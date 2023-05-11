@@ -9,6 +9,7 @@ import {
   createPaginationTests,
   createInfiniteHitsTests,
   createHitsTests,
+  createRangeInputTests,
 } from '@instantsearch/tests';
 import { act, render } from '@testing-library/react';
 import React from 'react';
@@ -25,6 +26,7 @@ import {
   useInstantSearch,
   Hits,
   Index,
+  RangeInput,
 } from '..';
 
 import type { Hit } from 'instantsearch.js';
@@ -200,6 +202,15 @@ createHitsTests(({ instantSearchOptions, widgetParams }) => {
       <Index indexName="nested">
         <Hits id="nested-hits" hitComponent={NestedHit} />
       </Index>
+      <GlobalErrorSwallower />
+    </InstantSearch>
+  );
+}, act);
+
+createRangeInputTests(({ instantSearchOptions, widgetParams }) => {
+  render(
+    <InstantSearch {...instantSearchOptions}>
+      <RangeInput {...widgetParams} />
       <GlobalErrorSwallower />
     </InstantSearch>
   );

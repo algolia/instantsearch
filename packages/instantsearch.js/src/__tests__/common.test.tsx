@@ -9,6 +9,7 @@ import {
   createMenuTests,
   createInfiniteHitsTests,
   createHitsTests,
+  createRangeInputTests,
 } from '@instantsearch/tests';
 
 import instantsearch from '../index.es';
@@ -22,6 +23,7 @@ import {
   searchBox,
   hits,
   index,
+  rangeInput,
 } from '../widgets';
 
 createHierarchicalMenuTests(({ instantSearchOptions, widgetParams }) => {
@@ -234,6 +236,23 @@ createHitsTests(({ instantSearchOptions, widgetParams }) => {
           },
         }),
       ]),
+    ])
+    .on('error', () => {
+      /*
+       * prevent rethrowing InstantSearch errors, so tests can be asserted.
+       * IRL this isn't needed, as the error doesn't stop execution.
+       */
+    })
+    .start();
+});
+
+createRangeInputTests(({ instantSearchOptions, widgetParams }) => {
+  instantsearch(instantSearchOptions)
+    .addWidgets([
+      rangeInput({
+        container: document.body.appendChild(document.createElement('div')),
+        ...widgetParams,
+      }),
     ])
     .on('error', () => {
       /*

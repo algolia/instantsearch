@@ -32,31 +32,43 @@ export type RangeInputProps = {
   refine: (rangeValue: RangeBoundaries) => void;
 };
 
-class RangeInput extends Component<RangeInputProps, Partial<Range>> {
+// Strips leading `0` from a positive number value
+function stripLeadingZeroFromInput(value: string): string {
+  return value.replace(/^(0+)\d/, (part) => Number(part).toString());
+}
+
+class RangeInput extends Component<
+  RangeInputProps,
+  { min?: string; max?: string }
+> {
   public state = {
-    min: this.props.values.min,
-    max: this.props.values.max,
+    min: this.props.values.min?.toString(),
+    max: this.props.values.max?.toString(),
   };
 
   public componentWillReceiveProps(nextProps: RangeInputProps) {
     this.setState({
-      min: nextProps.values.min,
-      max: nextProps.values.max,
+      min: nextProps.values.min?.toString(),
+      max: nextProps.values.max?.toString(),
     });
   }
 
-  private onInput = (key: string) => (event: Event) => {
+  private onInput = (key: keyof typeof this.state) => (event: Event) => {
     const { value } = event.currentTarget as HTMLInputElement;
 
     this.setState({
-      [key]: Number(value),
+      [key]: value,
     });
   };
 
   private onSubmit = (event: Event) => {
     event.preventDefault();
 
-    this.props.refine([this.state.min, this.state.max]);
+    const { min, max } = this.state;
+    this.props.refine([
+      min ? Number(min) : undefined,
+      max ? Number(max) : undefined,
+    ]);
   };
 
   public render() {
@@ -79,7 +91,7 @@ class RangeInput extends Component<RangeInputProps, Partial<Range>> {
               min={min}
               max={max}
               step={step}
-              value={minValue ?? ''}
+              value={stripLeadingZeroFromInput(minValue ?? '')}
               onInput={this.onInput('min')}
               placeholder={min?.toString()}
               disabled={isDisabled}
@@ -102,7 +114,7 @@ class RangeInput extends Component<RangeInputProps, Partial<Range>> {
               min={min}
               max={max}
               step={step}
-              value={maxValue ?? ''}
+              value={stripLeadingZeroFromInput(maxValue ?? '')}
               onInput={this.onInput('max')}
               placeholder={max?.toString()}
               disabled={isDisabled}

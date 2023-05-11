@@ -180,7 +180,7 @@ exports[`RangeInput expect to render with values 1`] = `
         placeholder="0"
         step={1}
         type="number"
-        value={20}
+        value="20"
       />
     </label>
     <Template
@@ -213,7 +213,7 @@ exports[`RangeInput expect to render with values 1`] = `
         placeholder="500"
         step={1}
         type="number"
-        value={480}
+        value="480"
       />
     </label>
     <Template
@@ -340,7 +340,7 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
         placeholder="0"
         step={1}
         type="number"
-        value={20}
+        value="20"
       />
     </label>
     <Template
@@ -373,7 +373,7 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
         placeholder="500"
         step={1}
         type="number"
-        value={480}
+        value="480"
       />
     </label>
     <Template
@@ -420,7 +420,7 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
         placeholder="0"
         step={1}
         type="number"
-        value={40}
+        value="40"
       />
     </label>
     <Template
@@ -453,7 +453,7 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
         placeholder="500"
         step={1}
         type="number"
-        value={460}
+        value="460"
       />
     </label>
     <Template
@@ -500,7 +500,7 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
         placeholder="0"
         step={1}
         type="number"
-        value={20}
+        value="20"
       />
     </label>
     <Template
@@ -533,7 +533,7 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
         placeholder="500"
         step={1}
         type="number"
-        value={480}
+        value="480"
       />
     </label>
     <Template
