@@ -68,6 +68,11 @@ export type RangeInputTranslations = {
 // if the default value is undefined, React considers the component uncontrolled initially, which we don't want 0 or NaN as the default value
 const unsetNumberInputValue = '';
 
+// Strips leading `0` from a positive number value
+function stripLeadingZeroFromInput(value: string): string {
+  return value.replace(/^(0+)\d/, (part) => Number(part).toString());
+}
+
 export function RangeInput({
   classNames = {},
   range: { min, max },
@@ -131,7 +136,7 @@ export function RangeInput({
             type="number"
             min={min}
             max={max}
-            value={from}
+            value={stripLeadingZeroFromInput(from || unsetNumberInputValue)}
             step={step}
             placeholder={min?.toString()}
             disabled={disabled}
@@ -158,7 +163,7 @@ export function RangeInput({
             type="number"
             min={min}
             max={max}
-            value={to}
+            value={stripLeadingZeroFromInput(to || unsetNumberInputValue)}
             step={step}
             placeholder={max?.toString()}
             disabled={disabled}

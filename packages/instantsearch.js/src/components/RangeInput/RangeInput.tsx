@@ -32,6 +32,11 @@ export type RangeInputProps = {
   refine: (rangeValue: RangeBoundaries) => void;
 };
 
+// Strips leading `0` from a positive number value
+function stripLeadingZeroFromInput(value: string): string {
+  return value.replace(/^(0+)\d/, (part) => Number(part).toString());
+}
+
 class RangeInput extends Component<
   RangeInputProps,
   { min?: string; max?: string }
@@ -86,7 +91,7 @@ class RangeInput extends Component<
               min={min}
               max={max}
               step={step}
-              value={minValue ?? ''}
+              value={stripLeadingZeroFromInput(minValue ?? '')}
               onInput={this.onInput('min')}
               placeholder={min?.toString()}
               disabled={isDisabled}
@@ -109,7 +114,7 @@ class RangeInput extends Component<
               min={min}
               max={max}
               step={step}
-              value={maxValue ?? ''}
+              value={stripLeadingZeroFromInput(maxValue ?? '')}
               onInput={this.onInput('max')}
               placeholder={max?.toString()}
               disabled={isDisabled}
