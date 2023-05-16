@@ -1,6 +1,6 @@
 {
   "name": "react-instantsearch-native",
-  "version": "6.39.2",
+  "version": "6.40.0",
   "description": "⚡ Lightning-fast search for React Native, by Algolia",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",

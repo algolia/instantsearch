@@ -26,7 +26,7 @@
     "express": "4.17.1",
     "react": "18.1.0",
     "react-dom": "18.1.0",
-    "react-instantsearch-hooks-server": "6.43.1",
-    "react-instantsearch-hooks-web": "6.43.1"
+    "react-instantsearch-hooks-server": "6.44.0",
+    "react-instantsearch-hooks-web": "6.44.0"
   }
 }

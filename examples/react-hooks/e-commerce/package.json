@@ -14,7 +14,7 @@
     "react": "18.1.0",
     "react-compound-slider": "3.4.0",
     "react-dom": "18.1.0",
-    "react-instantsearch-hooks-web": "6.43.1"
+    "react-instantsearch-hooks-web": "6.44.0"
   },
   "devDependencies": {
     "@parcel/core": "2.8.0",
