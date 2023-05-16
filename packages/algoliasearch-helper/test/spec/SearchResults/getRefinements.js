@@ -64,6 +64,27 @@ test('getRefinements(facetName) returns a refinement(exclude) when a facet exclu
   expect(hasSameNames(refinements, refinedFacetValues)).toBeTruthy();
 });
 
+// See: https://github.com/algolia/algoliasearch-helper-js/issues/921
+test.only('getRefinements(facetName) returns a refinement(exclude) when a facet exclusion is set and results are artificial', function() {
+  var data = require('./getRefinements/exclude-artificial-results.json');
+  var searchParams = new SearchParameters(data.state);
+  var result = new SearchResults(searchParams, data.content.results);
+
+  var refinements = result.getRefinements();
+  var facetValues = result.getFacetValues('brand');
+  var refinedFacetValues = facetValues.filter(function(f) {
+    return f.isExcluded === true;
+  });
+
+  var expected = [{
+    attributeName: 'brand', count: 0, exhaustive: true, name: 'Apple', type: 'exclude'
+  }];
+
+  expect(refinements).toEqual(expected);
+  expect(refinements.length).toBe(refinedFacetValues.length);
+  expect(hasSameNames(refinements, refinedFacetValues)).toBeTruthy();
+});
+
 test(
   'getRefinements(facetName) returns a refinement(disjunctive) when a disjunctive refinement is set',
   function() {

@@ -588,7 +588,7 @@ function SearchResults(state, results, options) {
 
     self.facets[position] = {
       name: facetName,
-      data: mainSubResponse.facets[facetName],
+      data: mainFacets[facetName],
       exhaustive: mainSubResponse.exhaustiveFacetsCount
     };
     excludes.forEach(function(facetValue) {

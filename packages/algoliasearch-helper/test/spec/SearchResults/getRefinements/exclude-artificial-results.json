@@ -1,0 +1,37 @@
+{
+  "content": {
+    "results": [{
+      "query": "",
+      "page": 0,
+      "hitsPerPage": 20,
+      "hits": [],
+      "nbHits": 0,
+      "nbPages": 0,
+      "params": "",
+      "exhaustiveNbHits": true,
+      "exhaustiveFacetsCount": true,
+      "processingTimeMS": 0,
+      "index": "instant_search"
+    }]
+  },
+  "state": {
+    "index": "instant_search",
+    "query": "",
+    "facets": [
+      "brand"
+    ],
+    "disjunctiveFacets": [],
+    "hierarchicalFacets": [],
+    "facetsRefinements": {},
+    "facetsExcludes": {
+      "brand": [
+        "Apple"
+      ]
+    },
+    "disjunctiveFacetsRefinements": {},
+    "numericRefinements": {},
+    "tagRefinements": [],
+    "hierarchicalFacetsRefinements": {},
+    "page": 0
+  }
+}
