@@ -137,7 +137,7 @@ export type RefinementListRenderState = {
    */
   isShowingMore: boolean;
   /**
-   * Total number of facets that can be displayed for 'show more'.
+   * Total number of facet values that can be displayed for 'show more'.
    */
   showMoreCount: number;
   /**
@@ -423,10 +423,7 @@ const connectRefinementList: RefinementListConnector =
             lastItemsFromMainSearch = items;
 
             if (showMore) {
-              const showMoreTotalCount =
-                showMoreLimit < facetValues.length
-                  ? showMoreLimit
-                  : facetValues.length;
+              const showMoreTotalCount = Math.min(showMoreLimit, facetValues.length);
               showMoreCount = showMoreTotalCount - currentLimit;
             }
 
