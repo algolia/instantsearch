@@ -1,5 +1,7 @@
 # nuxt
 
+[![Edit nuxt](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/github/algolia/instantsearch/tree/master/examples/vue/nuxt)
+
 > Vue InstantSearch & Nuxt
 
 ## Build Setup
