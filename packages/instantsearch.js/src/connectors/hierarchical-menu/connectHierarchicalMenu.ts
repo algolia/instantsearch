@@ -374,7 +374,10 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
                 : facetItems.length < currentLimit;
 
             if (showMore) {
-              const showMoreTotalCount = Math.min(showMoreLimit, facetItems.length);
+              const showMoreTotalCount = Math.min(
+                showMoreLimit,
+                facetItems.length
+              );
               showMoreCount = showMoreTotalCount - currentLimit;
             }
 

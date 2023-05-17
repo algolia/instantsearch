@@ -423,7 +423,10 @@ const connectRefinementList: RefinementListConnector =
             lastItemsFromMainSearch = items;
 
             if (showMore) {
-              const showMoreTotalCount = Math.min(showMoreLimit, facetValues.length);
+              const showMoreTotalCount = Math.min(
+                showMoreLimit,
+                facetValues.length
+              );
               showMoreCount = showMoreTotalCount - currentLimit;
             }
 
