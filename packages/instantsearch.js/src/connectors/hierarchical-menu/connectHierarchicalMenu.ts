@@ -114,7 +114,7 @@ export type HierarchicalMenuRenderState = {
    */
   isShowingMore: boolean;
   /**
-   * Total number of facets that can be displayed for 'show more'.
+   * Total number of facet values that can be displayed for 'show more'.
    */
   showMoreCount: number;
   /**
@@ -374,10 +374,7 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
                 : facetItems.length < currentLimit;
 
             if (showMore) {
-              const showMoreTotalCount =
-                showMoreLimit < facetItems.length
-                  ? showMoreLimit
-                  : facetItems.length;
+              const showMoreTotalCount = Math.min(showMoreLimit, facetItems.length);
               showMoreCount = showMoreTotalCount - currentLimit;
             }
 

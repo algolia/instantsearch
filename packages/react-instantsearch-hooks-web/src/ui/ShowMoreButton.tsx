@@ -12,7 +12,7 @@ export type ShowMoreButtonTextOptions = {
    */
   isShowingMore: boolean;
   /**
-   * Total number of facets that can be displayed for 'show more'.
+   * Total number of facet values that can be displayed for 'show more'.
    */
   showMoreCount: number;
 };
