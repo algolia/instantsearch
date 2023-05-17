@@ -305,7 +305,10 @@ const connectMenu: MenuConnector = function connectMenu(
               : [];
 
           if (showMore) {
-            const showMoreTotalCount = Math.min(showMoreLimit, facetItems.length);
+            const showMoreTotalCount = Math.min(
+              showMoreLimit,
+              facetItems.length
+            );
             showMoreCount = showMoreTotalCount - currentLimit;
           }
 
