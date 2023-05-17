@@ -11,6 +11,7 @@
       :toggle-show-more="toggleShowMore"
       :can-toggle-show-more="state.canToggleShowMore"
       :is-showing-more="state.isShowingMore"
+      :show-more-count="state.showMoreCount"
       :createURL="state.createURL"
       :is-from-search="state.isFromSearch"
       :can-refine="state.canRefine"
@@ -70,7 +71,11 @@
         v-if="showMore"
         :disabled="!state.canToggleShowMore"
       >
-        <slot name="showMoreLabel" :is-showing-more="state.isShowingMore">
+        <slot
+          name="showMoreLabel"
+          :is-showing-more="state.isShowingMore"
+          :show-more-count="showMoreCount"
+        >
           Show {{ state.isShowingMore ? 'less' : 'more' }}
         </slot>
       </button>
