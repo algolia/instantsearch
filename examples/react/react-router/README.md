@@ -1,5 +1,6 @@
-This example shows how to synchronize your instantsearch url
-if you are using react-router.
+This example shows how to synchronize your instantsearch url if you are using react-router.
+
+[![Edit react-router](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/github/algolia/instantsearch/tree/master/examples/react/react-router)
 
 ## Clone the example
 

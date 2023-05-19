@@ -1,5 +1,7 @@
 # default-theme
 
+[![Edit default-theme](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/github/algolia/instantsearch/tree/master/examples/vue/default-theme)
+
 ## Project setup
 
 ```
