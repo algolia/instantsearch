@@ -35,6 +35,7 @@
           :class="suit('item')"
           :key="item.objectID"
           @click="state.sendEvent('click:internal', item, 'Hit Clicked')"
+          @auxclick="state.sendEvent('click:internal', item, 'Hit Clicked')"
         >
           <slot
             name="item"

@@ -1,5 +1,5 @@
 import { wait } from '@instantsearch/testutils';
-import { screen } from '@testing-library/dom';
+import { fireEvent, screen } from '@testing-library/dom';
 import type { MockSearchClient } from '@instantsearch/mocks';
 import {
   createSearchClient,
@@ -329,6 +329,95 @@ export function createInsightsTests(setup: HitsSetup, act: Act) {
       {
         window.aa.mockClear();
         userEvent.click(screen.getByTestId('main-hits-top-level-1'));
+
+        expect(window.aa).toHaveBeenCalledTimes(1);
+        expect(window.aa).toHaveBeenCalledWith(
+          'clickedObjectIDsAfterSearch',
+          {
+            eventName: 'Hit Clicked',
+            algoliaSource: ['instantsearch', 'instantsearch-internal'],
+            index: 'indexName',
+            objectIDs: ['indexName-0'],
+            positions: [1],
+          },
+          {
+            headers: {
+              'X-Algolia-API-Key': 'apiKey',
+              'X-Algolia-Application-Id': 'appId',
+            },
+          }
+        );
+      }
+    });
+
+    test('sends a default click event with a middle mouse button click', async () => {
+      const delay = 100;
+      const margin = 10;
+      const hitsPerPage = 2;
+      window.aa = Object.assign(jest.fn(), { version: '2.6.0' });
+      const options = {
+        instantSearchOptions: {
+          indexName: 'indexName',
+          insights: true,
+          searchClient: createSearchClient({
+            search: jest.fn(async (requests) => {
+              await wait(delay);
+              return createMultiSearchResponse(
+                ...requests.map(
+                  ({
+                    indexName,
+                    params: { page = 0, query } = {},
+                  }: Parameters<SearchClient['search']>[0][number]) =>
+                    createSingleSearchResponse({
+                      hits: Array.from({ length: hitsPerPage }).map(
+                        (_, index) => ({
+                          objectID: `${indexName}-${
+                            page * hitsPerPage + index
+                          }`,
+                        })
+                      ),
+                      query,
+                      page,
+                      nbPages: 20,
+                    })
+                )
+              );
+            }) as MockSearchClient['search'],
+          }),
+        },
+        widgetParams: {},
+      };
+
+      await setup(options);
+      window.aa.mockClear();
+
+      // Wait for initial results to populate widgets with data
+      await act(async () => {
+        await wait(margin + delay);
+        await wait(0);
+      });
+
+      // Initial state, before interaction
+      {
+        expect(
+          document.querySelectorAll('#main-hits .ais-Hits-item')
+        ).toHaveLength(hitsPerPage);
+        expect(
+          document.querySelectorAll('#nested-hits .ais-Hits-item')
+        ).toHaveLength(hitsPerPage);
+      }
+
+      // Click on the first item of the first index with the middle mouse button
+      {
+        window.aa.mockClear();
+        fireEvent(
+          screen.getByTestId('main-hits-top-level-1'),
+          new MouseEvent('auxclick', {
+            bubbles: true,
+            cancelable: true,
+            button: 1,
+          })
+        );
 
         expect(window.aa).toHaveBeenCalledTimes(1);
         expect(window.aa).toHaveBeenCalledWith(
