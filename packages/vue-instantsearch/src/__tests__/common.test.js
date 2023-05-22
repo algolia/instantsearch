@@ -42,37 +42,47 @@ const GlobalErrorSwallower = {
   },
 };
 
-createRefinementListTests(async ({ instantSearchOptions, widgetParams }) => {
-  mountApp(
-    {
-      render: renderCompat((h) =>
-        h(AisInstantSearch, { props: instantSearchOptions }, [
-          h(AisRefinementList, { props: widgetParams }),
-          h(GlobalErrorSwallower),
-        ])
-      ),
-    },
-    document.body.appendChild(document.createElement('div'))
-  );
+createRefinementListTests(
+  async ({ instantSearchOptions, widgetParams, vueSlots }) => {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisRefinementList, {
+              props: widgetParams,
+              scopedSlots: vueSlots,
+            }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
 
-  await nextTick();
-});
+    await nextTick();
+  }
+);
 
-createHierarchicalMenuTests(async ({ instantSearchOptions, widgetParams }) => {
-  mountApp(
-    {
-      render: renderCompat((h) =>
-        h(AisInstantSearch, { props: instantSearchOptions }, [
-          h(AisHierarchicalMenu, { props: widgetParams }),
-          h(GlobalErrorSwallower),
-        ])
-      ),
-    },
-    document.body.appendChild(document.createElement('div'))
-  );
+createHierarchicalMenuTests(
+  async ({ instantSearchOptions, widgetParams, vueSlots }) => {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisHierarchicalMenu, {
+              props: widgetParams,
+              scopedSlots: vueSlots,
+            }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
 
-  await nextTick();
-});
+    await nextTick();
+  }
+);
 
 createBreadcrumbTests(async ({ instantSearchOptions, widgetParams }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -93,12 +103,12 @@ createBreadcrumbTests(async ({ instantSearchOptions, widgetParams }) => {
   await nextTick();
 });
 
-createMenuTests(async ({ instantSearchOptions, widgetParams }) => {
+createMenuTests(async ({ instantSearchOptions, widgetParams, vueSlots }) => {
   mountApp(
     {
       render: renderCompat((h) =>
         h(AisInstantSearch, { props: instantSearchOptions }, [
-          h(AisMenu, { props: widgetParams }),
+          h(AisMenu, { props: widgetParams, scopedSlots: vueSlots }),
           h(GlobalErrorSwallower),
         ])
       ),
