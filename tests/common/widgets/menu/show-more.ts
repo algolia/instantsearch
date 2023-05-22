@@ -61,7 +61,6 @@ export function createShowMoreTests(setup: MenuSetup, act: Act) {
           limit,
           showMoreLimit,
           showMore: true,
-          // InstantSearch.js
           templates: {
             // @ts-ignore
             showMoreText({ isShowingMore, showMoreCount }) {
@@ -69,24 +68,6 @@ export function createShowMoreTests(setup: MenuSetup, act: Act) {
                 ? `Show ${showMoreCount} more`
                 : 'Show top items';
             },
-          },
-          // React InstantSearch Hooks
-          translations: {
-            // @ts-ignore
-            showMoreButtonText({ isShowingMore, showMoreCount }) {
-              return !isShowingMore
-                ? `Show ${showMoreCount} more`
-                : 'Show top items';
-            },
-          },
-        },
-        // Vue InstantSearch
-        vueSlots: {
-          // @ts-ignore
-          showMoreLabel({ isShowingMore, showMoreCount }) {
-            return !isShowingMore
-              ? `Show ${showMoreCount} more`
-              : 'Show top items';
           },
         },
       };

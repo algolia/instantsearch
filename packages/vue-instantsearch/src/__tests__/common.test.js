@@ -29,6 +29,25 @@ import {
 jest.unmock('instantsearch.js/es');
 
 /**
+ * Converts InstantSearch.js templates into Vue InstantSearch slots.
+ * @param {Record<string, any>} templates InstantSearch.js templates received in `widgetParams`
+ * @param {Record<string, any>} map Matching between template keys and slots names
+ * @returns {Record<string, any>} Vue InstantSearch slots
+ */
+function fromTemplates(templates, map) {
+  return Object.entries(map).reduce(
+    (translations, [templateKey, translationKey]) => {
+      if (templates[templateKey] !== undefined) {
+        return { ...translations, [translationKey]: templates[templateKey] };
+      }
+
+      return translations;
+    },
+    {}
+  );
+}
+
+/**
  * prevent rethrowing InstantSearch errors, so tests can be asserted.
  * IRL this isn't needed, as the error doesn't stop execution.
  */
@@ -42,47 +61,57 @@ const GlobalErrorSwallower = {
   },
 };
 
-createRefinementListTests(
-  async ({ instantSearchOptions, widgetParams, vueSlots }) => {
-    mountApp(
-      {
-        render: renderCompat((h) =>
-          h(AisInstantSearch, { props: instantSearchOptions }, [
-            h(AisRefinementList, {
-              props: widgetParams,
-              scopedSlots: vueSlots,
-            }),
-            h(GlobalErrorSwallower),
-          ])
-        ),
-      },
-      document.body.appendChild(document.createElement('div'))
-    );
+createRefinementListTests(async ({ instantSearchOptions, widgetParams }) => {
+  const { templates, ...props } = widgetParams;
+  const scopedSlots =
+    templates &&
+    fromTemplates(templates, {
+      showMoreText: 'showMoreLabel',
+    });
 
-    await nextTick();
-  }
-);
+  mountApp(
+    {
+      render: renderCompat((h) =>
+        h(AisInstantSearch, { props: instantSearchOptions }, [
+          h(AisRefinementList, {
+            props,
+            scopedSlots,
+          }),
+          h(GlobalErrorSwallower),
+        ])
+      ),
+    },
+    document.body.appendChild(document.createElement('div'))
+  );
 
-createHierarchicalMenuTests(
-  async ({ instantSearchOptions, widgetParams, vueSlots }) => {
-    mountApp(
-      {
-        render: renderCompat((h) =>
-          h(AisInstantSearch, { props: instantSearchOptions }, [
-            h(AisHierarchicalMenu, {
-              props: widgetParams,
-              scopedSlots: vueSlots,
-            }),
-            h(GlobalErrorSwallower),
-          ])
-        ),
-      },
-      document.body.appendChild(document.createElement('div'))
-    );
+  await nextTick();
+});
 
-    await nextTick();
-  }
-);
+createHierarchicalMenuTests(async ({ instantSearchOptions, widgetParams }) => {
+  const { templates, ...props } = widgetParams;
+  const scopedSlots =
+    templates &&
+    fromTemplates(templates, {
+      showMoreText: 'showMoreLabel',
+    });
+
+  mountApp(
+    {
+      render: renderCompat((h) =>
+        h(AisInstantSearch, { props: instantSearchOptions }, [
+          h(AisHierarchicalMenu, {
+            props,
+            scopedSlots,
+          }),
+          h(GlobalErrorSwallower),
+        ])
+      ),
+    },
+    document.body.appendChild(document.createElement('div'))
+  );
+
+  await nextTick();
+});
 
 createBreadcrumbTests(async ({ instantSearchOptions, widgetParams }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -103,12 +132,19 @@ createBreadcrumbTests(async ({ instantSearchOptions, widgetParams }) => {
   await nextTick();
 });
 
-createMenuTests(async ({ instantSearchOptions, widgetParams, vueSlots }) => {
+createMenuTests(async ({ instantSearchOptions, widgetParams }) => {
+  const { templates, ...props } = widgetParams;
+  const scopedSlots =
+    templates &&
+    fromTemplates(templates, {
+      showMoreText: 'showMoreLabel',
+    });
+
   mountApp(
     {
       render: renderCompat((h) =>
         h(AisInstantSearch, { props: instantSearchOptions }, [
-          h(AisMenu, { props: widgetParams, scopedSlots: vueSlots }),
+          h(AisMenu, { props, scopedSlots }),
           h(GlobalErrorSwallower),
         ])
       ),
