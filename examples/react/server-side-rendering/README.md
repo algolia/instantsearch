@@ -1,5 +1,7 @@
 This example shows how to do server side rendering and React InstantSearch.
 
+[![Edit server-side-rendering](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/github/algolia/instantsearch/tree/master/examples/react/server-side-rendering)
+
 ## Clone the example
 
 ```sh
