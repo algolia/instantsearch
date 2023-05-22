@@ -68,6 +68,10 @@ export default function Hits({
                 handleInsightsClick(event);
                 sendEvent('click:internal', hit, 'Hit Clicked');
               },
+              onAuxClick: (event: MouseEvent) => {
+                handleInsightsClick(event);
+                sendEvent('click:internal', hit, 'Hit Clicked');
+              },
             }}
             key={hit.objectID}
             data={{

@@ -67,6 +67,9 @@ export function Hits<THit extends Hit>({
             onClick={() => {
               sendEvent('click:internal', hit, 'Hit Clicked');
             }}
+            onAuxClick={() => {
+              sendEvent('click:internal', hit, 'Hit Clicked');
+            }}
           >
             <HitComponent hit={hit} sendEvent={sendEvent} />
           </li>
