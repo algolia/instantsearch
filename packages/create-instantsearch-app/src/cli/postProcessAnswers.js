@@ -1,5 +1,5 @@
 const camelCase = require('lodash.camelcase');
-const latestSemver = require('latest-semver');
+const semver = require('semver');
 
 const { fetchLibraryVersions } = require('../utils');
 
@@ -24,10 +24,13 @@ async function getLibraryVersion(config, templateConfig) {
 
   if (libraryName && !libraryVersion) {
     const versions = await fetchLibraryVersions(libraryName);
+    const latestStableVersion = semver.maxSatisfying(versions, '*', {
+      includePrerelease: false,
+    });
 
     // Return the latest available version when
     // the stable version is not available
-    return latestSemver(versions) || versions[0];
+    return latestStableVersion || versions[0];
   }
 
   return libraryVersion;
