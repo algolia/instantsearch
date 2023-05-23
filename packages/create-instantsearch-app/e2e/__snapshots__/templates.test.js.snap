@@ -3229,10 +3229,10 @@ search.addWidgets([
   instantsearch.widgets.hits({
     container: '#hits',
     templates: {
-      item: \`
+      item: (hit, { html, components }) => \`
 <article>
-  <h1>{{#helpers.highlight}}{ \\"attribute\\": \\"attribute1\\" }{{/helpers.highlight}}</h1>
-  <p>{{#helpers.highlight}}{ \\"attribute\\": \\"attribute2\\" }{{/helpers.highlight}}</p>
+  <h1>\${components.Highlight({ hit, attribute: 'attribute1' })}</h1>
+  <p>\${components.Highlight({ hit, attribute: 'attribute2' })}</p>
 </article>
 \`,
     },
@@ -3243,9 +3243,9 @@ search.addWidgets([
   instantsearch.widgets.dynamicWidgets({
     container: '#dynamic-widgets',
     fallbackWidget({ container, attribute }) {
-      return instantsearch.widgets.panel({ templates: { header: attribute } })(
-        instantsearch.widgets.refinementList
-      )({
+      return instantsearch.widgets.panel({
+        templates: { header: () => attribute },
+      })(instantsearch.widgets.refinementList)({
         container,
         attribute,
       });
@@ -3253,14 +3253,14 @@ search.addWidgets([
     widgets: [
       (container) =>
         instantsearch.widgets.panel({
-          templates: { header: 'facet1' },
+          templates: { header: () => 'facet1' },
         })(instantsearch.widgets.refinementList)({
           container,
           attribute: 'facet1',
         }),
       (container) =>
         instantsearch.widgets.panel({
-          templates: { header: 'facet2' },
+          templates: { header: () => 'facet2' },
         })(instantsearch.widgets.refinementList)({
           container,
           attribute: 'facet2',
