@@ -38,7 +38,6 @@
     "commander": "4.1.1",
     "inquirer": "8.0.0",
     "jstransformer-handlebars": "1.1.0",
-    "latest-semver": "2.0.0",
     "load-json-file": "6.2.0",
     "lodash.camelcase": "4.3.0",
     "metalsmith": "2.3.0",

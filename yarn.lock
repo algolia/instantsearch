@@ -21232,13 +21232,6 @@ last-call-webpack-plugin@^3.0.0:
     lodash "^4.17.5"
     webpack-sources "^1.1.0"
 
-latest-semver@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/latest-semver/-/latest-semver-2.0.0.tgz#7208731deb29f1e109f269cff580fb61a792bb17"
-  integrity sha512-l8sU7ghgSK6fnaMMsmSkuLz8VWaHFhWFws6Iw6zIJdxTPC9mBsEZ+XW5nNTfNKWZmO4JMbfKIHXtQQjEO9o5Jw==
-  dependencies:
-    to-semver "^2.0.0"
-
 latest-version@5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/latest-version/-/latest-version-5.1.0.tgz#119dfe908fe38d15dfa43ecd13fa12ec8832face"
@@ -32881,13 +32874,6 @@ to-regex@^3.0.1, to-regex@^3.0.2:
     extend-shallow "^3.0.2"
     regex-not "^1.0.2"
     safe-regex "^1.1.0"
-
-to-semver@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/to-semver/-/to-semver-2.0.0.tgz#56eba7579694ff656f526b5c9cb4f62e9776fea8"
-  integrity sha512-ZQbSDYCfuF4weayoQBoLOiLPMNiD/v1VTK05DQKelpWTBa2gYEIVQnLvPQLnC+/TzKqasuE90ma6jSoLry9BDA==
-  dependencies:
-    semver "^6.0.0"
 
 toggle-selection@^1.0.6:
   version "1.0.6"
