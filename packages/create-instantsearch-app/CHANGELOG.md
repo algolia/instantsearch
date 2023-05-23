@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.3.2](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@6.3.1...create-instantsearch-app@6.3.2) (2023-05-23)
+
+
+### Bug Fixes
+
+* **cisa:** remove fixed isjs dependency from rish templates ([#5636](https://github.com/algolia/instantsearch/issues/5636)) ([9f41d7e](https://github.com/algolia/instantsearch/commit/9f41d7e702bfa482b229846e67ee4c7619f756cf))
+
+
+
+
+
 ## [6.3.1](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@6.3.0...create-instantsearch-app@6.3.1) (2023-04-24)
 
 **Note:** Version bump only for package create-instantsearch-app
