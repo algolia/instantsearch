@@ -6159,7 +6159,7 @@ Array [
 ]
 `;
 
-exports[`Templates React InstantSearch Hooks Native File content: .expo-shared/assets.json.hbs 1`] = `
+exports[`Templates React InstantSearch Hooks Native File content: .expo-shared/assets.json 1`] = `
 "{
   \\"12bb71342c6255bbf50437ec8f4441c083f47cdb74bd89160c15e4f43e52a1cb\\": true,
   \\"40b842e832070c58deac6aa9e08fa459302ee3f9da492c7e77d93d2fbf4a56fd\\": true
@@ -6592,7 +6592,7 @@ export type ProductHit = AlgoliaHit<{
 
 exports[`Templates React InstantSearch Hooks Native Folder structure: contains the right files 1`] = `
 Array [
-  ".expo-shared/assets.json.hbs",
+  ".expo-shared/assets.json",
   ".gitignore",
   "App.tsx",
   "README.md",
