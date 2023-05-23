@@ -7,6 +7,7 @@ module.exports = {
   supportedVersion: '>= 6.0.0 < 7.0.0',
   flags: {
     dynamicWidgets: '>=6.16',
+    insights: '>=6.43',
   },
   templateName: 'react-instantsearch-hooks',
   appName: 'react-instantsearch-hooks-app',

@@ -5,6 +5,7 @@ const searchClient = algoliasearch('{{appId}}', '{{apiKey}}');
 const search = instantsearch({
   indexName: '{{indexName}}',
   searchClient,
+  {{#if flags.insights}}insights: true,{{/if}}
 });
 
 search.addWidgets([
