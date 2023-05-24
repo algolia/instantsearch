@@ -74,6 +74,9 @@ async function postProcessAnswers({
       dynamicWidgets:
         Array.isArray(combinedAnswers.attributesForFaceting) &&
         combinedAnswers.attributesForFaceting.includes('ais.dynamicWidgets'),
+      insights:
+        Boolean(templateConfig.flags && templateConfig.flags.insights) &&
+        semver.satisfies(libraryVersion, templateConfig.flags.insights),
     },
   };
 }
