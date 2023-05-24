@@ -18,7 +18,7 @@ search.addWidgets([
     container: '#hits',
     {{#if attributesToDisplay}}
     templates: {
-      item: (hit, { html, components }) => `
+      item: (hit, { html, components }) => html`
 <article>
   <h1>${components.Highlight({hit, attribute: "{{attributesToDisplay.[0]}}"})}</h1>
   {{#each attributesToDisplay}}

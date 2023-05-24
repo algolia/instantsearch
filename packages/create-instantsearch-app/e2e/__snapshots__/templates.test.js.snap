@@ -3229,12 +3229,12 @@ search.addWidgets([
   instantsearch.widgets.hits({
     container: '#hits',
     templates: {
-      item: (hit, { html, components }) => \`
-<article>
-  <h1>\${components.Highlight({ hit, attribute: 'attribute1' })}</h1>
-  <p>\${components.Highlight({ hit, attribute: 'attribute2' })}</p>
-</article>
-\`,
+      item: (hit, { html, components }) => html\`
+        <article>
+          <h1>\${components.Highlight({ hit, attribute: 'attribute1' })}</h1>
+          <p>\${components.Highlight({ hit, attribute: 'attribute2' })}</p>
+        </article>
+      \`,
     },
   }),
   instantsearch.widgets.configure({
