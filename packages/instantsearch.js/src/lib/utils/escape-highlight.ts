@@ -13,6 +13,7 @@ export const TAG_REPLACEMENT = {
   highlightPostTag: '</mark>',
 };
 
+// @MAJOR: in the future, this should only escape, not replace
 function replaceTagsAndEscape(value: string): string {
   return escape(value)
     .replace(
