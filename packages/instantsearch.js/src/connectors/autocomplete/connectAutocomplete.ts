@@ -87,7 +87,10 @@ const connectAutocomplete: AutocompleteConnector = function connectAutocomplete(
   checkRendering(renderFn, withUsage());
 
   return (widgetParams) => {
-    const { escapeHTML = true } = widgetParams || {};
+    const {
+      // @MAJOR: this can default to false
+      escapeHTML = true,
+    } = widgetParams || {};
 
     warning(
       !(widgetParams as any).indices,

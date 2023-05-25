@@ -198,6 +198,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
 
   return (widgetParams) => {
     const {
+      // @MAJOR: this can default to false
       escapeHTML = true,
       transformItems = ((items) => items) as NonNullable<
         InfiniteHitsConnectorParams['transformItems']
