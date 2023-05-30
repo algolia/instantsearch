@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.44.1](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-web@6.44.0...react-instantsearch-hooks-web@6.44.1) (2023-05-30)
+
+
+### Bug Fixes
+
+* **insights:** send default click event when using auxiliary pointer button ([#5634](https://github.com/algolia/instantsearch.js/issues/5634)) ([7e4a216](https://github.com/algolia/instantsearch.js/commit/7e4a2162f87596a384b35c97efa51db9bb6f8973))
+
+
+
+
+
 ## [6.43.1](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-web@6.43.0...react-instantsearch-hooks-web@6.43.1) (2023-05-16)
 
 
