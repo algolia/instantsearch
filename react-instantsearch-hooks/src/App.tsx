@@ -37,7 +37,7 @@ export function App() {
       </header>
 
       <div className="container">
-        <InstantSearch searchClient={searchClient} indexName="instant_search">
+        <InstantSearch searchClient={searchClient} indexName="instant_search" >
           <Configure hitsPerPage={8} />
           <div className="search-panel">
             <div className="search-panel__filters">
