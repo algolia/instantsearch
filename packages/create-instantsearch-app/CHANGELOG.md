@@ -8,7 +8,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Bug Fixes
 
-* **cisa:** remove fixed isjs dependency from rish templates ([#5636](https://github.com/algolia/instantsearch/issues/5636)) ([9f41d7e](https://github.com/algolia/instantsearch/commit/9f41d7e702bfa482b229846e67ee4c7619f756cf))
+* **dependencies:** remove fixed instantsearch.js dependency from react instantsearch hooks templates ([#5636](https://github.com/algolia/instantsearch/issues/5636)) ([9f41d7e](https://github.com/algolia/instantsearch/commit/9f41d7e702bfa482b229846e67ee4c7619f756cf))
 * **dependencies:** update metalsmith packages ([#5642](https://github.com/algolia/instantsearch/issues/5642)) ([e001aa9](https://github.com/algolia/instantsearch/commit/e001aa9a06bab28777906901f4f4ea007c92a2a1))
 * **js:** use html templates ([#5644](https://github.com/algolia/instantsearch/issues/5644)) ([4bcc426](https://github.com/algolia/instantsearch/commit/4bcc4267cdbecdb9274b0fe87e0a4f8701ec6475))
 
