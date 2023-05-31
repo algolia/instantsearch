@@ -44,7 +44,8 @@
     "build:es": "BABEL_ENV=es babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet",
     "build:umd": "BABEL_ENV=rollup rollup -c rollup.config.js",
     "build:types": "tsc -p ./tsconfig.declaration.json --outDir ./dist/es",
-    "test:exports": "node ./test/module/is-es-module.mjs && node ./test/module/is-cjs-module.cjs"
+    "test:exports": "node ./test/module/is-es-module.mjs && node ./test/module/is-cjs-module.cjs",
+    "version": "./scripts/version.js"
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2",
