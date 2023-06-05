@@ -10,6 +10,7 @@ import {
   createInfiniteHitsTests,
   createHitsTests,
   createRangeInputTests,
+  createInstantSearchTests,
 } from '@instantsearch/tests';
 
 import { nextTick, mountApp } from '../../test/utils';
@@ -297,4 +298,27 @@ createRangeInputTests(async ({ instantSearchOptions, widgetParams }) => {
   );
 
   await nextTick();
+});
+
+createInstantSearchTests(({ instantSearchOptions }) => {
+  mountApp(
+    {
+      render: renderCompat((h) =>
+        h(AisInstantSearch, { props: instantSearchOptions })
+      ),
+    },
+    document.body.appendChild(document.createElement('div'))
+  );
+
+  return {
+    algoliaAgents: [
+      `instantsearch.js (${
+        require('../../../instantsearch.js/package.json').version
+      })`,
+      `Vue InstantSearch (${
+        require('../../../vue-instantsearch/package.json').version
+      })`,
+      `Vue (${require('../util/vue-compat').version})`,
+    ],
+  };
 });

@@ -10,6 +10,7 @@ import {
   createInfiniteHitsTests,
   createHitsTests,
   createRangeInputTests,
+  createInstantSearchTests,
 } from '@instantsearch/tests';
 
 import instantsearch from '../index.es';
@@ -261,4 +262,16 @@ createRangeInputTests(({ instantSearchOptions, widgetParams }) => {
        */
     })
     .start();
+});
+
+createInstantSearchTests(({ instantSearchOptions }) => {
+  instantsearch(instantSearchOptions).start();
+
+  return {
+    algoliaAgents: [
+      `instantsearch.js (${
+        require('../../../instantsearch.js/package.json').version
+      })`,
+    ],
+  };
 });
