@@ -319,7 +319,12 @@ const config = {
       files: ['packages/*/test/module/**/*.cjs'],
       rules: {
         'import/extensions': ['error', 'always'],
-        'import/no-commonjs': ['error', { allowRequire: true }],
+      },
+    },
+    {
+      files: ['*.cjs'],
+      rules: {
+        'import/no-commonjs': 'off',
       },
     },
     {
