@@ -127,7 +127,7 @@ storiesOf('Results/InfiniteHits', module)
         instantsearch.widgets.infiniteHits({
           container,
           templates: {
-            item: (hit) => `
+            item: (hit, { html }) => html`
               <p>#${hit.__position} ${hit.name}</p>
               <a href="https://google.com">Details</a>
             `,

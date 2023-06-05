@@ -22,12 +22,12 @@ search.addWidgets([
   hits({
     container: '#hits',
     templates: {
-      item: (hit) => `
+      item: (hit, { html, components }) => html`
         <li class="hit">
           <h3>
-            ${instantsearch.highlight({ attribute: 'name', hit })}
+            ${components.Highlight({ attribute: 'name', hit })}
             <small>
-              ${instantsearch.highlight({ attribute: 'location', hit })}
+              ${components.Highlight({ attribute: 'location', hit })}
             </small>
           </h3>
           <small>
