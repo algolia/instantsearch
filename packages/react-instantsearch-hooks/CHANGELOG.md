@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.44.2](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.44.1...react-instantsearch-hooks@6.44.2) (2023-06-05)
+
+
+### Bug Fixes
+
+* **hooks:** generate version for algoliaAgent in build ([#5655](https://github.com/algolia/instantsearch.js/issues/5655)) ([4d92ac4](https://github.com/algolia/instantsearch.js/commit/4d92ac4769e19e81fb55481aedc71121bef981cb))
+
+
+
+
+
 ## [6.44.1](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.44.0...react-instantsearch-hooks@6.44.1) (2023-05-30)
 
 **Note:** Version bump only for package react-instantsearch-hooks
