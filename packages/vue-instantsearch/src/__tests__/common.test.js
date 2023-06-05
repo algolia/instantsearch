@@ -304,7 +304,9 @@ createInstantSearchTests(({ instantSearchOptions }) => {
   mountApp(
     {
       render: renderCompat((h) =>
-        h(AisInstantSearch, { props: instantSearchOptions })
+        h(AisInstantSearch, { props: instantSearchOptions }, [
+          h(GlobalErrorSwallower),
+        ])
       ),
     },
     document.body.appendChild(document.createElement('div'))

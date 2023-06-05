@@ -265,7 +265,14 @@ createRangeInputTests(({ instantSearchOptions, widgetParams }) => {
 });
 
 createInstantSearchTests(({ instantSearchOptions }) => {
-  instantsearch(instantSearchOptions).start();
+  instantsearch(instantSearchOptions)
+    .on('error', () => {
+      /*
+       * prevent rethrowing InstantSearch errors, so tests can be asserted.
+       * IRL this isn't needed, as the error doesn't stop execution.
+       */
+    })
+    .start();
 
   return {
     algoliaAgents: [
