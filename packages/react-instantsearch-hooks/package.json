@@ -45,7 +45,7 @@
     "build:umd": "BABEL_ENV=rollup rollup -c rollup.config.js",
     "build:types": "tsc -p ./tsconfig.declaration.json --outDir ./dist/es",
     "test:exports": "node ./test/module/is-es-module.mjs && node ./test/module/is-cjs-module.cjs",
-    "version": "./scripts/version.js"
+    "version": "./scripts/version.cjs"
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2",
