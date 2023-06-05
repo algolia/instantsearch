@@ -16,7 +16,7 @@ export function createAlgoliaAgentTests(setup: InstantSearchSetup, _act: Act) {
 
       const { algoliaAgents } = await setup(options);
 
-      const algoliaAgent: string = searchClient.transporter
+      const algoliaAgent: string = (searchClient as any).transporter
         ? (searchClient as any).transporter.userAgent.value
         : (searchClient as any)._ua;
 
