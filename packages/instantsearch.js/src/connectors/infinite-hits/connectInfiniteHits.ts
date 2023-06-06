@@ -9,7 +9,6 @@ import {
   noop,
   createSendEventForHits,
   createBindEventForHits,
-  walkIndex,
 } from '../../lib/utils';
 
 import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
@@ -357,31 +356,10 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
             { results }
           );
 
-          /*
-            With dynamic widgets, facets are not included in the state before their relevant widgets are mounted. Until then, we need to bail out of writing this incomplete state representation in cache.
-          */
-          let hasDynamicWidgets = false;
-          walkIndex(instantSearchInstance.mainIndex, (indexWidget) => {
-            if (
-              !hasDynamicWidgets &&
-              indexWidget
-                .getWidgets()
-                .some(({ $$type }) => $$type === 'ais.dynamicWidgets')
-            ) {
-              hasDynamicWidgets = true;
-            }
-          });
-
-          const hasNoFacets =
-            !results.disjunctiveFacets?.length &&
-            !results.facets?.length &&
-            !results.hierarchicalFacets?.length;
-
           if (
             cachedHits[page] === undefined &&
             !results.__isArtificial &&
-            instantSearchInstance.status === 'idle' &&
-            !(hasDynamicWidgets && hasNoFacets)
+            instantSearchInstance.status === 'idle'
           ) {
             cachedHits[page] = transformedHits;
             cache.write({ state: normalizeState(state), hits: cachedHits });
