@@ -27,6 +27,9 @@ If this guide does not contain what you are looking for and thus prevents you fr
       - [Arrange](#arrange)
       - [Act](#act)
       - [Assert](#assert)
+    - [Common test suites](#common-test-suites)
+      - [Adding new tests in an existing test suite](#adding-new-tests-in-an-existing-test-suite)
+      - [Testing a new widget](#testing-a-new-widget)
   - [Unit tests](#unit-tests)
   - [End-to-end tests](#end-to-end-tests)
   - [Type checks](#type-checks)
@@ -313,6 +316,63 @@ await waitFor(() => {
 
 > **Note**
 >Sometimes, a second snapshot is clearer and shorter than a series of isolated assertions. Use your judgment to determine what will make the test the tersest and easiest to understand.
+
+#### Common test suites
+
+Across flavors, InstantSearch widgets should behave mostly the same (aside from legacy disparities we're still ironing out in major versions). For this reason, **we aim at writing widget tests once by using common test suites.**
+
+Common test suites are defined in `tests/common`. They're agnostic test suites that assert behaviors that should be the same across flavors. Each test suite is a function that exposes:
+- A setup, which is the _arrange_ code passed by each flavor to set up test cases
+- An act, to isolate the code that prepares the assertion. This is necessary when working with UI libraries like React.
+
+The setup code is defined in the `common.test.{tsx|js}` file present in each package.
+
+##### Adding new tests in an existing test suite
+
+If you need to add a new test for an existing widget in an existing test suite, you can add a new `test` block in the dedicated file and write your test here. This new test will run with every flavor.
+
+```js
+test('behaves as expected', async () => {
+  // 1. Arrange
+  // This leverages the `setup` function passed by each flavor.
+  // You can pass options to InstantSearch (index name, search client)
+  // and to the widgets.
+  // The function returns a `container` for you to asert on.
+  const { container } = await setup({
+    instantSearchOptions: {
+      indexName: 'indexName',
+      searchClient,
+    },
+    widgetParams: { attributes: hierarchicalAttributes },
+  });
+
+  // 2. Act
+  // Any interaction must be wrapped in `act`, which is passed by each flavor.
+  // You'll need to use `wait` before asserting as renders are asynchronous.
+  await act(async () => {
+    await wait(0);
+  });
+
+  // 3. Assert
+  // You can assert anything here based on the `container`.
+  expect(container).toMatchInlineSnapshot(`
+    <!-- … -->
+  `);
+});
+```
+
+> **Note**
+>If you need to use Testing Library queries, you can import [`screen`](https://testing-library.com/docs/queries/about#screen) from [`@testing-library/dom`](https://testing-library.com/docs/dom-testing-library/intro/) and call queries on it.
+
+##### Testing a new widget
+
+If you created a new widget and you want to create common tests for them, the process is as follows:
+
+- In `tests/common/widgets`, create a directory with the name of your widget (in kebab-case):
+  - Create a file with the name of your test suite (e.g., `optimistic-ui.ts`, `options.ts`). In doubt, refer to existing test suites for existing widgets.
+  - Create an `index.ts` file that exports a factory function to create your of test suite collection. You can copy one from an existing widget's test suite and modify it to suit your own widget.
+- In your new test suite, export a factory function to create your test suite. You can copy one from an existing widget's test suite and modify it to suit your own widget.
+- In each `common.test.{tsx|js}` file (in each package), import your test suite collection from `@instantsearch/tests`, and call it at the end of the file with the necessary test setup. You can copy one from the same file and modify it to suit your own widget.
 
 ### Unit tests
 
