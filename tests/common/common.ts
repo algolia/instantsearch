@@ -6,9 +6,9 @@ type TestSetupOptions = {
   instantSearchOptions: InstantSearchOptions;
 };
 
-export type TestSetup<TOptions = Record<string, unknown>> = (
+export type TestSetup<TOptions = Record<string, unknown>, TResult = void> = (
   options: TestSetupOptions & TOptions
-) => MaybePromise<void>;
+) => MaybePromise<TResult>;
 
 export interface Act {
   (callback: () => Promise<void>): Promise<undefined>;

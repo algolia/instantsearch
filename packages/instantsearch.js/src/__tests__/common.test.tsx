@@ -10,6 +10,7 @@ import {
   createInfiniteHitsTests,
   createHitsTests,
   createRangeInputTests,
+  createInstantSearchTests,
 } from '@instantsearch/tests';
 
 import instantsearch from '../index.es';
@@ -261,4 +262,23 @@ createRangeInputTests(({ instantSearchOptions, widgetParams }) => {
        */
     })
     .start();
+});
+
+createInstantSearchTests(({ instantSearchOptions }) => {
+  instantsearch(instantSearchOptions)
+    .on('error', () => {
+      /*
+       * prevent rethrowing InstantSearch errors, so tests can be asserted.
+       * IRL this isn't needed, as the error doesn't stop execution.
+       */
+    })
+    .start();
+
+  return {
+    algoliaAgents: [
+      `instantsearch.js (${
+        require('../../../instantsearch.js/package.json').version
+      })`,
+    ],
+  };
 });
