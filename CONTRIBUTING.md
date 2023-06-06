@@ -21,6 +21,11 @@ If this guide does not contain what you are looking for and thus prevents you fr
 - [Folders of the project](#folders-of-the-project)
 - [Importing existing projects](#importing-existing-projects)
 - [Tests](#tests)
+  - [Testing a widget](#testing-a-widget)
+    - [How to write a test](#how-to-write-a-test)
+      - [Arrange](#arrange)
+      - [Act](#act)
+      - [Assert](#assert)
   - [Unit tests](#unit-tests)
   - [End-to-end tests](#end-to-end-tests)
   - [Type checks](#type-checks)
@@ -28,6 +33,7 @@ If this guide does not contain what you are looking for and thus prevents you fr
 - [Release](#release)
   - [Main version](#main-version)
   - [Maintenance versions](#maintenance-versions)
+    - [`next` version](#next-version)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -164,6 +170,134 @@ This monorepo has as goal to be used for all InstantSearch flavors and tools. To
 10. make a pull request and _merge using rebase or merge_ (if you merge using squash the history will be lost)
 
 ## Tests
+
+### Testing a widget
+
+When testing a widget, you should focus on **user interactions, rendering, and possibly side-effects** (e.g., URL updates when used with routing).
+
+The general philosophy of testing widgets follows [Testing Library's guiding principles](https://testing-library.com/docs/guiding-principles):
+
+>The more your tests resemble the way your software is used, the more confidence they can give you.
+
+#### How to write a test
+
+Your tests should follow the [Arrange-Act-Assert](http://wiki.c2.com/?ArrangeActAssert) pattern.
+
+##### Arrange
+
+Set up the conditions for your test, such as creating a mocked search client, initializing the widget, and starting InstantSearch. **It should look like the code an InstantSearch user would write**, so refrain from manipulating internals. If you need mocks or spies, keep them minimal so the test case remains readable.
+##### Act
+
+Execute the code you're testing. If you're testing the initial render, this part would only contain the instantiation of the widget and the starting of InstantSearch. If you're testing what happens when an end user clicks a button, this part would contain the click on the button element as well.
+
+When querying elements, do it in a way that mindfully enforces the contract you're defining. For widgets, since class names are part of the public API, it's recommended to query elements by class name.
+
+In many like a user would by reflecting the experience of visual/mouse users as well as those that use assistive technology.
+
+**❌ Incorrect**
+
+```js
+// There might be other buttons, and this doesn't confirm that the right button
+// triggered the right action.
+const button = getByRole('button');
+
+// Unless the element is impossible to query without a test ID, avoid them.
+const button = getByTestId('show-more-button');
+```
+
+**✅ Correct**
+
+```js
+// This enforces the contract by identifying the button with an attribute that
+// the user has access to and could rely on for other things.
+const button = document.querySelector('.ais-RefinementList-showMore');
+```
+
+> ℹ️ Learn more about [available queries](https://testing-library.com/docs/queries/about#types-of-queries) and [priority](https://testing-library.com/docs/queries/about#priority).
+
+When you're testing user interactions, make sure to simulate full interactions and not manually dispatch events you thing should fire. To do so, use [`user-event`](https://testing-library.com/docs/user-event/intro/).
+
+**❌ Incorrect**
+
+```js
+// Use `userEvent` over `fireEvent` unless you have a legit case for it.
+fireEvent.click(button);
+
+// Don't manually dispatch with lower-level APIs or create custom-made events,
+// the browser might do other things you don't see or know about.
+fireEvent(button, new MouseEvent('click', { bubbles: true, cancelable: true }));
+button.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+```
+
+**✅ Correct**
+
+```js
+// This focuses on the interaction itself and relies on `userEvent` to behave
+// like the browser would.
+userEvent.click(button);
+```
+
+> ℹ️ Learn more about [firing events](https://testing-library.com/docs/dom-testing-library/api-events/).
+
+##### Assert
+
+Verify that the code you're testing behaves as expected.
+
+If you're testing the initial render, you can use [inline Jest snapshots](https://jestjs.io/docs/snapshot-testing) to assert what HTML gets rendered on the page. Don't use external snapshots.
+
+**❌ Incorrect**
+
+```js
+// Don't use external snapshots as they're harder to manage and makes you switch
+// between file to understand the test.
+expect(container).toMatchSnapshot();
+```
+
+**✅ Correct**
+
+```js
+// Use inline snapshots to encapsulate the entire test in a single place.
+expect(container).toMatchInlineSnapshot(`
+  <div>
+    <!-- … -->
+  </div>
+`);
+```
+
+Don't overuse snapshots, as they make tests files longer and are harder to review. Try limiting yourself to a single snapshot for initial render, and if you're testing DOM changes after an interaction, only test this part instead of using another snapshot.
+
+**❌ Incorrect**
+
+```js
+const showMoreButton = container.querySelector('.ais-RefinementList-showMore');
+
+userEvent.click(showMoreButton);
+
+// Don't use a snapshot to assert the whole HTML structure after an interaction
+// as they're harder to read and don't help focusing on what has changed.
+expect(container).toMatchInlineSnapshot(`
+  <div>
+    <!-- … -->
+  </div>
+`);
+```
+
+```js
+const showMoreButton = container.querySelector('.ais-RefinementList-showMore');
+const listItems = container.querySelectorAll('.ais-RefinementList-item');
+
+userEvent.click(showMoreButton);
+
+await waitFor(() => {
+  // Test the elements that did change, making it clear what the consequences of
+  // the interaction are.
+  expect(showMoreButton).toHaveTextContent('Show less');
+  expect(listItems).toHaveLength(20);
+});
+```
+
+> **Note**
+>Sometimes, a second snapshot is clearer and shorter than a series of isolated assertions. Use your judgment to determine what will make the test the tersest and easiest to understand.
 
 ### Unit tests
 
