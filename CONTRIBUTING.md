@@ -22,6 +22,7 @@ If this guide does not contain what you are looking for and thus prevents you fr
 - [Importing existing projects](#importing-existing-projects)
 - [Tests](#tests)
   - [Testing a widget](#testing-a-widget)
+    - [What to test](#what-to-test)
     - [How to write a test](#how-to-write-a-test)
       - [Arrange](#arrange)
       - [Act](#act)
@@ -173,11 +174,25 @@ This monorepo has as goal to be used for all InstantSearch flavors and tools. To
 
 ### Testing a widget
 
-When testing a widget, you should focus on **user interactions, rendering, and possibly side-effects** (e.g., URL updates when used with routing).
-
 The general philosophy of testing widgets follows [Testing Library's guiding principles](https://testing-library.com/docs/guiding-principles):
 
 >The more your tests resemble the way your software is used, the more confidence they can give you.
+
+#### What to test
+
+When testing a widget, you should focus on **user interactions, rendering, and possibly side-effects**.
+
+For example, you should test:
+- The rendering of a widget after passing all possible props.
+- The rendering of a widget or its side-effects (e.g., URL updates when used with routing) after interacting with it.
+
+Sometimes, you might also want to write performance tests to assess that a widget didn't render more than expected, or didn't unnecessarily call the search client.
+
+**Some tests might be common between your widget and its connector.** This is fine because they're two different APIs for the user, and the fact that a widget uses a connector under the hood is an implementation detail.
+
+However, refrain from testing components that aren't publicly available. For example, you don't need to test the UI components that the widgets use for rendering, because they're not exposed to the user. You'd end up writing twice the same tests for no gain.
+
+This guideline doesn't apply for internal utility functions used widely across the project, as testing them can help with codebase discovery and narrowing down isolated issues.
 
 #### How to write a test
 
