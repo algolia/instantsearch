@@ -95,33 +95,6 @@ it('accepts a transformItems prop', () => {
 });
 
 describe('default render', () => {
-  it('renders correctly', () => {
-    __setState({ ...defaultState });
-
-    const wrapper = mount(Breadcrumb, {
-      propsData: defaultProps,
-    });
-
-    expect(wrapper.html()).toMatchSnapshot();
-  });
-
-  it('renders correctly without refinement', () => {
-    __setState({
-      ...defaultState,
-      items: [],
-      canRefine: false,
-    });
-
-    const wrapper = mount(Breadcrumb, {
-      propsData: defaultProps,
-    });
-
-    const selected = wrapper.find('.ais-Breadcrumb-item--selected');
-
-    expect(selected.text()).toContain('Home');
-    expect(wrapper.html()).toMatchSnapshot();
-  });
-
   it('renders correctly with a selected item', () => {
     __setState({
       ...defaultState,

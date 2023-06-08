@@ -1,6 +1,6 @@
 # Common test suites
 
-To ensure InstantSearch widgets behave similarly in JavaScript, React and Vue, we needed framework agnostic tests suites to assert behaviors that needs to be consistent across flavors.
+To ensure InstantSearch widgets behave similarly in JavaScript, React and Vue, we have introduced framework agnostic tests suites to assert behaviors that needs to be consistent across flavors.
 
 Each test suite is a function that exposes:
 - A setup, which is the _arrange_ code passed by each flavor to set up test cases
