@@ -2,6 +2,7 @@ import type { BreadcrumbWidget } from 'instantsearch.js/es/widgets/breadcrumb/br
 import type { Act, TestSetup } from '../../common';
 import { fakeAct } from '../../common';
 import { createOptimisticUiTests } from './optimistic-ui';
+import { createOptionsTests } from './options';
 
 type WidgetParams = Parameters<BreadcrumbWidget>[0];
 export type BreadcrumbSetup = TestSetup<{
@@ -18,5 +19,6 @@ export function createBreadcrumbTests(
 
   describe('Breadcrumb common tests', () => {
     createOptimisticUiTests(setup, act);
+    createOptionsTests(setup, act);
   });
 }

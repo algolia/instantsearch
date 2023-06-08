@@ -291,7 +291,7 @@ await waitFor(() => {
 ```
 
 > **Note**
->Sometimes, a second snapshot is clearer and shorter than a series of isolated assertions. Use your judgment to determine what will make the test the tersest and easiest to understand.
+>Sometimes, a second (focused) snapshot is clearer and shorter than a series of isolated assertions. Use your judgment to determine what will make the test the tersest and easiest to understand.
 
 ### Testing a widget
 

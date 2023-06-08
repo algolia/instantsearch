@@ -2,46 +2,9 @@
  * @jest-environment jsdom
  */
 
-import {
-  createSearchClient,
-  createSingleSearchResponse,
-} from '@instantsearch/mocks';
-import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
-import algoliasearchHelper, {
-  SearchParameters,
-  SearchResults,
-} from 'algoliasearch-helper';
-import { render as preactRender } from 'preact';
-
-import {
-  createRenderOptions,
-  createInitOptions,
-} from '../../../../test/createWidget';
 import breadcrumb from '../breadcrumb';
 
-import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
-import type { VNode } from 'preact';
-
-const render = castToJestMock(preactRender);
-jest.mock('preact', () => {
-  const module = jest.requireActual('preact');
-
-  module.render = jest.fn();
-
-  return module;
-});
-
 describe('breadcrumb()', () => {
-  let container: HTMLElement;
-  let attributes: string[];
-
-  beforeEach(() => {
-    container = document.createElement('div');
-    attributes = ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1'];
-
-    render.mockClear();
-  });
-
   describe('Usage', () => {
     it('throws without `container`', () => {
       expect(() => {
@@ -54,72 +17,6 @@ describe('breadcrumb()', () => {
 
 See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/js/"
 `);
-    });
-  });
-
-  describe('render', () => {
-    let results: SearchResults;
-    let helper: AlgoliaSearchHelper;
-    let state: SearchParameters;
-
-    beforeEach(() => {
-      helper = algoliasearchHelper(createSearchClient(), '');
-
-      state = new SearchParameters({
-        hierarchicalFacets: [
-          {
-            attributes: [
-              'hierarchicalCategories.lvl0',
-              'hierarchicalCategories.lvl1',
-            ],
-            name: 'hierarchicalCategories.lvl0',
-            separator: ' > ',
-            rootPath: null,
-          },
-        ],
-        hierarchicalFacetsRefinements: {
-          'hierarchicalCategories.lvl0': [
-            'Cameras & Camcorders > Digital Cameras',
-          ],
-        },
-      });
-
-      results = new SearchResults(state, [
-        createSingleSearchResponse({
-          facets: {
-            'hierarchicalCategories.lvl0': {
-              'Cameras & Camcorders': 1369,
-            },
-            'hierarchicalCategories.lvl1': {
-              'Cameras & Camcorders > Digital Cameras': 170,
-            },
-          },
-        }),
-      ]);
-    });
-
-    it('renders transformed items correctly', () => {
-      const widget = breadcrumb({
-        container,
-        attributes,
-        transformItems: (items) =>
-          items.map((item) => ({ ...item, transformed: true })),
-      });
-      widget.init!(
-        createInitOptions({
-          helper,
-        })
-      );
-      widget.render!(
-        createRenderOptions({
-          results,
-          state,
-        })
-      );
-
-      const firstRender = render.mock.calls[0][0] as VNode;
-
-      expect(firstRender.props).toMatchSnapshot();
     });
   });
 });
