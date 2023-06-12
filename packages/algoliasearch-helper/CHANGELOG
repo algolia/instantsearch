@@ -1,3 +1,9 @@
+3.13.1 - 2023-06-12
+ * docs(site): follow-up improvements  (#939) https://github.com/algolia/algoliasearch-helper-js/commit/6a36194d425b2446c6406e74df75c87bf5028454
+ * docs: upgrade and simplify tools (#937) https://github.com/algolia/algoliasearch-helper-js/commit/19ccf0b5e6ea00272223f998b05bd3c8f2d904d6
+ * docs: upgrade and simplify tools (#937) https://github.com/algolia/algoliasearch-helper-js/commit/d352cc46d506448b9802e3daa756ff1e9e873886
+ * fix(SearchResults): use empty facets object for exclusion when results are artificial (#940) https://github.com/algolia/algoliasearch-helper-js/commit/a51e8cb37e10c41ca816be1630bab2078980947b
+
 3.13.0 - 2023-05-03
  * chore: delete renovate (#936) https://github.com/algolia/algoliasearch-helper-js/commit/0e3d8cff722d4a91a04251533636f0860ef3828c
  * feat(DerivedHelper): skip request for empty index (#938) https://github.com/algolia/algoliasearch-helper-js/commit/79caa4b0ca2537c0f4431ee11556464031935436
