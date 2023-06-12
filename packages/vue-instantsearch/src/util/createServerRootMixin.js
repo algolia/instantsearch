@@ -12,6 +12,7 @@ function defaultCloneComponent(componentInstance, { mixins = [] } = {}) {
     fetch: undefined,
     _base: undefined,
     name: 'ais-ssr-root-component',
+    i18n: componentInstance.$i18n,
   };
 
   let app;
