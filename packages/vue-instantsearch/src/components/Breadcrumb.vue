@@ -24,26 +24,32 @@
           >
             <slot name="rootLabel">Home</slot>
           </a>
-          <span v-else>
+          <a
+            v-else
+            :href="state.createURL(null)"
+            :class="suit('link')"
+            @click.prevent="state.refine(null)"
+          >
             <slot name="rootLabel">Home</slot>
-          </span>
-        </li>
-        <li
+          </a>
+          <!-- eslint-disable prettier/prettier -->
+        </li><!--
+        --><li
           v-for="(item, index) in state.items"
           :key="item.label"
           :class="[suit('item'), isLastItem(index) && suit('item', 'selected')]"
         >
+          <!-- eslint-enable prettier/prettier -->
           <span :class="suit('separator')" aria-hidden="true">
-            <slot name="separator">></slot>
-          </span>
-          <a
+            <slot name="separator">></slot> </span
+          ><a
             v-if="!isLastItem(index)"
             :href="state.createURL(item.value)"
             :class="suit('link')"
             @click.prevent="state.refine(item.value)"
             >{{ item.label }}</a
           >
-          <span v-else>{{ item.label }}</span>
+          <template v-else>{{ item.label }}</template>
         </li>
       </ul>
     </slot>
