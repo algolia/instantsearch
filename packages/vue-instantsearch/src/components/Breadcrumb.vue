@@ -32,14 +32,12 @@
           >
             <slot name="rootLabel">Home</slot>
           </a>
-          <!-- eslint-disable prettier/prettier -->
-        </li><!--
-        --><li
+        </li>
+        <li
           v-for="(item, index) in state.items"
           :key="item.label"
           :class="[suit('item'), isLastItem(index) && suit('item', 'selected')]"
         >
-          <!-- eslint-enable prettier/prettier -->
           <span :class="suit('separator')" aria-hidden="true">
             <slot name="separator">></slot> </span
           ><a
