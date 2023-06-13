@@ -491,7 +491,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       await renderToString(wrapper);
     });
 
-    it('forward i18n', async () => {
+    it('forwards i18n', async () => {
       const searchClient = createFakeClient();
 
       if (isVue2) {
@@ -512,7 +512,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
           }),
         ],
         data() {
-          expect(this.$i18n).toBe(i18n);
+          expect(this.$i18n).toBe(isVue3 ? i18n.global : i18n);
           return {};
         },
         render: renderCompat((h) =>
