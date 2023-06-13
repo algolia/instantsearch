@@ -12,7 +12,6 @@ function defaultCloneComponent(componentInstance, { mixins = [] } = {}) {
     fetch: undefined,
     _base: undefined,
     name: 'ais-ssr-root-component',
-    i18n: componentInstance.$i18n,
   };
 
   let app;
@@ -27,10 +26,14 @@ function defaultCloneComponent(componentInstance, { mixins = [] } = {}) {
     if (componentInstance.$store) {
       app.use(componentInstance.$store);
     }
+    if (componentInstance.$i18n) {
+      app.use(componentInstance.$i18n);
+    }
   } else {
     // copy over global Vue APIs
     options.router = componentInstance.$router;
     options.store = componentInstance.$store;
+    options.i18n = componentInstance.$i18n;
 
     const Extended = componentInstance.$vnode
       ? componentInstance.$vnode.componentOptions.Ctor.extend(options)

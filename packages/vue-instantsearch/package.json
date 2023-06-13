@@ -75,6 +75,8 @@
     "rollup-plugin-vue3": "npm:rollup-plugin-vue@6.0.0",
     "vue": "2.7.14",
     "vue-autosuggest": "1.8.1",
+    "vue-i18n": "8.24.4",
+    "vue-i18n-vue3": "npm:vue-i18n@^9.2.2",
     "vue-loader": "14.2.2",
     "vue-router": "3.4.3",
     "vue-router4": "npm:vue-router@4.0.0",
