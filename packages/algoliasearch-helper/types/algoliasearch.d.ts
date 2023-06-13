@@ -12,7 +12,8 @@ import type * as AlgoliaSearch from 'algoliasearch';
 import type * as ClientSearch from '@algolia/client-search';
 
 // turns any to unknown, so it can be used as a conditional
-type AnyToUnknown<T> = (any extends T ? true : false) extends true
+// more info in https://stackoverflow.com/a/49928360/3185307
+type AnyToUnknown<T> = (0 extends 1 & T ? true : false) extends true
   ? unknown
   : T;
 

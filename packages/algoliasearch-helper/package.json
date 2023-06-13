@@ -69,7 +69,7 @@
     "metalsmith-metallic": "1.0.0",
     "@metalsmith/sass": "1.4.0",
     "pug": "2.0.3",
-    "typescript": "4.6.2"
+    "typescript": "5.1.3"
   },
   "dependencies": {
     "@algolia/events": "^4.0.1"
