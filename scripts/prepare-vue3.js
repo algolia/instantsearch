@@ -8,7 +8,7 @@ console.log('swapping Vue 3 dependency');
 shell.sed(
   '-i',
   /"vue": "2.*"(,?)/,
-  '"vue": "3.1.2"$1',
+  '"vue": "3.2.47"$1',
   path.resolve(__dirname, '../packages/vue-instantsearch/package.json')
 );
 
