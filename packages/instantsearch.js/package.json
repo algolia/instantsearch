@@ -33,7 +33,7 @@
     "@types/google.maps": "^3.45.3",
     "@types/hogan.js": "^3.0.0",
     "@types/qs": "^6.5.3",
-    "algoliasearch-helper": "^3.13.0",
+    "algoliasearch-helper": "^3.13.2",
     "hogan.js": "^3.0.2",
     "htm": "^3.0.0",
     "preact": "^10.10.0",
