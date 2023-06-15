@@ -8,6 +8,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Bug Fixes
 
+* **createServerRootMixin:** forward i18n on option ([#5673](https://github.com/algolia/instantsearch/issues/5673)) ([d52b47f](https://github.com/algolia/instantsearch/commit/d52b47f58a9e723616ec59c9805c590e8079ba38))
 * **breadcrumb:** align vue component with specs ([#5672](https://github.com/algolia/instantsearch.js/issues/5672)) ([dbfed3a](https://github.com/algolia/instantsearch.js/commit/dbfed3ac25910013835c9bb36255b6dbd6d264ec))
 
 
