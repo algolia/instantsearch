@@ -60,7 +60,6 @@
     "mversion": "1.13.0",
     "yargs": "13.2.4",
     "jsdoc-to-markdown": "8.0.0",
-    "lodash.keyby": "4.6.0",
     "handlebars": "4.1.0",
     "metalsmith": "2.5.1",
     "metalsmith-in-place": "1.4.4",
