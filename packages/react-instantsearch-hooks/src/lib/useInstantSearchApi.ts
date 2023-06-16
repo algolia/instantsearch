@@ -271,12 +271,13 @@ You can ignore this warning if you are using a custom router that suits your nee
 
 /**
  * Gets the version of Next.js if it is available in the `window` object,
- * otherwise it returns the version from the npm package dependencies (in SSR).
+ * otherwise it returns the NEXT_RUNTIME environment variable (in SSR),
+ * which is either `nodejs` or `edge`.
  */
 function getNextVersion() {
   return (
     (typeof window !== 'undefined' &&
       ((window as any).next?.version as string | undefined)) ||
-    process.env.npm_package_dependencies_next
+    process.env?.NEXT_RUNTIME
   );
 }

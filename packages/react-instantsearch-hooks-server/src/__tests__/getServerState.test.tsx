@@ -189,8 +189,8 @@ describe('getServerState', () => {
   });
 
   test('adds the server user agents', async () => {
-    const nextVersion = '11.1.4';
-    process.env.npm_package_dependencies_next = nextVersion;
+    const nextRuntime = 'nodejs';
+    process.env.NEXT_RUNTIME = nextRuntime;
 
     const searchClient = createAlgoliaSearchClient({});
     const { App } = createTestEnvironment({ searchClient });
@@ -210,7 +210,7 @@ describe('getServerState', () => {
       `react-instantsearch-server (${version})`
     );
     expect(searchClient.addAlgoliaAgent).toHaveBeenCalledWith(
-      `next.js (${nextVersion})`
+      `next.js (${nextRuntime})`
     );
   });
 
