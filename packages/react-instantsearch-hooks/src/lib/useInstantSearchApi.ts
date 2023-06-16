@@ -278,6 +278,6 @@ function getNextVersion() {
   return (
     (typeof window !== 'undefined' &&
       ((window as any).next?.version as string | undefined)) ||
-    (typeof process !== 'undefined' && process.env?.NEXT_RUNTIME)
+    (typeof process !== 'undefined' ? process.env?.NEXT_RUNTIME : undefined)
   );
 }
