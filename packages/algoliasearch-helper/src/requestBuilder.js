@@ -4,10 +4,10 @@ var merge = require('./functions/merge');
 
 function sortObject(obj) {
   return Object.keys(obj)
-    .sort(function(a, b) {
+    .sort(function (a, b) {
       return a.localeCompare(b);
     })
-    .reduce(function(acc, curr) {
+    .reduce(function (acc, curr) {
       // eslint-disable-next-line no-param-reassign
       acc[curr] = obj[curr];
       return acc;
@@ -29,39 +29,47 @@ var requestBuilder = {
     // One query for the hits
     queries.push({
       indexName: index,
-      params: requestBuilder._getHitsSearchParams(state)
+      params: requestBuilder._getHitsSearchParams(state),
     });
 
     // One for each disjunctive facets
-    state.getRefinedDisjunctiveFacets().forEach(function(refinedFacet) {
+    state.getRefinedDisjunctiveFacets().forEach(function (refinedFacet) {
       queries.push({
         indexName: index,
-        params: requestBuilder._getDisjunctiveFacetSearchParams(state, refinedFacet)
+        params: requestBuilder._getDisjunctiveFacetSearchParams(
+          state,
+          refinedFacet
+        ),
       });
     });
 
     // More to get the parent levels of the hierarchical facets when refined
-    state.getRefinedHierarchicalFacets().forEach(function(refinedFacet) {
+    state.getRefinedHierarchicalFacets().forEach(function (refinedFacet) {
       var hierarchicalFacet = state.getHierarchicalFacetByName(refinedFacet);
       var currentRefinement = state.getHierarchicalRefinement(refinedFacet);
       var separator = state._getHierarchicalFacetSeparator(hierarchicalFacet);
 
       // If we are deeper than level 0 (starting from `beer > IPA`)
       // we want to get all parent values
-      if (currentRefinement.length > 0 && currentRefinement[0].split(separator).length > 1) {
+      if (
+        currentRefinement.length > 0 &&
+        currentRefinement[0].split(separator).length > 1
+      ) {
         // We generate a map of the filters we will use for our facet values queries
-        var filtersMap = currentRefinement[0].split(separator).slice(0, -1).reduce(
-          function createFiltersMap(map, segment, level) {
+        var filtersMap = currentRefinement[0]
+          .split(separator)
+          .slice(0, -1)
+          .reduce(function createFiltersMap(map, segment, level) {
             return map.concat({
               attribute: hierarchicalFacet.attributes[level],
-              value: level === 0
-                ? segment
-                : [map[map.length - 1].value, segment].join(separator)
+              value:
+                level === 0
+                  ? segment
+                  : [map[map.length - 1].value, segment].join(separator),
             });
-          }
-        , []);
+          }, []);
 
-        filtersMap.forEach(function(filter, level) {
+        filtersMap.forEach(function (filter, level) {
           var params = requestBuilder._getDisjunctiveFacetSearchParams(
             state,
             filter.attribute,
@@ -70,37 +78,48 @@ var requestBuilder = {
 
           // Keep facet filters unrelated to current hierarchical attributes
           function hasHierarchicalFacetFilter(value) {
-            return hierarchicalFacet.attributes.some(function(attribute) {
+            return hierarchicalFacet.attributes.some(function (attribute) {
               return attribute === value.split(':')[0];
             });
           }
 
-          var filteredFacetFilters = (params.facetFilters || []).reduce(function(acc, facetFilter) {
-            if (Array.isArray(facetFilter)) {
-              var filtered = facetFilter.filter(function(filterValue) {
-                return !hasHierarchicalFacetFilter(filterValue);
-              });
+          var filteredFacetFilters = (params.facetFilters || []).reduce(
+            function (acc, facetFilter) {
+              if (Array.isArray(facetFilter)) {
+                var filtered = facetFilter.filter(function (filterValue) {
+                  return !hasHierarchicalFacetFilter(filterValue);
+                });
 
-              if (filtered.length > 0) {
-                acc.push(filtered);
+                if (filtered.length > 0) {
+                  acc.push(filtered);
+                }
               }
-            }
 
-            if (typeof facetFilter === 'string' && !hasHierarchicalFacetFilter(facetFilter)) {
-              acc.push(facetFilter);
-            }
+              if (
+                typeof facetFilter === 'string' &&
+                !hasHierarchicalFacetFilter(facetFilter)
+              ) {
+                acc.push(facetFilter);
+              }
 
-            return acc;
-          }, []);
+              return acc;
+            },
+            []
+          );
 
           var parent = filtersMap[level - 1];
           if (level > 0) {
-            params.facetFilters = filteredFacetFilters.concat(parent.attribute + ':' + parent.value);
+            params.facetFilters = filteredFacetFilters.concat(
+              parent.attribute + ':' + parent.value
+            );
           } else {
-            params.facetFilters = filteredFacetFilters.length > 0 ? filteredFacetFilters : undefined;
+            params.facetFilters =
+              filteredFacetFilters.length > 0
+                ? filteredFacetFilters
+                : undefined;
           }
 
-          queries.push({indexName: index, params: params});
+          queries.push({ indexName: index, params: params });
         });
       }
     });
@@ -114,18 +133,17 @@ var requestBuilder = {
    * @param  {SearchParameters} state The state from which to get the queries
    * @return {object.<string, any>} The search parameters for hits
    */
-  _getHitsSearchParams: function(state) {
+  _getHitsSearchParams: function (state) {
     var facets = state.facets
       .concat(state.disjunctiveFacets)
       .concat(requestBuilder._getHitsHierarchicalFacetsAttributes(state));
-
 
     var facetFilters = requestBuilder._getFacetFilters(state);
     var numericFilters = requestBuilder._getNumericFilters(state);
     var tagFilters = requestBuilder._getTagFilters(state);
     var additionalParams = {
       facets: facets.indexOf('*') > -1 ? ['*'] : facets,
-      tagFilters: tagFilters
+      tagFilters: tagFilters,
     };
 
     if (facetFilters.length > 0) {
@@ -147,15 +165,23 @@ var requestBuilder = {
    * @param  {boolean} hierarchicalRootLevel ?? FIXME
    * @return {object} The search parameters for a disjunctive facet
    */
-  _getDisjunctiveFacetSearchParams: function(state, facet, hierarchicalRootLevel) {
-    var facetFilters = requestBuilder._getFacetFilters(state, facet, hierarchicalRootLevel);
+  _getDisjunctiveFacetSearchParams: function (
+    state,
+    facet,
+    hierarchicalRootLevel
+  ) {
+    var facetFilters = requestBuilder._getFacetFilters(
+      state,
+      facet,
+      hierarchicalRootLevel
+    );
     var numericFilters = requestBuilder._getNumericFilters(state, facet);
     var tagFilters = requestBuilder._getTagFilters(state);
     var additionalParams = {
       hitsPerPage: 0,
       page: 0,
       analytics: false,
-      clickAnalytics: false
+      clickAnalytics: false,
     };
 
     if (tagFilters.length > 0) {
@@ -165,11 +191,12 @@ var requestBuilder = {
     var hierarchicalFacet = state.getHierarchicalFacetByName(facet);
 
     if (hierarchicalFacet) {
-      additionalParams.facets = requestBuilder._getDisjunctiveHierarchicalFacetAttribute(
-        state,
-        hierarchicalFacet,
-        hierarchicalRootLevel
-      );
+      additionalParams.facets =
+        requestBuilder._getDisjunctiveHierarchicalFacetAttribute(
+          state,
+          hierarchicalFacet,
+          hierarchicalRootLevel
+        );
     } else {
       additionalParams.facets = facet;
     }
@@ -192,21 +219,21 @@ var requestBuilder = {
    * @param {string} [facetName] the name of the attribute for which the filters should be excluded
    * @return {string[]} the numeric filters in the algolia format
    */
-  _getNumericFilters: function(state, facetName) {
+  _getNumericFilters: function (state, facetName) {
     if (state.numericFilters) {
       return state.numericFilters;
     }
 
     var numericFilters = [];
 
-    Object.keys(state.numericRefinements).forEach(function(attribute) {
+    Object.keys(state.numericRefinements).forEach(function (attribute) {
       var operators = state.numericRefinements[attribute] || {};
-      Object.keys(operators).forEach(function(operator) {
+      Object.keys(operators).forEach(function (operator) {
         var values = operators[operator] || [];
         if (facetName !== attribute) {
-          values.forEach(function(value) {
+          values.forEach(function (value) {
             if (Array.isArray(value)) {
-              var vs = value.map(function(v) {
+              var vs = value.map(function (v) {
                 return attribute + operator + v;
               });
               numericFilters.push(vs);
@@ -227,14 +254,13 @@ var requestBuilder = {
    * @param {SearchParameters} state the state from which to get the filters
    * @return {string} Tag filters in a single string
    */
-  _getTagFilters: function(state) {
+  _getTagFilters: function (state) {
     if (state.tagFilters) {
       return state.tagFilters;
     }
 
     return state.tagRefinements.join(',');
   },
-
 
   /**
    * Build facetFilters parameter based on current refinements. The array returned
@@ -245,42 +271,43 @@ var requestBuilder = {
    * @param  {boolean} [hierarchicalRootLevel] ?? FIXME
    * @return {array.<string>} The facet filters in the algolia format
    */
-  _getFacetFilters: function(state, facet, hierarchicalRootLevel) {
+  _getFacetFilters: function (state, facet, hierarchicalRootLevel) {
     var facetFilters = [];
 
     var facetsRefinements = state.facetsRefinements || {};
-    Object.keys(facetsRefinements).forEach(function(facetName) {
+    Object.keys(facetsRefinements).forEach(function (facetName) {
       var facetValues = facetsRefinements[facetName] || [];
-      facetValues.forEach(function(facetValue) {
+      facetValues.forEach(function (facetValue) {
         facetFilters.push(facetName + ':' + facetValue);
       });
     });
 
     var facetsExcludes = state.facetsExcludes || {};
-    Object.keys(facetsExcludes).forEach(function(facetName) {
+    Object.keys(facetsExcludes).forEach(function (facetName) {
       var facetValues = facetsExcludes[facetName] || [];
-      facetValues.forEach(function(facetValue) {
+      facetValues.forEach(function (facetValue) {
         facetFilters.push(facetName + ':-' + facetValue);
       });
     });
 
     var disjunctiveFacetsRefinements = state.disjunctiveFacetsRefinements || {};
-    Object.keys(disjunctiveFacetsRefinements).forEach(function(facetName) {
+    Object.keys(disjunctiveFacetsRefinements).forEach(function (facetName) {
       var facetValues = disjunctiveFacetsRefinements[facetName] || [];
       if (facetName === facet || !facetValues || facetValues.length === 0) {
         return;
       }
       var orFilters = [];
 
-      facetValues.forEach(function(facetValue) {
+      facetValues.forEach(function (facetValue) {
         orFilters.push(facetName + ':' + facetValue);
       });
 
       facetFilters.push(orFilters);
     });
 
-    var hierarchicalFacetsRefinements = state.hierarchicalFacetsRefinements || {};
-    Object.keys(hierarchicalFacetsRefinements).forEach(function(facetName) {
+    var hierarchicalFacetsRefinements =
+      state.hierarchicalFacetsRefinements || {};
+    Object.keys(hierarchicalFacetsRefinements).forEach(function (facetName) {
       var facetValues = hierarchicalFacetsRefinements[facetName] || [];
       var facetValue = facetValues[0];
 
@@ -298,8 +325,13 @@ var requestBuilder = {
       if (facet === facetName) {
         // if we are at the root level already, no need to ask for facet values, we get them from
         // the hits query
-        if (facetValue.indexOf(separator) === -1 || (!rootPath && hierarchicalRootLevel === true) ||
-          (rootPath && rootPath.split(separator).length === facetValue.split(separator).length)) {
+        if (
+          facetValue.indexOf(separator) === -1 ||
+          (!rootPath && hierarchicalRootLevel === true) ||
+          (rootPath &&
+            rootPath.split(separator).length ===
+              facetValue.split(separator).length)
+        ) {
           return;
         }
 
@@ -326,13 +358,18 @@ var requestBuilder = {
     return facetFilters;
   },
 
-  _getHitsHierarchicalFacetsAttributes: function(state) {
+  _getHitsHierarchicalFacetsAttributes: function (state) {
     var out = [];
 
     return state.hierarchicalFacets.reduce(
       // ask for as much levels as there's hierarchical refinements
-      function getHitsAttributesForHierarchicalFacet(allAttributes, hierarchicalFacet) {
-        var hierarchicalRefinement = state.getHierarchicalRefinement(hierarchicalFacet.name)[0];
+      function getHitsAttributesForHierarchicalFacet(
+        allAttributes,
+        hierarchicalFacet
+      ) {
+        var hierarchicalRefinement = state.getHierarchicalRefinement(
+          hierarchicalFacet.name
+        )[0];
 
         // if no refinement, ask for root level
         if (!hierarchicalRefinement) {
@@ -345,10 +382,16 @@ var requestBuilder = {
         var newAttributes = hierarchicalFacet.attributes.slice(0, level + 1);
 
         return allAttributes.concat(newAttributes);
-      }, out);
+      },
+      out
+    );
   },
 
-  _getDisjunctiveHierarchicalFacetAttribute: function(state, hierarchicalFacet, rootLevel) {
+  _getDisjunctiveHierarchicalFacetAttribute: function (
+    state,
+    hierarchicalFacet,
+    rootLevel
+  ) {
     var separator = state._getHierarchicalFacetSeparator(hierarchicalFacet);
     if (rootLevel === true) {
       var rootPath = state._getHierarchicalRootPath(hierarchicalFacet);
@@ -360,7 +403,8 @@ var requestBuilder = {
       return [hierarchicalFacet.attributes[attributeIndex]];
     }
 
-    var hierarchicalRefinement = state.getHierarchicalRefinement(hierarchicalFacet.name)[0] || '';
+    var hierarchicalRefinement =
+      state.getHierarchicalRefinement(hierarchicalFacet.name)[0] || '';
     // if refinement is 'beers > IPA > Flying dog',
     // then we want `facets: ['beers > IPA']` as disjunctive facet (parent level values)
 
@@ -368,23 +412,25 @@ var requestBuilder = {
     return hierarchicalFacet.attributes.slice(0, parentLevel + 1);
   },
 
-  getSearchForFacetQuery: function(facetName, query, maxFacetHits, state) {
-    var stateForSearchForFacetValues = state.isDisjunctiveFacet(facetName) ?
-      state.clearRefinements(facetName) :
-      state;
+  getSearchForFacetQuery: function (facetName, query, maxFacetHits, state) {
+    var stateForSearchForFacetValues = state.isDisjunctiveFacet(facetName)
+      ? state.clearRefinements(facetName)
+      : state;
     var searchForFacetSearchParameters = {
       facetQuery: query,
-      facetName: facetName
+      facetName: facetName,
     };
     if (typeof maxFacetHits === 'number') {
       searchForFacetSearchParameters.maxFacetHits = maxFacetHits;
     }
-    return sortObject(merge(
-      {},
-      requestBuilder._getHitsSearchParams(stateForSearchForFacetValues),
-      searchForFacetSearchParameters
-    ));
-  }
+    return sortObject(
+      merge(
+        {},
+        requestBuilder._getHitsSearchParams(stateForSearchForFacetValues),
+        searchForFacetSearchParameters
+      )
+    );
+  },
 };
 
 module.exports = requestBuilder;

@@ -13,33 +13,33 @@ var stateWithStringForIntegers = {
   maxValuesPerFacet: '10',
   aroundRadius: '10',
   aroundPrecision: '2',
-  minimumAroundRadius: '234'
+  minimumAroundRadius: '234',
 };
 
-test('Constructor should parse the numeric attributes', function() {
+test('Constructor should parse the numeric attributes', function () {
   var state = new SearchParameters(stateWithStringForIntegers);
 
-  Object.entries(stateWithStringForIntegers).forEach(function([k, v]) {
+  Object.entries(stateWithStringForIntegers).forEach(function ([k, v]) {
     var parsedValue = parseFloat(v);
     expect(state[k]).toBe(parsedValue);
   });
 });
 
-test('setQueryParameter should parse the numeric attributes', function() {
+test('setQueryParameter should parse the numeric attributes', function () {
   var state0 = new SearchParameters();
 
-  Object.entries(stateWithStringForIntegers).forEach(function([k, v]) {
+  Object.entries(stateWithStringForIntegers).forEach(function ([k, v]) {
     var parsedValue = parseFloat(v);
     var state1 = state0.setQueryParameter(k, v);
     expect(state1[k]).toBe(parsedValue);
   });
 });
 
-test('setQueryParameters should parse the numeric attributes', function() {
+test('setQueryParameters should parse the numeric attributes', function () {
   var state0 = new SearchParameters();
   var state1 = state0.setQueryParameters(stateWithStringForIntegers);
 
-  Object.entries(stateWithStringForIntegers).forEach(function([k, v]) {
+  Object.entries(stateWithStringForIntegers).forEach(function ([k, v]) {
     var parsedValue = parseFloat(v);
     expect(state1[k]).toBe(parsedValue);
   });

@@ -4,15 +4,15 @@ var algoliasearchHelper = require('../../../../');
 
 function makeFakeClient(assertions) {
   return {
-    search: function() {
+    search: function () {
       assertions.apply(null, arguments);
 
-      return new Promise(function() {});
-    }
+      return new Promise(function () {});
+    },
   };
 }
 
-test('trigger a search without derivation', function() {
+test('trigger a search without derivation', function () {
   var client = makeFakeClient(assertions);
   var helper = algoliasearchHelper(client, 'indexName');
 
@@ -23,11 +23,11 @@ test('trigger a search without derivation', function() {
   }
 });
 
-test('trigger a search with one derivation without a state change', function() {
+test('trigger a search with one derivation without a state change', function () {
   var client = makeFakeClient(assertions);
   var helper = algoliasearchHelper(client, 'indexName');
 
-  helper.derive(function(state) {
+  helper.derive(function (state) {
     return state;
   });
 
@@ -39,11 +39,11 @@ test('trigger a search with one derivation without a state change', function() {
   }
 });
 
-test('trigger a search with one derivation with a state change', function() {
+test('trigger a search with one derivation with a state change', function () {
   var client = makeFakeClient(assertions);
   var helper = algoliasearchHelper(client, 'indexName');
 
-  helper.derive(function(state) {
+  helper.derive(function (state) {
     return state.setQuery('otherQuery');
   });
 
@@ -63,11 +63,11 @@ test('trigger a search with one derivation with a state change', function() {
   }
 });
 
-test('trigger a search with derivation only', function() {
+test('trigger a search with derivation only', function () {
   var client = makeFakeClient(assertions);
   var helper = algoliasearchHelper(client, 'indexName');
 
-  helper.derive(function(state) {
+  helper.derive(function (state) {
     return state;
   });
 

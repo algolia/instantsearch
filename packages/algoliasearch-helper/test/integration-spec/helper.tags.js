@@ -9,17 +9,17 @@ var algoliasearchHelper = require('../../');
 var indexName = createIndexName('helper_refinements');
 
 var dataset = [
-  {objectID: '0', _tags: ['t1', 't2']},
-  {objectID: '1', _tags: ['t1', 't3']},
-  {objectID: '2', _tags: ['t2', 't3']},
-  {objectID: '3', _tags: ['t3', 't4']}
+  { objectID: '0', _tags: ['t1', 't2'] },
+  { objectID: '1', _tags: ['t1', 't3'] },
+  { objectID: '2', _tags: ['t2', 't3'] },
+  { objectID: '3', _tags: ['t3', 't4'] },
 ];
 
 var config = {};
 
 var client;
-beforeAll(function() {
-  return setup(indexName, dataset, config).then(function(c) {
+beforeAll(function () {
+  return setup(indexName, dataset, config).then(function (c) {
     client = c;
   });
 });
@@ -28,16 +28,16 @@ function hitsToParsedID(h) {
   return parseInt(h.objectID, 10);
 }
 
-test('[INT][TAGS]Test tags operations on the helper and their results on the algolia API', function(done) {
+test('[INT][TAGS]Test tags operations on the helper and their results on the algolia API', function (done) {
   var helper = algoliasearchHelper(client, indexName, {});
 
   var calls = 0;
 
-  helper.on('error', function(event) {
+  helper.on('error', function (event) {
     done.fail(event.error);
   });
 
-  helper.on('result', function(event) {
+  helper.on('result', function (event) {
     calls++;
 
     var results = event.results;

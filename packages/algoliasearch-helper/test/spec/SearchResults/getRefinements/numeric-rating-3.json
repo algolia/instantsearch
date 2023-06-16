@@ -7,10 +7,7 @@
             "name": "3M - Eureka RR Pet Micro Allergen Vacuum Bag for Select Eureka Vacuums (3-Pack)",
             "description": "Equip your Eureka 4800 series vacuum with this odor-absorbent, micro allergen-filtering vacuum bag and help eliminate dust, dander and other airborne allergens as well as undesirable odors from your home.",
             "brand": "3M",
-            "categories": [
-              "Appliances",
-              "Vacuum Bags"
-            ],
+            "categories": ["Appliances", "Vacuum Bags"],
             "hierarchicalCategories": {
               "lvl0": "Appliances",
               "lvl1": "Appliances > Vacuum Bags"
@@ -58,10 +55,7 @@
             "name": "3M - Filtrete Eureka U Replacement Belt",
             "description": "Keep things running smoothly at home with these replacement vacuum belts on hand in case of a cleaning emergency.",
             "brand": "3M",
-            "categories": [
-              "Appliances",
-              "Vacuum Belts"
-            ],
+            "categories": ["Appliances", "Vacuum Belts"],
             "hierarchicalCategories": {
               "lvl0": "Appliances",
               "lvl1": "Appliances > Vacuum Belts"
@@ -109,10 +103,7 @@
             "name": "3M - Filtrete Hoover Windtunnel Replacement Belt",
             "description": "Be ready for a cleaning emergency with these replacement belts for your Hoover vacuum.",
             "brand": "3M",
-            "categories": [
-              "Appliances",
-              "Vacuum Belts"
-            ],
+            "categories": ["Appliances", "Vacuum Belts"],
             "hierarchicalCategories": {
               "lvl0": "Appliances",
               "lvl1": "Appliances > Vacuum Belts"
@@ -160,10 +151,7 @@
             "name": "3M - Hoover Y & Z Pet Micro Allergen Vacuum Bag for Select Hoover Vacuums (3-Pack)",
             "description": "Help eliminate dust, dander and other airborne allergens as well as undesirable odors from your home by equipping your Hoover Windtunnel upright vacuum with this odor-absorbent, micro allergen-filtering vacuum bag.",
             "brand": "3M",
-            "categories": [
-              "Appliances",
-              "Vacuum Bags"
-            ],
+            "categories": ["Appliances", "Vacuum Bags"],
             "hierarchicalCategories": {
               "lvl0": "Appliances",
               "lvl1": "Appliances > Vacuum Bags"
@@ -211,11 +199,7 @@
             "name": "Acer - 19\" LED Monitor - Black",
             "description": "Compatible with PC and Mac, this 19\" Acer V196LB LED monitor allows you to expand your digital workspace and provides a clear view of images, documents and other content. The wall-mountable design enables flexible placement around your workstation.",
             "brand": "Acer",
-            "categories": [
-              "Computers & Tablets",
-              "Monitors",
-              "All Monitors"
-            ],
+            "categories": ["Computers & Tablets", "Monitors", "All Monitors"],
             "hierarchicalCategories": {
               "lvl0": "Computers & Tablets",
               "lvl1": "Computers & Tablets > Monitors",
@@ -334,11 +318,7 @@
             "name": "Acer - Iconia Tab 8 - 8\" - Intel Atom - 16GB - Silver",
             "description": "Stay connected on the go using this Acer Iconia Tab 8 A1-850-13FQ tablet, which features built-in Wi-Fi for simple Web access. The 8\" 10-finger touch screen delivers high-definition visuals and makes navigation easy.",
             "brand": "Acer",
-            "categories": [
-              "Computers & Tablets",
-              "Tablets",
-              "All Tablets"
-            ],
+            "categories": ["Computers & Tablets", "Tablets", "All Tablets"],
             "hierarchicalCategories": {
               "lvl0": "Computers & Tablets",
               "lvl1": "Computers & Tablets > Tablets",
@@ -457,10 +437,7 @@
             "name": "adidas - Fit Smart Band + Heart Rate (Large) - Black",
             "description": "adidas Fit Smart Band + Heart Rate: Combining the convenience of precise heart rate measurement from your wrist, all-day activity tracking and personalized fitness coaching, this band helps you reach your fitness goals and enjoy a more active lifestyle.",
             "brand": "adidas",
-            "categories": [
-              "Health, Fitness & Beauty",
-              "Heart Rate Monitors"
-            ],
+            "categories": ["Health, Fitness & Beauty", "Heart Rate Monitors"],
             "hierarchicalCategories": {
               "lvl0": "Health, Fitness & Beauty",
               "lvl1": "Health, Fitness & Beauty > Heart Rate Monitors"
@@ -949,9 +926,7 @@
             "name": "Altec Lansing - Boom Jacket Bluetooth Speaker - Blue",
             "description": "Only at Best Buy  This Altec Lansing Boom Jacket IMW576-BLU speaker's Bluetooth interface and NFC (near-field communication) technology let you stream music from select devices from up to 50' away. The water-, sand-, shock- and snow-proof construction offers protection.",
             "brand": "Altec Lansing",
-            "categories": [
-              "Audio"
-            ],
+            "categories": ["Audio"],
             "hierarchicalCategories": {
               "lvl0": "Audio"
             },
@@ -993,9 +968,7 @@
             "name": "Altec Lansing - Mini Life Jacket Bluetooth Speaker - Blue",
             "description": "With a universal mounting mechanism and water-, sand-, shock- and snow-proof construction, this Altec Lansing Mini Life Jacket IMW477-AB speaker lets you listen to music both indoors and outdoors. A Bluetooth interface lets you pair with select devices.",
             "brand": "Altec Lansing",
-            "categories": [
-              "Audio"
-            ],
+            "categories": ["Audio"],
             "hierarchicalCategories": {
               "lvl0": "Audio"
             },
@@ -1037,11 +1010,7 @@
             "name": "Altra Furniture - AltraMount TV Stand for Flat-Panel TVs Up to 60\" - Black",
             "description": "Altra AltraMount TV Stand:  Keep your home theater neatly organized with this TV stand, which accommodates your flat-panel LCD or plasma TV and features 3 hollow-core shelves to house A/V components and gaming consoles.",
             "brand": "Altra Furniture",
-            "categories": [
-              "TV & Home Theater",
-              "TV Stands",
-              "All TV Stands"
-            ],
+            "categories": ["TV & Home Theater", "TV Stands", "All TV Stands"],
             "hierarchicalCategories": {
               "lvl0": "TV & Home Theater",
               "lvl1": "TV & Home Theater > TV Stands",
@@ -1095,11 +1064,7 @@
             "name": "Amana - 25.4 Cu. Ft. Side-by-Side Refrigerator with Thru-the-Door Ice and Water - White",
             "description": "Neatly store your fresh and frozen groceries in this 25.4 cu. ft. Amana ASD2575BRW side-by-side refrigerator, which features adjustable Spillsaver glass shelves and gallon-size door storage to help keep contents organized.",
             "brand": "Amana",
-            "categories": [
-              "Appliances",
-              "Refrigerators",
-              "All Refrigerators"
-            ],
+            "categories": ["Appliances", "Refrigerators", "All Refrigerators"],
             "hierarchicalCategories": {
               "lvl0": "Appliances",
               "lvl1": "Appliances > Refrigerators",
@@ -1445,13 +1410,8 @@
   "state": {
     "index": "instant_search",
     "query": "",
-    "facets": [
-      "brand"
-    ],
-    "disjunctiveFacets": [
-      "type",
-      "rating"
-    ],
+    "facets": ["brand"],
+    "disjunctiveFacets": ["type", "rating"],
     "hierarchicalFacets": [
       {
         "name": "hierarchicalCategories",
@@ -1468,9 +1428,7 @@
     "disjunctiveFacetsRefinements": {},
     "numericRefinements": {
       "rating": {
-        "=": [
-          3
-        ]
+        "=": [3]
       }
     },
     "tagRefinements": [],

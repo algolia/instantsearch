@@ -2,52 +2,74 @@
 
 var algoliasearchHelper = require('../../index');
 
-test('Search should call the algolia client according to the number of refinements', function(done) {
+test('Search should call the algolia client according to the number of refinements', function (done) {
   var testData = require('../datasets/SearchParameters/search.dataset')();
 
   var client = {
-    search: jest.fn().mockImplementationOnce(function() {
+    search: jest.fn().mockImplementationOnce(function () {
       return Promise.resolve(testData.response);
-    })
+    }),
   };
 
   var helper = algoliasearchHelper(client, 'test_hotels-node', {
-    disjunctiveFacets: ['city']
+    disjunctiveFacets: ['city'],
   });
 
   helper.addDisjunctiveRefine('city', 'Paris', true);
   helper.addDisjunctiveRefine('city', 'New York', true);
 
-  helper.on('result', function(event) {
+  helper.on('result', function (event) {
     var results = event.results;
 
     // shame deepclone, to remove any associated methods coming from the results
-    expect(JSON.parse(JSON.stringify(results))).toEqual(JSON.parse(JSON.stringify(testData.responseHelper)));
+    expect(JSON.parse(JSON.stringify(results))).toEqual(
+      JSON.parse(JSON.stringify(testData.responseHelper))
+    );
 
     var cityValues = results.getFacetValues('city');
     var expectedCityValues = [
-      {name: 'Paris', escapedValue: 'Paris', count: 3, isRefined: true},
-      {name: 'New York', escapedValue: 'New York', count: 1, isRefined: true},
-      {name: 'San Francisco', escapedValue: 'San Francisco', count: 1, isRefined: false}
+      { name: 'Paris', escapedValue: 'Paris', count: 3, isRefined: true },
+      { name: 'New York', escapedValue: 'New York', count: 1, isRefined: true },
+      {
+        name: 'San Francisco',
+        escapedValue: 'San Francisco',
+        count: 1,
+        isRefined: false,
+      },
     ];
 
     expect(cityValues).toEqual(expectedCityValues);
 
-    var cityValuesCustom = results.getFacetValues('city', {sortBy: ['count:asc', 'name:asc']});
+    var cityValuesCustom = results.getFacetValues('city', {
+      sortBy: ['count:asc', 'name:asc'],
+    });
     var expectedCityValuesCustom = [
-      {name: 'New York', escapedValue: 'New York', count: 1, isRefined: true},
-      {name: 'San Francisco', escapedValue: 'San Francisco', count: 1, isRefined: false},
-      {name: 'Paris', escapedValue: 'Paris', count: 3, isRefined: true}
+      { name: 'New York', escapedValue: 'New York', count: 1, isRefined: true },
+      {
+        name: 'San Francisco',
+        escapedValue: 'San Francisco',
+        count: 1,
+        isRefined: false,
+      },
+      { name: 'Paris', escapedValue: 'Paris', count: 3, isRefined: true },
     ];
-
 
     expect(cityValuesCustom).toEqual(expectedCityValuesCustom);
 
-    var cityValuesFn = results.getFacetValues('city', {sortBy: function(a, b) { return a.count - b.count; }});
+    var cityValuesFn = results.getFacetValues('city', {
+      sortBy: function (a, b) {
+        return a.count - b.count;
+      },
+    });
     var expectedCityValuesFn = [
-      {name: 'New York', escapedValue: 'New York', count: 1, isRefined: true},
-      {name: 'San Francisco', escapedValue: 'San Francisco', count: 1, isRefined: false},
-      {name: 'Paris', escapedValue: 'Paris', count: 3, isRefined: true}
+      { name: 'New York', escapedValue: 'New York', count: 1, isRefined: true },
+      {
+        name: 'San Francisco',
+        escapedValue: 'San Francisco',
+        count: 1,
+        isRefined: false,
+      },
+      { name: 'Paris', escapedValue: 'Paris', count: 3, isRefined: true },
     ];
 
     expect(cityValuesFn).toEqual(expectedCityValuesFn);
@@ -67,20 +89,20 @@ test('Search should call the algolia client according to the number of refinemen
   helper.search('');
 });
 
-test('Search should not mutate the original client response', function(done) {
+test('Search should not mutate the original client response', function (done) {
   var testData = require('../datasets/SearchParameters/search.dataset')();
 
   var client = {
-    search: jest.fn().mockImplementationOnce(function() {
+    search: jest.fn().mockImplementationOnce(function () {
       return Promise.resolve(testData.response);
-    })
+    }),
   };
 
   var helper = algoliasearchHelper(client, 'test_hotels-node');
 
   var originalResponseLength = testData.response.results.length;
 
-  helper.on('result', function() {
+  helper.on('result', function () {
     var currentResponseLength = testData.response.results.length;
 
     expect(currentResponseLength).toBe(originalResponseLength);
@@ -91,16 +113,16 @@ test('Search should not mutate the original client response', function(done) {
   helper.search('');
 });
 
-test('no mutating methods should trigger a search', function() {
+test('no mutating methods should trigger a search', function () {
   var client = {
-    search: jest.fn().mockImplementationOnce(function() {
-      return new Promise(function() {});
-    })
+    search: jest.fn().mockImplementationOnce(function () {
+      return new Promise(function () {});
+    }),
   };
 
   var helper = algoliasearchHelper(client, 'Index', {
     disjunctiveFacets: ['city'],
-    facets: ['tower']
+    facets: ['tower'],
   });
 
   helper.setQuery('');

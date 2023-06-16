@@ -1,9 +1,10 @@
 How to contribute?
 
 Basic flow:
+
 - fork this repository
 - setup the project: `yarn`
-- start dev mode `yarn dev` and open http://localhost:8090/__zuul
+- start dev mode `yarn dev` and open http://localhost:8090/\_\_zuul
 - you can also run both browser and node.js tests by using `npm test`
 - code, add a [test](./test/) for every fix or new feature
 - commit

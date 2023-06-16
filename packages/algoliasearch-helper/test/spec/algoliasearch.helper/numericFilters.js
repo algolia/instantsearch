@@ -5,10 +5,10 @@ var algoliasearchHelper = require('../../../index');
 
 var fakeClient = {};
 
-test('Numeric filters: numeric filters from constructor', function(done) {
+test('Numeric filters: numeric filters from constructor', function (done) {
   var client = algoliaSearch('dsf', 'dsfdf');
 
-  client.search = function(queries) {
+  client.search = function (queries) {
     var ps = queries[0].params;
 
     expect(ps.numericFilters).toEqual([
@@ -17,33 +17,33 @@ test('Numeric filters: numeric filters from constructor', function(done) {
       'attribute2=42',
       'attribute2=25',
       'attribute2=58',
-      ['attribute2=27', 'attribute2=70']
+      ['attribute2=27', 'attribute2=70'],
     ]);
 
     done();
 
-    return new Promise(function() {});
+    return new Promise(function () {});
   };
 
   var helper = algoliasearchHelper(client, 'index', {
     numericRefinements: {
       attribute1: {
         '>': [3],
-        '<=': [100]
+        '<=': [100],
       },
       attribute2: {
-        '=': [42, 25, 58, [27, 70]]
-      }
-    }
+        '=': [42, 25, 58, [27, 70]],
+      },
+    },
   });
 
   helper.search();
 });
 
-test('Numeric filters: numeric filters from setters', function(done) {
+test('Numeric filters: numeric filters from setters', function (done) {
   var client = algoliaSearch('dsf', 'dsfdf');
 
-  client.search = function(queries) {
+  client.search = function (queries) {
     var ps = queries[0].params;
 
     expect(ps.numericFilters).toEqual([
@@ -52,12 +52,12 @@ test('Numeric filters: numeric filters from setters', function(done) {
       'attribute2=42',
       'attribute2=25',
       'attribute2=58',
-      ['attribute2=27', 'attribute2=70']
+      ['attribute2=27', 'attribute2=70'],
     ]);
 
     done();
 
-    return new Promise(function() {});
+    return new Promise(function () {});
   };
 
   var helper = algoliasearchHelper(client, 'index');
@@ -72,7 +72,7 @@ test('Numeric filters: numeric filters from setters', function(done) {
   helper.search();
 });
 
-test('Should be able to remove values one by one even 0s', function() {
+test('Should be able to remove values one by one even 0s', function () {
   var helper = algoliasearchHelper(fakeClient, null, null);
 
   helper.addNumericRefinement('attribute', '>', 0);
@@ -84,54 +84,57 @@ test('Should be able to remove values one by one even 0s', function() {
   expect(helper.state.numericRefinements.attribute['>']).toEqual([]);
 });
 
-test(
-  'Should remove all the numeric values for a single operator if remove is called with two arguments',
-  function() {
-    var helper = algoliasearchHelper(fakeClient, null, null);
+test('Should remove all the numeric values for a single operator if remove is called with two arguments', function () {
+  var helper = algoliasearchHelper(fakeClient, null, null);
 
-    helper.addNumericRefinement('attribute', '>', 0);
-    helper.addNumericRefinement('attribute', '>', 4);
-    helper.addNumericRefinement('attribute', '<', 4);
-    expect(helper.state.numericRefinements.attribute).toEqual({'>': [0, 4], '<': [4]});
-    helper.removeNumericRefinement('attribute', '>');
-    expect(helper.state.numericRefinements.attribute['>']).toEqual([]);
-    expect(helper.state.numericRefinements.attribute['<']).toEqual([4]);
+  helper.addNumericRefinement('attribute', '>', 0);
+  helper.addNumericRefinement('attribute', '>', 4);
+  helper.addNumericRefinement('attribute', '<', 4);
+  expect(helper.state.numericRefinements.attribute).toEqual({
+    '>': [0, 4],
+    '<': [4],
+  });
+  helper.removeNumericRefinement('attribute', '>');
+  expect(helper.state.numericRefinements.attribute['>']).toEqual([]);
+  expect(helper.state.numericRefinements.attribute['<']).toEqual([4]);
 
-    expect(helper.getRefinements('attribute')).toEqual([
-      {type: 'numeric', operator: '>', value: []},
-      {type: 'numeric', operator: '<', value: [4]}
-    ]);
-  }
-);
+  expect(helper.getRefinements('attribute')).toEqual([
+    { type: 'numeric', operator: '>', value: [] },
+    { type: 'numeric', operator: '<', value: [4] },
+  ]);
+});
 
-test(
-  'Should remove all the numeric values for an attribute if remove is called with one argument',
-  function() {
-    var helper = algoliasearchHelper(fakeClient, null, null);
+test('Should remove all the numeric values for an attribute if remove is called with one argument', function () {
+  var helper = algoliasearchHelper(fakeClient, null, null);
 
-    helper.addNumericRefinement('attribute', '>', 0);
-    helper.addNumericRefinement('attribute', '>', 4);
-    helper.addNumericRefinement('attribute', '<', 4);
-    expect(helper.state.numericRefinements.attribute).toEqual({'>': [0, 4], '<': [4]});
-    helper.removeNumericRefinement('attribute');
-    expect(helper.state.numericRefinements.attribute).toEqual({'>': [], '<': []});
+  helper.addNumericRefinement('attribute', '>', 0);
+  helper.addNumericRefinement('attribute', '>', 4);
+  helper.addNumericRefinement('attribute', '<', 4);
+  expect(helper.state.numericRefinements.attribute).toEqual({
+    '>': [0, 4],
+    '<': [4],
+  });
+  helper.removeNumericRefinement('attribute');
+  expect(helper.state.numericRefinements.attribute).toEqual({
+    '>': [],
+    '<': [],
+  });
 
-    expect(helper.getRefinements('attribute')).toEqual([
-      {
-        operator: '>',
-        type: 'numeric',
-        value: []
-      },
-      {
-        operator: '<',
-        type: 'numeric',
-        value: []
-      }
-    ]);
-  }
-);
+  expect(helper.getRefinements('attribute')).toEqual([
+    {
+      operator: '>',
+      type: 'numeric',
+      value: [],
+    },
+    {
+      operator: '<',
+      type: 'numeric',
+      value: [],
+    },
+  ]);
+});
 
-test('Should be able to get if an attribute has numeric filter with hasRefinements', function() {
+test('Should be able to get if an attribute has numeric filter with hasRefinements', function () {
   var helper = algoliasearchHelper(fakeClient, null, null);
 
   expect(helper.hasRefinements('attribute')).toBeFalsy();
@@ -139,7 +142,7 @@ test('Should be able to get if an attribute has numeric filter with hasRefinemen
   expect(helper.hasRefinements('attribute')).toBeTruthy();
 });
 
-test('Should be able to remove the value even if it was a string used as a number', function() {
+test('Should be able to remove the value even if it was a string used as a number', function () {
   var attributeName = 'attr';
   var n = '42';
 

@@ -6,18 +6,25 @@
   display: inline;
   margin-top: 0.5em;
 
-  &.badge-event { background: $powder-blue; }
-  &.badge-chainable { background: $brand-primary; color: white; }
+  &.badge-event {
+    background: $powder-blue;
+  }
+  &.badge-chainable {
+    background: $brand-primary;
+    color: white;
+  }
 }
 
-.method, .property, .typedef, .event{
+.method,
+.property,
+.typedef,
+.event {
   margin: 10px 0;
   width: 100%;
-  font-size:  16px;
+  font-size: 16px;
   line-height: 22px;
   border: 1px solid $border;
   border-radius: 5px;
-
 
   > * {
     padding: 0.5em;
@@ -42,19 +49,19 @@
       margin-bottom: 5px;
       .param {
         &:after {
-          content:', ';
+          content: ', ';
         }
         &:last-child:after {
           content: initial;
         }
         &.optional:before {
-          content: '['
+          content: '[';
         }
         &.optional:after {
-          content:'], ';
+          content: '], ';
         }
         &.optional:last-child:after {
-          content:']';
+          content: ']';
         }
       }
     }
@@ -62,7 +69,7 @@
 
   .description {
   }
-  
+
   .parameters {
     list-style-type: none;
     margin: 0;
@@ -74,12 +81,14 @@
       font-size: 1.2em;
     }
 
-    .parameter{
+    .parameter {
       display: table-row;
       width: 100%;
       margin-top: 3px;
 
-      .param, .type, .description {
+      .param,
+      .type,
+      .description {
         display: table-cell;
       }
 
@@ -116,7 +125,9 @@
       width: 100%;
       margin-top: 3px;
 
-      .param, .type, .description {
+      .param,
+      .type,
+      .description {
         display: table-cell;
       }
 
@@ -137,7 +148,7 @@
     }
   }
 
-  .type{
+  .type {
     font-family: $font-code;
     font-size: 0.9em;
 
@@ -164,7 +175,8 @@
       display: table-row;
       width: 100%;
 
-      .type, .description {
+      .type,
+      .description {
         display: table-cell;
       }
 
@@ -195,6 +207,6 @@
 }
 
 .signature .type {
-  font-family: $font-settings; 
+  font-family: $font-settings;
   font-size: 1em;
 }

@@ -42,13 +42,13 @@ function orderBy(collection, iteratees, orders) {
     orders = [];
   }
 
-  var result = collection.map(function(value, index) {
+  var result = collection.map(function (value, index) {
     return {
-      criteria: iteratees.map(function(iteratee) {
+      criteria: iteratees.map(function (iteratee) {
         return value[iteratee];
       }),
       index: index,
-      value: value
+      value: value,
     };
   });
 
@@ -73,7 +73,7 @@ function orderBy(collection, iteratees, orders) {
     return object.index - other.index;
   });
 
-  return result.map(function(res) {
+  return result.map(function (res) {
     return res.value;
   });
 }

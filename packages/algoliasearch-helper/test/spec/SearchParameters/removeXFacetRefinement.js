@@ -2,270 +2,274 @@
 
 var SearchParameters = require('../../../src/SearchParameters');
 
-describe('removeDisjunctiveFacetRefinement', function() {
-  test('removeDisjunctiveFacetRefinement(attribute)', function() {
+describe('removeDisjunctiveFacetRefinement', function () {
+  test('removeDisjunctiveFacetRefinement(attribute)', function () {
     var state = new SearchParameters({
       disjunctiveFacets: ['attribute'],
       disjunctiveFacetsRefinements: {
-        attribute: ['value']
-      }
+        attribute: ['value'],
+      },
     });
 
     expect(state.removeDisjunctiveFacetRefinement('attribute')).toEqual(
       new SearchParameters({
         disjunctiveFacets: ['attribute'],
         disjunctiveFacetsRefinements: {
-          attribute: []
-        }
+          attribute: [],
+        },
       })
     );
   });
 
-  test('removeDisjunctiveFacetRefinement(attribute, value)', function() {
+  test('removeDisjunctiveFacetRefinement(attribute, value)', function () {
     var state = new SearchParameters({
       disjunctiveFacets: ['attribute'],
       disjunctiveFacetsRefinements: {
-        attribute: ['value', 'value2']
-      }
+        attribute: ['value', 'value2'],
+      },
     });
 
-    expect(state.removeDisjunctiveFacetRefinement('attribute', 'value')).toEqual(
+    expect(
+      state.removeDisjunctiveFacetRefinement('attribute', 'value')
+    ).toEqual(
       new SearchParameters({
         disjunctiveFacets: ['attribute'],
         disjunctiveFacetsRefinements: {
-          attribute: ['value2']
-        }
+          attribute: ['value2'],
+        },
       })
     );
   });
 
-  test('removeDisjunctiveFacetRefinement(attribute, lastValue)', function() {
+  test('removeDisjunctiveFacetRefinement(attribute, lastValue)', function () {
     var state = new SearchParameters({
       disjunctiveFacets: ['attribute'],
       disjunctiveFacetsRefinements: {
-        attribute: ['value']
-      }
+        attribute: ['value'],
+      },
     });
 
-    expect(state.removeDisjunctiveFacetRefinement('attribute', 'value')).toEqual(
+    expect(
+      state.removeDisjunctiveFacetRefinement('attribute', 'value')
+    ).toEqual(
       new SearchParameters({
         disjunctiveFacets: ['attribute'],
         disjunctiveFacetsRefinements: {
-          attribute: []
-        }
+          attribute: [],
+        },
       })
     );
   });
 });
 
-describe('removeFacetRefinement', function() {
-  test('removeFacetRefinement(attribute)', function() {
+describe('removeFacetRefinement', function () {
+  test('removeFacetRefinement(attribute)', function () {
     var state = new SearchParameters({
       facets: ['attribute'],
       facetsRefinements: {
-        attribute: ['value']
-      }
+        attribute: ['value'],
+      },
     });
 
     expect(state.removeFacetRefinement('attribute')).toEqual(
       new SearchParameters({
         facets: ['attribute'],
         facetsRefinements: {
-          attribute: []
-        }
+          attribute: [],
+        },
       })
     );
   });
 
-  test('removeFacetRefinement(attribute, value)', function() {
+  test('removeFacetRefinement(attribute, value)', function () {
     var state = new SearchParameters({
       facets: ['attribute'],
       facetsRefinements: {
-        attribute: ['value', 'value2']
-      }
+        attribute: ['value', 'value2'],
+      },
     });
 
     expect(state.removeFacetRefinement('attribute', 'value')).toEqual(
       new SearchParameters({
         facets: ['attribute'],
         facetsRefinements: {
-          attribute: ['value2']
-        }
+          attribute: ['value2'],
+        },
       })
     );
   });
 
-  test('removeFacetRefinement(attribute, lastValue)', function() {
+  test('removeFacetRefinement(attribute, lastValue)', function () {
     var state = new SearchParameters({
       facets: ['attribute'],
       facetsRefinements: {
-        attribute: ['value']
-      }
+        attribute: ['value'],
+      },
     });
 
     expect(state.removeFacetRefinement('attribute', 'value')).toEqual(
       new SearchParameters({
         facets: ['attribute'],
         facetsRefinements: {
-          attribute: []
-        }
+          attribute: [],
+        },
       })
     );
   });
 });
 
-describe('removeExcludeRefinement', function() {
-  test('removeExcludeRefinement(attribute)', function() {
+describe('removeExcludeRefinement', function () {
+  test('removeExcludeRefinement(attribute)', function () {
     var state = new SearchParameters({
       facets: ['attribute'],
       facetsExcludes: {
-        attribute: ['value']
-      }
+        attribute: ['value'],
+      },
     });
 
     expect(state.removeExcludeRefinement('attribute')).toEqual(
       new SearchParameters({
         facets: ['attribute'],
         facetsExcludes: {
-          attribute: []
-        }
+          attribute: [],
+        },
       })
     );
   });
 
-  test('removeExcludeRefinement(attribute, value)', function() {
+  test('removeExcludeRefinement(attribute, value)', function () {
     var state = new SearchParameters({
       facets: ['attribute'],
       facetsExcludes: {
-        attribute: ['value', 'value2']
-      }
+        attribute: ['value', 'value2'],
+      },
     });
 
     expect(state.removeExcludeRefinement('attribute', 'value')).toEqual(
       new SearchParameters({
         facets: ['attribute'],
         facetsExcludes: {
-          attribute: ['value2']
-        }
+          attribute: ['value2'],
+        },
       })
     );
   });
 
-  test('removeExcludeRefinement(attribute, lastValue)', function() {
+  test('removeExcludeRefinement(attribute, lastValue)', function () {
     var state = new SearchParameters({
       facets: ['attribute'],
       facetsExcludes: {
-        attribute: ['value']
-      }
+        attribute: ['value'],
+      },
     });
 
     expect(state.removeExcludeRefinement('attribute', 'value')).toEqual(
       new SearchParameters({
         facets: ['attribute'],
         facetsExcludes: {
-          attribute: []
-        }
+          attribute: [],
+        },
       })
     );
   });
 });
 
-describe('removeTagRefinement', function() {
-  test('removeTagRefinement(tag)', function() {
+describe('removeTagRefinement', function () {
+  test('removeTagRefinement(tag)', function () {
     var state = new SearchParameters({
-      tagRefinements: ['tag', 'tag2']
+      tagRefinements: ['tag', 'tag2'],
     });
 
     expect(state.removeTagRefinement('tag')).toEqual(
       new SearchParameters({
-        tagRefinements: ['tag2']
+        tagRefinements: ['tag2'],
       })
     );
   });
 
-  test('removeTagRefinement(lastTag)', function() {
+  test('removeTagRefinement(lastTag)', function () {
     var state = new SearchParameters({
-      tagRefinements: ['lastTag']
+      tagRefinements: ['lastTag'],
     });
 
     expect(state.removeTagRefinement('lastTag')).toEqual(
       new SearchParameters({
-        tagRefinements: []
+        tagRefinements: [],
       })
     );
   });
 });
 
-describe('removeHierarchicalFacetRefinement', function() {
+describe('removeHierarchicalFacetRefinement', function () {
   // NOTE: removeHierarchicalFacetRefinement only allows to remove a whole attribute
-  test('removeHierarchicalFacetRefinement(attribute)', function() {
+  test('removeHierarchicalFacetRefinement(attribute)', function () {
     var state = new SearchParameters({
-      hierarchicalFacets: [{name: 'attribute'}],
+      hierarchicalFacets: [{ name: 'attribute' }],
       hierarchicalFacetsRefinements: {
-        attribute: ['value', 'value2']
-      }
+        attribute: ['value', 'value2'],
+      },
     });
 
     expect(state.removeHierarchicalFacetRefinement('attribute')).toEqual(
       new SearchParameters({
-        hierarchicalFacets: [{name: 'attribute'}],
+        hierarchicalFacets: [{ name: 'attribute' }],
         hierarchicalFacetsRefinements: {
-          attribute: []
-        }
+          attribute: [],
+        },
       })
     );
   });
 });
 
-describe('removeNumericRefinement', function() {
-  test('removeNumericRefinement(attribute)', function() {
+describe('removeNumericRefinement', function () {
+  test('removeNumericRefinement(attribute)', function () {
     var state = new SearchParameters({
       numericRefinements: {
         attribute: {
-          '>=': [100]
-        }
-      }
+          '>=': [100],
+        },
+      },
     });
 
     expect(state.removeNumericRefinement('attribute')).toEqual(
       new SearchParameters({
         numericRefinements: {
           attribute: {
-            '>=': []
-          }
-        }
+            '>=': [],
+          },
+        },
       })
     );
   });
 
-  test('removeNumericRefinement(attribute, operator)', function() {
+  test('removeNumericRefinement(attribute, operator)', function () {
     var state = new SearchParameters({
       numericRefinements: {
         attribute: {
-          '>=': [100]
-        }
-      }
+          '>=': [100],
+        },
+      },
     });
 
     expect(state.removeNumericRefinement('attribute', '>=')).toEqual(
       new SearchParameters({
         numericRefinements: {
           attribute: {
-            '>=': []
-          }
-        }
+            '>=': [],
+          },
+        },
       })
     );
   });
 
-  test('removeNumericRefinement(attribute, operator, value)', function() {
+  test('removeNumericRefinement(attribute, operator, value)', function () {
     var state = new SearchParameters({
       numericRefinements: {
         attribute: {
           '<': [100],
-          '>=': [100, 200]
-        }
-      }
+          '>=': [100, 200],
+        },
+      },
     });
 
     expect(state.removeNumericRefinement('attribute', '>=', 100)).toEqual(
@@ -273,21 +277,21 @@ describe('removeNumericRefinement', function() {
         numericRefinements: {
           attribute: {
             '<': [100],
-            '>=': [200]
-          }
-        }
+            '>=': [200],
+          },
+        },
       })
     );
   });
 
-  test('removeNumericRefinement(attribute, operator, lastValue)', function() {
+  test('removeNumericRefinement(attribute, operator, lastValue)', function () {
     var state = new SearchParameters({
       numericRefinements: {
         attribute: {
           '<': [100],
-          '>=': [100, 200]
-        }
-      }
+          '>=': [100, 200],
+        },
+      },
     });
 
     expect(state.removeNumericRefinement('attribute', '<', 100)).toEqual(
@@ -295,9 +299,9 @@ describe('removeNumericRefinement', function() {
         numericRefinements: {
           attribute: {
             '<': [],
-            '>=': [100, 200]
-          }
-        }
+            '>=': [100, 200],
+          },
+        },
       })
     );
   });

@@ -16,20 +16,17 @@ function generateTrees(state) {
       (state.hierarchicalFacetsRefinements[hierarchicalFacet.name] &&
         state.hierarchicalFacetsRefinements[hierarchicalFacet.name][0]) ||
       '';
-    var hierarchicalSeparator = state._getHierarchicalFacetSeparator(
-      hierarchicalFacet
-    );
-    var hierarchicalRootPath = state._getHierarchicalRootPath(
-      hierarchicalFacet
-    );
-    var hierarchicalShowParentLevel = state._getHierarchicalShowParentLevel(
-      hierarchicalFacet
-    );
+    var hierarchicalSeparator =
+      state._getHierarchicalFacetSeparator(hierarchicalFacet);
+    var hierarchicalRootPath =
+      state._getHierarchicalRootPath(hierarchicalFacet);
+    var hierarchicalShowParentLevel =
+      state._getHierarchicalShowParentLevel(hierarchicalFacet);
     var sortBy = prepareHierarchicalFacetSortBy(
       state._getHierarchicalFacetSortBy(hierarchicalFacet)
     );
 
-    var rootExhaustive = hierarchicalFacetResult.every(function(facetResult) {
+    var rootExhaustive = hierarchicalFacetResult.every(function (facetResult) {
       return facetResult.exhaustive;
     });
 
@@ -56,7 +53,7 @@ function generateTrees(state) {
       path: null, // root level, no path
       escapedValue: null,
       exhaustive: rootExhaustive,
-      data: null
+      data: null,
     });
   };
 }
@@ -85,7 +82,7 @@ function generateHierarchicalTree(
          * @type {object[]]} hierarchical data
          */
         var data = parent && Array.isArray(parent.data) ? parent.data : [];
-        parent = find(data, function(subtree) {
+        parent = find(data, function (subtree) {
           return subtree.isRefined;
         });
         level++;
@@ -106,10 +103,10 @@ function generateHierarchicalTree(
       // showing up
 
       var picked = Object.keys(hierarchicalFacetResult.data)
-        .map(function(facetValue) {
+        .map(function (facetValue) {
           return [facetValue, hierarchicalFacetResult.data[facetValue]];
         })
-        .filter(function(tuple) {
+        .filter(function (tuple) {
           var facetValue = tuple[0];
           return onlyMatchingTree(
             facetValue,
@@ -122,7 +119,7 @@ function generateHierarchicalTree(
         });
 
       parent.data = orderBy(
-        picked.map(function(tuple) {
+        picked.map(function (tuple) {
           var facetValue = tuple[0];
           var facetCount = tuple[1];
 
@@ -200,6 +197,6 @@ function format(
       currentRefinement === facetValue ||
       currentRefinement.indexOf(facetValue + hierarchicalSeparator) === 0,
     exhaustive: exhaustive,
-    data: null
+    data: null,
   };
 }

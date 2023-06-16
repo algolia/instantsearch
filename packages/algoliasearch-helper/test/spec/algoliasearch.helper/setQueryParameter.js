@@ -4,11 +4,11 @@ var algoliasearchHelper = require('../../../index');
 
 var fakeClient = {};
 
-test('setChange should change the current state', function() {
+test('setChange should change the current state', function () {
   var helper = algoliasearchHelper(fakeClient, null, null);
   var changed = false;
 
-  helper.on('change', function() {
+  helper.on('change', function () {
     changed = true;
   });
 
@@ -19,12 +19,12 @@ test('setChange should change the current state', function() {
   expect(changed).toBe(true);
 });
 
-test('setChange should not change the current state: no real modification', function() {
-  var helper = algoliasearchHelper(fakeClient, null, {page: 0});
+test('setChange should not change the current state: no real modification', function () {
+  var helper = algoliasearchHelper(fakeClient, null, { page: 0 });
   var changed = false;
   var initialState = helper.state;
 
-  helper.on('change', function() {
+  helper.on('change', function () {
     changed = true;
   });
 
@@ -36,8 +36,9 @@ test('setChange should not change the current state: no real modification', func
   expect(helper.state).toBe(initialState);
 });
 
-test('setQueryParameter should warn about invalid userToken', function() {
-  const message = '[algoliasearch-helper] The `userToken` parameter is invalid. This can lead to wrong analytics.\n  - Format: [a-zA-Z0-9_-]{1,64}';
+test('setQueryParameter should warn about invalid userToken', function () {
+  const message =
+    '[algoliasearch-helper] The `userToken` parameter is invalid. This can lead to wrong analytics.\n  - Format: [a-zA-Z0-9_-]{1,64}';
   console.warn = jest.fn();
 
   var helper = algoliasearchHelper(fakeClient, null, {});

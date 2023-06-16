@@ -9,31 +9,31 @@ var algoliasearchHelper = require('../../');
 var indexName = createIndexName('helper_highlight');
 
 var dataset = [
-  {facet: ['f1', 'f2']},
-  {facet: ['f1', 'f3']},
-  {facet: ['f2', 'f3']}
+  { facet: ['f1', 'f2'] },
+  { facet: ['f1', 'f3'] },
+  { facet: ['f2', 'f3'] },
 ];
 
 var config = {
   attributesToIndex: ['facet'],
-  attributesForFaceting: ['facet']
+  attributesForFaceting: ['facet'],
 };
 
 var client;
-beforeAll(function() {
-  return setup(indexName, dataset, config).then(function(c) {
+beforeAll(function () {
+  return setup(indexName, dataset, config).then(function (c) {
     client = c;
   });
 });
 
-test('[INT][HIGHLIGHT] The highlight should be consistent with the parameters', function(done) {
+test('[INT][HIGHLIGHT] The highlight should be consistent with the parameters', function (done) {
   var helper = algoliasearchHelper(client, indexName, {
     attributesToHighlight: ['facet'],
-    facets: ['facet']
+    facets: ['facet'],
   });
 
   var calls = 0;
-  helper.on('result', function(event) {
+  helper.on('result', function (event) {
     calls++;
     if (calls === 1) {
       expect(event.results.hits[0]._highlightResult.facet[0].value).toBe(

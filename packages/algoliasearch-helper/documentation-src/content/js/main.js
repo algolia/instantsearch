@@ -4,11 +4,11 @@
 sidebar({
   headersContainer: document.querySelector('.documentation-container'),
   sidebarContainer: document.querySelector('.sidebar'),
-  headerStartLevel: 2
+  headerStartLevel: 2,
 });
 
 function sidebar(options) {
-  const {headersContainer, sidebarContainer} = options;
+  const { headersContainer, sidebarContainer } = options;
 
   if (!headersContainer || !sidebarContainer) {
     return;
@@ -25,7 +25,7 @@ function sidebar(options) {
 }
 
 function sidebarFollowScroll(sidebarContainer) {
-  const {height, footerHeight, menuHeight, sidebarTop} =
+  const { height, footerHeight, menuHeight, sidebarTop } =
     getPositionsKeyElements(sidebarContainer);
   function positionSidebar() {
     const currentScroll = window.pageYOffset;
@@ -64,9 +64,9 @@ function scrollSpy(sidebarContainer, headersContainer) {
     const highestVisibleHeaders = headers
       .map((header) => ({
         element: header,
-        rect: header.getBoundingClientRect()
+        rect: header.getBoundingClientRect(),
       }))
-      .filter(({rect}) => {
+      .filter(({ rect }) => {
         // top element relative viewport position should be at least 1/3 viewport
         // and element should be in viewport
         return (
@@ -118,7 +118,7 @@ function getPositionsKeyElements(sidebarContainer) {
   const footerHeight = footer.offsetHeight;
   const menuHeight = menu.offsetHeight;
 
-  return {sidebarTop, height, footerHeight, menuHeight};
+  return { sidebarTop, height, footerHeight, menuHeight };
 }
 // #endregion sidebar
 

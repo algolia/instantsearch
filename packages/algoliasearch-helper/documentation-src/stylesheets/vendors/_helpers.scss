@@ -1,11 +1,11 @@
 $sizes: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10;
 
-[class*="bloc-"] {
+[class*='bloc-'] {
   float: left;
 }
 @each $size in $sizes {
   .bloc-#{$size} {
-    $size: $size*10%;
+    $size: $size * 10%;
     width: $size;
   }
 }
@@ -14,7 +14,6 @@ $sizes: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10;
   position: relative;
   overflow: hidden;
 }
-
 
 .center-text {
   text-align: center;
@@ -37,12 +36,11 @@ hr {
     content: '';
     display: table;
     clear: both;
-
   }
 
   width: 100%;
   height: 1px;
-  background: #e5e5e5
+  background: #e5e5e5;
 }
 
 .pipe {
@@ -54,16 +52,16 @@ hr {
   margin: 20px 16px 0;
   line-height: $navigation-height;
 
-  &+ span {
+  & + span {
     font-weight: bold;
     width: 0;
     float: left;
   }
 
-  body.index &{
+  body.index & {
     display: none;
 
-    &+ span {
+    & + span {
       display: none !important;
     }
   }
@@ -85,12 +83,11 @@ hr {
     @include unhide(block);
   }
 
-
-&.community-badge {
-  @include mobile-mq {
-    @include unhide(inline);
+  &.community-badge {
+    @include mobile-mq {
+      @include unhide(inline);
+    }
   }
-}
 
   @media screen and (orientation: landscape) {
     @include hide();
@@ -116,7 +113,7 @@ hr {
 .display-on-small {
   @include hide();
 
-  @media (max-width: 960px){
+  @media (max-width: 960px) {
     display: inline-block !important;
     visibility: visible;
   }

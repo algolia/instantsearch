@@ -3,52 +3,82 @@
 var SearchResults = require('../../../src/SearchResults');
 var SearchParameters = require('../../../src/SearchParameters');
 
-describe('disjunctive facet', function() {
+describe('disjunctive facet', function () {
   test.each([
     [
       'nothing ordered (implicit sort by count)',
       {
         values: {
           brand: {
-            order: []
-          }
-        }
+            order: [],
+          },
+        },
       },
       [
-        {count: 551, isRefined: false, name: 'Insignia™', escapedValue: 'Insignia™'},
-        {count: 511, isRefined: false, name: 'Samsung', escapedValue: 'Samsung'},
-        {count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple'}
-      ]
+        {
+          count: 551,
+          isRefined: false,
+          name: 'Insignia™',
+          escapedValue: 'Insignia™',
+        },
+        {
+          count: 511,
+          isRefined: false,
+          name: 'Samsung',
+          escapedValue: 'Samsung',
+        },
+        { count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple' },
+      ],
     ],
     [
       'all ordered',
       {
         values: {
           brand: {
-            order: ['Samsung', 'Apple', 'Insignia™']
-          }
-        }
+            order: ['Samsung', 'Apple', 'Insignia™'],
+          },
+        },
       },
       [
-        {count: 511, isRefined: false, name: 'Samsung', escapedValue: 'Samsung'},
-        {count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple'},
-        {count: 551, isRefined: false, name: 'Insignia™', escapedValue: 'Insignia™'}
-      ]
+        {
+          count: 511,
+          isRefined: false,
+          name: 'Samsung',
+          escapedValue: 'Samsung',
+        },
+        { count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple' },
+        {
+          count: 551,
+          isRefined: false,
+          name: 'Insignia™',
+          escapedValue: 'Insignia™',
+        },
+      ],
     ],
     [
       'one item ordered (implicit sort by count)',
       {
         values: {
           brand: {
-            order: ['Samsung']
-          }
-        }
+            order: ['Samsung'],
+          },
+        },
       },
       [
-        {count: 511, isRefined: false, name: 'Samsung', escapedValue: 'Samsung'},
-        {count: 551, isRefined: false, name: 'Insignia™', escapedValue: 'Insignia™'},
-        {count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple'}
-      ]
+        {
+          count: 511,
+          isRefined: false,
+          name: 'Samsung',
+          escapedValue: 'Samsung',
+        },
+        {
+          count: 551,
+          isRefined: false,
+          name: 'Insignia™',
+          escapedValue: 'Insignia™',
+        },
+        { count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple' },
+      ],
     ],
     [
       'one item ordered (sort by count)',
@@ -56,15 +86,25 @@ describe('disjunctive facet', function() {
         values: {
           brand: {
             order: ['Samsung'],
-            sortRemainingBy: 'count'
-          }
-        }
+            sortRemainingBy: 'count',
+          },
+        },
       },
       [
-        {count: 511, isRefined: false, name: 'Samsung', escapedValue: 'Samsung'},
-        {count: 551, isRefined: false, name: 'Insignia™', escapedValue: 'Insignia™'},
-        {count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple'}
-      ]
+        {
+          count: 511,
+          isRefined: false,
+          name: 'Samsung',
+          escapedValue: 'Samsung',
+        },
+        {
+          count: 551,
+          isRefined: false,
+          name: 'Insignia™',
+          escapedValue: 'Insignia™',
+        },
+        { count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple' },
+      ],
     ],
     [
       'one item ordered (sort by alpha)',
@@ -72,15 +112,25 @@ describe('disjunctive facet', function() {
         values: {
           brand: {
             order: ['Samsung'],
-            sortRemainingBy: 'alpha'
-          }
-        }
+            sortRemainingBy: 'alpha',
+          },
+        },
       },
       [
-        {count: 511, isRefined: false, name: 'Samsung', escapedValue: 'Samsung'},
-        {count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple'},
-        {count: 551, isRefined: false, name: 'Insignia™', escapedValue: 'Insignia™'}
-      ]
+        {
+          count: 511,
+          isRefined: false,
+          name: 'Samsung',
+          escapedValue: 'Samsung',
+        },
+        { count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple' },
+        {
+          count: 551,
+          isRefined: false,
+          name: 'Insignia™',
+          escapedValue: 'Insignia™',
+        },
+      ],
     ],
     [
       'one item ordered (sort by hidden)',
@@ -88,18 +138,25 @@ describe('disjunctive facet', function() {
         values: {
           brand: {
             order: ['Samsung'],
-            sortRemainingBy: 'hidden'
-          }
-        }
+            sortRemainingBy: 'hidden',
+          },
+        },
       },
-      [{count: 511, isRefined: false, name: 'Samsung', escapedValue: 'Samsung'}]
-    ]
-  ])('%p', function(_name, facetOrdering, expected) {
+      [
+        {
+          count: 511,
+          isRefined: false,
+          name: 'Samsung',
+          escapedValue: 'Samsung',
+        },
+      ],
+    ],
+  ])('%p', function (_name, facetOrdering, expected) {
     var data = require('./getFacetValues/disjunctive.json');
     var order = {
       renderingContent: {
-        facetOrdering: facetOrdering
-      }
+        facetOrdering: facetOrdering,
+      },
     };
     var results = data.content.results.slice();
     results[0] = Object.assign(order, results[0]);
@@ -112,18 +169,18 @@ describe('disjunctive facet', function() {
     expect(facetValues).toEqual(expected);
   });
 
-  test('sortBy overrides facetOrdering', function() {
+  test('sortBy overrides facetOrdering', function () {
     var data = require('./getFacetValues/disjunctive.json');
     var order = {
       renderingContent: {
         facetOrdering: {
           values: {
             brand: {
-              order: ['Samsung', 'Apple', 'Insignia™']
-            }
-          }
-        }
-      }
+              order: ['Samsung', 'Apple', 'Insignia™'],
+            },
+          },
+        },
+      },
     };
     var results = data.content.results.slice();
     results[0] = Object.assign(order, results[0]);
@@ -131,29 +188,39 @@ describe('disjunctive facet', function() {
     var searchParams = new SearchParameters(data.state);
     var result = new SearchResults(searchParams, results);
 
-    var facetValues = result.getFacetValues('brand', {sortBy: ['name:desc']});
+    var facetValues = result.getFacetValues('brand', { sortBy: ['name:desc'] });
 
     var expected = [
-      {count: 511, isRefined: false, name: 'Samsung', escapedValue: 'Samsung'},
-      {count: 551, isRefined: false, name: 'Insignia™', escapedValue: 'Insignia™'},
-      {count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple'}
+      {
+        count: 511,
+        isRefined: false,
+        name: 'Samsung',
+        escapedValue: 'Samsung',
+      },
+      {
+        count: 551,
+        isRefined: false,
+        name: 'Insignia™',
+        escapedValue: 'Insignia™',
+      },
+      { count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple' },
     ];
 
     expect(facetValues).toEqual(expected);
   });
 
-  test('facetOrdering: true overrides sortBy', function() {
+  test('facetOrdering: true overrides sortBy', function () {
     var data = require('./getFacetValues/disjunctive.json');
     var order = {
       renderingContent: {
         facetOrdering: {
           values: {
             brand: {
-              order: ['Samsung', 'Apple', 'Insignia™']
-            }
-          }
-        }
-      }
+              order: ['Samsung', 'Apple', 'Insignia™'],
+            },
+          },
+        },
+      },
     };
     var results = data.content.results.slice();
     results[0] = Object.assign(order, results[0]);
@@ -163,30 +230,40 @@ describe('disjunctive facet', function() {
 
     var facetValues = result.getFacetValues('brand', {
       sortBy: ['name:desc'],
-      facetOrdering: true
+      facetOrdering: true,
     });
 
     var expected = [
-      {count: 511, isRefined: false, name: 'Samsung', escapedValue: 'Samsung'},
-      {count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple'},
-      {count: 551, isRefined: false, name: 'Insignia™', escapedValue: 'Insignia™'}
+      {
+        count: 511,
+        isRefined: false,
+        name: 'Samsung',
+        escapedValue: 'Samsung',
+      },
+      { count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple' },
+      {
+        count: 551,
+        isRefined: false,
+        name: 'Insignia™',
+        escapedValue: 'Insignia™',
+      },
     ];
 
     expect(facetValues).toEqual(expected);
   });
 
-  test('facetOrdering: false without sortBy uses default order', function() {
+  test('facetOrdering: false without sortBy uses default order', function () {
     var data = require('./getFacetValues/disjunctive.json');
     var order = {
       renderingContent: {
         facetOrdering: {
           values: {
             brand: {
-              order: ['Samsung', 'Apple', 'Insignia™']
-            }
-          }
-        }
-      }
+              order: ['Samsung', 'Apple', 'Insignia™'],
+            },
+          },
+        },
+      },
     };
     var results = data.content.results.slice();
     results[0] = Object.assign(order, results[0]);
@@ -195,22 +272,32 @@ describe('disjunctive facet', function() {
     var result = new SearchResults(searchParams, results);
 
     var facetValues = result.getFacetValues('brand', {
-      facetOrdering: false
+      facetOrdering: false,
     });
 
     var expected = [
-      {count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple'},
-      {count: 551, isRefined: false, name: 'Insignia™', escapedValue: 'Insignia™'},
-      {count: 511, isRefined: false, name: 'Samsung', escapedValue: 'Samsung'}
+      { count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple' },
+      {
+        count: 551,
+        isRefined: false,
+        name: 'Insignia™',
+        escapedValue: 'Insignia™',
+      },
+      {
+        count: 511,
+        isRefined: false,
+        name: 'Samsung',
+        escapedValue: 'Samsung',
+      },
     ];
 
     expect(facetValues).toEqual(expected);
   });
 
-  test('without facetOrdering, nor sortBy', function() {
+  test('without facetOrdering, nor sortBy', function () {
     var data = require('./getFacetValues/disjunctive.json');
     var order = {
-      renderingContent: {}
+      renderingContent: {},
     };
     var results = data.content.results.slice();
     results[0] = Object.assign(order, results[0]);
@@ -221,22 +308,32 @@ describe('disjunctive facet', function() {
     var facetValues = result.getFacetValues('brand');
 
     var expected = [
-      {count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple'},
-      {count: 551, isRefined: false, name: 'Insignia™', escapedValue: 'Insignia™'},
-      {count: 511, isRefined: false, name: 'Samsung', escapedValue: 'Samsung'}
+      { count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple' },
+      {
+        count: 551,
+        isRefined: false,
+        name: 'Insignia™',
+        escapedValue: 'Insignia™',
+      },
+      {
+        count: 511,
+        isRefined: false,
+        name: 'Samsung',
+        escapedValue: 'Samsung',
+      },
     ];
 
     expect(facetValues).toEqual(expected);
   });
 });
 
-describe('hierarchical facet', function() {
-  test('empty facet ordering', function() {
+describe('hierarchical facet', function () {
+  test('empty facet ordering', function () {
     var data = require('./getFacetValues/hierarchical.json');
     var order = {
       renderingContent: {
-        facetOrdering: {}
-      }
+        facetOrdering: {},
+      },
     };
     var results = data.content.results.slice();
     results[0] = Object.assign(order, results[0]);
@@ -269,7 +366,7 @@ describe('hierarchical facet', function() {
               count: 17,
               data: null,
               exhaustive: true,
-              isRefined: true
+              isRefined: true,
             },
             {
               name: 'Swag Gift Cards',
@@ -278,7 +375,7 @@ describe('hierarchical facet', function() {
               count: 20,
               isRefined: false,
               exhaustive: true,
-              data: null
+              data: null,
             },
             {
               name: 'Useless Gift Cards',
@@ -287,9 +384,9 @@ describe('hierarchical facet', function() {
               count: 12,
               isRefined: false,
               exhaustive: true,
-              data: null
-            }
-          ]
+              data: null,
+            },
+          ],
         },
         {
           name: 'Cell Phones',
@@ -298,7 +395,7 @@ describe('hierarchical facet', function() {
           count: 1920,
           isRefined: false,
           exhaustive: true,
-          data: null
+          data: null,
         },
         {
           name: 'Computers & Tablets',
@@ -307,7 +404,7 @@ describe('hierarchical facet', function() {
           count: 1858,
           isRefined: false,
           exhaustive: true,
-          data: null
+          data: null,
         },
         {
           name: 'Appliances',
@@ -316,7 +413,7 @@ describe('hierarchical facet', function() {
           count: 1533,
           isRefined: false,
           exhaustive: true,
-          data: null
+          data: null,
         },
         {
           name: 'Audio',
@@ -325,26 +422,26 @@ describe('hierarchical facet', function() {
           count: 1010,
           isRefined: false,
           exhaustive: true,
-          data: null
-        }
-      ]
+          data: null,
+        },
+      ],
     };
 
     expect(facetValues).toEqual(expected);
   });
 
-  test('root ordered (no sortRemainingBy)', function() {
+  test('root ordered (no sortRemainingBy)', function () {
     var data = require('./getFacetValues/hierarchical.json');
     var order = {
       renderingContent: {
         facetOrdering: {
           values: {
             'hierarchicalCategories.lvl0': {
-              order: ['Appliances', 'Best Buy Gift Cards', 'Audio']
-            }
-          }
-        }
-      }
+              order: ['Appliances', 'Best Buy Gift Cards', 'Audio'],
+            },
+          },
+        },
+      },
     };
     var results = data.content.results.slice();
     results[0] = Object.assign(order, results[0]);
@@ -369,7 +466,7 @@ describe('hierarchical facet', function() {
           count: 1533,
           isRefined: false,
           exhaustive: true,
-          data: null
+          data: null,
         },
         {
           name: 'Best Buy Gift Cards',
@@ -386,7 +483,7 @@ describe('hierarchical facet', function() {
               isRefined: true,
               name: 'Entertainment Gift Cards',
               path: 'Best Buy Gift Cards > Entertainment Gift Cards',
-              escapedValue: 'Best Buy Gift Cards > Entertainment Gift Cards'
+              escapedValue: 'Best Buy Gift Cards > Entertainment Gift Cards',
             },
             {
               name: 'Swag Gift Cards',
@@ -395,7 +492,7 @@ describe('hierarchical facet', function() {
               count: 20,
               isRefined: false,
               exhaustive: true,
-              data: null
+              data: null,
             },
             {
               name: 'Useless Gift Cards',
@@ -404,9 +501,9 @@ describe('hierarchical facet', function() {
               count: 12,
               isRefined: false,
               exhaustive: true,
-              data: null
-            }
-          ]
+              data: null,
+            },
+          ],
         },
         {
           name: 'Audio',
@@ -415,7 +512,7 @@ describe('hierarchical facet', function() {
           count: 1010,
           isRefined: false,
           exhaustive: true,
-          data: null
+          data: null,
         },
         {
           count: 1920,
@@ -424,7 +521,7 @@ describe('hierarchical facet', function() {
           isRefined: false,
           name: 'Cell Phones',
           path: 'Cell Phones',
-          escapedValue: 'Cell Phones'
+          escapedValue: 'Cell Phones',
         },
         {
           count: 1858,
@@ -433,15 +530,15 @@ describe('hierarchical facet', function() {
           isRefined: false,
           name: 'Computers & Tablets',
           path: 'Computers & Tablets',
-          escapedValue: 'Computers & Tablets'
-        }
-      ]
+          escapedValue: 'Computers & Tablets',
+        },
+      ],
     };
 
     expect(facetValues).toEqual(expected);
   });
 
-  test('root ordered (sortRemainingBy count)', function() {
+  test('root ordered (sortRemainingBy count)', function () {
     var data = require('./getFacetValues/hierarchical.json');
     var order = {
       renderingContent: {
@@ -449,11 +546,11 @@ describe('hierarchical facet', function() {
           values: {
             'hierarchicalCategories.lvl0': {
               order: ['Appliances', 'Best Buy Gift Cards'],
-              sortRemainingBy: 'count'
-            }
-          }
-        }
-      }
+              sortRemainingBy: 'count',
+            },
+          },
+        },
+      },
     };
     var results = data.content.results.slice();
     results[0] = Object.assign(order, results[0]);
@@ -478,7 +575,7 @@ describe('hierarchical facet', function() {
           count: 1533,
           isRefined: false,
           exhaustive: true,
-          data: null
+          data: null,
         },
         {
           name: 'Best Buy Gift Cards',
@@ -495,7 +592,7 @@ describe('hierarchical facet', function() {
               count: 17,
               isRefined: true,
               exhaustive: true,
-              data: null
+              data: null,
             },
             {
               name: 'Swag Gift Cards',
@@ -504,7 +601,7 @@ describe('hierarchical facet', function() {
               count: 20,
               isRefined: false,
               exhaustive: true,
-              data: null
+              data: null,
             },
             {
               name: 'Useless Gift Cards',
@@ -513,9 +610,9 @@ describe('hierarchical facet', function() {
               count: 12,
               isRefined: false,
               exhaustive: true,
-              data: null
-            }
-          ]
+              data: null,
+            },
+          ],
         },
         {
           name: 'Cell Phones',
@@ -524,7 +621,7 @@ describe('hierarchical facet', function() {
           count: 1920,
           isRefined: false,
           exhaustive: true,
-          data: null
+          data: null,
         },
         {
           name: 'Computers & Tablets',
@@ -533,7 +630,7 @@ describe('hierarchical facet', function() {
           count: 1858,
           isRefined: false,
           exhaustive: true,
-          data: null
+          data: null,
         },
         {
           name: 'Audio',
@@ -542,15 +639,15 @@ describe('hierarchical facet', function() {
           count: 1010,
           isRefined: false,
           exhaustive: true,
-          data: null
-        }
-      ]
+          data: null,
+        },
+      ],
     };
 
     expect(facetValues).toEqual(expected);
   });
 
-  test('root ordered (sortRemainingBy alpha)', function() {
+  test('root ordered (sortRemainingBy alpha)', function () {
     var data = require('./getFacetValues/hierarchical.json');
     var order = {
       renderingContent: {
@@ -558,11 +655,11 @@ describe('hierarchical facet', function() {
           values: {
             'hierarchicalCategories.lvl0': {
               order: ['Appliances', 'Best Buy Gift Cards'],
-              sortRemainingBy: 'alpha'
-            }
-          }
-        }
-      }
+              sortRemainingBy: 'alpha',
+            },
+          },
+        },
+      },
     };
     var results = data.content.results.slice();
     results[0] = Object.assign(order, results[0]);
@@ -587,7 +684,7 @@ describe('hierarchical facet', function() {
           count: 1533,
           isRefined: false,
           exhaustive: true,
-          data: null
+          data: null,
         },
         {
           name: 'Best Buy Gift Cards',
@@ -604,7 +701,7 @@ describe('hierarchical facet', function() {
               count: 17,
               isRefined: true,
               exhaustive: true,
-              data: null
+              data: null,
             },
             {
               name: 'Swag Gift Cards',
@@ -613,7 +710,7 @@ describe('hierarchical facet', function() {
               count: 20,
               isRefined: false,
               exhaustive: true,
-              data: null
+              data: null,
             },
             {
               name: 'Useless Gift Cards',
@@ -622,9 +719,9 @@ describe('hierarchical facet', function() {
               count: 12,
               isRefined: false,
               exhaustive: true,
-              data: null
-            }
-          ]
+              data: null,
+            },
+          ],
         },
         {
           name: 'Audio',
@@ -633,7 +730,7 @@ describe('hierarchical facet', function() {
           count: 1010,
           isRefined: false,
           exhaustive: true,
-          data: null
+          data: null,
         },
         {
           name: 'Cell Phones',
@@ -642,7 +739,7 @@ describe('hierarchical facet', function() {
           count: 1920,
           isRefined: false,
           exhaustive: true,
-          data: null
+          data: null,
         },
         {
           name: 'Computers & Tablets',
@@ -651,15 +748,15 @@ describe('hierarchical facet', function() {
           count: 1858,
           isRefined: false,
           exhaustive: true,
-          data: null
-        }
-      ]
+          data: null,
+        },
+      ],
     };
 
     expect(facetValues).toEqual(expected);
   });
 
-  test('root ordered (sortRemainingBy hidden)', function() {
+  test('root ordered (sortRemainingBy hidden)', function () {
     var data = require('./getFacetValues/hierarchical.json');
     var order = {
       renderingContent: {
@@ -667,11 +764,11 @@ describe('hierarchical facet', function() {
           values: {
             'hierarchicalCategories.lvl0': {
               order: ['Appliances', 'Audio', 'Best Buy Gift Cards'],
-              sortRemainingBy: 'hidden'
-            }
-          }
-        }
-      }
+              sortRemainingBy: 'hidden',
+            },
+          },
+        },
+      },
     };
     var results = data.content.results.slice();
     results[0] = Object.assign(order, results[0]);
@@ -696,7 +793,7 @@ describe('hierarchical facet', function() {
           count: 1533,
           isRefined: false,
           exhaustive: true,
-          data: null
+          data: null,
         },
         {
           name: 'Audio',
@@ -705,7 +802,7 @@ describe('hierarchical facet', function() {
           count: 1010,
           isRefined: false,
           exhaustive: true,
-          data: null
+          data: null,
         },
         {
           name: 'Best Buy Gift Cards',
@@ -722,7 +819,7 @@ describe('hierarchical facet', function() {
               count: 17,
               isRefined: true,
               exhaustive: true,
-              data: null
+              data: null,
             },
             {
               name: 'Swag Gift Cards',
@@ -731,7 +828,7 @@ describe('hierarchical facet', function() {
               count: 20,
               isRefined: false,
               exhaustive: true,
-              data: null
+              data: null,
             },
             {
               name: 'Useless Gift Cards',
@@ -740,17 +837,17 @@ describe('hierarchical facet', function() {
               count: 12,
               isRefined: false,
               exhaustive: true,
-              data: null
-            }
-          ]
-        }
-      ]
+              data: null,
+            },
+          ],
+        },
+      ],
     };
 
     expect(facetValues).toEqual(expected);
   });
 
-  test('two levels ordered (sortRemainingBy count)', function() {
+  test('two levels ordered (sortRemainingBy count)', function () {
     var data = require('./getFacetValues/hierarchical.json');
     var order = {
       renderingContent: {
@@ -758,15 +855,15 @@ describe('hierarchical facet', function() {
           values: {
             'hierarchicalCategories.lvl0': {
               order: ['Best Buy Gift Cards'],
-              sortRemainingBy: 'hidden'
+              sortRemainingBy: 'hidden',
             },
             'hierarchicalCategories.lvl1': {
               order: ['Best Buy Gift Cards > Entertainment Gift Cards'],
-              sortRemainingBy: 'count'
-            }
-          }
-        }
-      }
+              sortRemainingBy: 'count',
+            },
+          },
+        },
+      },
     };
     var results = data.content.results.slice();
     results[0] = Object.assign(order, results[0]);
@@ -799,7 +896,7 @@ describe('hierarchical facet', function() {
               count: 17,
               isRefined: true,
               exhaustive: true,
-              data: null
+              data: null,
             },
             {
               name: 'Swag Gift Cards',
@@ -808,7 +905,7 @@ describe('hierarchical facet', function() {
               count: 20,
               isRefined: false,
               exhaustive: true,
-              data: null
+              data: null,
             },
             {
               name: 'Useless Gift Cards',
@@ -817,32 +914,65 @@ describe('hierarchical facet', function() {
               count: 12,
               isRefined: false,
               exhaustive: true,
-              data: null
-            }
-          ]
-        }
-      ]
+              data: null,
+            },
+          ],
+        },
+      ],
     };
 
     expect(facetValues).toEqual(expected);
   });
 });
 
-test('does not return empty items', function() {
+test('does not return empty items', function () {
   var rawResults = require('./getFacetValues/sparse.json');
-  var results = new SearchResults(new SearchParameters({
-    disjunctiveFacets: ['brands']
-  }), rawResults.results);
+  var results = new SearchResults(
+    new SearchParameters({
+      disjunctiveFacets: ['brands'],
+    }),
+    rawResults.results
+  );
 
-  expect(results.getFacetValues('brands', {facetOrdering: true})).toEqual([
-    {name: 'Addo', escapedValue: 'Addo', count: 321, isRefined: false},
-    {name: 'Paw Patrol', escapedValue: 'Paw Patrol', count: 130, isRefined: false},
-    {name: 'Mattel', escapedValue: 'Mattel', count: 586, isRefined: false},
-    {name: 'Nick Jr.', escapedValue: 'Nick Jr.', count: 147, isRefined: false},
-    {name: 'Early Learning Centre', escapedValue: 'Early Learning Centre', count: 292, isRefined: false},
-    {name: 'Hot Wheels', escapedValue: 'Hot Wheels', count: 94, isRefined: false},
-    {name: 'Fisher-Price', escapedValue: 'Fisher-Price', count: 104, isRefined: false},
-    {name: 'Funko', escapedValue: 'Funko', count: 187, isRefined: false},
-    {name: 'Nickelodeon', escapedValue: 'Nickelodeon', count: 230, isRefined: false}
+  expect(results.getFacetValues('brands', { facetOrdering: true })).toEqual([
+    { name: 'Addo', escapedValue: 'Addo', count: 321, isRefined: false },
+    {
+      name: 'Paw Patrol',
+      escapedValue: 'Paw Patrol',
+      count: 130,
+      isRefined: false,
+    },
+    { name: 'Mattel', escapedValue: 'Mattel', count: 586, isRefined: false },
+    {
+      name: 'Nick Jr.',
+      escapedValue: 'Nick Jr.',
+      count: 147,
+      isRefined: false,
+    },
+    {
+      name: 'Early Learning Centre',
+      escapedValue: 'Early Learning Centre',
+      count: 292,
+      isRefined: false,
+    },
+    {
+      name: 'Hot Wheels',
+      escapedValue: 'Hot Wheels',
+      count: 94,
+      isRefined: false,
+    },
+    {
+      name: 'Fisher-Price',
+      escapedValue: 'Fisher-Price',
+      count: 104,
+      isRefined: false,
+    },
+    { name: 'Funko', escapedValue: 'Funko', count: 187, isRefined: false },
+    {
+      name: 'Nickelodeon',
+      escapedValue: 'Nickelodeon',
+      count: 230,
+      isRefined: false,
+    },
   ]);
 });

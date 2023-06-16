@@ -31,9 +31,9 @@ var lib = {
 
     var valueAsString = '' + value;
 
-    var facetRefinement = !refinementList[attribute] ?
-      [valueAsString] :
-      refinementList[attribute].concat(valueAsString);
+    var facetRefinement = !refinementList[attribute]
+      ? [valueAsString]
+      : refinementList[attribute].concat(valueAsString);
 
     var mod = {};
 
@@ -50,18 +50,22 @@ var lib = {
    * @param {string} [value] the value of the refinement
    * @return {RefinementList} a new and updated refinement lst
    */
-  removeRefinement: function removeRefinement(refinementList, attribute, value) {
+  removeRefinement: function removeRefinement(
+    refinementList,
+    attribute,
+    value
+  ) {
     if (value === undefined) {
       // we use the "filter" form of clearRefinement, since it leaves empty values as-is
       // the form with a string will remove the attribute completely
-      return lib.clearRefinement(refinementList, function(v, f) {
+      return lib.clearRefinement(refinementList, function (v, f) {
         return attribute === f;
       });
     }
 
     var valueAsString = '' + value;
 
-    return lib.clearRefinement(refinementList, function(v, f) {
+    return lib.clearRefinement(refinementList, function (v, f) {
       return attribute === f && valueAsString === v;
     });
   },
@@ -72,8 +76,13 @@ var lib = {
    * @param {string} value the value of the refinement
    * @return {RefinementList} a new and updated list
    */
-  toggleRefinement: function toggleRefinement(refinementList, attribute, value) {
-    if (value === undefined) throw new Error('toggleRefinement should be used with a value');
+  toggleRefinement: function toggleRefinement(
+    refinementList,
+    attribute,
+    value
+  ) {
+    if (value === undefined)
+      throw new Error('toggleRefinement should be used with a value');
 
     if (lib.isRefined(refinementList, attribute, value)) {
       return lib.removeRefinement(refinementList, attribute, value);
@@ -92,7 +101,11 @@ var lib = {
    * @param {string} [refinementType] optional parameter to give more context to the attribute function
    * @return {RefinementList} a new and updated refinement list
    */
-  clearRefinement: function clearRefinement(refinementList, attribute, refinementType) {
+  clearRefinement: function clearRefinement(
+    refinementList,
+    attribute,
+    refinementType
+  ) {
     if (attribute === undefined) {
       // return the same object if the list is already empty
       // this is mainly for tests, as it doesn't have much impact on performance
@@ -105,9 +118,12 @@ var lib = {
     } else if (typeof attribute === 'function') {
       var hasChanged = false;
 
-      var newRefinementList = Object.keys(refinementList).reduce(function(memo, key) {
+      var newRefinementList = Object.keys(refinementList).reduce(function (
+        memo,
+        key
+      ) {
         var values = refinementList[key] || [];
-        var facetList = values.filter(function(value) {
+        var facetList = values.filter(function (value) {
           return !attribute(value, key, refinementType);
         });
 
@@ -118,7 +134,8 @@ var lib = {
         memo[key] = facetList;
 
         return memo;
-      }, {});
+      },
+      {});
 
       if (hasChanged) return newRefinementList;
       return refinementList;
@@ -138,7 +155,8 @@ var lib = {
    * @return {boolean} true if the attribute is refined, false otherwise
    */
   isRefined: function isRefined(refinementList, attribute, refinementValue) {
-    var containsRefinements = Boolean(refinementList[attribute]) &&
+    var containsRefinements =
+      Boolean(refinementList[attribute]) &&
       refinementList[attribute].length > 0;
 
     if (refinementValue === undefined || !containsRefinements) {
@@ -148,7 +166,7 @@ var lib = {
     var refinementValueAsString = '' + refinementValue;
 
     return refinementList[attribute].indexOf(refinementValueAsString) !== -1;
-  }
+  },
 };
 
 module.exports = lib;

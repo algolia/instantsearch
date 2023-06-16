@@ -4,20 +4,20 @@ var algoliasearchHelper = require('../../../../');
 
 function makeFakeClient() {
   return {
-    search: jest.fn(function() {
-      return new Promise(function() {});
+    search: jest.fn(function () {
+      return new Promise(function () {});
     }),
-    searchForFacetValues: jest.fn(function() {
-      return new Promise(function() {});
-    })
+    searchForFacetValues: jest.fn(function () {
+      return new Promise(function () {});
+    }),
   };
 }
 
-test('[derived helper] emit a search event', function() {
+test('[derived helper] emit a search event', function () {
   var searched = jest.fn();
   var client = makeFakeClient();
   var helper = algoliasearchHelper(client, 'index');
-  var derivedHelper = helper.derive(function(s) {
+  var derivedHelper = helper.derive(function (s) {
     return s;
   });
 
@@ -30,6 +30,6 @@ test('[derived helper] emit a search event', function() {
   expect(searched).toHaveBeenCalledTimes(1);
   expect(searched).toHaveBeenLastCalledWith({
     state: helper.state,
-    results: null
+    results: null,
   });
 });

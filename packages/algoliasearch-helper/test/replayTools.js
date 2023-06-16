@@ -1,6 +1,6 @@
 'use strict';
 module.exports = {
-  toSaver: wrapHelperToSave
+  toSaver: wrapHelperToSave,
 };
 
 var fs = require('fs');
@@ -25,35 +25,43 @@ function wrapHelperToSave(Helper, folderName) {
 
   WrappedHelper.prototype = Object.create(Helper.prototype);
   WrappedHelper.prototype.constructor = WrappedHelper;
-  WrappedHelper.prototype._handleResponse = function(state, queryId, err, content) {
+  WrappedHelper.prototype._handleResponse = function (
+    state,
+    queryId,
+    err,
+    content
+  ) {
     savedParameters.state = state;
     savedParameters.error = err;
     savedParameters.content = content;
 
-    Helper.prototype._handleResponse.apply(this, Array.prototype.slice.call(arguments));
+    Helper.prototype._handleResponse.apply(
+      this,
+      Array.prototype.slice.call(arguments)
+    );
   };
-  WrappedHelper.prototype.searchOnce = function(options) {
+  WrappedHelper.prototype.searchOnce = function (options) {
     var state = this.state.setQueryParameters(options);
 
-    return Helper.prototype.searchOnce.call(
-      this,
-      state
-    ).then(function(contentAndState) {
-      savedParameters.content = contentAndState._originalResponse;
-      savedParameters.state = contentAndState.state;
-      savedParameters.error = null;
-      return contentAndState;
-    }, function(error) {
-      savedParameters.content = null;
-      savedParameters.state = state;
-      savedParameters.error = error;
-      throw error;
-    });
+    return Helper.prototype.searchOnce.call(this, state).then(
+      function (contentAndState) {
+        savedParameters.content = contentAndState._originalResponse;
+        savedParameters.state = contentAndState.state;
+        savedParameters.error = null;
+        return contentAndState;
+      },
+      function (error) {
+        savedParameters.content = null;
+        savedParameters.state = state;
+        savedParameters.error = error;
+        throw error;
+      }
+    );
   };
-  WrappedHelper.prototype.__getParameters = function() {
+  WrappedHelper.prototype.__getParameters = function () {
     return savedParameters;
   };
-  WrappedHelper.prototype.__saveLastToFile = function(filename) {
+  WrappedHelper.prototype.__saveLastToFile = function (filename) {
     // folder if it doesn't exist
     // create filename.json
     // save json of savedParameters to file

@@ -2,17 +2,18 @@
 
 var algoliasearchHelper = require('../../../../');
 
-test('[derived helper] detach a derived helper', function(done) {
+test('[derived helper] detach a derived helper', function (done) {
   var client = {
-    search: searchTest
+    search: searchTest,
   };
   var helper = algoliasearchHelper(client, 'indexName');
-  var derivedHelper = helper.derive(function(s) { return s; });
-  derivedHelper.on('result', function() {});
+  var derivedHelper = helper.derive(function (s) {
+    return s;
+  });
+  derivedHelper.on('result', function () {});
   helper.search();
   derivedHelper.detach();
   helper.search();
-
 
   var nbRequest;
   function searchTest(requests) {
@@ -28,6 +29,6 @@ test('[derived helper] detach a derived helper', function(done) {
       done();
     }
 
-    return new Promise(function() {});
+    return new Promise(function () {});
   }
 });

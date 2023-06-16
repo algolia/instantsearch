@@ -9,7 +9,7 @@ var find = require('./find');
  * @return {array.<string[]>} array containing 2 elements : attributes, orders
  */
 module.exports = function formatSort(sortBy, defaults) {
-  var defaultInstructions = (defaults || []).map(function(sort) {
+  var defaultInstructions = (defaults || []).map(function (sort) {
     return sort.split(':');
   });
 
@@ -17,11 +17,12 @@ module.exports = function formatSort(sortBy, defaults) {
     function preparePredicate(out, sort) {
       var sortInstruction = sort.split(':');
 
-      var matchingDefault = find(defaultInstructions, function(
-        defaultInstruction
-      ) {
-        return defaultInstruction[0] === sortInstruction[0];
-      });
+      var matchingDefault = find(
+        defaultInstructions,
+        function (defaultInstruction) {
+          return defaultInstruction[0] === sortInstruction[0];
+        }
+      );
 
       if (sortInstruction.length > 1 || !matchingDefault) {
         out[0].push(sortInstruction[0]);

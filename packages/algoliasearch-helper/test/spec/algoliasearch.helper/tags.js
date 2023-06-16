@@ -5,7 +5,7 @@ var requestBuilder = require('../../../src/requestBuilder');
 
 var fakeClient = {};
 
-test('Tag filters: operations on tags list', function() {
+test('Tag filters: operations on tags list', function () {
   var helper = algoliasearchHelper(fakeClient, null, null);
 
   helper.addTag('tag').addTag('tag2');
@@ -16,7 +16,7 @@ test('Tag filters: operations on tags list', function() {
   expect(helper.getTags()).toEqual(['tag3', 'tag4']);
 });
 
-test('Tags filters: advanced query', function() {
+test('Tags filters: advanced query', function () {
   var helper = algoliasearchHelper(fakeClient, null, null);
 
   var complexQuery = '(sea, city), romantic, -mountain';
@@ -26,7 +26,7 @@ test('Tags filters: advanced query', function() {
   expect(requestBuilder._getTagFilters(helper.state)).toEqual(complexQuery);
 });
 
-test('Tags filters: switching between advanced and simple API should be forbidden without clearing the refinements first', function(done) {
+test('Tags filters: switching between advanced and simple API should be forbidden without clearing the refinements first', function (done) {
   var helper = algoliasearchHelper(fakeClient, null, null);
 
   helper.addTag('tag').addTag('tag2');
@@ -46,7 +46,10 @@ test('Tags filters: switching between advanced and simple API should be forbidde
     helper.addTag('tag').addTag('tag2');
     done.fail("Can't switch directly from the managed API to the advanced API");
   } catch (e1) {
-    helper.setQueryParameter('tagFilters', undefined).addTag('tag').addTag('tag2');
+    helper
+      .setQueryParameter('tagFilters', undefined)
+      .addTag('tag')
+      .addTag('tag2');
     expect(requestBuilder._getTagFilters(helper.state)).toEqual('tag,tag2');
   }
 

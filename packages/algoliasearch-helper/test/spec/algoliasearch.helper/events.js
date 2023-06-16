@@ -4,12 +4,12 @@ var algoliaSearchHelper = require('../../../index');
 
 function makeFakeClient() {
   return {
-    search: jest.fn(function() {
-      return new Promise(function() {});
+    search: jest.fn(function () {
+      return new Promise(function () {});
     }),
-    searchForFacetValues: jest.fn(function() {
-      return new Promise(function() {});
-    })
+    searchForFacetValues: jest.fn(function () {
+      return new Promise(function () {});
+    }),
   };
 }
 
@@ -17,7 +17,7 @@ function runAllMicroTasks() {
   return new Promise(setImmediate);
 }
 
-test('Change events should be emitted with reset page to true on implicit reset methods', function() {
+test('Change events should be emitted with reset page to true on implicit reset methods', function () {
   var changed = jest.fn();
   var fakeClient = makeFakeClient();
   var helper = algoliaSearchHelper(fakeClient, 'Index');
@@ -33,7 +33,7 @@ test('Change events should be emitted with reset page to true on implicit reset 
   expect(changed).toHaveBeenLastCalledWith({
     state: expect.any(algoliaSearchHelper.SearchParameters),
     results: null,
-    isPageReset: true
+    isPageReset: true,
   });
 
   // Trigger a page reset
@@ -43,11 +43,11 @@ test('Change events should be emitted with reset page to true on implicit reset 
   expect(changed).toHaveBeenLastCalledWith({
     state: expect.any(algoliaSearchHelper.SearchParameters),
     results: null,
-    isPageReset: true
+    isPageReset: true,
   });
 });
 
-test('Change events should be emitted with reset page to false on regular methods', function() {
+test('Change events should be emitted with reset page to false on regular methods', function () {
   var changed = jest.fn();
   var fakeClient = makeFakeClient();
   var helper = algoliaSearchHelper(fakeClient, 'Index');
@@ -63,40 +63,40 @@ test('Change events should be emitted with reset page to false on regular method
   expect(changed).toHaveBeenLastCalledWith({
     state: expect.any(algoliaSearchHelper.SearchParameters),
     results: null,
-    isPageReset: false
+    isPageReset: false,
   });
 
   // Don't trigger a page reset
   helper.setState({
     query: 'Apple',
-    page: 22
+    page: 22,
   });
 
   expect(changed).toHaveBeenCalledTimes(2);
   expect(changed).toHaveBeenLastCalledWith({
     state: expect.any(algoliaSearchHelper.SearchParameters),
     results: null,
-    isPageReset: false
+    isPageReset: false,
   });
 });
 
-test('Change events should be emitted as soon as the state change, but search should be triggered (refactored)', function() {
+test('Change events should be emitted as soon as the state change, but search should be triggered (refactored)', function () {
   var fakeClient = makeFakeClient();
   var helper = algoliaSearchHelper(fakeClient, 'Index', {
     disjunctiveFacets: ['city'],
-    disjunctiveFacetsRefinements: {city: ['Paris']},
+    disjunctiveFacetsRefinements: { city: ['Paris'] },
     facets: ['tower'],
-    facetsRefinements: {tower: ['Empire State Building']},
-    facetsExcludes: {tower: ['Empire State Building']},
+    facetsRefinements: { tower: ['Empire State Building'] },
+    facetsExcludes: { tower: ['Empire State Building'] },
     hierarchicalFacets: [],
     numericRefinements: {
-      price: {'>': [300]}
-    }
+      price: { '>': [300] },
+    },
   });
 
   var changeEventCount = 0;
 
-  helper.on('change', function() {
+  helper.on('change', function () {
     changeEventCount++;
   });
 
@@ -137,27 +137,29 @@ test('Change events should be emitted as soon as the state change, but search sh
   expect(fakeClient.search).toHaveBeenCalledTimes(1);
 });
 
-test('Change events should only be emitted for meaningful changes', function() {
+test('Change events should only be emitted for meaningful changes', function () {
   var fakeClient = makeFakeClient();
   var helper = algoliaSearchHelper(fakeClient, 'Index', {
     query: 'a',
     disjunctiveFacets: ['city'],
-    disjunctiveFacetsRefinements: {city: ['Paris']},
+    disjunctiveFacetsRefinements: { city: ['Paris'] },
     facets: ['tower'],
-    facetsRefinements: {tower: ['Empire State Building']},
-    facetsExcludes: {tower: ['Empire State Building']},
-    hierarchicalFacets: [{
-      name: 'hierarchicalFacet',
-      attributes: ['lvl1', 'lvl2']
-    }],
+    facetsRefinements: { tower: ['Empire State Building'] },
+    facetsExcludes: { tower: ['Empire State Building'] },
+    hierarchicalFacets: [
+      {
+        name: 'hierarchicalFacet',
+        attributes: ['lvl1', 'lvl2'],
+      },
+    ],
     numericRefinements: {
-      price: {'>': [300]}
-    }
+      price: { '>': [300] },
+    },
   });
 
   var changeEventCount = 0;
 
-  helper.on('change', function() {
+  helper.on('change', function () {
     changeEventCount++;
   });
 
@@ -207,12 +209,12 @@ test('Change events should only be emitted for meaningful changes', function() {
   expect(fakeClient.search).toHaveBeenCalledTimes(1);
 });
 
-test('search event should be emitted once when the search is triggered and before the request is sent', function() {
+test('search event should be emitted once when the search is triggered and before the request is sent', function () {
   var searched = jest.fn();
   var fakeClient = makeFakeClient();
   var helper = algoliaSearchHelper(fakeClient, 'Index', {
     disjunctiveFacets: ['city'],
-    facets: ['tower']
+    facets: ['tower'],
   });
 
   helper.on('search', searched);
@@ -253,17 +255,17 @@ test('search event should be emitted once when the search is triggered and befor
   expect(searched).toHaveBeenCalledTimes(1);
   expect(searched).toHaveBeenLastCalledWith({
     state: helper.state,
-    results: null
+    results: null,
   });
   expect(fakeClient.search).toHaveBeenCalledTimes(1);
 });
 
-test('searchOnce event should be emitted once when the search is triggered using searchOnce and before the request is sent', function() {
+test('searchOnce event should be emitted once when the search is triggered using searchOnce and before the request is sent', function () {
   var searchedOnce = jest.fn();
   var fakeClient = makeFakeClient();
   var helper = algoliaSearchHelper(fakeClient, 'Index', {
     disjunctiveFacets: ['city'],
-    facets: ['tower']
+    facets: ['tower'],
   });
 
   helper.on('searchOnce', searchedOnce);
@@ -271,51 +273,54 @@ test('searchOnce event should be emitted once when the search is triggered using
   expect(searchedOnce).toHaveBeenCalledTimes(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.searchOnce({}, function() {});
+  helper.searchOnce({}, function () {});
 
   expect(searchedOnce).toHaveBeenCalledTimes(1);
   expect(searchedOnce).toHaveBeenLastCalledWith({
-    state: helper.state
+    state: helper.state,
   });
 
   expect(fakeClient.search).toHaveBeenCalledTimes(1);
 });
 
-test('searchForFacetValues event should be emitted once when the search is triggered using' +
-     ' searchForFacetValues and before the request is sent', function() {
-  var searchedForFacetValues = jest.fn();
-  var fakeClient = makeFakeClient();
-  var helper = algoliaSearchHelper(fakeClient, 'Index', {
-    disjunctiveFacets: ['city'],
-    facets: ['tower']
-  });
+test(
+  'searchForFacetValues event should be emitted once when the search is triggered using' +
+    ' searchForFacetValues and before the request is sent',
+  function () {
+    var searchedForFacetValues = jest.fn();
+    var fakeClient = makeFakeClient();
+    var helper = algoliaSearchHelper(fakeClient, 'Index', {
+      disjunctiveFacets: ['city'],
+      facets: ['tower'],
+    });
 
-  helper.on('searchForFacetValues', searchedForFacetValues);
+    helper.on('searchForFacetValues', searchedForFacetValues);
 
-  expect(searchedForFacetValues).toHaveBeenCalledTimes(0);
-  expect(fakeClient.searchForFacetValues).toHaveBeenCalledTimes(0);
+    expect(searchedForFacetValues).toHaveBeenCalledTimes(0);
+    expect(fakeClient.searchForFacetValues).toHaveBeenCalledTimes(0);
 
-  helper.searchForFacetValues('city', 'NYC');
-  expect(searchedForFacetValues).toHaveBeenCalledTimes(1);
-  expect(searchedForFacetValues).toHaveBeenLastCalledWith({
-    state: helper.state,
-    facet: 'city',
-    query: 'NYC'
-  });
-  expect(fakeClient.searchForFacetValues).toHaveBeenCalledTimes(1);
-});
+    helper.searchForFacetValues('city', 'NYC');
+    expect(searchedForFacetValues).toHaveBeenCalledTimes(1);
+    expect(searchedForFacetValues).toHaveBeenLastCalledWith({
+      state: helper.state,
+      facet: 'city',
+      query: 'NYC',
+    });
+    expect(fakeClient.searchForFacetValues).toHaveBeenCalledTimes(1);
+  }
+);
 
-test('result event should be emitted once the request is complete', function() {
+test('result event should be emitted once the request is complete', function () {
   var resulted = jest.fn();
   var fakeClient = makeFakeClient();
   var helper = algoliaSearchHelper(fakeClient, 'Index', {
     disjunctiveFacets: ['city'],
-    facets: ['tower']
+    facets: ['tower'],
   });
 
-  fakeClient.search.mockImplementationOnce(function() {
+  fakeClient.search.mockImplementationOnce(function () {
     return Promise.resolve({
-      results: [{}]
+      results: [{}],
     });
   });
 
@@ -325,24 +330,24 @@ test('result event should be emitted once the request is complete', function() {
 
   helper.search();
 
-  return runAllMicroTasks().then(function() {
+  return runAllMicroTasks().then(function () {
     expect(resulted).toHaveBeenCalledTimes(1);
     expect(resulted).toHaveBeenLastCalledWith({
       results: expect.any(algoliaSearchHelper.SearchResults),
-      state: helper.state
+      state: helper.state,
     });
   });
 });
 
-test('error event should be emitted once the request is complete with errors', function() {
+test('error event should be emitted once the request is complete with errors', function () {
   var errored = jest.fn();
   var fakeClient = makeFakeClient();
   var helper = algoliaSearchHelper(fakeClient, 'Index', {
     disjunctiveFacets: ['city'],
-    facets: ['tower']
+    facets: ['tower'],
   });
 
-  fakeClient.search.mockImplementationOnce(function() {
+  fakeClient.search.mockImplementationOnce(function () {
     return Promise.reject(new Error('Abort'));
   });
 
@@ -352,23 +357,23 @@ test('error event should be emitted once the request is complete with errors', f
 
   helper.search();
 
-  return runAllMicroTasks().then(function() {
+  return runAllMicroTasks().then(function () {
     expect(errored).toHaveBeenCalledTimes(1);
     expect(errored).toHaveBeenLastCalledWith({
-      error: expect.any(Error)
+      error: expect.any(Error),
     });
   });
 });
 
-test('error event should be emitted if an error happens at request time', function() {
+test('error event should be emitted if an error happens at request time', function () {
   var errored = jest.fn();
   var fakeClient = makeFakeClient();
   var helper = algoliaSearchHelper(fakeClient, 'Index', {
     disjunctiveFacets: ['city'],
-    facets: ['tower']
+    facets: ['tower'],
   });
 
-  fakeClient.search.mockImplementationOnce(function() {
+  fakeClient.search.mockImplementationOnce(function () {
     throw new Error('Unexpected error');
   });
 
@@ -380,6 +385,6 @@ test('error event should be emitted if an error happens at request time', functi
 
   expect(errored).toHaveBeenCalledTimes(1);
   expect(errored).toHaveBeenLastCalledWith({
-    error: expect.any(Error)
+    error: expect.any(Error),
   });
 });

@@ -1,13 +1,12 @@
-*Coming from V1 (or js client v2)?* Read the [migration guide](https://github.com/algolia/algoliasearch-helper-js/wiki/Migration-guide-:-V1-to-V2) to the new version of the Helper.
+_Coming from V1 (or js client v2)?_ Read the [migration guide](https://github.com/algolia/algoliasearch-helper-js/wiki/Migration-guide-:-V1-to-V2) to the new version of the Helper.
 
-*Coming from V2?* Read the [migration guide](https://github.com/algolia/algoliasearch-helper-js/wiki/Migration-guide-:-V2-to-V3) to the new version of the Helper.
+_Coming from V2?_ Read the [migration guide](https://github.com/algolia/algoliasearch-helper-js/wiki/Migration-guide-:-V2-to-V3) to the new version of the Helper.
 
 **The JavaScript helper is an advanced library we provide to our users. If you are looking to build a complete search interface, we recommend you to use [instantsearch.js](https://community.algolia.com/instantsearch.js/). If you want to build an autocomplete menu, see [autocomplete.js](https://github.com/algolia/autocomplete.js).**
 
 # algoliasearch-helper-js
 
-This module is the companion of the [algolia/algoliasearch-client-js](https://github.com/algolia/algoliasearch-client-js). It helps you keep
-track of the search parameters and provides a higher level API.
+This module is the companion of the [algolia/algoliasearch-client-js](https://github.com/algolia/algoliasearch-client-js). It helps you keep track of the search parameters and provides a higher level API.
 
 [See the helper in action](https://community.algolia.com/algoliasearch-helper-js/)
 
@@ -24,46 +23,46 @@ track of the search parameters and provides a higher level API.
 [jsdelivr-badge]: https://data.jsdelivr.com/v1/package/npm/algoliasearch-helper/badge
 [jsdelivr-hits]: https://www.jsdelivr.com/package/npm/algoliasearch-helper
 
-
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
-  - [Features](#features)
-  - [Examples](#examples)
-    - [Vanilla JavaScript](#vanilla-javascript)
-    - [AngularJS module](#angularjs-module)
-  - [Helper cheatsheet](#helper-cheatsheet)
-    - [Add the helper in your project](#add-the-helper-in-your-project)
-    - [Regular `<script>` tag](#regular-script-tag)
-    - [With npm](#with-npm)
-    - [Init the helper](#init-the-helper)
-    - [Helper lifecycle](#helper-lifecycle)
-    - [Objects](#objects)
-    - [Search](#search)
-    - [Events](#events)
-    - [Query](#query)
-    - [Filtering results](#filtering-results)
-    - [Facet utilities](#facet-utilities)
-    - [Tags](#tags)
-    - [Pagination](#pagination)
-    - [Index](#index)
-    - [One time query](#one-time-query)
-    - [Query parameters](#query-parameters)
-    - [Results format](#results-format)
+- [Features](#features)
+- [Examples](#examples)
+  - [Vanilla JavaScript](#vanilla-javascript)
+  - [AngularJS module](#angularjs-module)
+- [Helper cheatsheet](#helper-cheatsheet)
+  - [Add the helper in your project](#add-the-helper-in-your-project)
+  - [Regular `<script>` tag](#regular-script-tag)
+  - [With npm](#with-npm)
+  - [Init the helper](#init-the-helper)
+  - [Helper lifecycle](#helper-lifecycle)
+  - [Objects](#objects)
+  - [Search](#search)
+  - [Events](#events)
+  - [Query](#query)
+  - [Filtering results](#filtering-results)
+  - [Facet utilities](#facet-utilities)
+  - [Tags](#tags)
+  - [Pagination](#pagination)
+  - [Index](#index)
+  - [One time query](#one-time-query)
+  - [Query parameters](#query-parameters)
+  - [Results format](#results-format)
 - [Browser support](#browser-support)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Features
- - Search parameters management
- - Facets exclusions
- - Pagination
- - Disjunctive faceting (search on two or more values of the same facet)
+
+- Search parameters management
+- Facets exclusions
+- Pagination
+- Disjunctive faceting (search on two or more values of the same facet)
 
 ## Examples
 
 ### Vanilla JavaScript
+
 A small example that uses Browserify to manage modules.
 
 ```js
@@ -74,10 +73,10 @@ var client = algoliasearch('appId', 'apiKey');
 
 var helper = algoliasearchHelper(client, 'indexName', {
   facets: ['mainCharacterFirstName', 'year'],
-  disjunctiveFacets: ['director']
+  disjunctiveFacets: ['director'],
 });
 
-helper.on('result', function(event){
+helper.on('result', function (event) {
   console.log(event.results);
 });
 
@@ -89,6 +88,7 @@ helper.addNumericRefinement('year', '=', 2003);
 // Search for any movie filmed in 2003 and directed by either C. Eastwood or S. Coppola
 helper.search();
 ```
+
 See more examples in the [examples folder](examples/)
 
 ### AngularJS module
@@ -124,6 +124,7 @@ angular.module('searchApp', ['ngSanitize', 'algoliasearch'])
 }]);
 </script>
 ```
+
 You can see the full [Angular example here](https://codepen.io/Algolia/pen/PzZobK)
 
 ## Helper cheatsheet
@@ -145,27 +146,16 @@ Use our [jsDelivr](http://www.jsdelivr.com/) build:
 ### Init the helper
 
 ```js
-var helper = algoliasearchHelper(client, 'indexName'/*, parameters*/);
+var helper = algoliasearchHelper(client, 'indexName' /*, parameters*/);
 ```
 
 ### Helper lifecycle
 
-1. modify the parameters of the search (usually through user interactions)<br/>
-        ```
-        	helper.setQuery('iphone').addFacetRefinement('category', 'phone')
-        ```
+1. modify the parameters of the search (usually through user interactions)<br/> ` helper.setQuery('iphone').addFacetRefinement('category', 'phone') `
 
-2. trigger the search (after all the modification have been applied)<br/>
-        ```
-        helper.search()
-        ```
+2. trigger the search (after all the modification have been applied)<br/> ` helper.search() `
 
-3. read the results (with the event "result" handler) and update the UI with the results<br/>
-        ```
-        helper.on('result', function(event) {
-          updateUI(event.results);
-        });
-        ```
+3. read the results (with the event "result" handler) and update the UI with the results<br/> ` helper.on('result', function(event) { updateUI(event.results); }); `
 
 4. go back to 1
 
@@ -175,8 +165,7 @@ var helper = algoliasearchHelper(client, 'indexName'/*, parameters*/);
 
 **SearchParameters**: the object representing the state of the search. The current state is stored in `helperInstance.state`.
 
-**SearchResults**: the object in which the Algolia answers are transformed into. This object is passed to the result event handler.
-An example of SearchResults in JSON is available at [the end of this readme](#results-format)
+**SearchResults**: the object in which the Algolia answers are transformed into. This object is passed to the result event handler. An example of SearchResults in JSON is available at [the end of this readme](#results-format)
 
 ### Search
 
@@ -190,7 +179,7 @@ Example:
 var helper = algoliasearchHelper(client, indexName);
 
 // Let's monitor the results with the console
-helper.on('result', function(event) {
+helper.on('result', function (event) {
   console.log(event.results);
 });
 
@@ -210,8 +199,7 @@ helper.addTag('photo').search();
 
 The helper is a Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_events_eventemitter) instance.
 
-`result`: get notified when new results are received. The handler function will receive
-two objects (`SearchResults` and `SearchParameters`).
+`result`: get notified when new results are received. The handler function will receive two objects (`SearchResults` and `SearchParameters`).
 
 `error`: get notified when errors are received from the API.
 
@@ -265,7 +253,7 @@ Refinements are ANDed by default (Conjunctive selection).
 
 ```js
 var helper = algoliasearchHelper(client, indexName, {
-	facets: ['ANDFacet']
+  facets: ['ANDFacet'],
 });
 ```
 
@@ -289,7 +277,7 @@ Refinements are ORed by default (Disjunctive selection).
 
 ```js
 var helper = algoliasearchHelper(client, indexName, {
-	disjunctiveFacets: ['ORFacet']
+  disjunctiveFacets: ['ORFacet'],
 });
 ```
 
@@ -313,7 +301,7 @@ Filter so that we do NOT get a given facet
 
 ```js
 var helper = algoliasearchHelper(client, indexName, {
-	facets: ['ANDFacet']
+  facets: ['ANDFacet'],
 }).search();
 ```
 
@@ -337,7 +325,7 @@ Filter over numeric attributes with math operations like `=`, `>`, `<`, `>=`, `<
 
 ```js
 var helper = algoliasearchHelper(client, indexName, {
-  disjunctiveFacets: ['numericAttribute']
+  disjunctiveFacets: ['numericAttribute'],
 });
 ```
 
@@ -350,7 +338,9 @@ helper.addNumericRefinement('numericAttribute', '=', '4').search();
 // filter to only the results that match numericAttribute=3 AND numericAttribute=4
 
 // On another numeric with no previous filter
-helper.addNumericRefinement('numericAttribute2', '=', ['42', '56', '37'] ).search();
+helper
+  .addNumericRefinement('numericAttribute2', '=', ['42', '56', '37'])
+  .search();
 // filter to only the results that match numericAttribute2=42 OR numericAttribute2=56 OR numericAttribute2=37
 ```
 
@@ -383,6 +373,7 @@ Hierarchical facets are useful to build such navigation menus:
 ```
 
 Here, we refined the search this way:
+
 - click on fruits
 - click on citrus
 
@@ -392,15 +383,16 @@ To build such menu, you need to use hierarchical faceting:
 
 ```javascript
 var helper = algoliasearchHelper(client, indexName, {
-  hierarchicalFacets: [{
-    name: 'products',
-    attributes: ['categories.lvl0', 'categories.lvl1']
-  }]
+  hierarchicalFacets: [
+    {
+      name: 'products',
+      attributes: ['categories.lvl0', 'categories.lvl1'],
+    },
+  ],
 });
 ```
 
-**Requirements:** All the specified `attributes` must be defined in your Algolia settings
-as attributes for faceting.
+**Requirements:** All the specified `attributes` must be defined in your Algolia settings as attributes for faceting.
 
 Given your objects looks like this:
 
@@ -421,11 +413,10 @@ And you refine `products`:
 helper.toggleFacetRefinement('products', 'fruits > citrus');
 ```
 
-You will get a hierarchical presentation of your facet values: a navigation menu
-of your facet values.
+You will get a hierarchical presentation of your facet values: a navigation menu of your facet values.
 
 ```js
-helper.on('result', function(event){
+helper.on('result', function (event) {
   console.log(event.results.hierarchicalFacets[0]);
   // {
   //   'name': 'products',
@@ -450,6 +441,7 @@ helper.on('result', function(event){
 ```
 
 To ease navigation, we always:
+
 - provide the root level categories
 - provide the current refinement sub categories (`fruits > citrus > *`: n + 1)
 - provide the parent refinement (`fruits > citrus` => `fruits`: n -1) categories
@@ -482,11 +474,13 @@ Your records can also share multiple categories between one another by using arr
 
 ```js
 var helper = algoliasearchHelper(client, indexName, {
-  hierarchicalFacets: [{
-    name: 'products',
-    attributes: ['categories.lvl0', 'categories.lvl1'],
-    separator: '|'
-  }]
+  hierarchicalFacets: [
+    {
+      name: 'products',
+      attributes: ['categories.lvl0', 'categories.lvl1'],
+      separator: '|',
+    },
+  ],
 });
 
 helper.toggleFacetRefinement('products', 'fruits|citrus');
@@ -513,15 +507,18 @@ You can specify a different sort order by using:
 
 ```js
 var helper = algoliasearchHelper(client, indexName, {
-  hierarchicalFacets: [{
-    name: 'products',
-    attributes: ['categories.lvl0', 'categories.lvl1'],
-    sortBy: ['count:desc', 'name:asc'] // first show the most common values, then sort by name
-  }]
+  hierarchicalFacets: [
+    {
+      name: 'products',
+      attributes: ['categories.lvl0', 'categories.lvl1'],
+      sortBy: ['count:desc', 'name:asc'], // first show the most common values, then sort by name
+    },
+  ],
 });
 ```
 
 The available sort tokens are:
+
 - count
 - isRefined
 - name
@@ -562,11 +559,13 @@ If you do not want to get the parent facet values you can set showParentLevel to
 
 ```js
 var helper = algoliasearchHelper(client, indexName, {
-  hierarchicalFacets: [{
-    name: 'products',
-    attributes: ['categories.lvl0', 'categories.lvl1'],
-    showParentLevel: false
-  }]
+  hierarchicalFacets: [
+    {
+      name: 'products',
+      attributes: ['categories.lvl0', 'categories.lvl1'],
+      showParentLevel: false,
+    },
+  ],
 });
 ```
 
@@ -574,11 +573,13 @@ var helper = algoliasearchHelper(client, indexName, {
 
 ```js
 var helper = algoliasearchHelper(client, indexName, {
-  hierarchicalFacets: [{
-    name: 'products',
-    attributes: ['categories.lvl0', 'categories.lvl1'],
-    separator: '|'
-  }]
+  hierarchicalFacets: [
+    {
+      name: 'products',
+      attributes: ['categories.lvl0', 'categories.lvl1'],
+      separator: '|',
+    },
+  ],
 });
 
 helper.toggleFacetRefinement('products', 'fruits|citrus');
@@ -608,9 +609,11 @@ helper.clearRefinements('ANDFacet').search();
 ##### [ADVANCED] Clear only the exclusions on the "ANDFacet" attribute
 
 ```js
-helper.clearRefinements(function(value, attribute, type) {
-  return type === 'exclude' && attribute === 'ANDFacet';
-}).search();
+helper
+  .clearRefinements(function (value, attribute, type) {
+    return type === 'exclude' && attribute === 'ANDFacet';
+  })
+  .search();
 ```
 
 ### Facet utilities
@@ -618,7 +621,7 @@ helper.clearRefinements(function(value, attribute, type) {
 #### Get the values of a facet with the default sort
 
 ```js
-helper.on('result', function(event) {
+helper.on('result', function (event) {
   // Get the facet values for the attribute age
   event.results.getFacetValues('age');
   // It will be ordered :
@@ -631,9 +634,9 @@ helper.on('result', function(event) {
 #### Get the values of a facet with a custom sort
 
 ```js
-helper.on('result', function(event) {
+helper.on('result', function (event) {
   // Get the facet values for the attribute age
-  event.results.getFacetValues('age', {sortBy: ['count:asc']});
+  event.results.getFacetValues('age', { sortBy: ['count:asc'] });
   // It will be ordered by number of occurence (lower number => higher position)
   // Elements that can be sorted : count, name, isRefined
   // Type of sort : 'asc' for ascending order, 'desc' for descending order
@@ -642,10 +645,10 @@ helper.on('result', function(event) {
 
 #### Get the facet stats
 
-*This only apply on numeric based facets/attributes.*
+_This only apply on numeric based facets/attributes._
 
 ```js
-helper.on('result', function(event) {
+helper.on('result', function (event) {
   // Get the facet values for the attribute age
   event.results.getFacetStats('age');
 });
@@ -689,9 +692,7 @@ helper.setPage(3).search();
 
 #### Automatic reset to page 0
 
-During a search, changing the parameters will update the result set, which can then change
-the number of pages in the result set. Therefore, the behavior has been standardized so
-that any operation that may change the number of page will reset the pagination to page 0.
+During a search, changing the parameters will update the result set, which can then change the number of pages in the result set. Therefore, the behavior has been standardized so that any operation that may change the number of page will reset the pagination to page 0.
 
 This may lead to some unexpected behavior. For example:
 
@@ -703,12 +704,13 @@ helper.getPage(); // 0
 ```
 
 Non exhaustive list of operations that trigger a reset:
- - refinements (conjunctive, exclude, disjunctive, hierarchical, numeric)
- - tags
- - index (setIndex)
- - setQuery
- - setHitsPerPage
- - setTypoTolerance
+
+- refinements (conjunctive, exclude, disjunctive, hierarchical, numeric)
+- tags
+- index (setIndex)
+- setQuery
+- setHitsPerPage
+- setTypoTolerance
 
 ### Index
 
@@ -728,30 +730,27 @@ var currentIndex = helper.getIndex();
 
 ### One time query
 
-Sometime it's convenient to reuse the current search parameters with small changes
-without changing the state stored in the helper. That's why there is a function
-called `searchOnce`. This method does not trigger `change` or `error` events.
+Sometime it's convenient to reuse the current search parameters with small changes without changing the state stored in the helper. That's why there is a function called `searchOnce`. This method does not trigger `change` or `error` events.
 
-In the following, we are using `searchOnce` to fetch only a single element using
-all the other parameters already set in the search parameters.
+In the following, we are using `searchOnce` to fetch only a single element using all the other parameters already set in the search parameters.
 
 #### Using searchOnce with a callback
 
 ```js
 var state = helper.searchOnce(
-  {hitsPerPage: 1},
-  function(error, content, state) {
+  { hitsPerPage: 1 },
+  function (error, content, state) {
     // if an error occured it will be passed in error, otherwise its value is null
     // content contains the results formatted as a SearchResults
     // state is the instance of SearchParameters used for this search
-  });
+  }
+);
 ```
 
 #### Using searchOnce with a promise
 
 ```js
-var state1 = helper.searchOnce({hitsPerPage: 1})
-                   .then(function(res) {
+var state1 = helper.searchOnce({ hitsPerPage: 1 }).then(function (res) {
   // res contains
   // {
   //   content : SearchResults
@@ -768,7 +767,7 @@ There are lots of other parameters you can set.
 
 ```js
 var helper = algoliasearchHelper(client, indexName, {
-	hitsPerPage: 50
+  hitsPerPage: 50,
 });
 ```
 
@@ -779,6 +778,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
 ```
 
 #### List of parameters that can be set
+
 <table cellspacing="0" cellpadding="0" class="params">
   <tbody>
     <tr>

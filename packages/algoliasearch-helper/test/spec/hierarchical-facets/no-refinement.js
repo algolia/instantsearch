@@ -1,6 +1,6 @@
 'use strict';
 
-test('hierarchical facets: no refinement', function(done) {
+test('hierarchical facets: no refinement', function (done) {
   var algoliasearch = require('algoliasearch');
 
   var algoliasearchHelper = require('../../../');
@@ -11,60 +11,69 @@ test('hierarchical facets: no refinement', function(done) {
 
   var client = algoliasearch(appId, apiKey);
   var helper = algoliasearchHelper(client, indexName, {
-    hierarchicalFacets: [{
-      name: 'categories',
-      attributes: ['categories.lvl0']
-    }]
+    hierarchicalFacets: [
+      {
+        name: 'categories',
+        attributes: ['categories.lvl0'],
+      },
+    ],
   });
 
   var algoliaResponse = {
-    'results': [{
-      'query': 'a',
-      'index': indexName,
-      'hits': [{'objectID': 'one'}, {'objectID': 'two'}],
-      'nbHits': 5,
-      'page': 0,
-      'nbPages': 1,
-      'hitsPerPage': 20,
-      'exhaustiveFacetsCount': true,
-      'facets': {
-        'categories.lvl0': {'beers': 2, 'fruits': 3}
-      }
-    }]
+    results: [
+      {
+        query: 'a',
+        index: indexName,
+        hits: [{ objectID: 'one' }, { objectID: 'two' }],
+        nbHits: 5,
+        page: 0,
+        nbPages: 1,
+        hitsPerPage: 20,
+        exhaustiveFacetsCount: true,
+        facets: {
+          'categories.lvl0': { beers: 2, fruits: 3 },
+        },
+      },
+    ],
   };
 
-  var expectedHelperResponse = [{
-    'name': 'categories',
-    'count': null,
-    'isRefined': true,
-    'path': null,
-    'escapedValue': null,
-    'exhaustive': true,
-    'data': [{
-      'name': 'beers',
-      'path': 'beers',
-      'escapedValue': 'beers',
-      'count': 2,
-      'isRefined': false,
-      'exhaustive': true,
-      'data': null
-    }, {
-      'name': 'fruits',
-      'path': 'fruits',
-      'escapedValue': 'fruits',
-      'count': 3,
-      'isRefined': false,
-      'exhaustive': true,
-      'data': null
-    }]
-  }];
+  var expectedHelperResponse = [
+    {
+      name: 'categories',
+      count: null,
+      isRefined: true,
+      path: null,
+      escapedValue: null,
+      exhaustive: true,
+      data: [
+        {
+          name: 'beers',
+          path: 'beers',
+          escapedValue: 'beers',
+          count: 2,
+          isRefined: false,
+          exhaustive: true,
+          data: null,
+        },
+        {
+          name: 'fruits',
+          path: 'fruits',
+          escapedValue: 'fruits',
+          count: 3,
+          isRefined: false,
+          exhaustive: true,
+          data: null,
+        },
+      ],
+    },
+  ];
 
-  client.search = jest.fn(function() {
+  client.search = jest.fn(function () {
     return Promise.resolve(algoliaResponse);
   });
 
   helper.setQuery('a').search();
-  helper.once('result', function(event) {
+  helper.once('result', function (event) {
     var queries = client.search.mock.calls[0][0];
     var hitsQuery = queries[0];
 

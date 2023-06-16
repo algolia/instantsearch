@@ -19,13 +19,8 @@
   "state": {
     "index": "instant_search",
     "query": "",
-    "facets": [
-      "brand"
-    ],
-    "disjunctiveFacets": [
-      "type",
-      "rating"
-    ],
+    "facets": ["brand"],
+    "disjunctiveFacets": ["type", "rating"],
     "hierarchicalFacets": [
       {
         "name": "hierarchicalCategories",
@@ -41,10 +36,7 @@
     "facetsExcludes": {},
     "disjunctiveFacetsRefinements": {},
     "numericRefinements": {},
-    "tagRefinements": [
-      "foo",
-      "bar"
-    ],
+    "tagRefinements": ["foo", "bar"],
     "hierarchicalFacetsRefinements": {},
     "page": 0
   },

@@ -12,7 +12,7 @@ test('without a previous page it should return the given SearchParameters', () =
 
 test('with a previous page of 0 it should return the given SearchParameters', () => {
   const parameters = new SearchParameters({
-    page: 0
+    page: 0,
   });
 
   const parametersWithPageReseted = parameters.resetPage();
@@ -21,10 +21,9 @@ test('with a previous page of 0 it should return the given SearchParameters', ()
   expect(parametersWithPageReseted.page).toBe(0);
 });
 
-
 test('with a previous page it should set the page to 0', () => {
   const parameters = new SearchParameters({
-    page: 5
+    page: 5,
   });
 
   const parametersWithPageReseted = parameters.resetPage();

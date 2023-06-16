@@ -2,32 +2,32 @@
 
 var SearchParameters = require('../../../src/SearchParameters');
 
-describe('removeDisjunctiveFacet', function() {
-  test('removeDisjunctiveFacet(attribute), multiple refinements', function() {
+describe('removeDisjunctiveFacet', function () {
+  test('removeDisjunctiveFacet(attribute), multiple refinements', function () {
     var state = new SearchParameters({
       disjunctiveFacets: ['attribute', 'other'],
       disjunctiveFacetsRefinements: {
         attribute: ['value'],
-        other: ['value']
-      }
+        other: ['value'],
+      },
     });
 
     expect(state.removeDisjunctiveFacet('attribute')).toEqual(
       new SearchParameters({
         disjunctiveFacets: ['other'],
         disjunctiveFacetsRefinements: {
-          other: ['value']
-        }
+          other: ['value'],
+        },
       })
     );
   });
 
-  test('removeDisjunctiveFacet(attribute), empty refinements', function() {
+  test('removeDisjunctiveFacet(attribute), empty refinements', function () {
     var state = new SearchParameters({
       disjunctiveFacets: ['attribute'],
       disjunctiveFacetsRefinements: {
-        attribute: []
-      }
+        attribute: [],
+      },
     });
 
     expect(state.removeDisjunctiveFacet('attribute')).toEqual(
@@ -35,9 +35,9 @@ describe('removeDisjunctiveFacet', function() {
     );
   });
 
-  test('removeDisjunctiveFacet(attribute), no refinements', function() {
+  test('removeDisjunctiveFacet(attribute), no refinements', function () {
     var state = new SearchParameters({
-      disjunctiveFacets: ['attribute']
+      disjunctiveFacets: ['attribute'],
     });
 
     expect(state.removeDisjunctiveFacet('attribute')).toEqual(
@@ -45,7 +45,7 @@ describe('removeDisjunctiveFacet', function() {
     );
   });
 
-  test('removeDisjunctiveFacet(attribute), empty', function() {
+  test('removeDisjunctiveFacet(attribute), empty', function () {
     var state = new SearchParameters();
 
     expect(state.removeDisjunctiveFacet('attribute')).toEqual(
@@ -54,87 +54,81 @@ describe('removeDisjunctiveFacet', function() {
   });
 });
 
-describe('removeFacet', function() {
-  test('removeFacet(attribute), multiple refinements', function() {
+describe('removeFacet', function () {
+  test('removeFacet(attribute), multiple refinements', function () {
     var state = new SearchParameters({
       facets: ['attribute', 'other'],
       facetsRefinements: {
         attribute: ['value'],
-        other: ['value']
-      }
+        other: ['value'],
+      },
     });
 
     expect(state.removeFacet('attribute')).toEqual(
       new SearchParameters({
         facets: ['other'],
         facetsRefinements: {
-          other: ['value']
-        }
+          other: ['value'],
+        },
       })
     );
   });
 
-  test('removeFacet(attribute), empty refinements', function() {
+  test('removeFacet(attribute), empty refinements', function () {
     var state = new SearchParameters({
       facets: ['attribute'],
       facetsRefinements: {
-        attribute: []
-      }
+        attribute: [],
+      },
     });
 
-    expect(state.removeFacet('attribute')).toEqual(
-      new SearchParameters()
-    );
+    expect(state.removeFacet('attribute')).toEqual(new SearchParameters());
   });
 
-  test('removeFacet(attribute), no refinements', function() {
+  test('removeFacet(attribute), no refinements', function () {
     var state = new SearchParameters({
-      facets: ['attribute']
+      facets: ['attribute'],
     });
 
-    expect(state.removeFacet('attribute')).toEqual(
-      new SearchParameters()
-    );
+    expect(state.removeFacet('attribute')).toEqual(new SearchParameters());
   });
 
-  test('removeFacet(attribute), empty', function() {
+  test('removeFacet(attribute), empty', function () {
     var state = new SearchParameters();
 
-    expect(state.removeFacet('attribute')).toEqual(
-      new SearchParameters()
-    );
+    expect(state.removeFacet('attribute')).toEqual(new SearchParameters());
   });
 });
 
-describe('removeHierarchicalFacet', function() {
-  test('removeHierarchicalFacet(attribute), multiple refinements', function() {
+describe('removeHierarchicalFacet', function () {
+  test('removeHierarchicalFacet(attribute), multiple refinements', function () {
     var state = new SearchParameters({
       hierarchicalFacets: [
-        {name: 'attribute', attributes: ['zip', 'zop']},
-        {name: 'other', attributes: ['zap', 'zep']}
+        { name: 'attribute', attributes: ['zip', 'zop'] },
+        { name: 'other', attributes: ['zap', 'zep'] },
       ],
       hierarchicalFacetsRefinements: {
         attribute: ['value'],
-        other: ['value']
-      }
+        other: ['value'],
+      },
     });
 
     expect(state.removeHierarchicalFacet('attribute')).toEqual(
       new SearchParameters({
-        hierarchicalFacets: [{name: 'other', attributes: ['zap', 'zep']}],
+        hierarchicalFacets: [{ name: 'other', attributes: ['zap', 'zep'] }],
         hierarchicalFacetsRefinements: {
-          other: ['value']
-        }
+          other: ['value'],
+        },
       })
     );
   });
 
-  test('removeHierarchicalFacet(attribute), empty refinements', function() {
+  test('removeHierarchicalFacet(attribute), empty refinements', function () {
     var state = new SearchParameters({
-      hierarchicalFacets: [{name: 'attribute', attributes: ['zip', 'zop']}],
+      hierarchicalFacets: [{ name: 'attribute', attributes: ['zip', 'zop'] }],
       hierarchicalFacetsRefinements: {
-        attribute: []
-      }
+        attribute: [],
+      },
     });
 
     expect(state.removeHierarchicalFacet('attribute')).toEqual(
@@ -142,9 +136,9 @@ describe('removeHierarchicalFacet', function() {
     );
   });
 
-  test('removeHierarchicalFacet(attribute), no refinements', function() {
+  test('removeHierarchicalFacet(attribute), no refinements', function () {
     var state = new SearchParameters({
-      hierarchicalFacets: [{name: 'attribute', attributes: ['zip', 'zop']}]
+      hierarchicalFacets: [{ name: 'attribute', attributes: ['zip', 'zop'] }],
     });
 
     expect(state.removeHierarchicalFacet('attribute')).toEqual(
@@ -152,7 +146,7 @@ describe('removeHierarchicalFacet', function() {
     );
   });
 
-  test('removeHierarchicalFacet(attribute), empty', function() {
+  test('removeHierarchicalFacet(attribute), empty', function () {
     var state = new SearchParameters();
 
     expect(state.removeHierarchicalFacet('attribute')).toEqual(

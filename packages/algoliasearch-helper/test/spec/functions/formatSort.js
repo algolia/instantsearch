@@ -2,21 +2,21 @@
 
 var formatSort = require('../../../src/functions/formatSort');
 
-it('splits into attribute & direction', function() {
+it('splits into attribute & direction', function () {
   expect(formatSort(['isRefined:desc', 'isNotRefined:desc'])).toEqual([
     ['isRefined', 'isNotRefined'],
-    ['desc', 'desc']
+    ['desc', 'desc'],
   ]);
 });
 
-it('leaves direction empty if no direction was given', function() {
+it('leaves direction empty if no direction was given', function () {
   expect(formatSort(['isRefined:desc', 'isNotRefined'])).toEqual([
     ['isRefined', 'isNotRefined'],
-    ['desc', undefined]
+    ['desc', undefined],
   ]);
 });
 
-it('takes from defaults if no direction was given', function() {
+it('takes from defaults if no direction was given', function () {
   expect(
     formatSort(
       ['isRefined:desc', 'isNotRefined'],
@@ -24,11 +24,11 @@ it('takes from defaults if no direction was given', function() {
     )
   ).toEqual([
     ['isRefined', 'isNotRefined'],
-    ['desc', 'asc']
+    ['desc', 'asc'],
   ]);
 });
 
-it('leaves direction empty if no direction was given & no default matches', function() {
+it('leaves direction empty if no direction was given & no default matches', function () {
   expect(
     formatSort(
       ['isRefined:desc', 'isNotRefined'],
@@ -36,6 +36,6 @@ it('leaves direction empty if no direction was given & no default matches', func
     )
   ).toEqual([
     ['isRefined', 'isNotRefined'],
-    ['desc', undefined]
+    ['desc', undefined],
   ]);
 });

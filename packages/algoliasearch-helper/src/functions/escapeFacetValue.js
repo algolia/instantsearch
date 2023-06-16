@@ -26,5 +26,5 @@ function unescapeFacetValue(value) {
 
 module.exports = {
   escapeFacetValue: escapeFacetValue,
-  unescapeFacetValue: unescapeFacetValue
+  unescapeFacetValue: unescapeFacetValue,
 };

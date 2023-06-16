@@ -1424,13 +1424,8 @@
   "state": {
     "index": "instant_search",
     "query": "",
-    "facets": [
-      "brand"
-    ],
-    "disjunctiveFacets": [
-      "type",
-      "rating"
-    ],
+    "facets": ["brand"],
+    "disjunctiveFacets": ["type", "rating"],
     "hierarchicalFacets": [
       {
         "name": "hierarchicalCategories",
@@ -1445,9 +1440,7 @@
     "facetsRefinements": {},
     "facetsExcludes": {},
     "disjunctiveFacetsRefinements": {
-      "type": [
-        "Trend cases"
-      ]
+      "type": ["Trend cases"]
     },
     "numericRefinements": {},
     "tagRefinements": [],

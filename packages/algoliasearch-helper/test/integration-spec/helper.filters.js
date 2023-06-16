@@ -9,35 +9,35 @@ var algoliasearchHelper = require('../../');
 var indexName = createIndexName('helper_filters');
 
 var dataset = [
-  {facet: ['f1', 'f2']},
-  {facet: ['f1', 'f3']},
-  {facet: ['f2', 'f3']}
+  { facet: ['f1', 'f2'] },
+  { facet: ['f1', 'f3'] },
+  { facet: ['f2', 'f3'] },
 ];
 
 var config = {
   attributesToIndex: ['facet'],
-  attributesForFaceting: ['facet']
+  attributesForFaceting: ['facet'],
 };
 
 var client;
-beforeAll(function() {
-  return setup(indexName, dataset, config).then(function(c) {
+beforeAll(function () {
+  return setup(indexName, dataset, config).then(function (c) {
     client = c;
   });
 });
 
-test('[INT][FILTERS] Should retrieve different values for multi facetted records', function(done) {
+test('[INT][FILTERS] Should retrieve different values for multi facetted records', function (done) {
   var helper = algoliasearchHelper(client, indexName, {
-    facets: ['facet']
+    facets: ['facet'],
   });
 
   var calls = 0;
 
-  helper.on('error', function(event) {
+  helper.on('error', function (event) {
     done.fail(event.error);
   });
 
-  helper.on('result', function(event) {
+  helper.on('result', function (event) {
     calls++;
 
     var results = event.results;
@@ -47,7 +47,7 @@ test('[INT][FILTERS] Should retrieve different values for multi facetted records
       expect(results.facets[0].data).toEqual({
         f1: 2,
         f2: 1,
-        f3: 1
+        f3: 1,
       });
 
       helper.addRefine('facet', 'f2').search();
@@ -57,7 +57,7 @@ test('[INT][FILTERS] Should retrieve different values for multi facetted records
       expect(results.hits.length).toBe(1);
       expect(results.facets[0].data).toEqual({
         f1: 1,
-        f2: 1
+        f2: 1,
       });
 
       helper.toggleRefine('facet', 'f3').search();
@@ -74,7 +74,7 @@ test('[INT][FILTERS] Should retrieve different values for multi facetted records
       expect(results.hits.length).toBe(1);
       expect(results.facets[0].data).toEqual({
         f1: 1,
-        f3: 1
+        f3: 1,
       });
 
       client.deleteIndex(indexName);

@@ -2,18 +2,14 @@
 var parserOpts = {
   // eslint-disable-next-line no-useless-escape
   headerPattern: /^(\w*)(?:\((.*)\))?\: (.*)$/,
-  headerCorrespondence: [
-    'type',
-    'scope',
-    'subject'
-  ],
+  headerCorrespondence: ['type', 'scope', 'subject'],
   noteKeywords: ['BREAKING CHANGE', 'BREAKING CHANGES'],
   revertPattern: /^revert:\s([\s\S]*?)\s*This reverts commit (\w*)\./,
-  revertCorrespondence: ['header', 'hash']
+  revertCorrespondence: ['header', 'hash'],
 };
 
 var writerOpts = {
-  transform: function(commit) {
+  transform: function (commit) {
     return commit;
   },
   groupBy: 'type',
@@ -81,7 +77,7 @@ var writerOpts = {
   {{~/if}}{{/each}}
 {{~/if}}
 
-`
+`,
 };
 
 /*
@@ -93,5 +89,5 @@ var writerOpts = {
 
 module.exports = {
   parserOpts: parserOpts,
-  writerOpts: writerOpts
+  writerOpts: writerOpts,
 };

@@ -1,4 +1,4 @@
-@mixin ov-border($color){
+@mixin ov-border($color) {
   border: 2px solid $color;
   border-radius: 4px;
   color: $color;
@@ -34,7 +34,7 @@
   left: 0;
   top: 0;
 
-  [class*="ov-"] {
+  [class*='ov-'] {
     position: absolute;
 
     &:before {
@@ -67,10 +67,10 @@
     left: 0;
     right: 0;
 
-    @include ov-border(#F02E5C);
+    @include ov-border(#f02e5c);
 
     &:before {
-      margin: 0 -110px
+      margin: 0 -110px;
     }
     &:after {
       width: 30px;
@@ -86,7 +86,7 @@
     @include ov-border(#386088);
 
     &:before {
-      margin: -0.5em  calc(100% + 30px);
+      margin: -0.5em calc(100% + 30px);
       width: 180px;
     }
     &:after {
@@ -102,9 +102,9 @@
     left: 0;
     right: 0;
 
-    @include ov-border(#0199D5);
+    @include ov-border(#0199d5);
 
-     &:before {
+    &:before {
       margin: 0 -208px;
       width: 160px;
     }
@@ -114,32 +114,33 @@
       left: -32px;
     }
 
-
     .ov-suggestion,
-    .ov-suggestion-cursor{
+    .ov-suggestion-cursor {
       width: 98%;
       left: 0;
       right: 0;
       margin: 0.6% auto;
       height: 16%;
 
-      @include ov-border(darken(#8EDD42, 15%));
+      @include ov-border(darken(#8edd42, 15%));
 
       &:before {
         margin: 0 calc(100% + 30px);
         width: 180px;
       }
-       &:after {
+      &:after {
         width: 28px;
         right: -31px;
       }
     }
 
     .ov-suggestion-cursor {
-      background: url(/images/svg/icon-hover-cursor.svg)no-repeat center right 16px / 4%;
+      background: url(/images/svg/icon-hover-cursor.svg) no-repeat center right
+        16px / 4%;
 
       &:hover {
-        background: url(/images/svg/icon-hover-cursor-visible.svg)no-repeat center right 16px / 4%;
+        background: url(/images/svg/icon-hover-cursor-visible.svg) no-repeat
+          center right 16px / 4%;
       }
     }
 
@@ -147,7 +148,7 @@
       margin: 14.4% auto;
 
       &:before {
-        margin: -0.5em  calc(100% + 30px);
+        margin: -0.5em calc(100% + 30px);
         width: 120px;
       }
 
@@ -175,9 +176,9 @@
         margin: 9% auto;
         height: 72%;
 
-        @include ov-border(#A171E0);
+        @include ov-border(#a171e0);
 
-         &:before {
+        &:before {
           margin: -0.5em -162px;
           width: 80px;
         }
@@ -193,7 +194,7 @@
         margin: 9% auto;
         height: 72%;
 
-        @include ov-border(#A171E0);
+        @include ov-border(#a171e0);
 
         &:before {
           margin: -0.5em calc(100% + 190px);
@@ -211,7 +212,7 @@
         margin: 17.2% auto;
         height: 72%;
 
-        @include ov-border(#FB7807);
+        @include ov-border(#fb7807);
 
         &:before {
           margin: -0.4em -132px;

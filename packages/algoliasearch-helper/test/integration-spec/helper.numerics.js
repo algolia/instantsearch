@@ -9,17 +9,17 @@ var algoliasearchHelper = require('../../');
 var indexName = createIndexName('helper_numerics');
 
 var dataset = [
-  {objectID: '0', n: [6]},
-  {objectID: '1', n: [6, 10]},
-  {objectID: '2', n: [5, 45]},
-  {objectID: '3', n: 12}
+  { objectID: '0', n: [6] },
+  { objectID: '1', n: [6, 10] },
+  { objectID: '2', n: [5, 45] },
+  { objectID: '3', n: 12 },
 ];
 
 var config = {};
 
 var client;
-beforeAll(function() {
-  return setup(indexName, dataset, config).then(function(c) {
+beforeAll(function () {
+  return setup(indexName, dataset, config).then(function (c) {
     client = c;
   });
 });
@@ -28,16 +28,16 @@ function hitsToParsedID(h) {
   return parseInt(h.objectID, 10);
 }
 
-test('[INT][NUMERICS][RAW-API]Test numeric operations on the helper and their results on the algolia API', function(done) {
+test('[INT][NUMERICS][RAW-API]Test numeric operations on the helper and their results on the algolia API', function (done) {
   var helper = algoliasearchHelper(client, indexName, {});
 
   var calls = 0;
 
-  helper.on('error', function(event) {
+  helper.on('error', function (event) {
     done.fail(event.error);
   });
 
-  helper.on('result', function(event) {
+  helper.on('result', function (event) {
     calls++;
 
     var results = event.results;
@@ -80,16 +80,16 @@ test('[INT][NUMERICS][RAW-API]Test numeric operations on the helper and their re
   helper.search();
 });
 
-test('[INT][NUMERICS][MANAGED-API]Test numeric operations on the helper and their results on the algolia API', function(done) {
+test('[INT][NUMERICS][MANAGED-API]Test numeric operations on the helper and their results on the algolia API', function (done) {
   var helper = algoliasearchHelper(client, indexName, {});
 
   var calls = 0;
 
-  helper.on('error', function(event) {
+  helper.on('error', function (event) {
     done.fail(event.error);
   });
 
-  helper.on('result', function(event) {
+  helper.on('result', function (event) {
     calls++;
 
     var results = event.results;

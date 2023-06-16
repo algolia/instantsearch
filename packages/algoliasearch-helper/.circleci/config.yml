@@ -89,7 +89,6 @@ jobs:
       - store_artifacts:
           path: documentation
 
-
 workflows:
   version: 2
   ci:

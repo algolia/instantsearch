@@ -1,6 +1,6 @@
 'use strict';
 
-test('hierarchical facets: facet value called length', function(done) {
+test('hierarchical facets: facet value called length', function (done) {
   var algoliasearch = require('algoliasearch');
   var algoliasearchHelper = require('../../../');
 
@@ -13,9 +13,9 @@ test('hierarchical facets: facet value called length', function(done) {
     hierarchicalFacets: [
       {
         name: 'categories',
-        attributes: ['categories.lvl0']
-      }
-    ]
+        attributes: ['categories.lvl0'],
+      },
+    ],
   });
 
   var algoliaResponse = {
@@ -23,7 +23,7 @@ test('hierarchical facets: facet value called length', function(done) {
       {
         query: 'a',
         index: indexName,
-        hits: [{objectID: 'one'}],
+        hits: [{ objectID: 'one' }],
         nbHits: 3,
         page: 0,
         nbPages: 1,
@@ -31,10 +31,10 @@ test('hierarchical facets: facet value called length', function(done) {
         exhaustiveFacetsCount: true,
         facets: {
           // value length can cause lodash to turn an object into an array
-          'categories.lvl0': {beers: 8, length: 3}
-        }
-      }
-    ]
+          'categories.lvl0': { beers: 8, length: 3 },
+        },
+      },
+    ],
   };
 
   var expectedHelperResponse = [
@@ -53,7 +53,7 @@ test('hierarchical facets: facet value called length', function(done) {
           count: 8,
           isRefined: false,
           exhaustive: true,
-          data: null
+          data: null,
         },
         {
           name: 'length',
@@ -62,18 +62,18 @@ test('hierarchical facets: facet value called length', function(done) {
           count: 3,
           isRefined: false,
           exhaustive: true,
-          data: null
-        }
-      ]
-    }
+          data: null,
+        },
+      ],
+    },
   ];
 
-  client.search = jest.fn(function() {
+  client.search = jest.fn(function () {
     return Promise.resolve(algoliaResponse);
   });
 
   helper.search();
-  helper.once('result', function(event) {
+  helper.once('result', function (event) {
     expect(event.results.hierarchicalFacets).toEqual(expectedHelperResponse);
     done();
   });

@@ -1,6 +1,6 @@
 'use strict';
 
-test('hierarchical facets: using getHierarchicalFacetBreadcrumb()', function() {
+test('hierarchical facets: using getHierarchicalFacetBreadcrumb()', function () {
   var algoliasearch = require('algoliasearch');
 
   var algoliasearchHelper = require('../../../');
@@ -11,18 +11,29 @@ test('hierarchical facets: using getHierarchicalFacetBreadcrumb()', function() {
 
   var client = algoliasearch(appId, apiKey);
   var helper = algoliasearchHelper(client, indexName, {
-    hierarchicalFacets: [{
-      name: 'categories',
-      attributes: ['categories.lvl0', 'categories.lvl1', 'categories.lvl2', 'categories.lvl3']
-    }]
+    hierarchicalFacets: [
+      {
+        name: 'categories',
+        attributes: [
+          'categories.lvl0',
+          'categories.lvl1',
+          'categories.lvl2',
+          'categories.lvl3',
+        ],
+      },
+    ],
   });
 
   helper.toggleRefine('categories', 'beers > IPA > Flying dog');
 
-  expect(helper.getHierarchicalFacetBreadcrumb('categories')).toEqual(['beers', 'IPA', 'Flying dog']);
+  expect(helper.getHierarchicalFacetBreadcrumb('categories')).toEqual([
+    'beers',
+    'IPA',
+    'Flying dog',
+  ]);
 });
 
-test('hierarchical facets: using getHierarchicalFacetBreadcrumb before the first refinement', function() {
+test('hierarchical facets: using getHierarchicalFacetBreadcrumb before the first refinement', function () {
   var algoliasearch = require('algoliasearch');
 
   var algoliasearchHelper = require('../../../');
@@ -33,16 +44,23 @@ test('hierarchical facets: using getHierarchicalFacetBreadcrumb before the first
 
   var client = algoliasearch(appId, apiKey);
   var helper = algoliasearchHelper(client, indexName, {
-    hierarchicalFacets: [{
-      name: 'categories',
-      attributes: ['categories.lvl0', 'categories.lvl1', 'categories.lvl2', 'categories.lvl3']
-    }]
+    hierarchicalFacets: [
+      {
+        name: 'categories',
+        attributes: [
+          'categories.lvl0',
+          'categories.lvl1',
+          'categories.lvl2',
+          'categories.lvl3',
+        ],
+      },
+    ],
   });
 
   expect(helper.getHierarchicalFacetBreadcrumb('categories')).toEqual([]);
 });
 
-test('hierarchical facets: using getHierarchicalFacetBreadcrumb on an undefined facet', function() {
+test('hierarchical facets: using getHierarchicalFacetBreadcrumb on an undefined facet', function () {
   var algoliasearch = require('algoliasearch');
 
   var algoliasearchHelper = require('../../../');
@@ -53,10 +71,8 @@ test('hierarchical facets: using getHierarchicalFacetBreadcrumb on an undefined 
 
   var client = algoliasearch(appId, apiKey);
   var helper = algoliasearchHelper(client, indexName, {
-    hierarchicalFacetsRefinements: {categories: ['beers > IPA > Flying dog']}
+    hierarchicalFacetsRefinements: { categories: ['beers > IPA > Flying dog'] },
   });
 
-  expect(
-    helper.getHierarchicalFacetBreadcrumb('categories')
-  ).toEqual([]);
+  expect(helper.getHierarchicalFacetBreadcrumb('categories')).toEqual([]);
 });

@@ -19,7 +19,7 @@
 
   &:hover,
   &:active {
-    background: $accent-color
+    background: $accent-color;
   }
 
   &.btn-cta {
@@ -40,7 +40,6 @@
     border-color: mix($black, #fff, 90%);
   }
 
-
   &-ghost {
     background: transparent;
     border-color: currentColor;
@@ -49,7 +48,7 @@
     padding: 0 32px;
 
     &-grey {
-      color:  $steel;
+      color: $steel;
 
       &:hover {
         background: $steel;
@@ -57,13 +56,13 @@
         color: #fff;
 
         .ico-triangle {
-          border-left-color: #fff
+          border-left-color: #fff;
         }
       }
     }
 
     &-pink {
-      color:  $accent-color;
+      color: $accent-color;
 
       &:hover {
         background: $accent-color;
@@ -72,5 +71,4 @@
       }
     }
   }
-
 }

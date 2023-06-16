@@ -3,30 +3,21 @@
 var SearchParameters = require('../../../src/SearchParameters');
 
 test.each([
-  [
-    'Should be able to add remove strings',
-    '40'
-  ],
-  [
-    'Should be able to add remove numbers',
-    40
-  ],
-  [
-    'Should be able to add remove arrays',
-    [40, '30']
-  ]
-])(`%s`, function(_, value) {
+  ['Should be able to add remove strings', '40'],
+  ['Should be able to add remove numbers', 40],
+  ['Should be able to add remove arrays', [40, '30']],
+])(`%s`, function (_, value) {
   var attribute = 'attribute';
   var operator = '=';
-  
+
   var state0 = new SearchParameters();
   var state1 = state0.addNumericRefinement(attribute, operator, value);
   var stateEmpty = new SearchParameters({
     numericRefinements: {
       [attribute]: {
-        [operator]: []
-      }
-    }
+        [operator]: [],
+      },
+    },
   });
 
   // Ensure that we add and then remove the same value, and get a state equivalent to the initial one

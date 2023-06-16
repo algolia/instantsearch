@@ -23,12 +23,12 @@ var src = {
   content: path.join(__dirname, './content'),
   layouts: path.join(__dirname, './layouts'),
   partials: path.join(__dirname, './partials'),
-  js: path.join(__dirname, './js/')
+  js: path.join(__dirname, './js/'),
 };
 
 var customMarkedRenderer = new marked.Renderer();
 var oldHeadingRenderer = customMarkedRenderer.heading;
-customMarkedRenderer.heading = function(text, level) {
+customMarkedRenderer.heading = function (text, level) {
   // do not add id to h4+
   if (level > 3) {
     return '<h' + level + '>' + text + '</h' + level + '>';
@@ -39,7 +39,7 @@ customMarkedRenderer.heading = function(text, level) {
 var project = require('../package.json');
 var builder = metalsmith(projectRoot)
   .metadata({
-    pkg: project
+    pkg: project,
   })
   .ignore('.*')
   .clean(false)
@@ -55,58 +55,57 @@ var builder = metalsmith(projectRoot)
         [path.join(src.stylesheets, 'index.scss')]: path.join(
           cssRoot,
           'index.css'
-        )
-      }
+        ),
+      },
     })
   )
   .use(
     jsdoc({
       src: 'src/algoliasearch.helper.js',
-      namespace: 'helper'
+      namespace: 'helper',
     })
   )
   .use(
     jsdoc({
       src: 'src/SearchResults/index.js',
-      namespace: 'results'
+      namespace: 'results',
     })
   )
   .use(
     jsdoc({
       src: 'src/SearchParameters/index.js',
-      namespace: 'state'
+      namespace: 'state',
     })
   )
   .use(
     jsdoc({
       src: 'index.js',
-      namespace: 'main'
+      namespace: 'main',
     })
   )
   .use(
     inPlace({
       engine: 'handlebars',
       partials: 'documentation-src/partials',
-      exposeConsolidate: registerHandleBarHelpers
+      exposeConsolidate: registerHandleBarHelpers,
     })
   )
   .use(metallic())
   .use(
     markdown({
       gfm: true,
-      renderer: customMarkedRenderer
+      renderer: customMarkedRenderer,
     })
   )
   .use(headings('h2, h3'))
   .use(
     layouts({
       engine: 'pug',
-      directory: src.layouts
+      directory: src.layouts,
     })
   );
 
-
-builder.build(function(err) {
+builder.build(function (err) {
   if (err) {
     throw err;
   }

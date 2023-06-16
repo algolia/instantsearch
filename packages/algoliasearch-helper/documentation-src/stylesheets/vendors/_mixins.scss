@@ -1,6 +1,6 @@
 // Mixins
 @mixin placeholder {
-  $placeholders: ":-webkit-input" ":-moz" "-moz" "-ms-input";
+  $placeholders: ':-webkit-input' ':-moz' '-moz' '-ms-input';
   @each $placeholder in $placeholders {
     &:#{$placeholder}-placeholder {
       @content;
@@ -8,19 +8,33 @@
   }
 }
 @mixin better-fonts() {
-  h1,h2,h3,h4,h5,h6,span,div,p,pre,code,a,strong,em,i {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  span,
+  div,
+  p,
+  pre,
+  code,
+  a,
+  strong,
+  em,
+  i {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 }
 
-@mixin footer-text{
+@mixin footer-text {
   color: #496f92;
   text-transform: uppercase;
   font-weight: bold;
   font-size: 12px;
   margin: 0;
-  font-family: "Open Sans",Helvetica Neue,helvetica,sans-serif;
+  font-family: 'Open Sans', Helvetica Neue, helvetica, sans-serif;
   font-weight: 800;
   float: none;
 }
@@ -34,63 +48,56 @@
   display: $type !important;
   visibility: visible;
 }
-@mixin appearance ($value) {
+@mixin appearance($value) {
   -webkit-appearance: $value;
-     -moz-appearance: $value;
-          appearance: $value;
+  -moz-appearance: $value;
+  appearance: $value;
 }
 
 // Responsive Breakpoints
 @mixin big-min-mq {
-  @media (min-width: $bp-big){
-    @content
+  @media (min-width: $bp-big) {
+    @content;
   }
 }
 @mixin huge-min-mq {
-  @media (min-width: $bp-huge){
-    @content
+  @media (min-width: $bp-huge) {
+    @content;
   }
 }
 
 @mixin big-mq {
-  @media (max-width: $bp-big){
-    @content
+  @media (max-width: $bp-big) {
+    @content;
   }
 }
 @mixin medium-mq {
-  @media (max-width: $bp-medium){
-    @content
+  @media (max-width: $bp-medium) {
+    @content;
   }
 }
 @mixin small-mq {
-  @media  (max-width: $bp-medium){
-    @content
+  @media (max-width: $bp-medium) {
+    @content;
   }
 }
 @mixin mobile-mq {
-  @media  (max-width: $bp-small){
-    @content
+  @media (max-width: $bp-small) {
+    @content;
   }
 }
 @mixin tablet-mq-portrait {
- @media only screen
-  and (min-device-width : 768px)
-  and (max-device-width : 1024px)
-  and (orientation : portrait) {
-    @content
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {
+    @content;
   }
 }
 @mixin tablet-mq-landscape {
- @media only screen
-  and (min-device-width : 768px)
-  and (max-device-width : 1024px)
-  and (orientation : landscape) {
-    @content
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) {
+    @content;
   }
 }
 
 // Placeholders
-
 
 %fadeInDown {
   animation-name: fadeInDown;
@@ -112,6 +119,5 @@
     box-shadow: none;
     color: #fff;
     border-bottom: 2px solid $accent-color;
-
   }
 }

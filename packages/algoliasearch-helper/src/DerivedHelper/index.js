@@ -28,12 +28,12 @@ inherits(DerivedHelper, EventEmitter);
  * @return {undefined}
  * @throws Error if the derived helper is already detached
  */
-DerivedHelper.prototype.detach = function() {
+DerivedHelper.prototype.detach = function () {
   this.removeAllListeners();
   this.main.detachDerivedHelper(this);
 };
 
-DerivedHelper.prototype.getModifiedState = function(parameters) {
+DerivedHelper.prototype.getModifiedState = function (parameters) {
   return this.fn(parameters);
 };
 

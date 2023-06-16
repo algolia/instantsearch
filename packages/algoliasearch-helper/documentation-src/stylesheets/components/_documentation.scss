@@ -2,7 +2,6 @@
   padding-bottom: 200px;
 
   .container {
-
     article {
       width: 100%;
       position: relative;
@@ -41,7 +40,7 @@
           content: '-';
           float: left;
           margin-right: 6px;
-          color: $greyish
+          color: $greyish;
         }
       }
     }
@@ -80,9 +79,10 @@
   .api tr td:first-child {
     vertical-align: top;
 
-    p, ul {
+    p,
+    ul {
       font-size: 90%;
-      margin: .5em 0;
+      margin: 0.5em 0;
       line-height: 1.5em;
     }
     ul {
@@ -94,9 +94,12 @@
     }
   }
 
-  h2, h3, .api-entry, .css-class {
+  h2,
+  h3,
+  .api-entry,
+  .css-class {
     &:before {
-      content: "";
+      content: '';
       display: block;
       height: $offset-height;
       margin: -$offset-height 0 0;
@@ -137,7 +140,8 @@
         td {
           vertical-align: top;
         }
-        th, td {
+        th,
+        td {
           padding: 1em 2em;
           text-align: center;
           border: 1px solid #cccccc;
@@ -195,61 +199,63 @@
           }
         }
       }
-      &+ h2,
-      &+ h3 {
+      & + h2,
+      & + h3 {
         margin-top: 2em;
       }
-
 
       @include small-mq {
         display: block;
         float: left;
         margin-bottom: 2em;
 
-          thead, tbody, th, td, tr {
-            display: block;
-            float: left;
-            width: 100%;
-          }
-          tbody {
-            border-bottom: 1px solid #cccccc;
-          }
-          tr {
-            border-left: 1px solid #cccccc;
-            border-right: 1px solid #cccccc;
+        thead,
+        tbody,
+        th,
+        td,
+        tr {
+          display: block;
+          float: left;
+          width: 100%;
+        }
+        tbody {
+          border-bottom: 1px solid #cccccc;
+        }
+        tr {
+          border-left: 1px solid #cccccc;
+          border-right: 1px solid #cccccc;
 
-            th {
-              border: none;
-
-              &:nth-of-type(2) {
-                border-left: 1px solid #cccccc;
-              }
-            }
-          }
-          tr td  {
+          th {
             border: none;
-            overflow: auto;
-
 
             &:nth-of-type(2) {
-             border-left: 1px solid #cccccc;
+              border-left: 1px solid #cccccc;
             }
           }
+        }
+        tr td {
+          border: none;
+          overflow: auto;
 
-          th, td {
-            width: 50%;
-            float: left;
-          }
-
-          tr:nth-child(even) {
-            background: #f8f8f8
+          &:nth-of-type(2) {
+            border-left: 1px solid #cccccc;
           }
         }
+
+        th,
+        td {
+          width: 50%;
+          float: left;
+        }
+
+        tr:nth-child(even) {
+          background: #f8f8f8;
+        }
+      }
     }
 
-
     .anchor {
-      margin-left: .2em;
+      margin-left: 0.2em;
       display: inline;
       visibility: hidden;
     }
@@ -258,7 +264,9 @@
       padding-bottom: 8px;
     }
 
-    h2, h3, .api-entry {
+    h2,
+    h3,
+    .api-entry {
       .anchor {
         color: $accent-color;
         text-decoration: none;
@@ -308,4 +316,4 @@
   }
 }
 
-@import "docs/method"
+@import 'docs/method';

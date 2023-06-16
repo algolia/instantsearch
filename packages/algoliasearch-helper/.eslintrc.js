@@ -16,7 +16,7 @@ const config = {
       rules: {
         // Helper uses CommonJS for now
         'import/no-commonjs': 'off',
-        'strict': 'off',
+        strict: 'off',
         // Helper uses ES5 for now
         'no-var': 'off',
         'vars-on-top': 'off',
@@ -24,9 +24,6 @@ const config = {
         'prefer-template': 'off',
         'prefer-spread': 'off',
         'prefer-rest-params': 'off',
-
-        // TODO: migration
-        'prettier/prettier': 'off',
       },
     },
     {
@@ -37,8 +34,15 @@ const config = {
         'jest/no-done-callback': 'off',
         'jest/no-conditional-expect': 'off',
       },
+      env: {
+        jest: true,
+      },
+      globals: {
+        test: true,
+        beforeAll: true,
+      },
     },
-  ]
-}
+  ],
+};
 
 module.exports = config;

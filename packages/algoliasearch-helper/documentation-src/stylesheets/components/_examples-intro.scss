@@ -1,11 +1,11 @@
 // icon - degree - colorStart - colorEnd
 $square-map: (
-  (input,135, #13c4a5, #10a4b8),
-  (form,138, #af84e3, #5071c7),
-  (city,314, #ec4918, #e25d8d),
-  (country,134, #fad961, #f76b1c),
-  (map,135, #81bf30, #00bdbd),
-  (advanced,135, #bfbfbf, #8a8a8a)
+  (input, 135, #13c4a5, #10a4b8),
+  (form, 138, #af84e3, #5071c7),
+  (city, 314, #ec4918, #e25d8d),
+  (country, 134, #fad961, #f76b1c),
+  (map, 135, #81bf30, #00bdbd),
+  (advanced, 135, #bfbfbf, #8a8a8a)
 );
 
 .examples-intro {
@@ -20,7 +20,7 @@ $square-map: (
     margin-bottom: 1.5em;
   }
 
-  body.examples &{
+  body.examples & {
     display: block;
   }
 
@@ -47,7 +47,7 @@ $square-map: (
       max-width: 120px;
       height: 120px;
       float: left;
-      flex:1 1 auto;
+      flex: 1 1 auto;
       margin: 0 22px;
       text-align: center;
 
@@ -79,9 +79,13 @@ $square-map: (
         box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.3);
         transition: box-shadow 0.3s ease, transform 0.1s ease;
 
-        @each $class,$degrees, $color-a, $color-b in $square-map {
+        @each $class, $degrees, $color-a, $color-b in $square-map {
           &.#{$class} {
-            background: linear-gradient(#{$degrees}deg, #{$color-a} 0, #{$color-b} 100%);
+            background: linear-gradient(
+              #{$degrees}deg,
+              #{$color-a} 0,
+              #{$color-b} 100%
+            );
           }
         }
 
@@ -89,7 +93,7 @@ $square-map: (
           box-shadow: none;
           transform: scale(1.05);
 
-          &~ .name {
+          & ~ .name {
             opacity: 1;
           }
         }

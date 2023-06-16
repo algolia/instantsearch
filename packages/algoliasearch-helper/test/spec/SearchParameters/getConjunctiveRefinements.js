@@ -2,22 +2,22 @@
 
 var SearchParameters = require('../../../src/SearchParameters');
 
-test('getConjunctiveRefinements returns value in facets', function() {
+test('getConjunctiveRefinements returns value in facets', function () {
   var state = new SearchParameters({
     facets: ['test'],
     facetsRefinements: {
-      test: ['zongo']
-    }
+      test: ['zongo'],
+    },
   });
 
   expect(state.getConjunctiveRefinements('test')).toEqual(['zongo']);
 });
 
-test('getConjunctiveRefinements returns [] if facet is not conjunctive', function() {
+test('getConjunctiveRefinements returns [] if facet is not conjunctive', function () {
   var state = new SearchParameters({
     facetsRefinements: {
-      test: ['zongo']
-    }
+      test: ['zongo'],
+    },
   });
 
   expect(state.getConjunctiveRefinements('test')).toEqual([]);

@@ -24,17 +24,17 @@ nav.sidebar {
       overflow: auto;
     }
 
-
     li {
       width: 100%;
       line-height: 32px;
 
-      &.level-h2 {}
+      &.level-h2 {
+      }
       &.level-h3 {
         line-height: 24px;
         font-size: 12px;
         padding-left: 12px;
-        font-family: "Open sans";
+        font-family: 'Open sans';
       }
 
       a {
@@ -43,7 +43,6 @@ nav.sidebar {
         width: 100%;
         color: $charcoal-grey-75;
         font-weight: 400;
-
 
         &:focus,
         &:target {
@@ -69,7 +68,7 @@ nav.sidebar {
 
     select {
       width: calc(100% - 32px);
-      margin: 8px  8px;
+      margin: 8px 8px;
       visibility: hidden;
     }
 

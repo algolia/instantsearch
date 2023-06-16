@@ -13,7 +13,6 @@ body {
 }
 .row {
   float: left;
-
 }
 .text-right {
   text-align: right;
@@ -25,7 +24,7 @@ section {
   position: relative;
 
   &.oddbg {
-    background-color: #f9fafb
+    background-color: #f9fafb;
   }
 
   @include medium-mq {
@@ -35,7 +34,7 @@ section {
   &.hero-section {
     background: $hero-color;
     color: $hero-color-accent;
-    padding-top: $navigation-height*1.5;
+    padding-top: $navigation-height * 1.5;
 
     .container {
       margin-top: 40px;
@@ -47,7 +46,7 @@ section {
       width: 100%;
       display: none;
 
-      body.index &{
+      body.index & {
         display: block;
       }
     }
@@ -86,7 +85,6 @@ section {
       padding: 8px 0;
     }
 
-
     @include small-mq {
       text-align: center;
       padding-top: 16px;
@@ -100,7 +98,7 @@ section {
         max-width: 500px;
         float: none;
 
-         body.index &{
+        body.index & {
           margin-top: $navigation-height * 2;
         }
       }
@@ -132,7 +130,6 @@ section {
       }
     }
 
-
     &.shrink {
       min-height: 314px;
     }
@@ -150,7 +147,6 @@ section {
   }
 }
 
-
 /* Sections
 =========================*/
 
@@ -162,11 +158,11 @@ section {
     transform: translate(-50%, -50%);
 
     @include medium-mq {
-     position: relative;
-     transform: none;
-     top: inherit;
-     left: inherit;
-     padding: 4em 16px;
+      position: relative;
+      transform: none;
+      top: inherit;
+      left: inherit;
+      padding: 4em 16px;
     }
   }
 
@@ -208,15 +204,15 @@ section {
       .bloc-3 img {
         max-width: 50%;
         top: 0;
-        left: 0
+        left: 0;
       }
     }
 
     @include small-mq {
       .bloc-3 img {
-          top: 10px;
-        }
+        top: 10px;
       }
+    }
   }
 
   .bloc-3 {
@@ -266,16 +262,19 @@ section {
 
 ////
 .action-section {
-  background: url('../images/svg/search-everywhere-illu.svg')no-repeat center bottom / 38%;
+  background: url('../images/svg/search-everywhere-illu.svg') no-repeat center
+    bottom / 38%;
   padding-bottom: 300px;
   margin-bottom: -120px;
 
   @include medium-mq {
-    background: $pale-grey url('../images/svg/search-everywhere-illu.svg')no-repeat center bottom / 58%;
+    background: $pale-grey url('../images/svg/search-everywhere-illu.svg')
+      no-repeat center bottom / 58%;
   }
 
   @include big-min-mq {
-    background: $pale-grey url('../images/svg/search-everywhere-illu.svg')no-repeat center bottom / 28%;
+    background: $pale-grey url('../images/svg/search-everywhere-illu.svg')
+      no-repeat center bottom / 28%;
   }
 
   @include small-mq {

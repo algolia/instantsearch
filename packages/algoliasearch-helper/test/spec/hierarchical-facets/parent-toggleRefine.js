@@ -1,6 +1,6 @@
 'use strict';
 
-test('hierarchical facets: toggleRefine behavior', function() {
+test('hierarchical facets: toggleRefine behavior', function () {
   var algoliasearch = require('algoliasearch');
 
   var algoliasearchHelper = require('../../../');
@@ -11,14 +11,21 @@ test('hierarchical facets: toggleRefine behavior', function() {
 
   var client = algoliasearch(appId, apiKey);
   var helper = algoliasearchHelper(client, indexName, {
-    hierarchicalFacets: [{
-      name: 'categories',
-      attributes: ['categories.lvl0', 'categories.lvl1', 'categories.lvl2', 'categories.lvl3']
-    }]
+    hierarchicalFacets: [
+      {
+        name: 'categories',
+        attributes: [
+          'categories.lvl0',
+          'categories.lvl1',
+          'categories.lvl2',
+          'categories.lvl3',
+        ],
+      },
+    ],
   });
 
-  client.search = jest.fn(function() {
-    return new Promise(function() {});
+  client.search = jest.fn(function () {
+    return new Promise(function () {});
   });
 
   // select `Flying dog`
@@ -36,11 +43,14 @@ test('hierarchical facets: toggleRefine behavior', function() {
   var queries = client.search.mock.calls[0][0];
   var hitsQuery = queries[0];
 
-  expect(hitsQuery.params.facets).toEqual(['categories.lvl0', 'categories.lvl1']);
+  expect(hitsQuery.params.facets).toEqual([
+    'categories.lvl0',
+    'categories.lvl1',
+  ]);
   expect(hitsQuery.params.facetFilters).toEqual([['categories.lvl0:beers']]);
 });
 
-test('hierarchical facets: toggleRefine behavior when root level', function() {
+test('hierarchical facets: toggleRefine behavior when root level', function () {
   var algoliasearch = require('algoliasearch');
 
   var algoliasearchHelper = require('../../../');
@@ -51,14 +61,21 @@ test('hierarchical facets: toggleRefine behavior when root level', function() {
 
   var client = algoliasearch(appId, apiKey);
   var helper = algoliasearchHelper(client, indexName, {
-    hierarchicalFacets: [{
-      name: 'categories',
-      attributes: ['categories.lvl0', 'categories.lvl1', 'categories.lvl2', 'categories.lvl3']
-    }]
+    hierarchicalFacets: [
+      {
+        name: 'categories',
+        attributes: [
+          'categories.lvl0',
+          'categories.lvl1',
+          'categories.lvl2',
+          'categories.lvl3',
+        ],
+      },
+    ],
   });
 
-  client.search = jest.fn(function() {
-    return new Promise(function() {});
+  client.search = jest.fn(function () {
+    return new Promise(function () {});
   });
 
   helper.toggleRefine('categories', 'beers > IPA > Flying dog');
@@ -74,7 +91,7 @@ test('hierarchical facets: toggleRefine behavior when root level', function() {
   expect(hitsQuery.params.facetFilters).toBe(undefined);
 });
 
-test('hierarchical facets: toggleRefine behavior when different root level', function() {
+test('hierarchical facets: toggleRefine behavior when different root level', function () {
   var algoliasearch = require('algoliasearch');
 
   var algoliasearchHelper = require('../../../');
@@ -85,14 +102,21 @@ test('hierarchical facets: toggleRefine behavior when different root level', fun
 
   var client = algoliasearch(appId, apiKey);
   var helper = algoliasearchHelper(client, indexName, {
-    hierarchicalFacets: [{
-      name: 'categories',
-      attributes: ['categories.lvl0', 'categories.lvl1', 'categories.lvl2', 'categories.lvl3']
-    }]
+    hierarchicalFacets: [
+      {
+        name: 'categories',
+        attributes: [
+          'categories.lvl0',
+          'categories.lvl1',
+          'categories.lvl2',
+          'categories.lvl3',
+        ],
+      },
+    ],
   });
 
-  client.search = jest.fn(function() {
-    return new Promise(function() {});
+  client.search = jest.fn(function () {
+    return new Promise(function () {});
   });
 
   helper.toggleRefine('categories', 'beers > IPA > Flying dog');
@@ -104,6 +128,9 @@ test('hierarchical facets: toggleRefine behavior when different root level', fun
   var queries = client.search.mock.calls[0][0];
   var hitsQuery = queries[0];
 
-  expect(hitsQuery.params.facets).toEqual(['categories.lvl0', 'categories.lvl1']);
+  expect(hitsQuery.params.facets).toEqual([
+    'categories.lvl0',
+    'categories.lvl1',
+  ]);
   expect(hitsQuery.params.facetFilters).toEqual([['categories.lvl0:fruits']]);
 });

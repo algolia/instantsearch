@@ -2,7 +2,7 @@
 
 var SearchParameters = require('../../../src/SearchParameters');
 
-test('isNumericRefined with 3 parameters', function() {
+test('isNumericRefined with 3 parameters', function () {
   var params = new SearchParameters();
 
   expect(params.isNumericRefined('age', '>', '3')).toBeFalsy();
@@ -10,7 +10,7 @@ test('isNumericRefined with 3 parameters', function() {
   expect(params.isNumericRefined('age', '<', '7')).toBeFalsy();
   expect(params.isNumericRefined('size', '>', '3')).toBeFalsy();
 
-  var paramsWithNumerics = (params.addNumericRefinement('age', '>', '3'));
+  var paramsWithNumerics = params.addNumericRefinement('age', '>', '3');
 
   expect(paramsWithNumerics.isNumericRefined('age', '>', '3')).toBeTruthy();
   expect(paramsWithNumerics.isNumericRefined('age', '>', 3)).toBeTruthy();
@@ -27,25 +27,25 @@ test('isNumericRefined with 3 parameters', function() {
   expect(paramsWithArray.isNumericRefined('age', '=', '3')).toBeFalsy();
 });
 
-test('isNumericRefined with 2 parameters', function() {
+test('isNumericRefined with 2 parameters', function () {
   var params = new SearchParameters();
 
   expect(params.isNumericRefined('age', '>')).toBeFalsy();
   expect(params.isNumericRefined('size', '>')).toBeFalsy();
 
-  var paramsWithNumerics = (params.addNumericRefinement('age', '>', '3'));
+  var paramsWithNumerics = params.addNumericRefinement('age', '>', '3');
 
   expect(paramsWithNumerics.isNumericRefined('age', '>')).toBeTruthy();
   expect(paramsWithNumerics.isNumericRefined('size', '>')).toBeFalsy();
 });
 
-test('isNumericRefined with 1 parameter', function() {
+test('isNumericRefined with 1 parameter', function () {
   var params = new SearchParameters();
 
   expect(params.isNumericRefined('age')).toBeFalsy();
   expect(params.isNumericRefined('size')).toBeFalsy();
 
-  var paramsWithNumerics = (params.addNumericRefinement('age', '>', '3'));
+  var paramsWithNumerics = params.addNumericRefinement('age', '>', '3');
 
   expect(paramsWithNumerics.isNumericRefined('age')).toBeTruthy();
   expect(paramsWithNumerics.isNumericRefined('size')).toBeFalsy();

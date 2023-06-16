@@ -27,38 +27,37 @@ Synchronizing to the URL is no longer a responsibility of the Helper, but instea
 The event payload now always is an object, instead of multiple arguments:
 
 ```js
+helper.on('search', ({ state: SearchParameters, results: SearchResults }) => {
+  //
+});
 helper.on(
-  "search",
-  ({ state: SearchParameters, results: SearchResults }) => {/**/}
-);
-helper.on(
-  "change",
+  'change',
   ({
     state: SearchParameters,
     results: SearchResults,
-    isPageReset: boolean 
-  }) => {/**/}
+    isPageReset: boolean,
+  }) => {
+    //
+  }
 );
 helper.on(
-  "searchForFacetValues",
-  ({ state: SearchParameters, facet: string, query: string }) => {/**/}
+  'searchForFacetValues',
+  ({ state: SearchParameters, facet: string, query: string }) => {
+    //
+  }
 );
-helper.on(
-  "searchOnce",
-  ({ state: SearchParameters }) => {/**/}
-);
-helper.on(
-  "result",
-  ({ results: SearchResults, state: SearchParameters }) => {/**/}
-);
-helper.on(
-  "error",
-  ({ error: Error }) => {/**/}
-);
-helper.on(
-  "searchQueueEmpty",
-  () => {/**/}
-);
+helper.on('searchOnce', ({ state: SearchParameters }) => {
+  //
+});
+helper.on('result', ({ results: SearchResults, state: SearchParameters }) => {
+  //
+});
+helper.on('error', ({ error: Error }) => {
+  //
+});
+helper.on('searchQueueEmpty', () => {
+  //
+});
 ```
 
 ### Default values

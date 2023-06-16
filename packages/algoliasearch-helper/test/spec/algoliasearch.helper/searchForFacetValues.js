@@ -6,113 +6,115 @@ function makeFakeSearchForFacetValuesResponse() {
   return {
     exhaustiveFacetsCount: true,
     facetHits: [],
-    processingTimeMS: 3
+    processingTimeMS: 3,
   };
 }
 
-test('searchForFacetValues calls the client method over the index method', function() {
-  var clientSearchForFacetValues = jest.fn(function() {
+test('searchForFacetValues calls the client method over the index method', function () {
+  var clientSearchForFacetValues = jest.fn(function () {
     return Promise.resolve([makeFakeSearchForFacetValuesResponse()]);
   });
 
-  var indexSearchForFacetValues = jest.fn(function() {
+  var indexSearchForFacetValues = jest.fn(function () {
     return Promise.resolve(makeFakeSearchForFacetValuesResponse());
   });
 
   var fakeClient = {
     searchForFacetValues: clientSearchForFacetValues,
-    initIndex: function() {
+    initIndex: function () {
       return {
-        searchForFacetValues: indexSearchForFacetValues
+        searchForFacetValues: indexSearchForFacetValues,
       };
-    }
+    },
   };
 
   var helper = algoliasearchHelper(fakeClient, 'index');
 
-  return helper.searchForFacetValues('facet', 'query', 1).then(function() {
+  return helper.searchForFacetValues('facet', 'query', 1).then(function () {
     expect(clientSearchForFacetValues).toHaveBeenCalledTimes(1);
     expect(indexSearchForFacetValues).toHaveBeenCalledTimes(0);
   });
 });
 
-test('searchForFacetValues calls the index method if no client method', function() {
-  var indexSearchForFacetValues = jest.fn(function() {
+test('searchForFacetValues calls the index method if no client method', function () {
+  var indexSearchForFacetValues = jest.fn(function () {
     return Promise.resolve(makeFakeSearchForFacetValuesResponse());
   });
 
   var fakeClient = {
-    initIndex: function() {
+    initIndex: function () {
       return {
-        searchForFacetValues: indexSearchForFacetValues
+        searchForFacetValues: indexSearchForFacetValues,
       };
-    }
+    },
   };
 
   var helper = algoliasearchHelper(fakeClient, 'index');
 
-  return helper.searchForFacetValues('facet', 'query', 1).then(function() {
+  return helper.searchForFacetValues('facet', 'query', 1).then(function () {
     expect(indexSearchForFacetValues).toHaveBeenCalledTimes(1);
   });
 });
 
-test('searchForFacetValues resolve with the correct response from client', function() {
+test('searchForFacetValues resolve with the correct response from client', function () {
   var fakeClient = {
-    addAlgoliaAgent: function() {},
-    searchForFacetValues: function() {
-      return Promise.resolve([
-        makeFakeSearchForFacetValuesResponse()
-      ]);
-    }
+    addAlgoliaAgent: function () {},
+    searchForFacetValues: function () {
+      return Promise.resolve([makeFakeSearchForFacetValuesResponse()]);
+    },
   };
 
   var helper = algoliasearchHelper(fakeClient, 'index');
 
-  return helper.searchForFacetValues('facet', 'query', 1).then(function(content) {
-    expect(content.exhaustiveFacetsCount).toBe(true);
-    expect(content.facetHits.length).toBe(0);
-    expect(content.processingTimeMS).toBe(3);
-  });
+  return helper
+    .searchForFacetValues('facet', 'query', 1)
+    .then(function (content) {
+      expect(content.exhaustiveFacetsCount).toBe(true);
+      expect(content.facetHits.length).toBe(0);
+      expect(content.processingTimeMS).toBe(3);
+    });
 });
 
-test('searchForFacetValues resolve with the correct response from initIndex', function() {
+test('searchForFacetValues resolve with the correct response from initIndex', function () {
   var fakeClient = {
-    addAlgoliaAgent: function() {},
-    initIndex: function() {
+    addAlgoliaAgent: function () {},
+    initIndex: function () {
       return {
-        searchForFacetValues: function() {
+        searchForFacetValues: function () {
           return Promise.resolve(makeFakeSearchForFacetValuesResponse());
-        }
+        },
       };
-    }
+    },
   };
 
   var helper = algoliasearchHelper(fakeClient, 'index');
 
-  return helper.searchForFacetValues('facet', 'query', 1).then(function(content) {
-    expect(content.exhaustiveFacetsCount).toBe(true);
-    expect(content.facetHits.length).toBe(0);
-    expect(content.processingTimeMS).toBe(3);
-  });
+  return helper
+    .searchForFacetValues('facet', 'query', 1)
+    .then(function (content) {
+      expect(content.exhaustiveFacetsCount).toBe(true);
+      expect(content.facetHits.length).toBe(0);
+      expect(content.processingTimeMS).toBe(3);
+    });
 });
 
-test('index.searchForFacetValues should search for facetValues with the current state', function() {
-  var indexSearchForFacetValues = jest.fn(function() {
+test('index.searchForFacetValues should search for facetValues with the current state', function () {
+  var indexSearchForFacetValues = jest.fn(function () {
     return Promise.resolve(makeFakeSearchForFacetValuesResponse());
   });
 
   var fakeClient = {
-    initIndex: function() {
+    initIndex: function () {
       return {
-        searchForFacetValues: indexSearchForFacetValues
+        searchForFacetValues: indexSearchForFacetValues,
       };
-    }
+    },
   };
 
   var helper = algoliasearchHelper(fakeClient, 'index', {
     highlightPreTag: 'HIGHLIGHT>',
     highlightPostTag: '<HIGHLIGHT',
-    query: 'iphone'
+    query: 'iphone',
   });
 
   helper.searchForFacetValues('facet', 'query', 75);
@@ -126,28 +128,28 @@ test('index.searchForFacetValues should search for facetValues with the current 
   expect(lastArguments.highlightPostTag).toBe('<HIGHLIGHT');
 });
 
-test('index.searchForFacetValues can override the current search state', function() {
-  var indexSearchForFacetValues = jest.fn(function() {
+test('index.searchForFacetValues can override the current search state', function () {
+  var indexSearchForFacetValues = jest.fn(function () {
     return Promise.resolve(makeFakeSearchForFacetValuesResponse());
   });
 
   var fakeClient = {
-    initIndex: function() {
+    initIndex: function () {
       return {
-        searchForFacetValues: indexSearchForFacetValues
+        searchForFacetValues: indexSearchForFacetValues,
       };
-    }
+    },
   };
 
   var helper = algoliasearchHelper(fakeClient, 'index', {
     highlightPreTag: 'HIGHLIGHT>',
     highlightPostTag: '<HIGHLIGHT',
-    query: 'iphone'
+    query: 'iphone',
   });
 
   helper.searchForFacetValues('facet', 'query', 75, {
     query: undefined,
-    highlightPreTag: 'highlightTag'
+    highlightPreTag: 'highlightTag',
   });
 
   var lastArguments = indexSearchForFacetValues.mock.calls[0][0];
@@ -159,19 +161,19 @@ test('index.searchForFacetValues can override the current search state', functio
   expect(lastArguments.highlightPostTag).toBe('<HIGHLIGHT');
 });
 
-test('client.searchForFacetValues should search for facetValues with the current state', function() {
-  var clientSearchForFacetValues = jest.fn(function() {
+test('client.searchForFacetValues should search for facetValues with the current state', function () {
+  var clientSearchForFacetValues = jest.fn(function () {
     return Promise.resolve([makeFakeSearchForFacetValuesResponse()]);
   });
 
   var fakeClient = {
-    searchForFacetValues: clientSearchForFacetValues
+    searchForFacetValues: clientSearchForFacetValues,
   };
 
   var helper = algoliasearchHelper(fakeClient, 'index', {
     highlightPreTag: 'HIGHLIGHT>',
     highlightPostTag: '<HIGHLIGHT',
-    query: 'iphone'
+    query: 'iphone',
   });
 
   helper.searchForFacetValues('facet', 'query', 75);
@@ -186,24 +188,24 @@ test('client.searchForFacetValues should search for facetValues with the current
   expect(lastArguments.params.highlightPostTag).toBe('<HIGHLIGHT');
 });
 
-test('client.searchForFacetValues can override the current search state', function() {
-  var clientSearchForFacetValues = jest.fn(function() {
+test('client.searchForFacetValues can override the current search state', function () {
+  var clientSearchForFacetValues = jest.fn(function () {
     return Promise.resolve([makeFakeSearchForFacetValuesResponse()]);
   });
 
   var fakeClient = {
-    searchForFacetValues: clientSearchForFacetValues
+    searchForFacetValues: clientSearchForFacetValues,
   };
 
   var helper = algoliasearchHelper(fakeClient, 'index', {
     highlightPreTag: 'HIGHLIGHT>',
     highlightPostTag: '<HIGHLIGHT',
-    query: 'iphone'
+    query: 'iphone',
   });
 
   helper.searchForFacetValues('facet', 'query', 75, {
     query: undefined,
-    highlightPreTag: 'highlightTag'
+    highlightPreTag: 'highlightTag',
   });
 
   var lastArguments = clientSearchForFacetValues.mock.calls[0][0][0];
@@ -216,19 +218,21 @@ test('client.searchForFacetValues can override the current search state', functi
   expect(lastArguments.params.highlightPostTag).toBe('<HIGHLIGHT');
 });
 
-test('client.search should search for facetValues with the current state', function() {
-  var clientSearch = jest.fn(function() {
-    return Promise.resolve({results: [makeFakeSearchForFacetValuesResponse()]});
+test('client.search should search for facetValues with the current state', function () {
+  var clientSearch = jest.fn(function () {
+    return Promise.resolve({
+      results: [makeFakeSearchForFacetValuesResponse()],
+    });
   });
 
   var fakeClient = {
-    search: clientSearch
+    search: clientSearch,
   };
 
   var helper = algoliasearchHelper(fakeClient, 'index', {
     highlightPreTag: 'HIGHLIGHT>',
     highlightPostTag: '<HIGHLIGHT',
-    query: 'iphone'
+    query: 'iphone',
   });
 
   helper.searchForFacetValues('facet', 'query', 75);
@@ -244,24 +248,26 @@ test('client.search should search for facetValues with the current state', funct
   expect(lastArguments.params.highlightPostTag).toBe('<HIGHLIGHT');
 });
 
-test('client.search can override the current search state', function() {
-  var clientSearch = jest.fn(function() {
-    return Promise.resolve({results: [makeFakeSearchForFacetValuesResponse()]});
+test('client.search can override the current search state', function () {
+  var clientSearch = jest.fn(function () {
+    return Promise.resolve({
+      results: [makeFakeSearchForFacetValuesResponse()],
+    });
   });
 
   var fakeClient = {
-    search: clientSearch
+    search: clientSearch,
   };
 
   var helper = algoliasearchHelper(fakeClient, 'index', {
     highlightPreTag: 'HIGHLIGHT>',
     highlightPostTag: '<HIGHLIGHT',
-    query: 'iphone'
+    query: 'iphone',
   });
 
   helper.searchForFacetValues('facet', 'query', 75, {
     query: undefined,
-    highlightPreTag: 'highlightTag'
+    highlightPreTag: 'highlightTag',
   });
 
   var lastArguments = clientSearch.mock.calls[0][0][0];
@@ -275,7 +281,7 @@ test('client.search can override the current search state', function() {
   expect(lastArguments.params.highlightPostTag).toBe('<HIGHLIGHT');
 });
 
-test('an error will be thrown if the client does not contain .searchForFacetValues', function() {
+test('an error will be thrown if the client does not contain .searchForFacetValues', function () {
   var fakeClient = {};
   var helper = algoliasearchHelper(fakeClient, 'index');
 
@@ -288,10 +294,10 @@ test('an error will be thrown if the client does not contain .searchForFacetValu
   }
 });
 
-test('isRefined is set for disjunctive facets', function() {
+test('isRefined is set for disjunctive facets', function () {
   var fakeClient = {
-    addAlgoliaAgent: function() {},
-    searchForFacetValues: function() {
+    addAlgoliaAgent: function () {},
+    searchForFacetValues: function () {
       return Promise.resolve([
         {
           exhaustiveFacetsCount: true,
@@ -299,28 +305,28 @@ test('isRefined is set for disjunctive facets', function() {
             {
               count: 318,
               highlighted: '__ais-highlight__K__/ais-highlight__itchenAid',
-              value: 'KitchenAid'
+              value: 'KitchenAid',
             },
             {
               count: 1,
               highlighted: 'something',
-              value: 'something'
-            }
+              value: 'something',
+            },
           ],
-          processingTimeMS: 3
-        }
+          processingTimeMS: 3,
+        },
       ]);
-    }
+    },
   };
 
   var helper = algoliasearchHelper(fakeClient, 'index', {
     disjunctiveFacets: ['facet'],
     disjunctiveFacetsRefinements: {
-      facet: ['KitchenAid']
-    }
+      facet: ['KitchenAid'],
+    },
   });
 
-  return helper.searchForFacetValues('facet', 'k', 1).then(function(content) {
+  return helper.searchForFacetValues('facet', 'k', 1).then(function (content) {
     expect(content.exhaustiveFacetsCount).toBe(true);
     expect(content.processingTimeMS).toBe(3);
     expect(content.facetHits.length).toBe(2);
@@ -331,10 +337,10 @@ test('isRefined is set for disjunctive facets', function() {
   });
 });
 
-test('isRefined is set for conjunctive facets', function() {
+test('isRefined is set for conjunctive facets', function () {
   var fakeClient = {
-    addAlgoliaAgent: function() {},
-    searchForFacetValues: function() {
+    addAlgoliaAgent: function () {},
+    searchForFacetValues: function () {
       return Promise.resolve([
         {
           exhaustiveFacetsCount: true,
@@ -342,28 +348,28 @@ test('isRefined is set for conjunctive facets', function() {
             {
               count: 318,
               highlighted: '__ais-highlight__K__/ais-highlight__itchenAid',
-              value: 'KitchenAid'
+              value: 'KitchenAid',
             },
             {
               count: 1,
               highlighted: 'something',
-              value: 'something'
-            }
+              value: 'something',
+            },
           ],
-          processingTimeMS: 3
-        }
+          processingTimeMS: 3,
+        },
       ]);
-    }
+    },
   };
 
   var helper = algoliasearchHelper(fakeClient, 'index', {
     facets: ['facet'],
     facetsRefinements: {
-      facet: ['KitchenAid']
-    }
+      facet: ['KitchenAid'],
+    },
   });
 
-  return helper.searchForFacetValues('facet', 'k', 1).then(function(content) {
+  return helper.searchForFacetValues('facet', 'k', 1).then(function (content) {
     expect(content.exhaustiveFacetsCount).toBe(true);
     expect(content.processingTimeMS).toBe(3);
     expect(content.facetHits.length).toBe(2);
@@ -374,10 +380,10 @@ test('isRefined is set for conjunctive facets', function() {
   });
 });
 
-test('value is escaped when it starts with `-`', function() {
+test('value is escaped when it starts with `-`', function () {
   var fakeClient = {
-    addAlgoliaAgent: function() {},
-    searchForFacetValues: function() {
+    addAlgoliaAgent: function () {},
+    searchForFacetValues: function () {
       return Promise.resolve([
         {
           exhaustiveFacetsCount: true,
@@ -385,23 +391,23 @@ test('value is escaped when it starts with `-`', function() {
             {
               count: 318,
               highlighted: 'something',
-              value: 'something'
+              value: 'something',
             },
             {
               count: 1,
               highlighted: '-20%',
-              value: '-20%'
-            }
+              value: '-20%',
+            },
           ],
-          processingTimeMS: 3
-        }
+          processingTimeMS: 3,
+        },
       ]);
-    }
+    },
   };
 
   var helper = algoliasearchHelper(fakeClient, 'index');
 
-  return helper.searchForFacetValues('facet', 'k', 1).then(function(content) {
+  return helper.searchForFacetValues('facet', 'k', 1).then(function (content) {
     expect(content.exhaustiveFacetsCount).toBe(true);
     expect(content.processingTimeMS).toBe(3);
     expect(content.facetHits.length).toBe(2);
@@ -412,11 +418,10 @@ test('value is escaped when it starts with `-`', function() {
   });
 });
 
-
-test('escaped value is marked as refined', function() {
+test('escaped value is marked as refined', function () {
   var fakeClient = {
-    addAlgoliaAgent: function() {},
-    searchForFacetValues: function() {
+    addAlgoliaAgent: function () {},
+    searchForFacetValues: function () {
       return Promise.resolve([
         {
           exhaustiveFacetsCount: true,
@@ -424,28 +429,28 @@ test('escaped value is marked as refined', function() {
             {
               count: 318,
               highlighted: 'something',
-              value: 'something'
+              value: 'something',
             },
             {
               count: 1,
               highlighted: '-20%',
-              value: '-20%'
-            }
+              value: '-20%',
+            },
           ],
-          processingTimeMS: 3
-        }
+          processingTimeMS: 3,
+        },
       ]);
-    }
+    },
   };
 
   var helper = algoliasearchHelper(fakeClient, 'index', {
     disjunctiveFacets: ['facet'],
     disjunctiveFacetsRefinements: {
-      facet: ['\\-20%', 'something']
-    }
+      facet: ['\\-20%', 'something'],
+    },
   });
 
-  return helper.searchForFacetValues('facet', 'k', 1).then(function(content) {
+  return helper.searchForFacetValues('facet', 'k', 1).then(function (content) {
     expect(content).toEqual({
       exhaustiveFacetsCount: true,
       processingTimeMS: 3,
@@ -455,16 +460,16 @@ test('escaped value is marked as refined', function() {
           highlighted: 'something',
           isRefined: true,
           escapedValue: 'something',
-          value: 'something'
+          value: 'something',
         },
         {
           count: 1,
           highlighted: '-20%',
           isRefined: true,
           escapedValue: '\\-20%',
-          value: '-20%'
-        }
-      ]
+          value: '-20%',
+        },
+      ],
     });
   });
 });

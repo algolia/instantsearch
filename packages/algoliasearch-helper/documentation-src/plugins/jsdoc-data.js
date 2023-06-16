@@ -7,20 +7,20 @@ var jsdoc = require('jsdoc-to-markdown');
  * the last one wins.
  */
 function keyBy(arr, key) {
-  return arr.reduce(function(obj, o) {
+  return arr.reduce(function (obj, o) {
     obj[o[key]] = o;
     return obj;
   }, {});
 }
 
-module.exports = function(opts) {
+module.exports = function (opts) {
   if (!opts.src) throw new Error('opts.src must be defined');
   var namespace = opts.namespace;
 
-  return function(_files, metalsmith) {
+  return function (_files, metalsmith) {
     var files = metalsmith.path(opts.src);
-    return jsdoc.getTemplateData({files: files}).then((data) => {
-      var filteredData = data.filter(function(o) {
+    return jsdoc.getTemplateData({ files: files }).then((data) => {
+      var filteredData = data.filter(function (o) {
         return !o.deprecated;
       });
       var metadata = metalsmith.metadata();

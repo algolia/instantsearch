@@ -4,9 +4,9 @@ var algoliaSearchHelper = require('../../../');
 
 var fakeClient = {};
 
-test('addFacetRefinement keeps the order of refinements', function() {
+test('addFacetRefinement keeps the order of refinements', function () {
   var helper = algoliaSearchHelper(fakeClient, null, {
-    facets: ['facet1', 'facet2']
+    facets: ['facet1', 'facet2'],
   });
 
   helper.addFacetRefinement('facet1', 'facetValue');
@@ -15,7 +15,10 @@ test('addFacetRefinement keeps the order of refinements', function() {
   expect(helper.state.facets).toEqual(['facet1', 'facet2']);
   expect(helper.state.facetsRefinements).toEqual({
     facet1: ['facetValue'],
-    facet2: ['facetValue']
+    facet2: ['facetValue'],
   });
-  expect(Object.keys(helper.state.facetsRefinements)).toEqual(['facet1', 'facet2']);
+  expect(Object.keys(helper.state.facetsRefinements)).toEqual([
+    'facet1',
+    'facet2',
+  ]);
 });
