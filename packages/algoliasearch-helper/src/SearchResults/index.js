@@ -262,8 +262,8 @@ function SearchResults(state, results, options) {
    * all the records that match the search parameters. Each record is
    * augmented with a new attribute `_highlightResult`
    * which is an object keyed by attribute and with the following properties:
-   *  - `value` : the value of the facet highlighted (html)
-   *  - `matchLevel`: full, partial or none depending on how the query terms match
+   * - `value` : the value of the facet highlighted (html)
+   * - `matchLevel`: `full`, `partial` or `none`, depending on how the query terms match
    * @name hits
    * @member {object[]}
    * @memberof SearchResults
