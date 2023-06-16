@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.10.2](https://github.com/algolia/instantsearch.js/compare/vue-instantsearch@4.10.1...vue-instantsearch@4.10.2) (2023-06-13)
+
+
+### Bug Fixes
+
+* **createServerRootMixin:** forward i18n on option ([#5673](https://github.com/algolia/instantsearch/issues/5673)) ([d52b47f](https://github.com/algolia/instantsearch/commit/d52b47f58a9e723616ec59c9805c590e8079ba38))
+* **breadcrumb:** align vue component with specs ([#5672](https://github.com/algolia/instantsearch.js/issues/5672)) ([dbfed3a](https://github.com/algolia/instantsearch.js/commit/dbfed3ac25910013835c9bb36255b6dbd6d264ec))
+
+
+
+
+
 ## [4.10.1](https://github.com/algolia/instantsearch.js/compare/vue-instantsearch@4.10.0...vue-instantsearch@4.10.1) (2023-05-30)
 
 

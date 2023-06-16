@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.56.2](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.56.1...instantsearch.js@4.56.2) (2023-06-13)
+
+
+### Bug Fixes
+
+* **infiniteHits:** correctly avoid writing to cache when dynamicWidgets has no facets in the results ([#5669](https://github.com/algolia/instantsearch.js/issues/5669)) ([2eec37e](https://github.com/algolia/instantsearch.js/commit/2eec37e2bf70c4745577883fb1716dfe6ddce936)), closes [#5620](https://github.com/algolia/instantsearch.js/issues/5620)
+
+
+
+
+
 ## [4.56.1](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.56.0...instantsearch.js@4.56.1) (2023-05-30)
 
 
