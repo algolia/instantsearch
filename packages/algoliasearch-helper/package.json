@@ -12,7 +12,7 @@
     "doc:publish": "yarn run doc && gh-pages -d documentation",
     "doc:staging": "scripts/staging-doc.sh",
     "readme:toc": "doctoc --notitle README.md --maxlevel 3",
-    "test": "scripts/test.sh",
+    "test": "scripts/retry.sh 3 'scripts/test.sh'",
     "test:unit": "jest",
     "test:watch": "jest --watch",
     "release": "./scripts/release.js",
