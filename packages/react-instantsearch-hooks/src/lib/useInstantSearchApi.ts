@@ -180,7 +180,6 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
   const cleanupTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const store = useSyncExternalStore<InstantSearch<TUiState, TRouteState>>(
     useCallback(() => {
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       const search = searchRef.current!;
 
       // Scenario 1: the component mounts.
@@ -219,10 +218,8 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
         search._preventWidgetCleanup = true;
       };
     }, [forceUpdate]),
-    /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
     () => searchRef.current!,
     () => searchRef.current!
-    /* eslint-enable @typescript-eslint/no-unnecessary-type-assertion */
   );
 
   return store;
