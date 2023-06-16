@@ -21,6 +21,8 @@ const defaultUserAgents = [
   `react-instantsearch-hooks (${version})`,
 ];
 const serverUserAgent = `react-instantsearch-server (${version})`;
+const nextUserAgent = (nextVersion?: string) =>
+  nextVersion ? `next.js (${nextVersion})` : null;
 
 export type UseInstantSearchApiProps<
   TUiState extends UiState,
@@ -102,6 +104,7 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
     addAlgoliaAgents(props.searchClient, [
       ...defaultUserAgents,
       serverContext && serverUserAgent,
+      nextUserAgent(getNextVersion()),
     ]);
 
     // On the server, we start the search early to compute the search parameters.
@@ -177,6 +180,7 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
   const cleanupTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const store = useSyncExternalStore<InstantSearch<TUiState, TRouteState>>(
     useCallback(() => {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       const search = searchRef.current!;
 
       // Scenario 1: the component mounts.
@@ -215,8 +219,10 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
         search._preventWidgetCleanup = true;
       };
     }, [forceUpdate]),
+    /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
     () => searchRef.current!,
     () => searchRef.current!
+    /* eslint-enable @typescript-eslint/no-unnecessary-type-assertion */
   );
 
   return store;
@@ -261,4 +267,16 @@ Please check its usage instructions: https://github.com/algolia/instantsearch/tr
 You can ignore this warning if you are using a custom router that suits your needs, it won't be outputted in production builds.`
     );
   }
+}
+
+/**
+ * Gets the version of Next.js if it is available in the `window` object,
+ * otherwise it returns the version from the npm package dependencies (in SSR).
+ */
+function getNextVersion() {
+  return (
+    (typeof window !== 'undefined' &&
+      ((window as any).next?.version as string | undefined)) ||
+    process.env.npm_package_dependencies_next
+  );
 }

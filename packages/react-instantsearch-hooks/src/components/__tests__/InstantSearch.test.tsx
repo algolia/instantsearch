@@ -90,6 +90,9 @@ describe('InstantSearch', () => {
   });
 
   test('attaches users agents', () => {
+    const nextVersion = '11.1.4';
+    (window as any).next = { version: nextVersion };
+
     const searchClient = createAlgoliaSearchClient({});
 
     render(
@@ -107,6 +110,9 @@ describe('InstantSearch', () => {
     expect(searchClient.addAlgoliaAgent).toHaveBeenCalledWith(
       `react-instantsearch-hooks (${version})`
     );
+    expect(searchClient.addAlgoliaAgent).toHaveBeenCalledWith(
+      `next.js (${nextVersion})`
+    );
   });
 
   test('starts the search on mount', async () => {
@@ -119,7 +125,7 @@ describe('InstantSearch', () => {
       </StrictMode>
     );
 
-    expect(searchContext.current!.started).toEqual(true);
+    expect(searchContext.current?.started).toEqual(true);
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(0));
   });
@@ -136,7 +142,7 @@ describe('InstantSearch', () => {
       </StrictMode>
     );
 
-    expect(searchContext.current!.started).toEqual(true);
+    expect(searchContext.current?.started).toEqual(true);
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
   });
@@ -153,15 +159,15 @@ describe('InstantSearch', () => {
       </StrictMode>
     );
 
-    expect(searchContext.current!.started).toEqual(true);
+    expect(searchContext.current?.started).toEqual(true);
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
 
     unmount();
     await waitFor(() => {
-      expect(searchContext.current!.dispose).toHaveBeenCalledTimes(1);
-      expect(searchContext.current!.started).toEqual(false);
-      expect(searchContext.current!.mainIndex.getWidgets()).toEqual([]);
+      expect(searchContext.current?.dispose).toHaveBeenCalledTimes(1);
+      expect(searchContext.current?.started).toEqual(false);
+      expect(searchContext.current?.mainIndex.getWidgets()).toEqual([]);
     });
   });
 
