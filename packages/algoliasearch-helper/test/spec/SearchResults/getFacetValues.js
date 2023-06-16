@@ -79,6 +79,7 @@ test('getFacetValues(facetName) testing the sort function', function() {
       if (a.count === b.count) return 0;
       if (a.count > b.count)   return 1;
       if (b.count > a.count)   return -1;
+      return undefined;
     }
   });
 

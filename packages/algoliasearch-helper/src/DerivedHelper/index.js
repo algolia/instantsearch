@@ -12,6 +12,8 @@ var inherits = require('../functions/inherits');
  *  - result: when the response is retrieved from Algolia and is processed.
  *    This event contains a {@link SearchResults} object and the
  *    {@link SearchParameters} corresponding to this answer.
+ * @param {AlgoliaSearchHelper} mainHelper the main helper
+ * @param {function} fn the function to create the derived state
  */
 function DerivedHelper(mainHelper, fn) {
   this.main = mainHelper;

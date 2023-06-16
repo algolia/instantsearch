@@ -30,6 +30,7 @@ function compareAscending(value, other) {
  * @param {Array<object>} collection object with keys in attributes
  * @param {Array<string>} iteratees attributes
  * @param {Array<string>} orders asc | desc
+ * @return {Array<object>} sorted collection
  */
 function orderBy(collection, iteratees, orders) {
   if (!Array.isArray(collection)) {
@@ -37,6 +38,7 @@ function orderBy(collection, iteratees, orders) {
   }
 
   if (!Array.isArray(orders)) {
+    // eslint-disable-next-line no-param-reassign
     orders = [];
   }
 

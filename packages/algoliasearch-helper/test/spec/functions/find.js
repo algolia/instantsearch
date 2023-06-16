@@ -19,5 +19,5 @@ test('find returns undefined in non-found cases', function() {
 
   expect(function() {
     find([1, 2, 3], undefined);
-  }).toThrowError();
+  }).toThrow();
 });

@@ -102,14 +102,6 @@ test('[No changes] addFacetRefinement', function() {
   expect(state.addFacetRefinement('facet', 'value')).toBe(state);
 });
 
-test('[No changes] removeDisjunctiveFacetRefinement', function() {
-  var state = SearchParameters.make({
-    disjunctiveFacets: ['facet']
-  });
-
-  expect(state.removeDisjunctiveFacetRefinement('facet', 'value')).toBe(state);
-});
-
 test('[No changes] addNumericRefinement', function() {
   var state = SearchParameters.make({}).addNumericRefinement('attribute', '>', 0);
 

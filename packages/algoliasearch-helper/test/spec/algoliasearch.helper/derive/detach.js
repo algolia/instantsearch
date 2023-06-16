@@ -1,6 +1,6 @@
 'use strict';
 
-var algoliasearchHelper = require('../../../../index.js');
+var algoliasearchHelper = require('../../../../');
 
 test('[derived helper] detach a derived helper', function(done) {
   var client = {

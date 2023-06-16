@@ -1,6 +1,6 @@
 'use strict';
 
-var utils = require('../integration-utils.js');
+var utils = require('../integration-utils');
 var setup = utils.setupSimple;
 var createIndexName = utils.createIndexName;
 

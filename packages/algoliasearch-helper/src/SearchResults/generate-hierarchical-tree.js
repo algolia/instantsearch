@@ -143,6 +143,7 @@ function generateHierarchicalTree(
   };
 }
 
+// eslint-disable-next-line max-params
 function onlyMatchingTree(
   facetValue,
   parentPath,

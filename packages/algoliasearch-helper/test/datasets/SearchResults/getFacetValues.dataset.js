@@ -8,8 +8,8 @@ if (require.main === module) {
 
   var path = require('path');
 
-  var replayTools = require('../../replayTools.js');
-  var Helper = require('../../../src/algoliasearch.helper.js');
+  var replayTools = require('../../replayTools');
+  var Helper = require('../../../src/algoliasearch.helper');
   var HelperSaver = replayTools.toSaver(
     Helper,
     path.join(__dirname.replace('datasets', 'spec'), 'getFacetValues'));

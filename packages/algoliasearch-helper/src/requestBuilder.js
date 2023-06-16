@@ -8,6 +8,7 @@ function sortObject(obj) {
       return a.localeCompare(b);
     })
     .reduce(function(acc, curr) {
+      // eslint-disable-next-line no-param-reassign
       acc[curr] = obj[curr];
       return acc;
     }, {});
@@ -18,6 +19,8 @@ var requestBuilder = {
    * Get all the queries to send to the client, those queries can used directly
    * with the Algolia client.
    * @private
+   * @param  {string} index The name of the index
+   * @param  {SearchParameters} state The state from which to get the queries
    * @return {object[]} The queries
    */
   _getQueries: function getQueries(index, state) {
@@ -108,7 +111,8 @@ var requestBuilder = {
   /**
    * Build search parameters used to fetch hits
    * @private
-   * @return {object.<string, any>}
+   * @param  {SearchParameters} state The state from which to get the queries
+   * @return {object.<string, any>} The search parameters for hits
    */
   _getHitsSearchParams: function(state) {
     var facets = state.facets
@@ -138,9 +142,10 @@ var requestBuilder = {
   /**
    * Build search parameters used to fetch a disjunctive facet
    * @private
+   * @param  {SearchParameters} state The state from which to get the queries
    * @param  {string} facet the associated facet name
    * @param  {boolean} hierarchicalRootLevel ?? FIXME
-   * @return {object}
+   * @return {object} The search parameters for a disjunctive facet
    */
   _getDisjunctiveFacetSearchParams: function(state, facet, hierarchicalRootLevel) {
     var facetFilters = requestBuilder._getFacetFilters(state, facet, hierarchicalRootLevel);
@@ -183,6 +188,7 @@ var requestBuilder = {
   /**
    * Return the numeric filters in an algolia request fashion
    * @private
+   * @param {SearchParameters} state the state from which to get the filters
    * @param {string} [facetName] the name of the attribute for which the filters should be excluded
    * @return {string[]} the numeric filters in the algolia format
    */
@@ -216,9 +222,10 @@ var requestBuilder = {
   },
 
   /**
-   * Return the tags filters depending
+   * Return the tags filters depending on which format is used, either tagFilters or tagRefinements
    * @private
-   * @return {string}
+   * @param {SearchParameters} state the state from which to get the filters
+   * @return {string} Tag filters in a single string
    */
   _getTagFilters: function(state) {
     if (state.tagFilters) {
@@ -233,8 +240,10 @@ var requestBuilder = {
    * Build facetFilters parameter based on current refinements. The array returned
    * contains strings representing the facet filters in the algolia format.
    * @private
+   * @param  {SearchParameters} state The state from which to get the queries
    * @param  {string} [facet] if set, the current disjunctive facet
-   * @return {array.<string>}
+   * @param  {boolean} [hierarchicalRootLevel] ?? FIXME
+   * @return {array.<string>} The facet filters in the algolia format
    */
   _getFacetFilters: function(state, facet, hierarchicalRootLevel) {
     var facetFilters = [];

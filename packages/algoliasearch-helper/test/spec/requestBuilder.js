@@ -1,6 +1,6 @@
 'use strict';
 
-var requestBuilder = require('../../src/requestBuilder.js');
+var requestBuilder = require('../../src/requestBuilder');
 var SearchParameters = require('../../src/SearchParameters');
 var getQueries = requestBuilder._getQueries;
 

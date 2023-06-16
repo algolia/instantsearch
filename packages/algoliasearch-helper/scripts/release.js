@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+/* eslint no-process-exit: off */
+
 'use strict';
 
 const prompt = require('prompt');
@@ -20,7 +22,7 @@ colors.setTheme({
 
 const packageJson = require('../package.json');
 
-const {showChangelog, getChangelog, updateChangelog} = require('./lib/conventionalChangelog.js');
+const {showChangelog, getChangelog, updateChangelog} = require('./lib/conventionalChangelog');
 
 const {canary: isCanary} = argv;
 

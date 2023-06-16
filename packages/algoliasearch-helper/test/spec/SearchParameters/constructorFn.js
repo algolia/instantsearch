@@ -59,26 +59,31 @@ test('Constructor should ignore keys with undefined values', function() {
   expect(state).not.toHaveProperty('page');
 });
 
-test('Constructor should warn about invalid userToken', function() {
-  const message = '[algoliasearch-helper] The `userToken` parameter is invalid. This can lead to wrong analytics.\n  - Format: [a-zA-Z0-9_-]{1,64}';
+test('Constructor should warn about invalid userToken', function () {
+  const message =
+    '[algoliasearch-helper] The `userToken` parameter is invalid. This can lead to wrong analytics.\n  - Format: [a-zA-Z0-9_-]{1,64}';
   console.warn = jest.fn();
-  expect(new SearchParameters({
+
+  var sp1 = new SearchParameters({
     userToken: ''
-  }));
+  });
   expect(console.warn).toHaveBeenCalledTimes(1);
   expect(console.warn).toHaveBeenLastCalledWith(message);
+  expect(sp1.userToken).toBe('');
 
-  expect(new SearchParameters({
+  var sp2 = new SearchParameters({
     userToken: null
-  }));
+  });
   expect(console.warn).toHaveBeenCalledTimes(2);
   expect(console.warn).toHaveBeenLastCalledWith(message);
+  expect(sp2.userToken).toBe(null);
 
-  expect(new SearchParameters({
+  var sp3 = new SearchParameters({
     userToken: 'wrong user token!'
-  }));
+  });
   expect(console.warn).toHaveBeenCalledTimes(3);
   expect(console.warn).toHaveBeenLastCalledWith(message);
+  expect(sp3.userToken).toBe('wrong user token!');
 });
 
 test('Factory should accept an object with known keys', function() {

@@ -65,7 +65,7 @@ test('getRefinements(facetName) returns a refinement(exclude) when a facet exclu
 });
 
 // See: https://github.com/algolia/algoliasearch-helper-js/issues/921
-test.only('getRefinements(facetName) returns a refinement(exclude) when a facet exclusion is set and results are artificial', function() {
+test('getRefinements(facetName) returns a refinement(exclude) when a facet exclusion is set and results are artificial', function() {
   var data = require('./getRefinements/exclude-artificial-results.json');
   var searchParams = new SearchParameters(data.state);
   var result = new SearchResults(searchParams, data.content.results);

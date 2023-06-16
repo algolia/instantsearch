@@ -11,6 +11,7 @@ var path = require('path');
  * on data from Algolia and save the server response.
  * This is used to created data for tests.
  * @param {Helper} Helper a vanilla Helper constructor function
+ * @param {string} folderName the folder where to save the data
  * @return {HelperSaver} a Helper enhnaced with save function
  */
 function wrapHelperToSave(Helper, folderName) {

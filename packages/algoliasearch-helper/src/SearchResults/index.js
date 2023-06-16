@@ -55,7 +55,9 @@ var generateHierarchicalTree = require('./generate-hierarchical-tree');
  */
 
 /**
- * @param {string[]} attributes
+ * Turn an array of attributes in an object of attributes with their position in the array as value
+ * @param {string[]} attributes the list of attributes in the record
+ * @return {object} the list of attributes indexed by attribute name
  */
 function getIndices(attributes) {
   var indices = {};
@@ -69,6 +71,7 @@ function getIndices(attributes) {
 
 function assignFacetStats(dest, facetStats, key) {
   if (facetStats && facetStats[key]) {
+    // eslint-disable-next-line no-param-reassign
     dest.stats = facetStats[key];
   }
 }
@@ -80,8 +83,9 @@ function assignFacetStats(dest, facetStats, key) {
  */
 
 /**
- * @param {HierarchicalFacet[]} hierarchicalFacets
- * @param {string} hierarchicalAttributeName
+ * @param {HierarchicalFacet[]} hierarchicalFacets All hierarchical facets
+ * @param {string} hierarchicalAttributeName The name of the hierarchical attribute
+ * @return {HierarchicalFacet} The hierarchical facet matching the attribute name
  */
 function findMatchingHierarchicalFacetFromAttributeName(
   hierarchicalFacets,
@@ -95,7 +99,7 @@ function findMatchingHierarchicalFacetFromAttributeName(
   });
 }
 
-/*eslint-disable */
+// eslint-disable-next-line valid-jsdoc
 /**
  * Constructor for SearchResults
  * @class
@@ -226,12 +230,12 @@ function findMatchingHierarchicalFacetFromAttributeName(
    "index": "bestbuy"
 }
  **/
-/*eslint-enable */
 function SearchResults(state, results, options) {
   var mainSubResponse = results[0];
 
   this._rawResults = results;
 
+  // eslint-disable-next-line consistent-this
   var self = this;
 
   // https://www.algolia.com/doc/api-reference/api-methods/search/#response
@@ -684,15 +688,19 @@ function extractNormalizedFacetValues(results, attribute) {
 
     return hierarchicalFacetValues;
   }
+
+  return undefined;
 }
 
 /**
  * Set the isRefined of a hierarchical facet result based on the current state.
  * @param {SearchResults.HierarchicalFacet} item Hierarchical facet to fix
- * @param {string[]} currentRefinementSplit array of parts of the current hierarchical refinement
+ * @param {string[]} currentRefinement array of parts of the current hierarchical refinement
  * @param {number} depth recursion depth in the currentRefinement
+ * @return {undefined} function mutates the item
  */
 function setIsRefined(item, currentRefinement, depth) {
+  // eslint-disable-next-line no-param-reassign
   item.isRefined = item.name === currentRefinement[depth];
   if (item.data) {
     item.data.forEach(function(child) {
@@ -704,12 +712,14 @@ function setIsRefined(item, currentRefinement, depth) {
 /**
  * Sort nodes of a hierarchical or disjunctive facet results
  * @private
- * @param {function} sortFn
+ * @param {function} sortFn sort function to apply
  * @param {HierarchicalFacet|Array} node node upon which we want to apply the sort
  * @param {string[]} names attribute names
  * @param {number} [level=0] current index in the names array
+ * @return {HierarchicalFacet|Array} sorted node
  */
 function recSort(sortFn, node, names, level) {
+  // eslint-disable-next-line no-param-reassign
   level = level || 0;
 
   if (Array.isArray(node)) {
@@ -745,7 +755,7 @@ function vanillaSortFn(order, data) {
  * Sorts facet arrays via their facet ordering
  * @param {Array} facetValues the values
  * @param {FacetOrdering} facetOrdering the ordering
- * @returns {Array}
+ * @returns {Array} the sorted facet values
  */
 function sortViaFacetOrdering(facetValues, facetOrdering) {
   var orderedFacets = [];
@@ -757,6 +767,7 @@ function sortViaFacetOrdering(facetValues, facetOrdering) {
    * ['one', 'two'] -> { one: 0, two: 1 }
    */
   var reverseOrder = order.reduce(function(acc, name, i) {
+    // eslint-disable-next-line no-param-reassign
     acc[name] = i;
     return acc;
   }, {});
@@ -793,7 +804,7 @@ function sortViaFacetOrdering(facetValues, facetOrdering) {
 /**
  * @param {SearchResults} results the search results class
  * @param {string} attribute the attribute to retrieve ordering of
- * @returns {FacetOrdering=}
+ * @returns {FacetOrdering | undefined} the facet ordering
  */
 function getFacetOrdering(results, attribute) {
   return (
@@ -865,6 +876,7 @@ SearchResults.prototype.getFacetValues = function(attribute, opts) {
     facetOrdering: !(opts && opts.sortBy)
   });
 
+  // eslint-disable-next-line consistent-this
   var results = this;
   var attributes;
   if (Array.isArray(facetValues)) {
@@ -877,7 +889,7 @@ SearchResults.prototype.getFacetValues = function(attribute, opts) {
   return recSort(function(data, facetName) {
     if (options.facetOrdering) {
       var facetOrdering = getFacetOrdering(results, facetName);
-      if (Boolean(facetOrdering)) {
+      if (facetOrdering) {
         return sortViaFacetOrdering(data, facetOrdering);
       }
     }
@@ -918,7 +930,8 @@ SearchResults.prototype.getFacetStats = function(attribute) {
 
 /**
  * @param {FacetListItem[]} facetList (has more items, but enough for here)
- * @param {string} facetName
+ * @param {string} facetName The attribute to look for
+ * @return {object|undefined} The stats of the facet
  */
 function getFacetStatsIfAvailable(facetList, facetName) {
   var data = find(facetList, function(facet) {
@@ -941,6 +954,7 @@ function getFacetStatsIfAvailable(facetList, facetName) {
  */
 SearchResults.prototype.getRefinements = function() {
   var state = this._state;
+  // eslint-disable-next-line consistent-this
   var results = this;
   var res = [];
 
@@ -999,11 +1013,12 @@ SearchResults.prototype.getRefinements = function() {
  */
 
 /**
- * @param {*} state
- * @param {*} type
- * @param {string} attributeName
- * @param {*} name
- * @param {Facet[]} resultsFacets
+ * @param {SearchParameters} state the current state
+ * @param {string} type the type of the refinement
+ * @param {string} attributeName The attribute of the facet
+ * @param {*} name The name of the facet
+ * @param {Facet[]} resultsFacets facets from the results
+ * @return {Refinement} the refinement
  */
 function getRefinement(state, type, attributeName, name, resultsFacets) {
   var facet = find(resultsFacets, function(f) {
@@ -1022,10 +1037,11 @@ function getRefinement(state, type, attributeName, name, resultsFacets) {
 }
 
 /**
- * @param {*} state
- * @param {string} attributeName
- * @param {*} name
- * @param {Facet[]} resultsFacets
+ * @param {SearchParameters} state the current state
+ * @param {string} attributeName the attribute of the hierarchical facet
+ * @param {string} name the name of the facet
+ * @param {Facet[]} resultsFacets facets from the results
+ * @return {HierarchicalFacet} the hierarchical facet
  */
 function getHierarchicalRefinement(state, attributeName, name, resultsFacets) {
   var facetDeclaration = state.getHierarchicalFacetByName(attributeName);

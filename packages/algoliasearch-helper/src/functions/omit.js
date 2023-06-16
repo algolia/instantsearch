@@ -9,6 +9,7 @@ function _objectWithoutPropertiesLoose(source, excluded) {
   var i;
   for (i = 0; i < sourceKeys.length; i++) {
     key = sourceKeys[i];
+    // eslint-disable-next-line no-continue
     if (excluded.indexOf(key) >= 0) continue;
     target[key] = source[key];
   }

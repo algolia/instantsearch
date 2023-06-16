@@ -182,7 +182,7 @@ test('[Conjunctive] Facets should be resilient to user attempt to use numbers', 
   expect(helper.hasRefinements('facet1', 42)).toBe(false);
 });
 
-test('[Disjunctive] Facets should be resilient to user attempt to use numbers', function() {
+test('[Exclude] Facets should be resilient to user attempt to use numbers', function() {
   var helper = algoliasearchHelper(emptyClient, null, {
     facets: ['facet1'],
     disjunctiveFacets: ['facet2']

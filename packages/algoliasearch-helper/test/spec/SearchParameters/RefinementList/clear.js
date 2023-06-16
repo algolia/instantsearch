@@ -1,6 +1,6 @@
 'use strict';
 
-var RefinementList = require('../../../../src/SearchParameters/RefinementList.js');
+var RefinementList = require('../../../../src/SearchParameters/RefinementList');
 var clear = RefinementList.clearRefinement;
 
 test('When removing all refinements of a state without any', function() {

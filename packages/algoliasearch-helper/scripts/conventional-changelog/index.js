@@ -1,5 +1,6 @@
 'use strict';
 var parserOpts = {
+  // eslint-disable-next-line no-useless-escape
   headerPattern: /^(\w*)(?:\((.*)\))?\: (.*)$/,
   headerCorrespondence: [
     'type',

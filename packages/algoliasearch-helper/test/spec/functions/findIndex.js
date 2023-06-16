@@ -19,5 +19,5 @@ test('findIndex returns -1 in non-found cases', function() {
 
   expect(function() {
     findIndex([1, 2, 3], undefined);
-  }).toThrowError();
+  }).toThrow();
 });

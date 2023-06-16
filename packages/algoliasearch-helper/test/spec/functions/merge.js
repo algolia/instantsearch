@@ -49,7 +49,7 @@ it('should merge first source object properties to function', function() {
   expect(actual.prop).toBeInstanceOf(Function);
 });
 
-// TODO: differs from lodash, but seems to make more sense to me
+// this behaviour differs from lodash, but seems to make more sense to me
 it('should merge first and second source object properties to function', function() {
   var fn = function() {};
   var object = {prop: {dogs: 'out'}};
@@ -139,6 +139,7 @@ it('should skip merging when `object` and `source` are the same value', function
     enumerable: true,
     get: function() {
       pass = false;
+      return undefined;
     },
     set: function() {
       pass = false;

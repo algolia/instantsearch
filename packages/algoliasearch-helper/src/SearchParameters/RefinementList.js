@@ -94,6 +94,8 @@ var lib = {
    */
   clearRefinement: function clearRefinement(refinementList, attribute, refinementType) {
     if (attribute === undefined) {
+      // return the same object if the list is already empty
+      // this is mainly for tests, as it doesn't have much impact on performance
       if (!objectHasKeys(refinementList)) {
         return refinementList;
       }
@@ -112,6 +114,7 @@ var lib = {
         if (facetList.length !== values.length) {
           hasChanged = true;
         }
+        // eslint-disable-next-line no-param-reassign
         memo[key] = facetList;
 
         return memo;
@@ -120,6 +123,10 @@ var lib = {
       if (hasChanged) return newRefinementList;
       return refinementList;
     }
+
+    // We return nothing if the attribute is not undefined, a string or a function,
+    // as it is not a valid value for a refinement
+    return undefined;
   },
   /**
    * Test if the refinement value is used for the attribute. If no refinement value
@@ -128,10 +135,10 @@ var lib = {
    * @param {RefinementList} refinementList the list of refinement
    * @param {string} attribute name of the attribute
    * @param {string} [refinementValue] value of the filter/refinement
-   * @return {boolean}
+   * @return {boolean} true if the attribute is refined, false otherwise
    */
   isRefined: function isRefined(refinementList, attribute, refinementValue) {
-    var containsRefinements = !!refinementList[attribute] &&
+    var containsRefinements = Boolean(refinementList[attribute]) &&
       refinementList[attribute].length > 0;
 
     if (refinementValue === undefined || !containsRefinements) {

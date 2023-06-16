@@ -26,6 +26,7 @@ function _merge(target, source) {
       key === '__proto__' ||
       key === 'constructor'
     ) {
+      // eslint-disable-next-line no-continue
       continue;
     }
 
@@ -33,6 +34,7 @@ function _merge(target, source) {
     var targetVal = target[key];
 
     if (typeof targetVal !== 'undefined' && typeof sourceVal === 'undefined') {
+      // eslint-disable-next-line no-continue
       continue;
     }
 
@@ -40,8 +42,10 @@ function _merge(target, source) {
       isObjectOrArrayOrFunction(targetVal) &&
       isObjectOrArrayOrFunction(sourceVal)
     ) {
+      // eslint-disable-next-line no-param-reassign
       target[key] = _merge(targetVal, sourceVal);
     } else {
+      // eslint-disable-next-line no-param-reassign
       target[key] = clone(sourceVal);
     }
   }
@@ -59,13 +63,13 @@ function _merge(target, source) {
  * - treats sparse arrays as sparse
  * - does not convert Array-like objects (Arguments, NodeLists, etc.) to arrays
  *
- * @param {Object} object The destination object.
+ * @param {Object} target The destination object.
  * @param {...Object} [sources] The source objects.
  * @returns {Object} Returns `object`.
  */
-
 function merge(target) {
   if (!isObjectOrArrayOrFunction(target)) {
+    // eslint-disable-next-line no-param-reassign
     target = {};
   }
 

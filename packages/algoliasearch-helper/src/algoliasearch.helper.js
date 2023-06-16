@@ -140,7 +140,7 @@ inherits(AlgoliaSearchHelper, EventEmitter);
  * method is called, it triggers a `search` event. The results will
  * be available through the `result` event. If an error occurs, an
  * `error` will be fired instead.
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @fires search
  * @fires result
  * @fires error
@@ -173,7 +173,7 @@ AlgoliaSearchHelper.prototype.getQuery = function() {
  * same as a search call before calling searchOnce.
  * @param {object} options can contain all the parameters that can be set to SearchParameters
  * plus the index
- * @param {function} [callback] optional callback executed when the response from the
+ * @param {function} [cb] optional callback executed when the response from the
  * server is back.
  * @return {promise|undefined} if a callback is passed the method returns undefined
  * otherwise it returns a promise containing an object with two keys :
@@ -205,6 +205,7 @@ AlgoliaSearchHelper.prototype.getQuery = function() {
 AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
   var tempState = !options ? this.state : this.state.setQueryParameters(options);
   var queries = requestBuilder._getQueries(tempState.index, tempState);
+  // eslint-disable-next-line consistent-this
   var self = this;
 
   this._currentNbQueries++;
@@ -263,6 +264,7 @@ AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
  * @deprecated answers is deprecated and will be replaced with new initiatives
  */
 AlgoliaSearchHelper.prototype.findAnswers = function(options) {
+  // eslint-disable-next-line no-console
   console.warn('[algoliasearch-helper] answers is no longer supported');
   var state = this.state;
   var derivedHelper = this.derivedHelpers[0];
@@ -280,7 +282,7 @@ AlgoliaSearchHelper.prototype.findAnswers = function(options) {
         'attributesToSnippet',
         'hitsPerPage',
         'restrictSearchableAttributes',
-        'snippetEllipsisText' // FIXME remove this line once the engine is fixed.
+        'snippetEllipsisText'
       ])
     }
   );
@@ -348,6 +350,7 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function(facet, query, maxF
   var algoliaQuery = requestBuilder.getSearchForFacetQuery(facet, query, maxFacetHits, state);
 
   this._currentNbQueries++;
+  // eslint-disable-next-line consistent-this
   var self = this;
   var searchForFacetValuesPromise;
   // newer algoliasearch ^3.27.1 - ~4.0.0
@@ -388,10 +391,13 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function(facet, query, maxF
     self._currentNbQueries--;
     if (self._currentNbQueries === 0) self.emit('searchQueueEmpty');
 
+    // eslint-disable-next-line no-param-reassign
     content = Array.isArray(content) ? content[0] : content;
 
     content.facetHits.forEach(function(f) {
+      // eslint-disable-next-line no-param-reassign
       f.escapedValue = escapeFacetValue(f.value);
+      // eslint-disable-next-line no-param-reassign
       f.isRefined = isDisjunctive
         ? state.isDisjunctiveFacetRefined(facet, f.escapedValue)
         : state.isFacetRefined(facet, f.escapedValue);
@@ -410,7 +416,7 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function(facet, query, maxF
  *
  * This method resets the current page to 0.
  * @param  {string} q the user query
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @fires change
  * @chainable
  */
@@ -431,7 +437,7 @@ AlgoliaSearchHelper.prototype.setQuery = function(q) {
  *
  * This method resets the current page to 0.
  * @param {string} [name] optional name of the facet / attribute on which we want to remove all refinements
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @fires change
  * @chainable
  * @example
@@ -459,7 +465,7 @@ AlgoliaSearchHelper.prototype.clearRefinements = function(name) {
  * Remove all the tag filters.
  *
  * This method resets the current page to 0.
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @fires change
  * @chainable
  */
@@ -479,7 +485,7 @@ AlgoliaSearchHelper.prototype.clearTags = function() {
  * This method resets the current page to 0.
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value (will be converted to string)
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @fires change
  * @chainable
  */
@@ -492,6 +498,7 @@ AlgoliaSearchHelper.prototype.addDisjunctiveFacetRefinement = function(facet, va
   return this;
 };
 
+// eslint-disable-next-line valid-jsdoc
 /**
  * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addDisjunctiveFacetRefinement}
  */
@@ -507,14 +514,14 @@ AlgoliaSearchHelper.prototype.addDisjunctiveRefine = function() {
  * This method resets the current page to 0.
  * @param {string} facet the facet name
  * @param {string} path the hierarchical facet path
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @throws Error if the facet is not defined or if the facet is refined
  * @chainable
  * @fires change
  */
-AlgoliaSearchHelper.prototype.addHierarchicalFacetRefinement = function(facet, value) {
+AlgoliaSearchHelper.prototype.addHierarchicalFacetRefinement = function(facet, path) {
   this._change({
-    state: this.state.resetPage().addHierarchicalFacetRefinement(facet, value),
+    state: this.state.resetPage().addHierarchicalFacetRefinement(facet, path),
     isPageReset: true
   });
 
@@ -529,7 +536,7 @@ AlgoliaSearchHelper.prototype.addHierarchicalFacetRefinement = function(facet, v
  * @param  {string} attribute the attribute on which the numeric filter applies
  * @param  {string} operator the operator of the filter
  * @param  {number} value the value of the filter
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @fires change
  * @chainable
  */
@@ -549,7 +556,7 @@ AlgoliaSearchHelper.prototype.addNumericRefinement = function(attribute, operato
  * This method resets the current page to 0.
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value (will be converted to string)
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @fires change
  * @chainable
  */
@@ -562,6 +569,7 @@ AlgoliaSearchHelper.prototype.addFacetRefinement = function(facet, value) {
   return this;
 };
 
+// eslint-disable-next-line valid-jsdoc
 /**
  * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addFacetRefinement}
  */
@@ -577,7 +585,7 @@ AlgoliaSearchHelper.prototype.addRefine = function() {
  * This method resets the current page to 0.
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value (will be converted to string)
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @fires change
  * @chainable
  */
@@ -590,6 +598,7 @@ AlgoliaSearchHelper.prototype.addFacetExclusion = function(facet, value) {
   return this;
 };
 
+// eslint-disable-next-line valid-jsdoc
 /**
  * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addFacetExclusion}
  */
@@ -603,7 +612,7 @@ AlgoliaSearchHelper.prototype.addExclude = function() {
  *
  * This method resets the current page to 0.
  * @param {string} tag the tag to add to the filter
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @fires change
  * @chainable
  */
@@ -630,7 +639,7 @@ AlgoliaSearchHelper.prototype.addTag = function(tag) {
  * @param  {string} attribute the attribute on which the numeric filter applies
  * @param  {string} [operator] the operator of the filter
  * @param  {number} [value] the value of the filter
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @fires change
  * @chainable
  */
@@ -653,7 +662,7 @@ AlgoliaSearchHelper.prototype.removeNumericRefinement = function(attribute, oper
  * This method resets the current page to 0.
  * @param  {string} facet the facet to refine
  * @param  {string} [value] the associated value
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @fires change
  * @chainable
  */
@@ -666,6 +675,7 @@ AlgoliaSearchHelper.prototype.removeDisjunctiveFacetRefinement = function(facet,
   return this;
 };
 
+// eslint-disable-next-line valid-jsdoc
 /**
  * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeDisjunctiveFacetRefinement}
  */
@@ -676,7 +686,7 @@ AlgoliaSearchHelper.prototype.removeDisjunctiveRefine = function() {
 /**
  * Removes the refinement set on a hierarchical facet.
  * @param {string} facet the facet name
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @throws Error if the facet is not defined or if the facet is not refined
  * @fires change
  * @chainable
@@ -700,7 +710,7 @@ AlgoliaSearchHelper.prototype.removeHierarchicalFacetRefinement = function(facet
  * This method resets the current page to 0.
  * @param  {string} facet the facet to refine
  * @param  {string} [value] the associated value
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @fires change
  * @chainable
  */
@@ -713,6 +723,7 @@ AlgoliaSearchHelper.prototype.removeFacetRefinement = function(facet, value) {
   return this;
 };
 
+// eslint-disable-next-line valid-jsdoc
 /**
  * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeFacetRefinement}
  */
@@ -730,7 +741,7 @@ AlgoliaSearchHelper.prototype.removeRefine = function() {
  * This method resets the current page to 0.
  * @param  {string} facet the facet to refine
  * @param  {string} [value] the associated value
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @fires change
  * @chainable
  */
@@ -743,6 +754,7 @@ AlgoliaSearchHelper.prototype.removeFacetExclusion = function(facet, value) {
   return this;
 };
 
+// eslint-disable-next-line valid-jsdoc
 /**
  * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeFacetExclusion}
  */
@@ -756,7 +768,7 @@ AlgoliaSearchHelper.prototype.removeExclude = function() {
  *
  * This method resets the current page to 0.
  * @param {string} tag tag to remove from the filter
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @fires change
  * @chainable
  */
@@ -776,7 +788,7 @@ AlgoliaSearchHelper.prototype.removeTag = function(tag) {
  * This method resets the current page to 0.
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @fires change
  * @chainable
  */
@@ -789,6 +801,7 @@ AlgoliaSearchHelper.prototype.toggleFacetExclusion = function(facet, value) {
   return this;
 };
 
+// eslint-disable-next-line valid-jsdoc
 /**
  * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#toggleFacetExclusion}
  */
@@ -805,7 +818,7 @@ AlgoliaSearchHelper.prototype.toggleExclude = function() {
  * This method resets the current page to 0.
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @throws Error will throw an error if the facet is not declared in the settings of the helper
  * @fires change
  * @chainable
@@ -824,7 +837,7 @@ AlgoliaSearchHelper.prototype.toggleRefinement = function(facet, value) {
  * This method resets the current page to 0.
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @throws Error will throw an error if the facet is not declared in the settings of the helper
  * @fires change
  * @chainable
@@ -838,6 +851,7 @@ AlgoliaSearchHelper.prototype.toggleFacetRefinement = function(facet, value) {
   return this;
 };
 
+// eslint-disable-next-line valid-jsdoc
 /**
  * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#toggleFacetRefinement}
  */
@@ -851,7 +865,7 @@ AlgoliaSearchHelper.prototype.toggleRefine = function() {
  *
  * This method resets the current page to 0.
  * @param {string} tag tag to remove or add
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @fires change
  * @chainable
  */
@@ -866,7 +880,7 @@ AlgoliaSearchHelper.prototype.toggleTag = function(tag) {
 
 /**
  * Increments the page number by one.
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @fires change
  * @chainable
  * @example
@@ -881,7 +895,7 @@ AlgoliaSearchHelper.prototype.nextPage = function() {
 /**
  * Decrements the page number by one.
  * @fires change
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @chainable
  * @example
  * helper.setPage(1).previousPage().getPage();
@@ -894,6 +908,10 @@ AlgoliaSearchHelper.prototype.previousPage = function() {
 
 /**
  * @private
+ * @param {number} page The page number
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
+ * @chainable
+ * @fires change
  */
 function setCurrentPage(page) {
   if (page < 0) throw new Error('Page requested below 0.');
@@ -910,7 +928,7 @@ function setCurrentPage(page) {
  * Change the current page
  * @deprecated
  * @param  {number} page The page number
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @fires change
  * @chainable
  */
@@ -920,7 +938,7 @@ AlgoliaSearchHelper.prototype.setCurrentPage = setCurrentPage;
  * Updates the current page.
  * @function
  * @param  {number} page The page number
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @fires change
  * @chainable
  */
@@ -931,7 +949,7 @@ AlgoliaSearchHelper.prototype.setPage = setCurrentPage;
  *
  * This method resets the current page to 0.
  * @param {string} name the index name
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @fires change
  * @chainable
  */
@@ -955,7 +973,7 @@ AlgoliaSearchHelper.prototype.setIndex = function(name) {
  * This method resets the current page to 0.
  * @param {string} parameter name of the parameter to update
  * @param {any} value new value of the parameter
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @fires change
  * @chainable
  * @example
@@ -973,7 +991,7 @@ AlgoliaSearchHelper.prototype.setQueryParameter = function(parameter, value) {
 /**
  * Set the whole state (warning: will erase previous state)
  * @param {SearchParameters} newState the whole new state
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @fires change
  * @chainable
  */
@@ -991,7 +1009,7 @@ AlgoliaSearchHelper.prototype.setState = function(newState) {
  * Do not use this method unless you know what you are doing. (see the example
  * for a legit use case)
  * @param {SearchParameters} newState the whole new state
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @example
  *  helper.on('change', function(state){
  *    // In this function you might want to find a way to store the state in the url/history
@@ -1073,6 +1091,7 @@ AlgoliaSearchHelper.prototype.isExcluded = function(facet, value) {
   return this.state.isExcludeRefined(facet, value);
 };
 
+// eslint-disable-next-line valid-jsdoc
 /**
  * @deprecated since 2.4.0, see {@link AlgoliaSearchHelper#hasRefinements}
  */
@@ -1083,12 +1102,13 @@ AlgoliaSearchHelper.prototype.isDisjunctiveRefined = function(facet, value) {
 /**
  * Check if the string is a currently filtering tag.
  * @param {string} tag tag to check
- * @return {boolean}
+ * @return {boolean} true if the tag is currently refined
  */
 AlgoliaSearchHelper.prototype.hasTag = function(tag) {
   return this.state.isTagRefined(tag);
 };
 
+// eslint-disable-next-line valid-jsdoc
 /**
  * @deprecated since 2.4.0, see {@link AlgoliaSearchHelper#hasTag}
  */
@@ -1099,7 +1119,7 @@ AlgoliaSearchHelper.prototype.isTagRefined = function() {
 
 /**
  * Get the name of the currently used index.
- * @return {string}
+ * @return {string} name of the index
  * @example
  * helper.setIndex('highestPrice_products').getIndex();
  * // returns 'highestPrice_products'
@@ -1200,9 +1220,9 @@ AlgoliaSearchHelper.prototype.getRefinements = function(facetName) {
       });
     });
   } else if (this.state.isDisjunctiveFacet(facetName)) {
-    var disjRefinements = this.state.getDisjunctiveRefinements(facetName);
+    var disjunctiveRefinements = this.state.getDisjunctiveRefinements(facetName);
 
-    disjRefinements.forEach(function(r) {
+    disjunctiveRefinements.forEach(function(r) {
       refinements.push({
         value: r,
         type: 'disjunctive'
@@ -1249,7 +1269,9 @@ AlgoliaSearchHelper.prototype.getHierarchicalFacetBreadcrumb = function(facetNam
 /**
  * Perform the underlying queries
  * @private
- * @return {undefined}
+ * @param {object} options options for the query
+ * @param {boolean} [options.onlyWithDerivedHelpers=false] if true, only the derived helpers will be queried
+ * @return {undefined} does not return anything
  * @fires search
  * @fires result
  * @fires error
@@ -1315,6 +1337,8 @@ AlgoliaSearchHelper.prototype._search = function(options) {
       error: error
     });
   }
+
+  return undefined;
 };
 
 /**
@@ -1322,14 +1346,13 @@ AlgoliaSearchHelper.prototype._search = function(options) {
  * usable object that merge the results of all the batch requests. It will dispatch
  * over the different helper + derived helpers (when there are some).
  * @private
- * @param {array.<{SearchParameters, AlgoliaQueries, AlgoliaSearchHelper}>}
- *  state state used for to generate the request
+ * @param {array.<{SearchParameters, AlgoliaQueries, AlgoliaSearchHelper}>} states state used to generate the request
  * @param {number} queryId id of the current request
  * @param {object} content content of the response
  * @return {undefined}
  */
 AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function(states, queryId, content) {
-  // FIXME remove the number of outdated queries discarded instead of just one
+  // @TODO remove the number of outdated queries discarded instead of just one
 
   if (queryId < this._lastQueryIdReceived) {
     // Outdated answer
@@ -1357,10 +1380,10 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function(states, queryI
       return;
     }
 
-    var formattedResponse = helper.lastResults = new SearchResults(state, specificResults);
+    helper.lastResults = new SearchResults(state, specificResults);
 
     helper.emit('result', {
-      results: formattedResponse,
+      results: helper.lastResults,
       state: state
     });
   });
@@ -1393,7 +1416,7 @@ AlgoliaSearchHelper.prototype.containsRefinement = function(query, facetFilters,
  * Test if there are some disjunctive refinements on the facet
  * @private
  * @param {string} facet the attribute to test
- * @return {boolean}
+ * @return {boolean} true if there are refinements on this attribute
  */
 AlgoliaSearchHelper.prototype._hasDisjunctiveRefinements = function(facet) {
   return this.state.disjunctiveRefinements[facet] &&
@@ -1417,10 +1440,10 @@ AlgoliaSearchHelper.prototype._change = function(event) {
 
 /**
  * Clears the cache of the underlying Algolia client.
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  */
 AlgoliaSearchHelper.prototype.clearCache = function() {
-  this.client.clearCache && this.client.clearCache();
+  if (this.client.clearCache) this.client.clearCache();
   return this;
 };
 
@@ -1428,7 +1451,7 @@ AlgoliaSearchHelper.prototype.clearCache = function() {
  * Updates the internal client instance. If the reference of the clients
  * are equal then no update is actually done.
  * @param  {AlgoliaSearch} newClient an AlgoliaSearch client
- * @return {AlgoliaSearchHelper}
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
  */
 AlgoliaSearchHelper.prototype.setClient = function(newClient) {
   if (this.client === newClient) return this;
@@ -1443,7 +1466,7 @@ AlgoliaSearchHelper.prototype.setClient = function(newClient) {
 
 /**
  * Gets the instance of the currently used client.
- * @return {AlgoliaSearch}
+ * @return {AlgoliaSearch} the currently used client
  */
 AlgoliaSearchHelper.prototype.getClient = function() {
   return this.client;
@@ -1466,7 +1489,7 @@ AlgoliaSearchHelper.prototype.getClient = function() {
  * and the SearchParameters that is returned by the call of the
  * parameter function.
  * @param {function} fn SearchParameters -> SearchParameters
- * @return {DerivedHelper}
+ * @return {DerivedHelper} a new DerivedHelper
  */
 AlgoliaSearchHelper.prototype.derive = function(fn) {
   var derivedHelper = new DerivedHelper(this, fn);
@@ -1478,7 +1501,8 @@ AlgoliaSearchHelper.prototype.derive = function(fn) {
  * This method detaches a derived Helper from the main one. Prefer using the one from the
  * derived helper itself, to remove the event listeners too.
  * @private
- * @return {undefined}
+ * @param  {DerivedHelper} derivedHelper the derived helper to detach
+ * @return {undefined} nothing is returned
  * @throws Error
  */
 AlgoliaSearchHelper.prototype.detachDerivedHelper = function(derivedHelper) {

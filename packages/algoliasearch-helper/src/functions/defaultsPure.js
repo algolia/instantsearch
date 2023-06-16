@@ -12,8 +12,10 @@ module.exports = function defaultsPure() {
       }
       if (acc[key] !== undefined) {
         // remove if already added, so that we can add it in correct order
+        // eslint-disable-next-line no-param-reassign
         delete acc[key];
       }
+      // eslint-disable-next-line no-param-reassign
       acc[key] = source[key];
     });
     return acc;

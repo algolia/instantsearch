@@ -11,4 +11,6 @@ module.exports = function find(array, comparator) {
       return array[i];
     }
   }
+
+  return undefined;
 };

@@ -1,6 +1,6 @@
 'use strict';
 
-var algoliasearchHelper = require('../../../../index.js');
+var algoliasearchHelper = require('../../../../');
 
 describe('searches', function() {
   test('calls client.search for each derived helper that has an index', function() {

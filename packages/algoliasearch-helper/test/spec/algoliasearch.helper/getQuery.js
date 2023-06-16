@@ -1,6 +1,6 @@
 'use strict';
 
-var algoliaSearchHelper = require('../../../index.js');
+var algoliaSearchHelper = require('../../../');
 
 var fakeClient = {};
 

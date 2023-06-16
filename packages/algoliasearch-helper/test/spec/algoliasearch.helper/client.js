@@ -1,6 +1,6 @@
 'use strict';
 
-var algoliaSearchHelper = require('../../../index.js');
+var algoliaSearchHelper = require('../../../');
 var version = require('../../../src/version');
 var algoliasearch = require('algoliasearch');
 
@@ -11,16 +11,18 @@ function makeFakeClient() {
     return new Promise(function() {});
   });
 
-  client._ua || Object.defineProperty(client, '_ua', {
-    get() {
-      return client.transporter.userAgent.value;
-    }
-  });
+  if (!client._ua) {
+    Object.defineProperty(client, '_ua', {
+      get() {
+        return client.transporter.userAgent.value;
+      },
+    });
+  }
 
   return client;
 }
 
-test("client without addAlgoliaAgent() doesn't throw on instanciation", function() {
+test("client without addAlgoliaAgent() doesn't throw on instantiation", function() {
   var client = {};
 
   expect(function() {
@@ -64,11 +66,13 @@ test('clearCache gets called if exists', function() {
 
 test('setting the agent once', function() {
   var client = algoliasearch('what', 'wait', {});
-  client._ua || Object.defineProperty(client, '_ua', {
-    get() {
-      return client.transporter.userAgent.value;
-    }
-  });
+  if (!client._ua) {
+    Object.defineProperty(client, '_ua', {
+      get() {
+        return client.transporter.userAgent.value;
+      },
+    });
+  }
 
   var originalUA = client._ua;
   algoliaSearchHelper(client, 'IndexName', {});
