@@ -125,7 +125,7 @@ describe('InstantSearch', () => {
       </StrictMode>
     );
 
-    expect(searchContext.current?.started).toEqual(true);
+    expect(searchContext.current!.started).toEqual(true);
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(0));
   });
@@ -142,7 +142,7 @@ describe('InstantSearch', () => {
       </StrictMode>
     );
 
-    expect(searchContext.current?.started).toEqual(true);
+    expect(searchContext.current!.started).toEqual(true);
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
   });
@@ -159,15 +159,15 @@ describe('InstantSearch', () => {
       </StrictMode>
     );
 
-    expect(searchContext.current?.started).toEqual(true);
+    expect(searchContext.current!.started).toEqual(true);
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
 
     unmount();
     await waitFor(() => {
-      expect(searchContext.current?.dispose).toHaveBeenCalledTimes(1);
-      expect(searchContext.current?.started).toEqual(false);
-      expect(searchContext.current?.mainIndex.getWidgets()).toEqual([]);
+      expect(searchContext.current!.dispose).toHaveBeenCalledTimes(1);
+      expect(searchContext.current!.started).toEqual(false);
+      expect(searchContext.current!.mainIndex.getWidgets()).toEqual([]);
     });
   });
 
