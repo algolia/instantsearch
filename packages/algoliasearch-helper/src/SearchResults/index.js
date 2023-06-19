@@ -714,9 +714,20 @@ function extractNormalizedFacetValues(results, attribute) {
 
     var hierarchicalFacet =
       results._state.getHierarchicalFacetByName(attribute);
-    var currentRefinementSplit = unescapeFacetValue(
+    var separator =
+      results._state._getHierarchicalFacetSeparator(hierarchicalFacet);
+    var currentRefinement = unescapeFacetValue(
       results._state.getHierarchicalRefinement(attribute)[0] || ''
-    ).split(results._state._getHierarchicalFacetSeparator(hierarchicalFacet));
+    );
+
+    if (currentRefinement.indexOf(hierarchicalFacet.rootPath) === 0) {
+      currentRefinement = currentRefinement.replace(
+        hierarchicalFacet.rootPath + separator,
+        ''
+      );
+    }
+
+    var currentRefinementSplit = currentRefinement.split(separator);
     currentRefinementSplit.unshift(attribute);
 
     setIsRefined(hierarchicalFacetValues, currentRefinementSplit, 0);

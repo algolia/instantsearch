@@ -407,6 +407,94 @@ test('getFacetValues(hierarchical) returns escaped facet values', function () {
   expect(facetValues).toEqual(expected);
 });
 
+test('getFacetValues(hierarchical) takes `rootPath` into account', function () {
+  var searchParams = new SearchParameters({
+    index: 'instant_search',
+    hierarchicalFacets: [
+      {
+        name: 'type',
+        attributes: ['type1', 'type2', 'type3'],
+        rootPath: 'cats',
+      },
+    ],
+    hierarchicalFacetsRefinements: { type: ['cats > british shorthair'] },
+  });
+
+  var result = {
+    query: '',
+    facets: {
+      type1: {
+        dogs: 1,
+        cats: 8,
+      },
+      type2: {
+        'dogs > hounds': 1,
+        'cats > chartreux': 5,
+        'cats > british shorthair': 4,
+      },
+      type3: {
+        'cats > british shorthair > blue': 1,
+        'cats > british shorthair > golden': 3,
+      },
+    },
+    exhaustiveFacetsCount: true,
+  };
+
+  var results = new SearchResults(searchParams, [result, result, result]);
+
+  var facetValues = results.getFacetValues('type');
+
+  var expected = {
+    data: [
+      {
+        count: 4,
+        data: [
+          {
+            count: 3,
+            data: null,
+            escapedValue: 'cats > british shorthair > golden',
+            exhaustive: true,
+            isRefined: false,
+            name: 'golden',
+            path: 'cats > british shorthair > golden',
+          },
+          {
+            count: 1,
+            data: null,
+            escapedValue: 'cats > british shorthair > blue',
+            exhaustive: true,
+            isRefined: false,
+            name: 'blue',
+            path: 'cats > british shorthair > blue',
+          },
+        ],
+        escapedValue: 'cats > british shorthair',
+        exhaustive: true,
+        isRefined: true,
+        name: 'british shorthair',
+        path: 'cats > british shorthair',
+      },
+      {
+        count: 5,
+        data: null,
+        escapedValue: 'cats > chartreux',
+        exhaustive: true,
+        isRefined: false,
+        name: 'chartreux',
+        path: 'cats > chartreux',
+      },
+    ],
+    exhaustive: true,
+    isRefined: true,
+    name: 'type',
+    path: null,
+    escapedValue: null,
+    count: null,
+  };
+
+  expect(facetValues).toEqual(expected);
+});
+
 test('getFacetValues(unknown) returns undefined (does not throw)', function () {
   var searchParams = new SearchParameters({
     index: 'instant_search',
