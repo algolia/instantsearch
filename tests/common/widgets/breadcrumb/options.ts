@@ -9,38 +9,32 @@ import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { normalizeSnapshot, wait } from '@instantsearch/testutils';
 
-const hierarchicalFacets = {
-  'hierarchicalCategories.lvl0': {
-    'Cameras & Camcorders': 1369,
-  },
-  'hierarchicalCategories.lvl1': {
-    'Cameras & Camcorders > Digital Cameras': 170,
-  },
-};
-
-const hierarchicalAttributes = Object.keys(hierarchicalFacets);
-
-const searchClient = createAlgoliaSearchClient({
-  search: jest.fn((requests) => {
-    return Promise.resolve(
-      createMultiSearchResponse(
-        ...requests.map(() =>
-          createSingleSearchResponse({
-            facets: hierarchicalFacets,
-          })
-        )
-      )
-    );
-  }),
-});
-
 export function createOptionsTests(setup: BreadcrumbSetup, act: Act) {
   describe('options', () => {
     beforeEach(() => {
       searchClient.search.mockClear();
     });
 
+    const hierarchicalFacets = {
+      'hierarchicalCategories.lvl0': {
+        'Cameras & Camcorders': 1369,
+      },
+      'hierarchicalCategories.lvl1': {
+        'Cameras & Camcorders > Digital Cameras': 170,
+      },
+    };
+
+    const hierarchicalAttributes = Object.keys(hierarchicalFacets);
+
+    const searchClient = createMockedSearchClient({
+      facets: hierarchicalFacets,
+    });
+
     test('renders with required props', async () => {
+      const searchClient = createMockedSearchClient({
+        facets: hierarchicalFacets,
+      });
+
       await setup({
         instantSearchOptions: {
           indexName: 'indexName',
@@ -81,6 +75,10 @@ export function createOptionsTests(setup: BreadcrumbSetup, act: Act) {
     });
 
     test('renders with initial refinements', async () => {
+      const searchClient = createMockedSearchClient({
+        facets: hierarchicalFacets,
+      });
+
       await setup({
         instantSearchOptions: {
           indexName: 'indexName',
@@ -157,6 +155,10 @@ export function createOptionsTests(setup: BreadcrumbSetup, act: Act) {
     });
 
     test('transforms the items', async () => {
+      const searchClient = createMockedSearchClient({
+        facets: hierarchicalFacets,
+      });
+
       await setup({
         instantSearchOptions: {
           indexName: 'indexName',
@@ -196,6 +198,10 @@ export function createOptionsTests(setup: BreadcrumbSetup, act: Act) {
     });
 
     test('navigates to a parent category', async () => {
+      const searchClient = createMockedSearchClient({
+        facets: hierarchicalFacets,
+      });
+
       await setup({
         instantSearchOptions: {
           indexName: 'indexName',
@@ -291,7 +297,7 @@ export function createOptionsTests(setup: BreadcrumbSetup, act: Act) {
     });
 
     test('specifies a custom separator in records', async () => {
-      const hierarchicalFacets = {
+      const hierarchicalFacetsWithCustomSeparator = {
         'hierarchicalCategories.lvl0': {
           'Cameras & Camcorders': 1369,
         },
@@ -300,18 +306,8 @@ export function createOptionsTests(setup: BreadcrumbSetup, act: Act) {
         },
       };
 
-      const hierarchicalAttributes = Object.keys(hierarchicalFacets);
-
-      const searchClient = createAlgoliaSearchClient({
-        search: jest.fn((requests) => {
-          return Promise.resolve(
-            createMultiSearchResponse(
-              ...requests.map(() =>
-                createSingleSearchResponse({ facets: hierarchicalFacets })
-              )
-            )
-          );
-        }),
+      const searchClient = createMockedSearchClient({
+        facets: hierarchicalFacetsWithCustomSeparator,
       });
 
       await setup({
@@ -328,7 +324,10 @@ export function createOptionsTests(setup: BreadcrumbSetup, act: Act) {
           },
           searchClient,
         },
-        widgetParams: { attributes: hierarchicalAttributes, separator: ' ~ ' },
+        widgetParams: {
+          attributes: Object.keys(hierarchicalFacetsWithCustomSeparator),
+          separator: ' ~ ',
+        },
       });
 
       await act(async () => {
@@ -390,6 +389,10 @@ export function createOptionsTests(setup: BreadcrumbSetup, act: Act) {
     });
 
     test('uses a custom root path', async () => {
+      const searchClient = createMockedSearchClient({
+        facets: hierarchicalFacets,
+      });
+
       await setup({
         instantSearchOptions: {
           indexName: 'indexName',
@@ -440,5 +443,21 @@ export function createOptionsTests(setup: BreadcrumbSetup, act: Act) {
       `
       );
     });
+  });
+}
+
+function createMockedSearchClient({
+  facets,
+}: {
+  facets: Record<string, Record<string, number>>;
+}) {
+  return createAlgoliaSearchClient({
+    search: jest.fn((requests) =>
+      Promise.resolve(
+        createMultiSearchResponse(
+          ...requests.map(() => createSingleSearchResponse({ facets }))
+        )
+      )
+    ),
   });
 }
