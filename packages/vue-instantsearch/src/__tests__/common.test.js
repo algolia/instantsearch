@@ -78,8 +78,8 @@ createHierarchicalMenuTests(async ({ instantSearchOptions, widgetParams }) => {
 });
 
 createBreadcrumbTests(async ({ instantSearchOptions, widgetParams }) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { transformItems, ...hierarchicalWidgetParams } = widgetParams;
+
   mountApp(
     {
       render: renderCompat((h) =>
