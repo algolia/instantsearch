@@ -90,6 +90,9 @@ describe('InstantSearch', () => {
   });
 
   test('attaches users agents', () => {
+    const nextVersion = '11.1.4';
+    (window as any).next = { version: nextVersion };
+
     const searchClient = createAlgoliaSearchClient({});
 
     render(
@@ -106,6 +109,9 @@ describe('InstantSearch', () => {
     );
     expect(searchClient.addAlgoliaAgent).toHaveBeenCalledWith(
       `react-instantsearch-hooks (${version})`
+    );
+    expect(searchClient.addAlgoliaAgent).toHaveBeenCalledWith(
+      `next.js (${nextVersion})`
     );
   });
 
