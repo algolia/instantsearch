@@ -214,22 +214,9 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
           );
         },
         getRenderState(renderState, renderOptions) {
-          const dynamicWidgets = this.getWidgetRenderState(renderOptions);
-
-          // Set `willRerender` to true if `attributesToRender` have changed
-          if (
-            renderState.dynamicWidgets !== undefined &&
-            !isEqual(
-              renderState.dynamicWidgets.attributesToRender,
-              dynamicWidgets.attributesToRender
-            )
-          ) {
-            renderOptions.instantSearchInstance.willRerender = true;
-          }
-
           return {
             ...renderState,
-            dynamicWidgets,
+            dynamicWidgets: this.getWidgetRenderState(renderOptions),
           };
         },
         getWidgetRenderState({ results, state }) {

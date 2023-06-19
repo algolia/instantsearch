@@ -197,7 +197,10 @@ export function createInsightsMiddleware<
           instantSearchInstance.scheduleSearch();
         }
 
-        const setUserTokenToSearch = (userToken?: string) => {
+        const setUserTokenToSearch = (
+          userToken?: string,
+          immediate = false
+        ) => {
           if (!userToken) {
             return;
           }
@@ -217,7 +220,7 @@ export function createInsightsMiddleware<
           }
 
           // Delay the token application to the next render cycle
-          if (instantSearchInstance.willRerender) {
+          if (!immediate) {
             setTimeout(applyToken, 0);
           } else {
             applyToken();
@@ -228,16 +231,16 @@ export function createInsightsMiddleware<
         if (anonymousUserToken) {
           // When `aa('init', { ... })` is called, it creates an anonymous user token in cookie.
           // We can set it as userToken.
-          setUserTokenToSearch(anonymousUserToken);
+          setUserTokenToSearch(anonymousUserToken, true);
         }
 
         // We consider the `userToken` coming from a `init` call to have a higher
         // importance than the one coming from the queue.
         if (userTokenBeforeInit) {
-          setUserTokenToSearch(userTokenBeforeInit);
+          setUserTokenToSearch(userTokenBeforeInit, true);
           insightsClient('setUserToken', userTokenBeforeInit);
         } else if (queuedUserToken) {
-          setUserTokenToSearch(queuedUserToken);
+          setUserTokenToSearch(queuedUserToken, true);
           insightsClient('setUserToken', queuedUserToken);
         }
 
@@ -271,12 +274,6 @@ export function createInsightsMiddleware<
         }
 
         instantSearchInstance.sendEventToInsights = (event: InsightsEvent) => {
-          // Do not send events if a rerender is expected
-          // (e.g. when dynamic widgets are initialized)
-          if (instantSearchInstance.willRerender) {
-            return;
-          }
-
           if (onEvent) {
             onEvent(
               event,

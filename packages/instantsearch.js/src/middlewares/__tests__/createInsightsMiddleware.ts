@@ -682,7 +682,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       expect(getUserToken()).toEqual('abc');
     });
 
-    it('applies userToken which was set after subscribe()', () => {
+    it('applies userToken which was set after subscribe()', async () => {
       const { insightsClient, instantSearchInstance, getUserToken } =
         createTestEnvironment();
       instantSearchInstance.use(
@@ -691,10 +691,13 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         })
       );
       insightsClient('setUserToken', 'def');
+
+      await wait(0);
+
       expect(getUserToken()).toEqual('def');
     });
 
-    it('applies userToken which was set after subscribe() without resetting the page', () => {
+    it('applies userToken which was set after subscribe() without resetting the page', async () => {
       const { insightsClient, instantSearchInstance, getUserToken } =
         createTestEnvironment({ started: false });
 
@@ -708,6 +711,9 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       );
 
       insightsClient('setUserToken', 'def');
+
+      await wait(0);
+
       expect(instantSearchInstance.helper!.state.page).toEqual(100);
       expect(getUserToken()).toEqual('def');
     });
@@ -735,10 +741,11 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           insightsClient,
         })
       );
+
       expect(getUserToken()).toEqual('token-from-queue-before-init');
     });
 
-    it('handles multiple setUserToken calls before search.start()', () => {
+    it('handles multiple setUserToken calls before search.start()', async () => {
       const { insightsClient } = createInsights();
       const indexName = 'my-index';
       const instantSearchInstance = instantsearch({
@@ -763,6 +770,8 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       insightsClient('setUserToken', 'def');
 
       instantSearchInstance.start();
+
+      await wait(0);
 
       expect(
         (instantSearchInstance.helper!.state as PlainSearchParameters).userToken
@@ -862,6 +871,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
             insightsClient,
           })
         );
+
         expect(getUserToken()).toEqual('token-from-queue');
       });
 
@@ -887,6 +897,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           })
         );
         libraryLoadedAndProcessQueue();
+
         expect(getUserToken()).toEqual('token-from-queue');
       });
 
@@ -907,6 +918,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
             insightsClient,
           })
         );
+
         expect(getUserToken()).toEqual('token-from-queue-before-init');
       });
     });
@@ -1169,14 +1181,14 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       ]
     `);
 
+    await wait(0);
+
     instantSearchInstance
       .helper!.setState({
         ...instantSearchInstance.helper!.state,
         query: 'test',
       })
       .search();
-
-    await wait(0);
 
     // On subsequent searches, because the userToken is set, it should be sent with the search request.
 

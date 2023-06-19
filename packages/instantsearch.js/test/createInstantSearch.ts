@@ -69,7 +69,6 @@ export const createInstantSearch = (
     emit: jest.fn(),
     listenerCount: jest.fn(),
     sendEventToInsights: jest.fn(),
-    willRerender: false,
     ...args,
   };
 };
