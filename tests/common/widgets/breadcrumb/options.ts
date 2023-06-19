@@ -26,10 +26,6 @@ export function createOptionsTests(setup: BreadcrumbSetup, act: Act) {
 
     const hierarchicalAttributes = Object.keys(hierarchicalFacets);
 
-    const searchClient = createMockedSearchClient({
-      facets: hierarchicalFacets,
-    });
-
     test('renders with required props', async () => {
       const searchClient = createMockedSearchClient({
         facets: hierarchicalFacets,
