@@ -2,7 +2,6 @@ import {
   checkRendering,
   createDocumentationMessageGenerator,
   getWidgetAttribute,
-  isEqual,
   noop,
   warning,
 } from '../../lib/utils';
