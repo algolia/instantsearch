@@ -2,6 +2,7 @@ import {
   checkRendering,
   createDocumentationMessageGenerator,
   getWidgetAttribute,
+  isEqual,
   noop,
   warning,
 } from '../../lib/utils';
@@ -213,9 +214,22 @@ const connectDynamicWidgets: DynamicWidgetsConnector =
           );
         },
         getRenderState(renderState, renderOptions) {
+          const dynamicWidgets = this.getWidgetRenderState(renderOptions);
+
+          // Set `willRerender` to true if `attributesToRender` have changed
+          if (
+            renderState.dynamicWidgets !== undefined &&
+            !isEqual(
+              renderState.dynamicWidgets.attributesToRender,
+              dynamicWidgets.attributesToRender
+            )
+          ) {
+            renderOptions.instantSearchInstance.willRerender = true;
+          }
+
           return {
             ...renderState,
-            dynamicWidgets: this.getWidgetRenderState(renderOptions),
+            dynamicWidgets,
           };
         },
         getWidgetRenderState({ results, state }) {

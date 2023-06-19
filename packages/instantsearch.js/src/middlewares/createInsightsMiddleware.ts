@@ -205,13 +205,22 @@ export function createInsightsMiddleware<
           const existingToken = (helper.state as PlainSearchParameters)
             .userToken;
 
-          helper.overrideStateWithoutTriggeringChangeEvent({
-            ...helper.state,
-            userToken,
-          });
+          function applyToken() {
+            helper.overrideStateWithoutTriggeringChangeEvent({
+              ...helper.state,
+              userToken,
+            });
 
-          if (existingToken && existingToken !== userToken) {
-            instantSearchInstance.scheduleSearch();
+            if (existingToken && existingToken !== userToken) {
+              instantSearchInstance.scheduleSearch();
+            }
+          }
+
+          // Delay the token application to the next render cycle
+          if (instantSearchInstance.willRerender) {
+            setTimeout(applyToken, 0);
+          } else {
+            applyToken();
           }
         };
 
@@ -262,6 +271,12 @@ export function createInsightsMiddleware<
         }
 
         instantSearchInstance.sendEventToInsights = (event: InsightsEvent) => {
+          // Do not send events if a rerender is expected
+          // (e.g. when dynamic widgets are initialized)
+          if (instantSearchInstance.willRerender) {
+            return;
+          }
+
           if (onEvent) {
             onEvent(
               event,

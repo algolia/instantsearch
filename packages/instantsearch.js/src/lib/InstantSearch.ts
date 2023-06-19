@@ -203,6 +203,7 @@ class InstantSearch<
    * The error gets cleared when the next valid search response is rendered.
    */
   public error: Error | undefined = undefined;
+  public willRerender: boolean = false;
 
   /**
    * @deprecated use `status === 'stalled'` instead
@@ -684,6 +685,7 @@ See ${createDocumentationLink({
     this.mainIndex.render({
       instantSearchInstance: this as unknown as InstantSearch<UiState, UiState>,
     });
+    this.willRerender = false;
 
     this.emit('render');
   });

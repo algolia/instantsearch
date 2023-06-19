@@ -5,7 +5,9 @@
 import {
   createInsights,
   createInsightsUmdVersion,
+  createMultiSearchResponse,
   createSearchClient,
+  createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { castToJestMock } from '@instantsearch/testutils';
 import { wait } from '@instantsearch/testutils/wait';
@@ -17,7 +19,9 @@ import { connectSearchBox } from '../../connectors';
 import instantsearch from '../../index.es';
 import { history } from '../../lib/routers';
 import { warning } from '../../lib/utils';
+import { dynamicWidgets, hits, refinementList } from '../../widgets';
 
+import type { SearchClient } from '../../index.es';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
 import type { JSDOM } from 'jsdom';
 
@@ -1107,5 +1111,80 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
     expect(() => search.start()).not.toThrow();
 
     global.document = originalDocument;
+  });
+
+  test('does not immediately set userToken if a rerender is expected', async () => {
+    const searchClient = createSearchClient({
+      search: jest.fn((requests) => {
+        return Promise.resolve(
+          createMultiSearchResponse<any>(
+            ...requests.map(() =>
+              createSingleSearchResponse({
+                renderingContent: {
+                  facetOrdering: {
+                    facets: {
+                      order: ['brand'],
+                    },
+                  },
+                },
+                hits: [{ objectID: '1' }],
+              })
+            )
+          )
+        );
+      }),
+    }) as SearchClient & { search: jest.Mock };
+
+    const { insightsClient, instantSearchInstance, getUserToken } =
+      createTestEnvironment({ searchClient, started: false });
+
+    insightsClient('init', { partial: true, anonymousUserToken: true });
+    instantSearchInstance.use(createInsightsMiddleware({ insightsClient }));
+
+    instantSearchInstance.addWidgets([
+      dynamicWidgets({
+        container: document.createElement('div'),
+        widgets: [
+          (container) => refinementList({ container, attribute: 'brand' }),
+        ],
+      }),
+      hits({
+        container: document.createElement('div'),
+      }),
+    ]);
+
+    instantSearchInstance.start();
+
+    await wait(0);
+
+    // Dynamic widgets will trigger 2 searches. To avoid missing the cache on the second search, createInsightsMiddleware delays setting the userToken.
+
+    expect(searchClient.search).toHaveBeenCalledTimes(2);
+    expect(
+      searchClient.search.mock.calls.map(([[call]]) => call.params.userToken)
+    ).toMatchInlineSnapshot(`
+      [
+        undefined,
+        undefined,
+      ]
+    `);
+
+    instantSearchInstance
+      .helper!.setState({
+        ...instantSearchInstance.helper!.state,
+        query: 'test',
+      })
+      .search();
+
+    await wait(0);
+
+    // On subsequent searches, because the userToken is set, it should be sent with the search request.
+
+    expect(searchClient.search).toHaveBeenCalledTimes(3);
+    expect(searchClient.search).toHaveBeenLastCalledWith([
+      expect.objectContaining({
+        params: expect.objectContaining({ userToken: getUserToken() }),
+      }),
+    ]);
   });
 });
