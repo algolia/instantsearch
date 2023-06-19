@@ -1173,13 +1173,11 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
 
     expect(searchClient.search).toHaveBeenCalledTimes(2);
     expect(
-      searchClient.search.mock.calls.map(([[call]]) => call.params.userToken)
-    ).toMatchInlineSnapshot(`
-      [
-        undefined,
-        undefined,
-      ]
-    `);
+      searchClient.search.mock.calls[0][0][0].params.userToken
+    ).toBeUndefined();
+    expect(
+      searchClient.search.mock.calls[1][0][0].params.userToken
+    ).toBeUndefined();
 
     await wait(0);
 
