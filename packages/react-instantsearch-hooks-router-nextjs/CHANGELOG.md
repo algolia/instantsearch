@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [6.44.4](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-router-nextjs@6.44.3...react-instantsearch-hooks-router-nextjs@6.44.4) (2023-06-20)
+## [6.45.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-router-nextjs@6.44.3...react-instantsearch-hooks-router-nextjs@6.45.0) (2023-06-20)
 
 **Note:** Version bump only for package react-instantsearch-hooks-router-nextjs
 

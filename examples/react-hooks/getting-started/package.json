@@ -11,7 +11,7 @@
     "instantsearch.js": "4.56.3",
     "react": "18.1.0",
     "react-dom": "18.1.0",
-    "react-instantsearch-hooks-web": "6.44.4"
+    "react-instantsearch-hooks-web": "6.45.0"
   },
   "devDependencies": {
     "@parcel/core": "2.8.0",
