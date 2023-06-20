@@ -113,36 +113,6 @@ exports[`custom separator render renders correctly 1`] = `
 </div>
 `;
 
-exports[`default render renders correctly with a selected item 1`] = `
-<div class="ais-Breadcrumb">
-  <ul class="ais-Breadcrumb-list">
-    <li class="ais-Breadcrumb-item">
-      <a class="ais-Breadcrumb-link">
-        Home
-      </a>
-    </li>
-    <li class="ais-Breadcrumb-item">
-      <span aria-hidden="true"
-            class="ais-Breadcrumb-separator"
-      >
-        &gt;
-      </span>
-      <a class="ais-Breadcrumb-link">
-        TV &amp; Home Theater
-      </a>
-    </li>
-    <li class="ais-Breadcrumb-item ais-Breadcrumb-item--selected">
-      <span aria-hidden="true"
-            class="ais-Breadcrumb-separator"
-      >
-        &gt;
-      </span>
-      Streaming Media Players
-    </li>
-  </ul>
-</div>
-`;
-
 exports[`default render renders correctly with an URL for the href 1`] = `
 <div class="ais-Breadcrumb">
   <ul class="ais-Breadcrumb-list">
