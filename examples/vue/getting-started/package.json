@@ -1,6 +1,6 @@
 {
   "name": "example-vue-instantsearch-getting-started",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "private": true,
   "scripts": {
     "start": "vue-cli-service serve --port 3000",
@@ -9,9 +9,9 @@
   "dependencies": {
     "algoliasearch": "4.14.3",
     "core-js": "2",
-    "instantsearch.js": "4.56.2",
+    "instantsearch.js": "4.56.3",
     "vue": "2.7.14",
-    "vue-instantsearch": "4.10.2"
+    "vue-instantsearch": "4.10.3"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "3.12.1",

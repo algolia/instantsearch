@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-hooks-server-side-rendering",
-  "version": "6.38.19",
+  "version": "6.38.20",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -26,7 +26,7 @@
     "express": "4.17.1",
     "react": "18.1.0",
     "react-dom": "18.1.0",
-    "react-instantsearch-hooks-server": "6.44.3",
-    "react-instantsearch-hooks-web": "6.44.3"
+    "react-instantsearch-hooks-server": "6.45.0",
+    "react-instantsearch-hooks-web": "6.45.0"
   }
 }

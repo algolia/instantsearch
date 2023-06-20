@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.56.3](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.56.2...instantsearch.js@4.56.3) (2023-06-20)
+
+
+### Bug Fixes
+
+* **dependencies:** update helper requirement ([#5676](https://github.com/algolia/instantsearch.js/issues/5676)) ([c289120](https://github.com/algolia/instantsearch.js/commit/c2891205c1125b1203b3b3db946d57e0fc4e4687)), closes [#5658](https://github.com/algolia/instantsearch.js/issues/5658)
+* **insights:** delay usertoken updates if received after init ([#5681](https://github.com/algolia/instantsearch.js/issues/5681)) ([0fe653e](https://github.com/algolia/instantsearch.js/commit/0fe653eab2403f39879886b7d77b52a7214f528d))
+
+
+
+
+
 ## [4.56.2](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.56.1...instantsearch.js@4.56.2) (2023-06-13)
 
 

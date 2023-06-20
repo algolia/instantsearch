@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-autocomplete",
-  "version": "13.0.0",
+  "version": "14.0.0",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -36,7 +36,7 @@
     "react": "17.0.2",
     "react-autosuggest": "9.4.3",
     "react-dom": "17.0.2",
-    "react-instantsearch-dom": "6.40.0"
+    "react-instantsearch-dom": "6.40.1"
   },
   "browserslist": [
     ">0.2%",
