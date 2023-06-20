@@ -11,10 +11,6 @@ import { normalizeSnapshot, wait } from '@instantsearch/testutils';
 
 export function createOptionsTests(setup: BreadcrumbSetup, act: Act) {
   describe('options', () => {
-    beforeEach(() => {
-      searchClient.search.mockClear();
-    });
-
     const hierarchicalFacets = {
       'hierarchicalCategories.lvl0': {
         'Cameras & Camcorders': 1369,
