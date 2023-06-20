@@ -78,6 +78,8 @@ createHierarchicalMenuTests(async ({ instantSearchOptions, widgetParams }) => {
 });
 
 createBreadcrumbTests(async ({ instantSearchOptions, widgetParams }) => {
+  // The passed `transformItems` prop is meant to apply only to the breadcrumb,
+  // not the hierarchical menu
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { transformItems, ...hierarchicalWidgetParams } = widgetParams;
 
