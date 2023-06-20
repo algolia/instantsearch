@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.40.1](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-dom@6.40.0...react-instantsearch-dom@6.40.1) (2023-06-20)
+
+
+### Bug Fixes
+
+* **dependencies:** update helper requirement ([#5676](https://github.com/algolia/instantsearch.js/issues/5676)) ([c289120](https://github.com/algolia/instantsearch.js/commit/c2891205c1125b1203b3b3db946d57e0fc4e4687)), closes [#5658](https://github.com/algolia/instantsearch.js/issues/5658)
+
+
+
+
+
 # [6.40.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-dom@6.39.1...react-instantsearch-dom@6.40.0) (2023-05-16)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.10.3](https://github.com/algolia/instantsearch.js/compare/vue-instantsearch@4.10.2...vue-instantsearch@4.10.3) (2023-06-20)
+
+
+### Bug Fixes
+
+* **dependencies:** update helper requirement ([#5676](https://github.com/algolia/instantsearch.js/issues/5676)) ([c289120](https://github.com/algolia/instantsearch.js/commit/c2891205c1125b1203b3b3db946d57e0fc4e4687)), closes [#5658](https://github.com/algolia/instantsearch.js/issues/5658)
+
+
+
+
+
 ## [4.10.2](https://github.com/algolia/instantsearch.js/compare/vue-instantsearch@4.10.1...vue-instantsearch@4.10.2) (2023-06-13)
 
 

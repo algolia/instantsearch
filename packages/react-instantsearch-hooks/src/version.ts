@@ -1,1 +1,1 @@
-export default '6.44.3';
+export default '6.45.0';

@@ -1,6 +1,6 @@
 {
   "name": "example-instantsearch-media",
-  "version": "1.17.0",
+  "version": "1.18.0",
   "private": true,
   "scripts": {
     "start": "BABEL_ENV=parcel parcel index.html --port 3000",
@@ -10,7 +10,7 @@
   "dependencies": {
     "algoliasearch": "4.14.3",
     "date-fns": "2.25.0",
-    "instantsearch.js": "4.56.2"
+    "instantsearch.js": "4.56.3"
   },
   "devDependencies": {
     "@babel/core": "7.15.5",
