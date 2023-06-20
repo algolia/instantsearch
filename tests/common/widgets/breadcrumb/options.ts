@@ -378,6 +378,14 @@ export function createOptionsTests(setup: BreadcrumbSetup, act: Act) {
         </div>
       `
       );
+
+      const [firstSeparator, secondSeparator] = [
+        ...document.querySelectorAll('.ais-Breadcrumb-separator'),
+      ];
+
+      // This prop doesn't affect what separator is used for rendering
+      expect(firstSeparator).toHaveTextContent('>');
+      expect(secondSeparator).toHaveTextContent('>');
     });
 
     test('uses a custom root path', async () => {
