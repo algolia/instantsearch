@@ -1,3 +1,12 @@
+3.13.3 - 2023-06-21
+ * chore: introduce git-blame-ignore-revs file https://github.com/algolia/algoliasearch-helper-js/commit/d92f194463479cb40287964b72922bbb1bf91e3a
+ * chore(devDeps): remove lodash.keyBy (#945) https://github.com/algolia/algoliasearch-helper-js/commit/96daa3185de4f4f8076cd652f832798ba99db40a
+ * chore(lint): format using prettier (#948) https://github.com/algolia/algoliasearch-helper-js/commit/cc83731fc794a45d05b915e7419c59f25eb812c5
+ * chore(tools): update eslint and make all rules pass (#947) https://github.com/algolia/algoliasearch-helper-js/commit/8e5995a55ba0a51b05373caa156834fdf20d4c7a
+ * docs(html): no indentation after markdown-in-html (#944) https://github.com/algolia/algoliasearch-helper-js/commit/95f2dc4b469f45ebe27e386b91ff3e9ec97921ef
+ * fix(getFacetValues): ignore `rootPath` for hierarchical facets (#949) https://github.com/algolia/algoliasearch-helper-js/commit/deb5dafbe7ffb2c53d7c227ae236592ec9a9e02d
+ * test(unit): add retry mechanism (#946) https://github.com/algolia/algoliasearch-helper-js/commit/40a0ee1390478b64f574e9edac0b7400152aff84
+
 3.13.2 - 2023-06-14
  * fix(types): improve conditional for client version (#943) https://github.com/algolia/algoliasearch-helper-js/commit/6c2218508361c8a4130426a22ac4302328ba86ad
 
