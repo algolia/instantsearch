@@ -137,6 +137,22 @@ createPaginationTests(async ({ instantSearchOptions, widgetParams }) => {
       render: renderCompat((h) =>
         h(AisInstantSearch, { props: instantSearchOptions }, [
           h(AisPagination, { props: widgetParams }),
+          h(AisPagination, {
+            props: widgetParams,
+            scopedSlots: {
+              default: ({ createURL }) =>
+                h(
+                  'a',
+                  {
+                    attrs: {
+                      'data-testid': 'Pagination-link',
+                      href: createURL(10),
+                    },
+                  },
+                  'LINK'
+                ),
+            },
+          }),
           h(GlobalErrorSwallower),
         ])
       ),

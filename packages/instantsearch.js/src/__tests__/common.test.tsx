@@ -13,7 +13,7 @@ import {
   createInstantSearchTests,
 } from '@instantsearch/tests';
 
-import { connectRefinementList } from '../connectors';
+import { connectRefinementList, connectPagination } from '../connectors';
 import instantsearch from '../index.es';
 import {
   hierarchicalMenu,
@@ -120,8 +120,24 @@ createMenuTests(({ instantSearchOptions, widgetParams }) => {
 });
 
 createPaginationTests(({ instantSearchOptions, widgetParams }) => {
+  const paginationURL = connectPagination<{ container: HTMLElement }>(
+    (renderOptions) => {
+      renderOptions.widgetParams.container.innerHTML = `
+        <a
+          data-testid="Pagination-link"
+          href="${renderOptions.createURL(10)}"
+        >
+          LINK
+        </a>
+      `;
+    }
+  );
   instantsearch(instantSearchOptions)
     .addWidgets([
+      paginationURL({
+        container: document.body.appendChild(document.createElement('div')),
+        ...widgetParams,
+      }),
       pagination({
         container: document.body.appendChild(document.createElement('div')),
         ...widgetParams,
