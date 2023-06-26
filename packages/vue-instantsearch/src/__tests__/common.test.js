@@ -50,6 +50,22 @@ createRefinementListTests(async ({ instantSearchOptions, widgetParams }) => {
     {
       render: renderCompat((h) =>
         h(AisInstantSearch, { props: instantSearchOptions }, [
+          h(AisRefinementList, {
+            props: widgetParams,
+            scopedSlots: {
+              default: ({ createURL }) =>
+                h(
+                  'a',
+                  {
+                    attrs: {
+                      'data-testid': 'RefinementList-link',
+                      href: createURL('value'),
+                    },
+                  },
+                  'LINK'
+                ),
+            },
+          }),
           h(AisRefinementList, { props: widgetParams }),
           h(GlobalErrorSwallower),
         ])
