@@ -28,8 +28,10 @@ import {
   Hits,
   Index,
   RangeInput,
+  useRefinementList,
 } from '..';
 
+import type { UseRefinementListProps } from '..';
 import type { Hit } from 'instantsearch.js';
 import type { SendEventForHits } from 'instantsearch.js/es/lib/utils';
 
@@ -44,9 +46,18 @@ function GlobalErrorSwallower() {
 }
 
 createRefinementListTests(({ instantSearchOptions, widgetParams }) => {
+  function RefinementListURL(props: UseRefinementListProps) {
+    const { createURL } = useRefinementList(props);
+    return (
+      <a data-testid="RefinementList-link" href={createURL('value')}>
+        LINK
+      </a>
+    );
+  }
   render(
     <InstantSearch {...instantSearchOptions}>
       <RefinementList {...widgetParams} />
+      <RefinementListURL {...widgetParams} />
       <GlobalErrorSwallower />
     </InstantSearch>
   );

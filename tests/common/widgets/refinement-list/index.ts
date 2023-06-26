@@ -2,6 +2,7 @@ import type { RefinementListWidget } from 'instantsearch.js/es/widgets/refinemen
 import type { TestSetup, Act } from '../../common';
 import { fakeAct } from '../../common';
 import { createOptimisticUiTests } from './optimistic-ui';
+import { createRoutingTests } from './routing';
 
 type WidgetParams = Parameters<RefinementListWidget>[0];
 export type RefinementListSetup = TestSetup<{
@@ -18,5 +19,6 @@ export function createRefinementListTests(
 
   describe('RefinementList common tests', () => {
     createOptimisticUiTests(setup, act);
+    createRoutingTests(setup, act);
   });
 }

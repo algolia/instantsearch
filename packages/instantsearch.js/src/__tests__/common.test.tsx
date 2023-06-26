@@ -13,6 +13,7 @@ import {
   createInstantSearchTests,
 } from '@instantsearch/tests';
 
+import { connectRefinementList } from '../connectors';
 import instantsearch from '../index.es';
 import {
   hierarchicalMenu,
@@ -69,8 +70,24 @@ createBreadcrumbTests(({ instantSearchOptions, widgetParams }) => {
 });
 
 createRefinementListTests(({ instantSearchOptions, widgetParams }) => {
+  const refinementListURL = connectRefinementList<{ container: HTMLElement }>(
+    (renderOptions) => {
+      renderOptions.widgetParams.container.innerHTML = `
+        <a
+          data-testid="RefinementList-link"
+          href="${renderOptions.createURL('value')}"
+        >
+          LINK
+        </a>
+      `;
+    }
+  );
   instantsearch(instantSearchOptions)
     .addWidgets([
+      refinementListURL({
+        container: document.body.appendChild(document.createElement('div')),
+        ...widgetParams,
+      }),
       refinementList({
         container: document.body.appendChild(document.createElement('div')),
         ...widgetParams,
