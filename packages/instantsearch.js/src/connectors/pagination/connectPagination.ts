@@ -7,7 +7,6 @@ import {
 import Paginator from './Paginator';
 
 import type { Connector, CreateURL, WidgetRenderState } from '../../types';
-import type { SearchParameters } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'pagination',
@@ -99,7 +98,7 @@ const connectPagination: PaginationConnector = function connectPagination(
 
     type ConnectorState = {
       refine?: (page: number) => void;
-      createURL?: (state: SearchParameters) => (page: number) => string;
+      createURL?: (page: number) => string;
     };
 
     const connectorState: ConnectorState = {};
@@ -169,8 +168,11 @@ const connectPagination: PaginationConnector = function connectPagination(
         }
 
         if (!connectorState.createURL) {
-          connectorState.createURL = (helperState) => (page) =>
-            createURL(helperState.setPage(page));
+          connectorState.createURL = (page) =>
+            createURL((uiState) => ({
+              ...uiState,
+              page,
+            }));
         }
 
         const page = state.page || 0;
@@ -179,7 +181,7 @@ const connectPagination: PaginationConnector = function connectPagination(
         pager.total = nbPages;
 
         return {
-          createURL: connectorState.createURL(state),
+          createURL: connectorState.createURL,
           refine: connectorState.refine,
           canRefine: nbPages > 1,
           currentRefinement: page,

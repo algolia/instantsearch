@@ -29,9 +29,10 @@ import {
   Index,
   RangeInput,
   useRefinementList,
+  usePagination,
 } from '..';
 
-import type { UseRefinementListProps } from '..';
+import type { UsePaginationProps, UseRefinementListProps } from '..';
 import type { Hit } from 'instantsearch.js';
 import type { SendEventForHits } from 'instantsearch.js/es/lib/utils';
 
@@ -93,8 +94,17 @@ createMenuTests(({ instantSearchOptions, widgetParams }) => {
 }, act);
 
 createPaginationTests(({ instantSearchOptions, widgetParams }) => {
+  function PaginationURL(props: UsePaginationProps) {
+    const { createURL } = usePagination(props);
+    return (
+      <a data-testid="Pagination-link" href={createURL(10)}>
+        LINK
+      </a>
+    );
+  }
   render(
     <InstantSearch {...instantSearchOptions}>
+      <PaginationURL {...widgetParams} />
       <Pagination {...widgetParams} />
       <GlobalErrorSwallower />
     </InstantSearch>

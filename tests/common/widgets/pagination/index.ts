@@ -2,6 +2,7 @@ import type { PaginationWidget } from 'instantsearch.js/es/widgets/pagination/pa
 import type { Act, TestSetup } from '../../common';
 import { fakeAct } from '../../common';
 import { createOptimisticUiTests } from './optimistic-ui';
+import { createRoutingTests } from './routing';
 
 type WidgetParams = Parameters<PaginationWidget>[0];
 export type PaginationSetup = TestSetup<{
@@ -18,5 +19,6 @@ export function createPaginationTests(
 
   describe('Pagination common tests', () => {
     createOptimisticUiTests(setup, act);
+    createRoutingTests(setup, act);
   });
 }
