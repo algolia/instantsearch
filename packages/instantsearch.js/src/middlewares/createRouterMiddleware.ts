@@ -45,14 +45,25 @@ export const createRouterMiddleware = <
 
   return ({ instantSearchInstance }) => {
     function topLevelCreateURL(nextState: TUiState) {
+      const previousUiState =
+        // If only the mainIndex is initialized, we don't yet know what other
+        // index widgets are used. Therefore we fall back to the initialUiState.
+        // We can't indiscriminately use the initialUiState because then we
+        // reintroduce state that was changed by the user.
+        // When there are no widgets, we are sure the user can't yet have made
+        // any changes.
+        instantSearchInstance.mainIndex.getWidgets().length === 0
+          ? (instantSearchInstance._initialUiState as TUiState)
+          : instantSearchInstance.mainIndex.getWidgetUiState<TUiState>(
+              {} as TUiState
+            );
+
       const uiState: TUiState = Object.keys(nextState).reduce(
         (acc, indexId) => ({
           ...acc,
           [indexId]: nextState[indexId],
         }),
-        instantSearchInstance.mainIndex.getWidgetUiState<TUiState>(
-          {} as TUiState
-        )
+        previousUiState
       );
 
       const route = stateMapping.stateToRoute(uiState);
