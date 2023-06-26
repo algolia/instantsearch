@@ -72,7 +72,9 @@ export type IndexWidget<TUiState extends UiState = UiState> = Omit<
   getScopedResults: () => ScopedResult[];
   getParent: () => IndexWidget | null;
   getWidgets: () => Array<Widget | IndexWidget>;
-  createURL: (state: SearchParameters) => string;
+  createURL: (
+    nextState: SearchParameters | ((state: IndexUiState) => IndexUiState)
+  ) => string;
 
   addWidgets: (widgets: Array<Widget | IndexWidget>) => IndexWidget;
   removeWidgets: (widgets: Array<Widget | IndexWidget>) => IndexWidget;
@@ -277,7 +279,14 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       return localParent;
     },
 
-    createURL(nextState: SearchParameters) {
+    createURL(
+      nextState: SearchParameters | ((state: IndexUiState) => IndexUiState)
+    ) {
+      if (typeof nextState === 'function') {
+        return localInstantSearchInstance!._createURL({
+          [indexId]: nextState(localUiState),
+        });
+      }
       return localInstantSearchInstance!._createURL({
         [indexId]: getLocalWidgetsUiState(localWidgets, {
           searchParameters: nextState,
