@@ -23,12 +23,13 @@ export function createRoutingTests(setup: PaginationSetup, act: Act) {
       test('Consistently shows the right URL, even before widget is initialized', async () => {
         const delay = 100;
         const margin = 10;
+        const router = history();
         const options = {
           instantSearchOptions: {
             indexName: 'indexName',
             routing: {
               stateMapping: simple(),
-              routing: history(),
+              router,
             },
             searchClient: createSearchClient({
               search: jest.fn(async (requests) => {
@@ -60,7 +61,7 @@ export function createRoutingTests(setup: PaginationSetup, act: Act) {
             // eslint-disable-next-line jest/no-conditional-expect
             expect(link).toHaveAttribute(
               'href',
-              `http://localhost/?${encodeURI('indexName[page]=10')}`
+              router.createURL({ indexName: { page: 10 } })
             );
           }
         }
@@ -75,7 +76,7 @@ export function createRoutingTests(setup: PaginationSetup, act: Act) {
         {
           expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
             'href',
-            `http://localhost/?${encodeURI('indexName[page]=10')}`
+            router.createURL({ indexName: { page: 10 } })
           );
         }
 
@@ -91,7 +92,7 @@ export function createRoutingTests(setup: PaginationSetup, act: Act) {
           // URL is still the same, as it overrides the current state
           expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
             'href',
-            `http://localhost/?${encodeURI('indexName[page]=10')}`
+            router.createURL({ indexName: { page: 10 } })
           );
         }
 
@@ -103,7 +104,7 @@ export function createRoutingTests(setup: PaginationSetup, act: Act) {
 
           expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
             'href',
-            `http://localhost/?${encodeURI('indexName[page]=10')}`
+            router.createURL({ indexName: { page: 10 } })
           );
         }
 
@@ -119,7 +120,7 @@ export function createRoutingTests(setup: PaginationSetup, act: Act) {
           // URL is still the same, as it overrides the current state
           expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
             'href',
-            `http://localhost/?${encodeURI('indexName[page]=10')}`
+            router.createURL({ indexName: { page: 10 } })
           );
         }
 
@@ -132,7 +133,7 @@ export function createRoutingTests(setup: PaginationSetup, act: Act) {
 
           expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
             'href',
-            `http://localhost/?${encodeURI('indexName[page]=10')}`
+            router.createURL({ indexName: { page: 10 } })
           );
         }
       });

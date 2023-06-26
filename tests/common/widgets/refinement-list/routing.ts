@@ -24,12 +24,13 @@ export function createRoutingTests(setup: RefinementListSetup, act: Act) {
         const delay = 100;
         const margin = 10;
         const attribute = 'brand';
+        const router = history();
         const options = {
           instantSearchOptions: {
             indexName: 'indexName',
             routing: {
               stateMapping: simple(),
-              routing: history(),
+              router,
             },
             searchClient: createSearchClient({
               search: jest.fn(async (requests) => {
@@ -65,9 +66,13 @@ export function createRoutingTests(setup: RefinementListSetup, act: Act) {
             // eslint-disable-next-line jest/no-conditional-expect
             expect(link).toHaveAttribute(
               'href',
-              `http://localhost/?${encodeURI(
-                'indexName[refinementList][brand][0]=value'
-              )}`
+              router.createURL({
+                indexName: {
+                  refinementList: {
+                    [attribute]: ['value'],
+                  },
+                },
+              })
             );
           }
         }
@@ -82,9 +87,13 @@ export function createRoutingTests(setup: RefinementListSetup, act: Act) {
         {
           expect(screen.getByTestId('RefinementList-link')).toHaveAttribute(
             'href',
-            `http://localhost/?${encodeURI(
-              'indexName[refinementList][brand][0]=value'
-            )}`
+            router.createURL({
+              indexName: {
+                refinementList: {
+                  [attribute]: ['value'],
+                },
+              },
+            })
           );
         }
 
@@ -102,9 +111,13 @@ export function createRoutingTests(setup: RefinementListSetup, act: Act) {
           // URL has changed immediately after the user interaction
           expect(screen.getByTestId('RefinementList-link')).toHaveAttribute(
             'href',
-            `http://localhost/?${encodeURI(
-              'indexName[refinementList][brand][0]=Apple&indexName[refinementList][brand][1]=value'
-            )}`
+            router.createURL({
+              indexName: {
+                refinementList: {
+                  [attribute]: ['Apple', 'value'],
+                },
+              },
+            })
           );
         }
 
@@ -116,9 +129,13 @@ export function createRoutingTests(setup: RefinementListSetup, act: Act) {
 
           expect(screen.getByTestId('RefinementList-link')).toHaveAttribute(
             'href',
-            `http://localhost/?${encodeURI(
-              'indexName[refinementList][brand][0]=Apple&indexName[refinementList][brand][1]=value'
-            )}`
+            router.createURL({
+              indexName: {
+                refinementList: {
+                  [attribute]: ['Apple', 'value'],
+                },
+              },
+            })
           );
         }
 
@@ -136,9 +153,13 @@ export function createRoutingTests(setup: RefinementListSetup, act: Act) {
           // URL has changed immediately after the user interaction
           expect(screen.getByTestId('RefinementList-link')).toHaveAttribute(
             'href',
-            `http://localhost/?${encodeURI(
-              'indexName[refinementList][brand][0]=value'
-            )}`
+            router.createURL({
+              indexName: {
+                refinementList: {
+                  [attribute]: ['value'],
+                },
+              },
+            })
           );
         }
 
@@ -151,9 +172,13 @@ export function createRoutingTests(setup: RefinementListSetup, act: Act) {
 
           expect(screen.getByTestId('RefinementList-link')).toHaveAttribute(
             'href',
-            `http://localhost/?${encodeURI(
-              'indexName[refinementList][brand][0]=value'
-            )}`
+            router.createURL({
+              indexName: {
+                refinementList: {
+                  [attribute]: ['value'],
+                },
+              },
+            })
           );
         }
       });
