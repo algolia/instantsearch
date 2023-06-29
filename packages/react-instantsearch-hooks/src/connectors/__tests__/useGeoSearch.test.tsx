@@ -13,14 +13,14 @@ describe('useGeoSearch', () => {
     // Initial render state from manual `getWidgetRenderState`
     expect(result.current).toEqual({
       clearMapRefinement: expect.any(Function),
-      currentRefinement: expect.objectContaining({}),
+      currentRefinement: undefined,
       hasMapMoveSinceLastRefine: expect.any(Function),
       isRefinedWithMap: expect.any(Function),
       isRefineOnMapMove: expect.any(Function),
       items: [],
-      position: expect.objectContaining({}),
+      position: undefined,
       refine: expect.any(Function),
-      sendEvent: expect.objectContaining({}),
+      sendEvent: expect.any(Function),
       setMapMoveSinceLastRefine: expect.any(Function),
       toggleRefineOnMapMove: expect.any(Function),
     });
@@ -30,14 +30,14 @@ describe('useGeoSearch', () => {
     // InstantSearch.js state from the `render` lifecycle step
     expect(result.current).toEqual({
       clearMapRefinement: expect.any(Function),
-      currentRefinement: expect.objectContaining({}),
+      currentRefinement: undefined,
       hasMapMoveSinceLastRefine: expect.any(Function),
       isRefinedWithMap: expect.any(Function),
       isRefineOnMapMove: expect.any(Function),
       items: [],
-      position: expect.objectContaining({}),
+      position: undefined,
       refine: expect.any(Function),
-      sendEvent: expect.objectContaining({}),
+      sendEvent: expect.any(Function),
       setMapMoveSinceLastRefine: expect.any(Function),
       toggleRefineOnMapMove: expect.any(Function),
     });
