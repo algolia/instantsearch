@@ -92,7 +92,9 @@ export const createRouterMiddleware = <
         };
 
         router.onUpdate((route) => {
-          instantSearchInstance.setUiState(stateMapping.routeToState(route));
+          if (instantSearchInstance.mainIndex.getWidgets().length > 0) {
+            instantSearchInstance.setUiState(stateMapping.routeToState(route));
+          }
         });
       },
 
