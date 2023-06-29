@@ -132,8 +132,6 @@ describe('router', () => {
     });
 
     const setUiStateSpy = jest.spyOn(search, 'setUiState');
-
-    search.mainIndex.getHelper = jest.fn(() => search.mainHelper);
     search.start();
 
     await wait(0);
