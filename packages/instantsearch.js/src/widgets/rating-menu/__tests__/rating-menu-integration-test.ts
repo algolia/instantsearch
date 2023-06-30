@@ -60,8 +60,19 @@ describe('rendering', () => {
             },
           }).results
         ),
-        createURL(searchParams) {
-          return JSON.stringify(searchParams);
+        createURL(arg) {
+          if (typeof arg === 'function') {
+            return JSON.stringify(
+              widget.getWidgetSearchParameters(helper.state, {
+                uiState: widget.getWidgetUiState(arg({}), {
+                  searchParameters: helper.state,
+                  helper,
+                }),
+              })
+            );
+          }
+
+          return JSON.stringify(arg);
         },
       })
     );

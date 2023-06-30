@@ -315,12 +315,16 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
           let items: HierarchicalMenuRenderState['items'] = [];
           let canToggleShowMore = false;
 
+          const getWidgetUiState = this.getWidgetUiState;
           // Bind createURL to this specific attribute
           function _createURL(facetValue: string) {
-            return createURL(
-              state
-                .resetPage()
-                .toggleFacetRefinement(hierarchicalFacetName, facetValue)
+            return createURL((uiState) =>
+              getWidgetUiState(uiState, {
+                searchParameters: state
+                  .resetPage()
+                  .toggleFacetRefinement(hierarchicalFacetName, facetValue),
+                helper,
+              })
             );
           }
 
