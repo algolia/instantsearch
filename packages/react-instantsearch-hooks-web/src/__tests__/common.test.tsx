@@ -30,9 +30,14 @@ import {
   RangeInput,
   useRefinementList,
   usePagination,
+  useBreadcrumb,
 } from '..';
 
-import type { UsePaginationProps, UseRefinementListProps } from '..';
+import type {
+  UseBreadcrumbProps,
+  UsePaginationProps,
+  UseRefinementListProps,
+} from '..';
 import type { Hit } from 'instantsearch.js';
 import type { SendEventForHits } from 'instantsearch.js/es/lib/utils';
 
@@ -75,8 +80,17 @@ createHierarchicalMenuTests(({ instantSearchOptions, widgetParams }) => {
 
 createBreadcrumbTests(({ instantSearchOptions, widgetParams }) => {
   const { transformItems, ...hierarchicalWidgetParams } = widgetParams;
+  function BreadcrumbURL(props: UseBreadcrumbProps) {
+    const { createURL } = useBreadcrumb(props);
+    return (
+      <a data-testid="Breadcrumb-link" href={createURL('Apple > iPhone')}>
+        LINK
+      </a>
+    );
+  }
   render(
     <InstantSearch {...instantSearchOptions}>
+      <BreadcrumbURL {...widgetParams} />
       <Breadcrumb {...widgetParams} />
       <HierarchicalMenu {...hierarchicalWidgetParams} />
       <GlobalErrorSwallower />
