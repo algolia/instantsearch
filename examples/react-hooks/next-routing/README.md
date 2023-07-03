@@ -1,5 +1,7 @@
 This example shows how to do server side rendering with next.js and React InstantSearch Hooks. There's a live example here: https://codesandbox.io/s/github/algolia/instantsearch.js/tree/master/examples/react-hooks/next.
 
+[![Edit next-routing](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/github/algolia/instantsearch/tree/master/examples/react-hooks/next-routing)
+
 ## Clone the example
 
 ```sh

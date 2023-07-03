@@ -14,6 +14,7 @@ exports[`Hits markup should render <Hits /> 1`] = `
           "__html": "item",
         }
       }
+      onAuxClick={[Function]}
       onClick={[Function]}
     />
     <li
@@ -23,6 +24,7 @@ exports[`Hits markup should render <Hits /> 1`] = `
           "__html": "item",
         }
       }
+      onAuxClick={[Function]}
       onClick={[Function]}
     />
   </ol>
@@ -45,6 +47,7 @@ exports[`Hits markup should render <Hits /> without highlight function 1`] = `
 </mark>,
         }
       }
+      onAuxClick={[Function]}
       onClick={[Function]}
     />
     <li
@@ -56,6 +59,7 @@ exports[`Hits markup should render <Hits /> without highlight function 1`] = `
 </mark>,
         }
       }
+      onAuxClick={[Function]}
       onClick={[Function]}
     />
   </ol>

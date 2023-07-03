@@ -21,6 +21,8 @@ import {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
+import { createI18n } from 'vue-i18n-vue3';
+import VueI18n from 'vue-i18n';
 
 jest.unmock('instantsearch.js/es');
 
@@ -484,6 +486,61 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
       if (isVue3) {
         wrapper.use(store);
+      }
+
+      await renderToString(wrapper);
+    });
+
+    it('forwards i18n', async () => {
+      const searchClient = createFakeClient();
+
+      if (isVue2) {
+        Vue2.use(VueI18n);
+      }
+
+      const i18n = isVue3 ? createI18n() : new VueI18n();
+
+      // there are two renders of App, each with an assertion
+      expect.assertions(2);
+
+      const App = {
+        mixins: [
+          forceIsServerMixin,
+          createServerRootMixin({
+            searchClient,
+            indexName: 'hello',
+          }),
+        ],
+        data() {
+          expect(this.$i18n).toBe(isVue3 ? i18n.global : i18n);
+          return {};
+        },
+        render: renderCompat((h) =>
+          h(InstantSearchSsr, {}, [
+            h(Configure, {
+              attrs: {
+                hitsPerPage: 100,
+              },
+            }),
+            h(SearchBox),
+          ])
+        ),
+        serverPrefetch() {
+          return this.instantsearch.findResultsState({
+            component: this,
+            renderToString,
+          });
+        },
+      };
+
+      const wrapper = createSSRApp({
+        mixins: [forceIsServerMixin],
+        ...(isVue2 ? { i18n } : {}),
+        render: renderCompat((h) => h(App)),
+      });
+
+      if (isVue3) {
+        wrapper.use(i18n);
       }
 
       await renderToString(wrapper);

@@ -9,6 +9,8 @@ import {
   createPaginationTests,
   createInfiniteHitsTests,
   createHitsTests,
+  createRangeInputTests,
+  createInstantSearchTests,
 } from '@instantsearch/tests';
 import { act, render } from '@testing-library/react';
 import React from 'react';
@@ -25,6 +27,7 @@ import {
   useInstantSearch,
   Hits,
   Index,
+  RangeInput,
 } from '..';
 
 import type { Hit } from 'instantsearch.js';
@@ -203,4 +206,33 @@ createHitsTests(({ instantSearchOptions, widgetParams }) => {
       <GlobalErrorSwallower />
     </InstantSearch>
   );
+}, act);
+
+createRangeInputTests(({ instantSearchOptions, widgetParams }) => {
+  render(
+    <InstantSearch {...instantSearchOptions}>
+      <RangeInput {...widgetParams} />
+      <GlobalErrorSwallower />
+    </InstantSearch>
+  );
+}, act);
+
+createInstantSearchTests(({ instantSearchOptions }) => {
+  render(
+    <InstantSearch {...instantSearchOptions}>
+      <GlobalErrorSwallower />
+    </InstantSearch>
+  );
+
+  return {
+    algoliaAgents: [
+      `instantsearch.js (${
+        require('../../../instantsearch.js/package.json').version
+      })`,
+      `react-instantsearch (${
+        require('../../../react-instantsearch-hooks/package.json').version
+      })`,
+      `react (${require('react').version})`,
+    ],
+  };
 }, act);

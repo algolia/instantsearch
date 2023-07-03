@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-hooks-next-example",
-  "version": "6.46.0",
+  "version": "6.51.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -14,15 +14,15 @@
     "next": "12.1.6",
     "react": "18.1.0",
     "react-dom": "18.1.0",
-    "react-instantsearch-hooks-router-nextjs": "6.43.0",
-    "react-instantsearch-hooks-server": "6.43.0",
-    "react-instantsearch-hooks-web": "6.43.0"
+    "react-instantsearch-hooks-router-nextjs": "6.45.0",
+    "react-instantsearch-hooks-server": "6.45.0",
+    "react-instantsearch-hooks-web": "6.45.0"
   },
   "devDependencies": {
     "@types/node": "17.0.40",
     "@types/react": "18.0.12",
     "eslint": "8.4.0",
     "eslint-config-next": "12.0.7",
-    "typescript": "4.9.4"
+    "typescript": "5.1.3"
   }
 }

@@ -89,7 +89,7 @@ export function App() {
               />
             </Panel>
             <Panel header="Price">
-              <RangeInput attribute="price" />
+              <RangeInput attribute="price" precision={1} />
             </Panel>
             <Panel header="Free Shipping">
               <ToggleRefinement

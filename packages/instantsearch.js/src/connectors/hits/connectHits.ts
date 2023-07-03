@@ -82,6 +82,7 @@ const connectHits: HitsConnector = function connectHits(
 
   return (widgetParams) => {
     const {
+      // @MAJOR: this can default to false
       escapeHTML = true,
       transformItems = ((items) => items) as NonNullable<
         HitsConnectorParams['transformItems']

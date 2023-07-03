@@ -5,6 +5,7 @@ const searchClient = algoliasearch('{{appId}}', '{{apiKey}}');
 const search = instantsearch({
   indexName: '{{indexName}}',
   searchClient,
+  {{#if flags.insights}}insights: true,{{/if}}
 });
 
 search.addWidgets([
@@ -18,12 +19,12 @@ search.addWidgets([
     container: '#hits',
     {{#if attributesToDisplay}}
     templates: {
-      item: `
+      item: (hit, { html, components }) => html`
 <article>
-  <h1>\{{#helpers.highlight}}{ "attribute": "{{attributesToDisplay.[0]}}" }\{{/helpers.highlight}}</h1>
+  <h1>${components.Highlight({hit, attribute: "{{attributesToDisplay.[0]}}"})}</h1>
   {{#each attributesToDisplay}}
   {{#unless @first}}
-  <p>\{{#helpers.highlight}}{ "attribute": "{{this}}" }\{{/helpers.highlight}}</p>
+  <p>${components.Highlight({hit, attribute: "{{this}}"})}</p>
   {{/unless}}
   {{/each}}
 </article>
@@ -38,7 +39,7 @@ search.addWidgets([
   instantsearch.widgets.dynamicWidgets({
     container: '#dynamic-widgets',
     fallbackWidget({ container, attribute }) {
-      return instantsearch.widgets.panel({ templates: { header: attribute } })(
+      return instantsearch.widgets.panel({ templates: { header: () => attribute } })(
         instantsearch.widgets.refinementList
       )({
         container,
@@ -49,7 +50,7 @@ search.addWidgets([
       {{#each attributesForFaceting}}
       container =>
         instantsearch.widgets.panel({
-          templates: { header: '{{this}}' },
+          templates: { header: () => '{{this}}' },
         })(instantsearch.widgets.refinementList)({
           container,
           attribute: '{{this}}',
@@ -60,7 +61,7 @@ search.addWidgets([
   {{else}}
   {{#each attributesForFaceting}}
   instantsearch.widgets.panel({
-    templates: { header: '{{this}}' },
+    templates: { header: () => '{{this}}' },
   })(instantsearch.widgets.refinementList)({
     container: '#{{this}}-list',
     attribute: '{{this}}',

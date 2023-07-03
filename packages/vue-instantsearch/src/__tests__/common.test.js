@@ -9,6 +9,8 @@ import {
   createPaginationTests,
   createInfiniteHitsTests,
   createHitsTests,
+  createRangeInputTests,
+  createInstantSearchTests,
 } from '@instantsearch/tests';
 
 import { nextTick, mountApp } from '../../test/utils';
@@ -25,6 +27,7 @@ import {
   createWidgetMixin,
   AisHits,
   AisIndex,
+  AisRangeInput,
 } from '../instantsearch';
 jest.unmock('instantsearch.js/es');
 
@@ -75,8 +78,11 @@ createHierarchicalMenuTests(async ({ instantSearchOptions, widgetParams }) => {
 });
 
 createBreadcrumbTests(async ({ instantSearchOptions, widgetParams }) => {
+  // The passed `transformItems` prop is meant to apply only to the breadcrumb,
+  // not the hierarchical menu
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { transformItems, ...hierarchicalWidgetParams } = widgetParams;
+
   mountApp(
     {
       render: renderCompat((h) =>
@@ -279,4 +285,45 @@ createHitsTests(async ({ instantSearchOptions, widgetParams }) => {
   );
 
   await nextTick();
+});
+
+createRangeInputTests(async ({ instantSearchOptions, widgetParams }) => {
+  mountApp(
+    {
+      render: renderCompat((h) =>
+        h(AisInstantSearch, { props: instantSearchOptions }, [
+          h(AisRangeInput, { props: widgetParams }),
+          h(GlobalErrorSwallower),
+        ])
+      ),
+    },
+    document.body.appendChild(document.createElement('div'))
+  );
+
+  await nextTick();
+});
+
+createInstantSearchTests(({ instantSearchOptions }) => {
+  mountApp(
+    {
+      render: renderCompat((h) =>
+        h(AisInstantSearch, { props: instantSearchOptions }, [
+          h(GlobalErrorSwallower),
+        ])
+      ),
+    },
+    document.body.appendChild(document.createElement('div'))
+  );
+
+  return {
+    algoliaAgents: [
+      `instantsearch.js (${
+        require('../../../instantsearch.js/package.json').version
+      })`,
+      `Vue InstantSearch (${
+        require('../../../vue-instantsearch/package.json').version
+      })`,
+      `Vue (${require('../util/vue-compat').version})`,
+    ],
+  };
 });

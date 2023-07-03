@@ -1,6 +1,6 @@
 {
   "name": "react-instantsearch-hooks",
-  "version": "6.43.0",
+  "version": "6.45.0",
   "description": "⚡ Lightning-fast search for React, by Algolia",
   "source": "src/index.ts",
   "types": "dist/es/index.d.ts",
@@ -44,12 +44,13 @@
     "build:es": "BABEL_ENV=es babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet",
     "build:umd": "BABEL_ENV=rollup rollup -c rollup.config.js",
     "build:types": "tsc -p ./tsconfig.declaration.json --outDir ./dist/es",
-    "test:exports": "node ./test/module/is-es-module.mjs && node ./test/module/is-cjs-module.cjs"
+    "test:exports": "node ./test/module/is-es-module.mjs && node ./test/module/is-cjs-module.cjs",
+    "version": "./scripts/version.cjs"
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2",
-    "algoliasearch-helper": "^3.13.0",
-    "instantsearch.js": "4.55.0",
+    "algoliasearch-helper": "^3.13.2",
+    "instantsearch.js": "4.56.3",
     "use-sync-external-store": "^1.0.0"
   },
   "devDependencies": {

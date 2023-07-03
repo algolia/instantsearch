@@ -1,4 +1,7 @@
 This example shows how to use an external autocomplete component with `react-instantsearch`
+
+[![Edit autocomplete](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/github/algolia/instantsearch/tree/master/examples/react/autocomplete)
+
 It uses [react-autosuggest](https://github.com/moroshko/react-autosuggest) as the autocomplete external component.
 
 You will find two use cases:

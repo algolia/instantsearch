@@ -58,8 +58,8 @@ describe('RangeInput', () => {
 
     expect(component).toMatchSnapshot();
     expect(component.state()).toEqual({
-      min: 20,
-      max: 480,
+      min: '20',
+      max: '480',
     });
   });
 
@@ -92,8 +92,8 @@ describe('RangeInput', () => {
 
       expect(component).toMatchSnapshot();
       expect(component.state()).toEqual({
-        min: 20,
-        max: 480,
+        min: '20',
+        max: '480',
       });
     });
 
@@ -120,8 +120,8 @@ describe('RangeInput', () => {
 
       expect(component).toMatchSnapshot();
       expect(component.state()).toEqual({
-        min: 20,
-        max: 480,
+        min: '20',
+        max: '480',
       });
     });
   });

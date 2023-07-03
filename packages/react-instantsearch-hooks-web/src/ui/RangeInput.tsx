@@ -66,7 +66,12 @@ export type RangeInputTranslations = {
 };
 
 // if the default value is undefined, React considers the component uncontrolled initially, which we don't want 0 or NaN as the default value
-const unsetNumberInputValue = '' as unknown as number;
+const unsetNumberInputValue = '';
+
+// Strips leading `0` from a positive number value
+function stripLeadingZeroFromInput(value: string): string {
+  return value.replace(/^(0+)\d/, (part) => Number(part).toString());
+}
 
 export function RangeInput({
   classNames = {},
@@ -91,12 +96,12 @@ export function RangeInput({
   const [prevValues, setPrevValues] = useState(values);
 
   const [{ from, to }, setRange] = useState({
-    from: values.min,
-    to: values.max,
+    from: values.min?.toString(),
+    to: values.max?.toString(),
   });
 
   if (values.min !== prevValues.min || values.max !== prevValues.max) {
-    setRange({ from: values.min, to: values.max });
+    setRange({ from: values.min?.toString(), to: values.max?.toString() });
     setPrevValues(values);
   }
 
@@ -114,7 +119,10 @@ export function RangeInput({
         className={cx('ais-RangeInput-form', classNames.form)}
         onSubmit={(event) => {
           event.preventDefault();
-          onSubmit([from, to]);
+          onSubmit([
+            from ? Number(from) : undefined,
+            to ? Number(to) : undefined,
+          ]);
         }}
       >
         <label className={cx('ais-RangeInput-label', classNames.label)}>
@@ -128,13 +136,17 @@ export function RangeInput({
             type="number"
             min={min}
             max={max}
-            value={from?.toString()} // Strips leading `0` from a positive number value
+            value={stripLeadingZeroFromInput(from || unsetNumberInputValue)}
             step={step}
             placeholder={min?.toString()}
             disabled={disabled}
-            onInput={({ currentTarget }) =>
-              setRange({ from: Number(currentTarget.value), to })
-            }
+            onInput={({ currentTarget }) => {
+              const value = currentTarget.value;
+              setRange({
+                from: value || unsetNumberInputValue,
+                to,
+              });
+            }}
           />
         </label>
         <span className={cx('ais-RangeInput-separator', classNames.separator)}>
@@ -151,13 +163,17 @@ export function RangeInput({
             type="number"
             min={min}
             max={max}
-            value={to?.toString()} // Strips leading `0` from a positive number value
+            value={stripLeadingZeroFromInput(to || unsetNumberInputValue)}
             step={step}
             placeholder={max?.toString()}
             disabled={disabled}
-            onInput={({ currentTarget }) =>
-              setRange({ from, to: Number(currentTarget.value) })
-            }
+            onInput={({ currentTarget }) => {
+              const value = currentTarget.value;
+              setRange({
+                from,
+                to: value || unsetNumberInputValue,
+              });
+            }}
           />
         </label>
         <button

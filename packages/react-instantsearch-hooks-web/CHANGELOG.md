@@ -3,6 +3,53 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.45.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-web@6.44.3...react-instantsearch-hooks-web@6.45.0) (2023-06-20)
+
+**Note:** Version bump only for package react-instantsearch-hooks-web
+
+
+
+
+
+## [6.44.3](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-web@6.44.2...react-instantsearch-hooks-web@6.44.3) (2023-06-13)
+
+**Note:** Version bump only for package react-instantsearch-hooks-web
+
+
+
+
+
+## [6.44.2](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-web@6.44.1...react-instantsearch-hooks-web@6.44.2) (2023-06-05)
+
+**Note:** Version bump only for package react-instantsearch-hooks-web
+
+
+
+
+
+## [6.44.1](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-web@6.44.0...react-instantsearch-hooks-web@6.44.1) (2023-05-30)
+
+
+### Bug Fixes
+
+* **insights:** send default click event when using auxiliary pointer button ([#5634](https://github.com/algolia/instantsearch.js/issues/5634)) ([7e4a216](https://github.com/algolia/instantsearch.js/commit/7e4a2162f87596a384b35c97efa51db9bb6f8973))
+
+
+
+
+
+## [6.43.1](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-web@6.43.0...react-instantsearch-hooks-web@6.43.1) (2023-05-16)
+
+
+### Bug Fixes
+
+* **rangeinput:** allow input of numbers with precision ([#5541](https://github.com/algolia/instantsearch.js/issues/5541)) ([fb48951](https://github.com/algolia/instantsearch.js/commit/fb489513a8550528f3e2867be30fb380229ad188))
+* **this:** ensure all functions are able to be destructured ([#5611](https://github.com/algolia/instantsearch.js/issues/5611)) ([a8b5c1e](https://github.com/algolia/instantsearch.js/commit/a8b5c1e5bbd6afac39fce523f7d7c2ec02f51153)), closes [#5589](https://github.com/algolia/instantsearch.js/issues/5589)
+
+
+
+
+
 # [6.43.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-web@6.42.2...react-instantsearch-hooks-web@6.43.0) (2023-04-24)
 
 

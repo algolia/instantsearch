@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-e-commerce",
-  "version": "10.0.0",
+  "version": "12.0.0",
   "private": true,
   "dependencies": {
     "algoliasearch": "4.14.3",
@@ -9,6 +9,6 @@
     "react": "17.0.2",
     "react-compound-slider": "2.2.0",
     "react-dom": "17.0.2",
-    "react-instantsearch-dom": "6.39.1"
+    "react-instantsearch-dom": "6.40.1"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-hooks-default-theme",
-  "version": "6.39.0",
+  "version": "6.44.0",
   "private": true,
   "scripts": {
     "build": "BABEL_ENV=parcel parcel build index.html",
@@ -8,15 +8,16 @@
   },
   "dependencies": {
     "algoliasearch": "4.14.3",
-    "instantsearch.js": "4.55.0",
+    "instantsearch.js": "4.56.3",
     "react": "18.1.0",
     "react-dom": "18.1.0",
-    "react-instantsearch-hooks-web": "6.43.0"
+    "react-instantsearch-hooks-web": "6.45.0"
   },
   "devDependencies": {
     "@parcel/core": "2.8.0",
     "@parcel/packager-raw-url": "2.8.0",
     "@parcel/transformer-webmanifest": "2.8.0",
-    "parcel": "2.8.0"
+    "parcel": "2.8.0",
+    "typescript": "5.1.3"
   }
 }

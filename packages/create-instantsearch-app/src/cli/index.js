@@ -5,7 +5,6 @@ const os = require('os');
 const program = require('commander');
 const inquirer = require('inquirer');
 const chalk = require('chalk');
-const latestSemver = require('latest-semver');
 const semver = require('semver');
 
 const createInstantSearchApp = require('../api');
@@ -75,7 +74,9 @@ const getQuestions = ({ appName }) => ({
 
         try {
           const versions = await fetchLibraryVersions(libraryName);
-          const latestStableVersion = latestSemver(versions);
+          const latestStableVersion = semver.maxSatisfying(versions, '*', {
+            includePrerelease: false,
+          });
 
           if (!latestStableVersion) {
             return versions;

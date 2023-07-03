@@ -3,6 +3,65 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.45.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.44.3...react-instantsearch-hooks@6.45.0) (2023-06-20)
+
+
+### Bug Fixes
+
+* **dependencies:** update helper requirement ([#5676](https://github.com/algolia/instantsearch.js/issues/5676)) ([c289120](https://github.com/algolia/instantsearch.js/commit/c2891205c1125b1203b3b3db946d57e0fc4e4687)), closes [#5658](https://github.com/algolia/instantsearch.js/issues/5658)
+
+
+### Features
+
+* **algoliaAgent:** track Next.js version as Algolia agent ([#5677](https://github.com/algolia/instantsearch.js/issues/5677)) ([b205ac0](https://github.com/algolia/instantsearch.js/commit/b205ac019f79699cd608d63792b8ff5a0832aa7c))
+
+
+
+
+
+## [6.44.3](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.44.2...react-instantsearch-hooks@6.44.3) (2023-06-13)
+
+**Note:** Version bump only for package react-instantsearch-hooks
+
+
+
+
+
+## [6.44.2](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.44.1...react-instantsearch-hooks@6.44.2) (2023-06-05)
+
+
+### Bug Fixes
+
+* **hooks:** generate version for algoliaAgent in build ([#5655](https://github.com/algolia/instantsearch.js/issues/5655)) ([4d92ac4](https://github.com/algolia/instantsearch.js/commit/4d92ac4769e19e81fb55481aedc71121bef981cb))
+
+
+
+
+
+## [6.44.1](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.44.0...react-instantsearch-hooks@6.44.1) (2023-05-30)
+
+**Note:** Version bump only for package react-instantsearch-hooks
+
+
+
+
+
+# [6.44.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.43.0...react-instantsearch-hooks@6.44.0) (2023-05-16)
+
+
+### Bug Fixes
+
+* **this:** ensure all functions are able to be destructured ([#5611](https://github.com/algolia/instantsearch.js/issues/5611)) ([a8b5c1e](https://github.com/algolia/instantsearch.js/commit/a8b5c1e5bbd6afac39fce523f7d7c2ec02f51153)), closes [#5589](https://github.com/algolia/instantsearch.js/issues/5589)
+
+
+### Features
+
+* **instantsearch:** make root indexName optional ([#5590](https://github.com/algolia/instantsearch.js/issues/5590)) ([80f309e](https://github.com/algolia/instantsearch.js/commit/80f309ed69b61534ca118b60c9c88691e0148fca))
+
+
+
+
+
 # [6.43.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.42.2...react-instantsearch-hooks@6.43.0) (2023-04-24)
 
 
