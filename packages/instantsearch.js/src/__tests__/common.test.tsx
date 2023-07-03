@@ -11,7 +11,6 @@ import {
   createHitsTests,
   createRangeInputTests,
   createInstantSearchTests,
-  createClearRefinementsTests,
   createHitsPerPageTests,
   createNumericMenuTests,
   createRatingMenuTests,
@@ -21,7 +20,6 @@ import {
 
 import {
   connectBreadcrumb,
-  connectClearRefinements,
   connectCurrentRefinements,
   connectHierarchicalMenu,
   connectHitsPerPage,
@@ -353,36 +351,6 @@ createRangeInputTests(({ instantSearchOptions, widgetParams }) => {
   instantsearch(instantSearchOptions)
     .addWidgets([
       rangeInput({
-        container: document.body.appendChild(document.createElement('div')),
-        ...widgetParams,
-      }),
-    ])
-    .on('error', () => {
-      /*
-       * prevent rethrowing InstantSearch errors, so tests can be asserted.
-       * IRL this isn't needed, as the error doesn't stop execution.
-       */
-    })
-    .start();
-});
-
-createClearRefinementsTests(({ instantSearchOptions, widgetParams }) => {
-  const clearRefinementsURL = connectClearRefinements<{
-    container: HTMLElement;
-  }>((renderOptions) => {
-    renderOptions.widgetParams.container.innerHTML = `
-        <a
-          data-testid="ClearRefinements-link"
-          href="${renderOptions.createURL()}"
-        >
-          LINK
-        </a>
-      `;
-  });
-
-  instantsearch(instantSearchOptions)
-    .addWidgets([
-      clearRefinementsURL({
         container: document.body.appendChild(document.createElement('div')),
         ...widgetParams,
       }),

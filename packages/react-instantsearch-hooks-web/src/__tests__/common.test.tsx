@@ -11,7 +11,6 @@ import {
   createHitsTests,
   createRangeInputTests,
   createInstantSearchTests,
-  createClearRefinementsTests,
   createHitsPerPageTests,
   createNumericMenuTests,
   createRatingMenuTests,
@@ -39,7 +38,6 @@ import {
   usePagination,
   useBreadcrumb,
   useHierarchicalMenu,
-  useClearRefinements,
   useHitsPerPage,
   HitsPerPage,
   useMenu,
@@ -52,7 +50,6 @@ import {
 
 import type {
   UseBreadcrumbProps,
-  UseClearRefinementsProps,
   UseCurrentRefinementsProps,
   UseHierarchicalMenuProps,
   UseHitsPerPageProps,
@@ -299,24 +296,6 @@ createRangeInputTests(({ instantSearchOptions, widgetParams }) => {
     </InstantSearch>
   );
 }, act);
-
-createClearRefinementsTests(({ instantSearchOptions, widgetParams }) => {
-  function ClearRefinementsURL(props: UseClearRefinementsProps) {
-    const { createURL } = useClearRefinements(props);
-    return (
-      <a data-testid="ClearRefinements-link" href={createURL()}>
-        LINK
-      </a>
-    );
-  }
-
-  render(
-    <InstantSearch {...instantSearchOptions}>
-      <ClearRefinementsURL {...widgetParams} />
-      <GlobalErrorSwallower />
-    </InstantSearch>
-  );
-});
 
 createCurrentRefinementsTests(({ instantSearchOptions, widgetParams }) => {
   function CurrentRefinementsURL(props: UseCurrentRefinementsProps) {

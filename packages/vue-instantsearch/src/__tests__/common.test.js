@@ -11,7 +11,6 @@ import {
   createHitsTests,
   createRangeInputTests,
   createInstantSearchTests,
-  createClearRefinementsTests,
   createCurrentRefinementsTests,
   createHitsPerPageTests,
   createNumericMenuTests,
@@ -34,7 +33,6 @@ import {
   AisHits,
   AisIndex,
   AisRangeInput,
-  AisClearRefinements,
   AisCurrentRefinements,
   AisHitsPerPage,
   AisNumericMenu,
@@ -43,7 +41,6 @@ import {
 } from '../instantsearch';
 import {
   connectBreadcrumb,
-  connectClearRefinements,
   connectCurrentRefinements,
   connectHierarchicalMenu,
   connectHitsPerPage,
@@ -357,28 +354,6 @@ createRangeInputTests(async ({ instantSearchOptions, widgetParams }) => {
       render: renderCompat((h) =>
         h(AisInstantSearch, { props: instantSearchOptions }, [
           h(AisRangeInput, { props: widgetParams }),
-          h(GlobalErrorSwallower),
-        ])
-      ),
-    },
-    document.body.appendChild(document.createElement('div'))
-  );
-
-  await nextTick();
-});
-
-createClearRefinementsTests(async ({ instantSearchOptions, widgetParams }) => {
-  const ClearRefinementsURL = createURLComponent({
-    connector: connectClearRefinements,
-    name: 'ClearRefinements',
-  });
-
-  mountApp(
-    {
-      render: renderCompat((h) =>
-        h(AisInstantSearch, { props: instantSearchOptions }, [
-          h(ClearRefinementsURL, { props: widgetParams }),
-          h(AisClearRefinements),
           h(GlobalErrorSwallower),
         ])
       ),

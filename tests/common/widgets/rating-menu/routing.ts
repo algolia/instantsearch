@@ -12,6 +12,13 @@ import { history } from 'instantsearch.js/es/lib/routers';
 
 export function createRoutingTests(setup: RatingMenuSetup, act: Act) {
   describe('routing', () => {
+    beforeAll(() => {
+      window.history.pushState({}, '', 'http://localhost/');
+    });
+    afterAll(() => {
+      window.history.pushState({}, '', 'http://localhost/');
+    });
+
     describe('URLs created by widget', () => {
       test('Consistently shows the right URL, even before widget is initialized', async () => {
         const delay = 100;

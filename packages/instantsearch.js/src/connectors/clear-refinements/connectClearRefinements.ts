@@ -192,10 +192,6 @@ const connectClearRefinements: ClearRefinementsConnector =
           };
 
           connectorState.createURL = () => {
-            if (connectorState.attributesToClear.length === 0) {
-              return createURL((uiState) => uiState);
-            }
-
             return createURL(
               mergeSearchParameters(
                 ...connectorState.attributesToClear.map(
