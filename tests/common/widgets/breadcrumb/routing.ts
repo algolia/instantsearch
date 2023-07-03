@@ -5,12 +5,12 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { screen } from '@testing-library/dom';
-import type { PaginationSetup } from '.';
+import type { BreadcrumbSetup } from '.';
 import type { Act } from '../../common';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import { history } from 'instantsearch.js/es/lib/routers';
 
-export function createRoutingTests(setup: PaginationSetup, act: Act) {
+export function createRoutingTests(setup: BreadcrumbSetup, act: Act) {
   describe('routing', () => {
     beforeAll(() => {
       window.history.pushState({}, '', 'http://localhost/');
@@ -23,29 +23,52 @@ export function createRoutingTests(setup: PaginationSetup, act: Act) {
       test('Consistently shows the right URL, even before widget is initialized', async () => {
         const delay = 100;
         const margin = 10;
+        const attributes = ['one', 'two'];
+
+        const router = history();
         const options = {
           instantSearchOptions: {
             indexName: 'indexName',
             routing: {
               stateMapping: simple(),
-              routing: history(),
+              router,
             },
             searchClient: createSearchClient({
               search: jest.fn(async (requests) => {
                 await wait(delay);
                 return createMultiSearchResponse(
-                  ...requests.map(({ params }) =>
+                  ...requests.map(() =>
                     createSingleSearchResponse({
-                      page: params!.page,
-                      nbPages: 20,
+                      facets: {
+                        [attributes[0]]: {
+                          Samsung: 100,
+                          Apple: 200,
+                        },
+                        [attributes[1]]: {
+                          'Apple > iPad': 100,
+                          'Apple > iPhone': 100,
+                        },
+                      },
                     })
                   )
                 );
               }),
             }),
           },
-          widgetParams: {},
+          widgetParams: { attributes },
         };
+
+        window.history.pushState(
+          {},
+          '',
+          router.createURL({
+            indexName: {
+              hierarchicalMenu: {
+                one: ['Apple', 'iPhone'],
+              },
+            },
+          })
+        );
 
         await setup(options);
 
@@ -54,13 +77,19 @@ export function createRoutingTests(setup: PaginationSetup, act: Act) {
           // Vue doesn't render anything on first render, so we don't need
           // to check that the URL is correct.
           const link = document.querySelector(
-            '[data-testid="Pagination-link"]'
+            '[data-testid="Breadcrumb-link"]'
           );
           if (link) {
             // eslint-disable-next-line jest/no-conditional-expect
             expect(link).toHaveAttribute(
               'href',
-              `http://localhost/?${encodeURI('indexName[page]=10')}`
+              router.createURL({
+                indexName: {
+                  hierarchicalMenu: {
+                    one: ['Apple'],
+                  },
+                },
+              })
             );
           }
         }
@@ -71,27 +100,41 @@ export function createRoutingTests(setup: PaginationSetup, act: Act) {
           await wait(0);
         });
 
-        // Initial state, before interaction
+        // Initial state, before interaction, URL toggles the last section
         {
-          expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
+          expect(screen.getByTestId('Breadcrumb-link')).toHaveAttribute(
             'href',
-            `http://localhost/?${encodeURI('indexName[page]=10')}`
+            router.createURL({
+              indexName: {
+                hierarchicalMenu: {
+                  one: ['Apple'],
+                },
+              },
+            })
           );
         }
 
         // Select a refinement
         {
-          const secondPage = screen.getByRole('link', { name: 'Page 2' });
+          const firstItem = screen.getByRole('link', {
+            name: 'Apple',
+          });
           await act(async () => {
-            secondPage.click();
+            firstItem.click();
             await wait(0);
             await wait(0);
           });
 
-          // URL is still the same, as it overrides the current state
-          expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
+          // URL now includes "iPhone" as it is no longer refined
+          expect(screen.getByTestId('Breadcrumb-link')).toHaveAttribute(
             'href',
-            `http://localhost/?${encodeURI('indexName[page]=10')}`
+            router.createURL({
+              indexName: {
+                hierarchicalMenu: {
+                  one: ['Apple', 'iPhone'],
+                },
+              },
+            })
           );
         }
 
@@ -101,38 +144,15 @@ export function createRoutingTests(setup: PaginationSetup, act: Act) {
             await wait(delay + margin);
           });
 
-          expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
+          expect(screen.getByTestId('Breadcrumb-link')).toHaveAttribute(
             'href',
-            `http://localhost/?${encodeURI('indexName[page]=10')}`
-          );
-        }
-
-        // Unselect the refinement
-        {
-          const firstPage = screen.getByRole('link', { name: 'Page 1' });
-          await act(async () => {
-            firstPage.click();
-            await wait(0);
-            await wait(0);
-          });
-
-          // URL is still the same, as it overrides the current state
-          expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
-            'href',
-            `http://localhost/?${encodeURI('indexName[page]=10')}`
-          );
-        }
-
-        // Wait for new results to come in
-        {
-          await act(async () => {
-            await wait(delay + margin);
-            await wait(0);
-          });
-
-          expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
-            'href',
-            `http://localhost/?${encodeURI('indexName[page]=10')}`
+            router.createURL({
+              indexName: {
+                hierarchicalMenu: {
+                  one: ['Apple', 'iPhone'],
+                },
+              },
+            })
           );
         }
       });

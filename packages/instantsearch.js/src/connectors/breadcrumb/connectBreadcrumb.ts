@@ -214,7 +214,12 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
 
         if (!connectorState.createURL) {
           connectorState.createURL = (facetValue) => {
-            return createURL(getRefinedState(helper.state, facetValue));
+            return createURL((uiState) =>
+              this.getWidgetUiState!(uiState, {
+                searchParameters: getRefinedState(helper.state, facetValue),
+                helper,
+              })
+            );
           };
         }
 
@@ -233,7 +238,42 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
         };
       },
 
-      getWidgetSearchParameters(searchParameters) {
+      getWidgetUiState(uiState, { searchParameters }) {
+        const path = searchParameters.getHierarchicalFacetBreadcrumb(
+          hierarchicalFacetName
+        );
+
+        if (!path.length) {
+          return uiState;
+        }
+
+        return {
+          ...uiState,
+          hierarchicalMenu: {
+            ...uiState.hierarchicalMenu,
+            [hierarchicalFacetName]: path,
+          },
+        };
+      },
+
+      getWidgetSearchParameters(searchParameters, { uiState }) {
+        const values =
+          uiState.hierarchicalMenu &&
+          uiState.hierarchicalMenu[hierarchicalFacetName];
+
+        if (
+          searchParameters.isConjunctiveFacet(hierarchicalFacetName) ||
+          searchParameters.isDisjunctiveFacet(hierarchicalFacetName)
+        ) {
+          warning(
+            false,
+            `HierarchicalMenu: Attribute "${hierarchicalFacetName}" is already used by another widget applying conjunctive or disjunctive faceting.
+As this is not supported, please make sure to remove this other widget or this HierarchicalMenu widget will not work at all.`
+          );
+
+          return searchParameters;
+        }
+
         if (searchParameters.isHierarchicalFacet(hierarchicalFacetName)) {
           const facet = searchParameters.getHierarchicalFacetByName(
             hierarchicalFacetName
@@ -245,16 +285,30 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
               facet.rootPath === rootPath,
             'Using Breadcrumb and HierarchicalMenu on the same facet with different options overrides the configuration of the HierarchicalMenu.'
           );
-
-          return searchParameters;
         }
 
-        return searchParameters.addHierarchicalFacet({
-          name: hierarchicalFacetName,
-          attributes,
-          separator,
-          rootPath,
-        });
+        const withFacetConfiguration = searchParameters
+          .removeHierarchicalFacet(hierarchicalFacetName)
+          .addHierarchicalFacet({
+            name: hierarchicalFacetName,
+            attributes,
+            separator,
+            rootPath,
+          });
+
+        if (!values) {
+          return withFacetConfiguration.setQueryParameters({
+            hierarchicalFacetsRefinements: {
+              ...withFacetConfiguration.hierarchicalFacetsRefinements,
+              [hierarchicalFacetName]: [],
+            },
+          });
+        }
+
+        return withFacetConfiguration.addHierarchicalFacetRefinement(
+          hierarchicalFacetName,
+          values.join(separator)
+        );
       },
     };
   };

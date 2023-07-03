@@ -13,7 +13,11 @@ import {
   createInstantSearchTests,
 } from '@instantsearch/tests';
 
-import { connectRefinementList, connectPagination } from '../connectors';
+import {
+  connectRefinementList,
+  connectPagination,
+  connectBreadcrumb,
+} from '../connectors';
 import instantsearch from '../index.es';
 import {
   hierarchicalMenu,
@@ -49,8 +53,25 @@ createBreadcrumbTests(({ instantSearchOptions, widgetParams }) => {
   const { transformItems, templates, ...hierarchicalWidgetParams } =
     widgetParams;
 
+  const breadcrumbURL = connectBreadcrumb<{ container: HTMLElement }>(
+    (renderOptions) => {
+      renderOptions.widgetParams.container.innerHTML = `
+        <a
+          data-testid="Breadcrumb-link"
+          href="${renderOptions.createURL('Apple > iPhone')}"
+        >
+          LINK
+        </a>
+      `;
+    }
+  );
+
   instantsearch(instantSearchOptions)
     .addWidgets([
+      breadcrumbURL({
+        container: document.body.appendChild(document.createElement('div')),
+        ...widgetParams,
+      }),
       breadcrumb({
         container: document.body.appendChild(document.createElement('div')),
         ...widgetParams,

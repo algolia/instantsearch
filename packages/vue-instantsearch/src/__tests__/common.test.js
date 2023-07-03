@@ -29,6 +29,11 @@ import {
   AisIndex,
   AisRangeInput,
 } from '../instantsearch';
+import {
+  connectBreadcrumb,
+  connectPagination,
+  connectRefinementList,
+} from 'instantsearch.js/es/connectors';
 jest.unmock('instantsearch.js/es');
 
 /**
@@ -46,26 +51,18 @@ const GlobalErrorSwallower = {
 };
 
 createRefinementListTests(async ({ instantSearchOptions, widgetParams }) => {
+  const RefinementListURL = createURLComponent({
+    connector: connectRefinementList,
+    name: 'RefinementList',
+    requiredProps: ['attribute'],
+    urlValue: 'value',
+  });
+
   mountApp(
     {
       render: renderCompat((h) =>
         h(AisInstantSearch, { props: instantSearchOptions }, [
-          h(AisRefinementList, {
-            props: widgetParams,
-            scopedSlots: {
-              default: ({ createURL }) =>
-                h(
-                  'a',
-                  {
-                    attrs: {
-                      'data-testid': 'RefinementList-link',
-                      href: createURL('value'),
-                    },
-                  },
-                  'LINK'
-                ),
-            },
-          }),
+          h(RefinementListURL, { props: widgetParams }),
           h(AisRefinementList, { props: widgetParams }),
           h(GlobalErrorSwallower),
         ])
@@ -99,10 +96,18 @@ createBreadcrumbTests(async ({ instantSearchOptions, widgetParams }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { transformItems, ...hierarchicalWidgetParams } = widgetParams;
 
+  const BreadcrumbURL = createURLComponent({
+    connector: connectBreadcrumb,
+    name: 'Breadcrumb',
+    requiredProps: ['attributes'],
+    urlValue: 'Apple > iPhone',
+  });
+
   mountApp(
     {
       render: renderCompat((h) =>
         h(AisInstantSearch, { props: instantSearchOptions }, [
+          h(BreadcrumbURL, { props: widgetParams }),
           h(AisBreadcrumb, { props: widgetParams }),
           h(AisHierarchicalMenu, { props: hierarchicalWidgetParams }),
           h(GlobalErrorSwallower),
@@ -132,27 +137,18 @@ createMenuTests(async ({ instantSearchOptions, widgetParams }) => {
 });
 
 createPaginationTests(async ({ instantSearchOptions, widgetParams }) => {
+  const PaginationURL = createURLComponent({
+    connector: connectPagination,
+    name: 'Pagination',
+    urlValue: 10,
+  });
+
   mountApp(
     {
       render: renderCompat((h) =>
         h(AisInstantSearch, { props: instantSearchOptions }, [
+          h(PaginationURL, { props: widgetParams }),
           h(AisPagination, { props: widgetParams }),
-          h(AisPagination, {
-            props: widgetParams,
-            scopedSlots: {
-              default: ({ createURL }) =>
-                h(
-                  'a',
-                  {
-                    attrs: {
-                      'data-testid': 'Pagination-link',
-                      href: createURL(10),
-                    },
-                  },
-                  'LINK'
-                ),
-            },
-          }),
           h(GlobalErrorSwallower),
         ])
       ),
@@ -359,3 +355,34 @@ createInstantSearchTests(({ instantSearchOptions }) => {
     ],
   };
 });
+
+function createURLComponent({ connector, name, urlValue, requiredProps = [] }) {
+  return {
+    name: `${name}URL`,
+    mixins: [createWidgetMixin({ connector })],
+    props: Object.fromEntries(
+      requiredProps.map((prop) => [prop, { required: true }])
+    ),
+    computed: {
+      widgetParams() {
+        return Object.fromEntries(
+          requiredProps.map((prop) => [prop, this[prop]])
+        );
+      },
+    },
+    render: renderCompat(function (h) {
+      return this.state
+        ? h(
+            'a',
+            {
+              attrs: {
+                'data-testid': `${name}-link`,
+                href: this.state.createURL(urlValue),
+              },
+            },
+            'LINK'
+          )
+        : null;
+    }),
+  };
+}
