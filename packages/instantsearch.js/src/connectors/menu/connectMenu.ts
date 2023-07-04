@@ -263,10 +263,13 @@ const connectMenu: MenuConnector = function connectMenu(
 
         if (!_createURL) {
           _createURL = (facetValue: string) =>
-            createURL(
-              helper.state
-                .resetPage()
-                .toggleFacetRefinement(attribute, facetValue)
+            createURL((uiState) =>
+              this.getWidgetUiState(uiState, {
+                searchParameters: helper.state
+                  .resetPage()
+                  .toggleFacetRefinement(attribute, facetValue),
+                helper,
+              })
             );
         }
 

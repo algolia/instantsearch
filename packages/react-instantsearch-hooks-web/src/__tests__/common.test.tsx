@@ -11,8 +11,14 @@ import {
   createHitsTests,
   createRangeInputTests,
   createInstantSearchTests,
+  createHitsPerPageTests,
+  createNumericMenuTests,
+  createRatingMenuTests,
+  createToggleRefinementTests,
+  createCurrentRefinementsTests,
 } from '@instantsearch/tests';
 import { act, render } from '@testing-library/react';
+import { connectRatingMenu } from 'instantsearch.js/es/connectors';
 import React from 'react';
 
 import {
@@ -31,14 +37,33 @@ import {
   useRefinementList,
   usePagination,
   useBreadcrumb,
+  useHierarchicalMenu,
+  useHitsPerPage,
+  HitsPerPage,
+  useMenu,
+  useNumericMenu,
+  useConnector,
+  useToggleRefinement,
+  ToggleRefinement,
+  useCurrentRefinements,
 } from '..';
 
 import type {
   UseBreadcrumbProps,
+  UseCurrentRefinementsProps,
+  UseHierarchicalMenuProps,
+  UseHitsPerPageProps,
+  UseMenuProps,
+  UseNumericMenuProps,
   UsePaginationProps,
   UseRefinementListProps,
+  UseToggleRefinementProps,
 } from '..';
 import type { Hit } from 'instantsearch.js';
+import type {
+  RatingMenuConnectorParams,
+  RatingMenuRenderState,
+} from 'instantsearch.js/es/connectors/rating-menu/connectRatingMenu';
 import type { SendEventForHits } from 'instantsearch.js/es/lib/utils';
 
 /**
@@ -70,8 +95,18 @@ createRefinementListTests(({ instantSearchOptions, widgetParams }) => {
 }, act);
 
 createHierarchicalMenuTests(({ instantSearchOptions, widgetParams }) => {
+  function HierarchicalMenuURL(props: UseHierarchicalMenuProps) {
+    const { createURL } = useHierarchicalMenu(props);
+    return (
+      <a data-testid="HierarchicalMenu-link" href={createURL('value')}>
+        LINK
+      </a>
+    );
+  }
+
   render(
     <InstantSearch {...instantSearchOptions}>
+      <HierarchicalMenuURL {...widgetParams} />
       <HierarchicalMenu {...widgetParams} />
       <GlobalErrorSwallower />
     </InstantSearch>
@@ -99,8 +134,18 @@ createBreadcrumbTests(({ instantSearchOptions, widgetParams }) => {
 }, act);
 
 createMenuTests(({ instantSearchOptions, widgetParams }) => {
+  function MenuURL(props: UseMenuProps) {
+    const { createURL } = useMenu(props);
+    return (
+      <a data-testid="Menu-link" href={createURL('value')}>
+        LINK
+      </a>
+    );
+  }
+
   render(
     <InstantSearch {...instantSearchOptions}>
+      <MenuURL {...widgetParams} />
       <Menu {...widgetParams} />
       <GlobalErrorSwallower />
     </InstantSearch>
@@ -247,6 +292,113 @@ createRangeInputTests(({ instantSearchOptions, widgetParams }) => {
   render(
     <InstantSearch {...instantSearchOptions}>
       <RangeInput {...widgetParams} />
+      <GlobalErrorSwallower />
+    </InstantSearch>
+  );
+}, act);
+
+createCurrentRefinementsTests(({ instantSearchOptions, widgetParams }) => {
+  function CurrentRefinementsURL(props: UseCurrentRefinementsProps) {
+    const { createURL } = useCurrentRefinements(props);
+    return (
+      <a
+        data-testid="CurrentRefinements-link"
+        href={createURL({
+          attribute: 'brand',
+          type: 'disjunctive',
+          value: 'Apple',
+          label: 'Apple',
+        })}
+      >
+        LINK
+      </a>
+    );
+  }
+
+  render(
+    <InstantSearch {...instantSearchOptions}>
+      <CurrentRefinementsURL {...widgetParams} />
+      <RefinementList attribute="brand" />
+      <GlobalErrorSwallower />
+    </InstantSearch>
+  );
+}, act);
+
+createHitsPerPageTests(({ instantSearchOptions, widgetParams }) => {
+  function HitsPerPageURL(props: UseHitsPerPageProps) {
+    const { createURL } = useHitsPerPage(props);
+    return (
+      <a data-testid="HitsPerPage-link" href={createURL(12)}>
+        LINK
+      </a>
+    );
+  }
+
+  render(
+    <InstantSearch {...instantSearchOptions}>
+      <HitsPerPageURL {...widgetParams} />
+      <HitsPerPage {...widgetParams} />
+      <GlobalErrorSwallower />
+    </InstantSearch>
+  );
+}, act);
+
+createNumericMenuTests(({ instantSearchOptions, widgetParams }) => {
+  function NumericMenuURL(props: UseNumericMenuProps) {
+    const { createURL } = useNumericMenu(props);
+    return (
+      <a
+        data-testid="NumericMenu-link"
+        href={createURL(encodeURI('{ "start": 500 }'))}
+      >
+        LINK
+      </a>
+    );
+  }
+
+  render(
+    <InstantSearch {...instantSearchOptions}>
+      <NumericMenuURL {...widgetParams} />
+      <GlobalErrorSwallower />
+    </InstantSearch>
+  );
+}, act);
+
+createRatingMenuTests(({ instantSearchOptions, widgetParams }) => {
+  function RatingMenuURL(props: RatingMenuConnectorParams) {
+    const { createURL } = useConnector(
+      connectRatingMenu,
+      props
+    ) as RatingMenuRenderState;
+    return (
+      <a data-testid="RatingMenu-link" href={createURL(encodeURI('5'))}>
+        LINK
+      </a>
+    );
+  }
+
+  render(
+    <InstantSearch {...instantSearchOptions}>
+      <RatingMenuURL {...widgetParams} />
+      <GlobalErrorSwallower />
+    </InstantSearch>
+  );
+}, act);
+
+createToggleRefinementTests(({ instantSearchOptions, widgetParams }) => {
+  function ToggleRefinementURL(props: UseToggleRefinementProps) {
+    const { createURL } = useToggleRefinement(props);
+    return (
+      <a data-testid="ToggleRefinement-link" href={createURL()}>
+        LINK
+      </a>
+    );
+  }
+
+  render(
+    <InstantSearch {...instantSearchOptions}>
+      <ToggleRefinementURL {...widgetParams} />
+      <ToggleRefinement {...widgetParams} />
       <GlobalErrorSwallower />
     </InstantSearch>
   );

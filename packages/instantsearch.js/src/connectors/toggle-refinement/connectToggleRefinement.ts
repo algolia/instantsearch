@@ -11,7 +11,10 @@ import {
 import type {
   Connector,
   CreateURL,
+  InitOptions,
   InstantSearch,
+  RenderOptions,
+  Widget,
   WidgetRenderState,
 } from '../../types';
 import type {
@@ -135,7 +138,7 @@ export type ToggleRefinementRenderState = {
   /**
    * Creates an URL for the next state.
    */
-  createURL: CreateURL<string>;
+  createURL: CreateURL<void>;
   /**
    * Send a "Facet Clicked" Insights event.
    */
@@ -244,9 +247,13 @@ const connectToggleRefinement: ToggleRefinementConnector =
             {
               state,
               createURL,
+              getWidgetUiState,
+              helper,
             }: {
               state: SearchParameters;
-              createURL: (parameters: SearchParameters) => string;
+              createURL: (InitOptions | RenderOptions)['createURL'];
+              getWidgetUiState: NonNullable<Widget['getWidgetUiState']>;
+              helper: AlgoliaSearchHelper;
             }
           ) =>
           () => {
@@ -266,7 +273,9 @@ const connectToggleRefinement: ToggleRefinementConnector =
               });
             }
 
-            return createURL(state);
+            return createURL((uiState) =>
+              getWidgetUiState(uiState, { searchParameters: state, helper })
+            );
           },
       };
 
@@ -399,6 +408,8 @@ const connectToggleRefinement: ToggleRefinementConnector =
             createURL: connectorState.createURLFactory(isRefined, {
               state,
               createURL,
+              helper,
+              getWidgetUiState: this.getWidgetUiState,
             }),
             sendEvent,
             canRefine: Boolean(results ? nextRefinement.count : null),
@@ -415,6 +426,8 @@ const connectToggleRefinement: ToggleRefinementConnector =
             );
 
           if (!isRefined) {
+            // This needs to be done in the case `uiState` comes from `createURL`
+            delete uiState.toggle?.[attribute];
             return uiState;
           }
 
