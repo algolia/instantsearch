@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.56.4](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.56.3...instantsearch.js@4.56.4) (2023-07-04)
+
+
+### Bug Fixes
+
+* **router:** do not update ui state if there are no widgets ([#5692](https://github.com/algolia/instantsearch.js/issues/5692)) ([ba8199f](https://github.com/algolia/instantsearch.js/commit/ba8199fe8deed9539619c6f7d65d299358979c49))
+
+
+
+
+
 ## [4.56.3](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.56.2...instantsearch.js@4.56.3) (2023-06-20)
 
 
