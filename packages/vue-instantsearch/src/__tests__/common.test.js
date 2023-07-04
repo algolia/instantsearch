@@ -16,6 +16,7 @@ import {
   createNumericMenuTests,
   createRatingMenuTests,
   createToggleRefinementTests,
+  createSharedTests,
 } from '@instantsearch/tests';
 
 import { nextTick, mountApp } from '../../test/utils';
@@ -519,6 +520,38 @@ createInstantSearchTests(({ instantSearchOptions }) => {
       `Vue (${require('../util/vue-compat').version})`,
     ],
   };
+});
+
+createSharedTests(async ({ instantSearchOptions, widgetParams }) => {
+  const MenuURL = createURLComponent({
+    connector: connectMenu,
+    name: 'Menu',
+    requiredProps: ['attribute'],
+    urlValue: 'value',
+  });
+  const PaginationURL = createURLComponent({
+    connector: connectPagination,
+    name: 'Pagination',
+    urlValue: 10,
+  });
+
+  mountApp(
+    {
+      render: renderCompat((h) =>
+        h(AisInstantSearch, { props: instantSearchOptions }, [
+          h(MenuURL, { props: widgetParams.menu }),
+          h(AisMenu, { props: widgetParams.menu }),
+          h(AisHits, { props: widgetParams.hits }),
+          h(PaginationURL, { props: widgetParams.pagination }),
+          h(AisPagination, { props: widgetParams.pagination }),
+          h(GlobalErrorSwallower),
+        ])
+      ),
+    },
+    document.body.appendChild(document.createElement('div'))
+  );
+
+  await nextTick();
 });
 
 function createURLComponent({ connector, name, urlValue, requiredProps = [] }) {

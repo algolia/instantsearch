@@ -12,3 +12,4 @@ export * from './widgets/rating-menu';
 export * from './widgets/toggle-refinement';
 export * from './widgets/current-refinements';
 export * from './widgets/instantsearch';
+export * from './shared';

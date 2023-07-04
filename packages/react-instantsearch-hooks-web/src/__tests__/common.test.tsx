@@ -16,6 +16,7 @@ import {
   createRatingMenuTests,
   createToggleRefinementTests,
   createCurrentRefinementsTests,
+  createSharedTests,
 } from '@instantsearch/tests';
 import { act, render } from '@testing-library/react';
 import { connectRatingMenu } from 'instantsearch.js/es/connectors';
@@ -422,4 +423,35 @@ createInstantSearchTests(({ instantSearchOptions }) => {
       `react (${require('react').version})`,
     ],
   };
+}, act);
+
+createSharedTests(({ instantSearchOptions, widgetParams }) => {
+  function MenuURL(props: UseMenuProps) {
+    const { createURL } = useMenu(props);
+    return (
+      <a data-testid="Menu-link" href={createURL('value')}>
+        LINK
+      </a>
+    );
+  }
+
+  function PaginationURL(props: UsePaginationProps) {
+    const { createURL } = usePagination(props);
+    return (
+      <a data-testid="Pagination-link" href={createURL(10)}>
+        LINK
+      </a>
+    );
+  }
+
+  render(
+    <InstantSearch {...instantSearchOptions}>
+      <MenuURL {...widgetParams.menu} />
+      <Menu {...widgetParams.menu} />
+      <Hits {...widgetParams.hits} />
+      <PaginationURL {...widgetParams} />
+      <Pagination {...widgetParams} />
+      <GlobalErrorSwallower />
+    </InstantSearch>
+  );
 }, act);
