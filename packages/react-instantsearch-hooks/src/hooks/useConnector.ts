@@ -36,6 +36,7 @@ export function useConnector<
   const previousRenderStateRef = useRef<TDescription['renderState'] | null>(
     null
   );
+  const previousStatusRef = useRef(search.status);
 
   const widget = useMemo(() => {
     const createWidget = connector(
@@ -73,11 +74,13 @@ export function useConnector<
               previousRenderStateRef.current,
               (a, b) =>
                 a?.constructor === Function && b?.constructor === Function
-            )
+            ) ||
+            instantSearchInstance.status !== previousStatusRef.current
           ) {
             // eslint-disable-next-line @typescript-eslint/no-use-before-define
             setState(renderState);
             previousRenderStateRef.current = renderState;
+            previousStatusRef.current = instantSearchInstance.status;
           }
         }
       },
