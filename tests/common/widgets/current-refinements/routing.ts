@@ -8,10 +8,15 @@ import { screen } from '@testing-library/dom';
 import type { CurrentRefinementsSetup } from '.';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import { history } from 'instantsearch.js/es/lib/routers';
-import type { Act } from '../../common';
+import type { Act, SkippedTests } from '../../common';
+import { skippableDescribe } from '../../common';
 
-export function createRoutingTests(setup: CurrentRefinementsSetup, act: Act) {
-  describe('routing', () => {
+export function createRoutingTests(
+  setup: CurrentRefinementsSetup,
+  act: Act,
+  skippedTests: SkippedTests
+) {
+  skippableDescribe('routing', skippedTests, () => {
     beforeAll(() => {
       window.history.pushState({}, '', 'http://localhost/');
     });

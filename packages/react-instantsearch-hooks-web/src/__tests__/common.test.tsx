@@ -298,32 +298,41 @@ createRangeInputTests(({ instantSearchOptions, widgetParams }) => {
   );
 }, act);
 
-createCurrentRefinementsTests(({ instantSearchOptions, widgetParams }) => {
-  function CurrentRefinementsURL(props: UseCurrentRefinementsProps) {
-    const { createURL } = useCurrentRefinements(props);
-    return (
-      <a
-        data-testid="CurrentRefinements-link"
-        href={createURL({
-          attribute: 'brand',
-          type: 'disjunctive',
-          value: 'Apple',
-          label: 'Apple',
-        })}
-      >
-        LINK
-      </a>
-    );
-  }
+createCurrentRefinementsTests(
+  ({ instantSearchOptions, widgetParams }) => {
+    function CurrentRefinementsURL(props: UseCurrentRefinementsProps) {
+      const { createURL } = useCurrentRefinements(props);
+      return (
+        <a
+          data-testid="CurrentRefinements-link"
+          href={createURL({
+            attribute: 'brand',
+            type: 'disjunctive',
+            value: 'Apple',
+            label: 'Apple',
+          })}
+        >
+          LINK
+        </a>
+      );
+    }
 
-  render(
-    <InstantSearch {...instantSearchOptions}>
-      <CurrentRefinementsURL {...widgetParams} />
-      <RefinementList attribute="brand" />
-      <GlobalErrorSwallower />
-    </InstantSearch>
-  );
-}, act);
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <CurrentRefinementsURL {...widgetParams} />
+        <RefinementList attribute="brand" />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+  },
+  act,
+  {
+    skippedTests: {
+      /** createURL uses helper state instead of ui state as it can't be translated */
+      routing: true,
+    },
+  }
+);
 
 createHitsPerPageTests(({ instantSearchOptions, widgetParams }) => {
   function HitsPerPageURL(props: UseHitsPerPageProps) {
