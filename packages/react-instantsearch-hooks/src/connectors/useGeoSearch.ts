@@ -9,6 +9,7 @@ import type {
   GeoSearchConnectorParams,
   GeoSearchWidgetDescription,
 } from 'instantsearch.js/es/connectors/geo-search/connectGeoSearch';
+export type { GeoHit } from 'instantsearch.js/es/connectors/geo-search/connectGeoSearch';
 
 export type UseGeoSearchProps<THit extends BaseHit = BaseHit> =
   GeoSearchConnectorParams<THit>;
