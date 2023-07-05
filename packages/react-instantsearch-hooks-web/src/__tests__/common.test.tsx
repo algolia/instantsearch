@@ -458,8 +458,8 @@ createSharedTests(({ instantSearchOptions, widgetParams }) => {
       <MenuURL {...widgetParams.menu} />
       <Menu {...widgetParams.menu} />
       <Hits {...widgetParams.hits} />
-      <PaginationURL {...widgetParams} />
-      <Pagination {...widgetParams} />
+      <PaginationURL {...widgetParams.pagination} />
+      <Pagination {...widgetParams.pagination} />
       <GlobalErrorSwallower />
     </InstantSearch>
   );
