@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.46.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.45.1...react-instantsearch-hooks@6.46.0) (2023-07-10)
+
+
+### Bug Fixes
+
+* **url:** base createURL on UiState instead of SearchParameters ([#5696](https://github.com/algolia/instantsearch.js/issues/5696)) ([7e2c8a2](https://github.com/algolia/instantsearch.js/commit/7e2c8a295a6fc5ba36d9482f645ef55b422d5e75)), closes [#5694](https://github.com/algolia/instantsearch.js/issues/5694)
+
+
+### Features
+
+* **GeoSearch:** expose useGeoSearch() hook in RISH ([#5693](https://github.com/algolia/instantsearch.js/issues/5693)) ([b951b7b](https://github.com/algolia/instantsearch.js/commit/b951b7bcafb384d990ccf02538d9bb9e248a6bba))
+
+
+
+
+
 ## [6.45.1](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.45.0...react-instantsearch-hooks@6.45.1) (2023-07-04)
 
 **Note:** Version bump only for package react-instantsearch-hooks
