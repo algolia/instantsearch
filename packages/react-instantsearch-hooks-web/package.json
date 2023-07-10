@@ -1,6 +1,6 @@
 {
   "name": "react-instantsearch-hooks-web",
-  "version": "6.45.2",
+  "version": "6.46.0",
   "description": "⚡ Lightning-fast search for React, by Algolia",
   "source": "src/index.ts",
   "types": "dist/es/index.d.ts",
