@@ -130,7 +130,7 @@ var lib = {
         if (facetList.length !== values.length) {
           hasChanged = true;
         }
-        // eslint-disable-next-line no-param-reassign
+
         memo[key] = facetList;
 
         return memo;

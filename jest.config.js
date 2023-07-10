@@ -12,6 +12,7 @@ const config = {
     '<rootDir>/packages/*/dist*',
     '<rootDir>/tests/e2e/*',
     '<rootDir>/examples/',
+    '<rootDir>/packages/algoliasearch-helper',
     '<rootDir>/packages/create-instantsearch-app',
     '<rootDir>/packages/react-instantsearch-hooks-router-nextjs',
     '/__utils__/',

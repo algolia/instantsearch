@@ -2,18 +2,17 @@ _Coming from V1 (or js client v2)?_ Read the [migration guide](https://github.co
 
 _Coming from V2?_ Read the [migration guide](https://github.com/algolia/algoliasearch-helper-js/wiki/Migration-guide-:-V2-to-V3) to the new version of the Helper.
 
-**The JavaScript helper is an advanced library we provide to our users. If you are looking to build a complete search interface, we recommend you to use [instantsearch.js](https://community.algolia.com/instantsearch.js/). If you want to build an autocomplete menu, see [autocomplete.js](https://github.com/algolia/autocomplete.js).**
+**The JavaScript helper is an advanced library we provide to our users. If you are looking to build a complete search interface, we recommend you to use [InstantSearch](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/). If you want to build an autocomplete menu, see [Autocomplete](https://github.com/algolia/autocomplete).**
 
-# algoliasearch-helper-js
+# algoliasearch-helper
 
-This module is the companion of the [algolia/algoliasearch-client-js](https://github.com/algolia/algoliasearch-client-js). It helps you keep track of the search parameters and provides a higher level API.
+This module is the companion of the [algolia/algoliasearch-client-javascript](https://github.com/algolia/algoliasearch-client-javascript). It helps you keep track of the search parameters and provides a higher level API.
 
 [See the helper in action](https://community.algolia.com/algoliasearch-helper-js/)
 
-[![Version][version-svg]][package-url] [![Build Status][travis-svg]][travis-url] [![License][license-image]][license-url] [![Downloads][downloads-image]][downloads-url] [![jsDelivr Hits][jsdelivr-badge]][jsdelivr-hits]
+[![Version][version-svg]][package-url] [![License][license-image]][license-url] [![Downloads][downloads-image]][downloads-url] [![jsDelivr Hits][jsdelivr-badge]][jsdelivr-hits]
 
 [travis-svg]: https://img.shields.io/travis/algolia/algoliasearch-helper-js/develop.svg?style=flat-square
-[travis-url]: https://travis-ci.org/algolia/algoliasearch-helper-js
 [license-image]: http://img.shields.io/badge/license-MIT-green.svg?style=flat-square
 [license-url]: LICENSE
 [downloads-image]: https://img.shields.io/npm/dm/algoliasearch-helper.svg?style=flat-square
@@ -25,6 +24,7 @@ This module is the companion of the [algolia/algoliasearch-client-js](https://gi
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
 
 - [Features](#features)
 - [Examples](#examples)
@@ -1328,6 +1328,6 @@ Here is an example of a result object you get with the `result` event.
 }
 ```
 
-# Browser support
+## Browser support
 
 This project works on any [ES5](https://en.wikipedia.org/wiki/ECMAScript#5th_Edition) browser, basically >= IE9+.

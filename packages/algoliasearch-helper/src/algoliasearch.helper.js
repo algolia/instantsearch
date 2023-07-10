@@ -408,13 +408,10 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function (
       self._currentNbQueries--;
       if (self._currentNbQueries === 0) self.emit('searchQueueEmpty');
 
-      // eslint-disable-next-line no-param-reassign
       content = Array.isArray(content) ? content[0] : content;
 
       content.facetHits.forEach(function (f) {
-        // eslint-disable-next-line no-param-reassign
         f.escapedValue = escapeFacetValue(f.value);
-        // eslint-disable-next-line no-param-reassign
         f.isRefined = isDisjunctive
           ? state.isDisjunctiveFacetRefined(facet, f.escapedValue)
           : state.isFacetRefined(facet, f.escapedValue);

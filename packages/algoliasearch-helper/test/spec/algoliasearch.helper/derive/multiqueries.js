@@ -54,9 +54,7 @@ test('trigger a search with one derivation with a state change', function () {
     expect(requests[0].params.query).toBeUndefined();
     expect(requests[1].params.query).toBe('otherQuery');
 
-    // eslint-disable-next-line no-param-reassign
     delete requests[0].params.query;
-    // eslint-disable-next-line no-param-reassign
     delete requests[1].params.query;
 
     expect(requests[0]).toEqual(requests[1]);

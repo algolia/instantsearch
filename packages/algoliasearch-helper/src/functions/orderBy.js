@@ -38,7 +38,6 @@ function orderBy(collection, iteratees, orders) {
   }
 
   if (!Array.isArray(orders)) {
-    // eslint-disable-next-line no-param-reassign
     orders = [];
   }
 

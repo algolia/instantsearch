@@ -30,7 +30,7 @@
     "test:e2e:local": "wdio scripts/wdio/local.conf.js",
     "test:e2e:saucelabs": "wdio scripts/wdio/saucelabs.conf.js",
     "release": "shipjs prepare",
-    "prepare": "lerna run prepare",
+    "prepare": "lerna run prepare && patch-package",
     "prepare-vue3": "./scripts/prepare-vue3.js"
   },
   "devDependencies": {
@@ -131,6 +131,7 @@
     "jscodeshift": "0.7.0",
     "jsdom-global": "3.0.2",
     "lerna": "6.0.3",
+    "patch-package": "6.2.2",
     "places.js": "1.17.1",
     "prettier": "2.4.1",
     "prop-types": "15.6.2",

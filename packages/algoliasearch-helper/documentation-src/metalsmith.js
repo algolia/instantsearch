@@ -15,7 +15,10 @@ var marked = require('marked');
 var isDev = process.env.NODE_ENV === 'development';
 
 var projectRoot = path.join(__dirname, '..');
-var documentationRoot = path.join(projectRoot, 'documentation');
+var documentationRoot = path.join(
+  projectRoot,
+  '../../website/algoliasearch-helper-js/'
+);
 var cssRoot = path.join(documentationRoot, 'css');
 
 var src = {

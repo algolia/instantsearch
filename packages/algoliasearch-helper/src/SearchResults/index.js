@@ -71,7 +71,6 @@ function getIndices(attributes) {
 
 function assignFacetStats(dest, facetStats, key) {
   if (facetStats && facetStats[key]) {
-    // eslint-disable-next-line no-param-reassign
     dest.stats = facetStats[key];
   }
 }
@@ -746,7 +745,6 @@ function extractNormalizedFacetValues(results, attribute) {
  * @return {undefined} function mutates the item
  */
 function setIsRefined(item, currentRefinement, depth) {
-  // eslint-disable-next-line no-param-reassign
   item.isRefined = item.name === currentRefinement[depth];
   if (item.data) {
     item.data.forEach(function (child) {
@@ -765,7 +763,6 @@ function setIsRefined(item, currentRefinement, depth) {
  * @return {HierarchicalFacet|Array} sorted node
  */
 function recSort(sortFn, node, names, level) {
-  // eslint-disable-next-line no-param-reassign
   level = level || 0;
 
   if (Array.isArray(node)) {
@@ -813,7 +810,6 @@ function sortViaFacetOrdering(facetValues, facetOrdering) {
    * ['one', 'two'] -> { one: 0, two: 1 }
    */
   var reverseOrder = order.reduce(function (acc, name, i) {
-    // eslint-disable-next-line no-param-reassign
     acc[name] = i;
     return acc;
   }, {});

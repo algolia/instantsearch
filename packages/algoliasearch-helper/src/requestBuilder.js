@@ -8,7 +8,6 @@ function sortObject(obj) {
       return a.localeCompare(b);
     })
     .reduce(function (acc, curr) {
-      // eslint-disable-next-line no-param-reassign
       acc[curr] = obj[curr];
       return acc;
     }, {});

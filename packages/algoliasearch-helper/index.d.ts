@@ -1,5 +1,5 @@
 import EventEmitter from '@algolia/events';
-import {
+import type {
   FindAnswersResponse,
   HighlightResult,
   RankingInfo,
@@ -915,7 +915,7 @@ declare namespace algoliasearchHelper {
      * default: null
      * https://www.algolia.com/doc/api-reference/api-parameters/insideBoundingBox/
      */
-    insideBoundingBox?: [number, number, number, number][];
+    insideBoundingBox?: Array<[number, number, number, number]>;
     /**
      * Selects how the query words are interpreted
      * default: 'prefixLast'
@@ -1157,13 +1157,15 @@ declare namespace algoliasearchHelper {
      *  - `value` : the value of the facet highlighted (html)
      *  - `matchLevel`: full, partial or none depending on how the query terms match
      */
-    hits: (T & {
-      readonly objectID: string;
-      readonly _highlightResult?: HighlightResult<T>;
-      readonly _snippetResult?: SnippetResult<T>;
-      readonly _rankingInfo?: RankingInfo;
-      readonly _distinctSeqID?: number;
-    })[];
+    hits: Array<
+      T & {
+        readonly objectID: string;
+        readonly _highlightResult?: HighlightResult<T>;
+        readonly _snippetResult?: SnippetResult<T>;
+        readonly _rankingInfo?: RankingInfo;
+        readonly _distinctSeqID?: number;
+      }
+    >;
     /**
      * index where the results come from
      */
@@ -1314,7 +1316,7 @@ declare namespace algoliasearchHelper {
      */
     facets: SearchResults.Facet[];
 
-    _rawResults: SearchResponse<T>[];
+    _rawResults: Array<SearchResponse<T>>;
     _state: SearchParameters;
 
     /**
@@ -1325,7 +1327,7 @@ declare namespace algoliasearchHelper {
 
     constructor(
       state: SearchParameters,
-      results: SearchResponse<T>[],
+      results: Array<SearchResponse<T>>,
       options?: SearchResultsOptions
     );
 

@@ -20,6 +20,7 @@ function _merge(target, source) {
     return target;
   }
 
+  // eslint-disable-next-line no-restricted-syntax
   for (var key in source) {
     if (
       !Object.prototype.hasOwnProperty.call(source, key) ||
@@ -42,10 +43,8 @@ function _merge(target, source) {
       isObjectOrArrayOrFunction(targetVal) &&
       isObjectOrArrayOrFunction(sourceVal)
     ) {
-      // eslint-disable-next-line no-param-reassign
       target[key] = _merge(targetVal, sourceVal);
     } else {
-      // eslint-disable-next-line no-param-reassign
       target[key] = clone(sourceVal);
     }
   }
@@ -69,7 +68,6 @@ function _merge(target, source) {
  */
 function merge(target) {
   if (!isObjectOrArrayOrFunction(target)) {
-    // eslint-disable-next-line no-param-reassign
     target = {};
   }
 

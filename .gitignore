@@ -12,6 +12,7 @@ build/
 
 # Generated files
 /docs
+/website/algoliasearch-helper-js/*
 /website/examples/*
 /website/stories/*
 /website/specs/*

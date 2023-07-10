@@ -733,7 +733,6 @@ SearchParameters.prototype = {
             operatorList[operator] = outValues;
           });
 
-          // eslint-disable-next-line no-param-reassign
           memo[key] = operatorList;
 
           return memo;
@@ -1555,7 +1554,6 @@ SearchParameters.prototype = {
     var self = this;
     var nextWithNumbers = SearchParameters._parseNumbers(params);
     var previousPlainObject = Object.keys(this).reduce(function (acc, key) {
-      // eslint-disable-next-line no-param-reassign
       acc[key] = self[key];
       return acc;
     }, {});
@@ -1572,7 +1570,6 @@ SearchParameters.prototype = {
       }
 
       if (isNextValueDefined) {
-        // eslint-disable-next-line no-param-reassign
         previous[key] = nextWithNumbers[key];
       }
 
