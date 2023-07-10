@@ -1,0 +1,1137 @@
+{
+  "content": {
+    "results": [
+      {
+        "hits": [
+          {
+            "name": "3-Year Unlimited Cloud Storage Service Activation Card - Other",
+            "description": "Enjoy 3 years of unlimited Cloud storage service with this activation card, which allows you to remotely access your favorite music, movies and other media via a compatible device and enables private file sharing with loved ones.",
+            "brand": "Pogoplug",
+            "categories": ["Best Buy Gift Cards", "Entertainment Gift Cards"],
+            "hierarchicalCategories": {
+              "lvl0": "Best Buy Gift Cards",
+              "lvl1": "Best Buy Gift Cards > Entertainment Gift Cards"
+            },
+            "type": "Online data backup",
+            "price": 69,
+            "price_range": "50 - 100",
+            "image": "https://cdn-demo.algolia.com/bestbuy/1696302_sc.jpg",
+            "url": "http://www.bestbuy.com/site/3-year-unlimited-cloud-storage-service-activation-card-other/1696302.p?id=1219066776306&skuId=1696302&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": true,
+            "popularity": 10000,
+            "rating": 2,
+            "objectID": "1696302",
+            "_highlightResult": {
+              "name": {
+                "value": "3-Year Unlimited Cloud Storage Service Activation Card - Other",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Enjoy 3 years of unlimited Cloud storage service with this activation card, which allows you to remotely access your favorite music, movies and other media via a compatible device and enables private file sharing with loved ones.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Pogoplug",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Best Buy Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Entertainment Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "360fly - Panoramic 360° HD Video Camera - Black",
+            "description": "Only at Best Buy  This 360fly panoramic 360&#176; HD video camera features Wi-Fi, a Bluetooth LE interface and the included 360fly app (download required), so you can easily shoot, edit, replay and share recorded video footage using a compatible iOS or Android smartphone. Included action camera adaptor lets you use your 360fly camera with your existing 3-prong mounts.",
+            "brand": "360fly",
+            "categories": [
+              "Cameras & Camcorders",
+              "Digital Cameras",
+              "Point & Shoot Cameras",
+              "360 & Panoramic Cameras"
+            ],
+            "hierarchicalCategories": {
+              "lvl0": "Cameras & Camcorders",
+              "lvl1": "Cameras & Camcorders > Digital Cameras",
+              "lvl2": "Cameras & Camcorders > Digital Cameras > Point & Shoot Cameras",
+              "lvl3": "Cameras & Camcorders > Digital Cameras > Point & Shoot Cameras > 360 & Panoramic Cameras"
+            },
+            "type": "Point&#38;shoot camcrder",
+            "price": 399.99,
+            "price_range": "200 - 500",
+            "image": "https://cdn-demo.algolia.com/bestbuy/9131042_rb.jpg",
+            "url": "http://www.bestbuy.com/site/360fly-panoramic-360-hd-video-camera-black/9131042.p?id=1219405459683&skuId=9131042&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9999,
+            "rating": 5,
+            "objectID": "9131042",
+            "_highlightResult": {
+              "name": {
+                "value": "360fly - Panoramic 360° HD Video Camera - Black",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Only at Best Buy  This 360fly panoramic 360° HD video camera features Wi-Fi, a Bluetooth LE interface and the included 360fly app (download required), so you can easily shoot, edit, replay and share recorded video footage using a compatible iOS or Android smartphone. Included action camera adaptor lets you use your 360fly camera with your existing 3-prong mounts.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "360fly",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Cameras & Camcorders",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Digital Cameras",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Point & Shoot Cameras",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "360 & Panoramic Cameras",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "3DR - Backpack for Solo - Black",
+            "description": "3D Robotics Backpack for Solo Drones: Protect your Solo drone and accessories from the elements, wherever your adventures lead you. This Solo drone backpack features a custom-fitted foam interior that prevents the drone from jostling inside. The black exterior is water-resistant, with padded straps for extra comfort.",
+            "brand": "3DR",
+            "categories": [
+              "Toys, Games & Drones",
+              "Drones & Accessories",
+              "Drone Accessories",
+              "Drone Bags & Cases"
+            ],
+            "hierarchicalCategories": {
+              "lvl0": "Toys, Games & Drones",
+              "lvl1": "Toys, Games & Drones > Drones & Accessories",
+              "lvl2": "Toys, Games & Drones > Drones & Accessories > Drone Accessories",
+              "lvl3": "Toys, Games & Drones > Drones & Accessories > Drone Accessories > Drone Bags & Cases"
+            },
+            "type": "Drone accessory",
+            "price": 149.95,
+            "price_range": "100 - 200",
+            "image": "https://cdn-demo.algolia.com/bestbuy/5353024_sb.jpg",
+            "url": "http://www.bestbuy.com/site/3dr-backpack-for-solo-black/5353024.p?id=1219650465782&skuId=5353024&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9998,
+            "rating": 5,
+            "objectID": "5353024",
+            "_highlightResult": {
+              "name": {
+                "value": "3DR - Backpack for Solo - Black",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "3D Robotics Backpack for Solo Drones: Protect your Solo drone and accessories from the elements, wherever your adventures lead you. This Solo drone backpack features a custom-fitted foam interior that prevents the drone from jostling inside. The black exterior is water-resistant, with padded straps for extra comfort.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "3DR",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Toys, Games & Drones",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Drones & Accessories",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Drone Accessories",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Drone Bags & Cases",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "3DR - Propellers for 3DR Solo Drones (2-Pack) - Black",
+            "description": "3D Robotics Propellers for Solo Drones: Buy this set of replacement propellers before you need them so you can get back to flying as soon as you damage or lose a propeller. The 1-piece design of these propellers keeps them secure during flight, self-tightening so you can install them in an instant and return to in-air fun.",
+            "brand": "3DR",
+            "categories": [
+              "Toys, Games & Drones",
+              "Drones & Accessories",
+              "Drone Accessories",
+              "Drone Parts"
+            ],
+            "hierarchicalCategories": {
+              "lvl0": "Toys, Games & Drones",
+              "lvl1": "Toys, Games & Drones > Drones & Accessories",
+              "lvl2": "Toys, Games & Drones > Drones & Accessories > Drone Accessories",
+              "lvl3": "Toys, Games & Drones > Drones & Accessories > Drone Accessories > Drone Parts"
+            },
+            "type": "Drone accessory",
+            "price": 14.95,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/5357011_rb.jpg",
+            "url": "http://www.bestbuy.com/site/3dr-propellers-for-3dr-solo-drones-2-pack-black/5357011.p?id=1219650465778&skuId=5357011&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9997,
+            "rating": 2,
+            "objectID": "5357011",
+            "_highlightResult": {
+              "name": {
+                "value": "3DR - Propellers for 3DR Solo Drones (2-Pack) - Black",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "3D Robotics Propellers for Solo Drones: Buy this set of replacement propellers before you need them so you can get back to flying as soon as you damage or lose a propeller. The 1-piece design of these propellers keeps them secure during flight, self-tightening so you can install them in an instant and return to in-air fun.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "3DR",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Toys, Games & Drones",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Drones & Accessories",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Drone Accessories",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Drone Parts",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "3DR - Solo Gimbal - Black",
+            "description": "3D Robotics Gimbal for Solo Drones: This stabilizing, 3-axis gimbal for the 3DR Solo drone gives you unprecedented remote control over your compatible GoPro action camera (sold separately). Rotate and tilt the camera, start and stop recording, take photos and adjust camera settings &#8212; all while your drone is up to a half mile away. Plus, the gimbal charges your camera in flight so you never miss a shot.",
+            "brand": "3DR",
+            "categories": [
+              "Toys, Games & Drones",
+              "Drones & Accessories",
+              "Drone Accessories",
+              "Gimbals"
+            ],
+            "hierarchicalCategories": {
+              "lvl0": "Toys, Games & Drones",
+              "lvl1": "Toys, Games & Drones > Drones & Accessories",
+              "lvl2": "Toys, Games & Drones > Drones & Accessories > Drone Accessories",
+              "lvl3": "Toys, Games & Drones > Drones & Accessories > Drone Accessories > Gimbals"
+            },
+            "type": "Drone accessory",
+            "price": 399.99,
+            "price_range": "200 - 500",
+            "image": "https://cdn-demo.algolia.com/bestbuy/5352061_rb.jpg",
+            "url": "http://www.bestbuy.com/site/3dr-solo-gimbal-black/5352061.p?id=1219650467156&skuId=5352061&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9996,
+            "rating": 2,
+            "objectID": "5352061",
+            "_highlightResult": {
+              "name": {
+                "value": "3DR - Solo Gimbal - Black",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "3D Robotics Gimbal for Solo Drones: This stabilizing, 3-axis gimbal for the 3DR Solo drone gives you unprecedented remote control over your compatible GoPro action camera (sold separately). Rotate and tilt the camera, start and stop recording, take photos and adjust camera settings — all while your drone is up to a half mile away. Plus, the gimbal charges your camera in flight so you never miss a shot.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "3DR",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Toys, Games & Drones",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Drones & Accessories",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Drone Accessories",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Gimbals",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "3DR - Solo Smart Rechargeable Battery - Black",
+            "description": "3D Robotics Battery for Solo Drones: Instead of waiting for your lone battery to recharge, get back to flying right away with this rechargeable battery for Solo drones. The battery can power your drone for up to 25 minutes with no camera attached, or 20 minutes carrying a camera.",
+            "brand": "3DR",
+            "categories": [
+              "Toys, Games & Drones",
+              "Drones & Accessories",
+              "Drone Accessories",
+              "Drone Batteries"
+            ],
+            "hierarchicalCategories": {
+              "lvl0": "Toys, Games & Drones",
+              "lvl1": "Toys, Games & Drones > Drones & Accessories",
+              "lvl2": "Toys, Games & Drones > Drones & Accessories > Drone Accessories",
+              "lvl3": "Toys, Games & Drones > Drones & Accessories > Drone Accessories > Drone Batteries"
+            },
+            "type": "Drone accessory",
+            "price": 149.95,
+            "price_range": "100 - 200",
+            "image": "https://cdn-demo.algolia.com/bestbuy/5354101_sb.jpg",
+            "url": "http://www.bestbuy.com/site/3dr-solo-smart-rechargeable-battery-black/5354101.p?id=1219650465781&skuId=5354101&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9995,
+            "rating": 4,
+            "objectID": "5354101",
+            "_highlightResult": {
+              "name": {
+                "value": "3DR - Solo Smart Rechargeable Battery - Black",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "3D Robotics Battery for Solo Drones: Instead of waiting for your lone battery to recharge, get back to flying right away with this rechargeable battery for Solo drones. The battery can power your drone for up to 25 minutes with no camera attached, or 20 minutes carrying a camera.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "3DR",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Toys, Games & Drones",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Drones & Accessories",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Drone Accessories",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Drone Batteries",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "3M - Eureka RR Pet Micro Allergen Vacuum Bag for Select Eureka Vacuums (3-Pack)",
+            "description": "Equip your Eureka 4800 series vacuum with this odor-absorbent, micro allergen-filtering vacuum bag and help eliminate dust, dander and other airborne allergens as well as undesirable odors from your home.",
+            "brand": "3M",
+            "categories": ["Appliances", "Vacuum Bags"],
+            "hierarchicalCategories": {
+              "lvl0": "Appliances",
+              "lvl1": "Appliances > Vacuum Bags"
+            },
+            "type": "Bags",
+            "price": 7.99,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/9274741_sb.jpg",
+            "url": "http://www.bestbuy.com/site/3m-eureka-rr-pet-micro-allergen-vacuum-bag-for-select-eureka-vacuums-3-pack/9274741.p?id=1218072892585&skuId=9274741&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9994,
+            "rating": 3,
+            "objectID": "9274741",
+            "_highlightResult": {
+              "name": {
+                "value": "3M - Eureka RR Pet Micro Allergen Vacuum Bag for Select Eureka Vacuums (3-Pack)",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Equip your Eureka 4800 series vacuum with this odor-absorbent, micro allergen-filtering vacuum bag and help eliminate dust, dander and other airborne allergens as well as undesirable odors from your home.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "3M",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Appliances",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Vacuum Bags",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "3M - Filtrete BISSELL Replacement Belt",
+            "description": "Replace a worn-out or broken belt with these replacement belts for BISSELL vacuums.",
+            "brand": "3M",
+            "categories": ["Appliances", "Vacuum Belts"],
+            "hierarchicalCategories": {
+              "lvl0": "Appliances",
+              "lvl1": "Appliances > Vacuum Belts"
+            },
+            "type": "Belts",
+            "price": 4.99,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/8508064_sb.jpg",
+            "url": "http://www.bestbuy.com/site/3m-filtrete-bissell-replacement-belt/8508064.p?id=1186005357079&skuId=8508064&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9993,
+            "rating": 1,
+            "objectID": "8508064",
+            "_highlightResult": {
+              "name": {
+                "value": "3M - Filtrete BISSELL Replacement Belt",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Replace a worn-out or broken belt with these replacement belts for BISSELL vacuums.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "3M",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Appliances",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Vacuum Belts",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "3M - Filtrete Devil Tattoo Vacuum Bag (3-Pack)",
+            "description": "Eliminate allergens from your home with these vacuum bags that grab dust, pollen and dust mites.",
+            "brand": "3M",
+            "categories": ["Appliances", "Vacuum Bags"],
+            "hierarchicalCategories": {
+              "lvl0": "Appliances",
+              "lvl1": "Appliances > Vacuum Bags"
+            },
+            "type": "Bags",
+            "price": 5.99,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/9940451_sb.jpg",
+            "url": "http://www.bestbuy.com/site/3m-filtrete-devil-tattoo-vacuum-bag-3-pack/9940451.p?id=1218198436866&skuId=9940451&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9992,
+            "rating": 5,
+            "objectID": "9940451",
+            "_highlightResult": {
+              "name": {
+                "value": "3M - Filtrete Devil Tattoo Vacuum Bag (3-Pack)",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Eliminate allergens from your home with these vacuum bags that grab dust, pollen and dust mites.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "3M",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Appliances",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Vacuum Bags",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "3M - Filtrete Eureka R Replacement Belt for Select Eureka Vacuums",
+            "description": "This replacement belt lets you get your Eureka 4800 Series upright vacuum running like new.",
+            "brand": "3M",
+            "categories": ["Appliances", "Vacuum Belts"],
+            "hierarchicalCategories": {
+              "lvl0": "Appliances",
+              "lvl1": "Appliances > Vacuum Belts"
+            },
+            "type": "Belts",
+            "price": 6.99,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/8507948_sb.jpg",
+            "url": "http://www.bestbuy.com/site/3m-filtrete-eureka-r-replacement-belt-for-select-eureka-vacuums/8507948.p?id=1186005356352&skuId=8507948&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9991,
+            "rating": 1,
+            "objectID": "8507948",
+            "_highlightResult": {
+              "name": {
+                "value": "3M - Filtrete Eureka R Replacement Belt for Select Eureka Vacuums",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "This replacement belt lets you get your Eureka 4800 Series upright vacuum running like new.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "3M",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Appliances",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Vacuum Belts",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "3M - Filtrete Eureka U Replacement Belt",
+            "description": "Keep things running smoothly at home with these replacement vacuum belts on hand in case of a cleaning emergency.",
+            "brand": "3M",
+            "categories": ["Appliances", "Vacuum Belts"],
+            "hierarchicalCategories": {
+              "lvl0": "Appliances",
+              "lvl1": "Appliances > Vacuum Belts"
+            },
+            "type": "Belts",
+            "price": 2.99,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/8507939_sb.jpg",
+            "url": "http://www.bestbuy.com/site/3m-filtrete-eureka-u-replacement-belt/8507939.p?id=1186005356287&skuId=8507939&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9990,
+            "rating": 3,
+            "objectID": "8507939",
+            "_highlightResult": {
+              "name": {
+                "value": "3M - Filtrete Eureka U Replacement Belt",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Keep things running smoothly at home with these replacement vacuum belts on hand in case of a cleaning emergency.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "3M",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Appliances",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Vacuum Belts",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "3M - Filtrete Hoover A Micro Allergen Vacuum Bag",
+            "description": "Rid your home of allergens with these vacuum bags that grab dust, pollen and dust mites.",
+            "brand": "3M",
+            "categories": ["Appliances", "Vacuum Bags"],
+            "hierarchicalCategories": {
+              "lvl0": "Appliances",
+              "lvl1": "Appliances > Vacuum Bags"
+            },
+            "type": "Bags",
+            "price": 6.99,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/8507644_sb.jpg",
+            "url": "http://www.bestbuy.com/site/3m-filtrete-hoover-a-micro-allergen-vacuum-bag/8507644.p?id=1186005355618&skuId=8507644&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9989,
+            "rating": 5,
+            "objectID": "8507644",
+            "_highlightResult": {
+              "name": {
+                "value": "3M - Filtrete Hoover A Micro Allergen Vacuum Bag",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Rid your home of allergens with these vacuum bags that grab dust, pollen and dust mites.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "3M",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Appliances",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Vacuum Bags",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "3M - Filtrete Hoover W2 MicroAllergen Vacuum Bag (3-Pack)",
+            "description": "Equip your Hoover WindTunnel 2 series vacuum with these 3M Filtrete W2 64712 vacuum bags that trap airborne allergens using MicroAllergen filtration for a cleaner home environment.",
+            "brand": "3M",
+            "categories": ["Appliances", "Vacuum Bags"],
+            "hierarchicalCategories": {
+              "lvl0": "Appliances",
+              "lvl1": "Appliances > Vacuum Bags"
+            },
+            "type": "Bags",
+            "price": 9.99,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/9905762_sb.jpg",
+            "url": "http://www.bestbuy.com/site/3m-filtrete-hoover-w2-microallergen-vacuum-bag-3-pack/9905762.p?id=1218193208999&skuId=9905762&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9988,
+            "rating": 5,
+            "objectID": "9905762",
+            "_highlightResult": {
+              "name": {
+                "value": "3M - Filtrete Hoover W2 MicroAllergen Vacuum Bag (3-Pack)",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Equip your Hoover WindTunnel 2 series vacuum with these 3M Filtrete W2 64712 vacuum bags that trap airborne allergens using MicroAllergen filtration for a cleaner home environment.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "3M",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Appliances",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Vacuum Bags",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "3M - Filtrete Hoover Windtunnel Replacement Belt",
+            "description": "Be ready for a cleaning emergency with these replacement belts for your Hoover vacuum.",
+            "brand": "3M",
+            "categories": ["Appliances", "Vacuum Belts"],
+            "hierarchicalCategories": {
+              "lvl0": "Appliances",
+              "lvl1": "Appliances > Vacuum Belts"
+            },
+            "type": "Belts",
+            "price": 4.99,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/8507993_sb.jpg",
+            "url": "http://www.bestbuy.com/site/3m-filtrete-hoover-windtunnel-replacement-belt/8507993.p?id=1186005356689&skuId=8507993&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9987,
+            "rating": 3,
+            "objectID": "8507993",
+            "_highlightResult": {
+              "name": {
+                "value": "3M - Filtrete Hoover Windtunnel Replacement Belt",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Be ready for a cleaning emergency with these replacement belts for your Hoover vacuum.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "3M",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Appliances",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Vacuum Belts",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "3M - Filtrete Vacuum Belt for Select Hoover T-Series Upright Vacuums",
+            "description": "Designed for use with select Hoover T-Series upright vacuums, this 3M Filtrete 64121 vacuum belt offers up to 6 months of reliable performance to help you keep your home clean.",
+            "brand": "3M",
+            "categories": ["Appliances", "Vacuum Belts"],
+            "hierarchicalCategories": {
+              "lvl0": "Appliances",
+              "lvl1": "Appliances > Vacuum Belts"
+            },
+            "type": "Belts",
+            "price": 5.99,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/5425773_sb.jpg",
+            "url": "http://www.bestbuy.com/site/3m-filtrete-vacuum-belt-for-select-hoover-t-series-upright-vacuums/5425773.p?id=1218652578136&skuId=5425773&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9986,
+            "rating": 2,
+            "objectID": "5425773",
+            "_highlightResult": {
+              "name": {
+                "value": "3M - Filtrete Vacuum Belt for Select Hoover T-Series Upright Vacuums",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Designed for use with select Hoover T-Series upright vacuums, this 3M Filtrete 64121 vacuum belt offers up to 6 months of reliable performance to help you keep your home clean.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "3M",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Appliances",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Vacuum Belts",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "3M - Hoover Y & Z Pet Micro Allergen Vacuum Bag for Select Hoover Vacuums (3-Pack)",
+            "description": "Help eliminate dust, dander and other airborne allergens as well as undesirable odors from your home by equipping your Hoover Windtunnel upright vacuum with this odor-absorbent, micro allergen-filtering vacuum bag.",
+            "brand": "3M",
+            "categories": ["Appliances", "Vacuum Bags"],
+            "hierarchicalCategories": {
+              "lvl0": "Appliances",
+              "lvl1": "Appliances > Vacuum Bags"
+            },
+            "type": "Bags",
+            "price": 7.99,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/9274732_sb.jpg",
+            "url": "http://www.bestbuy.com/site/3m-hoover-y-z-pet-micro-allergen-vacuum-bag-for-select-hoover-vacuums-3-pack/9274732.p?id=1218072891545&skuId=9274732&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9985,
+            "rating": 3,
+            "objectID": "9274732",
+            "_highlightResult": {
+              "name": {
+                "value": "3M - Hoover Y & Z Pet Micro Allergen Vacuum Bag for Select Hoover Vacuums (3-Pack)",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Help eliminate dust, dander and other airborne allergens as well as undesirable odors from your home by equipping your Hoover Windtunnel upright vacuum with this odor-absorbent, micro allergen-filtering vacuum bag.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "3M",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Appliances",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Vacuum Bags",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "72-9301 - Speaker Wire Harness Adapter for Most Plymouth, Dodge and Mitsubishi Vehicles - Multi",
+            "description": "Easily install your aftermarket speakers in your vehicle with this speaker wire harness adapter.",
+            "brand": "72-9301",
+            "categories": [
+              "Car Electronics & GPS",
+              "Deck Installation Parts",
+              "Antennas & Adapters"
+            ],
+            "hierarchicalCategories": {
+              "lvl0": "Car Electronics & GPS",
+              "lvl1": "Car Electronics & GPS > Deck Installation Parts",
+              "lvl2": "Car Electronics & GPS > Deck Installation Parts > Antennas & Adapters"
+            },
+            "type": "Speaker harness",
+            "price": 14.99,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/2206525_rb.jpg",
+            "url": "http://www.bestbuy.com/site/72-9301-speaker-wire-harness-adapter-for-most-plymouth-dodge-and-mitsubishi-vehicles-multi/2206525.p?id=1051826167289&skuId=2206525&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9984,
+            "rating": 1,
+            "objectID": "2206525",
+            "_highlightResult": {
+              "name": {
+                "value": "72-9301 - Speaker Wire Harness Adapter for Most Plymouth, Dodge and Mitsubishi Vehicles - Multi",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Easily install your aftermarket speakers in your vehicle with this speaker wire harness adapter.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "72-9301",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Car Electronics & GPS",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Deck Installation Parts",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Antennas & Adapters",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Acer - 11.6\" Chromebook - Intel Celeron - 2GB Memory - 16GB eMMC Flash Memory - Moonstone White",
+            "description": "Acer CB3-111-C8UB Chromebook: Great for commuters and students, this lightweight Chromebook is optimized for Web-based apps and cloud storage on the go. The antiglare screen, quick Wi-Fi capability, and quiet fanless design allow for unobtrusive productivity at coffee shops, parks and more.  Learn more about Chromebooks &#8250;",
+            "brand": "Acer",
+            "categories": ["Computers & Tablets", "Laptops", "All Laptops"],
+            "hierarchicalCategories": {
+              "lvl0": "Computers & Tablets",
+              "lvl1": "Computers & Tablets > Laptops",
+              "lvl2": "Computers & Tablets > Laptops > All Laptops"
+            },
+            "type": "Google os",
+            "price": 169,
+            "price_range": "100 - 200",
+            "image": "https://cdn-demo.algolia.com/bestbuy/8610161_sb.jpg",
+            "url": "http://www.bestbuy.com/site/acer-11-6-chromebook-intel-celeron-2gb-memory-16gb-emmc-flash-memory-moonstone-white/8610161.p?id=1219351773817&skuId=8610161&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9983,
+            "rating": 4,
+            "objectID": "8610161",
+            "_highlightResult": {
+              "name": {
+                "value": "Acer - 11.6\" Chromebook - Intel Celeron - 2GB Memory - 16GB eMMC Flash Memory - Moonstone White",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Acer CB3-111-C8UB Chromebook: Great for commuters and students, this lightweight Chromebook is optimized for Web-based apps and cloud storage on the go. The antiglare screen, quick Wi-Fi capability, and quiet fanless design allow for unobtrusive productivity at coffee shops, parks and more.  Learn more about Chromebooks ›",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Acer",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Computers & Tablets",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Laptops",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "All Laptops",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Acer - 11.6\" Chromebook - Intel Celeron - 4GB Memory - 16GB Solid State Drive - Gray",
+            "description": "Acer Chromebook: Stay productive and entertained whether you're at home or on the go with this 11.6\" Chromebook, which features built-in Wireless-AC networking for rapid Web access. Easily connect a display via HDMI to enjoy enlarged content.  Learn more about Chromebooks &#8250;",
+            "brand": "Acer",
+            "categories": [
+              "Computers & Tablets",
+              "Laptops",
+              "All Laptops",
+              "Chromebooks"
+            ],
+            "hierarchicalCategories": {
+              "lvl0": "Computers & Tablets",
+              "lvl1": "Computers & Tablets > Laptops",
+              "lvl2": "Computers & Tablets > Laptops > All Laptops",
+              "lvl3": "Computers & Tablets > Laptops > All Laptops > Chromebooks"
+            },
+            "type": "So laptops",
+            "price": 279.99,
+            "price_range": "200 - 500",
+            "image": "https://cdn-demo.algolia.com/bestbuy/4020462_sb.jpg",
+            "url": "http://www.bestbuy.com/site/acer-11-6-chromebook-intel-celeron-4gb-memory-16gb-solid-state-drive-gray/4020462.p?id=1219616451773&skuId=4020462",
+            "free_shipping": true,
+            "popularity": 9982,
+            "rating": 2,
+            "objectID": "4020462",
+            "_highlightResult": {
+              "name": {
+                "value": "Acer - 11.6\" Chromebook - Intel Celeron - 4GB Memory - 16GB Solid State Drive - Gray",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Acer Chromebook: Stay productive and entertained whether you're at home or on the go with this 11.6\" Chromebook, which features built-in Wireless-AC networking for rapid Web access. Easily connect a display via HDMI to enjoy enlarged content.  Learn more about Chromebooks ›",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Acer",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Computers & Tablets",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Laptops",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "All Laptops",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Chromebooks",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Acer - 11.6\" Touch-Screen Chromebook - Intel Celeron - 2GB Memory - 32GB Solid State Drive - Moonstone White",
+            "description": "Acer C720P-2661 Chromebook: Navigate your favorite websites with a slide, tap and touch of your finger. You can easily take it wherever you go, and find new places to relax and watch your favorite TV shows or movies.   Learn more about Chromebooks &#8250;",
+            "brand": "Acer",
+            "categories": [
+              "Computers & Tablets",
+              "Laptops",
+              "All Laptops",
+              "Chromebooks"
+            ],
+            "hierarchicalCategories": {
+              "lvl0": "Computers & Tablets",
+              "lvl1": "Computers & Tablets > Laptops",
+              "lvl2": "Computers & Tablets > Laptops > All Laptops",
+              "lvl3": "Computers & Tablets > Laptops > All Laptops > Chromebooks"
+            },
+            "type": "Google os",
+            "price": 279,
+            "price_range": "200 - 500",
+            "image": "https://cdn-demo.algolia.com/bestbuy/4591017_sb.jpg",
+            "url": "http://www.bestbuy.com/site/acer-11-6-touch-screen-chromebook-intel-celeron-2gb-memory-32gb-solid-state-drive-moonstone-white/4591017.p?id=1219098810504&skuId=4591017&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": true,
+            "popularity": 9981,
+            "rating": 1,
+            "objectID": "4591017",
+            "_highlightResult": {
+              "name": {
+                "value": "Acer - 11.6\" Touch-Screen Chromebook - Intel Celeron - 2GB Memory - 32GB Solid State Drive - Moonstone White",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Acer C720P-2661 Chromebook: Navigate your favorite websites with a slide, tap and touch of your finger. You can easily take it wherever you go, and find new places to relax and watch your favorite TV shows or movies.   Learn more about Chromebooks ›",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Acer",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Computers & Tablets",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Laptops",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "All Laptops",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Chromebooks",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          }
+        ],
+        "nbHits": 10000,
+        "page": 0,
+        "nbPages": 50,
+        "hitsPerPage": 20,
+        "processingTimeMS": 1,
+        "facets": {
+          "brand": {
+            "Insignia™": 551,
+            "Samsung": 511,
+            "Apple": 386
+          }
+        },
+        "exhaustiveFacetsCount": true,
+        "query": "",
+        "params": "query=&maxValuesPerFacet=3&page=0&facets=%5B%22brand%22%5D&tagFilters=",
+        "index": "instant_search"
+      }
+    ]
+  },
+  "state": {
+    "index": "instant_search",
+    "query": "",
+    "facets": [],
+    "disjunctiveFacets": ["brand"],
+    "hierarchicalFacets": [],
+    "facetsRefinements": {},
+    "facetsExcludes": {},
+    "disjunctiveFacetsRefinements": {},
+    "numericRefinements": {},
+    "tagRefinements": [],
+    "hierarchicalFacetsRefinements": {},
+    "maxValuesPerFacet": 3,
+    "page": 0
+  },
+  "error": null
+}

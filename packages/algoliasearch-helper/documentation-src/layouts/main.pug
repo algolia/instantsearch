@@ -1,0 +1,69 @@
+doctype html
+html
+  head
+    meta(content='IE=edge', http-equiv='X-UA-Compatible')
+    meta(charset='utf-8')
+    meta(content='width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no', name='viewport')
+    link(href='#', rel='icon', type='image/x-icon')
+    include ./common/metas.pug
+    // Use title if it's in the page YAML frontmatter
+    title= title
+    link(href='https://fonts.googleapis.com/css?family=Montserrat:500,600|Open+Sans', rel='stylesheet', type='text/css')
+    link(rel='stylesheet', href='css/index.css')
+    // Google Tag Manager
+    noscript
+      iframe(src='//www.googletagmanager.com/ns.html?id=GTM-N8JP8G', height='0', width='0', style='display:none;visibility:hidden')
+    script.
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-N8JP8G');
+  body(class=page_classes)
+    include ./common/header.pug
+    section.hero-section.shrink
+      .container
+        .hero-container
+          .fl-right
+            img(src='images/al-helper-logo.svg')
+          .fl-left
+            a(href='https://www.algolia.com/?utm_medium=social-owned&utm_source=algoliasearch-helper%20website&utm_campaign=homepage', title='Algolia built this')
+              span#icon-algolia.icon.icon-algolia-small.no-mobile
+            h1= title
+            h3= subtitle
+    section
+      .container
+        div
+          h2.title A companion to Algolia's JS API client, used by instantsearch.js
+          p
+            | The Algolia JS Helper is a set of functions and patterns that
+            | make it possible to customize search experiences at a deeper
+            | level. Working side-by-side with the Algolia JS Client, the JS
+            | Helper exposes new interfaces to perform advanced faceting,
+            | manage stateful parameters, and subscribe to events.
+          a.btn.btn-cta(href='gettingstarted.html') Get Started
+    hr
+    section.oddbg
+      .container
+        div
+          h2.title Reusable abstractions
+          p
+            | The Helper can be used in any context and helps structure
+            | your search logic. The Helper:
+          ul
+            li defines an immutable source of truth for search parameters
+            li dispatches events at key stages of the search cycle
+          a.btn.btn-cta(href='concepts.html') See the concepts
+    hr
+    section
+      .container
+        div
+          h2.title Framework-agnostic
+          p
+            | The Helper can be any search application's best friend. The architecture isn't
+            | tied to a specific framework nor does it leak any unsightly abstractions.
+            | And it's battle-tested—we use it inside of our widget-based, full-page search library 
+            a(href='https://community.algolia.com/instantsearch.js/') instantsearch.js
+            | .
+          a.btn.btn-cta(href='examples.html#use-with-frameworks') Examples
+    include ./common/footer.pug

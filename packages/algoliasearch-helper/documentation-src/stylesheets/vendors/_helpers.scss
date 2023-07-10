@@ -1,0 +1,120 @@
+$sizes: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10;
+
+[class*='bloc-'] {
+  float: left;
+}
+@each $size in $sizes {
+  .bloc-#{$size} {
+    $size: $size * 10%;
+    width: $size;
+  }
+}
+
+.relative {
+  position: relative;
+  overflow: hidden;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.fl-left {
+  float: left;
+}
+
+.fl-right {
+  float: right;
+}
+
+hr {
+  border: none;
+  float: left;
+  clear: both;
+  &:before,
+  &:after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+
+  width: 100%;
+  height: 1px;
+  background: #e5e5e5;
+}
+
+.pipe {
+  width: 2px;
+  height: 20px;
+  background: $accent-color;
+  display: inline-block;
+  float: left;
+  margin: 20px 16px 0;
+  line-height: $navigation-height;
+
+  & + span {
+    font-weight: bold;
+    width: 0;
+    float: left;
+  }
+
+  body.index & {
+    display: none;
+
+    & + span {
+      display: none !important;
+    }
+  }
+}
+
+// The following helper classes
+// made responsive desing easy
+//  - no-desktop : Only display on mobile
+//  - no-mobile  : Only display on desktop
+//  - display-on-small : only display on smallish screen ( no mobile )
+
+.no-desktop {
+  @include hide();
+  @include small-mq {
+    @include hide();
+  }
+
+  @include mobile-mq {
+    @include unhide(block);
+  }
+
+  &.community-badge {
+    @include mobile-mq {
+      @include unhide(inline);
+    }
+  }
+
+  @media screen and (orientation: landscape) {
+    @include hide();
+  }
+}
+
+.no-mobile {
+  @include unhide(block);
+
+  &.nav-icon {
+    @include unhide(inline);
+
+    @include small-mq {
+      @include hide();
+    }
+  }
+
+  @include small-mq {
+    @include hide();
+  }
+}
+
+.display-on-small {
+  @include hide();
+
+  @media (max-width: 960px) {
+    display: inline-block !important;
+    visibility: visible;
+  }
+}

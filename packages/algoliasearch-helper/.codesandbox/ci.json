@@ -1,0 +1,7 @@
+{
+  "sandboxes": [
+    "github/algolia/create-instantsearch-app/tree/templates/javascript-helper",
+    "instantsearchjs-es-template-pcw1k"
+  ],
+  "node": "14"
+}
