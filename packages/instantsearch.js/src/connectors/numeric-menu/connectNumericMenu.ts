@@ -316,7 +316,16 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
 
         if (!connectorState.createURL) {
           connectorState.createURL = (newState) => (facetValue) =>
-            createURL(getRefinedState(newState, attribute, facetValue));
+            createURL((uiState) =>
+              this.getWidgetUiState(uiState, {
+                searchParameters: getRefinedState(
+                  newState,
+                  attribute,
+                  facetValue
+                ),
+                helper,
+              })
+            );
         }
 
         if (!connectorState.sendEvent) {

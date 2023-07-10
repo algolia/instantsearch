@@ -383,7 +383,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       createInitOptions({
         helper,
         state: helper.state,
-        createURL: (state) => JSON.stringify(state),
+        createURL: (arg) =>
+          typeof arg === 'function'
+            ? JSON.stringify(arg({}))
+            : JSON.stringify(arg),
       })
     );
 
@@ -398,7 +401,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
           createSingleSearchResponse(),
         ]),
         state: helper.state,
-        createURL: (state) => JSON.stringify(state),
+        createURL: (arg) =>
+          typeof arg === 'function'
+            ? JSON.stringify(arg({}))
+            : JSON.stringify(arg),
       })
     );
 

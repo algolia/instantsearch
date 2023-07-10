@@ -12,6 +12,7 @@ import type {
   InitOptions,
   RenderOptions,
   WidgetRenderState,
+  Widget,
 } from '../../types';
 import type {
   AlgoliaSearchHelper,
@@ -79,8 +80,6 @@ export type HitsPerPageRenderState = {
 
   /**
    * Creates the URL for a single item name in the list.
-   *
-   * @internal
    */
   createURL: CreateURL<HitsPerPageConnectorParamsItem['value']>;
 
@@ -172,6 +171,8 @@ const connectHitsPerPage: HitsPerPageConnector = function connectHitsPerPage(
       createURLFactory: (props: {
         state: SearchParameters;
         createURL: (InitOptions | RenderOptions)['createURL'];
+        getWidgetUiState: NonNullable<Widget['getWidgetUiState']>;
+        helper: AlgoliaSearchHelper;
       }) => HitsPerPageRenderState['createURL'];
     };
 
@@ -182,15 +183,18 @@ const connectHitsPerPage: HitsPerPageConnector = function connectHitsPerPage(
           : helper.setQueryParameter('hitsPerPage', value).search();
       },
       createURLFactory:
-        ({ state, createURL }) =>
+        ({ state, createURL, getWidgetUiState, helper }) =>
         (value) =>
-          createURL(
-            state
-              .resetPage()
-              .setQueryParameter(
-                'hitsPerPage',
-                !value && value !== 0 ? undefined : value
-              )
+          createURL((uiState) =>
+            getWidgetUiState(uiState, {
+              searchParameters: state
+                .resetPage()
+                .setQueryParameter(
+                  'hitsPerPage',
+                  !value && value !== 0 ? undefined : value
+                ),
+              helper,
+            })
           ),
     };
 
@@ -270,7 +274,12 @@ You may want to add another entry to the \`items\` option with this value.`
         return {
           items: transformItems(normalizeItems(state), { results }),
           refine: connectorState.getRefine(helper),
-          createURL: connectorState.createURLFactory({ state, createURL }),
+          createURL: connectorState.createURLFactory({
+            state,
+            createURL,
+            getWidgetUiState: this.getWidgetUiState,
+            helper,
+          }),
           hasNoResults: !canRefine,
           canRefine,
           widgetParams,

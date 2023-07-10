@@ -15,3 +15,13 @@ export interface Act {
   (callback: () => void): void;
 }
 export const fakeAct = ((cb) => cb()) as Act;
+
+export type SkippedTests = Record<string, boolean>;
+
+export function skippableDescribe(
+  name: string,
+  skippedTests: SkippedTests,
+  fn: () => void
+) {
+  return (skippedTests[name] ? describe.skip : describe)(name, fn);
+}

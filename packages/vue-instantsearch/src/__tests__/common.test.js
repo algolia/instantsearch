@@ -11,6 +11,12 @@ import {
   createHitsTests,
   createRangeInputTests,
   createInstantSearchTests,
+  createCurrentRefinementsTests,
+  createHitsPerPageTests,
+  createNumericMenuTests,
+  createRatingMenuTests,
+  createToggleRefinementTests,
+  createSharedTests,
 } from '@instantsearch/tests';
 
 import { nextTick, mountApp } from '../../test/utils';
@@ -28,7 +34,24 @@ import {
   AisHits,
   AisIndex,
   AisRangeInput,
+  AisCurrentRefinements,
+  AisHitsPerPage,
+  AisNumericMenu,
+  AisRatingMenu,
+  AisToggleRefinement,
 } from '../instantsearch';
+import {
+  connectBreadcrumb,
+  connectCurrentRefinements,
+  connectHierarchicalMenu,
+  connectHitsPerPage,
+  connectMenu,
+  connectNumericMenu,
+  connectPagination,
+  connectRatingMenu,
+  connectRefinementList,
+  connectToggleRefinement,
+} from 'instantsearch.js/es/connectors';
 jest.unmock('instantsearch.js/es');
 
 /**
@@ -46,10 +69,18 @@ const GlobalErrorSwallower = {
 };
 
 createRefinementListTests(async ({ instantSearchOptions, widgetParams }) => {
+  const RefinementListURL = createURLComponent({
+    connector: connectRefinementList,
+    name: 'RefinementList',
+    requiredProps: ['attribute'],
+    urlValue: 'value',
+  });
+
   mountApp(
     {
       render: renderCompat((h) =>
         h(AisInstantSearch, { props: instantSearchOptions }, [
+          h(RefinementListURL, { props: widgetParams }),
           h(AisRefinementList, { props: widgetParams }),
           h(GlobalErrorSwallower),
         ])
@@ -62,10 +93,18 @@ createRefinementListTests(async ({ instantSearchOptions, widgetParams }) => {
 });
 
 createHierarchicalMenuTests(async ({ instantSearchOptions, widgetParams }) => {
+  const HierarchicalMenuURL = createURLComponent({
+    connector: connectHierarchicalMenu,
+    name: 'HierarchicalMenu',
+    requiredProps: ['attributes'],
+    urlValue: 'value',
+  });
+
   mountApp(
     {
       render: renderCompat((h) =>
         h(AisInstantSearch, { props: instantSearchOptions }, [
+          h(HierarchicalMenuURL, { props: widgetParams }),
           h(AisHierarchicalMenu, { props: widgetParams }),
           h(GlobalErrorSwallower),
         ])
@@ -83,10 +122,18 @@ createBreadcrumbTests(async ({ instantSearchOptions, widgetParams }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { transformItems, ...hierarchicalWidgetParams } = widgetParams;
 
+  const BreadcrumbURL = createURLComponent({
+    connector: connectBreadcrumb,
+    name: 'Breadcrumb',
+    requiredProps: ['attributes'],
+    urlValue: 'Apple > iPhone',
+  });
+
   mountApp(
     {
       render: renderCompat((h) =>
         h(AisInstantSearch, { props: instantSearchOptions }, [
+          h(BreadcrumbURL, { props: widgetParams }),
           h(AisBreadcrumb, { props: widgetParams }),
           h(AisHierarchicalMenu, { props: hierarchicalWidgetParams }),
           h(GlobalErrorSwallower),
@@ -100,10 +147,18 @@ createBreadcrumbTests(async ({ instantSearchOptions, widgetParams }) => {
 });
 
 createMenuTests(async ({ instantSearchOptions, widgetParams }) => {
+  const MenuURL = createURLComponent({
+    connector: connectMenu,
+    name: 'Menu',
+    requiredProps: ['attribute'],
+    urlValue: 'value',
+  });
+
   mountApp(
     {
       render: renderCompat((h) =>
         h(AisInstantSearch, { props: instantSearchOptions }, [
+          h(MenuURL, { props: widgetParams }),
           h(AisMenu, { props: widgetParams }),
           h(GlobalErrorSwallower),
         ])
@@ -116,10 +171,17 @@ createMenuTests(async ({ instantSearchOptions, widgetParams }) => {
 });
 
 createPaginationTests(async ({ instantSearchOptions, widgetParams }) => {
+  const PaginationURL = createURLComponent({
+    connector: connectPagination,
+    name: 'Pagination',
+    urlValue: 10,
+  });
+
   mountApp(
     {
       render: renderCompat((h) =>
         h(AisInstantSearch, { props: instantSearchOptions }, [
+          h(PaginationURL, { props: widgetParams }),
           h(AisPagination, { props: widgetParams }),
           h(GlobalErrorSwallower),
         ])
@@ -303,6 +365,138 @@ createRangeInputTests(async ({ instantSearchOptions, widgetParams }) => {
   await nextTick();
 });
 
+createCurrentRefinementsTests(
+  async ({ instantSearchOptions, widgetParams }) => {
+    const CurrentRefinementsURL = createURLComponent({
+      connector: connectCurrentRefinements,
+      name: 'CurrentRefinements',
+      urlValue: {
+        attribute: 'brand',
+        type: 'disjunctive',
+        value: 'Apple',
+        label: 'Apple',
+      },
+    });
+
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(CurrentRefinementsURL, { props: widgetParams }),
+            h(AisCurrentRefinements),
+            h(AisRefinementList, { props: { attribute: 'brand' } }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
+  }
+);
+
+createHitsPerPageTests(async ({ instantSearchOptions, widgetParams }) => {
+  const HitsPerPageURL = createURLComponent({
+    connector: connectHitsPerPage,
+    name: 'HitsPerPage',
+    requiredProps: ['items'],
+    urlValue: 12,
+  });
+
+  mountApp(
+    {
+      render: renderCompat((h) =>
+        h(AisInstantSearch, { props: instantSearchOptions }, [
+          h(HitsPerPageURL, { props: widgetParams }),
+          h(AisHitsPerPage, { props: widgetParams }),
+          h(GlobalErrorSwallower),
+        ])
+      ),
+    },
+    document.body.appendChild(document.createElement('div'))
+  );
+
+  await nextTick();
+});
+
+createNumericMenuTests(async ({ instantSearchOptions, widgetParams }) => {
+  const NumericMenuURL = createURLComponent({
+    connector: connectNumericMenu,
+    name: 'NumericMenu',
+    requiredProps: ['attribute', 'items'],
+    urlValue: encodeURI('{ "start": 500 }'),
+  });
+
+  mountApp(
+    {
+      render: renderCompat((h) =>
+        h(AisInstantSearch, { props: instantSearchOptions }, [
+          h(NumericMenuURL, { props: widgetParams }),
+          h(AisNumericMenu, { props: widgetParams }),
+          h(GlobalErrorSwallower),
+        ])
+      ),
+    },
+    document.body.appendChild(document.createElement('div'))
+  );
+
+  await nextTick();
+});
+
+createRatingMenuTests(async ({ instantSearchOptions, widgetParams }) => {
+  const RatingMenuURL = createURLComponent({
+    connector: connectRatingMenu,
+    name: 'RatingMenu',
+    requiredProps: ['attribute'],
+    urlValue: encodeURI('5'),
+  });
+
+  mountApp(
+    {
+      render: renderCompat((h) =>
+        h(AisInstantSearch, { props: instantSearchOptions }, [
+          h(RatingMenuURL, { props: widgetParams }),
+          h(AisRatingMenu, { props: widgetParams }),
+          h(GlobalErrorSwallower),
+        ])
+      ),
+    },
+    document.body.appendChild(document.createElement('div'))
+  );
+
+  await nextTick();
+});
+
+createToggleRefinementTests(async ({ instantSearchOptions, widgetParams }) => {
+  const ToggleRefinementURL = createURLComponent({
+    name: 'ToggleRefinement',
+    connector: connectToggleRefinement,
+    requiredProps: ['attribute', 'label'],
+  });
+
+  // Label is required in Vue
+  const props = {
+    ...widgetParams,
+    label: 'Free Shipping',
+  };
+
+  mountApp(
+    {
+      render: renderCompat((h) =>
+        h(AisInstantSearch, { props: instantSearchOptions }, [
+          h(ToggleRefinementURL, { props }),
+          h(AisToggleRefinement, { props }),
+          h(GlobalErrorSwallower),
+        ])
+      ),
+    },
+    document.body.appendChild(document.createElement('div'))
+  );
+
+  await nextTick();
+});
+
 createInstantSearchTests(({ instantSearchOptions }) => {
   mountApp(
     {
@@ -327,3 +521,66 @@ createInstantSearchTests(({ instantSearchOptions }) => {
     ],
   };
 });
+
+createSharedTests(async ({ instantSearchOptions, widgetParams }) => {
+  const MenuURL = createURLComponent({
+    connector: connectMenu,
+    name: 'Menu',
+    requiredProps: ['attribute'],
+    urlValue: 'value',
+  });
+  const PaginationURL = createURLComponent({
+    connector: connectPagination,
+    name: 'Pagination',
+    urlValue: 10,
+  });
+
+  mountApp(
+    {
+      render: renderCompat((h) =>
+        h(AisInstantSearch, { props: instantSearchOptions }, [
+          h(MenuURL, { props: widgetParams.menu }),
+          h(AisMenu, { props: widgetParams.menu }),
+          h(AisHits, { props: widgetParams.hits }),
+          h(PaginationURL, { props: widgetParams.pagination }),
+          h(AisPagination, { props: widgetParams.pagination }),
+          h(GlobalErrorSwallower),
+        ])
+      ),
+    },
+    document.body.appendChild(document.createElement('div'))
+  );
+
+  await nextTick();
+});
+
+function createURLComponent({ connector, name, urlValue, requiredProps = [] }) {
+  return {
+    name: `${name}URL`,
+    mixins: [createWidgetMixin({ connector })],
+    props: Object.fromEntries(
+      requiredProps.map((prop) => [prop, { required: true }])
+    ),
+    computed: {
+      widgetParams() {
+        return Object.fromEntries(
+          requiredProps.map((prop) => [prop, this[prop]])
+        );
+      },
+    },
+    render: renderCompat(function (h) {
+      return this.state
+        ? h(
+            'a',
+            {
+              attrs: {
+                'data-testid': `${name}-link`,
+                href: this.state.createURL(urlValue),
+              },
+            },
+            'LINK'
+          )
+        : null;
+    }),
+  };
+}

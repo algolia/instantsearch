@@ -432,10 +432,16 @@ const connectRefinementList: RefinementListConnector =
           const canToggleShowMore = canShowLess || canShowMore;
 
           return {
-            createURL: (facetValue) =>
-              createURL(
-                state.resetPage().toggleFacetRefinement(attribute, facetValue)
-              ),
+            createURL: (facetValue: string) => {
+              return createURL((uiState) =>
+                this.getWidgetUiState(uiState, {
+                  searchParameters: state
+                    .resetPage()
+                    .toggleFacetRefinement(attribute, facetValue),
+                  helper,
+                })
+              );
+            },
             items,
             refine: triggerRefine,
             searchForItems: searchFacetValues,

@@ -11,8 +11,15 @@ import {
   createHitsTests,
   createRangeInputTests,
   createInstantSearchTests,
+  createHitsPerPageTests,
+  createNumericMenuTests,
+  createRatingMenuTests,
+  createToggleRefinementTests,
+  createCurrentRefinementsTests,
+  createSharedTests,
 } from '@instantsearch/tests';
 import { act, render } from '@testing-library/react';
+import { connectRatingMenu } from 'instantsearch.js/es/connectors';
 import React from 'react';
 
 import {
@@ -28,9 +35,36 @@ import {
   Hits,
   Index,
   RangeInput,
+  useRefinementList,
+  usePagination,
+  useBreadcrumb,
+  useHierarchicalMenu,
+  useHitsPerPage,
+  HitsPerPage,
+  useMenu,
+  useNumericMenu,
+  useConnector,
+  useToggleRefinement,
+  ToggleRefinement,
+  useCurrentRefinements,
 } from '..';
 
+import type {
+  UseBreadcrumbProps,
+  UseCurrentRefinementsProps,
+  UseHierarchicalMenuProps,
+  UseHitsPerPageProps,
+  UseMenuProps,
+  UseNumericMenuProps,
+  UsePaginationProps,
+  UseRefinementListProps,
+  UseToggleRefinementProps,
+} from '..';
 import type { Hit } from 'instantsearch.js';
+import type {
+  RatingMenuConnectorParams,
+  RatingMenuRenderState,
+} from 'instantsearch.js/es/connectors/rating-menu/connectRatingMenu';
 import type { SendEventForHits } from 'instantsearch.js/es/lib/utils';
 
 /**
@@ -44,17 +78,36 @@ function GlobalErrorSwallower() {
 }
 
 createRefinementListTests(({ instantSearchOptions, widgetParams }) => {
+  function RefinementListURL(props: UseRefinementListProps) {
+    const { createURL } = useRefinementList(props);
+    return (
+      <a data-testid="RefinementList-link" href={createURL('value')}>
+        LINK
+      </a>
+    );
+  }
   render(
     <InstantSearch {...instantSearchOptions}>
       <RefinementList {...widgetParams} />
+      <RefinementListURL {...widgetParams} />
       <GlobalErrorSwallower />
     </InstantSearch>
   );
 }, act);
 
 createHierarchicalMenuTests(({ instantSearchOptions, widgetParams }) => {
+  function HierarchicalMenuURL(props: UseHierarchicalMenuProps) {
+    const { createURL } = useHierarchicalMenu(props);
+    return (
+      <a data-testid="HierarchicalMenu-link" href={createURL('value')}>
+        LINK
+      </a>
+    );
+  }
+
   render(
     <InstantSearch {...instantSearchOptions}>
+      <HierarchicalMenuURL {...widgetParams} />
       <HierarchicalMenu {...widgetParams} />
       <GlobalErrorSwallower />
     </InstantSearch>
@@ -63,8 +116,17 @@ createHierarchicalMenuTests(({ instantSearchOptions, widgetParams }) => {
 
 createBreadcrumbTests(({ instantSearchOptions, widgetParams }) => {
   const { transformItems, ...hierarchicalWidgetParams } = widgetParams;
+  function BreadcrumbURL(props: UseBreadcrumbProps) {
+    const { createURL } = useBreadcrumb(props);
+    return (
+      <a data-testid="Breadcrumb-link" href={createURL('Apple > iPhone')}>
+        LINK
+      </a>
+    );
+  }
   render(
     <InstantSearch {...instantSearchOptions}>
+      <BreadcrumbURL {...widgetParams} />
       <Breadcrumb {...widgetParams} />
       <HierarchicalMenu {...hierarchicalWidgetParams} />
       <GlobalErrorSwallower />
@@ -73,8 +135,18 @@ createBreadcrumbTests(({ instantSearchOptions, widgetParams }) => {
 }, act);
 
 createMenuTests(({ instantSearchOptions, widgetParams }) => {
+  function MenuURL(props: UseMenuProps) {
+    const { createURL } = useMenu(props);
+    return (
+      <a data-testid="Menu-link" href={createURL('value')}>
+        LINK
+      </a>
+    );
+  }
+
   render(
     <InstantSearch {...instantSearchOptions}>
+      <MenuURL {...widgetParams} />
       <Menu {...widgetParams} />
       <GlobalErrorSwallower />
     </InstantSearch>
@@ -82,8 +154,17 @@ createMenuTests(({ instantSearchOptions, widgetParams }) => {
 }, act);
 
 createPaginationTests(({ instantSearchOptions, widgetParams }) => {
+  function PaginationURL(props: UsePaginationProps) {
+    const { createURL } = usePagination(props);
+    return (
+      <a data-testid="Pagination-link" href={createURL(10)}>
+        LINK
+      </a>
+    );
+  }
   render(
     <InstantSearch {...instantSearchOptions}>
+      <PaginationURL {...widgetParams} />
       <Pagination {...widgetParams} />
       <GlobalErrorSwallower />
     </InstantSearch>
@@ -217,6 +298,122 @@ createRangeInputTests(({ instantSearchOptions, widgetParams }) => {
   );
 }, act);
 
+createCurrentRefinementsTests(
+  ({ instantSearchOptions, widgetParams }) => {
+    function CurrentRefinementsURL(props: UseCurrentRefinementsProps) {
+      const { createURL } = useCurrentRefinements(props);
+      return (
+        <a
+          data-testid="CurrentRefinements-link"
+          href={createURL({
+            attribute: 'brand',
+            type: 'disjunctive',
+            value: 'Apple',
+            label: 'Apple',
+          })}
+        >
+          LINK
+        </a>
+      );
+    }
+
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <CurrentRefinementsURL {...widgetParams} />
+        <RefinementList attribute="brand" />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+  },
+  act,
+  {
+    skippedTests: {
+      /** createURL uses helper state instead of ui state as it can't be translated */
+      routing: true,
+    },
+  }
+);
+
+createHitsPerPageTests(({ instantSearchOptions, widgetParams }) => {
+  function HitsPerPageURL(props: UseHitsPerPageProps) {
+    const { createURL } = useHitsPerPage(props);
+    return (
+      <a data-testid="HitsPerPage-link" href={createURL(12)}>
+        LINK
+      </a>
+    );
+  }
+
+  render(
+    <InstantSearch {...instantSearchOptions}>
+      <HitsPerPageURL {...widgetParams} />
+      <HitsPerPage {...widgetParams} />
+      <GlobalErrorSwallower />
+    </InstantSearch>
+  );
+}, act);
+
+createNumericMenuTests(({ instantSearchOptions, widgetParams }) => {
+  function NumericMenuURL(props: UseNumericMenuProps) {
+    const { createURL } = useNumericMenu(props);
+    return (
+      <a
+        data-testid="NumericMenu-link"
+        href={createURL(encodeURI('{ "start": 500 }'))}
+      >
+        LINK
+      </a>
+    );
+  }
+
+  render(
+    <InstantSearch {...instantSearchOptions}>
+      <NumericMenuURL {...widgetParams} />
+      <GlobalErrorSwallower />
+    </InstantSearch>
+  );
+}, act);
+
+createRatingMenuTests(({ instantSearchOptions, widgetParams }) => {
+  function RatingMenuURL(props: RatingMenuConnectorParams) {
+    const { createURL } = useConnector(
+      connectRatingMenu,
+      props
+    ) as RatingMenuRenderState;
+    return (
+      <a data-testid="RatingMenu-link" href={createURL(encodeURI('5'))}>
+        LINK
+      </a>
+    );
+  }
+
+  render(
+    <InstantSearch {...instantSearchOptions}>
+      <RatingMenuURL {...widgetParams} />
+      <GlobalErrorSwallower />
+    </InstantSearch>
+  );
+}, act);
+
+createToggleRefinementTests(({ instantSearchOptions, widgetParams }) => {
+  function ToggleRefinementURL(props: UseToggleRefinementProps) {
+    const { createURL } = useToggleRefinement(props);
+    return (
+      <a data-testid="ToggleRefinement-link" href={createURL()}>
+        LINK
+      </a>
+    );
+  }
+
+  render(
+    <InstantSearch {...instantSearchOptions}>
+      <ToggleRefinementURL {...widgetParams} />
+      <ToggleRefinement {...widgetParams} />
+      <GlobalErrorSwallower />
+    </InstantSearch>
+  );
+}, act);
+
 createInstantSearchTests(({ instantSearchOptions }) => {
   render(
     <InstantSearch {...instantSearchOptions}>
@@ -235,4 +432,35 @@ createInstantSearchTests(({ instantSearchOptions }) => {
       `react (${require('react').version})`,
     ],
   };
+}, act);
+
+createSharedTests(({ instantSearchOptions, widgetParams }) => {
+  function MenuURL(props: UseMenuProps) {
+    const { createURL } = useMenu(props);
+    return (
+      <a data-testid="Menu-link" href={createURL('value')}>
+        LINK
+      </a>
+    );
+  }
+
+  function PaginationURL(props: UsePaginationProps) {
+    const { createURL } = usePagination(props);
+    return (
+      <a data-testid="Pagination-link" href={createURL(10)}>
+        LINK
+      </a>
+    );
+  }
+
+  render(
+    <InstantSearch {...instantSearchOptions}>
+      <MenuURL {...widgetParams.menu} />
+      <Menu {...widgetParams.menu} />
+      <Hits {...widgetParams.hits} />
+      <PaginationURL {...widgetParams.pagination} />
+      <Pagination {...widgetParams.pagination} />
+      <GlobalErrorSwallower />
+    </InstantSearch>
+  );
 }, act);

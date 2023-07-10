@@ -30,7 +30,9 @@ type SharedRenderOptions = {
   };
   status: InstantSearch['status'];
   error: InstantSearch['error'];
-  createURL: (state: SearchParameters) => string;
+  createURL: (
+    nextState: SearchParameters | ((state: IndexUiState) => IndexUiState)
+  ) => string;
 };
 
 export type InitOptions = SharedRenderOptions & {
