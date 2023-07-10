@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.56.5](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.56.4...instantsearch.js@4.56.5) (2023-07-10)
+
+
+### Bug Fixes
+
+* **url:** base createURL on UiState instead of SearchParameters ([#5696](https://github.com/algolia/instantsearch.js/issues/5696)) ([7e2c8a2](https://github.com/algolia/instantsearch.js/commit/7e2c8a295a6fc5ba36d9482f645ef55b422d5e75)), closes [#5694](https://github.com/algolia/instantsearch.js/issues/5694)
+
+
+
+
+
 ## [4.56.4](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.56.3...instantsearch.js@4.56.4) (2023-07-04)
 
 
