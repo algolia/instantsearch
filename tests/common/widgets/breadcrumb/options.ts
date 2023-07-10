@@ -423,13 +423,13 @@ export function createOptionsTests(setup: BreadcrumbSetup, act: Act) {
         normalizeSnapshot,
         `
         <div
-          class="ais-Breadcrumb ais-Breadcrumb--noRefinement"
+          class="ais-Breadcrumb"
         >
           <ul
             class="ais-Breadcrumb-list"
           >
             <li
-              class="ais-Breadcrumb-item ais-Breadcrumb-item--selected"
+              class="ais-Breadcrumb-item"
             >
               <a
                 class="ais-Breadcrumb-link"
@@ -437,6 +437,17 @@ export function createOptionsTests(setup: BreadcrumbSetup, act: Act) {
               >
                 Home
               </a>
+            </li>
+            <li
+              class="ais-Breadcrumb-item ais-Breadcrumb-item--selected"
+            >
+              <span
+                aria-hidden="true"
+                class="ais-Breadcrumb-separator"
+              >
+                &gt;
+              </span>
+              Digital Cameras
             </li>
           </ul>
         </div>

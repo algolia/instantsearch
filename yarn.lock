@@ -8630,13 +8630,6 @@ ajv@^8.0.1:
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
 
-algoliasearch-helper@3.13.2:
-  version "3.13.2"
-  resolved "https://registry.npmjs.org/algoliasearch-helper/-/algoliasearch-helper-3.13.2.tgz#4cc21eeaae9decf8999c748381f682dfe845c014"
-  integrity sha512-1bZjtHuqCBYw7Eu3Qh0Jfq4s63UcbOs6VvLPdt7kxn5+zMgs46xiXgc65YhZBNM3hDGrudhAX9hDhE9OP+rKUw==
-  dependencies:
-    "@algolia/events" "^4.0.1"
-
 "algoliasearch-v3@npm:algoliasearch@3.35.0":
   version "3.35.0"
   resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-3.35.0.tgz#03f2900698c7c547fce9fb8fb8d0b9a56c8da405"
