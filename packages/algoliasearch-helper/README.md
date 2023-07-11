@@ -12,7 +12,6 @@ This module is the companion of the [algolia/algoliasearch-client-javascript](ht
 
 [![Version][version-svg]][package-url] [![License][license-image]][license-url] [![Downloads][downloads-image]][downloads-url] [![jsDelivr Hits][jsdelivr-badge]][jsdelivr-hits]
 
-[travis-svg]: https://img.shields.io/travis/algolia/algoliasearch-helper-js/develop.svg?style=flat-square
 [license-image]: http://img.shields.io/badge/license-MIT-green.svg?style=flat-square
 [license-url]: LICENSE
 [downloads-image]: https://img.shields.io/npm/dm/algoliasearch-helper.svg?style=flat-square
