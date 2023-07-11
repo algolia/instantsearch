@@ -5,12 +5,12 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { screen } from '@testing-library/dom';
-import type { ToggleRefinementSetup } from '.';
+import type { PaginationConnectorSetup } from '.';
 import type { Act } from '../../common';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import { history } from 'instantsearch.js/es/lib/routers';
 
-export function createRoutingTests(setup: ToggleRefinementSetup, act: Act) {
+export function createRoutingTests(setup: PaginationConnectorSetup, act: Act) {
   describe('routing', () => {
     beforeAll(() => {
       window.history.pushState({}, '', 'http://localhost/');
@@ -24,7 +24,6 @@ export function createRoutingTests(setup: ToggleRefinementSetup, act: Act) {
         const delay = 100;
         const margin = 10;
         const router = history();
-        const attribute = 'free_shipping';
         const options = {
           instantSearchOptions: {
             indexName: 'indexName',
@@ -36,18 +35,17 @@ export function createRoutingTests(setup: ToggleRefinementSetup, act: Act) {
               search: jest.fn(async (requests) => {
                 await wait(delay);
                 return createMultiSearchResponse(
-                  ...requests.map(() =>
+                  ...requests.map(({ params }) =>
                     createSingleSearchResponse({
-                      facets: { [attribute]: { true: 400 } },
+                      page: params!.page,
+                      nbPages: 20,
                     })
                   )
                 );
               }),
             }),
           },
-          widgetParams: {
-            attribute,
-          },
+          widgetParams: {},
         };
 
         await setup(options);
@@ -57,15 +55,13 @@ export function createRoutingTests(setup: ToggleRefinementSetup, act: Act) {
           // Vue doesn't render anything on first render, so we don't need
           // to check that the URL is correct.
           const link = document.querySelector(
-            '[data-testid="ToggleRefinement-link"]'
+            '[data-testid="Pagination-link"]'
           );
           if (link) {
             // eslint-disable-next-line jest/no-conditional-expect
             expect(link).toHaveAttribute(
               'href',
-              router.createURL({
-                indexName: { toggle: { [attribute]: true } },
-              })
+              router.createURL({ indexName: { page: 10 } })
             );
           }
         }
@@ -76,29 +72,27 @@ export function createRoutingTests(setup: ToggleRefinementSetup, act: Act) {
           await wait(0);
         });
 
-        // Initial state
+        // Initial state, before interaction
         {
-          expect(screen.getByTestId('ToggleRefinement-link')).toHaveAttribute(
+          expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
             'href',
-            router.createURL({
-              indexName: { toggle: { [attribute]: true } },
-            })
+            router.createURL({ indexName: { page: 10 } })
           );
         }
 
-        // Toggle the widget
+        // Select a refinement
         {
-          const toggle = screen.getByRole('checkbox');
+          const secondPage = screen.getByTestId('Pagination-refine');
           await act(async () => {
-            toggle.click();
+            secondPage.click();
             await wait(0);
             await wait(0);
           });
 
-          // URL is different after toggle
-          expect(screen.getByTestId('ToggleRefinement-link')).toHaveAttribute(
+          // URL is still the same, as it overrides the current state
+          expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
             'href',
-            router.createURL({})
+            router.createURL({ indexName: { page: 10 } })
           );
         }
 
@@ -108,27 +102,25 @@ export function createRoutingTests(setup: ToggleRefinementSetup, act: Act) {
             await wait(delay + margin);
           });
 
-          expect(screen.getByTestId('ToggleRefinement-link')).toHaveAttribute(
+          expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
             'href',
-            router.createURL({})
+            router.createURL({ indexName: { page: 10 } })
           );
         }
 
         // Unselect the refinement
         {
-          const toggle = screen.getByRole('checkbox');
+          const firstPage = screen.getByTestId('Pagination-refine');
           await act(async () => {
-            toggle.click();
+            firstPage.click();
             await wait(0);
             await wait(0);
           });
 
-          // URL goes back to previous value
-          expect(screen.getByTestId('ToggleRefinement-link')).toHaveAttribute(
+          // URL is still the same, as it overrides the current state
+          expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
             'href',
-            router.createURL({
-              indexName: { toggle: { [attribute]: true } },
-            })
+            router.createURL({ indexName: { page: 10 } })
           );
         }
 
@@ -139,11 +131,9 @@ export function createRoutingTests(setup: ToggleRefinementSetup, act: Act) {
             await wait(0);
           });
 
-          expect(screen.getByTestId('ToggleRefinement-link')).toHaveAttribute(
+          expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
             'href',
-            router.createURL({
-              indexName: { toggle: { [attribute]: true } },
-            })
+            router.createURL({ indexName: { page: 10 } })
           );
         }
       });

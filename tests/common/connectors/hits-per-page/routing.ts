@@ -5,12 +5,12 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { screen } from '@testing-library/dom';
-import type { RefinementListSetup } from '.';
+import type { HitsPerPageConnectorSetup } from '.';
 import type { Act } from '../../common';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import { history } from 'instantsearch.js/es/lib/routers';
 
-export function createRoutingTests(setup: RefinementListSetup, act: Act) {
+export function createRoutingTests(setup: HitsPerPageConnectorSetup, act: Act) {
   describe('routing', () => {
     beforeAll(() => {
       window.history.pushState({}, '', 'http://localhost/');
@@ -23,7 +23,6 @@ export function createRoutingTests(setup: RefinementListSetup, act: Act) {
       test('Consistently shows the right URL, even before widget is initialized', async () => {
         const delay = 100;
         const margin = 10;
-        const attribute = 'brand';
         const router = history();
         const options = {
           instantSearchOptions: {
@@ -37,20 +36,18 @@ export function createRoutingTests(setup: RefinementListSetup, act: Act) {
                 await wait(delay);
                 return createMultiSearchResponse(
                   ...requests.map(() =>
-                    createSingleSearchResponse({
-                      facets: {
-                        [attribute]: {
-                          Samsung: 100,
-                          Apple: 200,
-                        },
-                      },
-                    })
+                    createSingleSearchResponse({ hitsPerPage: 12, nbHits: 200 })
                   )
                 );
               }),
             }),
           },
-          widgetParams: { attribute },
+          widgetParams: {
+            items: [
+              { value: 5, label: '5 per page', default: true },
+              { value: 10, label: '10 per page' },
+            ],
+          },
         };
 
         await setup(options);
@@ -60,18 +57,14 @@ export function createRoutingTests(setup: RefinementListSetup, act: Act) {
           // Vue doesn't render anything on first render, so we don't need
           // to check that the URL is correct.
           const link = document.querySelector(
-            '[data-testid="RefinementList-link"]'
+            '[data-testid="HitsPerPage-link"]'
           );
           if (link) {
             // eslint-disable-next-line jest/no-conditional-expect
             expect(link).toHaveAttribute(
               'href',
               router.createURL({
-                indexName: {
-                  refinementList: {
-                    [attribute]: ['value'],
-                  },
-                },
+                indexName: { hitsPerPage: 12 },
               })
             );
           }
@@ -85,38 +78,28 @@ export function createRoutingTests(setup: RefinementListSetup, act: Act) {
 
         // Initial state, before interaction
         {
-          expect(screen.getByTestId('RefinementList-link')).toHaveAttribute(
+          expect(screen.getByTestId('HitsPerPage-link')).toHaveAttribute(
             'href',
             router.createURL({
-              indexName: {
-                refinementList: {
-                  [attribute]: ['value'],
-                },
-              },
+              indexName: { hitsPerPage: 12 },
             })
           );
         }
 
         // Select a refinement
         {
-          const firstItem = screen.getByRole('checkbox', {
-            name: 'Apple 200',
-          });
+          const refine = screen.getByTestId('HitsPerPage-refine');
           await act(async () => {
-            firstItem.click();
+            refine.click();
             await wait(0);
             await wait(0);
           });
 
-          // URL has changed immediately after the user interaction
-          expect(screen.getByTestId('RefinementList-link')).toHaveAttribute(
+          // URL is still the same, as it overrides the current state
+          expect(screen.getByTestId('HitsPerPage-link')).toHaveAttribute(
             'href',
             router.createURL({
-              indexName: {
-                refinementList: {
-                  [attribute]: ['Apple', 'value'],
-                },
-              },
+              indexName: { hitsPerPage: 12 },
             })
           );
         }
@@ -127,38 +110,28 @@ export function createRoutingTests(setup: RefinementListSetup, act: Act) {
             await wait(delay + margin);
           });
 
-          expect(screen.getByTestId('RefinementList-link')).toHaveAttribute(
+          expect(screen.getByTestId('HitsPerPage-link')).toHaveAttribute(
             'href',
             router.createURL({
-              indexName: {
-                refinementList: {
-                  [attribute]: ['Apple', 'value'],
-                },
-              },
+              indexName: { hitsPerPage: 12 },
             })
           );
         }
 
         // Unselect the refinement
         {
-          const firstItem = screen.getByRole('checkbox', {
-            name: 'Apple 200',
-          });
+          const refine = screen.getByTestId('HitsPerPage-refine');
           await act(async () => {
-            firstItem.click();
+            refine.click();
             await wait(0);
             await wait(0);
           });
 
-          // URL has changed immediately after the user interaction
-          expect(screen.getByTestId('RefinementList-link')).toHaveAttribute(
+          // URL is still the same, as it overrides the current state
+          expect(screen.getByTestId('HitsPerPage-link')).toHaveAttribute(
             'href',
             router.createURL({
-              indexName: {
-                refinementList: {
-                  [attribute]: ['value'],
-                },
-              },
+              indexName: { hitsPerPage: 12 },
             })
           );
         }
@@ -170,14 +143,10 @@ export function createRoutingTests(setup: RefinementListSetup, act: Act) {
             await wait(0);
           });
 
-          expect(screen.getByTestId('RefinementList-link')).toHaveAttribute(
+          expect(screen.getByTestId('HitsPerPage-link')).toHaveAttribute(
             'href',
             router.createURL({
-              indexName: {
-                refinementList: {
-                  [attribute]: ['value'],
-                },
-              },
+              indexName: { hitsPerPage: 12 },
             })
           );
         }

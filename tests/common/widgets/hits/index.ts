@@ -4,16 +4,16 @@ import { fakeAct } from '../../common';
 import { createInsightsTests } from './insights';
 
 type WidgetParams = Parameters<HitsWidget>[0];
-export type HitsSetup = TestSetup<{
+export type HitsWidgetSetup = TestSetup<{
   widgetParams: Omit<WidgetParams, 'container'>;
 }>;
 
-export function createHitsTests(setup: HitsSetup, act: Act = fakeAct) {
+export function createHitsWidgetTests(setup: HitsWidgetSetup, act: Act = fakeAct) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
-  describe('Hits common tests', () => {
+  describe('Hits widget common tests', () => {
     createInsightsTests(setup, act);
   });
 }

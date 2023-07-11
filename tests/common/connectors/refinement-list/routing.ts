@@ -5,12 +5,15 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { screen } from '@testing-library/dom';
-import type { BreadcrumbSetup } from '.';
+import type { RefinementListConnectorSetup } from '.';
 import type { Act } from '../../common';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import { history } from 'instantsearch.js/es/lib/routers';
 
-export function createRoutingTests(setup: BreadcrumbSetup, act: Act) {
+export function createRoutingTests(
+  setup: RefinementListConnectorSetup,
+  act: Act
+) {
   describe('routing', () => {
     beforeAll(() => {
       window.history.pushState({}, '', 'http://localhost/');
@@ -23,8 +26,7 @@ export function createRoutingTests(setup: BreadcrumbSetup, act: Act) {
       test('Consistently shows the right URL, even before widget is initialized', async () => {
         const delay = 100;
         const margin = 10;
-        const attributes = ['one', 'two'];
-
+        const attribute = 'brand';
         const router = history();
         const options = {
           instantSearchOptions: {
@@ -40,13 +42,9 @@ export function createRoutingTests(setup: BreadcrumbSetup, act: Act) {
                   ...requests.map(() =>
                     createSingleSearchResponse({
                       facets: {
-                        [attributes[0]]: {
+                        [attribute]: {
                           Samsung: 100,
                           Apple: 200,
-                        },
-                        [attributes[1]]: {
-                          'Apple > iPad': 100,
-                          'Apple > iPhone': 100,
                         },
                       },
                     })
@@ -55,20 +53,8 @@ export function createRoutingTests(setup: BreadcrumbSetup, act: Act) {
               }),
             }),
           },
-          widgetParams: { attributes },
+          widgetParams: { attribute },
         };
-
-        window.history.pushState(
-          {},
-          '',
-          router.createURL({
-            indexName: {
-              hierarchicalMenu: {
-                one: ['Apple', 'iPhone'],
-              },
-            },
-          })
-        );
 
         await setup(options);
 
@@ -77,7 +63,7 @@ export function createRoutingTests(setup: BreadcrumbSetup, act: Act) {
           // Vue doesn't render anything on first render, so we don't need
           // to check that the URL is correct.
           const link = document.querySelector(
-            '[data-testid="Breadcrumb-link"]'
+            '[data-testid="RefinementList-link"]'
           );
           if (link) {
             // eslint-disable-next-line jest/no-conditional-expect
@@ -85,8 +71,8 @@ export function createRoutingTests(setup: BreadcrumbSetup, act: Act) {
               'href',
               router.createURL({
                 indexName: {
-                  hierarchicalMenu: {
-                    one: ['Apple'],
+                  refinementList: {
+                    [attribute]: ['value'],
                   },
                 },
               })
@@ -100,14 +86,14 @@ export function createRoutingTests(setup: BreadcrumbSetup, act: Act) {
           await wait(0);
         });
 
-        // Initial state, before interaction, URL toggles the last section
+        // Initial state, before interaction
         {
-          expect(screen.getByTestId('Breadcrumb-link')).toHaveAttribute(
+          expect(screen.getByTestId('RefinementList-link')).toHaveAttribute(
             'href',
             router.createURL({
               indexName: {
-                hierarchicalMenu: {
-                  one: ['Apple'],
+                refinementList: {
+                  [attribute]: ['value'],
                 },
               },
             })
@@ -116,22 +102,20 @@ export function createRoutingTests(setup: BreadcrumbSetup, act: Act) {
 
         // Select a refinement
         {
-          const firstItem = screen.getByRole('link', {
-            name: 'Apple',
-          });
+          const firstItem = screen.getByTestId('RefinementList-refine');
           await act(async () => {
             firstItem.click();
             await wait(0);
             await wait(0);
           });
 
-          // URL now includes "iPhone" as it is no longer refined
-          expect(screen.getByTestId('Breadcrumb-link')).toHaveAttribute(
+          // URL has changed immediately after the user interaction
+          expect(screen.getByTestId('RefinementList-link')).toHaveAttribute(
             'href',
             router.createURL({
               indexName: {
-                hierarchicalMenu: {
-                  one: ['Apple', 'iPhone'],
+                refinementList: {
+                  [attribute]: ['Apple', 'value'],
                 },
               },
             })
@@ -144,12 +128,53 @@ export function createRoutingTests(setup: BreadcrumbSetup, act: Act) {
             await wait(delay + margin);
           });
 
-          expect(screen.getByTestId('Breadcrumb-link')).toHaveAttribute(
+          expect(screen.getByTestId('RefinementList-link')).toHaveAttribute(
             'href',
             router.createURL({
               indexName: {
-                hierarchicalMenu: {
-                  one: ['Apple', 'iPhone'],
+                refinementList: {
+                  [attribute]: ['Apple', 'value'],
+                },
+              },
+            })
+          );
+        }
+
+        // Unselect the refinement
+        {
+          const firstItem = screen.getByTestId('RefinementList-refine');
+          await act(async () => {
+            firstItem.click();
+            await wait(0);
+            await wait(0);
+          });
+
+          // URL has changed immediately after the user interaction
+          expect(screen.getByTestId('RefinementList-link')).toHaveAttribute(
+            'href',
+            router.createURL({
+              indexName: {
+                refinementList: {
+                  [attribute]: ['value'],
+                },
+              },
+            })
+          );
+        }
+
+        // Wait for new results to come in
+        {
+          await act(async () => {
+            await wait(delay + margin);
+            await wait(0);
+          });
+
+          expect(screen.getByTestId('RefinementList-link')).toHaveAttribute(
+            'href',
+            router.createURL({
+              indexName: {
+                refinementList: {
+                  [attribute]: ['value'],
                 },
               },
             })

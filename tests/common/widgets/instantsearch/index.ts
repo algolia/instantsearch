@@ -2,22 +2,22 @@ import type { Act, TestSetup } from '../../common';
 import { fakeAct } from '../../common';
 import { createAlgoliaAgentTests } from './algolia-agent';
 
-export type InstantSearchSetup = TestSetup<
+export type InstantSearchWidgetSetup = TestSetup<
   Record<string, unknown>,
   {
     algoliaAgents: string[];
   }
 >;
 
-export function createInstantSearchTests(
-  setup: InstantSearchSetup,
+export function createInstantSearchWidgetTests(
+  setup: InstantSearchWidgetSetup,
   act: Act = fakeAct
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
-  describe('InstantSearch common tests', () => {
+  describe('InstantSearch widget common tests', () => {
     createAlgoliaAgentTests(setup, act);
   });
 }

@@ -5,12 +5,12 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { screen } from '@testing-library/dom';
-import type { NumericMenuSetup } from '.';
+import type { NumericMenuConnectorSetup } from '.';
 import type { Act } from '../../common';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import { history } from 'instantsearch.js/es/lib/routers';
 
-export function createRoutingTests(setup: NumericMenuSetup, act: Act) {
+export function createRoutingTests(setup: NumericMenuConnectorSetup, act: Act) {
   describe('routing', () => {
     beforeAll(() => {
       window.history.pushState({}, '', 'http://localhost/');
@@ -82,6 +82,9 @@ export function createRoutingTests(setup: NumericMenuSetup, act: Act) {
             })
           );
         }
+
+        // Toggle a refinement
+
       });
     });
   });

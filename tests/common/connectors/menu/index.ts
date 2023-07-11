@@ -2,18 +2,19 @@ import type { MenuWidget } from 'instantsearch.js/es/widgets/menu/menu';
 import type { Act, TestSetup } from '../../common';
 import { fakeAct } from '../../common';
 import { createOptimisticUiTests } from './optimistic-ui';
+import { createRoutingTests } from './routing';
 
 type WidgetParams = Parameters<MenuWidget>[0];
-export type MenuWidgetSetup = TestSetup<{
+export type MenuConnectorSetup = TestSetup<{
   widgetParams: Omit<WidgetParams, 'container'>;
 }>;
 
-export function createMenuWidgetTests(setup: MenuWidgetSetup, act: Act = fakeAct) {
+export function createMenuConnectorTests(setup: MenuConnectorSetup, act: Act = fakeAct) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
-  describe('Menu widget common tests', () => {
-    createOptimisticUiTests(setup, act);
+  describe('Menu connector common tests', () => {
+    createRoutingTests(setup, act);
   });
 }

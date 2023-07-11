@@ -4,19 +4,19 @@ import { fakeAct } from '../../common';
 import { createBehaviourTests } from './behaviour';
 
 type WidgetParams = Parameters<RangeInputWidget>[0];
-export type RangeInputSetup = TestSetup<{
+export type RangeInputWidgetSetup = TestSetup<{
   widgetParams: Omit<WidgetParams, 'container'>;
 }>;
 
-export function createRangeInputTests(
-  setup: RangeInputSetup,
+export function createRangeInputWidgetTests(
+  setup: RangeInputWidgetSetup,
   act: Act = fakeAct
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
-  describe('RangeInput common tests', () => {
+  describe('RangeInput widget common tests', () => {
     createBehaviourTests(setup, act);
   });
 }

@@ -5,12 +5,12 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { screen } from '@testing-library/dom';
-import type { HierarchicalMenuSetup } from '.';
+import type { HierarchicalMenuConnectorSetup } from '.';
 import type { Act } from '../../common';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import { history } from 'instantsearch.js/es/lib/routers';
 
-export function createRoutingTests(setup: HierarchicalMenuSetup, act: Act) {
+export function createRoutingTests(setup: HierarchicalMenuConnectorSetup, act: Act) {
   describe('routing', () => {
     beforeAll(() => {
       window.history.pushState({}, '', 'http://localhost/');
@@ -95,7 +95,7 @@ export function createRoutingTests(setup: HierarchicalMenuSetup, act: Act) {
 
         // Select a refinement
         {
-          const apple = screen.getByRole('link', { name: 'Apple 200' });
+          const apple = screen.getByTestId('HierarchicalMenu-refine');
           await act(async () => {
             apple.click();
             await wait(0);
@@ -129,7 +129,7 @@ export function createRoutingTests(setup: HierarchicalMenuSetup, act: Act) {
 
         // Unselect the refinement
         {
-          const apple = screen.getByRole('link', { name: 'Apple 200' });
+          const apple = screen.getByTestId('HierarchicalMenu-refine');
           await act(async () => {
             apple.click();
             await wait(0);

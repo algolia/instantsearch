@@ -6,12 +6,12 @@ import {
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import type { InfiniteHitsSetup } from '.';
+import type { InfiniteHitsWidgetSetup } from '.';
 import type { Act } from '../../common';
 import type { SearchClient } from 'instantsearch.js';
 import userEvent from '@testing-library/user-event';
 
-export function createOptimisticUiTests(setup: InfiniteHitsSetup, act: Act) {
+export function createOptimisticUiTests(setup: InfiniteHitsWidgetSetup, act: Act) {
   describe('optimistic UI', () => {
     test('shows the correct hits, regardless of network latency', async () => {
       const delay = 100;

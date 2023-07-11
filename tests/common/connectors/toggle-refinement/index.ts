@@ -4,19 +4,19 @@ import { fakeAct } from '../../common';
 import { createRoutingTests } from './routing';
 
 type WidgetParams = Parameters<ToggleRefinementWidget>[0];
-export type ToggleRefinementSetup = TestSetup<{
+export type ToggleRefinementConnectorSetup = TestSetup<{
   widgetParams: Omit<WidgetParams, 'container'>;
 }>;
 
-export function createToggleRefinementTests(
-  setup: ToggleRefinementSetup,
+export function createToggleRefinementConnectorTests(
+  setup: ToggleRefinementConnectorSetup,
   act: Act = fakeAct
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
-  describe('ToggleRefinement common tests', () => {
+  describe('ToggleRefinement connector common tests', () => {
     createRoutingTests(setup, act);
   });
 }
