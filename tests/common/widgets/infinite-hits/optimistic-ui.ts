@@ -11,7 +11,10 @@ import type { Act } from '../../common';
 import type { SearchClient } from 'instantsearch.js';
 import userEvent from '@testing-library/user-event';
 
-export function createOptimisticUiTests(setup: InfiniteHitsWidgetSetup, act: Act) {
+export function createOptimisticUiTests(
+  setup: InfiniteHitsWidgetSetup,
+  act: Act
+) {
   describe('optimistic UI', () => {
     test('shows the correct hits, regardless of network latency', async () => {
       const delay = 100;

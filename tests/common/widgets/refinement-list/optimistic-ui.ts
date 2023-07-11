@@ -8,7 +8,10 @@ import { screen } from '@testing-library/dom';
 import type { RefinementListWidgetSetup } from '.';
 import type { Act } from '../../common';
 
-export function createOptimisticUiTests(setup: RefinementListWidgetSetup, act: Act) {
+export function createOptimisticUiTests(
+  setup: RefinementListWidgetSetup,
+  act: Act
+) {
   describe('optimistic UI', () => {
     test('checks the clicked refinement immediately regardless of network latency', async () => {
       const delay = 100;

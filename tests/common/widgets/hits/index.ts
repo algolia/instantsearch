@@ -8,7 +8,10 @@ export type HitsWidgetSetup = TestSetup<{
   widgetParams: Omit<WidgetParams, 'container'>;
 }>;
 
-export function createHitsWidgetTests(setup: HitsWidgetSetup, act: Act = fakeAct) {
+export function createHitsWidgetTests(
+  setup: HitsWidgetSetup,
+  act: Act = fakeAct
+) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });

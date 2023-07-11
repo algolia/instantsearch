@@ -10,7 +10,10 @@ import type { Act } from '../../common';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import { history } from 'instantsearch.js/es/lib/routers';
 
-export function createRoutingTests(setup: HierarchicalMenuConnectorSetup, act: Act) {
+export function createRoutingTests(
+  setup: HierarchicalMenuConnectorSetup,
+  act: Act
+) {
   describe('routing', () => {
     beforeAll(() => {
       window.history.pushState({}, '', 'http://localhost/');

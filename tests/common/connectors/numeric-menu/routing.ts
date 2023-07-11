@@ -82,9 +82,6 @@ export function createRoutingTests(setup: NumericMenuConnectorSetup, act: Act) {
             })
           );
         }
-
-        // Toggle a refinement
-
       });
     });
   });

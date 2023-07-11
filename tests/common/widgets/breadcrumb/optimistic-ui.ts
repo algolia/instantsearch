@@ -9,7 +9,10 @@ import type { Act } from '../../common';
 import userEvent from '@testing-library/user-event';
 import { screen } from '@testing-library/dom';
 
-export function createOptimisticUiTests(setup: BreadcrumbWidgetSetup, act: Act) {
+export function createOptimisticUiTests(
+  setup: BreadcrumbWidgetSetup,
+  act: Act
+) {
   describe('optimistic UI', () => {
     test('checks the clicked refinement immediately regardless of network latency', async () => {
       const delay = 100;

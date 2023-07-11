@@ -8,7 +8,10 @@ export type MenuWidgetSetup = TestSetup<{
   widgetParams: Omit<WidgetParams, 'container'>;
 }>;
 
-export function createMenuWidgetTests(setup: MenuWidgetSetup, act: Act = fakeAct) {
+export function createMenuWidgetTests(
+  setup: MenuWidgetSetup,
+  act: Act = fakeAct
+) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
