@@ -40,6 +40,7 @@ It is part of the InstantSearch family which is designed for different platforms
 
 | Package | Version | Description |
 | --- | --- | --- |
+| [`algoliasearch-helper`](packages/algoliasearch-helper) | [![algoliasearch-helper npm version](https://img.shields.io/npm/v/algoliasearch-helper.svg?style=flat-square)](https://npmjs.org/package/algoliasearch-helper) | Helper for implementing advanced search features with Algolia |
 | [`create-instantsearch-app`](packages/create-instantsearch-app) | [![create-instantsearch-app npm version](https://img.shields.io/npm/v/create-instantsearch-app.svg?style=flat-square)](https://npmjs.org/package/create-instantsearch-app) | Command-line utility to quickly bootstrap a project with InstantSearch |
 | [`instantsearch.css`](packages/instantsearch.css) | [![instantsearch.css npm version](https://img.shields.io/npm/v/instantsearch.css.svg?style=flat-square)](https://npmjs.org/package/instantsearch.css) | Default CSS themes for InstantSearch |
 | [`instantsearch.js`](packages/instantsearch.js) | [![instantsearch.js npm version](https://img.shields.io/npm/v/instantsearch.js.svg?style=flat-square)](https://npmjs.org/package/instantsearch.js) | InstantSearch.js |

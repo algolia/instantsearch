@@ -163,6 +163,7 @@ This monorepo has as goal to be used for all InstantSearch flavors and tools. To
 8. replace commit messages which refer to issues/PRs with #xxx by also referencing the original repo: `git filter-branch --msg-filter 'sed -E "s/(#[[:digit:]]+)/algolia\/myproject\1/"' master..feat/import-myproject`
 9. make any changes necessary to make the project work in the monorepo and commit those
 10. make a pull request and _merge using rebase or merge_ (if you merge using squash the history will be lost)
+11. manually tag and push the latest release commit from the imported project to let shipjs know which version to take into account during the next release process 
 
 ## Tests
 
