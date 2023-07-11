@@ -199,26 +199,11 @@ jobs:
           command: |
             ./scripts/legacy/downgrade-algoliasearch-dependency.js
       - run:
+          name: Unit & Integration tests
+          command: yarn run test:v3
+      - run:
           name: Type Checking
           command: yarn run type-check:v3
-
-  algoliasearch v3:
-    <<: *defaults
-    steps:
-      - checkout
-      - *attach_workspace
-      - *install_yarn_version
-      - *restore_yarn_cache
-      - *run_yarn_install
-      - run:
-          name: Install algoliasearch v3
-          command: yarn add --dev algoliasearch@3.35.1 @types/algoliasearch@3.34.10
-      - run:
-          name: Unit & Integration tests
-          command: yarn workspace algoliasearch-helper run test --maxWorkers=4
-      - run:
-          name: Type checking
-          command: yarn workspace algoliasearch-helper tsc
 
   vue v3:
     <<: *defaults
