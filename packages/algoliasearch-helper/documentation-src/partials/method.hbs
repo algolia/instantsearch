@@ -1,0 +1,63 @@
+<div class="method">
+  <div class="summary">
+    <div class="name">
+      <span class="signature">
+        <a href="#{{id}}" id="{{id}}" class="api-entry">{{name}}</a>
+          (<span class="params">{{{cleanParameters params}}}</span>) ⇒ {{#each returns}}<span class="type">{{> types type}}</span>{{else}}undefined{{/each}}
+      </span>
+    </div>
+    {{#if chainable}}
+    <span class="badge badge-chainable">chainable</span>
+    {{/if}}
+    {{#each fires}}
+    <span class="badge badge-event">{{this}}</span>
+    {{/each}}
+  </div>
+  <div class="description">
+
+{{{description}}}
+
+</div>
+  {{#if params}}
+  <div class="parameters">
+    {{#each params as |v k|}}
+    <div class="parameter">
+      <span class="param param-{{k}}">{{name}}</span>
+      <span class="type">{{> types type}}</span>
+      <div class="description">
+
+{{{description}}}
+
+</div>
+    </div>
+    {{/each}}
+  </div>
+  {{/if}}
+  {{#if chainable}}{{else}}{{#each returns}}
+  <div class="returns">
+    <div class="return">
+      <span class="type">{{> types type}}</span>
+      <span class="description">
+
+{{{description}}}
+
+</span>
+    </div>
+  </div>
+  {{else}}
+  <div class="return no-return">This method does not return anything</div>
+  {{/each}}
+  {{/if}}
+  {{#if examples}}
+  <div class="examples">
+{{#each examples}}
+
+```javascript
+{{{this}}}
+```
+
+{{/each}}
+</div>
+{{/if}}
+</div>
+

@@ -64,6 +64,13 @@ workflows:
             branches:
               only:
                 - master
+      - helper docs:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
       - e2e tests:
           context: fx-libraries
           requires:
@@ -80,6 +87,7 @@ workflows:
             - unit tests
             - examples
             - legacy algoliasearch
+            - helper docs
             - e2e tests
           filters:
             branches:
@@ -136,6 +144,7 @@ jobs:
       - persist_to_workspace:
           root: *workspace_root
           paths:
+            - packages/algoliasearch-helper/dist
             - packages/instantsearch.js/es
             - packages/instantsearch.js/cjs
             - packages/instantsearch.js/dist
@@ -189,6 +198,9 @@ jobs:
           name: Update dependencies
           command: |
             ./scripts/legacy/downgrade-algoliasearch-dependency.js
+      - run:
+          name: Unit & Integration tests
+          command: yarn run test:v3
       - run:
           name: Type Checking
           command: yarn run type-check:v3
@@ -245,6 +257,22 @@ jobs:
           root: *workspace_root
           paths:
             - website/examples
+
+  helper docs:
+    <<: *defaults
+    steps:
+      - checkout
+      - *attach_workspace
+      - *install_yarn_version
+      - *restore_yarn_cache
+      - *run_yarn_install
+      - run:
+          name: Build helper documentation
+          command: yarn workspace algoliasearch-helper run doc
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - website/algoliasearch-helper-js
 
   e2e tests:
     <<: *defaults

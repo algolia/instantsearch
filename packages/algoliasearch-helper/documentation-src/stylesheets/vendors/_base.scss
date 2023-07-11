@@ -1,0 +1,31 @@
+@import url(https://fonts.googleapis.com/css?family=Montserrat:500,600|Open+Sans);
+
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Montserrat', Helvetica Neue, helvetica, sans-serif;
+}
+
+:root {
+  font-family: 'Open Sans', Helvetica Neue, helvetica, sans-serif;
+}
+
+hr {
+  margin: 0;
+}
+
+figure {
+  figcaption {
+    text-indent: -9999px;
+    color: transparent;
+  }
+}

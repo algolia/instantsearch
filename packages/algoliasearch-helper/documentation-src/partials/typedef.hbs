@@ -1,0 +1,71 @@
+<div class="typedef">
+  <div class="summary">
+    <span class="name"><a href="#{{id}}" id="{{id}}" class="api-entry">{{name}}</a></span>
+    -
+    {{#if properties}}
+    <span class="type">record-like object</span>
+    {{else}}
+    <span class="type">{{> types type}}</span>
+    {{/if}}
+  </div>
+  <div class="description">
+
+{{{description}}}
+
+  </div>
+  {{#if properties}}
+  <div class="type-properties">
+  {{#each properties}}
+    <div class="type-property">
+      <span class="param">{{name}}</span>
+      <span class="type">{{> types type}}</span>
+      <span class="description">
+
+{{{description}}}
+
+</span>
+    </div>
+  {{/each}}
+  </div>
+  {{/if}}
+  {{#if params}}
+  <div class="parameters">
+    {{#each params as |v k|}}
+    <div class="parameter">
+      <span class="param param-{{k}}">{{name}}</span>
+      <span class="type">{{> types type}}</span>
+      <div class="description">
+
+{{{description}}}
+
+</div>
+    </div>
+    {{/each}}
+  </div>
+  {{/if}}
+  {{#if returns}}
+  {{#each returns}}
+  <div class="returns">
+    <div class="return">
+      <span class="type">{{> types type}}</span>
+      <span class="description">
+
+{{{description}}}
+
+</span>
+    </div>
+  </div>
+  {{/each}}
+  {{/if}}
+  {{#if examples}}
+  <div class="examples">
+  {{#each examples}}
+
+```javascript
+{{{this}}}
+```
+
+  {{/each}}
+  </div>
+  {{/if}}
+</div>

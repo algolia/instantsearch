@@ -1,0 +1,979 @@
+{
+  "content": {
+    "results": [
+      {
+        "hits": [
+          {
+            "name": "3-Year Unlimited Cloud Storage Service Activation Card - Other",
+            "description": "Enjoy 3 years of unlimited Cloud storage service with this activation card, which allows you to remotely access your favorite music, movies and other media via a compatible device and enables private file sharing with loved ones.",
+            "brand": "Pogoplug",
+            "categories": ["Best Buy Gift Cards", "Entertainment Gift Cards"],
+            "hierarchicalCategories": {
+              "lvl0": "Best Buy Gift Cards",
+              "lvl1": "Best Buy Gift Cards > Entertainment Gift Cards"
+            },
+            "type": "Online data backup",
+            "price": 69,
+            "price_range": "50 - 100",
+            "image": "https://cdn-demo.algolia.com/bestbuy/1696302_sc.jpg",
+            "url": "http://www.bestbuy.com/site/3-year-unlimited-cloud-storage-service-activation-card-other/1696302.p?id=1219066776306&skuId=1696302&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": true,
+            "popularity": 10000,
+            "rating": 2,
+            "objectID": "1696302",
+            "_highlightResult": {
+              "name": {
+                "value": "3-Year Unlimited Cloud Storage Service Activation Card - Other",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Enjoy 3 years of unlimited Cloud storage service with this activation card, which allows you to remotely access your favorite music, movies and other media via a compatible device and enables private file sharing with loved ones.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Pogoplug",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Best Buy Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Entertainment Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "AMC Theatres - $15 Gift Card - Multi",
+            "description": "Give the gift of a night out with this AMC Theatres AMC $15 gift card, which is redeemable at AMC Theatres, Cineplex Odeon and other theaters throughout the U.S. for movie tickets and goods at the concession stand.",
+            "brand": "AMC Theatres",
+            "categories": ["Best Buy Gift Cards", "Entertainment Gift Cards"],
+            "hierarchicalCategories": {
+              "lvl0": "Best Buy Gift Cards",
+              "lvl1": "Best Buy Gift Cards > Entertainment Gift Cards"
+            },
+            "type": "Misc posa",
+            "price": 15,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/2592015_sb.jpg",
+            "url": "http://www.bestbuy.com/site/amc-theatres-15-gift-card-multi/2592015.p?id=1219550857028&skuId=2592015&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9825,
+            "rating": 6,
+            "objectID": "2592015",
+            "_highlightResult": {
+              "name": {
+                "value": "AMC Theatres - $15 Gift Card - Multi",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Give the gift of a night out with this AMC Theatres AMC $15 gift card, which is redeemable at AMC Theatres, Cineplex Odeon and other theaters throughout the U.S. for movie tickets and goods at the concession stand.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "AMC Theatres",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Best Buy Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Entertainment Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "AMC Theatres - $25 Gift Card",
+            "description": "This AMC Theatres $25 gift card is redeemable for movie tickets and concessions at AMC Theatres, AMC Loews, AMC Showplace, Cineplex Odeon, Magic Johnson and Star theaters in the U.S.",
+            "brand": "AMC Theatres",
+            "categories": ["Best Buy Gift Cards", "Entertainment Gift Cards"],
+            "hierarchicalCategories": {
+              "lvl0": "Best Buy Gift Cards",
+              "lvl1": "Best Buy Gift Cards > Entertainment Gift Cards"
+            },
+            "type": "Misc posa",
+            "price": 25,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/6643032_sb.jpg",
+            "url": "http://www.bestbuy.com/site/amc-theatres-25-gift-card/6643032.p?id=1219231132386&skuId=6643032&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9824,
+            "rating": 3,
+            "objectID": "6643032",
+            "_highlightResult": {
+              "name": {
+                "value": "AMC Theatres - $25 Gift Card",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "This AMC Theatres $25 gift card is redeemable for movie tickets and concessions at AMC Theatres, AMC Loews, AMC Showplace, Cineplex Odeon, Magic Johnson and Star theaters in the U.S.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "AMC Theatres",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Best Buy Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Entertainment Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Chili's - $10 Gift Card (3-Pack)",
+            "description": "Treat a group of friends to a delicious meal with this 3-pack of Chili's $10 gift cards that is valid at Chili's Grill & Bar, Romano's Macaroni Grill, On The Border Mexican Grill & Cantina and Maggiano's Little Italy locations in the U.S.",
+            "brand": "Chili's",
+            "categories": ["Best Buy Gift Cards", "Entertainment Gift Cards"],
+            "hierarchicalCategories": {
+              "lvl0": "Best Buy Gift Cards",
+              "lvl1": "Best Buy Gift Cards > Entertainment Gift Cards"
+            },
+            "type": "Misc posa",
+            "price": 30,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/6669016_sb.jpg",
+            "url": "http://www.bestbuy.com/site/chilis-10-gift-card-3-pack/6669016.p?id=1219236791060&skuId=6669016&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 8062,
+            "rating": 2,
+            "objectID": "6669016",
+            "_highlightResult": {
+              "name": {
+                "value": "Chili's - $10 Gift Card (3-Pack)",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Treat a group of friends to a delicious meal with this 3-pack of Chili's $10 gift cards that is valid at Chili's Grill & Bar, Romano's Macaroni Grill, On The Border Mexican Grill & Cantina and Maggiano's Little Italy locations in the U.S.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Chili's",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Best Buy Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Entertainment Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Chipotle - $25 Gift Card",
+            "description": "Treat a loved one to a delicious meal on the go with this Chipotle $25 gift card, which can be redeemed at any Chipotle restaurant in the U.S. for a variety of flavorful menu items prepared with fresh ingredients.",
+            "brand": "Chipotle",
+            "categories": ["Best Buy Gift Cards", "Entertainment Gift Cards"],
+            "hierarchicalCategories": {
+              "lvl0": "Best Buy Gift Cards",
+              "lvl1": "Best Buy Gift Cards > Entertainment Gift Cards"
+            },
+            "type": "Misc posa",
+            "price": 25,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/3267036_sb.jpg",
+            "url": "http://www.bestbuy.com/site/chipotle-25-gift-card/3267036.p?id=1219575817468&skuId=3267036&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": true,
+            "popularity": 8060,
+            "rating": 6,
+            "objectID": "3267036",
+            "_highlightResult": {
+              "name": {
+                "value": "Chipotle - $25 Gift Card",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Treat a loved one to a delicious meal on the go with this Chipotle $25 gift card, which can be redeemed at any Chipotle restaurant in the U.S. for a variety of flavorful menu items prepared with fresh ingredients.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Chipotle",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Best Buy Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Entertainment Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Dairy Queen - $15 Gift Card",
+            "description": "Compatible with online and mobile apps, this Dairy Queen $15 gift card is accepted nationally at participating Dairy Queen or Orange Julius locations, making it easy to enjoy Dairy Queen cakes, Orange Julius fruit smoothies and other tasty items.",
+            "brand": "Dairy Queen",
+            "categories": ["Best Buy Gift Cards", "Entertainment Gift Cards"],
+            "hierarchicalCategories": {
+              "lvl0": "Best Buy Gift Cards",
+              "lvl1": "Best Buy Gift Cards > Entertainment Gift Cards"
+            },
+            "type": "Misc posa",
+            "price": 15,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/6681207_sb.jpg",
+            "url": "http://www.bestbuy.com/site/dairy-queen-15-gift-card/6681207.p?id=1219236788879&skuId=6681207&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 7761,
+            "rating": 3,
+            "objectID": "6681207",
+            "_highlightResult": {
+              "name": {
+                "value": "Dairy Queen - $15 Gift Card",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Compatible with online and mobile apps, this Dairy Queen $15 gift card is accepted nationally at participating Dairy Queen or Orange Julius locations, making it easy to enjoy Dairy Queen cakes, Orange Julius fruit smoothies and other tasty items.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Dairy Queen",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Best Buy Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Entertainment Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Darden Restaurants - $25 Gift Card",
+            "description": "Present a loved one with a delicious meal at Olive Garden, LongHorn Steakhouse, Bahama Breeze, Seasons 52, Yard House or Red Lobster in the U.S. with this Darden Restaurants $25 gift card, which can be redeemed for appetizers, entrees and more.",
+            "brand": "Darden Restaurants",
+            "categories": ["Best Buy Gift Cards", "Entertainment Gift Cards"],
+            "hierarchicalCategories": {
+              "lvl0": "Best Buy Gift Cards",
+              "lvl1": "Best Buy Gift Cards > Entertainment Gift Cards"
+            },
+            "type": "Misc posa",
+            "price": 25,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/6824125_sb.jpg",
+            "url": "http://www.bestbuy.com/site/darden-restaurants-25-gift-card/6824125.p?id=1219239884950&skuId=6824125&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 7749,
+            "rating": 2,
+            "objectID": "6824125",
+            "_highlightResult": {
+              "name": {
+                "value": "Darden Restaurants - $25 Gift Card",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Present a loved one with a delicious meal at Olive Garden, LongHorn Steakhouse, Bahama Breeze, Seasons 52, Yard House or Red Lobster in the U.S. with this Darden Restaurants $25 gift card, which can be redeemed for appetizers, entrees and more.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Darden Restaurants",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Best Buy Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Entertainment Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Darden Restaurants - $60 Gift Card",
+            "description": "Use this Darden Restaurants $60 gift card at a variety of locations in the U.S., including Olive Garden, LongHorn Steakhouse, Bahama Breeze, Seasons 52, Yard House and Red Lobster restaurants.",
+            "brand": "Darden Restaurants",
+            "categories": ["Best Buy Gift Cards", "Entertainment Gift Cards"],
+            "hierarchicalCategories": {
+              "lvl0": "Best Buy Gift Cards",
+              "lvl1": "Best Buy Gift Cards > Entertainment Gift Cards"
+            },
+            "type": "Misc posa",
+            "price": 60,
+            "price_range": "50 - 100",
+            "image": "https://cdn-demo.algolia.com/bestbuy/6682206_sb.jpg",
+            "url": "http://www.bestbuy.com/site/darden-restaurants-60-gift-card/6682206.p?id=1219236788880&skuId=6682206&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 7748,
+            "rating": 2,
+            "objectID": "6682206",
+            "_highlightResult": {
+              "name": {
+                "value": "Darden Restaurants - $60 Gift Card",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Use this Darden Restaurants $60 gift card at a variety of locations in the U.S., including Olive Garden, LongHorn Steakhouse, Bahama Breeze, Seasons 52, Yard House and Red Lobster restaurants.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Darden Restaurants",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Best Buy Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Entertainment Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "eBay - $25 Gift Card",
+            "description": "Help a loved one celebrate a special occasion with this eBay gift card, which is redeemable for $25 and lets the recipient choose from a great assortment of goods offered by a vast network of online sellers.",
+            "brand": "eBay",
+            "categories": ["Best Buy Gift Cards", "Entertainment Gift Cards"],
+            "hierarchicalCategories": {
+              "lvl0": "Best Buy Gift Cards",
+              "lvl1": "Best Buy Gift Cards > Entertainment Gift Cards"
+            },
+            "type": "Misc posa",
+            "price": 25,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/3904022_sb.jpg",
+            "url": "http://www.bestbuy.com/site/ebay-25-gift-card/3904022.p?id=1219607581011&skuId=3904022&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 7256,
+            "rating": 4,
+            "objectID": "3904022",
+            "_highlightResult": {
+              "name": {
+                "value": "eBay - $25 Gift Card",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Help a loved one celebrate a special occasion with this eBay gift card, which is redeemable for $25 and lets the recipient choose from a great assortment of goods offered by a vast network of online sellers.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "eBay",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Best Buy Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Entertainment Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Fandango - $25 Gift Card",
+            "description": "Provide a friend or relative with tickets to the movies with this Fandango $25 gift card, which can be redeemed via the Fandango Web site and mobile apps to help your loved one avoid waiting on long lines at the theater.",
+            "brand": "Fandango",
+            "categories": ["Best Buy Gift Cards", "Entertainment Gift Cards"],
+            "hierarchicalCategories": {
+              "lvl0": "Best Buy Gift Cards",
+              "lvl1": "Best Buy Gift Cards > Entertainment Gift Cards"
+            },
+            "type": "Misc posa",
+            "price": 25,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/6822172_sb.jpg",
+            "url": "http://www.bestbuy.com/site/fandango-25-gift-card/6822172.p?id=1219239883569&skuId=6822172&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 6954,
+            "rating": 3,
+            "objectID": "6822172",
+            "_highlightResult": {
+              "name": {
+                "value": "Fandango - $25 Gift Card",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Provide a friend or relative with tickets to the movies with this Fandango $25 gift card, which can be redeemed via the Fandango Web site and mobile apps to help your loved one avoid waiting on long lines at the theater.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Fandango",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Best Buy Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Entertainment Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Fandango - $45 Gift Card",
+            "description": "Give a friend or family member the gift of the cinema with this Fandango $45 gift card, which can be redeemed via the Fandango Web site and mobile apps, so your loved one can skip the lines at the box office.",
+            "brand": "Fandango",
+            "categories": ["Best Buy Gift Cards", "Entertainment Gift Cards"],
+            "hierarchicalCategories": {
+              "lvl0": "Best Buy Gift Cards",
+              "lvl1": "Best Buy Gift Cards > Entertainment Gift Cards"
+            },
+            "type": "Misc posa",
+            "price": 45,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/6822205_sb.jpg",
+            "url": "http://www.bestbuy.com/site/fandango-45-gift-card/6822205.p?id=1219239885213&skuId=6822205&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 6953,
+            "rating": 6,
+            "objectID": "6822205",
+            "_highlightResult": {
+              "name": {
+                "value": "Fandango - $45 Gift Card",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Give a friend or family member the gift of the cinema with this Fandango $45 gift card, which can be redeemed via the Fandango Web site and mobile apps, so your loved one can skip the lines at the box office.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Fandango",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Best Buy Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Entertainment Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Netflix - $100 Gift Card - Multi",
+            "description": "This Netflix $100 gift card can be used to redeem TV shows and movies on most Internet-connected devices, so you can treat a friend or relative to entertainment at home or on the go.",
+            "brand": "Netflix",
+            "categories": ["Best Buy Gift Cards", "Entertainment Gift Cards"],
+            "hierarchicalCategories": {
+              "lvl0": "Best Buy Gift Cards",
+              "lvl1": "Best Buy Gift Cards > Entertainment Gift Cards"
+            },
+            "type": "Misc posa",
+            "price": 100,
+            "price_range": "50 - 100",
+            "image": "https://cdn-demo.algolia.com/bestbuy/3268017_sb.jpg",
+            "url": "http://www.bestbuy.com/site/netflix-100-gift-card-multi/3268017.p?id=1219575816028&skuId=3268017&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": true,
+            "popularity": 2812,
+            "rating": 6,
+            "objectID": "3268017",
+            "_highlightResult": {
+              "name": {
+                "value": "Netflix - $100 Gift Card - Multi",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "This Netflix $100 gift card can be used to redeem TV shows and movies on most Internet-connected devices, so you can treat a friend or relative to entertainment at home or on the go.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Netflix",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Best Buy Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Entertainment Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Netflix - $30 Gift Card",
+            "description": "Use the Netflix gift card to watch your favorite TV shows and movies on any internet-connected device instantly. Watch as much as you want, whenever you want. It's fast. It's easy. It's a better way to watch.",
+            "brand": "Netflix",
+            "categories": ["Best Buy Gift Cards", "Entertainment Gift Cards"],
+            "hierarchicalCategories": {
+              "lvl0": "Best Buy Gift Cards",
+              "lvl1": "Best Buy Gift Cards > Entertainment Gift Cards"
+            },
+            "type": "Misc posa",
+            "price": 30,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/8090039_sb.jpg",
+            "url": "http://www.bestbuy.com/site/netflix-30-gift-card/8090039.p?id=1219311894865&skuId=8090039&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 2811,
+            "rating": 2,
+            "objectID": "8090039",
+            "_highlightResult": {
+              "name": {
+                "value": "Netflix - $30 Gift Card",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Use the Netflix gift card to watch your favorite TV shows and movies on any internet-connected device instantly. Watch as much as you want, whenever you want. It's fast. It's easy. It's a better way to watch.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Netflix",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Best Buy Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Entertainment Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Netflix - $60 Gift Card",
+            "description": "Use the Netflix gift card to watch your favorite TV shows and movies on any internet-connected device instantly. Watch as much as you want, whenever you want. It's fast. It's easy. It's a better way to watch.",
+            "brand": "Netflix",
+            "categories": ["Best Buy Gift Cards", "Entertainment Gift Cards"],
+            "hierarchicalCategories": {
+              "lvl0": "Best Buy Gift Cards",
+              "lvl1": "Best Buy Gift Cards > Entertainment Gift Cards"
+            },
+            "type": "Misc posa",
+            "price": 60,
+            "price_range": "50 - 100",
+            "image": "https://cdn-demo.algolia.com/bestbuy/8092019_sb.jpg",
+            "url": "http://www.bestbuy.com/site/netflix-60-gift-card/8092019.p?id=1219428024107&skuId=8092019&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 2810,
+            "rating": 5,
+            "objectID": "8092019",
+            "_highlightResult": {
+              "name": {
+                "value": "Netflix - $60 Gift Card",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Use the Netflix gift card to watch your favorite TV shows and movies on any internet-connected device instantly. Watch as much as you want, whenever you want. It's fast. It's easy. It's a better way to watch.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Netflix",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Best Buy Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Entertainment Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Pogoplug - 1-Year Unlimited Cloud Storage Service Activation Card - Multicolor",
+            "description": "Enjoy 1 year of unlimited Cloud storage service with this activation card, which allows you to remotely access your favorite music, movies and other media via a compatible device and enables private file sharing with loved ones.",
+            "brand": "Pogoplug",
+            "categories": ["Best Buy Gift Cards", "Entertainment Gift Cards"],
+            "hierarchicalCategories": {
+              "lvl0": "Best Buy Gift Cards",
+              "lvl1": "Best Buy Gift Cards > Entertainment Gift Cards"
+            },
+            "type": "Online data backup",
+            "price": 29.99,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/1696225_sb.jpg",
+            "url": "http://www.bestbuy.com/site/pogoplug-1-year-unlimited-cloud-storage-service-activation-card-multicolor/1696225.p?id=1219066776119&skuId=1696225&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 1785,
+            "rating": 1,
+            "objectID": "1696225",
+            "_highlightResult": {
+              "name": {
+                "value": "Pogoplug - 1-Year Unlimited Cloud Storage Service Activation Card - Multicolor",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Enjoy 1 year of unlimited Cloud storage service with this activation card, which allows you to remotely access your favorite music, movies and other media via a compatible device and enables private file sharing with loved ones.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Pogoplug",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Best Buy Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Entertainment Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Pogoplug - 6-Month Unlimited Cloud Storage Service Activation Card - Multicolor",
+            "description": "Enjoy 6 months of unlimited Cloud storage service with this activation card, which allows you to remotely access your favorite music, movies and other media via a compatible device and enables private file sharing with loved ones.",
+            "brand": "Pogoplug",
+            "categories": ["Best Buy Gift Cards", "Entertainment Gift Cards"],
+            "hierarchicalCategories": {
+              "lvl0": "Best Buy Gift Cards",
+              "lvl1": "Best Buy Gift Cards > Entertainment Gift Cards"
+            },
+            "type": "Online data backup",
+            "price": 14.99,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/1696087_sb.jpg",
+            "url": "http://www.bestbuy.com/site/pogoplug-6-month-unlimited-cloud-storage-service-activation-card-multicolor/1696087.p?id=1219066776122&skuId=1696087&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 1784,
+            "rating": 1,
+            "objectID": "1696087",
+            "_highlightResult": {
+              "name": {
+                "value": "Pogoplug - 6-Month Unlimited Cloud Storage Service Activation Card - Multicolor",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Enjoy 6 months of unlimited Cloud storage service with this activation card, which allows you to remotely access your favorite music, movies and other media via a compatible device and enables private file sharing with loved ones.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Pogoplug",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Best Buy Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Entertainment Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Regal Entertainment Group - $25 Gift Card - Multi",
+            "description": "Gift the gift of cinematic adventures with this Regal Entertainment Group $25 gift card, which can be redeemed for movie tickets and concessions at Regal Cinemas, Edwards Theatres and United Artists Theatres in the U.S.",
+            "brand": "Regal Entertainment Group",
+            "categories": ["Best Buy Gift Cards", "Entertainment Gift Cards"],
+            "hierarchicalCategories": {
+              "lvl0": "Best Buy Gift Cards",
+              "lvl1": "Best Buy Gift Cards > Entertainment Gift Cards"
+            },
+            "type": "Misc posa",
+            "price": 25,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/6827113_sb.jpg",
+            "url": "http://www.bestbuy.com/site/regal-entertainment-group-25-gift-card-multi/6827113.p?id=1219239883573&skuId=6827113&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 1592,
+            "rating": 4,
+            "objectID": "6827113",
+            "_highlightResult": {
+              "name": {
+                "value": "Regal Entertainment Group - $25 Gift Card - Multi",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Gift the gift of cinematic adventures with this Regal Entertainment Group $25 gift card, which can be redeemed for movie tickets and concessions at Regal Cinemas, Edwards Theatres and United Artists Theatres in the U.S.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Regal Entertainment Group",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Best Buy Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Entertainment Gift Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          }
+        ],
+        "nbHits": 17,
+        "page": 0,
+        "nbPages": 1,
+        "hitsPerPage": 20,
+        "processingTimeMS": 1,
+        "facets": {
+          "type": {
+            "Misc posa": 14,
+            "Online data backup": 3
+          },
+          "brand": {
+            "Netflix": 3,
+            "Pogoplug": 3,
+            "AMC Theatres": 2,
+            "Darden Restaurants": 2,
+            "Fandango": 2,
+            "Chili's": 1,
+            "Chipotle": 1,
+            "Dairy Queen": 1,
+            "Regal Entertainment Group": 1,
+            "eBay": 1
+          },
+          "rating": {
+            "1": 2,
+            "2": 5,
+            "3": 3,
+            "4": 2,
+            "5": 1,
+            "6": 4
+          },
+          "hierarchicalCategories.lvl0": {
+            "Best Buy Gift Cards": 17
+          },
+          "hierarchicalCategories.lvl1": {
+            "Best Buy Gift Cards > Entertainment Gift Cards": 17
+          }
+        },
+        "facets_stats": {
+          "rating": {
+            "min": 1,
+            "max": 6,
+            "avg": 3,
+            "sum": 58
+          }
+        },
+        "exhaustiveFacetsCount": true,
+        "query": "",
+        "params": "query=&page=0&facets=%5B%22brand%22%2C%22type%22%2C%22rating%22%2C%22hierarchicalCategories.lvl0%22%2C%22hierarchicalCategories.lvl1%22%2C%22hierarchicalCategories.lvl2%22%5D&tagFilters=&facetFilters=%5B%5B%22hierarchicalCategories.lvl1%3ABest%20Buy%20Gift%20Cards%20%3E%20Entertainment%20Gift%20Cards%22%5D%5D",
+        "index": "instant_search"
+      },
+      {
+        "hits": [
+          {
+            "objectID": "1696302"
+          }
+        ],
+        "nbHits": 80,
+        "page": 0,
+        "nbPages": 80,
+        "hitsPerPage": 1,
+        "processingTimeMS": 1,
+        "facets": {
+          "hierarchicalCategories.lvl0": {
+            "Best Buy Gift Cards": 80
+          },
+          "hierarchicalCategories.lvl1": {
+            "Best Buy Gift Cards > Entertainment Gift Cards": 17,
+            "Best Buy Gift Cards > Swag Gift Cards": 20
+          }
+        },
+        "exhaustiveFacetsCount": true,
+        "query": "",
+        "params": "query=&page=0&hitsPerPage=1&attributesToRetrieve=%5B%5D&attributesToHighlight=%5B%5D&attributesToSnippet=%5B%5D&tagFilters=&facets=%5B%22hierarchicalCategories.lvl0%22%2C%22hierarchicalCategories.lvl1%22%5D&facetFilters=%5B%5B%22hierarchicalCategories.lvl0%3ABest%20Buy%20Gift%20Cards%22%5D%5D",
+        "index": "instant_search"
+      },
+      {
+        "hits": [
+          {
+            "objectID": "1696302"
+          }
+        ],
+        "nbHits": 10000,
+        "page": 0,
+        "nbPages": 1000,
+        "hitsPerPage": 1,
+        "processingTimeMS": 1,
+        "facets": {
+          "hierarchicalCategories.lvl0": {
+            "Cell Phones": 1920,
+            "Computers & Tablets": 1858,
+            "Appliances": 1533,
+            "Audio": 1010,
+            "Cameras & Camcorders": 753,
+            "TV & Home Theater": 617,
+            "Car Electronics & GPS": 509,
+            "Health, Fitness & Beauty": 385,
+            "Office & School Supplies": 302,
+            "Video Games": 178,
+            "Housewares": 135,
+            "Office Electronics": 122,
+            "Toys, Games & Drones": 104,
+            "Connected Home": 96,
+            "Best Buy Gift Cards": 80,
+            "Telephones & Communication": 76,
+            "Wearable Technology": 68,
+            "Name Brands": 55,
+            "Paper": 48,
+            "Musical Instruments": 40,
+            "Household Essentials": 32,
+            "Scanners, Faxes & Copiers": 25,
+            "Office Furniture & Storage": 14,
+            "Movies & Music": 13,
+            "Magnolia Home Theater": 10,
+            "Furniture & Decor": 6,
+            "Batteries & Power": 5,
+            "Carfi Instore Only": 4,
+            "Home": 1,
+            "Microwaves": 1
+          }
+        },
+        "exhaustiveFacetsCount": true,
+        "query": "",
+        "params": "query=&page=0&hitsPerPage=1&attributesToRetrieve=%5B%5D&attributesToHighlight=%5B%5D&attributesToSnippet=%5B%5D&tagFilters=&facets=%5B%22hierarchicalCategories.lvl0%22%5D",
+        "index": "instant_search"
+      }
+    ]
+  },
+  "state": {
+    "index": "instant_search",
+    "query": "",
+    "facets": ["brand"],
+    "disjunctiveFacets": ["type", "rating"],
+    "hierarchicalFacets": [
+      {
+        "name": "hierarchicalCategories",
+        "attributes": [
+          "hierarchicalCategories.lvl0",
+          "hierarchicalCategories.lvl1",
+          "hierarchicalCategories.lvl2",
+          "hierarchicalCategories.lvl3"
+        ]
+      }
+    ],
+    "facetsRefinements": {},
+    "facetsExcludes": {},
+    "disjunctiveFacetsRefinements": {},
+    "numericRefinements": {},
+    "tagRefinements": [],
+    "hierarchicalFacetsRefinements": {
+      "hierarchicalCategories": [
+        "Best Buy Gift Cards > Entertainment Gift Cards"
+      ]
+    },
+    "page": 0
+  },
+  "error": null
+}

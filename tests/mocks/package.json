@@ -3,7 +3,7 @@
   "version": "1.18.0",
   "private": true,
   "dependencies": {
-    "algoliasearch-helper": "3.13.2",
+    "algoliasearch-helper": "3.13.3",
     "instantsearch.js": "4.56.5"
   }
 }
