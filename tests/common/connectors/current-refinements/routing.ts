@@ -5,14 +5,14 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { screen } from '@testing-library/dom';
-import type { CurrentRefinementsSetup } from '.';
+import type { CurrentRefinementsConnectorSetup } from '.';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import { history } from 'instantsearch.js/es/lib/routers';
 import type { Act, SkippedTests } from '../../common';
 import { skippableDescribe } from '../../common';
 
 export function createRoutingTests(
-  setup: CurrentRefinementsSetup,
+  setup: CurrentRefinementsConnectorSetup,
   act: Act,
   skippedTests: SkippedTests
 ) {
@@ -83,7 +83,7 @@ export function createRoutingTests(
 
         // Select the refinement
         {
-          const apple = screen.getByRole('checkbox', { name: 'Apple 200' });
+          const apple = screen.getByTestId('CurrentRefinements-refine');
           await act(async () => {
             apple.click();
             await wait(0);
@@ -99,7 +99,7 @@ export function createRoutingTests(
 
         // Unselect the refinement
         {
-          const apple = screen.getByRole('checkbox', { name: 'Apple 200' });
+          const apple = screen.getByTestId('CurrentRefinements-refine');
           await act(async () => {
             apple.click();
             await wait(0);

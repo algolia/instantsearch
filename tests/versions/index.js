@@ -45,6 +45,7 @@ let hasError = false;
     hasError = true;
   } else {
     console.log('Versions are in sync per flavor');
+    console.log(Object.fromEntries(results));
   }
 }
 
@@ -86,6 +87,7 @@ let hasError = false;
     hasError = true;
   } else {
     console.log('Version files are in sync.');
+    console.log(results);
   }
 }
 

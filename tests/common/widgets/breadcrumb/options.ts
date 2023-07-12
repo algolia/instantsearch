@@ -3,13 +3,13 @@ import {
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import type { BreadcrumbSetup } from '.';
+import type { BreadcrumbWidgetSetup } from '.';
 import type { Act } from '../../common';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { normalizeSnapshot, wait } from '@instantsearch/testutils';
 
-export function createOptionsTests(setup: BreadcrumbSetup, act: Act) {
+export function createOptionsTests(setup: BreadcrumbWidgetSetup, act: Act) {
   describe('options', () => {
     const hierarchicalFacets = {
       'hierarchicalCategories.lvl0': {

@@ -4,13 +4,13 @@ import {
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import type { HierarchicalMenuSetup } from '.';
+import type { HierarchicalMenuWidgetSetup } from '.';
 import type { Act } from '../../common';
 import userEvent from '@testing-library/user-event';
 import { screen } from '@testing-library/dom';
 
 export function createOptimisticUiTests(
-  setup: HierarchicalMenuSetup,
+  setup: HierarchicalMenuWidgetSetup,
   act: Act
 ) {
   describe('optimistic UI', () => {

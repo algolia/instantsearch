@@ -5,12 +5,12 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { screen } from '@testing-library/dom';
-import type { PaginationSetup } from '.';
+import type { MenuConnectorSetup } from '.';
 import type { Act } from '../../common';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import { history } from 'instantsearch.js/es/lib/routers';
 
-export function createRoutingTests(setup: PaginationSetup, act: Act) {
+export function createRoutingTests(setup: MenuConnectorSetup, act: Act) {
   describe('routing', () => {
     beforeAll(() => {
       window.history.pushState({}, '', 'http://localhost/');
@@ -24,6 +24,7 @@ export function createRoutingTests(setup: PaginationSetup, act: Act) {
         const delay = 100;
         const margin = 10;
         const router = history();
+        const attribute = 'brand';
         const options = {
           instantSearchOptions: {
             indexName: 'indexName',
@@ -35,17 +36,21 @@ export function createRoutingTests(setup: PaginationSetup, act: Act) {
               search: jest.fn(async (requests) => {
                 await wait(delay);
                 return createMultiSearchResponse(
-                  ...requests.map(({ params }) =>
+                  ...requests.map(() =>
                     createSingleSearchResponse({
-                      page: params!.page,
-                      nbPages: 20,
+                      facets: {
+                        [attribute]: {
+                          Samsung: 100,
+                          Apple: 200,
+                        },
+                      },
                     })
                   )
                 );
               }),
             }),
           },
-          widgetParams: {},
+          widgetParams: { attribute },
         };
 
         await setup(options);
@@ -54,14 +59,14 @@ export function createRoutingTests(setup: PaginationSetup, act: Act) {
         {
           // Vue doesn't render anything on first render, so we don't need
           // to check that the URL is correct.
-          const link = document.querySelector(
-            '[data-testid="Pagination-link"]'
-          );
+          const link = document.querySelector('[data-testid="Menu-link"]');
           if (link) {
             // eslint-disable-next-line jest/no-conditional-expect
             expect(link).toHaveAttribute(
               'href',
-              router.createURL({ indexName: { page: 10 } })
+              router.createURL({
+                indexName: { menu: { [attribute]: 'value' } },
+              })
             );
           }
         }
@@ -74,25 +79,29 @@ export function createRoutingTests(setup: PaginationSetup, act: Act) {
 
         // Initial state, before interaction
         {
-          expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
+          expect(screen.getByTestId('Menu-link')).toHaveAttribute(
             'href',
-            router.createURL({ indexName: { page: 10 } })
+            router.createURL({
+              indexName: { menu: { [attribute]: 'value' } },
+            })
           );
         }
 
         // Select a refinement
         {
-          const secondPage = screen.getByRole('link', { name: 'Page 2' });
+          const firstItem = screen.getByTestId('Menu-refine');
           await act(async () => {
-            secondPage.click();
+            firstItem.click();
             await wait(0);
             await wait(0);
           });
 
           // URL is still the same, as it overrides the current state
-          expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
+          expect(screen.getByTestId('Menu-link')).toHaveAttribute(
             'href',
-            router.createURL({ indexName: { page: 10 } })
+            router.createURL({
+              indexName: { menu: { [attribute]: 'value' } },
+            })
           );
         }
 
@@ -102,25 +111,29 @@ export function createRoutingTests(setup: PaginationSetup, act: Act) {
             await wait(delay + margin);
           });
 
-          expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
+          expect(screen.getByTestId('Menu-link')).toHaveAttribute(
             'href',
-            router.createURL({ indexName: { page: 10 } })
+            router.createURL({
+              indexName: { menu: { [attribute]: 'value' } },
+            })
           );
         }
 
         // Unselect the refinement
         {
-          const firstPage = screen.getByRole('link', { name: 'Page 1' });
+          const firstItem = screen.getByTestId('Menu-refine');
           await act(async () => {
-            firstPage.click();
+            firstItem.click();
             await wait(0);
             await wait(0);
           });
 
           // URL is still the same, as it overrides the current state
-          expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
+          expect(screen.getByTestId('Menu-link')).toHaveAttribute(
             'href',
-            router.createURL({ indexName: { page: 10 } })
+            router.createURL({
+              indexName: { menu: { [attribute]: 'value' } },
+            })
           );
         }
 
@@ -131,9 +144,11 @@ export function createRoutingTests(setup: PaginationSetup, act: Act) {
             await wait(0);
           });
 
-          expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
+          expect(screen.getByTestId('Menu-link')).toHaveAttribute(
             'href',
-            router.createURL({ indexName: { page: 10 } })
+            router.createURL({
+              indexName: { menu: { [attribute]: 'value' } },
+            })
           );
         }
       });

@@ -1,8 +1,11 @@
 import algoliasearch from 'algoliasearch';
-import type { InstantSearchSetup } from '.';
+import type { InstantSearchWidgetSetup } from '.';
 import type { Act } from '../../common';
 
-export function createAlgoliaAgentTests(setup: InstantSearchSetup, _act: Act) {
+export function createAlgoliaAgentTests(
+  setup: InstantSearchWidgetSetup,
+  _act: Act
+) {
   describe('algolia agent', () => {
     test('sets the correct algolia agents', async () => {
       const searchClient = algoliasearch('appId', 'apiKey');

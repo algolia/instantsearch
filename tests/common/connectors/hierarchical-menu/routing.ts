@@ -5,12 +5,15 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { screen } from '@testing-library/dom';
-import type { MenuSetup } from '.';
+import type { HierarchicalMenuConnectorSetup } from '.';
 import type { Act } from '../../common';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import { history } from 'instantsearch.js/es/lib/routers';
 
-export function createRoutingTests(setup: MenuSetup, act: Act) {
+export function createRoutingTests(
+  setup: HierarchicalMenuConnectorSetup,
+  act: Act
+) {
   describe('routing', () => {
     beforeAll(() => {
       window.history.pushState({}, '', 'http://localhost/');
@@ -23,8 +26,8 @@ export function createRoutingTests(setup: MenuSetup, act: Act) {
       test('Consistently shows the right URL, even before widget is initialized', async () => {
         const delay = 100;
         const margin = 10;
+        const attributes = ['1', '2'];
         const router = history();
-        const attribute = 'brand';
         const options = {
           instantSearchOptions: {
             indexName: 'indexName',
@@ -39,9 +42,13 @@ export function createRoutingTests(setup: MenuSetup, act: Act) {
                   ...requests.map(() =>
                     createSingleSearchResponse({
                       facets: {
-                        [attribute]: {
+                        [attributes[0]]: {
                           Samsung: 100,
                           Apple: 200,
+                        },
+                        [attributes[1]]: {
+                          'Apple > iPad': 100,
+                          'Apple > iPhone': 100,
                         },
                       },
                     })
@@ -50,7 +57,7 @@ export function createRoutingTests(setup: MenuSetup, act: Act) {
               }),
             }),
           },
-          widgetParams: { attribute },
+          widgetParams: { attributes },
         };
 
         await setup(options);
@@ -59,13 +66,15 @@ export function createRoutingTests(setup: MenuSetup, act: Act) {
         {
           // Vue doesn't render anything on first render, so we don't need
           // to check that the URL is correct.
-          const link = document.querySelector('[data-testid="Menu-link"]');
+          const link = document.querySelector(
+            '[data-testid="HierarchicalMenu-link"]'
+          );
           if (link) {
             // eslint-disable-next-line jest/no-conditional-expect
             expect(link).toHaveAttribute(
               'href',
               router.createURL({
-                indexName: { menu: { [attribute]: 'value' } },
+                indexName: { hierarchicalMenu: { [attributes[0]]: ['value'] } },
               })
             );
           }
@@ -79,30 +88,28 @@ export function createRoutingTests(setup: MenuSetup, act: Act) {
 
         // Initial state, before interaction
         {
-          expect(screen.getByTestId('Menu-link')).toHaveAttribute(
+          expect(screen.getByTestId('HierarchicalMenu-link')).toHaveAttribute(
             'href',
             router.createURL({
-              indexName: { menu: { [attribute]: 'value' } },
+              indexName: { hierarchicalMenu: { [attributes[0]]: ['value'] } },
             })
           );
         }
 
         // Select a refinement
         {
-          const firstItem = screen.getByRole('link', {
-            name: 'Apple 200',
-          });
+          const apple = screen.getByTestId('HierarchicalMenu-refine');
           await act(async () => {
-            firstItem.click();
+            apple.click();
             await wait(0);
             await wait(0);
           });
 
           // URL is still the same, as it overrides the current state
-          expect(screen.getByTestId('Menu-link')).toHaveAttribute(
+          expect(screen.getByTestId('HierarchicalMenu-link')).toHaveAttribute(
             'href',
             router.createURL({
-              indexName: { menu: { [attribute]: 'value' } },
+              indexName: { hierarchicalMenu: { [attributes[0]]: ['value'] } },
             })
           );
         }
@@ -113,30 +120,30 @@ export function createRoutingTests(setup: MenuSetup, act: Act) {
             await wait(delay + margin);
           });
 
-          expect(screen.getByTestId('Menu-link')).toHaveAttribute(
+          expect(screen.getByTestId('HierarchicalMenu-link')).toHaveAttribute(
             'href',
             router.createURL({
-              indexName: { menu: { [attribute]: 'value' } },
+              indexName: {
+                hierarchicalMenu: { [attributes[0]]: ['value'] },
+              },
             })
           );
         }
 
         // Unselect the refinement
         {
-          const firstItem = screen.getByRole('link', {
-            name: 'Apple 200',
-          });
+          const apple = screen.getByTestId('HierarchicalMenu-refine');
           await act(async () => {
-            firstItem.click();
+            apple.click();
             await wait(0);
             await wait(0);
           });
 
           // URL is still the same, as it overrides the current state
-          expect(screen.getByTestId('Menu-link')).toHaveAttribute(
+          expect(screen.getByTestId('HierarchicalMenu-link')).toHaveAttribute(
             'href',
             router.createURL({
-              indexName: { menu: { [attribute]: 'value' } },
+              indexName: { hierarchicalMenu: { [attributes[0]]: ['value'] } },
             })
           );
         }
@@ -148,10 +155,10 @@ export function createRoutingTests(setup: MenuSetup, act: Act) {
             await wait(0);
           });
 
-          expect(screen.getByTestId('Menu-link')).toHaveAttribute(
+          expect(screen.getByTestId('HierarchicalMenu-link')).toHaveAttribute(
             'href',
             router.createURL({
-              indexName: { menu: { [attribute]: 'value' } },
+              indexName: { hierarchicalMenu: { [attributes[0]]: ['value'] } },
             })
           );
         }

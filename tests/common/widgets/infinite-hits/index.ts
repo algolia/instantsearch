@@ -5,19 +5,19 @@ import { createOptimisticUiTests } from './optimistic-ui';
 import { createInsightsTests } from './insights';
 
 type WidgetParams = Parameters<InfiniteHitsWidget>[0];
-export type InfiniteHitsSetup = TestSetup<{
+export type InfiniteHitsWidgetSetup = TestSetup<{
   widgetParams: Omit<WidgetParams, 'container'>;
 }>;
 
-export function createInfiniteHitsTests(
-  setup: InfiniteHitsSetup,
+export function createInfiniteHitsWidgetTests(
+  setup: InfiniteHitsWidgetSetup,
   act: Act = fakeAct
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
-  describe('InfiniteHits common tests', () => {
+  describe('InfiniteHits widget common tests', () => {
     createOptimisticUiTests(setup, act);
     createInsightsTests(setup, act);
   });

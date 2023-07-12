@@ -4,12 +4,12 @@ import { fakeAct } from '../../common';
 import { createRoutingTests } from './routing';
 
 type WidgetParams = Parameters<CurrentRefinementsWidget>[0];
-export type CurrentRefinementsSetup = TestSetup<{
+export type CurrentRefinementsConnectorSetup = TestSetup<{
   widgetParams: Omit<WidgetParams, 'container'>;
 }>;
 
-export function createCurrentRefinementsTests(
-  setup: CurrentRefinementsSetup,
+export function createCurrentRefinementsConnectorTests(
+  setup: CurrentRefinementsConnectorSetup,
   act: Act = fakeAct,
   { skippedTests = {} }: { skippedTests?: SkippedTests } = {}
 ) {
@@ -17,7 +17,7 @@ export function createCurrentRefinementsTests(
     document.body.innerHTML = '';
   });
 
-  describe('CurrentRefinements common tests', () => {
+  describe('CurrentRefinements connector common tests', () => {
     createRoutingTests(setup, act, skippedTests);
   });
 }

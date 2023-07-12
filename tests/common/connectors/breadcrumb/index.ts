@@ -1,24 +1,22 @@
 import type { BreadcrumbWidget } from 'instantsearch.js/es/widgets/breadcrumb/breadcrumb';
 import type { Act, TestSetup } from '../../common';
 import { fakeAct } from '../../common';
-import { createOptimisticUiTests } from './optimistic-ui';
-import { createOptionsTests } from './options';
+import { createRoutingTests } from './routing';
 
 type WidgetParams = Parameters<BreadcrumbWidget>[0];
-export type BreadcrumbWidgetSetup = TestSetup<{
+export type BreadcrumbConnectorSetup = TestSetup<{
   widgetParams: Omit<WidgetParams, 'container'>;
 }>;
 
-export function createBreadcrumbWidgetTests(
-  setup: BreadcrumbWidgetSetup,
+export function createBreadcrumbConnectorTests(
+  setup: BreadcrumbConnectorSetup,
   act: Act = fakeAct
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
-  describe('Breadcrumb widget common tests', () => {
-    createOptimisticUiTests(setup, act);
-    createOptionsTests(setup, act);
+  describe('Breadcrumb connector common tests', () => {
+    createRoutingTests(setup, act);
   });
 }

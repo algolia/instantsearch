@@ -4,19 +4,19 @@ import { fakeAct } from '../../common';
 import { createRoutingTests } from './routing';
 
 type WidgetParams = Parameters<RatingMenuWidget>[0];
-export type RatingMenuSetup = TestSetup<{
+export type RatingMenuConnectorSetup = TestSetup<{
   widgetParams: Omit<WidgetParams, 'container'>;
 }>;
 
-export function createRatingMenuTests(
-  setup: RatingMenuSetup,
+export function createRatingMenuConnectorTests(
+  setup: RatingMenuConnectorSetup,
   act: Act = fakeAct
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
-  describe('RatingMenu common tests', () => {
+  describe('RatingMenu connector common tests', () => {
     createRoutingTests(setup, act);
   });
 }

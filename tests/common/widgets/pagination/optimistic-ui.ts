@@ -5,13 +5,13 @@ import {
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import type { PaginationSetup } from '.';
+import type { PaginationWidgetSetup } from '.';
 import type { Act } from '../../common';
 
-export function createOptimisticUiTests(setup: PaginationSetup, act: Act) {
-  // https://github.com/jsdom/jsdom/issues/1695
-  window.Element.prototype.scrollIntoView = jest.fn();
-
+export function createOptimisticUiTests(
+  setup: PaginationWidgetSetup,
+  act: Act
+) {
   describe('optimistic UI', () => {
     test('checks the clicked refinement immediately regardless of network latency', async () => {
       const delay = 100;

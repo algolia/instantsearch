@@ -20,6 +20,11 @@ expect.extend(matchers);
 global.console.info = jest.fn();
 global.console.warn = jest.fn();
 
+if (typeof window !== 'undefined') {
+  // https://github.com/jsdom/jsdom/issues/1695
+  window.Element.prototype.scrollIntoView = jest.fn();
+}
+
 beforeEach(() => {
   // We reset the log's cache for our log assertions to be isolated in each test.
   warnCache.current = {};

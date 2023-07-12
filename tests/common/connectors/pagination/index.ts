@@ -1,22 +1,22 @@
 import type { PaginationWidget } from 'instantsearch.js/es/widgets/pagination/pagination';
 import type { Act, TestSetup } from '../../common';
 import { fakeAct } from '../../common';
-import { createOptimisticUiTests } from './optimistic-ui';
+import { createRoutingTests } from './routing';
 
 type WidgetParams = Parameters<PaginationWidget>[0];
-export type PaginationWidgetSetup = TestSetup<{
+export type PaginationConnectorSetup = TestSetup<{
   widgetParams: Omit<WidgetParams, 'container'>;
 }>;
 
-export function createPaginationWidgetTests(
-  setup: PaginationWidgetSetup,
+export function createPaginationConnectorTests(
+  setup: PaginationConnectorSetup,
   act: Act = fakeAct
 ) {
   beforeAll(() => {
     document.body.innerHTML = '';
   });
 
-  describe('Pagination widget common tests', () => {
-    createOptimisticUiTests(setup, act);
+  describe('Pagination connector common tests', () => {
+    createRoutingTests(setup, act);
   });
 }
