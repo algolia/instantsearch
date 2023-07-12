@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import { createSharedTests } from '@instantsearch/tests';
+import * as suites from '@instantsearch/tests/shared';
 
 import { nextTick, mountApp } from '../../test/utils';
 import { renderCompat } from '../util/vue-compat';
@@ -15,36 +15,38 @@ import {
 import { connectMenu, connectPagination } from 'instantsearch.js/es/connectors';
 jest.unmock('instantsearch.js/es');
 
-createSharedTests(async ({ instantSearchOptions, widgetParams }) => {
-  const CustomMenu = createCustomWidget({
-    connector: connectMenu,
-    name: 'Menu',
-    requiredProps: ['attribute'],
-    urlValue: 'value',
-  });
-  const CustomPagination = createCustomWidget({
-    connector: connectPagination,
-    name: 'Pagination',
-    urlValue: 10,
-  });
+const setups = {
+  async createSharedTests({ instantSearchOptions, widgetParams }) {
+    const CustomMenu = createCustomWidget({
+      connector: connectMenu,
+      name: 'Menu',
+      requiredProps: ['attribute'],
+      urlValue: 'value',
+    });
+    const CustomPagination = createCustomWidget({
+      connector: connectPagination,
+      name: 'Pagination',
+      urlValue: 10,
+    });
 
-  mountApp(
-    {
-      render: renderCompat((h) =>
-        h(AisInstantSearch, { props: instantSearchOptions }, [
-          h(CustomMenu, { props: widgetParams.menu }),
-          h(AisMenu, { props: widgetParams.menu }),
-          h(AisHits, { props: widgetParams.hits }),
-          h(CustomPagination, { props: widgetParams.pagination }),
-          h(AisPagination, { props: widgetParams.pagination }),
-        ])
-      ),
-    },
-    document.body.appendChild(document.createElement('div'))
-  );
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(CustomMenu, { props: widgetParams.menu }),
+            h(AisMenu, { props: widgetParams.menu }),
+            h(AisHits, { props: widgetParams.hits }),
+            h(CustomPagination, { props: widgetParams.pagination }),
+            h(AisPagination, { props: widgetParams.pagination }),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
 
-  await nextTick();
-});
+    await nextTick();
+  },
+};
 
 function createCustomWidget({ connector, name, urlValue, requiredProps = [] }) {
   return {
@@ -76,3 +78,13 @@ function createCustomWidget({ connector, name, urlValue, requiredProps = [] }) {
     }),
   };
 }
+
+describe('Common shared tests (Vue InstantSearch)', () => {
+  test('has all the tests', () => {
+    expect(Object.keys(setups).sort()).toEqual(Object.keys(suites).sort());
+  });
+
+  Object.keys(suites).forEach((testName) => {
+    suites[testName](setups[testName]);
+  });
+});
