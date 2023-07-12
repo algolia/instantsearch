@@ -319,7 +319,7 @@ function createCustomWidget({
     },
     render: renderCompat(function (h) {
       return this.state
-        ? h('div', [
+        ? h('div', {}, [
             h(
               'a',
               {
@@ -330,20 +330,24 @@ function createCustomWidget({
               },
               'LINK'
             ),
-            h('button', {
-              attrs: {
-                'data-testid': `${name}-refine`,
-              },
-              on: {
-                click: () => {
-                  this.state.refine(
-                    typeof refineValue === 'function'
-                      ? refineValue(this.state)
-                      : refineValue
-                  );
+            h(
+              'button',
+              {
+                attrs: {
+                  'data-testid': `${name}-refine`,
+                },
+                on: {
+                  click: () => {
+                    this.state.refine(
+                      typeof refineValue === 'function'
+                        ? refineValue(this.state)
+                        : refineValue
+                    );
+                  },
                 },
               },
-            }),
+              'REFINE'
+            ),
           ])
         : null;
     }),
