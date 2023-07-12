@@ -9,7 +9,7 @@
     "build": "./scripts/build.sh",
     "lint": "eslint .",
     "doc": "node documentation-src/metalsmith.js",
-    "test": "scripts/retry.sh 3 'scripts/test.sh'",
+    "test": "../../scripts/retry.sh 3 'scripts/test.sh'",
     "test:unit": "jest",
     "test:watch": "jest --watch",
     "test:v3": "yarn run test"
