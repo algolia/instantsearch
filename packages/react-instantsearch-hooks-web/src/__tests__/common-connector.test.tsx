@@ -42,6 +42,9 @@ const testSuites: TestSuites = suites;
 type TestSetups = {
   [key in keyof TestSuites]: Parameters<TestSuites[key]>[0];
 };
+type TestOptions = {
+  [key in keyof TestSuites]?: Parameters<TestSuites[key]>[2];
+};
 
 const setups: TestSetups = {
   createRefinementListConnectorTests({ instantSearchOptions, widgetParams }) {
@@ -309,18 +312,18 @@ describe('Common connector tests (React InstantSearch)', () => {
     expect(Object.keys(setups).sort()).toEqual(Object.keys(testSuites).sort());
   });
 
-  const skippedTests: Record<string, Record<string, boolean>> = {
+  const testOptions: TestOptions = {
     createCurrentRefinementsConnectorTests: {
-      /** createURL uses helper state instead of ui state as it can't be translated */
-      routing: true,
+      skippedTests: {
+        /** createURL uses helper state instead of ui state as it can't be translated */
+        routing: true,
+      },
     },
   };
 
   Object.keys(testSuites).forEach((testName) => {
     // @ts-ignore (typescript is only referentially typed)
     // https://github.com/microsoft/TypeScript/issues/38520
-    testSuites[testName](setups[testName], act, {
-      skippedTests: skippedTests[testName],
-    });
+    testSuites[testName](setups[testName], act, testOptions[testName]);
   });
 });
