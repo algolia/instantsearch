@@ -21,7 +21,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/algolia/algoliasearch-helper-js.git"
+    "url": "https://github.com/algolia/instantsearch/tree/master/packages/algoliasearch-helper"
   },
   "files": [
     "dist",
