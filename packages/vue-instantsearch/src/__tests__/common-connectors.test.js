@@ -1,18 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import {
-  createBreadcrumbConnectorTests,
-  createCurrentRefinementsConnectorTests,
-  createHierarchicalMenuConnectorTests,
-  createHitsPerPageConnectorTests,
-  createMenuConnectorTests,
-  createNumericMenuConnectorTests,
-  createPaginationConnectorTests,
-  createRatingMenuConnectorTests,
-  createRefinementListConnectorTests,
-  createToggleRefinementConnectorTests,
-} from '@instantsearch/tests';
+import * as suites from '@instantsearch/tests/connectors';
 
 import { nextTick, mountApp } from '../../test/utils';
 import { renderCompat } from '../util/vue-compat';
@@ -36,8 +25,11 @@ import {
 } from 'instantsearch.js/es/connectors';
 jest.unmock('instantsearch.js/es');
 
-createRefinementListConnectorTests(
-  async ({ instantSearchOptions, widgetParams }) => {
+const setups = {
+  async createRefinementListConnectorTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
     const CustomRefinementList = createCustomWidget({
       connector: connectRefinementList,
       name: 'RefinementList',
@@ -58,11 +50,11 @@ createRefinementListConnectorTests(
     );
 
     await nextTick();
-  }
-);
-
-createHierarchicalMenuConnectorTests(
-  async ({ instantSearchOptions, widgetParams }) => {
+  },
+  async createHierarchicalMenuConnectorTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
     const CustomHierarchicalMenu = createCustomWidget({
       connector: connectHierarchicalMenu,
       name: 'HierarchicalMenu',
@@ -83,11 +75,8 @@ createHierarchicalMenuConnectorTests(
     );
 
     await nextTick();
-  }
-);
-
-createBreadcrumbConnectorTests(
-  async ({ instantSearchOptions, widgetParams }) => {
+  },
+  async createBreadcrumbConnectorTests({ instantSearchOptions, widgetParams }) {
     const CustomBreadcrumb = createCustomWidget({
       connector: connectBreadcrumb,
       name: 'Breadcrumb',
@@ -108,35 +97,31 @@ createBreadcrumbConnectorTests(
     );
 
     await nextTick();
-  }
-);
+  },
+  async createMenuConnectorTests({ instantSearchOptions, widgetParams }) {
+    const CustomMenu = createCustomWidget({
+      connector: connectMenu,
+      name: 'Menu',
+      requiredProps: ['attribute'],
+      urlValue: 'value',
+      refineValue: 'Apple',
+    });
 
-createMenuConnectorTests(async ({ instantSearchOptions, widgetParams }) => {
-  const CustomMenu = createCustomWidget({
-    connector: connectMenu,
-    name: 'Menu',
-    requiredProps: ['attribute'],
-    urlValue: 'value',
-    refineValue: 'Apple',
-  });
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(CustomMenu, { props: widgetParams }),
+            h(AisMenu, { props: widgetParams }),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
 
-  mountApp(
-    {
-      render: renderCompat((h) =>
-        h(AisInstantSearch, { props: instantSearchOptions }, [
-          h(CustomMenu, { props: widgetParams }),
-          h(AisMenu, { props: widgetParams }),
-        ])
-      ),
-    },
-    document.body.appendChild(document.createElement('div'))
-  );
-
-  await nextTick();
-});
-
-createPaginationConnectorTests(
-  async ({ instantSearchOptions, widgetParams }) => {
+    await nextTick();
+  },
+  async createPaginationConnectorTests({ instantSearchOptions, widgetParams }) {
     const CustomPagination = createCustomWidget({
       connector: connectPagination,
       name: 'Pagination',
@@ -156,11 +141,11 @@ createPaginationConnectorTests(
     );
 
     await nextTick();
-  }
-);
-
-createCurrentRefinementsConnectorTests(
-  async ({ instantSearchOptions, widgetParams }) => {
+  },
+  async createCurrentRefinementsConnectorTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
     const CustomCurrentRefinements = createCustomWidget({
       connector: connectCurrentRefinements,
       name: 'CurrentRefinements',
@@ -191,11 +176,11 @@ createCurrentRefinementsConnectorTests(
     );
 
     await nextTick();
-  }
-);
-
-createHitsPerPageConnectorTests(
-  async ({ instantSearchOptions, widgetParams }) => {
+  },
+  async createHitsPerPageConnectorTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
     const CustomHitsPerPage = createCustomWidget({
       connector: connectHitsPerPage,
       name: 'HitsPerPage',
@@ -216,11 +201,11 @@ createHitsPerPageConnectorTests(
     );
 
     await nextTick();
-  }
-);
-
-createNumericMenuConnectorTests(
-  async ({ instantSearchOptions, widgetParams }) => {
+  },
+  async createNumericMenuConnectorTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
     const CustomNumericMenu = createCustomWidget({
       connector: connectNumericMenu,
       name: 'NumericMenu',
@@ -240,11 +225,8 @@ createNumericMenuConnectorTests(
     );
 
     await nextTick();
-  }
-);
-
-createRatingMenuConnectorTests(
-  async ({ instantSearchOptions, widgetParams }) => {
+  },
+  async createRatingMenuConnectorTests({ instantSearchOptions, widgetParams }) {
     const CustomRatingMenu = createCustomWidget({
       connector: connectRatingMenu,
       name: 'RatingMenu',
@@ -264,11 +246,11 @@ createRatingMenuConnectorTests(
     );
 
     await nextTick();
-  }
-);
-
-createToggleRefinementConnectorTests(
-  async ({ instantSearchOptions, widgetParams }) => {
+  },
+  async createToggleRefinementConnectorTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
     const CustomToggleRefinement = createCustomWidget({
       name: 'ToggleRefinement',
       connector: connectToggleRefinement,
@@ -294,8 +276,8 @@ createToggleRefinementConnectorTests(
     );
 
     await nextTick();
-  }
-);
+  },
+};
 
 function createCustomWidget({
   connector,
@@ -353,3 +335,13 @@ function createCustomWidget({
     }),
   };
 }
+
+describe('Common connector tests (Vue InstantSearch)', () => {
+  test('has all the tests', () => {
+    expect(Object.keys(setups).sort()).toEqual(Object.keys(suites).sort());
+  });
+
+  Object.keys(suites).forEach((testName) => {
+    suites[testName](setups[testName]);
+  });
+});

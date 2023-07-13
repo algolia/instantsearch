@@ -1,18 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import {
-  createHierarchicalMenuConnectorTests,
-  createBreadcrumbConnectorTests,
-  createRefinementListConnectorTests,
-  createPaginationConnectorTests,
-  createMenuConnectorTests,
-  createHitsPerPageConnectorTests,
-  createNumericMenuConnectorTests,
-  createRatingMenuConnectorTests,
-  createToggleRefinementConnectorTests,
-  createCurrentRefinementsConnectorTests,
-} from '@instantsearch/tests';
+import * as suites from '@instantsearch/tests/connectors';
 
 import {
   connectBreadcrumb,
@@ -29,8 +18,14 @@ import {
 import instantsearch from '../index.es';
 import { refinementList } from '../widgets';
 
-createHierarchicalMenuConnectorTests(
-  ({ instantSearchOptions, widgetParams }) => {
+type TestSuites = typeof suites;
+const testSuites: TestSuites = suites;
+type TestSetups = {
+  [key in keyof TestSuites]: Parameters<TestSuites[key]>[0];
+};
+
+const setups: TestSetups = {
+  createHierarchicalMenuConnectorTests({ instantSearchOptions, widgetParams }) {
     const customHierarchicalMenu = connectHierarchicalMenu<{
       container: HTMLElement;
     }>((renderOptions) => {
@@ -67,13 +62,11 @@ createHierarchicalMenuConnectorTests(
          */
       })
       .start();
-  }
-);
-
-createBreadcrumbConnectorTests(({ instantSearchOptions, widgetParams }) => {
-  const customBreadcrumb = connectBreadcrumb<{ container: HTMLElement }>(
-    (renderOptions) => {
-      renderOptions.widgetParams.container.innerHTML = `
+  },
+  createBreadcrumbConnectorTests({ instantSearchOptions, widgetParams }) {
+    const customBreadcrumb = connectBreadcrumb<{ container: HTMLElement }>(
+      (renderOptions) => {
+        renderOptions.widgetParams.container.innerHTML = `
         <a
           data-testid="Breadcrumb-link"
           href="${renderOptions.createURL('Apple > iPhone')}"
@@ -85,29 +78,28 @@ createBreadcrumbConnectorTests(({ instantSearchOptions, widgetParams }) => {
         </button>
       `;
 
-      renderOptions.widgetParams.container
-        .querySelector('[data-testid="Breadcrumb-refine"]')!
-        .addEventListener('click', () => {
-          renderOptions.refine('Apple');
-        });
-    }
-  );
+        renderOptions.widgetParams.container
+          .querySelector('[data-testid="Breadcrumb-refine"]')!
+          .addEventListener('click', () => {
+            renderOptions.refine('Apple');
+          });
+      }
+    );
 
-  instantsearch(instantSearchOptions)
-    .addWidgets([
-      customBreadcrumb({
-        container: document.body.appendChild(document.createElement('div')),
-        ...widgetParams,
-      }),
-    ])
-    .start();
-});
-
-createRefinementListConnectorTests(({ instantSearchOptions, widgetParams }) => {
-  const customRefinementList = connectRefinementList<{
-    container: HTMLElement;
-  }>((renderOptions) => {
-    renderOptions.widgetParams.container.innerHTML = `
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        customBreadcrumb({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .start();
+  },
+  createRefinementListConnectorTests({ instantSearchOptions, widgetParams }) {
+    const customRefinementList = connectRefinementList<{
+      container: HTMLElement;
+    }>((renderOptions) => {
+      renderOptions.widgetParams.container.innerHTML = `
         <a
           data-testid="RefinementList-link"
           href="${renderOptions.createURL('value')}"
@@ -119,27 +111,26 @@ createRefinementListConnectorTests(({ instantSearchOptions, widgetParams }) => {
         </button>
       `;
 
-    renderOptions.widgetParams.container
-      .querySelector('[data-testid="RefinementList-refine"]')!
-      .addEventListener('click', () => {
-        renderOptions.refine('Apple');
-      });
-  });
+      renderOptions.widgetParams.container
+        .querySelector('[data-testid="RefinementList-refine"]')!
+        .addEventListener('click', () => {
+          renderOptions.refine('Apple');
+        });
+    });
 
-  instantsearch(instantSearchOptions)
-    .addWidgets([
-      customRefinementList({
-        container: document.body.appendChild(document.createElement('div')),
-        ...widgetParams,
-      }),
-    ])
-    .start();
-});
-
-createMenuConnectorTests(({ instantSearchOptions, widgetParams }) => {
-  const customMenu = connectMenu<{ container: HTMLElement }>(
-    (renderOptions) => {
-      renderOptions.widgetParams.container.innerHTML = `
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        customRefinementList({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .start();
+  },
+  createMenuConnectorTests({ instantSearchOptions, widgetParams }) {
+    const customMenu = connectMenu<{ container: HTMLElement }>(
+      (renderOptions) => {
+        renderOptions.widgetParams.container.innerHTML = `
         <a
           data-testid="Menu-link"
           href="${renderOptions.createURL('value')}"
@@ -151,28 +142,27 @@ createMenuConnectorTests(({ instantSearchOptions, widgetParams }) => {
         </button>
       `;
 
-      renderOptions.widgetParams.container
-        .querySelector('[data-testid="Menu-refine"]')!
-        .addEventListener('click', () => {
-          renderOptions.refine('Apple');
-        });
-    }
-  );
+        renderOptions.widgetParams.container
+          .querySelector('[data-testid="Menu-refine"]')!
+          .addEventListener('click', () => {
+            renderOptions.refine('Apple');
+          });
+      }
+    );
 
-  instantsearch(instantSearchOptions)
-    .addWidgets([
-      customMenu({
-        container: document.body.appendChild(document.createElement('div')),
-        ...widgetParams,
-      }),
-    ])
-    .start();
-});
-
-createPaginationConnectorTests(({ instantSearchOptions, widgetParams }) => {
-  const customPagination = connectPagination<{ container: HTMLElement }>(
-    (renderOptions) => {
-      renderOptions.widgetParams.container.innerHTML = `
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        customMenu({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .start();
+  },
+  createPaginationConnectorTests({ instantSearchOptions, widgetParams }) {
+    const customPagination = connectPagination<{ container: HTMLElement }>(
+      (renderOptions) => {
+        renderOptions.widgetParams.container.innerHTML = `
         <a
           data-testid="Pagination-link"
           href="${renderOptions.createURL(10)}"
@@ -184,26 +174,27 @@ createPaginationConnectorTests(({ instantSearchOptions, widgetParams }) => {
         </button>
       `;
 
-      renderOptions.widgetParams.container
-        .querySelector('[data-testid="Pagination-refine"]')!
-        .addEventListener('click', () => {
-          renderOptions.refine(10);
-        });
-    }
-  );
+        renderOptions.widgetParams.container
+          .querySelector('[data-testid="Pagination-refine"]')!
+          .addEventListener('click', () => {
+            renderOptions.refine(10);
+          });
+      }
+    );
 
-  instantsearch(instantSearchOptions)
-    .addWidgets([
-      customPagination({
-        container: document.body.appendChild(document.createElement('div')),
-        ...widgetParams,
-      }),
-    ])
-    .start();
-});
-
-createCurrentRefinementsConnectorTests(
-  ({ instantSearchOptions, widgetParams }) => {
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        customPagination({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .start();
+  },
+  createCurrentRefinementsConnectorTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
     const customCurrentRefinements = connectCurrentRefinements<{
       container: HTMLElement;
     }>((renderOptions) => {
@@ -248,13 +239,11 @@ createCurrentRefinementsConnectorTests(
         }),
       ])
       .start();
-  }
-);
-
-createHitsPerPageConnectorTests(({ instantSearchOptions, widgetParams }) => {
-  const customHitsPerPage = connectHitsPerPage<{ container: HTMLElement }>(
-    (renderOptions) => {
-      renderOptions.widgetParams.container.innerHTML = `
+  },
+  createHitsPerPageConnectorTests({ instantSearchOptions, widgetParams }) {
+    const customHitsPerPage = connectHitsPerPage<{ container: HTMLElement }>(
+      (renderOptions) => {
+        renderOptions.widgetParams.container.innerHTML = `
         <a
           data-testid="HitsPerPage-link"
           href="${renderOptions.createURL(12)}"
@@ -266,28 +255,27 @@ createHitsPerPageConnectorTests(({ instantSearchOptions, widgetParams }) => {
         </button>
       `;
 
-      renderOptions.widgetParams.container
-        .querySelector('[data-testid="HitsPerPage-refine"]')!
-        .addEventListener('click', () => {
-          renderOptions.refine(12);
-        });
-    }
-  );
+        renderOptions.widgetParams.container
+          .querySelector('[data-testid="HitsPerPage-refine"]')!
+          .addEventListener('click', () => {
+            renderOptions.refine(12);
+          });
+      }
+    );
 
-  instantsearch(instantSearchOptions)
-    .addWidgets([
-      customHitsPerPage({
-        container: document.body.appendChild(document.createElement('div')),
-        ...widgetParams,
-      }),
-    ])
-    .start();
-});
-
-createNumericMenuConnectorTests(({ instantSearchOptions, widgetParams }) => {
-  const customNumericMenu = connectNumericMenu<{ container: HTMLElement }>(
-    (renderOptions) => {
-      renderOptions.widgetParams.container.innerHTML = `
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        customHitsPerPage({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .start();
+  },
+  createNumericMenuConnectorTests({ instantSearchOptions, widgetParams }) {
+    const customNumericMenu = connectNumericMenu<{ container: HTMLElement }>(
+      (renderOptions) => {
+        renderOptions.widgetParams.container.innerHTML = `
         <a
           data-testid="NumericMenu-link"
           href="${renderOptions.createURL(encodeURI('{ "start": 500 }'))}"
@@ -299,28 +287,27 @@ createNumericMenuConnectorTests(({ instantSearchOptions, widgetParams }) => {
         </button>
       `;
 
-      renderOptions.widgetParams.container
-        .querySelector('[data-testid="NumericMenu-refine"]')!
-        .addEventListener('click', () => {
-          renderOptions.refine('500');
-        });
-    }
-  );
+        renderOptions.widgetParams.container
+          .querySelector('[data-testid="NumericMenu-refine"]')!
+          .addEventListener('click', () => {
+            renderOptions.refine('500');
+          });
+      }
+    );
 
-  instantsearch(instantSearchOptions)
-    .addWidgets([
-      customNumericMenu({
-        container: document.body.appendChild(document.createElement('div')),
-        ...widgetParams,
-      }),
-    ])
-    .start();
-});
-
-createRatingMenuConnectorTests(({ instantSearchOptions, widgetParams }) => {
-  const customRatingMenu = connectRatingMenu<{ container: HTMLElement }>(
-    (renderOptions) => {
-      renderOptions.widgetParams.container.innerHTML = `
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        customNumericMenu({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .start();
+  },
+  createRatingMenuConnectorTests({ instantSearchOptions, widgetParams }) {
+    const customRatingMenu = connectRatingMenu<{ container: HTMLElement }>(
+      (renderOptions) => {
+        renderOptions.widgetParams.container.innerHTML = `
         <a
           data-testid="RatingMenu-link"
           href="${renderOptions.createURL('5')}"
@@ -332,26 +319,24 @@ createRatingMenuConnectorTests(({ instantSearchOptions, widgetParams }) => {
         </button>
       `;
 
-      renderOptions.widgetParams.container
-        .querySelector('[data-testid="RatingMenu-refine"]')!
-        .addEventListener('click', () => {
-          renderOptions.refine('5');
-        });
-    }
-  );
+        renderOptions.widgetParams.container
+          .querySelector('[data-testid="RatingMenu-refine"]')!
+          .addEventListener('click', () => {
+            renderOptions.refine('5');
+          });
+      }
+    );
 
-  instantsearch(instantSearchOptions)
-    .addWidgets([
-      customRatingMenu({
-        container: document.body.appendChild(document.createElement('div')),
-        ...widgetParams,
-      }),
-    ])
-    .start();
-});
-
-createToggleRefinementConnectorTests(
-  ({ instantSearchOptions, widgetParams }) => {
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        customRatingMenu({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .start();
+  },
+  createToggleRefinementConnectorTests({ instantSearchOptions, widgetParams }) {
     const customToggleRefinement = connectToggleRefinement<{
       container: HTMLElement;
     }>((renderOptions) => {
@@ -388,5 +373,17 @@ createToggleRefinementConnectorTests(
          */
       })
       .start();
-  }
-);
+  },
+};
+
+describe('Common connector tests (InstantSearch.js)', () => {
+  test('has all the tests', () => {
+    expect(Object.keys(setups).sort()).toEqual(Object.keys(testSuites).sort());
+  });
+
+  Object.keys(testSuites).forEach((testName) => {
+    // @ts-ignore (typescript is only referentially typed)
+    // https://github.com/microsoft/TypeScript/issues/38520
+    testSuites[testName](setups[testName]);
+  });
+});

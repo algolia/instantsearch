@@ -1,18 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import {
-  createRefinementListConnectorTests,
-  createHierarchicalMenuConnectorTests,
-  createBreadcrumbConnectorTests,
-  createMenuConnectorTests,
-  createPaginationConnectorTests,
-  createHitsPerPageConnectorTests,
-  createNumericMenuConnectorTests,
-  createRatingMenuConnectorTests,
-  createToggleRefinementConnectorTests,
-  createCurrentRefinementsConnectorTests,
-} from '@instantsearch/tests';
+import * as suites from '@instantsearch/tests/connectors';
 import { act, render } from '@testing-library/react';
 import { connectRatingMenu } from 'instantsearch.js/es/connectors';
 import React from 'react';
@@ -48,32 +37,41 @@ import type {
   RatingMenuWidgetDescription,
 } from 'instantsearch.js/es/connectors/rating-menu/connectRatingMenu';
 
-createRefinementListConnectorTests(({ instantSearchOptions, widgetParams }) => {
-  function CustomRefinementList(props: UseRefinementListProps) {
-    const { createURL, refine } = useRefinementList(props);
-    return (
-      <>
-        <a data-testid="RefinementList-link" href={createURL('value')}>
-          LINK
-        </a>
-        <button
-          data-testid="RefinementList-refine"
-          onClick={() => refine('Apple')}
-        >
-          BUTTON
-        </button>
-      </>
-    );
-  }
-  render(
-    <InstantSearch {...instantSearchOptions}>
-      <CustomRefinementList {...widgetParams} />
-    </InstantSearch>
-  );
-}, act);
+type TestSuites = typeof suites;
+const testSuites: TestSuites = suites;
+type TestSetups = {
+  [key in keyof TestSuites]: Parameters<TestSuites[key]>[0];
+};
+type TestOptions = {
+  [key in keyof TestSuites]?: Parameters<TestSuites[key]>[2];
+};
 
-createHierarchicalMenuConnectorTests(
-  ({ instantSearchOptions, widgetParams }) => {
+const setups: TestSetups = {
+  createRefinementListConnectorTests({ instantSearchOptions, widgetParams }) {
+    function CustomRefinementList(props: UseRefinementListProps) {
+      const { createURL, refine } = useRefinementList(props);
+      return (
+        <>
+          <a data-testid="RefinementList-link" href={createURL('value')}>
+            LINK
+          </a>
+          <button
+            data-testid="RefinementList-refine"
+            onClick={() => refine('Apple')}
+          >
+            BUTTON
+          </button>
+        </>
+      );
+    }
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <CustomRefinementList {...widgetParams} />
+      </InstantSearch>
+    );
+  },
+
+  createHierarchicalMenuConnectorTests({ instantSearchOptions, widgetParams }) {
     function CustomHierarchicalMenu(props: UseHierarchicalMenuProps) {
       const { createURL, refine } = useHierarchicalMenu(props);
       return (
@@ -97,75 +95,78 @@ createHierarchicalMenuConnectorTests(
       </InstantSearch>
     );
   },
-  act
-);
 
-createBreadcrumbConnectorTests(({ instantSearchOptions, widgetParams }) => {
-  function CustomBreadcrumb(props: UseBreadcrumbProps) {
-    const { createURL, refine } = useBreadcrumb(props);
-    return (
-      <>
-        <a data-testid="Breadcrumb-link" href={createURL('Apple > iPhone')}>
-          LINK
-        </a>
-        <button data-testid="Breadcrumb-refine" onClick={() => refine('Apple')}>
-          BUTTON
-        </button>
-      </>
+  createBreadcrumbConnectorTests({ instantSearchOptions, widgetParams }) {
+    function CustomBreadcrumb(props: UseBreadcrumbProps) {
+      const { createURL, refine } = useBreadcrumb(props);
+      return (
+        <>
+          <a data-testid="Breadcrumb-link" href={createURL('Apple > iPhone')}>
+            LINK
+          </a>
+          <button
+            data-testid="Breadcrumb-refine"
+            onClick={() => refine('Apple')}
+          >
+            BUTTON
+          </button>
+        </>
+      );
+    }
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <CustomBreadcrumb {...widgetParams} />
+      </InstantSearch>
     );
-  }
-  render(
-    <InstantSearch {...instantSearchOptions}>
-      <CustomBreadcrumb {...widgetParams} />
-    </InstantSearch>
-  );
-}, act);
+  },
 
-createMenuConnectorTests(({ instantSearchOptions, widgetParams }) => {
-  function CustomMenu(props: UseMenuProps) {
-    const { createURL, refine } = useMenu(props);
-    return (
-      <>
-        <a data-testid="Menu-link" href={createURL('value')}>
-          LINK
-        </a>
-        <button data-testid="Menu-refine" onClick={() => refine('Apple')}>
-          BUTTON
-        </button>
-      </>
+  createMenuConnectorTests({ instantSearchOptions, widgetParams }) {
+    function CustomMenu(props: UseMenuProps) {
+      const { createURL, refine } = useMenu(props);
+      return (
+        <>
+          <a data-testid="Menu-link" href={createURL('value')}>
+            LINK
+          </a>
+          <button data-testid="Menu-refine" onClick={() => refine('Apple')}>
+            BUTTON
+          </button>
+        </>
+      );
+    }
+
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <CustomMenu {...widgetParams} />
+      </InstantSearch>
     );
-  }
+  },
 
-  render(
-    <InstantSearch {...instantSearchOptions}>
-      <CustomMenu {...widgetParams} />
-    </InstantSearch>
-  );
-}, act);
-
-createPaginationConnectorTests(({ instantSearchOptions, widgetParams }) => {
-  function CustomPagination(props: UsePaginationProps) {
-    const { createURL, refine } = usePagination(props);
-    return (
-      <>
-        <a data-testid="Pagination-link" href={createURL(10)}>
-          LINK
-        </a>
-        <button data-testid="Pagination-refine" onClick={() => refine(10)}>
-          BUTTON
-        </button>
-      </>
+  createPaginationConnectorTests({ instantSearchOptions, widgetParams }) {
+    function CustomPagination(props: UsePaginationProps) {
+      const { createURL, refine } = usePagination(props);
+      return (
+        <>
+          <a data-testid="Pagination-link" href={createURL(10)}>
+            LINK
+          </a>
+          <button data-testid="Pagination-refine" onClick={() => refine(10)}>
+            BUTTON
+          </button>
+        </>
+      );
+    }
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <CustomPagination {...widgetParams} />
+      </InstantSearch>
     );
-  }
-  render(
-    <InstantSearch {...instantSearchOptions}>
-      <CustomPagination {...widgetParams} />
-    </InstantSearch>
-  );
-}, act);
+  },
 
-createCurrentRefinementsConnectorTests(
-  ({ instantSearchOptions, widgetParams }) => {
+  createCurrentRefinementsConnectorTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
     function CustomCurrentRefinements(props: UseCurrentRefinementsProps) {
       const { createURL, refine } = useCurrentRefinements(props);
       return (
@@ -205,89 +206,82 @@ createCurrentRefinementsConnectorTests(
       </InstantSearch>
     );
   },
-  act,
-  {
-    skippedTests: {
-      /** createURL uses helper state instead of ui state as it can't be translated */
-      routing: true,
-    },
-  }
-);
+  createHitsPerPageConnectorTests({ instantSearchOptions, widgetParams }) {
+    function CustomHitsPerPage(props: UseHitsPerPageProps) {
+      const { createURL, refine } = useHitsPerPage(props);
+      return (
+        <>
+          <a data-testid="HitsPerPage-link" href={createURL(12)}>
+            LINK
+          </a>
+          <button data-testid="HitsPerPage-refine" onClick={() => refine(5)}>
+            BUTTON
+          </button>
+        </>
+      );
+    }
 
-createHitsPerPageConnectorTests(({ instantSearchOptions, widgetParams }) => {
-  function CustomHitsPerPage(props: UseHitsPerPageProps) {
-    const { createURL, refine } = useHitsPerPage(props);
-    return (
-      <>
-        <a data-testid="HitsPerPage-link" href={createURL(12)}>
-          LINK
-        </a>
-        <button data-testid="HitsPerPage-refine" onClick={() => refine(5)}>
-          BUTTON
-        </button>
-      </>
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <CustomHitsPerPage {...widgetParams} />
+      </InstantSearch>
     );
-  }
+  },
 
-  render(
-    <InstantSearch {...instantSearchOptions}>
-      <CustomHitsPerPage {...widgetParams} />
-    </InstantSearch>
-  );
-}, act);
+  createNumericMenuConnectorTests({ instantSearchOptions, widgetParams }) {
+    function CustomNumericMenu(props: UseNumericMenuProps) {
+      const { createURL, refine } = useNumericMenu(props);
+      return (
+        <>
+          <a
+            data-testid="NumericMenu-link"
+            href={createURL(encodeURI('{ "start": 500 }'))}
+          >
+            LINK
+          </a>
+          <button
+            data-testid="NumericMenu-refine"
+            onClick={() => refine('500')}
+          >
+            BUTTON
+          </button>
+        </>
+      );
+    }
 
-createNumericMenuConnectorTests(({ instantSearchOptions, widgetParams }) => {
-  function CustomNumericMenu(props: UseNumericMenuProps) {
-    const { createURL, refine } = useNumericMenu(props);
-    return (
-      <>
-        <a
-          data-testid="NumericMenu-link"
-          href={createURL(encodeURI('{ "start": 500 }'))}
-        >
-          LINK
-        </a>
-        <button data-testid="NumericMenu-refine" onClick={() => refine('500')}>
-          BUTTON
-        </button>
-      </>
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <CustomNumericMenu {...widgetParams} />
+      </InstantSearch>
     );
-  }
+  },
 
-  render(
-    <InstantSearch {...instantSearchOptions}>
-      <CustomNumericMenu {...widgetParams} />
-    </InstantSearch>
-  );
-}, act);
+  createRatingMenuConnectorTests({ instantSearchOptions, widgetParams }) {
+    function CustomRatingMenu(props: RatingMenuConnectorParams) {
+      const { createURL, refine } = useConnector<
+        RatingMenuConnectorParams,
+        RatingMenuWidgetDescription
+      >(connectRatingMenu, props);
+      return (
+        <>
+          <a data-testid="RatingMenu-link" href={createURL(encodeURI('5'))}>
+            LINK
+          </a>
+          <button data-testid="RatingMenu-refine" onClick={() => refine('5')}>
+            BUTTON
+          </button>
+        </>
+      );
+    }
 
-createRatingMenuConnectorTests(({ instantSearchOptions, widgetParams }) => {
-  function CustomRatingMenu(props: RatingMenuConnectorParams) {
-    const { createURL, refine } = useConnector<
-      RatingMenuConnectorParams,
-      RatingMenuWidgetDescription
-    >(connectRatingMenu, props);
-    return (
-      <>
-        <a data-testid="RatingMenu-link" href={createURL(encodeURI('5'))}>
-          LINK
-        </a>
-        <button data-testid="RatingMenu-refine" onClick={() => refine('5')}>
-          BUTTON
-        </button>
-      </>
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <CustomRatingMenu {...widgetParams} />
+      </InstantSearch>
     );
-  }
+  },
 
-  render(
-    <InstantSearch {...instantSearchOptions}>
-      <CustomRatingMenu {...widgetParams} />
-    </InstantSearch>
-  );
-}, act);
-
-createToggleRefinementConnectorTests(
-  ({ instantSearchOptions, widgetParams }) => {
+  createToggleRefinementConnectorTests({ instantSearchOptions, widgetParams }) {
     function CustomToggleRefinement(props: UseToggleRefinementProps) {
       const { createURL, refine, value } = useToggleRefinement(props);
       return (
@@ -311,5 +305,25 @@ createToggleRefinementConnectorTests(
       </InstantSearch>
     );
   },
-  act
-);
+};
+
+describe('Common connector tests (React InstantSearch)', () => {
+  test('has all the tests', () => {
+    expect(Object.keys(setups).sort()).toEqual(Object.keys(testSuites).sort());
+  });
+
+  const testOptions: TestOptions = {
+    createCurrentRefinementsConnectorTests: {
+      skippedTests: {
+        /** createURL uses helper state instead of ui state as it can't be translated */
+        routing: true,
+      },
+    },
+  };
+
+  Object.keys(testSuites).forEach((testName) => {
+    // @ts-ignore (typescript is only referentially typed)
+    // https://github.com/microsoft/TypeScript/issues/38520
+    testSuites[testName](setups[testName], act, testOptions[testName]);
+  });
+});

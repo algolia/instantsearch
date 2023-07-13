@@ -1,17 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import {
-  createRefinementListWidgetTests,
-  createHierarchicalMenuWidgetTests,
-  createBreadcrumbWidgetTests,
-  createMenuWidgetTests,
-  createPaginationWidgetTests,
-  createInfiniteHitsWidgetTests,
-  createHitsWidgetTests,
-  createRangeInputWidgetTests,
-  createInstantSearchWidgetTests,
-} from '@instantsearch/tests';
+import * as suites from '@instantsearch/tests/widgets';
 
 import { nextTick, mountApp } from '../../test/utils';
 import { renderCompat } from '../util/vue-compat';
@@ -45,8 +35,11 @@ const GlobalErrorSwallower = {
   },
 };
 
-createRefinementListWidgetTests(
-  async ({ instantSearchOptions, widgetParams }) => {
+const setups = {
+  async createRefinementListWidgetTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
     mountApp(
       {
         render: renderCompat((h) =>
@@ -60,11 +53,11 @@ createRefinementListWidgetTests(
     );
 
     await nextTick();
-  }
-);
-
-createHierarchicalMenuWidgetTests(
-  async ({ instantSearchOptions, widgetParams }) => {
+  },
+  async createHierarchicalMenuWidgetTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
     mountApp(
       {
         render: renderCompat((h) =>
@@ -78,65 +71,59 @@ createHierarchicalMenuWidgetTests(
     );
 
     await nextTick();
-  }
-);
+  },
+  async createBreadcrumbWidgetTests({ instantSearchOptions, widgetParams }) {
+    // The passed `transformItems` prop is meant to apply only to the breadcrumb,
+    // not the hierarchical menu
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { transformItems, ...hierarchicalWidgetParams } = widgetParams;
 
-createBreadcrumbWidgetTests(async ({ instantSearchOptions, widgetParams }) => {
-  // The passed `transformItems` prop is meant to apply only to the breadcrumb,
-  // not the hierarchical menu
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { transformItems, ...hierarchicalWidgetParams } = widgetParams;
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisBreadcrumb, { props: widgetParams }),
+            h(AisHierarchicalMenu, { props: hierarchicalWidgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
 
-  mountApp(
-    {
-      render: renderCompat((h) =>
-        h(AisInstantSearch, { props: instantSearchOptions }, [
-          h(AisBreadcrumb, { props: widgetParams }),
-          h(AisHierarchicalMenu, { props: hierarchicalWidgetParams }),
-          h(GlobalErrorSwallower),
-        ])
-      ),
-    },
-    document.body.appendChild(document.createElement('div'))
-  );
+    await nextTick();
+  },
+  async createMenuWidgetTests({ instantSearchOptions, widgetParams }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisMenu, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
 
-  await nextTick();
-});
+    await nextTick();
+  },
+  async createPaginationWidgetTests({ instantSearchOptions, widgetParams }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisPagination, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
 
-createMenuWidgetTests(async ({ instantSearchOptions, widgetParams }) => {
-  mountApp(
-    {
-      render: renderCompat((h) =>
-        h(AisInstantSearch, { props: instantSearchOptions }, [
-          h(AisMenu, { props: widgetParams }),
-          h(GlobalErrorSwallower),
-        ])
-      ),
-    },
-    document.body.appendChild(document.createElement('div'))
-  );
-
-  await nextTick();
-});
-
-createPaginationWidgetTests(async ({ instantSearchOptions, widgetParams }) => {
-  mountApp(
-    {
-      render: renderCompat((h) =>
-        h(AisInstantSearch, { props: instantSearchOptions }, [
-          h(AisPagination, { props: widgetParams }),
-          h(GlobalErrorSwallower),
-        ])
-      ),
-    },
-    document.body.appendChild(document.createElement('div'))
-  );
-
-  await nextTick();
-});
-
-createInfiniteHitsWidgetTests(
-  async ({ instantSearchOptions, widgetParams }) => {
+    await nextTick();
+  },
+  async createInfiniteHitsWidgetTests({ instantSearchOptions, widgetParams }) {
     mountApp(
       {
         render: renderCompat((h) =>
@@ -213,124 +200,132 @@ createInfiniteHitsWidgetTests(
     );
 
     await nextTick();
-  }
-);
-
-createHitsWidgetTests(async ({ instantSearchOptions, widgetParams }) => {
-  mountApp(
-    {
-      render: renderCompat((h) =>
-        h(AisInstantSearch, { props: instantSearchOptions }, [
-          h(AisSearchBox),
-          h(AisHits, {
-            attrs: { id: 'main-hits' },
-            props: widgetParams,
-            scopedSlots: {
-              item: ({ item: hit, sendEvent }) =>
-                h(
-                  'div',
-                  {
-                    attrs: {
-                      'data-testid': `main-hits-top-level-${hit.__position}`,
-                    },
-                  },
-                  [
-                    hit.objectID,
-                    h('button', {
-                      attrs: {
-                        'data-testid': `main-hits-convert-${hit.__position}`,
-                      },
-                      on: {
-                        click: () => sendEvent('conversion', hit, 'Converted'),
-                      },
-                    }),
-                    h('button', {
-                      attrs: {
-                        'data-testid': `main-hits-click-${hit.__position}`,
-                      },
-                      on: {
-                        click: () => sendEvent('click', hit, 'Clicked'),
-                      },
-                    }),
-                  ]
-                ),
-            },
-          }),
-          h(AisIndex, { props: { indexName: 'nested' } }, [
+  },
+  async createHitsWidgetTests({ instantSearchOptions, widgetParams }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisSearchBox),
             h(AisHits, {
-              attrs: { id: 'nested-hits' },
+              attrs: { id: 'main-hits' },
+              props: widgetParams,
               scopedSlots: {
                 item: ({ item: hit, sendEvent }) =>
                   h(
                     'div',
                     {
                       attrs: {
-                        'data-testid': `nested-hits-top-level-${hit.__position}`,
+                        'data-testid': `main-hits-top-level-${hit.__position}`,
                       },
                     },
                     [
                       hit.objectID,
                       h('button', {
                         attrs: {
-                          'data-testid': `nested-hits-click-${hit.__position}`,
+                          'data-testid': `main-hits-convert-${hit.__position}`,
                         },
                         on: {
                           click: () =>
-                            sendEvent('click', hit, 'Clicked nested'),
+                            sendEvent('conversion', hit, 'Converted'),
+                        },
+                      }),
+                      h('button', {
+                        attrs: {
+                          'data-testid': `main-hits-click-${hit.__position}`,
+                        },
+                        on: {
+                          click: () => sendEvent('click', hit, 'Clicked'),
                         },
                       }),
                     ]
                   ),
               },
             }),
-          ]),
-          h(GlobalErrorSwallower),
-        ])
-      ),
-    },
-    document.body.appendChild(document.createElement('div'))
-  );
+            h(AisIndex, { props: { indexName: 'nested' } }, [
+              h(AisHits, {
+                attrs: { id: 'nested-hits' },
+                scopedSlots: {
+                  item: ({ item: hit, sendEvent }) =>
+                    h(
+                      'div',
+                      {
+                        attrs: {
+                          'data-testid': `nested-hits-top-level-${hit.__position}`,
+                        },
+                      },
+                      [
+                        hit.objectID,
+                        h('button', {
+                          attrs: {
+                            'data-testid': `nested-hits-click-${hit.__position}`,
+                          },
+                          on: {
+                            click: () =>
+                              sendEvent('click', hit, 'Clicked nested'),
+                          },
+                        }),
+                      ]
+                    ),
+                },
+              }),
+            ]),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
 
-  await nextTick();
-});
+    await nextTick();
+  },
+  async createRangeInputWidgetTests({ instantSearchOptions, widgetParams }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisRangeInput, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
 
-createRangeInputWidgetTests(async ({ instantSearchOptions, widgetParams }) => {
-  mountApp(
-    {
-      render: renderCompat((h) =>
-        h(AisInstantSearch, { props: instantSearchOptions }, [
-          h(AisRangeInput, { props: widgetParams }),
-          h(GlobalErrorSwallower),
-        ])
-      ),
-    },
-    document.body.appendChild(document.createElement('div'))
-  );
+    await nextTick();
+  },
+  createInstantSearchWidgetTests({ instantSearchOptions }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
 
-  await nextTick();
-});
+    return {
+      algoliaAgents: [
+        `instantsearch.js (${
+          require('../../../instantsearch.js/package.json').version
+        })`,
+        `Vue InstantSearch (${
+          require('../../../vue-instantsearch/package.json').version
+        })`,
+        `Vue (${require('../util/vue-compat').version})`,
+      ],
+    };
+  },
+};
 
-createInstantSearchWidgetTests(({ instantSearchOptions }) => {
-  mountApp(
-    {
-      render: renderCompat((h) =>
-        h(AisInstantSearch, { props: instantSearchOptions }, [
-          h(GlobalErrorSwallower),
-        ])
-      ),
-    },
-    document.body.appendChild(document.createElement('div'))
-  );
+describe('Common widget tests (Vue InstantSearch)', () => {
+  test('has all the tests', () => {
+    expect(Object.keys(setups).sort()).toEqual(Object.keys(suites).sort());
+  });
 
-  return {
-    algoliaAgents: [
-      `instantsearch.js (${
-        require('../../../instantsearch.js/package.json').version
-      })`,
-      `Vue InstantSearch (${
-        require('../../../vue-instantsearch/package.json').version
-      })`,
-      `Vue (${require('../util/vue-compat').version})`,
-    ],
-  };
+  Object.keys(suites).forEach((testName) => {
+    suites[testName](setups[testName]);
+  });
 });
