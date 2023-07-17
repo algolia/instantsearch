@@ -1,5 +1,5 @@
 import React from 'react';
-import { useStats } from 'react-instantsearch-hooks';
+import { useStats, warn } from 'react-instantsearch-hooks';
 
 import { Stats as StatsUiComponent } from '../ui/Stats';
 
@@ -8,7 +8,6 @@ import type {
   StatsTranslationOptions,
 } from '../ui/Stats';
 import type { UseStatsProps } from 'react-instantsearch-hooks';
-import { warn } from '../../../react-instantsearch-hooks/src/lib/warn';
 
 type UiProps = Pick<
   StatsUiComponentProps,
