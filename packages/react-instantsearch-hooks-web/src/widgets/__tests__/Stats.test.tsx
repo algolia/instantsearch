@@ -172,7 +172,7 @@ describe('Stats', () => {
     const client = createMockedSearchClient();
     let result: ReturnType<typeof render> | undefined = undefined;
 
-    expect(async () => {
+    expect(() => {
       result = render(
         <InstantSearchHooksTestWrapper searchClient={client}>
           <Stats
