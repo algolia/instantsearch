@@ -38,7 +38,7 @@ export function Stats({ translations, ...props }: StatsProps) {
     processingTimeMS,
     areHitsSorted,
     translations: {
-      stats: statsTranslation,
+      rootElementText: statsTranslation,
       ...translations,
     },
   };

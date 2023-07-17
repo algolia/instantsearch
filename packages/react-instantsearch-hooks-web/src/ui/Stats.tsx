@@ -9,7 +9,7 @@ export type StatsProps = React.ComponentProps<'div'> & {
   areHitsSorted?: boolean;
   classNames?: Partial<StatsClassNames>;
   translations: {
-    stats: StatsTranslations;
+    rootElementText: StatsTranslations;
   };
 };
 
@@ -49,7 +49,7 @@ export function Stats({
       className={cx('ais-Stats', classNames.root, props.className)}
     >
       <span className="ais-Stats-text">
-        {translations.stats(translationOptions)}
+        {translations.rootElementText(translationOptions)}
       </span>
     </div>
   );

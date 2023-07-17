@@ -143,7 +143,7 @@ describe('Stats', () => {
       <InstantSearchHooksTestWrapper searchClient={client}>
         <Stats
           translations={{
-            stats: () => 'Nice stats',
+            rootElementText: () => 'Nice stats',
           }}
         />
       </InstantSearchHooksTestWrapper>
