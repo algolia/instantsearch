@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-hooks-e-commerce",
-  "version": "6.38.22",
+  "version": "6.38.23",
   "private": true,
   "scripts": {
     "build": "BABEL_ENV=parcel parcel build index.html",
@@ -10,11 +10,11 @@
   "browserslist": "firefox 68, chrome 78, IE 11",
   "dependencies": {
     "algoliasearch": "4.14.3",
-    "instantsearch.js": "4.56.5",
+    "instantsearch.js": "4.56.6",
     "react": "18.1.0",
     "react-compound-slider": "3.4.0",
     "react-dom": "18.1.0",
-    "react-instantsearch-hooks-web": "6.46.0"
+    "react-instantsearch-hooks-web": "6.47.0"
   },
   "devDependencies": {
     "@parcel/core": "2.8.0",
