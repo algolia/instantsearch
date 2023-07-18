@@ -54,30 +54,54 @@ let hasError = false;
     {
       name: 'react-instantsearch-hooks',
       versionFile: 'src/version.ts',
+      format: 'esm',
     },
     {
       name: 'instantsearch.js',
       versionFile: 'src/lib/version.ts',
+      format: 'esm',
     },
     {
       name: 'react-instantsearch-core',
       versionFile: 'src/core/version.js',
+      format: 'esm',
+    },
+    {
+      name: 'algoliasearch-helper',
+      versionFile: 'src/version.js',
+      format: 'cjs',
     },
   ];
 
-  const results = versions.map(({ name, versionFile }) => {
+  const results = versions.map(({ name, versionFile, format }) => {
     const version = require(`../../packages/${name}/package.json`).version;
+
     const versionFileContent = fs
       .readFileSync(
         path.join(__dirname, `../../packages/${name}/${versionFile}`)
       )
       .toString();
 
+    const expectedVersionFileContent = (() => {
+      switch (format) {
+        case 'esm': {
+          return `export default '${version}';\n`;
+        }
+        case 'cjs': {
+          return `'use strict';\n\nmodule.exports = '${version}';\n`;
+        }
+        default: {
+          throw new Error(`Unknown format: ${format}`);
+        }
+      }
+    })();
+
     return {
       name,
       version,
       versionFileContent,
-      isValid: `export default '${version}';\n` === versionFileContent,
+      expectedVersionFileContent,
+      isValid: expectedVersionFileContent === versionFileContent,
     };
   });
 
