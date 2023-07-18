@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import * as suites from '@instantsearch/tests/widgets';
+import * as testSuites from '@instantsearch/tests/widgets';
 
 import { nextTick, mountApp } from '../../test/utils';
 import { renderCompat } from '../util/vue-compat';
@@ -19,6 +19,8 @@ import {
   AisIndex,
   AisRangeInput,
 } from '../instantsearch';
+import { runTestSuites } from '@instantsearch/tests/common';
+
 jest.unmock('instantsearch.js/es');
 
 /**
@@ -35,7 +37,7 @@ const GlobalErrorSwallower = {
   },
 };
 
-const setups = {
+const testSetups = {
   async createRefinementListWidgetTests({
     instantSearchOptions,
     widgetParams,
@@ -320,12 +322,22 @@ const setups = {
   },
 };
 
-describe('Common widget tests (Vue InstantSearch)', () => {
-  test('has all the tests', () => {
-    expect(Object.keys(setups).sort()).toEqual(Object.keys(suites).sort());
-  });
+const testOptions = {
+  createRefinementListWidgetTests: undefined,
+  createHierarchicalMenuWidgetTests: undefined,
+  createBreadcrumbWidgetTests: undefined,
+  createMenuWidgetTests: undefined,
+  createPaginationWidgetTests: undefined,
+  createInfiniteHitsWidgetTests: undefined,
+  createHitsWidgetTests: undefined,
+  createRangeInputWidgetTests: undefined,
+  createInstantSearchWidgetTests: undefined,
+};
 
-  Object.keys(suites).forEach((testName) => {
-    suites[testName](setups[testName]);
+describe('Common widget tests (Vue InstantSearch)', () => {
+  runTestSuites({
+    testSuites,
+    testSetups,
+    testOptions,
   });
 });
