@@ -8,13 +8,12 @@ import { screen } from '@testing-library/dom';
 import type { CurrentRefinementsConnectorSetup } from '.';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import { history } from 'instantsearch.js/es/lib/routers';
-import type { Act, SkippedTests } from '../../common';
+import type { TestOptions } from '../../common';
 import { skippableDescribe } from '../../common';
 
 export function createRoutingTests(
   setup: CurrentRefinementsConnectorSetup,
-  act: Act,
-  skippedTests: SkippedTests
+  { act, skippedTests }: Required<TestOptions>
 ) {
   skippableDescribe('routing', skippedTests, () => {
     beforeAll(() => {

@@ -6,11 +6,14 @@ import {
 } from '@instantsearch/mocks';
 import { screen } from '@testing-library/dom';
 import type { RatingMenuConnectorSetup } from '.';
-import type { Act } from '../../common';
+import type { TestOptions } from '../../common';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import { history } from 'instantsearch.js/es/lib/routers';
 
-export function createRoutingTests(setup: RatingMenuConnectorSetup, act: Act) {
+export function createRoutingTests(
+  setup: RatingMenuConnectorSetup,
+  { act }: Required<TestOptions>
+) {
   describe('routing', () => {
     beforeAll(() => {
       window.history.pushState({}, '', 'http://localhost/');

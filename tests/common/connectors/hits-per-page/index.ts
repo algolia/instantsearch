@@ -1,5 +1,5 @@
 import type { HitsPerPageWidget } from 'instantsearch.js/es/widgets/hits-per-page/hits-per-page';
-import type { Act, TestSetup } from '../../common';
+import type { TestOptions, TestSetup } from '../../common';
 import { fakeAct } from '../../common';
 import { createRoutingTests } from './routing';
 
@@ -10,13 +10,13 @@ export type HitsPerPageConnectorSetup = TestSetup<{
 
 export function createHitsPerPageConnectorTests(
   setup: HitsPerPageConnectorSetup,
-  act: Act = fakeAct
+  { act = fakeAct, skippedTests = {} }: TestOptions = {}
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
   describe('HitsPerPage connector common tests', () => {
-    createRoutingTests(setup, act);
+    createRoutingTests(setup, { act, skippedTests });
   });
 }

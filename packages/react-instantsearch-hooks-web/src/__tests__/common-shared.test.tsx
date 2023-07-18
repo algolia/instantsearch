@@ -54,7 +54,7 @@ const testSetups: TestSetupsMap<TestSuites> = {
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
-  createSharedTests: undefined,
+  createSharedTests: { act },
 };
 
 describe('Common shared tests (React InstantSearch)', () => {
@@ -62,6 +62,5 @@ describe('Common shared tests (React InstantSearch)', () => {
     testSuites,
     testSetups,
     testOptions,
-    act,
   });
 });

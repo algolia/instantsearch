@@ -305,20 +305,21 @@ const testSetups: TestSetupsMap<TestSuites> = {
 
 const testOptions: TestOptionsMap<TestSuites> = {
   createCurrentRefinementsConnectorTests: {
+    act,
     skippedTests: {
       /** createURL uses helper state instead of ui state as it can't be translated */
       routing: true,
     },
   },
-  createHierarchicalMenuConnectorTests: undefined,
-  createBreadcrumbConnectorTests: undefined,
-  createMenuConnectorTests: undefined,
-  createPaginationConnectorTests: undefined,
-  createRefinementListConnectorTests: undefined,
-  createHitsPerPageConnectorTests: undefined,
-  createNumericMenuConnectorTests: undefined,
-  createRatingMenuConnectorTests: undefined,
-  createToggleRefinementConnectorTests: undefined,
+  createHierarchicalMenuConnectorTests: { act },
+  createBreadcrumbConnectorTests: { act },
+  createMenuConnectorTests: { act },
+  createPaginationConnectorTests: { act },
+  createRefinementListConnectorTests: { act },
+  createHitsPerPageConnectorTests: { act },
+  createNumericMenuConnectorTests: { act },
+  createRatingMenuConnectorTests: { act },
+  createToggleRefinementConnectorTests: { act },
 };
 
 describe('Common connector tests (React InstantSearch)', () => {
@@ -326,6 +327,5 @@ describe('Common connector tests (React InstantSearch)', () => {
     testSuites,
     testSetups,
     testOptions,
-    act,
   });
 });

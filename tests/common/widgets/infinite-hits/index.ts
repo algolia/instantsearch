@@ -1,5 +1,5 @@
 import type { InfiniteHitsWidget } from 'instantsearch.js/es/widgets/infinite-hits/infinite-hits';
-import type { Act, TestSetup } from '../../common';
+import type { TestOptions, TestSetup } from '../../common';
 import { fakeAct } from '../../common';
 import { createOptimisticUiTests } from './optimistic-ui';
 import { createInsightsTests } from './insights';
@@ -11,14 +11,14 @@ export type InfiniteHitsWidgetSetup = TestSetup<{
 
 export function createInfiniteHitsWidgetTests(
   setup: InfiniteHitsWidgetSetup,
-  act: Act = fakeAct
+  { act = fakeAct, skippedTests = {} }: TestOptions = {}
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
   describe('InfiniteHits widget common tests', () => {
-    createOptimisticUiTests(setup, act);
-    createInsightsTests(setup, act);
+    createOptimisticUiTests(setup, { act, skippedTests });
+    createInsightsTests(setup, { act, skippedTests });
   });
 }
