@@ -1,5 +1,5 @@
 import type { BreadcrumbWidget } from 'instantsearch.js/es/widgets/breadcrumb/breadcrumb';
-import type { Act, TestSetup } from '../../common';
+import type { TestOptions, TestSetup } from '../../common';
 import { fakeAct } from '../../common';
 import { createRoutingTests } from './routing';
 
@@ -10,13 +10,13 @@ export type BreadcrumbConnectorSetup = TestSetup<{
 
 export function createBreadcrumbConnectorTests(
   setup: BreadcrumbConnectorSetup,
-  act: Act = fakeAct
+  { act = fakeAct, skippedTests = {} }: TestOptions = {}
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
   describe('Breadcrumb connector common tests', () => {
-    createRoutingTests(setup, act);
+    createRoutingTests(setup, { act, skippedTests });
   });
 }

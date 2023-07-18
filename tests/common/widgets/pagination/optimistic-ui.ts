@@ -6,11 +6,11 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import type { PaginationWidgetSetup } from '.';
-import type { Act } from '../../common';
+import type { TestOptions } from '../../common';
 
 export function createOptimisticUiTests(
   setup: PaginationWidgetSetup,
-  act: Act
+  { act }: Required<TestOptions>
 ) {
   describe('optimistic UI', () => {
     test('checks the clicked refinement immediately regardless of network latency', async () => {

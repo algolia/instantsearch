@@ -1,5 +1,5 @@
 import type { ToggleRefinementWidget } from 'instantsearch.js/es/widgets/toggle-refinement/toggle-refinement';
-import type { Act, TestSetup } from '../../common';
+import type { TestOptions, TestSetup } from '../../common';
 import { fakeAct } from '../../common';
 import { createRoutingTests } from './routing';
 
@@ -10,13 +10,13 @@ export type ToggleRefinementConnectorSetup = TestSetup<{
 
 export function createToggleRefinementConnectorTests(
   setup: ToggleRefinementConnectorSetup,
-  act: Act = fakeAct
+  { act = fakeAct, skippedTests = {} }: TestOptions = {}
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
   describe('ToggleRefinement connector common tests', () => {
-    createRoutingTests(setup, act);
+    createRoutingTests(setup, { act, skippedTests });
   });
 }

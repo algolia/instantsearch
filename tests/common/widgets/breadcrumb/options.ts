@@ -4,12 +4,15 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import type { BreadcrumbWidgetSetup } from '.';
-import type { Act } from '../../common';
+import type { TestOptions } from '../../common';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { normalizeSnapshot, wait } from '@instantsearch/testutils';
 
-export function createOptionsTests(setup: BreadcrumbWidgetSetup, act: Act) {
+export function createOptionsTests(
+  setup: BreadcrumbWidgetSetup,
+  { act }: Required<TestOptions>
+) {
   describe('options', () => {
     const hierarchicalFacets = {
       'hierarchicalCategories.lvl0': {

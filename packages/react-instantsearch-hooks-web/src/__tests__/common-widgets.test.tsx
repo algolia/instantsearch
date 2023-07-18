@@ -218,15 +218,15 @@ const testSetups: TestSetupsMap<TestSuites> = {
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
-  createRefinementListWidgetTests: undefined,
-  createHierarchicalMenuWidgetTests: undefined,
-  createBreadcrumbWidgetTests: undefined,
-  createMenuWidgetTests: undefined,
-  createPaginationWidgetTests: undefined,
-  createInfiniteHitsWidgetTests: undefined,
-  createHitsWidgetTests: undefined,
-  createRangeInputWidgetTests: undefined,
-  createInstantSearchWidgetTests: undefined,
+  createRefinementListWidgetTests: { act },
+  createHierarchicalMenuWidgetTests: { act },
+  createBreadcrumbWidgetTests: { act },
+  createMenuWidgetTests: { act },
+  createPaginationWidgetTests: { act },
+  createInfiniteHitsWidgetTests: { act },
+  createHitsWidgetTests: { act },
+  createRangeInputWidgetTests: { act },
+  createInstantSearchWidgetTests: { act },
 };
 
 /**
@@ -244,6 +244,5 @@ describe('Common widget tests (React InstantSearch)', () => {
     testSuites,
     testSetups,
     testOptions,
-    act,
   });
 });

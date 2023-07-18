@@ -1,5 +1,5 @@
 import type { NumericMenuWidget } from 'instantsearch.js/es/widgets/numeric-menu/numeric-menu';
-import type { Act, TestSetup } from '../../common';
+import type { TestOptions, TestSetup } from '../../common';
 import { fakeAct } from '../../common';
 import { createRoutingTests } from './routing';
 
@@ -10,13 +10,13 @@ export type NumericMenuConnectorSetup = TestSetup<{
 
 export function createNumericMenuConnectorTests(
   setup: NumericMenuConnectorSetup,
-  act: Act = fakeAct
+  { act = fakeAct, skippedTests = {} }: TestOptions = {}
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
   describe('NumericMenu connector common tests', () => {
-    createRoutingTests(setup, act);
+    createRoutingTests(setup, { act, skippedTests });
   });
 }

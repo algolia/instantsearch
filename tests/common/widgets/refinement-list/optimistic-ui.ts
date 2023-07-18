@@ -6,11 +6,11 @@ import {
 } from '@instantsearch/mocks';
 import { screen } from '@testing-library/dom';
 import type { RefinementListWidgetSetup } from '.';
-import type { Act } from '../../common';
+import type { TestOptions } from '../../common';
 
 export function createOptimisticUiTests(
   setup: RefinementListWidgetSetup,
-  act: Act
+  { act }: Required<TestOptions>
 ) {
   describe('optimistic UI', () => {
     test('checks the clicked refinement immediately regardless of network latency', async () => {
