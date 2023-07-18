@@ -1,6 +1,7 @@
 /**
  * @jest-environment jsdom
  */
+import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/widgets';
 import { act, render } from '@testing-library/react';
 import React from 'react';
@@ -20,16 +21,14 @@ import {
   RangeInput,
 } from '..';
 
+import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
 import type { Hit } from 'instantsearch.js';
 import type { SendEventForHits } from 'instantsearch.js/es/lib/utils';
 
 type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
-type TestSetups = {
-  [key in keyof TestSuites]: Parameters<TestSuites[key]>[0];
-};
 
-const setups: TestSetups = {
+const testSetups: TestSetupsMap<TestSuites> = {
   createRefinementListWidgetTests({ instantSearchOptions, widgetParams }) {
     render(
       <InstantSearch {...instantSearchOptions}>
@@ -218,6 +217,18 @@ const setups: TestSetups = {
   },
 };
 
+const testOptions: TestOptionsMap<TestSuites> = {
+  createRefinementListWidgetTests: undefined,
+  createHierarchicalMenuWidgetTests: undefined,
+  createBreadcrumbWidgetTests: undefined,
+  createMenuWidgetTests: undefined,
+  createPaginationWidgetTests: undefined,
+  createInfiniteHitsWidgetTests: undefined,
+  createHitsWidgetTests: undefined,
+  createRangeInputWidgetTests: undefined,
+  createInstantSearchWidgetTests: undefined,
+};
+
 /**
  * prevent rethrowing InstantSearch errors, so tests can be asserted.
  * IRL this isn't needed, as the error doesn't stop execution.
@@ -229,13 +240,10 @@ function GlobalErrorSwallower() {
 }
 
 describe('Common widget tests (React InstantSearch)', () => {
-  test('has all the tests', () => {
-    expect(Object.keys(setups).sort()).toEqual(Object.keys(testSuites).sort());
-  });
-
-  Object.keys(testSuites).forEach((testName) => {
-    // @ts-ignore (typescript is only referentially typed)
-    // https://github.com/microsoft/TypeScript/issues/38520
-    testSuites[testName](setups[testName], act);
+  runTestSuites({
+    testSuites,
+    testSetups,
+    testOptions,
+    act,
   });
 });

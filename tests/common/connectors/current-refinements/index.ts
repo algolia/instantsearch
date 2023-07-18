@@ -1,5 +1,5 @@
 import type { CurrentRefinementsWidget } from 'instantsearch.js/es/widgets/current-refinements/current-refinements';
-import type { Act, SkippedTests, TestSetup } from '../../common';
+import type { TestSetup, TestOptions } from '../../common';
 import { fakeAct } from '../../common';
 import { createRoutingTests } from './routing';
 
@@ -10,8 +10,8 @@ export type CurrentRefinementsConnectorSetup = TestSetup<{
 
 export function createCurrentRefinementsConnectorTests(
   setup: CurrentRefinementsConnectorSetup,
-  act: Act = fakeAct,
-  { skippedTests = {} }: { skippedTests?: SkippedTests } = {}
+  act = fakeAct,
+  { skippedTests = {} }: TestOptions = {}
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';

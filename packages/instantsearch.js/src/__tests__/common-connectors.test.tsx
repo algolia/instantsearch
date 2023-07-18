@@ -1,6 +1,7 @@
 /**
  * @jest-environment jsdom
  */
+import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/connectors';
 
 import {
@@ -18,13 +19,12 @@ import {
 import instantsearch from '../index.es';
 import { refinementList } from '../widgets';
 
+import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
+
 type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
-type TestSetups = {
-  [key in keyof TestSuites]: Parameters<TestSuites[key]>[0];
-};
 
-const setups: TestSetups = {
+const testSetups: TestSetupsMap<TestSuites> = {
   createHierarchicalMenuConnectorTests({ instantSearchOptions, widgetParams }) {
     const customHierarchicalMenu = connectHierarchicalMenu<{
       container: HTMLElement;
@@ -376,14 +376,23 @@ const setups: TestSetups = {
   },
 };
 
-describe('Common connector tests (InstantSearch.js)', () => {
-  test('has all the tests', () => {
-    expect(Object.keys(setups).sort()).toEqual(Object.keys(testSuites).sort());
-  });
+const testOptions: TestOptionsMap<TestSuites> = {
+  createHierarchicalMenuConnectorTests: undefined,
+  createBreadcrumbConnectorTests: undefined,
+  createRefinementListConnectorTests: undefined,
+  createMenuConnectorTests: undefined,
+  createPaginationConnectorTests: undefined,
+  createCurrentRefinementsConnectorTests: undefined,
+  createHitsPerPageConnectorTests: undefined,
+  createNumericMenuConnectorTests: undefined,
+  createRatingMenuConnectorTests: undefined,
+  createToggleRefinementConnectorTests: undefined,
+};
 
-  Object.keys(testSuites).forEach((testName) => {
-    // @ts-ignore (typescript is only referentially typed)
-    // https://github.com/microsoft/TypeScript/issues/38520
-    testSuites[testName](setups[testName]);
+describe('Common connector tests (InstantSearch.js)', () => {
+  runTestSuites({
+    testSuites,
+    testSetups,
+    testOptions,
   });
 });

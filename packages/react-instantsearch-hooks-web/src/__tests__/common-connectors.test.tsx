@@ -1,6 +1,7 @@
 /**
  * @jest-environment jsdom
  */
+import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/connectors';
 import { act, render } from '@testing-library/react';
 import { connectRatingMenu } from 'instantsearch.js/es/connectors';
@@ -32,6 +33,7 @@ import type {
   UseRefinementListProps,
   UseToggleRefinementProps,
 } from '..';
+import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
 import type {
   RatingMenuConnectorParams,
   RatingMenuWidgetDescription,
@@ -39,14 +41,8 @@ import type {
 
 type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
-type TestSetups = {
-  [key in keyof TestSuites]: Parameters<TestSuites[key]>[0];
-};
-type TestOptions = {
-  [key in keyof TestSuites]?: Parameters<TestSuites[key]>[2];
-};
 
-const setups: TestSetups = {
+const testSetups: TestSetupsMap<TestSuites> = {
   createRefinementListConnectorTests({ instantSearchOptions, widgetParams }) {
     function CustomRefinementList(props: UseRefinementListProps) {
       const { createURL, refine } = useRefinementList(props);
@@ -307,23 +303,29 @@ const setups: TestSetups = {
   },
 };
 
-describe('Common connector tests (React InstantSearch)', () => {
-  test('has all the tests', () => {
-    expect(Object.keys(setups).sort()).toEqual(Object.keys(testSuites).sort());
-  });
-
-  const testOptions: TestOptions = {
-    createCurrentRefinementsConnectorTests: {
-      skippedTests: {
-        /** createURL uses helper state instead of ui state as it can't be translated */
-        routing: true,
-      },
+const testOptions: TestOptionsMap<TestSuites> = {
+  createCurrentRefinementsConnectorTests: {
+    skippedTests: {
+      /** createURL uses helper state instead of ui state as it can't be translated */
+      routing: true,
     },
-  };
+  },
+  createHierarchicalMenuConnectorTests: undefined,
+  createBreadcrumbConnectorTests: undefined,
+  createMenuConnectorTests: undefined,
+  createPaginationConnectorTests: undefined,
+  createRefinementListConnectorTests: undefined,
+  createHitsPerPageConnectorTests: undefined,
+  createNumericMenuConnectorTests: undefined,
+  createRatingMenuConnectorTests: undefined,
+  createToggleRefinementConnectorTests: undefined,
+};
 
-  Object.keys(testSuites).forEach((testName) => {
-    // @ts-ignore (typescript is only referentially typed)
-    // https://github.com/microsoft/TypeScript/issues/38520
-    testSuites[testName](setups[testName], act, testOptions[testName]);
+describe('Common connector tests (React InstantSearch)', () => {
+  runTestSuites({
+    testSuites,
+    testSetups,
+    testOptions,
+    act,
   });
 });

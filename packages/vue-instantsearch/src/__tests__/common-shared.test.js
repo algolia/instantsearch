@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import * as suites from '@instantsearch/tests/shared';
+import * as testSuites from '@instantsearch/tests/shared';
 
 import { nextTick, mountApp } from '../../test/utils';
 import { renderCompat } from '../util/vue-compat';
@@ -13,9 +13,10 @@ import {
   createWidgetMixin,
 } from '../instantsearch';
 import { connectMenu, connectPagination } from 'instantsearch.js/es/connectors';
+import { runTestSuites } from '@instantsearch/tests/common';
 jest.unmock('instantsearch.js/es');
 
-const setups = {
+const testSetups = {
   async createSharedTests({ instantSearchOptions, widgetParams }) {
     const CustomMenu = createCustomWidget({
       connector: connectMenu,
@@ -79,12 +80,14 @@ function createCustomWidget({ connector, name, urlValue, requiredProps = [] }) {
   };
 }
 
-describe('Common shared tests (Vue InstantSearch)', () => {
-  test('has all the tests', () => {
-    expect(Object.keys(setups).sort()).toEqual(Object.keys(suites).sort());
-  });
+const testOptions = {
+  createSharedTests: undefined,
+};
 
-  Object.keys(suites).forEach((testName) => {
-    suites[testName](setups[testName]);
+describe('Common shared tests (Vue InstantSearch)', () => {
+  runTestSuites({
+    testSuites,
+    testSetups,
+    testOptions,
   });
 });
