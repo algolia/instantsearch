@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.47.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-web@6.46.0...react-instantsearch-hooks-web@6.47.0) (2023-07-18)
+
+
+### Features
+
+* **react-instantsearch-hooks web:** rename `<Stats>` translation ([#5756](https://github.com/algolia/instantsearch.js/issues/5756)) ([6c70035](https://github.com/algolia/instantsearch.js/commit/6c700350377d69a71b8ed44f70952d33ed81d085))
+
+
+
+
+
 ## [6.46.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-web@6.45.1...react-instantsearch-hooks-web@6.46.0) (2023-07-10)
 
 
