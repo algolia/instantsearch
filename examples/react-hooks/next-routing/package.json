@@ -14,8 +14,8 @@
     "next": "12.1.6",
     "react": "18.1.0",
     "react-dom": "18.1.0",
-    "react-instantsearch-hooks-router-nextjs": "6.46.1",
-    "react-instantsearch-hooks-server": "6.46.1",
+    "react-instantsearch-hooks-router-nextjs": "6.47.0",
+    "react-instantsearch-hooks-server": "6.47.0",
     "react-instantsearch-hooks-web": "6.47.0"
   },
   "devDependencies": {
