@@ -12,7 +12,8 @@
     "test": "../../scripts/retry.sh 3 'scripts/test.sh'",
     "test:unit": "jest",
     "test:watch": "jest --watch",
-    "test:v3": "yarn run test"
+    "test:v3": "yarn run test",
+    "version": "./scripts/update-version.js"
   },
   "author": {
     "name": "Algolia Inc.",
