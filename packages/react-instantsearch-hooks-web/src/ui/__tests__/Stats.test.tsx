@@ -17,7 +17,7 @@ describe('Stats', () => {
       areHitsSorted: false,
       nbSortedHits: 100,
       translations: {
-        stats: ({
+        rootElementText: ({
           nbHits,
           processingTimeMS,
           nbSortedHits,
@@ -153,7 +153,9 @@ describe('Stats', () => {
   test('renders with translations', () => {
     const translationFn = ({ areHitsSorted }: StatsTranslationOptions) =>
       areHitsSorted ? 'Sorted' : 'Unsorted';
-    let props = createProps({ translations: { stats: translationFn } });
+    let props = createProps({
+      translations: { rootElementText: translationFn },
+    });
 
     const { getByText, rerender } = render(<Stats {...props} />);
 
@@ -163,7 +165,7 @@ describe('Stats', () => {
       areHitsSorted: true,
       nbSortedHits: 1,
       nbHits: 2,
-      translations: { stats: translationFn },
+      translations: { rootElementText: translationFn },
     });
 
     rerender(<Stats {...props} />);

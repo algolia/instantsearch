@@ -1,5 +1,5 @@
 import React from 'react';
-import { useStats } from 'react-instantsearch-hooks';
+import { useStats, warn } from 'react-instantsearch-hooks';
 
 import { Stats as StatsUiComponent } from '../ui/Stats';
 
@@ -19,12 +19,24 @@ type UiProps = Pick<
 >;
 
 export type StatsProps = Omit<StatsUiComponentProps, keyof UiProps> &
-  UseStatsProps & { translations?: Partial<UiProps['translations']> };
+  UseStatsProps & {
+    translations?: Partial<UiProps['translations']> & {
+      /**
+       * @deprecated Use `rootElementText` instead.
+       */
+      stats?: Partial<UiProps['translations']>['rootElementText'];
+    };
+  };
 
 export function Stats({ translations, ...props }: StatsProps) {
   const { nbHits, nbSortedHits, processingTimeMS, areHitsSorted } = useStats(
     undefined,
     { $$widgetType: 'ais.stats' }
+  );
+
+  warn(
+    !translations?.stats,
+    'The `stats` translation is deprecated. Please use `rootElementText` instead.'
   );
 
   const statsTranslation = (options: StatsTranslationOptions): string =>
@@ -38,7 +50,7 @@ export function Stats({ translations, ...props }: StatsProps) {
     processingTimeMS,
     areHitsSorted,
     translations: {
-      stats: statsTranslation,
+      rootElementText: translations?.stats || statsTranslation,
       ...translations,
     },
   };
