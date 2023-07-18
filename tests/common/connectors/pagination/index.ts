@@ -1,5 +1,5 @@
 import type { PaginationWidget } from 'instantsearch.js/es/widgets/pagination/pagination';
-import type { Act, TestSetup } from '../../common';
+import type { TestOptions, TestSetup } from '../../common';
 import { fakeAct } from '../../common';
 import { createRoutingTests } from './routing';
 
@@ -10,13 +10,13 @@ export type PaginationConnectorSetup = TestSetup<{
 
 export function createPaginationConnectorTests(
   setup: PaginationConnectorSetup,
-  act: Act = fakeAct
+  { act = fakeAct, skippedTests = {} }: TestOptions = {}
 ) {
   beforeAll(() => {
     document.body.innerHTML = '';
   });
 
   describe('Pagination connector common tests', () => {
-    createRoutingTests(setup, act);
+    createRoutingTests(setup, { act, skippedTests });
   });
 }

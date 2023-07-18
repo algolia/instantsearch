@@ -1,10 +1,10 @@
 import algoliasearch from 'algoliasearch';
 import type { InstantSearchWidgetSetup } from '.';
-import type { Act } from '../../common';
+import type { TestOptions } from '../../common';
 
 export function createAlgoliaAgentTests(
   setup: InstantSearchWidgetSetup,
-  _act: Act
+  _options: Required<TestOptions>
 ) {
   describe('algolia agent', () => {
     test('sets the correct algolia agents', async () => {

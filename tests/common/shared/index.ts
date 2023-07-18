@@ -1,4 +1,4 @@
-import type { Act, TestSetup } from '../common';
+import type { TestOptions, TestSetup } from '../common';
 import { fakeAct } from '../common';
 import { createRoutingTests } from './routing';
 import type { MenuWidget } from 'instantsearch.js/es/widgets/menu/menu';
@@ -13,12 +13,15 @@ export type SharedSetup = TestSetup<{
   };
 }>;
 
-export function createSharedTests(setup: SharedSetup, act: Act = fakeAct) {
+export function createSharedTests(
+  setup: SharedSetup,
+  { act = fakeAct, skippedTests = {} }: TestOptions = {}
+) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
   describe('Shared common tests', () => {
-    createRoutingTests(setup, act);
+    createRoutingTests(setup, { act, skippedTests });
   });
 }

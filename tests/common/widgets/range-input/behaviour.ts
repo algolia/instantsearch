@@ -5,10 +5,13 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import type { RangeInputWidgetSetup } from '.';
-import type { Act } from '../../common';
+import type { TestOptions } from '../../common';
 import userEvent from '@testing-library/user-event';
 
-export function createBehaviourTests(setup: RangeInputWidgetSetup, act: Act) {
+export function createBehaviourTests(
+  setup: RangeInputWidgetSetup,
+  { act }: Required<TestOptions>
+) {
   describe('behaviour', () => {
     test('allows input of values containing a dot decimal separator', async () => {
       const delay = 100;

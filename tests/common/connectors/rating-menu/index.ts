@@ -1,5 +1,5 @@
 import type { RatingMenuWidget } from 'instantsearch.js/es/widgets/rating-menu/rating-menu';
-import type { Act, TestSetup } from '../../common';
+import type { TestOptions, TestSetup } from '../../common';
 import { fakeAct } from '../../common';
 import { createRoutingTests } from './routing';
 
@@ -10,13 +10,13 @@ export type RatingMenuConnectorSetup = TestSetup<{
 
 export function createRatingMenuConnectorTests(
   setup: RatingMenuConnectorSetup,
-  act: Act = fakeAct
+  { act = fakeAct, skippedTests = {} }: TestOptions = {}
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
   describe('RatingMenu connector common tests', () => {
-    createRoutingTests(setup, act);
+    createRoutingTests(setup, { act, skippedTests });
   });
 }

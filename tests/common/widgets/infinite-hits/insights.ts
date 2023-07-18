@@ -7,7 +7,7 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import type { InfiniteHitsWidgetSetup } from '.';
-import type { Act } from '../../common';
+import type { TestOptions } from '../../common';
 import type { SearchClient } from 'instantsearch.js';
 import userEvent from '@testing-library/user-event';
 
@@ -16,7 +16,10 @@ declare const window: Window &
     aa: jest.Mock;
   };
 
-export function createInsightsTests(setup: InfiniteHitsWidgetSetup, act: Act) {
+export function createInsightsTests(
+  setup: InfiniteHitsWidgetSetup,
+  { act }: Required<TestOptions>
+) {
   describe('insights', () => {
     test('sends only one default view event per widget', async () => {
       const delay = 100;

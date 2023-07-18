@@ -1,4 +1,4 @@
-import type { Act, TestSetup } from '../../common';
+import type { TestOptions, TestSetup } from '../../common';
 import { fakeAct } from '../../common';
 import { createAlgoliaAgentTests } from './algolia-agent';
 
@@ -11,13 +11,13 @@ export type InstantSearchWidgetSetup = TestSetup<
 
 export function createInstantSearchWidgetTests(
   setup: InstantSearchWidgetSetup,
-  act: Act = fakeAct
+  { act = fakeAct, skippedTests = {} }: TestOptions = {}
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
   describe('InstantSearch widget common tests', () => {
-    createAlgoliaAgentTests(setup, act);
+    createAlgoliaAgentTests(setup, { act, skippedTests });
   });
 }

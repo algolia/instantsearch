@@ -6,13 +6,13 @@ import {
 } from '@instantsearch/mocks';
 import { screen } from '@testing-library/dom';
 import type { HierarchicalMenuConnectorSetup } from '.';
-import type { Act } from '../../common';
+import type { TestOptions } from '../../common';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import { history } from 'instantsearch.js/es/lib/routers';
 
 export function createRoutingTests(
   setup: HierarchicalMenuConnectorSetup,
-  act: Act
+  { act }: Required<TestOptions>
 ) {
   describe('routing', () => {
     beforeAll(() => {
