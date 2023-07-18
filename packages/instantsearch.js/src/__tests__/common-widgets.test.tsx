@@ -2,6 +2,7 @@
  * @jest-environment jsdom
  */
 
+import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/widgets';
 
 import instantsearch from '../index.es';
@@ -18,13 +19,12 @@ import {
   rangeInput,
 } from '../widgets';
 
+import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
+
 type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
-type TestSetups = {
-  [key in keyof TestSuites]: Parameters<TestSuites[key]>[0];
-};
 
-const setups: TestSetups = {
+const testSetups: TestSetupsMap<TestSuites> = {
   createHierarchicalMenuWidgetTests({ instantSearchOptions, widgetParams }) {
     instantsearch(instantSearchOptions)
       .addWidgets([
@@ -274,14 +274,22 @@ const setups: TestSetups = {
   },
 };
 
-describe('Common shared tests (InstantSearch.js)', () => {
-  test('has all the tests', () => {
-    expect(Object.keys(setups).sort()).toEqual(Object.keys(testSuites).sort());
-  });
+const testOptions: TestOptionsMap<TestSuites> = {
+  createRefinementListWidgetTests: undefined,
+  createHierarchicalMenuWidgetTests: undefined,
+  createBreadcrumbWidgetTests: undefined,
+  createMenuWidgetTests: undefined,
+  createPaginationWidgetTests: undefined,
+  createInfiniteHitsWidgetTests: undefined,
+  createHitsWidgetTests: undefined,
+  createRangeInputWidgetTests: undefined,
+  createInstantSearchWidgetTests: undefined,
+};
 
-  Object.keys(testSuites).forEach((testName) => {
-    // @ts-ignore (typescript is only referentially typed)
-    // https://github.com/microsoft/TypeScript/issues/38520
-    testSuites[testName](setups[testName]);
+describe('Common widget tests (InstantSearch.js)', () => {
+  runTestSuites({
+    testSuites,
+    testSetups,
+    testOptions,
   });
 });

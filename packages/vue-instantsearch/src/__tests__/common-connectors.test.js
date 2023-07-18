@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import * as suites from '@instantsearch/tests/connectors';
+import * as testSuites from '@instantsearch/tests/connectors';
 
 import { nextTick, mountApp } from '../../test/utils';
 import { renderCompat } from '../util/vue-compat';
@@ -23,9 +23,10 @@ import {
   connectRefinementList,
   connectToggleRefinement,
 } from 'instantsearch.js/es/connectors';
+import { runTestSuites } from '@instantsearch/tests/common';
 jest.unmock('instantsearch.js/es');
 
-const setups = {
+const testSetups = {
   async createRefinementListConnectorTests({
     instantSearchOptions,
     widgetParams,
@@ -336,12 +337,23 @@ function createCustomWidget({
   };
 }
 
-describe('Common connector tests (Vue InstantSearch)', () => {
-  test('has all the tests', () => {
-    expect(Object.keys(setups).sort()).toEqual(Object.keys(suites).sort());
-  });
+const testOptions = {
+  createHierarchicalMenuConnectorTests: undefined,
+  createBreadcrumbConnectorTests: undefined,
+  createRefinementListConnectorTests: undefined,
+  createMenuConnectorTests: undefined,
+  createPaginationConnectorTests: undefined,
+  createCurrentRefinementsConnectorTests: undefined,
+  createHitsPerPageConnectorTests: undefined,
+  createNumericMenuConnectorTests: undefined,
+  createRatingMenuConnectorTests: undefined,
+  createToggleRefinementConnectorTests: undefined,
+};
 
-  Object.keys(suites).forEach((testName) => {
-    suites[testName](setups[testName]);
+describe('Common connector tests (Vue InstantSearch)', () => {
+  runTestSuites({
+    testSuites,
+    testSetups,
+    testOptions,
   });
 });
