@@ -32,96 +32,102 @@ var requestBuilder = {
     });
 
     // One for each disjunctive facets
-    state.getRefinedDisjunctiveFacets().forEach(function (refinedFacet) {
-      queries.push({
-        indexName: index,
-        params: requestBuilder._getDisjunctiveFacetSearchParams(
-          state,
-          refinedFacet
-        ),
+    state
+      .getRefinedDisjunctiveFacets()
+      .sort()
+      .forEach(function (refinedFacet) {
+        queries.push({
+          indexName: index,
+          params: requestBuilder._getDisjunctiveFacetSearchParams(
+            state,
+            refinedFacet
+          ),
+        });
       });
-    });
 
     // More to get the parent levels of the hierarchical facets when refined
-    state.getRefinedHierarchicalFacets().forEach(function (refinedFacet) {
-      var hierarchicalFacet = state.getHierarchicalFacetByName(refinedFacet);
-      var currentRefinement = state.getHierarchicalRefinement(refinedFacet);
-      var separator = state._getHierarchicalFacetSeparator(hierarchicalFacet);
+    state
+      .getRefinedHierarchicalFacets()
+      .sort()
+      .forEach(function (refinedFacet) {
+        var hierarchicalFacet = state.getHierarchicalFacetByName(refinedFacet);
+        var currentRefinement = state.getHierarchicalRefinement(refinedFacet);
+        var separator = state._getHierarchicalFacetSeparator(hierarchicalFacet);
 
-      // If we are deeper than level 0 (starting from `beer > IPA`)
-      // we want to get all parent values
-      if (
-        currentRefinement.length > 0 &&
-        currentRefinement[0].split(separator).length > 1
-      ) {
-        // We generate a map of the filters we will use for our facet values queries
-        var filtersMap = currentRefinement[0]
-          .split(separator)
-          .slice(0, -1)
-          .reduce(function createFiltersMap(map, segment, level) {
-            return map.concat({
-              attribute: hierarchicalFacet.attributes[level],
-              value:
-                level === 0
-                  ? segment
-                  : [map[map.length - 1].value, segment].join(separator),
-            });
-          }, []);
+        // If we are deeper than level 0 (starting from `beer > IPA`)
+        // we want to get all parent values
+        if (
+          currentRefinement.length > 0 &&
+          currentRefinement[0].split(separator).length > 1
+        ) {
+          // We generate a map of the filters we will use for our facet values queries
+          var filtersMap = currentRefinement[0]
+            .split(separator)
+            .slice(0, -1)
+            .reduce(function createFiltersMap(map, segment, level) {
+              return map.concat({
+                attribute: hierarchicalFacet.attributes[level],
+                value:
+                  level === 0
+                    ? segment
+                    : [map[map.length - 1].value, segment].join(separator),
+              });
+            }, []);
 
-        filtersMap.forEach(function (filter, level) {
-          var params = requestBuilder._getDisjunctiveFacetSearchParams(
-            state,
-            filter.attribute,
-            level === 0
-          );
-
-          // Keep facet filters unrelated to current hierarchical attributes
-          function hasHierarchicalFacetFilter(value) {
-            return hierarchicalFacet.attributes.some(function (attribute) {
-              return attribute === value.split(':')[0];
-            });
-          }
-
-          var filteredFacetFilters = (params.facetFilters || []).reduce(
-            function (acc, facetFilter) {
-              if (Array.isArray(facetFilter)) {
-                var filtered = facetFilter.filter(function (filterValue) {
-                  return !hasHierarchicalFacetFilter(filterValue);
-                });
-
-                if (filtered.length > 0) {
-                  acc.push(filtered);
-                }
-              }
-
-              if (
-                typeof facetFilter === 'string' &&
-                !hasHierarchicalFacetFilter(facetFilter)
-              ) {
-                acc.push(facetFilter);
-              }
-
-              return acc;
-            },
-            []
-          );
-
-          var parent = filtersMap[level - 1];
-          if (level > 0) {
-            params.facetFilters = filteredFacetFilters.concat(
-              parent.attribute + ':' + parent.value
+          filtersMap.forEach(function (filter, level) {
+            var params = requestBuilder._getDisjunctiveFacetSearchParams(
+              state,
+              filter.attribute,
+              level === 0
             );
-          } else {
-            params.facetFilters =
-              filteredFacetFilters.length > 0
-                ? filteredFacetFilters
-                : undefined;
-          }
 
-          queries.push({ indexName: index, params: params });
-        });
-      }
-    });
+            // Keep facet filters unrelated to current hierarchical attributes
+            function hasHierarchicalFacetFilter(value) {
+              return hierarchicalFacet.attributes.some(function (attribute) {
+                return attribute === value.split(':')[0];
+              });
+            }
+
+            var filteredFacetFilters = (params.facetFilters || []).reduce(
+              function (acc, facetFilter) {
+                if (Array.isArray(facetFilter)) {
+                  var filtered = facetFilter.filter(function (filterValue) {
+                    return !hasHierarchicalFacetFilter(filterValue);
+                  });
+
+                  if (filtered.length > 0) {
+                    acc.push(filtered);
+                  }
+                }
+
+                if (
+                  typeof facetFilter === 'string' &&
+                  !hasHierarchicalFacetFilter(facetFilter)
+                ) {
+                  acc.push(facetFilter);
+                }
+
+                return acc;
+              },
+              []
+            );
+
+            var parent = filtersMap[level - 1];
+            if (level > 0) {
+              params.facetFilters = filteredFacetFilters.concat(
+                parent.attribute + ':' + parent.value
+              );
+            } else {
+              params.facetFilters =
+                filteredFacetFilters.length > 0
+                  ? filteredFacetFilters
+                  : undefined;
+            }
+
+            queries.push({ indexName: index, params: params });
+          });
+        }
+      });
 
     return queries;
   },
@@ -135,11 +141,12 @@ var requestBuilder = {
   _getHitsSearchParams: function (state) {
     var facets = state.facets
       .concat(state.disjunctiveFacets)
-      .concat(requestBuilder._getHitsHierarchicalFacetsAttributes(state));
+      .concat(requestBuilder._getHitsHierarchicalFacetsAttributes(state))
+      .sort();
 
-    var facetFilters = requestBuilder._getFacetFilters(state);
-    var numericFilters = requestBuilder._getNumericFilters(state);
-    var tagFilters = requestBuilder._getTagFilters(state);
+    var facetFilters = requestBuilder._getFacetFilters(state).sort();
+    var numericFilters = requestBuilder._getNumericFilters(state).sort();
+    var tagFilters = requestBuilder._getTagFilters(state).sort();
     var additionalParams = {
       facets: facets.indexOf('*') > -1 ? ['*'] : facets,
       tagFilters: tagFilters,
