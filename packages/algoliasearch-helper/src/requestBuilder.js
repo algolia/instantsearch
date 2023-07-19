@@ -273,85 +273,93 @@ var requestBuilder = {
     var facetFilters = [];
 
     var facetsRefinements = state.facetsRefinements || {};
-    Object.keys(facetsRefinements).forEach(function (facetName) {
-      var facetValues = facetsRefinements[facetName] || [];
-      facetValues.forEach(function (facetValue) {
-        facetFilters.push(facetName + ':' + facetValue);
+    Object.keys(facetsRefinements)
+      .sort()
+      .forEach(function (facetName) {
+        var facetValues = facetsRefinements[facetName] || [];
+        facetValues.sort().forEach(function (facetValue) {
+          facetFilters.push(facetName + ':' + facetValue);
+        });
       });
-    });
 
     var facetsExcludes = state.facetsExcludes || {};
-    Object.keys(facetsExcludes).forEach(function (facetName) {
-      var facetValues = facetsExcludes[facetName] || [];
-      facetValues.forEach(function (facetValue) {
-        facetFilters.push(facetName + ':-' + facetValue);
+    Object.keys(facetsExcludes)
+      .sort()
+      .forEach(function (facetName) {
+        var facetValues = facetsExcludes[facetName] || [];
+        facetValues.sort().forEach(function (facetValue) {
+          facetFilters.push(facetName + ':-' + facetValue);
+        });
       });
-    });
 
     var disjunctiveFacetsRefinements = state.disjunctiveFacetsRefinements || {};
-    Object.keys(disjunctiveFacetsRefinements).forEach(function (facetName) {
-      var facetValues = disjunctiveFacetsRefinements[facetName] || [];
-      if (facetName === facet || !facetValues || facetValues.length === 0) {
-        return;
-      }
-      var orFilters = [];
+    Object.keys(disjunctiveFacetsRefinements)
+      .sort()
+      .forEach(function (facetName) {
+        var facetValues = disjunctiveFacetsRefinements[facetName] || [];
+        if (facetName === facet || !facetValues || facetValues.length === 0) {
+          return;
+        }
+        var orFilters = [];
 
-      facetValues.forEach(function (facetValue) {
-        orFilters.push(facetName + ':' + facetValue);
+        facetValues.sort().forEach(function (facetValue) {
+          orFilters.push(facetName + ':' + facetValue);
+        });
+
+        facetFilters.push(orFilters);
       });
-
-      facetFilters.push(orFilters);
-    });
 
     var hierarchicalFacetsRefinements =
       state.hierarchicalFacetsRefinements || {};
-    Object.keys(hierarchicalFacetsRefinements).forEach(function (facetName) {
-      var facetValues = hierarchicalFacetsRefinements[facetName] || [];
-      var facetValue = facetValues[0];
+    Object.keys(hierarchicalFacetsRefinements)
+      .sort()
+      .forEach(function (facetName) {
+        var facetValues = hierarchicalFacetsRefinements[facetName] || [];
+        var facetValue = facetValues[0];
 
-      if (facetValue === undefined) {
-        return;
-      }
-
-      var hierarchicalFacet = state.getHierarchicalFacetByName(facetName);
-      var separator = state._getHierarchicalFacetSeparator(hierarchicalFacet);
-      var rootPath = state._getHierarchicalRootPath(hierarchicalFacet);
-      var attributeToRefine;
-      var attributesIndex;
-
-      // we ask for parent facet values only when the `facet` is the current hierarchical facet
-      if (facet === facetName) {
-        // if we are at the root level already, no need to ask for facet values, we get them from
-        // the hits query
-        if (
-          facetValue.indexOf(separator) === -1 ||
-          (!rootPath && hierarchicalRootLevel === true) ||
-          (rootPath &&
-            rootPath.split(separator).length ===
-              facetValue.split(separator).length)
-        ) {
+        if (facetValue === undefined) {
           return;
         }
 
-        if (!rootPath) {
-          attributesIndex = facetValue.split(separator).length - 2;
-          facetValue = facetValue.slice(0, facetValue.lastIndexOf(separator));
+        var hierarchicalFacet = state.getHierarchicalFacetByName(facetName);
+        var separator = state._getHierarchicalFacetSeparator(hierarchicalFacet);
+        var rootPath = state._getHierarchicalRootPath(hierarchicalFacet);
+        var attributeToRefine;
+        var attributesIndex;
+
+        // we ask for parent facet values only when the `facet` is the current hierarchical facet
+        if (facet === facetName) {
+          // if we are at the root level already, no need to ask for facet values, we get them from
+          // the hits query
+          if (
+            facetValue.indexOf(separator) === -1 ||
+            (!rootPath && hierarchicalRootLevel === true) ||
+            (rootPath &&
+              rootPath.split(separator).length ===
+                facetValue.split(separator).length)
+          ) {
+            return;
+          }
+
+          if (!rootPath) {
+            attributesIndex = facetValue.split(separator).length - 2;
+            facetValue = facetValue.slice(0, facetValue.lastIndexOf(separator));
+          } else {
+            attributesIndex = rootPath.split(separator).length - 1;
+            facetValue = rootPath;
+          }
+
+          attributeToRefine = hierarchicalFacet.attributes[attributesIndex];
         } else {
-          attributesIndex = rootPath.split(separator).length - 1;
-          facetValue = rootPath;
+          attributesIndex = facetValue.split(separator).length - 1;
+
+          attributeToRefine = hierarchicalFacet.attributes[attributesIndex];
         }
 
-        attributeToRefine = hierarchicalFacet.attributes[attributesIndex];
-      } else {
-        attributesIndex = facetValue.split(separator).length - 1;
-
-        attributeToRefine = hierarchicalFacet.attributes[attributesIndex];
-      }
-
-      if (attributeToRefine) {
-        facetFilters.push([attributeToRefine + ':' + facetValue]);
-      }
-    });
+        if (attributeToRefine) {
+          facetFilters.push([attributeToRefine + ':' + facetValue]);
+        }
+      });
 
     return facetFilters;
   },

@@ -269,3 +269,121 @@ describe('wildcard facets', function () {
     expect(queries[1].params.facets).toEqual('test_disjunctive');
   });
 });
+
+describe('request ordering', function () {
+  test('should order queries and facet values by name', function () {
+    // These facets are all sorted reverse-alphabetically
+    var searchParams = new SearchParameters({
+      facets: [
+        'c_test_conjunctive_2',
+        'c_conjunctive_1',
+        'd_exclude_2',
+        'd_exclude_1',
+      ],
+      disjunctiveFacets: ['b_disjunctive_2', 'b_disjunctive_1'],
+      hierarchicalFacets: [
+        {
+          name: 'a_hierarchical_2',
+          attributes: ['a_hierarchical_2'],
+        },
+        {
+          name: 'a_hierarchical_1',
+          attributes: ['a_hierarchical_1'],
+        },
+      ],
+      hierarchicalFacetsRefinements: {
+        a_hierarchical_2: ['beta'],
+        a_hierarchical_1: ['alpha'],
+      },
+      disjunctiveFacetsRefinements: {
+        b_disjunctive_2: ['beta', 'alpha'],
+        b_disjunctive_1: ['beta', 'alpha'],
+      },
+      facetsRefinements: {
+        c_conjunctive_2: ['beta', 'alpha'],
+        c_conjunctive_1: ['beta', 'alpha'],
+      },
+      facetsExcludes: {
+        d_exclude_2: ['beta', 'alpha'],
+        d_exclude_1: ['beta', 'alpha'],
+      },
+    });
+
+    var queries = getQueries(searchParams.index, searchParams);
+
+    // Order of filters is alphabetical within type
+    // Order of queries is alphabetical within type
+    expect(queries.length).toBe(5);
+    // Hits
+    expect(queries[0].params.facetFilters).toEqual([
+      'c_conjunctive_1:alpha',
+      'c_conjunctive_1:beta',
+      'c_conjunctive_2:alpha',
+      'c_conjunctive_2:beta',
+      'd_exclude_1:-alpha',
+      'd_exclude_1:-beta',
+      'd_exclude_2:-alpha',
+      'd_exclude_2:-beta',
+      ['b_disjunctive_1:alpha', 'b_disjunctive_1:beta'],
+      ['b_disjunctive_2:alpha', 'b_disjunctive_2:beta'],
+      ['a_hierarchical_1:alpha'],
+      ['a_hierarchical_2:beta'],
+    ]);
+    // Hierarchical 1
+    expect(queries[1].params.facetFilters).toEqual([
+      'c_conjunctive_1:alpha',
+      'c_conjunctive_1:beta',
+      'c_conjunctive_2:alpha',
+      'c_conjunctive_2:beta',
+      'd_exclude_1:-alpha',
+      'd_exclude_1:-beta',
+      'd_exclude_2:-alpha',
+      'd_exclude_2:-beta',
+      ['b_disjunctive_1:alpha', 'b_disjunctive_1:beta'],
+      ['b_disjunctive_2:alpha', 'b_disjunctive_2:beta'],
+      ['a_hierarchical_2:beta'],
+    ]);
+    // Hierarchical 2
+    expect(queries[2].params.facetFilters).toEqual([
+      'c_conjunctive_1:alpha',
+      'c_conjunctive_1:beta',
+      'c_conjunctive_2:alpha',
+      'c_conjunctive_2:beta',
+      'd_exclude_1:-alpha',
+      'd_exclude_1:-beta',
+      'd_exclude_2:-alpha',
+      'd_exclude_2:-beta',
+      ['b_disjunctive_1:alpha', 'b_disjunctive_1:beta'],
+      ['b_disjunctive_2:alpha', 'b_disjunctive_2:beta'],
+      ['a_hierarchical_1:alpha'],
+    ]);
+    // Disjunctive 1
+    expect(queries[3].params.facetFilters).toEqual([
+      'c_conjunctive_1:alpha',
+      'c_conjunctive_1:beta',
+      'c_conjunctive_2:alpha',
+      'c_conjunctive_2:beta',
+      'd_exclude_1:-alpha',
+      'd_exclude_1:-beta',
+      'd_exclude_2:-alpha',
+      'd_exclude_2:-beta',
+      ['b_disjunctive_2:alpha', 'b_disjunctive_2:beta'],
+      ['a_hierarchical_1:alpha'],
+      ['a_hierarchical_2:beta'],
+    ]);
+    // Disjunctive 2
+    expect(queries[4].params.facetFilters).toEqual([
+      'c_conjunctive_1:alpha',
+      'c_conjunctive_1:beta',
+      'c_conjunctive_2:alpha',
+      'c_conjunctive_2:beta',
+      'd_exclude_1:-alpha',
+      'd_exclude_1:-beta',
+      'd_exclude_2:-alpha',
+      'd_exclude_2:-beta',
+      ['b_disjunctive_1:alpha', 'b_disjunctive_1:beta'],
+      ['a_hierarchical_1:alpha'],
+      ['a_hierarchical_2:beta'],
+    ]);
+  });
+});
