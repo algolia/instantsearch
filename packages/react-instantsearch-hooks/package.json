@@ -1,6 +1,6 @@
 {
   "name": "react-instantsearch-hooks",
-  "version": "6.47.0",
+  "version": "6.47.1",
   "description": "⚡ Lightning-fast search for React, by Algolia",
   "source": "src/index.ts",
   "types": "dist/es/index.d.ts",
@@ -49,8 +49,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2",
-    "algoliasearch-helper": "3.13.4",
-    "instantsearch.js": "4.56.6",
+    "algoliasearch-helper": "3.13.5",
+    "instantsearch.js": "4.56.7",
     "use-sync-external-store": "^1.0.0"
   },
   "devDependencies": {

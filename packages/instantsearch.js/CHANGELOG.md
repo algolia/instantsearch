@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.56.7](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.56.6...instantsearch.js@4.56.7) (2023-07-19)
+
+
+### Bug Fixes
+
+* **instantsearch:** keep algoliasearch-helper as external dependency during build ([#5765](https://github.com/algolia/instantsearch.js/issues/5765)) ([550fefa](https://github.com/algolia/instantsearch.js/commit/550fefa1401773f38dedc20322513ae662faa25d))
+
+
+
+
+
 ## [4.56.6](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.56.5...instantsearch.js@4.56.6) (2023-07-18)
 
 **Note:** Version bump only for package instantsearch.js

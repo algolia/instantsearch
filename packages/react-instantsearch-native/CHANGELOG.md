@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.40.3](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-native@6.40.2...react-instantsearch-native@6.40.3) (2023-07-19)
+
+**Note:** Version bump only for package react-instantsearch-native
+
+
+
+
+
 ## [6.40.2](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-native@6.40.1...react-instantsearch-native@6.40.2) (2023-07-18)
 
 **Note:** Version bump only for package react-instantsearch-native
