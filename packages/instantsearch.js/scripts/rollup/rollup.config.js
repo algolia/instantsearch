@@ -25,6 +25,7 @@ const plugins = [
     rootMode: 'upward',
     exclude: /node_modules/,
     extensions: ['.js', '.ts', '.tsx'],
+    sourceType: 'unambiguous',
   }),
   commonjs(),
   filesize({
