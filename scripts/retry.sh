@@ -14,7 +14,7 @@ exit_code=$?
 # If the exit code is non-zero (i.e. command failed), and we have not
 # reached the maximum number of retries, run the command again
 if [[ $exit_code -ne 0 && $retries -gt 0 ]]; then
-  scripts/retry.sh $(($retries - 1)) "$command"
+  eval "$(dirname "$0")/retry.sh" $(($retries - 1)) "\"${command}\""
 else
   # Return the exit code from the command
   exit $exit_code
