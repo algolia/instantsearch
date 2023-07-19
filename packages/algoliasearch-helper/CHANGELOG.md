@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.13.5](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.13.4...algoliasearch-helper@3.13.5) (2023-07-19)
+
+
+### Bug Fixes
+
+* **version:** ensure version file/export matches package ([#5762](https://github.com/algolia/instantsearch/issues/5762)) ([eb0bb32](https://github.com/algolia/instantsearch/commit/eb0bb3230735e498cbcb2d5096365534d1fae575))
+
+
+
+
+
 ## [3.13.4](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.13.3...algoliasearch-helper@3.13.4) (2023-07-18)
 
 **Note:** Version bump only for package algoliasearch-helper

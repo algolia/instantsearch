@@ -1,3 +1,3 @@
 'use strict';
 
-module.exports = '3.13.4';
+module.exports = '3.13.5';

@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-hooks-react-native-example",
-  "version": "6.38.23",
+  "version": "6.38.24",
   "private": true,
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
@@ -14,9 +14,9 @@
     "algoliasearch": "4.14.3",
     "expo": "~44.0.0",
     "expo-status-bar": "~1.2.0",
-    "instantsearch.js": "4.56.6",
+    "instantsearch.js": "4.56.7",
     "react": "17.0.1",
-    "react-instantsearch-hooks": "6.47.0",
+    "react-instantsearch-hooks": "6.47.1",
     "react-native": "0.64.3",
     "react-native-web": "0.17.1"
   },

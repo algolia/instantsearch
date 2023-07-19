@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.47.1](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-web@6.47.0...react-instantsearch-hooks-web@6.47.1) (2023-07-19)
+
+
+### Bug Fixes
+
+* **instantsearch:** keep algoliasearch-helper as external dependency during build ([#5765](https://github.com/algolia/instantsearch.js/issues/5765)) ([550fefa](https://github.com/algolia/instantsearch.js/commit/550fefa1401773f38dedc20322513ae662faa25d))
+
+
+
+
+
 # [6.47.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-web@6.46.0...react-instantsearch-hooks-web@6.47.0) (2023-07-18)
 
 
