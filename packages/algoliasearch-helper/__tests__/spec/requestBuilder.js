@@ -5,7 +5,8 @@ var SearchParameters = require('../../src/SearchParameters');
 var getQueries = requestBuilder._getQueries;
 
 test('The request builder should set analytics to subsequent queries', function () {
-  var testData = require('../datasets/SearchParameters/search.dataset')();
+  var testData =
+    require('../../test/datasets/SearchParameters/search.dataset')();
   var searchParams = testData.searchParams;
 
   searchParams.analytics = true;
@@ -17,7 +18,8 @@ test('The request builder should set analytics to subsequent queries', function 
 });
 
 test('The request builder should set clickAnalytics to subsequent queries', function () {
-  var testData = require('../datasets/SearchParameters/search.dataset')();
+  var testData =
+    require('../../test/datasets/SearchParameters/search.dataset')();
   var searchParams = testData.searchParams;
 
   searchParams.clickAnalytics = true;
@@ -29,7 +31,8 @@ test('The request builder should set clickAnalytics to subsequent queries', func
 });
 
 test('The request builder should should force analytics to false on subsequent queries if not specified', function () {
-  var testData = require('../datasets/SearchParameters/search.dataset')();
+  var testData =
+    require('../../test/datasets/SearchParameters/search.dataset')();
   var searchParams = testData.searchParams;
 
   var queries = getQueries(searchParams.index, searchParams);
@@ -39,7 +42,8 @@ test('The request builder should should force analytics to false on subsequent q
 });
 
 test('The request builder should should force clickAnalytics to false on subsequent queries if not specified', function () {
-  var testData = require('../datasets/SearchParameters/search.dataset')();
+  var testData =
+    require('../../test/datasets/SearchParameters/search.dataset')();
   var searchParams = testData.searchParams;
 
   var queries = getQueries(searchParams.index, searchParams);

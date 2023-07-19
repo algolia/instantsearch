@@ -3,7 +3,7 @@
 var algoliasearchHelper = require('../../index');
 
 test('Search should call the algolia client according to the number of refinements', function (done) {
-  var testData = require('../datasets/SearchParameters/search.dataset')();
+  var testData = require('../../test/datasets/SearchParameters/search.dataset')();
 
   var client = {
     search: jest.fn().mockImplementationOnce(function () {
@@ -90,7 +90,7 @@ test('Search should call the algolia client according to the number of refinemen
 });
 
 test('Search should not mutate the original client response', function (done) {
-  var testData = require('../datasets/SearchParameters/search.dataset')();
+  var testData = require('../../test/datasets/SearchParameters/search.dataset')();
 
   var client = {
     search: jest.fn().mockImplementationOnce(function () {

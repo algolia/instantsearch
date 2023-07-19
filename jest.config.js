@@ -1,21 +1,27 @@
 // @ts-check
 
+const enableIntegrationTest =
+  process.env.ONLY_UNIT !== 'true' &&
+  process.env.INTEGRATION_TEST_API_KEY &&
+  process.env.INTEGRATION_TEST_APPID;
+
 /** @type {import('@jest/types').Config.InitialOptions} */
 const config = {
   rootDir: process.cwd(),
   testRunner: 'jest-circus',
   testEnvironment: 'node',
   setupFilesAfterEnv: ['./tests/utils/setupTests.ts'],
+  globalTeardown: './tests/utils/teardownTests.ts',
   testPathIgnorePatterns: [
     '<rootDir>/node_modules/',
     '<rootDir>/packages/*/node_modules/',
     '<rootDir>/packages/*/dist*',
     '<rootDir>/tests/e2e/*',
     '<rootDir>/examples/',
-    '<rootDir>/packages/algoliasearch-helper',
     '<rootDir>/packages/create-instantsearch-app',
     '<rootDir>/packages/react-instantsearch-hooks-router-nextjs',
     '/__utils__/',
+    enableIntegrationTest ? '' : '/integration-spec/',
   ],
   watchPathIgnorePatterns: [
     '<rootDir>/packages/*/cjs',

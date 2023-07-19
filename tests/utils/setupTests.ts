@@ -33,3 +33,12 @@ beforeEach(() => {
 if (isVue2) {
   Vue2.config.productionTip = false;
 }
+
+const enableIntegrationTest =
+  process.env.ONLY_UNIT !== 'true' &&
+  process.env.INTEGRATION_TEST_API_KEY &&
+  process.env.INTEGRATION_TEST_APPID;
+
+if (enableIntegrationTest) {
+  jest.setTimeout(20_000);
+}
