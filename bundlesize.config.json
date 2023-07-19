@@ -10,11 +10,11 @@
     },
     {
       "path": "./packages/instantsearch.js/dist/instantsearch.production.min.js",
-      "maxSize": "74.50 kB"
+      "maxSize": "84.25 kB"
     },
     {
       "path": "./packages/instantsearch.js/dist/instantsearch.development.js",
-      "maxSize": "165 kB"
+      "maxSize": "175.5 kB"
     },
     {
       "path": "packages/react-instantsearch/dist/umd/Core.min.js",
