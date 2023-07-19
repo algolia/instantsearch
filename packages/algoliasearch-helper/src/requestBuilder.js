@@ -4,9 +4,7 @@ var merge = require('./functions/merge');
 
 function sortObject(obj) {
   return Object.keys(obj)
-    .sort(function (a, b) {
-      return a.localeCompare(b);
-    })
+    .sort()
     .reduce(function (acc, curr) {
       acc[curr] = obj[curr];
       return acc;
