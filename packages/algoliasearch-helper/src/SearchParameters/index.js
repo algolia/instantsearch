@@ -1446,7 +1446,8 @@ SearchParameters.prototype = {
         return self.disjunctiveFacetsRefinements[facet].length > 0;
       })
       .concat(disjunctiveNumericRefinedFacets)
-      .concat(this.getRefinedHierarchicalFacets());
+      .concat(this.getRefinedHierarchicalFacets())
+      .sort();
   },
   /**
    * Returns the list of all disjunctive facets refined
@@ -1467,7 +1468,7 @@ SearchParameters.prototype = {
       Object.keys(this.hierarchicalFacetsRefinements).filter(function (facet) {
         return self.hierarchicalFacetsRefinements[facet].length > 0;
       })
-    );
+    ).sort();
   },
   /**
    * Returned the list of all disjunctive facets not refined
