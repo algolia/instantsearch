@@ -176,12 +176,10 @@ test('orders parameters alphabetically in every query', function () {
         'this is last in parameters, but first in queries',
       ],
       clickAnalytics: false,
-      facetFilters: [
-        ['test_disjunctive:test_disjunctive_value'],
-        ['whatever:item'],
-      ],
-      facets: 'test_numeric',
+      facetFilters: [['test_disjunctive:test_disjunctive_value']],
+      facets: ['whatever'],
       hitsPerPage: 0,
+      numericFilters: ['test_numeric>=10'],
       page: 0,
     })
   );
@@ -192,10 +190,12 @@ test('orders parameters alphabetically in every query', function () {
         'this is last in parameters, but first in queries',
       ],
       clickAnalytics: false,
-      facetFilters: [['test_disjunctive:test_disjunctive_value']],
-      facets: ['whatever'],
+      facetFilters: [
+        ['test_disjunctive:test_disjunctive_value'],
+        ['whatever:item'],
+      ],
+      facets: 'test_numeric',
       hitsPerPage: 0,
-      numericFilters: ['test_numeric>=10'],
       page: 0,
     })
   );
