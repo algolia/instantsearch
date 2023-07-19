@@ -115,6 +115,7 @@ export * from './src/instantsearch.js';`
         JSON.stringify({ type: 'module', sideEffects: true })
       ),
       babel({
+        exclude: /node_modules|algoliasearch-helper/,
         extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', '.vue'],
         babelrc: false,
         plugins: [

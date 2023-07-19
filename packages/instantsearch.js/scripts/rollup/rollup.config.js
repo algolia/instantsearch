@@ -23,7 +23,7 @@ const plugins = [
   }),
   babel({
     rootMode: 'upward',
-    exclude: /node_modules/,
+    exclude: /node_modules|algoliasearch-helper/,
     extensions: ['.js', '.ts', '.tsx'],
   }),
   commonjs(),

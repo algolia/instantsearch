@@ -16,7 +16,7 @@ const createBanner = () =>
 
 const plugins = [
   babel({
-    exclude: ['../../node_modules/**', 'node_modules/**'],
+    exclude: /node_modules|algoliasearch-helper/,
     extensions: ['.js', '.ts', '.tsx'],
     rootMode: 'upward',
     runtimeHelpers: true,
