@@ -6,6 +6,13 @@ function setup(indexName, fn) {
   var appID = process.env.INTEGRATION_TEST_APPID;
   var key = process.env.INTEGRATION_TEST_API_KEY;
 
+  if (!appID) {
+    throw new Error('Missing environment variable INTEGRATION_TEST_APPID');
+  }
+  if (!key) {
+    throw new Error('Missing environment variable INTEGRATION_TEST_API_KEY');
+  }
+
   var client = algoliasearch(appID, key, {
     // all indexing requests must be done in https
     protocol: 'https:',

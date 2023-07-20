@@ -1,6 +1,8 @@
 'use strict';
 
-var utils = require('../integration-utils');
+jest.retryTimes(3, { logErrorsBeforeRetry: true });
+
+var utils = require('../../test/integration-utils');
 var setup = utils.setupSimple;
 var createIndexName = utils.createIndexName;
 

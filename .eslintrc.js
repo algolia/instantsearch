@@ -429,7 +429,10 @@ const config = {
       },
     },
     {
-      files: ['packages/algoliasearch-helper/test/**/*.js'],
+      files: [
+        'packages/algoliasearch-helper/__tests__/**/*.js',
+        'packages/algoliasearch-helper/test/**/*.js',
+      ],
       rules: {
         'no-console': 'off',
         'jest/no-done-callback': 'off',

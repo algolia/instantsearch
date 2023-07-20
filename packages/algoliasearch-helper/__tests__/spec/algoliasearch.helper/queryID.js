@@ -22,7 +22,8 @@ test('the queryid should keep increasing when new requests arrives', function ()
 });
 
 test('the response handler should check that the query is not outdated', function (done) {
-  var testData = require('../../datasets/SearchParameters/search.dataset')();
+  var testData =
+    require('../../../test/datasets/SearchParameters/search.dataset')();
   var shouldTriggerResult = true;
   var callCount = 0;
 
