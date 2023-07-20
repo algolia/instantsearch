@@ -22,7 +22,7 @@ const config = {
     '<rootDir>/packages/react-instantsearch-hooks-router-nextjs',
     '/__utils__/',
     enableIntegrationTest ? '' : '/integration-spec/',
-  ],
+  ].filter(Boolean),
   watchPathIgnorePatterns: [
     '<rootDir>/packages/*/cjs',
     '<rootDir>/packages/*/dist',
