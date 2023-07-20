@@ -5,7 +5,8 @@ var algoliaSearch = require('algoliasearch');
 var algoliasearchHelper = require('../../../index');
 
 test('When searchOnce with callback, hasPendingRequests is true', function (done) {
-  var testData = require('../../../test/datasets/SearchParameters/search.dataset')();
+  var testData =
+    require('../../../test/datasets/SearchParameters/search.dataset')();
   var client = algoliaSearch('dsf', 'dsfdf');
 
   var triggerCb;
@@ -38,7 +39,8 @@ test('When searchOnce with callback, hasPendingRequests is true', function (done
 });
 
 test('When searchOnce with promises, hasPendingRequests is true', function (done) {
-  var testData = require('../../../test/datasets/SearchParameters/search.dataset')();
+  var testData =
+    require('../../../test/datasets/SearchParameters/search.dataset')();
   var client = algoliaSearch('dsf', 'dsfdf');
 
   var triggerCb;
@@ -109,7 +111,8 @@ test('When searchForFacetValues, hasPendingRequests is true', function (done) {
 });
 
 test('When helper.search(), hasPendingRequests is true', function (done) {
-  var testData = require('../../../test/datasets/SearchParameters/search.dataset')();
+  var testData =
+    require('../../../test/datasets/SearchParameters/search.dataset')();
   var client = algoliaSearch('dsf', 'dsfdf');
 
   var triggerCb;
@@ -144,7 +147,8 @@ test('When helper.search(), hasPendingRequests is true', function (done) {
 });
 
 test('When helper.search() and one request is discarded, hasPendingRequests is true unless all come back', function (done) {
-  var testData = require('../../../test/datasets/SearchParameters/search.dataset')();
+  var testData =
+    require('../../../test/datasets/SearchParameters/search.dataset')();
   var client = algoliaSearch('dsf', 'dsfdf');
 
   var triggerCbs = [];

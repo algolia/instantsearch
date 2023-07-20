@@ -5,7 +5,8 @@ var SearchParameters = require('../../../src/SearchParameters');
 var algoliasearchHelper = require('../../../index');
 
 test('searchOnce should call the algolia client according to the number of refinements and call callback with no error and with results when no error', function (done) {
-  var testData = require('../../../test/datasets/SearchParameters/search.dataset')();
+  var testData =
+    require('../../../test/datasets/SearchParameters/search.dataset')();
 
   var client = {
     search: jest.fn().mockImplementationOnce(function () {
