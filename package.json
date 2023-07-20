@@ -29,7 +29,7 @@
     "test:e2e": "yarn test:e2e:local",
     "test:e2e:local": "wdio scripts/wdio/local.conf.js",
     "test:e2e:saucelabs": "wdio scripts/wdio/saucelabs.conf.js",
-    "test:v3": "lerna run test:v3",
+    "test:v3": "./scripts/retry.sh 3 'jest --maxWorkers=4 --ci' && lerna run test:v3 --concurrency=1",
     "release": "shipjs prepare",
     "prepare": "lerna run prepare && patch-package",
     "prepare-vue3": "./scripts/prepare-vue3.js"
