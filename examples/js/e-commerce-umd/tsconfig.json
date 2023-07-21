@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "lib": ["es6", "dom", "dom.iterable"],
+    "baseUrl": ".",
+    "downlevelIteration": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "noImplicitAny": true,
+  },
+  "include": [
+    "src",
+    "src/global.d.ts"
+  ]
+}
