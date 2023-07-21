@@ -52,7 +52,6 @@ export default function transform(file, api, options) {
   const j = api.jscodeshift;
   const printOptions = options.printOptions || {
     quote: 'single',
-    shouldAddParens: false,
   };
   const root = j(file.source);
   const jsxElements = root.findJSXElements();
@@ -170,18 +169,14 @@ See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/ 
                   : 'searchablePlaceholder';
               const placeholder = property.value.value;
 
-              if (placeholder.type !== 'Literal') {
-                property.node.comments = [
-                  j.commentLine(
-                    ` TODO: Move this as a \`${newProp}\` prop for \`${jsxElementName}\``
-                  ),
-                ];
-                return;
-              }
-
               jsxElement.attributes = [
                 ...jsxElement.attributes,
-                j.jsxAttribute(j.jsxIdentifier(newProp), placeholder),
+                j.jsxAttribute(
+                  j.jsxIdentifier(newProp),
+                  placeholder.type === 'Literal'
+                    ? placeholder
+                    : j.jsxExpressionContainer(placeholder)
+                ),
               ];
 
               property.prune();
