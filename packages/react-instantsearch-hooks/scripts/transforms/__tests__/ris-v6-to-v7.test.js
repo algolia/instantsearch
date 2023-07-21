@@ -38,3 +38,4 @@ defineTest(
   null,
   'ris-v6-to-v7/placeholder-not-inline'
 );
+defineTest(__dirname, 'ris-v6-to-v7', null, 'ris-v6-to-v7/import-path');

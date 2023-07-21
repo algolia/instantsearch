@@ -8,12 +8,19 @@ export default function transform(file, api, options) {
   const replaceImports = (from, to) => (root) =>
     root
       .find(j.ImportDeclaration)
-      .filter((path) => path.node.source.value === from)
-      .forEach((sourceImport) =>
+      .filter(
+        (path) =>
+          path.node.source.value === from ||
+          path.node.source.value.startsWith(`${from}/`)
+      )
+      .forEach((sourceImport) => {
         j(sourceImport).replaceWith(
-          j.importDeclaration(sourceImport.node.specifiers, j.stringLiteral(to))
-        )
-      );
+          j.importDeclaration(
+            sourceImport.node.specifiers,
+            j.stringLiteral(sourceImport.value.source.value.replace(from, to))
+          )
+        );
+      });
 
   const replaceHooks = replaceImports(
     'react-instantsearch-hooks',
