@@ -29,7 +29,7 @@ test('hierarchical facets: combined with a disjunctive facet', function () {
 
   helper.setQuery('a').search();
 
-  var disjunctiveFacetsValuesQuery = client.search.mock.calls[0][0][1];
+  var disjunctiveFacetsValuesQuery = client.search.mock.calls[0][0][2];
 
   expect(disjunctiveFacetsValuesQuery.params.facetFilters).toEqual([
     ['categories.lvl1:beers > IPA'],

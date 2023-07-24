@@ -23,7 +23,7 @@ test('getQuery', function () {
   expect(helper.getQuery()).toEqual({
     minWordSizefor1Typo: 8,
     ignorePlurals: true,
-    facets: ['facet1', 'facet2', 'facet3', 'df1', 'df2', 'df3'],
+    facets: ['df1', 'df2', 'df3', 'facet1', 'facet2', 'facet3'],
     tagFilters: '',
     facetFilters: [
       'facet1:FACET1-VAL-1',
