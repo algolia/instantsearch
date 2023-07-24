@@ -40,3 +40,4 @@ defineTest(
 );
 defineTest(__dirname, 'ris-v6-to-v7', null, 'ris-v6-to-v7/import-path');
 defineTest(__dirname, 'ris-v6-to-v7', null, 'ris-v6-to-v7/menuselect');
+defineTest(__dirname, 'ris-v6-to-v7', null, 'ris-v6-to-v7/connectors');

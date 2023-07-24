@@ -247,6 +247,84 @@ function MenuSelect(props) {
     `);
   };
 
+  /*
+   * finds the highest parent of a path in the body, for example to add a top-level comment
+   */
+  const findParent = (path) => {
+    const parent = path.parentPath;
+
+    if (parent.name === 'body') {
+      return path;
+    }
+
+    return findParent(parent);
+  };
+
+  const handleCreateConnector = () => {
+    const imports = root
+      .find(j.ImportDeclaration)
+      .filter((path) => path.node.source.value === 'react-instantsearch')
+      .find(j.ImportSpecifier)
+      .filter((path) => path.node.imported.name === 'createConnector');
+
+    if (imports.size() === 0) {
+      return;
+    }
+
+    imports.remove();
+
+    root
+      .find(j.CallExpression)
+      .filter((path) => path.node.callee.name === 'createConnector')
+      .forEach((path) => {
+        const parent = findParent(path);
+
+        parent.node.comments ??= [];
+        parent.node.comments.push(
+          j.commentBlock(`
+ * TODO: custom widgets must be converted to hooks.
+ * See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/#creating-connectors
+ `)
+        );
+      });
+  };
+
+  const handleConnectors = () => {
+    const imports = root
+      .find(j.ImportDeclaration)
+      .filter((path) => path.node.source.value === 'react-instantsearch')
+      .find(j.ImportSpecifier)
+      .filter((path) => path.node.imported.name.startsWith('connect'));
+
+    if (imports.size() === 0) {
+      return;
+    }
+
+    imports.replaceWith((path) =>
+      j.importSpecifier(
+        j.identifier(path.node.imported.name.replace('connect', 'use'))
+      )
+    );
+
+    imports.forEach((path) => {
+      const connectorName = path.node.imported.name.split('use')[1];
+
+      root.get().node.program.body.push(j.template.statement`
+
+      // TODO: ensure your usage correctly maps the props from the connector to the hook
+      function ${`connect${connectorName}`}(renderFn) {
+        const ${connectorName} = (props) => {
+          const data = ${`use${connectorName}`}(props);
+      
+          return renderFn({ ...props, ...data });
+        };
+      
+        return ${connectorName};
+      }
+      `);
+    });
+  };
+
   const commentProp = ({ element, prop, comment }) =>
     jsxElements
       .filter((p) => elementName(p) === element)
@@ -270,6 +348,8 @@ function MenuSelect(props) {
   replaceTranslations();
   handleDefaultRefinements();
   handleMenuSelect();
+  handleCreateConnector();
+  handleConnectors();
 
   commentProp({
     element: 'InstantSearch',
