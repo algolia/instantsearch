@@ -16,6 +16,8 @@ import {
 } from 'react-instantsearch-dom';
 
 function App() {
+  const [refreshValue] = useState(0);
+
   return (
     <InstantSearch
       searchState={{}}
@@ -23,7 +25,7 @@ function App() {
       createURL={() => {}}
       onSearchStateChange={() => {}}
       onSearchParameters={() => {}}
-      refresh={true}
+      refresh={refreshValue}
       indexName="instant_search"
     >
       <Breadcrumb rootURL="/truc" translations={{ rootLabel: 'Home' }} />

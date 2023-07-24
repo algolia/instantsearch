@@ -16,6 +16,8 @@ import {
 } from 'react-instantsearch';
 
 function App() {
+  const [refreshValue] = useState(0);
+
   return (
     <InstantSearch
       /* TODO: `searchState` is no longer supported. This is now handled via an `onStateChange` callback.
@@ -30,12 +32,12 @@ function App() {
       /* TODO: `onSearchStateChange` is no longer supported. This is now handled via an `onStateChange` callback.
       See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-onsearchstatechange-with-onstatechange */
       onSearchStateChange={() => {}}
-      /* TODO: `onSearchParameters` is no longer supported.
-      See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-refresh-prop-with-refresh-from-useinstantsearch */
+      /* TODO: `onSearchParameters` is no longer supported, if you used it for server-side rendering, you can follow
+      this guide : https://www.algolia.com/doc/guides/building-search-ui/going-further/server-side-rendering/react/ */
       onSearchParameters={() => {}}
-      /* TODO: `refresh` is no longer a prop on `InstantSearch`. It can now be called programatically via the `refresh` function returned by `useInstantSearch`.
+      /* TODO: the `refresh` prop is no longer a prop on `InstantSearch`. It can now be called programmatically via the `refresh` function returned by `useInstantSearch`.
       See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-refresh-prop-with-refresh-from-useinstantsearch */
-      refresh={true}
+      refresh={refreshValue}
       indexName="instant_search"
     >
       <Breadcrumb rootPath="/truc" translations={{ rootElementText: 'Home' }} />

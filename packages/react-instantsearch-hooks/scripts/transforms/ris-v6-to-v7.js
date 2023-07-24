@@ -285,6 +285,12 @@ this guide : https://www.algolia.com/doc/guides/building-search-ui/going-further
   });
   commentProp({
     element: 'InstantSearch',
+    prop: 'onSearchParameters',
+    comment: `\`onSearchParameters\` is no longer supported, if you used it for server-side rendering, you can follow
+this guide : https://www.algolia.com/doc/guides/building-search-ui/going-further/server-side-rendering/react/`,
+  });
+  commentProp({
+    element: 'InstantSearch',
     prop: 'createURL',
     comment: `\`createURL\` should be moved to the \`routing\` prop.
 See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#move-createurl-in-routing`,
@@ -297,14 +303,8 @@ See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-h
   });
   commentProp({
     element: 'InstantSearch',
-    prop: 'onSearchParameters',
-    comment: `\`onSearchParameters\` is no longer supported.
-See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-refresh-prop-with-refresh-from-useinstantsearch`,
-  });
-  commentProp({
-    element: 'InstantSearch',
     prop: 'refresh',
-    comment: `\`refresh\` is no longer a prop on \`InstantSearch\`. It can now be called programatically via the \`refresh\` function returned by \`useInstantSearch\`.
+    comment: `the \`refresh\` prop is no longer a prop on \`InstantSearch\`. It can now be called programmatically via the \`refresh\` function returned by \`useInstantSearch\`.
 See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-refresh-prop-with-refresh-from-useinstantsearch`,
   });
 
