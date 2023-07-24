@@ -42,22 +42,22 @@ const CustomWidget = createConnector({
 })(RawCustomWidget);
 
 // TODO: ensure your usage correctly maps the props from the connector to the hook
-function connectSearchBox(renderFn) {
+function connectSearchBox(Component) {
   const SearchBox = (props) => {
     const data = useSearchBox(props);
 
-    return renderFn({ ...props, ...data });
+    return <Component {...props} {...data} />;
   };
 
   return SearchBox;
 }
 
 // TODO: ensure your usage correctly maps the props from the connector to the hook
-function connectHits(renderFn) {
+function connectHits(Component) {
   const Hits = (props) => {
     const data = useHits(props);
 
-    return renderFn({ ...props, ...data });
+    return <Component {...props} {...data} />;
   };
 
   return Hits;

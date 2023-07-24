@@ -312,13 +312,13 @@ function MenuSelect(props) {
       root.get().node.program.body.push(j.template.statement`
 
       // TODO: ensure your usage correctly maps the props from the connector to the hook
-      function ${`connect${connectorName}`}(renderFn) {
+      function ${`connect${connectorName}`}(Component) {
         const ${connectorName} = (props) => {
           const data = ${`use${connectorName}`}(props);
-      
-          return renderFn({ ...props, ...data });
+
+          return <Component {...props} {...data} />;
         };
-      
+
         return ${connectorName};
       }
       `);
