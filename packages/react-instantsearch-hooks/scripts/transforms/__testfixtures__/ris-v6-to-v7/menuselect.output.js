@@ -1,4 +1,4 @@
-import { useMenu } from 'react-instantsearch';
+import { InstantSearch, useMenu } from 'react-instantsearch';
 
 function App() {
   return (

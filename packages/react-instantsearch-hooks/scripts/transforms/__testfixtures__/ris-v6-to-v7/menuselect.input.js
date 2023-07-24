@@ -1,4 +1,4 @@
-import { MenuSelect } from 'react-instantsearch-dom';
+import { InstantSearch, MenuSelect } from 'react-instantsearch-dom';
 
 function App() {
   return (
