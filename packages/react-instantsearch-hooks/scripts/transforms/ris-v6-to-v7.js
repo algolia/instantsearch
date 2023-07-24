@@ -214,6 +214,39 @@ See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/#
       });
   };
 
+  const handleMenuSelect = () => {
+    const imports = root
+      .find(j.ImportDeclaration)
+      .filter((path) => path.node.source.value === 'react-instantsearch')
+      .find(j.ImportSpecifier)
+      .filter((path) => path.node.imported.name === 'MenuSelect');
+
+    if (imports.size() === 0) {
+      return;
+    }
+
+    imports.replaceWith(j.importSpecifier(j.identifier('useMenu')));
+
+    root.get().node.program.body.push(j.template.statement`
+
+function MenuSelect(props) {
+  const { items, refine } = useMenu(props, {
+    $$widgetType: 'custom.menuSelect',
+  });
+
+  return (
+    <select onChange={(event) => refine(event.target.value)}>
+      {items.map((item) => (
+        <option key={item.label} value={item.value} selected={item.isRefined}>
+          {item.label}
+        </option>
+      ))}
+    </select>
+  );
+}
+    `);
+  };
+
   const commentProp = ({ element, prop, comment }) =>
     jsxElements
       .filter((p) => elementName(p) === element)
@@ -231,6 +264,7 @@ See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/#
   replaceClearsQuery();
   replaceTranslations();
   handleDefaultRefinements();
+  handleMenuSelect();
 
   commentProp({
     element: 'InstantSearch',
