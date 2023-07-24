@@ -1,3 +1,4 @@
+import algoliasearch from 'algoliasearch/lite';
 import React from 'react';
 import {
   InstantSearch,
@@ -16,7 +17,7 @@ import {
   Configure,
   connectStateResults,
 } from 'react-instantsearch-dom';
-import algoliasearch from 'algoliasearch/lite';
+
 import withURLSync from './URLSync';
 import './App.css';
 

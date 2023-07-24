@@ -2,17 +2,18 @@
  * @jest-environment jsdom
  */
 
-import React from 'react';
-import Enzyme, { shallow, mount } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import Enzyme, { shallow, mount } from 'enzyme';
+import React from 'react';
+
 import {
   createFakeGoogleReference,
   createFakeMapInstance,
   createFakeMarkerInstance,
 } from '../../test/mockGoogleMaps';
-import * as utils from '../utils';
 import GoogleMapsContext from '../GoogleMapsContext';
 import Connected, { Marker } from '../Marker';
+import * as utils from '../utils';
 
 Enzyme.configure({ adapter: new Adapter() });
 

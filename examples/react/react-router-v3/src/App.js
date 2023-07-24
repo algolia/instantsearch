@@ -1,9 +1,8 @@
-import isEqual from 'react-fast-compare';
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withRouter } from 'react-router';
-import qs from 'qs';
 import algoliasearch from 'algoliasearch/lite';
+import PropTypes from 'prop-types';
+import qs from 'qs';
+import React, { Component } from 'react';
+import isEqual from 'react-fast-compare';
 import {
   InstantSearch,
   HierarchicalMenu,
@@ -16,6 +15,7 @@ import {
   SearchBox,
   ClearRefinements,
 } from 'react-instantsearch-dom';
+import { withRouter } from 'react-router';
 
 const searchClient = algoliasearch(
   'latency',

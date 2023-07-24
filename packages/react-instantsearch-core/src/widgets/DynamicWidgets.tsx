@@ -1,7 +1,9 @@
-import type { ComponentType, ReactElement, ReactNode } from 'react';
 import React, { Fragment } from 'react';
-import { getDisplayName } from '../core/utils';
+
 import connectDynamicWidgets from '../connectors/connectDynamicWidgets';
+import { getDisplayName } from '../core/utils';
+
+import type { ComponentType, ReactElement, ReactNode } from 'react';
 
 function isReactElement(element: any): element is ReactElement {
   return typeof element === 'object' && element.props;

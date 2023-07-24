@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { LatLngPropType, BoundingBoxPropType } from './propTypes';
+import React, { Component } from 'react';
+
 import GeoSearchContext from './GeoSearchContext';
+import { LatLngPropType, BoundingBoxPropType } from './propTypes';
 
 class Provider extends Component {
   static propTypes = {

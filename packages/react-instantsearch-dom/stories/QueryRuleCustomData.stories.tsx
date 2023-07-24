@@ -1,7 +1,8 @@
-import React from 'react';
 import { storiesOf } from '@storybook/react';
+import React from 'react';
 import { connectHits } from 'react-instantsearch-core';
 import { QueryRuleCustomData, Panel, Highlight } from 'react-instantsearch-dom';
+
 import { WrapWithHits } from './util';
 
 type CustomDataItem = {

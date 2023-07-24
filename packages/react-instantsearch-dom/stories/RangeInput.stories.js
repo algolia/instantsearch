@@ -1,7 +1,8 @@
-import React from 'react';
-import { storiesOf } from '@storybook/react';
 import { object, number } from '@storybook/addon-knobs';
+import { storiesOf } from '@storybook/react';
+import React from 'react';
 import { Panel, RangeInput, SearchBox } from 'react-instantsearch-dom';
+
 import { WrapWithHits } from './util';
 
 const stories = storiesOf('RangeInput', module);

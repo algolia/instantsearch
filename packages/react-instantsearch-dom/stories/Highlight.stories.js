@@ -1,8 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { storiesOf } from '@storybook/react';
 import { text } from '@storybook/addon-knobs';
+import { storiesOf } from '@storybook/react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { Highlight, Hits } from 'react-instantsearch-dom';
+
 import { WrapWithHits } from './util';
 
 const stories = storiesOf('Highlight', module);

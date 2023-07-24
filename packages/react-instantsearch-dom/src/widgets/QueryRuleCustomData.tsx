@@ -1,8 +1,10 @@
 import React from 'react';
 import { connectQueryRules } from 'react-instantsearch-core';
+
 import PanelCallbackHandler from '../components/PanelCallbackHandler';
-import type { QueryRuleCustomDataProps } from '../components/QueryRuleCustomData';
 import QueryRuleCustomData from '../components/QueryRuleCustomData';
+
+import type { QueryRuleCustomDataProps } from '../components/QueryRuleCustomData';
 
 type CustomUserData = {
   [key: string]: any;

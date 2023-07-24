@@ -1,8 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import { storiesOf } from '@storybook/react';
-import Autosuggest from 'react-autosuggest';
 import algoliasearch from 'algoliasearch/lite';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Autosuggest from 'react-autosuggest';
 import {
   Configure,
   InstantSearch,
@@ -15,6 +15,7 @@ import {
   connectAutoComplete,
   connectStateResults,
 } from 'react-instantsearch-dom';
+
 import { Content as StoryWrapper } from './util';
 
 const searchClient = algoliasearch(

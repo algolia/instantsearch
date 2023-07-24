@@ -1,6 +1,8 @@
-const path = require('path');
 const { execSync } = require('child_process');
+const path = require('path');
+
 const chalk = require('chalk');
+
 const { isYarnAvailable } = require('../../utils');
 
 module.exports = function teardown(config) {

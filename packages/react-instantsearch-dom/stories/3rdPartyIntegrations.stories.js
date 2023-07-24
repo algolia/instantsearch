@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import Rheostat from 'rheostat';
 import { storiesOf } from '@storybook/react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { connectRange } from 'react-instantsearch-dom';
+import Rheostat from 'rheostat';
+
 import { WrapWithHits } from './util';
 
 class Range extends Component {

@@ -1,4 +1,5 @@
 import { SearchResults, SearchParameters } from 'algoliasearch-helper';
+
 import connect from '../connectHierarchicalMenu';
 
 jest.mock('../../core/createConnector', () => (x) => x);

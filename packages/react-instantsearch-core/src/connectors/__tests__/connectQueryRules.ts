@@ -1,10 +1,12 @@
 import { SearchParameters } from 'algoliasearch-helper';
+
+import connectReal from '../connectQueryRules';
+
 import type {
   ConnectorDescription,
   ConnectedProps,
 } from '../../core/createConnector';
 import type { QueryRulesProps } from '../connectQueryRules';
-import connectReal from '../connectQueryRules';
 
 jest.mock(
   '../../core/createConnector',

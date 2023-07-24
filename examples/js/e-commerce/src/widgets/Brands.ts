@@ -1,4 +1,5 @@
 import { panel, refinementList } from 'instantsearch.js/es/widgets';
+
 import { collapseButtonText } from '../templates/panel';
 
 const brandRefinementList = panel({

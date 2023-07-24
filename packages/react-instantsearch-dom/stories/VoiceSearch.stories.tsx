@@ -1,7 +1,9 @@
-import React from 'react';
 import { storiesOf } from '@storybook/react';
+import React from 'react';
 import { VoiceSearch, SearchBox } from 'react-instantsearch-dom';
+
 import { WrapWithHits } from './util';
+
 import type { InnerComponentProps } from '../src/components/VoiceSearch';
 
 const stories = storiesOf('VoiceSearch', module);

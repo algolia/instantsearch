@@ -1,10 +1,11 @@
 /**
  * @jest-environment jsdom
  */
+import { runTestSuites } from '@instantsearch/tests/common';
 import * as testSuites from '@instantsearch/tests/shared';
+import { connectMenu, connectPagination } from 'instantsearch.js/es/connectors';
 
 import { nextTick, mountApp } from '../../test/utils';
-import { renderCompat } from '../util/vue-compat';
 import {
   AisHits,
   AisInstantSearch,
@@ -12,8 +13,7 @@ import {
   AisPagination,
   createWidgetMixin,
 } from '../instantsearch';
-import { connectMenu, connectPagination } from 'instantsearch.js/es/connectors';
-import { runTestSuites } from '@instantsearch/tests/common';
+import { renderCompat } from '../util/vue-compat';
 jest.unmock('instantsearch.js/es');
 
 const testSetups = {

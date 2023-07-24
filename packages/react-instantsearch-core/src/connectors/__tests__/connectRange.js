@@ -1,4 +1,5 @@
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
+
 import connect from '../connectRange';
 
 jest.mock('../../core/createConnector', () => (x) => x);

@@ -1,8 +1,10 @@
-import type { SearchParameters } from 'algoliasearch-helper';
 import PropTypes from 'prop-types';
+
 import createConnector from '../core/createConnector';
 // @ts-ignore
 import { getResults } from '../core/indexUtils';
+
+import type { SearchParameters } from 'algoliasearch-helper';
 
 const MAX_WILDCARD_FACETS = 20;
 

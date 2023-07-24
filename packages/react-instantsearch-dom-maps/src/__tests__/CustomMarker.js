@@ -2,20 +2,21 @@
  * @jest-environment jsdom
  */
 
-import React from 'react';
-import ReactDOM from 'react-dom';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount, shallow } from 'enzyme';
 import { createSerializer } from 'enzyme-to-json';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import React from 'react';
+import ReactDOM from 'react-dom';
+
 import {
   createFakeGoogleReference,
   createFakeMapInstance,
   createFakeHTMLMarkerInstance,
 } from '../../test/mockGoogleMaps';
-import createHTMLMarker from '../elements/createHTMLMarker';
-import * as utils from '../utils';
-import GoogleMapsContext from '../GoogleMapsContext';
 import Connected, { CustomMarker } from '../CustomMarker';
+import createHTMLMarker from '../elements/createHTMLMarker';
+import GoogleMapsContext from '../GoogleMapsContext';
+import * as utils from '../utils';
 
 expect.addSnapshotSerializer(createSerializer());
 Enzyme.configure({ adapter: new Adapter() });

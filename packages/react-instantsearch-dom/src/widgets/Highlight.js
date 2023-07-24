@@ -1,4 +1,5 @@
 import { connectHighlight } from 'react-instantsearch-core';
+
 import Highlight from '../components/Highlight';
 
 /**

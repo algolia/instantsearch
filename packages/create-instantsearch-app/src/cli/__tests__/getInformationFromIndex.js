@@ -1,4 +1,5 @@
 const algoliasearch = require('algoliasearch');
+
 const getInformationFromIndex = require('../getInformationFromIndex');
 
 jest.mock('algoliasearch', () => {

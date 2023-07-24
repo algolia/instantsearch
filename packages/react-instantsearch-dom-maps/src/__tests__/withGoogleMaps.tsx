@@ -2,13 +2,15 @@
  * @jest-environment jsdom
  */
 
-import React from 'react';
-import Enzyme, { mount } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import type { WithGoogleMapsProps } from '../withGoogleMaps';
-import withGoogleMaps from '../withGoogleMaps';
-import type { GoogleMapsContextState } from '../GoogleMapsContext';
+import Enzyme, { mount } from 'enzyme';
+import React from 'react';
+
 import GoogleMapsContext from '../GoogleMapsContext';
+import withGoogleMaps from '../withGoogleMaps';
+
+import type { GoogleMapsContextState } from '../GoogleMapsContext';
+import type { WithGoogleMapsProps } from '../withGoogleMaps';
 
 Enzyme.configure({ adapter: new Adapter() });
 

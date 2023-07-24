@@ -2,10 +2,11 @@
  * @jest-environment jsdom
  */
 
-import React from 'react';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { shallow, mount } from 'enzyme';
 import { createSerializer } from 'enzyme-to-json';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import React from 'react';
+
 import Panel, { PanelConsumer } from '../Panel';
 
 expect.addSnapshotSerializer(createSerializer());

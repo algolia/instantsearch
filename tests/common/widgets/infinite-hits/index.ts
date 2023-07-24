@@ -1,8 +1,10 @@
-import type { InfiniteHitsWidget } from 'instantsearch.js/es/widgets/infinite-hits/infinite-hits';
-import type { TestOptions, TestSetup } from '../../common';
 import { fakeAct } from '../../common';
-import { createOptimisticUiTests } from './optimistic-ui';
+
 import { createInsightsTests } from './insights';
+import { createOptimisticUiTests } from './optimistic-ui';
+
+import type { TestOptions, TestSetup } from '../../common';
+import type { InfiniteHitsWidget } from 'instantsearch.js/es/widgets/infinite-hits/infinite-hits';
 
 type WidgetParams = Parameters<InfiniteHitsWidget>[0];
 export type InfiniteHitsWidgetSetup = TestSetup<{

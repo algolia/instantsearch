@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { instantSearchContext } from 'react-instantsearch-core';
+
 import { createConcurrentSafePromise } from '../lib/createConcurrentSafePromise';
 import { debounce } from '../lib/debounce';
 

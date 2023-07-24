@@ -49,9 +49,10 @@
 
 <script>
 import { connectMenu } from 'instantsearch.js/es/connectors';
+
 import { createPanelConsumerMixin } from '../mixins/panel';
-import { createWidgetMixin } from '../mixins/widget';
 import { createSuitMixin } from '../mixins/suit';
+import { createWidgetMixin } from '../mixins/widget';
 
 export default {
   name: 'AisMenu',

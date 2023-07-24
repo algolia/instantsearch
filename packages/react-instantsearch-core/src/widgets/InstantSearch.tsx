@@ -1,18 +1,20 @@
+import PropTypes from 'prop-types';
 import React, { Component, Children } from 'react';
 import isEqual from 'react-fast-compare';
-import PropTypes from 'prop-types';
-import createInstantSearchManager from '../core/createInstantSearchManager';
-import type { InstantSearchContext, IndexContext } from '../core/context';
+
 import { InstantSearchProvider } from '../core/context';
+import createInstantSearchManager from '../core/createInstantSearchManager';
+import { isMetadataEnabled, injectMetadata } from '../core/metadata';
+
+import type { InstantSearchContext, IndexContext } from '../core/context';
+import type { ConnectorDescription } from '../core/createConnector';
 import type { Store } from '../core/createStore';
+import type { WidgetsManager } from '../core/createWidgetsManager';
+import type { MultiResponse } from '../types/algoliasearch';
 import type {
   PlainSearchParameters,
   SearchParameters,
 } from 'algoliasearch-helper';
-import type { MultiResponse } from '../types/algoliasearch';
-import type { ConnectorDescription } from '../core/createConnector';
-import type { WidgetsManager } from '../core/createWidgetsManager';
-import { isMetadataEnabled, injectMetadata } from '../core/metadata';
 
 type ResultsState = {
   metadata: never[];

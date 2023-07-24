@@ -2,15 +2,17 @@
  * @jest-environment jsdom
  */
 
+import { render } from '@testing-library/react';
 import algoliasearch from 'algoliasearch/lite';
 import React from 'react';
-import { render } from '@testing-library/react';
+
 import { connectSearchBox } from '../..';
-import type { SearchClient } from '../../widgets/InstantSearch';
 import { InstantSearchProvider } from '../context';
 import createStore from '../createStore';
 import createWidgetsManager from '../createWidgetsManager';
 import { isMetadataEnabled, getMetadataPayload } from '../metadata';
+
+import type { SearchClient } from '../../widgets/InstantSearch';
 
 const { window: originalWindow } = global;
 

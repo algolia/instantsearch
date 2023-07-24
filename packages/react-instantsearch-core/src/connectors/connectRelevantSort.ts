@@ -1,4 +1,3 @@
-import type { ConnectedProps } from '../core/createConnector';
 import createConnector from '../core/createConnector';
 import {
   refineValue,
@@ -6,6 +5,8 @@ import {
   getResults,
   // @ts-ignore
 } from '../core/indexUtils';
+
+import type { ConnectedProps } from '../core/createConnector';
 
 function getId() {
   return 'relevancyStrictness';

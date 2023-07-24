@@ -1,14 +1,6 @@
+import algoliasearch from 'algoliasearch/lite';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import RatingMenu from 'react-native-star-rating';
-import {
-  StyleSheet,
-  Text,
-  FlatList,
-  View,
-  TouchableHighlight,
-} from 'react-native';
-import algoliasearch from 'algoliasearch/lite';
 import {
   InstantSearch,
   connectRefinementList,
@@ -16,6 +8,15 @@ import {
   connectRange,
   connectMenu,
 } from 'react-instantsearch-native';
+import {
+  StyleSheet,
+  Text,
+  FlatList,
+  View,
+  TouchableHighlight,
+} from 'react-native';
+import RatingMenu from 'react-native-star-rating';
+
 import Stats from './components/Stats';
 
 const searchClient = algoliasearch(

@@ -1,4 +1,5 @@
 import { panel, toggleRefinement } from 'instantsearch.js/es/widgets';
+
 import { collapseButtonText } from '../templates/panel';
 
 const freeShippingToggleRefinement = panel({

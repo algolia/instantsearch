@@ -1,5 +1,17 @@
+import algoliasearch from 'algoliasearch/lite';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import {
+  InstantSearch,
+  connectSearchBox,
+  connectInfiniteHits,
+  connectRefinementList,
+  connectStats,
+  connectMenu,
+  connectSortBy,
+  connectRange,
+  connectCurrentRefinements,
+} from 'react-instantsearch-native';
 import {
   StyleSheet,
   Text,
@@ -12,23 +24,12 @@ import {
   Platform,
   Dimensions,
 } from 'react-native';
-import algoliasearch from 'algoliasearch/lite';
-import {
-  InstantSearch,
-  connectSearchBox,
-  connectInfiniteHits,
-  connectRefinementList,
-  connectStats,
-  connectMenu,
-  connectSortBy,
-  connectRange,
-  connectCurrentRefinements,
-} from 'react-instantsearch-native';
-import RatingMenu from 'react-native-star-rating';
 import ModalDropdown from 'react-native-modal-dropdown';
+import { Actions } from 'react-native-router-flux';
+import RatingMenu from 'react-native-star-rating';
 import IosIcon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import { Actions } from 'react-native-router-flux';
+
 import Highlight from './components/Highlight';
 import Spinner from './components/Spinner';
 

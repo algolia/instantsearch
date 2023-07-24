@@ -1,7 +1,6 @@
+import { createAlgoliaSearchClient } from '@instantsearch/mocks';
 import React from 'react';
 import { InstantSearch } from 'react-instantsearch-hooks';
-
-import { createAlgoliaSearchClient } from '@instantsearch/mocks';
 
 import type { InstantSearchProps } from 'react-instantsearch-hooks';
 

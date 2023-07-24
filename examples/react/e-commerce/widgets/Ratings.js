@@ -1,6 +1,6 @@
+import cx from 'classnames';
 import React from 'react';
 import { connectRange } from 'react-instantsearch-dom';
-import cx from 'classnames';
 
 const Ratings = ({ currentRefinement, refine, createURL, count }) => {
   const ratings = new Array(4).fill(null).map((_, ratingIndex) => {

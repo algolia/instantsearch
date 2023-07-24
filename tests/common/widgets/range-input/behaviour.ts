@@ -1,12 +1,13 @@
-import { wait } from '@instantsearch/testutils';
 import {
   createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils';
+import userEvent from '@testing-library/user-event';
+
 import type { RangeInputWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
-import userEvent from '@testing-library/user-event';
 
 export function createBehaviourTests(
   setup: RangeInputWidgetSetup,

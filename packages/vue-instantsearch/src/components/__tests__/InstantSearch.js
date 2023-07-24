@@ -3,12 +3,13 @@
  */
 
 import { createAlgoliaSearchClient } from '@instantsearch/mocks';
-import { isVue3, version as vueVersion } from '../../util/vue-compat';
-import { mount, nextTick } from '../../../test/utils';
 import instantsearch from 'instantsearch.js/es';
-import InstantSearch from '../InstantSearch';
+
 import { version } from '../../../package.json';
+import { mount, nextTick } from '../../../test/utils';
+import { isVue3, version as vueVersion } from '../../util/vue-compat';
 import { warn } from '../../util/warn';
+import InstantSearch from '../InstantSearch';
 import '../../../test/utils/sortedHtmlSerializer';
 
 jest.mock('../../util/warn');

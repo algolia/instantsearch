@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+
 import { isSpecialClick } from '../core/utils';
 
 export default class Link extends Component {

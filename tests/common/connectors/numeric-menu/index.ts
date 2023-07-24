@@ -1,7 +1,9 @@
-import type { NumericMenuWidget } from 'instantsearch.js/es/widgets/numeric-menu/numeric-menu';
-import type { TestOptions, TestSetup } from '../../common';
 import { fakeAct } from '../../common';
+
 import { createRoutingTests } from './routing';
+
+import type { TestOptions, TestSetup } from '../../common';
+import type { NumericMenuWidget } from 'instantsearch.js/es/widgets/numeric-menu/numeric-menu';
 
 type WidgetParams = Parameters<NumericMenuWidget>[0];
 export type NumericMenuConnectorSetup = TestSetup<{

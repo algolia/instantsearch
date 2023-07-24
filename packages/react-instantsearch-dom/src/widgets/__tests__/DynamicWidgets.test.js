@@ -8,6 +8,7 @@ import {
   DynamicWidgets as CoreDynamicWidgets,
   InstantSearch,
 } from 'react-instantsearch-core';
+
 import DynamicWidgets from '../DynamicWidgets';
 
 jest.mock('react-instantsearch-core', () => {

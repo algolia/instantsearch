@@ -1,5 +1,5 @@
-const postProcessAnswers = require('../postProcessAnswers');
 const utils = require('../../utils');
+const postProcessAnswers = require('../postProcessAnswers');
 
 jest.mock('../../utils', () => ({
   ...jest.requireActual('../../utils'),

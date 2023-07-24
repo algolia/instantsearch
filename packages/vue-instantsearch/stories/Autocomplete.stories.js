@@ -1,7 +1,8 @@
-import { previewWrapper } from './utils';
 import { storiesOf } from '@storybook/vue';
 import Vue from 'vue';
 import VueAutosuggest from 'vue-autosuggest';
+
+import { previewWrapper } from './utils';
 Vue.use(VueAutosuggest);
 
 storiesOf('ais-autocomplete', module)

@@ -1,4 +1,5 @@
 import { createContext } from 'react';
+
 import type { Store } from '../core/createStore';
 import type InstantSearch from '../widgets/InstantSearch';
 

@@ -1,6 +1,8 @@
 import algoliasearch from 'algoliasearch';
-import type { AlgoliaSearchHelper } from '..';
+
 import algoliasearchHelper, { SearchParameters, SearchResults } from '..';
+
+import type { AlgoliaSearchHelper } from '..';
 
 const helper: AlgoliaSearchHelper = algoliasearchHelper(
   algoliasearch('', ''),

@@ -1,6 +1,6 @@
-import React from 'react';
+import algoliasearch from 'algoliasearch/lite';
 import qs from 'qs';
-import { useLocation, useHistory } from 'react-router-dom';
+import React from 'react';
 import {
   InstantSearch,
   HierarchicalMenu,
@@ -13,7 +13,7 @@ import {
   SearchBox,
   ClearRefinements,
 } from 'react-instantsearch-dom';
-import algoliasearch from 'algoliasearch/lite';
+import { useLocation, useHistory } from 'react-router-dom';
 
 const searchClient = algoliasearch(
   'latency',

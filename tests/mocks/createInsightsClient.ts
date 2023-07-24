@@ -1,3 +1,4 @@
+import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import {
   AlgoliaAnalytics,
   processQueue,
@@ -5,7 +6,6 @@ import {
 } from 'search-insights';
 
 import type { InsightsClient } from 'instantsearch.js';
-import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 
 /**
  * Tests that rely on this mock interface have side effects caused by

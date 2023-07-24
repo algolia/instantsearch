@@ -114,6 +114,32 @@ const config = {
         message: 'defaultProps are not allowed, use function defaults instead.',
       },
     ],
+    'import/order': [
+      'error',
+      {
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
+        'newlines-between': 'always',
+        groups: [
+          'builtin',
+          'external',
+          'parent',
+          'sibling',
+          'index',
+          'type',
+        ],
+        pathGroups: [
+          {
+            pattern: '@/**/*',
+            group: 'parent',
+            position: 'before',
+          },
+        ],
+        pathGroupsExcludedImportTypes: ['builtin'],
+      },
+    ],
   },
   overrides: [
     {
@@ -187,41 +213,6 @@ const config = {
         'import/parsers': {
           '@typescript-eslint/parser': ['.ts', '.tsx'],
         },
-      },
-    },
-    {
-      files: [
-        'packages/instantsearch.js/**/*',
-        'packages/react-instantsearch-hooks/**/*',
-        'packages/react-instantsearch-hooks-*/**/*',
-      ],
-      rules: {
-        'import/order': [
-          'error',
-          {
-            alphabetize: {
-              order: 'asc',
-              caseInsensitive: true,
-            },
-            'newlines-between': 'always',
-            groups: [
-              'builtin',
-              'external',
-              'parent',
-              'sibling',
-              'index',
-              'type',
-            ],
-            pathGroups: [
-              {
-                pattern: '@/**/*',
-                group: 'parent',
-                position: 'before',
-              },
-            ],
-            pathGroupsExcludedImportTypes: ['builtin'],
-          },
-        ],
       },
     },
     {

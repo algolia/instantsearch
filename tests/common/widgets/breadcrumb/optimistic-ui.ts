@@ -1,13 +1,14 @@
-import { wait } from '@instantsearch/testutils';
 import {
   createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils';
+import { screen } from '@testing-library/dom';
+import userEvent from '@testing-library/user-event';
+
 import type { BreadcrumbWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
-import userEvent from '@testing-library/user-event';
-import { screen } from '@testing-library/dom';
 
 export function createOptimisticUiTests(
   setup: BreadcrumbWidgetSetup,

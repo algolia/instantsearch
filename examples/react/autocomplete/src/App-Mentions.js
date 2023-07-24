@@ -1,7 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Mention from 'antd/lib/mention';
 import algoliasearch from 'algoliasearch/lite';
+import Mention from 'antd/lib/mention';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { InstantSearch, connectAutoComplete } from 'react-instantsearch-dom';
 import 'antd/lib/mention/style/css';
 

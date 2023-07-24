@@ -1,15 +1,6 @@
-import PropTypes from 'prop-types';
-import { Actions } from 'react-native-router-flux';
-import React, { Component } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  TouchableHighlight,
-  Keyboard,
-} from 'react-native';
 import algoliasearch from 'algoliasearch/lite';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import {
   InstantSearch,
   connectCurrentRefinements,
@@ -18,6 +9,15 @@ import {
   connectRefinementList,
   connectSearchBox,
 } from 'react-instantsearch-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  TouchableHighlight,
+  Keyboard,
+} from 'react-native';
+import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const searchClient = algoliasearch(

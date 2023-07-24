@@ -2,9 +2,9 @@
  * @jest-environment jsdom
  */
 
-import SearchBox from '../SearchBox.vue';
 import { mount, htmlCompat } from '../../../test/utils';
 import { __setState } from '../../mixins/widget';
+import SearchBox from '../SearchBox.vue';
 jest.mock('../../mixins/widget');
 import '../../../test/utils/sortedHtmlSerializer';
 

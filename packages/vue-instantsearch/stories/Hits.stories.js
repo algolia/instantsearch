@@ -1,6 +1,7 @@
-import { storiesOf } from '@storybook/vue';
-import { previewWrapper } from './utils';
 import { action } from '@storybook/addon-actions';
+import { storiesOf } from '@storybook/vue';
+
+import { previewWrapper } from './utils';
 
 storiesOf('ais-hits', module)
   .addDecorator(previewWrapper())

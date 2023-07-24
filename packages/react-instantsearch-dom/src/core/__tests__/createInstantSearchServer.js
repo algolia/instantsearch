@@ -1,7 +1,7 @@
-import React from 'react';
-import Enzyme from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { SearchParameters } from 'algoliasearch-helper';
+import Enzyme from 'enzyme';
+import React from 'react';
 import {
   Index,
   InstantSearch,
@@ -10,8 +10,9 @@ import {
   version,
   connectRefinementList,
 } from 'react-instantsearch-core';
-import { findResultsState } from '../createInstantSearchServer';
 import { SearchBox } from 'react-instantsearch-dom';
+
+import { findResultsState } from '../createInstantSearchServer';
 
 Enzyme.configure({ adapter: new Adapter() });
 

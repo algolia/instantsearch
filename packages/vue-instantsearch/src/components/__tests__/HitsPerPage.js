@@ -2,12 +2,13 @@
  * @jest-environment jsdom
  */
 
-import { mount } from '../../../test/utils';
-import { __setState } from '../../mixins/widget';
-import HitsPerPage from '../HitsPerPage.vue';
-import '../../../test/utils/sortedHtmlSerializer';
 import { getByRole } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
+
+import { mount } from '../../../test/utils';
+import { __setState } from '../../mixins/widget';
+import '../../../test/utils/sortedHtmlSerializer';
+import HitsPerPage from '../HitsPerPage.vue';
 
 jest.mock('../../mixins/widget');
 jest.mock('../../mixins/panel');

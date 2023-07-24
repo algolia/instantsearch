@@ -1,6 +1,6 @@
+import algoliasearch from 'algoliasearch/lite';
 import qs from 'qs';
 import React, { Component, Fragment } from 'react';
-import algoliasearch from 'algoliasearch/lite';
 import { InstantSearch, SearchBox, Configure } from 'react-instantsearch-dom';
 import {
   GoogleMapsLoader,

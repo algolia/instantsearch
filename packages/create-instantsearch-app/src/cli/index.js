@@ -1,12 +1,14 @@
 #!/usr/bin/env node
+const os = require('os');
 const path = require('path');
 const process = require('process');
-const os = require('os');
+
+const chalk = require('chalk');
 const program = require('commander');
 const inquirer = require('inquirer');
-const chalk = require('chalk');
 const semver = require('semver');
 
+const { version } = require('../../package.json');
 const createInstantSearchApp = require('../api');
 const {
   checkAppPath,
@@ -17,13 +19,13 @@ const {
   getTemplatePath,
   splitArray,
 } = require('../utils');
-const getAttributesFromIndex = require('./getAttributesFromIndex');
-const getFacetsFromIndex = require('./getFacetsFromIndex');
+
 const getAnswersDefaultValues = require('./getAnswersDefaultValues');
-const isQuestionAsked = require('./isQuestionAsked');
+const getAttributesFromIndex = require('./getAttributesFromIndex');
 const getConfiguration = require('./getConfiguration');
+const getFacetsFromIndex = require('./getFacetsFromIndex');
+const isQuestionAsked = require('./isQuestionAsked');
 const postProcessAnswers = require('./postProcessAnswers');
-const { version } = require('../../package.json');
 
 let appPathFromArgument;
 

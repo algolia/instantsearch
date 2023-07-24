@@ -1,9 +1,11 @@
 /* eslint-disable jest/no-conditional-expect */
+const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
-const walkSync = require('walk-sync');
+
 const { toMatchImageSnapshot } = require('jest-image-snapshot');
+const walkSync = require('walk-sync');
+
 const { getEarliestLibraryVersion } = require('../src/utils');
 
 expect.extend({ toMatchImageSnapshot });

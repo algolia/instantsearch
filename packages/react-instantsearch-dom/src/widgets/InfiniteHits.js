@@ -1,4 +1,5 @@
 import { connectInfiniteHits } from 'react-instantsearch-core';
+
 import InfiniteHits from '../components/InfiniteHits';
 
 /**

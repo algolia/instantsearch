@@ -1,7 +1,9 @@
-import type { RatingMenuWidget } from 'instantsearch.js/es/widgets/rating-menu/rating-menu';
-import type { TestOptions, TestSetup } from '../../common';
 import { fakeAct } from '../../common';
+
 import { createRoutingTests } from './routing';
+
+import type { TestOptions, TestSetup } from '../../common';
+import type { RatingMenuWidget } from 'instantsearch.js/es/widgets/rating-menu/rating-menu';
 
 type WidgetParams = Parameters<RatingMenuWidget>[0];
 export type RatingMenuConnectorSetup = TestSetup<{

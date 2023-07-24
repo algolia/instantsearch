@@ -1,4 +1,5 @@
 import { SearchResults, SearchParameters } from 'algoliasearch-helper';
+
 import connector from '../connectDynamicWidgets';
 
 jest.mock('../../core/createConnector', () => (x) => x);

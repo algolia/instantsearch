@@ -1,7 +1,8 @@
 import React from 'react';
 import { connectBreadcrumb } from 'react-instantsearch-core';
-import PanelCallbackHandler from '../components/PanelCallbackHandler';
+
 import Breadcrumb from '../components/Breadcrumb';
+import PanelCallbackHandler from '../components/PanelCallbackHandler';
 
 /**
  * A breadcrumb is a secondary navigation scheme that allows the user to see where the current page

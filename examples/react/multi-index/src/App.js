@@ -1,6 +1,6 @@
+import algoliasearch from 'algoliasearch/lite';
 import React from 'react';
 import { InstantSearch, Hits, SearchBox, Index } from 'react-instantsearch-dom';
-import algoliasearch from 'algoliasearch/lite';
 
 const searchClient = algoliasearch(
   'latency',

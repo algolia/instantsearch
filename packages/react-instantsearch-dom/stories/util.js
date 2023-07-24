@@ -1,7 +1,7 @@
-import React, { useState, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { linkTo } from '@storybook/addon-links';
 import algoliasearch from 'algoliasearch/lite';
+import PropTypes from 'prop-types';
+import React, { useState, useMemo } from 'react';
 import {
   InstantSearch,
   ClearRefinements,

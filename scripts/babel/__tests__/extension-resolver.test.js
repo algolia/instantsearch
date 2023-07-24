@@ -1,7 +1,8 @@
+import fs from 'fs';
+
 import { transformAsync } from '@babel/core';
 
 import plugin from '../extension-resolver';
-import fs from 'fs';
 jest.mock('fs');
 
 describe('babel-plugin-extension-resolver', () => {

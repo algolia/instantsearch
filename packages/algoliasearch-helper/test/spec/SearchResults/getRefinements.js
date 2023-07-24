@@ -1,7 +1,7 @@
 'use strict';
 
-var SearchResults = require('../../../src/SearchResults');
 var SearchParameters = require('../../../src/SearchParameters');
+var SearchResults = require('../../../src/SearchResults');
 
 test('getRefinements(facetName) returns an empty array when there is no refinements set', function () {
   var data = require('./getRefinements/noFilters.json');

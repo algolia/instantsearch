@@ -1,7 +1,8 @@
 import React from 'react';
 import { connectCurrentRefinements } from 'react-instantsearch-core';
-import PanelCallbackHandler from '../components/PanelCallbackHandler';
+
 import ClearRefinements from '../components/ClearRefinements';
+import PanelCallbackHandler from '../components/PanelCallbackHandler';
 
 /**
  * The ClearRefinements widget displays a button that lets the user clean every refinement applied

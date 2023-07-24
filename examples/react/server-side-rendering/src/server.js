@@ -1,8 +1,10 @@
 import { join } from 'path';
+
 import express from 'express';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { findResultsState } from 'react-instantsearch-dom/server';
+
 import { createApp } from './createApp';
 import template from './template';
 

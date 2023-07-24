@@ -1,7 +1,9 @@
-import type { MenuWidget } from 'instantsearch.js/es/widgets/menu/menu';
-import type { TestOptions, TestSetup } from '../../common';
 import { fakeAct } from '../../common';
+
 import { createRoutingTests } from './routing';
+
+import type { TestOptions, TestSetup } from '../../common';
+import type { MenuWidget } from 'instantsearch.js/es/widgets/menu/menu';
 
 type WidgetParams = Parameters<MenuWidget>[0];
 export type MenuConnectorSetup = TestSetup<{

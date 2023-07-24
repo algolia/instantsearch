@@ -2,12 +2,13 @@
  * @jest-environment jsdom
  */
 
+import { createSearchClient } from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils';
+import { render, fireEvent } from '@testing-library/react';
 import React from 'react';
 import { InstantSearch, SearchBox } from 'react-instantsearch-dom';
-import { render, fireEvent } from '@testing-library/react';
+
 import Answers from '../Answers';
-import { wait } from '@instantsearch/testutils';
-import { createSearchClient } from '@instantsearch/mocks';
 
 const createAnswersSearchClient = () =>
   createSearchClient({

@@ -1,10 +1,9 @@
 'use strict';
 
+var algoliasearchHelper = require('../../');
 var utils = require('../integration-utils');
 var setup = utils.setupSimple;
 var createIndexName = utils.createIndexName;
-
-var algoliasearchHelper = require('../../');
 
 var indexName = createIndexName('helper_derive');
 
