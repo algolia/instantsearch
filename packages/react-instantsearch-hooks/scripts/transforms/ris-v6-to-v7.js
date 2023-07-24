@@ -325,6 +325,33 @@ function MenuSelect(props) {
     });
   };
 
+  const handleSearchboxIcons = () => {
+    const propsDict = {
+      submit: 'submitIconComponent',
+      reset: 'resetIconComponent',
+      loadingIndicator: 'loadingIconComponent',
+    };
+
+    jsxElements
+      .filter((path) => elementName(path) === 'SearchBox')
+      .find(j.JSXAttribute)
+      .filter((attribute) =>
+        Object.keys(propsDict).includes(propName(attribute))
+      )
+      .forEach((attribute) => {
+        const newProp = propsDict[propName(attribute)];
+
+        j(attribute).replaceWith(
+          j.jsxAttribute(
+            j.jsxIdentifier(newProp),
+            j.jsxExpressionContainer(
+              j.arrowFunctionExpression([], attribute.value.value.expression)
+            )
+          )
+        );
+      });
+  };
+
   const commentProp = ({ element, prop, comment }) =>
     jsxElements
       .filter((p) => elementName(p) === element)
@@ -350,6 +377,7 @@ function MenuSelect(props) {
   handleMenuSelect();
   handleCreateConnector();
   handleConnectors();
+  handleSearchboxIcons();
 
   commentProp({
     element: 'InstantSearch',
