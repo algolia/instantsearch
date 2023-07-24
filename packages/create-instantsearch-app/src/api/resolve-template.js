@@ -1,5 +1,7 @@
 const path = require('path');
+
 const semver = require('semver');
+
 const { getAppTemplateConfig } = require('../utils');
 
 function getTemplateNameByLibraryVersion({

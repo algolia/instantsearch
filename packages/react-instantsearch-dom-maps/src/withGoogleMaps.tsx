@@ -1,4 +1,5 @@
 import React from 'react';
+
 import GoogleMapsContext from './GoogleMapsContext';
 
 type Subtract<TProps, TSubstractedProps> = Omit<

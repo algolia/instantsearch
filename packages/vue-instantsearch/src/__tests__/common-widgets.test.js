@@ -1,10 +1,10 @@
 /**
  * @jest-environment jsdom
  */
+import { runTestSuites } from '@instantsearch/tests/common';
 import * as testSuites from '@instantsearch/tests/widgets';
 
 import { nextTick, mountApp } from '../../test/utils';
-import { renderCompat } from '../util/vue-compat';
 import {
   AisInstantSearch,
   AisRefinementList,
@@ -19,7 +19,7 @@ import {
   AisIndex,
   AisRangeInput,
 } from '../instantsearch';
-import { runTestSuites } from '@instantsearch/tests/common';
+import { renderCompat } from '../util/vue-compat';
 
 jest.unmock('instantsearch.js/es');
 

@@ -3,9 +3,10 @@
  */
 
 import React from 'react';
-import MultiIndex from '../App-Multi-Index';
-import Mentions from '../App-Mentions';
 import renderer from 'react-test-renderer';
+
+import Mentions from '../App-Mentions';
+import MultiIndex from '../App-Multi-Index';
 
 jest.mock('antd/lib/mention', () => {
   return ({ placeholder, suggestions }) =>

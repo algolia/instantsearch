@@ -1,4 +1,5 @@
 import { connectPoweredBy } from 'react-instantsearch-core';
+
 import PoweredBy from '../components/PoweredBy';
 
 /**

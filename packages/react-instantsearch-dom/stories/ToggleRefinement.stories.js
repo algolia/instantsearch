@@ -1,6 +1,7 @@
-import React from 'react';
 import { storiesOf } from '@storybook/react';
+import React from 'react';
 import { Panel, ToggleRefinement } from 'react-instantsearch-dom';
+
 import { WrapWithHits } from './util';
 
 const stories = storiesOf('ToggleRefinement', module);

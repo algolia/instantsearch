@@ -1,7 +1,8 @@
-import React from 'react';
-import algoliasearch from 'algoliasearch/lite';
 import { storiesOf } from '@storybook/react';
+import algoliasearch from 'algoliasearch/lite';
+import React from 'react';
 import { InstantSearch, SearchBox, Hits } from 'react-instantsearch-dom';
+
 import { Content } from './util';
 
 const stories = storiesOf('<InstantSearch>', module);

@@ -3,8 +3,9 @@
  */
 
 import React from 'react';
-import App from '../App';
 import renderer from 'react-test-renderer';
+
+import App from '../App';
 
 describe('Multi index recipe', () => {
   it('App renders without crashing', () => {

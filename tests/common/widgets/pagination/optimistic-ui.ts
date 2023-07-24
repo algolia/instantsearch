@@ -1,10 +1,11 @@
-import { wait } from '@instantsearch/testutils';
-import { screen } from '@testing-library/dom';
 import {
   createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils';
+import { screen } from '@testing-library/dom';
+
 import type { PaginationWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 

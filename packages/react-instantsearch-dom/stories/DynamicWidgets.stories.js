@@ -1,5 +1,5 @@
-import React from 'react';
 import { storiesOf } from '@storybook/react';
+import React from 'react';
 import {
   DynamicWidgets,
   HierarchicalMenu,
@@ -7,6 +7,7 @@ import {
   Panel,
   RefinementList,
 } from 'react-instantsearch-dom';
+
 import { WrapWithHits } from './util';
 
 const stories = storiesOf('DynamicWidgets', module);

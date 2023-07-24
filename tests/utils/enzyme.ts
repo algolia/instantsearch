@@ -1,5 +1,6 @@
-import type { ShallowWrapper, ReactWrapper } from 'enzyme';
 import { mount, shallow } from 'enzyme';
+
+import type { ShallowWrapper, ReactWrapper } from 'enzyme';
 import type { VNode } from 'preact';
 
 /**

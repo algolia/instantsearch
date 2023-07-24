@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
 import qs from 'qs';
+import React, { Component } from 'react';
 
 const updateAfter = 700;
 const searchStateToURL = (searchState) =>

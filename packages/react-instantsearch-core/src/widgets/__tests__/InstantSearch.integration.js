@@ -2,13 +2,14 @@
  * @jest-environment jsdom
  */
 
+import { createAlgoliaSearchClient } from '@instantsearch/mocks';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import algoliasearch from 'algoliasearch';
 import Enzyme, { mount } from 'enzyme';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import React from 'react';
+
 import { connectHits, connectRefinementList, Index } from '../../index';
 import InstantSearch from '../InstantSearch';
-import { createAlgoliaSearchClient } from '@instantsearch/mocks';
 
 Enzyme.configure({ adapter: new Adapter() });
 

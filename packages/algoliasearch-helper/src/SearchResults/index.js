@@ -1,13 +1,13 @@
 'use strict';
 
-var merge = require('../functions/merge');
-var defaultsPure = require('../functions/defaultsPure');
-var orderBy = require('../functions/orderBy');
 var compact = require('../functions/compact');
+var defaultsPure = require('../functions/defaultsPure');
+var fv = require('../functions/escapeFacetValue');
 var find = require('../functions/find');
 var findIndex = require('../functions/findIndex');
 var formatSort = require('../functions/formatSort');
-var fv = require('../functions/escapeFacetValue');
+var merge = require('../functions/merge');
+var orderBy = require('../functions/orderBy');
 var escapeFacetValue = fv.escapeFacetValue;
 var unescapeFacetValue = fv.unescapeFacetValue;
 

@@ -1,5 +1,6 @@
-import type { ConnectorDescription } from '../../core/createConnector';
 import connectReal from '../connectStats';
+
+import type { ConnectorDescription } from '../../core/createConnector';
 
 jest.mock(
   '../../core/createConnector',

@@ -1,6 +1,8 @@
-import type { PlainSearchParameters } from 'algoliasearch-helper';
 import { SearchParameters } from 'algoliasearch-helper';
+
 import connectConfigureRelatedItems from '../connectConfigureRelatedItems';
+
+import type { PlainSearchParameters } from 'algoliasearch-helper';
 
 jest.mock('../../core/createConnector', () => (x: any) => x);
 const connect = connectConfigureRelatedItems as any;

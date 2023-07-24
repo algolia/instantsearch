@@ -1,6 +1,7 @@
+import { connectQueryRules } from 'instantsearch.js/es/connectors';
+
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
-import { connectQueryRules } from 'instantsearch.js/es/connectors';
 
 export default {
   name: 'AisQueryRuleContext',

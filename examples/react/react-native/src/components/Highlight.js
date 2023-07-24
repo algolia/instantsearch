@@ -1,6 +1,6 @@
 import React from 'react';
-import { Text } from 'react-native';
 import { connectHighlight } from 'react-instantsearch-native';
+import { Text } from 'react-native';
 
 export default connectHighlight(
   ({ highlight, attribute, hit, highlightProperty }) => {

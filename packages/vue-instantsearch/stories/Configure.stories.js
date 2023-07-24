@@ -1,6 +1,7 @@
-import { storiesOf } from '@storybook/vue';
-import { previewWrapper } from './utils';
 import { withKnobs, object } from '@storybook/addon-knobs/vue';
+import { storiesOf } from '@storybook/vue';
+
+import { previewWrapper } from './utils';
 
 storiesOf('ais-configure', module)
   .addDecorator(

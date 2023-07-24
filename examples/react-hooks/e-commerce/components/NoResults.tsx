@@ -1,5 +1,6 @@
 import React from 'react';
 import { useInstantSearch } from 'react-instantsearch-hooks-web';
+
 import { ClearFilters } from './ClearFilters';
 
 export function NoResults() {

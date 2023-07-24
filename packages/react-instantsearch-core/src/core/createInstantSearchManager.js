@@ -1,9 +1,10 @@
 import algoliasearchHelper from 'algoliasearch-helper';
-import createWidgetsManager from './createWidgetsManager';
+import { version as ReactVersion } from 'react';
+
 import createStore from './createStore';
+import createWidgetsManager from './createWidgetsManager';
 import { HIGHLIGHT_TAGS } from './highlight';
 import { hasMultipleIndices } from './indexUtils';
-import { version as ReactVersion } from 'react';
 import version from './version';
 
 function addAlgoliaAgents(searchClient) {

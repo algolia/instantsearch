@@ -1,4 +1,5 @@
 import algoliasearch from 'algoliasearch';
+
 import type { InstantSearchWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 

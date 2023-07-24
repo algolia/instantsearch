@@ -1,10 +1,11 @@
-import React from 'react';
 import { storiesOf } from '@storybook/react';
+import React from 'react';
 import {
   ClearRefinements,
   RefinementList,
   Panel,
 } from 'react-instantsearch-dom';
+
 import { WrapWithHits } from './util';
 
 const stories = storiesOf('ClearRefinements', module);

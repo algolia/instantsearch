@@ -1,10 +1,12 @@
-import type {
-  PlainSearchParameters,
-  SearchParameters,
-} from 'algoliasearch-helper';
 import algoliasearchHelper from 'algoliasearch-helper';
-import type { ConnectedProps } from '../core/createConnector';
+
 import createConnector from '../core/createConnector';
+import {
+  refineValue,
+  getIndexId,
+  hasMultipleIndices,
+  // @ts-ignore
+} from '../core/indexUtils';
 import {
   omit,
   getObjectType,
@@ -12,12 +14,12 @@ import {
   removeEmptyKey,
   removeEmptyArraysFromObject,
 } from '../core/utils';
-import {
-  refineValue,
-  getIndexId,
-  hasMultipleIndices,
-  // @ts-ignore
-} from '../core/indexUtils';
+
+import type { ConnectedProps } from '../core/createConnector';
+import type {
+  PlainSearchParameters,
+  SearchParameters,
+} from 'algoliasearch-helper';
 
 type Hit = any;
 

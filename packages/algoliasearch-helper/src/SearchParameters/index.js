@@ -1,12 +1,12 @@
 'use strict';
 
-var merge = require('../functions/merge');
 var defaultsPure = require('../functions/defaultsPure');
-var intersection = require('../functions/intersection');
 var find = require('../functions/find');
-var valToNumber = require('../functions/valToNumber');
-var omit = require('../functions/omit');
+var intersection = require('../functions/intersection');
+var merge = require('../functions/merge');
 var objectHasKeys = require('../functions/objectHasKeys');
+var omit = require('../functions/omit');
+var valToNumber = require('../functions/valToNumber');
 var isValidUserToken = require('../utils/isValidUserToken');
 
 var RefinementList = require('./RefinementList');

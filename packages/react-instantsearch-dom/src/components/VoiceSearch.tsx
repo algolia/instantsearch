@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { translatable } from 'react-instantsearch-core';
+
 import { createClassNames } from '../core/utils';
+import createVoiceSearchHelper from '../lib/voiceSearchHelper';
+
 import type {
   VoiceSearchHelper,
   VoiceListeningState,
   Status,
   SpeechRecognitionErrorCode,
 } from '../lib/voiceSearchHelper';
-import createVoiceSearchHelper from '../lib/voiceSearchHelper';
 const cx = createClassNames('VoiceSearch');
 
 type ButtonSvgProps = {

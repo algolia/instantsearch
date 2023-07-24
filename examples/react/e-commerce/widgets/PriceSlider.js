@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { connectRange } from 'react-instantsearch-dom';
 import { Slider, Rail, Handles, Tracks, Ticks } from 'react-compound-slider';
+import { connectRange } from 'react-instantsearch-dom';
+
 import { formatNumber } from '../utils';
 import './PriceSlider.css';
 

@@ -1,16 +1,13 @@
 'use strict';
 var path = require('path');
 
-var metalsmith = require('metalsmith');
-var inPlace = require('metalsmith-in-place');
-var markdown = require('metalsmith-markdown');
-var jsdoc = require('./plugins/jsdoc-data');
-var registerHandleBarHelpers = require('./plugins/handlebars-helpers');
-var headings = require('./plugins/headings');
-var layouts = require('metalsmith-layouts');
-var metallic = require('metalsmith-metallic');
 var sass = require('@metalsmith/sass');
 var marked = require('marked');
+var metalsmith = require('metalsmith');
+var inPlace = require('metalsmith-in-place');
+var layouts = require('metalsmith-layouts');
+var markdown = require('metalsmith-markdown');
+var metallic = require('metalsmith-metallic');
 
 var isDev = process.env.NODE_ENV === 'development';
 
@@ -40,6 +37,10 @@ customMarkedRenderer.heading = function (text, level) {
 };
 
 var project = require('../package.json');
+
+var registerHandleBarHelpers = require('./plugins/handlebars-helpers');
+var headings = require('./plugins/headings');
+var jsdoc = require('./plugins/jsdoc-data');
 var builder = metalsmith(projectRoot)
   .metadata({
     pkg: project,

@@ -1,6 +1,7 @@
-import React from 'react';
 import { storiesOf } from '@storybook/react';
+import React from 'react';
 import { PoweredBy } from 'react-instantsearch-dom';
+
 import { WrapWithHits } from './util';
 
 const stories = storiesOf('PoweredBy', module);

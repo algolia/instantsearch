@@ -1,4 +1,5 @@
 import EventEmitter from '@algolia/events';
+
 import type {
   FindAnswersResponse,
   HighlightResult,

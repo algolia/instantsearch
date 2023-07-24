@@ -1,8 +1,10 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { translatable } from 'react-instantsearch-core';
+
 import { createClassNames, capitalize, range } from '../core/utils';
+
 import LinkList from './LinkList';
 
 const cx = createClassNames('Pagination');

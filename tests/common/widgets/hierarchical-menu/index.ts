@@ -1,7 +1,9 @@
-import type { HierarchicalMenuWidget } from 'instantsearch.js/es/widgets/hierarchical-menu/hierarchical-menu';
-import type { TestOptions, TestSetup } from '../../common';
 import { fakeAct } from '../../common';
+
 import { createOptimisticUiTests } from './optimistic-ui';
+
+import type { TestOptions, TestSetup } from '../../common';
+import type { HierarchicalMenuWidget } from 'instantsearch.js/es/widgets/hierarchical-menu/hierarchical-menu';
 
 type WidgetParams = Parameters<HierarchicalMenuWidget>[0];
 export type HierarchicalMenuWidgetSetup = TestSetup<{

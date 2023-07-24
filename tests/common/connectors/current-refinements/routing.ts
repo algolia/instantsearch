@@ -1,15 +1,17 @@
-import { wait } from '@instantsearch/testutils';
 import {
   createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
-import type { CurrentRefinementsConnectorSetup } from '.';
-import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import { history } from 'instantsearch.js/es/lib/routers';
-import type { TestOptions } from '../../common';
+import { simple } from 'instantsearch.js/es/lib/stateMappings';
+
 import { skippableDescribe } from '../../common';
+
+import type { CurrentRefinementsConnectorSetup } from '.';
+import type { TestOptions } from '../../common';
 
 export function createRoutingTests(
   setup: CurrentRefinementsConnectorSetup,

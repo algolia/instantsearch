@@ -1,7 +1,8 @@
 import React from 'react';
 import { connectCurrentRefinements } from 'react-instantsearch-core';
-import PanelCallbackHandler from '../components/PanelCallbackHandler';
+
 import CurrentRefinements from '../components/CurrentRefinements';
+import PanelCallbackHandler from '../components/PanelCallbackHandler';
 
 /**
  * The CurrentRefinements widget displays the list of currently applied filters.

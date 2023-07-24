@@ -1,10 +1,10 @@
-import { omit } from '../core/utils';
 import createConnector from '../core/createConnector';
 import {
   refineValue,
   getIndexId,
   hasMultipleIndices,
 } from '../core/indexUtils';
+import { omit } from '../core/utils';
 
 function getId() {
   return 'configure';

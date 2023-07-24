@@ -1,6 +1,6 @@
+import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import { version, HIGHLIGHT_TAGS } from 'react-instantsearch-core';
 
 const hasMultipleIndices = (context) => context && context.multiIndexContext;

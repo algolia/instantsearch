@@ -1,6 +1,6 @@
-import React from 'react';
 import algoliasearch from 'algoliasearch/lite';
 import { Hit } from 'instantsearch.js';
+import React from 'react';
 import {
   Configure,
   Highlight,

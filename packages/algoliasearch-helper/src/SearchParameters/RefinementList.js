@@ -13,8 +13,8 @@
  */
 
 var defaultsPure = require('../functions/defaultsPure');
-var omit = require('../functions/omit');
 var objectHasKeys = require('../functions/objectHasKeys');
+var omit = require('../functions/omit');
 
 var lib = {
   /**

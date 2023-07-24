@@ -1,8 +1,7 @@
 'use strict';
 
-var SearchParameters = require('../../../src/SearchParameters');
-
 var algoliasearchHelper = require('../../../index');
+var SearchParameters = require('../../../src/SearchParameters');
 
 test('searchOnce should call the algolia client according to the number of refinements and call callback with no error and with results when no error', function (done) {
   var testData = require('../../datasets/SearchParameters/search.dataset')();

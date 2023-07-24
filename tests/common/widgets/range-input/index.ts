@@ -1,7 +1,9 @@
-import type { RangeInputWidget } from 'instantsearch.js/es/widgets/range-input/range-input';
-import type { TestOptions, TestSetup } from '../../common';
 import { fakeAct } from '../../common';
+
 import { createBehaviourTests } from './behaviour';
+
+import type { TestOptions, TestSetup } from '../../common';
+import type { RangeInputWidget } from 'instantsearch.js/es/widgets/range-input/range-input';
 
 type WidgetParams = Parameters<RangeInputWidget>[0];
 export type RangeInputWidgetSetup = TestSetup<{

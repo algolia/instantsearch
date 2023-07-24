@@ -2,14 +2,15 @@
  * @jest-environment jsdom
  */
 
-import React from 'react';
-import Enzyme, { mount, shallow } from 'enzyme';
+import { wait } from '@instantsearch/testutils';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import Enzyme, { mount, shallow } from 'enzyme';
+import React from 'react';
+
+import { InstantSearchProvider } from '../context';
 import createConnector, {
   createConnectorWithoutContext,
 } from '../createConnector';
-import { InstantSearchProvider } from '../context';
-import { wait } from '@instantsearch/testutils';
 
 Enzyme.configure({ adapter: new Adapter() });
 

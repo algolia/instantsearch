@@ -1,10 +1,11 @@
+const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+
+const algoliasearch = require('algoliasearch');
 const chalk = require('chalk');
 const semver = require('semver');
 const validateProjectName = require('validate-npm-package-name');
-const algoliasearch = require('algoliasearch');
 
 const TEMPLATES_FOLDER = path.join(__dirname, '../templates');
 

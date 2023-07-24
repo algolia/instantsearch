@@ -3,8 +3,8 @@
  */
 
 import { mount } from '../../../test/utils';
-import RatingMenu from '../RatingMenu.vue';
 import { __setState } from '../../mixins/widget';
+import RatingMenu from '../RatingMenu.vue';
 import '../../../test/utils/sortedHtmlSerializer';
 
 jest.mock('../../mixins/widget');

@@ -3,6 +3,7 @@
  */
 
 import isEqual from 'react-fast-compare';
+
 import connect from '../connectInfiniteHits';
 
 jest.mock('../../core/createConnector', () => (x) => x);

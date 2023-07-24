@@ -2,12 +2,12 @@
  * @jest-environment jsdom
  */
 
+import { wait } from '@instantsearch/testutils';
+import { render, cleanup } from '@testing-library/react';
+import algoliasearch from 'algoliasearch';
 import nock from 'nock';
 import React from 'react';
-import algoliasearch from 'algoliasearch';
 import { InstantSearch, SearchBox, Index } from 'react-instantsearch-dom';
-import { render, cleanup } from '@testing-library/react';
-import { wait } from '@instantsearch/testutils';
 
 // @ts-ignore: `version` is not present on Algoliasearch v3 type declaration
 const CLIENT_VERSION_LOWER_THAN_V4 = /^[0-3]\./.test(algoliasearch.version);

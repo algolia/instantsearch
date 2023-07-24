@@ -1,4 +1,5 @@
 import { refinementList, panel } from 'instantsearch.js/es/widgets';
+
 import { isWindowMediumSize } from '../utils';
 
 const createAuthorsList = () =>

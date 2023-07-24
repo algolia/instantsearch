@@ -3,8 +3,8 @@
  */
 
 import { mount } from '../../../test/utils';
-import MenuSelect from '../MenuSelect.vue';
 import { __setState } from '../../mixins/widget';
+import MenuSelect from '../MenuSelect.vue';
 import '../../../test/utils/sortedHtmlSerializer';
 
 jest.mock('../../mixins/widget');

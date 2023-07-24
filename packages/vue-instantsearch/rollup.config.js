@@ -1,14 +1,15 @@
 import path from 'path';
+
+import babel from 'rollup-plugin-babel';
+import buble from 'rollup-plugin-buble';
+import commonjs from 'rollup-plugin-commonjs';
+import filesize from 'rollup-plugin-filesize';
+import json from 'rollup-plugin-json';
+import resolve from 'rollup-plugin-node-resolve';
+import replace from 'rollup-plugin-replace';
+import { terser } from 'rollup-plugin-terser';
 import vueV2 from 'rollup-plugin-vue2';
 import vueV3 from 'rollup-plugin-vue3';
-import buble from 'rollup-plugin-buble';
-import filesize from 'rollup-plugin-filesize';
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
-import { terser } from 'rollup-plugin-terser';
-import replace from 'rollup-plugin-replace';
-import json from 'rollup-plugin-json';
-import babel from 'rollup-plugin-babel';
 
 const processEnv = (conf) => ({
   // parenthesis to avoid syntax errors in places where {} is interpreted as a block

@@ -1,4 +1,5 @@
 import { connectStats } from 'react-instantsearch-core';
+
 import Stats from '../components/Stats';
 
 /**

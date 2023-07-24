@@ -1,6 +1,7 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Component } from 'react';
 import { connectGeoSearch } from 'react-instantsearch-dom';
+
 import { LatLngPropType, BoundingBoxPropType } from './propTypes';
 
 function isEqualPosition(a, b) {

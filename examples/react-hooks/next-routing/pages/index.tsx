@@ -1,8 +1,13 @@
-import React from 'react';
-import { GetServerSideProps } from 'next';
-import { renderToString } from 'react-dom/server';
 import algoliasearch from 'algoliasearch/lite';
 import { Hit as AlgoliaHit } from 'instantsearch.js';
+import { GetServerSideProps } from 'next';
+import Head from 'next/head';
+import Link from 'next/link';
+import singletonRouter from 'next/router';
+import React from 'react';
+import { renderToString } from 'react-dom/server';
+import { createInstantSearchRouterNext } from 'react-instantsearch-hooks-router-nextjs';
+import { getServerState } from 'react-instantsearch-hooks-server';
 import {
   DynamicWidgets,
   InstantSearch,
@@ -13,12 +18,8 @@ import {
   InstantSearchServerState,
   InstantSearchSSRProvider,
 } from 'react-instantsearch-hooks-web';
-import { getServerState } from 'react-instantsearch-hooks-server';
+
 import { Panel } from '../components/Panel';
-import singletonRouter from 'next/router';
-import Link from 'next/link';
-import { createInstantSearchRouterNext } from 'react-instantsearch-hooks-router-nextjs';
-import Head from 'next/head';
 
 const client = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');
 

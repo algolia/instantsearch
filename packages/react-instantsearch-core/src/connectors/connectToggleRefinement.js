@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { find } from '../core/utils';
+
 import createConnector from '../core/createConnector';
 import {
   cleanUpValue,
@@ -8,6 +8,7 @@ import {
   refineValue,
   getCurrentRefinementValue,
 } from '../core/indexUtils';
+import { find } from '../core/utils';
 
 function getId(props) {
   return props.attribute;

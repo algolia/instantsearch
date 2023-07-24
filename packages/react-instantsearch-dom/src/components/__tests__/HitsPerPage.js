@@ -2,10 +2,11 @@
  * @jest-environment jsdom
  */
 
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import Enzyme, { mount } from 'enzyme';
 import React from 'react';
 import renderer from 'react-test-renderer';
-import Enzyme, { mount } from 'enzyme';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+
 import HitsPerPage from '../HitsPerPage';
 
 Enzyme.configure({ adapter: new Adapter() });

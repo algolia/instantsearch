@@ -1,7 +1,8 @@
 import React from 'react';
 import { connectMenu } from 'react-instantsearch-core';
-import PanelCallbackHandler from '../components/PanelCallbackHandler';
+
 import MenuSelect from '../components/MenuSelect';
+import PanelCallbackHandler from '../components/PanelCallbackHandler';
 
 /**
  * The MenuSelect component displays a select that lets the user choose a single value for a specific attribute.

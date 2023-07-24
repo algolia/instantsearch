@@ -1,7 +1,9 @@
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { translatable } from 'react-instantsearch-core';
+
 import { createClassNames } from '../core/utils';
+
 import List from './List';
 
 const cx = createClassNames('NumericMenu');

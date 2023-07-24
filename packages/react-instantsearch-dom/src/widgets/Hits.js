@@ -1,4 +1,5 @@
 import { connectHits } from 'react-instantsearch-core';
+
 import Hits from '../components/Hits';
 
 /**

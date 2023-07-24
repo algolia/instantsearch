@@ -1,4 +1,3 @@
-import { objectHasKeys } from '../core/utils';
 import createConnector from '../core/createConnector';
 import {
   getResults,
@@ -7,6 +6,7 @@ import {
   refineValue,
   cleanUpValue,
 } from '../core/indexUtils';
+import { objectHasKeys } from '../core/utils';
 
 /**
  * The GeoSearch connector provides the logic to build a widget that will display the results on a map.

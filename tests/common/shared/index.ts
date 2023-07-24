@@ -1,8 +1,10 @@
-import type { TestOptions, TestSetup } from '../common';
 import { fakeAct } from '../common';
+
 import { createRoutingTests } from './routing';
-import type { MenuWidget } from 'instantsearch.js/es/widgets/menu/menu';
+
+import type { TestOptions, TestSetup } from '../common';
 import type { HitsWidget } from 'instantsearch.js/es/widgets/hits/hits';
+import type { MenuWidget } from 'instantsearch.js/es/widgets/menu/menu';
 import type { PaginationWidget } from 'instantsearch.js/es/widgets/pagination/pagination';
 
 export type SharedSetup = TestSetup<{

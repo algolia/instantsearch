@@ -1,4 +1,5 @@
 import { panel, ratingMenu } from 'instantsearch.js/es/widgets';
+
 import { collapseButtonText } from '../templates/panel';
 
 const ratingsMenu = panel({

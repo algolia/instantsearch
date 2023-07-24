@@ -1,8 +1,10 @@
-import React from 'react';
-import Enzyme, { shallow } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import type { QueryRuleCustomDataProps } from '../QueryRuleCustomData';
+import Enzyme, { shallow } from 'enzyme';
+import React from 'react';
+
 import QueryRuleCustomData from '../QueryRuleCustomData';
+
+import type { QueryRuleCustomDataProps } from '../QueryRuleCustomData';
 
 Enzyme.configure({ adapter: new Adapter() });
 

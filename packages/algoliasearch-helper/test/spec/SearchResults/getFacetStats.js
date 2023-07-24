@@ -1,7 +1,7 @@
 'use strict';
 
-var SearchResults = require('../../../src/SearchResults');
 var SearchParameters = require('../../../src/SearchParameters');
+var SearchResults = require('../../../src/SearchResults');
 
 var response = {
   results: [

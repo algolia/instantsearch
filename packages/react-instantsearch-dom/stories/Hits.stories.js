@@ -1,7 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
+import { storiesOf } from '@storybook/react';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { connectHitInsights } from 'react-instantsearch-core';
 import {
   Hits,
   Highlight,
@@ -9,7 +10,7 @@ import {
   Snippet,
   Configure,
 } from 'react-instantsearch-dom';
-import { connectHitInsights } from 'react-instantsearch-core';
+
 import { WrapWithHits } from './util';
 
 const stories = storiesOf('Hits', module);

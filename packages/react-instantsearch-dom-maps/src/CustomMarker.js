@@ -1,9 +1,10 @@
+import PropTypes from 'prop-types';
 import { Component } from 'react';
 import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
+
 import createHTMLMarker from './elements/createHTMLMarker';
-import { registerEvents, createListenersPropTypes } from './utils';
 import { GeolocHitPropType } from './propTypes';
+import { registerEvents, createListenersPropTypes } from './utils';
 import withGoogleMaps from './withGoogleMaps';
 
 const eventTypes = {

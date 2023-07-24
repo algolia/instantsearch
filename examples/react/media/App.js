@@ -1,6 +1,7 @@
+import algoliasearch from 'algoliasearch/lite';
 import React from 'react';
 import * as ReactInstantSearch from 'react-instantsearch-dom';
-import algoliasearch from 'algoliasearch/lite';
+
 import withURLSync from './URLSync';
 import './App.css';
 

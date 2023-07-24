@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import { storiesOf } from '@storybook/react';
+import React, { useState } from 'react';
 import {
   Configure,
   ExperimentalConfigureRelatedItems,
@@ -7,6 +7,7 @@ import {
   Index,
   connectPagination,
 } from 'react-instantsearch-dom';
+
 import { WrapWithHits } from './util';
 
 type Hit = any;

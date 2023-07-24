@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
-import { storiesOf } from '@storybook/react';
-import { object, boolean } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
+import { object, boolean } from '@storybook/addon-knobs';
+import { storiesOf } from '@storybook/react';
+import React, { Component } from 'react';
 import { Panel, SearchBox } from 'react-instantsearch-dom';
+
 import { WrapWithHits } from './util';
 
 const stories = storiesOf('SearchBox', module);

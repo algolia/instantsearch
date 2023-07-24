@@ -27,15 +27,15 @@ import {
   ResultsNumberMobile,
   SaveFiltersMobile,
 } from './components';
-
+import { ScrollTo } from './components/ScrollTo';
+import getRouting from './routing';
+import { formatNumber } from './utils';
 import './Theme.css';
 import './App.css';
 import './components/Pagination.css';
 import './App.mobile.css';
-import { formatNumber } from './utils';
-import getRouting from './routing';
-import { ScrollTo } from './components/ScrollTo';
-import { Hit as AlgoliaHit } from 'instantsearch.js';
+
+import type { Hit as AlgoliaHit } from 'instantsearch.js';
 
 const searchClient = algoliasearch(
   'latency',

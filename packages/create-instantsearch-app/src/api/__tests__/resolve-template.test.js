@@ -1,4 +1,5 @@
 const path = require('path');
+
 const resolveTemplate = require('../resolve-template');
 
 describe('resolveTemplate', () => {

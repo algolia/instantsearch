@@ -2,9 +2,10 @@
  * @jest-environment jsdom
  */
 
-import React from 'react';
-import Enzyme, { shallow, mount } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import Enzyme, { shallow, mount } from 'enzyme';
+import React from 'react';
+
 import SortBy from '../SortBy';
 
 Enzyme.configure({ adapter: new Adapter() });

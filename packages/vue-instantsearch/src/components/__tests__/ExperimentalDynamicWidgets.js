@@ -3,10 +3,10 @@
  */
 
 import { mount } from '../../../test/utils';
-import ExperimentalDynamicWidgets from '../ExperimentalDynamicWidgets';
-import { warn } from '../../util/warn';
 import { __setState } from '../../mixins/widget';
+import { warn } from '../../util/warn';
 import DynamicWidgets from '../DynamicWidgets';
+import ExperimentalDynamicWidgets from '../ExperimentalDynamicWidgets';
 import '../../../test/utils/sortedHtmlSerializer';
 
 jest.mock('../../mixins/widget');
