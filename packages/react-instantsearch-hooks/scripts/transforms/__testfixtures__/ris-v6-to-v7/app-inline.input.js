@@ -22,6 +22,8 @@ function App() {
       resultsState={{}}
       createURL={() => {}}
       onSearchStateChange={() => {}}
+      onSearchParameters={() => {}}
+      refresh={true}
       indexName="instant_search"
     >
       <Breadcrumb rootURL="/truc" translations={{ rootLabel: 'Home' }} />
@@ -33,6 +35,7 @@ function App() {
       <HierarchicalMenu
         defaultRefinement="Cameras & Camcorders"
         attributes={['categories.lvl0', 'categories.lvl1']}
+        facetOrdering={false}
         translations={{
           showMore(expanded) {
             return expanded ? 'Show less' : 'Show more';
@@ -49,6 +52,7 @@ function App() {
       <Menu
         defaultRefinement="Audio"
         attribute="category"
+        facetOrdering={false}
         translations={{
           showMore(expanded) {
             return expanded ? 'Show less' : 'Show more';
@@ -99,6 +103,7 @@ function App() {
       />
       <SearchBox
         defaultRefinement="iphone"
+        focusShortcuts={['s']}
         translations={{
           submitTitle: 'Submit your search query.',
           resetTitle: 'Clear your search query.',
@@ -110,6 +115,11 @@ function App() {
         value={true}
         attribute="free_shipping"
         defaultRefinement={true}
+      />
+      <Hits
+        hitComponent={(hit) => (
+          <Highlight tagName="span">{JSON.stringify(hit)}</Highlight>
+        )}
       />
     </InstantSearch>
   );

@@ -19,17 +19,23 @@ function App() {
   return (
     <InstantSearch
       /* TODO: `searchState` is no longer supported. This is now handled via an `onStateChange` callback.
-      See https://www.algolia.com/doc/api-reference/widgets/instantsearch/react/#widget-param-onstatechange */
+      See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-searchstate-with-initialuistate */
       searchState={{}}
       /* TODO: `resultsState` is no longer supported, if you used it for server-side rendering, you can follow
       this guide : https://www.algolia.com/doc/guides/building-search-ui/going-further/server-side-rendering/react/ */
       resultsState={{}}
-      /* TODO: `createURL` is not supported anymore, you can set `routing` to `true` or follow
-      this guide to implement routing : https://www.algolia.com/doc/guides/building-search-ui/going-further/routing-urls/react/ */
+      /* TODO: `createURL` should be moved to the `routing` prop.
+      See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#move-createurl-in-routing */
       createURL={() => {}}
       /* TODO: `onSearchStateChange` is no longer supported. This is now handled via an `onStateChange` callback.
-      See https://www.algolia.com/doc/api-reference/widgets/instantsearch/react/#widget-param-onstatechange */
+      See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-onsearchstatechange-with-onstatechange */
       onSearchStateChange={() => {}}
+      /* TODO: `onSearchParameters` is no longer supported.
+      See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-refresh-prop-with-refresh-from-useinstantsearch */
+      onSearchParameters={() => {}}
+      /* TODO: `refresh` is no longer a prop on `InstantSearch`. It can now be called programatically via the `refresh` function returned by `useInstantSearch`.
+      See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-refresh-prop-with-refresh-from-useinstantsearch */
+      refresh={true}
       indexName="instant_search"
     >
       <Breadcrumb rootPath="/truc" translations={{ rootElementText: 'Home' }} />
@@ -43,6 +49,9 @@ function App() {
         See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/#default-refinements */
         defaultRefinement="Cameras & Camcorders"
         attributes={['categories.lvl0', 'categories.lvl1']}
+        /* TODO: `facetOrdering` is not supported anymore, see the new `sortBy` prop
+        there : https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-facetordering-with-sortby */
+        facetOrdering={false}
         translations={{
           showMoreButtonText({ isShowingMore: expanded }) {
             return expanded ? 'Show less' : 'Show more';
@@ -62,6 +71,9 @@ function App() {
         See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/#default-refinements */
         defaultRefinement="Audio"
         attribute="category"
+        /* TODO: `facetOrdering` is not supported anymore, see the new `sortBy` prop
+        there : https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-facetordering-with-sortby */
+        facetOrdering={false}
         translations={{
           showMoreButtonText({ isShowingMore: expanded }) {
             return expanded ? 'Show less' : 'Show more';
@@ -106,7 +118,7 @@ function App() {
         defaultRefinement={['Apple', 'Insignia']}
         attribute="brand"
         /* TODO: `facetOrdering` is not supported anymore, see the new `sortBy` prop
-        there :https://www.algolia.com/doc/api-reference/widgets/refinement-list/react/#widget-param-sortby */
+        there : https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-facetordering-with-sortby */
         facetOrdering={false}
         translations={{
           showMoreButtonText({ isShowingMore: expanded }) {
@@ -122,6 +134,9 @@ function App() {
         /* TODO: Move this into `InstantSearch`'s `initialUiState` prop.
         See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/#default-refinements */
         defaultRefinement="iphone"
+        /* TODO: `focusShortcuts` is not supported anymore, see there for suggestions on how to replace
+        it : https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-focusshortcuts-with-custom-code */
+        focusShortcuts={['s']}
         translations={{
           submitButtonTitle: 'Submit your search query.',
           resetButtonTitle: 'Clear your search query.'
@@ -136,6 +151,11 @@ function App() {
         /* TODO: Move this into `InstantSearch`'s `initialUiState` prop.
         See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/#default-refinements */
         defaultRefinement={true}
+      />
+      <Hits
+        hitComponent={(hit) => (
+          <Highlight highlightedTagName="span">{JSON.stringify(hit)}</Highlight>
+        )}
       />
     </InstantSearch>
   );

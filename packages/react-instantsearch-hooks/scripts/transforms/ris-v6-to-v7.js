@@ -259,6 +259,11 @@ function MenuSelect(props) {
   replaceImports('react-instantsearch-dom', 'react-instantsearch');
 
   replacePropName({ element: 'Breadcrumb', from: 'rootURL', to: 'rootPath' });
+  replacePropName({
+    element: 'Highlight',
+    from: 'tagName',
+    to: 'highlightedTagName',
+  });
   replacePropName({ element: 'ToggleRefinement', from: 'value', to: 'on' });
 
   replaceClearsQuery();
@@ -270,7 +275,7 @@ function MenuSelect(props) {
     element: 'InstantSearch',
     prop: 'searchState',
     comment: `\`searchState\` is no longer supported. This is now handled via an \`onStateChange\` callback.
-See https://www.algolia.com/doc/api-reference/widgets/instantsearch/react/#widget-param-onstatechange`,
+See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-searchstate-with-initialuistate`,
   });
   commentProp({
     element: 'InstantSearch',
@@ -281,21 +286,52 @@ this guide : https://www.algolia.com/doc/guides/building-search-ui/going-further
   commentProp({
     element: 'InstantSearch',
     prop: 'createURL',
-    comment: `\`createURL\` is not supported anymore, you can set \`routing\` to \`true\` or follow
-this guide to implement routing : https://www.algolia.com/doc/guides/building-search-ui/going-further/routing-urls/react/`,
+    comment: `\`createURL\` should be moved to the \`routing\` prop.
+See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#move-createurl-in-routing`,
   });
   commentProp({
     element: 'InstantSearch',
     prop: 'onSearchStateChange',
     comment: `\`onSearchStateChange\` is no longer supported. This is now handled via an \`onStateChange\` callback.
-See https://www.algolia.com/doc/api-reference/widgets/instantsearch/react/#widget-param-onstatechange`,
+See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-onsearchstatechange-with-onstatechange`,
+  });
+  commentProp({
+    element: 'InstantSearch',
+    prop: 'onSearchParameters',
+    comment: `\`onSearchParameters\` is no longer supported.
+See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-refresh-prop-with-refresh-from-useinstantsearch`,
+  });
+  commentProp({
+    element: 'InstantSearch',
+    prop: 'refresh',
+    comment: `\`refresh\` is no longer a prop on \`InstantSearch\`. It can now be called programatically via the \`refresh\` function returned by \`useInstantSearch\`.
+See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-refresh-prop-with-refresh-from-useinstantsearch`,
   });
 
+  commentProp({
+    element: 'HierarchicalMenu',
+    prop: 'facetOrdering',
+    comment: `\`facetOrdering\` is not supported anymore, see the new \`sortBy\` prop
+there : https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-facetordering-with-sortby`,
+  });
+  commentProp({
+    element: 'Menu',
+    prop: 'facetOrdering',
+    comment: `\`facetOrdering\` is not supported anymore, see the new \`sortBy\` prop
+there : https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-facetordering-with-sortby`,
+  });
   commentProp({
     element: 'RefinementList',
     prop: 'facetOrdering',
     comment: `\`facetOrdering\` is not supported anymore, see the new \`sortBy\` prop
-there :https://www.algolia.com/doc/api-reference/widgets/refinement-list/react/#widget-param-sortby`,
+there : https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-facetordering-with-sortby`,
+  });
+
+  commentProp({
+    element: 'SearchBox',
+    prop: 'focusShortcuts',
+    comment: `\`focusShortcuts\` is not supported anymore, see there for suggestions on how to replace
+it : https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-focusshortcuts-with-custom-code`,
   });
 
   return root.toSource(printOptions);
