@@ -369,6 +369,11 @@ function MenuSelect(props) {
     from: 'tagName',
     to: 'highlightedTagName',
   });
+  replacePropName({
+    element: 'Snippet',
+    from: 'tagName',
+    to: 'highlightedTagName',
+  });
   replacePropName({ element: 'ToggleRefinement', from: 'value', to: 'on' });
 
   replaceClearsQuery();
