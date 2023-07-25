@@ -2,13 +2,14 @@
  * @jest-environment jsdom
  */
 
-import React from 'react';
-import Enzyme, { shallow, mount } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { SearchParameters } from 'algoliasearch-helper';
-import Index, { IndexComponentWithoutContext } from '../Index';
+import Enzyme, { shallow, mount } from 'enzyme';
+import React from 'react';
+
 import { IndexConsumer, InstantSearchProvider } from '../../core/context';
 import createConnector from '../../core/createConnector';
+import Index, { IndexComponentWithoutContext } from '../Index';
 
 Enzyme.configure({ adapter: new Adapter() });
 

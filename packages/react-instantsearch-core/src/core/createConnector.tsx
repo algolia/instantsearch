@@ -1,9 +1,11 @@
-import type { ElementType } from 'react';
 import React, { Component } from 'react';
 import isEqual from 'react-fast-compare';
-import { shallowEqual, getDisplayName, removeEmptyKey } from './utils';
-import type { InstantSearchContext, IndexContext } from './context';
+
 import { InstantSearchConsumer, IndexConsumer } from './context';
+import { shallowEqual, getDisplayName, removeEmptyKey } from './utils';
+
+import type { InstantSearchContext, IndexContext } from './context';
+import type { ElementType } from 'react';
 
 export type ConnectorDescription = {
   displayName: string;

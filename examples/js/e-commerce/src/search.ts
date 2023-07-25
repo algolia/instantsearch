@@ -1,5 +1,7 @@
 import algoliasearch from 'algoliasearch/lite';
 import instantsearch from 'instantsearch.js';
+
+import getRouting from './routing';
 import {
   brands,
   categories,
@@ -18,7 +20,6 @@ import {
   searchBox,
   sortBy,
 } from './widgets';
-import getRouting from './routing';
 
 const searchClient = algoliasearch(
   'latency',

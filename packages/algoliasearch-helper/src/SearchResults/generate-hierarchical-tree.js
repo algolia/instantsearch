@@ -2,10 +2,10 @@
 
 module.exports = generateTrees;
 
-var orderBy = require('../functions/orderBy');
+var fv = require('../functions/escapeFacetValue');
 var find = require('../functions/find');
 var prepareHierarchicalFacetSortBy = require('../functions/formatSort');
-var fv = require('../functions/escapeFacetValue');
+var orderBy = require('../functions/orderBy');
 var escapeFacetValue = fv.escapeFacetValue;
 var unescapeFacetValue = fv.unescapeFacetValue;
 

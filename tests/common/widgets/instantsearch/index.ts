@@ -1,6 +1,8 @@
-import type { TestOptions, TestSetup } from '../../common';
 import { fakeAct } from '../../common';
+
 import { createAlgoliaAgentTests } from './algolia-agent';
+
+import type { TestOptions, TestSetup } from '../../common';
 
 export type InstantSearchWidgetSetup = TestSetup<
   Record<string, unknown>,

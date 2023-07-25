@@ -3,8 +3,8 @@
  */
 
 import { mount } from '../../../test/utils';
-import CurrentRefinements from '../CurrentRefinements.vue';
 import { __setState } from '../../mixins/widget';
+import CurrentRefinements from '../CurrentRefinements.vue';
 import '../../../test/utils/sortedHtmlSerializer';
 
 jest.mock('../../mixins/widget');

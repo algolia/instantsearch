@@ -1,4 +1,5 @@
 import { connectHits } from 'instantsearch.js/es/connectors';
+
 import { formatNumber, getDateRangeFromTimestamp } from '../utils';
 
 const statsWidget = connectHits<{ container: string }>(

@@ -23,7 +23,7 @@ This example present you how to configure and use facets in your application.
 
 With excluding facet the user can choose not to have certain values in the results. This very powerful feature is configure the same way the conjunctive facets are.
 
-{{{codepen "LkzEgG"}}}
+{{{codepen "vYQzYpw"}}}
 
 ### Disjunctive facet list
 

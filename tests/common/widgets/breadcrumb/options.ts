@@ -3,11 +3,12 @@ import {
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import type { BreadcrumbWidgetSetup } from '.';
-import type { TestOptions } from '../../common';
+import { normalizeSnapshot, wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
-import { normalizeSnapshot, wait } from '@instantsearch/testutils';
+
+import type { BreadcrumbWidgetSetup } from '.';
+import type { TestOptions } from '../../common';
 
 export function createOptionsTests(
   setup: BreadcrumbWidgetSetup,

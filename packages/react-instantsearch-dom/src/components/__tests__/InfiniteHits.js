@@ -2,11 +2,12 @@
  * @jest-environment jsdom
  */
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import renderer from 'react-test-renderer';
-import Enzyme, { mount } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import Enzyme, { mount } from 'enzyme';
+import PropTypes from 'prop-types';
+import React from 'react';
+import renderer from 'react-test-renderer';
+
 import InfiniteHits from '../InfiniteHits';
 
 Enzyme.configure({ adapter: new Adapter() });

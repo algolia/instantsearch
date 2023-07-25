@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App-Multi-Index';
+
 import Mentions from './App-Mentions';
+import App from './App-Multi-Index';
 
 ReactDOM.render(
   <App />,

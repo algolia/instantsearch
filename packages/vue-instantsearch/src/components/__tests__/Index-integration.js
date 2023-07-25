@@ -3,11 +3,12 @@
  */
 
 jest.unmock('instantsearch.js/es');
-import { mount } from '../../../test/utils';
-import Index from '../Index';
 import instantsearch from 'instantsearch.js/es';
+
+import { mount } from '../../../test/utils';
 import { createWidgetMixin } from '../../mixins/widget';
 import { createFakeClient } from '../../util/testutils/client';
+import Index from '../Index';
 import '../../../test/utils/sortedHtmlSerializer';
 
 it('child widgets get added to their parent index', () => {

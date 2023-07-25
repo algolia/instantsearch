@@ -1,8 +1,9 @@
-import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
+import React, { Component, createRef } from 'react';
 import { createClassNames } from 'react-instantsearch-dom';
-import { LatLngPropType, BoundingBoxPropType } from './propTypes';
+
 import GoogleMapsContext from './GoogleMapsContext';
+import { LatLngPropType, BoundingBoxPropType } from './propTypes';
 
 const cx = createClassNames('GeoSearch');
 

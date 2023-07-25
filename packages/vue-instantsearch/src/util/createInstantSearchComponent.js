@@ -1,5 +1,6 @@
-import { createSuitMixin } from '../mixins/suit';
 import { version } from '../../package.json'; // rollup does pick only what needed from json
+import { createSuitMixin } from '../mixins/suit';
+
 import { _objectSpread } from './polyfills';
 import { isVue3, version as vueVersion } from './vue-compat';
 import { warn } from './warn';

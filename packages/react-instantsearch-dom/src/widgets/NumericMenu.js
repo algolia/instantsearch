@@ -1,7 +1,8 @@
 import React from 'react';
 import { connectNumericMenu } from 'react-instantsearch-core';
-import PanelCallbackHandler from '../components/PanelCallbackHandler';
+
 import NumericMenu from '../components/NumericMenu';
+import PanelCallbackHandler from '../components/PanelCallbackHandler';
 
 /**
  * NumericMenu is a widget used for selecting the range value of a numeric attribute.

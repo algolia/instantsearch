@@ -4,6 +4,7 @@
 
 import React from 'react';
 import renderer from 'react-test-renderer';
+
 import App from '../pages/index';
 
 describe('Next app recipes', () => {

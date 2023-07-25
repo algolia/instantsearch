@@ -1,16 +1,8 @@
 /**
  * @jest-environment jsdom
  */
+import { runTestSuites } from '@instantsearch/tests/common';
 import * as testSuites from '@instantsearch/tests/connectors';
-
-import { nextTick, mountApp } from '../../test/utils';
-import { renderCompat } from '../util/vue-compat';
-import {
-  AisInstantSearch,
-  AisMenu,
-  AisRefinementList,
-  createWidgetMixin,
-} from '../instantsearch';
 import {
   connectBreadcrumb,
   connectCurrentRefinements,
@@ -23,7 +15,15 @@ import {
   connectRefinementList,
   connectToggleRefinement,
 } from 'instantsearch.js/es/connectors';
-import { runTestSuites } from '@instantsearch/tests/common';
+
+import { nextTick, mountApp } from '../../test/utils';
+import {
+  AisInstantSearch,
+  AisMenu,
+  AisRefinementList,
+  createWidgetMixin,
+} from '../instantsearch';
+import { renderCompat } from '../util/vue-compat';
 jest.unmock('instantsearch.js/es');
 
 const testSetups = {

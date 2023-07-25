@@ -2,9 +2,9 @@
  * @jest-environment jsdom
  */
 
-import VoiceSearch from '../VoiceSearch.vue';
 import { mount } from '../../../test/utils';
 import { __setState } from '../../mixins/widget';
+import VoiceSearch from '../VoiceSearch.vue';
 jest.mock('../../mixins/widget');
 import '../../../test/utils/sortedHtmlSerializer';
 

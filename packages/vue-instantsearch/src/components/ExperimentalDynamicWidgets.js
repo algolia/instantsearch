@@ -1,5 +1,6 @@
-import AisDynamicWidgets from './DynamicWidgets';
 import { warn } from '../util/warn';
+
+import AisDynamicWidgets from './DynamicWidgets';
 
 // @MAJOR remove this file
 export default Object.assign({}, AisDynamicWidgets, {

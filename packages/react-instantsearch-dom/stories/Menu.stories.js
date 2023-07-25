@@ -1,8 +1,9 @@
-import React from 'react';
-import orderBy from 'lodash.orderby';
-import { storiesOf } from '@storybook/react';
 import { text, boolean, number } from '@storybook/addon-knobs';
+import { storiesOf } from '@storybook/react';
+import orderBy from 'lodash.orderby';
+import React from 'react';
 import { Menu, Panel, SearchBox } from 'react-instantsearch-dom';
+
 import { WrapWithHits } from './util';
 
 const stories = storiesOf('Menu', module);

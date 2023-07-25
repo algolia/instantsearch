@@ -3,9 +3,9 @@
  */
 
 import { mount, nextTick } from '../../../test/utils';
-import InstantSearch from '../InstantSearch';
 import { createWidgetMixin } from '../../mixins/widget';
 import { createFakeClient } from '../../util/testutils/client';
+import InstantSearch from '../InstantSearch';
 import SearchBox from '../SearchBox.vue';
 jest.unmock('instantsearch.js/es');
 import '../../../test/utils/sortedHtmlSerializer';

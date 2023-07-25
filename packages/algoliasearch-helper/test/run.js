@@ -1,8 +1,10 @@
 'use strict';
 
 var path = require('path');
-var jest = require('jest');
+
 var algoliasearch = require('algoliasearch');
+var jest = require('jest');
+
 var staticJestConfig = require('../jest.config');
 
 var enableIntegrationTest =

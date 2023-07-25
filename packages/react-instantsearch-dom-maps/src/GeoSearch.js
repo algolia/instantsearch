@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { LatLngPropType, BoundingBoxPropType } from './propTypes';
+import React, { Component } from 'react';
+
 import Connector from './Connector';
-import Provider from './Provider';
 import GoogleMaps from './GoogleMaps';
+import { LatLngPropType, BoundingBoxPropType } from './propTypes';
+import Provider from './Provider';
 
 class GeoSearch extends Component {
   static propTypes = {

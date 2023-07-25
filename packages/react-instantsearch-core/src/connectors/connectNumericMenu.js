@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
+
 import createConnector from '../core/createConnector';
-import { find } from '../core/utils';
 import {
   cleanUpValue,
   refineValue,
@@ -8,6 +8,7 @@ import {
   getResults,
   getIndexId,
 } from '../core/indexUtils';
+import { find } from '../core/utils';
 
 function stringifyItem(item) {
   if (typeof item.start === 'undefined' && typeof item.end === 'undefined') {

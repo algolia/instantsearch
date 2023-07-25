@@ -3,13 +3,13 @@
 // the version of the client installed by the developer.
 
 // @ts-ignore
-import type algoliasearch from 'algoliasearch/lite';
-// @ts-ignore
-import type * as AlgoliaSearchLite from 'algoliasearch/lite';
+import type * as ClientSearch from '@algolia/client-search';
 // @ts-ignore
 import type * as AlgoliaSearch from 'algoliasearch';
 // @ts-ignore
-import type * as ClientSearch from '@algolia/client-search';
+import type algoliasearch from 'algoliasearch/lite';
+// @ts-ignore
+import type * as AlgoliaSearchLite from 'algoliasearch/lite';
 
 // turns any to unknown, so it can be used as a conditional
 // more info in https://stackoverflow.com/a/49928360/3185307

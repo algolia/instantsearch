@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+
 import { createFakeMarkerInstance } from '../../test/mockGoogleMaps';
 import * as utils from '../utils';
 

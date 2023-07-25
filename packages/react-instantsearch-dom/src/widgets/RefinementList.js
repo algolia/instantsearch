@@ -1,5 +1,6 @@
 import React from 'react';
 import { connectRefinementList } from 'react-instantsearch-core';
+
 import PanelCallbackHandler from '../components/PanelCallbackHandler';
 import RefinementList from '../components/RefinementList';
 

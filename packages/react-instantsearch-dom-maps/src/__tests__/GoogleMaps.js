@@ -2,9 +2,10 @@
  * @jest-environment jsdom
  */
 
-import React from 'react';
-import Enzyme, { shallow, mount } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import Enzyme, { shallow, mount } from 'enzyme';
+import React from 'react';
+
 import {
   createFakeGoogleReference,
   createFakeMapInstance,

@@ -2,12 +2,14 @@
  * @jest-environment jsdom
  */
 
-import React from 'react';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme, { mount } from 'enzyme';
 import { createSerializer } from 'enzyme-to-json';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import type { InnerComponentProps } from '../VoiceSearch';
+import React from 'react';
+
 import VoiceSearch from '../VoiceSearch';
+
+import type { InnerComponentProps } from '../VoiceSearch';
 
 expect.addSnapshotSerializer(createSerializer() as any);
 Enzyme.configure({ adapter: new Adapter() });

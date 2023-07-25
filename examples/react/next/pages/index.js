@@ -1,8 +1,9 @@
-import React from 'react';
+import algoliasearch from 'algoliasearch/lite';
 import { useRouter } from 'next/router';
 import qs from 'qs';
-import algoliasearch from 'algoliasearch/lite';
+import React from 'react';
 import { findResultsState } from 'react-instantsearch-dom/server';
+
 import { Head, App } from '../components';
 
 const searchClient = algoliasearch(

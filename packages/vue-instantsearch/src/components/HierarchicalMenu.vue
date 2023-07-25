@@ -40,10 +40,12 @@
 
 <script>
 import { connectHierarchicalMenu } from 'instantsearch.js/es/connectors';
-import { createWidgetMixin } from '../mixins/widget';
+
 import { createPanelConsumerMixin } from '../mixins/panel';
-import HierarchicalMenuList from './HierarchicalMenuList.vue';
 import { createSuitMixin } from '../mixins/suit';
+import { createWidgetMixin } from '../mixins/widget';
+
+import HierarchicalMenuList from './HierarchicalMenuList.vue';
 
 export default {
   name: 'AisHierarchicalMenu',

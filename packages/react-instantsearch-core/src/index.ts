@@ -19,6 +19,7 @@ export { default as translatable } from './core/translatable';
 export { default as Configure } from './widgets/Configure';
 export { default as ExperimentalConfigureRelatedItems } from './widgets/ConfigureRelatedItems';
 
+import { default as connectDynamicWidgets } from './connectors/connectDynamicWidgets';
 import { default as DynamicWidgets } from './widgets/DynamicWidgets';
 /** @deprecated use DynamicWidgets */
 const ExperimentalDynamicWidgets = DynamicWidgets;
@@ -39,7 +40,6 @@ export { default as EXPERIMENTAL_connectConfigureRelatedItems } from './connecto
 // @ts-ignore not yet typed
 export { default as connectCurrentRefinements } from './connectors/connectCurrentRefinements';
 
-import { default as connectDynamicWidgets } from './connectors/connectDynamicWidgets';
 /** @deprecated use connectDynamicWidgets */
 const EXPERIMENTAL_connectDynamicWidgets = connectDynamicWidgets;
 export { connectDynamicWidgets, EXPERIMENTAL_connectDynamicWidgets };

@@ -40,9 +40,11 @@
 
 <script>
 import { connectSearchBox } from 'instantsearch.js/es/connectors';
+
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
 import { isVue3, isVue2 } from '../util/vue-compat';
+
 import SearchInput from './SearchInput.vue';
 
 export default {

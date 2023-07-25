@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import algoliasearch from 'algoliasearch/lite';
 import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import Autosuggest from 'react-autosuggest';
 import {
   InstantSearch,
@@ -8,7 +9,6 @@ import {
   Highlight,
   connectAutoComplete,
 } from 'react-instantsearch-dom';
-import algoliasearch from 'algoliasearch/lite';
 
 const searchClient = algoliasearch(
   'latency',

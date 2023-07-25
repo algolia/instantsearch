@@ -1,7 +1,8 @@
 import React from 'react';
 import { connectHierarchicalMenu } from 'react-instantsearch-core';
-import PanelCallbackHandler from '../components/PanelCallbackHandler';
+
 import HierarchicalMenu from '../components/HierarchicalMenu';
+import PanelCallbackHandler from '../components/PanelCallbackHandler';
 
 /**
  * The hierarchical menu lets the user browse attributes using a tree-like structure.

@@ -1,5 +1,5 @@
-import React from 'react';
 import { storiesOf } from '@storybook/react';
+import React from 'react';
 import {
   CurrentRefinements,
   Menu,
@@ -10,6 +10,7 @@ import {
   RefinementList,
   ToggleRefinement,
 } from 'react-instantsearch-dom';
+
 import { WrapWithHits } from './util';
 
 const stories = storiesOf('CurrentRefinements', module);

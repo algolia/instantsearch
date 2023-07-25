@@ -1,6 +1,7 @@
-import React from 'react';
-import Enzyme, { shallow } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import Enzyme, { shallow } from 'enzyme';
+import React from 'react';
+
 import { createFakeMapInstance } from '../../test/mockGoogleMaps';
 import { Redo } from '../Redo';
 

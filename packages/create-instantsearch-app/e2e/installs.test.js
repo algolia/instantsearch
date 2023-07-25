@@ -1,5 +1,5 @@
-const fs = require('fs');
 const { execSync } = require('child_process');
+const fs = require('fs');
 
 describe('Installation', () => {
   let temporaryDirectory;

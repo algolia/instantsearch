@@ -1,3 +1,4 @@
+import algoliasearch from 'algoliasearch/lite';
 import React, { useRef } from 'react';
 import {
   InstantSearch,
@@ -15,7 +16,10 @@ import {
   Snippet,
   ToggleRefinement,
 } from 'react-instantsearch-dom';
-import algoliasearch from 'algoliasearch/lite';
+
+import AlgoliaSvg from './AlgoliaSvg';
+import withURLSync from './URLSync';
+import { formatNumber } from './utils';
 import {
   ClearFiltersMobile,
   PriceSlider,
@@ -24,13 +28,10 @@ import {
   ResultsNumberMobile,
   SaveFiltersMobile,
 } from './widgets';
-import withURLSync from './URLSync';
-import { formatNumber } from './utils';
 import './Theme.css';
 import './App.css';
 import './App.mobile.css';
 import './widgets/Pagination.css';
-import AlgoliaSvg from './AlgoliaSvg';
 
 const searchClient = algoliasearch(
   'latency',

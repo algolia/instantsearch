@@ -1,5 +1,6 @@
-import connect from '../connectVoiceSearch';
 import { SearchParameters } from 'algoliasearch-helper';
+
+import connect from '../connectVoiceSearch';
 
 jest.mock('../../core/createConnector', () => (x) => x);
 

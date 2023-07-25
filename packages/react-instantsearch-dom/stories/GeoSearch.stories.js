@@ -1,7 +1,7 @@
-import React, { Fragment, Component } from 'react';
-import PropTypes from 'prop-types';
-import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
+import { storiesOf } from '@storybook/react';
+import PropTypes from 'prop-types';
+import React, { Fragment, Component } from 'react';
 import { Configure, Highlight, connectHits } from 'react-instantsearch-dom';
 import {
   GoogleMapsLoader,
@@ -11,8 +11,9 @@ import {
   Redo,
   Control,
 } from 'react-instantsearch-dom-maps';
-import { WrapWithHits } from './util';
+
 import Places from './places';
+import { WrapWithHits } from './util';
 
 const stories = storiesOf('GeoSearch', module);
 

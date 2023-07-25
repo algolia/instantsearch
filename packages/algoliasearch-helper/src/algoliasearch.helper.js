@@ -1,18 +1,17 @@
 'use strict';
 
-var SearchParameters = require('./SearchParameters');
-var SearchResults = require('./SearchResults');
-var DerivedHelper = require('./DerivedHelper');
-var requestBuilder = require('./requestBuilder');
-
 var EventEmitter = require('@algolia/events');
+
+var DerivedHelper = require('./DerivedHelper');
+var escapeFacetValue = require('./functions/escapeFacetValue').escapeFacetValue;
 var inherits = require('./functions/inherits');
+var merge = require('./functions/merge');
 var objectHasKeys = require('./functions/objectHasKeys');
 var omit = require('./functions/omit');
-var merge = require('./functions/merge');
-
+var requestBuilder = require('./requestBuilder');
+var SearchParameters = require('./SearchParameters');
+var SearchResults = require('./SearchResults');
 var version = require('./version');
-var escapeFacetValue = require('./functions/escapeFacetValue').escapeFacetValue;
 
 /**
  * Event triggered when a parameter is set or updated

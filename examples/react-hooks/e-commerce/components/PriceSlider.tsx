@@ -1,3 +1,7 @@
+import {
+  Range,
+  RangeBoundaries,
+} from 'instantsearch.js/es/connectors/range/connectRange';
 import React, { useState } from 'react';
 import {
   Slider,
@@ -7,13 +11,10 @@ import {
   Ticks,
   GetHandleProps,
 } from 'react-compound-slider';
-import { formatNumber } from '../utils';
-import './PriceSlider.css';
 import { useRange } from 'react-instantsearch-hooks-web';
-import {
-  Range,
-  RangeBoundaries,
-} from 'instantsearch.js/es/connectors/range/connectRange';
+
+import './PriceSlider.css';
+import { formatNumber } from '../utils';
 
 function Handle({
   domain: [min, max],

@@ -1,7 +1,9 @@
-import type { PaginationWidget } from 'instantsearch.js/es/widgets/pagination/pagination';
-import type { TestOptions, TestSetup } from '../../common';
 import { fakeAct } from '../../common';
+
 import { createRoutingTests } from './routing';
+
+import type { TestOptions, TestSetup } from '../../common';
+import type { PaginationWidget } from 'instantsearch.js/es/widgets/pagination/pagination';
 
 type WidgetParams = Parameters<PaginationWidget>[0];
 export type PaginationConnectorSetup = TestSetup<{

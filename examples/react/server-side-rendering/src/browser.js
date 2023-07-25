@@ -1,5 +1,6 @@
 import React from 'react';
 import { hydrate } from 'react-dom';
+
 import { createApp } from './createApp';
 
 const { App, props } = createApp();

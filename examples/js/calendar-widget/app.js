@@ -1,8 +1,8 @@
 /* global moment Calendar $ */
 import algoliasearch from 'algoliasearch/lite';
 import instantsearch from 'instantsearch.js';
-import { searchBox, hits } from 'instantsearch.js/es/widgets';
 import { connectRange } from 'instantsearch.js/es/connectors';
+import { searchBox, hits } from 'instantsearch.js/es/widgets';
 
 const ONE_DAY_IN_MS = 3600 * 24 * 1000;
 

@@ -1,8 +1,9 @@
 'use strict';
 
+var algoliasearch = require('algoliasearch');
+
 var algoliaSearchHelper = require('../../../');
 var version = require('../../../src/version');
-var algoliasearch = require('algoliasearch');
 
 function makeFakeClient() {
   var client = algoliasearch('what', 'wait', {});

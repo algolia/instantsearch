@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
 import { storiesOf } from '@storybook/react';
 import algoliasearch from 'algoliasearch/lite';
+import React, { Component } from 'react';
 import { InstantSearch, SearchBox, Configure } from 'react-instantsearch-dom';
+
 import { CustomHits, Content } from './util';
 
 const stories = storiesOf('RefreshCache', module);

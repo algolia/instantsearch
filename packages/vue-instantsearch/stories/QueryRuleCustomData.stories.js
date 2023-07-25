@@ -1,5 +1,6 @@
-import { previewWrapper } from './utils';
 import { storiesOf } from '@storybook/vue';
+
+import { previewWrapper } from './utils';
 
 storiesOf('ais-query-rule-custom-data', module)
   .addDecorator(

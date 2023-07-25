@@ -1,4 +1,6 @@
 import algoliasearch from 'algoliasearch/lite';
+import PropTypes from 'prop-types';
+import React, { Component, Fragment } from 'react';
 import {
   InstantSearch,
   ClearRefinements,
@@ -16,9 +18,8 @@ import {
   GeoSearch,
   Marker,
 } from 'react-instantsearch-dom-maps';
-import PropTypes from 'prop-types';
-import React, { Component, Fragment } from 'react';
 import Rheostat from 'rheostat';
+
 import withURLSync from './URLSync';
 import './App.css';
 

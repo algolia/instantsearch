@@ -5,13 +5,14 @@
 import { render } from '@testing-library/react';
 import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
+import { Panel } from 'react-instantsearch-dom';
+
 import {
   connectHierarchicalMenu,
   connectMenu,
   connectPagination,
   connectRefinementList,
 } from '../..';
-import { Panel } from 'react-instantsearch-dom';
 import DynamicWidgets from '../DynamicWidgets';
 import InstantSearch from '../InstantSearch';
 

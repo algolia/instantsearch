@@ -1,10 +1,10 @@
-import type { SearchClient, SearchResponses } from 'instantsearch.js';
-
 import {
   createSingleSearchResponse,
   createMultiSearchResponse,
   createSFFVResponse,
 } from './createAPIResponse';
+
+import type { SearchClient, SearchResponses } from 'instantsearch.js';
 
 export const createSearchClient = (
   args: Partial<SearchClient> = {}

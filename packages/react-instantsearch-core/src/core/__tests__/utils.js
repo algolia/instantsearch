@@ -1,4 +1,5 @@
 import { Component } from 'react';
+
 import * as utils from '../utils';
 
 describe('utils', () => {

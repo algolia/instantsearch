@@ -10,12 +10,14 @@
  * To be able to push the branch, create a first dummy commit.
  */
 
+const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+
 const chalk = require('chalk');
-const { getLatestLibraryVersion } = require('../src/utils');
+
 const createInstantSearchApp = require('../');
+const { getLatestLibraryVersion } = require('../src/utils');
 
 const GITHUB_REPOSITORY = 'https://github.com/algolia/instantsearch.git';
 const TEMPLATES_BRANCH = 'templates';

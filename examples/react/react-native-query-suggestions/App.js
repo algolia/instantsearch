@@ -1,5 +1,15 @@
-import React, { Component } from 'react';
+import algoliasearch from 'algoliasearch/lite';
 import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import {
+  InstantSearch,
+  Configure,
+  Index,
+  connectSearchBox,
+  connectInfiniteHits,
+  connectHits,
+  connectRefinementList,
+} from 'react-instantsearch-native';
 import {
   StyleSheet,
   Text,
@@ -10,18 +20,9 @@ import {
   Keyboard,
   TouchableHighlight,
 } from 'react-native';
-import algoliasearch from 'algoliasearch/lite';
-import {
-  InstantSearch,
-  Configure,
-  Index,
-  connectSearchBox,
-  connectInfiniteHits,
-  connectHits,
-  connectRefinementList,
-} from 'react-instantsearch-native';
-import Highlight from './Highlight';
 import Icon from 'react-native-vector-icons/FontAwesome';
+
+import Highlight from './Highlight';
 
 const searchClient = algoliasearch(
   'latency',

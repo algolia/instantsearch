@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import places from 'places.js';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+
 import connect from './connector';
 
 class Places extends Component {

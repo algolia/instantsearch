@@ -1,8 +1,9 @@
-import React from 'react';
-import orderBy from 'lodash.orderby';
-import { storiesOf } from '@storybook/react';
 import { boolean, number, array } from '@storybook/addon-knobs';
+import { storiesOf } from '@storybook/react';
+import orderBy from 'lodash.orderby';
+import React from 'react';
 import { Panel, RefinementList, SearchBox } from 'react-instantsearch-dom';
+
 import { WrapWithHits } from './util';
 
 const stories = storiesOf('RefinementList', module);

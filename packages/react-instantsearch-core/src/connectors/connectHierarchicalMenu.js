@@ -1,5 +1,6 @@
-import PropTypes from 'prop-types';
 import algoliasearchHelper from 'algoliasearch-helper';
+import PropTypes from 'prop-types';
+
 import createConnector from '../core/createConnector';
 import {
   cleanUpValue,

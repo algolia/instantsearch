@@ -1,4 +1,5 @@
 import { storiesOf } from '@storybook/vue';
+
 import { previewWrapper } from './utils';
 
 storiesOf('ais-clear-refinements', module)

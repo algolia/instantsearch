@@ -1,6 +1,6 @@
 import React from 'react';
-
 import { useQueryRules, UseQueryRulesProps } from 'react-instantsearch-hooks';
+
 import { cx } from '../cx';
 
 export type QueryRuleCustomDataProps = Omit<

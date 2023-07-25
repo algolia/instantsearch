@@ -58,9 +58,10 @@
 
 <script>
 import { connectRange } from 'instantsearch.js/es/connectors';
-import { createWidgetMixin } from '../mixins/widget';
+
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
+import { createWidgetMixin } from '../mixins/widget';
 
 export default {
   name: 'AisRangeInput',

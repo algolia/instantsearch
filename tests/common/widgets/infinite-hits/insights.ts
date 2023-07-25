@@ -1,15 +1,16 @@
-import { wait } from '@instantsearch/testutils';
-import { fireEvent, screen } from '@testing-library/dom';
-import type { MockSearchClient } from '@instantsearch/mocks';
 import {
   createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils';
+import { fireEvent, screen } from '@testing-library/dom';
+import userEvent from '@testing-library/user-event';
+
 import type { InfiniteHitsWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
+import type { MockSearchClient } from '@instantsearch/mocks';
 import type { SearchClient } from 'instantsearch.js';
-import userEvent from '@testing-library/user-event';
 
 declare const window: Window &
   typeof globalThis & {

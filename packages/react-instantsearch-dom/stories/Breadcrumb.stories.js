@@ -1,12 +1,13 @@
-import React from 'react';
-import { storiesOf } from '@storybook/react';
 import { object, text } from '@storybook/addon-knobs';
+import { storiesOf } from '@storybook/react';
+import React from 'react';
 import {
   Breadcrumb,
   HierarchicalMenu,
   Panel,
   connectHierarchicalMenu,
 } from 'react-instantsearch-dom';
+
 import { WrapWithHits } from './util';
 
 const stories = storiesOf('Breadcrumb', module);

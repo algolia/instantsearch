@@ -1,4 +1,5 @@
 import { connectToggleRefinement } from 'react-instantsearch-core';
+
 import ToggleRefinement from '../components/ToggleRefinement';
 
 /**

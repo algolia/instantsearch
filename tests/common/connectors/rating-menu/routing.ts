@@ -1,14 +1,15 @@
-import { wait } from '@instantsearch/testutils';
 import {
   createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
+import { history } from 'instantsearch.js/es/lib/routers';
+import { simple } from 'instantsearch.js/es/lib/stateMappings';
+
 import type { RatingMenuConnectorSetup } from '.';
 import type { TestOptions } from '../../common';
-import { simple } from 'instantsearch.js/es/lib/stateMappings';
-import { history } from 'instantsearch.js/es/lib/routers';
 
 export function createRoutingTests(
   setup: RatingMenuConnectorSetup,

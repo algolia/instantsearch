@@ -1,12 +1,12 @@
 'use strict';
 
-var merge = require('../functions/merge');
 var defaultsPure = require('../functions/defaultsPure');
-var intersection = require('../functions/intersection');
 var find = require('../functions/find');
-var valToNumber = require('../functions/valToNumber');
-var omit = require('../functions/omit');
+var intersection = require('../functions/intersection');
+var merge = require('../functions/merge');
 var objectHasKeys = require('../functions/objectHasKeys');
+var omit = require('../functions/omit');
+var valToNumber = require('../functions/valToNumber');
 var isValidUserToken = require('../utils/isValidUserToken');
 
 var RefinementList = require('./RefinementList');
@@ -1446,7 +1446,8 @@ SearchParameters.prototype = {
         return self.disjunctiveFacetsRefinements[facet].length > 0;
       })
       .concat(disjunctiveNumericRefinedFacets)
-      .concat(this.getRefinedHierarchicalFacets());
+      .concat(this.getRefinedHierarchicalFacets())
+      .sort();
   },
   /**
    * Returns the list of all disjunctive facets refined
@@ -1467,7 +1468,7 @@ SearchParameters.prototype = {
       Object.keys(this.hierarchicalFacetsRefinements).filter(function (facet) {
         return self.hierarchicalFacetsRefinements[facet].length > 0;
       })
-    );
+    ).sort();
   },
   /**
    * Returned the list of all disjunctive facets not refined

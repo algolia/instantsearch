@@ -3,8 +3,8 @@
  */
 
 import { mount } from '../../../test/utils';
-import Template from '../__Template.vue';
 import { __setState } from '../../mixins/widget';
+import Template from '../__Template.vue';
 jest.mock('../../mixins/widget');
 import '../../../test/utils/sortedHtmlSerializer';
 

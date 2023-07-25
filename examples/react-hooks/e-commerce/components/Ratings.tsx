@@ -1,11 +1,11 @@
-import React from 'react';
 import cx from 'classnames';
 import { connectRatingMenu } from 'instantsearch.js/es/connectors';
-import { useConnector } from 'react-instantsearch-hooks-web';
 import {
   RatingMenuConnectorParams,
   RatingMenuWidgetDescription,
 } from 'instantsearch.js/es/connectors/rating-menu/connectRatingMenu';
+import React from 'react';
+import { useConnector } from 'react-instantsearch-hooks-web';
 
 export function Ratings({ attribute }: { attribute: string }) {
   const { refine, items, createURL } = useConnector<

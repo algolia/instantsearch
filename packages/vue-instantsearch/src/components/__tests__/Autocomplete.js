@@ -3,8 +3,8 @@
  */
 
 import { mount } from '../../../test/utils';
-import Autocomplete from '../Autocomplete.vue';
 import { __setState } from '../../mixins/widget';
+import Autocomplete from '../Autocomplete.vue';
 import '../../../test/utils/sortedHtmlSerializer';
 jest.mock('../../mixins/widget');
 

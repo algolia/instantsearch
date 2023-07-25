@@ -1,4 +1,5 @@
 const path = require('path');
+
 const { flavors } = require('./flavors');
 
 module.exports = {

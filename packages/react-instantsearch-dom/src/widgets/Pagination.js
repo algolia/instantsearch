@@ -1,7 +1,8 @@
 import React from 'react';
 import { connectPagination } from 'react-instantsearch-core';
-import PanelCallbackHandler from '../components/PanelCallbackHandler';
+
 import Pagination from '../components/Pagination';
+import PanelCallbackHandler from '../components/PanelCallbackHandler';
 
 /**
  * The Pagination widget displays a simple pagination system allowing the user to

@@ -1,7 +1,7 @@
+import MultiSlider from '@ptomasroos/react-native-multi-slider';
+import algoliasearch from 'algoliasearch/lite';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import algoliasearch from 'algoliasearch/lite';
 import {
   InstantSearch,
   connectRefinementList,
@@ -9,7 +9,8 @@ import {
   connectRange,
   connectMenu,
 } from 'react-instantsearch-native';
-import MultiSlider from '@ptomasroos/react-native-multi-slider';
+import { StyleSheet, Text, View } from 'react-native';
+
 import Stats from './components/Stats';
 
 const searchClient = algoliasearch(
