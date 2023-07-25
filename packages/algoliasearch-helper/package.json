@@ -33,21 +33,21 @@
     "types/algoliasearch.js"
   ],
   "devDependencies": {
-    "@metalsmith/sass": "1.4.0",
-    "@types/algoliasearch": "3.34.11",
-    "browserify": "14.5.0",
-    "exorcist": "1.0.1",
-    "handlebars": "4.1.0",
-    "jest-watch-typeahead": "0.3.0",
-    "jsdoc-to-markdown": "8.0.0",
-    "metalsmith": "2.5.1",
-    "metalsmith-in-place": "1.4.4",
-    "metalsmith-layouts": "1.8.1",
-    "metalsmith-markdown": "1.3.0",
-    "metalsmith-metallic": "1.0.0",
-    "pretty-bytes-cli": "2.0.0",
-    "pug": "2.0.3",
-    "uglify-js": "2.8.29"
+    "@metalsmith/sass": "^1.4.0",
+    "@types/algoliasearch": "^3.34.11",
+    "browserify": "^14.5.0",
+    "exorcist": "^1.0.1",
+    "handlebars": "^4.1.0",
+    "jest-watch-typeahead": "^0.3.0",
+    "jsdoc-to-markdown": "^8.0.0",
+    "metalsmith": "^2.5.1",
+    "metalsmith-in-place": "^1.4.4",
+    "metalsmith-layouts": "^1.8.1",
+    "metalsmith-markdown": "^1.3.0",
+    "metalsmith-metallic": "^1.0.0",
+    "pretty-bytes-cli": "^2.0.0",
+    "pug": "^2.0.3",
+    "uglify-js": "^2.8.29"
   },
   "dependencies": {
     "@algolia/events": "^4.0.1"
