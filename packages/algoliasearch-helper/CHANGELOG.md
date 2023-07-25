@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.14.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.13.5...algoliasearch-helper@3.14.0) (2023-07-25)
+
+
+### Features
+
+* **caching:** sort filters and queries ([#5764](https://github.com/algolia/instantsearch/issues/5764)) ([f3d2019](https://github.com/algolia/instantsearch/commit/f3d2019748512a66c748da5d18750eaffd9e53b9))
+
+
+
+
+
 ## [3.13.5](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.13.4...algoliasearch-helper@3.13.5) (2023-07-19)
 
 
