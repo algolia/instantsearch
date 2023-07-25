@@ -7,7 +7,7 @@ These codemods (code transformers) can be ran with [jscodeshift](https://github.
 This will replace all imports from `react-instantsearch-hooks` to their `react-instantsearch` equivalent.
 
 ```
-npx jscodeshift --transform scripts/transforms/rish-to-ris.js --extensions='ts,js,tsx' <path>
+npx @codeshift/cli -p instantsearch-codemods#rish-to-ris <path>
 ```
 
 ### `ris-v6-to-v7`
@@ -20,7 +20,7 @@ This will :
 - Add some TODO comments to help you migrate
 
 ```
-npx jscodeshift --transform scripts/transforms/ris-v6-to-v7.js --extensions='ts,js,tsx' <path>
+npx @codeshift/cli -p instantsearch-codemods#ris-v6-to-v7 <path>
 ```
 
 ### Notes
@@ -28,5 +28,5 @@ npx jscodeshift --transform scripts/transforms/ris-v6-to-v7.js --extensions='ts,
 If you are using Prettier or ESLint, make sure to run its autofixing after this transformation, since code can be formatted differently after it has been transformed. For example, in our repository, the Prettier command would be:
 
 ```
-yarn prettier --write '{examples,stories,.storybook}/**/*.{js,ts,tsx}'
+yarn prettier --write '{examples,stories,.storybook}/**/*.{js,jsx,ts,tsx}'
 ```

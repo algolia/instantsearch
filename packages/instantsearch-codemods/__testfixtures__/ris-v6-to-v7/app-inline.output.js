@@ -55,7 +55,9 @@ function App() {
         there : https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-facetordering-with-sortby */
         facetOrdering={false}
         translations={{
-          showMoreButtonText({ isShowingMore: expanded }) {
+          showMoreButtonText({
+            isShowingMore: expanded
+          }) {
             return expanded ? 'Show less' : 'Show more';
           },
         }}
@@ -77,7 +79,9 @@ function App() {
         there : https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-facetordering-with-sortby */
         facetOrdering={false}
         translations={{
-          showMoreButtonText({ isShowingMore: expanded }) {
+          showMoreButtonText({
+            isShowingMore: expanded
+          }) {
             return expanded ? 'Show less' : 'Show more';
           },
           noResults: 'No results',
@@ -92,14 +96,18 @@ function App() {
           nextPageItemText: '›',
           firstPageItemText: '«',
           lastPageItemText: '»',
-          pageItemText({ currentPage: currentRefinement }) {
+          pageItemText({
+            currentPage: currentRefinement
+          }) {
             return currentRefinement;
           },
           previousPageItemAriaLabel: 'Previous page',
           nextPageItemAriaLabel: 'Next page',
           firstPageItemAriaLabel: 'First page',
           lastPageItemAriaLabel: 'Last page',
-          pageItemAriaLabel({ currentPage: currentRefinement }) {
+          pageItemAriaLabel({
+            currentPage: currentRefinement
+          }) {
             return `Page ${currentRefinement}`;
           },
         }}
@@ -123,7 +131,9 @@ function App() {
         there : https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-facetordering-with-sortby */
         facetOrdering={false}
         translations={{
-          showMoreButtonText({ isShowingMore: expanded }) {
+          showMoreButtonText({
+            isShowingMore: expanded
+          }) {
             return expanded ? 'Show less' : 'Show more';
           },
 

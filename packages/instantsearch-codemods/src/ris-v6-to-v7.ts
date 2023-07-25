@@ -1,6 +1,22 @@
-const elementName = (path) => path.value.openingElement.name.name;
-const propName = (attribute) => attribute.node.name.name;
-const parentElementName = (attribute) =>
+import type {
+  API,
+  FileInfo,
+  Options,
+  ASTPath,
+  JSXElement,
+  JSXIdentifier,
+  JSXAttribute,
+  Identifier,
+  FunctionExpression,
+  JSXExpressionContainer,
+  CallExpression,
+} from 'jscodeshift';
+
+const elementName = (path: ASTPath<JSXElement>) =>
+  (path.value.openingElement.name as JSXIdentifier).name;
+const propName = (attribute: ASTPath<JSXAttribute>) =>
+  attribute.node.name.name as string;
+const parentElementName = (attribute: ASTPath<JSXAttribute>) =>
   attribute.parentPath.parentPath.value.name.name;
 
 const translations = {
@@ -48,32 +64,45 @@ const componentsWithDefaultRefinement = [
   'ToggleRefinement',
 ];
 
-export default function transform(file, api, options) {
-  const j = api.jscodeshift;
+export default function transform(
+  file: FileInfo,
+  { jscodeshift: j }: API,
+  options: Options
+) {
   const printOptions = options.printOptions || {
     quote: 'single',
   };
   const root = j(file.source);
   const jsxElements = root.findJSXElements();
 
-  const replaceImports = (from, to) =>
+  const replaceImports = (from: string, to: string) =>
     root
       .find(j.ImportDeclaration)
       .filter(
         (path) =>
           path.node.source.value === from ||
-          path.node.source.value.startsWith(`${from}/`)
+          (typeof path.node.source.value === 'string' &&
+            path.node.source.value.startsWith(`${from}/`))
       )
       .forEach((sourceImport) => {
+        const value = sourceImport.value.source.value as string;
         j(sourceImport).replaceWith(
           j.importDeclaration(
             sourceImport.node.specifiers,
-            j.stringLiteral(sourceImport.value.source.value.replace(from, to))
+            j.stringLiteral(value.replace(from, to))
           )
         );
       });
 
-  const replacePropName = ({ element, from, to }) =>
+  const replacePropName = ({
+    element,
+    from,
+    to,
+  }: {
+    element: string;
+    from: string;
+    to: string;
+  }) =>
     jsxElements
       .filter((p) => elementName(p) === element)
       .find(j.JSXAttribute)
@@ -108,7 +137,10 @@ export default function transform(file, api, options) {
       .find(j.JSXAttribute)
       .filter((attribute) => propName(attribute) === 'translations')
       .forEach((attribute) => {
-        const translationsDict = translations[parentElementName(attribute)];
+        const translationsDict =
+          translations[
+            parentElementName(attribute) as keyof typeof translations
+          ];
 
         if (j(attribute).find(j.ObjectExpression).size() === 0) {
           attribute.node.comments = [
@@ -124,9 +156,11 @@ See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/ 
           .find(j.ObjectExpression)
           .find(j.Property)
           .forEach((property) => {
-            const currentKey = property.value.key.name;
-            const newKey = translationsDict[currentKey];
-            const functionExpression = property.value.value;
+            const currentKey = (property.value.key as Identifier).name;
+            const newKey =
+              translationsDict[currentKey as keyof typeof translationsDict];
+            const functionExpression = property.value
+              .value as FunctionExpression;
 
             if (currentKey === 'showMore') {
               if (!functionExpression.params) {
@@ -175,7 +209,7 @@ See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/ 
                   j.jsxIdentifier(newProp),
                   placeholder.type === 'Literal'
                     ? placeholder
-                    : j.jsxExpressionContainer(placeholder)
+                    : j.jsxExpressionContainer(placeholder as Identifier)
                 ),
               ];
 
@@ -185,7 +219,7 @@ See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/ 
             }
 
             if (newKey) {
-              property.value.key.name = newKey;
+              (property.value.key as Identifier).name = newKey;
             }
           });
       });
@@ -250,7 +284,7 @@ function MenuSelect(props) {
   /*
    * finds the highest parent of a path in the body, for example to add a top-level comment
    */
-  const findParent = (path) => {
+  const findParent = (path: ASTPath): ASTPath => {
     const parent = path.parentPath;
 
     if (parent.name === 'body') {
@@ -275,9 +309,11 @@ function MenuSelect(props) {
 
     root
       .find(j.CallExpression)
-      .filter((path) => path.node.callee.name === 'createConnector')
+      .filter((path) => {
+        return (path.node.callee as Identifier).name === 'createConnector';
+      })
       .forEach((path) => {
-        const parent = findParent(path);
+        const parent = findParent(path) as ASTPath<Identifier>;
 
         parent.node.comments ??= [];
         parent.node.comments.push(
@@ -339,20 +375,33 @@ function MenuSelect(props) {
         Object.keys(propsDict).includes(propName(attribute))
       )
       .forEach((attribute) => {
-        const newProp = propsDict[propName(attribute)];
+        const newProp =
+          propsDict[propName(attribute) as keyof typeof propsDict];
 
+        const container = attribute.value.value as JSXExpressionContainer;
         j(attribute).replaceWith(
           j.jsxAttribute(
             j.jsxIdentifier(newProp),
             j.jsxExpressionContainer(
-              j.arrowFunctionExpression([], attribute.value.value.expression)
+              j.arrowFunctionExpression(
+                [],
+                container.expression as CallExpression
+              )
             )
           )
         );
       });
   };
 
-  const commentProp = ({ element, prop, comment }) =>
+  const commentProp = ({
+    element,
+    prop,
+    comment,
+  }: {
+    element: string;
+    prop: string;
+    comment: string;
+  }) =>
     jsxElements
       .filter((p) => elementName(p) === element)
       .find(j.JSXAttribute)
