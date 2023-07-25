@@ -25,5 +25,19 @@ export default function transformer(
     'react-instantsearch'
   );
 
+  replaceImports(
+    j,
+    source,
+    'react-instantsearch-hooks-router-nextjs',
+    'react-instantsearch-router-nextjs'
+  );
+
+  replaceImports(
+    j,
+    source,
+    'react-instantsearch-hooks-server',
+    'react-instantsearch'
+  );
+
   return source.toSource(printOptions);
 }
