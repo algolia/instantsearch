@@ -14,6 +14,7 @@ import type {
   Property,
   ObjectProperty,
 } from 'jscodeshift';
+import { replaceImports } from './replaceImports';
 
 const elementName = (path: ASTPath<JSXElement>) =>
   (path.value.openingElement.name as JSXIdentifier).name;
@@ -86,25 +87,6 @@ export default function transform(
       j.commentBlock(` TODO (Codemod generated): ${comment} `)
     );
   };
-
-  const replaceImports = (from: string, to: string) =>
-    root
-      .find(j.ImportDeclaration)
-      .filter(
-        (path) =>
-          path.node.source.value === from ||
-          (typeof path.node.source.value === 'string' &&
-            path.node.source.value.startsWith(`${from}/`))
-      )
-      .forEach((sourceImport) => {
-        const value = sourceImport.value.source.value as string;
-        j(sourceImport).replaceWith(
-          j.importDeclaration(
-            sourceImport.node.specifiers,
-            j.stringLiteral(value.replace(from, to))
-          )
-        );
-      });
 
   const replacePropName = ({
     element,
@@ -425,7 +407,7 @@ See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/#
         addTodoComment(path.node, comment);
       });
 
-  replaceImports('react-instantsearch-dom', 'react-instantsearch');
+  replaceImports(j, root, 'react-instantsearch-dom', 'react-instantsearch');
 
   replacePropName({ element: 'Breadcrumb', from: 'rootURL', to: 'rootPath' });
   replacePropName({
