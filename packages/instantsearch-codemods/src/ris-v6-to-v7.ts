@@ -10,6 +10,9 @@ import type {
   FunctionExpression,
   JSXExpressionContainer,
   CallExpression,
+  Node,
+  Property,
+  ObjectProperty,
 } from 'jscodeshift';
 
 const elementName = (path: ASTPath<JSXElement>) =>
@@ -66,7 +69,7 @@ const componentsWithDefaultRefinement = [
 
 export default function transform(
   file: FileInfo,
-  { jscodeshift: j }: API,
+  { jscodeshift: j, stats }: API,
   options: Options
 ) {
   const printOptions = options.printOptions || {
@@ -74,6 +77,15 @@ export default function transform(
   };
   const root = j(file.source);
   const jsxElements = root.findJSXElements();
+
+  const addTodoComment = (node: Node, comment: string) => {
+    stats('TODO comments added');
+
+    node.comments = node.comments || [];
+    node.comments.push(
+      j.commentBlock(` TODO (Codemod generated): ${comment} `)
+    );
+  };
 
   const replaceImports = (from: string, to: string) =>
     root
@@ -143,85 +155,90 @@ export default function transform(
           ];
 
         if (j(attribute).find(j.ObjectExpression).size() === 0) {
-          attribute.node.comments = [
-            j.commentBlock(
-              ` TODO: Follow the upgrade guide to rename the keys of the \`translations\` prop
-See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/ `
-            ),
-          ];
+          addTodoComment(
+            attribute.node,
+            `Follow the upgrade guide to rename the keys of the \`translations\` prop
+See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/`
+          );
           return;
         }
+
+        const changeProperty = (
+          property: ASTPath<Property> | ASTPath<ObjectProperty>
+        ) => {
+          const currentKey = (property.value.key as Identifier).name;
+          const newKey =
+            translationsDict[currentKey as keyof typeof translationsDict];
+          const functionExpression = property.value.value as FunctionExpression;
+
+          if (currentKey === 'showMore') {
+            if (!functionExpression.params) {
+              addTodoComment(
+                property.node,
+                `Rename this key to \`showMoreButton\` and change its function's first argument to an object with an \`isShowingMore\` key
+See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/`
+              );
+              return;
+            }
+            if (functionExpression.params.length > 0) {
+              functionExpression.params = [
+                j.template
+                  .expression`{ isShowingMore: ${functionExpression.params[0]} }`,
+              ];
+            }
+          } else if (currentKey === 'page' || currentKey === 'ariaPage') {
+            if (!functionExpression.params) {
+              addTodoComment(
+                property.node,
+                `Rename this key and change its function's first argument to an object with a \`currentPage\` key
+See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/`
+              );
+              return;
+            }
+            if (functionExpression.params.length > 0) {
+              functionExpression.params = [
+                j.template
+                  .expression`{ currentPage: ${functionExpression.params[0]} }`,
+              ];
+            }
+          } else if (currentKey === 'placeholder') {
+            const jsxElement = attribute.parentPath.parentPath.value;
+            const jsxElementName = jsxElement.name.name;
+            const newProp =
+              jsxElementName === 'SearchBox'
+                ? 'placeholder'
+                : 'searchablePlaceholder';
+            const placeholder = property.value.value;
+
+            jsxElement.attributes = [
+              ...jsxElement.attributes,
+              j.jsxAttribute(
+                j.jsxIdentifier(newProp),
+                placeholder.type === 'Literal'
+                  ? placeholder
+                  : j.jsxExpressionContainer(placeholder as Identifier)
+              ),
+            ];
+
+            property.prune();
+
+            return;
+          }
+
+          if (newKey) {
+            (property.value.key as Identifier).name = newKey;
+          }
+        };
 
         j(attribute)
           .find(j.ObjectExpression)
           .find(j.Property)
-          .forEach((property) => {
-            const currentKey = (property.value.key as Identifier).name;
-            const newKey =
-              translationsDict[currentKey as keyof typeof translationsDict];
-            const functionExpression = property.value
-              .value as FunctionExpression;
+          .forEach(changeProperty);
 
-            if (currentKey === 'showMore') {
-              if (!functionExpression.params) {
-                property.node.comments = [
-                  j.commentBlock(
-                    ` TODO: Rename this key to \`showMoreButton\` and change its function's first argument to an object with an \`isShowingMore\` key
-See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/ `
-                  ),
-                ];
-                return;
-              }
-              if (functionExpression.params.length > 0) {
-                functionExpression.params = [
-                  j.template
-                    .expression`{ isShowingMore: ${functionExpression.params[0]} }`,
-                ];
-              }
-            } else if (currentKey === 'page' || currentKey === 'ariaPage') {
-              if (!functionExpression.params) {
-                property.node.comments = [
-                  j.commentBlock(
-                    ` TODO: Rename this key and change its function's first argument to an object with a \`currentPage\` key
-See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/ `
-                  ),
-                ];
-                return;
-              }
-              if (functionExpression.params.length > 0) {
-                functionExpression.params = [
-                  j.template
-                    .expression`{ currentPage: ${functionExpression.params[0]} }`,
-                ];
-              }
-            } else if (currentKey === 'placeholder') {
-              const jsxElement = attribute.parentPath.parentPath.value;
-              const jsxElementName = jsxElement.name.name;
-              const newProp =
-                jsxElementName === 'SearchBox'
-                  ? 'placeholder'
-                  : 'searchablePlaceholder';
-              const placeholder = property.value.value;
-
-              jsxElement.attributes = [
-                ...jsxElement.attributes,
-                j.jsxAttribute(
-                  j.jsxIdentifier(newProp),
-                  placeholder.type === 'Literal'
-                    ? placeholder
-                    : j.jsxExpressionContainer(placeholder as Identifier)
-                ),
-              ];
-
-              property.prune();
-
-              return;
-            }
-
-            if (newKey) {
-              (property.value.key as Identifier).name = newKey;
-            }
-          });
+        j(attribute)
+          .find(j.ObjectExpression)
+          .find(j.ObjectProperty)
+          .forEach(changeProperty);
       });
 
   const handleDefaultRefinements = () => {
@@ -233,18 +250,18 @@ See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/ 
       .filter((attribute) => propName(attribute) === 'defaultRefinement')
       .forEach((attribute) => {
         if (attribute.parentPath.parentPath.value.name.name === 'HitsPerPage') {
-          attribute.node.comments = [
-            j.commentLine(
-              ' TODO: Remove this `defaultRefinement` prop and add `default: true` to the corresponding item in the `items` array prop.'
-            ),
-          ];
+          addTodoComment(
+            attribute.node,
+            'Remove this `defaultRefinement` prop and add `default: true` to the corresponding item in the `items` array prop.'
+          );
           return;
         }
 
-        attribute.node.comments = [
-          j.commentBlock(` TODO: Move this into \`InstantSearch\`'s \`initialUiState\` prop.
-See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/#default-refinements `),
-        ];
+        addTodoComment(
+          attribute.node,
+          `Move this into \`InstantSearch\`'s \`initialUiState\` prop.
+See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/#default-refinements`
+        );
       });
   };
 
@@ -315,12 +332,10 @@ function MenuSelect(props) {
       .forEach((path) => {
         const parent = findParent(path) as ASTPath<Identifier>;
 
-        parent.node.comments ??= [];
-        parent.node.comments.push(
-          j.commentBlock(`
- * TODO: custom widgets must be converted to hooks.
- * See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/#creating-connectors
- `)
+        addTodoComment(
+          parent.node,
+          `custom widgets must be converted to hooks.
+See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/#creating-connectors`
         );
       });
   };
@@ -347,7 +362,7 @@ function MenuSelect(props) {
 
       root.get().node.program.body.push(j.template.statement`
 
-      // TODO: ensure your usage correctly maps the props from the connector to the hook
+      // TODO (Codemod generated): ensure your usage correctly maps the props from the connector to the hook
       function ${`connect${connectorName}`}(Component) {
         const ${connectorName} = (props) => {
           const data = ${`use${connectorName}`}(props);
@@ -407,7 +422,7 @@ function MenuSelect(props) {
       .find(j.JSXAttribute)
       .filter((path) => propName(path) === prop)
       .forEach((path) => {
-        path.node.comments = [j.commentBlock(` TODO: ${comment} `)];
+        addTodoComment(path.node, comment);
       });
 
   replaceImports('react-instantsearch-dom', 'react-instantsearch');

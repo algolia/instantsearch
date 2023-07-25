@@ -30,10 +30,8 @@ const Hits = connectHits(RawHits);
 
 const RawCustomWidget = () => null;
 
-/*
- * TODO: custom widgets must be converted to hooks.
- * See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/#creating-connectors
- */
+/* TODO (Codemod generated): custom widgets must be converted to hooks.
+See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/#creating-connectors */
 const CustomWidget = createConnector({
   displayName: 'CustomWidget',
   getProvidedProps() {
@@ -41,7 +39,7 @@ const CustomWidget = createConnector({
   },
 })(RawCustomWidget);
 
-// TODO: ensure your usage correctly maps the props from the connector to the hook
+// TODO (Codemod generated): ensure your usage correctly maps the props from the connector to the hook
 function connectSearchBox(Component) {
   const SearchBox = (props) => {
     const data = useSearchBox(props);
@@ -52,7 +50,7 @@ function connectSearchBox(Component) {
   return SearchBox;
 }
 
-// TODO: ensure your usage correctly maps the props from the connector to the hook
+// TODO (Codemod generated): ensure your usage correctly maps the props from the connector to the hook
 function connectHits(Component) {
   const Hits = (props) => {
     const data = useHits(props);

@@ -20,22 +20,22 @@ function App() {
 
   return (
     <InstantSearch
-      /* TODO: `searchState` is no longer supported. This is now handled via an `onStateChange` callback.
+      /* TODO (Codemod generated): `searchState` is no longer supported. This is now handled via an `onStateChange` callback.
       See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-searchstate-with-initialuistate */
       searchState={{}}
-      /* TODO: `resultsState` is no longer supported, if you used it for server-side rendering, you can follow
+      /* TODO (Codemod generated): `resultsState` is no longer supported, if you used it for server-side rendering, you can follow
       this guide : https://www.algolia.com/doc/guides/building-search-ui/going-further/server-side-rendering/react/ */
       resultsState={{}}
-      /* TODO: `createURL` should be moved to the `routing` prop.
+      /* TODO (Codemod generated): `createURL` should be moved to the `routing` prop.
       See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#move-createurl-in-routing */
       createURL={() => {}}
-      /* TODO: `onSearchStateChange` is no longer supported. This is now handled via an `onStateChange` callback.
+      /* TODO (Codemod generated): `onSearchStateChange` is no longer supported. This is now handled via an `onStateChange` callback.
       See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-onsearchstatechange-with-onstatechange */
       onSearchStateChange={() => {}}
-      /* TODO: `onSearchParameters` is no longer supported, if you used it for server-side rendering, you can follow
+      /* TODO (Codemod generated): `onSearchParameters` is no longer supported, if you used it for server-side rendering, you can follow
       this guide : https://www.algolia.com/doc/guides/building-search-ui/going-further/server-side-rendering/react/ */
       onSearchParameters={() => {}}
-      /* TODO: the `refresh` prop is no longer a prop on `InstantSearch`. It can now be called programmatically via the `refresh` function returned by `useInstantSearch`.
+      /* TODO (Codemod generated): the `refresh` prop is no longer a prop on `InstantSearch`. It can now be called programmatically via the `refresh` function returned by `useInstantSearch`.
       See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-refresh-prop-with-refresh-from-useinstantsearch */
       refresh={refreshValue}
       indexName="instant_search"
@@ -47,11 +47,11 @@ function App() {
       />
       <CurrentRefinements excludedAttributes={[]} />
       <HierarchicalMenu
-        /* TODO: Move this into `InstantSearch`'s `initialUiState` prop.
+        /* TODO (Codemod generated): Move this into `InstantSearch`'s `initialUiState` prop.
         See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/#default-refinements */
         defaultRefinement="Cameras & Camcorders"
         attributes={['categories.lvl0', 'categories.lvl1']}
-        /* TODO: `facetOrdering` is not supported anymore, see the new `sortBy` prop
+        /* TODO (Codemod generated): `facetOrdering` is not supported anymore, see the new `sortBy` prop
         there : https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-facetordering-with-sortby */
         facetOrdering={false}
         translations={{
@@ -63,7 +63,7 @@ function App() {
         }}
       />
       <HitsPerPage
-        // TODO: Remove this `defaultRefinement` prop and add `default: true` to the corresponding item in the `items` array prop.
+        /* TODO (Codemod generated): Remove this `defaultRefinement` prop and add `default: true` to the corresponding item in the `items` array prop. */
         defaultRefinement={5}
         items={[
           { value: 5, label: 'Show 5 hits' },
@@ -71,11 +71,11 @@ function App() {
         ]}
       />
       <Menu
-        /* TODO: Move this into `InstantSearch`'s `initialUiState` prop.
+        /* TODO (Codemod generated): Move this into `InstantSearch`'s `initialUiState` prop.
         See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/#default-refinements */
         defaultRefinement="Audio"
         attribute="category"
-        /* TODO: `facetOrdering` is not supported anymore, see the new `sortBy` prop
+        /* TODO (Codemod generated): `facetOrdering` is not supported anymore, see the new `sortBy` prop
         there : https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-facetordering-with-sortby */
         facetOrdering={false}
         translations={{
@@ -88,7 +88,7 @@ function App() {
         }}
       />
       <Pagination
-        /* TODO: Move this into `InstantSearch`'s `initialUiState` prop.
+        /* TODO (Codemod generated): Move this into `InstantSearch`'s `initialUiState` prop.
         See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/#default-refinements */
         defaultRefinement={2}
         translations={{
@@ -113,7 +113,7 @@ function App() {
         }}
       />
       <RangeInput
-        /* TODO: Move this into `InstantSearch`'s `initialUiState` prop.
+        /* TODO (Codemod generated): Move this into `InstantSearch`'s `initialUiState` prop.
         See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/#default-refinements */
         defaultRefinement={{ min: 0, max: 500 }}
         attribute="price"
@@ -123,11 +123,11 @@ function App() {
         }}
       />
       <RefinementList
-        /* TODO: Move this into `InstantSearch`'s `initialUiState` prop.
+        /* TODO (Codemod generated): Move this into `InstantSearch`'s `initialUiState` prop.
         See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/#default-refinements */
         defaultRefinement={['Apple', 'Insignia']}
         attribute="brand"
-        /* TODO: `facetOrdering` is not supported anymore, see the new `sortBy` prop
+        /* TODO (Codemod generated): `facetOrdering` is not supported anymore, see the new `sortBy` prop
         there : https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-facetordering-with-sortby */
         facetOrdering={false}
         translations={{
@@ -143,10 +143,10 @@ function App() {
         }}
         searchablePlaceholder='Search here...' />
       <SearchBox
-        /* TODO: Move this into `InstantSearch`'s `initialUiState` prop.
+        /* TODO (Codemod generated): Move this into `InstantSearch`'s `initialUiState` prop.
         See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/#default-refinements */
         defaultRefinement="iphone"
-        /* TODO: `focusShortcuts` is not supported anymore, see there for suggestions on how to replace
+        /* TODO (Codemod generated): `focusShortcuts` is not supported anymore, see there for suggestions on how to replace
         it : https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react-hooks/#replace-focusshortcuts-with-custom-code */
         focusShortcuts={['s']}
         translations={{
@@ -154,13 +154,13 @@ function App() {
           resetButtonTitle: 'Clear your search query.'
         }}
         placeholder='Search here...' />
-      <SortBy /* TODO: Move this into `InstantSearch`'s `initialUiState` prop.
+      <SortBy /* TODO (Codemod generated): Move this into `InstantSearch`'s `initialUiState` prop.
       See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/#default-refinements */
       defaultRefinement="instant_search_asc" />
       <ToggleRefinement
         on={true}
         attribute="free_shipping"
-        /* TODO: Move this into `InstantSearch`'s `initialUiState` prop.
+        /* TODO (Codemod generated): Move this into `InstantSearch`'s `initialUiState` prop.
         See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/#default-refinements */
         defaultRefinement={true}
       />
