@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
 
@@ -8,7 +9,7 @@ const shell = require('shelljs');
 console.log('swapping Vue 3 dependency');
 shell.sed(
   '-i',
-  /"vue": "2.*"(,?)/,
+  /"vue": "^?2.*"(,?)/,
   '"vue": "3.2.47"$1',
   path.resolve(__dirname, '../packages/vue-instantsearch/package.json')
 );
@@ -32,3 +33,9 @@ shell.sed(
 
 console.log('installing');
 shell.exec('yarn');
+
+assert.equal(
+  require('vue/package.json').version[0],
+  '3',
+  'Algoliasearch major version should be 3'
+);
