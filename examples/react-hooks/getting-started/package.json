@@ -7,17 +7,17 @@
     "start": "BABEL_ENV=parcel parcel index.html --port 3000"
   },
   "dependencies": {
-    "algoliasearch": "4.14.3",
+    "algoliasearch": "^4.14.3",
     "instantsearch.js": "4.56.7",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-instantsearch-hooks-web": "6.47.1"
   },
   "devDependencies": {
-    "@parcel/core": "2.8.0",
-    "@parcel/packager-raw-url": "2.8.0",
-    "@parcel/transformer-webmanifest": "2.8.0",
-    "parcel": "2.8.0",
-    "typescript": "5.1.3"
+    "@parcel/core": "^2.8.0",
+    "@parcel/packager-raw-url": "^2.8.0",
+    "@parcel/transformer-webmanifest": "^2.8.0",
+    "parcel": "^2.8.0",
+    "typescript": "^5.1.3"
   }
 }

@@ -23,7 +23,7 @@ console.log(
 // change main dependency
 shell.sed(
   '-i',
-  /"algoliasearch": "4.*"(,?)/,
+  /"algoliasearch": "\^?4.*"(,?)/,
   '"algoliasearch": "3.35.1","@types/algoliasearch": "3.34.10"$1',
   packageJsonPaths
 );
@@ -31,7 +31,7 @@ shell.sed(
 // remove other v4 dependencies
 shell.sed(
   '-i',
-  /"@algolia\/(cache-.*|client-.*|logger-.*|requester-.*|transporter)": "4.*",?/,
+  /"@algolia\/(cache-.*|client-.*|logger-.*|requester-.*|transporter)": "\^?4.*",?/,
   '',
   packageJsonPaths
 );

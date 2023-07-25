@@ -25,18 +25,18 @@
     "lint": "stylelint \"**/*.scss\""
   },
   "devDependencies": {
-    "autoprefixer": "10.4.13",
-    "postcss": "8.4.20",
-    "postcss-cli": "10.1.0",
-    "sass": "1.56.2",
-    "stylelint": "14.16.0",
-    "stylelint-a11y": "1.2.3",
-    "stylelint-config-prettier": "9.0.4",
-    "stylelint-config-prettier-scss": "0.0.1",
-    "stylelint-config-standard": "29.0.0",
-    "stylelint-config-standard-scss": "6.1.0",
-    "stylelint-no-unsupported-browser-features": "6.0.1",
-    "stylelint-order": "5.0.0",
-    "stylelint-prettier": "2.0.0"
+    "autoprefixer": "^10.4.13",
+    "postcss": "^8.4.20",
+    "postcss-cli": "^10.1.0",
+    "sass": "^1.56.2",
+    "stylelint": "^14.16.0",
+    "stylelint-a11y": "^1.2.3",
+    "stylelint-config-prettier": "^9.0.4",
+    "stylelint-config-prettier-scss": "^0.0.1",
+    "stylelint-config-standard": "^29.0.0",
+    "stylelint-config-standard-scss": "^6.1.0",
+    "stylelint-no-unsupported-browser-features": "^6.0.1",
+    "stylelint-order": "^5.0.0",
+    "stylelint-prettier": "^2.0.0"
   }
 }

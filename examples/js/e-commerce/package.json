@@ -9,14 +9,14 @@
   },
   "browserslist": "firefox 68, chrome 78, IE 11",
   "dependencies": {
-    "algoliasearch": "4.14.3",
+    "algoliasearch": "^4.14.3",
     "instantsearch.js": "4.56.7"
   },
   "devDependencies": {
-    "@babel/core": "7.15.5",
-    "@parcel/core": "2.8.0",
-    "@parcel/packager-raw-url": "2.8.0",
-    "@parcel/transformer-webmanifest": "2.8.0",
-    "parcel": "2.8.0"
+    "@babel/core": "^7.15.5",
+    "@parcel/core": "^2.8.0",
+    "@parcel/packager-raw-url": "^2.8.0",
+    "@parcel/transformer-webmanifest": "^2.8.0",
+    "parcel": "^2.8.0"
   }
 }

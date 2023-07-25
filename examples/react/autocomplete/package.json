@@ -9,12 +9,12 @@
     "test": "jest --ci"
   },
   "devDependencies": {
-    "@babel/core": "7.15.5",
-    "@parcel/core": "2.8.0",
-    "@parcel/packager-raw-url": "2.8.0",
-    "@parcel/transformer-webmanifest": "2.8.0",
-    "parcel": "2.8.0",
-    "react-test-renderer": "17.0.2"
+    "@babel/core": "^7.15.5",
+    "@parcel/core": "^2.8.0",
+    "@parcel/packager-raw-url": "^2.8.0",
+    "@parcel/transformer-webmanifest": "^2.8.0",
+    "parcel": "^2.8.0",
+    "react-test-renderer": "^17.0.2"
   },
   "jest": {
     "transform": {
@@ -30,7 +30,7 @@
     }
   },
   "dependencies": {
-    "algoliasearch": "4.14.3",
+    "algoliasearch": "^4.14.3",
     "antd": "3.23.2",
     "prop-types": "15.6.2",
     "react": "17.0.2",

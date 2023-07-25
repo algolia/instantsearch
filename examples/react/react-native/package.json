@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@ptomasroos/react-native-multi-slider": "2.2.2",
-    "algoliasearch": "4.14.3",
+    "algoliasearch": "^4.14.3",
     "expo": "37.0.3",
     "prop-types": "15.6.2",
     "react": "17.0.2",
@@ -31,10 +31,10 @@
     "react-native-web": "~0.11.7"
   },
   "devDependencies": {
-    "@babel/core": "7.15.5",
-    "babel-preset-expo": "8.1.0",
-    "jest-expo": "37.0.0",
-    "react-test-renderer": "17.0.2"
+    "@babel/core": "^7.15.5",
+    "babel-preset-expo": "^8.1.0",
+    "jest-expo": "^37.0.0",
+    "react-test-renderer": "^17.0.2"
   },
   "private": true,
   "jest": {

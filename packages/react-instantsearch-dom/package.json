@@ -48,11 +48,11 @@
     "react-instantsearch-core": "6.40.3"
   },
   "devDependencies": {
-    "@storybook/react": "5.3.9",
-    "babel-preset-react-app": "10.0.1",
-    "lodash.orderby": "4.6.0",
-    "nock": "11.7.2",
-    "react-autosuggest": "9.4.3"
+    "@storybook/react": "^5.3.9",
+    "babel-preset-react-app": "^10.0.1",
+    "lodash.orderby": "^4.6.0",
+    "nock": "^11.7.2",
+    "react-autosuggest": "^9.4.3"
   },
   "peerDependencies": {
     "algoliasearch": ">= 3.1 < 5",
