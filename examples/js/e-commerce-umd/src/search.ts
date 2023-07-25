@@ -1,4 +1,6 @@
 import algoliasearch from 'algoliasearch/lite';
+
+import getRouting from './routing';
 import {
   brands,
   categories,
@@ -17,7 +19,6 @@ import {
   searchBox,
   sortBy,
 } from './widgets';
-import getRouting from './routing';
 
 const searchClient = algoliasearch(
   'latency',

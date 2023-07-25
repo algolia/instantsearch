@@ -1,5 +1,6 @@
-import type { API, FileInfo, Options } from 'jscodeshift';
 import { replaceImports } from './replaceImports';
+
+import type { API, FileInfo, Options } from 'jscodeshift';
 
 export default function transformer(
   file: FileInfo,

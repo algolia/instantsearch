@@ -1,3 +1,5 @@
+import { replaceImports } from './replaceImports';
+
 import type {
   API,
   FileInfo,
@@ -14,7 +16,6 @@ import type {
   Property,
   ObjectProperty,
 } from 'jscodeshift';
-import { replaceImports } from './replaceImports';
 
 const elementName = (path: ASTPath<JSXElement>) =>
   (path.value.openingElement.name as JSXIdentifier).name;
@@ -327,7 +328,13 @@ See https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/#
       .find(j.ImportDeclaration)
       .filter((path) => path.node.source.value === 'react-instantsearch')
       .find(j.ImportSpecifier)
-      .filter((path) => path.node.imported.name.startsWith('connect'));
+      .filter(
+        (path) =>
+          path.node.imported.name.startsWith('connect') &&
+          !['connectStateResults', 'connectAutoComplete'].includes(
+            path.node.imported.name
+          )
+      );
 
     if (imports.size() === 0) {
       return;
