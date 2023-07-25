@@ -7,7 +7,7 @@ These codemods (code transformers) can be ran with [jscodeshift](https://github.
 This will replace all imports from `react-instantsearch-hooks` to their `react-instantsearch` equivalent.
 
 ```
-npx @codeshift/cli -p instantsearch-codemods#rish-to-ris <path>
+npx @codeshift/cli --packages 'instantsearch-codemods#rish-to-ris' <path>
 ```
 
 ### `ris-v6-to-v7`
@@ -20,7 +20,7 @@ This will :
 - Add some TODO comments to help you migrate
 
 ```
-npx @codeshift/cli -p instantsearch-codemods#ris-v6-to-v7 <path>
+npx @codeshift/cli --packages 'instantsearch-codemods#ris-v6-to-v7' <path>
 ```
 
 ### Notes
