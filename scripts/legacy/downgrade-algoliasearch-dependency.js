@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+const assert = require('assert');
 const path = require('path');
 
 const shell = require('shelljs');
@@ -37,3 +38,15 @@ shell.sed(
 );
 
 shell.exec('yarn install');
+
+assert.equal(
+  require('algoliasearch/package.json').version[0],
+  '3',
+  'Algoliasearch major version should be 3'
+);
+
+assert.equal(
+  require('@types/algoliasearch/package.json').version[0],
+  '3',
+  'Algoliasearch major version should be 3'
+);
