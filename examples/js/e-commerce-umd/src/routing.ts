@@ -1,11 +1,12 @@
 /* eslint complexity: off */
 
-import type { UiState } from 'instantsearch.js';
 import {
   getFallbackHitsPerPageRoutingValue,
   getFallbackSortByRoutingValue,
   getFallbackRatingsRoutingValue,
 } from './widgets';
+
+import type { UiState } from 'instantsearch.js';
 
 type RouteState = {
   query?: string;
