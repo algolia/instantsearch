@@ -14,7 +14,7 @@ import type { ComponentProps } from 'react';
 type AllWidgets = typeof widgets;
 // We only track widgets that use connectors.
 const NON_WIDGETS = ['Highlight', 'Snippet', 'PoweredBy'] as const;
-type RegularWidgets = Omit<typeof widgets, typeof NON_WIDGETS[number]>;
+type RegularWidgets = Omit<typeof widgets, (typeof NON_WIDGETS)[number]>;
 
 export type SingleWidget = {
   [name in keyof AllWidgets]: {

@@ -1,8 +1,8 @@
-import type { IndexWidget } from '../widgets/index/index';
 import type { InstantSearch } from './instantsearch';
 import type { IndexRenderState, WidgetRenderState } from './render-state';
 import type { IndexUiState, UiState } from './ui-state';
 import type { Expand, RequiredKeys } from './utils';
+import type { IndexWidget } from '../widgets/index/index';
 import type {
   AlgoliaSearchHelper as Helper,
   SearchParameters,

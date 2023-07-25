@@ -4,8 +4,8 @@
 
 import { runAllMicroTasks } from '@instantsearch/testutils';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import { SearchResults } from 'algoliasearch-helper';
 import algoliasearch from 'algoliasearch/lite';
+import { SearchResults } from 'algoliasearch-helper';
 import Enzyme, { mount } from 'enzyme';
 import React from 'react';
 import {

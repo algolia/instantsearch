@@ -333,11 +333,7 @@
               >
                 <ul class="ais-Pagination-list">
                   <li
-                    class="
-                      ais-Pagination-item
-                      ais-Pagination-item--previousPage
-                      ais-Pagination-item--disabled
-                    "
+                    class="ais-Pagination-item ais-Pagination-item--previousPage ais-Pagination-item--disabled"
                     v-if="isFirstPage"
                   >
                     <span class="ais-Pagination-link">
@@ -362,9 +358,7 @@
                   </li>
 
                   <li
-                    class="
-                      ais-Pagination-item ais-Pagination-item--previousPage
-                    "
+                    class="ais-Pagination-item ais-Pagination-item--previousPage"
                     v-if="!isFirstPage"
                   >
                     <a
@@ -445,11 +439,7 @@
                   </li>
 
                   <li
-                    class="
-                      ais-Pagination-item
-                      ais-Pagination-item--nextPage
-                      ais-Pagination-item--disabled
-                    "
+                    class="ais-Pagination-item ais-Pagination-item--nextPage ais-Pagination-item--disabled"
                     v-if="isLastPage"
                   >
                     <span class="ais-Pagination-link">

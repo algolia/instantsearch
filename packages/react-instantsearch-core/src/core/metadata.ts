@@ -1,5 +1,5 @@
-import type { SearchClient } from '../widgets/InstantSearch';
 import type { Widget } from './createWidgetsManager';
+import type { SearchClient } from '../widgets/InstantSearch';
 
 export function isMetadataEnabled() {
   return (

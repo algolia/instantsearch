@@ -15,13 +15,13 @@ import createHTMLMarker from './createHTMLMarker';
 import defaultTemplates from './defaultTemplates';
 import renderer from './GeoSearchRenderer';
 
+import type { HTMLMarkerArguments } from './createHTMLMarker';
 import type {
   GeoSearchConnectorParams,
   GeoSearchWidgetDescription,
   GeoHit,
 } from '../../connectors/geo-search/connectGeoSearch';
 import type { GeoLoc, Template, WidgetFactory } from '../../types';
-import type { HTMLMarkerArguments } from './createHTMLMarker';
 
 export type CreateMarker = (args: {
   item: GeoHit;
@@ -150,7 +150,7 @@ export type GeoSearchWidgetParams = {
    * Reference to the global `window.google` object.
    * See [the documentation](https://developers.google.com/maps/documentation/javascript/tutorial) for more information.
    */
-  googleReference: typeof window['google'];
+  googleReference: (typeof window)['google'];
 };
 
 export type GeoSearchWidget = WidgetFactory<

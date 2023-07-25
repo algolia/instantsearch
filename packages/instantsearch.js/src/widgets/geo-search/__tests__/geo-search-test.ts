@@ -131,7 +131,7 @@ describe('GeoSearch', () => {
   const lastRenderState = (fn: jest.MockedFunction<typeof originalRenderer>) =>
     lastRenderArgs(fn).widgetParams.renderState;
 
-  const simulateMapReadyEvent = (google: typeof window['google']) => {
+  const simulateMapReadyEvent = (google: (typeof window)['google']) => {
     castToJestMock(google.maps.event.addListenerOnce).mock.calls[0][2]();
   };
 

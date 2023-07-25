@@ -1,10 +1,4 @@
 /* global google */
-import type {
-  GeoSearchConnectorParams,
-  GeoSearchRenderState,
-} from '../../connectors/geo-search/connectGeoSearch';
-import type { PreparedTemplateProps } from '../../lib/templating';
-import type { ComponentCSSClasses, Renderer } from '../../types';
 import type { HTMLMarkerArguments } from './createHTMLMarker';
 import type {
   CreateMarker,
@@ -12,6 +6,12 @@ import type {
   GeoSearchTemplates,
   GeoSearchWidgetParams,
 } from './geo-search';
+import type {
+  GeoSearchConnectorParams,
+  GeoSearchRenderState,
+} from '../../connectors/geo-search/connectGeoSearch';
+import type { PreparedTemplateProps } from '../../lib/templating';
+import type { ComponentCSSClasses, Renderer } from '../../types';
 
 // @TODO: decide whether this should use the "specialized renderer" pattern to separate these options from connector params
 type GeoSearchRendererParams = {

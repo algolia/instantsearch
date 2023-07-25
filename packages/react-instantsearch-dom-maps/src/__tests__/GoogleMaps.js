@@ -48,12 +48,12 @@ describe('GoogleMaps', () => {
 
     const wrapper = shallow(
       <GoogleMaps {...props}>
-        <div testId="children">This is the children</div>
+        <div data-testid="children">This is the children</div>
       </GoogleMaps>
     );
 
     expect(wrapper).toMatchSnapshot();
-    expect(wrapper.find('[testId]').exists()).toBe(false);
+    expect(wrapper.find('[data-testid]').exists()).toBe(false);
   });
 
   it('expect render correctly with the map rendered', () => {
@@ -66,17 +66,17 @@ describe('GoogleMaps', () => {
 
     const wrapper = shallow(
       <GoogleMaps {...props}>
-        <div testId="children">This is the children</div>
+        <div data-testid="children">This is the children</div>
       </GoogleMaps>
     );
 
     expect(wrapper).toMatchSnapshot();
-    expect(wrapper.find('[testId]').exists()).toBe(false);
+    expect(wrapper.find('[data-testid]').exists()).toBe(false);
 
     simulateMapReadyEvent(google);
 
     expect(wrapper).toMatchSnapshot();
-    expect(wrapper.find('[testId]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid]').exists()).toBe(true);
   });
 
   describe('creation', () => {
