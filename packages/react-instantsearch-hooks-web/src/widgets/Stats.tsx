@@ -1,5 +1,5 @@
 import React from 'react';
-import { useStats, warn } from 'react-instantsearch-hooks';
+import { useStats } from 'react-instantsearch-hooks';
 
 import { Stats as StatsUiComponent } from '../ui/Stats';
 
@@ -19,14 +19,7 @@ type UiProps = Pick<
 >;
 
 export type StatsProps = Omit<StatsUiComponentProps, keyof UiProps> &
-  UseStatsProps & {
-    translations?: Partial<UiProps['translations']> & {
-      /**
-       * @deprecated Use `rootElementText` instead.
-       */
-      stats?: Partial<UiProps['translations']>['rootElementText'];
-    };
-  };
+  UseStatsProps & { translations?: Partial<UiProps['translations']> };
 
 export function Stats({ translations, ...props }: StatsProps) {
   const { nbHits, nbSortedHits, processingTimeMS, areHitsSorted } = useStats(
@@ -34,23 +27,17 @@ export function Stats({ translations, ...props }: StatsProps) {
     { $$widgetType: 'ais.stats' }
   );
 
-  warn(
-    !translations?.stats,
-    'The `stats` translation is deprecated. Please use `rootElementText` instead.'
-  );
-
-  const statsTranslation = (options: StatsTranslationOptions): string =>
-    options.areHitsSorted
-      ? `${options.nbSortedHits!.toLocaleString()} relevant results sorted out of ${options.nbHits.toLocaleString()} found in ${options.processingTimeMS.toLocaleString()}ms`
-      : `${options.nbHits.toLocaleString()} results found in ${options.processingTimeMS.toLocaleString()}ms`;
-
   const uiProps: UiProps = {
     nbHits,
     nbSortedHits,
     processingTimeMS,
     areHitsSorted,
     translations: {
-      rootElementText: translations?.stats || statsTranslation,
+      rootElementText(options: StatsTranslationOptions) {
+        return options.areHitsSorted
+          ? `${options.nbSortedHits!.toLocaleString()} relevant results sorted out of ${options.nbHits.toLocaleString()} found in ${options.processingTimeMS.toLocaleString()}ms`
+          : `${options.nbHits.toLocaleString()} results found in ${options.processingTimeMS.toLocaleString()}ms`;
+      },
       ...translations,
     },
   };
