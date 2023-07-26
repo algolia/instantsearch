@@ -12,7 +12,7 @@ npx @codeshift/cli --packages 'instantsearch-codemods#rish-to-ris' <path>
 
 ### `ris-v6-to-v7`
 
-This will :
+This will:
 
 - Replace `react-instantsearch-dom` imports to `react-instantsearch`
 - Replace prop names to their new equivalent
