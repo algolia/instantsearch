@@ -168,7 +168,7 @@ describe('Stats', () => {
     });
   });
 
-  test.skip('renders with deprecated translations (with a deprecation warning)', async () => {
+  test('renders with deprecated translations (with a deprecation warning)', async () => {
     const client = createMockedSearchClient();
     let result: ReturnType<typeof render> | undefined = undefined;
 
