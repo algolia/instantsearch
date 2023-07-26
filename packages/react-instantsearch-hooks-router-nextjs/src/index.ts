@@ -1,8 +1,14 @@
 import history from 'instantsearch.js/es/lib/routers/history';
+import { warn } from 'react-instantsearch-hooks';
 
 import type { Router, UiState } from 'instantsearch.js';
 import type { BrowserHistoryArgs } from 'instantsearch.js/es/lib/routers/history';
 import type { Router as NextRouter, SingletonRouter } from 'next/router';
+
+warn(
+  Date.now() < new Date('2023-08-09').getTime(),
+  'The package `react-instantsearch-hooks-router-nextjs` is replaced by `react-instantsearch-router-nextjs`. The API is the same, but the package name has changed. Please update your dependencies and follow the migration guide: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/react/'
+);
 
 type BeforePopStateCallback = NonNullable<NextRouter['_bps']>;
 type NextHistoryState = Parameters<BeforePopStateCallback>[0];
