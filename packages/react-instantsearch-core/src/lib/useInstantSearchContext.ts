@@ -22,7 +22,7 @@ export function useInstantSearchContext<
   invariant(
     search !== null,
     'Hooks must be used inside the <InstantSearch> component.\n\n' +
-      'They are not compatible with the `react-instantsearch-core` and `react-instantsearch-dom` packages, so make sure to use the <InstantSearch> component from `react-instantsearch-hooks`.'
+      'They are not compatible with the `react-instantsearch-core@6.x` and `react-instantsearch-dom` packages, so make sure to use the <InstantSearch> component from `react-instantsearch-core@7.x`.'
   );
 
   return search;

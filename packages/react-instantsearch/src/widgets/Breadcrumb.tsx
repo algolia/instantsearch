@@ -1,10 +1,10 @@
 import React from 'react';
-import { useBreadcrumb } from 'react-instantsearch-hooks';
+import { useBreadcrumb } from 'react-instantsearch-core';
 
 import { Breadcrumb as BreadcrumbUiComponent } from '../ui/Breadcrumb';
 
 import type { BreadcrumbProps as BreadcrumbUiProps } from '../ui/Breadcrumb';
-import type { UseBreadcrumbProps } from 'react-instantsearch-hooks';
+import type { UseBreadcrumbProps } from 'react-instantsearch-core';
 
 type UiProps = Pick<
   BreadcrumbUiProps,

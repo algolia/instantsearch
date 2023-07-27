@@ -3,7 +3,7 @@ import React from 'react';
 import { cx } from './lib/cx';
 import { isModifierClick } from './lib/isModifierClick';
 
-import type { useBreadcrumb } from 'react-instantsearch-hooks';
+import type { useBreadcrumb } from 'react-instantsearch-core';
 
 export type BreadcrumbTranslations = {
   /**

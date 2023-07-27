@@ -1,10 +1,10 @@
 import React from 'react';
-import { usePagination } from 'react-instantsearch-hooks';
+import { usePagination } from 'react-instantsearch-core';
 
 import { Pagination as PaginationUiComponent } from '../ui/Pagination';
 
 import type { PaginationProps as PaginationUiComponentProps } from '../ui/Pagination';
-import type { UsePaginationProps } from 'react-instantsearch-hooks';
+import type { UsePaginationProps } from 'react-instantsearch-core';
 
 type UiProps = Pick<
   PaginationUiComponentProps,

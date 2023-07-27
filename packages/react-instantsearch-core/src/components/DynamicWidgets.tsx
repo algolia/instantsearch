@@ -34,7 +34,7 @@ export function DynamicWidgets({
 
   warn(
     Fallback === FallbackComponent.current,
-    'The `fallbackComponent` prop of `DynamicWidgets` changed between renders. Please provide a stable reference, as described in https://www.algolia.com/doc/api-reference/widgets/dynamic-facets/react-hooks/#widget-param-fallbackcomponent'
+    'The `fallbackComponent` prop of `DynamicWidgets` changed between renders. Please provide a stable reference, as described in https://www.algolia.com/doc/api-reference/widgets/dynamic-facets/react/#widget-param-fallbackcomponent'
   );
 
   const { attributesToRender } = useDynamicWidgets(props, {

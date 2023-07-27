@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 import assert from 'assert';
 
-import * as ReactInstantSearchRouterNext from 'react-instantsearch-hooks-router-nextjs';
+import * as ReactInstantSearchRouterNext from 'react-instantsearch-router-nextjs';
 
 assert.ok(ReactInstantSearchRouterNext);
 
-console.log('react-instantsearch-hooks-router-nextjs is valid ESM');
+console.log('react-instantsearch-router-nextjs is valid ESM');

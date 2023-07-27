@@ -2,7 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [react-instantsearch-hooks](#react-instantsearch-hooks)
+- [react-instantsearch-core](#react-instantsearch-core)
   - [Installation](#installation)
   - [Getting started](#getting-started)
   - [API reference](#api-reference)
@@ -12,43 +12,43 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# react-instantsearch-hooks
+# react-instantsearch-core
 
-React InstantSearch Hooks is an open-source UI library for React that lets you quickly build a search interface in your front-end application.
+React InstantSearch Core is an open-source UI library for React that lets you quickly build a search interface in your front-end application.
 
 InstantSearch’s goal is to help you implement awesome search experiences as smoothly as possible by providing a [complete search ecosystem](https://algolia.com/doc/guides/getting-started/how-algolia-works/#the-full-ecosystem). InstantSearch tackles an important part of this vast goal by providing front-end primitives that you can assemble into unique search interfaces.
 
 <p align="center">
-  <a href="https://codesandbox.io/s/github/algolia/instantsearch.js/tree/master/examples/react-hooks/default-themes" title="Edit on CodeSandbox">
+  <a href="https://codesandbox.io/s/github/algolia/instantsearch.js/tree/master/examples/react/default-themes" title="Edit on CodeSandbox">
     <img alt="Edit on CodeSandbox" src="https://codesandbox.io/static/img/play-codesandbox.svg">
   </a>
 </p>
 
-> Note: `react-instantsearch-hooks` exports renderless components and hooks which can be used for both web and React Native. If you are using React in a web project, we recommend using the package `react-instantsearch-hooks-web` instead, as it includes complete components that render to the DOM.
+> Note: `react-instantsearch-core` exports renderless components and hooks which can be used for both web and React Native. If you are using React in a web project, we recommend using the package `react-instantsearch` instead, as it includes complete components that render to the DOM.
 
 ## Installation
 
-React InstantSearch Hooks is available on the npm registry. It relies on [`algoliasearch`](https://github.com/algolia/algoliasearch-client-javascript) to communicate with Algolia APIs.
+React InstantSearch Core is available on the npm registry. It relies on [`algoliasearch`](https://github.com/algolia/algoliasearch-client-javascript) to communicate with Algolia APIs.
 
 ```sh
-yarn add algoliasearch react-instantsearch-hooks
+yarn add algoliasearch react-instantsearch-core
 # or
-npm install algoliasearch react-instantsearch-hooks
+npm install algoliasearch react-instantsearch-core
 ```
 
 ## Getting started
 
-React InstantSearch Hooks is a headless React library that lets you create an instant search results experience using Algolia’s search API.
+React InstantSearch Core is a headless React library that lets you create an instant search results experience using Algolia’s search API.
 
-Check out our [**Getting Started guide**](https://algolia.com/doc/guides/building-search-ui/getting-started/react-hooks/) to start implementing a full-featured search experience with React InstantSearch Hooks.
+Check out our [**Getting Started guide**](https://algolia.com/doc/guides/building-search-ui/getting-started/react/) to start implementing a full-featured search experience with React InstantSearch Core.
 
 ## API reference
 
-Check out the [**API reference**](https://www.algolia.com/doc/api-reference/widgets/react-hooks/).
+Check out the [**API reference**](https://www.algolia.com/doc/api-reference/widgets/react/).
 
 ## Documentation
 
-The documentation is available on [algolia.com/doc](https://algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react-hooks/).
+The documentation is available on [algolia.com/doc](https://algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/).
 
 ## Contributing
 
@@ -69,13 +69,13 @@ Please read [our contribution process](https://github.com/algolia/instantsearch.
 
 ## License
 
-React InstantSearch Hooks is [MIT licensed](../../LICENSE).
+React InstantSearch is [MIT licensed](../../LICENSE).
 
 <!-- Links -->
 
-[contributing-bugreport]: https://github.com/algolia/instantsearch.js/issues/new?template=BUG_REPORT.yml&labels=triage,Library%3A%20React+InstantSearch+Hooks
-[contributing-featurerequest]: https://github.com/algolia/instantsearch.js/discussions/new?category=ideas&labels=triage,Library%3A%20React+InstantSearch+Hooks&title=Feature%20request%3A%20
-[contributing-newissue]: https://github.com/algolia/instantsearch.js/issues/new?labels=triage,Library%3A%20React+InstantSearch+Hooks
-[contributing-label-easy]: https://github.com/algolia/instantsearch.js/issues?q=is%3Aopen+is%3Aissue+label%3A%22Difficulty%3A+Easy%22+label%3A%22Library%3A%20React+InstantSearch+Hooks%22
-[contributing-label-bug]: https://github.com/algolia/instantsearch.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22Type%3A+Bug%22+label%3A%22Library%3A%20React+InstantSearch+Hooks%22
-[contributing-label-chore]: https://github.com/algolia/instantsearch.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22Type%3A+Chore%22+label%3A%22Library%3A%20React+InstantSearch+Hooks%22
+[contributing-bugreport]: https://github.com/algolia/instantsearch.js/issues/new?template=BUG_REPORT.yml&labels=triage,Library%3A%20React+InstantSearch
+[contributing-featurerequest]: https://github.com/algolia/instantsearch.js/discussions/new?category=ideas&labels=triage,Library%3A%20React+InstantSearch&title=Feature%20request%3A%20
+[contributing-newissue]: https://github.com/algolia/instantsearch.js/issues/new?labels=triage,Library%3A%20React+InstantSearch
+[contributing-label-easy]: https://github.com/algolia/instantsearch.js/issues?q=is%3Aopen+is%3Aissue+label%3A%22Difficulty%3A+Easy%22+label%3A%22Library%3A%20React+InstantSearch%22
+[contributing-label-bug]: https://github.com/algolia/instantsearch.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22Type%3A+Bug%22+label%3A%22Library%3A%20React+InstantSearch%22
+[contributing-label-chore]: https://github.com/algolia/instantsearch.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22Type%3A+Chore%22+label%3A%22Library%3A%20React+InstantSearch%22

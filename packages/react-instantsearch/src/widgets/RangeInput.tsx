@@ -1,10 +1,10 @@
 import React from 'react';
-import { useRange } from 'react-instantsearch-hooks';
+import { useRange } from 'react-instantsearch-core';
 
 import { RangeInput as RangeInputUiComponent } from '../ui/RangeInput';
 
 import type { RangeInputProps as RangeInputUiProps } from '../ui/RangeInput';
-import type { UseRangeProps } from 'react-instantsearch-hooks';
+import type { UseRangeProps } from 'react-instantsearch-core';
 
 type UiProps = Pick<
   RangeInputUiProps,

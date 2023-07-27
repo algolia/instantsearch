@@ -13,7 +13,7 @@ type CreateInstantSearchRouterNextOptions<TRouteState> = {
    *
    * @example
    * import singletonRouter from 'next/router';
-   * import { createInstantSearchNextRouter } from 'react-instantsearch-hooks-router-nextjs';
+   * import { createInstantSearchNextRouter } from 'react-instantsearch-router-nextjs';
    *
    * const router = createInstantSearchNextRouter({ singletonRouter });
    */
@@ -59,7 +59,7 @@ type CreateInstantSearchRouterNextOptions<TRouteState> = {
 
   /**
    * Options passed to the underlying history router.
-   * See https://www.algolia.com/doc/api-reference/widgets/history-router/react-hooks/
+   * See https://www.algolia.com/doc/api-reference/widgets/history-router/react/
    * for the list of available options.
    */
   routerOptions?: Partial<

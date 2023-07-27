@@ -1,10 +1,10 @@
 import React from 'react';
-import { useMenu } from 'react-instantsearch-hooks';
+import { useMenu } from 'react-instantsearch-core';
 
 import { Menu as MenuUiComponent } from '../ui/Menu';
 
 import type { MenuProps as MenuUiComponentProps } from '../ui/Menu';
-import type { UseMenuProps } from 'react-instantsearch-hooks';
+import type { UseMenuProps } from 'react-instantsearch-core';
 
 type UiProps = Pick<
   MenuUiComponentProps,

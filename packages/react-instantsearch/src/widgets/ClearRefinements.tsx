@@ -1,10 +1,10 @@
 import React from 'react';
-import { useClearRefinements } from 'react-instantsearch-hooks';
+import { useClearRefinements } from 'react-instantsearch-core';
 
 import { ClearRefinements as ClearRefinementsUiComponent } from '../ui/ClearRefinements';
 
 import type { ClearRefinementsProps as ClearRefinementsUiComponentProps } from '../ui/ClearRefinements';
-import type { UseClearRefinementsProps } from 'react-instantsearch-hooks';
+import type { UseClearRefinementsProps } from 'react-instantsearch-core';
 
 type UiProps = Pick<
   ClearRefinementsUiComponentProps,

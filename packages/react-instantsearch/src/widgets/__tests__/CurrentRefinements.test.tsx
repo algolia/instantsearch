@@ -7,11 +7,11 @@ import { InstantSearchHooksTestWrapper } from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
-import { useRefinementList } from 'react-instantsearch-hooks';
+import { useRefinementList } from 'react-instantsearch-core';
 
 import { CurrentRefinements } from '../CurrentRefinements';
 
-import type { UseRefinementListProps } from 'react-instantsearch-hooks';
+import type { UseRefinementListProps } from 'react-instantsearch-core';
 
 describe('CurrentRefinements', () => {
   test('renders with default props', async () => {

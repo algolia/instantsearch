@@ -5,7 +5,7 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { render } from '@testing-library/react';
 import React from 'react';
-import { InstantSearch as InstantSearchCore } from 'react-instantsearch-core';
+import { InstantSearch as InstantSearchCore } from 'react-instantsearch-v6-core';
 
 import { useSearchBox } from '../connectors/useSearchBox';
 import { noop } from '../lib/noop';
@@ -32,7 +32,7 @@ describe('Compat', () => {
     }).toThrowErrorMatchingInlineSnapshot(`
       "[InstantSearch] Hooks must be used inside the <InstantSearch> component.
 
-      They are not compatible with the \`react-instantsearch-core\` and \`react-instantsearch-dom\` packages, so make sure to use the <InstantSearch> component from \`react-instantsearch-hooks\`."
+      They are not compatible with the \`react-instantsearch-core@6.x\` and \`react-instantsearch-dom\` packages, so make sure to use the <InstantSearch> component from \`react-instantsearch-core@7.x\`."
     `);
 
     jest.spyOn(console, 'error').mockRestore();

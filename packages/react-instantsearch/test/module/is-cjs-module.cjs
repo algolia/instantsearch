@@ -2,8 +2,8 @@
 
 const assert = require('assert');
 
-const ReactInstantSearchHooksWeb = require('react-instantsearch-hooks-web');
+const ReactInstantSearch = require('react-instantsearch');
 
-assert.ok(ReactInstantSearchHooksWeb);
+assert.ok(ReactInstantSearch);
 
-console.log('react-instantsearch-hooks-web is valid CJS');
+console.log('react-instantsearch is valid CJS');

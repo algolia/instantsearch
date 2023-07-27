@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { cx } from './lib/cx';
 
-import type { useRange } from 'react-instantsearch-hooks';
+import type { useRange } from 'react-instantsearch-core';
 
 type RangeRenderState = ReturnType<typeof useRange>;
 

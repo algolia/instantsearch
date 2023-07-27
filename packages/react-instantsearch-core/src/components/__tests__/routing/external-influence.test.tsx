@@ -6,11 +6,7 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { render, waitFor } from '@testing-library/react';
 import historyRouter from 'instantsearch.js/es/lib/routers/history';
 import React, { useEffect } from 'react';
-import {
-  InstantSearch,
-  SearchBox,
-  useSearchBox,
-} from 'react-instantsearch-hooks-web';
+import { InstantSearch, SearchBox, useSearchBox } from 'react-instantsearch';
 
 describe('routing with external influence', () => {
   test('keeps on working when the URL is updated by another program', async () => {

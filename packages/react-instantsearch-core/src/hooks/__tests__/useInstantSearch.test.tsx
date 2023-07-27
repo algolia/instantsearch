@@ -13,7 +13,7 @@ import { renderHook } from '@testing-library/react-hooks';
 import userEvent from '@testing-library/user-event';
 import { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
 import React, { useEffect } from 'react';
-import { SearchBox } from 'react-instantsearch-hooks-web';
+import { SearchBox } from 'react-instantsearch';
 
 import { useInstantSearch } from '../useInstantSearch';
 
@@ -28,7 +28,7 @@ describe('useInstantSearch', () => {
       expect(result.error?.message).toMatchInlineSnapshot(`
         "[InstantSearch] Hooks must be used inside the <InstantSearch> component.
 
-        They are not compatible with the \`react-instantsearch-core\` and \`react-instantsearch-dom\` packages, so make sure to use the <InstantSearch> component from \`react-instantsearch-hooks\`."
+        They are not compatible with the \`react-instantsearch-core@6.x\` and \`react-instantsearch-dom\` packages, so make sure to use the <InstantSearch> component from \`react-instantsearch-core@7.x\`."
       `);
     });
   });

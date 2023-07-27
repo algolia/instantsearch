@@ -1,11 +1,11 @@
 import React from 'react';
-import { useToggleRefinement } from 'react-instantsearch-hooks';
+import { useToggleRefinement } from 'react-instantsearch-core';
 
 import { ToggleRefinement as ToggleRefinementUiComponent } from '../ui/ToggleRefinement';
 
 import type { PartialKeys } from '../types';
 import type { ToggleRefinementProps as ToggleRefinementUiComponentProps } from '../ui/ToggleRefinement';
-import type { UseToggleRefinementProps } from 'react-instantsearch-hooks';
+import type { UseToggleRefinementProps } from 'react-instantsearch-core';
 
 type UiProps = Pick<ToggleRefinementUiComponentProps, 'onChange' | 'checked'>;
 

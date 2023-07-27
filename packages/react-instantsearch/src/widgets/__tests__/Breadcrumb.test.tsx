@@ -10,11 +10,11 @@ import {
 import { InstantSearchHooksTestWrapper } from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
 import React from 'react';
-import { useHierarchicalMenu } from 'react-instantsearch-hooks';
+import { useHierarchicalMenu } from 'react-instantsearch-core';
 
 import { Breadcrumb } from '../Breadcrumb';
 
-import type { UseHierarchicalMenuProps } from 'react-instantsearch-hooks';
+import type { UseHierarchicalMenuProps } from 'react-instantsearch-core';
 
 describe('Breadcrumb', () => {
   const hierarchicalFacets = {

@@ -70,11 +70,11 @@ const createConfiguration = ({ name, minify = false } = {}) => ({
 
 export default [
   createConfiguration({
-    name: 'HooksDOM',
+    name: '',
   }),
 
   createConfiguration({
-    name: 'HooksDOM',
+    name: '',
     minify: true,
   }),
 ];

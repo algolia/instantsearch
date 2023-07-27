@@ -1,10 +1,10 @@
 import React from 'react';
-import { useSortBy } from 'react-instantsearch-hooks';
+import { useSortBy } from 'react-instantsearch-core';
 
 import { SortBy as SortByUiComponent } from '../ui/SortBy';
 
 import type { SortByProps as SortByUiComponentProps } from '../ui/SortBy';
-import type { UseSortByProps } from 'react-instantsearch-hooks';
+import type { UseSortByProps } from 'react-instantsearch-core';
 
 type UiProps = Pick<SortByUiComponentProps, 'items' | 'value' | 'onChange'>;
 

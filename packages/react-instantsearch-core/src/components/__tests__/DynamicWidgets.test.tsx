@@ -405,7 +405,7 @@ describe('DynamicWidgets', () => {
     expect(() => {
       rerender(<App />);
     }).toWarnDev(
-      '[InstantSearch] The `fallbackComponent` prop of `DynamicWidgets` changed between renders. Please provide a stable reference, as described in https://www.algolia.com/doc/api-reference/widgets/dynamic-facets/react-hooks/#widget-param-fallbackcomponent'
+      '[InstantSearch] The `fallbackComponent` prop of `DynamicWidgets` changed between renders. Please provide a stable reference, as described in https://www.algolia.com/doc/api-reference/widgets/dynamic-facets/react/#widget-param-fallbackcomponent'
     );
 
     await waitFor(() => {

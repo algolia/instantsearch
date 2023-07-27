@@ -2,7 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [react-instantsearch-hooks-router-nextjs](#react-instantsearch-hooks-router-nextjs)
+- [react-instantsearch-router-nextjs](#react-instantsearch-router-nextjs)
   - [Installation](#installation)
   - [Usage](#usage)
   - [API](#api)
@@ -12,29 +12,29 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# react-instantsearch-hooks-router-nextjs
+# react-instantsearch-router-nextjs
 
-This package is a router for [React InstantSearch Hooks](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react-hooks/) that is compatible with [Next.js](https://nextjs.org/) routing.
+This package is a router for [React InstantSearch](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/) that is compatible with [Next.js](https://nextjs.org/) routing.
 
 > :warning: **This function cannot be used in conjunction with [`getStaticProps()`](https://nextjs.org/docs/api-reference/data-fetching/get-static-props). Use `getServerSideProps()` or client-side rendering instead.**
 
 ## Installation
 
 ```sh
-yarn add react-instantsearch-hooks-router-nextjs
+yarn add react-instantsearch-router-nextjs
 # or with npm
-npm install react-instantsearch-hooks-router-nextjs
+npm install react-instantsearch-router-nextjs
 ```
 
 ## Usage
 
 You need to pass the Next.js router singleton that you can import from `next/router`.
 
-If you are doing SSR with the `getServerState` and `InstantSearchSSRProvider` from `react-instantsearch-hooks-server`, you need to pass the `url` prop to `createInstantSearchRouterNext`'s `serverUrl` option :
+If you are doing SSR with the `getServerState` and `InstantSearchSSRProvider` from `react-instantsearch/server`, you need to pass the `url` prop to `createInstantSearchRouterNext`'s `serverUrl` option :
 
 ```js
 import singletonRouter from 'next/router';
-import { createInstantSearchRouterNext } from 'react-instantsearch-hooks-router-nextjs';
+import { createInstantSearchRouterNext } from 'react-instantsearch-router-nextjs';
 
 export default function Page({ serverState, url }) {
   return (
@@ -55,7 +55,7 @@ If you are not doing SSR but only CSR, you can omit the `serverUrl` option:
 
 ```js
 import singletonRouter from 'next/router';
-import { createInstantSearchRouterNext } from 'react-instantsearch-hooks-router-nextjs';
+import { createInstantSearchRouterNext } from 'react-instantsearch-router-nextjs';
 
 export default function Page() {
   return (
@@ -74,7 +74,7 @@ Lastly, if you had custom routing logic in your app, you can pass it to the `cre
 
 ```js
 import singletonRouter from 'next/router';
-import { createInstantSearchRouterNext } from 'react-instantsearch-hooks-router-nextjs';
+import { createInstantSearchRouterNext } from 'react-instantsearch-router-nextjs';
 
 export default function Page({ serverState, url }) {
   return (
@@ -118,7 +118,7 @@ For troubleshooting purposes, some other options are available :
 
 ## Troubleshooting
 
-If you're experiencing issues, please refer to the [**Need help?**](https://algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react-hooks/#need-help) section of the docs, or [open a new issue](https://github.com/algolia/instantsearch.js/issues/new?assignees=&labels=triage&template=BUG_REPORT.yml).
+If you're experiencing issues, please refer to the [**Need help?**](https://algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/#need-help) section of the docs, or [open a new issue](https://github.com/algolia/instantsearch.js/issues/new?assignees=&labels=triage&template=BUG_REPORT.yml).
 
 ## Contributing
 
@@ -139,13 +139,13 @@ Please read [our contribution process](https://github.com/algolia/instantsearch.
 
 ## License
 
-React InstantSearch Hooks is [MIT licensed](../../LICENSE).
+React InstantSearch is [MIT licensed](../../LICENSE).
 
 <!-- Links -->
 
-[contributing-bugreport]: https://github.com/algolia/instantsearch.js/issues/new?template=BUG_REPORT.yml&labels=triage,Library%3A%20React+InstantSearch+Hooks
-[contributing-featurerequest]: https://github.com/algolia/instantsearch.js/discussions/new?category=ideas&labels=triage,Library%3A%20React+InstantSearch+Hooks&title=Feature%20request%3A%20
-[contributing-newissue]: https://github.com/algolia/instantsearch.js/issues/new?labels=triage,Library%3A%20React+InstantSearch+Hooks
-[contributing-label-easy]: https://github.com/algolia/instantsearch.js/issues?q=is%3Aopen+is%3Aissue+label%3A%22Difficulty%3A+Easy%22+label%3A%22Library%3A%20React+InstantSearch+Hooks%22
-[contributing-label-bug]: https://github.com/algolia/instantsearch.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22Type%3A+Bug%22+label%3A%22Library%3A%20React+InstantSearch+Hooks%22
-[contributing-label-chore]: https://github.com/algolia/instantsearch.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22Type%3A+Chore%22+label%3A%22Library%3A%20React+InstantSearch+Hooks%22
+[contributing-bugreport]: https://github.com/algolia/instantsearch.js/issues/new?template=BUG_REPORT.yml&labels=triage,Library%3A%20React+InstantSearch
+[contributing-featurerequest]: https://github.com/algolia/instantsearch.js/discussions/new?category=ideas&labels=triage,Library%3A%20React+InstantSearch&title=Feature%20request%3A%20
+[contributing-newissue]: https://github.com/algolia/instantsearch.js/issues/new?labels=triage,Library%3A%20React+InstantSearch
+[contributing-label-easy]: https://github.com/algolia/instantsearch.js/issues?q=is%3Aopen+is%3Aissue+label%3A%22Difficulty%3A+Easy%22+label%3A%22Library%3A%20React+InstantSearch%22
+[contributing-label-bug]: https://github.com/algolia/instantsearch.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22Type%3A+Bug%22+label%3A%22Library%3A%20React+InstantSearch%22
+[contributing-label-chore]: https://github.com/algolia/instantsearch.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22Type%3A+Chore%22+label%3A%22Library%3A%20React+InstantSearch%22

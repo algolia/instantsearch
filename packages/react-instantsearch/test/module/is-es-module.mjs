@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 import assert from 'assert';
 
-import * as ReactInstantSearchHooksWeb from 'react-instantsearch-hooks-web';
+import * as ReactInstantSearch from 'react-instantsearch';
 
-assert.ok(ReactInstantSearchHooksWeb);
+assert.ok(ReactInstantSearch);
 
-console.log('react-instantsearch-hooks-web is valid ESM');
+console.log('react-instantsearch is valid ESM');

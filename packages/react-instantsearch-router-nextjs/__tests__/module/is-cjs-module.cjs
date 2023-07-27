@@ -2,8 +2,8 @@
 
 const assert = require('assert');
 
-const ReactInstantSearchRouterNext = require('react-instantsearch-hooks-router-nextjs');
+const ReactInstantSearchRouterNext = require('react-instantsearch-router-nextjs');
 
 assert.ok(ReactInstantSearchRouterNext);
 
-console.log('react-instantsearch-hooks-router-nextjs is valid CJS');
+console.log('react-instantsearch-router-nextjs is valid CJS');

@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react';
-import { useSearchBox } from 'react-instantsearch-hooks';
+import { useSearchBox } from 'react-instantsearch-core';
 
 import { SearchBox as SearchBoxUiComponent } from '../ui/SearchBox';
 
 import type { SearchBoxProps as SearchBoxUiComponentProps } from '../ui/SearchBox';
-import type { UseSearchBoxProps } from 'react-instantsearch-hooks';
+import type { UseSearchBoxProps } from 'react-instantsearch-core';
 
 type UiProps = Pick<
   SearchBoxUiComponentProps,

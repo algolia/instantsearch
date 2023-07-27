@@ -1,5 +1,5 @@
 import React from 'react';
-import { usePoweredBy } from 'react-instantsearch-hooks';
+import { usePoweredBy } from 'react-instantsearch-core';
 
 import { PoweredBy as PoweredByUiComponent } from '../ui/PoweredBy';
 

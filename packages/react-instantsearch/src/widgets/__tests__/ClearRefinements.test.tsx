@@ -10,14 +10,14 @@ import React from 'react';
 import {
   useCurrentRefinements,
   useRefinementList,
-} from 'react-instantsearch-hooks';
+} from 'react-instantsearch-core';
 
 import { ClearRefinements } from '../ClearRefinements';
 
 import type {
   UseRefinementListProps,
   UseCurrentRefinementsProps,
-} from 'react-instantsearch-hooks';
+} from 'react-instantsearch-core';
 
 describe('ClearRefinements', () => {
   test('renders with default props', async () => {

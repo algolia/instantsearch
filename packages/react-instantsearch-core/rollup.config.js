@@ -70,11 +70,11 @@ const createConfiguration = ({ name, minify = false } = {}) => ({
 
 export default [
   createConfiguration({
-    name: 'Hooks',
+    name: 'Core',
   }),
 
   createConfiguration({
-    name: 'Hooks',
+    name: 'Core',
     minify: true,
   }),
 ];

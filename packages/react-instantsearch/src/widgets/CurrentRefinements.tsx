@@ -1,10 +1,10 @@
 import React from 'react';
-import { useCurrentRefinements } from 'react-instantsearch-hooks';
+import { useCurrentRefinements } from 'react-instantsearch-core';
 
 import { CurrentRefinements as CurrentRefinementsUiComponent } from '../ui/CurrentRefinements';
 
 import type { CurrentRefinementsProps as CurrentRefinementsUiComponentProps } from '../ui/CurrentRefinements';
-import type { UseCurrentRefinementsProps } from 'react-instantsearch-hooks';
+import type { UseCurrentRefinementsProps } from 'react-instantsearch-core';
 
 type UiProps = Pick<
   CurrentRefinementsUiComponentProps,

@@ -1,5 +1,5 @@
 {
-  "name": "react-instantsearch-hooks",
+  "name": "react-instantsearch-core",
   "version": "6.47.3",
   "description": "⚡ Lightning-fast search for React, by Algolia",
   "source": "src/index.ts",
@@ -15,7 +15,7 @@
   },
   "sideEffects": false,
   "license": "MIT",
-  "homepage": "https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react-hooks/",
+  "homepage": "https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/",
   "repository": {
     "type": "git",
     "url": "https://github.com/algolia/instantsearch.js"

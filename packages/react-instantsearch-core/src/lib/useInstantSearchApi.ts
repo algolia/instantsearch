@@ -18,7 +18,7 @@ import type {
 const defaultUserAgents = [
   `react (${ReactVersion})`,
   `react-instantsearch (${version})`,
-  `react-instantsearch-hooks (${version})`,
+  `react-instantsearch-core (${version})`,
 ];
 const serverUserAgent = `react-instantsearch-server (${version})`;
 const nextUserAgent = (nextVersion?: string) =>
@@ -137,7 +137,7 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
     if (prevProps.searchClient !== props.searchClient) {
       warn(
         false,
-        'The `searchClient` prop of `<InstantSearch>` changed between renders, which may cause more search requests than necessary. If this is an unwanted behavior, please provide a stable reference: https://www.algolia.com/doc/api-reference/widgets/instantsearch/react-hooks/#widget-param-searchclient'
+        'The `searchClient` prop of `<InstantSearch>` changed between renders, which may cause more search requests than necessary. If this is an unwanted behavior, please provide a stable reference: https://www.algolia.com/doc/api-reference/widgets/instantsearch/react/#widget-param-searchclient'
       );
 
       addAlgoliaAgents(props.searchClient, [
@@ -257,9 +257,9 @@ function warnNextRouter<TUiState extends UiState, TRouteState>(
     warn(
       isUsingNextRouter,
       `
-You are using Next.js with InstantSearch without the "react-instantsearch-hooks-router-nextjs" package.
+You are using Next.js with InstantSearch without the "react-instantsearch-router-nextjs" package.
 This package is recommended to make the routing work correctly with Next.js.
-Please check its usage instructions: https://github.com/algolia/instantsearch/tree/master/packages/react-instantsearch-hooks-router-nextjs
+Please check its usage instructions: https://github.com/algolia/instantsearch/tree/master/packages/react-instantsearch-router-nextjs
 
 You can ignore this warning if you are using a custom router that suits your needs, it won't be outputted in production builds.`
     );

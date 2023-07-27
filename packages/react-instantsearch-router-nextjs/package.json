@@ -1,7 +1,7 @@
 {
-  "name": "react-instantsearch-hooks-router-nextjs",
+  "name": "react-instantsearch-router-nextjs",
   "version": "6.47.3",
-  "description": "React InstantSearch Hooks Router for Next.js",
+  "description": "React InstantSearch Router for Next.js",
   "source": "src/index.ts",
   "types": "dist/es/index.d.ts",
   "main": "dist/cjs/index.js",
@@ -14,7 +14,7 @@
   },
   "sideEffects": false,
   "license": "MIT",
-  "homepage": "https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react-hooks/",
+  "homepage": "https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/",
   "repository": {
     "type": "git",
     "url": "https://github.com/algolia/instantsearch.js"
@@ -44,12 +44,12 @@
     "build:es": "BABEL_ENV=es babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet",
     "build:types": "tsc -p ./tsconfig.declaration.json --outDir ./dist/es",
     "test:exports": "node ./__tests__/module/is-es-module.mjs && node ./__tests__/module/is-cjs-module.cjs",
-    "test:start-server": "yarn workspace example-react-instantsearch-hooks-next-routing-example build && yarn workspace example-react-instantsearch-hooks-next-routing-example start",
+    "test:start-server": "yarn workspace example-react-instantsearch-next-routing-example build && yarn workspace example-react-instantsearch-next-routing-example start",
     "test:e2e": "start-server-and-test test:start-server 3000 'wdio run ./wdio.conf.cjs'"
   },
   "dependencies": {
     "instantsearch.js": "4.56.8",
-    "react-instantsearch-hooks": "6.47.3"
+    "react-instantsearch-core": "6.47.3"
   },
   "devDependencies": {
     "@types/jasmine": "3.3.16",

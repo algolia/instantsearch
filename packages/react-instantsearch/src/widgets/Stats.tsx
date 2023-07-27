@@ -1,5 +1,5 @@
 import React from 'react';
-import { useStats } from 'react-instantsearch-hooks';
+import { useStats } from 'react-instantsearch-core';
 
 import { Stats as StatsUiComponent } from '../ui/Stats';
 
@@ -7,7 +7,7 @@ import type {
   StatsProps as StatsUiComponentProps,
   StatsTranslationOptions,
 } from '../ui/Stats';
-import type { UseStatsProps } from 'react-instantsearch-hooks';
+import type { UseStatsProps } from 'react-instantsearch-core';
 
 type UiProps = Pick<
   StatsUiComponentProps,

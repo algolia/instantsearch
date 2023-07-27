@@ -209,7 +209,7 @@ const testSetups: TestSetupsMap<TestSuites> = {
           require('../../../instantsearch.js/package.json').version
         })`,
         `react-instantsearch (${
-          require('../../../react-instantsearch-hooks/package.json').version
+          require('../../../react-instantsearch-core/package.json').version
         })`,
         `react (${require('react').version})`,
       ],

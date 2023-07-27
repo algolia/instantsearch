@@ -5,7 +5,7 @@ import { isModifierClick } from './lib/isModifierClick';
 import { ShowMoreButton } from './ShowMoreButton';
 
 import type { ShowMoreButtonTranslations } from './ShowMoreButton';
-import type { useHierarchicalMenu } from 'react-instantsearch-hooks';
+import type { useHierarchicalMenu } from 'react-instantsearch-core';
 
 type HierarchicalMenuClassNames = {
   /**

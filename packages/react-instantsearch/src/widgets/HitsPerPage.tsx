@@ -1,10 +1,10 @@
 import React from 'react';
-import { useHitsPerPage } from 'react-instantsearch-hooks';
+import { useHitsPerPage } from 'react-instantsearch-core';
 
 import { HitsPerPage as HitsPerPageUiComponent } from '../ui/HitsPerPage';
 
 import type { HitsPerPageProps as HitsPerPageUiComponentProps } from '../ui/HitsPerPage';
-import type { UseHitsPerPageProps } from 'react-instantsearch-hooks';
+import type { UseHitsPerPageProps } from 'react-instantsearch-core';
 
 type UiProps = Pick<
   HitsPerPageUiComponentProps,

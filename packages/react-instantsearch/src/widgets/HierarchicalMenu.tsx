@@ -1,10 +1,10 @@
 import React from 'react';
-import { useHierarchicalMenu } from 'react-instantsearch-hooks';
+import { useHierarchicalMenu } from 'react-instantsearch-core';
 
 import { HierarchicalMenu as HierarchicalMenuUiComponent } from '../ui/HierarchicalMenu';
 
 import type { HierarchicalMenuProps as HierarchicalMenuUiComponentProps } from '../ui/HierarchicalMenu';
-import type { UseHierarchicalMenuProps } from 'react-instantsearch-hooks';
+import type { UseHierarchicalMenuProps } from 'react-instantsearch-core';
 
 type UiProps = Pick<
   HierarchicalMenuUiComponentProps,

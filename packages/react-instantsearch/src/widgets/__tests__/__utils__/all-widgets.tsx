@@ -4,7 +4,7 @@ import { renderToString } from 'react-dom/server';
 import {
   InstantSearch,
   InstantSearchServerContext,
-} from 'react-instantsearch-hooks';
+} from 'react-instantsearch-core';
 
 import * as widgets from '../..';
 

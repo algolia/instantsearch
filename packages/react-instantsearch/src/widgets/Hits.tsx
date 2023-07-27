@@ -1,11 +1,11 @@
 import React from 'react';
-import { useHits } from 'react-instantsearch-hooks';
+import { useHits } from 'react-instantsearch-core';
 
 import { Hits as HitsUiComponent } from '../ui/Hits';
 
 import type { HitsProps as HitsUiComponentProps } from '../ui/Hits';
 import type { Hit, BaseHit } from 'instantsearch.js';
-import type { UseHitsProps } from 'react-instantsearch-hooks';
+import type { UseHitsProps } from 'react-instantsearch-core';
 
 type UiProps<THit extends BaseHit> = Pick<
   HitsUiComponentProps<Hit<THit>>,

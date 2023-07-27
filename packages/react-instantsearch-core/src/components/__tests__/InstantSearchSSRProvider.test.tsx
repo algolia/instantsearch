@@ -12,7 +12,7 @@ import userEvent from '@testing-library/user-event';
 import { history } from 'instantsearch.js/es/lib/routers';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import React, { StrictMode } from 'react';
-import { Hits, RefinementList, SearchBox } from 'react-instantsearch-hooks-web';
+import { Hits, RefinementList, SearchBox } from 'react-instantsearch';
 
 import { InstantSearch } from '../InstantSearch';
 import { InstantSearchSSRProvider } from '../InstantSearchSSRProvider';

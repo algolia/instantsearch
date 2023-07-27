@@ -9,7 +9,7 @@ import userEvent from '@testing-library/user-event';
 import { history } from 'instantsearch.js/es/lib/routers';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import React, { StrictMode, Suspense, version as ReactVersion } from 'react';
-import { SearchBox } from 'react-instantsearch-hooks-web';
+import { SearchBox } from 'react-instantsearch';
 
 import { useRefinementList } from '../../connectors/useRefinementList';
 import { warn } from '../../lib/warn';
@@ -108,7 +108,7 @@ describe('InstantSearch', () => {
       `react-instantsearch (${version})`
     );
     expect(searchClient.addAlgoliaAgent).toHaveBeenCalledWith(
-      `react-instantsearch-hooks (${version})`
+      `react-instantsearch-core (${version})`
     );
     expect(searchClient.addAlgoliaAgent).toHaveBeenCalledWith(
       `next.js (${nextVersion})`
@@ -574,7 +574,7 @@ describe('InstantSearch', () => {
         `react-instantsearch (${version})`
       );
       expect(searchClient2.addAlgoliaAgent).toHaveBeenCalledWith(
-        `react-instantsearch-hooks (${version})`
+        `react-instantsearch-core (${version})`
       );
     });
 
@@ -591,7 +591,7 @@ describe('InstantSearch', () => {
         `react-instantsearch (${version})`
       );
       expect(searchClient3.addAlgoliaAgent).toHaveBeenCalledWith(
-        `react-instantsearch-hooks (${version})`
+        `react-instantsearch-core (${version})`
       );
     });
 
@@ -631,7 +631,7 @@ describe('InstantSearch', () => {
 
     expect(warn).toHaveBeenCalledWith(
       false,
-      'The `searchClient` prop of `<InstantSearch>` changed between renders, which may cause more search requests than necessary. If this is an unwanted behavior, please provide a stable reference: https://www.algolia.com/doc/api-reference/widgets/instantsearch/react-hooks/#widget-param-searchclient'
+      'The `searchClient` prop of `<InstantSearch>` changed between renders, which may cause more search requests than necessary. If this is an unwanted behavior, please provide a stable reference: https://www.algolia.com/doc/api-reference/widgets/instantsearch/react/#widget-param-searchclient'
     );
   });
 

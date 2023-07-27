@@ -2,7 +2,7 @@ import React from 'react';
 
 import { cx } from './lib/cx';
 
-import type { UseSortByProps } from 'react-instantsearch-hooks';
+import type { UseSortByProps } from 'react-instantsearch-core';
 
 export type SortByProps = Omit<React.ComponentProps<'div'>, 'onChange'> &
   Pick<UseSortByProps, 'items'> &
