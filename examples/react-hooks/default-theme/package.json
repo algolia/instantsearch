@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-hooks-default-theme",
-  "version": "6.49.0",
+  "version": "6.50.0",
   "private": true,
   "scripts": {
     "build": "BABEL_ENV=parcel parcel build index.html",
@@ -11,7 +11,7 @@
     "instantsearch.js": "4.56.8",
     "react": "18.1.0",
     "react-dom": "18.1.0",
-    "react-instantsearch-hooks-web": "6.47.2"
+    "react-instantsearch-hooks-web": "6.47.3"
   },
   "devDependencies": {
     "@parcel/core": "2.8.0",

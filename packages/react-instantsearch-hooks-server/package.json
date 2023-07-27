@@ -1,6 +1,6 @@
 {
   "name": "react-instantsearch-hooks-server",
-  "version": "6.47.2",
+  "version": "6.47.3",
   "description": "⚡ Server-side support for React InstantSearch Hooks, by Algolia",
   "source": "src/index.ts",
   "types": "dist/es/index.d.ts",
@@ -48,7 +48,7 @@
   "dependencies": {
     "@babel/runtime": "^7.1.2",
     "instantsearch.js": "4.56.8",
-    "react-instantsearch-hooks": "6.47.2"
+    "react-instantsearch-hooks": "6.47.3"
   },
   "peerDependencies": {
     "algoliasearch": ">= 3.1 < 5",
