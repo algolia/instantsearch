@@ -12,6 +12,7 @@ module.exports = ({ config }) => ({
             options: {
               rootMode: 'upward',
               presets: [['react-app', { typescript: true }]],
+              exclude: /node_modules|algoliasearch-helper/,
             },
           },
         ],
