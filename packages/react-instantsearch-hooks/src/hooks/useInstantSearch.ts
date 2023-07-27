@@ -12,9 +12,25 @@ import type { InstantSearch, Middleware, UiState } from 'instantsearch.js';
 export type InstantSearchApi<TUiState extends UiState = UiState> =
   SearchStateApi<TUiState> &
     SearchResultsApi & {
-      use: (...middlewares: Middleware[]) => () => void;
+      /**
+       * Adds middlewares to InstantSearch. It returns its own cleanup function.
+       */
+      addMiddlewares: (...middlewares: Middleware[]) => () => void;
+      /**
+       * Clears the search client’s cache and performs a new search.
+       *
+       * This is useful to update the results once an indexing operation has finished.
+       */
       refresh: InstantSearch['refresh'];
+      /**
+       * The status of the search happening.
+       */
       status: InstantSearch['status'];
+      /**
+       * The error that occurred during the search.
+       *
+       * This is only valid when status is 'error'.
+       */
       error: InstantSearch['error'];
     };
 
@@ -33,16 +49,17 @@ export function useInstantSearch<TUiState extends UiState = UiState>({
     useSearchState<TUiState>();
   const { results, scopedResults } = useSearchResults();
 
-  const use: InstantSearchApi<TUiState>['use'] = useCallback(
-    (...middlewares: Middleware[]) => {
-      search.use(...middlewares);
+  const addMiddlewares: InstantSearchApi<TUiState>['addMiddlewares'] =
+    useCallback(
+      (...middlewares: Middleware[]) => {
+        search.use(...middlewares);
 
-      return () => {
-        search.unuse(...middlewares);
-      };
-    },
-    [search]
-  );
+        return () => {
+          search.unuse(...middlewares);
+        };
+      },
+      [search]
+    );
 
   const refresh: InstantSearchApi<TUiState>['refresh'] = useCallback(() => {
     search.refresh();
@@ -64,7 +81,7 @@ export function useInstantSearch<TUiState extends UiState = UiState>({
     setUiState,
     indexUiState,
     setIndexUiState,
-    use,
+    addMiddlewares,
     refresh,
     status: search.status,
     error: search.error,
