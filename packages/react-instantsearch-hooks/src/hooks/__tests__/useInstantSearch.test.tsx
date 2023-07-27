@@ -173,7 +173,7 @@ describe('useInstantSearch', () => {
   });
 
   describe('middleware', () => {
-    test('gives access to the use function', async () => {
+    test('gives access to the addMiddlewares function', async () => {
       const subscribe = jest.fn();
       const onStateChange = jest.fn();
       const unsubscribe = jest.fn();
@@ -184,8 +184,8 @@ describe('useInstantSearch', () => {
       }));
 
       function Middleware() {
-        const { use } = useInstantSearch();
-        useEffect(() => use(middleware), [use]);
+        const { addMiddlewares } = useInstantSearch();
+        useEffect(() => addMiddlewares(middleware), [addMiddlewares]);
 
         return null;
       }
@@ -232,13 +232,40 @@ describe('useInstantSearch', () => {
         wrapper,
       });
 
-      expect(result.current.use).toBeInstanceOf(Function);
+      expect(result.current.addMiddlewares).toBeInstanceOf(Function);
 
-      const ref = result.current.use;
+      const ref = result.current.addMiddlewares;
 
       rerender();
 
-      expect(result.current.use).toBe(ref);
+      expect(result.current.addMiddlewares).toBe(ref);
+    });
+
+    test('warns when using the deprecated use function', () => {
+      function Middleware() {
+        const { use } = useInstantSearch();
+        useEffect(
+          () =>
+            use(() => ({
+              subscribe() {},
+            })),
+          [use]
+        );
+
+        return null;
+      }
+
+      function App() {
+        return (
+          <InstantSearchHooksTestWrapper>
+            <Middleware />
+          </InstantSearchHooksTestWrapper>
+        );
+      }
+
+      expect(() => render(<App />)).toWarnDev(
+        '[InstantSearch] The `use` function is deprecated and will be removed in the next major version. Please use `addMiddlewares` instead.'
+      );
     });
   });
 
