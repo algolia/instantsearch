@@ -4,6 +4,7 @@ import { useInstantSearchContext } from '../lib/useInstantSearchContext';
 import { useIsomorphicLayoutEffect } from '../lib/useIsomorphicLayoutEffect';
 import { useSearchResults } from '../lib/useSearchResults';
 import { useSearchState } from '../lib/useSearchState';
+import { warn } from '../lib/warn';
 
 import type { SearchResultsApi } from '../lib/useSearchResults';
 import type { SearchStateApi } from '../lib/useSearchState';
@@ -12,9 +13,29 @@ import type { InstantSearch, Middleware, UiState } from 'instantsearch.js';
 export type InstantSearchApi<TUiState extends UiState = UiState> =
   SearchStateApi<TUiState> &
     SearchResultsApi & {
+      /**
+       * Adds middlewares to InstantSearch. It returns its own cleanup function.
+       */
+      addMiddlewares: (...middlewares: Middleware[]) => () => void;
+      /**
+       * @deprecated Use `addMiddlewares` instead.
+       */
       use: (...middlewares: Middleware[]) => () => void;
+      /**
+       * Clears the search client’s cache and performs a new search.
+       *
+       * This is useful to update the results once an indexing operation has finished.
+       */
       refresh: InstantSearch['refresh'];
+      /**
+       * The status of the search happening.
+       */
       status: InstantSearch['status'];
+      /**
+       * The error that occurred during the search.
+       *
+       * This is only valid when status is 'error'.
+       */
       error: InstantSearch['error'];
     };
 
@@ -33,15 +54,28 @@ export function useInstantSearch<TUiState extends UiState = UiState>({
     useSearchState<TUiState>();
   const { results, scopedResults } = useSearchResults();
 
+  const addMiddlewares: InstantSearchApi<TUiState>['addMiddlewares'] =
+    useCallback(
+      (...middlewares: Middleware[]) => {
+        search.use(...middlewares);
+
+        return () => {
+          search.unuse(...middlewares);
+        };
+      },
+      [search]
+    );
+
+  // @MAJOR: Remove in v7
   const use: InstantSearchApi<TUiState>['use'] = useCallback(
     (...middlewares: Middleware[]) => {
-      search.use(...middlewares);
-
-      return () => {
-        search.unuse(...middlewares);
-      };
+      warn(
+        false,
+        'The `use` function is deprecated and will be removed in the next major version. Please use `addMiddlewares` instead.'
+      );
+      return addMiddlewares(...middlewares);
     },
-    [search]
+    [addMiddlewares]
   );
 
   const refresh: InstantSearchApi<TUiState>['refresh'] = useCallback(() => {
@@ -64,6 +98,7 @@ export function useInstantSearch<TUiState extends UiState = UiState>({
     setUiState,
     indexUiState,
     setIndexUiState,
+    addMiddlewares,
     use,
     refresh,
     status: search.status,
