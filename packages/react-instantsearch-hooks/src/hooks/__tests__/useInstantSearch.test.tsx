@@ -240,33 +240,6 @@ describe('useInstantSearch', () => {
 
       expect(result.current.addMiddlewares).toBe(ref);
     });
-
-    test('warns when using the deprecated use function', () => {
-      function Middleware() {
-        const { use } = useInstantSearch();
-        useEffect(
-          () =>
-            use(() => ({
-              subscribe() {},
-            })),
-          [use]
-        );
-
-        return null;
-      }
-
-      function App() {
-        return (
-          <InstantSearchHooksTestWrapper>
-            <Middleware />
-          </InstantSearchHooksTestWrapper>
-        );
-      }
-
-      expect(() => render(<App />)).toWarnDev(
-        '[InstantSearch] The `use` function is deprecated and will be removed in the next major version. Please use `addMiddlewares` instead.'
-      );
-    });
   });
 
   describe('refresh', () => {

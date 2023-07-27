@@ -18,10 +18,6 @@ export type InstantSearchApi<TUiState extends UiState = UiState> =
        */
       addMiddlewares: (...middlewares: Middleware[]) => () => void;
       /**
-       * @deprecated Use `addMiddlewares` instead.
-       */
-      use: (...middlewares: Middleware[]) => () => void;
-      /**
        * Clears the search client’s cache and performs a new search.
        *
        * This is useful to update the results once an indexing operation has finished.
@@ -66,18 +62,6 @@ export function useInstantSearch<TUiState extends UiState = UiState>({
       [search]
     );
 
-  // @MAJOR: Remove in v7
-  const use: InstantSearchApi<TUiState>['use'] = useCallback(
-    (...middlewares: Middleware[]) => {
-      warn(
-        false,
-        'The `use` function is deprecated and will be removed in the next major version. Please use `addMiddlewares` instead.'
-      );
-      return addMiddlewares(...middlewares);
-    },
-    [addMiddlewares]
-  );
-
   const refresh: InstantSearchApi<TUiState>['refresh'] = useCallback(() => {
     search.refresh();
   }, [search]);
@@ -99,7 +83,6 @@ export function useInstantSearch<TUiState extends UiState = UiState>({
     indexUiState,
     setIndexUiState,
     addMiddlewares,
-    use,
     refresh,
     status: search.status,
     error: search.error,
