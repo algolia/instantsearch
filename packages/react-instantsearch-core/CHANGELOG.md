@@ -3,15 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [6.40.4](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-core@6.40.3...react-instantsearch-core@6.40.4) (2023-07-25)
-
-**Note:** Version bump only for package react-instantsearch-core
+## [6.47.3](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.47.2...react-instantsearch-hooks@6.47.3) (2023-07-27)
 
 
+### Bug Fixes
+
+* add a future warning when the package name changes ([#5778](https://github.com/algolia/instantsearch.js/issues/5778)) ([3d22ee4](https://github.com/algolia/instantsearch.js/commit/3d22ee45e1f03a443323a371621262f1fe45e664))
+* **useInstantSearch:** deprecate `use` function ([#5781](https://github.com/algolia/instantsearch.js/issues/5781)) ([ec16c6e](https://github.com/algolia/instantsearch.js/commit/ec16c6e74cc9e364aca47d64983be32bf0cce0fe))
 
 
 
-## [6.40.3](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-core@6.40.2...react-instantsearch-core@6.40.3) (2023-07-19)
+
+
+## [6.47.2](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.47.1...react-instantsearch-hooks@6.47.2) (2023-07-25)
+
+**Note:** Version bump only for package react-instantsearch-hooks
+
+
+
+
+
+## [6.47.1](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.47.0...react-instantsearch-hooks@6.47.1) (2023-07-19)
 
 
 ### Bug Fixes
@@ -22,15 +34,38 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-## [6.40.2](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-core@6.40.1...react-instantsearch-core@6.40.2) (2023-07-18)
+# [6.47.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.46.0...react-instantsearch-hooks@6.47.0) (2023-07-18)
 
-**Note:** Version bump only for package react-instantsearch-core
-
-
+**Note:** Version bump only for package react-instantsearch-hooks
 
 
 
-## [6.40.1](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-core@6.40.0...react-instantsearch-core@6.40.1) (2023-06-20)
+
+# [6.46.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.45.1...react-instantsearch-hooks@6.46.0) (2023-07-10)
+
+
+### Bug Fixes
+
+* **url:** base createURL on UiState instead of SearchParameters ([#5696](https://github.com/algolia/instantsearch.js/issues/5696)) ([7e2c8a2](https://github.com/algolia/instantsearch.js/commit/7e2c8a295a6fc5ba36d9482f645ef55b422d5e75)), closes [#5694](https://github.com/algolia/instantsearch.js/issues/5694)
+
+
+### Features
+
+* **GeoSearch:** expose useGeoSearch() hook in RISH ([#5693](https://github.com/algolia/instantsearch.js/issues/5693)) ([b951b7b](https://github.com/algolia/instantsearch.js/commit/b951b7bcafb384d990ccf02538d9bb9e248a6bba))
+
+
+
+
+
+## [6.45.1](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.45.0...react-instantsearch-hooks@6.45.1) (2023-07-04)
+
+**Note:** Version bump only for package react-instantsearch-hooks
+
+
+
+
+
+# [6.45.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.44.3...react-instantsearch-hooks@6.45.0) (2023-06-20)
 
 
 ### Bug Fixes
@@ -38,10 +73,42 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **dependencies:** update helper requirement ([#5676](https://github.com/algolia/instantsearch.js/issues/5676)) ([c289120](https://github.com/algolia/instantsearch.js/commit/c2891205c1125b1203b3b3db946d57e0fc4e4687)), closes [#5658](https://github.com/algolia/instantsearch.js/issues/5658)
 
 
+### Features
+
+* **algoliaAgent:** track Next.js version as Algolia agent ([#5677](https://github.com/algolia/instantsearch.js/issues/5677)) ([b205ac0](https://github.com/algolia/instantsearch.js/commit/b205ac019f79699cd608d63792b8ff5a0832aa7c))
 
 
 
-# [6.40.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-core@6.39.1...react-instantsearch-core@6.40.0) (2023-05-16)
+
+
+## [6.44.3](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.44.2...react-instantsearch-hooks@6.44.3) (2023-06-13)
+
+**Note:** Version bump only for package react-instantsearch-hooks
+
+
+
+
+
+## [6.44.2](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.44.1...react-instantsearch-hooks@6.44.2) (2023-06-05)
+
+
+### Bug Fixes
+
+* **hooks:** generate version for algoliaAgent in build ([#5655](https://github.com/algolia/instantsearch.js/issues/5655)) ([4d92ac4](https://github.com/algolia/instantsearch.js/commit/4d92ac4769e19e81fb55481aedc71121bef981cb))
+
+
+
+
+
+## [6.44.1](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.44.0...react-instantsearch-hooks@6.44.1) (2023-05-30)
+
+**Note:** Version bump only for package react-instantsearch-hooks
+
+
+
+
+
+# [6.44.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.43.0...react-instantsearch-hooks@6.44.0) (2023-05-16)
 
 
 ### Bug Fixes
@@ -57,15 +124,137 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-# [6.39.1](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-core@6.38.3...react-instantsearch-core@6.39.1) (2023-01-26)
+# [6.43.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.42.2...react-instantsearch-hooks@6.43.0) (2023-04-24)
 
 
-**Note:** Version bump only for package react-instantsearch-core
+### Bug Fixes
+
+* **lifecycle:** prevent extra network requests when unmounting multiple widgets ([#5602](https://github.com/algolia/instantsearch.js/issues/5602)) ([11458ee](https://github.com/algolia/instantsearch.js/commit/11458eee7e7f0f3e9c5f368584a16f58646b1cdd))
+
+
+### Features
+
+
+* **insights:** add insights option to InstantSearch ([#5488](https://github.com/algolia/instantsearch.js/issues/5488)) ([9031573](https://github.com/algolia/instantsearch.js/commit/9031573807fa6803dcfae9f33d61b8f111f68423)) ([#5578](https://github.com/algolia/instantsearch.js/issues/5578)) ([8fb517f](https://github.com/algolia/instantsearch.js/commit/8fb517f15381ecb32ea00cf4b01a0fd5e70e1d17)) ([#5545](https://github.com/algolia/instantsearch.js/issues/5545)) ([99a0972](https://github.com/algolia/instantsearch.js/commit/99a0972663b8f3284cac3b5621571ced7a33908f)) ([#5493](https://github.com/algolia/instantsearch.js/issues/5493)) ([cff723f](https://github.com/algolia/instantsearch.js/commit/cff723fc95a90ebb2ed14c46c51ab05764835a47))
+* **insights:** always pass Algolia credentials locally ([#5554](https://github.com/algolia/instantsearch.js/issues/5554)) ([654ab81](https://github.com/algolia/instantsearch.js/commit/654ab81e1669354c249710b6756610fba35d54b4)) ([#5558](https://github.com/algolia/instantsearch.js/issues/5558)) ([82144c0](https://github.com/algolia/instantsearch.js/commit/82144c0a0b18e6b47d6f508e5c670a9de274c121)) ([#5529](https://github.com/algolia/instantsearch.js/issues/5529)) ([8537f8f](https://github.com/algolia/instantsearch.js/commit/8537f8f7a10bcaf053ff62180c082e077b1b052d))
+* **insights:** annotate events with algoliaSource ([#5580](https://github.com/algolia/instantsearch.js/issues/5580)) ([c419307](https://github.com/algolia/instantsearch.js/commit/c419307a5f7fe46d5032c9437a17c8e3dad57fe5))
+* **insights:** automatically load search-insights if not passed ([#5484](https://github.com/algolia/instantsearch.js/issues/5484)) ([a85797b](https://github.com/algolia/instantsearch.js/commit/a85797b503edc94e001c5bfb3b754db6cb556943))
+* **insights:** enable default click events on hits and infinite hits ([#5522](https://github.com/algolia/instantsearch.js/issues/5522)) ([271bd12](https://github.com/algolia/instantsearch.js/commit/271bd12e34bc55656976bb53c90282193083eb86)) ([#5527](https://github.com/algolia/instantsearch.js/issues/5527)) ([0e55821](https://github.com/algolia/instantsearch.js/commit/0e558213c807cd17d592fadec052f3d1fc692e6c))
+* **insights:** prevent potential errors ([#5487](https://github.com/algolia/instantsearch.js/issues/5487)) ([33fe510](https://github.com/algolia/instantsearch.js/commit/33fe510307e4b382a5ba1153a0eaf160420acd11)) ([#5606](https://github.com/algolia/instantsearch.js/issues/5606)) ([bdd9290](https://github.com/algolia/instantsearch.js/commit/bdd92901b59ae4e5d7311eadfbf53ed656bbaf4a)) ([#5512](https://github.com/algolia/instantsearch.js/issues/5512)) ([85dfbc9](https://github.com/algolia/instantsearch.js/commit/85dfbc9ebd722fbe6a7e1bd056950fdbcc16d8d9))
+* **metadata:** register metadata around middleware ([#5492](https://github.com/algolia/instantsearch.js/issues/5492)) ([3e72ec8](https://github.com/algolia/instantsearch.js/commit/3e72ec82894a05a071328a4802d2f764233fe005))
 
 
 
 
-## [6.38.3](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-core@6.38.2...react-instantsearch-core@6.38.3) (2023-01-09)
+## [6.42.2](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.42.1...react-instantsearch-hooks@6.42.2) (2023-04-11)
+
+**Note:** Version bump only for package react-instantsearch-hooks
+
+
+
+
+
+## [6.42.1](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.42.0...react-instantsearch-hooks@6.42.1) (2023-03-28)
+
+### Features
+
+* **InstantSearch**: warn when an unstable search client is detected ([#5563](https://github.com/algolia/instantsearch.js/issues/5563)) ([0fcf716](https://github.com/algolia/instantsearch/commit/0fcf7162ce77246133c0d4a6ff7ea975ba17cc4c))
+
+
+
+# [6.42.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.41.0...react-instantsearch-hooks@6.42.0) (2023-03-21)
+
+
+### Features
+
+* **current-refinements:** provide indexId of refinements in transformItems ([#5546](https://github.com/algolia/instantsearch.js/issues/5546)) ([89781db](https://github.com/algolia/instantsearch.js/commit/89781db6cb1d2b8ebbc116e9bcd8a10f646e7baf))
+
+
+
+
+
+# [6.41.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.40.1...react-instantsearch-hooks@6.41.0) (2023-03-07)
+
+
+### Features
+
+* **index:** introduce setIndexUiState ([#5504](https://github.com/algolia/instantsearch.js/issues/5504)) ([c199feb](https://github.com/algolia/instantsearch.js/commit/c199febbc3381df574afbb2504edd7373b32904a))
+* **react:** export `InstantSearchApi` type ([#5518](https://github.com/algolia/instantsearch.js/issues/5518)) ([27b478f](https://github.com/algolia/instantsearch.js/commit/27b478f8f20c4e8835914cceabbdce57ff5d4650))
+
+
+## Bug Fixes
+
+* **DynamicWidgets**: prevent non-stable fallbackComponent ([#5532](https://github.com/algolia/instantsearch.js/issues/5532)) ([0625c90](https://github.com/algolia/instantsearch.js/commit/0625c90346e32b926d6ce276a4e0b13d4fa4bf6c))
+
+
+## [6.40.2](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.40.1...react-instantsearch-hooks@6.40.2) (2023-02-28)
+
+**Note:** Version bump only for package react-instantsearch-hooks
+
+
+
+
+
+## [6.40.1](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.40.0...react-instantsearch-hooks@6.40.1) (2023-02-21)
+
+**Note:** Version bump only for package react-instantsearch-hooks
+
+
+
+
+
+# [6.40.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.39.3...react-instantsearch-hooks@6.40.0) (2023-02-14)
+
+
+### Features
+
+* Warn when not using the dedicated Next.js router ([#5432](https://github.com/algolia/instantsearch.js/issues/5432)) ([39b5859](https://github.com/algolia/instantsearch.js/commit/39b5859ba78a5e8472a80e357a35ba900c963b61))
+
+
+### Bug Fixes
+
+* Prevent issue where instantsearch instance got created twice in ssr ([#5432](https://github.com/algolia/instantsearch.js/issues/5432)) ([39b5859](https://github.com/algolia/instantsearch.js/commit/39b5859ba78a5e8472a80e357a35ba900c963b61))
+
+
+
+## [6.39.3](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.39.2...react-instantsearch-hooks@6.39.3) (2023-02-07)
+
+**Note:** Version bump only for package react-instantsearch-hooks
+
+
+
+
+
+## [6.39.2](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.39.1...react-instantsearch-hooks@6.39.2) (2023-01-30)
+
+**Note:** Version bump only for package react-instantsearch-hooks
+
+
+
+
+
+## [6.39.1](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.39.0...react-instantsearch-hooks@6.39.1) (2023-01-26)
+
+**Note:** Version bump only for package react-instantsearch-hooks
+
+
+
+
+
+# [6.39.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.38.3...react-instantsearch-hooks@6.39.0) (2023-01-25)
+
+
+### Features
+
+* **react-instantsearch-hooks-web:** Add stats widget and ui component ([#5427](https://github.com/algolia/instantsearch.js/issues/5427)) ([d07cf0d](https://github.com/algolia/instantsearch.js/commit/d07cf0d0310bf4e49d4a4c2142b3783d9bcda79d))
+* **react-instantsearch-hooks:** Add useStats hook ([#5425](https://github.com/algolia/instantsearch.js/issues/5425)) ([772c918](https://github.com/algolia/instantsearch.js/commit/772c918f47aec183af3f1aa78c65505f70dd0088))
+* **rendering:** always render with current state ([#5429](https://github.com/algolia/instantsearch.js/issues/5429)) ([920e951](https://github.com/algolia/instantsearch.js/commit/920e951f03aada0e6a1ce16bc389a82a2f00b202))
+
+
+
+
+
+## [6.38.3](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.38.2...react-instantsearch-hooks@6.38.3) (2023-01-09)
 
 
 ### Bug Fixes
@@ -76,9 +265,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-## [6.38.2](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-core@6.38.1...react-instantsearch-core@6.38.2) (2023-01-03)
+## [6.38.2](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks@6.38.1...react-instantsearch-hooks@6.38.2) (2023-01-03)
 
-**Note:** Version bump only for package react-instantsearch-core
+**Note:** Version bump only for package react-instantsearch-hooks
 
 
 

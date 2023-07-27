@@ -11,8 +11,8 @@ const clear = (x) => x.filter(Boolean);
 const version = process.env.VERSION || 'UNRELEASED';
 const algolia = '© Algolia, inc.';
 const link = 'https://github.com/algolia/instantsearch.js';
-const createBanner = () =>
-  `/*! React InstantSearch ${version} | ${algolia} | ${link} */`;
+const createBanner = (name) =>
+  `/*! React InstantSearch${name} ${version} | ${algolia} | ${link} */`;
 
 const plugins = [
   babel({
@@ -26,7 +26,13 @@ const plugins = [
     preferBuiltins: false,
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
   }),
-  commonjs(),
+  commonjs({
+    namedExports: {
+      '../../node_modules/use-sync-external-store/shim/index.js': [
+        'useSyncExternalStore',
+      ],
+    },
+  }),
   globals(),
   replace({
     'process.env.NODE_ENV': JSON.stringify('production'),
@@ -37,18 +43,17 @@ const plugins = [
   }),
 ];
 
-const createConfiguration = ({ input, name, minify = false } = {}) => ({
-  input,
-  external: ['react', 'react-dom'],
+const createConfiguration = ({ name, minify = false } = {}) => ({
+  input: 'src/index.ts',
+  external: ['react'],
   output: {
-    file: `dist/umd/${name}${minify ? '.min' : ''}.js`,
-    name: `ReactInstantSearch.${name}`,
+    file: `dist/umd/ReactInstantSearch${name}${minify ? '.min' : ''}.js`,
+    name: `ReactInstantSearch${name}`,
     format: 'umd',
     globals: {
       react: 'React',
-      'react-dom': 'ReactDOM',
     },
-    banner: createBanner(),
+    banner: createBanner(name),
     sourcemap: true,
   },
   plugins: plugins.concat(
@@ -56,7 +61,7 @@ const createConfiguration = ({ input, name, minify = false } = {}) => ({
       minify &&
         uglify({
           output: {
-            preamble: createBanner(),
+            preamble: createBanner(name),
           },
         }),
     ])
@@ -64,36 +69,12 @@ const createConfiguration = ({ input, name, minify = false } = {}) => ({
 });
 
 export default [
-  // Core
   createConfiguration({
-    input: 'index.js',
-    name: 'Core',
-  }),
-  createConfiguration({
-    input: 'index.js',
-    name: 'Core',
-    minify: true,
+    name: 'HooksDOM',
   }),
 
-  // DOM
   createConfiguration({
-    input: 'dom.js',
-    name: 'Dom',
-  }),
-  createConfiguration({
-    input: 'dom.js',
-    name: 'Dom',
-    minify: true,
-  }),
-
-  // Connectors
-  createConfiguration({
-    input: 'connectors.js',
-    name: 'Connectors',
-  }),
-  createConfiguration({
-    input: 'connectors.js',
-    name: 'Connectors',
+    name: 'HooksDOM',
     minify: true,
   }),
 ];

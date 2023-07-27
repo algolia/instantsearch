@@ -26,7 +26,13 @@ const plugins = [
     preferBuiltins: false,
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
   }),
-  commonjs(),
+  commonjs({
+    namedExports: {
+      '../../node_modules/use-sync-external-store/shim/index.js': [
+        'useSyncExternalStore',
+      ],
+    },
+  }),
   globals(),
   replace({
     'process.env.NODE_ENV': JSON.stringify('production'),
@@ -64,11 +70,11 @@ const createConfiguration = ({ name, minify = false } = {}) => ({
 
 export default [
   createConfiguration({
-    name: 'Core',
+    name: 'Hooks',
   }),
 
   createConfiguration({
-    name: 'Core',
+    name: 'Hooks',
     minify: true,
   }),
 ];
