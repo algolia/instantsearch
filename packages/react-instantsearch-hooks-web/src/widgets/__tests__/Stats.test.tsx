@@ -168,45 +168,6 @@ describe('Stats', () => {
     });
   });
 
-  test('renders with deprecated translations (with a deprecation warning)', async () => {
-    const client = createMockedSearchClient();
-    let result: ReturnType<typeof render> | undefined = undefined;
-
-    expect(() => {
-      result = render(
-        <InstantSearchHooksTestWrapper searchClient={client}>
-          <Stats
-            translations={{
-              stats: () => 'Nice stats',
-            }}
-          />
-        </InstantSearchHooksTestWrapper>
-      );
-    }).toWarnDev(
-      '[InstantSearch] The `stats` translation is deprecated. Please use `rootElementText` instead.'
-    );
-
-    await waitFor(() => {
-      expect(client.search).toHaveBeenCalledTimes(1);
-    });
-
-    const { container } = result!;
-
-    await waitFor(() => {
-      expect(container.querySelector('.ais-Stats')).toMatchInlineSnapshot(`
-      <div
-        class="ais-Stats"
-      >
-        <span
-          class="ais-Stats-text"
-        >
-          Nice stats
-        </span>
-      </div>
-      `);
-    });
-  });
-
   test('forwards custom class names and `div` props to the root element', () => {
     const { container } = render(
       <InstantSearchHooksTestWrapper>
