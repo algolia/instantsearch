@@ -62,7 +62,7 @@ To start contributing to code, you need to:
 1.  [Fork the project](https://help.github.com/articles/fork-a-repo/)
 1.  [Clone the repository](https://help.github.com/articles/cloning-a-repository/)
 1.  Install the dependencies: `yarn`
-1.  [Pick a package to work on](#packages) and cd into it (e.g. `cd packages/react-instantsearch-hooks`)
+1.  [Pick a package to work on](#packages) and cd into it (e.g. `cd packages/react-instantsearch`)
 
 Please read [our contribution process](CONTRIBUTING.md) to learn more.
 
