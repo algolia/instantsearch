@@ -14,6 +14,7 @@ export type MenuProps = React.ComponentProps<'div'> & {
   canToggleShowMore: boolean;
   onToggleShowMore: () => void;
   isShowingMore: boolean;
+  showMoreCount: number;
   createURL: CreateURL<MenuItem['value']>;
   onRefine: (item: MenuItem) => void;
   translations: MenuTranslations;
@@ -71,6 +72,7 @@ export function Menu({
   canToggleShowMore,
   onToggleShowMore,
   isShowingMore,
+  showMoreCount,
   createURL,
   onRefine,
   translations,
@@ -127,6 +129,7 @@ export function Menu({
           disabled={!canToggleShowMore}
           onClick={onToggleShowMore}
           isShowingMore={isShowingMore}
+          showMoreCount={showMoreCount}
           translations={translations}
         />
       )}

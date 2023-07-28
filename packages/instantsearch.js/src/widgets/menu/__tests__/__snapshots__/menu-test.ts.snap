@@ -41,6 +41,7 @@ exports[`menu render renders transformed items 1`] = `
   ],
   "isShowingMore": false,
   "showMore": undefined,
+  "showMoreCount": 0,
   "templateProps": {
     "templates": {
       "item": [Function],
@@ -96,6 +97,7 @@ exports[`menu render snapshot 1`] = `
   ],
   "isShowingMore": false,
   "showMore": undefined,
+  "showMoreCount": 0,
   "templateProps": {
     "templates": {
       "item": [Function],

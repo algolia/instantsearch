@@ -15,6 +15,7 @@ type UiProps = Pick<
   | 'canToggleShowMore'
   | 'onToggleShowMore'
   | 'isShowingMore'
+  | 'showMoreCount'
   | 'translations'
 >;
 
@@ -45,6 +46,7 @@ export function HierarchicalMenu({
     canToggleShowMore,
     createURL,
     isShowingMore,
+    showMoreCount,
     refine,
     toggleShowMore,
   } = useHierarchicalMenu(
@@ -72,6 +74,7 @@ export function HierarchicalMenu({
     canToggleShowMore,
     onToggleShowMore: toggleShowMore,
     isShowingMore,
+    showMoreCount,
     translations: {
       showMoreButtonText(options) {
         return options.isShowingMore ? 'Show less' : 'Show more';

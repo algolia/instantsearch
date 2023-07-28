@@ -75,6 +75,24 @@ storiesOf('Refinements/Menu', module)
     })
   )
   .add(
+    'with show more templates and showMoreCount',
+    withHits(({ search, container, instantsearch }) => {
+      search.addWidgets([
+        instantsearch.widgets.menu({
+          container,
+          attribute: 'categories',
+          limit: 3,
+          showMore: true,
+          showMoreLimit: 10,
+          templates: {
+            showMoreText: ({ isShowingMore, showMoreCount }) =>
+              isShowingMore ? 'Show less' : `Show ${showMoreCount} more`,
+          },
+        }),
+      ]);
+    })
+  )
+  .add(
     'with add/remove',
     withHits(({ search, container, instantsearch }) => {
       withLifecycle(search, container, (node) =>
