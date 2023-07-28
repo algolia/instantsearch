@@ -65,7 +65,6 @@
     "@testing-library/react": "13.2.0",
     "@testing-library/react-hooks": "7.0.2",
     "@testing-library/user-event": "13.5.0",
-    "@types/classnames": "^2.2.7",
     "@types/enzyme": "^3.1.15",
     "@types/enzyme-adapter-react-16": "^1.0.3",
     "@types/googlemaps": "^3.30.16",

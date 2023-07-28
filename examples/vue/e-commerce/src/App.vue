@@ -174,13 +174,12 @@
                     <template #default="{ items, refine, createURL }">
                       <ul class="ais-RatingMenu-list">
                         <li
-                          :class="
-                            cx('ais-RatingMenu-item', {
-                              'ais-RatingMenu-item--selected':
-                                items.every((item) => !item.isRefined) ||
-                                item.isRefined,
-                            })
-                          "
+                          :class="{
+                            'ais-RatingMenu-item': true,
+                            'ais-RatingMenu-item--selected':
+                              items.every((item) => !item.isRefined) ||
+                              item.isRefined,
+                          }"
                           v-for="item in items"
                           :key="item.value"
                         >
@@ -195,12 +194,11 @@
                               :key="index"
                             >
                               <svg
-                                :class="
-                                  cx('ais-RatingMenu-starIcon', {
-                                    'ais-RatingMenu-starIcon--full': full,
-                                    'ais-RatingMenu-starIcon--empty': !full,
-                                  })
-                                "
+                                :class="{
+                                  'ais-RatingMenu-starIcon': true,
+                                  'ais-RatingMenu-starIcon--full': full,
+                                  'ais-RatingMenu-starIcon--empty': !full,
+                                }"
                                 aria-hidden="true"
                                 viewBox="0 0 16 16"
                               >
@@ -394,12 +392,12 @@
                   </li>
 
                   <li
-                    :class="
-                      cx('ais-Pagination-item', 'ais-Pagination-item--page', {
-                        'ais-Pagination-item--selected':
-                          page === currentRefinement,
-                      })
-                    "
+                    :class="{
+                      'ais-Pagination-item': true,
+                      'ais-Pagination-item--page': true,
+                      'ais-Pagination-item--selected':
+                        page === currentRefinement,
+                    }"
                     v-for="page in pages"
                     :key="page"
                   >
@@ -502,7 +500,6 @@
 
 <script>
 import algoliasearch from 'algoliasearch/lite';
-import cx from 'classnames';
 import VueSlider from 'vue-slider-component';
 
 import getRouting from './routing';
@@ -543,7 +540,6 @@ export default {
   },
   data() {
     return {
-      cx,
       searchClient: algoliasearch(
         'latency',
         '6be0576ff61c053d5f9a3225e2a90f76'
