@@ -13,4 +13,5 @@
 /examples/media/*   /examples/js/media/:splat   301
 /examples/tourism/*   /examples/js/tourism/:splat   301
 
+/stories/react/*   /stories/js/:splat   301
 /stories   /stories/js   301!
