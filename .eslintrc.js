@@ -193,8 +193,8 @@ const config = {
     },
     {
       files: [
-        'packages/react-instantsearch-core/**/*',
-        'packages/react-instantsearch-core-*/**/*',
+        'packages/react-instantsearch/**/*',
+        'packages/react-instantsearch-*/**/*',
       ],
       rules: {
         '@typescript-eslint/consistent-type-assertions': 'off',

@@ -5,7 +5,7 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { render } from '@testing-library/react';
 import React from 'react';
-import { InstantSearch as InstantSearchCore } from 'react-instantsearch-v6-core';
+import { InstantSearch as InstantSearchCore } from 'react-instantsearch-core-v6';
 
 import { useSearchBox } from '../connectors/useSearchBox';
 import { noop } from '../lib/noop';
