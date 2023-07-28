@@ -21,7 +21,7 @@ type SearchRef = { current: InstantSearch | undefined };
 export type RenderToString = (element: JSX.Element) => unknown;
 
 export type GetServerStateOptions = {
-  renderToString?: RenderToString;
+  renderToString: RenderToString;
 };
 
 /**
@@ -29,7 +29,7 @@ export type GetServerStateOptions = {
  */
 export function getServerState(
   children: ReactNode,
-  options: GetServerStateOptions = {}
+  { renderToString }: GetServerStateOptions
 ): Promise<InstantSearchServerState> {
   const searchRef: SearchRef = {
     current: undefined,
@@ -54,43 +54,39 @@ export function getServerState(
     return notifyServer;
   };
 
-  return importRenderToString(options.renderToString)
-    .then((renderToString) => {
+  return execute({
+    children,
+    renderToString,
+    searchRef,
+    notifyServer: createNotifyServer(),
+  }).then((serverState) => {
+    let shouldRefetch = false;
+
+    // <DynamicWidgets> requires another query to retrieve the dynamic widgets
+    // to render.
+    walkIndex(searchRef.current!.mainIndex, (index) => {
+      shouldRefetch =
+        shouldRefetch ||
+        index
+          .getWidgets()
+          .some((widget) => widget.$$type === 'ais.dynamicWidgets');
+    });
+
+    if (shouldRefetch) {
       return execute({
-        children,
+        children: (
+          <InstantSearchSSRProvider {...serverState}>
+            {children}
+          </InstantSearchSSRProvider>
+        ),
         renderToString,
         searchRef,
         notifyServer: createNotifyServer(),
-      }).then((serverState) => ({ serverState, renderToString }));
-    })
-    .then(({ renderToString, serverState }) => {
-      let shouldRefetch = false;
-
-      // <DynamicWidgets> requires another query to retrieve the dynamic widgets
-      // to render.
-      walkIndex(searchRef.current!.mainIndex, (index) => {
-        shouldRefetch =
-          shouldRefetch ||
-          index
-            .getWidgets()
-            .some((widget) => widget.$$type === 'ais.dynamicWidgets');
       });
+    }
 
-      if (shouldRefetch) {
-        return execute({
-          children: (
-            <InstantSearchSSRProvider {...serverState}>
-              {children}
-            </InstantSearchSSRProvider>
-          ),
-          renderToString,
-          searchRef,
-          notifyServer: createNotifyServer(),
-        });
-      }
-
-      return serverState;
-    });
+    return serverState;
+  });
 }
 
 type ExecuteArgs = {
@@ -140,37 +136,4 @@ function execute({
         initialResults: getInitialResults(searchRef.current!.mainIndex),
       };
     });
-}
-
-function importRenderToString(
-  renderToString?: RenderToString
-): Promise<RenderToString> {
-  if (renderToString) {
-    return Promise.resolve(renderToString);
-  }
-  // eslint-disable-next-line no-console
-  console.warn(
-    '[InstantSearch] `renderToString` should be passed to getServerState(<App/>, { renderToString })'
-  );
-
-  // React pre-18 doesn't use `exports` in package.json, requiring a fully resolved path
-  // Thus, only one of these imports is correct
-  const modules = ['react-dom/server.js', 'react-dom/server'];
-
-  // import is an expression to make sure https://github.com/webpack/webpack/issues/13865 does not kick in
-  return Promise.all(modules.map((mod) => import(mod).catch(() => {}))).then(
-    (imports: unknown[]) => {
-      const ReactDOMServer = imports.find(
-        (mod): mod is { renderToString: RenderToString } => mod !== undefined
-      );
-
-      if (!ReactDOMServer) {
-        throw new Error(
-          'Could not import ReactDOMServer. You can provide it as an argument: getServerState(<Search />, { renderToString }).'
-        );
-      }
-
-      return ReactDOMServer.renderToString;
-    }
-  );
 }

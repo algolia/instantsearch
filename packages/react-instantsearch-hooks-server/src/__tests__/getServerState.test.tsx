@@ -126,7 +126,7 @@ describe('getServerState', () => {
     }
 
     await expect(
-      getServerState(<App />)
+      getServerState(<App />, { renderToString })
     ).rejects.toThrowErrorMatchingInlineSnapshot(
       `"Unable to retrieve InstantSearch's server state in \`getServerState()\`. Did you mount the <InstantSearch> component?"`
     );
@@ -149,7 +149,7 @@ describe('getServerState', () => {
     }
 
     await expect(
-      getServerState(<App />)
+      getServerState(<App />, { renderToString })
     ).rejects.toThrowErrorMatchingInlineSnapshot(
       `"getServerState should be called with a single InstantSearchSSRProvider and a single InstantSearch component."`
     );
@@ -168,7 +168,7 @@ describe('getServerState', () => {
       searchClient,
     });
 
-    await expect(getServerState(<App />)).rejects.toThrow(
+    await expect(getServerState(<App />, { renderToString })).rejects.toThrow(
       /Search client error/
     );
   });
@@ -183,7 +183,7 @@ describe('getServerState', () => {
       searchClient,
     });
 
-    await expect(getServerState(<App />)).rejects.toThrow(
+    await expect(getServerState(<App />, { renderToString })).rejects.toThrow(
       /Search client error/
     );
   });
@@ -195,7 +195,7 @@ describe('getServerState', () => {
     const searchClient = createAlgoliaSearchClient({});
     const { App } = createTestEnvironment({ searchClient });
 
-    await getServerState(<App />);
+    await getServerState(<App />, { renderToString });
 
     expect(searchClient.addAlgoliaAgent).toHaveBeenCalledWith(
       `react (${ReactVersion})`
@@ -218,7 +218,7 @@ describe('getServerState', () => {
     const searchClient = createSearchClient({});
     const { App } = createTestEnvironment({ searchClient });
 
-    await getServerState(<App />);
+    await getServerState(<App />, { renderToString });
 
     expect(searchClient.search).toHaveBeenCalledTimes(1);
     expect(searchClient.search).toHaveBeenCalledWith([
@@ -333,7 +333,7 @@ describe('getServerState', () => {
     const searchClient = createAlgoliaSearchClient({});
     const { App } = createTestEnvironment({ searchClient });
 
-    const serverState = await getServerState(<App />);
+    const serverState = await getServerState(<App />, { renderToString });
 
     expect(Object.keys(serverState.initialResults)).toHaveLength(4);
     expect(serverState.initialResults).toMatchSnapshot();
@@ -346,7 +346,8 @@ describe('getServerState', () => {
     await getServerState(
       <App>
         <DynamicWidgets fallbackComponent={RefinementList} />
-      </App>
+      </App>,
+      { renderToString }
     );
 
     expect(searchClient.search).toHaveBeenCalledTimes(2);
@@ -365,7 +366,8 @@ describe('getServerState', () => {
         <Index indexName="something">
           <DynamicWidgets fallbackComponent={RefinementList} />
         </Index>
-      </App>
+      </App>,
+      { renderToString }
     );
 
     expect(searchClient.search).toHaveBeenCalledTimes(2);
@@ -403,7 +405,8 @@ describe('getServerState', () => {
     await getServerState(
       <App>
         <DynamicWidgets fallbackComponent={RefinementList} />
-      </App>
+      </App>,
+      { renderToString }
     );
 
     expect(searchClient.search).toHaveBeenCalledTimes(2);
@@ -452,7 +455,7 @@ describe('getServerState', () => {
     });
     const { App } = createTestEnvironment({ searchClient });
 
-    const serverState = await getServerState(<App />);
+    const serverState = await getServerState(<App />, { renderToString });
     const html = renderToString(<App serverState={serverState} />);
 
     expect(html).toMatchInlineSnapshot(`
