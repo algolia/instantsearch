@@ -1,5 +1,5 @@
 import React from 'react';
-import { useClearRefinements } from 'react-instantsearch-hooks-web';
+import { useClearRefinements } from 'react-instantsearch';
 
 export function ClearFilters() {
   const { refine, canRefine } = useClearRefinements();

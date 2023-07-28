@@ -1,5 +1,5 @@
 import React from 'react';
-import { useInstantSearch } from 'react-instantsearch-hooks-web';
+import { useInstantSearch } from 'react-instantsearch';
 
 import { formatNumber } from '../utils';
 

@@ -5,7 +5,7 @@ import {
   RatingMenuWidgetDescription,
 } from 'instantsearch.js/es/connectors/rating-menu/connectRatingMenu';
 import React from 'react';
-import { useConnector } from 'react-instantsearch-hooks-web';
+import { useConnector } from 'react-instantsearch';
 
 export function Ratings({ attribute }: { attribute: string }) {
   const { refine, items, createURL } = useConnector<

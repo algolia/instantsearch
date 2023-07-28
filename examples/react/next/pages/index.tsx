@@ -5,8 +5,6 @@ import Head from 'next/head';
 import singletonRouter from 'next/router';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import { createInstantSearchRouterNext } from 'react-instantsearch-hooks-router-nextjs';
-import { getServerState } from 'react-instantsearch-hooks-server';
 import {
   DynamicWidgets,
   InstantSearch,
@@ -16,7 +14,9 @@ import {
   SearchBox,
   InstantSearchServerState,
   InstantSearchSSRProvider,
-} from 'react-instantsearch-hooks-web';
+  getServerState,
+} from 'react-instantsearch';
+import { createInstantSearchRouterNext } from 'react-instantsearch-router-nextjs';
 
 import { Panel } from '../components/Panel';
 
@@ -47,7 +47,7 @@ export default function HomePage({ serverState, url }: HomePageProps) {
   return (
     <InstantSearchSSRProvider {...serverState}>
       <Head>
-        <title>React InstantSearch Hooks - Next.js</title>
+        <title>React InstantSearch - Next.js</title>
       </Head>
 
       <InstantSearch

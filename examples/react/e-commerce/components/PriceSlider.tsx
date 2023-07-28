@@ -11,7 +11,7 @@ import {
   Ticks,
   GetHandleProps,
 } from 'react-compound-slider';
-import { useRange } from 'react-instantsearch-hooks-web';
+import { useRange } from 'react-instantsearch';
 
 import './PriceSlider.css';
 import { formatNumber } from '../utils';

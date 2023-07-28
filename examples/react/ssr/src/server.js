@@ -3,7 +3,7 @@ import { join } from 'path';
 import express from 'express';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import { getServerState } from 'react-instantsearch-hooks-server';
+import { getServerState } from 'react-instantsearch';
 
 import App from './App';
 
@@ -30,11 +30,11 @@ app.get('/', async (req, res) => {
     <link href="https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/satellite-min.css" rel="stylesheet" />
     <script>window.__SERVER_STATE__ = ${JSON.stringify(serverState)}</script>
   </head>
-  
+
   <body>
     <div id="root">${html}</div>
   </body>
-  
+
   <script src="/assets/bundle.js"></script>
 </html>`
   );

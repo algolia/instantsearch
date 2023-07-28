@@ -1,4 +1,4 @@
-import { useQueryRules, UseQueryRulesProps } from 'react-instantsearch-hooks';
+import { useQueryRules, UseQueryRulesProps } from 'react-instantsearch-core';
 
 export type QueryRuleContextProps = Partial<
   Pick<UseQueryRulesProps, 'trackedFilters' | 'transformRuleContexts'>

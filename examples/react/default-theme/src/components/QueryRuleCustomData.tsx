@@ -1,5 +1,5 @@
 import React from 'react';
-import { useQueryRules, UseQueryRulesProps } from 'react-instantsearch-hooks';
+import { useQueryRules, UseQueryRulesProps } from 'react-instantsearch-core';
 
 import { cx } from '../cx';
 

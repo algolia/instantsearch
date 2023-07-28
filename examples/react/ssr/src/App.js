@@ -11,7 +11,7 @@ import {
   Pagination,
   RefinementList,
   SearchBox,
-} from 'react-instantsearch-hooks-web';
+} from 'react-instantsearch';
 // because this is ran on node without type: "module" set in the package.json
 // we need to use commonjs instead of esm.
 // If you use ESM in Node, you can rely on these import statements instead:

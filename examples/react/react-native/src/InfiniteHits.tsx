@@ -4,7 +4,7 @@ import { Hit as AlgoliaHit } from '@algolia/client-search';
 import {
   useInfiniteHits,
   UseInfiniteHitsProps,
-} from 'react-instantsearch-hooks';
+} from 'react-instantsearch-core';
 
 type InfiniteHitsProps<THit> = UseInfiniteHitsProps & {
   hitComponent: (props: { hit: THit }) => JSX.Element;

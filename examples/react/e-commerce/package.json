@@ -1,10 +1,10 @@
 {
-  "name": "example-react-instantsearch-hooks-e-commerce",
+  "name": "example-react-instantsearch-e-commerce",
   "version": "6.38.26",
   "private": true,
   "scripts": {
     "build": "BABEL_ENV=parcel parcel build index.html",
-    "website:examples": "BABEL_ENV=parcel parcel build index.html --public-url . --dist-dir=../../../website/examples/react-hooks/e-commerce",
+    "website:examples": "BABEL_ENV=parcel parcel build index.html --public-url . --dist-dir=../../../website/examples/react/e-commerce",
     "start": "BABEL_ENV=parcel parcel index.html"
   },
   "browserslist": "firefox 68, chrome 78, IE 11",
@@ -14,7 +14,7 @@
     "react": "18.1.0",
     "react-compound-slider": "3.4.0",
     "react-dom": "18.1.0",
-    "react-instantsearch-hooks-web": "6.47.3"
+    "react-instantsearch": "6.47.3"
   },
   "devDependencies": {
     "@parcel/core": "2.8.0",

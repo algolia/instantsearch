@@ -21,7 +21,7 @@ import {
   SearchBox,
   SortBy,
   ToggleRefinement,
-} from 'react-instantsearch-hooks-web';
+} from 'react-instantsearch';
 
 import {
   Panel,

@@ -13,7 +13,7 @@ import {
   ToggleRefinement,
   Highlight,
   Snippet,
-} from 'react-instantsearch-hooks-web';
+} from 'react-instantsearch';
 
 import {
   AlgoliaSvg,

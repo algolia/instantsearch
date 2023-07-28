@@ -9,7 +9,7 @@ import {
   Pagination,
   RefinementList,
   SearchBox,
-} from 'react-instantsearch-hooks-web';
+} from 'react-instantsearch';
 
 import { Panel } from './Panel';
 
@@ -29,8 +29,8 @@ export function App() {
         </h1>
         <p className="header-subtitle">
           using{' '}
-          <a href="https://github.com/algolia/instantsearch/tree/master/packages/react-instantsearch-hooks-web">
-            React InstantSearch Hooks
+          <a href="https://github.com/algolia/instantsearch/tree/master/packages/react-instantsearch">
+            React InstantSearch
           </a>
         </p>
       </header>

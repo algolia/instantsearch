@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNumericMenu, UseNumericMenuProps } from 'react-instantsearch-hooks';
+import { useNumericMenu, UseNumericMenuProps } from 'react-instantsearch-core';
 
 import { cx } from '../cx';
 
