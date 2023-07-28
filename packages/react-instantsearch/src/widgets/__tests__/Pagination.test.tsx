@@ -7,7 +7,7 @@ import {
   createAlgoliaSearchClient,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import { InstantSearchHooksTestWrapper } from '@instantsearch/testutils';
+import { InstantSearchTestWrapper } from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
@@ -41,9 +41,9 @@ function createMockedSearchClient({ nbPages }: { nbPages?: number } = {}) {
 describe('Pagination', () => {
   test('renders with default props', async () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <Pagination />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() =>
@@ -120,9 +120,9 @@ describe('Pagination', () => {
   test('renders with props', async () => {
     const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <Pagination />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() =>
@@ -282,9 +282,9 @@ describe('Pagination', () => {
   test('navigates between pages', async () => {
     const searchClient = createMockedSearchClient();
     const { container, getByText } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <Pagination />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() =>
@@ -1219,9 +1219,9 @@ describe('Pagination', () => {
   test('does not navigate when pressing a modifier key', async () => {
     const searchClient = createMockedSearchClient();
     const { getByText } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <Pagination />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
@@ -1288,9 +1288,9 @@ describe('Pagination', () => {
   test('adds items around the current one', async () => {
     const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <Pagination padding={4} />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() =>
@@ -1473,9 +1473,9 @@ describe('Pagination', () => {
     });
 
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={client}>
+      <InstantSearchTestWrapper searchClient={client}>
         <Pagination padding={4} />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() =>
@@ -1609,9 +1609,9 @@ describe('Pagination', () => {
   test('limits the total pages to display', async () => {
     const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <Pagination totalPages={4} />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() =>
@@ -1722,9 +1722,9 @@ describe('Pagination', () => {
 
   test('hides the "First" item when `showFirst` is `false`', async () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <Pagination showFirst={false} />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() =>
@@ -1795,9 +1795,9 @@ describe('Pagination', () => {
 
   test('hides the "Previous" item when `showPrevious` is `false`', async () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <Pagination showPrevious={false} />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() =>
@@ -1868,9 +1868,9 @@ describe('Pagination', () => {
 
   test('hides the "Next" item when `showNext` is `false`', async () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <Pagination showNext={false} />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() =>
@@ -1939,9 +1939,9 @@ describe('Pagination', () => {
 
   test('hides the "Last" item when `showLast` is `false`', async () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <Pagination showLast={false} />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() =>
@@ -2010,13 +2010,13 @@ describe('Pagination', () => {
 
   test('forwards custom class names and `div` props to the root element', () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <Pagination
           className="MyPagination"
           classNames={{ root: 'ROOT' }}
           title="Some custom title"
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     const root = container.firstChild;
@@ -2026,7 +2026,7 @@ describe('Pagination', () => {
 
   test('renders with translations', async () => {
     const { getByRole, findByRole, debug } = render(
-      <InstantSearchHooksTestWrapper
+      <InstantSearchTestWrapper
         searchClient={createMockedSearchClient({ nbPages: 3 })}
       >
         <Pagination
@@ -2045,7 +2045,7 @@ describe('Pagination', () => {
               `#${currentPage}/${nbPages}`,
           }}
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() =>

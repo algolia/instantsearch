@@ -8,7 +8,7 @@ import {
   createSFFVResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import { InstantSearchHooksTestWrapper } from '@instantsearch/testutils';
+import { InstantSearchTestWrapper } from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
@@ -119,9 +119,9 @@ describe('RefinementList', () => {
   test('renders with props', async () => {
     const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <RefinementList attribute="brand" />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() =>
@@ -403,9 +403,9 @@ describe('RefinementList', () => {
   test('enables conjunctive faceting', async () => {
     const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <RefinementList attribute="brand" operator="and" />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => {
@@ -439,9 +439,9 @@ describe('RefinementList', () => {
   test('limits the number of items to display', async () => {
     const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <RefinementList attribute="brand" limit={5} />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() =>
@@ -582,7 +582,7 @@ describe('RefinementList', () => {
   test('transforms the items', async () => {
     const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <RefinementList
           attribute="brand"
           transformItems={(items) =>
@@ -592,7 +592,7 @@ describe('RefinementList', () => {
             }))
           }
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => {
@@ -619,9 +619,9 @@ describe('RefinementList', () => {
     test('sorts the items by ascending name', async () => {
       const searchClient = createMockedSearchClient();
       const { container } = render(
-        <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <InstantSearchTestWrapper searchClient={searchClient}>
           <RefinementList attribute="brand" sortBy={['name:asc']} />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       await waitFor(() => {
@@ -647,9 +647,9 @@ describe('RefinementList', () => {
     test('sorts the items by descending name', async () => {
       const searchClient = createMockedSearchClient();
       const { container } = render(
-        <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <InstantSearchTestWrapper searchClient={searchClient}>
           <RefinementList attribute="brand" sortBy={['name:desc']} />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       await waitFor(() => {
@@ -675,9 +675,9 @@ describe('RefinementList', () => {
     test('sorts the items by count', async () => {
       const searchClient = createMockedSearchClient();
       const { container } = render(
-        <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <InstantSearchTestWrapper searchClient={searchClient}>
           <RefinementList attribute="brand" sortBy={['count']} />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       await waitFor(() => {
@@ -703,9 +703,9 @@ describe('RefinementList', () => {
     test('sorts the items by refinement state', async () => {
       const searchClient = createMockedSearchClient();
       const { container } = render(
-        <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <InstantSearchTestWrapper searchClient={searchClient}>
           <RefinementList attribute="brand" sortBy={['isRefined']} />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       await waitFor(() => {
@@ -759,12 +759,12 @@ describe('RefinementList', () => {
     test('sorts the items using a sorting function', async () => {
       const searchClient = createMockedSearchClient();
       const { container } = render(
-        <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <InstantSearchTestWrapper searchClient={searchClient}>
           <RefinementList
             attribute="brand"
             sortBy={(a, b) => a.name.length - b.name.length}
           />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       await waitFor(() => {
@@ -792,13 +792,13 @@ describe('RefinementList', () => {
     test('displays a search box', async () => {
       const searchClient = createMockedSearchClient();
       const { container } = render(
-        <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <InstantSearchTestWrapper searchClient={searchClient}>
           <RefinementList
             attribute="brand"
             searchable={true}
             searchablePlaceholder="Search brands"
           />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       const searchInput = container.querySelector(
@@ -881,13 +881,13 @@ describe('RefinementList', () => {
         ),
       });
       const { container } = render(
-        <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <InstantSearchTestWrapper searchClient={searchClient}>
           <RefinementList
             attribute="brand"
             searchable={true}
             searchablePlaceholder="Search brands"
           />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
@@ -1027,9 +1027,9 @@ describe('RefinementList', () => {
     test('displays a "Show more" button', async () => {
       const searchClient = createMockedSearchClient();
       const { container } = render(
-        <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <InstantSearchTestWrapper searchClient={searchClient}>
           <RefinementList attribute="brand" showMore={true} />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       await waitFor(() =>
@@ -1305,13 +1305,13 @@ describe('RefinementList', () => {
     test('limits the number of items to reveal', async () => {
       const searchClient = createMockedSearchClient();
       const { container } = render(
-        <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <InstantSearchTestWrapper searchClient={searchClient}>
           <RefinementList
             attribute="brand"
             showMore={true}
             showMoreLimit={11}
           />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       await waitFor(() =>
@@ -1344,14 +1344,14 @@ describe('RefinementList', () => {
   test('forwards custom class names and `div` props to the root element', () => {
     const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <RefinementList
           attribute="brand"
           className="MyRefinementList"
           classNames={{ root: 'ROOT' }}
           title="Some custom title"
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     const root = container.firstChild;
@@ -1376,7 +1376,7 @@ describe('RefinementList', () => {
       ),
     });
     const { container, getByRole } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <RefinementList
           attribute="brand"
           showMore
@@ -1390,7 +1390,7 @@ describe('RefinementList', () => {
           }}
           searchable
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));

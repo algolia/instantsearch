@@ -3,7 +3,7 @@
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
-import { InstantSearchHooksTestWrapper } from '@instantsearch/testutils';
+import { InstantSearchTestWrapper } from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
@@ -16,7 +16,7 @@ import type { UseRefinementListProps } from 'react-instantsearch-core';
 describe('CurrentRefinements', () => {
   test('renders with default props', async () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper
+      <InstantSearchTestWrapper
         initialUiState={{
           indexName: {
             refinementList: {
@@ -29,7 +29,7 @@ describe('CurrentRefinements', () => {
         <VirtualRefinementList attribute="brand" />
         <VirtualRefinementList attribute="categories" />
         <CurrentRefinements />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => {
@@ -123,9 +123,9 @@ describe('CurrentRefinements', () => {
   test('renders with a specific set of class names when there are no refinements', async () => {
     const searchClient = createSearchClient({});
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <CurrentRefinements />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
@@ -145,7 +145,7 @@ describe('CurrentRefinements', () => {
 
   test('clears a refinement', async () => {
     const { container, queryByText } = render(
-      <InstantSearchHooksTestWrapper
+      <InstantSearchTestWrapper
         initialUiState={{
           indexName: {
             refinementList: {
@@ -158,7 +158,7 @@ describe('CurrentRefinements', () => {
         <VirtualRefinementList attribute="brand" />
         <VirtualRefinementList attribute="categories" />
         <CurrentRefinements />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => {
@@ -304,7 +304,7 @@ describe('CurrentRefinements', () => {
 
     render(
       <form onSubmit={onSubmit}>
-        <InstantSearchHooksTestWrapper
+        <InstantSearchTestWrapper
           searchClient={searchClient}
           initialUiState={{
             indexName: {
@@ -316,7 +316,7 @@ describe('CurrentRefinements', () => {
         >
           <VirtualRefinementList attribute="brand" />
           <CurrentRefinements />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       </form>
     );
 
@@ -334,7 +334,7 @@ describe('CurrentRefinements', () => {
   test('does not clear when pressing a modifier key', async () => {
     const searchClient = createSearchClient({});
     const { container } = render(
-      <InstantSearchHooksTestWrapper
+      <InstantSearchTestWrapper
         searchClient={searchClient}
         initialUiState={{
           indexName: {
@@ -346,7 +346,7 @@ describe('CurrentRefinements', () => {
       >
         <VirtualRefinementList attribute="brand" />
         <CurrentRefinements />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
@@ -450,7 +450,7 @@ describe('CurrentRefinements', () => {
   test('inclusively restricts what refinements to display', async () => {
     const searchClient = createSearchClient({});
     const { container, queryByText } = render(
-      <InstantSearchHooksTestWrapper
+      <InstantSearchTestWrapper
         searchClient={searchClient}
         initialUiState={{
           indexName: {
@@ -464,7 +464,7 @@ describe('CurrentRefinements', () => {
         <VirtualRefinementList attribute="brand" />
         <VirtualRefinementList attribute="categories" />
         <CurrentRefinements includedAttributes={['categories']} />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
@@ -513,7 +513,7 @@ describe('CurrentRefinements', () => {
   test('exclusively restricts what refinements to display', async () => {
     const searchClient = createSearchClient({});
     const { container, queryByText } = render(
-      <InstantSearchHooksTestWrapper
+      <InstantSearchTestWrapper
         searchClient={searchClient}
         initialUiState={{
           indexName: {
@@ -527,7 +527,7 @@ describe('CurrentRefinements', () => {
         <VirtualRefinementList attribute="brand" />
         <VirtualRefinementList attribute="categories" />
         <CurrentRefinements excludedAttributes={['brand']} />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
@@ -576,7 +576,7 @@ describe('CurrentRefinements', () => {
   test('restricts what refinements to display with custom logic', async () => {
     const searchClient = createSearchClient({});
     const { container, queryByText } = render(
-      <InstantSearchHooksTestWrapper
+      <InstantSearchTestWrapper
         searchClient={searchClient}
         initialUiState={{
           indexName: {
@@ -594,7 +594,7 @@ describe('CurrentRefinements', () => {
             items.filter((item) => item.attribute !== 'brand')
           }
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
@@ -642,13 +642,13 @@ describe('CurrentRefinements', () => {
 
   test('forwards custom class names and `div` props to the root element', () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <CurrentRefinements
           className="MyCurrentRefinements"
           classNames={{ root: 'ROOT' }}
           title="Some custom title"
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     const root = container.firstChild;

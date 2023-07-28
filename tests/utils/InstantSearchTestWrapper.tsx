@@ -6,14 +6,14 @@ import type { InstantSearchProps } from 'react-instantsearch-core';
 
 const searchClient = createAlgoliaSearchClient({});
 
-type InstantSearchHooksTestWrapperProps = {
+type InstantSearchTestWrapperProps = {
   children: React.ReactNode;
 } & Partial<InstantSearchProps>;
 
-export function InstantSearchHooksTestWrapper({
+export function InstantSearchTestWrapper({
   children,
   ...props
-}: InstantSearchHooksTestWrapperProps) {
+}: InstantSearchTestWrapperProps) {
   return (
     <InstantSearch searchClient={searchClient} indexName="indexName" {...props}>
       {children}

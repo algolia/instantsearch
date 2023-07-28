@@ -7,7 +7,7 @@ import {
   createSearchClient,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import { InstantSearchHooksTestWrapper } from '@instantsearch/testutils';
+import { InstantSearchTestWrapper } from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
 import React from 'react';
 import { useHierarchicalMenu } from 'react-instantsearch-core';
@@ -46,7 +46,7 @@ describe('Breadcrumb', () => {
   test('forwards custom class names and `div` props to the root element', () => {
     const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <VirtualHierarchicalMenu attributes={hierarchicalAttributes} />
         <Breadcrumb
           className="MyBreadcrumb"
@@ -54,7 +54,7 @@ describe('Breadcrumb', () => {
           title="Some custom title"
           attributes={hierarchicalAttributes}
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     const root = container.firstChild;
@@ -65,13 +65,13 @@ describe('Breadcrumb', () => {
   test('renders with translations', async () => {
     const searchClient = createMockedSearchClient();
     const { getByRole } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <VirtualHierarchicalMenu attributes={hierarchicalAttributes} />
         <Breadcrumb
           attributes={hierarchicalAttributes}
           translations={{ rootElementText: 'Index' }}
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));

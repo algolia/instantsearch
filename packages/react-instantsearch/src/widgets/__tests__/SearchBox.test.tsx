@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { InstantSearchHooksTestWrapper } from '@instantsearch/testutils';
+import { InstantSearchTestWrapper } from '@instantsearch/testutils';
 import { act, render, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
@@ -14,9 +14,9 @@ import type { InstantSearch, UiState } from 'instantsearch.js';
 describe('SearchBox', () => {
   test('renders with default props', async () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <SearchBox />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => {
@@ -126,9 +126,9 @@ describe('SearchBox', () => {
 
   test('forwards placeholder prop', async () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <SearchBox placeholder="Placeholder" />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => {
@@ -141,9 +141,9 @@ describe('SearchBox', () => {
 
   test('forwards `autoFocus` prop', async () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <SearchBox autoFocus />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => {
@@ -155,7 +155,7 @@ describe('SearchBox', () => {
     let lastUiState: UiState = {};
 
     const { container } = render(
-      <InstantSearchHooksTestWrapper
+      <InstantSearchTestWrapper
         initialUiState={{
           indexName: {
             query: 'something',
@@ -166,7 +166,7 @@ describe('SearchBox', () => {
         }}
       >
         <SearchBox />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     const input = container.querySelector<HTMLInputElement>(
@@ -194,7 +194,7 @@ describe('SearchBox', () => {
     let lastUiState: UiState = {};
 
     const { container } = render(
-      <InstantSearchHooksTestWrapper
+      <InstantSearchTestWrapper
         initialUiState={{
           indexName: {
             query: 'something',
@@ -205,7 +205,7 @@ describe('SearchBox', () => {
         }}
       >
         <SearchBox />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     const resetButton = container.querySelector<HTMLButtonElement>(
@@ -232,13 +232,13 @@ describe('SearchBox', () => {
     let localSetUiState: InstantSearch['setUiState'];
 
     const { container } = render(
-      <InstantSearchHooksTestWrapper
+      <InstantSearchTestWrapper
         onStateChange={({ setUiState }) => {
           localSetUiState = setUiState;
         }}
       >
         <SearchBox />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
     const input = container.querySelector<HTMLInputElement>(
       '.ais-SearchBox-input'
@@ -262,13 +262,13 @@ describe('SearchBox', () => {
 
   test('forwards custom class names and `div` props to the root element', () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <SearchBox
           className="MySearchBox"
           classNames={{ root: 'ROOT' }}
           title="Some custom title"
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     const root = container.firstChild;
@@ -280,13 +280,13 @@ describe('SearchBox', () => {
     let lastUiState: UiState = {};
 
     const { container } = render(
-      <InstantSearchHooksTestWrapper
+      <InstantSearchTestWrapper
         onStateChange={({ uiState }) => {
           lastUiState = uiState;
         }}
       >
         <SearchBox searchAsYouType={false} />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     const input = container.querySelector<HTMLInputElement>(
@@ -305,13 +305,13 @@ describe('SearchBox', () => {
     let lastUiState: UiState = {};
 
     const { container } = render(
-      <InstantSearchHooksTestWrapper
+      <InstantSearchTestWrapper
         onStateChange={({ uiState }) => {
           lastUiState = uiState;
         }}
       >
         <SearchBox searchAsYouType={false} onSubmit={onSubmit} />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     const input = container.querySelector<HTMLInputElement>(
@@ -329,13 +329,13 @@ describe('SearchBox', () => {
     let lastUiState: UiState = {};
 
     const { container } = render(
-      <InstantSearchHooksTestWrapper
+      <InstantSearchTestWrapper
         onStateChange={({ uiState }) => {
           lastUiState = uiState;
         }}
       >
         <SearchBox searchAsYouType={false} />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     const input = container.querySelector<HTMLInputElement>(
@@ -354,14 +354,14 @@ describe('SearchBox', () => {
 
   test('renders with translations', () => {
     const { getByRole } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <SearchBox
           translations={{
             resetButtonTitle: 'Reset',
             submitButtonTitle: 'Submit',
           }}
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     expect(getByRole('button', { name: 'Submit' })).toBeInTheDocument();

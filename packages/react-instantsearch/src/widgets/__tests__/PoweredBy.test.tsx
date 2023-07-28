@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { InstantSearchHooksTestWrapper } from '@instantsearch/testutils';
+import { InstantSearchTestWrapper } from '@instantsearch/testutils';
 import { render } from '@testing-library/react';
 import React from 'react';
 
@@ -11,9 +11,9 @@ import { PoweredBy } from '../PoweredBy';
 describe('PoweredBy', () => {
   test('renders with default props', () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <PoweredBy />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     expect(container).toMatchInlineSnapshot(`
@@ -49,9 +49,9 @@ describe('PoweredBy', () => {
 
   test('renders for dark themes', () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <PoweredBy theme="dark" />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     expect(container.firstChild).toHaveClass('ais-PoweredBy--dark');
@@ -88,7 +88,7 @@ describe('PoweredBy', () => {
 
   test('customizes the class names with the light theme', () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <PoweredBy
           classNames={{
             root: 'MyCustomPoweredBy',
@@ -97,7 +97,7 @@ describe('PoweredBy', () => {
             logo: 'MyCustomPoweredByLogo',
           }}
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     expect(container.firstChild).toHaveClass(
@@ -116,7 +116,7 @@ describe('PoweredBy', () => {
 
   test('customizes the class names with the dark theme', () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <PoweredBy
           theme="dark"
           classNames={{
@@ -126,7 +126,7 @@ describe('PoweredBy', () => {
             logo: 'MyCustomPoweredByLogo',
           }}
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     expect(container.firstChild).toHaveClass(
@@ -145,13 +145,13 @@ describe('PoweredBy', () => {
 
   test('forwards custom class names and `div` props to the root element', () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <PoweredBy
           className="MyPoweredBy"
           classNames={{ root: 'ROOT' }}
           title="Some custom title"
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     const root = container.firstChild;

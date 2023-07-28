@@ -7,7 +7,7 @@ import {
   createSearchClient,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import { InstantSearchHooksTestWrapper } from '@instantsearch/testutils';
+import { InstantSearchTestWrapper } from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
@@ -49,9 +49,9 @@ describe('HierarchicalMenu', () => {
   test('renders with props', async () => {
     const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <HierarchicalMenu attributes={attributes} />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => {
@@ -164,9 +164,9 @@ describe('HierarchicalMenu', () => {
   test('limits the number of items to display', async () => {
     const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <HierarchicalMenu attributes={attributes} limit={1} />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() =>
@@ -211,14 +211,14 @@ describe('HierarchicalMenu', () => {
   test('transforms the items', async () => {
     const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <HierarchicalMenu
           attributes={attributes}
           transformItems={(items) =>
             items.map((item) => ({ ...item, label: item.label.toUpperCase() }))
           }
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => {
@@ -238,9 +238,9 @@ describe('HierarchicalMenu', () => {
     test('sorts the items by ascending name', async () => {
       const searchClient = createMockedSearchClient();
       const { container } = render(
-        <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <InstantSearchTestWrapper searchClient={searchClient}>
           <HierarchicalMenu attributes={attributes} sortBy={['name:asc']} />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       await waitFor(() =>
@@ -259,9 +259,9 @@ describe('HierarchicalMenu', () => {
     test('sorts the items by descending name', async () => {
       const searchClient = createMockedSearchClient();
       const { container } = render(
-        <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <InstantSearchTestWrapper searchClient={searchClient}>
           <HierarchicalMenu attributes={attributes} sortBy={['name:desc']} />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       await waitFor(() =>
@@ -280,9 +280,9 @@ describe('HierarchicalMenu', () => {
     test('sorts the items by count', async () => {
       const searchClient = createMockedSearchClient();
       const { container } = render(
-        <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <InstantSearchTestWrapper searchClient={searchClient}>
           <HierarchicalMenu attributes={attributes} sortBy={['count']} />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       await waitFor(() =>
@@ -297,7 +297,7 @@ describe('HierarchicalMenu', () => {
     test('sorts the items by refinement state', async () => {
       const searchClient = createMockedSearchClient();
       const { container, findByText } = render(
-        <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <InstantSearchTestWrapper searchClient={searchClient}>
           <HierarchicalMenu
             attributes={attributes}
             sortBy={['isRefined', 'name']}
@@ -308,7 +308,7 @@ describe('HierarchicalMenu', () => {
               }))
             }
           />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       await waitFor(() =>
@@ -355,12 +355,12 @@ describe('HierarchicalMenu', () => {
     test('sorts the items using a sorting function', async () => {
       const searchClient = createMockedSearchClient();
       const { container } = render(
-        <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <InstantSearchTestWrapper searchClient={searchClient}>
           <HierarchicalMenu
             attributes={attributes}
             sortBy={(a, b) => b.name.localeCompare(a.name)}
           />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       await waitFor(() =>
@@ -381,9 +381,9 @@ describe('HierarchicalMenu', () => {
     test('displays a "Show more" button', async () => {
       const searchClient = createMockedSearchClient();
       const { container } = render(
-        <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <InstantSearchTestWrapper searchClient={searchClient}>
           <HierarchicalMenu attributes={attributes} limit={1} showMore={true} />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       await waitFor(() =>
@@ -447,14 +447,14 @@ describe('HierarchicalMenu', () => {
     test('limits the number of items to reveal', async () => {
       const searchClient = createMockedSearchClient();
       const { container } = render(
-        <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <InstantSearchTestWrapper searchClient={searchClient}>
           <HierarchicalMenu
             attributes={attributes}
             limit={1}
             showMore={true}
             showMoreLimit={2}
           />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       await waitFor(() =>
@@ -482,14 +482,14 @@ describe('HierarchicalMenu', () => {
   test('forwards custom class names and `div` props to the root element', () => {
     const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <HierarchicalMenu
           attributes={attributes}
           className="MyHierarchicalMenu"
           classNames={{ root: 'ROOT' }}
           title="Some custom title"
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     const root = container.firstChild;
@@ -500,7 +500,7 @@ describe('HierarchicalMenu', () => {
   test('renders with translations', async () => {
     const searchClient = createMockedSearchClient();
     const { getByRole } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <HierarchicalMenu
           attributes={attributes}
           limit={1}
@@ -513,7 +513,7 @@ describe('HierarchicalMenu', () => {
           }}
           showMore
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => {

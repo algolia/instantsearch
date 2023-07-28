@@ -3,7 +3,7 @@
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
-import { InstantSearchHooksTestWrapper } from '@instantsearch/testutils';
+import { InstantSearchTestWrapper } from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
@@ -13,7 +13,7 @@ import { SortBy } from '../SortBy';
 describe('SortBy', () => {
   test('renders with props', () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <SortBy
           items={[
             { label: 'Featured', value: 'instant_search' },
@@ -21,7 +21,7 @@ describe('SortBy', () => {
             { label: 'Price (desc)', value: 'instant_search_price_desc' },
           ]}
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     expect(document.querySelector('.ais-SortBy-select')).toHaveValue(
@@ -62,7 +62,7 @@ describe('SortBy', () => {
 
   test('transform the passed items', () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <SortBy
           transformItems={(items) =>
             items.map((item) => ({
@@ -76,7 +76,7 @@ describe('SortBy', () => {
             { label: 'Price (desc)', value: 'instant_search_price_desc' },
           ]}
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     expect(container).toMatchInlineSnapshot(`
@@ -115,7 +115,7 @@ describe('SortBy', () => {
     const client = createSearchClient({});
 
     const { getByRole } = render(
-      <InstantSearchHooksTestWrapper
+      <InstantSearchTestWrapper
         searchClient={client}
         indexName="instant_search"
       >
@@ -126,7 +126,7 @@ describe('SortBy', () => {
             { label: 'Price (desc)', value: 'instant_search_price_desc' },
           ]}
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => {
@@ -156,7 +156,7 @@ describe('SortBy', () => {
 
   test('forwards custom class names and `div` props to the root element', () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <SortBy
           className="MySortBy"
           classNames={{ root: 'ROOT' }}
@@ -167,7 +167,7 @@ describe('SortBy', () => {
             { label: 'Price (desc)', value: 'instant_search_price_desc' },
           ]}
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     const root = container.firstChild;

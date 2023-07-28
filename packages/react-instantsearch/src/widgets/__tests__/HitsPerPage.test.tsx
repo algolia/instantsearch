@@ -3,7 +3,7 @@
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
-import { InstantSearchHooksTestWrapper } from '@instantsearch/testutils';
+import { InstantSearchTestWrapper } from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
@@ -14,7 +14,7 @@ describe('HitsPerPage', () => {
   test('renders with props', async () => {
     const searchClient = createSearchClient({});
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <HitsPerPage
           items={[
             { label: '10', value: 10, default: true },
@@ -22,7 +22,7 @@ describe('HitsPerPage', () => {
             { label: '30', value: 30 },
           ]}
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
@@ -62,7 +62,7 @@ describe('HitsPerPage', () => {
   test('selects current value', async () => {
     const searchClient = createSearchClient({});
     const { getByRole } = render(
-      <InstantSearchHooksTestWrapper
+      <InstantSearchTestWrapper
         searchClient={searchClient}
         initialUiState={{
           indexName: {
@@ -77,7 +77,7 @@ describe('HitsPerPage', () => {
             { label: '30', value: 30 },
           ]}
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
@@ -96,7 +96,7 @@ describe('HitsPerPage', () => {
   test('refines on select', async () => {
     const searchClient = createSearchClient({});
     const { getByRole } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <HitsPerPage
           items={[
             { label: '10', value: 10, default: true },
@@ -104,7 +104,7 @@ describe('HitsPerPage', () => {
             { label: '30', value: 30 },
           ]}
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
@@ -125,7 +125,7 @@ describe('HitsPerPage', () => {
 
   test('forwards custom class names and `div` props to the root element', () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <HitsPerPage
           className="MyHitsPerPage"
           classNames={{ root: 'ROOT' }}
@@ -136,7 +136,7 @@ describe('HitsPerPage', () => {
             { label: '30', value: 30 },
           ]}
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     const root = container.firstChild;

@@ -7,7 +7,7 @@ import {
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import { InstantSearchHooksTestWrapper } from '@instantsearch/testutils';
+import { InstantSearchTestWrapper } from '@instantsearch/testutils';
 import { act, render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
@@ -57,9 +57,9 @@ describe('InfiniteHits', () => {
   test('renders with default props', async () => {
     const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <InfiniteHits />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() =>
@@ -124,13 +124,13 @@ describe('InfiniteHits', () => {
   test('renders with a custom hit component', async () => {
     const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <InfiniteHits<CustomHit>
           hitComponent={({ hit }) => (
             <strong>{`${hit.__position} - ${hit.somethingSpecial}`}</strong>
           )}
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() =>
@@ -184,13 +184,13 @@ describe('InfiniteHits', () => {
   test('displays more hits when clicking the "Show More" button', async () => {
     const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <InfiniteHits
           hitComponent={({ hit: { __position } }) => (
             <strong>{__position}</strong>
           )}
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() =>
@@ -237,7 +237,7 @@ describe('InfiniteHits', () => {
   test('displays previous hits when clicking the "Show Previous" button', async () => {
     const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper
+      <InstantSearchTestWrapper
         searchClient={searchClient}
         initialUiState={{ indexName: { page: 4 } }}
       >
@@ -246,7 +246,7 @@ describe('InfiniteHits', () => {
             <strong>{__position}</strong>
           )}
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() =>
@@ -295,9 +295,9 @@ describe('InfiniteHits', () => {
   test('hides the "Show Previous" button when `showPrevious` is `false`', async () => {
     const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <InfiniteHits showPrevious={false} />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => {
@@ -327,9 +327,9 @@ describe('InfiniteHits', () => {
   test('marks the "Show Previous" button as disabled on first page', async () => {
     const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <InfiniteHits />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
@@ -353,12 +353,12 @@ describe('InfiniteHits', () => {
   test('marks the "Show More" button as disabled on last page', async () => {
     const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper
+      <InstantSearchTestWrapper
         searchClient={searchClient}
         initialUiState={{ indexName: { page: 10 } }}
       >
         <InfiniteHits />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
@@ -378,13 +378,13 @@ describe('InfiniteHits', () => {
   test('forwards custom class names and `div` props to the root element', () => {
     const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <InfiniteHits
           className="MyInfiniteHits"
           classNames={{ root: 'ROOT' }}
           aria-hidden={true}
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     const root = container.firstChild;
@@ -395,7 +395,7 @@ describe('InfiniteHits', () => {
   test('renders with translations', async () => {
     const searchClient = createMockedSearchClient();
     const { getByRole } = render(
-      <InstantSearchHooksTestWrapper
+      <InstantSearchTestWrapper
         searchClient={searchClient}
         initialUiState={{ indexName: { page: 10 } }}
       >
@@ -405,7 +405,7 @@ describe('InfiniteHits', () => {
             showPreviousButtonText: 'Display previous',
           }}
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));

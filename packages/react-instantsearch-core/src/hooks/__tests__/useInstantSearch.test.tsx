@@ -5,7 +5,7 @@
 import { createAlgoliaSearchClient } from '@instantsearch/mocks';
 import {
   createInstantSearchTestWrapper,
-  InstantSearchHooksTestWrapper,
+  InstantSearchTestWrapper,
   wait,
 } from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
@@ -114,9 +114,9 @@ describe('useInstantSearch', () => {
       }
 
       const { findByTestId } = render(
-        <InstantSearchHooksTestWrapper>
+        <InstantSearchTestWrapper>
           <App />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       const button = await findByTestId('button');
@@ -153,9 +153,9 @@ describe('useInstantSearch', () => {
       }
 
       const { findByTestId } = render(
-        <InstantSearchHooksTestWrapper>
+        <InstantSearchTestWrapper>
           <App />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       const button = await findByTestId('button');
@@ -192,10 +192,10 @@ describe('useInstantSearch', () => {
 
       function App() {
         return (
-          <InstantSearchHooksTestWrapper>
+          <InstantSearchTestWrapper>
             <Middleware />
             <SearchBox placeholder="searchbox" />
-          </InstantSearchHooksTestWrapper>
+          </InstantSearchTestWrapper>
         );
       }
 
@@ -262,10 +262,10 @@ describe('useInstantSearch', () => {
       }
 
       const { getByTestId } = render(
-        <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <InstantSearchTestWrapper searchClient={searchClient}>
           <SearchBox />
           <Refresh />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
       const refreshButton = getByTestId('refresh-button');
 
@@ -297,10 +297,10 @@ describe('useInstantSearch', () => {
   describe('status', () => {
     test('initial status: idle', () => {
       const App = () => (
-        <InstantSearchHooksTestWrapper>
+        <InstantSearchTestWrapper>
           <SearchBox />
           <Status />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       const { getByTestId } = render(<App />);
@@ -310,12 +310,10 @@ describe('useInstantSearch', () => {
 
     test('turns to loading and idle when searching', async () => {
       const App = () => (
-        <InstantSearchHooksTestWrapper
-          searchClient={createDelayedSearchClient(20)}
-        >
+        <InstantSearchTestWrapper searchClient={createDelayedSearchClient(20)}>
           <SearchBox placeholder="search here" />
           <Status />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       const { getByTestId, getByPlaceholderText } = render(<App />);
@@ -335,13 +333,13 @@ describe('useInstantSearch', () => {
 
     test('turns to loading, stalled and idle when searching slowly', async () => {
       const App = () => (
-        <InstantSearchHooksTestWrapper
+        <InstantSearchTestWrapper
           searchClient={createDelayedSearchClient(300)}
           stalledSearchDelay={200}
         >
           <SearchBox placeholder="search here" />
           <Status />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       const { getByTestId, getByPlaceholderText } = render(<App />);
@@ -371,11 +369,11 @@ describe('useInstantSearch', () => {
       });
 
       const App = () => (
-        <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <InstantSearchTestWrapper searchClient={searchClient}>
           <SearchBox placeholder="search here" />
           {/* has catchError, as the real error can not be asserted upon */}
           <Status catchError />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       const { getByTestId, getByPlaceholderText } = render(<App />);

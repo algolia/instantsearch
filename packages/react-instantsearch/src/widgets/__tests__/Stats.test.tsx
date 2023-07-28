@@ -7,7 +7,7 @@ import {
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import { InstantSearchHooksTestWrapper } from '@instantsearch/testutils';
+import { InstantSearchTestWrapper } from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
 import React from 'react';
 
@@ -36,9 +36,9 @@ function createMockedSearchClient({ nbSorted }: { nbSorted?: number } = {}) {
 describe('Stats', () => {
   test('renders with default props', async () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <Stats />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => {
@@ -59,9 +59,9 @@ describe('Stats', () => {
   test('renders with proper message nbHits and processingTimeMS', async () => {
     const client = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={client}>
+      <InstantSearchTestWrapper searchClient={client}>
         <Stats />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => {
@@ -86,9 +86,9 @@ describe('Stats', () => {
   test('renders with proper message when hits are sorted', async () => {
     const client = createMockedSearchClient({ nbSorted: 500 });
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={client}>
+      <InstantSearchTestWrapper searchClient={client}>
         <Stats />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => {
@@ -113,9 +113,9 @@ describe('Stats', () => {
   test('renders with proper message when nbSorted equals nbHits', async () => {
     const client = createMockedSearchClient({ nbSorted: 1000 });
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={client}>
+      <InstantSearchTestWrapper searchClient={client}>
         <Stats />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => {
@@ -140,13 +140,13 @@ describe('Stats', () => {
   test('renders with translations', async () => {
     const client = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={client}>
+      <InstantSearchTestWrapper searchClient={client}>
         <Stats
           translations={{
             rootElementText: () => 'Nice stats',
           }}
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => {
@@ -170,13 +170,13 @@ describe('Stats', () => {
 
   test('forwards custom class names and `div` props to the root element', () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <Stats
           className="MyHits"
           classNames={{ root: 'ROOT' }}
           aria-hidden={true}
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     const root = container.firstChild;

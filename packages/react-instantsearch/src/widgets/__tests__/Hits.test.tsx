@@ -7,7 +7,7 @@ import {
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import { InstantSearchHooksTestWrapper } from '@instantsearch/testutils';
+import { InstantSearchTestWrapper } from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
 import React from 'react';
 
@@ -19,9 +19,9 @@ import type { AlgoliaHit } from 'instantsearch.js';
 describe('Hits', () => {
   test('renders with default props', async () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <Hits />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => {
@@ -63,13 +63,13 @@ describe('Hits', () => {
     });
 
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={client}>
+      <InstantSearchTestWrapper searchClient={client}>
         <Hits<CustomHit>
           hitComponent={({ hit }) => (
             <strong>{`${hit.__position} - ${hit.somethingSpecial}`}</strong>
           )}
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => {
@@ -110,13 +110,13 @@ describe('Hits', () => {
 
   test('forwards custom class names and `div` props to the root element', () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <Hits
           className="MyHits"
           classNames={{ root: 'ROOT' }}
           aria-hidden={true}
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     const root = container.firstChild;

@@ -7,7 +7,7 @@ import {
   createAlgoliaSearchClient,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import { InstantSearchHooksTestWrapper } from '@instantsearch/testutils';
+import { InstantSearchTestWrapper } from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
@@ -66,9 +66,9 @@ describe('Menu', () => {
   test('renders with props', async () => {
     const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <Menu attribute="brand" />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
@@ -305,9 +305,9 @@ describe('Menu', () => {
   test('limits the number of items to display', async () => {
     const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <Menu attribute="brand" limit={5} />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() =>
@@ -426,7 +426,7 @@ describe('Menu', () => {
   test('transforms the items', async () => {
     const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <Menu
           attribute="brand"
           transformItems={(items) =>
@@ -436,7 +436,7 @@ describe('Menu', () => {
             }))
           }
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => {
@@ -463,9 +463,9 @@ describe('Menu', () => {
     test('sorts the items by ascending name', async () => {
       const searchClient = createMockedSearchClient();
       const { container } = render(
-        <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <InstantSearchTestWrapper searchClient={searchClient}>
           <Menu attribute="brand" sortBy={['name:asc']} />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       await waitFor(() => {
@@ -491,9 +491,9 @@ describe('Menu', () => {
     test('sorts the items by descending name', async () => {
       const searchClient = createMockedSearchClient();
       const { container } = render(
-        <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <InstantSearchTestWrapper searchClient={searchClient}>
           <Menu attribute="brand" sortBy={['name:desc']} />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       await waitFor(() => {
@@ -519,9 +519,9 @@ describe('Menu', () => {
     test('sorts the items by count', async () => {
       const searchClient = createMockedSearchClient();
       const { container } = render(
-        <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <InstantSearchTestWrapper searchClient={searchClient}>
           <Menu attribute="brand" sortBy={['count']} />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       await waitFor(() => {
@@ -547,7 +547,7 @@ describe('Menu', () => {
     test('sorts the items by refinement state', async () => {
       const searchClient = createMockedSearchClient();
       const { container, findByText } = render(
-        <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <InstantSearchTestWrapper searchClient={searchClient}>
           <Menu
             attribute="brand"
             sortBy={['isRefined', 'name']}
@@ -558,7 +558,7 @@ describe('Menu', () => {
               }))
             }
           />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       await waitFor(() => {
@@ -626,12 +626,12 @@ describe('Menu', () => {
     test('sorts the items using a sorting function', async () => {
       const searchClient = createMockedSearchClient();
       const { container } = render(
-        <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <InstantSearchTestWrapper searchClient={searchClient}>
           <Menu
             attribute="brand"
             sortBy={(a, b) => b.name.localeCompare(a.name)}
           />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       await waitFor(() => {
@@ -659,9 +659,9 @@ describe('Menu', () => {
     test('displays a "Show more" button', async () => {
       const searchClient = createMockedSearchClient();
       const { container } = render(
-        <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <InstantSearchTestWrapper searchClient={searchClient}>
           <Menu attribute="brand" showMore={true} />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       await waitFor(() =>
@@ -892,9 +892,9 @@ describe('Menu', () => {
     test('limits the number of items to reveal', async () => {
       const searchClient = createMockedSearchClient();
       const { container } = render(
-        <InstantSearchHooksTestWrapper searchClient={searchClient}>
+        <InstantSearchTestWrapper searchClient={searchClient}>
           <Menu attribute="brand" showMore={true} showMoreLimit={11} />
-        </InstantSearchHooksTestWrapper>
+        </InstantSearchTestWrapper>
       );
 
       await waitFor(() =>
@@ -919,14 +919,14 @@ describe('Menu', () => {
   test('forwards custom class names and `div` props to the root element', () => {
     const searchClient = createMockedSearchClient();
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <Menu
           attribute="brand"
           className="MyMenu"
           classNames={{ root: 'ROOT' }}
           title="Some custom title"
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     const root = container.firstChild;
@@ -937,7 +937,7 @@ describe('Menu', () => {
   test('renders with translations', async () => {
     const searchClient = createMockedSearchClient();
     const { getByRole } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <Menu
           attribute="brand"
           translations={{
@@ -947,7 +947,7 @@ describe('Menu', () => {
           }}
           showMore
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => {

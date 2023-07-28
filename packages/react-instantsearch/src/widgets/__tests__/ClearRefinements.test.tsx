@@ -3,7 +3,7 @@
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
-import { InstantSearchHooksTestWrapper } from '@instantsearch/testutils';
+import { InstantSearchTestWrapper } from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
@@ -23,7 +23,7 @@ describe('ClearRefinements', () => {
   test('renders with default props', async () => {
     const searchClient = createSearchClient({});
     const { container } = render(
-      <InstantSearchHooksTestWrapper
+      <InstantSearchTestWrapper
         searchClient={searchClient}
         initialUiState={{
           indexName: {
@@ -35,7 +35,7 @@ describe('ClearRefinements', () => {
       >
         <RefinementList attribute="brand" />
         <ClearRefinements />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
@@ -58,9 +58,9 @@ describe('ClearRefinements', () => {
   test('renders with a disabled button when there are no refinements', async () => {
     const searchClient = createSearchClient({});
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={searchClient}>
+      <InstantSearchTestWrapper searchClient={searchClient}>
         <ClearRefinements />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
@@ -88,7 +88,7 @@ describe('ClearRefinements', () => {
   test('clears all refinements', async () => {
     const searchClient = createSearchClient({});
     const { container, queryAllByRole } = render(
-      <InstantSearchHooksTestWrapper
+      <InstantSearchTestWrapper
         searchClient={searchClient}
         initialUiState={{
           indexName: {
@@ -101,7 +101,7 @@ describe('ClearRefinements', () => {
         <RefinementList attribute="brand" />
         <CurrentRefinements />
         <ClearRefinements />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
@@ -160,7 +160,7 @@ describe('ClearRefinements', () => {
   test('inclusively restricts what refinements to clear', async () => {
     const searchClient = createSearchClient({});
     const { container, queryAllByRole } = render(
-      <InstantSearchHooksTestWrapper
+      <InstantSearchTestWrapper
         searchClient={searchClient}
         initialUiState={{
           indexName: {
@@ -175,7 +175,7 @@ describe('ClearRefinements', () => {
         <RefinementList attribute="categories" />
         <CurrentRefinements />
         <ClearRefinements includedAttributes={['categories']} />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
@@ -254,7 +254,7 @@ describe('ClearRefinements', () => {
   test('exclusively restricts what refinements to clear', async () => {
     const searchClient = createSearchClient({});
     const { container, queryAllByRole } = render(
-      <InstantSearchHooksTestWrapper
+      <InstantSearchTestWrapper
         searchClient={searchClient}
         initialUiState={{
           indexName: {
@@ -269,7 +269,7 @@ describe('ClearRefinements', () => {
         <RefinementList attribute="categories" />
         <CurrentRefinements />
         <ClearRefinements excludedAttributes={['categories']} />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
@@ -348,7 +348,7 @@ describe('ClearRefinements', () => {
   test('restricts what refinements to clear with custom logic', async () => {
     const searchClient = createSearchClient({});
     const { container, queryAllByRole } = render(
-      <InstantSearchHooksTestWrapper
+      <InstantSearchTestWrapper
         searchClient={searchClient}
         initialUiState={{
           indexName: {
@@ -365,7 +365,7 @@ describe('ClearRefinements', () => {
         <ClearRefinements
           transformItems={(items) => items.filter((item) => item !== 'brand')}
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));
@@ -443,13 +443,13 @@ describe('ClearRefinements', () => {
 
   test('forwards custom class names and `div` props to the root element', () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <ClearRefinements
           className="MyClearsRefinements"
           classNames={{ root: 'ROOT' }}
           title="Some custom title"
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     const root = container.firstChild;
@@ -460,7 +460,7 @@ describe('ClearRefinements', () => {
   test('renders with translations', async () => {
     const searchClient = createSearchClient({});
     const { getByRole } = render(
-      <InstantSearchHooksTestWrapper
+      <InstantSearchTestWrapper
         searchClient={searchClient}
         initialUiState={{
           indexName: {
@@ -472,7 +472,7 @@ describe('ClearRefinements', () => {
       >
         <RefinementList attribute="brand" />
         <ClearRefinements translations={{ resetButtonText: 'Reset' }} />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => expect(searchClient.search).toHaveBeenCalledTimes(1));

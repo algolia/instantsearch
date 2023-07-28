@@ -4,7 +4,7 @@
 
 import {
   createInstantSearchTestWrapper,
-  InstantSearchHooksTestWrapper,
+  InstantSearchTestWrapper,
 } from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
@@ -91,9 +91,9 @@ describe('useSearchState', () => {
     }
 
     const { getByRole, getByTestId } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <App />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
     const button = getByRole('button');
     const uiState = getByTestId('uiState');
@@ -140,9 +140,9 @@ describe('useSearchState', () => {
     }
 
     const { getByRole, getByTestId } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <App />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
     const button = getByRole('button');
     const uiState = getByTestId('uiState');
@@ -192,9 +192,9 @@ describe('useSearchState', () => {
     }
 
     const { getByRole, getByTestId } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <App />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
     const button = getByRole('button');
     const indexUiState = getByTestId('indexUiState');
@@ -238,9 +238,9 @@ describe('useSearchState', () => {
     }
 
     const { getByRole, getByTestId } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <App />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
     const button = getByRole('button');
     const indexUiState = getByTestId('indexUiState');

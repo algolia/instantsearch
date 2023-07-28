@@ -3,7 +3,7 @@
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
-import { InstantSearchHooksTestWrapper } from '@instantsearch/testutils';
+import { InstantSearchTestWrapper } from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
@@ -13,9 +13,9 @@ import { ToggleRefinement } from '../ToggleRefinement';
 describe('ToggleRefinement', () => {
   test('renders with props', () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <ToggleRefinement attribute="free_shipping" />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     expect(container).toMatchInlineSnapshot(`
@@ -43,9 +43,9 @@ describe('ToggleRefinement', () => {
 
   test('customizes the label', () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <ToggleRefinement attribute="free_shipping" label="Free shipping" />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     expect(
@@ -55,7 +55,7 @@ describe('ToggleRefinement', () => {
 
   test('renders checked when the attribute is refined', () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper
+      <InstantSearchTestWrapper
         initialUiState={{
           indexName: {
             toggle: {
@@ -65,7 +65,7 @@ describe('ToggleRefinement', () => {
         }}
       >
         <ToggleRefinement attribute="free_shipping" />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     expect(
@@ -79,9 +79,9 @@ describe('ToggleRefinement', () => {
     const client = createSearchClient({});
 
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={client}>
+      <InstantSearchTestWrapper searchClient={client}>
         <ToggleRefinement attribute="free_shipping" />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => {
@@ -134,9 +134,9 @@ describe('ToggleRefinement', () => {
     const client = createSearchClient({});
 
     const { container } = render(
-      <InstantSearchHooksTestWrapper searchClient={client}>
+      <InstantSearchTestWrapper searchClient={client}>
         <ToggleRefinement attribute="free_shipping" on="yes" off="no" />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     await waitFor(() => {
@@ -184,14 +184,14 @@ describe('ToggleRefinement', () => {
 
   test('forwards custom class names and `div` props to the root element', () => {
     const { container } = render(
-      <InstantSearchHooksTestWrapper>
+      <InstantSearchTestWrapper>
         <ToggleRefinement
           attribute="free_shipping"
           className="MyToggleRefinement"
           classNames={{ root: 'ROOT' }}
           title="Some custom title"
         />
-      </InstantSearchHooksTestWrapper>
+      </InstantSearchTestWrapper>
     );
 
     const root = container.firstChild;
