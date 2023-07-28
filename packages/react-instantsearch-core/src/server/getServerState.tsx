@@ -4,17 +4,15 @@ import {
 } from 'instantsearch.js/es/lib/server';
 import { walkIndex } from 'instantsearch.js/es/lib/utils';
 import React from 'react';
-import {
-  InstantSearchServerContext,
-  InstantSearchSSRProvider,
-} from 'react-instantsearch-hooks';
 
-import type { InstantSearch, UiState } from 'instantsearch.js';
-import type { ReactNode } from 'react';
+import { InstantSearchServerContext, InstantSearchSSRProvider } from '..';
+
 import type {
   InstantSearchServerContextApi,
   InstantSearchServerState,
-} from 'react-instantsearch-hooks';
+} from '..';
+import type { InstantSearch, UiState } from 'instantsearch.js';
+import type { ReactNode } from 'react';
 
 type SearchRef = { current: InstantSearch | undefined };
 

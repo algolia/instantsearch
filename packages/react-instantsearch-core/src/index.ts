@@ -35,3 +35,4 @@ export * from './connectors/useStats';
 export * from './connectors/useToggleRefinement';
 export * from './hooks/useConnector';
 export * from './hooks/useInstantSearch';
+export * from './server';

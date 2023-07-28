@@ -11,6 +11,7 @@ import {
 } from '@instantsearch/mocks';
 import React, { version as ReactVersion } from 'react';
 import { renderToString } from 'react-dom/server';
+import { Hits, RefinementList } from 'react-instantsearch';
 import {
   InstantSearch,
   InstantSearchSSRProvider,
@@ -18,8 +19,7 @@ import {
   DynamicWidgets,
   version,
   useSearchBox,
-} from 'react-instantsearch-hooks';
-import { Hits, RefinementList } from 'react-instantsearch-hooks-web';
+} from 'react-instantsearch-core';
 
 import { getServerState } from '../getServerState';
 
@@ -28,7 +28,7 @@ import type { Hit as AlgoliaHit } from 'instantsearch.js';
 import type {
   InstantSearchServerState,
   InstantSearchProps,
-} from 'react-instantsearch-hooks';
+} from 'react-instantsearch-core';
 
 function SearchBox() {
   const { query } = useSearchBox();
@@ -204,7 +204,7 @@ describe('getServerState', () => {
       `react-instantsearch (${version})`
     );
     expect(searchClient.addAlgoliaAgent).toHaveBeenCalledWith(
-      `react-instantsearch-hooks (${version})`
+      `react-instantsearch-core (${version})`
     );
     expect(searchClient.addAlgoliaAgent).toHaveBeenCalledWith(
       `react-instantsearch-server (${version})`
