@@ -90,6 +90,62 @@ export default function transformer(
       });
   };
 
+  const addRenderToStringIfMissing = () => {
+    const importDeclaration = source
+      .find(j.ImportDeclaration)
+      .filter(
+        (path) => path.node.source.value === 'react-instantsearch-hooks-server'
+      );
+
+    const importSpecifier = importDeclaration
+      .find(j.ImportSpecifier)
+      .filter((path) => path.node.imported.name === 'getServerState');
+
+    const callExpression = source.find(j.CallExpression, {
+      callee: { name: 'getServerState' },
+    });
+
+    if (importSpecifier.size() === 0 || callExpression.length === 0) {
+      return;
+    }
+
+    const hasRenderToString =
+      source
+        .find(j.ImportDeclaration)
+        .filter((path) => path.node.source.value === 'react-dom/server')
+        .find(j.ImportSpecifier)
+        .filter((path) => path.node.imported.name === 'renderToString')
+        .size() > 0;
+
+    if (!hasRenderToString) {
+      importDeclaration.insertAfter(
+        j.importDeclaration(
+          [j.importSpecifier(j.identifier('renderToString'))],
+          j.literal('react-dom/server')
+        )
+      );
+    }
+
+    callExpression.forEach((path) => {
+      if (
+        path.value.arguments.length === 2 &&
+        j(path)
+          .find(j.Property, { key: { name: 'renderToString' } })
+          .size()
+      ) {
+        return;
+      }
+
+      const expression = j.template.expression`{ renderToString }`;
+
+      path.value.arguments.length === 2
+        ? (path.value.arguments[1] = expression)
+        : path.value.arguments.push(expression);
+    });
+  };
+
+  addRenderToStringIfMissing();
+
   replaceImports(
     j,
     source,
