@@ -18,8 +18,8 @@ Tests that only apply to specific flavors belong to their relevant packages, as 
 
 - [Common scenarios](../../tests/common/widgets/breadcrumb)
 - Flavor-specific tests:
-  - [InstantSearch.js](../../packages/instantsearch.js/src/widgets/breadcrumb)
-  - [React InstantSearch Hooks](../../packages/react-instantsearch-hooks-web/src/widgets/__tests__)
+  - [InstantSearch.js](../../packages/instantsearch.js/src/widgets/breadcrumb/__tests__)
+  - [React InstantSearch](../../packages/react-instantsearch/src/widgets/__tests__)
   - [Vue InstantSearch](../../packages/vue-instantsearch/src/components/__tests__)
 
 > **Note** Flavor-specific tests should be the exception. They should either cover inconsistencies between flavors that should go away in a next major, or assert flavor-specific behavior or APIs.
