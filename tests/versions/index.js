@@ -16,15 +16,7 @@ let hasError = false;
     react: [
       'react-instantsearch',
       'react-instantsearch-core',
-      'react-instantsearch-dom',
-      'react-instantsearch-dom-maps',
-      'react-instantsearch-native',
-    ],
-    'react-hooks': [
-      'react-instantsearch-hooks',
-      'react-instantsearch-hooks-web',
-      'react-instantsearch-hooks-server',
-      'react-instantsearch-hooks-router-nextjs',
+      'react-instantsearch-router-nextjs',
     ],
   };
 
@@ -52,18 +44,13 @@ let hasError = false;
 {
   const versions = [
     {
-      name: 'react-instantsearch-hooks',
+      name: 'react-instantsearch-core',
       versionFile: 'src/version.ts',
       format: 'esm',
     },
     {
       name: 'instantsearch.js',
       versionFile: 'src/lib/version.ts',
-      format: 'esm',
-    },
-    {
-      name: 'react-instantsearch-core',
-      versionFile: 'src/core/version.js',
       format: 'esm',
     },
     {

@@ -122,14 +122,7 @@ const config = {
           caseInsensitive: true,
         },
         'newlines-between': 'always',
-        groups: [
-          'builtin',
-          'external',
-          'parent',
-          'sibling',
-          'index',
-          'type',
-        ],
+        groups: ['builtin', 'external', 'parent', 'sibling', 'index', 'type'],
         pathGroups: [
           {
             pattern: '@/**/*',
@@ -200,8 +193,8 @@ const config = {
     },
     {
       files: [
-        'packages/react-instantsearch-hooks/**/*',
-        'packages/react-instantsearch-hooks-*/**/*',
+        'packages/react-instantsearch-core/**/*',
+        'packages/react-instantsearch-core-*/**/*',
       ],
       rules: {
         '@typescript-eslint/consistent-type-assertions': 'off',
@@ -250,25 +243,6 @@ const config = {
       },
     },
     // Disable stricter rules introduced for the next versions of the libraries.
-    {
-      files: [
-        'packages/react-instantsearch-core/**/*',
-        'packages/react-instantsearch-dom/**/*',
-      ],
-      rules: {
-        '@typescript-eslint/consistent-type-assertions': 'off',
-        '@typescript-eslint/ban-types': 'off',
-      },
-    },
-    {
-      files: [
-        'examples/react-hooks/react-native/**/*.ts',
-        'examples/react-hooks/react-native/**/*.tsx',
-      ],
-      parserOptions: {
-        project: 'examples/react-hooks/react-native/tsconfig.json',
-      },
-    },
     {
       files: [
         'packages/instantsearch.js/src/**/*.ts',
@@ -373,12 +347,9 @@ const config = {
       },
     },
     {
-      files: [
-        'packages/react-instantsearch-hooks-router-nextjs/__tests__/e2e/**/*',
-      ],
+      files: ['packages/react-instantsearch-router-nextjs/__tests__/e2e/**/*'],
       parserOptions: {
-        project:
-          'packages/react-instantsearch-hooks-router-nextjs/tsconfig.json',
+        project: 'packages/react-instantsearch-router-nextjs/tsconfig.json',
       },
     },
     {

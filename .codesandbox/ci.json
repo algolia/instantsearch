@@ -2,17 +2,14 @@
   "sandboxes": [
     "instantsearchjs-es-template-pcw1k",
     "github/algolia/instantsearch.js/tree/templates/react-instantsearch",
-    "/examples/react-hooks/default-theme",
+    "/examples/react/default-theme",
     "/examples/vue/default-theme"
   ],
   "buildCommand": "build --no-private --ignore *-maps --ignore *-native",
   "packages": [
     "packages/instantsearch.js",
+    "packages/react-instantsearch",
     "packages/react-instantsearch-core",
-    "packages/react-instantsearch-dom",
-    "packages/react-instantsearch-hooks",
-    "packages/react-instantsearch-hooks-web",
-    "packages/react-instantsearch-hooks-server",
     "packages/vue-instantsearch",
     "packages/instantsearch.css"
   ],

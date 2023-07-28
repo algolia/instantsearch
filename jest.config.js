@@ -14,7 +14,7 @@ const config = {
     '<rootDir>/examples/',
     '<rootDir>/packages/algoliasearch-helper',
     '<rootDir>/packages/create-instantsearch-app',
-    '<rootDir>/packages/react-instantsearch-hooks-router-nextjs',
+    '<rootDir>/packages/react-instantsearch-router-nextjs',
     '/__utils__/',
   ],
   watchPathIgnorePatterns: [
