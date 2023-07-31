@@ -1,4 +1,3 @@
-import cx from 'classnames';
 import { connectRatingMenu } from 'instantsearch.js/es/connectors';
 import {
   RatingMenuConnectorParams,
@@ -6,6 +5,8 @@ import {
 } from 'instantsearch.js/es/connectors/rating-menu/connectRatingMenu';
 import React from 'react';
 import { useConnector } from 'react-instantsearch';
+
+import { cx } from '../utils';
 
 export function Ratings({ attribute }: { attribute: string }) {
   const { refine, items, createURL } = useConnector<
@@ -23,10 +24,11 @@ export function Ratings({ attribute }: { attribute: string }) {
         {items.map((rating) => {
           return (
             <li
-              className={cx('ais-RatingMenu-item', {
-                'ais-RatingMenu-item--selected': rating.isRefined,
-                'ais-RatingMenu-item--disabled': rating.count === 0,
-              })}
+              className={cx(
+                'ais-RatingMenu-item',
+                rating.isRefined && 'ais-RatingMenu-item--selected',
+                rating.count === 0 && 'ais-RatingMenu-item--disabled'
+              )}
               key={rating.value}
             >
               <a
@@ -43,10 +45,12 @@ export function Ratings({ attribute }: { attribute: string }) {
                   return (
                     <svg
                       key={starIndex}
-                      className={cx('ais-RatingMenu-starIcon', {
-                        'ais-RatingMenu-starIcon--full': isStarFull,
-                        'ais-RatingMenu-starIcon--empty': !isStarFull,
-                      })}
+                      className={cx(
+                        'ais-RatingMenu-starIcon',
+                        isStarFull
+                          ? 'ais-RatingMenu-starIcon--full'
+                          : 'ais-RatingMenu-starIcon--empty'
+                      )}
                       aria-hidden="true"
                       viewBox="0 0 16 16"
                     >
