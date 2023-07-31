@@ -1,0 +1,67 @@
+{
+  "name": "react-instantsearch-router-nextjs",
+  "version": "6.47.3",
+  "description": "React InstantSearch Router for Next.js",
+  "source": "src/index.ts",
+  "types": "dist/es/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "module": "dist/es/index.js",
+  "type": "module",
+  "exports": {
+    "types": "./dist/es/index.d.ts",
+    "require": "./dist/cjs/index.js",
+    "default": "./dist/es/index.js"
+  },
+  "sideEffects": false,
+  "license": "MIT",
+  "homepage": "https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/algolia/instantsearch.js"
+  },
+  "author": {
+    "name": "Algolia, Inc.",
+    "url": "https://www.algolia.com"
+  },
+  "keywords": [
+    "algolia",
+    "router",
+    "fast",
+    "instantsearch",
+    "react",
+    "search",
+    "next",
+    "nextjs"
+  ],
+  "files": [
+    "README.md",
+    "dist"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "yarn build:cjs && yarn build:es && yarn build:types",
+    "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/cjs --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet && ../../scripts/prepare-cjs.sh",
+    "build:es": "BABEL_ENV=es babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet",
+    "build:types": "tsc -p ./tsconfig.declaration.json --outDir ./dist/es",
+    "test:exports": "node ./__tests__/module/is-es-module.mjs && node ./__tests__/module/is-cjs-module.cjs",
+    "test:start-server": "yarn workspace example-react-instantsearch-next-routing-example build && yarn workspace example-react-instantsearch-next-routing-example start",
+    "test:e2e": "start-server-and-test test:start-server 3000 'wdio run ./wdio.conf.cjs'"
+  },
+  "dependencies": {
+    "instantsearch.js": "4.56.8",
+    "react-instantsearch-core": "6.47.3"
+  },
+  "devDependencies": {
+    "@types/jasmine": "3.3.16",
+    "@wdio/cli": "5.16.9",
+    "@wdio/jasmine-framework": "5.16.5",
+    "@wdio/local-runner": "5.16.9",
+    "@wdio/selenium-standalone-service": "5.16.5",
+    "@wdio/spec-reporter": "5.16.5",
+    "start-server-and-test": "1.15.3",
+    "ts-node": "8.4.1"
+  },
+  "peerDependencies": {
+    "next": ">= 9 && < 14"
+  }
+}

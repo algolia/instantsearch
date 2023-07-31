@@ -19,10 +19,10 @@
     "**/es",
     "**/dist",
     "tests/e2e",
-    "examples/react-hooks/next/next-env.d.ts",
+    "examples/react/next/next-env.d.ts",
     // @TODO: we need to re-enable type checking in the React Native example
     // when the RN types work with React 18.
-    "examples/react-hooks/react-native",
+    "examples/react/react-native",
     "packages/create-instantsearch-app/src/templates/**/*"
   ]
 }

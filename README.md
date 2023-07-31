@@ -44,14 +44,8 @@ It is part of the InstantSearch family which is designed for different platforms
 | [`create-instantsearch-app`](packages/create-instantsearch-app) | [![create-instantsearch-app npm version](https://img.shields.io/npm/v/create-instantsearch-app.svg?style=flat-square)](https://npmjs.org/package/create-instantsearch-app) | Command-line utility to quickly bootstrap a project with InstantSearch |
 | [`instantsearch.css`](packages/instantsearch.css) | [![instantsearch.css npm version](https://img.shields.io/npm/v/instantsearch.css.svg?style=flat-square)](https://npmjs.org/package/instantsearch.css) | Default CSS themes for InstantSearch |
 | [`instantsearch.js`](packages/instantsearch.js) | [![instantsearch.js npm version](https://img.shields.io/npm/v/instantsearch.js.svg?style=flat-square)](https://npmjs.org/package/instantsearch.js) | InstantSearch.js |
-| [`react-instantsearch`](packages/react-instantsearch) | [![react-instantsearch npm version](https://img.shields.io/npm/v/react-instantsearch.svg?style=flat-square)](https://npmjs.org/package/react-instantsearch)| React InstantSearch (prefer using `react-instantsearch-hooks-web` instead) |
-| [`react-instantsearch-core`](packages/react-instantsearch-core) | [![react-instantsearch-core npm version](https://img.shields.io/npm/v/react-instantsearch-core.svg?style=flat-square)](https://npmjs.org/package/react-instantsearch-core) | React InstantSearch Core (prefer using `react-instantsearch-hooks` instead) |
-| [`react-instantsearch-dom`](packages/react-instantsearch-dom) | [![react-instantsearch-dom npm version](https://img.shields.io/npm/v/react-instantsearch-dom.svg?style=flat-square)](https://npmjs.org/package/react-instantsearch-dom) | React InstantSearch DOM (prefer using `react-instantsearch-hooks-web` instead) |
-| [`react-instantsearch-dom-maps`](packages/react-instantsearch-dom-maps) | [![react-instantsearch-dom-maps npm version](https://img.shields.io/npm/v/react-instantsearch-dom-maps.svg?style=flat-square)](https://npmjs.org/package/react-instantsearch-dom-maps)| GeoSearch widget for React InstantSearch DOM |
-| [`react-instantsearch-hooks`](packages/react-instantsearch-hooks) | [![react-instantsearch-hooks npm version](https://img.shields.io/npm/v/react-instantsearch-hooks?style=flat-square)](https://npmjs.org/package/react-instantsearch-hooks) | React InstantSearch Hooks |
-| [`react-instantsearch-hooks-server`](packages/react-instantsearch-hooks-server) | [![react-instantsearch-hooks-server npm version](https://img.shields.io/npm/v/react-instantsearch-hooks-server.svg?style=flat-square)](https://npmjs.org/package/react-instantsearch-hooks-server) | Utilities to do server-side rendering with React InstantSearch Hooks |
-| [`react-instantsearch-hooks-web`](packages/react-instantsearch-hooks-web) | [![react-instantsearch-hooks-web npm version](https://img.shields.io/npm/v/react-instantsearch-hooks-web.svg?style=flat-square)](https://npmjs.org/package/react-instantsearch-hooks-web) | React InstantSearch Hooks bundled with UI components |
-| [`react-instantsearch-native`](packages/react-instantsearch-native) | [![react-instantsearch-native npm version](https://img.shields.io/npm/v/react-instantsearch-native.svg?style=flat-square)](https://npmjs.org/package/react-instantsearch-native) | React InstantSearch Native (prefer using `react-instantsearch-hooks` instead) |
+| [`react-instantsearch`](packages/react-instantsearch) | [![react-instantsearch npm version](https://img.shields.io/npm/v/react-instantsearch.svg?style=flat-square)](https://npmjs.org/package/react-instantsearch)| React InstantSearch bundled library |
+| [`react-instantsearch-core`](packages/react-instantsearch-core) | [![react-instantsearch-core npm version](https://img.shields.io/npm/v/react-instantsearch-core.svg?style=flat-square)](https://npmjs.org/package/react-instantsearch-core) | Runtime-independent React InstantSearch version |
 | [`vue-instantsearch`](packages/vue-instantsearch) | [![vue-instantsearch npm version](https://img.shields.io/npm/v/vue-instantsearch.svg?style=flat-square)](https://npmjs.org/package/vue-instantsearch) | Vue InstantSearch |
 
 ## Contributing
@@ -68,7 +62,7 @@ To start contributing to code, you need to:
 1.  [Fork the project](https://help.github.com/articles/fork-a-repo/)
 1.  [Clone the repository](https://help.github.com/articles/cloning-a-repository/)
 1.  Install the dependencies: `yarn`
-1.  [Pick a package to work on](#packages) and cd into it (e.g. `cd packages/react-instantsearch-hooks`)
+1.  [Pick a package to work on](#packages) and cd into it (e.g. `cd packages/react-instantsearch`)
 
 Please read [our contribution process](CONTRIBUTING.md) to learn more.
 
@@ -87,7 +81,7 @@ InstantSearch is [MIT licensed][license-url].
 
 [algolia-website]: https://www.algolia.com/?utm_source=instantsearch.js&utm_campaign=repository "Algolia's website"
 [instantsearch-docs]: https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/?utm_source=instantsearch.js&utm_campaign=repository "InstantSearch.js documentation"
-[react-instantsearch-docs]: https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react-hooks/?utm_source=instantsearch.js&utm_campaign=repository "React InstantSearch documentation"
+[react-instantsearch-docs]: https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/?utm_source=instantsearch.js&utm_campaign=repository "React InstantSearch documentation"
 [vue-instantsearch-docs]: https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/vue/?utm_source=instantsearch.js&utm_campaign=repository "Vue InstantSearch documentation"
 [angular-instantsearch-docs]: https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/angular/?utm_source=instantsearch.js&utm_campaign=repository "Angular InstantSearch documentation"
 [instantsearch-android-github]: https://github.com/algolia/instantsearch-android

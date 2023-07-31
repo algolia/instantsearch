@@ -23,9 +23,9 @@ declare module 'algoliasearch-v3' {
   };
 }
 
-// fake typing for legacy modules
-declare module 'react-instantsearch-core';
-declare module 'react-instantsearch-dom';
+declare module 'react-instantsearch-core-v6' {
+  export const InstantSearch: any;
+}
 
 declare module 'jest-serializer-html/createSerializer' {
   export default function createSerializer(): jest.SnapshotSerializerPlugin;

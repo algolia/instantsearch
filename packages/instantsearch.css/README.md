@@ -1,6 +1,7 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+**Table of Contents** _generated with [DocToc](https://github.com/thlorenz/doctoc)_
 
 - [Getting started](#getting-started)
 - [Installation](#installation)
@@ -20,10 +21,7 @@
 
 ---
 
-[![Version][version-svg]][package-url]
-[![License][license-image]][license-url]
-[![Build Status][ci-svg]][ci-url]
-[![Website][website-svg]][website-url]
+[![Version][version-svg]][package-url] [![License][license-image]][license-url] [![Build Status][ci-svg]][ci-url] [![Website][website-svg]][website-url]
 
 ## Getting started
 
@@ -38,8 +36,8 @@ import 'instantsearch.css/themes/satellite.css';
 ```
 
 To learn more about the library, follow the guide on how to style your InstantSearch widgets:
+
 - [InstantSearch.js](https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-existing-widget/js/#style-your-widgets)
-- [React InstantSearch Hooks](https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-existing-widget/react-hooks/#style-your-widgets)
 - [React InstantSearch](https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-existing-widget/react/#style-your-widgets)
 - [Vue InstantSearch](https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-existing-widget/vue/#style-your-widgets)
 - [Angular InstantSearch](https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-existing-widget/angular/#style-your-widgets)
@@ -55,6 +53,7 @@ yarn add instantsearch.css
 ## Available themes
 
 InstantSearch.css exposes two themes:
+
 - [Algolia](src/themes/algolia.scss)
 - [Satellite](src/themes/satellite.scss)
 
@@ -70,14 +69,12 @@ We support the **last two versions of major browsers** (Chrome, Edge, Firefox, S
 
 InstantSearch.css is a living standard. This table tracks down the version implemented in each InstantSearch flavor.
 
-| Project                   | Version |
-| ------------------------- | ------- |
-| InstantSearch.js          | 7       |
-| React InstantSearch Hooks | 7       |
-| React InstantSearch       | 7       |
-| Vue InstantSearch         | 7       |
-| Angular InstantSearch     | 7       |
-
+| Project               | Version |
+| --------------------- | ------- |
+| InstantSearch.js      | 7       |
+| React InstantSearch   | 7       |
+| Vue InstantSearch     | 7       |
+| Angular InstantSearch | 7       |
 
 ## Contributing
 

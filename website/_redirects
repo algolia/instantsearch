@@ -2,8 +2,8 @@
 /examples   https://www.algolia.com/doc/guides/building-search-ui/resources/demos/js/
 /examples/js/ https://www.algolia.com/doc/guides/building-search-ui/resources/demos/
 /examples/react/ https://www.algolia.com/doc/guides/building-search-ui/resources/demos/react
-/examples/hooks/ https://www.algolia.com/doc/guides/building-search-ui/resources/demos/react-hooks
-/examples/react-hooks/ https://www.algolia.com/doc/guides/building-search-ui/resources/demos/react-hooks
+/examples/hooks/ https://www.algolia.com/doc/guides/building-search-ui/resources/demos/react
+/examples/react-hooks/ https://www.algolia.com/doc/guides/building-search-ui/resources/demos/react
 /examples/vue/ https://www.algolia.com/doc/guides/building-search-ui/resources/demos/vue
 
 /examples/:flavor/:name/search/*   /examples/:flavor/:name/index.html   200
@@ -13,4 +13,5 @@
 /examples/media/*   /examples/js/media/:splat   301
 /examples/tourism/*   /examples/js/tourism/:splat   301
 
+/stories/react/*   /stories/js/:splat   301
 /stories   /stories/js   301!
