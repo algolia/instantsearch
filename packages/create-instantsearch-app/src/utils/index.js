@@ -2,21 +2,12 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-const algoliasearch = require('algoliasearch');
 const chalk = require('chalk');
 const semver = require('semver');
 const validateProjectName = require('validate-npm-package-name');
 
+const { fetchLibraryVersions } = require('./fetchLibraryVersions');
 const TEMPLATES_FOLDER = path.join(__dirname, '../templates');
-
-const algoliaConfig = {
-  appId: 'OFCNCOG2CU',
-  apiKey: 'f54e21fa3a2a0160595bb058179bfb1e',
-  indexName: 'npm-search',
-};
-
-const client = algoliasearch(algoliaConfig.appId, algoliaConfig.apiKey);
-const index = client.initIndex(algoliaConfig.indexName);
 
 function checkAppName(appName) {
   const validationResult = validateProjectName(appName);
@@ -128,14 +119,6 @@ function getTemplatePath(templateName) {
 
   // This is a custom template, it's a path already
   return templateName;
-}
-
-async function fetchLibraryVersions(libraryName) {
-  const library = await index.getObject(libraryName, {
-    attributesToRetrieve: ['versions'],
-  });
-
-  return Object.keys(library.versions).reverse();
 }
 
 function getLibraryVersion({ libraryName, supportedVersion = '' }) {
