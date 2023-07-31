@@ -1076,7 +1076,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
 
     search.start();
 
-    // insights is added *after start*, like in React InstantSearch Hooks
+    // insights is added *after start*, like in React InstantSearch
     search.use(
       createInsightsMiddleware({
         insightsClient(eventName, ...args) {
@@ -1108,7 +1108,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       },
     });
 
-    // insights is added *after start*, like in React InstantSearch Hooks
+    // insights is added *after start*, like in React InstantSearch
     search.use(
       createInsightsMiddleware({
         insightsClient(eventName, ...args) {

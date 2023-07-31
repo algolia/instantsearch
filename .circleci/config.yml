@@ -150,13 +150,7 @@ jobs:
             - packages/instantsearch.js/dist
             - packages/react-instantsearch/dist
             - packages/react-instantsearch-core/dist
-            - packages/react-instantsearch-dom/dist
-            - packages/react-instantsearch-dom-maps/dist
-            - packages/react-instantsearch-native/dist
-            - packages/react-instantsearch-hooks/dist
-            - packages/react-instantsearch-hooks-web/dist
-            - packages/react-instantsearch-hooks-router-nextjs/dist
-            - packages/react-instantsearch-hooks-server/dist
+            - packages/react-instantsearch-router-nextjs/dist
             - packages/vue-instantsearch/vue2
             - packages/vue-instantsearch/vue3
 

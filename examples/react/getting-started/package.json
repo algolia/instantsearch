@@ -1,22 +1,23 @@
 {
   "name": "example-react-instantsearch-getting-started",
-  "version": "1.0.7",
+  "version": "6.38.26",
   "private": true,
   "scripts": {
-    "start": "BABEL_ENV=parcel parcel index.html --port 3000",
-    "build": "BABEL_ENV=parcel parcel build index.html --public-url ."
+    "build": "BABEL_ENV=parcel parcel build index.html",
+    "start": "BABEL_ENV=parcel parcel index.html --port 3000"
   },
   "dependencies": {
     "algoliasearch": "4.14.3",
+    "instantsearch.js": "4.56.8",
     "react": "18.1.0",
     "react-dom": "18.1.0",
-    "react-instantsearch-dom": "6.40.4"
+    "react-instantsearch": "6.47.3"
   },
   "devDependencies": {
-    "@babel/core": "7.15.5",
     "@parcel/core": "2.8.0",
     "@parcel/packager-raw-url": "2.8.0",
     "@parcel/transformer-webmanifest": "2.8.0",
-    "parcel": "2.8.0"
+    "parcel": "2.8.0",
+    "typescript": "5.1.3"
   }
 }

@@ -15,4 +15,4 @@ yarn install --no-lockfile
 yarn run dev
 ```
 
-Read more about `react-instantsearch` [in our documentation](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/).
+Read more about React InstantSearch [in our documentation](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/).

@@ -119,13 +119,6 @@ module.exports = (api) => {
           ],
         ],
       },
-      {
-        test: 'packages/react-instantsearch-dom-maps',
-        plugins: clean([
-          '@babel/plugin-syntax-dynamic-import',
-          !isRollup && 'babel-plugin-dynamic-import-node',
-        ]),
-      },
     ],
     // jsx is transpiled, so the comment should no longer be present in the final files
     shouldPrintComment: (value) => value !== '* @jsx h ',

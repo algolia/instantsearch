@@ -4,7 +4,7 @@ import { createSerializer } from 'enzyme-to-json';
 import htmlSerializer from 'jest-serializer-html/createSerializer';
 
 import '@testing-library/jest-dom/extend-expect';
-import { warnCache } from '../../packages/react-instantsearch-hooks/src/lib/warn';
+import { warnCache } from '../../packages/react-instantsearch-core/src/lib/warn';
 import {
   Vue2,
   isVue2,

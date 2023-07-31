@@ -127,15 +127,8 @@ Here are the main files and folders of the project.
 ```
 ▸ examples/                            << Examples, grouped per flavor
 ▸ packages/                            << Packages of the project
-  ▸ react-instantsearch/               << Bundled React InstantSearch library
-  ▸ react-instantsearch-core/          << Runtime-independent React InstantSearch version
-  ▸ react-instantsearch-dom/           << DOM-specific React InstantSearch version
-  ▸ react-instantsearch-native/        << React Native-specific InstantSearch version
-  ▸ react-instantsearch-dom-maps/      << DOM-specific React InstantSearch version with Google Maps
-
-  ▸ react-instantsearch-hooks/        << React InstantSearch Hooks library
-  ▸ react-instantsearch-hooks-web/    << DOM-specific React InstantSearch Hooks version
-  ▸ react-instantsearch-hooks-server/ << Server-specific React InstantSearch Hooks version
+  ▸ react-instantsearch/              << Bundled React InstantSearch library
+  ▸ react-instantsearch-core/         << Runtime-independent React InstantSearch version
 
   ▸ instantsearch.js/                  << The InstantSearch.js library
 ▸ tests/                               << The test utilites
@@ -163,7 +156,7 @@ This monorepo has as goal to be used for all InstantSearch flavors and tools. To
 8. replace commit messages which refer to issues/PRs with #xxx by also referencing the original repo: `git filter-branch --msg-filter 'sed -E "s/(#[[:digit:]]+)/algolia\/myproject\1/"' master..feat/import-myproject`
 9. make any changes necessary to make the project work in the monorepo and commit those
 10. make a pull request and _merge using rebase or merge_ (if you merge using squash the history will be lost)
-11. manually tag and push the latest release commit from the imported project to let shipjs know which version to take into account during the next release process 
+11. manually tag and push the latest release commit from the imported project to let shipjs know which version to take into account during the next release process
 
 ## Tests
 
@@ -171,7 +164,7 @@ The general philosophy of testing in InstantSearch follows [Testing Library's gu
 
 >The more your tests resemble the way your software is used, the more confidence they can give you.
 
-We rely on [Jest](https://jestjs.io/) for unit tests on all flavors of InstantSearch. In addition, [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) is used to test interactions in React InstantSearch Hooks.
+We rely on [Jest](https://jestjs.io/) for unit tests on all flavors of InstantSearch. In addition, [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) is used to test interactions in React InstantSearch.
 
 ### How to write a test
 
