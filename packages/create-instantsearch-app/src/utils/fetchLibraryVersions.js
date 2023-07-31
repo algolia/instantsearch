@@ -7,21 +7,27 @@ function fetchCachedLibraryVersions() {
       return Promise.resolve(cache.get(libraryName));
     }
 
-    return new Promise((resolve) => {
-      https.get(`https://registry.npmjs.org/${libraryName}`, (res) => {
-        let body = '';
-        res.on('data', (chunk) => {
-          body += chunk;
-        });
+    return new Promise((resolve, reject) => {
+      https
+        .get(`https://registry.npmjs.org/${libraryName}`, (res) => {
+          let body = '';
+          res.on('data', (chunk) => {
+            body += chunk;
+          });
 
-        res.on('end', () => {
-          const library = JSON.parse(body);
-          const versions = Object.keys(library.versions).reverse();
+          res.on('end', () => {
+            try {
+              const library = JSON.parse(body);
+              const versions = Object.keys(library.versions).reverse();
 
-          cache.set(libraryName, versions);
-          resolve(versions);
-        });
-      });
+              cache.set(libraryName, versions);
+              resolve(versions);
+            } catch (err) {
+              reject(err);
+            }
+          });
+        })
+        .on('error', reject);
     });
   };
 }
