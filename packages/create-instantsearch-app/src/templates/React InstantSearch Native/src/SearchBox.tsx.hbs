@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View, TextInput } from 'react-native';
-import { useSearchBox, UseSearchBoxProps } from 'react-instantsearch-hooks';
+import { useSearchBox, UseSearchBoxProps } from 'react-instantsearch-core';
 
 type SearchBoxProps = UseSearchBoxProps & {
   onChange: (newValue: string) => void;
