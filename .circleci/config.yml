@@ -353,7 +353,7 @@ jobs:
       - *run_yarn_install
       - run:
           name: End-to-end tests
-          command: yarn run workspace react-instantsearch-router-nextjs run test:e2e:saucelabs
+          command: yarn workspace react-instantsearch-router-nextjs run test:e2e:saucelabs
       - store_test_results:
           path: packages/react-instantsearch-router-nextjs/junit/wdio/
 
