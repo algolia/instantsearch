@@ -1,6 +1,6 @@
 {
   "name": "react-instantsearch-dom",
-  "version": "6.40.4",
+  "version": "6.40.5",
   "description": "⚡ Lightning-fast search for React DOM, by Algolia",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
