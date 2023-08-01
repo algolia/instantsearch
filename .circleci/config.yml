@@ -60,10 +60,10 @@ workflows:
       - examples:
           requires:
             - build
-          filters:
-            branches:
-              only:
-                - master
+          # filters:
+          #   branches:
+          #     only:
+          #       - master
       - helper docs:
           requires:
             - build
