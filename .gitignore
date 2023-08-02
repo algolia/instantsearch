@@ -38,7 +38,7 @@ scripts/*/CHANGELOG.md
 
 # Test artifacts
 integration/screenshots/
-/junit
+junit
 /coverage
 junit.xml
 
