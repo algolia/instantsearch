@@ -98,11 +98,7 @@ export function createRoutingTests(
             // eslint-disable-next-line jest/no-conditional-expect
             expect(paginationLink).toHaveAttribute(
               'href',
-              router.createURL({
-                indexName: {
-                  page: 10,
-                },
-              })
+              router.createURL({ indexName: { page: 11 } })
             );
           }
         }
@@ -124,9 +120,7 @@ export function createRoutingTests(
 
           expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
             'href',
-            router.createURL({
-              indexName: { page: 10 },
-            })
+            router.createURL({ indexName: { page: 11 } })
           );
         }
 
@@ -149,12 +143,12 @@ export function createRoutingTests(
             })
           );
 
-          // expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
-          //   'href',
-          //   router.createURL({
-          //     indexName: { menu: { [attribute]: 'Apple' }, page: 10 },
-          //   })
-          // );
+          expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
+            'href',
+            router.createURL({
+              indexName: { menu: { [attribute]: 'Apple' }, page: 11 },
+            })
+          );
         }
 
         // Wait for new results to come in
