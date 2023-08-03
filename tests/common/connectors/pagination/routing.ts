@@ -65,7 +65,7 @@ export function createRoutingTests(
             // eslint-disable-next-line jest/no-conditional-expect
             expect(link).toHaveAttribute(
               'href',
-              router.createURL({ indexName: { page: 10 } })
+              router.createURL({ indexName: { page: 11 } })
             );
           }
         }
@@ -80,7 +80,7 @@ export function createRoutingTests(
         {
           expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
             'href',
-            router.createURL({ indexName: { page: 10 } })
+            router.createURL({ indexName: { page: 11 } })
           );
         }
 

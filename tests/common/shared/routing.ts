@@ -167,7 +167,7 @@ export function createRoutingTests(
           expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
             'href',
             router.createURL({
-              indexName: { menu: { [attribute]: 'Apple' }, page: 10 },
+              indexName: { menu: { [attribute]: 'Apple' }, page: 11 },
             })
           );
         }
@@ -193,9 +193,7 @@ export function createRoutingTests(
 
           expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
             'href',
-            router.createURL({
-              indexName: { page: 10 },
-            })
+            router.createURL({ indexName: { page: 11 } })
           );
         }
 
@@ -214,9 +212,7 @@ export function createRoutingTests(
 
           expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
             'href',
-            router.createURL({
-              indexName: { page: 10 },
-            })
+            router.createURL({ indexName: { page: 11 } })
           );
         }
 
@@ -232,7 +228,7 @@ export function createRoutingTests(
           // URL is still the same, as it overrides the current state
           expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
             'href',
-            router.createURL({ indexName: { page: 10 } })
+            router.createURL({ indexName: { page: 11 } })
           );
 
           expect(screen.getByTestId('Menu-link')).toHaveAttribute(
@@ -251,7 +247,7 @@ export function createRoutingTests(
 
           expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
             'href',
-            router.createURL({ indexName: { page: 10 } })
+            router.createURL({ indexName: { page: 11 } })
           );
 
           expect(screen.getByTestId('Menu-link')).toHaveAttribute(
@@ -274,7 +270,7 @@ export function createRoutingTests(
           // URL is still the same, as it overrides the current state
           expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
             'href',
-            router.createURL({ indexName: { page: 10 } })
+            router.createURL({ indexName: { page: 11 } })
           );
 
           expect(screen.getByTestId('Menu-link')).toHaveAttribute(
@@ -294,7 +290,7 @@ export function createRoutingTests(
 
           expect(screen.getByTestId('Pagination-link')).toHaveAttribute(
             'href',
-            router.createURL({ indexName: { page: 10 } })
+            router.createURL({ indexName: { page: 11 } })
           );
 
           expect(screen.getByTestId('Menu-link')).toHaveAttribute(

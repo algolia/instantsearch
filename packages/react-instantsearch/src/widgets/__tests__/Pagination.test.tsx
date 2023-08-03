@@ -2025,7 +2025,7 @@ describe('Pagination', () => {
   });
 
   test('renders with translations', async () => {
-    const { getByRole, findByRole, debug } = render(
+    const { getByRole, findByRole } = render(
       <InstantSearchTestWrapper
         searchClient={createMockedSearchClient({ nbPages: 3 })}
       >
@@ -2065,8 +2065,6 @@ describe('Pagination', () => {
       name: 'First page',
     });
     expect(firstPageLink).toHaveTextContent('First');
-
-    debug();
 
     const previousPageLink = getByRole('link', {
       name: 'Previous page',
