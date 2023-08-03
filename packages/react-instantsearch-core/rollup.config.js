@@ -35,6 +35,7 @@ const plugins = [
   }),
   globals(),
   replace({
+    __DEV__: false,
     'process.env.NODE_ENV': JSON.stringify('production'),
   }),
   filesize({
