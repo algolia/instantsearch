@@ -55,9 +55,9 @@
     "version": "./scripts/version/update-version.js"
   },
   "devDependencies": {
-    "@instantsearch/mocks": "1.21.0",
-    "@instantsearch/tests": "1.21.0",
-    "@instantsearch/testutils": "1.10.0",
+    "@instantsearch/mocks": "1.22.0",
+    "@instantsearch/tests": "1.22.0",
+    "@instantsearch/testutils": "1.11.0",
     "@storybook/html": "5.3.9",
     "@types/scriptjs": "0.0.2",
     "algoliasearch": "4.14.3",

@@ -1,6 +1,6 @@
 {
   "name": "example-instantsearch-ecommerce-umd",
-  "version": "1.22.1",
+  "version": "1.22.2",
   "private": true,
   "scripts": {
     "start": "BABEL_ENV=parcel parcel index.html --port 3000",

@@ -1,6 +1,6 @@
 {
   "name": "example-instantsearch-tourism",
-  "version": "1.0.24",
+  "version": "1.0.25",
   "private": true,
   "scripts": {
     "start": "BABEL_ENV=parcel parcel index.html --port 3000",

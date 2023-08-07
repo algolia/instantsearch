@@ -1,6 +1,6 @@
 {
   "name": "@instantsearch/testutils",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "private": true,
   "dependencies": {
     "@types/enzyme": "3.1.15",

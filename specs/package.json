@@ -1,6 +1,6 @@
 {
   "name": "@instantsearch/specs-website",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": true,
   "description": "The specs website for InstantSearch.",
   "repository": {

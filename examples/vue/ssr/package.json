@@ -1,6 +1,6 @@
 {
   "name": "example-vue-instantsearch-ssr",
-  "version": "0.24.0",
+  "version": "0.25.0",
   "private": true,
   "scripts": {
     "build": "vue-cli-service ssr:build",
