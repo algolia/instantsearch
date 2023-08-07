@@ -1,9 +1,24 @@
 {
   "name": "instantsearch-codemods",
+  "description": "Codemods for Algolia InstantSearch libraries",
   "version": "0.0.0",
-  "license": "MIT",
   "source": "src/codeshift.config.js",
   "main": "dist/codeshift.config.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/algolia/instantsearch"
+  },
+  "author": {
+    "name": "Algolia, Inc.",
+    "url": "https://www.algolia.com"
+  },
+  "keywords": [
+    "algolia",
+    "instantsearch",
+    "react",
+    "codemods"
+  ],
   "scripts": {
     "dev": "codeshift",
     "build": "parcel build"
