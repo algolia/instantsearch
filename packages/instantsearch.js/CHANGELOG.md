@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.57.0](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.56.8...instantsearch.js@4.57.0) (2023-08-07)
+
+
+### Features
+
+* rename packages ([#5787](https://github.com/algolia/instantsearch.js/issues/5787)) ([c133170](https://github.com/algolia/instantsearch.js/commit/c133170e563592dfc15a95daced1f8447327a09a))
+
+
+
+
+
 ## [4.56.8](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.56.7...instantsearch.js@4.56.8) (2023-07-25)
 
 **Note:** Version bump only for package instantsearch.js

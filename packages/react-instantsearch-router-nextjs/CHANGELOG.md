@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 6.48.0 (2023-08-07)
+
+
+### Features
+
+* rename packages ([#5787](https://github.com/algolia/instantsearch.js/issues/5787)) ([c133170](https://github.com/algolia/instantsearch.js/commit/c133170e563592dfc15a95daced1f8447327a09a))
+
+
+
+
+
 ## [6.47.3](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-hooks-router-nextjs@6.47.2...react-instantsearch-hooks-router-nextjs@6.47.3) (2023-07-27)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.4.2](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@6.4.1...create-instantsearch-app@6.4.2) (2023-08-07)
+
+
+### Bug Fixes
+
+* use npm registry to retrieve library versions ([#5789](https://github.com/algolia/instantsearch/issues/5789)) ([f3906dc](https://github.com/algolia/instantsearch/commit/f3906dc72ddaaae7115cf948fb6c3ce6babc1783))
+
+
+
+
+
 ## [6.4.1](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@6.4.0...create-instantsearch-app@6.4.1) (2023-07-25)
 
 **Note:** Version bump only for package create-instantsearch-app
