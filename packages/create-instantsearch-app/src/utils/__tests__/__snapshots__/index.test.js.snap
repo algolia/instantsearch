@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`checkAppName throws with correct error message 1`] = `
-"Could not create a project called \\"[31m./project-name[39m\\" because of npm naming restrictions.
+"Could not create a project called \\"./project-name\\" because of npm naming restrictions.
   - name cannot start with a period
   - name can only contain URL-friendly characters"
 `;

@@ -5609,7 +5609,7 @@ exports[`Templates React InstantSearch File content: package.json 1`] = `
     \\"start\\": \\"parcel index.html\\"
   },
   \\"partialDependencies\\": {
-    \\"react-instantsearch\\": \\"2.0.0\\"
+    \\"react-instantsearch\\": \\"7.0.0\\"
   }
 }"
 `;
@@ -5726,7 +5726,11 @@ export function App() {
       </header>
 
       <div className=\\"container\\">
-        <InstantSearch searchClient={searchClient} indexName=\\"indexName\\">
+        <InstantSearch
+          searchClient={searchClient}
+          indexName=\\"indexName\\"
+          insights
+        >
           <Configure hitsPerPage={8} />
           <div className=\\"search-panel\\">
             <div className=\\"search-panel__filters\\">
@@ -5817,6 +5821,458 @@ Array [
   "src/App.tsx",
   "src/Panel.tsx",
   "src/index.tsx",
+]
+`;
+
+exports[`Templates React InstantSearch Native File content: .expo-shared/assets.json 1`] = `
+"{
+  \\"12bb71342c6255bbf50437ec8f4441c083f47cdb74bd89160c15e4f43e52a1cb\\": true,
+  \\"40b842e832070c58deac6aa9e08fa459302ee3f9da492c7e77d93d2fbf4a56fd\\": true
+}"
+`;
+
+exports[`Templates React InstantSearch Native File content: .gitignore 1`] = `
+"node_modules/
+.expo/
+dist/
+npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+
+# macOS
+.DS_Store"
+`;
+
+exports[`Templates React InstantSearch Native File content: App.tsx 1`] = `
+"import React, { useRef } from 'react';
+import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import algoliasearch from 'algoliasearch/lite';
+import { InstantSearch } from 'react-instantsearch-core';
+
+import { InfiniteHits } from './src/InfiniteHits';
+import { SearchBox } from './src/SearchBox';
+import { Highlight } from './src/Highlight';
+import { ProductHit } from './types/ProductHit';
+
+const searchClient = algoliasearch(
+  'appId',
+  'apiKey'
+);
+
+export default function App() {
+  const listRef = useRef<FlatList>(null);
+
+  return (
+    <SafeAreaView style={styles.safe}>
+      <StatusBar style=\\"light\\" />
+      <View style={styles.container}>
+        <InstantSearch searchClient={searchClient} indexName=\\"indexName\\">
+          <SearchBox
+            onChange={() =>
+              listRef.current?.scrollToOffset({ animated: false, offset: 0 })
+            }
+          />
+          <InfiniteHits ref={listRef} hitComponent={Hit} />
+        </InstantSearch>
+      </View>
+    </SafeAreaView>
+  );
+}
+
+type HitProps = {
+  hit: ProductHit;
+};
+
+function Hit({ hit }: HitProps) {
+  return (
+    <>
+      <Text>
+        <Highlight hit={hit} attribute=\\"attribute1\\" />
+      </Text>
+      <Text>
+        <Highlight hit={hit} attribute=\\"attribute2\\" />
+      </Text>
+    </>
+  );
+}
+
+const styles = StyleSheet.create({
+  safe: {
+    flex: 1,
+    backgroundColor: '#252b33',
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+    flexDirection: 'column',
+  },
+});"
+`;
+
+exports[`Templates React InstantSearch Native File content: README.md 1`] = `
+"# react-instantsearch-native-app
+
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
+
+## Get started
+
+To run this project locally, install the dependencies and run the local server:
+
+\`\`\`sh
+npm install
+npm start
+\`\`\`
+
+Alternatively, you may use [Yarn](https://http://yarnpkg.com/):
+
+\`\`\`sh
+yarn
+yarn start
+\`\`\`"
+`;
+
+exports[`Templates React InstantSearch Native File content: app.json 1`] = `
+"{
+  \\"expo\\": {
+    \\"name\\": \\"react-instantsearch-native-app\\",
+    \\"slug\\": \\"react-instantsearch-native-app\\",
+    \\"version\\": \\"1.0.0\\",
+    \\"orientation\\": \\"portrait\\",
+    \\"icon\\": \\"./assets/icon.png\\",
+    \\"splash\\": {
+      \\"image\\": \\"./assets/splash.png\\",
+      \\"resizeMode\\": \\"contain\\",
+      \\"backgroundColor\\": \\"#ffffff\\"
+    },
+    \\"updates\\": {
+      \\"fallbackToCacheTimeout\\": 0
+    },
+    \\"assetBundlePatterns\\": [\\"**/*\\"],
+    \\"ios\\": {
+      \\"supportsTablet\\": true
+    },
+    \\"android\\": {
+      \\"adaptiveIcon\\": {
+        \\"foregroundImage\\": \\"./assets/adaptive-icon.png\\",
+        \\"backgroundColor\\": \\"#FFFFFF\\"
+      }
+    },
+    \\"web\\": {
+      \\"favicon\\": \\"./assets/favicon.png\\"
+    }
+  }
+}"
+`;
+
+exports[`Templates React InstantSearch Native File content: babel.config.js 1`] = `
+"module.exports = function(api) {
+  api.cache(true);
+  return {
+    presets: ['babel-preset-expo'],
+  };
+};"
+`;
+
+exports[`Templates React InstantSearch Native File content: package.json 1`] = `
+"{
+  \\"name\\": \\"react-instantsearch-native-app\\",
+  \\"version\\": \\"1.0.0\\",
+  \\"private\\": true,
+  \\"main\\": \\"node_modules/expo/AppEntry.js\\",
+  \\"scripts\\": {
+    \\"start\\": \\"expo start\\",
+    \\"android\\": \\"expo start --android\\",
+    \\"ios\\": \\"expo start --ios\\",
+    \\"web\\": \\"expo start --web\\",
+    \\"eject\\": \\"expo eject\\"
+  },
+  \\"partialDependencies\\": {
+    \\"react-instantsearch-core\\": \\"7.0.0\\"
+  }
+}"
+`;
+
+exports[`Templates React InstantSearch Native File content: src/Highlight.tsx 1`] = `
+"import React, { Fragment } from 'react';
+import { StyleSheet, Text } from 'react-native';
+import { Hit as AlgoliaHit } from '@algolia/client-search';
+import {
+  getHighlightedParts,
+  getPropertyByPath,
+} from 'instantsearch.js/es/lib/utils';
+
+type HighlightPartProps = {
+  children: React.ReactNode;
+  isHighlighted: boolean;
+};
+
+function HighlightPart({ children, isHighlighted }: HighlightPartProps) {
+  return (
+    <Text style={isHighlighted ? styles.highlighted : styles.nonHighlighted}>
+      {children}
+    </Text>
+  );
+}
+
+type HighlightProps<THit> = {
+  hit: THit;
+  attribute: keyof THit | string[];
+  className?: string;
+  separator?: string;
+};
+
+export function Highlight<THit extends AlgoliaHit<Record<string, unknown>>>({
+  hit,
+  attribute,
+  separator = ', ',
+}: HighlightProps<THit>) {
+  const { value: attributeValue = '' } =
+    getPropertyByPath(hit._highlightResult, attribute as string) || {};
+  const parts = getHighlightedParts(attributeValue);
+
+  return (
+    <>
+      {parts.map((part, partIndex) => {
+        if (Array.isArray(part)) {
+          const isLastPart = partIndex === parts.length - 1;
+
+          return (
+            <Fragment key={partIndex}>
+              {part.map((subPart, subPartIndex) => (
+                <HighlightPart
+                  key={subPartIndex}
+                  isHighlighted={subPart.isHighlighted}
+                >
+                  {subPart.value}
+                </HighlightPart>
+              ))}
+
+              {!isLastPart && separator}
+            </Fragment>
+          );
+        }
+
+        return (
+          <HighlightPart key={partIndex} isHighlighted={part.isHighlighted}>
+            {part.value}
+          </HighlightPart>
+        );
+      })}
+    </>
+  );
+}
+
+const styles = StyleSheet.create({
+  highlighted: {
+    fontWeight: 'bold',
+    backgroundColor: '#f5df4d',
+    color: '#6f6106',
+  },
+  nonHighlighted: {
+    fontWeight: 'normal',
+    backgroundColor: 'transparent',
+    color: 'black',
+  },
+});"
+`;
+
+exports[`Templates React InstantSearch Native File content: src/InfiniteHits.tsx 1`] = `
+"import React, { forwardRef } from 'react';
+import { StyleSheet, View, FlatList } from 'react-native';
+import { Hit as AlgoliaHit } from '@algolia/client-search';
+import {
+  useInfiniteHits,
+  UseInfiniteHitsProps,
+} from 'react-instantsearch-core';
+
+type InfiniteHitsProps<THit> = UseInfiniteHitsProps & {
+  hitComponent: (props: { hit: THit }) => JSX.Element;
+};
+
+export const InfiniteHits = forwardRef(
+  <THit extends AlgoliaHit<Record<string, unknown>>>(
+    { hitComponent: Hit, ...props }: InfiniteHitsProps<THit>,
+    ref: React.ForwardedRef<FlatList<THit>>
+  ) => {
+    const { hits, isLastPage, showMore } = useInfiniteHits(props);
+
+    return (
+      <FlatList
+        ref={ref}
+        data={(hits as unknown) as THit[]}
+        keyExtractor={item => item.objectID}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
+        onEndReached={() => {
+          if (!isLastPage) {
+            showMore();
+          }
+        }}
+        renderItem={({ item }) => (
+          <View style={styles.item}>
+            <Hit hit={(item as unknown) as THit} />
+          </View>
+        )}
+      />
+    );
+  }
+);
+
+const styles = StyleSheet.create({
+  separator: {
+    borderBottomWidth: 1,
+    borderColor: '#ddd',
+  },
+  item: {
+    padding: 18,
+  },
+});
+
+declare module 'react' {
+  // eslint-disable-next-line no-shadow
+  function forwardRef<TRef, TProps = unknown>(
+    render: (props: TProps, ref: React.Ref<TRef>) => React.ReactElement | null
+  ): (props: TProps & React.RefAttributes<TRef>) => React.ReactElement | null;
+}"
+`;
+
+exports[`Templates React InstantSearch Native File content: src/SearchBox.tsx 1`] = `
+"import React, { useEffect, useRef, useState } from 'react';
+import { StyleSheet, View, TextInput } from 'react-native';
+import { useSearchBox, UseSearchBoxProps } from 'react-instantsearch-core';
+
+type SearchBoxProps = UseSearchBoxProps & {
+  onChange: (newValue: string) => void;
+};
+
+export function SearchBox({ onChange, ...props }: SearchBoxProps) {
+  const { query, refine } = useSearchBox(props);
+  const [value, setValue] = useState(query);
+  const inputRef = useRef<TextInput>(null);
+
+  // Track when the value coming from the React state changes to synchronize
+  // it with InstantSearch.
+  useEffect(() => {
+    if (query !== value) {
+      refine(value);
+    }
+    // We don't want to track when the React state value changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value, refine]);
+
+  // Track when the InstantSearch query changes to synchronize it with
+  // the React state.
+  useEffect(() => {
+    // We bypass the state update if the input is focused to avoid concurrent
+    // updates when typing.
+    if (!inputRef.current?.isFocused() && query !== value) {
+      setValue(query);
+    }
+    // We don't want to track when the React state value changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query]);
+
+  return (
+    <View style={styles.container}>
+      <TextInput
+        ref={inputRef}
+        style={styles.input}
+        value={value}
+        onChangeText={newValue => {
+          setValue(newValue);
+          onChange(newValue);
+        }}
+        clearButtonMode=\\"while-editing\\"
+        autoCapitalize=\\"none\\"
+        autoCorrect={false}
+        spellCheck={false}
+        autoCompleteType=\\"off\\"
+        placeholder=\\"Search placeholder\\"
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#252b33',
+    padding: 18,
+  },
+  input: {
+    height: 48,
+    padding: 12,
+    fontSize: 16,
+    backgroundColor: '#fff',
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#ddd',
+  },
+});"
+`;
+
+exports[`Templates React InstantSearch Native File content: tsconfig.json 1`] = `
+"{
+  \\"extends\\": \\"expo/tsconfig.base\\",
+  \\"compilerOptions\\": {
+    \\"strict\\": true
+  }
+}"
+`;
+
+exports[`Templates React InstantSearch Native File content: types/ProductHit.ts 1`] = `
+"import { Hit as AlgoliaHit } from '@algolia/client-search';
+
+export type ProductHit = AlgoliaHit<{
+  brand: string;
+  categories: string[];
+  comments: number;
+  description: string;
+  free_shipping: boolean;
+  hierarchicalCategories: {
+    lvl0: string;
+    lvl1?: string;
+    lvl2?: string;
+    lvl3?: string;
+    lvl4?: string;
+    lvl5?: string;
+    lvl6?: string;
+  };
+  image: string;
+  name: string;
+  popularity: number;
+  price: number;
+  prince_range: string;
+  rating: number;
+  sale: boolean;
+  sale_price: string;
+  type: string;
+  url: string;
+}>;"
+`;
+
+exports[`Templates React InstantSearch Native Folder structure: contains the right files 1`] = `
+Array [
+  ".expo-shared/assets.json",
+  ".gitignore",
+  "App.tsx",
+  "README.md",
+  "app.json",
+  "assets/adaptive-icon.png",
+  "assets/favicon.png",
+  "assets/icon.png",
+  "assets/splash.png",
+  "babel.config.js",
+  "package.json",
+  "src/Highlight.tsx",
+  "src/InfiniteHits.tsx",
+  "src/SearchBox.tsx",
+  "tsconfig.json",
+  "types/ProductHit.ts",
 ]
 `;
 
