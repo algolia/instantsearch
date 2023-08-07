@@ -3,22 +3,6 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [4.1.0](https://github.com/algolia/instantsearch/compare/@instantsearch/e2e-tests@4.0.0...@instantsearch/e2e-tests@4.1.0) (2023-08-07)
-
-
-### Bug Fixes
-
-* **this:** ensure all functions are able to be destructured ([#5611](https://github.com/algolia/instantsearch/issues/5611)) ([a8b5c1e](https://github.com/algolia/instantsearch/commit/a8b5c1e5bbd6afac39fce523f7d7c2ec02f51153)), closes [#5589](https://github.com/algolia/instantsearch/issues/5589)
-
-
-### Features
-
-* rename packages ([#5787](https://github.com/algolia/instantsearch/issues/5787)) ([c133170](https://github.com/algolia/instantsearch/commit/c133170e563592dfc15a95daced1f8447327a09a))
-
-
-
-
-
 ## [4.0.3](https://github.com/algolia/instantsearch/compare/@instantsearch/e2e-tests@4.0.0...@instantsearch/e2e-tests@4.0.3) (2023-07-25)
 
 

@@ -4,6 +4,6 @@
   "private": true,
   "dependencies": {
     "algoliasearch-helper": "3.14.0",
-    "instantsearch.js": "4.57.0"
+    "instantsearch.js": "4.56.8"
   }
 }

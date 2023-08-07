@@ -13,6 +13,3 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **react-instantsearch:** provide codemods to help with migration ([#5771](https://github.com/algolia/instantsearch/issues/5771)) ([4db165e](https://github.com/algolia/instantsearch/commit/4db165e77b73714dc206e6e88cec848136f1e32f))
 
 
-### BREAKING CHANGES
-
-* **getServerState:** `getServerState` now requires `renderToString` to be passed as an option.

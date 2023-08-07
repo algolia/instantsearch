@@ -4,6 +4,6 @@
   "version": "1.22.0",
   "description": "Common tests for all InstantSearch flavors.",
   "dependencies": {
-    "instantsearch.js": "4.57.0"
+    "instantsearch.js": "4.56.8"
   }
 }
