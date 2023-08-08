@@ -50,6 +50,7 @@
   },
   "devDependencies": {
     "jest-image-snapshot": "2.12.0",
-    "walk-sync": "2.0.2"
+    "walk-sync": "2.0.2",
+    "@instantsearch/testutils": "1.11.0"
   }
 }

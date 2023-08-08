@@ -3,10 +3,11 @@ const teardown = require('../../tasks/node/teardown');
 
 module.exports = {
   category: 'Web',
-  libraryName: 'react-instantsearch-dom',
-  supportedVersion: '>= 5.0.0 < 7.0.0',
+  libraryName: 'react-instantsearch',
+  supportedVersion: '>= 7.0.0 < 8.0.0',
   flags: {
-    dynamicWidgets: '>=6.16',
+    dynamicWidgets: '>=7.0',
+    insights: '>=7.0',
   },
   templateName: 'react-instantsearch',
   appName: 'react-instantsearch-app',
