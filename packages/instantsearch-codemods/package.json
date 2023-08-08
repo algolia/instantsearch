@@ -1,7 +1,7 @@
 {
   "name": "instantsearch-codemods",
   "description": "Codemods for Algolia InstantSearch libraries",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "source": "src/codeshift.config.js",
   "main": "dist/codeshift.config.js",
   "license": "MIT",

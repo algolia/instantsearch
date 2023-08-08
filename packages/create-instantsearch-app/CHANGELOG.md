@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.5.0](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@6.4.2...create-instantsearch-app@6.5.0) (2023-08-08)
+
+
+### Features
+
+* update react instantsearch templates ([#5790](https://github.com/algolia/instantsearch/issues/5790)) ([6f136ec](https://github.com/algolia/instantsearch/commit/6f136ec60a07f6cdbc5aac1382f6d77ea2554e95))
+
+
+
+
+
 ## [6.4.2](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@6.4.1...create-instantsearch-app@6.4.2) (2023-08-07)
 
 

@@ -1,6 +1,18 @@
 # Change Log
 
-All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [7.0.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.0.0...react-instantsearch@7.0.1) (2023-08-08)
+
+
+### Bug Fixes
+
+* **pagination:** correctly use 1-based pagination in createURL ([#5798](https://github.com/algolia/instantsearch/issues/5798)) ([69ec7de](https://github.com/algolia/instantsearch/commit/69ec7deba05a60a223b833c6a117d5a0f2e83012))
+
+
+
+
 
 # [7.0.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@6.40.4...react-instantsearch@7.0.0) (2023-08-07)
 

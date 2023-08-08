@@ -1,6 +1,6 @@
 {
   "name": "create-instantsearch-app",
-  "version": "6.4.2",
+  "version": "6.5.0",
   "license": "MIT",
   "description": "⚡️ Build InstantSearch apps at the speed of thought",
   "keywords": [
@@ -49,8 +49,8 @@
     "validate-npm-package-name": "3.0.0"
   },
   "devDependencies": {
+    "@instantsearch/testutils": "1.12.0",
     "jest-image-snapshot": "2.12.0",
-    "walk-sync": "2.0.2",
-    "@instantsearch/testutils": "1.11.0"
+    "walk-sync": "2.0.2"
   }
 }
