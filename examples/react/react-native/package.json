@@ -14,7 +14,7 @@
     "algoliasearch": "4.14.3",
     "expo": "~44.0.0",
     "expo-status-bar": "~1.2.0",
-    "instantsearch.js": "4.57.0",
+    "instantsearch.js": "4.56.9",
     "react": "17.0.1",
     "react-instantsearch-core": "7.0.1",
     "react-native": "0.64.3",

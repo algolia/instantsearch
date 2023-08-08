@@ -49,7 +49,7 @@
     "test:e2e:saucelabs": "start-server-and-test test:start-server 3000 'wdio run ./wdio.saucelabs.conf.cjs'"
   },
   "dependencies": {
-    "instantsearch.js": "4.57.0",
+    "instantsearch.js": "4.56.9",
     "react-instantsearch-core": "7.0.1"
   },
   "devDependencies": {
