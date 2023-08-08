@@ -171,7 +171,7 @@ const connectPagination: PaginationConnector = function connectPagination(
           connectorState.createURL = (page) =>
             createURL((uiState) => ({
               ...uiState,
-              page,
+              page: page + 1,
             }));
         }
 
