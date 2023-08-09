@@ -1,6 +1,15 @@
 # Change Log
 
-All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [7.0.1](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-core@7.0.0...react-instantsearch-core@7.0.1) (2023-08-08)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+
 
 # [7.0.0](https://github.com/algolia/instantsearch.js/compare/react-instantsearch-core@6.40.4...react-instantsearch-core@7.0.0) (2023-08-07)
 

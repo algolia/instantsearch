@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.56.9](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.56.8...instantsearch.js@4.56.9) (2023-08-08)
+
+
+### Bug Fixes
+
+* **pagination:** correctly use 1-based pagination in createURL ([#5798](https://github.com/algolia/instantsearch.js/issues/5798)) ([69ec7de](https://github.com/algolia/instantsearch.js/commit/69ec7deba05a60a223b833c6a117d5a0f2e83012))
+
+
 ## [4.56.8](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.56.7...instantsearch.js@4.56.8) (2023-07-25)
 
 **Note:** Version bump only for package instantsearch.js
