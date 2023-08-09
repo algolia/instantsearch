@@ -9,6 +9,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Features
 
 * update react instantsearch templates ([#5790](https://github.com/algolia/instantsearch/issues/5790)) ([6f136ec](https://github.com/algolia/instantsearch/commit/6f136ec60a07f6cdbc5aac1382f6d77ea2554e95))
+* **cisa:** remove outdated templates ([#5805](https://github.com/algolia/instantsearch/pull/5805)) ([bc33605](https://github.com/algolia/instantsearch/commit/bc33605f4a820fdc21237813ce81ba953ac1714c))
 
 
 
