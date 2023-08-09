@@ -4,7 +4,6 @@ const baseConfig = require('./wdio.base.conf');
 
 module.exports = {
   ...baseConfig,
-  logLevel: 'debug',
   /*
    * List of reporters to use
    * https://webdriver.io/docs/options.html#reporters
@@ -61,7 +60,6 @@ module.exports = {
      */
     connectRetries: 2,
     connectRetryTimeout: 10000,
-    verbose: true,
   },
   /*
    * Sauce Labs Open Source offer has a maximum of 5 concurrent session
@@ -80,34 +78,9 @@ module.exports = {
    * https://wiki.saucelabs.com/display/DOCS/Platform+Configurator#/
    */
   capabilities: [
-    // {
-    //   browserName: 'chrome',
-    //   browserVersion: '76.0',
-    //   /*
-    //    * Sauce Labs specific options
-    //    * https://wiki.saucelabs.com/display/DOCS/Test+Configuration+Options
-    //    */
-    //   'sauce:options': {
-    //     screenResolution: '1680x1050',
-    //   },
-    // },
-    // {
-    //   browserName: 'firefox',
-    //   browserVersion: '68.0',
-    //   /*
-    //    * Sauce Labs specific options
-    //    * https://wiki.saucelabs.com/display/DOCS/Test+Configuration+Options
-    //    */
-    //   'sauce:options': {
-    //     screenResolution: '1680x1050',
-    //     // Force Selenium version on Firefox, solves an issue with `setValue`
-    //     // https://github.com/webdriverio/webdriverio/issues/3443
-    //     seleniumVersion: '3.11.0',
-    //   },
-    // },
     {
-      browserName: 'internet explorer',
-      browserVersion: '11.285',
+      browserName: 'chrome',
+      browserVersion: '76.0',
       /*
        * Sauce Labs specific options
        * https://wiki.saucelabs.com/display/DOCS/Test+Configuration+Options
@@ -115,11 +88,36 @@ module.exports = {
       'sauce:options': {
         screenResolution: '1680x1050',
       },
-      'se:ieOptions': {
-        // Required for drag and drop to work
-        // https://stackoverflow.com/questions/14299392/selenium-webdriver-draganddrop-for-ie9
-        requireWindowFocus: true,
+    },
+    {
+      browserName: 'firefox',
+      browserVersion: '68.0',
+      /*
+       * Sauce Labs specific options
+       * https://wiki.saucelabs.com/display/DOCS/Test+Configuration+Options
+       */
+      'sauce:options': {
+        screenResolution: '1680x1050',
+        // Force Selenium version on Firefox, solves an issue with `setValue`
+        // https://github.com/webdriverio/webdriverio/issues/3443
+        seleniumVersion: '3.11.0',
       },
     },
+    // {
+    //   browserName: 'internet explorer',
+    //   browserVersion: '11.285',
+    //   /*
+    //    * Sauce Labs specific options
+    //    * https://wiki.saucelabs.com/display/DOCS/Test+Configuration+Options
+    //    */
+    //   'sauce:options': {
+    //     screenResolution: '1680x1050',
+    //   },
+    //   'se:ieOptions': {
+    //     // Required for drag and drop to work
+    //     // https://stackoverflow.com/questions/14299392/selenium-webdriver-draganddrop-for-ie9
+    //     requireWindowFocus: true,
+    //   },
+    // },
   ],
 };
