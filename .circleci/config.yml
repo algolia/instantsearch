@@ -60,10 +60,10 @@ workflows:
       - examples:
           requires:
             - build
-          # filters:
-          #   branches:
-          #     only:
-          #       - master
+          filters:
+            branches:
+              only:
+                - master
       - helper docs:
           requires:
             - build
@@ -75,18 +75,18 @@ workflows:
           context: fx-libraries
           requires:
             - examples
-          # filters:
-          #   branches:
-          #     only:
-          #       - master
+          filters:
+            branches:
+              only:
+                - master
       - e2e tests router nextjs:
           context: fx-libraries
           requires:
             - build
-          # filters:
-          #   branches:
-          #     only:
-          #       - master
+          filters:
+            branches:
+              only:
+                - master
       - release if needed:
           context: fx-libraries
           requires:
