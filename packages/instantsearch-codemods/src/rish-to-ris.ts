@@ -45,11 +45,15 @@ export default function transformer(
           path.value.id.type === 'ObjectPattern' &&
           (path.value.id.properties.find((prop) => {
             return (
-              prop.type === 'Property' &&
+              // Babel 5/6 in JSCodeshift, Babel 7 in codeshift
+              // https://github.com/babel/babel/blob/main/.github/CHANGELOG-v6.md#600
+              (prop.type === 'Property' || prop.type === 'ObjectProperty') &&
               prop.key.type === 'Identifier' &&
               prop.key.name === 'use'
             );
           }) as ObjectProperty);
+
+        console.log(path.value.id.properties[0].type);
 
         if (!useProperty) {
           return;
