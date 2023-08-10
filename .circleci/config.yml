@@ -82,7 +82,7 @@ workflows:
       - e2e tests router nextjs:
           context: fx-libraries
           requires:
-            - examples
+            - build
           filters:
             branches:
               only:
@@ -131,7 +131,7 @@ workflows:
       - e2e tests router nextjs:
           context: fx-libraries
           requires:
-            - examples
+            - build
 
 jobs:
   build:
