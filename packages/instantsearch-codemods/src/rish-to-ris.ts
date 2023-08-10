@@ -53,8 +53,6 @@ export default function transformer(
             );
           }) as ObjectProperty);
 
-        console.log(path.value.id.properties[0].type);
-
         if (!useProperty) {
           return;
         }
