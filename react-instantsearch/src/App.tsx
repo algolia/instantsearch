@@ -1,21 +1,27 @@
 import React from 'react';
 import algoliasearch from 'algoliasearch/lite';
 import {
-  InstantSearch,
   Configure,
-  Hits,
-  SearchBox,
-  Panel,
-  RefinementList,
-  Pagination,
   Highlight,
-} from 'react-instantsearch-dom';
-import PropTypes from 'prop-types';
+  Hits,
+  InstantSearch,
+  Pagination,
+  RefinementList,
+  SearchBox,
+} from 'react-instantsearch';
+
+import { Panel } from './Panel';
+
+import type { Hit } from 'instantsearch.js';
+
 import './App.css';
 
-const searchClient = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');
+const searchClient = algoliasearch(
+  'latency',
+  '6be0576ff61c053d5f9a3225e2a90f76'
+);
 
-function App() {
+export function App() {
   return (
     <div>
       <header className="header">
@@ -31,7 +37,7 @@ function App() {
       </header>
 
       <div className="container">
-        <InstantSearch searchClient={searchClient} indexName="instant_search">
+        <InstantSearch searchClient={searchClient} indexName="instant_search" >
           <Configure hitsPerPage={8} />
           <div className="search-panel">
             <div className="search-panel__filters">
@@ -41,12 +47,7 @@ function App() {
             </div>
 
             <div className="search-panel__results">
-              <SearchBox
-                className="searchbox"
-                translations={{
-                  placeholder: '',
-                }}
-              />
+              <SearchBox placeholder="" className="searchbox" />
               <Hits hitComponent={Hit} />
 
               <div className="pagination">
@@ -60,21 +61,19 @@ function App() {
   );
 }
 
-function Hit(props) {
+type HitProps = {
+  hit: Hit;
+};
+
+function Hit({ hit }: HitProps) {
   return (
     <article>
       <h1>
-        <Highlight attribute="name" hit={props.hit} />
+        <Highlight attribute="name" hit={hit} />
       </h1>
       <p>
-        <Highlight attribute="description" hit={props.hit} />
+        <Highlight attribute="description" hit={hit} />
       </p>
     </article>
   );
 }
-
-Hit.propTypes = {
-  hit: PropTypes.object.isRequired,
-};
-
-export default App;

@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import algoliasearch from 'algoliasearch/lite';
-import { InstantSearch } from 'react-instantsearch-hooks';
+import { InstantSearch } from 'react-instantsearch-core';
 
 import { InfiniteHits } from './src/InfiniteHits';
 import { SearchBox } from './src/SearchBox';
