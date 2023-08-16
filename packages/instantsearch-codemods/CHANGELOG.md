@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.2](https://github.com/algolia/instantsearch/compare/instantsearch-codemods@0.1.1...instantsearch-codemods@0.1.2) (2023-08-15)
+
+
+### Bug Fixes
+
+* **use:** compatibility for modern babel ([#5807](https://github.com/algolia/instantsearch/issues/5807)) ([c4f9eeb](https://github.com/algolia/instantsearch/commit/c4f9eeb49dffb9caa12acef7ffa895e30d7f06fa))
+
+
+
+
+
 ## [0.1.1](https://github.com/algolia/instantsearch/compare/instantsearch-codemods@0.1.0...instantsearch-codemods@0.1.1) (2023-08-08)
 
 
