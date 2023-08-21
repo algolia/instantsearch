@@ -54,7 +54,5 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
 
 You may want to add another entry to the \`items\` option with this value.`);
     });
-
-    //test('');
   });
 });
