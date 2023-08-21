@@ -19,6 +19,7 @@ import {
   Hits,
   Index,
   RangeInput,
+  HitsPerPage,
 } from '..';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -215,6 +216,14 @@ const testSetups: TestSetupsMap<TestSuites> = {
       ],
     };
   },
+  createHitsPerPageWidgetTests({ instantSearchOptions, widgetParams }) {
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <HitsPerPage {...widgetParams} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -227,6 +236,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createHitsWidgetTests: { act },
   createRangeInputWidgetTests: { act },
   createInstantSearchWidgetTests: { act },
+  createHitsPerPageWidgetTests: { act },
 };
 
 /**

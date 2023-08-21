@@ -17,6 +17,7 @@ import {
   hits,
   index,
   rangeInput,
+  hitsPerPage,
 } from '../widgets';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -272,6 +273,22 @@ const testSetups: TestSetupsMap<TestSuites> = {
       ],
     };
   },
+  createHitsPerPageWidgetTests({ instantSearchOptions, widgetParams }) {
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        hitsPerPage({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -284,6 +301,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createHitsWidgetTests: undefined,
   createRangeInputWidgetTests: undefined,
   createInstantSearchWidgetTests: undefined,
+  createHitsPerPageWidgetTests: undefined,
 };
 
 describe('Common widget tests (InstantSearch.js)', () => {
