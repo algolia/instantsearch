@@ -1,10 +1,10 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { normalizeSnapshot, wait } from '@instantsearch/testutils';
+import { screen } from '@testing-library/dom';
+import userEvent from '@testing-library/user-event';
 
 import type { HitsPerPageWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
-import { screen } from '@testing-library/dom';
-import userEvent from '@testing-library/user-event';
 
 export function createOptionsTests(
   setup: HitsPerPageWidgetSetup,
