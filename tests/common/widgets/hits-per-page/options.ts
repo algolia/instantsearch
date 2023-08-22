@@ -65,6 +65,59 @@ export function createOptionsTests(
         </div>
       `
       );
+
+      // The `default` item isn't the first one
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          items: [
+            { label: '10', value: 10 },
+            { label: '20', value: 20, default: true },
+            { label: '30', value: 30 },
+          ],
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(
+        document.querySelector('.ais-HitsPerPage')
+      ).toMatchNormalizedInlineSnapshot(
+        normalizeSnapshot,
+        `
+        <div
+          class="ais-HitsPerPage"
+        >
+          <select
+            class="ais-HitsPerPage-select"
+          >
+            <option
+              class="ais-HitsPerPage-option"
+              value="10"
+            >
+              10
+            </option>
+            <option
+              class="ais-HitsPerPage-option"
+              value="20"
+            >
+              20
+            </option>
+            <option
+              class="ais-HitsPerPage-option"
+              value="30"
+            >
+              30
+            </option>
+          </select>
+        </div>
+      `
+      );
     });
 
     test('transforms the items', async () => {
