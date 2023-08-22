@@ -18,6 +18,7 @@ import {
   AisHits,
   AisIndex,
   AisRangeInput,
+  AisHitsPerPage,
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
 
@@ -320,6 +321,21 @@ const testSetups = {
       ],
     };
   },
+  async createHitsPerPageWidgetTests({ instantSearchOptions, widgetParams }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisHitsPerPage, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
+  },
 };
 
 const testOptions = {
@@ -332,6 +348,7 @@ const testOptions = {
   createHitsWidgetTests: undefined,
   createRangeInputWidgetTests: undefined,
   createInstantSearchWidgetTests: undefined,
+  createHitsPerPageWidgetTests: undefined,
 };
 
 describe('Common widget tests (Vue InstantSearch)', () => {

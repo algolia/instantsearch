@@ -75,6 +75,33 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
 `);
     });
 
+    it('warns with an item without a `value`', () => {
+      const renderFn = jest.fn();
+      const makeWidget = connectHitsPerPage(renderFn);
+      const widget = makeWidget({
+        items: [
+          // @ts-expect-error Incomplete item
+          { label: '10', default: true },
+        ],
+      });
+
+      const searchClient = createSearchClient();
+      const helper = algoliasearchHelper(searchClient, '');
+      helper.search = jest.fn();
+
+      expect(() => {
+        widget.init!(
+          createInitOptions({
+            helper,
+            state: helper.state,
+          })
+        );
+      })
+        .toWarnDev(`[InstantSearch.js]: The \`items\` option of \`hitsPerPage\` does not contain the "hits per page" value coming from the state: undefined.
+
+You may want to add another entry to the \`items\` option with this value.`);
+    });
+
     it('does not throw with items and one default value', () => {
       expect(() => {
         connectHitsPerPage(() => {})({

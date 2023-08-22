@@ -2,6 +2,9 @@
  * @jest-environment jsdom
  */
 
+/**
+ * Keeping this suite for when we migrate VDOM components to their own package.
+ */
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
