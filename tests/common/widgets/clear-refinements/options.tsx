@@ -9,7 +9,7 @@ export function createOptionsTests(
   setup: ClearRefinementsWidgetSetup,
   { act }: Required<TestOptions>
 ) {
-  describe.only('options', () => {
+  describe('options', () => {
     test('renders with default props', async () => {
       const searchClient = createSearchClient({});
 
