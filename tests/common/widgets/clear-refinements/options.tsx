@@ -228,7 +228,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelectorAll('.ais-CurrentRefinements-item')[0]
-      ).toHaveTextContent(/brand:Apple/i);
+      ).toHaveTextContent(/brand:\s?Apple/i);
       expect(
         document.querySelector('.ais-ClearRefinements')
       ).toMatchNormalizedInlineSnapshot(
@@ -309,7 +309,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelectorAll('.ais-CurrentRefinements-item')[0]
-      ).toHaveTextContent(/categories:Audio/i);
+      ).toHaveTextContent(/categories:\s?Audio/i);
       expect(
         document.querySelector('.ais-ClearRefinements')
       ).toMatchNormalizedInlineSnapshot(
@@ -390,7 +390,7 @@ export function createOptionsTests(
 
       expect(
         document.querySelectorAll('.ais-CurrentRefinements-item')[0]
-      ).toHaveTextContent(/brand:Apple/i);
+      ).toHaveTextContent(/brand:\s?Apple/i);
       expect(
         document.querySelector('.ais-ClearRefinements')
       ).toMatchNormalizedInlineSnapshot(
