@@ -338,7 +338,10 @@ const testSetups = {
 
     await nextTick();
   },
-  async createClearRefinementsTests({ instantSearchOptions, widgetParams }) {
+  async createClearRefinementsWidgetTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
     const refinementListAttributes = Object.keys(
       instantSearchOptions.initialUiState?.indexName.refinementList || {}
     );
@@ -374,7 +377,7 @@ const testOptions = {
   createRangeInputWidgetTests: undefined,
   createInstantSearchWidgetTests: undefined,
   createHitsPerPageWidgetTests: undefined,
-  createClearRefinementsTests: undefined,
+  createClearRefinementsWidgetTests: undefined,
 };
 
 describe('Common widget tests (Vue InstantSearch)', () => {
