@@ -20,6 +20,8 @@ import {
   Index,
   RangeInput,
   HitsPerPage,
+  ClearRefinements,
+  CurrentRefinements,
 } from '..';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -224,6 +226,22 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
+  createClearRefinementsWidgetTests({ instantSearchOptions, widgetParams }) {
+    const refinementListAttributes = Object.keys(
+      instantSearchOptions.initialUiState?.indexName.refinementList || {}
+    );
+
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        {refinementListAttributes.map((attribute) => (
+          <RefinementList key={attribute} attribute={attribute} />
+        ))}
+        <CurrentRefinements />
+        <ClearRefinements {...widgetParams} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -237,6 +255,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createRangeInputWidgetTests: { act },
   createInstantSearchWidgetTests: { act },
   createHitsPerPageWidgetTests: { act },
+  createClearRefinementsWidgetTests: { act },
 };
 
 /**
