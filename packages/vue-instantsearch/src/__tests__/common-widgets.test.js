@@ -19,6 +19,8 @@ import {
   AisIndex,
   AisRangeInput,
   AisHitsPerPage,
+  AisClearRefinements,
+  AisCurrentRefinements,
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
 
@@ -336,6 +338,32 @@ const testSetups = {
 
     await nextTick();
   },
+  async createClearRefinementsWidgetTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
+    const refinementListAttributes = Object.keys(
+      instantSearchOptions.initialUiState?.indexName.refinementList || {}
+    );
+
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            ...refinementListAttributes.map((attribute) =>
+              h(AisRefinementList, { props: { attribute } })
+            ),
+            h(AisCurrentRefinements),
+            h(AisClearRefinements, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
+  },
 };
 
 const testOptions = {
@@ -349,6 +377,7 @@ const testOptions = {
   createRangeInputWidgetTests: undefined,
   createInstantSearchWidgetTests: undefined,
   createHitsPerPageWidgetTests: undefined,
+  createClearRefinementsWidgetTests: undefined,
 };
 
 describe('Common widget tests (Vue InstantSearch)', () => {
