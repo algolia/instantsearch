@@ -1,6 +1,7 @@
 import { fakeAct } from '../../common';
 
 import { createOptimisticUiTests } from './optimistic-ui';
+import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
 import type { MenuWidget } from 'instantsearch.js/es/widgets/menu/menu';
@@ -19,6 +20,7 @@ export function createMenuWidgetTests(
   });
 
   describe('Menu widget common tests', () => {
+    createOptionsTests(setup, { act, skippedTests });
     createOptimisticUiTests(setup, { act, skippedTests });
   });
 }
