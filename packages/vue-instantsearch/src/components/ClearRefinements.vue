@@ -1,3 +1,4 @@
+<!-- @MAJOR remove `type="reset"` -->
 <template>
   <div v-if="state" :class="suit()">
     <slot
