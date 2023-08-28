@@ -20,8 +20,5 @@ export function normalizeSnapshot(html: string) {
       .replace(/(\s+)?<!--v-if-->/g, '') // Vue 3
       // Vue renders extra whitespace after list elements
       .replace(/<\/ul> </g, '</ul><')
-      // InstantSearch.js <Template> adds a div wrapper around menu items
-      // @MAJOR: Remove this once <Template> stops defaulting to div root tags
-      .replace(/<div>\s*(<a[\s\S]*?<\/a>)\s*<\/div>/g, '$1')
   );
 }

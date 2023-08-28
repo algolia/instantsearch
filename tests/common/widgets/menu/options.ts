@@ -3,12 +3,24 @@ import {
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import { normalizeSnapshot, wait } from '@instantsearch/testutils';
+import {
+  normalizeSnapshot as commonNormalizeSnapshot,
+  wait,
+} from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 
 import type { MenuWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
+
+function normalizeSnapshot(html: string) {
+  // InstantSearch.js <Template> adds a div wrapper around menu items
+  // @MAJOR: Remove this once <Template> stops defaulting to div root tags
+  return commonNormalizeSnapshot(html).replace(
+    /<div>\s*(<a class="ais-Menu-link"[\s\S]*?<\/a>)\s*<\/div>/g,
+    '$1'
+  );
+}
 
 export function createOptionsTests(
   setup: MenuWidgetSetup,
@@ -27,22 +39,6 @@ export function createOptionsTests(
                     Samsung: 633,
                     Metra: 591,
                     HP: 530,
-                    Apple: 442,
-                    GE: 394,
-                    Sony: 350,
-                    Incipio: 320,
-                    KitchenAid: 318,
-                    Whirlpool: 298,
-                    LG: 291,
-                    Canon: 287,
-                    Frigidaire: 275,
-                    Speck: 216,
-                    OtterBox: 214,
-                    Epson: 204,
-                    'Dynex™': 184,
-                    Dell: 174,
-                    'Hamilton Beach': 173,
-                    Platinum: 155,
                   },
                 },
                 renderingContent: {
@@ -80,7 +76,7 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      expect(document.querySelectorAll('.ais-Menu-item')).toHaveLength(10);
+      expect(document.querySelectorAll('.ais-Menu-item')).toHaveLength(4);
       expect(
         document.querySelector('.ais-Menu')
       ).toMatchNormalizedInlineSnapshot(
@@ -165,120 +161,6 @@ export function createOptionsTests(
                   class="ais-Menu-count"
                 >
                   530
-                </span>
-              </a>
-            </li>
-            <li
-              class="ais-Menu-item"
-            >
-              <a
-                class="ais-Menu-link"
-                href="#"
-              >
-                <span
-                  class="ais-Menu-label"
-                >
-                  Apple
-                </span>
-                <span
-                  class="ais-Menu-count"
-                >
-                  442
-                </span>
-              </a>
-            </li>
-            <li
-              class="ais-Menu-item"
-            >
-              <a
-                class="ais-Menu-link"
-                href="#"
-              >
-                <span
-                  class="ais-Menu-label"
-                >
-                  GE
-                </span>
-                <span
-                  class="ais-Menu-count"
-                >
-                  394
-                </span>
-              </a>
-            </li>
-            <li
-              class="ais-Menu-item"
-            >
-              <a
-                class="ais-Menu-link"
-                href="#"
-              >
-                <span
-                  class="ais-Menu-label"
-                >
-                  Sony
-                </span>
-                <span
-                  class="ais-Menu-count"
-                >
-                  350
-                </span>
-              </a>
-            </li>
-            <li
-              class="ais-Menu-item"
-            >
-              <a
-                class="ais-Menu-link"
-                href="#"
-              >
-                <span
-                  class="ais-Menu-label"
-                >
-                  Incipio
-                </span>
-                <span
-                  class="ais-Menu-count"
-                >
-                  320
-                </span>
-              </a>
-            </li>
-            <li
-              class="ais-Menu-item"
-            >
-              <a
-                class="ais-Menu-link"
-                href="#"
-              >
-                <span
-                  class="ais-Menu-label"
-                >
-                  KitchenAid
-                </span>
-                <span
-                  class="ais-Menu-count"
-                >
-                  318
-                </span>
-              </a>
-            </li>
-            <li
-              class="ais-Menu-item"
-            >
-              <a
-                class="ais-Menu-link"
-                href="#"
-              >
-                <span
-                  class="ais-Menu-label"
-                >
-                  Whirlpool
-                </span>
-                <span
-                  class="ais-Menu-count"
-                >
-                  298
                 </span>
               </a>
             </li>
@@ -296,7 +178,7 @@ export function createOptionsTests(
         },
         widgetParams: {
           attribute: 'brand',
-          limit: 5,
+          limit: 2,
         },
       });
 
@@ -304,7 +186,7 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      expect(document.querySelectorAll('.ais-Menu-item')).toHaveLength(5);
+      expect(document.querySelectorAll('.ais-Menu-item')).toHaveLength(2);
       expect(
         document.querySelector('.ais-Menu')
       ).toMatchNormalizedInlineSnapshot(
@@ -351,63 +233,6 @@ export function createOptionsTests(
                   class="ais-Menu-count"
                 >
                   633
-                </span>
-              </a>
-            </li>
-            <li
-              class="ais-Menu-item"
-            >
-              <a
-                class="ais-Menu-link"
-                href="#"
-              >
-                <span
-                  class="ais-Menu-label"
-                >
-                  Metra
-                </span>
-                <span
-                  class="ais-Menu-count"
-                >
-                  591
-                </span>
-              </a>
-            </li>
-            <li
-              class="ais-Menu-item"
-            >
-              <a
-                class="ais-Menu-link"
-                href="#"
-              >
-                <span
-                  class="ais-Menu-label"
-                >
-                  HP
-                </span>
-                <span
-                  class="ais-Menu-count"
-                >
-                  530
-                </span>
-              </a>
-            </li>
-            <li
-              class="ais-Menu-item"
-            >
-              <a
-                class="ais-Menu-link"
-                href="#"
-              >
-                <span
-                  class="ais-Menu-label"
-                >
-                  Apple
-                </span>
-                <span
-                  class="ais-Menu-count"
-                >
-                  442
                 </span>
               </a>
             </li>
@@ -444,12 +269,6 @@ export function createOptionsTests(
         ['SAMSUNG', '633'],
         ['METRA', '591'],
         ['HP', '530'],
-        ['APPLE', '442'],
-        ['GE', '394'],
-        ['SONY', '350'],
-        ['INCIPIO', '320'],
-        ['KITCHENAID', '318'],
-        ['WHIRLPOOL', '298'],
       ]);
     });
 
@@ -513,18 +332,7 @@ export function createOptionsTests(
           Array.from(document.querySelectorAll('.ais-Menu-label')).map(
             (item) => item.textContent
           )
-        ).toEqual([
-          'Apple',
-          'Canon',
-          'Dell',
-          'Dynex™',
-          'Epson',
-          'Frigidaire',
-          'GE',
-          'HP',
-          'Hamilton Beach',
-          'Incipio',
-        ]);
+        ).toEqual(['HP', 'Insignia™', 'Metra', 'Samsung']);
       });
 
       test('sorts the items by descending name', async () => {
@@ -547,18 +355,7 @@ export function createOptionsTests(
           Array.from(document.querySelectorAll('.ais-Menu-label')).map(
             (item) => item.textContent
           )
-        ).toEqual([
-          'Whirlpool',
-          'Speck',
-          'Sony',
-          'Samsung',
-          'Platinum',
-          'OtterBox',
-          'Metra',
-          'LG',
-          'KitchenAid',
-          'Insignia™',
-        ]);
+        ).toEqual(['Samsung', 'Metra', 'Insignia™', 'HP']);
       });
 
       test('sorts the items by count', async () => {
@@ -581,18 +378,7 @@ export function createOptionsTests(
           Array.from(document.querySelectorAll('.ais-Menu-count')).map(
             (item) => item.textContent
           )
-        ).toEqual([
-          '746',
-          '633',
-          '591',
-          '530',
-          '442',
-          '394',
-          '350',
-          '320',
-          '318',
-          '298',
-        ]);
+        ).toEqual(['746', '633', '591', '530']);
       });
 
       test('sorts the items by refinement state', async () => {
@@ -620,21 +406,10 @@ export function createOptionsTests(
           Array.from(document.querySelectorAll('.ais-Menu-label')).map(
             (item) => item.textContent
           )
-        ).toEqual([
-          'Apple n',
-          'Canon n',
-          'Dell n',
-          'Dynex™ n',
-          'Epson n',
-          'Frigidaire n',
-          'GE n',
-          'HP n',
-          'Hamilton Beach n',
-          'Incipio n',
-        ]);
+        ).toEqual(['HP n', 'Insignia™ n', 'Metra n', 'Samsung n']);
 
         await act(async () => {
-          userEvent.click(screen.getByText('Hamilton Beach n'));
+          userEvent.click(screen.getByText('Samsung n'));
           await wait(0);
         });
 
@@ -642,21 +417,10 @@ export function createOptionsTests(
           Array.from(document.querySelectorAll('.ais-Menu-label')).map(
             (item) => item.textContent
           )
-        ).toEqual([
-          'Hamilton Beach y',
-          'Apple n',
-          'Canon n',
-          'Dell n',
-          'Dynex™ n',
-          'Epson n',
-          'Frigidaire n',
-          'GE n',
-          'HP n',
-          'Incipio n',
-        ]);
+        ).toEqual(['Samsung y', 'HP n', 'Insignia™ n', 'Metra n']);
 
         await act(async () => {
-          userEvent.click(screen.getByText('Frigidaire n'));
+          userEvent.click(screen.getByText('Metra n'));
           await wait(0);
         });
 
@@ -664,18 +428,7 @@ export function createOptionsTests(
           Array.from(document.querySelectorAll('.ais-Menu-label')).map(
             (item) => item.textContent
           )
-        ).toEqual([
-          'Frigidaire y',
-          'Apple n',
-          'Canon n',
-          'Dell n',
-          'Dynex™ n',
-          'Epson n',
-          'GE n',
-          'HP n',
-          'Hamilton Beach n',
-          'Incipio n',
-        ]);
+        ).toEqual(['Metra y', 'HP n', 'Insignia™ n', 'Samsung n']);
       });
 
       test('sorts the items using a sorting function', async () => {
@@ -698,18 +451,7 @@ export function createOptionsTests(
           Array.from(document.querySelectorAll('.ais-Menu-label')).map(
             (item) => item.textContent
           )
-        ).toEqual([
-          'Whirlpool',
-          'Speck',
-          'Sony',
-          'Samsung',
-          'Platinum',
-          'OtterBox',
-          'Metra',
-          'LG',
-          'KitchenAid',
-          'Insignia™',
-        ]);
+        ).toEqual(['Samsung', 'Metra', 'Insignia™', 'HP']);
       });
     });
 
@@ -722,6 +464,7 @@ export function createOptionsTests(
           },
           widgetParams: {
             attribute: 'brand',
+            limit: 2,
             showMore: true,
           },
         });
@@ -730,7 +473,7 @@ export function createOptionsTests(
           await wait(0);
         });
 
-        expect(document.querySelectorAll('.ais-Menu-item')).toHaveLength(10);
+        expect(document.querySelectorAll('.ais-Menu-item')).toHaveLength(2);
 
         const showMoreButton = screen.getByRole('button');
         expect(showMoreButton).toHaveTextContent('Show more');
@@ -783,158 +526,6 @@ export function createOptionsTests(
                   </span>
                 </a>
               </li>
-              <li
-                class="ais-Menu-item"
-              >
-                <a
-                  class="ais-Menu-link"
-                  href="#"
-                >
-                  <span
-                    class="ais-Menu-label"
-                  >
-                    Metra
-                  </span>
-                  <span
-                    class="ais-Menu-count"
-                  >
-                    591
-                  </span>
-                </a>
-              </li>
-              <li
-                class="ais-Menu-item"
-              >
-                <a
-                  class="ais-Menu-link"
-                  href="#"
-                >
-                  <span
-                    class="ais-Menu-label"
-                  >
-                    HP
-                  </span>
-                  <span
-                    class="ais-Menu-count"
-                  >
-                    530
-                  </span>
-                </a>
-              </li>
-              <li
-                class="ais-Menu-item"
-              >
-                <a
-                  class="ais-Menu-link"
-                  href="#"
-                >
-                  <span
-                    class="ais-Menu-label"
-                  >
-                    Apple
-                  </span>
-                  <span
-                    class="ais-Menu-count"
-                  >
-                    442
-                  </span>
-                </a>
-              </li>
-              <li
-                class="ais-Menu-item"
-              >
-                <a
-                  class="ais-Menu-link"
-                  href="#"
-                >
-                  <span
-                    class="ais-Menu-label"
-                  >
-                    GE
-                  </span>
-                  <span
-                    class="ais-Menu-count"
-                  >
-                    394
-                  </span>
-                </a>
-              </li>
-              <li
-                class="ais-Menu-item"
-              >
-                <a
-                  class="ais-Menu-link"
-                  href="#"
-                >
-                  <span
-                    class="ais-Menu-label"
-                  >
-                    Sony
-                  </span>
-                  <span
-                    class="ais-Menu-count"
-                  >
-                    350
-                  </span>
-                </a>
-              </li>
-              <li
-                class="ais-Menu-item"
-              >
-                <a
-                  class="ais-Menu-link"
-                  href="#"
-                >
-                  <span
-                    class="ais-Menu-label"
-                  >
-                    Incipio
-                  </span>
-                  <span
-                    class="ais-Menu-count"
-                  >
-                    320
-                  </span>
-                </a>
-              </li>
-              <li
-                class="ais-Menu-item"
-              >
-                <a
-                  class="ais-Menu-link"
-                  href="#"
-                >
-                  <span
-                    class="ais-Menu-label"
-                  >
-                    KitchenAid
-                  </span>
-                  <span
-                    class="ais-Menu-count"
-                  >
-                    318
-                  </span>
-                </a>
-              </li>
-              <li
-                class="ais-Menu-item"
-              >
-                <a
-                  class="ais-Menu-link"
-                  href="#"
-                >
-                  <span
-                    class="ais-Menu-label"
-                  >
-                    Whirlpool
-                  </span>
-                  <span
-                    class="ais-Menu-count"
-                  >
-                    298
-                  </span>
-                </a>
-              </li>
             </ul>
             <button
               class="ais-Menu-showMore"
@@ -950,7 +541,7 @@ export function createOptionsTests(
           await wait(0);
         });
 
-        expect(document.querySelectorAll('.ais-Menu-item')).toHaveLength(20);
+        expect(document.querySelectorAll('.ais-Menu-item')).toHaveLength(4);
         expect(showMoreButton).toHaveTextContent('Show less');
       });
 
@@ -962,8 +553,9 @@ export function createOptionsTests(
           },
           widgetParams: {
             attribute: 'brand',
+            limit: 2,
             showMore: true,
-            showMoreLimit: 11,
+            showMoreLimit: 3,
           },
         });
 
@@ -971,7 +563,7 @@ export function createOptionsTests(
           await wait(0);
         });
 
-        expect(document.querySelectorAll('.ais-Menu-item')).toHaveLength(10);
+        expect(document.querySelectorAll('.ais-Menu-item')).toHaveLength(2);
 
         const showMoreButton = screen.getByRole('button');
 
@@ -980,7 +572,7 @@ export function createOptionsTests(
           await wait(0);
         });
 
-        expect(document.querySelectorAll('.ais-Menu-item')).toHaveLength(11);
+        expect(document.querySelectorAll('.ais-Menu-item')).toHaveLength(3);
       });
 
       test('disables the button when there are no more items to reveal', async () => {
@@ -992,8 +584,8 @@ export function createOptionsTests(
           widgetParams: {
             attribute: 'brand',
             showMore: true,
-            limit: 20,
-            showMoreLimit: 21,
+            limit: 10,
+            showMoreLimit: 11,
           },
         });
 
