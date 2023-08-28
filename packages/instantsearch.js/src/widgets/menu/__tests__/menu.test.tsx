@@ -19,6 +19,19 @@ beforeEach(() => {
 });
 
 describe('menu', () => {
+  describe('options', () => {
+    test('throws without a `container`', () => {
+      expect(() => {
+        // @ts-expect-error
+        menu({ attribute: undefined });
+      }).toThrowErrorMatchingInlineSnapshot(`
+        "The \`container\` option is required.
+
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/"
+      `);
+    });
+  });
+
   describe('templates', () => {
     test('renders default templates', async () => {
       const container = document.createElement('div');
