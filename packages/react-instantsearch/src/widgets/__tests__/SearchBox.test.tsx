@@ -5,13 +5,64 @@
 import { InstantSearchTestWrapper } from '@instantsearch/testutils';
 import { act, render, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
+import React, { Suspense } from 'react';
+import { searchBox, hits } from 'instantsearch.js/es/widgets';
 
 import { SearchBox } from '../SearchBox';
+import { Hits } from '../Hits';
 
 import type { InstantSearch, UiState } from 'instantsearch.js';
+import {
+  InstantSearch as InstantSearchWidget,
+  InstantSearchServerComponentsSSRProvider,
+} from 'react-instantsearch-core';
+import { createAlgoliaSearchClient } from '@instantsearch/mocks';
+import instantsearch from 'instantsearch.js';
+
+const searchClient = createAlgoliaSearchClient({});
+const searchClient2 = createAlgoliaSearchClient({});
 
 describe('SearchBox', () => {
+  test.only('renders with a reference', async () => {
+    const queryHook = (query, search) => {
+      search(query);
+    };
+
+    const search = instantsearch({ searchClient, indexName: 'indexName' });
+
+    search.addWidgets([
+      searchBox({
+        container: document.createElement('div'),
+        queryHook,
+      }),
+      hits({
+        container: document.createElement('div'),
+      }),
+    ]);
+
+    await act(async () => {
+      render(await <InstantSearchServerComponentsSSRProvider search={search}>
+          <InstantSearchWidget
+            searchClient={searchClient2}
+            indexName="indexName"
+          >
+            <SearchBox queryHook={queryHook} />
+            <Hits />
+          </InstantSearchWidget>
+        </InstantSearchServerComponentsSSRProvider>
+      );
+    });
+
+    // const { container } = render(Result);
+
+    // await waitFor(() => {
+    //   expect(searchClient.search).toHaveBeenCalledTimes(1);
+    //   expect(searchClient2.search).not.toHaveBeenCalled();
+
+    //   expect(container.querySelector('.ais-SearchBox')).toMatchInlineSnapshot();
+    // });
+  });
+
   test('renders with default props', async () => {
     const { container } = render(
       <InstantSearchTestWrapper>
