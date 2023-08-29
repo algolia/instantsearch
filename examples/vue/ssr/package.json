@@ -1,6 +1,6 @@
 {
   "name": "example-vue-instantsearch-ssr",
-  "version": "0.26.0",
+  "version": "0.27.0",
   "private": true,
   "scripts": {
     "build": "vue-cli-service ssr:build",
@@ -13,7 +13,7 @@
     "instantsearch.css": "8.0.0",
     "qs": "6.9.7",
     "vue": "2.7.14",
-    "vue-instantsearch": "4.10.9",
+    "vue-instantsearch": "4.10.10",
     "vue-router": "^3.0.2",
     "vue-server-renderer": "2.7.14"
   },
