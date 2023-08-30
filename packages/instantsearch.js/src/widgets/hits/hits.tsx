@@ -70,19 +70,19 @@ const renderer =
       });
       return;
     }
-
-    render(
-      <Hits
-        cssClasses={cssClasses}
-        hits={receivedHits}
-        results={results!}
-        templateProps={renderState.templateProps!}
-        insights={insights}
-        sendEvent={sendEvent}
-        bindEvent={bindEvent}
-      />,
-      containerNode
-    );
+    return null;
+    // render(
+    //   <Hits
+    //     cssClasses={cssClasses}
+    //     hits={receivedHits}
+    //     results={results!}
+    //     templateProps={renderState.templateProps!}
+    //     insights={insights}
+    //     sendEvent={sendEvent}
+    //     bindEvent={bindEvent}
+    //   />,
+    //   containerNode
+    // );
   };
 
 export type HitsCSSClasses = Partial<{
@@ -160,11 +160,11 @@ const hits: HitsWidget = function hits(widgetParams) {
     cssClasses: userCssClasses = {},
   } = widgetParams || {};
 
-  if (!container) {
-    throw new Error(withUsage('The `container` option is required.'));
-  }
+  // if (!container) {
+  //   throw new Error(withUsage('The `container` option is required.'));
+  // }
 
-  const containerNode = getContainerNode(container);
+  const containerNode = undefined; // getContainerNode(container);
   const cssClasses = {
     root: cx(suit(), userCssClasses.root),
     emptyRoot: cx(suit({ modifierName: 'empty' }), userCssClasses.emptyRoot),

@@ -5,7 +5,7 @@ import React from 'react';
 import { InstantSearchSSRContext } from '../lib/InstantSearchSSRContext';
 
 import type { InternalInstantSearch } from '../lib/useInstantSearchApi';
-import type { InitialResults, UiState, InstantSearch } from 'instantsearch.js';
+import type { InitialResults, UiState } from 'instantsearch.js';
 import type { ReactNode } from 'react';
 
 export type InstantSearchServerState = {
