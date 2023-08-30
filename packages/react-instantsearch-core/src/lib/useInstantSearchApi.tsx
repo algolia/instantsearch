@@ -1,15 +1,20 @@
+/* eslint-disable complexity */
 import InstantSearch from 'instantsearch.js/es/lib/InstantSearch';
-import { useCallback, useRef, version as ReactVersion } from 'react';
+import { getInitialResults } from 'instantsearch.js/es/lib/server';
+import React, { useCallback, useRef, version as ReactVersion } from 'react';
 import { useSyncExternalStore } from 'use-sync-external-store/shim';
 
+import { useRSCContext } from '../components/InstantSearchWrapper';
 import { useInstantSearchServerContext } from '../lib/useInstantSearchServerContext';
 import { useInstantSearchSSRContext } from '../lib/useInstantSearchSSRContext';
 import version from '../version';
 
 import { useForceUpdate } from './useForceUpdate';
 import { warn } from './warn';
+import { wrapPromiseWithState } from './wrapPromiseWithState';
 
 import type {
+  InitialResults,
   InstantSearchOptions,
   SearchClient,
   UiState,
@@ -50,14 +55,30 @@ export type InternalInstantSearch<
   _preventWidgetCleanup?: boolean;
 };
 
+const InstantSearchInitialResults = Symbol.for('InstantSearchInitialResults');
+declare global {
+  interface Window {
+    [InstantSearchInitialResults]?: InitialResults;
+  }
+}
+
 export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
   props: UseInstantSearchApiProps<TUiState, TRouteState>
 ) {
   const forceUpdate = useForceUpdate();
   const serverContext = useInstantSearchServerContext<TUiState, TRouteState>();
   const serverState = useInstantSearchSSRContext<TUiState, TRouteState>();
-  const initialResults = serverState?.initialResults;
+  const { promiseRef, insertHTML } = useRSCContext();
+  let initialResults =
+    serverState?.initialResults ||
+    (typeof window !== 'undefined'
+      ? window[InstantSearchInitialResults]
+      : undefined);
   const prevPropsRef = useRef(props);
+
+  if (Array.isArray(initialResults)) {
+    initialResults = initialResults.pop();
+  }
 
   let searchRef = useRef<InternalInstantSearch<TUiState, TRouteState> | null>(
     null
@@ -110,7 +131,7 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
     // On the server, we start the search early to compute the search parameters.
     // On SSR, we start the search early to directly catch up with the lifecycle
     // and render.
-    if (serverContext || initialResults) {
+    if (serverContext || initialResults || promiseRef?.current === null) {
       search.start();
     }
 
@@ -118,6 +139,26 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
       // We notify `getServerState()` of the InstantSearch internals to retrieve
       // the server state and pass it to the render on SSR.
       serverContext.notifyServer({ search });
+    }
+
+    if (promiseRef?.current === null && typeof window === 'undefined') {
+      promiseRef.current = wrapPromiseWithState(
+        new Promise((resolve) => {
+          search.once('render', () => {
+            const results = getInitialResults(search.mainIndex);
+            insertHTML(() => (
+              <script
+                dangerouslySetInnerHTML={{
+                  __html: `(window[Symbol.for("InstantSearchInitialResults")] ??= []).push(${JSON.stringify(
+                    results
+                  )})`,
+                }}
+              />
+            ));
+            resolve();
+          });
+        })
+      );
     }
 
     warnNextRouter(props.routing);

@@ -3,6 +3,9 @@ import React from 'react';
 import { IndexContext } from '../lib/IndexContext';
 import { InstantSearchContext } from '../lib/InstantSearchContext';
 import { useInstantSearchApi } from '../lib/useInstantSearchApi';
+import { useInstantSearchContext } from '../lib/useInstantSearchContext';
+
+import { useRSCContext } from './InstantSearchWrapper';
 
 import type { UseInstantSearchApiProps } from '../lib/useInstantSearchApi';
 import type {
@@ -33,7 +36,19 @@ export function InstantSearch<
     >
       <IndexContext.Provider value={search.mainIndex}>
         {children}
+        <TriggerSearch />
       </IndexContext.Provider>
     </InstantSearchContext.Provider>
   );
+}
+
+function TriggerSearch() {
+  const instantsearch = useInstantSearchContext();
+  const { promiseRef } = useRSCContext();
+
+  if (promiseRef.current?.status === 'pending') {
+    instantsearch.mainHelper?.searchOnlyWithDerivedHelpers();
+  }
+
+  return null;
 }

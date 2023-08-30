@@ -1,5 +1,8 @@
 import { useEffect, useRef } from 'react';
 
+import { useRSCContext } from '../components/InstantSearchWrapper';
+
+import { __use } from './__use';
 import { dequal } from './dequal';
 import { useInstantSearchContext } from './useInstantSearchContext';
 import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect';
@@ -18,6 +21,8 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
   props: TProps;
   shouldSsr: boolean;
 }) {
+  const { promiseRef } = useRSCContext();
+
   const prevPropsRef = useRef<TProps>(props);
   useEffect(() => {
     prevPropsRef.current = props;
@@ -83,7 +88,11 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
     };
   }, [parentIndex, widget, shouldAddWidgetEarly, search, props]);
 
-  if (shouldAddWidgetEarly) {
+  if (shouldAddWidgetEarly && promiseRef.current?.status === 'pending') {
     parentIndex.addWidgets([widget]);
+  }
+
+  if (typeof window === 'undefined' && promiseRef.current) {
+    __use(promiseRef.current);
   }
 }
