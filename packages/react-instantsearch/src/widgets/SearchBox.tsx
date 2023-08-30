@@ -5,7 +5,6 @@ import { SearchBox as SearchBoxUiComponent } from '../ui/SearchBox';
 
 import type { SearchBoxProps as SearchBoxUiComponentProps } from '../ui/SearchBox';
 import type { UseSearchBoxProps } from 'react-instantsearch-core';
-import { Widget } from 'instantsearch.js';
 
 type UiProps = Pick<
   SearchBoxUiComponentProps,
@@ -30,7 +29,6 @@ export type SearchBoxProps = Omit<
      */
     searchAsYouType?: boolean;
     translations?: Partial<UiProps['translations']>;
-    widget?: Widget;
   };
 
 export function SearchBox({
@@ -43,7 +41,6 @@ export function SearchBox({
     { queryHook },
     { $$widgetType: 'ais.searchBox' }
   );
-
   const [inputValue, setInputValue] = useState(query);
   const inputRef = useRef<HTMLInputElement>(null);
 
