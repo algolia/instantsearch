@@ -141,7 +141,7 @@ const renderer =
     showSubmit,
     showLoadingIndicator,
   }: {
-    containerNode: HTMLElement;
+    containerNode?: HTMLElement;
     cssClasses: SearchBoxComponentCSSClasses;
     placeholder: string;
     templates: SearchBoxComponentTemplates;
@@ -156,7 +156,8 @@ const renderer =
     query,
     isSearchStalled,
   }: SearchBoxRenderState & RendererOptions<SearchBoxConnectorParams>) => {
-    render(
+    return null;
+    /* render(
       <SearchBox
         query={query}
         placeholder={placeholder}
@@ -171,7 +172,7 @@ const renderer =
         cssClasses={cssClasses}
       />,
       containerNode
-    );
+    ); */
   };
 
 /**
@@ -201,11 +202,11 @@ const searchBox: SearchBoxWidget = function searchBox(widgetParams) {
     queryHook,
     templates: userTemplates = {},
   } = widgetParams || {};
-  if (!container) {
-    throw new Error(withUsage('The `container` option is required.'));
-  }
+  // if (!container) {
+  //   throw new Error(withUsage('The `container` option is required.'));
+  // }
 
-  const containerNode = getContainerNode(container);
+  const containerNode = undefined; // getContainerNode(container);
 
   const cssClasses = {
     root: cx(suit(), userCssClasses.root),
@@ -247,8 +248,9 @@ const searchBox: SearchBoxWidget = function searchBox(widgetParams) {
     showLoadingIndicator,
   });
 
-  const makeWidget = connectSearchBox(specializedRenderer, () =>
-    render(null, containerNode)
+  const makeWidget = connectSearchBox(
+    specializedRenderer,
+    () => null /* render(null, containerNode) */
   );
 
   return {

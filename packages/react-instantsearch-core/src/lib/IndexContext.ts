@@ -1,3 +1,5 @@
+'use client';
+
 import { createContext } from 'react';
 
 import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
