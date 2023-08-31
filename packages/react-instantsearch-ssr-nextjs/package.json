@@ -1,0 +1,60 @@
+{
+  "name": "react-instantsearch-ssr-nextjs",
+  "version": "7.0.1",
+  "description": "React InstantSearch SSR utilities for Next.js",
+  "source": "src/index.ts",
+  "types": "dist/es/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "module": "dist/es/index.js",
+  "type": "module",
+  "exports": {
+    "types": "./dist/es/index.d.ts",
+    "require": "./dist/cjs/index.js",
+    "default": "./dist/es/index.js"
+  },
+  "sideEffects": false,
+  "license": "MIT",
+  "homepage": "https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/algolia/instantsearch.js"
+  },
+  "author": {
+    "name": "Algolia, Inc.",
+    "url": "https://www.algolia.com"
+  },
+  "keywords": [
+    "algolia",
+    "ssr",
+    "app",
+    "app router",
+    "fast",
+    "instantsearch",
+    "react",
+    "search",
+    "next",
+    "nextjs"
+  ],
+  "files": [
+    "README.md",
+    "dist"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "yarn build:cjs && yarn build:es && yarn build:types",
+    "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/cjs --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet && ../../scripts/prepare-cjs.sh",
+    "build:es": "BABEL_ENV=es babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet",
+    "build:types": "tsc -p ./tsconfig.declaration.json --outDir ./dist/es",
+    "test:exports": "node ./__tests__/module/is-es-module.mjs && node ./__tests__/module/is-cjs-module.cjs"
+  },
+  "dependencies": {
+    "instantsearch.js": "4.56.9",
+    "react-instantsearch-core": "7.0.1"
+  },
+  "devDependencies": {
+    "ts-node": "8.4.1"
+  },
+  "peerDependencies": {
+    "next": ">= 13 && < 14"
+  }
+}
