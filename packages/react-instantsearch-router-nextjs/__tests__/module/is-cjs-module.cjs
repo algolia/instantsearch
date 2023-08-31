@@ -7,3 +7,4 @@ const ReactInstantSearchRouterNext = require('react-instantsearch-router-nextjs'
 assert.ok(ReactInstantSearchRouterNext);
 
 console.log('react-instantsearch-router-nextjs is valid CJS');
+Ò;
