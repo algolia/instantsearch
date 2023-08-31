@@ -1,11 +1,10 @@
 import { useEffect, useRef } from 'react';
 
-import { useRSCContext } from '../components/InstantSearchWrapper';
-
 import { __use } from './__use';
 import { dequal } from './dequal';
 import { useInstantSearchContext } from './useInstantSearchContext';
 import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect';
+import { useRSCContext } from './useRSCContext';
 
 import type { Widget } from 'instantsearch.js';
 import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';

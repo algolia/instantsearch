@@ -4,12 +4,12 @@ import { getInitialResults } from 'instantsearch.js/es/lib/server';
 import React, { useCallback, useRef, version as ReactVersion } from 'react';
 import { useSyncExternalStore } from 'use-sync-external-store/shim';
 
-import { useRSCContext } from '../components/InstantSearchWrapper';
 import { useInstantSearchServerContext } from '../lib/useInstantSearchServerContext';
 import { useInstantSearchSSRContext } from '../lib/useInstantSearchSSRContext';
 import version from '../version';
 
 import { useForceUpdate } from './useForceUpdate';
+import { useRSCContext } from './useRSCContext';
 import { warn } from './warn';
 import { wrapPromiseWithState } from './wrapPromiseWithState';
 
