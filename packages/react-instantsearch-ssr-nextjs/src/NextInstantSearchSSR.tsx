@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext, useRef } from 'react';
+import type { ReactElement } from 'react';
 import {
   InstantSearch,
   InstantSearchRSCContext,
@@ -18,7 +19,7 @@ export type NextInstantSearchSSRProps<
   TUiState extends UiState = UiState,
   TRouteState = TUiState
 > = {
-  children: React.ReactElement;
+  children: ReactElement;
 } & InstantSearchProps<TUiState, TRouteState>;
 
 export function NextInstantSearchSSR<
@@ -28,9 +29,9 @@ export function NextInstantSearchSSR<
   children,
   ...instantSearchProps
 }: NextInstantSearchSSRProps<TUiState, TRouteState>) {
-  const promiseRef = React.useRef<PromiseWithState<void> | null>(null);
+  const promiseRef = useRef<PromiseWithState<void> | null>(null);
   const insertHTML =
-    React.useContext(ServerInsertedHTMLContext) ||
+    useContext(ServerInsertedHTMLContext) ||
     (() => {
       throw new Error('Missing ServerInsertedHTMLContext');
     });
