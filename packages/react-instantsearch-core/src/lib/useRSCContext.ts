@@ -1,21 +1,7 @@
-import React from 'react';
+import { useContext } from 'react';
 
-import type { PromiseWithState } from './wrapPromiseWithState';
-import type { MutableRefObject } from 'react';
-
-export type ServerInsertedHTMLHook = (callbacks: () => React.ReactNode) => void;
-
-export type InstantSearchRSCContextValue = {
-  promiseRef: MutableRefObject<PromiseWithState<void> | null>;
-  insertHTML: ServerInsertedHTMLHook;
-};
-
-export const InstantSearchRSCContext =
-  React.createContext<InstantSearchRSCContextValue>({
-    promiseRef: { current: null },
-    insertHTML: () => {},
-  });
+import { InstantSearchRSCContext } from './InstantSearchRSCContext';
 
 export function useRSCContext() {
-  return React.useContext(InstantSearchRSCContext);
+  return useContext(InstantSearchRSCContext);
 }

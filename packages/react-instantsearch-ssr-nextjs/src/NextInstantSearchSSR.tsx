@@ -10,7 +10,7 @@ import type { UiState } from 'instantsearch.js';
 import type {
   InstantSearchProps,
   PromiseWithState,
-  ServerInsertedHTMLHook,
+  InstantSearchRSCContextApi,
 } from 'react-instantsearch-core';
 
 export type NextInstantSearchSSRProps<
@@ -18,7 +18,9 @@ export type NextInstantSearchSSRProps<
   TRouteState = TUiState
 > = {
   children: React.ReactElement;
-  ServerInsertedHTMLContext: React.Context<ServerInsertedHTMLHook | null>;
+  ServerInsertedHTMLContext: React.Context<
+    InstantSearchRSCContextApi['insertHTML'] | null
+  >;
 } & InstantSearchProps<TUiState, TRouteState>;
 
 export function NextInstantSearchSSR<

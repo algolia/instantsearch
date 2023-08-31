@@ -32,3 +32,4 @@ export * from './server';
 export * from './lib/wrapPromiseWithState';
 export * from './lib/useInstantSearchContext';
 export * from './lib/useRSCContext';
+export * from './lib/InstantSearchRSCContext';
