@@ -3,6 +3,7 @@
     "instantsearchjs-es-template-pcw1k",
     "github/algolia/instantsearch.js/tree/templates/react-instantsearch",
     "/examples/react/default-theme",
+    "/examples/react/next-app-router",
     "/examples/vue/default-theme"
   ],
   "buildCommand": "build --no-private --ignore *-maps --ignore *-native",
@@ -10,8 +11,9 @@
     "packages/instantsearch.js",
     "packages/react-instantsearch",
     "packages/react-instantsearch-core",
+    "packages/react-instantsearch-ssr-nextjs",
     "packages/vue-instantsearch",
     "packages/instantsearch.css"
   ],
-  "node": "14"
+  "node": "16"
 }
