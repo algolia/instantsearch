@@ -1,5 +1,5 @@
+import { ServerInsertedHTMLContext } from 'next/navigation';
 import React, { useContext, useRef } from 'react';
-import type { ReactElement } from 'react';
 import {
   InstantSearch,
   InstantSearchRSCContext,
@@ -7,9 +7,8 @@ import {
   useRSCContext,
 } from 'react-instantsearch-core';
 
-import { ServerInsertedHTMLContext } from 'next/navigation';
-
 import type { UiState } from 'instantsearch.js';
+import type { ReactElement } from 'react';
 import type {
   InstantSearchProps,
   PromiseWithState,

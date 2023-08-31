@@ -5,7 +5,7 @@ import type { MutableRefObject } from 'react';
 
 export type InstantSearchRSCContextApi = {
   promiseRef: MutableRefObject<PromiseWithState<void> | null>;
-  insertHTML(callbacks: () => React.ReactNode): void;
+  insertHTML: (callbacks: () => React.ReactNode) => void;
 };
 
 export const InstantSearchRSCContext =
