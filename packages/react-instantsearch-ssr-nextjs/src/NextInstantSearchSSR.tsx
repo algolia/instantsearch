@@ -6,11 +6,12 @@ import {
   useRSCContext,
 } from 'react-instantsearch-core';
 
+import { ServerInsertedHTMLContext } from 'next/navigation';
+
 import type { UiState } from 'instantsearch.js';
 import type {
   InstantSearchProps,
   PromiseWithState,
-  InstantSearchRSCContextApi,
 } from 'react-instantsearch-core';
 
 export type NextInstantSearchSSRProps<
@@ -18,9 +19,6 @@ export type NextInstantSearchSSRProps<
   TRouteState = TUiState
 > = {
   children: React.ReactElement;
-  ServerInsertedHTMLContext: React.Context<
-    InstantSearchRSCContextApi['insertHTML'] | null
-  >;
 } & InstantSearchProps<TUiState, TRouteState>;
 
 export function NextInstantSearchSSR<
@@ -28,7 +26,6 @@ export function NextInstantSearchSSR<
   TRouteState = TUiState
 >({
   children,
-  ServerInsertedHTMLContext,
   ...instantSearchProps
 }: NextInstantSearchSSRProps<TUiState, TRouteState>) {
   const promiseRef = React.useRef<PromiseWithState<void> | null>(null);

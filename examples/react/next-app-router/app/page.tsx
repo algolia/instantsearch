@@ -2,7 +2,6 @@
 
 import algoliasearch from 'algoliasearch/lite';
 import { Hit as AlgoliaHit } from 'instantsearch.js';
-import { ServerInsertedHTMLContext } from 'next/navigation';
 import React from 'react';
 import {
   Hits,
@@ -32,11 +31,7 @@ function Hit({ hit }: HitProps) {
 
 export default function SearchPage() {
   return (
-    <NextInstantSearchSSR
-      searchClient={client}
-      indexName="instant_search"
-      ServerInsertedHTMLContext={ServerInsertedHTMLContext}
-    >
+    <NextInstantSearchSSR searchClient={client} indexName="instant_search">
       <div className="Container">
         <div>
           <RefinementList attribute="brand" />
