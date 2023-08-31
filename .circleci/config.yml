@@ -33,7 +33,7 @@ references:
 defaults: &defaults
   working_directory: ~/instantsearch
   docker:
-    - image: cimg/node:16.8.0
+    - image: cimg/node:16.12.0
 
 workflows:
   version: 2
