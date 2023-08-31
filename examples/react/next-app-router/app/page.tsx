@@ -5,13 +5,12 @@ import { Hit as AlgoliaHit } from 'instantsearch.js';
 import { ServerInsertedHTMLContext } from 'next/navigation';
 import React from 'react';
 import {
-  InstantSearch,
   Hits,
   Highlight,
   SearchBox,
   RefinementList,
-  InstantSearchWrapper,
 } from 'react-instantsearch';
+import { NextInstantSearchSSR } from 'react-instantsearch-ssr-nextjs';
 
 const client = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');
 
@@ -33,18 +32,20 @@ function Hit({ hit }: HitProps) {
 
 export default function SearchPage() {
   return (
-    <InstantSearchWrapper ServerInsertedHTMLContext={ServerInsertedHTMLContext}>
-      <InstantSearch searchClient={client} indexName="instant_search">
-        <div className="Container">
-          <div>
-            <RefinementList attribute="brand" />
-          </div>
-          <div>
-            <SearchBox />
-            <Hits hitComponent={Hit} />
-          </div>
+    <NextInstantSearchSSR
+      searchClient={client}
+      indexName="instant_search"
+      ServerInsertedHTMLContext={ServerInsertedHTMLContext}
+    >
+      <div className="Container">
+        <div>
+          <RefinementList attribute="brand" />
         </div>
-      </InstantSearch>
-    </InstantSearchWrapper>
+        <div>
+          <SearchBox />
+          <Hits hitComponent={Hit} />
+        </div>
+      </div>
+    </NextInstantSearchSSR>
   );
 }
