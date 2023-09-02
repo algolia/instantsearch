@@ -8,8 +8,11 @@ import {
   Highlight,
   SearchBox,
   RefinementList,
+  DynamicWidgets,
 } from 'react-instantsearch';
 import { NextInstantSearchSSR } from 'react-instantsearch-ssr-nextjs';
+
+import { Panel } from '../components/Panel';
 
 const client = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');
 
@@ -34,7 +37,7 @@ export default function SearchPage() {
     <NextInstantSearchSSR searchClient={client} indexName="instant_search">
       <div className="Container">
         <div>
-          <RefinementList attribute="brand" />
+          <DynamicWidgets fallbackComponent={FallbackComponent} />
         </div>
         <div>
           <SearchBox />
@@ -42,5 +45,13 @@ export default function SearchPage() {
         </div>
       </div>
     </NextInstantSearchSSR>
+  );
+}
+
+function FallbackComponent({ attribute }: { attribute: string }) {
+  return (
+    <Panel header={attribute}>
+      <RefinementList attribute={attribute} />
+    </Panel>
   );
 }

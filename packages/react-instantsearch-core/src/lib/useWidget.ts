@@ -20,7 +20,7 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
   props: TProps;
   shouldSsr: boolean;
 }) {
-  const { promiseRef } = useRSCContext();
+  const waitingForResultsRef = useRSCContext();
 
   const prevPropsRef = useRef<TProps>(props);
   useEffect(() => {
@@ -87,11 +87,14 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
     };
   }, [parentIndex, widget, shouldAddWidgetEarly, search, props]);
 
-  if (shouldAddWidgetEarly && promiseRef.current?.status === 'pending') {
+  if (
+    shouldAddWidgetEarly ||
+    waitingForResultsRef?.current?.status === 'pending'
+  ) {
     parentIndex.addWidgets([widget]);
   }
 
-  if (typeof window === 'undefined' && promiseRef.current) {
-    __use(promiseRef.current);
+  if (typeof window === 'undefined' && waitingForResultsRef?.current) {
+    __use(waitingForResultsRef.current);
   }
 }
