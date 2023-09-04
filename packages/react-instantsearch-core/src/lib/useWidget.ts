@@ -96,5 +96,8 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
 
   if (typeof window === 'undefined' && waitingForResultsRef?.current) {
     __use(waitingForResultsRef.current);
+    if (widget.$$type !== 'ais.dynamicWidgets' && search.helper?.lastResults) {
+      __use(waitingForResultsRef.current);
+    }
   }
 }

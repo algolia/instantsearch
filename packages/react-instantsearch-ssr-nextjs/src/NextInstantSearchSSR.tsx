@@ -1,6 +1,12 @@
+import historyRouter from 'instantsearch.js/es/lib/routers/history';
 import { getInitialResults } from 'instantsearch.js/es/lib/server';
-import { walkIndex } from 'instantsearch.js/es/lib/utils';
-import { ServerInsertedHTMLContext } from 'next/navigation';
+import { safelyRunOnBrowser, walkIndex } from 'instantsearch.js/es/lib/utils';
+import { headers } from 'next/headers';
+import {
+  ServerInsertedHTMLContext,
+  usePathname,
+  useSearchParams,
+} from 'next/navigation';
 import React, { useContext, useRef } from 'react';
 import {
   InstantSearch,
@@ -11,8 +17,8 @@ import {
   wrapPromiseWithState,
 } from 'react-instantsearch-core';
 
-import type { InitialResults, UiState } from 'instantsearch.js';
-import type { ReactNode } from 'react';
+import type { InitialResults, StateMapping, UiState } from 'instantsearch.js';
+import type { BrowserHistoryArgs } from 'instantsearch.js/es/lib/routers/history';
 import type {
   InstantSearchProps,
   PromiseWithState,
@@ -25,35 +31,66 @@ declare global {
   }
 }
 
+export type NextInstantSearchSSRRouting<TUiState, TRouteState> = {
+  router?: BrowserHistoryArgs<TRouteState>;
+  stateMapping?: StateMapping<TUiState, TRouteState>;
+};
+
 export type NextInstantSearchSSRProps<
   TUiState extends UiState = UiState,
   TRouteState = TUiState
-> = {
-  children: ReactNode;
-} & InstantSearchProps<TUiState, TRouteState>;
+> = Omit<InstantSearchProps<TUiState, TRouteState>, 'routing'> & {
+  routing?: NextInstantSearchSSRRouting<TUiState, TRouteState> | boolean;
+};
 
 export function NextInstantSearchSSR<
   TUiState extends UiState = UiState,
   TRouteState = TUiState
 >({
   children,
+  routing: passedRouting,
   ...instantSearchProps
 }: NextInstantSearchSSRProps<TUiState, TRouteState>) {
-  const promiseRef = useRef<PromiseWithState<void> | null>(null);
-  const isServerSide = typeof window === 'undefined';
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  let initialResults;
-  if (!isServerSide) {
-    initialResults = window[InstantSearchInitialResults]?.pop();
+  const promiseRef = useRef<PromiseWithState<void> | null>(null);
+
+  const initialResults = safelyRunOnBrowser(() =>
+    window[InstantSearchInitialResults]?.pop()
+  );
+
+  const routing: InstantSearchProps<TUiState, TRouteState>['routing'] =
+    passedRouting && {};
+  if (routing) {
+    let browserHistoryOptions: Partial<BrowserHistoryArgs<TRouteState>> = {};
+    browserHistoryOptions.getLocation = () => {
+      if (typeof window === 'undefined') {
+        let url = `${
+          headers().get('x-forwarded-proto') || 'http'
+        }://${headers().get('host')}${pathname}`;
+        searchParams.size > 0 && (url += `?${searchParams}`);
+        return new URL(url) as unknown as Location;
+      }
+      return window.location;
+    };
+    if (typeof passedRouting === 'object') {
+      browserHistoryOptions = {
+        ...browserHistoryOptions,
+        ...passedRouting.router,
+      };
+      routing.stateMapping = passedRouting.stateMapping;
+    }
+    routing.router = historyRouter(browserHistoryOptions);
   }
 
   return (
     <InstantSearchRSCContext.Provider value={promiseRef}>
       <InstantSearchSSRProvider initialResults={initialResults}>
-        <InstantSearch {...instantSearchProps}>
-          {isServerSide && <InitializePromise />}
+        <InstantSearch {...instantSearchProps} routing={routing}>
+          {!initialResults && <InitializePromise />}
           {children}
-          {isServerSide && <TriggerSearch />}
+          {!initialResults && <TriggerSearch />}
         </InstantSearch>
       </InstantSearchSSRProvider>
     </InstantSearchRSCContext.Provider>
@@ -69,9 +106,9 @@ function InitializePromise() {
       throw new Error('Missing ServerInsertedHTMLContext');
     });
 
-  const waitForRender = () =>
+  const waitForResults = () =>
     new Promise<void>((resolve) => {
-      search.once('render', () => {
+      search.mainHelper!.derivedHelpers[0].on('result', () => {
         resolve();
       });
     });
@@ -91,7 +128,7 @@ function InitializePromise() {
 
   if (waitForResultsRef?.current === null) {
     waitForResultsRef.current = wrapPromiseWithState(
-      waitForRender()
+      waitForResults()
         .then(() => {
           let shouldRefetch = false;
           walkIndex(search.mainIndex, (index) => {
@@ -102,9 +139,7 @@ function InitializePromise() {
 
           if (shouldRefetch) {
             waitForResultsRef.current = wrapPromiseWithState(
-              // We have to wait for 2 renders, one for the dynamic widgets to be
-              // rendered, and one for the results to be received.
-              waitForRender().then(waitForRender).then(injectInitialResults)
+              waitForResults().then(injectInitialResults)
             );
           }
 
