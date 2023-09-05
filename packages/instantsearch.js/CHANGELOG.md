@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.56.10](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.56.9...instantsearch.js@4.56.10) (2023-09-05)
+
+
+### Bug Fixes
+
+* **server:** allow detached index (no rootIndexName) in SSR ([#5832](https://github.com/algolia/instantsearch.js/issues/5832)) ([bed6c5f](https://github.com/algolia/instantsearch.js/commit/bed6c5fd003da7ba85618cd5f2fb4ff1e60c50f9)), closes [#5831](https://github.com/algolia/instantsearch.js/issues/5831)
+
+
+
+
+
 ## [4.56.9](https://github.com/algolia/instantsearch.js/compare/instantsearch.js@4.56.8...instantsearch.js@4.56.9) (2023-08-08)
 
 
