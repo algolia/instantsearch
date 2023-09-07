@@ -81,6 +81,7 @@ export function CurrentRefinements({
         className={cx(
           'ais-CurrentRefinements-list',
           classNames.list,
+          /* @MAJOR remove to ensure conformity with InstantSearch.css specs */
           !hasRefinements &&
             cx(
               'ais-CurrentRefinements-list--noRefinement',
