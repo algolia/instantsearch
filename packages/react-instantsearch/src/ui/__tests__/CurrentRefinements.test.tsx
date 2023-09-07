@@ -199,7 +199,7 @@ describe('CurrentRefinements', () => {
                 <span
                   class="ais-CurrentRefinements-label LABEL"
                 >
-                  brand
+                  Brand
                   :
                 </span>
                 <span
