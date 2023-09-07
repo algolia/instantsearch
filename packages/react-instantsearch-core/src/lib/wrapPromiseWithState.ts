@@ -1,15 +1,15 @@
 // Taken from https://github.com/apollographql/apollo-client/blob/ba3e7d9fa7d46e4c636148bbf01552833db0ceda/src/utilities/promises/decoration.ts
 
-export interface PendingPromise<TValue> extends Promise<TValue> {
+interface PendingPromise<TValue> extends Promise<TValue> {
   status: 'pending';
 }
 
-export interface FulfilledPromise<TValue> extends Promise<TValue> {
+interface FulfilledPromise<TValue> extends Promise<TValue> {
   status: 'fulfilled';
   value: TValue;
 }
 
-export interface RejectedPromise<TValue> extends Promise<TValue> {
+interface RejectedPromise<TValue> extends Promise<TValue> {
   status: 'rejected';
   reason: unknown;
 }
@@ -19,7 +19,7 @@ export type PromiseWithState<TValue> =
   | FulfilledPromise<TValue>
   | RejectedPromise<TValue>;
 
-export function isStatefulPromise<TValue>(
+function isStatefulPromise<TValue>(
   promise: Promise<TValue>
 ): promise is PromiseWithState<TValue> {
   return 'status' in promise;

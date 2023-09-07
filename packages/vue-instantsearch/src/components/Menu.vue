@@ -39,9 +39,9 @@
         :disabled="!state.canToggleShowMore"
         @click.prevent="state.toggleShowMore()"
       >
-        <slot name="showMoreLabel" :is-showing-more="state.isShowingMore">{{
-          state.isShowingMore ? 'Show less' : 'Show more'
-        }}</slot>
+        <slot name="showMoreLabel" :is-showing-more="state.isShowingMore">
+          {{ state.isShowingMore ? 'Show less' : 'Show more' }}
+        </slot>
       </button>
     </slot>
   </div>

@@ -33,14 +33,14 @@ references:
 defaults: &defaults
   working_directory: ~/instantsearch
   docker:
-    - image: cimg/node:14.18.0
+    - image: cimg/node:16.12.0
 
 workflows:
   version: 2
   ci:
     when:
       not:
-        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+        equal: [scheduled_pipeline, << pipeline.trigger_source >>]
     jobs:
       - build:
           context: fx-libraries
@@ -106,8 +106,8 @@ workflows:
     # See: https://app.circleci.com/settings/project/github/algolia/instantsearch/triggers
     when:
       and:
-        - equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
-        - equal: [ scheduled_release, << pipeline.schedule.name >> ]
+        - equal: [scheduled_pipeline, << pipeline.trigger_source >>]
+        - equal: [scheduled_release, << pipeline.schedule.name >>]
     jobs:
       - prepare release:
           context: fx-libraries
@@ -116,8 +116,8 @@ workflows:
     # See: https://app.circleci.com/settings/project/github/algolia/instantsearch/triggers
     when:
       and:
-        - equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
-        - equal: [ scheduled_e2e, << pipeline.schedule.name >> ]
+        - equal: [scheduled_pipeline, << pipeline.trigger_source >>]
+        - equal: [scheduled_e2e, << pipeline.schedule.name >>]
     jobs:
       - build:
           context: fx-libraries
@@ -163,6 +163,7 @@ jobs:
             - packages/react-instantsearch/dist
             - packages/react-instantsearch-core/dist
             - packages/react-instantsearch-router-nextjs/dist
+            - packages/react-instantsearch-ssr-nextjs/dist
             - packages/vue-instantsearch/vue2
             - packages/vue-instantsearch/vue3
 

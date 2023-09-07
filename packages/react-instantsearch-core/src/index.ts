@@ -29,4 +29,7 @@ export * from './connectors/useToggleRefinement';
 export * from './hooks/useConnector';
 export * from './hooks/useInstantSearch';
 export * from './server';
-export * from './components/InstantSearchWrapper';
+export * from './lib/wrapPromiseWithState';
+export * from './lib/useInstantSearchContext';
+export * from './lib/useRSCContext';
+export * from './lib/InstantSearchRSCContext';
