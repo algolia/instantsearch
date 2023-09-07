@@ -72,6 +72,7 @@ const CurrentRefinements = ({
 
               <button
                 className={cssClasses.delete}
+                type="button"
                 onClick={handleClick(item.refine.bind(null, refinement))}
               >
                 ✕

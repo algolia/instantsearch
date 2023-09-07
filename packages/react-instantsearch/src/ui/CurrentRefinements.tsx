@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { cx } from './lib/cx';
-import { isModifierClick } from './lib/isModifierClick';
+import { capitalize, cx, isModifierClick } from './lib';
 
 import type {
   CurrentRefinementsConnectorParamsItem,
@@ -97,7 +96,7 @@ export function CurrentRefinements({
             <span
               className={cx('ais-CurrentRefinements-label', classNames.label)}
             >
-              {item.label}:
+              {capitalize(item.label)}:
             </span>
             {item.refinements.map((refinement) => (
               <span

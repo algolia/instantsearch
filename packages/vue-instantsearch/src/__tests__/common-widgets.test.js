@@ -364,6 +364,45 @@ const testSetups = {
 
     await nextTick();
   },
+  async createCurrentRefinementsWidgetTests({
+    instantSearchOptions,
+    widgetParams,
+    testParams,
+  }) {
+    const refinementListAttributes = Object.keys(
+      instantSearchOptions.initialUiState?.indexName.refinementList || {}
+    );
+
+    const search = (h) =>
+      h(AisInstantSearch, { props: instantSearchOptions }, [
+        ...refinementListAttributes.map((attribute) =>
+          h(AisRefinementList, { props: { attribute } })
+        ),
+        h(AisCurrentRefinements, { props: widgetParams }),
+        h(GlobalErrorSwallower),
+      ]);
+
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          testParams?.formWrapperSubmitHandler
+            ? h(
+                'form',
+                {
+                  on: {
+                    submit: testParams.formWrapperSubmitHandler,
+                  },
+                },
+                [search(h)]
+              )
+            : search(h)
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
+  },
 };
 
 const testOptions = {
@@ -378,6 +417,7 @@ const testOptions = {
   createInstantSearchWidgetTests: undefined,
   createHitsPerPageWidgetTests: undefined,
   createClearRefinementsWidgetTests: undefined,
+  createCurrentRefinementsWidgetTests: undefined,
 };
 
 describe('Common widget tests (Vue InstantSearch)', () => {

@@ -242,6 +242,32 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
+  createCurrentRefinementsWidgetTests({
+    instantSearchOptions,
+    widgetParams,
+    testParams,
+  }) {
+    const refinementListAttributes = Object.keys(
+      instantSearchOptions.initialUiState?.indexName?.refinementList || {}
+    );
+    const search = (
+      <InstantSearch {...instantSearchOptions}>
+        {refinementListAttributes.map((attribute) => (
+          <RefinementList key={attribute} attribute={attribute} />
+        ))}
+        <CurrentRefinements {...widgetParams} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+
+    render(
+      testParams?.formWrapperSubmitHandler ? (
+        <form onSubmit={testParams.formWrapperSubmitHandler}>{search}</form>
+      ) : (
+        search
+      )
+    );
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -256,6 +282,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createInstantSearchWidgetTests: { act },
   createHitsPerPageWidgetTests: { act },
   createClearRefinementsWidgetTests: { act },
+  createCurrentRefinementsWidgetTests: { act },
 };
 
 /**
