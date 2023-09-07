@@ -319,6 +319,7 @@ export function createOptionsTests(
           indexName: 'indexName',
           initialUiState: {
             indexName: {
+              query: 'iPhone',
               refinementList: {
                 brand: ['Apple'],
                 categories: ['Audio'],
@@ -327,7 +328,7 @@ export function createOptionsTests(
           },
         },
         widgetParams: {
-          includedAttributes: ['categories'],
+          includedAttributes: ['categories', 'query'],
         },
       });
 
@@ -338,8 +339,10 @@ export function createOptionsTests(
       const container = document.querySelector<HTMLElement>(
         '.ais-CurrentRefinements'
       )!;
+
       expect(queryByText(container, 'Apple')).toBeNull();
       expect(queryByText(container, 'Audio')).not.toBeNull();
+      expect(queryByText(container, 'iPhone')).not.toBeNull();
     });
 
     it('exclusively restricts what refinements to display', async () => {
@@ -349,6 +352,7 @@ export function createOptionsTests(
           indexName: 'indexName',
           initialUiState: {
             indexName: {
+              query: 'iPhone',
               refinementList: {
                 brand: ['Apple'],
                 categories: ['Audio'],
@@ -357,7 +361,7 @@ export function createOptionsTests(
           },
         },
         widgetParams: {
-          excludedAttributes: ['brand'],
+          excludedAttributes: ['brand', 'query'],
         },
       });
 
@@ -370,6 +374,7 @@ export function createOptionsTests(
       )!;
       expect(queryByText(container, 'Apple')).toBeNull();
       expect(queryByText(container, 'Audio')).not.toBeNull();
+      expect(queryByText(container, 'iPhone')).toBeNull();
     });
 
     it('restricts what refinements to display with custom logic', async () => {

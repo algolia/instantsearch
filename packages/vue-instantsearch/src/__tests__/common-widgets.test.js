@@ -375,6 +375,7 @@ const testSetups = {
 
     const search = (h) =>
       h(AisInstantSearch, { props: instantSearchOptions }, [
+        h(AisSearchBox),
         ...refinementListAttributes.map((attribute) =>
           h(AisRefinementList, { props: { attribute } })
         ),

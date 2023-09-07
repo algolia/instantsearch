@@ -340,6 +340,9 @@ const testSetups: TestSetupsMap<TestSuites> = {
 
     instantsearch(instantSearchOptions)
       .addWidgets([
+        searchBox({
+          container: container.appendChild(document.createElement('div')),
+        }),
         ...refinementListAttributes.map((attribute) =>
           refinementList({
             container: container.appendChild(document.createElement('div')),

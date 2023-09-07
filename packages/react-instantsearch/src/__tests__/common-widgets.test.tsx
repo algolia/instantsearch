@@ -252,6 +252,7 @@ const testSetups: TestSetupsMap<TestSuites> = {
     );
     const search = (
       <InstantSearch {...instantSearchOptions}>
+        <SearchBox />
         {refinementListAttributes.map((attribute) => (
           <RefinementList key={attribute} attribute={attribute} />
         ))}
