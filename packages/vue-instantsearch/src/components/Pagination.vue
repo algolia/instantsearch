@@ -1,7 +1,7 @@
 <template>
   <div v-if="state" :class="suit()">
     <slot
-      :refine="(page) => refine(page, $event)"
+      :refine="refine"
       :createURL="state.createURL"
       :current-refinement="state.currentRefinement"
       :nb-hits="state.nbHits"
@@ -23,14 +23,14 @@
             name="first"
             :createURL="() => state.createURL(0)"
             :is-first-page="state.isFirstPage"
-            :refine="() => refine(0, $event)"
+            :refine="() => refine(0)"
           >
             <template v-if="!state.isFirstPage">
               <a
                 :class="suit('link')"
                 aria-label="First"
                 :href="state.createURL(0)"
-                @click.prevent="refine(0, $event)"
+                @click.exact.left.prevent="refine(0)"
                 >‹‹</a
               >
             </template>
@@ -51,14 +51,14 @@
             name="previous"
             :createURL="() => state.createURL(state.currentRefinement - 1)"
             :is-first-page="state.isFirstPage"
-            :refine="() => refine(state.currentRefinement - 1, $event)"
+            :refine="() => refine(state.currentRefinement - 1)"
           >
             <template v-if="!state.isFirstPage">
               <a
                 :class="suit('link')"
                 aria-label="Previous"
                 :href="state.createURL(state.currentRefinement - 1)"
-                @click.prevent="refine(state.currentRefinement - 1, $event)"
+                @click.exact.left.prevent="refine(state.currentRefinement - 1)"
                 >‹</a
               >
             </template>
@@ -83,13 +83,13 @@
             :createURL="() => state.createURL(page)"
             :is-first-page="state.isFirstPage"
             :is-last-page="state.isLastPage"
-            :refine="() => refine(page, $event)"
+            :refine="() => refine(page)"
           >
             <a
               :class="suit('link')"
               :href="state.createURL(page)"
               :aria-label="`Page ${page + 1}`"
-              @click.prevent="refine(page, $event)"
+              @click.exact.left.prevent="refine(page)"
               >{{ page + 1 }}</a
             >
           </slot>
@@ -107,14 +107,14 @@
             name="next"
             :createURL="() => state.createURL(state.currentRefinement + 1)"
             :is-last-page="state.isLastPage"
-            :refine="() => refine(state.currentRefinement + 1, $event)"
+            :refine="() => refine(state.currentRefinement + 1)"
           >
             <template v-if="!state.isLastPage">
               <a
                 :class="suit('link')"
                 aria-label="Next"
                 :href="state.createURL(state.currentRefinement + 1)"
-                @click.prevent="refine(state.currentRefinement + 1, $event)"
+                @click.exact.left.prevent="refine(state.currentRefinement + 1)"
                 >›</a
               >
             </template>
@@ -135,14 +135,14 @@
             name="last"
             :createURL="() => state.createURL(state.nbPages - 1)"
             :is-last-page="state.isLastPage"
-            :refine="() => refine(state.nbPages - 1, $event)"
+            :refine="() => refine(state.nbPages - 1)"
           >
             <template v-if="!state.isLastPage">
               <a
                 :class="suit('link')"
                 aria-label="Last"
                 :href="state.createURL(state.nbPages - 1)"
-                @click.prevent="refine(state.nbPages - 1, $event)"
+                @click.exact.left.prevent="refine(state.nbPages - 1)"
                 >››</a
               >
             </template>
@@ -162,7 +162,6 @@ import { connectPagination } from 'instantsearch.js/es/connectors';
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
-import { isModifierClick } from '../util/isModifierClick';
 
 export default {
   name: 'AisPagination',
@@ -220,11 +219,7 @@ export default {
   },
   emits: ['page-change'],
   methods: {
-    refine(page, event) {
-      if (isModifierClick(event)) {
-        return;
-      }
-
+    refine(page) {
       const p = Math.min(Math.max(page, 0), this.state.nbPages - 1);
       this.state.refine(p);
       // TODO: do this in a general way
