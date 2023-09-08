@@ -54,24 +54,22 @@ program
   .option('--config <config>', 'The configuration file to get the options from')
   .option('--no-installation', 'Ignore dependency installation')
   .option('--no-interactive', 'Ask no interactive questions')
-  .action(dest => {
+  .action((dest) => {
     appPathFromArgument = dest;
   })
   .parse(process.argv);
 
 const optionsFromArguments = program.opts();
-const {
-  attributesToDisplay = [],
-  attributesForFaceting = [],
-} = optionsFromArguments;
+const { attributesToDisplay = [], attributesForFaceting = [] } =
+  optionsFromArguments;
 
 const getQuestions = ({ appName }) => ({
   application: [
     {
       type: 'list',
       name: 'libraryVersion',
-      message: answers => `${answers.template} version`,
-      choices: async answers => {
+      message: (answers) => `${answers.template} version`,
+      choices: async (answers) => {
         const templatePath = getTemplatePath(answers.template);
         const templateConfig = getAppTemplateConfig(templatePath);
         const { libraryName } = templateConfig;
@@ -115,7 +113,7 @@ const getQuestions = ({ appName }) => ({
           ];
         }
       },
-      when: answers => {
+      when: (answers) => {
         const templatePath = getTemplatePath(answers.template);
         const templateConfig = getAppTemplateConfig(templatePath);
 
@@ -148,7 +146,7 @@ const getQuestions = ({ appName }) => ({
         'Used to generate the default result template'
       )}`,
       pageSize: 10,
-      choices: async answers => [
+      choices: async (answers) => [
         {
           name: 'None',
           value: undefined,
@@ -157,7 +155,7 @@ const getQuestions = ({ appName }) => ({
         new inquirer.Separator('From your index'),
         ...(await getAttributesFromIndex(answers)),
       ],
-      filter: attributes => attributes.filter(Boolean),
+      filter: (attributes) => attributes.filter(Boolean),
       when: ({ appId, apiKey, indexName }) =>
         attributesToDisplay.length === 0 && appId && apiKey && indexName,
     },
@@ -167,7 +165,7 @@ const getQuestions = ({ appName }) => ({
       message: 'Attributes for faceting',
       suffix: `\n  ${chalk.gray('Used to filter the search interface')}`,
       pageSize: 10,
-      choices: async answers => {
+      choices: async (answers) => {
         const templatePath = getTemplatePath(answers.template);
         const templateConfig = getAppTemplateConfig(templatePath);
 
@@ -199,7 +197,7 @@ const getQuestions = ({ appName }) => ({
           new inquirer.Separator(),
         ];
       },
-      filter: attributes => attributes.filter(Boolean),
+      filter: (attributes) => attributes.filter(Boolean),
       when: ({ appId, apiKey, indexName }) =>
         attributesForFaceting.length === 0 && appId && apiKey && indexName,
     },
@@ -332,7 +330,7 @@ async function run() {
     ...(await inquirer.prompt(initialQuestions, args)),
   };
 
-  initialQuestions.forEach(question => {
+  initialQuestions.forEach((question) => {
     // .default doesn't get executed when "when" returns false
     if (!initialAnswers[question.name] && question.default) {
       const defaultValue = question.default(initialAnswers);
@@ -372,7 +370,7 @@ async function run() {
 
   const answers = await inquirer.prompt(
     getQuestions({ appName })[implementationType].filter(
-      question => !isQuestionAsked({ question, args: optionsFromArguments })
+      (question) => !isQuestionAsked({ question, args: optionsFromArguments })
     ),
     getAnswersDefaultValues(optionsFromArguments, configuration, template)
   );
@@ -392,7 +390,7 @@ async function run() {
   await app.create();
 }
 
-run().catch(err => {
+run().catch((err) => {
   console.error(err.message);
   console.log();
 
