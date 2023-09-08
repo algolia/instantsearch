@@ -8,12 +8,6 @@ import type { CurrentRefinementsWidget } from 'instantsearch.js/es/widgets/curre
 type WidgetParams = Parameters<CurrentRefinementsWidget>[0];
 export type CurrentRefinementsWidgetSetup = TestSetup<{
   widgetParams: Omit<WidgetParams, 'container'>;
-  testParams?: {
-    /**
-     * Sets up an InstantSearch instance wrapped in a form element with the provided `onSubmit` event handler.
-     */
-    formWrapperSubmitHandler?: jest.Mock<any, any>;
-  };
 }>;
 
 export function createCurrentRefinementsWidgetTests(
