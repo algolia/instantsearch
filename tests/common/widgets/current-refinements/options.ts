@@ -86,7 +86,7 @@ export function createOptionsTests(
               <span
                 class="ais-CurrentRefinements-label"
               >
-                Feature: 
+                Feature:
               </span>
               <span
                 class="ais-CurrentRefinements-category"
@@ -125,7 +125,7 @@ export function createOptionsTests(
               <span
                 class="ais-CurrentRefinements-label"
               >
-                Brand: 
+                Brand:
               </span>
               <span
                 class="ais-CurrentRefinements-category"
@@ -164,7 +164,7 @@ export function createOptionsTests(
               <span
                 class="ais-CurrentRefinements-label"
               >
-                HierarchicalCategories.lvl0: 
+                HierarchicalCategories.lvl0:
               </span>
               <span
                 class="ais-CurrentRefinements-category"
@@ -188,7 +188,7 @@ export function createOptionsTests(
               <span
                 class="ais-CurrentRefinements-label"
               >
-                Price: 
+                Price:
               </span>
               <span
                 class="ais-CurrentRefinements-category"
@@ -318,7 +318,6 @@ export function createOptionsTests(
     });
 
     it('does not trigger default event', async () => {
-      const formWrapperSubmitHandler = jest.fn();
       await setup({
         instantSearchOptions: {
           searchClient,
@@ -333,9 +332,6 @@ export function createOptionsTests(
           },
         },
         widgetParams: {},
-        testParams: {
-          formWrapperSubmitHandler,
-        },
       });
 
       await act(async () => {
