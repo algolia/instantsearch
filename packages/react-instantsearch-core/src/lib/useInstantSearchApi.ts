@@ -126,6 +126,7 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
     }
 
     warnNextRouter(props.routing);
+    warnNextAppDir(Boolean(waitingForResultsRef));
 
     searchRef.current = search;
   }
@@ -269,6 +270,22 @@ Please check its usage instructions: https://github.com/algolia/instantsearch/tr
 You can ignore this warning if you are using a custom router that suits your needs, it won't be outputted in production builds.`
     );
   }
+}
+
+function warnNextAppDir(isRscContextDefined: boolean) {
+  if (!__DEV__ || typeof window === 'undefined' || isRscContextDefined) {
+    return;
+  }
+
+  warn(
+    Boolean((window as any).next?.appDir) === false,
+    `
+We've detected you are using Next.js with the App Router.
+We released an **experimental** package called "react-instantsearch-ssr-nextjs" that makes SSR work with the App Router.
+Please check its usage instructions: https://www.algolia.com/doc/guides/building-search-ui/going-further/server-side-rendering/react/#with-nextjs
+
+This warning will not be outputted in production builds.`
+  );
 }
 
 /**
