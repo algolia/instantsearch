@@ -97,7 +97,7 @@ export function CurrentRefinements({
             <span
               className={cx('ais-CurrentRefinements-label', classNames.label)}
             >
-              {capitalize(item.label)}:
+              {capitalize(item.label)}:{' '}
             </span>
             {item.refinements.map((refinement) => (
               <span

@@ -15,7 +15,7 @@ exports[`CurrentRefinements options.refinements can be used with a disjunctive f
           class="label"
         >
           CustomDisjunctiveFacet
-          :
+          : 
         </span>
         <span
           class="category"
@@ -53,7 +53,7 @@ exports[`CurrentRefinements options.refinements can be used with a facet 1`] = `
           class="label"
         >
           CustomFacet
-          :
+          : 
         </span>
         <span
           class="category"
@@ -91,7 +91,7 @@ exports[`CurrentRefinements options.refinements can be used with a hierarchical 
           class="label"
         >
           CustomHierarchicalFacet
-          :
+          : 
         </span>
         <span
           class="category"
@@ -129,7 +129,7 @@ exports[`CurrentRefinements options.refinements can be used with a query 1`] = `
           class="label"
         >
           Query
-          :
+          : 
         </span>
         <span
           class="category"
@@ -169,7 +169,7 @@ exports[`CurrentRefinements options.refinements can be used with a tag 1`] = `
           class="label"
         >
           _tags
-          :
+          : 
         </span>
         <span
           class="category"
@@ -207,7 +207,7 @@ exports[`CurrentRefinements options.refinements can be used with an exclude 1`] 
           class="label"
         >
           CustomExcludeFacet
-          :
+          : 
         </span>
         <span
           class="category"
@@ -245,7 +245,7 @@ exports[`CurrentRefinements options.refinements can be used with numeric filters
           class="label"
         >
           CustomNumericFilter
-          :
+          : 
         </span>
         <span
           class="category"
@@ -270,7 +270,7 @@ exports[`CurrentRefinements options.refinements can be used with numeric filters
           class="label"
         >
           CustomNumericFilter
-          :
+          : 
         </span>
         <span
           class="category"
@@ -295,7 +295,7 @@ exports[`CurrentRefinements options.refinements can be used with numeric filters
           class="label"
         >
           CustomNumericFilter
-          :
+          : 
         </span>
         <span
           class="category"
@@ -333,7 +333,7 @@ exports[`CurrentRefinements renders 1`] = `
           class="label"
         >
           Facet
-          :
+          : 
         </span>
         <span
           class="category"
@@ -373,7 +373,7 @@ exports[`CurrentRefinements renders 1`] = `
           class="label"
         >
           FacetExclude
-          :
+          : 
         </span>
         <span
           class="category"
@@ -398,7 +398,7 @@ exports[`CurrentRefinements renders 1`] = `
           class="label"
         >
           Disjunctive
-          :
+          : 
         </span>
         <span
           class="category"
@@ -423,7 +423,7 @@ exports[`CurrentRefinements renders 1`] = `
           class="label"
         >
           Hierarchical
-          :
+          : 
         </span>
         <span
           class="category"
@@ -448,7 +448,7 @@ exports[`CurrentRefinements renders 1`] = `
           class="label"
         >
           Numeric
-          :
+          : 
         </span>
         <span
           class="category"
@@ -473,7 +473,7 @@ exports[`CurrentRefinements renders 1`] = `
           class="label"
         >
           Tag
-          :
+          : 
         </span>
         <span
           class="category"
