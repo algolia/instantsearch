@@ -41,14 +41,22 @@ export function getInitialResults(rootIndex: IndexWidget): InitialResults {
   const initialResults: InitialResults = {};
 
   walkIndex(rootIndex, (widget) => {
-    const searchResults = widget.getResults()!;
-    initialResults[widget.getIndexId()] = {
-      // We convert the Helper state to a plain object to pass parsable data
-      // structures from server to client.
-      state: { ...searchResults._state },
-      results: searchResults._rawResults,
-    };
+    const searchResults = widget.getResults();
+    if (searchResults) {
+      initialResults[widget.getIndexId()] = {
+        // We convert the Helper state to a plain object to pass parsable data
+        // structures from server to client.
+        state: { ...searchResults._state },
+        results: searchResults._rawResults,
+      };
+    }
   });
+
+  if (Object.keys(initialResults).length === 0) {
+    throw new Error(
+      'The root index does not have any results. Make sure you have at least one widget that provides results.'
+    );
+  }
 
   return initialResults;
 }

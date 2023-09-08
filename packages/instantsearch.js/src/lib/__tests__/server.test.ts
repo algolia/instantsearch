@@ -78,7 +78,11 @@ describe('getInitialResults', () => {
       searchClient: createSearchClient(),
     });
 
-    expect(() => getInitialResults(search.mainIndex)).toThrow();
+    expect(() =>
+      getInitialResults(search.mainIndex)
+    ).toThrowErrorMatchingInlineSnapshot(
+      `"The root index does not have any results. Make sure you have at least one widget that provides results."`
+    );
   });
 
   test('returns the current results from one index', async () => {
@@ -86,6 +90,47 @@ describe('getInitialResults', () => {
       indexName: 'indexName',
       searchClient: createSearchClient(),
     });
+
+    search.start();
+
+    await waitForResults(search);
+
+    expect(getInitialResults(search.mainIndex)).toEqual({
+      indexName: {
+        state: {
+          disjunctiveFacets: [],
+          disjunctiveFacetsRefinements: {},
+          facets: [],
+          facetsExcludes: {},
+          facetsRefinements: {},
+          hierarchicalFacets: [],
+          hierarchicalFacetsRefinements: {},
+          index: 'indexName',
+          numericRefinements: {},
+          tagRefinements: [],
+        },
+        results: [
+          {
+            exhaustiveFacetsCount: true,
+            exhaustiveNbHits: true,
+            hits: [],
+            hitsPerPage: 20,
+            nbHits: 0,
+            nbPages: 0,
+            page: 0,
+            params: '',
+            processingTimeMS: 0,
+            query: '',
+          },
+        ],
+      },
+    });
+  });
+
+  test('returns the current results from one non-rootindex', async () => {
+    const search = instantsearch({
+      searchClient: createSearchClient(),
+    }).addWidgets([index({ indexName: 'indexName' })]);
 
     search.start();
 
