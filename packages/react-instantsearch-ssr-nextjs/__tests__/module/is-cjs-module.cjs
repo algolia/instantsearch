@@ -2,6 +2,7 @@
 
 const assert = require('assert');
 
+require('next');
 const ReactInstantSearchSSRNext = require('react-instantsearch-ssr-nextjs');
 
 assert.ok(ReactInstantSearchSSRNext);

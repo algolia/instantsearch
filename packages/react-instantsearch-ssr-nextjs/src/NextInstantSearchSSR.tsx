@@ -1,21 +1,16 @@
 import historyRouter from 'instantsearch.js/es/lib/routers/history';
-import { getInitialResults } from 'instantsearch.js/es/lib/server';
-import { safelyRunOnBrowser, walkIndex } from 'instantsearch.js/es/lib/utils';
+import { safelyRunOnBrowser } from 'instantsearch.js/es/lib/utils';
 import { headers } from 'next/headers';
-import {
-  ServerInsertedHTMLContext,
-  usePathname,
-  useSearchParams,
-} from 'next/navigation';
-import React, { useContext, useRef } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
+import React, { useRef } from 'react';
 import {
   InstantSearch,
   InstantSearchRSCContext,
   InstantSearchSSRProvider,
-  useInstantSearchContext,
-  useRSCContext,
-  wrapPromiseWithState,
 } from 'react-instantsearch-core';
+
+import { InitializePromise } from './InitializePromise';
+import { TriggerSearch } from './TriggerSearch';
 
 import type { InitialResults, StateMapping, UiState } from 'instantsearch.js';
 import type { BrowserHistoryArgs } from 'instantsearch.js/es/lib/routers/history';
@@ -95,75 +90,4 @@ export function NextInstantSearchSSR<
       </InstantSearchSSRProvider>
     </InstantSearchRSCContext.Provider>
   );
-}
-
-function InitializePromise() {
-  const search = useInstantSearchContext();
-  const waitForResultsRef = useRSCContext();
-  const insertHTML =
-    useContext(ServerInsertedHTMLContext) ||
-    (() => {
-      throw new Error('Missing ServerInsertedHTMLContext');
-    });
-
-  const waitForResults = () =>
-    new Promise<void>((resolve) => {
-      search.mainHelper!.derivedHelpers[0].on('result', () => {
-        resolve();
-      });
-    });
-
-  const injectInitialResults = () => {
-    const results = getInitialResults(search.mainIndex);
-    insertHTML(() => (
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `(window[Symbol.for("InstantSearchInitialResults")] ??= []).push(${JSON.stringify(
-            results
-          )})`,
-        }}
-      />
-    ));
-  };
-
-  if (waitForResultsRef?.current === null) {
-    waitForResultsRef.current = wrapPromiseWithState(
-      waitForResults()
-        .then(() => {
-          let shouldRefetch = false;
-          walkIndex(search.mainIndex, (index) => {
-            shouldRefetch = index
-              .getWidgets()
-              .some((widget) => widget.$$type === 'ais.dynamicWidgets');
-          });
-
-          if (shouldRefetch) {
-            waitForResultsRef.current = wrapPromiseWithState(
-              waitForResults().then(injectInitialResults)
-            );
-          }
-
-          return shouldRefetch;
-        })
-        .then((shouldRefetch) => {
-          if (shouldRefetch) {
-            return;
-          }
-          injectInitialResults();
-        })
-    );
-  }
-
-  return null;
-}
-
-function TriggerSearch() {
-  const instantsearch = useInstantSearchContext();
-  const waitForResultsRef = useRSCContext();
-
-  if (waitForResultsRef?.current?.status === 'pending') {
-    instantsearch.mainHelper?.searchOnlyWithDerivedHelpers();
-  }
-
-  return null;
 }
