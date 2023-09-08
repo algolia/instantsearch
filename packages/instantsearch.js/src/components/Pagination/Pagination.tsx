@@ -158,8 +158,8 @@ function PaginationLink({
     <li
       className={cx(
         cssClasses.item,
-        className,
         isDisabled && cssClasses.disabledItem,
+        className,
         isSelected && cssClasses.selectedItem
       )}
     >
@@ -168,6 +168,7 @@ function PaginationLink({
           rootTagName="span"
           rootProps={{
             className: cssClasses.link,
+            'aria-label': ariaLabel,
           }}
           templateKey={templateKey}
           templates={templates}
