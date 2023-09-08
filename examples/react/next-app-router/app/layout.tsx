@@ -1,5 +1,6 @@
 import './globals.css';
 import 'instantsearch.css/themes/satellite-min.css';
+import React from 'react';
 
 export const metadata = {
   title: 'Next.js',
