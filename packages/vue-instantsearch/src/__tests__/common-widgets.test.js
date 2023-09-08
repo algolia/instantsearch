@@ -367,39 +367,27 @@ const testSetups = {
   async createCurrentRefinementsWidgetTests({
     instantSearchOptions,
     widgetParams,
-    testParams,
   }) {
     const refinementListAttributes = Object.keys(
       instantSearchOptions.initialUiState?.indexName.refinementList || {}
     );
 
-    const search = (h) =>
-      h(AisInstantSearch, { props: instantSearchOptions }, [
-        h(AisSearchBox),
-        ...refinementListAttributes.map((attribute) =>
-          h(AisRefinementList, { props: { attribute } })
-        ),
-        h(AisCurrentRefinements, { props: widgetParams }),
-        h(GlobalErrorSwallower),
-      ]);
-
     mountApp(
       {
         render: renderCompat((h) =>
-          testParams?.formWrapperSubmitHandler
-            ? h(
-                'form',
-                {
-                  on: {
-                    submit: testParams.formWrapperSubmitHandler,
-                  },
-                },
-                [search(h)]
-              )
-            : search(h)
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisSearchBox),
+            ...refinementListAttributes.map((attribute) =>
+              h(AisRefinementList, { props: { attribute } })
+            ),
+            h(AisCurrentRefinements, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
         ),
       },
-      document.body.appendChild(document.createElement('div'))
+      (document.querySelector('form') || document.body).appendChild(
+        document.createElement('div')
+      )
     );
 
     await nextTick();

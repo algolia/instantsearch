@@ -320,37 +320,26 @@ const testSetups: TestSetupsMap<TestSuites> = {
       })
       .start();
   },
-  createCurrentRefinementsWidgetTests({
-    instantSearchOptions,
-    widgetParams,
-    testParams,
-  }) {
+  createCurrentRefinementsWidgetTests({ instantSearchOptions, widgetParams }) {
     const refinementListAttributes = Object.keys(
       instantSearchOptions.initialUiState?.indexName.refinementList || {}
     );
 
-    let container: HTMLElement;
-    if (testParams?.formWrapperSubmitHandler) {
-      container = document.createElement('form');
-      container.addEventListener('submit', testParams.formWrapperSubmitHandler);
-    } else {
-      container = document.createElement('div');
-    }
-    document.body.appendChild(container);
+    const formContainer = document.querySelector('form') || document.body;
 
     instantsearch(instantSearchOptions)
       .addWidgets([
         searchBox({
-          container: container.appendChild(document.createElement('div')),
+          container: formContainer.appendChild(document.createElement('div')),
         }),
         ...refinementListAttributes.map((attribute) =>
           refinementList({
-            container: container.appendChild(document.createElement('div')),
+            container: formContainer.appendChild(document.createElement('div')),
             attribute,
           })
         ),
         currentRefinements({
-          container: container.appendChild(document.createElement('div')),
+          container: formContainer.appendChild(document.createElement('div')),
           ...widgetParams,
         }),
       ])

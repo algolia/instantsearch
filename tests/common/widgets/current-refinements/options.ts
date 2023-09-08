@@ -24,9 +24,14 @@ export function createOptionsTests(
 ) {
   describe('options', () => {
     const searchClient = createAlgoliaSearchClient({});
+    const onSubmitListener = jest.fn();
 
     beforeEach(() => {
       searchClient.search.mockClear();
+
+      const form = document.createElement('form')!;
+      form.addEventListener('submit', onSubmitListener);
+      document.body.appendChild(form);
     });
 
     it('renders with refinements', async () => {
@@ -270,7 +275,7 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      expect(formWrapperSubmitHandler).not.toHaveBeenCalled();
+      expect(onSubmitListener).not.toHaveBeenCalled();
     });
 
     it('does not clear when pressing a modifier key', async () => {
