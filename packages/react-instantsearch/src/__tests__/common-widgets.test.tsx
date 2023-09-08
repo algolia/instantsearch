@@ -244,24 +244,23 @@ const testSetups: TestSetupsMap<TestSuites> = {
   },
   createCurrentRefinementsWidgetTests({ instantSearchOptions, widgetParams }) {
     render(
-      <InstantSearch {...instantSearchOptions}>
-        <SearchBox />
-        <RefinementList attribute="brand" />
-        <RefinementList operator="and" attribute="feature" />
-        <HierarchicalMenu
-          attributes={[
-            'hierarchicalCategories.lvl0',
-            'hierarchicalCategories.lvl1',
-            'hierarchicalCategories.lvl2',
-          ]}
-        />
-        <RangeInput attribute="price" />
-        <CurrentRefinements {...widgetParams} />
-        <GlobalErrorSwallower />
-      </InstantSearch>,
-      {
-        baseElement: document.querySelector('form') || document.body,
-      }
+      <form>
+        <InstantSearch {...instantSearchOptions}>
+          <SearchBox />
+          <RefinementList attribute="brand" />
+          <RefinementList operator="and" attribute="feature" />
+          <HierarchicalMenu
+            attributes={[
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ]}
+          />
+          <RangeInput attribute="price" />
+          <CurrentRefinements {...widgetParams} />
+          <GlobalErrorSwallower />
+        </InstantSearch>
+      </form>
     );
   },
 };

@@ -29,9 +29,7 @@ export function createOptionsTests(
     beforeEach(() => {
       searchClient.search.mockClear();
 
-      const form = document.createElement('form')!;
-      form.addEventListener('submit', onSubmitListener);
-      document.body.appendChild(form);
+      document.body.addEventListener('submit', onSubmitListener);
     });
 
     it('renders with refinements', async () => {

@@ -321,7 +321,9 @@ const testSetups: TestSetupsMap<TestSuites> = {
       .start();
   },
   createCurrentRefinementsWidgetTests({ instantSearchOptions, widgetParams }) {
-    const formContainer = document.querySelector('form') || document.body;
+    const formContainer = document.body.appendChild(
+      document.createElement('form')
+    );
 
     instantsearch(instantSearchOptions)
       .addWidgets([
