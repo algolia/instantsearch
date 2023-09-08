@@ -59,6 +59,7 @@ export function createOptionsTests(
       expect(
         document.querySelector('.ais-Pagination-item--lastPage')
       ).not.toHaveClass('ais-Pagination-item--disabled');
+
       expect(
         document.querySelector('.ais-Pagination')
       ).toMatchNormalizedInlineSnapshot(
@@ -353,16 +354,16 @@ export function createOptionsTests(
 
       const firstPageItem = document.querySelector(
         '.ais-Pagination-item--firstPage'
-      );
+      )!;
       const previousPageItem = document.querySelector(
         '.ais-Pagination-item--previousPage'
-      );
+      )!;
       const nextPageItem = document.querySelector(
         '.ais-Pagination-item--nextPage'
-      );
+      )!;
       const lastPageItem = document.querySelector(
         '.ais-Pagination-item--lastPage'
-      );
+      )!;
 
       searchClient.search.mockClear();
 
@@ -371,14 +372,12 @@ export function createOptionsTests(
       expect(previousPageItem).toHaveClass('ais-Pagination-item--disabled');
 
       userEvent.click(
-        firstPageItem!.querySelector(
-          '.ais-Pagination-link'
-        ) as HTMLAnchorElement
+        firstPageItem.querySelector<HTMLAnchorElement>('.ais-Pagination-link')!
       );
       userEvent.click(
-        previousPageItem!.querySelector(
+        previousPageItem.querySelector<HTMLAnchorElement>(
           '.ais-Pagination-link'
-        ) as HTMLAnchorElement
+        )!
       );
 
       await act(async () => {
@@ -403,145 +402,14 @@ export function createOptionsTests(
         document.querySelector('.ais-Pagination-item--selected')
       ).toHaveTextContent('2');
 
-      expect(
-        document.querySelector('.ais-Pagination')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-Pagination"
-        >
-          <ul
-            class="ais-Pagination-list"
-          >
-            <li
-              class="ais-Pagination-item ais-Pagination-item--firstPage"
-            >
-              <a
-                aria-label="First"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                ‹‹
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--previousPage"
-            >
-              <a
-                aria-label="Previous"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                ‹
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 1"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                1
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
-            >
-              <a
-                aria-label="Page 2"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                2
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 3"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                3
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 4"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                4
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 5"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                5
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 6"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                6
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 7"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                7
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--nextPage"
-            >
-              <a
-                aria-label="Next"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                ›
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--lastPage"
-            >
-              <a
-                aria-label="Last"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                ››
-              </a>
-            </li>
-          </ul>
-        </div>
-      `
-      );
+      // We're on page 2, "First" and "Previous" links are no longer disabled
+      expect(firstPageItem).not.toHaveClass('ais-Pagination-item--disabled');
+      expect(previousPageItem).not.toHaveClass('ais-Pagination-item--disabled');
 
       // We click on "Next" link
-      userEvent.click(screen.getByText('›'));
+      userEvent.click(
+        nextPageItem.querySelector<HTMLAnchorElement>('.ais-Pagination-link')!
+      );
 
       await act(async () => {
         await wait(0);
@@ -556,147 +424,12 @@ export function createOptionsTests(
         document.querySelector('.ais-Pagination-item--selected')
       ).toHaveTextContent('3');
 
-      expect(
-        document.querySelector('.ais-Pagination')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-Pagination"
-        >
-          <ul
-            class="ais-Pagination-list"
-          >
-            <li
-              class="ais-Pagination-item ais-Pagination-item--firstPage"
-            >
-              <a
-                aria-label="First"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                ‹‹
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--previousPage"
-            >
-              <a
-                aria-label="Previous"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                ‹
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 1"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                1
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 2"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                2
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
-            >
-              <a
-                aria-label="Page 3"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                3
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 4"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                4
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 5"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                5
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 6"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                6
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 7"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                7
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--nextPage"
-            >
-              <a
-                aria-label="Next"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                ›
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--lastPage"
-            >
-              <a
-                aria-label="Last"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                ››
-              </a>
-            </li>
-          </ul>
-        </div>
-      `
-      );
-
       // We click on "Last" link
       // InstantSearch.js uses different text in the page items.
       // @MAJOR: Standardize page item text between all flavors.
-      userEvent.click(screen.queryByText('››') || screen.getByText('»'));
+      userEvent.click(
+        lastPageItem.querySelector<HTMLAnchorElement>('.ais-Pagination-link')!
+      );
 
       await act(async () => {
         await wait(0);
@@ -711,152 +444,17 @@ export function createOptionsTests(
         document.querySelector('.ais-Pagination-item--selected')
       ).toHaveTextContent('50');
 
-      expect(
-        document.querySelector('.ais-Pagination')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-Pagination"
-        >
-          <ul
-            class="ais-Pagination-list"
-          >
-            <li
-              class="ais-Pagination-item ais-Pagination-item--firstPage"
-            >
-              <a
-                aria-label="First"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                ‹‹
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--previousPage"
-            >
-              <a
-                aria-label="Previous"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                ‹
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 44"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                44
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 45"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                45
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 46"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                46
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 47"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                47
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 48"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                48
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 49"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                49
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
-            >
-              <a
-                aria-label="Page 50"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                50
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--nextPage"
-            >
-              <span
-                aria-label="Next"
-                class="ais-Pagination-link"
-              >
-                ›
-              </span>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--lastPage"
-            >
-              <span
-                aria-label="Last"
-                class="ais-Pagination-link"
-              >
-                ››
-              </span>
-            </li>
-          </ul>
-        </div>
-      `
-      );
-
-      searchClient.search.mockClear();
-
-      // We're on last page, "Next" and "Last" links are disabled
+      // We're on the last page, "Next" and "Last" links are disabled
       expect(nextPageItem).toHaveClass('ais-Pagination-item--disabled');
       expect(lastPageItem).toHaveClass('ais-Pagination-item--disabled');
 
+      searchClient.search.mockClear();
+
       userEvent.click(
-        nextPageItem!.querySelector('.ais-Pagination-link') as HTMLAnchorElement
+        nextPageItem.querySelector<HTMLAnchorElement>('.ais-Pagination-link')!
       );
       userEvent.click(
-        lastPageItem!.querySelector('.ais-Pagination-link') as HTMLAnchorElement
+        lastPageItem.querySelector<HTMLAnchorElement>('.ais-Pagination-link')!
       );
 
       await act(async () => {
@@ -867,9 +465,9 @@ export function createOptionsTests(
 
       // We click on "Previous" link
       userEvent.click(
-        previousPageItem!.querySelector(
+        previousPageItem.querySelector<HTMLAnchorElement>(
           '.ais-Pagination-link'
-        ) as HTMLAnchorElement
+        )!
       );
 
       await act(async () => {
@@ -885,142 +483,9 @@ export function createOptionsTests(
         document.querySelector('.ais-Pagination-item--selected')
       ).toHaveTextContent('49');
 
-      expect(
-        document.querySelector('.ais-Pagination')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-Pagination"
-        >
-          <ul
-            class="ais-Pagination-list"
-          >
-            <li
-              class="ais-Pagination-item ais-Pagination-item--firstPage"
-            >
-              <a
-                aria-label="First"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                ‹‹
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--previousPage"
-            >
-              <a
-                aria-label="Previous"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                ‹
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 44"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                44
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 45"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                45
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 46"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                46
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 47"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                47
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 48"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                48
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
-            >
-              <a
-                aria-label="Page 49"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                49
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 50"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                50
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--nextPage"
-            >
-              <a
-                aria-label="Next"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                ›
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--lastPage"
-            >
-              <a
-                aria-label="Last"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                ››
-              </a>
-            </li>
-          </ul>
-        </div>
-      `
-      );
+      // We're on page 49, "Next" and "Last" links are no longer disabled
+      expect(nextPageItem).not.toHaveClass('ais-Pagination-item--disabled');
+      expect(lastPageItem).not.toHaveClass('ais-Pagination-item--disabled');
 
       // We click on "First" link
       userEvent.click(
@@ -1042,140 +507,9 @@ export function createOptionsTests(
         document.querySelector('.ais-Pagination-item--selected')
       ).toHaveTextContent('1');
 
-      expect(
-        document.querySelector('.ais-Pagination')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-Pagination"
-        >
-          <ul
-            class="ais-Pagination-list"
-          >
-            <li
-              class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--firstPage"
-            >
-              <span
-                aria-label="First"
-                class="ais-Pagination-link"
-              >
-                ‹‹
-              </span>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--previousPage"
-            >
-              <span
-                aria-label="Previous"
-                class="ais-Pagination-link"
-              >
-                ‹
-              </span>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected"
-            >
-              <a
-                aria-label="Page 1"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                1
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 2"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                2
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 3"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                3
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 4"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                4
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 5"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                5
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 6"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                6
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--page"
-            >
-              <a
-                aria-label="Page 7"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                7
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--nextPage"
-            >
-              <a
-                aria-label="Next"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                ›
-              </a>
-            </li>
-            <li
-              class="ais-Pagination-item ais-Pagination-item--lastPage"
-            >
-              <a
-                aria-label="Last"
-                class="ais-Pagination-link"
-                href="#"
-              >
-                ››
-              </a>
-            </li>
-          </ul>
-        </div>
-      `
-      );
+      // We're back on page 1, "First" and "Previous" links are disabled
+      expect(firstPageItem).toHaveClass('ais-Pagination-item--disabled');
+      expect(previousPageItem).toHaveClass('ais-Pagination-item--disabled');
     });
 
     test('does not navigate when pressing a modifier key', async () => {
