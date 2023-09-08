@@ -30,7 +30,7 @@
                 :class="suit('link')"
                 aria-label="First"
                 :href="state.createURL(0)"
-                @click.prevent="refine(0)"
+                @click.exact.left.prevent="refine(0)"
                 >‹‹</a
               >
             </template>
@@ -58,7 +58,7 @@
                 :class="suit('link')"
                 aria-label="Previous"
                 :href="state.createURL(state.currentRefinement - 1)"
-                @click.prevent="refine(state.currentRefinement - 1)"
+                @click.exact.left.prevent="refine(state.currentRefinement - 1)"
                 >‹</a
               >
             </template>
@@ -89,7 +89,7 @@
               :class="suit('link')"
               :href="state.createURL(page)"
               :aria-label="`Page ${page + 1}`"
-              @click.prevent="refine(page)"
+              @click.exact.left.prevent="refine(page)"
               >{{ page + 1 }}</a
             >
           </slot>
@@ -114,7 +114,7 @@
                 :class="suit('link')"
                 aria-label="Next"
                 :href="state.createURL(state.currentRefinement + 1)"
-                @click.prevent="refine(state.currentRefinement + 1)"
+                @click.exact.left.prevent="refine(state.currentRefinement + 1)"
                 >›</a
               >
             </template>
@@ -142,7 +142,7 @@
                 :class="suit('link')"
                 aria-label="Last"
                 :href="state.createURL(state.nbPages - 1)"
-                @click.prevent="refine(state.nbPages - 1)"
+                @click.exact.left.prevent="refine(state.nbPages - 1)"
                 >››</a
               >
             </template>
