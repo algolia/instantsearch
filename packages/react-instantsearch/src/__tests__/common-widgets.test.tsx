@@ -243,16 +243,19 @@ const testSetups: TestSetupsMap<TestSuites> = {
     );
   },
   createCurrentRefinementsWidgetTests({ instantSearchOptions, widgetParams }) {
-    const refinementListAttributes = Object.keys(
-      instantSearchOptions.initialUiState?.indexName?.refinementList || {}
-    );
-
     render(
       <InstantSearch {...instantSearchOptions}>
         <SearchBox />
-        {refinementListAttributes.map((attribute) => (
-          <RefinementList key={attribute} attribute={attribute} />
-        ))}
+        <RefinementList attribute="brand" />
+        <RefinementList operator="and" attribute="feature" />
+        <HierarchicalMenu
+          attributes={[
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+          ]}
+        />
+        <RangeInput attribute="price" />
         <CurrentRefinements {...widgetParams} />
         <GlobalErrorSwallower />
       </InstantSearch>,

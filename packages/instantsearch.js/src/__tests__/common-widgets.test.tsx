@@ -321,10 +321,6 @@ const testSetups: TestSetupsMap<TestSuites> = {
       .start();
   },
   createCurrentRefinementsWidgetTests({ instantSearchOptions, widgetParams }) {
-    const refinementListAttributes = Object.keys(
-      instantSearchOptions.initialUiState?.indexName.refinementList || {}
-    );
-
     const formContainer = document.querySelector('form') || document.body;
 
     instantsearch(instantSearchOptions)
@@ -332,12 +328,27 @@ const testSetups: TestSetupsMap<TestSuites> = {
         searchBox({
           container: formContainer.appendChild(document.createElement('div')),
         }),
-        ...refinementListAttributes.map((attribute) =>
-          refinementList({
-            container: formContainer.appendChild(document.createElement('div')),
-            attribute,
-          })
-        ),
+        refinementList({
+          container: formContainer.appendChild(document.createElement('div')),
+          attribute: 'brand',
+        }),
+        refinementList({
+          container: formContainer.appendChild(document.createElement('div')),
+          operator: 'and',
+          attribute: 'feature',
+        }),
+        hierarchicalMenu({
+          container: formContainer.appendChild(document.createElement('div')),
+          attributes: [
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+          ],
+        }),
+        rangeInput({
+          container: formContainer.appendChild(document.createElement('div')),
+          attribute: 'price',
+        }),
         currentRefinements({
           container: formContainer.appendChild(document.createElement('div')),
           ...widgetParams,

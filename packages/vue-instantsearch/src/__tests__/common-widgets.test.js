@@ -368,18 +368,25 @@ const testSetups = {
     instantSearchOptions,
     widgetParams,
   }) {
-    const refinementListAttributes = Object.keys(
-      instantSearchOptions.initialUiState?.indexName.refinementList || {}
-    );
-
     mountApp(
       {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
             h(AisSearchBox),
-            ...refinementListAttributes.map((attribute) =>
-              h(AisRefinementList, { props: { attribute } })
-            ),
+            h(AisRefinementList, { props: { attribute: 'brand' } }),
+            h(AisRefinementList, {
+              props: { operator: 'and', attribute: 'feature' },
+            }),
+            h(AisHierarchicalMenu, {
+              props: {
+                attributes: [
+                  'hierarchicalCategories.lvl0',
+                  'hierarchicalCategories.lvl1',
+                  'hierarchicalCategories.lvl2',
+                ],
+              },
+            }),
+            h(AisRangeInput, { props: { attribute: 'price' } }),
             h(AisCurrentRefinements, { props: widgetParams }),
             h(GlobalErrorSwallower),
           ])

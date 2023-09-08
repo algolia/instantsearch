@@ -42,8 +42,14 @@ export function createOptionsTests(
           initialUiState: {
             indexName: {
               refinementList: {
-                brand: ['Apple', 'Samsung'],
-                categories: ['Audio'],
+                feature: ['5G', 'OLED Display'],
+                brand: ['Samsung', 'Apple'],
+              },
+              hierarchicalMenu: {
+                'hierarchicalCategories.lvl0': ['Cell Phones'],
+              },
+              range: {
+                price: '500:990',
               },
             },
           },
@@ -57,11 +63,11 @@ export function createOptionsTests(
 
       expect(
         document.querySelectorAll('.ais-CurrentRefinements-item')
-      ).toHaveLength(2);
+      ).toHaveLength(4);
 
       expect(
         document.querySelectorAll('.ais-CurrentRefinements-category')
-      ).toHaveLength(3);
+      ).toHaveLength(7);
 
       expect(
         document.querySelector('.ais-CurrentRefinements')
@@ -74,6 +80,45 @@ export function createOptionsTests(
           <ul
             class="ais-CurrentRefinements-list"
           >
+            <li
+              class="ais-CurrentRefinements-item"
+            >
+              <span
+                class="ais-CurrentRefinements-label"
+              >
+                Feature:
+              </span>
+              <span
+                class="ais-CurrentRefinements-category"
+              >
+                <span
+                  class="ais-CurrentRefinements-categoryLabel"
+                >
+                  5G
+                </span>
+                <button
+                  class="ais-CurrentRefinements-delete"
+                  type="button"
+                >
+                  ✕
+                </button>
+              </span>
+              <span
+                class="ais-CurrentRefinements-category"
+              >
+                <span
+                  class="ais-CurrentRefinements-categoryLabel"
+                >
+                  OLED Display
+                </span>
+                <button
+                  class="ais-CurrentRefinements-delete"
+                  type="button"
+                >
+                  ✕
+                </button>
+              </span>
+            </li>
             <li
               class="ais-CurrentRefinements-item"
             >
@@ -119,7 +164,7 @@ export function createOptionsTests(
               <span
                 class="ais-CurrentRefinements-label"
               >
-                Categories:
+                HierarchicalCategories.lvl0:
               </span>
               <span
                 class="ais-CurrentRefinements-category"
@@ -127,7 +172,46 @@ export function createOptionsTests(
                 <span
                   class="ais-CurrentRefinements-categoryLabel"
                 >
-                  Audio
+                  Cell Phones
+                </span>
+                <button
+                  class="ais-CurrentRefinements-delete"
+                  type="button"
+                >
+                  ✕
+                </button>
+              </span>
+            </li>
+            <li
+              class="ais-CurrentRefinements-item"
+            >
+              <span
+                class="ais-CurrentRefinements-label"
+              >
+                Price:
+              </span>
+              <span
+                class="ais-CurrentRefinements-category"
+              >
+                <span
+                  class="ais-CurrentRefinements-categoryLabel"
+                >
+                  ≥ 500
+                </span>
+                <button
+                  class="ais-CurrentRefinements-delete"
+                  type="button"
+                >
+                  ✕
+                </button>
+              </span>
+              <span
+                class="ais-CurrentRefinements-category"
+              >
+                <span
+                  class="ais-CurrentRefinements-categoryLabel"
+                >
+                  ≤ 990
                 </span>
                 <button
                   class="ais-CurrentRefinements-delete"
@@ -181,7 +265,7 @@ export function createOptionsTests(
             indexName: {
               refinementList: {
                 brand: ['Apple', 'Samsung'],
-                categories: ['Audio'],
+                feature: ['5G'],
               },
             },
           },
@@ -197,17 +281,17 @@ export function createOptionsTests(
         '.ais-CurrentRefinements'
       )!;
 
-      const [btnApple, btnSamsung, btnAudio] = document.querySelectorAll(
+      const [btn5G, btnApple, btnSamsung] = document.querySelectorAll(
         '.ais-CurrentRefinements-delete'
       );
 
       await act(async () => {
-        userEvent.click(btnAudio);
+        userEvent.click(btn5G);
         await wait(0);
       });
       expect(queryByText(container, 'Apple')).not.toBeNull();
       expect(queryByText(container, 'Samsung')).not.toBeNull();
-      expect(queryByText(container, 'Audio')).toBeNull();
+      expect(queryByText(container, '5G')).toBeNull();
 
       await act(async () => {
         userEvent.click(btnApple);
@@ -215,7 +299,7 @@ export function createOptionsTests(
       });
       expect(queryByText(container, 'Apple')).toBeNull();
       expect(queryByText(container, 'Samsung')).not.toBeNull();
-      expect(queryByText(container, 'Audio')).toBeNull();
+      expect(queryByText(container, '5G')).toBeNull();
 
       await act(async () => {
         userEvent.click(btnSamsung);
@@ -223,7 +307,7 @@ export function createOptionsTests(
       });
       expect(queryByText(container, 'Apple')).toBeNull();
       expect(queryByText(container, 'Samsung')).toBeNull();
-      expect(queryByText(container, 'Audio')).toBeNull();
+      expect(queryByText(container, '5G')).toBeNull();
 
       expect(
         document.querySelectorAll('.ais-CurrentRefinements-item')
@@ -243,7 +327,7 @@ export function createOptionsTests(
             indexName: {
               refinementList: {
                 brand: ['Apple', 'Samsung'],
-                categories: ['Audio'],
+                feature: ['5G'],
               },
             },
           },
@@ -327,13 +411,13 @@ export function createOptionsTests(
               query: 'iPhone',
               refinementList: {
                 brand: ['Apple'],
-                categories: ['Audio'],
+                feature: ['5G'],
               },
             },
           },
         },
         widgetParams: {
-          includedAttributes: ['categories', 'query'],
+          includedAttributes: ['feature', 'query'],
         },
       });
 
@@ -346,7 +430,7 @@ export function createOptionsTests(
       )!;
 
       expect(queryByText(container, 'Apple')).toBeNull();
-      expect(queryByText(container, 'Audio')).not.toBeNull();
+      expect(queryByText(container, '5G')).not.toBeNull();
       expect(queryByText(container, 'iPhone')).not.toBeNull();
     });
 
@@ -360,7 +444,7 @@ export function createOptionsTests(
               query: 'iPhone',
               refinementList: {
                 brand: ['Apple'],
-                categories: ['Audio'],
+                feature: ['5G'],
               },
             },
           },
@@ -378,7 +462,7 @@ export function createOptionsTests(
         '.ais-CurrentRefinements'
       )!;
       expect(queryByText(container, 'Apple')).toBeNull();
-      expect(queryByText(container, 'Audio')).not.toBeNull();
+      expect(queryByText(container, '5G')).not.toBeNull();
       expect(queryByText(container, 'iPhone')).toBeNull();
     });
 
@@ -391,7 +475,7 @@ export function createOptionsTests(
             indexName: {
               refinementList: {
                 brand: ['Apple'],
-                categories: ['Audio'],
+                feature: ['5G'],
               },
             },
           },
@@ -410,7 +494,7 @@ export function createOptionsTests(
         '.ais-CurrentRefinements'
       )!;
       expect(queryByText(container, 'Apple')).toBeNull();
-      expect(queryByText(container, 'Audio')).not.toBeNull();
+      expect(queryByText(container, '5G')).not.toBeNull();
     });
   });
 }
