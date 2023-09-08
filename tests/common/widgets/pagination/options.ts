@@ -489,9 +489,7 @@ export function createOptionsTests(
 
       // We click on "First" link
       userEvent.click(
-        firstPageItem!.querySelector(
-          '.ais-Pagination-link'
-        ) as HTMLAnchorElement
+        firstPageItem.querySelector<HTMLAnchorElement>('.ais-Pagination-link')!
       );
 
       await act(async () => {
