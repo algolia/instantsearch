@@ -25,16 +25,23 @@ export function InitializePromise() {
     });
 
   const injectInitialResults = () => {
+    let inserted = false;
     const results = getInitialResults(search.mainIndex);
-    insertHTML(() => (
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `(window[Symbol.for("InstantSearchInitialResults")] ??= []).push(${JSON.stringify(
-            results
-          )})`,
-        }}
-      />
-    ));
+    insertHTML(() => {
+      if (inserted) {
+        return <></>;
+      }
+      inserted = true;
+      return (
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(window[Symbol.for("InstantSearchInitialResults")] ??= []).push(${JSON.stringify(
+              results
+            )})`,
+          }}
+        />
+      );
+    });
   };
 
   if (waitForResultsRef?.current === null) {
