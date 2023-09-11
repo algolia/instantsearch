@@ -320,6 +320,50 @@ const testSetups: TestSetupsMap<TestSuites> = {
       })
       .start();
   },
+  createCurrentRefinementsWidgetTests({ instantSearchOptions, widgetParams }) {
+    const formContainer = document.body.appendChild(
+      document.createElement('form')
+    );
+
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        searchBox({
+          container: formContainer.appendChild(document.createElement('div')),
+        }),
+        refinementList({
+          container: formContainer.appendChild(document.createElement('div')),
+          attribute: 'brand',
+        }),
+        refinementList({
+          container: formContainer.appendChild(document.createElement('div')),
+          operator: 'and',
+          attribute: 'feature',
+        }),
+        hierarchicalMenu({
+          container: formContainer.appendChild(document.createElement('div')),
+          attributes: [
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+          ],
+        }),
+        rangeInput({
+          container: formContainer.appendChild(document.createElement('div')),
+          attribute: 'price',
+        }),
+        currentRefinements({
+          container: formContainer.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -334,6 +378,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createInstantSearchWidgetTests: undefined,
   createHitsPerPageWidgetTests: undefined,
   createClearRefinementsWidgetTests: undefined,
+  createCurrentRefinementsWidgetTests: undefined,
 };
 
 describe('Common widget tests (InstantSearch.js)', () => {

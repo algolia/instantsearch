@@ -364,6 +364,41 @@ const testSetups = {
 
     await nextTick();
   },
+  async createCurrentRefinementsWidgetTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h('form', {}, [
+            h(AisInstantSearch, { props: instantSearchOptions }, [
+              h(AisSearchBox),
+              h(AisRefinementList, { props: { attribute: 'brand' } }),
+              h(AisRefinementList, {
+                props: { operator: 'and', attribute: 'feature' },
+              }),
+              h(AisHierarchicalMenu, {
+                props: {
+                  attributes: [
+                    'hierarchicalCategories.lvl0',
+                    'hierarchicalCategories.lvl1',
+                    'hierarchicalCategories.lvl2',
+                  ],
+                },
+              }),
+              h(AisRangeInput, { props: { attribute: 'price' } }),
+              h(AisCurrentRefinements, { props: widgetParams }),
+              h(GlobalErrorSwallower),
+            ]),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
+  },
 };
 
 const testOptions = {
@@ -378,6 +413,7 @@ const testOptions = {
   createInstantSearchWidgetTests: undefined,
   createHitsPerPageWidgetTests: undefined,
   createClearRefinementsWidgetTests: undefined,
+  createCurrentRefinementsWidgetTests: undefined,
 };
 
 describe('Common widget tests (Vue InstantSearch)', () => {

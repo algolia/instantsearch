@@ -6,7 +6,10 @@ export function normalizeSnapshot(html: string) {
       // Vue renders extra whitespace inside option item elements
       .replace(/>\s+?(\w+?)\s+?<\/option>/gs, '>$1</option>')
       // Vue renders extra whitespace inside button elements
-      .replace(/>\s+(.+?)\s+<\/button>/gs, '>$1</button>')
+      .replace(
+        /(<button[^>]*>)\s+(.+?)\s+(<\/button>)/gs,
+        (_, open, content, close) => `${open}${content.trim()}${close}`
+      )
       // Vue's `<AisClearRefinements>` widget uses `type="reset"` unlike other flavors
       .replace(/(type="reset")(.+class="ais-ClearRefinements-button)/gs, '$2')
       // Vue uses XHTML syntax

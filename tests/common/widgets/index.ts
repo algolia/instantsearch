@@ -1,5 +1,6 @@
 export * from './breadcrumb';
 export * from './clear-refinements';
+export * from './current-refinements';
 export * from './hierarchical-menu';
 export * from './hits';
 export * from './infinite-hits';
