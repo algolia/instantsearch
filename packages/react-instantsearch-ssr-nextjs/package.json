@@ -52,8 +52,7 @@
     "react-instantsearch-core": "7.0.2"
   },
   "devDependencies": {
-    "next": "13.4.19",
-    "ts-node": "8.4.1"
+    "next": "13.4.19"
   },
   "peerDependencies": {
     "next": ">= 13.4 && < 14"

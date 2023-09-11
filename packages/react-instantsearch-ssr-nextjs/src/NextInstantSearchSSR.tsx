@@ -62,10 +62,9 @@ export function NextInstantSearchSSR<
     let browserHistoryOptions: Partial<BrowserHistoryArgs<TRouteState>> = {};
     browserHistoryOptions.getLocation = () => {
       if (typeof window === 'undefined') {
-        let url = `${
+        const url = `${
           headers().get('x-forwarded-proto') || 'http'
-        }://${headers().get('host')}${pathname}`;
-        searchParams.size > 0 && (url += `?${searchParams}`);
+        }://${headers().get('host')}${pathname}?${searchParams}`;
         return new URL(url) as unknown as Location;
       }
       return window.location;
