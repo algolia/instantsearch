@@ -162,7 +162,7 @@ const getQuestions = ({ appName }) => ({
     {
       type: 'checkbox',
       name: 'attributesForFaceting',
-      message: 'Attributes to display',
+      message: 'Attributes for faceting',
       suffix: `\n  ${chalk.gray('Used to filter the search interface')}`,
       pageSize: 10,
       choices: async (answers) => {
