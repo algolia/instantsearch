@@ -11,6 +11,7 @@ import {
 
 import { InitializePromise } from './InitializePromise';
 import { TriggerSearch } from './TriggerSearch';
+import { warn } from './warn';
 
 import type { InitialResults, StateMapping, UiState } from 'instantsearch.js';
 import type { BrowserHistoryArgs } from 'instantsearch.js/es/lib/routers/history';
@@ -78,6 +79,12 @@ export function NextInstantSearchSSR<
     }
     routing.router = historyRouter(browserHistoryOptions);
   }
+
+  warn(
+    false,
+    `NextInstantSearchSSR relies on experimental APIs and may break in the future.
+This message will only be displayed in development mode.`
+  );
 
   return (
     <InstantSearchRSCContext.Provider value={promiseRef}>
