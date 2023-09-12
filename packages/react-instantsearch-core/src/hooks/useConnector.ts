@@ -111,7 +111,7 @@ export function useConnector<
 
       // We get the widget render state by providing the same parameters as
       // InstantSearch provides to the widget's `render` method.
-      // See https://github.com/algolia/instantsearch.js/blob/019cd18d0de6dd320284aa4890541b7fe2198c65/src/widgets/index/index.ts#L604-L617
+      // See https://github.com/algolia/instantsearch/blob/019cd18d0de6dd320284aa4890541b7fe2198c65/src/widgets/index/index.ts#L604-L617
       const { widgetParams, ...renderState } = widget.getWidgetRenderState({
         helper,
         parent: parentIndex,

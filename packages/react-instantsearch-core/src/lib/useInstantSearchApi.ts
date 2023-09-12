@@ -72,7 +72,7 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
   if (searchRef.current === null) {
     // We don't use the `instantsearch()` function because it comes with other
     // top-level APIs that we don't need.
-    // See https://github.com/algolia/instantsearch.js/blob/5b529f43d8acc680f85837eaaa41f7fd03a3f833/src/index.es.ts#L63-L86
+    // See https://github.com/algolia/instantsearch/blob/5b529f43d8acc680f85837eaaa41f7fd03a3f833/src/index.es.ts#L63-L86
     const search = new InstantSearch(props) as InternalInstantSearch<
       TUiState,
       TRouteState

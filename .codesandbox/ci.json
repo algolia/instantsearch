@@ -1,7 +1,7 @@
 {
   "sandboxes": [
     "instantsearchjs-es-template-pcw1k",
-    "github/algolia/instantsearch.js/tree/templates/react-instantsearch",
+    "github/algolia/instantsearch/tree/templates/react-instantsearch",
     "/examples/react/default-theme",
     "/examples/vue/default-theme"
   ],

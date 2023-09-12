@@ -131,7 +131,7 @@ export function createInsightsTests(
         });
 
         // @TODO: This is a bug, we should not send a view event when the results are the same.
-        // see: https://github.com/algolia/instantsearch.js/issues/5442
+        // see: https://github.com/algolia/instantsearch/issues/5442
         expect(window.aa).toHaveBeenCalledTimes(2);
       }
     });

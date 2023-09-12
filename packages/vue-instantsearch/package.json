@@ -25,7 +25,7 @@
   "main": "vue2/cjs",
   "module": "vue2/es",
   "sideEffects": false,
-  "repository": "https://github.com/algolia/instantsearch.js",
+  "repository": "https://github.com/algolia/instantsearch",
   "scripts": {
     "prebuild": "rm -rf vue2 vue3",
     "build": "rollup -c",

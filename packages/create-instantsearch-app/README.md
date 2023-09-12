@@ -16,7 +16,6 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Get started](#get-started)
 - [Usage](#usage)
 - [API](#api)
@@ -180,7 +179,7 @@ Create InstantSearch App is [MIT licensed](LICENSE).
 [version-svg]: https://img.shields.io/npm/v/create-instantsearch-app.svg?style=flat-square
 [package-url]: https://npmjs.org/package/create-instantsearch-app
 [ci-svg]: https://img.shields.io/circleci/project/github/algolia/create-instantsearch-app.svg?style=flat-square
-[ci-url]: https://circleci.com/gh/algolia/instantsearch.js
+[ci-url]: https://circleci.com/gh/algolia/instantsearch
 [license-image]: https://img.shields.io/badge/license-MIT-green.svg?style=flat-square
 [license-url]: LICENSE
 

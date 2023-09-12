@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
   - name: Feature Request
-    url: https://github.com/algolia/instantsearch.js/discussions/new?category=ideas&labels=triage&title=Feature%20request%3A%20
+    url: https://github.com/algolia/instantsearch/discussions/new?category=ideas&labels=triage&title=Feature%20request%3A%20
     about: Request a feature to add to InstantSearch.
   - name: Ask a Question
-    url: https://github.com/algolia/instantsearch.js/discussions/new?category=q-a&labels=triage
+    url: https://github.com/algolia/instantsearch/discussions/new?category=q-a&labels=triage
     about: Ask questions and discuss with other community members.
