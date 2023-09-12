@@ -391,7 +391,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       if (localInstantSearchInstance && Boolean(widgets.length)) {
         let initialSearchParameters;
         if (
-          localInstantSearchInstance.flags.disposeMode === 'searchParameters'
+          localInstantSearchInstance.modes.disposeMode === 'searchParameters'
         ) {
           initialSearchParameters = widgets.reduce((state, widget) => {
             // the `dispose` method exists at this point we already assert it

@@ -215,7 +215,7 @@ class InstantSearch<
    */
   public error: Error | undefined = undefined;
 
-  public flags: {
+  public modes: {
     disposeMode: InstantSearchOptions['disposeMode'];
   };
 
@@ -253,7 +253,7 @@ Use \`InstantSearch.status === "stalled"\` instead.`
       disposeMode = 'searchParameters',
     } = options;
 
-    this.flags = {
+    this.modes = {
       disposeMode,
     };
 
