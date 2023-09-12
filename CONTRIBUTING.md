@@ -6,11 +6,10 @@
 
 Hello and welcome to the contributing guide for InstantSearch. Thanks for considering participating in our project 🙇
 
-If this guide does not contain what you are looking for and thus prevents you from contributing, don't hesitate to leave a message on the [community forum](https://discourse.algolia.com/) or to [open an issue](https://github.com/algolia/instantsearch.js/issues).
+If this guide does not contain what you are looking for and thus prevents you from contributing, don't hesitate to leave a message on the [community forum](https://discourse.algolia.com/) or to [open an issue](https://github.com/algolia/instantsearch/issues).
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 
 - [Reporting an issue](#reporting-an-issue)
 - [The code contribution process](#the-code-contribution-process)
@@ -36,7 +35,7 @@ If this guide does not contain what you are looking for and thus prevents you fr
 
 Opening an issue is very effective way to contribute because many users might also be impacted. We'll make sure to fix it quickly if it's technically feasible and doesn't have important side effects for other users.
 
-Before reporting an issue, first check that there is not an already open issue for the same topic using the [issues page](https://github.com/algolia/instantsearch.js/issues). Don't hesitate to thumb up an issue that corresponds to the problem you have.
+Before reporting an issue, first check that there is not an already open issue for the same topic using the [issues page](https://github.com/algolia/instantsearch/issues). Don't hesitate to thumb up an issue that corresponds to the problem you have.
 
 Another element that will help us go faster at solving the issue is to provide a reproducible test case. We often recommend to [use this CodeSandbox template](https://codesandbox.io/s/github/algolia/instantsearch-templates/tree/master/src/InstantSearch.js).
 
@@ -162,7 +161,7 @@ This monorepo has as goal to be used for all InstantSearch flavors and tools. To
 
 The general philosophy of testing in InstantSearch follows [Testing Library's guiding principles](https://testing-library.com/docs/guiding-principles):
 
->The more your tests resemble the way your software is used, the more confidence they can give you.
+> The more your tests resemble the way your software is used, the more confidence they can give you.
 
 We rely on [Jest](https://jestjs.io/) for unit tests on all flavors of InstantSearch. In addition, [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) is used to test interactions in React InstantSearch.
 
@@ -214,7 +213,9 @@ fireEvent.click(button);
 // Don't manually dispatch with lower-level APIs or create custom-made events,
 // the browser might do other things you don't see or know about.
 fireEvent(button, new MouseEvent('click', { bubbles: true, cancelable: true }));
-button.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+button.dispatchEvent(
+  new MouseEvent('click', { bubbles: true, cancelable: true })
+);
 ```
 
 **✅ Correct**
@@ -284,8 +285,7 @@ await waitFor(() => {
 });
 ```
 
-> **Note**
->Sometimes, a second (focused) snapshot is clearer and shorter than a series of isolated assertions. Use your judgment to determine what will make the test the tersest and easiest to understand.
+> **Note** Sometimes, a second (focused) snapshot is clearer and shorter than a series of isolated assertions. Use your judgment to determine what will make the test the tersest and easiest to understand.
 
 ### Testing a widget
 
@@ -294,6 +294,7 @@ Widgets in InstantSearch are building blocks that have a predefined behavior and
 When testing a widget, you should focus on **user interactions, rendering, and possibly side-effects**.
 
 For example, you should test:
+
 - The rendering of a widget after passing all possible props.
 - The rendering of a widget or its side-effects (e.g., URL updates when used with routing) after interacting with it.
 
@@ -338,12 +339,12 @@ yarn test:e2e:local
 ```
 
 To run them on Sauce Labs:
+
 ```sh
 yarn test:e2e:saucelabs
 ```
 
-> **Note**
->Make sure to set up Sauce Labs credentials with the `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY` environment variables.
+> **Note** Make sure to set up Sauce Labs credentials with the `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY` environment variables.
 
 For more info, including how to write end-to-end tests, check the `tests/e2e` [CONTRIBUTING](./tests/e2e/CONTRIBUTING.md) and [README](./tests/e2e/README.md) files.
 

@@ -13,7 +13,7 @@
   ],
   "author": "Algolia <support@algolia.com>",
   "license": "MIT",
-  "repository": "algolia/instantsearch.js",
+  "repository": "algolia/instantsearch",
   "main": "cjs/index.js",
   "module": "es/index.js",
   "jsdelivr": "dist/instantsearch.production.min.js",

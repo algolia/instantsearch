@@ -636,7 +636,7 @@ See ${createDocumentationLink({
   /**
    * Removes all widgets without triggering a search afterwards. This is an **EXPERIMENTAL** feature,
    * if you find an issue with it, please
-   * [open an issue](https://github.com/algolia/instantsearch.js/issues/new?title=Problem%20with%20dispose).
+   * [open an issue](https://github.com/algolia/instantsearch/issues/new?title=Problem%20with%20dispose).
    * @return {undefined} This method does not return anything
    */
   public dispose(): void {
