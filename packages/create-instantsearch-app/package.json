@@ -38,7 +38,7 @@
     "algoliasearch": "4",
     "chalk": "3.0.0",
     "commander": "4.1.1",
-    "inquirer": "8.0.0",
+    "inquirer": "8.2.0",
     "jstransformer-handlebars": "1.1.0",
     "load-json-file": "6.2.0",
     "lodash.camelcase": "4.3.0",
