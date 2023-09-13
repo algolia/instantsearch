@@ -28,13 +28,7 @@ export type InsightsProps<
   TInsightsClient extends ProvidedInsightsClient = ProvidedInsightsClient
 > = {
   insightsClient?: TInsightsClient;
-  insightsInitParams?: {
-    userHasOptedOut?: boolean;
-    useCookie?: boolean;
-    anonymousUserToken?: boolean;
-    cookieDuration?: number;
-    region?: 'de' | 'us';
-  };
+  insightsInitParams?: Omit<InsightsMethodMap['init'][0], 'appId' | 'apiKey'>;
   onEvent?: (event: InsightsEvent, insightsClient: TInsightsClient) => void;
   /**
    * @internal indicator for the default insights middleware
