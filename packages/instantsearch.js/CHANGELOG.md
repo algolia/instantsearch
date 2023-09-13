@@ -1,6 +1,17 @@
 # Change Log
 
-All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [4.56.11](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.56.10...instantsearch.js@4.56.11) (2023-09-12)
+
+### Bug Fixes
+
+- **insights**: use init method params type from Search Insights ([#5848](https://github.com/algolia/instantsearch/issues/5848)) ([d05c6c6](https://github.com/algolia/instantsearch/commit/d05c6c69c7662c9551431ae787223029076ff972))
+
+
+
+
 
 ## [4.56.10](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.56.9...instantsearch.js@4.56.10) (2023-09-05)
 
