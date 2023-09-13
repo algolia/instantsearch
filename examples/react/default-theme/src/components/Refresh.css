@@ -21,7 +21,7 @@
 }
 
 .Refresh svg {
-  transition: transform .5s ease-out;
+  transition: transform 0.5s ease-out;
 }
 
 .Refresh:active svg {

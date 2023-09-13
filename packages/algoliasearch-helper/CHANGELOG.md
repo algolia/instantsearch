@@ -1,15 +1,10 @@
 # Change Log
 
-All notable changes to this project will be documented in this file.
-See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
 ## [3.14.1](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.14.0...algoliasearch-helper@3.14.1) (2023-09-12)
 
 **Note:** Version bump only for package algoliasearch-helper
-
-
-
-
 
 # [3.14.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.13.5...algoliasearch-helper@3.14.0) (2023-07-25)
 

@@ -158,7 +158,9 @@ $break-medium: 767px;
 .ais-InfiniteHits-loadMore:hover,
 .ais-RangeInput-submit:hover,
 .ais-InfiniteHits-loadPrevious:hover,
-.ais-Pagination-item:not(.ais-Pagination-item--selected):not(.ais-Pagination-item--disabled)
+.ais-Pagination-item:not(.ais-Pagination-item--selected):not(
+    .ais-Pagination-item--disabled
+  )
   .ais-Pagination-link:hover,
 .ais-GeoSearch-redo:hover,
 .ais-GeoSearch-reset:hover,
