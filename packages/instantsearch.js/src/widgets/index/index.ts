@@ -416,6 +416,15 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
             })
           );
         } else {
+          // Dispose all widgets without keeping the mutated state
+          widgets.forEach((widget) => {
+            widget.dispose!({
+              helper: helper!,
+              state: helper!.state,
+              parent: this,
+            });
+          });
+
           // Update helper state with previous localUiState
           const initialSearchParameters =
             new algoliasearchHelper.SearchParameters({

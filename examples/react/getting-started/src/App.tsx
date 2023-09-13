@@ -9,7 +9,8 @@ import {
   Pagination,
   RefinementList,
   SearchBox,
-  useRefinementList,
+  DynamicWidgets,
+  CurrentRefinements,
 } from 'react-instantsearch';
 
 import { Panel } from './Panel';
@@ -58,20 +59,21 @@ export function App() {
                 Toggle filters
               </button>
               {showFilters && (
-                <Panel header="brand">
-                  <RefinementList attribute="brand" />
-                </Panel>
+                <DynamicWidgets fallbackComponent={FallbackComponent} />
               )}
             </div>
 
             <div className="search-panel__results">
               <SearchBox placeholder="" className="searchbox" />
-              <CustomBrandRefinementList />
+              <CurrentRefinements />
               <Hits hitComponent={HitComponent} />
 
               <div className="pagination">
                 <Pagination />
               </div>
+            </div>
+            <div className="search-panel__filters">
+              <DynamicWidgets fallbackComponent={FallbackComponent} />
             </div>
           </div>
         </InstantSearch>
@@ -97,25 +99,10 @@ function HitComponent({ hit }: HitProps) {
   );
 }
 
-function CustomBrandRefinementList() {
-  const { items } = useRefinementList({ attribute: 'brand' });
-  const selectedItems = items
-    .filter((item) => item.isRefined)
-    .map((item) => item.label);
-
+function FallbackComponent({ attribute }: any) {
   return (
-    <div
-      style={{
-        border: '1px solid gray',
-        padding: '1rem',
-        marginBottom: '1rem',
-      }}
-    >
-      <pre>{`useRefinementList({ attribute: 'brand' })`}</pre>
-      <small>
-        <strong>Selected brands: </strong>{' '}
-        {selectedItems.length ? selectedItems.join(', ') : 'none'}
-      </small>
-    </div>
+    <Panel header={attribute}>
+      <RefinementList attribute={attribute} />
+    </Panel>
   );
 }
