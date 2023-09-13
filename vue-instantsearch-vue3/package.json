@@ -11,7 +11,7 @@
   "dependencies": {
     "algoliasearch": "4.12.1",
     "vue": "3.2.25",
-    "vue-instantsearch": "4.10.10"
+    "vue-instantsearch": "4.10.11"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "2.2.0",
