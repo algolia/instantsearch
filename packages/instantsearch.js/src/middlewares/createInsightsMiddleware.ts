@@ -28,7 +28,7 @@ export type InsightsProps<
   TInsightsClient extends ProvidedInsightsClient = ProvidedInsightsClient
 > = {
   insightsClient?: TInsightsClient;
-  insightsInitParams?: Omit<InsightsMethodMap['init'][0], 'appId' | 'apiKey'>;
+  insightsInitParams?: Partial<InsightsMethodMap['init'][0]>;
   onEvent?: (event: InsightsEvent, insightsClient: TInsightsClient) => void;
   /**
    * @internal indicator for the default insights middleware
