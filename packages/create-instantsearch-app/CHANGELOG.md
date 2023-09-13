@@ -1,16 +1,26 @@
 # Change Log
 
-All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
 ## [7.0.2](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.0.1...create-instantsearch-app@7.0.2) (2023-09-12)
 
+
 ### Bug Fixes
 
-- **create-instantsearch-app:** fix option label for `attributesForFaceting` ([#5841](https://github.com/algolia/instantsearch/issues/5841)) ([9b2471e](https://github.com/algolia/instantsearch/commit/9b2471e65060d645c437cc115d7f423a3a1153a8))
+* **create-instantsearch-app:** fix option label for `attributesForFaceting` ([#5841](https://github.com/algolia/instantsearch/issues/5841)) ([9b2471e](https://github.com/algolia/instantsearch/commit/9b2471e65060d645c437cc115d7f423a3a1153a8))
+
+
+
+
 
 ## [7.0.1](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.0.0...create-instantsearch-app@7.0.1) (2023-09-05)
 
 **Note:** Version bump only for package create-instantsearch-app
+
+
+
+
 
 # [7.0.0](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@6.4.2...create-instantsearch-app@7.0.0) (2023-08-08)
 

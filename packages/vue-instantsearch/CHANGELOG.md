@@ -1,12 +1,18 @@
 # Change Log
 
-All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
 ## [4.10.11](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.10.10...vue-instantsearch@4.10.11) (2023-09-12)
 
+
 ### Bug Fixes
 
-- **vue-instantsearch:** prevent click on navigation items when pressing modifiers ([#5837](https://github.com/algolia/instantsearch/issues/5837)) ([53a2434](https://github.com/algolia/instantsearch/commit/53a24345a423142da6b70fcf0bc3cbe2bb1638d6))
+* **vue-instantsearch:** prevent click on navigation items when pressing modifiers ([#5837](https://github.com/algolia/instantsearch/issues/5837)) ([53a2434](https://github.com/algolia/instantsearch/commit/53a24345a423142da6b70fcf0bc3cbe2bb1638d6))
+
+
+
+
 
 ## [4.10.10](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.10.9...vue-instantsearch@4.10.10) (2023-09-05)
 
