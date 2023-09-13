@@ -44,7 +44,7 @@
     "lodash.camelcase": "4.3.0",
     "metalsmith": "2.5.1",
     "metalsmith-rename": "1.0.0",
-    "prettier": "1.19.1",
+    "prettier": "2.4.1",
     "semver": "6.1.1",
     "validate-npm-package-name": "3.0.0"
   },
