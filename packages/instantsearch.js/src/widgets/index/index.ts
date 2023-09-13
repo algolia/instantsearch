@@ -389,11 +389,11 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       );
 
       if (localInstantSearchInstance && Boolean(widgets.length)) {
-        let initialSearchParameters;
         if (
           localInstantSearchInstance.modes.disposeMode === 'searchParameters'
         ) {
-          initialSearchParameters = widgets.reduce((state, widget) => {
+          // Update helper state with cleaned local ui state
+          const initialSearchParameters = widgets.reduce((state, widget) => {
             // the `dispose` method exists at this point we already assert it
             const next = widget.dispose!({
               helper: helper!,
@@ -403,23 +403,37 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
             return next || state;
           }, helper!.state);
-        } else {
-          initialSearchParameters = new algoliasearchHelper.SearchParameters({
-            index: this.getIndexName(),
+
+          localUiState = getLocalWidgetsUiState(localWidgets, {
+            searchParameters: initialSearchParameters,
+            helper: helper!,
           });
+
+          helper!.setState(
+            getLocalWidgetsSearchParameters(localWidgets, {
+              uiState: localUiState,
+              initialSearchParameters,
+            })
+          );
+        } else {
+          // Update helper state with previous localUiState
+          const initialSearchParameters =
+            new algoliasearchHelper.SearchParameters({
+              index: this.getIndexName(),
+            });
+
+          const newState = getLocalWidgetsSearchParameters(localWidgets, {
+            uiState: localUiState,
+            initialSearchParameters,
+          });
+
+          localUiState = getLocalWidgetsUiState(localWidgets, {
+            searchParameters: newState,
+            helper: helper!,
+          });
+
+          helper!.setState(newState);
         }
-
-        const newState = getLocalWidgetsSearchParameters(localWidgets, {
-          uiState: localUiState,
-          initialSearchParameters,
-        });
-
-        localUiState = getLocalWidgetsUiState(localWidgets, {
-          searchParameters: newState,
-          helper: helper!,
-        });
-
-        helper!.setState(newState);
 
         if (localWidgets.length) {
           localInstantSearchInstance.scheduleSearch();

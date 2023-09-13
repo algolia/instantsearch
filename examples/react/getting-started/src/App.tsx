@@ -9,6 +9,7 @@ import {
   Pagination,
   RefinementList,
   SearchBox,
+  useRefinementList,
 } from 'react-instantsearch';
 
 import { Panel } from './Panel';
@@ -21,16 +22,24 @@ const searchClient = algoliasearch(
 );
 
 export function App() {
+  const [showFilters, setShowFilters] = React.useState(true);
+
+  const queryParameters = new URLSearchParams(window.location.search);
+  const disposeMode = queryParameters.get('disposeMode') || 'searchParameters';
+
   return (
     <div>
       <header className="header">
-        <h1 className="header-title">
-          <a href="/">Getting started</a>
-        </h1>
+        <h1 className="header-title">Current dispose mode: {disposeMode}</h1>
         <p className="header-subtitle">
-          using{' '}
-          <a href="https://github.com/algolia/instantsearch/tree/master/packages/react-instantsearch">
-            React InstantSearch
+          <a
+            href={`?disposeMode=${
+              disposeMode === 'searchParameters'
+                ? 'uiState'
+                : 'searchParameters'
+            }`}
+          >
+            Switch
           </a>
         </p>
       </header>
@@ -40,17 +49,24 @@ export function App() {
           searchClient={searchClient}
           indexName="instant_search"
           insights={true}
+          disposeMode={disposeMode}
         >
           <Configure hitsPerPage={8} />
           <div className="search-panel">
             <div className="search-panel__filters">
-              <Panel header="brand">
-                <RefinementList attribute="brand" />
-              </Panel>
+              <button onClick={() => setShowFilters(!showFilters)}>
+                Toggle filters
+              </button>
+              {showFilters && (
+                <Panel header="brand">
+                  <RefinementList attribute="brand" />
+                </Panel>
+              )}
             </div>
 
             <div className="search-panel__results">
               <SearchBox placeholder="" className="searchbox" />
+              <CustomBrandRefinementList />
               <Hits hitComponent={HitComponent} />
 
               <div className="pagination">
@@ -78,5 +94,28 @@ function HitComponent({ hit }: HitProps) {
         <Highlight attribute="description" hit={hit} />
       </p>
     </article>
+  );
+}
+
+function CustomBrandRefinementList() {
+  const { items } = useRefinementList({ attribute: 'brand' });
+  const selectedItems = items
+    .filter((item) => item.isRefined)
+    .map((item) => item.label);
+
+  return (
+    <div
+      style={{
+        border: '1px solid gray',
+        padding: '1rem',
+        marginBottom: '1rem',
+      }}
+    >
+      <pre>{`useRefinementList({ attribute: 'brand' })`}</pre>
+      <small>
+        <strong>Selected brands: </strong>{' '}
+        {selectedItems.length ? selectedItems.join(', ') : 'none'}
+      </small>
+    </div>
   );
 }
