@@ -3,7 +3,7 @@ layout: ../../layouts/WidgetLayout.astro
 title: ReverseSnippet
 type: widget
 html: |
-  <span class="ais-ReverseSnippet"><span class"ais-ReverseSnippet-nonHighlighted">This is the</span> <mark class="ais-ReverseSnippet-highlighted">reversed snippet text</mark></span>
+  <span class="ais-ReverseSnippet"><span class="ais-ReverseSnippet-nonHighlighted">This is the</span> <mark class="ais-ReverseSnippet-highlighted">reversed snippet text</mark></span>
 classes:
   - name: .ais-ReverseSnippet
     description: the root span of the widget

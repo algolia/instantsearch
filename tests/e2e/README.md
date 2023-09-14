@@ -80,10 +80,10 @@ exports.config = {
 CircleCI can [read JUnit XML test metadata files](https://circleci.com/docs/2.0/collect-test-data/) to provide insights on the stability of the test suite. To enable this feature, you can add the following key to your e2e job in **.circleci/config.yml**:
 
 ```yaml
-  test_e2e:
+test_e2e:
+  # ...
+  steps:
     # ...
-    steps:
-      # ...
-      - store_test_results:
-        path: junit/wdio
+    - store_test_results:
+      path: junit/wdio
 ```

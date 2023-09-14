@@ -5,7 +5,7 @@
 // The source code is available on GitHub:
 // https://github.com/googlemaps/v3-utility-library/tree/master/infobox
 
-const createInfoBox = googleReference => {
+const createInfoBox = (googleReference) => {
   /**
    * @name InfoBox
    * @version 1.1.13 [March 19, 2014]
@@ -141,7 +141,7 @@ const createInfoBox = googleReference => {
    * Creates the DIV representing the InfoBox.
    * @private
    */
-  InfoBox.prototype.createInfoBoxDiv_ = function() {
+  InfoBox.prototype.createInfoBoxDiv_ = function () {
     let i;
     let events;
     let bw;
@@ -149,7 +149,7 @@ const createInfoBox = googleReference => {
 
     // This handler prevents an event in the InfoBox from being passed on to the map.
     //
-    const cancelHandler = function(e) {
+    const cancelHandler = function (e) {
       e.cancelBubble = true;
       if (e.stopPropagation) {
         e.stopPropagation();
@@ -159,7 +159,7 @@ const createInfoBox = googleReference => {
     // This handler ignores the current event in the InfoBox and conditionally prevents
     // the event from being passed on to the map. It is used for the contextmenu event.
     //
-    const ignoreHandler = function(e) {
+    const ignoreHandler = function (e) {
       e.returnValue = false;
 
       if (e.preventDefault) {
@@ -202,9 +202,9 @@ const createInfoBox = googleReference => {
 
         bw = this.getBoxWidths_();
 
-        this.div_.style.width = `${this.div_.offsetWidth -
-          bw.left -
-          bw.right}px`;
+        this.div_.style.width = `${
+          this.div_.offsetWidth - bw.left - bw.right
+        }px`;
         this.fixedWidthSet_ = false;
       }
 
@@ -244,7 +244,7 @@ const createInfoBox = googleReference => {
           googleReference.maps.event.addDomListener(
             this.div_,
             'mouseover',
-            function(e) {
+            function (e) {
               this.style.cursor = 'default';
             }
           )
@@ -270,7 +270,7 @@ const createInfoBox = googleReference => {
    * Returns the HTML <IMG> tag for the close box.
    * @private
    */
-  InfoBox.prototype.getCloseBoxImg_ = function() {
+  InfoBox.prototype.getCloseBoxImg_ = function () {
     let img = '';
 
     if (this.closeBoxURL_ !== '') {
@@ -291,7 +291,7 @@ const createInfoBox = googleReference => {
    * Adds the click handler to the InfoBox close box.
    * @private
    */
-  InfoBox.prototype.addClickHandler_ = function() {
+  InfoBox.prototype.addClickHandler_ = function () {
     let closeBox;
 
     if (this.closeBoxURL_ !== '') {
@@ -310,10 +310,10 @@ const createInfoBox = googleReference => {
    * Returns the function to call when the user clicks the close box of an InfoBox.
    * @private
    */
-  InfoBox.prototype.getCloseClickHandler_ = function() {
+  InfoBox.prototype.getCloseClickHandler_ = function () {
     const me = this;
 
-    return function(e) {
+    return function (e) {
       // 1.0.3 fix: Always prevent propagation of a close box click to the map:
       e.cancelBubble = true;
 
@@ -336,7 +336,7 @@ const createInfoBox = googleReference => {
    * Pans the map so that the InfoBox appears entirely within the map's visible area.
    * @private
    */
-  InfoBox.prototype.panBox_ = function(disablePan) {
+  InfoBox.prototype.panBox_ = function (disablePan) {
     let map;
     let bounds;
     let xOffset = 0,
@@ -401,7 +401,7 @@ const createInfoBox = googleReference => {
    * other specific styles requested.
    * @private
    */
-  InfoBox.prototype.setBoxStyle_ = function() {
+  InfoBox.prototype.setBoxStyle_ = function () {
     let i, boxStyle;
 
     if (this.div_) {
@@ -430,10 +430,12 @@ const createInfoBox = googleReference => {
         this.div_.style.opacity !== ''
       ) {
         // See http://www.quirksmode.org/css/opacity.html
-        this.div_.style.MsFilter = `"progid:DXImageTransform.Microsoft.Alpha(Opacity=${this
-          .div_.style.opacity * 100})"`;
-        this.div_.style.filter = `alpha(opacity=${this.div_.style.opacity *
-          100})`;
+        this.div_.style.MsFilter = `"progid:DXImageTransform.Microsoft.Alpha(Opacity=${
+          this.div_.style.opacity * 100
+        })"`;
+        this.div_.style.filter = `alpha(opacity=${
+          this.div_.style.opacity * 100
+        })`;
       }
 
       // Apply required styles:
@@ -451,7 +453,7 @@ const createInfoBox = googleReference => {
    * @private
    * @return {Object} widths object (top, bottom left, right)
    */
-  InfoBox.prototype.getBoxWidths_ = function() {
+  InfoBox.prototype.getBoxWidths_ = function () {
     let computedStyle;
     const bw = { top: 0, bottom: 0, left: 0, right: 0 };
     const box = this.div_;
@@ -484,7 +486,7 @@ const createInfoBox = googleReference => {
   /**
    * Invoked when <tt>close</tt> is called. Do not call it directly.
    */
-  InfoBox.prototype.onRemove = function() {
+  InfoBox.prototype.onRemove = function () {
     if (this.div_) {
       this.div_.parentNode.removeChild(this.div_);
       this.div_ = null;
@@ -494,7 +496,7 @@ const createInfoBox = googleReference => {
   /**
    * Draws the InfoBox based on the current map projection and zoom level.
    */
-  InfoBox.prototype.draw = function() {
+  InfoBox.prototype.draw = function () {
     this.createInfoBoxDiv_();
 
     const pixPosition = this.getProjection().fromLatLngToDivPixel(
@@ -525,7 +527,7 @@ const createInfoBox = googleReference => {
    *  is <tt>open</tt>ed.
    * @param {InfoBoxOptions} opt_opts
    */
-  InfoBox.prototype.setOptions = function(opt_opts) {
+  InfoBox.prototype.setOptions = function (opt_opts) {
     if (typeof opt_opts.boxClass !== 'undefined') {
       // Must be first
 
@@ -588,7 +590,7 @@ const createInfoBox = googleReference => {
    *  The content can be plain text or an HTML DOM node.
    * @param {string|Node} content
    */
-  InfoBox.prototype.setContent = function(content) {
+  InfoBox.prototype.setContent = function (content) {
     this.content_ = content;
 
     if (this.div_) {
@@ -638,7 +640,7 @@ const createInfoBox = googleReference => {
    * Sets the geographic location of the InfoBox.
    * @param {LatLng} latlng
    */
-  InfoBox.prototype.setPosition = function(latlng) {
+  InfoBox.prototype.setPosition = function (latlng) {
     this.position_ = latlng;
 
     if (this.div_) {
@@ -657,7 +659,7 @@ const createInfoBox = googleReference => {
    * Sets the zIndex style for the InfoBox.
    * @param {number} index
    */
-  InfoBox.prototype.setZIndex = function(index) {
+  InfoBox.prototype.setZIndex = function (index) {
     this.zIndex_ = index;
 
     if (this.div_) {
@@ -676,7 +678,7 @@ const createInfoBox = googleReference => {
    * Sets the visibility of the InfoBox.
    * @param {boolean} isVisible
    */
-  InfoBox.prototype.setVisible = function(isVisible) {
+  InfoBox.prototype.setVisible = function (isVisible) {
     this.isHidden_ = !isVisible;
     if (this.div_) {
       this.div_.style.visibility = this.isHidden_ ? 'hidden' : 'visible';
@@ -687,7 +689,7 @@ const createInfoBox = googleReference => {
    * Returns the content of the InfoBox.
    * @returns {string}
    */
-  InfoBox.prototype.getContent = function() {
+  InfoBox.prototype.getContent = function () {
     return this.content_;
   };
 
@@ -695,7 +697,7 @@ const createInfoBox = googleReference => {
    * Returns the geographic location of the InfoBox.
    * @returns {LatLng}
    */
-  InfoBox.prototype.getPosition = function() {
+  InfoBox.prototype.getPosition = function () {
     return this.position_;
   };
 
@@ -703,7 +705,7 @@ const createInfoBox = googleReference => {
    * Returns the zIndex for the InfoBox.
    * @returns {number}
    */
-  InfoBox.prototype.getZIndex = function() {
+  InfoBox.prototype.getZIndex = function () {
     return this.zIndex_;
   };
 
@@ -711,7 +713,7 @@ const createInfoBox = googleReference => {
    * Returns a flag indicating whether the InfoBox is visible.
    * @returns {boolean}
    */
-  InfoBox.prototype.getVisible = function() {
+  InfoBox.prototype.getVisible = function () {
     let isVisible;
 
     if (typeof this.getMap() === 'undefined' || this.getMap() === null) {
@@ -725,7 +727,7 @@ const createInfoBox = googleReference => {
   /**
    * Shows the InfoBox. [Deprecated; use <tt>setVisible</tt> instead.]
    */
-  InfoBox.prototype.show = function() {
+  InfoBox.prototype.show = function () {
     this.isHidden_ = false;
     if (this.div_) {
       this.div_.style.visibility = 'visible';
@@ -735,7 +737,7 @@ const createInfoBox = googleReference => {
   /**
    * Hides the InfoBox. [Deprecated; use <tt>setVisible</tt> instead.]
    */
-  InfoBox.prototype.hide = function() {
+  InfoBox.prototype.hide = function () {
     this.isHidden_ = true;
     if (this.div_) {
       this.div_.style.visibility = 'hidden';
@@ -750,7 +752,7 @@ const createInfoBox = googleReference => {
    * @param {Map|StreetViewPanorama} map
    * @param {MVCObject} [anchor]
    */
-  InfoBox.prototype.open = function(map, anchor) {
+  InfoBox.prototype.open = function (map, anchor) {
     const me = this;
 
     if (anchor) {
@@ -758,7 +760,7 @@ const createInfoBox = googleReference => {
       this.moveListener_ = googleReference.maps.event.addListener(
         anchor,
         'position_changed',
-        function() {
+        function () {
           me.setPosition(this.getPosition());
         }
       );
@@ -766,7 +768,7 @@ const createInfoBox = googleReference => {
       this.mapListener_ = googleReference.maps.event.addListener(
         anchor,
         'map_changed',
-        function() {
+        function () {
           me.setMap(this.map);
         }
       );
@@ -782,7 +784,7 @@ const createInfoBox = googleReference => {
   /**
    * Removes the InfoBox from the map.
    */
-  InfoBox.prototype.close = function() {
+  InfoBox.prototype.close = function () {
     let i;
 
     if (this.closeListener_) {
