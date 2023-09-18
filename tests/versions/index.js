@@ -17,7 +17,6 @@ let hasError = false;
       'react-instantsearch',
       'react-instantsearch-core',
       'react-instantsearch-router-nextjs',
-      'react-instantsearch-ssr-nextjs',
     ],
   };
 
