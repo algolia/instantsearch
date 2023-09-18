@@ -1,0 +1,13 @@
+diff --git a/node_modules/doctoc/lib/transform.js b/node_modules/doctoc/lib/transform.js
+index 5b1370d..07be5c4 100644
+--- a/node_modules/doctoc/lib/transform.js
++++ b/node_modules/doctoc/lib/transform.js
+@@ -139,7 +139,7 @@ exports = module.exports = function transform(content, mode, maxHeaderLevel, tit
+ 
+   var toc =
+       inferredTitle
+-    + '\n\n'
++    + '\n'
+     + linkedHeaders
+         .map(function (x) {
+           var indent = _(_.range(x.rank - lowestRank))

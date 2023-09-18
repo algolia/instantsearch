@@ -33,13 +33,11 @@
                   <q v-if="refinement.attribute === 'query'">{{
                     refinement.label
                   }}</q>
-                  <template v-else>
-                    {{ refinement.label }}
-                  </template>
-                </span>
-                <button
+                  <template v-else>{{ refinement.label }}</template> </span
+                ><button
                   :class="suit('delete')"
-                  @click="item.refine(refinement)"
+                  type="button"
+                  @click.left.exact="item.refine(refinement)"
                 >
                   ✕
                 </button>

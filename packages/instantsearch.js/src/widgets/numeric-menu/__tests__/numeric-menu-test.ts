@@ -165,7 +165,7 @@ describe('numericMenu()', () => {
   });
 
   it('does not alter the initial items when rendering', () => {
-    // Note: https://github.com/algolia/instantsearch.js/issues/1010
+    // Note: https://github.com/algolia/instantsearch/issues/1010
     // Make sure we work on a copy of the initial facetValues when rendering,
     // not directly editing it
 

@@ -204,7 +204,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    *
    * It always generates the full URL, not a relative one.
    * This allows to handle cases like using a <base href>.
-   * See: https://github.com/algolia/instantsearch.js/issues/790
+   * See: https://github.com/algolia/instantsearch/issues/790
    */
   public createURL(routeState: TRouteState): string {
     const url = this._createURL({

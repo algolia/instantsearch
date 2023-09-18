@@ -1,6 +1,6 @@
 {
   "name": "create-instantsearch-app",
-  "version": "7.0.1",
+  "version": "7.0.2",
   "license": "MIT",
   "description": "⚡️ Build InstantSearch apps at the speed of thought",
   "keywords": [
@@ -38,18 +38,18 @@
     "algoliasearch": "4",
     "chalk": "3.0.0",
     "commander": "4.1.1",
-    "inquirer": "8.0.0",
+    "inquirer": "8.2.0",
     "jstransformer-handlebars": "1.1.0",
     "load-json-file": "6.2.0",
     "lodash.camelcase": "4.3.0",
     "metalsmith": "2.5.1",
     "metalsmith-rename": "1.0.0",
-    "prettier": "1.19.1",
+    "prettier": "^2.4.1",
     "semver": "6.1.1",
     "validate-npm-package-name": "3.0.0"
   },
   "devDependencies": {
-    "@instantsearch/testutils": "1.13.0",
+    "@instantsearch/testutils": "1.14.0",
     "jest-image-snapshot": "2.12.0",
     "walk-sync": "2.0.2"
   }

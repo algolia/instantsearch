@@ -96,13 +96,8 @@ exports[`Templates Angular InstantSearch File content: angular.json 1`] = `
             \\"main\\": \\"src/main.ts\\",
             \\"polyfills\\": \\"src/polyfills.ts\\",
             \\"tsConfig\\": \\"tsconfig.app.json\\",
-            \\"assets\\": [
-              \\"src/favicon.ico\\",
-              \\"src/assets\\"
-            ],
-            \\"styles\\": [
-              \\"src/styles.css\\"
-            ],
+            \\"assets\\": [\\"src/favicon.ico\\", \\"src/assets\\"],
+            \\"styles\\": [\\"src/styles.css\\"],
             \\"scripts\\": []
           },
           \\"configurations\\": {
@@ -163,10 +158,7 @@ exports[`Templates Angular InstantSearch File content: angular.json 1`] = `
             \\"polyfills\\": \\"src/polyfills.ts\\",
             \\"tsConfig\\": \\"tsconfig.spec.json\\",
             \\"karmaConfig\\": \\"karma.conf.js\\",
-            \\"assets\\": [
-              \\"src/favicon.ico\\",
-              \\"src/assets\\"
-            ],
+            \\"assets\\": [\\"src/favicon.ico\\", \\"src/assets\\"],
             \\"styles\\": [
               \\"node_modules/instantsearch.css/themes/satellite.css\\",
               \\"src/styles.css\\"
@@ -194,7 +186,7 @@ module.exports = function (config) {
       require('karma-chrome-launcher'),
       require('karma-jasmine-html-reporter'),
       require('karma-coverage'),
-      require('@angular-devkit/build-angular/plugins/karma')
+      require('@angular-devkit/build-angular/plugins/karma'),
     ],
     client: {
       jasmine: {
@@ -203,18 +195,15 @@ module.exports = function (config) {
         // for example, you can disable the random execution with \`random: false\`
         // or set a specific seed with \`seed: 4321\`
       },
-      clearContext: false // leave Jasmine Spec Runner output visible in browser
+      clearContext: false, // leave Jasmine Spec Runner output visible in browser
     },
     jasmineHtmlReporter: {
-      suppressAll: true // removes the duplicated traces
+      suppressAll: true, // removes the duplicated traces
     },
     coverageReporter: {
       dir: require('path').join(__dirname, './coverage/angular-instantsearch-app'),
       subdir: '.',
-      reporters: [
-        { type: 'html' },
-        { type: 'text-summary' }
-      ]
+      reporters: [{ type: 'html' }, { type: 'text-summary' }],
     },
     reporters: ['progress', 'kjhtml'],
     port: 9876,
@@ -223,7 +212,7 @@ module.exports = function (config) {
     autoWatch: true,
     browsers: ['Chrome'],
     singleRun: false,
-    restartOnFileChange: true
+    restartOnFileChange: true,
   });
 };"
 `;
@@ -371,15 +360,12 @@ exports[`Templates Angular InstantSearch File content: src/app/app.component.ts 
 "import { Component } from '@angular/core';
 import algoliasearch from 'algoliasearch/lite';
 
-const searchClient = algoliasearch(
-  'appId',
-  'apiKey'
-);
+const searchClient = algoliasearch('appId', 'apiKey');
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
   config = {
@@ -397,24 +383,19 @@ import { NgAisModule } from 'angular-instantsearch';
 import { AppComponent } from './app.component';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    NgAisModule.forRoot(),
-    BrowserModule
-  ],
+  declarations: [AppComponent],
+  imports: [NgAisModule.forRoot(), BrowserModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }"
+export class AppModule {}"
 `;
 
 exports[`Templates Angular InstantSearch File content: src/assets/.gitkeep 1`] = `""`;
 
 exports[`Templates Angular InstantSearch File content: src/environments/environment.prod.ts 1`] = `
 "export const environment = {
-  production: true
+  production: true,
 };"
 `;
 
@@ -424,7 +405,7 @@ exports[`Templates Angular InstantSearch File content: src/environments/environm
 // The list of file replacements can be found in \`angular.json\`.
 
 export const environment = {
-  production: false
+  production: false,
 };
 
 /*
@@ -438,19 +419,22 @@ export const environment = {
 `;
 
 exports[`Templates Angular InstantSearch File content: src/index.html 1`] = `
-"<!doctype html>
+"<!DOCTYPE html>
 <html lang=\\"en\\">
-<head>
-  <meta charset=\\"utf-8\\">
-  <title>angular-instantsearch-app</title>
-  <base href=\\"/\\">
-  <meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1\\">
-  <link rel=\\"icon\\" type=\\"image/x-icon\\" href=\\"favicon.ico\\">
-  <link href=\\"https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/satellite.css\\" rel=\\"stylesheet\\" />
-</head>
-<body>
-  <app-root></app-root>
-</body>
+  <head>
+    <meta charset=\\"utf-8\\" />
+    <title>angular-instantsearch-app</title>
+    <base href=\\"/\\" />
+    <meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1\\" />
+    <link rel=\\"icon\\" type=\\"image/x-icon\\" href=\\"favicon.ico\\" />
+    <link
+      href=\\"https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/satellite.css\\"
+      rel=\\"stylesheet\\"
+    />
+  </head>
+  <body>
+    <app-root></app-root>
+  </body>
 </html>"
 `;
 
@@ -465,8 +449,9 @@ if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.error(err));"
+platformBrowserDynamic()
+  .bootstrapModule(AppModule)
+  .catch((err) => console.error(err));"
 `;
 
 exports[`Templates Angular InstantSearch File content: src/polyfills.ts 1`] = `
@@ -529,8 +514,7 @@ exports[`Templates Angular InstantSearch File content: src/polyfills.ts 1`] = `
 /***************************************************************************************************
  * Zone JS is required by default for Angular itself.
  */
-import 'zone.js';  // Included with Angular CLI.
-
+import 'zone.js'; // Included with Angular CLI.
 
 /***************************************************************************************************
  * APPLICATION IMPORTS
@@ -562,11 +546,15 @@ import 'zone.js/testing';
 import { getTestBed } from '@angular/core/testing';
 import {
   BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting
+  platformBrowserDynamicTesting,
 } from '@angular/platform-browser-dynamic/testing';
 
 declare const require: {
-  context(path: string, deep?: boolean, filter?: RegExp): {
+  context(
+    path: string,
+    deep?: boolean,
+    filter?: RegExp
+  ): {
     keys(): string[];
     <T>(id: string): T;
   };
@@ -576,7 +564,7 @@ declare const require: {
 getTestBed().initTestEnvironment(
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting(),
-  { teardown: { destroyAfterEach: true }},
+  { teardown: { destroyAfterEach: true } }
 );
 
 // Then we find all the tests.
@@ -2103,51 +2091,51 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 exports[`Templates InstantSearch iOS File content: App/Assets.xcassets/AppIcon.appiconset/Contents.json 1`] = `
 "{
-  \\"images\\" : [
+  \\"images\\": [
     {
-      \\"idiom\\" : \\"iphone\\",
-      \\"size\\" : \\"20x20\\",
-      \\"scale\\" : \\"2x\\"
+      \\"idiom\\": \\"iphone\\",
+      \\"size\\": \\"20x20\\",
+      \\"scale\\": \\"2x\\"
     },
     {
-      \\"idiom\\" : \\"iphone\\",
-      \\"size\\" : \\"20x20\\",
-      \\"scale\\" : \\"3x\\"
+      \\"idiom\\": \\"iphone\\",
+      \\"size\\": \\"20x20\\",
+      \\"scale\\": \\"3x\\"
     },
     {
-      \\"idiom\\" : \\"iphone\\",
-      \\"size\\" : \\"29x29\\",
-      \\"scale\\" : \\"2x\\"
+      \\"idiom\\": \\"iphone\\",
+      \\"size\\": \\"29x29\\",
+      \\"scale\\": \\"2x\\"
     },
     {
-      \\"idiom\\" : \\"iphone\\",
-      \\"size\\" : \\"29x29\\",
-      \\"scale\\" : \\"3x\\"
+      \\"idiom\\": \\"iphone\\",
+      \\"size\\": \\"29x29\\",
+      \\"scale\\": \\"3x\\"
     },
     {
-      \\"idiom\\" : \\"iphone\\",
-      \\"size\\" : \\"40x40\\",
-      \\"scale\\" : \\"2x\\"
+      \\"idiom\\": \\"iphone\\",
+      \\"size\\": \\"40x40\\",
+      \\"scale\\": \\"2x\\"
     },
     {
-      \\"idiom\\" : \\"iphone\\",
-      \\"size\\" : \\"40x40\\",
-      \\"scale\\" : \\"3x\\"
+      \\"idiom\\": \\"iphone\\",
+      \\"size\\": \\"40x40\\",
+      \\"scale\\": \\"3x\\"
     },
     {
-      \\"idiom\\" : \\"iphone\\",
-      \\"size\\" : \\"60x60\\",
-      \\"scale\\" : \\"2x\\"
+      \\"idiom\\": \\"iphone\\",
+      \\"size\\": \\"60x60\\",
+      \\"scale\\": \\"2x\\"
     },
     {
-      \\"idiom\\" : \\"iphone\\",
-      \\"size\\" : \\"60x60\\",
-      \\"scale\\" : \\"3x\\"
+      \\"idiom\\": \\"iphone\\",
+      \\"size\\": \\"60x60\\",
+      \\"scale\\": \\"3x\\"
     }
   ],
-  \\"info\\" : {
-    \\"version\\" : 1,
-    \\"author\\" : \\"xcode\\"
+  \\"info\\": {
+    \\"version\\": 1,
+    \\"author\\": \\"xcode\\"
   }
 }"
 `;
@@ -3055,7 +3043,7 @@ exports[`Templates InstantSearch.js widget File content: config/api-extractor.js
 "/**
  * Config file for API Extractor.  For more info, please visit: https://api-extractor.com
  */
- {
+{
   \\"$schema\\": \\"https://developer.microsoft.com/json-schemas/api-extractor/v7/api-extractor.schema.json\\",
 
   /**
@@ -3426,7 +3414,7 @@ exports[`Templates InstantSearch.js widget File content: example/index.css 1`] =
   font-family: sans-serif;
 }
 
-[class^=ais-] {
+[class^='ais-'] {
   font-size: 1em;
 }"
 `;
@@ -3434,20 +3422,23 @@ exports[`Templates InstantSearch.js widget File content: example/index.css 1`] =
 exports[`Templates InstantSearch.js widget File content: example/index.html 1`] = `
 "<!DOCTYPE html>
 <html lang=\\"en\\">
-<head>
-  <meta charset=\\"UTF-8\\">
-  <meta http-equiv=\\"X-UA-Compatible\\" content=\\"IE=edge\\">
-  <meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1.0\\">
-  <link rel=\\"stylesheet\\" href=\\"https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/algolia-min.css\\">
-  <link rel=\\"stylesheet\\" href=\\"style.css\\">
-  <title>date-picker example</title>
-</head>
-<body>
-  <div id=\\"search-box\\"></div>
-  <div id=\\"example\\"></div>
-  <div id=\\"hits\\"></div>
-  <script src=\\"index.ts\\"></script>
-</body>
+  <head>
+    <meta charset=\\"UTF-8\\" />
+    <meta http-equiv=\\"X-UA-Compatible\\" content=\\"IE=edge\\" />
+    <meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1.0\\" />
+    <link
+      rel=\\"stylesheet\\"
+      href=\\"https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/algolia-min.css\\"
+    />
+    <link rel=\\"stylesheet\\" href=\\"style.css\\" />
+    <title>date-picker example</title>
+  </head>
+  <body>
+    <div id=\\"search-box\\"></div>
+    <div id=\\"example\\"></div>
+    <div id=\\"hits\\"></div>
+    <script src=\\"index.ts\\"></script>
+  </body>
 </html>"
 `;
 
@@ -4623,7 +4614,7 @@ exports[`Templates React InstantSearch File content: index.html 1`] = `
       content=\\"width=device-width, initial-scale=1, shrink-to-fit=no\\"
     />
 
-    <link rel=\\"shortcut icon\\" href=\\"favicon.png\\">
+    <link rel=\\"shortcut icon\\" href=\\"favicon.png\\" />
 
     <!--
     Do not use @7 in production, use a complete version like x.x.x, see website for latest version:
@@ -5019,7 +5010,7 @@ exports[`Templates React InstantSearch Native File content: app.json 1`] = `
 `;
 
 exports[`Templates React InstantSearch Native File content: babel.config.js 1`] = `
-"module.exports = function(api) {
+"module.exports = function (api) {
   api.cache(true);
   return {
     presets: ['babel-preset-expo'],
@@ -5153,8 +5144,8 @@ export const InfiniteHits = forwardRef(
     return (
       <FlatList
         ref={ref}
-        data={(hits as unknown) as THit[]}
-        keyExtractor={item => item.objectID}
+        data={hits as unknown as THit[]}
+        keyExtractor={(item) => item.objectID}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
         onEndReached={() => {
           if (!isLastPage) {
@@ -5163,7 +5154,7 @@ export const InfiniteHits = forwardRef(
         }}
         renderItem={({ item }) => (
           <View style={styles.item}>
-            <Hit hit={(item as unknown) as THit} />
+            <Hit hit={item as unknown as THit} />
           </View>
         )}
       />
@@ -5436,20 +5427,26 @@ exports[`Templates Vue InstantSearch File content: public/index.html 1`] = `
 "<!DOCTYPE html>
 <html lang=\\"en\\">
   <head>
-    <meta charset=\\"utf-8\\">
-    <meta http-equiv=\\"X-UA-Compatible\\" content=\\"IE=edge\\">
-    <meta name=\\"viewport\\" content=\\"width=device-width,initial-scale=1.0\\">
-    <link rel=\\"icon\\" href=\\"<%= BASE_URL %>favicon.png\\">
-     <!--
+    <meta charset=\\"utf-8\\" />
+    <meta http-equiv=\\"X-UA-Compatible\\" content=\\"IE=edge\\" />
+    <meta name=\\"viewport\\" content=\\"width=device-width,initial-scale=1.0\\" />
+    <link rel=\\"icon\\" href=\\"<%= BASE_URL %>favicon.png\\" />
+    <!--
       Do not use @7 in production, use a complete version like x.x.x, see website for latest version:
       https://www.algolia.com/doc/guides/building-search-ui/installation/react/#load-the-style
     -->
-    <link rel=\\"stylesheet\\" href=\\"https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/satellite-min.css\\">
+    <link
+      rel=\\"stylesheet\\"
+      href=\\"https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/satellite-min.css\\"
+    />
     <title>vue-instantsearch-app</title>
   </head>
   <body>
     <noscript>
-      <strong>We're sorry but vue-instantsearch-app doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong
+        >We're sorry but vue-instantsearch-app doesn't work properly without JavaScript
+        enabled. Please enable it to continue.</strong
+      >
     </noscript>
     <div id=\\"app\\"></div>
     <!-- built files will be auto injected -->
@@ -5710,14 +5707,17 @@ exports[`Templates Vue InstantSearch with Vue 3 File content: index.html 1`] = `
 <html lang=\\"en\\">
   <head>
     <meta charset=\\"UTF-8\\" />
-    <meta http-equiv=\\"X-UA-Compatible\\" content=\\"ie=edge\\">
+    <meta http-equiv=\\"X-UA-Compatible\\" content=\\"ie=edge\\" />
     <meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1.0\\" />
     <link rel=\\"icon\\" href=\\"/favicon.png\\" />
     <!--
       Do not use @7 in production, use a complete version like x.x.x, see website for latest version:
       https://www.algolia.com/doc/guides/building-search-ui/installation/react/#load-the-style
     -->
-    <link rel=\\"stylesheet\\" href=\\"https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/satellite-min.css\\">
+    <link
+      rel=\\"stylesheet\\"
+      href=\\"https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/satellite-min.css\\"
+    />
     <title>vue-instantsearch-app</title>
   </head>
   <body>

@@ -20,8 +20,8 @@ export const InfiniteHits = forwardRef(
     return (
       <FlatList
         ref={ref}
-        data={(hits as unknown) as THit[]}
-        keyExtractor={item => item.objectID}
+        data={hits as unknown as THit[]}
+        keyExtractor={(item) => item.objectID}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
         onEndReached={() => {
           if (!isLastPage) {
@@ -30,7 +30,7 @@ export const InfiniteHits = forwardRef(
         }}
         renderItem={({ item }) => (
           <View style={styles.item}>
-            <Hit hit={(item as unknown) as THit} />
+            <Hit hit={item as unknown as THit} />
           </View>
         )}
       />

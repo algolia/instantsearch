@@ -5,7 +5,7 @@
   "description": "The specs website for InstantSearch.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/algolia/instantsearch.js"
+    "url": "https://github.com/algolia/instantsearch"
   },
   "license": "MIT",
   "author": "Algolia <support@algolia.com>",

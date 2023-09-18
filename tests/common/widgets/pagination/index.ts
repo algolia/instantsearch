@@ -1,6 +1,7 @@
 import { fakeAct } from '../../common';
 
 import { createOptimisticUiTests } from './optimistic-ui';
+import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
 import type { PaginationWidget } from 'instantsearch.js/es/widgets/pagination/pagination';
@@ -20,5 +21,6 @@ export function createPaginationWidgetTests(
 
   describe('Pagination widget common tests', () => {
     createOptimisticUiTests(setup, { act, skippedTests });
+    createOptionsTests(setup, { act, skippedTests });
   });
 }

@@ -24,7 +24,6 @@ This module is the companion of the [algolia/algoliasearch-client-javascript](ht
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Features](#features)
 - [Examples](#examples)
   - [Vanilla JavaScript](#vanilla-javascript)
@@ -150,11 +149,11 @@ var helper = algoliasearchHelper(client, 'indexName' /*, parameters*/);
 
 ### Helper lifecycle
 
-1. modify the parameters of the search (usually through user interactions)<br/> ` helper.setQuery('iphone').addFacetRefinement('category', 'phone') `
+1. modify the parameters of the search (usually through user interactions)<br/> `helper.setQuery('iphone').addFacetRefinement('category', 'phone')`
 
-2. trigger the search (after all the modification have been applied)<br/> ` helper.search() `
+2. trigger the search (after all the modification have been applied)<br/> `helper.search()`
 
-3. read the results (with the event "result" handler) and update the UI with the results<br/> ` helper.on('result', function(event) { updateUI(event.results); }); `
+3. read the results (with the event "result" handler) and update the UI with the results<br/> `helper.on('result', function(event) { updateUI(event.results); });`
 
 4. go back to 1
 

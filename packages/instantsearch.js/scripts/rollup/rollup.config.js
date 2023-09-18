@@ -12,7 +12,7 @@ const version =
     ? packageJson.version
     : `UNRELEASED (${new Date().toUTCString()})`;
 const algolia = '© Algolia, Inc. and contributors; MIT License';
-const link = 'https://github.com/algolia/instantsearch.js';
+const link = 'https://github.com/algolia/instantsearch';
 const license = `/*! InstantSearch.js ${version} | ${algolia} | ${link} */`;
 
 const plugins = [

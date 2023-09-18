@@ -72,6 +72,7 @@ describe('CurrentRefinements', () => {
               >
                 Brand
                 :
+                 
               </span>
               <span
                 class="ais-CurrentRefinements-category"
@@ -199,8 +200,9 @@ describe('CurrentRefinements', () => {
                 <span
                   class="ais-CurrentRefinements-label LABEL"
                 >
-                  brand
+                  Brand
                   :
+                   
                 </span>
                 <span
                   class="ais-CurrentRefinements-category CATEGORY"

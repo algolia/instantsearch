@@ -242,6 +242,27 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
+  createCurrentRefinementsWidgetTests({ instantSearchOptions, widgetParams }) {
+    render(
+      <form>
+        <InstantSearch {...instantSearchOptions}>
+          <SearchBox />
+          <RefinementList attribute="brand" />
+          <RefinementList operator="and" attribute="feature" />
+          <HierarchicalMenu
+            attributes={[
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ]}
+          />
+          <RangeInput attribute="price" />
+          <CurrentRefinements {...widgetParams} />
+          <GlobalErrorSwallower />
+        </InstantSearch>
+      </form>
+    );
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -256,6 +277,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createInstantSearchWidgetTests: { act },
   createHitsPerPageWidgetTests: { act },
   createClearRefinementsWidgetTests: { act },
+  createCurrentRefinementsWidgetTests: { act },
 };
 
 /**

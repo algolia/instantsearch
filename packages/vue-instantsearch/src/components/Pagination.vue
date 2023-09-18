@@ -1,5 +1,8 @@
 <template>
-  <div v-if="state" :class="suit()">
+  <div
+    v-if="state"
+    :class="{ [suit()]: true, [suit('', 'noRefinement')]: state.nbPages <= 1 }"
+  >
     <slot
       :refine="refine"
       :createURL="state.createURL"
@@ -14,8 +17,8 @@
         <li
           :class="{
             [suit('item')]: true,
-            [suit('item', 'firstPage')]: true,
             [suit('item', 'disabled')]: state.isFirstPage,
+            [suit('item', 'firstPage')]: true,
           }"
           v-if="showFirst"
         >
@@ -42,8 +45,8 @@
         <li
           :class="{
             [suit('item')]: true,
-            [suit('item', 'previousPage')]: true,
             [suit('item', 'disabled')]: state.isFirstPage,
+            [suit('item', 'previousPage')]: true,
           }"
           v-if="showPrevious"
         >
@@ -98,8 +101,8 @@
         <li
           :class="{
             [suit('item')]: true,
-            [suit('item', 'nextPage')]: true,
             [suit('item', 'disabled')]: state.isLastPage,
+            [suit('item', 'nextPage')]: true,
           }"
           v-if="showNext"
         >
@@ -126,8 +129,8 @@
         <li
           :class="{
             [suit('item')]: true,
-            [suit('item', 'lastPage')]: true,
             [suit('item', 'disabled')]: state.isLastPage,
+            [suit('item', 'lastPage')]: true,
           }"
           v-if="showLast"
         >

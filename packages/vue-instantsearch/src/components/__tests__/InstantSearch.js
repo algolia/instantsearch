@@ -334,7 +334,7 @@ it.skip('Does not allow a change in `routing`', async () => {
   ).rejects.toMatchInlineSnapshot(`
 [Error: routing configuration can not be changed dynamically at this point.
 
-Please open a new issue: https://github.com/algolia/instantsearch.js/discussions/new?category=ideas&labels=triage%2cLibrary%3A+Vue+InstantSearch&title=Feature%20request%3A%20dynamic%20props]
+Please open a new issue: https://github.com/algolia/instantsearch/discussions/new?category=ideas&labels=triage%2cLibrary%3A+Vue+InstantSearch&title=Feature%20request%3A%20dynamic%20props]
 `);
 });
 

@@ -1,6 +1,6 @@
 {
   "name": "react-instantsearch-router-nextjs",
-  "version": "7.0.2",
+  "version": "7.0.3",
   "description": "React InstantSearch Router for Next.js",
   "source": "src/index.ts",
   "types": "dist/es/index.d.ts",
@@ -17,7 +17,7 @@
   "homepage": "https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/algolia/instantsearch.js"
+    "url": "https://github.com/algolia/instantsearch"
   },
   "author": {
     "name": "Algolia, Inc.",
@@ -49,8 +49,8 @@
     "test:e2e:saucelabs": "start-server-and-test test:start-server 3000 'wdio run ./wdio.saucelabs.conf.cjs'"
   },
   "dependencies": {
-    "instantsearch.js": "4.56.10",
-    "react-instantsearch-core": "7.0.2"
+    "instantsearch.js": "4.56.11",
+    "react-instantsearch-core": "7.0.3"
   },
   "devDependencies": {
     "@types/jasmine": "3.3.16",

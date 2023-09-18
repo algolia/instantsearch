@@ -3,76 +3,76 @@ description: Help us improve InstantSearch
 labels:
   - triage
 body:
-- type: textarea
-  id: current-behavior
-  attributes:
-    label: 🐛 Current behavior
-    description: A clear and concise description of what the bug is.
-  validations:
-    required: true
-- type: textarea
-  id: reproduction-steps
-  attributes:
-    label: 🔍 Steps to reproduce
-    description: Steps to reproduce the behavior.
-    placeholder: |
-      1. Go to ...
-      2. Click on ...
-      3. Scroll down to ...
-      4. See error
+  - type: textarea
+    id: current-behavior
+    attributes:
+      label: 🐛 Current behavior
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: 🔍 Steps to reproduce
+      description: Steps to reproduce the behavior.
+      placeholder: |
+        1. Go to ...
+        2. Click on ...
+        3. Scroll down to ...
+        4. See error
 
-      You can attach screenshots by dragging and dropping, or selecting and pasting them in the text field.
-  validations:
-    required: true
-- type: input
-  id: reproduction-links
-  attributes:
-    label: Live reproduction
-    description: |
-      A live example helps a lot! Fork the sandbox relevant to the library you're using, reproduce the bug, and paste the URL here.
+        You can attach screenshots by dragging and dropping, or selecting and pasting them in the text field.
+    validations:
+      required: true
+  - type: input
+    id: reproduction-links
+    attributes:
+      label: Live reproduction
+      description: |
+        A live example helps a lot! Fork the sandbox relevant to the library you're using, reproduce the bug, and paste the URL here.
 
-      <table>
-        <tr>
-          <th>Sandboxes</th>
-          <td><a href="https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/instantsearch.js" target="_blank">InstantSearch.js</a></td>
-          <td><a href="https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/react-instantsearch" target="_blank">React InstantSearch</a></td>
-          <td><a href="https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/vue-instantsearch" target="_blank">Vue InstantSearch</a></td>
-          <td><a href="https://codesandbox.io/s/github/algolia/instantsearch.js/tree/templates/angular-instantsearch" target="_blank">Angular InstantSearch</a></td>
-        </tr>
-      </table>
+        <table>
+          <tr>
+            <th>Sandboxes</th>
+            <td><a href="https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/instantsearch.js" target="_blank">InstantSearch.js</a></td>
+            <td><a href="https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/react-instantsearch" target="_blank">React InstantSearch</a></td>
+            <td><a href="https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/vue-instantsearch" target="_blank">Vue InstantSearch</a></td>
+            <td><a href="https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/angular-instantsearch" target="_blank">Angular InstantSearch</a></td>
+          </tr>
+        </table>
 
-    placeholder: https://codesandbox.io/...
-  validations:
-    required: true
-- type: textarea
-  id: expected-behavior
-  attributes:
-    label: 💭 Expected behavior
-    description: A clear and concise description of what you expected to happen.
-  validations:
-    required: true
-- type: input
-  id: version
-  attributes:
-    label: Package version
-    description: What library and version you're experiencing the issue with.
-    placeholder: e.g., instantsearch.js 4.49.2, react-instantsearch 6.38.1
-  validations:
-    required: true
-- type: input
-  id: os
-  attributes:
-    label: Operating system
-    placeholder: e.g., macOS 13.1
-- type: input
-  id: browser
-  attributes:
-    label: Browser
-    placeholder: e.g., Firefox 108.0.1
-- type: checkboxes
-  attributes:
-    label: Code of Conduct
-    description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/algolia/.github/blob/main/CODE_OF_CONDUCT.md).
-    options:
-      - label: I agree to follow this project's Code of Conduct
-        required: true
+      placeholder: https://codesandbox.io/...
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: 💭 Expected behavior
+      description: A clear and concise description of what you expected to happen.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      description: What library and version you're experiencing the issue with.
+      placeholder: e.g., instantsearch.js 4.49.2, react-instantsearch 6.38.1
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      placeholder: e.g., macOS 13.1
+  - type: input
+    id: browser
+    attributes:
+      label: Browser
+      placeholder: e.g., Firefox 108.0.1
+  - type: checkboxes
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/algolia/.github/blob/main/CODE_OF_CONDUCT.md).
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

@@ -10,8 +10,7 @@
 
 ---
 
-[![License][license-image]][license-url]
-[![Build Status][ci-svg]][ci-url]
+[![License][license-image]][license-url] [![Build Status][ci-svg]][ci-url]
 
 [InstantSearch][instantsearch-docs] is a JavaScript library that lets you create an instant-search result experience using [Algolia][algolia-website]’s search API.
 
@@ -26,7 +25,6 @@ It is part of the InstantSearch family which is designed for different platforms
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 
 - [Packages](#packages)
 - [Contributing](#contributing)
@@ -44,7 +42,7 @@ It is part of the InstantSearch family which is designed for different platforms
 | [`create-instantsearch-app`](packages/create-instantsearch-app) | [![create-instantsearch-app npm version](https://img.shields.io/npm/v/create-instantsearch-app.svg?style=flat-square)](https://npmjs.org/package/create-instantsearch-app) | Command-line utility to quickly bootstrap a project with InstantSearch |
 | [`instantsearch.css`](packages/instantsearch.css) | [![instantsearch.css npm version](https://img.shields.io/npm/v/instantsearch.css.svg?style=flat-square)](https://npmjs.org/package/instantsearch.css) | Default CSS themes for InstantSearch |
 | [`instantsearch.js`](packages/instantsearch.js) | [![instantsearch.js npm version](https://img.shields.io/npm/v/instantsearch.js.svg?style=flat-square)](https://npmjs.org/package/instantsearch.js) | InstantSearch.js |
-| [`react-instantsearch`](packages/react-instantsearch) | [![react-instantsearch npm version](https://img.shields.io/npm/v/react-instantsearch.svg?style=flat-square)](https://npmjs.org/package/react-instantsearch)| React InstantSearch bundled library |
+| [`react-instantsearch`](packages/react-instantsearch) | [![react-instantsearch npm version](https://img.shields.io/npm/v/react-instantsearch.svg?style=flat-square)](https://npmjs.org/package/react-instantsearch) | React InstantSearch bundled library |
 | [`react-instantsearch-core`](packages/react-instantsearch-core) | [![react-instantsearch-core npm version](https://img.shields.io/npm/v/react-instantsearch-core.svg?style=flat-square)](https://npmjs.org/package/react-instantsearch-core) | Runtime-independent React InstantSearch version |
 | [`vue-instantsearch`](packages/vue-instantsearch) | [![vue-instantsearch npm version](https://img.shields.io/npm/v/vue-instantsearch.svg?style=flat-square)](https://npmjs.org/package/vue-instantsearch) | Vue InstantSearch |
 
@@ -80,16 +78,16 @@ InstantSearch is [MIT licensed][license-url].
 <!-- Links -->
 
 [algolia-website]: https://www.algolia.com/?utm_source=instantsearch.js&utm_campaign=repository "Algolia's website"
-[instantsearch-docs]: https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/?utm_source=instantsearch.js&utm_campaign=repository "InstantSearch.js documentation"
-[react-instantsearch-docs]: https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/?utm_source=instantsearch.js&utm_campaign=repository "React InstantSearch documentation"
-[vue-instantsearch-docs]: https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/vue/?utm_source=instantsearch.js&utm_campaign=repository "Vue InstantSearch documentation"
-[angular-instantsearch-docs]: https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/angular/?utm_source=instantsearch.js&utm_campaign=repository "Angular InstantSearch documentation"
+[instantsearch-docs]: https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/?utm_source=instantsearch.js&utm_campaign=repository 'InstantSearch.js documentation'
+[react-instantsearch-docs]: https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/?utm_source=instantsearch.js&utm_campaign=repository 'React InstantSearch documentation'
+[vue-instantsearch-docs]: https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/vue/?utm_source=instantsearch.js&utm_campaign=repository 'Vue InstantSearch documentation'
+[angular-instantsearch-docs]: https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/angular/?utm_source=instantsearch.js&utm_campaign=repository 'Angular InstantSearch documentation'
 [instantsearch-android-github]: https://github.com/algolia/instantsearch-android
 [instantsearch-ios-github]: https://github.com/algolia/instantsearch-ios
 [instantsearch-angular-github]: https://github.com/algolia/angular-instantsearch
-[contributing-bugreport]: https://github.com/algolia/instantsearch.js/issues/new?template=BUG_REPORT.yml&labels=triage
-[contributing-featurerequest]: https://github.com/algolia/instantsearch.js/discussions/new?category=ideas&labels=triage&title=Feature%20request%3A%20
-[contributing-newissue]: https://github.com/algolia/instantsearch.js/issues/new?labels=triage
-[contributing-label-easy]: https://github.com/algolia/instantsearch.js/issues?q=is%3Aopen+is%3Aissue+label%3A%22Difficulty%3A+Easy%22
-[contributing-label-bug]: https://github.com/algolia/instantsearch.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22Type%3A+Bug%22
-[contributing-label-chore]: https://github.com/algolia/instantsearch.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22Type%3A+Chore%22
+[contributing-bugreport]: https://github.com/algolia/instantsearch/issues/new?template=BUG_REPORT.yml&labels=triage
+[contributing-featurerequest]: https://github.com/algolia/instantsearch/discussions/new?category=ideas&labels=triage&title=Feature%20request%3A%20
+[contributing-newissue]: https://github.com/algolia/instantsearch/issues/new?labels=triage
+[contributing-label-easy]: https://github.com/algolia/instantsearch/issues?q=is%3Aopen+is%3Aissue+label%3A%22Difficulty%3A+Easy%22
+[contributing-label-bug]: https://github.com/algolia/instantsearch/issues?q=is%3Aissue+is%3Aopen+label%3A%22Type%3A+Bug%22
+[contributing-label-chore]: https://github.com/algolia/instantsearch/issues?q=is%3Aissue+is%3Aopen+label%3A%22Type%3A+Chore%22

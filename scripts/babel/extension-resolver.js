@@ -120,11 +120,32 @@ function resolveRelativePath(baseDir, sourcePath, srcExtensions, dstExtension) {
   return resolvedPath;
 }
 
+/**
+ * @param {string} sourcePath the path to resolve using require.resolve
+ * @returns {string} the resolved path
+ */
 function resolveAbsolutePath(sourcePath) {
-  const fullPath = require.resolve(sourcePath);
-  const [, suffix] = fullPath.split(sourcePath);
+  // The source path is composed of: 1. the package name, 2. the path inside the package.
+  const packageNameRegex = sourcePath.startsWith('@')
+    ? /^(?<packageName>@[^/]+\/[^/]+)\/(?<pathName>.+)/
+    : /^(?<packageName>[^/]+)\/(?<pathName>.+)/;
+  const { packageName } = sourcePath.match(packageNameRegex).groups;
 
-  return sourcePath + suffix;
+  // the require.resolve will return the full path of the requested file.
+  const fullPath = require.resolve(sourcePath);
+
+  // the bare package could resolve to a nested file, but /package.json is always at the root.
+  // this gives us the path to the root of the package.
+  const packageJson = '/package.json';
+  const packagePath = require
+    .resolve(packageName + packageJson)
+    .slice(0, -packageJson.length);
+
+  // We overlap the two parts to get path inside the package.
+  const [, resolvedPath] = fullPath.split(packagePath);
+
+  // That's then combined with the package name.
+  return packageName + resolvedPath;
 }
 
 function resolveRelativeExtension(
