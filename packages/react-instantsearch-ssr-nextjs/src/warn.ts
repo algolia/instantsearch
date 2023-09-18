@@ -26,7 +26,7 @@ export function warn(condition: boolean, message: string) {
 
   if (!hasAlreadyPrinted) {
     warnCache.current[sanitizedMessage] = true;
-    const warning = `[react-instantsearch-ssr-nextjs] ${sanitizedMessage}`;
+    const warning = `[react-instantsearch-nextjs] ${sanitizedMessage}`;
 
     console.warn(warning);
 

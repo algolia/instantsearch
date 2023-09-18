@@ -3,8 +3,8 @@
 const assert = require('assert');
 
 require('next');
-const ReactInstantSearchSSRNext = require('react-instantsearch-ssr-nextjs');
+const ReactInstantSearchSSRNext = require('react-instantsearch-nextjs');
 
 assert.ok(ReactInstantSearchSSRNext);
 
-console.log('react-instantsearch-ssr-nextjs is valid CJS');
+console.log('react-instantsearch-nextjs is valid CJS');

@@ -2,7 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [react-instantsearch-ssr-nextjs](#react-instantsearch-ssr-nextjs)
+- [react-instantsearch-nextjs](#react-instantsearch-nextjs)
   - [Installation](#installation)
   - [Usage](#usage)
   - [API](#api)
@@ -12,7 +12,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# react-instantsearch-ssr-nextjs
+# react-instantsearch-nextjs
 
 This package provides server-side rendering for [React InstantSearch](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/) that is compatible with [Next.js 13 App Router](https://nextjs.org/docs/app).
 
@@ -21,9 +21,9 @@ This package provides server-side rendering for [React InstantSearch](https://ww
 ## Installation
 
 ```sh
-yarn add react-instantsearch-ssr-nextjs
+yarn add react-instantsearch-nextjs
 # or with npm
-npm install react-instantsearch-ssr-nextjs
+npm install react-instantsearch-nextjs
 ```
 
 ## Usage

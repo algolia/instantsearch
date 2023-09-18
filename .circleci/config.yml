@@ -163,7 +163,7 @@ jobs:
             - packages/react-instantsearch/dist
             - packages/react-instantsearch-core/dist
             - packages/react-instantsearch-router-nextjs/dist
-            - packages/react-instantsearch-ssr-nextjs/dist
+            - packages/react-instantsearch-nextjs/dist
             - packages/vue-instantsearch/vue2
             - packages/vue-instantsearch/vue3
 

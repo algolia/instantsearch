@@ -27,26 +27,26 @@ declare global {
   }
 }
 
-export type NextInstantSearchSSRRouting<TUiState, TRouteState> = {
+export type InstantSearchNextRouting<TUiState, TRouteState> = {
   router?: BrowserHistoryArgs<TRouteState>;
   stateMapping?: StateMapping<TUiState, TRouteState>;
 };
 
-export type NextInstantSearchSSRProps<
+export type InstantSearchNextProps<
   TUiState extends UiState = UiState,
   TRouteState = TUiState
 > = Omit<InstantSearchProps<TUiState, TRouteState>, 'routing'> & {
-  routing?: NextInstantSearchSSRRouting<TUiState, TRouteState> | boolean;
+  routing?: InstantSearchNextRouting<TUiState, TRouteState> | boolean;
 };
 
-export function NextInstantSearchSSR<
+export function InstantSearchNext<
   TUiState extends UiState = UiState,
   TRouteState = TUiState
 >({
   children,
   routing: passedRouting,
   ...instantSearchProps
-}: NextInstantSearchSSRProps<TUiState, TRouteState>) {
+}: InstantSearchNextProps<TUiState, TRouteState>) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -97,7 +97,7 @@ export function NextInstantSearchSSR<
 
   warn(
     false,
-    `NextInstantSearchSSR relies on experimental APIs and may break in the future.
+    `InstantSearchNext relies on experimental APIs and may break in the future.
 This message will only be displayed in development mode.`
   );
 

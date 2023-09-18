@@ -10,7 +10,7 @@ import {
   RefinementList,
   DynamicWidgets,
 } from 'react-instantsearch';
-import { NextInstantSearchSSR } from 'react-instantsearch-ssr-nextjs';
+import { InstantSearchNext } from 'react-instantsearch-nextjs';
 
 import { Panel } from '../components/Panel';
 
@@ -34,11 +34,7 @@ function Hit({ hit }: HitProps) {
 
 export default function Search() {
   return (
-    <NextInstantSearchSSR
-      searchClient={client}
-      indexName="instant_search"
-      routing
-    >
+    <InstantSearchNext searchClient={client} indexName="instant_search" routing>
       <div className="Container">
         <div>
           <DynamicWidgets fallbackComponent={FallbackComponent} />
@@ -48,7 +44,7 @@ export default function Search() {
           <Hits hitComponent={Hit} />
         </div>
       </div>
-    </NextInstantSearchSSR>
+    </InstantSearchNext>
   );
 }
 

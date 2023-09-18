@@ -1,1 +1,1 @@
-export * from './NextInstantSearchSSR';
+export * from './InstantSearchNext';

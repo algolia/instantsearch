@@ -11,7 +11,7 @@
     "packages/instantsearch.js",
     "packages/react-instantsearch",
     "packages/react-instantsearch-core",
-    "packages/react-instantsearch-ssr-nextjs",
+    "packages/react-instantsearch-nextjs",
     "packages/vue-instantsearch",
     "packages/instantsearch.css"
   ],

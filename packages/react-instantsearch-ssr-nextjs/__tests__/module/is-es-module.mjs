@@ -2,8 +2,8 @@
 import assert from 'assert';
 
 import 'next';
-import * as ReactInstantSearchSSRNext from 'react-instantsearch-ssr-nextjs';
+import * as ReactInstantSearchSSRNext from 'react-instantsearch-nextjs';
 
 assert.ok(ReactInstantSearchSSRNext);
 
-console.log('react-instantsearch-ssr-nextjs is valid ESM');
+console.log('react-instantsearch-nextjs is valid ESM');
