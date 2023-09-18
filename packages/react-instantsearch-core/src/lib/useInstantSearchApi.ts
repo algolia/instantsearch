@@ -4,7 +4,6 @@ import { useSyncExternalStore } from 'use-sync-external-store/shim';
 
 import version from '../version';
 
-import { hydrateSearchClient } from './hydrateSearchClient';
 import { useForceUpdate } from './useForceUpdate';
 import { useInstantSearchServerContext } from './useInstantSearchServerContext';
 import { useInstantSearchSSRContext } from './useInstantSearchSSRContext';
@@ -106,8 +105,6 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
       // `scheduleSearch` to a noop.)
       search._initialResults = initialResults || {};
     }
-
-    hydrateSearchClient(props.searchClient, initialResults);
 
     addAlgoliaAgents(props.searchClient, [
       ...defaultUserAgents,

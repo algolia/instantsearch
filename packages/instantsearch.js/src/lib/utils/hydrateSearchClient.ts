@@ -1,5 +1,5 @@
 // @ts-nocheck (types to be fixed during actual implementation)
-import type { InitialResults, SearchClient } from 'instantsearch.js';
+import type { InitialResults, SearchClient } from '../../types';
 
 export function hydrateSearchClient(
   client: SearchClient,
