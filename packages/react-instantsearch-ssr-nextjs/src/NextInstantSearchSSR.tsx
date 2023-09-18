@@ -1,7 +1,7 @@
 import historyRouter from 'instantsearch.js/es/lib/routers/history';
 import { safelyRunOnBrowser } from 'instantsearch.js/es/lib/utils';
 import { headers } from 'next/headers';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import React, { useRef } from 'react';
 import {
   InstantSearch,
@@ -49,6 +49,7 @@ export function NextInstantSearchSSR<
 }: NextInstantSearchSSRProps<TUiState, TRouteState>) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   const promiseRef = useRef<PromiseWithState<void> | null>(null);
 
@@ -60,6 +61,7 @@ export function NextInstantSearchSSR<
     passedRouting && {};
   if (routing) {
     let browserHistoryOptions: Partial<BrowserHistoryArgs<TRouteState>> = {};
+
     browserHistoryOptions.getLocation = () => {
       if (typeof window === 'undefined') {
         const url = `${
@@ -67,8 +69,22 @@ export function NextInstantSearchSSR<
         }://${headers().get('host')}${pathname}?${searchParams}`;
         return new URL(url) as unknown as Location;
       }
-      return window.location;
+
+      return new URL(
+        `${window.location.protocol}//${window.location.host}${pathname}?${searchParams}`
+      ) as unknown as Location;
     };
+    browserHistoryOptions.push = function push(
+      this: ReturnType<typeof historyRouter>,
+      url
+    ) {
+      // This is to skip the push with empty routeState on dispose as it would clear params set on a <Link>
+      if (this.isDisposed) {
+        return;
+      }
+      router.push(url);
+    };
+
     if (typeof passedRouting === 'object') {
       browserHistoryOptions = {
         ...browserHistoryOptions,

@@ -86,7 +86,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
   /**
    * Indicates whether the history router is disposed or not.
    */
-  private isDisposed: boolean = false;
+  protected isDisposed: boolean = false;
 
   /**
    * Indicates the window.history.length before the last call to
