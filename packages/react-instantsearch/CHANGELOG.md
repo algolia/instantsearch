@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.4](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.0.3...react-instantsearch@7.0.4) (2023-09-19)
+
+
+### Bug Fixes
+
+* **prettier:** consistent version ([#5850](https://github.com/algolia/instantsearch/issues/5850)) ([ca59c6d](https://github.com/algolia/instantsearch/commit/ca59c6dbd5c9eac4e2e0179a24e39bca997ae141))
+
+
+
+
+
 ## [7.0.3](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.0.2...react-instantsearch@7.0.3) (2023-09-12)
 
 **Note:** Version bump only for package react-instantsearch
