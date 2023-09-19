@@ -2,6 +2,6 @@
   "name": "@instantsearch/babel-testfixture",
   "private": true,
   "description": "A package to use as a test in extension-resolver",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "nested/index"
 }
