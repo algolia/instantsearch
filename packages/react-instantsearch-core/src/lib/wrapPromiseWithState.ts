@@ -1,4 +1,4 @@
-// Taken from https://github.com/apollographql/apollo-client/blob/ba3e7d9fa7d46e4c636148bbf01552833db0ceda/src/utilities/promises/decoration.ts
+// This is needed in order to work with RSC Suspense, perhaps they will later provide a wrapper.
 
 interface PendingPromise<TValue> extends Promise<TValue> {
   status: 'pending';
