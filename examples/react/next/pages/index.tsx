@@ -4,7 +4,7 @@ import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import singletonRouter from 'next/router';
 import React from 'react';
-import { renderToStaticNodeStream } from 'react-dom/server';
+import { renderToString } from 'react-dom/server';
 import {
   DynamicWidgets,
   InstantSearch,
@@ -88,7 +88,7 @@ export const getServerSideProps: GetServerSideProps<HomePageProps> =
     const protocol = req.headers.referer?.split('://')[0] || 'https';
     const url = `${protocol}://${req.headers.host}${req.url}`;
     const serverState = await getServerState(<HomePage url={url} />, {
-      renderToString: renderToStaticNodeStream,
+      renderToString,
     });
 
     return {
