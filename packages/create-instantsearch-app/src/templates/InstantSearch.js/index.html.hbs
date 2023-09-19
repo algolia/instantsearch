@@ -50,6 +50,11 @@
 
   <script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.10.5/dist/algoliasearch-lite.umd.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@{{libraryVersion}}"></script>
+  {{#if autocompleteLibraryVersion}}
+  <script src="https://cdn.jsdelivr.net/npm/@algolia/autocomplete-js@{{autocompleteLibraryVersion}}/dist/umd/index.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@algolia/autocomplete-plugin-query-suggestions@{{autocompleteLibraryVersion}}/dist/umd/index.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@algolia/autocomplete-plugin-recent-searches@{{autocompleteLibraryVersion}}/dist/umd/index.production.min.js"></script>
+  {{/if}}
   <script src="./src/app.js"></script>
 </body>
 

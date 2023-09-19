@@ -14,6 +14,9 @@
     "prettier": "2.6.2"
   },
   "dependencies": {
+    "@algolia/autocomplete-js": "{{autocompleteLibraryVersion}}",
+    "@algolia/autocomplete-plugin-recent-searches": "{{autocompleteLibraryVersion}}",
+    "@algolia/autocomplete-plugin-query-suggestions": "{{autocompleteLibraryVersion}}",
     "algoliasearch": "4",
     "instantsearch.js": "{{libraryVersion}}"
   }
