@@ -6,6 +6,8 @@
   - [Installation](#installation)
   - [Usage](#usage)
   - [API](#api)
+    - [`<InstantSearchNext>`](#instantsearchnext)
+    - [`routing` prop](#routing-prop)
   - [Troubleshooting](#troubleshooting)
   - [Contributing](#contributing)
   - [License](#license)
@@ -16,7 +18,8 @@
 
 This package provides server-side rendering for [React InstantSearch](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/) that is compatible with [Next.js 13 App Router](https://nextjs.org/docs/app).
 
-> :warning: **This package is experimental.**
+> [!WARNING]
+> **This package is experimental.**
 
 ## Installation
 
@@ -28,11 +31,86 @@ npm install react-instantsearch-nextjs
 
 ## Usage
 
-@TODO
+> [!NOTE]
+> You can check this documentation on [Algolia's Documentation website](https://www.algolia.com/doc/guides/building-search-ui/going-further/server-side-rendering/react/#app-router-experimental).
+
+Your search component must be in its own file, and it shouldn't be named `page.js` or `page.tsx`.
+
+To render the component in the browser and allow users to interact with it, include the "use client" directive at the top of your code.
+
+```diff
++'use client';
+import algoliasearch from 'algoliasearch/lite';
+import {
+  InstantSearch,
+  SearchBox,
+} from 'react-instantsearch';
+
+const searchClient = algoliasearch('YourApplicationID', 'YourSearchOnlyAPIKey');
+
+export function Search() {
+  return (
+    <InstantSearch indexName="YourIndexName" searchClient={searchClient}>
+      <SearchBox />
+      {/* other widgets */}
+    </InstantSearch>
+  );
+}
+```
+
+Import the `<InstantSearchNext>` component from the `react-instantsearch-nextjs` package, and replace the <%= widget_link('instantsearch', 'react') %> component with it, without changing the props.
+
+
+```diff
+'use client';
+import algoliasearch from 'algoliasearch/lite';
+import {
+- InstantSearch,
+  SearchBox,
+} from 'react-instantsearch';
++import { InstantSearchNext } from 'react-instantsearch-nextjs';
+
+const searchClient = algoliasearch('YourApplicationID', 'YourSearchOnlyAPIKey');
+
+export function Search() {
+  return (
+-   <InstantSearch indexName="YourIndexName" searchClient={searchClient}>
++   <InstantSearchSSRNext indexName="YourIndexName" searchClient={searchClient}>
+      <SearchBox />
+      {/* other widgets */}
+    </InstantSearch>
+  );
+}
+```
+
+To serve your search page at `/search`, create an `app/search` directory. Inside it, create a `page.js` file (or `page.tsx` if you're using TypeScript).
+
+Make sure to [configure your route segment to be dynamic](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamic) so that Next.js generates a new page for each request.
+
+```jsx
+// app/search/page.js or app/search/page.tsx
+import { Search } from './Search'; // change this with the path to your <Search> component
+
+export const dynamic = 'force-dynamic';
+
+export default function Page() {
+  return <Search />;
+}
+```
+
+You can now visit `/search` to see your server-side rendered search page.
 
 ## API
 
-@TODO
+### `<InstantSearchNext>`
+
+The `<InstantSearchNext>` component is a drop-in replacement for the `<InstantSearch>` component. It accepts the same props, and it renders the same UI.
+
+You can check the [InstantSearch API reference](https://www.algolia.com/doc/api-reference/widgets/instantsearch/react/) for more information.
+
+### `routing` prop
+
+As with the `<InstantSearch>` component, you can pass a `routing` prop to the `<InstantSearchNext>` component to customize the routing behavior. The difference here is that `routing.router` takes [the same options as the `historyRouter`](https://www.algolia.com/doc/api-reference/widgets/history-router/react/).
 
 ## Troubleshooting
 
