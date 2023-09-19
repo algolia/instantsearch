@@ -94,8 +94,15 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
     parentIndex.addWidgets([widget]);
   }
 
-  if (typeof window === 'undefined' && waitingForResultsRef?.current) {
+  if (
+    typeof window === 'undefined' &&
+    waitingForResultsRef?.current &&
+    // We need the widgets contained in the index to be added before we trigger the search request.
+    widget.$$type !== 'ais.index'
+  ) {
     __use(waitingForResultsRef.current);
+    // If we made a second request because of DynamicWidgets, we need to wait for the second result,
+    // except for DynamicWidgets itself which needs to render its children after the first result.
     if (widget.$$type !== 'ais.dynamicWidgets' && search.helper?.lastResults) {
       __use(waitingForResultsRef.current);
     }
