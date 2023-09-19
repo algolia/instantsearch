@@ -54,6 +54,6 @@
   },
   "peerDependencies": {
     "next": ">= 13.4 && < 14",
-    "react-instantsearch": ">= 7.0.3 && < 8"
+    "react-instantsearch": ">= 7.1.0 && < 8"
   }
 }
