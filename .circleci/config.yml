@@ -33,7 +33,7 @@ references:
 defaults: &defaults
   working_directory: ~/instantsearch
   docker:
-    - image: cimg/node:14.18.0
+    - image: cimg/node:16.14.0
 
 workflows:
   version: 2
@@ -163,6 +163,7 @@ jobs:
             - packages/react-instantsearch/dist
             - packages/react-instantsearch-core/dist
             - packages/react-instantsearch-router-nextjs/dist
+            - packages/react-instantsearch-nextjs/dist
             - packages/vue-instantsearch/vue2
             - packages/vue-instantsearch/vue3
 
