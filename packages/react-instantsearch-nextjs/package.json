@@ -49,7 +49,7 @@
   },
   "devDependencies": {
     "instantsearch.js": "4.57.0",
-    "next": "13.4.19",
+    "next": "13.5.1",
     "react-instantsearch-core": "7.1.0"
   },
   "peerDependencies": {
