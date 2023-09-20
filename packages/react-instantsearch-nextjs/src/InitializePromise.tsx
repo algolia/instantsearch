@@ -35,9 +35,9 @@ export function InitializePromise() {
       return (
         <script
           dangerouslySetInnerHTML={{
-            __html: `(window[Symbol.for("InstantSearchInitialResults")] ??= []).push(${JSON.stringify(
+            __html: `window[Symbol.for("InstantSearchInitialResults")] = ${JSON.stringify(
               results
-            )})`,
+            )}`,
           }}
         />
       );

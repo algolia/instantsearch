@@ -2,7 +2,7 @@ import historyRouter from 'instantsearch.js/es/lib/routers/history';
 import { safelyRunOnBrowser } from 'instantsearch.js/es/lib/utils';
 import { headers } from 'next/headers';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   InstantSearch,
   InstantSearchRSCContext,
@@ -23,12 +23,12 @@ import type {
 const InstantSearchInitialResults = Symbol.for('InstantSearchInitialResults');
 declare global {
   interface Window {
-    [InstantSearchInitialResults]?: InitialResults[];
+    [InstantSearchInitialResults]?: InitialResults;
   }
 }
 
 export type InstantSearchNextRouting<TUiState, TRouteState> = {
-  router?: BrowserHistoryArgs<TRouteState>;
+  router?: Partial<BrowserHistoryArgs<TRouteState>>;
   stateMapping?: StateMapping<TUiState, TRouteState>;
 };
 
@@ -51,10 +51,15 @@ export function InstantSearchNext<
   const searchParams = useSearchParams();
   const router = useRouter();
 
+  const isMounting = useRef(true);
+  useEffect(() => {
+    isMounting.current = false;
+  }, []);
+
   const promiseRef = useRef<PromiseWithState<void> | null>(null);
 
-  const initialResults = safelyRunOnBrowser(() =>
-    window[InstantSearchInitialResults]?.pop()
+  const initialResults = safelyRunOnBrowser(
+    () => window[InstantSearchInitialResults]
   );
 
   const routing: InstantSearchProps<TUiState, TRouteState>['routing'] =
@@ -70,9 +75,13 @@ export function InstantSearchNext<
         return new URL(url) as unknown as Location;
       }
 
-      return new URL(
-        `${window.location.protocol}//${window.location.host}${pathname}?${searchParams}`
-      ) as unknown as Location;
+      if (isMounting.current) {
+        return new URL(
+          `${window.location.protocol}//${window.location.host}${pathname}?${searchParams}`
+        ) as unknown as Location;
+      }
+
+      return window.location;
     };
     browserHistoryOptions.push = function push(
       this: ReturnType<typeof historyRouter>,
