@@ -77,11 +77,6 @@ async function postProcessAnswers({
       insights:
         Boolean(templateConfig.flags && templateConfig.flags.insights) &&
         semver.satisfies(libraryVersion, templateConfig.flags.insights),
-      autocomplete: Boolean(
-        templateConfig.flags &&
-          templateConfig.flags.autocomplete &&
-          combinedAnswers.useAutocomplete
-      ),
     },
   };
 }

@@ -1,4 +1,4 @@
-{{#if flags.autocomplete}}
+{{#if useAutocomplete}}
 import { autocomplete } from '@algolia/autocomplete-js';
 import { createLocalStorageRecentSearchesPlugin } from '@algolia/autocomplete-plugin-recent-searches';
 import { createQuerySuggestionsPlugin } from '@algolia/autocomplete-plugin-query-suggestions';
@@ -10,7 +10,7 @@ declare global {
   interface Window {
     algoliasearch: typeof algoliasearch;
     instantsearch: typeof instantsearch;
-    {{#if flags.autocomplete}}
+    {{#if useAutocomplete}}
     '@algolia/autocomplete-js': {
       autocomplete: typeof autocomplete;
     };
