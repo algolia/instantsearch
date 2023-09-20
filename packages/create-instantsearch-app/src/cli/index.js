@@ -201,6 +201,83 @@ const getQuestions = ({ appName }) => ({
       when: ({ appId, apiKey, indexName }) =>
         attributesForFaceting.length === 0 && appId && apiKey && indexName,
     },
+    {
+      type: 'confirm',
+      name: 'useAutocomplete',
+      message: 'Use an autocomplete as a search box',
+      suffix: `\n  ${chalk.gray(
+        'Displays a list of suggested and recent searches as you type'
+      )}`,
+      default: true,
+      when: ({ template }) => {
+        const templatePath = getTemplatePath(template);
+        const templateConfig = getAppTemplateConfig(templatePath);
+
+        return Boolean(templateConfig.flags.autocomplete);
+      },
+    },
+    {
+      type: 'input',
+      name: 'querySuggestionsIndexName',
+      message: 'Index name for Query Suggestions',
+      suffix: `\n  ${chalk.gray(
+        'Used to populate the autocomplete with suggested searches'
+      )}`,
+      default: 'instant_search_demo_query_suggestions',
+      when: ({ useAutocomplete }) => useAutocomplete,
+    },
+    {
+      type: 'list',
+      name: 'autocompleteLibraryVersion',
+      message: () => `Autocomplete version`,
+      choices: async (answers) => {
+        const templatePath = getTemplatePath(answers.template);
+        const templateConfig = getAppTemplateConfig(templatePath);
+        const { libraryName } = templateConfig;
+
+        try {
+          const versions = await fetchLibraryVersions(
+            '@algolia/autocomplete-js'
+          );
+          const latestStableVersion = semver.maxSatisfying(versions, '*', {
+            includePrerelease: false,
+          });
+
+          if (!latestStableVersion) {
+            return versions;
+          }
+
+          return [
+            new inquirer.Separator('Latest stable version (recommended)'),
+            latestStableVersion,
+            new inquirer.Separator('All versions'),
+            ...versions,
+          ];
+        } catch (err) {
+          const fallbackLibraryVersion = '1.0.0';
+
+          console.log();
+          console.error(
+            chalk.red(
+              `Cannot fetch versions for library "${chalk.cyan(libraryName)}".`
+            )
+          );
+          console.log();
+          console.log(
+            `Fallback to ${chalk.cyan(
+              fallbackLibraryVersion
+            )}, please upgrade the dependency after generating the app.`
+          );
+          console.log();
+
+          return [
+            new inquirer.Separator('Available versions'),
+            fallbackLibraryVersion,
+          ];
+        }
+      },
+      when: ({ useAutocomplete }) => useAutocomplete,
+    },
   ],
   widget: [
     {
