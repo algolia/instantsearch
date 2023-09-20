@@ -22,7 +22,7 @@ const virtualSearchBox = instantsearch.connectors.connectSearchBox(() => {});
 {{/if}}
 
 search.addWidgets([
-  {{#if flags.autocomplete}}
+  {{#unless flags.autocomplete}}
   instantsearch.widgets.searchBox({
     container: '#searchbox',
     {{#if searchPlaceholder}}
@@ -31,7 +31,7 @@ search.addWidgets([
   }),
   {{else}}
   virtualSearchBox({}),
-  {{/if}}
+  {{/unless}}
   instantsearch.widgets.hits({
     container: '#hits',
     {{#if attributesToDisplay}}
