@@ -1,8 +1,10 @@
 import { useEffect, useRef } from 'react';
 
 import { dequal } from './dequal';
+import { use } from './use';
 import { useInstantSearchContext } from './useInstantSearchContext';
 import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect';
+import { useRSCContext } from './useRSCContext';
 
 import type { Widget } from 'instantsearch.js';
 import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
@@ -18,6 +20,8 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
   props: TProps;
   shouldSsr: boolean;
 }) {
+  const waitingForResultsRef = useRSCContext();
+
   const prevPropsRef = useRef<TProps>(props);
   useEffect(() => {
     prevPropsRef.current = props;
@@ -83,7 +87,24 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
     };
   }, [parentIndex, widget, shouldAddWidgetEarly, search, props]);
 
-  if (shouldAddWidgetEarly) {
+  if (
+    shouldAddWidgetEarly ||
+    waitingForResultsRef?.current?.status === 'pending'
+  ) {
     parentIndex.addWidgets([widget]);
+  }
+
+  if (
+    typeof window === 'undefined' &&
+    waitingForResultsRef?.current &&
+    // We need the widgets contained in the index to be added before we trigger the search request.
+    widget.$$type !== 'ais.index'
+  ) {
+    use(waitingForResultsRef.current);
+    // If we made a second request because of DynamicWidgets, we need to wait for the second result,
+    // except for DynamicWidgets itself which needs to render its children after the first result.
+    if (widget.$$type !== 'ais.dynamicWidgets' && search.helper?.lastResults) {
+      use(waitingForResultsRef.current);
+    }
   }
 }

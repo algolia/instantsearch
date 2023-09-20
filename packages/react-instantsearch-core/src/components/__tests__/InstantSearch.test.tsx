@@ -607,7 +607,7 @@ describe('InstantSearch', () => {
           }),
         },
       ]);
-      expect(warn).toHaveBeenCalledTimes(2);
+      expect(warn).toHaveBeenCalledTimes(4);
     });
   });
 
@@ -653,7 +653,7 @@ describe('InstantSearch', () => {
 
     rerender(<App />);
 
-    expect(warn).not.toHaveBeenCalled();
+    expect(warn).not.toHaveBeenCalledWith(false, expect.any(String));
   });
 
   test('updates the index on index prop change', async () => {
@@ -939,7 +939,7 @@ describe('InstantSearch', () => {
         </StrictMode>
       );
 
-      expect(warn).toHaveBeenLastCalledWith(false, expect.any(String));
+      expect(warn).toHaveBeenCalledWith(true, expect.any(String));
     });
 
     test('does not warn when using Next.js with routing with _isNextRouter', () => {
@@ -965,7 +965,7 @@ describe('InstantSearch', () => {
         </StrictMode>
       );
 
-      expect(warn).toHaveBeenLastCalledWith(true, expect.any(String));
+      expect(warn).not.toHaveBeenCalledWith(false, expect.any(String));
     });
 
     test('does not warn when using Next.js without routing', () => {
@@ -980,7 +980,7 @@ describe('InstantSearch', () => {
         </StrictMode>
       );
 
-      expect(warn).not.toHaveBeenCalled();
+      expect(warn).not.toHaveBeenCalledWith(false, expect.any(String));
     });
 
     test('does not warn when not using Next.js', () => {
@@ -998,7 +998,7 @@ describe('InstantSearch', () => {
         </StrictMode>
       );
 
-      expect(warn).not.toHaveBeenCalled();
+      expect(warn).not.toHaveBeenCalledWith(false, expect.any(String));
     });
   });
 });
