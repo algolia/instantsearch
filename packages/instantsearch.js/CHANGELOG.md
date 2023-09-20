@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.57.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.56.11...instantsearch.js@4.57.0) (2023-09-19)
+
+
+### Bug Fixes
+
+* **prettier:** consistent version ([#5850](https://github.com/algolia/instantsearch/issues/5850)) ([ca59c6d](https://github.com/algolia/instantsearch/commit/ca59c6dbd5c9eac4e2e0179a24e39bca997ae141))
+
+
+### Features
+
+* **server:** add experimental support for React Server Components and Next.js app directory ([#5827](https://github.com/algolia/instantsearch/issues/5827)) ([44de9ec](https://github.com/algolia/instantsearch/commit/44de9ecbb2bf2e10085b884ab4089b6a5d968da6)), closes [#5830](https://github.com/algolia/instantsearch/issues/5830)
+
+
+
+
+
 ## [4.56.11](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.56.10...instantsearch.js@4.56.11) (2023-09-12)
 
 ### Bug Fixes
