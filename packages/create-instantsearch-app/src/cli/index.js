@@ -240,15 +240,11 @@ const getQuestions = ({ appName }) => ({
       type: 'list',
       name: 'autocompleteLibraryVersion',
       message: () => `Autocomplete version`,
-      choices: async (answers) => {
-        const templatePath = getTemplatePath(answers.template);
-        const templateConfig = getAppTemplateConfig(templatePath);
-        const { libraryName } = templateConfig;
+      choices: async () => {
+        const libraryName = '@algolia/autocomplete-js';
 
         try {
-          const versions = await fetchLibraryVersions(
-            '@algolia/autocomplete-js'
-          );
+          const versions = await fetchLibraryVersions(libraryName);
           const latestStableVersion = semver.maxSatisfying(versions, '*', {
             includePrerelease: false,
           });
