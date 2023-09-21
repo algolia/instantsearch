@@ -213,7 +213,17 @@ const getQuestions = ({ appName }) => ({
         const templatePath = getTemplatePath(template);
         const templateConfig = getAppTemplateConfig(templatePath);
 
-        return Boolean(templateConfig.flags.autocomplete);
+        const selectedLibraryVersion = answers.libraryVersion;
+        const requiredLibraryVersion =
+          templateConfig.flags && templateConfig.flags.autocomplete;
+        const supportsAutocomplete =
+          selectedLibraryVersion &&
+          requiredLibraryVersion &&
+          semver.satisfies(selectedLibraryVersion, requiredLibraryVersion, {
+            includePrerelease: true,
+          });
+
+        return supportsAutocomplete;
       },
     },
     {
