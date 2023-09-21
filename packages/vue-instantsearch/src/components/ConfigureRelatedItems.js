@@ -1,5 +1,6 @@
-import { createWidgetMixin } from '../mixins/widget';
 import { EXPERIMENTAL_connectConfigureRelatedItems } from 'instantsearch.js/es/connectors';
+
+import { createWidgetMixin } from '../mixins/widget';
 
 export default {
   inheritAttrs: false,

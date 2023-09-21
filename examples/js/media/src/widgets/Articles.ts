@@ -1,6 +1,6 @@
+import { formatDistanceToNow } from 'date-fns';
 import { connectInfiniteHits } from 'instantsearch.js/es/connectors';
 import { highlight, snippet } from 'instantsearch.js/es/helpers';
-import { formatDistanceToNow } from 'date-fns';
 
 type Hit = {
   slug: string;

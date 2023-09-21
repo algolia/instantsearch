@@ -2,11 +2,11 @@
  * @jest-environment jsdom
  */
 /** @jsx h */
+import { createSearchClient } from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils/wait';
 import { h } from 'preact';
 
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 import instantsearch from '../../../index.es';
-import { wait } from '@instantsearch/testutils/wait';
 import searchBox from '../search-box';
 
 beforeEach(() => {
@@ -61,6 +61,7 @@ describe('searchBox', () => {
         type="submit"
       >
         <svg
+          aria-hidden="true"
           class="ais-SearchBox-submitIcon"
           height="10"
           viewBox="0 0 40 40"
@@ -78,6 +79,7 @@ describe('searchBox', () => {
         type="reset"
       >
         <svg
+          aria-hidden="true"
           class="ais-SearchBox-resetIcon"
           height="10"
           viewBox="0 0 20 20"
@@ -93,6 +95,7 @@ describe('searchBox', () => {
         hidden=""
       >
         <svg
+          aria-hidden="true"
           class="ais-SearchBox-loadingIcon"
           height="16"
           stroke="#444"

@@ -1,9 +1,10 @@
 import React, { createRef } from 'react';
 
-import { InstantSearch } from '../../packages/react-instantsearch-hooks/src/components/InstantSearch';
-import { IndexContext } from '../../packages/react-instantsearch-hooks/src/lib/IndexContext';
-import { InstantSearchContext } from '../../packages/react-instantsearch-hooks/src/lib/InstantSearchContext';
-import type { InstantSearchProps } from '../../packages/react-instantsearch-hooks/src';
+import { InstantSearch } from '../../packages/react-instantsearch-core/src/components/InstantSearch';
+import { IndexContext } from '../../packages/react-instantsearch-core/src/lib/IndexContext';
+import { InstantSearchContext } from '../../packages/react-instantsearch-core/src/lib/InstantSearchContext';
+
+import type { InstantSearchProps } from '../../packages/react-instantsearch-core/src';
 import type { InstantSearch as InstantSearchType } from 'instantsearch.js';
 import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
 

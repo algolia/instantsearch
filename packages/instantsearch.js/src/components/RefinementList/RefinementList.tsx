@@ -1,22 +1,25 @@
 /** @jsx h */
 
-import type { JSX } from 'preact';
-import { h, createRef, Component } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h, createRef, Component } from 'preact';
+
 import { isSpecialClick, isEqual } from '../../lib/utils';
-import type { PreparedTemplateProps } from '../../lib/templating';
+import SearchBox from '../SearchBox/SearchBox';
 import Template from '../Template/Template';
+
 import RefinementListItem from './RefinementListItem';
+
+import type { HierarchicalMenuItem } from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
+import type { PreparedTemplateProps } from '../../lib/templating';
+import type { ComponentCSSClasses, CreateURL, Templates } from '../../types';
+import type { HierarchicalMenuComponentCSSClasses } from '../../widgets/hierarchical-menu/hierarchical-menu';
+import type { RatingMenuComponentCSSClasses } from '../../widgets/rating-menu/rating-menu';
+import type { RefinementListOwnCSSClasses } from '../../widgets/refinement-list/refinement-list';
 import type {
   SearchBoxComponentCSSClasses,
   SearchBoxComponentTemplates,
 } from '../SearchBox/SearchBox';
-import SearchBox from '../SearchBox/SearchBox';
-import type { HierarchicalMenuItem } from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
-import type { ComponentCSSClasses, CreateURL, Templates } from '../../types';
-import type { RefinementListOwnCSSClasses } from '../../widgets/refinement-list/refinement-list';
-import type { RatingMenuComponentCSSClasses } from '../../widgets/rating-menu/rating-menu';
-import type { HierarchicalMenuComponentCSSClasses } from '../../widgets/hierarchical-menu/hierarchical-menu';
+import type { JSX } from 'preact';
 
 // CSS types
 type RefinementListOptionalClasses =
@@ -107,11 +110,6 @@ class RefinementList<TTemplates extends Templates> extends Component<
 
   private searchBox = createRef<SearchBox>();
 
-  public constructor(props: RefinementListPropsWithDefaultProps<TTemplates>) {
-    super(props);
-    this.handleItemClick = this.handleItemClick.bind(this);
-  }
-
   public shouldComponentUpdate(
     nextProps: RefinementListPropsWithDefaultProps<TTemplates>
   ) {
@@ -127,7 +125,7 @@ class RefinementList<TTemplates extends Templates> extends Component<
     this.props.toggleRefinement(facetValueToRefine);
   }
 
-  private _generateFacetItem(facetValue: FacetValue) {
+  private _generateFacetItem = (facetValue: FacetValue) => {
     let subItems;
     if (
       isHierarchicalMenuItem(facetValue) &&
@@ -192,7 +190,7 @@ class RefinementList<TTemplates extends Templates> extends Component<
         templateProps={this.props.templateProps}
       />
     );
-  }
+  };
 
   // Click events on DOM tree like LABEL > INPUT will result in two click events
   // instead of one.
@@ -209,7 +207,7 @@ class RefinementList<TTemplates extends Templates> extends Component<
   //
   // Finally, we always stop propagation of the event to avoid multiple levels RefinementLists to fail: click
   // on child would click on parent also
-  private handleItemClick({
+  private handleItemClick = ({
     facetValueToRefine,
     isRefined,
     originalEvent,
@@ -217,7 +215,7 @@ class RefinementList<TTemplates extends Templates> extends Component<
     facetValueToRefine: string;
     isRefined: boolean;
     originalEvent: MouseEvent;
-  }) {
+  }) => {
     if (isSpecialClick(originalEvent)) {
       // do not alter the default browser behavior
       // if one special key is down
@@ -267,7 +265,7 @@ class RefinementList<TTemplates extends Templates> extends Component<
     originalEvent.stopPropagation();
 
     this.refine(facetValueToRefine);
-  }
+  };
 
   public componentWillReceiveProps(
     nextProps: RefinementListPropsWithDefaultProps<TTemplates>

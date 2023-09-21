@@ -1,25 +1,28 @@
 /** @jsx h */
 
-import { h, render } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h, render } from 'preact';
+
+import SearchBox from '../../components/SearchBox/SearchBox';
+import connectSearchBox from '../../connectors/search-box/connectSearchBox';
+import { component } from '../../lib/suit';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
-import { component } from '../../lib/suit';
-import type { WidgetFactory, Template, RendererOptions } from '../../types';
+
+import defaultTemplates from './defaultTemplates';
+
+import type {
+  SearchBoxComponentCSSClasses,
+  SearchBoxComponentTemplates,
+} from '../../components/SearchBox/SearchBox';
 import type {
   SearchBoxConnectorParams,
   SearchBoxRenderState,
   SearchBoxWidgetDescription,
 } from '../../connectors/search-box/connectSearchBox';
-import connectSearchBox from '../../connectors/search-box/connectSearchBox';
-import type {
-  SearchBoxComponentCSSClasses,
-  SearchBoxComponentTemplates,
-} from '../../components/SearchBox/SearchBox';
-import SearchBox from '../../components/SearchBox/SearchBox';
-import defaultTemplates from './defaultTemplates';
+import type { WidgetFactory, Template, RendererOptions } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'search-box' });
 const suit = component('SearchBox');

@@ -8,6 +8,7 @@ import {
   noop,
   escapeHits,
 } from '../../lib/utils';
+
 import type { DebouncedFunction } from '../../lib/utils';
 import type {
   Connector,
@@ -117,6 +118,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
       nbHits = 1,
       renderDebounceTime = 100,
       searchDebounceTime = 100,
+      // @MAJOR: this can default to false
       escapeHTML = true,
       extraParameters = {},
     } = widgetParams || {};

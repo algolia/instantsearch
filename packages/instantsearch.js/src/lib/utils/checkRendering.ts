@@ -1,5 +1,6 @@
-import type { Renderer } from '../../types/connector';
 import { getObjectType } from './getObjectType';
+
+import type { Renderer } from '../../types/connector';
 
 export function checkRendering<TRenderOptions, TWidgetParams>(
   rendering: Renderer<TRenderOptions, TWidgetParams>,

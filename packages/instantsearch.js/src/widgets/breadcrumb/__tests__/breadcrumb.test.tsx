@@ -2,35 +2,56 @@
  * @jest-environment jsdom
  */
 /** @jsx h */
-import { h } from 'preact';
-
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import instantsearch from '../../../index.es';
-import { wait } from '@instantsearch/testutils/wait';
-import breadcrumb from '../breadcrumb';
 import {
+  createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
-} from '@instantsearch/mocks/createAPIResponse';
-import { connectHierarchicalMenu } from '../../../connectors';
+} from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils/wait';
+import { h } from 'preact';
 
-beforeEach(() => {
-  document.body.innerHTML = '';
-});
+import { connectHierarchicalMenu } from '../../../connectors';
+import instantsearch from '../../../index.es';
+import breadcrumb from '../breadcrumb';
+
+const hierarchicalFacets = {
+  'hierarchicalCategories.lvl0': {
+    'Cameras & Camcorders': 1369,
+  },
+  'hierarchicalCategories.lvl1': {
+    'Cameras & Camcorders > Digital Cameras': 170,
+  },
+};
+const attributes = Object.keys(hierarchicalFacets);
+const virtualHierarchicalMenu = connectHierarchicalMenu(() => null);
 
 describe('breadcrumb', () => {
-  describe('templates', () => {
-    const hierarchicalFacets = {
-      'hierarchicalCategories.lvl0': {
-        'Cameras & Camcorders': 1369,
-      },
-      'hierarchicalCategories.lvl1': {
-        'Cameras & Camcorders > Digital Cameras': 170,
-      },
-    };
-    const attributes = Object.keys(hierarchicalFacets);
-    const virtualHierarchicalMenu = connectHierarchicalMenu(() => null);
+  describe('options', () => {
+    test('throws without a `container`', () => {
+      expect(() => {
+        const searchClient = createMockedSearchClient();
 
+        const search = instantsearch({
+          indexName: 'indexName',
+          searchClient,
+        });
+
+        search.addWidgets([
+          breadcrumb({
+            // @ts-expect-error
+            container: undefined,
+            attributes,
+          }),
+        ]);
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`container\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/js/"
+`);
+    });
+  });
+
+  describe('templates', () => {
     test('renders default templates', async () => {
       const container = document.createElement('div');
       const searchClient = createMockedSearchClient();
@@ -305,21 +326,21 @@ describe('breadcrumb', () => {
 </div>
 `);
     });
-
-    function createMockedSearchClient() {
-      return createSearchClient({
-        search: jest.fn((requests) =>
-          Promise.resolve(
-            createMultiSearchResponse(
-              ...requests.map(() =>
-                createSingleSearchResponse({
-                  facets: hierarchicalFacets,
-                })
-              )
-            )
-          )
-        ),
-      });
-    }
   });
 });
+
+function createMockedSearchClient() {
+  return createSearchClient({
+    search: jest.fn((requests) =>
+      Promise.resolve(
+        createMultiSearchResponse(
+          ...requests.map(() =>
+            createSingleSearchResponse({
+              facets: hierarchicalFacets,
+            })
+          )
+        )
+      )
+    ),
+  });
+}

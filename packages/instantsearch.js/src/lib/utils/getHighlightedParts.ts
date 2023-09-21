@@ -1,6 +1,7 @@
 import { TAG_REPLACEMENT } from './escape-highlight';
 
 export function getHighlightedParts(highlightedValue: string) {
+  // @MAJOR: this should use TAG_PLACEHOLDER
   const { highlightPostTag, highlightPreTag } = TAG_REPLACEMENT;
 
   const splitByPreTag = highlightedValue.split(highlightPreTag);

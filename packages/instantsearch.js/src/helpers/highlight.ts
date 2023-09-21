@@ -1,6 +1,7 @@
-import type { Hit } from '../types';
 import { component } from '../lib/suit';
 import { getPropertyByPath, TAG_REPLACEMENT, warning } from '../lib/utils';
+
+import type { Hit } from '../types';
 
 export type HighlightOptions = {
   // @MAJOR string should no longer be allowed to be a path, only array can be a path
@@ -14,12 +15,22 @@ export type HighlightOptions = {
 
 const suit = component('Highlight');
 
+/**
+ * @deprecated use html tagged templates and the Highlight component instead
+ */
 export default function highlight({
   attribute,
   highlightedTagName = 'mark',
   hit,
   cssClasses = {},
 }: HighlightOptions): string {
+  warning(
+    false,
+    `\`instantsearch.highlight\` function has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by the \`Highlight\` component.
+
+For more information, visit https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/?client=html+tagged+templates#upgrade-templates`
+  );
+
   const highlightAttributeResult = getPropertyByPath(
     hit._highlightResult,
     attribute

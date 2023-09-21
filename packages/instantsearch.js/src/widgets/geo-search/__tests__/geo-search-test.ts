@@ -3,20 +3,23 @@
  */
 
 /* global google */
-import { render as preactRender } from 'preact';
-import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
-import createHTMLMarker from '../createHTMLMarker';
-import originalRenderer from '../GeoSearchRenderer';
-import geoSearch from '../geo-search';
-import { createInstantSearch } from '../../../../test/createInstantSearch';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
+import { render as preactRender } from 'preact';
+
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
+import createHTMLMarker from '../createHTMLMarker';
+import geoSearch from '../geo-search';
+import originalRenderer from '../GeoSearchRenderer';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

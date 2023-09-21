@@ -1,4 +1,3 @@
-import type { SendEventForFacet } from '../../lib/utils';
 import {
   checkRendering,
   warning,
@@ -7,7 +6,8 @@ import {
   isEqual,
   noop,
 } from '../../lib/utils';
-import type { SearchResults } from 'algoliasearch-helper';
+
+import type { SendEventForFacet } from '../../lib/utils';
 import type {
   Connector,
   CreateURL,
@@ -17,6 +17,7 @@ import type {
   SortBy,
   WidgetRenderState,
 } from '../../types';
+import type { SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'hierarchical-menu',
@@ -315,13 +316,16 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
           let canToggleShowMore = false;
 
           // Bind createURL to this specific attribute
-          function _createURL(facetValue: string) {
-            return createURL(
-              state
-                .resetPage()
-                .toggleFacetRefinement(hierarchicalFacetName, facetValue)
+          const _createURL = (facetValue: string) => {
+            return createURL((uiState) =>
+              this.getWidgetUiState(uiState, {
+                searchParameters: state
+                  .resetPage()
+                  .toggleFacetRefinement(hierarchicalFacetName, facetValue),
+                helper,
+              })
             );
-          }
+          };
 
           if (!sendEvent) {
             sendEvent = createSendEventForFacet({
@@ -338,7 +342,7 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
 
           if (!_refine) {
             _refine = function (facetValue) {
-              sendEvent('click', facetValue);
+              sendEvent('click:internal', facetValue);
               helper
                 .toggleFacetRefinement(hierarchicalFacetName, facetValue)
                 .search();
@@ -409,6 +413,19 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
           const values =
             uiState.hierarchicalMenu &&
             uiState.hierarchicalMenu[hierarchicalFacetName];
+
+          if (
+            searchParameters.isConjunctiveFacet(hierarchicalFacetName) ||
+            searchParameters.isDisjunctiveFacet(hierarchicalFacetName)
+          ) {
+            warning(
+              false,
+              `HierarchicalMenu: Attribute "${hierarchicalFacetName}" is already used by another widget applying conjunctive or disjunctive faceting.
+As this is not supported, please make sure to remove this other widget or this HierarchicalMenu widget will not work at all.`
+            );
+
+            return searchParameters;
+          }
 
           if (searchParameters.isHierarchicalFacet(hierarchicalFacetName)) {
             const facet = searchParameters.getHierarchicalFacetByName(

@@ -1,6 +1,8 @@
-import type { InsightsClientMethod, InsightsClientPayload } from '../types';
 import { warning, serializePayload, deserializePayload } from '../lib/utils';
 
+import type { InsightsClientMethod, InsightsClientPayload } from '../types';
+
+/** @deprecated use bindEvent instead */
 export function readDataAttributes(domElement: HTMLElement): {
   method: InsightsClientMethod;
   payload: Partial<InsightsClientPayload>;
@@ -28,10 +30,7 @@ export function readDataAttributes(domElement: HTMLElement): {
   }
 }
 
-export function hasDataAttributes(domElement: HTMLElement): boolean {
-  return domElement.hasAttribute('data-insights-method');
-}
-
+/** @deprecated use bindEvent instead */
 export function writeDataAttributes({
   method,
   payload,

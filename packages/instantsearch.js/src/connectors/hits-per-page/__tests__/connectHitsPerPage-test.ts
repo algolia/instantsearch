@@ -1,16 +1,20 @@
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
+
 import { connectHitsPerPage } from '../..';
-import type { HitsPerPageConnectorParams } from '../connectHitsPerPage';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
+
+import type { HitsPerPageConnectorParams } from '../connectHitsPerPage';
 
 describe('connectHitsPerPage', () => {
   describe('Usage', () => {
@@ -69,6 +73,33 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
 
 See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-page/js/#connector"
 `);
+    });
+
+    it('warns with an item without a `value`', () => {
+      const renderFn = jest.fn();
+      const makeWidget = connectHitsPerPage(renderFn);
+      const widget = makeWidget({
+        items: [
+          // @ts-expect-error Incomplete item
+          { label: '10', default: true },
+        ],
+      });
+
+      const searchClient = createSearchClient();
+      const helper = algoliasearchHelper(searchClient, '');
+      helper.search = jest.fn();
+
+      expect(() => {
+        widget.init!(
+          createInitOptions({
+            helper,
+            state: helper.state,
+          })
+        );
+      })
+        .toWarnDev(`[InstantSearch.js]: The \`items\` option of \`hitsPerPage\` does not contain the "hits per page" value coming from the state: undefined.
+
+You may want to add another entry to the \`items\` option with this value.`);
     });
 
     it('does not throw with items and one default value', () => {
@@ -379,7 +410,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
       createInitOptions({
         helper,
         state: helper.state,
-        createURL: (state) => JSON.stringify(state),
+        createURL: (arg) =>
+          typeof arg === 'function'
+            ? JSON.stringify(arg({}))
+            : JSON.stringify(arg),
       })
     );
 
@@ -394,7 +428,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits-per-pa
           createSingleSearchResponse(),
         ]),
         state: helper.state,
-        createURL: (state) => JSON.stringify(state),
+        createURL: (arg) =>
+          typeof arg === 'function'
+            ? JSON.stringify(arg({}))
+            : JSON.stringify(arg),
       })
     );
 

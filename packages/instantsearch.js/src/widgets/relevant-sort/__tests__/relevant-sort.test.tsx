@@ -2,16 +2,16 @@
  * @jest-environment jsdom
  */
 /** @jsx h */
-import { h } from 'preact';
-
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import instantsearch from '../../../index.es';
-import { wait } from '@instantsearch/testutils/wait';
-import relevantSort from '../relevant-sort';
 import {
+  createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
-} from '@instantsearch/mocks/createAPIResponse';
+} from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils/wait';
+import { h } from 'preact';
+
+import instantsearch from '../../../index.es';
+import relevantSort from '../relevant-sort';
 
 beforeEach(() => {
   document.body.innerHTML = '';

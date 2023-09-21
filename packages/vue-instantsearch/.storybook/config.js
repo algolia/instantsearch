@@ -3,7 +3,7 @@ import { setOptions } from '@storybook/addon-options';
 
 setOptions({
   name: 'vue-instantsearch',
-  url: 'https://github.com/algolia/instantsearch.js',
+  url: 'https://github.com/algolia/instantsearch',
   goFullScreen: false,
   showStoriesPanel: true,
   showAddonPanel: true,
@@ -24,7 +24,7 @@ Vue.use(InstantSearch);
 const req = require.context('../stories', true, /\.stories\.js$/);
 
 function loadStories() {
-  req.keys().forEach(filename => req(filename));
+  req.keys().forEach((filename) => req(filename));
 }
 
 configure(loadStories, module);

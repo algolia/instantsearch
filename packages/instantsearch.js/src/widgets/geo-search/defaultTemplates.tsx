@@ -1,6 +1,7 @@
 /** @jsx h */
 
 import { h } from 'preact';
+
 import type { GeoSearchComponentTemplates } from './geo-search';
 
 const defaultTemplates: GeoSearchComponentTemplates = {

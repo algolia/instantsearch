@@ -1,9 +1,11 @@
 const path = require('path');
-const checkConfig = require('./check-config');
-const resolveTemplate = require('./resolve-template');
+
 const buildTask = require('../tasks/common/build');
 const cleanTask = require('../tasks/common/clean');
 const { getAllTemplates } = require('../utils');
+
+const checkConfig = require('./check-config');
+const resolveTemplate = require('./resolve-template');
 
 const supportedTemplates = getAllTemplates();
 

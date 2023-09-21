@@ -1,21 +1,5 @@
-import type {
-  AlgoliaSearchHelper as Helper,
-  DerivedHelper,
-  PlainSearchParameters,
-  SearchParameters,
-  SearchResults,
-  AlgoliaSearchHelper,
-} from 'algoliasearch-helper';
 import algoliasearchHelper from 'algoliasearch-helper';
-import type {
-  InstantSearch,
-  UiState,
-  IndexUiState,
-  Widget,
-  ScopedResult,
-  SearchClient,
-  IndexRenderState,
-} from '../../types';
+
 import {
   checkIndexUiState,
   createDocumentationMessageGenerator,
@@ -26,6 +10,24 @@ import {
   createInitArgs,
   createRenderArgs,
 } from '../../lib/utils';
+
+import type {
+  InstantSearch,
+  UiState,
+  IndexUiState,
+  Widget,
+  ScopedResult,
+  SearchClient,
+  IndexRenderState,
+} from '../../types';
+import type {
+  AlgoliaSearchHelper as Helper,
+  DerivedHelper,
+  PlainSearchParameters,
+  SearchParameters,
+  SearchResults,
+  AlgoliaSearchHelper,
+} from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'index-widget',
@@ -58,37 +60,54 @@ export type IndexWidgetDescription = {
   $$widgetType: 'ais.index';
 };
 
-export type IndexWidget = Omit<
+export type IndexWidget<TUiState extends UiState = UiState> = Omit<
   Widget<IndexWidgetDescription & { widgetParams: IndexWidgetParams }>,
   'getWidgetUiState' | 'getWidgetState'
 > & {
-  getIndexName(): string;
-  getIndexId(): string;
-  getHelper(): Helper | null;
-  getResults(): SearchResults | null;
-  getScopedResults(): ScopedResult[];
-  getParent(): IndexWidget | null;
-  getWidgets(): Array<Widget | IndexWidget>;
-  createURL(state: SearchParameters): string;
+  getIndexName: () => string;
+  getIndexId: () => string;
+  getHelper: () => Helper | null;
+  getResults: () => SearchResults | null;
+  getPreviousState: () => SearchParameters | null;
+  getScopedResults: () => ScopedResult[];
+  getParent: () => IndexWidget | null;
+  getWidgets: () => Array<Widget | IndexWidget>;
+  createURL: (
+    nextState: SearchParameters | ((state: IndexUiState) => IndexUiState)
+  ) => string;
 
-  addWidgets(widgets: Array<Widget | IndexWidget>): IndexWidget;
-  removeWidgets(widgets: Array<Widget | IndexWidget>): IndexWidget;
+  addWidgets: (widgets: Array<Widget | IndexWidget>) => IndexWidget;
+  removeWidgets: (widgets: Array<Widget | IndexWidget>) => IndexWidget;
 
-  init(options: IndexInitOptions): void;
-  render(options: IndexRenderOptions): void;
-  dispose(): void;
+  init: (options: IndexInitOptions) => void;
+  render: (options: IndexRenderOptions) => void;
+  dispose: () => void;
   /**
    * @deprecated
    */
-  getWidgetState(uiState: UiState): UiState;
-  getWidgetUiState<TUiState extends UiState = UiState>(
-    uiState: TUiState
-  ): TUiState;
-  getWidgetSearchParameters(
+  getWidgetState: (uiState: UiState) => UiState;
+  getWidgetUiState: <TSpecificUiState extends UiState = TUiState>(
+    uiState: TSpecificUiState
+  ) => TSpecificUiState;
+  getWidgetSearchParameters: (
     searchParameters: SearchParameters,
     searchParametersOptions: { uiState: IndexUiState }
-  ): SearchParameters;
-  refreshUiState(): void;
+  ) => SearchParameters;
+  /**
+   * Set this index' UI state back to the state defined by the widgets.
+   * Can only be called after `init`.
+   */
+  refreshUiState: () => void;
+  /**
+   * Set this index' UI state and search. This is the equivalent of calling
+   * a spread `setUiState` on the InstantSearch instance.
+   * Can only be called after `init`.
+   */
+  setIndexUiState: (
+    indexUiState:
+      | TUiState[string]
+      | ((previousIndexUiState: TUiState[string]) => TUiState[string])
+  ) => void;
 };
 
 /**
@@ -212,6 +231,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
   let localParent: IndexWidget | null = null;
   let helper: Helper | null = null;
   let derivedHelper: DerivedHelper | null = null;
+  let lastValidSearchParameters: SearchParameters | null = null;
 
   return {
     $$type: 'ais.index',
@@ -230,7 +250,20 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
     },
 
     getResults() {
-      return derivedHelper && derivedHelper.lastResults;
+      if (!derivedHelper?.lastResults) return null;
+
+      // To make the UI optimistic, we patch the state to display to the current
+      // one instead of the one associated with the latest results.
+      // This means user-driven UI changes (e.g., checked checkbox) are reflected
+      // immediately instead of waiting for Algolia to respond, regardless of
+      // the status of the network request.
+      derivedHelper.lastResults._state = helper!.state;
+
+      return derivedHelper.lastResults;
+    },
+
+    getPreviousState() {
+      return lastValidSearchParameters;
     },
 
     getScopedResults() {
@@ -246,7 +279,14 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       return localParent;
     },
 
-    createURL(nextState: SearchParameters) {
+    createURL(
+      nextState: SearchParameters | ((state: IndexUiState) => IndexUiState)
+    ) {
+      if (typeof nextState === 'function') {
+        return localInstantSearchInstance!._createURL({
+          [indexId]: nextState(localUiState),
+        });
+      }
       return localInstantSearchInstance!._createURL({
         [indexId]: getLocalWidgetsUiState(localWidgets, {
           searchParameters: nextState,
@@ -503,6 +543,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         // does not have access to lastResults, which it used to in pre-federated
         // search behavior.
         helper!.lastResults = results;
+        lastValidSearchParameters = results?._state;
       });
 
       // We compute the render state before calling `init` in a separate loop
@@ -541,7 +582,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       // configuration step. This is mainly for backward compatibility with custom
       // widgets. When the subscription happens before the `init` step, the (static)
       // configuration of the widget is pushed in the URL. That's what we want to avoid.
-      // https://github.com/algolia/instantsearch.js/pull/994/commits/4a672ae3fd78809e213de0368549ef12e9dc9454
+      // https://github.com/algolia/instantsearch/pull/994/commits/4a672ae3fd78809e213de0368549ef12e9dc9454
       helper.on('change', (event) => {
         const { state } = event;
 
@@ -572,11 +613,23 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
     },
 
     render({ instantSearchInstance }: IndexRenderOptions) {
-      if (!this.getResults()) {
-        return;
+      // we can't attach a listener to the error event of search, as the error
+      // then would no longer be thrown for global handlers.
+      if (
+        instantSearchInstance.status === 'error' &&
+        !instantSearchInstance.mainHelper!.hasPendingRequests() &&
+        lastValidSearchParameters
+      ) {
+        helper!.setState(lastValidSearchParameters);
       }
 
-      localWidgets.forEach((widget) => {
+      // We only render index widgets if there are no results.
+      // This makes sure `render` is never called with `results` being `null`.
+      const widgetsToRender = this.getResults()
+        ? localWidgets
+        : localWidgets.filter(isIndexWidget);
+
+      widgetsToRender.forEach((widget) => {
         if (widget.getRenderState) {
           const renderState = widget.getRenderState(
             instantSearchInstance.renderState[this.getIndexId()] || {},
@@ -597,7 +650,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       const { PREVENT_RENDER = false } =
         instantSearchInstance.renderState?.[this.getIndexId()] ?? {};
 
-      localWidgets.forEach((widget) => {
+      widgetsToRender.forEach((widget) => {
         // At this point, all the variables used below are set. Both `helper`
         // and `derivedHelper` have been created at the `init` step. The attribute
         // `lastResults` might be `null` though. It's possible that a stalled render
@@ -631,10 +684,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
       localInstantSearchInstance = null;
       localParent = null;
-      helper!.removeAllListeners();
+      helper?.removeAllListeners();
       helper = null;
 
-      derivedHelper!.detach();
+      derivedHelper?.detach();
       derivedHelper = null;
     },
 
@@ -679,6 +732,22 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         },
         localUiState
       );
+    },
+
+    setIndexUiState<TIndexUiState extends IndexUiState = IndexUiState>(
+      indexUiState:
+        | TIndexUiState
+        | ((previousIndexUiState: TIndexUiState) => TIndexUiState)
+    ) {
+      const nextIndexUiState =
+        typeof indexUiState === 'function'
+          ? indexUiState(localUiState as TIndexUiState)
+          : indexUiState;
+
+      localInstantSearchInstance!.setUiState((state) => ({
+        ...state,
+        [indexId]: nextIndexUiState,
+      }));
     },
   };
 };

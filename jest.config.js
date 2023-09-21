@@ -12,7 +12,10 @@ const config = {
     '<rootDir>/packages/*/dist*',
     '<rootDir>/tests/e2e/*',
     '<rootDir>/examples/',
+    '<rootDir>/packages/algoliasearch-helper',
     '<rootDir>/packages/create-instantsearch-app',
+    '<rootDir>/packages/react-instantsearch-router-nextjs',
+    '<rootDir>/packages/react-instantsearch-nextjs',
     '/__utils__/',
   ],
   watchPathIgnorePatterns: [
@@ -34,9 +37,12 @@ const config = {
   },
   moduleFileExtensions: ['tsx', 'ts', 'js', 'vue'],
   moduleNameMapper: {
-    '^react-instantsearch-(.*)$':
+    '^react-instantsearch$': '<rootDir>/packages/react-instantsearch/src/',
+    '^react-instantsearch-(.*[^v6])$':
       '<rootDir>/packages/react-instantsearch-$1/src/',
     '^instantsearch.js$': '<rootDir>/packages/instantsearch.js/src/',
+    '^instantsearch.js/es(.*)$': '<rootDir>/packages/instantsearch.js/src$1',
+    '^instantsearch.js/(.*)$': '<rootDir>/packages/instantsearch.js/$1',
   },
   modulePathIgnorePatterns: [
     '<rootDir>/packages/create-instantsearch-app/src/templates',

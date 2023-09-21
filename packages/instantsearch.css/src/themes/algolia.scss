@@ -343,8 +343,9 @@ a[class^='ais-'] {
   position: relative;
 
   &.ais-Panel--collapsed {
-    .ais-Panel-body, .ais-Panel-footer{
-      display:none;
+    .ais-Panel-body,
+    .ais-Panel-footer {
+      display: none;
     }
   }
 
@@ -489,17 +490,17 @@ a[class^='ais-'] {
   height: 20px;
   position: relative;
   z-index: 1;
-  background: #FFFFFF;
-  border: 1px solid #46AEDA;
+  background: #ffffff;
+  border: 1px solid #46aeda;
   border-radius: 50%;
   cursor: pointer;
 }
 
 .ais-RangeSlider-tooltip {
   position: absolute;
-  background: #FFFFFF;
+  background: #ffffff;
   top: -22px;
-  font-size: .8em;
+  font-size: 0.8em;
 }
 
 .ais-RangeSlider-value {
@@ -508,12 +509,12 @@ a[class^='ais-'] {
   text-align: center;
   margin-left: -20px;
   padding-top: 15px;
-  font-size: .8em;
+  font-size: 0.8em;
 }
 
 .ais-RangeSlider-marker {
   position: absolute;
-  background: #DDD;
+  background: #ddd;
   margin-left: -1px;
   width: 1px;
   height: 5px;

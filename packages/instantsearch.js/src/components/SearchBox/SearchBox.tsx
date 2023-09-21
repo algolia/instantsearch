@@ -1,13 +1,15 @@
 /** @jsx h */
 
 import { h, createRef, Component } from 'preact';
+
 import { noop } from '../../lib/utils';
 import Template from '../Template/Template';
+
+import type { ComponentCSSClasses } from '../../types';
 import type {
   SearchBoxCSSClasses,
   SearchBoxTemplates,
 } from '../../widgets/search-box/search-box';
-import type { ComponentCSSClasses } from '../../types';
 
 export type SearchBoxComponentCSSClasses =
   ComponentCSSClasses<SearchBoxCSSClasses>;
@@ -95,7 +97,7 @@ class SearchBox extends Component<
     /**
      * when the user is typing, we don't want to replace the query typed
      * by the user (state.query) with the query exposed by the connector (props.query)
-     * see: https://github.com/algolia/instantsearch.js/issues/4141
+     * see: https://github.com/algolia/instantsearch/issues/4141
      */
     if (!this.state.focused && nextProps.query !== this.state.query) {
       this.setState({ query: nextProps.query });

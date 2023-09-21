@@ -1,5 +1,6 @@
 // copied from React InstantSearch
 import { getPropertyByPath } from 'instantsearch.js/es/lib/utils';
+
 import { unescape } from '../util/unescape';
 
 const TAG_PLACEHOLDER = {

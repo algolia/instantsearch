@@ -1,10 +1,12 @@
-import type { SendEventForFacet } from '../../lib/utils';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
   isFiniteNumber,
   noop,
 } from '../../lib/utils';
+
+import type { SendEventForFacet } from '../../lib/utils';
+import type { InsightsEvent } from '../../middlewares';
 import type {
   Connector,
   CreateURL,
@@ -13,7 +15,6 @@ import type {
   WidgetRenderState,
 } from '../../types';
 import type { SearchParameters } from 'algoliasearch-helper';
-import type { InsightsEvent } from '../../middlewares';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'numeric-menu',
@@ -171,8 +172,8 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
     }
 
     type ConnectorState = {
-      refine?(facetValue: string): void;
-      createURL?(state: SearchParameters): (facetValue: string) => string;
+      refine?: (facetValue: string) => void;
+      createURL?: (state: SearchParameters) => (facetValue: string) => string;
       sendEvent?: SendEventForFacet;
     };
 
@@ -308,14 +309,23 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
               attribute,
               facetValue
             );
-            connectorState.sendEvent!('click', facetValue);
+            connectorState.sendEvent!('click:internal', facetValue);
             helper.setState(refinedState).search();
           };
         }
 
         if (!connectorState.createURL) {
           connectorState.createURL = (newState) => (facetValue) =>
-            createURL(getRefinedState(newState, attribute, facetValue));
+            createURL((uiState) =>
+              this.getWidgetUiState(uiState, {
+                searchParameters: getRefinedState(
+                  newState,
+                  attribute,
+                  facetValue
+                ),
+                helper,
+              })
+            );
         }
 
         if (!connectorState.sendEvent) {

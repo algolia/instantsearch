@@ -2,16 +2,20 @@
  * @jest-environment jsdom
  */
 
-import type { VNode } from 'preact';
-import { render as preactRender } from 'preact';
-import toggleRefinement from '../toggle-refinement';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import { createRenderOptions } from '../../../../test/createWidget';
 import { wait } from '@instantsearch/testutils/wait';
+import { render as preactRender } from 'preact';
+
 import instantsearch from '../../..';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
+import { createRenderOptions } from '../../../../test/createWidget';
+import toggleRefinement from '../toggle-refinement';
+
 import type { ToggleRefinementProps } from '../../../components/ToggleRefinement/ToggleRefinement';
+import type { VNode } from 'preact';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

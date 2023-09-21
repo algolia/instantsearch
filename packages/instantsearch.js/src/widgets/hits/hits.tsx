@@ -1,41 +1,41 @@
 /** @jsx h */
 
-import { h, render } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h, render } from 'preact';
+
+import Hits from '../../components/Hits/Hits';
+import connectHits from '../../connectors/hits/connectHits';
+import { withInsights } from '../../lib/insights';
+import { component } from '../../lib/suit';
+import { prepareTemplateProps } from '../../lib/templating';
+import {
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
+
+import defaultTemplates from './defaultTemplates';
+
+import type {
+  HitsComponentCSSClasses,
+  HitsComponentTemplates,
+} from '../../components/Hits/Hits';
 import type {
   HitsConnectorParams,
   HitsRenderState,
   HitsWidgetDescription,
 } from '../../connectors/hits/connectHits';
-import connectHits from '../../connectors/hits/connectHits';
-import type {
-  HitsComponentCSSClasses,
-  HitsComponentTemplates,
-} from '../../components/Hits/Hits';
-import Hits from '../../components/Hits/Hits';
-import defaultTemplates from './defaultTemplates';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { prepareTemplateProps } from '../../lib/templating';
-import { component } from '../../lib/suit';
-import { withInsights, withInsightsListener } from '../../lib/insights';
+import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   Template,
   TemplateWithBindEvent,
   Hit,
   WidgetFactory,
   Renderer,
-  InsightsClient,
 } from '../../types';
-import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
-import type { PreparedTemplateProps } from '../../lib/templating';
 import type { SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'hits' });
 const suit = component('Hits');
-const HitsWithInsightsListener = withInsightsListener(Hits);
 
 const renderer =
   ({
@@ -52,7 +52,14 @@ const renderer =
     templates: HitsTemplates;
   }): Renderer<HitsRenderState, Partial<HitsWidgetParams>> =>
   (
-    { hits: receivedHits, results, instantSearchInstance, insights, bindEvent },
+    {
+      hits: receivedHits,
+      results,
+      instantSearchInstance,
+      insights,
+      bindEvent,
+      sendEvent,
+    },
     isFirstRendering
   ) => {
     if (isFirstRendering) {
@@ -65,15 +72,13 @@ const renderer =
     }
 
     render(
-      <HitsWithInsightsListener
+      <Hits
         cssClasses={cssClasses}
         hits={receivedHits}
-        results={results}
-        templateProps={renderState.templateProps}
-        insights={insights as InsightsClient}
-        sendEvent={(event: InsightsEvent) => {
-          instantSearchInstance.sendEventToInsights(event);
-        }}
+        results={results!}
+        templateProps={renderState.templateProps!}
+        insights={insights}
+        sendEvent={sendEvent}
         bindEvent={bindEvent}
       />,
       containerNode
@@ -117,7 +122,7 @@ export type HitsTemplates = Partial<{
    */
   item: TemplateWithBindEvent<
     Hit & {
-      // @deprecated the index in the hits array, use __position instead, which is the absolute position
+      /** @deprecated the index in the hits array, use __position instead, which is the absolute position */
       __hitIndex: number;
     }
   >;

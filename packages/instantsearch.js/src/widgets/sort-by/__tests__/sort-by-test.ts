@@ -2,19 +2,23 @@
  * @jest-environment jsdom
  */
 
-import { render as preactRender } from 'preact';
-import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
+import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
-import type { SortByIndexDefinition } from '../sort-by';
-import sortBy from '../sort-by';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import { render as preactRender } from 'preact';
+
 import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
+import sortBy from '../sort-by';
+
+import type { SortByIndexDefinition } from '../sort-by';
+import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
@@ -48,7 +52,7 @@ describe('sortBy()', () => {
     render.mockClear();
 
     const instantSearchInstance = createInstantSearch({
-      indexName: '',
+      indexName: 'indexName',
     });
 
     container = document.createElement('div');

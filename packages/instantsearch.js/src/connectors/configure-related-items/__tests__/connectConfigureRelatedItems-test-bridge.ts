@@ -1,6 +1,7 @@
-import connectConfigureRelatedItems from '../connectConfigureRelatedItems';
-import connectConfigure from '../../configure/connectConfigure';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
+
+import connectConfigure from '../../configure/connectConfigure';
+import connectConfigureRelatedItems from '../connectConfigureRelatedItems';
 
 jest.mock('../../configure/connectConfigure');
 

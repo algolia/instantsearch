@@ -1,15 +1,16 @@
-import type { PlainSearchParameters } from 'algoliasearch-helper';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
   noop,
 } from '../../lib/utils';
-import type { Connector, WidgetRenderState } from '../../types';
 import builtInCreateVoiceSearchHelper from '../../lib/voiceSearchHelper';
+
 import type {
   CreateVoiceSearchHelper,
   VoiceListeningState,
 } from '../../lib/voiceSearchHelper/types';
+import type { Connector, WidgetRenderState } from '../../types';
+import type { PlainSearchParameters } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'voice-search',

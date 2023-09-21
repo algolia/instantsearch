@@ -1,5 +1,6 @@
-import { storiesOf } from '@storybook/html';
 import { action } from '@storybook/addon-actions';
+import { storiesOf } from '@storybook/html';
+
 import { withHits } from '../.storybook/decorators';
 
 storiesOf('Metadata/Analytics', module).add(

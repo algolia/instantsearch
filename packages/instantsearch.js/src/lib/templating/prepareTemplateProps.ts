@@ -1,4 +1,5 @@
 import { uniq } from '../utils/uniq';
+
 import type { HoganHelpers, Templates } from '../../types';
 import type { HoganOptions } from 'hogan.js';
 
@@ -35,7 +36,7 @@ function prepareTemplates<TTemplates extends Templates>(
         customTemplate !== undefined && customTemplate !== defaultTemplate;
 
       config.templates[key] = isCustomTemplate
-        ? customTemplate! // typescript doesn't recognize that this condition asserts customTemplate is defined
+        ? customTemplate
         : defaultTemplate!;
 
       config.useCustomCompileOptions[key] = isCustomTemplate;

@@ -1,13 +1,14 @@
 /** @jsx h */
 
-import type { ComponentChildren } from 'preact';
 import { h } from 'preact';
+
+import type { ComponentChildren } from 'preact';
 
 type Props = {
   classNameLabel: string;
   classNameInput: string;
   checked: boolean;
-  onToggle(event: Event): void;
+  onToggle: (event: Event) => void;
   children: ComponentChildren;
 };
 

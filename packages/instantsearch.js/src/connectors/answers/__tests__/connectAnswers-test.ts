@@ -1,12 +1,15 @@
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils/wait';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
+
 import { createInstantSearch } from '../../../../test/createInstantSearch';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
-import { wait } from '@instantsearch/testutils/wait';
 import connectAnswers from '../connectAnswers';
 
 const defaultRenderDebounceTime = 10;

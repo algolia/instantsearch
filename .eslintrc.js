@@ -69,7 +69,6 @@ const config = {
     'react/no-deprecated': 'off',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
-    'jest/no-done-callback': 'warn',
     'eslint-comments/disable-enable-pair': ['error', { allowWholeFile: true }],
     '@typescript-eslint/no-unused-vars': [
       'error',
@@ -115,15 +114,68 @@ const config = {
         message: 'defaultProps are not allowed, use function defaults instead.',
       },
     ],
+    'import/order': [
+      'error',
+      {
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
+        'newlines-between': 'always',
+        groups: ['builtin', 'external', 'parent', 'sibling', 'index', 'type'],
+        pathGroups: [
+          {
+            pattern: '@/**/*',
+            group: 'parent',
+            position: 'before',
+          },
+        ],
+        pathGroupsExcludedImportTypes: ['builtin'],
+      },
+    ],
   },
   overrides: [
     {
       files: ['*.ts', '*.tsx'],
+      // this is the same files as ignored in tsconfig.json
+      excludedFiles: ['examples/**/*', '*/es'],
+      parserOptions: {
+        project: './tsconfig.json',
+      },
+    },
+    {
+      files: ['*.ts', '*.tsx'],
       rules: {
+        'valid-jsdoc': 'off',
+        'no-redeclare': 'off',
+        '@typescript-eslint/no-redeclare': ['error'],
+        'react/prop-types': 'off',
         // This rule has issues with the TypeScript parser, but tsc catches
         // these sorts of errors anyway.
         // See: https://github.com/typescript-eslint/typescript-eslint/issues/342
         'no-undef': 'off',
+        // This rule only supports ?. with the TypeScript parser.
+        'no-unused-expressions': 'off',
+        '@typescript-eslint/no-unused-expressions': [
+          'error',
+          {
+            allowShortCircuit: true,
+            allowTernary: true,
+            allowTaggedTemplates: true,
+          },
+        ],
+        'deprecation/deprecation': 'warn',
+        '@typescript-eslint/no-unnecessary-type-assertion': 'error',
+        '@typescript-eslint/method-signature-style': 'error',
+        '@typescript-eslint/unbound-method': 'error',
+      },
+    },
+    {
+      files: ['**/__tests__/**.ts', '**/__tests__/**.tsx'],
+      rules: {
+        'jest/no-done-callback': 'warn',
+        '@typescript-eslint/unbound-method': 'off',
+        'jest/unbound-method': 'error',
       },
     },
     {
@@ -141,39 +193,13 @@ const config = {
     },
     {
       files: [
-        'packages/react-instantsearch-hooks/**/*',
-        'packages/react-instantsearch-hooks-*/**/*',
+        'packages/react-instantsearch/**/*',
+        'packages/react-instantsearch-*/**/*',
       ],
       rules: {
         '@typescript-eslint/consistent-type-assertions': 'off',
         // We don't ship PropTypes in the next version of the library.
         'react/prop-types': 'off',
-        'import/order': [
-          'error',
-          {
-            alphabetize: {
-              order: 'asc',
-              caseInsensitive: true,
-            },
-            'newlines-between': 'always',
-            groups: [
-              'builtin',
-              'external',
-              'parent',
-              'sibling',
-              'index',
-              'type',
-            ],
-            pathGroups: [
-              {
-                pattern: '@/**/*',
-                group: 'parent',
-                position: 'before',
-              },
-            ],
-            pathGroupsExcludedImportTypes: ['builtin'],
-          },
-        ],
         'import/extensions': ['error', 'never'],
       },
       settings: {
@@ -219,46 +245,6 @@ const config = {
     // Disable stricter rules introduced for the next versions of the libraries.
     {
       files: [
-        'packages/react-instantsearch-core/**/*',
-        'packages/react-instantsearch-dom/**/*',
-      ],
-      rules: {
-        '@typescript-eslint/consistent-type-assertions': 'off',
-        '@typescript-eslint/ban-types': 'off',
-      },
-    },
-    {
-      files: ['*.ts', '*.tsx'],
-      rules: {
-        'valid-jsdoc': 'off',
-        'no-redeclare': 'off',
-        '@typescript-eslint/no-redeclare': ['error'],
-        'react/prop-types': 'off',
-      },
-    },
-    {
-      files: ['*.ts', '*.tsx'],
-      // this is the same files as ignored in tsconfig.json
-      excludedFiles: ['examples/**/*', '*/es'],
-      parserOptions: {
-        project: './tsconfig.json',
-      },
-      rules: {
-        'deprecation/deprecation': 'warn',
-        '@typescript-eslint/no-unnecessary-type-assertion': 'error',
-      },
-    },
-    {
-      files: [
-        'examples/react-hooks/react-native/**/*.ts',
-        'examples/react-hooks/react-native/**/*.tsx',
-      ],
-      parserOptions: {
-        project: 'examples/react-hooks/react-native/tsconfig.json',
-      },
-    },
-    {
-      files: [
         'packages/instantsearch.js/src/**/*.ts',
         'packages/instantsearch.js/src/**/*.tsx',
         'packages/instantsearch.js/src/**/*.js',
@@ -273,7 +259,7 @@ const config = {
       },
     },
     {
-      files: ['*.js'],
+      files: ['*.js', '*.d.ts'],
       rules: {
         '@typescript-eslint/explicit-member-accessibility': 'off',
       },
@@ -298,7 +284,12 @@ const config = {
       files: ['packages/*/test/module/**/*.cjs'],
       rules: {
         'import/extensions': ['error', 'always'],
-        'import/no-commonjs': ['error', { allowRequire: true }],
+      },
+    },
+    {
+      files: ['*.cjs'],
+      rules: {
+        'import/no-commonjs': 'off',
       },
     },
     {
@@ -353,6 +344,65 @@ const config = {
       ],
       rules: {
         '@typescript-eslint/naming-convention': 'off',
+      },
+    },
+    {
+      files: ['packages/react-instantsearch-router-nextjs/__tests__/e2e/**/*'],
+      parserOptions: {
+        project: 'packages/react-instantsearch-router-nextjs/tsconfig.json',
+      },
+    },
+    {
+      files: ['packages/algoliasearch-helper/**/*.js'],
+      rules: {
+        // Helper uses CommonJS for now
+        'import/no-commonjs': 'off',
+        strict: 'off',
+        // Helper uses ES5 for now
+        'no-var': 'off',
+        'vars-on-top': 'off',
+        'object-shorthand': 'off',
+        'prefer-template': 'off',
+        'prefer-spread': 'off',
+        'prefer-rest-params': 'off',
+      },
+    },
+    {
+      // The only TypeScript files in the Helper package are declaration files and a test file.
+      files: [
+        'packages/algoliasearch-helper/**/*.d.ts',
+        'packages/algoliasearch-helper/test/types.ts',
+      ],
+      rules: {
+        // TypeScript declaration file
+        'no-dupe-class-members': 'off',
+        'no-new': 'off',
+        'no-warning-comments': 'off',
+        'no-shadow': 'off',
+        '@typescript-eslint/naming-convention': 'off',
+        '@typescript-eslint/method-signature-style': 'off',
+      },
+    },
+    {
+      files: ['packages/algoliasearch-helper/documentation-src/**/*.js'],
+      rules: {
+        'no-console': 'off',
+        'valid-jsdoc': 'off',
+      },
+    },
+    {
+      files: ['packages/algoliasearch-helper/test/**/*.js'],
+      rules: {
+        'no-console': 'off',
+        'jest/no-done-callback': 'off',
+        'jest/no-conditional-expect': 'off',
+      },
+      env: {
+        jest: true,
+      },
+      globals: {
+        test: true,
+        beforeAll: true,
       },
     },
   ],

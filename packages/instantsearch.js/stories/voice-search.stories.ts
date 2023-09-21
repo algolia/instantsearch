@@ -1,4 +1,5 @@
 import { storiesOf } from '@storybook/html';
+
 import { withHits } from '../.storybook/decorators';
 
 storiesOf('Basics/VoiceSearch', module)
@@ -27,7 +28,7 @@ storiesOf('Basics/VoiceSearch', module)
         instantsearch.widgets.voiceSearch({
           container,
           templates: {
-            status: ``,
+            status: () => ``,
           },
         }),
       ]);
@@ -87,13 +88,13 @@ storiesOf('Basics/VoiceSearch', module)
         instantsearch.widgets.voiceSearch({
           container,
           templates: {
-            status: `
-              <p>status: {{status}}</p>
-              <p>errorCode: {{errorCode}}</p>
-              <p>isListening: {{isListening}}</p>
-              <p>transcript: {{transcript}}</p>
-              <p>isSpeechFinal: {{isSpeechFinal}}</p>
-              <p>isBrowserSupported: {{isBrowserSupported}}</p>
+            status: (data, { html }) => html`
+              <p>status: ${data.status}</p>
+              <p>errorCode: ${data.errorCode}</p>
+              <p>isListening: ${data.isListening}</p>
+              <p>transcript: ${data.transcript}</p>
+              <p>isSpeechFinal: ${data.isSpeechFinal}</p>
+              <p>isBrowserSupported: ${data.isBrowserSupported}</p>
             `,
           },
         }),
@@ -108,13 +109,13 @@ storiesOf('Basics/VoiceSearch', module)
           container,
           searchAsYouSpeak: true,
           templates: {
-            status: `
-              <p>status: {{status}}</p>
-              <p>errorCode: {{errorCode}}</p>
-              <p>isListening: {{isListening}}</p>
-              <p>transcript: {{transcript}}</p>
-              <p>isSpeechFinal: {{isSpeechFinal}}</p>
-              <p>isBrowserSupported: {{isBrowserSupported}}</p>
+            status: (data, { html }) => html`
+              <p>status: ${data.status}</p>
+              <p>errorCode: ${data.errorCode}</p>
+              <p>isListening: ${data.isListening}</p>
+              <p>transcript: ${data.transcript}</p>
+              <p>isSpeechFinal: ${data.isSpeechFinal}</p>
+              <p>isBrowserSupported: ${data.isBrowserSupported}</p>
             `,
           },
         }),
@@ -167,12 +168,12 @@ storiesOf('Basics/VoiceSearch', module)
             status: 'voice-search-status',
           },
           templates: {
-            status({ isListening, transcript }) {
-              return `
-              <div class="layer listening-${isListening}">
-                <span>${transcript}</span>
-              </div>
-            `;
+            status({ isListening, transcript }, { html }) {
+              return html`
+                <div class="layer listening-${isListening}">
+                  <span>${transcript}</span>
+                </div>
+              `;
             },
           },
         }),

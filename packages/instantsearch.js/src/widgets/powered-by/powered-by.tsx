@@ -1,20 +1,22 @@
 /** @jsx h */
 
-import { h, render } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
-import type { PoweredByComponentCSSClasses } from '../../components/PoweredBy/PoweredBy';
+import { h, render } from 'preact';
+
 import PoweredBy from '../../components/PoweredBy/PoweredBy';
+import connectPoweredBy from '../../connectors/powered-by/connectPoweredBy';
+import { component } from '../../lib/suit';
+import {
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
+
+import type { PoweredByComponentCSSClasses } from '../../components/PoweredBy/PoweredBy';
 import type {
   PoweredByConnectorParams,
   PoweredByRenderState,
   PoweredByWidgetDescription,
 } from '../../connectors/powered-by/connectPoweredBy';
-import connectPoweredBy from '../../connectors/powered-by/connectPoweredBy';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { component } from '../../lib/suit';
 import type { Renderer, WidgetFactory } from '../../types';
 
 const suit = component('PoweredBy');

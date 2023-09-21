@@ -1,4 +1,5 @@
 import { storiesOf } from '@storybook/html';
+
 import { withHits, withLifecycle } from '../.storybook/decorators';
 
 storiesOf('Refinements/Menu', module)
@@ -67,13 +68,7 @@ storiesOf('Refinements/Menu', module)
           showMore: true,
           showMoreLimit: 10,
           templates: {
-            showMoreText: `
-              {{#isShowingMore}}
-                ⬆️
-              {{/isShowingMore}}
-              {{^isShowingMore}}
-                ⬇️
-              {{/isShowingMore}}`,
+            showMoreText: ({ isShowingMore }) => (isShowingMore ? '⬆️' : '⬇️'),
           },
         }),
       ]);

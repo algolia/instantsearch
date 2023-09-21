@@ -188,16 +188,16 @@ strong {
 
 .previous-hits-message {
   margin: 0;
-  font-size: .9rem;
+  font-size: 0.9rem;
   color: #6e7070;
 }
 
 .previous-hits-button {
   font-family: inherit;
-  font-size: .75rem;
+  font-size: 0.75rem;
   font-weight: bold;
   margin-left: 1rem;
-  padding: .5rem 1rem;
+  padding: 0.5rem 1rem;
   color: #6634d1;
   background-color: #e6ebf7;
   text-transform: uppercase;

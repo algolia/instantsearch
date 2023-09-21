@@ -1,10 +1,14 @@
-import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
-import algoliasearchHelper from 'algoliasearch-helper';
 import EventEmitter from '@algolia/events';
+import algoliasearchHelper from 'algoliasearch-helper';
 
-import type { IndexWidget } from '../widgets/index/index';
+import { createInsightsMiddleware } from '../middlewares/createInsightsMiddleware';
+import {
+  createMetadataMiddleware,
+  isMetadataEnabled,
+} from '../middlewares/createMetadataMiddleware';
+import { createRouterMiddleware } from '../middlewares/createRouterMiddleware';
 import index from '../widgets/index/index';
-import version from './version';
+
 import createHelpers from './createHelpers';
 import {
   createDocumentationMessageGenerator,
@@ -13,7 +17,15 @@ import {
   noop,
   warning,
   setIndexHelperState,
+  isIndexWidget,
 } from './utils';
+import version from './version';
+
+import type {
+  InsightsEvent,
+  InsightsProps,
+} from '../middlewares/createInsightsMiddleware';
+import type { RouterProps } from '../middlewares/createRouterMiddleware';
 import type {
   InsightsClient as AlgoliaInsightsClient,
   SearchClient,
@@ -25,13 +37,8 @@ import type {
   RenderState,
   InitialResults,
 } from '../types';
-import type { RouterProps } from '../middlewares/createRouterMiddleware';
-import { createRouterMiddleware } from '../middlewares/createRouterMiddleware';
-import type { InsightsEvent } from '../middlewares/createInsightsMiddleware';
-import {
-  createMetadataMiddleware,
-  isMetadataEnabled,
-} from '../middlewares/createMetadataMiddleware';
+import type { IndexWidget } from '../widgets/index/index';
+import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',
@@ -44,7 +51,7 @@ function defaultCreateURL() {
 // this purposely breaks typescript's type inference to ensure it's not used
 // as it's used for a default parameter for example
 // source: https://github.com/Microsoft/TypeScript/issues/14829#issuecomment-504042546
-type NoInfer<T> = [T][T extends any ? 0 : never];
+type NoInfer<T> = T extends infer S ? S : never;
 
 /**
  * Global options for an InstantSearch instance.
@@ -54,9 +61,9 @@ export type InstantSearchOptions<
   TRouteState = TUiState
 > = {
   /**
-   * The name of the main index
+   * The name of the main index. If no indexName is provided, you have to manually add an index widget.
    */
-  indexName: string;
+  indexName?: string;
 
   /**
    * The search client to plug to InstantSearch.js
@@ -97,6 +104,7 @@ export type InstantSearchOptions<
    * A hook that will be called each time a search needs to be done, with the
    * helper as a parameter. It's your responsibility to call `helper.search()`.
    * This option allows you to avoid doing searches at page load for example.
+   * @deprecated use onStateChange instead
    */
   searchFunction?: (helper: AlgoliaSearchHelper) => void;
 
@@ -108,9 +116,9 @@ export type InstantSearchOptions<
    */
   onStateChange?: (params: {
     uiState: TUiState;
-    setUiState(
+    setUiState: (
       uiState: TUiState | ((previousUiState: TUiState) => TUiState)
-    ): void;
+    ) => void;
   }) => void;
 
   /**
@@ -131,6 +139,17 @@ export type InstantSearchOptions<
    * client side persistence. Passing `true` will use the default URL options.
    */
   routing?: RouterProps<TUiState, TRouteState> | boolean;
+
+  /**
+   * Enables the Insights middleware and loads the Insights library
+   * if not already loaded.
+   *
+   * The Insights middleware sends view and click events automatically, and lets
+   * you set up your own events.
+   *
+   * @default false
+   */
+  insights?: InsightsProps | boolean;
 
   /**
    * the instance of search-insights to use for sending insights events inside
@@ -171,8 +190,8 @@ class InstantSearch<
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
   public middleware: Array<{
-    creator: Middleware;
-    instance: MiddlewareDefinition;
+    creator: Middleware<TUiState>;
+    instance: MiddlewareDefinition<TUiState>;
   }> = [];
   public sendEventToInsights: (event: InsightsEvent) => void;
   /**
@@ -206,20 +225,17 @@ Use \`InstantSearch.status === "stalled"\` instead.`
     this.setMaxListeners(100);
 
     const {
-      indexName = null,
+      indexName = '',
       numberLocale,
       initialUiState = {} as TUiState,
       routing = null,
+      insights = false,
       searchFunction,
       stalledSearchDelay = 200,
       searchClient = null,
       insightsClient = null,
       onStateChange = null,
     } = options;
-
-    if (indexName === null) {
-      throw new Error(withUsage('The `indexName` option is required.'));
-    }
 
     if (searchClient === null) {
       throw new Error(withUsage('The `searchClient` option is required.'));
@@ -287,31 +303,46 @@ See ${createDocumentationLink({
     this._searchStalledTimer = null;
 
     this._createURL = defaultCreateURL;
-    this._initialUiState = initialUiState;
+    this._initialUiState = initialUiState as TUiState;
     this._initialResults = null;
 
     if (searchFunction) {
+      warning(
+        false,
+        `The \`searchFunction\` option is deprecated. Use \`onStateChange\` instead.`
+      );
       this._searchFunction = searchFunction;
     }
 
     this.sendEventToInsights = noop;
 
     if (routing) {
-      const routerOptions = typeof routing === 'boolean' ? undefined : routing;
+      const routerOptions = typeof routing === 'boolean' ? {} : routing;
+      routerOptions.$$internal = true;
       this.use(createRouterMiddleware(routerOptions));
     }
 
+    // This is the default middleware,
+    // any user-provided middleware will be added later and override this one.
+    if (insights) {
+      const insightsOptions = typeof insights === 'boolean' ? {} : insights;
+      insightsOptions.$$internal = true;
+      this.use(createInsightsMiddleware(insightsOptions));
+    }
+
     if (isMetadataEnabled()) {
-      this.use(createMetadataMiddleware());
+      this.use(createMetadataMiddleware({ $$internal: true }));
     }
   }
 
   /**
    * Hooks a middleware into the InstantSearch lifecycle.
    */
-  public use(...middleware: Middleware[]): this {
+  public use(...middleware: Array<Middleware<TUiState>>): this {
     const newMiddlewareList = middleware.map((fn) => {
       const newMiddleware = {
+        $$type: '__unknown__',
+        $$internal: false,
         subscribe: noop,
         started: noop,
         unsubscribe: noop,
@@ -345,7 +376,7 @@ See ${createDocumentationLink({
   /**
    * Removes a middleware from the InstantSearch lifecycle.
    */
-  public unuse(...middlewareToUnuse: Middleware[]): this {
+  public unuse(...middlewareToUnuse: Array<Middleware<TUiState>>): this {
     this.middleware
       .filter((m) => middlewareToUnuse.includes(m.creator))
       .forEach((m) => m.instance.unsubscribe());
@@ -481,12 +512,13 @@ See ${createDocumentationLink({
 
     mainHelper.search = () => {
       this.status = 'loading';
-      // @MAJOR: use scheduleRender here
-      // For now, widgets don't expect to be rendered at the start of `loading`,
-      // so it would be a breaking change to add an extra render. We don't have
-      // these guarantees about the render event, thus emitting it once more
-      // isn't a breaking change.
-      this.emit('render');
+      this.scheduleRender(false);
+
+      warning(
+        Boolean(this.indexName) ||
+          this.mainIndex.getWidgets().some(isIndexWidget),
+        'No indexName provided, nor an explicit index widget in the widgets tree. This is required to be able to display results.'
+      );
 
       // This solution allows us to keep the exact same API for the users but
       // under the hood, we have a different implementation. It should be
@@ -604,7 +636,7 @@ See ${createDocumentationLink({
   /**
    * Removes all widgets without triggering a search afterwards. This is an **EXPERIMENTAL** feature,
    * if you find an issue with it, please
-   * [open an issue](https://github.com/algolia/instantsearch.js/issues/new?title=Problem%20with%20dispose).
+   * [open an issue](https://github.com/algolia/instantsearch/issues/new?title=Problem%20with%20dispose).
    * @return {undefined} This method does not return anything
    */
   public dispose(): void {
@@ -623,7 +655,7 @@ See ${createDocumentationLink({
     // The helper needs to be reset to perform the next search from a fresh state.
     // If not reset, it would use the state stored before calling `dispose()`.
     this.removeAllListeners();
-    this.mainHelper!.removeAllListeners();
+    this.mainHelper?.removeAllListeners();
     this.mainHelper = null;
     this.helper = null;
 
@@ -639,7 +671,7 @@ See ${createDocumentationLink({
   });
 
   public scheduleRender = defer((shouldResetStatus: boolean = true) => {
-    if (!this.mainHelper!.hasPendingRequests()) {
+    if (!this.mainHelper?.hasPendingRequests()) {
       clearTimeout(this._searchStalledTimer);
       this._searchStalledTimer = null;
 
@@ -721,7 +753,7 @@ See ${createDocumentationLink({
   }
 
   public onInternalStateChange = defer(() => {
-    const nextUiState = this.mainIndex.getWidgetUiState({});
+    const nextUiState = this.mainIndex.getWidgetUiState({}) as TUiState;
 
     this.middleware.forEach(({ instance }) => {
       instance.onStateChange({

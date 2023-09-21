@@ -1,5 +1,22 @@
 import { deprecate } from '../lib/utils';
 
+import connectAnswers from './answers/connectAnswers';
+import connectDynamicWidgets from './dynamic-widgets/connectDynamicWidgets';
+
+/** @deprecated answers is no longer supported */
+export const EXPERIMENTAL_connectAnswers = deprecate(
+  connectAnswers,
+  'answers is no longer supported'
+);
+
+/** @deprecated use connectDynamicWidgets */
+export const EXPERIMENTAL_connectDynamicWidgets = deprecate(
+  connectDynamicWidgets,
+  'use connectDynamicWidgets'
+);
+
+export { connectDynamicWidgets };
+
 export { default as connectClearRefinements } from './clear-refinements/connectClearRefinements';
 export { default as connectCurrentRefinements } from './current-refinements/connectCurrentRefinements';
 export { default as connectHierarchicalMenu } from './hierarchical-menu/connectHierarchicalMenu';
@@ -26,21 +43,4 @@ export { default as EXPERIMENTAL_connectConfigureRelatedItems } from './configur
 export { default as connectAutocomplete } from './autocomplete/connectAutocomplete';
 export { default as connectQueryRules } from './query-rules/connectQueryRules';
 export { default as connectVoiceSearch } from './voice-search/connectVoiceSearch';
-import connectAnswers from './answers/connectAnswers';
-
-/** @deprecated answers is no longer supported */
-export const EXPERIMENTAL_connectAnswers = deprecate(
-  connectAnswers,
-  'answers is no longer supported'
-);
-
 export { default as connectRelevantSort } from './relevant-sort/connectRelevantSort';
-
-import connectDynamicWidgets from './dynamic-widgets/connectDynamicWidgets';
-export { connectDynamicWidgets };
-
-/** @deprecated use connectDynamicWidgets */
-export const EXPERIMENTAL_connectDynamicWidgets = deprecate(
-  connectDynamicWidgets,
-  'use connectDynamicWidgets'
-);

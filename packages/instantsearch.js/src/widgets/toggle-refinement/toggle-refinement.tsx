@@ -1,28 +1,31 @@
 /** @jsx h */
 
-import { h, render } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h, render } from 'preact';
+
+import ToggleRefinement from '../../components/ToggleRefinement/ToggleRefinement';
+import connectToggleRefinement from '../../connectors/toggle-refinement/connectToggleRefinement';
+import { component } from '../../lib/suit';
+import { prepareTemplateProps } from '../../lib/templating';
+import {
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
+
+import defaultTemplates from './defaultTemplates';
+
 import type {
   ToggleRefinementComponentCSSClasses,
   ToggleRefinementComponentTemplates,
 } from '../../components/ToggleRefinement/ToggleRefinement';
-import ToggleRefinement from '../../components/ToggleRefinement/ToggleRefinement';
 import type {
   ToggleRefinementConnectorParams,
   ToggleRefinementWidgetDescription,
   ToggleRefinementValue,
   ToggleRefinementRenderState,
 } from '../../connectors/toggle-refinement/connectToggleRefinement';
-import connectToggleRefinement from '../../connectors/toggle-refinement/connectToggleRefinement';
-import defaultTemplates from './defaultTemplates';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { prepareTemplateProps } from '../../lib/templating';
-import type { RendererOptions, Template, WidgetFactory } from '../../types';
-import { component } from '../../lib/suit';
 import type { PreparedTemplateProps } from '../../lib/templating';
+import type { RendererOptions, Template, WidgetFactory } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'toggle-refinement',

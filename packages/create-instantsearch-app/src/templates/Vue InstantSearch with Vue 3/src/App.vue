@@ -6,7 +6,7 @@
       </h1>
       <p class="header-subtitle">
         using
-        <a href="https://github.com/algolia/vue-instantsearch">
+        <a href="https://github.com/algolia/instantsearch/tree/master/packages/vue-instantsearch">
           Vue InstantSearch
         </a>
       </p>
@@ -16,6 +16,7 @@
       <ais-instant-search
         :search-client="searchClient"
         index-name="{{indexName}}"
+        {{#if flags.insights}}insights{{/if}}
       >
         <ais-configure :hits-per-page.camel="8" />
         <div class="search-panel">

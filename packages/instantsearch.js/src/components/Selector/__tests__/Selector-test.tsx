@@ -3,9 +3,10 @@
  */
 /** @jsx h */
 
-import { h } from 'preact';
-import Selector from '../Selector';
 import { mount } from '@instantsearch/testutils/enzyme';
+import { h } from 'preact';
+
+import Selector from '../Selector';
 
 describe('Selector', () => {
   it('should render <Selector/> with strings', () => {

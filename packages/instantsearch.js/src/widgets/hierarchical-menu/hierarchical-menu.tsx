@@ -1,22 +1,26 @@
 /** @jsx h */
 
-import { h, render } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h, render } from 'preact';
+
 import RefinementList from '../../components/RefinementList/RefinementList';
+import connectHierarchicalMenu from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
+import { component } from '../../lib/suit';
+import { prepareTemplateProps } from '../../lib/templating';
+import {
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
+
+import defaultTemplates from './defaultTemplates';
+
 import type {
   HierarchicalMenuItem,
   HierarchicalMenuConnectorParams,
   HierarchicalMenuRenderState,
   HierarchicalMenuWidgetDescription,
 } from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
-import connectHierarchicalMenu from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
-import defaultTemplates from './defaultTemplates';
 import type { PreparedTemplateProps } from '../../lib/templating';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { prepareTemplateProps } from '../../lib/templating';
 import type {
   TransformItems,
   Template,
@@ -25,7 +29,6 @@ import type {
   SortBy,
   ComponentCSSClasses,
 } from '../../types';
-import { component } from '../../lib/suit';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'hierarchical-menu',

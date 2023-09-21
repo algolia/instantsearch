@@ -2,16 +2,20 @@
  * @jest-environment jsdom
  */
 
-import { render } from 'preact';
-import type { RelevantSortTemplates } from '../relevant-sort';
-import relevantSort from '../relevant-sort';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import { render } from 'preact';
+
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
+import relevantSort from '../relevant-sort';
+
+import type { RelevantSortTemplates } from '../relevant-sort';
 
 jest.mock('preact', () => {
   const module = jest.requireActual('preact');

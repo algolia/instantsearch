@@ -5,13 +5,18 @@
       :refine="state.refine"
       :has-no-results="state.hasNoResults"
       :can-refine="state.canRefine"
+      :createURL="state.createURL"
     >
-      <select :class="suit('select')" v-model="selected" @change="handleChange">
+      <select
+        :class="suit('select')"
+        @change="state.refine(Number($event.currentTarget.value))"
+      >
         <option
           v-for="item in state.items"
           :key="item.value"
           :class="suit('option')"
           :value="item.value"
+          :selected="item.isRefined"
         >
           {{ item.label }}
         </option>
@@ -22,9 +27,10 @@
 
 <script>
 import { connectHitsPerPage } from 'instantsearch.js/es/connectors';
+
 import { createPanelConsumerMixin } from '../mixins/panel';
-import { createWidgetMixin } from '../mixins/widget';
 import { createSuitMixin } from '../mixins/suit';
+import { createWidgetMixin } from '../mixins/widget';
 
 export default {
   name: 'AisHitsPerPage',
@@ -50,22 +56,12 @@ export default {
       default: undefined,
     },
   },
-  data() {
-    return {
-      selected: this.items.find((item) => item.default === true).value,
-    };
-  },
   computed: {
     widgetParams() {
       return {
         items: this.items,
         transformItems: this.transformItems,
       };
-    },
-  },
-  methods: {
-    handleChange() {
-      this.state.refine(this.selected);
     },
   },
 };

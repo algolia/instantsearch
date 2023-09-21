@@ -2,27 +2,29 @@
  * @jest-environment jsdom
  */
 
-import type { VNode } from 'preact';
-import { render as preactRender } from 'preact';
-import type {
-  AlgoliaSearchHelper,
-  PlainSearchParameters,
-} from 'algoliasearch-helper';
+import { createSingleSearchResponse } from '@instantsearch/mocks';
+import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import type { SearchClient } from '../../../types';
-import infiniteHits from '../infinite-hits';
-import type { InfiniteHitsProps } from '../../../components/InfiniteHits/InfiniteHits';
-import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
+import { render as preactRender } from 'preact';
+
 import { createInstantSearch } from '../../../../test/createInstantSearch';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
+import infiniteHits from '../infinite-hits';
+
+import type { InfiniteHitsProps } from '../../../components/InfiniteHits/InfiniteHits';
 import type { InfiniteHitsCache } from '../../../connectors/infinite-hits/connectInfiniteHits';
+import type { SearchClient } from '../../../types';
+import type {
+  AlgoliaSearchHelper,
+  PlainSearchParameters,
+} from 'algoliasearch-helper';
+import type { VNode } from 'preact';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

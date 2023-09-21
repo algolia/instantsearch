@@ -1,4 +1,5 @@
 const loadJsonFile = require('load-json-file');
+
 const getConfiguration = require('../getConfiguration');
 
 jest.mock('load-json-file');

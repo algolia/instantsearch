@@ -2,11 +2,12 @@
  * @jest-environment jsdom
  */
 
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
-import historyRouter from '../../routers/history';
+
 import instantsearch from '../../..';
 import { connectSearchBox } from '../../../connectors';
+import historyRouter from '../../routers/history';
 
 /* eslint no-lone-blocks: "off" */
 
@@ -45,7 +46,7 @@ describe('routing with external influence', () => {
 
     // 2. Refine: '/?indexName[query]=Apple'
     {
-      search.renderState.indexName!.searchBox!.refine('Apple');
+      search.renderState.indexName.searchBox!.refine('Apple');
 
       await wait(writeWait);
       expect(window.location.search).toEqual(
@@ -66,7 +67,7 @@ describe('routing with external influence', () => {
 
     // 4. Refine: '/about?indexName[query]=Samsung'
     {
-      search.renderState.indexName!.searchBox!.refine('Samsung');
+      search.renderState.indexName.searchBox!.refine('Samsung');
 
       await wait(writeWait);
       expect(window.location.pathname).toEqual('/about');

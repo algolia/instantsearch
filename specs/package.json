@@ -1,11 +1,11 @@
 {
   "name": "@instantsearch/specs-website",
-  "version": "0.1.1",
+  "version": "0.1.4",
   "private": true,
   "description": "The specs website for InstantSearch.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/algolia/instantsearch.js"
+    "url": "https://github.com/algolia/instantsearch"
   },
   "license": "MIT",
   "author": "Algolia <support@algolia.com>",
@@ -20,7 +20,7 @@
   "devDependencies": {
     "@types/node": "18.11.13",
     "astro": "1.6.14",
-    "instantsearch.css": "8.0.0",
+    "instantsearch.css": "8.1.0",
     "sass": "1.56.2"
   }
 }

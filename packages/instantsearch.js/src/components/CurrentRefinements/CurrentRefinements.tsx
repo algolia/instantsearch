@@ -1,14 +1,16 @@
 /** @jsx h */
 
-import { h } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h } from 'preact';
+
 import { isSpecialClick, capitalize } from '../../lib/utils';
+
 import type {
   CurrentRefinementsConnectorParamsItem,
   CurrentRefinementsConnectorParamsRefinement,
 } from '../../connectors/current-refinements/connectCurrentRefinements';
-import type { CurrentRefinementsCSSClasses } from '../../widgets/current-refinements/current-refinements';
 import type { ComponentCSSClasses } from '../../types';
+import type { CurrentRefinementsCSSClasses } from '../../widgets/current-refinements/current-refinements';
 
 export type CurrentRefinementsComponentCSSClasses =
   ComponentCSSClasses<CurrentRefinementsCSSClasses>;
@@ -53,7 +55,7 @@ const CurrentRefinements = ({
           key={`${item.indexName}-${item.attribute}-${index}`}
           className={cssClasses.item}
         >
-          <span className={cssClasses.label}>{capitalize(item.label)}:</span>
+          <span className={cssClasses.label}>{capitalize(item.label)}: </span>
 
           {item.refinements.map((refinement) => (
             <span
@@ -70,6 +72,7 @@ const CurrentRefinements = ({
 
               <button
                 className={cssClasses.delete}
+                type="button"
                 onClick={handleClick(item.refine.bind(null, refinement))}
               >
                 ✕

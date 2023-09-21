@@ -1,10 +1,10 @@
-import type { SearchClient, SearchResponses } from 'instantsearch.js';
-
 import {
   createSingleSearchResponse,
   createMultiSearchResponse,
   createSFFVResponse,
 } from './createAPIResponse';
+
+import type { SearchClient, SearchResponses } from 'instantsearch.js';
 
 export const createSearchClient = (
   args: Partial<SearchClient> = {}
@@ -17,6 +17,9 @@ export const createSearchClient = (
     )
   ),
   searchForFacetValues: jest.fn(() => Promise.resolve([createSFFVResponse()])),
+  // @ts-ignore this allows us to test insights initialization without warning
+  applicationID: 'appId',
+  apiKey: 'apiKey',
   ...args,
 });
 
@@ -25,24 +28,35 @@ type ControlledClient = {
   searches: Array<{
     promise: Promise<SearchResponses<any>>;
     resolver: () => void;
+    rejecter: (value: any) => void;
   }>;
 };
 
 export const createControlledSearchClient = (
-  args: Partial<SearchClient> = {}
+  args: Partial<SearchClient> = {},
+  createResponse = (...params: Parameters<SearchClient['search']>) =>
+    createMultiSearchResponse(
+      ...params[0].map(() => createSingleSearchResponse())
+    )
 ): ControlledClient => {
   const searches: ControlledClient['searches'] = [];
   const searchClient = createSearchClient({
-    search: jest.fn(() => {
+    search: jest.fn((...params) => {
       let resolver: () => void;
-      const promise: Promise<SearchResponses<any>> = new Promise((resolve) => {
-        resolver = () => resolve(createMultiSearchResponse());
-      });
+      let rejecter: (value: any) => void;
+      const promise: Promise<SearchResponses<any>> = new Promise(
+        (resolve, reject) => {
+          resolver = () => resolve(createResponse(...params));
+          rejecter = (value) => reject(value);
+        }
+      );
 
       searches.push({
         promise,
-        // @ts-expect-error
+        // @ts-expect-error actually being assigned in the promise constructor
         resolver,
+        // @ts-expect-error actually being assigned in the promise constructor
+        rejecter,
       });
 
       return promise;

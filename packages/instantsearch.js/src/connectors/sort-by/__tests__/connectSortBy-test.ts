@@ -1,19 +1,22 @@
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import type { SortByRenderState } from '../connectSortBy';
-import connectSortBy from '../connectSortBy';
-import index from '../../../widgets/index/index';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
+import index from '../../../widgets/index/index';
+import connectSortBy from '../connectSortBy';
+
+import type { SortByRenderState } from '../connectSortBy';
 
 describe('connectSortBy', () => {
   describe('Usage', () => {
@@ -504,7 +507,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         const renderFn = jest.fn();
         const customSortBy = connectSortBy(renderFn);
         const instantSearchInstance = createInstantSearch({
-          indexName: '',
+          indexName: 'indexName',
         });
         const helper = algoliasearchHelper(
           createSearchClient(),
@@ -537,7 +540,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         const renderFn = jest.fn();
         const customSortBy = connectSortBy(renderFn);
         const instantSearchInstance = createInstantSearch({
-          indexName: '',
+          indexName: 'indexName',
         });
         const helper = algoliasearchHelper(
           createSearchClient(),

@@ -3,11 +3,12 @@
  */
 
 import { createInstantSearch } from '../../../../test/createInstantSearch';
+import { deserializePayload } from '../../utils';
 import {
   createBindEventForHits,
   createSendEventForHits,
 } from '../createSendEventForHits';
-import { deserializePayload } from '../../utils';
+
 import type { EscapedHits } from '../../../types';
 
 const createTestEnvironment = ({ nbHits = 2 }: { nbHits?: number } = {}) => {
@@ -27,6 +28,7 @@ const createTestEnvironment = ({ nbHits = 2 }: { nbHits?: number } = {}) => {
   const bindEvent = createBindEventForHits({
     index,
     widgetType,
+    instantSearchInstance,
   });
   return {
     instantSearchInstance,
@@ -94,6 +96,30 @@ describe('createSendEventForHits', () => {
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
       eventType: 'view',
+      hits: [
+        {
+          __position: 0,
+          __queryID: 'test-query-id',
+          objectID: 'obj0',
+        },
+      ],
+      insightsMethod: 'viewedObjectIDs',
+      payload: {
+        eventName: 'Hits Viewed',
+        index: 'testIndex',
+        objectIDs: ['obj0'],
+      },
+      widgetType: 'ais.testWidget',
+    });
+  });
+
+  it('sends internal view event with default eventName', () => {
+    const { sendEvent, instantSearchInstance, hits } = createTestEnvironment();
+    sendEvent('view:internal', hits[0]);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+      eventType: 'view',
+      eventModifier: 'internal',
       hits: [
         {
           __position: 0,
@@ -200,12 +226,58 @@ describe('createSendEventForHits', () => {
     });
   });
 
+  it('skips view event when search is not idle', () => {
+    const { sendEvent, instantSearchInstance, hits } = createTestEnvironment();
+
+    instantSearchInstance.status = 'loading';
+    sendEvent('view', hits);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(0);
+
+    instantSearchInstance.status = 'error';
+    sendEvent('view', hits);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(0);
+
+    instantSearchInstance.status = 'stalled';
+    sendEvent('view', hits);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(0);
+
+    instantSearchInstance.status = 'idle';
+    sendEvent('view', hits);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
+  });
+
   it('sends click event', () => {
     const { sendEvent, instantSearchInstance, hits } = createTestEnvironment();
     sendEvent('click', hits[0], 'Product Clicked');
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
       eventType: 'click',
+      hits: [
+        {
+          __position: 0,
+          __queryID: 'test-query-id',
+          objectID: 'obj0',
+        },
+      ],
+      insightsMethod: 'clickedObjectIDsAfterSearch',
+      payload: {
+        eventName: 'Product Clicked',
+        index: 'testIndex',
+        objectIDs: ['obj0'],
+        positions: [0],
+        queryID: 'test-query-id',
+      },
+      widgetType: 'ais.testWidget',
+    });
+  });
+
+  it('sends internal click event', () => {
+    const { sendEvent, instantSearchInstance, hits } = createTestEnvironment();
+    sendEvent('click:internal', hits[0], 'Product Clicked');
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+      eventType: 'click',
+      eventModifier: 'internal',
       hits: [
         {
           __position: 0,
@@ -277,6 +349,31 @@ describe('createSendEventForHits', () => {
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
       eventType: 'conversion',
+      hits: [
+        {
+          __position: 0,
+          __queryID: 'test-query-id',
+          objectID: 'obj0',
+        },
+      ],
+      insightsMethod: 'convertedObjectIDsAfterSearch',
+      payload: {
+        eventName: 'Product Ordered',
+        index: 'testIndex',
+        objectIDs: ['obj0'],
+        queryID: 'test-query-id',
+      },
+      widgetType: 'ais.testWidget',
+    });
+  });
+
+  it('sends internal conversion event', () => {
+    const { sendEvent, instantSearchInstance, hits } = createTestEnvironment();
+    sendEvent('conversion:internal', hits[0], 'Product Ordered');
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+      eventType: 'conversion',
+      eventModifier: 'internal',
       hits: [
         {
           __position: 0,
@@ -389,6 +486,51 @@ describe('createBindEventForHits', () => {
     expect(payload.startsWith('data-insights-event=')).toBe(true);
     return deserializePayload(payload.substr('data-insights-event='.length));
   }
+
+  it('returns a payload for view event', () => {
+    const { bindEvent, hits } = createTestEnvironment();
+    const parsedPayload = parsePayload(bindEvent('view', hits));
+    expect(parsedPayload).toEqual([
+      {
+        eventType: 'view',
+        hits: [
+          {
+            __position: 0,
+            __queryID: 'test-query-id',
+            objectID: 'obj0',
+          },
+          {
+            __position: 1,
+            __queryID: 'test-query-id',
+            objectID: 'obj1',
+          },
+        ],
+        insightsMethod: 'viewedObjectIDs',
+        payload: {
+          eventName: 'Hits Viewed',
+          index: 'testIndex',
+          objectIDs: ['obj0', 'obj1'],
+        },
+        widgetType: 'ais.testWidget',
+      },
+    ]);
+  });
+
+  it('skips payload for view event when search is not idle', () => {
+    const { bindEvent, hits, instantSearchInstance } = createTestEnvironment();
+
+    instantSearchInstance.status = 'loading';
+    expect(bindEvent('view', hits)).toHaveLength(0);
+
+    instantSearchInstance.status = 'error';
+    expect(bindEvent('view', hits)).toHaveLength(0);
+
+    instantSearchInstance.status = 'stalled';
+    expect(bindEvent('view', hits)).toHaveLength(0);
+
+    instantSearchInstance.status = 'idle';
+    expect(bindEvent('view', hits)).not.toHaveLength(0);
+  });
 
   it('returns a payload for click event', () => {
     const { bindEvent, hits } = createTestEnvironment();

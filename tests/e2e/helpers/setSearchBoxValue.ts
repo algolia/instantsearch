@@ -1,6 +1,6 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    setSearchBoxValue(value: string): Promise<void>;
+    setSearchBoxValue: (value: string) => Promise<void>;
   }
 }
 

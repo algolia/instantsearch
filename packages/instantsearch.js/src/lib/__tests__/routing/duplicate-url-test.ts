@@ -2,11 +2,12 @@
  * @jest-environment jsdom
  */
 
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
-import historyRouter from '../../routers/history';
+
 import instantsearch from '../../..';
 import { connectPagination, connectSearchBox } from '../../../connectors';
+import historyRouter from '../../routers/history';
 
 /* eslint no-lone-blocks: "off" */
 
@@ -59,7 +60,7 @@ test('does not write the same URL twice', async () => {
 
   // 2. Refine query: '/?indexName[query]=Apple'
   {
-    search.renderState.indexName!.searchBox!.refine('Apple');
+    search.renderState.indexName.searchBox!.refine('Apple');
 
     await wait(writeWait);
     expect(window.location.search).toEqual(
@@ -70,7 +71,7 @@ test('does not write the same URL twice', async () => {
 
   // 3. Refine page: '/?indexName[query]=Apple'
   {
-    search.renderState.indexName!.pagination!.refine(2);
+    search.renderState.indexName.pagination!.refine(2);
 
     await wait(writeWait);
     expect(window.location.search).toEqual(

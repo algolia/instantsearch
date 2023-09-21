@@ -5,13 +5,14 @@ import {
   isEqual,
   noop,
 } from '../../lib/utils';
-import type { SearchParameters, SearchResults } from 'algoliasearch-helper';
+
 import type {
   Connector,
   TransformItems,
   CreateURL,
   WidgetRenderState,
 } from '../../types';
+import type { SearchParameters, SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'breadcrumb',
@@ -127,7 +128,7 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
 
     function getRefinedState(
       state: SearchParameters,
-      facetValue: string | null
+      facetValue: BreadcrumbConnectorParamsItem['value']
     ) {
       if (!facetValue) {
         const breadcrumb = state.getHierarchicalFacetBreadcrumb(
@@ -187,21 +188,24 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
         function getItems() {
           // The hierarchicalFacets condition is required for flavors
           // that render immediately with empty results, without relying
-          // on init() (like React InstantSearch Hooks).
+          // on init() (like React InstantSearch).
           if (!results || state.hierarchicalFacets.length === 0) {
             return [];
           }
 
           const [{ name: facetName }] = state.hierarchicalFacets;
 
-          const facetValues = results.getFacetValues(
-            facetName,
-            {}
-          ) as SearchResults.HierarchicalFacet;
-          const data = Array.isArray(facetValues.data) ? facetValues.data : [];
-          const items = transformItems(shiftItemsValues(prepareItems(data)), {
-            results,
-          });
+          const facetValues = results.getFacetValues(facetName, {});
+          const facetItems =
+            facetValues && !Array.isArray(facetValues) && facetValues.data
+              ? facetValues.data
+              : [];
+          const items = transformItems(
+            shiftItemsValues(prepareItems(facetItems)),
+            {
+              results,
+            }
+          );
 
           return items;
         }
@@ -210,7 +214,12 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
 
         if (!connectorState.createURL) {
           connectorState.createURL = (facetValue) => {
-            return createURL(getRefinedState(helper.state, facetValue));
+            return createURL((uiState) =>
+              this.getWidgetUiState!(uiState, {
+                searchParameters: getRefinedState(helper.state, facetValue),
+                helper,
+              })
+            );
           };
         }
 
@@ -229,7 +238,42 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
         };
       },
 
-      getWidgetSearchParameters(searchParameters) {
+      getWidgetUiState(uiState, { searchParameters }) {
+        const path = searchParameters.getHierarchicalFacetBreadcrumb(
+          hierarchicalFacetName
+        );
+
+        if (!path.length) {
+          return uiState;
+        }
+
+        return {
+          ...uiState,
+          hierarchicalMenu: {
+            ...uiState.hierarchicalMenu,
+            [hierarchicalFacetName]: path,
+          },
+        };
+      },
+
+      getWidgetSearchParameters(searchParameters, { uiState }) {
+        const values =
+          uiState.hierarchicalMenu &&
+          uiState.hierarchicalMenu[hierarchicalFacetName];
+
+        if (
+          searchParameters.isConjunctiveFacet(hierarchicalFacetName) ||
+          searchParameters.isDisjunctiveFacet(hierarchicalFacetName)
+        ) {
+          warning(
+            false,
+            `HierarchicalMenu: Attribute "${hierarchicalFacetName}" is already used by another widget applying conjunctive or disjunctive faceting.
+As this is not supported, please make sure to remove this other widget or this HierarchicalMenu widget will not work at all.`
+          );
+
+          return searchParameters;
+        }
+
         if (searchParameters.isHierarchicalFacet(hierarchicalFacetName)) {
           const facet = searchParameters.getHierarchicalFacetByName(
             hierarchicalFacetName
@@ -241,16 +285,30 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
               facet.rootPath === rootPath,
             'Using Breadcrumb and HierarchicalMenu on the same facet with different options overrides the configuration of the HierarchicalMenu.'
           );
-
-          return searchParameters;
         }
 
-        return searchParameters.addHierarchicalFacet({
-          name: hierarchicalFacetName,
-          attributes,
-          separator,
-          rootPath,
-        });
+        const withFacetConfiguration = searchParameters
+          .removeHierarchicalFacet(hierarchicalFacetName)
+          .addHierarchicalFacet({
+            name: hierarchicalFacetName,
+            attributes,
+            separator,
+            rootPath,
+          });
+
+        if (!values) {
+          return withFacetConfiguration.setQueryParameters({
+            hierarchicalFacetsRefinements: {
+              ...withFacetConfiguration.hierarchicalFacetsRefinements,
+              [hierarchicalFacetName]: [],
+            },
+          });
+        }
+
+        return withFacetConfiguration.addHierarchicalFacetRefinement(
+          hierarchicalFacetName,
+          values.join(separator)
+        );
       },
     };
   };

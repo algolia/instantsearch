@@ -1,8 +1,9 @@
 /** @jsx h */
+import { cx } from '@algolia/ui-components-shared';
 import { h } from 'preact';
 
 import { formatNumber } from '../../lib/formatNumber';
-import { cx } from '@algolia/ui-components-shared';
+
 import type { HierarchicalMenuComponentTemplates } from './hierarchical-menu';
 
 const defaultTemplates: HierarchicalMenuComponentTemplates = {

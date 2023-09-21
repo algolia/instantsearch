@@ -1,7 +1,8 @@
+import { checkIndexUiState } from './checkIndexUiState';
+import { isIndexWidget } from './isIndexWidget';
+
 import type { UiState } from '../../types';
 import type { IndexWidget } from '../../widgets/index/index';
-import { isIndexWidget } from './isIndexWidget';
-import { checkIndexUiState } from './checkIndexUiState';
 
 export function setIndexHelperState<TUiState extends UiState>(
   finalUiState: TUiState,

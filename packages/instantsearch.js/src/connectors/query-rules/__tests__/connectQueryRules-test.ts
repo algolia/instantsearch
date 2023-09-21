@@ -1,18 +1,22 @@
-import type { AlgoliaSearchHelper as Helper } from 'algoliasearch-helper';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
+
 import { createInstantSearch } from '../../../../test/createInstantSearch';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 import connectQueryRules from '../connectQueryRules';
+
 import type { TransformItems } from '../../../types';
+import type { AlgoliaSearchHelper as Helper } from 'algoliasearch-helper';
 
 describe('connectQueryRules', () => {
   function createWidget() {

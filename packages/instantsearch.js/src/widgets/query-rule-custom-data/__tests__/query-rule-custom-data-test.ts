@@ -2,18 +2,20 @@
  * @jest-environment jsdom
  */
 
-import type { VNode } from 'preact';
-import { render as preactRender } from 'preact';
-import type { AlgoliaSearchHelper as Helper } from 'algoliasearch-helper';
+import { createSearchClient } from '@instantsearch/mocks';
+import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import algoliasearchHelper from 'algoliasearch-helper';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import { render as preactRender } from 'preact';
+
 import {
   createDisposeOptions,
   createInitOptions,
 } from '../../../../test/createWidget';
-import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import queryRuleCustomData from '../query-rule-custom-data';
+
 import type { QueryRuleCustomDataProps } from '../../../components/QueryRuleCustomData/QueryRuleCustomData';
+import type { AlgoliaSearchHelper as Helper } from 'algoliasearch-helper';
+import type { VNode } from 'preact';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

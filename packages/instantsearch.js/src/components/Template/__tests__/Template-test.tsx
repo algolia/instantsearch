@@ -3,12 +3,14 @@
  */
 /** @jsx h */
 
-import { h } from 'preact';
-import type { TemplateProps } from '../Template';
-import Template from '../Template';
 import { mount, shallow } from '@instantsearch/testutils/enzyme';
 import { render } from '@testing-library/preact';
+import { h } from 'preact';
+
 import { warning } from '../../../lib/utils';
+import Template from '../Template';
+
+import type { TemplateProps } from '../Template';
 
 function getProps({
   templates = { test: '' },
@@ -76,6 +78,8 @@ describe('Template', () => {
       .toWarnDev(`[InstantSearch.js]: Hogan.js and string-based templates are deprecated and will not be supported in InstantSearch.js 5.x.
 
 You can replace them with function-form templates and use either the provided \`html\` function or JSX templates.
+
+String-based templates: test.
 
 See: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/#upgrade-templates`);
   });

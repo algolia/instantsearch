@@ -1,16 +1,19 @@
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import connectRelevantSort from '../connectRelevantSort';
+
 import {
   createInitOptions,
   createRenderOptions,
   createDisposeOptions,
 } from '../../../../test/createWidget';
 import { noop } from '../../../lib/utils';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
+import connectRelevantSort from '../connectRelevantSort';
 
 const createHelper = () => {
   return algoliasearchHelper(createSearchClient(), '', {});

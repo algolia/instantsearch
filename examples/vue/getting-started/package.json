@@ -1,0 +1,31 @@
+{
+  "name": "example-vue-instantsearch-getting-started",
+  "version": "1.0.15",
+  "private": true,
+  "scripts": {
+    "start": "vue-cli-service serve --port 3000",
+    "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "algoliasearch": "4.14.3",
+    "core-js": "2",
+    "instantsearch.js": "4.57.0",
+    "vue": "2.7.14",
+    "vue-instantsearch": "4.10.12"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "3.12.1",
+    "@vue/cli-service": "3.12.1",
+    "vue-template-compiler": "2.7.14"
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
+}

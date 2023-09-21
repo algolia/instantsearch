@@ -1,6 +1,8 @@
-import { storiesOf } from '@storybook/html';
 import { action } from '@storybook/addon-actions';
+import { storiesOf } from '@storybook/html';
+
 import { withHits } from '../.storybook/decorators';
+
 import type { InsightsClient } from '../src/types';
 
 const fakeInsightsClient: InsightsClient = (method, ...payloads) => {
@@ -37,8 +39,8 @@ storiesOf('Results/Hits', module)
         instantsearch.widgets.hits({
           container,
           templates: {
-            item(hit) {
-              return instantsearch.highlight({
+            item(hit, { components }) {
+              return components.Highlight({
                 attribute: 'name',
                 hit,
               });
@@ -68,8 +70,8 @@ storiesOf('Results/Hits', module)
         instantsearch.widgets.hits({
           container,
           templates: {
-            item(hit) {
-              return instantsearch.reverseHighlight({
+            item(hit, { components }) {
+              return components.ReverseHighlight({
                 attribute: 'name',
                 hit,
               });
@@ -105,16 +107,20 @@ storiesOf('Results/Hits', module)
         instantsearch.widgets.hits({
           container,
           templates: {
-            item(hit) {
-              return `
-                <h4>${instantsearch.snippet({
-                  attribute: 'name',
-                  hit,
-                })}</h4>
-                <p>${instantsearch.snippet({
-                  attribute: 'description',
-                  hit,
-                })}</p>
+            item(hit, { html, components }) {
+              return html`
+                <h4>
+                  ${components.Snippet({
+                    attribute: 'name',
+                    hit,
+                  })}
+                </h4>
+                <p>
+                  ${components.Snippet({
+                    attribute: 'description',
+                    hit,
+                  })}
+                </p>
               `;
             },
           },
@@ -209,14 +215,10 @@ storiesOf('Results/Hits', module)
           instantsearch.widgets.hits({
             container,
             templates: {
-              item: (item, bindEvent) => `
+              item: (item, { html, sendEvent }) => html`
                 <h4>${item.name}</h4>
                 <button
-                  ${bindEvent(
-                    'clickedObjectIDsAfterSearch',
-                    [item],
-                    'Add to cart'
-                  )}
+                  onClick=${() => sendEvent('click', [item], 'Add to cart')}
                 >
                   Add to cart
                 </button>

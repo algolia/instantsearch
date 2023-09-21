@@ -1,8 +1,8 @@
 /* global moment Calendar $ */
 import algoliasearch from 'algoliasearch/lite';
 import instantsearch from 'instantsearch.js';
-import { searchBox, hits } from 'instantsearch.js/es/widgets';
 import { connectRange } from 'instantsearch.js/es/connectors';
+import { searchBox, hits } from 'instantsearch.js/es/widgets';
 
 const ONE_DAY_IN_MS = 3600 * 24 * 1000;
 
@@ -10,6 +10,7 @@ const search = instantsearch({
   indexName: 'concert_events_instantsearchjs',
   searchClient: algoliasearch('latency', '059c79ddd276568e990286944276464a'),
   routing: true,
+  insights: true,
 });
 
 search.addWidgets([
@@ -21,12 +22,12 @@ search.addWidgets([
   hits({
     container: '#hits',
     templates: {
-      item: (hit) => `
+      item: (hit, { html, components }) => html`
         <li class="hit">
           <h3>
-            ${instantsearch.highlight({ attribute: 'name', hit })}
+            ${components.Highlight({ attribute: 'name', hit })}
             <small>
-              ${instantsearch.highlight({ attribute: 'location', hit })}
+              ${components.Highlight({ attribute: 'location', hit })}
             </small>
           </h3>
           <small>

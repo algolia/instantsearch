@@ -1,15 +1,17 @@
 /** @jsx h */
 
-import { h } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h } from 'preact';
+
 import Template from '../Template/Template';
+
+import type { BreadcrumbConnectorParamsItem } from '../../connectors/breadcrumb/connectBreadcrumb';
+import type { PreparedTemplateProps } from '../../lib/templating';
+import type { ComponentCSSClasses } from '../../types';
 import type {
   BreadcrumbCSSClasses,
   BreadcrumbTemplates,
 } from '../../widgets/breadcrumb/breadcrumb';
-import type { ComponentCSSClasses } from '../../types';
-import type { PreparedTemplateProps } from '../../lib/templating';
-import type { BreadcrumbConnectorParamsItem } from '../../connectors/breadcrumb/connectBreadcrumb';
 
 export type BreadcrumbComponentCSSClasses =
   ComponentCSSClasses<BreadcrumbCSSClasses>;
@@ -20,8 +22,8 @@ export type BreadcrumbProps = {
   items: BreadcrumbConnectorParamsItem[];
   cssClasses: BreadcrumbComponentCSSClasses;
   templateProps: PreparedTemplateProps<BreadcrumbComponentTemplates>;
-  createURL(value?: string | null): string;
-  refine(value?: string | null): void;
+  createURL: (value: BreadcrumbConnectorParamsItem['value']) => string;
+  refine: (value: BreadcrumbConnectorParamsItem['value']) => void;
   canRefine?: boolean;
 };
 
@@ -51,10 +53,10 @@ const Breadcrumb = ({
           rootTagName="a"
           rootProps={{
             className: cssClasses.link,
-            href: createURL(undefined),
+            href: createURL(null),
             onClick: (event: MouseEvent) => {
               event.preventDefault();
-              refine(undefined);
+              refine(null);
             },
           }}
         />

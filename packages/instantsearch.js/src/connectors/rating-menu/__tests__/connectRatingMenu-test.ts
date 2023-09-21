@@ -1,16 +1,19 @@
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import connectRatingMenu from '../connectRatingMenu';
+
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
-import { createInstantSearch } from '../../../../test/createInstantSearch';
+import connectRatingMenu from '../connectRatingMenu';
 
 describe('connectRatingMenu', () => {
   const getInitializedWidget = (config = {}, unmount = () => {}) => {
@@ -977,6 +980,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
         attribute: 'swag',
         eventType: 'click',
+        eventModifier: 'internal',
         insightsMethod: 'clickedFilters',
         payload: {
           eventName: 'Filter Applied',
@@ -1010,6 +1014,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
         attribute: 'swag',
         eventType: 'click',
+        eventModifier: 'internal',
         insightsMethod: 'clickedFilters',
         payload: {
           eventName: 'Filter Applied',

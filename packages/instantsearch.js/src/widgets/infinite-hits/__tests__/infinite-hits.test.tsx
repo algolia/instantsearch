@@ -2,19 +2,20 @@
  * @jest-environment jsdom
  */
 /** @jsx h */
-import { Fragment, h } from 'preact';
-
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import instantsearch from '../../../index.es';
-import { wait } from '@instantsearch/testutils/wait';
-import infiniteHits from '../infinite-hits';
 import {
+  createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
-} from '@instantsearch/mocks/createAPIResponse';
-import type { SearchResponse } from '../../../../src/types';
-import searchBox from '../../search-box/search-box';
+} from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils/wait';
 import { within, fireEvent } from '@testing-library/dom';
+import { Fragment, h } from 'preact';
+
+import instantsearch from '../../../index.es';
+import searchBox from '../../search-box/search-box';
+import infiniteHits from '../infinite-hits';
+
+import type { SearchResponse } from '../../../../src/types';
 
 beforeEach(() => {
   document.body.innerHTML = '';
@@ -39,6 +40,9 @@ describe('infiniteHits', () => {
       // assertion can go away.
       expect(async () => {
         search.start();
+        // prevent warning from insights view event because insightsClient isn't yet loaded
+        // @ts-ignore
+        search.helper!.state.userToken = 'userToken';
 
         await wait(0);
       }).not.toWarnDev();
@@ -46,91 +50,87 @@ describe('infiniteHits', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div>
-    <div
-      class="ais-InfiniteHits"
-    >
-      <button
-        class="ais-InfiniteHits-loadPrevious ais-InfiniteHits-loadPrevious--disabled"
-        disabled=""
-      >
-        Show previous results
-      </button>
-      <ol
-        class="ais-InfiniteHits-list"
-      >
-        <li
-          class="ais-InfiniteHits-item"
-        >
-          {
-  "objectID": "1",
-  "name": "Apple iPhone smartphone",
-  "description": "A smartphone by Apple.",
-  "_highlightResult": {
-    "name": {
-      "value": "Apple iPhone &lt;mark&gt;smartphone&lt;/mark&gt;",
-      "matchLevel": "full",
-      "matchedWords": [
-        "smartphone"
-      ]
-    }
-  },
-  "_snippetResult": {
-    "name": {
-      "value": "Apple iPhone &lt;mark&gt;smartphone&lt;/mark&gt;",
-      "matchLevel": "full"
-    },
-    "description": {
-      "value": "A &lt;mark&gt;smartphone&lt;/mark&gt; by Apple.",
-      "matchLevel": "full"
-    }
-  },
-  "__position": 1,
-  "__hitIndex": 0
-}
-        </li>
-        <li
-          class="ais-InfiniteHits-item"
-        >
-          {
-  "objectID": "2",
-  "name": "Samsung Galaxy smartphone",
-  "description": "A smartphone by Samsung.",
-  "_highlightResult": {
-    "name": {
-      "value": "Samsung Galaxy &lt;mark&gt;smartphone&lt;/mark&gt;",
-      "matchLevel": "full",
-      "matchedWords": [
-        "smartphone"
-      ]
-    }
-  },
-  "_snippetResult": {
-    "name": {
-      "value": "Samsung Galaxy &lt;mark&gt;smartphone&lt;/mark&gt;",
-      "matchLevel": "full"
-    },
-    "description": {
-      "value": "A &lt;mark&gt;smartphone&lt;/mark&gt; by Samsung.",
-      "matchLevel": "full"
-    }
-  },
-  "__position": 2,
-  "__hitIndex": 1
-}
-        </li>
-      </ol>
-      <button
-        class="ais-InfiniteHits-loadMore ais-InfiniteHits-loadMore--disabled"
-        disabled=""
-      >
-        Show more results
-      </button>
-    </div>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-InfiniteHits"
+          >
+            <button
+              class="ais-InfiniteHits-loadPrevious ais-InfiniteHits-loadPrevious--disabled"
+              disabled=""
+            >
+              Show previous results
+            </button>
+            <ol
+              class="ais-InfiniteHits-list"
+            >
+              <li
+                class="ais-InfiniteHits-item"
+              >
+                {
+          "objectID": "1",
+          "name": "Apple iPhone smartphone",
+          "description": "A smartphone by Apple.",
+          "_highlightResult": {
+            "name": {
+              "value": "Apple iPhone &lt;mark&gt;smartphone&lt;/mark&gt;",
+              "matchLevel": "full",
+              "matchedWords": [
+                "smartphone"
+              ]
+            }
+          },
+          "_snippetResult": {
+            "name": {
+              "value": "Apple iPhone &lt;mark&gt;smartphone&lt;/mark&gt;",
+              "matchLevel": "full"
+            },
+            "description": {
+              "value": "A &lt;mark&gt;smartphone&lt;/mark&gt; by Apple.",
+              "matchLevel": "full"
+            }
+          },
+          "__position": 1
+        }
+              </li>
+              <li
+                class="ais-InfiniteHits-item"
+              >
+                {
+          "objectID": "2",
+          "name": "Samsung Galaxy smartphone",
+          "description": "A smartphone by Samsung.",
+          "_highlightResult": {
+            "name": {
+              "value": "Samsung Galaxy &lt;mark&gt;smartphone&lt;/mark&gt;",
+              "matchLevel": "full",
+              "matchedWords": [
+                "smartphone"
+              ]
+            }
+          },
+          "_snippetResult": {
+            "name": {
+              "value": "Samsung Galaxy &lt;mark&gt;smartphone&lt;/mark&gt;",
+              "matchLevel": "full"
+            },
+            "description": {
+              "value": "A &lt;mark&gt;smartphone&lt;/mark&gt; by Samsung.",
+              "matchLevel": "full"
+            }
+          },
+          "__position": 2
+        }
+              </li>
+            </ol>
+            <button
+              class="ais-InfiniteHits-loadMore ais-InfiniteHits-loadMore--disabled"
+              disabled=""
+            >
+              Show more results
+            </button>
+          </div>
+        </div>
+      `);
 
       fireEvent.input(within(searchBoxContainer).getByRole('searchbox'), {
         target: { value: 'query with no results' },
@@ -139,16 +139,14 @@ describe('infiniteHits', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div>
-    <div
-      class="ais-InfiniteHits ais-InfiniteHits--empty"
-    >
-      No results
-    </div>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-InfiniteHits ais-InfiniteHits--empty"
+          >
+            No results
+          </div>
+        </div>
+      `);
     });
 
     test('renders with templates using `html`', async () => {
@@ -197,191 +195,189 @@ describe('infiniteHits', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div>
-    <div
-      class="ais-InfiniteHits"
-    >
-      <button
-        class="ais-InfiniteHits-loadPrevious ais-InfiniteHits-loadPrevious--disabled"
-        disabled=""
-      >
-        <span>
-          Show previous
-        </span>
-      </button>
-      <ol
-        class="ais-InfiniteHits-list"
-      >
-        <li
-          class="ais-InfiniteHits-item"
-        >
-          <h2>
-            <span
-              class="ais-Highlight"
+        <div>
+          <div
+            class="ais-InfiniteHits"
+          >
+            <button
+              class="ais-InfiniteHits-loadPrevious ais-InfiniteHits-loadPrevious--disabled"
+              disabled=""
             >
-              <span
-                class="ais-Highlight-nonHighlighted"
-              >
-                Apple iPhone 
+              <span>
+                Show previous
               </span>
-              <mark
-                class="ais-Highlight-highlighted"
-              >
-                smartphone
-              </mark>
-            </span>
-          </h2>
-          <h3>
-            <span
-              class="ais-ReverseHighlight"
+            </button>
+            <ol
+              class="ais-InfiniteHits-list"
             >
-              <mark
-                class="ais-ReverseHighlight-highlighted"
+              <li
+                class="ais-InfiniteHits-item"
               >
-                Apple iPhone 
-              </mark>
-              <span
-                class="ais-ReverseHighlight-nonHighlighted"
+                <h2>
+                  <span
+                    class="ais-Highlight"
+                  >
+                    <span
+                      class="ais-Highlight-nonHighlighted"
+                    >
+                      Apple iPhone 
+                    </span>
+                    <mark
+                      class="ais-Highlight-highlighted"
+                    >
+                      smartphone
+                    </mark>
+                  </span>
+                </h2>
+                <h3>
+                  <span
+                    class="ais-ReverseHighlight"
+                  >
+                    <mark
+                      class="ais-ReverseHighlight-highlighted"
+                    >
+                      Apple iPhone 
+                    </mark>
+                    <span
+                      class="ais-ReverseHighlight-nonHighlighted"
+                    >
+                      smartphone
+                    </span>
+                  </span>
+                </h3>
+                <p>
+                  <span
+                    class="ais-Snippet"
+                  >
+                    <span
+                      class="ais-Snippet-nonHighlighted"
+                    >
+                      A 
+                    </span>
+                    <mark
+                      class="ais-Snippet-highlighted"
+                    >
+                      smartphone
+                    </mark>
+                    <span
+                      class="ais-Snippet-nonHighlighted"
+                    >
+                       by Apple.
+                    </span>
+                  </span>
+                </p>
+                <p>
+                  <span
+                    class="ais-ReverseSnippet"
+                  >
+                    <mark
+                      class="ais-ReverseSnippet-highlighted"
+                    >
+                      A 
+                    </mark>
+                    <span
+                      class="ais-ReverseSnippet-nonHighlighted"
+                    >
+                      smartphone
+                    </span>
+                    <mark
+                      class="ais-ReverseSnippet-highlighted"
+                    >
+                       by Apple.
+                    </mark>
+                  </span>
+                </p>
+              </li>
+              <li
+                class="ais-InfiniteHits-item"
               >
-                smartphone
-              </span>
-            </span>
-          </h3>
-          <p>
-            <span
-              class="ais-Snippet"
+                <h2>
+                  <span
+                    class="ais-Highlight"
+                  >
+                    <span
+                      class="ais-Highlight-nonHighlighted"
+                    >
+                      Samsung Galaxy 
+                    </span>
+                    <mark
+                      class="ais-Highlight-highlighted"
+                    >
+                      smartphone
+                    </mark>
+                  </span>
+                </h2>
+                <h3>
+                  <span
+                    class="ais-ReverseHighlight"
+                  >
+                    <mark
+                      class="ais-ReverseHighlight-highlighted"
+                    >
+                      Samsung Galaxy 
+                    </mark>
+                    <span
+                      class="ais-ReverseHighlight-nonHighlighted"
+                    >
+                      smartphone
+                    </span>
+                  </span>
+                </h3>
+                <p>
+                  <span
+                    class="ais-Snippet"
+                  >
+                    <span
+                      class="ais-Snippet-nonHighlighted"
+                    >
+                      A 
+                    </span>
+                    <mark
+                      class="ais-Snippet-highlighted"
+                    >
+                      smartphone
+                    </mark>
+                    <span
+                      class="ais-Snippet-nonHighlighted"
+                    >
+                       by Samsung.
+                    </span>
+                  </span>
+                </p>
+                <p>
+                  <span
+                    class="ais-ReverseSnippet"
+                  >
+                    <mark
+                      class="ais-ReverseSnippet-highlighted"
+                    >
+                      A 
+                    </mark>
+                    <span
+                      class="ais-ReverseSnippet-nonHighlighted"
+                    >
+                      smartphone
+                    </span>
+                    <mark
+                      class="ais-ReverseSnippet-highlighted"
+                    >
+                       by Samsung.
+                    </mark>
+                  </span>
+                </p>
+              </li>
+            </ol>
+            <button
+              class="ais-InfiniteHits-loadMore ais-InfiniteHits-loadMore--disabled"
+              disabled=""
             >
-              <span
-                class="ais-Snippet-nonHighlighted"
-              >
-                A 
+              <span>
+                Show more
               </span>
-              <mark
-                class="ais-Snippet-highlighted"
-              >
-                smartphone
-              </mark>
-              <span
-                class="ais-Snippet-nonHighlighted"
-              >
-                 by Apple.
-              </span>
-            </span>
-          </p>
-          <p>
-            <span
-              class="ais-ReverseSnippet"
-            >
-              <mark
-                class="ais-ReverseSnippet-highlighted"
-              >
-                A 
-              </mark>
-              <span
-                class="ais-ReverseSnippet-nonHighlighted"
-              >
-                smartphone
-              </span>
-              <mark
-                class="ais-ReverseSnippet-highlighted"
-              >
-                 by Apple.
-              </mark>
-            </span>
-          </p>
-        </li>
-        <li
-          class="ais-InfiniteHits-item"
-        >
-          <h2>
-            <span
-              class="ais-Highlight"
-            >
-              <span
-                class="ais-Highlight-nonHighlighted"
-              >
-                Samsung Galaxy 
-              </span>
-              <mark
-                class="ais-Highlight-highlighted"
-              >
-                smartphone
-              </mark>
-            </span>
-          </h2>
-          <h3>
-            <span
-              class="ais-ReverseHighlight"
-            >
-              <mark
-                class="ais-ReverseHighlight-highlighted"
-              >
-                Samsung Galaxy 
-              </mark>
-              <span
-                class="ais-ReverseHighlight-nonHighlighted"
-              >
-                smartphone
-              </span>
-            </span>
-          </h3>
-          <p>
-            <span
-              class="ais-Snippet"
-            >
-              <span
-                class="ais-Snippet-nonHighlighted"
-              >
-                A 
-              </span>
-              <mark
-                class="ais-Snippet-highlighted"
-              >
-                smartphone
-              </mark>
-              <span
-                class="ais-Snippet-nonHighlighted"
-              >
-                 by Samsung.
-              </span>
-            </span>
-          </p>
-          <p>
-            <span
-              class="ais-ReverseSnippet"
-            >
-              <mark
-                class="ais-ReverseSnippet-highlighted"
-              >
-                A 
-              </mark>
-              <span
-                class="ais-ReverseSnippet-nonHighlighted"
-              >
-                smartphone
-              </span>
-              <mark
-                class="ais-ReverseSnippet-highlighted"
-              >
-                 by Samsung.
-              </mark>
-            </span>
-          </p>
-        </li>
-      </ol>
-      <button
-        class="ais-InfiniteHits-loadMore ais-InfiniteHits-loadMore--disabled"
-        disabled=""
-      >
-        <span>
-          Show more
-        </span>
-      </button>
-    </div>
-  </div>
-</div>
-`);
+            </button>
+          </div>
+        </div>
+      `);
 
       fireEvent.input(within(searchBoxContainer).getByRole('searchbox'), {
         target: { value: 'query with no results' },
@@ -390,21 +386,19 @@ describe('infiniteHits', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div>
-    <div
-      class="ais-InfiniteHits ais-InfiniteHits--empty"
-    >
-      <p>
-        No results for 
-        <q>
-          query with no results
-        </q>
-      </p>
-    </div>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-InfiniteHits ais-InfiniteHits--empty"
+          >
+            <p>
+              No results for 
+              <q>
+                query with no results
+              </q>
+            </p>
+          </div>
+        </div>
+      `);
     });
 
     test('renders with templates using JSX', async () => {
@@ -463,191 +457,189 @@ describe('infiniteHits', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div>
-    <div
-      class="ais-InfiniteHits"
-    >
-      <button
-        class="ais-InfiniteHits-loadPrevious ais-InfiniteHits-loadPrevious--disabled"
-        disabled=""
-      >
-        <span>
-          Show previous
-        </span>
-      </button>
-      <ol
-        class="ais-InfiniteHits-list"
-      >
-        <li
-          class="ais-InfiniteHits-item"
-        >
-          <h2>
-            <span
-              class="ais-Highlight"
+        <div>
+          <div
+            class="ais-InfiniteHits"
+          >
+            <button
+              class="ais-InfiniteHits-loadPrevious ais-InfiniteHits-loadPrevious--disabled"
+              disabled=""
             >
-              <span
-                class="ais-Highlight-nonHighlighted"
-              >
-                Apple iPhone 
+              <span>
+                Show previous
               </span>
-              <mark
-                class="ais-Highlight-highlighted"
-              >
-                smartphone
-              </mark>
-            </span>
-          </h2>
-          <h3>
-            <span
-              class="ais-ReverseHighlight"
+            </button>
+            <ol
+              class="ais-InfiniteHits-list"
             >
-              <mark
-                class="ais-ReverseHighlight-highlighted"
+              <li
+                class="ais-InfiniteHits-item"
               >
-                Apple iPhone 
-              </mark>
-              <span
-                class="ais-ReverseHighlight-nonHighlighted"
+                <h2>
+                  <span
+                    class="ais-Highlight"
+                  >
+                    <span
+                      class="ais-Highlight-nonHighlighted"
+                    >
+                      Apple iPhone 
+                    </span>
+                    <mark
+                      class="ais-Highlight-highlighted"
+                    >
+                      smartphone
+                    </mark>
+                  </span>
+                </h2>
+                <h3>
+                  <span
+                    class="ais-ReverseHighlight"
+                  >
+                    <mark
+                      class="ais-ReverseHighlight-highlighted"
+                    >
+                      Apple iPhone 
+                    </mark>
+                    <span
+                      class="ais-ReverseHighlight-nonHighlighted"
+                    >
+                      smartphone
+                    </span>
+                  </span>
+                </h3>
+                <p>
+                  <span
+                    class="ais-Snippet"
+                  >
+                    <span
+                      class="ais-Snippet-nonHighlighted"
+                    >
+                      A 
+                    </span>
+                    <mark
+                      class="ais-Snippet-highlighted"
+                    >
+                      smartphone
+                    </mark>
+                    <span
+                      class="ais-Snippet-nonHighlighted"
+                    >
+                       by Apple.
+                    </span>
+                  </span>
+                </p>
+                <p>
+                  <span
+                    class="ais-ReverseSnippet"
+                  >
+                    <mark
+                      class="ais-ReverseSnippet-highlighted"
+                    >
+                      A 
+                    </mark>
+                    <span
+                      class="ais-ReverseSnippet-nonHighlighted"
+                    >
+                      smartphone
+                    </span>
+                    <mark
+                      class="ais-ReverseSnippet-highlighted"
+                    >
+                       by Apple.
+                    </mark>
+                  </span>
+                </p>
+              </li>
+              <li
+                class="ais-InfiniteHits-item"
               >
-                smartphone
-              </span>
-            </span>
-          </h3>
-          <p>
-            <span
-              class="ais-Snippet"
+                <h2>
+                  <span
+                    class="ais-Highlight"
+                  >
+                    <span
+                      class="ais-Highlight-nonHighlighted"
+                    >
+                      Samsung Galaxy 
+                    </span>
+                    <mark
+                      class="ais-Highlight-highlighted"
+                    >
+                      smartphone
+                    </mark>
+                  </span>
+                </h2>
+                <h3>
+                  <span
+                    class="ais-ReverseHighlight"
+                  >
+                    <mark
+                      class="ais-ReverseHighlight-highlighted"
+                    >
+                      Samsung Galaxy 
+                    </mark>
+                    <span
+                      class="ais-ReverseHighlight-nonHighlighted"
+                    >
+                      smartphone
+                    </span>
+                  </span>
+                </h3>
+                <p>
+                  <span
+                    class="ais-Snippet"
+                  >
+                    <span
+                      class="ais-Snippet-nonHighlighted"
+                    >
+                      A 
+                    </span>
+                    <mark
+                      class="ais-Snippet-highlighted"
+                    >
+                      smartphone
+                    </mark>
+                    <span
+                      class="ais-Snippet-nonHighlighted"
+                    >
+                       by Samsung.
+                    </span>
+                  </span>
+                </p>
+                <p>
+                  <span
+                    class="ais-ReverseSnippet"
+                  >
+                    <mark
+                      class="ais-ReverseSnippet-highlighted"
+                    >
+                      A 
+                    </mark>
+                    <span
+                      class="ais-ReverseSnippet-nonHighlighted"
+                    >
+                      smartphone
+                    </span>
+                    <mark
+                      class="ais-ReverseSnippet-highlighted"
+                    >
+                       by Samsung.
+                    </mark>
+                  </span>
+                </p>
+              </li>
+            </ol>
+            <button
+              class="ais-InfiniteHits-loadMore ais-InfiniteHits-loadMore--disabled"
+              disabled=""
             >
-              <span
-                class="ais-Snippet-nonHighlighted"
-              >
-                A 
+              <span>
+                Show more
               </span>
-              <mark
-                class="ais-Snippet-highlighted"
-              >
-                smartphone
-              </mark>
-              <span
-                class="ais-Snippet-nonHighlighted"
-              >
-                 by Apple.
-              </span>
-            </span>
-          </p>
-          <p>
-            <span
-              class="ais-ReverseSnippet"
-            >
-              <mark
-                class="ais-ReverseSnippet-highlighted"
-              >
-                A 
-              </mark>
-              <span
-                class="ais-ReverseSnippet-nonHighlighted"
-              >
-                smartphone
-              </span>
-              <mark
-                class="ais-ReverseSnippet-highlighted"
-              >
-                 by Apple.
-              </mark>
-            </span>
-          </p>
-        </li>
-        <li
-          class="ais-InfiniteHits-item"
-        >
-          <h2>
-            <span
-              class="ais-Highlight"
-            >
-              <span
-                class="ais-Highlight-nonHighlighted"
-              >
-                Samsung Galaxy 
-              </span>
-              <mark
-                class="ais-Highlight-highlighted"
-              >
-                smartphone
-              </mark>
-            </span>
-          </h2>
-          <h3>
-            <span
-              class="ais-ReverseHighlight"
-            >
-              <mark
-                class="ais-ReverseHighlight-highlighted"
-              >
-                Samsung Galaxy 
-              </mark>
-              <span
-                class="ais-ReverseHighlight-nonHighlighted"
-              >
-                smartphone
-              </span>
-            </span>
-          </h3>
-          <p>
-            <span
-              class="ais-Snippet"
-            >
-              <span
-                class="ais-Snippet-nonHighlighted"
-              >
-                A 
-              </span>
-              <mark
-                class="ais-Snippet-highlighted"
-              >
-                smartphone
-              </mark>
-              <span
-                class="ais-Snippet-nonHighlighted"
-              >
-                 by Samsung.
-              </span>
-            </span>
-          </p>
-          <p>
-            <span
-              class="ais-ReverseSnippet"
-            >
-              <mark
-                class="ais-ReverseSnippet-highlighted"
-              >
-                A 
-              </mark>
-              <span
-                class="ais-ReverseSnippet-nonHighlighted"
-              >
-                smartphone
-              </span>
-              <mark
-                class="ais-ReverseSnippet-highlighted"
-              >
-                 by Samsung.
-              </mark>
-            </span>
-          </p>
-        </li>
-      </ol>
-      <button
-        class="ais-InfiniteHits-loadMore ais-InfiniteHits-loadMore--disabled"
-        disabled=""
-      >
-        <span>
-          Show more
-        </span>
-      </button>
-    </div>
-  </div>
-</div>
-`);
+            </button>
+          </div>
+        </div>
+      `);
 
       fireEvent.input(within(searchBoxContainer).getByRole('searchbox'), {
         target: { value: 'query with no results' },
@@ -656,22 +648,20 @@ describe('infiniteHits', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div>
-    <div
-      class="ais-InfiniteHits ais-InfiniteHits--empty"
-    >
-      <p>
-        No results for 
-        <q>
-          $
-          query with no results
-        </q>
-      </p>
-    </div>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-InfiniteHits ais-InfiniteHits--empty"
+          >
+            <p>
+              No results for 
+              <q>
+                $
+                query with no results
+              </q>
+            </p>
+          </div>
+        </div>
+      `);
     });
 
     type CustomHit = { name: string; description: string };

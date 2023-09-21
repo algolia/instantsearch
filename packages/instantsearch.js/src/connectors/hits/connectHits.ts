@@ -1,4 +1,3 @@
-import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
 import {
   escapeHits,
   TAG_PLACEHOLDER,
@@ -10,6 +9,8 @@ import {
   createBindEventForHits,
   noop,
 } from '../../lib/utils';
+
+import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
 import type {
   TransformItems,
   Connector,
@@ -81,6 +82,7 @@ const connectHits: HitsConnector = function connectHits(
 
   return (widgetParams) => {
     const {
+      // @MAJOR: this can default to false
       escapeHTML = true,
       transformItems = ((items) => items) as NonNullable<
         HitsConnectorParams['transformItems']
@@ -113,7 +115,7 @@ const connectHits: HitsConnector = function connectHits(
           false
         );
 
-        renderState.sendEvent('view', renderState.hits);
+        renderState.sendEvent('view:internal', renderState.hits);
       },
 
       getRenderState(renderState, renderOptions) {
@@ -136,6 +138,7 @@ const connectHits: HitsConnector = function connectHits(
           bindEvent = createBindEventForHits({
             index: helper.getIndex(),
             widgetType: this.$$type,
+            instantSearchInstance,
           });
         }
 

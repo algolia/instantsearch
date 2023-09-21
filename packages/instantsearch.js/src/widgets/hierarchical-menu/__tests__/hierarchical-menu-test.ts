@@ -2,20 +2,24 @@
  * @jest-environment jsdom
  */
 
-import type { VNode } from 'preact';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
+import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
+import { wait } from '@instantsearch/testutils/wait';
 import { render as originalRender } from 'preact';
+
+import instantsearch from '../../../index.es';
+import hierarchicalMenu from '../hierarchical-menu';
+
+import type { RefinementListProps } from '../../../components/RefinementList/RefinementList';
+import type { HierarchicalMenuConnectorParams } from '../../../connectors/hierarchical-menu/connectHierarchicalMenu';
 import type {
   HierarchicalMenuComponentTemplates,
   HierarchicalMenuWidgetParams,
 } from '../hierarchical-menu';
-import hierarchicalMenu from '../hierarchical-menu';
-import type { HierarchicalMenuConnectorParams } from '../../../connectors/hierarchical-menu/connectHierarchicalMenu';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
-import instantsearch from '../../../index.es';
-import { wait } from '@instantsearch/testutils/wait';
-import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
-import type { RefinementListProps } from '../../../components/RefinementList/RefinementList';
+import type { VNode } from 'preact';
 
 const render = castToJestMock(originalRender);
 jest.mock('preact', () => {

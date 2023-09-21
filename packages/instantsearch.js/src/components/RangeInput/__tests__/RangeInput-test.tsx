@@ -3,11 +3,13 @@
  */
 /** @jsx h */
 
-import { h } from 'preact';
 import { shallow } from '@instantsearch/testutils/enzyme';
 import { render, fireEvent } from '@testing-library/preact';
-import type { RangeInputProps } from '../RangeInput';
+import { h } from 'preact';
+
 import RangeInput from '../RangeInput';
+
+import type { RangeInputProps } from '../RangeInput';
 
 describe('RangeInput', () => {
   const defaultProps: RangeInputProps = {
@@ -56,8 +58,8 @@ describe('RangeInput', () => {
 
     expect(component).toMatchSnapshot();
     expect(component.state()).toEqual({
-      min: 20,
-      max: 480,
+      min: '20',
+      max: '480',
     });
   });
 
@@ -90,8 +92,8 @@ describe('RangeInput', () => {
 
       expect(component).toMatchSnapshot();
       expect(component.state()).toEqual({
-        min: 20,
-        max: 480,
+        min: '20',
+        max: '480',
       });
     });
 
@@ -118,8 +120,8 @@ describe('RangeInput', () => {
 
       expect(component).toMatchSnapshot();
       expect(component.state()).toEqual({
-        min: 20,
-        max: 480,
+        min: '20',
+        max: '480',
       });
     });
   });

@@ -2,15 +2,16 @@
  * @jest-environment jsdom
  */
 
-import { render as preactRender } from 'preact';
-import stats from '../stats';
+import { createSingleSearchResponse } from '@instantsearch/mocks';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
+import { SearchParameters, SearchResults } from 'algoliasearch-helper';
+import { render as preactRender } from 'preact';
+
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { SearchParameters, SearchResults } from 'algoliasearch-helper';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
+import stats from '../stats';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

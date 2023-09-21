@@ -1,13 +1,16 @@
 /** @jsx h */
 
-import { h } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h } from 'preact';
+
+import { warning } from '../../lib/utils';
 import Template from '../Template/Template';
+
+import type { ComponentCSSClasses, Hit } from '../../types';
 import type {
   AnswersCSSClasses,
   AnswersTemplates,
 } from '../../widgets/answers/answers';
-import type { ComponentCSSClasses, Hit } from '../../types';
 
 export type AnswersComponentCSSClasses = ComponentCSSClasses<AnswersCSSClasses>;
 
@@ -49,7 +52,7 @@ const Answers = ({
       />
     ) : (
       <ul className={cssClasses.list}>
-        {hits.map((hit, position) => (
+        {hits.map((hit, index) => (
           <Template
             {...templateProps}
             templateKey="item"
@@ -58,7 +61,13 @@ const Answers = ({
             key={hit.objectID}
             data={{
               ...hit,
-              __hitIndex: position,
+              get __hitIndex() {
+                warning(
+                  false,
+                  'The `__hitIndex` property is deprecated. Use the absolute `__position` instead.'
+                );
+                return index;
+              },
             }}
           />
         ))}

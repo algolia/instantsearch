@@ -2,18 +2,18 @@
  * @jest-environment jsdom
  */
 /** @jsx h */
-import { h } from 'preact';
-import { fireEvent, within } from '@testing-library/dom';
-
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import instantsearch from '../../../index.es';
-import { wait } from '@instantsearch/testutils/wait';
-import hierarchicalMenu from '../hierarchical-menu';
 import {
+  createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
-} from '@instantsearch/mocks/createAPIResponse';
+} from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils/wait';
+import { fireEvent, within } from '@testing-library/dom';
+import { h } from 'preact';
+
+import instantsearch from '../../../index.es';
 import { createInsightsMiddleware } from '../../../middlewares';
+import hierarchicalMenu from '../hierarchical-menu';
 
 beforeEach(() => {
   document.body.innerHTML = '';
@@ -362,6 +362,7 @@ describe('refinementList', () => {
         {
           attribute: 'categories.lvl0',
           eventType: 'click',
+          eventModifier: 'internal',
           insightsMethod: 'clickedFilters',
           payload: {
             eventName: 'Filter Applied',
@@ -370,7 +371,7 @@ describe('refinementList', () => {
           },
           widgetType: 'ais.hierarchicalMenu',
         },
-        null
+        expect.any(Function)
       );
 
       await wait(0);
@@ -385,6 +386,7 @@ describe('refinementList', () => {
         {
           attribute: 'categories.lvl1',
           eventType: 'click',
+          eventModifier: 'internal',
           insightsMethod: 'clickedFilters',
           payload: {
             eventName: 'Filter Applied',
@@ -393,7 +395,7 @@ describe('refinementList', () => {
           },
           widgetType: 'ais.hierarchicalMenu',
         },
-        null
+        expect.any(Function)
       );
     });
   });

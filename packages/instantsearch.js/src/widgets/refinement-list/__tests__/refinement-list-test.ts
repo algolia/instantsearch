@@ -2,16 +2,20 @@
  * @jest-environment jsdom
  */
 
-import type { VNode } from 'preact';
-import { render as originalRender } from 'preact';
-import type { RefinementListTemplates } from '../refinement-list';
-import refinementList from '../refinement-list';
-import type { RefinementListProps } from '../../../components/RefinementList/RefinementList';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
-import instantsearch from '../../../index.es';
 import { wait } from '@instantsearch/testutils/wait';
+import { render as originalRender } from 'preact';
+
+import instantsearch from '../../../index.es';
+import refinementList from '../refinement-list';
+
+import type { RefinementListProps } from '../../../components/RefinementList/RefinementList';
+import type { RefinementListTemplates } from '../refinement-list';
+import type { VNode } from 'preact';
 
 const render = castToJestMock(originalRender);
 jest.mock('preact', () => {

@@ -10,13 +10,13 @@ import {
   getHighlightedParts,
 } from '../../lib/utils';
 
+import type { ReverseHighlightProps as ReverseHighlightUiComponentProps } from '../../components/ReverseHighlight/ReverseHighlight';
 import type {
   BaseHit,
   Hit,
   HitAttributeHighlightResult,
   PartialKeys,
 } from '../../types';
-import type { ReverseHighlightProps as ReverseHighlightUiComponentProps } from '../../components/ReverseHighlight/ReverseHighlight';
 
 export type ReverseHighlightProps<THit extends Hit<BaseHit>> = {
   hit: THit;

@@ -1,15 +1,24 @@
 {
   "name": "react-instantsearch-core",
-  "version": "6.38.3",
+  "version": "7.1.0",
   "description": "⚡ Lightning-fast search for React, by Algolia",
+  "source": "src/index.ts",
+  "types": "dist/es/index.d.ts",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/es/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
   "sideEffects": false,
   "license": "MIT",
   "homepage": "https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/algolia/instantsearch.js"
+    "url": "https://github.com/algolia/instantsearch"
   },
   "author": {
     "name": "Algolia, Inc.",
@@ -30,20 +39,26 @@
   "scripts": {
     "clean": "rm -rf dist",
     "watch": "yarn build:cjs --watch",
-    "build": "yarn build:cjs && yarn build:es && yarn build:umd",
-    "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/cjs --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet",
+    "build": "yarn build:cjs && yarn build:es && yarn build:umd && yarn build:types",
+    "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/cjs --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet && ../../scripts/prepare-cjs.sh",
     "build:es": "BABEL_ENV=es babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet",
     "build:umd": "BABEL_ENV=rollup rollup -c rollup.config.js",
-    "version": "./scripts/version.js"
+    "build:types": "tsc -p ./tsconfig.declaration.json --outDir ./dist/es",
+    "test:exports": "node ./test/module/is-es-module.mjs && node ./test/module/is-cjs-module.cjs",
+    "version": "./scripts/version.cjs"
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2",
-    "algoliasearch-helper": "^3.11.2",
-    "prop-types": "^15.6.2",
-    "react-fast-compare": "^3.0.0"
+    "algoliasearch-helper": "3.14.2",
+    "instantsearch.js": "4.57.0",
+    "use-sync-external-store": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/use-sync-external-store": "0.0.3",
+    "react-instantsearch-core-v6": "npm:react-instantsearch-core@6.40.4"
   },
   "peerDependencies": {
     "algoliasearch": ">= 3.1 < 5",
-    "react": ">= 16.3.0 < 19"
+    "react": ">= 16.8.0 < 19"
   }
 }

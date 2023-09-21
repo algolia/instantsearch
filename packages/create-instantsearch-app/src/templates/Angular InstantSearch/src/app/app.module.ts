@@ -5,14 +5,9 @@ import { NgAisModule } from 'angular-instantsearch';
 import { AppComponent } from './app.component';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    NgAisModule.forRoot(),
-    BrowserModule
-  ],
+  declarations: [AppComponent],
+  imports: [NgAisModule.forRoot(), BrowserModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

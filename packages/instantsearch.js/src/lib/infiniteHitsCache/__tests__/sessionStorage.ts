@@ -45,7 +45,6 @@ describe('createInfiniteHitsSessionStorageCache', () => {
   });
 
   afterAll(() => {
-    // @ts-expect-error
     window.sessionStorage = originalSessionStorage;
   });
 

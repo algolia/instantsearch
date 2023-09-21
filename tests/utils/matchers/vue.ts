@@ -5,8 +5,8 @@ import {
 } from '../../../packages/vue-instantsearch/src/util/vue-compat';
 
 type VueTestWrapper = {
-  html(): string;
-  attributes(attribute: string): string;
+  html: () => string;
+  attributes: (attribute: string) => string;
 };
 
 export const vueToHaveEmptyHTML: jest.CustomMatcher = (
@@ -60,10 +60,10 @@ declare global {
   namespace jest {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/naming-convention
     interface Matchers<R> {
-      vueToHaveEmptyHTML(): jest.CustomMatcherResult;
-      vueToBeDisabled(): jest.CustomMatcherResult;
-      vueToBeHidden(): jest.CustomMatcherResult;
-      vueToBeAutofocused(): jest.CustomMatcherResult;
+      vueToHaveEmptyHTML: () => jest.CustomMatcherResult;
+      vueToBeDisabled: () => jest.CustomMatcherResult;
+      vueToBeHidden: () => jest.CustomMatcherResult;
+      vueToBeAutofocused: () => jest.CustomMatcherResult;
     }
   }
 }

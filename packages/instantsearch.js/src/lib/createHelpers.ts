@@ -1,9 +1,3 @@
-import type {
-  HighlightOptions,
-  ReverseHighlightOptions,
-  SnippetOptions,
-  ReverseSnippetOptions,
-} from '../helpers';
 import {
   highlight,
   reverseHighlight,
@@ -11,13 +5,21 @@ import {
   reverseSnippet,
   insights,
 } from '../helpers';
+
+import { formatNumber } from './formatNumber';
+
+import type {
+  HighlightOptions,
+  ReverseHighlightOptions,
+  SnippetOptions,
+  ReverseSnippetOptions,
+} from '../helpers';
 import type {
   Hit,
   HoganHelpers,
   InsightsClientMethod,
   InsightsClientPayload,
 } from '../types';
-import { formatNumber } from './formatNumber';
 
 type DefaultHoganHelpers = HoganHelpers<
   | 'formatNumber'

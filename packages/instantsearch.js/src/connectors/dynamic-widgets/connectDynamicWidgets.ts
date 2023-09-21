@@ -5,6 +5,7 @@ import {
   noop,
   warning,
 } from '../../lib/utils';
+
 import type {
   Connector,
   TransformItems,
@@ -31,10 +32,10 @@ export type DynamicWidgetsConnectorParams = {
    * Function to return a fallback widget when an attribute isn't found in
    * `widgets`.
    */
-  fallbackWidget?(args: {
+  fallbackWidget?: (args: {
     /** The attribute name to create a widget for. */
     attribute: string;
-  }): Widget;
+  }) => Widget;
 
   /**
    * Function to transform the items to render.

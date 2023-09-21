@@ -1,25 +1,27 @@
 /** @jsx h */
 
-import { h, render } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h, render } from 'preact';
+
+import CustomData from '../../components/QueryRuleCustomData/QueryRuleCustomData';
+import connectQueryRules from '../../connectors/query-rules/connectQueryRules';
+import { component } from '../../lib/suit';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
-import { component } from '../../lib/suit';
-import type { WidgetFactory, Template } from '../../types';
+
+import type {
+  QueryRuleCustomDataComponentCSSClasses,
+  QueryRuleCustomDataComponentTemplates,
+} from '../../components/QueryRuleCustomData/QueryRuleCustomData';
 import type {
   QueryRulesConnectorParams,
   QueryRulesRenderState,
   QueryRulesWidgetDescription,
 } from '../../connectors/query-rules/connectQueryRules';
-import connectQueryRules from '../../connectors/query-rules/connectQueryRules';
-import type {
-  QueryRuleCustomDataComponentCSSClasses,
-  QueryRuleCustomDataComponentTemplates,
-} from '../../components/QueryRuleCustomData/QueryRuleCustomData';
-import CustomData from '../../components/QueryRuleCustomData/QueryRuleCustomData';
 import type { PreparedTemplateProps } from '../../lib/templating';
+import type { WidgetFactory, Template } from '../../types';
 
 export type QueryRuleCustomDataCSSClasses = Partial<{
   root: string | string[];

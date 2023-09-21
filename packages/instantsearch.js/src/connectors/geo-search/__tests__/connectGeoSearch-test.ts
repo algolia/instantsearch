@@ -1,21 +1,23 @@
+import {
+  createSearchClient,
+  createMultiSearchResponse,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils/wait';
 import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import connectGeoSearch from '../connectGeoSearch';
+
 import { createInstantSearch } from '../../../../test/createInstantSearch';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import {
-  createMultiSearchResponse,
-  createSingleSearchResponse,
-} from '@instantsearch/mocks/createAPIResponse';
 import instantsearch from '../../../index.es';
-import { wait } from '@instantsearch/testutils/wait';
+import connectGeoSearch from '../connectGeoSearch';
+
 import type { SearchResponse } from '../../../types';
 
 describe('connectGeoSearch', () => {
@@ -1666,6 +1668,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       );
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
         eventType: 'view',
+        eventModifier: 'internal',
         hits: [
           {
             __position: 0,
@@ -1748,8 +1751,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         stalledSearchDelay: 1,
         indexName: 'indexName',
       });
-      instantSearchInstance.sendEventToInsights = jest.fn();
       instantSearchInstance.start();
+      instantSearchInstance.sendEventToInsights = jest.fn();
 
       instantSearchInstance.addWidgets([widget]);
 

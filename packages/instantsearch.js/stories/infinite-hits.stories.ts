@@ -1,7 +1,9 @@
-import { storiesOf } from '@storybook/html';
 import { action } from '@storybook/addon-actions';
+import { storiesOf } from '@storybook/html';
+
 import { withHits } from '../.storybook/decorators';
 import { createInfiniteHitsSessionStorageCache } from '../src/lib/infiniteHitsCache';
+
 import type { InsightsClient } from '../src/types';
 
 const fakeInsightsClient: InsightsClient = (method, ...payloads) => {
@@ -17,7 +19,7 @@ storiesOf('Results/InfiniteHits', module)
         instantsearch.widgets.infiniteHits({
           container,
           templates: {
-            item: '{{name}}',
+            item: ({ name }) => name,
           },
         }),
       ]);
@@ -30,7 +32,7 @@ storiesOf('Results/InfiniteHits', module)
         instantsearch.widgets.infiniteHits({
           container,
           templates: {
-            item: '{{name}}',
+            item: ({ name }) => name,
             showMoreText: 'Load more',
           },
         }),
@@ -70,14 +72,15 @@ storiesOf('Results/InfiniteHits', module)
           instantsearch.widgets.infiniteHits({
             container,
             templates: {
-              item: (item, bindEvent) => `
+              item: (item, { html, sendEvent }) => html`
                 <h4>${item.name}</h4>
                 <button
-                  ${bindEvent(
-                    'clickedObjectIDsAfterSearch',
-                    [item],
-                    'Add to cart'
-                  )}
+                  onClick=${() =>
+                    sendEvent(
+                      'clickedObjectIDsAfterSearch',
+                      [item],
+                      'Add to cart'
+                    )}
                 >
                   Add to cart
                 </button>
@@ -124,7 +127,7 @@ storiesOf('Results/InfiniteHits', module)
         instantsearch.widgets.infiniteHits({
           container,
           templates: {
-            item: (hit) => `
+            item: (hit, { html }) => html`
               <p>#${hit.__position} ${hit.name}</p>
               <a href="https://google.com">Details</a>
             `,

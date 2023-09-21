@@ -1,8 +1,3 @@
-import type {
-  AlgoliaSearchHelper,
-  SearchParameters,
-} from 'algoliasearch-helper';
-import type { SendEventForHits } from '../../lib/utils';
 import {
   checkRendering,
   aroundLatLngToPosition,
@@ -11,6 +6,8 @@ import {
   createSendEventForHits,
   noop,
 } from '../../lib/utils';
+
+import type { SendEventForHits } from '../../lib/utils';
 import type {
   BaseHit,
   Connector,
@@ -21,6 +18,10 @@ import type {
   TransformItems,
   WidgetRenderState,
 } from '../../types';
+import type {
+  AlgoliaSearchHelper,
+  SearchParameters,
+} from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'geo-search',
@@ -58,7 +59,7 @@ export type GeoSearchRenderState<THit extends BaseHit = Record<string, any>> = {
   /**
    * Reset the current bounding box refinement.
    */
-  clearMapRefinement(): void;
+  clearMapRefinement: () => void;
   /**
    * The current bounding box of the search.
    */
@@ -66,15 +67,15 @@ export type GeoSearchRenderState<THit extends BaseHit = Record<string, any>> = {
   /**
    * Return true if the map has move since the last refinement.
    */
-  hasMapMoveSinceLastRefine(): boolean;
+  hasMapMoveSinceLastRefine: () => boolean;
   /**
    * Return true if the current refinement is set with the map bounds.
    */
-  isRefinedWithMap(): boolean;
+  isRefinedWithMap: () => boolean;
   /**
    * Return true if the user is able to refine on map move.
    */
-  isRefineOnMapMove(): boolean;
+  isRefineOnMapMove: () => boolean;
   /**
    * The matched hits from Algolia API.
    */
@@ -86,7 +87,7 @@ export type GeoSearchRenderState<THit extends BaseHit = Record<string, any>> = {
   /**
    * Sets a bounding box to filter the results from the given map bounds.
    */
-  refine(bounds: Bounds): void;
+  refine: (bounds: Bounds) => void;
   /**
    * Send event to insights middleware
    */
@@ -96,11 +97,11 @@ export type GeoSearchRenderState<THit extends BaseHit = Record<string, any>> = {
    * called on each map move. The call to the function triggers a new rendering
    * only when the value change.
    */
-  setMapMoveSinceLastRefine(): void;
+  setMapMoveSinceLastRefine: () => void;
   /**
    * Toggle the fact that the user is able to refine on map move.
    */
-  toggleRefineOnMapMove(): void;
+  toggleRefineOnMapMove: () => void;
 };
 
 export type GeoSearchConnectorParams<
@@ -315,7 +316,7 @@ const connectGeoSearch: GeoSearchConnector = (renderFn, unmountFn = noop) => {
 
         const widgetRenderState = this.getWidgetRenderState(renderArgs);
 
-        sendEvent('view', widgetRenderState.items);
+        sendEvent('view:internal', widgetRenderState.items);
 
         renderFn(
           {

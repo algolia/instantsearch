@@ -2,15 +2,17 @@
  * @jest-environment jsdom-global
  */
 
-import qs from 'qs';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import { createWidget } from '../../../test/createWidget';
+import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
-import type { Router, UiState, StateMapping, IndexUiState } from '../../types';
-import historyRouter from '../routers/history';
+import qs from 'qs';
+
 import instantsearch from '../..';
-import type { JSDOM } from 'jsdom';
+import { createWidget } from '../../../test/createWidget';
 import { connectHitsPerPage, connectSearchBox } from '../../connectors';
+import historyRouter from '../routers/history';
+
+import type { Router, UiState, StateMapping, IndexUiState } from '../../types';
+import type { JSDOM } from 'jsdom';
 
 declare const jsdom: JSDOM;
 
@@ -271,7 +273,7 @@ describe('RoutingManager', () => {
       await wait(0);
 
       // Trigger an update - push a change
-      search.renderState.indexName!.searchBox!.refine('Apple');
+      search.renderState.indexName.searchBox!.refine('Apple');
 
       await wait(0);
 
@@ -379,7 +381,7 @@ describe('RoutingManager', () => {
       await wait(0);
 
       // Trigger an update - push a change
-      search.renderState.indexName!.searchBox!.refine('Apple');
+      search.renderState.indexName.searchBox!.refine('Apple');
 
       await wait(0);
 
@@ -391,7 +393,7 @@ describe('RoutingManager', () => {
       });
 
       // Trigger an update - push a change
-      search.renderState.indexName!.searchBox!.refine('Apple iPhone');
+      search.renderState.indexName.searchBox!.refine('Apple iPhone');
 
       await wait(0);
 
@@ -476,7 +478,7 @@ describe('RoutingManager', () => {
       await wait(0);
 
       // Trigger an update - push a change
-      search.renderState.indexName!.searchBox!.refine('Apple');
+      search.renderState.indexName.searchBox!.refine('Apple');
 
       await wait(0);
 

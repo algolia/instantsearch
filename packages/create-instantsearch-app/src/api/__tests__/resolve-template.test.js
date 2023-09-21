@@ -1,4 +1,5 @@
 const path = require('path');
+
 const resolveTemplate = require('../resolve-template');
 
 describe('resolveTemplate', () => {
@@ -26,34 +27,6 @@ describe('resolveTemplate', () => {
         }
       )
     ).toBe(path.resolve('src/templates/InstantSearch.js'));
-  });
-
-  test('selects the right template with InstantSearch.js template and version 2', () => {
-    expect(
-      resolveTemplate(
-        {
-          template: 'InstantSearch.js',
-          libraryVersion: '2.10.0',
-        },
-        {
-          supportedTemplates: ['InstantSearch.js 2'],
-        }
-      )
-    ).toBe(path.resolve('src/templates/InstantSearch.js 2'));
-  });
-
-  test('selects the selected template for Vue v1', () => {
-    expect(
-      resolveTemplate(
-        {
-          template: 'Vue InstantSearch',
-          libraryVersion: '1.7.0',
-        },
-        {
-          supportedTemplates: ['Vue InstantSearch', 'Vue InstantSearch 1'],
-        }
-      )
-    ).toBe(path.resolve('src/templates/Vue InstantSearch 1'));
   });
 
   test('throws with unsupported version', () => {

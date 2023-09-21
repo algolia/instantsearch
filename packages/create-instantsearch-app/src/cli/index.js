@@ -1,13 +1,14 @@
 #!/usr/bin/env node
+const os = require('os');
 const path = require('path');
 const process = require('process');
-const os = require('os');
+
+const chalk = require('chalk');
 const program = require('commander');
 const inquirer = require('inquirer');
-const chalk = require('chalk');
-const latestSemver = require('latest-semver');
 const semver = require('semver');
 
+const { version } = require('../../package.json');
 const createInstantSearchApp = require('../api');
 const {
   checkAppPath,
@@ -18,13 +19,13 @@ const {
   getTemplatePath,
   splitArray,
 } = require('../utils');
-const getAttributesFromIndex = require('./getAttributesFromIndex');
-const getFacetsFromIndex = require('./getFacetsFromIndex');
+
 const getAnswersDefaultValues = require('./getAnswersDefaultValues');
-const isQuestionAsked = require('./isQuestionAsked');
+const getAttributesFromIndex = require('./getAttributesFromIndex');
 const getConfiguration = require('./getConfiguration');
+const getFacetsFromIndex = require('./getFacetsFromIndex');
+const isQuestionAsked = require('./isQuestionAsked');
 const postProcessAnswers = require('./postProcessAnswers');
-const { version } = require('../../package.json');
 
 let appPathFromArgument;
 
@@ -75,7 +76,9 @@ const getQuestions = ({ appName }) => ({
 
         try {
           const versions = await fetchLibraryVersions(libraryName);
-          const latestStableVersion = latestSemver(versions);
+          const latestStableVersion = semver.maxSatisfying(versions, '*', {
+            includePrerelease: false,
+          });
 
           if (!latestStableVersion) {
             return versions;
@@ -159,7 +162,7 @@ const getQuestions = ({ appName }) => ({
     {
       type: 'checkbox',
       name: 'attributesForFaceting',
-      message: 'Attributes to display',
+      message: 'Attributes for faceting',
       suffix: `\n  ${chalk.gray('Used to filter the search interface')}`,
       pageSize: 10,
       choices: async (answers) => {

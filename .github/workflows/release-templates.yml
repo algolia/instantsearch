@@ -26,7 +26,7 @@ jobs:
 
       - name: 🚀  push templates
         run: |
-          cd build
+          cd packages/create-instantsearch-app/build
           UNCOMMITTED_CHANGES=`git status --porcelain`
           if [ ! -z "$UNCOMMITTED_CHANGES" ]; then
             git config --global user.name "InstantSearch"

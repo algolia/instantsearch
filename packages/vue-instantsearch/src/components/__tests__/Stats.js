@@ -3,11 +3,10 @@
  */
 
 import { mount } from '../../../test/utils';
-
-import Stats from '../Stats.vue';
-
 import '../../../test/utils/sortedHtmlSerializer';
 import { __setState } from '../../mixins/widget';
+import Stats from '../Stats.vue';
+
 jest.mock('../../mixins/widget');
 
 it('renders correctly', () => {

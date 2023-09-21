@@ -1,7 +1,8 @@
 import instantsearch from 'instantsearch.js/es';
+
 import { createInstantSearchComponent } from '../util/createInstantSearchComponent';
-import { warn } from '../util/warn';
 import { renderCompat, getDefaultSlot } from '../util/vue-compat';
+import { warn } from '../util/warn';
 
 const oldApiWarning = `Vue InstantSearch: You used the prop api-key or app-id.
 These have been replaced by search-client.
@@ -36,6 +37,12 @@ export default createInstantSearchComponent({
           return false;
         }
         return true;
+      },
+    },
+    insights: {
+      default: undefined,
+      validator(value) {
+        return typeof value === 'boolean' || typeof value === 'object';
       },
     },
     stalledSearchDelay: {
@@ -84,6 +91,7 @@ export default createInstantSearchComponent({
       instantSearchInstance: instantsearch({
         searchClient: this.searchClient,
         insightsClient: this.insightsClient,
+        insights: this.insights,
         indexName: this.indexName,
         routing: this.routing,
         stalledSearchDelay: this.stalledSearchDelay,

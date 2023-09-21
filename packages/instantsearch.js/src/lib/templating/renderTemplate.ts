@@ -1,17 +1,19 @@
-import type { HoganOptions, Template } from 'hogan.js';
 import hogan from 'hogan.js';
 import { html } from 'htm/preact';
+
 import {
   Highlight,
   ReverseHighlight,
   ReverseSnippet,
   Snippet,
 } from '../../helpers/components';
+
 import type { Templates, HoganHelpers, TemplateParams } from '../../types';
 import type {
   BindEventForHits,
   SendEventForHits,
 } from '../utils/createSendEventForHits';
+import type { HoganOptions, Template } from 'hogan.js';
 
 type TransformedHoganHelpers = {
   [helper: string]: () => (text: string) => string;
@@ -72,7 +74,7 @@ export function renderTemplate({
     const params = (bindEvent || {}) as TemplateParams;
 
     params.html = html;
-    params.sendEvent = sendEvent;
+    (params as any).sendEvent = sendEvent;
     params.components = {
       Highlight,
       ReverseHighlight,
@@ -80,7 +82,9 @@ export function renderTemplate({
       ReverseSnippet,
     };
 
-    return template(data, params);
+    // @MAJOR remove the `as any` when string templates are removed
+    // needed because not every template receives sendEvent
+    return template(data, params as any);
   }
 
   const transformedHelpers = transformHelpersToHogan(

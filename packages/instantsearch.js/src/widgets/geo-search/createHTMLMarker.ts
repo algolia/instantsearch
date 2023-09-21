@@ -1,5 +1,6 @@
 /* global google EventListener */
 import { render } from 'preact';
+
 import type { renderTemplate } from '../../lib/templating';
 
 export type HTMLMarkerArguments = {
@@ -19,7 +20,7 @@ interface Marker {
   listeners: { [key: string]: EventListener };
   latLng: google.maps.LatLng;
   element: HTMLDivElement;
-  getPosition(): google.maps.LatLng;
+  getPosition: () => google.maps.LatLng;
 }
 
 const createHTMLMarker = (

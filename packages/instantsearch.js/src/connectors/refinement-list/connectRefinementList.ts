@@ -1,5 +1,3 @@
-import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
-import type { SendEventForFacet } from '../../lib/utils';
 import {
   escapeFacets,
   TAG_PLACEHOLDER,
@@ -8,7 +6,10 @@ import {
   createDocumentationMessageGenerator,
   createSendEventForFacet,
   noop,
+  warning,
 } from '../../lib/utils';
+
+import type { SendEventForFacet } from '../../lib/utils';
 import type {
   Connector,
   TransformItems,
@@ -20,6 +21,7 @@ import type {
   CreateURL,
   WidgetRenderState,
 } from '../../types';
+import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'refinement-list',
@@ -108,7 +110,7 @@ export type RefinementListRenderState = {
   /**
    * Action to apply selected refinements.
    */
-  refine(value: string): void;
+  refine: (value: string) => void;
   /**
    * Send event to insights middleware
    */
@@ -116,7 +118,7 @@ export type RefinementListRenderState = {
   /**
    * Searches for values inside the list.
    */
-  searchForItems(query: string): void;
+  searchForItems: (query: string) => void;
   /**
    * `true` if the values are from an index search.
    */
@@ -137,7 +139,7 @@ export type RefinementListRenderState = {
   /**
    * Toggles the number of values displayed between `limit` and `showMoreLimit`.
    */
-  toggleShowMore(): void;
+  toggleShowMore: () => void;
 };
 
 export type RefinementListWidgetDescription = {
@@ -379,7 +381,7 @@ const connectRefinementList: RefinementListConnector =
             });
 
             triggerRefine = (facetValue) => {
-              sendEvent!('click', facetValue);
+              sendEvent!('click:internal', facetValue);
               helper.toggleFacetRefinement(attribute, facetValue).search();
             };
 
@@ -430,10 +432,16 @@ const connectRefinementList: RefinementListConnector =
           const canToggleShowMore = canShowLess || canShowMore;
 
           return {
-            createURL: (facetValue) =>
-              createURL(
-                state.resetPage().toggleFacetRefinement(attribute, facetValue)
-              ),
+            createURL: (facetValue: string) => {
+              return createURL((uiState) =>
+                this.getWidgetUiState(uiState, {
+                  searchParameters: state
+                    .resetPage()
+                    .toggleFacetRefinement(attribute, facetValue),
+                  helper,
+                })
+              );
+            },
             items,
             refine: triggerRefine,
             searchForItems: searchFacetValues,
@@ -482,6 +490,30 @@ const connectRefinementList: RefinementListConnector =
 
         getWidgetSearchParameters(searchParameters, { uiState }) {
           const isDisjunctive = operator === 'or';
+
+          if (searchParameters.isHierarchicalFacet(attribute)) {
+            warning(
+              false,
+              `RefinementList: Attribute "${attribute}" is already used by another widget applying hierarchical faceting.
+As this is not supported, please make sure to remove this other widget or this RefinementList widget will not work at all.`
+            );
+
+            return searchParameters;
+          }
+
+          if (
+            (isDisjunctive && searchParameters.isConjunctiveFacet(attribute)) ||
+            (!isDisjunctive && searchParameters.isDisjunctiveFacet(attribute))
+          ) {
+            warning(
+              false,
+              `RefinementList: Attribute "${attribute}" is used by another refinement list with a different operator.
+As this is not supported, please make sure to only use this attribute with one of the two operators.`
+            );
+
+            return searchParameters;
+          }
+
           const values =
             uiState.refinementList && uiState.refinementList[attribute];
 

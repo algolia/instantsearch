@@ -1,8 +1,3 @@
-import type {
-  AlgoliaSearchHelper,
-  SearchParameters,
-  SearchResults,
-} from 'algoliasearch-helper';
 import {
   checkRendering,
   escapeFacetValue,
@@ -10,13 +5,23 @@ import {
   find,
   noop,
   toArray,
+  warning,
 } from '../../lib/utils';
+
 import type {
   Connector,
   CreateURL,
+  InitOptions,
   InstantSearch,
+  RenderOptions,
+  Widget,
   WidgetRenderState,
 } from '../../types';
+import type {
+  AlgoliaSearchHelper,
+  SearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'toggle-refinement',
@@ -51,7 +56,8 @@ const createSendEvent = ({
       instantSearchInstance.sendEventToInsights(args[0]);
       return;
     }
-    const [eventType, isRefined, eventName = 'Filter Applied'] = args;
+    const [, isRefined, eventName = 'Filter Applied'] = args;
+    const [eventType, eventModifier] = args[0].split(':');
     if (eventType !== 'click' || on === undefined) {
       return;
     }
@@ -63,6 +69,7 @@ const createSendEvent = ({
         insightsMethod: 'clickedFilters',
         widgetType: $$type,
         eventType,
+        eventModifier,
         payload: {
           eventName,
           index: helper.getIndex(),
@@ -131,7 +138,7 @@ export type ToggleRefinementRenderState = {
   /**
    * Creates an URL for the next state.
    */
-  createURL: CreateURL<string>;
+  createURL: CreateURL<void>;
   /**
    * Send a "Facet Clicked" Insights event.
    */
@@ -208,7 +215,7 @@ const connectToggleRefinement: ToggleRefinementConnector =
           } = { isRefined: false }
         ) => {
           if (!isRefined) {
-            sendEvent('click', isRefined);
+            sendEvent('click:internal', isRefined);
             if (hasAnOffValue) {
               off!.forEach((v) =>
                 helper.removeDisjunctiveFacetRefinement(attribute, v)
@@ -240,9 +247,13 @@ const connectToggleRefinement: ToggleRefinementConnector =
             {
               state,
               createURL,
+              getWidgetUiState,
+              helper,
             }: {
               state: SearchParameters;
-              createURL(parameters: SearchParameters): string;
+              createURL: (InitOptions | RenderOptions)['createURL'];
+              getWidgetUiState: NonNullable<Widget['getWidgetUiState']>;
+              helper: AlgoliaSearchHelper;
             }
           ) =>
           () => {
@@ -262,7 +273,9 @@ const connectToggleRefinement: ToggleRefinementConnector =
               });
             }
 
-            return createURL(state);
+            return createURL((uiState) =>
+              getWidgetUiState(uiState, { searchParameters: state, helper })
+            );
           },
       };
 
@@ -395,6 +408,8 @@ const connectToggleRefinement: ToggleRefinementConnector =
             createURL: connectorState.createURLFactory(isRefined, {
               state,
               createURL,
+              helper,
+              getWidgetUiState: this.getWidgetUiState,
             }),
             sendEvent,
             canRefine: Boolean(results ? nextRefinement.count : null),
@@ -411,6 +426,8 @@ const connectToggleRefinement: ToggleRefinementConnector =
             );
 
           if (!isRefined) {
+            // This needs to be done in the case `uiState` comes from `createURL`
+            delete uiState.toggle?.[attribute];
             return uiState;
           }
 
@@ -424,6 +441,19 @@ const connectToggleRefinement: ToggleRefinementConnector =
         },
 
         getWidgetSearchParameters(searchParameters, { uiState }) {
+          if (
+            searchParameters.isHierarchicalFacet(attribute) ||
+            searchParameters.isConjunctiveFacet(attribute)
+          ) {
+            warning(
+              false,
+              `ToggleRefinement: Attribute "${attribute}" is already used by another widget of a different type.
+As this is not supported, please make sure to remove this other widget or this ToggleRefinement widget will not work at all.`
+            );
+
+            return searchParameters;
+          }
+
           let withFacetConfiguration = searchParameters
             .clearRefinements(attribute)
             .addDisjunctiveFacet(attribute);

@@ -1,13 +1,17 @@
 /** @jsx h */
 
-import { h } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h } from 'preact';
+
+import { createInsightsEventHandler } from '../../lib/insights/listener';
+import { warning } from '../../lib/utils';
 import Template from '../Template/Template';
-import type { SearchResults } from 'algoliasearch-helper';
-import type { BindEventForHits, SendEventForHits } from '../../lib/utils';
+
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type { ComponentCSSClasses, Hit } from '../../types';
+import type { BindEventForHits, SendEventForHits } from '../../lib/utils';
+import type { ComponentCSSClasses, Hit, InsightsClient } from '../../types';
 import type { HitsCSSClasses, HitsTemplates } from '../../widgets/hits/hits';
+import type { SearchResults } from 'algoliasearch-helper';
 
 export type HitsComponentCSSClasses = ComponentCSSClasses<HitsCSSClasses>;
 export type HitsComponentTemplates = Required<HitsTemplates>;
@@ -15,20 +19,27 @@ export type HitsComponentTemplates = Required<HitsTemplates>;
 export type HitsProps = {
   results: SearchResults;
   hits: Hit[];
-  sendEvent?: SendEventForHits;
-  bindEvent?: BindEventForHits;
+  insights?: InsightsClient;
+  sendEvent: SendEventForHits;
+  bindEvent: BindEventForHits;
   cssClasses: HitsComponentCSSClasses;
   templateProps: PreparedTemplateProps<HitsComponentTemplates>;
 };
 
-const Hits = ({
+export default function Hits({
   results,
   hits,
+  insights,
   bindEvent,
   sendEvent,
   cssClasses,
   templateProps,
-}: HitsProps) => {
+}: HitsProps) {
+  const handleInsightsClick = createInsightsEventHandler({
+    insights,
+    sendEvent,
+  });
+
   if (results.hits.length === 0) {
     return (
       <Template
@@ -36,6 +47,7 @@ const Hits = ({
         templateKey="empty"
         rootProps={{
           className: cx(cssClasses.root, cssClasses.emptyRoot),
+          onClick: handleInsightsClick,
         }}
         data={results}
       />
@@ -50,11 +62,27 @@ const Hits = ({
             {...templateProps}
             templateKey="item"
             rootTagName="li"
-            rootProps={{ className: cssClasses.item }}
+            rootProps={{
+              className: cssClasses.item,
+              onClick: (event: MouseEvent) => {
+                handleInsightsClick(event);
+                sendEvent('click:internal', hit, 'Hit Clicked');
+              },
+              onAuxClick: (event: MouseEvent) => {
+                handleInsightsClick(event);
+                sendEvent('click:internal', hit, 'Hit Clicked');
+              },
+            }}
             key={hit.objectID}
             data={{
               ...hit,
-              __hitIndex: index,
+              get __hitIndex() {
+                warning(
+                  false,
+                  'The `__hitIndex` property is deprecated. Use the absolute `__position` instead.'
+                );
+                return index;
+              },
             }}
             bindEvent={bindEvent}
             sendEvent={sendEvent}
@@ -63,6 +91,4 @@ const Hits = ({
       </ol>
     </div>
   );
-};
-
-export default Hits;
+}

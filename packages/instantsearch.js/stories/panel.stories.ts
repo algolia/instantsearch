@@ -1,4 +1,5 @@
 import { storiesOf } from '@storybook/html';
+
 import { withHits } from '../.storybook/decorators';
 import { connectHierarchicalMenu } from '../src/connectors';
 import { noop } from '../src/lib/utils';
@@ -22,7 +23,7 @@ storiesOf('Basics/Panel', module)
     withHits(({ search, container, instantsearch }) => {
       const brandList = instantsearch.widgets.panel({
         templates: {
-          header: 'Brand',
+          header: () => 'Brand',
           footer: ({ results }) => {
             return results ? `${results.nbHits} results` : '';
           },
@@ -42,8 +43,8 @@ storiesOf('Basics/Panel', module)
     withHits(({ search, container, instantsearch }) => {
       const priceList = instantsearch.widgets.panel({
         templates: {
-          header: 'Price',
-          footer: 'Footer',
+          header: () => 'Price',
+          footer: () => 'Footer',
         },
       })(instantsearch.widgets.rangeInput);
 
@@ -62,8 +63,8 @@ storiesOf('Basics/Panel', module)
         typeof instantsearch.widgets.rangeSlider
       >({
         templates: {
-          header: 'Price',
-          footer: 'Footer',
+          header: () => 'Price',
+          footer: () => 'Footer',
         },
       })(instantsearch.widgets.rangeSlider);
 
@@ -86,8 +87,8 @@ storiesOf('Basics/Panel', module)
     withHits(({ search, container, instantsearch }) => {
       const priceList = instantsearch.widgets.panel({
         templates: {
-          header: 'Price',
-          footer: 'The panel is hidden when there are no results.',
+          header: () => 'Price',
+          footer: () => 'The panel is hidden when there are no results.',
         },
         hidden: ({ results }) => results.nbHits === 0,
       })(instantsearch.widgets.rangeInput);
@@ -108,8 +109,8 @@ storiesOf('Basics/Panel', module)
           return options && options.state && !options.state.query;
         },
         templates: {
-          header: 'Brand (collapsible)',
-          footer: 'The panel collapses on empty query until controlled',
+          header: () => 'Brand (collapsible)',
+          footer: () => 'The panel collapses on empty query until controlled',
         },
       })(instantsearch.widgets.refinementList);
 
@@ -129,8 +130,8 @@ storiesOf('Basics/Panel', module)
           return options && options.state && !options.state.query;
         },
         templates: {
-          header: 'Collapsible panel',
-          footer: 'The panel collapses on empty query until controlled',
+          header: () => 'Collapsible panel',
+          footer: () => 'The panel collapses on empty query until controlled',
           collapseButtonText: ({ collapsed }) => (collapsed ? 'More' : 'Less'),
         },
       })(instantsearch.widgets.refinementList);
@@ -157,7 +158,7 @@ storiesOf('Basics/Panel', module)
             header({ canRefine }) {
               return `Breadcrumb that can${canRefine ? '' : "'t "} refine`;
             },
-            footer:
+            footer: () =>
               'The panel collapses if it cannot refine. Click "Home". This panel will collapse and you will not see this footer anymore.',
           },
         })(instantsearch.widgets.breadcrumb);

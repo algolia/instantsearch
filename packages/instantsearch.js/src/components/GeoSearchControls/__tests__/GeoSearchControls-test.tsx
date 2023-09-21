@@ -3,10 +3,11 @@
  */
 /** @jsx h */
 
-import { h } from 'preact';
 import { render, fireEvent } from '@testing-library/preact';
-import GeoSearchControls from '../GeoSearchControls';
+import { h } from 'preact';
+
 import { prepareTemplateProps } from '../../../lib/templating';
+import GeoSearchControls from '../GeoSearchControls';
 
 describe('GeoSearchControls', () => {
   const CSSClassesDefaultProps = {

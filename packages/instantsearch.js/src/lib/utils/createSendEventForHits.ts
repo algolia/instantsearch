@@ -1,6 +1,7 @@
-import type { InstantSearch, Hit, EscapedHits } from '../../types';
 import { serializePayload } from './serializer';
+
 import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
+import type { InstantSearch, Hit, EscapedHits } from '../../types';
 
 type BuiltInSendEventForHits = (
   eventType: string,
@@ -10,12 +11,14 @@ type BuiltInSendEventForHits = (
 type CustomSendEventForHits = (customPayload: any) => void;
 export type SendEventForHits = BuiltInSendEventForHits & CustomSendEventForHits;
 
-type BuiltInBindEventForHits = (
+export type BuiltInBindEventForHits = (
   eventType: string,
   hits: Hit | Hit[],
   eventName?: string
 ) => string;
-type CustomBindEventForHits = (customPayload: any) => string;
+
+export type CustomBindEventForHits = (customPayload: any) => string;
+
 export type BindEventForHits = BuiltInBindEventForHits & CustomBindEventForHits;
 
 function chunk<TItem>(arr: TItem[], chunkSize: number = 20): TItem[][] {
@@ -26,24 +29,25 @@ function chunk<TItem>(arr: TItem[], chunkSize: number = 20): TItem[][] {
   return chunks;
 }
 
-const buildPayloads = ({
+export function _buildEventPayloadsForHits({
   index,
   widgetType,
   methodName,
   args,
-  isSearchStalled,
+  instantSearchInstance,
 }: {
   widgetType: string;
   index: string;
   methodName: 'sendEvent' | 'bindEvent';
   args: any[];
-  isSearchStalled: boolean;
-}): InsightsEvent[] => {
+  instantSearchInstance: InstantSearch;
+}): InsightsEvent[] {
   // when there's only one argument, that means it's custom
   if (args.length === 1 && typeof args[0] === 'object') {
     return [args[0]];
   }
-  const eventType: string = args[0];
+  const [eventType, eventModifier]: [string, string] = args[0].split(':');
+
   const hits: Hit | Hit[] | EscapedHits = args[1];
   const eventName: string | undefined = args[2];
   if (!hits) {
@@ -70,9 +74,7 @@ const buildPayloads = ({
       return [];
     }
   }
-  const hitsArray: Hit[] = Array.isArray(hits)
-    ? removeEscapedFromHits(hits)
-    : [hits];
+  const hitsArray: Hit[] = Array.isArray(hits) ? hits : [hits];
 
   if (hitsArray.length === 0) {
     return [];
@@ -87,7 +89,7 @@ const buildPayloads = ({
   );
 
   if (eventType === 'view') {
-    if (isSearchStalled) {
+    if (instantSearchInstance.status !== 'idle') {
       return [];
     }
     return hitsChunks.map((batch, i) => {
@@ -101,6 +103,7 @@ const buildPayloads = ({
           objectIDs: objectIDsByChunk[i],
         },
         hits: batch,
+        eventModifier,
       };
     });
   } else if (eventType === 'click') {
@@ -110,13 +113,14 @@ const buildPayloads = ({
         widgetType,
         eventType,
         payload: {
-          eventName,
+          eventName: eventName || 'Hit Clicked',
           index,
           queryID,
           objectIDs: objectIDsByChunk[i],
           positions: positionsByChunk[i],
         },
         hits: batch,
+        eventModifier,
       };
     });
   } else if (eventType === 'conversion') {
@@ -126,12 +130,13 @@ const buildPayloads = ({
         widgetType,
         eventType,
         payload: {
-          eventName,
+          eventName: eventName || 'Hit Converted',
           index,
           queryID,
           objectIDs: objectIDsByChunk[i],
         },
         hits: batch,
+        eventModifier,
       };
     });
   } else if (__DEV__) {
@@ -141,11 +146,6 @@ const buildPayloads = ({
   } else {
     return [];
   }
-};
-
-function removeEscapedFromHits(hits: Hit[] | EscapedHits): Hit[] {
-  // remove `hits.__escaped` without mutating
-  return hits.slice();
 }
 
 export function createSendEventForHits({
@@ -157,18 +157,35 @@ export function createSendEventForHits({
   index: string;
   widgetType: string;
 }): SendEventForHits {
+  let sentEvents: Record<InsightsEvent['eventType'], boolean> = {};
+  let timer: ReturnType<typeof setTimeout> | undefined = undefined;
+
   const sendEventForHits: SendEventForHits = (...args: any[]) => {
-    const payloads = buildPayloads({
+    const payloads = _buildEventPayloadsForHits({
       widgetType,
       index,
       methodName: 'sendEvent',
       args,
-      isSearchStalled: instantSearchInstance.status === 'stalled',
+      instantSearchInstance,
     });
 
-    payloads.forEach((payload) =>
-      instantSearchInstance.sendEventToInsights(payload)
-    );
+    payloads.forEach((payload) => {
+      if (
+        payload.eventType === 'click' &&
+        payload.eventModifier === 'internal' &&
+        sentEvents[payload.eventType]
+      ) {
+        return;
+      }
+
+      sentEvents[payload.eventType] = true;
+      instantSearchInstance.sendEventToInsights(payload);
+    });
+
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      sentEvents = {};
+    }, 0);
   };
   return sendEventForHits;
 }
@@ -176,17 +193,19 @@ export function createSendEventForHits({
 export function createBindEventForHits({
   index,
   widgetType,
+  instantSearchInstance,
 }: {
   index: string;
   widgetType: string;
+  instantSearchInstance: InstantSearch;
 }): BindEventForHits {
   const bindEventForHits: BindEventForHits = (...args: any[]) => {
-    const payloads = buildPayloads({
+    const payloads = _buildEventPayloadsForHits({
       widgetType,
       index,
       methodName: 'bindEvent',
       args,
-      isSearchStalled: false,
+      instantSearchInstance,
     });
 
     return payloads.length

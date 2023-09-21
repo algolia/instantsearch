@@ -2,12 +2,14 @@
  * @jest-environment jsdom
  */
 
-import historyRouter from '../history';
-import type { UiState } from '../../../types';
-import { noop } from '../../utils';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import { createSearchClient } from '@instantsearch/mocks';
+
 import instantsearch from '../../..';
 import { simple } from '../../stateMappings';
+import { noop, warning } from '../../utils';
+import historyRouter from '../history';
+
+import type { UiState } from '../../../types';
 
 jest.useFakeTimers();
 
@@ -53,6 +55,21 @@ describe('life cycle', () => {
         { indexName: { query: 'query3' } },
         '',
         'http://localhost/?indexName%5Bquery%5D=query3'
+      );
+    });
+
+    test('calls user-provided push if set', () => {
+      const windowPushState = jest.spyOn(window.history, 'pushState');
+      const customPush = jest.fn();
+      const router = historyRouter<UiState>({ push: customPush });
+
+      router.write({ indexName: { query: 'query' } });
+      jest.runAllTimers();
+
+      expect(windowPushState).toHaveBeenCalledTimes(0);
+      expect(customPush).toHaveBeenCalledTimes(1);
+      expect(customPush).toHaveBeenLastCalledWith(
+        'http://localhost/?indexName%5Bquery%5D=query'
       );
     });
   });
@@ -220,6 +237,40 @@ describe('life cycle', () => {
         router.dispose();
         router.createURL({ indexName: { query: 'query1' } });
       }).not.toThrow();
+    });
+  });
+
+  describe('onUpdate', () => {
+    test('calls user-provided start function', () => {
+      const start = jest.fn();
+      const router = historyRouter<UiState>({ start });
+
+      router.onUpdate(jest.fn());
+
+      expect(start).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('dispose', () => {
+    test('calls user-provided dispose function', () => {
+      const dispose = jest.fn();
+      const router = historyRouter<UiState>({ dispose });
+
+      router.dispose();
+
+      expect(dispose).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('createURL', () => {
+    test('prints a warning when created URL is not valid', () => {
+      warning.cache = {};
+
+      const router = historyRouter<UiState>({ createURL: () => '/search' });
+
+      expect(() => router.createURL({ indexName: {} }))
+        .toWarnDev(`[InstantSearch.js]: The URL returned by the \`createURL\` function is invalid.
+Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algolia.com/search?query=iphone\`.`);
     });
   });
 });

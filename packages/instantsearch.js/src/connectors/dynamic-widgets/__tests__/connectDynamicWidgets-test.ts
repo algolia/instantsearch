@@ -1,24 +1,26 @@
-import { connectMenu, connectDynamicWidgets } from '../..';
-import { index } from '../../../widgets';
-import { widgetSnapshotSerializer } from '@instantsearch/testutils';
 import {
-  createDisposeOptions,
-  createInitOptions,
-  createRenderOptions,
-} from '../../../../test/createWidget';
+  createMultiSearchResponse,
+  createSingleSearchResponse,
+  createSearchClient,
+} from '@instantsearch/mocks';
+import { widgetSnapshotSerializer } from '@instantsearch/testutils';
 import { wait } from '@instantsearch/testutils/wait';
 import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
+
+import { connectMenu, connectDynamicWidgets } from '../..';
 import {
-  createMultiSearchResponse,
-  createSingleSearchResponse,
-} from '@instantsearch/mocks/createAPIResponse';
+  createDisposeOptions,
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/createWidget';
+import { index } from '../../../widgets';
 import connectHierarchicalMenu from '../../hierarchical-menu/connectHierarchicalMenu';
-import type { DynamicWidgetsConnectorParams } from '../connectDynamicWidgets';
 import connectRefinementList from '../../refinement-list/connectRefinementList';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+
+import type { DynamicWidgetsConnectorParams } from '../connectDynamicWidgets';
 
 expect.addSnapshotSerializer(widgetSnapshotSerializer);
 

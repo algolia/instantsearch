@@ -1,20 +1,22 @@
 /** @jsx h */
 
-import { h, render } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h, render } from 'preact';
+
 import Selector from '../../components/Selector/Selector';
-import type {
-  HitsPerPageConnectorParams,
-  HitsPerPageRenderState,
-  HitsPerPageWidgetDescription,
-} from '../../connectors/hits-per-page/connectHitsPerPage';
 import connectHitsPerPage from '../../connectors/hits-per-page/connectHitsPerPage';
+import { component } from '../../lib/suit';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
   find,
 } from '../../lib/utils';
-import { component } from '../../lib/suit';
+
+import type {
+  HitsPerPageConnectorParams,
+  HitsPerPageRenderState,
+  HitsPerPageWidgetDescription,
+} from '../../connectors/hits-per-page/connectHitsPerPage';
 import type { ComponentCSSClasses, WidgetFactory } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -42,6 +44,7 @@ const renderer =
           cssClasses={cssClasses}
           currentValue={currentValue}
           options={items}
+          // @ts-expect-error: the refine function expects a number, but setValue will call it with a string. We don't want to change the type of the refine function because it's part of the connector API.
           setValue={refine}
         />
       </div>,

@@ -1,16 +1,19 @@
 /** @jsx h */
 
-import { h, Fragment } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h, Fragment } from 'preact';
+
 import Template from '../Template/Template';
+
 import GeoSearchButton from './GeoSearchButton';
 import GeoSearchToggle from './GeoSearchToggle';
+
+import type { PreparedTemplateProps } from '../../lib/templating';
+import type { ComponentCSSClasses } from '../../types';
 import type {
   GeoSearchCSSClasses,
   GeoSearchTemplates,
 } from '../../widgets/geo-search/geo-search';
-import type { ComponentCSSClasses } from '../../types';
-import type { PreparedTemplateProps } from '../../lib/templating';
 
 type Props = {
   cssClasses: ComponentCSSClasses<GeoSearchCSSClasses>;
@@ -20,9 +23,9 @@ type Props = {
   isRefineOnMapMove: boolean;
   isRefinedWithMap: boolean;
   hasMapMoveSinceLastRefine: boolean;
-  onRefineToggle(event: Event): void;
-  onRefineClick(event: MouseEvent): void;
-  onClearClick(event: MouseEvent): void;
+  onRefineToggle: (event: Event) => void;
+  onRefineClick: (event: MouseEvent) => void;
+  onClearClick: (event: MouseEvent) => void;
   templateProps: PreparedTemplateProps<GeoSearchTemplates>;
 };
 

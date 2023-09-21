@@ -1,11 +1,12 @@
 /* eslint-disable no-nested-ternary */
-import Vue from 'vue';
-import App from './App.vue';
-import { createRouter } from './router';
-import { createServerRootMixin } from 'vue-instantsearch';
 import algoliasearch from 'algoliasearch/lite';
 import qs from 'qs';
+import Vue from 'vue';
+import { createServerRootMixin } from 'vue-instantsearch';
 import _renderToString from 'vue-server-renderer/basic';
+
+import App from './App.vue';
+import { createRouter } from './router';
 
 function renderToString(app) {
   return new Promise((resolve, reject) => {
@@ -39,6 +40,7 @@ export async function createApp({
       createServerRootMixin({
         searchClient,
         indexName: 'instant_search',
+        insights: true,
         routing: {
           router: {
             read() {

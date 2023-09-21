@@ -1,12 +1,13 @@
 import { storiesOf } from '@storybook/vue';
+import Vue from 'vue';
+import VueSlider from 'vue-slider-component';
+import Vuetify from 'vuetify';
+
 import { previewWrapper } from './utils';
 
-import VueSlider from 'vue-slider-component';
 import 'vue-slider-component/theme/default.css';
-
-import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.css';
-import Vue from 'vue';
+
 Vue.use(Vuetify);
 
 storiesOf('ais-range-input', module)

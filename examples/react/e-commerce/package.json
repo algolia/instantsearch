@@ -1,14 +1,26 @@
 {
   "name": "example-react-instantsearch-e-commerce",
-  "version": "8.0.0",
+  "version": "11.0.0",
   "private": true,
+  "scripts": {
+    "build": "BABEL_ENV=parcel parcel build index.html",
+    "website:examples": "BABEL_ENV=parcel parcel build index.html --public-url . --dist-dir=../../../website/examples/react/e-commerce",
+    "start": "BABEL_ENV=parcel parcel index.html"
+  },
+  "browserslist": "firefox 68, chrome 78, IE 11",
   "dependencies": {
     "algoliasearch": "4.14.3",
-    "classnames": "2.2.6",
-    "qs": "6.9.6",
-    "react": "17.0.2",
-    "react-compound-slider": "2.2.0",
-    "react-dom": "17.0.2",
-    "react-instantsearch-dom": "6.38.3"
+    "instantsearch.js": "4.57.0",
+    "react": "18.2.0",
+    "react-compound-slider": "3.4.0",
+    "react-dom": "18.2.0",
+    "react-instantsearch": "7.1.0"
+  },
+  "devDependencies": {
+    "@parcel/core": "2.8.0",
+    "@parcel/packager-raw-url": "2.8.0",
+    "@parcel/transformer-webmanifest": "2.8.0",
+    "parcel": "2.8.0",
+    "typescript": "5.1.3"
   }
 }

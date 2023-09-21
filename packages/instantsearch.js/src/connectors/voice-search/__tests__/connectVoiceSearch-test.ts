@@ -1,11 +1,13 @@
+import { createSearchClient } from '@instantsearch/mocks';
 import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
-import connectVoiceSearch from '../connectVoiceSearch';
+
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import connectVoiceSearch from '../connectVoiceSearch';
+
 import type {
   VoiceSearchHelperParams,
   VoiceSearchHelper,

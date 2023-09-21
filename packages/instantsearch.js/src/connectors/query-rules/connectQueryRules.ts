@@ -1,8 +1,3 @@
-import type {
-  AlgoliaSearchHelper as Helper,
-  SearchParameters,
-} from 'algoliasearch-helper';
-import type { Connector, TransformItems, WidgetRenderState } from '../../types';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -11,10 +6,16 @@ import {
   isEqual,
   noop,
 } from '../../lib/utils';
+
 import type {
   Refinement as InternalRefinement,
   NumericRefinement as InternalNumericRefinement,
 } from '../../lib/utils';
+import type { Connector, TransformItems, WidgetRenderState } from '../../types';
+import type {
+  AlgoliaSearchHelper as Helper,
+  SearchParameters,
+} from 'algoliasearch-helper';
 
 type TrackedFilterRefinement = string | number | boolean;
 

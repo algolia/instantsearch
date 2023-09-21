@@ -1,23 +1,26 @@
 /** @jsx h */
 
-import { h, Component } from 'preact';
-import type { HandleProps } from './Rheostat';
-import Rheostat from './Rheostat';
 import { cx } from '@algolia/ui-components-shared';
+import { h, Component } from 'preact';
+
 import { range } from '../../lib/utils';
+
 import Pit from './Pit';
+import Rheostat from './Rheostat';
+
 import type { RangeBoundaries } from '../../connectors/range/connectRange';
+import type { ComponentCSSClasses } from '../../types';
 import type {
   RangeSliderCssClasses,
   RangeSliderWidgetParams,
 } from '../../widgets/range-slider/range-slider';
-import type { ComponentCSSClasses } from '../../types';
+import type { HandleProps } from './Rheostat';
 
 export type RangeSliderComponentCSSClasses =
   ComponentCSSClasses<RangeSliderCssClasses>;
 
 export type SliderProps = {
-  refine(values: RangeBoundaries): void;
+  refine: (values: RangeBoundaries) => void;
   min?: number;
   max?: number;
   values: RangeBoundaries;
@@ -124,7 +127,7 @@ class Slider extends Component<SliderProps> {
           pitPoints={pitPoints}
           snap={true}
           snapPoints={snapPoints}
-          values={(this.isDisabled ? [min, max] : values) as number[]}
+          values={(this.isDisabled ? [min, max] : values) as [number, number]}
           disabled={this.isDisabled}
         />
       </div>

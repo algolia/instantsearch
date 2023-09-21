@@ -1,6 +1,6 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
 
 - [Getting started](#getting-started)
 - [Installation](#installation)
@@ -20,10 +20,7 @@
 
 ---
 
-[![Version][version-svg]][package-url]
-[![License][license-image]][license-url]
-[![Build Status][ci-svg]][ci-url]
-[![Website][website-svg]][website-url]
+[![Version][version-svg]][package-url] [![License][license-image]][license-url] [![Build Status][ci-svg]][ci-url] [![Website][website-svg]][website-url]
 
 ## Getting started
 
@@ -38,8 +35,8 @@ import 'instantsearch.css/themes/satellite.css';
 ```
 
 To learn more about the library, follow the guide on how to style your InstantSearch widgets:
+
 - [InstantSearch.js](https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-existing-widget/js/#style-your-widgets)
-- [React InstantSearch Hooks](https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-existing-widget/react-hooks/#style-your-widgets)
 - [React InstantSearch](https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-existing-widget/react/#style-your-widgets)
 - [Vue InstantSearch](https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-existing-widget/vue/#style-your-widgets)
 - [Angular InstantSearch](https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-existing-widget/angular/#style-your-widgets)
@@ -55,6 +52,7 @@ yarn add instantsearch.css
 ## Available themes
 
 InstantSearch.css exposes two themes:
+
 - [Algolia](src/themes/algolia.scss)
 - [Satellite](src/themes/satellite.scss)
 
@@ -70,14 +68,12 @@ We support the **last two versions of major browsers** (Chrome, Edge, Firefox, S
 
 InstantSearch.css is a living standard. This table tracks down the version implemented in each InstantSearch flavor.
 
-| Project                   | Version |
-| ------------------------- | ------- |
-| InstantSearch.js          | 7       |
-| React InstantSearch Hooks | 7       |
-| React InstantSearch       | 7       |
-| Vue InstantSearch         | 7       |
-| Angular InstantSearch     | 7       |
-
+| Project               | Version |
+| --------------------- | ------- |
+| InstantSearch.js      | 7       |
+| React InstantSearch   | 7       |
+| Vue InstantSearch     | 7       |
+| Angular InstantSearch | 7       |
 
 ## Contributing
 
@@ -94,7 +90,7 @@ To start contributing to code, you need to:
 1.  [Clone the repository](https://help.github.com/articles/cloning-a-repository/)
 1.  Install the dependencies: `yarn`
 
-Please read [our contribution process](https://github.com/algolia/instantsearch.js/blob/master/CONTRIBUTING.md) to learn more.
+Please read [our contribution process](https://github.com/algolia/instantsearch/blob/master/CONTRIBUTING.md) to learn more.
 
 ## License
 
@@ -104,8 +100,8 @@ InstantSearch.css is [MIT licensed][license-url].
 
 [version-svg]: https://img.shields.io/npm/v/instantsearch.css.svg?style=flat-square
 [package-url]: https://npmjs.org/package/instantsearch.css
-[ci-svg]: https://img.shields.io/circleci/project/github/algolia/instantsearch.js.svg?style=flat-square
-[ci-url]: https://circleci.com/gh/algolia/instantsearch.js
+[ci-svg]: https://img.shields.io/circleci/project/github/algolia/instantsearch.svg?style=flat-square
+[ci-url]: https://circleci.com/gh/algolia/instantsearch
 [license-image]: http://img.shields.io/badge/license-MIT-green.svg?style=flat-square
 [website-svg]: https://img.shields.io/badge/website-instantsearchjs.netlify.app/specs-yellow?style=flat-square
 [website-url]: https://instantsearchjs.netlify.app/specs/
@@ -113,9 +109,9 @@ InstantSearch.css is [MIT licensed][license-url].
 
 <!-- Links -->
 
-[contributing-bugreport]: https://github.com/algolia/instantsearch.js/issues/new?template=BUG_REPORT.yml&labels=triage,Library%3A%20InstantSearch.css
-[contributing-featurerequest]: https://github.com/algolia/instantsearch.js/discussions/new?category=ideas&labels=triage,Library%3A%20InstantSearch.css&title=Feature%20request%3A%20
-[contributing-newissue]: https://github.com/algolia/instantsearch.js/issues/new?labels=triage,Library%3A%20InstantSearch.css
-[contributing-label-easy]: https://github.com/algolia/instantsearch.js/issues?q=is%3Aopen+is%3Aissue+label%3A%22Difficulty%3A+Easy%22+label%3A%22Library%3A%20InstantSearch.css%22
-[contributing-label-bug]: https://github.com/algolia/instantsearch.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22Type%3A+Bug%22+label%3A%22Library%3A%20InstantSearch.css%22
-[contributing-label-chore]: https://github.com/algolia/instantsearch.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22Type%3A+Chore%22+label%3A%22Library%3A%20InstantSearch.css%22
+[contributing-bugreport]: https://github.com/algolia/instantsearch/issues/new?template=BUG_REPORT.yml&labels=triage,Library%3A%20InstantSearch.css
+[contributing-featurerequest]: https://github.com/algolia/instantsearch/discussions/new?category=ideas&labels=triage,Library%3A%20InstantSearch.css&title=Feature%20request%3A%20
+[contributing-newissue]: https://github.com/algolia/instantsearch/issues/new?labels=triage,Library%3A%20InstantSearch.css
+[contributing-label-easy]: https://github.com/algolia/instantsearch/issues?q=is%3Aopen+is%3Aissue+label%3A%22Difficulty%3A+Easy%22+label%3A%22Library%3A%20InstantSearch.css%22
+[contributing-label-bug]: https://github.com/algolia/instantsearch/issues?q=is%3Aissue+is%3Aopen+label%3A%22Type%3A+Bug%22+label%3A%22Library%3A%20InstantSearch.css%22
+[contributing-label-chore]: https://github.com/algolia/instantsearch/issues?q=is%3Aissue+is%3Aopen+label%3A%22Type%3A+Chore%22+label%3A%22Library%3A%20InstantSearch.css%22

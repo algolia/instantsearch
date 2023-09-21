@@ -1,7 +1,9 @@
 import { storiesOf } from '@storybook/html';
+
 import { withHits } from '../.storybook/decorators';
-import type { HitsWidgetParams } from '../src/widgets/hits/hits';
+
 import type { AlgoliaHit } from '../src/types';
+import type { HitsWidgetParams } from '../src/widgets/hits/hits';
 
 storiesOf('Basics/ConfigureRelatedItems', module).add(
   'default',
@@ -104,20 +106,18 @@ storiesOf('Basics/ConfigureRelatedItems', module).add(
               instantsearch.widgets.hits({
                 container: widgetParams.container,
                 templates: {
-                  item(item) {
-                    return `
-              <li class="ais-RelatedHits-item">
-                <div class="ais-RelatedHits-item-image">
-                  <img src="${item.image}" alt="${item.name}">
-                </div>
+                  item: (item, { html }) => html`
+                    <li class="ais-RelatedHits-item">
+                      <div class="ais-RelatedHits-item-image">
+                        <img src="${item.image}" alt="${item.name}" />
+                      </div>
 
-                <div class="ais-RelatedHits-item-title">
-                  <h4>${item.name}</h4>
-                </div>
-              </li>
-              `;
-                  },
-                  empty: '',
+                      <div class="ais-RelatedHits-item-title">
+                        <h4>${item.name}</h4>
+                      </div>
+                    </li>
+                  `,
+                  empty: () => '',
                 },
               }),
             ]),
@@ -132,26 +132,26 @@ storiesOf('Basics/ConfigureRelatedItems', module).add(
       instantsearch.widgets.hits({
         container: productContainer,
         templates: {
-          item: `
-<div
-  class="hits-image"
-  style="background-image: url({{image}})"
-></div>
-<article>
-  <header>
-    <strong>{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}</strong>
-  </header>
-  <p>
-    {{#helpers.snippet}}{ "attribute": "description" }{{/helpers.snippet}}
-  </p>
-  <footer>
-    <p>
-      <strong>{{price}}$</strong>
-    </p>
-  </footer>
-</article>
-`,
-          empty: '',
+          item: (hit, { html, components }) => html`
+            <div
+              class="hits-image"
+              style="background-image: url(${hit.image})"
+            ></div>
+            <article>
+              <header>
+                <strong>
+                  ${components.Highlight({ attribute: 'name', hit })})}
+                </strong>
+              </header>
+              <p>${components.Snippet({ attribute: 'description', hit })})}</p>
+              <footer>
+                <p>
+                  <strong>${hit.price}$</strong>
+                </p>
+              </footer>
+            </article>
+          `,
+          empty: () => '',
         },
         cssClasses: {
           item: 'hits-item',

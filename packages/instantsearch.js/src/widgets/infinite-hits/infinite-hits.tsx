@@ -1,27 +1,31 @@
 /** @jsx h */
 
-import { h, render } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
-import type { SearchResults } from 'algoliasearch-helper';
+import { h, render } from 'preact';
+
+import InfiniteHits from '../../components/InfiniteHits/InfiniteHits';
+import connectInfiniteHits from '../../connectors/infinite-hits/connectInfiniteHits';
+import { withInsights } from '../../lib/insights';
+import { component } from '../../lib/suit';
+import { prepareTemplateProps } from '../../lib/templating';
+import {
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
+
+import defaultTemplates from './defaultTemplates';
+
 import type {
   InfiniteHitsComponentCSSClasses,
   InfiniteHitsComponentTemplates,
 } from '../../components/InfiniteHits/InfiniteHits';
-import InfiniteHits from '../../components/InfiniteHits/InfiniteHits';
 import type {
   InfiniteHitsConnectorParams,
   InfiniteHitsRenderState,
   InfiniteHitsCache,
   InfiniteHitsWidgetDescription,
 } from '../../connectors/infinite-hits/connectInfiniteHits';
-import connectInfiniteHits from '../../connectors/infinite-hits/connectInfiniteHits';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { prepareTemplateProps } from '../../lib/templating';
-import { component } from '../../lib/suit';
-import { withInsights, withInsightsListener } from '../../lib/insights';
+import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   WidgetFactory,
   Template,
@@ -30,15 +34,12 @@ import type {
   InsightsClient,
   Renderer,
 } from '../../types';
-import defaultTemplates from './defaultTemplates';
-import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
-import type { PreparedTemplateProps } from '../../lib/templating';
+import type { SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'infinite-hits',
 });
 const suit = component('InfiniteHits');
-const InfiniteHitsWithInsightsListener = withInsightsListener(InfiniteHits);
 
 export type InfiniteHitsCSSClasses = Partial<{
   /**
@@ -103,7 +104,7 @@ export type InfiniteHitsTemplates = Partial<{
    */
   item: TemplateWithBindEvent<
     Hit & {
-      // @deprecated the index in the hits array, use __position instead, which is the absolute position
+      /** @deprecated the index in the hits array, use __position instead, which is the absolute position */
       __hitIndex: number;
     }
   >;
@@ -166,6 +167,7 @@ const renderer =
       instantSearchInstance,
       insights,
       bindEvent,
+      sendEvent,
     },
     isFirstRendering
   ) => {
@@ -179,20 +181,18 @@ const renderer =
     }
 
     render(
-      <InfiniteHitsWithInsightsListener
+      <InfiniteHits
         cssClasses={cssClasses}
         hits={hits}
-        results={results}
-        hasShowPrevious={hasShowPrevious}
+        results={results!}
+        hasShowPrevious={hasShowPrevious!}
         showPrevious={showPrevious}
         showMore={showMore}
         templateProps={renderState.templateProps!}
         isFirstPage={isFirstPage}
         isLastPage={isLastPage}
         insights={insights as InsightsClient}
-        sendEvent={(event: InsightsEvent) => {
-          instantSearchInstance.sendEventToInsights(event);
-        }}
+        sendEvent={sendEvent}
         bindEvent={bindEvent}
       />,
       containerNode

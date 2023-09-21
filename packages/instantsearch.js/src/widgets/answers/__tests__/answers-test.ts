@@ -3,14 +3,15 @@
  */
 /** @jsx h */
 
-import algoliasearchHelper from 'algoliasearch-helper';
-import { fireEvent } from '@testing-library/preact';
-import instantsearch from '../../../index.es';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
-import answers from '../answers';
-import searchBox from '../../search-box/search-box';
+import { fireEvent } from '@testing-library/preact';
+import algoliasearchHelper from 'algoliasearch-helper';
+
 import { createInitOptions } from '../../../../test/createWidget';
+import instantsearch from '../../../index.es';
+import searchBox from '../../search-box/search-box';
+import answers from '../answers';
 
 describe('answers', () => {
   describe('Usage', () => {

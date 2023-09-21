@@ -1,12 +1,14 @@
 /** @jsx h */
 
 import { h } from 'preact';
+
 import Template from '../Template/Template';
+
+import type { ComponentCSSClasses } from '../../types';
 import type {
   RelevantSortCSSClasses,
   RelevantSortTemplates,
 } from '../../widgets/relevant-sort/relevant-sort';
-import type { ComponentCSSClasses } from '../../types';
 
 export type RelevantSortComponentCSSClasses =
   ComponentCSSClasses<RelevantSortCSSClasses>;
@@ -18,7 +20,7 @@ type RelevantSortProps = {
   templates: RelevantSortComponentTemplates;
   isRelevantSorted: boolean;
   isVirtualReplica: boolean;
-  refine(relevancyStrictness: number | undefined): void;
+  refine: (relevancyStrictness: number | undefined) => void;
 };
 
 const RelevantSort = ({

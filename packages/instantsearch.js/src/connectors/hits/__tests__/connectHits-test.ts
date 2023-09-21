@@ -2,31 +2,33 @@
  * @jest-environment jsdom
  */
 
+import {
+  createSearchClient,
+  createMultiSearchResponse,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils/wait';
 import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import { TAG_PLACEHOLDER, deserializePayload } from '../../../lib/utils';
-import connectHits from '../connectHits';
+
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import {
-  createMultiSearchResponse,
-  createSingleSearchResponse,
-} from '@instantsearch/mocks/createAPIResponse';
+import instantsearch from '../../../index.es';
+import { TAG_PLACEHOLDER, deserializePayload } from '../../../lib/utils';
+import connectHits from '../connectHits';
+
 import type {
   EscapedHits,
   Hit,
   HitAttributeHighlightResult,
   SearchResponse,
 } from '../../../types';
-import { createInstantSearch } from '../../../../test/createInstantSearch';
-import { wait } from '@instantsearch/testutils/wait';
-import instantsearch from '../../../index.es';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({
   // The real implementation creates a new array instance, which can cause bugs,
@@ -807,6 +809,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
             instantSearchInstance.sendEventToInsights
           ).toHaveBeenCalledWith({
             eventType: 'view',
+            eventModifier: 'internal',
             hits: [
               {
                 __position: 0,
@@ -868,8 +871,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
             stalledSearchDelay: 1,
             indexName: 'indexName',
           });
-          instantSearchInstance.sendEventToInsights = jest.fn();
           instantSearchInstance.start();
+          instantSearchInstance.sendEventToInsights = jest.fn();
 
           instantSearchInstance.addWidgets([widget]);
 

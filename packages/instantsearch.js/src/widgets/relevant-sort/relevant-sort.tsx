@@ -1,26 +1,29 @@
 /** @jsx h */
 
-import { h, render } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h, render } from 'preact';
+
+import RelevantSort from '../../components/RelevantSort/RelevantSort';
+import connectRelevantSort from '../../connectors/relevant-sort/connectRelevantSort';
+import { component } from '../../lib/suit';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
-import { component } from '../../lib/suit';
-import type { WidgetFactory, Template } from '../../types';
+
+import defaultTemplates from './defaultTemplates';
+
+import type {
+  RelevantSortComponentCSSClasses,
+  RelevantSortComponentTemplates,
+} from '../../components/RelevantSort/RelevantSort';
 import type {
   RelevantSortConnectorParams,
   RelevantSortRenderState,
   RelevantSortWidgetDescription,
 } from '../../connectors/relevant-sort/connectRelevantSort';
-import connectRelevantSort from '../../connectors/relevant-sort/connectRelevantSort';
-import type {
-  RelevantSortComponentCSSClasses,
-  RelevantSortComponentTemplates,
-} from '../../components/RelevantSort/RelevantSort';
-import RelevantSort from '../../components/RelevantSort/RelevantSort';
-import defaultTemplates from './defaultTemplates';
 import type { PreparedTemplateProps } from '../../lib/templating';
+import type { WidgetFactory, Template } from '../../types';
 
 export type RelevantSortCSSClasses = Partial<{
   root: string;

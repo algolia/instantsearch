@@ -1,5 +1,6 @@
-import type { UiState } from '../../../types';
 import singleIndexStateMapping from '../singleIndex';
+
+import type { UiState } from '../../../types';
 
 describe('singleIndexStateMapping', () => {
   describe('stateToRoute', () => {

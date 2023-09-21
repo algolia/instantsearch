@@ -1,4 +1,5 @@
 import { storiesOf } from '@storybook/html';
+
 import { withHits, withLifecycle } from '../.storybook/decorators';
 import { connectHierarchicalMenu } from '../src/connectors';
 import { noop } from '../src/lib/utils';
@@ -68,7 +69,7 @@ storiesOf('Metadata/Breadcrumb', module)
               'hierarchicalCategories.lvl2',
             ],
             templates: {
-              separator: ' + ',
+              separator: () => ' + ',
             },
           }),
         ]);
@@ -104,7 +105,7 @@ storiesOf('Metadata/Breadcrumb', module)
               'hierarchicalCategories.lvl2',
             ],
             templates: {
-              home: 'Home Page',
+              home: () => 'Home Page',
             },
           }),
         ]);

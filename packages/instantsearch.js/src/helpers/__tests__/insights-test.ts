@@ -2,12 +2,8 @@
  * @jest-environment jsdom
  */
 
-import insights, {
-  writeDataAttributes,
-  readDataAttributes,
-  hasDataAttributes,
-} from '../insights';
 import { warning, serializePayload } from '../../lib/utils';
+import insights, { writeDataAttributes, readDataAttributes } from '../insights';
 
 const makeDomElement = (html: string): HTMLElement => {
   const div = document.createElement('div');
@@ -89,28 +85,6 @@ describe('writeDataAttributes', () => {
     ).toThrowErrorMatchingInlineSnapshot(
       `"Could not JSON serialize the payload object."`
     );
-  });
-});
-
-describe('hasDataAttributes', () => {
-  it('should return true when there is a data-insights-method attribute', () => {
-    const domElement = makeDomElement(
-      `<button
-        data-insights-method="clickedObjectIDsAfterSearch"
-        data-insights-payload='{"objectIDs":["3"],"eventName":"Add to Cart"}'
-        > Add to Cart </button>`
-    );
-
-    expect(hasDataAttributes(domElement)).toBe(true);
-  });
-  it("should return false when there isn't a data-insights-method attribute", () => {
-    const domElement = makeDomElement(
-      `<button
-        data-insights-payload='{"objectIDs":["3"],"eventName":"Add to Cart"}'
-        > Add to Cart </button>`
-    );
-
-    expect(hasDataAttributes(domElement)).toBe(false);
   });
 });
 

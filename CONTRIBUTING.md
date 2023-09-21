@@ -6,7 +6,7 @@
 
 Hello and welcome to the contributing guide for InstantSearch. Thanks for considering participating in our project 🙇
 
-If this guide does not contain what you are looking for and thus prevents you from contributing, don't hesitate to leave a message on the [community forum](https://discourse.algolia.com/) or to [open an issue](https://github.com/algolia/instantsearch.js/issues).
+If this guide does not contain what you are looking for and thus prevents you from contributing, don't hesitate to leave a message on the [community forum](https://discourse.algolia.com/) or to [open an issue](https://github.com/algolia/instantsearch/issues).
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -21,8 +21,9 @@ If this guide does not contain what you are looking for and thus prevents you fr
 - [Folders of the project](#folders-of-the-project)
 - [Importing existing projects](#importing-existing-projects)
 - [Tests](#tests)
-  - [Unit tests](#unit-tests)
-  - [End-to-end tests](#end-to-end-tests)
+  - [How to write a test](#how-to-write-a-test)
+  - [Testing a widget](#testing-a-widget)
+  - [Running tests](#running-tests)
   - [Type checks](#type-checks)
 - [Linting](#linting)
 - [Release](#release)
@@ -35,7 +36,7 @@ If this guide does not contain what you are looking for and thus prevents you fr
 
 Opening an issue is very effective way to contribute because many users might also be impacted. We'll make sure to fix it quickly if it's technically feasible and doesn't have important side effects for other users.
 
-Before reporting an issue, first check that there is not an already open issue for the same topic using the [issues page](https://github.com/algolia/instantsearch.js/issues). Don't hesitate to thumb up an issue that corresponds to the problem you have.
+Before reporting an issue, first check that there is not an already open issue for the same topic using the [issues page](https://github.com/algolia/instantsearch/issues). Don't hesitate to thumb up an issue that corresponds to the problem you have.
 
 Another element that will help us go faster at solving the issue is to provide a reproducible test case. We often recommend to [use this CodeSandbox template](https://codesandbox.io/s/github/algolia/instantsearch-templates/tree/master/src/InstantSearch.js).
 
@@ -126,15 +127,8 @@ Here are the main files and folders of the project.
 ```
 ▸ examples/                            << Examples, grouped per flavor
 ▸ packages/                            << Packages of the project
-  ▸ react-instantsearch/               << Bundled React InstantSearch library
-  ▸ react-instantsearch-core/          << Runtime-independent React InstantSearch version
-  ▸ react-instantsearch-dom/           << DOM-specific React InstantSearch version
-  ▸ react-instantsearch-native/        << React Native-specific InstantSearch version
-  ▸ react-instantsearch-dom-maps/      << DOM-specific React InstantSearch version with Google Maps
-
-  ▸ react-instantsearch-hooks/        << React InstantSearch Hooks library
-  ▸ react-instantsearch-hooks-web/    << DOM-specific React InstantSearch Hooks version
-  ▸ react-instantsearch-hooks-server/ << Server-specific React InstantSearch Hooks version
+  ▸ react-instantsearch/              << Bundled React InstantSearch library
+  ▸ react-instantsearch-core/         << Runtime-independent React InstantSearch version
 
   ▸ instantsearch.js/                  << The InstantSearch.js library
 ▸ tests/                               << The test utilites
@@ -162,12 +156,168 @@ This monorepo has as goal to be used for all InstantSearch flavors and tools. To
 8. replace commit messages which refer to issues/PRs with #xxx by also referencing the original repo: `git filter-branch --msg-filter 'sed -E "s/(#[[:digit:]]+)/algolia\/myproject\1/"' master..feat/import-myproject`
 9. make any changes necessary to make the project work in the monorepo and commit those
 10. make a pull request and _merge using rebase or merge_ (if you merge using squash the history will be lost)
+11. manually tag and push the latest release commit from the imported project to let shipjs know which version to take into account during the next release process
 
 ## Tests
 
-### Unit tests
+The general philosophy of testing in InstantSearch follows [Testing Library's guiding principles](https://testing-library.com/docs/guiding-principles):
 
-Our unit tests are written with [Jest](https://facebook.github.io/jest/):
+> The more your tests resemble the way your software is used, the more confidence they can give you.
+
+We rely on [Jest](https://jestjs.io/) for unit tests on all flavors of InstantSearch. In addition, [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) is used to test interactions in React InstantSearch.
+
+### How to write a test
+
+Your tests should follow the [Arrange-Act-Assert](http://wiki.c2.com/?ArrangeActAssert) pattern.
+
+#### Arrange
+
+Set up the conditions for your test, such as creating a mocked search client, initializing the widget, and starting InstantSearch. **It should look like the code an InstantSearch user would write**, so refrain from manipulating internals. If you need mocks or spies, keep them minimal so the test case remains readable.
+
+#### Act
+
+Execute the code you're testing. If you're testing the initial render, this part would only contain the instantiation of the widget and the starting of InstantSearch. If you're testing what happens when an end user clicks a button, this part would contain the click on the button element as well.
+
+When querying elements, do it in a way that mindfully enforces the contract you're defining. For widgets, since class names are part of the public API, it's recommended to query elements by class name.
+
+In many like a user would by reflecting the experience of visual/mouse users as well as those that use assistive technology.
+
+**❌ Incorrect**
+
+```js
+// There might be other buttons, and this doesn't confirm that the right button
+// triggered the right action.
+const button = getByRole('button');
+
+// Unless the element is impossible to query without a test ID, avoid them.
+const button = getByTestId('show-more-button');
+```
+
+**✅ Correct**
+
+```js
+// This enforces the contract by identifying the button with an attribute that
+// the user has access to and could rely on for other things.
+const button = document.querySelector('.ais-RefinementList-showMore');
+```
+
+> ℹ️ Learn more about [available queries](https://testing-library.com/docs/queries/about#types-of-queries) and [priority](https://testing-library.com/docs/queries/about#priority).
+
+When you're testing user interactions, make sure to simulate full interactions and not manually dispatch events you thing should fire. To do so, use [`user-event`](https://testing-library.com/docs/user-event/intro/).
+
+**❌ Incorrect**
+
+```js
+// Use `userEvent` over `fireEvent` unless you have a legit case for it.
+fireEvent.click(button);
+
+// Don't manually dispatch with lower-level APIs or create custom-made events,
+// the browser might do other things you don't see or know about.
+fireEvent(button, new MouseEvent('click', { bubbles: true, cancelable: true }));
+button.dispatchEvent(
+  new MouseEvent('click', { bubbles: true, cancelable: true })
+);
+```
+
+**✅ Correct**
+
+```js
+// This focuses on the interaction itself and relies on `userEvent` to behave
+// like the browser would.
+userEvent.click(button);
+```
+
+> ℹ️ Learn more about [firing events](https://testing-library.com/docs/dom-testing-library/api-events/).
+
+#### Assert
+
+Verify that the code you're testing behaves as expected.
+
+If you're testing the initial render, you can use [inline Jest snapshots](https://jestjs.io/docs/snapshot-testing) to assert what HTML gets rendered on the page. Don't use external snapshots.
+
+**❌ Incorrect**
+
+```js
+// Don't use external snapshots as they're harder to manage and makes you switch
+// between file to understand the test.
+expect(container).toMatchSnapshot();
+```
+
+**✅ Correct**
+
+```js
+// Use inline snapshots to encapsulate the entire test in a single place.
+expect(container).toMatchInlineSnapshot(`
+  <div>
+    <!-- … -->
+  </div>
+`);
+```
+
+Don't overuse snapshots, as they make tests files longer and are harder to review. Try limiting yourself to a single snapshot for initial render, and if you're testing DOM changes after an interaction, only test this part instead of using another snapshot.
+
+**❌ Incorrect**
+
+```js
+const showMoreButton = container.querySelector('.ais-RefinementList-showMore');
+
+userEvent.click(showMoreButton);
+
+// Don't use a snapshot to assert the whole HTML structure after an interaction
+// as they're harder to read and don't help focusing on what has changed.
+expect(container).toMatchInlineSnapshot(`
+  <div>
+    <!-- … -->
+  </div>
+`);
+```
+
+```js
+const showMoreButton = container.querySelector('.ais-RefinementList-showMore');
+const listItems = container.querySelectorAll('.ais-RefinementList-item');
+
+userEvent.click(showMoreButton);
+
+await waitFor(() => {
+  // Test the elements that did change, making it clear what the consequences of
+  // the interaction are.
+  expect(showMoreButton).toHaveTextContent('Show less');
+  expect(listItems).toHaveLength(20);
+});
+```
+
+> **Note** Sometimes, a second (focused) snapshot is clearer and shorter than a series of isolated assertions. Use your judgment to determine what will make the test the tersest and easiest to understand.
+
+### Testing a widget
+
+Widgets in InstantSearch are building blocks that have a predefined behavior and render output. Widgets usually have options to alter their behavior; options can be passed to widgets via attributes.
+
+When testing a widget, you should focus on **user interactions, rendering, and possibly side-effects**.
+
+For example, you should test:
+
+- The rendering of a widget after passing all possible props.
+- The rendering of a widget or its side-effects (e.g., URL updates when used with routing) after interacting with it.
+
+Sometimes, you might also want to write performance tests to assess that a widget didn't render more than expected, or didn't unnecessarily call the search client.
+
+**Some tests might be common between your widget and its connector.** This is fine because they're two different APIs for the user, and the fact that a widget uses a connector under the hood is an implementation detail.
+
+However, refrain from testing components that aren't publicly available. For example, you don't need to test the UI components that the widgets use for rendering, because they're not exposed to the user. You'd end up writing twice the same tests for no gain.
+
+This guideline doesn't apply for internal utility functions used widely across the project, as testing them can help with codebase discovery and narrowing down isolated issues.
+
+#### Common test suites
+
+Across flavors, InstantSearch widgets should behave mostly the same (aside from legacy disparities we're still ironing out in major versions). For this reason, **we aim at writing widget tests once by using common test suites.**
+
+Common test suites are defined in `tests/common`. They're agnostic test suites that assert behaviors that should be the same across flavors.
+
+To learn more, please read the [dedicated guidelines on common tests](./tests/common/README.md).
+
+### Running tests
+
+Our unit tests are written with [Jest](https://facebook.github.io/jest/).
 
 To run all the tests once:
 
@@ -181,8 +331,6 @@ To run the test continuously based on what you changed (useful when developing o
 yarn test --watch
 ```
 
-### End-to-end tests
-
 End-to-end tests are defined in [tests/e2e](./tests/e2e/README.md).
 
 To run them locally:
@@ -192,12 +340,12 @@ yarn test:e2e:local
 ```
 
 To run them on Sauce Labs:
+
 ```sh
 yarn test:e2e:saucelabs
 ```
 
-> **Note**
->Make sure to set up Sauce Labs credentials with the `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY` environment variables.
+> **Note** Make sure to set up Sauce Labs credentials with the `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY` environment variables.
 
 For more info, including how to write end-to-end tests, check the `tests/e2e` [CONTRIBUTING](./tests/e2e/CONTRIBUTING.md) and [README](./tests/e2e/README.md) files.
 

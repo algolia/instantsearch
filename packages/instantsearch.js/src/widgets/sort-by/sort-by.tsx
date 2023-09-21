@@ -1,21 +1,23 @@
 /** @jsx h */
 
-import { h, render } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
-import type { SelectorComponentCSSClasses } from '../../components/Selector/Selector';
+import { h, render } from 'preact';
+
 import Selector from '../../components/Selector/Selector';
+import connectSortBy from '../../connectors/sort-by/connectSortBy';
+import { component } from '../../lib/suit';
+import {
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
+
+import type { SelectorComponentCSSClasses } from '../../components/Selector/Selector';
 import type {
   SortByConnectorParams,
   SortByItem,
   SortByRenderState,
   SortByWidgetDescription,
 } from '../../connectors/sort-by/connectSortBy';
-import connectSortBy from '../../connectors/sort-by/connectSortBy';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { component } from '../../lib/suit';
 import type { Renderer, TransformItems, WidgetFactory } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'sort-by' });

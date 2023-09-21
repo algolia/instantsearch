@@ -1,12 +1,15 @@
+import {
+  createSingleSearchResponse,
+  createSearchClient,
+} from '@instantsearch/mocks';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
+
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
 import connectClearRefinements from '../connectClearRefinements';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 
 describe('connectClearRefinements', () => {
   describe('Usage', () => {

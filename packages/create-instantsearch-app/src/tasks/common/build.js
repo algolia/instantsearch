@@ -1,7 +1,7 @@
+const inPlace = require('@metalsmith/in-place');
+const remove = require('@metalsmith/remove');
 const metalsmith = require('metalsmith');
-const inPlace = require('metalsmith-in-place');
 const rename = require('metalsmith-rename');
-const ignore = require('metalsmith-ignore');
 
 module.exports = function build(config) {
   return new Promise((resolve, reject) => {
@@ -9,7 +9,7 @@ module.exports = function build(config) {
       .source(config.template)
       .destination(config.path)
       .metadata(config)
-      .use(ignore(['.template.js']))
+      .use(remove(['.template.js']))
       .use(
         // Add the `.hbs` extension to any templating files that need
         // their placeholders to get filled with `metalsmith-in-place`

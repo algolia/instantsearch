@@ -21,8 +21,10 @@ coverage
 
 # Non-lintable source files
 ## React-Native TypeScript wasn't supporting the mix of react 18 and 17
-examples/react-hooks/react-native
+examples/react/react-native
 ## Excluded from global typescript config
-examples/react-hooks/next/next-env.d.ts
+examples/react/next/next-env.d.ts
 ## templates that don't get installed
 packages/create-instantsearch-app/src/templates
+## test fixtures for codemods
+packages/instantsearch-codemods/__testfixtures__

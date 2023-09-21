@@ -79,12 +79,14 @@
 </template>
 
 <script>
-import { createWidgetMixin } from '../mixins/widget';
+import { connectRefinementList } from 'instantsearch.js/es/connectors';
+
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
-import { connectRefinementList } from 'instantsearch.js/es/connectors';
-import SearchInput from './SearchInput.vue';
+import { createWidgetMixin } from '../mixins/widget';
+
 import AisHighlight from './Highlight.vue';
+import SearchInput from './SearchInput.vue';
 
 const noop = () => {};
 

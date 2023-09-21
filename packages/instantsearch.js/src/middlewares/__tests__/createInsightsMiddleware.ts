@@ -2,18 +2,28 @@
  * @jest-environment jsdom-global
  */
 
-import instantsearch from '../../index.es';
-import { createInsightsMiddleware } from '..';
 import {
   createInsights,
   createInsightsUmdVersion,
-} from '@instantsearch/mocks/createInsightsClient';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import { warning } from '../../lib/utils';
-import { history } from '../../lib/routers';
+  createMultiSearchResponse,
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
+import { castToJestMock } from '@instantsearch/testutils';
 import { wait } from '@instantsearch/testutils/wait';
-import type { JSDOM } from 'jsdom';
+import { fireEvent } from '@testing-library/dom';
+
+import { createInsightsMiddleware } from '..';
+import { createInstantSearch } from '../../../test/createInstantSearch';
+import { connectSearchBox } from '../../connectors';
+import instantsearch from '../../index.es';
+import { history } from '../../lib/routers';
+import { warning } from '../../lib/utils';
+import { dynamicWidgets, hits, refinementList } from '../../widgets';
+
+import type { SearchClient } from '../../index.es';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
+import type { JSDOM } from 'jsdom';
 
 declare const jsdom: JSDOM;
 
@@ -39,12 +49,15 @@ describe('insights', () => {
   const createTestEnvironment = ({
     searchClient = searchClientWithCredentials,
     started = true,
+    insights = false,
   } = {}) => {
+    castToJestMock(searchClient.search).mockClear();
     const { analytics, insightsClient } = createInsights();
     const indexName = 'my-index';
     const instantSearchInstance = instantsearch({
       searchClient,
       indexName,
+      insights,
     });
     if (started) {
       instantSearchInstance.start();
@@ -76,6 +89,7 @@ describe('insights', () => {
           },
         },
       }),
+      insights: false,
       indexName,
     });
     instantSearchInstance.start();
@@ -97,16 +111,18 @@ describe('insights', () => {
 
   beforeEach(() => {
     warning.cache = {};
+
+    (window as any).AlgoliaAnalyticsObject = undefined;
+    (window as any).aa = undefined;
+
+    document.body.innerHTML = '';
+
+    document.cookie = '_ALGOLIA=;';
   });
 
   describe('usage', () => {
-    it('throws when insightsClient is not given', () => {
-      expect(() =>
-        // @ts-expect-error
-        createInsightsMiddleware()
-      ).toThrowErrorMatchingInlineSnapshot(
-        `"The \`insightsClient\` option is required if you want userToken to be automatically set in search calls. If you don't want this behaviour, set it to \`null\`."`
-      );
+    it('passes when insightsClient is not given', () => {
+      expect(() => createInsightsMiddleware()).not.toThrow();
     });
 
     it('passes with insightsClient: null', () => {
@@ -115,6 +131,174 @@ describe('insights', () => {
           insightsClient: null,
         })
       ).not.toThrow();
+    });
+  });
+
+  describe('insightsClient', () => {
+    it('does nothing when insightsClient is passed', () => {
+      const { instantSearchInstance } = createTestEnvironment();
+
+      instantSearchInstance.use(
+        createInsightsMiddleware({ insightsClient: () => {} })
+      );
+
+      expect(document.body).toMatchInlineSnapshot(`<body />`);
+      expect((window as any).AlgoliaAnalyticsObject).toBe(undefined);
+      expect((window as any).aa).toBe(undefined);
+    });
+
+    it('does nothing when insightsClient is null', () => {
+      const { instantSearchInstance } = createTestEnvironment();
+
+      instantSearchInstance.use(
+        createInsightsMiddleware({ insightsClient: null })
+      );
+
+      expect(document.body).toMatchInlineSnapshot(`<body />`);
+      expect((window as any).AlgoliaAnalyticsObject).toBe(undefined);
+      expect((window as any).aa).toBe(undefined);
+    });
+
+    it('does nothing when insightsClient is already present', () => {
+      (window as any).AlgoliaAnalyticsObject = 'aa';
+      const aa = () => {};
+      (window as any).aa = aa;
+
+      const { instantSearchInstance } = createTestEnvironment();
+
+      instantSearchInstance.use(createInsightsMiddleware());
+
+      expect(document.body).toMatchInlineSnapshot(`<body />`);
+      expect((window as any).AlgoliaAnalyticsObject).toBe('aa');
+      expect((window as any).aa).toBe(aa);
+    });
+
+    it('loads the script when insightsClient is not passed', () => {
+      const { instantSearchInstance } = createTestEnvironment();
+
+      instantSearchInstance.use(createInsightsMiddleware());
+
+      expect(document.body).toMatchInlineSnapshot(`
+        <body>
+          <script
+            src="https://cdn.jsdelivr.net/npm/search-insights@2.6.0/dist/search-insights.min.js"
+          />
+        </body>
+      `);
+      expect((window as any).AlgoliaAnalyticsObject).toBe('aa');
+      expect((window as any).aa).toEqual(expect.any(Function));
+    });
+
+    it('loads script, even when globals are set up by a different instance', () => {
+      const { instantSearchInstance: instantSearchInstance1 } =
+        createTestEnvironment({
+          started: false,
+        });
+      const { instantSearchInstance: instantSearchInstance2 } =
+        createTestEnvironment({
+          started: false,
+        });
+
+      expect((window as any).AlgoliaAnalyticsObject).toBe(undefined);
+
+      // middleware is added to first instance
+      instantSearchInstance1.use(createInsightsMiddleware());
+
+      // it sets up globals
+      expect(document.body).toMatchInlineSnapshot(`<body />`);
+      expect((window as any).AlgoliaAnalyticsObject).toBe('aa');
+      expect((window as any).aa).toEqual(expect.any(Function));
+
+      // middleware is set up on second instance
+      instantSearchInstance2.use(createInsightsMiddleware());
+
+      // globals stay as-is
+      expect(document.body).toMatchInlineSnapshot(`<body />`);
+      expect((window as any).AlgoliaAnalyticsObject).toBe('aa');
+      expect((window as any).aa).toEqual(expect.any(Function));
+
+      // only second instance starts
+      instantSearchInstance2.start();
+
+      // which finally loads search-insights
+      expect(document.body).toMatchInlineSnapshot(`
+        <body>
+          <script
+            src="https://cdn.jsdelivr.net/npm/search-insights@2.6.0/dist/search-insights.min.js"
+          />
+        </body>
+      `);
+      expect((window as any).AlgoliaAnalyticsObject).toBe('aa');
+      expect((window as any).aa).toEqual(expect.any(Function));
+    });
+
+    it("loads the script when pointer isn't a string, and value is absent", () => {
+      const { instantSearchInstance } = createTestEnvironment();
+
+      const anyWindow = window as any;
+      anyWindow.AlgoliaAnalyticsObject = {
+        type: 'not a string',
+      };
+      instantSearchInstance.use(createInsightsMiddleware());
+
+      expect(document.body).toMatchInlineSnapshot(`
+        <body>
+          <script
+            src="https://cdn.jsdelivr.net/npm/search-insights@2.6.0/dist/search-insights.min.js"
+          />
+        </body>
+      `);
+    });
+
+    it("doesn't load the script when pointer isn't a string, and value is present", () => {
+      const { instantSearchInstance } = createTestEnvironment();
+
+      const anyWindow = window as any;
+
+      anyWindow.AlgoliaAnalyticsObject = {
+        type: 'not a string',
+      };
+      anyWindow[anyWindow.AlgoliaAnalyticsObject] = () => {};
+
+      instantSearchInstance.use(createInsightsMiddleware());
+
+      expect(document.body).toMatchInlineSnapshot(`<body />`);
+    });
+
+    it('notifies when the script fails to be added', () => {
+      const { instantSearchInstance } = createTestEnvironment();
+
+      /* eslint-disable deprecation/deprecation */
+      // eslint-disable-next-line jest/unbound-method
+      const createElement = document.createElement;
+      document.createElement = () => {
+        throw new Error('error');
+      };
+
+      instantSearchInstance.on('error', (error) =>
+        expect(error).toMatchInlineSnapshot(
+          `[Error: [insights middleware]: could not load search-insights.js. Please load it manually following https://alg.li/insights-init]`
+        )
+      );
+
+      instantSearchInstance.use(createInsightsMiddleware());
+
+      document.createElement = createElement;
+      /* eslint-enable deprecation/deprecation */
+    });
+
+    it('notifies when the script fails to load', () => {
+      const { instantSearchInstance } = createTestEnvironment();
+
+      instantSearchInstance.on('error', (error) =>
+        expect(error).toMatchInlineSnapshot(
+          `[Error: [insights middleware]: could not load search-insights.js. Please load it manually following https://alg.li/insights-init]`
+        )
+      );
+
+      instantSearchInstance.use(createInsightsMiddleware());
+
+      fireEvent(document.querySelector('script')!, new ErrorEvent('error'));
     });
   });
 
@@ -133,20 +317,27 @@ describe('insights', () => {
         apiKey: 'myApiKey',
         appId: 'myAppId',
         region: 'de',
+        partial: true,
         useCookie: false,
       });
     });
 
-    it('throws when search client does not have credentials', () => {
-      const { insightsClient, instantSearchInstance } = createTestEnvironment({
-        searchClient: createSearchClient(),
+    it('warns when search client does not have credentials', () => {
+      const { insightsClient } = createInsights();
+      const instantSearchInstance = createInstantSearch({
+        // @ts-expect-error fake client
+        client: { search: () => {} },
       });
-      expect(() =>
-        createInsightsMiddleware({
-          insightsClient,
-        })({ instantSearchInstance })
-      ).toThrowErrorMatchingInlineSnapshot(
-        `"[insights middleware]: could not extract Algolia credentials from searchClient"`
+      expect(() => {
+        try {
+          createInsightsMiddleware({
+            insightsClient,
+          })({ instantSearchInstance });
+        } catch (e) {
+          // insights error
+        }
+      }).toWarnDev(
+        '[InstantSearch.js]: could not extract Algolia credentials from searchClient in insights middleware.'
       );
     });
 
@@ -250,7 +441,10 @@ describe('insights', () => {
       instantSearchInstance.use(
         createInsightsMiddleware({
           insightsClient,
-          insightsInitParams: { useCookie: false },
+          insightsInitParams: {
+            useCookie: false,
+            anonymousUserToken: false,
+          },
         })
       );
 
@@ -307,6 +501,151 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         'insights-middleware'
       );
     });
+
+    it('removes default middleware if user adds a custom one', () => {
+      const { instantSearchInstance } = createTestEnvironment({
+        insights: true,
+      });
+
+      // just the internal one
+      expect(instantSearchInstance.middleware).toHaveLength(1);
+      expect(instantSearchInstance.middleware).toMatchInlineSnapshot(`
+        [
+          {
+            "creator": [Function],
+            "instance": {
+              "$$internal": true,
+              "$$type": "ais.insights",
+              "onStateChange": [Function],
+              "started": [Function],
+              "subscribe": [Function],
+              "unsubscribe": [Function],
+            },
+          },
+        ]
+      `);
+
+      instantSearchInstance.use(
+        createInsightsMiddleware({ insightsClient: () => {} })
+      );
+
+      // just the user-provided one
+      expect(instantSearchInstance.middleware).toHaveLength(1);
+      expect(instantSearchInstance.middleware).toMatchInlineSnapshot(`
+        [
+          {
+            "creator": [Function],
+            "instance": {
+              "$$internal": false,
+              "$$type": "ais.insights",
+              "onStateChange": [Function],
+              "started": [Function],
+              "subscribe": [Function],
+              "unsubscribe": [Function],
+            },
+          },
+        ]
+      `);
+
+      instantSearchInstance.use(createInsightsMiddleware({}));
+
+      // both user-provided
+      expect(instantSearchInstance.middleware).toHaveLength(2);
+      expect(instantSearchInstance.middleware).toMatchInlineSnapshot(`
+        [
+          {
+            "creator": [Function],
+            "instance": {
+              "$$internal": false,
+              "$$type": "ais.insights",
+              "onStateChange": [Function],
+              "started": [Function],
+              "subscribe": [Function],
+              "unsubscribe": [Function],
+            },
+          },
+          {
+            "creator": [Function],
+            "instance": {
+              "$$internal": false,
+              "$$type": "ais.insights",
+              "onStateChange": [Function],
+              "started": [Function],
+              "subscribe": [Function],
+              "unsubscribe": [Function],
+            },
+          },
+        ]
+      `);
+    });
+
+    it('does not call `init` when default middleware is used', () => {
+      const { instantSearchInstance, insightsClient } = createTestEnvironment({
+        insights: true,
+      });
+
+      instantSearchInstance.use(
+        createInsightsMiddleware({ $$internal: true, insightsClient })
+      );
+
+      expect(instantSearchInstance.middleware).toHaveLength(1);
+      expect(instantSearchInstance.middleware).toMatchInlineSnapshot(`
+        [
+          {
+            "creator": [Function],
+            "instance": {
+              "$$internal": true,
+              "$$type": "ais.insights",
+              "onStateChange": [Function],
+              "started": [Function],
+              "subscribe": [Function],
+              "unsubscribe": [Function],
+            },
+          },
+        ]
+      `);
+      expect(insightsClient).not.toHaveBeenCalledWith('init', {
+        apiKey: 'myApiKey',
+        appId: 'myAppId',
+        partial: true,
+        useCookie: true,
+      });
+    });
+
+    it('does call `init` when `initParams` are passed', () => {
+      const { instantSearchInstance, insightsClient } = createTestEnvironment();
+
+      instantSearchInstance.use(
+        createInsightsMiddleware({
+          $$internal: true,
+          insightsClient,
+          insightsInitParams: { useCookie: false },
+        })
+      );
+
+      expect(instantSearchInstance.middleware).toHaveLength(1);
+      expect(instantSearchInstance.middleware).toMatchInlineSnapshot(`
+        [
+          {
+            "creator": [Function],
+            "instance": {
+              "$$internal": true,
+              "$$type": "ais.insights",
+              "onStateChange": [Function],
+              "started": [Function],
+              "subscribe": [Function],
+              "unsubscribe": [Function],
+            },
+          },
+        ]
+      `);
+      expect(insightsClient).toHaveBeenCalledWith('init', {
+        apiKey: 'myApiKey',
+        appId: 'myAppId',
+        partial: true,
+        useCookie: false,
+      });
+    });
   });
 
   describe('userToken', () => {
@@ -343,7 +682,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       expect(getUserToken()).toEqual('abc');
     });
 
-    it('applies userToken which was set after subscribe()', () => {
+    it('applies userToken which was set after subscribe()', async () => {
       const { insightsClient, instantSearchInstance, getUserToken } =
         createTestEnvironment();
       instantSearchInstance.use(
@@ -352,10 +691,13 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         })
       );
       insightsClient('setUserToken', 'def');
+
+      await wait(0);
+
       expect(getUserToken()).toEqual('def');
     });
 
-    it('applies userToken which was set after subscribe() without resetting the page', () => {
+    it('applies userToken which was set after subscribe() without resetting the page', async () => {
       const { insightsClient, instantSearchInstance, getUserToken } =
         createTestEnvironment({ started: false });
 
@@ -369,6 +711,9 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       );
 
       insightsClient('setUserToken', 'def');
+
+      await wait(0);
+
       expect(instantSearchInstance.helper!.state.page).toEqual(100);
       expect(getUserToken()).toEqual('def');
     });
@@ -396,10 +741,11 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           insightsClient,
         })
       );
+
       expect(getUserToken()).toEqual('token-from-queue-before-init');
     });
 
-    it('handles multiple setUserToken calls before search.start()', () => {
+    it('handles multiple setUserToken calls before search.start()', async () => {
       const { insightsClient } = createInsights();
       const indexName = 'my-index';
       const instantSearchInstance = instantsearch({
@@ -425,9 +771,81 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
 
       instantSearchInstance.start();
 
+      await wait(0);
+
       expect(
         (instantSearchInstance.helper!.state as PlainSearchParameters).userToken
       ).toEqual('def');
+    });
+
+    it('searches once per unique userToken', async () => {
+      const { insightsClient, instantSearchInstance } = createTestEnvironment();
+
+      instantSearchInstance.addWidgets([connectSearchBox(() => ({}))({})]);
+
+      await wait(0);
+      expect(instantSearchInstance.client.search).toHaveBeenCalledTimes(1);
+
+      insightsClient('setUserToken', 'abc');
+      instantSearchInstance.use(
+        createInsightsMiddleware({
+          insightsClient,
+        })
+      );
+
+      await wait(0);
+      expect(instantSearchInstance.client.search).toHaveBeenCalledTimes(2);
+
+      insightsClient('setUserToken', 'abc');
+
+      await wait(0);
+      expect(instantSearchInstance.client.search).toHaveBeenCalledTimes(2);
+    });
+
+    it("doesn't search when userToken is falsy", async () => {
+      const { insightsClient, instantSearchInstance } = createTestEnvironment();
+
+      instantSearchInstance.addWidgets([connectSearchBox(() => ({}))({})]);
+
+      await wait(0);
+      expect(instantSearchInstance.client.search).toHaveBeenCalledTimes(1);
+      expect(instantSearchInstance.client.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'my-index',
+          params: {
+            facets: [],
+            query: '',
+            tagFilters: '',
+          },
+        },
+      ]);
+
+      insightsClient('setUserToken', 0);
+      instantSearchInstance.use(
+        createInsightsMiddleware({
+          insightsClient,
+          insightsInitParams: { useCookie: false },
+        })
+      );
+
+      await wait(0);
+      expect(instantSearchInstance.client.search).toHaveBeenCalledTimes(2);
+      expect(instantSearchInstance.client.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'my-index',
+          params: {
+            clickAnalytics: true,
+            facets: [],
+            query: '',
+            tagFilters: '',
+          },
+        },
+      ]);
+
+      insightsClient('setUserToken', '');
+
+      await wait(0);
+      expect(instantSearchInstance.client.search).toHaveBeenCalledTimes(2);
     });
 
     describe('umd', () => {
@@ -453,6 +871,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
             insightsClient,
           })
         );
+
         expect(getUserToken()).toEqual('token-from-queue');
       });
 
@@ -478,6 +897,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           })
         );
         libraryLoadedAndProcessQueue();
+
         expect(getUserToken()).toEqual('token-from-queue');
       });
 
@@ -498,6 +918,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
             insightsClient,
           })
         );
+
         expect(getUserToken()).toEqual('token-from-queue-before-init');
       });
     });
@@ -527,11 +948,20 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       });
 
       expect(analytics.viewedObjectIDs).toHaveBeenCalledTimes(1);
-      expect(analytics.viewedObjectIDs).toHaveBeenCalledWith({
-        index: 'my-index',
-        eventName: 'My Hits Viewed',
-        objectIDs: ['obj1'],
-      });
+      expect(analytics.viewedObjectIDs).toHaveBeenCalledWith(
+        {
+          index: 'my-index',
+          eventName: 'My Hits Viewed',
+          objectIDs: ['obj1'],
+          algoliaSource: ['instantsearch'],
+        },
+        {
+          headers: {
+            'X-Algolia-Application-Id': 'myAppId',
+            'X-Algolia-API-Key': 'myApiKey',
+          },
+        }
+      );
     });
 
     it('calls onEvent when given', () => {
@@ -539,6 +969,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         createTestEnvironment();
 
       const onEvent = jest.fn();
+
       instantSearchInstance.use(
         createInsightsMiddleware({
           insightsClient,
@@ -552,7 +983,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         eventType: 'click',
         payload: {
           hello: 'world',
-        },
+        } as any,
       });
       expect(analytics.viewedObjectIDs).toHaveBeenCalledTimes(0);
       expect(onEvent).toHaveBeenCalledTimes(1);
@@ -565,7 +996,42 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
             hello: 'world',
           },
         },
-        insightsClient
+        expect.any(Function)
+      );
+    });
+
+    it('sends events using onEvent', () => {
+      const { insightsClient, instantSearchInstance } = createTestEnvironment();
+
+      const onEvent = jest.fn((event, aa) => {
+        aa(event.insightsMethod, event.payload);
+      });
+
+      instantSearchInstance.use(
+        createInsightsMiddleware({
+          insightsClient,
+          onEvent,
+        })
+      );
+
+      instantSearchInstance.sendEventToInsights({
+        insightsMethod: 'viewedObjectIDs',
+        widgetType: 'ais.customWidget',
+        eventType: 'click',
+        payload: {
+          hello: 'world',
+        } as any,
+      });
+
+      expect(insightsClient).toHaveBeenLastCalledWith(
+        'viewedObjectIDs',
+        { hello: 'world' },
+        {
+          headers: {
+            'X-Algolia-API-Key': 'myApiKey',
+            'X-Algolia-Application-Id': 'myAppId',
+          },
+        }
       );
     });
 
@@ -585,7 +1051,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           eventType: 'click',
           payload: {
             hello: 'world',
-          },
+          } as any,
         });
       }).toWarnDev();
       expect(insightsClient).toHaveBeenCalledTimes(numberOfCalls); // still the same
@@ -610,7 +1076,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
 
     search.start();
 
-    // insights is added *after start*, like in React InstantSearch Hooks
+    // insights is added *after start*, like in React InstantSearch
     search.use(
       createInsightsMiddleware({
         insightsClient(eventName, ...args) {
@@ -625,8 +1091,6 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
     await wait(100);
     // url should not get cleared
     expect(document.location.href).toEqual(url);
-
-    document.cookie = '';
   });
 
   test('does not throw error when document or cookie are undefined', () => {
@@ -644,7 +1108,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       },
     });
 
-    // insights is added *after start*, like in React InstantSearch Hooks
+    // insights is added *after start*, like in React InstantSearch
     search.use(
       createInsightsMiddleware({
         insightsClient(eventName, ...args) {
@@ -659,5 +1123,78 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
     expect(() => search.start()).not.toThrow();
 
     global.document = originalDocument;
+  });
+
+  test('does not immediately set userToken if a rerender is expected', async () => {
+    const searchClient = createSearchClient({
+      search: jest.fn((requests) => {
+        return Promise.resolve(
+          createMultiSearchResponse<any>(
+            ...requests.map(() =>
+              createSingleSearchResponse({
+                renderingContent: {
+                  facetOrdering: {
+                    facets: {
+                      order: ['brand'],
+                    },
+                  },
+                },
+                hits: [{ objectID: '1' }],
+              })
+            )
+          )
+        );
+      }),
+    }) as SearchClient & { search: jest.Mock };
+
+    const { insightsClient, instantSearchInstance, getUserToken } =
+      createTestEnvironment({ searchClient, started: false });
+
+    insightsClient('init', { partial: true, anonymousUserToken: true });
+    instantSearchInstance.use(createInsightsMiddleware({ insightsClient }));
+
+    instantSearchInstance.addWidgets([
+      dynamicWidgets({
+        container: document.createElement('div'),
+        widgets: [
+          (container) => refinementList({ container, attribute: 'brand' }),
+        ],
+      }),
+      hits({
+        container: document.createElement('div'),
+      }),
+    ]);
+
+    instantSearchInstance.start();
+
+    await wait(0);
+
+    // Dynamic widgets will trigger 2 searches. To avoid missing the cache on the second search, createInsightsMiddleware delays setting the userToken.
+
+    expect(searchClient.search).toHaveBeenCalledTimes(2);
+    expect(
+      searchClient.search.mock.calls[0][0][0].params.userToken
+    ).toBeUndefined();
+    expect(
+      searchClient.search.mock.calls[1][0][0].params.userToken
+    ).toBeUndefined();
+
+    await wait(0);
+
+    instantSearchInstance
+      .helper!.setState({
+        ...instantSearchInstance.helper!.state,
+        query: 'test',
+      })
+      .search();
+
+    // On subsequent searches, because the userToken is set, it should be sent with the search request.
+
+    expect(searchClient.search).toHaveBeenCalledTimes(3);
+    expect(searchClient.search).toHaveBeenLastCalledWith([
+      expect.objectContaining({
+        params: expect.objectContaining({ userToken: getUserToken() }),
+      }),
+    ]);
   });
 });

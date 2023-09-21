@@ -1,19 +1,21 @@
 /** @jsx h */
 
-import { h, render } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h, render } from 'preact';
+
 import CurrentRefinements from '../../components/CurrentRefinements/CurrentRefinements';
+import connectCurrentRefinements from '../../connectors/current-refinements/connectCurrentRefinements';
+import { component } from '../../lib/suit';
+import {
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
+
 import type {
   CurrentRefinementsConnectorParams,
   CurrentRefinementsRenderState,
   CurrentRefinementsWidgetDescription,
 } from '../../connectors/current-refinements/connectCurrentRefinements';
-import connectCurrentRefinements from '../../connectors/current-refinements/connectCurrentRefinements';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { component } from '../../lib/suit';
 import type { ComponentCSSClasses, Renderer, WidgetFactory } from '../../types';
 
 export type CurrentRefinementsCSSClasses = Partial<{

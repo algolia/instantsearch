@@ -1,6 +1,8 @@
 import qs from 'qs';
+
+import { safelyRunOnBrowser, warning } from '../utils';
+
 import type { Router, UiState } from '../../types';
-import { safelyRunOnBrowser } from '../utils';
 
 type CreateURL<TRouteState> = (args: {
   qsModule: typeof qs;
@@ -13,7 +15,7 @@ type ParseURL<TRouteState> = (args: {
   location: Location;
 }) => TRouteState;
 
-type BrowserHistoryArgs<TRouteState> = {
+export type BrowserHistoryArgs<TRouteState> = {
   windowTitle?: (routeState: TRouteState) => string;
   writeDelay: number;
   createURL: CreateURL<TRouteState>;
@@ -21,7 +23,10 @@ type BrowserHistoryArgs<TRouteState> = {
   // @MAJOR: The `Location` type is hard to simulate in non-browser environments
   // so we should accept a subset of it that is easier to work with in any
   // environments.
-  getLocation(): Location;
+  getLocation: () => Location;
+  start?: (onUpdate: () => void) => void;
+  dispose?: () => void;
+  push?: (url: string) => void;
 };
 
 const setWindowTitle = (title?: string): void => {
@@ -33,6 +38,7 @@ const setWindowTitle = (title?: string): void => {
 };
 
 class BrowserHistory<TRouteState> implements Router<TRouteState> {
+  public $$type = 'ais.browser';
   /**
    * Transforms a UI state into a title for the page.
    */
@@ -70,7 +76,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
   >['getLocation'];
 
   private writeTimer?: ReturnType<typeof setTimeout>;
-  private _onPopState?(event: PopStateEvent): void;
+  private _onPopState?: (event: PopStateEvent) => void;
 
   /**
    * Indicates if last action was back/forward in the browser.
@@ -80,7 +86,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
   /**
    * Indicates whether the history router is disposed or not.
    */
-  private isDisposed: boolean = false;
+  protected isDisposed: boolean = false;
 
   /**
    * Indicates the window.history.length before the last call to
@@ -89,6 +95,12 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    * and thus to prevent the `write` method from calling `pushState`.
    */
   private latestAcknowledgedHistory: number = 0;
+
+  private _start?: (onUpdate: () => void) => void;
+
+  private _dispose?: () => void;
+
+  private _push?: (url: string) => void;
 
   /**
    * Initializes a new storage provider that syncs the search state to the URL
@@ -100,6 +112,9 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     createURL,
     parseURL,
     getLocation,
+    start,
+    dispose,
+    push,
   }: BrowserHistoryArgs<TRouteState>) {
     this.windowTitle = windowTitle;
     this.writeTimer = undefined;
@@ -107,6 +122,9 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     this._createURL = createURL;
     this.parseURL = parseURL;
     this.getLocation = getLocation;
+    this._start = start;
+    this._dispose = dispose;
+    this._push = push;
 
     safelyRunOnBrowser(({ window }) => {
       const title = this.windowTitle && this.windowTitle(this.read());
@@ -139,7 +157,11 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
         setWindowTitle(title);
 
         if (this.shouldWrite(url)) {
-          window.history.pushState(routeState, title || '', url);
+          if (this._push) {
+            this._push(url);
+          } else {
+            window.history.pushState(routeState, title || '', url);
+          }
           this.latestAcknowledgedHistory = window.history.length;
         }
         this.inPopState = false;
@@ -153,6 +175,12 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    * It enables the URL sync to keep track of the changes.
    */
   public onUpdate(callback: (routeState: TRouteState) => void): void {
+    if (this._start) {
+      this._start(() => {
+        callback(this.read());
+      });
+    }
+
     this._onPopState = () => {
       if (this.writeTimer) {
         clearTimeout(this.writeTimer);
@@ -176,20 +204,40 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
    *
    * It always generates the full URL, not a relative one.
    * This allows to handle cases like using a <base href>.
-   * See: https://github.com/algolia/instantsearch.js/issues/790
+   * See: https://github.com/algolia/instantsearch/issues/790
    */
   public createURL(routeState: TRouteState): string {
-    return this._createURL({
+    const url = this._createURL({
       qsModule: qs,
       routeState,
       location: this.getLocation(),
     });
+
+    if (__DEV__) {
+      try {
+        // We just want to check if the URL is valid.
+        // eslint-disable-next-line no-new
+        new URL(url);
+      } catch (e) {
+        warning(
+          false,
+          `The URL returned by the \`createURL\` function is invalid.
+Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algolia.com/search?query=iphone\`.`
+        );
+      }
+    }
+
+    return url;
   }
 
   /**
    * Removes the event listener and cleans up the URL.
    */
   public dispose(): void {
+    if (this._dispose) {
+      this._dispose();
+    }
+
     this.isDisposed = true;
 
     safelyRunOnBrowser(({ window }) => {
@@ -203,6 +251,10 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     }
 
     this.write({} as TRouteState);
+  }
+
+  public start() {
+    this.isDisposed = false;
   }
 
   private shouldWrite(url: string): boolean {
@@ -269,6 +321,9 @@ export default function historyRouter<TRouteState = UiState>({
       },
     });
   },
+  start,
+  dispose,
+  push,
 }: Partial<BrowserHistoryArgs<TRouteState>> = {}): BrowserHistory<TRouteState> {
   return new BrowserHistory({
     createURL,
@@ -276,5 +331,8 @@ export default function historyRouter<TRouteState = UiState>({
     writeDelay,
     windowTitle,
     getLocation,
+    start,
+    dispose,
+    push,
   });
 }

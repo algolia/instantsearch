@@ -1,0 +1,44 @@
+{
+  "content": {
+    "results": [
+      {
+        "hits": [],
+        "nbHits": 0,
+        "page": 0,
+        "nbPages": 0,
+        "hitsPerPage": 20,
+        "processingTimeMS": 1,
+        "facets": {},
+        "exhaustiveFacetsCount": true,
+        "query": "",
+        "params": "query=&page=0&facets=%5B%22brand%22%2C%22type%22%2C%22rating%22%2C%22hierarchicalCategories.lvl0%22%5D&tagFilters=foo%2Cbar",
+        "index": "instant_search"
+      }
+    ]
+  },
+  "state": {
+    "index": "instant_search",
+    "query": "",
+    "facets": ["brand"],
+    "disjunctiveFacets": ["type", "rating"],
+    "hierarchicalFacets": [
+      {
+        "name": "hierarchicalCategories",
+        "attributes": [
+          "hierarchicalCategories.lvl0",
+          "hierarchicalCategories.lvl1",
+          "hierarchicalCategories.lvl2",
+          "hierarchicalCategories.lvl3"
+        ]
+      }
+    ],
+    "facetsRefinements": {},
+    "facetsExcludes": {},
+    "disjunctiveFacetsRefinements": {},
+    "numericRefinements": {},
+    "tagRefinements": ["foo", "bar"],
+    "hierarchicalFacetsRefinements": {},
+    "page": 0
+  },
+  "error": null
+}

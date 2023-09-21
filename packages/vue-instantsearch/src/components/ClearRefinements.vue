@@ -1,3 +1,4 @@
+<!-- @MAJOR remove `type="reset"` -->
 <template>
   <div v-if="state" :class="suit()">
     <slot
@@ -19,6 +20,7 @@
 
 <script>
 import { connectClearRefinements } from 'instantsearch.js/es/connectors';
+
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';

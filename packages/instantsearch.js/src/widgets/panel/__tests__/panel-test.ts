@@ -2,18 +2,20 @@
  * @jest-environment jsdom
  */
 
-import type { VNode } from 'preact';
-import { render as preactRender } from 'preact';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
-import panel from '../panel';
-import type { PanelProps } from '../../../components/Panel/Panel';
+import algoliasearchHelper from 'algoliasearch-helper';
+import { render as preactRender } from 'preact';
+
 import {
   createInitOptions,
   createRenderOptions,
   createDisposeOptions,
 } from '../../../../test/createWidget';
-import algoliasearchHelper from 'algoliasearch-helper';
+import panel from '../panel';
+
+import type { PanelProps } from '../../../components/Panel/Panel';
 import type { Widget } from '../../../types';
+import type { VNode } from 'preact';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
@@ -130,8 +132,6 @@ describe('Templates', () => {
     const { templates } = firstRender.props as PanelProps<typeof widgetFactory>;
 
     expect(templates).toEqual({
-      header: '',
-      footer: '',
       collapseButtonText: expect.any(Function),
     });
   });

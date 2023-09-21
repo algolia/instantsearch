@@ -2,8 +2,9 @@
  * @jest-environment jsdom
  */
 
-import { mount, nextTick } from '../../../test/utils';
 import mitt from 'mitt';
+
+import { mount, nextTick } from '../../../test/utils';
 import { isVue3 } from '../../util/vue-compat';
 import {
   createPanelProviderMixin,

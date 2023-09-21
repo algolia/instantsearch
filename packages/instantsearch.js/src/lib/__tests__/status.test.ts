@@ -1,7 +1,9 @@
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
+
 import { connectSearchBox } from '../../connectors';
 import instantsearch from '../../index.es';
+
 import type InstantSearch from '../InstantSearch';
 
 function createDelayedSearchClient(timeout: number) {
@@ -185,7 +187,6 @@ describe('status', () => {
   });
 
   test('lets users render on error with the `render` event', async () => {
-    // expect.assertions(4);
     const search = instantsearch({
       indexName: 'indexName',
       searchClient: createSearchClient({

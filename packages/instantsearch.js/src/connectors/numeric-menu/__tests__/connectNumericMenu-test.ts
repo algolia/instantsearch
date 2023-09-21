@@ -2,23 +2,27 @@
  * @jest-environment jsdom
  */
 
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import type {
-  NumericMenuConnectorParamsItem,
-  NumericMenuRenderState,
-  NumericMenuRenderStateItem,
-} from '../connectNumericMenu';
-import connectNumericMenu from '../connectNumericMenu';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
+import connectNumericMenu from '../connectNumericMenu';
+
+import type {
+  NumericMenuConnectorParamsItem,
+  NumericMenuRenderState,
+  NumericMenuRenderStateItem,
+} from '../connectNumericMenu';
 
 const encodeValue = (
   start: NumericMenuConnectorParamsItem['start'],
@@ -1128,7 +1132,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
   });
 
   describe('insights', () => {
-    // See: https://github.com/algolia/instantsearch.js/pull/5085
+    // See: https://github.com/algolia/instantsearch/pull/5085
     it(`doesn't send event when a facet is added`, () => {
       const rendering = jest.fn();
       const makeWidget = connectNumericMenu(rendering);

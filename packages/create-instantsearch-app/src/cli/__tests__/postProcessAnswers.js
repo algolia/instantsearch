@@ -1,5 +1,5 @@
-const postProcessAnswers = require('../postProcessAnswers');
 const utils = require('../../utils');
+const postProcessAnswers = require('../postProcessAnswers');
 
 jest.mock('../../utils', () => ({
   ...jest.requireActual('../../utils'),
@@ -80,32 +80,109 @@ test('creates alternative names', async () => {
   );
 });
 
-test('detects dynamic widgets', async () => {
-  expect(
-    await postProcessAnswers({
-      configuration: {},
-      templateConfig: {},
-      optionsFromArguments: {},
-      answers: { attributesForFaceting: ['ais.dynamicWidgets', 'test'] },
-    })
-  ).toEqual(
-    expect.objectContaining({
-      attributesForFaceting: ['test'],
-      flags: { dynamicWidgets: true },
-    })
-  );
+describe('flags', () => {
+  describe('dynamicWidgets', () => {
+    test('with usage of dynamicWidgets in attributesForFaceting', async () => {
+      expect(
+        await postProcessAnswers({
+          configuration: {},
+          templateConfig: {},
+          optionsFromArguments: {},
+          answers: { attributesForFaceting: ['ais.dynamicWidgets', 'test'] },
+        })
+      ).toEqual(
+        expect.objectContaining({
+          attributesForFaceting: ['test'],
+          flags: expect.objectContaining({ dynamicWidgets: true }),
+        })
+      );
+    });
 
-  expect(
-    await postProcessAnswers({
-      configuration: {},
-      templateConfig: {},
-      optionsFromArguments: {},
-      answers: { attributesForFaceting: ['test'] },
-    })
-  ).toEqual(
-    expect.objectContaining({
-      attributesForFaceting: ['test'],
-      flags: { dynamicWidgets: false },
-    })
-  );
+    test('without usage of dynamicWidgets in attributesForFaceting', async () => {
+      expect(
+        await postProcessAnswers({
+          configuration: {},
+          templateConfig: {},
+          optionsFromArguments: {},
+          answers: { attributesForFaceting: ['test'] },
+        })
+      ).toEqual(
+        expect.objectContaining({
+          attributesForFaceting: ['test'],
+          flags: expect.objectContaining({ dynamicWidgets: false }),
+        })
+      );
+    });
+
+    test('without attributes', async () => {
+      expect(
+        await postProcessAnswers({
+          configuration: {},
+          templateConfig: {},
+          optionsFromArguments: {},
+          answers: {},
+        })
+      ).toEqual(
+        expect.objectContaining({
+          flags: expect.objectContaining({ dynamicWidgets: false }),
+        })
+      );
+    });
+  });
+
+  describe('insights', () => {
+    test('with a valid version', async () => {
+      utils.fetchLibraryVersions.mockImplementationOnce(() =>
+        Promise.resolve(['1.2.0'])
+      );
+
+      expect(
+        (
+          await postProcessAnswers({
+            configuration: {},
+            templateConfig: {
+              libraryName: 'instantsearch.js',
+              flags: {
+                insights: '>= 1',
+              },
+            },
+            optionsFromArguments: {},
+          })
+        ).flags
+      ).toEqual(expect.objectContaining({ insights: true }));
+    });
+
+    test('with an invalid version', async () => {
+      utils.fetchLibraryVersions.mockImplementationOnce(() =>
+        Promise.resolve(['1.2.0'])
+      );
+
+      expect(
+        (
+          await postProcessAnswers({
+            configuration: {},
+            templateConfig: {
+              libraryName: 'instantsearch.js',
+              flags: {
+                insights: '>= 1.3',
+              },
+            },
+            optionsFromArguments: {},
+          })
+        ).flags
+      ).toEqual(expect.objectContaining({ insights: false }));
+    });
+
+    test('without config', async () => {
+      expect(
+        (
+          await postProcessAnswers({
+            configuration: {},
+            templateConfig: {},
+            optionsFromArguments: {},
+          })
+        ).flags
+      ).toEqual(expect.objectContaining({ insights: false }));
+    });
+  });
 });

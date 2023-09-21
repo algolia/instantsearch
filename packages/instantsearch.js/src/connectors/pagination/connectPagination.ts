@@ -3,9 +3,10 @@ import {
   createDocumentationMessageGenerator,
   noop,
 } from '../../lib/utils';
+
 import Paginator from './Paginator';
+
 import type { Connector, CreateURL, WidgetRenderState } from '../../types';
-import type { SearchParameters } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'pagination',
@@ -30,7 +31,7 @@ export type PaginationRenderState = {
   createURL: CreateURL<number>;
 
   /** Sets the current page and triggers a search. */
-  refine(page: number): void;
+  refine: (page: number) => void;
 
   /** true if this search returned more than one page */
   canRefine: boolean;
@@ -96,8 +97,8 @@ const connectPagination: PaginationConnector = function connectPagination(
     });
 
     type ConnectorState = {
-      refine?(page: number): void;
-      createURL?(state: SearchParameters): (page: number) => string;
+      refine?: (page: number) => void;
+      createURL?: (page: number) => string;
     };
 
     const connectorState: ConnectorState = {};
@@ -167,8 +168,11 @@ const connectPagination: PaginationConnector = function connectPagination(
         }
 
         if (!connectorState.createURL) {
-          connectorState.createURL = (helperState) => (page) =>
-            createURL(helperState.setPage(page));
+          connectorState.createURL = (page) =>
+            createURL((uiState) => ({
+              ...uiState,
+              page: page + 1,
+            }));
         }
 
         const page = state.page || 0;
@@ -177,7 +181,7 @@ const connectPagination: PaginationConnector = function connectPagination(
         pager.total = nbPages;
 
         return {
-          createURL: connectorState.createURL(state),
+          createURL: connectorState.createURL,
           refine: connectorState.refine,
           canRefine: nbPages > 1,
           currentRefinement: page,

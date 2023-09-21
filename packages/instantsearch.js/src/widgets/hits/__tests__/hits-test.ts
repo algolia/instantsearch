@@ -2,23 +2,25 @@
  * @jest-environment jsdom
  */
 
-import type { VNode } from 'preact';
-import { render as preactRender } from 'preact';
-import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
+import { createSingleSearchResponse } from '@instantsearch/mocks';
+import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import type { SearchClient } from '../../../types';
-import hits from '../hits';
-import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
+import { render as preactRender } from 'preact';
+
 import { createInstantSearch } from '../../../../test/createInstantSearch';
-import type { HitsProps } from '../../../components/Hits/Hits';
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
+import hits from '../hits';
+
+import type { HitsProps } from '../../../components/Hits/Hits';
+import type { SearchClient } from '../../../types';
+import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
+import type { VNode } from 'preact';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {
@@ -82,170 +84,170 @@ describe('hits()', () => {
 
     expect(render).toHaveBeenCalledTimes(2);
     expect(firstRender.props).toMatchInlineSnapshot(`
-{
-  "bindEvent": [Function],
-  "cssClasses": {
-    "emptyRoot": "ais-Hits--empty",
-    "item": "ais-Hits-item",
-    "list": "ais-Hits-list",
-    "root": "ais-Hits root cx",
-  },
-  "hits": [
-    {
-      "__position": 9,
-      "hit": "first",
-      "objectID": "1",
-    },
-  ],
-  "insights": [Function],
-  "results": SearchResults {
-    "_rawResults": [
       {
-        "exhaustiveFacetsCount": true,
-        "exhaustiveNbHits": true,
+        "bindEvent": [Function],
+        "cssClasses": {
+          "emptyRoot": "ais-Hits--empty",
+          "item": "ais-Hits-item",
+          "list": "ais-Hits-list",
+          "root": "ais-Hits root cx",
+        },
         "hits": [
           {
+            "__position": 9,
             "hit": "first",
             "objectID": "1",
           },
         ],
-        "hitsPerPage": 4,
-        "nbHits": 1,
-        "nbPages": 1,
-        "page": 2,
-        "params": "",
-        "processingTimeMS": 0,
-        "query": "",
-      },
-    ],
-    "_state": SearchParameters {
-      "disjunctiveFacets": [],
-      "disjunctiveFacetsRefinements": {},
-      "facets": [],
-      "facetsExcludes": {},
-      "facetsRefinements": {},
-      "hierarchicalFacets": [],
-      "hierarchicalFacetsRefinements": {},
-      "index": "",
-      "numericRefinements": {},
-      "tagRefinements": [],
-    },
-    "disjunctiveFacets": [],
-    "exhaustiveFacetsCount": true,
-    "exhaustiveNbHits": true,
-    "facets": [],
-    "hierarchicalFacets": [],
-    "hits": [
-      {
-        "hit": "first",
-        "objectID": "1",
-      },
-    ],
-    "hitsPerPage": 4,
-    "nbHits": 1,
-    "nbPages": 1,
-    "page": 2,
-    "params": "",
-    "processingTimeMS": 0,
-    "query": "",
-  },
-  "sendEvent": [Function],
-  "templateProps": {
-    "templates": {
-      "empty": [Function],
-      "item": [Function],
-    },
-    "templatesConfig": undefined,
-    "useCustomCompileOptions": {
-      "empty": false,
-      "item": false,
-    },
-  },
-}
-`);
+        "insights": [Function],
+        "results": SearchResults {
+          "_rawResults": [
+            {
+              "exhaustiveFacetsCount": true,
+              "exhaustiveNbHits": true,
+              "hits": [
+                {
+                  "hit": "first",
+                  "objectID": "1",
+                },
+              ],
+              "hitsPerPage": 4,
+              "nbHits": 1,
+              "nbPages": 1,
+              "page": 2,
+              "params": "",
+              "processingTimeMS": 0,
+              "query": "",
+            },
+          ],
+          "_state": SearchParameters {
+            "disjunctiveFacets": [],
+            "disjunctiveFacetsRefinements": {},
+            "facets": [],
+            "facetsExcludes": {},
+            "facetsRefinements": {},
+            "hierarchicalFacets": [],
+            "hierarchicalFacetsRefinements": {},
+            "index": "",
+            "numericRefinements": {},
+            "tagRefinements": [],
+          },
+          "disjunctiveFacets": [],
+          "exhaustiveFacetsCount": true,
+          "exhaustiveNbHits": true,
+          "facets": [],
+          "hierarchicalFacets": [],
+          "hits": [
+            {
+              "hit": "first",
+              "objectID": "1",
+            },
+          ],
+          "hitsPerPage": 4,
+          "nbHits": 1,
+          "nbPages": 1,
+          "page": 2,
+          "params": "",
+          "processingTimeMS": 0,
+          "query": "",
+        },
+        "sendEvent": [Function],
+        "templateProps": {
+          "templates": {
+            "empty": [Function],
+            "item": [Function],
+          },
+          "templatesConfig": undefined,
+          "useCustomCompileOptions": {
+            "empty": false,
+            "item": false,
+          },
+        },
+      }
+    `);
     expect(firstContainer).toEqual(container);
     expect(secondRender.props).toMatchInlineSnapshot(`
-{
-  "bindEvent": [Function],
-  "cssClasses": {
-    "emptyRoot": "ais-Hits--empty",
-    "item": "ais-Hits-item",
-    "list": "ais-Hits-list",
-    "root": "ais-Hits root cx",
-  },
-  "hits": [
-    {
-      "__position": 9,
-      "hit": "first",
-      "objectID": "1",
-    },
-  ],
-  "insights": [Function],
-  "results": SearchResults {
-    "_rawResults": [
       {
-        "exhaustiveFacetsCount": true,
-        "exhaustiveNbHits": true,
+        "bindEvent": [Function],
+        "cssClasses": {
+          "emptyRoot": "ais-Hits--empty",
+          "item": "ais-Hits-item",
+          "list": "ais-Hits-list",
+          "root": "ais-Hits root cx",
+        },
         "hits": [
           {
+            "__position": 9,
             "hit": "first",
             "objectID": "1",
           },
         ],
-        "hitsPerPage": 4,
-        "nbHits": 1,
-        "nbPages": 1,
-        "page": 2,
-        "params": "",
-        "processingTimeMS": 0,
-        "query": "",
-      },
-    ],
-    "_state": SearchParameters {
-      "disjunctiveFacets": [],
-      "disjunctiveFacetsRefinements": {},
-      "facets": [],
-      "facetsExcludes": {},
-      "facetsRefinements": {},
-      "hierarchicalFacets": [],
-      "hierarchicalFacetsRefinements": {},
-      "index": "",
-      "numericRefinements": {},
-      "tagRefinements": [],
-    },
-    "disjunctiveFacets": [],
-    "exhaustiveFacetsCount": true,
-    "exhaustiveNbHits": true,
-    "facets": [],
-    "hierarchicalFacets": [],
-    "hits": [
-      {
-        "hit": "first",
-        "objectID": "1",
-      },
-    ],
-    "hitsPerPage": 4,
-    "nbHits": 1,
-    "nbPages": 1,
-    "page": 2,
-    "params": "",
-    "processingTimeMS": 0,
-    "query": "",
-  },
-  "sendEvent": [Function],
-  "templateProps": {
-    "templates": {
-      "empty": [Function],
-      "item": [Function],
-    },
-    "templatesConfig": undefined,
-    "useCustomCompileOptions": {
-      "empty": false,
-      "item": false,
-    },
-  },
-}
-`);
+        "insights": [Function],
+        "results": SearchResults {
+          "_rawResults": [
+            {
+              "exhaustiveFacetsCount": true,
+              "exhaustiveNbHits": true,
+              "hits": [
+                {
+                  "hit": "first",
+                  "objectID": "1",
+                },
+              ],
+              "hitsPerPage": 4,
+              "nbHits": 1,
+              "nbPages": 1,
+              "page": 2,
+              "params": "",
+              "processingTimeMS": 0,
+              "query": "",
+            },
+          ],
+          "_state": SearchParameters {
+            "disjunctiveFacets": [],
+            "disjunctiveFacetsRefinements": {},
+            "facets": [],
+            "facetsExcludes": {},
+            "facetsRefinements": {},
+            "hierarchicalFacets": [],
+            "hierarchicalFacetsRefinements": {},
+            "index": "",
+            "numericRefinements": {},
+            "tagRefinements": [],
+          },
+          "disjunctiveFacets": [],
+          "exhaustiveFacetsCount": true,
+          "exhaustiveNbHits": true,
+          "facets": [],
+          "hierarchicalFacets": [],
+          "hits": [
+            {
+              "hit": "first",
+              "objectID": "1",
+            },
+          ],
+          "hitsPerPage": 4,
+          "nbHits": 1,
+          "nbPages": 1,
+          "page": 2,
+          "params": "",
+          "processingTimeMS": 0,
+          "query": "",
+        },
+        "sendEvent": [Function],
+        "templateProps": {
+          "templates": {
+            "empty": [Function],
+            "item": [Function],
+          },
+          "templatesConfig": undefined,
+          "useCustomCompileOptions": {
+            "empty": false,
+            "item": false,
+          },
+        },
+      }
+    `);
     expect(secondContainer).toEqual(container);
   });
 
@@ -269,88 +271,88 @@ describe('hits()', () => {
     const firstRender = render.mock.calls[0][0] as VNode<HitsProps>;
 
     expect(firstRender.props).toMatchInlineSnapshot(`
-{
-  "bindEvent": [Function],
-  "cssClasses": {
-    "emptyRoot": "ais-Hits--empty",
-    "item": "ais-Hits-item",
-    "list": "ais-Hits-list",
-    "root": "ais-Hits",
-  },
-  "hits": [
-    {
-      "__position": 9,
-      "hit": "first",
-      "objectID": "1",
-      "transformed": true,
-    },
-  ],
-  "insights": [Function],
-  "results": SearchResults {
-    "_rawResults": [
       {
-        "exhaustiveFacetsCount": true,
-        "exhaustiveNbHits": true,
+        "bindEvent": [Function],
+        "cssClasses": {
+          "emptyRoot": "ais-Hits--empty",
+          "item": "ais-Hits-item",
+          "list": "ais-Hits-list",
+          "root": "ais-Hits",
+        },
         "hits": [
           {
+            "__position": 9,
             "hit": "first",
             "objectID": "1",
+            "transformed": true,
           },
         ],
-        "hitsPerPage": 4,
-        "nbHits": 1,
-        "nbPages": 1,
-        "page": 2,
-        "params": "",
-        "processingTimeMS": 0,
-        "query": "",
-      },
-    ],
-    "_state": SearchParameters {
-      "disjunctiveFacets": [],
-      "disjunctiveFacetsRefinements": {},
-      "facets": [],
-      "facetsExcludes": {},
-      "facetsRefinements": {},
-      "hierarchicalFacets": [],
-      "hierarchicalFacetsRefinements": {},
-      "index": "",
-      "numericRefinements": {},
-      "tagRefinements": [],
-    },
-    "disjunctiveFacets": [],
-    "exhaustiveFacetsCount": true,
-    "exhaustiveNbHits": true,
-    "facets": [],
-    "hierarchicalFacets": [],
-    "hits": [
-      {
-        "hit": "first",
-        "objectID": "1",
-      },
-    ],
-    "hitsPerPage": 4,
-    "nbHits": 1,
-    "nbPages": 1,
-    "page": 2,
-    "params": "",
-    "processingTimeMS": 0,
-    "query": "",
-  },
-  "sendEvent": [Function],
-  "templateProps": {
-    "templates": {
-      "empty": [Function],
-      "item": [Function],
-    },
-    "templatesConfig": undefined,
-    "useCustomCompileOptions": {
-      "empty": false,
-      "item": false,
-    },
-  },
-}
-`);
+        "insights": [Function],
+        "results": SearchResults {
+          "_rawResults": [
+            {
+              "exhaustiveFacetsCount": true,
+              "exhaustiveNbHits": true,
+              "hits": [
+                {
+                  "hit": "first",
+                  "objectID": "1",
+                },
+              ],
+              "hitsPerPage": 4,
+              "nbHits": 1,
+              "nbPages": 1,
+              "page": 2,
+              "params": "",
+              "processingTimeMS": 0,
+              "query": "",
+            },
+          ],
+          "_state": SearchParameters {
+            "disjunctiveFacets": [],
+            "disjunctiveFacetsRefinements": {},
+            "facets": [],
+            "facetsExcludes": {},
+            "facetsRefinements": {},
+            "hierarchicalFacets": [],
+            "hierarchicalFacetsRefinements": {},
+            "index": "",
+            "numericRefinements": {},
+            "tagRefinements": [],
+          },
+          "disjunctiveFacets": [],
+          "exhaustiveFacetsCount": true,
+          "exhaustiveNbHits": true,
+          "facets": [],
+          "hierarchicalFacets": [],
+          "hits": [
+            {
+              "hit": "first",
+              "objectID": "1",
+            },
+          ],
+          "hitsPerPage": 4,
+          "nbHits": 1,
+          "nbPages": 1,
+          "page": 2,
+          "params": "",
+          "processingTimeMS": 0,
+          "query": "",
+        },
+        "sendEvent": [Function],
+        "templateProps": {
+          "templates": {
+            "empty": [Function],
+            "item": [Function],
+          },
+          "templatesConfig": undefined,
+          "useCustomCompileOptions": {
+            "empty": false,
+            "item": false,
+          },
+        },
+      }
+    `);
   });
 
   it('should add __position key with absolute position', () => {

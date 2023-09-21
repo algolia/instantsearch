@@ -5,9 +5,9 @@ import { diff } from 'jest-diff';
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace jest {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/naming-convention
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     interface Matchers<R> {
-      toWarnDev(expectedMessage?: string): jest.CustomMatcherResult;
+      toWarnDev: (expectedMessage?: string) => R;
     }
   }
 }
@@ -36,7 +36,10 @@ export const toWarnDev: jest.CustomMatcher = (
   }
 
   if (!__DEV__) {
-    return runCallback(callback, () => ({ pass: true, message: () => '' }));
+    return runCallback(callback, () => ({
+      pass: true,
+      message: () => 'Not in dev mode, so no warnings get triggered.',
+    }));
   }
 
   const originalWarnMethod = console.warn;
@@ -72,6 +75,11 @@ ${diff(expectedMessage, actualWarning)}`,
       };
     }
 
-    return { pass: true, message: () => '' };
+    return {
+      pass: true,
+      message: () => `Warning was triggered:
+
+${actualWarning}`,
+    };
   });
 };

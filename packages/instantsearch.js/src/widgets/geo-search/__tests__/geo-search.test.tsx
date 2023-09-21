@@ -2,12 +2,12 @@
  * @jest-environment jsdom
  */
 /** @jsx h */
-import { h } from 'preact';
 import { initialize } from '@googlemaps/jest-mocks';
-
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import instantsearch from '../../../index.es';
+import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
+import { h } from 'preact';
+
+import instantsearch from '../../../index.es';
 import geoSearch from '../geo-search';
 
 beforeEach(() => {

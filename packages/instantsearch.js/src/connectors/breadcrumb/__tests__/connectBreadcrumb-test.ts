@@ -1,16 +1,19 @@
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { warning } from '../../../lib/utils';
-import connectBreadcrumb from '../connectBreadcrumb';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
+
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
+import { warning } from '../../../lib/utils';
+import connectBreadcrumb from '../connectBreadcrumb';
 
 describe('connectBreadcrumb', () => {
   describe('Usage', () => {
@@ -291,6 +294,57 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       });
     });
 
+    it('returns an empty array of items if no hierarchicalFacets result exist', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createBreadcrumb = connectBreadcrumb(renderFn, unmountFn);
+      const breadcrumb = createBreadcrumb({
+        attributes: ['category', 'subCategory'],
+      });
+      const helper = algoliasearchHelper(
+        createSearchClient(),
+        'indexName',
+        breadcrumb.getWidgetSearchParameters!(new SearchParameters(), {
+          uiState: {},
+        })
+      );
+
+      const results = new algoliasearchHelper.SearchResults(
+        new SearchParameters({ index: helper.state.index }),
+        [
+          {
+            query: helper.state.query ?? '',
+            page: helper.state.page ?? 0,
+            hitsPerPage: helper.state.hitsPerPage ?? 20,
+            hits: [],
+            nbHits: 0,
+            nbPages: 0,
+            params: '',
+            exhaustiveNbHits: true,
+            exhaustiveFacetsCount: true,
+            processingTimeMS: 0,
+            index: helper.state.index,
+          },
+        ]
+      );
+
+      const renderState = breadcrumb.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          results,
+          state: helper.state,
+        })
+      );
+
+      expect(renderState).toEqual({
+        canRefine: false,
+        createURL: expect.any(Function),
+        items: [],
+        refine: expect.any(Function),
+        widgetParams: { attributes: ['category', 'subCategory'] },
+      });
+    });
+
     test('refine method called with null does not mutate the current helper state if no hierarchicalFacets exist', () => {
       const renderFn = jest.fn();
       const unmountFn = jest.fn();
@@ -558,6 +612,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
             separator: ' > ',
           },
         ],
+        hierarchicalFacetsRefinements: {
+          category: [],
+        },
       })
     );
 
@@ -894,7 +951,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       createInitOptions({
         helper,
         state: helper.state,
-        createURL: (state) => JSON.stringify(state),
+        createURL: (arg) =>
+          typeof arg === 'function'
+            ? JSON.stringify(arg({}))
+            : JSON.stringify(arg),
       })
     );
 
@@ -927,16 +987,21 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         ]),
         state: helper.state,
         helper,
-        createURL: (state) => JSON.stringify(state),
+        createURL: (arg) =>
+          typeof arg === 'function'
+            ? JSON.stringify(arg({}))
+            : JSON.stringify(arg),
       })
     );
     const createURL = rendering.mock.calls[1][0].createURL;
-    expect(helper.state.hierarchicalFacetsRefinements).toEqual({});
+    expect(helper.state.hierarchicalFacetsRefinements).toEqual({
+      category: [],
+    });
     const stateForURL = JSON.parse(
       createURL('Decoration > Candle holders & candles')
     );
-    expect(stateForURL.hierarchicalFacetsRefinements).toEqual({
-      category: ['Decoration > Candle holders & candles'],
+    expect(stateForURL.hierarchicalMenu).toEqual({
+      category: ['Decoration', 'Candle holders & candles'],
     });
   });
 
@@ -961,7 +1026,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       createInitOptions({
         helper,
         state: helper.state,
-        createURL: (state) => JSON.stringify(state),
+        createURL: (arg) =>
+          typeof arg === 'function'
+            ? JSON.stringify(arg({}))
+            : JSON.stringify(arg),
       })
     );
 
@@ -1095,7 +1163,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
         ]),
         state: helper.state,
         helper,
-        createURL: (state) => JSON.stringify(state),
+        createURL: (arg) =>
+          typeof arg === 'function'
+            ? JSON.stringify(arg({}))
+            : JSON.stringify(arg),
       })
     );
     const { createURL, items } = rendering.mock.calls[1][0];
@@ -1103,13 +1174,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
 
     const stateForURL = JSON.parse(createURL(secondItemValue));
 
-    expect(stateForURL.hierarchicalFacetsRefinements).toEqual({
-      'hierarchicalCategories.lvl0': ['Cameras & Camcorders > Digital Cameras'],
+    expect(stateForURL.hierarchicalMenu).toEqual({
+      'hierarchicalCategories.lvl0': [
+        'Cameras & Camcorders',
+        'Digital Cameras',
+      ],
     });
     const stateForHome = JSON.parse(createURL(null));
-    expect(stateForHome.hierarchicalFacetsRefinements).toEqual({
-      'hierarchicalCategories.lvl0': [],
-    });
+    expect(stateForHome.hierarchicalMenu).toEqual(undefined);
   });
 
   it('toggles the refine function when passed the special value null', () => {

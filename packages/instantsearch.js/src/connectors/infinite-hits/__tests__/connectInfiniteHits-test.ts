@@ -2,8 +2,25 @@
  * @jest-environment jsdom
  */
 
-import type { SearchParameters } from 'algoliasearch-helper';
+import {
+  createMultiSearchResponse,
+  createSingleSearchResponse,
+  createSearchClient,
+} from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils/wait';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
+
+import { createInstantSearch } from '../../../../test/createInstantSearch';
+import {
+  createDisposeOptions,
+  createInitOptions,
+  createRenderOptions,
+} from '../../../../test/createWidget';
+import instantsearch from '../../../index.es';
+import { createInfiniteHitsSessionStorageCache } from '../../../lib/infiniteHitsCache';
+import { TAG_PLACEHOLDER, deserializePayload } from '../../../lib/utils';
+import connectInfiniteHits from '../connectInfiniteHits';
+
 import type {
   SearchClient,
   HitAttributeHighlightResult,
@@ -11,21 +28,7 @@ import type {
   EscapedHits,
   SearchResponse,
 } from '../../../types';
-import { createInstantSearch } from '../../../../test/createInstantSearch';
-import {
-  createDisposeOptions,
-  createInitOptions,
-  createRenderOptions,
-} from '../../../../test/createWidget';
-import {
-  createMultiSearchResponse,
-  createSingleSearchResponse,
-} from '@instantsearch/mocks/createAPIResponse';
-import { TAG_PLACEHOLDER, deserializePayload } from '../../../lib/utils';
-import connectInfiniteHits from '../connectInfiniteHits';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import instantsearch from '../../../index.es';
-import { wait } from '@instantsearch/testutils/wait';
+import type { SearchParameters } from 'algoliasearch-helper';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({
   // The real implementation creates a new array instance, which can cause bugs,
@@ -867,6 +870,239 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     expect((results.hits as unknown as EscapedHits).__escaped).toBe(true);
   });
 
+  it('does not overwrite custom cache when dynamic widgets have no facets in state yet', () => {
+    const sessionStorageCache = createInfiniteHitsSessionStorageCache();
+    window.sessionStorage.clear();
+
+    function getInstance() {
+      const renderFn = jest.fn();
+      const makeWidget = connectInfiniteHits(renderFn);
+      const widget = makeWidget({ cache: sessionStorageCache });
+
+      const helper = algoliasearchHelper({} as SearchClient, '', {});
+      helper.search = jest.fn();
+
+      const instantSearchInstance = createInstantSearch();
+      instantSearchInstance.mainIndex.addWidgets([
+        { $$type: 'ais.dynamicWidgets', init() {} },
+      ]);
+
+      const initOptions = createInitOptions({
+        state: helper.state,
+        helper,
+        instantSearchInstance,
+      });
+
+      widget.init!(initOptions);
+
+      const renderWidget = (
+        args: Partial<ReturnType<typeof createRenderOptions>>
+      ) => {
+        const renderOptions = createRenderOptions({
+          state: helper.state,
+          helper,
+          instantSearchInstance,
+          ...args,
+        });
+
+        widget.render!(renderOptions);
+      };
+      return { helper, renderFn, renderWidget };
+    }
+
+    const firstPageHits = [{ objectID: '1' }, { objectID: '2' }];
+    const secondPageHits = [{ objectID: '3' }, { objectID: '4' }];
+
+    // Load InstantSearch
+    {
+      const { helper, renderFn, renderWidget } = getInstance();
+
+      // Render: page 1
+      let searchResults = new SearchResults(helper.state, [
+        createSingleSearchResponse({ hits: firstPageHits }),
+      ]);
+      renderWidget({ results: searchResults });
+
+      // Simulate facets added to state by Dynamic Widgets
+      helper.setState(helper.state.addFacet('brand'));
+
+      // Rerender: page 1
+      searchResults = new SearchResults(helper.state, [
+        createSingleSearchResponse({
+          facets: { brand: { Apple: 100 } },
+          hits: firstPageHits,
+        }),
+      ]);
+      renderWidget({ results: searchResults });
+
+      let renderOptions = renderFn.mock.calls[2][0];
+      expect(renderOptions.hits).toEqual(firstPageHits);
+      expect(renderOptions.results).toEqual(searchResults);
+
+      // Search: page 2
+      renderOptions.showMore();
+      expect(helper.search).toHaveBeenCalledTimes(1);
+
+      // Render: page 2
+      searchResults = new SearchResults(helper.state, [
+        createSingleSearchResponse({
+          facets: { brand: { Apple: 100 } },
+          hits: secondPageHits,
+        }),
+      ]);
+      renderWidget({ results: searchResults });
+
+      renderOptions = renderFn.mock.calls[3][0];
+      expect(renderOptions.hits).toEqual([...firstPageHits, ...secondPageHits]);
+      expect(renderOptions.results).toEqual(searchResults);
+    }
+
+    // Refresh InstantSearch
+    {
+      const { helper, renderFn, renderWidget } = getInstance();
+
+      // Render: page 2
+      let searchResults = new SearchResults(helper.state, [
+        createSingleSearchResponse({ hits: secondPageHits }),
+      ]);
+      renderWidget({ results: searchResults });
+
+      // Simulate facets added to state by Dynamic Widgets
+      helper.setState(helper.state.addFacet('brand'));
+
+      // Rerender: page 2
+      searchResults = new SearchResults(helper.state, [
+        createSingleSearchResponse({
+          facets: { brand: { Apple: 100 } },
+          hits: secondPageHits,
+        }),
+      ]);
+      renderWidget({ results: searchResults });
+
+      const renderOptions = renderFn.mock.calls[2][0];
+      expect(renderOptions.hits).toEqual([...firstPageHits, ...secondPageHits]);
+      expect(renderOptions.results).toEqual(searchResults);
+    }
+  });
+
+  it('does overwrite custom cache when dynamic widgets have state of facets, but no results', () => {
+    const sessionStorageCache = createInfiniteHitsSessionStorageCache();
+    window.sessionStorage.clear();
+
+    function getInstance() {
+      const renderFn = jest.fn();
+      const makeWidget = connectInfiniteHits(renderFn);
+      const widget = makeWidget({ cache: sessionStorageCache });
+
+      const helper = algoliasearchHelper({} as SearchClient, '', {});
+      helper.search = jest.fn();
+
+      const instantSearchInstance = createInstantSearch();
+      instantSearchInstance.mainIndex.addWidgets([
+        { $$type: 'ais.dynamicWidgets', init() {} },
+      ]);
+
+      const initOptions = createInitOptions({
+        state: helper.state,
+        helper,
+        instantSearchInstance,
+      });
+
+      widget.init!(initOptions);
+
+      const renderWidget = (
+        args: Partial<ReturnType<typeof createRenderOptions>>
+      ) => {
+        const renderOptions = createRenderOptions({
+          state: helper.state,
+          helper,
+          instantSearchInstance,
+          ...args,
+        });
+
+        widget.render!(renderOptions);
+      };
+      return { helper, renderFn, renderWidget };
+    }
+
+    const firstPageHits = [{ objectID: '1' }, { objectID: '2' }];
+    const secondPageHits = [{ objectID: '3' }, { objectID: '4' }];
+
+    // Load InstantSearch
+    {
+      const { helper, renderFn, renderWidget } = getInstance();
+
+      // Render: page 1
+      let searchResults = new SearchResults(helper.state, [
+        createSingleSearchResponse({ hits: firstPageHits }),
+      ]);
+      renderWidget({ results: searchResults });
+
+      // Simulate facets added to state by Dynamic Widgets
+      helper.setState(helper.state.addFacet('brand'));
+
+      // Rerender: page 1
+      searchResults = new SearchResults(helper.state, [
+        createSingleSearchResponse({
+          // no facets for this result
+          facets: {},
+          hits: firstPageHits,
+        }),
+      ]);
+      renderWidget({ results: searchResults });
+
+      let renderOptions = renderFn.mock.calls[2][0];
+      expect(renderOptions.hits).toEqual(firstPageHits);
+      expect(renderOptions.results).toEqual(searchResults);
+
+      // Search: page 2
+      renderOptions.showMore();
+      expect(helper.search).toHaveBeenCalledTimes(1);
+
+      // Render: page 2
+      searchResults = new SearchResults(helper.state, [
+        createSingleSearchResponse({
+          // no facets for this result
+          facets: {},
+          hits: secondPageHits,
+        }),
+      ]);
+      renderWidget({ results: searchResults });
+
+      renderOptions = renderFn.mock.calls[3][0];
+      expect(renderOptions.hits).toEqual([...firstPageHits, ...secondPageHits]);
+      expect(renderOptions.results).toEqual(searchResults);
+    }
+
+    // Refresh InstantSearch
+    {
+      const { helper, renderFn, renderWidget } = getInstance();
+
+      // Render: page 2
+      let searchResults = new SearchResults(helper.state, [
+        createSingleSearchResponse({ hits: secondPageHits }),
+      ]);
+      renderWidget({ results: searchResults });
+
+      // Simulate facets added to state by Dynamic Widgets
+      helper.setState(helper.state.addFacet('brand'));
+
+      // Rerender: page 2
+      searchResults = new SearchResults(helper.state, [
+        createSingleSearchResponse({
+          // no facets for this result
+          facets: {},
+          hits: secondPageHits,
+        }),
+      ]);
+      renderWidget({ results: searchResults });
+
+      const renderOptions = renderFn.mock.calls[2][0];
+      expect(renderOptions.hits).toEqual([...firstPageHits, ...secondPageHits]);
+      expect(renderOptions.results).toEqual(searchResults);
+    }
+  });
+
   describe('dispose', () => {
     it('calls the unmount function', () => {
       const helper = algoliasearchHelper({} as SearchClient, '', {});
@@ -1397,6 +1633,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
             instantSearchInstance.sendEventToInsights
           ).toHaveBeenCalledWith({
             eventType: 'view',
+            eventModifier: 'internal',
             hits: [
               {
                 __position: 0,
@@ -1458,8 +1695,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
             stalledSearchDelay: 1,
             indexName: 'indexName',
           });
-          instantSearchInstance.sendEventToInsights = jest.fn();
           instantSearchInstance.start();
+          instantSearchInstance.sendEventToInsights = jest.fn();
 
           instantSearchInstance.addWidgets([widget]);
 

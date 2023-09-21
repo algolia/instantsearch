@@ -1,33 +1,36 @@
 /** @jsx h */
 
-import { h, render } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h, render } from 'preact';
+
+import Pagination from '../../components/Pagination/Pagination';
+import connectPagination from '../../connectors/pagination/connectPagination';
+import { component } from '../../lib/suit';
+import {
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
+
 import type {
   PaginationComponentCSSClasses,
   PaginationComponentTemplates,
 } from '../../components/Pagination/Pagination';
-import Pagination from '../../components/Pagination/Pagination';
 import type {
   PaginationConnectorParams,
   PaginationRenderState,
   PaginationWidgetDescription,
 } from '../../connectors/pagination/connectPagination';
-import connectPagination from '../../connectors/pagination/connectPagination';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { component } from '../../lib/suit';
-import type { Renderer, WidgetFactory } from '../../types';
+import type { Renderer, Template, WidgetFactory } from '../../types';
 
 const suit = component('Pagination');
 const withUsage = createDocumentationMessageGenerator({ name: 'pagination' });
 
 const defaultTemplates: PaginationComponentTemplates = {
-  previous: '‹',
-  next: '›',
-  first: '«',
-  last: '»',
+  previous: () => '‹',
+  next: () => '›',
+  page: ({ page }) => `${page}`,
+  first: () => '«',
+  last: () => '»',
 };
 
 const renderer =
@@ -158,22 +161,28 @@ export type PaginationTemplates = Partial<{
   /**
    * Label for the Previous link.
    */
-  previous: string;
+  previous: Template;
 
   /**
    * Label for the Next link.
    */
-  next: string;
+  next: Template;
+
+  /**
+   * Label for the link of a certain page
+   * Page is one-based, so `page` will be `1` for the first page.
+   */
+  page: Template<{ page: number }>;
 
   /**
    * Label for the First link.
    */
-  first: string;
+  first: Template;
 
   /**
    * Label for the Last link.
    */
-  last: string;
+  last: Template;
 }>;
 
 export type PaginationWidgetParams = {

@@ -3,10 +3,12 @@
  */
 /** @jsx h */
 
-import { h } from 'preact';
 import { shallow } from '@instantsearch/testutils/enzyme';
-import type { RefinementListItemProps } from '../RefinementListItem';
+import { h } from 'preact';
+
 import RefinementListItem from '../RefinementListItem';
+
+import type { RefinementListItemProps } from '../RefinementListItem';
 
 describe('RefinementListItem', () => {
   const props: RefinementListItemProps = {

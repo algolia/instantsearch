@@ -1,4 +1,5 @@
 import { storiesOf } from '@storybook/html';
+
 import { withHits } from '../.storybook/decorators';
 import '../.storybook/static/answers.css';
 
@@ -24,9 +25,7 @@ storiesOf('Results/Answers', module)
           queryLanguages: ['en'],
           attributesForPrediction: ['description'],
           templates: {
-            item: (hit) => {
-              return `<p>${hit._answer.extract}</p>`;
-            },
+            item: (hit, { html }) => html`<p>${hit._answer.extract}</p>`,
           },
         }),
       ]);
@@ -50,9 +49,7 @@ storiesOf('Results/Answers', module)
             header: ({ hits }) => {
               return hits.length === 0 ? '' : `<p>Answers</p>`;
             },
-            item: (hit) => {
-              return `<p>${hit._answer.extract}</p>`;
-            },
+            item: (hit, { html }) => html`<p>${hit._answer.extract}</p>`,
           },
         }),
       ]);
@@ -73,13 +70,11 @@ storiesOf('Results/Answers', module)
           queryLanguages: ['en'],
           attributesForPrediction: ['description'],
           templates: {
-            header: ({ hits }) => {
-              return hits.length === 0 ? '' : `<p>Answers</p>`;
+            header: ({ hits }, { html }) => {
+              return hits.length === 0 ? '' : html`<p>Answers</p>`;
             },
-            loader: `loading...`,
-            item: (hit) => {
-              return `<p>${hit._answer.extract}</p>`;
-            },
+            loader: () => `loading...`,
+            item: (hit, { html }) => html`<p>${hit._answer.extract}</p>`,
           },
         }),
       ]);
@@ -103,24 +98,22 @@ storiesOf('Results/Answers', module)
             root: 'my-Answers',
           },
           templates: {
-            loader: `
-            <div class="card-skeleton">
-              <div class="animated-background">
-                <div class="skel-mask-container">
-                  <div class="skel-mask skel-mask-1"></div>
-                  <div class="skel-mask skel-mask-2"></div>
-                  <div class="skel-mask skel-mask-3"></div>
+            loader: (_, { html }) => html`
+              <div class="card-skeleton">
+                <div class="animated-background">
+                  <div class="skel-mask-container">
+                    <div class="skel-mask skel-mask-1"></div>
+                    <div class="skel-mask skel-mask-2"></div>
+                    <div class="skel-mask skel-mask-3"></div>
+                  </div>
                 </div>
               </div>
-            </div>
             `,
-            item: (hit) => {
-              return `
-                <p class="title one-line">${hit.title}</p>
-                <div class="separator"></div>
-                <p class="description three-lines">${hit._answer.extract}</p>
-              `;
-            },
+            item: (hit, { html }) => html`
+              <p class="title one-line">${hit.title}</p>
+              <div class="separator"></div>
+              <p class="description three-lines">${hit._answer.extract}</p>
+            `,
           },
         }),
       ]);

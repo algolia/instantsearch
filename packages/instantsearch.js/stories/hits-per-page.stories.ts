@@ -1,4 +1,5 @@
 import { storiesOf } from '@storybook/html';
+
 import { withHits, withLifecycle } from '../.storybook/decorators';
 
 storiesOf('Pagination/HitsPerPage', module)

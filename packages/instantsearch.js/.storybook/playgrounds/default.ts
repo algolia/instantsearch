@@ -1,23 +1,22 @@
+import { HitsTemplates } from '../../src/widgets/hits/hits';
 import { Playground } from '../decorators';
 
-export const hitsItemTemplate = `
-<div
-  class="hits-image"
-  style="background-image: url({{image}})"
-></div>
-<article>
-  <header>
-    <strong>{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}</strong>
-  </header>
-  <p>
-    {{#helpers.snippet}}{ "attribute": "description" }{{/helpers.snippet}}
-  </p>
-  <footer>
-    <p>
-      <strong>{{price}}$</strong>
-    </p>
-  </footer>
-</article>
+export const hitsItemTemplate: HitsTemplates['item'] = (
+  hit,
+  { html, components }
+) => html`
+  <div class="hits-image" style="background-image: url(${hit.image})"></div>
+  <article>
+    <header>
+      <strong>${components.Highlight({ hit, attribute: 'name' })}</strong>
+    </header>
+    <p>${components.Snippet({ hit, attribute: 'description' })}</p>
+    <footer>
+      <p>
+        <strong>${hit.price}$</strong>
+      </p>
+    </footer>
+  </article>
 `;
 
 const instantSearchPlayground: Playground = function instantSearchPlayground({
@@ -33,7 +32,7 @@ const instantSearchPlayground: Playground = function instantSearchPlayground({
     typeof instantsearch.widgets.refinementList
   >({
     templates: {
-      header: 'Brands',
+      header: () => 'Brands',
     },
   })(instantsearch.widgets.refinementList);
 
@@ -49,7 +48,9 @@ const instantSearchPlayground: Playground = function instantSearchPlayground({
 
   const priceMenu = instantsearch.widgets.panel<
     typeof instantsearch.widgets.numericMenu
-  >({ templates: { header: 'Price' } })(instantsearch.widgets.numericMenu);
+  >({ templates: { header: () => 'Price' } })(
+    instantsearch.widgets.numericMenu
+  );
 
   search.addWidgets([
     priceMenu({
@@ -72,7 +73,7 @@ const instantSearchPlayground: Playground = function instantSearchPlayground({
     typeof instantsearch.widgets.ratingMenu
   >({
     templates: {
-      header: 'Rating',
+      header: () => 'Rating',
     },
   })(instantsearch.widgets.ratingMenu);
 
@@ -127,11 +128,19 @@ const instantSearchPlayground: Playground = function instantSearchPlayground({
     instantsearch.widgets.pagination({
       container: pagination,
     }),
+    instantsearch.widgets.hitsPerPage({
+      container: rightPanel.appendChild(document.createElement('div')),
+      items: [
+        { label: '16 per page', value: 16 },
+        { label: '32 per page', value: 32 },
+        { label: '64 per page', value: 64, default: true },
+      ],
+    }),
   ]);
 
   const insights = instantsearch.middlewares.createInsightsMiddleware({
     insightsClient: null,
-    onEvent: props => {
+    onEvent: (props) => {
       console.log('insights onEvent', props);
     },
   });

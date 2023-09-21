@@ -1,13 +1,14 @@
 /** @jsx h */
 
-import type { JSX } from 'preact';
 import { h, Component } from 'preact';
-import { warning, isEqual } from '../../lib/utils';
-import { renderTemplate } from '../../lib/templating';
 
-import type { BindEventForHits, SendEventForHits } from '../../lib/utils';
+import { renderTemplate } from '../../lib/templating';
+import { warning, isEqual } from '../../lib/utils';
+
 import type { PreparedTemplateProps } from '../../lib/templating';
+import type { BindEventForHits, SendEventForHits } from '../../lib/utils';
 import type { Templates } from '../../types';
+import type { JSX } from 'preact';
 
 const defaultProps = {
   data: {},
@@ -40,16 +41,21 @@ class Template extends Component<TemplateProps> {
   }
 
   public render() {
-    warning(
-      Object.keys(this.props.templates).every(
-        (key) => typeof this.props.templates[key] === 'function'
-      ),
-      `Hogan.js and string-based templates are deprecated and will not be supported in InstantSearch.js 5.x.
+    if (__DEV__) {
+      const nonFunctionTemplates = Object.keys(this.props.templates).filter(
+        (key) => typeof this.props.templates[key] !== 'function'
+      );
+      warning(
+        nonFunctionTemplates.length === 0,
+        `Hogan.js and string-based templates are deprecated and will not be supported in InstantSearch.js 5.x.
 
 You can replace them with function-form templates and use either the provided \`html\` function or JSX templates.
 
+String-based templates: ${nonFunctionTemplates.join(', ')}.
+
 See: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/#upgrade-templates`
-    );
+      );
+    }
 
     const RootTagName = this.props.rootTagName;
 

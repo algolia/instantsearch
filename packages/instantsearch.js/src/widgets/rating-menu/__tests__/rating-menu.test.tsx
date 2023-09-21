@@ -2,17 +2,17 @@
  * @jest-environment jsdom
  */
 /** @jsx h */
-import { h } from 'preact';
-
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import instantsearch from '../../../index.es';
-import { wait } from '@instantsearch/testutils/wait';
-import ratingMenu from '../rating-menu';
+import { cx } from '@algolia/ui-components-shared';
 import {
+  createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
-} from '@instantsearch/mocks/createAPIResponse';
-import { cx } from '@algolia/ui-components-shared';
+} from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils/wait';
+import { h } from 'preact';
+
+import instantsearch from '../../../index.es';
+import ratingMenu from '../rating-menu';
 
 beforeEach(() => {
   document.body.innerHTML = '';

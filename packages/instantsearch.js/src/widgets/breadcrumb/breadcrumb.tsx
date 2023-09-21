@@ -1,27 +1,30 @@
 /** @jsx h */
 
-import { h, render } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
+import { h, render } from 'preact';
+
+import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
+import connectBreadcrumb from '../../connectors/breadcrumb/connectBreadcrumb';
+import { component } from '../../lib/suit';
+import { prepareTemplateProps } from '../../lib/templating';
+import {
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
+
+import defaultTemplates from './defaultTemplates';
+
 import type {
   BreadcrumbComponentCSSClasses,
   BreadcrumbComponentTemplates,
 } from '../../components/Breadcrumb/Breadcrumb';
-import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
 import type {
   BreadcrumbWidgetDescription,
   BreadcrumbConnectorParams,
   BreadcrumbRenderState,
 } from '../../connectors/breadcrumb/connectBreadcrumb';
-import connectBreadcrumb from '../../connectors/breadcrumb/connectBreadcrumb';
-import defaultTemplates from './defaultTemplates';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { prepareTemplateProps } from '../../lib/templating';
-import { component } from '../../lib/suit';
-import type { WidgetFactory, Template, Renderer } from '../../types';
 import type { PreparedTemplateProps } from '../../lib/templating';
+import type { WidgetFactory, Template, Renderer } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'breadcrumb' });
 const suit = component('Breadcrumb');

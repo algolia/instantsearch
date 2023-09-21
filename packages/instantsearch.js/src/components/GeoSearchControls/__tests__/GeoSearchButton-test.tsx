@@ -3,8 +3,9 @@
  */
 /** @jsx h */
 
-import { h } from 'preact';
 import { shallow } from '@instantsearch/testutils/enzyme';
+import { h } from 'preact';
+
 import GeoSearchButton from '../GeoSearchButton';
 
 describe('GeoSearchButton', () => {

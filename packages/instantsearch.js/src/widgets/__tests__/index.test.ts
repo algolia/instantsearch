@@ -2,10 +2,11 @@
  * @jest-environment jsdom
  */
 /* global google */
-import type { PlacesInstance } from 'places.js';
 import * as widgets from '..';
+
 import type { UnknownWidgetFactory, Widget } from '../../types';
 import type { IndexWidget } from '../index/index';
+import type { PlacesInstance } from 'places.js';
 
 /**
  * Checklist when adding a new widget

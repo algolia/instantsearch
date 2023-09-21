@@ -1,46 +1,30 @@
 {
-  "name": "example-react-instantsearch-react-native",
-  "version": "8.0.0",
+  "name": "example-react-instantsearch-react-native-example",
+  "version": "11.0.0",
+  "private": true,
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "build": "echo \"Error: no build specified\" && exit 0",
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject",
-    "test": "echo \"Error: no test specified\" && exit 0",
-    "test:actual": "jest"
+    "eject": "expo eject"
   },
   "dependencies": {
-    "@ptomasroos/react-native-multi-slider": "2.2.2",
     "algoliasearch": "4.14.3",
-    "expo": "37.0.3",
-    "prop-types": "15.6.2",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
-    "react-instantsearch-native": "6.38.3",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.1.tar.gz",
-    "react-native-gesture-handler": "1.6.1",
-    "react-native-modal-dropdown": "0.7.0",
-    "react-native-reanimated": "1.7.0",
-    "react-native-router-flux": "4.2.0",
-    "react-native-screens": "2.2.0",
-    "react-native-star-rating": "1.1.0",
-    "react-native-vector-icons": "6.6.0",
-    "react-native-web": "~0.11.7"
+    "expo": "~44.0.0",
+    "expo-status-bar": "~1.2.0",
+    "instantsearch.js": "4.57.0",
+    "react": "17.0.1",
+    "react-instantsearch-core": "7.1.0",
+    "react-native": "0.64.3",
+    "react-native-web": "0.17.1"
   },
   "devDependencies": {
     "@babel/core": "7.15.5",
-    "babel-preset-expo": "8.1.0",
-    "jest-expo": "37.0.0",
-    "react-test-renderer": "17.0.2"
-  },
-  "private": true,
-  "jest": {
-    "preset": "jest-expo",
-    "transformIgnorePatterns": [
-      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|@sentry/.*|deprecated-react-native-listview|@ptomasroos/react-native-multi-slider)"
-    ]
+    "@types/react": "~17.0.21",
+    "@types/react-native": "~0.64.12",
+    "expo-cli": "5.1.1",
+    "typescript": "5.1.3"
   }
 }

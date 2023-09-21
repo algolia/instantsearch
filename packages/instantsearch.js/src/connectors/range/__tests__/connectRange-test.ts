@@ -1,18 +1,22 @@
-import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import connectRange from '../connectRange';
+
+import instantsearch from '../../..';
+import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
-import { createInstantSearch } from '../../../../test/createInstantSearch';
-import instantsearch from '../../..';
+import connectRange from '../connectRange';
+
+import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 
 function createFacetStatsResults({
   helper,
@@ -2216,7 +2220,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 });
 
 describe('insights', () => {
-  // See: https://github.com/algolia/instantsearch.js/pull/5085
+  // See: https://github.com/algolia/instantsearch/pull/5085
   it(`doesn't send event when a facet is added`, () => {
     const rendering = jest.fn();
     const makeWidget = connectRange(rendering);

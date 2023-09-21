@@ -1,4 +1,5 @@
 import { storiesOf } from '@storybook/html';
+
 import { withHits } from '../.storybook/decorators';
 
 storiesOf('Refinements/ClearRefinements', module)
@@ -31,7 +32,7 @@ storiesOf('Refinements/ClearRefinements', module)
           container,
           includedAttributes: ['query'],
           templates: {
-            resetLabel: 'Clear query',
+            resetLabel: () => 'Clear query',
           },
         }),
       ]);
@@ -46,7 +47,7 @@ storiesOf('Refinements/ClearRefinements', module)
             container,
             excludedAttributes: [],
             templates: {
-              resetLabel: 'Clear refinements and query',
+              resetLabel: () => 'Clear refinements and query',
             },
           }),
         ]);

@@ -1,11 +1,13 @@
+import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import algoliasearchHelper from 'algoliasearch-helper';
-import { createSendEventForFacet } from '../createSendEventForFacet';
-import type { SearchClient } from '../../../types';
+
 import { createInstantSearch } from '../../../../test/createInstantSearch';
+import { createSendEventForFacet } from '../createSendEventForFacet';
+import { isFacetRefined } from '../isFacetRefined';
+
+import type { SearchClient } from '../../../types';
 
 jest.mock('../isFacetRefined', () => ({ isFacetRefined: jest.fn() }));
-import { isFacetRefined } from '../isFacetRefined';
-import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 
 const createTestEnvironment = () => {
   const instantSearchInstance = createInstantSearch();
@@ -84,6 +86,26 @@ If you want to send a custom payload, you can pass one object: sendEvent(customP
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
         attribute: 'category',
         eventType: 'click',
+        insightsMethod: 'clickedFilters',
+        payload: {
+          eventName: 'Filter Applied',
+          filters: ['category:value'],
+          index: '',
+        },
+        widgetType: 'ais.customWidget',
+      });
+    });
+
+    it('sends with internal eventName', () => {
+      const { sendEvent, instantSearchInstance } = createTestEnvironment();
+      sendEvent('click:internal', 'value');
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(
+        1
+      );
+      expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+        attribute: 'category',
+        eventType: 'click',
+        eventModifier: 'internal',
         insightsMethod: 'clickedFilters',
         payload: {
           eventName: 'Filter Applied',

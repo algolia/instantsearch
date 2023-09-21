@@ -2,23 +2,26 @@
 /* global google */
 import { cx } from '@algolia/ui-components-shared';
 import { render } from 'preact';
+
+import connectGeoSearch from '../../connectors/geo-search/connectGeoSearch';
+import { component } from '../../lib/suit';
+import { renderTemplate } from '../../lib/templating';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
-import { renderTemplate } from '../../lib/templating';
-import { component } from '../../lib/suit';
+
+import createHTMLMarker from './createHTMLMarker';
+import defaultTemplates from './defaultTemplates';
+import renderer from './GeoSearchRenderer';
+
 import type {
   GeoSearchConnectorParams,
   GeoSearchWidgetDescription,
   GeoHit,
 } from '../../connectors/geo-search/connectGeoSearch';
-import connectGeoSearch from '../../connectors/geo-search/connectGeoSearch';
-import renderer from './GeoSearchRenderer';
-import defaultTemplates from './defaultTemplates';
-import type { HTMLMarkerArguments } from './createHTMLMarker';
-import createHTMLMarker from './createHTMLMarker';
 import type { GeoLoc, Template, WidgetFactory } from '../../types';
+import type { HTMLMarkerArguments } from './createHTMLMarker';
 
 export type CreateMarker = (args: {
   item: GeoHit;
@@ -68,7 +71,7 @@ export type GeoSearchMarker<TOptions> = {
    * See the documentation for more information:
    * https://developers.google.com/maps/documentation/javascript/reference/3/#MarkerOptions
    */
-  createOptions?(item: GeoHit): TOptions;
+  createOptions?: (item: GeoHit) => TOptions;
   /**
    * Object that takes an event type (ex: `click`, `mouseover`) as key and a
    * listener as value. The listener is provided with an object that contains:

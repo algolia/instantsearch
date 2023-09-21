@@ -3,8 +3,8 @@
  */
 
 import { mount } from '../../../test/utils';
-import QueryRuleContext from '../QueryRuleContext';
 import { __setState } from '../../mixins/widget';
+import QueryRuleContext from '../QueryRuleContext';
 import '../../../test/utils/sortedHtmlSerializer';
 
 jest.mock('../../mixins/widget');

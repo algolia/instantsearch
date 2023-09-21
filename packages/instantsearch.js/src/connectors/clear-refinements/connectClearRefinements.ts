@@ -1,4 +1,3 @@
-import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
 import {
   checkRendering,
   clearRefinements,
@@ -8,6 +7,7 @@ import {
   uniq,
   mergeSearchParameters,
 } from '../../lib/utils';
+
 import type {
   TransformItems,
   CreateURL,
@@ -15,6 +15,7 @@ import type {
   WidgetRenderState,
   ScopedResult,
 } from '../../types';
+import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'clear-refinements',
@@ -108,8 +109,8 @@ const connectClearRefinements: ClearRefinementsConnector =
       }
 
       type ConnectorState = {
-        refine(): void;
-        createURL(): string;
+        refine: () => void;
+        createURL: () => string;
         attributesToClear: AttributesToClear[];
       };
 
@@ -190,8 +191,8 @@ const connectClearRefinements: ClearRefinementsConnector =
             );
           };
 
-          connectorState.createURL = () =>
-            createURL(
+          connectorState.createURL = () => {
+            return createURL(
               mergeSearchParameters(
                 ...connectorState.attributesToClear.map(
                   ({ helper: indexHelper, items }) => {
@@ -203,6 +204,7 @@ const connectClearRefinements: ClearRefinementsConnector =
                 )
               )
             );
+          };
 
           const canRefine = connectorState.attributesToClear.some(
             (attributeToClear) => attributeToClear.items.length > 0

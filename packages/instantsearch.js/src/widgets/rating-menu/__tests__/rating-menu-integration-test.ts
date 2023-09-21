@@ -2,16 +2,19 @@
  * @jest-environment jsdom
  */
 
+import {
+  createSearchClient,
+  createMultiSearchResponse,
+} from '@instantsearch/mocks';
 import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { createMultiSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 import ratingMenu from '../rating-menu';
 
 function getInitializedWidget() {
@@ -57,8 +60,19 @@ describe('rendering', () => {
             },
           }).results
         ),
-        createURL(searchParams) {
-          return JSON.stringify(searchParams);
+        createURL(arg) {
+          if (typeof arg === 'function') {
+            return JSON.stringify(
+              widget.getWidgetSearchParameters(helper.state, {
+                uiState: widget.getWidgetUiState(arg({}), {
+                  searchParameters: helper.state,
+                  helper,
+                }),
+              })
+            );
+          }
+
+          return JSON.stringify(arg);
         },
       })
     );

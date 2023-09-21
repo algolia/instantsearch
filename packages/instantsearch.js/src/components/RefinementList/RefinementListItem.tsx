@@ -1,8 +1,10 @@
 /** @jsx h */
 
-import type { JSX } from 'preact';
 import { h } from 'preact';
+
 import Template from '../Template/Template';
+
+import type { JSX } from 'preact';
 
 export type RefinementListItemProps = {
   facetValueToRefine: string;

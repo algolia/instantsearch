@@ -33,13 +33,11 @@
                   <q v-if="refinement.attribute === 'query'">{{
                     refinement.label
                   }}</q>
-                  <template v-else>
-                    {{ refinement.label }}
-                  </template>
-                </span>
-                <button
+                  <template v-else>{{ refinement.label }}</template> </span
+                ><button
                   :class="suit('delete')"
-                  @click="item.refine(refinement)"
+                  type="button"
+                  @click.left.exact="item.refine(refinement)"
                 >
                   ✕
                 </button>
@@ -53,10 +51,11 @@
 </template>
 
 <script>
-import { createWidgetMixin } from '../mixins/widget';
 import { connectCurrentRefinements } from 'instantsearch.js/es/connectors';
+
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
+import { createWidgetMixin } from '../mixins/widget';
 
 export default {
   name: 'AisCurrentRefinements',

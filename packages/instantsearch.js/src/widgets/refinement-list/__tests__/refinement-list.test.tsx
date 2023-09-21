@@ -2,18 +2,18 @@
  * @jest-environment jsdom
  */
 /** @jsx h */
-import { h } from 'preact';
-
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import instantsearch from '../../../index.es';
-import { wait } from '@instantsearch/testutils/wait';
-import refinementList from '../refinement-list';
 import {
+  createSearchClient,
   createMultiSearchResponse,
   createSFFVResponse,
   createSingleSearchResponse,
-} from '@instantsearch/mocks/createAPIResponse';
+} from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils/wait';
 import { fireEvent, within } from '@testing-library/dom';
+import { h } from 'preact';
+
+import instantsearch from '../../../index.es';
+import refinementList from '../refinement-list';
 
 beforeEach(() => {
   document.body.innerHTML = '';
@@ -91,6 +91,7 @@ describe('refinementList', () => {
             type="submit"
           >
             <svg
+              aria-hidden="true"
               class="ais-SearchBox-submitIcon"
               height="10"
               viewBox="0 0 40 40"
@@ -108,6 +109,7 @@ describe('refinementList', () => {
             type="reset"
           >
             <svg
+              aria-hidden="true"
               class="ais-SearchBox-resetIcon"
               height="10"
               viewBox="0 0 20 20"
@@ -123,6 +125,7 @@ describe('refinementList', () => {
             hidden=""
           >
             <svg
+              aria-hidden="true"
               class="ais-SearchBox-loadingIcon"
               height="16"
               stroke="#444"
@@ -273,6 +276,7 @@ describe('refinementList', () => {
             type="submit"
           >
             <svg
+              aria-hidden="true"
               class="ais-SearchBox-submitIcon"
               height="10"
               viewBox="0 0 40 40"
@@ -289,6 +293,7 @@ describe('refinementList', () => {
             type="reset"
           >
             <svg
+              aria-hidden="true"
               class="ais-SearchBox-resetIcon"
               height="10"
               viewBox="0 0 20 20"
@@ -304,6 +309,7 @@ describe('refinementList', () => {
             hidden=""
           >
             <svg
+              aria-hidden="true"
               class="ais-SearchBox-loadingIcon"
               height="16"
               stroke="#444"

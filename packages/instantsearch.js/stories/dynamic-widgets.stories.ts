@@ -1,4 +1,5 @@
 import { storiesOf } from '@storybook/html';
+
 import { withHits } from '../.storybook/decorators';
 
 storiesOf('Basics/DynamicWidgets', module)
@@ -33,7 +34,7 @@ storiesOf('Basics/DynamicWidgets', module)
               }),
             (container) =>
               instantsearch.widgets.panel({
-                templates: { header: 'hierarchy' },
+                templates: { header: () => 'hierarchy' },
               })(instantsearch.widgets.hierarchicalMenu)({
                 container,
                 attributes: [
@@ -78,7 +79,7 @@ storiesOf('Basics/DynamicWidgets', module)
               }),
             (container) =>
               instantsearch.widgets.panel({
-                templates: { header: 'hierarchy' },
+                templates: { header: () => 'hierarchy' },
               })(instantsearch.widgets.hierarchicalMenu)({
                 container,
                 attributes: [

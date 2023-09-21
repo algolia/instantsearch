@@ -1,9 +1,10 @@
-import type { Connector, WidgetRenderState } from '../../types';
 import { noop } from '../../lib/utils';
+
+import type { Connector, WidgetRenderState } from '../../types';
 
 export type RelevantSortConnectorParams = Record<string, unknown>;
 
-type Refine = (relevancyStrictness: number) => void;
+type Refine = (relevancyStrictness: number | undefined) => void;
 
 export type RelevantSortRenderState = {
   /**
@@ -98,7 +99,7 @@ const connectRelevantSort: RelevantSortConnector = function connectRelevantSort(
 
       getWidgetRenderState({ results, helper }) {
         if (!connectorState.refine) {
-          connectorState.refine = (relevancyStrictness: number | undefined) => {
+          connectorState.refine = (relevancyStrictness) => {
             helper
               .setQueryParameter('relevancyStrictness', relevancyStrictness)
               .search();

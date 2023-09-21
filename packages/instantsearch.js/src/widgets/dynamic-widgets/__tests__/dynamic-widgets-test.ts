@@ -3,18 +3,21 @@
  */
 
 import {
+  createMultiSearchResponse,
+  createSearchClient,
+} from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils/wait';
+import { widgetSnapshotSerializer } from '@instantsearch/testutils/widgetSnapshotSerializer';
+import { SearchParameters, SearchResults } from 'algoliasearch-helper';
+
+import { index, searchBox, menu, dynamicWidgets } from '../..';
+import instantsearch from '../../..';
+import { createInstantSearch } from '../../../../test/createInstantSearch';
+import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { index, searchBox, menu, dynamicWidgets } from '../..';
-import { createInstantSearch } from '../../../../test/createInstantSearch';
-import { SearchParameters, SearchResults } from 'algoliasearch-helper';
-import { createMultiSearchResponse } from '@instantsearch/mocks/createAPIResponse';
-import { wait } from '@instantsearch/testutils/wait';
-import { widgetSnapshotSerializer } from '@instantsearch/testutils/widgetSnapshotSerializer';
 import refinementList from '../../refinement-list/refinement-list';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
-import instantsearch from '../../..';
 
 expect.addSnapshotSerializer(widgetSnapshotSerializer);
 
@@ -216,7 +219,7 @@ describe('dynamicWidgets()', () => {
 
     it('renders the widgets returned by transformItems', async () => {
       const instantSearchInstance = instantsearch({
-        indexName: '',
+        indexName: 'indexName',
         searchClient: createSearchClient(),
       });
       const rootContainer = document.createElement('div');
@@ -288,7 +291,7 @@ describe('dynamicWidgets()', () => {
 
     it('updates the position of widgets returned by transformItems', async () => {
       const instantSearchInstance = instantsearch({
-        indexName: '',
+        indexName: 'indexName',
         searchClient: createSearchClient(),
       });
       instantSearchInstance.start();
@@ -488,7 +491,7 @@ describe('dynamicWidgets()', () => {
 
     it('removes dom on dispose', async () => {
       const instantSearchInstance = instantsearch({
-        indexName: '',
+        indexName: 'indexName',
         searchClient: createSearchClient(),
       });
       instantSearchInstance.start();

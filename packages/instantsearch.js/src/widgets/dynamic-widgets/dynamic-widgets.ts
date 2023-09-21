@@ -1,7 +1,3 @@
-import type {
-  DynamicWidgetsConnectorParams,
-  DynamicWidgetsWidgetDescription,
-} from '../../connectors/dynamic-widgets/connectDynamicWidgets';
 import connectDynamicWidgets from '../../connectors/dynamic-widgets/connectDynamicWidgets';
 import { component } from '../../lib/suit';
 import {
@@ -9,6 +5,11 @@ import {
   getContainerNode,
   getWidgetAttribute,
 } from '../../lib/utils';
+
+import type {
+  DynamicWidgetsConnectorParams,
+  DynamicWidgetsWidgetDescription,
+} from '../../connectors/dynamic-widgets/connectDynamicWidgets';
 import type { Widget, WidgetFactory } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -32,12 +33,12 @@ export type DynamicWidgetsWidgetParams = {
    * Function to return a fallback widget when an attribute isn't found in
    * `widgets`.
    */
-  fallbackWidget?(args: {
+  fallbackWidget?: (args: {
     /** The attribute name to create a widget for. */
     attribute: string;
     /** CSS Selector or HTMLElement to insert the widget */
     container: HTMLElement;
-  }): Widget;
+  }) => Widget;
 };
 
 export type DynamicWidgetsWidget = WidgetFactory<

@@ -1,5 +1,3 @@
-import type { SearchResults } from 'algoliasearch-helper';
-import type { SendEventForHits } from '../../lib/utils';
 import {
   escapeHits,
   TAG_PLACEHOLDER,
@@ -9,7 +7,10 @@ import {
   noop,
   warning,
 } from '../../lib/utils';
+
+import type { SendEventForHits } from '../../lib/utils';
 import type { Hit, Connector, WidgetRenderState } from '../../types';
+import type { SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'autocomplete',
@@ -86,7 +87,10 @@ const connectAutocomplete: AutocompleteConnector = function connectAutocomplete(
   checkRendering(renderFn, withUsage());
 
   return (widgetParams) => {
-    const { escapeHTML = true } = widgetParams || {};
+    const {
+      // @MAJOR: this can default to false
+      escapeHTML = true,
+    } = widgetParams || {};
 
     warning(
       !(widgetParams as any).indices,
@@ -114,7 +118,7 @@ search.addWidgets([
     );
 
     type ConnectorState = {
-      refine?(query: string): void;
+      refine?: (query: string) => void;
     };
 
     const connectorState: ConnectorState = {};
@@ -140,7 +144,7 @@ search.addWidgets([
         const renderState = this.getWidgetRenderState(renderOptions);
 
         renderState.indices.forEach(({ sendEvent, hits }) => {
-          sendEvent('view', hits);
+          sendEvent('view:internal', hits);
         });
 
         renderFn(

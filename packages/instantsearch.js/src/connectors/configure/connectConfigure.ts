@@ -1,16 +1,18 @@
-import type {
-  SearchParameters,
-  PlainSearchParameters,
-  AlgoliaSearchHelper,
-} from 'algoliasearch-helper';
 import algoliasearchHelper from 'algoliasearch-helper';
-import type { Connector, WidgetRenderState } from '../../types';
+
 import {
   createDocumentationMessageGenerator,
   isPlainObject,
   mergeSearchParameters,
   noop,
 } from '../../lib/utils';
+
+import type { Connector, WidgetRenderState } from '../../types';
+import type {
+  SearchParameters,
+  PlainSearchParameters,
+  AlgoliaSearchHelper,
+} from 'algoliasearch-helper';
 
 /**
  * Refine the given search parameters.

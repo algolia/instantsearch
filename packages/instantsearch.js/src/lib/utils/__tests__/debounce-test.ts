@@ -1,4 +1,5 @@
 import { wait } from '@instantsearch/testutils/wait';
+
 import { debounce } from '../debounce';
 
 describe('debounce', () => {

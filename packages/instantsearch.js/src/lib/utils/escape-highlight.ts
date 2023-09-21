@@ -1,5 +1,6 @@
 import { escape } from './escape-html';
 import { isPlainObject } from './isPlainObject';
+
 import type { Hit, FacetHit, EscapedHits } from '../../types';
 
 export const TAG_PLACEHOLDER = {
@@ -12,6 +13,7 @@ export const TAG_REPLACEMENT = {
   highlightPostTag: '</mark>',
 };
 
+// @MAJOR: in the future, this should only escape, not replace
 function replaceTagsAndEscape(value: string): string {
   return escape(value)
     .replace(

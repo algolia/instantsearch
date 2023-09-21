@@ -1,8 +1,10 @@
+import { createSearchClient } from '@instantsearch/mocks';
 import algoliasearchHelper from 'algoliasearch-helper';
-import index from '../src/widgets/index/index';
-import type { InstantSearch } from '../src/types';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+
 import { defer } from '../src/lib/utils';
+import index from '../src/widgets/index/index';
+
+import type { InstantSearch } from '../src/types';
 
 export const createInstantSearch = (
   args: Partial<InstantSearch> = {}
@@ -46,7 +48,7 @@ export const createInstantSearch = (
     // Since we defer `onInternalStateChange` with our `defer` util which
     // creates a scoped deferred function, we're not able to spy that method.
     // We'll therefore need to override it when calling `createInstantSearch`.
-    // See https://github.com/algolia/instantsearch.js/blob/f3213b2f118d75acac31a1f6cf4640241c438e9d/src/lib/utils/defer.ts#L13-L28
+    // See https://github.com/algolia/instantsearch/blob/f3213b2f118d75acac31a1f6cf4640241c438e9d/src/lib/utils/defer.ts#L13-L28
     onInternalStateChange: jest.fn() as any,
     createURL: jest.fn(() => '#'),
     addWidget: jest.fn(),

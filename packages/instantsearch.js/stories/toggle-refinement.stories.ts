@@ -1,4 +1,5 @@
 import { storiesOf } from '@storybook/html';
+
 import { withHits, withLifecycle } from '../.storybook/decorators';
 
 storiesOf('Refinements/ToggleRefinement', module)
@@ -21,7 +22,7 @@ storiesOf('Refinements/ToggleRefinement', module)
           container,
           attribute: 'free_shipping',
           templates: {
-            labelText: 'Free Shipping (toggle single value)',
+            labelText: () => 'Free Shipping (toggle single value)',
           },
         }),
       ]);
@@ -37,7 +38,7 @@ storiesOf('Refinements/ToggleRefinement', module)
           on: 'Sony',
           off: 'Canon',
           templates: {
-            labelText: 'Canon (not checked) or sony (checked)',
+            labelText: () => 'Canon (not checked) or sony (checked)',
           },
         }),
       ]);
@@ -51,7 +52,7 @@ storiesOf('Refinements/ToggleRefinement', module)
           container: node,
           attribute: 'free_shipping',
           templates: {
-            labelText: 'Free Shipping (toggle single value)',
+            labelText: () => 'Free Shipping (toggle single value)',
           },
         })
       );

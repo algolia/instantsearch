@@ -2,18 +2,20 @@
  * @jest-environment jsdom
  */
 
-import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
+import { createSearchClient } from '@instantsearch/mocks';
+import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import algoliasearchHelper from 'algoliasearch-helper';
-import type { VNode } from 'preact';
 import { render as preactRender } from 'preact';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+
 import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
-import type { PoweredByProps } from '../../../components/PoweredBy/PoweredBy';
 import poweredBy from '../powered-by';
+
+import type { PoweredByProps } from '../../../components/PoweredBy/PoweredBy';
+import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
+import type { VNode } from 'preact';
 
 const render = castToJestMock(preactRender);
 jest.mock('preact', () => {

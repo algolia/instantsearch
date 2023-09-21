@@ -1,4 +1,5 @@
 import { storiesOf } from '@storybook/html';
+
 import { withHits } from '../.storybook/decorators';
 
 storiesOf('Refinements/CurrentRefinements', module)
@@ -140,7 +141,7 @@ storiesOf('Refinements/CurrentRefinements', module)
           container: toggleRefinementContainer,
           attribute: 'free_shipping',
           templates: {
-            labelText: 'Free Shipping',
+            labelText: () => 'Free Shipping',
           },
         }),
       ]);

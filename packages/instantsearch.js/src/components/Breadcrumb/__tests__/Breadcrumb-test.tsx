@@ -3,16 +3,18 @@
  */
 /** @jsx h */
 
-import { h } from 'preact';
 import { render, fireEvent } from '@testing-library/preact';
-import type { BreadcrumbProps } from '../Breadcrumb';
-import Breadcrumb from '../Breadcrumb';
+import { h } from 'preact';
+
 import { prepareTemplateProps } from '../../../lib/templating';
 import defaultTemplates from '../../../widgets/breadcrumb/defaultTemplates';
+import Breadcrumb from '../Breadcrumb';
+
+import type { BreadcrumbProps } from '../Breadcrumb';
 
 const defaultProps: BreadcrumbProps = {
   items: [],
-  createURL: (data: string) => data,
+  createURL: (data) => data as string,
   refine: () => {},
   cssClasses: {
     root: 'root',
@@ -115,7 +117,7 @@ describe('Breadcrumb', () => {
       fireEvent.click(firstLink);
 
       expect(refine).toHaveBeenCalledTimes(2);
-      expect(refine).toHaveBeenCalledWith(undefined);
+      expect(refine).toHaveBeenCalledWith(null);
     });
   });
 });

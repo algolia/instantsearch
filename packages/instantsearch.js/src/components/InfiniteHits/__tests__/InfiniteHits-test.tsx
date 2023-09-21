@@ -3,12 +3,14 @@
  */
 /** @jsx h */
 
-import { h } from 'preact';
+import { createSingleSearchResponse } from '@instantsearch/mocks';
 import { render } from '@testing-library/preact';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
+import { h } from 'preact';
+
 import InfiniteHits from '../InfiniteHits';
+
 import type { Hit, SearchResponse } from '../../../types';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 
 function createResults(partialResults: Partial<SearchResponse<any>>) {
   return new SearchResults(new SearchParameters(), [

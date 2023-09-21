@@ -1,4 +1,5 @@
 import { storiesOf } from '@storybook/html';
+
 import { withHits } from '../.storybook/decorators';
 
 storiesOf('Pagination/Pagination', module)
@@ -75,10 +76,10 @@ storiesOf('Pagination/Pagination', module)
         instantsearch.widgets.pagination({
           container,
           templates: {
-            previous: 'Previous',
-            next: 'Next',
-            first: 'First',
-            last: 'Last',
+            previous: () => 'Previous',
+            next: () => 'Next',
+            first: () => 'First',
+            last: () => 'Last',
           },
         }),
       ]);

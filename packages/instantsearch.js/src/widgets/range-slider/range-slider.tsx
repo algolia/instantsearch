@@ -1,21 +1,23 @@
 /** @jsx h */
 
-import { h, render } from 'preact';
 import { cx } from '@algolia/ui-components-shared';
-import type { RangeSliderComponentCSSClasses } from '../../components/Slider/Slider';
+import { h, render } from 'preact';
+
 import Slider from '../../components/Slider/Slider';
+import connectRange from '../../connectors/range/connectRange';
+import { component } from '../../lib/suit';
+import {
+  getContainerNode,
+  createDocumentationMessageGenerator,
+} from '../../lib/utils';
+
+import type { RangeSliderComponentCSSClasses } from '../../components/Slider/Slider';
 import type {
   RangeBoundaries,
   RangeConnectorParams,
   RangeRenderState,
   RangeWidgetDescription,
 } from '../../connectors/range/connectRange';
-import connectRange from '../../connectors/range/connectRange';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
-import { component } from '../../lib/suit';
 import type { Renderer, WidgetFactory } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'range-slider' });
@@ -88,7 +90,7 @@ type RangeSliderTooltipOptions = {
    * @example
    * { format(rawValue) {return '$' + Math.round(rawValue).toLocaleString() } }
    */
-  format(value: number): string;
+  format: (value: number) => string;
 };
 
 export type RangeSliderWidgetParams = {

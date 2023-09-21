@@ -2,11 +2,11 @@
  * @jest-environment jsdom
  */
 /** @jsx h */
+import { createSearchClient } from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils/wait';
 import { h } from 'preact';
 
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
 import instantsearch from '../../../index.es';
-import { wait } from '@instantsearch/testutils/wait';
 import toggleRefinement from '../toggle-refinement';
 
 beforeEach(() => {

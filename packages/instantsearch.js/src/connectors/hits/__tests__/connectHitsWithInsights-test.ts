@@ -1,13 +1,17 @@
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
-import { createSearchClient } from '@instantsearch/mocks/createSearchClient';
+
 import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import { createSingleSearchResponse } from '@instantsearch/mocks/createAPIResponse';
 import connectHitsWithInsights from '../connectHitsWithInsights';
+
 import type { Hit } from '../../../types';
 
 jest.mock('../../../lib/utils/hits-absolute-position', () => ({

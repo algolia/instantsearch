@@ -1,4 +1,5 @@
 import { storiesOf } from '@storybook/html';
+
 import { withHits } from '../.storybook/decorators';
 
 storiesOf('Refinements/RangeInput', module)
@@ -72,8 +73,8 @@ storiesOf('Refinements/RangeInput', module)
           min: 10,
           max: 500,
           templates: {
-            separatorText: '→',
-            submitText: 'Refine',
+            separatorText: () => '→',
+            submitText: () => 'Refine',
           },
         }),
       ]);

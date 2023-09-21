@@ -3,9 +3,9 @@
  */
 
 import { mount, nextTick } from '../../../test/utils';
-import DynamicWidgets from '../DynamicWidgets';
 import { __setState } from '../../mixins/widget';
 import { AisPanel } from '../../widgets';
+import DynamicWidgets from '../DynamicWidgets';
 jest.mock('../../mixins/widget');
 import '../../../test/utils/sortedHtmlSerializer';
 
