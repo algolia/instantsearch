@@ -91,7 +91,7 @@ export function InstantSearchNext<
       if (this.isDisposed) {
         return;
       }
-      router.push(url);
+      router.push(url, { scroll: false });
     };
 
     if (typeof passedRouting === 'object') {
