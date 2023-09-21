@@ -203,7 +203,7 @@ const getQuestions = ({ appName }) => ({
     },
     {
       type: 'confirm',
-      name: 'useAutocomplete',
+      name: 'autocomplete',
       message: 'Use an autocomplete as a search box',
       suffix: `\n  ${chalk.gray(
         'Displays a list of suggested and recent searches as you type'
@@ -234,7 +234,7 @@ const getQuestions = ({ appName }) => ({
         'Used to populate the autocomplete with suggested searches'
       )}`,
       default: 'instant_search_demo_query_suggestions',
-      when: ({ useAutocomplete }) => useAutocomplete,
+      when: ({ autocomplete }) => autocomplete,
     },
     {
       type: 'list',
@@ -282,7 +282,7 @@ const getQuestions = ({ appName }) => ({
           ];
         }
       },
-      when: ({ useAutocomplete }) => useAutocomplete,
+      when: ({ autocomplete }) => autocomplete,
     },
   ],
   widget: [
