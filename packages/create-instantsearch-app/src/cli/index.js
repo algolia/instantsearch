@@ -209,11 +209,11 @@ const getQuestions = ({ appName }) => ({
         'Displays a list of suggested and recent searches as you type'
       )}`,
       default: true,
-      when: ({ template }) => {
+      when: ({ libraryVersion, template }) => {
         const templatePath = getTemplatePath(template);
         const templateConfig = getAppTemplateConfig(templatePath);
 
-        const selectedLibraryVersion = answers.libraryVersion;
+        const selectedLibraryVersion = libraryVersion;
         const requiredLibraryVersion =
           templateConfig.flags && templateConfig.flags.autocomplete;
         const supportsAutocomplete =
