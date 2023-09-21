@@ -1,5 +1,5 @@
 const { algoliasearch, instantsearch } = window;
-{{#if autocomplete}}
+{{#if flags.autocomplete}}
 const { autocomplete } = window['@algolia/autocomplete-js'];
 const { createLocalStorageRecentSearchesPlugin } = window[
   '@algolia/autocomplete-plugin-recent-searches'
@@ -17,12 +17,12 @@ const search = instantsearch({
   {{#if flags.insights}}insights: true,{{/if}}
 });
 
-{{#if autocomplete}}
+{{#if flags.autocomplete}}
 const virtualSearchBox = instantsearch.connectors.connectSearchBox(() => {});
 {{/if}}
 
 search.addWidgets([
-  {{#unless autocomplete}}
+  {{#unless flags.autocomplete}}
   instantsearch.widgets.searchBox({
     container: '#searchbox',
     {{#if searchPlaceholder}}
@@ -92,7 +92,7 @@ search.addWidgets([
 
 search.start();
 
-{{#if autocomplete}}
+{{#if flags.autocomplete}}
 const recentSearchesPlugin = createLocalStorageRecentSearchesPlugin({
   key: 'instantsearch',
   limit: 3,

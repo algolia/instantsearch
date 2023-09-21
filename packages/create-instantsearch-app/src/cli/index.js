@@ -202,13 +202,17 @@ const getQuestions = ({ appName }) => ({
         attributesForFaceting.length === 0 && appId && apiKey && indexName,
     },
     {
-      type: 'confirm',
-      name: 'autocomplete',
-      message: 'Use an autocomplete as a search box',
-      suffix: `\n  ${chalk.gray(
-        'Displays a list of suggested and recent searches as you type'
-      )}`,
-      default: true,
+      type: 'list',
+      name: 'searchInputType',
+      message: 'Type of search input',
+      choices: [
+        {
+          name: 'Autocomplete with suggested and recent searches',
+          value: 'autocomplete',
+        },
+        { name: 'Regular search box', value: 'searchbox' },
+      ],
+      default: 'autocomplete',
       when: ({ libraryVersion, template }) => {
         const templatePath = getTemplatePath(template);
         const templateConfig = getAppTemplateConfig(templatePath);
@@ -229,12 +233,10 @@ const getQuestions = ({ appName }) => ({
     {
       type: 'input',
       name: 'querySuggestionsIndexName',
-      message: 'Index name for Query Suggestions',
-      suffix: `\n  ${chalk.gray(
-        'Used to populate the autocomplete with suggested searches'
-      )}`,
+      message: 'Index name for suggested searches',
+      suffix: `\n  ${chalk.gray('This must be a Query Suggestions index')}`,
       default: 'instant_search_demo_query_suggestions',
-      when: ({ autocomplete }) => autocomplete,
+      when: ({ searchInputType }) => searchInputType === 'autocomplete',
     },
     {
       type: 'list',
@@ -282,7 +284,7 @@ const getQuestions = ({ appName }) => ({
           ];
         }
       },
-      when: ({ autocomplete }) => autocomplete,
+      when: ({ searchInputType }) => searchInputType === 'autocomplete',
     },
   ],
   widget: [
