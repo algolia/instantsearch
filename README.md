@@ -26,6 +26,7 @@ It is part of the InstantSearch family which is designed for different platforms
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+
 - [Packages](#packages)
 - [Contributing](#contributing)
 - [License](#license)

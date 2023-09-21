@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.3](https://github.com/algolia/instantsearch/compare/instantsearch-codemods@0.1.2...instantsearch-codemods@0.1.3) (2023-09-19)
+
+
+### Bug Fixes
+
+* **prettier:** consistent version ([#5850](https://github.com/algolia/instantsearch/issues/5850)) ([ca59c6d](https://github.com/algolia/instantsearch/commit/ca59c6dbd5c9eac4e2e0179a24e39bca997ae141))
+
+
+
+
+
 ## [0.1.2](https://github.com/algolia/instantsearch/compare/instantsearch-codemods@0.1.1...instantsearch-codemods@0.1.2) (2023-08-15)
 
 

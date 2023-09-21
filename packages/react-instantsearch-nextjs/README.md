@@ -75,10 +75,12 @@ const searchClient = algoliasearch('YourApplicationID', 'YourSearchOnlyAPIKey');
 export function Search() {
   return (
 -   <InstantSearch indexName="YourIndexName" searchClient={searchClient}>
-+   <InstantSearchSSRNext indexName="YourIndexName" searchClient={searchClient}>
++   <InstantSearchNext indexName="YourIndexName" searchClient={searchClient}>
       <SearchBox />
       {/* other widgets */}
-    </InstantSearch>
+
+-   </InstantSearch>
++   </InstantSearchNext>
   );
 }
 ```
