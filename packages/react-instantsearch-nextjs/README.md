@@ -58,7 +58,7 @@ export function Search() {
 }
 ```
 
-Import the `<InstantSearchNext>` component from the `react-instantsearch-nextjs` package, and replace the <%= widget_link('instantsearch', 'react') %> component with it, without changing the props.
+Import the `<InstantSearchNext>` component from the `react-instantsearch-nextjs` package, and replace the [`<InstantSearch>`](https://www.algolia.com/doc/api-reference/widgets/instantsearch/react/) component with it, without changing the props.
 
 
 ```diff
