@@ -264,7 +264,7 @@ const getQuestions = ({ appName }) => ({
             ...versions,
           ];
         } catch (err) {
-          const fallbackLibraryVersion = '1.0.0';
+          const fallbackLibraryVersion = '1.11.0';
 
           console.log();
           console.error(
