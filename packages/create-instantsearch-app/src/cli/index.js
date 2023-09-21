@@ -247,7 +247,7 @@ const getQuestions = ({ appName }) => ({
 
         try {
           const versions = await fetchLibraryVersions(libraryName);
-          const latestStableVersion = semver.maxSatisfying(versions, '*', {
+          const latestStableVersion = semver.maxSatisfying(versions, '1', {
             includePrerelease: false,
           });
 
