@@ -75,12 +75,13 @@
     </button>
 
     <span
-      :hidden="!showLoadingIndicator && !shouldShowLoadingIndicator"
+      v-if="showLoadingIndicator"
+      :hidden="!shouldShowLoadingIndicator"
       :class="suit('loadingIndicator')"
     >
       <slot name="loading-indicator">
         <svg
-          :aria-hidden="!showLoadingIndicator && !shouldShowLoadingIndicator"
+          :aria-hidden="!shouldShowLoadingIndicator"
           aria-label="Results are loading"
           width="16"
           height="16"

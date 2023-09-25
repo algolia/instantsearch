@@ -74,7 +74,7 @@ export default {
     },
     showLoadingIndicator: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     submitTitle: {
       type: String,

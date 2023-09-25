@@ -37,7 +37,7 @@ exports[`SearchBox Rendering with custom templates 1`] = `
         }
       }
       hidden={false}
-      title="Submit the search query."
+      title="Submit the search query"
       type="submit"
     />
     <button
@@ -48,7 +48,7 @@ exports[`SearchBox Rendering with custom templates 1`] = `
         }
       }
       hidden={true}
-      title="Clear the search query."
+      title="Clear the search query"
       type="reset"
     />
     <span

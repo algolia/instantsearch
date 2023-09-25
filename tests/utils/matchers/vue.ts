@@ -41,7 +41,7 @@ const toHaveBooleanAttribute =
     if ((isVue2 && value === attribute) || (isVue3 && value === '')) {
       return {
         pass: true,
-        message: () => '',
+        message: () => `bl ${wrapper.html()} ${attribute}:${value}`,
       };
     } else {
       return {
