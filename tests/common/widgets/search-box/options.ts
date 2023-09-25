@@ -29,6 +29,8 @@ function normalizeSnapshot(html: string) {
       .replace(/hidden="hidden"/g, 'hidden=""')
       // Vue adds whitespace between some tags
       .replace(/>\s+</g, '><')
+      // In CI Vue3 keeps comments
+      .replace(/<!-- .*? -->/g, '')
   );
 }
 
