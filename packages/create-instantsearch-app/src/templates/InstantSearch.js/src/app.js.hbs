@@ -132,7 +132,9 @@ const querySuggestionsPlugin = createQuerySuggestionsPlugin({
 
 autocomplete({
   container: '#searchbox',
-  placeholder: 'Search for products',
+  {{#if searchPlaceholder}}
+    placeholder: '{{searchPlaceholder}}',
+  {{/if}}
   openOnFocus: true,
   detachedMediaQuery: 'none',
   onSubmit({ state }) {
