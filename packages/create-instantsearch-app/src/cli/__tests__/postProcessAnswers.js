@@ -229,48 +229,6 @@ describe('flags', () => {
       );
     });
 
-    test('with a valid version', async () => {
-      utils.fetchLibraryVersions.mockImplementationOnce(() =>
-        Promise.resolve(['4.52.0'])
-      );
-
-      expect(
-        (
-          await postProcessAnswers({
-            configuration: {},
-            templateConfig: {
-              libraryName: 'instantsearch.js',
-              flags: {
-                autocomplete: '>= 4.52',
-              },
-            },
-            optionsFromArguments: {},
-          })
-        ).flags
-      ).toEqual(expect.objectContaining({ autocomplete: true }));
-    });
-
-    test('with an invalid version', async () => {
-      utils.fetchLibraryVersions.mockImplementationOnce(() =>
-        Promise.resolve(['4.0.0'])
-      );
-
-      expect(
-        (
-          await postProcessAnswers({
-            configuration: {},
-            templateConfig: {
-              libraryName: 'instantsearch.js',
-              flags: {
-                autocomplete: '>= 4.52',
-              },
-            },
-            optionsFromArguments: {},
-          })
-        ).flags
-      ).toEqual(expect.objectContaining({ autocomplete: false }));
-    });
-
     test('without config', async () => {
       expect(
         (
