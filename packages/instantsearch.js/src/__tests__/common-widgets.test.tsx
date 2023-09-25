@@ -372,6 +372,16 @@ const testSetups: TestSetupsMap<TestSuites> = {
       })
       .start();
   },
+  createSearchBoxWidgetTests({ instantSearchOptions, widgetParams }) {
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        searchBox({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .start();
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -387,6 +397,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createHitsPerPageWidgetTests: undefined,
   createClearRefinementsWidgetTests: undefined,
   createCurrentRefinementsWidgetTests: undefined,
+  createSearchBoxWidgetTests: undefined,
 };
 
 describe('Common widget tests (InstantSearch.js)', () => {

@@ -66,7 +66,7 @@ export default {
   props: {
     placeholder: {
       type: String,
-      default: 'Search here…',
+      default: '',
     },
     autofocus: {
       type: Boolean,
@@ -78,11 +78,11 @@ export default {
     },
     submitTitle: {
       type: String,
-      default: 'Search',
+      default: 'Submit the search query',
     },
     resetTitle: {
       type: String,
-      default: 'Clear',
+      default: 'Clear the search query',
     },
     value: {
       type: String,

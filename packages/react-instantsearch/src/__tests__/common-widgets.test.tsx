@@ -266,6 +266,14 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </form>
     );
   },
+  createSearchBoxWidgetTests({ instantSearchOptions, widgetParams }) {
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <SearchBox {...widgetParams} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -281,6 +289,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createHitsPerPageWidgetTests: { act },
   createClearRefinementsWidgetTests: { act },
   createCurrentRefinementsWidgetTests: { act },
+  createSearchBoxWidgetTests: { act },
 };
 
 /**

@@ -33,6 +33,7 @@ const defaultTemplate: SearchBoxComponentTemplates = {
   loadingIndicator({ cssClasses }) {
     return (
       <svg
+        aria-label="Results are loading"
         className={cssClasses.loadingIcon}
         width="16"
         height="16"

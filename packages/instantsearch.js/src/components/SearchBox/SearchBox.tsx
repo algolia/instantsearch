@@ -170,6 +170,7 @@ class SearchBox extends Component<
           onReset={this.onReset}
         >
           <input
+            aria-label="Search"
             ref={this.input}
             value={this.state.query}
             disabled={this.props.disabled}
@@ -195,7 +196,7 @@ class SearchBox extends Component<
             rootProps={{
               className: cssClasses.submit,
               type: 'submit',
-              title: 'Submit the search query.',
+              title: 'Submit the search query',
               hidden: !showSubmit,
             }}
             templates={templates}
@@ -208,7 +209,7 @@ class SearchBox extends Component<
             rootProps={{
               className: cssClasses.reset,
               type: 'reset',
-              title: 'Clear the search query.',
+              title: 'Clear the search query',
               hidden: !(
                 showReset &&
                 this.state.query.trim() &&
