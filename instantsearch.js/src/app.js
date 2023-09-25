@@ -8,6 +8,7 @@ const search = instantsearch({
   
 });
 
+
 search.addWidgets([
   instantsearch.widgets.searchBox({
     container: '#searchbox',
@@ -38,3 +39,4 @@ search.addWidgets([
 ]);
 
 search.start();
+

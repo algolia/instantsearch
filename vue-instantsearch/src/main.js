@@ -7,5 +7,5 @@ Vue.config.productionTip = false;
 Vue.use(InstantSearch);
 
 new Vue({
-  render: h => h(App),
+  render: (h) => h(App),
 }).$mount('#app');
