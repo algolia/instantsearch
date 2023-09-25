@@ -185,4 +185,60 @@ describe('flags', () => {
       ).toEqual(expect.objectContaining({ insights: false }));
     });
   });
+
+  describe('autocomplete', () => {
+    test('with usage of autocomplete in searchInputType', async () => {
+      expect(
+        await postProcessAnswers({
+          configuration: {},
+          templateConfig: {
+            libraryName: 'instantsearch.js',
+            flags: {
+              autocomplete: '>= 4.52',
+            },
+          },
+          optionsFromArguments: {},
+          answers: { searchInputType: 'autocomplete' },
+        })
+      ).toEqual(
+        expect.objectContaining({
+          searchInputType: 'autocomplete',
+          flags: expect.objectContaining({ autocomplete: true }),
+        })
+      );
+    });
+
+    test('without usage of autocomplete in searchInputType', async () => {
+      expect(
+        await postProcessAnswers({
+          configuration: {},
+          templateConfig: {
+            libraryName: 'instantsearch.js',
+            flags: {
+              autocomplete: '>= 4.52',
+            },
+          },
+          optionsFromArguments: {},
+          answers: { searchInputType: 'searchbox' },
+        })
+      ).toEqual(
+        expect.objectContaining({
+          searchInputType: 'searchbox',
+          flags: expect.objectContaining({ autocomplete: false }),
+        })
+      );
+    });
+
+    test('without config', async () => {
+      expect(
+        (
+          await postProcessAnswers({
+            configuration: {},
+            templateConfig: {},
+            optionsFromArguments: {},
+          })
+        ).flags
+      ).toEqual(expect.objectContaining({ autocomplete: false }));
+    });
+  });
 });
