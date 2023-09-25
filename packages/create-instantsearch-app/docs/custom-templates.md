@@ -8,7 +8,6 @@ Besides all the InstantSearch templates provided, the Create InstantSearch API e
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Defining the template](#defining-the-template)
   - [`libraryName`](#libraryname)
   - [`tasks`](#tasks)
