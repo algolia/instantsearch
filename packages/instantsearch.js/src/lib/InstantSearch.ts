@@ -258,10 +258,6 @@ Use \`InstantSearch.status === "stalled"\` instead.`
       },
     } = options;
 
-    if (indexName === null) {
-      throw new Error(withUsage('The `indexName` option is required.'));
-    }
-
     if (searchClient === null) {
       throw new Error(withUsage('The `searchClient` option is required.'));
     }
