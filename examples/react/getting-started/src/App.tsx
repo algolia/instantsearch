@@ -9,8 +9,6 @@ import {
   Pagination,
   RefinementList,
   SearchBox,
-  DynamicWidgets,
-  CurrentRefinements,
 } from 'react-instantsearch';
 
 import { Panel } from './Panel';
@@ -23,24 +21,16 @@ const searchClient = algoliasearch(
 );
 
 export function App() {
-  const [showFilters, setShowFilters] = React.useState(true);
-
-  const queryParameters = new URLSearchParams(window.location.search);
-  const disposeMode = queryParameters.get('disposeMode') || 'searchParameters';
-
   return (
     <div>
       <header className="header">
-        <h1 className="header-title">Current dispose mode: {disposeMode}</h1>
+        <h1 className="header-title">
+          <a href="/">Getting started</a>
+        </h1>
         <p className="header-subtitle">
-          <a
-            href={`?disposeMode=${
-              disposeMode === 'searchParameters'
-                ? 'uiState'
-                : 'searchParameters'
-            }`}
-          >
-            Switch
+          using{' '}
+          <a href="https://github.com/algolia/instantsearch/tree/master/packages/react-instantsearch">
+            React InstantSearch
           </a>
         </p>
       </header>
@@ -50,30 +40,22 @@ export function App() {
           searchClient={searchClient}
           indexName="instant_search"
           insights={true}
-          disposeMode={disposeMode}
         >
           <Configure hitsPerPage={8} />
           <div className="search-panel">
             <div className="search-panel__filters">
-              <button onClick={() => setShowFilters(!showFilters)}>
-                Toggle filters
-              </button>
-              {showFilters && (
-                <DynamicWidgets fallbackComponent={FallbackComponent} />
-              )}
+              <Panel header="brand">
+                <RefinementList attribute="brand" />
+              </Panel>
             </div>
 
             <div className="search-panel__results">
               <SearchBox placeholder="" className="searchbox" />
-              <CurrentRefinements />
               <Hits hitComponent={HitComponent} />
 
               <div className="pagination">
                 <Pagination />
               </div>
-            </div>
-            <div className="search-panel__filters">
-              <DynamicWidgets fallbackComponent={FallbackComponent} />
             </div>
           </div>
         </InstantSearch>
@@ -96,13 +78,5 @@ function HitComponent({ hit }: HitProps) {
         <Highlight attribute="description" hit={hit} />
       </p>
     </article>
-  );
-}
-
-function FallbackComponent({ attribute }: any) {
-  return (
-    <Panel header={attribute}>
-      <RefinementList attribute={attribute} />
-    </Panel>
   );
 }

@@ -51,7 +51,6 @@ em {
 
 .search-panel {
   display: flex;
-  gap: 1rem;
 }
 
 .search-panel__filters {
