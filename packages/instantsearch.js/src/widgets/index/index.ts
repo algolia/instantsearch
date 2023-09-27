@@ -389,60 +389,41 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       );
 
       if (localInstantSearchInstance && Boolean(widgets.length)) {
-        if (
-          localInstantSearchInstance.modes.disposeMode === 'searchParameters'
-        ) {
-          // Update helper state with cleaned local ui state
-          const initialSearchParameters = widgets.reduce((state, widget) => {
-            // the `dispose` method exists at this point we already assert it
-            const next = widget.dispose!({
-              helper: helper!,
-              state,
-              parent: this,
-            });
-
-            return next || state;
-          }, helper!.state);
-
-          localUiState = getLocalWidgetsUiState(localWidgets, {
-            searchParameters: initialSearchParameters,
+        const cleanedState = widgets.reduce((state, widget) => {
+          // the `dispose` method exists at this point we already assert it
+          const next = widget.dispose!({
             helper: helper!,
+            state,
+            parent: this,
           });
 
-          helper!.setState(
-            getLocalWidgetsSearchParameters(localWidgets, {
+          return next || state;
+        }, helper!.state);
+
+        const newState = localInstantSearchInstance.future
+          .preserveSharedStateOnUnmount
+          ? getLocalWidgetsSearchParameters(localWidgets, {
               uiState: localUiState,
-              initialSearchParameters,
+              initialSearchParameters: new algoliasearchHelper.SearchParameters(
+                {
+                  index: this.getIndexName(),
+                }
+              ),
             })
-          );
-        } else {
-          // Dispose all widgets without keeping the mutated state
-          widgets.forEach((widget) => {
-            widget.dispose!({
-              helper: helper!,
-              state: helper!.state,
-              parent: this,
-            });
-          });
-
-          // Update helper state with previous localUiState
-          const initialSearchParameters =
-            new algoliasearchHelper.SearchParameters({
-              index: this.getIndexName(),
+          : getLocalWidgetsSearchParameters(localWidgets, {
+              uiState: getLocalWidgetsUiState(localWidgets, {
+                searchParameters: cleanedState,
+                helper: helper!,
+              }),
+              initialSearchParameters: cleanedState,
             });
 
-          const newState = getLocalWidgetsSearchParameters(localWidgets, {
-            uiState: localUiState,
-            initialSearchParameters,
-          });
+        localUiState = getLocalWidgetsUiState(localWidgets, {
+          searchParameters: newState,
+          helper: helper!,
+        });
 
-          localUiState = getLocalWidgetsUiState(localWidgets, {
-            searchParameters: newState,
-            helper: helper!,
-          });
-
-          helper!.setState(newState);
-        }
+        helper!.setState(newState);
 
         if (localWidgets.length) {
           localInstantSearchInstance.scheduleSearch();

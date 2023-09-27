@@ -158,20 +158,25 @@ export type InstantSearchOptions<
    * @deprecated This property will be still supported in 4.x releases, but not further. It is replaced by the `insights` middleware. For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/
    */
   insightsClient?: AlgoliaInsightsClient;
-
-  /**
-   * Changes the way `dispose` is used in InstantSearch lifecycle.
-   *
-   * If the existing default (searchParameters) is used, each widget unmounting will remove its state as well, even if there are multiple widgets reading that UI State.
-   *
-   * With the future default (uiState), each widget unmounting will only remove its own state if it's the last of its type. This allows for dynamically adding and removing widgets without losing the state of those widgets.
-   *
-   * @default 'searchParameters'
-   */
-  disposeMode?: 'searchParameters' | 'uiState';
+  future?: {
+    /**
+     * Changes the way `dispose` is used in InstantSearch lifecycle.
+     *
+     * If `false` (by default), each widget unmounting will remove its state as well, even if there are multiple widgets reading that UI State.
+     *
+     * If `true`, each widget unmounting will only remove its own state if it's the last of its type. This allows for dynamically adding and removing widgets without losing their state.
+     *
+     * @default false
+     */
+    preserveSharedStateOnUnmount?: boolean;
+  };
 };
 
 export type InstantSearchStatus = 'idle' | 'loading' | 'stalled' | 'error';
+
+export const INSTANTSEARCH_FUTURE_DEFAULTS: Required<
+  InstantSearchOptions['future']
+> = { preserveSharedStateOnUnmount: false };
 
 /**
  * The actual implementation of the InstantSearch. This is
@@ -187,6 +192,7 @@ class InstantSearch<
   public insightsClient: AlgoliaInsightsClient | null;
   public onStateChange: InstantSearchOptions<TUiState>['onStateChange'] | null =
     null;
+  public future: NonNullable<InstantSearchOptions<TUiState>['future']>;
   public helper: AlgoliaSearchHelper | null;
   public mainHelper: AlgoliaSearchHelper | null;
   public mainIndex: IndexWidget;
@@ -214,10 +220,6 @@ class InstantSearch<
    * The error gets cleared when the next valid search response is rendered.
    */
   public error: Error | undefined = undefined;
-
-  public modes: {
-    disposeMode: InstantSearchOptions['disposeMode'];
-  };
 
   /**
    * @deprecated use `status === 'stalled'` instead
@@ -250,12 +252,11 @@ Use \`InstantSearch.status === "stalled"\` instead.`
       searchClient = null,
       insightsClient = null,
       onStateChange = null,
-      disposeMode = 'searchParameters',
+      future = {
+        ...INSTANTSEARCH_FUTURE_DEFAULTS,
+        ...(options.future || {}),
+      },
     } = options;
-
-    this.modes = {
-      disposeMode,
-    };
 
     if (indexName === null) {
       throw new Error(withUsage('The `indexName` option is required.'));
@@ -308,6 +309,7 @@ See ${createDocumentationLink({
     );
 
     this.client = searchClient;
+    this.future = future;
     this.insightsClient = insightsClient;
     this.indexName = indexName;
     this.helper = null;

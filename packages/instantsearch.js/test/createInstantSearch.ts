@@ -1,6 +1,7 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import algoliasearchHelper from 'algoliasearch-helper';
 
+import { INSTANTSEARCH_FUTURE_DEFAULTS } from '../src/lib/InstantSearch';
 import { defer } from '../src/lib/utils';
 import index from '../src/widgets/index/index';
 
@@ -69,8 +70,9 @@ export const createInstantSearch = (
     emit: jest.fn(),
     listenerCount: jest.fn(),
     sendEventToInsights: jest.fn(),
-    flags: {
-      disposeMode: 'searchParameters',
+    future: {
+      ...INSTANTSEARCH_FUTURE_DEFAULTS,
+      ...(args.future || {}),
     },
     ...args,
   };
