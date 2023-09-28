@@ -284,6 +284,21 @@ const testSetups = {
 
     await nextTick();
   },
+  async createHitsWidgetOptionsTests({ instantSearchOptions, widgetParams }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisHits, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
+  },
   async createRangeInputWidgetTests({ instantSearchOptions, widgetParams }) {
     mountApp(
       {
@@ -409,6 +424,7 @@ const testOptions = {
   createPaginationWidgetTests: undefined,
   createInfiniteHitsWidgetTests: undefined,
   createHitsWidgetTests: undefined,
+  createHitsWidgetOptionsTests: undefined,
   createRangeInputWidgetTests: undefined,
   createInstantSearchWidgetTests: undefined,
   createHitsPerPageWidgetTests: undefined,

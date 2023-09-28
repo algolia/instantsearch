@@ -241,6 +241,22 @@ const testSetups: TestSetupsMap<TestSuites> = {
       })
       .start();
   },
+  createHitsWidgetOptionsTests({ instantSearchOptions, widgetParams }) {
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        hits({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
   createRangeInputWidgetTests({ instantSearchOptions, widgetParams }) {
     instantsearch(instantSearchOptions)
       .addWidgets([
@@ -374,6 +390,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createPaginationWidgetTests: undefined,
   createInfiniteHitsWidgetTests: undefined,
   createHitsWidgetTests: undefined,
+  createHitsWidgetOptionsTests: undefined,
   createRangeInputWidgetTests: undefined,
   createInstantSearchWidgetTests: undefined,
   createHitsPerPageWidgetTests: undefined,

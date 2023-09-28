@@ -191,6 +191,16 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
+  createHitsWidgetOptionsTests({ instantSearchOptions, widgetParams }) {
+    render(
+      <form>
+        <InstantSearch {...instantSearchOptions}>
+          <Hits {...widgetParams} />
+          <GlobalErrorSwallower />
+        </InstantSearch>
+      </form>
+    );
+  },
   createRangeInputWidgetTests({ instantSearchOptions, widgetParams }) {
     render(
       <InstantSearch {...instantSearchOptions}>
@@ -273,6 +283,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createPaginationWidgetTests: { act },
   createInfiniteHitsWidgetTests: { act },
   createHitsWidgetTests: { act },
+  createHitsWidgetOptionsTests: { act },
   createRangeInputWidgetTests: { act },
   createInstantSearchWidgetTests: { act },
   createHitsPerPageWidgetTests: { act },
