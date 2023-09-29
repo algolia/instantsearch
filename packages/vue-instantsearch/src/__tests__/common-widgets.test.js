@@ -27,6 +27,7 @@ import {
   AisRatingMenu,
   AisNumericMenu,
   AisPoweredBy,
+  AisMenuSelect,
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
 
@@ -537,6 +538,21 @@ const testSetups = {
     return {
       flavor: 'vue-instantsearch',
     };
+  },
+  async createMenuSelectWidgetTests({ instantSearchOptions, widgetParams }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisMenuSelect, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
   },
 };
 
