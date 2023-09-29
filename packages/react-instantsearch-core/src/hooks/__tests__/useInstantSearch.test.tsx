@@ -53,7 +53,7 @@ describe('useInstantSearch', () => {
     });
   });
 
-  describe('state', () => {
+  describe('ui state', () => {
     test('returns the ui state', () => {
       const wrapper = createInstantSearchTestWrapper();
       const { result } = renderHook(() => useInstantSearch(), { wrapper });
@@ -168,6 +168,130 @@ describe('useInstantSearch', () => {
 
       await waitFor(() => {
         expect(button).toHaveTextContent('new query');
+      });
+    });
+  });
+
+  describe('render state', () => {
+    test('returns the render state', async () => {
+      function App() {
+        const { renderState } = useInstantSearch();
+
+        return (
+          <>
+            <button
+              type="button"
+              data-testid="button"
+              onClick={() => {
+                renderState.indexName?.searchBox?.refine('new query');
+              }}
+            >
+              {renderState.indexName?.searchBox?.query}
+            </button>
+            <pre data-testid="renderState">{JSON.stringify(renderState)}</pre>
+            <SearchBox />
+          </>
+        );
+      }
+
+      const { getByTestId } = render(
+        <InstantSearchTestWrapper>
+          <App />
+        </InstantSearchTestWrapper>
+      );
+      const button = getByTestId('button');
+      const renderState = getByTestId('renderState');
+
+      await waitFor(() => {
+        expect(button).toHaveTextContent('');
+        expect(renderState).toHaveTextContent(
+          JSON.stringify({
+            indexName: {
+              searchBox: {
+                query: '',
+                widgetParams: {},
+                isSearchStalled: false,
+              },
+            },
+          })
+        );
+      });
+
+      userEvent.click(button);
+
+      await waitFor(() => {
+        expect(button).toHaveTextContent('new query');
+        expect(renderState).toHaveTextContent(
+          JSON.stringify({
+            indexName: {
+              searchBox: {
+                query: 'new query',
+                widgetParams: {},
+                isSearchStalled: false,
+              },
+            },
+          })
+        );
+      });
+    });
+
+    test('returns the index render state', async () => {
+      function App() {
+        const { indexRenderState } = useInstantSearch();
+
+        return (
+          <>
+            <button
+              type="button"
+              data-testid="button"
+              onClick={() => {
+                indexRenderState.searchBox?.refine('new query');
+              }}
+            >
+              {indexRenderState.searchBox?.query}
+            </button>
+            <pre data-testid="indexRenderState">
+              {JSON.stringify(indexRenderState)}
+            </pre>
+            <SearchBox />
+          </>
+        );
+      }
+
+      const { getByTestId } = render(
+        <InstantSearchTestWrapper>
+          <App />
+        </InstantSearchTestWrapper>
+      );
+      const button = getByTestId('button');
+      const indexRenderState = getByTestId('indexRenderState');
+
+      await waitFor(() => {
+        expect(button).toHaveTextContent('');
+        expect(indexRenderState).toHaveTextContent(
+          JSON.stringify({
+            searchBox: {
+              query: '',
+              widgetParams: {},
+              isSearchStalled: false,
+            },
+          })
+        );
+      });
+
+      userEvent.click(button);
+
+      await waitFor(() => {
+        expect(button).toHaveTextContent('new query');
+        expect(indexRenderState).toHaveTextContent(
+          JSON.stringify({
+            searchBox: {
+              query: 'new query',
+              widgetParams: {},
+              isSearchStalled: false,
+            },
+          })
+        );
       });
     });
   });
