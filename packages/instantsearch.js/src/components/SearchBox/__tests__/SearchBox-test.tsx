@@ -146,22 +146,6 @@ describe('SearchBox', () => {
       });
     });
 
-    test('sets focus with autofocus to true', () => {
-      const props = {
-        ...defaultProps,
-        autofocus: true,
-      };
-
-      const { container } = render(<SearchBox {...props} />);
-      const input = container.querySelector('input');
-
-      // @TODO Since the Preact X migration and new testing environment, this
-      // assertion doesn't work. Once it does, we can remove the
-      // `toHaveAttribute` assertion.
-      // expect(input).toHaveFocus();
-      expect(input).toHaveAttribute('autofocus', 'true');
-    });
-
     test('disables the input with disabled to true', () => {
       const props = {
         ...defaultProps,
@@ -244,20 +228,6 @@ describe('SearchBox', () => {
   });
 
   describe('Rendering', () => {
-    test('sets search input attributes', () => {
-      const res = render(
-        <SearchBox {...defaultProps} autofocus={true} query="sample query" />
-      );
-      const input = res.getByDisplayValue('sample query');
-
-      expect(input).toHaveAttribute('autofocus', 'true');
-      expect(input).toHaveAttribute('autocomplete', 'off');
-      expect(input).toHaveAttribute('autocorrect', 'off');
-      expect(input).toHaveAttribute('autocapitalize', 'off');
-      expect(input).toHaveAttribute('spellcheck', 'false');
-      expect(input).toHaveAttribute('maxlength', '512');
-    });
-
     test('with custom templates', () => {
       const props = {
         ...defaultProps,

@@ -165,6 +165,31 @@ export function createOptionsTests(
       expect(screen.getByRole('searchbox')).not.toHaveFocus();
     });
 
+    test('sets `autofocus` on input when `autofocus` option is set', async () => {
+      const searchClient = createSearchClient({});
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: { autofocus: true },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      try {
+        // For IS.js and Vue, jsdom does not implement autofocus so we test the attribute
+        expect(screen.getByRole('searchbox')).toHaveAttribute('autofocus');
+      } catch {
+        // For React, it doesn't set the `autofocus` attribute but polyfills it
+        // eslint-disable-next-line jest/no-conditional-expect
+        expect(screen.getByRole('searchbox')).toHaveFocus();
+      }
+    });
+
     test('shows a reset button when there is a query', async () => {
       const searchClient = createSearchClient({});
 

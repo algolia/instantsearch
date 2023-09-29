@@ -266,10 +266,13 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </form>
     );
   },
-  createSearchBoxWidgetTests({ instantSearchOptions, widgetParams }) {
+  createSearchBoxWidgetTests({
+    instantSearchOptions,
+    widgetParams: { autofocus, ...rest },
+  }) {
     render(
       <InstantSearch {...instantSearchOptions}>
-        <SearchBox {...widgetParams} />
+        <SearchBox {...rest} autoFocus={autofocus} />
         <GlobalErrorSwallower />
       </InstantSearch>
     );

@@ -10,17 +10,6 @@ import '../../../test/utils/sortedHtmlSerializer';
 
 const defaultState = {};
 
-test('with autofocus', () => {
-  __setState(defaultState);
-  const wrapper = mount(SearchBox, {
-    propsData: {
-      autofocus: true,
-    },
-  });
-
-  expect(wrapper.find('.ais-SearchBox-input')).vueToBeAutofocused();
-});
-
 test('with submit title', () => {
   __setState(defaultState);
   const wrapper = mount(SearchBox, {

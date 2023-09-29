@@ -3,7 +3,7 @@
  */
 
 import { InstantSearchTestWrapper } from '@instantsearch/testutils';
-import { render, waitFor, within } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
@@ -12,18 +12,6 @@ import { SearchBox } from '../SearchBox';
 import type { UiState } from 'instantsearch.js';
 
 describe('SearchBox', () => {
-  test('forwards `autoFocus` prop', async () => {
-    const { container } = render(
-      <InstantSearchTestWrapper>
-        <SearchBox autoFocus />
-      </InstantSearchTestWrapper>
-    );
-
-    await waitFor(() => {
-      expect(within(container).getByRole('searchbox')).toHaveFocus();
-    });
-  });
-
   test('forwards custom class names and `div` props to the root element', () => {
     const { container } = render(
       <InstantSearchTestWrapper>
