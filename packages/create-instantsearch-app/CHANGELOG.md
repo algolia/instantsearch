@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.2.0](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.1.0...create-instantsearch-app@7.2.0) (2023-09-25)
+
+
+### Features
+
+* **create-instantsearch-app:** support Autocomplete in InstantSearch.js template ([#5857](https://github.com/algolia/instantsearch/issues/5857)) ([4a27e5b](https://github.com/algolia/instantsearch/commit/4a27e5bc3924bc289945c55a10da74dfda02fedb))
+
+
+
+
+
 # [7.1.0](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.0.2...create-instantsearch-app@7.1.0) (2023-09-19)
 
 
