@@ -247,10 +247,9 @@ const testSetups = {
                   ),
               },
             }),
-            h(AisHits, {
-              attrs: { id: 'hits-with-defaults' },
-              props: widgetParams,
-            }),
+            h('div', { attrs: { id: 'hits-with-defaults' } }, [
+              h(AisHits, { props: widgetParams }),
+            ]),
             h(AisIndex, { props: { indexName: 'nested' } }, [
               h(AisHits, {
                 attrs: { id: 'nested-hits' },

@@ -184,7 +184,9 @@ const testSetups: TestSetupsMap<TestSuites> = {
       <InstantSearch {...instantSearchOptions}>
         <SearchBox />
         <Hits id="main-hits" hitComponent={MainHit} {...widgetParams} />
-        <Hits id="hits-with-defaults" {...widgetParams} />
+        <div id="hits-with-defaults">
+          <Hits {...widgetParams} />
+        </div>
         <Index indexName="nested">
           <Hits id="nested-hits" hitComponent={NestedHit} />
         </Index>
