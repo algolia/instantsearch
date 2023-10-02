@@ -4,7 +4,6 @@
     "github/algolia/instantsearch/tree/templates/react-instantsearch",
     "/examples/react/default-theme",
     "/examples/react/next-app-router",
-    "/examples/react/getting-started",
     "/examples/vue/default-theme"
   ],
   "buildCommand": "build --no-private --ignore *-maps --ignore *-native",
