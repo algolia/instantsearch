@@ -45,8 +45,14 @@ export function useInstantSearch<TUiState extends UiState = UiState>({
   catchError,
 }: UseInstantSearchProps = {}): InstantSearchApi<TUiState> {
   const search = useInstantSearchContext<TUiState>();
-  const { uiState, setUiState, indexUiState, setIndexUiState } =
-    useSearchState<TUiState>();
+  const {
+    uiState,
+    setUiState,
+    indexUiState,
+    setIndexUiState,
+    renderState,
+    indexRenderState,
+  } = useSearchState<TUiState>();
   const { results, scopedResults } = useSearchResults();
 
   const addMiddlewares: InstantSearchApi<TUiState>['addMiddlewares'] =
@@ -81,6 +87,8 @@ export function useInstantSearch<TUiState extends UiState = UiState>({
     setUiState,
     indexUiState,
     setIndexUiState,
+    renderState,
+    indexRenderState,
     addMiddlewares,
     refresh,
     status: search.status,

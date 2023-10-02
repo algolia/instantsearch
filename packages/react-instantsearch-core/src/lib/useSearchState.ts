@@ -10,6 +10,8 @@ export type SearchStateApi<TUiState extends UiState> = {
   setUiState: InstantSearch<TUiState>['setUiState'];
   indexUiState: TUiState[string];
   setIndexUiState: IndexWidget<TUiState>['setIndexUiState'];
+  renderState: InstantSearch<TUiState>['renderState'];
+  indexRenderState: InstantSearch<TUiState>['renderState'][string];
 };
 
 export function useSearchState<
@@ -20,6 +22,8 @@ export function useSearchState<
   const indexId = searchIndex.getIndexId();
   const [uiState, setLocalUiState] = useState(() => search.getUiState());
   const indexUiState = uiState[indexId] as TUiState[string];
+  const [renderState, setRenderState] = useState(() => search.renderState);
+  const indexRenderState = renderState[indexId] || {};
 
   const setUiState = useCallback<SearchStateApi<TUiState>['setUiState']>(
     (nextUiState) => {
@@ -39,6 +43,7 @@ export function useSearchState<
   useEffect(() => {
     function handleRender() {
       setLocalUiState(search.getUiState());
+      setRenderState(search.renderState);
     }
 
     search.addListener('render', handleRender);
@@ -53,5 +58,7 @@ export function useSearchState<
     setUiState,
     indexUiState,
     setIndexUiState,
+    renderState,
+    indexRenderState,
   };
 }
