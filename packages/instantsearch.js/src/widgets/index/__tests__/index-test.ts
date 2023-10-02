@@ -580,6 +580,108 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         ).toHaveBeenCalledTimes(2);
       });
 
+      it('cleans shared refinements when `preserveSharedStateOnUnmount` is false', () => {
+        const instance = index({ indexName: 'indexName' });
+        const instantSearchInstance = createInstantSearch({
+          future: { preserveSharedStateOnUnmount: false },
+        });
+
+        const refinementList1 = virtualRefinementList({
+          attribute: 'brand',
+        });
+
+        const refinementList2 = virtualRefinementList({
+          attribute: 'brand',
+        });
+
+        instance.addWidgets([refinementList1, refinementList2]);
+
+        instance.init(
+          createIndexInitOptions({
+            instantSearchInstance,
+            parent: null,
+          })
+        );
+
+        // Simulate a state change
+        instance.getHelper()!.addDisjunctiveFacetRefinement('brand', 'Apple');
+
+        expect(instance.getHelper()!.state).toEqual(
+          new SearchParameters({
+            index: 'indexName',
+            maxValuesPerFacet: 10,
+            disjunctiveFacets: ['brand'],
+            disjunctiveFacetsRefinements: {
+              brand: ['Apple'],
+            },
+          })
+        );
+
+        instance.removeWidgets([refinementList2]);
+
+        expect(instance.getHelper()!.state).toEqual(
+          new SearchParameters({
+            index: 'indexName',
+            maxValuesPerFacet: 10,
+            disjunctiveFacets: ['brand'],
+            disjunctiveFacetsRefinements: {
+              brand: [],
+            },
+          })
+        );
+      });
+
+      it('preserves shared refinements when `preserveSharedStateOnUnmount` is true', () => {
+        const instance = index({ indexName: 'indexName' });
+        const instantSearchInstance = createInstantSearch({
+          future: { preserveSharedStateOnUnmount: true },
+        });
+
+        const refinementList1 = virtualRefinementList({
+          attribute: 'brand',
+        });
+
+        const refinementList2 = virtualRefinementList({
+          attribute: 'brand',
+        });
+
+        instance.addWidgets([refinementList1, refinementList2]);
+
+        instance.init(
+          createIndexInitOptions({
+            instantSearchInstance,
+            parent: null,
+          })
+        );
+
+        // Simulate a state change
+        instance.getHelper()!.addDisjunctiveFacetRefinement('brand', 'Apple');
+
+        expect(instance.getHelper()!.state).toEqual(
+          new SearchParameters({
+            index: 'indexName',
+            maxValuesPerFacet: 10,
+            disjunctiveFacets: ['brand'],
+            disjunctiveFacetsRefinements: {
+              brand: ['Apple'],
+            },
+          })
+        );
+
+        instance.removeWidgets([refinementList2]);
+
+        expect(instance.getHelper()!.state).toEqual(
+          new SearchParameters({
+            index: 'indexName',
+            maxValuesPerFacet: 10,
+            disjunctiveFacets: ['brand'],
+            disjunctiveFacetsRefinements: {
+              brand: ['Apple'],
+            },
+          })
+        );
+      });
+
       it('calls `dispose` on the removed widgets', () => {
         const instance = index({ indexName: 'indexName' });
         const widgets = [
