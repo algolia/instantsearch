@@ -211,6 +211,14 @@ const testSetups: TestSetupsMap<TestSuites> = {
           },
           ...widgetParams,
         }),
+        hits({
+          container: document.body.appendChild(
+            Object.assign(document.createElement('div'), {
+              id: 'hits-with-defaults',
+            })
+          ),
+          ...widgetParams,
+        }),
         index({ indexName: 'nested' }).addWidgets([
           hits({
             container: document.body.appendChild(
