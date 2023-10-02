@@ -50,12 +50,13 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-Hits')
+        document.querySelector('#hits-with-defaults.ais-Hits')
       ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
           class="ais-Hits"
+          id="hits-with-defaults"
         >
           <ol
             class="ais-Hits-list"
@@ -101,12 +102,13 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-Hits')
+        document.querySelector('#hits-with-defaults.ais-Hits')
       ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <div
           class="ais-Hits"
+          id="hits-with-defaults"
         >
           <ol
             class="ais-Hits-list"

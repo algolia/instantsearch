@@ -247,6 +247,10 @@ const testSetups = {
                   ),
               },
             }),
+            h(AisHits, {
+              attrs: { id: 'hits-with-defaults' },
+              props: widgetParams,
+            }),
             h(AisIndex, { props: { indexName: 'nested' } }, [
               h(AisHits, {
                 attrs: { id: 'nested-hits' },
@@ -275,21 +279,6 @@ const testSetups = {
                 },
               }),
             ]),
-            h(GlobalErrorSwallower),
-          ])
-        ),
-      },
-      document.body.appendChild(document.createElement('div'))
-    );
-
-    await nextTick();
-  },
-  async createHitsWidgetOptionsTests({ instantSearchOptions, widgetParams }) {
-    mountApp(
-      {
-        render: renderCompat((h) =>
-          h(AisInstantSearch, { props: instantSearchOptions }, [
-            h(AisHits, { props: widgetParams }),
             h(GlobalErrorSwallower),
           ])
         ),
@@ -424,7 +413,6 @@ const testOptions = {
   createPaginationWidgetTests: undefined,
   createInfiniteHitsWidgetTests: undefined,
   createHitsWidgetTests: undefined,
-  createHitsWidgetOptionsTests: undefined,
   createRangeInputWidgetTests: undefined,
   createInstantSearchWidgetTests: undefined,
   createHitsPerPageWidgetTests: undefined,

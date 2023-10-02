@@ -19,20 +19,8 @@ export function createHitsWidgetTests(
     document.body.innerHTML = '';
   });
 
-  describe('Hits widget common Insights tests', () => {
+  describe('Hits widget common tests', () => {
     createInsightsTests(setup, { act, skippedTests });
-  });
-}
-
-export function createHitsWidgetOptionsTests(
-  setup: HitsWidgetSetup,
-  { act = fakeAct, skippedTests = {} }: TestOptions = {}
-) {
-  beforeEach(() => {
-    document.body.innerHTML = '';
-  });
-
-  describe('Hits widget common option tests', () => {
     createOptionsTests(setup, { act, skippedTests });
   });
 }

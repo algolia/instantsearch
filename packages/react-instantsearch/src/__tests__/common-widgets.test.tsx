@@ -184,21 +184,12 @@ const testSetups: TestSetupsMap<TestSuites> = {
       <InstantSearch {...instantSearchOptions}>
         <SearchBox />
         <Hits id="main-hits" hitComponent={MainHit} {...widgetParams} />
+        <Hits id="hits-with-defaults" {...widgetParams} />
         <Index indexName="nested">
           <Hits id="nested-hits" hitComponent={NestedHit} />
         </Index>
         <GlobalErrorSwallower />
       </InstantSearch>
-    );
-  },
-  createHitsWidgetOptionsTests({ instantSearchOptions, widgetParams }) {
-    render(
-      <form>
-        <InstantSearch {...instantSearchOptions}>
-          <Hits {...widgetParams} />
-          <GlobalErrorSwallower />
-        </InstantSearch>
-      </form>
     );
   },
   createRangeInputWidgetTests({ instantSearchOptions, widgetParams }) {
@@ -283,7 +274,6 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createPaginationWidgetTests: { act },
   createInfiniteHitsWidgetTests: { act },
   createHitsWidgetTests: { act },
-  createHitsWidgetOptionsTests: { act },
   createRangeInputWidgetTests: { act },
   createInstantSearchWidgetTests: { act },
   createHitsPerPageWidgetTests: { act },
