@@ -24,7 +24,7 @@ function normalizeSnapshot(html: string) {
           .replace(/,"__position":\d/, '');
       }
     )
-    .replace(/\s+(objectID): (.+?), index: \d\s+/gs, (_, ...captured) => {
+    .replace(/\s{0,}(objectID): (.+?), index: \d\s{0,}/gs, (_, ...captured) => {
       return `{"objectID":"${captured[1]}"}`;
     });
 }
