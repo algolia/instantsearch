@@ -131,7 +131,7 @@ export function createOptionsTests(
                 <span
                   class="ais-CurrentRefinements-categoryLabel"
                 >
-                  Samsung
+                  Apple
                 </span>
                 <button
                   class="ais-CurrentRefinements-delete"
@@ -146,7 +146,7 @@ export function createOptionsTests(
                 <span
                   class="ais-CurrentRefinements-categoryLabel"
                 >
-                  Apple
+                  Samsung
                 </span>
                 <button
                   class="ais-CurrentRefinements-delete"

@@ -64,8 +64,7 @@ describe('insights', () => {
     }
 
     const getUserToken = () =>
-      (instantSearchInstance.mainHelper!.state as PlainSearchParameters)
-        .userToken;
+      (instantSearchInstance.helper!.state as PlainSearchParameters).userToken;
 
     return {
       analytics,
@@ -95,11 +94,10 @@ describe('insights', () => {
     });
     instantSearchInstance.start();
 
-    const helper = instantSearchInstance.mainHelper!;
+    const helper = instantSearchInstance.helper!;
 
     const getUserToken = () =>
-      (instantSearchInstance.mainHelper!.state as PlainSearchParameters)
-        .userToken;
+      (instantSearchInstance.helper!.state as PlainSearchParameters).userToken;
 
     return {
       analytics,
@@ -475,7 +473,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           insightsClient,
         })
       );
-      expect(instantSearchInstance.mainHelper!.state.clickAnalytics).toBe(true);
+      expect(instantSearchInstance.helper!.state.clickAnalytics).toBe(true);
     });
 
     it("doesn't reset page", () => {
@@ -483,9 +481,9 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       const middleware = createInsightsMiddleware({
         insightsClient,
       })({ instantSearchInstance });
-      instantSearchInstance.mainHelper!.setPage(100);
+      instantSearchInstance.helper!.setPage(100);
       middleware.subscribe();
-      expect(instantSearchInstance.mainHelper!.state.page).toBe(100);
+      expect(instantSearchInstance.helper!.state.page).toBe(100);
     });
 
     it('adds user agent', () => {
@@ -672,7 +670,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
 
       insightsClient('setUserToken', 'abc');
       instantSearchInstance.start();
-      instantSearchInstance.mainHelper!.setPage(100);
+      instantSearchInstance.helper!.setPage(100);
 
       instantSearchInstance.use(
         createInsightsMiddleware({
@@ -680,7 +678,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         })
       );
 
-      expect(instantSearchInstance.mainHelper!.state.page).toBe(100);
+      expect(instantSearchInstance.helper!.state.page).toBe(100);
       expect(getUserToken()).toEqual('abc');
     });
 
@@ -704,7 +702,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         createTestEnvironment({ started: false });
 
       instantSearchInstance.start();
-      instantSearchInstance.mainHelper!.setPage(100);
+      instantSearchInstance.helper!.setPage(100);
 
       instantSearchInstance.use(
         createInsightsMiddleware({
@@ -716,7 +714,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
 
       await wait(0);
 
-      expect(instantSearchInstance.mainHelper!.state.page).toEqual(100);
+      expect(instantSearchInstance.helper!.state.page).toEqual(100);
       expect(getUserToken()).toEqual('def');
     });
 
@@ -776,8 +774,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       await wait(0);
 
       expect(
-        (instantSearchInstance.mainHelper!.state as PlainSearchParameters)
-          .userToken
+        (instantSearchInstance.helper!.state as PlainSearchParameters).userToken
       ).toEqual('def');
     });
 
@@ -1186,7 +1183,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
 
     instantSearchInstance
       .helper!.setState({
-        ...instantSearchInstance.mainHelper!.state,
+        ...instantSearchInstance.helper!.state,
         query: 'test',
       })
       .search();

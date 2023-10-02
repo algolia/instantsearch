@@ -176,7 +176,7 @@ export function createInsightsMiddleware<
       started() {
         insightsClient('addAlgoliaAgent', 'insights-middleware');
 
-        helper = instantSearchInstance.mainHelper!;
+        helper = instantSearchInstance.helper!;
 
         initialParameters = {
           userToken: (helper.state as PlainSearchParameters).userToken,
