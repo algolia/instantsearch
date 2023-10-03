@@ -18,7 +18,6 @@ import {
   warning,
   setIndexHelperState,
   isIndexWidget,
-  safelyRunOnBrowser,
 } from './utils';
 import version from './version';
 
@@ -306,23 +305,18 @@ See ${createDocumentationLink({
       })}`
     );
 
-    safelyRunOnBrowser(() => {
-      if (
-        __DEV__ &&
-        options.future?.preserveSharedStateOnUnmount === undefined
-      ) {
-        // eslint-disable-next-line no-console
-        console.info(`Starting from the next major version, InstantSearch will change how widgets state is preserved when they are removed. InstantSearch will keep the state of unmounted widgets to be usable by other widgets with the same attribute.
+    if (__DEV__ && options.future?.preserveSharedStateOnUnmount === undefined) {
+      // eslint-disable-next-line no-console
+      console.info(`Starting from the next major version, InstantSearch will change how widgets state is preserved when they are removed. InstantSearch will keep the state of unmounted widgets to be usable by other widgets with the same attribute.
 
 We recommend setting \`future.preserveSharedStateOnUnmount\` to true to adopt this change today.
 To stay with the current behaviour and remove this warning, set the option to false.
 
 See documentation: ${createDocumentationLink({
-          name: 'instantsearch',
-        })}#widget-param-future
+        name: 'instantsearch',
+      })}#widget-param-future
           `);
-      }
-    });
+    }
 
     this.client = searchClient;
     this.future = future;
