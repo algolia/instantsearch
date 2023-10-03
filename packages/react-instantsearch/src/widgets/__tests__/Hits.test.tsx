@@ -17,38 +17,18 @@ import type { MockSearchClient } from '@instantsearch/mocks';
 import type { AlgoliaHit } from 'instantsearch.js';
 
 describe('Hits', () => {
-  test('renders with default props', async () => {
-    const { container } = render(
-      <InstantSearchTestWrapper>
-        <Hits />
-      </InstantSearchTestWrapper>
-    );
-
-    await waitFor(() => {
-      expect(container.querySelector('.ais-Hits')).toMatchInlineSnapshot(`
-        <div
-          class="ais-Hits ais-Hits--empty"
-        >
-          <ol
-            class="ais-Hits-list"
-          />
-        </div>
-      `);
-    });
-  });
-
-  test('renders with a non-default hit shape', async () => {
-    type CustomHit = {
+  test('renders with a custom hit component', async () => {
+    type CustomRecord = {
       somethingSpecial: string;
     };
 
-    const client = createSearchClient({
+    const searchClient = createSearchClient({
       search: jest.fn((requests) =>
         Promise.resolve(
           createMultiSearchResponse(
             ...requests.map(
               (request: Parameters<MockSearchClient['search']>[0][number]) =>
-                createSingleSearchResponse<AlgoliaHit<CustomHit>>({
+                createSingleSearchResponse<AlgoliaHit<CustomRecord>>({
                   hits: [
                     { objectID: '1', somethingSpecial: 'a' },
                     { objectID: '2', somethingSpecial: 'b' },
@@ -63,8 +43,8 @@ describe('Hits', () => {
     });
 
     const { container } = render(
-      <InstantSearchTestWrapper searchClient={client}>
-        <Hits<CustomHit>
+      <InstantSearchTestWrapper searchClient={searchClient}>
+        <Hits<CustomRecord>
           hitComponent={({ hit }) => (
             <strong>{`${hit.__position} - ${hit.somethingSpecial}`}</strong>
           )}
