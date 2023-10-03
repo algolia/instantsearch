@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.2.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.1.0...react-instantsearch-core@7.2.0) (2023-10-03)
+
+
+### Features
+
+* **useInstantSearch:** expose renderState ([#5873](https://github.com/algolia/instantsearch/issues/5873)) ([9c43382](https://github.com/algolia/instantsearch/commit/9c4338259edd93ff5e0a4c33c0c789d1ef34d0e2))
+
+
+
+
+
 # [7.1.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.0.3...react-instantsearch-core@7.1.0) (2023-09-19)
 
 
