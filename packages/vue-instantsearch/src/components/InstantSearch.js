@@ -42,7 +42,11 @@ export default createInstantSearchComponent({
     insights: {
       default: undefined,
       validator(value) {
-        return typeof value === 'boolean' || typeof value === 'object';
+        return (
+          typeof value === 'undefined' ||
+          typeof value === 'boolean' ||
+          typeof value === 'object'
+        );
       },
     },
     stalledSearchDelay: {
