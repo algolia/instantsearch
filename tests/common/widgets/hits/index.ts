@@ -1,6 +1,7 @@
 import { fakeAct } from '../../common';
 
 import { createInsightsTests } from './insights';
+import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
 import type { HitsWidget } from 'instantsearch.js/es/widgets/hits/hits';
@@ -20,5 +21,6 @@ export function createHitsWidgetTests(
 
   describe('Hits widget common tests', () => {
     createInsightsTests(setup, { act, skippedTests });
+    createOptionsTests(setup, { act, skippedTests });
   });
 }
