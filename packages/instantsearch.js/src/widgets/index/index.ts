@@ -492,7 +492,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       };
 
       derivedHelper = mainHelper.derive(() =>
-        mergeSearchParameters(...resolveSearchParameters(this))
+        mergeSearchParameters(
+          mainHelper.state,
+          ...resolveSearchParameters(this)
+        )
       );
 
       const indexInitialResults =
