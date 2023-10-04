@@ -258,14 +258,38 @@ const testSetups: TestSetupsMap<TestSuites> = {
       .start();
   },
   createInstantSearchWidgetTests({ instantSearchOptions }) {
-    instantsearch(instantSearchOptions)
+    const refinementList1 = refinementList({
+      container: document.body.appendChild(document.createElement('div')),
+      attribute: 'brand',
+      cssClasses: {
+        root: 'refinement-list-1',
+      },
+    });
+
+    const refinementList2 = refinementList({
+      container: document.body.appendChild(document.createElement('div')),
+      attribute: 'brand',
+      cssClasses: {
+        root: 'refinement-list-2',
+      },
+    });
+
+    const search = instantsearch(instantSearchOptions)
+      .addWidgets([refinementList1, refinementList2])
       .on('error', () => {
         /*
          * prevent rethrowing InstantSearch errors, so tests can be asserted.
          * IRL this isn't needed, as the error doesn't stop execution.
          */
-      })
-      .start();
+      });
+
+    search.start();
+
+    const button = document.createElement('button');
+    button.addEventListener('click', () => {
+      search.removeWidgets([refinementList1]);
+    });
+    document.body.appendChild(button);
 
     return {
       algoliaAgents: [

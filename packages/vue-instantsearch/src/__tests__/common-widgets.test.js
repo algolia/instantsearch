@@ -302,11 +302,40 @@ const testSetups = {
   createInstantSearchWidgetTests({ instantSearchOptions }) {
     mountApp(
       {
-        render: renderCompat((h) =>
-          h(AisInstantSearch, { props: instantSearchOptions }, [
+        data() {
+          return {
+            showMenu: true,
+          };
+        },
+        render: renderCompat(function (h) {
+          return h(AisInstantSearch, { props: instantSearchOptions }, [
+            this.showMenu &&
+              h(AisRefinementList, {
+                props: {
+                  attribute: 'brand',
+                  classNames: {
+                    'ais-RefinementList': 'refinement-list-1',
+                  },
+                },
+              }),
+            h(AisRefinementList, {
+              props: {
+                attribute: 'brand',
+                classNames: {
+                  'ais-RefinementList': 'refinement-list-2',
+                },
+              },
+            }),
+            h('button', {
+              on: {
+                click: () => {
+                  this.showMenu = false;
+                },
+              },
+            }),
             h(GlobalErrorSwallower),
-          ])
-        ),
+          ]);
+        }),
       },
       document.body.appendChild(document.createElement('div'))
     );

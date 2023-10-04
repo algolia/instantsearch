@@ -200,8 +200,22 @@ const testSetups: TestSetupsMap<TestSuites> = {
     );
   },
   createInstantSearchWidgetTests({ instantSearchOptions }) {
+    function SearchElement() {
+      const [showMenu, setShowMenu] = React.useState(true);
+
+      return (
+        <>
+          <button onClick={() => setShowMenu(false)} />
+          {showMenu && (
+            <RefinementList className="refinement-list-1" attribute="brand" />
+          )}
+          <RefinementList className="refinement-list-2" attribute="brand" />
+        </>
+      );
+    }
     render(
       <InstantSearch {...instantSearchOptions}>
+        <SearchElement />
         <GlobalErrorSwallower />
       </InstantSearch>
     );
