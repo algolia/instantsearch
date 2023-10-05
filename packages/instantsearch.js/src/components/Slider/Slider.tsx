@@ -94,8 +94,8 @@ class Slider extends Component<SliderProps> {
 
       const ariaLabel =
         props['data-handle-key'] === 0
-          ? 'Min Filter Handle'
-          : 'Max Filter Handle';
+          ? 'Minimum Filter Handle'
+          : 'Maximum Filter Handle';
 
       return (
         <div {...props} className={className} aria-label={ariaLabel}>
