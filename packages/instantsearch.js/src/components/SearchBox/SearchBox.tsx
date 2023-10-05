@@ -183,6 +183,7 @@ class SearchBox extends Component<
             onInput={this.onInput}
             onBlur={this.onBlur}
             onFocus={this.onFocus}
+            aria-label="Search for results"
           />
 
           <Template
