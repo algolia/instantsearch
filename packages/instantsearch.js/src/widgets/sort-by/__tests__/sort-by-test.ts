@@ -113,6 +113,7 @@ describe('sortBy()', () => {
           },
         ],
         "setValue": [Function],
+        "aria-label": "Sort results by",
       }
     `);
     expect(firstRender[1]).toEqual(container);

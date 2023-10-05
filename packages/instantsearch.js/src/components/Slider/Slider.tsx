@@ -92,8 +92,13 @@ class Slider extends Component<SliderProps> {
         props['data-handle-key'] === 1 && 'rheostat-handle-upper'
       );
 
+      const ariaLabel =
+        props['data-handle-key'] === 0
+          ? 'Min Filter Handle'
+          : 'Max Filter Handle';
+
       return (
-        <div {...props} className={className}>
+        <div {...props} className={className} aria-label={ariaLabel}>
           {tooltips && <div className="rheostat-tooltip">{value}</div>}
         </div>
       );
