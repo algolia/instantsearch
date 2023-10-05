@@ -43,6 +43,7 @@ export const createInstantSearch = (
     _initialUiState: {},
     _initialResults: null,
     _createURL: jest.fn(() => '#'),
+    _insights: undefined,
     onStateChange: null,
     setUiState: jest.fn(),
     getUiState: jest.fn(() => ({})),
