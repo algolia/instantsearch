@@ -33,6 +33,8 @@ describe('useSearchState', () => {
       indexUiState: {},
       setUiState: expect.any(Function),
       setIndexUiState: expect.any(Function),
+      renderState: expect.any(Object),
+      indexRenderState: expect.any(Object),
     });
 
     const setUiState = result.current.setUiState;
@@ -47,6 +49,8 @@ describe('useSearchState', () => {
       indexUiState: {},
       setUiState,
       setIndexUiState,
+      renderState: expect.any(Object),
+      indexRenderState: expect.any(Object),
     });
   });
 
@@ -67,6 +71,8 @@ describe('useSearchState', () => {
       indexUiState: { query: 'iphone' },
       setUiState: expect.any(Function),
       setIndexUiState: expect.any(Function),
+      renderState: expect.any(Object),
+      indexRenderState: expect.any(Object),
     });
   });
 
@@ -265,6 +271,126 @@ describe('useSearchState', () => {
       expect(button).toHaveTextContent('undefined added added');
       expect(indexUiState).toHaveTextContent(
         JSON.stringify({ query: 'undefined added added' })
+      );
+    });
+  });
+
+  test('returns the render state', async () => {
+    function App() {
+      const { renderState } = useSearchState();
+
+      return (
+        <>
+          <button
+            type="button"
+            onClick={() => {
+              renderState.indexName?.searchBox?.refine('new query');
+            }}
+          >
+            {renderState.indexName?.searchBox?.query}
+          </button>
+          <pre data-testid="renderState">{JSON.stringify(renderState)}</pre>
+          <SearchBox />
+        </>
+      );
+    }
+
+    const { getByRole, getByTestId } = render(
+      <InstantSearchTestWrapper>
+        <App />
+      </InstantSearchTestWrapper>
+    );
+    const button = getByRole('button');
+    const renderState = getByTestId('renderState');
+
+    await waitFor(() => {
+      expect(button).toHaveTextContent('');
+      expect(renderState).toHaveTextContent(
+        JSON.stringify({
+          indexName: {
+            searchBox: {
+              query: '',
+              widgetParams: {},
+              isSearchStalled: false,
+            },
+          },
+        })
+      );
+    });
+
+    userEvent.click(button);
+
+    await waitFor(() => {
+      expect(button).toHaveTextContent('new query');
+      expect(renderState).toHaveTextContent(
+        JSON.stringify({
+          indexName: {
+            searchBox: {
+              query: 'new query',
+              widgetParams: {},
+              isSearchStalled: false,
+            },
+          },
+        })
+      );
+    });
+  });
+
+  test('returns the index render state', async () => {
+    function App() {
+      const { indexRenderState } = useSearchState();
+
+      return (
+        <>
+          <button
+            type="button"
+            onClick={() => {
+              indexRenderState.searchBox?.refine('new query');
+            }}
+          >
+            {indexRenderState.searchBox?.query}
+          </button>
+          <pre data-testid="indexRenderState">
+            {JSON.stringify(indexRenderState)}
+          </pre>
+          <SearchBox />
+        </>
+      );
+    }
+
+    const { getByRole, getByTestId } = render(
+      <InstantSearchTestWrapper>
+        <App />
+      </InstantSearchTestWrapper>
+    );
+    const button = getByRole('button');
+    const indexRenderState = getByTestId('indexRenderState');
+
+    await waitFor(() => {
+      expect(button).toHaveTextContent('');
+      expect(indexRenderState).toHaveTextContent(
+        JSON.stringify({
+          searchBox: {
+            query: '',
+            widgetParams: {},
+            isSearchStalled: false,
+          },
+        })
+      );
+    });
+
+    userEvent.click(button);
+
+    await waitFor(() => {
+      expect(button).toHaveTextContent('new query');
+      expect(indexRenderState).toHaveTextContent(
+        JSON.stringify({
+          searchBox: {
+            query: 'new query',
+            widgetParams: {},
+            isSearchStalled: false,
+          },
+        })
       );
     });
   });
