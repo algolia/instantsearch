@@ -1,3 +1,5 @@
+import { INSTANTSEARCH_FUTURE_DEFAULTS } from 'instantsearch.js/es/lib/InstantSearch';
+
 import { version } from '../../package.json'; // rollup does pick only what needed from json
 import { createSuitMixin } from '../mixins/suit';
 
@@ -63,6 +65,12 @@ export const createInstantSearchComponent = (component) =>
                 this.instantSearchInstance.use(middlewareToAdd);
               });
           },
+        },
+        future(future) {
+          this.instantSearchInstance.future = Object.assign(
+            INSTANTSEARCH_FUTURE_DEFAULTS,
+            future
+          );
         },
       },
       created() {

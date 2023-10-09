@@ -1,9 +1,12 @@
-import InstantSearch from 'instantsearch.js/es/lib/InstantSearch';
+import InstantSearch, {
+  INSTANTSEARCH_FUTURE_DEFAULTS,
+} from 'instantsearch.js/es/lib/InstantSearch';
 import { useCallback, useRef, version as ReactVersion } from 'react';
 import { useSyncExternalStore } from 'use-sync-external-store/shim';
 
 import version from '../version';
 
+import { dequal } from './dequal';
 import { useForceUpdate } from './useForceUpdate';
 import { useInstantSearchServerContext } from './useInstantSearchServerContext';
 import { useInstantSearchSSRContext } from './useInstantSearchSSRContext';
@@ -171,6 +174,14 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
       // The default `stalledSearchDelay` in InstantSearch.js is 200ms.
       // We need to reset it when it's undefined to get back to the original value.
       search._stalledSearchDelay = props.stalledSearchDelay ?? 200;
+      prevPropsRef.current = props;
+    }
+
+    if (!dequal(prevProps.future, props.future)) {
+      search.future = {
+        ...INSTANTSEARCH_FUTURE_DEFAULTS,
+        ...props.future,
+      };
       prevPropsRef.current = props;
     }
 
