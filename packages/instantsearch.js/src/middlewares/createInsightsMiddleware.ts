@@ -157,6 +157,7 @@ export function createInsightsMiddleware<
     return {
       $$type: 'ais.insights',
       $$internal,
+      $$automatic,
       onStateChange() {},
       subscribe() {
         if (!insightsClient.shouldAddScript) return;

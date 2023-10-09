@@ -6,6 +6,8 @@
 import {
   createSearchClient,
   createControlledSearchClient,
+  createMultiSearchResponse,
+  createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import { wait } from '@instantsearch/testutils/wait';
@@ -474,18 +476,93 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
   });
 
   describe('insights middleware', () => {
-    test('does not add insights middleware by default', () => {
-      const search = new InstantSearch({
-        searchClient: createSearchClient(),
-        indexName: 'test',
-      });
-
-      expect(
-        search.middleware.map(({ instance: { $$type, $$internal } }) => ({
+    const mapMiddlewares = (middlewares: InstantSearch['middleware']) =>
+      middlewares.map(
+        // @ts-ignore: $$automatic is only applicable to insights middleware
+        ({ instance: { $$type, $$internal, $$automatic } }) => ({
           $$type,
           $$internal,
-        }))
-      ).toEqual([]);
+          $$automatic,
+        })
+      );
+
+    test('insights: undefined does not add the insights middleware if `queryID` is not found in initial response', async () => {
+      const searchClient = createSearchClient({
+        search: jest.fn((requests) => {
+          return Promise.resolve(
+            createMultiSearchResponse(
+              ...requests.map((request) => {
+                return createSingleSearchResponse<any>({
+                  index: request.indexName,
+                  query: request.query,
+                  ...(request.indexName === 'indexNameWithQueryID'
+                    ? { queryID: 'queryID' }
+                    : undefined),
+                  hits: [{ objectID: `${request.indexName}-objectID1` }],
+                });
+              })
+            )
+          );
+        }),
+      });
+
+      const search = new InstantSearch({
+        indexName: 'indexName',
+        searchClient,
+      });
+
+      search.addWidgets([
+        virtualSearchBox({}),
+        index({ indexName: 'indexName2' }).addWidgets([virtualSearchBox({})]),
+      ]);
+      search.start();
+
+      await wait(0);
+
+      expect(mapMiddlewares(search.middleware)).toEqual([]);
+    });
+
+    test('insights: undefined adds the insights middleware if `queryID` is found in at least one index in initial response', async () => {
+      const searchClient = createSearchClient({
+        search: jest.fn((requests) => {
+          return Promise.resolve(
+            createMultiSearchResponse(
+              ...requests.map((request) => {
+                return createSingleSearchResponse<any>({
+                  index: request.indexName,
+                  query: request.query,
+                  ...(request.indexName === 'indexNameWithQueryID'
+                    ? { queryID: 'queryID' }
+                    : undefined),
+                  hits: [{ objectID: `${request.indexName}-objectID1` }],
+                });
+              })
+            )
+          );
+        }),
+      });
+
+      const search = new InstantSearch({
+        indexName: 'indexNameWithQueryID',
+        searchClient,
+      });
+
+      search.addWidgets([
+        virtualSearchBox({}),
+        index({ indexName: 'indexName' }).addWidgets([virtualSearchBox({})]),
+      ]);
+      search.start();
+
+      await wait(0);
+
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+      expect(mapMiddlewares(search.middleware)).toEqual([
+        {
+          $$type: 'ais.insights',
+          $$internal: true,
+          $$automatic: true,
+        },
+      ]);
     });
 
     test('insights: true adds only one insights middleware', () => {
@@ -495,15 +572,11 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
         insights: true,
       });
 
-      expect(
-        search.middleware.map(({ instance: { $$type, $$internal } }) => ({
-          $$type,
-          $$internal,
-        }))
-      ).toEqual([
+      expect(mapMiddlewares(search.middleware)).toEqual([
         {
           $$type: 'ais.insights',
           $$internal: true,
+          $$automatic: false,
         },
       ]);
     });
@@ -519,15 +592,11 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
         },
       });
 
-      expect(
-        search.middleware.map(({ instance: { $$type, $$internal } }) => ({
-          $$type,
-          $$internal,
-        }))
-      ).toEqual([
+      expect(mapMiddlewares(search.middleware)).toEqual([
         {
           $$type: 'ais.insights',
           $$internal: true,
+          $$automatic: false,
         },
       ]);
     });
@@ -543,15 +612,11 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
       });
       search.start();
 
-      expect(
-        search.middleware.map(({ instance: { $$type, $$internal } }) => ({
-          $$type,
-          $$internal,
-        }))
-      ).toEqual([
+      expect(mapMiddlewares(search.middleware)).toEqual([
         {
           $$type: 'ais.insights',
           $$internal: true,
+          $$automatic: false,
         },
       ]);
 
@@ -586,12 +651,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
         insights: false,
       });
 
-      expect(
-        search.middleware.map(({ instance: { $$type, $$internal } }) => ({
-          $$type,
-          $$internal,
-        }))
-      ).toEqual([]);
+      expect(mapMiddlewares(search.middleware)).toEqual([]);
     });
 
     test("users' middleware overrides the builtin one", () => {
@@ -602,15 +662,11 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
 
       search.use(createInsightsMiddleware({}));
 
-      expect(
-        search.middleware.map(({ instance: { $$type, $$internal } }) => ({
-          $$type,
-          $$internal,
-        }))
-      ).toEqual([
+      expect(mapMiddlewares(search.middleware)).toEqual([
         {
           $$type: 'ais.insights',
           $$internal: false,
+          $$automatic: false,
         },
       ]);
     });
