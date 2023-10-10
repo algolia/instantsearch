@@ -96,6 +96,7 @@ describe('sortBy()', () => {
     `);
     expect(children.props).toMatchInlineSnapshot(`
       {
+        "ariaLabel": "Sort results by",
         "cssClasses": {
           "option": "ais-SortBy-option custom-option",
           "root": "ais-SortBy custom-root cx",
@@ -113,7 +114,6 @@ describe('sortBy()', () => {
           },
         ],
         "setValue": [Function],
-        "aria-label": "Sort results by",
       }
     `);
     expect(firstRender[1]).toEqual(container);

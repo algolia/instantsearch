@@ -2,6 +2,7 @@
 
 exports[`searchBox() Rendering renders during init() 1`] = `
 {
+  "ariaLabel": "Search",
   "autofocus": false,
   "cssClasses": {
     "form": "ais-SearchBox-form",
@@ -36,6 +37,7 @@ exports[`searchBox() Rendering renders during init() 1`] = `
 
 exports[`searchBox() Rendering renders during render() 1`] = `
 {
+  "ariaLabel": "Search",
   "autofocus": false,
   "cssClasses": {
     "form": "ais-SearchBox-form",
@@ -70,6 +72,7 @@ exports[`searchBox() Rendering renders during render() 1`] = `
 
 exports[`searchBox() Rendering renders during render() 2`] = `
 {
+  "ariaLabel": "Search",
   "autofocus": false,
   "cssClasses": {
     "form": "ais-SearchBox-form",
