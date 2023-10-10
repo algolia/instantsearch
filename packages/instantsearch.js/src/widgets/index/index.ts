@@ -389,7 +389,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       );
 
       if (localInstantSearchInstance && Boolean(widgets.length)) {
-        const nextState = widgets.reduce((state, widget) => {
+        const cleanedState = widgets.reduce((state, widget) => {
           // the `dispose` method exists at this point we already assert it
           const next = widget.dispose!({
             helper: helper!,
@@ -400,17 +400,30 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           return next || state;
         }, helper!.state);
 
+        const newState = localInstantSearchInstance.future
+          .preserveSharedStateOnUnmount
+          ? getLocalWidgetsSearchParameters(localWidgets, {
+              uiState: localUiState,
+              initialSearchParameters: new algoliasearchHelper.SearchParameters(
+                {
+                  index: this.getIndexName(),
+                }
+              ),
+            })
+          : getLocalWidgetsSearchParameters(localWidgets, {
+              uiState: getLocalWidgetsUiState(localWidgets, {
+                searchParameters: cleanedState,
+                helper: helper!,
+              }),
+              initialSearchParameters: cleanedState,
+            });
+
         localUiState = getLocalWidgetsUiState(localWidgets, {
-          searchParameters: nextState,
+          searchParameters: newState,
           helper: helper!,
         });
 
-        helper!.setState(
-          getLocalWidgetsSearchParameters(localWidgets, {
-            uiState: localUiState,
-            initialSearchParameters: nextState,
-          })
-        );
+        helper!.setState(newState);
 
         if (localWidgets.length) {
           localInstantSearchInstance.scheduleSearch();
