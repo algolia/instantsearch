@@ -75,7 +75,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--firstPage"
             >
               <span
-                aria-label="First"
+                aria-label="First Page"
                 class="ais-Pagination-link"
               >
                 ‹‹
@@ -85,7 +85,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--previousPage"
             >
               <span
-                aria-label="Previous"
+                aria-label="Previous Page"
                 class="ais-Pagination-link"
               >
                 ‹
@@ -172,7 +172,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--nextPage"
             >
               <a
-                aria-label="Next"
+                aria-label="Next Page"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -183,7 +183,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--lastPage"
             >
               <a
-                aria-label="Last"
+                aria-label="Last Page, Page 50"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -232,7 +232,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--firstPage"
             >
               <span
-                aria-label="First"
+                aria-label="First Page"
                 class="ais-Pagination-link"
               >
                 ‹‹
@@ -242,7 +242,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--previousPage"
             >
               <span
-                aria-label="Previous"
+                aria-label="Previous Page"
                 class="ais-Pagination-link"
               >
                 ‹
@@ -329,7 +329,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--nextPage"
             >
               <a
-                aria-label="Next"
+                aria-label="Next Page"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -340,7 +340,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--lastPage"
             >
               <a
-                aria-label="Last"
+                aria-label="Last Page, Page 50"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -629,7 +629,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--firstPage"
             >
               <span
-                aria-label="First"
+                aria-label="First Page"
                 class="ais-Pagination-link"
               >
                 ‹‹
@@ -639,7 +639,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--previousPage"
             >
               <span
-                aria-label="Previous"
+                aria-label="Previous Page"
                 class="ais-Pagination-link"
               >
                 ‹
@@ -748,7 +748,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--nextPage"
             >
               <a
-                aria-label="Next"
+                aria-label="Next Page"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -759,7 +759,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--lastPage"
             >
               <a
-                aria-label="Last"
+                aria-label="Last Page, Page 50"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -806,7 +806,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--firstPage"
             >
               <span
-                aria-label="First"
+                aria-label="First Page"
                 class="ais-Pagination-link"
               >
                 ‹‹
@@ -816,7 +816,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--previousPage"
             >
               <span
-                aria-label="Previous"
+                aria-label="Previous Page"
                 class="ais-Pagination-link"
               >
                 ‹
@@ -892,7 +892,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--nextPage"
             >
               <a
-                aria-label="Next"
+                aria-label="Next Page"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -903,7 +903,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--lastPage"
             >
               <a
-                aria-label="Last"
+                aria-label="Last Page, Page 6"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -950,7 +950,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--firstPage"
             >
               <span
-                aria-label="First"
+                aria-label="First Page"
                 class="ais-Pagination-link"
               >
                 ‹‹
@@ -960,7 +960,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--previousPage"
             >
               <span
-                aria-label="Previous"
+                aria-label="Previous Page"
                 class="ais-Pagination-link"
               >
                 ‹
@@ -1014,7 +1014,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--nextPage"
             >
               <a
-                aria-label="Next"
+                aria-label="Next Page"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1025,7 +1025,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--lastPage"
             >
               <a
-                aria-label="Last"
+                aria-label="Last Page, Page 4"
                 class="ais-Pagination-link"
                 href="#"
               >
@@ -1072,7 +1072,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--previousPage"
             >
               <span
-                aria-label="Previous"
+                aria-label="Previous Page"
                 class="ais-Pagination-link"
               >
                 ‹
@@ -1093,7 +1093,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--nextPage"
             >
               <span
-                aria-label="Next"
+                aria-label="Next Page"
                 class="ais-Pagination-link"
               >
                 ›
@@ -1103,7 +1103,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--lastPage"
             >
               <span
-                aria-label="Last"
+                aria-label="Last Page, Page 0"
                 class="ais-Pagination-link"
               >
                 ››
@@ -1149,7 +1149,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--firstPage"
             >
               <span
-                aria-label="First"
+                aria-label="First Page"
                 class="ais-Pagination-link"
               >
                 ‹‹
@@ -1170,7 +1170,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--nextPage"
             >
               <span
-                aria-label="Next"
+                aria-label="Next Page"
                 class="ais-Pagination-link"
               >
                 ›
@@ -1180,7 +1180,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--lastPage"
             >
               <span
-                aria-label="Last"
+                aria-label="Last Page, Page 0"
                 class="ais-Pagination-link"
               >
                 ››
@@ -1226,7 +1226,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--firstPage"
             >
               <span
-                aria-label="First"
+                aria-label="First Page"
                 class="ais-Pagination-link"
               >
                 ‹‹
@@ -1236,7 +1236,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--previousPage"
             >
               <span
-                aria-label="Previous"
+                aria-label="Previous Page"
                 class="ais-Pagination-link"
               >
                 ‹
@@ -1257,7 +1257,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--lastPage"
             >
               <span
-                aria-label="Last"
+                aria-label="Last Page, Page 0"
                 class="ais-Pagination-link"
               >
                 ››
@@ -1303,7 +1303,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--firstPage"
             >
               <span
-                aria-label="First"
+                aria-label="First Page"
                 class="ais-Pagination-link"
               >
                 ‹‹
@@ -1313,7 +1313,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--previousPage"
             >
               <span
-                aria-label="Previous"
+                aria-label="Previous Page"
                 class="ais-Pagination-link"
               >
                 ‹
@@ -1334,7 +1334,7 @@ export function createOptionsTests(
               class="ais-Pagination-item ais-Pagination-item--disabled ais-Pagination-item--nextPage"
             >
               <span
-                aria-label="Next"
+                aria-label="Next Page"
                 class="ais-Pagination-link"
               >
                 ›
