@@ -113,7 +113,7 @@ function Pagination(props: PaginationProps) {
 
         {props.showLast && (
           <PaginationLink
-            ariaLabel={`Last Page of ${props.nbPages}`}
+            ariaLabel={`Last Page, Page ${props.nbPages}`}
             className={props.cssClasses.lastPageItem}
             isDisabled={props.isLastPage}
             templates={props.templates}
