@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.11.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.10.12...vue-instantsearch@4.11.0) (2023-10-10)
+
+
+### Features
+
+* preserve shared state on unmount with a future flag ([#5123](https://github.com/algolia/instantsearch/issues/5123)) ([2258d89](https://github.com/algolia/instantsearch/commit/2258d899fab887d495af8f31905f0974f53e8e47))
+
+
+
+
+
 ## [4.10.12](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.10.11...vue-instantsearch@4.10.12) (2023-09-19)
 
 
