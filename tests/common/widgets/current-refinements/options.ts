@@ -315,6 +315,53 @@ export function createOptionsTests(
       ).toHaveLength(0);
     });
 
+    it('clears a refinement by calling the `refine` method in each item', async () => {
+      const refine = jest.fn();
+      await setup({
+        instantSearchOptions: {
+          searchClient,
+          indexName: 'indexName',
+          initialUiState: {
+            indexName: {
+              refinementList: {
+                brand: ['Apple', 'Samsung'],
+                feature: ['5G'],
+              },
+            },
+          },
+        },
+        widgetParams: {
+          transformItems: (items) =>
+            items.map((item) => ({
+              ...item,
+              refine(refinement) {
+                refine(refinement);
+                item.refine(refinement);
+              },
+            })),
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const container = document.querySelector<HTMLElement>(
+        '.ais-CurrentRefinements'
+      )!;
+
+      const [btn5G] = document.querySelectorAll(
+        '.ais-CurrentRefinements-delete'
+      );
+
+      await act(async () => {
+        userEvent.click(btn5G);
+        await wait(0);
+      });
+      expect(refine).toHaveBeenCalledTimes(1);
+      expect(queryByText(container, '5G')).toBeNull();
+    });
+
     it('does not trigger default event', async () => {
       await setup({
         instantSearchOptions: {

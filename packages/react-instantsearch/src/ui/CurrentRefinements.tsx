@@ -2,18 +2,17 @@ import React from 'react';
 
 import { capitalize, cx, isModifierClick } from './lib';
 
-import type {
-  CurrentRefinementsConnectorParamsItem,
-  CurrentRefinementsConnectorParamsRefinement,
-} from 'instantsearch.js/es/connectors/current-refinements/connectCurrentRefinements';
+import type { CurrentRefinementsConnectorParamsItem } from 'instantsearch.js/es/connectors/current-refinements/connectCurrentRefinements';
 
 export type CurrentRefinementsProps = React.ComponentProps<'div'> & {
   classNames?: Partial<CurrentRefinementsClassNames>;
   items?: Array<
-    Pick<CurrentRefinementsConnectorParamsItem, 'label' | 'refinements'> &
+    Pick<
+      CurrentRefinementsConnectorParamsItem,
+      'label' | 'refinements' | 'refine'
+    > &
       Record<string, unknown>
   >;
-  onRemove?: (refinement: CurrentRefinementsConnectorParamsRefinement) => void;
   hasRefinements?: boolean;
 };
 
@@ -59,7 +58,6 @@ export type CurrentRefinementsClassNames = {
 export function CurrentRefinements({
   classNames = {},
   items = [],
-  onRemove = () => {},
   hasRefinements = false,
   ...props
 }: CurrentRefinementsProps) {
@@ -122,7 +120,7 @@ export function CurrentRefinements({
                       return;
                     }
 
-                    onRemove(refinement);
+                    item.refine(refinement);
                   }}
                   className={cx(
                     'ais-CurrentRefinements-delete',
