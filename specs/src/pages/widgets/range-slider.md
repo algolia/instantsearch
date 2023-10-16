@@ -7,10 +7,10 @@ html: |
   <div class="ais-RangeSlider">
     <div class="rheostat rheostat-horizontal" style="position: relative;">
       <div class="rheostat-background"></div>
-      <div class="rheostat-handle rehostat-handle--lower" aria-valuemax="5000" aria-valuemin="1" aria-valuenow="750" aria-disabled="false" data-handle-key="0" role="slider" tabindex="0" style="left: 15%; position: absolute;">
+      <div class="rheostat-handle rehostat-handle--lower" aria-valuemax="5000" aria-valuemin="1" aria-valuenow="750" aria-disabled="false" data-handle-key="0" role="slider" tabindex="0" style="left: 15%; position: absolute;" aria-label="Minimum Filter Handle">
         <div class="rheostat-tooltip">$750</div>
       </div>
-      <div class="rheostat-handle rheostat-handle--upper" aria-valuemax="5000" aria-valuemin="750" aria-valuenow="5000" aria-disabled="false" data-handle-key="1" role="slider" tabindex="0" style="left: 100%; position: absolute;">
+      <div class="rheostat-handle rheostat-handle--upper" aria-valuemax="5000" aria-valuemin="750" aria-valuenow="5000" aria-disabled="false" data-handle-key="1" role="slider" tabindex="0" style="left: 100%; position: absolute;" aria-label="Maximum Filter Handle">
         <div class="rheostat-tooltip">$5,000</div>
       </div>
       <div class="rheostat-progress" style="left: 15%; width: 85%;"></div>
