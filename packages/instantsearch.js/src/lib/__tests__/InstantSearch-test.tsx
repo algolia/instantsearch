@@ -522,13 +522,16 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
       expect(mapMiddlewares(search.middleware)).toEqual([]);
     });
 
-    test('insights: undefined adds the insights middleware if `queryID` is found in at least one index in initial response', async () => {
+    test('insights: undefined adds the insights middleware if `_automaticInsights` is found in at least one index in initial response', async () => {
       const searchClient = createSearchClient({
         search: jest.fn((requests) => {
           return Promise.resolve(
             createMultiSearchResponse(
               ...requests.map((request) => {
                 return createSingleSearchResponse<any>({
+                  ...(request.indexName === 'indexNameWithQueryID'
+                    ? { _automaticInsights: true }
+                    : undefined),
                   index: request.indexName,
                   query: request.query,
                   ...(request.indexName === 'indexNameWithQueryID'
