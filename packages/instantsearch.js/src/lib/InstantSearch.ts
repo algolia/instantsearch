@@ -677,10 +677,10 @@ See documentation: ${createDocumentationLink({
     // Any user-provided middleware will be added later and override this one.
     if (typeof this._insights === 'undefined') {
       mainHelper.derivedHelpers[0].once('result', () => {
-        const hasQueryID = this.mainIndex
+        const hasAutomaticInsights = this.mainIndex
           .getScopedResults()
-          .some(({ results }) => results?.queryID !== undefined);
-        if (hasQueryID) {
+          .some(({ results }) => results?._automaticInsights === true);
+        if (hasAutomaticInsights) {
           this.use(
             createInsightsMiddleware({ $$internal: true, $$automatic: true })
           );
