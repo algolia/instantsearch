@@ -143,7 +143,7 @@
             <template v-if="!state.isLastPage">
               <a
                 :class="suit('link')"
-                :aria-label="`Last Page, Page {{ state.nbPages }}`"
+                :aria-label="`Last Page, Page ${state.nbPages}`"
                 :href="state.createURL(state.nbPages - 1)"
                 @click.exact.left.prevent="refine(state.nbPages - 1)"
                 >››</a
@@ -152,7 +152,7 @@
             <template v-else>
               <span
                 :class="suit('link')"
-                :aria-label="`Last page, Page {{ state.nbPages }}`"
+                :aria-label="`Last Page, Page ${state.nbPages}`"
               >
                 ››
               </span>
