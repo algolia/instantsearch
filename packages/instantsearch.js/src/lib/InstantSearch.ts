@@ -682,7 +682,10 @@ See documentation: ${createDocumentationLink({
           .some(({ results }) => results?._automaticInsights);
         if (hasAutomaticInsights) {
           this.use(
-            createInsightsMiddleware({ $$internal: true, $$automatic: true })
+            createInsightsMiddleware({
+              $$internal: true,
+              $$clickAnalytics: false,
+            })
           );
         }
       });

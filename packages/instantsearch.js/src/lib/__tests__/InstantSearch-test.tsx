@@ -500,11 +500,11 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
       });
     const mapMiddlewares = (middlewares: InstantSearch['middleware']) =>
       middlewares.map(
-        // @ts-ignore: $$automatic is only applicable to insights middleware
-        ({ instance: { $$type, $$internal, $$automatic } }) => ({
+        // @ts-ignore: $$clickAnalytics is only applicable to insights middleware
+        ({ instance: { $$type, $$internal, $$clickAnalytics } }) => ({
           $$type,
           $$internal,
-          $$automatic,
+          $$clickAnalytics,
         })
       );
 
@@ -545,7 +545,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
         {
           $$type: 'ais.insights',
           $$internal: true,
-          $$automatic: true,
+          $$clickAnalytics: false,
         },
       ]);
     });
@@ -561,7 +561,28 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
         {
           $$type: 'ais.insights',
           $$internal: true,
-          $$automatic: false,
+          $$clickAnalytics: true,
+        },
+      ]);
+    });
+
+    test('insights: true adds only one insights middleware when `_automaticInsights: true` is also set', async () => {
+      const search = new InstantSearch({
+        searchClient: createSearchClientWithAutomaticInsightsOptedIn(),
+        indexName: 'indexNameWithAutomaticInsights',
+        insights: true,
+      });
+
+      search.addWidgets([virtualSearchBox({})]);
+      search.start();
+
+      await wait(0);
+
+      expect(mapMiddlewares(search.middleware)).toEqual([
+        {
+          $$type: 'ais.insights',
+          $$internal: true,
+          $$clickAnalytics: true,
         },
       ]);
     });
@@ -581,7 +602,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
         {
           $$type: 'ais.insights',
           $$internal: true,
-          $$automatic: false,
+          $$clickAnalytics: true,
         },
       ]);
     });
@@ -601,7 +622,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
         {
           $$type: 'ais.insights',
           $$internal: true,
-          $$automatic: false,
+          $$clickAnalytics: true,
         },
       ]);
 
@@ -666,7 +687,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
         {
           $$type: 'ais.insights',
           $$internal: false,
-          $$automatic: false,
+          $$clickAnalytics: true,
         },
       ]);
     });

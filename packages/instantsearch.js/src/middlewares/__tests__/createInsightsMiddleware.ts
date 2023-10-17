@@ -468,7 +468,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       );
     });
 
-    it('applies clickAnalytics if $$automatic: false', () => {
+    it('applies clickAnalytics if $$clickAnalytics: undefined', () => {
       const { insightsClient, instantSearchInstance } = createTestEnvironment();
       instantSearchInstance.use(
         createInsightsMiddleware({
@@ -478,12 +478,23 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       expect(instantSearchInstance.mainHelper!.state.clickAnalytics).toBe(true);
     });
 
-    it('does not apply clickAnalytics if $$automatic: true', () => {
+    it('applies clickAnalytics if $$clickAnalytics: true', () => {
       const { insightsClient, instantSearchInstance } = createTestEnvironment();
       instantSearchInstance.use(
         createInsightsMiddleware({
           insightsClient,
-          $$automatic: true,
+          $$clickAnalytics: true,
+        })
+      );
+      expect(instantSearchInstance.mainHelper!.state.clickAnalytics).toBe(true);
+    });
+
+    it('does not apply clickAnalytics if $$clickAnalytics: false', () => {
+      const { insightsClient, instantSearchInstance } = createTestEnvironment();
+      instantSearchInstance.use(
+        createInsightsMiddleware({
+          insightsClient,
+          $$clickAnalytics: false,
         })
       );
       expect(
@@ -529,7 +540,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           {
             "creator": [Function],
             "instance": {
-              "$$automatic": false,
+              "$$clickAnalytics": true,
               "$$internal": true,
               "$$type": "ais.insights",
               "onStateChange": [Function],
@@ -552,7 +563,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           {
             "creator": [Function],
             "instance": {
-              "$$automatic": false,
+              "$$clickAnalytics": true,
               "$$internal": false,
               "$$type": "ais.insights",
               "onStateChange": [Function],
@@ -573,7 +584,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           {
             "creator": [Function],
             "instance": {
-              "$$automatic": false,
+              "$$clickAnalytics": true,
               "$$internal": false,
               "$$type": "ais.insights",
               "onStateChange": [Function],
@@ -585,7 +596,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           {
             "creator": [Function],
             "instance": {
-              "$$automatic": false,
+              "$$clickAnalytics": true,
               "$$internal": false,
               "$$type": "ais.insights",
               "onStateChange": [Function],
@@ -613,7 +624,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           {
             "creator": [Function],
             "instance": {
-              "$$automatic": false,
+              "$$clickAnalytics": true,
               "$$internal": true,
               "$$type": "ais.insights",
               "onStateChange": [Function],
@@ -649,7 +660,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           {
             "creator": [Function],
             "instance": {
-              "$$automatic": false,
+              "$$clickAnalytics": true,
               "$$internal": true,
               "$$type": "ais.insights",
               "onStateChange": [Function],
