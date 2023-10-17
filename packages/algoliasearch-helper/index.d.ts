@@ -1317,7 +1317,7 @@ declare namespace algoliasearchHelper {
      */
     facets: SearchResults.Facet[];
 
-    _automaticInsights?: boolean;
+    _automaticInsights?: true;
 
     _rawResults: Array<SearchResponse<T>>;
     _state: SearchParameters;
