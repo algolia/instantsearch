@@ -679,7 +679,7 @@ See documentation: ${createDocumentationLink({
       mainHelper.derivedHelpers[0].once('result', () => {
         const hasAutomaticInsights = this.mainIndex
           .getScopedResults()
-          .some(({ results }) => results?._automaticInsights === true);
+          .some(({ results }) => results?._automaticInsights);
         if (hasAutomaticInsights) {
           this.use(
             createInsightsMiddleware({ $$internal: true, $$automatic: true })

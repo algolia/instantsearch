@@ -476,7 +476,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
   });
 
   describe('insights middleware', () => {
-    const createSearchClientWithInsights = () =>
+    const createSearchClientWithAutomaticInsightsOptedIn = () =>
       createSearchClient({
         search: jest.fn((requests) => {
           return Promise.resolve(
@@ -511,7 +511,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
     test('insights: undefined does not add the insights middleware if `_automaticInsights: true` is not found in initial response', async () => {
       const search = new InstantSearch({
         indexName: 'indexName',
-        searchClient: createSearchClientWithInsights(),
+        searchClient: createSearchClientWithAutomaticInsightsOptedIn(),
       });
 
       search.addWidgets([
@@ -526,7 +526,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
     });
 
     test('insights: undefined adds the insights middleware if `_automaticInsights: true` is found in at least one index in initial response', async () => {
-      const searchClient = createSearchClientWithInsights();
+      const searchClient = createSearchClientWithAutomaticInsightsOptedIn();
       const search = new InstantSearch({
         indexName: 'indexNameWithAutomaticInsights',
         searchClient,
@@ -552,7 +552,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
 
     test('insights: true adds only one insights middleware', () => {
       const search = new InstantSearch({
-        searchClient: createSearchClientWithInsights(),
+        searchClient: createSearchClientWithAutomaticInsightsOptedIn(),
         indexName: 'test',
         insights: true,
       });
@@ -568,7 +568,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
 
     test('insights: options adds only one insights middleware', () => {
       const search = new InstantSearch({
-        searchClient: createSearchClientWithInsights(),
+        searchClient: createSearchClientWithAutomaticInsightsOptedIn(),
         indexName: 'test',
         insights: {
           insightsInitParams: {
@@ -589,7 +589,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
     test('insights: options passes options to middleware', () => {
       const insightsClient = Object.assign(jest.fn(), { version: '2.6.0' });
       const search = new InstantSearch({
-        searchClient: createSearchClientWithInsights(),
+        searchClient: createSearchClientWithAutomaticInsightsOptedIn(),
         indexName: 'test',
         insights: {
           insightsClient,
@@ -631,7 +631,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
 
     test('insights: false disables default insights', () => {
       const search = new InstantSearch({
-        searchClient: createSearchClientWithInsights(),
+        searchClient: createSearchClientWithAutomaticInsightsOptedIn(),
         indexName: 'test',
         insights: false,
       });
@@ -641,7 +641,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
 
     test('insights: false does not add Insights middleware even if `_automaticInsights: true` is set', async () => {
       const search = new InstantSearch({
-        searchClient: createSearchClientWithInsights(),
+        searchClient: createSearchClientWithAutomaticInsightsOptedIn(),
         indexName: 'indexNameWithAutomaticInsights',
         insights: false,
       });
