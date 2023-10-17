@@ -1106,9 +1106,7 @@ export function createOptionsTests(
                 aria-label="Last Page, Page 0"
                 class="ais-Pagination-link"
               >
-                
-                      ››
-                    
+                ››
               </span>
             </li>
           </ul>
@@ -1185,9 +1183,7 @@ export function createOptionsTests(
                 aria-label="Last Page, Page 0"
                 class="ais-Pagination-link"
               >
-                
-                      ››
-                    
+                ››
               </span>
             </li>
           </ul>
@@ -1264,9 +1260,7 @@ export function createOptionsTests(
                 aria-label="Last Page, Page 0"
                 class="ais-Pagination-link"
               >
-                
-                      ››
-                    
+                ››
               </span>
             </li>
           </ul>
