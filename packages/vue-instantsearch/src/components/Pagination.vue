@@ -153,7 +153,8 @@
               <span
                 :class="suit('link')"
                 :aria-label="`Last Page, Page ${state.nbPages}`"
-                >››
+              >
+                ››
               </span>
             </template>
           </slot>

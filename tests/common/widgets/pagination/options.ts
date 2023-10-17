@@ -1107,7 +1107,6 @@ export function createOptionsTests(
                 class="ais-Pagination-link"
               >
                 ››
-                    
               </span>
             </li>
           </ul>
@@ -1185,7 +1184,6 @@ export function createOptionsTests(
                 class="ais-Pagination-link"
               >
                 ››
-                    
               </span>
             </li>
           </ul>
@@ -1263,7 +1261,6 @@ export function createOptionsTests(
                 class="ais-Pagination-link"
               >
                 ››
-                    
               </span>
             </li>
           </ul>
