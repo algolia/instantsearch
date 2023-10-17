@@ -476,54 +476,8 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
   });
 
   describe('insights middleware', () => {
-    const mapMiddlewares = (middlewares: InstantSearch['middleware']) =>
-      middlewares.map(
-        // @ts-ignore: $$automatic is only applicable to insights middleware
-        ({ instance: { $$type, $$internal, $$automatic } }) => ({
-          $$type,
-          $$internal,
-          $$automatic,
-        })
-      );
-
-    test('insights: undefined does not add the insights middleware if `queryID` is not found in initial response', async () => {
-      const searchClient = createSearchClient({
-        search: jest.fn((requests) => {
-          return Promise.resolve(
-            createMultiSearchResponse(
-              ...requests.map((request) => {
-                return createSingleSearchResponse<any>({
-                  index: request.indexName,
-                  query: request.query,
-                  ...(request.indexName === 'indexNameWithQueryID'
-                    ? { queryID: 'queryID' }
-                    : undefined),
-                  hits: [{ objectID: `${request.indexName}-objectID1` }],
-                });
-              })
-            )
-          );
-        }),
-      });
-
-      const search = new InstantSearch({
-        indexName: 'indexName',
-        searchClient,
-      });
-
-      search.addWidgets([
-        virtualSearchBox({}),
-        index({ indexName: 'indexName2' }).addWidgets([virtualSearchBox({})]),
-      ]);
-      search.start();
-
-      await wait(0);
-
-      expect(mapMiddlewares(search.middleware)).toEqual([]);
-    });
-
-    test('insights: undefined adds the insights middleware if `_automaticInsights` is found in at least one index in initial response', async () => {
-      const searchClient = createSearchClient({
+    const createSearchClientWithInsights = () =>
+      createSearchClient({
         search: jest.fn((requests) => {
           return Promise.resolve(
             createMultiSearchResponse(
@@ -544,7 +498,35 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
           );
         }),
       });
+    const mapMiddlewares = (middlewares: InstantSearch['middleware']) =>
+      middlewares.map(
+        // @ts-ignore: $$automatic is only applicable to insights middleware
+        ({ instance: { $$type, $$internal, $$automatic } }) => ({
+          $$type,
+          $$internal,
+          $$automatic,
+        })
+      );
 
+    test('insights: undefined does not add the insights middleware if `queryID` is not found in initial response', async () => {
+      const search = new InstantSearch({
+        indexName: 'indexName',
+        searchClient: createSearchClientWithInsights(),
+      });
+
+      search.addWidgets([
+        virtualSearchBox({}),
+        index({ indexName: 'indexName2' }).addWidgets([virtualSearchBox({})]),
+      ]);
+      search.start();
+
+      await wait(0);
+
+      expect(mapMiddlewares(search.middleware)).toEqual([]);
+    });
+
+    test('insights: undefined adds the insights middleware if `_automaticInsights: true` is found in at least one index in initial response', async () => {
+      const searchClient = createSearchClientWithInsights();
       const search = new InstantSearch({
         indexName: 'indexNameWithQueryID',
         searchClient,
@@ -570,7 +552,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
 
     test('insights: true adds only one insights middleware', () => {
       const search = new InstantSearch({
-        searchClient: createSearchClient(),
+        searchClient: createSearchClientWithInsights(),
         indexName: 'test',
         insights: true,
       });
@@ -586,7 +568,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
 
     test('insights: options adds only one insights middleware', () => {
       const search = new InstantSearch({
-        searchClient: createSearchClient(),
+        searchClient: createSearchClientWithInsights(),
         indexName: 'test',
         insights: {
           insightsInitParams: {
@@ -607,7 +589,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
     test('insights: options passes options to middleware', () => {
       const insightsClient = Object.assign(jest.fn(), { version: '2.6.0' });
       const search = new InstantSearch({
-        searchClient: createSearchClient(),
+        searchClient: createSearchClientWithInsights(),
         indexName: 'test',
         insights: {
           insightsClient,
@@ -649,10 +631,25 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
 
     test('insights: false disables default insights', () => {
       const search = new InstantSearch({
-        searchClient: createSearchClient(),
+        searchClient: createSearchClientWithInsights(),
         indexName: 'test',
         insights: false,
       });
+
+      expect(mapMiddlewares(search.middleware)).toEqual([]);
+    });
+
+    test('insights: false does not add Insights middleware even if `_automaticInsights: true` is set', async () => {
+      const search = new InstantSearch({
+        searchClient: createSearchClientWithInsights(),
+        indexName: 'indexNameWithQueryID',
+        insights: false,
+      });
+
+      search.addWidgets([virtualSearchBox({})]);
+      search.start();
+
+      await wait(0);
 
       expect(mapMiddlewares(search.middleware)).toEqual([]);
     });
