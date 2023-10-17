@@ -483,12 +483,12 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
             createMultiSearchResponse(
               ...requests.map((request) => {
                 return createSingleSearchResponse<any>({
-                  ...(request.indexName === 'indexNameWithQueryID'
+                  ...(request.indexName === 'indexNameWithAutomaticInsights'
                     ? { _automaticInsights: true }
                     : undefined),
                   index: request.indexName,
                   query: request.query,
-                  ...(request.indexName === 'indexNameWithQueryID'
+                  ...(request.indexName === 'indexNameWithAutomaticInsights'
                     ? { queryID: 'queryID' }
                     : undefined),
                   hits: [{ objectID: `${request.indexName}-objectID1` }],
@@ -508,7 +508,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
         })
       );
 
-    test('insights: undefined does not add the insights middleware if `queryID` is not found in initial response', async () => {
+    test('insights: undefined does not add the insights middleware if `_automaticInsights: true` is not found in initial response', async () => {
       const search = new InstantSearch({
         indexName: 'indexName',
         searchClient: createSearchClientWithInsights(),
@@ -528,7 +528,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
     test('insights: undefined adds the insights middleware if `_automaticInsights: true` is found in at least one index in initial response', async () => {
       const searchClient = createSearchClientWithInsights();
       const search = new InstantSearch({
-        indexName: 'indexNameWithQueryID',
+        indexName: 'indexNameWithAutomaticInsights',
         searchClient,
       });
 
@@ -642,7 +642,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
     test('insights: false does not add Insights middleware even if `_automaticInsights: true` is set', async () => {
       const search = new InstantSearch({
         searchClient: createSearchClientWithInsights(),
-        indexName: 'indexNameWithQueryID',
+        indexName: 'indexNameWithAutomaticInsights',
         insights: false,
       });
 
