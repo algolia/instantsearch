@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.12.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.11.0...vue-instantsearch@4.12.0) (2023-10-17)
+
+
+### Features
+
+* **instantsearch:** make `insights` undefined by default ([#5889](https://github.com/algolia/instantsearch/issues/5889)) ([96a5c8b](https://github.com/algolia/instantsearch/commit/96a5c8b736d081aa11ca23ff7ad06a24d6b54960))
+
+
+
+
+
 # [4.11.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.10.12...vue-instantsearch@4.11.0) (2023-10-10)
 
 
