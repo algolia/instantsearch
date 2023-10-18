@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.58.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.57.0...instantsearch.js@4.58.0) (2023-10-10)
+
+
+### Bug Fixes
+
+* **dependencies:** update ui-components ([#5882](https://github.com/algolia/instantsearch/issues/5882)) ([85eac81](https://github.com/algolia/instantsearch/commit/85eac8102ae45ac43a0bee2dd7d12df82872451e)), closes [#5853](https://github.com/algolia/instantsearch/issues/5853)
+* use mainHelper consistently ([#5875](https://github.com/algolia/instantsearch/issues/5875)) ([121d13a](https://github.com/algolia/instantsearch/commit/121d13ab9cec7a6555963bfc3c8fedc8b1afd790))
+
+
+### Features
+
+* preserve shared state on unmount with a future flag ([#5123](https://github.com/algolia/instantsearch/issues/5123)) ([2258d89](https://github.com/algolia/instantsearch/commit/2258d899fab887d495af8f31905f0974f53e8e47))
+
+
+
+
+
 # [4.57.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.56.11...instantsearch.js@4.57.0) (2023-09-19)
 
 

@@ -247,7 +247,7 @@ Use \`InstantSearch.status === "stalled"\` instead.`
       numberLocale,
       initialUiState = {} as TUiState,
       routing = null,
-      insights = false,
+      insights = undefined,
       searchFunction,
       stalledSearchDelay = 200,
       searchClient = null,
