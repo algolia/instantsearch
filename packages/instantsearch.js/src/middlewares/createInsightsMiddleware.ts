@@ -34,6 +34,10 @@ export type InsightsProps<
    * @internal indicator for the default insights middleware
    */
   $$internal?: boolean;
+  /**
+   * @internal indicator for sending the `clickAnalytics` search parameter
+   */
+  $$clickAnalytics?: boolean;
 };
 
 const ALGOLIA_INSIGHTS_VERSION = '2.6.0';
@@ -54,6 +58,7 @@ export function createInsightsMiddleware<
     insightsInitParams,
     onEvent,
     $$internal = false,
+    $$clickAnalytics = true,
   } = props;
 
   let potentialInsightsClient: ProvidedInsightsClient = _insightsClient;
@@ -152,6 +157,7 @@ export function createInsightsMiddleware<
     return {
       $$type: 'ais.insights',
       $$internal,
+      $$clickAnalytics,
       onStateChange() {},
       subscribe() {
         if (!insightsClient.shouldAddScript) return;
@@ -183,10 +189,13 @@ export function createInsightsMiddleware<
           clickAnalytics: helper.state.clickAnalytics,
         };
 
-        helper.overrideStateWithoutTriggeringChangeEvent({
-          ...helper.state,
-          clickAnalytics: true,
-        });
+        if ($$clickAnalytics) {
+          helper.overrideStateWithoutTriggeringChangeEvent({
+            ...helper.state,
+            clickAnalytics: true,
+          });
+        }
+
         if (!$$internal) {
           instantSearchInstance.scheduleSearch();
         }

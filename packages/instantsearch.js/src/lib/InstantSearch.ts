@@ -207,6 +207,7 @@ class InstantSearch<
   public _createURL: CreateURL<TUiState>;
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
+  public _insights: InstantSearchOptions['insights'];
   public middleware: Array<{
     creator: Middleware<TUiState>;
     instance: MiddlewareDefinition<TUiState>;
@@ -342,6 +343,8 @@ See documentation: ${createDocumentationLink({
     this._initialUiState = initialUiState as TUiState;
     this._initialResults = null;
 
+    this._insights = insights;
+
     if (searchFunction) {
       warning(
         false,
@@ -358,8 +361,9 @@ See documentation: ${createDocumentationLink({
       this.use(createRouterMiddleware(routerOptions));
     }
 
-    // This is the default middleware,
-    // any user-provided middleware will be added later and override this one.
+    // This is the default Insights middleware,
+    // added when `insights` is set to true by the user.
+    // Any user-provided middleware will be added later and override this one.
     if (insights) {
       const insightsOptions = typeof insights === 'boolean' ? {} : insights;
       insightsOptions.$$internal = true;
@@ -667,6 +671,25 @@ See documentation: ${createDocumentationLink({
     this.middleware.forEach(({ instance }) => {
       instance.started();
     });
+
+    // This is the automatic Insights middleware,
+    // added when `insights` is unset and the initial results possess `queryID`.
+    // Any user-provided middleware will be added later and override this one.
+    if (typeof this._insights === 'undefined') {
+      mainHelper.derivedHelpers[0].once('result', () => {
+        const hasAutomaticInsights = this.mainIndex
+          .getScopedResults()
+          .some(({ results }) => results?._automaticInsights);
+        if (hasAutomaticInsights) {
+          this.use(
+            createInsightsMiddleware({
+              $$internal: true,
+              $$clickAnalytics: false,
+            })
+          );
+        }
+      });
+    }
   }
 
   /**
