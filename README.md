@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/">
-    <img alt="InstantSearch.js" src=".github/banner.png">
+    <img alt="InstantSearch.js" src=".github/banner.png?raw=">
   </a>
 
   <p align="center">
