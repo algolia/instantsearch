@@ -88,10 +88,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
         pageLink,
       ] = await Promise.all([
         findByRole(container, 'list'),
-        (await findByLabelText(container, 'First')).parentNode,
-        (await findByLabelText(container, 'Previous')).parentNode,
-        (await findByLabelText(container, 'Next')).parentNode,
-        (await findByLabelText(container, 'Last')).parentNode,
+        (await findByLabelText(container, 'First Page')).parentNode,
+        (await findByLabelText(container, 'Previous Page')).parentNode,
+        (await findByLabelText(container, 'Next Page')).parentNode,
+        (await findByLabelText(container, 'Last Page, Page 0')).parentNode,
         findByRole(container, 'link', { name: 'Page 1' }),
       ]);
 

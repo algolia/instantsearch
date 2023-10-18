@@ -328,6 +328,7 @@ class RefinementList<TTemplates extends Templates> extends Component<
           // This sets the search box to a controlled state because
           // we don't rely on the `refine` prop but on `onChange`.
           searchAsYouType={false}
+          ariaLabel="Search for filters"
         />
       </div>
     );

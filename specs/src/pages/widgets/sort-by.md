@@ -4,7 +4,7 @@ title: SortBy
 type: widget
 html: |
   <div class="ais-SortBy">
-    <select class="ais-SortBy-select">
+    <select class="ais-SortBy-select" aria-label="Sort results by">
       <option class="ais-SortBy-option" value="Most relevant">Most relevant</option>
       <option class="ais-SortBy-option" value="Lowest price">Lowest price</option>
     </select>

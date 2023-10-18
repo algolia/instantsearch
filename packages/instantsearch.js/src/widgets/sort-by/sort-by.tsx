@@ -94,6 +94,7 @@ const renderer =
           currentValue={currentRefinement}
           options={options}
           setValue={refine}
+          ariaLabel="Sort results by"
         />
       </div>,
       containerNode
