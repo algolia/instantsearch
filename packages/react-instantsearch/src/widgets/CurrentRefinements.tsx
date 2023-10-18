@@ -8,7 +8,7 @@ import type { UseCurrentRefinementsProps } from 'react-instantsearch-core';
 
 type UiProps = Pick<
   CurrentRefinementsUiComponentProps,
-  'items' | 'onRemove' | 'hasRefinements'
+  'items' | 'hasRefinements'
 >;
 
 export type CurrentRefinementsProps = Omit<
@@ -23,7 +23,7 @@ export function CurrentRefinements({
   transformItems,
   ...props
 }: CurrentRefinementsProps) {
-  const { items, refine, canRefine } = useCurrentRefinements(
+  const { items, canRefine } = useCurrentRefinements(
     {
       includedAttributes,
       excludedAttributes,
@@ -36,7 +36,6 @@ export function CurrentRefinements({
 
   const uiProps: UiProps = {
     items,
-    onRemove: refine,
     hasRefinements: canRefine,
   };
 

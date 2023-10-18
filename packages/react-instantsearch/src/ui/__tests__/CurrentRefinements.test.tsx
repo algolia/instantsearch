@@ -28,13 +28,14 @@ describe('CurrentRefinements', () => {
   });
 
   test('renders with clickable refinements', () => {
-    const onRemove = jest.fn();
+    const refine = jest.fn();
 
     const { container } = render(
       <CurrentRefinements
         items={[
           {
             label: 'Brand',
+            refine,
             refinements: [
               {
                 label: 'Apple',
@@ -52,7 +53,6 @@ describe('CurrentRefinements', () => {
           },
         ]}
         hasRefinements={true}
-        onRemove={onRemove}
       />
     );
 
@@ -116,7 +116,7 @@ describe('CurrentRefinements', () => {
 
     userEvent.click(button1);
 
-    expect(onRemove).toHaveBeenLastCalledWith({
+    expect(refine).toHaveBeenLastCalledWith({
       attribute: 'brand',
       label: 'Apple',
       type: 'facet',
@@ -125,13 +125,13 @@ describe('CurrentRefinements', () => {
 
     userEvent.click(button2);
 
-    expect(onRemove).toHaveBeenLastCalledWith({
+    expect(refine).toHaveBeenLastCalledWith({
       attribute: 'brand',
       label: 'Samsung',
       type: 'facet',
       value: 'Samsung',
     });
-    expect(onRemove).toHaveBeenCalledTimes(2);
+    expect(refine).toHaveBeenCalledTimes(2);
   });
 
   test('accepts custom class names', () => {
@@ -172,6 +172,7 @@ describe('CurrentRefinements', () => {
           items={[
             {
               label: 'brand',
+              refine: jest.fn(),
               refinements: [
                 {
                   attribute: 'brand',
