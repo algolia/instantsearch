@@ -18,7 +18,13 @@ import type { SearchClient } from 'instantsearch.js';
 function normalizeSnapshot(html: string) {
   // InstantSearch.js uses different text in the page items.
   // @MAJOR: Standardize page item text between all flavors.
-  return commonNormalizeSnapshot(html).replace('«', '‹‹').replace('»', '››');
+  return commonNormalizeSnapshot(html)
+    .replace('«', '‹‹')
+    .replace('»', '››')
+    .replace(
+      /(<span[^>]*class="ais-Pagination-link"[^>]*>)([^<]*)(<\/span>)/g,
+      (_, open, content, close) => `${open}${content.trim()}${close}`
+    );
 }
 
 export function createOptionsTests(
