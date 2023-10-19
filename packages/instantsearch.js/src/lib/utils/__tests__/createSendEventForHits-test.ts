@@ -20,6 +20,19 @@ const createTestEnvironment = ({ nbHits = 2 }: { nbHits?: number } = {}) => {
     __queryID: 'test-query-id',
     objectID: `obj${i}`,
   }));
+  const additionalData = {
+    eventSubtype: 'addToCart',
+    objectData: [
+      {
+        queryID: hits[0].__queryID,
+        price: 100,
+        discount: 0,
+        quantity: 1,
+      },
+    ],
+    value: 100,
+    currency: 'USD',
+  };
   const sendEvent = createSendEventForHits({
     instantSearchInstance,
     index,
@@ -35,6 +48,7 @@ const createTestEnvironment = ({ nbHits = 2 }: { nbHits?: number } = {}) => {
     index,
     widgetType,
     hits,
+    additionalData,
     sendEvent,
     bindEvent,
   };
@@ -161,7 +175,8 @@ describe('createSendEventForHits', () => {
   });
 
   it('sends view event with multiple hits', () => {
-    const { sendEvent, instantSearchInstance, hits } = createTestEnvironment();
+    const { sendEvent, instantSearchInstance, hits, additionalData } =
+      createTestEnvironment();
     sendEvent('view', hits);
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
@@ -183,6 +198,32 @@ describe('createSendEventForHits', () => {
         eventName: 'Hits Viewed',
         index: 'testIndex',
         objectIDs: ['obj0', 'obj1'],
+      },
+      widgetType: 'ais.testWidget',
+    });
+
+    sendEvent('view', hits, 'Products Viewed', additionalData);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(2);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+      eventType: 'view',
+      hits: [
+        {
+          __position: 0,
+          __queryID: 'test-query-id',
+          objectID: 'obj0',
+        },
+        {
+          __position: 1,
+          __queryID: 'test-query-id',
+          objectID: 'obj1',
+        },
+      ],
+      insightsMethod: 'viewedObjectIDs',
+      payload: {
+        eventName: 'Products Viewed',
+        index: 'testIndex',
+        objectIDs: ['obj0', 'obj1'],
+        ...additionalData,
       },
       widgetType: 'ais.testWidget',
     });
@@ -247,7 +288,8 @@ describe('createSendEventForHits', () => {
   });
 
   it('sends click event', () => {
-    const { sendEvent, instantSearchInstance, hits } = createTestEnvironment();
+    const { sendEvent, instantSearchInstance, hits, additionalData } =
+      createTestEnvironment();
     sendEvent('click', hits[0], 'Product Clicked');
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
@@ -266,6 +308,29 @@ describe('createSendEventForHits', () => {
         objectIDs: ['obj0'],
         positions: [0],
         queryID: 'test-query-id',
+      },
+      widgetType: 'ais.testWidget',
+    });
+
+    sendEvent('click', hits[0], 'Product Clicked', additionalData);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(2);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
+      eventType: 'click',
+      hits: [
+        {
+          __position: 0,
+          __queryID: 'test-query-id',
+          objectID: 'obj0',
+        },
+      ],
+      insightsMethod: 'clickedObjectIDsAfterSearch',
+      payload: {
+        eventName: 'Product Clicked',
+        index: 'testIndex',
+        objectIDs: ['obj0'],
+        positions: [0],
+        queryID: 'test-query-id',
+        ...additionalData,
       },
       widgetType: 'ais.testWidget',
     });
@@ -344,7 +409,8 @@ describe('createSendEventForHits', () => {
   });
 
   it('sends conversion event', () => {
-    const { sendEvent, instantSearchInstance, hits } = createTestEnvironment();
+    const { sendEvent, instantSearchInstance, hits, additionalData } =
+      createTestEnvironment();
     sendEvent('conversion', hits[0], 'Product Ordered');
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(1);
     expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
@@ -362,6 +428,28 @@ describe('createSendEventForHits', () => {
         index: 'testIndex',
         objectIDs: ['obj0'],
         queryID: 'test-query-id',
+      },
+      widgetType: 'ais.testWidget',
+    });
+
+    sendEvent('conversion', hits[0], 'Product Added To Cart', additionalData);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledTimes(2);
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenLastCalledWith({
+      eventType: 'conversion',
+      hits: [
+        {
+          __position: 0,
+          __queryID: 'test-query-id',
+          objectID: 'obj0',
+        },
+      ],
+      insightsMethod: 'convertedObjectIDsAfterSearch',
+      payload: {
+        eventName: 'Product Added To Cart',
+        index: 'testIndex',
+        objectIDs: ['obj0'],
+        queryID: 'test-query-id',
+        ...additionalData,
       },
       widgetType: 'ais.testWidget',
     });
@@ -488,7 +576,7 @@ describe('createBindEventForHits', () => {
   }
 
   it('returns a payload for view event', () => {
-    const { bindEvent, hits } = createTestEnvironment();
+    const { bindEvent, hits, additionalData } = createTestEnvironment();
     const parsedPayload = parsePayload(bindEvent('view', hits));
     expect(parsedPayload).toEqual([
       {
@@ -514,6 +602,35 @@ describe('createBindEventForHits', () => {
         widgetType: 'ais.testWidget',
       },
     ]);
+
+    const parsedPayloadWithAdditionalData = parsePayload(
+      bindEvent('view', hits, 'Products Viewed', additionalData)
+    );
+    expect(parsedPayloadWithAdditionalData).toEqual([
+      {
+        eventType: 'view',
+        hits: [
+          {
+            __position: 0,
+            __queryID: 'test-query-id',
+            objectID: 'obj0',
+          },
+          {
+            __position: 1,
+            __queryID: 'test-query-id',
+            objectID: 'obj1',
+          },
+        ],
+        insightsMethod: 'viewedObjectIDs',
+        payload: {
+          eventName: 'Products Viewed',
+          index: 'testIndex',
+          objectIDs: ['obj0', 'obj1'],
+          ...additionalData,
+        },
+        widgetType: 'ais.testWidget',
+      },
+    ]);
   });
 
   it('skips payload for view event when search is not idle', () => {
@@ -533,7 +650,7 @@ describe('createBindEventForHits', () => {
   });
 
   it('returns a payload for click event', () => {
-    const { bindEvent, hits } = createTestEnvironment();
+    const { bindEvent, hits, additionalData } = createTestEnvironment();
     const parsedPayload = parsePayload(
       bindEvent('click', hits[0], 'Product Clicked')
     );
@@ -558,10 +675,36 @@ describe('createBindEventForHits', () => {
         widgetType: 'ais.testWidget',
       },
     ]);
+
+    const parsedPayloadWithAdditionalData = parsePayload(
+      bindEvent('click', hits[0], 'Product Clicked', additionalData)
+    );
+    expect(parsedPayloadWithAdditionalData).toEqual([
+      {
+        eventType: 'click',
+        hits: [
+          {
+            __position: 0,
+            __queryID: 'test-query-id',
+            objectID: 'obj0',
+          },
+        ],
+        insightsMethod: 'clickedObjectIDsAfterSearch',
+        payload: {
+          eventName: 'Product Clicked',
+          index: 'testIndex',
+          objectIDs: ['obj0'],
+          positions: [0],
+          queryID: 'test-query-id',
+          ...additionalData,
+        },
+        widgetType: 'ais.testWidget',
+      },
+    ]);
   });
 
   it('returns a payload for conversion event', () => {
-    const { bindEvent, hits } = createTestEnvironment();
+    const { bindEvent, hits, additionalData } = createTestEnvironment();
     const parsedPayload = parsePayload(
       bindEvent('conversion', hits[0], 'Product Ordered')
     );
@@ -581,6 +724,31 @@ describe('createBindEventForHits', () => {
           index: 'testIndex',
           objectIDs: ['obj0'],
           queryID: 'test-query-id',
+        },
+        widgetType: 'ais.testWidget',
+      },
+    ]);
+
+    const parsedPayloadWithAdditionalData = parsePayload(
+      bindEvent('conversion', hits[0], 'Product Added To Cart', additionalData)
+    );
+    expect(parsedPayloadWithAdditionalData).toEqual([
+      {
+        eventType: 'conversion',
+        hits: [
+          {
+            __position: 0,
+            __queryID: 'test-query-id',
+            objectID: 'obj0',
+          },
+        ],
+        insightsMethod: 'convertedObjectIDsAfterSearch',
+        payload: {
+          eventName: 'Product Added To Cart',
+          index: 'testIndex',
+          objectIDs: ['obj0'],
+          queryID: 'test-query-id',
+          ...additionalData,
         },
         widgetType: 'ais.testWidget',
       },
