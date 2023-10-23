@@ -1,5 +1,6 @@
 import { fakeAct } from '../common';
 
+import { createInsightsTests } from './insights';
 import { createRoutingTests } from './routing';
 
 import type { TestOptions, TestSetup } from '../common';
@@ -25,5 +26,6 @@ export function createSharedTests(
 
   describe('Shared common tests', () => {
     createRoutingTests(setup, { act, skippedTests });
+    createInsightsTests(setup, { act, skippedTests });
   });
 }

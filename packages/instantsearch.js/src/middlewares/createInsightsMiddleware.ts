@@ -285,6 +285,11 @@ export function createInsightsMiddleware<
           } else if (event.insightsMethod) {
             // Source is used to differentiate events sent by instantsearch from those sent manually.
             (event.payload as any).algoliaSource = ['instantsearch'];
+            if (!$$clickAnalytics) {
+              (event.payload as any).algoliaSource.push(
+                'instantsearch-automatic'
+              );
+            }
             if (event.eventModifier === 'internal') {
               (event.payload as any).algoliaSource.push(
                 'instantsearch-internal'
