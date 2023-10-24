@@ -545,7 +545,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
         {
           $$type: 'ais.insights',
           $$internal: true,
-          $$automatic: false,
+          $$automatic: true,
         },
       ]);
     });
@@ -561,7 +561,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
         {
           $$type: 'ais.insights',
           $$internal: true,
-          $$automatic: true,
+          $$automatic: false,
         },
       ]);
     });
@@ -582,7 +582,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
         {
           $$type: 'ais.insights',
           $$internal: true,
-          $$automatic: true,
+          $$automatic: false,
         },
       ]);
     });
@@ -602,7 +602,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
         {
           $$type: 'ais.insights',
           $$internal: true,
-          $$automatic: true,
+          $$automatic: false,
         },
       ]);
     });
@@ -622,7 +622,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
         {
           $$type: 'ais.insights',
           $$internal: true,
-          $$automatic: true,
+          $$automatic: false,
         },
       ]);
 
@@ -687,7 +687,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
         {
           $$type: 'ais.insights',
           $$internal: false,
-          $$automatic: true,
+          $$automatic: false,
         },
       ]);
     });

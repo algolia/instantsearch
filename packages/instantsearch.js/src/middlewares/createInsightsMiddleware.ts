@@ -58,7 +58,7 @@ export function createInsightsMiddleware<
     insightsInitParams,
     onEvent,
     $$internal = false,
-    $$automatic = true,
+    $$automatic = false,
   } = props;
 
   let potentialInsightsClient: ProvidedInsightsClient = _insightsClient;
@@ -189,7 +189,7 @@ export function createInsightsMiddleware<
           clickAnalytics: helper.state.clickAnalytics,
         };
 
-        if ($$automatic) {
+        if (!$$automatic) {
           helper.overrideStateWithoutTriggeringChangeEvent({
             ...helper.state,
             clickAnalytics: true,
@@ -285,7 +285,7 @@ export function createInsightsMiddleware<
           } else if (event.insightsMethod) {
             // Source is used to differentiate events sent by instantsearch from those sent manually.
             (event.payload as any).algoliaSource = ['instantsearch'];
-            if (!$$automatic) {
+            if ($$automatic) {
               (event.payload as any).algoliaSource.push(
                 'instantsearch-automatic'
               );

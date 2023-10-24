@@ -684,7 +684,7 @@ See documentation: ${createDocumentationLink({
           this.use(
             createInsightsMiddleware({
               $$internal: true,
-              $$automatic: false,
+              $$automatic: true,
             })
           );
         }
