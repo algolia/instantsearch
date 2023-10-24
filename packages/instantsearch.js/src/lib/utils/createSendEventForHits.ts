@@ -6,7 +6,8 @@ import type { InstantSearch, Hit, EscapedHits } from '../../types';
 type BuiltInSendEventForHits = (
   eventType: string,
   hits: Hit | Hit[],
-  eventName?: string
+  eventName?: string,
+  additionalData?: Record<string, any>
 ) => void;
 type CustomSendEventForHits = (customPayload: any) => void;
 export type SendEventForHits = BuiltInSendEventForHits & CustomSendEventForHits;
@@ -14,11 +15,10 @@ export type SendEventForHits = BuiltInSendEventForHits & CustomSendEventForHits;
 export type BuiltInBindEventForHits = (
   eventType: string,
   hits: Hit | Hit[],
-  eventName?: string
+  eventName?: string,
+  additionalData?: Record<string, any>
 ) => string;
-
 export type CustomBindEventForHits = (customPayload: any) => string;
-
 export type BindEventForHits = BuiltInBindEventForHits & CustomBindEventForHits;
 
 function chunk<TItem>(arr: TItem[], chunkSize: number = 20): TItem[][] {
@@ -50,6 +50,8 @@ export function _buildEventPayloadsForHits({
 
   const hits: Hit | Hit[] | EscapedHits = args[1];
   const eventName: string | undefined = args[2];
+  const additionalData: Record<string, any> = args[3] || {};
+
   if (!hits) {
     if (__DEV__) {
       throw new Error(
@@ -101,6 +103,7 @@ export function _buildEventPayloadsForHits({
           eventName: eventName || 'Hits Viewed',
           index,
           objectIDs: objectIDsByChunk[i],
+          ...additionalData,
         },
         hits: batch,
         eventModifier,
@@ -118,6 +121,7 @@ export function _buildEventPayloadsForHits({
           queryID,
           objectIDs: objectIDsByChunk[i],
           positions: positionsByChunk[i],
+          ...additionalData,
         },
         hits: batch,
         eventModifier,
@@ -134,6 +138,7 @@ export function _buildEventPayloadsForHits({
           index,
           queryID,
           objectIDs: objectIDsByChunk[i],
+          ...additionalData,
         },
         hits: batch,
         eventModifier,
