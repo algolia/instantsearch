@@ -2562,6 +2562,7 @@ const searchClient = algoliasearch('appId', 'apiKey');
 const search = instantsearch({
   indexName: 'indexName',
   searchClient,
+  future: { preserveSharedStateOnUnmount: true },
 });
 
 search.addWidgets([
@@ -4749,6 +4750,8 @@ import './App.css';
 
 const searchClient = algoliasearch('appId', 'apiKey');
 
+const future = { preserveSharedStateOnUnmount: true };
+
 export function App() {
   return (
     <div>
@@ -4768,6 +4771,7 @@ export function App() {
         <InstantSearch
           searchClient={searchClient}
           indexName=\\"indexName\\"
+          future={future}
           insights
         >
           <Configure hitsPerPage={8} />
@@ -5762,7 +5766,11 @@ exports[`Templates Vue InstantSearch with Vue 3 File content: src/App.vue 1`] = 
     </header>
 
     <div class=\\"container\\">
-      <ais-instant-search :search-client=\\"searchClient\\" index-name=\\"indexName\\">
+      <ais-instant-search
+        :search-client=\\"searchClient\\"
+        index-name=\\"indexName\\"
+        :future=\\"future\\"
+      >
         <ais-configure :hits-per-page.camel=\\"8\\" />
         <div class=\\"search-panel\\">
           <div class=\\"search-panel__filters\\">
@@ -5812,6 +5820,7 @@ export default {
   data() {
     return {
       searchClient: algoliasearch('appId', 'apiKey'),
+      future: { preserveSharedStateOnUnmount: true },
     };
   },
 };
