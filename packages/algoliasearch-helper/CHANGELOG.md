@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.15.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.14.2...algoliasearch-helper@3.15.0) (2023-10-24)
+
+
+### Features
+
+* **instantsearch:** allow the insights middleware to be added in answer to a server setting ([#5883](https://github.com/algolia/instantsearch/issues/5883)) ([2a9e654](https://github.com/algolia/instantsearch/commit/2a9e6542f6ce22d67789febc8a2e1852a0ad7641))
+
+
+
+
+
 ## [3.14.2](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.14.1...algoliasearch-helper@3.14.2) (2023-09-19)
 
 
