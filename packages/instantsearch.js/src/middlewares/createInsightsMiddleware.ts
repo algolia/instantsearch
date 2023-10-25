@@ -189,6 +189,8 @@ export function createInsightsMiddleware<
           clickAnalytics: helper.state.clickAnalytics,
         };
 
+        // We don't want to force clickAnalytics when the insights is enabled from the search response.
+        // This means we don't enable insights for indices that don't opt in
         if (!$$automatic) {
           helper.overrideStateWithoutTriggeringChangeEvent({
             ...helper.state,
