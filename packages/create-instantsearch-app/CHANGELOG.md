@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.2.1](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.2.0...create-instantsearch-app@7.2.1) (2023-10-24)
+
+## Bug Fixes
+* **templates:** add "future" flags ([#5904](https://github.com/algolia/instantsearch/issues/5904)) ([c82ce6d](https://github.com/algolia/instantsearch/commit/08305b910e8b057c9d13020a50f6615089a58412))
+
+
+
+
+
+
 # [7.2.0](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.1.0...create-instantsearch-app@7.2.0) (2023-09-25)
 
 
