@@ -16,6 +16,7 @@
       <ais-instant-search
         :search-client="searchClient"
         index-name="instant_search"
+        :future="future"
         
       >
         <ais-configure :hits-per-page.camel="8" />
@@ -64,6 +65,7 @@ export default {
   data() {
     return {
       searchClient: algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76'),
+      future: { preserveSharedStateOnUnmount: true },
     };
   },
 };
