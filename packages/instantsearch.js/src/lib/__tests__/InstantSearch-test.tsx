@@ -500,11 +500,11 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
       });
     const mapMiddlewares = (middlewares: InstantSearch['middleware']) =>
       middlewares.map(
-        // @ts-ignore: $$clickAnalytics is only applicable to insights middleware
-        ({ instance: { $$type, $$internal, $$clickAnalytics } }) => ({
+        // @ts-ignore: $$automatic is only applicable to insights middleware
+        ({ instance: { $$type, $$internal, $$automatic } }) => ({
           $$type,
           $$internal,
-          $$clickAnalytics,
+          $$automatic,
         })
       );
 
@@ -545,7 +545,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
         {
           $$type: 'ais.insights',
           $$internal: true,
-          $$clickAnalytics: false,
+          $$automatic: true,
         },
       ]);
     });
@@ -561,7 +561,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
         {
           $$type: 'ais.insights',
           $$internal: true,
-          $$clickAnalytics: true,
+          $$automatic: false,
         },
       ]);
     });
@@ -582,7 +582,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
         {
           $$type: 'ais.insights',
           $$internal: true,
-          $$clickAnalytics: true,
+          $$automatic: false,
         },
       ]);
     });
@@ -602,7 +602,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
         {
           $$type: 'ais.insights',
           $$internal: true,
-          $$clickAnalytics: true,
+          $$automatic: false,
         },
       ]);
     });
@@ -622,7 +622,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
         {
           $$type: 'ais.insights',
           $$internal: true,
-          $$clickAnalytics: true,
+          $$automatic: false,
         },
       ]);
 
@@ -687,7 +687,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
         {
           $$type: 'ais.insights',
           $$internal: false,
-          $$clickAnalytics: true,
+          $$automatic: false,
         },
       ]);
     });
