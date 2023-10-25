@@ -5,7 +5,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [7.2.1](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.2.0...create-instantsearch-app@7.2.1) (2023-10-24)
 
-**Note:** Version bump only for package create-instantsearch-app
+## Bug Fixes
+* **templates:** add "future" flags ([#5904](https://github.com/algolia/instantsearch/issues/5904)) ([c82ce6d](https://github.com/algolia/instantsearch/commit/08305b910e8b057c9d13020a50f6615089a58412))
+
 
 
 
