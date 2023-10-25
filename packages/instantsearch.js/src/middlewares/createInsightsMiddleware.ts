@@ -37,7 +37,7 @@ export type InsightsProps<
   /**
    * @internal indicator for sending the `clickAnalytics` search parameter
    */
-  $$clickAnalytics?: boolean;
+  $$automatic?: boolean;
 };
 
 const ALGOLIA_INSIGHTS_VERSION = '2.6.0';
@@ -58,7 +58,7 @@ export function createInsightsMiddleware<
     insightsInitParams,
     onEvent,
     $$internal = false,
-    $$clickAnalytics = true,
+    $$automatic = false,
   } = props;
 
   let potentialInsightsClient: ProvidedInsightsClient = _insightsClient;
@@ -157,7 +157,7 @@ export function createInsightsMiddleware<
     return {
       $$type: 'ais.insights',
       $$internal,
-      $$clickAnalytics,
+      $$automatic,
       onStateChange() {},
       subscribe() {
         if (!insightsClient.shouldAddScript) return;
@@ -189,7 +189,9 @@ export function createInsightsMiddleware<
           clickAnalytics: helper.state.clickAnalytics,
         };
 
-        if ($$clickAnalytics) {
+        // We don't want to force clickAnalytics when the insights is enabled from the search response.
+        // This means we don't enable insights for indices that don't opt in
+        if (!$$automatic) {
           helper.overrideStateWithoutTriggeringChangeEvent({
             ...helper.state,
             clickAnalytics: true,
@@ -285,7 +287,7 @@ export function createInsightsMiddleware<
           } else if (event.insightsMethod) {
             // Source is used to differentiate events sent by instantsearch from those sent manually.
             (event.payload as any).algoliaSource = ['instantsearch'];
-            if (!$$clickAnalytics) {
+            if ($$automatic) {
               (event.payload as any).algoliaSource.push(
                 'instantsearch-automatic'
               );
