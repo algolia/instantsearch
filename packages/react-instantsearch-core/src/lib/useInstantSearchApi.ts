@@ -59,7 +59,6 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
   const serverState = useInstantSearchSSRContext<TUiState, TRouteState>();
   const waitingForResultsRef = useRSCContext();
   const initialResults = serverState?.initialResults;
-  const prevPropsRef = useRef(props);
 
   const shouldRenderAtOnce =
     serverContext || initialResults || waitingForResultsRef;
@@ -131,16 +130,7 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
     searchRef.current = search;
   }
 
-  {
-    const search = searchRef.current;
-    // TODO: is this still needed? (was it even ever needed, we could have read the private InstantSearch values)
-    // const prevProps = prevPropsRef.current;
-    const nextProps = props;
-    const updated = search.update(nextProps);
-    if (updated) {
-      prevPropsRef.current = nextProps;
-    }
-  }
+  searchRef.current.update(props);
 
   const cleanupTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const store = useSyncExternalStore<InstantSearch<TUiState, TRouteState>>(

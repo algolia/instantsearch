@@ -844,15 +844,12 @@ See documentation: ${createDocumentationLink({
 
   /**
    * Update the parameters passed to the InstantSearch constructor.
-   * @returns true if anything has been updated
    */
   public update(
     props: Partial<InstantSearchOptions<TUiState, TRouteState>>
-  ): boolean {
-    let hasUpdated = false;
+  ): void {
     if (this.indexName !== props.indexName) {
       this.helper!.setIndex(props.indexName || '').search();
-      hasUpdated = true;
     }
 
     if (this.client !== props.searchClient) {
@@ -881,12 +878,10 @@ See documentation: ${createDocumentationLink({
       // ]);
 
       this.mainHelper!.setClient(props.searchClient).search();
-      hasUpdated = true;
     }
 
     if (this.onStateChange !== props.onStateChange) {
       this.onStateChange = props.onStateChange;
-      hasUpdated = true;
     }
 
     if (this._searchFunction !== props.searchFunction) {
@@ -899,13 +894,11 @@ See documentation: ${createDocumentationLink({
         ((helper) => {
           helper.search();
         });
-      hasUpdated = true;
     }
 
     if (this._stalledSearchDelay !== props.stalledSearchDelay) {
       this._stalledSearchDelay =
         props.stalledSearchDelay ?? INSTANTSEARCH_STALLED_SEARCH_DEFAULTS;
-      hasUpdated = true;
     }
 
     // TODO: move dequal to a shared package?
@@ -914,7 +907,6 @@ See documentation: ${createDocumentationLink({
     //     ...INSTANTSEARCH_FUTURE_DEFAULTS,
     //     ...props.future,
     //   };
-    //   hasUpdated = true;
     // }
 
     // TODO: insights option
@@ -927,8 +919,6 @@ See documentation: ${createDocumentationLink({
     // it privately on the InstantSearch instance. Another way would be to
     // manually inject the routing middleware in this library, and not rely
     // on the provided `routing` prop.
-
-    return hasUpdated;
   }
 }
 
