@@ -178,6 +178,7 @@ export type InstantSearchStatus = 'idle' | 'loading' | 'stalled' | 'error';
 export const INSTANTSEARCH_FUTURE_DEFAULTS: Required<
   InstantSearchOptions['future']
 > = { preserveSharedStateOnUnmount: false };
+export const INSTANTSEARCH_STALLED_SEARCH_DEFAULTS = 200;
 
 /**
  * The actual implementation of the InstantSearch. This is
@@ -250,7 +251,7 @@ Use \`InstantSearch.status === "stalled"\` instead.`
       routing = null,
       insights = undefined,
       searchFunction,
-      stalledSearchDelay = 200,
+      stalledSearchDelay = INSTANTSEARCH_STALLED_SEARCH_DEFAULTS,
       searchClient = null,
       insightsClient = null,
       onStateChange = null,
@@ -839,6 +840,95 @@ See documentation: ${createDocumentationLink({
     }
 
     this.mainHelper.clearCache().search();
+  }
+
+  /**
+   * Update the parameters passed to the InstantSearch constructor.
+   * @returns true if anything has been updated
+   */
+  public update(
+    props: Partial<InstantSearchOptions<TUiState, TRouteState>>
+  ): boolean {
+    let hasUpdated = false;
+    if (this.indexName !== props.indexName) {
+      this.helper!.setIndex(props.indexName || '').search();
+      hasUpdated = true;
+    }
+
+    if (this.client !== props.searchClient) {
+      warning(
+        false,
+        // TODO: flavor-specific warning (search._flavor = 'vue') URL
+        'The `searchClient` parameter changed, which may cause more search requests than necessary. If this is an unwanted behavior, please provide a stable reference.'
+      );
+
+      if (!props.searchClient) {
+        throw new Error(withUsage('The `searchClient` option is required.'));
+      }
+
+      if (typeof props.searchClient.search !== 'function') {
+        throw new Error(
+          `The \`searchClient\` must implement a \`search\` method.
+  
+  See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend-search/in-depth/backend-instantsearch/js/`
+        );
+      }
+
+      // TODO: proper API for this too
+      // addAlgoliaAgents(props.searchClient, [
+      //   ...defaultUserAgents,
+      //   serverContext && serverUserAgent,
+      // ]);
+
+      this.mainHelper!.setClient(props.searchClient).search();
+      hasUpdated = true;
+    }
+
+    if (this.onStateChange !== props.onStateChange) {
+      this.onStateChange = props.onStateChange;
+      hasUpdated = true;
+    }
+
+    if (this._searchFunction !== props.searchFunction) {
+      // Updating the `searchFunction` to `undefined` is not supported by
+      // InstantSearch.js, so it will throw an error.
+      // This is a fair behavior until we add an update API in InstantSearch.js.
+      // TODO: unset if next searchFunction is undefined, maybe set to a noop?
+      this._searchFunction =
+        props.searchFunction ??
+        ((helper) => {
+          helper.search();
+        });
+      hasUpdated = true;
+    }
+
+    if (this._stalledSearchDelay !== props.stalledSearchDelay) {
+      this._stalledSearchDelay =
+        props.stalledSearchDelay ?? INSTANTSEARCH_STALLED_SEARCH_DEFAULTS;
+      hasUpdated = true;
+    }
+
+    // TODO: move dequal to a shared package?
+    // if (!dequal(this.future, props.future)) {
+    //   this.future = {
+    //     ...INSTANTSEARCH_FUTURE_DEFAULTS,
+    //     ...props.future,
+    //   };
+    //   hasUpdated = true;
+    // }
+
+    // TODO: insights option
+    // TODO: validate other options (onStateChange, routing, give a warning for all non-updated values?)
+
+    // Updating the `routing` prop is not supported because InstantSearch.js
+    // doesn't let us change it. This might not be a problem though, because `routing`
+    // shouldn't need to be dynamic.
+    // If we find scenarios where `routing` needs to change, we can always expose
+    // it privately on the InstantSearch instance. Another way would be to
+    // manually inject the routing middleware in this library, and not rely
+    // on the provided `routing` prop.
+
+    return hasUpdated;
   }
 }
 

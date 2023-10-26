@@ -1,12 +1,9 @@
-import InstantSearch, {
-  INSTANTSEARCH_FUTURE_DEFAULTS,
-} from 'instantsearch.js/es/lib/InstantSearch';
+import InstantSearch from 'instantsearch.js/es/lib/InstantSearch';
 import { useCallback, useRef, version as ReactVersion } from 'react';
 import { useSyncExternalStore } from 'use-sync-external-store/shim';
 
 import version from '../version';
 
-import { dequal } from './dequal';
 import { useForceUpdate } from './useForceUpdate';
 import { useInstantSearchServerContext } from './useInstantSearchServerContext';
 import { useInstantSearchSSRContext } from './useInstantSearchSSRContext';
@@ -136,62 +133,13 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
 
   {
     const search = searchRef.current;
-    const prevProps = prevPropsRef.current;
-
-    if (prevProps.indexName !== props.indexName) {
-      search.helper!.setIndex(props.indexName || '').search();
-      prevPropsRef.current = props;
+    // TODO: is this still needed? (was it even ever needed, we could have read the private InstantSearch values)
+    // const prevProps = prevPropsRef.current;
+    const nextProps = props;
+    const updated = search.update(nextProps);
+    if (updated) {
+      prevPropsRef.current = nextProps;
     }
-
-    if (prevProps.searchClient !== props.searchClient) {
-      warn(
-        false,
-        'The `searchClient` prop of `<InstantSearch>` changed between renders, which may cause more search requests than necessary. If this is an unwanted behavior, please provide a stable reference: https://www.algolia.com/doc/api-reference/widgets/instantsearch/react/#widget-param-searchclient'
-      );
-
-      addAlgoliaAgents(props.searchClient, [
-        ...defaultUserAgents,
-        serverContext && serverUserAgent,
-      ]);
-      search.mainHelper!.setClient(props.searchClient).search();
-      prevPropsRef.current = props;
-    }
-
-    if (prevProps.onStateChange !== props.onStateChange) {
-      search.onStateChange = props.onStateChange;
-      prevPropsRef.current = props;
-    }
-
-    if (prevProps.searchFunction !== props.searchFunction) {
-      // Updating the `searchFunction` to `undefined` is not supported by
-      // InstantSearch.js, so it will throw an error.
-      // This is a fair behavior until we add an update API in InstantSearch.js.
-      search._searchFunction = props.searchFunction;
-      prevPropsRef.current = props;
-    }
-
-    if (prevProps.stalledSearchDelay !== props.stalledSearchDelay) {
-      // The default `stalledSearchDelay` in InstantSearch.js is 200ms.
-      // We need to reset it when it's undefined to get back to the original value.
-      search._stalledSearchDelay = props.stalledSearchDelay ?? 200;
-      prevPropsRef.current = props;
-    }
-
-    if (!dequal(prevProps.future, props.future)) {
-      search.future = {
-        ...INSTANTSEARCH_FUTURE_DEFAULTS,
-        ...props.future,
-      };
-      prevPropsRef.current = props;
-    }
-
-    // Updating the `routing` prop is not supported because InstantSearch.js
-    // doesn't let us change it. This might not be a problem though, because `routing`
-    // shouldn't need to be dynamic.
-    // If we find scenarios where `routing` needs to change, we can always expose
-    // it privately on the InstantSearch instance. Another way would be to
-    // manually inject the routing middleware in this library, and not rely
-    // on the provided `routing` prop.
   }
 
   const cleanupTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
