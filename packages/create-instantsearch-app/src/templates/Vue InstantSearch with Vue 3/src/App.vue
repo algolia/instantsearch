@@ -17,7 +17,7 @@
         :search-client="searchClient"
         index-name="{{indexName}}"
         :future="future"
-        {{#if enableInsights}}insights{{/if}}
+        {{#if flags.insights}}insights{{/if}}
       >
         <ais-configure :hits-per-page.camel="8" />
         <div class="search-panel">

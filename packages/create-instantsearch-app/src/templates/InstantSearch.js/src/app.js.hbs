@@ -15,7 +15,7 @@ const search = instantsearch({
   indexName: '{{indexName}}',
   searchClient,
   future: { preserveSharedStateOnUnmount: true },
-  {{#if enableInsights}}insights: true,{{/if}}
+  {{#if flags.insights}}insights: true,{{/if}}
 });
 
 {{#if flags.autocomplete}}
