@@ -131,7 +131,7 @@ describe('flags', () => {
   });
 
   describe('insights', () => {
-    test('with a valid version', async () => {
+    test('with a valid version and user consent', async () => {
       utils.fetchLibraryVersions.mockImplementationOnce(() =>
         Promise.resolve(['1.2.0'])
       );
@@ -139,7 +139,7 @@ describe('flags', () => {
       expect(
         (
           await postProcessAnswers({
-            configuration: {},
+            configuration: { enableInsights: true },
             templateConfig: {
               libraryName: 'instantsearch.js',
               flags: {
@@ -150,6 +150,27 @@ describe('flags', () => {
           })
         ).flags
       ).toEqual(expect.objectContaining({ insights: true }));
+    });
+
+    test('with a valid version and no user consent', async () => {
+      utils.fetchLibraryVersions.mockImplementationOnce(() =>
+        Promise.resolve(['1.2.0'])
+      );
+
+      expect(
+        (
+          await postProcessAnswers({
+            configuration: { enableInsights: false },
+            templateConfig: {
+              libraryName: 'instantsearch.js',
+              flags: {
+                insights: '>= 1',
+              },
+            },
+            optionsFromArguments: {},
+          })
+        ).flags
+      ).toEqual(expect.objectContaining({ insights: false }));
     });
 
     test('with an invalid version', async () => {
