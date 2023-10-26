@@ -286,6 +286,35 @@ const getQuestions = ({ appName }) => ({
       },
       when: ({ searchInputType }) => searchInputType === 'autocomplete',
     },
+    {
+      type: 'confirm',
+      name: 'enableInsights',
+      message: 'Enable user events',
+      default: true,
+      suffix: `${chalk.gray(`
+  Selecting 'Y' enables the \`insights\` option.
+  By doing this, you instruct Algolia to process your user Events.
+  Please review our API reference at ${chalk.bold(
+    chalk.underline('https://alg.li/instantsearch-insights')
+  )}
+  for more details about Events collection and settings.`)}`,
+      when: ({ libraryVersion, template }) => {
+        const templatePath = getTemplatePath(template);
+        const templateConfig = getAppTemplateConfig(templatePath);
+
+        const selectedLibraryVersion = libraryVersion;
+        const requiredLibraryVersion =
+          templateConfig.flags && templateConfig.flags.insights;
+        const supportsInsights =
+          selectedLibraryVersion &&
+          requiredLibraryVersion &&
+          semver.satisfies(selectedLibraryVersion, requiredLibraryVersion, {
+            includePrerelease: true,
+          });
+
+        return supportsInsights;
+      },
+    },
   ],
   widget: [
     {
