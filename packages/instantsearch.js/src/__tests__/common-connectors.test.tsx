@@ -109,7 +109,7 @@ const testSetups: TestSetupsMap<TestSuites> = {
         <button data-testid="RefinementList-refine">
           refine
         </button>
-        <button data-testid="RefinementList-refine-value">
+      <button data-testid="RefinementList-refine-value">
         refine
       </button>
       `;
