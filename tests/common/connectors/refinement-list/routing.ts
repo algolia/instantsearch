@@ -181,6 +181,23 @@ export function createRoutingTests(
             })
           );
         }
+
+        // Unselect the 'value' refinement
+        {
+          screen.debug();
+          const firstItem = screen.getByTestId('RefinementList-refine-value');
+          await act(async () => {
+            firstItem.click();
+            await wait(0);
+            await wait(0);
+          });
+
+          // URL has changed immediately after the user interaction
+          expect(screen.getByTestId('RefinementList-link')).toHaveAttribute(
+            'href',
+            router.createURL({})
+          );
+        }
       });
     });
   });

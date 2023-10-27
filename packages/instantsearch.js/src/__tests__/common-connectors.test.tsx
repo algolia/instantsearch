@@ -109,12 +109,21 @@ const testSetups: TestSetupsMap<TestSuites> = {
         <button data-testid="RefinementList-refine">
           refine
         </button>
+        <button data-testid="RefinementList-refine-value">
+        refine
+      </button>
       `;
 
       renderOptions.widgetParams.container
         .querySelector('[data-testid="RefinementList-refine"]')!
         .addEventListener('click', () => {
           renderOptions.refine('Apple');
+        });
+
+      renderOptions.widgetParams.container
+        .querySelector('[data-testid="RefinementList-refine-value"]')!
+        .addEventListener('click', () => {
+          renderOptions.refine('value');
         });
     });
 
