@@ -433,29 +433,14 @@ const connectRefinementList: RefinementListConnector =
 
           return {
             createURL: (facetValue: string) => {
-              return createURL((uiState) => {
-                console.log('createURL', {
-                  ui: uiState.refinementList,
-                  st: state.disjunctiveFacetsRefinements,
-                  next: state
-                    .resetPage()
-                    .toggleFacetRefinement(attribute, facetValue)
-                    .disjunctiveFacetsRefinements,
-                  fv: facetValue,
-                  nextui: this.getWidgetUiState(uiState, {
-                    searchParameters: state
-                      .resetPage()
-                      .toggleFacetRefinement(attribute, facetValue),
-                    helper,
-                  }).refinementList,
-                });
-                return this.getWidgetUiState(uiState, {
+              return createURL((uiState) =>
+                this.getWidgetUiState(uiState, {
                   searchParameters: state
                     .resetPage()
                     .toggleFacetRefinement(attribute, facetValue),
                   helper,
-                });
-              });
+                })
+              );
             },
             items,
             refine: triggerRefine,
@@ -489,16 +474,6 @@ const connectRefinementList: RefinementListConnector =
             operator === 'or'
               ? searchParameters.getDisjunctiveRefinements(attribute)
               : searchParameters.getConjunctiveRefinements(attribute);
-
-          if (!values.length) {
-            return {
-              ...uiState,
-              refinementList: {
-                ...uiState.refinementList,
-                [attribute]: undefined,
-              },
-            };
-          }
 
           return {
             ...uiState,
