@@ -53,10 +53,10 @@ export function hydrateSearchClient(
       {
         method: 'search',
         args: [
-          Object.values(results).reduce(
-            (acc, result) =>
+          Object.keys(results).reduce(
+            (acc, key) =>
               acc.concat(
-                result.results.map((request) => ({
+                results[key].results.map((request) => ({
                   indexName: request.index,
                   params: request.params,
                 }))
@@ -66,8 +66,8 @@ export function hydrateSearchClient(
         ],
       },
       {
-        results: Object.values(results).reduce(
-          (acc, result) => acc.concat(result.results),
+        results: Object.keys(results).reduce(
+          (acc, key) => acc.concat(results[key].results),
           []
         ),
       }
@@ -81,11 +81,11 @@ export function hydrateSearchClient(
   // computation of the key inside the client (see link below).
   // https://github.com/algolia/algoliasearch-client-javascript/blob/c27e89ff92b2a854ae6f40dc524bffe0f0cbc169/src/AlgoliaSearchCore.js#L232-L240
   if (!client.transporter) {
-    const key = `/1/indexes/*/queries_body_${JSON.stringify({
-      requests: results.reduce(
-        (acc, result) =>
+    const cacheKey = `/1/indexes/*/queries_body_${JSON.stringify({
+      requests: Object.keys(results).reduce(
+        (acc, key) =>
           acc.concat(
-            result.rawResults.map((request) => ({
+            results[key].rawResults.map((request) => ({
               indexName: request.index,
               params: request.params,
             }))
@@ -96,9 +96,9 @@ export function hydrateSearchClient(
 
     client.cache = {
       ...client.cache,
-      [key]: JSON.stringify({
-        results: results.reduce(
-          (acc, result) => acc.concat(result.rawResults),
+      [cacheKey]: JSON.stringify({
+        results: Object.keys(results).reduce(
+          (acc, key) => acc.concat(results[key].rawResults),
           []
         ),
       }),
