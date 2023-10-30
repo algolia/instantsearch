@@ -9,6 +9,7 @@ import {
 } from '@instantsearch/mocks';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import algoliasearch from 'algoliasearch';
 import { history } from 'instantsearch.js/es/lib/routers';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import React, { StrictMode } from 'react';
@@ -213,6 +214,7 @@ describe('InstantSearchSSRProvider', () => {
         );
       }),
     });
+    const spiedSearch = jest.spyOn(searchClient, 'search');
     const initialResults = {
       indexName: {
         state: {
@@ -297,7 +299,7 @@ describe('InstantSearchSSRProvider', () => {
     const { getByRole } = render(<App />);
 
     await waitFor(() => {
-      expect(searchClient.search).toHaveBeenCalledTimes(0);
+      expect(spiedSearch).toHaveBeenCalledTimes(0);
       expect(getByRole('checkbox', { name: 'Apple 442' })).not.toBeChecked();
       expect(getByRole('checkbox', { name: 'Samsung 633' })).not.toBeChecked();
     });
@@ -305,7 +307,7 @@ describe('InstantSearchSSRProvider', () => {
     userEvent.click(getByRole('checkbox', { name: 'Apple 442' }));
 
     await waitFor(() => {
-      expect(searchClient.search).toHaveBeenCalledTimes(1);
+      expect(spiedSearch).toHaveBeenCalledTimes(1);
       expect(getByRole('checkbox', { name: 'Apple 442' })).toBeChecked();
       expect(getByRole('checkbox', { name: 'Samsung 633' })).not.toBeChecked();
     });
@@ -351,6 +353,7 @@ describe('InstantSearchSSRProvider', () => {
 
   test('does not trigger a network request with initialResults', async () => {
     const searchClient = createAlgoliaSearchClient({});
+    const spiedSearch = jest.spyOn(searchClient, 'search');
     const initialResults = {
       indexName: {
         state: {},
@@ -387,12 +390,13 @@ describe('InstantSearchSSRProvider', () => {
     render(<App />);
 
     await waitFor(() => {
-      expect(searchClient.search).toHaveBeenCalledTimes(0);
+      expect(spiedSearch).toHaveBeenCalledTimes(0);
     });
   });
 
   test('recovers the state on rerender', async () => {
     const searchClient = createAlgoliaSearchClient({});
+    const spiedSearch = jest.spyOn(searchClient, 'search');
     const initialResults = {
       indexName: {
         state: {},
@@ -429,7 +433,7 @@ describe('InstantSearchSSRProvider', () => {
     const { rerender } = render(<App />);
 
     await waitFor(() => {
-      expect(searchClient.search).toHaveBeenCalledTimes(0);
+      expect(spiedSearch).toHaveBeenCalledTimes(0);
     });
 
     rerender(<App />);
@@ -437,8 +441,8 @@ describe('InstantSearchSSRProvider', () => {
     userEvent.type(screen.getByRole('searchbox'), 'iphone');
 
     await waitFor(() => {
-      expect(searchClient.search).toHaveBeenCalledTimes(6);
-      expect(searchClient.search).toHaveBeenLastCalledWith([
+      expect(spiedSearch).toHaveBeenCalledTimes(6);
+      expect(spiedSearch).toHaveBeenLastCalledWith([
         {
           indexName: 'indexName',
           params: expect.objectContaining({
@@ -455,8 +459,8 @@ describe('InstantSearchSSRProvider', () => {
     });
 
     await waitFor(() => {
-      expect(searchClient.search).toHaveBeenCalledTimes(11);
-      expect(searchClient.search).toHaveBeenLastCalledWith([
+      expect(spiedSearch).toHaveBeenCalledTimes(11);
+      expect(spiedSearch).toHaveBeenLastCalledWith([
         {
           indexName: 'indexName',
           params: expect.objectContaining({
@@ -464,6 +468,69 @@ describe('InstantSearchSSRProvider', () => {
           }),
         },
       ]);
+    });
+  });
+
+  test('caches the initial results to avoid a client-side request', async () => {
+    const send = jest.fn(() =>
+      Promise.resolve({
+        content: JSON.stringify(createMultiSearchResponse()),
+        isTimedOut: false,
+        status: 200,
+      })
+    );
+    const searchClient = algoliasearch('appId', 'apiKey', {
+      requester: { send },
+    });
+    const initialResults = {
+      indexName: {
+        state: {},
+        results: [
+          {
+            exhaustiveFacetsCount: true,
+            exhaustiveNbHits: true,
+            hits: [{ objectID: '1' }, { objectID: '2' }, { objectID: '3' }],
+            hitsPerPage: 20,
+            index: 'indexName',
+            nbHits: 0,
+            nbPages: 0,
+            page: 0,
+            params: '',
+            processingTimeMS: 0,
+            query: '',
+          },
+        ],
+      },
+    };
+
+    function App() {
+      return (
+        <StrictMode>
+          <InstantSearchSSRProvider initialResults={initialResults}>
+            <InstantSearch searchClient={searchClient} indexName="indexName">
+              <SearchBox />
+            </InstantSearch>
+          </InstantSearchSSRProvider>
+        </StrictMode>
+      );
+    }
+
+    render(<App />);
+
+    await waitFor(() => {
+      expect(send).toHaveBeenCalledTimes(0);
+    });
+
+    userEvent.type(screen.getByRole('searchbox'), 'i');
+
+    await waitFor(() => {
+      expect(send).toHaveBeenCalledTimes(1);
+    });
+
+    userEvent.clear(screen.getByRole('searchbox'));
+
+    await waitFor(() => {
+      expect(send).toHaveBeenCalledTimes(1);
     });
   });
 });
