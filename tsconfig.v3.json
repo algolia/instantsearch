@@ -20,5 +20,7 @@
     "packages/instantsearch.js/src/connectors/hierarchical-menu/__tests__/connectHierarchicalMenu-test.ts",
     "packages/instantsearch.js/src/connectors/menu/__tests__/connectMenu-test.ts",
     "packages/instantsearch.js/src/connectors/refinement-list/__tests__/connectRefinementList-test.ts",
+    // this test has specific code for v4
+    "packages/react-instantsearch-core/src/components/__tests__/InstantSearchSSRProvider.test.tsx"
   ]
 }
