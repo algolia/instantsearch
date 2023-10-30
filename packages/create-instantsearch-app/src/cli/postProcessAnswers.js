@@ -76,7 +76,10 @@ async function postProcessAnswers({
         combinedAnswers.attributesForFaceting.includes('ais.dynamicWidgets'),
       insights:
         Boolean(templateConfig.flags && templateConfig.flags.insights) &&
-        semver.satisfies(libraryVersion, templateConfig.flags.insights),
+        combinedAnswers.enableInsights === true,
+      autocomplete:
+        Boolean(templateConfig.flags && templateConfig.flags.autocomplete) &&
+        combinedAnswers.searchInputType === 'autocomplete',
     },
   };
 }

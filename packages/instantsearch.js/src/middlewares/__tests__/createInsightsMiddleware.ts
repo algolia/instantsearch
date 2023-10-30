@@ -64,7 +64,8 @@ describe('insights', () => {
     }
 
     const getUserToken = () =>
-      (instantSearchInstance.helper!.state as PlainSearchParameters).userToken;
+      (instantSearchInstance.mainHelper!.state as PlainSearchParameters)
+        .userToken;
 
     return {
       analytics,
@@ -94,10 +95,11 @@ describe('insights', () => {
     });
     instantSearchInstance.start();
 
-    const helper = instantSearchInstance.helper!;
+    const helper = instantSearchInstance.mainHelper!;
 
     const getUserToken = () =>
-      (instantSearchInstance.helper!.state as PlainSearchParameters).userToken;
+      (instantSearchInstance.mainHelper!.state as PlainSearchParameters)
+        .userToken;
 
     return {
       analytics,
@@ -466,14 +468,38 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       );
     });
 
-    it('applies clickAnalytics', () => {
+    it('applies clickAnalytics if $$automatic: undefined', () => {
       const { insightsClient, instantSearchInstance } = createTestEnvironment();
       instantSearchInstance.use(
         createInsightsMiddleware({
           insightsClient,
         })
       );
-      expect(instantSearchInstance.helper!.state.clickAnalytics).toBe(true);
+      expect(instantSearchInstance.mainHelper!.state.clickAnalytics).toBe(true);
+    });
+
+    it('applies clickAnalytics if $$automatic: false', () => {
+      const { insightsClient, instantSearchInstance } = createTestEnvironment();
+      instantSearchInstance.use(
+        createInsightsMiddleware({
+          insightsClient,
+          $$automatic: false,
+        })
+      );
+      expect(instantSearchInstance.mainHelper!.state.clickAnalytics).toBe(true);
+    });
+
+    it('does not apply clickAnalytics if $$automatic: true', () => {
+      const { insightsClient, instantSearchInstance } = createTestEnvironment();
+      instantSearchInstance.use(
+        createInsightsMiddleware({
+          insightsClient,
+          $$automatic: true,
+        })
+      );
+      expect(
+        instantSearchInstance.helper!.state.clickAnalytics
+      ).toBeUndefined();
     });
 
     it("doesn't reset page", () => {
@@ -481,9 +507,9 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       const middleware = createInsightsMiddleware({
         insightsClient,
       })({ instantSearchInstance });
-      instantSearchInstance.helper!.setPage(100);
+      instantSearchInstance.mainHelper!.setPage(100);
       middleware.subscribe();
-      expect(instantSearchInstance.helper!.state.page).toBe(100);
+      expect(instantSearchInstance.mainHelper!.state.page).toBe(100);
     });
 
     it('adds user agent', () => {
@@ -514,6 +540,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           {
             "creator": [Function],
             "instance": {
+              "$$automatic": false,
               "$$internal": true,
               "$$type": "ais.insights",
               "onStateChange": [Function],
@@ -536,6 +563,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           {
             "creator": [Function],
             "instance": {
+              "$$automatic": false,
               "$$internal": false,
               "$$type": "ais.insights",
               "onStateChange": [Function],
@@ -556,6 +584,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           {
             "creator": [Function],
             "instance": {
+              "$$automatic": false,
               "$$internal": false,
               "$$type": "ais.insights",
               "onStateChange": [Function],
@@ -567,6 +596,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           {
             "creator": [Function],
             "instance": {
+              "$$automatic": false,
               "$$internal": false,
               "$$type": "ais.insights",
               "onStateChange": [Function],
@@ -594,6 +624,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           {
             "creator": [Function],
             "instance": {
+              "$$automatic": false,
               "$$internal": true,
               "$$type": "ais.insights",
               "onStateChange": [Function],
@@ -629,6 +660,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           {
             "creator": [Function],
             "instance": {
+              "$$automatic": false,
               "$$internal": true,
               "$$type": "ais.insights",
               "onStateChange": [Function],
@@ -670,7 +702,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
 
       insightsClient('setUserToken', 'abc');
       instantSearchInstance.start();
-      instantSearchInstance.helper!.setPage(100);
+      instantSearchInstance.mainHelper!.setPage(100);
 
       instantSearchInstance.use(
         createInsightsMiddleware({
@@ -678,7 +710,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         })
       );
 
-      expect(instantSearchInstance.helper!.state.page).toBe(100);
+      expect(instantSearchInstance.mainHelper!.state.page).toBe(100);
       expect(getUserToken()).toEqual('abc');
     });
 
@@ -702,7 +734,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         createTestEnvironment({ started: false });
 
       instantSearchInstance.start();
-      instantSearchInstance.helper!.setPage(100);
+      instantSearchInstance.mainHelper!.setPage(100);
 
       instantSearchInstance.use(
         createInsightsMiddleware({
@@ -714,7 +746,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
 
       await wait(0);
 
-      expect(instantSearchInstance.helper!.state.page).toEqual(100);
+      expect(instantSearchInstance.mainHelper!.state.page).toEqual(100);
       expect(getUserToken()).toEqual('def');
     });
 
@@ -774,7 +806,8 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       await wait(0);
 
       expect(
-        (instantSearchInstance.helper!.state as PlainSearchParameters).userToken
+        (instantSearchInstance.mainHelper!.state as PlainSearchParameters)
+          .userToken
       ).toEqual('def');
     });
 
@@ -1183,7 +1216,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
 
     instantSearchInstance
       .helper!.setState({
-        ...instantSearchInstance.helper!.state,
+        ...instantSearchInstance.mainHelper!.state,
         query: 'test',
       })
       .search();

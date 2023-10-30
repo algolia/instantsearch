@@ -201,6 +201,120 @@ const getQuestions = ({ appName }) => ({
       when: ({ appId, apiKey, indexName }) =>
         attributesForFaceting.length === 0 && appId && apiKey && indexName,
     },
+    {
+      type: 'list',
+      name: 'searchInputType',
+      message: 'Type of search input',
+      choices: [
+        {
+          name: 'Autocomplete with suggested and recent searches',
+          value: 'autocomplete',
+        },
+        { name: 'Regular search box', value: 'searchbox' },
+      ],
+      default: 'autocomplete',
+      when: ({ libraryVersion, template }) => {
+        const templatePath = getTemplatePath(template);
+        const templateConfig = getAppTemplateConfig(templatePath);
+
+        const selectedLibraryVersion = libraryVersion;
+        const requiredLibraryVersion =
+          templateConfig.flags && templateConfig.flags.autocomplete;
+        const supportsAutocomplete =
+          selectedLibraryVersion &&
+          requiredLibraryVersion &&
+          semver.satisfies(selectedLibraryVersion, requiredLibraryVersion, {
+            includePrerelease: true,
+          });
+
+        return supportsAutocomplete;
+      },
+    },
+    {
+      type: 'input',
+      name: 'querySuggestionsIndexName',
+      message: 'Index name for suggested searches',
+      suffix: `\n  ${chalk.gray('This must be a Query Suggestions index')}`,
+      default: 'instant_search_demo_query_suggestions',
+      when: ({ searchInputType }) => searchInputType === 'autocomplete',
+    },
+    {
+      type: 'list',
+      name: 'autocompleteLibraryVersion',
+      message: () => `Autocomplete version`,
+      choices: async () => {
+        const libraryName = '@algolia/autocomplete-js';
+
+        try {
+          const versions = await fetchLibraryVersions(libraryName);
+          const latestStableVersion = semver.maxSatisfying(versions, '1', {
+            includePrerelease: false,
+          });
+
+          if (!latestStableVersion) {
+            return versions;
+          }
+
+          return [
+            new inquirer.Separator('Latest stable version (recommended)'),
+            latestStableVersion,
+            new inquirer.Separator('All versions'),
+            ...versions,
+          ];
+        } catch (err) {
+          const fallbackLibraryVersion = '1.11.0';
+
+          console.log();
+          console.error(
+            chalk.red(
+              `Cannot fetch versions for library "${chalk.cyan(libraryName)}".`
+            )
+          );
+          console.log();
+          console.log(
+            `Fallback to ${chalk.cyan(
+              fallbackLibraryVersion
+            )}, please upgrade the dependency after generating the app.`
+          );
+          console.log();
+
+          return [
+            new inquirer.Separator('Available versions'),
+            fallbackLibraryVersion,
+          ];
+        }
+      },
+      when: ({ searchInputType }) => searchInputType === 'autocomplete',
+    },
+    {
+      type: 'confirm',
+      name: 'enableInsights',
+      message: 'Enable user events',
+      default: true,
+      suffix: `${chalk.gray(`
+  Selecting 'Y' enables the \`insights\` option.
+  By doing this, you instruct Algolia to process your user Events.
+  Please review our API reference at ${chalk.bold(
+    chalk.underline('https://alg.li/instantsearch-insights')
+  )}
+  for more details about Events collection and settings.`)}`,
+      when: ({ libraryVersion, template }) => {
+        const templatePath = getTemplatePath(template);
+        const templateConfig = getAppTemplateConfig(templatePath);
+
+        const selectedLibraryVersion = libraryVersion;
+        const requiredLibraryVersion =
+          templateConfig.flags && templateConfig.flags.insights;
+        const supportsInsights =
+          selectedLibraryVersion &&
+          requiredLibraryVersion &&
+          semver.satisfies(selectedLibraryVersion, requiredLibraryVersion, {
+            includePrerelease: true,
+          });
+
+        return supportsInsights;
+      },
+    },
   ],
   widget: [
     {

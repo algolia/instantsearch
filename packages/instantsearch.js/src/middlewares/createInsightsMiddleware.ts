@@ -34,6 +34,10 @@ export type InsightsProps<
    * @internal indicator for the default insights middleware
    */
   $$internal?: boolean;
+  /**
+   * @internal indicator for sending the `clickAnalytics` search parameter
+   */
+  $$automatic?: boolean;
 };
 
 const ALGOLIA_INSIGHTS_VERSION = '2.6.0';
@@ -54,6 +58,7 @@ export function createInsightsMiddleware<
     insightsInitParams,
     onEvent,
     $$internal = false,
+    $$automatic = false,
   } = props;
 
   let potentialInsightsClient: ProvidedInsightsClient = _insightsClient;
@@ -152,6 +157,7 @@ export function createInsightsMiddleware<
     return {
       $$type: 'ais.insights',
       $$internal,
+      $$automatic,
       onStateChange() {},
       subscribe() {
         if (!insightsClient.shouldAddScript) return;
@@ -176,17 +182,22 @@ export function createInsightsMiddleware<
       started() {
         insightsClient('addAlgoliaAgent', 'insights-middleware');
 
-        helper = instantSearchInstance.helper!;
+        helper = instantSearchInstance.mainHelper!;
 
         initialParameters = {
           userToken: (helper.state as PlainSearchParameters).userToken,
           clickAnalytics: helper.state.clickAnalytics,
         };
 
-        helper.overrideStateWithoutTriggeringChangeEvent({
-          ...helper.state,
-          clickAnalytics: true,
-        });
+        // We don't want to force clickAnalytics when the insights is enabled from the search response.
+        // This means we don't enable insights for indices that don't opt in
+        if (!$$automatic) {
+          helper.overrideStateWithoutTriggeringChangeEvent({
+            ...helper.state,
+            clickAnalytics: true,
+          });
+        }
+
         if (!$$internal) {
           instantSearchInstance.scheduleSearch();
         }
@@ -276,6 +287,11 @@ export function createInsightsMiddleware<
           } else if (event.insightsMethod) {
             // Source is used to differentiate events sent by instantsearch from those sent manually.
             (event.payload as any).algoliaSource = ['instantsearch'];
+            if ($$automatic) {
+              (event.payload as any).algoliaSource.push(
+                'instantsearch-automatic'
+              );
+            }
             if (event.eventModifier === 'internal') {
               (event.payload as any).algoliaSource.push(
                 'instantsearch-internal'

@@ -29,6 +29,7 @@ type SearchBoxProps = {
   searchAsYouType?: boolean;
   isSearchStalled?: boolean;
   disabled?: boolean;
+  ariaLabel?: string;
   onChange?: (event: Event) => void;
   onSubmit?: (event: Event) => void;
   onReset?: (event: Event) => void;
@@ -43,6 +44,7 @@ const defaultProps = {
   searchAsYouType: true,
   isSearchStalled: false,
   disabled: false,
+  ariaLabel: 'Search',
   onChange: noop,
   onSubmit: noop,
   onReset: noop,
@@ -154,6 +156,7 @@ class SearchBox extends Component<
       showLoadingIndicator,
       templates,
       isSearchStalled,
+      ariaLabel,
     } = this.props;
 
     return (
@@ -183,6 +186,7 @@ class SearchBox extends Component<
             onInput={this.onInput}
             onBlur={this.onBlur}
             onFocus={this.onFocus}
+            aria-label={ariaLabel}
           />
 
           <Template

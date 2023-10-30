@@ -16,7 +16,6 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Get started](#get-started)
 - [Usage](#usage)
 - [API](#api)
@@ -50,6 +49,10 @@ yarn create instantsearch-app my-app
 cd my-app
 yarn start
 ```
+
+> **Important**
+> Selecting 'Y' when being prompted to ‘Enable user events’ activates the [`insights`](https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/#widget-param-insights) option for compatible templates, allowing Algolia to process your user Events. Events can unlock powerful features, enhancing your application's effectiveness and we encourage you to consider enabling this valuable functionality. Please review our [API reference](https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/#widget-param-insights) for more details about Events collection and settings.
+
 
 ## Usage
 
@@ -111,7 +114,8 @@ The `config` flag is handy to automate app generations.
   "indexName": "MY_INDEX_NAME",
   "searchPlaceholder": "Search",
   "attributesToDisplay": ["name", "description"],
-  "attributesForFaceting": ["brand", "location"]
+  "attributesForFaceting": ["brand", "location"],
+  "enableInsights": true
 }
 ```
 
@@ -133,6 +137,7 @@ const app = createInstantSearchApp('~/lab/my-app', {
   libraryVersion: '2.0.0',
   attributesToDisplay: ['name', 'description'],
   attributesForFaceting: ['keywords'],
+  enableInsights: true,
 });
 
 app.create().then(() => console.log('App generated!'));

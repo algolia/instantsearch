@@ -42,7 +42,11 @@ export default createInstantSearchComponent({
     insights: {
       default: undefined,
       validator(value) {
-        return typeof value === 'boolean' || typeof value === 'object';
+        return (
+          typeof value === 'undefined' ||
+          typeof value === 'boolean' ||
+          typeof value === 'object'
+        );
       },
     },
     stalledSearchDelay: {
@@ -85,6 +89,10 @@ export default createInstantSearchComponent({
       type: Array,
       default: null,
     },
+    future: {
+      type: Object,
+      default: undefined,
+    },
   },
   data() {
     return {
@@ -98,6 +106,7 @@ export default createInstantSearchComponent({
         searchFunction: this.searchFunction,
         onStateChange: this.onStateChange,
         initialUiState: this.initialUiState,
+        future: this.future,
       }),
     };
   },

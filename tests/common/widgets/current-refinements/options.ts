@@ -131,7 +131,7 @@ export function createOptionsTests(
                 <span
                   class="ais-CurrentRefinements-categoryLabel"
                 >
-                  Apple
+                  Samsung
                 </span>
                 <button
                   class="ais-CurrentRefinements-delete"
@@ -146,7 +146,7 @@ export function createOptionsTests(
                 <span
                   class="ais-CurrentRefinements-categoryLabel"
                 >
-                  Samsung
+                  Apple
                 </span>
                 <button
                   class="ais-CurrentRefinements-delete"
@@ -313,6 +313,53 @@ export function createOptionsTests(
       expect(
         document.querySelectorAll('.ais-CurrentRefinements-category')
       ).toHaveLength(0);
+    });
+
+    it('clears a refinement by calling the `refine` method in each item', async () => {
+      const refine = jest.fn();
+      await setup({
+        instantSearchOptions: {
+          searchClient,
+          indexName: 'indexName',
+          initialUiState: {
+            indexName: {
+              refinementList: {
+                brand: ['Apple', 'Samsung'],
+                feature: ['5G'],
+              },
+            },
+          },
+        },
+        widgetParams: {
+          transformItems: (items) =>
+            items.map((item) => ({
+              ...item,
+              refine(refinement) {
+                refine(refinement);
+                item.refine(refinement);
+              },
+            })),
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const container = document.querySelector<HTMLElement>(
+        '.ais-CurrentRefinements'
+      )!;
+
+      const [btn5G] = document.querySelectorAll(
+        '.ais-CurrentRefinements-delete'
+      );
+
+      await act(async () => {
+        userEvent.click(btn5G);
+        await wait(0);
+      });
+      expect(refine).toHaveBeenCalledTimes(1);
+      expect(queryByText(container, '5G')).toBeNull();
     });
 
     it('does not trigger default event', async () => {

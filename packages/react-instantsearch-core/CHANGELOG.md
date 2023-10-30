@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.2.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.2.0...react-instantsearch-core@7.2.1) (2023-10-24)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+
+
+# [7.2.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.1.0...react-instantsearch-core@7.2.0) (2023-10-10)
+
+
+### Features
+
+* preserve shared state on unmount with a future flag ([#5123](https://github.com/algolia/instantsearch/issues/5123)) ([2258d89](https://github.com/algolia/instantsearch/commit/2258d899fab887d495af8f31905f0974f53e8e47))
+* **useInstantSearch:** expose renderState ([#5873](https://github.com/algolia/instantsearch/issues/5873)) ([9c43382](https://github.com/algolia/instantsearch/commit/9c4338259edd93ff5e0a4c33c0c789d1ef34d0e2))
+
+
+
+
+
 # [7.1.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.0.3...react-instantsearch-core@7.1.0) (2023-09-19)
 
 

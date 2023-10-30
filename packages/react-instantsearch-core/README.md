@@ -1,6 +1,11 @@
+<p align="center">
+  <a href="https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/">
+    <img alt="React InstantSearch" src="https://github.com/algolia/instantsearch/blob/master/.github/react-instantsearch-banner.png?raw=true">
+  </a>
+</p>
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 
 - [react-instantsearch-core](#react-instantsearch-core)
   - [Installation](#installation)

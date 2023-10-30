@@ -56,7 +56,7 @@ function Pagination(props: PaginationProps) {
       <ul className={props.cssClasses.list}>
         {props.showFirst && (
           <PaginationLink
-            ariaLabel="First"
+            ariaLabel="First Page"
             className={props.cssClasses.firstPageItem}
             isDisabled={props.isFirstPage}
             templates={props.templates}
@@ -70,7 +70,7 @@ function Pagination(props: PaginationProps) {
 
         {props.showPrevious && (
           <PaginationLink
-            ariaLabel="Previous"
+            ariaLabel="Previous Page"
             className={props.cssClasses.previousPageItem}
             isDisabled={props.isFirstPage}
             templates={props.templates}
@@ -99,7 +99,7 @@ function Pagination(props: PaginationProps) {
 
         {props.showNext && (
           <PaginationLink
-            ariaLabel="Next"
+            ariaLabel="Next Page"
             className={props.cssClasses.nextPageItem}
             isDisabled={props.isLastPage}
             templates={props.templates}
@@ -113,7 +113,7 @@ function Pagination(props: PaginationProps) {
 
         {props.showLast && (
           <PaginationLink
-            ariaLabel="Last"
+            ariaLabel={`Last Page, Page ${props.nbPages}`}
             className={props.cssClasses.lastPageItem}
             isDisabled={props.isLastPage}
             templates={props.templates}

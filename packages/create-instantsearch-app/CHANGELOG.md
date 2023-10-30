@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.3.0](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.2.1...create-instantsearch-app@7.3.0) (2023-10-26)
+
+
+### Features
+
+* prompt users to enable support for events ([#5906](https://github.com/algolia/instantsearch/issues/5906)) ([675f1a0](https://github.com/algolia/instantsearch/commit/675f1a06d9ce9b8452d14344d6f3de30eb766e6c))
+
+
+
+
+
+## [7.2.1](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.2.0...create-instantsearch-app@7.2.1) (2023-10-24)
+
+## Bug Fixes
+* **templates:** add "future" flags ([#5904](https://github.com/algolia/instantsearch/issues/5904)) ([c82ce6d](https://github.com/algolia/instantsearch/commit/08305b910e8b057c9d13020a50f6615089a58412))
+
+
+
+
+
+
+# [7.2.0](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.1.0...create-instantsearch-app@7.2.0) (2023-09-25)
+
+
+### Features
+
+* **create-instantsearch-app:** support Autocomplete in InstantSearch.js template ([#5857](https://github.com/algolia/instantsearch/issues/5857)) ([4a27e5b](https://github.com/algolia/instantsearch/commit/4a27e5bc3924bc289945c55a10da74dfda02fedb))
+
+
+
+
+
 # [7.1.0](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.0.2...create-instantsearch-app@7.1.0) (2023-09-19)
 
 

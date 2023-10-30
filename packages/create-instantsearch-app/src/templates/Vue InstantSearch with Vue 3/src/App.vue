@@ -16,6 +16,7 @@
       <ais-instant-search
         :search-client="searchClient"
         index-name="{{indexName}}"
+        :future="future"
         {{#if flags.insights}}insights{{/if}}
       >
         <ais-configure :hits-per-page.camel="8" />
@@ -85,6 +86,7 @@ export default {
   data() {
     return {
       searchClient: algoliasearch('{{appId}}', '{{apiKey}}'),
+      future: { preserveSharedStateOnUnmount: true },
     };
   },
 };

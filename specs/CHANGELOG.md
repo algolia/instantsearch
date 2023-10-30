@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.1.5 (2023-10-24)
+
+
+### Bug Fixes
+
+* **accessibility:** CR-4249 instantearch accessibility fixes ([#5884](https://github.com/algolia/instantsearch/issues/5884)) ([bed187b](https://github.com/algolia/instantsearch/commit/bed187be5ce0f9c8b4b3b41994e1226f56ba598a))
+* **prettier:** consistent version ([#5850](https://github.com/algolia/instantsearch/issues/5850)) ([ca59c6d](https://github.com/algolia/instantsearch/commit/ca59c6dbd5c9eac4e2e0179a24e39bca997ae141))
+* **searchbox:** add aria-hidden to svg icons ([#5547](https://github.com/algolia/instantsearch/issues/5547)) ([50344e3](https://github.com/algolia/instantsearch/commit/50344e3b14c22c886415c0e7d799aca778dc39ab)), closes [#5546](https://github.com/algolia/instantsearch/issues/5546)
+* **svg:** don't style width/height in attributes with unit ([#5550](https://github.com/algolia/instantsearch/issues/5550)) ([31b85a6](https://github.com/algolia/instantsearch/commit/31b85a6ad56993455adb201f88ab1d1ae2d96683))
+
+
+
+
+
 ## 0.1.4 (2023-09-19)
 
 

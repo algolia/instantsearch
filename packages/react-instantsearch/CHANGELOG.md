@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.2.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.2.0...react-instantsearch@7.2.1) (2023-10-24)
+
+
+### Bug Fixes
+
+* **accessibility:** CR-4249 instantearch accessibility fixes ([#5884](https://github.com/algolia/instantsearch/issues/5884)) ([bed187b](https://github.com/algolia/instantsearch/commit/bed187be5ce0f9c8b4b3b41994e1226f56ba598a))
+* **current-refinements:** clear with the `refine` function in each item ([#5893](https://github.com/algolia/instantsearch/issues/5893)) ([845190b](https://github.com/algolia/instantsearch/commit/845190b650eae342989785772393613cf3335543))
+
+
+
+
+
+## [7.2.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.1.0...react-instantsearch@7.2.0) (2023-10-10)
+
+**Note:** Version bump only for package react-instantsearch
+
+
+
+
+
 ## [7.1.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.0.3...react-instantsearch@7.0.4) (2023-09-19)
 
 

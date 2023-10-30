@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/">
-    <img alt="InstantSearch.js" src=".github/banner.png">
+    <img alt="InstantSearch.js" src="https://github.com/algolia/instantsearch/blob/master/.github/banner.png?raw=true">
   </a>
 
   <p align="center">
@@ -19,7 +19,6 @@ InstantSearch.js is a vanilla JavaScript library that lets you create an instant
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 
 - [Why](#why)
 - [Getting started](#getting-started)

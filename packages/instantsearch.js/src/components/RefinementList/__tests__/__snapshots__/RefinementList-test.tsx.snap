@@ -98,6 +98,7 @@ exports[`RefinementList rendering with facets from search 1`] = `
           role="search"
         >
           <input
+            aria-label="Search for filters"
             autocapitalize="off"
             autocomplete="off"
             autocorrect="off"
@@ -175,6 +176,7 @@ exports[`RefinementList rendering without facets from search 1`] = `
           role="search"
         >
           <input
+            aria-label="Search for filters"
             autocapitalize="off"
             autocomplete="off"
             autocorrect="off"

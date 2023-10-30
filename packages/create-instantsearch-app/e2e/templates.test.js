@@ -55,6 +55,7 @@ describe('Templates', () => {
           attributesToDisplay: ['attribute1', 'attribute2'],
           attributesForFaceting: ['ais.dynamicWidgets', 'facet1', 'facet2'],
           organization: 'algolia',
+          enableInsights: true,
         };
 
         configFilePath = `${temporaryDirectory}/${templateConfig.appName}.config.json`;

@@ -3,6 +3,42 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.59.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.58.0...instantsearch.js@4.59.0) (2023-10-24)
+
+
+### Bug Fixes
+
+* **accessibility:** CR-4249 instantearch accessibility fixes ([#5884](https://github.com/algolia/instantsearch/issues/5884)) ([bed187b](https://github.com/algolia/instantsearch/commit/bed187be5ce0f9c8b4b3b41994e1226f56ba598a))
+* **insights:** declare automatic source ([#5901](https://github.com/algolia/instantsearch/issues/5901)) ([c82ce6d](https://github.com/algolia/instantsearch/commit/c82ce6d01eae3054baab897a7c9317ff7df799e9))
+
+
+### Features
+
+* **insights:** allow sending additional data in events payloads ([#5878](https://github.com/algolia/instantsearch/issues/5878)) ([86d70ac](https://github.com/algolia/instantsearch/commit/86d70ac5c1c61eb8ccdb79ab59df114ac7c048b9))
+* **instantsearch:** allow the insights middleware to be added in answer to a server setting ([#5883](https://github.com/algolia/instantsearch/issues/5883)) ([2a9e654](https://github.com/algolia/instantsearch/commit/2a9e6542f6ce22d67789febc8a2e1852a0ad7641))
+* **instantsearch:** make `insights` undefined by default ([#5889](https://github.com/algolia/instantsearch/issues/5889)) ([96a5c8b](https://github.com/algolia/instantsearch/commit/96a5c8b736d081aa11ca23ff7ad06a24d6b54960))
+
+
+
+
+
+# [4.58.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.57.0...instantsearch.js@4.58.0) (2023-10-10)
+
+
+### Bug Fixes
+
+* **dependencies:** update ui-components ([#5882](https://github.com/algolia/instantsearch/issues/5882)) ([85eac81](https://github.com/algolia/instantsearch/commit/85eac8102ae45ac43a0bee2dd7d12df82872451e)), closes [#5853](https://github.com/algolia/instantsearch/issues/5853)
+* use mainHelper consistently ([#5875](https://github.com/algolia/instantsearch/issues/5875)) ([121d13a](https://github.com/algolia/instantsearch/commit/121d13ab9cec7a6555963bfc3c8fedc8b1afd790))
+
+
+### Features
+
+* preserve shared state on unmount with a future flag ([#5123](https://github.com/algolia/instantsearch/issues/5123)) ([2258d89](https://github.com/algolia/instantsearch/commit/2258d899fab887d495af8f31905f0974f53e8e47))
+
+
+
+
+
 # [4.57.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.56.11...instantsearch.js@4.57.0) (2023-09-19)
 
 

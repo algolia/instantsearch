@@ -159,9 +159,26 @@ export type InstantSearchOptions<
    * @deprecated This property will be still supported in 4.x releases, but not further. It is replaced by the `insights` middleware. For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/
    */
   insightsClient?: AlgoliaInsightsClient;
+  future?: {
+    /**
+     * Changes the way `dispose` is used in InstantSearch lifecycle.
+     *
+     * If `false` (by default), each widget unmounting will remove its state as well, even if there are multiple widgets reading that UI State.
+     *
+     * If `true`, each widget unmounting will only remove its own state if it's the last of its type. This allows for dynamically adding and removing widgets without losing their state.
+     *
+     * @default false
+     */
+    // @MAJOR: Remove legacy behaviour
+    preserveSharedStateOnUnmount?: boolean;
+  };
 };
 
 export type InstantSearchStatus = 'idle' | 'loading' | 'stalled' | 'error';
+
+export const INSTANTSEARCH_FUTURE_DEFAULTS: Required<
+  InstantSearchOptions['future']
+> = { preserveSharedStateOnUnmount: false };
 
 /**
  * The actual implementation of the InstantSearch. This is
@@ -177,6 +194,7 @@ class InstantSearch<
   public insightsClient: AlgoliaInsightsClient | null;
   public onStateChange: InstantSearchOptions<TUiState>['onStateChange'] | null =
     null;
+  public future: NonNullable<InstantSearchOptions<TUiState>['future']>;
   public helper: AlgoliaSearchHelper | null;
   public mainHelper: AlgoliaSearchHelper | null;
   public mainIndex: IndexWidget;
@@ -190,6 +208,7 @@ class InstantSearch<
   public _createURL: CreateURL<TUiState>;
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
+  public _insights: InstantSearchOptions['insights'];
   public middleware: Array<{
     creator: Middleware<TUiState>;
     instance: MiddlewareDefinition<TUiState>;
@@ -230,12 +249,16 @@ Use \`InstantSearch.status === "stalled"\` instead.`
       numberLocale,
       initialUiState = {} as TUiState,
       routing = null,
-      insights = false,
+      insights = undefined,
       searchFunction,
       stalledSearchDelay = 200,
       searchClient = null,
       insightsClient = null,
       onStateChange = null,
+      future = {
+        ...INSTANTSEARCH_FUTURE_DEFAULTS,
+        ...(options.future || {}),
+      },
     } = options;
 
     if (searchClient === null) {
@@ -284,7 +307,21 @@ See ${createDocumentationLink({
       })}`
     );
 
+    if (__DEV__ && options.future?.preserveSharedStateOnUnmount === undefined) {
+      // eslint-disable-next-line no-console
+      console.info(`Starting from the next major version, InstantSearch will change how widgets state is preserved when they are removed. InstantSearch will keep the state of unmounted widgets to be usable by other widgets with the same attribute.
+
+We recommend setting \`future.preserveSharedStateOnUnmount\` to true to adopt this change today.
+To stay with the current behaviour and remove this warning, set the option to false.
+
+See documentation: ${createDocumentationLink({
+        name: 'instantsearch',
+      })}#widget-param-future
+          `);
+    }
+
     this.client = searchClient;
+    this.future = future;
     this.insightsClient = insightsClient;
     this.indexName = indexName;
     this.helper = null;
@@ -307,6 +344,8 @@ See ${createDocumentationLink({
     this._initialUiState = initialUiState as TUiState;
     this._initialResults = null;
 
+    this._insights = insights;
+
     if (searchFunction) {
       warning(
         false,
@@ -323,8 +362,9 @@ See ${createDocumentationLink({
       this.use(createRouterMiddleware(routerOptions));
     }
 
-    // This is the default middleware,
-    // any user-provided middleware will be added later and override this one.
+    // This is the default Insights middleware,
+    // added when `insights` is set to true by the user.
+    // Any user-provided middleware will be added later and override this one.
     if (insights) {
       const insightsOptions = typeof insights === 'boolean' ? {} : insights;
       insightsOptions.$$internal = true;
@@ -634,6 +674,25 @@ See ${createDocumentationLink({
     this.middleware.forEach(({ instance }) => {
       instance.started();
     });
+
+    // This is the automatic Insights middleware,
+    // added when `insights` is unset and the initial results possess `queryID`.
+    // Any user-provided middleware will be added later and override this one.
+    if (typeof this._insights === 'undefined') {
+      mainHelper.derivedHelpers[0].once('result', () => {
+        const hasAutomaticInsights = this.mainIndex
+          .getScopedResults()
+          .some(({ results }) => results?._automaticInsights);
+        if (hasAutomaticInsights) {
+          this.use(
+            createInsightsMiddleware({
+              $$internal: true,
+              $$automatic: true,
+            })
+          );
+        }
+      });
+    }
   }
 
   /**
