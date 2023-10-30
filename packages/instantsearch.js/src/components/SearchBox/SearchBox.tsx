@@ -170,7 +170,6 @@ class SearchBox extends Component<
           onReset={this.onReset}
         >
           <input
-            aria-label="Search"
             ref={this.input}
             value={this.state.query}
             disabled={this.props.disabled}
