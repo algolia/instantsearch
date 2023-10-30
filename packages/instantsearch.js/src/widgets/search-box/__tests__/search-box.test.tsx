@@ -14,6 +14,73 @@ beforeEach(() => {
 });
 
 describe('searchBox', () => {
+  describe('options', () => {
+    test('throws without a `container`', () => {
+      expect(() => {
+        // @ts-expect-error
+        searchBox({});
+      }).toThrowErrorMatchingInlineSnapshot(`
+        "The \`container\` option is required.
+
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/js/"
+      `);
+    });
+
+    test('add custom CSS classes', async () => {
+      const container = document.createElement('div');
+      const searchClient = createSearchClient();
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+      });
+
+      search.addWidgets([
+        searchBox({
+          container,
+          cssClasses: {
+            root: 'ROOT',
+            form: 'FORM',
+            input: 'INPUT',
+            loadingIcon: 'LOADING_ICON',
+            loadingIndicator: 'LOADING_INDICATOR',
+            reset: 'RESET',
+            resetIcon: 'RESET_ICON',
+            submit: 'SUBMIT',
+            submitIcon: 'SUBMIT_ICON',
+          },
+        }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      expect(container.firstChild).toHaveClass('ROOT');
+      expect(container.querySelector('.ais-SearchBox-form')).toHaveClass(
+        'FORM'
+      );
+      expect(container.querySelector('.ais-SearchBox-input')).toHaveClass(
+        'INPUT'
+      );
+      expect(container.querySelector('.ais-SearchBox-loadingIcon')).toHaveClass(
+        'LOADING_ICON'
+      );
+      expect(
+        container.querySelector('.ais-SearchBox-loadingIndicator')
+      ).toHaveClass('LOADING_INDICATOR');
+      expect(container.querySelector('.ais-SearchBox-resetIcon')).toHaveClass(
+        'RESET_ICON'
+      );
+      expect(container.querySelector('.ais-SearchBox-submit')).toHaveClass(
+        'SUBMIT'
+      );
+      expect(container.querySelector('.ais-SearchBox-submitIcon')).toHaveClass(
+        'SUBMIT_ICON'
+      );
+    });
+  });
+
   describe('templates', () => {
     test('renders default templates', async () => {
       const container = document.createElement('div');
