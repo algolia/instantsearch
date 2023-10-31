@@ -21,6 +21,7 @@ import {
   AisHitsPerPage,
   AisClearRefinements,
   AisCurrentRefinements,
+  AisMenuSelect,
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
 
@@ -394,6 +395,28 @@ const testSetups = {
               h(AisCurrentRefinements, { props: widgetParams }),
               h(GlobalErrorSwallower),
             ]),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
+  },
+  async createMenuSelectWidgetTests({ instantSearchOptions, widgetParams }) {
+    const { attribute, ...otherWidgetParams } = widgetParams;
+
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisMenuSelect, {
+              props: {
+                attribute,
+                ...otherWidgetParams,
+              },
+            }),
+            h(GlobalErrorSwallower),
           ])
         ),
       },
