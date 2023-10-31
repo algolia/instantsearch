@@ -14,6 +14,7 @@ import {
   createDocumentationMessageGenerator,
   createDocumentationLink,
   defer,
+  hydrateSearchClient,
   noop,
   warning,
   setIndexHelperState,
@@ -634,6 +635,8 @@ See documentation: ${createDocumentationLink({
     });
 
     if (this._initialResults) {
+      hydrateSearchClient(this.client, this._initialResults);
+
       const originalScheduleSearch = this.scheduleSearch;
       // We don't schedule a first search when initial results are provided
       // because we already have the results to render. This skips the initial

@@ -216,12 +216,13 @@ describe('getServerState', () => {
 
   test('calls search with widgets search parameters', async () => {
     const searchClient = createSearchClient({});
+    const spiedSearch = jest.spyOn(searchClient, 'search');
     const { App } = createTestEnvironment({ searchClient });
 
     await getServerState(<App />, { renderToString });
 
-    expect(searchClient.search).toHaveBeenCalledTimes(1);
-    expect(searchClient.search).toHaveBeenCalledWith([
+    expect(spiedSearch).toHaveBeenCalledTimes(1);
+    expect(spiedSearch).toHaveBeenCalledWith([
       {
         indexName: 'instant_search',
         params: {
@@ -341,6 +342,7 @@ describe('getServerState', () => {
 
   test('searches twice (cached) with dynamic widgets', async () => {
     const searchClient = createAlgoliaSearchClient({});
+    const spiedSearch = jest.spyOn(searchClient, 'search');
     const { App } = createTestEnvironment({ searchClient, initialUiState: {} });
 
     await getServerState(
@@ -350,15 +352,14 @@ describe('getServerState', () => {
       { renderToString }
     );
 
-    expect(searchClient.search).toHaveBeenCalledTimes(2);
+    expect(spiedSearch).toHaveBeenCalledTimes(2);
     // both calls are the same, so they're cached
-    expect(searchClient.search.mock.calls[0][0]).toEqual(
-      searchClient.search.mock.calls[1][0]
-    );
+    expect(spiedSearch.mock.calls[0][0]).toEqual(spiedSearch.mock.calls[1][0]);
   });
 
   test('searches twice (cached) with dynamic widgets inside index', async () => {
     const searchClient = createAlgoliaSearchClient({});
+    const spiedSearch = jest.spyOn(searchClient, 'search');
     const { App } = createTestEnvironment({ searchClient, initialUiState: {} });
 
     await getServerState(
@@ -370,11 +371,9 @@ describe('getServerState', () => {
       { renderToString }
     );
 
-    expect(searchClient.search).toHaveBeenCalledTimes(2);
+    expect(spiedSearch).toHaveBeenCalledTimes(2);
     // both calls are the same, so they're cached
-    expect(searchClient.search.mock.calls[0][0]).toEqual(
-      searchClient.search.mock.calls[1][0]
-    );
+    expect(spiedSearch.mock.calls[0][0]).toEqual(spiedSearch.mock.calls[1][0]);
   });
 
   test('searches twice with dynamic widgets and a refinement', async () => {
@@ -391,6 +390,7 @@ describe('getServerState', () => {
         );
       }),
     });
+    const spiedSearch = jest.spyOn(searchClient, 'search');
     const { App } = createTestEnvironment({
       searchClient,
       initialUiState: {
@@ -409,10 +409,10 @@ describe('getServerState', () => {
       { renderToString }
     );
 
-    expect(searchClient.search).toHaveBeenCalledTimes(2);
+    expect(spiedSearch).toHaveBeenCalledTimes(2);
 
     // first query doesn't have the fallback widget mounted yet
-    expect(searchClient.search.mock.calls[0][0][0]).toEqual({
+    expect(spiedSearch.mock.calls[0][0][0]).toEqual({
       indexName: 'instant_search',
       params: {
         facets: ['*'],
@@ -425,7 +425,7 @@ describe('getServerState', () => {
     });
 
     // second query does have the fallback widget mounted, and thus also the refinement
-    expect(searchClient.search.mock.calls[1][0][0]).toEqual({
+    expect(spiedSearch.mock.calls[1][0][0]).toEqual({
       indexName: 'instant_search',
       params: {
         facetFilters: [['categories:refined!']],
