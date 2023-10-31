@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.3.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.2.1...react-instantsearch-core@7.3.0) (2023-10-31)
+
+
+### Features
+
+* **instantsearch:** hydrate search client ([#5854](https://github.com/algolia/instantsearch/issues/5854)) ([5b96771](https://github.com/algolia/instantsearch/commit/5b96771fd6289969065815e1804fd3eb999d012e)), closes [#5913](https://github.com/algolia/instantsearch/issues/5913)
+
+
+
+
+
 ## [7.2.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.2.0...react-instantsearch-core@7.2.1) (2023-10-24)
 
 **Note:** Version bump only for package react-instantsearch-core
