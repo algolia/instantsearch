@@ -5,7 +5,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [4.12.1](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.12.0...vue-instantsearch@4.12.1) (2023-10-31)
 
-**Note:** Version bump only for package vue-instantsearch
+### Features
+
+* **instantsearch:** hydrate search client ([#5854](https://github.com/algolia/instantsearch/issues/5854)) ([5b96771](https://github.com/algolia/instantsearch/commit/5b96771fd6289969065815e1804fd3eb999d012e)), closes [#5913](https://github.com/algolia/instantsearch/issues/5913)
 
 
 
