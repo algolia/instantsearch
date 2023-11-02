@@ -293,7 +293,10 @@ export function createOptionsTests(
         instantSearchOptions: {
           indexName: 'indexName',
           searchClient,
-          onStateChange: ({ uiState }) => (state = uiState),
+          onStateChange: ({ uiState, setUiState }) => {
+            state = uiState;
+            setUiState(uiState);
+          },
         },
         widgetParams: {},
       });
@@ -316,7 +319,10 @@ export function createOptionsTests(
         instantSearchOptions: {
           indexName: 'indexName',
           searchClient,
-          onStateChange: ({ uiState }) => (state = uiState),
+          onStateChange: ({ uiState, setUiState }) => {
+            state = uiState;
+            setUiState(uiState);
+          },
           initialUiState: {
             indexName: {
               query: 'something',
@@ -343,6 +349,7 @@ export function createOptionsTests(
       });
 
       expect(state.indexName.query).not.toBeDefined();
+      expect(screen.getByRole('searchbox')).toHaveValue('');
     });
 
     test('does not update input value when query is updated externally and on focus', async () => {
@@ -357,6 +364,7 @@ export function createOptionsTests(
           onStateChange: ({ uiState, setUiState }) => {
             localSetUiState = setUiState;
             localUiState = uiState;
+            setUiState(uiState);
           },
         },
         widgetParams: {},
@@ -398,7 +406,10 @@ export function createOptionsTests(
         instantSearchOptions: {
           indexName: 'indexName',
           searchClient,
-          onStateChange: ({ uiState }) => (state = uiState),
+          onStateChange: ({ uiState, setUiState }) => {
+            state = uiState;
+            setUiState(uiState);
+          },
         },
         widgetParams: { searchAsYouType: false },
       });
@@ -421,7 +432,10 @@ export function createOptionsTests(
         instantSearchOptions: {
           indexName: 'indexName',
           searchClient,
-          onStateChange: ({ uiState }) => (state = uiState),
+          onStateChange: ({ uiState, setUiState }) => {
+            state = uiState;
+            setUiState(uiState);
+          },
         },
         widgetParams: { searchAsYouType: false },
       });
@@ -449,7 +463,10 @@ export function createOptionsTests(
         instantSearchOptions: {
           indexName: 'indexName',
           searchClient,
-          onStateChange: ({ uiState }) => (state = uiState),
+          onStateChange: ({ uiState, setUiState }) => {
+            state = uiState;
+            setUiState(uiState);
+          },
         },
         widgetParams: { searchAsYouType: false },
       });
