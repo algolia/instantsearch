@@ -213,11 +213,7 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      expect(
-        screen.getByRole('button', {
-          name: /clear the search query/i,
-        })
-      ).toBeVisible();
+      expect(document.querySelector('.ais-SearchBox-reset')).toBeVisible();
     });
 
     test('shows a loader when search is stalled', async () => {
@@ -258,6 +254,14 @@ export function createOptionsTests(
       expect(
         document.querySelector('.ais-SearchBox-loadingIndicator')
       ).toBeVisible();
+
+      await act(async () => {
+        await wait(100);
+      });
+
+      expect(
+        document.querySelector('.ais-SearchBox-loadingIndicator')
+      ).not.toBeVisible();
     });
 
     test('forwards `placeholder` prop', async () => {
@@ -304,7 +308,112 @@ export function createOptionsTests(
       expect(screen.getByRole('searchbox')).toHaveValue('iPhone');
     });
 
-    test('refines when hitting the Enter key', async () => {
+    test('resets query when clicking on reset button', async () => {
+      let state: UiState = {};
+      const searchClient = createSearchClient({});
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+          onStateChange: ({ uiState }) => (state = uiState),
+          initialUiState: {
+            indexName: {
+              query: 'something',
+            },
+          },
+        },
+        widgetParams: {},
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(screen.getByRole('searchbox')).toHaveValue('something');
+
+      userEvent.click(
+        screen.getByRole('button', {
+          name: /clear the search query/i,
+        })
+      );
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(state.indexName.query).not.toBeDefined();
+    });
+
+    test('does not update input value when query is updated externally and on focus', async () => {
+      let localUiState: UiState = {};
+      let localSetUiState: InstantSearch['setUiState'];
+      const searchClient = createSearchClient({});
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+          onStateChange: ({ uiState, setUiState }) => {
+            localSetUiState = setUiState;
+            localUiState = uiState;
+          },
+        },
+        widgetParams: {},
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      userEvent.type(screen.getByRole('searchbox'), 'i');
+      expect(localUiState.indexName.query).toBe('i');
+
+      act(() => {
+        localSetUiState({
+          indexName: {
+            query: 'iPhone',
+          },
+        });
+      });
+
+      expect(screen.getByRole('searchbox')).toHaveValue('i');
+
+      await act(async () => {
+        userEvent.tab();
+
+        await wait(0);
+      });
+
+      expect(screen.getByRole('searchbox')).toHaveValue('iPhone');
+    });
+  });
+
+  skippableDescribe('searchAsYouType option', skippedTests, () => {
+    test('does not refine query on type when `searchAsYouType` is false', async () => {
+      let state: UiState = {};
+      const searchClient = createSearchClient({});
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+          onStateChange: ({ uiState }) => (state = uiState),
+        },
+        widgetParams: { searchAsYouType: false },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      userEvent.type(screen.getByRole('searchbox'), 'iPhone');
+
+      expect(state.indexName?.query).not.toBeDefined();
+      expect(screen.getByRole('searchbox')).toHaveValue('iPhone');
+    });
+
+    test('refines when hitting the Enter key when `searchAsYouType` is false', async () => {
       let state: UiState = {};
       const searchClient = createSearchClient({});
 
@@ -362,100 +471,6 @@ export function createOptionsTests(
       );
 
       expect(state.indexName.query).toBe('iPhone');
-    });
-
-    test('resets query when clicking on reset button', async () => {
-      let state: UiState = {};
-      const searchClient = createSearchClient({});
-
-      await setup({
-        instantSearchOptions: {
-          indexName: 'indexName',
-          searchClient,
-          onStateChange: ({ uiState }) => (state = uiState),
-          initialUiState: {
-            indexName: {
-              query: 'something',
-            },
-          },
-        },
-        widgetParams: {},
-      });
-
-      await act(async () => {
-        await wait(0);
-      });
-
-      userEvent.click(
-        screen.getByRole('button', {
-          name: /clear the search query/i,
-        })
-      );
-
-      expect(state.indexName.query).not.toBeDefined();
-    });
-
-    test('does not update input value when query is updated externally and on focus', async () => {
-      let localSetUiState: InstantSearch['setUiState'];
-      const searchClient = createSearchClient({});
-
-      await setup({
-        instantSearchOptions: {
-          indexName: 'indexName',
-          searchClient,
-          onStateChange: ({ setUiState }) => (localSetUiState = setUiState),
-        },
-        widgetParams: {},
-      });
-
-      await act(async () => {
-        await wait(0);
-      });
-
-      userEvent.type(screen.getByRole('searchbox'), 'i');
-
-      act(() => {
-        localSetUiState({
-          indexName: {
-            query: 'iPhone',
-          },
-        });
-      });
-
-      expect(screen.getByRole('searchbox')).toHaveValue('i');
-
-      await act(async () => {
-        userEvent.tab();
-
-        await wait(0);
-      });
-
-      expect(screen.getByRole('searchbox')).toHaveValue('iPhone');
-    });
-  });
-
-  skippableDescribe('searchAsYouType option', skippedTests, () => {
-    test('does not refine query on type when `searchAsYouType` is false', async () => {
-      let state: UiState = {};
-      const searchClient = createSearchClient({});
-
-      await setup({
-        instantSearchOptions: {
-          indexName: 'indexName',
-          searchClient,
-          onStateChange: ({ uiState }) => (state = uiState),
-        },
-        widgetParams: { searchAsYouType: false },
-      });
-
-      await act(async () => {
-        await wait(0);
-      });
-
-      userEvent.type(screen.getByRole('searchbox'), 'iPhone');
-
-      expect(state.indexName?.query).not.toBeDefined();
-      expect(screen.getByRole('searchbox')).toHaveValue('iPhone');
     });
   });
 }
