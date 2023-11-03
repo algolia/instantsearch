@@ -18,10 +18,6 @@ import type { InstantSearch, UiState } from 'instantsearch.js';
 function normalizeSnapshot(html: string) {
   return (
     commonNormalizeSnapshot(html)
-      // Preact and React transform some SVG attributes differently
-      .replace(/fillRule/g, 'fill-rule')
-      .replace(/strokeWidth/g, 'stroke-width')
-      .replace(/strokeOpacity/g, 'stroke-opacity')
       // Preact does not set the value attribute, it only sets the value property on the Element
       .replace(/value=".*?"/g, '')
       // Vue duplicates these attributes names in the attribute value

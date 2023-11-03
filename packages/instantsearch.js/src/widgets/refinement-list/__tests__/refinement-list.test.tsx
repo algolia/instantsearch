@@ -136,7 +136,7 @@ describe('refinementList', () => {
                     >
                       <g
                         fill="none"
-                        fillRule="evenodd"
+                        fill-rule="evenodd"
                       >
                         <g
                           stroke-width="2"
@@ -322,7 +322,7 @@ describe('refinementList', () => {
                     >
                       <g
                         fill="none"
-                        fillRule="evenodd"
+                        fill-rule="evenodd"
                       >
                         <g
                           stroke-width="2"

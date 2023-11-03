@@ -173,7 +173,7 @@ describe('searchBox', () => {
                 >
                   <g
                     fill="none"
-                    fillRule="evenodd"
+                    fill-rule="evenodd"
                   >
                     <g
                       stroke-width="2"
