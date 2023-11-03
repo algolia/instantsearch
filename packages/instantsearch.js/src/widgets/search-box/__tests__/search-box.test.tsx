@@ -14,6 +14,73 @@ beforeEach(() => {
 });
 
 describe('searchBox', () => {
+  describe('options', () => {
+    test('throws without a `container`', () => {
+      expect(() => {
+        // @ts-expect-error
+        searchBox({});
+      }).toThrowErrorMatchingInlineSnapshot(`
+        "The \`container\` option is required.
+
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/js/"
+      `);
+    });
+
+    test('add custom CSS classes', async () => {
+      const container = document.createElement('div');
+      const searchClient = createSearchClient();
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+      });
+
+      search.addWidgets([
+        searchBox({
+          container,
+          cssClasses: {
+            root: 'ROOT',
+            form: 'FORM',
+            input: 'INPUT',
+            loadingIcon: 'LOADING_ICON',
+            loadingIndicator: 'LOADING_INDICATOR',
+            reset: 'RESET',
+            resetIcon: 'RESET_ICON',
+            submit: 'SUBMIT',
+            submitIcon: 'SUBMIT_ICON',
+          },
+        }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      expect(container.firstChild).toHaveClass('ROOT');
+      expect(container.querySelector('.ais-SearchBox-form')).toHaveClass(
+        'FORM'
+      );
+      expect(container.querySelector('.ais-SearchBox-input')).toHaveClass(
+        'INPUT'
+      );
+      expect(container.querySelector('.ais-SearchBox-loadingIcon')).toHaveClass(
+        'LOADING_ICON'
+      );
+      expect(
+        container.querySelector('.ais-SearchBox-loadingIndicator')
+      ).toHaveClass('LOADING_INDICATOR');
+      expect(container.querySelector('.ais-SearchBox-resetIcon')).toHaveClass(
+        'RESET_ICON'
+      );
+      expect(container.querySelector('.ais-SearchBox-submit')).toHaveClass(
+        'SUBMIT'
+      );
+      expect(container.querySelector('.ais-SearchBox-submitIcon')).toHaveClass(
+        'SUBMIT_ICON'
+      );
+    });
+  });
+
   describe('templates', () => {
     test('renders default templates', async () => {
       const container = document.createElement('div');
@@ -58,7 +125,7 @@ describe('searchBox', () => {
               />
               <button
                 class="ais-SearchBox-submit"
-                title="Submit the search query."
+                title="Submit the search query"
                 type="submit"
               >
                 <svg
@@ -76,7 +143,7 @@ describe('searchBox', () => {
               <button
                 class="ais-SearchBox-reset"
                 hidden=""
-                title="Clear the search query."
+                title="Clear the search query"
                 type="reset"
               >
                 <svg
@@ -97,6 +164,7 @@ describe('searchBox', () => {
               >
                 <svg
                   aria-hidden="true"
+                  aria-label="Results are loading"
                   class="ais-SearchBox-loadingIcon"
                   height="16"
                   stroke="#444"
@@ -105,17 +173,17 @@ describe('searchBox', () => {
                 >
                   <g
                     fill="none"
-                    fillRule="evenodd"
+                    fill-rule="evenodd"
                   >
                     <g
-                      strokeWidth="2"
+                      stroke-width="2"
                       transform="translate(1 1)"
                     >
                       <circle
                         cx="18"
                         cy="18"
                         r="18"
-                        strokeOpacity=".5"
+                        stroke-opacity=".5"
                       />
                       <path
                         d="M36 18c0-9.94-8.06-18-18-18"
@@ -190,7 +258,7 @@ describe('searchBox', () => {
               />
               <button
                 class="ais-SearchBox-submit"
-                title="Submit the search query."
+                title="Submit the search query"
                 type="submit"
               >
                 <span
@@ -202,7 +270,7 @@ describe('searchBox', () => {
               <button
                 class="ais-SearchBox-reset"
                 hidden=""
-                title="Clear the search query."
+                title="Clear the search query"
                 type="reset"
               >
                 <span
@@ -278,7 +346,7 @@ describe('searchBox', () => {
               />
               <button
                 class="ais-SearchBox-submit"
-                title="Submit the search query."
+                title="Submit the search query"
                 type="submit"
               >
                 <span
@@ -290,7 +358,7 @@ describe('searchBox', () => {
               <button
                 class="ais-SearchBox-reset"
                 hidden=""
-                title="Clear the search query."
+                title="Clear the search query"
                 type="reset"
               >
                 <span

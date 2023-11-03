@@ -48,8 +48,10 @@ describe('SearchBox', () => {
             action=""
             class="ais-SearchBox-form"
             novalidate=""
+            role="search"
           >
             <input
+              aria-label="Search"
               autocapitalize="off"
               autocomplete="off"
               autocorrect="off"
@@ -101,6 +103,7 @@ describe('SearchBox', () => {
             >
               <svg
                 aria-hidden="true"
+                aria-label="Results are loading"
                 class="ais-SearchBox-loadingIcon"
                 height="16"
                 stroke="#444"
@@ -163,8 +166,10 @@ describe('SearchBox', () => {
             action=""
             class="ais-SearchBox-form"
             novalidate=""
+            role="search"
           >
             <input
+              aria-label="Search"
               autocapitalize="off"
               autocomplete="off"
               autocorrect="off"
@@ -216,6 +221,7 @@ describe('SearchBox', () => {
             >
               <svg
                 aria-hidden="true"
+                aria-label="Results are loading"
                 class="ais-SearchBox-loadingIcon"
                 height="16"
                 stroke="#444"
@@ -276,8 +282,10 @@ describe('SearchBox', () => {
             action=""
             class="ais-SearchBox-form"
             novalidate=""
+            role="search"
           >
             <input
+              aria-label="Search"
               autocapitalize="off"
               autocomplete="off"
               autocorrect="off"
@@ -511,8 +519,10 @@ describe('SearchBox', () => {
             action=""
             class="ais-SearchBox-form FORM"
             novalidate=""
+            role="search"
           >
             <input
+              aria-label="Search"
               autocapitalize="off"
               autocomplete="off"
               autocorrect="off"
@@ -564,6 +574,7 @@ describe('SearchBox', () => {
             >
               <svg
                 aria-hidden="true"
+                aria-label="Results are loading"
                 class="ais-SearchBox-loadingIcon LOADINGICON"
                 height="16"
                 stroke="#444"
