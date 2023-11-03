@@ -176,14 +176,14 @@ describe('searchBox', () => {
                     fillRule="evenodd"
                   >
                     <g
-                      strokeWidth="2"
+                      stroke-width="2"
                       transform="translate(1 1)"
                     >
                       <circle
                         cx="18"
                         cy="18"
                         r="18"
-                        strokeOpacity=".5"
+                        stroke-opacity=".5"
                       />
                       <path
                         d="M36 18c0-9.94-8.06-18-18-18"
