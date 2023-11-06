@@ -6,10 +6,14 @@ export function toMatchNormalizedInlineSnapshot(
   normalizeFn: (html: string) => string,
   snapshot: string = ''
 ): jest.CustomMatcherResult {
-  const normalizedElement = received.cloneNode() as Element;
-  normalizedElement.innerHTML = normalizeFn(received.innerHTML);
+  const normalizedElement = document.createElement('div');
+  normalizedElement.innerHTML = normalizeFn(received.outerHTML);
 
-  return toMatchInlineSnapshot.call(this, normalizedElement, snapshot);
+  return toMatchInlineSnapshot.call(
+    this,
+    normalizedElement.firstChild,
+    snapshot
+  );
 }
 
 declare global {
