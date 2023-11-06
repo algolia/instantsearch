@@ -22,6 +22,7 @@ import {
   HitsPerPage,
   ClearRefinements,
   CurrentRefinements,
+  ToggleRefinement,
 } from '..';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -266,6 +267,14 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </form>
     );
   },
+  createToggleRefinementWidgetTests({ instantSearchOptions, widgetParams }) {
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <ToggleRefinement {...widgetParams} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -281,6 +290,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createHitsPerPageWidgetTests: { act },
   createClearRefinementsWidgetTests: { act },
   createCurrentRefinementsWidgetTests: { act },
+  createToggleRefinementWidgetTests: { act },
 };
 
 /**

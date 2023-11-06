@@ -14,6 +14,30 @@ beforeEach(() => {
 });
 
 describe('toggleRefinement', () => {
+  describe('options', () => {
+    test('throws without a `container`', () => {
+      expect(() => {
+        const searchClient = createSearchClient();
+
+        const search = instantsearch({
+          indexName: 'indexName',
+          searchClient,
+        });
+
+        search.addWidgets([
+          toggleRefinement({
+            // @ts-expect-error
+            container: undefined,
+          }),
+        ]);
+      }).toThrowErrorMatchingInlineSnapshot(`
+        "The \`container\` option is required.
+
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refinement/js/"
+      `);
+    });
+  });
+
   describe('templates', () => {
     test('renders default templates', async () => {
       const container = document.createElement('div');
@@ -40,26 +64,26 @@ describe('toggleRefinement', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-ToggleRefinement"
-  >
-    <label
-      class="ais-ToggleRefinement-label"
-    >
-      <input
-        class="ais-ToggleRefinement-checkbox"
-        type="checkbox"
-      />
-      <span
-        class="ais-ToggleRefinement-labelText"
-      >
-        free_shipping
-      </span>
-    </label>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-ToggleRefinement"
+          >
+            <label
+              class="ais-ToggleRefinement-label"
+            >
+              <input
+                class="ais-ToggleRefinement-checkbox"
+                type="checkbox"
+              />
+              <span
+                class="ais-ToggleRefinement-labelText"
+              >
+                free_shipping
+              </span>
+            </label>
+          </div>
+        </div>
+      `);
     });
 
     test('renders with templates using `html`', async () => {
@@ -88,30 +112,30 @@ describe('toggleRefinement', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-ToggleRefinement"
-  >
-    <label
-      class="ais-ToggleRefinement-label"
-    >
-      <input
-        class="ais-ToggleRefinement-checkbox"
-        type="checkbox"
-      />
-      <span
-        class="ais-ToggleRefinement-labelText"
-      >
-        <span
-          style="font-weight: normal;"
-        >
-          Free shipping 
-        </span>
-      </span>
-    </label>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-ToggleRefinement"
+          >
+            <label
+              class="ais-ToggleRefinement-label"
+            >
+              <input
+                class="ais-ToggleRefinement-checkbox"
+                type="checkbox"
+              />
+              <span
+                class="ais-ToggleRefinement-labelText"
+              >
+                <span
+                  style="font-weight: normal;"
+                >
+                  Free shipping 
+                </span>
+              </span>
+            </label>
+          </div>
+        </div>
+      `);
     });
 
     test('renders with templates using JSX', async () => {
@@ -141,30 +165,30 @@ describe('toggleRefinement', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-ToggleRefinement"
-  >
-    <label
-      class="ais-ToggleRefinement-label"
-    >
-      <input
-        class="ais-ToggleRefinement-checkbox"
-        type="checkbox"
-      />
-      <span
-        class="ais-ToggleRefinement-labelText"
-      >
-        <span
-          style="font-weight: normal;"
-        >
-          Free shipping 
-        </span>
-      </span>
-    </label>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-ToggleRefinement"
+          >
+            <label
+              class="ais-ToggleRefinement-label"
+            >
+              <input
+                class="ais-ToggleRefinement-checkbox"
+                type="checkbox"
+              />
+              <span
+                class="ais-ToggleRefinement-labelText"
+              >
+                <span
+                  style="font-weight: normal;"
+                >
+                  Free shipping 
+                </span>
+              </span>
+            </label>
+          </div>
+        </div>
+      `);
     });
   });
 });
