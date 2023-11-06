@@ -566,10 +566,10 @@ function removeEmptyRefinementsFromUiState(indexUiState: IndexUiState) {
     return indexUiState;
   }
 
-  const connectorUiState = Object.entries(refinementList).reduce(
-    (acc, [attribute, value]) => ({
+  const connectorUiState = Object.keys(refinementList).reduce(
+    (acc, key) => ({
       ...acc,
-      ...(value.length > 0 ? { [attribute]: value } : {}),
+      ...(refinementList[key].length > 0 ? { [key]: refinementList[key] } : {}),
     }),
     {}
   );
