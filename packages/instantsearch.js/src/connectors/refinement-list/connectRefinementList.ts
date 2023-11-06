@@ -20,6 +20,7 @@ import type {
   FacetHit,
   CreateURL,
   WidgetRenderState,
+  IndexUiState,
 } from '../../types';
 import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
 
@@ -475,13 +476,13 @@ const connectRefinementList: RefinementListConnector =
               ? searchParameters.getDisjunctiveRefinements(attribute)
               : searchParameters.getConjunctiveRefinements(attribute);
 
-          return {
+          return removeEmptyRefinementsFromUiState({
             ...uiState,
             refinementList: {
               ...uiState.refinementList,
               [attribute]: values,
             },
-          };
+          });
         },
 
         getWidgetSearchParameters(searchParameters, { uiState }) {
@@ -557,5 +558,28 @@ As this is not supported, please make sure to only use this attribute with one o
       };
     };
   };
+
+function removeEmptyRefinementsFromUiState(indexUiState: IndexUiState) {
+  const { refinementList, ...indexUiStateBase } = indexUiState;
+
+  if (!refinementList) {
+    return indexUiState;
+  }
+
+  const connectorUiState = Object.entries(refinementList).reduce(
+    (acc, [attribute, value]) => ({
+      ...acc,
+      ...(value.length > 0 ? { [attribute]: value } : {}),
+    }),
+    {}
+  );
+
+  return {
+    ...indexUiStateBase,
+    ...(Object.keys(connectorUiState).length > 0
+      ? { refinementList: connectorUiState }
+      : {}),
+  };
+}
 
 export default connectRefinementList;

@@ -106,24 +106,21 @@ const testSetups: TestSetupsMap<TestSuites> = {
         >
           LINK
         </a>
-        <button data-testid="RefinementList-refine">
-          refine
-        </button>
-      <button data-testid="RefinementList-refine-value">
-        refine
-      </button>
+        <form data-testid="RefinementList-refine-form">
+          <input type="text" data-testid="RefinementList-refine-input" />
+        </form>
       `;
 
       renderOptions.widgetParams.container
-        .querySelector('[data-testid="RefinementList-refine"]')!
-        .addEventListener('click', () => {
-          renderOptions.refine('Apple');
-        });
-
-      renderOptions.widgetParams.container
-        .querySelector('[data-testid="RefinementList-refine-value"]')!
-        .addEventListener('click', () => {
-          renderOptions.refine('value');
+        .querySelector('[data-testid="RefinementList-refine-form"]')!
+        .addEventListener('submit', (event) => {
+          renderOptions.refine(
+            (
+              (event.currentTarget as HTMLFormElement).elements.item(
+                0
+              ) as HTMLInputElement
+            ).value
+          );
         });
     });
 

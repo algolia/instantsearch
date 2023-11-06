@@ -10,6 +10,7 @@ import { simple } from 'instantsearch.js/es/lib/stateMappings';
 
 import type { RefinementListConnectorSetup } from '.';
 import type { TestOptions } from '../../common';
+import userEvent from '@testing-library/user-event';
 
 export function createRoutingTests(
   setup: RefinementListConnectorSetup,
@@ -87,6 +88,14 @@ export function createRoutingTests(
           await wait(0);
         });
 
+        function updateRefinement(value: string) {
+          const inputElement = screen.getByTestId(
+            'RefinementList-refine-input'
+          );
+          userEvent.clear(inputElement);
+          userEvent.type(inputElement, `${value}{Enter}`);
+        }
+
         // Initial state, before interaction
         {
           expect(screen.getByTestId('RefinementList-link')).toHaveAttribute(
@@ -103,9 +112,8 @@ export function createRoutingTests(
 
         // Select a refinement
         {
-          const firstItem = screen.getByTestId('RefinementList-refine');
           await act(async () => {
-            firstItem.click();
+            updateRefinement('Apple');
             await wait(0);
             await wait(0);
           });
@@ -143,9 +151,8 @@ export function createRoutingTests(
 
         // Unselect the refinement
         {
-          const firstItem = screen.getByTestId('RefinementList-refine');
           await act(async () => {
-            firstItem.click();
+            updateRefinement('Apple');
             await wait(0);
             await wait(0);
           });
@@ -184,10 +191,8 @@ export function createRoutingTests(
 
         // Unselect the 'value' refinement
         {
-          screen.debug();
-          const firstItem = screen.getByTestId('RefinementList-refine-value');
           await act(async () => {
-            firstItem.click();
+            updateRefinement('value');
             await wait(0);
             await wait(0);
           });

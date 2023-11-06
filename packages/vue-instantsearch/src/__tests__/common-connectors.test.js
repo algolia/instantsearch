@@ -36,7 +36,42 @@ const testSetups = {
       name: 'RefinementList',
       requiredProps: ['attribute'],
       urlValue: 'value',
-      refineValue: 'Apple',
+      refineComponents: [
+        (h, state) =>
+          h(
+            'form',
+            {
+              on: {
+                submit: (event) => {
+                  state.refine(event.currentTarget.elements[0].value);
+                },
+              },
+            },
+            [
+              h('input', {
+                attrs: {
+                  type: 'text',
+                  'data-testid': 'RefinementList-refine-input',
+                },
+              }),
+            ]
+          ),
+        (h, state) =>
+          h(
+            'button',
+            {
+              attrs: {
+                'data-testid': 'RefinementList-refine-value',
+              },
+              on: {
+                click: () => {
+                  state.refine('value');
+                },
+              },
+            },
+            'REFINE VALUE'
+          ),
+      ],
     });
 
     mountApp(
@@ -286,6 +321,27 @@ function createCustomWidget({
   urlValue,
   refineValue,
   requiredProps = [],
+  refineComponents = [
+    (h, state) =>
+      h(
+        'button',
+        {
+          attrs: {
+            'data-testid': `${name}-refine`,
+          },
+          on: {
+            click: () => {
+              state.refine(
+                typeof refineValue === 'function'
+                  ? refineValue(state)
+                  : refineValue
+              );
+            },
+          },
+        },
+        'REFINE'
+      ),
+  ],
 }) {
   return {
     name: `Custom${name}`,
@@ -313,24 +369,7 @@ function createCustomWidget({
               },
               'LINK'
             ),
-            h(
-              'button',
-              {
-                attrs: {
-                  'data-testid': `${name}-refine`,
-                },
-                on: {
-                  click: () => {
-                    this.state.refine(
-                      typeof refineValue === 'function'
-                        ? refineValue(this.state)
-                        : refineValue
-                    );
-                  },
-                },
-              },
-              'REFINE'
-            ),
+            ...refineComponents.map((component) => component(h, this.state)),
           ])
         : null;
     }),

@@ -51,12 +51,15 @@ const testSetups: TestSetupsMap<TestSuites> = {
           <a data-testid="RefinementList-link" href={createURL('value')}>
             LINK
           </a>
-          <button
-            data-testid="RefinementList-refine"
-            onClick={() => refine('Apple')}
+          <form
+            onSubmit={(event) => {
+              refine(
+                (event.currentTarget.elements.item(0) as HTMLInputElement).value
+              );
+            }}
           >
-            BUTTON
-          </button>
+            <input type="text" data-testid="RefinementList-refine-input" />
+          </form>
         </>
       );
     }
