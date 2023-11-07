@@ -275,6 +275,17 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
+  createSearchBoxWidgetTests({
+    instantSearchOptions,
+    widgetParams: { autofocus, ...rest },
+  }) {
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <SearchBox {...rest} autoFocus={autofocus} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -291,6 +302,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createClearRefinementsWidgetTests: { act },
   createCurrentRefinementsWidgetTests: { act },
   createToggleRefinementWidgetTests: { act },
+  createSearchBoxWidgetTests: { act },
 };
 
 /**

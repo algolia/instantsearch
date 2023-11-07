@@ -421,6 +421,21 @@ const testSetups = {
 
     await nextTick();
   },
+  async createSearchBoxWidgetTests({ instantSearchOptions, widgetParams }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisSearchBox, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
+  },
 };
 
 const testOptions = {
@@ -437,6 +452,9 @@ const testOptions = {
   createClearRefinementsWidgetTests: undefined,
   createCurrentRefinementsWidgetTests: undefined,
   createToggleRefinementWidgetTests: undefined,
+  createSearchBoxWidgetTests: {
+    skippedTests: { 'searchAsYouType option': true },
+  },
 };
 
 describe('Common widget tests (Vue InstantSearch)', () => {

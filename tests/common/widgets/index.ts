@@ -11,3 +11,4 @@ export * from './range-input';
 export * from './refinement-list';
 export * from './hits-per-page';
 export * from './toggle-refinement';
+export * from './search-box';

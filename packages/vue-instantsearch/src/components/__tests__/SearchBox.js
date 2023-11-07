@@ -10,37 +10,6 @@ import '../../../test/utils/sortedHtmlSerializer';
 
 const defaultState = {};
 
-test('renders HTML correctly', () => {
-  __setState(defaultState);
-  const wrapper = mount(SearchBox);
-
-  expect(wrapper.htmlCompat()).toMatchSnapshot();
-});
-
-test('with autofocus', () => {
-  __setState(defaultState);
-  const wrapper = mount(SearchBox, {
-    propsData: {
-      autofocus: true,
-    },
-  });
-
-  expect(wrapper.find('.ais-SearchBox-input')).vueToBeAutofocused();
-});
-
-test('with placeholder', () => {
-  __setState(defaultState);
-  const wrapper = mount(SearchBox, {
-    propsData: {
-      placeholder: 'Search placeholder',
-    },
-  });
-
-  expect(wrapper.find('.ais-SearchBox-input').attributes().placeholder).toBe(
-    'Search placeholder'
-  );
-});
-
 test('with submit title', () => {
   __setState(defaultState);
   const wrapper = mount(SearchBox, {
@@ -67,47 +36,11 @@ test('with reset title', () => {
   );
 });
 
-test('with reset button hidden without refinement', () => {
-  __setState({ ...defaultState });
-
-  const wrapper = mount(SearchBox);
-
-  expect(wrapper.find('.ais-SearchBox-reset')).vueToBeHidden();
-});
-
-test('with reset button visible with refinement', () => {
-  __setState({
-    ...defaultState,
-    query: 'Hello',
-  });
-
-  const wrapper = mount(SearchBox);
-
-  expect(wrapper.find('.ais-SearchBox-reset')).not.vueToBeHidden();
-});
-
-test('with stalled search hides the submit, reset and displays the loader', () => {
-  __setState({
-    ...defaultState,
-    isSearchStalled: true,
-  });
-
-  const wrapper = mount(SearchBox, {
-    propsData: {
-      showLoadingIndicator: true,
-    },
-  });
-
-  expect(wrapper.find('.ais-SearchBox-submit')).vueToBeHidden();
-
-  expect(wrapper.find('.ais-SearchBox-reset')).vueToBeHidden();
-
-  expect(wrapper.find('.ais-SearchBox-loadingIndicator').exists()).toBe(true);
-});
-
 test('with stalled search but no `showLoadingIndicator` displays the submit and hides reset, loader', () => {
   __setState({ ...defaultState, isSearchStalled: true });
-  const wrapper = mount(SearchBox);
+  const wrapper = mount(SearchBox, {
+    propsData: { showLoadingIndicator: false },
+  });
 
   expect(wrapper.find('.ais-SearchBox-submit')).not.vueToBeHidden();
 
@@ -118,11 +51,7 @@ test('with stalled search but no `showLoadingIndicator` displays the submit and 
 
 test('with not stalled search displays the submit and hides reset, loader', () => {
   __setState(defaultState);
-  const wrapper = mount(SearchBox, {
-    propsData: {
-      showLoadingIndicator: true,
-    },
-  });
+  const wrapper = mount(SearchBox);
 
   expect(wrapper.find('.ais-SearchBox-submit')).not.vueToBeHidden();
 
@@ -204,34 +133,34 @@ test('overriding slots', () => {
 
   expect(htmlCompat(wrapper.find('.ais-SearchBox-submit').html()))
     .toMatchInlineSnapshot(`
-<button class="ais-SearchBox-submit"
-        hidden="hidden"
-        title="Search"
-        type="submit"
->
-  <span>
-    SUBMIT
-  </span>
-</button>
-`);
+    <button class="ais-SearchBox-submit"
+            hidden="hidden"
+            title="Submit the search query"
+            type="submit"
+    >
+      <span>
+        SUBMIT
+      </span>
+    </button>
+  `);
   expect(htmlCompat(wrapper.find('.ais-SearchBox-reset').html()))
     .toMatchInlineSnapshot(`
-<button class="ais-SearchBox-reset"
-        hidden="hidden"
-        title="Clear"
-        type="reset"
->
-  <span>
-    RESET
-  </span>
-</button>
-`);
+    <button class="ais-SearchBox-reset"
+            hidden="hidden"
+            title="Clear the search query"
+            type="reset"
+    >
+      <span>
+        RESET
+      </span>
+    </button>
+  `);
   expect(wrapper.find('.ais-SearchBox-loadingIndicator').html())
     .toMatchInlineSnapshot(`
-<span class="ais-SearchBox-loadingIndicator">
-  <span>
-    LOADING...
-  </span>
-</span>
-`);
+    <span class="ais-SearchBox-loadingIndicator">
+      <span>
+        LOADING...
+      </span>
+    </span>
+  `);
 });
