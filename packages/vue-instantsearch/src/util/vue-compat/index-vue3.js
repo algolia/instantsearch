@@ -14,12 +14,13 @@ export function renderCompat(fn) {
       (props.attrs || props.props || props.scopedSlots || props.on)
     ) {
       // In vue 3, we no longer wrap with `attrs` or `props` key.
+      const defaultedOnProp = props.on || {};
       const flatProps = Object.assign(
         {},
         props,
         props.attrs,
         props.props,
-        Object.keys(props.on || {}).reduce((acc, key) => {
+        Object.keys(defaultedOnProp).reduce((acc, key) => {
           // eslint-disable-next-line no-param-reassign
           acc[`on${key[0].toUpperCase()}${key.slice(1)}`] = props.on[key];
           return acc;
@@ -28,7 +29,7 @@ export function renderCompat(fn) {
       delete flatProps.attrs;
       delete flatProps.props;
       delete flatProps.scopedSlots;
-      delete flatProps.on;
+      Object.keys(defaultedOnProp).forEach((key) => delete flatProps.on[key]);
 
       return Vue.h(
         tag,
