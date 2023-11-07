@@ -25,7 +25,7 @@ export function createOptionsTests(
   setup: ToggleRefinementWidgetSetup,
   { act }: Required<TestOptions>
 ) {
-  describe.only('options', () => {
+  describe('options', () => {
     test('renders with props', async () => {
       const searchClient = createSearchClient({});
 
