@@ -11,6 +11,7 @@ import type {
   TransformItems,
   CreateURL,
   WidgetRenderState,
+  IndexUiState,
 } from '../../types';
 import type { SearchParameters, SearchResults } from 'algoliasearch-helper';
 
@@ -243,17 +244,13 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
           hierarchicalFacetName
         );
 
-        if (!path.length) {
-          return uiState;
-        }
-
-        return {
+        return removeEmptyRefinementsFromUiState({
           ...uiState,
           hierarchicalMenu: {
             ...uiState.hierarchicalMenu,
             [hierarchicalFacetName]: path,
           },
-        };
+        });
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
@@ -334,6 +331,31 @@ function shiftItemsValues(array: BreadcrumbConnectorParamsItem[]) {
     label: x.label,
     value: idx + 1 === array.length ? null : array[idx + 1].value,
   }));
+}
+
+function removeEmptyRefinementsFromUiState(indexUiState: IndexUiState) {
+  const { hierarchicalMenu, ...indexUiStateBase } = indexUiState;
+
+  if (!hierarchicalMenu) {
+    return indexUiState;
+  }
+
+  const connectorUiState = Object.keys(hierarchicalMenu).reduce(
+    (acc, key) => ({
+      ...acc,
+      ...(hierarchicalMenu[key].length > 0
+        ? { [key]: hierarchicalMenu[key] }
+        : {}),
+    }),
+    {}
+  );
+
+  return {
+    ...indexUiStateBase,
+    ...(Object.keys(connectorUiState).length > 0
+      ? { hierarchicalMenu: connectorUiState }
+      : {}),
+  };
 }
 
 export default connectBreadcrumb;

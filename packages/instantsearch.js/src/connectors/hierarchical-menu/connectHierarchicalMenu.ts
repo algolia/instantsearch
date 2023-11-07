@@ -16,6 +16,7 @@ import type {
   Widget,
   SortBy,
   WidgetRenderState,
+  IndexUiState,
 } from '../../types';
 import type { SearchResults } from 'algoliasearch-helper';
 
@@ -396,17 +397,13 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
             hierarchicalFacetName
           );
 
-          if (!path.length) {
-            return uiState;
-          }
-
-          return {
+          return removeEmptyRefinementsFromUiState({
             ...uiState,
             hierarchicalMenu: {
               ...uiState.hierarchicalMenu,
               [hierarchicalFacetName]: path,
             },
-          };
+          });
         },
 
         getWidgetSearchParameters(searchParameters, { uiState }) {
@@ -481,5 +478,30 @@ As this is not supported, please make sure to remove this other widget or this H
       };
     };
   };
+
+function removeEmptyRefinementsFromUiState(indexUiState: IndexUiState) {
+  const { hierarchicalMenu, ...indexUiStateBase } = indexUiState;
+
+  if (!hierarchicalMenu) {
+    return indexUiState;
+  }
+
+  const connectorUiState = Object.keys(hierarchicalMenu).reduce(
+    (acc, key) => ({
+      ...acc,
+      ...(hierarchicalMenu[key].length > 0
+        ? { [key]: hierarchicalMenu[key] }
+        : {}),
+    }),
+    {}
+  );
+
+  return {
+    ...indexUiStateBase,
+    ...(Object.keys(connectorUiState).length > 0
+      ? { hierarchicalMenu: connectorUiState }
+      : {}),
+  };
+}
 
 export default connectHierarchicalMenu;
