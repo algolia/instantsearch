@@ -36,6 +36,45 @@ describe('toggleRefinement', () => {
         See documentation: https://www.algolia.com/doc/api-reference/widgets/toggle-refinement/js/"
       `);
     });
+
+    test('add custom CSS classes', async () => {
+      const container = document.createElement('div');
+
+      const searchClient = createSearchClient();
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+      });
+
+      search.addWidgets([
+        toggleRefinement({
+          container,
+          attribute: 'free_shipping',
+          cssClasses: {
+            root: 'ROOT',
+            label: 'LABEL',
+            checkbox: 'CHECKBOX',
+            labelText: 'LABEL_TEXT',
+          },
+        }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      expect(container.firstChild).toHaveClass('ROOT');
+      expect(
+        container.querySelector('.ais-ToggleRefinement-label')
+      ).toHaveClass('LABEL');
+      expect(
+        container.querySelector('.ais-ToggleRefinement-checkbox')
+      ).toHaveClass('CHECKBOX');
+      expect(
+        container.querySelector('.ais-ToggleRefinement-labelText')
+      ).toHaveClass('LABEL_TEXT');
+    });
   });
 
   describe('templates', () => {
