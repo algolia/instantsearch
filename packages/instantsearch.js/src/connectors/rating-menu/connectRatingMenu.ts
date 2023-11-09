@@ -157,7 +157,7 @@ export type RatingMenuWidgetDescription = {
   };
   indexUiState: {
     ratingMenu: {
-      [attribute: string]: number;
+      [attribute: string]: number | undefined;
     };
   };
 };
@@ -443,7 +443,7 @@ const connectRatingMenu: RatingMenuConnector = function connectRatingMenu(
           ...uiState,
           ratingMenu: {
             ...uiState.ratingMenu,
-            ...(typeof value === 'number' ? { [attribute]: value } : {}),
+            [attribute]: typeof value === 'number' ? value : undefined,
           },
         });
       },
