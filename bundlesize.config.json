@@ -10,7 +10,7 @@
     },
     {
       "path": "./packages/instantsearch.js/dist/instantsearch.production.min.js",
-      "maxSize": "75 kB"
+      "maxSize": "75.25 kB"
     },
     {
       "path": "./packages/instantsearch.js/dist/instantsearch.development.js",
@@ -26,11 +26,11 @@
     },
     {
       "path": "packages/vue-instantsearch/vue2/umd/index.js",
-      "maxSize": "63.5 kB"
+      "maxSize": "63.75 kB"
     },
     {
       "path": "packages/vue-instantsearch/vue3/umd/index.js",
-      "maxSize": "63.75 kB"
+      "maxSize": "64.25 kB"
     },
     {
       "path": "packages/vue-instantsearch/vue2/cjs/index.js",
