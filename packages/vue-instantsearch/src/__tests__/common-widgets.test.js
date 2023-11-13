@@ -21,6 +21,7 @@ import {
   AisHitsPerPage,
   AisClearRefinements,
   AisCurrentRefinements,
+  AisToggleRefinement,
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
 
@@ -402,6 +403,39 @@ const testSetups = {
 
     await nextTick();
   },
+  async createToggleRefinementWidgetTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisToggleRefinement, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
+  },
+  async createSearchBoxWidgetTests({ instantSearchOptions, widgetParams }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisSearchBox, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
+  },
 };
 
 const testOptions = {
@@ -417,6 +451,10 @@ const testOptions = {
   createHitsPerPageWidgetTests: undefined,
   createClearRefinementsWidgetTests: undefined,
   createCurrentRefinementsWidgetTests: undefined,
+  createToggleRefinementWidgetTests: undefined,
+  createSearchBoxWidgetTests: {
+    skippedTests: { 'searchAsYouType option': true },
+  },
 };
 
 describe('Common widget tests (Vue InstantSearch)', () => {

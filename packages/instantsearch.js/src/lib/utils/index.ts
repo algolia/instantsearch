@@ -27,6 +27,7 @@ export * from './getRefinements';
 export * from './getWidgetAttribute';
 export * from './hits-absolute-position';
 export * from './hits-query-id';
+export * from './hydrateSearchClient';
 export * from './isDomElement';
 export * from './isEqual';
 export * from './isFacetRefined';

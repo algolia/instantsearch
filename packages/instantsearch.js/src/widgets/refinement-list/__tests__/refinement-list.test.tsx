@@ -88,7 +88,7 @@ describe('refinementList', () => {
                   />
                   <button
                     class="ais-SearchBox-submit"
-                    title="Submit the search query."
+                    title="Submit the search query"
                     type="submit"
                   >
                     <svg
@@ -106,7 +106,7 @@ describe('refinementList', () => {
                   <button
                     class="ais-SearchBox-reset"
                     hidden=""
-                    title="Clear the search query."
+                    title="Clear the search query"
                     type="reset"
                   >
                     <svg
@@ -127,6 +127,7 @@ describe('refinementList', () => {
                   >
                     <svg
                       aria-hidden="true"
+                      aria-label="Results are loading"
                       class="ais-SearchBox-loadingIcon"
                       height="16"
                       stroke="#444"
@@ -135,17 +136,17 @@ describe('refinementList', () => {
                     >
                       <g
                         fill="none"
-                        fillRule="evenodd"
+                        fill-rule="evenodd"
                       >
                         <g
-                          strokeWidth="2"
+                          stroke-width="2"
                           transform="translate(1 1)"
                         >
                           <circle
                             cx="18"
                             cy="18"
                             r="18"
-                            strokeOpacity=".5"
+                            stroke-opacity=".5"
                           />
                           <path
                             d="M36 18c0-9.94-8.06-18-18-18"
@@ -274,7 +275,7 @@ describe('refinementList', () => {
                   />
                   <button
                     class="ais-SearchBox-submit"
-                    title="Submit the search query."
+                    title="Submit the search query"
                     type="submit"
                   >
                     <svg
@@ -291,7 +292,7 @@ describe('refinementList', () => {
                   </button>
                   <button
                     class="ais-SearchBox-reset"
-                    title="Clear the search query."
+                    title="Clear the search query"
                     type="reset"
                   >
                     <svg
@@ -312,6 +313,7 @@ describe('refinementList', () => {
                   >
                     <svg
                       aria-hidden="true"
+                      aria-label="Results are loading"
                       class="ais-SearchBox-loadingIcon"
                       height="16"
                       stroke="#444"
@@ -320,17 +322,17 @@ describe('refinementList', () => {
                     >
                       <g
                         fill="none"
-                        fillRule="evenodd"
+                        fill-rule="evenodd"
                       >
                         <g
-                          strokeWidth="2"
+                          stroke-width="2"
                           transform="translate(1 1)"
                         >
                           <circle
                             cx="18"
                             cy="18"
                             r="18"
-                            strokeOpacity=".5"
+                            stroke-opacity=".5"
                           />
                           <path
                             d="M36 18c0-9.94-8.06-18-18-18"
@@ -448,7 +450,7 @@ describe('refinementList', () => {
                   />
                   <button
                     class="ais-SearchBox-submit"
-                    title="Submit the search query."
+                    title="Submit the search query"
                     type="submit"
                   >
                     <span>
@@ -458,7 +460,7 @@ describe('refinementList', () => {
                   <button
                     class="ais-SearchBox-reset"
                     hidden=""
-                    title="Clear the search query."
+                    title="Clear the search query"
                     type="reset"
                   >
                     <span>
@@ -569,7 +571,7 @@ describe('refinementList', () => {
                   />
                   <button
                     class="ais-SearchBox-submit"
-                    title="Submit the search query."
+                    title="Submit the search query"
                     type="submit"
                   >
                     <span>
@@ -578,7 +580,7 @@ describe('refinementList', () => {
                   </button>
                   <button
                     class="ais-SearchBox-reset"
-                    title="Clear the search query."
+                    title="Clear the search query"
                     type="reset"
                   >
                     <span>
@@ -697,7 +699,7 @@ describe('refinementList', () => {
                   />
                   <button
                     class="ais-SearchBox-submit"
-                    title="Submit the search query."
+                    title="Submit the search query"
                     type="submit"
                   >
                     <span>
@@ -707,7 +709,7 @@ describe('refinementList', () => {
                   <button
                     class="ais-SearchBox-reset"
                     hidden=""
-                    title="Clear the search query."
+                    title="Clear the search query"
                     type="reset"
                   >
                     <span>
@@ -818,7 +820,7 @@ describe('refinementList', () => {
                   />
                   <button
                     class="ais-SearchBox-submit"
-                    title="Submit the search query."
+                    title="Submit the search query"
                     type="submit"
                   >
                     <span>
@@ -827,7 +829,7 @@ describe('refinementList', () => {
                   </button>
                   <button
                     class="ais-SearchBox-reset"
-                    title="Clear the search query."
+                    title="Clear the search query"
                     type="reset"
                   >
                     <span>

@@ -20,6 +20,7 @@ import {
   hitsPerPage,
   clearRefinements,
   currentRefinements,
+  toggleRefinement,
 } from '../widgets';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -372,6 +373,38 @@ const testSetups: TestSetupsMap<TestSuites> = {
       })
       .start();
   },
+  createToggleRefinementWidgetTests({ instantSearchOptions, widgetParams }) {
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        toggleRefinement({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
+  createSearchBoxWidgetTests({ instantSearchOptions, widgetParams }) {
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        searchBox({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -387,6 +420,8 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createHitsPerPageWidgetTests: undefined,
   createClearRefinementsWidgetTests: undefined,
   createCurrentRefinementsWidgetTests: undefined,
+  createToggleRefinementWidgetTests: undefined,
+  createSearchBoxWidgetTests: undefined,
 };
 
 describe('Common widget tests (InstantSearch.js)', () => {

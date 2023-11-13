@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.60.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.59.0...instantsearch.js@4.60.0) (2023-10-31)
+
+
+### Features
+
+* **instantsearch:** hydrate search client ([#5854](https://github.com/algolia/instantsearch/issues/5854)) ([5b96771](https://github.com/algolia/instantsearch/commit/5b96771fd6289969065815e1804fd3eb999d012e)), closes [#5913](https://github.com/algolia/instantsearch/issues/5913)
+
+
+
+
+
 # [4.59.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.58.0...instantsearch.js@4.59.0) (2023-10-24)
 
 

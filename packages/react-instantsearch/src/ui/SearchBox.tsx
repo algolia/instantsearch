@@ -108,6 +108,7 @@ function DefaultResetIcon({ classNames }: IconProps) {
 function DefaultLoadingIcon({ classNames }: IconProps) {
   return (
     <svg
+      aria-label="Results are loading"
       width="16"
       height="16"
       viewBox="0 0 38 38"
@@ -141,7 +142,7 @@ export function SearchBox({
   onChange,
   onReset,
   onSubmit,
-  placeholder,
+  placeholder = '',
   value,
   autoFocus,
   resetIconComponent: ResetIcon = DefaultResetIcon,
@@ -187,10 +188,12 @@ export function SearchBox({
         noValidate
         onSubmit={handleSubmit}
         onReset={handleReset}
+        role="search"
       >
         <input
           ref={inputRef}
           className={cx('ais-SearchBox-input', classNames.input)}
+          aria-label="Search"
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="off"
