@@ -36,15 +36,21 @@ const testSetups: TestSetupsMap<TestSuites> = {
         >
           LINK
         </a>
-        <button data-testid="HierarchicalMenu-refine">
-          refine
-        </button>
+        <form data-testid="HierarchicalMenu-refine-form">
+          <input type="text" data-testid="HierarchicalMenu-refine-input" />
+        </form>
       `;
 
       renderOptions.widgetParams.container
-        .querySelector('[data-testid="HierarchicalMenu-refine"]')!
-        .addEventListener('click', () => {
-          renderOptions.refine('Apple');
+        .querySelector('[data-testid="HierarchicalMenu-refine-form"]')!
+        .addEventListener('submit', (event) => {
+          renderOptions.refine(
+            (
+              (event.currentTarget as HTMLFormElement).elements.item(
+                0
+              ) as HTMLInputElement
+            ).value
+          );
         });
     });
 
@@ -143,15 +149,21 @@ const testSetups: TestSetupsMap<TestSuites> = {
         >
           LINK
         </a>
-        <button data-testid="Menu-refine">
-          refine
-        </button>
+        <form data-testid="Menu-refine-form">
+          <input type="text" data-testid="Menu-refine-input" />
+        </form>
       `;
 
         renderOptions.widgetParams.container
-          .querySelector('[data-testid="Menu-refine"]')!
-          .addEventListener('click', () => {
-            renderOptions.refine('Apple');
+          .querySelector('[data-testid="Menu-refine-form"]')!
+          .addEventListener('submit', (event) => {
+            renderOptions.refine(
+              (
+                (event.currentTarget as HTMLFormElement).elements.item(
+                  0
+                ) as HTMLInputElement
+              ).value
+            );
           });
       }
     );

@@ -5,6 +5,7 @@ import {
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
+import userEvent from '@testing-library/user-event';
 import { history } from 'instantsearch.js/es/lib/routers';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 
@@ -81,6 +82,12 @@ export function createRoutingTests(
           await wait(0);
         });
 
+        function updateRefinement(value: string) {
+          const inputElement = screen.getByTestId('Menu-refine-input');
+          userEvent.clear(inputElement);
+          userEvent.type(inputElement, `${value}{Enter}`);
+        }
+
         // Initial state, before interaction
         {
           expect(screen.getByTestId('Menu-link')).toHaveAttribute(
@@ -91,11 +98,10 @@ export function createRoutingTests(
           );
         }
 
-        // Select a refinement
+        // Select the refinement "Apple"
         {
-          const firstItem = screen.getByTestId('Menu-refine');
           await act(async () => {
-            firstItem.click();
+            updateRefinement('Apple');
             await wait(0);
             await wait(0);
           });
@@ -123,11 +129,10 @@ export function createRoutingTests(
           );
         }
 
-        // Unselect the refinement
+        // Unselect the refinement "Apple"
         {
-          const firstItem = screen.getByTestId('Menu-refine');
           await act(async () => {
-            firstItem.click();
+            updateRefinement('Apple');
             await wait(0);
             await wait(0);
           });
@@ -153,6 +158,34 @@ export function createRoutingTests(
             router.createURL({
               indexName: { menu: { [attribute]: 'value' } },
             })
+          );
+        }
+
+        // Select the refinement "value"
+        {
+          await act(async () => {
+            updateRefinement('value');
+            await wait(0);
+            await wait(0);
+          });
+
+          // URL has now removed the "value" refinement from its query string
+          expect(screen.getByTestId('Menu-link')).toHaveAttribute(
+            'href',
+            router.createURL({})
+          );
+        }
+
+        // Wait for new results to come in
+        {
+          await act(async () => {
+            await wait(delay + margin);
+            await wait(0);
+          });
+
+          expect(screen.getByTestId('Menu-link')).toHaveAttribute(
+            'href',
+            router.createURL({})
           );
         }
       });

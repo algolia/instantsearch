@@ -56,21 +56,6 @@ const testSetups = {
               }),
             ]
           ),
-        (h, state) =>
-          h(
-            'button',
-            {
-              attrs: {
-                'data-testid': 'RefinementList-refine-value',
-              },
-              on: {
-                click: () => {
-                  state.refine('value');
-                },
-              },
-            },
-            'REFINE VALUE'
-          ),
       ],
     });
 
@@ -96,7 +81,27 @@ const testSetups = {
       name: 'HierarchicalMenu',
       requiredProps: ['attributes'],
       urlValue: 'value',
-      refineValue: 'Apple',
+      refineComponents: [
+        (h, state) =>
+          h(
+            'form',
+            {
+              on: {
+                submit: (event) => {
+                  state.refine(event.currentTarget.elements[0].value);
+                },
+              },
+            },
+            [
+              h('input', {
+                attrs: {
+                  type: 'text',
+                  'data-testid': 'HierarchicalMenu-refine-input',
+                },
+              }),
+            ]
+          ),
+      ],
     });
 
     mountApp(
@@ -140,7 +145,27 @@ const testSetups = {
       name: 'Menu',
       requiredProps: ['attribute'],
       urlValue: 'value',
-      refineValue: 'Apple',
+      refineComponents: [
+        (h, state) =>
+          h(
+            'form',
+            {
+              on: {
+                submit: (event) => {
+                  state.refine(event.currentTarget.elements[0].value);
+                },
+              },
+            },
+            [
+              h('input', {
+                attrs: {
+                  type: 'text',
+                  'data-testid': 'Menu-refine-input',
+                },
+              }),
+            ]
+          ),
+      ],
     });
 
     mountApp(
@@ -268,6 +293,7 @@ const testSetups = {
       name: 'RatingMenu',
       requiredProps: ['attribute'],
       urlValue: encodeURI('5'),
+      refineValue: 5,
     });
 
     mountApp(
