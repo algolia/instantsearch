@@ -35,6 +35,7 @@ describe('SortBy', () => {
           class="ais-SortBy"
         >
           <select
+            aria-label="Sort results by"
             class="ais-SortBy-select"
           >
             <option
@@ -105,6 +106,7 @@ describe('SortBy', () => {
           class="ais-SortBy ROOT MyCustomSortBy"
         >
           <select
+            aria-label="Sort results by"
             class="ais-SortBy-select SELECT"
           >
             <option

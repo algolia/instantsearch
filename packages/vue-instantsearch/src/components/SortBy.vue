@@ -10,6 +10,7 @@
       <select
         :class="suit('select')"
         @change="state.refine($event.currentTarget.value)"
+        aria-label="Sort results by"
       >
         <option
           v-for="item in state.options"

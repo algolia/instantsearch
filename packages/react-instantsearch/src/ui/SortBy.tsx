@@ -42,6 +42,7 @@ export function SortBy({
         className={cx('ais-SortBy-select', classNames.select)}
         onChange={(event) => onChange(event.target.value)}
         value={value}
+        aria-label="Sort results by"
       >
         {items.map((item) => (
           <option

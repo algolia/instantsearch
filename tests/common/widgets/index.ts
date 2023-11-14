@@ -12,3 +12,4 @@ export * from './refinement-list';
 export * from './hits-per-page';
 export * from './toggle-refinement';
 export * from './search-box';
+export * from './sort-by';
