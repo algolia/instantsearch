@@ -5,6 +5,7 @@ import {
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
+import userEvent from '@testing-library/user-event';
 import { history } from 'instantsearch.js/es/lib/routers';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 
@@ -90,6 +91,38 @@ export function createRoutingTests(
 
         // Initial state
         {
+          expect(screen.getByTestId('RatingMenu-link')).toHaveAttribute(
+            'href',
+            router.createURL({
+              indexName: { ratingMenu: { [attribute]: 5 } },
+            })
+          );
+        }
+
+        // Select a refinement
+        {
+          const refineButton = screen.getByTestId('RatingMenu-refine');
+          await act(async () => {
+            userEvent.click(refineButton);
+            await wait(margin + delay);
+            await wait(0);
+          });
+
+          expect(screen.getByTestId('RatingMenu-link')).toHaveAttribute(
+            'href',
+            router.createURL({})
+          );
+        }
+
+        // Deselect a refinement
+        {
+          const refineButton = screen.getByTestId('RatingMenu-refine');
+          await act(async () => {
+            userEvent.click(refineButton);
+            await wait(margin + delay);
+            await wait(0);
+          });
+
           expect(screen.getByTestId('RatingMenu-link')).toHaveAttribute(
             'href',
             router.createURL({

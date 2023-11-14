@@ -51,12 +51,15 @@ const testSetups: TestSetupsMap<TestSuites> = {
           <a data-testid="RefinementList-link" href={createURL('value')}>
             LINK
           </a>
-          <button
-            data-testid="RefinementList-refine"
-            onClick={() => refine('Apple')}
+          <form
+            onSubmit={(event) => {
+              refine(
+                (event.currentTarget.elements.item(0) as HTMLInputElement).value
+              );
+            }}
           >
-            BUTTON
-          </button>
+            <input type="text" data-testid="RefinementList-refine-input" />
+          </form>
         </>
       );
     }
@@ -75,12 +78,15 @@ const testSetups: TestSetupsMap<TestSuites> = {
           <a data-testid="HierarchicalMenu-link" href={createURL('value')}>
             LINK
           </a>
-          <button
-            data-testid="HierarchicalMenu-refine"
-            onClick={() => refine('Apple')}
+          <form
+            onSubmit={(event) => {
+              refine(
+                (event.currentTarget.elements.item(0) as HTMLInputElement).value
+              );
+            }}
           >
-            BUTTON
-          </button>
+            <input type="text" data-testid="HierarchicalMenu-refine-input" />
+          </form>
         </>
       );
     }
@@ -124,9 +130,15 @@ const testSetups: TestSetupsMap<TestSuites> = {
           <a data-testid="Menu-link" href={createURL('value')}>
             LINK
           </a>
-          <button data-testid="Menu-refine" onClick={() => refine('Apple')}>
-            BUTTON
-          </button>
+          <form
+            onSubmit={(event) => {
+              refine(
+                (event.currentTarget.elements.item(0) as HTMLInputElement).value
+              );
+            }}
+          >
+            <input type="text" data-testid="Menu-refine-input" />
+          </form>
         </>
       );
     }

@@ -36,7 +36,27 @@ const testSetups = {
       name: 'RefinementList',
       requiredProps: ['attribute'],
       urlValue: 'value',
-      refineValue: 'Apple',
+      refineComponents: [
+        (h, state) =>
+          h(
+            'form',
+            {
+              on: {
+                submit: (event) => {
+                  state.refine(event.currentTarget.elements[0].value);
+                },
+              },
+            },
+            [
+              h('input', {
+                attrs: {
+                  type: 'text',
+                  'data-testid': 'RefinementList-refine-input',
+                },
+              }),
+            ]
+          ),
+      ],
     });
 
     mountApp(
@@ -61,7 +81,27 @@ const testSetups = {
       name: 'HierarchicalMenu',
       requiredProps: ['attributes'],
       urlValue: 'value',
-      refineValue: 'Apple',
+      refineComponents: [
+        (h, state) =>
+          h(
+            'form',
+            {
+              on: {
+                submit: (event) => {
+                  state.refine(event.currentTarget.elements[0].value);
+                },
+              },
+            },
+            [
+              h('input', {
+                attrs: {
+                  type: 'text',
+                  'data-testid': 'HierarchicalMenu-refine-input',
+                },
+              }),
+            ]
+          ),
+      ],
     });
 
     mountApp(
@@ -105,7 +145,27 @@ const testSetups = {
       name: 'Menu',
       requiredProps: ['attribute'],
       urlValue: 'value',
-      refineValue: 'Apple',
+      refineComponents: [
+        (h, state) =>
+          h(
+            'form',
+            {
+              on: {
+                submit: (event) => {
+                  state.refine(event.currentTarget.elements[0].value);
+                },
+              },
+            },
+            [
+              h('input', {
+                attrs: {
+                  type: 'text',
+                  'data-testid': 'Menu-refine-input',
+                },
+              }),
+            ]
+          ),
+      ],
     });
 
     mountApp(
@@ -233,6 +293,7 @@ const testSetups = {
       name: 'RatingMenu',
       requiredProps: ['attribute'],
       urlValue: encodeURI('5'),
+      refineValue: 5,
     });
 
     mountApp(
@@ -286,6 +347,27 @@ function createCustomWidget({
   urlValue,
   refineValue,
   requiredProps = [],
+  refineComponents = [
+    (h, state) =>
+      h(
+        'button',
+        {
+          attrs: {
+            'data-testid': `${name}-refine`,
+          },
+          on: {
+            click: () => {
+              state.refine(
+                typeof refineValue === 'function'
+                  ? refineValue(state)
+                  : refineValue
+              );
+            },
+          },
+        },
+        'REFINE'
+      ),
+  ],
 }) {
   return {
     name: `Custom${name}`,
@@ -313,24 +395,7 @@ function createCustomWidget({
               },
               'LINK'
             ),
-            h(
-              'button',
-              {
-                attrs: {
-                  'data-testid': `${name}-refine`,
-                },
-                on: {
-                  click: () => {
-                    this.state.refine(
-                      typeof refineValue === 'function'
-                        ? refineValue(this.state)
-                        : refineValue
-                    );
-                  },
-                },
-              },
-              'REFINE'
-            ),
+            ...refineComponents.map((component) => component(h, this.state)),
           ])
         : null;
     }),

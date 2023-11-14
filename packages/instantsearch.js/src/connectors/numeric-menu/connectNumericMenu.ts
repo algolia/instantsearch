@@ -9,6 +9,7 @@ import type { SendEventForFacet } from '../../lib/utils';
 import type {
   Connector,
   CreateURL,
+  IndexUiState,
   InstantSearch,
   TransformItems,
   WidgetRenderState,
@@ -234,17 +235,13 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
         const min = (values['>='] && values['>='][0]) || '';
         const max = (values['<='] && values['<='][0]) || '';
 
-        if (min === '' && max === '') {
-          return uiState;
-        }
-
-        return {
+        return removeEmptyRefinementsFromUiState({
           ...uiState,
           numericMenu: {
             ...uiState.numericMenu,
             [attribute]: `${min}:${max}`,
           },
-        };
+        });
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
@@ -484,6 +481,29 @@ function hasNumericRefinement(
     currentRefinements[operator] !== undefined &&
     currentRefinements[operator]!.includes(value)
   );
+}
+
+function removeEmptyRefinementsFromUiState(indexUiState: IndexUiState) {
+  const { numericMenu, ...indexUiStateBase } = indexUiState;
+
+  if (!numericMenu) {
+    return indexUiState;
+  }
+
+  const connectorUiState = Object.keys(numericMenu).reduce(
+    (acc, key) => ({
+      ...acc,
+      ...(numericMenu[key] !== ':' ? { [key]: numericMenu[key] } : {}),
+    }),
+    {}
+  );
+
+  return {
+    ...indexUiStateBase,
+    ...(Object.keys(connectorUiState).length > 0
+      ? { numericMenu: connectorUiState }
+      : {}),
+  };
 }
 
 export default connectNumericMenu;

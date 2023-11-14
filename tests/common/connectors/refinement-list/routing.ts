@@ -5,6 +5,7 @@ import {
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
+import userEvent from '@testing-library/user-event';
 import { history } from 'instantsearch.js/es/lib/routers';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 
@@ -87,6 +88,14 @@ export function createRoutingTests(
           await wait(0);
         });
 
+        function updateRefinement(value: string) {
+          const inputElement = screen.getByTestId(
+            'RefinementList-refine-input'
+          );
+          userEvent.clear(inputElement);
+          userEvent.type(inputElement, `${value}{Enter}`);
+        }
+
         // Initial state, before interaction
         {
           expect(screen.getByTestId('RefinementList-link')).toHaveAttribute(
@@ -103,9 +112,8 @@ export function createRoutingTests(
 
         // Select a refinement
         {
-          const firstItem = screen.getByTestId('RefinementList-refine');
           await act(async () => {
-            firstItem.click();
+            updateRefinement('Apple');
             await wait(0);
             await wait(0);
           });
@@ -143,9 +151,8 @@ export function createRoutingTests(
 
         // Unselect the refinement
         {
-          const firstItem = screen.getByTestId('RefinementList-refine');
           await act(async () => {
-            firstItem.click();
+            updateRefinement('Apple');
             await wait(0);
             await wait(0);
           });
@@ -179,6 +186,21 @@ export function createRoutingTests(
                 },
               },
             })
+          );
+        }
+
+        // Unselect the 'value' refinement
+        {
+          await act(async () => {
+            updateRefinement('value');
+            await wait(0);
+            await wait(0);
+          });
+
+          // URL has changed immediately after the user interaction
+          expect(screen.getByTestId('RefinementList-link')).toHaveAttribute(
+            'href',
+            router.createURL({})
           );
         }
       });

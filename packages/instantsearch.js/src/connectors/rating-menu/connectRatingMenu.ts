@@ -15,6 +15,7 @@ import type {
   Widget,
   InitOptions,
   RenderOptions,
+  IndexUiState,
 } from '../../types';
 import type {
   AlgoliaSearchHelper,
@@ -156,7 +157,7 @@ export type RatingMenuWidgetDescription = {
   };
   indexUiState: {
     ratingMenu: {
-      [attribute: string]: number;
+      [attribute: string]: number | undefined;
     };
   };
 };
@@ -438,17 +439,13 @@ const connectRatingMenu: RatingMenuConnector = function connectRatingMenu(
       getWidgetUiState(uiState, { searchParameters }) {
         const value = getRefinedStar(searchParameters);
 
-        if (typeof value !== 'number') {
-          return uiState;
-        }
-
-        return {
+        return removeEmptyRefinementsFromUiState({
           ...uiState,
           ratingMenu: {
             ...uiState.ratingMenu,
-            [attribute]: value,
+            [attribute]: typeof value === 'number' ? value : undefined,
           },
-        };
+        });
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
@@ -474,5 +471,30 @@ const connectRatingMenu: RatingMenuConnector = function connectRatingMenu(
     };
   };
 };
+
+function removeEmptyRefinementsFromUiState(indexUiState: IndexUiState) {
+  const { ratingMenu, ...indexUiStateBase } = indexUiState;
+
+  if (!ratingMenu) {
+    return indexUiState;
+  }
+
+  const connectorUiState = Object.keys(ratingMenu).reduce(
+    (acc, key) => ({
+      ...acc,
+      ...(typeof ratingMenu[key] === 'number'
+        ? { [key]: ratingMenu[key] }
+        : {}),
+    }),
+    {}
+  );
+
+  return {
+    ...indexUiStateBase,
+    ...(Object.keys(connectorUiState).length > 0
+      ? { ratingMenu: connectorUiState }
+      : {}),
+  };
+}
 
 export default connectRatingMenu;

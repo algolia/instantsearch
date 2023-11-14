@@ -10,6 +10,7 @@ import type { SendEventForFacet } from '../../lib/utils';
 import type {
   Connector,
   CreateURL,
+  IndexUiState,
   RenderOptions,
   SortBy,
   TransformItems,
@@ -333,17 +334,13 @@ const connectMenu: MenuConnector = function connectMenu(
         const [value] =
           searchParameters.getHierarchicalFacetBreadcrumb(attribute);
 
-        if (!value) {
-          return uiState;
-        }
-
-        return {
+        return removeEmptyRefinementsFromUiState({
           ...uiState,
           menu: {
             ...uiState.menu,
             [attribute]: value,
           },
-        };
+        });
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
@@ -399,5 +396,28 @@ As this is not supported, please make sure to remove this other widget or this M
     };
   };
 };
+
+function removeEmptyRefinementsFromUiState(indexUiState: IndexUiState) {
+  const { menu, ...indexUiStateBase } = indexUiState;
+
+  if (!menu) {
+    return indexUiState;
+  }
+
+  const connectorUiState = Object.keys(menu).reduce(
+    (acc, key) => ({
+      ...acc,
+      ...(menu[key]?.length > 0 ? { [key]: menu[key] } : {}),
+    }),
+    {}
+  );
+
+  return {
+    ...indexUiStateBase,
+    ...(Object.keys(connectorUiState).length > 0
+      ? { menu: connectorUiState }
+      : {}),
+  };
+}
 
 export default connectMenu;
