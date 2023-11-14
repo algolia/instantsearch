@@ -4,7 +4,7 @@ export function normalizeSnapshot(html: string) {
       // Vue renders a useless extra space between list item elements
       .replace(/<\/li> <li/g, '</li><li')
       // Vue renders extra whitespace inside option item elements
-      .replace(/>\s+?(\w+?)\s+?<\/option>/gs, '>$1</option>')
+      .replace(/>\s+([\w() ]+?)\s+<\/option>/gs, '>$1</option>')
       // Vue renders extra whitespace inside button elements
       .replace(
         /(<button[^>]*>)\s+(.+?)\s+(<\/button>)/gs,
