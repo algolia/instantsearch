@@ -51,9 +51,12 @@ export function createOptionsTests(
   setup: StatsWidgetSetup,
   { act }: Required<TestOptions>
 ) {
-  describe('options', () => {
+  describe.only('options', () => {
     test('renders with 0 hits', async () => {
-      const searchClient = createMockedSearchClient({ nbHits: 0 });
+      const searchClient = createMockedSearchClient({
+        nbHits: 0,
+        processingTimeMS: 0,
+      });
 
       await setup({
         instantSearchOptions: {
@@ -80,7 +83,7 @@ export function createOptionsTests(
           <span
             class="ais-Stats-text"
           >
-            No results found in 10ms
+            No results found in 0ms
           </span>
         </div>
       `
@@ -88,7 +91,10 @@ export function createOptionsTests(
     });
 
     test('renders with 1 hit', async () => {
-      const searchClient = createMockedSearchClient({ nbHits: 1 });
+      const searchClient = createMockedSearchClient({
+        nbHits: 1,
+        processingTimeMS: 50,
+      });
 
       await setup({
         instantSearchOptions: {
@@ -103,11 +109,11 @@ export function createOptionsTests(
       });
 
       expect(document.querySelector('.ais-Stats-text')).toHaveTextContent(
-        '1 result found in 10ms'
+        '1 result found in 50ms'
       );
     });
 
-    test('renders with many hits and custom processingTimeMS', async () => {
+    test('renders with many hits', async () => {
       const searchClient = createMockedSearchClient({
         nbHits: 1000,
         processingTimeMS: 2,
@@ -132,7 +138,10 @@ export function createOptionsTests(
 
     describe('with relevant sort', () => {
       test('renders with 0 sorted hits', async () => {
-        const searchClient = createMockedSearchClient({ nbSortedHits: 0 });
+        const searchClient = createMockedSearchClient({
+          nbSortedHits: 0,
+          processingTimeMS: 0,
+        });
 
         await setup({
           instantSearchOptions: {
@@ -147,12 +156,15 @@ export function createOptionsTests(
         });
 
         expect(document.querySelector('.ais-Stats-text')).toHaveTextContent(
-          'No relevant results sorted out of 1,000 found in 10ms'
+          'No relevant results sorted out of 1,000 found in 0ms'
         );
       });
 
       test('renders with 1 sorted hit', async () => {
-        const searchClient = createMockedSearchClient({ nbSortedHits: 1 });
+        const searchClient = createMockedSearchClient({
+          nbSortedHits: 1,
+          processingTimeMS: 50,
+        });
 
         await setup({
           instantSearchOptions: {
@@ -167,11 +179,11 @@ export function createOptionsTests(
         });
 
         expect(document.querySelector('.ais-Stats-text')).toHaveTextContent(
-          '1 relevant result sorted out of 1,000 found in 10ms'
+          '1 relevant result sorted out of 1,000 found in 50ms'
         );
       });
 
-      test('renders with many sorted hits and custom processingTimeMS', async () => {
+      test('renders with many sorted hits', async () => {
         const searchClient = createMockedSearchClient({
           nbSortedHits: 500,
           processingTimeMS: 20,

@@ -7,8 +7,8 @@
       <!-- prettier-ignore -->
       <span :class="suit('text')"
         ><template v-if="state.areHitsSorted"
-          >{{ getSortedResultsSentence() }}</template
-        ><template v-else>{{ getResultsSentence() }}</template
+          >{{ sortedResultsSentence }}</template
+        ><template v-else>{{ resultsSentence }}</template
         > found in {{ state.processingTimeMS.toLocaleString() }}ms</span
       >
     </slot>
@@ -23,8 +23,17 @@ import { createWidgetMixin } from '../mixins/widget';
 
 export default {
   name: 'AisStats',
-  methods: {
-    getSortedResultsSentence() {
+  mixins: [
+    createWidgetMixin(
+      { connector: connectStats },
+      {
+        $$widgetType: 'ais.stats',
+      }
+    ),
+    createSuitMixin({ name: 'Stats' }),
+  ],
+  computed: {
+    sortedResultsSentence() {
       const { nbHits, nbSortedHits } = this.state;
 
       const suffix = `sorted out of ${nbHits.toLocaleString()}`;
@@ -45,7 +54,7 @@ export default {
 
       return '';
     },
-    getResultsSentence() {
+    resultsSentence() {
       const { nbHits } = this.state;
 
       if (nbHits === 0) {
@@ -62,17 +71,6 @@ export default {
 
       return '';
     },
-  },
-  mixins: [
-    createWidgetMixin(
-      { connector: connectStats },
-      {
-        $$widgetType: 'ais.stats',
-      }
-    ),
-    createSuitMixin({ name: 'Stats' }),
-  ],
-  computed: {
     widgetParams() {
       return {};
     },
