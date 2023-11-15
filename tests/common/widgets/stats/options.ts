@@ -3,10 +3,21 @@ import {
   createSearchClient,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import { normalizeSnapshot, wait } from '@instantsearch/testutils';
+import {
+  normalizeSnapshot as commonNormalizeSnapshot,
+  wait,
+} from '@instantsearch/testutils';
 
 import type { StatsWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
+
+function normalizeSnapshot(html: string) {
+  return (
+    commonNormalizeSnapshot(html)
+      // Vue 3 keeps prettier comments in the rendered HTML.
+      .replace(/<!-- prettier-ignore -->/g, '')
+  );
+}
 
 function createMockedSearchClient(
   responseProps: {
