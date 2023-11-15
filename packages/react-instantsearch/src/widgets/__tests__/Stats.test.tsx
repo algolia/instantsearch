@@ -49,7 +49,7 @@ describe('Stats', () => {
         <span
           class="ais-Stats-text"
         >
-          0 results found in 0ms
+          No results found in 0ms
         </span>
       </div>
       `);
