@@ -23,6 +23,7 @@ import {
   AisCurrentRefinements,
   AisToggleRefinement,
   AisSortBy,
+  AisStats,
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
 
@@ -452,6 +453,24 @@ const testSetups = {
 
     await nextTick();
   },
+  async createStatsWidgetTests({ instantSearchOptions, widgetParams }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h('div', {}, [
+            h(AisInstantSearch, { props: instantSearchOptions }, [
+              h(AisSearchBox),
+              h(AisStats, { props: widgetParams }),
+              h(GlobalErrorSwallower),
+            ]),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
+  },
 };
 
 const testOptions = {
@@ -472,6 +491,7 @@ const testOptions = {
     skippedTests: { 'searchAsYouType option': true },
   },
   createSortByWidgetTests: undefined,
+  createStatsWidgetTests: undefined,
 };
 
 describe('Common widget tests (Vue InstantSearch)', () => {
