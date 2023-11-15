@@ -51,7 +51,7 @@ export function createOptionsTests(
   setup: StatsWidgetSetup,
   { act }: Required<TestOptions>
 ) {
-  describe.only('options', () => {
+  describe('options', () => {
     test('renders with 0 hits', async () => {
       const searchClient = createMockedSearchClient({
         nbHits: 0,
