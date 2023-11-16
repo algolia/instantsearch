@@ -24,6 +24,7 @@ import {
   CurrentRefinements,
   ToggleRefinement,
   SortBy,
+  Stats,
 } from '..';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -295,6 +296,14 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
+  createStatsWidgetTests({ instantSearchOptions, widgetParams }) {
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <Stats {...widgetParams} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -313,6 +322,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createToggleRefinementWidgetTests: { act },
   createSearchBoxWidgetTests: { act },
   createSortByWidgetTests: { act },
+  createStatsWidgetTests: { act },
 };
 
 /**

@@ -22,6 +22,7 @@ import {
   currentRefinements,
   toggleRefinement,
   sortBy,
+  stats,
 } from '../widgets';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -422,6 +423,22 @@ const testSetups: TestSetupsMap<TestSuites> = {
       })
       .start();
   },
+  createStatsWidgetTests({ instantSearchOptions, widgetParams }) {
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        stats({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -440,6 +457,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createToggleRefinementWidgetTests: undefined,
   createSearchBoxWidgetTests: undefined,
   createSortByWidgetTests: undefined,
+  createStatsWidgetTests: undefined,
 };
 
 describe('Common widget tests (InstantSearch.js)', () => {
