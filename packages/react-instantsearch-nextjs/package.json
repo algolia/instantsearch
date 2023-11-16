@@ -53,7 +53,7 @@
     "react-instantsearch-core": "7.3.0"
   },
   "peerDependencies": {
-    "next": ">= 13.4 && < 14",
+    "next": ">= 13.4 && < 15",
     "react-instantsearch": ">= 7.1.0 && < 8"
   }
 }
