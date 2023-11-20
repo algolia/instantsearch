@@ -1,4 +1,4 @@
-import { mapToRecommendations } from '@algolia/recommend-core/dist/esm/utils';
+import { getFrequentlyBoughtTogether } from '@algolia/recommend-core';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -51,30 +51,21 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
         init(initOptions) {
           const { state, instantSearchInstance } = initOptions;
 
-          const queries = objectIDs.map((objectID) => ({
+          getFrequentlyBoughtTogether({
+            objectIDs,
+            recommendClient: instantSearchInstance.recommendClient,
             indexName: state.index,
-            objectID,
-          }));
+          }).then(({ recommendations: _recommendations }) => {
+            recommendations = _recommendations;
 
-          instantSearchInstance.recommendClient
-            .getFrequentlyBoughtTogether(queries)
-            .then((response: any) =>
-              mapToRecommendations({
-                hits: response.results.map((result: any) => result.hits),
-                nrOfObjs: objectIDs.length,
-              })
-            )
-            .then((hits: any[]) => {
-              recommendations = hits;
-
-              renderFn(
-                {
-                  ...this.getWidgetRenderState(initOptions),
-                  instantSearchInstance: initOptions.instantSearchInstance,
-                },
-                true
-              );
-            });
+            renderFn(
+              {
+                ...this.getWidgetRenderState(initOptions),
+                instantSearchInstance: initOptions.instantSearchInstance,
+              },
+              true
+            );
+          });
 
           renderFn(
             {
