@@ -18,21 +18,18 @@ export const createInstantSearchComponent = (component) =>
       },
       watch: {
         searchClient(searchClient) {
-          warn(
-            false,
-            'The `search-client` prop of `<ais-instant-search>` changed between renders, which may cause more search requests than necessary. If this is an unwanted behavior, please provide a stable reference: https://www.algolia.com/doc/api-reference/widgets/instantsearch/vue/#widget-param-search-client'
-          );
-
-          this.instantSearchInstance.helper.setClient(searchClient).search();
+          this.instantSearchInstance.update({ searchClient });
         },
         indexName(indexName) {
-          this.instantSearchInstance.helper.setIndex(indexName || '').search();
+          this.instantSearchInstance.update({ indexName });
         },
         stalledSearchDelay(stalledSearchDelay) {
-          // private InstantSearch.js API:
-          this.instantSearchInstance._stalledSearchDelay = stalledSearchDelay;
+          this.instantSearchInstance.update({ stalledSearchDelay });
         },
         routing() {
+          // TODO: in React this is ignored, in Vue an error
+          // How do we get a consistent behaviour?
+          // Nobody ever opened these issues, implying error is right behaviour?
           throw new Error(
             'routing configuration can not be changed dynamically at this point.' +
               '\n\n' +
@@ -47,9 +44,10 @@ export const createInstantSearchComponent = (component) =>
           );
         },
         searchFunction(searchFunction) {
-          // private InstantSearch.js API:
-          this.instantSearchInstance._searchFunction = searchFunction;
+          this.instantSearchInstance.update({ searchFunction });
         },
+        // TODO: insights
+        // TODO: should this be an InstantSearch API? maybe not
         middlewares: {
           immediate: true,
           handler(next, prev) {
@@ -67,10 +65,7 @@ export const createInstantSearchComponent = (component) =>
           },
         },
         future(future) {
-          this.instantSearchInstance.future = Object.assign(
-            INSTANTSEARCH_FUTURE_DEFAULTS,
-            future
-          );
+          this.instantSearchInstance.update({ future });
         },
       },
       created() {

@@ -179,6 +179,7 @@ export type InstantSearchStatus = 'idle' | 'loading' | 'stalled' | 'error';
 export const INSTANTSEARCH_FUTURE_DEFAULTS: Required<
   InstantSearchOptions['future']
 > = { preserveSharedStateOnUnmount: false };
+export const INSTANTSEARCH_STALLED_SEARCH_DEFAULTS = 200;
 
 /**
  * The actual implementation of the InstantSearch. This is
@@ -251,7 +252,7 @@ Use \`InstantSearch.status === "stalled"\` instead.`
       routing = null,
       insights = undefined,
       searchFunction,
-      stalledSearchDelay = 200,
+      stalledSearchDelay = INSTANTSEARCH_STALLED_SEARCH_DEFAULTS,
       searchClient = null,
       insightsClient = null,
       onStateChange = null,
@@ -365,8 +366,9 @@ See documentation: ${createDocumentationLink({
     // This is the default Insights middleware,
     // added when `insights` is set to true by the user.
     // Any user-provided middleware will be added later and override this one.
-    if (insights) {
-      const insightsOptions = typeof insights === 'boolean' ? {} : insights;
+    if (this._insights) {
+      const insightsOptions =
+        typeof this._insights === 'boolean' ? {} : this._insights;
       insightsOptions.$$internal = true;
       this.use(createInsightsMiddleware(insightsOptions));
     }
@@ -842,6 +844,100 @@ See documentation: ${createDocumentationLink({
     }
 
     this.mainHelper.clearCache().search();
+  }
+
+  /**
+   * Update the parameters passed to the InstantSearch constructor.
+   */
+  public update(
+    options: Partial<InstantSearchOptions<TUiState, TRouteState>>
+  ): void {
+    if (this.indexName !== options.indexName) {
+      this.helper!.setIndex(options.indexName || '').search();
+    }
+
+    if (this.client !== options.searchClient) {
+      warning(
+        false,
+        // TODO: flavor-specific warning (search._flavor = 'vue') URL
+        'The `searchClient` parameter changed, which may cause more search requests than necessary. If this is an unwanted behavior, please provide a stable reference.'
+      );
+
+      if (!options.searchClient) {
+        throw new Error(withUsage('The `searchClient` option is required.'));
+      }
+
+      if (typeof options.searchClient.search !== 'function') {
+        throw new Error(
+          `The \`searchClient\` must implement a \`search\` method.
+  
+  See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend-search/in-depth/backend-instantsearch/js/`
+        );
+      }
+
+      // TODO: proper API for this too
+      // InstantSearch._algoliaAgents (or constructor)
+      // addAlgoliaAgents(props.searchClient, [
+      //   ...defaultUserAgents,
+      //   serverContext && serverUserAgent,
+      // ]);
+
+      this.mainHelper!.setClient(options.searchClient).search();
+    }
+
+    if (this.onStateChange !== options.onStateChange) {
+      this.onStateChange = options.onStateChange;
+    }
+
+    if (this._searchFunction !== options.searchFunction) {
+      this._searchFunction =
+        options.searchFunction ??
+        ((helper) => {
+          helper.search();
+        });
+    }
+
+    if (this._stalledSearchDelay !== options.stalledSearchDelay) {
+      this._stalledSearchDelay =
+        options.stalledSearchDelay ?? INSTANTSEARCH_STALLED_SEARCH_DEFAULTS;
+    }
+
+    // TODO: move dequal to a shared package?
+    // if (!dequal(this.future, props.future)) {
+    //   this.future = {
+    //     ...INSTANTSEARCH_FUTURE_DEFAULTS,
+    //     ...props.future,
+    //   };
+    // }
+
+    // TODO: implement update in middleware
+    // TODO: can this be simplified?
+    // if (!dequal(this._insights, options.insights)) {
+    //   this._insights = options.insights;
+    //   const existing = this.middleware.find(
+    //     (m) => m.instance.$$type === 'ais.insights' && m.instance.$$internal
+    //   );
+    //   if (options.insights && existing) {
+    //     // TODO: update existing middleware somehow (or maybe remount it)
+    //   } else if (options.insights && !existing) {
+    //     const insightsOptions =
+    //       typeof options.insights === 'boolean' ? {} : options.insights;
+    //     insightsOptions.$$internal = true;
+    //     this.use(createInsightsMiddleware(insightsOptions));
+    //   } else if (!options.insights && existing) {
+    //     this.unuse(existing.creator);
+    //   }
+    // }
+
+    // TODO: validate other options (onStateChange, routing, give a warning for all non-updated values?)
+
+    // Updating the `routing` prop is not supported because InstantSearch.js
+    // doesn't let us change it. This might not be a problem though, because `routing`
+    // shouldn't need to be dynamic.
+    // If we find scenarios where `routing` needs to change, we can always expose
+    // it privately on the InstantSearch instance. Another way would be to
+    // manually inject the routing middleware in this library, and not rely
+    // on the provided `routing` prop.
   }
 }
 
