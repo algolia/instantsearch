@@ -93,7 +93,9 @@ export type InstantSearchOptions<
    * });
    * ```
    */
-  searchClient: SearchClient;
+  searchClient?: SearchClient;
+
+  client?: { searchClient: SearchClient; recommendClient: any };
 
   /**
    * The locale used to display numbers. This will be passed
@@ -189,7 +191,8 @@ class InstantSearch<
   TUiState extends UiState = UiState,
   TRouteState = TUiState
 > extends EventEmitter {
-  public client: InstantSearchOptions['searchClient'];
+  public client: NonNullable<InstantSearchOptions['searchClient']>;
+  public recommendClient: any;
   public indexName: string;
   public insightsClient: AlgoliaInsightsClient | null;
   public onStateChange: InstantSearchOptions<TUiState>['onStateChange'] | null =
@@ -253,6 +256,7 @@ Use \`InstantSearch.status === "stalled"\` instead.`
       searchFunction,
       stalledSearchDelay = 200,
       searchClient = null,
+      client = null,
       insightsClient = null,
       onStateChange = null,
       future = {
@@ -261,20 +265,30 @@ Use \`InstantSearch.status === "stalled"\` instead.`
       },
     } = options;
 
-    if (searchClient === null) {
-      throw new Error(withUsage('The `searchClient` option is required.'));
+    if (searchClient === null && client === null) {
+      throw new Error(
+        withUsage('Either `searchClient` or `client` option is required.')
+      );
     }
 
-    if (typeof searchClient.search !== 'function') {
+    if (
+      typeof searchClient?.search !== 'function' &&
+      typeof client?.searchClient.search !== 'function'
+    ) {
       throw new Error(
-        `The \`searchClient\` must implement a \`search\` method.
+        `The \`searchClient\` or \`client.searchClient\` must implement a \`search\` method.
 
 See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend-search/in-depth/backend-instantsearch/js/`
       );
     }
 
-    if (typeof searchClient.addAlgoliaAgent === 'function') {
-      searchClient.addAlgoliaAgent(`instantsearch.js (${version})`);
+    if (
+      typeof searchClient?.addAlgoliaAgent === 'function' ||
+      typeof client?.searchClient.addAlgoliaAgent === 'function'
+    ) {
+      const { addAlgoliaAgent } = (client?.searchClient ||
+        searchClient) as SearchClient;
+      addAlgoliaAgent!(`instantsearch.js (${version})`);
     }
 
     warning(
@@ -320,7 +334,8 @@ See documentation: ${createDocumentationLink({
           `);
     }
 
-    this.client = searchClient;
+    this.client = (client?.searchClient || searchClient) as SearchClient;
+    this.recommendClient = client?.recommendClient!;
     this.future = future;
     this.insightsClient = insightsClient;
     this.indexName = indexName;

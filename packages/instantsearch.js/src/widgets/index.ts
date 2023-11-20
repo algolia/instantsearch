@@ -22,6 +22,7 @@ export { default as clearRefinements } from './clear-refinements/clear-refinemen
 export { default as configure } from './configure/configure';
 export { default as currentRefinements } from './current-refinements/current-refinements';
 export { default as EXPERIMENTAL_configureRelatedItems } from './configure-related-items/configure-related-items';
+export { default as frequentlyBoughtTogether } from './frequently-bought-together/frequently-bought-together';
 export { default as geoSearch } from './geo-search/geo-search';
 export { default as hierarchicalMenu } from './hierarchical-menu/hierarchical-menu';
 export { default as hits } from './hits/hits';

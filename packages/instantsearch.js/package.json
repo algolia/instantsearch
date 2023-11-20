@@ -27,6 +27,8 @@
   ],
   "dependencies": {
     "@algolia/events": "^4.0.1",
+    "@algolia/recommend-core": "1.10.0",
+    "@algolia/recommend-vdom": "1.10.0",
     "@algolia/ui-components-highlight-vdom": "^1.2.2",
     "@algolia/ui-components-shared": "^1.2.2",
     "@types/dom-speech-recognition": "^0.0.1",
