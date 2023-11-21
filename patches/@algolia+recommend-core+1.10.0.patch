@@ -1,0 +1,31 @@
+diff --git a/node_modules/@algolia/recommend-core/dist/esm/getFrequentlyBoughtTogether.js b/node_modules/@algolia/recommend-core/dist/esm/getFrequentlyBoughtTogether.js
+index e222b59..64fea8c 100644
+--- a/node_modules/@algolia/recommend-core/dist/esm/getFrequentlyBoughtTogether.js
++++ b/node_modules/@algolia/recommend-core/dist/esm/getFrequentlyBoughtTogether.js
+@@ -17,11 +17,19 @@ export function getFrequentlyBoughtTogether({
+     threshold
+   }));
+   recommendClient.addAlgoliaAgent('recommend-core', version);
+-  return recommendClient.getFrequentlyBoughtTogether(queries).then(response => mapToRecommendations({
+-    maxRecommendations,
+-    hits: response.results.map(result => result.hits),
+-    nrOfObjs: objectIDs.length
+-  })).then(hits => ({
+-    recommendations: transformItems(hits)
+-  }));
++  return recommendClient.getFrequentlyBoughtTogether(queries).then(response => ({
++    recommendations: mapToRecommendations({
++      maxRecommendations,
++      hits: response.results.map(result => result.hits),
++      nrOfObjs: objectIDs.length,
++    }),
++    results: response.results
++  })).then((r) => {
++    console.log(r)
++
++    return {
++      recommendations: transformItems(r.recommendations),
++      results: r.results
++    }
++  });
+ }

@@ -95,7 +95,15 @@ function renderer({
 
           return header({ ...props, html, sendEvent });
         }}
-        itemComponent={({ item }) => templates.item({ item, html, sendEvent })}
+        itemComponent={({ item }) => (
+          <div
+            onClick={() => {
+              sendEvent('click:internal', item, 'Hit Clicked');
+            }}
+          >
+            {templates.item({ item, html, sendEvent })}
+          </div>
+        )}
       />,
       containerNode
     );

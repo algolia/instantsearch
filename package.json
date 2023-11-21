@@ -32,7 +32,8 @@
     "test:v3": "lerna run test:v3",
     "release": "shipjs prepare",
     "prepare": "lerna run prepare && patch-package",
-    "prepare-vue3": "./scripts/prepare-vue3.js"
+    "prepare-vue3": "./scripts/prepare-vue3.js",
+    "postinstall": "patch-package"
   },
   "devDependencies": {
     "@algolia/cache-common": "4.14.3",
@@ -121,8 +122,9 @@
     "jest-watch-typeahead": "1.0.0",
     "jsdom-global": "3.0.2",
     "lerna": "6.0.3",
-    "patch-package": "6.2.2",
+    "patch-package": "8.0.0",
     "places.js": "1.17.1",
+    "postinstall-postinstall": "2.1.0",
     "prettier": "^2.4.1",
     "prop-types": "15.6.2",
     "react": "18.2.0",

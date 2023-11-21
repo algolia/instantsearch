@@ -21,7 +21,11 @@ export function recommendItem({ item, html, onAddToCart }) {
       </div>`,
     footer: html`<button
       class="flex items-center justify-center w-full bg-white border-nebula-500 border-solid border rounded text-nebula-900 cursor-pointer py-1 px-2 font-semibold"
-      onClick="${onAddToCart}"
+      onClick="${(event) => {
+        event.stopPropagation();
+
+        onAddToCart();
+      }}"
     >
       Add to cart
     </button>`,

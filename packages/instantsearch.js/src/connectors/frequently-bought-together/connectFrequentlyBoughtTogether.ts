@@ -59,8 +59,16 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
             objectIDs,
             recommendClient: instantSearchInstance.recommendClient,
             indexName: state.index,
-          }).then(({ recommendations: _recommendations }) => {
-            recommendations = _recommendations;
+            // The Insights middleware hasn't run yet so forcing it to `true`
+            // for now for demo purposes
+            queryParameters: { clickAnalytics: true },
+            // @ts-ignore
+          }).then(({ recommendations: _recommendations, results }) => {
+            recommendations = _recommendations.map((recommendation, index) => ({
+              ...recommendation,
+              __position: index,
+              __queryID: results[0].queryID,
+            }));
 
             renderFn(
               {
