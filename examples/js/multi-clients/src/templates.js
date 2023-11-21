@@ -1,10 +1,11 @@
-export function hitItem({ hit, html, components }) {
+export function hitItem({ hit, html, components, orientation }) {
   return html`<a href="/product.html?pid=${hit.objectID}"
     >${itemComponent({
       item: hit,
       header: html`<h1>${components.Highlight({ hit, attribute: 'name' })}</h1>
         <p>${components.Highlight({ hit, attribute: 'description' })}</p>`,
       html,
+      orientation,
     })}</a
   >`;
 }
@@ -27,8 +28,19 @@ export function recommendItem({ item, html, onAddToCart }) {
   });
 }
 
-function itemComponent({ item, header = null, footer = null, html } = {}) {
-  return html`<div class="group grid gap-2 color-inherit no-underline">
+function itemComponent({
+  item,
+  header = null,
+  footer = null,
+  html,
+  orientation = 'vertical',
+} = {}) {
+  return html`<div
+    class="group grid gap-2 color-inherit no-underline ${orientation ===
+    'horizontal'
+      ? 'grid-cols-2'
+      : ''}"
+  >
     <div class="relative">
       <img src="${item.image_urls[0]}" alt="${item.name}" class="max-w-full" />
     </div>

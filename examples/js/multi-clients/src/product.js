@@ -19,13 +19,14 @@ search.addWidgets([
     container: '#hits',
     cssClasses: { root: 'ais-Hits--product', list: 'grid gap-2' },
     templates: {
-      item: (hit, { html, components }) => hitItem({ hit, html, components }),
+      item: (hit, { html, components }) =>
+        hitItem({ hit, html, components, orientation: 'horizontal' }),
     },
   }),
   frequentlyBoughtTogether({
     container: '#fbt',
     objectIDs: [objectID],
-    cssClasses: { list: 'grid gap-2 grid-cols-3' },
+    cssClasses: { list: 'grid gap-2 grid-cols-3 lg:grid-cols-6' },
     templates: {
       item: ({ item, html, sendEvent }) => {
         return recommendItem({
