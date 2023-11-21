@@ -27,7 +27,26 @@ search.addWidgets([
     objectIDs: [objectID],
     cssClasses: { list: 'grid gap-2 grid-cols-3' },
     templates: {
-      item: ({ item, html }) => recommendItem({ item, html }),
+      item: ({ item, html, sendEvent }) => {
+        return recommendItem({
+          item,
+          html,
+          onAddToCart() {
+            sendEvent('conversion', item, 'Added To Cart', {
+              eventSubtype: 'addToCart',
+              objectData: [
+                {
+                  discount: 0,
+                  price: item.price.value,
+                  quantity: 1,
+                },
+              ],
+              value: item.price.value,
+              currency: item.price.currency,
+            });
+          },
+        });
+      },
     },
   }),
 ]);

@@ -9,7 +9,7 @@ export function hitItem({ hit, html, components }) {
   >`;
 }
 
-export function recommendItem({ item, html }) {
+export function recommendItem({ item, html, onAddToCart }) {
   return itemComponent({
     item,
     html,
@@ -20,6 +20,7 @@ export function recommendItem({ item, html }) {
       </div>`,
     footer: html`<button
       class="flex items-center justify-center w-full bg-white border-nebula-500 border-solid border rounded text-nebula-900 cursor-pointer py-1 px-2 font-semibold"
+      onClick="${onAddToCart}"
     >
       Add to cart
     </button>`,

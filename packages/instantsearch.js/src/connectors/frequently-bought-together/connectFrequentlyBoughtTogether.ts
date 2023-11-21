@@ -1,7 +1,9 @@
 import { getFrequentlyBoughtTogether } from '@algolia/recommend-core';
 import {
+  SendEventForHits,
   checkRendering,
   createDocumentationMessageGenerator,
+  createSendEventForHits,
   noop,
 } from '../../lib/utils';
 
@@ -14,6 +16,7 @@ const withUsage = createDocumentationMessageGenerator({
 
 export type FrequentlyBoughtTogetherRenderState = {
   recommendations: Hit[];
+  sendEvent: SendEventForHits;
 };
 
 export type FrequentlyBoughtTogetherConnectorParams = {
@@ -41,6 +44,7 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
     checkRendering(renderFn, withUsage());
 
     return (widgetParams) => {
+      let sendEvent: SendEventForHits;
       const { objectIDs } = widgetParams || {};
 
       let recommendations = [] as any[];
@@ -77,13 +81,17 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
         },
 
         render(renderOptions) {
+          const renderState = this.getWidgetRenderState(renderOptions);
+
           renderFn(
             {
-              ...this.getWidgetRenderState(renderOptions),
+              ...renderState,
               instantSearchInstance: renderOptions.instantSearchInstance,
             },
             false
           );
+
+          renderState.sendEvent('view:internal', renderState.recommendations);
         },
 
         getRenderState(renderState, renderOptions) {
@@ -93,9 +101,18 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
           };
         },
 
-        getWidgetRenderState() {
+        getWidgetRenderState({ helper, instantSearchInstance }) {
+          if (!sendEvent) {
+            sendEvent = createSendEventForHits({
+              instantSearchInstance,
+              index: helper.getIndex(),
+              widgetType: this.$$type,
+            });
+          }
+
           return {
             recommendations,
+            sendEvent,
             widgetParams,
           };
         },

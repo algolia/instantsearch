@@ -57,8 +57,8 @@ export type FrequentlyBoughtTogetherWidgetParams = {
 };
 
 export type FrequentlyBoughtTogetherTemplates = {
-  header?({ html }: any): VNode;
-  item({ item, html }: any): VNode;
+  header?({ html, sendEvent }: any): VNode;
+  item({ item, html, sendEvent }: any): VNode;
 };
 
 export type FrequentlyBoughtTogetherWidget = WidgetFactory<
@@ -84,7 +84,7 @@ function renderer({
   FrequentlyBoughtTogetherRenderState,
   Partial<FrequentlyBoughtTogetherWidgetParams>
 > {
-  return ({ recommendations }) => {
+  return ({ recommendations, sendEvent }) => {
     render(
       <UncontrolledFrequentlyBoughtTogether
         items={recommendations}
@@ -93,9 +93,9 @@ function renderer({
         headerComponent={(props) => {
           const header = templates.header || DefaultHeaderComponent;
 
-          return header({ ...props, html });
+          return header({ ...props, html, sendEvent });
         }}
-        itemComponent={({ item }) => templates.item({ item, html })}
+        itemComponent={({ item }) => templates.item({ item, html, sendEvent })}
       />,
       containerNode
     );
