@@ -17,7 +17,6 @@ import type {
   IndexUiState,
   Widget,
   ScopedResult,
-  SearchClient,
   IndexRenderState,
 } from '../../types';
 import type {
@@ -36,6 +35,7 @@ const withUsage = createDocumentationMessageGenerator({
 export type IndexWidgetParams = {
   indexName: string;
   indexId?: string;
+  separate?: boolean;
 };
 
 export type IndexInitOptions = {
@@ -223,7 +223,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
     throw new Error(withUsage('The `indexName` option is required.'));
   }
 
-  const { indexName, indexId = indexName } = widgetParams;
+  const { indexName, indexId = indexName, separate = false } = widgetParams;
 
   let localWidgets: Array<Widget | IndexWidget> = [];
   let localUiState: IndexUiState = {};
@@ -459,10 +459,11 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       // `searchClient`. Only the "main" Helper created at the `InstantSearch`
       // level is aware of the client.
       helper = algoliasearchHelper(
-        {} as SearchClient,
+        mainHelper.getClient(),
         parameters.index,
         parameters
       );
+      const originalSearch = helper.search.bind(helper);
 
       // We forward the call to `search` to the "main" instance of the Helper
       // which is responsible for managing the queries (it's the only one that is
@@ -480,7 +481,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           return mainHelper;
         }
 
-        return mainHelper.search();
+        return separate ? originalSearch() : mainHelper.search();
       };
 
       helper.searchWithoutTriggeringOnStateChange = () => {
@@ -554,6 +555,12 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         // run the render process in one pass.
         instantSearchInstance.scheduleRender();
 
+        // Normally we would not request this index
+        if (separate && helper!.lastResults) {
+          derivedHelper!.lastResults = helper!.lastResults;
+          return;
+        }
+
         // the derived helper is the one which actually searches, but the helper
         // which is exposed e.g. via instance.helper, doesn't search, and thus
         // does not have access to lastResults, which it used to in pre-federated
@@ -561,6 +568,16 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         helper!.lastResults = results;
         lastValidSearchParameters = results?._state;
       });
+
+      if (separate) {
+        helper.on('result', ({ results, state }) => {
+          helper!.lastResults = results;
+          derivedHelper!.lastResults = results;
+          lastValidSearchParameters = state;
+
+          this.render({ instantSearchInstance });
+        });
+      }
 
       // We compute the render state before calling `init` in a separate loop
       // to construct the whole render state object that is then passed to

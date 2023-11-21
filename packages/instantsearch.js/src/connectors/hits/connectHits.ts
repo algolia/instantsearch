@@ -105,6 +105,7 @@ const connectHits: HitsConnector = function connectHits(
       },
 
       render(renderOptions) {
+        console.log('rendering hits for ', renderOptions.parent.getIndexName());
         const renderState = this.getWidgetRenderState(renderOptions);
 
         renderFn(
