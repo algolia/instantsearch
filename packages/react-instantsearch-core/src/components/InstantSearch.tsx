@@ -21,7 +21,10 @@ export function InstantSearch<
   TUiState extends UiState = UiState,
   TRouteState = TUiState
 >({ children, ...props }: InstantSearchProps<TUiState, TRouteState>) {
-  const search = useInstantSearchApi<TUiState, TRouteState>(props);
+  const search = useInstantSearchApi<TUiState, TRouteState>({
+    ...props,
+    searchClient: props.searchClient || props.client!.searchClient,
+  });
 
   if (!search.started) {
     return null;
