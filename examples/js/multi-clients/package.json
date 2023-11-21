@@ -20,6 +20,6 @@
     "parcel": "2.10.0"
   },
   "alias": {
-    "@algolia/client": "./src/algolia"
+    "@algolia/client": "/src/algolia"
   }
 }
