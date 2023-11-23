@@ -1,12 +1,13 @@
 import { getFrequentlyBoughtTogether } from '@algolia/recommend-core';
+
 import {
-  SendEventForHits,
   checkRendering,
   createDocumentationMessageGenerator,
   createSendEventForHits,
   noop,
 } from '../../lib/utils';
 
+import type { SendEventForHits } from '../../lib/utils';
 import type { Connector, Hit, WidgetRenderState } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -51,6 +52,8 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
 
       return {
         $$type: 'ais.frequentlyBoughtTogether',
+
+        requires: ['recommendClient'],
 
         init(initOptions) {
           const { state, instantSearchInstance } = initOptions;

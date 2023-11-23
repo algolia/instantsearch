@@ -9,6 +9,7 @@ import {
   isIndexWidget,
   createInitArgs,
   createRenderArgs,
+  warn,
 } from '../../lib/utils';
 
 import type {
@@ -323,6 +324,16 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       localWidgets = localWidgets.concat(widgets);
 
       if (localInstantSearchInstance && Boolean(widgets.length)) {
+        const [validWidgets, invalidWidgets] = satisfyWidgetRequirements(
+          localInstantSearchInstance,
+          widgets
+        );
+        if (invalidWidgets.length > 0) {
+          localWidgets = localWidgets.filter(
+            (widget) => invalidWidgets.indexOf(widget) === -1
+          );
+        }
+
         privateHelperSetState(helper!, {
           state: getLocalWidgetsSearchParameters(localWidgets, {
             uiState: localUiState,
@@ -334,7 +345,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         // We compute the render state before calling `init` in a separate loop
         // to construct the whole render state object that is then passed to
         // `init`.
-        widgets.forEach((widget) => {
+        validWidgets.forEach((widget) => {
           if (widget.getRenderState) {
             const renderState = widget.getRenderState(
               localInstantSearchInstance!.renderState[this.getIndexId()] || {},
@@ -353,7 +364,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           }
         });
 
-        widgets.forEach((widget) => {
+        validWidgets.forEach((widget) => {
           if (widget.init) {
             widget.init(
               createInitArgs(
@@ -443,6 +454,17 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       localInstantSearchInstance = instantSearchInstance;
       localParent = parent;
       localUiState = uiState[indexId] || {};
+
+      // Ensure widgets requirements are available
+      const [, invalidWidgets] = satisfyWidgetRequirements(
+        localInstantSearchInstance,
+        localWidgets
+      );
+      if (invalidWidgets.length > 0) {
+        localWidgets = localWidgets.filter(
+          (widget) => invalidWidgets.indexOf(widget) === -1
+        );
+      }
 
       // The `mainHelper` is already defined at this point. The instance is created
       // inside InstantSearch at the `start` method, which occurs before the `init`
@@ -783,4 +805,40 @@ function storeRenderState({
       ...renderState,
     },
   };
+}
+
+function satisfyWidgetRequirements(
+  instantSearchInstance: InstantSearch,
+  widgets: Array<Widget | IndexWidget>
+): [Array<Widget | IndexWidget>, Array<Widget | IndexWidget>] {
+  const clients = Object.keys(instantSearchInstance.clients);
+  const [widgetsToKeep, widgetsToSkip] = widgets.reduce(
+    ([keep, skip], widget) => {
+      if (
+        (widget.requires || ['searchClient']).some(
+          (requirement) => !clients.includes(requirement)
+        )
+      ) {
+        skip.push(widget);
+      } else {
+        keep.push(widget);
+      }
+
+      return [keep, skip];
+    },
+    [[] as Array<Widget | IndexWidget>, [] as Array<Widget | IndexWidget>]
+  );
+
+  if (widgetsToSkip.length > 0) {
+    warn(`Some widgets cannot be added to your InstantSearch application, because they require clients that are not configured:
+
+${widgetsToSkip
+  .map((widget) => `- ${widget.$$type} requires ${widget.requires}`)
+  .join('\n')}
+
+See: https://alg.li/instantsearch-multi-clients
+    `);
+  }
+
+  return [widgetsToKeep, widgetsToSkip];
 }

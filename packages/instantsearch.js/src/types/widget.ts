@@ -1,3 +1,4 @@
+import type { InstantSearchClients } from '../lib/InstantSearch';
 import type { IndexWidget } from '../widgets/index/index';
 import type { InstantSearch } from './instantsearch';
 import type { IndexRenderState, WidgetRenderState } from './render-state';
@@ -139,6 +140,8 @@ type RequiredWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
    * Identifier for connectors and widgets.
    */
   $$type: TWidgetDescription['$$type'];
+
+  requires?: Array<keyof InstantSearchClients>;
 
   /**
    * Called once before the first search.
