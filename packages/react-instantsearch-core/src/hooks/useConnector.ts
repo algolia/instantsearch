@@ -77,6 +77,11 @@ export function useConnector<
             ) ||
             instantSearchInstance.status !== previousStatusRef.current
           ) {
+            // eslint-disable-next-line no-console
+            console.log(`useConnector(${connector.name}) > setState`, {
+              prev: previousRenderStateRef.current,
+              next: renderState,
+            });
             // eslint-disable-next-line @typescript-eslint/no-use-before-define
             setState(renderState);
             previousRenderStateRef.current = renderState;

@@ -660,6 +660,8 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         }
       });
 
+      // eslint-disable-next-line no-console
+      console.group('index.render()');
       widgetsToRender.forEach((widget) => {
         // At this point, all the variables used below are set. Both `helper`
         // and `derivedHelper` have been created at the `init` step. The attribute
@@ -672,6 +674,8 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           widget.render(createRenderArgs(instantSearchInstance, this));
         }
       });
+      // eslint-disable-next-line no-console
+      console.groupEnd();
     },
 
     dispose() {
