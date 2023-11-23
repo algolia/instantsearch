@@ -199,6 +199,10 @@ export function createInsightsMiddleware<
         }
 
         if (!$$internal) {
+          console.log(
+            '\x1b[32m%s\x1b[0m',
+            'Insights:started() > scheduling search'
+          );
           instantSearchInstance.scheduleSearch();
         }
 
@@ -220,6 +224,10 @@ export function createInsightsMiddleware<
             });
 
             if (existingToken && existingToken !== userToken) {
+              console.log(
+                '\x1b[32m%s\x1b[0m',
+                'Insights:setUserTokenToSearch() > scheduling search'
+              );
               instantSearchInstance.scheduleSearch();
             }
           }
@@ -328,6 +336,10 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
             ...initialParameters,
           });
 
+          console.log(
+            '\x1b[32m%s\x1b[0m',
+            'Insights:unsubscribe() > scheduling search'
+          );
           instantSearchInstance.scheduleSearch();
         }
       },

@@ -365,6 +365,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           }
         });
 
+        console.log(
+          '\x1b[32m%s\x1b[0m',
+          'Index:addWidgets() > scheduling search'
+        );
         localInstantSearchInstance.scheduleSearch();
       }
 
@@ -426,6 +430,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         helper!.setState(newState);
 
         if (localWidgets.length) {
+          console.log(
+            '\x1b[32m%s\x1b[0m',
+            'Index:removeWidgets() > scheduling search'
+          );
           localInstantSearchInstance.scheduleSearch();
         }
       }
@@ -552,6 +560,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         // The index does not render the results it schedules a new render
         // to let all the other indices emit their own results. It allows us to
         // run the render process in one pass.
+        console.log(
+          '\x1b[34m%s\x1b[0m',
+          'Index:derivedHelper.on(result) > scheduling render'
+        );
         instantSearchInstance.scheduleRender();
 
         // the derived helper is the one which actually searches, but the helper
@@ -624,6 +636,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         // If there are initial results, we're not notified of the next results
         // because we don't trigger an initial search. We therefore need to directly
         // schedule a render that will render the results injected on the helper.
+        console.log(
+          '\x1b[34m%s\x1b[0m',
+          'Index:init() > scheduling render due to indexInitialResults'
+        );
         instantSearchInstance.scheduleRender();
       }
     },
@@ -661,7 +677,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       });
 
       // eslint-disable-next-line no-console
-      console.group('index.render()');
+      console.groupCollapsed('Index:render()');
       widgetsToRender.forEach((widget) => {
         // At this point, all the variables used below are set. Both `helper`
         // and `derivedHelper` have been created at the `init` step. The attribute

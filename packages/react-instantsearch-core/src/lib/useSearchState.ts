@@ -27,6 +27,7 @@ export function useSearchState<
 
   const setUiState = useCallback<SearchStateApi<TUiState>['setUiState']>(
     (nextUiState) => {
+      console.log('\x1b[33m%s\x1b[0m', 'useSearchState > call setUiState()');
       search.setUiState(nextUiState);
     },
     [search]
