@@ -54,6 +54,11 @@ function defaultCreateURL() {
 // source: https://github.com/Microsoft/TypeScript/issues/14829#issuecomment-504042546
 type NoInfer<T> = T extends infer S ? S : never;
 
+export type InstantSearchClients = {
+  searchClient: SearchClient;
+  recommendClient: any;
+};
+
 /**
  * Global options for an InstantSearch instance.
  */
@@ -95,7 +100,7 @@ export type InstantSearchOptions<
    */
   searchClient?: SearchClient;
 
-  client?: { searchClient: SearchClient; recommendClient: any };
+  client?: InstantSearchClients;
 
   /**
    * The locale used to display numbers. This will be passed
@@ -191,6 +196,7 @@ class InstantSearch<
   TUiState extends UiState = UiState,
   TRouteState = TUiState
 > extends EventEmitter {
+  public clients: NonNullable<InstantSearchOptions['client']>;
   public client: NonNullable<InstantSearchOptions['searchClient']>;
   public recommendClient: any;
   public indexName: string;
@@ -334,8 +340,12 @@ See documentation: ${createDocumentationLink({
           `);
     }
 
-    this.client = (client?.searchClient || searchClient) as SearchClient;
-    this.recommendClient = client?.recommendClient!;
+    this.clients = client || {
+      searchClient: searchClient!,
+      recommendClient: undefined,
+    };
+    this.client = this.clients.searchClient;
+    this.recommendClient = this.clients.recommendClient!;
     this.future = future;
     this.insightsClient = insightsClient;
     this.indexName = indexName;
