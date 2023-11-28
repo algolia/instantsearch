@@ -34,7 +34,7 @@ export function useSearchResults(): SearchResultsApi {
         results !== null &&
         !dequal(scopedResults, _scopedResultsRef.current)
       ) {
-        console.log('useSearchResults() > handleRender() > setState()');
+        console.log('-- useSearchResults() > handleRender() > setState()');
         _scopedResultsRef.current = scopedResults;
         setSearchResults({
           results,

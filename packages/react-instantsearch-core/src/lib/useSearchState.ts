@@ -4,6 +4,7 @@ import { useIndexContext } from './useIndexContext';
 import { useInstantSearchContext } from './useInstantSearchContext';
 
 import type { InstantSearch, UiState, IndexWidget } from 'instantsearch.js';
+import { dequal } from './dequal';
 
 export type SearchStateApi<TUiState extends UiState> = {
   uiState: TUiState;
@@ -43,8 +44,12 @@ export function useSearchState<
 
   useEffect(() => {
     function handleRender() {
-      setLocalUiState(search.getUiState());
-      setRenderState(search.renderState);
+      console.log('useSearchState() > handleRender()');
+      if (!dequal(search.renderState, renderState)) {
+        console.log('-- useSearchState() > handleRender() > setState()');
+        setLocalUiState(search.getUiState());
+        setRenderState(search.renderState);
+      }
     }
 
     search.addListener('render', handleRender);
