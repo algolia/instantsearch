@@ -97,13 +97,15 @@ export function createInstantSearchRouterNext<TRouteState = UiState>(
         beforeStart(onUpdate);
       }
 
+      let lastPushFromThis = false;
       const initialPathname = singletonRouter.pathname;
       handler = () => {
         // Without this check, we would trigger an unnecessary search when navigating
         // to a page without InstantSearch
-        if (singletonRouter.pathname === initialPathname) {
+        if (singletonRouter.pathname === initialPathname && !lastPushFromThis) {
           onUpdate();
         }
+        lastPushFromThis = false;
       };
       singletonRouter.events.on('routeChangeComplete', handler);
 
@@ -161,6 +163,7 @@ export function createInstantSearchRouterNext<TRouteState = UiState>(
       singletonRouter.push(url, undefined, {
         shallow: true,
       });
+      lastPushFromThis = true;
     },
     ...routerOptions,
   });
