@@ -58,30 +58,40 @@ describe('connectDynamicWidgets', () => {
       ).not.toThrow();
     });
 
-    it('fails when a non-star facet is given', () => {
+    it('fails when widgets is not an array', () => {
       expect(() =>
-        connectDynamicWidgets(() => {})(
+        connectDynamicWidgets(() => {})({
           // @ts-expect-error
-          { widgets: [], facets: ['lol'] }
-        )
+          widgets: {},
+        })
       ).toThrowErrorMatchingInlineSnapshot(`
-        "The \`facets\` option only accepts [] or [\\"*\\"], you passed [\\"lol\\"]
+        "The \`widgets\` option expects an array of widgets.
 
         See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/#connector"
       `);
     });
 
-    it('fails when a multiple star facets are given', () => {
+    it('fails when facets is not an array', () => {
       expect(() =>
-        connectDynamicWidgets(() => {})(
+        connectDynamicWidgets(() => {})({
+          widgets: [],
           // @ts-expect-error
-          { widgets: [], facets: ['*', '*'] }
-        )
+          facets: {},
+        })
       ).toThrowErrorMatchingInlineSnapshot(`
-        "The \`facets\` option only accepts [] or [\\"*\\"], you passed [\\"*\\",\\"*\\"]
+        "The \`facets\` option only accepts an array of facets, you passed {}
 
         See documentation: https://www.algolia.com/doc/api-reference/widgets/dynamic-widgets/js/#connector"
       `);
+    });
+
+    it('does not fail when only some facets are given', () => {
+      expect(() =>
+        connectDynamicWidgets(() => {})({
+          widgets: [],
+          facets: ['a', 'b', 'c'],
+        })
+      ).not.toThrow();
     });
 
     it('does not fail when only star facet is given', () => {
