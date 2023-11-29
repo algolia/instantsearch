@@ -58,11 +58,11 @@ export function hydrateSearchClient(
           Object.keys(results).reduce(
             (acc, key) =>
               acc.concat(
-                results[key].results.map((request) => ({
-                  indexName: request.index,
+                results[key].results.map((result) => ({
+                  indexName: result.index,
                   // We normalize the params received from the server as they can
                   // be serialized differently depending on the engine.
-                  params: serializeQueryParameters(qs.parse(request.params)),
+                  params: serializeQueryParameters(qs.parse(result.params)),
                 }))
               ),
             []
@@ -89,9 +89,9 @@ export function hydrateSearchClient(
       requests: Object.keys(results).reduce(
         (acc, key) =>
           acc.concat(
-            results[key].rawResults.map((request) => ({
-              indexName: request.index,
-              params: request.params,
+            results[key].rawResults.map((result) => ({
+              indexName: result.index,
+              params: serializeQueryParameters(qs.parse(result.params)),
             }))
           ),
         []
