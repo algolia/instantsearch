@@ -882,5 +882,34 @@ describe('connectDynamicWidgets', () => {
         })
       );
     });
+
+    test('adds to existing facets', () => {
+      const dynamicWidgets = connectDynamicWidgets(() => {})({
+        facets: ['facet1', 'facet2'],
+        transformItems() {
+          return ['test1'];
+        },
+        widgets: [
+          connectMenu(() => {})({ attribute: 'test1' }),
+          connectHierarchicalMenu(() => {})({ attributes: ['test2', 'test3'] }),
+        ],
+      });
+
+      expect(
+        dynamicWidgets.getWidgetSearchParameters!(
+          new SearchParameters({
+            facets: ['existing'],
+          }),
+          {
+            uiState: {},
+          }
+        )
+      ).toEqual(
+        new SearchParameters({
+          facets: ['existing', 'facet1', 'facet2'],
+          maxValuesPerFacet: 20,
+        })
+      );
+    });
   });
 });
