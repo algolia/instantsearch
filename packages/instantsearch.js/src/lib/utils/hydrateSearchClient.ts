@@ -1,4 +1,6 @@
 // @ts-nocheck (types to be fixed during actual implementation)
+import qs from 'qs';
+
 import type { InitialResults, SearchClient } from '../../types';
 
 export function hydrateSearchClient(
@@ -58,7 +60,9 @@ export function hydrateSearchClient(
               acc.concat(
                 results[key].results.map((request) => ({
                   indexName: request.index,
-                  params: request.params,
+                  // We normalize the params received from the server as they can
+                  // be serialized differently depending on the engine.
+                  params: serializeQueryParameters(qs.parse(request.params)),
                 }))
               ),
             []
