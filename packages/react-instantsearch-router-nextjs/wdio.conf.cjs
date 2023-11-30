@@ -8,7 +8,7 @@ exports.config = {
   services: ['selenium-standalone'],
   capabilities: [
     {
-      browserName: 'safari',
+      browserName: 'chrome',
     },
   ],
 
