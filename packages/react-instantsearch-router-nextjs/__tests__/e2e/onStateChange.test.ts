@@ -34,6 +34,7 @@ describe('refining InstantSearch causes only one onStateChange', () => {
   describe('InstantSearch', () => {
     it('works when not on a i18n route', async () => {
       await browser.url('/');
+
       const refinementLink = await $('.ais-RefinementList-labelText=Apple');
       await refinementLink.click();
 
