@@ -49,6 +49,7 @@ type HomePageProps = {
 };
 
 export default function HomePage({ serverState, url }: HomePageProps) {
+  const [onStateChangeCalled, setOnStateChangeCalled] = React.useState(0);
   return (
     <InstantSearchSSRProvider {...serverState}>
       <Head>
@@ -56,9 +57,7 @@ export default function HomePage({ serverState, url }: HomePageProps) {
       </Head>
 
       {/* If you have navigation links outside of InstantSearch */}
-      <Link href="/?instant_search%5Bquery%5D=apple" passHref>
-        <a>Prefilled query</a>
-      </Link>
+      <Link href="/?instant_search%5Bquery%5D=apple">Prefilled query</Link>
 
       <InstantSearch
         searchClient={client}
@@ -70,7 +69,13 @@ export default function HomePage({ serverState, url }: HomePageProps) {
           }),
         }}
         insights={true}
+        // only for tests
+        onStateChange={({ uiState, setUiState }) => {
+          setOnStateChangeCalled((times) => times + 1);
+          setUiState(uiState);
+        }}
       >
+        <output id="onStateChange">{onStateChangeCalled}</output>
         <div className="Container">
           <div>
             <DynamicWidgets fallbackComponent={FallbackComponent} facets={[]} />
