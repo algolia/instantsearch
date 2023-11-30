@@ -171,6 +171,17 @@ export type InstantSearchOptions<
      */
     // @MAJOR: Remove legacy behaviour
     preserveSharedStateOnUnmount?: boolean;
+    /**
+     * Changes the way root levels of hierarchical facets have their count displayed.
+     *
+     * If `false` (by default), the count of the refined root level is updated to match the count of the actively refined parent level.
+     *
+     * If `true`, the count of the root level stays the same as the count of all children levels.
+     *
+     * @default false
+     */
+    // @MAJOR: Remove legacy behaviour here and in algoliasearch-helper
+    persistHierarchicalRootCount?: boolean;
   };
 };
 
@@ -178,7 +189,10 @@ export type InstantSearchStatus = 'idle' | 'loading' | 'stalled' | 'error';
 
 export const INSTANTSEARCH_FUTURE_DEFAULTS: Required<
   InstantSearchOptions['future']
-> = { preserveSharedStateOnUnmount: false };
+> = {
+  preserveSharedStateOnUnmount: false,
+  persistHierarchicalRootCount: false,
+};
 
 /**
  * The actual implementation of the InstantSearch. This is

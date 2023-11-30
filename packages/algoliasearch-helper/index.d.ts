@@ -1392,6 +1392,7 @@ declare namespace algoliasearchHelper {
       opts: {
         sortBy?: any;
         facetOrdering?: boolean;
+        persistHierarchicalRootCount?: boolean;
       }
     ): SearchResults.FacetValue[] | SearchResults.HierarchicalFacet | undefined;
 

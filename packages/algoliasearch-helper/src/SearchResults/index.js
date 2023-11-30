@@ -587,24 +587,7 @@ function SearchResults(state, results, options) {
           return;
         }
 
-        // when we always get root levels, if the hits refinement is `beers > IPA` (count: 5),
-        // then the disjunctive values will be `beers` (count: 100),
-        // but we do not want to display
-        //   | beers (100)
-        //     > IPA (5)
-        // We want
-        //   | beers (5)
-        //     > IPA (5)
-        var defaultData = {};
-
-        if (currentRefinement.length > 0) {
-          var root = currentRefinement[0].split(separator)[0];
-          defaultData[root] =
-            self.hierarchicalFacets[position][attributeIndex].data[root];
-        }
-
         self.hierarchicalFacets[position][attributeIndex].data = defaultsPure(
-          defaultData,
           facetResults,
           self.hierarchicalFacets[position][attributeIndex].data
         );
@@ -673,9 +656,14 @@ SearchResults.prototype.getFacetByName = function (name) {
  * @private
  * @param {SearchResults} results the search results to search in
  * @param {string} attribute name of the faceted attribute to search for
+ * @param {string} persistHierarchicalRootCount whether to replace the count of a refined root level with the count of the actively refined parent level
  * @return {array|object} facet values. For the hierarchical facets it is an object.
  */
-function extractNormalizedFacetValues(results, attribute) {
+function extractNormalizedFacetValues(
+  results,
+  attribute,
+  persistHierarchicalRootCount
+) {
   function predicate(facet) {
     return facet.name === attribute;
   }
@@ -730,6 +718,24 @@ function extractNormalizedFacetValues(results, attribute) {
     currentRefinementSplit.unshift(attribute);
 
     setIsRefined(hierarchicalFacetValues, currentRefinementSplit, 0);
+
+    // @MAJOR: remove this legacy behaviour in next major version
+    if (
+      currentRefinementSplit.length > 2 &&
+      hierarchicalFacetValues.data &&
+      !persistHierarchicalRootCount
+    ) {
+      var rootRefinement = hierarchicalFacetValues.data.find(function (item) {
+        return item.name === currentRefinementSplit[1];
+      });
+      var parentRefinement = getHierarchicalRefinement(
+        results._state,
+        attribute,
+        currentRefinementSplit.slice(1, -1).join(separator),
+        results.hierarchicalFacets
+      );
+      rootRefinement.count = parentRefinement.count;
+    }
 
     return hierarchicalFacetValues;
   }
@@ -909,17 +915,23 @@ function getFacetOrdering(results, attribute) {
  * });
  */
 SearchResults.prototype.getFacetValues = function (attribute, opts) {
-  var facetValues = extractNormalizedFacetValues(this, attribute);
-  if (!facetValues) {
-    return undefined;
-  }
-
   var options = defaultsPure({}, opts, {
     sortBy: SearchResults.DEFAULT_SORT,
     // if no sortBy is given, attempt to sort based on facetOrdering
     // if it is given, we still allow to sort via facet ordering first
     facetOrdering: !(opts && opts.sortBy),
+    persistHierarchicalRootCount: false,
   });
+
+  var facetValues = extractNormalizedFacetValues(
+    this,
+    attribute,
+    options.persistHierarchicalRootCount
+  );
+
+  if (!facetValues) {
+    return undefined;
+  }
 
   // eslint-disable-next-line consistent-this
   var results = this;
