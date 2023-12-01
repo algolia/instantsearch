@@ -62,7 +62,7 @@ export function hydrateSearchClient(
         params: serializeQueryParameters(request.params!),
       }));
 
-      return (client as ClientV3_4).transporter.responsesCache.get(
+      return (client as unknown as ClientV3_4).transporter.responsesCache.get(
         {
           method: 'search',
           args: [requestsWithSerializedParams, ...methodArgs],
@@ -73,7 +73,7 @@ export function hydrateSearchClient(
       );
     };
 
-    (client as ClientV3_4).transporter.responsesCache.set(
+    (client as unknown as ClientV3_4).transporter.responsesCache.set(
       {
         method: 'search',
         args: cachedRequest,
