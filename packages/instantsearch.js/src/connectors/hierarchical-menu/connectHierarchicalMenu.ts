@@ -353,8 +353,6 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
           if (results) {
             const facetValues = results.getFacetValues(hierarchicalFacetName, {
               sortBy,
-              persistHierarchicalRootCount:
-                instantSearchInstance.future.persistHierarchicalRootCount,
               facetOrdering: sortBy === DEFAULT_SORT,
             });
             const facetItems =

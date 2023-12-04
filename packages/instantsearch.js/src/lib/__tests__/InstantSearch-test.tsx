@@ -949,7 +949,12 @@ describe('start', () => {
     search.start();
 
     expect(algoliasearchHelper).toHaveBeenCalledTimes(2);
-    expect(algoliasearchHelper).toHaveBeenCalledWith(searchClient, indexName);
+    expect(algoliasearchHelper).toHaveBeenCalledWith(
+      searchClient,
+      indexName,
+      undefined,
+      { persistHierarchicalRootCount: false }
+    );
   });
 
   it('schedules a search with widgets', async () => {

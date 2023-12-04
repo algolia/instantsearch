@@ -563,7 +563,10 @@ See documentation: ${createDocumentationLink({
     // In Vue InstantSearch' hydrate, a main helper gets set before start, so
     // we need to respect this helper as a way to keep all listeners correct.
     const mainHelper =
-      this.mainHelper || algoliasearchHelper(this.client, this.indexName);
+      this.mainHelper ||
+      algoliasearchHelper(this.client, this.indexName, undefined, {
+        persistHierarchicalRootCount: this.future.persistHierarchicalRootCount,
+      });
 
     mainHelper.search = () => {
       this.status = 'loading';

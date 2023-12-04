@@ -115,8 +115,9 @@ var version = require('./version');
  * @param  {SearchParameters | object} options an object defining the initial
  * config of the search. It doesn't have to be a {SearchParameters},
  * just an object containing the properties you need from it.
+ * @param {SearchResultsOptions|object} searchResultsOptions an object defining the options to use when creating the search results.
  */
-function AlgoliaSearchHelper(client, index, options) {
+function AlgoliaSearchHelper(client, index, options, searchResultsOptions) {
   if (typeof client.addAlgoliaAgent === 'function') {
     client.addAlgoliaAgent('JS Helper (' + version + ')');
   }
@@ -130,6 +131,7 @@ function AlgoliaSearchHelper(client, index, options) {
   this._lastQueryIdReceived = -1;
   this.derivedHelpers = [];
   this._currentNbQueries = 0;
+  this._searchResultsOptions = searchResultsOptions;
 }
 
 inherits(AlgoliaSearchHelper, EventEmitter);
@@ -1402,6 +1404,9 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function (
   queryId,
   content
 ) {
+  // eslint-disable-next-line consistent-this
+  var self = this;
+
   // @TODO remove the number of outdated queries discarded instead of just one
 
   if (queryId < this._lastQueryIdReceived) {
@@ -1430,7 +1435,11 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function (
       return;
     }
 
-    helper.lastResults = new SearchResults(state, specificResults);
+    helper.lastResults = new SearchResults(
+      state,
+      specificResults,
+      self._searchResultsOptions
+    );
 
     helper.emit('result', {
       results: helper.lastResults,
