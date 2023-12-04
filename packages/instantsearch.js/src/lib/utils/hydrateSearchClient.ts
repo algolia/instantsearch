@@ -7,6 +7,10 @@ import type {
 } from '../../types';
 
 type ClientWithCache = SearchClient & { cache: Record<string, string> };
+type ClientWithTransporter = ClientV3_4 & {
+  transporter: { responsesCache: any };
+  search: (requests: any, ...args: any[]) => any;
+};
 
 export function hydrateSearchClient(
   client: SearchClient & {
@@ -55,14 +59,18 @@ export function hydrateSearchClient(
   if ('transporter' in client && !client._cacheHydrated) {
     client._cacheHydrated = true;
 
-    const baseMethod = client.search;
+    const baseMethod = client.search as unknown as (
+      query: any,
+      ...args: any[]
+    ) => any;
+    // @ts-ignore wanting type checks for v3 on this would make this too complex
     client.search = (requests, ...methodArgs) => {
       const requestsWithSerializedParams = requests.map((request) => ({
         ...request,
         params: serializeQueryParameters(request.params!),
       }));
 
-      return (client as unknown as ClientV3_4).transporter.responsesCache.get(
+      return (client as ClientWithTransporter).transporter.responsesCache.get(
         {
           method: 'search',
           args: [requestsWithSerializedParams, ...methodArgs],
@@ -73,7 +81,7 @@ export function hydrateSearchClient(
       );
     };
 
-    (client as unknown as ClientV3_4).transporter.responsesCache.set(
+    (client as ClientWithTransporter).transporter.responsesCache.set(
       {
         method: 'search',
         args: cachedRequest,
