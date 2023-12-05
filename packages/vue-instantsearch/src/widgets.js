@@ -6,7 +6,7 @@ export { default as AisExperimentalConfigureRelatedItems } from './components/Co
 export { default as AisCurrentRefinements } from './components/CurrentRefinements.vue';
 export { default as AisHierarchicalMenu } from './components/HierarchicalMenu.vue';
 export { default as AisHighlight } from './components/Highlight.vue';
-export { default as AisHits } from './components/Hits.vue';
+export { default as AisHits } from './components/Hits';
 export { default as AisHitsPerPage } from './components/HitsPerPage.vue';
 export { default as AisIndex } from './components/Index';
 export { default as AisInstantSearch } from './components/InstantSearch';
