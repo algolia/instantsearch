@@ -9,6 +9,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * **createURL:** ensure refined value gets removed ([#5912](https://github.com/algolia/instantsearch/issues/5912)) ([77919a9](https://github.com/algolia/instantsearch/commit/77919a92ede2dac7420c16f7743567e550e7cdac))
+* **cache-hydration:** normalize params returned from response ([#5946](https://github.com/algolia/instantsearch/issues/5946)) ([042aaac](https://github.com/algolia/instantsearch/commit/042aaacc0eb06226b2e5e29f7a77fcf2e4e8676e))
 
 
 ### Features
