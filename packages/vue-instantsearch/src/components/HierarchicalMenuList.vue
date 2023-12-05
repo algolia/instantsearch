@@ -24,7 +24,6 @@
         <span :class="suit('label')">{{ item.label }}</span>
         <span :class="suit('count')">{{ item.count }}</span>
       </a>
-
       <hierarchical-menu-list
         v-if="item.data"
         :items="item.data"

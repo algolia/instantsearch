@@ -19,7 +19,86 @@ beforeEach(() => {
   document.body.innerHTML = '';
 });
 
-describe('refinementList', () => {
+const facets = {
+  'hierarchicalCategories.lvl0': {
+    'Cameras & Camcorders': 1369,
+    'Video Games': 505,
+    'Wearable Technology': 271,
+  },
+  'hierarchicalCategories.lvl1': {
+    'Cameras & Camcorders > Digital Cameras': 170,
+    'Cameras & Camcorders > Memory Cards': 113,
+  },
+};
+
+const attributes = Object.keys(facets);
+
+describe('hierarchicalMenu', () => {
+  describe('options', () => {
+    test('throws without a `container`', () => {
+      expect(() => {
+        const searchClient = createMockedSearchClient();
+
+        const search = instantsearch({
+          indexName: 'indexName',
+          searchClient,
+        });
+
+        search.addWidgets([
+          hierarchicalMenu({
+            // @ts-expect-error
+            container: undefined,
+            attributes,
+          }),
+        ]);
+      }).toThrowErrorMatchingInlineSnapshot(`
+"The \`container\` option is required.
+
+See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/js/"
+`);
+    });
+
+    test('add custom CSS classes', async () => {
+      const container = document.createElement('div');
+      const searchClient = createSearchClient();
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+      });
+
+      search.addWidgets([
+        hierarchicalMenu({
+          container,
+          attributes,
+          cssClasses: {
+            root: 'ROOT',
+            noRefinementRoot: 'NO_REFINEMENT_ROOT',
+            list: 'LIST',
+            childList: 'CHILD_LIST',
+            item: 'ITEM',
+            selectedItem: 'SELECTED_ITEM',
+            parentItem: 'PARENT_ITEM',
+            link: 'LINK',
+            selectedItemLink: 'SELECTED_ITEM_LINK',
+            label: 'LABEL',
+            count: 'COUNT',
+            showMore: 'SHOW_MORE',
+            disabledShowMore: 'DISABLED_SHOW_MORE',
+          },
+        }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      const root = container.firstChild;
+
+      expect(root).toHaveClass('ROOT');
+    });
+  });
+
   describe('templates', () => {
     test('renders default templates', async () => {
       const container = document.createElement('div');
@@ -415,29 +494,10 @@ function createMockedSearchClient() {
   const search = jest.fn((requests) =>
     Promise.resolve(
       createMultiSearchResponse(
-        ...requests.map(() =>
-          createSingleSearchResponse({
-            facets: {
-              'categories.lvl0': {
-                'Cameras & Camcorders': 1369,
-                'Video Games': 505,
-                'Wearable Technology': 271,
-              },
-              'categories.lvl1': {
-                'Cameras & Camcorders > Digital Cameras': 170,
-                'Cameras & Camcorders > Memory Cards': 113,
-              },
-            },
-          })
-        )
+        ...requests.map(() => createSingleSearchResponse({ facets }))
       )
     )
   );
 
-  return createSearchClient({
-    search,
-    // @ts-ignore
-    applicationID: 'latency',
-    apiKey: '123',
-  });
+  return createSearchClient({ search });
 }
