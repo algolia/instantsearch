@@ -15,6 +15,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Features
 
 * **stats:** add common test suite ([#5931](https://github.com/algolia/instantsearch/issues/5931)) ([16e9b34](https://github.com/algolia/instantsearch/commit/16e9b3440a75d2d559fbeadfbcc4778be3212c63))
+* **dynamicWidgets:** accept strings for `facets` ([#5948](https://github.com/algolia/instantsearch/pull/5948)) ([61a4bea](https://github.com/algolia/instantsearch/commit/61a4beaf3da414370c946b8eed9d6a533db3e58f))
 
 
 
