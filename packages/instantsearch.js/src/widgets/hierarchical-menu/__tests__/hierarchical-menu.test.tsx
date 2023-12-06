@@ -20,12 +20,12 @@ beforeEach(() => {
 });
 
 const facets = {
-  'hierarchicalCategories.lvl0': {
+  'categories.lvl0': {
     'Cameras & Camcorders': 1369,
     'Video Games': 505,
     'Wearable Technology': 271,
   },
-  'hierarchicalCategories.lvl1': {
+  'categories.lvl1': {
     'Cameras & Camcorders > Digital Cameras': 170,
     'Cameras & Camcorders > Memory Cards': 113,
   },
