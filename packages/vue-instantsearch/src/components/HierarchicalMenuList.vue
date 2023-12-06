@@ -12,8 +12,8 @@
       :key="item.value"
       :class="[
         suit('item'),
-        item.data && item.data.length > 0 && suit('item', 'parent'),
         item.isRefined && suit('item', 'selected'),
+        item.data && item.data.length > 0 && suit('item', 'parent'),
       ]"
     >
       <a

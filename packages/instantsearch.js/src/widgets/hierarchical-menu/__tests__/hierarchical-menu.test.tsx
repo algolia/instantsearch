@@ -54,7 +54,7 @@ describe('hierarchicalMenu', () => {
       }).toThrowErrorMatchingInlineSnapshot(`
 "The \`container\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/js/"
+See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchical-menu/js/"
 `);
     });
 

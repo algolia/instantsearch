@@ -35,6 +35,11 @@ function normalizeSnapshot(html: string) {
             .replace('<div class="ais-HierarchicalMenu-list--child">', '')
             .replace('</div>', '')
       )
+      // InstantSearch.js formats count with `Number.toLocaleString`
+      .replace(
+        /<span class="ais-HierarchicalMenu-count">(.*?)<\/span>/g,
+        (match) => match.replace(',', '')
+      )
   );
 }
 
@@ -573,7 +578,11 @@ export function createOptionsTests(
         expect(
           Array.from(
             document.querySelectorAll('.ais-HierarchicalMenu-count')
-          ).map((item) => item.textContent)
+          ).map((item) =>
+            item.textContent
+              // InstantSearch.js formats count with `Number.toLocaleString`
+              ?.replace(',', '')
+          )
         ).toEqual(['1369', '505', '271']);
       });
 
