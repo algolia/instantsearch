@@ -1,5 +1,68 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`custom default render renders correctly 1`] = `
+<div class="ais-HierarchicalMenu">
+  <div class>
+    <ol>
+      <li>
+        <a>
+          Apple - 80
+        </a>
+        <ol>
+          <li>
+            <a>
+              iPhone - 20
+            </a>
+          </li>
+          <li>
+            <a>
+              iPad - 20
+            </a>
+          </li>
+          <li>
+            <a>
+              MacBook - 40
+            </a>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <a>
+          Samsung - 40
+        </a>
+        <ol>
+          <li>
+            <a>
+              Galaxy - 30
+            </a>
+          </li>
+          <li>
+            <a>
+              Note - 10
+            </a>
+          </li>
+        </ol>
+      </li>
+      <li>
+        <a>
+          Microsoft - 20
+        </a>
+      </li>
+      <li>
+        <a>
+          Google - 2
+        </a>
+        <ol>
+        </ol>
+      </li>
+    </ol>
+    <button>
+      View more
+    </button>
+  </div>
+</div>
+`;
+
 exports[`custom default render renders correctly with a disabled show more button 1`] = `
 <div class="ais-HierarchicalMenu">
   <div class>
@@ -600,138 +663,5 @@ exports[`custom showMoreLabel render renders correctly with a custom show more l
       Voir moins
     </span>
   </button>
-</div>
-`;
-
-exports[`default render renders correctly 1`] = `
-<div class="ais-HierarchicalMenu">
-  <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0">
-    <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
-      <a class="ais-HierarchicalMenu-link">
-        <span class="ais-HierarchicalMenu-label">
-          Apple
-        </span>
-        <span class="ais-HierarchicalMenu-count">
-          80
-        </span>
-      </a>
-      <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child ais-HierarchicalMenu-list--lvl1">
-        <li class="ais-HierarchicalMenu-item">
-          <a class="ais-HierarchicalMenu-link">
-            <span class="ais-HierarchicalMenu-label">
-              iPhone
-            </span>
-            <span class="ais-HierarchicalMenu-count">
-              20
-            </span>
-          </a>
-        </li>
-        <li class="ais-HierarchicalMenu-item">
-          <a class="ais-HierarchicalMenu-link">
-            <span class="ais-HierarchicalMenu-label">
-              iPad
-            </span>
-            <span class="ais-HierarchicalMenu-count">
-              20
-            </span>
-          </a>
-        </li>
-        <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
-          <a class="ais-HierarchicalMenu-link">
-            <span class="ais-HierarchicalMenu-label">
-              MacBook
-            </span>
-            <span class="ais-HierarchicalMenu-count">
-              40
-            </span>
-          </a>
-          <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child ais-HierarchicalMenu-list--lvl2">
-            <li class="ais-HierarchicalMenu-item">
-              <a class="ais-HierarchicalMenu-link">
-                <span class="ais-HierarchicalMenu-label">
-                  MacBook 13"
-                </span>
-                <span class="ais-HierarchicalMenu-count">
-                  20
-                </span>
-              </a>
-            </li>
-            <li class="ais-HierarchicalMenu-item">
-              <a class="ais-HierarchicalMenu-link">
-                <span class="ais-HierarchicalMenu-label">
-                  MacBook 15"
-                </span>
-                <span class="ais-HierarchicalMenu-count">
-                  10
-                </span>
-              </a>
-            </li>
-            <li class="ais-HierarchicalMenu-item">
-              <a class="ais-HierarchicalMenu-link">
-                <span class="ais-HierarchicalMenu-label">
-                  MacBook 12
-                </span>
-                <span class="ais-HierarchicalMenu-count">
-                  10
-                </span>
-              </a>
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </li>
-    <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
-      <a class="ais-HierarchicalMenu-link">
-        <span class="ais-HierarchicalMenu-label">
-          Samsung
-        </span>
-        <span class="ais-HierarchicalMenu-count">
-          40
-        </span>
-      </a>
-      <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child ais-HierarchicalMenu-list--lvl1">
-        <li class="ais-HierarchicalMenu-item">
-          <a class="ais-HierarchicalMenu-link">
-            <span class="ais-HierarchicalMenu-label">
-              Galaxy
-            </span>
-            <span class="ais-HierarchicalMenu-count">
-              30
-            </span>
-          </a>
-        </li>
-        <li class="ais-HierarchicalMenu-item">
-          <a class="ais-HierarchicalMenu-link">
-            <span class="ais-HierarchicalMenu-label">
-              Note
-            </span>
-            <span class="ais-HierarchicalMenu-count">
-              10
-            </span>
-          </a>
-        </li>
-      </ul>
-    </li>
-    <li class="ais-HierarchicalMenu-item">
-      <a class="ais-HierarchicalMenu-link">
-        <span class="ais-HierarchicalMenu-label">
-          Microsoft
-        </span>
-        <span class="ais-HierarchicalMenu-count">
-          20
-        </span>
-      </a>
-    </li>
-    <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--selected">
-      <a class="ais-HierarchicalMenu-link ais-HierarchicalMenu-link--selected">
-        <span class="ais-HierarchicalMenu-label">
-          Google
-        </span>
-        <span class="ais-HierarchicalMenu-count">
-          2
-        </span>
-      </a>
-    </li>
-  </ul>
 </div>
 `;
