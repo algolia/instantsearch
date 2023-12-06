@@ -7,9 +7,22 @@ const version = Vue.version;
 
 export { Vue, Vue2, isVue2, isVue3, version };
 
+const augmentCreateElement =
+  (createElement) => (tag, propsWithClassName, children) => {
+    const { className, ...props } = propsWithClassName;
+
+    if (typeof tag === 'function') {
+      return tag(Object.assign(props, { class: className, children }));
+    }
+
+    return createElement(tag, Object.assign(props, { class: className }), [
+      children,
+    ]);
+  };
+
 export function renderCompat(fn) {
   return function (createElement) {
-    return fn.call(this, createElement);
+    return fn.call(this, augmentCreateElement(createElement));
   };
 }
 

@@ -3,12 +3,7 @@ import { connectHitsWithInsights } from 'instantsearch.js/es/connectors';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
-import { renderCompat } from '../util/vue-compat';
-
-const augmentH = (baseH) => (tag, propsWithClassName, children) => {
-  const { className, ...props } = propsWithClassName;
-  return baseH(tag, Object.assign(props, { class: className }), [children]);
-};
+import { renderCompat, isVue2 } from '../util/vue-compat';
 
 export default {
   name: 'AisHits',
@@ -44,14 +39,18 @@ export default {
       };
     },
   },
-  render: renderCompat(function (baseH) {
+  render: renderCompat(function (h) {
     if (!this.state) return null;
 
-    const h = augmentH(baseH);
-
-    return createHits({ createElement: h })({
+    return h(createHits({ createElement: h }), {
       hits: this.state.hits,
-      hitSlot: this.$scopedSlots.item,
+      hitSlot: isVue2 ? this.$scopedSlots.item : this.$slots.item,
+      sendEvent: this.state.sendEvent,
+      classNames: {
+        item: this.suit('item'),
+        list: this.suit('list'),
+        root: this.suit(),
+      },
     });
   }),
 };
