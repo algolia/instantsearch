@@ -99,7 +99,6 @@ function findMatchingHierarchicalFacetFromAttributeName(
   );
 }
 
-// eslint-disable-next-line valid-jsdoc
 /**
  * Constructor for SearchResults
  * @class
@@ -107,6 +106,7 @@ function findMatchingHierarchicalFacetFromAttributeName(
  * {@link AlgoliaSearchHelper}.
  * @param {SearchParameters} state state that led to the response
  * @param {array.<object>} results the results from algolia client
+ * @param {object} options options to control results content
  * @example <caption>SearchResults of the first query in
  * <a href="http://demos.algolia.com/instant-search-demo">the instant search demo</a></caption>
 {
@@ -244,8 +244,14 @@ function SearchResults(state, results, options) {
   });
 
   // Make every key of the result options reachable from the instance
-  Object.keys(options || {}).forEach(function (key) {
-    self[key] = options[key];
+  var opts = merge(
+    {
+      persistHierarchicalRootCount: false,
+    },
+    options
+  );
+  Object.keys(opts).forEach(function (key) {
+    self[key] = opts[key];
   });
 
   /**
@@ -595,9 +601,13 @@ function SearchResults(state, results, options) {
         // We want
         //   | beers (5)
         //     > IPA (5)
+        // @MAJOR: remove this legacy behaviour in next major version
         var defaultData = {};
 
-        if (currentRefinement.length > 0) {
+        if (
+          currentRefinement.length > 0 &&
+          !self.persistHierarchicalRootCount
+        ) {
           var root = currentRefinement[0].split(separator)[0];
           defaultData[root] =
             self.hierarchicalFacets[position][attributeIndex].data[root];

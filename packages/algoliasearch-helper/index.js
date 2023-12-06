@@ -33,10 +33,11 @@ var SearchResults = require('./src/SearchResults');
  * @param  {AlgoliaSearch} client an AlgoliaSearch client
  * @param  {string} index the name of the index to query
  * @param  {SearchParameters|object} opts an object defining the initial config of the search. It doesn't have to be a {SearchParameters}, just an object containing the properties you need from it.
+ * @param {SearchResultsOptions|object} searchResultsOptions an object defining the options to use when creating the search results.
  * @return {AlgoliaSearchHelper} The helper instance
  */
-function algoliasearchHelper(client, index, opts) {
-  return new AlgoliaSearchHelper(client, index, opts);
+function algoliasearchHelper(client, index, opts, searchResultsOptions) {
+  return new AlgoliaSearchHelper(client, index, opts, searchResultsOptions);
 }
 
 /**

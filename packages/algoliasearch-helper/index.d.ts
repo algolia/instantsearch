@@ -18,11 +18,13 @@ import type {
  * @param client an AlgoliaSearch client
  * @param index the name of the index to query
  * @param opts
+ * @param searchResultsOptions
  */
 declare function algoliasearchHelper(
   client: SearchClient,
   index: string,
-  opts?: algoliasearchHelper.PlainSearchParameters
+  opts?: algoliasearchHelper.PlainSearchParameters,
+  searchResultsOptions?: algoliasearchHelper.SearchResultsOptions
 ): algoliasearchHelper.AlgoliaSearchHelper;
 
 declare namespace algoliasearchHelper {
@@ -1129,6 +1131,7 @@ declare namespace algoliasearchHelper {
      * This is for internal use, e.g., avoiding caching in infinite hits, or delaying the display of these results.
      */
     __isArtificial?: boolean | undefined;
+    persistHierarchicalRootCount?: boolean;
   }
 
   type ISearchResponse<T> = Omit<SearchResponse<T>, 'facets' | 'params'> &

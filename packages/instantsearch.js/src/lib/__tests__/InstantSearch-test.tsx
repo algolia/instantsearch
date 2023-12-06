@@ -949,7 +949,34 @@ describe('start', () => {
     search.start();
 
     expect(algoliasearchHelper).toHaveBeenCalledTimes(2);
-    expect(algoliasearchHelper).toHaveBeenCalledWith(searchClient, indexName);
+    expect(algoliasearchHelper).toHaveBeenCalledWith(
+      searchClient,
+      indexName,
+      undefined,
+      { persistHierarchicalRootCount: false }
+    );
+  });
+
+  it('creates a Helper with `persistHierarchicalRootCount` set to true when specified with a future flag', () => {
+    const searchClient = createSearchClient();
+    const indexName = 'indexName';
+    const future = {
+      persistHierarchicalRootCount: true,
+    };
+    const search = new InstantSearch({
+      indexName,
+      searchClient,
+      future,
+    });
+
+    search.start();
+
+    expect(algoliasearchHelper).toHaveBeenCalledWith(
+      searchClient,
+      indexName,
+      undefined,
+      future
+    );
   });
 
   it('schedules a search with widgets', async () => {
