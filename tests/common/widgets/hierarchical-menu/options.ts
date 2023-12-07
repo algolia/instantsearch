@@ -664,6 +664,7 @@ export function createOptionsTests(
           },
           widgetParams: {
             attributes,
+            // @ts-ignore
             sortBy: (a, b) => b.name.localeCompare(a.name),
           },
         });
