@@ -397,6 +397,110 @@ export function createOptionsTests(
         </div>
       `
       );
+
+      userEvent.click(
+        document.querySelector<HTMLAnchorElement>('.ais-HierarchicalMenu-link')!
+      );
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(
+        document.querySelector('.ais-HierarchicalMenu')
+      ).toMatchNormalizedInlineSnapshot(
+        normalizeSnapshot,
+        `
+        <div
+          class="ais-HierarchicalMenu"
+        >
+          <ul
+            class="ais-HierarchicalMenu-list"
+          >
+            <li
+              class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--selected ais-HierarchicalMenu-item--parent"
+            >
+              <a
+                class="ais-HierarchicalMenu-link ais-HierarchicalMenu-link--selected"
+                href="#"
+              >
+                <span
+                  class="ais-HierarchicalMenu-label"
+                >
+                  Digital Cameras
+                </span>
+                <span
+                  class="ais-HierarchicalMenu-count"
+                >
+                  170
+                </span>
+              </a>
+              <ul
+                class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child"
+              >
+                <li
+                  class="ais-HierarchicalMenu-item"
+                >
+                  <a
+                    class="ais-HierarchicalMenu-link"
+                    href="#"
+                  >
+                    <span
+                      class="ais-HierarchicalMenu-label"
+                    >
+                      Digital SLR Cameras
+                    </span>
+                    <span
+                      class="ais-HierarchicalMenu-count"
+                    >
+                      23
+                    </span>
+                  </a>
+                </li>
+                <li
+                  class="ais-HierarchicalMenu-item"
+                >
+                  <a
+                    class="ais-HierarchicalMenu-link"
+                    href="#"
+                  >
+                    <span
+                      class="ais-HierarchicalMenu-label"
+                    >
+                      Mirrorless Cameras
+                    </span>
+                    <span
+                      class="ais-HierarchicalMenu-count"
+                    >
+                      37
+                    </span>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li
+              class="ais-HierarchicalMenu-item"
+            >
+              <a
+                class="ais-HierarchicalMenu-link"
+                href="#"
+              >
+                <span
+                  class="ais-HierarchicalMenu-label"
+                >
+                  Memory Cards
+                </span>
+                <span
+                  class="ais-HierarchicalMenu-count"
+                >
+                  113
+                </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      `
+      );
     });
 
     test('transforms the items', async () => {
