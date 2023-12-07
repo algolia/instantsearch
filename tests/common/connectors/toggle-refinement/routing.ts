@@ -9,7 +9,7 @@ import { history } from 'instantsearch.js/es/lib/routers';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 
 import type { ToggleRefinementConnectorSetup } from '.';
-import type { TestOptions } from '../../common';
+import type { SetupOptions, TestOptions } from '../../common';
 
 export function createRoutingTests(
   setup: ToggleRefinementConnectorSetup,
@@ -29,7 +29,7 @@ export function createRoutingTests(
         const margin = 10;
         const router = history();
         const attribute = 'free_shipping';
-        const options = {
+        const options: SetupOptions<ToggleRefinementConnectorSetup> = {
           instantSearchOptions: {
             indexName: 'indexName',
             routing: {
@@ -149,6 +149,79 @@ export function createRoutingTests(
               indexName: { toggle: { [attribute]: true } },
             })
           );
+        }
+      });
+
+      test('works with unsafe "routeToState" implementation', async () => {
+        const delay = 100;
+        const attribute = 'free_shipping';
+        const router = history();
+        const options: SetupOptions<ToggleRefinementConnectorSetup> = {
+          instantSearchOptions: {
+            indexName: 'indexName',
+            routing: {
+              stateMapping: {
+                stateToRoute(uiState) {
+                  return uiState;
+                },
+                // @ts-expect-error returning undefined instead of real UiState for attribute keys
+                routeToState(routeState) {
+                  return {
+                    ...routeState,
+                    indexName: {
+                      toggle: {
+                        other: routeState.indexName?.toggle?.other,
+                        [attribute]: routeState.indexName?.toggle?.[attribute],
+                      },
+                    },
+                  };
+                },
+              },
+              router,
+            },
+            searchClient: createSearchClient({
+              search: jest.fn(async (requests) => {
+                await wait(delay);
+                return createMultiSearchResponse(
+                  ...requests.map(() =>
+                    createSingleSearchResponse({
+                      facets: {
+                        [attribute]: {
+                          Samsung: 100,
+                          Apple: 200,
+                        },
+                      },
+                    })
+                  )
+                );
+              }),
+            }),
+          },
+          widgetParams: { attribute },
+        };
+
+        await setup(options);
+
+        // Before widgets are completely mounted
+        {
+          // Vue doesn't render anything on first render, so we don't need
+          // to check that the URL is correct.
+          const link = document.querySelector(
+            '[data-testid="ToggleRefinement-link"]'
+          );
+          if (link) {
+            // eslint-disable-next-line jest/no-conditional-expect
+            expect(link).toHaveAttribute(
+              'href',
+              router.createURL({
+                indexName: {
+                  toggle: {
+                    [attribute]: true,
+                  },
+                },
+              })
+            );
+          }
         }
       });
     });

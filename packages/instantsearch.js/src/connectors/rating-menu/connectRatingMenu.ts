@@ -439,13 +439,16 @@ const connectRatingMenu: RatingMenuConnector = function connectRatingMenu(
       getWidgetUiState(uiState, { searchParameters }) {
         const value = getRefinedStar(searchParameters);
 
-        return removeEmptyRefinementsFromUiState({
-          ...uiState,
-          ratingMenu: {
-            ...uiState.ratingMenu,
-            [attribute]: typeof value === 'number' ? value : undefined,
+        return removeEmptyRefinementsFromUiState(
+          {
+            ...uiState,
+            ratingMenu: {
+              ...uiState.ratingMenu,
+              [attribute]: typeof value === 'number' ? value : undefined,
+            },
           },
-        });
+          attribute
+        );
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
@@ -472,29 +475,23 @@ const connectRatingMenu: RatingMenuConnector = function connectRatingMenu(
   };
 };
 
-function removeEmptyRefinementsFromUiState(indexUiState: IndexUiState) {
-  const { ratingMenu, ...indexUiStateBase } = indexUiState;
-
-  if (!ratingMenu) {
+function removeEmptyRefinementsFromUiState(
+  indexUiState: IndexUiState,
+  attribute: string
+): IndexUiState {
+  if (!indexUiState.ratingMenu) {
     return indexUiState;
   }
 
-  const connectorUiState = Object.keys(ratingMenu).reduce(
-    (acc, key) => ({
-      ...acc,
-      ...(typeof ratingMenu[key] === 'number'
-        ? { [key]: ratingMenu[key] }
-        : {}),
-    }),
-    {}
-  );
+  if (typeof indexUiState.ratingMenu[attribute] !== 'number') {
+    delete indexUiState.ratingMenu[attribute];
+  }
 
-  return {
-    ...indexUiStateBase,
-    ...(Object.keys(connectorUiState).length > 0
-      ? { ratingMenu: connectorUiState }
-      : {}),
-  };
+  if (Object.keys(indexUiState.ratingMenu).length === 0) {
+    delete indexUiState.ratingMenu;
+  }
+
+  return indexUiState;
 }
 
 export default connectRatingMenu;

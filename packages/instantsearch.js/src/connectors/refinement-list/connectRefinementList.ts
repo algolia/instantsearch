@@ -476,13 +476,16 @@ const connectRefinementList: RefinementListConnector =
               ? searchParameters.getDisjunctiveRefinements(attribute)
               : searchParameters.getConjunctiveRefinements(attribute);
 
-          return removeEmptyRefinementsFromUiState({
-            ...uiState,
-            refinementList: {
-              ...uiState.refinementList,
-              [attribute]: values,
+          return removeEmptyRefinementsFromUiState(
+            {
+              ...uiState,
+              refinementList: {
+                ...uiState.refinementList,
+                [attribute]: values,
+              },
             },
-          });
+            attribute
+          );
         },
 
         getWidgetSearchParameters(searchParameters, { uiState }) {
@@ -559,27 +562,26 @@ As this is not supported, please make sure to only use this attribute with one o
     };
   };
 
-function removeEmptyRefinementsFromUiState(indexUiState: IndexUiState) {
-  const { refinementList, ...indexUiStateBase } = indexUiState;
-
-  if (!refinementList) {
+function removeEmptyRefinementsFromUiState(
+  indexUiState: IndexUiState,
+  attribute: string
+): IndexUiState {
+  if (!indexUiState.refinementList) {
     return indexUiState;
   }
 
-  const connectorUiState = Object.keys(refinementList).reduce(
-    (acc, key) => ({
-      ...acc,
-      ...(refinementList[key].length > 0 ? { [key]: refinementList[key] } : {}),
-    }),
-    {}
-  );
+  if (
+    !indexUiState.refinementList[attribute] ||
+    indexUiState.refinementList[attribute].length === 0
+  ) {
+    delete indexUiState.refinementList[attribute];
+  }
 
-  return {
-    ...indexUiStateBase,
-    ...(Object.keys(connectorUiState).length > 0
-      ? { refinementList: connectorUiState }
-      : {}),
-  };
+  if (Object.keys(indexUiState.refinementList).length === 0) {
+    delete indexUiState.refinementList;
+  }
+
+  return indexUiState;
 }
 
 export default connectRefinementList;

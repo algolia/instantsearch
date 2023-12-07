@@ -9,7 +9,7 @@ import { history } from 'instantsearch.js/es/lib/routers';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 
 import type { PaginationConnectorSetup } from '.';
-import type { TestOptions } from '../../common';
+import type { SetupOptions, TestOptions } from '../../common';
 
 export function createRoutingTests(
   setup: PaginationConnectorSetup,
@@ -28,7 +28,7 @@ export function createRoutingTests(
         const delay = 100;
         const margin = 10;
         const router = history();
-        const options = {
+        const options: SetupOptions<PaginationConnectorSetup> = {
           instantSearchOptions: {
             indexName: 'indexName',
             routing: {
