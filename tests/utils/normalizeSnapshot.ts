@@ -16,6 +16,8 @@ export function normalizeSnapshot(html: string) {
       .replace(/disabled="disabled"/gs, 'disabled=""')
       // Vue renders a useless extra space between last list item element and closing list tag
       .replace(/<\/li> <\/ul>/g, '</li></ul>')
+      // Vue renders a useless extra space between last anchor item element and opening list tag
+      .replace(/<\/a>\s+<ul/g, '</a><ul')
       // Vue renders extra whitespace between span elements
       .replace(/<\/span> <span/g, '</span><span')
       // Vue renders an empty comment for falsy v-if predicates

@@ -1,6 +1,7 @@
 import { fakeAct } from '../../common';
 
 import { createOptimisticUiTests } from './optimistic-ui';
+import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
 import type { HierarchicalMenuWidget } from 'instantsearch.js/es/widgets/hierarchical-menu/hierarchical-menu';
@@ -20,5 +21,6 @@ export function createHierarchicalMenuWidgetTests(
 
   describe('HierarchicalMenu widget common tests', () => {
     createOptimisticUiTests(setup, { act, skippedTests });
+    createOptionsTests(setup, { act, skippedTests });
   });
 }
