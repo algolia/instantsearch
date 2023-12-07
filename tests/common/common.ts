@@ -69,7 +69,7 @@ export function runTestSuites<
   testSetups: TestSetupsMap<TTestSuites>;
   testOptions: TestOptionsMap<TTestSuites>;
 }) {
-  test.skip('has all the tests', () => {
+  test('has all the tests', () => {
     expect(Object.keys(testSetups).sort()).toEqual(
       Object.keys(testSuites).sort()
     );
