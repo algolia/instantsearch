@@ -142,9 +142,9 @@ export function createOptionsTests(
       );
 
       userEvent.click(
-        document
-          .querySelector<HTMLLIElement>('.ais-HierarchicalMenu-item')!
-          .querySelector<HTMLAnchorElement>('.ais-HierarchicalMenu-link')!
+        document.querySelector<HTMLAnchorElement>(
+          '.ais-HierarchicalMenu-item .ais-HierarchicalMenu-link'
+        )!
       );
 
       await act(async () => {
@@ -152,9 +152,9 @@ export function createOptionsTests(
       });
 
       expect(
-        document
-          .querySelector<HTMLLIElement>('.ais-HierarchicalMenu-item')!
-          .querySelector<HTMLAnchorElement>('.ais-HierarchicalMenu-link')
+        document.querySelector<HTMLAnchorElement>(
+          '.ais-HierarchicalMenu-item .ais-HierarchicalMenu-link'
+        )
       ).toHaveClass('ais-HierarchicalMenu-link--selected');
 
       // Once on load, once on check
@@ -246,9 +246,9 @@ export function createOptionsTests(
       });
 
       userEvent.click(
-        document
-          .querySelector<HTMLLIElement>('.ais-HierarchicalMenu-item')!
-          .querySelector<HTMLAnchorElement>('.ais-HierarchicalMenu-link')!
+        document.querySelector<HTMLAnchorElement>(
+          '.ais-HierarchicalMenu-item .ais-HierarchicalMenu-link'
+        )!
       );
 
       await act(async () => {
@@ -256,7 +256,7 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector<HTMLLIElement>('.ais-HierarchicalMenu-item')!
+        document.querySelector<HTMLLIElement>('.ais-HierarchicalMenu-item')
       ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
@@ -704,7 +704,7 @@ export function createOptionsTests(
 
         const showMoreButton = document.querySelector<HTMLButtonElement>(
           '.ais-HierarchicalMenu-showMore'
-        )!;
+        );
 
         expect(showMoreButton).toHaveTextContent('Show more');
         expect(
