@@ -2,7 +2,6 @@
   "name": "instantsearch-jsx",
   "version": "1.0.0",
   "description": "Common JSX components for InstantSearch flavors",
-  "source": "src/index.ts",
   "types": "dist/es/index.d.ts",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
