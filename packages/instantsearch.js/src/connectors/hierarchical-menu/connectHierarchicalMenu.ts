@@ -397,13 +397,16 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
             hierarchicalFacetName
           );
 
-          return removeEmptyRefinementsFromUiState({
-            ...uiState,
-            hierarchicalMenu: {
-              ...uiState.hierarchicalMenu,
-              [hierarchicalFacetName]: path,
+          return removeEmptyRefinementsFromUiState(
+            {
+              ...uiState,
+              hierarchicalMenu: {
+                ...uiState.hierarchicalMenu,
+                [hierarchicalFacetName]: path,
+              },
             },
-          });
+            hierarchicalFacetName
+          );
         },
 
         getWidgetSearchParameters(searchParameters, { uiState }) {
@@ -479,29 +482,26 @@ As this is not supported, please make sure to remove this other widget or this H
     };
   };
 
-function removeEmptyRefinementsFromUiState(indexUiState: IndexUiState) {
-  const { hierarchicalMenu, ...indexUiStateBase } = indexUiState;
-
-  if (!hierarchicalMenu) {
+function removeEmptyRefinementsFromUiState(
+  indexUiState: IndexUiState,
+  attribute: string
+): IndexUiState {
+  if (!indexUiState.hierarchicalMenu) {
     return indexUiState;
   }
 
-  const connectorUiState = Object.keys(hierarchicalMenu).reduce(
-    (acc, key) => ({
-      ...acc,
-      ...(hierarchicalMenu[key].length > 0
-        ? { [key]: hierarchicalMenu[key] }
-        : {}),
-    }),
-    {}
-  );
+  if (
+    !indexUiState.hierarchicalMenu[attribute] ||
+    indexUiState.hierarchicalMenu[attribute].length === 0
+  ) {
+    delete indexUiState.hierarchicalMenu[attribute];
+  }
 
-  return {
-    ...indexUiStateBase,
-    ...(Object.keys(connectorUiState).length > 0
-      ? { hierarchicalMenu: connectorUiState }
-      : {}),
-  };
+  if (Object.keys(indexUiState.hierarchicalMenu).length === 0) {
+    delete indexUiState.hierarchicalMenu;
+  }
+
+  return indexUiState;
 }
 
 export default connectHierarchicalMenu;

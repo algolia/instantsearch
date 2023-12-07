@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.62.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.61.0...instantsearch.js@4.62.0) (2023-12-07)
+
+
+### Bug Fixes
+
+* **routing:** ensure UiState is cleaned up allowing "undefined" for values ([#5956](https://github.com/algolia/instantsearch/issues/5956)) ([18cfece](https://github.com/algolia/instantsearch/commit/18cfeced8a33e5dba479868fc871205702abd45a)), closes [#5954](https://github.com/algolia/instantsearch/issues/5954)
+
+
+### Features
+
+* **hierarchical-menu:** persist refined root level count with a future flag ([#5950](https://github.com/algolia/instantsearch/issues/5950)) ([79ee485](https://github.com/algolia/instantsearch/commit/79ee485b63904debe16e033011d6bf728c1f1a0b))
+
+
+
+
+
 # [4.61.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.60.0...instantsearch.js@4.61.0) (2023-11-28)
 
 
