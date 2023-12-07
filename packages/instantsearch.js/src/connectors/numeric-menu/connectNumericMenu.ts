@@ -235,13 +235,16 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
         const min = (values['>='] && values['>='][0]) || '';
         const max = (values['<='] && values['<='][0]) || '';
 
-        return removeEmptyRefinementsFromUiState({
-          ...uiState,
-          numericMenu: {
-            ...uiState.numericMenu,
-            [attribute]: `${min}:${max}`,
+        return removeEmptyRefinementsFromUiState(
+          {
+            ...uiState,
+            numericMenu: {
+              ...uiState.numericMenu,
+              [attribute]: `${min}:${max}`,
+            },
           },
-        });
+          attribute
+        );
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
@@ -483,27 +486,23 @@ function hasNumericRefinement(
   );
 }
 
-function removeEmptyRefinementsFromUiState(indexUiState: IndexUiState) {
-  const { numericMenu, ...indexUiStateBase } = indexUiState;
-
-  if (!numericMenu) {
+function removeEmptyRefinementsFromUiState(
+  indexUiState: IndexUiState,
+  attribute: string
+): IndexUiState {
+  if (!indexUiState.numericMenu) {
     return indexUiState;
   }
 
-  const connectorUiState = Object.keys(numericMenu).reduce(
-    (acc, key) => ({
-      ...acc,
-      ...(numericMenu[key] !== ':' ? { [key]: numericMenu[key] } : {}),
-    }),
-    {}
-  );
+  if (indexUiState.numericMenu[attribute] === ':') {
+    delete indexUiState.numericMenu[attribute];
+  }
 
-  return {
-    ...indexUiStateBase,
-    ...(Object.keys(connectorUiState).length > 0
-      ? { numericMenu: connectorUiState }
-      : {}),
-  };
+  if (Object.keys(indexUiState.numericMenu).length === 0) {
+    delete indexUiState.numericMenu;
+  }
+
+  return indexUiState;
 }
 
 export default connectNumericMenu;
