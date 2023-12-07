@@ -1,6 +1,7 @@
 /** @jsx h */
 
 import { cx } from '@algolia/ui-components-shared';
+import { createHits } from 'instantsearch-jsx';
 import { h } from 'preact';
 
 import { createInsightsEventHandler } from '../../lib/insights/listener';
@@ -26,13 +27,15 @@ export type HitsProps = {
   templateProps: PreparedTemplateProps<HitsComponentTemplates>;
 };
 
+const UiHits = createHits({ createElement: h });
+
 export default function Hits({
   results,
   hits,
   insights,
-  bindEvent,
   sendEvent,
   cssClasses,
+  bindEvent,
   templateProps,
 }: HitsProps) {
   const handleInsightsClick = createInsightsEventHandler({
@@ -55,40 +58,41 @@ export default function Hits({
   }
 
   return (
-    <div className={cssClasses.root}>
-      <ol className={cssClasses.list}>
-        {hits.map((hit, index) => (
-          <Template
-            {...templateProps}
-            templateKey="item"
-            rootTagName="li"
-            rootProps={{
-              className: cssClasses.item,
-              onClick: (event: MouseEvent) => {
-                handleInsightsClick(event);
-                sendEvent('click:internal', hit, 'Hit Clicked');
-              },
-              onAuxClick: (event: MouseEvent) => {
-                handleInsightsClick(event);
-                sendEvent('click:internal', hit, 'Hit Clicked');
-              },
-            }}
-            key={hit.objectID}
-            data={{
-              ...hit,
-              get __hitIndex() {
-                warning(
-                  false,
-                  'The `__hitIndex` property is deprecated. Use the absolute `__position` instead.'
-                );
-                return index;
-              },
-            }}
-            bindEvent={bindEvent}
-            sendEvent={sendEvent}
-          />
-        ))}
-      </ol>
-    </div>
+    <UiHits
+      hits={hits}
+      sendEvent={sendEvent}
+      classNames={cssClasses}
+      itemComponent={({ hit, index }) => (
+        <Template
+          {...templateProps}
+          templateKey="item"
+          rootTagName="li"
+          rootProps={{
+            className: cssClasses.item,
+            onClick: (event: MouseEvent) => {
+              handleInsightsClick(event);
+              sendEvent('click:internal', hit, 'Hit Clicked');
+            },
+            onAuxClick: (event: MouseEvent) => {
+              handleInsightsClick(event);
+              sendEvent('click:internal', hit, 'Hit Clicked');
+            },
+          }}
+          key={hit.objectID}
+          data={{
+            ...hit,
+            get __hitIndex() {
+              warning(
+                false,
+                'The `__hitIndex` property is deprecated. Use the absolute `__position` instead.'
+              );
+              return index;
+            },
+          }}
+          bindEvent={bindEvent}
+          sendEvent={sendEvent}
+        />
+      )}
+    />
   );
 }

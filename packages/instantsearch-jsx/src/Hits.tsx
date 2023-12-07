@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 /** @jsx createElement */
 
 export type HitsClassNames = {
@@ -25,8 +24,12 @@ type BaseHit = {
 };
 
 export type HitsProps<T extends BaseHit> = {
-  hitComponent: any;
-  hitSlot?: any;
+  hitComponent?: (props: {
+    hit: T;
+    item: T;
+    sendEvent: (eventName: string, hit: T, event: string) => void;
+  }) => JSX.Element;
+  itemComponent?: (props: { hit: T; index: number }) => JSX.Element;
   hits: T[];
   className?: string;
   classNames?: Partial<HitsClassNames>;
@@ -50,7 +53,7 @@ export function createHits({ createElement }: any) {
 
   return function Hits<T extends BaseHit>({
     hitComponent: HitComponent,
-    hitSlot,
+    itemComponent: ItemComponent,
     classNames = {},
     hits,
     sendEvent,
@@ -67,26 +70,29 @@ export function createHits({ createElement }: any) {
         )}
       >
         <ol className={cx('ais-Hits-list', classNames.list)}>
-          {hits.map((hit) => (
-            <li
-              key={hit.objectID}
-              className={cx('ais-Hits-item', classNames.item)}
-              onClick={() => {
-                sendEvent('click:internal', hit, 'Hit Clicked');
-              }}
-              onAuxClick={() => {
-                sendEvent('click:internal', hit, 'Hit Clicked');
-              }}
-            >
-              {HitComponent ? (
-                <HitComponent hit={hit} sendEvent={sendEvent} />
-              ) : hitSlot ? (
-                hitSlot({ item: hit })
-              ) : (
-                <DefaultHitComponent hit={hit} />
-              )}
-            </li>
-          ))}
+          {hits.map((hit, index) =>
+            ItemComponent ? (
+              <ItemComponent hit={hit} index={index} />
+            ) : (
+              <li
+                key={hit.objectID}
+                className={cx('ais-Hits-item', classNames.item)}
+                onClick={() => {
+                  sendEvent('click:internal', hit, 'Hit Clicked');
+                }}
+                onAuxClick={() => {
+                  sendEvent('click:internal', hit, 'Hit Clicked');
+                }}
+              >
+                {HitComponent ? (
+                  // Vue uses `item` and React uses `hit`
+                  <HitComponent item={hit} hit={hit} sendEvent={sendEvent} />
+                ) : (
+                  <DefaultHitComponent hit={hit} />
+                )}
+              </li>
+            )
+          )}
         </ol>
       </div>
     );

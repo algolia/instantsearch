@@ -44,7 +44,7 @@ export default {
 
     return h(createHits({ createElement: h }), {
       hits: this.state.hits,
-      hitSlot: isVue2 ? this.$scopedSlots.item : this.$slots.item,
+      hitComponent: isVue2 ? this.$scopedSlots.item : this.$slots.item,
       sendEvent: this.state.sendEvent,
       classNames: {
         item: this.suit('item'),
