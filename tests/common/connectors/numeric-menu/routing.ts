@@ -120,7 +120,7 @@ export function createRoutingTests(
               search: jest.fn(async (requests) => {
                 await wait(delay);
                 return createMultiSearchResponse(
-                  requests.map(() => createSingleSearchResponse({}))
+                  ...requests.map(() => createSingleSearchResponse({}))
                 );
               }),
             }),
