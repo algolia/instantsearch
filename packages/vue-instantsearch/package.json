@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "instantsearch.js": "4.61.0",
+    "instantsearch-jsx": "1.0.0",
     "mitt": "^2.1.0"
   },
   "peerDependencies": {

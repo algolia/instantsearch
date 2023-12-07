@@ -1,8 +1,7 @@
 {
-  "name": "react-instantsearch",
-  "version": "7.4.0",
-  "description": "⚡ Lightning-fast search for React, by Algolia",
-  "source": "src/index.ts",
+  "name": "instantsearch-jsx",
+  "version": "1.0.0",
+  "description": "Common JSX components for InstantSearch flavors",
   "types": "dist/es/index.d.ts",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
@@ -39,22 +38,14 @@
   "scripts": {
     "clean": "rm -rf dist",
     "watch": "yarn build:cjs --watch",
-    "build": "yarn build:cjs && yarn build:es && yarn build:umd && yarn build:types",
+    "build": "yarn build:cjs && yarn build:es && yarn build:types",
     "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/cjs --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet && ../../scripts/prepare-cjs.sh",
     "build:es": "BABEL_ENV=es babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet",
-    "build:umd": "BABEL_ENV=rollup rollup -c rollup.config.js",
     "build:types": "tsc -p ./tsconfig.declaration.json --outDir ./dist/es",
-    "test:exports": "node ./test/module/is-es-module.mjs && node ./test/module/is-cjs-module.cjs"
+    "test:exports": "node ./test/module/is-es-module.mjs && node ./test/module/is-cjs-module.cjs",
+    "version": "./scripts/version.cjs"
   },
   "dependencies": {
-    "@babel/runtime": "^7.1.2",
-    "instantsearch.js": "4.61.0",
-    "instantsearch-jsx": "1.0.0",
-    "react-instantsearch-core": "7.4.0"
-  },
-  "peerDependencies": {
-    "algoliasearch": ">= 3.1 < 5",
-    "react": ">= 16.8.0 < 19",
-    "react-dom": ">= 16.8.0 < 19"
+    "@babel/runtime": "^7.1.2"
   }
 }

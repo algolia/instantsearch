@@ -3,7 +3,7 @@ import { useHits } from 'react-instantsearch-core';
 
 import { Hits as HitsUiComponent } from '../ui/Hits';
 
-import type { HitsProps as HitsUiComponentProps } from '../ui/Hits';
+import type { HitsProps as HitsUiComponentProps } from 'instantsearch-jsx';
 import type { Hit, BaseHit } from 'instantsearch.js';
 import type { UseHitsProps } from 'react-instantsearch-core';
 
