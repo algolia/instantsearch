@@ -570,7 +570,10 @@ function removeEmptyRefinementsFromUiState(
     return indexUiState;
   }
 
-  if (indexUiState.refinementList[attribute] === undefined) {
+  if (
+    !indexUiState.refinementList[attribute] ||
+    indexUiState.refinementList[attribute].length === 0
+  ) {
     delete indexUiState.refinementList[attribute];
   }
 

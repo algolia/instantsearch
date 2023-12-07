@@ -479,16 +479,16 @@ function removeEmptyRefinementsFromUiState(
   indexUiState: IndexUiState,
   attribute: string
 ): IndexUiState {
-  if (!indexUiState.numericMenu) {
+  if (!indexUiState.ratingMenu) {
     return indexUiState;
   }
 
-  if (typeof indexUiState.numericMenu[attribute] !== 'number') {
-    delete indexUiState.numericMenu[attribute];
+  if (typeof indexUiState.ratingMenu[attribute] !== 'number') {
+    delete indexUiState.ratingMenu[attribute];
   }
 
-  if (Object.keys(indexUiState.numericMenu).length === 0) {
-    delete indexUiState.numericMenu;
+  if (Object.keys(indexUiState.ratingMenu).length === 0) {
+    delete indexUiState.ratingMenu;
   }
 
   return indexUiState;

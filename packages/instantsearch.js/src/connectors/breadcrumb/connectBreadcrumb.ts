@@ -344,7 +344,10 @@ function removeEmptyRefinementsFromUiState(
     return indexUiState;
   }
 
-  if (indexUiState.hierarchicalMenu[attribute] === undefined) {
+  if (
+    !indexUiState.hierarchicalMenu[attribute] ||
+    !indexUiState.hierarchicalMenu[attribute].length
+  ) {
     delete indexUiState.hierarchicalMenu[attribute];
   }
 
