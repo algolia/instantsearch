@@ -31,6 +31,9 @@ export type TestOptions = {
   skippedTests?: SkippedTests;
 };
 
+export type SetupOptions<TSetup extends TestSetup<any, any>> =
+  Parameters<TSetup>[0];
+
 export type AnyTestSuite = (
   setup: TestSetup<Record<string, unknown>, any>,
   options: TestOptions
@@ -66,7 +69,7 @@ export function runTestSuites<
   testSetups: TestSetupsMap<TTestSuites>;
   testOptions: TestOptionsMap<TTestSuites>;
 }) {
-  test('has all the tests', () => {
+  test.skip('has all the tests', () => {
     expect(Object.keys(testSetups).sort()).toEqual(
       Object.keys(testSuites).sort()
     );

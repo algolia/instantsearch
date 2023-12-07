@@ -10,7 +10,7 @@ import { history } from 'instantsearch.js/es/lib/routers';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 
 import type { RefinementListConnectorSetup } from '.';
-import type { TestOptions } from '../../common';
+import type { TestOptions, SetupOptions } from '../../common';
 
 export function createRoutingTests(
   setup: RefinementListConnectorSetup,
@@ -30,7 +30,7 @@ export function createRoutingTests(
         const margin = 10;
         const attribute = 'brand';
         const router = history();
-        const options = {
+        const options: SetupOptions<RefinementListConnectorSetup> = {
           instantSearchOptions: {
             indexName: 'indexName',
             routing: {
@@ -202,6 +202,80 @@ export function createRoutingTests(
             'href',
             router.createURL({})
           );
+        }
+      });
+
+      test('works with unsafe "routeToState" implementation', async () => {
+        const delay = 100;
+        const attribute = 'brand';
+        const router = history();
+        const options: SetupOptions<RefinementListConnectorSetup> = {
+          instantSearchOptions: {
+            indexName: 'indexName',
+            routing: {
+              stateMapping: {
+                stateToRoute(uiState) {
+                  return uiState;
+                },
+                // @ts-expect-error returning undefined instead of real UiState for attribute keys
+                routeToState(routeState) {
+                  return {
+                    ...routeState,
+                    indexName: {
+                      refinementList: {
+                        other: routeState.indexName?.refinementList?.other,
+                        [attribute]:
+                          routeState.indexName?.refinementList?.[attribute],
+                      },
+                    },
+                  };
+                },
+              },
+              router,
+            },
+            searchClient: createSearchClient({
+              search: jest.fn(async (requests) => {
+                await wait(delay);
+                return createMultiSearchResponse(
+                  ...requests.map(() =>
+                    createSingleSearchResponse({
+                      facets: {
+                        [attribute]: {
+                          Samsung: 100,
+                          Apple: 200,
+                        },
+                      },
+                    })
+                  )
+                );
+              }),
+            }),
+          },
+          widgetParams: { attribute },
+        };
+
+        await setup(options);
+
+        // Before widgets are completely mounted
+        {
+          // Vue doesn't render anything on first render, so we don't need
+          // to check that the URL is correct.
+          const link = document.querySelector(
+            '[data-testid="RefinementList-link"]'
+          );
+          if (link) {
+            // eslint-disable-next-line jest/no-conditional-expect
+            expect(link).toHaveAttribute(
+              'href',
+              router.createURL({
+                indexName: {
+                  refinementList: {
+                    [attribute]: ['value'],
+                  },
+                },
+              })
+            );
+          }
         }
       });
     });

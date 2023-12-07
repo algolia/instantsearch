@@ -11,7 +11,7 @@ import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import { skippableDescribe } from '../../common';
 
 import type { CurrentRefinementsConnectorSetup } from '.';
-import type { TestOptions } from '../../common';
+import type { SetupOptions, TestOptions } from '../../common';
 
 export function createRoutingTests(
   setup: CurrentRefinementsConnectorSetup,
@@ -30,7 +30,7 @@ export function createRoutingTests(
         const delay = 100;
         const margin = 10;
         const router = history();
-        const options = {
+        const options: SetupOptions<CurrentRefinementsConnectorSetup> = {
           instantSearchOptions: {
             indexName: 'indexName',
             routing: {
@@ -119,7 +119,7 @@ export function createRoutingTests(
         const delay = 100;
         const margin = 10;
         const router = history();
-        const options = {
+        const options: SetupOptions<CurrentRefinementsConnectorSetup> = {
           instantSearchOptions: {
             indexName: 'indexName',
             routing: {
