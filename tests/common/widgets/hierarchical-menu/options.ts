@@ -808,7 +808,7 @@ export function createOptionsTests(
 
         const showMoreButton = document.querySelector<HTMLButtonElement>(
           '.ais-HierarchicalMenu-showMore'
-        );
+        )!;
 
         expect(showMoreButton).toHaveTextContent('Show more');
         expect(
