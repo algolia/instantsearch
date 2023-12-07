@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.13.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.12.1...vue-instantsearch@4.13.0) (2023-11-28)
+
+
+### Bug Fixes
+
+* **createURL:** ensure refined value gets removed ([#5912](https://github.com/algolia/instantsearch/issues/5912)) ([77919a9](https://github.com/algolia/instantsearch/commit/77919a92ede2dac7420c16f7743567e550e7cdac))
+
+
+### Features
+
+* **stats:** add common test suite ([#5931](https://github.com/algolia/instantsearch/issues/5931)) ([16e9b34](https://github.com/algolia/instantsearch/commit/16e9b3440a75d2d559fbeadfbcc4778be3212c63))
+
+
+
+
+
 ## [4.12.1](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.12.0...vue-instantsearch@4.12.1) (2023-10-31)
 
 ### Features
