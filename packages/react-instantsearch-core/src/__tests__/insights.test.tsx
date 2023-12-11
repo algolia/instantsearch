@@ -29,7 +29,7 @@ describe('insights', () => {
       <body>
         <div />
         <script
-          src="https://cdn.jsdelivr.net/npm/search-insights@2.6.0/dist/search-insights.min.js"
+          src="https://cdn.jsdelivr.net/npm/search-insights@2.13.0/dist/search-insights.min.js"
         />
       </body>
     `);
