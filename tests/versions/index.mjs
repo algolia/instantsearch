@@ -1,7 +1,11 @@
 #!/usr/bin/env node
-/* eslint-disable no-process-exit, no-console, import/no-commonjs */
-const fs = require('fs');
-const path = require('path');
+/* eslint-disable no-process-exit, no-console*/
+import fs from 'fs';
+import { createRequire } from 'module';
+import path from 'path';
+
+const require = createRequire(import.meta.url);
+const dirname = path.dirname(new URL(import.meta.url).pathname);
 
 // This file does not use any dependencies, so that it can be ran before installing
 
@@ -64,9 +68,7 @@ let hasError = false;
     const version = require(`../../packages/${name}/package.json`).version;
 
     const versionFileContent = fs
-      .readFileSync(
-        path.join(__dirname, `../../packages/${name}/${versionFile}`)
-      )
+      .readFileSync(path.join(dirname, `../../packages/${name}/${versionFile}`))
       .toString();
 
     const expectedVersionFileContent = (() => {
@@ -99,6 +101,50 @@ let hasError = false;
   } else {
     console.log('Version files are in sync.');
     console.log(results);
+  }
+}
+
+{
+  const data = await fetch('https://registry.npmjs.org/search-insights')
+    .then((res) => res.json())
+    .catch(() => null);
+
+  if (
+    !data ||
+    !data.versions ||
+    !data['dist-tags'] ||
+    !data['dist-tags'].latest
+  ) {
+    console.error('Unable to fetch versions from npm');
+    console.error("Can't check if search-insights is up to date");
+  } else {
+    const { latest } = data['dist-tags'];
+    const dependency =
+      require('../../packages/instantsearch.js/package.json').dependencies[
+        'search-insights'
+      ].replace('^', '');
+    const [, middleware] = fs
+      .readFileSync(
+        path.join(
+          dirname,
+          '../../packages/instantsearch.js/src/middlewares/createInsightsMiddleware.ts'
+        ),
+        'utf-8'
+      )
+      .match(/ALGOLIA_INSIGHTS_VERSION = '(.*)';/);
+
+    if (latest !== dependency || latest !== middleware) {
+      console.error(`search-insights is not up to date.`);
+      hasError = true;
+    } else {
+      console.log('search-insights is up to date');
+    }
+    console.log({
+      name: 'search-insights',
+      latest,
+      dependency,
+      middleware,
+    });
   }
 }
 

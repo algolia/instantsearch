@@ -25,7 +25,7 @@
     "test:ci": "./scripts/retry.sh 3 'jest --maxWorkers=4 --ci' && lerna run test --concurrency=1",
     "test:size": "bundlesize",
     "test:exports": "lerna run test:exports",
-    "test:versions": "./tests/versions/index.js",
+    "test:versions": "./tests/versions/index.mjs",
     "test:e2e": "yarn test:e2e:local",
     "test:e2e:local": "wdio scripts/wdio/local.conf.js",
     "test:e2e:saucelabs": "wdio scripts/wdio/saucelabs.conf.js",
