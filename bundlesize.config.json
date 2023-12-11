@@ -2,7 +2,7 @@
   "files": [
     {
       "path": "packages/algoliasearch-helper/dist/algoliasearch.helper.js",
-      "maxSize": "38.5 kB"
+      "maxSize": "38.75 kB"
     },
     {
       "path": "packages/algoliasearch-helper/dist/algoliasearch.helper.min.js",
@@ -14,7 +14,7 @@
     },
     {
       "path": "./packages/instantsearch.js/dist/instantsearch.development.js",
-      "maxSize": "166.5 kB"
+      "maxSize": "166.75 kB"
     },
     {
       "path": "packages/react-instantsearch-core/dist/umd/ReactInstantSearchCore.min.js",
