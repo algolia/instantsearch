@@ -3,9 +3,9 @@
   "version": "0.34.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "website:examples": "vue-cli-service build --dest ../../../website/examples/vue/e-commerce"
+    "serve": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build",
+    "website:examples": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build --dest ../../../website/examples/vue/e-commerce"
   },
   "dependencies": {
     "algoliasearch": "4.14.3",

@@ -5412,9 +5412,9 @@ exports[`Templates Vue InstantSearch File content: package.json 1`] = `
   \\"version\\": \\"1.0.0\\",
   \\"private\\": true,
   \\"scripts\\": {
-    \\"start\\": \\"vue-cli-service serve --port 3000\\",
-    \\"build\\": \\"vue-cli-service build\\",
-    \\"lint\\": \\"vue-cli-service lint\\",
+    \\"start\\": \\"NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve --port 3000\\",
+    \\"build\\": \\"NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build\\",
+    \\"lint\\": \\"NODE_OPTIONS=--openssl-legacy-provider vue-cli-service lint\\",
     \\"lint:fix\\": \\"npm run lint -- --fix\\"
   },
   \\"browserslist\\": [
