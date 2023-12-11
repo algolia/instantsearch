@@ -13,7 +13,8 @@
     "test:unit": "jest",
     "test:watch": "jest --watch",
     "test:v3": "yarn run test",
-    "version": "./scripts/update-version.js"
+    "version": "./scripts/update-version.js",
+    "prepare": "patch-package"
   },
   "author": {
     "name": "Algolia Inc.",

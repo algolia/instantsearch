@@ -49,8 +49,8 @@
     "build:cjs": "rm -rf cjs && BABEL_ENV=cjs babel --root-mode upward src --extensions '.js,.ts,.tsx' --out-dir cjs/ --ignore 'src/index.es.ts','**/__tests__','**/__mocks__' --quiet",
     "build:es": "rm -rf es && BABEL_ENV=es babel --root-mode upward src --extensions '.js,.ts,.tsx' --out-dir es/ --ignore 'src/index.es.ts','**/__tests__','**/__mocks__' --quiet && BABEL_ENV=es babel --root-mode upward src/index.es.ts --out-file es/index.js --quiet && echo '{\"type\":\"module\",\"sideEffects\":false}' > es/package.json",
     "build:types": "scripts/typescript/extract.js",
-    "storybook": "start-storybook --quiet --port 6006 --ci --static-dir .storybook/static",
-    "storybook:build": "build-storybook --quiet --output-dir ../../website/stories/js --static-dir .storybook/static",
+    "storybook": "NODE_OPTIONS=--openssl-legacy-provider start-storybook --quiet --port 6006 --ci --static-dir .storybook/static",
+    "storybook:build": "NODE_OPTIONS=--openssl-legacy-provider build-storybook --quiet --output-dir ../../website/stories/js --static-dir .storybook/static",
     "test:exports": "node test/module/is-es-module.mjs && node test/module/is-cjs-module.cjs",
     "version": "./scripts/version/update-version.js"
   },
@@ -63,6 +63,6 @@
     "algoliasearch": "4.14.3",
     "places.js": "1.17.1",
     "scriptjs": "2.5.9",
-    "webpack": "4.41.5"
+    "webpack": "4.47.0"
   }
 }

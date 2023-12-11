@@ -3,8 +3,8 @@
   "version": "1.0.20",
   "private": true,
   "scripts": {
-    "start": "vue-cli-service serve --port 3000",
-    "build": "vue-cli-service build"
+    "start": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve --port 3000",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build"
   },
   "dependencies": {
     "algoliasearch": "4.14.3",
