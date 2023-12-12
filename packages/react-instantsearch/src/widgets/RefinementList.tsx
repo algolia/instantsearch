@@ -5,7 +5,7 @@ import { RefinementList as RefinementListUiComponent } from '../ui/RefinementLis
 import { SearchBox as SearchBoxUiComponent } from '../ui/SearchBox';
 
 import type { RefinementListProps as RefinementListUiComponentProps } from '../ui/RefinementList';
-import type { SearchBoxTranslations } from '../ui/SearchBox';
+import type { SearchBoxProps, SearchBoxTranslations } from '../ui/SearchBox';
 import type { RefinementListItem } from 'instantsearch.js/es/connectors/refinement-list/connectRefinementList';
 import type { RefinementListWidgetParams } from 'instantsearch.js/es/widgets/refinement-list/refinement-list';
 import type { UseRefinementListProps } from 'react-instantsearch-core';
@@ -82,9 +82,11 @@ export function RefinementList({
   const [inputValue, setInputValue] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
-  function setQuery(newQuery: string) {
+  function setQuery(newQuery: string, compositionComplete = true) {
     setInputValue(newQuery);
-    searchForItems(newQuery);
+    if (compositionComplete) {
+      searchForItems(newQuery);
+    }
   }
 
   function onRefine(item: RefinementListItem) {
@@ -92,8 +94,14 @@ export function RefinementList({
     setQuery('');
   }
 
-  function onChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setQuery(event.currentTarget.value);
+  function onChange(
+    event: Parameters<NonNullable<SearchBoxProps['onChange']>>[0]
+  ) {
+    const compositionComplete =
+      event.type === 'compositionend' ||
+      !(event.nativeEvent as KeyboardEvent).isComposing;
+
+    setQuery(event.currentTarget.value, compositionComplete);
   }
 
   function onReset() {
