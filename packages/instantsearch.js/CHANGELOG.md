@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.63.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.62.0...instantsearch.js@4.63.0) (2023-12-12)
+
+
+### Features
+
+* **insights:** update default version to support `authenticatedUserToken` ([#5958](https://github.com/algolia/instantsearch/issues/5958)) ([b62f2bc](https://github.com/algolia/instantsearch/commit/b62f2bc3f62f13e0dfd84d6df3a189ae293d5da2))
+
+
+
+
+
 # [4.62.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.61.0...instantsearch.js@4.62.0) (2023-12-07)
 
 
