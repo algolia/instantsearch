@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [7.4.2](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.4.1...react-instantsearch@7.4.2) (2023-12-12)
+## [7.5.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.4.1...react-instantsearch@7.5.0) (2023-12-12)
 
 **Note:** Version bump only for package react-instantsearch
 
