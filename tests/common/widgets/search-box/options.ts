@@ -307,7 +307,7 @@ export function createOptionsTests(
       expect(screen.getByRole('searchbox')).toHaveValue('iPhone');
     });
 
-    test('refines only when not composition is complete', async () => {
+    test('refines query only when composition is complete', async () => {
       const searchClient = createSearchClient({});
 
       await setup({
@@ -327,6 +327,8 @@ export function createOptionsTests(
 
       await act(async () => {
         await wait(0);
+
+        searchClient.search.mockClear();
 
         strokes.forEach((stroke, index) => {
           const isFirst = index === 0;
@@ -361,7 +363,7 @@ export function createOptionsTests(
 
       expect(screen.getByRole('searchbox')).toHaveValue(character);
 
-      expect(searchClient.search).toHaveBeenCalledTimes(2);
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
       expect(searchClient.search).toHaveBeenLastCalledWith(
         expect.arrayContaining([
           expect.objectContaining({
