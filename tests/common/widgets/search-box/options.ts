@@ -3,6 +3,7 @@ import {
   createSearchClient,
 } from '@instantsearch/mocks';
 import {
+  castToJestMock,
   normalizeSnapshot as commonNormalizeSnapshot,
   wait,
 } from '@instantsearch/testutils';
@@ -327,8 +328,7 @@ export function createOptionsTests(
 
       await act(async () => {
         await wait(0);
-
-        searchClient.search.mockClear();
+        castToJestMock(searchClient.search).mockClear();
 
         strokes.forEach((stroke, index) => {
           const isFirst = index === 0;
