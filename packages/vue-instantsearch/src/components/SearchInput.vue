@@ -23,10 +23,8 @@
       :value="value || modelValue"
       @focus="$emit('focus', $event)"
       @blur="$emit('blur', $event)"
-      @input="
-        $emit('input', $event.target.value);
-        $emit('update:modelValue', $event.target.value);
-      "
+      @input="onInput($event)"
+      @compositionend="onInput($event)"
       ref="input"
     />
     <button
@@ -161,6 +159,12 @@ export default {
   methods: {
     isFocused() {
       return document.activeElement === this.$refs.input;
+    },
+    onInput(event) {
+      if (event.type === 'compositionend' || !event.isComposing) {
+        this.$emit('input', event.target.value);
+        this.$emit('update:modelValue', event.target.value);
+      }
     },
     onFormSubmit() {
       const input = this.$refs.input;
