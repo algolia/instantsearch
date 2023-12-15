@@ -4,20 +4,20 @@
 
 _This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
 
-## Get started
+## Project setup
 
-To run this project locally, install the dependencies and run the local server:
-
-```sh
-npm install
-npm start
+```
+yarn install
 ```
 
-Alternatively, you may use [Yarn](https://http://yarnpkg.com/):
+### Compiles and hot-reloads for development
 
-```sh
-yarn
-yarn start
+```
+yarn run dev
 ```
 
-Open http://localhost:3000 to see your app.
+### Compiles and minifies for production
+
+```
+yarn run build
+```

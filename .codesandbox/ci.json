@@ -15,5 +15,5 @@
     "packages/vue-instantsearch",
     "packages/instantsearch.css"
   ],
-  "node": "16"
+  "node": "20"
 }
