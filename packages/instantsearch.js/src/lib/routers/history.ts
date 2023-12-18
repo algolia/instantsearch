@@ -27,6 +27,14 @@ export type BrowserHistoryArgs<TRouteState> = {
   start?: (onUpdate: () => void) => void;
   dispose?: () => void;
   push?: (url: string) => void;
+  /**
+   * Whether the URL should be cleaned up when the router is disposed.
+   * This can be useful when closing a modal containing InstantSearch, to
+   * remove active refinements from the URL.
+   * @default true
+   */
+  // @MAJOR: Switch the default to `false` in the next major version.
+  cleanUrlOnDispose?: boolean;
 };
 
 const setWindowTitle = (title?: string): void => {
@@ -97,10 +105,9 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
   private latestAcknowledgedHistory: number = 0;
 
   private _start?: (onUpdate: () => void) => void;
-
   private _dispose?: () => void;
-
   private _push?: (url: string) => void;
+  private _cleanUrlOnDispose: boolean;
 
   /**
    * Initializes a new storage provider that syncs the search state to the URL
@@ -115,6 +122,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     start,
     dispose,
     push,
+    cleanUrlOnDispose = true,
   }: BrowserHistoryArgs<TRouteState>) {
     this.windowTitle = windowTitle;
     this.writeTimer = undefined;
@@ -125,6 +133,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     this._start = start;
     this._dispose = dispose;
     this._push = push;
+    this._cleanUrlOnDispose = cleanUrlOnDispose;
 
     safelyRunOnBrowser(({ window }) => {
       const title = this.windowTitle && this.windowTitle(this.read());
@@ -250,7 +259,9 @@ Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algo
       clearTimeout(this.writeTimer);
     }
 
-    this.write({} as TRouteState);
+    if (this._cleanUrlOnDispose) {
+      this.write({} as TRouteState);
+    }
   }
 
   public start() {
@@ -324,6 +335,7 @@ export default function historyRouter<TRouteState = UiState>({
   start,
   dispose,
   push,
+  cleanUrlOnDispose,
 }: Partial<BrowserHistoryArgs<TRouteState>> = {}): BrowserHistory<TRouteState> {
   return new BrowserHistory({
     createURL,
@@ -334,5 +346,6 @@ export default function historyRouter<TRouteState = UiState>({
     start,
     dispose,
     push,
+    cleanUrlOnDispose,
   });
 }

@@ -260,6 +260,57 @@ describe('life cycle', () => {
 
       expect(dispose).toHaveBeenCalledTimes(1);
     });
+
+    describe('cleanUrlOnDispose', () => {
+      test('cleans refinements from URL if not defined or `true`', () => {
+        const windowPushState = jest.spyOn(window.history, 'pushState');
+        const router = historyRouter<UiState>();
+
+        router.write({ indexName: { query: 'query1' } });
+        jest.runAllTimers();
+
+        expect(windowPushState).toHaveBeenCalledTimes(1);
+        expect(windowPushState).toHaveBeenLastCalledWith(
+          {
+            indexName: { query: 'query1' },
+          },
+          '',
+          'http://localhost/?indexName%5Bquery%5D=query1'
+        );
+
+        router.dispose();
+        jest.runAllTimers();
+
+        expect(windowPushState).toHaveBeenCalledTimes(2);
+        expect(windowPushState).toHaveBeenLastCalledWith(
+          {},
+          '',
+          'http://localhost/'
+        );
+      });
+
+      test('does not clean refinements from URL if `false`', () => {
+        const windowPushState = jest.spyOn(window.history, 'pushState');
+        const router = historyRouter<UiState>({ cleanUrlOnDispose: false });
+
+        router.write({ indexName: { query: 'query1' } });
+        jest.runAllTimers();
+
+        expect(windowPushState).toHaveBeenCalledTimes(1);
+        expect(windowPushState).toHaveBeenLastCalledWith(
+          {
+            indexName: { query: 'query1' },
+          },
+          '',
+          'http://localhost/?indexName%5Bquery%5D=query1'
+        );
+
+        router.dispose();
+        jest.runAllTimers();
+
+        expect(windowPushState).toHaveBeenCalledTimes(1);
+      });
+    });
   });
 
   describe('createURL', () => {
