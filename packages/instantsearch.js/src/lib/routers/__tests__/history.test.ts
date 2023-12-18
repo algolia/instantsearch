@@ -279,7 +279,7 @@ describe('life cycle', () => {
       expect(dispose).toHaveBeenCalledTimes(1);
     });
 
-    describe.only('cleanUrlOnDispose', () => {
+    describe('cleanUrlOnDispose', () => {
       const consoleSpy = jest.spyOn(global.console, 'info');
       consoleSpy.mockImplementation(() => {});
 
