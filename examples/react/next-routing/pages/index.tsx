@@ -67,6 +67,9 @@ export default function HomePage({ serverState, url }: HomePageProps) {
           router: createInstantSearchRouterNext({
             singletonRouter,
             serverUrl: url,
+            routerOptions: {
+              cleanUrlOnDispose: false,
+            },
           }),
         }}
         insights={true}

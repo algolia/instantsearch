@@ -33,6 +33,7 @@ function App({ serverState, location }) {
         routing={{
           stateMapping: simple(),
           router: history({
+            cleanUrlOnDispose: false,
             getLocation() {
               if (typeof window === 'undefined') {
                 return location;
