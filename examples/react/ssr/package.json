@@ -26,6 +26,6 @@
     "express": "4.17.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-instantsearch": "7.4.2"
+    "react-instantsearch": "7.5.0"
   }
 }

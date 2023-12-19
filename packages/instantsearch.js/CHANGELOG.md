@@ -14,6 +14,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Features
 
 * **insights:** update default version to support `authenticatedUserToken` ([#5958](https://github.com/algolia/instantsearch/issues/5958)) ([b62f2bc](https://github.com/algolia/instantsearch/commit/b62f2bc3f62f13e0dfd84d6df3a189ae293d5da2))
+* **history:** provide option to not clean url on dispose ([#5966](https://github.com/algolia/instantsearch/issues/5966)) ([e60ac95](https://github.com/algolia/instantsearch/commit/e60ac95083252589d60543c09039c3944e37abe9))
 
 
 
