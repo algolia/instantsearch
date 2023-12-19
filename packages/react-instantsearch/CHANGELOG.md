@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.5.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.4.1...react-instantsearch@7.5.0) (2023-12-19)
+
+
+### Bug Fixes
+
+* **searchbox:** only refine if composition ended when using an IME ([#5963](https://github.com/algolia/instantsearch/issues/5963)) ([0820455](https://github.com/algolia/instantsearch/commit/0820455ad291fb3e1910ebdfbcfa8d18eb811d31))
+
+
+
+
+
 ## [7.4.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.4.0...react-instantsearch@7.4.1) (2023-12-07)
 
 **Note:** Version bump only for package react-instantsearch

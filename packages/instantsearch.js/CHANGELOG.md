@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.63.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.62.0...instantsearch.js@4.63.0) (2023-12-19)
+
+
+### Bug Fixes
+
+* **searchbox:** only refine if composition ended when using an IME ([#5963](https://github.com/algolia/instantsearch/issues/5963)) ([0820455](https://github.com/algolia/instantsearch/commit/0820455ad291fb3e1910ebdfbcfa8d18eb811d31))
+
+
+### Features
+
+* **insights:** update default version to support `authenticatedUserToken` ([#5958](https://github.com/algolia/instantsearch/issues/5958)) ([b62f2bc](https://github.com/algolia/instantsearch/commit/b62f2bc3f62f13e0dfd84d6df3a189ae293d5da2))
+* **history:** provide option to not clean url on dispose ([#5966](https://github.com/algolia/instantsearch/issues/5966)) ([e60ac95](https://github.com/algolia/instantsearch/commit/e60ac95083252589d60543c09039c3944e37abe9))
+
+
+
+
+
 # [4.62.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.61.0...instantsearch.js@4.62.0) (2023-12-07)
 
 
