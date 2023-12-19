@@ -1,6 +1,6 @@
 import qs from 'qs';
 
-import { safelyRunOnBrowser, warning } from '../utils';
+import { createDocumentationLink, safelyRunOnBrowser, warning } from '../utils';
 
 import type { Router, UiState } from '../../types';
 
@@ -27,6 +27,14 @@ export type BrowserHistoryArgs<TRouteState> = {
   start?: (onUpdate: () => void) => void;
   dispose?: () => void;
   push?: (url: string) => void;
+  /**
+   * Whether the URL should be cleaned up when the router is disposed.
+   * This can be useful when closing a modal containing InstantSearch, to
+   * remove active refinements from the URL.
+   * @default true
+   */
+  // @MAJOR: Switch the default to `false` and remove the console info in the next major version.
+  cleanUrlOnDispose?: boolean;
 };
 
 const setWindowTitle = (title?: string): void => {
@@ -97,10 +105,9 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
   private latestAcknowledgedHistory: number = 0;
 
   private _start?: (onUpdate: () => void) => void;
-
   private _dispose?: () => void;
-
   private _push?: (url: string) => void;
+  private _cleanUrlOnDispose: boolean;
 
   /**
    * Initializes a new storage provider that syncs the search state to the URL
@@ -115,6 +122,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     start,
     dispose,
     push,
+    cleanUrlOnDispose,
   }: BrowserHistoryArgs<TRouteState>) {
     this.windowTitle = windowTitle;
     this.writeTimer = undefined;
@@ -125,6 +133,20 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     this._start = start;
     this._dispose = dispose;
     this._push = push;
+    this._cleanUrlOnDispose =
+      typeof cleanUrlOnDispose === 'undefined' ? true : cleanUrlOnDispose;
+
+    if (__DEV__ && typeof cleanUrlOnDispose === 'undefined') {
+      // eslint-disable-next-line no-console
+      console.info(`Starting from the next major version, InstantSearch will not clean up the URL from active refinements when it is disposed.
+
+We recommend setting \`cleanUrlOnDispose\` to false to adopt this change today.
+To stay with the current behaviour and remove this warning, set the option to true.
+
+See documentation: ${createDocumentationLink({
+        name: 'history-router',
+      })}#widget-param-cleanurlondispose`);
+    }
 
     safelyRunOnBrowser(({ window }) => {
       const title = this.windowTitle && this.windowTitle(this.read());
@@ -250,7 +272,9 @@ Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algo
       clearTimeout(this.writeTimer);
     }
 
-    this.write({} as TRouteState);
+    if (this._cleanUrlOnDispose) {
+      this.write({} as TRouteState);
+    }
   }
 
   public start() {
@@ -324,6 +348,7 @@ export default function historyRouter<TRouteState = UiState>({
   start,
   dispose,
   push,
+  cleanUrlOnDispose,
 }: Partial<BrowserHistoryArgs<TRouteState>> = {}): BrowserHistory<TRouteState> {
   return new BrowserHistory({
     createURL,
@@ -334,5 +359,6 @@ export default function historyRouter<TRouteState = UiState>({
     start,
     dispose,
     push,
+    cleanUrlOnDispose,
   });
 }
