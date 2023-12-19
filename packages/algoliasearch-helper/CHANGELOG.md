@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.16.1](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.16.0...algoliasearch-helper@3.16.1) (2023-12-19)
+
+**Note:** Version bump only for package algoliasearch-helper
+
+
+
+
+
 # [3.16.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.15.0...algoliasearch-helper@3.16.0) (2023-12-07)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.13.2](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.13.1...vue-instantsearch@4.13.2) (2023-12-19)
+
+
+### Bug Fixes
+
+* **searchbox:** only refine if composition ended when using an IME ([#5963](https://github.com/algolia/instantsearch/issues/5963)) ([0820455](https://github.com/algolia/instantsearch/commit/0820455ad291fb3e1910ebdfbcfa8d18eb811d31))
+
+
+
+
+
 ## [4.13.1](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.13.0...vue-instantsearch@4.13.1) (2023-12-07)
 
 **Note:** Version bump only for package vue-instantsearch
