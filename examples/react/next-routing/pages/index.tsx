@@ -33,7 +33,7 @@ type HitProps = {
 function Hit({ hit }: HitProps) {
   return (
     <>
-      <Link href="/other-page" passHref className="Hit-label">
+      <Link href="/other-page" className="Hit-label">
         <Highlight hit={hit} attribute="name" />
       </Link>
       <span className="Hit-price">${hit.price}</span>
@@ -54,9 +54,7 @@ export default function HomePage({ serverState, url }: HomePageProps) {
       </Head>
 
       {/* If you have navigation links outside of InstantSearch */}
-      <Link href="/?instant_search%5Bquery%5D=apple" passHref>
-        Prefilled query
-      </Link>
+      <Link href="/?instant_search%5Bquery%5D=apple">Prefilled query</Link>
 
       <InstantSearch
         searchClient={client}
