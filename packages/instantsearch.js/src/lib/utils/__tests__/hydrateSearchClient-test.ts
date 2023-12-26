@@ -50,7 +50,7 @@ describe('hydrateSearchClient', () => {
 
     expect(setCache).toHaveBeenCalledWith(
       expect.objectContaining({
-        args: [[{ indexName: 'instant_search', params: 'params' }]],
+        args: [[{ indexName: 'instant_search', params: 'params=' }]],
         method: 'search',
       }),
       expect.objectContaining({

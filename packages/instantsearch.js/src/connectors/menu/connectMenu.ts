@@ -334,13 +334,16 @@ const connectMenu: MenuConnector = function connectMenu(
         const [value] =
           searchParameters.getHierarchicalFacetBreadcrumb(attribute);
 
-        return removeEmptyRefinementsFromUiState({
-          ...uiState,
-          menu: {
-            ...uiState.menu,
-            [attribute]: value,
+        return removeEmptyRefinementsFromUiState(
+          {
+            ...uiState,
+            menu: {
+              ...uiState.menu,
+              [attribute]: value,
+            },
           },
-        });
+          attribute
+        );
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
@@ -397,27 +400,23 @@ As this is not supported, please make sure to remove this other widget or this M
   };
 };
 
-function removeEmptyRefinementsFromUiState(indexUiState: IndexUiState) {
-  const { menu, ...indexUiStateBase } = indexUiState;
-
-  if (!menu) {
+function removeEmptyRefinementsFromUiState(
+  indexUiState: IndexUiState,
+  attribute: string
+): IndexUiState {
+  if (!indexUiState.menu) {
     return indexUiState;
   }
 
-  const connectorUiState = Object.keys(menu).reduce(
-    (acc, key) => ({
-      ...acc,
-      ...(menu[key]?.length > 0 ? { [key]: menu[key] } : {}),
-    }),
-    {}
-  );
+  if (indexUiState.menu[attribute] === undefined) {
+    delete indexUiState.menu[attribute];
+  }
 
-  return {
-    ...indexUiStateBase,
-    ...(Object.keys(connectorUiState).length > 0
-      ? { menu: connectorUiState }
-      : {}),
-  };
+  if (Object.keys(indexUiState.menu).length === 0) {
+    delete indexUiState.menu;
+  }
+
+  return indexUiState;
 }
 
 export default connectMenu;

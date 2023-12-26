@@ -9,7 +9,7 @@ import { history } from 'instantsearch.js/es/lib/routers';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 
 import type { BreadcrumbConnectorSetup } from '.';
-import type { TestOptions } from '../../common';
+import type { SetupOptions, TestOptions } from '../../common';
 
 export function createRoutingTests(
   setup: BreadcrumbConnectorSetup,
@@ -30,7 +30,7 @@ export function createRoutingTests(
         const attributes = ['one', 'two'];
 
         const router = history();
-        const options = {
+        const options: SetupOptions<BreadcrumbConnectorSetup> = {
           instantSearchOptions: {
             indexName: 'indexName',
             routing: {
@@ -156,6 +156,82 @@ export function createRoutingTests(
               },
             })
           );
+        }
+      });
+
+      test('works with unsafe "routeToState" implementation', async () => {
+        const delay = 100;
+        const attributes = ['brand'];
+        const router = history();
+        const options: SetupOptions<BreadcrumbConnectorSetup> = {
+          instantSearchOptions: {
+            indexName: 'indexName',
+            routing: {
+              stateMapping: {
+                stateToRoute(uiState) {
+                  return uiState;
+                },
+                // @ts-expect-error returning undefined instead of real UiState for attribute keys
+                routeToState(routeState) {
+                  return {
+                    ...routeState,
+                    indexName: {
+                      hierarchicalMenu: {
+                        other: routeState.indexName?.hierarchicalMenu?.other,
+                        [attributes[0]]:
+                          routeState.indexName?.hierarchicalMenu?.[
+                            attributes[0]
+                          ],
+                      },
+                    },
+                  };
+                },
+              },
+              router,
+            },
+            searchClient: createSearchClient({
+              search: jest.fn(async (requests) => {
+                await wait(delay);
+                return createMultiSearchResponse(
+                  ...requests.map(() =>
+                    createSingleSearchResponse({
+                      facets: {
+                        [attributes[0]]: {
+                          Samsung: 100,
+                          Apple: 200,
+                        },
+                      },
+                    })
+                  )
+                );
+              }),
+            }),
+          },
+          widgetParams: { attributes },
+        };
+
+        await setup(options);
+
+        // Before widgets are completely mounted
+        {
+          // Vue doesn't render anything on first render, so we don't need
+          // to check that the URL is correct.
+          const link = document.querySelector(
+            '[data-testid="Breadcrumb-link"]'
+          );
+          if (link) {
+            // eslint-disable-next-line jest/no-conditional-expect
+            expect(link).toHaveAttribute(
+              'href',
+              router.createURL({
+                indexName: {
+                  hierarchicalMenu: {
+                    [attributes[0]]: ['Apple', 'iPhone'],
+                  },
+                },
+              })
+            );
+          }
         }
       });
     });

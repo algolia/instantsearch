@@ -31,6 +31,9 @@ export type TestOptions = {
   skippedTests?: SkippedTests;
 };
 
+export type SetupOptions<TSetup extends TestSetup<any, any>> =
+  Parameters<TSetup>[0];
+
 export type AnyTestSuite = (
   setup: TestSetup<Record<string, unknown>, any>,
   options: TestOptions

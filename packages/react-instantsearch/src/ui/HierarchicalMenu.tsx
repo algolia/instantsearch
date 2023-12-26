@@ -102,11 +102,14 @@ function HierarchicalList({
           className={cx(
             'ais-HierarchicalMenu-item',
             classNames.item,
+            item.isRefined &&
+              cx(
+                'ais-HierarchicalMenu-item--selected',
+                classNames.selectedItem
+              ),
             item.data &&
               item.data.length > 0 &&
-              cx('ais-HierarchicalMenu-item--parent', classNames.parentItem),
-            item.isRefined &&
-              cx('ais-HierarchicalMenu-item--selected', classNames.selectedItem)
+              cx('ais-HierarchicalMenu-item--parent', classNames.parentItem)
           )}
         >
           <a

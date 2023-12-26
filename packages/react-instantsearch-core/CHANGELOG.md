@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.5.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.4.1...react-instantsearch-core@7.5.0) (2023-12-19)
+
+
+### Features
+
+* **insights:** update default version to support `authenticatedUserToken` ([#5958](https://github.com/algolia/instantsearch/issues/5958)) ([b62f2bc](https://github.com/algolia/instantsearch/commit/b62f2bc3f62f13e0dfd84d6df3a189ae293d5da2))
+
+
+
+
+
+## [7.4.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.4.0...react-instantsearch-core@7.4.1) (2023-12-07)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+
+
+## [7.3.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.3.0...react-instantsearch-core@7.3.1) (2023-11-28)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+
+
 # [7.3.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.2.1...react-instantsearch-core@7.3.0) (2023-10-31)
 
 

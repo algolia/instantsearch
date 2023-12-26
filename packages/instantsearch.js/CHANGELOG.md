@@ -3,6 +3,57 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.63.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.62.0...instantsearch.js@4.63.0) (2023-12-19)
+
+
+### Bug Fixes
+
+* **searchbox:** only refine if composition ended when using an IME ([#5963](https://github.com/algolia/instantsearch/issues/5963)) ([0820455](https://github.com/algolia/instantsearch/commit/0820455ad291fb3e1910ebdfbcfa8d18eb811d31))
+
+
+### Features
+
+* **insights:** update default version to support `authenticatedUserToken` ([#5958](https://github.com/algolia/instantsearch/issues/5958)) ([b62f2bc](https://github.com/algolia/instantsearch/commit/b62f2bc3f62f13e0dfd84d6df3a189ae293d5da2))
+* **history:** provide option to not clean url on dispose ([#5966](https://github.com/algolia/instantsearch/issues/5966)) ([e60ac95](https://github.com/algolia/instantsearch/commit/e60ac95083252589d60543c09039c3944e37abe9))
+
+
+
+
+
+# [4.62.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.61.0...instantsearch.js@4.62.0) (2023-12-07)
+
+
+### Bug Fixes
+
+* **routing:** ensure UiState is cleaned up allowing "undefined" for values ([#5956](https://github.com/algolia/instantsearch/issues/5956)) ([18cfece](https://github.com/algolia/instantsearch/commit/18cfeced8a33e5dba479868fc871205702abd45a)), closes [#5954](https://github.com/algolia/instantsearch/issues/5954)
+
+
+### Features
+
+* **hierarchical-menu:** persist refined root level count with a future flag ([#5950](https://github.com/algolia/instantsearch/issues/5950)) ([79ee485](https://github.com/algolia/instantsearch/commit/79ee485b63904debe16e033011d6bf728c1f1a0b))
+
+
+
+
+
+# [4.61.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.60.0...instantsearch.js@4.61.0) (2023-11-28)
+
+
+### Bug Fixes
+
+* **createURL:** ensure refined value gets removed ([#5912](https://github.com/algolia/instantsearch/issues/5912)) ([77919a9](https://github.com/algolia/instantsearch/commit/77919a92ede2dac7420c16f7743567e550e7cdac))
+* **cache-hydration:** normalize params returned from response ([#5946](https://github.com/algolia/instantsearch/issues/5946)) ([042aaac](https://github.com/algolia/instantsearch/commit/042aaacc0eb06226b2e5e29f7a77fcf2e4e8676e))
+
+
+### Features
+
+* **stats:** add common test suite ([#5931](https://github.com/algolia/instantsearch/issues/5931)) ([16e9b34](https://github.com/algolia/instantsearch/commit/16e9b3440a75d2d559fbeadfbcc4778be3212c63))
+* **dynamicWidgets:** accept strings for `facets` ([#5948](https://github.com/algolia/instantsearch/pull/5948)) ([61a4bea](https://github.com/algolia/instantsearch/commit/61a4beaf3da414370c946b8eed9d6a533db3e58f))
+
+
+
+
+
 # [4.60.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.59.0...instantsearch.js@4.60.0) (2023-10-31)
 
 

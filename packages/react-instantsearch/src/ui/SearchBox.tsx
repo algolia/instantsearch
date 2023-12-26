@@ -62,10 +62,12 @@ export type SearchBoxProps = Omit<
 > &
   Pick<React.ComponentProps<'form'>, 'onSubmit'> &
   Required<Pick<React.ComponentProps<'form'>, 'onReset'>> &
-  Pick<
-    React.ComponentProps<'input'>,
-    'placeholder' | 'onChange' | 'autoFocus'
-  > & {
+  Pick<React.ComponentProps<'input'>, 'placeholder' | 'autoFocus'> & {
+    onChange?: (
+      event:
+        | React.ChangeEvent<HTMLInputElement>
+        | React.CompositionEvent<HTMLInputElement>
+    ) => void;
     formRef?: React.RefObject<HTMLFormElement>;
     inputRef: React.RefObject<HTMLInputElement>;
     isSearchStalled: boolean;
@@ -203,6 +205,7 @@ export function SearchBox({
           type="search"
           value={value}
           onChange={onChange}
+          onCompositionEnd={onChange}
           autoFocus={autoFocus}
         />
         <button

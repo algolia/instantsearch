@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.16.1](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.16.0...algoliasearch-helper@3.16.1) (2023-12-19)
+
+**Note:** Version bump only for package algoliasearch-helper
+
+
+
+
+
+# [3.16.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.15.0...algoliasearch-helper@3.16.0) (2023-12-07)
+
+
+### Features
+
+* **hierarchical-menu:** persist refined root level count with a future flag ([#5950](https://github.com/algolia/instantsearch/issues/5950)) ([79ee485](https://github.com/algolia/instantsearch/commit/79ee485b63904debe16e033011d6bf728c1f1a0b))
+
+
+
+
+
 # [3.15.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.14.2...algoliasearch-helper@3.15.0) (2023-10-24)
 
 

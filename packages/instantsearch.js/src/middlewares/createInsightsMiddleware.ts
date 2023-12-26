@@ -40,7 +40,7 @@ export type InsightsProps<
   $$automatic?: boolean;
 };
 
-const ALGOLIA_INSIGHTS_VERSION = '2.6.0';
+const ALGOLIA_INSIGHTS_VERSION = '2.13.0';
 const ALGOLIA_INSIGHTS_SRC = `https://cdn.jsdelivr.net/npm/search-insights@${ALGOLIA_INSIGHTS_VERSION}/dist/search-insights.min.js`;
 
 export type InsightsClientWithGlobals = InsightsClient & {
@@ -131,13 +131,13 @@ export function createInsightsMiddleware<
           ([method]) => method === 'setUserToken'
         ) || [];
     }
-    insightsClient('getUserToken', null, (_error: any, userToken: string) => {
+    insightsClient('getUserToken', null, (_error, userToken) => {
       // If user has called `aa('setUserToken', 'my-user-token')` before creating
       // the `insights` middleware, we store them temporarily and
       // set it later on.
       //
       // Otherwise, the `init` call might override it with anonymous user token.
-      userTokenBeforeInit = userToken;
+      userTokenBeforeInit = normalizeUserToken(userToken);
     });
 
     // Only `init` if the `insightsInitParams` option is passed or
@@ -203,10 +203,12 @@ export function createInsightsMiddleware<
         }
 
         const setUserTokenToSearch = (
-          userToken?: string,
+          userToken?: string | number,
           immediate = false
         ) => {
-          if (!userToken) {
+          const normalizedUserToken = normalizeUserToken(userToken);
+
+          if (!normalizedUserToken) {
             return;
           }
 
@@ -216,7 +218,7 @@ export function createInsightsMiddleware<
           function applyToken() {
             helper.overrideStateWithoutTriggeringChangeEvent({
               ...helper.state,
-              userToken,
+              userToken: normalizedUserToken,
             });
 
             if (existingToken && existingToken !== userToken) {
@@ -349,4 +351,16 @@ function isModernInsightsClient(client: InsightsClientWithGlobals): boolean {
   /* eslint-enable @typescript-eslint/naming-convention */
 
   return v3 || v2_6 || v1_10;
+}
+
+/**
+ * While `search-insights` supports both string and number user tokens,
+ * the Search API only accepts strings. This function normalizes the user token.
+ */
+function normalizeUserToken(userToken?: string | number): string | undefined {
+  if (!userToken) {
+    return undefined;
+  }
+
+  return typeof userToken === 'number' ? userToken.toString() : userToken;
 }

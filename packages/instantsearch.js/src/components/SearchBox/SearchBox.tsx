@@ -87,12 +87,17 @@ class SearchBox extends Component<
     const { searchAsYouType, refine, onChange } = this.props;
     const query = (event.target as HTMLInputElement).value;
 
-    if (searchAsYouType) {
-      refine(query);
-    }
-    this.setState({ query });
+    if (
+      event.type === 'compositionend' ||
+      !(event as KeyboardEvent).isComposing
+    ) {
+      if (searchAsYouType) {
+        refine(query);
+      }
+      this.setState({ query });
 
-    onChange(event);
+      onChange(event);
+    }
   };
 
   public componentWillReceiveProps(nextProps: SearchBoxPropsWithDefaultProps) {
@@ -184,6 +189,9 @@ class SearchBox extends Component<
             spellCheck="false"
             maxLength={512}
             onInput={this.onInput}
+            // see: https://github.com/preactjs/preact/issues/1978
+            // eslint-disable-next-line react/no-unknown-property
+            oncompositionend={this.onInput}
             onBlur={this.onBlur}
             onFocus={this.onFocus}
             aria-label={ariaLabel}

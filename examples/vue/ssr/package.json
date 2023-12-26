@@ -1,11 +1,11 @@
 {
   "name": "example-vue-instantsearch-ssr",
-  "version": "0.32.0",
+  "version": "0.35.0",
   "private": true,
   "scripts": {
-    "build": "vue-cli-service ssr:build",
-    "serve": "vue-cli-service ssr:serve",
-    "start": "cross-env NODE_ENV=production vue-cli-service ssr:serve --mode production"
+    "build": "NODE_OPTIONS=--openssl-legacy-provider -cli-service ssr:build",
+    "serve": "NODE_OPTIONS=--openssl-legacy-provider -cli-service ssr:serve",
+    "start": "NODE_ENV=production NODE_OPTIONS=--openssl-legacy-provider -cli-service ssr:serve --mode production"
   },
   "dependencies": {
     "algoliasearch": "4.14.3",
@@ -13,7 +13,7 @@
     "instantsearch.css": "8.1.0",
     "qs": "6.9.7",
     "vue": "2.7.14",
-    "vue-instantsearch": "4.12.1",
+    "vue-instantsearch": "4.13.2",
     "vue-router": "^3.0.2",
     "vue-server-renderer": "2.7.14"
   },

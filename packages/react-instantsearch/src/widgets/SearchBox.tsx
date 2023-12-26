@@ -44,10 +44,10 @@ export function SearchBox({
   const [inputValue, setInputValue] = useState(query);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  function setQuery(newQuery: string) {
+  function setQuery(newQuery: string, compositionComplete = true) {
     setInputValue(newQuery);
 
-    if (searchAsYouType) {
+    if (searchAsYouType && compositionComplete) {
       refine(newQuery);
     }
   }
@@ -60,8 +60,14 @@ export function SearchBox({
     }
   }
 
-  function onChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setQuery(event.currentTarget.value);
+  function onChange(
+    event: Parameters<NonNullable<SearchBoxUiComponentProps['onChange']>>[0]
+  ) {
+    const compositionComplete =
+      event.type === 'compositionend' ||
+      !(event.nativeEvent as KeyboardEvent).isComposing;
+
+    setQuery(event.currentTarget.value, compositionComplete);
   }
 
   function onSubmit(event: React.FormEvent<HTMLFormElement>) {

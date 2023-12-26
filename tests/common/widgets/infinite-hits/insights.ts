@@ -26,7 +26,7 @@ export function createInsightsTests(
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 2;
-      window.aa = Object.assign(jest.fn(), { version: '2.6.0' });
+      window.aa = Object.assign(jest.fn(), { version: '2.13.0' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
@@ -140,7 +140,7 @@ export function createInsightsTests(
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 25;
-      window.aa = Object.assign(jest.fn(), { version: '2.6.0' });
+      window.aa = Object.assign(jest.fn(), { version: '2.13.0' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
@@ -276,7 +276,7 @@ export function createInsightsTests(
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 2;
-      window.aa = Object.assign(jest.fn(), { version: '2.6.0' });
+      window.aa = Object.assign(jest.fn(), { version: '2.13.0' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
@@ -358,7 +358,7 @@ export function createInsightsTests(
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 2;
-      window.aa = Object.assign(jest.fn(), { version: '2.6.0' });
+      window.aa = Object.assign(jest.fn(), { version: '2.13.0' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
@@ -447,7 +447,7 @@ export function createInsightsTests(
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 2;
-      window.aa = Object.assign(jest.fn(), { version: '2.6.0' });
+      window.aa = Object.assign(jest.fn(), { version: '2.13.0' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
@@ -533,7 +533,7 @@ export function createInsightsTests(
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 2;
-      window.aa = Object.assign(jest.fn(), { version: '2.6.0' });
+      window.aa = Object.assign(jest.fn(), { version: '2.13.0' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
@@ -630,7 +630,7 @@ export function createInsightsTests(
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 2;
-      window.aa = Object.assign(jest.fn(), { version: '2.6.0' });
+      window.aa = Object.assign(jest.fn(), { version: '2.13.0' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
@@ -712,7 +712,7 @@ export function createInsightsTests(
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 2;
-      window.aa = Object.assign(jest.fn(), { version: '2.6.0' });
+      window.aa = Object.assign(jest.fn(), { version: '2.13.0' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',

@@ -1,6 +1,6 @@
 {
   "name": "algoliasearch-helper",
-  "version": "3.15.0",
+  "version": "3.16.1",
   "description": "Helper for implementing advanced search features with algolia",
   "main": "index.js",
   "types": "index.d.ts",
@@ -13,7 +13,8 @@
     "test:unit": "jest",
     "test:watch": "jest --watch",
     "test:v3": "yarn run test",
-    "version": "./scripts/update-version.js"
+    "version": "./scripts/update-version.js",
+    "prepare": "patch-package"
   },
   "author": {
     "name": "Algolia Inc.",
