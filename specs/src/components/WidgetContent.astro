@@ -2,6 +2,9 @@
 import { Code } from 'astro/components';
 import type { WidgetFrontmatter } from '../types';
 import ThemeSelector from './ThemeSelector.astro';
+import Sandbox from './Sandbox.jsx';
+import { getSandpackCssText } from "@codesandbox/sandpack-react";
+
 
 type Props = {
   frontmatter: WidgetFrontmatter;
@@ -23,7 +26,8 @@ const title = frontmatter.title;
   {
     frontmatter.info && (
       <div class="info">
-        <p>{frontmatter.info}</p>
+        {' '}
+        <p>{frontmatter.info}</p>{' '}
       </div>
     )
   }
@@ -109,6 +113,22 @@ const title = frontmatter.title;
       </p>
     )
   }
+
+  {frontmatter.examples ? (
+    <>
+      <h3 id="example">Usage</h3>
+      <!-- TODO: theme is implied dark? -->
+      <style is:inline set:html={getSandpackCssText()}></style>
+      {frontmatter.examples.map(({ code, flavor, library }) => (
+        <div class="example">
+          <h4>{library}</h4>
+          <div class="code-output">
+            <Sandbox code={code} flavor={flavor} client:load />
+          </div>
+        </div>
+      ))}
+    </>
+  ) : null}
 
   <h3 id="css-classes">CSS classes</h3>
   {

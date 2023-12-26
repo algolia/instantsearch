@@ -50,4 +50,57 @@ translations:
   - name: separatorText
     default: '" > "'
     description: The text for the breadcrumb’s separator.
+examples:
+  - flavor: js
+    library: instantsearch.js
+    code: |
+      import { breadcrumb } from 'instantsearch.js/es/widgets';
+
+      export const createWidgets = (container) => [
+        breadcrumb({
+          container,
+          attributes: [
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+          ],
+        }),
+      ];
+  - flavor: react
+    library: react-instantsearch
+    code: |
+      import React from 'react';
+      import { Breadcrumb } from 'react-instantsearch';
+
+      export const widgets = (
+        <Breadcrumb
+          attributes={[
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+          ]}
+        />
+      );
+  - flavor: vue
+    library: vue-instantsearch
+    code: |
+      <template>
+        <ais-breadcrumb
+          :attributes="[
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+          ]"
+        />
+      </template>
+
+      <script>
+      import { AisBreadcrumb } from 'vue-instantsearch';
+
+      export default {
+        components: {
+          AisBreadcrumb,
+        },
+      };
+      </script>
 ---
