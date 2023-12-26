@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-next-routing-example",
-  "version": "6.68.0",
+  "version": "6.69.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
