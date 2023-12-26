@@ -10,6 +10,9 @@ describe('clicking on a Next.js link within the same page updates InstantSearch'
     await waitForUrl('http://localhost:3000/?instant_search%5Bquery%5D=apple');
 
     const searchInput = await $('.ais-SearchBox-input');
+    await browser.waitUntil(async () => {
+      return (await searchInput.getValue()) === 'apple';
+    });
     expect(await searchInput.getValue()).toBe('apple');
   });
 
@@ -24,6 +27,9 @@ describe('clicking on a Next.js link within the same page updates InstantSearch'
     );
 
     const searchInput = await $('.ais-SearchBox-input');
+    await browser.waitUntil(async () => {
+      return (await searchInput.getValue()) === 'apple';
+    });
     expect(await searchInput.getValue()).toBe('apple');
   });
 });

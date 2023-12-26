@@ -167,7 +167,7 @@ export function createInstantSearchRouterNext<TRouteState = UiState>(
       singletonRouter.push(url, undefined, {
         shallow: true,
       });
-      // lastPushFromThis = true;
+      lastPushFromThis = true;
     },
     ...routerOptions,
   });

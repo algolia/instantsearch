@@ -12,6 +12,11 @@ describe('refining InstantSearch causes only one onStateChange', () => {
         'http://localhost:3000/?instant_search%5Bquery%5D=apple'
       );
 
+      const searchInput = await $('.ais-SearchBox-input');
+      await browser.waitUntil(async () => {
+        return (await searchInput.getValue()) === 'apple';
+      });
+
       const output = await $('output#onStateChange');
       expect(await output.getText()).toBe('1');
     });
@@ -25,6 +30,11 @@ describe('refining InstantSearch causes only one onStateChange', () => {
       await waitForUrl(
         'http://localhost:3000/fr?instant_search%5Bquery%5D=apple'
       );
+
+      const searchInput = await $('.ais-SearchBox-input');
+      await browser.waitUntil(async () => {
+        return (await searchInput.getValue()) === 'apple';
+      });
 
       const output = await $('output#onStateChange');
       expect(await output.getText()).toBe('1');
