@@ -91,6 +91,11 @@ export function createInstantSearchRouterNext<TRouteState = UiState>(
     });
   }
 
+  /**
+   * Marker to skip `routeChangeComplete` event when the push comes from the router itself.
+   */
+  let lastPushFromThis = false;
+
   const router: Router<TRouteState> & { _isNextRouter?: boolean } = history({
     start(onUpdate) {
       if (beforeStart) {
@@ -101,9 +106,10 @@ export function createInstantSearchRouterNext<TRouteState = UiState>(
       handler = () => {
         // Without this check, we would trigger an unnecessary search when navigating
         // to a page without InstantSearch
-        if (singletonRouter.pathname === initialPathname) {
+        if (singletonRouter.pathname === initialPathname && !lastPushFromThis) {
           onUpdate();
         }
+        lastPushFromThis = false;
       };
       singletonRouter.events.on('routeChangeComplete', handler);
 
@@ -161,6 +167,7 @@ export function createInstantSearchRouterNext<TRouteState = UiState>(
       singletonRouter.push(url, undefined, {
         shallow: true,
       });
+      lastPushFromThis = true;
     },
     ...routerOptions,
   });

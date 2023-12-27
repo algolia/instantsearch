@@ -6,6 +6,7 @@ exports.config = {
   baseUrl: 'http://localhost:3000',
   waitforTimeout: 10000,
   services: ['selenium-standalone'],
+  seleniumInstallArgs: { drivers: { chrome: { version: '2.43' } } },
   capabilities: [
     {
       browserName: 'chrome',
