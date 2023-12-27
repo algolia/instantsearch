@@ -1,5 +1,5 @@
+// This is only to test `onStateChange` does not get called twice
 import algoliasearch from 'algoliasearch/lite';
-import { Hit as AlgoliaHit } from 'instantsearch.js';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -7,10 +7,7 @@ import singletonRouter from 'next/router';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import {
-  DynamicWidgets,
   InstantSearch,
-  Hits,
-  Highlight,
   RefinementList,
   SearchBox,
   InstantSearchServerState,
@@ -19,27 +16,7 @@ import {
 } from 'react-instantsearch';
 import { createInstantSearchRouterNext } from 'react-instantsearch-router-nextjs';
 
-import { Panel } from '../components/Panel';
-
 const client = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');
-
-type HitProps = {
-  hit: AlgoliaHit<{
-    name: string;
-    price: number;
-  }>;
-};
-
-function Hit({ hit }: HitProps) {
-  return (
-    <>
-      <Link href="/other-page" className="Hit-label">
-        <Highlight hit={hit} attribute="name" />
-      </Link>
-      <span className="Hit-price">${hit.price}</span>
-    </>
-  );
-}
 
 type HomePageProps = {
   serverState?: InstantSearchServerState;
@@ -47,6 +24,8 @@ type HomePageProps = {
 };
 
 export default function HomePage({ serverState, url }: HomePageProps) {
+  const [onStateChangeCalled, setOnStateChangeCalled] = React.useState(0);
+
   return (
     <InstantSearchSSRProvider {...serverState}>
       <Head>
@@ -54,7 +33,7 @@ export default function HomePage({ serverState, url }: HomePageProps) {
       </Head>
 
       {/* If you have navigation links outside of InstantSearch */}
-      <Link href="/?instant_search%5Bquery%5D=apple">Prefilled query</Link>
+      <Link href="/test?instant_search%5Bquery%5D=apple">Prefilled query</Link>
 
       <InstantSearch
         searchClient={client}
@@ -69,26 +48,22 @@ export default function HomePage({ serverState, url }: HomePageProps) {
           }),
         }}
         insights={true}
+        onStateChange={({ uiState, setUiState }) => {
+          setOnStateChangeCalled((times) => times + 1);
+          setUiState(uiState);
+        }}
       >
+        <output id="onStateChange">{onStateChangeCalled}</output>
         <div className="Container">
           <div>
-            <DynamicWidgets fallbackComponent={FallbackComponent} facets={[]} />
+            <RefinementList attribute="brand" />
           </div>
           <div>
             <SearchBox />
-            <Hits hitComponent={Hit} />
           </div>
         </div>
       </InstantSearch>
     </InstantSearchSSRProvider>
-  );
-}
-
-function FallbackComponent({ attribute }: { attribute: string }) {
-  return (
-    <Panel header={attribute}>
-      <RefinementList attribute={attribute} />
-    </Panel>
   );
 }
 
