@@ -18,6 +18,14 @@ function normalizeSnapshot(html: string) {
       .replace(/name="\w+"/g, '')
       .replace(/value="\w+"/g, '')
       .replace(/<input.+?>(\s+)/gs, (match) => match.trim())
+      // Vue InstantSearch adds the count after the label if available.
+      // @MAJOR: Remove this once Vue InstantSearch aligns with spec.
+      .replace(
+        /<span\n?\s*class="ais-ToggleRefinement-count"\n?\s*>\n?.*\s*<\/span>/g,
+        ''
+      )
+      // React renders `checked` as `checked=""` through an attribute, other frameworks use the property.
+      .replace(/checked=""/g, '')
   );
 }
 
@@ -69,6 +77,51 @@ export function createOptionsTests(
       );
     });
 
+    test('renders with custom label', async () => {
+      const searchClient = createSearchClient({});
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          attribute: 'free_shipping',
+          // @ts-expect-error `label` is not part of the options for InstantSearch.js (it uses templates.labelText instead)
+          label: 'Free Shipping!',
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(
+        document.querySelector('.ais-ToggleRefinement')
+      ).toMatchNormalizedInlineSnapshot(
+        normalizeSnapshot,
+        `
+        <div
+          class="ais-ToggleRefinement"
+        >
+          <label
+            class="ais-ToggleRefinement-label"
+          >
+            <input
+              class="ais-ToggleRefinement-checkbox"
+              type="checkbox"
+            />
+            <span
+              class="ais-ToggleRefinement-labelText"
+            >
+              Free Shipping!
+            </span>
+          </label>
+        </div>
+      `
+      );
+    });
+
     test('renders checked when the attribute is refined', async () => {
       const searchClient = createSearchClient({});
 
@@ -98,6 +151,31 @@ export function createOptionsTests(
           '.ais-ToggleRefinement-checkbox'
         )!.checked
       ).toBe(true);
+
+      expect(
+        document.querySelector('.ais-ToggleRefinement')
+      ).toMatchNormalizedInlineSnapshot(
+        normalizeSnapshot,
+        `
+        <div
+          class="ais-ToggleRefinement"
+        >
+          <label
+            class="ais-ToggleRefinement-label"
+          >
+            <input
+              class="ais-ToggleRefinement-checkbox"
+              type="checkbox"
+            />
+            <span
+              class="ais-ToggleRefinement-labelText"
+            >
+              free_shipping
+            </span>
+          </label>
+        </div>
+      `
+      );
     });
 
     test('toggles when clicking the checkbox', async () => {

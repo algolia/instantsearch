@@ -375,12 +375,19 @@ const testSetups: TestSetupsMap<TestSuites> = {
       })
       .start();
   },
-  createToggleRefinementWidgetTests({ instantSearchOptions, widgetParams }) {
+  createToggleRefinementWidgetTests({
+    instantSearchOptions,
+    // @ts-expect-error `label` is not part of the props for InstantSearch.js, but is for the other flavors
+    widgetParams: { label, ...widgetParams },
+  }) {
     instantsearch(instantSearchOptions)
       .addWidgets([
         toggleRefinement({
           container: document.body.appendChild(document.createElement('div')),
           ...widgetParams,
+          templates: {
+            labelText: label,
+          },
         }),
       ])
       .on('error', () => {
