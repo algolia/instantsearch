@@ -2784,7 +2784,7 @@ If you want to publish it as a public scoped package, run \`npm publish --access
 exports[`Templates InstantSearch.js widget File content: LICENSE.md 1`] = `
 "The MIT License (MIT)
 
-Copyright (c) 2023-present algolia.
+Copyright (c) 2024-present algolia.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the \\"Software\\"), to deal
