@@ -54,10 +54,6 @@ export default {
       type: String,
       required: true,
     },
-    label: {
-      type: String,
-      required: true,
-    },
     on: {
       type: [String, Number, Boolean, Array],
       required: false,
@@ -68,12 +64,15 @@ export default {
       required: false,
       default: undefined,
     },
+    label: {
+      type: String,
+      default: undefined,
+    },
   },
   computed: {
     widgetParams() {
       return {
         attribute: this.attribute,
-        label: this.label,
         on: this.on,
         off: this.off,
       };
