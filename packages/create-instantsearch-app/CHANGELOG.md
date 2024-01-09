@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.3.4](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.3.3...create-instantsearch-app@7.3.4) (2024-01-09)
+
+
+### Bug Fixes
+
+* **angular:** update versions to avoid typescript errors ([#5979](https://github.com/algolia/instantsearch/issues/5979)) ([fc97b45](https://github.com/algolia/instantsearch/commit/fc97b45e04ec6eb11e8c9274a60c21a76d348c18))
+
+
+
+
+
 ## [7.3.3](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.3.2...create-instantsearch-app@7.3.3) (2023-12-19)
 
 **Note:** Version bump only for package create-instantsearch-app
