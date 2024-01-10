@@ -8,6 +8,8 @@ import {
   wrapPromiseWithState,
 } from 'react-instantsearch-core';
 
+import type { SearchClient } from 'instantsearch.js';
+
 export function InitializePromise() {
   const search = useInstantSearchContext();
   const waitForResultsRef = useRSCContext();
@@ -16,6 +18,16 @@ export function InitializePromise() {
     (() => {
       throw new Error('Missing ServerInsertedHTMLContext');
     });
+
+  // Extract search parameters from the search client to use them
+  // later during hydration.
+  let requestParams: Parameters<SearchClient['search']>[0];
+  search.mainHelper!.setClient({
+    search(queries, requestOptions) {
+      requestParams = queries;
+      return search.client.search(queries, requestOptions);
+    },
+  });
 
   const waitForResults = () =>
     new Promise<void>((resolve) => {
@@ -26,7 +38,7 @@ export function InitializePromise() {
 
   const injectInitialResults = () => {
     let inserted = false;
-    const results = getInitialResults(search.mainIndex);
+    const results = getInitialResults(search.mainIndex, requestParams);
     insertHTML(() => {
       if (inserted) {
         return <></>;
