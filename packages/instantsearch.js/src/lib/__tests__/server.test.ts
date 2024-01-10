@@ -25,7 +25,10 @@ describe('waitForResults', () => {
 
     searches[0].resolver();
 
-    await expect(output).resolves.toBeUndefined();
+    await expect(output).resolves.toEqual([
+      expect.objectContaining({ indexName: 'indexName' }),
+      expect.objectContaining({ indexName: 'indexName2' }),
+    ]);
   });
 
   test('throws on a search client error', async () => {
@@ -237,6 +240,45 @@ describe('getInitialResults', () => {
           },
         ],
       },
+    });
+  });
+
+  test('returns the current results with request params if specified', async () => {
+    const search = instantsearch({
+      indexName: 'indexName',
+      searchClient: createSearchClient(),
+      initialUiState: {
+        indexName: {
+          query: 'apple',
+        },
+        indexName2: {
+          query: 'samsung',
+        },
+      },
+    });
+
+    search.addWidgets([
+      connectSearchBox(() => {})({}),
+      index({ indexName: 'indexName2' }).addWidgets([
+        connectSearchBox(() => {})({}),
+      ]),
+    ]);
+
+    search.start();
+
+    const requestParams = await waitForResults(search);
+
+    expect(getInitialResults(search.mainIndex, requestParams)).toEqual({
+      indexName: expect.objectContaining({
+        requestParams: expect.objectContaining({
+          query: 'apple',
+        }),
+      }),
+      indexName2: expect.objectContaining({
+        requestParams: expect.objectContaining({
+          query: 'samsung',
+        }),
+      }),
     });
   });
 });

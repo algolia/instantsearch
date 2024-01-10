@@ -3,6 +3,21 @@
 exports[`getServerState returns initialResults 1`] = `
 {
   "instant_search": {
+    "requestParams": {
+      "facetFilters": [
+        [
+          "brand:Apple",
+        ],
+      ],
+      "facets": [
+        "brand",
+      ],
+      "highlightPostTag": "__/ais-highlight__",
+      "highlightPreTag": "__ais-highlight__",
+      "maxValuesPerFacet": 10,
+      "query": "iphone",
+      "tagFilters": "",
+    },
     "results": [
       {
         "exhaustiveFacetsCount": true,
@@ -55,6 +70,21 @@ exports[`getServerState returns initialResults 1`] = `
     },
   },
   "instant_search_price_asc": {
+    "requestParams": {
+      "facetFilters": [
+        [
+          "brand:Apple",
+        ],
+      ],
+      "facets": [
+        "brand",
+      ],
+      "highlightPostTag": "__/ais-highlight__",
+      "highlightPreTag": "__ais-highlight__",
+      "maxValuesPerFacet": 10,
+      "query": "iphone",
+      "tagFilters": "",
+    },
     "results": [
       {
         "exhaustiveFacetsCount": true,
@@ -99,6 +129,21 @@ exports[`getServerState returns initialResults 1`] = `
     },
   },
   "instant_search_price_desc": {
+    "requestParams": {
+      "facetFilters": [
+        [
+          "brand:Apple",
+        ],
+      ],
+      "facets": [
+        "brand",
+      ],
+      "highlightPostTag": "__/ais-highlight__",
+      "highlightPreTag": "__ais-highlight__",
+      "maxValuesPerFacet": 10,
+      "query": "iphone",
+      "tagFilters": "",
+    },
     "results": [
       {
         "exhaustiveFacetsCount": true,
@@ -143,6 +188,21 @@ exports[`getServerState returns initialResults 1`] = `
     },
   },
   "instant_search_rating_desc": {
+    "requestParams": {
+      "facetFilters": [
+        [
+          "brand:Apple",
+        ],
+      ],
+      "facets": [
+        "brand",
+      ],
+      "highlightPostTag": "__/ais-highlight__",
+      "highlightPreTag": "__ais-highlight__",
+      "maxValuesPerFacet": 10,
+      "query": "iphone",
+      "tagFilters": "",
+    },
     "results": [
       {
         "exhaustiveFacetsCount": true,
