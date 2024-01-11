@@ -3,7 +3,7 @@ import {
   createSearchClient,
 } from '@instantsearch/mocks';
 
-import { connectSearchBox } from '../../connectors';
+import { connectConfigure, connectSearchBox } from '../../connectors';
 import instantsearch from '../../index.es';
 import { index } from '../../widgets';
 import { getInitialResults, waitForResults } from '../server';
@@ -14,8 +14,15 @@ describe('waitForResults', () => {
     const search = instantsearch({
       indexName: 'indexName',
       searchClient,
+      initialUiState: {
+        indexName: {
+          query: 'apple',
+        },
+      },
     }).addWidgets([
-      index({ indexName: 'indexName2' }),
+      index({ indexName: 'indexName2' }).addWidgets([
+        connectConfigure(() => {})({ searchParameters: { hitsPerPage: 2 } }),
+      ]),
       connectSearchBox(() => {})({}),
     ]);
 
@@ -26,8 +33,8 @@ describe('waitForResults', () => {
     searches[0].resolver();
 
     await expect(output).resolves.toEqual([
-      expect.objectContaining({ indexName: 'indexName' }),
-      expect.objectContaining({ indexName: 'indexName2' }),
+      expect.objectContaining({ query: 'apple' }),
+      expect.objectContaining({ query: 'apple', hitsPerPage: 2 }),
     ]);
   });
 
@@ -262,6 +269,9 @@ describe('getInitialResults', () => {
       index({ indexName: 'indexName2' }).addWidgets([
         connectSearchBox(() => {})({}),
       ]),
+      index({ indexName: 'indexName2', indexId: 'indexId' }).addWidgets([
+        connectConfigure(() => {})({ searchParameters: { hitsPerPage: 2 } }),
+      ]),
     ]);
 
     search.start();
@@ -277,6 +287,12 @@ describe('getInitialResults', () => {
       indexName2: expect.objectContaining({
         requestParams: expect.objectContaining({
           query: 'samsung',
+        }),
+      }),
+      indexId: expect.objectContaining({
+        requestParams: expect.objectContaining({
+          query: 'apple',
+          hitsPerPage: 2,
         }),
       }),
     });

@@ -8,7 +8,7 @@ import {
   wrapPromiseWithState,
 } from 'react-instantsearch-core';
 
-import type { SearchClient } from 'instantsearch.js';
+import type { SearchOptions } from 'instantsearch.js';
 
 export function InitializePromise() {
   const search = useInstantSearchContext();
@@ -21,10 +21,10 @@ export function InitializePromise() {
 
   // Extract search parameters from the search client to use them
   // later during hydration.
-  let requestParams: Parameters<SearchClient['search']>[0];
+  let requestParamsList: Array<SearchOptions | undefined>;
   search.mainHelper!.setClient({
     search(queries, requestOptions) {
-      requestParams = queries;
+      requestParamsList = queries.map(({ params }) => params);
       return search.client.search(queries, requestOptions);
     },
   });
@@ -38,7 +38,7 @@ export function InitializePromise() {
 
   const injectInitialResults = () => {
     let inserted = false;
-    const results = getInitialResults(search.mainIndex, requestParams);
+    const results = getInitialResults(search.mainIndex, requestParamsList);
     insertHTML(() => {
       if (inserted) {
         return <></>;

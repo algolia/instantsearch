@@ -71,19 +71,15 @@ exports[`getServerState returns initialResults 1`] = `
   },
   "instant_search_price_asc": {
     "requestParams": {
-      "facetFilters": [
-        [
-          "brand:Apple",
-        ],
-      ],
-      "facets": [
-        "brand",
-      ],
+      "analytics": false,
+      "clickAnalytics": false,
+      "facets": "brand",
       "highlightPostTag": "__/ais-highlight__",
       "highlightPreTag": "__ais-highlight__",
+      "hitsPerPage": 0,
       "maxValuesPerFacet": 10,
+      "page": 0,
       "query": "iphone",
-      "tagFilters": "",
     },
     "results": [
       {
@@ -130,19 +126,15 @@ exports[`getServerState returns initialResults 1`] = `
   },
   "instant_search_price_desc": {
     "requestParams": {
-      "facetFilters": [
-        [
-          "brand:Apple",
-        ],
-      ],
-      "facets": [
-        "brand",
-      ],
+      "analytics": false,
+      "clickAnalytics": false,
+      "facets": "brand",
       "highlightPostTag": "__/ais-highlight__",
       "highlightPreTag": "__ais-highlight__",
+      "hitsPerPage": 0,
       "maxValuesPerFacet": 10,
+      "page": 0,
       "query": "iphone",
-      "tagFilters": "",
     },
     "results": [
       {

@@ -4,25 +4,27 @@ import type {
   IndexWidget,
   InitialResults,
   InstantSearch,
-  SearchClient,
+  SearchOptions,
 } from '../types';
 
-type RequestParams = Parameters<SearchClient['search']>[0];
+type RequestParams = SearchOptions | undefined;
 
 /**
  * Waits for the results from the search instance to coordinate the next steps
  * in `getServerState()`.
  */
-export function waitForResults(search: InstantSearch): Promise<RequestParams> {
+export function waitForResults(
+  search: InstantSearch
+): Promise<RequestParams[]> {
   const helper = search.mainHelper!;
 
   // Extract search parameters from the search client to use them
   // later during hydration.
-  let requestParams: RequestParams;
+  let requestParamsList: RequestParams[];
   const client = helper.getClient();
   helper.setClient({
     search(queries, requestOptions) {
-      requestParams = queries;
+      requestParamsList = queries.map(({ params }) => params);
       return client.search(queries, requestOptions);
     },
   });
@@ -33,7 +35,7 @@ export function waitForResults(search: InstantSearch): Promise<RequestParams> {
     // All derived helpers resolve in the same tick so we're safe only relying
     // on the first one.
     helper.derivedHelpers[0].on('result', () => {
-      resolve(requestParams);
+      resolve(requestParamsList);
     });
 
     // However, we listen to errors that can happen on any derived helper because
@@ -61,7 +63,7 @@ export function getInitialResults(
    * Search parameters sent to the search client, usually
    * returned by `waitForResults()`.
    */
-  requestParams?: RequestParams
+  requestParamsList?: RequestParams[]
 ): InitialResults {
   const initialResults: InitialResults = {};
 
@@ -69,14 +71,13 @@ export function getInitialResults(
     const searchResults = widget.getResults();
     if (searchResults) {
       const indexId = widget.getIndexId();
+      const requestParams = requestParamsList?.shift();
       initialResults[indexId] = {
         // We convert the Helper state to a plain object to pass parsable data
         // structures from server to client.
         state: { ...searchResults._state },
         results: searchResults._rawResults,
-        requestParams: requestParams?.find(
-          ({ indexName }) => indexName === indexId
-        )?.params,
+        ...(requestParams && { requestParams }),
       };
     }
   });
