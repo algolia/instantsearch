@@ -269,6 +269,9 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </form>
     );
   },
+  createRatingMenuWidgetTests() {
+    throw new Error('RatingMenu is not supported in React InstantSearch');
+  },
   createToggleRefinementWidgetTests({ instantSearchOptions, widgetParams }) {
     render(
       <InstantSearch {...instantSearchOptions}>
@@ -315,6 +318,12 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createInfiniteHitsWidgetTests: { act },
   createHitsWidgetTests: { act },
   createRangeInputWidgetTests: { act },
+  createRatingMenuWidgetTests: {
+    act,
+    skippedTests: {
+      'RatingMenu widget common tests': true,
+    },
+  },
   createInstantSearchWidgetTests: { act },
   createHitsPerPageWidgetTests: { act },
   createClearRefinementsWidgetTests: { act },

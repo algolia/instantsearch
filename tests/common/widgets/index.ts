@@ -8,6 +8,7 @@ export * from './instantsearch';
 export * from './menu';
 export * from './pagination';
 export * from './range-input';
+export * from './rating-menu';
 export * from './refinement-list';
 export * from './hits-per-page';
 export * from './toggle-refinement';

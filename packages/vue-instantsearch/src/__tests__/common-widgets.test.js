@@ -24,6 +24,7 @@ import {
   AisToggleRefinement,
   AisSortBy,
   AisStats,
+  AisRatingMenu,
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
 
@@ -405,6 +406,21 @@ const testSetups = {
 
     await nextTick();
   },
+  async createRatingMenuWidgetTests({ instantSearchOptions, widgetParams }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisRatingMenu, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
+  },
   async createToggleRefinementWidgetTests({
     instantSearchOptions,
     widgetParams,
@@ -482,6 +498,7 @@ const testOptions = {
   createInfiniteHitsWidgetTests: undefined,
   createHitsWidgetTests: undefined,
   createRangeInputWidgetTests: undefined,
+  createRatingMenuWidgetTests: undefined,
   createInstantSearchWidgetTests: undefined,
   createHitsPerPageWidgetTests: undefined,
   createClearRefinementsWidgetTests: undefined,
