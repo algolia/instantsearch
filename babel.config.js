@@ -79,6 +79,11 @@ module.exports = (api) => {
             // false positive (babel doesn't know types)
             // this is actually only called on arrays
             'String.prototype.includes',
+
+            // Just for the PoC
+            'Array.prototype.flatMap',
+            'Object.entries',
+            'Object.fromEntries',
           ];
           if (defaultShouldInject && !exclude.includes(name)) {
             throw new Error(

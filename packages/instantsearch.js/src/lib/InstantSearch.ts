@@ -335,7 +335,7 @@ See documentation: ${createDocumentationLink({
     }
 
     this.client = (client?.searchClient || searchClient) as SearchClient;
-    this.recommendClient = client?.recommendClient!;
+    this.recommendClient = client?.recommendClient;
     this.future = future;
     this.insightsClient = insightsClient;
     this.indexName = indexName;
@@ -676,6 +676,7 @@ See documentation: ${createDocumentationLink({
     // the results, but this is an optimization that has a very low impact for now.
     else if (this.mainIndex.getWidgets().length > 0) {
       this.scheduleSearch();
+      this.scheduleRecommend();
     }
 
     // Keep the previous reference for legacy purpose, some pattern use
@@ -718,6 +719,7 @@ See documentation: ${createDocumentationLink({
    */
   public dispose(): void {
     this.scheduleSearch.cancel();
+    this.scheduleRecommend.cancel();
     this.scheduleRender.cancel();
     clearTimeout(this._searchStalledTimer);
 
@@ -744,6 +746,37 @@ See documentation: ${createDocumentationLink({
   public scheduleSearch = defer(() => {
     if (this.started) {
       this.mainHelper!.search();
+    }
+  });
+
+  private recommend: Record<string, any> = {};
+  public recommendResults: any;
+
+  public registerRecommend(indexName: string, params: any) {
+    this.recommend[indexName] = params;
+  }
+
+  public scheduleRecommend = defer(() => {
+    if (this.started) {
+      const requests = Object.entries(this.recommend).flatMap(
+        ([indexName, { frequentlyBoughtTogether }]) =>
+          frequentlyBoughtTogether.map((objectID: string) => ({
+            indexName,
+            model: 'bought-together',
+            objectID,
+          }))
+      );
+      this.recommendClient
+        .getRecommendations(requests)
+        .then(({ results }: any) => {
+          this.recommendResults = Object.fromEntries(
+            results.map((result: any, i: number) => [
+              requests[i].objectID,
+              result.hits,
+            ])
+          );
+          this.scheduleRender();
+        });
     }
   });
 

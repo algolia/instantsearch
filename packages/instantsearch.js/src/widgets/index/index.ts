@@ -331,6 +331,17 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           _uiState: localUiState,
         });
 
+        localInstantSearchInstance.registerRecommend(
+          indexName,
+          localWidgets.reduce(
+            (acc, widget) =>
+              widget.getWidgetRecommendParameters
+                ? widget.getWidgetRecommendParameters(acc)
+                : acc,
+            { frequentlyBoughtTogether: [] }
+          )
+        );
+
         // We compute the render state before calling `init` in a separate loop
         // to construct the whole render state object that is then passed to
         // `init`.
@@ -366,6 +377,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         });
 
         localInstantSearchInstance.scheduleSearch();
+        localInstantSearchInstance.scheduleRecommend();
       }
 
       return this;
@@ -454,6 +466,16 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           index: indexName,
         }),
       });
+      instantSearchInstance.registerRecommend(
+        indexName,
+        localWidgets.reduce(
+          (acc, widget) =>
+            widget.getWidgetRecommendParameters
+              ? widget.getWidgetRecommendParameters(acc)
+              : acc,
+          { frequentlyBoughtTogether: [] }
+        )
+      );
 
       // This Helper is only used for state management we do not care about the
       // `searchClient`. Only the "main" Helper created at the `InstantSearch`

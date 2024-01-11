@@ -216,6 +216,8 @@ type RequiredUiStateLifeCycle<TWidgetDescription extends WidgetDescription> = {
       >;
     }
   ) => SearchParameters;
+
+  getWidgetRecommendParameters?: any;
 };
 
 type UiStateLifeCycle<TWidgetDescription extends WidgetDescription> =
