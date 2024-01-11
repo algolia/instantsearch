@@ -129,11 +129,11 @@ function execute({
 
       return waitForResults(searchRef.current);
     })
-    .then((requestParams) => {
+    .then((requestParamsList) => {
       return {
         initialResults: getInitialResults(
           searchRef.current!.mainIndex,
-          requestParams
+          requestParamsList
         ),
       };
     });
