@@ -23,9 +23,9 @@ export function InitializePromise() {
   // later during hydration.
   let requestParamsList: Array<SearchOptions | undefined>;
   search.mainHelper!.setClient({
-    search(queries, requestOptions) {
-      requestParamsList = queries.map(({ params }) => params);
-      return search.client.search(queries, requestOptions);
+    search(...args) {
+      requestParamsList = args[0].map(({ params }) => params);
+      return search.client.search(...args);
     },
   });
 

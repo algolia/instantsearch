@@ -23,9 +23,9 @@ export function waitForResults(
   let requestParamsList: RequestParams[];
   const client = helper.getClient();
   helper.setClient({
-    search(queries, requestOptions) {
-      requestParamsList = queries.map(({ params }) => params);
-      return client.search(queries, requestOptions);
+    search(...args) {
+      requestParamsList = args[0].map(({ params }) => params);
+      return client.search(...args);
     },
   });
 
