@@ -222,115 +222,112 @@ describe('getServerState', () => {
     await getServerState(<App />, { renderToString });
 
     expect(spiedSearch).toHaveBeenCalledTimes(1);
-    expect(spiedSearch).toHaveBeenCalledWith(
-      [
-        {
-          indexName: 'instant_search',
-          params: {
-            facetFilters: [['brand:Apple']],
-            facets: ['brand'],
-            highlightPostTag: '__/ais-highlight__',
-            highlightPreTag: '__ais-highlight__',
-            maxValuesPerFacet: 10,
-            query: 'iphone',
-            tagFilters: '',
-          },
+    expect(spiedSearch).toHaveBeenCalledWith([
+      {
+        indexName: 'instant_search',
+        params: {
+          facetFilters: [['brand:Apple']],
+          facets: ['brand'],
+          highlightPostTag: '__/ais-highlight__',
+          highlightPreTag: '__ais-highlight__',
+          maxValuesPerFacet: 10,
+          query: 'iphone',
+          tagFilters: '',
         },
-        {
-          indexName: 'instant_search',
-          params: {
-            analytics: false,
-            clickAnalytics: false,
-            facets: 'brand',
-            highlightPostTag: '__/ais-highlight__',
-            highlightPreTag: '__ais-highlight__',
-            hitsPerPage: 0,
-            maxValuesPerFacet: 10,
-            query: 'iphone',
-            page: 0,
-          },
+      },
+      {
+        indexName: 'instant_search',
+        params: {
+          analytics: false,
+          clickAnalytics: false,
+          facets: 'brand',
+          highlightPostTag: '__/ais-highlight__',
+          highlightPreTag: '__ais-highlight__',
+          hitsPerPage: 0,
+          maxValuesPerFacet: 10,
+          query: 'iphone',
+          page: 0,
         },
-        {
-          indexName: 'instant_search_price_asc',
-          params: {
-            facetFilters: [['brand:Apple']],
-            facets: ['brand'],
-            highlightPostTag: '__/ais-highlight__',
-            highlightPreTag: '__ais-highlight__',
-            maxValuesPerFacet: 10,
-            query: 'iphone',
-            tagFilters: '',
-          },
+      },
+      {
+        indexName: 'instant_search_price_asc',
+        params: {
+          facetFilters: [['brand:Apple']],
+          facets: ['brand'],
+          highlightPostTag: '__/ais-highlight__',
+          highlightPreTag: '__ais-highlight__',
+          maxValuesPerFacet: 10,
+          query: 'iphone',
+          tagFilters: '',
         },
-        {
-          indexName: 'instant_search_price_asc',
-          params: {
-            analytics: false,
-            clickAnalytics: false,
-            facets: 'brand',
-            highlightPostTag: '__/ais-highlight__',
-            highlightPreTag: '__ais-highlight__',
-            hitsPerPage: 0,
-            maxValuesPerFacet: 10,
-            page: 0,
-            query: 'iphone',
-          },
+      },
+      {
+        indexName: 'instant_search_price_asc',
+        params: {
+          analytics: false,
+          clickAnalytics: false,
+          facets: 'brand',
+          highlightPostTag: '__/ais-highlight__',
+          highlightPreTag: '__ais-highlight__',
+          hitsPerPage: 0,
+          maxValuesPerFacet: 10,
+          page: 0,
+          query: 'iphone',
         },
-        {
-          indexName: 'instant_search_rating_desc',
-          params: {
-            facetFilters: [['brand:Apple']],
-            facets: ['brand'],
-            highlightPostTag: '__/ais-highlight__',
-            highlightPreTag: '__ais-highlight__',
-            maxValuesPerFacet: 10,
-            query: 'iphone',
-            tagFilters: '',
-          },
+      },
+      {
+        indexName: 'instant_search_rating_desc',
+        params: {
+          facetFilters: [['brand:Apple']],
+          facets: ['brand'],
+          highlightPostTag: '__/ais-highlight__',
+          highlightPreTag: '__ais-highlight__',
+          maxValuesPerFacet: 10,
+          query: 'iphone',
+          tagFilters: '',
         },
-        {
-          indexName: 'instant_search_rating_desc',
-          params: {
-            analytics: false,
-            clickAnalytics: false,
-            facets: 'brand',
-            highlightPostTag: '__/ais-highlight__',
-            highlightPreTag: '__ais-highlight__',
-            hitsPerPage: 0,
-            maxValuesPerFacet: 10,
-            page: 0,
-            query: 'iphone',
-          },
+      },
+      {
+        indexName: 'instant_search_rating_desc',
+        params: {
+          analytics: false,
+          clickAnalytics: false,
+          facets: 'brand',
+          highlightPostTag: '__/ais-highlight__',
+          highlightPreTag: '__ais-highlight__',
+          hitsPerPage: 0,
+          maxValuesPerFacet: 10,
+          page: 0,
+          query: 'iphone',
         },
-        {
-          indexName: 'instant_search_price_desc',
-          params: {
-            facetFilters: [['brand:Apple']],
-            facets: ['brand'],
-            highlightPostTag: '__/ais-highlight__',
-            highlightPreTag: '__ais-highlight__',
-            maxValuesPerFacet: 10,
-            query: 'iphone',
-            tagFilters: '',
-          },
+      },
+      {
+        indexName: 'instant_search_price_desc',
+        params: {
+          facetFilters: [['brand:Apple']],
+          facets: ['brand'],
+          highlightPostTag: '__/ais-highlight__',
+          highlightPreTag: '__ais-highlight__',
+          maxValuesPerFacet: 10,
+          query: 'iphone',
+          tagFilters: '',
         },
-        {
-          indexName: 'instant_search_price_desc',
-          params: {
-            analytics: false,
-            clickAnalytics: false,
-            facets: 'brand',
-            highlightPostTag: '__/ais-highlight__',
-            highlightPreTag: '__ais-highlight__',
-            hitsPerPage: 0,
-            maxValuesPerFacet: 10,
-            page: 0,
-            query: 'iphone',
-          },
+      },
+      {
+        indexName: 'instant_search_price_desc',
+        params: {
+          analytics: false,
+          clickAnalytics: false,
+          facets: 'brand',
+          highlightPostTag: '__/ais-highlight__',
+          highlightPreTag: '__ais-highlight__',
+          hitsPerPage: 0,
+          maxValuesPerFacet: 10,
+          page: 0,
+          query: 'iphone',
         },
-      ],
-      undefined
-    );
+      },
+    ]);
   });
 
   test('returns initialResults', async () => {
