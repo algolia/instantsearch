@@ -17,6 +17,9 @@ function renderHits(query) {
               `<li class="ais-hits--item">
                 <article>
                 {{#if attributesToDisplay}}
+                  {{#if imageAttribute}}
+                  <img src="${ hit.{{imageAttribute}} }" alt="${ hit.{{attributesToDisplay.[0]}} }" />
+                  {{/if}}
                   <h1>${hit._highlightResult.{{attributesToDisplay.[0]}}.value}</h1>
                   {{#each attributesToDisplay}}
                   {{#unless @first}}

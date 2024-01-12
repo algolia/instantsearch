@@ -53,6 +53,7 @@ describe('Templates', () => {
           indexName: 'indexName',
           searchPlaceholder: 'Search placeholder',
           attributesToDisplay: ['attribute1', 'attribute2'],
+          imageAttribute: 'imageAttribute',
           attributesForFaceting: ['ais.dynamicWidgets', 'facet1', 'facet2'],
           organization: 'algolia',
           enableInsights: true,
