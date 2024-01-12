@@ -1,5 +1,6 @@
 import { fakeAct } from '../../common';
 
+import { createLinksTests } from './links';
 import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
@@ -25,5 +26,6 @@ export function createPoweredByWidgetTests(
 
   describe('PoweredBy widget common tests', () => {
     createOptionsTests(setup, { act, skippedTests });
+    createLinksTests(setup, { act, skippedTests });
   });
 }

@@ -1,5 +1,6 @@
 import { fakeAct } from '../../common';
 
+import { createLinksTests } from './links';
 import { createOptimisticUiTests } from './optimistic-ui';
 import { createOptionsTests } from './options';
 
@@ -22,5 +23,6 @@ export function createMenuWidgetTests(
   describe('Menu widget common tests', () => {
     createOptionsTests(setup, { act, skippedTests });
     createOptimisticUiTests(setup, { act, skippedTests });
+    createLinksTests(setup, { act, skippedTests });
   });
 }

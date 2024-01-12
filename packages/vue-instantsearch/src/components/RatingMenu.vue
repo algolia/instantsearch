@@ -31,7 +31,7 @@
               :href="state.createURL(item.value)"
               :aria-label="`${item.value} & up`"
               :class="suit('link')"
-              @click.prevent="state.refine(item.value)"
+              @click.exact.left.prevent="state.refine(item.value)"
             >
               <template v-for="(full, n) in item.stars">
                 <svg

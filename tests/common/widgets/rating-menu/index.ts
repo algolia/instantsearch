@@ -1,6 +1,7 @@
 import { fakeAct, skippableDescribe } from '../../common';
 
 import { createBehaviourTests } from './behaviour';
+import { createLinksTests } from './links';
 import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
@@ -22,5 +23,6 @@ export function createRatingMenuWidgetTests(
   skippableDescribe('RatingMenu widget common tests', skippedTests, () => {
     createBehaviourTests(setup, { act, skippedTests });
     createOptionsTests(setup, { act, skippedTests });
+    createLinksTests(setup, { act, skippedTests });
   });
 }

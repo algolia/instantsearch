@@ -1,5 +1,6 @@
 import { fakeAct } from '../../common';
 
+import { createLinksTests } from './links';
 import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
@@ -20,5 +21,6 @@ export function createCurrentRefinementsWidgetTests(
 
   describe('CurrentRefinements widget common tests', () => {
     createOptionsTests(setup, { act, skippedTests });
+    createLinksTests(setup, { act, skippedTests });
   });
 }
