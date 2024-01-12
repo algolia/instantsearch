@@ -71,6 +71,7 @@ $ create-instantsearch-app --help
     --api-key <apiKey>                                 The Algolia search API key
     --index-name <indexName>                           The main index of your search
     --attributes-to-display <attributesToDisplay>      The attributes of your index to display
+    --image-attribute <imageAttribute>                 The attribute of your index to use for image display
     --attributes-for-faceting <attributesForFaceting>  The attributes for faceting
     --template <template>                              The InstantSearch template to use
     --library-version <libraryVersion>                 The version of the library
@@ -114,6 +115,7 @@ The `config` flag is handy to automate app generations.
   "indexName": "MY_INDEX_NAME",
   "searchPlaceholder": "Search",
   "attributesToDisplay": ["name", "description"],
+  "imageAttribute": "image",
   "attributesForFaceting": ["brand", "location"],
   "enableInsights": true
 }
@@ -136,6 +138,7 @@ const app = createInstantSearchApp('~/lab/my-app', {
   template: 'InstantSearch.js',
   libraryVersion: '2.0.0',
   attributesToDisplay: ['name', 'description'],
+  imageAttribute: 'image',
   attributesForFaceting: ['keywords'],
   enableInsights: true,
 });
