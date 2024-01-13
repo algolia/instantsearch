@@ -112,9 +112,13 @@ export function createInsightsMiddleware<
     );
 
     let queuedUserToken: string | undefined = undefined;
+    let queuedAuthenticatedUserToken: string | undefined = undefined;
     let userTokenBeforeInit: string | undefined = undefined;
+    let authenticatedUserTokenBeforeInit: string | undefined = undefined;
 
-    if (Array.isArray(insightsClient.queue)) {
+    const { queue } = insightsClient;
+
+    if (Array.isArray(queue)) {
       // Context: The umd build of search-insights is asynchronously loaded by the snippet.
       //
       // When user calls `aa('setUserToken', 'my-user-token')` before `search-insights` is loaded,
@@ -125,19 +129,28 @@ export function createInsightsMiddleware<
       // At this point, even though `search-insights` is not loaded yet,
       // we still want to read the token from the queue.
       // Otherwise, the first search call will be fired without the token.
-      [, queuedUserToken] =
-        find(
-          insightsClient.queue.slice().reverse(),
-          ([method]) => method === 'setUserToken'
-        ) || [];
+      [queuedUserToken, queuedAuthenticatedUserToken] = [
+        'setUserToken',
+        'setAuthenticatedUserToken',
+      ].map((key) => {
+        const [, value] =
+          find(queue.slice().reverse(), ([method]) => method === key) || [];
+
+        return value;
+      });
     }
+
+    // If user called `aa('setUserToken')` or `aa('setAuthenticatedUserToken')`
+    // before creating the Insights middleware, we temporarily store the token
+    // and set it later on.
+    //
+    // Otherwise, the `init` call might override them with anonymous user token.
     insightsClient('getUserToken', null, (_error, userToken) => {
-      // If user has called `aa('setUserToken', 'my-user-token')` before creating
-      // the `insights` middleware, we store them temporarily and
-      // set it later on.
-      //
-      // Otherwise, the `init` call might override it with anonymous user token.
       userTokenBeforeInit = normalizeUserToken(userToken);
+    });
+
+    insightsClient('getAuthenticatedUserToken', null, (_error, userToken) => {
+      authenticatedUserTokenBeforeInit = normalizeUserToken(userToken);
     });
 
     // Only `init` if the `insightsInitParams` option is passed or
@@ -241,20 +254,63 @@ export function createInsightsMiddleware<
           setUserTokenToSearch(anonymousUserToken, true);
         }
 
-        // We consider the `userToken` coming from a `init` call to have a higher
-        // importance than the one coming from the queue.
-        if (userTokenBeforeInit) {
-          setUserTokenToSearch(userTokenBeforeInit, true);
-          insightsClient('setUserToken', userTokenBeforeInit);
-        } else if (queuedUserToken) {
-          setUserTokenToSearch(queuedUserToken, true);
-          insightsClient('setUserToken', queuedUserToken);
+        function setUserToken(
+          token: string | number,
+          userToken?: string | number,
+          authenticatedUserToken?: string | number
+        ) {
+          setUserTokenToSearch(token, true);
+
+          if (userToken) {
+            insightsClient('setUserToken', userToken);
+          }
+          if (authenticatedUserToken) {
+            insightsClient('setAuthenticatedUserToken', authenticatedUserToken);
+          }
+        }
+
+        // We consider the `userToken` or `authenticatedUserToken` before an
+        // `init` call of higher importance than one from the queue.
+        const tokenBeforeInit =
+          authenticatedUserTokenBeforeInit || userTokenBeforeInit;
+        const queuedToken = queuedAuthenticatedUserToken || queuedUserToken;
+
+        if (tokenBeforeInit) {
+          setUserToken(
+            tokenBeforeInit,
+            userTokenBeforeInit,
+            authenticatedUserTokenBeforeInit
+          );
+        } else if (queuedToken) {
+          setUserToken(
+            queuedToken,
+            queuedUserToken,
+            queuedAuthenticatedUserToken
+          );
         }
 
         // This updates userToken which is set explicitly by `aa('setUserToken', userToken)`
         insightsClient('onUserTokenChange', setUserTokenToSearch, {
           immediate: true,
         });
+
+        // This updates userToken which is set explicitly by `aa('setAuthenticatedtUserToken', authenticatedUserToken)`
+        insightsClient(
+          'onAuthenticatedUserTokenChange',
+          (authenticatedUserToken) => {
+            // If we're unsetting the `authenticatedUserToken`, we revert to the `userToken`
+            if (!authenticatedUserToken) {
+              insightsClient('getUserToken', null, (_, userToken) => {
+                setUserTokenToSearch(userToken);
+              });
+            }
+
+            setUserTokenToSearch(authenticatedUserToken);
+          },
+          {
+            immediate: true,
+          }
+        );
 
         type InsightsClientWithLocalCredentials = <
           TMethod extends InsightsMethod
@@ -323,6 +379,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       },
       unsubscribe() {
         insightsClient('onUserTokenChange', undefined);
+        insightsClient('onAuthenticatedUserTokenChange', undefined);
         instantSearchInstance.sendEventToInsights = noop;
         if (helper && initialParameters) {
           helper.overrideStateWithoutTriggeringChangeEvent({

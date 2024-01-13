@@ -881,6 +881,166 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       expect(instantSearchInstance.client.search).toHaveBeenCalledTimes(2);
     });
 
+    describe('authenticatedUserToken', () => {
+      describe('before `init`', () => {
+        it('uses the `authenticatedUserToken` as the `userToken` when defined', () => {
+          const { insightsClient, instantSearchInstance, getUserToken } =
+            createTestEnvironment();
+
+          insightsClient('setAuthenticatedUserToken', 'abc');
+
+          instantSearchInstance.use(
+            createInsightsMiddleware({ insightsClient })
+          );
+
+          expect(getUserToken()).toEqual('abc');
+        });
+
+        it('uses the `authenticatedUserToken` as the `userToken` when both are defined', () => {
+          const { insightsClient, instantSearchInstance, getUserToken } =
+            createTestEnvironment();
+
+          insightsClient('setUserToken', 'abc');
+          insightsClient('setAuthenticatedUserToken', 'def');
+
+          instantSearchInstance.use(
+            createInsightsMiddleware({ insightsClient })
+          );
+
+          expect(getUserToken()).toEqual('def');
+        });
+
+        it('reverts to the `userToken` when unsetting the `authenticatedUserToken`', () => {
+          const { insightsClient, instantSearchInstance, getUserToken } =
+            createTestEnvironment();
+
+          insightsClient('setUserToken', 'abc');
+          insightsClient('setAuthenticatedUserToken', 'def');
+          insightsClient('setAuthenticatedUserToken', undefined);
+
+          instantSearchInstance.use(
+            createInsightsMiddleware({ insightsClient })
+          );
+
+          expect(getUserToken()).toEqual('abc');
+        });
+      });
+
+      describe('after `init`', () => {
+        it('uses the `authenticatedUserToken` as the `userToken` when defined', async () => {
+          const { insightsClient, instantSearchInstance, getUserToken } =
+            createTestEnvironment();
+          instantSearchInstance.use(
+            createInsightsMiddleware({ insightsClient })
+          );
+
+          insightsClient('setAuthenticatedUserToken', 'abc');
+
+          await wait(0);
+
+          expect(getUserToken()).toEqual('abc');
+        });
+
+        it('uses the `authenticatedUserToken` as the `userToken` when both are defined', async () => {
+          const { insightsClient, instantSearchInstance, getUserToken } =
+            createTestEnvironment();
+          instantSearchInstance.use(
+            createInsightsMiddleware({ insightsClient })
+          );
+
+          insightsClient('setUserToken', 'abc');
+          insightsClient('setAuthenticatedUserToken', 'def');
+
+          await wait(0);
+
+          expect(getUserToken()).toEqual('def');
+        });
+
+        it('reverts to the `userToken` when unsetting the `authenticatedUserToken`', async () => {
+          const { insightsClient, instantSearchInstance, getUserToken } =
+            createTestEnvironment();
+          instantSearchInstance.use(
+            createInsightsMiddleware({ insightsClient })
+          );
+
+          insightsClient('setUserToken', 'abc');
+          insightsClient('setAuthenticatedUserToken', 'def');
+          insightsClient('setAuthenticatedUserToken', undefined);
+
+          await wait(0);
+
+          expect(getUserToken()).toEqual('abc');
+        });
+      });
+
+      describe('from queue', () => {
+        it('uses the `authenticatedUserToken` as the `userToken` when defined', () => {
+          const {
+            insightsClient,
+            libraryLoadedAndProcessQueue,
+            instantSearchInstance,
+            getUserToken,
+          } = createUmdTestEnvironment();
+
+          insightsClient('init', { appId: 'myAppId', apiKey: 'myApiKey' });
+          insightsClient('setAuthenticatedUserToken', 'abc');
+
+          instantSearchInstance.use(
+            createInsightsMiddleware({
+              insightsClient,
+            })
+          );
+          libraryLoadedAndProcessQueue();
+
+          expect(getUserToken()).toEqual('abc');
+        });
+
+        it('uses the `authenticatedUserToken` as the `userToken` when both are defined', () => {
+          const {
+            insightsClient,
+            libraryLoadedAndProcessQueue,
+            instantSearchInstance,
+            getUserToken,
+          } = createUmdTestEnvironment();
+
+          insightsClient('init', { appId: 'myAppId', apiKey: 'myApiKey' });
+          insightsClient('setUserToken', 'abc');
+          insightsClient('setAuthenticatedUserToken', 'def');
+
+          instantSearchInstance.use(
+            createInsightsMiddleware({
+              insightsClient,
+            })
+          );
+          libraryLoadedAndProcessQueue();
+
+          expect(getUserToken()).toEqual('def');
+        });
+
+        it('reverts to the `userToken` when unsetting the `authenticatedUserToken`', () => {
+          const {
+            insightsClient,
+            libraryLoadedAndProcessQueue,
+            instantSearchInstance,
+            getUserToken,
+          } = createUmdTestEnvironment();
+
+          insightsClient('setUserToken', 'abc');
+          insightsClient('setAuthenticatedUserToken', 'def');
+          insightsClient('setAuthenticatedUserToken', undefined);
+
+          instantSearchInstance.use(
+            createInsightsMiddleware({
+              insightsClient,
+            })
+          );
+          libraryLoadedAndProcessQueue();
+
+          expect(getUserToken()).toEqual('abc');
+        });
+      });
+    });
+
     describe('umd', () => {
       it('applies userToken from queue if exists', () => {
         const {
