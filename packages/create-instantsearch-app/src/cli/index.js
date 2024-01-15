@@ -24,6 +24,7 @@ const getAnswersDefaultValues = require('./getAnswersDefaultValues');
 const getAttributesFromIndex = require('./getAttributesFromIndex');
 const getConfiguration = require('./getConfiguration');
 const getFacetsFromIndex = require('./getFacetsFromIndex');
+const getPotentialImageAttributes = require('./getPotentialImageAttributes');
 const isQuestionAsked = require('./isQuestionAsked');
 const postProcessAnswers = require('./postProcessAnswers');
 
@@ -43,6 +44,10 @@ program
     '--attributes-to-display <attributesToDisplay>',
     'The attributes of your index to display in hits',
     splitArray
+  )
+  .option(
+    '--image-attribute <imageAttribute>',
+    'The attribute for image display in hits'
   )
   .option(
     '--attributes-for-faceting <attributesForFaceting>',
@@ -158,6 +163,36 @@ const getQuestions = ({ appName }) => ({
       filter: (attributes) => attributes.filter(Boolean),
       when: ({ appId, apiKey, indexName }) =>
         attributesToDisplay.length === 0 && appId && apiKey && indexName,
+    },
+    {
+      type: 'list',
+      name: 'imageAttribute',
+      message: 'Attribute for image display',
+      suffix: `\n  ${chalk.gray(
+        'Used to display images in the default result template'
+      )}`,
+      pageSize: 10,
+      choices: async (answers) => [
+        {
+          name: 'None',
+          value: undefined,
+        },
+        new inquirer.Separator(),
+        new inquirer.Separator('From your index'),
+        ...(await getPotentialImageAttributes(answers)),
+      ],
+      when: ({
+        appId,
+        apiKey,
+        indexName,
+        imageAttribute,
+        attributesToDisplay: selectedAttributes,
+      }) =>
+        selectedAttributes.length > 0 &&
+        !imageAttribute &&
+        appId &&
+        apiKey &&
+        indexName,
     },
     {
       type: 'checkbox',

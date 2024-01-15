@@ -49,6 +49,9 @@
             <ais-hits>
               <template v-slot:item="{ item }">
                 <article>
+                  {{#if imageAttribute}}
+                  <img :src="item.{{imageAttribute}}" :alt="item.{{attributesToDisplay.[0]}}" />
+                  {{/if}}
                   <h1>
                     <ais-highlight
                       :hit="item"
