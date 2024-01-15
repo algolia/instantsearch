@@ -2576,6 +2576,7 @@ search.addWidgets([
     templates: {
       item: (hit, { html, components }) => html\`
         <article>
+          <img src=\${hit.imageAttribute} alt=\${hit.attribute1} />
           <h1>\${components.Highlight({ hit, attribute: 'attribute1' })}</h1>
           <p>\${components.Highlight({ hit, attribute: 'attribute2' })}</p>
         </article>
@@ -4182,6 +4183,7 @@ function renderHits(query) {
             (hit) =>
               \`<li class=\\"ais-hits--item\\">
                 <article>
+                  <img src=\\"\${hit.imageAttribute}\\" alt=\\"\${hit.attribute1}\\" />
                   <h1>\${hit._highlightResult.attribute1.value}</h1>
                   <p>\${hit._highlightResult.attribute2.value}</p>
                 </article>
@@ -4496,6 +4498,7 @@ helper.on('result', ({ results }) => {
           (hit) =>
             \`<li class=\\"ais-hits--item\\">
               <article>
+                <img src=\\"\${hit.imageAttribute}\\" alt=\\"\${hit.attribute1}\\" />
                 <h1>\${hit._highlightResult.attribute1.value}</h1>
                 <p>\${hit._highlightResult.attribute2.value}</p>
               </article>
@@ -4778,7 +4781,7 @@ export function App() {
           <Configure hitsPerPage={8} />
           <div className=\\"search-panel\\">
             <div className=\\"search-panel__filters\\">
-              <DynamicWidgets fallback={RefinementList}>
+              <DynamicWidgets fallbackComponent={RefinementList}>
                 <Panel header=\\"facet1\\">
                   <RefinementList attribute=\\"facet1\\" />
                 </Panel>
@@ -4813,6 +4816,7 @@ type HitProps = {
 function Hit({ hit }: HitProps) {
   return (
     <article>
+      <img src={hit.imageAttribute} alt={hit.attribute1} />
       <h1>
         <Highlight attribute=\\"attribute1\\" hit={hit} />
       </h1>
@@ -5504,6 +5508,7 @@ exports[`Templates Vue InstantSearch File content: src/App.vue 1`] = `
             <ais-hits>
               <template slot=\\"item\\" slot-scope=\\"{ item }\\">
                 <article>
+                  <img :src=\\"item.imageAttribute\\" :alt=\\"item.attribute1\\" />
                   <h1>
                     <ais-highlight :hit=\\"item\\" attribute=\\"attribute1\\" />
                   </h1>
@@ -5799,6 +5804,7 @@ exports[`Templates Vue InstantSearch with Vue 3 File content: src/App.vue 1`] = 
             <ais-hits>
               <template v-slot:item=\\"{ item }\\">
                 <article>
+                  <img :src=\\"item.imageAttribute\\" :alt=\\"item.attribute1\\" />
                   <h1>
                     <ais-highlight :hit=\\"item\\" attribute=\\"attribute1\\" />
                   </h1>

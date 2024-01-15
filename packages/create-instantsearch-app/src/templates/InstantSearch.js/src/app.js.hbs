@@ -39,6 +39,9 @@ search.addWidgets([
     templates: {
       item: (hit, { html, components }) => html`
 <article>
+  {{#if imageAttribute}}
+  <img src=${ hit.{{imageAttribute}} } alt=${ hit.{{attributesToDisplay.[0]}} } />
+  {{/if}}
   <h1>${components.Highlight({hit, attribute: "{{attributesToDisplay.[0]}}"})}</h1>
   {{#each attributesToDisplay}}
   {{#unless @first}}
