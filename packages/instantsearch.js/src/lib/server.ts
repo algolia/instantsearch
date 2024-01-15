@@ -7,24 +7,22 @@ import type {
   SearchOptions,
 } from '../types';
 
-type RequestParams = SearchOptions | undefined;
-
 /**
  * Waits for the results from the search instance to coordinate the next steps
  * in `getServerState()`.
  */
 export function waitForResults(
   search: InstantSearch
-): Promise<RequestParams[]> {
+): Promise<SearchOptions[]> {
   const helper = search.mainHelper!;
 
   // Extract search parameters from the search client to use them
   // later during hydration.
-  let requestParamsList: RequestParams[];
+  let requestParamsList: SearchOptions[];
   const client = helper.getClient();
   helper.setClient({
     search(queries) {
-      requestParamsList = queries.map(({ params }) => params);
+      requestParamsList = queries.map(({ params }) => params!);
       return client.search(queries);
     },
   });
@@ -63,7 +61,7 @@ export function getInitialResults(
    * Search parameters sent to the search client,
    * returned by `waitForResults()`.
    */
-  requestParamsList?: RequestParams[]
+  requestParamsList?: SearchOptions[]
 ): InitialResults {
   const initialResults: InitialResults = {};
 

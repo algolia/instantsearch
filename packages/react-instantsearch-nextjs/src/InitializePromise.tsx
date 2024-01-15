@@ -21,10 +21,10 @@ export function InitializePromise() {
 
   // Extract search parameters from the search client to use them
   // later during hydration.
-  let requestParamsList: Array<SearchOptions | undefined>;
+  let requestParamsList: SearchOptions[];
   search.mainHelper!.setClient({
     search(queries) {
-      requestParamsList = queries.map(({ params }) => params);
+      requestParamsList = queries.map(({ params }) => params!);
       return search.client.search(queries);
     },
   });
