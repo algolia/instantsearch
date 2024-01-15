@@ -277,8 +277,7 @@ describe('getInitialResults', () => {
     search.start();
 
     const requestParams = await waitForResults(search);
-
-    expect(getInitialResults(search.mainIndex, requestParams)).toEqual({
+    const expectedInitialResults = {
       indexName: expect.objectContaining({
         requestParams: expect.objectContaining({
           query: 'apple',
@@ -295,6 +294,16 @@ describe('getInitialResults', () => {
           hitsPerPage: 2,
         }),
       }),
-    });
+    };
+
+    expect(getInitialResults(search.mainIndex, requestParams)).toEqual(
+      expectedInitialResults
+    );
+
+    // Multiple calls to `getInitialResults()` with the same requestParams
+    // return the same results
+    expect(getInitialResults(search.mainIndex, requestParams)).toEqual(
+      expectedInitialResults
+    );
   });
 });

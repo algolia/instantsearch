@@ -60,19 +60,19 @@ export function waitForResults(
 export function getInitialResults(
   rootIndex: IndexWidget,
   /**
-   * Search parameters sent to the search client, usually
+   * Search parameters sent to the search client,
    * returned by `waitForResults()`.
    */
   requestParamsList?: RequestParams[]
 ): InitialResults {
   const initialResults: InitialResults = {};
 
+  let requestParamsIndex = 0;
   walkIndex(rootIndex, (widget) => {
     const searchResults = widget.getResults();
     if (searchResults) {
-      const indexId = widget.getIndexId();
-      const requestParams = requestParamsList?.shift();
-      initialResults[indexId] = {
+      const requestParams = requestParamsList?.[requestParamsIndex++];
+      initialResults[widget.getIndexId()] = {
         // We convert the Helper state to a plain object to pass parsable data
         // structures from server to client.
         state: { ...searchResults._state },
