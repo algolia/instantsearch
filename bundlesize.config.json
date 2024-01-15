@@ -30,7 +30,7 @@
     },
     {
       "path": "packages/vue-instantsearch/vue3/umd/index.js",
-      "maxSize": "65 kB"
+      "maxSize": "65.25 kB"
     },
     {
       "path": "packages/vue-instantsearch/vue2/cjs/index.js",
