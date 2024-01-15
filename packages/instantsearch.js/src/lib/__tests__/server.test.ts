@@ -272,11 +272,50 @@ describe('getInitialResults', () => {
       index({ indexName: 'indexName2', indexId: 'indexId' }).addWidgets([
         connectConfigure(() => {})({ searchParameters: { hitsPerPage: 2 } }),
       ]),
+      index({ indexName: 'indexName2', indexId: 'indexId' }).addWidgets([
+        connectConfigure(() => {})({ searchParameters: { hitsPerPage: 3 } }),
+      ]),
     ]);
 
     search.start();
 
     const requestParams = await waitForResults(search);
+
+    // Request params for the same index name + index id are not deduplicated,
+    // so we should have data for 4 indices (main index + 3 index widgets)
+    expect(requestParams).toHaveLength(4);
+    expect(requestParams).toMatchInlineSnapshot(`
+      [
+        {
+          "facets": [],
+          "query": "apple",
+          "tagFilters": "",
+        },
+        {
+          "facets": [],
+          "query": "samsung",
+          "tagFilters": "",
+        },
+        {
+          "facets": [],
+          "hitsPerPage": 2,
+          "query": "apple",
+          "tagFilters": "",
+        },
+        {
+          "facets": [],
+          "hitsPerPage": 3,
+          "query": "apple",
+          "tagFilters": "",
+        },
+      ]
+    `);
+
+    // `getInitialResults()` generates a dictionary of initial results
+    // keyed by index id, so indexName2/indexId should be deduplicated...
+    expect(Object.entries(getInitialResults(search.mainIndex))).toHaveLength(3);
+
+    // ...and only the latest duplicate params are in the returned results
     const expectedInitialResults = {
       indexName: expect.objectContaining({
         requestParams: expect.objectContaining({
@@ -291,7 +330,7 @@ describe('getInitialResults', () => {
       indexId: expect.objectContaining({
         requestParams: expect.objectContaining({
           query: 'apple',
-          hitsPerPage: 2,
+          hitsPerPage: 3,
         }),
       }),
     };
