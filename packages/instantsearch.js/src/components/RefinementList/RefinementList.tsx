@@ -222,29 +222,24 @@ class RefinementList<TTemplates extends Templates> extends Component<
       return;
     }
 
-    if (
-      !(originalEvent.target instanceof HTMLElement) ||
-      !(originalEvent.target.parentNode instanceof HTMLElement)
-    ) {
+    let parent = originalEvent.target as HTMLElement | null;
+
+    if (parent === null || parent.parentNode === null) {
       return;
     }
 
     if (
       isRefined &&
-      originalEvent.target.parentNode.querySelector(
-        'input[type="radio"]:checked'
-      )
+      parent.parentNode.querySelector('input[type="radio"]:checked')
     ) {
       // Prevent refinement for being reset if the user clicks on an already checked radio button
       return;
     }
 
-    if (originalEvent.target.tagName === 'INPUT') {
+    if (parent.tagName === 'INPUT') {
       this.refine(facetValueToRefine);
       return;
     }
-
-    let parent = originalEvent.target;
 
     while (parent !== originalEvent.currentTarget) {
       if (
