@@ -5,7 +5,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [7.5.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.5.0...react-instantsearch@7.5.1) (2024-01-16)
 
-**Note:** Version bump only for package react-instantsearch
+
+### Bug Fixes
+
+* **RatingMenu/RefinementList:** handle clicks in svg ([#5993](https://github.com/algolia/instantsearch/issues/5993)) ([a6698f5](https://github.com/algolia/instantsearch/commit/a6698f5db33a6e18733aa8861e38491aef793c15))
 
 
 

@@ -5,7 +5,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [4.63.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.63.0...instantsearch.js@4.63.1) (2024-01-16)
 
-**Note:** Version bump only for package instantsearch.js
+
+### Bug Fixes
+
+* **RatingMenu/RefinementList:** handle clicks in svg ([#5993](https://github.com/algolia/instantsearch/issues/5993)) ([a6698f5](https://github.com/algolia/instantsearch/commit/a6698f5db33a6e18733aa8861e38491aef793c15))
 
 
 
