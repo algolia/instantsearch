@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-getting-started",
-  "version": "6.49.0",
+  "version": "6.50.0",
   "private": true,
   "scripts": {
     "build": "BABEL_ENV=parcel parcel build index.html",
@@ -8,10 +8,10 @@
   },
   "dependencies": {
     "algoliasearch": "4.14.3",
-    "instantsearch.js": "4.63.0",
+    "instantsearch.js": "4.63.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-instantsearch": "7.5.0"
+    "react-instantsearch": "7.5.1"
   },
   "devDependencies": {
     "@parcel/core": "2.10.0",
