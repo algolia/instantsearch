@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.64.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.63.1...instantsearch.js@4.64.0) (2024-01-16)
+
+
+### Features
+
+* **createInsightsMiddleware:** support `authenticatedUserToken` ([#5997](https://github.com/algolia/instantsearch/issues/5997)) ([a20715c](https://github.com/algolia/instantsearch/commit/a20715c9a8a69cdca6c58c369b7f1f5ab2e557d6))
+
+
+
+
+
 ## [4.63.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.63.0...instantsearch.js@4.63.1) (2024-01-16)
 
 
