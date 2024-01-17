@@ -129,9 +129,12 @@ function execute({
 
       return waitForResults(searchRef.current);
     })
-    .then(() => {
+    .then((requestParamsList) => {
       return {
-        initialResults: getInitialResults(searchRef.current!.mainIndex),
+        initialResults: getInitialResults(
+          searchRef.current!.mainIndex,
+          requestParamsList
+        ),
       };
     });
 }
