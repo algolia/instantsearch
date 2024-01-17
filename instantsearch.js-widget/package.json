@@ -59,7 +59,7 @@
     "eslint-plugin-jest": "24.1.5",
     "eslint-plugin-jsdoc": "32.2.0",
     "eslint-plugin-prettier": "3.3.1",
-    "instantsearch.js": "4.63.1",
+    "instantsearch.js": "4.64.0",
     "jest": "26.6.3",
     "prettier": "2.2.1",
     "rollup-plugin-api-extractor": "0.2.2",
