@@ -300,7 +300,7 @@ SearchParameters._parseNumbers = function (partialState) {
     numbers.numericRefinements = numericRefinements;
   }
 
-  return merge(partialState, numbers);
+  return merge({}, partialState, numbers);
 };
 
 /**

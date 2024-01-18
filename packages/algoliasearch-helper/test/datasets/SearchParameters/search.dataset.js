@@ -188,8 +188,7 @@ function getData() {
     index: 'test_hotels-node',
     disjunctiveFacets: ['city'],
     disjunctiveFacetsRefinements: {
-      // Note: these are in the same order as the refinements above, not sorted
-      city: ['Paris', 'New York'],
+      city: ['New York', 'Paris'],
     },
   });
 
