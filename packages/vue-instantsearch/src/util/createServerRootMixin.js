@@ -116,8 +116,11 @@ function augmentInstantSearch(instantSearchOptions, cloneComponent) {
       })
       .then(() => renderToString(app))
       .then(() => waitForResults(instance))
-      .then(() => {
-        initialResults = getInitialResults(instance.mainIndex);
+      .then((requestParamsList) => {
+        initialResults = getInitialResults(
+          instance.mainIndex,
+          requestParamsList
+        );
         search.hydrate(initialResults);
         return search.getState();
       });

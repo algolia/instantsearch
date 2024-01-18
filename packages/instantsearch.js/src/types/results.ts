@@ -1,3 +1,4 @@
+import type { SearchOptions } from './algoliasearch';
 import type {
   PlainSearchParameters,
   SearchForFacetValues,
@@ -94,6 +95,7 @@ export type Refinement = FacetRefinement | NumericRefinement;
 type InitialResult = {
   state: PlainSearchParameters;
   results: SearchResults['_rawResults'];
+  requestParams?: SearchOptions;
 };
 
 export type InitialResults = Record<string, InitialResult>;

@@ -546,9 +546,7 @@ See documentation: ${createDocumentationLink({
 
   /**
    * Ends the initialization of InstantSearch.js and triggers the
-   * first search. This method should be called after all widgets have been added
-   * to the instance of InstantSearch.js. InstantSearch.js also supports adding and removing
-   * widgets after the start as an **EXPERIMENTAL** feature.
+   * first search.
    */
   public start() {
     if (this.started) {
@@ -713,9 +711,7 @@ See documentation: ${createDocumentationLink({
   }
 
   /**
-   * Removes all widgets without triggering a search afterwards. This is an **EXPERIMENTAL** feature,
-   * if you find an issue with it, please
-   * [open an issue](https://github.com/algolia/instantsearch/issues/new?title=Problem%20with%20dispose).
+   * Removes all widgets without triggering a search afterwards.
    * @return {undefined} This method does not return anything
    */
   public dispose(): void {

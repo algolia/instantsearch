@@ -3,7 +3,7 @@ import {
   createSearchClient,
 } from '@instantsearch/mocks';
 
-import { connectSearchBox } from '../../connectors';
+import { connectConfigure, connectSearchBox } from '../../connectors';
 import instantsearch from '../../index.es';
 import { index } from '../../widgets';
 import { getInitialResults, waitForResults } from '../server';
@@ -14,8 +14,15 @@ describe('waitForResults', () => {
     const search = instantsearch({
       indexName: 'indexName',
       searchClient,
+      initialUiState: {
+        indexName: {
+          query: 'apple',
+        },
+      },
     }).addWidgets([
-      index({ indexName: 'indexName2' }),
+      index({ indexName: 'indexName2' }).addWidgets([
+        connectConfigure(() => {})({ searchParameters: { hitsPerPage: 2 } }),
+      ]),
       connectSearchBox(() => {})({}),
     ]);
 
@@ -25,7 +32,10 @@ describe('waitForResults', () => {
 
     searches[0].resolver();
 
-    await expect(output).resolves.toBeUndefined();
+    await expect(output).resolves.toEqual([
+      expect.objectContaining({ query: 'apple' }),
+      expect.objectContaining({ query: 'apple', hitsPerPage: 2 }),
+    ]);
   });
 
   test('throws on a search client error', async () => {
@@ -238,5 +248,101 @@ describe('getInitialResults', () => {
         ],
       },
     });
+  });
+
+  test('returns the current results with request params if specified', async () => {
+    const search = instantsearch({
+      indexName: 'indexName',
+      searchClient: createSearchClient(),
+      initialUiState: {
+        indexName: {
+          query: 'apple',
+        },
+        indexName2: {
+          query: 'samsung',
+        },
+      },
+    });
+
+    search.addWidgets([
+      connectSearchBox(() => {})({}),
+      index({ indexName: 'indexName2' }).addWidgets([
+        connectSearchBox(() => {})({}),
+      ]),
+      index({ indexName: 'indexName2', indexId: 'indexId' }).addWidgets([
+        connectConfigure(() => {})({ searchParameters: { hitsPerPage: 2 } }),
+      ]),
+      index({ indexName: 'indexName2', indexId: 'indexId' }).addWidgets([
+        connectConfigure(() => {})({ searchParameters: { hitsPerPage: 3 } }),
+      ]),
+    ]);
+
+    search.start();
+
+    const requestParams = await waitForResults(search);
+
+    // Request params for the same index name + index id are not deduplicated,
+    // so we should have data for 4 indices (main index + 3 index widgets)
+    expect(requestParams).toHaveLength(4);
+    expect(requestParams).toMatchInlineSnapshot(`
+      [
+        {
+          "facets": [],
+          "query": "apple",
+          "tagFilters": "",
+        },
+        {
+          "facets": [],
+          "query": "samsung",
+          "tagFilters": "",
+        },
+        {
+          "facets": [],
+          "hitsPerPage": 2,
+          "query": "apple",
+          "tagFilters": "",
+        },
+        {
+          "facets": [],
+          "hitsPerPage": 3,
+          "query": "apple",
+          "tagFilters": "",
+        },
+      ]
+    `);
+
+    // `getInitialResults()` generates a dictionary of initial results
+    // keyed by index id, so indexName2/indexId should be deduplicated...
+    expect(Object.entries(getInitialResults(search.mainIndex))).toHaveLength(3);
+
+    // ...and only the latest duplicate params are in the returned results
+    const expectedInitialResults = {
+      indexName: expect.objectContaining({
+        requestParams: expect.objectContaining({
+          query: 'apple',
+        }),
+      }),
+      indexName2: expect.objectContaining({
+        requestParams: expect.objectContaining({
+          query: 'samsung',
+        }),
+      }),
+      indexId: expect.objectContaining({
+        requestParams: expect.objectContaining({
+          query: 'apple',
+          hitsPerPage: 3,
+        }),
+      }),
+    };
+
+    expect(getInitialResults(search.mainIndex, requestParams)).toEqual(
+      expectedInitialResults
+    );
+
+    // Multiple calls to `getInitialResults()` with the same requestParams
+    // return the same results
+    expect(getInitialResults(search.mainIndex, requestParams)).toEqual(
+      expectedInitialResults
+    );
   });
 });

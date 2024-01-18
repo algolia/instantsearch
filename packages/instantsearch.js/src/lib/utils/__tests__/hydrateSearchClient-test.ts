@@ -71,4 +71,80 @@ describe('hydrateSearchClient', () => {
 
     expect(client.cache).toBeDefined();
   });
+
+  it('should use request params by default', () => {
+    const setCache = jest.fn();
+    client = {
+      transporter: { responsesCache: { set: setCache } },
+      addAlgoliaAgent: jest.fn(),
+    } as unknown as SearchClient;
+
+    hydrateSearchClient(client, {
+      instant_search: {
+        results: [
+          { index: 'instant_search', params: 'source=results', nbHits: 1000 },
+        ],
+        state: {},
+        rawResults: [
+          { index: 'instant_search', params: 'source=results', nbHits: 1000 },
+        ],
+        requestParams: {
+          source: 'request',
+        },
+      },
+    } as unknown as InitialResults);
+
+    expect(setCache).toHaveBeenCalledWith(
+      expect.objectContaining({
+        args: [[{ indexName: 'instant_search', params: 'source=request' }]],
+        method: 'search',
+      }),
+      expect.anything()
+    );
+  });
+
+  it('should use results params as a fallback', () => {
+    const setCache = jest.fn();
+    client = {
+      transporter: { responsesCache: { set: setCache } },
+      addAlgoliaAgent: jest.fn(),
+    } as unknown as SearchClient;
+
+    hydrateSearchClient(client, {
+      instant_search: {
+        results: [
+          { index: 'instant_search', params: 'source=results', nbHits: 1000 },
+        ],
+        state: {},
+        rawResults: [
+          { index: 'instant_search', params: 'source=results', nbHits: 1000 },
+        ],
+      },
+    } as unknown as InitialResults);
+
+    expect(setCache).toHaveBeenCalledWith(
+      expect.objectContaining({
+        args: [[{ indexName: 'instant_search', params: 'source=results' }]],
+        method: 'search',
+      }),
+      expect.anything()
+    );
+  });
+
+  it('should not throw if there are no params from request or results to generate the cache with', () => {
+    expect(() => {
+      client = {
+        transporter: { responsesCache: { set: jest.fn() } },
+        addAlgoliaAgent: jest.fn(),
+      } as unknown as SearchClient;
+
+      hydrateSearchClient(client, {
+        instant_search: {
+          results: [{ index: 'instant_search', nbHits: 1000 }],
+          state: {},
+          rawResults: [{ index: 'instant_search', nbHits: 1000 }],
+        },
+      } as unknown as InitialResults);
+    }).not.toThrow();
+  });
 });

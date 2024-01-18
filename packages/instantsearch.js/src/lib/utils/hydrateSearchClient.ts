@@ -34,16 +34,24 @@ export function hydrateSearchClient(
     return;
   }
 
-  const cachedRequest = Object.keys(results).map((key) =>
-    results[key].results.map((result) => ({
-      indexName: result.index,
+  const cachedRequest = Object.keys(results).map((key) => {
+    const { state, requestParams, results: serverResults } = results[key];
+    return serverResults.map((result) => ({
+      indexName: state.index || result.index,
       // We normalize the params received from the server as they can
       // be serialized differently depending on the engine.
-      params: serializeQueryParameters(
-        deserializeQueryParameters(result.params)
-      ),
-    }))
-  );
+      // We use search parameters from the server request to craft the cache
+      // if possible, and fallback to those from results if not.
+      ...(requestParams || result.params
+        ? {
+            params: serializeQueryParameters(
+              requestParams || deserializeQueryParameters(result.params)
+            ),
+          }
+        : {}),
+    }));
+  });
+
   const cachedResults = Object.keys(results).reduce<Array<SearchResponse<any>>>(
     (acc, key) => acc.concat(results[key].results),
     []

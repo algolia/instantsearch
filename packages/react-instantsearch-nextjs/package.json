@@ -1,6 +1,6 @@
 {
   "name": "react-instantsearch-nextjs",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "React InstantSearch SSR utilities for Next.js",
   "source": "src/index.ts",
   "types": "dist/es/index.d.ts",
@@ -48,9 +48,9 @@
     "test:exports": "node ./__tests__/module/is-es-module.mjs && node ./__tests__/module/is-cjs-module.cjs"
   },
   "devDependencies": {
-    "instantsearch.js": "4.63.1",
+    "instantsearch.js": "4.64.0",
     "next": "13.5.1",
-    "react-instantsearch-core": "7.5.1"
+    "react-instantsearch-core": "7.5.2"
   },
   "peerDependencies": {
     "next": ">= 13.4 && < 15",
