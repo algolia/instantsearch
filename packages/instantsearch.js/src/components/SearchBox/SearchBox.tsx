@@ -27,6 +27,7 @@ type SearchBoxProps = {
   refine?: (value: string) => void;
   autofocus?: boolean;
   searchAsYouType?: boolean;
+  ignoreCompositionEvents?: boolean;
   isSearchStalled?: boolean;
   disabled?: boolean;
   ariaLabel?: string;
@@ -42,6 +43,7 @@ const defaultProps = {
   showLoadingIndicator: true,
   autofocus: false,
   searchAsYouType: true,
+  ignoreCompositionEvents: false,
   isSearchStalled: false,
   disabled: false,
   ariaLabel: 'Search',
@@ -88,8 +90,10 @@ class SearchBox extends Component<
     const query = (event.target as HTMLInputElement).value;
 
     if (
-      event.type === 'compositionend' ||
-      !(event as KeyboardEvent).isComposing
+      !(
+        this.props.ignoreCompositionEvents &&
+        (event as KeyboardEvent).isComposing
+      )
     ) {
       if (searchAsYouType) {
         refine(query);

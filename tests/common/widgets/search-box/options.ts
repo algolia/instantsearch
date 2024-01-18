@@ -308,7 +308,7 @@ export function createOptionsTests(
       expect(screen.getByRole('searchbox')).toHaveValue('iPhone');
     });
 
-    test('refines query only when composition is complete', async () => {
+    test('does not refine in progress composition when `ignoreCompositionEvents: true`', async () => {
       const searchClient = createSearchClient({});
 
       await setup({
@@ -316,7 +316,9 @@ export function createOptionsTests(
           indexName: 'indexName',
           searchClient,
         },
-        widgetParams: {},
+        widgetParams: {
+          ignoreCompositionEvents: true,
+        },
       });
 
       // Typing 木 using the Wubihua input method

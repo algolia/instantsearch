@@ -131,6 +131,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    ignoreCompositionEvents: {
+      type: Boolean,
+      default: false,
+    },
     submitTitle: {
       type: String,
       default: 'Search',
@@ -161,7 +165,7 @@ export default {
       return document.activeElement === this.$refs.input;
     },
     onInput(event) {
-      if (event.type === 'compositionend' || !event.isComposing) {
+      if (!(this.ignoreCompositionEvents && event.isComposing)) {
         this.$emit('input', event.target.value);
         this.$emit('update:modelValue', event.target.value);
       }
