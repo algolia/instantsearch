@@ -277,12 +277,9 @@ var requestBuilder = {
       .sort()
       .forEach(function (facetName) {
         var facetValues = facetsRefinements[facetName] || [];
-        facetValues
-          .slice()
-          .sort()
-          .forEach(function (facetValue) {
-            facetFilters.push(facetName + ':' + facetValue);
-          });
+        facetValues.sort().forEach(function (facetValue) {
+          facetFilters.push(facetName + ':' + facetValue);
+        });
       });
 
     var facetsExcludes = state.facetsExcludes || {};
@@ -305,12 +302,9 @@ var requestBuilder = {
         }
         var orFilters = [];
 
-        facetValues
-          .slice()
-          .sort()
-          .forEach(function (facetValue) {
-            orFilters.push(facetName + ':' + facetValue);
-          });
+        facetValues.sort().forEach(function (facetValue) {
+          orFilters.push(facetName + ':' + facetValue);
+        });
 
         facetFilters.push(orFilters);
       });
