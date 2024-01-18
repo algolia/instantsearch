@@ -308,7 +308,7 @@ export function createOptionsTests(
       expect(screen.getByRole('searchbox')).toHaveValue('iPhone');
     });
 
-    test('does not refine in progress composition when `ignoreCompositionEvents: true`', async () => {
+    test('does not refine within composition session when `ignoreCompositionEvents: true`', async () => {
       const searchClient = createSearchClient({});
 
       await setup({
