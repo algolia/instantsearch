@@ -454,9 +454,10 @@ const connectRatingMenu: RatingMenuConnector = function connectRatingMenu(
       getWidgetSearchParameters(searchParameters, { uiState }) {
         const value = uiState.ratingMenu && uiState.ratingMenu[attribute];
 
-        const withoutRefinements = searchParameters.clearRefinements(attribute);
-        const withDisjunctiveFacet =
-          withoutRefinements.addDisjunctiveFacet(attribute);
+        const withDisjunctiveFacet = searchParameters
+          .addDisjunctiveFacet(attribute)
+          .removeNumericRefinement(attribute)
+          .removeDisjunctiveFacetRefinement(attribute);
 
         if (!value) {
           return withDisjunctiveFacet.setQueryParameters({

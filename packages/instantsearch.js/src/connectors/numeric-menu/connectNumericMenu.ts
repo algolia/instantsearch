@@ -214,7 +214,7 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
 
       dispose({ state }) {
         unmountFn();
-        return state.clearRefinements(attribute);
+        return state.removeNumericRefinement(attribute);
       },
 
       getWidgetUiState(uiState, { searchParameters }) {
@@ -250,15 +250,15 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
       getWidgetSearchParameters(searchParameters, { uiState }) {
         const value = uiState.numericMenu && uiState.numericMenu[attribute];
 
-        const withoutRefinements = searchParameters.clearRefinements(attribute);
+        const withoutRefinements = searchParameters.setQueryParameters({
+          numericRefinements: {
+            ...searchParameters.numericRefinements,
+            [attribute]: {},
+          },
+        });
 
         if (!value) {
-          return withoutRefinements.setQueryParameters({
-            numericRefinements: {
-              ...withoutRefinements.numericRefinements,
-              [attribute]: {},
-            },
-          });
+          return withoutRefinements;
         }
 
         const isExact = value.indexOf(':') === -1;
