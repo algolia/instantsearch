@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.64.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.64.0...instantsearch.js@4.64.1) (2024-01-23)
+
+
+### Bug Fixes
+
+* **hydration:** generate cache with search parameters from server-side request ([#5991](https://github.com/algolia/instantsearch/issues/5991)) ([968cf43](https://github.com/algolia/instantsearch/commit/968cf433511eb172acee8eaf6a7c90740f7ee0a6))
+* **perf:** remove usage of SearchParameters.clearRefinements ([#6004](https://github.com/algolia/instantsearch/issues/6004)) ([d9491e1](https://github.com/algolia/instantsearch/commit/d9491e155a0157085d11e6ef3a2fb02b19e28985))
+
+
+
+
+
 # [4.64.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.63.1...instantsearch.js@4.64.0) (2024-01-16)
 
 
