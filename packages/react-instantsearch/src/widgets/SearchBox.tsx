@@ -28,12 +28,19 @@ export type SearchBoxProps = Omit<
      * @default true
      */
     searchAsYouType?: boolean;
+    /**
+     * Whether to update the search state in the middle of a
+     * composition session.
+     * @default false
+     */
+    ignoreCompositionEvents?: boolean;
     translations?: Partial<UiProps['translations']>;
   };
 
 export function SearchBox({
   queryHook,
   searchAsYouType = true,
+  ignoreCompositionEvents = false,
   translations,
   ...props
 }: SearchBoxProps) {
@@ -44,10 +51,10 @@ export function SearchBox({
   const [inputValue, setInputValue] = useState(query);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  function setQuery(newQuery: string, compositionComplete = true) {
+  function setQuery(newQuery: string, isComposing = false) {
     setInputValue(newQuery);
 
-    if (searchAsYouType && compositionComplete) {
+    if (searchAsYouType && !(ignoreCompositionEvents && isComposing)) {
       refine(newQuery);
     }
   }
@@ -63,11 +70,10 @@ export function SearchBox({
   function onChange(
     event: Parameters<NonNullable<SearchBoxUiComponentProps['onChange']>>[0]
   ) {
-    const compositionComplete =
-      event.type === 'compositionend' ||
-      !(event.nativeEvent as KeyboardEvent).isComposing;
-
-    setQuery(event.currentTarget.value, compositionComplete);
+    setQuery(
+      event.currentTarget.value,
+      (event.nativeEvent as KeyboardEvent).isComposing
+    );
   }
 
   function onSubmit(event: React.FormEvent<HTMLFormElement>) {

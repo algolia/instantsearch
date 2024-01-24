@@ -100,6 +100,12 @@ export type SearchBoxWidgetParams = {
    */
   searchAsYouType?: boolean;
   /**
+   * Whether to update the search state in the middle of a
+   * composition session.
+   * @default false
+   */
+  ignoreCompositionEvents?: boolean;
+  /**
    * Whether to show the reset button
    */
   showReset?: boolean;
@@ -137,6 +143,7 @@ const renderer =
     templates,
     autofocus,
     searchAsYouType,
+    ignoreCompositionEvents,
     showReset,
     showSubmit,
     showLoadingIndicator,
@@ -147,6 +154,7 @@ const renderer =
     templates: SearchBoxComponentTemplates;
     autofocus: boolean;
     searchAsYouType: boolean;
+    ignoreCompositionEvents: boolean;
     showReset: boolean;
     showSubmit: boolean;
     showLoadingIndicator: boolean;
@@ -163,6 +171,7 @@ const renderer =
         autofocus={autofocus}
         refine={refine}
         searchAsYouType={searchAsYouType}
+        ignoreCompositionEvents={ignoreCompositionEvents}
         templates={templates}
         showSubmit={showSubmit}
         showReset={showReset}
@@ -195,6 +204,7 @@ const searchBox: SearchBoxWidget = function searchBox(widgetParams) {
     cssClasses: userCssClasses = {},
     autofocus = false,
     searchAsYouType = true,
+    ignoreCompositionEvents = false,
     showReset = true,
     showSubmit = true,
     showLoadingIndicator = true,
@@ -242,6 +252,7 @@ const searchBox: SearchBoxWidget = function searchBox(widgetParams) {
     templates,
     autofocus,
     searchAsYouType,
+    ignoreCompositionEvents,
     showReset,
     showSubmit,
     showLoadingIndicator,
