@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.4.1](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.4.0...create-instantsearch-app@7.4.1) (2024-01-23)
+
+**Note:** Version bump only for package create-instantsearch-app
+
+
+
+
+
 # [7.4.0](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.3.3...create-instantsearch-app@7.4.0) (2024-01-16)
 
 

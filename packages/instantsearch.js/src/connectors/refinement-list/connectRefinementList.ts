@@ -517,11 +517,13 @@ As this is not supported, please make sure to only use this attribute with one o
           const values =
             uiState.refinementList && uiState.refinementList[attribute];
 
-          const withoutRefinements =
-            searchParameters.clearRefinements(attribute);
           const withFacetConfiguration = isDisjunctive
-            ? withoutRefinements.addDisjunctiveFacet(attribute)
-            : withoutRefinements.addFacet(attribute);
+            ? searchParameters
+                .addDisjunctiveFacet(attribute)
+                .removeDisjunctiveFacetRefinement(attribute)
+            : searchParameters
+                .addFacet(attribute)
+                .removeFacetRefinement(attribute);
 
           const currentMaxValuesPerFacet =
             withFacetConfiguration.maxValuesPerFacet || 0;

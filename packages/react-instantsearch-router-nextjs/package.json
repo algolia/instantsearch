@@ -1,6 +1,6 @@
 {
   "name": "react-instantsearch-router-nextjs",
-  "version": "7.5.2",
+  "version": "7.5.3",
   "description": "React InstantSearch Router for Next.js",
   "source": "src/index.ts",
   "types": "dist/es/index.d.ts",
@@ -49,8 +49,8 @@
     "test:e2e:saucelabs": "start-server-and-test test:start-server 3000 'wdio run ./wdio.saucelabs.conf.cjs'"
   },
   "dependencies": {
-    "instantsearch.js": "4.64.0",
-    "react-instantsearch-core": "7.5.2"
+    "instantsearch.js": "4.64.1",
+    "react-instantsearch-core": "7.5.3"
   },
   "devDependencies": {
     "@types/jasmine": "3.3.16",

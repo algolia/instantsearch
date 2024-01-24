@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.16.2](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.16.1...algoliasearch-helper@3.16.2) (2024-01-23)
+
+
+### Bug Fixes
+
+* **perf:** improve speed of setQueryParameters ([d1aa720](https://github.com/algolia/instantsearch/commit/d1aa720c8e4e1aad2d7b64e385a29b258240c7df))
+* **requestBuilder:** sort facet refinements in a non-mutating manner ([#6012](https://github.com/algolia/instantsearch/issues/6012)) ([31dbf87](https://github.com/algolia/instantsearch/commit/31dbf874faa582b930ada59781c56642436ad35c)), closes [#5764](https://github.com/algolia/instantsearch/issues/5764)
+
+
+
+
+
 ## [3.16.1](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.16.0...algoliasearch-helper@3.16.1) (2023-12-19)
 
 **Note:** Version bump only for package algoliasearch-helper
