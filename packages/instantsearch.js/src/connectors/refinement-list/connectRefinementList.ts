@@ -430,14 +430,6 @@ const connectRefinementList: RefinementListConnector =
               showMoreCount = showMoreTotalCount - currentLimit;
             }
 
-            if (showMore) {
-              const showMoreTotalCount =
-                showMoreLimit < facetValues.length
-                  ? showMoreLimit
-                  : facetValues.length;
-              showMoreCount = showMoreTotalCount - currentLimit;
-            }
-
             if (renderOptions.results) {
               toggleShowMore = createToggleShowMore(renderOptions, this);
             }
