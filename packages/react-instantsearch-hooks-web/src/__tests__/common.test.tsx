@@ -34,6 +34,27 @@ import type { Hit } from 'instantsearch.js';
 import type { SendEventForHits } from 'instantsearch.js/es/lib/utils';
 
 /**
+ * Converts InstantSearch.js templates into React InstantSearch Hooks translations.
+ * @param templates InstantSearch.js templates received in `widgetParams`
+ * @param map Matching between template keys and translation keys
+ */
+function fromTemplates(
+  templates: Record<string, unknown>,
+  map: Record<string, string>
+) {
+  return Object.entries(map).reduce<Record<string, any>>(
+    (translations, [templateKey, translationKey]) => {
+      if (templates[templateKey] !== undefined) {
+        translations[translationKey] = templates[templateKey];
+      }
+
+      return translations;
+    },
+    {}
+  );
+}
+
+/**
  * prevent rethrowing InstantSearch errors, so tests can be asserted.
  * IRL this isn't needed, as the error doesn't stop execution.
  */
@@ -44,18 +65,32 @@ function GlobalErrorSwallower() {
 }
 
 createRefinementListTests(({ instantSearchOptions, widgetParams }) => {
+  const { templates, ...props } = widgetParams;
+  const translations =
+    templates &&
+    fromTemplates(templates, {
+      showMoreText: 'showMoreButtonText',
+    });
+
   render(
     <InstantSearch {...instantSearchOptions}>
-      <RefinementList {...widgetParams} />
+      <RefinementList {...props} translations={translations} />
       <GlobalErrorSwallower />
     </InstantSearch>
   );
 }, act);
 
 createHierarchicalMenuTests(({ instantSearchOptions, widgetParams }) => {
+  const { templates, ...props } = widgetParams;
+  const translations =
+    templates &&
+    fromTemplates(templates, {
+      showMoreText: 'showMoreButtonText',
+    });
+
   render(
     <InstantSearch {...instantSearchOptions}>
-      <HierarchicalMenu {...widgetParams} />
+      <HierarchicalMenu {...props} translations={translations} />
       <GlobalErrorSwallower />
     </InstantSearch>
   );
@@ -73,9 +108,16 @@ createBreadcrumbTests(({ instantSearchOptions, widgetParams }) => {
 }, act);
 
 createMenuTests(({ instantSearchOptions, widgetParams }) => {
+  const { templates, ...props } = widgetParams;
+  const translations =
+    templates &&
+    fromTemplates(templates, {
+      showMoreText: 'showMoreButtonText',
+    });
+
   render(
     <InstantSearch {...instantSearchOptions}>
-      <Menu {...widgetParams} />
+      <Menu {...props} translations={translations} />
       <GlobalErrorSwallower />
     </InstantSearch>
   );
