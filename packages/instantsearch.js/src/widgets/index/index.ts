@@ -331,14 +331,14 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           _uiState: localUiState,
         });
 
-        localInstantSearchInstance.registerRecommend(
+        localInstantSearchInstance.recommendHelper.register(
           indexName,
           localWidgets.reduce(
             (acc, widget) =>
               widget.getWidgetRecommendParameters
                 ? widget.getWidgetRecommendParameters(acc)
                 : acc,
-            { frequentlyBoughtTogether: [] }
+            { frequentlyBoughtTogether: new Set<string>() }
           )
         );
 
@@ -466,14 +466,14 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           index: indexName,
         }),
       });
-      instantSearchInstance.registerRecommend(
+      instantSearchInstance.recommendHelper.register(
         indexName,
         localWidgets.reduce(
           (acc, widget) =>
             widget.getWidgetRecommendParameters
               ? widget.getWidgetRecommendParameters(acc)
               : acc,
-          { frequentlyBoughtTogether: [] }
+          { frequentlyBoughtTogether: new Set<string>() }
         )
       );
 

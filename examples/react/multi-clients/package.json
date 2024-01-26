@@ -1,0 +1,24 @@
+{
+  "name": "example-react-instantsearch-multi-clients",
+  "version": "6.46.0",
+  "private": true,
+  "scripts": {
+    "build": "BABEL_ENV=parcel parcel build index.html",
+    "start": "BABEL_ENV=parcel parcel index.html --port 3000"
+  },
+  "dependencies": {
+    "@algolia/recommend": "4.20.0",
+    "algoliasearch": "4.14.3",
+    "instantsearch.js": "4.60.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-instantsearch": "7.3.0"
+  },
+  "devDependencies": {
+    "@parcel/core": "2.10.0",
+    "@parcel/packager-raw-url": "2.10.0",
+    "@parcel/transformer-webmanifest": "2.10.0",
+    "parcel": "2.10.0",
+    "typescript": "5.1.3"
+  }
+}

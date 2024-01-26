@@ -5,8 +5,9 @@ import {
   noop,
 } from '../../lib/utils';
 
+import type { RecommendHits } from '../../lib/RecommendHelper';
 import type { SendEventForHits } from '../../lib/utils';
-import type { Connector, Hit, WidgetRenderState } from '../../types';
+import type { Connector, WidgetRenderState } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'frequentlyBoughtTogether',
@@ -14,7 +15,7 @@ const withUsage = createDocumentationMessageGenerator({
 });
 
 export type FrequentlyBoughtTogetherRenderState = {
-  recommendations: Hit[];
+  recommendations: RecommendHits;
   sendEvent: SendEventForHits;
 };
 
@@ -42,8 +43,6 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
   function connectFrequentlyBoughtTogether(renderFn, unmountFn = noop) {
     checkRendering(renderFn, withUsage());
 
-    let lastRenderedResults: any = null;
-
     return (widgetParams) => {
       let sendEvent: SendEventForHits;
       const { objectIDs } = widgetParams || {};
@@ -61,21 +60,20 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
           );
         },
 
-        shouldRender(currentResults: any) {
-          return lastRenderedResults !== currentResults;
+        shouldRender(lastResults: any, currentResults: any) {
+          return lastResults !== currentResults;
         },
 
         render(renderOptions) {
           if (
             // @ts-ignore
             !this.shouldRender(
-              renderOptions.instantSearchInstance.recommendResults
+              renderOptions.instantSearchInstance.recommendHelper.lastResults,
+              renderOptions.instantSearchInstance.recommendHelper.currentResults
             )
           ) {
             return;
           }
-          lastRenderedResults =
-            renderOptions.instantSearchInstance.recommendResults;
 
           const renderState = this.getWidgetRenderState(renderOptions);
 
@@ -87,6 +85,7 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
             false
           );
 
+          // @ts-ignore
           renderState.sendEvent('view:internal', renderState.recommendations);
         },
 
@@ -97,7 +96,7 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
           };
         },
 
-        getWidgetRenderState({ helper, instantSearchInstance, parent }) {
+        getWidgetRenderState({ helper, instantSearchInstance }) {
           if (!sendEvent) {
             sendEvent = createSendEventForHits({
               instantSearchInstance,
@@ -107,8 +106,11 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
           }
 
           return {
-            recommendations: instantSearchInstance.recommendResults
-              ? instantSearchInstance.recommendResults[objectIDs[0]]
+            recommendations: instantSearchInstance.recommendHelper
+              .currentResults
+              ? instantSearchInstance.recommendHelper.currentResults[
+                  objectIDs[0]
+                ]
               : [],
             sendEvent,
             widgetParams,
@@ -125,14 +127,12 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
           return state;
         },
 
-        getWidgetRecommendParameters(state: any) {
-          return {
-            ...state,
-            frequentlyBoughtTogether: [
-              ...state.frequentlyBoughtTogether,
-              ...objectIDs,
-            ],
-          };
+        getWidgetRecommendParameters(state) {
+          objectIDs.forEach((objectID) => {
+            state.frequentlyBoughtTogether.add(objectID);
+          });
+
+          return state;
         },
       };
     };

@@ -84,6 +84,7 @@ module.exports = (api) => {
             'Array.prototype.flatMap',
             'Object.entries',
             'Object.fromEntries',
+            'Array.from',
           ];
           if (defaultShouldInject && !exclude.includes(name)) {
             throw new Error(
