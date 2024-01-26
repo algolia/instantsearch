@@ -58,11 +58,7 @@ export function App() {
       </header>
 
       <div className="container">
-        <InstantSearch
-          client={client}
-          indexName="test_FLAGSHIP_ECOM_recommend"
-          insights={true}
-        >
+        <InstantSearch client={client} indexName="test_FLAGSHIP_ECOM_recommend">
           <FrequentlyBoughtTogether
             objectIDs={['M0E20000000EAAK']}
             itemComponent={({ item }) => <span>{item.objectID}</span>}

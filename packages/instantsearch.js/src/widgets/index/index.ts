@@ -1,5 +1,6 @@
 import algoliasearchHelper from 'algoliasearch-helper';
 
+import { RECOMMEND_DEFAULT_PARAMS } from '../../lib/RecommendHelper';
 import {
   checkIndexUiState,
   createDocumentationMessageGenerator,
@@ -338,7 +339,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
               widget.getWidgetRecommendParameters
                 ? widget.getWidgetRecommendParameters(acc)
                 : acc,
-            { frequentlyBoughtTogether: new Set<string>() }
+            RECOMMEND_DEFAULT_PARAMS
           )
         );
 

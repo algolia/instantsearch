@@ -777,6 +777,8 @@ See documentation: ${createDocumentationLink({
     });
 
     this.emit('render');
+
+    this.recommendHelper.lastResults = this.recommendHelper.currentResults;
   });
 
   public scheduleStalledRender() {

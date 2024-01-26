@@ -10,6 +10,10 @@ export type RecommendParams = {
 export type RecommendHits = SearchResponse['hits'];
 export type RecommendResults = Record<string, RecommendHits>;
 
+export const RECOMMEND_DEFAULT_PARAMS: RecommendParams = {
+  frequentlyBoughtTogether: new Set<string>(),
+};
+
 export default class RecommendHelper extends EventEmitter {
   private client: RecommendClient;
   private queries: Record<string, RecommendParams> = {};
