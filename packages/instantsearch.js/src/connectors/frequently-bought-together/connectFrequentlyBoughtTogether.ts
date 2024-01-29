@@ -78,6 +78,13 @@ const connectFrequentlyBoughtTogether = createConnector<
         widgetParams,
       };
     },
+
+    shouldRender({ instantSearchInstance }) {
+      const { lastResults, currentResults } =
+        instantSearchInstance.recommendResults;
+
+      return lastResults !== currentResults;
+    },
   };
 });
 
