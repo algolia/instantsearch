@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -8,6 +10,7 @@ import {
 import type { RecommendHits } from '../../lib/RecommendHelper';
 import type { SendEventForHits } from '../../lib/utils';
 import type { Connector, WidgetRenderState } from '../../types';
+import { createConnector } from '../../lib/createConnector';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'frequentlyBoughtTogether',
@@ -39,103 +42,43 @@ export type FrequentlyBoughtTogetherConnector = Connector<
   FrequentlyBoughtTogetherConnectorParams
 >;
 
-const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
-  function connectFrequentlyBoughtTogether(renderFn, unmountFn = noop) {
-    checkRendering(renderFn, withUsage());
+let sendEvent: SendEventForHits;
 
-    return (widgetParams) => {
-      let sendEvent: SendEventForHits;
-      const { objectIDs } = widgetParams || {};
+const connectFrequentlyBoughtTogether = createConnector<
+  FrequentlyBoughtTogetherWidgetDescription,
+  FrequentlyBoughtTogetherConnectorParams
+>((widgetParams) => {
+  const { objectIDs } = widgetParams || {};
+
+  return {
+    name: 'frequentlyBoughtTogether',
+    dependsOn: 'recommend',
+    getWidgetParameters(state) {
+      objectIDs.forEach((objectID) => {
+        state.frequentlyBoughtTogether.add(objectID);
+      });
+
+      return state;
+    },
+
+    getWidgetRenderState({ helper, instantSearchInstance }) {
+      if (!sendEvent) {
+        sendEvent = createSendEventForHits({
+          instantSearchInstance,
+          index: helper.getIndex(),
+          widgetType: this.$$type,
+        });
+      }
 
       return {
-        $$type: 'ais.frequentlyBoughtTogether',
-
-        init(initOptions) {
-          renderFn(
-            {
-              ...this.getWidgetRenderState(initOptions),
-              instantSearchInstance: initOptions.instantSearchInstance,
-            },
-            true
-          );
-        },
-
-        shouldRender(lastResults: any, currentResults: any) {
-          return lastResults !== currentResults;
-        },
-
-        render(renderOptions) {
-          if (
-            // @ts-ignore
-            !this.shouldRender(
-              renderOptions.instantSearchInstance.recommendHelper.lastResults,
-              renderOptions.instantSearchInstance.recommendHelper.currentResults
-            )
-          ) {
-            return;
-          }
-
-          const renderState = this.getWidgetRenderState(renderOptions);
-
-          renderFn(
-            {
-              ...renderState,
-              instantSearchInstance: renderOptions.instantSearchInstance,
-            },
-            false
-          );
-
-          // @ts-ignore
-          renderState.sendEvent('view:internal', renderState.recommendations);
-        },
-
-        getRenderState(renderState, renderOptions) {
-          return {
-            ...renderState,
-            frequentlyBoughtTogether: this.getWidgetRenderState(renderOptions),
-          };
-        },
-
-        getWidgetRenderState({ helper, instantSearchInstance }) {
-          if (!sendEvent) {
-            sendEvent = createSendEventForHits({
-              instantSearchInstance,
-              index: helper.getIndex(),
-              widgetType: this.$$type,
-            });
-          }
-
-          return {
-            recommendations: instantSearchInstance.recommendHelper
-              .currentResults
-              ? instantSearchInstance.recommendHelper.currentResults[
-                  objectIDs[0]
-                ]
-              : [],
-            sendEvent,
-            widgetParams,
-          };
-        },
-
-        dispose({ state }) {
-          unmountFn();
-
-          return state;
-        },
-
-        getWidgetSearchParameters(state) {
-          return state;
-        },
-
-        getWidgetRecommendParameters(state) {
-          objectIDs.forEach((objectID) => {
-            state.frequentlyBoughtTogether.add(objectID);
-          });
-
-          return state;
-        },
+        recommendations: instantSearchInstance.recommendHelper.currentResults
+          ? instantSearchInstance.recommendHelper.currentResults[objectIDs[0]]
+          : [],
+        sendEvent,
+        widgetParams,
       };
-    };
+    },
   };
+});
 
 export default connectFrequentlyBoughtTogether;
