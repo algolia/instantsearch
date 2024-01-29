@@ -49,5 +49,13 @@ export function renderCompat(fn) {
 }
 
 export function getDefaultSlot(component) {
-  return component.$slots.default && component.$slots.default();
+  const $slots = component.$slots || component.slots;
+
+  if (typeof $slots.default === 'function') {
+    // Vue 3
+    return $slots.default();
+  }
+
+  // Vue 3 with @vue/compat
+  return $slots.default;
 }
