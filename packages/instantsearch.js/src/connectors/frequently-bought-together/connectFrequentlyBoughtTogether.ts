@@ -66,7 +66,7 @@ const connectFrequentlyBoughtTogether = createConnector<
         sendEvent = createSendEventForHits({
           instantSearchInstance,
           index: helper.getIndex(),
-          widgetType: this.$$type,
+          widgetType: 'ais.frequentlyBoughtTogether', // this.$$type,
         });
       }
 
