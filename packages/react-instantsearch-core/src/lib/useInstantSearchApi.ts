@@ -109,7 +109,7 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
       search._initialResults = initialResults || {};
     }
 
-    addAlgoliaAgents(props.searchClient, [
+    addAlgoliaAgents(props.searchClient!, [
       ...defaultUserAgents,
       serverContext && serverUserAgent,
       nextUserAgent(getNextVersion()),
@@ -149,11 +149,11 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
         'The `searchClient` prop of `<InstantSearch>` changed between renders, which may cause more search requests than necessary. If this is an unwanted behavior, please provide a stable reference: https://www.algolia.com/doc/api-reference/widgets/instantsearch/react/#widget-param-searchclient'
       );
 
-      addAlgoliaAgents(props.searchClient, [
+      addAlgoliaAgents(props.searchClient!, [
         ...defaultUserAgents,
         serverContext && serverUserAgent,
       ]);
-      search.mainHelper!.setClient(props.searchClient).search();
+      search.mainHelper!.setClient(props.searchClient!).search();
       prevPropsRef.current = props;
     }
 
