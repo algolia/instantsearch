@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.13.6](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.13.5...vue-instantsearch@4.13.6) (2024-01-30)
+
+
+### Bug Fixes
+
+* **searchbox:** ignore composition events with option ([#6009](https://github.com/algolia/instantsearch/issues/6009)) ([7d82b01](https://github.com/algolia/instantsearch/commit/7d82b0198f0b22c753bff012a0edf667b7e40be7))
+* **vue-compat:** Ensure getDefaultSlots works with @vue/compat & Vue 3 ([#6016](https://github.com/algolia/instantsearch/issues/6016)) ([e270069](https://github.com/algolia/instantsearch/commit/e270069c3533b56cfc3011d1aeadce89fd3654cb))
+
+
+
+
+
 ## [4.13.5](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.13.4...vue-instantsearch@4.13.5) (2024-01-23)
 
 
