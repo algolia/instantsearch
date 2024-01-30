@@ -27,7 +27,7 @@ export function FrequentlyBoughtTogether({
   objectIDs,
   ...props
 }: FrequentlyBoughtTogetherProps) {
-  const { recommendations } = useFrequentlyBoughtTogether(
+  const { recommendations = [] } = useFrequentlyBoughtTogether(
     {
       objectIDs,
     },

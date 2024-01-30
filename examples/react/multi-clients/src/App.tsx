@@ -32,7 +32,7 @@ function CustomFrequentlyBoughtTogether({
 }: {
   objectIDs: string[];
 }) {
-  const { recommendations } = useFrequentlyBoughtTogether({ objectIDs });
+  const { recommendations = [] } = useFrequentlyBoughtTogether({ objectIDs });
   return (
     <ul>
       {recommendations.map((item) => (
@@ -47,7 +47,7 @@ export function App() {
     <div>
       <header className="header">
         <h1 className="header-title">
-          <a href="/">Getting started</a>
+          <a href="/">Multi-client</a>
         </h1>
         <p className="header-subtitle">
           using{' '}

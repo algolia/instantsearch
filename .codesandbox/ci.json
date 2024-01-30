@@ -1,5 +1,5 @@
 {
-  "sandboxes": ["/examples/js/multi-clients"],
+  "sandboxes": ["/examples/js/multi-clients", "/examples/react/multi-clients"],
   "buildCommand": "build --no-private --ignore *-maps --ignore *-native",
   "packages": [
     "packages/instantsearch.js",

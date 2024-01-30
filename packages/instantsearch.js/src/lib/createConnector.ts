@@ -101,7 +101,7 @@ export function createConnector<
         state: SearchParameters | RecommendParams
       ) {
         return params.dependsOn === 'recommend'
-          ? (state: SearchParameters) => state
+          ? state // (state: SearchParameters) => state
           : params.getWidgetParameters(state);
       }
 
