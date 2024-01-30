@@ -29,7 +29,7 @@ function CustomFrequentlyBoughtTogether({
 }: {
   objectIDs: string[];
 }) {
-  const { recommendations } = useFrequentlyBoughtTogether({ objectIDs });
+  const { recommendations = [] } = useFrequentlyBoughtTogether({ objectIDs });
   return (
     <ul>
       {recommendations.map((item) => (
