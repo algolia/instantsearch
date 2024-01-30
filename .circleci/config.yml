@@ -166,7 +166,7 @@ jobs:
             - packages/react-instantsearch-nextjs/dist
             - packages/vue-instantsearch/vue2
             - packages/vue-instantsearch/vue3
-
+            - packages/instantsearch-ui-components/dist
   test metadata:
     <<: *defaults
     steps:

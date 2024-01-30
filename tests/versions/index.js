@@ -58,6 +58,11 @@ let hasError = false;
       versionFile: 'src/version.js',
       format: 'cjs',
     },
+    {
+      name: 'instantsearch-ui-components',
+      versionFile: 'src/version.ts',
+      format: 'esm',
+    },
   ];
 
   const results = versions.map(({ name, versionFile, format }) => {
