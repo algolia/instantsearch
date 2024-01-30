@@ -81,7 +81,7 @@ const connectFrequentlyBoughtTogether = createConnector<
 
     shouldRender({ instantSearchInstance }) {
       const { lastResults, currentResults } =
-        instantSearchInstance.recommendResults;
+        instantSearchInstance.recommendHelper;
 
       return lastResults !== currentResults;
     },
