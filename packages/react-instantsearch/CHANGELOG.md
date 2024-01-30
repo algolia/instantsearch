@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.5.4](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.5.3...react-instantsearch@7.5.4) (2024-01-30)
+
+
+### Bug Fixes
+
+* **searchbox:** ignore composition events with option ([#6009](https://github.com/algolia/instantsearch/issues/6009)) ([7d82b01](https://github.com/algolia/instantsearch/commit/7d82b0198f0b22c753bff012a0edf667b7e40be7))
+
+
+
+
+
 ## [7.5.3](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.5.2...react-instantsearch@7.5.3) (2024-01-23)
 
 **Note:** Version bump only for package react-instantsearch
