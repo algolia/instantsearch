@@ -1,5 +1,6 @@
 import algoliasearchHelper from 'algoliasearch-helper';
 
+import { RECOMMEND_DEFAULT_PARAMS } from '../../lib/RecommendHelper';
 import {
   checkIndexUiState,
   createDocumentationMessageGenerator,
@@ -331,6 +332,17 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           _uiState: localUiState,
         });
 
+        localInstantSearchInstance.recommendHelper.register(
+          indexName,
+          localWidgets.reduce(
+            (acc, widget) =>
+              widget.getWidgetRecommendParameters
+                ? widget.getWidgetRecommendParameters(acc)
+                : acc,
+            RECOMMEND_DEFAULT_PARAMS
+          )
+        );
+
         // We compute the render state before calling `init` in a separate loop
         // to construct the whole render state object that is then passed to
         // `init`.
@@ -366,6 +378,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         });
 
         localInstantSearchInstance.scheduleSearch();
+        localInstantSearchInstance.scheduleRecommend();
       }
 
       return this;
@@ -454,6 +467,16 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           index: indexName,
         }),
       });
+      instantSearchInstance.recommendHelper.register(
+        indexName,
+        localWidgets.reduce(
+          (acc, widget) =>
+            widget.getWidgetRecommendParameters
+              ? widget.getWidgetRecommendParameters(acc)
+              : acc,
+          { frequentlyBoughtTogether: new Set<string>() }
+        )
+      );
 
       // This Helper is only used for state management we do not care about the
       // `searchClient`. Only the "main" Helper created at the `InstantSearch`

@@ -1,3 +1,4 @@
+import type { RecommendParams } from '../lib/RecommendHelper';
 import type { IndexWidget } from '../widgets/index/index';
 import type { InstantSearch } from './instantsearch';
 import type { IndexRenderState, WidgetRenderState } from './render-state';
@@ -216,6 +217,8 @@ type RequiredUiStateLifeCycle<TWidgetDescription extends WidgetDescription> = {
       >;
     }
   ) => SearchParameters;
+
+  getWidgetRecommendParameters?: (state: RecommendParams) => RecommendParams;
 };
 
 type UiStateLifeCycle<TWidgetDescription extends WidgetDescription> =

@@ -10,6 +10,7 @@ import { createRouterMiddleware } from '../middlewares/createRouterMiddleware';
 import index from '../widgets/index/index';
 
 import createHelpers from './createHelpers';
+import RecommendHelper from './RecommendHelper';
 import {
   createDocumentationMessageGenerator,
   createDocumentationLink,
@@ -39,6 +40,7 @@ import type {
   InitialResults,
 } from '../types';
 import type { IndexWidget } from '../widgets/index/index';
+import type { RecommendClient } from '@algolia/recommend';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -192,7 +194,8 @@ class InstantSearch<
   TRouteState = TUiState
 > extends EventEmitter {
   public client: NonNullable<InstantSearchOptions['searchClient']>;
-  public recommendClient: any;
+  public recommendClient: RecommendClient;
+  public recommendHelper: RecommendHelper;
   public indexName: string;
   public insightsClient: AlgoliaInsightsClient | null;
   public onStateChange: InstantSearchOptions<TUiState>['onStateChange'] | null =
@@ -335,7 +338,8 @@ See documentation: ${createDocumentationLink({
     }
 
     this.client = (client?.searchClient || searchClient) as SearchClient;
-    this.recommendClient = client?.recommendClient!;
+    this.recommendClient = client?.recommendClient;
+    this.recommendHelper = new RecommendHelper(this.recommendClient);
     this.future = future;
     this.insightsClient = insightsClient;
     this.indexName = indexName;
@@ -676,6 +680,7 @@ See documentation: ${createDocumentationLink({
     // the results, but this is an optimization that has a very low impact for now.
     else if (this.mainIndex.getWidgets().length > 0) {
       this.scheduleSearch();
+      this.scheduleRecommend();
     }
 
     // Keep the previous reference for legacy purpose, some pattern use
@@ -718,6 +723,7 @@ See documentation: ${createDocumentationLink({
    */
   public dispose(): void {
     this.scheduleSearch.cancel();
+    this.scheduleRecommend.cancel();
     this.scheduleRender.cancel();
     clearTimeout(this._searchStalledTimer);
 
@@ -747,6 +753,14 @@ See documentation: ${createDocumentationLink({
     }
   });
 
+  public scheduleRecommend = defer(() => {
+    if (this.started) {
+      this.recommendHelper.fetch().then(() => {
+        this.scheduleRender();
+      });
+    }
+  });
+
   public scheduleRender = defer((shouldResetStatus: boolean = true) => {
     if (!this.mainHelper?.hasPendingRequests()) {
       clearTimeout(this._searchStalledTimer);
@@ -763,6 +777,8 @@ See documentation: ${createDocumentationLink({
     });
 
     this.emit('render');
+
+    this.recommendHelper.lastResults = this.recommendHelper.currentResults;
   });
 
   public scheduleStalledRender() {

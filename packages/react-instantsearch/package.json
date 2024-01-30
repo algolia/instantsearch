@@ -47,6 +47,7 @@
     "test:exports": "node ./test/module/is-es-module.mjs && node ./test/module/is-cjs-module.cjs"
   },
   "dependencies": {
+    "@algolia/recommend-vdom": "1.10.0",
     "@babel/runtime": "^7.1.2",
     "instantsearch.js": "4.60.0",
     "react-instantsearch-core": "7.3.0"

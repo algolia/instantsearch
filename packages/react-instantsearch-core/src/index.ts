@@ -26,6 +26,7 @@ export * from './connectors/useSearchBox';
 export * from './connectors/useSortBy';
 export * from './connectors/useStats';
 export * from './connectors/useToggleRefinement';
+export * from './connectors/useFrequentlyBoughtTogether';
 export * from './hooks/useConnector';
 export * from './hooks/useInstantSearch';
 export * from './lib/wrapPromiseWithState';

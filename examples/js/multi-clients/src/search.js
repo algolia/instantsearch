@@ -1,5 +1,7 @@
 import instantsearch from 'instantsearch.js';
-import { algolia } from '@algolia/client';
+
+// In real life this would come from an @algolia/client package
+import { algolia } from './algolia';
 
 const client = algolia('XX85YRZZMV', '098f71f9e2267178bdfc08cc986d2999');
 

@@ -1,13 +1,16 @@
-import { getFrequentlyBoughtTogether } from '@algolia/recommend-core';
+//@ts-nocheck
+
 import {
-  SendEventForHits,
   checkRendering,
   createDocumentationMessageGenerator,
   createSendEventForHits,
   noop,
 } from '../../lib/utils';
 
-import type { Connector, Hit, WidgetRenderState } from '../../types';
+import type { RecommendHits } from '../../lib/RecommendHelper';
+import type { SendEventForHits } from '../../lib/utils';
+import type { Connector, WidgetRenderState } from '../../types';
+import { createConnector } from '../../lib/createConnector';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'frequentlyBoughtTogether',
@@ -15,7 +18,7 @@ const withUsage = createDocumentationMessageGenerator({
 });
 
 export type FrequentlyBoughtTogetherRenderState = {
-  recommendations: Hit[];
+  recommendations: RecommendHits;
   sendEvent: SendEventForHits;
 };
 
@@ -39,103 +42,50 @@ export type FrequentlyBoughtTogetherConnector = Connector<
   FrequentlyBoughtTogetherConnectorParams
 >;
 
-const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
-  function connectFrequentlyBoughtTogether(renderFn, unmountFn = noop) {
-    checkRendering(renderFn, withUsage());
+let sendEvent: SendEventForHits;
 
-    return (widgetParams) => {
-      let sendEvent: SendEventForHits;
-      const { objectIDs } = widgetParams || {};
+const connectFrequentlyBoughtTogether = createConnector<
+  FrequentlyBoughtTogetherWidgetDescription,
+  FrequentlyBoughtTogetherConnectorParams
+>((widgetParams) => {
+  const { objectIDs } = widgetParams || {};
 
-      let recommendations = [] as any[];
+  return {
+    name: 'frequentlyBoughtTogether',
+    dependsOn: 'recommend',
+    getWidgetParameters(state) {
+      objectIDs.forEach((objectID) => {
+        state.frequentlyBoughtTogether.add(objectID);
+      });
+
+      return state;
+    },
+
+    getWidgetRenderState({ helper, instantSearchInstance }) {
+      if (!sendEvent) {
+        sendEvent = createSendEventForHits({
+          instantSearchInstance,
+          index: helper.getIndex(),
+          widgetType: 'ais.frequentlyBoughtTogether', // this.$$type,
+        });
+      }
 
       return {
-        $$type: 'ais.frequentlyBoughtTogether',
-
-        init(initOptions) {
-          const { state, instantSearchInstance } = initOptions;
-
-          getFrequentlyBoughtTogether({
-            objectIDs,
-            recommendClient: instantSearchInstance.recommendClient,
-            indexName: state.index,
-            // The Insights middleware hasn't run yet so forcing it to `true`
-            // for now for demo purposes
-            queryParameters: { clickAnalytics: true },
-            // @ts-ignore
-          }).then(({ recommendations: _recommendations, results }) => {
-            recommendations = _recommendations.map((recommendation, index) => ({
-              ...recommendation,
-              __position: index,
-              __queryID: results[0].queryID,
-            }));
-
-            renderFn(
-              {
-                ...this.getWidgetRenderState(initOptions),
-                instantSearchInstance: initOptions.instantSearchInstance,
-              },
-              true
-            );
-          });
-
-          renderFn(
-            {
-              ...this.getWidgetRenderState(initOptions),
-              instantSearchInstance: initOptions.instantSearchInstance,
-            },
-            true
-          );
-        },
-
-        render(renderOptions) {
-          const renderState = this.getWidgetRenderState(renderOptions);
-
-          renderFn(
-            {
-              ...renderState,
-              instantSearchInstance: renderOptions.instantSearchInstance,
-            },
-            false
-          );
-
-          renderState.sendEvent('view:internal', renderState.recommendations);
-        },
-
-        getRenderState(renderState, renderOptions) {
-          return {
-            ...renderState,
-            frequentlyBoughtTogether: this.getWidgetRenderState(renderOptions),
-          };
-        },
-
-        getWidgetRenderState({ helper, instantSearchInstance }) {
-          if (!sendEvent) {
-            sendEvent = createSendEventForHits({
-              instantSearchInstance,
-              index: helper.getIndex(),
-              widgetType: this.$$type,
-            });
-          }
-
-          return {
-            recommendations,
-            sendEvent,
-            widgetParams,
-          };
-        },
-
-        dispose({ state }) {
-          unmountFn();
-
-          return state;
-        },
-
-        getWidgetSearchParameters(state) {
-          return state;
-        },
+        recommendations: instantSearchInstance.recommendHelper.currentResults
+          ? instantSearchInstance.recommendHelper.currentResults[objectIDs[0]]
+          : [],
+        sendEvent,
+        widgetParams,
       };
-    };
+    },
+
+    shouldRender({ instantSearchInstance }) {
+      const { lastResults, currentResults } =
+        instantSearchInstance.recommendHelper;
+
+      return lastResults !== currentResults;
+    },
   };
+});
 
 export default connectFrequentlyBoughtTogether;
