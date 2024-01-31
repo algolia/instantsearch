@@ -9,7 +9,6 @@
   "type": "module",
   "exports": {
     "types": "./dist/es/index.d.ts",
-    "require": "./dist/cjs/index.js",
     "default": "./dist/es/index.js"
   },
   "sideEffects": false,
