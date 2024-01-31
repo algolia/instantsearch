@@ -281,3 +281,23 @@ test('removes `imageAttribute` from `attributesToDisplay`', async () => {
     })
   );
 });
+
+test('ignores invalid input', async () => {
+  expect(
+    await postProcessAnswers({
+      configuration: {},
+      templateConfig: {},
+      optionsFromArguments: {},
+      answers: {
+        attributesToDisplay: 'test',
+        attributesForFaceting: 'test',
+      },
+    })
+  ).toEqual(
+    expect.objectContaining({
+      attributesForFaceting: false,
+      attributesToDisplay: false,
+      flags: { autocomplete: false, dynamicWidgets: false, insights: false },
+    })
+  );
+});
