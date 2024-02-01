@@ -6,6 +6,7 @@ import { render } from '@testing-library/preact';
 import { createElement, Fragment } from 'preact';
 
 import { createHighlightComponent } from '../Highlight';
+import { ComponentChildren } from '../../types';
 
 import type { ComponentChildren } from '../../types';
 
