@@ -49,7 +49,7 @@ describe('Highlight', () => {
             st
           </span>
           <span>
-            , 
+            ,
           </span>
           <span>
             nothing
@@ -86,7 +86,7 @@ describe('Highlight', () => {
           </span>
           <span>
             <strong>
-               - 
+               -
             </strong>
           </span>
           <span>
@@ -124,7 +124,7 @@ describe('Highlight', () => {
             st
           </small>
           <span>
-            , 
+            ,
           </span>
           <small>
             nothing
@@ -172,7 +172,7 @@ describe('Highlight', () => {
             st
           </small>
           <span>
-            , 
+            ,
           </span>
           <small>
             nothing
@@ -220,7 +220,7 @@ describe('Highlight', () => {
           <span
             class="SEPARATOR"
           >
-            , 
+            ,
           </span>
           <span
             class="NON-HIGHLIGHTED"
@@ -260,7 +260,7 @@ describe('Highlight', () => {
             st
           </span>
           <span>
-            , 
+            ,
           </span>
           <span>
             nothing
