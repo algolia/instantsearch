@@ -6,6 +6,7 @@ import { render } from '@testing-library/preact';
 import { createElement, Fragment } from 'preact';
 
 import { createHighlightComponent } from '../Highlight';
+import { ComponentChildren } from '../../types';
 
 const Highlight = createHighlightComponent({ createElement, Fragment });
 
@@ -47,7 +48,7 @@ describe('Highlight', () => {
             st
           </span>
           <span>
-            , 
+            ,
           </span>
           <span>
             nothing
@@ -84,7 +85,7 @@ describe('Highlight', () => {
           </span>
           <span>
             <strong>
-               - 
+               -
             </strong>
           </span>
           <span>
@@ -122,7 +123,7 @@ describe('Highlight', () => {
             st
           </small>
           <span>
-            , 
+            ,
           </span>
           <small>
             nothing
@@ -133,10 +134,14 @@ describe('Highlight', () => {
   });
 
   test('renders with custom tag names as components', () => {
-    function Highlighted({ children }) {
+    type PropsWithChildren = {
+      children: ComponentChildren;
+    };
+
+    function Highlighted({ children }: PropsWithChildren) {
       return <strong>{children}</strong>;
     }
-    function NonHighlighted({ children }) {
+    function NonHighlighted({ children }: PropsWithChildren) {
       return <small>{children}</small>;
     }
 
@@ -166,7 +171,7 @@ describe('Highlight', () => {
             st
           </small>
           <span>
-            , 
+            ,
           </span>
           <small>
             nothing
@@ -214,7 +219,7 @@ describe('Highlight', () => {
           <span
             class="SEPARATOR"
           >
-            , 
+            ,
           </span>
           <span
             class="NON-HIGHLIGHTED"
@@ -254,7 +259,7 @@ describe('Highlight', () => {
             st
           </span>
           <span>
-            , 
+            ,
           </span>
           <span>
             nothing
