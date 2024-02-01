@@ -27,8 +27,6 @@
   ],
   "dependencies": {
     "@algolia/events": "^4.0.1",
-    "@algolia/ui-components-highlight-vdom": "^1.2.2",
-    "@algolia/ui-components-shared": "^1.2.2",
     "@types/dom-speech-recognition": "^0.0.1",
     "@types/google.maps": "^3.45.3",
     "@types/hogan.js": "^3.0.0",
@@ -36,6 +34,7 @@
     "algoliasearch-helper": "3.16.2",
     "hogan.js": "^3.0.2",
     "htm": "^3.0.0",
+    "instantsearch-ui-components": "^0.1.0",
     "preact": "^10.10.0",
     "qs": "^6.5.1 < 6.10",
     "search-insights": "^2.13.0"

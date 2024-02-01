@@ -7,7 +7,7 @@ import { h } from 'preact';
 
 import { Snippet } from '../Snippet';
 
-import type { ComponentChildren } from '@algolia/ui-components-shared';
+import type { ComponentChildren } from 'instantsearch-ui-components';
 
 describe('Snippet', () => {
   test('renders single match', () => {
@@ -87,7 +87,7 @@ describe('Snippet', () => {
     <span
       class="ais-Snippet-separator"
     >
-      , 
+      ,
     </span>
     <span
       class="ais-Snippet-nonHighlighted"
@@ -287,7 +287,7 @@ describe('Snippet', () => {
       class="ais-Snippet-separator"
     >
       <strong>
-         - 
+         -
       </strong>
     </span>
     <small>

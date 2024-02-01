@@ -1,6 +1,6 @@
 // global for TypeScript alone
 /* global google */
-import { cx } from '@algolia/ui-components-shared';
+import { cx } from 'instantsearch-ui-components';
 import { render } from 'preact';
 
 import connectGeoSearch from '../../connectors/geo-search/connectGeoSearch';

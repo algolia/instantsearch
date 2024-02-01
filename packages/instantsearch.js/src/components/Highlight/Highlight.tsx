@@ -1,5 +1,5 @@
 /** @jsx h */
-import { cx } from '@algolia/ui-components-shared';
+import { cx } from 'instantsearch-ui-components';
 import { h } from 'preact';
 
 import { InternalHighlight } from '../InternalHighlight/InternalHighlight';
@@ -7,7 +7,7 @@ import { InternalHighlight } from '../InternalHighlight/InternalHighlight';
 import type {
   HighlightProps as InternalHighlightProps,
   HighlightClassNames as InternalHighlightClassNames,
-} from '@algolia/ui-components-highlight-vdom';
+} from 'instantsearch-ui-components';
 
 export type HighlightClassNames = InternalHighlightClassNames;
 export type HighlightProps = Omit<InternalHighlightProps, 'classNames'> & {

@@ -7,7 +7,7 @@ import { h } from 'preact';
 
 import { ReverseHighlight } from '../ReverseHighlight';
 
-import type { ComponentChildren } from '@algolia/ui-components-shared';
+import type { ComponentChildren } from 'instantsearch-ui-components';
 
 describe('ReverseHighlight', () => {
   test('renders single match', () => {
@@ -89,7 +89,7 @@ describe('ReverseHighlight', () => {
     <span
       class="ais-ReverseHighlight-separator"
     >
-      , 
+      ,
     </span>
     <mark
       class="ais-ReverseHighlight-highlighted"
@@ -292,7 +292,7 @@ describe('ReverseHighlight', () => {
       class="ais-ReverseHighlight-separator"
     >
       <strong>
-         - 
+         -
       </strong>
     </span>
     <strong>
