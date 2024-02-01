@@ -70,33 +70,33 @@ describe('Snippet', () => {
     );
 
     expect(container).toMatchInlineSnapshot(`
-<div>
-  <span
-    class="ais-Snippet"
-  >
-    <mark
-      class="ais-Snippet-highlighted"
-    >
-      te
-    </mark>
-    <span
-      class="ais-Snippet-nonHighlighted"
-    >
-      st
-    </span>
-    <span
-      class="ais-Snippet-separator"
-    >
-      ,
-    </span>
-    <span
-      class="ais-Snippet-nonHighlighted"
-    >
-      nothing
-    </span>
-  </span>
-</div>
-`);
+      <div>
+        <span
+          class="ais-Snippet"
+        >
+          <mark
+            class="ais-Snippet-highlighted"
+          >
+            te
+          </mark>
+          <span
+            class="ais-Snippet-nonHighlighted"
+          >
+            st
+          </span>
+          <span
+            class="ais-Snippet-separator"
+          >
+            , 
+          </span>
+          <span
+            class="ais-Snippet-nonHighlighted"
+          >
+            nothing
+          </span>
+        </span>
+      </div>
+    `);
   });
 
   test('renders path to match', () => {
@@ -273,29 +273,29 @@ describe('Snippet', () => {
     );
 
     expect(container).toMatchInlineSnapshot(`
-<div>
-  <span
-    class="ais-Snippet"
-  >
-    <strong>
-      it
-    </strong>
-    <small>
-      em1
-    </small>
-    <span
-      class="ais-Snippet-separator"
-    >
-      <strong>
-         -
-      </strong>
-    </span>
-    <small>
-      item2
-    </small>
-  </span>
-</div>
-`);
+      <div>
+        <span
+          class="ais-Snippet"
+        >
+          <strong>
+            it
+          </strong>
+          <small>
+            em1
+          </small>
+          <span
+            class="ais-Snippet-separator"
+          >
+            <strong>
+               - 
+            </strong>
+          </span>
+          <small>
+            item2
+          </small>
+        </span>
+      </div>
+    `);
   });
 
   test('forwards custom class names and `div` props to the root element', () => {

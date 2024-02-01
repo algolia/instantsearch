@@ -30,23 +30,23 @@ describe('ReverseHighlight', () => {
     );
 
     expect(container).toMatchInlineSnapshot(`
-<div>
-  <span
-    class="ais-ReverseHighlight"
-  >
-    <span
-      class="ais-ReverseHighlight-nonHighlighted"
-    >
-      te
-    </span>
-    <mark
-      class="ais-ReverseHighlight-highlighted"
-    >
-      st
-    </mark>
-  </span>
-</div>
-`);
+      <div>
+        <span
+          class="ais-ReverseHighlight"
+        >
+          <span
+            class="ais-ReverseHighlight-nonHighlighted"
+          >
+            te
+          </span>
+          <mark
+            class="ais-ReverseHighlight-highlighted"
+          >
+            st
+          </mark>
+        </span>
+      </div>
+    `);
   });
 
   test('renders list of matches', () => {
@@ -72,33 +72,33 @@ describe('ReverseHighlight', () => {
     );
 
     expect(container).toMatchInlineSnapshot(`
-<div>
-  <span
-    class="ais-ReverseHighlight"
-  >
-    <span
-      class="ais-ReverseHighlight-nonHighlighted"
-    >
-      te
-    </span>
-    <mark
-      class="ais-ReverseHighlight-highlighted"
-    >
-      st
-    </mark>
-    <span
-      class="ais-ReverseHighlight-separator"
-    >
-      ,
-    </span>
-    <mark
-      class="ais-ReverseHighlight-highlighted"
-    >
-      nothing
-    </mark>
-  </span>
-</div>
-`);
+      <div>
+        <span
+          class="ais-ReverseHighlight"
+        >
+          <span
+            class="ais-ReverseHighlight-nonHighlighted"
+          >
+            te
+          </span>
+          <mark
+            class="ais-ReverseHighlight-highlighted"
+          >
+            st
+          </mark>
+          <span
+            class="ais-ReverseHighlight-separator"
+          >
+            , 
+          </span>
+          <mark
+            class="ais-ReverseHighlight-highlighted"
+          >
+            nothing
+          </mark>
+        </span>
+      </div>
+    `);
   });
 
   test('renders path to match', () => {
@@ -124,23 +124,23 @@ describe('ReverseHighlight', () => {
     );
 
     expect(container).toMatchInlineSnapshot(`
-<div>
-  <span
-    class="ais-ReverseHighlight"
-  >
-    <span
-      class="ais-ReverseHighlight-nonHighlighted"
-    >
-      te
-    </span>
-    <mark
-      class="ais-ReverseHighlight-highlighted"
-    >
-      st
-    </mark>
-  </span>
-</div>
-`);
+      <div>
+        <span
+          class="ais-ReverseHighlight"
+        >
+          <span
+            class="ais-ReverseHighlight-nonHighlighted"
+          >
+            te
+          </span>
+          <mark
+            class="ais-ReverseHighlight-highlighted"
+          >
+            st
+          </mark>
+        </span>
+      </div>
+    `);
   });
 
   test('renders path to match as array', () => {
@@ -165,23 +165,23 @@ describe('ReverseHighlight', () => {
     );
 
     expect(container).toMatchInlineSnapshot(`
-<div>
-  <span
-    class="ais-ReverseHighlight"
-  >
-    <span
-      class="ais-ReverseHighlight-nonHighlighted"
-    >
-      te
-    </span>
-    <mark
-      class="ais-ReverseHighlight-highlighted"
-    >
-      st
-    </mark>
-  </span>
-</div>
-`);
+      <div>
+        <span
+          class="ais-ReverseHighlight"
+        >
+          <span
+            class="ais-ReverseHighlight-nonHighlighted"
+          >
+            te
+          </span>
+          <mark
+            class="ais-ReverseHighlight-highlighted"
+          >
+            st
+          </mark>
+        </span>
+      </div>
+    `);
   });
 
   test("renders nothing when there's no match", () => {
@@ -226,23 +226,23 @@ describe('ReverseHighlight', () => {
     );
 
     expect(container).toMatchInlineSnapshot(`
-<div>
-  <span
-    class="ais-ReverseHighlight"
-  >
-    <span
-      class="ais-ReverseHighlight-nonHighlighted"
-    >
-      don
-    </span>
-    <mark
-      class="ais-ReverseHighlight-highlighted"
-    >
-      't &lt;script&gt;alert("xss");&lt;/script&gt;
-    </mark>
-  </span>
-</div>
-`);
+      <div>
+        <span
+          class="ais-ReverseHighlight"
+        >
+          <span
+            class="ais-ReverseHighlight-nonHighlighted"
+          >
+            don
+          </span>
+          <mark
+            class="ais-ReverseHighlight-highlighted"
+          >
+            't &lt;script&gt;alert("xss");&lt;/script&gt;
+          </mark>
+        </span>
+      </div>
+    `);
   });
 
   test('forwards tag names and separator', () => {
@@ -278,29 +278,29 @@ describe('ReverseHighlight', () => {
     );
 
     expect(container).toMatchInlineSnapshot(`
-<div>
-  <span
-    class="ais-ReverseHighlight"
-  >
-    <small>
-      it
-    </small>
-    <strong>
-      em1
-    </strong>
-    <span
-      class="ais-ReverseHighlight-separator"
-    >
-      <strong>
-         -
-      </strong>
-    </span>
-    <strong>
-      item2
-    </strong>
-  </span>
-</div>
-`);
+      <div>
+        <span
+          class="ais-ReverseHighlight"
+        >
+          <small>
+            it
+          </small>
+          <strong>
+            em1
+          </strong>
+          <span
+            class="ais-ReverseHighlight-separator"
+          >
+            <strong>
+               - 
+            </strong>
+          </span>
+          <strong>
+            item2
+          </strong>
+        </span>
+      </div>
+    `);
   });
 
   test('forwards custom class names and `div` props to the root element', () => {

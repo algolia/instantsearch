@@ -29,23 +29,23 @@ describe('Snippet', () => {
     );
 
     expect(container).toMatchInlineSnapshot(`
-<div>
-  <span
-    class="ais-ReverseSnippet"
-  >
-    <span
-      class="ais-ReverseSnippet-nonHighlighted"
-    >
-      te
-    </span>
-    <mark
-      class="ais-ReverseSnippet-highlighted"
-    >
-      st
-    </mark>
-  </span>
-</div>
-`);
+      <div>
+        <span
+          class="ais-ReverseSnippet"
+        >
+          <span
+            class="ais-ReverseSnippet-nonHighlighted"
+          >
+            te
+          </span>
+          <mark
+            class="ais-ReverseSnippet-highlighted"
+          >
+            st
+          </mark>
+        </span>
+      </div>
+    `);
   });
 
   test('renders list of matches', () => {
@@ -70,33 +70,33 @@ describe('Snippet', () => {
     );
 
     expect(container).toMatchInlineSnapshot(`
-<div>
-  <span
-    class="ais-ReverseSnippet"
-  >
-    <span
-      class="ais-ReverseSnippet-nonHighlighted"
-    >
-      te
-    </span>
-    <mark
-      class="ais-ReverseSnippet-highlighted"
-    >
-      st
-    </mark>
-    <span
-      class="ais-ReverseSnippet-separator"
-    >
-      ,
-    </span>
-    <mark
-      class="ais-ReverseSnippet-highlighted"
-    >
-      nothing
-    </mark>
-  </span>
-</div>
-`);
+      <div>
+        <span
+          class="ais-ReverseSnippet"
+        >
+          <span
+            class="ais-ReverseSnippet-nonHighlighted"
+          >
+            te
+          </span>
+          <mark
+            class="ais-ReverseSnippet-highlighted"
+          >
+            st
+          </mark>
+          <span
+            class="ais-ReverseSnippet-separator"
+          >
+            , 
+          </span>
+          <mark
+            class="ais-ReverseSnippet-highlighted"
+          >
+            nothing
+          </mark>
+        </span>
+      </div>
+    `);
   });
 
   test('renders path to match', () => {
@@ -121,23 +121,23 @@ describe('Snippet', () => {
     );
 
     expect(container).toMatchInlineSnapshot(`
-<div>
-  <span
-    class="ais-ReverseSnippet"
-  >
-    <span
-      class="ais-ReverseSnippet-nonHighlighted"
-    >
-      te
-    </span>
-    <mark
-      class="ais-ReverseSnippet-highlighted"
-    >
-      st
-    </mark>
-  </span>
-</div>
-`);
+      <div>
+        <span
+          class="ais-ReverseSnippet"
+        >
+          <span
+            class="ais-ReverseSnippet-nonHighlighted"
+          >
+            te
+          </span>
+          <mark
+            class="ais-ReverseSnippet-highlighted"
+          >
+            st
+          </mark>
+        </span>
+      </div>
+    `);
   });
 
   test('renders path to match as array', () => {
@@ -161,23 +161,23 @@ describe('Snippet', () => {
     );
 
     expect(container).toMatchInlineSnapshot(`
-<div>
-  <span
-    class="ais-ReverseSnippet"
-  >
-    <span
-      class="ais-ReverseSnippet-nonHighlighted"
-    >
-      te
-    </span>
-    <mark
-      class="ais-ReverseSnippet-highlighted"
-    >
-      st
-    </mark>
-  </span>
-</div>
-`);
+      <div>
+        <span
+          class="ais-ReverseSnippet"
+        >
+          <span
+            class="ais-ReverseSnippet-nonHighlighted"
+          >
+            te
+          </span>
+          <mark
+            class="ais-ReverseSnippet-highlighted"
+          >
+            st
+          </mark>
+        </span>
+      </div>
+    `);
   });
 
   test("renders nothing when there's no match", () => {
@@ -222,23 +222,23 @@ describe('Snippet', () => {
     );
 
     expect(container).toMatchInlineSnapshot(`
-<div>
-  <span
-    class="ais-ReverseSnippet"
-  >
-    <span
-      class="ais-ReverseSnippet-nonHighlighted"
-    >
-      don
-    </span>
-    <mark
-      class="ais-ReverseSnippet-highlighted"
-    >
-      't &lt;script&gt;alert("xss");&lt;/script&gt;
-    </mark>
-  </span>
-</div>
-`);
+      <div>
+        <span
+          class="ais-ReverseSnippet"
+        >
+          <span
+            class="ais-ReverseSnippet-nonHighlighted"
+          >
+            don
+          </span>
+          <mark
+            class="ais-ReverseSnippet-highlighted"
+          >
+            't &lt;script&gt;alert("xss");&lt;/script&gt;
+          </mark>
+        </span>
+      </div>
+    `);
   });
 
   test('forwards tag names and separator', () => {
@@ -273,29 +273,29 @@ describe('Snippet', () => {
     );
 
     expect(container).toMatchInlineSnapshot(`
-<div>
-  <span
-    class="ais-ReverseSnippet"
-  >
-    <small>
-      it
-    </small>
-    <strong>
-      em1
-    </strong>
-    <span
-      class="ais-ReverseSnippet-separator"
-    >
-      <strong>
-         -
-      </strong>
-    </span>
-    <strong>
-      item2
-    </strong>
-  </span>
-</div>
-`);
+      <div>
+        <span
+          class="ais-ReverseSnippet"
+        >
+          <small>
+            it
+          </small>
+          <strong>
+            em1
+          </strong>
+          <span
+            class="ais-ReverseSnippet-separator"
+          >
+            <strong>
+               - 
+            </strong>
+          </span>
+          <strong>
+            item2
+          </strong>
+        </span>
+      </div>
+    `);
   });
 
   test('forwards custom class names and `div` props to the root element', () => {
