@@ -96,16 +96,18 @@ function Hit({ hit }: HitProps) {
       {{#if imageAttribute}}
       <img src={ hit.{{imageAttribute}} } alt={ hit.{{attributesToDisplay.[0]}} } />
       {{/if}}
-      <h1>
-        <Highlight attribute="{{attributesToDisplay.[0]}}" hit={hit} />
-      </h1>
-      {{#each attributesToDisplay}}
-      {{#unless @first}}
-      <p>
-        <Highlight attribute="{{this}}" hit={hit} />
-      </p>
-      {{/unless}}
-      {{/each}}
+      <div>
+        <h1>
+          <Highlight attribute="{{attributesToDisplay.[0]}}" hit={hit} />
+        </h1>
+        {{#each attributesToDisplay}}
+        {{#unless @first}}
+        <p>
+          <Highlight attribute="{{this}}" hit={hit} />
+        </p>
+        {{/unless}}
+        {{/each}}
+      </div>
       {{else}}
       <p>
         <code>{JSON.stringify(hit).slice(0, 100)}...</code>

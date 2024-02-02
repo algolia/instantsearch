@@ -2551,6 +2551,15 @@ exports[`Templates InstantSearch.js File content: src/app.css 1`] = `
 #pagination {
   margin: 2rem auto;
   text-align: center;
+}
+
+.ais-Hits-item article {
+  display: flex;
+}
+
+.ais-Hits-item img {
+  max-height: 125px;
+  padding-right: 16px;
 }"
 `;
 
@@ -2577,8 +2586,10 @@ search.addWidgets([
       item: (hit, { html, components }) => html\`
         <article>
           <img src=\${hit.imageAttribute} alt=\${hit.attribute1} />
-          <h1>\${components.Highlight({ hit, attribute: 'attribute1' })}</h1>
-          <p>\${components.Highlight({ hit, attribute: 'attribute2' })}</p>
+          <div>
+            <h1>\${components.Highlight({ hit, attribute: 'attribute1' })}</h1>
+            <p>\${components.Highlight({ hit, attribute: 'attribute2' })}</p>
+          </div>
         </article>
       \`,
     },
@@ -4159,6 +4170,15 @@ exports[`Templates JavaScript Client File content: src/app.css 1`] = `
   margin-bottom: 1rem;
 }
 
+.ais-hits--item article {
+  display: flex;
+}
+
+.ais-hits--item img {
+  max-height: 125px;
+  padding-right: 16px;
+}
+
 #searchBox {
   margin-bottom: 2rem;
 }"
@@ -4184,8 +4204,10 @@ function renderHits(query) {
               \`<li class=\\"ais-hits--item\\">
                 <article>
                   <img src=\\"\${hit.imageAttribute}\\" alt=\\"\${hit.attribute1}\\" />
-                  <h1>\${hit._highlightResult.attribute1.value}</h1>
-                  <p>\${hit._highlightResult.attribute2.value}</p>
+                  <div>
+                    <h1>\${hit._highlightResult.attribute1.value}</h1>
+                    <p>\${hit._highlightResult.attribute2.value}</p>
+                  </div>
                 </article>
               </li>\`
           )
@@ -4468,6 +4490,15 @@ exports[`Templates JavaScript Helper File content: src/app.css 1`] = `
   margin-bottom: 1rem;
 }
 
+.ais-hits--item article {
+  display: flex;
+}
+
+.ais-hits--item img {
+  max-height: 125px;
+  padding-right: 16px;
+}
+
 #searchBox {
   margin-bottom: 2rem;
 }"
@@ -4499,8 +4530,10 @@ helper.on('result', ({ results }) => {
             \`<li class=\\"ais-hits--item\\">
               <article>
                 <img src=\\"\${hit.imageAttribute}\\" alt=\\"\${hit.attribute1}\\" />
-                <h1>\${hit._highlightResult.attribute1.value}</h1>
-                <p>\${hit._highlightResult.attribute2.value}</p>
+                <div>
+                  <h1>\${hit._highlightResult.attribute1.value}</h1>
+                  <p>\${hit._highlightResult.attribute2.value}</p>
+                </div>
               </article>
             </li>\`
         )
@@ -4729,6 +4762,15 @@ em {
 .pagination {
   margin: 2rem auto;
   text-align: center;
+}
+
+.ais-Hits-item article {
+  display: flex;
+}
+
+.ais-Hits-item img {
+  max-height: 125px;
+  padding-right: 16px;
 }"
 `;
 
@@ -4817,12 +4859,14 @@ function Hit({ hit }: HitProps) {
   return (
     <article>
       <img src={hit.imageAttribute} alt={hit.attribute1} />
-      <h1>
-        <Highlight attribute=\\"attribute1\\" hit={hit} />
-      </h1>
-      <p>
-        <Highlight attribute=\\"attribute2\\" hit={hit} />
-      </p>
+      <div>
+        <h1>
+          <Highlight attribute=\\"attribute1\\" hit={hit} />
+        </h1>
+        <p>
+          <Highlight attribute=\\"attribute2\\" hit={hit} />
+        </p>
+      </div>
     </article>
   );
 }"
@@ -5509,12 +5553,14 @@ exports[`Templates Vue InstantSearch File content: src/App.vue 1`] = `
               <template slot=\\"item\\" slot-scope=\\"{ item }\\">
                 <article>
                   <img :src=\\"item.imageAttribute\\" :alt=\\"item.attribute1\\" />
-                  <h1>
-                    <ais-highlight :hit=\\"item\\" attribute=\\"attribute1\\" />
-                  </h1>
-                  <p>
-                    <ais-highlight :hit=\\"item\\" attribute=\\"attribute2\\" />
-                  </p>
+                  <div>
+                    <h1>
+                      <ais-highlight :hit=\\"item\\" attribute=\\"attribute1\\" />
+                    </h1>
+                    <p>
+                      <ais-highlight :hit=\\"item\\" attribute=\\"attribute2\\" />
+                    </p>
+                  </div>
                 </article>
               </template>
             </ais-hits>
@@ -5612,6 +5658,15 @@ em {
 .pagination {
   margin: 2rem auto;
   text-align: center;
+}
+
+.ais-Hits-item article {
+  display: flex;
+}
+
+.ais-Hits-item img {
+  max-height: 125px;
+  padding-right: 16px;
 }
 </style>"
 `;
@@ -5805,12 +5860,14 @@ exports[`Templates Vue InstantSearch with Vue 3 File content: src/App.vue 1`] = 
               <template v-slot:item=\\"{ item }\\">
                 <article>
                   <img :src=\\"item.imageAttribute\\" :alt=\\"item.attribute1\\" />
-                  <h1>
-                    <ais-highlight :hit=\\"item\\" attribute=\\"attribute1\\" />
-                  </h1>
-                  <p>
-                    <ais-highlight :hit=\\"item\\" attribute=\\"attribute2\\" />
-                  </p>
+                  <div>
+                    <h1>
+                      <ais-highlight :hit=\\"item\\" attribute=\\"attribute1\\" />
+                    </h1>
+                    <p>
+                      <ais-highlight :hit=\\"item\\" attribute=\\"attribute2\\" />
+                    </p>
+                  </div>
                 </article>
               </template>
             </ais-hits>
@@ -5913,6 +5970,15 @@ em {
 .pagination {
   margin: 2rem auto;
   text-align: center;
+}
+
+.ais-Hits-item article {
+  display: flex;
+}
+
+.ais-Hits-item img {
+  max-height: 125px;
+  padding-right: 16px;
 }
 </style>"
 `;
