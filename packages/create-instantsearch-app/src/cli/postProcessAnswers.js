@@ -65,9 +65,11 @@ async function postProcessAnswers({
     template: templatePath,
     installation: optionsFromArguments.installation,
     currentYear: new Date().getFullYear(),
-    attributesToDisplay: combinedAnswers.attributesToDisplay?.filter(
-      (attribute) => attribute !== combinedAnswers.imageAttribute
-    ),
+    attributesToDisplay:
+      Array.isArray(combinedAnswers.attributesToDisplay) &&
+      combinedAnswers.attributesToDisplay.filter(
+        (attribute) => attribute !== combinedAnswers.imageAttribute
+      ),
     attributesForFaceting:
       Array.isArray(combinedAnswers.attributesForFaceting) &&
       combinedAnswers.attributesForFaceting.filter(
