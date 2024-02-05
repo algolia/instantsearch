@@ -23,6 +23,7 @@ const plugins = [
   }),
   babel({
     rootMode: 'upward',
+    runtimeHelpers: true,
     exclude: /node_modules|algoliasearch-helper/,
     extensions: ['.js', '.ts', '.tsx'],
   }),
