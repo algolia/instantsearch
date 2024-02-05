@@ -26,12 +26,14 @@ helper.on('result', ({ results }) => {
                 {{#if imageAttribute}}
                 <img src="${ hit.{{imageAttribute}} }" alt="${ hit.{{attributesToDisplay.[0]}} }" />
                 {{/if}}
-                <h1>${hit._highlightResult.{{attributesToDisplay.[0]}}.value}</h1>
-                {{#each attributesToDisplay}}
-                {{#unless @first}}
-                <p>${hit._highlightResult.{{this}}.value}</p>
-                {{/unless}}
-                {{/each}}
+                <div>
+                  <h1>${hit._highlightResult.{{attributesToDisplay.[0]}}.value}</h1>
+                  {{#each attributesToDisplay}}
+                  {{#unless @first}}
+                  <p>${hit._highlightResult.{{this}}.value}</p>
+                  {{/unless}}
+                  {{/each}}
+                </div>
               {{else}}
                 <p>
                   <code>${JSON.stringify(hit).slice(0, 100)}...</code>

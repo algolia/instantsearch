@@ -69,6 +69,15 @@ em {
   margin-bottom: 1rem;
 }
 
+.ais-hits--item article {
+  display: flex;
+}
+
+.ais-hits--item img {
+  max-height: 125px;
+  padding-right: 16px;
+}
+
 #searchBox {
   margin-bottom: 2rem;
 }
