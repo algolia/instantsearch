@@ -184,7 +184,7 @@ search.addWidgets([
 
           const sendEvent = createSendEventForHits({
             instantSearchInstance,
-            index: scopedResult.results.index,
+            getIndex: () => scopedResult.results.index,
             widgetType: this.$$type,
           });
 

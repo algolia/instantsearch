@@ -11,9 +11,12 @@ import {
 
 import type { EscapedHits } from '../../../types';
 
-const createTestEnvironment = ({ nbHits = 2 }: { nbHits?: number } = {}) => {
-  const instantSearchInstance = createInstantSearch();
-  const index = 'testIndex';
+const createTestEnvironment = ({
+  nbHits = 2,
+  index = 'testIndex',
+}: { nbHits?: number; index?: string } = {}) => {
+  const instantSearchInstance = createInstantSearch({ indexName: index });
+  const helper = instantSearchInstance.helper!;
   const widgetType = 'ais.testWidget';
   const hits = Array.from({ length: nbHits }, (_, i) => ({
     __position: i,
@@ -35,16 +38,17 @@ const createTestEnvironment = ({ nbHits = 2 }: { nbHits?: number } = {}) => {
   };
   const sendEvent = createSendEventForHits({
     instantSearchInstance,
-    index,
+    getIndex: () => helper.getIndex(),
     widgetType,
   });
   const bindEvent = createBindEventForHits({
-    index,
+    getIndex: () => helper.getIndex(),
     widgetType,
     instantSearchInstance,
   });
   return {
     instantSearchInstance,
+    helper,
     index,
     widgetType,
     hits,
@@ -522,6 +526,29 @@ describe('createSendEventForHits', () => {
       },
       widgetType: 'ais.testWidget',
     });
+  });
+
+  it('sends event with an up-to-date index name', () => {
+    const { sendEvent, instantSearchInstance, helper, hits } =
+      createTestEnvironment({
+        index: 'index1',
+      });
+
+    sendEvent('view', hits, 'Products Viewed');
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        payload: expect.objectContaining({ index: 'index1' }),
+      })
+    );
+
+    helper.setIndex('index2');
+
+    sendEvent('view', hits, 'Products Viewed');
+    expect(instantSearchInstance.sendEventToInsights).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        payload: expect.objectContaining({ index: 'index2' }),
+      })
+    );
   });
 
   it('sends custom event', () => {

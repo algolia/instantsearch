@@ -323,11 +323,11 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
           showMore = getShowMore(helper);
           sendEvent = createSendEventForHits({
             instantSearchInstance,
-            index: helper.getIndex(),
+            getIndex: () => helper.getIndex(),
             widgetType: this.$$type,
           });
           bindEvent = createBindEventForHits({
-            index: helper.getIndex(),
+            getIndex: () => helper.getIndex(),
             widgetType: this.$$type,
             instantSearchInstance,
           });
