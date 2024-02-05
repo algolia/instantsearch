@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { cx } from './lib/cx';
+import { isModifierClick } from './lib/isModifierClick';
 import { ShowMoreButton } from './ShowMoreButton';
 
 import type { ShowMoreButtonTranslations } from './ShowMoreButton';
@@ -102,6 +103,9 @@ export function Menu({
               className={cx('ais-Menu-link', classNames.link)}
               href={createURL(item.value)}
               onClick={(event) => {
+                if (isModifierClick(event)) {
+                  return;
+                }
                 event.preventDefault();
                 onRefine(item);
               }}

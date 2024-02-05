@@ -3,6 +3,7 @@
 import { cx } from '@algolia/ui-components-shared';
 import { h } from 'preact';
 
+import { isSpecialClick } from '../../lib/utils';
 import Template from '../Template/Template';
 
 import type { BreadcrumbConnectorParamsItem } from '../../connectors/breadcrumb/connectBreadcrumb';
@@ -86,6 +87,9 @@ const Breadcrumb = ({
                 className={cssClasses.link}
                 href={createURL(item.value)}
                 onClick={(event) => {
+                  if (isSpecialClick(event)) {
+                    return;
+                  }
                   event.preventDefault();
                   refine(item.value);
                 }}
