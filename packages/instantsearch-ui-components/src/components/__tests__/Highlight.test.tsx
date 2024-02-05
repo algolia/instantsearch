@@ -9,8 +9,6 @@ import { createHighlightComponent } from '../Highlight';
 
 import type { ComponentChildren } from '../../types';
 
-import type { ComponentChildren } from '../../types';
-
 const Highlight = createHighlightComponent({ createElement, Fragment });
 
 describe('Highlight', () => {
