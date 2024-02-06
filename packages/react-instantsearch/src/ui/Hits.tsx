@@ -1,6 +1,5 @@
+import { cx } from 'instantsearch-ui-components';
 import React from 'react';
-
-import { cx } from './lib/cx';
 
 import type { Hit } from 'instantsearch.js';
 import type { SendEventForHits } from 'instantsearch.js/es/lib/utils';

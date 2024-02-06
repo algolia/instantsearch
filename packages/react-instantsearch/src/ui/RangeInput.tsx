@@ -1,6 +1,5 @@
+import { cx } from 'instantsearch-ui-components';
 import React, { useState } from 'react';
-
-import { cx } from './lib/cx';
 
 import type { useRange } from 'react-instantsearch-core';
 
