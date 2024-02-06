@@ -20,6 +20,22 @@ exports[`Template can configure custom rootTagName 1`] = `
 />
 `;
 
+exports[`Template can have Fragment as rootTagName with Preact component 1`] = `
+<div>
+  <span>
+    test
+  </span>
+</div>
+`;
+
+exports[`Template can have Fragment as rootTagName with template 1`] = `
+<div>
+  <span>
+    test
+  </span>
+</div>
+`;
+
 exports[`Template forward rootProps to the first node 1`] = `
 <div
   className="className"
