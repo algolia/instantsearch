@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.5.0](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.4.1...create-instantsearch-app@7.5.0) (2024-02-06)
+
+
+### Bug Fixes
+
+* **config:** don't accept non-arrays for attributesToDisplay ([#6027](https://github.com/algolia/instantsearch/issues/6027)) ([0dbeb82](https://github.com/algolia/instantsearch/commit/0dbeb824349f535c0fb873216f6cb4b646c68b00)), closes [#6023](https://github.com/algolia/instantsearch/issues/6023)
+
+
+### Features
+
+* **cisa:** style images ([#6033](https://github.com/algolia/instantsearch/issues/6033)) ([1fc011e](https://github.com/algolia/instantsearch/commit/1fc011e8b97655b193b965c604097a42a353b09f))
+
+
+
+
+
 ## [7.4.1](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.4.0...create-instantsearch-app@7.4.1) (2024-01-23)
 
 **Note:** Version bump only for package create-instantsearch-app

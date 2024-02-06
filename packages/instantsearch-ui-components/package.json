@@ -1,6 +1,6 @@
 {
   "name": "instantsearch-ui-components",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Common UI components for InstantSearch.",
   "source": "src/index.ts",
   "types": "dist/es/index.d.ts",
