@@ -541,6 +541,8 @@ describe('createSendEventForHits', () => {
       })
     );
 
+    // This is what happens when a user changes the active index
+    // using sortBy() for example.
     helper.setIndex('index2');
 
     sendEvent('view', hits, 'Products Viewed');
