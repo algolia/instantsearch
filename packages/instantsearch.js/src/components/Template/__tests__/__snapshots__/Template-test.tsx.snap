@@ -20,7 +20,7 @@ exports[`Template can configure custom rootTagName 1`] = `
 />
 `;
 
-exports[`Template can have Fragment as rootTagName with Preact component 1`] = `
+exports[`Template can have Fragment as rootTagName with Preact template 1`] = `
 <div>
   <span>
     test
@@ -28,7 +28,7 @@ exports[`Template can have Fragment as rootTagName with Preact component 1`] = `
 </div>
 `;
 
-exports[`Template can have Fragment as rootTagName with template 1`] = `
+exports[`Template can have Fragment as rootTagName with string template 1`] = `
 <div>
   <span>
     test
