@@ -128,7 +128,7 @@ describe('createInsightsEventHandler', () => {
       const payload = serializePayload(
         _buildEventPayloadsForHits({
           widgetType: 'ais.hits',
-          index: 'instant_search',
+          getIndex: () => 'instant_search',
           instantSearchInstance: createInstantSearch(),
           methodName: 'bindEvent',
           args: ['click', { objectID: '1', __position: 1 }, 'Hit Clicked'],
@@ -172,7 +172,7 @@ describe('createInsightsEventHandler', () => {
       const payload = serializePayload(
         _buildEventPayloadsForHits({
           widgetType: 'ais.hits',
-          index: 'instant_search',
+          getIndex: () => 'instant_search',
           instantSearchInstance: createInstantSearch(),
           methodName: 'bindEvent',
           args: ['click', { objectID: '1', __position: 1 }, 'Hit Clicked'],
@@ -246,7 +246,7 @@ describe('createInsightsEventHandler', () => {
       const modernPayload = serializePayload(
         _buildEventPayloadsForHits({
           widgetType: 'ais.hits',
-          index: 'instant_search',
+          getIndex: () => 'instant_search',
           instantSearchInstance: createInstantSearch(),
           methodName: 'bindEvent',
           args: ['click', { objectID: '1', __position: 1 }, 'Product Clicked'],

@@ -341,7 +341,7 @@ const connectGeoSearch: GeoSearchConnector = (renderFn, unmountFn = noop) => {
         if (!sendEvent) {
           sendEvent = createSendEventForHits({
             instantSearchInstance,
-            index: helper.getIndex(),
+            getIndex: () => helper.getIndex(),
             widgetType: $$type,
           });
         }

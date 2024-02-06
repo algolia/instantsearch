@@ -30,14 +30,14 @@ function chunk<TItem>(arr: TItem[], chunkSize: number = 20): TItem[][] {
 }
 
 export function _buildEventPayloadsForHits({
-  index,
+  getIndex,
   widgetType,
   methodName,
   args,
   instantSearchInstance,
 }: {
   widgetType: string;
-  index: string;
+  getIndex: () => string;
   methodName: 'sendEvent' | 'bindEvent';
   args: any[];
   instantSearchInstance: InstantSearch;
@@ -101,7 +101,7 @@ export function _buildEventPayloadsForHits({
         eventType,
         payload: {
           eventName: eventName || 'Hits Viewed',
-          index,
+          index: getIndex(),
           objectIDs: objectIDsByChunk[i],
           ...additionalData,
         },
@@ -117,7 +117,7 @@ export function _buildEventPayloadsForHits({
         eventType,
         payload: {
           eventName: eventName || 'Hit Clicked',
-          index,
+          index: getIndex(),
           queryID,
           objectIDs: objectIDsByChunk[i],
           positions: positionsByChunk[i],
@@ -135,7 +135,7 @@ export function _buildEventPayloadsForHits({
         eventType,
         payload: {
           eventName: eventName || 'Hit Converted',
-          index,
+          index: getIndex(),
           queryID,
           objectIDs: objectIDsByChunk[i],
           ...additionalData,
@@ -155,11 +155,11 @@ export function _buildEventPayloadsForHits({
 
 export function createSendEventForHits({
   instantSearchInstance,
-  index,
+  getIndex,
   widgetType,
 }: {
   instantSearchInstance: InstantSearch;
-  index: string;
+  getIndex: () => string;
   widgetType: string;
 }): SendEventForHits {
   let sentEvents: Record<InsightsEvent['eventType'], boolean> = {};
@@ -168,7 +168,7 @@ export function createSendEventForHits({
   const sendEventForHits: SendEventForHits = (...args: any[]) => {
     const payloads = _buildEventPayloadsForHits({
       widgetType,
-      index,
+      getIndex,
       methodName: 'sendEvent',
       args,
       instantSearchInstance,
@@ -196,18 +196,18 @@ export function createSendEventForHits({
 }
 
 export function createBindEventForHits({
-  index,
+  getIndex,
   widgetType,
   instantSearchInstance,
 }: {
-  index: string;
+  getIndex: () => string;
   widgetType: string;
   instantSearchInstance: InstantSearch;
 }): BindEventForHits {
   const bindEventForHits: BindEventForHits = (...args: any[]) => {
     const payloads = _buildEventPayloadsForHits({
       widgetType,
-      index,
+      getIndex,
       methodName: 'bindEvent',
       args,
       instantSearchInstance,
