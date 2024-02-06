@@ -16,8 +16,10 @@ function renderHits(query) {
             hit =>
               `<li class="ais-hits--item">
                 <article>
-                  <h1>${hit._highlightResult.name.value}</h1>
-                  <p>${hit._highlightResult.description.value}</p>
+                  <div>
+                    <h1>${hit._highlightResult.name.value}</h1>
+                    <p>${hit._highlightResult.description.value}</p>
+                  </div>
                 </article>
               </li>`
           )

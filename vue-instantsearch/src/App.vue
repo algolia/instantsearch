@@ -36,15 +36,17 @@
             <ais-hits>
               <template slot="item" slot-scope="{ item }">
                 <article>
-                  <h1>
-                    <ais-highlight
-                      :hit="item"
-                      attribute="name"
-                    />
-                  </h1>
-                  <p>
-                    <ais-highlight :hit="item" attribute="description" />
-                  </p>
+                  <div>
+                    <h1>
+                      <ais-highlight
+                        :hit="item"
+                        attribute="name"
+                      />
+                    </h1>
+                    <p>
+                      <ais-highlight :hit="item" attribute="description" />
+                    </p>
+                  </div>
                 </article>
               </template>
             </ais-hits>
@@ -142,5 +144,14 @@ em {
 .pagination {
   margin: 2rem auto;
   text-align: center;
+}
+
+.ais-Hits-item article {
+  display: flex;
+}
+
+.ais-Hits-item img {
+  max-height: 125px;
+  padding-right: 16px;
 }
 </style>

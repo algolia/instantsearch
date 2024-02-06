@@ -19,8 +19,10 @@ search.addWidgets([
     templates: {
       item: (hit, { html, components }) => html`
 <article>
-  <h1>${components.Highlight({hit, attribute: "name"})}</h1>
-  <p>${components.Highlight({hit, attribute: "description"})}</p>
+  <div>
+    <h1>${components.Highlight({hit, attribute: "name"})}</h1>
+    <p>${components.Highlight({hit, attribute: "description"})}</p>
+  </div>
 </article>
 `,
     },
