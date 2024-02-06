@@ -1,12 +1,12 @@
+import { cx } from 'instantsearch-ui-components';
 import React from 'react';
 
 import { InternalHighlight } from './InternalHighlight';
-import { cx } from './lib/cx';
 
 import type {
-  InternalHighlightProps,
-  InternalHighlightClassNames,
-} from './InternalHighlight';
+  HighlightProps as InternalHighlightProps,
+  HighlightClassNames as InternalHighlightClassNames,
+} from 'instantsearch-ui-components';
 
 export type SnippetClassNames = InternalHighlightClassNames;
 export type SnippetProps = Omit<InternalHighlightProps, 'classNames'> & {
