@@ -121,6 +121,19 @@ module.exports = (api) => {
           ],
         ],
       },
+      {
+        test: 'packages/instantsearch-ui-components',
+        plugins: [
+          [
+            '@babel/plugin-transform-runtime',
+            {
+              corejs: false,
+              helpers: true,
+              regenerator: false,
+            },
+          ],
+        ],
+      },
     ],
     // jsx is transpiled, so the comment should no longer be present in the final files
     shouldPrintComment: (value) => value !== '* @jsx h ',

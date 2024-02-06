@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.64.3](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.64.2...instantsearch.js@4.64.3) (2024-02-06)
+
+
+### Bug Fixes
+
+* **insights:** use up-to-date index name when sending events ([#6036](https://github.com/algolia/instantsearch/issues/6036)) ([fbda9fb](https://github.com/algolia/instantsearch/commit/fbda9fb1359339153ba8d4f78c9c0e28eabe7d75))
+
+
+
+
+
 ## [4.64.2](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.64.1...instantsearch.js@4.64.2) (2024-01-30)
 
 

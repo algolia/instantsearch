@@ -1,14 +1,15 @@
 {
   "name": "instantsearch-ui-components",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Common UI components for InstantSearch.",
   "source": "src/index.ts",
   "types": "dist/es/index.d.ts",
-  "main": "dist/es/index.js",
+  "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
   "type": "module",
   "exports": {
     "types": "./dist/es/index.d.ts",
+    "require": "./dist/cjs/index.js",
     "default": "./dist/es/index.js"
   },
   "sideEffects": false,
@@ -38,8 +39,9 @@
   ],
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "yarn build:es && yarn build:types",
+    "build": "yarn build:cjs && yarn build:es && yarn build:types",
     "build:es": "BABEL_ENV=es babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet",
+    "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/cjs --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet && ../../scripts/prepare-cjs.sh",
     "build:types": "tsc -p ./tsconfig.declaration.json --outDir ./dist/es",
     "version": "./scripts/version.cjs"
   }
