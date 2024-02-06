@@ -2,7 +2,6 @@
  * @jest-environment jsdom
  */
 /** @jsx h */
-import { cx } from '@algolia/ui-components-shared';
 import {
   createSearchClient,
   createMultiSearchResponse,
@@ -10,6 +9,7 @@ import {
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 import userEvent from '@testing-library/user-event';
+import { cx } from 'instantsearch-ui-components';
 import { h } from 'preact';
 
 import instantsearch from '../../../index.es';

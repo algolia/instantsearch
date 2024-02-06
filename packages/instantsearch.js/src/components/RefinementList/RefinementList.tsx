@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { cx } from '@algolia/ui-components-shared';
+import { cx } from 'instantsearch-ui-components';
 import { h, createRef, Component } from 'preact';
 
 import { isSpecialClick, isEqual } from '../../lib/utils';
