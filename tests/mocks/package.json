@@ -1,9 +1,9 @@
 {
   "name": "@instantsearch/mocks",
-  "version": "1.36.0",
+  "version": "1.37.0",
   "private": true,
   "dependencies": {
     "algoliasearch-helper": "3.16.2",
-    "instantsearch.js": "4.64.2"
+    "instantsearch.js": "4.64.3"
   }
 }

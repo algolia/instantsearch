@@ -129,7 +129,7 @@ module.exports = (api) => {
             {
               corejs: false,
               helpers: true,
-              regenerator: true,
+              regenerator: false,
             },
           ],
         ],

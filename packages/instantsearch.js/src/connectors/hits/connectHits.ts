@@ -129,14 +129,14 @@ const connectHits: HitsConnector = function connectHits(
         if (!sendEvent) {
           sendEvent = createSendEventForHits({
             instantSearchInstance,
-            index: helper.getIndex(),
+            getIndex: () => helper.getIndex(),
             widgetType: this.$$type,
           });
         }
 
         if (!bindEvent) {
           bindEvent = createBindEventForHits({
-            index: helper.getIndex(),
+            getIndex: () => helper.getIndex(),
             widgetType: this.$$type,
             instantSearchInstance,
           });
