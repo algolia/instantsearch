@@ -1,6 +1,6 @@
+import { cx } from 'instantsearch-ui-components';
 import React from 'react';
 
-import { cx } from './lib/cx';
 import { ShowMoreButton } from './ShowMoreButton';
 
 import type { ShowMoreButtonTranslations } from './ShowMoreButton';

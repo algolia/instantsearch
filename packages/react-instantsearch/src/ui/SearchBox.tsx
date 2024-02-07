@@ -1,6 +1,5 @@
+import { cx } from 'instantsearch-ui-components';
 import React from 'react';
-
-import { cx } from './lib/cx';
 
 export type IconProps = {
   classNames: Partial<SearchBoxClassNames>;
@@ -228,7 +227,6 @@ export function SearchBox({
             'ais-SearchBox-loadingIndicator',
             classNames.loadingIndicator
           )}
-          // @ts-ignore (this error is due to conflict with @algolia/ui-components-highlight-vdom, which declares "too global" type for span in case there's no @types/react or preact)
           hidden={!isSearchStalled}
         >
           <LoadingIcon classNames={classNames} />
