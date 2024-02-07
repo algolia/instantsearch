@@ -12,9 +12,19 @@ import type { JSX } from 'preact';
 
 class RawHtml extends Component<{ content: string }> {
   ref = createRef();
+  nodes: Element[] = [];
 
   componentDidMount() {
-    this.ref.current.outerHTML = this.props.content;
+    const fragment = new DocumentFragment();
+    const root = document.createElement('div');
+    root.innerHTML = this.props.content;
+    this.nodes = [...root.children];
+    fragment.append(...this.nodes);
+    this.ref.current.replaceWith(fragment);
+  }
+
+  componentWillUnmount() {
+    this.nodes.forEach((node) => (node.outerHTML = ''));
   }
 
   render() {
@@ -100,7 +110,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/#up
 
     // This is to handle Hogan templates with Fragment as rootTagName
     if (RootTagName === Fragment) {
-      return <RawHtml content={content} />;
+      return <RawHtml content={content} key={content} />;
     }
 
     return (
