@@ -1,24 +1,21 @@
 /** @jsx h */
 
-import { cx } from 'instantsearch-ui-components';
-import { h, render } from 'preact';
+import { cx, createHits } from 'instantsearch-ui-components';
+import { Fragment, h, render } from 'preact';
 
-import Hits from '../../components/Hits/Hits';
+import TemplateComponent from '../../components/Template/Template';
 import connectHits from '../../connectors/hits/connectHits';
 import { withInsights } from '../../lib/insights';
-import { component } from '../../lib/suit';
+import { createInsightsEventHandler } from '../../lib/insights/listener';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
+  warning,
 } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
 
-import type {
-  HitsComponentCSSClasses,
-  HitsComponentTemplates,
-} from '../../components/Hits/Hits';
 import type {
   HitsConnectorParams,
   HitsRenderState,
@@ -33,9 +30,11 @@ import type {
   Renderer,
 } from '../../types';
 import type { SearchResults } from 'algoliasearch-helper';
+import type { HitsClassNames } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'hits' });
-const suit = component('Hits');
+
+const Hits = createHits({ createElement: h, Fragment });
 
 const renderer =
   ({
@@ -45,9 +44,9 @@ const renderer =
     templates,
   }: {
     containerNode: HTMLElement;
-    cssClasses: HitsComponentCSSClasses;
+    cssClasses: HitsClassNames;
     renderState: {
-      templateProps?: PreparedTemplateProps<HitsComponentTemplates>;
+      templateProps?: PreparedTemplateProps<Required<HitsTemplates>>;
     };
     templates: HitsTemplates;
   }): Renderer<HitsRenderState, Partial<HitsWidgetParams>> =>
@@ -71,15 +70,62 @@ const renderer =
       return;
     }
 
+    const handleInsightsClick = createInsightsEventHandler({
+      insights,
+      sendEvent,
+    });
+
+    // FIXME: Use exported type from instantsearch-ui-components
+    const emptyComponent = ({ ...rootProps }) => (
+      <TemplateComponent
+        {...renderState.templateProps}
+        rootProps={rootProps}
+        templateKey="empty"
+        data={results}
+      />
+    );
+
+    // @MAJOR: Move default hit component back to the UI library
+    // once flavour specificities are erased
+    // FIXME: Use exported type from instantsearch-ui-components
+    const itemComponent = ({ hit, index, ...rootProps }) => (
+      <TemplateComponent
+        {...renderState.templateProps}
+        templateKey="item"
+        rootTagName="li"
+        rootProps={{
+          ...rootProps,
+          onClick: (event: MouseEvent) => {
+            handleInsightsClick(event);
+            rootProps.onClick?.(event);
+          },
+          onAuxClick: (event: MouseEvent) => {
+            handleInsightsClick(event);
+            rootProps.onClick?.(event);
+          },
+        }}
+        data={{
+          ...hit,
+          get __hitIndex() {
+            warning(
+              false,
+              'The `__hitIndex` property is deprecated. Use the absolute `__position` instead.'
+            );
+            return index;
+          },
+        }}
+        bindEvent={bindEvent}
+        sendEvent={sendEvent}
+      />
+    );
+
     render(
       <Hits
-        cssClasses={cssClasses}
         hits={receivedHits}
-        results={results!}
-        templateProps={renderState.templateProps!}
-        insights={insights}
+        itemComponent={itemComponent}
         sendEvent={sendEvent}
-        bindEvent={bindEvent}
+        classNames={cssClasses}
+        emptyComponent={emptyComponent}
       />,
       containerNode
     );
@@ -166,10 +212,10 @@ const hits: HitsWidget = function hits(widgetParams) {
 
   const containerNode = getContainerNode(container);
   const cssClasses = {
-    root: cx(suit(), userCssClasses.root),
-    emptyRoot: cx(suit({ modifierName: 'empty' }), userCssClasses.emptyRoot),
-    list: cx(suit({ descendantName: 'list' }), userCssClasses.list),
-    item: cx(suit({ descendantName: 'item' }), userCssClasses.item),
+    root: cx(userCssClasses.root),
+    emptyRoot: cx(userCssClasses.emptyRoot),
+    list: cx(userCssClasses.list),
+    item: cx(userCssClasses.item),
   };
 
   const specializedRenderer = renderer({

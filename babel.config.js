@@ -125,6 +125,12 @@ module.exports = (api) => {
         test: 'packages/instantsearch-ui-components',
         plugins: [
           [
+            '@babel/plugin-transform-react-jsx',
+            {
+              pragma: 'createElement',
+            },
+          ],
+          [
             '@babel/plugin-transform-runtime',
             {
               corejs: false,
