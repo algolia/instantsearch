@@ -19,7 +19,7 @@ class RawHtml extends Component<{ content: string }> {
     const root = document.createElement('div');
     root.innerHTML = this.props.content;
     this.nodes = [...root.children];
-    fragment.append(...this.nodes);
+    this.nodes.forEach((node) => fragment.appendChild(node));
     this.ref.current.replaceWith(fragment);
   }
 
