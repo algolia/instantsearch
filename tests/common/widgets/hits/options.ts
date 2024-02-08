@@ -10,6 +10,8 @@ import {
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 
+import { skippableDescribe } from '../../common';
+
 import type { HitsWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 import type { Hit, SearchResponse } from 'instantsearch.js';
@@ -33,7 +35,7 @@ function normalizeSnapshot(html: string) {
 
 export function createOptionsTests(
   setup: HitsWidgetSetup,
-  { act }: Required<TestOptions>
+  { act, skippedTests }: Required<TestOptions>
 ) {
   describe('options', () => {
     test('renders with default props', async () => {
@@ -76,61 +78,6 @@ export function createOptionsTests(
         </div>
       `
       );
-    });
-
-    // FIXME: Switch to 2 skippable tests
-    test.skip('renders with no results', async () => {
-      const searchClient = createMockedSearchClient();
-
-      await setup({
-        instantSearchOptions: {
-          indexName: 'indexName',
-          searchClient,
-        },
-        widgetParams: {},
-      });
-
-      await act(async () => {
-        await wait(0);
-      });
-
-      await act(async () => {
-        await userEvent.type(
-          screen.getByRole('searchbox'),
-          'query with no results'
-        );
-        await wait(0);
-      });
-
-      // React + Vue
-      expect(
-        document.querySelector('#hits-with-defaults .ais-Hits')
-      ).toMatchNormalizedInlineSnapshot(
-        normalizeSnapshot,
-        `
-        <div
-          class="ais-Hits ais-Hits--empty"
-        >
-          <ol
-            class="ais-Hits-list"
-          />
-        </div>
-      `
-      );
-
-      // JS
-      // expect(
-      //   document.querySelector('#hits-with-defaults .ais-Hits')
-      // ).toMatchNormalizedInlineSnapshot(
-      //   normalizeSnapshot
-      //     `
-      //     <div
-      //       class="ais-Hits ais-Hits--empty"
-      //     >
-      //       No results
-      //     </div>
-      //   `
-      // );
     });
 
     test('renders transformed items', async () => {
@@ -182,6 +129,87 @@ export function createOptionsTests(
         </div>
       `
       );
+    });
+
+    skippableDescribe('instantsearch.js', skippedTests, () => {
+      test('renders with no results', async () => {
+        const searchClient = createMockedSearchClient();
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {},
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        await act(async () => {
+          userEvent.type(
+            screen.getByRole('searchbox'),
+            'query with no results'
+          );
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('#hits-with-defaults .ais-Hits')
+        ).toMatchNormalizedInlineSnapshot(
+          normalizeSnapshot,
+          `
+            <div
+              class="ais-Hits ais-Hits--empty"
+            >
+              No results
+            </div>
+          `
+        );
+      });
+    });
+
+    skippableDescribe('react + vue instantsearch', skippedTests, () => {
+      // eslint-disable-next-line jest/no-identical-title
+      test('renders with no results', async () => {
+        const searchClient = createMockedSearchClient();
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {},
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        await act(async () => {
+          userEvent.type(
+            screen.getByRole('searchbox'),
+            'query with no results'
+          );
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('#hits-with-defaults .ais-Hits')
+        ).toMatchNormalizedInlineSnapshot(
+          normalizeSnapshot,
+          `
+          <div
+            class="ais-Hits ais-Hits--empty"
+          >
+            <ol
+              class="ais-Hits-list"
+            />
+          </div>
+        `
+        );
+      });
     });
   });
 }

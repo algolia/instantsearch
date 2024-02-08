@@ -5,18 +5,19 @@ import type { Renderer } from '../types';
 import type { Hit } from 'instantsearch.js';
 import type { SendEventForHits } from 'instantsearch.js/es/lib/utils';
 
-export type HitsProps<
-  THit,
-  TAdditionalProps extends React.ComponentProps<'div'>
-> = {
+export type HitsProps<THit> = React.ComponentProps<'div'> & {
   hits: THit[];
-  // FIXME: define and export props type
-  itemComponent: (props: any) => JSX.Element;
+  itemComponent: (props: {
+    hit: THit;
+    index: number;
+    className: string;
+    onClick: () => void;
+    onAuxClick: () => void;
+  }) => JSX.Element;
   sendEvent: SendEventForHits;
   classNames?: Partial<HitsClassNames>;
-  // FIXME: define and export props type
-  emptyComponent?: (props: any) => JSX.Element;
-} & TAdditionalProps;
+  emptyComponent?: (props: { className: string }) => JSX.Element;
+};
 
 export type HitsClassNames = {
   /**
@@ -38,17 +39,14 @@ export type HitsClassNames = {
 };
 
 export function createHits({ createElement }: Renderer) {
-  return <
-    THit extends Hit,
-    TAdditionalProps extends React.ComponentProps<'div'>
-  >({
+  return <THit extends Hit>({
     classNames = {},
     hits,
     itemComponent: ItemComponent,
     sendEvent,
     emptyComponent: EmptyComponent,
     ...props
-  }: HitsProps<THit, TAdditionalProps>) => {
+  }: HitsProps<THit>) => {
     if (hits.length === 0 && EmptyComponent) {
       return (
         <EmptyComponent

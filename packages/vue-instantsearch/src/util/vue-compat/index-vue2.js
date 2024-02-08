@@ -13,12 +13,19 @@ const augmentCreateElement =
     const { className, ...props } = propsWithClassName;
 
     if (typeof tag === 'function') {
-      return tag(Object.assign(props, { class: className, children }));
+      return tag(
+        Object.assign(props, {
+          class: className || props.class,
+          children,
+        })
+      );
     }
 
-    return createElement(tag, Object.assign(props, { class: className }), [
-      children,
-    ]);
+    return createElement(
+      tag,
+      Object.assign(props, { class: className || props.class }),
+      [children]
+    );
   };
 
 export function renderCompat(fn) {

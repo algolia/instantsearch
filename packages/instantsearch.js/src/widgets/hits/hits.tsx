@@ -30,7 +30,10 @@ import type {
   Renderer,
 } from '../../types';
 import type { SearchResults } from 'algoliasearch-helper';
-import type { HitsClassNames } from 'instantsearch-ui-components';
+import type {
+  HitsClassNames as HitsUiComponentClassNames,
+  HitsProps as HitsUiComponentProps,
+} from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'hits' });
 
@@ -44,7 +47,7 @@ const renderer =
     templates,
   }: {
     containerNode: HTMLElement;
-    cssClasses: HitsClassNames;
+    cssClasses: HitsCSSClasses;
     renderState: {
       templateProps?: PreparedTemplateProps<Required<HitsTemplates>>;
     };
@@ -75,8 +78,9 @@ const renderer =
       sendEvent,
     });
 
-    // FIXME: Use exported type from instantsearch-ui-components
-    const emptyComponent = ({ ...rootProps }) => (
+    const emptyComponent: HitsUiComponentProps<Hit>['emptyComponent'] = ({
+      ...rootProps
+    }) => (
       <TemplateComponent
         {...renderState.templateProps}
         rootProps={rootProps}
@@ -87,8 +91,11 @@ const renderer =
 
     // @MAJOR: Move default hit component back to the UI library
     // once flavour specificities are erased
-    // FIXME: Use exported type from instantsearch-ui-components
-    const itemComponent = ({ hit, index, ...rootProps }) => (
+    const itemComponent: HitsUiComponentProps<Hit>['itemComponent'] = ({
+      hit,
+      index,
+      ...rootProps
+    }) => (
       <TemplateComponent
         {...renderState.templateProps}
         templateKey="item"
@@ -97,11 +104,11 @@ const renderer =
           ...rootProps,
           onClick: (event: MouseEvent) => {
             handleInsightsClick(event);
-            rootProps.onClick?.(event);
+            rootProps.onClick();
           },
           onAuxClick: (event: MouseEvent) => {
             handleInsightsClick(event);
-            rootProps.onClick?.(event);
+            rootProps.onAuxClick();
           },
         }}
         data={{
@@ -131,27 +138,7 @@ const renderer =
     );
   };
 
-export type HitsCSSClasses = Partial<{
-  /**
-   * CSS class to add to the wrapping element.
-   */
-  root: string | string[];
-
-  /**
-   * CSS class to add to the wrapping element when no results.
-   */
-  emptyRoot: string | string[];
-
-  /**
-   * CSS class to add to the list of results.
-   */
-  list: string | string[];
-
-  /**
-   * CSS class to add to each result.
-   */
-  item: string | string[];
-}>;
+export type HitsCSSClasses = Partial<HitsUiComponentClassNames>;
 
 export type HitsTemplates = Partial<{
   /**
