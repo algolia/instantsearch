@@ -38,6 +38,10 @@ export function getDefaultSlot(component) {
   return component.$slots.default;
 }
 
+export function getScopedSlot(component, name) {
+  return (component.$scopedSlots || {})[name];
+}
+
 // Vue3-only APIs
 export const computed = undefined;
 export const createApp = undefined;

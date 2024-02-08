@@ -3,7 +3,7 @@ import { connectHitsWithInsights } from 'instantsearch.js/es/connectors';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
-import { renderCompat } from '../util/vue-compat';
+import { getScopedSlot, renderCompat } from '../util/vue-compat';
 
 export default {
   name: 'AisHits',
@@ -49,10 +49,11 @@ export default {
       index,
       onClick,
       onAuxClick,
-      // FIXME: Should this be removed by augmentCreateElement?
+      // We don't want to pass the Preact key as a prop
       key: _key,
       ...rootProps
     }) => {
+      const itemSlot = getScopedSlot(this, 'item');
       return h(
         'li',
         {
@@ -64,9 +65,8 @@ export default {
           },
         },
         [
-          // FIXME: This is not compatible with Vue 3?
-          (this.$scopedSlots.item &&
-            this.$scopedSlots.item({
+          (itemSlot &&
+            itemSlot({
               item: hit,
               index,
               insights: this.state.insights,
@@ -77,7 +77,9 @@ export default {
       );
     };
 
-    if (this.$scopedSlots.default) {
+    const defaultSlot = getScopedSlot(this, 'default');
+    // FIXME: The logic fails with Vue 3 render functions because children are passed as a default scope, making this always true.
+    if (defaultSlot) {
       return h(
         'div',
         {
@@ -86,8 +88,7 @@ export default {
           },
         },
         [
-          // FIXME: This is not compatible with Vue 3?
-          this.$scopedSlots.default({
+          defaultSlot({
             items: this.state.hits,
             insights: this.state.insights,
             sendEvent: this.state.sendEvent,
