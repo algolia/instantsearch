@@ -2,7 +2,6 @@
   "name": "react-instantsearch-router-nextjs",
   "version": "7.5.5",
   "description": "React InstantSearch Router for Next.js",
-  "source": "src/index.ts",
   "types": "dist/es/index.d.ts",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",

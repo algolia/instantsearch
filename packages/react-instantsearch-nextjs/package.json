@@ -2,7 +2,6 @@
   "name": "react-instantsearch-nextjs",
   "version": "0.1.12",
   "description": "React InstantSearch SSR utilities for Next.js",
-  "source": "src/index.ts",
   "types": "dist/es/index.d.ts",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
