@@ -2,8 +2,12 @@
 import { cx } from '../lib';
 
 import type { Renderer } from '../types';
-import type { Hit } from 'instantsearch.js';
-import type { SendEventForHits } from 'instantsearch.js/es/lib/utils';
+
+// Should be imported from a shared package in the future
+type Hit = Record<string, unknown> & {
+  objectID: string;
+};
+type SendEventForHits = (...props: unknown[]) => void;
 
 export type HitsProps<THit> = React.ComponentProps<'div'> & {
   hits: THit[];
