@@ -44,6 +44,9 @@ export default {
       return null;
     }
 
+    const defaultSlot = getScopedSlot(this, 'default');
+    const itemSlot = getScopedSlot(this, 'item');
+
     const itemComponent = ({
       hit,
       index,
@@ -53,7 +56,6 @@ export default {
       key: _key,
       ...rootProps
     }) => {
-      const itemSlot = getScopedSlot(this, 'item');
       return h(
         'li',
         {
@@ -77,9 +79,9 @@ export default {
       );
     };
 
-    const defaultSlot = getScopedSlot(this, 'default');
-    // FIXME: The logic fails with Vue 3 render functions because children are passed as a default scope, making this always true.
-    if (defaultSlot) {
+    // We only want to render the default slot
+    // if no other slots are defined
+    if (!itemSlot && defaultSlot) {
       return h(
         'div',
         {
