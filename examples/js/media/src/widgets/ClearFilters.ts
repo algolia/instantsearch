@@ -5,6 +5,8 @@ export const createClearFilters = ({ container }: { container: string }) =>
     container,
     excludedAttributes: ['categories', 'query'],
     templates: {
-      resetLabel: 'Clear filters',
+      resetLabel() {
+        return 'Clear filters';
+      },
     },
   });

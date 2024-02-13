@@ -3,7 +3,9 @@ import { collapseButtonText } from '../templates/panel';
 const { panel, rangeSlider } = window.instantsearch.widgets;
 const priceRangeSlider = panel({
   templates: {
-    header: 'Price',
+    header() {
+      return 'Price';
+    },
     collapseButtonText,
   },
   collapsed: () => false,
