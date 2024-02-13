@@ -43,7 +43,7 @@ export default {
   },
   render() {
     const property =
-      getPropertyByPath(this.hit._highlightResult, this.attribute) || [];
+      getPropertyByPath(this.hit[this.highlightProperty], this.attribute) || [];
     const properties = Array.isArray(property) ? property : [property];
 
     const parts = properties.map((singleValue) =>
@@ -56,6 +56,7 @@ export default {
         highlighted: this.suit('highlighted'),
       },
       highlightedTagName: this.highlightedTagName,
+      nonHighlightedTagName: Fragment,
       parts,
     });
   },
