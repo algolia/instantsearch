@@ -2,7 +2,7 @@ import { panel, ratingMenu } from 'instantsearch.js/es/widgets';
 
 import { collapseButtonText } from '../templates/panel';
 
-const ratingsMenu = panel({
+const ratingsMenu = panel<typeof ratingMenu>({
   templates: {
     header() {
       return 'Ratings';
@@ -16,7 +16,7 @@ export const ratings = ratingsMenu({
   container: '[data-widget="ratings"]',
   attribute: 'rating',
   templates: {
-    item(hit, { html }) {
+    item: (hit, { html }) => {
       const stars = hit.stars.map(
         (isFilled, index) =>
           html`<svg

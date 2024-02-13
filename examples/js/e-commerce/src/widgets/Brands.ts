@@ -2,7 +2,7 @@ import { panel, refinementList } from 'instantsearch.js/es/widgets';
 
 import { collapseButtonText } from '../templates/panel';
 
-const brandRefinementList = panel({
+const brandRefinementList = panel<typeof refinementList>({
   templates: {
     header() {
       return 'Brands';
@@ -17,9 +17,8 @@ export const brands = brandRefinementList({
   attribute: 'brand',
   searchable: true,
   searchablePlaceholder: 'Search for brands…',
-  searchableShowReset: false,
   templates: {
-    searchableSubmit(_, { html }) {
+    searchableSubmit: (_, { html }) => {
       return html`
         <svg
           xmlns="http://www.w3.org/2000/svg"

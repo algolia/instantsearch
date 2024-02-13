@@ -3,7 +3,7 @@ import { refinementList, panel } from 'instantsearch.js/es/widgets';
 import { isWindowMediumSize } from '../utils';
 
 const createAuthorsList = () =>
-  panel({
+  panel<typeof refinementList>({
     templates: {
       header() {
         return 'Authors';

@@ -1,6 +1,6 @@
 import { panel, clearRefinements } from 'instantsearch.js/es/widgets';
 
-const clearFilters = panel({
+const clearFilters = panel<typeof clearRefinements>({
   hidden(options) {
     return options.results.nbHits > 0;
   },
@@ -9,7 +9,7 @@ const clearFilters = panel({
 export const clearFiltersEmptyResults = clearFilters({
   container: '[data-widget="clear-filters-empty-state"]',
   templates: {
-    resetLabel(_, { html }) {
+    resetLabel: (_, { html }) => {
       return html`
         <div class="clear-filters">
           <svg

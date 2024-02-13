@@ -1,6 +1,6 @@
 const { pagination: paginationWidget, panel } = window.instantsearch.widgets;
 
-const paginationWithMultiplePages = panel({
+const paginationWithMultiplePages = panel<typeof paginationWidget>({
   hidden({ results }) {
     return results.nbPages <= 1;
   },
@@ -13,7 +13,7 @@ export const pagination = paginationWithMultiplePages({
   showFirst: false,
   showLast: false,
   templates: {
-    previous(_, { html }) {
+    previous: (_, { html }) => {
       return html`
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -34,7 +34,7 @@ export const pagination = paginationWithMultiplePages({
         </svg>
       `;
     },
-    next(_, { html }) {
+    next: (_, { html }) => {
       return html`
         <svg
           xmlns="http://www.w3.org/2000/svg"
