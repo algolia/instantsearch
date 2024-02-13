@@ -24,12 +24,22 @@ export type SingleWidget = {
 }[keyof AllWidgets];
 
 /**
+ * Get the props for a widget, excluding the ref prop as it's not valid for
+ * "Internal" components due to the usage of a more generic ComponentProps used
+ * than the React.ComponentProps.
+ */
+type Props<TWidget extends SingleWidget> = Omit<
+  ComponentProps<TWidget['Component']>,
+  'ref'
+>;
+
+/**
  * Intermediary component to render any React InstantSearch widget with their minimal props
  */
 function Widget<TWidget extends SingleWidget>({
   widget,
   ...props
-}: { widget: TWidget } & ComponentProps<TWidget['Component']>) {
+}: { widget: TWidget } & Props<TWidget>) {
   switch (widget.name) {
     case 'Breadcrumb': {
       return <widget.Component attributes={['']} {...props} />;

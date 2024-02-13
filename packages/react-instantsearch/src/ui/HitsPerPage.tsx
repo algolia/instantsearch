@@ -1,6 +1,5 @@
+import { cx } from 'instantsearch-ui-components';
 import React from 'react';
-
-import { cx } from './lib/cx';
 
 import type { HitsPerPageConnectorParamsItem as HitsPerPageItem } from 'instantsearch.js/es/connectors/hits-per-page/connectHitsPerPage';
 

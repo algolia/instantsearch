@@ -1,8 +1,8 @@
+import { cx } from 'instantsearch-ui-components';
 import { getHighlightedParts, unescape } from 'instantsearch.js/es/lib/utils';
 import React from 'react';
 
 import { Highlight } from './Highlight';
-import { cx } from './lib/cx';
 import { ShowMoreButton } from './ShowMoreButton';
 
 import type { ShowMoreButtonTranslations } from './ShowMoreButton';

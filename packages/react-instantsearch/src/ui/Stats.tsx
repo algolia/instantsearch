@@ -1,6 +1,5 @@
+import { cx } from 'instantsearch-ui-components';
 import React from 'react';
-
-import { cx } from './lib/cx';
 
 export type StatsProps = React.ComponentProps<'div'> & {
   nbHits: number;

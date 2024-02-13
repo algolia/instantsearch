@@ -1,6 +1,7 @@
+import { cx } from 'instantsearch-ui-components';
 import React from 'react';
 
-import { capitalize, cx, isModifierClick } from './lib';
+import { capitalize, isModifierClick } from './lib';
 
 import type { CurrentRefinementsConnectorParamsItem } from 'instantsearch.js/es/connectors/current-refinements/connectCurrentRefinements';
 
