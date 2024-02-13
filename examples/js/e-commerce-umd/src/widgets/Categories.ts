@@ -3,7 +3,9 @@ import { collapseButtonText } from '../templates/panel';
 const { panel, hierarchicalMenu } = window.instantsearch.widgets;
 const categoryHierarchicalMenu = panel({
   templates: {
-    header: 'Category',
+    header() {
+      return 'Category';
+    },
     collapseButtonText,
   },
   collapsed: () => false,
