@@ -65,9 +65,13 @@ function outputs(vueVersion) {
   ];
 
   const external = (id) =>
-    ['algoliasearch-helper', 'instantsearch.js', 'vue', 'mitt'].some(
-      (dep) => id === dep || id.startsWith(`${dep}/`)
-    );
+    [
+      'algoliasearch-helper',
+      'instantsearch.js',
+      'instantsearch-ui-components',
+      'vue',
+      'mitt',
+    ].some((dep) => id === dep || id.startsWith(`${dep}/`));
 
   const cjs = {
     input: 'src/instantsearch.js',

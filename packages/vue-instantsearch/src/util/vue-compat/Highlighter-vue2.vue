@@ -11,16 +11,13 @@
 </template>
 
 <script>
-import { parseAlgoliaHit } from '../util/parseAlgoliaHit';
-import { getDefaultSlot, renderCompat, isVue3 } from '../util/vue-compat';
+import { parseAlgoliaHit } from '../parseAlgoliaHit';
 
-const TextNode = isVue3
-  ? (props, context) => context.slots.default()
-  : {
-      render: renderCompat(function () {
-        return getDefaultSlot(this);
-      }),
-    };
+const TextNode = {
+  render() {
+    return this.$slots.default;
+  },
+};
 
 export default {
   name: 'AisHighlighter',

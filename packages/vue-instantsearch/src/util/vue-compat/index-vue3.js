@@ -66,3 +66,5 @@ export function getDefaultSlot(component) {
 export function getScopedSlot(component, name) {
   return (component.$slots || component.slots || {})[name];
 }
+
+export { default as AisHighlighter } from '../../components/Highlighter';

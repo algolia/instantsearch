@@ -42,6 +42,8 @@ export function getScopedSlot(component, name) {
   return (component.$scopedSlots || {})[name];
 }
 
+export { default as AisHighlighter } from './Highlighter-vue2.vue';
+
 // Vue3-only APIs
 export const computed = undefined;
 export const createApp = undefined;

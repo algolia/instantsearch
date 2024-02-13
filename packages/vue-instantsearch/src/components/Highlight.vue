@@ -12,8 +12,7 @@
 
 <script>
 import { createSuitMixin } from '../mixins/suit';
-
-import AisHighlighter from './Highlighter.vue';
+import { AisHighlighter } from '../util/vue-compat';
 
 export default {
   name: 'AisHighlight',
