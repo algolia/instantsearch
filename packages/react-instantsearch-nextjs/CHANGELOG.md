@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.13](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.1.12...react-instantsearch-nextjs@0.1.13) (2024-02-13)
+
+
+### Bug Fixes
+
+* **packaging:** remove non-exposed "source" key ([#6044](https://github.com/algolia/instantsearch/issues/6044)) ([77f0c48](https://github.com/algolia/instantsearch/commit/77f0c48d6458aa2d2ab4af804fbaf45f0839d88b))
+
+
+
+
+
 ## [0.1.12](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.1.11...react-instantsearch-nextjs@0.1.12) (2024-02-06)
 
 **Note:** Version bump only for package react-instantsearch-nextjs

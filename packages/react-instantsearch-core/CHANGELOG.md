@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.5.6](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.5.5...react-instantsearch-core@7.5.6) (2024-02-13)
+
+
+### Bug Fixes
+
+* **packaging:** remove non-exposed "source" key ([#6044](https://github.com/algolia/instantsearch/issues/6044)) ([77f0c48](https://github.com/algolia/instantsearch/commit/77f0c48d6458aa2d2ab4af804fbaf45f0839d88b))
+
+
+
+
+
 ## [7.5.5](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.5.4...react-instantsearch-core@7.5.5) (2024-02-06)
 
 **Note:** Version bump only for package react-instantsearch-core
