@@ -11,7 +11,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **instantsearch-ui-components:** update build ([#6037](https://github.com/algolia/instantsearch/issues/6037)) ([b4ed187](https://github.com/algolia/instantsearch/commit/b4ed187d5ffab1067b68f553278e0d5feffd3527))
 * **instantsearch.js:** replace `Highlight` and `cx` ([#6030](https://github.com/algolia/instantsearch/issues/6030)) ([ff8b345](https://github.com/algolia/instantsearch/commit/ff8b3458f147349f4c041ded7a1b426b45b28b5a))
 
+### Bug Fixes
 
+* **autocomplete:** add indexId to type ([#6050](https://github.com/algolia/instantsearch/issues/6050)) ([5f60268](https://github.com/algolia/instantsearch/commit/5f60268b1d74b33e93c17d1c9677e8abce7f6429))
 
 
 
