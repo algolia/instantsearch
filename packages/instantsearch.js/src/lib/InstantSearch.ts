@@ -309,6 +309,10 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       searchClient.addAlgoliaAgent(`instantsearch.js (${version})`);
     }
 
+    if (typeof recommendClient?.addAlgoliaAgent === 'function') {
+      recommendClient.addAlgoliaAgent(`instantsearch.js (${version})`);
+    }
+
     warning(
       insightsClient === null,
       `\`insightsClient\` property has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by the \`insights\` middleware.
