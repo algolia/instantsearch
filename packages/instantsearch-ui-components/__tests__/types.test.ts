@@ -38,7 +38,9 @@ function delint(sourceFile: ts.SourceFile) {
             );
           }
 
-          if (functionDeclaration.type?.kind !== ts.SyntaxKind.FunctionType) {
+          const returnType = functionDeclaration.type as ts.FunctionTypeNode;
+
+          if (returnType.kind !== ts.SyntaxKind.FunctionType) {
             report(
               node,
               `Exported component's return type should be a function.`
@@ -46,9 +48,8 @@ function delint(sourceFile: ts.SourceFile) {
           }
 
           if (
-            functionDeclaration.type?.kind === ts.SyntaxKind.FunctionType &&
-            (functionDeclaration.type as ts.FunctionTypeNode).parameters
-              .length !== 1
+            returnType.kind === ts.SyntaxKind.FunctionType &&
+            returnType.parameters.length !== 1
           ) {
             report(
               node,
