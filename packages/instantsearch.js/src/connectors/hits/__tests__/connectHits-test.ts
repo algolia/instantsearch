@@ -493,8 +493,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     it('returns the render state', () => {
       const renderFn = jest.fn();
       const unmountFn = jest.fn();
-      const createHits = connectHits(renderFn, unmountFn);
-      const hitsWidget = createHits({});
+      const createHitsComponent = connectHits(renderFn, unmountFn);
+      const hitsWidget = createHitsComponent({});
       const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
         index: 'indexName',
       });
@@ -549,8 +549,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
     it('returns the widget render state', () => {
       const renderFn = jest.fn();
       const unmountFn = jest.fn();
-      const createHits = connectHits(renderFn, unmountFn);
-      const hitsWidget = createHits({});
+      const createHitsComponent = connectHits(renderFn, unmountFn);
+      const hitsWidget = createHitsComponent({});
       const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
         index: 'indexName',
       });
