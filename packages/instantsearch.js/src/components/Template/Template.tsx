@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { h, Component } from 'preact';
+import { h, Component, Fragment, createRef } from 'preact';
 
 import { renderTemplate } from '../../lib/templating';
 import { warning, isEqual } from '../../lib/utils';
@@ -9,6 +9,28 @@ import type { PreparedTemplateProps } from '../../lib/templating';
 import type { BindEventForHits, SendEventForHits } from '../../lib/utils';
 import type { Templates } from '../../types';
 import type { JSX } from 'preact';
+
+class RawHtml extends Component<{ content: string }> {
+  ref = createRef();
+  nodes: Element[] = [];
+
+  componentDidMount() {
+    const fragment = new DocumentFragment();
+    const root = document.createElement('div');
+    root.innerHTML = this.props.content;
+    this.nodes = [...root.children];
+    this.nodes.forEach((node) => fragment.appendChild(node));
+    this.ref.current.replaceWith(fragment);
+  }
+
+  componentWillUnmount() {
+    this.nodes.forEach((node) => (node.outerHTML = ''));
+  }
+
+  render() {
+    return <div ref={this.ref} />;
+  }
+}
 
 const defaultProps = {
   data: {},
@@ -21,7 +43,7 @@ const defaultProps = {
 export type TemplateProps = {
   data?: Record<string, any>;
   rootProps?: Record<string, any>;
-  rootTagName?: keyof JSX.IntrinsicElements;
+  rootTagName: keyof JSX.IntrinsicElements | 'fragment';
   templateKey: string;
   bindEvent?: BindEventForHits;
   sendEvent?: SendEventForHits;
@@ -57,7 +79,8 @@ See: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/#up
       );
     }
 
-    const RootTagName = this.props.rootTagName;
+    const RootTagName =
+      this.props.rootTagName === 'fragment' ? Fragment : this.props.rootTagName;
 
     const useCustomCompileOptions =
       this.props.useCustomCompileOptions[this.props.templateKey];
@@ -83,6 +106,11 @@ See: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/#up
 
     if (typeof content === 'object') {
       return <RootTagName {...this.props.rootProps}>{content}</RootTagName>;
+    }
+
+    // This is to handle Hogan templates with Fragment as rootTagName
+    if (RootTagName === Fragment) {
+      return <RawHtml content={content} key={content} />;
     }
 
     return (

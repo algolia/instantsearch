@@ -56,6 +56,26 @@ describe('Template', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
+  it('can have Fragment as rootTagName with string template', () => {
+    const props = getProps({
+      rootTagName: 'fragment',
+      templates: { test: '<span>test</span>' },
+    });
+    const wrapper = render(<Template {...props} />);
+
+    expect(wrapper.container).toMatchSnapshot();
+  });
+
+  it('can have Fragment as rootTagName with Preact template', () => {
+    const props = getProps({
+      rootTagName: 'fragment',
+      templates: { test: () => <span>test</span> },
+    });
+    const wrapper = render(<Template {...props} />);
+
+    expect(wrapper.container).toMatchSnapshot();
+  });
+
   it('forward rootProps to the first node', () => {
     function onClick() {}
 
