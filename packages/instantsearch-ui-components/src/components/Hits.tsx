@@ -27,19 +27,19 @@ export type HitsClassNames = {
   /**
    * Class names to apply to the root element
    */
-  root: string;
+  root: string | string[];
   /**
    * Class names to apply to the root element without results
    */
-  emptyRoot: string;
+  emptyRoot: string | string[];
   /**
    * Class names to apply to the list element
    */
-  list: string;
+  list: string | string[];
   /**
    * Class names to apply to each item element
    */
-  item: string;
+  item: string | string[];
 };
 
 export function createHits({ createElement }: Renderer) {

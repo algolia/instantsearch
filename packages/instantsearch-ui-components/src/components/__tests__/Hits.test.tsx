@@ -74,7 +74,7 @@ describe('Hits', () => {
     const props = createProps({
       className: 'MyCustomHits',
       classNames: {
-        root: 'ROOT',
+        root: ['ROOT-A', 'ROOT-B'],
         list: 'LIST',
         item: 'ITEM',
       },
@@ -83,7 +83,7 @@ describe('Hits', () => {
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
-          class="ais-Hits ROOT MyCustomHits"
+          class="ais-Hits ROOT-A ROOT-B MyCustomHits"
         >
           <ol
             class="ais-Hits-list LIST"
