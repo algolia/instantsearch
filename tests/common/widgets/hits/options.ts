@@ -131,47 +131,7 @@ export function createOptionsTests(
       );
     });
 
-    skippableDescribe('instantsearch.js', skippedTests, () => {
-      test('renders with no results', async () => {
-        const searchClient = createMockedSearchClient();
-
-        await setup({
-          instantSearchOptions: {
-            indexName: 'indexName',
-            searchClient,
-          },
-          widgetParams: {},
-        });
-
-        await act(async () => {
-          await wait(0);
-        });
-
-        await act(async () => {
-          userEvent.type(
-            screen.getByRole('searchbox'),
-            'query with no results'
-          );
-          await wait(0);
-        });
-
-        expect(
-          document.querySelector('#hits-with-defaults .ais-Hits')
-        ).toMatchNormalizedInlineSnapshot(
-          normalizeSnapshot,
-          `
-            <div
-              class="ais-Hits ais-Hits--empty"
-            >
-              No results
-            </div>
-          `
-        );
-      });
-    });
-
-    skippableDescribe('react + vue instantsearch', skippedTests, () => {
-      // eslint-disable-next-line jest/no-identical-title
+    skippableDescribe('common rendering', skippedTests, () => {
       test('renders with no results', async () => {
         const searchClient = createMockedSearchClient();
 

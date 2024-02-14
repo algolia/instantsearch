@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { cx, createHits } from 'instantsearch-ui-components';
+import { createHits } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
@@ -190,7 +190,7 @@ const hits: HitsWidget = function hits(widgetParams) {
     escapeHTML,
     transformItems,
     templates = {},
-    cssClasses: userCssClasses = {},
+    cssClasses = {},
   } = widgetParams || {};
 
   if (!container) {
@@ -198,12 +198,6 @@ const hits: HitsWidget = function hits(widgetParams) {
   }
 
   const containerNode = getContainerNode(container);
-  const cssClasses = {
-    root: cx(userCssClasses.root),
-    emptyRoot: cx(userCssClasses.emptyRoot),
-    list: cx(userCssClasses.list),
-    item: cx(userCssClasses.item),
-  };
 
   const specializedRenderer = renderer({
     containerNode,

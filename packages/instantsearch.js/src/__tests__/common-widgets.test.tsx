@@ -473,7 +473,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createInfiniteHitsWidgetTests: undefined,
   createHitsWidgetTests: {
     skippedTests: {
-      'react + vue instantsearch': true,
+      'common rendering': true,
     },
   },
   createRangeInputWidgetTests: undefined,

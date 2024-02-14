@@ -1,7 +1,7 @@
 /** @jsx createElement */
 import { cx } from '../lib';
 
-import type { Renderer } from '../types';
+import type { ComponentProps, Renderer } from '../types';
 
 // Should be imported from a shared package in the future
 type Hit = Record<string, unknown> & {
@@ -9,7 +9,7 @@ type Hit = Record<string, unknown> & {
 };
 type SendEventForHits = (...props: unknown[]) => void;
 
-export type HitsProps<THit> = React.ComponentProps<'div'> & {
+export type HitsProps<THit> = ComponentProps<'div'> & {
   hits: THit[];
   itemComponent: (props: {
     hit: THit;
@@ -43,14 +43,18 @@ export type HitsClassNames = {
 };
 
 export function createHits({ createElement }: Renderer) {
-  return <THit extends Hit>({
-    classNames = {},
-    hits,
-    itemComponent: ItemComponent,
-    sendEvent,
-    emptyComponent: EmptyComponent,
-    ...props
-  }: HitsProps<THit>) => {
+  return function Hits<THit extends Hit>(userProps: HitsProps<THit>) {
+    // Not destructured in function signature, to make sure it's not exposed in
+    // the type definition.
+    const {
+      classNames = {},
+      hits,
+      itemComponent: ItemComponent,
+      sendEvent,
+      emptyComponent: EmptyComponent,
+      ...props
+    } = userProps;
+
     if (hits.length === 0 && EmptyComponent) {
       return (
         <EmptyComponent

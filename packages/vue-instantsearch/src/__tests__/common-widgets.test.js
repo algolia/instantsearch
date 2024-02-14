@@ -496,11 +496,7 @@ const testOptions = {
   createMenuWidgetTests: undefined,
   createPaginationWidgetTests: undefined,
   createInfiniteHitsWidgetTests: undefined,
-  createHitsWidgetTests: {
-    skippedTests: {
-      'instantsearch.js': true,
-    },
-  },
+  createHitsWidgetTests: undefined,
   createRangeInputWidgetTests: undefined,
   createRatingMenuWidgetTests: undefined,
   createInstantSearchWidgetTests: undefined,

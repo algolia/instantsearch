@@ -316,12 +316,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createMenuWidgetTests: { act },
   createPaginationWidgetTests: { act },
   createInfiniteHitsWidgetTests: { act },
-  createHitsWidgetTests: {
-    act,
-    skippedTests: {
-      'instantsearch.js': true,
-    },
-  },
+  createHitsWidgetTests: { act },
   createRangeInputWidgetTests: { act },
   createRatingMenuWidgetTests: {
     act,
