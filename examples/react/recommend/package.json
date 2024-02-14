@@ -9,10 +9,10 @@
   "dependencies": {
     "@algolia/recommend": "4.22.1",
     "algoliasearch": "4.14.3",
-    "instantsearch.js": "4.64.3",
+    "instantsearch.js": "4.65.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-instantsearch": "7.5.5"
+    "react-instantsearch": "7.6.0"
   },
   "devDependencies": {
     "@parcel/core": "2.10.0",
