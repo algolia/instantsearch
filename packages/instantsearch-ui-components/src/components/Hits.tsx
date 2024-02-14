@@ -42,15 +42,16 @@ export type HitsClassNames = {
   item: string;
 };
 
-export function createHits({ createElement }: Renderer) {
-  return <THit extends Hit>({
-    classNames = {},
-    hits,
-    itemComponent: ItemComponent,
-    sendEvent,
-    emptyComponent: EmptyComponent,
-    ...props
-  }: HitsProps<THit>) => {
+export function createHitsComponent({ createElement }: Renderer) {
+  return function Hits<THit extends Hit>(userProps: HitsProps<THit>) {
+    const {
+      classNames = {},
+      hits,
+      itemComponent: ItemComponent,
+      sendEvent,
+      emptyComponent: EmptyComponent,
+      ...props
+    } = userProps;
     if (hits.length === 0 && EmptyComponent) {
       return (
         <EmptyComponent

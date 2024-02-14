@@ -1,4 +1,4 @@
-import { createHits } from 'instantsearch-ui-components';
+import { createHitsComponent } from 'instantsearch-ui-components';
 import { connectHitsWithInsights } from 'instantsearch.js/es/connectors';
 
 import { createSuitMixin } from '../mixins/suit';
@@ -99,7 +99,7 @@ export default {
       );
     }
 
-    return h(createHits({ createElement: h }), {
+    return h(createHitsComponent({ createElement: h }), {
       hits: this.state.hits,
       itemComponent,
       sendEvent: this.state.sendEvent,

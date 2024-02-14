@@ -1,4 +1,4 @@
-import { createHits } from 'instantsearch-ui-components';
+import { createHitsComponent } from 'instantsearch-ui-components';
 import React, { createElement, Fragment } from 'react';
 import { useHits } from 'react-instantsearch-core';
 
@@ -39,7 +39,7 @@ function DefaultHitComponent<THit extends BaseHit = BaseHit>({
   );
 }
 
-const HitsUiComponent = createHits({
+const HitsUiComponent = createHitsComponent({
   createElement: createElement as Pragma,
   Fragment,
 });
