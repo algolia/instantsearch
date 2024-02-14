@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.6.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-router-nextjs@7.5.6...react-instantsearch-router-nextjs@7.6.0) (2024-02-13)
+
+**Note:** Version bump only for package react-instantsearch-router-nextjs
+
+
+
+
+
 ## [7.5.6](https://github.com/algolia/instantsearch/compare/react-instantsearch-router-nextjs@7.5.5...react-instantsearch-router-nextjs@7.5.6) (2024-02-13)
 
 
