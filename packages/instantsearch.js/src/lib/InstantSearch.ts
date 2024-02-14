@@ -39,6 +39,7 @@ import type {
   InitialResults,
 } from '../types';
 import type { IndexWidget } from '../widgets/index/index';
+import type { RecommendClient } from '@algolia/recommend';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -94,6 +95,21 @@ export type InstantSearchOptions<
    * ```
    */
   searchClient: SearchClient;
+
+  /**
+   * The Recommend client to plug to InstantSearch.js
+   *
+   * Usage:
+   * ```javascript
+   * import algoliarecommend from '@algolia/recommend';
+   *
+   * instantsearch({
+   *   indexName: 'indexName',
+   *   recommendClient: algoliarecommend('appId', 'apiKey')
+   * });
+   * ```
+   */
+  recommendClient?: RecommendClient;
 
   /**
    * The locale used to display numbers. This will be passed
@@ -204,6 +220,7 @@ class InstantSearch<
   TRouteState = TUiState
 > extends EventEmitter {
   public client: InstantSearchOptions['searchClient'];
+  public recommendClient: InstantSearchOptions['recommendClient'] | null;
   public indexName: string;
   public insightsClient: AlgoliaInsightsClient | null;
   public onStateChange: InstantSearchOptions<TUiState>['onStateChange'] | null =
@@ -267,6 +284,7 @@ Use \`InstantSearch.status === "stalled"\` instead.`
       searchFunction,
       stalledSearchDelay = 200,
       searchClient = null,
+      recommendClient = null,
       insightsClient = null,
       onStateChange = null,
       future = {
@@ -335,6 +353,7 @@ See documentation: ${createDocumentationLink({
     }
 
     this.client = searchClient;
+    this.recommendClient = recommendClient;
     this.future = future;
     this.insightsClient = insightsClient;
     this.indexName = indexName;
