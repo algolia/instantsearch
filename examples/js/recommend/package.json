@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@algolia/recommend": "4.22.1",
-    "algoliasearch": "4.14.3",
+    "algoliasearch": "4.22.1",
     "instantsearch.js": "4.65.0"
   },
   "devDependencies": {
