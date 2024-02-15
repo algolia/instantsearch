@@ -10,6 +10,7 @@ import type {
   Widget,
 } from '../src/types';
 import type { IndexInitOptions } from '../src/widgets/index/index';
+import type { SearchResponse } from '@algolia/client-search';
 
 export const createInitOptions = (
   args: Partial<InitOptions> = {}
@@ -57,7 +58,7 @@ export const createRenderOptions = (
   const helper = args.helper || instantSearchInstance.helper!;
   const results = new algoliasearchHelper.SearchResults(
     instantSearchInstance.helper!.state,
-    response.results
+    response.results as Array<SearchResponse<any>>
   );
 
   return {
