@@ -20,6 +20,7 @@ import { index } from '../../../widgets';
 import connectHierarchicalMenu from '../../hierarchical-menu/connectHierarchicalMenu';
 import connectRefinementList from '../../refinement-list/connectRefinementList';
 
+import type { SearchResponse } from '../../../types/algoliasearch';
 import type { DynamicWidgetsConnectorParams } from '../connectDynamicWidgets';
 
 expect.addSnapshotSerializer(widgetSnapshotSerializer);
@@ -339,7 +340,7 @@ describe('connectDynamicWidgets', () => {
               new SearchParameters(),
               createMultiSearchResponse({
                 userData: [{ MOCK_facetOrder: ['test1'] }],
-              }).results
+              }).results as Array<SearchResponse<any>>
             ),
           })
         );
@@ -362,7 +363,7 @@ describe('connectDynamicWidgets', () => {
               new SearchParameters(),
               createMultiSearchResponse({
                 userData: [{ MOCK_facetOrder: ['test2', 'test1'] }],
-              }).results
+              }).results as Array<SearchResponse<any>>
             ),
           })
         );
@@ -388,7 +389,7 @@ describe('connectDynamicWidgets', () => {
               new SearchParameters(),
               createMultiSearchResponse({
                 userData: [{ MOCK_facetOrder: ['test2'] }],
-              }).results
+              }).results as Array<SearchResponse<any>>
             ),
           })
         );
@@ -411,7 +412,7 @@ describe('connectDynamicWidgets', () => {
               new SearchParameters(),
               createMultiSearchResponse({
                 userData: [{ MOCK_facetOrder: ['test1', 'test4', 'test5'] }],
-              }).results
+              }).results as Array<SearchResponse<any>>
             ),
           })
         );
