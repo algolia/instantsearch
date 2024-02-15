@@ -22,7 +22,6 @@ import connectRefinementList from '../../refinement-list/connectRefinementList';
 
 import type { SearchResponse } from '../../../types/algoliasearch';
 import type { DynamicWidgetsConnectorParams } from '../connectDynamicWidgets';
-import type { SearchResponse } from '@algolia/client-search';
 
 expect.addSnapshotSerializer(widgetSnapshotSerializer);
 
