@@ -1,8 +1,10 @@
 import algoliarecommend from '@algolia/recommend';
 import algoliasearch from 'algoliasearch';
 
+import { skippableDescribe } from '../../common';
+
 import type { InstantSearchWidgetSetup } from '.';
-import { skippableDescribe, type TestOptions } from '../../common';
+import type { TestOptions } from '../../common';
 
 export function createAlgoliaAgentTests(
   setup: InstantSearchWidgetSetup,
