@@ -19,7 +19,7 @@ import {
 } from '../../../../test/createWidget';
 import refinementList from '../../refinement-list/refinement-list';
 
-import type { SearchResponse } from '@algolia/client-search';
+import type { SearchResponse } from '../../../types/algoliasearch';
 
 expect.addSnapshotSerializer(widgetSnapshotSerializer);
 

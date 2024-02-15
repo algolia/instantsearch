@@ -10,7 +10,7 @@ import type {
   Widget,
 } from '../src/types';
 import type { IndexInitOptions } from '../src/widgets/index/index';
-import type { SearchResponse } from '@algolia/client-search';
+import type { SearchResponse } from 'algoliasearch-helper/types/algoliasearch';
 
 export const createInitOptions = (
   args: Partial<InitOptions> = {}
