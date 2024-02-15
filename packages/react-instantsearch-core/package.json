@@ -60,5 +60,10 @@
     "@algolia/recommend": ">= 4.22 < 5",
     "algoliasearch": ">= 3.1 < 5",
     "react": ">= 16.8.0 < 19"
+  },
+  "peerDependenciesMeta": {
+    "@algolia/recommend": {
+      "optional": true
+    }
   }
 }

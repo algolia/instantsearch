@@ -43,6 +43,11 @@
     "@algolia/recommend": ">= 4.22 < 5",
     "algoliasearch": ">= 3.1 < 6"
   },
+  "peerDependenciesMeta": {
+    "@algolia/recommend": {
+      "optional": true
+    }
+  },
   "scripts": {
     "build": "yarn run build:cjs && yarn run build:es && yarn run build:umd && yarn run build:types",
     "build:umd": "rm -rf dist && BABEL_ENV=umd rollup --config ./scripts/rollup/rollup.config.js",
