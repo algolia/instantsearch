@@ -1,7 +1,7 @@
 /** @jsx createElement */
 import { cx } from '../lib';
 
-import type { Renderer } from '../types';
+import type { ComponentProps, Renderer } from '../types';
 
 // Should be imported from a shared package in the future
 type Hit = Record<string, unknown> & {
@@ -9,7 +9,7 @@ type Hit = Record<string, unknown> & {
 };
 type SendEventForHits = (...props: unknown[]) => void;
 
-export type HitsProps<THit> = React.ComponentProps<'div'> & {
+export type HitsProps<THit> = ComponentProps<'div'> & {
   hits: THit[];
   itemComponent: (props: {
     hit: THit;
@@ -27,19 +27,19 @@ export type HitsClassNames = {
   /**
    * Class names to apply to the root element
    */
-  root: string;
+  root: string | string[];
   /**
    * Class names to apply to the root element without results
    */
-  emptyRoot: string;
+  emptyRoot: string | string[];
   /**
    * Class names to apply to the list element
    */
-  list: string;
+  list: string | string[];
   /**
    * Class names to apply to each item element
    */
-  item: string;
+  item: string | string[];
 };
 
 export function createHitsComponent({ createElement }: Renderer) {
@@ -52,6 +52,7 @@ export function createHitsComponent({ createElement }: Renderer) {
       emptyComponent: EmptyComponent,
       ...props
     } = userProps;
+
     if (hits.length === 0 && EmptyComponent) {
       return (
         <EmptyComponent
