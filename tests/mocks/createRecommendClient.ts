@@ -1,8 +1,4 @@
-import {
-  createMultiSearchResponse,
-  createSingleSearchResponse,
-} from './createAPIResponse';
-
+import type { SearchResponse } from '@algolia/client-search';
 import type { RecommendClient } from '@algolia/recommend';
 
 export const hit = {
@@ -100,5 +96,55 @@ export function createRecommendClient(
       queryParameters: {},
     } as any,
     ...args,
+  };
+}
+
+function createSingleSearchResponse<THit = any>(
+  subset: Partial<SearchResponse<THit>> = {}
+): SearchResponse<THit> {
+  const {
+    query = '',
+    page = 0,
+    hitsPerPage = 20,
+    hits = [],
+    nbHits = hits.length,
+    nbPages = Math.ceil(nbHits / hitsPerPage),
+    params = '',
+    exhaustiveNbHits = true,
+    exhaustiveFacetsCount = true,
+    processingTimeMS = 0,
+    ...rest
+  } = subset;
+
+  return {
+    page,
+    hitsPerPage,
+    nbHits,
+    nbPages,
+    processingTimeMS,
+    hits,
+    query,
+    params,
+    exhaustiveNbHits,
+    exhaustiveFacetsCount,
+    ...rest,
+  };
+}
+
+type MultiResponse<THit = any> = {
+  results: Array<SearchResponse<THit>>;
+};
+
+function createMultiSearchResponse<THit = any>(
+  ...args: Array<Partial<SearchResponse<THit>>>
+): MultiResponse {
+  if (!args.length) {
+    return {
+      results: [createSingleSearchResponse()],
+    };
+  }
+
+  return {
+    results: args.map(createSingleSearchResponse),
   };
 }
