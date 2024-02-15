@@ -82,6 +82,7 @@ const connectHits: HitsConnector = function connectHits(
 
   return (widgetParams) => {
     const {
+      // @MAJOR: this can default to false
       escapeHTML = true,
       transformItems = ((items) => items) as NonNullable<
         HitsConnectorParams['transformItems']
@@ -114,7 +115,7 @@ const connectHits: HitsConnector = function connectHits(
           false
         );
 
-        renderState.sendEvent('view', renderState.hits);
+        renderState.sendEvent('view:internal', renderState.hits);
       },
 
       getRenderState(renderState, renderOptions) {
@@ -128,14 +129,14 @@ const connectHits: HitsConnector = function connectHits(
         if (!sendEvent) {
           sendEvent = createSendEventForHits({
             instantSearchInstance,
-            index: helper.getIndex(),
+            getIndex: () => helper.getIndex(),
             widgetType: this.$$type,
           });
         }
 
         if (!bindEvent) {
           bindEvent = createBindEventForHits({
-            index: helper.getIndex(),
+            getIndex: () => helper.getIndex(),
             widgetType: this.$$type,
             instantSearchInstance,
           });

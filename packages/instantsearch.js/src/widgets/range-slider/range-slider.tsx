@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { cx } from '@algolia/ui-components-shared';
+import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import Slider from '../../components/Slider/Slider';
@@ -90,7 +90,7 @@ type RangeSliderTooltipOptions = {
    * @example
    * { format(rawValue) {return '$' + Math.round(rawValue).toLocaleString() } }
    */
-  format(value: number): string;
+  format: (value: number) => string;
 };
 
 export type RangeSliderWidgetParams = {

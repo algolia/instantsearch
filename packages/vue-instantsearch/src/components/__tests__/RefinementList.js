@@ -3,8 +3,8 @@
  */
 
 import { mount } from '../../../test/utils';
-import RefinementList from '../RefinementList.vue';
 import { __setState } from '../../mixins/widget';
+import RefinementList from '../RefinementList.vue';
 import '../../../test/utils/sortedHtmlSerializer';
 
 jest.unmock('instantsearch.js/es');

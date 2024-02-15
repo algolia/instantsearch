@@ -4,6 +4,7 @@
       :search-client="searchClient"
       index-name="instant_search"
       :routing="routing"
+      :insights="true"
     >
       <ais-configure :hits-per-page.camel="16" />
 
@@ -136,7 +137,9 @@ export default {
         '6be0576ff61c053d5f9a3225e2a90f76'
       ),
       routing: {
-        router: historyRouter(),
+        router: historyRouter({
+          cleanUrlOnDispose: false,
+        }),
         stateMapping: simpleMapping(),
       },
     };

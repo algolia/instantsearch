@@ -1,9 +1,10 @@
-import { storiesOf } from '@storybook/vue';
 import { action } from '@storybook/addon-actions';
+import { storiesOf } from '@storybook/vue';
 import { createInfiniteHitsSessionStorageCache } from 'instantsearch.js/es/lib/infiniteHitsCache';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
-import { previewWrapper } from './utils';
+
 import { MemoryRouter } from './MemoryRouter';
+import { previewWrapper } from './utils';
 
 storiesOf('ais-infinite-hits', module)
   .addDecorator(previewWrapper())

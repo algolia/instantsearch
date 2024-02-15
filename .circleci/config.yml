@@ -33,14 +33,14 @@ references:
 defaults: &defaults
   working_directory: ~/instantsearch
   docker:
-    - image: cimg/node:14.18.0
+    - image: cimg/node:20.10.0
 
 workflows:
   version: 2
   ci:
     when:
       not:
-        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+        equal: [scheduled_pipeline, << pipeline.trigger_source >>]
     jobs:
       - build:
           context: fx-libraries
@@ -64,10 +64,25 @@ workflows:
             branches:
               only:
                 - master
+      - helper docs:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
       - e2e tests:
           context: fx-libraries
           requires:
             - examples
+          filters:
+            branches:
+              only:
+                - master
+      - e2e tests router nextjs:
+          context: fx-libraries
+          requires:
+            - build
           filters:
             branches:
               only:
@@ -80,6 +95,7 @@ workflows:
             - unit tests
             - examples
             - legacy algoliasearch
+            - helper docs
             - e2e tests
           filters:
             branches:
@@ -90,8 +106,8 @@ workflows:
     # See: https://app.circleci.com/settings/project/github/algolia/instantsearch/triggers
     when:
       and:
-        - equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
-        - equal: [ scheduled_release, << pipeline.schedule.name >> ]
+        - equal: [scheduled_pipeline, << pipeline.trigger_source >>]
+        - equal: [scheduled_release, << pipeline.schedule.name >>]
     jobs:
       - prepare release:
           context: fx-libraries
@@ -100,8 +116,8 @@ workflows:
     # See: https://app.circleci.com/settings/project/github/algolia/instantsearch/triggers
     when:
       and:
-        - equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
-        - equal: [ scheduled_e2e, << pipeline.schedule.name >> ]
+        - equal: [scheduled_pipeline, << pipeline.trigger_source >>]
+        - equal: [scheduled_e2e, << pipeline.schedule.name >>]
     jobs:
       - build:
           context: fx-libraries
@@ -112,6 +128,10 @@ workflows:
           context: fx-libraries
           requires:
             - examples
+      - e2e tests router nextjs:
+          context: fx-libraries
+          requires:
+            - build
 
 jobs:
   build:
@@ -136,20 +156,17 @@ jobs:
       - persist_to_workspace:
           root: *workspace_root
           paths:
+            - packages/algoliasearch-helper/dist
             - packages/instantsearch.js/es
             - packages/instantsearch.js/cjs
             - packages/instantsearch.js/dist
             - packages/react-instantsearch/dist
             - packages/react-instantsearch-core/dist
-            - packages/react-instantsearch-dom/dist
-            - packages/react-instantsearch-dom-maps/dist
-            - packages/react-instantsearch-native/dist
-            - packages/react-instantsearch-hooks/dist
-            - packages/react-instantsearch-hooks-web/dist
-            - packages/react-instantsearch-hooks-router-nextjs/dist
-            - packages/react-instantsearch-hooks-server/dist
+            - packages/react-instantsearch-router-nextjs/dist
+            - packages/react-instantsearch-nextjs/dist
             - packages/vue-instantsearch/vue2
             - packages/vue-instantsearch/vue3
+            - packages/instantsearch-ui-components/dist
 
   test metadata:
     <<: *defaults
@@ -189,6 +206,9 @@ jobs:
           name: Update dependencies
           command: |
             ./scripts/legacy/downgrade-algoliasearch-dependency.js
+      - run:
+          name: Unit & Integration tests
+          command: yarn run test:v3
       - run:
           name: Type Checking
           command: yarn run type-check:v3
@@ -245,6 +265,22 @@ jobs:
           root: *workspace_root
           paths:
             - website/examples
+
+  helper docs:
+    <<: *defaults
+    steps:
+      - checkout
+      - *attach_workspace
+      - *install_yarn_version
+      - *restore_yarn_cache
+      - *run_yarn_install
+      - run:
+          name: Build helper documentation
+          command: yarn workspace algoliasearch-helper run doc
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - website/algoliasearch-helper-js
 
   e2e tests:
     <<: *defaults
@@ -307,6 +343,21 @@ jobs:
                 }
               ]
             }
+
+  e2e tests router nextjs:
+    <<: *defaults
+    resource_class: large
+    steps:
+      - checkout
+      - *attach_workspace
+      - *install_yarn_version
+      - *restore_yarn_cache
+      - *run_yarn_install
+      - run:
+          name: End-to-end tests
+          command: yarn workspace react-instantsearch-router-nextjs run test:e2e:saucelabs
+      - store_test_results:
+          path: packages/react-instantsearch-router-nextjs/junit/wdio/
 
   release if needed:
     <<: *defaults

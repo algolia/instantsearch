@@ -7,10 +7,10 @@ html: |
     <nav class="ais-Pagination-navigation" aria-label="Pagination">
       <ul class="ais-Pagination-list">
         <li class="ais-Pagination-item ais-Pagination-item--firstPage ais-Pagination-item--disabled">
-          <span class="ais-Pagination-link" aria-label="First">‹‹</span>
+          <span class="ais-Pagination-link" aria-label="First Page">‹‹</span>
         </li>
         <li class="ais-Pagination-item ais-Pagination-item--previousPage ais-Pagination-item--disabled">
-          <span class="ais-Pagination-link" aria-label="Previous">‹</span>
+          <span class="ais-Pagination-link" aria-label="Previous Page">‹</span>
         </li>
         <li class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected">
           <span class="ais-Pagination-link" aria-label="Page 1, Current page" aria-current="page">1</span>
@@ -25,10 +25,10 @@ html: |
           <a class="ais-Pagination-link" aria-label="Page 4" href="#">4</a>
         </li>
         <li class="ais-Pagination-item ais-Pagination-item--nextPage">
-          <a class="ais-Pagination-link" aria-label="Next" href="#">›</a>
+          <a class="ais-Pagination-link" aria-label="Next Page" href="#">›</a>
         </li>
         <li class="ais-Pagination-item ais-Pagination-item--lastPage">
-          <a class="ais-Pagination-link" aria-label="Last" href="#">››</a>
+          <a class="ais-Pagination-link" aria-label="Last Page, Page 0" href="#">››</a>
         </li>
       </ul>
     <nav>

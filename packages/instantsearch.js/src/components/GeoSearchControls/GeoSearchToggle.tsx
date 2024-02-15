@@ -8,7 +8,7 @@ type Props = {
   classNameLabel: string;
   classNameInput: string;
   checked: boolean;
-  onToggle(event: Event): void;
+  onToggle: (event: Event) => void;
   children: ComponentChildren;
 };
 

@@ -6,10 +6,10 @@ import {
 } from '../../lib/utils';
 
 import type { SendEventForFacet } from '../../lib/utils';
-import type { InsightsEvent } from '../../middlewares';
 import type {
   Connector,
   CreateURL,
+  IndexUiState,
   InstantSearch,
   TransformItems,
   WidgetRenderState,
@@ -139,7 +139,7 @@ const $$type = 'ais.numericMenu';
 
 const createSendEvent =
   ({ instantSearchInstance }: { instantSearchInstance: InstantSearch }) =>
-  (...args: [InsightsEvent] | [string, string, string?]) => {
+  (...args: Parameters<SendEventForFacet>) => {
     if (args.length === 1) {
       instantSearchInstance.sendEventToInsights(args[0]);
       return;
@@ -172,8 +172,8 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
     }
 
     type ConnectorState = {
-      refine?(facetValue: string): void;
-      createURL?(state: SearchParameters): (facetValue: string) => string;
+      refine?: (facetValue: string) => void;
+      createURL?: (state: SearchParameters) => (facetValue: string) => string;
       sendEvent?: SendEventForFacet;
     };
 
@@ -214,7 +214,7 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
 
       dispose({ state }) {
         unmountFn();
-        return state.clearRefinements(attribute);
+        return state.removeNumericRefinement(attribute);
       },
 
       getWidgetUiState(uiState, { searchParameters }) {
@@ -235,31 +235,30 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
         const min = (values['>='] && values['>='][0]) || '';
         const max = (values['<='] && values['<='][0]) || '';
 
-        if (min === '' && max === '') {
-          return uiState;
-        }
-
-        return {
-          ...uiState,
-          numericMenu: {
-            ...uiState.numericMenu,
-            [attribute]: `${min}:${max}`,
+        return removeEmptyRefinementsFromUiState(
+          {
+            ...uiState,
+            numericMenu: {
+              ...uiState.numericMenu,
+              [attribute]: `${min}:${max}`,
+            },
           },
-        };
+          attribute
+        );
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
         const value = uiState.numericMenu && uiState.numericMenu[attribute];
 
-        const withoutRefinements = searchParameters.clearRefinements(attribute);
+        const withoutRefinements = searchParameters.setQueryParameters({
+          numericRefinements: {
+            ...searchParameters.numericRefinements,
+            [attribute]: {},
+          },
+        });
 
         if (!value) {
-          return withoutRefinements.setQueryParameters({
-            numericRefinements: {
-              ...withoutRefinements.numericRefinements,
-              [attribute]: {},
-            },
-          });
+          return withoutRefinements;
         }
 
         const isExact = value.indexOf(':') === -1;
@@ -309,14 +308,23 @@ const connectNumericMenu: NumericMenuConnector = function connectNumericMenu(
               attribute,
               facetValue
             );
-            connectorState.sendEvent!('click', facetValue);
+            connectorState.sendEvent!('click:internal', facetValue);
             helper.setState(refinedState).search();
           };
         }
 
         if (!connectorState.createURL) {
           connectorState.createURL = (newState) => (facetValue) =>
-            createURL(getRefinedState(newState, attribute, facetValue));
+            createURL((uiState) =>
+              this.getWidgetUiState(uiState, {
+                searchParameters: getRefinedState(
+                  newState,
+                  attribute,
+                  facetValue
+                ),
+                helper,
+              })
+            );
         }
 
         if (!connectorState.sendEvent) {
@@ -476,6 +484,25 @@ function hasNumericRefinement(
     currentRefinements[operator] !== undefined &&
     currentRefinements[operator]!.includes(value)
   );
+}
+
+function removeEmptyRefinementsFromUiState(
+  indexUiState: IndexUiState,
+  attribute: string
+): IndexUiState {
+  if (!indexUiState.numericMenu) {
+    return indexUiState;
+  }
+
+  if (indexUiState.numericMenu[attribute] === ':') {
+    delete indexUiState.numericMenu[attribute];
+  }
+
+  if (Object.keys(indexUiState.numericMenu).length === 0) {
+    delete indexUiState.numericMenu;
+  }
+
+  return indexUiState;
 }
 
 export default connectNumericMenu;

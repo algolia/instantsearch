@@ -980,6 +980,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
         attribute: 'swag',
         eventType: 'click',
+        eventModifier: 'internal',
         insightsMethod: 'clickedFilters',
         payload: {
           eventName: 'Filter Applied',
@@ -1013,6 +1014,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
       expect(instantSearchInstance.sendEventToInsights).toHaveBeenCalledWith({
         attribute: 'swag',
         eventType: 'click',
+        eventModifier: 'internal',
         insightsMethod: 'clickedFilters',
         payload: {
           eventName: 'Filter Applied',

@@ -1,17 +1,18 @@
-import { wait } from '@instantsearch/testutils';
 import {
   createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import type { HierarchicalMenuSetup } from '.';
-import type { Act } from '../../common';
-import userEvent from '@testing-library/user-event';
+import { wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
+import userEvent from '@testing-library/user-event';
+
+import type { HierarchicalMenuWidgetSetup } from '.';
+import type { TestOptions } from '../../common';
 
 export function createOptimisticUiTests(
-  setup: HierarchicalMenuSetup,
-  act: Act
+  setup: HierarchicalMenuWidgetSetup,
+  { act }: Required<TestOptions>
 ) {
   describe('optimistic UI', () => {
     test('checks the clicked refinement immediately regardless of network latency', async () => {

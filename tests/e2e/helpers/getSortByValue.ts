@@ -1,6 +1,6 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    getSortByValue(): Promise<string>;
+    getSortByValue: () => Promise<string>;
   }
 }
 

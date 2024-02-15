@@ -1,7 +1,11 @@
 import { numericMenu, panel } from 'instantsearch.js/es/widgets';
+import { PanelTemplates } from 'instantsearch.js/es/widgets/panel/panel';
+
 import { DATE_RANGES } from '../utils';
 
-const createDatesList = (header: string) =>
+const createDatesList = (
+  header: PanelTemplates<typeof numericMenu>['header']
+) =>
   panel({
     templates: {
       header,
@@ -13,7 +17,7 @@ export const createDates = ({
   header,
 }: {
   container: string;
-  header: string;
+  header: PanelTemplates<typeof numericMenu>['header'];
 }) =>
   createDatesList(header)({
     container,

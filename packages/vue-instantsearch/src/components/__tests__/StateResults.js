@@ -3,8 +3,8 @@
  */
 
 import { mount } from '../../../test/utils';
-import StateResults from '../StateResults.vue';
 import { __setIndexHelper, __setIndexResults } from '../../mixins/widget';
+import StateResults from '../StateResults.vue';
 jest.mock('../../mixins/widget');
 import '../../../test/utils/sortedHtmlSerializer';
 

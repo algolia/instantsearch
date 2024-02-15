@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { cx } from '@algolia/ui-components-shared';
+import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import Selector from '../../components/Selector/Selector';
@@ -44,6 +44,7 @@ const renderer =
           cssClasses={cssClasses}
           currentValue={currentValue}
           options={items}
+          // @ts-expect-error: the refine function expects a number, but setValue will call it with a string. We don't want to change the type of the refine function because it's part of the connector API.
           setValue={refine}
         />
       </div>,

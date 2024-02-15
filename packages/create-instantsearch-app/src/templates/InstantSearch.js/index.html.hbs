@@ -9,6 +9,9 @@
   <link rel="shortcut icon" href="./favicon.png">
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/satellite-min.css">
+  {{#if flags.autocomplete}}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@algolia/autocomplete-theme-classic@1.11.0/dist/theme.min.css">
+  {{/if}}
   <link rel="stylesheet" href="./src/index.css">
   <link rel="stylesheet" href="./src/app.css">
 
@@ -50,6 +53,11 @@
 
   <script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.10.5/dist/algoliasearch-lite.umd.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@{{libraryVersion}}"></script>
+  {{#if flags.autocomplete}}
+  <script src="https://cdn.jsdelivr.net/npm/@algolia/autocomplete-js@{{autocompleteLibraryVersion}}/dist/umd/index.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@algolia/autocomplete-plugin-query-suggestions@{{autocompleteLibraryVersion}}/dist/umd/index.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@algolia/autocomplete-plugin-recent-searches@{{autocompleteLibraryVersion}}/dist/umd/index.production.min.js"></script>
+  {{/if}}
   <script src="./src/app.js"></script>
 </body>
 

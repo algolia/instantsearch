@@ -1,13 +1,14 @@
 #!/usr/bin/env node
+const os = require('os');
 const path = require('path');
 const process = require('process');
-const os = require('os');
+
+const chalk = require('chalk');
 const program = require('commander');
 const inquirer = require('inquirer');
-const chalk = require('chalk');
-const latestSemver = require('latest-semver');
 const semver = require('semver');
 
+const { version } = require('../../package.json');
 const createInstantSearchApp = require('../api');
 const {
   checkAppPath,
@@ -18,13 +19,14 @@ const {
   getTemplatePath,
   splitArray,
 } = require('../utils');
-const getAttributesFromIndex = require('./getAttributesFromIndex');
-const getFacetsFromIndex = require('./getFacetsFromIndex');
+
 const getAnswersDefaultValues = require('./getAnswersDefaultValues');
-const isQuestionAsked = require('./isQuestionAsked');
+const getAttributesFromIndex = require('./getAttributesFromIndex');
 const getConfiguration = require('./getConfiguration');
+const getFacetsFromIndex = require('./getFacetsFromIndex');
+const getPotentialImageAttributes = require('./getPotentialImageAttributes');
+const isQuestionAsked = require('./isQuestionAsked');
 const postProcessAnswers = require('./postProcessAnswers');
-const { version } = require('../../package.json');
 
 let appPathFromArgument;
 
@@ -42,6 +44,10 @@ program
     '--attributes-to-display <attributesToDisplay>',
     'The attributes of your index to display in hits',
     splitArray
+  )
+  .option(
+    '--image-attribute <imageAttribute>',
+    'The attribute for image display in hits'
   )
   .option(
     '--attributes-for-faceting <attributesForFaceting>',
@@ -75,7 +81,9 @@ const getQuestions = ({ appName }) => ({
 
         try {
           const versions = await fetchLibraryVersions(libraryName);
-          const latestStableVersion = latestSemver(versions);
+          const latestStableVersion = semver.maxSatisfying(versions, '*', {
+            includePrerelease: false,
+          });
 
           if (!latestStableVersion) {
             return versions;
@@ -157,9 +165,39 @@ const getQuestions = ({ appName }) => ({
         attributesToDisplay.length === 0 && appId && apiKey && indexName,
     },
     {
+      type: 'list',
+      name: 'imageAttribute',
+      message: 'Attribute for image display',
+      suffix: `\n  ${chalk.gray(
+        'Used to display images in the default result template'
+      )}`,
+      pageSize: 10,
+      choices: async (answers) => [
+        {
+          name: 'None',
+          value: undefined,
+        },
+        new inquirer.Separator(),
+        new inquirer.Separator('From your index'),
+        ...(await getPotentialImageAttributes(answers)),
+      ],
+      when: ({
+        appId,
+        apiKey,
+        indexName,
+        imageAttribute,
+        attributesToDisplay: selectedAttributes,
+      }) =>
+        selectedAttributes.length > 0 &&
+        !imageAttribute &&
+        appId &&
+        apiKey &&
+        indexName,
+    },
+    {
       type: 'checkbox',
       name: 'attributesForFaceting',
-      message: 'Attributes to display',
+      message: 'Attributes for faceting',
       suffix: `\n  ${chalk.gray('Used to filter the search interface')}`,
       pageSize: 10,
       choices: async (answers) => {
@@ -197,6 +235,120 @@ const getQuestions = ({ appName }) => ({
       filter: (attributes) => attributes.filter(Boolean),
       when: ({ appId, apiKey, indexName }) =>
         attributesForFaceting.length === 0 && appId && apiKey && indexName,
+    },
+    {
+      type: 'list',
+      name: 'searchInputType',
+      message: 'Type of search input',
+      choices: [
+        {
+          name: 'Autocomplete with suggested and recent searches',
+          value: 'autocomplete',
+        },
+        { name: 'Regular search box', value: 'searchbox' },
+      ],
+      default: 'autocomplete',
+      when: ({ libraryVersion, template }) => {
+        const templatePath = getTemplatePath(template);
+        const templateConfig = getAppTemplateConfig(templatePath);
+
+        const selectedLibraryVersion = libraryVersion;
+        const requiredLibraryVersion =
+          templateConfig.flags && templateConfig.flags.autocomplete;
+        const supportsAutocomplete =
+          selectedLibraryVersion &&
+          requiredLibraryVersion &&
+          semver.satisfies(selectedLibraryVersion, requiredLibraryVersion, {
+            includePrerelease: true,
+          });
+
+        return supportsAutocomplete;
+      },
+    },
+    {
+      type: 'input',
+      name: 'querySuggestionsIndexName',
+      message: 'Index name for suggested searches',
+      suffix: `\n  ${chalk.gray('This must be a Query Suggestions index')}`,
+      default: 'instant_search_demo_query_suggestions',
+      when: ({ searchInputType }) => searchInputType === 'autocomplete',
+    },
+    {
+      type: 'list',
+      name: 'autocompleteLibraryVersion',
+      message: () => `Autocomplete version`,
+      choices: async () => {
+        const libraryName = '@algolia/autocomplete-js';
+
+        try {
+          const versions = await fetchLibraryVersions(libraryName);
+          const latestStableVersion = semver.maxSatisfying(versions, '1', {
+            includePrerelease: false,
+          });
+
+          if (!latestStableVersion) {
+            return versions;
+          }
+
+          return [
+            new inquirer.Separator('Latest stable version (recommended)'),
+            latestStableVersion,
+            new inquirer.Separator('All versions'),
+            ...versions,
+          ];
+        } catch (err) {
+          const fallbackLibraryVersion = '1.11.0';
+
+          console.log();
+          console.error(
+            chalk.red(
+              `Cannot fetch versions for library "${chalk.cyan(libraryName)}".`
+            )
+          );
+          console.log();
+          console.log(
+            `Fallback to ${chalk.cyan(
+              fallbackLibraryVersion
+            )}, please upgrade the dependency after generating the app.`
+          );
+          console.log();
+
+          return [
+            new inquirer.Separator('Available versions'),
+            fallbackLibraryVersion,
+          ];
+        }
+      },
+      when: ({ searchInputType }) => searchInputType === 'autocomplete',
+    },
+    {
+      type: 'confirm',
+      name: 'enableInsights',
+      message: 'Enable user events',
+      default: true,
+      suffix: `${chalk.gray(`
+  Selecting 'Y' enables the \`insights\` option.
+  By doing this, you instruct Algolia to process your user Events.
+  Please review our API reference at ${chalk.bold(
+    chalk.underline('https://alg.li/instantsearch-insights')
+  )}
+  for more details about Events collection and settings.`)}`,
+      when: ({ libraryVersion, template }) => {
+        const templatePath = getTemplatePath(template);
+        const templateConfig = getAppTemplateConfig(templatePath);
+
+        const selectedLibraryVersion = libraryVersion;
+        const requiredLibraryVersion =
+          templateConfig.flags && templateConfig.flags.insights;
+        const supportsInsights =
+          selectedLibraryVersion &&
+          requiredLibraryVersion &&
+          semver.satisfies(selectedLibraryVersion, requiredLibraryVersion, {
+            includePrerelease: true,
+          });
+
+        return supportsInsights;
+      },
     },
   ],
   widget: [

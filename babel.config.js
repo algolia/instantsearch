@@ -51,6 +51,8 @@ module.exports = (api) => {
           'react-dom',
           // `use-sync-external-store` also fails if the paths are incomplete
           'use-sync-external-store',
+          // `next` imports as peer dependencies fail if paths are incomplete
+          'next',
         ],
       },
     ],
@@ -120,14 +122,20 @@ module.exports = (api) => {
         ],
       },
       {
-        test: 'packages/react-instantsearch-dom-maps',
-        plugins: clean([
-          '@babel/plugin-syntax-dynamic-import',
-          !isRollup && 'babel-plugin-dynamic-import-node',
-        ]),
+        test: 'packages/instantsearch-ui-components',
+        plugins: [
+          [
+            '@babel/plugin-transform-runtime',
+            {
+              corejs: false,
+              helpers: true,
+              regenerator: false,
+            },
+          ],
+        ],
       },
     ],
     // jsx is transpiled, so the comment should no longer be present in the final files
-    shouldPrintComment: (value) => value !== '* @jsx h ',
+    shouldPrintComment: (value) => !value.startsWith('* @jsx'),
   };
 };

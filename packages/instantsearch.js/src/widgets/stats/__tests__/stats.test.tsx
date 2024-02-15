@@ -22,6 +22,45 @@ beforeEach(() => {
 });
 
 describe('stats', () => {
+  describe('options', () => {
+    test('throws without a `container`', () => {
+      expect(() => {
+        // @ts-expect-error
+        stats({ container: undefined });
+      }).toThrowErrorMatchingInlineSnapshot(`
+        "The \`container\` option is required.
+
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/"
+      `);
+    });
+
+    test('add custom CSS classes', async () => {
+      const container = document.createElement('div');
+      const searchClient = createSearchClient();
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+      });
+
+      search.addWidgets([
+        stats({
+          container,
+          cssClasses: {
+            root: 'ROOT',
+            text: 'TEXT',
+          },
+        }),
+      ]);
+
+      search.start();
+      await wait(0);
+
+      expect(container.querySelector('.ais-Stats')).toHaveClass('ROOT');
+      expect(container.querySelector('.ais-Stats-text')).toHaveClass('TEXT');
+    });
+  });
+
   describe('templates', () => {
     test('renders default templates', async () => {
       const container = document.createElement('div');

@@ -2,16 +2,18 @@
  * @jest-environment jsdom
  */
 /** @jsx h */
-import { cx } from '@algolia/ui-components-shared';
 import {
   createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
+import userEvent from '@testing-library/user-event';
+import { cx } from 'instantsearch-ui-components';
 import { h } from 'preact';
 
 import instantsearch from '../../../index.es';
+import { history } from '../../../lib/routers';
 import ratingMenu from '../rating-menu';
 
 beforeEach(() => {
@@ -19,6 +21,69 @@ beforeEach(() => {
 });
 
 describe('ratingMenu', () => {
+  test('has correct URLs', async () => {
+    const container = document.createElement('div');
+    const router = history();
+    const searchClient = createSearchClient({
+      search: jest.fn((requests) =>
+        Promise.resolve(
+          createMultiSearchResponse(
+            ...requests.map((request) =>
+              createSingleSearchResponse({
+                index: request.indexName,
+                facets: { price: { 1: 42, 2: 104, 3: 127, 4: 189, 5: 212 } },
+              })
+            )
+          )
+        )
+      ),
+    });
+
+    const search = instantsearch({
+      indexName: 'indexName',
+      searchClient,
+      routing: {
+        router,
+      },
+    });
+
+    search.addWidgets([
+      ratingMenu({
+        container,
+        attribute: 'price',
+      }),
+    ]);
+
+    search.start();
+    await wait(0);
+
+    const [link4, link3, link2, link1] = [...container.querySelectorAll('a')];
+    expect(link4).toHaveAttribute(
+      'href',
+      router.createURL({ indexName: { ratingMenu: { price: 4 } } })
+    );
+    expect(link3).toHaveAttribute(
+      'href',
+      router.createURL({ indexName: { ratingMenu: { price: 3 } } })
+    );
+    expect(link2).toHaveAttribute(
+      'href',
+      router.createURL({ indexName: { ratingMenu: { price: 2 } } })
+    );
+    expect(link1).toHaveAttribute(
+      'href',
+      router.createURL({ indexName: { ratingMenu: { price: 1 } } })
+    );
+
+    userEvent.click(link4);
+    await wait(0);
+
+    expect(container.querySelector('a:first-of-type')).toHaveAttribute(
+      'href',
+      router.createURL({})
+    );
+  });
+
   describe('templates', () => {
     test('renders default templates', async () => {
       const container = document.createElement('div');

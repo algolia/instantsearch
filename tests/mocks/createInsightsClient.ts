@@ -1,3 +1,4 @@
+import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import {
   AlgoliaAnalytics,
   processQueue,
@@ -6,25 +7,51 @@ import {
 
 import type { InsightsClient } from 'instantsearch.js';
 
-export function createInsights() {
+/**
+ * Tests that rely on this mock interface have side effects caused by
+ * the import of search-insights. The following code deletes those side effects.
+ */
+try {
+  delete window.AlgoliaAnalyticsObject;
+} catch (error) {} // eslint-disable-line no-empty
+
+export function createInsights<TVersion extends string | undefined = '2.13.0'>({
+  forceVersion = '2.13.0',
+}: {
+  forceVersion?: TVersion;
+} = {}) {
   const analytics = mockMethods(
     new AlgoliaAnalytics({
       requestFn: jest.fn(),
     })
   );
-  const insightsClient = jest.fn(getFunctionalInterface(analytics));
+  const mockedInsightsClient = castToJestMock(
+    jest.fn(getFunctionalInterface(analytics)) as InsightsClient
+  );
+
+  if (forceVersion) {
+    return {
+      analytics,
+      insightsClient: Object.assign(mockedInsightsClient, {
+        version: forceVersion,
+      }),
+    };
+  }
 
   return {
     analytics,
-    insightsClient,
+    insightsClient: mockedInsightsClient,
   };
 }
 
 export function createInsightsUmdVersion() {
-  const globalObject: { AlgoliaAnalyticsObject: string; aa?: InsightsClient } =
-    {
-      AlgoliaAnalyticsObject: 'aa',
-    };
+  const globalObject: {
+    AlgoliaAnalyticsObject: 'aa';
+    aa?: InsightsClient;
+  } = {
+    AlgoliaAnalyticsObject: 'aa',
+  };
+
   globalObject.aa = (methodName, ...args) => {
     globalObject.aa!.queue = globalObject.aa!.queue || [];
     // @ts-expect-error TypeScript loses track of the exact tuple type when the array gets recreated

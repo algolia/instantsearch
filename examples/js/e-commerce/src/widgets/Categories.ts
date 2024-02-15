@@ -1,9 +1,12 @@
 import { panel, hierarchicalMenu } from 'instantsearch.js/es/widgets';
+
 import { collapseButtonText } from '../templates/panel';
 
 const categoryHierarchicalMenu = panel({
   templates: {
-    header: 'Category',
+    header() {
+      return 'Category';
+    },
     collapseButtonText,
   },
   collapsed: () => false,

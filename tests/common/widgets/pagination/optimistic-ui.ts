@@ -1,17 +1,18 @@
-import { wait } from '@instantsearch/testutils';
-import { screen } from '@testing-library/dom';
 import {
   createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import type { PaginationSetup } from '.';
-import type { Act } from '../../common';
+import { wait } from '@instantsearch/testutils';
+import { screen } from '@testing-library/dom';
 
-export function createOptimisticUiTests(setup: PaginationSetup, act: Act) {
-  // https://github.com/jsdom/jsdom/issues/1695
-  window.Element.prototype.scrollIntoView = jest.fn();
+import type { PaginationWidgetSetup } from '.';
+import type { TestOptions } from '../../common';
 
+export function createOptimisticUiTests(
+  setup: PaginationWidgetSetup,
+  { act }: Required<TestOptions>
+) {
   describe('optimistic UI', () => {
     test('checks the clicked refinement immediately regardless of network latency', async () => {
       const delay = 100;

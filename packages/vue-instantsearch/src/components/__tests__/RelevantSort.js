@@ -3,8 +3,8 @@
  */
 
 import { mount } from '../../../test/utils';
-import RelevantSort from '../RelevantSort.vue';
 import { __setState } from '../../mixins/widget';
+import RelevantSort from '../RelevantSort.vue';
 jest.mock('../../mixins/widget');
 import '../../../test/utils/sortedHtmlSerializer';
 

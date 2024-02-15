@@ -26,15 +26,20 @@ const search = instantsearch({
   routing: {
     stateMapping: singleIndex('PROD_algolia_blog'),
   },
+  insights: true,
 });
 
 const datesDesktop = createDates({
   container: '[data-widget="dates-desktop"]',
-  header: 'Date',
+  header() {
+    return 'Date';
+  },
 });
 const datesMobile = createDates({
   container: '[data-widget="dates-mobile"]',
-  header: 'Date',
+  header() {
+    return 'Date';
+  },
 });
 const selectedTopicsDesktop = createSelectedTopics({
   container: '[data-widget="selected-topics-desktop"]',

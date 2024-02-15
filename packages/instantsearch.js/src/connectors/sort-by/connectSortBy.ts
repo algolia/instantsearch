@@ -94,7 +94,7 @@ const connectSortBy: SortByConnector = function connectSortBy(
   const connectorState: ConnectorState = {};
 
   type ConnectorState = {
-    setIndex?(indexName: string): void;
+    setIndex?: (indexName: string) => void;
     initialIndex?: string;
   };
 

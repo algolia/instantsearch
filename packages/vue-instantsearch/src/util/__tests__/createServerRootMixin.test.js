@@ -3,24 +3,27 @@
  */
 
 /* eslint-disable jest/no-done-callback */
-import { mount, createSSRApp } from '../../../test/utils';
-import Router from 'vue-router';
-import Vuex from 'vuex';
-import { createStore } from 'vuex4';
-import { createServerRootMixin } from '../createServerRootMixin';
-import InstantSearchSsr from '../../components/InstantSearchSsr';
-import Configure from '../../components/Configure';
-import SearchBox from '../../components/SearchBox.vue';
-import Index from '../../components/Index';
-import { createWidgetMixin } from '../../mixins/widget';
-import { createFakeClient } from '../testutils/client';
-import { createSerializedState } from '../testutils/helper';
-import { isVue3, isVue2, Vue2, renderCompat } from '../vue-compat';
 import {
   AlgoliaSearchHelper,
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
+import VueI18n from 'vue-i18n';
+import { createI18n } from 'vue-i18n-vue3';
+import Router from 'vue-router';
+import Vuex from 'vuex';
+import { createStore } from 'vuex4';
+
+import { mount, createSSRApp } from '../../../test/utils';
+import Configure from '../../components/Configure';
+import Index from '../../components/Index';
+import InstantSearchSsr from '../../components/InstantSearchSsr';
+import SearchBox from '../../components/SearchBox.vue';
+import { createWidgetMixin } from '../../mixins/widget';
+import { createServerRootMixin } from '../createServerRootMixin';
+import { createFakeClient } from '../testutils/client';
+import { createSerializedState } from '../testutils/helper';
+import { isVue3, isVue2, Vue2, renderCompat } from '../vue-compat';
 
 jest.unmock('instantsearch.js/es');
 
@@ -65,23 +68,6 @@ describe('createServerRootMixin', () => {
         })
       ).toThrowErrorMatchingInlineSnapshot(`
 "The \`searchClient\` option is required.
-
-See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
-`);
-    });
-
-    it('requires indexName', () => {
-      expect(() =>
-        createSSRApp({
-          mixins: [
-            createServerRootMixin({
-              searchClient: createFakeClient(),
-              indexName: undefined,
-            }),
-          ],
-        })
-      ).toThrowErrorMatchingInlineSnapshot(`
-"The \`indexName\` option is required.
 
 See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
 `);
@@ -331,6 +317,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
               });
 
               expect(state.hello).toEqual({
+                requestParams: {
+                  facets: [],
+                  hitsPerPage: 100,
+                  query: '',
+                  tagFilters: '',
+                },
                 results: [
                   {
                     query: '',
@@ -354,6 +346,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
               // Parent's widgets state should not be merged into nested index state
               expect(state.nestedIndex).toEqual({
+                requestParams: {
+                  facets: [],
+                  hitsPerPage: 100,
+                  query: '',
+                  tagFilters: '',
+                },
                 results: [
                   {
                     query: '',
@@ -501,6 +499,61 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
       if (isVue3) {
         wrapper.use(store);
+      }
+
+      await renderToString(wrapper);
+    });
+
+    it('forwards i18n', async () => {
+      const searchClient = createFakeClient();
+
+      if (isVue2) {
+        Vue2.use(VueI18n);
+      }
+
+      const i18n = isVue3 ? createI18n() : new VueI18n();
+
+      // there are two renders of App, each with an assertion
+      expect.assertions(2);
+
+      const App = {
+        mixins: [
+          forceIsServerMixin,
+          createServerRootMixin({
+            searchClient,
+            indexName: 'hello',
+          }),
+        ],
+        data() {
+          expect(this.$i18n).toBe(isVue3 ? i18n.global : i18n);
+          return {};
+        },
+        render: renderCompat((h) =>
+          h(InstantSearchSsr, {}, [
+            h(Configure, {
+              attrs: {
+                hitsPerPage: 100,
+              },
+            }),
+            h(SearchBox),
+          ])
+        ),
+        serverPrefetch() {
+          return this.instantsearch.findResultsState({
+            component: this,
+            renderToString,
+          });
+        },
+      };
+
+      const wrapper = createSSRApp({
+        mixins: [forceIsServerMixin],
+        ...(isVue2 ? { i18n } : {}),
+        render: renderCompat((h) => h(App)),
+      });
+
+      if (isVue3) {
+        wrapper.use(i18n);
       }
 
       await renderToString(wrapper);
@@ -1133,7 +1186,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
       const resultsState = createSerializedState();
       const state = new SearchParameters(resultsState.state);
-      const localState = new SearchParameters({ index: 'lol' });
+      const localState = new SearchParameters({
+        index: 'lol',
+      });
       const results = new SearchResults(state, resultsState.results);
 
       instantSearchInstance.hydrate({

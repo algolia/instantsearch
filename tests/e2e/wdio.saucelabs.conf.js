@@ -105,7 +105,8 @@ module.exports = {
     },
     {
       browserName: 'internet explorer',
-      browserVersion: '11.285',
+      browserVersion: '11',
+      platformName: 'Windows 7',
       /*
        * Sauce Labs specific options
        * https://wiki.saucelabs.com/display/DOCS/Test+Configuration+Options

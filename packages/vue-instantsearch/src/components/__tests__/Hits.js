@@ -11,6 +11,7 @@ jest.mock('../../mixins/widget');
 
 const defaultState = {
   hits: [{ objectID: 'one' }, { objectID: 'two' }],
+  sendEvent: jest.fn(),
 };
 
 it('accepts an escapeHTML prop', () => {
@@ -25,32 +26,6 @@ it('accepts an escapeHTML prop', () => {
   });
 
   expect(wrapper.vm.widgetParams.escapeHTML).toBe(true);
-});
-
-it('accepts a transformItems prop', () => {
-  __setState({
-    ...defaultState,
-  });
-
-  const transformItems = () => {};
-
-  const wrapper = mount(Hits, {
-    propsData: {
-      transformItems,
-    },
-  });
-
-  expect(wrapper.vm.widgetParams.transformItems).toBe(transformItems);
-});
-
-it('renders correctly', () => {
-  __setState({
-    ...defaultState,
-  });
-
-  const wrapper = mount(Hits);
-
-  expect(wrapper.html()).toMatchSnapshot();
 });
 
 it('exposes insights prop to the default slot', async () => {

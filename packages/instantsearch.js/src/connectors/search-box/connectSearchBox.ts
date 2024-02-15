@@ -133,7 +133,7 @@ const connectSearchBox: SearchBoxConnector = function connectSearchBox(
         };
       },
 
-      getWidgetRenderState({ helper, searchMetadata, state }) {
+      getWidgetRenderState({ helper, instantSearchInstance, state }) {
         if (!_refine) {
           _refine = (query) => {
             queryHook(query, (q) => helper.setQuery(q).search());
@@ -149,7 +149,7 @@ const connectSearchBox: SearchBoxConnector = function connectSearchBox(
           refine: _refine,
           clear: _clear,
           widgetParams,
-          isSearchStalled: searchMetadata.isSearchStalled,
+          isSearchStalled: instantSearchInstance.status === 'stalled',
         };
       },
 

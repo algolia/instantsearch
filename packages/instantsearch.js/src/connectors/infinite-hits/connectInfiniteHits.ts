@@ -9,6 +9,7 @@ import {
   noop,
   createSendEventForHits,
   createBindEventForHits,
+  walkIndex,
 } from '../../lib/utils';
 
 import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
@@ -154,6 +155,11 @@ function getStateWithoutPage(state: PlainSearchParameters) {
   return rest;
 }
 
+function normalizeState(state: PlainSearchParameters) {
+  const { clickAnalytics, userToken, ...rest } = state || {};
+  return rest;
+}
+
 function getInMemoryCache<THit extends BaseHit>(): InfiniteHitsCache<THit> {
   let cachedHits: InfiniteHitsCachedHits<THit> | null = null;
   let cachedState: PlainSearchParameters | null = null;
@@ -192,6 +198,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
 
   return (widgetParams) => {
     const {
+      // @MAJOR: this can default to false
       escapeHTML = true,
       transformItems = ((items) => items) as NonNullable<
         InfiniteHitsConnectorParams['transformItems']
@@ -238,7 +245,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
             page:
               getFirstReceivedPage(
                 helper.state,
-                cache.read({ state: helper.state }) || {}
+                cache.read({ state: normalizeState(helper.state) }) || {}
               ) - 1,
           })
           .searchWithoutTriggeringOnStateChange();
@@ -251,7 +258,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
           .setPage(
             getLastReceivedPage(
               helper.state,
-              cache.read({ state: helper.state }) || {}
+              cache.read({ state: normalizeState(helper.state) }) || {}
             ) + 1
           )
           .search();
@@ -283,7 +290,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
           false
         );
 
-        sendEvent('view', widgetRenderState.currentPageHits);
+        sendEvent('view:internal', widgetRenderState.currentPageHits);
       },
 
       getRenderState(renderState, renderOptions) {
@@ -309,18 +316,18 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
          */
         const state = parent.getPreviousState() || existingState;
 
-        const cachedHits = cache.read({ state }) || {};
+        const cachedHits = cache.read({ state: normalizeState(state) }) || {};
 
         if (!results) {
           showPrevious = getShowPrevious(helper);
           showMore = getShowMore(helper);
           sendEvent = createSendEventForHits({
             instantSearchInstance,
-            index: helper.getIndex(),
+            getIndex: () => helper.getIndex(),
             widgetType: this.$$type,
           });
           bindEvent = createBindEventForHits({
-            index: helper.getIndex(),
+            getIndex: () => helper.getIndex(),
             widgetType: this.$$type,
             instantSearchInstance,
           });
@@ -350,13 +357,34 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
             { results }
           );
 
+          /*
+            With dynamic widgets, facets are not included in the state before their relevant widgets are mounted. Until then, we need to bail out of writing this incomplete state representation in cache.
+          */
+          let hasDynamicWidgets = false;
+          walkIndex(instantSearchInstance.mainIndex, (indexWidget) => {
+            if (
+              !hasDynamicWidgets &&
+              indexWidget
+                .getWidgets()
+                .some(({ $$type }) => $$type === 'ais.dynamicWidgets')
+            ) {
+              hasDynamicWidgets = true;
+            }
+          });
+
+          const hasNoFacets =
+            !state.disjunctiveFacets?.length &&
+            !(state.facets || []).filter((f) => f !== '*').length &&
+            !state.hierarchicalFacets?.length;
+
           if (
             cachedHits[page] === undefined &&
             !results.__isArtificial &&
-            instantSearchInstance.status === 'idle'
+            instantSearchInstance.status === 'idle' &&
+            !(hasDynamicWidgets && hasNoFacets)
           ) {
             cachedHits[page] = transformedHits;
-            cache.write({ state, hits: cachedHits });
+            cache.write({ state: normalizeState(state), hits: cachedHits });
           }
           currentPageHits = transformedHits;
 

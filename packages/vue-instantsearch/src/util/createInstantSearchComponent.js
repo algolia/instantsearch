@@ -1,5 +1,8 @@
-import { createSuitMixin } from '../mixins/suit';
+import { INSTANTSEARCH_FUTURE_DEFAULTS } from 'instantsearch.js/es/lib/InstantSearch';
+
 import { version } from '../../package.json'; // rollup does pick only what needed from json
+import { createSuitMixin } from '../mixins/suit';
+
 import { _objectSpread } from './polyfills';
 import { isVue3, version as vueVersion } from './vue-compat';
 import { warn } from './warn';
@@ -23,7 +26,7 @@ export const createInstantSearchComponent = (component) =>
           this.instantSearchInstance.helper.setClient(searchClient).search();
         },
         indexName(indexName) {
-          this.instantSearchInstance.helper.setIndex(indexName).search();
+          this.instantSearchInstance.helper.setIndex(indexName || '').search();
         },
         stalledSearchDelay(stalledSearchDelay) {
           // private InstantSearch.js API:
@@ -33,14 +36,14 @@ export const createInstantSearchComponent = (component) =>
           throw new Error(
             'routing configuration can not be changed dynamically at this point.' +
               '\n\n' +
-              'Please open a new issue: https://github.com/algolia/instantsearch.js/discussions/new?category=ideas&labels=triage%2cLibrary%3A+Vue+InstantSearch&title=Feature%20request%3A%20dynamic%20props'
+              'Please open a new issue: https://github.com/algolia/instantsearch/discussions/new?category=ideas&labels=triage%2cLibrary%3A+Vue+InstantSearch&title=Feature%20request%3A%20dynamic%20props'
           );
         },
         onStateChange() {
           throw new Error(
             'onStateChange configuration can not be changed dynamically at this point.' +
               '\n\n' +
-              'Please open a new issue: https://github.com/algolia/instantsearch.js/discussions/new?category=ideas&labels=triage%2cLibrary%3A+Vue+InstantSearch&title=Feature%20request%3A%20dynamic%20props'
+              'Please open a new issue: https://github.com/algolia/instantsearch/discussions/new?category=ideas&labels=triage%2cLibrary%3A+Vue+InstantSearch&title=Feature%20request%3A%20dynamic%20props'
           );
         },
         searchFunction(searchFunction) {
@@ -62,6 +65,12 @@ export const createInstantSearchComponent = (component) =>
                 this.instantSearchInstance.use(middlewareToAdd);
               });
           },
+        },
+        future(future) {
+          this.instantSearchInstance.future = Object.assign(
+            INSTANTSEARCH_FUTURE_DEFAULTS,
+            future
+          );
         },
       },
       created() {

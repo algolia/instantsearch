@@ -4,6 +4,8 @@
 
 /* eslint-disable jest/no-conditional-expect */
 
+import { mount } from '../../test/utils';
+import InstantSearch from '../instantsearch';
 import {
   isVue3,
   isVue2,
@@ -11,8 +13,6 @@ import {
   createApp,
   renderCompat,
 } from '../util/vue-compat';
-import { mount } from '../../test/utils';
-import InstantSearch from '../instantsearch';
 import { AisInstantSearch } from '../widgets';
 
 const renderlessComponents = ['AisExperimentalConfigureRelatedItems'];

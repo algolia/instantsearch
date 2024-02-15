@@ -64,48 +64,50 @@ export type IndexWidget<TUiState extends UiState = UiState> = Omit<
   Widget<IndexWidgetDescription & { widgetParams: IndexWidgetParams }>,
   'getWidgetUiState' | 'getWidgetState'
 > & {
-  getIndexName(): string;
-  getIndexId(): string;
-  getHelper(): Helper | null;
-  getResults(): SearchResults | null;
-  getPreviousState(): SearchParameters | null;
-  getScopedResults(): ScopedResult[];
-  getParent(): IndexWidget | null;
-  getWidgets(): Array<Widget | IndexWidget>;
-  createURL(state: SearchParameters): string;
+  getIndexName: () => string;
+  getIndexId: () => string;
+  getHelper: () => Helper | null;
+  getResults: () => SearchResults | null;
+  getPreviousState: () => SearchParameters | null;
+  getScopedResults: () => ScopedResult[];
+  getParent: () => IndexWidget | null;
+  getWidgets: () => Array<Widget | IndexWidget>;
+  createURL: (
+    nextState: SearchParameters | ((state: IndexUiState) => IndexUiState)
+  ) => string;
 
-  addWidgets(widgets: Array<Widget | IndexWidget>): IndexWidget;
-  removeWidgets(widgets: Array<Widget | IndexWidget>): IndexWidget;
+  addWidgets: (widgets: Array<Widget | IndexWidget>) => IndexWidget;
+  removeWidgets: (widgets: Array<Widget | IndexWidget>) => IndexWidget;
 
-  init(options: IndexInitOptions): void;
-  render(options: IndexRenderOptions): void;
-  dispose(): void;
+  init: (options: IndexInitOptions) => void;
+  render: (options: IndexRenderOptions) => void;
+  dispose: () => void;
   /**
    * @deprecated
    */
-  getWidgetState(uiState: UiState): UiState;
-  getWidgetUiState<TSpecificUiState extends UiState = TUiState>(
+  getWidgetState: (uiState: UiState) => UiState;
+  getWidgetUiState: <TSpecificUiState extends UiState = TUiState>(
     uiState: TSpecificUiState
-  ): TSpecificUiState;
-  getWidgetSearchParameters(
+  ) => TSpecificUiState;
+  getWidgetSearchParameters: (
     searchParameters: SearchParameters,
     searchParametersOptions: { uiState: IndexUiState }
-  ): SearchParameters;
+  ) => SearchParameters;
   /**
    * Set this index' UI state back to the state defined by the widgets.
    * Can only be called after `init`.
    */
-  refreshUiState(): void;
+  refreshUiState: () => void;
   /**
    * Set this index' UI state and search. This is the equivalent of calling
    * a spread `setUiState` on the InstantSearch instance.
    * Can only be called after `init`.
    */
-  setIndexUiState(
+  setIndexUiState: (
     indexUiState:
       | TUiState[string]
       | ((previousIndexUiState: TUiState[string]) => TUiState[string])
-  ): void;
+  ) => void;
 };
 
 /**
@@ -277,7 +279,14 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       return localParent;
     },
 
-    createURL(nextState: SearchParameters) {
+    createURL(
+      nextState: SearchParameters | ((state: IndexUiState) => IndexUiState)
+    ) {
+      if (typeof nextState === 'function') {
+        return localInstantSearchInstance!._createURL({
+          [indexId]: nextState(localUiState),
+        });
+      }
       return localInstantSearchInstance!._createURL({
         [indexId]: getLocalWidgetsUiState(localWidgets, {
           searchParameters: nextState,
@@ -380,7 +389,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       );
 
       if (localInstantSearchInstance && Boolean(widgets.length)) {
-        const nextState = widgets.reduce((state, widget) => {
+        const cleanedState = widgets.reduce((state, widget) => {
           // the `dispose` method exists at this point we already assert it
           const next = widget.dispose!({
             helper: helper!,
@@ -391,17 +400,30 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           return next || state;
         }, helper!.state);
 
+        const newState = localInstantSearchInstance.future
+          .preserveSharedStateOnUnmount
+          ? getLocalWidgetsSearchParameters(localWidgets, {
+              uiState: localUiState,
+              initialSearchParameters: new algoliasearchHelper.SearchParameters(
+                {
+                  index: this.getIndexName(),
+                }
+              ),
+            })
+          : getLocalWidgetsSearchParameters(localWidgets, {
+              uiState: getLocalWidgetsUiState(localWidgets, {
+                searchParameters: cleanedState,
+                helper: helper!,
+              }),
+              initialSearchParameters: cleanedState,
+            });
+
         localUiState = getLocalWidgetsUiState(localWidgets, {
-          searchParameters: nextState,
+          searchParameters: newState,
           helper: helper!,
         });
 
-        helper!.setState(
-          getLocalWidgetsSearchParameters(localWidgets, {
-            uiState: localUiState,
-            initialSearchParameters: nextState,
-          })
-        );
+        helper!.setState(newState);
 
         if (localWidgets.length) {
           localInstantSearchInstance.scheduleSearch();
@@ -483,7 +505,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       };
 
       derivedHelper = mainHelper.derive(() =>
-        mergeSearchParameters(...resolveSearchParameters(this))
+        mergeSearchParameters(
+          mainHelper.state,
+          ...resolveSearchParameters(this)
+        )
       );
 
       const indexInitialResults =
@@ -534,7 +559,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         // does not have access to lastResults, which it used to in pre-federated
         // search behavior.
         helper!.lastResults = results;
-        lastValidSearchParameters = results._state;
+        lastValidSearchParameters = results?._state;
       });
 
       // We compute the render state before calling `init` in a separate loop
@@ -573,7 +598,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       // configuration step. This is mainly for backward compatibility with custom
       // widgets. When the subscription happens before the `init` step, the (static)
       // configuration of the widget is pushed in the URL. That's what we want to avoid.
-      // https://github.com/algolia/instantsearch.js/pull/994/commits/4a672ae3fd78809e213de0368549ef12e9dc9454
+      // https://github.com/algolia/instantsearch/pull/994/commits/4a672ae3fd78809e213de0368549ef12e9dc9454
       helper.on('change', (event) => {
         const { state } = event;
 
@@ -604,20 +629,23 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
     },
 
     render({ instantSearchInstance }: IndexRenderOptions) {
-      if (!this.getResults()) {
-        return;
-      }
-
       // we can't attach a listener to the error event of search, as the error
       // then would no longer be thrown for global handlers.
       if (
         instantSearchInstance.status === 'error' &&
-        !instantSearchInstance.mainHelper!.hasPendingRequests()
+        !instantSearchInstance.mainHelper!.hasPendingRequests() &&
+        lastValidSearchParameters
       ) {
-        helper!.setState(lastValidSearchParameters!);
+        helper!.setState(lastValidSearchParameters);
       }
 
-      localWidgets.forEach((widget) => {
+      // We only render index widgets if there are no results.
+      // This makes sure `render` is never called with `results` being `null`.
+      const widgetsToRender = this.getResults()
+        ? localWidgets
+        : localWidgets.filter(isIndexWidget);
+
+      widgetsToRender.forEach((widget) => {
         if (widget.getRenderState) {
           const renderState = widget.getRenderState(
             instantSearchInstance.renderState[this.getIndexId()] || {},
@@ -632,7 +660,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         }
       });
 
-      localWidgets.forEach((widget) => {
+      widgetsToRender.forEach((widget) => {
         // At this point, all the variables used below are set. Both `helper`
         // and `derivedHelper` have been created at the `init` step. The attribute
         // `lastResults` might be `null` though. It's possible that a stalled render

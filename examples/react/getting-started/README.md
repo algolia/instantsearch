@@ -1,5 +1,7 @@
 # react-instantsearch-app
 
+[![Edit getting-started](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/github/algolia/instantsearch/tree/master/examples/react/getting-started)
+
 _This project was generated with [create-instantsearch-app](https://github.com/algolia/instantsearch/tree/master/packages/create-instantsearch-app) by [Algolia](https://algolia.com)._
 
 ## Get started

@@ -1,6 +1,6 @@
 {
   "name": "example-instantsearch-ecommerce",
-  "version": "1.13.0",
+  "version": "1.40.0",
   "private": true,
   "scripts": {
     "start": "BABEL_ENV=parcel parcel index.html --port 3000",
@@ -9,14 +9,14 @@
   },
   "browserslist": "firefox 68, chrome 78, IE 11",
   "dependencies": {
-    "algoliasearch": "4.14.3",
-    "instantsearch.js": "4.54.1"
+    "algoliasearch": "4.22.1",
+    "instantsearch.js": "4.65.0"
   },
   "devDependencies": {
     "@babel/core": "7.15.5",
-    "@parcel/core": "2.8.0",
-    "@parcel/packager-raw-url": "2.8.0",
-    "@parcel/transformer-webmanifest": "2.8.0",
-    "parcel": "2.8.0"
+    "@parcel/core": "2.10.0",
+    "@parcel/packager-raw-url": "2.10.0",
+    "@parcel/transformer-webmanifest": "2.10.0",
+    "parcel": "2.10.0"
   }
 }

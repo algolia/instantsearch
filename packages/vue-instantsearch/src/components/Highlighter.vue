@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import { getDefaultSlot, renderCompat, isVue3 } from '../util/vue-compat';
 import { parseAlgoliaHit } from '../util/parseAlgoliaHit';
+import { getDefaultSlot, renderCompat, isVue3 } from '../util/vue-compat';
 
 const TextNode = isVue3
   ? (props, context) => context.slots.default()

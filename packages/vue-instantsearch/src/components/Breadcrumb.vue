@@ -24,9 +24,14 @@
           >
             <slot name="rootLabel">Home</slot>
           </a>
-          <span v-else>
+          <a
+            v-else
+            :href="state.createURL(null)"
+            :class="suit('link')"
+            @click.prevent="state.refine(null)"
+          >
             <slot name="rootLabel">Home</slot>
-          </span>
+          </a>
         </li>
         <li
           v-for="(item, index) in state.items"
@@ -34,16 +39,15 @@
           :class="[suit('item'), isLastItem(index) && suit('item', 'selected')]"
         >
           <span :class="suit('separator')" aria-hidden="true">
-            <slot name="separator">></slot>
-          </span>
-          <a
+            <slot name="separator">></slot> </span
+          ><a
             v-if="!isLastItem(index)"
             :href="state.createURL(item.value)"
             :class="suit('link')"
             @click.prevent="state.refine(item.value)"
             >{{ item.label }}</a
           >
-          <span v-else>{{ item.label }}</span>
+          <template v-else>{{ item.label }}</template>
         </li>
       </ul>
     </slot>
@@ -52,6 +56,7 @@
 
 <script>
 import { connectBreadcrumb } from 'instantsearch.js/es/connectors';
+
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';

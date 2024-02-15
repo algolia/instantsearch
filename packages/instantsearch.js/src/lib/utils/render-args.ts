@@ -30,14 +30,15 @@ export function createRenderArgs(
   parent: IndexWidget
 ) {
   const results = parent.getResults()!;
+  const helper = parent.getHelper()!;
 
   return {
-    helper: parent.getHelper()!,
+    helper,
     parent,
     instantSearchInstance,
     results,
     scopedResults: parent.getScopedResults(),
-    state: results._state,
+    state: results ? results._state : helper.state,
     renderState: instantSearchInstance.renderState,
     templatesConfig: instantSearchInstance.templatesConfig,
     createURL: parent.createURL,

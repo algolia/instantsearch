@@ -12,7 +12,7 @@ const version =
     ? packageJson.version
     : `UNRELEASED (${new Date().toUTCString()})`;
 const algolia = '© Algolia, Inc. and contributors; MIT License';
-const link = 'https://github.com/algolia/instantsearch.js';
+const link = 'https://github.com/algolia/instantsearch';
 const license = `/*! InstantSearch.js ${version} | ${algolia} | ${link} */`;
 
 const plugins = [
@@ -23,7 +23,8 @@ const plugins = [
   }),
   babel({
     rootMode: 'upward',
-    exclude: /node_modules/,
+    runtimeHelpers: true,
+    exclude: /node_modules|algoliasearch-helper/,
     extensions: ['.js', '.ts', '.tsx'],
   }),
   commonjs(),

@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { cx } from '@algolia/ui-components-shared';
+import { cx } from 'instantsearch-ui-components';
 import { h, Fragment } from 'preact';
 
 import Template from '../Template/Template';
@@ -23,9 +23,9 @@ type Props = {
   isRefineOnMapMove: boolean;
   isRefinedWithMap: boolean;
   hasMapMoveSinceLastRefine: boolean;
-  onRefineToggle(event: Event): void;
-  onRefineClick(event: MouseEvent): void;
-  onClearClick(event: MouseEvent): void;
+  onRefineToggle: (event: Event) => void;
+  onRefineClick: (event: MouseEvent) => void;
+  onClearClick: (event: MouseEvent) => void;
   templateProps: PreparedTemplateProps<GeoSearchTemplates>;
 };
 

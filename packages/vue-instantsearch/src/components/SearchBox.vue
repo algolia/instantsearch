@@ -13,6 +13,7 @@
         :autofocus="autofocus"
         :show-loading-indicator="showLoadingIndicator"
         :should-show-loading-indicator="state.isSearchStalled"
+        :ignore-composition-events="ignoreCompositionEvents"
         :submit-title="submitTitle"
         :reset-title="resetTitle"
         :class-names="classNames"
@@ -40,9 +41,11 @@
 
 <script>
 import { connectSearchBox } from 'instantsearch.js/es/connectors';
+
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
 import { isVue3, isVue2 } from '../util/vue-compat';
+
 import SearchInput from './SearchInput.vue';
 
 export default {
@@ -64,7 +67,7 @@ export default {
   props: {
     placeholder: {
       type: String,
-      default: 'Search here…',
+      default: '',
     },
     autofocus: {
       type: Boolean,
@@ -72,15 +75,19 @@ export default {
     },
     showLoadingIndicator: {
       type: Boolean,
+      default: true,
+    },
+    ignoreCompositionEvents: {
+      type: Boolean,
       default: false,
     },
     submitTitle: {
       type: String,
-      default: 'Search',
+      default: 'Submit the search query',
     },
     resetTitle: {
       type: String,
-      default: 'Clear',
+      default: 'Clear the search query',
     },
     value: {
       type: String,

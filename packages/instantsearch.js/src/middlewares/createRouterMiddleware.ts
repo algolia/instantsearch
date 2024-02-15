@@ -18,6 +18,10 @@ export type RouterProps<
   // ideally stateMapping should be required if TRouteState is given,
   // but there's no way to check if a generic is provided or the default value.
   stateMapping?: StateMapping<TUiState, TRouteState>;
+  /**
+   * @internal indicator for the default middleware
+   */
+  $$internal?: boolean;
 };
 
 export const createRouterMiddleware = <
@@ -36,18 +40,30 @@ export const createRouterMiddleware = <
       TUiState,
       TRouteState
     >,
+    $$internal = false,
   } = props;
 
   return ({ instantSearchInstance }) => {
     function topLevelCreateURL(nextState: TUiState) {
+      const previousUiState =
+        // If only the mainIndex is initialized, we don't yet know what other
+        // index widgets are used. Therefore we fall back to the initialUiState.
+        // We can't indiscriminately use the initialUiState because then we
+        // reintroduce state that was changed by the user.
+        // When there are no widgets, we are sure the user can't yet have made
+        // any changes.
+        instantSearchInstance.mainIndex.getWidgets().length === 0
+          ? (instantSearchInstance._initialUiState as TUiState)
+          : instantSearchInstance.mainIndex.getWidgetUiState<TUiState>(
+              {} as TUiState
+            );
+
       const uiState: TUiState = Object.keys(nextState).reduce(
         (acc, indexId) => ({
           ...acc,
           [indexId]: nextState[indexId],
         }),
-        instantSearchInstance.mainIndex.getWidgetUiState<TUiState>(
-          {} as TUiState
-        )
+        previousUiState
       );
 
       const route = stateMapping.stateToRoute(uiState);
@@ -64,6 +80,10 @@ export const createRouterMiddleware = <
     const initialUiState = instantSearchInstance._initialUiState;
 
     return {
+      $$type: `ais.router({router:${
+        router.$$type || '__unknown__'
+      }, stateMapping:${stateMapping.$$type || '__unknown__'}})`,
+      $$internal,
       onStateChange({ uiState }) {
         const routeState = stateMapping.stateToRoute(uiState);
 
@@ -83,7 +103,9 @@ export const createRouterMiddleware = <
         };
 
         router.onUpdate((route) => {
-          instantSearchInstance.setUiState(stateMapping.routeToState(route));
+          if (instantSearchInstance.mainIndex.getWidgets().length > 0) {
+            instantSearchInstance.setUiState(stateMapping.routeToState(route));
+          }
         });
       },
 

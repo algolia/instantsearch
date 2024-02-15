@@ -34,12 +34,15 @@
           v-for="(item, index) in items"
           :class="suit('item')"
           :key="item.objectID"
+          @click="state.sendEvent('click:internal', item, 'Hit Clicked')"
+          @auxclick="state.sendEvent('click:internal', item, 'Hit Clicked')"
         >
           <slot
             name="item"
             :item="item"
             :index="index"
             :insights="state.insights"
+            :send-event="state.sendEvent"
           >
             objectID: {{ item.objectID }}, index: {{ index }}
           </slot>
@@ -69,9 +72,10 @@
 </template>
 
 <script>
-import { createWidgetMixin } from '../mixins/widget';
 import { connectInfiniteHitsWithInsights } from 'instantsearch.js/es/connectors';
+
 import { createSuitMixin } from '../mixins/suit';
+import { createWidgetMixin } from '../mixins/widget';
 
 export default {
   name: 'AisInfiniteHits',

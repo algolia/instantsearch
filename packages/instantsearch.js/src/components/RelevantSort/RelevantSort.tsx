@@ -20,7 +20,7 @@ type RelevantSortProps = {
   templates: RelevantSortComponentTemplates;
   isRelevantSorted: boolean;
   isVirtualReplica: boolean;
-  refine(relevancyStrictness: number | undefined): void;
+  refine: (relevancyStrictness: number | undefined) => void;
 };
 
 const RelevantSort = ({

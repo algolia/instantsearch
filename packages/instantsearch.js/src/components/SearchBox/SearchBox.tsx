@@ -27,8 +27,10 @@ type SearchBoxProps = {
   refine?: (value: string) => void;
   autofocus?: boolean;
   searchAsYouType?: boolean;
+  ignoreCompositionEvents?: boolean;
   isSearchStalled?: boolean;
   disabled?: boolean;
+  ariaLabel?: string;
   onChange?: (event: Event) => void;
   onSubmit?: (event: Event) => void;
   onReset?: (event: Event) => void;
@@ -41,8 +43,10 @@ const defaultProps = {
   showLoadingIndicator: true,
   autofocus: false,
   searchAsYouType: true,
+  ignoreCompositionEvents: false,
   isSearchStalled: false,
   disabled: false,
+  ariaLabel: 'Search',
   onChange: noop,
   onSubmit: noop,
   onReset: noop,
@@ -85,19 +89,26 @@ class SearchBox extends Component<
     const { searchAsYouType, refine, onChange } = this.props;
     const query = (event.target as HTMLInputElement).value;
 
-    if (searchAsYouType) {
-      refine(query);
-    }
-    this.setState({ query });
+    if (
+      !(
+        this.props.ignoreCompositionEvents &&
+        (event as KeyboardEvent).isComposing
+      )
+    ) {
+      if (searchAsYouType) {
+        refine(query);
+      }
+      this.setState({ query });
 
-    onChange(event);
+      onChange(event);
+    }
   };
 
   public componentWillReceiveProps(nextProps: SearchBoxPropsWithDefaultProps) {
     /**
      * when the user is typing, we don't want to replace the query typed
      * by the user (state.query) with the query exposed by the connector (props.query)
-     * see: https://github.com/algolia/instantsearch.js/issues/4141
+     * see: https://github.com/algolia/instantsearch/issues/4141
      */
     if (!this.state.focused && nextProps.query !== this.state.query) {
       this.setState({ query: nextProps.query });
@@ -154,6 +165,7 @@ class SearchBox extends Component<
       showLoadingIndicator,
       templates,
       isSearchStalled,
+      ariaLabel,
     } = this.props;
 
     return (
@@ -181,8 +193,12 @@ class SearchBox extends Component<
             spellCheck="false"
             maxLength={512}
             onInput={this.onInput}
+            // see: https://github.com/preactjs/preact/issues/1978
+            // eslint-disable-next-line react/no-unknown-property
+            oncompositionend={this.onInput}
             onBlur={this.onBlur}
             onFocus={this.onFocus}
+            aria-label={ariaLabel}
           />
 
           <Template
@@ -191,7 +207,7 @@ class SearchBox extends Component<
             rootProps={{
               className: cssClasses.submit,
               type: 'submit',
-              title: 'Submit the search query.',
+              title: 'Submit the search query',
               hidden: !showSubmit,
             }}
             templates={templates}
@@ -204,7 +220,7 @@ class SearchBox extends Component<
             rootProps={{
               className: cssClasses.reset,
               type: 'reset',
-              title: 'Clear the search query.',
+              title: 'Clear the search query',
               hidden: !(
                 showReset &&
                 this.state.query.trim() &&

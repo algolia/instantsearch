@@ -1,6 +1,7 @@
 import EventEmitter from '@algolia/events';
 import algoliasearchHelper from 'algoliasearch-helper';
 
+import { createInsightsMiddleware } from '../middlewares/createInsightsMiddleware';
 import {
   createMetadataMiddleware,
   isMetadataEnabled,
@@ -13,13 +14,18 @@ import {
   createDocumentationMessageGenerator,
   createDocumentationLink,
   defer,
+  hydrateSearchClient,
   noop,
   warning,
   setIndexHelperState,
+  isIndexWidget,
 } from './utils';
 import version from './version';
 
-import type { InsightsEvent } from '../middlewares/createInsightsMiddleware';
+import type {
+  InsightsEvent,
+  InsightsProps,
+} from '../middlewares/createInsightsMiddleware';
 import type { RouterProps } from '../middlewares/createRouterMiddleware';
 import type {
   InsightsClient as AlgoliaInsightsClient,
@@ -56,9 +62,9 @@ export type InstantSearchOptions<
   TRouteState = TUiState
 > = {
   /**
-   * The name of the main index
+   * The name of the main index. If no indexName is provided, you have to manually add an index widget.
    */
-  indexName: string;
+  indexName?: string;
 
   /**
    * The search client to plug to InstantSearch.js
@@ -111,9 +117,9 @@ export type InstantSearchOptions<
    */
   onStateChange?: (params: {
     uiState: TUiState;
-    setUiState(
+    setUiState: (
       uiState: TUiState | ((previousUiState: TUiState) => TUiState)
-    ): void;
+    ) => void;
   }) => void;
 
   /**
@@ -136,15 +142,57 @@ export type InstantSearchOptions<
   routing?: RouterProps<TUiState, TRouteState> | boolean;
 
   /**
+   * Enables the Insights middleware and loads the Insights library
+   * if not already loaded.
+   *
+   * The Insights middleware sends view and click events automatically, and lets
+   * you set up your own events.
+   *
+   * @default false
+   */
+  insights?: InsightsProps | boolean;
+
+  /**
    * the instance of search-insights to use for sending insights events inside
    * widgets like `hits`.
    *
    * @deprecated This property will be still supported in 4.x releases, but not further. It is replaced by the `insights` middleware. For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/
    */
   insightsClient?: AlgoliaInsightsClient;
+  future?: {
+    /**
+     * Changes the way `dispose` is used in InstantSearch lifecycle.
+     *
+     * If `false` (by default), each widget unmounting will remove its state as well, even if there are multiple widgets reading that UI State.
+     *
+     * If `true`, each widget unmounting will only remove its own state if it's the last of its type. This allows for dynamically adding and removing widgets without losing their state.
+     *
+     * @default false
+     */
+    // @MAJOR: Remove legacy behaviour
+    preserveSharedStateOnUnmount?: boolean;
+    /**
+     * Changes the way root levels of hierarchical facets have their count displayed.
+     *
+     * If `false` (by default), the count of the refined root level is updated to match the count of the actively refined parent level.
+     *
+     * If `true`, the count of the root level stays the same as the count of all children levels.
+     *
+     * @default false
+     */
+    // @MAJOR: Remove legacy behaviour here and in algoliasearch-helper
+    persistHierarchicalRootCount?: boolean;
+  };
 };
 
 export type InstantSearchStatus = 'idle' | 'loading' | 'stalled' | 'error';
+
+export const INSTANTSEARCH_FUTURE_DEFAULTS: Required<
+  InstantSearchOptions['future']
+> = {
+  preserveSharedStateOnUnmount: false,
+  persistHierarchicalRootCount: false,
+};
 
 /**
  * The actual implementation of the InstantSearch. This is
@@ -160,6 +208,7 @@ class InstantSearch<
   public insightsClient: AlgoliaInsightsClient | null;
   public onStateChange: InstantSearchOptions<TUiState>['onStateChange'] | null =
     null;
+  public future: NonNullable<InstantSearchOptions<TUiState>['future']>;
   public helper: AlgoliaSearchHelper | null;
   public mainHelper: AlgoliaSearchHelper | null;
   public mainIndex: IndexWidget;
@@ -173,9 +222,10 @@ class InstantSearch<
   public _createURL: CreateURL<TUiState>;
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
+  public _insights: InstantSearchOptions['insights'];
   public middleware: Array<{
-    creator: Middleware;
-    instance: MiddlewareDefinition;
+    creator: Middleware<TUiState>;
+    instance: MiddlewareDefinition<TUiState>;
   }> = [];
   public sendEventToInsights: (event: InsightsEvent) => void;
   /**
@@ -209,20 +259,21 @@ Use \`InstantSearch.status === "stalled"\` instead.`
     this.setMaxListeners(100);
 
     const {
-      indexName = null,
+      indexName = '',
       numberLocale,
       initialUiState = {} as TUiState,
       routing = null,
+      insights = undefined,
       searchFunction,
       stalledSearchDelay = 200,
       searchClient = null,
       insightsClient = null,
       onStateChange = null,
+      future = {
+        ...INSTANTSEARCH_FUTURE_DEFAULTS,
+        ...(options.future || {}),
+      },
     } = options;
-
-    if (indexName === null) {
-      throw new Error(withUsage('The `indexName` option is required.'));
-    }
 
     if (searchClient === null) {
       throw new Error(withUsage('The `searchClient` option is required.'));
@@ -270,7 +321,21 @@ See ${createDocumentationLink({
       })}`
     );
 
+    if (__DEV__ && options.future?.preserveSharedStateOnUnmount === undefined) {
+      // eslint-disable-next-line no-console
+      console.info(`Starting from the next major version, InstantSearch will change how widgets state is preserved when they are removed. InstantSearch will keep the state of unmounted widgets to be usable by other widgets with the same attribute.
+
+We recommend setting \`future.preserveSharedStateOnUnmount\` to true to adopt this change today.
+To stay with the current behaviour and remove this warning, set the option to false.
+
+See documentation: ${createDocumentationLink({
+        name: 'instantsearch',
+      })}#widget-param-future
+          `);
+    }
+
     this.client = searchClient;
+    this.future = future;
     this.insightsClient = insightsClient;
     this.indexName = indexName;
     this.helper = null;
@@ -293,6 +358,8 @@ See ${createDocumentationLink({
     this._initialUiState = initialUiState as TUiState;
     this._initialResults = null;
 
+    this._insights = insights;
+
     if (searchFunction) {
       warning(
         false,
@@ -304,21 +371,33 @@ See ${createDocumentationLink({
     this.sendEventToInsights = noop;
 
     if (routing) {
-      const routerOptions = typeof routing === 'boolean' ? undefined : routing;
+      const routerOptions = typeof routing === 'boolean' ? {} : routing;
+      routerOptions.$$internal = true;
       this.use(createRouterMiddleware(routerOptions));
     }
 
+    // This is the default Insights middleware,
+    // added when `insights` is set to true by the user.
+    // Any user-provided middleware will be added later and override this one.
+    if (insights) {
+      const insightsOptions = typeof insights === 'boolean' ? {} : insights;
+      insightsOptions.$$internal = true;
+      this.use(createInsightsMiddleware(insightsOptions));
+    }
+
     if (isMetadataEnabled()) {
-      this.use(createMetadataMiddleware());
+      this.use(createMetadataMiddleware({ $$internal: true }));
     }
   }
 
   /**
    * Hooks a middleware into the InstantSearch lifecycle.
    */
-  public use(...middleware: Middleware[]): this {
+  public use(...middleware: Array<Middleware<TUiState>>): this {
     const newMiddlewareList = middleware.map((fn) => {
       const newMiddleware = {
+        $$type: '__unknown__',
+        $$internal: false,
         subscribe: noop,
         started: noop,
         unsubscribe: noop,
@@ -352,7 +431,7 @@ See ${createDocumentationLink({
   /**
    * Removes a middleware from the InstantSearch lifecycle.
    */
-  public unuse(...middlewareToUnuse: Middleware[]): this {
+  public unuse(...middlewareToUnuse: Array<Middleware<TUiState>>): this {
     this.middleware
       .filter((m) => middlewareToUnuse.includes(m.creator))
       .forEach((m) => m.instance.unsubscribe());
@@ -467,9 +546,7 @@ See ${createDocumentationLink({
 
   /**
    * Ends the initialization of InstantSearch.js and triggers the
-   * first search. This method should be called after all widgets have been added
-   * to the instance of InstantSearch.js. InstantSearch.js also supports adding and removing
-   * widgets after the start as an **EXPERIMENTAL** feature.
+   * first search.
    */
   public start() {
     if (this.started) {
@@ -484,11 +561,20 @@ See ${createDocumentationLink({
     // In Vue InstantSearch' hydrate, a main helper gets set before start, so
     // we need to respect this helper as a way to keep all listeners correct.
     const mainHelper =
-      this.mainHelper || algoliasearchHelper(this.client, this.indexName);
+      this.mainHelper ||
+      algoliasearchHelper(this.client, this.indexName, undefined, {
+        persistHierarchicalRootCount: this.future.persistHierarchicalRootCount,
+      });
 
     mainHelper.search = () => {
       this.status = 'loading';
       this.scheduleRender(false);
+
+      warning(
+        Boolean(this.indexName) ||
+          this.mainIndex.getWidgets().some(isIndexWidget),
+        'No indexName provided, nor an explicit index widget in the widgets tree. This is required to be able to display results.'
+      );
 
       // This solution allows us to keep the exact same API for the users but
       // under the hood, we have a different implementation. It should be
@@ -564,6 +650,8 @@ See ${createDocumentationLink({
     });
 
     if (this._initialResults) {
+      hydrateSearchClient(this.client, this._initialResults);
+
       const originalScheduleSearch = this.scheduleSearch;
       // We don't schedule a first search when initial results are provided
       // because we already have the results to render. This skips the initial
@@ -601,12 +689,29 @@ See ${createDocumentationLink({
     this.middleware.forEach(({ instance }) => {
       instance.started();
     });
+
+    // This is the automatic Insights middleware,
+    // added when `insights` is unset and the initial results possess `queryID`.
+    // Any user-provided middleware will be added later and override this one.
+    if (typeof this._insights === 'undefined') {
+      mainHelper.derivedHelpers[0].once('result', () => {
+        const hasAutomaticInsights = this.mainIndex
+          .getScopedResults()
+          .some(({ results }) => results?._automaticInsights);
+        if (hasAutomaticInsights) {
+          this.use(
+            createInsightsMiddleware({
+              $$internal: true,
+              $$automatic: true,
+            })
+          );
+        }
+      });
+    }
   }
 
   /**
-   * Removes all widgets without triggering a search afterwards. This is an **EXPERIMENTAL** feature,
-   * if you find an issue with it, please
-   * [open an issue](https://github.com/algolia/instantsearch.js/issues/new?title=Problem%20with%20dispose).
+   * Removes all widgets without triggering a search afterwards.
    * @return {undefined} This method does not return anything
    */
   public dispose(): void {
@@ -723,7 +828,7 @@ See ${createDocumentationLink({
   }
 
   public onInternalStateChange = defer(() => {
-    const nextUiState = this.mainIndex.getWidgetUiState({});
+    const nextUiState = this.mainIndex.getWidgetUiState({}) as TUiState;
 
     this.middleware.forEach(({ instance }) => {
       instance.onStateChange({

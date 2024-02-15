@@ -66,13 +66,13 @@ options:
     default: 1
     description: Zoom of the map when no results are found
   - name: initialPosition
-    default: "{ lat:0, lng:0 }"
+    default: '{ lat:0, lng:0 }'
     description: Position of the map when no results are found
   - name: paddingBoundingBox
-    default: "{ top:0, right:0, bottom:0, left:0 }"
+    default: '{ top:0, right:0, bottom:0, left:0 }'
     description: Add an inner padding on the map when you refine
   - name: mapOptions
-    default: "{}"
+    default: '{}'
     description: Option forwarded to the Google Maps constructor
   - name: enableClearMapRefinement
     default: true

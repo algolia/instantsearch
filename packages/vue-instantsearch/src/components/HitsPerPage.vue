@@ -5,6 +5,7 @@
       :refine="state.refine"
       :has-no-results="state.hasNoResults"
       :can-refine="state.canRefine"
+      :createURL="state.createURL"
     >
       <select
         :class="suit('select')"
@@ -26,9 +27,10 @@
 
 <script>
 import { connectHitsPerPage } from 'instantsearch.js/es/connectors';
+
 import { createPanelConsumerMixin } from '../mixins/panel';
-import { createWidgetMixin } from '../mixins/widget';
 import { createSuitMixin } from '../mixins/suit';
+import { createWidgetMixin } from '../mixins/widget';
 
 export default {
   name: 'AisHitsPerPage',

@@ -1,6 +1,6 @@
 // global for TypeScript alone
 /* global google */
-import { cx } from '@algolia/ui-components-shared';
+import { cx } from 'instantsearch-ui-components';
 import { render } from 'preact';
 
 import connectGeoSearch from '../../connectors/geo-search/connectGeoSearch';
@@ -71,7 +71,7 @@ export type GeoSearchMarker<TOptions> = {
    * See the documentation for more information:
    * https://developers.google.com/maps/documentation/javascript/reference/3/#MarkerOptions
    */
-  createOptions?(item: GeoHit): TOptions;
+  createOptions?: (item: GeoHit) => TOptions;
   /**
    * Object that takes an event type (ex: `click`, `mouseover`) as key and a
    * listener as value. The listener is provided with an object that contains:

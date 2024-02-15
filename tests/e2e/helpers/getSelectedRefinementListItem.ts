@@ -1,6 +1,6 @@
 declare namespace WebdriverIOAsync {
   interface Browser {
-    getSelectedRefinementListItem(): Promise<string>;
+    getSelectedRefinementListItem: () => Promise<string>;
   }
 }
 

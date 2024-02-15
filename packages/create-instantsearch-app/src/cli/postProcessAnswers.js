@@ -1,5 +1,5 @@
 const camelCase = require('lodash.camelcase');
-const latestSemver = require('latest-semver');
+const semver = require('semver');
 
 const { fetchLibraryVersions } = require('../utils');
 
@@ -24,10 +24,13 @@ async function getLibraryVersion(config, templateConfig) {
 
   if (libraryName && !libraryVersion) {
     const versions = await fetchLibraryVersions(libraryName);
+    const latestStableVersion = semver.maxSatisfying(versions, '*', {
+      includePrerelease: false,
+    });
 
     // Return the latest available version when
     // the stable version is not available
-    return latestSemver(versions) || versions[0];
+    return latestStableVersion || versions[0];
   }
 
   return libraryVersion;
@@ -62,6 +65,11 @@ async function postProcessAnswers({
     template: templatePath,
     installation: optionsFromArguments.installation,
     currentYear: new Date().getFullYear(),
+    attributesToDisplay:
+      Array.isArray(combinedAnswers.attributesToDisplay) &&
+      combinedAnswers.attributesToDisplay.filter(
+        (attribute) => attribute !== combinedAnswers.imageAttribute
+      ),
     attributesForFaceting:
       Array.isArray(combinedAnswers.attributesForFaceting) &&
       combinedAnswers.attributesForFaceting.filter(
@@ -71,6 +79,12 @@ async function postProcessAnswers({
       dynamicWidgets:
         Array.isArray(combinedAnswers.attributesForFaceting) &&
         combinedAnswers.attributesForFaceting.includes('ais.dynamicWidgets'),
+      insights:
+        Boolean(templateConfig.flags && templateConfig.flags.insights) &&
+        combinedAnswers.enableInsights === true,
+      autocomplete:
+        Boolean(templateConfig.flags && templateConfig.flags.autocomplete) &&
+        combinedAnswers.searchInputType === 'autocomplete',
     },
   };
 }

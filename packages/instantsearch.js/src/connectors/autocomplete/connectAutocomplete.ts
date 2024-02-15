@@ -42,6 +42,11 @@ export type AutocompleteRenderState = {
     indexName: string;
 
     /**
+     * The id of the index
+     */
+    indexId: string;
+
+    /**
      * The resolved hits from the index matching the query.
      */
     hits: Hit[];
@@ -87,7 +92,10 @@ const connectAutocomplete: AutocompleteConnector = function connectAutocomplete(
   checkRendering(renderFn, withUsage());
 
   return (widgetParams) => {
-    const { escapeHTML = true } = widgetParams || {};
+    const {
+      // @MAJOR: this can default to false
+      escapeHTML = true,
+    } = widgetParams || {};
 
     warning(
       !(widgetParams as any).indices,
@@ -115,7 +123,7 @@ search.addWidgets([
     );
 
     type ConnectorState = {
-      refine?(query: string): void;
+      refine?: (query: string) => void;
     };
 
     const connectorState: ConnectorState = {};
@@ -141,7 +149,7 @@ search.addWidgets([
         const renderState = this.getWidgetRenderState(renderOptions);
 
         renderState.indices.forEach(({ sendEvent, hits }) => {
-          sendEvent('view', hits);
+          sendEvent('view:internal', hits);
         });
 
         renderFn(
@@ -181,7 +189,7 @@ search.addWidgets([
 
           const sendEvent = createSendEventForHits({
             instantSearchInstance,
-            index: scopedResult.results.index,
+            getIndex: () => scopedResult.results.index,
             widgetType: this.$$type,
           });
 

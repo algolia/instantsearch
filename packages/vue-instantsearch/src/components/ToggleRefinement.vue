@@ -19,7 +19,7 @@
           :checked="state.value.isRefined"
           @change="state.refine(state.value)"
         />
-        <span :class="suit('labelText')">{{ label }}</span>
+        <span :class="suit('labelText')">{{ label || state.value.name }}</span>
         <span v-if="state.value.count !== null" :class="suit('count')">{{
           state.value.count.toLocaleString()
         }}</span>
@@ -30,9 +30,10 @@
 
 <script>
 import { connectToggleRefinement } from 'instantsearch.js/es/connectors';
-import { createWidgetMixin } from '../mixins/widget';
+
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
+import { createWidgetMixin } from '../mixins/widget';
 
 export default {
   name: 'AisToggleRefinement',
@@ -53,10 +54,6 @@ export default {
       type: String,
       required: true,
     },
-    label: {
-      type: String,
-      required: true,
-    },
     on: {
       type: [String, Number, Boolean, Array],
       required: false,
@@ -67,12 +64,15 @@ export default {
       required: false,
       default: undefined,
     },
+    label: {
+      type: String,
+      default: undefined,
+    },
   },
   computed: {
     widgetParams() {
       return {
         attribute: this.attribute,
-        label: this.label,
         on: this.on,
         off: this.off,
       };

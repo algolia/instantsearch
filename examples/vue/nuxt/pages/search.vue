@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import algoliasearch from 'algoliasearch/lite';
 import {
   AisInstantSearchSsr,
   AisIndex,
@@ -45,7 +46,6 @@ import {
   AisPagination,
   createServerRootMixin,
 } from 'vue-instantsearch';
-import algoliasearch from 'algoliasearch/lite';
 import _renderToString from 'vue-server-renderer/basic';
 
 function renderToString(app) {
@@ -67,6 +67,7 @@ export default {
     createServerRootMixin({
       searchClient,
       indexName: 'instant_search',
+      insights: true,
       initialUiState: {
         // eslint-disable-next-line camelcase
         instant_search: {

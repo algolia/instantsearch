@@ -19,7 +19,7 @@ addParameters({
     theme: create({
       base: 'light',
       brandTitle: 'InstantSearch.js',
-      brandUrl: 'https://github.com/algolia/instantsearch.js',
+      brandUrl: 'https://github.com/algolia/instantsearch',
     }),
     panelPosition: 'bottom',
     storySort(a: any[], b: any[]) {
@@ -38,7 +38,7 @@ addParameters({
 const req = require.context('../stories', true, /.stories.(js|ts|tsx)$/);
 
 function loadStories() {
-  req.keys().forEach(filename => req(filename));
+  req.keys().forEach((filename) => req(filename));
 }
 
 configure(loadStories, module);

@@ -7,6 +7,8 @@ module.exports = {
   supportedVersion: '>= 3.0.0 < 5.0.0',
   flags: {
     dynamicWidgets: '>= 4.30',
+    insights: '>= 4.55',
+    autocomplete: '>= 4.52',
   },
   templateName: 'instantsearch.js',
   appName: 'instantsearch.js-app',

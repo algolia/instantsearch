@@ -1,20 +1,22 @@
 import { createNullCache } from '@algolia/cache-common';
 import { createInMemoryCache } from '@algolia/cache-in-memory';
+import { createNullLogger } from '@algolia/logger-common';
+import { createNodeHttpRequester } from '@algolia/requester-node-http';
 import {
   serializeQueryParameters,
   createTransporter,
   CallEnum,
   createUserAgent,
 } from '@algolia/transporter';
-import type { HostOptions } from '@algolia/transporter';
-import { createNullLogger } from '@algolia/logger-common';
-import { createNodeHttpRequester } from '@algolia/requester-node-http';
 import algoliasearch from 'algoliasearch';
+
 import {
   createSingleSearchResponse,
   createMultiSearchResponse,
   createSFFVResponse,
 } from './createAPIResponse';
+
+import type { HostOptions } from '@algolia/transporter';
 
 type OverrideKeys<TTarget, TOptions> = TOptions extends Record<string, never>
   ? TTarget

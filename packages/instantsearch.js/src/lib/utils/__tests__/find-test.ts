@@ -32,6 +32,7 @@ describe('find', () => {
   });
 
   describe('with polyfill', () => {
+    // eslint-disable-next-line jest/unbound-method
     const originalArrayFind = Array.prototype.find;
 
     beforeAll(() => {

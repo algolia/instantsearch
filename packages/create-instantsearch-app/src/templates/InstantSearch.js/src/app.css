@@ -58,3 +58,12 @@
   margin: 2rem auto;
   text-align: center;
 }
+
+.ais-Hits-item article {
+  display: flex;
+}
+
+.ais-Hits-item img {
+  max-height: 125px;
+  padding-right: 16px;
+}

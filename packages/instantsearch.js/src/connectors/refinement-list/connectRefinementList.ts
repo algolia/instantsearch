@@ -20,6 +20,7 @@ import type {
   FacetHit,
   CreateURL,
   WidgetRenderState,
+  IndexUiState,
 } from '../../types';
 import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
 
@@ -110,7 +111,7 @@ export type RefinementListRenderState = {
   /**
    * Action to apply selected refinements.
    */
-  refine(value: string): void;
+  refine: (value: string) => void;
   /**
    * Send event to insights middleware
    */
@@ -118,7 +119,7 @@ export type RefinementListRenderState = {
   /**
    * Searches for values inside the list.
    */
-  searchForItems(query: string): void;
+  searchForItems: (query: string) => void;
   /**
    * `true` if the values are from an index search.
    */
@@ -139,7 +140,7 @@ export type RefinementListRenderState = {
   /**
    * Toggles the number of values displayed between `limit` and `showMoreLimit`.
    */
-  toggleShowMore(): void;
+  toggleShowMore: () => void;
 };
 
 export type RefinementListWidgetDescription = {
@@ -381,7 +382,7 @@ const connectRefinementList: RefinementListConnector =
             });
 
             triggerRefine = (facetValue) => {
-              sendEvent!('click', facetValue);
+              sendEvent!('click:internal', facetValue);
               helper.toggleFacetRefinement(attribute, facetValue).search();
             };
 
@@ -432,10 +433,16 @@ const connectRefinementList: RefinementListConnector =
           const canToggleShowMore = canShowLess || canShowMore;
 
           return {
-            createURL: (facetValue) =>
-              createURL(
-                state.resetPage().toggleFacetRefinement(attribute, facetValue)
-              ),
+            createURL: (facetValue: string) => {
+              return createURL((uiState) =>
+                this.getWidgetUiState(uiState, {
+                  searchParameters: state
+                    .resetPage()
+                    .toggleFacetRefinement(attribute, facetValue),
+                  helper,
+                })
+              );
+            },
             items,
             refine: triggerRefine,
             searchForItems: searchFacetValues,
@@ -469,17 +476,16 @@ const connectRefinementList: RefinementListConnector =
               ? searchParameters.getDisjunctiveRefinements(attribute)
               : searchParameters.getConjunctiveRefinements(attribute);
 
-          if (!values.length) {
-            return uiState;
-          }
-
-          return {
-            ...uiState,
-            refinementList: {
-              ...uiState.refinementList,
-              [attribute]: values,
+          return removeEmptyRefinementsFromUiState(
+            {
+              ...uiState,
+              refinementList: {
+                ...uiState.refinementList,
+                [attribute]: values,
+              },
             },
-          };
+            attribute
+          );
         },
 
         getWidgetSearchParameters(searchParameters, { uiState }) {
@@ -511,11 +517,13 @@ As this is not supported, please make sure to only use this attribute with one o
           const values =
             uiState.refinementList && uiState.refinementList[attribute];
 
-          const withoutRefinements =
-            searchParameters.clearRefinements(attribute);
           const withFacetConfiguration = isDisjunctive
-            ? withoutRefinements.addDisjunctiveFacet(attribute)
-            : withoutRefinements.addFacet(attribute);
+            ? searchParameters
+                .addDisjunctiveFacet(attribute)
+                .removeDisjunctiveFacetRefinement(attribute)
+            : searchParameters
+                .addFacet(attribute)
+                .removeFacetRefinement(attribute);
 
           const currentMaxValuesPerFacet =
             withFacetConfiguration.maxValuesPerFacet || 0;
@@ -555,5 +563,27 @@ As this is not supported, please make sure to only use this attribute with one o
       };
     };
   };
+
+function removeEmptyRefinementsFromUiState(
+  indexUiState: IndexUiState,
+  attribute: string
+): IndexUiState {
+  if (!indexUiState.refinementList) {
+    return indexUiState;
+  }
+
+  if (
+    !indexUiState.refinementList[attribute] ||
+    indexUiState.refinementList[attribute].length === 0
+  ) {
+    delete indexUiState.refinementList[attribute];
+  }
+
+  if (Object.keys(indexUiState.refinementList).length === 0) {
+    delete indexUiState.refinementList;
+  }
+
+  return indexUiState;
+}
 
 export default connectRefinementList;

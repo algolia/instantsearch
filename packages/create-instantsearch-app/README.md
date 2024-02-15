@@ -4,7 +4,7 @@
 
 [![Version][version-svg]][package-url] [![License][license-image]][license-url] [![Build Status][ci-svg]][ci-url]
 
-`create-instantsearch-app` is a command line utility that helps you quick start your InstantSearch app using any [Algolia][algolia-website] InstantSearch flavor ([InstantSearch.js][instantsearchjs-github], [React InstantSearch Hooks][react-instantsearch-hooks-github], [Vue InstantSearch][vue-instantsearch-github], [Angular InstantSearch][angular-instantsearch-github], [InstantSearch iOS][instantsearch-ios-github] and [InstantSearch Android][instantsearch-android-github]).
+`create-instantsearch-app` is a command line utility that helps you quick start your InstantSearch app using any [Algolia][algolia-website] InstantSearch flavor ([InstantSearch.js][instantsearchjs-github], [React InstantSearch][react-instantsearch-github], [Vue InstantSearch][vue-instantsearch-github], [Angular InstantSearch][angular-instantsearch-github], [InstantSearch iOS][instantsearch-ios-github] and [InstantSearch Android][instantsearch-android-github]).
 
 <p align="center">
   <img src="preview.png" width="800" alt="Preview">
@@ -16,17 +16,13 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
-- [Create InstantSearch App](#create-instantsearch-app)
-  - [Get started](#get-started)
-  - [Usage](#usage)
-      - [`--template`](#--template)
-      - [`--config`](#--config)
-  - [API](#api)
-  - [Tutorials](#tutorials)
-  - [Previews](#previews)
-  - [Contributing](#contributing)
-  - [License](#license)
+- [Get started](#get-started)
+- [Usage](#usage)
+- [API](#api)
+- [Tutorials](#tutorials)
+- [Previews](#previews)
+- [Contributing](#contributing)
+- [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -54,6 +50,10 @@ cd my-app
 yarn start
 ```
 
+> **Important**
+> Selecting 'Y' when being prompted to ‘Enable user events’ activates the [`insights`](https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/#widget-param-insights) option for compatible templates, allowing Algolia to process your user Events. Events can unlock powerful features, enhancing your application's effectiveness and we encourage you to consider enabling this valuable functionality. Please review our [API reference](https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/#widget-param-insights) for more details about Events collection and settings.
+
+
 ## Usage
 
 This package comes with the module `createInstantSearchApp(path, options?)` and the command-line tool `create-instantsearch-app`.
@@ -71,6 +71,7 @@ $ create-instantsearch-app --help
     --api-key <apiKey>                                 The Algolia search API key
     --index-name <indexName>                           The main index of your search
     --attributes-to-display <attributesToDisplay>      The attributes of your index to display
+    --image-attribute <imageAttribute>                 The attribute of your index to use for image display
     --attributes-for-faceting <attributesForFaceting>  The attributes for faceting
     --template <template>                              The InstantSearch template to use
     --library-version <libraryVersion>                 The version of the library
@@ -114,7 +115,9 @@ The `config` flag is handy to automate app generations.
   "indexName": "MY_INDEX_NAME",
   "searchPlaceholder": "Search",
   "attributesToDisplay": ["name", "description"],
-  "attributesForFaceting": ["brand", "location"]
+  "imageAttribute": "image",
+  "attributesForFaceting": ["brand", "location"],
+  "enableInsights": true
 }
 ```
 
@@ -135,7 +138,9 @@ const app = createInstantSearchApp('~/lab/my-app', {
   template: 'InstantSearch.js',
   libraryVersion: '2.0.0',
   attributesToDisplay: ['name', 'description'],
+  imageAttribute: 'image',
   attributesForFaceting: ['keywords'],
+  enableInsights: true,
 });
 
 app.create().then(() => console.log('App generated!'));
@@ -150,9 +155,8 @@ app.create().then(() => console.log('App generated!'));
 
 You can use the web templates on CodeSandbox:
 
-- [InstantSearch.js 3](https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/instantsearch.js)
-- [InstantSearch.js 2](https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/instantsearch.js-2.x)
-- [React InstantSearch Hooks](https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/react-instantsearch-hooks)
+- [InstantSearch.js](https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/instantsearch.js)
+- [React InstantSearch](https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/react-instantsearch)
 - [Vue InstantSearch](https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/vue-instantsearch)
 - [Angular InstantSearch](https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/angular-instantsearch)
 - [Autocomplete.js](https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/autocomplete.js)
@@ -184,7 +188,7 @@ Create InstantSearch App is [MIT licensed](LICENSE).
 [version-svg]: https://img.shields.io/npm/v/create-instantsearch-app.svg?style=flat-square
 [package-url]: https://npmjs.org/package/create-instantsearch-app
 [ci-svg]: https://img.shields.io/circleci/project/github/algolia/create-instantsearch-app.svg?style=flat-square
-[ci-url]: https://circleci.com/gh/algolia/instantsearch.js
+[ci-url]: https://circleci.com/gh/algolia/instantsearch
 [license-image]: https://img.shields.io/badge/license-MIT-green.svg?style=flat-square
 [license-url]: LICENSE
 
@@ -192,7 +196,7 @@ Create InstantSearch App is [MIT licensed](LICENSE).
 
 [algolia-website]: https://www.algolia.com/?utm_medium=social-owned&utm_source=GitHub&utm_campaign=create-instantsearch-app%20repository
 [instantsearchjs-github]: https://github.com/algolia/instantsearch/tree/master/packages/instantsearch.js
-[react-instantsearch-hooks-github]: https://github.com/algolia/instantsearch/tree/master/packages/react-instantsearch-hooks-web
+[react-instantsearch-github]: https://github.com/algolia/instantsearch/tree/master/packages/react-instantsearch
 [vue-instantsearch-github]: https://github.com/algolia/instantsearch/tree/master/packages/vue-instantsearch
 [angular-instantsearch-github]: https://github.com/algolia/angular-instantsearch
 [instantsearch-ios-github]: https://github.com/algolia/instantsearch-ios

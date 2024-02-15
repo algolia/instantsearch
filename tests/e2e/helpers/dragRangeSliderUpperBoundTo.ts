@@ -5,7 +5,7 @@ import {
 
 declare module 'webdriverio' {
   interface Browser {
-    dragRangeSliderUpperBoundTo(value: number): Promise<number>;
+    dragRangeSliderUpperBoundTo: (value: number) => Promise<number>;
   }
 }
 

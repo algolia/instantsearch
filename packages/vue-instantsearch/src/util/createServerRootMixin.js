@@ -3,6 +3,7 @@ import {
   waitForResults,
   getInitialResults,
 } from 'instantsearch.js/es/lib/server';
+
 import { isVue3, isVue2, Vue2, createSSRApp } from './vue-compat';
 import { warn } from './warn';
 
@@ -26,10 +27,14 @@ function defaultCloneComponent(componentInstance, { mixins = [] } = {}) {
     if (componentInstance.$store) {
       app.use(componentInstance.$store);
     }
+    if (componentInstance.$i18n) {
+      app.use(componentInstance.$i18n);
+    }
   } else {
     // copy over global Vue APIs
     options.router = componentInstance.$router;
     options.store = componentInstance.$store;
+    options.i18n = componentInstance.$i18n;
 
     const Extended = componentInstance.$vnode
       ? componentInstance.$vnode.componentOptions.Ctor.extend(options)
@@ -111,8 +116,11 @@ function augmentInstantSearch(instantSearchOptions, cloneComponent) {
       })
       .then(() => renderToString(app))
       .then(() => waitForResults(instance))
-      .then(() => {
-        initialResults = getInitialResults(instance.mainIndex);
+      .then((requestParamsList) => {
+        initialResults = getInitialResults(
+          instance.mainIndex,
+          requestParamsList
+        );
         search.hydrate(initialResults);
         return search.getState();
       });

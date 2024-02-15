@@ -7,7 +7,6 @@ import {
 } from '../../lib/utils';
 
 import type { SendEventForFacet } from '../../lib/utils';
-import type { InsightsEvent } from '../../middlewares';
 import type { Connector, InstantSearch, WidgetRenderState } from '../../types';
 import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
 
@@ -35,7 +34,7 @@ export type RangeRenderState = {
    * previously set bound or to set an infinite bound.
    * @param rangeValue tuple of [min, max] bounds
    */
-  refine(rangeValue: RangeBoundaries): void;
+  refine: (rangeValue: RangeBoundaries) => void;
 
   /**
    * Indicates whether this widget can be refined
@@ -62,8 +61,8 @@ export type RangeRenderState = {
    * Both functions take a `number` as input and should output a `string`.
    */
   format: {
-    from(fromValue: number): string;
-    to(toValue: number): string;
+    from: (fromValue: number) => string;
+    to: (toValue: number) => string;
   };
 };
 
@@ -258,7 +257,7 @@ const connectRange: RangeConnector = function connectRange(
 
     const createSendEvent =
       (instantSearchInstance: InstantSearch) =>
-      (...args: [InsightsEvent] | [string, string, string?]) => {
+      (...args: Parameters<SendEventForFacet>) => {
         if (args.length === 1) {
           instantSearchInstance.sendEventToInsights(args[0]);
           return;

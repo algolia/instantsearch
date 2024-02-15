@@ -2220,7 +2220,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 });
 
 describe('insights', () => {
-  // See: https://github.com/algolia/instantsearch.js/pull/5085
+  // See: https://github.com/algolia/instantsearch/pull/5085
   it(`doesn't send event when a facet is added`, () => {
     const rendering = jest.fn();
     const makeWidget = connectRange(rendering);

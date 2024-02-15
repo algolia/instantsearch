@@ -23,12 +23,17 @@ helper.on('result', ({ results }) => {
             `<li class="ais-hits--item">
               <article>
               {{#if attributesToDisplay}}
-                <h1>${hit._highlightResult.{{attributesToDisplay.[0]}}.value}</h1>
-                {{#each attributesToDisplay}}
-                {{#unless @first}}
-                <p>${hit._highlightResult.{{this}}.value}</p>
-                {{/unless}}
-                {{/each}}
+                {{#if imageAttribute}}
+                <img src="${ hit.{{imageAttribute}} }" alt="${ hit.{{attributesToDisplay.[0]}} }" />
+                {{/if}}
+                <div>
+                  <h1>${hit._highlightResult.{{attributesToDisplay.[0]}}.value}</h1>
+                  {{#each attributesToDisplay}}
+                  {{#unless @first}}
+                  <p>${hit._highlightResult.{{this}}.value}</p>
+                  {{/unless}}
+                  {{/each}}
+                </div>
               {{else}}
                 <p>
                   <code>${JSON.stringify(hit).slice(0, 100)}...</code>

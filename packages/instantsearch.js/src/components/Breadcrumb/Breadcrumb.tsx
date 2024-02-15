@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { cx } from '@algolia/ui-components-shared';
+import { cx } from 'instantsearch-ui-components';
 import { h } from 'preact';
 
 import Template from '../Template/Template';
@@ -22,8 +22,8 @@ export type BreadcrumbProps = {
   items: BreadcrumbConnectorParamsItem[];
   cssClasses: BreadcrumbComponentCSSClasses;
   templateProps: PreparedTemplateProps<BreadcrumbComponentTemplates>;
-  createURL(value?: string | null): string;
-  refine(value?: string | null): void;
+  createURL: (value: BreadcrumbConnectorParamsItem['value']) => string;
+  refine: (value: BreadcrumbConnectorParamsItem['value']) => void;
   canRefine?: boolean;
 };
 
@@ -53,10 +53,10 @@ const Breadcrumb = ({
           rootTagName="a"
           rootProps={{
             className: cssClasses.link,
-            href: createURL(undefined),
+            href: createURL(null),
             onClick: (event: MouseEvent) => {
               event.preventDefault();
-              refine(undefined);
+              refine(null);
             },
           }}
         />

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const path = require('path');
+
 const shell = require('shelljs');
 
 const packageJsonPaths = [
