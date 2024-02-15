@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { createHits } from 'instantsearch-ui-components';
+import { createHitsComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
@@ -37,7 +37,7 @@ import type {
 
 const withUsage = createDocumentationMessageGenerator({ name: 'hits' });
 
-const Hits = createHits({ createElement: h, Fragment });
+const Hits = createHitsComponent({ createElement: h, Fragment });
 
 const renderer =
   ({

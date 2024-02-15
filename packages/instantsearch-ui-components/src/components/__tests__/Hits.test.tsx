@@ -6,13 +6,13 @@ import { fireEvent, render } from '@testing-library/preact';
 import userEvent from '@testing-library/user-event';
 import { Fragment, createElement } from 'preact';
 
-import { createHits } from '../Hits';
+import { createHitsComponent } from '../Hits';
 
 import type { HitsProps } from '../Hits';
 import type { Hit } from 'instantsearch.js';
 
 describe('Hits', () => {
-  const Hits = createHits({ createElement, Fragment });
+  const Hits = createHitsComponent({ createElement, Fragment });
   function createProps<THit extends Hit = Hit>(
     props: Omit<Partial<HitsProps<THit>>, 'sendEvent'>
   ): Omit<HitsProps<THit>, 'sendEvent'> & {

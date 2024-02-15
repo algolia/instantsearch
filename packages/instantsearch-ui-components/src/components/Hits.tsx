@@ -42,10 +42,8 @@ export type HitsClassNames = {
   item: string | string[];
 };
 
-export function createHits({ createElement }: Renderer) {
+export function createHitsComponent({ createElement }: Renderer) {
   return function Hits<THit extends Hit>(userProps: HitsProps<THit>) {
-    // Not destructured in function signature, to make sure it's not exposed in
-    // the type definition.
     const {
       classNames = {},
       hits,
