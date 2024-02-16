@@ -19,6 +19,8 @@ import {
 } from '../../../../test/createWidget';
 import refinementList from '../../refinement-list/refinement-list';
 
+import type { SearchResponse } from '../../../types/algoliasearch';
+
 expect.addSnapshotSerializer(widgetSnapshotSerializer);
 
 describe('dynamicWidgets()', () => {
@@ -188,7 +190,7 @@ describe('dynamicWidgets()', () => {
           indexWidget.getWidgetSearchParameters(new SearchParameters(), {
             uiState: {},
           }),
-          createMultiSearchResponse({}).results
+          createMultiSearchResponse({}).results as Array<SearchResponse<any>>
         );
 
       indexWidget.render(createRenderOptions({ instantSearchInstance }));
@@ -455,7 +457,7 @@ describe('dynamicWidgets()', () => {
           }),
           createMultiSearchResponse({
             userData: [{ MOCK_facetOrder: ['test1', 'test4', 'test5'] }],
-          }).results
+          }).results as Array<SearchResponse<any>>
         );
 
       indexWidget.render(createRenderOptions({ instantSearchInstance }));

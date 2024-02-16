@@ -42,6 +42,11 @@ export type AutocompleteRenderState = {
     indexName: string;
 
     /**
+     * The id of the index
+     */
+    indexId: string;
+
+    /**
      * The resolved hits from the index matching the query.
      */
     hits: Hit[];

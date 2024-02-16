@@ -1,5 +1,7 @@
 import history from 'instantsearch.js/es/lib/routers/history';
 
+import { stripLocaleFromUrl } from './utils/stripLocaleFromUrl';
+
 import type { Router, UiState } from 'instantsearch.js';
 import type { BrowserHistoryArgs } from 'instantsearch.js/es/lib/routers/history';
 import type { Router as NextRouter, SingletonRouter } from 'next/router';
@@ -122,14 +124,11 @@ export function createInstantSearchRouterNext<TRouteState = UiState>(
         let nextPathname = new URL(window.location.href).pathname;
 
         // We strip the locale from the pathname if it's present
-        if (singletonRouter.locale) {
-          nextPathname = nextPathname.replace(
-            previousPathname === '/'
-              ? singletonRouter.locale
-              : `/${singletonRouter.locale}`,
-            ''
-          );
-        }
+        nextPathname = stripLocaleFromUrl(
+          nextPathname,
+          singletonRouter.locale,
+          previousPathname !== '/'
+        );
 
         // We only want to trigger a server request when going back/forward to a different page
         return previousPathname !== nextPathname;
@@ -156,12 +155,9 @@ export function createInstantSearchRouterNext<TRouteState = UiState>(
       singletonRouter.beforePopState(ownBeforePopState);
     },
     push(newUrl) {
-      let url = newUrl;
-      // We need to do this because there's an error when using i18n on the root path
-      // it says for example `pages/fr.js` doesn't exist
-      if (singletonRouter.locale) {
-        url = url.replace(`/${singletonRouter.locale}`, '');
-      }
+      // We need to do this because there's an error when using i18n on the
+      // root path it says for example `pages/fr.js` doesn't exist
+      const url = stripLocaleFromUrl(newUrl, singletonRouter.locale);
 
       // No need to provide the second argument, Next.js will know what to do
       singletonRouter.push(url, undefined, {
