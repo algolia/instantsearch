@@ -7,6 +7,10 @@ import {
   normalizeSnapshot as commonNormalizeSnapshot,
   wait,
 } from '@instantsearch/testutils';
+import { screen } from '@testing-library/dom';
+import userEvent from '@testing-library/user-event';
+
+import { skippableDescribe } from '../../common';
 
 import type { HitsWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
@@ -31,7 +35,7 @@ function normalizeSnapshot(html: string) {
 
 export function createOptionsTests(
   setup: HitsWidgetSetup,
-  { act }: Required<TestOptions>
+  { act, skippedTests }: Required<TestOptions>
 ) {
   describe('options', () => {
     test('renders with default props', async () => {
@@ -125,6 +129,47 @@ export function createOptionsTests(
         </div>
       `
       );
+    });
+
+    skippableDescribe('common rendering', skippedTests, () => {
+      test('renders with no results', async () => {
+        const searchClient = createMockedSearchClient();
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {},
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        await act(async () => {
+          userEvent.type(
+            screen.getByRole('searchbox'),
+            'query with no results'
+          );
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('#hits-with-defaults .ais-Hits')
+        ).toMatchNormalizedInlineSnapshot(
+          normalizeSnapshot,
+          `
+          <div
+            class="ais-Hits ais-Hits--empty"
+          >
+            <ol
+              class="ais-Hits-list"
+            />
+          </div>
+        `
+        );
+      });
     });
   });
 }
