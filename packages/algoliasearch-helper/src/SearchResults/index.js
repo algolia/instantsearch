@@ -755,7 +755,8 @@ function extractNormalizedFacetValues(results, attribute) {
  * @return {undefined} function mutates the item
  */
 function setIsRefined(item, currentRefinement, depth) {
-  item.isRefined = item.name === currentRefinement[depth];
+  item.isRefined =
+    item.name === (currentRefinement[depth] && currentRefinement[depth].trim());
   if (item.data) {
     item.data.forEach(function (child) {
       setIsRefined(child, currentRefinement, depth + 1);

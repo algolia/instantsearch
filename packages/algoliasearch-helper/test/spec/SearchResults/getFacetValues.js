@@ -495,6 +495,61 @@ test('getFacetValues(hierarchical) takes `rootPath` into account', function () {
   expect(facetValues).toEqual(expected);
 });
 
+test('getFacetValues(hierarchical) correctly sets `isRefined` on facet values with trailing spaces', function () {
+  var searchParams = new SearchParameters({
+    index: 'instant_search',
+    hierarchicalFacets: [
+      {
+        name: 'type',
+        attributes: ['type1', 'type2', 'type3'],
+      },
+    ],
+    hierarchicalFacetsRefinements: { type: ['something > discounts '] },
+  });
+
+  var result = {
+    query: '',
+    facets: {
+      type1: {
+        dogs: 1,
+        something: 5,
+      },
+      type2: {
+        'dogs > hounds': 1,
+        'something > discounts ': 5,
+      },
+      type3: {
+        'something > discounts  > -5%': 1,
+        'something > discounts  > full price': 4,
+      },
+    },
+    exhaustiveFacetsCount: true,
+  };
+
+  var results = new SearchResults(searchParams, [result, result, result]);
+
+  var facetValues = results.getFacetValues('type');
+
+  expect(facetValues).toEqual(
+    expect.objectContaining({
+      name: 'type',
+      isRefined: true,
+      data: expect.arrayContaining([
+        expect.objectContaining({
+          name: 'something',
+          isRefined: true,
+          data: expect.arrayContaining([
+            expect.objectContaining({
+              name: 'discounts',
+              isRefined: true,
+            }),
+          ]),
+        }),
+      ]),
+    })
+  );
+});
+
 test('getFacetValues(unknown) returns undefined (does not throw)', function () {
   var searchParams = new SearchParameters({
     index: 'instant_search',
