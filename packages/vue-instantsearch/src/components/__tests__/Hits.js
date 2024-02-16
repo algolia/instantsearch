@@ -4,7 +4,7 @@
 
 import { mount } from '../../../test/utils';
 import { __setState } from '../../mixins/widget';
-import Hits from '../Hits.vue';
+import Hits from '../Hits';
 import '../../../test/utils/sortedHtmlSerializer';
 
 jest.mock('../../mixins/widget');

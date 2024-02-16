@@ -80,8 +80,6 @@ export function createHighlightComponent({
   });
 
   return function Highlight(userProps: HighlightProps) {
-    // Not destructured in function signature, to make sure it's not exposed in
-    // the type definition.
     const {
       parts,
       highlightedTagName = 'mark',

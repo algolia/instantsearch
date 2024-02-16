@@ -30,6 +30,9 @@ export function renderCompat(fn) {
       delete flatProps.props;
       delete flatProps.scopedSlots;
       onPropKeys.forEach((key) => delete flatProps.on[key]);
+      if (flatProps.on && Object.keys(flatProps.on).length === 0) {
+        delete flatProps.on;
+      }
 
       return Vue.h(
         tag,
@@ -58,4 +61,8 @@ export function getDefaultSlot(component) {
 
   // Vue 3 with @vue/compat
   return $slots.default;
+}
+
+export function getScopedSlot(component, name) {
+  return (component.$slots || component.slots || {})[name];
 }

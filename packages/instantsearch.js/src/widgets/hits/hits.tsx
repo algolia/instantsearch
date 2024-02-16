@@ -1,24 +1,21 @@
 /** @jsx h */
 
-import { cx } from 'instantsearch-ui-components';
-import { h, render } from 'preact';
+import { createHitsComponent } from 'instantsearch-ui-components';
+import { Fragment, h, render } from 'preact';
 
-import Hits from '../../components/Hits/Hits';
+import TemplateComponent from '../../components/Template/Template';
 import connectHits from '../../connectors/hits/connectHits';
 import { withInsights } from '../../lib/insights';
-import { component } from '../../lib/suit';
+import { createInsightsEventHandler } from '../../lib/insights/listener';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
+  warning,
 } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
 
-import type {
-  HitsComponentCSSClasses,
-  HitsComponentTemplates,
-} from '../../components/Hits/Hits';
 import type {
   HitsConnectorParams,
   HitsRenderState,
@@ -33,9 +30,14 @@ import type {
   Renderer,
 } from '../../types';
 import type { SearchResults } from 'algoliasearch-helper';
+import type {
+  HitsClassNames as HitsUiComponentClassNames,
+  HitsProps as HitsUiComponentProps,
+} from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'hits' });
-const suit = component('Hits');
+
+const Hits = createHitsComponent({ createElement: h, Fragment });
 
 const renderer =
   ({
@@ -45,9 +47,9 @@ const renderer =
     templates,
   }: {
     containerNode: HTMLElement;
-    cssClasses: HitsComponentCSSClasses;
+    cssClasses: HitsCSSClasses;
     renderState: {
-      templateProps?: PreparedTemplateProps<HitsComponentTemplates>;
+      templateProps?: PreparedTemplateProps<Required<HitsTemplates>>;
     };
     templates: HitsTemplates;
   }): Renderer<HitsRenderState, Partial<HitsWidgetParams>> =>
@@ -71,41 +73,72 @@ const renderer =
       return;
     }
 
+    const handleInsightsClick = createInsightsEventHandler({
+      insights,
+      sendEvent,
+    });
+
+    const emptyComponent: HitsUiComponentProps<Hit>['emptyComponent'] = ({
+      ...rootProps
+    }) => (
+      <TemplateComponent
+        {...renderState.templateProps}
+        rootProps={rootProps}
+        templateKey="empty"
+        data={results}
+      />
+    );
+
+    // @MAJOR: Move default hit component back to the UI library
+    // once flavour specificities are erased
+    const itemComponent: HitsUiComponentProps<Hit>['itemComponent'] = ({
+      hit,
+      index,
+      ...rootProps
+    }) => (
+      <TemplateComponent
+        {...renderState.templateProps}
+        templateKey="item"
+        rootTagName="li"
+        rootProps={{
+          ...rootProps,
+          onClick: (event: MouseEvent) => {
+            handleInsightsClick(event);
+            rootProps.onClick();
+          },
+          onAuxClick: (event: MouseEvent) => {
+            handleInsightsClick(event);
+            rootProps.onAuxClick();
+          },
+        }}
+        data={{
+          ...hit,
+          get __hitIndex() {
+            warning(
+              false,
+              'The `__hitIndex` property is deprecated. Use the absolute `__position` instead.'
+            );
+            return index;
+          },
+        }}
+        bindEvent={bindEvent}
+        sendEvent={sendEvent}
+      />
+    );
+
     render(
       <Hits
-        cssClasses={cssClasses}
         hits={receivedHits}
-        results={results!}
-        templateProps={renderState.templateProps!}
-        insights={insights}
+        itemComponent={itemComponent}
         sendEvent={sendEvent}
-        bindEvent={bindEvent}
+        classNames={cssClasses}
+        emptyComponent={emptyComponent}
       />,
       containerNode
     );
   };
 
-export type HitsCSSClasses = Partial<{
-  /**
-   * CSS class to add to the wrapping element.
-   */
-  root: string | string[];
-
-  /**
-   * CSS class to add to the wrapping element when no results.
-   */
-  emptyRoot: string | string[];
-
-  /**
-   * CSS class to add to the list of results.
-   */
-  list: string | string[];
-
-  /**
-   * CSS class to add to each result.
-   */
-  item: string | string[];
-}>;
+export type HitsCSSClasses = Partial<HitsUiComponentClassNames>;
 
 export type HitsTemplates = Partial<{
   /**
@@ -157,7 +190,7 @@ const hits: HitsWidget = function hits(widgetParams) {
     escapeHTML,
     transformItems,
     templates = {},
-    cssClasses: userCssClasses = {},
+    cssClasses = {},
   } = widgetParams || {};
 
   if (!container) {
@@ -165,12 +198,6 @@ const hits: HitsWidget = function hits(widgetParams) {
   }
 
   const containerNode = getContainerNode(container);
-  const cssClasses = {
-    root: cx(suit(), userCssClasses.root),
-    emptyRoot: cx(suit({ modifierName: 'empty' }), userCssClasses.emptyRoot),
-    list: cx(suit({ descendantName: 'list' }), userCssClasses.list),
-    item: cx(suit({ descendantName: 'item' }), userCssClasses.item),
-  };
 
   const specializedRenderer = renderer({
     containerNode,

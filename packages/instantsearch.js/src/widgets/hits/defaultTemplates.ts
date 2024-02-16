@@ -1,8 +1,8 @@
 import { omit } from '../../lib/utils';
 
-import type { HitsComponentTemplates } from '../../components/Hits/Hits';
+import type { HitsTemplates } from './hits';
 
-const defaultTemplates: HitsComponentTemplates = {
+const defaultTemplates: Required<HitsTemplates> = {
   empty() {
     return 'No results';
   },

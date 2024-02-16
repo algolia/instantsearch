@@ -741,6 +741,41 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
       `);
     });
 
+    test('provides __hitIndex in the list to each item', async () => {
+      const container = document.createElement('div');
+      const searchBoxContainer = document.createElement('div');
+      const searchClient = createMockedSearchClient();
+
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+
+      search.addWidgets([
+        searchBox({ container: searchBoxContainer }),
+        hits({
+          container,
+          templates: {
+            item(hit, { html }) {
+              return html`${hit.__hitIndex.toString()}`;
+            },
+          },
+        }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      expect(
+        [...container.querySelectorAll('.ais-Hits-item')].map(
+          (item) => item.textContent
+        )
+      ).toMatchInlineSnapshot(`
+        [
+          "0",
+          "1",
+        ]
+      `);
+    });
+
     type CustomHit = { name: string; description: string };
 
     function createMockedSearchClient(
