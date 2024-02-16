@@ -1,3 +1,5 @@
+import { deprecate } from '../../lib/utils';
+
 import type { WidgetFactory, WidgetRenderState } from '../../types';
 /* Places.js is an optional dependency, no error should be reported if the package is missing */
 /** @ts-ignore */
@@ -54,6 +56,7 @@ export type PlacesWidget = WidgetFactory<
 /**
  * This widget sets the geolocation value for the search based on the selected
  * result in the Algolia Places autocomplete.
+ * @deprecated the places service is no longer offered, and this widget will be removed in InstantSearch.js v5
  */
 const placesWidget: PlacesWidget = (widgetParams) => {
   const {
@@ -172,4 +175,7 @@ const placesWidget: PlacesWidget = (widgetParams) => {
   };
 };
 
-export default placesWidget;
+export default deprecate(
+  placesWidget,
+  'The places widget is deprecated and will be removed in InstantSearch.js 5.0.'
+);
