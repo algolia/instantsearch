@@ -1,0 +1,23 @@
+{
+  "name": "example-instantsearch-recommend",
+  "version": "1.0.26",
+  "private": true,
+  "scripts": {
+    "start": "BABEL_ENV=parcel parcel index.html --port 3000",
+    "build": "BABEL_ENV=parcel parcel build index.html",
+    "lint": "eslint .",
+    "lint:fix": "npm run lint -- --fix"
+  },
+  "dependencies": {
+    "@algolia/recommend": "4.22.1",
+    "algoliasearch": "4.22.1",
+    "instantsearch.js": "4.65.0"
+  },
+  "devDependencies": {
+    "@babel/core": "7.15.5",
+    "@parcel/core": "2.10.0",
+    "@parcel/packager-raw-url": "2.10.0",
+    "@parcel/transformer-webmanifest": "2.10.0",
+    "parcel": "2.10.0"
+  }
+}

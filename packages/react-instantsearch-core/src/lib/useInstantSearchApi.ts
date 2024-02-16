@@ -13,6 +13,7 @@ import { useInstantSearchSSRContext } from './useInstantSearchSSRContext';
 import { useRSCContext } from './useRSCContext';
 import { warn } from './warn';
 
+import type { RecommendClient } from '@algolia/recommend';
 import type {
   InstantSearchOptions,
   SearchClient,
@@ -109,11 +110,17 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
       search._initialResults = initialResults || {};
     }
 
-    addAlgoliaAgents(props.searchClient, [
-      ...defaultUserAgents,
-      serverContext && serverUserAgent,
-      nextUserAgent(getNextVersion()),
-    ]);
+    addAlgoliaAgents(
+      {
+        searchClient: props.searchClient,
+        recommendClient: props.recommendClient,
+      },
+      [
+        ...defaultUserAgents,
+        serverContext && serverUserAgent,
+        nextUserAgent(getNextVersion()),
+      ]
+    );
 
     // On the server, we start the search early to compute the search parameters.
     // On SSR, we start the search early to directly catch up with the lifecycle
@@ -149,10 +156,13 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
         'The `searchClient` prop of `<InstantSearch>` changed between renders, which may cause more search requests than necessary. If this is an unwanted behavior, please provide a stable reference: https://www.algolia.com/doc/api-reference/widgets/instantsearch/react/#widget-param-searchclient'
       );
 
-      addAlgoliaAgents(props.searchClient, [
-        ...defaultUserAgents,
-        serverContext && serverUserAgent,
-      ]);
+      addAlgoliaAgents(
+        {
+          searchClient: props.searchClient,
+          recommendClient: props.recommendClient,
+        },
+        [...defaultUserAgents, serverContext && serverUserAgent]
+      );
       search.mainHelper!.setClient(props.searchClient).search();
       prevPropsRef.current = props;
     }
@@ -243,15 +253,12 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
 }
 
 function addAlgoliaAgents(
-  searchClient: SearchClient,
+  clients: { searchClient: SearchClient; recommendClient?: RecommendClient },
   userAgents: Array<string | null>
 ) {
-  if (typeof searchClient.addAlgoliaAgent !== 'function') {
-    return;
-  }
-
   userAgents.filter(Boolean).forEach((userAgent) => {
-    searchClient.addAlgoliaAgent!(userAgent!);
+    clients.searchClient.addAlgoliaAgent?.(userAgent!);
+    clients.recommendClient?.addAlgoliaAgent(userAgent!);
   });
 }
 

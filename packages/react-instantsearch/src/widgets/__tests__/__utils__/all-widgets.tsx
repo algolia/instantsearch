@@ -27,11 +27,17 @@ export type SingleWidget = {
  * Get the props for a widget, excluding the ref prop as it's not valid for
  * "Internal" components due to the usage of a more generic ComponentProps used
  * than the React.ComponentProps.
+ * We also make classNames stricter to ensure type compatibility until
+ * all widgets can support class list arrays.
  */
 type Props<TWidget extends SingleWidget> = Omit<
   ComponentProps<TWidget['Component']>,
-  'ref'
->;
+  'ref' | 'classNames'
+> & {
+  classNames?: {
+    root: string | undefined;
+  };
+};
 
 /**
  * Intermediary component to render any React InstantSearch widget with their minimal props

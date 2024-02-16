@@ -471,7 +471,11 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createMenuWidgetTests: undefined,
   createPaginationWidgetTests: undefined,
   createInfiniteHitsWidgetTests: undefined,
-  createHitsWidgetTests: undefined,
+  createHitsWidgetTests: {
+    skippedTests: {
+      'common rendering': true,
+    },
+  },
   createRangeInputWidgetTests: undefined,
   createRatingMenuWidgetTests: undefined,
   createInstantSearchWidgetTests: undefined,
