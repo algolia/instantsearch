@@ -30,8 +30,8 @@ E2E_BROWSER="internet explorer" yarn test:e2e:saucelabs
 ```
 
 > [!NOTE]
-> When running a Sauce Labs test locally, make sure examples are built with `yarn website:examples` and set the appropriate Sauce Labs environment variables: `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY`.
-> Additionally, the Sauce Connect proxy doesn't support macOS in its latest version (4.9.2 in Jan. 2024). You can fix it to the previous version by setting the `SAUCE_CONNECT_VERSION=4.9.1` variable.
+> To run tests locally with Sauce Labs, make sure examples are built with `yarn website:examples` and set the appropriate Sauce Labs environment variables: `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY`.
+> Additionally, the latest version of the Sauce Connect v4 tunnel (4.9.2) [doesn't support macOS](https://docs.saucelabs.com/secure-connections/sauce-connect/installation/#downloading-sauce-connect-proxy). You can pin it to the previous version by setting the `SAUCE_CONNECT_VERSION=4.9.1` variable.
 
 You can also run the tests with [WebdriverIO](https://webdriver.io) options. For example, to run a specific test in watch mode:
 
