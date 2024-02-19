@@ -328,6 +328,10 @@ jobs:
                     {
                       "type": "mrkdwn",
                       "text": "*Project*: $CIRCLE_PROJECT_REPONAME"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Browser*: << parameters.browser >>"
                     }
                   ]
                 },
