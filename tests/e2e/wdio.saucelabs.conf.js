@@ -60,6 +60,10 @@ module.exports = {
      */
     connectRetries: 2,
     connectRetryTimeout: 10000,
+    tunnelIdentifier: ['instantsearch-e2e', process.env.E2E_BROWSER]
+      .filter(Boolean)
+      .join('-')
+      .replace(/ /g, ''),
   },
   /*
    * Sauce Labs Open Source offer has a maximum of 5 concurrent session
@@ -120,5 +124,9 @@ module.exports = {
         requireWindowFocus: true,
       },
     },
-  ],
+  ].filter(
+    !process.env.E2E_BROWSER
+      ? Boolean
+      : ({ browserName }) => browserName === process.env.E2E_BROWSER
+  ),
 };
