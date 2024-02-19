@@ -40,7 +40,13 @@
     "search-insights": "^2.13.0"
   },
   "peerDependencies": {
+    "@algolia/recommend": ">= 4.22 < 5",
     "algoliasearch": ">= 3.1 < 6"
+  },
+  "peerDependenciesMeta": {
+    "@algolia/recommend": {
+      "optional": true
+    }
   },
   "scripts": {
     "build": "yarn run build:cjs && yarn run build:es && yarn run build:umd && yarn run build:types",
@@ -54,6 +60,7 @@
     "version": "./scripts/version/update-version.js"
   },
   "devDependencies": {
+    "@algolia/recommend": "4.22.1",
     "@instantsearch/mocks": "1.38.0",
     "@instantsearch/tests": "1.38.0",
     "@instantsearch/testutils": "1.27.0",
