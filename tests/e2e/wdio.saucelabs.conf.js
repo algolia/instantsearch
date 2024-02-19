@@ -120,5 +120,9 @@ module.exports = {
         requireWindowFocus: true,
       },
     },
-  ],
+  ].filter(
+    !process.env.E2E_BROWSER
+      ? Boolean
+      : ({ browserName }) => browserName === process.env.E2E_BROWSER
+  ),
 };

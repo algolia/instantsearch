@@ -15,6 +15,24 @@ yarn test:e2e # Run the test suite on Chrome browser on your local machine
 yarn test:e2e:saucelabs # Run the test suite on multiple browsers on the Sauce Labs service
 ```
 
+The tests are run on the **e-commerce** example built for every flavor (with the addition of an UMD build for InstantSearch.js). You can filter on a single flavor by setting the `E2E_FLAVOR` environment variable:
+
+```sh
+E2E_FLAVOR="react" yarn test:e2e
+# Possible values: js, js-umd, react, vue
+```
+
+When using the Sauce Labs service, tests are run on multiple browsers. To run a Sauce Labs test on a single browser, you can set the `E2E_BROWSER` environment variable:
+
+```sh
+E2E_BROWSER="internet explorer" yarn test:e2e:saucelabs
+# Possible values: chrome, firefox, internet explorer
+```
+
+> [!NOTE]
+> When running a Sauce Labs test locally, make sure examples are built with `yarn website:examples` and set the appropriate Sauce Labs environment variables: `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY`.
+> Additionally, the Sauce Connect proxy doesn't support macOS in its latest version (4.9.2 in Jan. 2024). You can fix it to the previous version by setting the `SAUCE_CONNECT_VERSION=4.9.1` variable.
+
 You can also run the tests with [WebdriverIO](https://webdriver.io) options. For example, to run a specific test in watch mode:
 
 ```sh
