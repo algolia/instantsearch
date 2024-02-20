@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.7.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.6.0...react-instantsearch-core@7.7.0) (2024-02-20)
+
+
+### Features
+
+* accept optional Recommend client ([#6053](https://github.com/algolia/instantsearch/issues/6053)) ([6ef8d2a](https://github.com/algolia/instantsearch/commit/6ef8d2a9791effc5621a28b530f5709b7c6bf564))
+
+
+
+
+
 ## [7.6.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.5.6...react-instantsearch-core@7.6.0) (2024-02-13)
 
 **Note:** Version bump only for package react-instantsearch-core
