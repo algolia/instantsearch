@@ -31,7 +31,7 @@ module.exports = (api) => {
     'babel-plugin-transform-react-pure-class-to-function',
     './scripts/babel/wrap-warning-with-dev-check',
     isRollup && 'babel-plugin-transform-react-remove-prop-types',
-    (isCJS || isES) && [
+    (isCJS || isES || isParcel) && [
       'inline-replace-variables',
       {
         __DEV__: {
