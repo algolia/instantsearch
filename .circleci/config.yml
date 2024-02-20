@@ -75,6 +75,9 @@ workflows:
           context: fx-libraries
           requires:
             - examples
+          matrix:
+            parameters:
+              browser: [chrome, firefox, internet explorer]
           filters:
             branches:
               only:
@@ -128,6 +131,9 @@ workflows:
           context: fx-libraries
           requires:
             - examples
+          matrix:
+            parameters:
+              browser: [chrome, firefox, internet explorer]
       - e2e tests router nextjs:
           context: fx-libraries
           requires:
@@ -284,6 +290,11 @@ jobs:
 
   e2e tests:
     <<: *defaults
+    parameters:
+      browser:
+        type: string
+    environment:
+      E2E_BROWSER: << parameters.browser >>
     resource_class: large
     steps:
       - checkout
@@ -317,6 +328,10 @@ jobs:
                     {
                       "type": "mrkdwn",
                       "text": "*Project*: $CIRCLE_PROJECT_REPONAME"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Browser*: << parameters.browser >>"
                     }
                   ]
                 },
