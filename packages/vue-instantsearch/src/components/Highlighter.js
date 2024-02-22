@@ -47,7 +47,13 @@ export default {
     const properties = Array.isArray(property) ? property : [property];
 
     const parts = properties.map((singleValue) =>
-      getHighlightedParts(unescape(singleValue.value || ''))
+      getHighlightedParts(unescape(singleValue.value || '')).map(
+        ({ value, isHighlighted }) => ({
+          // We have to do this because Vue gets rid of TextNodes with a single white space
+          value: value === ' ' ? '  ' : value,
+          isHighlighted,
+        })
+      )
     );
 
     return createElement(Highlight, {

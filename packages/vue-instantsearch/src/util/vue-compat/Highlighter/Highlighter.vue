@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { parseAlgoliaHit } from '../parseAlgoliaHit';
+import { parseAlgoliaHit } from '../../parseAlgoliaHit';
 
 const TextNode = {
   render() {
