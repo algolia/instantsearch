@@ -75,6 +75,7 @@ module.exports = (api) => {
 
             // we require polyfills for this already
             'Array.prototype.includes',
+            'Object.assign',
 
             // false positive (babel doesn't know types)
             // this is actually only called on arrays
@@ -117,19 +118,6 @@ module.exports = (api) => {
               helpers: true,
               regenerator: false,
               useESModules: isES || isRollup,
-            },
-          ],
-        ],
-      },
-      {
-        test: 'packages/instantsearch-ui-components',
-        plugins: [
-          [
-            '@babel/plugin-transform-runtime',
-            {
-              corejs: false,
-              helpers: true,
-              regenerator: false,
             },
           ],
         ],
