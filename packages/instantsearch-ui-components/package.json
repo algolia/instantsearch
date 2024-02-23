@@ -43,5 +43,8 @@
     "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/cjs --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet && ../../scripts/prepare-cjs.sh",
     "build:types": "tsc -p ./tsconfig.declaration.json --outDir ./dist/es",
     "version": "./scripts/version.cjs"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.1.2"
   }
 }
