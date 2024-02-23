@@ -45,6 +45,8 @@ const aliasVueCompat = (vueVersion) => ({
   },
 });
 
+const isWatching = process.env.ROLLUP_WATCH;
+
 function outputs(vueVersion) {
   const vuePlugin = vueVersion === 'vue3' ? vueV3 : vueV2;
 
@@ -160,7 +162,11 @@ export * from './src/instantsearch.js';`
     ],
   };
 
+  if (isWatching) {
+    return [esm];
+  }
+
   return [cjs, esm, umd];
 }
 
-export default [...outputs('vue2'), ...outputs('vue3')];
+export default [...outputs('vue2'), ...(isWatching ? [] : outputs('vue3'))];

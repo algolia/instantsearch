@@ -39,10 +39,12 @@
   "scripts": {
     "clean": "rm -rf dist",
     "build": "yarn build:cjs && yarn build:es && yarn build:types",
-    "build:es": "BABEL_ENV=es babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet",
+    "build:es:base": "BABEL_ENV=es babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --ignore '**/__tests__/**/*','**/__mocks__/**/*'",
+    "build:es": "yarn build:es:base --quiet",
     "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/cjs --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet && ../../scripts/prepare-cjs.sh",
     "build:types": "tsc -p ./tsconfig.declaration.json --outDir ./dist/es",
-    "version": "./scripts/version.cjs"
+    "version": "./scripts/version.cjs",
+    "watch": "yarn --silent build:es:base --watch"
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2"

@@ -37,14 +37,15 @@
   ],
   "scripts": {
     "clean": "rm -rf dist",
-    "watch": "yarn build:cjs --watch",
     "build": "yarn build:cjs && yarn build:es && yarn build:umd && yarn build:types",
     "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/cjs --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet && ../../scripts/prepare-cjs.sh",
-    "build:es": "BABEL_ENV=es babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet",
+    "build:es:base": "BABEL_ENV=es babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --ignore '**/__tests__/**/*','**/__mocks__/**/*'",
+    "build:es": "yarn build:es:base --quiet",
     "build:umd": "BABEL_ENV=rollup rollup -c rollup.config.js",
     "build:types": "tsc -p ./tsconfig.declaration.json --outDir ./dist/es",
     "test:exports": "node ./test/module/is-es-module.mjs && node ./test/module/is-cjs-module.cjs",
-    "version": "./scripts/version.cjs"
+    "version": "./scripts/version.cjs",
+    "watch": "yarn --silent build:es:base --watch"
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2",
