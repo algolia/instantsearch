@@ -1,1 +1,1 @@
-export { default } from './Highlighter.vue';
+export { default } from './Highlighter-vue2.vue';
