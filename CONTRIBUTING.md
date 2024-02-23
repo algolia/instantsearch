@@ -122,7 +122,7 @@ Each flavor has a **getting-started** example which can be used for development 
 First, build the libraries and watch changes:
 
 ```sh
-yarn watch
+yarn watch:es
 ```
 
 Then start the server of the relevant example:

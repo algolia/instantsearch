@@ -46,7 +46,7 @@
     "build:es": "yarn build:es:base --quiet",
     "build:types": "tsc -p ./tsconfig.declaration.json --outDir ./dist/es",
     "test:exports": "node ./__tests__/module/is-es-module.mjs && node ./__tests__/module/is-cjs-module.cjs",
-    "watch": "yarn --silent build:es:base --watch"
+    "watch:es": "yarn --silent build:es:base --watch"
   },
   "devDependencies": {
     "instantsearch.js": "4.65.0",

@@ -33,7 +33,7 @@
     "storybook:build": "NODE_OPTIONS=--openssl-legacy-provider build-storybook -c .storybook -o ../../website/stories/vue",
     "test:exports": "node ./test/module/vue2/is-es-module.mjs && node ./test/module/vue2/is-cjs-module.cjs",
     "test:exports:vue3": "node ./test/module/vue3/is-es-module.mjs && node ./test/module/vue3/is-cjs-module.cjs",
-    "watch": "yarn --silent build --watch"
+    "watch:es": "yarn --silent build --watch"
   },
   "dependencies": {
     "instantsearch.js": "4.65.0",

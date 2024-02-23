@@ -33,7 +33,7 @@
     "release": "shipjs prepare",
     "prepare": "lerna run prepare && patch-package",
     "prepare-vue3": "./scripts/prepare-vue3.js",
-    "watch": "lerna run watch --parallel --stream --ignore='example-*' --ignore='create-instantsearch-app'"
+    "watch:es": "lerna run watch:es --parallel --stream --ignore='example-*' --ignore='create-instantsearch-app'"
   },
   "devDependencies": {
     "@algolia/cache-common": "4.22.1",
