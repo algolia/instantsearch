@@ -3,9 +3,9 @@
   "version": "0.41.0",
   "private": true,
   "scripts": {
-    "build": "NODE_OPTIONS=--openssl-legacy-provider -cli-service ssr:build",
-    "serve": "NODE_OPTIONS=--openssl-legacy-provider -cli-service ssr:serve",
-    "start": "NODE_ENV=production NODE_OPTIONS=--openssl-legacy-provider -cli-service ssr:serve --mode production"
+    "build": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service ssr:build",
+    "serve": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service ssr:serve",
+    "start": "NODE_ENV=production NODE_OPTIONS=--openssl-legacy-provider vue-cli-service ssr:serve --mode production"
   },
   "dependencies": {
     "algoliasearch": "4.22.1",

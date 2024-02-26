@@ -21,6 +21,13 @@ fs.writeFileSync(
   ),
   "export * from './index-vue3';"
 );
+fs.writeFileSync(
+  path.resolve(
+    __dirname,
+    '../packages/vue-instantsearch/src/util/vue-compat/Highlighter/index.js'
+  ),
+  "export { default } from './index-vue3';"
+);
 
 console.log('switching to Vue 3 for Jest');
 shell.sed(
