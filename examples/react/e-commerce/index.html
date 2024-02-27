@@ -23,6 +23,13 @@
       href="https://cdn.jsdelivr.net/npm/instantsearch.css@7.3.1/themes/reset-min.css"
     />
 
+    <!--
+      This ensures the generated CSS asset is not inserted before
+      the <base href> tag.
+      See: https://github.com/parcel-bundler/parcel/issues/4882#issuecomment-872879634
+    -->
+    <script></script>
+
     <title>React InstantSearch - e-commerce</title>
   </head>
 

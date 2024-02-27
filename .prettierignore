@@ -1,2 +1,2 @@
 packages/*/CHANGELOG.md
-examples/polyfills.js
+examples/**/polyfills.js
