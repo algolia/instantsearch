@@ -8,6 +8,7 @@ var inherits = require('./functions/inherits');
 var merge = require('./functions/merge');
 var objectHasKeys = require('./functions/objectHasKeys');
 var omit = require('./functions/omit');
+var RecommendParameters = require('./RecommendParameters');
 var requestBuilder = require('./requestBuilder');
 var SearchParameters = require('./SearchParameters');
 var SearchResults = require('./SearchResults');
@@ -126,11 +127,16 @@ function AlgoliaSearchHelper(client, index, options, searchResultsOptions) {
   var opts = options || {};
   opts.index = index;
   this.state = SearchParameters.make(opts);
+  this.recommendState = new RecommendParameters(opts.recommendState);
   this.lastResults = null;
+  this.lastRecommendResults = null;
   this._queryId = 0;
+  this._recommendQueryId = 0;
   this._lastQueryIdReceived = -1;
+  this._lastRecommendQueryIdReceived = -1;
   this.derivedHelpers = [];
   this._currentNbQueries = 0;
+  this._currentNbRecommendQueries = 0;
   this._searchResultsOptions = searchResultsOptions;
 }
 
@@ -154,6 +160,22 @@ AlgoliaSearchHelper.prototype.search = function () {
 
 AlgoliaSearchHelper.prototype.searchOnlyWithDerivedHelpers = function () {
   this._search({ onlyWithDerivedHelpers: true });
+  return this;
+};
+
+/**
+ * Start the recommend query with the parameters set in the state. When the
+ * method is called, it triggers a `recommend` event. The results will
+ * be available through the `recommendResult` event. If an error occurs, an
+ * `recommendError` will be fired instead.
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
+ * @fires recommend
+ * @fires recommendResult
+ * @fires recommendError
+ * @chainable
+ */
+AlgoliaSearchHelper.prototype.recommend = function () {
+  this._recommend();
   return this;
 };
 
@@ -648,6 +670,22 @@ AlgoliaSearchHelper.prototype.addTag = function (tag) {
   this._change({
     state: this.state.resetPage().addTagRefinement(tag),
     isPageReset: true,
+  });
+
+  return this;
+};
+
+/**
+ * Adds a frequentlyBoughtTogether query
+ *
+ * @param {FrequentlyBoughtTogetherParams} params the params without index
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
+ * @fires recommendChange
+ * @chainable
+ */
+AlgoliaSearchHelper.prototype.addFrequentlyBoughtTogether = function (params) {
+  this._recommendChange({
+    state: this.recommendState.addFrequentlyBoughtTogether(params),
   });
 
   return this;
@@ -1389,6 +1427,81 @@ AlgoliaSearchHelper.prototype._search = function (options) {
   return undefined;
 };
 
+AlgoliaSearchHelper.prototype._recommend = function () {
+  var state = this.recommendState;
+  var queries = state.map((query) => ({ ...query, indexName: this.indexName }));
+
+  var queryId = this._recommendQueryId++;
+  this._currentNbRecommendQueries++;
+
+  try {
+    this.client
+      .getRecommendations(queries)
+      .then(this._dispatchRecommendResponse.bind(this, queryId))
+      .catch(this._dispatchRecommendError.bind(this, queryId));
+  } catch (error) {
+    // If we reach this part, we're in an internal error state
+    this.emit('recommendError', {
+      error: error,
+    });
+  }
+
+  return undefined;
+};
+
+/**
+ * This dispatches the response
+ * @private
+ * @param {number} queryId id of the current request
+ * @param {object} content content of the response
+ * @return {undefined}
+ */
+AlgoliaSearchHelper.prototype._dispatchRecommendResponse = function (
+  queryId,
+  content
+) {
+  // @TODO remove the number of outdated queries discarded instead of just one
+
+  if (queryId < this._lastRecommendQueryIdReceived) {
+    // Outdated answer
+    return;
+  }
+
+  this._currentNbQueries -= queryId - this._lastQueryIdReceived;
+  this._lastQueryIdReceived = queryId;
+
+  if (this._currentNbQueries === 0) this.emit('recommendQueueEmpty');
+
+  var results = content.results.slice();
+
+  this.lastRecommendResults = results;
+
+  this.emit('recommendResults', {
+    results: this.lastRecommendResults,
+    state: this.recommendState,
+  });
+};
+
+AlgoliaSearchHelper.prototype._dispatchRecommendError = function (
+  queryId,
+  error
+) {
+  if (queryId < this._lastRecommendQueryIdReceived) {
+    // Outdated answer
+    return;
+  }
+
+  this._currentNbRecommendQueries -=
+    queryId - this._lastRecommendQueryIdReceived;
+  this._lastRecommendQueryIdReceived = queryId;
+
+  this.emit('recommendError', {
+    error: error,
+  });
+
+  if (this._currentNbQueries === 0) this.emit('recommendQueueEmpty');
+};
+
 /**
  * Transform the responses as sent by the server and transform them into a user
  * usable object that merge the results of all the batch requests. It will dispatch
@@ -1505,6 +1618,18 @@ AlgoliaSearchHelper.prototype._change = function (event) {
       state: this.state,
       results: this.lastResults,
       isPageReset: isPageReset,
+    });
+  }
+};
+
+AlgoliaSearchHelper.prototype._recommendChange = function (event) {
+  var state = event.state;
+
+  if (state !== this.recommendState) {
+    this.recommendState = state;
+
+    this.emit('recommendChange', {
+      state: this.recommendState,
     });
   }
 };
