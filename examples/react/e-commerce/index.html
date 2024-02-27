@@ -22,7 +22,13 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/instantsearch.css@7.3.1/themes/reset-min.css"
     />
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=default%2CArray.prototype.find%2CArray.prototype.includes%2CPromise%2CArray.prototype.findIndex%2CObject.assign%2CObject.entries"></script>
+
+    <!--
+      This ensures the generated CSS asset is not inserted before
+      the <base href> tag.
+      See: https://github.com/parcel-bundler/parcel/issues/4882#issuecomment-872879634
+    -->
+    <script></script>
 
     <title>React InstantSearch - e-commerce</title>
   </head>
