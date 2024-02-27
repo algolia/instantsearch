@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-recommend",
-  "version": "6.54.0",
+  "version": "6.55.0",
   "private": true,
   "scripts": {
     "build": "BABEL_ENV=parcel parcel build index.html",
@@ -9,10 +9,10 @@
   "dependencies": {
     "@algolia/recommend": "4.22.1",
     "algoliasearch": "4.22.1",
-    "instantsearch.js": "4.65.0",
+    "instantsearch.js": "4.66.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-instantsearch": "7.6.0"
+    "react-instantsearch": "7.7.0"
   },
   "devDependencies": {
     "@parcel/core": "2.10.0",

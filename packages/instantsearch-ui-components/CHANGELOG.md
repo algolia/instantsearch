@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.3.0...instantsearch-ui-components@0.4.0) (2024-02-27)
+
+
+### Bug Fixes
+
+* require @babel/runtime dependency ([#6072](https://github.com/algolia/instantsearch/issues/6072)) ([7929f52](https://github.com/algolia/instantsearch/commit/7929f52784e7cd99d330b6e495fb097ecf77c1a8))
+
+
+### Features
+
+* **ui-components:** migrate `Hits` component ([#6042](https://github.com/algolia/instantsearch/issues/6042)) ([55d550e](https://github.com/algolia/instantsearch/commit/55d550eb1030a3b2091917b1a84d280a73a28a3a))
+
+
+
+
+
 # [0.3.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.2.0...instantsearch-ui-components@0.3.0) (2024-02-13)
 
 

@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.14.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.13.8...vue-instantsearch@4.14.0) (2024-02-27)
+
+
+### Features
+
+* accept optional Recommend client ([#6053](https://github.com/algolia/instantsearch/issues/6053)) ([6ef8d2a](https://github.com/algolia/instantsearch/commit/6ef8d2a9791effc5621a28b530f5709b7c6bf564))
+* **ui-components:** migrate `Hits` component ([#6042](https://github.com/algolia/instantsearch/issues/6042)) ([55d550e](https://github.com/algolia/instantsearch/commit/55d550eb1030a3b2091917b1a84d280a73a28a3a))
+* use shared highlight component in vue3 ([#6051](https://github.com/algolia/instantsearch/issues/6051)) ([2974343](https://github.com/algolia/instantsearch/commit/29743437f769a000f9add89f7934fee68ae0425f))
+
+
+
+
+
 ## [4.13.8](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.13.7...vue-instantsearch@4.13.8) (2024-02-13)
 
 **Note:** Version bump only for package vue-instantsearch
