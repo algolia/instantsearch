@@ -113,23 +113,6 @@
   dependencies:
     "@algolia/logger-common" "4.22.1"
 
-"@algolia/recommend@4.22.1":
-  version "4.22.1"
-  resolved "https://registry.yarnpkg.com/@algolia/recommend/-/recommend-4.22.1.tgz#861344a276748c7dee655329d21291b1670305da"
-  integrity sha512-M3FCHKNdlDrxFs+uXZN9pWZ9j0YGe0q5GyL+f9w+GG0OXn0W16ryLHtum0sda4yTGM0MVfvAND6HXwoUvKKbVQ==
-  dependencies:
-    "@algolia/cache-browser-local-storage" "4.22.1"
-    "@algolia/cache-common" "4.22.1"
-    "@algolia/cache-in-memory" "4.22.1"
-    "@algolia/client-common" "4.22.1"
-    "@algolia/client-search" "4.22.1"
-    "@algolia/logger-common" "4.22.1"
-    "@algolia/logger-console" "4.22.1"
-    "@algolia/requester-browser-xhr" "4.22.1"
-    "@algolia/requester-common" "4.22.1"
-    "@algolia/requester-node-http" "4.22.1"
-    "@algolia/transporter" "4.22.1"
-
 "@algolia/requester-browser-xhr@4.22.1":
   version "4.22.1"
   resolved "https://registry.yarnpkg.com/@algolia/requester-browser-xhr/-/requester-browser-xhr-4.22.1.tgz#f04df6fe9690a071b267c77d26b83a3be9280361"

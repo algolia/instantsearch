@@ -1,7 +1,4 @@
-import {
-  createSearchClient,
-  createRecommendClient,
-} from '@instantsearch/mocks';
+import { createSearchClient } from '@instantsearch/mocks';
 import algoliasearchHelper from 'algoliasearch-helper';
 
 import { INSTANTSEARCH_FUTURE_DEFAULTS } from '../src/lib/InstantSearch';
@@ -13,11 +10,7 @@ import type { InstantSearch } from '../src/types';
 export const createInstantSearch = (
   args: Partial<InstantSearch> = {}
 ): InstantSearch => {
-  const {
-    indexName = 'indexName',
-    client = createSearchClient(),
-    recommendClient = createRecommendClient(),
-  } = args;
+  const { indexName = 'indexName', client = createSearchClient() } = args;
   const mainHelper = algoliasearchHelper(client, indexName, {});
   const mainIndex = index({ indexName });
 
@@ -26,7 +19,6 @@ export const createInstantSearch = (
     mainIndex,
     mainHelper,
     client,
-    recommendClient,
     started: false,
     status: 'idle',
     _isSearchStalled: false,

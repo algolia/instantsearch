@@ -1,17 +1,14 @@
-import algoliarecommend from '@algolia/recommend';
 import algoliasearch from 'algoliasearch';
-
-import { skippableDescribe } from '../../common';
 
 import type { InstantSearchWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 
 export function createAlgoliaAgentTests(
   setup: InstantSearchWidgetSetup,
-  { skippedTests }: Required<TestOptions>
+  _options: Required<TestOptions>
 ) {
-  describe('Algolia agent', () => {
-    test('sets the correct Algolia agents on the Search client', async () => {
+  describe('algolia agent', () => {
+    test('sets the correct algolia agents', async () => {
       const searchClient = algoliasearch('appId', 'apiKey');
       const options = {
         instantSearchOptions: {
@@ -30,29 +27,6 @@ export function createAlgoliaAgentTests(
       expect(algoliaAgent.split(';').map((agent) => agent.trim())).toEqual(
         expect.arrayContaining(algoliaAgents)
       );
-    });
-
-    skippableDescribe('Recommend', skippedTests, () => {
-      test('sets the correct Algolia agents on the Recommend client', async () => {
-        const searchClient = algoliasearch('appId', 'apiKey');
-        const recommendClient = algoliarecommend('appId', 'apiKey');
-        const options = {
-          instantSearchOptions: {
-            indexName: 'indexName',
-            searchClient,
-            recommendClient,
-          },
-          widgetParams: {},
-        };
-
-        const { algoliaAgents } = await setup(options);
-
-        const { value: algoliaAgent } = recommendClient.transporter.userAgent;
-
-        expect(algoliaAgent.split(';').map((agent) => agent.trim())).toEqual(
-          expect.arrayContaining(algoliaAgents)
-        );
-      });
     });
   });
 }

@@ -499,9 +499,7 @@ const testOptions = {
   createHitsWidgetTests: undefined,
   createRangeInputWidgetTests: undefined,
   createRatingMenuWidgetTests: undefined,
-  createInstantSearchWidgetTests: {
-    skippedTests: { Recommend: true },
-  },
+  createInstantSearchWidgetTests: undefined,
   createHitsPerPageWidgetTests: undefined,
   createClearRefinementsWidgetTests: undefined,
   createCurrentRefinementsWidgetTests: undefined,
