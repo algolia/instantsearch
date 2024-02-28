@@ -8,7 +8,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-* accept optional Recommend client ([#6053](https://github.com/algolia/instantsearch/issues/6053)) ([6ef8d2a](https://github.com/algolia/instantsearch/commit/6ef8d2a9791effc5621a28b530f5709b7c6bf564))
 * **ui-components:** migrate `Hits` component ([#6042](https://github.com/algolia/instantsearch/issues/6042)) ([55d550e](https://github.com/algolia/instantsearch/commit/55d550eb1030a3b2091917b1a84d280a73a28a3a))
 * use shared highlight component in vue3 ([#6051](https://github.com/algolia/instantsearch/issues/6051)) ([2974343](https://github.com/algolia/instantsearch/commit/29743437f769a000f9add89f7934fee68ae0425f))
 
