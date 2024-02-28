@@ -1,6 +1,6 @@
 {
   "name": "example-vue-instantsearch-getting-started",
-  "version": "1.0.27",
+  "version": "1.0.28",
   "private": true,
   "scripts": {
     "start": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve --port 3000",
@@ -9,9 +9,9 @@
   "dependencies": {
     "algoliasearch": "4.22.1",
     "core-js": "2",
-    "instantsearch.js": "4.65.0",
+    "instantsearch.js": "4.66.0",
     "vue": "2.7.14",
-    "vue-instantsearch": "4.13.8"
+    "vue-instantsearch": "4.14.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "3.12.1",

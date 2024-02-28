@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.7.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-router-nextjs@7.6.1...react-instantsearch-router-nextjs@7.7.0) (2024-02-27)
+
+**Note:** Version bump only for package react-instantsearch-router-nextjs
+
+
+
+
+
+## [7.6.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-router-nextjs@7.6.0...react-instantsearch-router-nextjs@7.6.1) (2024-02-27)
+
+
+### Bug Fixes
+
+* **router-nextjs:** improve how locale is removed from url during route navigation ([#6056](https://github.com/algolia/instantsearch/issues/6056)) ([66ac853](https://github.com/algolia/instantsearch/commit/66ac85380720190c14a871c0c0b908fe34b54f9e))
+
+
+
+
+
 ## [7.6.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-router-nextjs@7.5.6...react-instantsearch-router-nextjs@7.6.0) (2024-02-13)
 
 **Note:** Version bump only for package react-instantsearch-router-nextjs

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.16.3](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.16.2...algoliasearch-helper@3.16.3) (2024-02-27)
+
+
+### Bug Fixes
+
+* **helper:** correctly set isRefined for hierarchical facet values with trailing spaces ([#6059](https://github.com/algolia/instantsearch/issues/6059)) ([a12e567](https://github.com/algolia/instantsearch/commit/a12e5678e6bf4e7fe010c09bf958ac216acb0ed7))
+
+
+
+
+
 ## [3.16.2](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.16.1...algoliasearch-helper@3.16.2) (2024-01-23)
 
 

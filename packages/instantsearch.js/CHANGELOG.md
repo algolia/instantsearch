@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.66.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.65.0...instantsearch.js@4.66.0) (2024-02-27)
+
+
+### Bug Fixes
+
+* **support:** deprecate answers & places ([#6057](https://github.com/algolia/instantsearch/issues/6057)) ([7b053d3](https://github.com/algolia/instantsearch/commit/7b053d3c2c8137b8a3c1281400c80ed5f66f0675))
+
+
+### Features
+
+* **ui-components:** migrate `Hits` component ([#6042](https://github.com/algolia/instantsearch/issues/6042)) ([55d550e](https://github.com/algolia/instantsearch/commit/55d550eb1030a3b2091917b1a84d280a73a28a3a))
+
+
+
+
+
 # [4.65.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.64.3...instantsearch.js@4.65.0) (2024-02-13)
 
 
