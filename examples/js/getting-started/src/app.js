@@ -1,12 +1,10 @@
 import algoliasearch from 'algoliasearch/lite';
 import instantsearch from 'instantsearch.js';
 import {
-  configure,
   hits,
-  pagination,
-  panel,
-  refinementList,
+  index,
   searchBox,
+  refinementList,
 } from 'instantsearch.js/es/widgets';
 
 const searchClient = algoliasearch(
@@ -20,32 +18,36 @@ const search = instantsearch({
   insights: true,
 });
 
+const itemComponent = (hit, { html, components }) => html`
+  <article>
+    <h1>${components.ReverseHighlight({ hit, attribute: 'query' })}</h1>
+    <p>${components.Highlight({ hit, attribute: 'description' })}</p>
+  </article>
+`;
+
 search.addWidgets([
-  searchBox({
-    container: '#searchbox',
-  }),
+  index({
+    indexName: 'instant_search_demo_query_suggestions',
+    separate: true,
+  }).addWidgets([
+    searchBox({
+      container: '#searchbox',
+    }),
+    hits({
+      container: '#hits',
+      templates: {
+        item: (hit, { html, components }) => html`
+          ${components.ReverseHighlight({ hit, attribute: 'query' })}
+        `,
+      },
+    }),
+  ]),
+  refinementList({ container: '#filters', attribute: 'brand' }),
   hits({
-    container: '#hits',
+    container: '#hits2',
     templates: {
-      item: (hit, { html, components }) => html`
-        <article>
-          <h1>${components.Highlight({ hit, attribute: 'name' })}</h1>
-          <p>${components.Highlight({ hit, attribute: 'description' })}</p>
-        </article>
-      `,
+      item: itemComponent,
     },
-  }),
-  configure({
-    hitsPerPage: 8,
-  }),
-  panel({
-    templates: { header: 'brand' },
-  })(refinementList)({
-    container: '#brand-list',
-    attribute: 'brand',
-  }),
-  pagination({
-    container: '#pagination',
   }),
 ]);
 
