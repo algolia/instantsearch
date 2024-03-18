@@ -28,14 +28,22 @@ function normalizeSnapshot(html: string) {
     .replace('No results.', 'No results')
     .replace('aria-label="Search"', 'aria-label="Search for filters"')
     .replace('value="nothing"', '')
-    .replace(/<div>(.*?)<\/div>/gs, '$1');
+    .replace('novalidate="novalidate"', 'novalidate=""')
+    .replace('hidden="hidden"', 'hidden=""')
+    .replace('title="Search"', 'title="Submit the search query"')
+    .replace('title="Clear"', 'title="Clear the search query"')
+    .replace(/<div>(.*?)<\/div>/gs, '$1')
+    .replace(
+      /(<div class="ais-RefinementList-searchBox">)(<form.+?>.+?<\/form>)(<\/div>)/s,
+      '$1<div class="ais-SearchBox">$2</div>$3'
+    );
 }
 
 export function createOptionsTests(
   setup: RefinementListWidgetSetup,
   { act }: Required<TestOptions>
 ) {
-  describe.only('options', () => {
+  describe('options', () => {
     test('renders with props', async () => {
       const searchClient = createMockedSearchClient();
 
@@ -898,7 +906,7 @@ export function createOptionsTests(
         ]);
       });
 
-      test('displays a fallback when there are no results', async () => {
+      test.only('displays a fallback when there are no results', async () => {
         const searchClient = createMockedSearchClient({
           searchForFacetValues: jest.fn(() =>
             Promise.resolve([createSFFVResponse({ facetHits: [] })])
