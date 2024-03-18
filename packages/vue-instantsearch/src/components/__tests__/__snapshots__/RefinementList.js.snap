@@ -155,8 +155,6 @@ exports[`allows search bar classes override when it's searchable 1`] = `
 
 exports[`renders correctly (empty) 1`] = `
 <div class="ais-RefinementList ais-RefinementList--noRefinement">
-  <ul class="ais-RefinementList-list">
-  </ul>
 </div>
 `;
 
