@@ -30,7 +30,7 @@
       >
         <div :class="suit('noResults')">No results.</div>
       </slot>
-      <ul :class="suit('list')">
+      <ul v-if="items.length > 0" :class="suit('list')">
         <li
           :class="[suit('item'), item.isRefined && suit('item', 'selected')]"
           v-for="item in items"
