@@ -25,5 +25,7 @@ export function normalizeSnapshot(html: string) {
       .replace(/(\s+)?<!--v-if-->(\s+)?/g, '') // Vue 3
       // Vue renders extra whitespace after list elements
       .replace(/<\/ul> </g, '</ul><')
+      // Vue renders extra whitespace after input elements
+      .replace(/(<input.+?>)\s/gs, '$1')
   );
 }

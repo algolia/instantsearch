@@ -625,7 +625,7 @@ describe('RefinementList', () => {
   test('accepts custom class names (empty)', () => {
     const props = createProps({
       canRefine: false,
-      items: undefined,
+      items: [],
       noResults: 'No results.',
       className: 'MyCustomRefinementList',
       classNames: {

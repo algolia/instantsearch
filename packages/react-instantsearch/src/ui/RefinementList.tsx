@@ -102,7 +102,7 @@ export function RefinementList({
       className={cx(
         'ais-RefinementList',
         classNames.root,
-        !canRefine &&
+        items.length === 0 &&
           cx('ais-RefinementList--noRefinement', classNames.noRefinementRoot),
         className
       )}

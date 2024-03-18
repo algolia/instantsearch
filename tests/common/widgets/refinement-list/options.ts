@@ -17,8 +17,14 @@ function normalizeSnapshot(html: string) {
   // Each flavor has its own way to render the hit by default.
   // @MAJOR: Remove this once all flavors are aligned.
   return commonNormalizeSnapshot(html)
-    .replace('<mark>', '<mark class="ais-Highlight-highlighted">')
-    .replace('</mark>', '</mark>')
+    .replace(
+      '<mark>',
+      '<span class="ais-Highlight"><mark class="ais-Highlight-highlighted">'
+    )
+    .replace(
+      /<\/mark>(\w*?)<\/span>/,
+      '</mark><span class="ais-Highlight-nonHighlighted">$1</span></span>'
+    )
     .replace('No results.', 'No results')
     .replace('aria-label="Search"', 'aria-label="Search for filters"')
     .replace('value="nothing"', '')
@@ -545,20 +551,20 @@ export function createOptionsTests(
       });
 
       expect(
-        Array.from(document.querySelectorAll('.ais-RefinementList-item')).map(
-          (item) => item.textContent
-        )
+        Array.from(
+          document.querySelectorAll('.ais-RefinementList-labelText')
+        ).map((item) => item.textContent)
       ).toEqual([
-        'INSIGNIA™746',
-        'SAMSUNG633',
-        'METRA591',
-        'HP530',
-        'APPLE442',
-        'GE394',
-        'SONY350',
-        'INCIPIO320',
-        'KITCHENAID318',
-        'WHIRLPOOL298',
+        'INSIGNIA™',
+        'SAMSUNG',
+        'METRA',
+        'HP',
+        'APPLE',
+        'GE',
+        'SONY',
+        'INCIPIO',
+        'KITCHENAID',
+        'WHIRLPOOL',
       ]);
     });
 
@@ -857,12 +863,20 @@ export function createOptionsTests(
           <span
             class="ais-RefinementList-labelText"
           >
-            <mark
-              class="ais-Highlight-highlighted"
+            <span
+              class="ais-Highlight"
             >
-              App
-            </mark>
-            le
+              <mark
+                class="ais-Highlight-highlighted"
+              >
+                App
+              </mark>
+              <span
+                class="ais-Highlight-nonHighlighted"
+              >
+                le
+              </span>
+            </span>
           </span>
         `
         );
@@ -931,7 +945,7 @@ export function createOptionsTests(
           normalizeSnapshot,
           `
           <div
-            class="ais-RefinementList"
+            class="ais-RefinementList ais-RefinementList--noRefinement"
           >
             <div
               class="ais-RefinementList-searchBox"
