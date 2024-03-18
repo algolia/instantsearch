@@ -909,7 +909,7 @@ describe('RefinementList', () => {
       expect(container).toMatchInlineSnapshot(`
         <div>
           <div
-            class="ais-RefinementList"
+            class="ais-RefinementList ais-RefinementList--noRefinement"
           >
             <div
               class="ais-RefinementList-searchBox"
