@@ -1,6 +1,7 @@
 import { fakeAct } from '../../common';
 
 import { createOptimisticUiTests } from './optimistic-ui';
+import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
 import type { RefinementListWidget } from 'instantsearch.js/es/widgets/refinement-list/refinement-list';
@@ -20,5 +21,6 @@ export function createRefinementListWidgetTests(
 
   describe('RefinementList widget common tests', () => {
     createOptimisticUiTests(setup, { act, skippedTests });
+    createOptionsTests(setup, { act, skippedTests });
   });
 }
