@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="[suit(), !state.canRefine && suit('', 'noRefinement')]"
+    :class="[suit(), items.length === 0 && suit('', 'noRefinement')]"
     v-if="state"
   >
     <slot
