@@ -19,6 +19,7 @@
       <div :class="suit('searchBox')" v-if="searchable">
         <search-input
           v-model="searchForFacetValues"
+          :show-loading-indicator="true"
           :placeholder="searchablePlaceholder"
           :class-names="classNames"
         />
