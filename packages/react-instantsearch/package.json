@@ -1,6 +1,6 @@
 {
   "name": "react-instantsearch",
-  "version": "7.7.0",
+  "version": "7.7.1",
   "description": "⚡ Lightning-fast search for React, by Algolia",
   "types": "dist/es/index.d.ts",
   "main": "dist/cjs/index.js",

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.14.1](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.14.0...vue-instantsearch@4.14.1) (2024-03-19)
+
+
+### Bug Fixes
+
+* **vue-instantsearch:** only render list in `<refinement-list>` when it has items ([#6092](https://github.com/algolia/instantsearch/issues/6092)) ([9a38de0](https://github.com/algolia/instantsearch/commit/9a38de0851a1b1e245e3b5af12b96da25fb24e72))
+
+
+
+
+
 # [4.14.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.13.8...vue-instantsearch@4.14.0) (2024-02-27)
 
 

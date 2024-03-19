@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.7.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.7.0...react-instantsearch@7.7.1) (2024-03-19)
+
+
+### Bug Fixes
+
+* **react-instantsearch:** properly add `noRefinementRoot` class on `<RefinementList>` ([#6091](https://github.com/algolia/instantsearch/issues/6091)) ([04fd202](https://github.com/algolia/instantsearch/commit/04fd2021801f67958639ace73a100dca4b1e461c))
+
+
+
+
+
 # [7.7.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.6.0...react-instantsearch@7.7.0) (2024-02-27)
 
 
