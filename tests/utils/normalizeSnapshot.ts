@@ -23,6 +23,8 @@ export function normalizeSnapshot(html: string) {
       // Vue renders an empty comment for falsy v-if predicates
       .replace(/(\s+)?<!---->(\s+)?/g, '') // Vue 2
       .replace(/(\s+)?<!--v-if-->(\s+)?/g, '') // Vue 3
+      // Vue 3 preserves user comments
+      .replace(/(\s+)?<!--.*?-->(\s+)?/gs, '') // Vue 3
       // Vue renders extra whitespace after list elements
       .replace(/<\/ul> </g, '</ul><')
       // Vue renders extra whitespace after input elements

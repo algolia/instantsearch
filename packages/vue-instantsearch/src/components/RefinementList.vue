@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="[suit(), !state.canRefine && suit('', 'noRefinement')]"
+    :class="[suit(), items.length === 0 && suit('', 'noRefinement')]"
     v-if="state"
   >
     <slot
@@ -19,6 +19,7 @@
       <div :class="suit('searchBox')" v-if="searchable">
         <search-input
           v-model="searchForFacetValues"
+          :show-loading-indicator="true"
           :placeholder="searchablePlaceholder"
           :class-names="classNames"
         />

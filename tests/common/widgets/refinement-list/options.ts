@@ -14,7 +14,7 @@ import type { RefinementListWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 
 function normalizeSnapshot(html: string) {
-  // Each flavor has its own way to render the hit by default.
+  // Each flavor has its own way to render the widget by default.
   // @MAJOR: Remove this once all flavors are aligned.
   return commonNormalizeSnapshot(html)
     .replace(
@@ -36,6 +36,10 @@ function normalizeSnapshot(html: string) {
     .replace(
       /(<div class="ais-RefinementList-searchBox">)(<form.+?>.+?<\/form>)(<\/div>)/s,
       '$1<div class="ais-SearchBox">$2</div>$3'
+    )
+    .replace(
+      /<span class="ais-RefinementList-labelText"><span class="ais-Highlight">([\w™]+)<\/span><\/span>/gs,
+      '<span class="ais-RefinementList-labelText">$1</span>'
     );
 }
 
@@ -906,7 +910,7 @@ export function createOptionsTests(
         ]);
       });
 
-      test.only('displays a fallback when there are no results', async () => {
+      test('displays a fallback when there are no results', async () => {
         const searchClient = createMockedSearchClient({
           searchForFacetValues: jest.fn(() =>
             Promise.resolve([createSFFVResponse({ facetHits: [] })])
