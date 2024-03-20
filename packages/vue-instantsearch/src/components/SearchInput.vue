@@ -47,7 +47,6 @@
         </svg>
       </slot>
     </button>
-
     <button
       type="reset"
       :title="resetTitle"
