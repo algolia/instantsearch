@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.66.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.66.0...instantsearch.js@4.66.1) (2024-03-20)
+
+
+### Bug Fixes
+
+* **vue-instantsearch:** properly add `noRefinement` class on `<ais-refinement-list>` ([#6095](https://github.com/algolia/instantsearch/issues/6095)) ([9ae7c05](https://github.com/algolia/instantsearch/commit/9ae7c05ef6d17bd1d945dc1d31c7d87a262d1e06))
+
+
+
+
+
 # [4.66.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.65.0...instantsearch.js@4.66.0) (2024-02-27)
 
 
