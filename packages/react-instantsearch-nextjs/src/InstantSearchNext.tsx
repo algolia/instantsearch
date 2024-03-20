@@ -54,6 +54,10 @@ export function InstantSearchNext<
   const isMounting = useRef(true);
   useEffect(() => {
     isMounting.current = false;
+    return () => {
+      // This is to make sure that they're not reused if mounting again on a different route
+      delete window[InstantSearchInitialResults];
+    };
   }, []);
 
   const promiseRef = useRef<PromiseWithState<void> | null>(null);
