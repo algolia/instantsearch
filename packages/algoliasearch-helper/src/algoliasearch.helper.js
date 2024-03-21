@@ -8,6 +8,7 @@ var inherits = require('./functions/inherits');
 var merge = require('./functions/merge');
 var objectHasKeys = require('./functions/objectHasKeys');
 var omit = require('./functions/omit');
+var RecommendParameters = require('./RecommendParameters');
 var requestBuilder = require('./requestBuilder');
 var SearchParameters = require('./SearchParameters');
 var SearchResults = require('./SearchResults');
@@ -126,6 +127,7 @@ function AlgoliaSearchHelper(client, index, options, searchResultsOptions) {
   var opts = options || {};
   opts.index = index;
   this.state = SearchParameters.make(opts);
+  this.recommendState = RecommendParameters.make(opts.recommendState);
   this.lastResults = null;
   this._queryId = 0;
   this._lastQueryIdReceived = -1;
@@ -1506,6 +1508,17 @@ AlgoliaSearchHelper.prototype._change = function (event) {
       results: this.lastResults,
       isPageReset: isPageReset,
     });
+  }
+};
+
+AlgoliaSearchHelper.prototype._recommendChange = function (event) {
+  var state = event.state;
+
+  if (state !== this.recommendState) {
+    this.recommendState = state;
+
+    // eslint-disable-next-line no-warning-comments
+    // TODO: emit "change" event when events for Recommend are implemented
   }
 };
 

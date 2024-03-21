@@ -11,3 +11,15 @@ test('not vulnerable to prototype pollution', () => {
 
   expect({}.test).toBeUndefined();
 });
+
+test('initializes RecommendParameters with params if provided through opts', () => {
+  var state = {
+    query: 'a query',
+    recommendState: [
+      { $$id: '1', objectID: 'objectID', model: 'bought-together' },
+    ],
+  };
+
+  var helper = algoliasearchHelper({}, null, state);
+  expect(helper.recommendState.params).toEqual(state.recommendState);
+});
