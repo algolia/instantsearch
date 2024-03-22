@@ -8,6 +8,7 @@
   ],
   "buildCommand": "build --no-private --ignore *-maps --ignore *-native",
   "packages": [
+    "packages/algoliasearch-helper",
     "packages/instantsearch.js",
     "packages/react-instantsearch",
     "packages/react-instantsearch-core",
