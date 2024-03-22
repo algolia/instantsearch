@@ -9,6 +9,7 @@ import type {
   SearchResponse,
   SnippetResult,
 } from './types/algoliasearch';
+// @ts-ignore
 import type {
   RecommendationsQuery,
   RecommendedForYouQuery,
