@@ -1473,14 +1473,15 @@ declare namespace algoliasearchHelper {
     $$id: string;
   };
 
+  export type RecommendParametersOptions = {
+    params?: PlainRecommendParametersWithId[];
+  };
+
   export class RecommendParameters {
     params: PlainRecommendParametersWithId[];
-    constructor(newParameters?: PlainRecommendParametersWithId);
+    constructor(opts?: RecommendParametersOptions);
     addParams(params: PlainRecommendParametersWithId): RecommendParameters;
     removeParams(id: string): RecommendParameters;
-    static make(
-      newParameters: PlainRecommendParametersWithId[]
-    ): RecommendParameters;
   }
 }
 

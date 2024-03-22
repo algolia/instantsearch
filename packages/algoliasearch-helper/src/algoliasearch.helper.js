@@ -127,7 +127,9 @@ function AlgoliaSearchHelper(client, index, options, searchResultsOptions) {
   var opts = options || {};
   opts.index = index;
   this.state = SearchParameters.make(opts);
-  this.recommendState = RecommendParameters.make(opts.recommendState);
+  this.recommendState = new RecommendParameters({
+    params: opts.recommendState,
+  });
   this.lastResults = null;
   this._queryId = 0;
   this._lastQueryIdReceived = -1;

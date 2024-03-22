@@ -21,7 +21,9 @@ describe('addParams', () => {
 
 describe('removeParams', () => {
   test('removes parameters for a specific id', () => {
-    var recommendParameters = new RecommendParameters([params1, params2]);
+    var recommendParameters = new RecommendParameters({
+      params: [params1, params2],
+    });
 
     recommendParameters = recommendParameters.removeParams('1');
     expect(recommendParameters.params).toHaveLength(1);
