@@ -7,6 +7,7 @@ import type {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
   SearchResults,
+  RecommendParameters,
 } from 'algoliasearch-helper';
 
 export type ScopedResult = {
@@ -39,6 +40,8 @@ export type InitOptions = SharedRenderOptions & {
   uiState: UiState;
   results?: undefined;
 };
+
+export type ShouldRenderOptions = { instantSearchInstance: InstantSearch };
 
 export type RenderOptions = SharedRenderOptions & {
   results: SearchResults;
@@ -141,9 +144,18 @@ type RequiredWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
   $$type: TWidgetDescription['$$type'];
 
   /**
+   * Which API endpoint this connector relies on, `'search'` by default.
+   */
+  dependsOn?: 'search' | 'recommend';
+
+  /**
    * Called once before the first search.
    */
   init?: (options: InitOptions) => void;
+  /**
+   * Whether `render` should be called
+   */
+  shouldRender?: (options: ShouldRenderOptions) => boolean;
   /**
    * Called after each search response has been received.
    */
@@ -216,6 +228,15 @@ type RequiredUiStateLifeCycle<TWidgetDescription extends WidgetDescription> = {
       >;
     }
   ) => SearchParameters;
+
+  getWidgetParameters?: (
+    state: SearchParameters | RecommendParameters,
+    widgetSearchParametersOptions: {
+      uiState: Expand<
+        Partial<TWidgetDescription['indexUiState'] & IndexUiState>
+      >;
+    }
+  ) => SearchParameters | RecommendParameters;
 };
 
 type UiStateLifeCycle<TWidgetDescription extends WidgetDescription> =

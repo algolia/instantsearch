@@ -109,6 +109,15 @@ describe('index', () => {
       ...args,
     });
 
+  const createFrequentlyBoughtTogether = (args: Partial<Widget> = {}): Widget =>
+    createWidget({
+      dependsOn: 'recommend',
+      getWidgetParameters: jest.fn((parameters) => {
+        return parameters;
+      }),
+      ...args,
+    });
+
   const virtualSearchBox = connectSearchBox(() => {});
   const virtualPagination = connectPagination(() => {});
   const virtualRefinementList = connectRefinementList(() => {});
@@ -250,6 +259,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             page: 5,
           })
         );
+      });
+
+      it('calls getWidgetParameters on widgets that depend on recommend', () => {
+        const instance = index({ indexName: 'indexName' });
+
+        instance.init(createIndexInitOptions({ parent: null }));
+
+        const fbt = createFrequentlyBoughtTogether({});
+        instance.addWidgets([fbt]);
+
+        expect(fbt.getWidgetParameters).toHaveBeenCalledTimes(1);
       });
 
       it('calls `init` on the added widgets', () => {
@@ -1168,6 +1188,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           },
         ])
       );
+    });
+
+    it('calls getWidgetParameters on widgets that depend on recommend', () => {
+      const instance = index({ indexName: 'indexName' });
+
+      const fbt = createFrequentlyBoughtTogether({});
+      instance.addWidgets([fbt]);
+
+      instance.init(createIndexInitOptions({ parent: null }));
+
+      expect(fbt.getWidgetParameters).toHaveBeenCalledTimes(1);
     });
 
     it('uses the index set by the widget for the queries', () => {
@@ -2633,6 +2664,75 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           },
         });
       });
+    });
+
+    it('calls `render` when `shouldRender` is undefined', async () => {
+      const instance = index({ indexName: 'indexName' });
+      const instantSearchInstance = createInstantSearch();
+
+      const fbt = createFrequentlyBoughtTogether({ shouldRender: undefined });
+      instance.addWidgets([fbt]);
+
+      instance.init(
+        createIndexInitOptions({
+          instantSearchInstance,
+          parent: null,
+        })
+      );
+      instance.getHelper()!.search();
+      await wait(0);
+
+      instance.render({
+        instantSearchInstance,
+      });
+
+      expect(fbt.render).toHaveBeenCalledTimes(1);
+    });
+
+    it('calls `render` when `shouldRender` returns true', async () => {
+      const instance = index({ indexName: 'indexName' });
+      const instantSearchInstance = createInstantSearch();
+
+      const fbt = createFrequentlyBoughtTogether({ shouldRender: () => true });
+      instance.addWidgets([fbt]);
+
+      instance.init(
+        createIndexInitOptions({
+          instantSearchInstance,
+          parent: null,
+        })
+      );
+      instance.getHelper()!.search();
+      await wait(0);
+
+      instance.render({
+        instantSearchInstance,
+      });
+
+      expect(fbt.render).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not call `render` when `shouldRender` returns false', async () => {
+      const instance = index({ indexName: 'indexName' });
+      const instantSearchInstance = createInstantSearch();
+
+      const fbt = createFrequentlyBoughtTogether({ shouldRender: () => false });
+      instance.addWidgets([fbt]);
+
+      instance.init(
+        createIndexInitOptions({
+          instantSearchInstance,
+          parent: null,
+        })
+      );
+      instance.getHelper()!.search();
+      await wait(0);
+
+      instance.render({
+        instantSearchInstance,
+      });
+
+      expect(fbt.render).toHaveBeenCalledTimes(0);
     });
 
     // https://github.com/algolia/instantsearch/pull/2623
