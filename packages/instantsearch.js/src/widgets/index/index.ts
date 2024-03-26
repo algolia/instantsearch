@@ -184,15 +184,17 @@ function getLocalWidgetsSearchParameters(
 ): SearchParameters {
   const { initialSearchParameters, ...rest } = widgetSearchParametersOptions;
 
-  return widgets
-    .filter((widget) => !isIndexWidget(widget))
-    .reduce<SearchParameters>((state, widget) => {
-      if (!widget.getWidgetSearchParameters) {
-        return state;
-      }
+  return widgets.reduce<SearchParameters>((state, widget) => {
+    if (!widget.getWidgetSearchParameters || isIndexWidget(widget)) {
+      return state;
+    }
 
-      return widget.getWidgetSearchParameters(state, rest);
-    }, initialSearchParameters);
+    if (widget.dependsOn === 'search' && widget.getWidgetParameters) {
+      return widget.getWidgetParameters(state, rest);
+    }
+
+    return widget.getWidgetSearchParameters(state, rest);
+  }, initialSearchParameters);
 }
 
 function getLocalWidgetsRecommendParameters(

@@ -272,6 +272,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(fbt.getWidgetParameters).toHaveBeenCalledTimes(1);
       });
 
+      it('calls getWidgetParameters on widgets that depend on search and implement the function', () => {
+        const instance = index({ indexName: 'indexName' });
+
+        instance.init(createIndexInitOptions({ parent: null }));
+
+        const searchbox = createSearchBox({
+          dependsOn: 'search',
+          getWidgetParameters: jest.fn((searchParameters, { uiState }) => {
+            return searchParameters.setQueryParameter(
+              'query',
+              uiState.query || ''
+            );
+          }),
+        });
+        instance.addWidgets([searchbox]);
+
+        expect(searchbox.getWidgetParameters).toHaveBeenCalledTimes(1);
+      });
+
       it('calls `init` on the added widgets', () => {
         const instance = index({ indexName: 'indexName' });
         const instantSearchInstance = createInstantSearch();
@@ -1199,6 +1218,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       instance.init(createIndexInitOptions({ parent: null }));
 
       expect(fbt.getWidgetParameters).toHaveBeenCalledTimes(1);
+    });
+
+    it('calls getWidgetParameters on widgets that depend on search and implement the function', () => {
+      const instance = index({ indexName: 'indexName' });
+
+      const searchbox = createSearchBox({
+        dependsOn: 'search',
+        getWidgetParameters: jest.fn((searchParameters, { uiState }) => {
+          return searchParameters.setQueryParameter(
+            'query',
+            uiState.query || ''
+          );
+        }),
+      });
+      instance.addWidgets([searchbox]);
+
+      instance.init(createIndexInitOptions({ parent: null }));
+
+      expect(searchbox.getWidgetParameters).toHaveBeenCalledTimes(1);
     });
 
     it('uses the index set by the widget for the queries', () => {
