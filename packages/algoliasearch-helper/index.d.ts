@@ -9,6 +9,12 @@ import type {
   SearchResponse,
   SnippetResult,
 } from './types/algoliasearch';
+// @ts-ignore
+import type {
+  RecommendationsQuery,
+  RecommendedForYouQuery,
+  TrendingQuery,
+} from '@algolia/recommend';
 
 /**
  * The algoliasearchHelper module is the function that will let its
@@ -32,6 +38,7 @@ declare namespace algoliasearchHelper {
 
   export class AlgoliaSearchHelper extends EventEmitter {
     state: SearchParameters;
+    recommendState: RecommendParameters;
     lastResults: SearchResults | null;
     derivedHelpers: DerivedHelper[];
 
@@ -1456,6 +1463,26 @@ declare namespace algoliasearchHelper {
       count: number;
       exhaustive: boolean;
     }
+  }
+
+  export type PlainRecommendParameters =
+    | RecommendationsQuery
+    | TrendingQuery
+    | RecommendedForYouQuery;
+
+  export type PlainRecommendParametersWithId = PlainRecommendParameters & {
+    $$id: string;
+  };
+
+  export type RecommendParametersOptions = {
+    params?: PlainRecommendParametersWithId[];
+  };
+
+  export class RecommendParameters {
+    params: PlainRecommendParametersWithId[];
+    constructor(opts?: RecommendParametersOptions);
+    addParams(params: PlainRecommendParametersWithId): RecommendParameters;
+    removeParams(id: string): RecommendParameters;
   }
 }
 
