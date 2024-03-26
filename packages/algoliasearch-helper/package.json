@@ -34,6 +34,7 @@
     "types/algoliasearch.js"
   ],
   "devDependencies": {
+    "@algolia/recommend": "4.22.1",
     "@metalsmith/sass": "1.4.0",
     "@types/algoliasearch": "3.34.11",
     "browserify": "14.5.0",
