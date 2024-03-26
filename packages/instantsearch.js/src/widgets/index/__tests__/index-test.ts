@@ -261,7 +261,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         );
       });
 
-      it('calls getWidgetParameters on widgets that depend on recommend', () => {
+      it('calls getWidgetParameters after init on widgets that depend on recommend', () => {
         const instance = index({ indexName: 'indexName' });
 
         instance.init(createIndexInitOptions({ parent: null }));
@@ -272,7 +272,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(fbt.getWidgetParameters).toHaveBeenCalledTimes(1);
       });
 
-      it('calls getWidgetParameters on widgets that depend on search and implement the function', () => {
+      it('calls getWidgetParameters after init on widgets that depend on search and implement the function', () => {
         const instance = index({ indexName: 'indexName' });
 
         instance.init(createIndexInitOptions({ parent: null }));
