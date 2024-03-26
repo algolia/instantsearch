@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.15](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.1.14...react-instantsearch-nextjs@0.1.15) (2024-03-26)
+
+
+### Bug Fixes
+
+* **next-app-router:** using wrong initial results when mounting on client ([#6099](https://github.com/algolia/instantsearch/issues/6099)) ([8328b13](https://github.com/algolia/instantsearch/commit/8328b13e6c71f2c8a426f3d5b332dda5325ddc24))
+
+
+
+
+
 ## [0.1.14](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.1.13...react-instantsearch-nextjs@0.1.14) (2024-02-27)
 
 **Note:** Version bump only for package react-instantsearch-nextjs

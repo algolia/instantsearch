@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.15.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.14.0...vue-instantsearch@4.15.0) (2024-03-26)
+
+
+### Bug Fixes
+
+* **vue-instantsearch:** only render list in `<refinement-list>` when it has items ([#6092](https://github.com/algolia/instantsearch/issues/6092)) ([9a38de0](https://github.com/algolia/instantsearch/commit/9a38de0851a1b1e245e3b5af12b96da25fb24e72))
+* **vue-instantsearch:** properly add `noRefinement` class on `<ais-refinement-list>` ([#6095](https://github.com/algolia/instantsearch/issues/6095)) ([9ae7c05](https://github.com/algolia/instantsearch/commit/9ae7c05ef6d17bd1d945dc1d31c7d87a262d1e06))
+
+
+### Features
+
+* **vue-instantsearch:** render loading indicator in `<ais-refinement-list>` ([#6096](https://github.com/algolia/instantsearch/issues/6096)) ([830f39e](https://github.com/algolia/instantsearch/commit/830f39e0b9855913e726c98662a4eb3af35f9c59))
+
+
+
+
+
 # [4.14.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.13.8...vue-instantsearch@4.14.0) (2024-02-27)
 
 
