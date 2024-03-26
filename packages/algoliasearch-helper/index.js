@@ -63,7 +63,7 @@ algoliasearchHelper.AlgoliaSearchHelper = AlgoliaSearchHelper;
 algoliasearchHelper.SearchParameters = SearchParameters;
 
 /**
- * Constructor for the object containing all the parameters for reocmmend.
+ * Constructor for the object containing all the parameters for Recommend.
  * @member module:algoliasearchHelper.RecommendParameters
  * @type {RecommendParameters}
  */
