@@ -47,7 +47,7 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
 
     // Scenario 1: the widget is added for the first time.
     if (!cleanupTimerRef.current) {
-      if (!shouldAddWidgetEarly) {
+      if (!shouldSsr) {
         parentIndex.addWidgets([widget]);
       }
     }
@@ -85,7 +85,7 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
         });
       });
     };
-  }, [parentIndex, widget, shouldAddWidgetEarly, search, props]);
+  }, [parentIndex, widget, shouldSsr, search, props]);
 
   if (
     shouldAddWidgetEarly ||
