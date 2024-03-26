@@ -154,7 +154,7 @@ describe('RoutingManager', () => {
       const widget = createWidget({
         render: jest.fn(),
         getWidgetSearchParameters: jest.fn((searchParameters, { uiState }) =>
-          searchParameters.setQuery(uiState.query)
+          searchParameters.setQuery(uiState.query!)
         ),
       });
 

@@ -150,7 +150,7 @@ type SearchWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
 };
 
 type RecommendWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
-  dependsOn: 'recommend';
+  dependsOn?: 'recommend';
   getWidgetParameters: (
     state: RecommendParameters,
     widgetParametersOptions: {

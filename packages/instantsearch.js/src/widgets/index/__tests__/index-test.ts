@@ -116,7 +116,7 @@ describe('index', () => {
         return parameters;
       }),
       ...args,
-    });
+    } as unknown as Widget);
 
   const virtualSearchBox = connectSearchBox(() => {});
   const virtualPagination = connectPagination(() => {});
