@@ -202,18 +202,16 @@ function getLocalWidgetsRecommendParameters(
   const { initialRecommendParameters, ...rest } =
     widgetRecommendParametersOptions;
 
-  return widgets
-    .filter(
-      (widget) =>
-        !isIndexWidget(widget) &&
-        widget.getWidgetParameters &&
-        widget.dependsOn === 'recommend'
-    )
-    .reduce<RecommendParameters>(
-      (state, widget) =>
-        widget.getWidgetParameters!(state, rest) as RecommendParameters,
-      initialRecommendParameters
-    );
+  return widgets.reduce((state, widget) => {
+    if (
+      !isIndexWidget(widget) &&
+      widget.dependsOn === 'recommend' &&
+      widget.getWidgetParameters
+    ) {
+      return widget.getWidgetParameters(state, rest);
+    }
+    return state;
+  }, initialRecommendParameters);
 }
 
 function resetPageFromWidgets(widgets: Array<Widget | IndexWidget>): void {

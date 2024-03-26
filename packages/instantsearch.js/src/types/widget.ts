@@ -137,16 +137,35 @@ export type WidgetDescription = {
   indexUiState?: Record<string, unknown>;
 };
 
+type SearchWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
+  dependsOn?: 'search';
+  getWidgetParameters?: (
+    state: SearchParameters,
+    widgetParametersOptions: {
+      uiState: Expand<
+        Partial<TWidgetDescription['indexUiState'] & IndexUiState>
+      >;
+    }
+  ) => SearchParameters;
+};
+
+type RecommendWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
+  dependsOn: 'recommend';
+  getWidgetParameters: (
+    state: RecommendParameters,
+    widgetParametersOptions: {
+      uiState: Expand<
+        Partial<TWidgetDescription['indexUiState'] & IndexUiState>
+      >;
+    }
+  ) => RecommendParameters;
+};
+
 type RequiredWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
   /**
    * Identifier for connectors and widgets.
    */
   $$type: TWidgetDescription['$$type'];
-
-  /**
-   * Which API endpoint this connector relies on, `'search'` by default.
-   */
-  dependsOn?: 'search' | 'recommend';
 
   /**
    * Called once before the first search.
@@ -228,16 +247,10 @@ type RequiredUiStateLifeCycle<TWidgetDescription extends WidgetDescription> = {
       >;
     }
   ) => SearchParameters;
-
-  getWidgetParameters?: (
-    state: SearchParameters | RecommendParameters,
-    widgetSearchParametersOptions: {
-      uiState: Expand<
-        Partial<TWidgetDescription['indexUiState'] & IndexUiState>
-      >;
-    }
-  ) => SearchParameters | RecommendParameters;
-};
+} & (
+  | SearchWidgetLifeCycle<TWidgetDescription>
+  | RecommendWidgetLifeCycle<TWidgetDescription>
+);
 
 type UiStateLifeCycle<TWidgetDescription extends WidgetDescription> =
   TWidgetDescription extends RequiredKeys<WidgetDescription, 'indexUiState'>
