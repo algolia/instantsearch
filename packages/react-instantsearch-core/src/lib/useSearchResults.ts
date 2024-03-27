@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 
 import { getIndexSearchResults } from './getIndexSearchResults';
+import { use } from './use';
 import { useIndexContext } from './useIndexContext';
 import { useInstantSearchContext } from './useInstantSearchContext';
+import { useRSCContext } from './useRSCContext';
 
 import type { SearchResults } from 'algoliasearch-helper';
 import type { ScopedResult } from 'instantsearch.js';
@@ -13,6 +15,7 @@ export type SearchResultsApi = {
 };
 
 export function useSearchResults(): SearchResultsApi {
+  const waitingForResultsRef = useRSCContext();
   const search = useInstantSearchContext();
   const searchIndex = useIndexContext();
   const [searchResults, setSearchResults] = useState(() =>
@@ -40,6 +43,10 @@ export function useSearchResults(): SearchResultsApi {
       search.removeListener('render', handleRender);
     };
   }, [search, searchIndex]);
+
+  if (typeof window === 'undefined' && waitingForResultsRef?.current) {
+    use(waitingForResultsRef.current);
+  }
 
   return searchResults;
 }
