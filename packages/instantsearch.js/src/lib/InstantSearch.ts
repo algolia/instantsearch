@@ -568,6 +568,10 @@ See documentation: ${createDocumentationLink({
 
     mainHelper.search = () => {
       this.status = 'loading';
+      console.log(
+        '\x1b[34m%s\x1b[0m',
+        'InstantSearch:mainHelper.search() > scheduling render'
+      );
       this.scheduleRender(false);
 
       warning(
@@ -631,6 +635,10 @@ See documentation: ${createDocumentationLink({
       (error as any).error = error;
       this.error = error;
       this.status = 'error';
+      console.log(
+        '\x1b[34m%s\x1b[0m',
+        'InstantSearch:mainHelper.on(error) > scheduling render'
+      );
       this.scheduleRender(false);
 
       // This needs to execute last because it throws the error.
@@ -675,6 +683,10 @@ See documentation: ${createDocumentationLink({
     // Later, we could also skip `index()` widgets and widgets that don't read
     // the results, but this is an optimization that has a very low impact for now.
     else if (this.mainIndex.getWidgets().length > 0) {
+      console.log(
+        '\x1b[32m%s\x1b[0m',
+        'InstantSearch:start() > scheduling search'
+      );
       this.scheduleSearch();
     }
 
@@ -740,12 +752,20 @@ See documentation: ${createDocumentationLink({
   }
 
   public scheduleSearch = defer(() => {
+    console.log(
+      '\x1b[32m%s\x1b[0m',
+      'InstantSearch:scheduleSearch() > calling main helper search'
+    );
     if (this.started) {
       this.mainHelper!.search();
     }
   });
 
   public scheduleRender = defer((shouldResetStatus: boolean = true) => {
+    console.log(
+      '\x1b[34m%s\x1b[0m',
+      'InstantSearch:scheduleRender() > render index and emit render event'
+    );
     if (!this.mainHelper?.hasPendingRequests()) {
       clearTimeout(this._searchStalledTimer);
       this._searchStalledTimer = null;
@@ -767,6 +787,10 @@ See documentation: ${createDocumentationLink({
     if (!this._searchStalledTimer) {
       this._searchStalledTimer = setTimeout(() => {
         this.status = 'stalled';
+        console.log(
+          '\x1b[34m%s\x1b[0m',
+          'InstantSearch:scheduleStalledRender() > scheduling render'
+        );
         this.scheduleRender();
       }, this._stalledSearchDelay);
     }
@@ -806,6 +830,10 @@ See documentation: ${createDocumentationLink({
             this.mainIndex
           );
 
+          console.log(
+            '\x1b[32m%s\x1b[0m',
+            'InstantSearch:setUiState() > scheduling search'
+          );
           this.scheduleSearch();
           this.onInternalStateChange();
         },
@@ -813,6 +841,10 @@ See documentation: ${createDocumentationLink({
     } else {
       setIndexHelperState(nextUiState, this.mainIndex);
 
+      console.log(
+        '\x1b[32m%s\x1b[0m',
+        'InstantSearch:setUiState() > scheduling search'
+      );
       this.scheduleSearch();
       this.onInternalStateChange();
     }
