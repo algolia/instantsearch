@@ -451,6 +451,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
         let widgetSearchParameters = searchParameters;
 
         if (escapeHTML) {
+          // @MAJOR: set this globally, not in the InfiniteHits widget to allow InfiniteHits to be conditionally used
           widgetSearchParameters =
             searchParameters.setQueryParameters(TAG_PLACEHOLDER);
         }

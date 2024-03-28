@@ -204,6 +204,7 @@ const connectHits: HitsConnector = function connectHits(
           return state;
         }
 
+        // @MAJOR: set this globally, not in the Hits widget to allow Hits to be conditionally used
         return state.setQueryParameters(TAG_PLACEHOLDER);
       },
     };
