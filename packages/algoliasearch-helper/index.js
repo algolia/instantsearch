@@ -1,6 +1,7 @@
 'use strict';
 
 var AlgoliaSearchHelper = require('./src/algoliasearch.helper');
+var RecommendParameters = require('./src/RecommendParameters');
 var SearchParameters = require('./src/SearchParameters');
 var SearchResults = require('./src/SearchResults');
 
@@ -60,6 +61,13 @@ algoliasearchHelper.AlgoliaSearchHelper = AlgoliaSearchHelper;
  * @type {SearchParameters}
  */
 algoliasearchHelper.SearchParameters = SearchParameters;
+
+/**
+ * Constructor for the object containing all the parameters for Recommend.
+ * @member module:algoliasearchHelper.RecommendParameters
+ * @type {RecommendParameters}
+ */
+algoliasearchHelper.RecommendParameters = RecommendParameters;
 
 /**
  * Constructor for the object containing the results of the search.
