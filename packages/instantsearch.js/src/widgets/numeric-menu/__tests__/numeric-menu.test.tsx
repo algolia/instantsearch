@@ -8,7 +8,12 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
-import { fireEvent, within } from '@testing-library/dom';
+import {
+  findAllByRole,
+  findByRole,
+  fireEvent,
+  within,
+} from '@testing-library/dom';
 import { h } from 'preact';
 
 import instantsearch from '../../../index.es';
@@ -19,6 +24,84 @@ beforeEach(() => {
 });
 
 describe('numericMenu', () => {
+  describe('options', () => {
+    test('throws without a `container`', () => {
+      expect(() => {
+        const searchClient = createSearchClient();
+
+        const search = instantsearch({
+          indexName: 'indexName',
+          searchClient,
+        });
+
+        search.addWidgets([
+          numericMenu({
+            // @ts-expect-error
+            container: undefined,
+          }),
+        ]);
+      }).toThrowErrorMatchingInlineSnapshot(`
+        "The \`container\` option is required.
+
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-menu/js/"
+      `);
+    });
+
+    test('add custom CSS classes', async () => {
+      const container = document.createElement('div');
+      const searchClient = createSearchClient();
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+      });
+
+      search.addWidgets([
+        numericMenu({
+          container,
+          attribute: 'price',
+          items: [
+            { label: 'All' },
+            { label: 'Less than 500$', end: 500 },
+            { label: 'Between 500$ - 1000$', start: 500, end: 1000 },
+            { label: 'More than 1000$', start: 1000 },
+          ],
+          cssClasses: {
+            root: 'ROOT',
+            noRefinementRoot: 'NO-REFINEMENT-ROOT',
+            list: 'LIST',
+            item: 'ITEM',
+            selectedItem: 'SELECTED-ITEM',
+            label: 'LABEL',
+            labelText: 'LABEL-TEXT',
+            radio: 'RADIO',
+          },
+        }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      const root = container.firstChild;
+      const list = await findByRole(container, 'list');
+      const items = await findAllByRole(container, 'listitem');
+      const labels = container.querySelectorAll('.ais-NumericMenu-label');
+      const labelsTexts = container.querySelectorAll(
+        '.ais-NumericMenu-labelText'
+      );
+      const options = await findAllByRole(container, 'radio');
+
+      expect(root).toHaveClass('ROOT');
+      expect(list).toHaveClass('LIST');
+      expect(items[0]).toHaveClass('SELECTED-ITEM');
+      items.forEach((item) => expect(item).toHaveClass('ITEM'));
+      labels.forEach((label) => expect(label).toHaveClass('LABEL'));
+      labelsTexts.forEach((text) => expect(text).toHaveClass('LABEL-TEXT'));
+      options.forEach((option) => expect(option).toHaveClass('RADIO'));
+    });
+  });
+
   describe('templates', () => {
     test('renders default templates', async () => {
       const container = document.createElement('div');

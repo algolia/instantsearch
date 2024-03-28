@@ -272,6 +272,9 @@ const testSetups: TestSetupsMap<TestSuites> = {
   createRatingMenuWidgetTests() {
     throw new Error('RatingMenu is not supported in React InstantSearch');
   },
+  createNumericMenuWidgetTests() {
+    throw new Error('NumericMenu is not supported in React InstantSearch');
+  },
   createToggleRefinementWidgetTests({ instantSearchOptions, widgetParams }) {
     render(
       <InstantSearch {...instantSearchOptions}>
@@ -332,6 +335,12 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createSearchBoxWidgetTests: { act },
   createSortByWidgetTests: { act },
   createStatsWidgetTests: { act },
+  createNumericMenuWidgetTests: {
+    act,
+    skippedTests: {
+      'NumericMenu widget common tests': true,
+    },
+  },
 };
 
 /**
