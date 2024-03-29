@@ -1702,6 +1702,10 @@ AlgoliaSearchHelper.prototype._dispatchRecommendResponse = function (
   // eslint-disable-next-line no-warning-comments
   // TODO: emit "result" event when events for Recommend are implemented
   this.emit('recommend:result', {
+    search: {
+      results: this.lastResults,
+      state: this.state,
+    },
     recommend: {
       results: this.lastRecommendResults,
       state: this.recommendState,
@@ -1798,6 +1802,16 @@ AlgoliaSearchHelper.prototype._recommendChange = function (event) {
 
     // eslint-disable-next-line no-warning-comments
     // TODO: emit "change" event when events for Recommend are implemented
+    this.emit('recommend:change', {
+      search: {
+        results: this.lastResults,
+        state: this.state,
+      },
+      recommend: {
+        results: this.lastRecommendResults,
+        state: this.recommendState,
+      },
+    });
   }
 };
 
