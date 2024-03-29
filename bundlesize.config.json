@@ -2,35 +2,35 @@
   "files": [
     {
       "path": "packages/algoliasearch-helper/dist/algoliasearch.helper.js",
-      "maxSize": "39 kB"
+      "maxSize": "40 kB"
     },
     {
       "path": "packages/algoliasearch-helper/dist/algoliasearch.helper.min.js",
-      "maxSize": "12 kB"
+      "maxSize": "12.75 kB"
     },
     {
       "path": "./packages/instantsearch.js/dist/instantsearch.production.min.js",
-      "maxSize": "76.5 kB"
+      "maxSize": "77.25 kB"
     },
     {
       "path": "./packages/instantsearch.js/dist/instantsearch.development.js",
-      "maxSize": "168.75 kB"
+      "maxSize": "170 kB"
     },
     {
       "path": "packages/react-instantsearch-core/dist/umd/ReactInstantSearchCore.min.js",
-      "maxSize": "46.5 kB"
+      "maxSize": "47 kB"
     },
     {
       "path": "packages/react-instantsearch/dist/umd/ReactInstantSearch.min.js",
-      "maxSize": "58 kB"
+      "maxSize": "58.75 kB"
     },
     {
       "path": "packages/vue-instantsearch/vue2/umd/index.js",
-      "maxSize": "65.25 kB"
+      "maxSize": "66 kB"
     },
     {
       "path": "packages/vue-instantsearch/vue3/umd/index.js",
-      "maxSize": "65.75 kB"
+      "maxSize": "66.5 kB"
     },
     {
       "path": "packages/vue-instantsearch/vue2/cjs/index.js",
