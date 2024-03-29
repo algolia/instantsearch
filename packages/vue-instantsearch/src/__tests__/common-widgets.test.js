@@ -25,6 +25,7 @@ import {
   AisSortBy,
   AisStats,
   AisRatingMenu,
+  AisNumericMenu,
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
 
@@ -412,6 +413,21 @@ const testSetups = {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
             h(AisRatingMenu, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    await nextTick();
+  },
+  async createNumericMenuWidgetTests({ instantSearchOptions, widgetParams }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisNumericMenu, { props: widgetParams }),
             h(GlobalErrorSwallower),
           ])
         ),
