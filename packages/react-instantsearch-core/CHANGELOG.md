@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.7.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.7.0...react-instantsearch-core@7.7.1) (2024-04-02)
+
+
+### Bug Fixes
+
+* **react-instantsearch:** index added twice with Next.js app router ([#6106](https://github.com/algolia/instantsearch/issues/6106)) ([1778b31](https://github.com/algolia/instantsearch/commit/1778b314b03d04a580379e4d9baab3587ffb8802))
+
+
+
+
+
 # [7.7.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.6.0...react-instantsearch-core@7.7.0) (2024-02-27)
 
 **Note:** Version bump only for package react-instantsearch-core
