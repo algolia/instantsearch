@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.17.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.16.3...algoliasearch-helper@3.17.0) (2024-04-02)
+
+
+### Features
+
+* **helper:** set up state management for recommendations ([#6100](https://github.com/algolia/instantsearch/issues/6100)) ([bc5122f](https://github.com/algolia/instantsearch/commit/bc5122faae0159ab532a59c80490852c0a625e22))
+
+
+
+
+
 ## [3.16.3](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.16.2...algoliasearch-helper@3.16.3) (2024-02-27)
 
 
