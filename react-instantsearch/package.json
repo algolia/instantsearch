@@ -10,7 +10,7 @@
     "algoliasearch": "4",
     "react": "18.1.0",
     "react-dom": "18.1.0",
-    "react-instantsearch": "7.7.0"
+    "react-instantsearch": "7.7.1"
   },
   "devDependencies": {
     "@types/react": "18.0.15",
