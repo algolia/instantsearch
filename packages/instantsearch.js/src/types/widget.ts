@@ -7,6 +7,7 @@ import type {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
   SearchResults,
+  RecommendParameters,
 } from 'algoliasearch-helper';
 
 export type ScopedResult = {
@@ -39,6 +40,8 @@ export type InitOptions = SharedRenderOptions & {
   uiState: UiState;
   results?: undefined;
 };
+
+export type ShouldRenderOptions = { instantSearchInstance: InstantSearch };
 
 export type RenderOptions = SharedRenderOptions & {
   results: SearchResults;
@@ -134,6 +137,30 @@ export type WidgetDescription = {
   indexUiState?: Record<string, unknown>;
 };
 
+type SearchWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
+  dependsOn?: 'search';
+  getWidgetParameters?: (
+    state: SearchParameters,
+    widgetParametersOptions: {
+      uiState: Expand<
+        Partial<TWidgetDescription['indexUiState'] & IndexUiState>
+      >;
+    }
+  ) => SearchParameters;
+};
+
+type RecommendWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
+  dependsOn?: 'recommend';
+  getWidgetParameters: (
+    state: RecommendParameters,
+    widgetParametersOptions: {
+      uiState: Expand<
+        Partial<TWidgetDescription['indexUiState'] & IndexUiState>
+      >;
+    }
+  ) => RecommendParameters;
+};
+
 type RequiredWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
   /**
    * Identifier for connectors and widgets.
@@ -144,6 +171,10 @@ type RequiredWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
    * Called once before the first search.
    */
   init?: (options: InitOptions) => void;
+  /**
+   * Whether `render` should be called
+   */
+  shouldRender?: (options: ShouldRenderOptions) => boolean;
   /**
    * Called after each search response has been received.
    */
@@ -216,7 +247,10 @@ type RequiredUiStateLifeCycle<TWidgetDescription extends WidgetDescription> = {
       >;
     }
   ) => SearchParameters;
-};
+} & (
+  | SearchWidgetLifeCycle<TWidgetDescription>
+  | RecommendWidgetLifeCycle<TWidgetDescription>
+);
 
 type UiStateLifeCycle<TWidgetDescription extends WidgetDescription> =
   TWidgetDescription extends RequiredKeys<WidgetDescription, 'indexUiState'>
