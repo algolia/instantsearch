@@ -1573,24 +1573,30 @@ AlgoliaSearchHelper.prototype._search = function (options) {
 };
 
 AlgoliaSearchHelper.prototype._recommend = function () {
-  var state = this.recommendState;
+  var searchState = this.state;
+  var recommendState = this.recommendState;
   var index = this.getIndex();
-  var states = [{ state: state, index: index, helper: this }];
+  var states = [{ state: recommendState, index: index, helper: this }];
 
   this.emit('fetch', {
     recommend: {
-      state: state,
+      state: recommendState,
       results: this.lastRecommendResults,
     },
   });
 
   var derivedQueries = this.derivedHelpers.map(function (derivedHelper) {
-    var derivedIndex = derivedHelper.getModifiedState().index;
+    var derivedIndex = derivedHelper.getModifiedState(searchState).index;
     if (!derivedIndex) {
       return [];
     }
 
-    var derivedState = derivedHelper.getModifiedRecommendState(state);
+    // Contrary to what is done when deriving the search state, we don't want to
+    // provide the current recommend state to the derived helper, as it would
+    // inherit unwanted queries. We instead provide an empty recommend state.
+    var derivedState = derivedHelper.getModifiedRecommendState(
+      new RecommendParameters()
+    );
     states.push({
       state: derivedState,
       index: derivedIndex,

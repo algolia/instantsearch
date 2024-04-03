@@ -612,6 +612,8 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         lastValidSearchParameters = results?._state;
       });
 
+      // eslint-disable-next-line no-warning-comments
+      // TODO: listen to "result" event when events for Recommend are implemented
       derivedHelper.on('recommend:result', ({ recommend }) => {
         // The index does not render the results it schedules a new render
         // to let all the other indices emit their own results. It allows us to
