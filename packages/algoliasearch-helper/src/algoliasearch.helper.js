@@ -1573,18 +1573,44 @@ AlgoliaSearchHelper.prototype._search = function (options) {
 };
 
 AlgoliaSearchHelper.prototype._recommend = function () {
-  var queries = this.recommendState._buildQueries(this.getIndex());
+  var state = this.recommendState;
+  var index = this.getIndex();
+  var states = [{ state: state, index: index, helper: this }];
 
   this.emit('fetch', {
-    search: {
-      state: this.state,
-      results: this.lastResults,
-    },
     recommend: {
-      state: this.recommendState,
+      state: state,
       results: this.lastRecommendResults,
     },
   });
+
+  var derivedQueries = this.derivedHelpers.map(function (derivedHelper) {
+    var derivedIndex = derivedHelper.getModifiedState().index;
+    if (!derivedIndex) {
+      return [];
+    }
+
+    var derivedState = derivedHelper.getModifiedRecommendState(state);
+    states.push({
+      state: derivedState,
+      index: derivedIndex,
+      helper: derivedHelper,
+    });
+
+    derivedHelper.emit('fetch', {
+      recommend: {
+        state: derivedState,
+        results: derivedHelper.lastRecommendResults,
+      },
+    });
+
+    return derivedState._buildQueries(derivedIndex);
+  });
+
+  var queries = Array.prototype.concat.apply(
+    this.recommendState._buildQueries(index),
+    derivedQueries
+  );
 
   if (queries.length === 0) {
     return;
@@ -1607,7 +1633,7 @@ AlgoliaSearchHelper.prototype._recommend = function () {
   try {
     this.client
       .getRecommendations(queries)
-      .then(this._dispatchRecommendResponse.bind(this, queryId))
+      .then(this._dispatchRecommendResponse.bind(this, queryId, states))
       .catch(this._dispatchRecommendError.bind(this, queryId));
   } catch (error) {
     // If we reach this part, we're in an internal error state
@@ -1680,6 +1706,7 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function (
 
 AlgoliaSearchHelper.prototype._dispatchRecommendResponse = function (
   queryId,
+  states,
   content
 ) {
   // @TODO remove the number of outdated queries discarded instead of just one
@@ -1697,19 +1724,30 @@ AlgoliaSearchHelper.prototype._dispatchRecommendResponse = function (
 
   var results = content.results.slice();
 
-  this.lastRecommendResults = results;
+  states.forEach(function (s) {
+    var state = s.state;
+    var helper = s.helper;
 
-  // eslint-disable-next-line no-warning-comments
-  // TODO: emit "result" event when events for Recommend are implemented
-  this.emit('recommend:result', {
-    search: {
-      results: this.lastResults,
-      state: this.state,
-    },
-    recommend: {
-      results: this.lastRecommendResults,
-      state: this.recommendState,
-    },
+    if (!s.index) {
+      // eslint-disable-next-line no-warning-comments
+      // TODO: emit "result" event when events for Recommend are implemented
+      helper.emit('recommend:result', {
+        results: null,
+        state: state,
+      });
+      return;
+    }
+
+    helper.lastRecommendResults = results;
+
+    // eslint-disable-next-line no-warning-comments
+    // TODO: emit "result" event when events for Recommend are implemented
+    helper.emit('recommend:result', {
+      recommend: {
+        results: helper.lastRecommendResults,
+        state: state,
+      },
+    });
   });
 };
 
@@ -1866,10 +1904,11 @@ AlgoliaSearchHelper.prototype.getClient = function () {
  * and the SearchParameters that is returned by the call of the
  * parameter function.
  * @param {function} fn SearchParameters -> SearchParameters
+ * @param {function} recommendFn RecommendParameters -> RecommendParameters
  * @return {DerivedHelper} a new DerivedHelper
  */
-AlgoliaSearchHelper.prototype.derive = function (fn) {
-  var derivedHelper = new DerivedHelper(this, fn);
+AlgoliaSearchHelper.prototype.derive = function (fn, recommendFn) {
+  var derivedHelper = new DerivedHelper(this, fn, recommendFn);
   this.derivedHelpers.push(derivedHelper);
   return derivedHelper;
 };

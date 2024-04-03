@@ -380,7 +380,10 @@ declare namespace algoliasearchHelper {
     setClient(client: SearchClient): this;
     getClient(): SearchClient;
     derive(
-      deriveFn: (oldParams: SearchParameters) => SearchParameters
+      deriveFn: (oldParams: SearchParameters) => SearchParameters,
+      deriveRecommendFn?: (
+        oldParams: RecommendParameters
+      ) => RecommendParameters
     ): DerivedHelper;
     detachDerivedHelper(derivedHelper: DerivedHelper): void;
     hasPendingRequests(): boolean;
@@ -395,11 +398,22 @@ declare namespace algoliasearchHelper {
       event: 'result',
       cb: (res: { results: SearchResults; state: SearchParameters }) => void
     ): this;
+    on(
+      event: 'recommend:result',
+      cb: (res: {
+        recommend: {
+          results: unknown | null; // TODO: Define type in dedicated PR
+          state: RecommendParameters;
+        };
+      }) => void
+    ): this;
     on(event: 'error', cb: (res: { error: Error }) => void): this;
 
     lastResults: SearchResults | null;
+    lastRecommendResults: unknown | null; // TODO: Define type in dedicated PR
     detach(): void;
     getModifiedState(): SearchParameters;
+    getModifiedRecommendState(): RecommendParameters;
   }
 
   namespace SearchForFacetValues {
