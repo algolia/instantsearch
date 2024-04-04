@@ -9,6 +9,7 @@ var merge = require('./functions/merge');
 var objectHasKeys = require('./functions/objectHasKeys');
 var omit = require('./functions/omit');
 var RecommendParameters = require('./RecommendParameters');
+var RecommendResults = require('./RecommendResults');
 var requestBuilder = require('./requestBuilder');
 var SearchParameters = require('./SearchParameters');
 var SearchResults = require('./SearchResults');
@@ -1744,7 +1745,7 @@ AlgoliaSearchHelper.prototype._dispatchRecommendResponse = function (
       return;
     }
 
-    helper.lastRecommendResults = results;
+    helper.lastRecommendResults = new RecommendResults(state, results);
 
     // eslint-disable-next-line no-warning-comments
     // TODO: emit "result" event when events for Recommend are implemented
