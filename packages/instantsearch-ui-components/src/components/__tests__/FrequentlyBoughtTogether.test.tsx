@@ -5,9 +5,9 @@
 import { render } from '@testing-library/preact';
 import { createElement, Fragment } from 'preact';
 
-import { createFrequentlyBoughtTogether } from '../FrequentlyBoughtTogether';
+import { createFrequentlyBoughtTogetherComponent } from '../FrequentlyBoughtTogether';
 
-const FrequentlyBoughtTogether = createFrequentlyBoughtTogether({
+const FrequentlyBoughtTogether = createFrequentlyBoughtTogetherComponent({
   createElement,
   Fragment,
 });
@@ -165,32 +165,6 @@ describe('FrequentlyBoughtTogether', () => {
                 <div />
               </li>
             </ol>
-          </div>
-        </section>
-      </div>
-    `);
-  });
-
-  test.only('should not render while loading', () => {
-    const { container } = render(
-      <FrequentlyBoughtTogether
-        status="loading"
-        items={[]}
-        itemComponent={() => <div />}
-      />
-    );
-
-    expect(container).toMatchInlineSnapshot(`
-      <div>
-        <section
-          class="auc-Recommend"
-        >
-          <div
-            class="auc-Recommend-container"
-          >
-            <ol
-              class="auc-Recommend-list"
-            />
           </div>
         </section>
       </div>

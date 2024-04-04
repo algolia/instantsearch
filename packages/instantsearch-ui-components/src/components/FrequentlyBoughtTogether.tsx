@@ -1,37 +1,29 @@
-/* eslint-disable @typescript-eslint/ban-types */
 /** @jsx createElement */
 
 import { cx } from '../lib';
 
+import { createDefaultHeaderComponent } from './DefaultHeader';
+import { createListViewComponent } from './ListView';
+
 import type { Renderer } from '../types';
+import type { ViewProps } from './ListView';
+import type {
+  ItemComponentProps,
+  RecommendClassNames,
+  RecommendTranslations,
+} from './types';
 
 // types
-export type RecommendClassNames = Partial<{
-  root: string;
-  title: string;
-  container: string;
-  list: string;
-  item: string;
-}>;
-
 export type InnerComponentProps<TObject> = {
   classNames: RecommendClassNames;
   recommendations: TObject[];
   translations: RecommendTranslations;
 };
 
-export type RecordWithObjectID<TObject = {}> = TObject & {
+export type RecordWithObjectID<TObject = Record<string, unknown>> = TObject & {
   objectID: string;
 };
-export type ItemComponentProps<TObject> = {
-  item: TObject;
-};
 
-export type RecommendTranslations = Partial<{
-  title: string;
-  // Horizontal Slider
-  sliderLabel: string;
-}>;
 export type RecommendStatus = 'loading' | 'stalled' | 'idle';
 
 export type FrequentlyBoughtTogetherComponentProps<TObject> = {
@@ -51,70 +43,13 @@ export type ChildrenProps<TObject> =
     View: (props: unknown) => JSX.Element;
   };
 
-export type ViewProps<
-  TItem extends RecordWithObjectID,
-  TTranslations extends Record<string, string>,
-  TClassNames extends Record<string, string>
-> = {
-  classNames: TClassNames;
-  itemComponent: <TComponentProps extends Record<string, unknown> = {}>(
-    props: ItemComponentProps<RecordWithObjectID<TItem>> & TComponentProps
-  ) => JSX.Element;
-  items: TItem[];
-  translations: TTranslations;
-};
-
 // components
-export function createDefaultHeaderComponent({ createElement }: Renderer) {
-  return function DefaultHeader<TObject>(props: InnerComponentProps<TObject>) {
-    if (!props.recommendations || props.recommendations.length < 1) {
-      return null;
-    }
-
-    if (!props.translations.title) {
-      return null;
-    }
-
-    return (
-      <h3 className={cx('auc-Recommend-title', props.classNames.title)}>
-        {props.translations.title}
-      </h3>
-    );
-  };
-}
-
-export function createListViewComponent({ createElement, Fragment }: Renderer) {
-  return function ListView<TItem extends RecordWithObjectID>(
-    props: ViewProps<TItem, RecommendTranslations, RecommendClassNames>
-  ) {
-    return (
-      <div
-        className={cx('auc-Recommend-container', props.classNames.container)}
-      >
-        <ol className={cx('auc-Recommend-list', props.classNames.list)}>
-          {props.items.map((item) => (
-            <li
-              key={item.objectID}
-              className={cx('auc-Recommend-item', props.classNames.item)}
-            >
-              <props.itemComponent
-                createElement={createElement}
-                Fragment={Fragment}
-                item={item}
-              />
-            </li>
-          ))}
-        </ol>
-      </div>
-    );
-  };
-}
 
 // most above will need to go to shared file
 
 export type RecommendComponentProps<
   TObject,
-  TComponentProps extends Record<string, unknown> = {}
+  TComponentProps extends Record<string, unknown> = Record<string, unknown>
 > = {
   itemComponent: (
     props: ItemComponentProps<RecordWithObjectID<TObject>> & TComponentProps
@@ -140,22 +75,23 @@ export type RecommendComponentProps<
 
 export type FrequentlyBoughtTogetherProps<
   TObject,
-  TComponentProps extends Record<string, unknown> = {}
+  TComponentProps extends Record<string, unknown> = Record<string, unknown>
 > = RecommendComponentProps<TObject, TComponentProps>;
 
-export function createFrequentlyBoughtTogether({
+export function createFrequentlyBoughtTogetherComponent({
   createElement,
   Fragment,
 }: Renderer) {
   return function FrequentlyBoughtTogether<TObject>(
-    props: FrequentlyBoughtTogetherProps<TObject>
+    userProps: FrequentlyBoughtTogetherProps<TObject>
   ) {
+    const { classNames = {}, ...props } = userProps;
+
     const translations: Required<RecommendTranslations> = {
       title: 'Frequently bought together',
       sliderLabel: 'Frequently bought together products',
       ...props.translations,
     };
-    const classNames = props.classNames ?? {};
 
     const FallbackComponent = props.fallbackComponent ?? (() => null);
 
