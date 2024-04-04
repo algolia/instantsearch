@@ -16,6 +16,7 @@ import type {
   RelatedProductsQuery as RecommendRelatedProductsQuery,
   TrendingFacetsQuery as RecommendTrendingFacetsQuery,
   TrendingItemsQuery as RecommendTrendingItemsQuery,
+  RecommendQueriesResponse,
 } from '@algolia/recommend';
 
 /**
@@ -42,7 +43,7 @@ declare namespace algoliasearchHelper {
     state: SearchParameters;
     recommendState: RecommendParameters;
     lastResults: SearchResults | null;
-    lastRecommendResults: unknown | null; // TODO: Define type in dedicated PR
+    lastRecommendResults: RecommendResults | null;
     derivedHelpers: DerivedHelper[];
 
     on(
@@ -402,7 +403,7 @@ declare namespace algoliasearchHelper {
       event: 'recommend:result',
       cb: (res: {
         recommend: {
-          results: unknown | null; // TODO: Define type in dedicated PR
+          results: RecommendResults | null;
           state: RecommendParameters;
         };
       }) => void
@@ -410,7 +411,7 @@ declare namespace algoliasearchHelper {
     on(event: 'error', cb: (res: { error: Error }) => void): this;
 
     lastResults: SearchResults | null;
-    lastRecommendResults: unknown | null; // TODO: Define type in dedicated PR
+    lastRecommendResults: RecommendResults | null;
     detach(): void;
     getModifiedState(): SearchParameters;
     getModifiedRecommendState(): RecommendParameters;
@@ -1525,7 +1526,7 @@ declare namespace algoliasearchHelper {
   export type RecommendParametersWithId<
     T extends PlainRecommendParameters = PlainRecommendParameters
   > = T & {
-    $$id: string;
+    $$id: number;
   };
 
   export type RecommendParametersOptions = {
@@ -1552,6 +1553,20 @@ declare namespace algoliasearchHelper {
     addLookingSimilar(
       params: RecommendParametersWithId<LookingSimilarQuery>
     ): RecommendParameters;
+  }
+
+  type RecommendResponse<TObject> =
+    RecommendQueriesResponse<TObject>['results'];
+
+  type RecommendResultItem<TObject = any> = RecommendResponse<TObject>[0];
+
+  export class RecommendResults<T = any> {
+    constructor(state: RecommendParameters, results: RecommendResponse<T>);
+
+    _state: RecommendParameters;
+    _rawResults: RecommendResponse<T>;
+
+    [index: number]: RecommendResultItem<T>;
   }
 }
 
