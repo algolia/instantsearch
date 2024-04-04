@@ -1,8 +1,7 @@
 /** @jsx createElement */
-import { cx } from '../lib';
+import { cx } from '../../lib';
 
-import type { Renderer } from '../types';
-import type { InnerComponentProps } from './types';
+import type { InnerComponentProps, Renderer } from '../../types';
 
 export function createDefaultHeaderComponent({ createElement }: Renderer) {
   return function DefaultHeader<TObject>(

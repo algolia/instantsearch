@@ -2,16 +2,16 @@
 
 import { cx } from '../lib';
 
-import { createDefaultHeaderComponent } from './DefaultHeader';
-import { createListViewComponent } from './ListView';
+import { createDefaultHeaderComponent } from './recommend-inner/DefaultHeader';
+import { createListViewComponent } from './recommend-inner/ListView';
 
-import type { Renderer } from '../types';
-import type { ViewProps } from './ListView';
 import type {
   ItemComponentProps,
   RecommendClassNames,
   RecommendTranslations,
-} from './types';
+  Renderer,
+} from '../types';
+import type { ViewProps } from './recommend-inner/ListView';
 
 // types
 export type InnerComponentProps<TObject> = {
@@ -42,8 +42,6 @@ export type ChildrenProps<TObject> =
     status: RecommendStatus; // align with instantsearch status
     View: (props: unknown) => JSX.Element;
   };
-
-// components
 
 // most above will need to go to shared file
 

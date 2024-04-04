@@ -1,13 +1,13 @@
 /** @jsx createElement */
-import { cx } from '../lib';
+import { cx } from '../../lib';
 
-import type { Renderer } from '../types';
 import type {
   ItemComponentProps,
   RecommendClassNames,
   RecommendTranslations,
   RecordWithObjectID,
-} from './types';
+  Renderer,
+} from '../../types';
 
 export type ViewProps<
   TItem extends RecordWithObjectID,
