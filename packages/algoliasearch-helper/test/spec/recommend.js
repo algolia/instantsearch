@@ -16,16 +16,20 @@ describe('recommend()', () => {
     var helper = algoliasearchHelper(client, 'indexName', {});
 
     helper.addFrequentlyBoughtTogether({
-      $$id: '1',
+      $$id: 1,
       objectID: 'A0E20000000279B',
     });
-    helper.addTrendingFacets({ $$id: '2', facetName: 'brand' });
+    helper.addTrendingFacets({ $$id: 2, facetName: 'brand' });
 
     // eslint-disable-next-line no-warning-comments
     // TODO: listen to "result" event when events for Recommend are implemented
     helper.on('recommend:result', (event) => {
       var results = event.recommend.results;
-      expect(results).toHaveLength(2);
+      // As it also includes '_state' and '_rawResults'
+      expect(Object.keys(results)).toHaveLength(4);
+
+      expect(results[1]).toBe(testData.response.results[0]);
+      expect(results[2]).toBe(testData.response.results[1]);
 
       var state = event.recommend.state;
       expect(state.params).toEqual(testData.recommendParams.params);
@@ -53,7 +57,7 @@ describe('recommend()', () => {
     };
 
     var helper = algoliasearchHelper(client, 'indexName', {});
-    helper.addTrendingFacets({ $$id: '2', facetName: 'brand' });
+    helper.addTrendingFacets({ $$id: 2, facetName: 'brand' });
 
     helper.on('fetch', (event) => {
       var state = event.recommend.state;
@@ -84,7 +88,7 @@ describe('recommend()', () => {
     console.warn = jest.fn();
 
     var helper = algoliasearchHelper(client, 'indexName', {});
-    helper.addFrequentlyBoughtTogether({ $$id: '1' }).recommend();
+    helper.addFrequentlyBoughtTogether({ $$id: 1 }).recommend();
 
     expect(console.warn).toHaveBeenCalledTimes(1);
     expect(console.warn).toHaveBeenLastCalledWith(message);
@@ -99,20 +103,20 @@ describe('recommend()', () => {
 
     var helper = algoliasearchHelper(client, 'indexName', {});
 
-    helper.addFrequentlyBoughtTogether({ $$id: '1' });
-    helper.removeFrequentlyBoughtTogether('1');
-    helper.addRelatedProducts({ $$id: '2' });
-    helper.removeRelatedProducts('2');
-    helper.addTrendingItems({ $$id: '3' });
-    helper.removeTrendingItems('3');
-    helper.addTrendingFacets({ $$id: '4' });
-    helper.removeTrendingFacets('4');
-    helper.addLookingSimilar({ $$id: '5' });
-    helper.removeLookingSimilar('5');
+    helper.addFrequentlyBoughtTogether({ $$id: 1 });
+    helper.removeFrequentlyBoughtTogether(1);
+    helper.addRelatedProducts({ $$id: 2 });
+    helper.removeRelatedProducts(2);
+    helper.addTrendingItems({ $$id: 3 });
+    helper.removeTrendingItems(3);
+    helper.addTrendingFacets({ $$id: 4 });
+    helper.removeTrendingFacets(4);
+    helper.addLookingSimilar({ $$id: 5 });
+    helper.removeLookingSimilar(5);
 
     expect(client.getRecommendations).not.toHaveBeenCalled();
 
-    helper.addFrequentlyBoughtTogether({ $$id: '6' });
+    helper.addFrequentlyBoughtTogether({ $$id: 6 });
     helper.recommend();
 
     expect(client.getRecommendations).toHaveBeenCalledTimes(1);

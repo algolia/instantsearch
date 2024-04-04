@@ -9,6 +9,7 @@ var merge = require('./functions/merge');
 var objectHasKeys = require('./functions/objectHasKeys');
 var omit = require('./functions/omit');
 var RecommendParameters = require('./RecommendParameters');
+var RecommendResults = require('./RecommendResults');
 var requestBuilder = require('./requestBuilder');
 var SearchParameters = require('./SearchParameters');
 var SearchResults = require('./SearchResults');
@@ -1577,6 +1578,9 @@ AlgoliaSearchHelper.prototype._recommend = function () {
   var recommendState = this.recommendState;
   var index = this.getIndex();
   var states = [{ state: recommendState, index: index, helper: this }];
+  var ids = recommendState.params.map(function (param) {
+    return param.$$id;
+  });
 
   this.emit('fetch', {
     recommend: {
@@ -1602,6 +1606,13 @@ AlgoliaSearchHelper.prototype._recommend = function () {
       index: derivedIndex,
       helper: derivedHelper,
     });
+
+    ids = Array.prototype.concat.apply(
+      ids,
+      derivedState.params.map(function (param) {
+        return param.$$id;
+      })
+    );
 
     derivedHelper.emit('fetch', {
       recommend: {
@@ -1639,7 +1650,7 @@ AlgoliaSearchHelper.prototype._recommend = function () {
   try {
     this.client
       .getRecommendations(queries)
-      .then(this._dispatchRecommendResponse.bind(this, queryId, states))
+      .then(this._dispatchRecommendResponse.bind(this, queryId, states, ids))
       .catch(this._dispatchRecommendError.bind(this, queryId));
   } catch (error) {
     // If we reach this part, we're in an internal error state
@@ -1713,6 +1724,7 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function (
 AlgoliaSearchHelper.prototype._dispatchRecommendResponse = function (
   queryId,
   states,
+  ids,
   content
 ) {
   // @TODO remove the number of outdated queries discarded instead of just one
@@ -1728,7 +1740,11 @@ AlgoliaSearchHelper.prototype._dispatchRecommendResponse = function (
 
   if (this._currentNbRecommendQueries === 0) this.emit('recommendQueueEmpty');
 
-  var results = content.results.slice();
+  var results = {};
+  content.results.forEach(function (result, index) {
+    var id = ids[index];
+    results[id] = result;
+  });
 
   states.forEach(function (s) {
     var state = s.state;
@@ -1744,7 +1760,7 @@ AlgoliaSearchHelper.prototype._dispatchRecommendResponse = function (
       return;
     }
 
-    helper.lastRecommendResults = results;
+    helper.lastRecommendResults = new RecommendResults(state, results);
 
     // eslint-disable-next-line no-warning-comments
     // TODO: emit "result" event when events for Recommend are implemented

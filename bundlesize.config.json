@@ -2,11 +2,11 @@
   "files": [
     {
       "path": "packages/algoliasearch-helper/dist/algoliasearch.helper.js",
-      "maxSize": "40.25 kB"
+      "maxSize": "40.5 kB"
     },
     {
       "path": "packages/algoliasearch-helper/dist/algoliasearch.helper.min.js",
-      "maxSize": "12.75 kB"
+      "maxSize": "13 kB"
     },
     {
       "path": "./packages/instantsearch.js/dist/instantsearch.production.min.js",
