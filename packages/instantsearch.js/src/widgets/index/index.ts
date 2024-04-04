@@ -19,6 +19,7 @@ import type {
   ScopedResult,
   SearchClient,
   IndexRenderState,
+  RenderOptions,
 } from '../../types';
 import type {
   AlgoliaSearchHelper as Helper,
@@ -27,6 +28,8 @@ import type {
   SearchParameters,
   SearchResults,
   AlgoliaSearchHelper,
+  RecommendParameters,
+  RecommendResultItem,
 } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -68,6 +71,9 @@ export type IndexWidget<TUiState extends UiState = UiState> = Omit<
   getIndexId: () => string;
   getHelper: () => Helper | null;
   getResults: () => SearchResults | null;
+  getResultsForWidget: (
+    widget: IndexWidget | Widget
+  ) => SearchResults | RecommendResultItem | null;
   getPreviousState: () => SearchParameters | null;
   getScopedResults: () => ScopedResult[];
   getParent: () => IndexWidget | null;
@@ -260,6 +266,22 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       derivedHelper.lastResults._state = helper!.state;
 
       return derivedHelper.lastResults;
+    },
+
+    getResultsForWidget(widget) {
+      if (
+        widget.dependsOn !== 'recommend' ||
+        isIndexWidget(widget) ||
+        !widget.$$id
+      ) {
+        return this.getResults();
+      }
+
+      if (!helper?.lastRecommendResults) {
+        return null;
+      }
+
+      return helper.lastRecommendResults[widget.$$id];
     },
 
     getPreviousState() {
@@ -649,7 +671,11 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         if (widget.getRenderState) {
           const renderState = widget.getRenderState(
             instantSearchInstance.renderState[this.getIndexId()] || {},
-            createRenderArgs(instantSearchInstance, this)
+            createRenderArgs(
+              instantSearchInstance,
+              this,
+              widget
+            ) as RenderOptions
           );
 
           storeRenderState({
@@ -669,7 +695,13 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         // not have results yet.
 
         if (widget.render) {
-          widget.render(createRenderArgs(instantSearchInstance, this));
+          widget.render(
+            createRenderArgs(
+              instantSearchInstance,
+              this,
+              widget
+            ) as RenderOptions
+          );
         }
       });
     },

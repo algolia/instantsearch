@@ -11,9 +11,12 @@ import type {
 } from './types/algoliasearch';
 // @ts-ignore
 import type {
-  RecommendationsQuery,
-  RecommendedForYouQuery,
-  TrendingQuery,
+  FrequentlyBoughtTogetherQuery as RecommendFrequentlyBoughtTogetherQuery,
+  LookingSimilarQuery as RecommendLookingSimilarQuery,
+  RelatedProductsQuery as RecommendRelatedProductsQuery,
+  TrendingFacetsQuery as RecommendTrendingFacetsQuery,
+  TrendingItemsQuery as RecommendTrendingItemsQuery,
+  RecommendQueriesResponse,
 } from '@algolia/recommend';
 
 /**
@@ -40,6 +43,7 @@ declare namespace algoliasearchHelper {
     state: SearchParameters;
     recommendState: RecommendParameters;
     lastResults: SearchResults | null;
+    lastRecommendResults: RecommendResults | null;
     derivedHelpers: DerivedHelper[];
 
     on(
@@ -370,9 +374,19 @@ declare namespace algoliasearchHelper {
       event: 'result',
       cb: (res: { results: SearchResults; state: SearchParameters }) => void
     ): this;
+    on(
+      event: 'recommend:result',
+      cb: (res: {
+        recommend: {
+          results: RecommendResults | null;
+          state: RecommendParameters;
+        };
+      }) => void
+    ): this;
     on(event: 'error', cb: (res: { error: Error }) => void): this;
 
     lastResults: SearchResults | null;
+    lastRecommendResults: RecommendResults | null;
     detach(): void;
     getModifiedState(): SearchParameters;
   }
@@ -1483,6 +1497,49 @@ declare namespace algoliasearchHelper {
     constructor(opts?: RecommendParametersOptions);
     addParams(params: PlainRecommendParametersWithId): RecommendParameters;
     removeParams(id: string): RecommendParameters;
+    addFrequentlyBoughtTogether(
+      params: RecommendParametersWithId<FrequentlyBoughtTogetherQuery>
+    ): RecommendParameters;
+    addRelatedProducts(
+      params: RecommendParametersWithId<RelatedProductsQuery>
+    ): RecommendParameters;
+    addTrendingItems(
+      params: RecommendParametersWithId<TrendingItemsQuery>
+    ): RecommendParameters;
+    addTrendingFacets(
+      params: RecommendParametersWithId<TrendingFacetsQuery>
+    ): RecommendParameters;
+    addLookingSimilar(
+      params: RecommendParametersWithId<LookingSimilarQuery>
+    ): RecommendParameters;
+  }
+
+  type RecommendResponse<TObject> =
+    RecommendQueriesResponse<TObject>['results'];
+
+  type RecommendResultItem<TObject = any> = RecommendResponse<TObject>[0];
+
+  export class RecommendResults<T = any> {
+    constructor(state: RecommendParameters, results: RecommendResponse<T>);
+
+    _state: RecommendParameters;
+    _rawResults: RecommendResponse<T>;
+
+    [index: number]: RecommendResultItem<T>;
+  }
+
+  type RecommendResponse<TObject> =
+    RecommendQueriesResponse<TObject>['results'];
+
+  type RecommendResultItem<TObject = any> = RecommendResponse<TObject>[0];
+
+  export class RecommendResults<T = any> {
+    constructor(state: RecommendParameters, results: RecommendResponse<T>);
+
+    _state: RecommendParameters;
+    _rawResults: RecommendResponse<T>;
+
+    [index: number]: RecommendResultItem<T>;
   }
 }
 

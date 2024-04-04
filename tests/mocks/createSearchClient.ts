@@ -1,6 +1,7 @@
 import {
   createSingleSearchResponse,
   createMultiSearchResponse,
+  createRecommendResponse,
   createSFFVResponse,
 } from './createAPIResponse';
 
@@ -9,6 +10,9 @@ import type { SearchClient, SearchResponses } from 'instantsearch.js';
 export const createSearchClient = (
   args: Partial<SearchClient> = {}
 ): SearchClient => ({
+  getRecommendations: jest.fn((requests) =>
+    Promise.resolve(createRecommendResponse(requests))
+  ),
   search: jest.fn((requests) =>
     Promise.resolve(
       createMultiSearchResponse(

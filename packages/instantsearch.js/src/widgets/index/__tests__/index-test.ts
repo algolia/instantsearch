@@ -109,6 +109,18 @@ describe('index', () => {
       ...args,
     });
 
+  const createFrequentlyBoughtTogether = (args: Partial<Widget> = {}): Widget =>
+    createWidget({
+      dependsOn: 'recommend',
+      getWidgetParameters: jest.fn((parameters) => {
+        return parameters.addFrequentlyBoughtTogether({
+          $$id: 1,
+          objectID: 'abc',
+        });
+      }),
+      ...args,
+    } as unknown as Widget);
+
   const virtualSearchBox = connectSearchBox(() => {});
   const virtualPagination = connectPagination(() => {});
   const virtualRefinementList = connectRefinementList(() => {});
@@ -2327,6 +2339,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const paginationCreateURL = jest.fn();
 
       const searchBox = createSearchBox({
+        dependsOn: 'search',
         getRenderState: jest.fn((renderState, { helper, searchMetadata }) => {
           return {
             ...renderState,
@@ -2443,6 +2456,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const mainHelper = algoliasearchHelper(searchClient, 'indexName', {});
       const instantSearchInstance = createInstantSearch({ mainHelper });
       const searchBox = createSearchBox({
+        dependsOn: 'search',
         getRenderState: jest.fn((renderState, { helper, searchMetadata }) => {
           return {
             ...renderState,
@@ -2815,6 +2829,53 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
               helper: level3.getHelper(),
             },
           ],
+        })
+      );
+    });
+
+    it('forwards recommend results when `dependsOn` is `recommend`', async () => {
+      const instance = index({ indexName: 'indexName' });
+      const searchClient = createSearchClient({
+        getRecommendations: jest.fn(() =>
+          Promise.resolve({
+            results: [{ hits: [{ objectID: '1', title: 'Recommend' }] }],
+          })
+        ),
+      });
+      const mainHelper = algoliasearchHelper(searchClient, '', {});
+      const instantSearchInstance = createInstantSearch({
+        mainHelper,
+      });
+
+      const fbt = createFrequentlyBoughtTogether({
+        $$id: 1,
+        dependsOn: 'recommend',
+        shouldRender: () => true,
+      });
+      instance.addWidgets([fbt]);
+
+      instance.init(
+        createIndexInitOptions({
+          instantSearchInstance,
+          parent: null,
+        })
+      );
+      mainHelper.search();
+      await wait(0);
+      mainHelper.recommend();
+      await wait(0);
+
+      instance.render({
+        instantSearchInstance,
+      });
+
+      expect(fbt.render).toHaveBeenCalledWith(
+        expect.objectContaining({
+          results: expect.objectContaining({
+            hits: expect.arrayContaining([
+              { objectID: '1', title: 'Recommend' },
+            ]),
+          }),
         })
       );
     });

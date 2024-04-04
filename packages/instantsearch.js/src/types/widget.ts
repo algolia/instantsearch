@@ -7,6 +7,8 @@ import type {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
   SearchResults,
+  RecommendParameters,
+  RecommendResultItem,
 } from 'algoliasearch-helper';
 
 export type ScopedResult = {
@@ -132,6 +134,51 @@ export type WidgetDescription = {
   renderState?: Record<string, unknown>;
   indexRenderState?: Record<string, unknown>;
   indexUiState?: Record<string, unknown>;
+};
+
+type SearchWidget<TWidgetDescription extends WidgetDescription> = {
+  dependsOn?: 'search';
+  getWidgetParameters?: (
+    state: SearchParameters,
+    widgetParametersOptions: {
+      uiState: Expand<
+        Partial<TWidgetDescription['indexUiState'] & IndexUiState>
+      >;
+    }
+  ) => SearchParameters;
+};
+
+type RecommmendRenderOptions = SharedRenderOptions & {
+  results: RecommendResultItem;
+};
+
+type RecommendWidget<
+  TWidgetDescription extends WidgetDescription & WidgetParams
+> = {
+  dependsOn: 'recommend';
+  $$id: number;
+  getWidgetParameters: (
+    state: RecommendParameters,
+    widgetParametersOptions: {
+      uiState: Expand<
+        Partial<TWidgetDescription['indexUiState'] & IndexUiState>
+      >;
+    }
+  ) => RecommendParameters;
+  getRenderState: (
+    renderState: Expand<
+      IndexRenderState & Partial<TWidgetDescription['indexRenderState']>
+    >,
+    renderOptions: InitOptions | RecommmendRenderOptions
+  ) => IndexRenderState & TWidgetDescription['indexRenderState'];
+  getWidgetRenderState: (
+    renderOptions: InitOptions | RecommmendRenderOptions
+  ) => Expand<
+    WidgetRenderState<
+      TWidgetDescription['renderState'],
+      TWidgetDescription['widgetParams']
+    >
+  >;
 };
 
 type RequiredWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
@@ -268,7 +315,8 @@ export type Widget<
     WidgetType<TWidgetDescription> &
     UiStateLifeCycle<TWidgetDescription> &
     RenderStateLifeCycle<TWidgetDescription>
->;
+> &
+  (SearchWidget<TWidgetDescription> | RecommendWidget<TWidgetDescription>);
 
 export type TransformItemsMetadata = {
   results?: SearchResults;

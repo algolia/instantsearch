@@ -9,6 +9,7 @@ var merge = require('./functions/merge');
 var objectHasKeys = require('./functions/objectHasKeys');
 var omit = require('./functions/omit');
 var RecommendParameters = require('./RecommendParameters');
+var RecommendResults = require('./RecommendResults');
 var requestBuilder = require('./requestBuilder');
 var SearchParameters = require('./SearchParameters');
 var SearchResults = require('./SearchResults');
@@ -1448,6 +1449,53 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function (
     helper.emit('result', {
       results: helper.lastResults,
       state: state,
+    });
+  });
+};
+
+AlgoliaSearchHelper.prototype._dispatchRecommendResponse = function (
+  queryId,
+  states,
+  content
+) {
+  // @TODO remove the number of outdated queries discarded instead of just one
+
+  if (queryId < this._lastRecommendQueryIdReceived) {
+    // Outdated answer
+    return;
+  }
+
+  this._currentNbRecommendQueries -=
+    queryId - this._lastRecommendQueryIdReceived;
+  this._lastRecommendQueryIdReceived = queryId;
+
+  if (this._currentNbRecommendQueries === 0) this.emit('recommendQueueEmpty');
+
+  var results = content.results.slice();
+
+  states.forEach(function (s) {
+    var state = s.state;
+    var helper = s.helper;
+
+    if (!s.index) {
+      // eslint-disable-next-line no-warning-comments
+      // TODO: emit "result" event when events for Recommend are implemented
+      helper.emit('recommend:result', {
+        results: null,
+        state: state,
+      });
+      return;
+    }
+
+    helper.lastRecommendResults = new RecommendResults(state, results);
+
+    // eslint-disable-next-line no-warning-comments
+    // TODO: emit "result" event when events for Recommend are implemented
+    helper.emit('recommend:result', {
+      recommend: {
+        results: helper.lastRecommendResults,
+        state: state,
+      },
     });
   });
 };
