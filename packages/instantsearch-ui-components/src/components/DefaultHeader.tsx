@@ -19,7 +19,7 @@ export function createDefaultHeaderComponent({ createElement }: Renderer) {
     }
 
     return (
-      <h3 className={cx('auc-Recommend-title', classNames.title)}>
+      <h3 className={cx('ais-Recommend-title', classNames.title)}>
         {translations.title}
       </h3>
     );

@@ -106,7 +106,7 @@ export function createFrequentlyBoughtTogetherComponent({
     }
 
     return (
-      <section className={cx('auc-Recommend', classNames.root)}>
+      <section className={cx('ais-Recommend', classNames.root)}>
         <Header
           classNames={classNames}
           recommendations={props.items}

@@ -38,21 +38,21 @@ describe('FrequentlyBoughtTogether', () => {
     expect(container).toMatchInlineSnapshot(`
       <div>
         <section
-          class="auc-Recommend"
+          class="ais-Recommend"
         >
           <h3
-            class="auc-Recommend-title"
+            class="ais-Recommend-title"
           >
             Frequently bought together
           </h3>
           <div
-            class="auc-Recommend-container"
+            class="ais-Recommend-container"
           >
             <ol
-              class="auc-Recommend-list"
+              class="ais-Recommend-list"
             >
               <li
-                class="auc-Recommend-item"
+                class="ais-Recommend-item"
               >
                 <div>
                   1
@@ -61,7 +61,7 @@ describe('FrequentlyBoughtTogether', () => {
                 </div>
               </li>
               <li
-                class="auc-Recommend-item"
+                class="ais-Recommend-item"
               >
                 <div>
                   2
@@ -108,19 +108,19 @@ describe('FrequentlyBoughtTogether', () => {
     expect(container).toMatchInlineSnapshot(`
       <div>
         <section
-          class="auc-Recommend"
+          class="ais-Recommend"
         >
           <div>
             My custom header
           </div>
           <div
-            class="auc-Recommend-container"
+            class="ais-Recommend-container"
           >
             <ol
-              class="auc-Recommend-list"
+              class="ais-Recommend-list"
             >
               <li
-                class="auc-Recommend-item"
+                class="ais-Recommend-item"
               >
                 1
               </li>
@@ -146,21 +146,21 @@ describe('FrequentlyBoughtTogether', () => {
     expect(container).toMatchInlineSnapshot(`
       <div>
         <section
-          class="auc-Recommend"
+          class="ais-Recommend"
         >
           <h3
-            class="auc-Recommend-title"
+            class="ais-Recommend-title"
           >
             My custom title
           </h3>
           <div
-            class="auc-Recommend-container"
+            class="ais-Recommend-container"
           >
             <ol
-              class="auc-Recommend-list"
+              class="ais-Recommend-list"
             >
               <li
-                class="auc-Recommend-item"
+                class="ais-Recommend-item"
               >
                 <div />
               </li>

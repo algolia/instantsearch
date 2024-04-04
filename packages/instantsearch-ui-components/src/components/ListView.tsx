@@ -30,12 +30,12 @@ export function createListViewComponent({ createElement, Fragment }: Renderer) {
   ) {
     const { classNames = {}, itemComponent: ItemComponent, items } = userProps;
     return (
-      <div className={cx('auc-Recommend-container', classNames.container)}>
-        <ol className={cx('auc-Recommend-list', classNames.list)}>
+      <div className={cx('ais-Recommend-container', classNames.container)}>
+        <ol className={cx('ais-Recommend-list', classNames.list)}>
           {items.map((item) => (
             <li
               key={item.objectID}
-              className={cx('auc-Recommend-item', classNames.item)}
+              className={cx('ais-Recommend-item', classNames.item)}
             >
               <ItemComponent
                 createElement={createElement}
