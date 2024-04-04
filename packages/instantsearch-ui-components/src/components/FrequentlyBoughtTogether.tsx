@@ -8,28 +8,19 @@ import { createListViewComponent } from './recommend-inner/ListView';
 import type {
   ItemComponentProps,
   RecommendClassNames,
+  RecommendStatus,
   RecommendTranslations,
+  RecordWithObjectID,
   Renderer,
 } from '../types';
 import type { ViewProps } from './recommend-inner/ListView';
 
 // types
-export type InnerComponentProps<TObject> = {
-  classNames: RecommendClassNames;
-  recommendations: TObject[];
-  translations: RecommendTranslations;
-};
-
-export type RecordWithObjectID<TObject = Record<string, unknown>> = TObject & {
-  objectID: string;
-};
-
-export type RecommendStatus = 'loading' | 'stalled' | 'idle';
 
 export type FrequentlyBoughtTogetherComponentProps<TObject> = {
-  classNames: RecommendClassNames;
+  classNames: Partial<RecommendClassNames>;
   recommendations: TObject[];
-  translations: RecommendTranslations;
+  translations: Partial<RecommendTranslations>;
 };
 
 export type HeaderComponentProps<TObject> =
@@ -39,7 +30,7 @@ export type ChildrenProps<TObject> =
   FrequentlyBoughtTogetherComponentProps<TObject> & {
     Fallback: () => JSX.Element | null;
     Header: (props: HeaderComponentProps<TObject>) => JSX.Element | null;
-    status: RecommendStatus; // align with instantsearch status
+    status: RecommendStatus;
     View: (props: unknown) => JSX.Element;
   };
 
@@ -53,14 +44,13 @@ export type RecommendComponentProps<
     props: ItemComponentProps<RecordWithObjectID<TObject>> & TComponentProps
   ) => JSX.Element;
   items: Array<RecordWithObjectID<TObject>>;
-  classNames?: RecommendClassNames;
-  // children?: (props: ChildrenProps<TObject> & TComponentProps) => JSX.Element;
+  classNames?: Partial<RecommendClassNames>;
   fallbackComponent?: (props: TComponentProps) => JSX.Element;
   headerComponent?: (
     props: HeaderComponentProps<TObject> & TComponentProps
   ) => JSX.Element;
   status: RecommendStatus;
-  translations?: RecommendTranslations;
+  translations?: Partial<RecommendTranslations>;
   view?: (
     props: ViewProps<
       RecordWithObjectID<TObject>,

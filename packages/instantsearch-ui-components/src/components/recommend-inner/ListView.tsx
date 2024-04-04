@@ -26,7 +26,11 @@ export type ViewProps<
 
 export function createListViewComponent({ createElement, Fragment }: Renderer) {
   return function ListView<TItem extends RecordWithObjectID>(
-    userProps: ViewProps<TItem, RecommendTranslations, RecommendClassNames>
+    userProps: ViewProps<
+      TItem,
+      RecommendTranslations,
+      Partial<RecommendClassNames>
+    >
   ) {
     const { classNames = {}, itemComponent: ItemComponent, items } = userProps;
     return (
