@@ -8,6 +8,7 @@ import type {
   SearchParameters,
   SearchResults,
   RecommendParameters,
+  RecommendResultItem,
 } from 'algoliasearch-helper';
 
 export type ScopedResult = {
@@ -137,7 +138,7 @@ export type WidgetDescription = {
   indexUiState?: Record<string, unknown>;
 };
 
-type SearchWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
+type SearchWidget<TWidgetDescription extends WidgetDescription> = {
   dependsOn?: 'search';
   getWidgetParameters?: (
     state: SearchParameters,
@@ -149,8 +150,15 @@ type SearchWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
   ) => SearchParameters;
 };
 
-type RecommendWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
-  dependsOn?: 'recommend';
+type RecommmendRenderOptions = SharedRenderOptions & {
+  results: RecommendResultItem;
+};
+
+type RecommendWidget<
+  TWidgetDescription extends WidgetDescription & WidgetParams
+> = {
+  dependsOn: 'recommend';
+  $$id: number;
   getWidgetParameters: (
     state: RecommendParameters,
     widgetParametersOptions: {
@@ -159,6 +167,20 @@ type RecommendWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
       >;
     }
   ) => RecommendParameters;
+  getRenderState: (
+    renderState: Expand<
+      IndexRenderState & Partial<TWidgetDescription['indexRenderState']>
+    >,
+    renderOptions: InitOptions | RecommmendRenderOptions
+  ) => IndexRenderState & TWidgetDescription['indexRenderState'];
+  getWidgetRenderState: (
+    renderOptions: InitOptions | RecommmendRenderOptions
+  ) => Expand<
+    WidgetRenderState<
+      TWidgetDescription['renderState'],
+      TWidgetDescription['widgetParams']
+    >
+  >;
 };
 
 type RequiredWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
@@ -247,10 +269,7 @@ type RequiredUiStateLifeCycle<TWidgetDescription extends WidgetDescription> = {
       >;
     }
   ) => SearchParameters;
-} & (
-  | SearchWidgetLifeCycle<TWidgetDescription>
-  | RecommendWidgetLifeCycle<TWidgetDescription>
-);
+};
 
 type UiStateLifeCycle<TWidgetDescription extends WidgetDescription> =
   TWidgetDescription extends RequiredKeys<WidgetDescription, 'indexUiState'>
@@ -302,7 +321,8 @@ export type Widget<
     WidgetType<TWidgetDescription> &
     UiStateLifeCycle<TWidgetDescription> &
     RenderStateLifeCycle<TWidgetDescription>
->;
+> &
+  (SearchWidget<TWidgetDescription> | RecommendWidget<TWidgetDescription>);
 
 export type TransformItemsMetadata = {
   results?: SearchResults;
