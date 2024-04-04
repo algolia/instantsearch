@@ -15,8 +15,6 @@ import type {
 } from '../types';
 import type { ViewProps } from './recommend-inner/ListView';
 
-// types
-
 export type FrequentlyBoughtTogetherComponentProps<TObject> = {
   classNames: Partial<RecommendClassNames>;
   recommendations: TObject[];
@@ -33,8 +31,6 @@ export type ChildrenProps<TObject> =
     status: RecommendStatus;
     View: (props: unknown) => JSX.Element;
   };
-
-// most above will need to go to shared file
 
 export type RecommendComponentProps<
   TObject,
