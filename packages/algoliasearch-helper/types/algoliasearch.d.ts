@@ -172,4 +172,5 @@ export interface SearchClient {
     ? DefaultSearchClient['initIndex']
     : never;
   addAlgoliaAgent?: DefaultSearchClient['addAlgoliaAgent'];
+  getRecommendations?: DefaultSearchClient['getRecommendations'];
 }

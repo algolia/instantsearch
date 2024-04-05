@@ -580,7 +580,9 @@ See documentation: ${createDocumentationLink({
       // under the hood, we have a different implementation. It should be
       // completely transparent for the rest of the codebase. Only this module
       // is impacted.
-      return mainHelper.searchOnlyWithDerivedHelpers();
+      return (
+        mainHelper.searchOnlyWithDerivedHelpers() && mainHelper.recommend()
+      );
     };
 
     if (this._searchFunction) {

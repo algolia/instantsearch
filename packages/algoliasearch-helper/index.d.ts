@@ -90,6 +90,8 @@ declare namespace algoliasearchHelper {
      */
     search(): this;
 
+    recommend(): this;
+
     /**
      * Private method to only search on derived helpers
      */
@@ -271,6 +273,21 @@ declare namespace algoliasearchHelper {
      */
     addExclude: AlgoliaSearchHelper['addFacetExclusion'];
     addTag(tag: string): this;
+    addFrequentlyBoughtTogether(
+      params: RecommendParametersWithId<FrequentlyBoughtTogetherQuery>
+    ): this;
+    addRelatedProducts(
+      params: RecommendParametersWithId<RelatedProductsQuery>
+    ): this;
+    addTrendingItems(
+      params: RecommendParametersWithId<TrendingItemsQuery>
+    ): this;
+    addTrendingFacets(
+      params: RecommendParametersWithId<TrendingFacetsQuery>
+    ): this;
+    addLookingSimilar(
+      params: RecommendParametersWithId<LookingSimilarQuery>
+    ): this;
     removeNumericRefinement(
       facet: string,
       operator?: SearchParameters.Operator,
@@ -293,6 +310,11 @@ declare namespace algoliasearchHelper {
      */
     removeExclude(facet: string, value: string): this;
     removeTag(value: string): this;
+    removeFrequentlyBoughtTogether(id: string): this;
+    removeRelatedProducts(id: string): this;
+    removeTrendingItems(id: string): this;
+    removeTrendingFacets(id: string): this;
+    removeLookingSimilar(id: string): this;
     toggleFacetExclusion(facet: string, value: string): this;
     /**
      * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#toggleFacetExclusion}
@@ -359,7 +381,10 @@ declare namespace algoliasearchHelper {
     setClient(client: SearchClient): this;
     getClient(): SearchClient;
     derive(
-      deriveFn: (oldParams: SearchParameters) => SearchParameters
+      deriveFn: (oldParams: SearchParameters) => SearchParameters,
+      deriveRecommendFn?: (
+        oldParams: RecommendParameters
+      ) => RecommendParameters
     ): DerivedHelper;
     detachDerivedHelper(derivedHelper: DerivedHelper): void;
     hasPendingRequests(): boolean;
@@ -389,6 +414,7 @@ declare namespace algoliasearchHelper {
     lastRecommendResults: RecommendResults | null;
     detach(): void;
     getModifiedState(): SearchParameters;
+    getModifiedRecommendState(): RecommendParameters;
   }
 
   namespace SearchForFacetValues {
@@ -1479,11 +1505,24 @@ declare namespace algoliasearchHelper {
     }
   }
 
-  export type PlainRecommendParameters =
-    | RecommendationsQuery
-    | TrendingQuery
-    | RecommendedForYouQuery;
+  // We remove `indexName` from the Recommend query types as the helper
+  // will fill in this value before sending the queries
+  type FrequentlyBoughtTogetherQuery = Omit<
+    RecommendFrequentlyBoughtTogetherQuery,
+    'indexName'
+  >;
+  type LookingSimilarQuery = Omit<RecommendLookingSimilarQuery, 'indexName'>;
+  type RelatedProductsQuery = Omit<RecommendRelatedProductsQuery, 'indexName'>;
+  type TrendingFacetsQuery = Omit<RecommendTrendingFacetsQuery, 'indexName'>;
+  type TrendingItemsQuery = Omit<RecommendTrendingItemsQuery, 'indexName'>;
 
+  export type PlainRecommendParameters =
+    | FrequentlyBoughtTogetherQuery
+    | LookingSimilarQuery
+    | RelatedProductsQuery
+    | TrendingFacetsQuery
+    | TrendingItemsQuery;
+  
   export type RecommendParametersWithId<
     T extends PlainRecommendParameters = PlainRecommendParameters
   > = T & {
@@ -1491,13 +1530,13 @@ declare namespace algoliasearchHelper {
   };
 
   export type RecommendParametersOptions = {
-    params?: PlainRecommendParametersWithId[];
+    params?: Array<RecommendParametersWithId<PlainRecommendParameters>>;
   };
 
   export class RecommendParameters {
-    params: PlainRecommendParametersWithId[];
+    params: RecommendParametersWithId[];
     constructor(opts?: RecommendParametersOptions);
-    addParams(params: PlainRecommendParametersWithId): RecommendParameters;
+    addParams(params: RecommendParametersWithId): RecommendParameters;
     removeParams(id: string): RecommendParameters;
     addFrequentlyBoughtTogether(
       params: RecommendParametersWithId<FrequentlyBoughtTogetherQuery>

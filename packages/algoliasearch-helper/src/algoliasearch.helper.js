@@ -132,10 +132,14 @@ function AlgoliaSearchHelper(client, index, options, searchResultsOptions) {
     params: opts.recommendState,
   });
   this.lastResults = null;
+  this.lastRecommendResults = null;
   this._queryId = 0;
+  this._recommendQueryId = 0;
   this._lastQueryIdReceived = -1;
+  this._lastRecommendQueryIdReceived = -1;
   this.derivedHelpers = [];
   this._currentNbQueries = 0;
+  this._currentNbRecommendQueries = 0;
   this._searchResultsOptions = searchResultsOptions;
 }
 
@@ -159,6 +163,21 @@ AlgoliaSearchHelper.prototype.search = function () {
 
 AlgoliaSearchHelper.prototype.searchOnlyWithDerivedHelpers = function () {
   this._search({ onlyWithDerivedHelpers: true });
+  return this;
+};
+
+/**
+ * Sends the recommendation queries set in the state. When the method is
+ * called, it triggers a `fetch` event. The results will be available through
+ * the `result` event. If an error occurs, an `error` will be fired instead.
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
+ * @fires fetch
+ * @fires result
+ * @fires error
+ * @chainable
+ */
+AlgoliaSearchHelper.prototype.recommend = function () {
+  this._recommend();
   return this;
 };
 
@@ -659,6 +678,86 @@ AlgoliaSearchHelper.prototype.addTag = function (tag) {
 };
 
 /**
+ * Adds a "frequently bought together" recommendation query.
+ *
+ * @param {FrequentlyBoughtTogetherQuery} params the parameters for the recommendation
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
+ * @fires change
+ * @chainable
+ */
+AlgoliaSearchHelper.prototype.addFrequentlyBoughtTogether = function (params) {
+  this._recommendChange({
+    state: this.recommendState.addFrequentlyBoughtTogether(params),
+  });
+
+  return this;
+};
+
+/**
+ * Adds a "related products" recommendation query.
+ *
+ * @param {RelatedProductsQuery} params the parameters for the recommendation
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
+ * @fires change
+ * @chainable
+ */
+AlgoliaSearchHelper.prototype.addRelatedProducts = function (params) {
+  this._recommendChange({
+    state: this.recommendState.addRelatedProducts(params),
+  });
+
+  return this;
+};
+
+/**
+ * Adds a "trending items" recommendation query.
+ *
+ * @param {TrendingItemsQuery} params the parameters for the recommendation
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
+ * @fires change
+ * @chainable
+ */
+AlgoliaSearchHelper.prototype.addTrendingItems = function (params) {
+  this._recommendChange({
+    state: this.recommendState.addTrendingItems(params),
+  });
+
+  return this;
+};
+
+/**
+ * Adds a "trending facets" recommendation query.
+ *
+ * @param {TrendingFacetsQuery} params the parameters for the recommendation
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
+ * @fires change
+ * @chainable
+ */
+AlgoliaSearchHelper.prototype.addTrendingFacets = function (params) {
+  this._recommendChange({
+    state: this.recommendState.addTrendingFacets(params),
+  });
+
+  return this;
+};
+
+/**
+ * Adds a "looking similar" recommendation query.
+ *
+ * @param {LookingSimilarQuery} params the parameters for the recommendation
+ * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
+ * @fires change
+ * @chainable
+ */
+AlgoliaSearchHelper.prototype.addLookingSimilar = function (params) {
+  this._recommendChange({
+    state: this.recommendState.addLookingSimilar(params),
+  });
+
+  return this;
+};
+
+/**
  * Removes an numeric filter to an attribute with the `operator` and `value` provided. If the
  * filter is not set, it doesn't change the filters.
  *
@@ -822,6 +921,86 @@ AlgoliaSearchHelper.prototype.removeTag = function (tag) {
   this._change({
     state: this.state.resetPage().removeTagRefinement(tag),
     isPageReset: true,
+  });
+
+  return this;
+};
+
+/**
+ * Removes a "frequently bought together" recommendation query.
+ *
+ * @param {string} id identifier of the recommendation widget
+ * @returns {AlgoliaSearchHelper} Method is chainable, it returns itself
+ * @fires change
+ * @chainable
+ */
+AlgoliaSearchHelper.prototype.removeFrequentlyBoughtTogether = function (id) {
+  this._recommendChange({
+    state: this.recommendState.removeParams(id),
+  });
+
+  return this;
+};
+
+/**
+ * Removes a "related products" recommendation query.
+ *
+ * @param {string} id identifier of the recommendation widget
+ * @returns {AlgoliaSearchHelper} Method is chainable, it returns itself
+ * @fires change
+ * @chainable
+ */
+AlgoliaSearchHelper.prototype.removeRelatedProducts = function (id) {
+  this._recommendChange({
+    state: this.recommendState.removeParams(id),
+  });
+
+  return this;
+};
+
+/**
+ * Removes a "trending items" recommendation query.
+ *
+ * @param {string} id identifier of the recommendation widget
+ * @returns {AlgoliaSearchHelper} Method is chainable, it returns itself
+ * @fires change
+ * @chainable
+ */
+AlgoliaSearchHelper.prototype.removeTrendingItems = function (id) {
+  this._recommendChange({
+    state: this.recommendState.removeParams(id),
+  });
+
+  return this;
+};
+
+/**
+ * Removes a "trending facets" recommendation query.
+ *
+ * @param {string} id identifier of the recommendation widget
+ * @returns {AlgoliaSearchHelper} Method is chainable, it returns itself
+ * @fires change
+ * @chainable
+ */
+AlgoliaSearchHelper.prototype.removeTrendingFacets = function (id) {
+  this._recommendChange({
+    state: this.recommendState.removeParams(id),
+  });
+
+  return this;
+};
+
+/**
+ * Removes a "looking similar" recommendation query.
+ *
+ * @param {string} id identifier of the recommendation widget
+ * @returns {AlgoliaSearchHelper} Method is chainable, it returns itself
+ * @fires change
+ * @chainable
+ */
+AlgoliaSearchHelper.prototype.removeLookingSimilar = function (id) {
+  this._recommendChange({
+    state: this.recommendState.removeParams(id),
   });
 
   return this;
@@ -1434,7 +1613,7 @@ AlgoliaSearchHelper.prototype._recommend = function () {
         return param.$$id;
       })
     );
-
+    
     derivedHelper.emit('fetch', {
       recommend: {
         state: derivedState,
@@ -1613,6 +1792,26 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaError = function (
   if (this._currentNbQueries === 0) this.emit('searchQueueEmpty');
 };
 
+AlgoliaSearchHelper.prototype._dispatchRecommendError = function (
+  queryId,
+  error
+) {
+  if (queryId < this._lastRecommendQueryIdReceived) {
+    // Outdated answer
+    return;
+  }
+
+  this._currentNbRecommendQueries -=
+    queryId - this._lastRecommendQueryIdReceived;
+  this._lastRecommendQueryIdReceived = queryId;
+
+  this.emit('error', {
+    error: error,
+  });
+
+  if (this._currentNbRecommendQueries === 0) this.emit('recommendQueueEmpty');
+};
+
 AlgoliaSearchHelper.prototype.containsRefinement = function (
   query,
   facetFilters,
@@ -1663,6 +1862,16 @@ AlgoliaSearchHelper.prototype._recommendChange = function (event) {
 
     // eslint-disable-next-line no-warning-comments
     // TODO: emit "change" event when events for Recommend are implemented
+    this.emit('recommend:change', {
+      search: {
+        results: this.lastResults,
+        state: this.state,
+      },
+      recommend: {
+        results: this.lastRecommendResults,
+        state: this.recommendState,
+      },
+    });
   }
 };
 
@@ -1717,10 +1926,11 @@ AlgoliaSearchHelper.prototype.getClient = function () {
  * and the SearchParameters that is returned by the call of the
  * parameter function.
  * @param {function} fn SearchParameters -> SearchParameters
+ * @param {function} recommendFn RecommendParameters -> RecommendParameters
  * @return {DerivedHelper} a new DerivedHelper
  */
-AlgoliaSearchHelper.prototype.derive = function (fn) {
-  var derivedHelper = new DerivedHelper(this, fn);
+AlgoliaSearchHelper.prototype.derive = function (fn, recommendFn) {
+  var derivedHelper = new DerivedHelper(this, fn, recommendFn);
   this.derivedHelpers.push(derivedHelper);
   return derivedHelper;
 };

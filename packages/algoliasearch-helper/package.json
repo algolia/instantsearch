@@ -1,6 +1,6 @@
 {
   "name": "algoliasearch-helper",
-  "version": "3.16.3",
+  "version": "3.17.0",
   "description": "Helper for implementing advanced search features with algolia",
   "main": "index.js",
   "types": "index.d.ts",
@@ -34,7 +34,7 @@
     "types/algoliasearch.js"
   ],
   "devDependencies": {
-    "@algolia/recommend": "4.22.1",
+    "@algolia/recommend": "4.23.2",
     "@metalsmith/sass": "1.4.0",
     "@types/algoliasearch": "3.34.11",
     "browserify": "14.5.0",

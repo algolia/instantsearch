@@ -42,6 +42,8 @@ export type InitOptions = SharedRenderOptions & {
   results?: undefined;
 };
 
+export type ShouldRenderOptions = { instantSearchInstance: InstantSearch };
+
 export type RenderOptions = SharedRenderOptions & {
   results: SearchResults;
 };
@@ -192,6 +194,10 @@ type RequiredWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
    */
   init?: (options: InitOptions) => void;
   /**
+   * Whether `render` should be called
+   */
+  shouldRender?: (options: ShouldRenderOptions) => boolean;
+  /**
    * Called after each search response has been received.
    */
   render?: (options: RenderOptions) => void;
@@ -263,7 +269,10 @@ type RequiredUiStateLifeCycle<TWidgetDescription extends WidgetDescription> = {
       >;
     }
   ) => SearchParameters;
-};
+} & (
+  | SearchWidgetLifeCycle<TWidgetDescription>
+  | RecommendWidgetLifeCycle<TWidgetDescription>
+);
 
 type UiStateLifeCycle<TWidgetDescription extends WidgetDescription> =
   TWidgetDescription extends RequiredKeys<WidgetDescription, 'indexUiState'>
