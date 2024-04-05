@@ -10,6 +10,7 @@ import type {
   TransformItems,
   Hit,
   BaseHit,
+  RenderOptions,
 } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -67,7 +68,8 @@ export type FrequentlyBoughtTogetherWidgetDescription<
   $$type: 'ais.frequentlyBoughtTogether';
   renderState: FrequentlyBoughtTogetherRenderState<THit>;
   indexRenderState: {
-    hits: WidgetRenderState<
+    // Why is this here?
+    fbt: WidgetRenderState<
       FrequentlyBoughtTogetherRenderState<THit>,
       FrequentlyBoughtTogetherConnectorParams<THit>
     >;
@@ -80,7 +82,6 @@ export type FrequentlyBoughtTogetherConnector<THit extends BaseHit = BaseHit> =
     FrequentlyBoughtTogetherConnectorParams<THit>
   >;
 
-// why is this erroring?
 const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
   function connectFrequentlyBoughtTogether(renderFn, unmountFn = noop) {
     checkRendering(renderFn, withUsage());
@@ -89,7 +90,7 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
       return {
         dependsOn: 'recommend',
         $$type: 'ais.frequentlyBoughtTogether',
-        $$id: '123456789', // to do: generate a unique id
+        $$id: 123456789, // to do: generate a unique id
 
         init(initOptions) {
           renderFn(
@@ -115,8 +116,11 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
           // renderState.sendEvent('view:internal', renderState.hits);
         },
 
-        getRenderState(renderState, _renderOptions) {
-          return renderState;
+        getRenderState(renderState, renderOptions) {
+          return {
+            ...renderState,
+            fbt: this.getWidgetRenderState(renderOptions as RenderOptions),
+          };
         },
 
         getWidgetRenderState({ results }) {
@@ -135,7 +139,7 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
 
         getWidgetParameters(state) {
           return state.addFrequentlyBoughtTogether({
-            $$id: '123456789',
+            $$id: 123456789,
             objectID: widgetParams.objectID,
           });
         },
