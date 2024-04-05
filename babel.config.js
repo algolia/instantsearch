@@ -79,6 +79,9 @@ module.exports = (api) => {
             // false positive (babel doesn't know types)
             // this is actually only called on arrays
             'String.prototype.includes',
+
+            // false positive (spread)
+            'Object.getOwnPropertyDescriptors',
           ];
           if (defaultShouldInject && !exclude.includes(name)) {
             throw new Error(
