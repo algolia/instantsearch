@@ -1484,8 +1484,10 @@ declare namespace algoliasearchHelper {
     | TrendingQuery
     | RecommendedForYouQuery;
 
-  export type PlainRecommendParametersWithId = PlainRecommendParameters & {
-    $$id: string;
+  export type RecommendParametersWithId<
+    T extends PlainRecommendParameters = PlainRecommendParameters
+  > = T & {
+    $$id: number;
   };
 
   export type RecommendParametersOptions = {

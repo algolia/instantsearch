@@ -1394,6 +1394,95 @@ AlgoliaSearchHelper.prototype._search = function (options) {
   return undefined;
 };
 
+AlgoliaSearchHelper.prototype._recommend = function () {
+  var searchState = this.state;
+  var recommendState = this.recommendState;
+  var index = this.getIndex();
+  var states = [{ state: recommendState, index: index, helper: this }];
+  var ids = recommendState.params.map(function (param) {
+    return param.$$id;
+  });
+
+  this.emit('fetch', {
+    recommend: {
+      state: recommendState,
+      results: this.lastRecommendResults,
+    },
+  });
+
+  var derivedQueries = this.derivedHelpers.map(function (derivedHelper) {
+    var derivedIndex = derivedHelper.getModifiedState(searchState).index;
+    if (!derivedIndex) {
+      return [];
+    }
+
+    // Contrary to what is done when deriving the search state, we don't want to
+    // provide the current recommend state to the derived helper, as it would
+    // inherit unwanted queries. We instead provide an empty recommend state.
+    var derivedState = derivedHelper.getModifiedRecommendState(
+      new RecommendParameters()
+    );
+    states.push({
+      state: derivedState,
+      index: derivedIndex,
+      helper: derivedHelper,
+    });
+
+    ids = Array.prototype.concat.apply(
+      ids,
+      derivedState.params.map(function (param) {
+        return param.$$id;
+      })
+    );
+
+    derivedHelper.emit('fetch', {
+      recommend: {
+        state: derivedState,
+        results: derivedHelper.lastRecommendResults,
+      },
+    });
+
+    return derivedState._buildQueries(derivedIndex);
+  });
+
+  var queries = Array.prototype.concat.apply(
+    this.recommendState._buildQueries(index),
+    derivedQueries
+  );
+
+  if (queries.length === 0) {
+    return;
+  }
+
+  if (
+    queries.length > 0 &&
+    typeof this.client.getRecommendations === 'undefined'
+  ) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      'Please update algoliasearch/lite to the latest version in order to use recommendations widgets.'
+    );
+    return;
+  }
+
+  var queryId = this._recommendQueryId++;
+  this._currentNbRecommendQueries++;
+
+  try {
+    this.client
+      .getRecommendations(queries)
+      .then(this._dispatchRecommendResponse.bind(this, queryId, states, ids))
+      .catch(this._dispatchRecommendError.bind(this, queryId));
+  } catch (error) {
+    // If we reach this part, we're in an internal error state
+    this.emit('error', {
+      error: error,
+    });
+  }
+
+  return;
+};
+
 /**
  * Transform the responses as sent by the server and transform them into a user
  * usable object that merge the results of all the batch requests. It will dispatch
@@ -1456,6 +1545,7 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function (
 AlgoliaSearchHelper.prototype._dispatchRecommendResponse = function (
   queryId,
   states,
+  ids,
   content
 ) {
   // @TODO remove the number of outdated queries discarded instead of just one
@@ -1471,7 +1561,11 @@ AlgoliaSearchHelper.prototype._dispatchRecommendResponse = function (
 
   if (this._currentNbRecommendQueries === 0) this.emit('recommendQueueEmpty');
 
-  var results = content.results.slice();
+  var results = {};
+  content.results.forEach(function (result, index) {
+    var id = ids[index];
+    results[id] = result;
+  });
 
   states.forEach(function (s) {
     var state = s.state;
