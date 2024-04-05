@@ -9,7 +9,7 @@
   },
   "browserslist": "firefox 68, chrome 78, IE 11",
   "dependencies": {
-    "algoliasearch": "4.22.1",
+    "algoliasearch": "4.23.2",
     "instantsearch.js": "4.66.1",
     "react": "18.2.0",
     "react-compound-slider": "3.4.0",
