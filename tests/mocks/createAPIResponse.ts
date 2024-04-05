@@ -1,8 +1,9 @@
-import type { RecommendResponse } from 'algoliasearch-helper';
+import type { RecommendQueriesResponse } from '@algolia/recommend';
 import type {
   SearchResponse,
   SearchResponses,
   SearchForFacetValuesResponse,
+  DefaultSearchClient,
 } from 'instantsearch.js';
 
 export const defaultRenderingContent: SearchResponse<any>['renderingContent'] =
@@ -88,8 +89,12 @@ export const createSFFVResponse = (
   ...args,
 });
 
+type RecommendRequest = Parameters<
+  DefaultSearchClient['getRecommendations']
+>[0];
+
 export const createRecommendResponse = (
-  requests: Array<{ objectID: string; model: string }>
-): { results: RecommendResponse<Record<string, unknown>> } => {
+  requests: RecommendRequest
+): RecommendQueriesResponse<any> => {
   return { results: requests.map(() => createSingleSearchResponse()) };
 };

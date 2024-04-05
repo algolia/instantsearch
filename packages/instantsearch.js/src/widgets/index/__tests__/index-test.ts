@@ -2965,6 +2965,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
     it('forwards recommend results when `dependsOn` is `recommend`', async () => {
       const instance = index({ indexName: 'indexName' });
       const searchClient = createSearchClient({
+        // @ts-expect-error just setting a partial response
         getRecommendations: jest.fn(() =>
           Promise.resolve({
             results: [{ hits: [{ objectID: '1', title: 'Recommend' }] }],
