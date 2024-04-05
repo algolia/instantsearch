@@ -19,6 +19,7 @@ import type {
   ScopedResult,
   SearchClient,
   IndexRenderState,
+  RenderOptions,
 } from '../../types';
 import type {
   AlgoliaSearchHelper as Helper,
@@ -28,6 +29,7 @@ import type {
   SearchResults,
   AlgoliaSearchHelper,
   RecommendParameters,
+  RecommendResultItem,
 } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -72,6 +74,9 @@ export type IndexWidget<TUiState extends UiState = UiState> = Omit<
   getIndexId: () => string;
   getHelper: () => Helper | null;
   getResults: () => SearchResults | null;
+  getResultsForWidget: (
+    widget: IndexWidget | Widget
+  ) => SearchResults | RecommendResultItem | null;
   getPreviousState: () => SearchParameters | null;
   getScopedResults: () => ScopedResult[];
   getParent: () => IndexWidget | null;
@@ -295,6 +300,22 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       derivedHelper.lastResults._state = helper!.state;
 
       return derivedHelper.lastResults;
+    },
+
+    getResultsForWidget(widget) {
+      if (
+        widget.dependsOn !== 'recommend' ||
+        isIndexWidget(widget) ||
+        !widget.$$id
+      ) {
+        return this.getResults();
+      }
+
+      if (!helper?.lastRecommendResults) {
+        return null;
+      }
+
+      return helper.lastRecommendResults[widget.$$id];
     },
 
     getPreviousState() {
@@ -552,11 +573,13 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         );
       };
 
-      derivedHelper = mainHelper.derive(() =>
-        mergeSearchParameters(
-          mainHelper.state,
-          ...resolveSearchParameters(this)
-        )
+      derivedHelper = mainHelper.derive(
+        () =>
+          mergeSearchParameters(
+            mainHelper.state,
+            ...resolveSearchParameters(this)
+          ),
+        () => this.getHelper()!.recommendState
       );
 
       const indexInitialResults =
@@ -608,6 +631,20 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         // search behavior.
         helper!.lastResults = results;
         lastValidSearchParameters = results?._state;
+      });
+
+      // eslint-disable-next-line no-warning-comments
+      // TODO: listen to "result" event when events for Recommend are implemented
+      derivedHelper.on('recommend:result', ({ recommend }) => {
+        // The index does not render the results it schedules a new render
+        // to let all the other indices emit their own results. It allows us to
+        // run the render process in one pass.
+        instantSearchInstance.scheduleRender();
+
+        // the derived helper is the one which actually searches, but the helper
+        // which is exposed e.g. via instance.helper, doesn't search, and thus
+        // does not have access to lastRecommendResults.
+        helper!.lastRecommendResults = recommend.results;
       });
 
       // We compute the render state before calling `init` in a separate loop
@@ -705,7 +742,11 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         if (widget.getRenderState) {
           const renderState = widget.getRenderState(
             instantSearchInstance.renderState[this.getIndexId()] || {},
-            createRenderArgs(instantSearchInstance, this)
+            createRenderArgs(
+              instantSearchInstance,
+              this,
+              widget
+            ) as RenderOptions
           );
 
           storeRenderState({
@@ -725,7 +766,13 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         // not have results yet.
 
         if (widget.render) {
-          widget.render(createRenderArgs(instantSearchInstance, this));
+          widget.render(
+            createRenderArgs(
+              instantSearchInstance,
+              this,
+              widget
+            ) as RenderOptions
+          );
         }
       });
     },

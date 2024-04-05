@@ -22,7 +22,18 @@ RecommendParameters.prototype = {
   constructor: RecommendParameters,
 
   addParams: function (params) {
-    return new RecommendParameters({ params: this.params.concat(params) });
+    var newParams = this.params.slice();
+    var existingParamsIndex = this.params.findIndex(function (currentParams) {
+      return currentParams.$$id === params.$$id;
+    });
+
+    if (existingParamsIndex !== -1) {
+      newParams.splice(existingParamsIndex, 1, params);
+    } else {
+      newParams.push(params);
+    }
+
+    return new RecommendParameters({ params: newParams });
   },
 
   removeParams: function (id) {
@@ -30,6 +41,45 @@ RecommendParameters.prototype = {
       params: this.params.filter(function (param) {
         return param.$$id !== id;
       }),
+    });
+  },
+
+  addFrequentlyBoughtTogether: function (params) {
+    return this.addParams(
+      Object.assign({}, params, { model: 'bought-together' })
+    );
+  },
+
+  addRelatedProducts: function (params) {
+    return this.addParams(
+      Object.assign({}, params, { model: 'related-products' })
+    );
+  },
+
+  addTrendingItems: function (params) {
+    return this.addParams(
+      Object.assign({}, params, { model: 'trending-items' })
+    );
+  },
+
+  addTrendingFacets: function (params) {
+    return this.addParams(
+      Object.assign({}, params, { model: 'trending-facets' })
+    );
+  },
+
+  addLookingSimilar: function (params) {
+    return this.addParams(
+      Object.assign({}, params, { model: 'looking-similar' })
+    );
+  },
+
+  _buildQueries: function (indexName) {
+    return this.params.map(function (params) {
+      var query = Object.assign({}, params, { indexName: indexName });
+      delete query.$$id;
+
+      return query;
     });
   },
 };

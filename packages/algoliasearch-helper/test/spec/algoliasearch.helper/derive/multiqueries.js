@@ -2,76 +2,125 @@
 
 var algoliasearchHelper = require('../../../../');
 
-function makeFakeClient(assertions) {
+function makeFakeClient({
+  searchAssertions = () => {},
+  recommendAssertions = () => {},
+}) {
   return {
     search: function () {
-      assertions.apply(null, arguments);
+      searchAssertions.apply(null, arguments);
+
+      return new Promise(function () {});
+    },
+    getRecommendations: function () {
+      recommendAssertions.apply(null, arguments);
 
       return new Promise(function () {});
     },
   };
 }
 
-test('trigger a search without derivation', function () {
-  var client = makeFakeClient(assertions);
-  var helper = algoliasearchHelper(client, 'indexName');
+describe('search', function () {
+  test('trigger a search without derivation', function () {
+    var client = makeFakeClient({ searchAssertions });
+    var helper = algoliasearchHelper(client, 'indexName');
 
-  helper.search();
+    helper.search();
 
-  function assertions(requests) {
-    expect(requests.length).toBe(1);
-  }
-});
-
-test('trigger a search with one derivation without a state change', function () {
-  var client = makeFakeClient(assertions);
-  var helper = algoliasearchHelper(client, 'indexName');
-
-  helper.derive(function (state) {
-    return state;
+    function searchAssertions(requests) {
+      expect(requests.length).toBe(1);
+    }
   });
 
-  helper.search();
+  test('trigger a search with one derivation without a state change', function () {
+    var client = makeFakeClient({ searchAssertions });
+    var helper = algoliasearchHelper(client, 'indexName');
 
-  function assertions(requests) {
-    expect(requests.length).toBe(2);
-    expect(requests[0]).toEqual(requests[1]);
-  }
-});
+    helper.derive(function (state) {
+      return state;
+    });
 
-test('trigger a search with one derivation with a state change', function () {
-  var client = makeFakeClient(assertions);
-  var helper = algoliasearchHelper(client, 'indexName');
+    helper.search();
 
-  helper.derive(function (state) {
-    return state.setQuery('otherQuery');
+    function searchAssertions(requests) {
+      expect(requests.length).toBe(2);
+      expect(requests[0]).toEqual(requests[1]);
+    }
   });
 
-  helper.search();
+  test('trigger a search with one derivation with a state change', function () {
+    var client = makeFakeClient({ searchAssertions });
+    var helper = algoliasearchHelper(client, 'indexName');
 
-  function assertions(requests) {
-    expect(requests.length).toBe(2);
-    expect(requests[0].params.query).toBeUndefined();
-    expect(requests[1].params.query).toBe('otherQuery');
+    helper.derive(function (state) {
+      return state.setQuery('otherQuery');
+    });
 
-    delete requests[0].params.query;
-    delete requests[1].params.query;
+    helper.search();
 
-    expect(requests[0]).toEqual(requests[1]);
-  }
-});
+    function searchAssertions(requests) {
+      expect(requests.length).toBe(2);
+      expect(requests[0].params.query).toBeUndefined();
+      expect(requests[1].params.query).toBe('otherQuery');
 
-test('trigger a search with derivation only', function () {
-  var client = makeFakeClient(assertions);
-  var helper = algoliasearchHelper(client, 'indexName');
+      delete requests[0].params.query;
+      delete requests[1].params.query;
 
-  helper.derive(function (state) {
-    return state;
+      expect(requests[0]).toEqual(requests[1]);
+    }
   });
 
-  helper.searchOnlyWithDerivedHelpers();
+  test('trigger a search with derivation only', function () {
+    var client = makeFakeClient({ searchAssertions });
+    var helper = algoliasearchHelper(client, 'indexName');
 
-  function assertions(requests) {
-    expect(requests.length).toBe(1);
-  }
+    helper.derive(function (state) {
+      return state;
+    });
+
+    helper.searchOnlyWithDerivedHelpers();
+
+    function searchAssertions(requests) {
+      expect(requests.length).toBe(1);
+    }
+  });
+});
+
+describe('recommend', function () {
+  test('trigger a recommend request without derivation', function () {
+    var client = makeFakeClient({ recommendAssertions });
+    var helper = algoliasearchHelper(client, 'indexName');
+
+    helper.addFrequentlyBoughtTogether({ $$id: '1', objectID: 'objectID' });
+    helper.recommend();
+
+    function recommendAssertions(requests) {
+      expect(requests).toHaveLength(1);
+    }
+  });
+
+  test('trigger a recommend request with one derivation', function () {
+    var client = makeFakeClient({ recommendAssertions });
+    var helper = algoliasearchHelper(client, 'indexName');
+
+    helper.addFrequentlyBoughtTogether({ $$id: '1', objectID: 'objectID' });
+
+    helper.derive(
+      function (state) {
+        return state;
+      },
+      function (recommendState) {
+        return recommendState.addFrequentlyBoughtTogether({
+          $$id: '2',
+          objectID: 'objectID2',
+        });
+      }
+    );
+
+    helper.recommend();
+
+    function recommendAssertions(requests) {
+      expect(requests.length).toBe(2);
+    }
+  });
 });

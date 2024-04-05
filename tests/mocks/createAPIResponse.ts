@@ -1,3 +1,4 @@
+import type { RecommendResponse } from 'algoliasearch-helper';
 import type {
   SearchResponse,
   SearchResponses,
@@ -86,3 +87,9 @@ export const createSFFVResponse = (
   processingTimeMS: 1,
   ...args,
 });
+
+export const createRecommendResponse = (
+  requests: Array<{ objectID: string; model: string }>
+): { results: RecommendResponse<Record<string, unknown>> } => {
+  return { results: requests.map(() => createSingleSearchResponse()) };
+};

@@ -11,9 +11,12 @@ import type {
 } from './types/algoliasearch';
 // @ts-ignore
 import type {
-  RecommendationsQuery,
-  RecommendedForYouQuery,
-  TrendingQuery,
+  FrequentlyBoughtTogetherQuery as RecommendFrequentlyBoughtTogetherQuery,
+  LookingSimilarQuery as RecommendLookingSimilarQuery,
+  RelatedProductsQuery as RecommendRelatedProductsQuery,
+  TrendingFacetsQuery as RecommendTrendingFacetsQuery,
+  TrendingItemsQuery as RecommendTrendingItemsQuery,
+  RecommendQueriesResponse,
 } from '@algolia/recommend';
 
 /**
@@ -40,6 +43,7 @@ declare namespace algoliasearchHelper {
     state: SearchParameters;
     recommendState: RecommendParameters;
     lastResults: SearchResults | null;
+    lastRecommendResults: RecommendResults | null;
     derivedHelpers: DerivedHelper[];
 
     on(
@@ -85,6 +89,8 @@ declare namespace algoliasearchHelper {
      * @chainable
      */
     search(): this;
+
+    recommend(): this;
 
     /**
      * Private method to only search on derived helpers
@@ -267,6 +273,21 @@ declare namespace algoliasearchHelper {
      */
     addExclude: AlgoliaSearchHelper['addFacetExclusion'];
     addTag(tag: string): this;
+    addFrequentlyBoughtTogether(
+      params: RecommendParametersWithId<FrequentlyBoughtTogetherQuery>
+    ): this;
+    addRelatedProducts(
+      params: RecommendParametersWithId<RelatedProductsQuery>
+    ): this;
+    addTrendingItems(
+      params: RecommendParametersWithId<TrendingItemsQuery>
+    ): this;
+    addTrendingFacets(
+      params: RecommendParametersWithId<TrendingFacetsQuery>
+    ): this;
+    addLookingSimilar(
+      params: RecommendParametersWithId<LookingSimilarQuery>
+    ): this;
     removeNumericRefinement(
       facet: string,
       operator?: SearchParameters.Operator,
@@ -289,6 +310,11 @@ declare namespace algoliasearchHelper {
      */
     removeExclude(facet: string, value: string): this;
     removeTag(value: string): this;
+    removeFrequentlyBoughtTogether(id: string): this;
+    removeRelatedProducts(id: string): this;
+    removeTrendingItems(id: string): this;
+    removeTrendingFacets(id: string): this;
+    removeLookingSimilar(id: string): this;
     toggleFacetExclusion(facet: string, value: string): this;
     /**
      * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#toggleFacetExclusion}
@@ -355,7 +381,10 @@ declare namespace algoliasearchHelper {
     setClient(client: SearchClient): this;
     getClient(): SearchClient;
     derive(
-      deriveFn: (oldParams: SearchParameters) => SearchParameters
+      deriveFn: (oldParams: SearchParameters) => SearchParameters,
+      deriveRecommendFn?: (
+        oldParams: RecommendParameters
+      ) => RecommendParameters
     ): DerivedHelper;
     detachDerivedHelper(derivedHelper: DerivedHelper): void;
     hasPendingRequests(): boolean;
@@ -370,11 +399,22 @@ declare namespace algoliasearchHelper {
       event: 'result',
       cb: (res: { results: SearchResults; state: SearchParameters }) => void
     ): this;
+    on(
+      event: 'recommend:result',
+      cb: (res: {
+        recommend: {
+          results: RecommendResults | null;
+          state: RecommendParameters;
+        };
+      }) => void
+    ): this;
     on(event: 'error', cb: (res: { error: Error }) => void): this;
 
     lastResults: SearchResults | null;
+    lastRecommendResults: RecommendResults | null;
     detach(): void;
     getModifiedState(): SearchParameters;
+    getModifiedRecommendState(): RecommendParameters;
   }
 
   namespace SearchForFacetValues {
@@ -1465,24 +1505,68 @@ declare namespace algoliasearchHelper {
     }
   }
 
-  export type PlainRecommendParameters =
-    | RecommendationsQuery
-    | TrendingQuery
-    | RecommendedForYouQuery;
+  // We remove `indexName` from the Recommend query types as the helper
+  // will fill in this value before sending the queries
+  type FrequentlyBoughtTogetherQuery = Omit<
+    RecommendFrequentlyBoughtTogetherQuery,
+    'indexName'
+  >;
+  type LookingSimilarQuery = Omit<RecommendLookingSimilarQuery, 'indexName'>;
+  type RelatedProductsQuery = Omit<RecommendRelatedProductsQuery, 'indexName'>;
+  type TrendingFacetsQuery = Omit<RecommendTrendingFacetsQuery, 'indexName'>;
+  type TrendingItemsQuery = Omit<RecommendTrendingItemsQuery, 'indexName'>;
 
-  export type PlainRecommendParametersWithId = PlainRecommendParameters & {
+  export type PlainRecommendParameters =
+    | FrequentlyBoughtTogetherQuery
+    | LookingSimilarQuery
+    | RelatedProductsQuery
+    | TrendingFacetsQuery
+    | TrendingItemsQuery;
+
+  export type RecommendParametersWithId<
+    T extends PlainRecommendParameters = PlainRecommendParameters
+  > = T & {
     $$id: string;
   };
 
   export type RecommendParametersOptions = {
-    params?: PlainRecommendParametersWithId[];
+    params?: Array<RecommendParametersWithId<PlainRecommendParameters>>;
   };
 
   export class RecommendParameters {
-    params: PlainRecommendParametersWithId[];
+    params: RecommendParametersWithId[];
     constructor(opts?: RecommendParametersOptions);
-    addParams(params: PlainRecommendParametersWithId): RecommendParameters;
+    addParams(params: RecommendParametersWithId): RecommendParameters;
     removeParams(id: string): RecommendParameters;
+    addFrequentlyBoughtTogether(
+      params: RecommendParametersWithId<FrequentlyBoughtTogetherQuery>
+    ): RecommendParameters;
+    addRelatedProducts(
+      params: RecommendParametersWithId<RelatedProductsQuery>
+    ): RecommendParameters;
+    addTrendingItems(
+      params: RecommendParametersWithId<TrendingItemsQuery>
+    ): RecommendParameters;
+    addTrendingFacets(
+      params: RecommendParametersWithId<TrendingFacetsQuery>
+    ): RecommendParameters;
+    addLookingSimilar(
+      params: RecommendParametersWithId<LookingSimilarQuery>
+    ): RecommendParameters;
+  }
+
+  type RecommendResponse<TObject> =
+    RecommendQueriesResponse<TObject>['results'];
+
+  type RecommendResultItem<TObject = any> = RecommendResponse<TObject>[0];
+
+  export class RecommendResults<T = any> {
+    constructor(state: RecommendParameters, results: RecommendResponse<T>);
+
+    _state: RecommendParameters;
+    _rawResults: RecommendResponse<T>;
+
+    [index: number]: RecommendResultItem<T>;
   }
 }
 

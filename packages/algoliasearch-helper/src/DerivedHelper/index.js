@@ -14,12 +14,15 @@ var inherits = require('../functions/inherits');
  *    This event contains a {@link SearchResults} object and the
  *    {@link SearchParameters} corresponding to this answer.
  * @param {AlgoliaSearchHelper} mainHelper the main helper
- * @param {function} fn the function to create the derived state
+ * @param {function} fn the function to create the derived state for search
+ * @param {function} recommendFn the function to create the derived state for recommendations
  */
-function DerivedHelper(mainHelper, fn) {
+function DerivedHelper(mainHelper, fn, recommendFn) {
   this.main = mainHelper;
   this.fn = fn;
+  this.recommendFn = recommendFn;
   this.lastResults = null;
+  this.lastRecommendResults = null;
 }
 
 inherits(DerivedHelper, EventEmitter);
@@ -36,6 +39,10 @@ DerivedHelper.prototype.detach = function () {
 
 DerivedHelper.prototype.getModifiedState = function (parameters) {
   return this.fn(parameters);
+};
+
+DerivedHelper.prototype.getModifiedRecommendState = function (parameters) {
+  return this.recommendFn(parameters);
 };
 
 module.exports = DerivedHelper;

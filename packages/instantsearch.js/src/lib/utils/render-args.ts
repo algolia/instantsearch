@@ -1,4 +1,4 @@
-import type { InstantSearch, UiState } from '../../types';
+import type { InstantSearch, UiState, Widget } from '../../types';
 import type { IndexWidget } from '../../widgets/index/index';
 
 export function createInitArgs(
@@ -27,9 +27,10 @@ export function createInitArgs(
 
 export function createRenderArgs(
   instantSearchInstance: InstantSearch,
-  parent: IndexWidget
+  parent: IndexWidget,
+  widget: IndexWidget | Widget
 ) {
-  const results = parent.getResults()!;
+  const results = parent.getResultsForWidget(widget)!;
   const helper = parent.getHelper()!;
 
   return {
@@ -38,7 +39,7 @@ export function createRenderArgs(
     instantSearchInstance,
     results,
     scopedResults: parent.getScopedResults(),
-    state: results ? results._state : helper.state,
+    state: results && '_state' in results ? results._state : helper.state,
     renderState: instantSearchInstance.renderState,
     templatesConfig: instantSearchInstance.templatesConfig,
     createURL: parent.createURL,
