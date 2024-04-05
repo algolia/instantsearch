@@ -16,6 +16,8 @@ function RecommendResults(state, results) {
   var self = this;
 
   results.forEach(function (result, index) {
+    if (state.params[index] === undefined) return;
+
     var id = state.params[index].$$id;
     self[id] = result;
   });
