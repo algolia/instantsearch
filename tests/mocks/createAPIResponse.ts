@@ -3,7 +3,6 @@ import type {
   SearchResponse,
   SearchResponses,
   SearchForFacetValuesResponse,
-  DefaultSearchClient,
 } from 'instantsearch.js';
 
 export const defaultRenderingContent: SearchResponse<any>['renderingContent'] =
@@ -89,12 +88,8 @@ export const createSFFVResponse = (
   ...args,
 });
 
-type RecommendRequest = Parameters<
-  DefaultSearchClient['getRecommendations']
->[0];
-
 export const createRecommendResponse = (
-  requests: RecommendRequest
+  requests: readonly any[]
 ): RecommendQueriesResponse<any> => {
   return { results: requests.map(() => createSingleSearchResponse()) };
 };
