@@ -1526,7 +1526,7 @@ declare namespace algoliasearchHelper {
   export type RecommendParametersWithId<
     T extends PlainRecommendParameters = PlainRecommendParameters
   > = T & {
-    $$id: string;
+    $$id: number;
   };
 
   export type RecommendParametersOptions = {
