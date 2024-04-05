@@ -1,4 +1,4 @@
-import type { RecommendResponse } from 'algoliasearch-helper';
+import type { RecommendQueriesResponse } from '@algolia/recommend';
 import type {
   SearchResponse,
   SearchResponses,
@@ -89,7 +89,7 @@ export const createSFFVResponse = (
 });
 
 export const createRecommendResponse = (
-  requests: Array<{ objectID: string; model: string }>
-): { results: RecommendResponse<Record<string, unknown>> } => {
+  requests: readonly any[]
+): RecommendQueriesResponse<any> => {
   return { results: requests.map(() => createSingleSearchResponse()) };
 };
