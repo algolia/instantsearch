@@ -1606,7 +1606,7 @@ AlgoliaSearchHelper.prototype._recommend = function () {
       index: derivedIndex,
       helper: derivedHelper,
     });
-    
+
     ids = Array.prototype.concat.apply(
       ids,
       derivedState.params.map(function (param) {
