@@ -1614,6 +1614,13 @@ AlgoliaSearchHelper.prototype._recommend = function () {
       })
     );
 
+    ids = Array.prototype.concat.apply(
+      ids,
+      derivedState.params.map(function (param) {
+        return param.$$id;
+      })
+    );
+
     derivedHelper.emit('fetch', {
       recommend: {
         state: derivedState,
