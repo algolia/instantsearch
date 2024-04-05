@@ -1613,7 +1613,7 @@ AlgoliaSearchHelper.prototype._recommend = function () {
         return param.$$id;
       })
     );
-    
+
     derivedHelper.emit('fetch', {
       recommend: {
         state: derivedState,

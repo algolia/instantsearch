@@ -269,10 +269,7 @@ type RequiredUiStateLifeCycle<TWidgetDescription extends WidgetDescription> = {
       >;
     }
   ) => SearchParameters;
-} & (
-  | SearchWidgetLifeCycle<TWidgetDescription>
-  | RecommendWidgetLifeCycle<TWidgetDescription>
-);
+};
 
 type UiStateLifeCycle<TWidgetDescription extends WidgetDescription> =
   TWidgetDescription extends RequiredKeys<WidgetDescription, 'indexUiState'>

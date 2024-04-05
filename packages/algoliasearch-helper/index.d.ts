@@ -1522,7 +1522,7 @@ declare namespace algoliasearchHelper {
     | RelatedProductsQuery
     | TrendingFacetsQuery
     | TrendingItemsQuery;
-  
+
   export type RecommendParametersWithId<
     T extends PlainRecommendParameters = PlainRecommendParameters
   > = T & {
@@ -1553,20 +1553,6 @@ declare namespace algoliasearchHelper {
     addLookingSimilar(
       params: RecommendParametersWithId<LookingSimilarQuery>
     ): RecommendParameters;
-  }
-
-  type RecommendResponse<TObject> =
-    RecommendQueriesResponse<TObject>['results'];
-
-  type RecommendResultItem<TObject = any> = RecommendResponse<TObject>[0];
-
-  export class RecommendResults<T = any> {
-    constructor(state: RecommendParameters, results: RecommendResponse<T>);
-
-    _state: RecommendParameters;
-    _rawResults: RecommendResponse<T>;
-
-    [index: number]: RecommendResultItem<T>;
   }
 
   type RecommendResponse<TObject> =
