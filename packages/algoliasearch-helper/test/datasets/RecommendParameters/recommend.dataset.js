@@ -152,12 +152,12 @@ function getData() {
   var recommendParams = new RecommendParameters({
     params: [
       {
-        $$id: '1',
+        $$id: 1,
         objectID: 'A0E20000000279B',
         model: 'bought-together',
       },
       {
-        $$id: '2',
+        $$id: 2,
         facetName: 'brand',
         model: 'trending-facets',
       },
