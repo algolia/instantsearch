@@ -6,16 +6,11 @@ import { createDefaultHeaderComponent } from './recommend-shared/DefaultHeader';
 import { createListViewComponent } from './recommend-shared/ListView';
 
 import type {
-  RecommendItemComponentProps,
-  RecommendClassNames,
-  RecommendStatus,
   RecommendTranslations,
-  RecordWithObjectID,
   Renderer,
   ComponentProps,
   RecommendComponentProps,
 } from '../types';
-import type { RecommendViewProps } from './recommend-shared/ListView';
 
 export type FrequentlyBoughtTogetherProps<
   TObject,
