@@ -1,13 +1,6 @@
 import algoliasearch from 'algoliasearch/lite';
 import instantsearch from 'instantsearch.js';
-import {
-  configure,
-  hits,
-  pagination,
-  panel,
-  refinementList,
-  searchBox,
-} from 'instantsearch.js/es/widgets';
+import { configure, hits, index, searchBox } from 'instantsearch.js/es/widgets';
 
 const searchClient = algoliasearch(
   'latency',
@@ -17,36 +10,158 @@ const searchClient = algoliasearch(
 const search = instantsearch({
   indexName: 'instant_search',
   searchClient,
-  insights: true,
+  future: {
+    preserveSharedStateOnUnmount: true,
+  },
 });
 
+const trendingFacets = connectTrendingFacets(({ items, widgetOptions }) => {
+  const container = document.querySelector(widgetOptions.container);
+  container.innerHTML = '';
+  container.insertAdjacentHTML(
+    'beforeend',
+    `<div><h3>Trending facets</h3><ul></ul></div>`
+  );
+  items.forEach((item) => {
+    container.querySelector('ul').insertAdjacentHTML(
+      'beforeend',
+      `<li>
+          <p style="margin-left: 1rem">${item.facetValue}</p>
+          </li>`
+    );
+  });
+});
+
+const frequentlyBoughtTogether = connectFrequentlyBoughtTogether(
+  ({ items, widgetOptions }) => {
+    const container = document.querySelector(widgetOptions.container);
+    container.innerHTML = '';
+    container.insertAdjacentHTML(
+      'beforeend',
+      `<div><h3>Frequently Bought Together</h3><ul></ul></div>`
+    );
+    items.forEach((item) => {
+      container.querySelector('ul').insertAdjacentHTML(
+        'beforeend',
+        `<li>
+          <p style="margin-left: 1rem">${item.name || item.title}</p>
+          </li>`
+      );
+    });
+  }
+);
+
 search.addWidgets([
-  searchBox({
-    container: '#searchbox',
+  trendingFacets({
+    container: '#trending',
+    facetName: 'categories',
+    maxRecommendations: 5,
   }),
-  hits({
-    container: '#hits',
-    templates: {
-      item: (hit, { html, components }) => html`
-        <article>
-          <h1>${components.Highlight({ hit, attribute: 'name' })}</h1>
-          <p>${components.Highlight({ hit, attribute: 'description' })}</p>
-        </article>
-      `,
-    },
+  frequentlyBoughtTogether({
+    container: '#fbt1',
+    objectIDs: ['5723537', '5005506'],
+    maxRecommendations: 3,
   }),
-  configure({
-    hitsPerPage: 8,
-  }),
-  panel({
-    templates: { header: 'brand' },
-  })(refinementList)({
-    container: '#brand-list',
-    attribute: 'brand',
-  }),
-  pagination({
-    container: '#pagination',
-  }),
+  index({ indexName: 'devcon22_bm_products' }).addWidgets([
+    frequentlyBoughtTogether({
+      container: '#fbt2',
+      objectIDs: ['90807', '91789'],
+      maxRecommendations: 4,
+    }),
+  ]),
 ]);
 
 search.start();
+
+function connectTrendingFacets(renderFn, unmountFn = () => {}) {
+  return function _trendingFacets(widgetOptions) {
+    return {
+      $$type: 'ais.trendingFacets',
+      dependsOn: 'recommend',
+      init(initOptions) {
+        renderFn(
+          {
+            ...this.getWidgetRenderState(initOptions),
+            instantSearchInstance: initOptions.instantSearchInstance,
+          },
+          true
+        );
+      },
+      render(renderOptions) {
+        renderFn(
+          {
+            ...this.getWidgetRenderState(renderOptions),
+            instantSearchInstance: renderOptions.instantSearchInstance,
+          },
+          false
+        );
+      },
+      dispose() {
+        unmountFn();
+      },
+      getRenderState(renderState) {
+        return renderState;
+      },
+      getWidgetRenderState({ results }) {
+        console.log('\t trendingFacets', results);
+
+        return {
+          items: results?.length > 0 ? results[0].hits : [],
+          widgetOptions,
+        };
+      },
+      getWidgetParameters(state) {
+        const { container: _container, ...options } = widgetOptions;
+        return state.addTrendingFacets({ ...options });
+      },
+    };
+  };
+}
+
+function connectFrequentlyBoughtTogether(renderFn, unmountFn = () => {}) {
+  return function _trendingFacets(widgetOptions) {
+    return {
+      $$type: 'ais.frequentlyBoughtTogether',
+      dependsOn: 'recommend',
+      init(initOptions) {
+        renderFn(
+          {
+            ...this.getWidgetRenderState(initOptions),
+            instantSearchInstance: initOptions.instantSearchInstance,
+          },
+          true
+        );
+      },
+      render(renderOptions) {
+        renderFn(
+          {
+            ...this.getWidgetRenderState(renderOptions),
+            instantSearchInstance: renderOptions.instantSearchInstance,
+          },
+          false
+        );
+      },
+      dispose() {
+        unmountFn();
+      },
+      getRenderState(renderState) {
+        return renderState;
+      },
+      getWidgetRenderState({ results }) {
+        console.log('\t frequentlyBoughtTogether', results);
+
+        return {
+          items: results?.length > 0 ? results[0].hits : [],
+          widgetOptions,
+        };
+      },
+      getWidgetParameters(state) {
+        const { container: _container, objectIDs, ...options } = widgetOptions;
+        return objectIDs.reduce(
+          (acc, objectID) => acc.addRelatedProducts({ objectID, ...options }),
+          state
+        );
+      },
+    };
+  };
+}

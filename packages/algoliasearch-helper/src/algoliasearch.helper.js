@@ -1578,9 +1578,6 @@ AlgoliaSearchHelper.prototype._recommend = function () {
   var recommendState = this.recommendState;
   var index = this.getIndex();
   var states = [{ state: recommendState, index: index, helper: this }];
-  var ids = recommendState.params.map(function (param) {
-    return param.$$id;
-  });
 
   this.emit('fetch', {
     recommend: {
@@ -1606,13 +1603,6 @@ AlgoliaSearchHelper.prototype._recommend = function () {
       index: derivedIndex,
       helper: derivedHelper,
     });
-
-    ids = Array.prototype.concat.apply(
-      ids,
-      derivedState.params.map(function (param) {
-        return param.$$id;
-      })
-    );
 
     derivedHelper.emit('fetch', {
       recommend: {
@@ -1650,7 +1640,9 @@ AlgoliaSearchHelper.prototype._recommend = function () {
   try {
     this.client
       .getRecommendations(queries)
-      .then(this._dispatchRecommendResponse.bind(this, queryId, states, ids))
+      .then(
+        this._dispatchRecommendResponse.bind(this, queryId, states, queries)
+      )
       .catch(this._dispatchRecommendError.bind(this, queryId));
   } catch (error) {
     // If we reach this part, we're in an internal error state
@@ -1724,7 +1716,7 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function (
 AlgoliaSearchHelper.prototype._dispatchRecommendResponse = function (
   queryId,
   states,
-  ids,
+  queries,
   content
 ) {
   // @TODO remove the number of outdated queries discarded instead of just one
@@ -1742,7 +1734,7 @@ AlgoliaSearchHelper.prototype._dispatchRecommendResponse = function (
 
   var results = {};
   content.results.forEach(function (result, index) {
-    var id = ids[index];
+    var id = JSON.stringify(queries[index]);
     results[id] = result;
   });
 

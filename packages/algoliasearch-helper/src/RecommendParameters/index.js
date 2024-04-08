@@ -23,15 +23,7 @@ RecommendParameters.prototype = {
 
   addParams: function (params) {
     var newParams = this.params.slice();
-    var existingParamsIndex = this.params.findIndex(function (currentParams) {
-      return currentParams.$$id === params.$$id;
-    });
-
-    if (existingParamsIndex !== -1) {
-      newParams.splice(existingParamsIndex, 1, params);
-    } else {
-      newParams.push(params);
-    }
+    newParams.push(params);
 
     return new RecommendParameters({ params: newParams });
   },

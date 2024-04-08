@@ -303,11 +303,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
     },
 
     getResultsForWidget(widget) {
-      if (
-        widget.dependsOn !== 'recommend' ||
-        isIndexWidget(widget) ||
-        !widget.$$id
-      ) {
+      if (widget.dependsOn !== 'recommend' || isIndexWidget(widget)) {
         return this.getResults();
       }
 
@@ -315,7 +311,24 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         return null;
       }
 
-      return helper.lastRecommendResults[widget.$$id];
+      const recommendWidgetParams = widget
+        .getWidgetParameters(
+          new algoliasearchHelper.RecommendParameters(),
+          {} as any // FIXME: forward proper widgetParametersOptions?
+        )
+        .params.map((param) =>
+          JSON.stringify({ ...param, indexName: this.getIndexName() })
+        );
+
+      // TODO: Remap RecommendResults instead of using _rawResults provide agregated results to widget?
+      return Object.entries(helper.lastRecommendResults._rawResults).reduce(
+        (results, [key, value]) => {
+          return recommendWidgetParams.includes(key)
+            ? [...results, value]
+            : results;
+        },
+        [] as RecommendResultItem[]
+      );
     },
 
     getPreviousState() {
@@ -714,6 +727,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
     },
 
     render({ instantSearchInstance }: IndexRenderOptions) {
+      console.log('index:render()', this.getIndexName());
       // we can't attach a listener to the error event of search, as the error
       // then would no longer be thrown for global handlers.
       if (
