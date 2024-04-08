@@ -32,7 +32,49 @@ export type RecommendTranslations = {
   sliderLabel: string;
 };
 
-export type InnerComponentProps<TObject> = {
+export type RecommendViewProps<
+  TItem extends RecordWithObjectID,
+  TTranslations extends Record<string, string>,
+  TClassNames extends Record<string, string>
+> = {
+  classNames: TClassNames;
+  itemComponent: <
+    TComponentProps extends Record<string, unknown> = Record<string, unknown>
+  >(
+    props: RecommendItemComponentProps<RecordWithObjectID<TItem>> &
+      TComponentProps
+  ) => JSX.Element;
+  items: TItem[];
+  translations: TTranslations;
+};
+
+export type RecommendComponentProps<
+  TObject,
+  TComponentProps extends Record<string, unknown> = Record<string, unknown>
+> = {
+  itemComponent: (
+    props: RecommendItemComponentProps<RecordWithObjectID<TObject>> &
+      TComponentProps
+  ) => JSX.Element;
+  items: Array<RecordWithObjectID<TObject>>;
+  classNames?: Partial<RecommendClassNames>;
+  fallbackComponent?: (props: TComponentProps) => JSX.Element;
+  headerComponent?: (
+    props: RecommendInnerComponentProps<TObject> & TComponentProps
+  ) => JSX.Element;
+  status: RecommendStatus;
+  translations?: Partial<RecommendTranslations>;
+  view?: (
+    props: RecommendViewProps<
+      RecordWithObjectID<TObject>,
+      Required<RecommendTranslations>,
+      Record<string, string>
+    > &
+      TComponentProps
+  ) => JSX.Element;
+};
+
+export type RecommendInnerComponentProps<TObject> = {
   classNames: Partial<RecommendClassNames>;
   recommendations: TObject[];
   translations: Partial<RecommendTranslations>;
@@ -42,9 +84,9 @@ export type RecordWithObjectID<TObject = Record<string, unknown>> = TObject & {
   objectID: string;
 };
 
-export type ItemComponentProps<TObject> = {
+export type RecommendItemComponentProps<TObject> = {
   item: TObject;
 };
 
-// align with instantsearch status
+// @TODO: align with InstantSearch `status`
 export type RecommendStatus = 'loading' | 'stalled' | 'idle';
