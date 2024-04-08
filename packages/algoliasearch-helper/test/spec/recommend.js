@@ -44,8 +44,14 @@ describe('recommend()', () => {
         indexName: 'indexName',
         model: 'bought-together',
         objectID: 'A0E20000000279B',
+        queryParameters: expect.any(Object),
       },
-      { indexName: 'indexName', model: 'trending-facets', facetName: 'brand' },
+      {
+        indexName: 'indexName',
+        model: 'trending-facets',
+        facetName: 'brand',
+        queryParameters: expect.any(Object),
+      },
     ]);
   });
 
@@ -120,5 +126,37 @@ describe('recommend()', () => {
     helper.recommend();
 
     expect(client.getRecommendations).toHaveBeenCalledTimes(1);
+  });
+
+  test('adds `clickAnalytics` and `userToken` to the queries if available', () => {
+    var client = {
+      getRecommendations: jest.fn().mockImplementationOnce(() => {
+        return Promise.resolve({ results: [] });
+      }),
+    };
+
+    var helper = algoliasearchHelper(client, 'indexName', {});
+
+    // Set `clickAnalytics` and `userToken` on the helper search state
+    helper.overrideStateWithoutTriggeringChangeEvent({
+      ...helper.state,
+      clickAnalytics: true,
+      userToken: 'userToken',
+    });
+
+    helper.addFrequentlyBoughtTogether({ $$id: 1 });
+    helper.recommend();
+
+    expect(client.getRecommendations).toHaveBeenCalledTimes(1);
+    expect(client.getRecommendations).toHaveBeenLastCalledWith([
+      {
+        indexName: 'indexName',
+        model: 'bought-together',
+        queryParameters: {
+          clickAnalytics: true,
+          userToken: 'userToken',
+        },
+      },
+    ]);
   });
 });

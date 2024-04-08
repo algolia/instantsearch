@@ -1631,10 +1631,16 @@ AlgoliaSearchHelper.prototype._recommend = function () {
     return derivedState._buildQueries(derivedIndex);
   });
 
-  var queries = Array.prototype.concat.apply(
-    this.recommendState._buildQueries(index),
-    derivedQueries
-  );
+  var queries = Array.prototype.concat
+    .apply(this.recommendState._buildQueries(index), derivedQueries)
+    .map(function (query) {
+      return Object.assign(query, {
+        queryParameters: Object.assign(query.queryParameters || {}, {
+          clickAnalytics: searchState.clickAnalytics,
+          userToken: searchState.userToken,
+        }),
+      });
+    });
 
   if (queries.length === 0) {
     return;
