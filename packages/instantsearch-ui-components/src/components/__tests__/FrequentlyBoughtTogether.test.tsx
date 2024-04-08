@@ -30,11 +30,11 @@ describe('FrequentlyBoughtTogether', () => {
         items={[
           {
             objectID: '1',
-            title: 'item 1',
+            __position: 1,
           },
           {
             objectID: '2',
-            title: 'item 2',
+            __position: 2,
           },
         ]}
         itemComponent={ItemComponent}
@@ -94,7 +94,7 @@ describe('FrequentlyBoughtTogether', () => {
     const { container } = render(
       <FrequentlyBoughtTogether
         status="idle"
-        items={[{ objectID: '1' }]}
+        items={[{ objectID: '1', __position: 1 }]}
         headerComponent={({ classNames }) => (
           <div className={classNames.title}>My custom header</div>
         )}
@@ -136,7 +136,7 @@ describe('FrequentlyBoughtTogether', () => {
     const { container } = render(
       <FrequentlyBoughtTogether
         status="idle"
-        items={[{ objectID: '1' }]}
+        items={[{ objectID: '1', __position: 1 }]}
         itemComponent={ItemComponent}
         view={(props) => (
           <div className={props.classNames.container}>
@@ -207,7 +207,7 @@ describe('FrequentlyBoughtTogether', () => {
     const { container } = render(
       <FrequentlyBoughtTogether
         status="idle"
-        items={[{ objectID: '1' }]}
+        items={[{ objectID: '1', __position: 1 }]}
         translations={{ title: 'My custom title' }}
         itemComponent={ItemComponent}
       />
@@ -247,7 +247,7 @@ describe('FrequentlyBoughtTogether', () => {
     const { container } = render(
       <FrequentlyBoughtTogether
         status="idle"
-        items={[{ objectID: '1' }]}
+        items={[{ objectID: '1', __position: 1 }]}
         hidden={true}
         itemComponent={ItemComponent}
       />
@@ -263,7 +263,7 @@ describe('FrequentlyBoughtTogether', () => {
     const { container } = render(
       <FrequentlyBoughtTogether
         status="idle"
-        items={[{ objectID: '1' }]}
+        items={[{ objectID: '1', __position: 1 }]}
         classNames={{
           root: 'ROOT',
           title: 'TITLE',
