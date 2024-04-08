@@ -82,6 +82,8 @@ export type RecommendInnerComponentProps<TObject> = {
 
 export type RecordWithObjectID<TObject = Record<string, unknown>> = TObject & {
   objectID: string;
+  __position: number; // @TODO: verify if necessary
+  __queryID?: string; // @TODO: verify if necessary
 };
 
 export type RecommendItemComponentProps<TObject> = {
@@ -89,4 +91,4 @@ export type RecommendItemComponentProps<TObject> = {
 };
 
 // @TODO: align with InstantSearch `status`
-export type RecommendStatus = 'loading' | 'stalled' | 'idle';
+export type RecommendStatus = 'loading' | 'stalled' | 'idle' | 'error';

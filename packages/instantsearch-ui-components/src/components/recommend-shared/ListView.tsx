@@ -22,13 +22,13 @@ export function createListViewComponent({ createElement, Fragment }: Renderer) {
       <div className={classNames.container}>
         <ol className={classNames.list}>
           {items.map((item) => (
-            <li key={item.objectID} className={classNames.item}>
-              <ItemComponent
-                createElement={createElement}
-                Fragment={Fragment}
-                item={item}
-              />
-            </li>
+            <ItemComponent
+              key={item.objectID}
+              className={classNames.item}
+              createElement={createElement}
+              Fragment={Fragment}
+              item={item}
+            />
           ))}
         </ol>
       </div>

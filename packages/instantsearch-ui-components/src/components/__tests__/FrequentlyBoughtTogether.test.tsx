@@ -16,7 +16,11 @@ const FrequentlyBoughtTogether = createFrequentlyBoughtTogetherComponent({
 });
 
 const ItemComponent: FrequentlyBoughtTogetherProps<RecordWithObjectID>['itemComponent'] =
-  ({ item }) => <div>{item.objectID}</div>;
+  ({ item, ...itemProps }) => (
+    <li {...itemProps}>
+      <div>{item.objectID}</div>
+    </li>
+  );
 
 describe('FrequentlyBoughtTogether', () => {
   test('renders items with default view and header', () => {
@@ -136,13 +140,13 @@ describe('FrequentlyBoughtTogether', () => {
         itemComponent={ItemComponent}
         view={(props) => (
           <div className={props.classNames.container}>
-            <section className={props.classNames.list}>
+            <ol className={props.classNames.list}>
               {props.items.map((item) => (
-                <article key={item.objectID} className={props.classNames.item}>
+                <li key={item.objectID} className={props.classNames.item}>
                   <props.itemComponent item={item} />
-                </article>
+                </li>
               ))}
-            </section>
+            </ol>
           </div>
         )}
       />
@@ -161,17 +165,19 @@ describe('FrequentlyBoughtTogether', () => {
           <div
             class="ais-FrequentlyBoughtTogether-container"
           >
-            <section
+            <ol
               class="ais-FrequentlyBoughtTogether-list"
             >
-              <article
+              <li
                 class="ais-FrequentlyBoughtTogether-item"
               >
-                <div>
-                  1
-                </div>
-              </article>
-            </section>
+                <li>
+                  <div>
+                    1
+                  </div>
+                </li>
+              </li>
+            </ol>
           </div>
         </section>
       </div>
