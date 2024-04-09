@@ -1,3 +1,5 @@
+import type { SendEventForHits } from '.';
+
 export type RecommendClassNames = {
   /**
    * Class names to apply to the root element
@@ -46,6 +48,7 @@ export type RecommendViewProps<
   ) => JSX.Element;
   items: TItem[];
   translations: TTranslations;
+  sendEvent: SendEventForHits;
 };
 
 export type RecommendComponentProps<
@@ -64,6 +67,7 @@ export type RecommendComponentProps<
   ) => JSX.Element;
   status: RecommendStatus;
   translations?: Partial<RecommendTranslations>;
+  sendEvent: SendEventForHits;
   view?: (
     props: RecommendViewProps<
       RecordWithObjectID<TObject>,
@@ -82,13 +86,16 @@ export type RecommendInnerComponentProps<TObject> = {
 
 export type RecordWithObjectID<TObject = Record<string, unknown>> = TObject & {
   objectID: string;
-  __position: number; // @TODO: verify if necessary
-  __queryID?: string; // @TODO: verify if necessary
+  __position: number;
+  __queryID?: string;
 };
 
 export type RecommendItemComponentProps<TObject> = {
   item: TObject;
+  onClick: () => void;
+  onAuxClick: () => void;
 };
 
-// @TODO: align with InstantSearch `status`
+// Should be equal to InstantSearchStatus and imported
+// from a shared package in the future
 export type RecommendStatus = 'loading' | 'stalled' | 'idle' | 'error';

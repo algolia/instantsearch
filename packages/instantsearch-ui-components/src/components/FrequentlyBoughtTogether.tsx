@@ -76,6 +76,7 @@ export function createFrequentlyBoughtTogetherComponent({
           translations={translations}
           itemComponent={ItemComponent}
           items={items}
+          sendEvent={props.sendEvent}
         />
       </section>
     );

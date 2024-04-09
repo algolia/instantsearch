@@ -16,7 +16,12 @@ export function createListViewComponent({ createElement, Fragment }: Renderer) {
       Partial<RecommendClassNames>
     >
   ) {
-    const { classNames = {}, itemComponent: ItemComponent, items } = userProps;
+    const {
+      classNames = {},
+      itemComponent: ItemComponent,
+      items,
+      sendEvent,
+    } = userProps;
 
     return (
       <div className={classNames.container}>
@@ -28,6 +33,12 @@ export function createListViewComponent({ createElement, Fragment }: Renderer) {
               createElement={createElement}
               Fragment={Fragment}
               item={item}
+              onClick={() => {
+                sendEvent('click:internal', item, 'Hit Clicked');
+              }}
+              onAuxClick={() => {
+                sendEvent('click:internal', item, 'Hit Clicked');
+              }}
             />
           ))}
         </ol>
