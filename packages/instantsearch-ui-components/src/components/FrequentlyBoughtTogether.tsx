@@ -36,6 +36,7 @@ export function createFrequentlyBoughtTogetherComponent({
       items,
       status,
       translations: userTranslations,
+      sendEvent,
       ...props
     } = userProps;
 
@@ -76,7 +77,7 @@ export function createFrequentlyBoughtTogetherComponent({
           translations={translations}
           itemComponent={ItemComponent}
           items={items}
-          sendEvent={props.sendEvent}
+          sendEvent={sendEvent}
         />
       </section>
     );
