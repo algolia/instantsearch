@@ -2,8 +2,12 @@ import {
   createDocumentationMessageGenerator,
   checkRendering,
   noop,
+  createSendEventForHits,
+  addAbsolutePosition,
+  addQueryID,
 } from '../../lib/utils';
 
+import type { SendEventForHits } from '../../lib/utils';
 import type {
   Connector,
   WidgetRenderState,
@@ -34,12 +38,7 @@ export type FrequentlyBoughtTogetherRenderState<
   /**
    * Sends an event to the Insights middleware.
    */
-  // sendEvent: SendEventForHits;
-
-  /**
-   * Returns a string for the `data-insights-event` attribute for the Insights middleware
-   */
-  // bindEvent: BindEventForHits;
+  sendEvent: SendEventForHits;
 };
 
 export type FrequentlyBoughtTogetherConnectorParams<
@@ -87,6 +86,8 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
     checkRendering(renderFn, withUsage());
 
     return (widgetParams) => {
+      let sendEvent: SendEventForHits;
+
       return {
         dependsOn: 'recommend',
         $$type: 'ais.frequentlyBoughtTogether',
@@ -113,7 +114,7 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
             false
           );
 
-          // renderState.sendEvent('view:internal', renderState.hits);
+          renderState.sendEvent('view:internal', renderState.hits);
         },
 
         getRenderState(renderState, renderOptions) {
@@ -123,12 +124,36 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
           };
         },
 
-        getWidgetRenderState({ results }) {
-          if (results === null || results === undefined) {
-            return { hits: [], widgetParams };
+        getWidgetRenderState({ results, helper, instantSearchInstance }) {
+          if (!sendEvent) {
+            sendEvent = createSendEventForHits({
+              instantSearchInstance,
+              getIndex: () => helper.getIndex(),
+              widgetType: this.$$type,
+            });
           }
 
-          return { hits: results.hits, widgetParams };
+          if (results === null || results === undefined) {
+            return { hits: [], sendEvent, widgetParams };
+          }
+
+          const hitsWithAbsolutePosition = addAbsolutePosition(
+            results.hits,
+            // page and hitsPerPage are not returned in Recommend results
+            0,
+            0
+          );
+
+          const hitsWithAbsolutePositionAndQueryID = addQueryID(
+            hitsWithAbsolutePosition,
+            results.queryID
+          );
+
+          return {
+            hits: hitsWithAbsolutePositionAndQueryID,
+            sendEvent,
+            widgetParams,
+          };
         },
 
         dispose({ state }) {
