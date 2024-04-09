@@ -130,7 +130,7 @@ describe('recommend()', () => {
 
   test('adds `clickAnalytics` and `userToken` to the queries if available', () => {
     var client = {
-      getRecommendations: jest.fn().mockImplementationOnce(() => {
+      getRecommendations: jest.fn().mockImplementation(() => {
         return Promise.resolve({ results: [] });
       }),
     };
@@ -153,6 +153,38 @@ describe('recommend()', () => {
         indexName: 'indexName',
         model: 'bought-together',
         queryParameters: {
+          clickAnalytics: true,
+          userToken: 'userToken',
+        },
+      },
+    ]);
+
+    client.getRecommendations.mockClear();
+
+    // Add a second query with a non-empty queryParameters object
+    helper.addLookingSimilar({
+      $$id: 2,
+      queryParameters: {
+        filters: 'brand:Apple',
+      },
+    });
+    helper.recommend();
+
+    expect(client.getRecommendations).toHaveBeenCalledTimes(1);
+    expect(client.getRecommendations).toHaveBeenLastCalledWith([
+      {
+        indexName: 'indexName',
+        model: 'bought-together',
+        queryParameters: {
+          clickAnalytics: true,
+          userToken: 'userToken',
+        },
+      },
+      {
+        indexName: 'indexName',
+        model: 'looking-similar',
+        queryParameters: {
+          filters: 'brand:Apple',
           clickAnalytics: true,
           userToken: 'userToken',
         },
