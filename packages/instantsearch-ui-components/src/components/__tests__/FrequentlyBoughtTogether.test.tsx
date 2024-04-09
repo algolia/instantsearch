@@ -39,11 +39,7 @@ describe('FrequentlyBoughtTogether', () => {
           },
         ]}
         itemComponent={ItemComponent}
-<<<<<<< HEAD
-        sendEvent={() => {}}
-=======
         sendEvent={jest.fn()}
->>>>>>> 83bab4ef5 (fix: fix issues with sendEvent and test it)
       />
     );
 
@@ -90,11 +86,7 @@ describe('FrequentlyBoughtTogether', () => {
         status="idle"
         items={[]}
         itemComponent={ItemComponent}
-<<<<<<< HEAD
-        sendEvent={() => {}}
-=======
         sendEvent={jest.fn()}
->>>>>>> 83bab4ef5 (fix: fix issues with sendEvent and test it)
       />
     );
 
@@ -110,11 +102,7 @@ describe('FrequentlyBoughtTogether', () => {
           <div className={classNames.title}>My custom header</div>
         )}
         itemComponent={ItemComponent}
-<<<<<<< HEAD
-        sendEvent={() => {}}
-=======
         sendEvent={jest.fn()}
->>>>>>> 83bab4ef5 (fix: fix issues with sendEvent and test it)
       />
     );
 
@@ -169,11 +157,7 @@ describe('FrequentlyBoughtTogether', () => {
             </ol>
           </div>
         )}
-<<<<<<< HEAD
-        sendEvent={() => {}}
-=======
         sendEvent={jest.fn()}
->>>>>>> 83bab4ef5 (fix: fix issues with sendEvent and test it)
       />
     );
 
@@ -216,11 +200,7 @@ describe('FrequentlyBoughtTogether', () => {
         items={[]}
         fallbackComponent={() => <div>My custom fallback</div>}
         itemComponent={ItemComponent}
-<<<<<<< HEAD
-        sendEvent={() => {}}
-=======
         sendEvent={jest.fn()}
->>>>>>> 83bab4ef5 (fix: fix issues with sendEvent and test it)
       />
     );
 
@@ -265,11 +245,7 @@ describe('FrequentlyBoughtTogether', () => {
         items={[{ objectID: '1', __position: 1 }]}
         translations={{ title: 'My custom title' }}
         itemComponent={ItemComponent}
-<<<<<<< HEAD
-        sendEvent={() => {}}
-=======
         sendEvent={jest.fn()}
->>>>>>> 83bab4ef5 (fix: fix issues with sendEvent and test it)
       />
     );
 
@@ -310,11 +286,7 @@ describe('FrequentlyBoughtTogether', () => {
         items={[{ objectID: '1', __position: 1 }]}
         hidden={true}
         itemComponent={ItemComponent}
-<<<<<<< HEAD
-        sendEvent={() => {}}
-=======
         sendEvent={jest.fn()}
->>>>>>> 83bab4ef5 (fix: fix issues with sendEvent and test it)
       />
     );
 
@@ -337,11 +309,7 @@ describe('FrequentlyBoughtTogether', () => {
           item: 'ITEM',
         }}
         itemComponent={ItemComponent}
-<<<<<<< HEAD
-        sendEvent={() => {}}
-=======
         sendEvent={jest.fn()}
->>>>>>> 83bab4ef5 (fix: fix issues with sendEvent and test it)
       />
     );
 

@@ -8,7 +8,7 @@ import type {
   RecommendViewProps,
 } from '../../types';
 
-export function createListViewComponent({ createElement, Fragment }: Renderer) {
+export function createListViewComponent({ createElement }: Renderer) {
   return function ListView<TItem extends RecordWithObjectID>(
     userProps: RecommendViewProps<
       TItem,
@@ -30,8 +30,6 @@ export function createListViewComponent({ createElement, Fragment }: Renderer) {
             <ItemComponent
               key={item.objectID}
               className={classNames.item}
-              createElement={createElement}
-              Fragment={Fragment}
               item={item}
               onClick={() => {
                 sendEvent('click:internal', item, 'Hit Clicked');
