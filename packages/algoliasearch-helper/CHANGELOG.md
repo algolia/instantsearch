@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.18.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.17.0...algoliasearch-helper@3.18.0) (2024-04-09)
+
+
+### Features
+
+* **helper:** add methods to request and retrieve recommendations ([#6111](https://github.com/algolia/instantsearch/issues/6111)) ([1b683c5](https://github.com/algolia/instantsearch/commit/1b683c5ebbcae4a77a43ff2034da406c9eb0dbc4))
+* **instantsearch:** prepare index widget for recommend widgets ([#6104](https://github.com/algolia/instantsearch/issues/6104)) ([f4e3527](https://github.com/algolia/instantsearch/commit/f4e35270ab23f66a4de8fe4c71d7c1d7be143439))
+
+
+
+
+
 # [3.17.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.16.3...algoliasearch-helper@3.17.0) (2024-04-02)
 
 

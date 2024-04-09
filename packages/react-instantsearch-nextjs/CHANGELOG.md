@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.2.0...react-instantsearch-nextjs@0.2.1) (2024-04-09)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
 # [0.2.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.1.14...react-instantsearch-nextjs@0.2.0) (2024-04-02)
 
 
