@@ -38,6 +38,7 @@ describe('FrequentlyBoughtTogether', () => {
           },
         ]}
         itemComponent={ItemComponent}
+        sendEvent={() => {}}
       />
     );
 
@@ -84,6 +85,7 @@ describe('FrequentlyBoughtTogether', () => {
         status="idle"
         items={[]}
         itemComponent={ItemComponent}
+        sendEvent={() => {}}
       />
     );
 
@@ -99,6 +101,7 @@ describe('FrequentlyBoughtTogether', () => {
           <div className={classNames.title}>My custom header</div>
         )}
         itemComponent={ItemComponent}
+        sendEvent={() => {}}
       />
     );
 
@@ -149,6 +152,7 @@ describe('FrequentlyBoughtTogether', () => {
             </ol>
           </div>
         )}
+        sendEvent={() => {}}
       />
     );
 
@@ -191,6 +195,7 @@ describe('FrequentlyBoughtTogether', () => {
         items={[]}
         fallbackComponent={() => <div>My custom fallback</div>}
         itemComponent={ItemComponent}
+        sendEvent={() => {}}
       />
     );
 
@@ -210,6 +215,7 @@ describe('FrequentlyBoughtTogether', () => {
         items={[{ objectID: '1', __position: 1 }]}
         translations={{ title: 'My custom title' }}
         itemComponent={ItemComponent}
+        sendEvent={() => {}}
       />
     );
 
@@ -250,6 +256,7 @@ describe('FrequentlyBoughtTogether', () => {
         items={[{ objectID: '1', __position: 1 }]}
         hidden={true}
         itemComponent={ItemComponent}
+        sendEvent={() => {}}
       />
     );
 
@@ -272,6 +279,7 @@ describe('FrequentlyBoughtTogether', () => {
           item: 'ITEM',
         }}
         itemComponent={ItemComponent}
+        sendEvent={() => {}}
       />
     );
 

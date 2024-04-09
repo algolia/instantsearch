@@ -92,8 +92,8 @@ export type RecordWithObjectID<TObject = Record<string, unknown>> = TObject & {
 
 export type RecommendItemComponentProps<TObject> = {
   item: TObject;
-  onClick: () => void;
-  onAuxClick: () => void;
+  onClick?: () => void;
+  onAuxClick?: () => void;
 };
 
 // Should be equal to InstantSearchStatus and imported
