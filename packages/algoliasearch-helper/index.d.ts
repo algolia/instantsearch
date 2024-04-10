@@ -1326,6 +1326,49 @@ declare namespace algoliasearchHelper {
           };
         };
       };
+      /**
+       * Defining UI widget configuration
+       */
+      widgets?: {
+        /**
+         * Configuration for banners
+         */
+        banners?: Array<{
+          /**
+           * Configuration for the banner image
+           */
+          image?: Array<{
+            /**
+             * Set of possible URLs of the banner image
+             */
+            urls?: Array<{
+              /**
+               * URL of the banner image
+               */
+              url?: string;
+            }>;
+            /**
+             * Alt text of the banner image
+             */
+            title?: string;
+          }>;
+          /**
+           * Configuration for the banner click navigation
+           */
+          link?: {
+            /**
+             * URL to navigate to when the banner is clicked
+             */
+            url?: string;
+            /**
+             * Target of the navigation
+             * - `_blank` opens the URL in a new tab
+             * - `_self` opens the URL in the same tab
+             */
+            target?: '__blank' | '__self';
+          };
+        }>;
+      };
     };
 
     /**

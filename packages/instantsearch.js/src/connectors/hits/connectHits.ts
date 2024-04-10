@@ -146,6 +146,7 @@ const connectHits: HitsConnector = function connectHits(
           return {
             hits: [],
             results: undefined,
+            banner: undefined,
             sendEvent,
             bindEvent,
             widgetParams,
@@ -172,9 +173,12 @@ const connectHits: HitsConnector = function connectHits(
           { results }
         );
 
+        const banner = results.renderingContent?.widgets?.banners?.[0];
+
         return {
           hits: transformedHits,
           results,
+          banner,
           sendEvent,
           bindEvent,
           widgetParams,
