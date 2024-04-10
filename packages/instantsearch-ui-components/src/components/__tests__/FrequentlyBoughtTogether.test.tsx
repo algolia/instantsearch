@@ -3,13 +3,13 @@
  */
 /** @jsx createElement */
 import { render } from '@testing-library/preact';
+import userEvent from '@testing-library/user-event';
 import { createElement, Fragment } from 'preact';
 
 import { createFrequentlyBoughtTogetherComponent } from '../FrequentlyBoughtTogether';
 
 import type { RecordWithObjectID } from '../../types';
 import type { FrequentlyBoughtTogetherProps } from '../FrequentlyBoughtTogether';
-import userEvent from '@testing-library/user-event';
 
 const FrequentlyBoughtTogether = createFrequentlyBoughtTogetherComponent({
   createElement,
