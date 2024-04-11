@@ -528,6 +528,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
         createSingleSearchResponse({
           hits,
           queryID: 'theQueryID',
+          // @TODO: remove once algoliasearch js client has been updated
+          // @ts-expect-error
           renderingContent,
         }),
       ]);
