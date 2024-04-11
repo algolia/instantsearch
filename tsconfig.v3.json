@@ -16,6 +16,7 @@
     // v3 has a wrong definition for optionalWords (only accepts string[])
     "packages/instantsearch.js/src/connectors/voice-search/__tests__/connectVoiceSearch-test.ts",
     // v3 does not have renderingContent (only errors in the test)
+    "packages/instantSearch.js/src/connectors/hits/__tests__/connectHits-test.ts",
     "packages/instantsearch.js/src/connectors/dynamic-widgets/__tests__/connectDynamicWidgets-test.ts",
     "packages/instantsearch.js/src/connectors/hierarchical-menu/__tests__/connectHierarchicalMenu-test.ts",
     "packages/instantsearch.js/src/connectors/menu/__tests__/connectMenu-test.ts",
