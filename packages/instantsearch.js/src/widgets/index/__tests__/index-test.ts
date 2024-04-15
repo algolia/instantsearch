@@ -109,17 +109,19 @@ describe('index', () => {
       ...args,
     });
 
-  const createFrequentlyBoughtTogether = (args: Partial<Widget> = {}): Widget =>
+  const createFrequentlyBoughtTogether = (
+    args: Partial<Widget> = {}
+  ): Widget & { $$id: number } =>
     createWidget({
       dependsOn: 'recommend',
-      getWidgetParameters: jest.fn((parameters) => {
+      getWidgetParameters(parameters) {
         return parameters.addFrequentlyBoughtTogether({
-          $$id: 1,
+          $$id: this.$$id!,
           objectID: 'abc',
         });
-      }),
+      },
       ...args,
-    } as unknown as Widget);
+    } as Widget) as unknown as Widget & { $$id: number };
 
   const virtualSearchBox = connectSearchBox(() => {});
   const virtualPagination = connectPagination(() => {});
@@ -226,6 +228,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 `);
     });
 
+    it('adds generated `$$id` to widgets that depend on `recommend`', () => {
+      const instance = index({ indexName: 'indexName' });
+      const fbt1 = createFrequentlyBoughtTogether({});
+      const fbt2 = createFrequentlyBoughtTogether({});
+
+      instance.addWidgets([fbt1, fbt2]);
+
+      expect(fbt1.$$id).toBe(0);
+      expect(fbt2.$$id).toBe(1);
+    });
+
     describe('with a started instance', () => {
       it('updates the internal state with added widgets', () => {
         const instance = index({ indexName: 'indexName' });
@@ -270,9 +283,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         instance.init(createIndexInitOptions({ parent: null }));
 
         const fbt = createFrequentlyBoughtTogether({});
+        const getWidgetParameters = jest.spyOn(fbt, 'getWidgetParameters');
         instance.addWidgets([fbt]);
 
-        expect(fbt.getWidgetParameters).toHaveBeenCalledTimes(1);
+        expect(getWidgetParameters).toHaveBeenCalledTimes(1);
       });
 
       it('calls getWidgetParameters after init on widgets that depend on search and implement the function', () => {
@@ -1216,11 +1230,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const instance = index({ indexName: 'indexName' });
 
       const fbt = createFrequentlyBoughtTogether({});
+      const getWidgetParameters = jest.spyOn(fbt, 'getWidgetParameters');
       instance.addWidgets([fbt]);
 
       instance.init(createIndexInitOptions({ parent: null }));
 
-      expect(fbt.getWidgetParameters).toHaveBeenCalledTimes(1);
+      expect(getWidgetParameters).toHaveBeenCalledTimes(1);
     });
 
     it('calls getWidgetParameters on widgets that depend on search and implement the function', () => {
@@ -2978,9 +2993,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       });
 
       const fbt = createFrequentlyBoughtTogether({
-        $$id: 1,
         dependsOn: 'recommend',
         shouldRender: () => true,
+        render: jest.fn(),
       });
       instance.addWidgets([fbt]);
 
@@ -2994,6 +3009,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       await wait(0);
       mainHelper.recommend();
       await wait(0);
+
+      console.log(fbt.$$id);
 
       instance.render({
         instantSearchInstance,

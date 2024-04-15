@@ -4,17 +4,14 @@ import {
   noop,
 } from '../../lib/utils';
 
+import type { Connector, TransformItems, Hit, BaseHit } from '../../types';
 import type {
-  Connector,
-  WidgetRenderState,
-  TransformItems,
-  Hit,
-  BaseHit,
-  RenderOptions,
-} from '../../types';
+  PlainSearchParameters,
+  RecommendResultItem,
+} from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
-  name: 'frequentlyBoughtTogether',
+  name: 'frequently-bought-together',
   connector: true,
 });
 
@@ -24,22 +21,7 @@ export type FrequentlyBoughtTogetherRenderState<
   /**
    * The matched hits from Algolia API.
    */
-  hits: Array<Hit<THit>>; // To do something with types here ?
-
-  /**
-   * The response from the Algolia API.
-   */
-  // results?: SearchResults<Hit<THit>>;
-
-  /**
-   * Sends an event to the Insights middleware.
-   */
-  // sendEvent: SendEventForHits;
-
-  /**
-   * Returns a string for the `data-insights-event` attribute for the Insights middleware
-   */
-  // bindEvent: BindEventForHits;
+  hits: Array<Hit<THit>>;
 };
 
 export type FrequentlyBoughtTogetherConnectorParams<
@@ -49,17 +31,29 @@ export type FrequentlyBoughtTogetherConnectorParams<
    * The objectID of the item to get the frequently bought together items.
    */
   objectID: string;
+
   /**
-   * Whether to escape HTML tags from hits string values.
-   *
-   * @default true
+   * Threshold for the recommendations confidence score (between 0 and 100). Only recommendations with a greater score are returned.
    */
-  escapeHTML?: boolean;
+  threshold?: number;
+
+  /**
+   * The maximum number of recommendations to return.
+   */
+  maxRecommendations?: number;
+
+  /**
+   * Parameters to pass to the request.
+   */
+  queryParameters?: Omit<
+    PlainSearchParameters,
+    'page' | 'hitsPerPage' | 'offset' | 'length'
+  >;
 
   /**
    * Function to transform the items passed to the templates.
    */
-  transformItems?: TransformItems<Hit<THit>>;
+  transformItems?: TransformItems<Hit<THit>, { results: RecommendResultItem }>;
 };
 
 export type FrequentlyBoughtTogetherWidgetDescription<
@@ -67,13 +61,6 @@ export type FrequentlyBoughtTogetherWidgetDescription<
 > = {
   $$type: 'ais.frequentlyBoughtTogether';
   renderState: FrequentlyBoughtTogetherRenderState<THit>;
-  indexRenderState: {
-    // Why is this here?
-    fbt: WidgetRenderState<
-      FrequentlyBoughtTogetherRenderState<THit>,
-      FrequentlyBoughtTogetherConnectorParams<THit>
-    >;
-  };
 };
 
 export type FrequentlyBoughtTogetherConnector<THit extends BaseHit = BaseHit> =
@@ -87,10 +74,19 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
     checkRendering(renderFn, withUsage());
 
     return (widgetParams) => {
+      const {
+        transformItems = ((items) => items) as NonNullable<
+          FrequentlyBoughtTogetherConnectorParams['transformItems']
+        >,
+        objectID,
+        maxRecommendations,
+        threshold,
+        queryParameters,
+      } = widgetParams || {};
+
       return {
         dependsOn: 'recommend',
         $$type: 'ais.frequentlyBoughtTogether',
-        $$id: 123456789, // to do: generate a unique id
 
         init(initOptions) {
           renderFn(
@@ -112,15 +108,10 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
             },
             false
           );
-
-          // renderState.sendEvent('view:internal', renderState.hits);
         },
 
-        getRenderState(renderState, renderOptions) {
-          return {
-            ...renderState,
-            fbt: this.getWidgetRenderState(renderOptions as RenderOptions),
-          };
+        getRenderState(renderState) {
+          return renderState;
         },
 
         getWidgetRenderState({ results }) {
@@ -128,7 +119,11 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
             return { hits: [], widgetParams };
           }
 
-          return { hits: results.hits, widgetParams };
+          const transformedItems = transformItems(results.hits, {
+            results: results as RecommendResultItem,
+          });
+
+          return { hits: transformedItems, widgetParams };
         },
 
         dispose({ state }) {
@@ -139,8 +134,11 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
 
         getWidgetParameters(state) {
           return state.addFrequentlyBoughtTogether({
-            $$id: 123456789,
-            objectID: widgetParams.objectID,
+            objectID,
+            threshold,
+            maxRecommendations,
+            queryParameters,
+            $$id: this.$$id!,
           });
         },
       };
