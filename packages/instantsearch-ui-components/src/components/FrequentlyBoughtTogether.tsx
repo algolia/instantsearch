@@ -2,65 +2,20 @@
 
 import { cx } from '../lib';
 
-import { createDefaultHeaderComponent } from './recommend-inner/DefaultHeader';
-import { createListViewComponent } from './recommend-inner/ListView';
+import { createDefaultHeaderComponent } from './recommend-shared/DefaultHeader';
+import { createListViewComponent } from './recommend-shared/ListView';
 
 import type {
-  ItemComponentProps,
-  RecommendClassNames,
-  RecommendStatus,
   RecommendTranslations,
-  RecordWithObjectID,
   Renderer,
+  ComponentProps,
+  RecommendComponentProps,
 } from '../types';
-import type { ViewProps } from './recommend-inner/ListView';
-
-export type FrequentlyBoughtTogetherComponentProps<TObject> = {
-  classNames: Partial<RecommendClassNames>;
-  recommendations: TObject[];
-  translations: Partial<RecommendTranslations>;
-};
-
-export type HeaderComponentProps<TObject> =
-  FrequentlyBoughtTogetherComponentProps<TObject>;
-
-export type ChildrenProps<TObject> =
-  FrequentlyBoughtTogetherComponentProps<TObject> & {
-    Fallback: () => JSX.Element | null;
-    Header: (props: HeaderComponentProps<TObject>) => JSX.Element | null;
-    status: RecommendStatus;
-    View: (props: unknown) => JSX.Element;
-  };
-
-export type RecommendComponentProps<
-  TObject,
-  TComponentProps extends Record<string, unknown> = Record<string, unknown>
-> = {
-  itemComponent: (
-    props: ItemComponentProps<RecordWithObjectID<TObject>> & TComponentProps
-  ) => JSX.Element;
-  items: Array<RecordWithObjectID<TObject>>;
-  classNames?: Partial<RecommendClassNames>;
-  fallbackComponent?: (props: TComponentProps) => JSX.Element;
-  headerComponent?: (
-    props: HeaderComponentProps<TObject> & TComponentProps
-  ) => JSX.Element;
-  status: RecommendStatus;
-  translations?: Partial<RecommendTranslations>;
-  view?: (
-    props: ViewProps<
-      RecordWithObjectID<TObject>,
-      Required<RecommendTranslations>,
-      Record<string, string>
-    > &
-      TComponentProps
-  ) => JSX.Element;
-};
 
 export type FrequentlyBoughtTogetherProps<
   TObject,
   TComponentProps extends Record<string, unknown> = Record<string, unknown>
-> = RecommendComponentProps<TObject, TComponentProps>;
+> = ComponentProps<'div'> & RecommendComponentProps<TObject, TComponentProps>;
 
 export function createFrequentlyBoughtTogetherComponent({
   createElement,
@@ -69,39 +24,60 @@ export function createFrequentlyBoughtTogetherComponent({
   return function FrequentlyBoughtTogether<TObject>(
     userProps: FrequentlyBoughtTogetherProps<TObject>
   ) {
-    const { classNames = {}, ...props } = userProps;
+    const {
+      classNames = {},
+      fallbackComponent: FallbackComponent = () => null,
+      headerComponent: HeaderComponent = createDefaultHeaderComponent({
+        createElement,
+        Fragment,
+      }),
+      itemComponent: ItemComponent,
+      view: View = createListViewComponent({ createElement, Fragment }),
+      items,
+      status,
+      translations: userTranslations,
+      sendEvent,
+      ...props
+    } = userProps;
 
     const translations: Required<RecommendTranslations> = {
       title: 'Frequently bought together',
       sliderLabel: 'Frequently bought together products',
-      ...props.translations,
+      ...userTranslations,
     };
 
-    const FallbackComponent = props.fallbackComponent ?? (() => null);
-
-    const Header =
-      props.headerComponent ??
-      createDefaultHeaderComponent({ createElement, Fragment });
-    const View =
-      props.view ?? createListViewComponent({ createElement, Fragment });
-
-    if (props.items.length === 0 && props.status === 'idle') {
+    if (items.length === 0 && status === 'idle') {
       return <FallbackComponent />;
     }
 
     return (
-      <section className={cx('ais-Recommend', classNames.root)}>
-        <Header
-          classNames={classNames}
-          recommendations={props.items}
+      <section
+        {...props}
+        className={cx('ais-FrequentlyBoughtTogether', classNames.root)}
+      >
+        <HeaderComponent
+          classNames={{
+            ...classNames,
+            title: cx('ais-FrequentlyBoughtTogether-title', classNames.title),
+          }}
+          recommendations={items}
           translations={translations}
         />
 
         <View
-          classNames={classNames}
+          classNames={{
+            ...classNames,
+            container: cx(
+              'ais-FrequentlyBoughtTogether-container',
+              classNames.container
+            ),
+            list: cx('ais-FrequentlyBoughtTogether-list', classNames.list),
+            item: cx('ais-FrequentlyBoughtTogether-item', classNames.item),
+          }}
           translations={translations}
-          itemComponent={props.itemComponent}
-          items={props.items}
+          itemComponent={ItemComponent}
+          items={items}
+          sendEvent={sendEvent}
         />
       </section>
     );
