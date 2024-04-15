@@ -31,12 +31,8 @@ export function createListViewComponent({ createElement }: Renderer) {
               key={item.objectID}
               className={classNames.item}
               item={item}
-              onClick={() => {
-                sendEvent('click:internal', item, 'Hit Clicked');
-              }}
-              onAuxClick={() => {
-                sendEvent('click:internal', item, 'Hit Clicked');
-              }}
+              onClick={sendEvent}
+              onAuxClick={sendEvent}
             />
           ))}
         </ol>

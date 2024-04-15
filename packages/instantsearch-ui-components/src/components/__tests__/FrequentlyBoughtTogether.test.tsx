@@ -213,7 +213,7 @@ describe('FrequentlyBoughtTogether', () => {
     `);
   });
 
-  test('sends a default `click` event when clicking on an item', () => {
+  test('sends a `click` event when clicking on an item', () => {
     const sendEvent = jest.fn();
     const items = [{ objectID: '1', __position: 1 }];
 
@@ -231,11 +231,6 @@ describe('FrequentlyBoughtTogether', () => {
     );
 
     expect(sendEvent).toHaveBeenCalledTimes(1);
-    expect(sendEvent).toHaveBeenLastCalledWith(
-      'click:internal',
-      items[0],
-      'Hit Clicked'
-    );
   });
 
   test('accepts custom title translation', () => {
