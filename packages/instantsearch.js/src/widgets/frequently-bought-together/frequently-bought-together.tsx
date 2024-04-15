@@ -41,29 +41,23 @@ const renderer =
     cssClasses,
     containerNode,
     templates,
+    view,
   }: {
     containerNode: HTMLElement;
     cssClasses: FrequentlyBoughtTogetherCSSClasses;
     renderState: {
-      // do we need this if we don't support hogan?
       templateProps?: PreparedTemplateProps<
         Required<FrequentlyBoughtTogetherTemplates>
       >;
     };
     templates: FrequentlyBoughtTogetherTemplates;
+    view?: FrequentlyBoughtTogetherWidgetParams['view'];
   }): Renderer<
     FrequentlyBoughtTogetherRenderState,
     Partial<FrequentlyBoughtTogetherWidgetParams>
   > =>
   (
-    {
-      hits: receivedHits,
-      results,
-      instantSearchInstance,
-      // insights,
-      // bindEvent,
-      // sendEvent,
-    },
+    { hits: receivedHits, results, instantSearchInstance },
     isFirstRendering
   ) => {
     if (isFirstRendering) {
@@ -75,8 +69,6 @@ const renderer =
       return;
     }
 
-    // to do insights
-
     const emptyComponent: FrequentlyBoughtTogetherUiProps<Hit>['fallbackComponent'] =
       ({ ...rootProps }) => (
         <TemplateComponent
@@ -87,22 +79,23 @@ const renderer =
         />
       );
 
+    const headerComponent: FrequentlyBoughtTogetherUiProps<Hit>['headerComponent'] =
+      ({ ...rootProps }) => (
+        <TemplateComponent
+          {...renderState.templateProps}
+          rootProps={rootProps}
+          templateKey="header"
+          data={results}
+        />
+      );
+
     const itemComponent: FrequentlyBoughtTogetherUiProps<Hit>['itemComponent'] =
       ({ item, ...rootProps }) => (
         <TemplateComponent
           {...renderState.templateProps}
           templateKey="item"
           rootTagName="li"
-          rootProps={{
-            onClick: (_event: MouseEvent) => {
-              // handleInsightsClick(event);
-              // rootProps.onClick();
-            },
-            onAuxClick: (_event: MouseEvent) => {
-              // handleInsightsClick(event);
-              // rootProps.onAuxClick();
-            },
-          }}
+          rootProps={rootProps}
           data={item}
         />
       );
@@ -110,11 +103,13 @@ const renderer =
     render(
       <FrequentlyBoughtTogether
         items={receivedHits}
+        headerComponent={headerComponent}
         itemComponent={itemComponent}
-        // sendEvent={sendEvent}
+        sendEvent={() => {}}
         classNames={cssClasses}
         fallbackComponent={emptyComponent}
         status={instantSearchInstance.status}
+        view={view}
       />,
       containerNode
     );
@@ -131,16 +126,18 @@ export type FrequentlyBoughtTogetherTemplates = Partial<{
   empty: Template<RecommendResultItem>;
 
   /**
+   * Template to use for the header of the widget.
+   *
+   * @default ''
+   */
+  header: Template<RecommendResultItem>;
+
+  /**
    * Template to use for each result. This template will receive an object containing a single record.
    *
    * @default ''
    */
-  item: Template<
-    Hit & {
-      /** @deprecated the index in the hits array, use __position instead, which is the absolute position */
-      __hitIndex: number;
-    }
-  >;
+  item: Template<Hit>;
 }>;
 
 type FrequentlyBoughtTogetherWidgetParams = {
@@ -158,6 +155,11 @@ type FrequentlyBoughtTogetherWidgetParams = {
    * CSS classes to add.
    */
   cssClasses?: FrequentlyBoughtTogetherCSSClasses;
+
+  /**
+   * View component to render items into.
+   */
+  view?: FrequentlyBoughtTogetherUiProps<Hit>['view'];
 };
 
 export type FrequentlyBoughtTogetherWidget = WidgetFactory<
@@ -193,6 +195,7 @@ const frequentlyBoughtTogether: FrequentlyBoughtTogetherWidget =
       cssClasses,
       renderState: {},
       templates,
+      view,
     });
 
     const makeWidget = connectFrequentlyBoughtTogether(
