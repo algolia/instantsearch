@@ -5,7 +5,7 @@ const defaultTemplates: Required<FrequentlyBoughtTogetherTemplates> = {
     return 'No results';
   },
   header() {
-    return '';
+    return null;
   },
   item(data) {
     return JSON.stringify(data, null, 2);

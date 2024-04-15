@@ -80,12 +80,20 @@ const renderer =
       );
 
     const headerComponent: FrequentlyBoughtTogetherUiProps<Hit>['headerComponent'] =
-      ({ ...rootProps }) => (
+      ({ classNames, recommendations, translations, ...rootProps }) => (
         <TemplateComponent
           {...renderState.templateProps}
-          rootProps={rootProps}
           templateKey="header"
-          data={results}
+          rootTagName="h3"
+          rootProps={{
+            ...rootProps,
+            className: classNames.title,
+          }}
+          data={{
+            classNames,
+            recommendations,
+            translations,
+          }}
         />
       );
 
@@ -130,7 +138,11 @@ export type FrequentlyBoughtTogetherTemplates = Partial<{
    *
    * @default ''
    */
-  header: Template<RecommendResultItem>;
+  header: Template<
+    Parameters<
+      NonNullable<FrequentlyBoughtTogetherUiProps<Hit>['headerComponent']>
+    >[0]
+  >;
 
   /**
    * Template to use for each result. This template will receive an object containing a single record.
