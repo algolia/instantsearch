@@ -30,6 +30,7 @@ scripts/*/CHANGELOG.md
 # private files
 .env
 .idea/
+.vscode/
 
 # Caches
 .eslintcache
