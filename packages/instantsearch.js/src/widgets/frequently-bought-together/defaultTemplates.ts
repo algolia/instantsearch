@@ -10,6 +10,9 @@ const defaultTemplates: Required<FrequentlyBoughtTogetherTemplates> = {
   item(data) {
     return JSON.stringify(data, null, 2);
   },
+  view() {
+    return null;
+  },
 };
 
 export default defaultTemplates;

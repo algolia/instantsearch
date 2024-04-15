@@ -41,7 +41,6 @@ const renderer =
     cssClasses,
     containerNode,
     templates,
-    view,
   }: {
     containerNode: HTMLElement;
     cssClasses: FrequentlyBoughtTogetherCSSClasses;
@@ -51,7 +50,6 @@ const renderer =
       >;
     };
     templates: FrequentlyBoughtTogetherTemplates;
-    view?: FrequentlyBoughtTogetherWidgetParams['view'];
   }): Renderer<
     FrequentlyBoughtTogetherRenderState,
     Partial<FrequentlyBoughtTogetherWidgetParams>
@@ -108,6 +106,33 @@ const renderer =
         />
       );
 
+    const viewComponent: FrequentlyBoughtTogetherUiProps<Hit>['view'] =
+      templates.view
+        ? ({
+            classNames,
+            itemComponent: viewItemComponent,
+            items,
+            translations,
+            ...rootProps
+          }) => (
+            <TemplateComponent
+              {...renderState.templateProps}
+              templateKey="view"
+              rootTagName="div"
+              rootProps={{
+                ...rootProps,
+                className: classNames.container,
+              }}
+              data={{
+                classNames,
+                itemComponent: viewItemComponent,
+                items,
+                translations,
+              }}
+            />
+          )
+        : undefined;
+
     render(
       <FrequentlyBoughtTogether
         items={receivedHits}
@@ -117,7 +142,7 @@ const renderer =
         classNames={cssClasses}
         fallbackComponent={emptyComponent}
         status={instantSearchInstance.status}
-        view={view}
+        view={viewComponent}
       />,
       containerNode
     );
@@ -150,6 +175,15 @@ export type FrequentlyBoughtTogetherTemplates = Partial<{
    * @default ''
    */
   item: Template<Hit>;
+
+  /**
+   * Template to use for the view component.
+   *
+   * @default ''
+   */
+  view: Template<
+    Parameters<NonNullable<FrequentlyBoughtTogetherUiProps<Hit>['view']>>[0]
+  >;
 }>;
 
 type FrequentlyBoughtTogetherWidgetParams = {
@@ -167,11 +201,6 @@ type FrequentlyBoughtTogetherWidgetParams = {
    * CSS classes to add.
    */
   cssClasses?: FrequentlyBoughtTogetherCSSClasses;
-
-  /**
-   * View component to render items into.
-   */
-  view?: FrequentlyBoughtTogetherUiProps<Hit>['view'];
 };
 
 export type FrequentlyBoughtTogetherWidget = WidgetFactory<
@@ -191,7 +220,6 @@ const frequentlyBoughtTogether: FrequentlyBoughtTogetherWidget =
       queryParameters,
       threshold,
       transformItems,
-      view,
       templates = {},
       cssClasses = {},
     } = widgetParams || {};
@@ -207,7 +235,6 @@ const frequentlyBoughtTogether: FrequentlyBoughtTogetherWidget =
       cssClasses,
       renderState: {},
       templates,
-      view,
     });
 
     const makeWidget = connectFrequentlyBoughtTogether(
@@ -221,7 +248,6 @@ const frequentlyBoughtTogether: FrequentlyBoughtTogetherWidget =
         queryParameters,
         threshold,
         transformItems,
-        view,
       }),
       $$widgetType: 'ais.frequentlyBoughtTogether',
     };
