@@ -30,7 +30,7 @@ export type FrequentlyBoughtTogetherConnectorParams<
   /**
    * The objectID of the item to get the frequently bought together items.
    */
-  objectID: string;
+  objectIDs: string[];
 
   /**
    * Threshold for the recommendations confidence score (between 0 and 100). Only recommendations with a greater score are returned.
@@ -78,7 +78,7 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
         transformItems = ((items) => items) as NonNullable<
           FrequentlyBoughtTogetherConnectorParams['transformItems']
         >,
-        objectID,
+        objectIDs,
         maxRecommendations,
         threshold,
         queryParameters,
@@ -133,13 +133,17 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
         },
 
         getWidgetParameters(state) {
-          return state.addFrequentlyBoughtTogether({
-            objectID,
-            threshold,
-            maxRecommendations,
-            queryParameters,
-            $$id: this.$$id!,
-          });
+          return objectIDs.reduce(
+            (acc, objectID) =>
+              acc.addFrequentlyBoughtTogether({
+                objectID,
+                threshold,
+                maxRecommendations,
+                queryParameters,
+                $$id: this.$$id!,
+              }),
+            state
+          );
         },
       };
     };

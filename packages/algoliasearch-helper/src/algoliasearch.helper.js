@@ -1614,13 +1614,6 @@ AlgoliaSearchHelper.prototype._recommend = function () {
       })
     );
 
-    ids = Array.prototype.concat.apply(
-      ids,
-      derivedState.params.map(function (param) {
-        return param.$$id;
-      })
-    );
-
     derivedHelper.emit('fetch', {
       recommend: {
         state: derivedState,
@@ -1750,7 +1743,20 @@ AlgoliaSearchHelper.prototype._dispatchRecommendResponse = function (
   var results = {};
   content.results.forEach(function (result, index) {
     var id = ids[index];
-    results[id] = result;
+
+    if (!results[id]) {
+      results[id] = result;
+      return;
+    }
+
+    results[id].hits = results[id].hits
+      .concat(result.hits)
+      .sort(function (a, b) {
+        return b._score - a._score;
+      })
+      .filter(function (item, idx, self) {
+        return self.findIndex((i) => i.objectID === item.objectID) === idx;
+      });
   });
 
   states.forEach(function (s) {

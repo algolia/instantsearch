@@ -22,9 +22,9 @@ const search = instantsearch({
 });
 
 const mySuperWidget = connectFrequentlyBoughtTogether(
-  ({ items, widgetParams }) => {
+  ({ hits, widgetParams }) => {
     // eslint-disable-next-line no-console
-    console.log('FrequentlyBoughtTogether', { items, widgetParams });
+    console.log('FrequentlyBoughtTogether', { hits, widgetParams });
   }
 );
 
@@ -32,8 +32,8 @@ search.addWidgets([
   searchBox({
     container: '#searchbox',
   }),
-  mySuperWidget({ container: '#hits', objectID: '5723538' }),
-
+  mySuperWidget({ container: '#hits', objectIDs: ['5723538', '4790739'] }),
+  //  5386012, 5327500
   configure({
     hitsPerPage: 8,
   }),
