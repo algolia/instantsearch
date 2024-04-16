@@ -71,6 +71,7 @@ const renderer =
       ({ ...rootProps }) => (
         <TemplateComponent
           {...renderState.templateProps}
+          rootTagName="section"
           rootProps={rootProps}
           templateKey="empty"
           data={results}
