@@ -6,20 +6,23 @@ import {
 import { wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
 
+import { skippableDescribe } from '../../common';
+
 import type { RelatedProductsConnectorSetup } from '.';
 import type { SetupOptions, TestOptions } from '../../common';
 
 export function createOptionsTests(
   setup: RelatedProductsConnectorSetup,
-  { act }: Required<TestOptions>
+  { act, skippedTests }: Required<TestOptions>
 ) {
-  describe('options', () => {
+  skippableDescribe('options', skippedTests, () => {
     test('throws when not passing the `objectID` option', async () => {
       const options: SetupOptions<RelatedProductsConnectorSetup> = {
         instantSearchOptions: {
           indexName: 'indexName',
           searchClient: createSearchClient(),
         },
+        // @ts-expect-error missing `objectID`
         widgetParams: {},
       };
 

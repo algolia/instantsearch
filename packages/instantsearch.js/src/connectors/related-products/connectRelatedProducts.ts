@@ -4,13 +4,7 @@ import {
   noop,
 } from '../../lib/utils';
 
-import type {
-  Connector,
-  WidgetRenderState,
-  TransformItems,
-  Hit,
-  BaseHit,
-} from '../../types';
+import type { Connector, TransformItems, Hit, BaseHit } from '../../types';
 import type {
   RecommendResultItem,
   SearchParameters,
@@ -36,22 +30,22 @@ export type RelatedProductsConnectorParams<THit extends BaseHit = BaseHit> = {
   /**
    * The number of recommendations to retrieve.
    */
-  maxRecommendations: number;
+  maxRecommendations?: number;
   /**
    * The threshold for the recommendations confidence score (between 0 and 100).
    */
-  threshold: number;
+  threshold?: number;
   /**
    * List of search parameters to send.
    */
-  fallbackParameters: Omit<
+  fallbackParameters?: Omit<
     SearchParameters,
     'page' | 'hitsPerPage' | 'offset' | 'length'
   >;
   /**
    * List of search parameters to send.
    */
-  queryParameters: Omit<
+  queryParameters?: Omit<
     SearchParameters,
     'page' | 'hitsPerPage' | 'offset' | 'length'
   >;

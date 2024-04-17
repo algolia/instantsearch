@@ -431,7 +431,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createNumericMenuConnectorTests: undefined,
   createRatingMenuConnectorTests: undefined,
   createToggleRefinementConnectorTests: undefined,
-  connectRelatedProductsConnectorTests: undefined,
+  createRelatedProductsConnectorTests: undefined,
 };
 
 describe('Common connector tests (InstantSearch.js)', () => {
