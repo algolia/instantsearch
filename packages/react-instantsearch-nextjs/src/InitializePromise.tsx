@@ -8,6 +8,8 @@ import {
   wrapPromiseWithState,
 } from 'react-instantsearch-core';
 
+import { htmlEscapeJsonString } from './htmlEscape';
+
 import type { SearchOptions } from 'instantsearch.js';
 
 export function InitializePromise() {
@@ -47,8 +49,8 @@ export function InitializePromise() {
       return (
         <script
           dangerouslySetInnerHTML={{
-            __html: `window[Symbol.for("InstantSearchInitialResults")] = ${JSON.stringify(
-              results
+            __html: `window[Symbol.for("InstantSearchInitialResults")] = ${htmlEscapeJsonString(
+              JSON.stringify(results)
             )}`,
           }}
         />
