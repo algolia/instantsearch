@@ -115,10 +115,6 @@ describe('frequentlyBoughtTogether', () => {
       // assertion can go away.
       expect(async () => {
         search.start();
-        // prevent warning from insights view event because insightsClient isn't yet loaded
-        // @ts-ignore
-        search.helper!.state.userToken = 'userToken';
-
         await wait(0);
       }).not.toWarnDev();
 
@@ -257,7 +253,6 @@ describe('frequentlyBoughtTogether', () => {
 
     test('renders with templates using `html`', async () => {
       const container = document.createElement('div');
-      const containerView = document.createElement('div');
       const containerNoResults = document.createElement('div');
       const searchClient = createMockedSearchClient();
 
@@ -274,22 +269,6 @@ describe('frequentlyBoughtTogether', () => {
             item(hit, { html }) {
               return html`<h2>${hit.name}</h2>
                 <p>${hit.brand}</p>`;
-            },
-          },
-        }),
-        frequentlyBoughtTogether({
-          container: containerView,
-          objectID: 'objectID2',
-          templates: {
-            item(hit, { html }) {
-              return html`<p>${hit.name}</p>`;
-            },
-            view({ classNames, items, itemComponent }, { html }) {
-              return html`
-                <ul class="${classNames.list}">
-                  ${items.map((item) => itemComponent({ item }))}
-                </ul>
-              `;
             },
           },
         }),
@@ -362,38 +341,6 @@ describe('frequentlyBoughtTogether', () => {
         </div>
       `);
 
-      expect(containerView).toMatchInlineSnapshot(`
-        <div>
-          <section
-            class="ais-FrequentlyBoughtTogether"
-          >
-            <div
-              class="ais-FrequentlyBoughtTogether-container"
-            >
-              <ul
-                class="ais-FrequentlyBoughtTogether-list"
-              >
-                <li>
-                  <p>
-                    Moschino Love – Shoulder bag
-                  </p>
-                </li>
-                <li>
-                  <p>
-                    Bag “Sabrina“ medium Gabs
-                  </p>
-                </li>
-                <li>
-                  <p>
-                    Bag La Carrie Bag small black
-                  </p>
-                </li>
-              </ul>
-            </div>
-          </section>
-        </div>
-      `);
-
       expect(containerNoResults).toMatchInlineSnapshot(`
         <div>
           <section>
@@ -407,7 +354,6 @@ describe('frequentlyBoughtTogether', () => {
 
     test('renders with templates using JSX', async () => {
       const container = document.createElement('div');
-      const containerView = document.createElement('div');
       const containerNoResults = document.createElement('div');
       const searchClient = createMockedSearchClient();
 
@@ -427,22 +373,6 @@ describe('frequentlyBoughtTogether', () => {
                   <h2>${hit.name}</h2>
                   <p>${hit.brand}</p>
                 </Fragment>
-              );
-            },
-          },
-        }),
-        frequentlyBoughtTogether({
-          container: containerView,
-          objectID: 'objectID2',
-          templates: {
-            item(hit) {
-              return <p>{hit.name}</p>;
-            },
-            view({ classNames, items, itemComponent }) {
-              return (
-                <ul className={classNames.list}>
-                  {items.map((item) => itemComponent({ item }))}
-                </ul>
               );
             },
           },
@@ -517,38 +447,6 @@ describe('frequentlyBoughtTogether', () => {
                   </p>
                 </li>
               </ol>
-            </div>
-          </section>
-        </div>
-      `);
-
-      expect(containerView).toMatchInlineSnapshot(`
-        <div>
-          <section
-            class="ais-FrequentlyBoughtTogether"
-          >
-            <div
-              class="ais-FrequentlyBoughtTogether-container"
-            >
-              <ul
-                class="ais-FrequentlyBoughtTogether-list"
-              >
-                <li>
-                  <p>
-                    Moschino Love – Shoulder bag
-                  </p>
-                </li>
-                <li>
-                  <p>
-                    Bag “Sabrina“ medium Gabs
-                  </p>
-                </li>
-                <li>
-                  <p>
-                    Bag La Carrie Bag small black
-                  </p>
-                </li>
-              </ul>
             </div>
           </section>
         </div>

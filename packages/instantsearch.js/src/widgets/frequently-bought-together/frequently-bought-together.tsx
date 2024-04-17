@@ -107,33 +107,6 @@ const renderer =
         />
       );
 
-    const viewComponent: FrequentlyBoughtTogetherUiProps<Hit>['view'] =
-      templates.view
-        ? ({
-            classNames,
-            itemComponent: viewItemComponent,
-            items,
-            translations,
-            ...rootProps
-          }) => (
-            <TemplateComponent
-              {...renderState.templateProps}
-              templateKey="view"
-              rootTagName="div"
-              rootProps={{
-                ...rootProps,
-                className: classNames.container,
-              }}
-              data={{
-                classNames,
-                itemComponent: viewItemComponent,
-                items,
-                translations,
-              }}
-            />
-          )
-        : undefined;
-
     render(
       <FrequentlyBoughtTogether
         items={receivedHits}
@@ -143,7 +116,6 @@ const renderer =
         classNames={cssClasses}
         fallbackComponent={emptyComponent}
         status={instantSearchInstance.status}
-        view={viewComponent}
       />,
       containerNode
     );
@@ -176,15 +148,6 @@ export type FrequentlyBoughtTogetherTemplates = Partial<{
    * @default ''
    */
   item: Template<Hit>;
-
-  /**
-   * Template to use for the view component.
-   *
-   * @default ''
-   */
-  view: Template<
-    Parameters<NonNullable<FrequentlyBoughtTogetherUiProps<Hit>['view']>>[0]
-  >;
 }>;
 
 type FrequentlyBoughtTogetherWidgetParams = {
