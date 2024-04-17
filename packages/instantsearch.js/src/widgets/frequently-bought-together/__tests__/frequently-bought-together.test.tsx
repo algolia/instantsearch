@@ -3,7 +3,7 @@
  */
 /** @jsx h */
 import {
-  createMultiSearchResponse,
+  createRecommendResponse,
   createSearchClient,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
@@ -468,9 +468,9 @@ describe('frequentlyBoughtTogether', () => {
     return createSearchClient({
       getRecommendations: jest.fn((requests) =>
         Promise.resolve(
-          createMultiSearchResponse(
-            ...requests.map((request) => {
-              return createSingleSearchResponse<any>({
+          createRecommendResponse(
+            requests.map((request) => {
+              return createSingleSearchResponse({
                 hits:
                   request.maxRecommendations === 0
                     ? []
