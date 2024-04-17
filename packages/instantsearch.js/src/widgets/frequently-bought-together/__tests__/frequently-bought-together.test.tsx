@@ -469,6 +469,9 @@ describe('frequentlyBoughtTogether', () => {
       getRecommendations: jest.fn((requests) =>
         Promise.resolve(
           createRecommendResponse(
+            // @ts-ignore
+            // `request` will be implicitly typed as any in type-check:v3
+            // since `getRecommendations` is not available there
             requests.map((request) => {
               return createSingleSearchResponse({
                 hits:
