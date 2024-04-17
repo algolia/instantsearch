@@ -1,5 +1,5 @@
 import {
-  createMultiSearchResponse,
+  createRecommendResponse,
   createSearchClient,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
@@ -170,6 +170,7 @@ export function createOptionsTests(
           transformItems(items) {
             return items.map((item) => ({
               objectID: item.objectID,
+              __position: item.__position,
             }));
           },
         },
@@ -327,8 +328,8 @@ function createMockedSearchClient() {
   return createSearchClient({
     getRecommendations: jest.fn((requests) =>
       Promise.resolve(
-        createMultiSearchResponse(
-          ...requests.map((request) => {
+        createRecommendResponse(
+          requests.map((request) => {
             return createSingleSearchResponse<any>({
               hits:
                 request.maxRecommendations === 0
