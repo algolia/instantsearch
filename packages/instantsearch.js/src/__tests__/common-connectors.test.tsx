@@ -15,6 +15,7 @@ import {
   connectRatingMenu,
   connectRefinementList,
   connectToggleRefinement,
+  connectRelatedProducts,
 } from '../connectors';
 import instantsearch from '../index.es';
 import { refinementList } from '../widgets';
@@ -392,6 +393,31 @@ const testSetups: TestSetupsMap<TestSuites> = {
       })
       .start();
   },
+  createRelatedProductsConnectorTests({ instantSearchOptions, widgetParams }) {
+    const customRelatedProducts = connectRelatedProducts<{
+      container: HTMLElement;
+    }>((renderOptions) => {
+      renderOptions.widgetParams.container.innerHTML = `
+        <ul>${renderOptions.recommendations
+          .map((recommendation) => `<li>${recommendation.objectID}</li>`)
+          .join('')}</ul>`;
+    });
+
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        customRelatedProducts({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -405,6 +431,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createNumericMenuConnectorTests: undefined,
   createRatingMenuConnectorTests: undefined,
   createToggleRefinementConnectorTests: undefined,
+  connectRelatedProductsConnectorTests: undefined,
 };
 
 describe('Common connector tests (InstantSearch.js)', () => {
