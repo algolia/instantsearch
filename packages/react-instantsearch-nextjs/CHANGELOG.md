@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.2.0...react-instantsearch-nextjs@0.2.1) (2024-04-18)
+
+
+### Bug Fixes
+
+* **next-app-router:** escape injected results for hydration ([#6141](https://github.com/algolia/instantsearch/issues/6141)) ([2e6f0de](https://github.com/algolia/instantsearch/commit/2e6f0de329ca9e951eb962767ee836c8f7c6ede9))
+
+
+
+
+
 # [0.2.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.1.14...react-instantsearch-nextjs@0.2.0) (2024-04-02)
 
 
