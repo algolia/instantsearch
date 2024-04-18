@@ -1365,7 +1365,7 @@ declare namespace algoliasearchHelper {
              * - `_blank` opens the URL in a new tab
              * - `_self` opens the URL in the same tab
              */
-            target?: '__blank' | '__self';
+            target?: '_blank' | '_self';
           };
         }>;
       };
