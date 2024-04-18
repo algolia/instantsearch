@@ -10,7 +10,7 @@ import { skippableDescribe } from '../../common';
 
 import type { RelatedProductsConnectorSetup } from '.';
 import type { SetupOptions, TestOptions } from '../../common';
-import type { SearchClient } from 'algoliasearch';
+import type { SearchClient } from 'instantsearch.js';
 
 export function createOptionsTests(
   setup: RelatedProductsConnectorSetup,
