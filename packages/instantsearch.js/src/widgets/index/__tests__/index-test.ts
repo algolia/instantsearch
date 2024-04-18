@@ -3010,8 +3010,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       mainHelper.recommend();
       await wait(0);
 
-      console.log(fbt.$$id);
-
       instance.render({
         instantSearchInstance,
       });

@@ -1,9 +1,8 @@
 import algoliasearch from 'algoliasearch/lite';
 import instantsearch from 'instantsearch.js';
-import { connectFrequentlyBoughtTogether } from 'instantsearch.js/es/connectors';
 import {
   configure,
-  // hits,
+  hits,
   pagination,
   panel,
   refinementList,
@@ -21,19 +20,21 @@ const search = instantsearch({
   insights: true,
 });
 
-const mySuperWidget = connectFrequentlyBoughtTogether(
-  ({ items, widgetParams }) => {
-    // eslint-disable-next-line no-console
-    console.log('FrequentlyBoughtTogether', { items, widgetParams });
-  }
-);
-
 search.addWidgets([
   searchBox({
     container: '#searchbox',
   }),
-  mySuperWidget({ container: '#hits', objectID: '5723538' }),
-
+  hits({
+    container: '#hits',
+    templates: {
+      item: (hit, { html, components }) => html`
+        <article>
+          <h1>${components.Highlight({ hit, attribute: 'name' })}</h1>
+          <p>${components.Highlight({ hit, attribute: 'description' })}</p>
+        </article>
+      `,
+    },
+  }),
   configure({
     hitsPerPage: 8,
   }),
