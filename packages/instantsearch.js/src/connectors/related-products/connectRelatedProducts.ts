@@ -38,16 +38,14 @@ export type RelatedProductsConnectorParams<THit extends BaseHit = BaseHit> = {
   /**
    * List of search parameters to send.
    */
-  fallbackParameters?: Omit<
-    SearchParameters,
-    'page' | 'hitsPerPage' | 'offset' | 'length'
+  fallbackParameters?: Partial<
+    Omit<SearchParameters, 'page' | 'hitsPerPage' | 'offset' | 'length'>
   >;
   /**
    * List of search parameters to send.
    */
-  queryParameters?: Omit<
-    SearchParameters,
-    'page' | 'hitsPerPage' | 'offset' | 'length'
+  queryParameters?: Partial<
+    Omit<SearchParameters, 'page' | 'hitsPerPage' | 'offset' | 'length'>
   >;
   /**
    * Function to transform the items passed to the templates.
@@ -142,7 +140,7 @@ const connectRelatedProducts: RelatedProductsConnector =
             threshold,
             fallbackParameters,
             queryParameters,
-            $$id: this.$$id,
+            $$id: this.$$id!,
           });
         },
       };
