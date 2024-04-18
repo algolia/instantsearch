@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.16.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.15.0...vue-instantsearch@4.16.0) (2024-04-18)
+
+
+### Features
+
+* **helper:** add methods to request and retrieve recommendations ([#6111](https://github.com/algolia/instantsearch/issues/6111)) ([1b683c5](https://github.com/algolia/instantsearch/commit/1b683c5ebbcae4a77a43ff2034da406c9eb0dbc4))
+
+
+
+
+
 # [4.15.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.14.0...vue-instantsearch@4.15.0) (2024-04-02)
 
 
