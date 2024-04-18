@@ -605,11 +605,13 @@ $break-medium: 767px;
 }
 
 /**
- * Hits
+ * Hits and InfiniteHits
+ * FrequentlyBoughtTogether
  */
 
 .ais-Hits-item,
-.ais-InfiniteHits-item {
+.ais-InfiniteHits-item,
+.ais-FrequentlyBoughtTogether-item {
   align-items: center;
   background: $white;
   box-shadow: 0 0 0 1px rgba($grey900, 0.05), 0 1px 3px 0 rgba($grey900, 0.15);
@@ -621,17 +623,20 @@ $break-medium: 767px;
 }
 
 .ais-Hits-item:first-of-type,
-.ais-InfiniteHits-item:first-of-type {
+.ais-InfiniteHits-item:first-of-type,
+.ais-FrequentlyBoughtTogether-item:first-of-type {
   border-radius: 3px 3px 0 0;
 }
 
 .ais-Hits-item:last-of-type,
-.ais-InfiniteHits-item:last-of-type {
+.ais-InfiniteHits-item:last-of-type,
+.ais-FrequentlyBoughtTogether-item:last-of-type {
   border-radius: 0 0 3px 3px;
 }
 
 .ais-Hits-item:only-of-type,
-.ais-InfiniteHits-item:only-of-type {
+.ais-InfiniteHits-item:only-of-type,
+.ais-FrequentlyBoughtTogether-item:only-of-type {
   border-radius: 3px;
 }
 
