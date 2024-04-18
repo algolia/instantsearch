@@ -10,6 +10,7 @@ import { skippableDescribe } from '../../common';
 
 import type { RelatedProductsConnectorSetup } from '.';
 import type { SetupOptions, TestOptions } from '../../common';
+import type { SearchClient } from 'algoliasearch';
 
 export function createOptionsTests(
   setup: RelatedProductsConnectorSetup,
@@ -226,6 +227,6 @@ function createMockedSearchClient() {
           })
         )
       )
-    ),
+    ) as SearchClient['getRecommendations'],
   });
 }
