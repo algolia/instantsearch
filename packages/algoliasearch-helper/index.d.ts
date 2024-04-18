@@ -1337,7 +1337,7 @@ declare namespace algoliasearchHelper {
           /**
            * Configuration for the banner image
            */
-          image: Array<{
+          image: {
             /**
              * Set of possible URLs of the banner image
              */
@@ -1351,7 +1351,7 @@ declare namespace algoliasearchHelper {
              * Alt text of the banner image
              */
             title?: string;
-          }>;
+          };
           /**
            * Configuration for the banner click navigation
            */
