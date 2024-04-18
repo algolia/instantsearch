@@ -34,7 +34,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/frequently-
     const unmount = jest.fn();
 
     const customFbt = connectFrequentlyBoughtTogether(render, unmount);
-    const widget = customFbt({ objectID: '1' });
+    const widget = customFbt({ objectIDs: ['1'] });
 
     expect(widget).toEqual(
       expect.objectContaining({
@@ -49,7 +49,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/frequently-
   it('Renders during init and render', () => {
     const renderFn = jest.fn();
     const makeWidget = connectFrequentlyBoughtTogether(renderFn);
-    const widget = makeWidget({ objectID: '1' });
+    const widget = makeWidget({ objectIDs: ['1'] });
 
     // test if widget is not rendered yet at this point
     expect(renderFn).toHaveBeenCalledTimes(0);
@@ -66,7 +66,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/frequently-
 
     expect(renderFn).toHaveBeenCalledTimes(1);
     expect(renderFn).toHaveBeenLastCalledWith(
-      expect.objectContaining({ widgetParams: { objectID: '1' } }),
+      expect.objectContaining({ widgetParams: { objectIDs: ['1'] } }),
       true
     );
 
@@ -78,7 +78,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/frequently-
 
     expect(renderFn).toHaveBeenCalledTimes(2);
     expect(renderFn).toHaveBeenLastCalledWith(
-      expect.objectContaining({ widgetParams: { objectID: '1' } }),
+      expect.objectContaining({ widgetParams: { objectIDs: ['1'] } }),
       false
     );
   });
@@ -86,7 +86,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/frequently-
   it('Provides the hits and the whole results', () => {
     const renderFn = jest.fn();
     const makeWidget = connectFrequentlyBoughtTogether(renderFn);
-    const widget = makeWidget({ objectID: '1' });
+    const widget = makeWidget({ objectIDs: ['1'] });
 
     const helper = algoliasearchHelper(createSearchClient(), '', {});
     helper.search = jest.fn();
@@ -130,7 +130,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/frequently-
     const renderFn = jest.fn();
     const makeWidget = connectFrequentlyBoughtTogether(renderFn);
     const widget = makeWidget({
-      objectID: '1',
+      objectIDs: ['1'],
       transformItems: (items) =>
         items.map((item) => ({ ...item, name: 'transformed' })),
     });
@@ -179,7 +179,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/frequently-
     const makeWidget = connectFrequentlyBoughtTogether(() => {});
     const widget = makeWidget({
       transformItems,
-      objectID: '1',
+      objectIDs: ['1'],
     });
 
     const results = createSingleSearchResponse({
@@ -204,7 +204,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/frequently-
       const renderFn = jest.fn();
       const unmountFn = jest.fn();
       const createFbt = connectFrequentlyBoughtTogether(renderFn, unmountFn);
-      const fbtWidget = createFbt({ objectID: '1' });
+      const fbtWidget = createFbt({ objectIDs: ['1'] });
 
       const renderState1 = fbtWidget.getWidgetRenderState!(
         createInitOptions({})
@@ -212,7 +212,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/frequently-
 
       expect(renderState1).toEqual({
         hits: [],
-        widgetParams: { objectID: '1' },
+        widgetParams: { objectIDs: ['1'] },
       });
 
       const hits = [
@@ -226,7 +226,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/frequently-
 
       expect(renderState2).toEqual({
         hits,
-        widgetParams: { objectID: '1' },
+        widgetParams: { objectIDs: ['1'] },
       });
     });
   });
@@ -236,7 +236,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/frequently-
       const render = () => {};
       const makeWidget = connectFrequentlyBoughtTogether(render);
       const widget = makeWidget({
-        objectID: '1',
+        objectIDs: ['1'],
         maxRecommendations: 10,
         threshold: 95,
         queryParameters: { userToken: 'token' },

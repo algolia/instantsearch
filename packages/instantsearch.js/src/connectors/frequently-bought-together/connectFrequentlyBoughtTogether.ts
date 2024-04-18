@@ -28,9 +28,9 @@ export type FrequentlyBoughtTogetherConnectorParams<
   THit extends BaseHit = BaseHit
 > = {
   /**
-   * The objectID of the item to get the frequently bought together items.
+   * The objectIDs of the items to get the frequently bought together items for.
    */
-  objectID: string;
+  objectIDs: string[];
 
   /**
    * Threshold for the recommendations confidence score (between 0 and 100). Only recommendations with a greater score are returned.
@@ -78,7 +78,7 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
         transformItems = ((items) => items) as NonNullable<
           FrequentlyBoughtTogetherConnectorParams['transformItems']
         >,
-        objectID,
+        objectIDs,
         maxRecommendations,
         threshold,
         queryParameters,
@@ -133,6 +133,9 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
         },
 
         getWidgetParameters(state) {
+          // We only use the first objectID to get the recommendations for
+          // until we implement support for multiple objectIDs in the helper.
+          const objectID = objectIDs[0];
           return state.addFrequentlyBoughtTogether({
             objectID,
             threshold,
