@@ -114,21 +114,12 @@ describe('index', () => {
   ): Widget & { $$id: number } =>
     createWidget({
       dependsOn: 'recommend',
-<<<<<<< HEAD
       getWidgetParameters(parameters) {
         return parameters.addFrequentlyBoughtTogether({
           $$id: this.$$id!,
           objectID: 'abc',
         });
       },
-=======
-      getWidgetParameters: jest.fn((parameters) => {
-        return parameters.addFrequentlyBoughtTogether({
-          $$id: 1,
-          objectID: 'abc',
-        });
-      }),
->>>>>>> feat/map-recommend-results
       ...args,
     } as Widget) as unknown as Widget & { $$id: number };
 
