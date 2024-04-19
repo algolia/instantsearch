@@ -23,7 +23,7 @@ export function createOptionsTests(
           searchClient,
         },
         widgetParams: {
-          objectID: 'objectID',
+          objectIDs: ['objectID'],
         },
       });
 
@@ -166,7 +166,7 @@ export function createOptionsTests(
           searchClient,
         },
         widgetParams: {
-          objectID: 'objectID',
+          objectIDs: ['objectID'],
           transformItems(items) {
             return items.map((item) => ({
               objectID: item.objectID,
@@ -232,7 +232,7 @@ export function createOptionsTests(
             searchClient,
           },
           widgetParams: {
-            objectID: 'objectID',
+            objectIDs: ['objectID'],
             // Using this to mock an empty response
             maxRecommendations: 0,
             templates: {
@@ -266,7 +266,7 @@ export function createOptionsTests(
             searchClient,
           },
           widgetParams: {
-            objectID: 'objectID',
+            objectIDs: ['objectID'],
             templates: {
               header: '',
             },
@@ -303,7 +303,7 @@ export function createOptionsTests(
             searchClient,
           },
           widgetParams: {
-            objectID: 'objectID',
+            objectIDs: ['objectID'],
             templates: {
               item: '',
             },
