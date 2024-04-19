@@ -1,4 +1,4 @@
 {
   "extends": "../../tsconfig.declaration",
-  "exclude": ["**/__tests__/e2e/**/*", "**/dist/**/*"]
+  "exclude": ["**/__tests__/**/*", "**/dist/**/*"]
 }
