@@ -53,7 +53,7 @@ describe('frequentlyBoughtTogether', () => {
       search.addWidgets([
         frequentlyBoughtTogether({
           container,
-          objectID: 'objectID',
+          objectIDs: ['objectID'],
           cssClasses: {
             root: 'ROOT',
             title: 'TITLE',
@@ -100,11 +100,11 @@ describe('frequentlyBoughtTogether', () => {
       search.addWidgets([
         frequentlyBoughtTogether({
           container,
-          objectID: 'objectID',
+          objectIDs: ['objectID'],
         }),
         frequentlyBoughtTogether({
           container: containerNoResults,
-          objectID: 'objectID2',
+          objectIDs: ['objectID2'],
           // Using this to mock an empty response
           maxRecommendations: 0,
         }),
@@ -261,7 +261,7 @@ describe('frequentlyBoughtTogether', () => {
       search.addWidgets([
         frequentlyBoughtTogether({
           container,
-          objectID: 'objectID',
+          objectIDs: ['objectID'],
           templates: {
             header({ translations }, { html }) {
               return html`${translations.title}`;
@@ -274,7 +274,7 @@ describe('frequentlyBoughtTogether', () => {
         }),
         frequentlyBoughtTogether({
           container: containerNoResults,
-          objectID: 'objectID3',
+          objectIDs: ['objectID3'],
           // Using this to mock an empty response
           maxRecommendations: 0,
           templates: {
@@ -362,7 +362,7 @@ describe('frequentlyBoughtTogether', () => {
       search.addWidgets([
         frequentlyBoughtTogether({
           container,
-          objectID: 'objectID',
+          objectIDs: ['objectID'],
           templates: {
             header({ translations }) {
               return <Fragment>{translations.title}</Fragment>;
@@ -379,7 +379,7 @@ describe('frequentlyBoughtTogether', () => {
         }),
         frequentlyBoughtTogether({
           container: containerNoResults,
-          objectID: 'objectID3',
+          objectIDs: ['objectID3'],
           // Using this to mock an empty response
           maxRecommendations: 0,
           templates: {
