@@ -84,6 +84,10 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
         queryParameters,
       } = widgetParams || {};
 
+      if (!objectIDs || objectIDs.length === 0) {
+        throw new Error(withUsage('The `objectIDs` option is required.'));
+      }
+
       return {
         dependsOn: 'recommend',
         $$type: 'ais.frequentlyBoughtTogether',

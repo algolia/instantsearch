@@ -23,10 +23,10 @@ describe('connectFrequentlyBoughtTogether', () => {
       // @ts-expect-error
       connectFrequentlyBoughtTogether()({});
     }).toThrowErrorMatchingInlineSnapshot(`
-"The render function is not valid (received type Undefined).
+      "The render function is not valid (received type Undefined).
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/frequently-bought-together/js/#connector"
-`);
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/frequently-bought-together/js/#connector"
+    `);
   });
 
   it('is a widget', () => {
@@ -44,6 +44,30 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/frequently-
         dispose: expect.any(Function),
       })
     );
+  });
+
+  it('throws when no `objectIDs` are provided', () => {
+    const makeWidget = connectFrequentlyBoughtTogether(() => {});
+    expect(() => {
+      makeWidget({
+        // @ts-expect-error
+        objectIDs: undefined,
+      });
+    }).toThrowErrorMatchingInlineSnapshot(`
+      "The \`objectIDs\` option is required.
+
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/frequently-bought-together/js/#connector"
+    `);
+
+    expect(() => {
+      makeWidget({
+        objectIDs: [],
+      });
+    }).toThrowErrorMatchingInlineSnapshot(`
+      "The \`objectIDs\` option is required.
+
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/frequently-bought-together/js/#connector"
+    `);
   });
 
   it('Renders during init and render', () => {
