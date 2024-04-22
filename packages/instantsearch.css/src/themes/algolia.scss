@@ -26,6 +26,7 @@ a[class^='ais-'] {
 .ais-HierarchicalMenu,
 .ais-Hits,
 .ais-FrequentlyBoughtTogether,
+.ais-RelatedProducts,
 .ais-Results,
 .ais-HitsPerPage,
 .ais-ResultsPerPage,
@@ -288,6 +289,7 @@ a[class^='ais-'] {
 .ais-InfiniteResults-list,
 .ais-Hits-list,
 .ais-FrequentlyBoughtTogether-list,
+.ais-RelatedProducts-list,
 .ais-Results-list {
   margin-top: -1rem;
   margin-left: -1rem;
@@ -303,6 +305,7 @@ a[class^='ais-'] {
 .ais-InfiniteResults-item,
 .ais-Hits-item,
 .ais-FrequentlyBoughtTogether-item,
+.ais-RelatedProducts-item,
 .ais-Results-item {
   margin-top: 1rem;
   margin-left: 1rem;
