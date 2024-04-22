@@ -30,6 +30,7 @@ export { default as connectNumericMenu } from './numeric-menu/connectNumericMenu
 export { default as connectPagination } from './pagination/connectPagination';
 export { default as connectRange } from './range/connectRange';
 export { default as connectRefinementList } from './refinement-list/connectRefinementList';
+export { default as connectRelatedProducts } from './related-products/connectRelatedProducts';
 export { default as connectSearchBox } from './search-box/connectSearchBox';
 export { default as connectSortBy } from './sort-by/connectSortBy';
 export { default as connectRatingMenu } from './rating-menu/connectRatingMenu';

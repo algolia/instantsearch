@@ -313,6 +313,7 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
+  createRelatedProductsConnectorTests: () => {},
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -332,6 +333,12 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createNumericMenuConnectorTests: { act },
   createRatingMenuConnectorTests: { act },
   createToggleRefinementConnectorTests: { act },
+  createRelatedProductsConnectorTests: {
+    act,
+    skippedTests: {
+      options: true,
+    },
+  },
 };
 
 describe('Common connector tests (React InstantSearch)', () => {
