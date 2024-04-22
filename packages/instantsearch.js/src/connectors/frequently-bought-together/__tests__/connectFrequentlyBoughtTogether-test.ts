@@ -123,7 +123,7 @@ describe('connectFrequentlyBoughtTogether', () => {
 
     expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
-        hits: [],
+        recommendations: [],
       }),
       expect.anything()
     );
@@ -144,7 +144,7 @@ describe('connectFrequentlyBoughtTogether', () => {
 
     expect(renderFn).toHaveBeenLastCalledWith(
       expect.objectContaining({
-        hits,
+        recommendations: hits,
       }),
       expect.anything()
     );
@@ -166,7 +166,7 @@ describe('connectFrequentlyBoughtTogether', () => {
 
     expect(renderFn).toHaveBeenNthCalledWith(
       1,
-      expect.objectContaining({ hits: [] }),
+      expect.objectContaining({ recommendations: [] }),
       expect.anything()
     );
 
@@ -192,7 +192,7 @@ describe('connectFrequentlyBoughtTogether', () => {
     expect(renderFn).toHaveBeenNthCalledWith(
       2,
       expect.objectContaining({
-        hits: expectedHits,
+        recommendations: expectedHits,
       }),
       expect.anything()
     );
@@ -235,7 +235,7 @@ describe('connectFrequentlyBoughtTogether', () => {
       );
 
       expect(renderState1).toEqual({
-        hits: [],
+        recommendations: [],
         widgetParams: { objectIDs: ['1'] },
       });
 
@@ -249,7 +249,7 @@ describe('connectFrequentlyBoughtTogether', () => {
       } as unknown as RenderOptions);
 
       expect(renderState2).toEqual({
-        hits,
+        recommendations: hits,
         widgetParams: { objectIDs: ['1'] },
       });
     });

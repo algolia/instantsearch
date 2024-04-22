@@ -19,9 +19,9 @@ export type FrequentlyBoughtTogetherRenderState<
   THit extends BaseHit = BaseHit
 > = {
   /**
-   * The matched hits from Algolia API.
+   * The matched recommendations from Algolia API.
    */
-  hits: Array<Hit<THit>>;
+  recommendations: Array<Hit<THit>>;
 };
 
 export type FrequentlyBoughtTogetherConnectorParams<
@@ -120,14 +120,14 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
 
         getWidgetRenderState({ results }) {
           if (results === null || results === undefined) {
-            return { hits: [], widgetParams };
+            return { recommendations: [], widgetParams };
           }
 
           const transformedItems = transformItems(results.hits, {
             results: results as RecommendResultItem,
           });
 
-          return { hits: transformedItems, widgetParams };
+          return { recommendations: transformedItems, widgetParams };
         },
 
         dispose({ state }) {
