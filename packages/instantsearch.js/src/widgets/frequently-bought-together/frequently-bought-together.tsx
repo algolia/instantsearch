@@ -27,7 +27,7 @@ import type {
 } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({
-  name: 'frequentlyBoughtTogether',
+  name: 'frequently-bought-together',
 });
 
 const FrequentlyBoughtTogether = createFrequentlyBoughtTogetherComponent({

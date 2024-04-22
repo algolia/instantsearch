@@ -37,7 +37,7 @@ describe('frequentlyBoughtTogether', () => {
       }).toThrowErrorMatchingInlineSnapshot(`
         "The \`container\` option is required.
 
-        See documentation: https://www.algolia.com/doc/api-reference/widgets/frequentlyBoughtTogether/js/"
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/frequently-bought-together/js/"
       `);
     });
 

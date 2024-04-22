@@ -96,5 +96,5 @@ export type RecommendItemComponentProps<TObject> = {
   onAuxClick?: () => void;
 };
 
-// use instantsearch status instead
+// @TODO: use instantsearch status instead
 export type RecommendStatus = 'idle' | 'loading' | 'stalled' | 'error';
