@@ -125,6 +125,11 @@ describe('frequentlyBoughtTogether', () => {
           <section
             class="ais-FrequentlyBoughtTogether"
           >
+            <h3
+              class="ais-FrequentlyBoughtTogether-title"
+            >
+              Frequently bought together
+            </h3>
             <div
               class="ais-FrequentlyBoughtTogether-container"
             >
