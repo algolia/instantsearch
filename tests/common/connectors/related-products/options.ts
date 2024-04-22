@@ -17,20 +17,20 @@ export function createOptionsTests(
   { act, skippedTests }: Required<TestOptions>
 ) {
   skippableDescribe('options', skippedTests, () => {
-    test('throws when not passing the `objectID` option', async () => {
+    test('throws when not passing the `objectIDs` option', async () => {
       const options: SetupOptions<RelatedProductsConnectorSetup> = {
         instantSearchOptions: {
           indexName: 'indexName',
           searchClient: createSearchClient(),
         },
-        // @ts-expect-error missing `objectID`
+        // @ts-expect-error missing `objectIDs`
         widgetParams: {},
       };
 
       await expect(async () => {
         await setup(options);
       }).rejects.toThrowErrorMatchingInlineSnapshot(`
-              "The \`objectID\` option is required.
+              "The \`objectIDs\` option is required.
 
               See documentation: https://www.algolia.com/doc/api-reference/widgets/related-products/js/#connector"
             `);
@@ -41,7 +41,7 @@ export function createOptionsTests(
       const options: SetupOptions<RelatedProductsConnectorSetup> = {
         instantSearchOptions: { indexName: 'indexName', searchClient },
         widgetParams: {
-          objectID: '1',
+          objectIDs: ['1'],
           maxRecommendations: 2,
           threshold: 3,
           fallbackParameters: { facetFilters: ['test1'] },
@@ -62,7 +62,7 @@ export function createOptionsTests(
           indexName: 'indexName',
           searchClient: createMockedSearchClient(),
         },
-        widgetParams: { objectID: '1' },
+        widgetParams: { objectIDs: ['1'] },
       };
 
       await setup(options);
@@ -95,7 +95,7 @@ export function createOptionsTests(
           searchClient: createMockedSearchClient(),
         },
         widgetParams: {
-          objectID: '1',
+          objectIDs: ['1'],
           transformItems(items) {
             return items.map((item) => ({
               ...item,

@@ -24,9 +24,9 @@ export type RelatedProductsRenderState<THit extends BaseHit = BaseHit> = {
 
 export type RelatedProductsConnectorParams<THit extends BaseHit = BaseHit> = {
   /**
-   * The `objectID` of the item to get related products from.
+   * The `objectIDs` of the items to get related products from.
    */
-  objectID: string;
+  objectIDs: string[];
   /**
    * The number of recommendations to retrieve.
    */
@@ -72,7 +72,7 @@ const connectRelatedProducts: RelatedProductsConnector =
 
     return function relatedProducts(widgetParams) {
       const {
-        objectID,
+        objectIDs,
         maxRecommendations,
         threshold,
         fallbackParameters,
@@ -82,7 +82,7 @@ const connectRelatedProducts: RelatedProductsConnector =
         >,
       } = widgetParams || {};
 
-      if (!objectID) {
+      if (!objectIDs || objectIDs.length === 0) {
         throw new Error(withUsage('The `objectID` option is required.'));
       }
 
@@ -136,6 +136,10 @@ const connectRelatedProducts: RelatedProductsConnector =
         },
 
         getWidgetParameters(state) {
+          // We only use the first `objectID` to get the recommendations for
+          // until we implement support for multiple `objectIDs` in the helper.
+          const objectID = objectIDs[0];
+
           return state.addRelatedProducts({
             objectID,
             maxRecommendations,
