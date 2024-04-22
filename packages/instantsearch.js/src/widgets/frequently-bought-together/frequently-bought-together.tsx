@@ -55,7 +55,11 @@ const renderer =
     Partial<FrequentlyBoughtTogetherWidgetParams>
   > =>
   (
-    { hits: receivedHits, results, instantSearchInstance },
+    {
+      recommendations: receivedRecommendations,
+      results,
+      instantSearchInstance,
+    },
     isFirstRendering
   ) => {
     if (isFirstRendering) {
@@ -109,7 +113,7 @@ const renderer =
 
     render(
       <FrequentlyBoughtTogether
-        items={receivedHits}
+        items={receivedRecommendations}
         headerComponent={headerComponent}
         itemComponent={itemComponent}
         sendEvent={() => {}}
