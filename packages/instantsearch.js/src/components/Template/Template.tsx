@@ -12,19 +12,30 @@ import type { JSX } from 'preact';
 
 class RawHtml extends Component<{ content: string }> {
   ref = createRef();
-  nodes: Element[] = [];
+  nodes: ChildNode[] = [];
 
   componentDidMount() {
     const fragment = new DocumentFragment();
     const root = document.createElement('div');
     root.innerHTML = this.props.content;
-    this.nodes = [...root.children];
+    this.nodes = [...root.childNodes];
     this.nodes.forEach((node) => fragment.appendChild(node));
     this.ref.current.replaceWith(fragment);
   }
 
   componentWillUnmount() {
-    this.nodes.forEach((node) => (node.outerHTML = ''));
+    this.nodes.forEach((node) => {
+      if (node instanceof Element) {
+        node.outerHTML = '';
+        return;
+      }
+      node.nodeValue = '';
+    });
+    // if there is one TextNode first and one TextNode last, the
+    // last one's nodeValue will be assigned to the first.
+    if (this.nodes[0].nodeValue) {
+      this.nodes[0].nodeValue = '';
+    }
   }
 
   render() {

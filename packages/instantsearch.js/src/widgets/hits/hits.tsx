@@ -86,6 +86,7 @@ const renderer =
         rootProps={rootProps}
         templateKey="empty"
         data={results}
+        rootTagName="fragment"
       />
     );
 

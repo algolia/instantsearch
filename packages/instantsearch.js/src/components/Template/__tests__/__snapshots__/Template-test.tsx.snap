@@ -28,11 +28,31 @@ exports[`Template can have Fragment as rootTagName with Preact template 1`] = `
 </div>
 `;
 
+exports[`Template can have Fragment as rootTagName with simple string 1`] = `
+<div>
+  test
+</div>
+`;
+
 exports[`Template can have Fragment as rootTagName with string template 1`] = `
 <div>
+  Hello 
   <span>
-    test
+    world
   </span>
+   !
+</div>
+`;
+
+exports[`Template can have Fragment as rootTagName with string template 2`] = `
+<div>
+  
+  
+  Hello 
+  <span>
+    world2
+  </span>
+   !
 </div>
 `;
 

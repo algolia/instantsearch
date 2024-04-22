@@ -194,9 +194,7 @@ describe('Hits', () => {
     test('renders when defined and there are no hits', () => {
       const props = createProps({
         hits: [],
-        emptyComponent: ({ ...rootProps }) => (
-          <div {...rootProps}>No results</div>
-        ),
+        emptyComponent: () => <span>No results</span>,
       });
       const { container } = render(<Hits {...props} />);
       expect(container).toMatchInlineSnapshot(`
@@ -204,7 +202,9 @@ describe('Hits', () => {
           <div
             class="ais-Hits ais-Hits--empty"
           >
-            No results
+            <span>
+              No results
+            </span>
           </div>
         </div>
       `);
