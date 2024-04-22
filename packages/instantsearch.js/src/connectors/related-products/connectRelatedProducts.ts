@@ -6,8 +6,8 @@ import {
 
 import type { Connector, TransformItems, Hit, BaseHit } from '../../types';
 import type {
+  PlainSearchParameters,
   RecommendResultItem,
-  SearchParameters,
 } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -38,14 +38,16 @@ export type RelatedProductsConnectorParams<THit extends BaseHit = BaseHit> = {
   /**
    * List of search parameters to send.
    */
-  fallbackParameters?: Partial<
-    Omit<SearchParameters, 'page' | 'hitsPerPage' | 'offset' | 'length'>
+  fallbackParameters?: Omit<
+    PlainSearchParameters,
+    'page' | 'hitsPerPage' | 'offset' | 'length'
   >;
   /**
    * List of search parameters to send.
    */
-  queryParameters?: Partial<
-    Omit<SearchParameters, 'page' | 'hitsPerPage' | 'offset' | 'length'>
+  queryParameters?: Omit<
+    PlainSearchParameters,
+    'page' | 'hitsPerPage' | 'offset' | 'length'
   >;
   /**
    * Function to transform the items passed to the templates.
