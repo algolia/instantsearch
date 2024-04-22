@@ -47,7 +47,7 @@ classes:
     description: the hit list item
 options:
   - name: objectIDs
-    description: objectIDs of the items to get the frequently bought together items from
+    description: objectIDs of the items to get the Frequently Bought Together items from
   - name: maxRecommendations
     description: Number of recommendations to retrieve
   - name: queryParameters
