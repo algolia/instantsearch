@@ -52,7 +52,15 @@ export function createOptionsTests(
       await setup(options);
 
       expect(searchClient.getRecommendations).toHaveBeenCalledWith(
-        expect.arrayContaining([expect.objectContaining(options.widgetParams)])
+        expect.arrayContaining([
+          expect.objectContaining({
+            objectID: '1',
+            maxRecommendations: 2,
+            threshold: 3,
+            fallbackParameters: { facetFilters: ['test1'] },
+            queryParameters: { analytics: true },
+          }),
+        ])
       );
     });
 

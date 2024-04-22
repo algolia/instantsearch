@@ -83,7 +83,7 @@ const connectRelatedProducts: RelatedProductsConnector =
       } = widgetParams || {};
 
       if (!objectIDs || objectIDs.length === 0) {
-        throw new Error(withUsage('The `objectID` option is required.'));
+        throw new Error(withUsage('The `objectIDs` option is required.'));
       }
 
       return {
