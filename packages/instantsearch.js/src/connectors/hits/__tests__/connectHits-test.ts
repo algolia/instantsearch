@@ -498,6 +498,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
         index: 'indexName',
       });
+      const banner = { image: { urls: [{ url: 'https://example.com' }] } };
+      const renderingContent = {
+        widgets: {
+          banners: [banner],
+        },
+      };
 
       const renderState1 = hitsWidget.getRenderState(
         {},
@@ -506,6 +512,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
       expect(renderState1.hits).toEqual({
         hits: [],
+        banner: undefined,
         sendEvent: expect.any(Function),
         bindEvent: expect.any(Function),
         results: undefined,
@@ -518,7 +525,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       ];
 
       const results = new SearchResults(helper.state, [
-        createSingleSearchResponse({ hits, queryID: 'theQueryID' }),
+        createSingleSearchResponse({
+          hits,
+          queryID: 'theQueryID',
+          // @TODO: remove once algoliasearch js client has been updated
+          // @ts-expect-error
+          renderingContent,
+        }),
       ]);
 
       const renderState2 = hitsWidget.getRenderState(
@@ -537,6 +550,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
       expect(renderState2.hits).toEqual({
         hits: expectedHits,
+        banner,
         sendEvent: renderState1.hits.sendEvent,
         bindEvent: renderState1.hits.bindEvent,
         results,
