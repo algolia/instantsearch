@@ -1,10 +1,10 @@
 {
   "sandboxes": [
-    "instantsearchjs-es-template-pcw1k",
-    "github/algolia/instantsearch/tree/templates/react-instantsearch",
-    "/examples/react/default-theme",
+    "/examples/js/getting-started",
+    "/examples/react/getting-started",
     "/examples/react/next-app-router",
-    "/examples/vue/default-theme"
+    "/examples/react/next-routing",
+    "/examples/vue/getting-started"
   ],
   "buildCommand": "build --no-private --ignore *-maps --ignore *-native",
   "packages": [
