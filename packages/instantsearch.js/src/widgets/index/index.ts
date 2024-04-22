@@ -10,6 +10,7 @@ import {
   createInitArgs,
   createRenderArgs,
 } from '../../lib/utils';
+import { addWidgetId } from '../../lib/utils/addWidgetId';
 
 import type {
   InstantSearch,
@@ -306,7 +307,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       if (
         widget.dependsOn !== 'recommend' ||
         isIndexWidget(widget) ||
-        !widget.$$id
+        widget.$$id === undefined
       ) {
         return this.getResults();
       }
@@ -385,6 +386,14 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           )
         );
       }
+
+      widgets.forEach((widget) => {
+        if (isIndexWidget(widget)) {
+          return;
+        }
+
+        addWidgetId(widget);
+      });
 
       localWidgets = localWidgets.concat(widgets);
 

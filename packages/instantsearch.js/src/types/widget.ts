@@ -158,7 +158,7 @@ type RecommendWidget<
   TWidgetDescription extends WidgetDescription & WidgetParams
 > = {
   dependsOn: 'recommend';
-  $$id: number;
+  $$id?: number;
   getWidgetParameters: (
     state: RecommendParameters,
     widgetParametersOptions: {
