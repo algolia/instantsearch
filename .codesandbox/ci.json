@@ -2,10 +2,9 @@
   "sandboxes": [
     "/examples/js/getting-started",
     "/examples/react/getting-started",
-    "/examples/vue/getting-started",
-    "/examples/react/default-theme",
+    "/examples/react/next-app-router",
     "/examples/react/next-routing",
-    "/examples/react/next-app-router"
+    "/examples/vue/getting-started"
   ],
   "buildCommand": "build --no-private --ignore *-maps --ignore *-native",
   "packages": [
