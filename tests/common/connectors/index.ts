@@ -9,3 +9,4 @@ export * from './rating-menu';
 export * from './toggle-refinement';
 export * from './current-refinements';
 export * from './related-products';
+export * from './frequently-bought-together';

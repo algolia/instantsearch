@@ -314,6 +314,7 @@ const testSetups: TestSetupsMap<TestSuites> = {
     );
   },
   createRelatedProductsConnectorTests: () => {},
+  createFrequentlyBoughtTogetherConnectorTests: () => {},
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -334,6 +335,12 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createRatingMenuConnectorTests: { act },
   createToggleRefinementConnectorTests: { act },
   createRelatedProductsConnectorTests: {
+    act,
+    skippedTests: {
+      options: true,
+    },
+  },
+  createFrequentlyBoughtTogetherConnectorTests: {
     act,
     skippedTests: {
       options: true,
