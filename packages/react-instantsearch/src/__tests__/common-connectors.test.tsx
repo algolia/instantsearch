@@ -340,15 +340,12 @@ const testOptions: TestOptionsMap<TestSuites> = {
       options: true,
     },
   },
-<<<<<<< HEAD
-=======
   createFrequentlyBoughtTogetherConnectorTests: {
     act,
     skippedTests: {
       options: true,
     },
   },
->>>>>>> feat/map-recommend-results
 };
 
 describe('Common connector tests (React InstantSearch)', () => {
