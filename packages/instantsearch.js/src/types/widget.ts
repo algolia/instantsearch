@@ -150,7 +150,7 @@ type SearchWidget<TWidgetDescription extends WidgetDescription> = {
   ) => SearchParameters;
 };
 
-type RecommmendRenderOptions = SharedRenderOptions & {
+type RecommendRenderOptions = SharedRenderOptions & {
   results: RecommendResultItem;
 };
 
@@ -171,10 +171,10 @@ type RecommendWidget<
     renderState: Expand<
       IndexRenderState & Partial<TWidgetDescription['indexRenderState']>
     >,
-    renderOptions: InitOptions | RecommmendRenderOptions
+    renderOptions: InitOptions | RecommendRenderOptions
   ) => IndexRenderState & TWidgetDescription['indexRenderState'];
   getWidgetRenderState: (
-    renderOptions: InitOptions | RecommmendRenderOptions
+    renderOptions: InitOptions | RecommendRenderOptions
   ) => Expand<
     WidgetRenderState<
       TWidgetDescription['renderState'],
