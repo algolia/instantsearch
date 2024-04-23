@@ -503,6 +503,9 @@ const testSetups = {
 
     await nextTick();
   },
+  async createRelatedProductsWidgetTests() {
+    throw new Error('RelatedProduct is not supported in Vue InstantSearch');
+  },
 };
 
 const testOptions = {
@@ -525,6 +528,11 @@ const testOptions = {
   },
   createSortByWidgetTests: undefined,
   createStatsWidgetTests: undefined,
+  createRelatedProductsWidgetTests: {
+    skippedTests: {
+      'RelatedProducts widget common tests': true,
+    },
+  },
 };
 
 describe('Common widget tests (Vue InstantSearch)', () => {
