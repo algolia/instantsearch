@@ -1,6 +1,7 @@
 export * from './Breadcrumb';
 export * from './ClearRefinements';
 export * from './CurrentRefinements';
+export * from './FrequentlyBoughtTogether';
 export * from './HierarchicalMenu';
 export * from './Highlight';
 export * from './Hits';
