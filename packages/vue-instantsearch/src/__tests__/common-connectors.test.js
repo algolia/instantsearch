@@ -339,6 +339,7 @@ const testSetups = {
 
     await nextTick();
   },
+  createRelatedProductsConnectorTests: () => {},
 };
 
 function createCustomWidget({
@@ -413,6 +414,11 @@ const testOptions = {
   createNumericMenuConnectorTests: undefined,
   createRatingMenuConnectorTests: undefined,
   createToggleRefinementConnectorTests: undefined,
+  createRelatedProductsConnectorTests: {
+    skippedTests: {
+      options: true,
+    },
+  },
 };
 
 describe('Common connector tests (Vue InstantSearch)', () => {
