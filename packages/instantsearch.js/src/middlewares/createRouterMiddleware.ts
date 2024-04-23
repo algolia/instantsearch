@@ -104,6 +104,10 @@ export const createRouterMiddleware = <
 
         router.onUpdate((route) => {
           if (instantSearchInstance.mainIndex.getWidgets().length > 0) {
+            console.log(
+              '\x1b[33m%s\x1b[0m',
+              'Router:onUpdate() > call setUiState()'
+            );
             instantSearchInstance.setUiState(stateMapping.routeToState(route));
           }
         });
