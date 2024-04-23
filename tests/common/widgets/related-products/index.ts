@@ -1,4 +1,4 @@
-import { fakeAct } from '../../common';
+import { fakeAct, skippableDescribe } from '../../common';
 
 import { createOptionsTests } from './options';
 
@@ -18,7 +18,7 @@ export function createRelatedProductsWidgetTests(
     document.body.innerHTML = '';
   });
 
-  describe('RelatedProducts widget common tests', () => {
+  skippableDescribe('RelatedProducts widget common tests', skippedTests, () => {
     createOptionsTests(setup, { act, skippedTests });
   });
 }
