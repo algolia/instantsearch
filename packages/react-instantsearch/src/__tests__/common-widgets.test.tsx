@@ -310,6 +310,9 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
+  createRelatedProductsWidgetTests() {
+    throw new Error('RelatedProduct is not supported in React InstantSearch');
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -339,6 +342,12 @@ const testOptions: TestOptionsMap<TestSuites> = {
     act,
     skippedTests: {
       'NumericMenu widget common tests': true,
+    },
+  },
+  createRelatedProductsWidgetTests: {
+    act,
+    skippedTests: {
+      'RelatedProducts widget common tests': true,
     },
   },
 };

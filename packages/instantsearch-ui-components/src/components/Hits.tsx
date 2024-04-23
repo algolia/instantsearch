@@ -1,12 +1,13 @@
 /** @jsx createElement */
 import { cx } from '../lib';
 
-import type { ComponentProps, Renderer, SendEventForHits } from '../types';
+import type { ComponentProps, Renderer } from '../types';
 
 // Should be imported from a shared package in the future
 type Hit = Record<string, unknown> & {
   objectID: string;
 };
+type SendEventForHits = (...props: unknown[]) => void;
 
 export type HitsProps<THit> = ComponentProps<'div'> & {
   hits: THit[];

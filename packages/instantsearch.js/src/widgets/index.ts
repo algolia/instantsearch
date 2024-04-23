@@ -37,6 +37,7 @@ export { default as places } from './places/places';
 export { default as poweredBy } from './powered-by/powered-by';
 export { default as queryRuleContext } from './query-rule-context/query-rule-context';
 export { default as queryRuleCustomData } from './query-rule-custom-data/query-rule-custom-data';
+export { default as relatedProducts } from './related-products/related-products';
 export { default as rangeInput } from './range-input/range-input';
 export { default as rangeSlider } from './range-slider/range-slider';
 export { default as ratingMenu } from './rating-menu/rating-menu';

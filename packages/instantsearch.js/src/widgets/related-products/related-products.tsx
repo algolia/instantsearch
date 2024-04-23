@@ -11,8 +11,6 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
-import defaultTemplates from './defaultTemplates';
-
 import type {
   RelatedProductsWidgetDescription,
   RelatedProductsConnectorParams,
@@ -27,7 +25,7 @@ import type {
 } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({
-  name: 'relatedProducts',
+  name: 'related-products',
 });
 
 const RelatedProducts = createRelatedProductsComponent({
@@ -54,12 +52,13 @@ function createRenderer({
   Partial<RelatedProductsWidgetParams>
 > {
   return function renderer(
-    { hits: receivedHits, results, instantSearchInstance },
+    { recommendations, results, instantSearchInstance },
     isFirstRendering
   ) {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
-        defaultTemplates,
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        defaultTemplates: {} as RelatedProductsTemplates,
         templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
@@ -67,48 +66,54 @@ function createRenderer({
       return;
     }
 
-    const fallbackComponent: RelatedProductsUiProps<Hit>['fallbackComponent'] =
-      ({ ...rootProps }) => (
-        <TemplateComponent
-          {...renderState.templateProps}
-          rootTagName="section"
-          rootProps={rootProps}
-          templateKey="empty"
-          data={results}
-        />
-      );
+    const headerComponent = (
+      templates.header
+        ? (data) => (
+            <TemplateComponent
+              {...renderState.templateProps}
+              templateKey="header"
+              rootTagName="fragment"
+              data={{
+                cssClasses: data.classNames,
+                title: data.translations.title,
+                recommendations: data.recommendations,
+              }}
+            />
+          )
+        : undefined
+    ) as RelatedProductsUiProps<Hit>['headerComponent'];
 
-    const headerComponent: RelatedProductsUiProps<Hit>['headerComponent'] = ({
-      classNames,
-      recommendations,
-      translations,
-      ...rootProps
-    }) => (
-      <TemplateComponent
-        {...renderState.templateProps}
-        templateKey="header"
-        rootTagName="h3"
-        rootProps={{ ...rootProps, className: classNames.title }}
-        data={{ classNames, recommendations, translations }}
-      />
-    );
+    const itemComponent = (
+      templates.item
+        ? ({ item }) => {
+            return (
+              <TemplateComponent
+                {...renderState.templateProps}
+                templateKey="item"
+                rootTagName="fragment"
+                data={item}
+              />
+            );
+          }
+        : undefined
+    ) as RelatedProductsUiProps<Hit>['itemComponent'];
 
-    const itemComponent: RelatedProductsUiProps<Hit>['itemComponent'] = ({
-      item,
-      ...rootProps
-    }) => (
-      <TemplateComponent
-        {...renderState.templateProps}
-        templateKey="item"
-        rootTagName="li"
-        rootProps={rootProps}
-        data={item}
-      />
-    );
+    const fallbackComponent = (
+      templates.empty
+        ? () => (
+            <TemplateComponent
+              {...renderState.templateProps}
+              templateKey="empty"
+              rootTagName="fragment"
+              data={results}
+            />
+          )
+        : undefined
+    ) as RelatedProductsUiProps<Hit>['fallbackComponent'];
 
     render(
       <RelatedProducts
-        items={receivedHits}
+        items={recommendations}
         sendEvent={() => {}}
         classNames={cssClasses}
         headerComponent={headerComponent}
@@ -123,18 +128,14 @@ function createRenderer({
 
 export type RelatedProductsCSSClasses = Partial<RecommendClassNames>;
 
-export type RelatedProductsTemplates = Partial<{
+export type RelatedProductsTemplates = {
   /**
    * Template to use when there are no results.
-   *
-   * @default 'No Results'
    */
   empty: Template<RecommendResultItem>;
 
   /**
    * Template to use for the header of the widget.
-   *
-   * @default ''
    */
   header: Template<
     Parameters<NonNullable<RelatedProductsUiProps<Hit>['headerComponent']>>[0]
@@ -142,11 +143,9 @@ export type RelatedProductsTemplates = Partial<{
 
   /**
    * Template to use for each result. This template will receive an object containing a single record.
-   *
-   * @default ''
    */
   item: Template<Hit>;
-}>;
+};
 
 type RelatedProductsWidgetParams = {
   /**
@@ -178,7 +177,7 @@ const relatedProducts: RelatedProductsWidget = function relatedProducts(
 ) {
   const {
     container,
-    objectID,
+    objectIDs,
     maxRecommendations,
     queryParameters,
     threshold,
@@ -197,7 +196,7 @@ const relatedProducts: RelatedProductsWidget = function relatedProducts(
     containerNode,
     cssClasses,
     renderState: {},
-    templates,
+    templates: templates as RelatedProductsTemplates,
   });
 
   const makeWidget = connectRelatedProducts(specializedRenderer, () =>
@@ -206,7 +205,7 @@ const relatedProducts: RelatedProductsWidget = function relatedProducts(
 
   return {
     ...makeWidget({
-      objectID,
+      objectIDs,
       maxRecommendations,
       queryParameters,
       threshold,
