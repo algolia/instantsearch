@@ -8,3 +8,4 @@ export * from './numeric-menu';
 export * from './rating-menu';
 export * from './toggle-refinement';
 export * from './current-refinements';
+export * from './related-products';
