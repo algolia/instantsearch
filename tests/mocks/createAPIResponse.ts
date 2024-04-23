@@ -91,5 +91,5 @@ export const createSFFVResponse = (
 export const createRecommendResponse = (
   requests: readonly any[]
 ): RecommendQueriesResponse<any> => {
-  return { results: requests.map(() => createSingleSearchResponse()) };
+  return { results: requests.map(createSingleSearchResponse) };
 };
