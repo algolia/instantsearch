@@ -340,6 +340,7 @@ const testSetups = {
     await nextTick();
   },
   createRelatedProductsConnectorTests: () => {},
+  createFrequentlyBoughtTogetherConnectorTests: () => {},
 };
 
 function createCustomWidget({
@@ -415,6 +416,11 @@ const testOptions = {
   createRatingMenuConnectorTests: undefined,
   createToggleRefinementConnectorTests: undefined,
   createRelatedProductsConnectorTests: {
+    skippedTests: {
+      options: true,
+    },
+  },
+  createFrequentlyBoughtTogetherConnectorTests: {
     skippedTests: {
       options: true,
     },

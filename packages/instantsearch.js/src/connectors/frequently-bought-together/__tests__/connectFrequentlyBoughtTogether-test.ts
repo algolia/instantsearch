@@ -2,10 +2,7 @@
  * @jest-environment jsdom
  */
 
-import {
-  createSearchClient,
-  createSingleSearchResponse,
-} from '@instantsearch/mocks';
+import { createSearchClient } from '@instantsearch/mocks';
 import algoliasearchHelper, { RecommendParameters } from 'algoliasearch-helper';
 
 import {
@@ -13,9 +10,6 @@ import {
   createRenderOptions,
 } from '../../../../test/createWidget';
 import connectFrequentlyBoughtTogether from '../connectFrequentlyBoughtTogether';
-
-import type { RenderOptions } from '../../../types';
-import type { SearchResults } from 'algoliasearch-helper';
 
 describe('connectFrequentlyBoughtTogether', () => {
   it('throws without render function', () => {
@@ -44,30 +38,6 @@ describe('connectFrequentlyBoughtTogether', () => {
         dispose: expect.any(Function),
       })
     );
-  });
-
-  it('throws when no `objectIDs` are provided', () => {
-    const makeWidget = connectFrequentlyBoughtTogether(() => {});
-    expect(() => {
-      makeWidget({
-        // @ts-expect-error
-        objectIDs: undefined,
-      });
-    }).toThrowErrorMatchingInlineSnapshot(`
-      "The \`objectIDs\` option is required.
-
-      See documentation: https://www.algolia.com/doc/api-reference/widgets/frequently-bought-together/js/#connector"
-    `);
-
-    expect(() => {
-      makeWidget({
-        objectIDs: [],
-      });
-    }).toThrowErrorMatchingInlineSnapshot(`
-      "The \`objectIDs\` option is required.
-
-      See documentation: https://www.algolia.com/doc/api-reference/widgets/frequently-bought-together/js/#connector"
-    `);
   });
 
   it('Renders during init and render', () => {
@@ -105,154 +75,6 @@ describe('connectFrequentlyBoughtTogether', () => {
       expect.objectContaining({ widgetParams: { objectIDs: ['1'] } }),
       false
     );
-  });
-
-  it('Provides the hits and the whole results', () => {
-    const renderFn = jest.fn();
-    const makeWidget = connectFrequentlyBoughtTogether(renderFn);
-    const widget = makeWidget({ objectIDs: ['1'] });
-
-    const helper = algoliasearchHelper(createSearchClient(), '', {});
-    helper.search = jest.fn();
-
-    widget.init!(
-      createInitOptions({
-        helper,
-      })
-    );
-
-    expect(renderFn).toHaveBeenLastCalledWith(
-      expect.objectContaining({
-        recommendations: [],
-      }),
-      expect.anything()
-    );
-
-    const hits = [
-      { objectID: '1', fake: 'data' },
-      { objectID: '2', sample: 'infos' },
-    ];
-
-    const results = createSingleSearchResponse({
-      hits,
-    }) as unknown as SearchResults;
-    widget.render!(
-      createRenderOptions({
-        results,
-      })
-    );
-
-    expect(renderFn).toHaveBeenLastCalledWith(
-      expect.objectContaining({
-        recommendations: hits,
-      }),
-      expect.anything()
-    );
-  });
-
-  it('transform items if requested', () => {
-    const renderFn = jest.fn();
-    const makeWidget = connectFrequentlyBoughtTogether(renderFn);
-    const widget = makeWidget({
-      objectIDs: ['1'],
-      transformItems: (items) =>
-        items.map((item) => ({ ...item, name: 'transformed' })),
-    });
-
-    const helper = algoliasearchHelper(createSearchClient(), '', {});
-    helper.search = jest.fn();
-
-    widget.init!(createInitOptions({}));
-
-    expect(renderFn).toHaveBeenNthCalledWith(
-      1,
-      expect.objectContaining({ recommendations: [] }),
-      expect.anything()
-    );
-
-    const hits = [
-      { objectID: '1', name: 'name 1' },
-      { objectID: '2', name: 'name 2' },
-    ];
-
-    const results = createSingleSearchResponse({
-      hits,
-    }) as unknown as SearchResults;
-    widget.render!(
-      createRenderOptions({
-        results,
-      })
-    );
-
-    const expectedHits = [
-      { objectID: '1', name: 'transformed' },
-      { objectID: '2', name: 'transformed' },
-    ];
-
-    expect(renderFn).toHaveBeenNthCalledWith(
-      2,
-      expect.objectContaining({
-        recommendations: expectedHits,
-      }),
-      expect.anything()
-    );
-  });
-
-  it('provides results within transformItems', () => {
-    const transformItems = jest.fn((items) => items);
-    const makeWidget = connectFrequentlyBoughtTogether(() => {});
-    const widget = makeWidget({
-      transformItems,
-      objectIDs: ['1'],
-    });
-
-    const results = createSingleSearchResponse({
-      hits: [],
-    }) as unknown as SearchResults;
-
-    widget.init!(createInitOptions({}));
-    widget.render!(
-      createRenderOptions({
-        results,
-      })
-    );
-
-    expect(transformItems).toHaveBeenLastCalledWith(
-      expect.anything(),
-      expect.objectContaining({ results })
-    );
-  });
-
-  describe('getWidgetRenderState', () => {
-    it('returns the widget render state', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
-      const createFbt = connectFrequentlyBoughtTogether(renderFn, unmountFn);
-      const fbtWidget = createFbt({ objectIDs: ['1'] });
-
-      const renderState1 = fbtWidget.getWidgetRenderState!(
-        createInitOptions({})
-      );
-
-      expect(renderState1).toEqual({
-        recommendations: [],
-        widgetParams: { objectIDs: ['1'] },
-      });
-
-      const hits = [
-        { objectID: '1', name: 'name 1' },
-        { objectID: '2', name: 'name 2' },
-      ];
-
-      const renderState2 = fbtWidget.getWidgetRenderState!({
-        results: { hits },
-      } as unknown as RenderOptions);
-
-      expect(renderState2).toEqual({
-        recommendations: hits,
-        widgetParams: { objectIDs: ['1'] },
-      });
-    });
   });
 
   describe('getWidgetParameters', () => {
