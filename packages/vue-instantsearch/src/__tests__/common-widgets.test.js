@@ -503,7 +503,7 @@ const testSetups = {
 
     await nextTick();
   },
-  async createRelatedProductsWidgetTests() {
+  createRelatedProductsWidgetTests() {
     throw new Error('RelatedProduct is not supported in Vue InstantSearch');
   },
 };
