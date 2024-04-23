@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.68.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.67.0...instantsearch.js@4.68.0) (2024-04-23)
+
+
+### Features
+
+* **hits:** return banner from connectHits ([#6130](https://github.com/algolia/instantsearch/issues/6130)) ([5bde60d](https://github.com/algolia/instantsearch/commit/5bde60df53401dc3cdf32b1446ec960ca4060112))
+
+
+
+
+
 # [4.67.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.66.1...instantsearch.js@4.67.0) (2024-04-18)
 
 
