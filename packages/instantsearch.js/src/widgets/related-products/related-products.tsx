@@ -138,7 +138,12 @@ export type RelatedProductsTemplates = {
    * Template to use for the header of the widget.
    */
   header: Template<
-    Parameters<NonNullable<RelatedProductsUiProps<Hit>['headerComponent']>>[0]
+    Pick<
+      Parameters<
+        NonNullable<RelatedProductsUiProps<Hit>['headerComponent']>
+      >[0],
+      'recommendations'
+    > & { cssClasses: RecommendClassNames; title: string }
   >;
 
   /**
