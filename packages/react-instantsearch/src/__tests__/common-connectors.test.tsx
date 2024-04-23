@@ -314,6 +314,7 @@ const testSetups: TestSetupsMap<TestSuites> = {
     );
   },
   createRelatedProductsConnectorTests: () => {},
+  createFrequentlyBoughtTogetherConnectorTests: () => {},
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -339,6 +340,15 @@ const testOptions: TestOptionsMap<TestSuites> = {
       options: true,
     },
   },
+<<<<<<< HEAD
+=======
+  createFrequentlyBoughtTogetherConnectorTests: {
+    act,
+    skippedTests: {
+      options: true,
+    },
+  },
+>>>>>>> feat/map-recommend-results
 };
 
 describe('Common connector tests (React InstantSearch)', () => {
