@@ -20,11 +20,14 @@ import {
   useConnector,
   useToggleRefinement,
   useCurrentRefinements,
+  useFrequentlyBoughtTogether,
+  useInstantSearch,
 } from '..';
 
 import type {
   UseBreadcrumbProps,
   UseCurrentRefinementsProps,
+  UseFrequentlyBoughtTogetherProps,
   UseHierarchicalMenuProps,
   UseHitsPerPageProps,
   UseMenuProps,
@@ -314,7 +317,30 @@ const testSetups: TestSetupsMap<TestSuites> = {
     );
   },
   createRelatedProductsConnectorTests: () => {},
-  createFrequentlyBoughtTogetherConnectorTests: () => {},
+  createFrequentlyBoughtTogetherConnectorTests: ({
+    instantSearchOptions,
+    widgetParams,
+  }) => {
+    function CustomFrequentlyBoughtTogether(
+      props: UseFrequentlyBoughtTogetherProps
+    ) {
+      const { recommendations } = useFrequentlyBoughtTogether(props);
+      return (
+        <ul>
+          {recommendations.map((recommendation) => (
+            <li key={recommendation.objectID}>{recommendation.objectID}</li>
+          ))}
+        </ul>
+      );
+    }
+
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <CustomFrequentlyBoughtTogether {...widgetParams} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -340,12 +366,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
       options: true,
     },
   },
-  createFrequentlyBoughtTogetherConnectorTests: {
-    act,
-    skippedTests: {
-      options: true,
-    },
-  },
+  createFrequentlyBoughtTogetherConnectorTests: { act },
 };
 
 describe('Common connector tests (React InstantSearch)', () => {
@@ -355,3 +376,9 @@ describe('Common connector tests (React InstantSearch)', () => {
     testOptions,
   });
 });
+
+function GlobalErrorSwallower() {
+  useInstantSearch({ catchError: true });
+
+  return null;
+}

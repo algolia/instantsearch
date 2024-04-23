@@ -10,6 +10,7 @@ export * from './connectors/useClearRefinements';
 export * from './connectors/useConfigure';
 export * from './connectors/useCurrentRefinements';
 export * from './connectors/useDynamicWidgets';
+export * from './connectors/useFrequentlyBoughtTogether';
 export * from './connectors/useGeoSearch';
 export * from './connectors/useHierarchicalMenu';
 export * from './connectors/useHits';
