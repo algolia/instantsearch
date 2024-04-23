@@ -92,23 +92,16 @@ describe('frequentlyBoughtTogether', () => {
   describe('templates', () => {
     test('renders default templates', async () => {
       const container = document.createElement('div');
-      const containerNoResults = document.createElement('div');
       const searchClient = createMockedSearchClient();
+      const options: Parameters<typeof frequentlyBoughtTogether>[0] = {
+        container,
+        objectIDs: ['1'],
+      };
 
       const search = instantsearch({ indexName: 'indexName', searchClient });
+      const widget = frequentlyBoughtTogether(options);
 
-      search.addWidgets([
-        frequentlyBoughtTogether({
-          container,
-          objectIDs: ['objectID'],
-        }),
-        frequentlyBoughtTogether({
-          container: containerNoResults,
-          objectIDs: ['objectID2'],
-          // Using this to mock an empty response
-          maxRecommendations: 0,
-        }),
-      ]);
+      search.addWidgets([widget]);
 
       // @MAJOR Once Hogan.js and string-based templates are removed,
       // `search.start()` can be moved to the test body and the following
@@ -140,105 +133,14 @@ describe('frequentlyBoughtTogether', () => {
                   class="ais-FrequentlyBoughtTogether-item"
                 >
                   {
-          "_highlightResult": {
-            "brand": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Moschino Love"
-            },
-            "name": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Moschino Love – Shoulder bag"
-            }
-          },
-          "_score": 40.87,
-          "brand": "Moschino Love",
-          "list_categories": [
-            "Women",
-            "Bags",
-            "Shoulder bags"
-          ],
-          "name": "Moschino Love – Shoulder bag",
-          "objectID": "A0E200000002BLK",
-          "parentID": "JC4052PP10LB100A",
-          "price": {
-            "currency": "EUR",
-            "discount_level": -100,
-            "discounted_value": 0,
-            "on_sales": false,
-            "value": 227.5
-          }
+          "objectID": "1"
         }
                 </li>
                 <li
                   class="ais-FrequentlyBoughtTogether-item"
                 >
                   {
-          "_highlightResult": {
-            "brand": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Gabs"
-            },
-            "name": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Bag “Sabrina“ medium Gabs"
-            }
-          },
-          "_score": 40.91,
-          "brand": "Gabs",
-          "list_categories": [
-            "Women",
-            "Bags",
-            "Shoulder bags"
-          ],
-          "name": "Bag “Sabrina“ medium Gabs",
-          "objectID": "A0E200000001WFI",
-          "parentID": "SABRINA",
-          "price": {
-            "currency": "EUR",
-            "discount_level": -100,
-            "discounted_value": 0,
-            "on_sales": false,
-            "value": 210
-          }
-        }
-                </li>
-                <li
-                  class="ais-FrequentlyBoughtTogether-item"
-                >
-                  {
-          "_highlightResult": {
-            "brand": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "La Carrie Bag"
-            },
-            "name": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Bag La Carrie Bag small black"
-            }
-          },
-          "_score": 39.92,
-          "brand": "La Carrie Bag",
-          "list_categories": [
-            "Women",
-            "Bags",
-            "Shoulder bags"
-          ],
-          "name": "Bag La Carrie Bag small black",
-          "objectID": "A0E2000000024R1",
-          "parentID": "151",
-          "price": {
-            "currency": "EUR",
-            "discount_level": -100,
-            "discounted_value": 0,
-            "on_sales": false,
-            "value": 161.25
-          }
+          "objectID": "2"
         }
                 </li>
               </ol>
@@ -247,7 +149,15 @@ describe('frequentlyBoughtTogether', () => {
         </div>
       `);
 
-      expect(containerNoResults).toMatchInlineSnapshot(`
+      search
+        .removeWidgets([widget])
+        .addWidgets([
+          frequentlyBoughtTogether({ ...options, maxRecommendations: 0 }),
+        ]);
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
         <div>
           <section>
             No results
@@ -258,38 +168,28 @@ describe('frequentlyBoughtTogether', () => {
 
     test('renders with templates using `html`', async () => {
       const container = document.createElement('div');
-      const containerNoResults = document.createElement('div');
       const searchClient = createMockedSearchClient();
+      const options: Parameters<typeof frequentlyBoughtTogether>[0] = {
+        container,
+        objectIDs: ['1'],
+        templates: {
+          header({ translations }, { html }) {
+            return html`${translations.title}`;
+          },
+          item(hit, { html }) {
+            return html`<h2>${hit.name}</h2>
+              <p>${hit.brand}</p>`;
+          },
+          empty(_, { html }) {
+            return html`<p>No results</p>`;
+          },
+        },
+      };
 
       const search = instantsearch({ indexName: 'indexName', searchClient });
+      const widget = frequentlyBoughtTogether(options);
 
-      search.addWidgets([
-        frequentlyBoughtTogether({
-          container,
-          objectIDs: ['objectID'],
-          templates: {
-            header({ translations }, { html }) {
-              return html`${translations.title}`;
-            },
-            item(hit, { html }) {
-              return html`<h2>${hit.name}</h2>
-                <p>${hit.brand}</p>`;
-            },
-          },
-        }),
-        frequentlyBoughtTogether({
-          container: containerNoResults,
-          objectIDs: ['objectID3'],
-          // Using this to mock an empty response
-          maxRecommendations: 0,
-          templates: {
-            empty(_, { html }) {
-              return html`<p>No results</p>`;
-            },
-          },
-        }),
-      ]);
-
+      search.addWidgets([widget]);
       search.start();
 
       await wait(0);
@@ -313,32 +213,14 @@ describe('frequentlyBoughtTogether', () => {
                 <li
                   class="ais-FrequentlyBoughtTogether-item"
                 >
-                  <h2>
-                    Moschino Love – Shoulder bag
-                  </h2>
-                  <p>
-                    Moschino Love
-                  </p>
+                  <h2 />
+                  <p />
                 </li>
                 <li
                   class="ais-FrequentlyBoughtTogether-item"
                 >
-                  <h2>
-                    Bag “Sabrina“ medium Gabs
-                  </h2>
-                  <p>
-                    Gabs
-                  </p>
-                </li>
-                <li
-                  class="ais-FrequentlyBoughtTogether-item"
-                >
-                  <h2>
-                    Bag La Carrie Bag small black
-                  </h2>
-                  <p>
-                    La Carrie Bag
-                  </p>
+                  <h2 />
+                  <p />
                 </li>
               </ol>
             </div>
@@ -346,7 +228,16 @@ describe('frequentlyBoughtTogether', () => {
         </div>
       `);
 
-      expect(containerNoResults).toMatchInlineSnapshot(`
+      search.removeWidgets([widget]).addWidgets([
+        frequentlyBoughtTogether({
+          ...options,
+          maxRecommendations: 0,
+        }),
+      ]);
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
         <div>
           <section>
             <p>
@@ -359,42 +250,32 @@ describe('frequentlyBoughtTogether', () => {
 
     test('renders with templates using JSX', async () => {
       const container = document.createElement('div');
-      const containerNoResults = document.createElement('div');
       const searchClient = createMockedSearchClient();
+      const options: Parameters<typeof frequentlyBoughtTogether>[0] = {
+        container,
+        objectIDs: ['1'],
+        templates: {
+          header({ translations }) {
+            return <Fragment>{translations.title}</Fragment>;
+          },
+          item(hit) {
+            return (
+              <Fragment>
+                <h2>${hit.name}</h2>
+                <p>${hit.brand}</p>
+              </Fragment>
+            );
+          },
+          empty() {
+            return <p>No results</p>;
+          },
+        },
+      };
 
       const search = instantsearch({ indexName: 'indexName', searchClient });
+      const widget = frequentlyBoughtTogether(options);
 
-      search.addWidgets([
-        frequentlyBoughtTogether({
-          container,
-          objectIDs: ['objectID'],
-          templates: {
-            header({ translations }) {
-              return <Fragment>{translations.title}</Fragment>;
-            },
-            item(hit) {
-              return (
-                <Fragment>
-                  <h2>${hit.name}</h2>
-                  <p>${hit.brand}</p>
-                </Fragment>
-              );
-            },
-          },
-        }),
-        frequentlyBoughtTogether({
-          container: containerNoResults,
-          objectIDs: ['objectID3'],
-          // Using this to mock an empty response
-          maxRecommendations: 0,
-          templates: {
-            empty() {
-              return <p>No results</p>;
-            },
-          },
-        }),
-      ]);
-
+      search.addWidgets([widget]);
       search.start();
 
       await wait(0);
@@ -420,11 +301,9 @@ describe('frequentlyBoughtTogether', () => {
                 >
                   <h2>
                     $
-                    Moschino Love – Shoulder bag
                   </h2>
                   <p>
                     $
-                    Moschino Love
                   </p>
                 </li>
                 <li
@@ -432,23 +311,9 @@ describe('frequentlyBoughtTogether', () => {
                 >
                   <h2>
                     $
-                    Bag “Sabrina“ medium Gabs
                   </h2>
                   <p>
                     $
-                    Gabs
-                  </p>
-                </li>
-                <li
-                  class="ais-FrequentlyBoughtTogether-item"
-                >
-                  <h2>
-                    $
-                    Bag La Carrie Bag small black
-                  </h2>
-                  <p>
-                    $
-                    La Carrie Bag
                   </p>
                 </li>
               </ol>
@@ -457,7 +322,16 @@ describe('frequentlyBoughtTogether', () => {
         </div>
       `);
 
-      expect(containerNoResults).toMatchInlineSnapshot(`
+      search.removeWidgets([widget]).addWidgets([
+        frequentlyBoughtTogether({
+          ...options,
+          maxRecommendations: 0,
+        }),
+      ]);
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
         <div>
           <section>
             <p>
@@ -482,89 +356,7 @@ describe('frequentlyBoughtTogether', () => {
                 hits:
                   request.maxRecommendations === 0
                     ? []
-                    : [
-                        {
-                          _highlightResult: {
-                            brand: {
-                              matchLevel: 'none',
-                              matchedWords: [],
-                              value: 'Moschino Love',
-                            },
-                            name: {
-                              matchLevel: 'none',
-                              matchedWords: [],
-                              value: 'Moschino Love – Shoulder bag',
-                            },
-                          },
-                          _score: 40.87,
-                          brand: 'Moschino Love',
-                          list_categories: ['Women', 'Bags', 'Shoulder bags'],
-                          name: 'Moschino Love – Shoulder bag',
-                          objectID: 'A0E200000002BLK',
-                          parentID: 'JC4052PP10LB100A',
-                          price: {
-                            currency: 'EUR',
-                            discount_level: -100,
-                            discounted_value: 0,
-                            on_sales: false,
-                            value: 227.5,
-                          },
-                        },
-                        {
-                          _highlightResult: {
-                            brand: {
-                              matchLevel: 'none',
-                              matchedWords: [],
-                              value: 'Gabs',
-                            },
-                            name: {
-                              matchLevel: 'none',
-                              matchedWords: [],
-                              value: 'Bag “Sabrina“ medium Gabs',
-                            },
-                          },
-                          _score: 40.91,
-                          brand: 'Gabs',
-                          list_categories: ['Women', 'Bags', 'Shoulder bags'],
-                          name: 'Bag “Sabrina“ medium Gabs',
-                          objectID: 'A0E200000001WFI',
-                          parentID: 'SABRINA',
-                          price: {
-                            currency: 'EUR',
-                            discount_level: -100,
-                            discounted_value: 0,
-                            on_sales: false,
-                            value: 210,
-                          },
-                        },
-                        {
-                          _highlightResult: {
-                            brand: {
-                              matchLevel: 'none',
-                              matchedWords: [],
-                              value: 'La Carrie Bag',
-                            },
-                            name: {
-                              matchLevel: 'none',
-                              matchedWords: [],
-                              value: 'Bag La Carrie Bag small black',
-                            },
-                          },
-                          _score: 39.92,
-                          brand: 'La Carrie Bag',
-                          list_categories: ['Women', 'Bags', 'Shoulder bags'],
-                          name: 'Bag La Carrie Bag small black',
-                          objectID: 'A0E2000000024R1',
-                          parentID: '151',
-                          price: {
-                            currency: 'EUR',
-                            discount_level: -100,
-                            discounted_value: 0,
-                            on_sales: false,
-                            value: 161.25,
-                          },
-                        },
-                      ],
+                    : [{ objectID: '1' }, { objectID: '2' }],
               });
             })
           )
