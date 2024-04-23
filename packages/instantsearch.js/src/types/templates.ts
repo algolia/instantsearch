@@ -14,7 +14,10 @@ import type { VNode } from 'preact';
 
 export type Template<TTemplateData = void> =
   | string
-  | ((data: TTemplateData, params: TemplateParams) => VNode | VNode[] | string);
+  | ((
+      data: TTemplateData,
+      params: TemplateParams
+    ) => VNode | VNode[] | string | null);
 
 export type TemplateParams = {
   html: typeof html;
