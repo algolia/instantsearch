@@ -7,6 +7,7 @@ import type { ComponentProps, Renderer, SendEventForHits } from '../types';
 type Hit = Record<string, unknown> & {
   objectID: string;
 };
+
 export type HitsProps<THit> = ComponentProps<'div'> & {
   hits: THit[];
   itemComponent: (props: {
