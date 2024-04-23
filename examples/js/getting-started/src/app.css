@@ -60,16 +60,16 @@
 }
 
 #related-products,
-#hits {
+.ais-Hits--single {
   margin-top: 1rem;
 }
 
-.ais-Hits-item--single article {
+.ais-Hits--single article {
   display: flex;
   gap: 1rem;
 }
 
-.ais-Hits-item--single img {
+.ais-Hits--single img {
   width: 150px;
   height: 150px;
   object-fit: contain;

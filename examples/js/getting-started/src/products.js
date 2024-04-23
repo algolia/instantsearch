@@ -31,7 +31,7 @@ search.addWidgets([
         </article>
       `,
     },
-    cssClasses: { item: 'ais-Hits-item--single' },
+    cssClasses: { root: 'ais-Hits--single' },
   }),
   relatedProducts({
     container: '#related-products',
