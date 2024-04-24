@@ -173,15 +173,14 @@ describe('frequentlyBoughtTogether', () => {
         container,
         objectIDs: ['1'],
         templates: {
-          header({ translations }, { html }) {
-            return html`${translations.title}`;
+          header({ recommendations }, { html }) {
+            return html` Frequently bought with (${recommendations.length})`;
           },
           item(hit, { html }) {
-            return html`<h2>${hit.name}</h2>
-              <p>${hit.brand}</p>`;
+            return html`<p>${hit.objectID}</p>`;
           },
           empty(_, { html }) {
-            return html`<p>No results</p>`;
+            return html`<p>No recommendations</p>`;
           },
         },
       };
@@ -202,7 +201,9 @@ describe('frequentlyBoughtTogether', () => {
             <h3
               class="ais-FrequentlyBoughtTogether-title"
             >
-              Frequently bought together
+               Frequently bought with (
+              2
+              )
             </h3>
             <div
               class="ais-FrequentlyBoughtTogether-container"
@@ -213,14 +214,16 @@ describe('frequentlyBoughtTogether', () => {
                 <li
                   class="ais-FrequentlyBoughtTogether-item"
                 >
-                  <h2 />
-                  <p />
+                  <p>
+                    1
+                  </p>
                 </li>
                 <li
                   class="ais-FrequentlyBoughtTogether-item"
                 >
-                  <h2 />
-                  <p />
+                  <p>
+                    2
+                  </p>
                 </li>
               </ol>
             </div>
@@ -241,7 +244,7 @@ describe('frequentlyBoughtTogether', () => {
         <div>
           <section>
             <p>
-              No results
+              No recommendations
             </p>
           </section>
         </div>
@@ -255,19 +258,18 @@ describe('frequentlyBoughtTogether', () => {
         container,
         objectIDs: ['1'],
         templates: {
-          header({ translations }) {
-            return <Fragment>{translations.title}</Fragment>;
-          },
-          item(hit) {
+          header({ recommendations }) {
             return (
               <Fragment>
-                <h2>${hit.name}</h2>
-                <p>${hit.brand}</p>
+                Frequently bought with ({recommendations.length})
               </Fragment>
             );
           },
+          item(hit) {
+            return <p>{hit.objectID}</p>;
+          },
           empty() {
-            return <p>No results</p>;
+            return <p>No recommendations</p>;
           },
         },
       };
@@ -288,7 +290,9 @@ describe('frequentlyBoughtTogether', () => {
             <h3
               class="ais-FrequentlyBoughtTogether-title"
             >
-              Frequently bought together
+              Frequently bought with (
+              2
+              )
             </h3>
             <div
               class="ais-FrequentlyBoughtTogether-container"
@@ -299,21 +303,15 @@ describe('frequentlyBoughtTogether', () => {
                 <li
                   class="ais-FrequentlyBoughtTogether-item"
                 >
-                  <h2>
-                    $
-                  </h2>
                   <p>
-                    $
+                    1
                   </p>
                 </li>
                 <li
                   class="ais-FrequentlyBoughtTogether-item"
                 >
-                  <h2>
-                    $
-                  </h2>
                   <p>
-                    $
+                    2
                   </p>
                 </li>
               </ol>
@@ -335,7 +333,7 @@ describe('frequentlyBoughtTogether', () => {
         <div>
           <section>
             <p>
-              No results
+              No recommendations
             </p>
           </section>
         </div>
