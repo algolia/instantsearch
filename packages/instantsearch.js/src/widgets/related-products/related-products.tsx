@@ -58,7 +58,7 @@ function createRenderer({
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        defaultTemplates: {} as RelatedProductsTemplates,
+        defaultTemplates: {} as Required<RelatedProductsTemplates>,
         templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
@@ -124,7 +124,7 @@ function createRenderer({
 
 export type RelatedProductsCSSClasses = Partial<RecommendClassNames>;
 
-export type RelatedProductsTemplates = {
+export type RelatedProductsTemplates = Partial<{
   /**
    * Template to use when there are no results.
    */
@@ -146,7 +146,7 @@ export type RelatedProductsTemplates = {
    * Template to use for each result. This template will receive an object containing a single record.
    */
   item: Template<Hit>;
-};
+}>;
 
 type RelatedProductsWidgetParams = {
   /**
@@ -197,7 +197,7 @@ const relatedProducts: RelatedProductsWidget = function relatedProducts(
     containerNode,
     cssClasses,
     renderState: {},
-    templates: templates as RelatedProductsTemplates,
+    templates,
   });
 
   const makeWidget = connectRelatedProducts(specializedRenderer, () =>
