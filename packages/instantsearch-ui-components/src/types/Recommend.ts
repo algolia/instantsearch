@@ -6,6 +6,10 @@ export type RecommendClassNames = {
    */
   root: string;
   /**
+   * Class names to apply to the root element without results
+   */
+  emptyRoot: string;
+  /**
    * Class names to apply to the title element
    */
   title: string;

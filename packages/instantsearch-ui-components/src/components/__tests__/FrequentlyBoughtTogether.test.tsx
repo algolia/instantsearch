@@ -62,16 +62,20 @@ describe('FrequentlyBoughtTogether', () => {
               <li
                 class="ais-FrequentlyBoughtTogether-item"
               >
-                <div>
-                  1
-                </div>
+                <li>
+                  <div>
+                    1
+                  </div>
+                </li>
               </li>
               <li
                 class="ais-FrequentlyBoughtTogether-item"
               >
-                <div>
-                  2
-                </div>
+                <li>
+                  <div>
+                    2
+                  </div>
+                </li>
               </li>
             </ol>
           </div>
@@ -90,7 +94,15 @@ describe('FrequentlyBoughtTogether', () => {
       />
     );
 
-    expect(container).toMatchInlineSnapshot(`<div />`);
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        <section
+          class="ais-FrequentlyBoughtTogether ais-FrequentlyBoughtTogether--empty"
+        >
+          No results
+        </section>
+      </div>
+    `);
   });
 
   test('renders custom header', () => {
@@ -125,9 +137,11 @@ describe('FrequentlyBoughtTogether', () => {
               <li
                 class="ais-FrequentlyBoughtTogether-item"
               >
-                <div>
-                  1
-                </div>
+                <li>
+                  <div>
+                    1
+                  </div>
+                </li>
               </li>
             </ol>
           </div>
@@ -206,9 +220,13 @@ describe('FrequentlyBoughtTogether', () => {
 
     expect(container).toMatchInlineSnapshot(`
       <div>
-        <div>
-          My custom fallback
-        </div>
+        <section
+          class="ais-FrequentlyBoughtTogether ais-FrequentlyBoughtTogether--empty"
+        >
+          <div>
+            My custom fallback
+          </div>
+        </section>
       </div>
     `);
   });
@@ -263,9 +281,11 @@ describe('FrequentlyBoughtTogether', () => {
               <li
                 class="ais-FrequentlyBoughtTogether-item"
               >
-                <div>
-                  1
-                </div>
+                <li>
+                  <div>
+                    1
+                  </div>
+                </li>
               </li>
             </ol>
           </div>
@@ -327,9 +347,11 @@ describe('FrequentlyBoughtTogether', () => {
               <li
                 class="ais-FrequentlyBoughtTogether-item ITEM"
               >
-                <div>
-                  1
-                </div>
+                <li>
+                  <div>
+                    1
+                  </div>
+                </li>
               </li>
             </ol>
           </div>
