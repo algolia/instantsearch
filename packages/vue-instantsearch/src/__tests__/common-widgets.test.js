@@ -503,6 +503,11 @@ const testSetups = {
 
     await nextTick();
   },
+  createFrequentlyBoughtTogetherTests() {
+    throw new Error(
+      'FrequentlyBoughtTogether is not supported in Vue InstantSearch'
+    );
+  },
 };
 
 const testOptions = {
@@ -525,6 +530,9 @@ const testOptions = {
   },
   createSortByWidgetTests: undefined,
   createStatsWidgetTests: undefined,
+  createFrequentlyBoughtTogetherTests: {
+    skippedTests: { 'FrequentlyBoughtTogether widget common tests': true },
+  },
 };
 
 describe('Common widget tests (Vue InstantSearch)', () => {
