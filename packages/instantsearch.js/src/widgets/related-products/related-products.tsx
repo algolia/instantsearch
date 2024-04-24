@@ -68,16 +68,12 @@ function createRenderer({
 
     const headerComponent = (
       templates.header
-        ? (data) => (
+        ? ({ classNames, recommendations }) => (
             <TemplateComponent
               {...renderState.templateProps}
               templateKey="header"
               rootTagName="fragment"
-              data={{
-                cssClasses: data.classNames,
-                title: data.translations.title,
-                recommendations: data.recommendations,
-              }}
+              data={{ cssClasses: classNames, recommendations }}
             />
           )
         : undefined
@@ -143,7 +139,7 @@ export type RelatedProductsTemplates = {
         NonNullable<RelatedProductsUiProps<Hit>['headerComponent']>
       >[0],
       'recommendations'
-    > & { cssClasses: RecommendClassNames; title: string }
+    > & { cssClasses: RecommendClassNames }
   >;
 
   /**

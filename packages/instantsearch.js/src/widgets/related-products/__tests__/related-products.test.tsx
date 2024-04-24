@@ -186,9 +186,9 @@ describe('relatedProducts', () => {
         container,
         objectIDs: ['1'],
         templates: {
-          header({ title, recommendations, cssClasses }, { html }) {
+          header({ recommendations, cssClasses }, { html }) {
             return html`<h4 class="${cssClasses.title}">
-              ${title} (${recommendations.length})
+              Related products (${recommendations.length})
             </h4>`;
           },
           item(item, { html }) {
@@ -217,8 +217,7 @@ describe('relatedProducts', () => {
             <h4
               class="ais-RelatedProducts-title"
             >
-              Related products
-               (
+              Related products (
               2
               )
             </h4>
@@ -276,10 +275,10 @@ describe('relatedProducts', () => {
         container,
         objectIDs: ['1'],
         templates: {
-          header({ title, recommendations, cssClasses }) {
+          header({ recommendations, cssClasses }) {
             return (
               <h4 className={cssClasses.title}>
-                {title} ({recommendations.length})
+                Related products ({recommendations.length})
               </h4>
             );
           },
@@ -309,8 +308,7 @@ describe('relatedProducts', () => {
             <h4
               class="ais-RelatedProducts-title"
             >
-              Related products
-               (
+              Related products (
               2
               )
             </h4>
