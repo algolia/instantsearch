@@ -17,3 +17,4 @@ export * from './sort-by';
 export * from './stats';
 export * from './numeric-menu';
 export * from './related-products';
+export * from './frequently-bought-together';

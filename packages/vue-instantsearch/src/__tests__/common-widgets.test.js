@@ -506,6 +506,11 @@ const testSetups = {
   createRelatedProductsWidgetTests() {
     throw new Error('RelatedProduct is not supported in Vue InstantSearch');
   },
+  createFrequentlyBoughtTogetherTests() {
+    throw new Error(
+      'FrequentlyBoughtTogether is not supported in Vue InstantSearch'
+    );
+  },
 };
 
 const testOptions = {
@@ -532,6 +537,9 @@ const testOptions = {
     skippedTests: {
       'RelatedProducts widget common tests': true,
     },
+  },
+  createFrequentlyBoughtTogetherTests: {
+    skippedTests: { 'FrequentlyBoughtTogether widget common tests': true },
   },
 };
 
