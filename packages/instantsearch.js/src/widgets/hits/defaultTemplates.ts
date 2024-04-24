@@ -9,6 +9,9 @@ const defaultTemplates: Required<HitsTemplates> = {
   item(data) {
     return JSON.stringify(omit(data, ['__hitIndex']), null, 2);
   },
+  banner() {
+    return '';
+  },
 };
 
 export default defaultTemplates;
