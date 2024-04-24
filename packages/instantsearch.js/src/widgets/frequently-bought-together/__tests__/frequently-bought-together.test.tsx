@@ -8,7 +8,7 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
-import { Fragment, h } from 'preact';
+import { h } from 'preact';
 
 import instantsearch from '../../../index.es';
 import frequentlyBoughtTogether from '../frequently-bought-together';
