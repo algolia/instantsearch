@@ -310,6 +310,11 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
+  createFrequentlyBoughtTogetherTests() {
+    throw new Error(
+      'FrequentlyBoughtTogether is not implemented in React InstantSearch yet'
+    );
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -339,6 +344,12 @@ const testOptions: TestOptionsMap<TestSuites> = {
     act,
     skippedTests: {
       'NumericMenu widget common tests': true,
+    },
+  },
+  createFrequentlyBoughtTogetherTests: {
+    act,
+    skippedTests: {
+      'FrequentlyBoughtTogether widget common tests': true,
     },
   },
 };
