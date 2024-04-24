@@ -174,7 +174,7 @@ describe('frequentlyBoughtTogether', () => {
         objectIDs: ['1'],
         templates: {
           header({ recommendations }, { html }) {
-            return html` Frequently bought with (${recommendations.length})`;
+            return html`Frequently bought with (${recommendations.length})`;
           },
           item(hit, { html }) {
             return html`<p>${hit.objectID}</p>`;
