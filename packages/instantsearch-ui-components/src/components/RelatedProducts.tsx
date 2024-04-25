@@ -59,6 +59,7 @@ export function createRelatedProductsComponent({
     if (items.length === 0 && status === 'idle') {
       return (
         <section
+          {...props}
           className={cx(
             'ais-RelatedProducts',
             classNames.root,
