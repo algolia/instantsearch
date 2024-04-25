@@ -8,7 +8,7 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
-import { Fragment, h } from 'preact';
+import { h } from 'preact';
 
 import instantsearch from '../../../index.es';
 import frequentlyBoughtTogether from '../frequently-bought-together';
@@ -44,28 +44,23 @@ describe('frequentlyBoughtTogether', () => {
     test('adds custom CSS classes', async () => {
       const container = document.createElement('div');
       const searchClient = createMockedSearchClient();
+      const options: Parameters<typeof frequentlyBoughtTogether>[0] = {
+        container,
+        objectIDs: ['1'],
+        cssClasses: {
+          root: 'ROOT',
+          emptyRoot: 'EMPTY_ROOT',
+          title: 'TITLE',
+          container: 'CONTAINER',
+          list: 'LIST',
+          item: 'ITEM',
+        },
+      };
 
-      const search = instantsearch({
-        indexName: 'indexName',
-        searchClient,
-      });
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+      const widget = frequentlyBoughtTogether(options);
 
-      search.addWidgets([
-        frequentlyBoughtTogether({
-          container,
-          objectIDs: ['objectID'],
-          cssClasses: {
-            root: 'ROOT',
-            title: 'TITLE',
-            container: 'CONTAINER',
-            list: 'LIST',
-            item: 'ITEM',
-          },
-          templates: {
-            header: 'Frequently bought together',
-          },
-        }),
-      ]);
+      search.addWidgets([widget]);
 
       search.start();
 
@@ -86,6 +81,18 @@ describe('frequentlyBoughtTogether', () => {
       expect(
         container.querySelector('.ais-FrequentlyBoughtTogether-item')
       ).toHaveClass('ITEM');
+
+      search
+        .removeWidgets([widget])
+        .addWidgets([
+          frequentlyBoughtTogether({ ...options, maxRecommendations: 0 }),
+        ]);
+
+      await wait(0);
+
+      expect(
+        container.querySelector('.ais-FrequentlyBoughtTogether')
+      ).toHaveClass('ROOT', 'EMPTY_ROOT');
     });
   });
 
@@ -159,7 +166,9 @@ describe('frequentlyBoughtTogether', () => {
 
       expect(container).toMatchInlineSnapshot(`
         <div>
-          <section>
+          <section
+            class="ais-FrequentlyBoughtTogether ais-FrequentlyBoughtTogether--empty"
+          >
             No results
           </section>
         </div>
@@ -173,14 +182,16 @@ describe('frequentlyBoughtTogether', () => {
         container,
         objectIDs: ['1'],
         templates: {
-          header({ recommendations }, { html }) {
-            return html`Frequently bought with (${recommendations.length})`;
+          header({ recommendations, cssClasses }, { html }) {
+            return html`<h4 class="${cssClasses.title}">
+              Frequently bought together (${recommendations.length})
+            </h4>`;
           },
           item(hit, { html }) {
             return html`<p>${hit.objectID}</p>`;
           },
           empty(_, { html }) {
-            return html`<p>No recommendations</p>`;
+            return html`<p>No recommendations.</p>`;
           },
         },
       };
@@ -198,13 +209,13 @@ describe('frequentlyBoughtTogether', () => {
           <section
             class="ais-FrequentlyBoughtTogether"
           >
-            <h3
+            <h4
               class="ais-FrequentlyBoughtTogether-title"
             >
-               Frequently bought with (
+              Frequently bought together (
               2
               )
-            </h3>
+            </h4>
             <div
               class="ais-FrequentlyBoughtTogether-container"
             >
@@ -242,9 +253,11 @@ describe('frequentlyBoughtTogether', () => {
 
       expect(container).toMatchInlineSnapshot(`
         <div>
-          <section>
+          <section
+            class="ais-FrequentlyBoughtTogether ais-FrequentlyBoughtTogether--empty"
+          >
             <p>
-              No recommendations
+              No recommendations.
             </p>
           </section>
         </div>
@@ -258,18 +271,18 @@ describe('frequentlyBoughtTogether', () => {
         container,
         objectIDs: ['1'],
         templates: {
-          header({ recommendations }) {
+          header({ recommendations, cssClasses }) {
             return (
-              <Fragment>
-                Frequently bought with ({recommendations.length})
-              </Fragment>
+              <h4 className={cssClasses.title}>
+                Frequently bought together ({recommendations.length})
+              </h4>
             );
           },
           item(hit) {
             return <p>{hit.objectID}</p>;
           },
           empty() {
-            return <p>No recommendations</p>;
+            return <p>No recommendations.</p>;
           },
         },
       };
@@ -287,13 +300,13 @@ describe('frequentlyBoughtTogether', () => {
           <section
             class="ais-FrequentlyBoughtTogether"
           >
-            <h3
+            <h4
               class="ais-FrequentlyBoughtTogether-title"
             >
-              Frequently bought with (
+              Frequently bought together (
               2
               )
-            </h3>
+            </h4>
             <div
               class="ais-FrequentlyBoughtTogether-container"
             >
@@ -331,9 +344,11 @@ describe('frequentlyBoughtTogether', () => {
 
       expect(container).toMatchInlineSnapshot(`
         <div>
-          <section>
+          <section
+            class="ais-FrequentlyBoughtTogether ais-FrequentlyBoughtTogether--empty"
+          >
             <p>
-              No recommendations
+              No recommendations.
             </p>
           </section>
         </div>
