@@ -25,6 +25,12 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
+type Banner = NonNullable<
+  NonNullable<
+    Required<SearchResults<Hit>['renderingContent']>
+  >['widgets']['banners']
+>[0];
+
 export type HitsRenderState<THit extends BaseHit = BaseHit> = {
   /**
    * The matched hits from Algolia API.
@@ -35,6 +41,11 @@ export type HitsRenderState<THit extends BaseHit = BaseHit> = {
    * The response from the Algolia API.
    */
   results?: SearchResults<Hit<THit>>;
+
+  /**
+   * The banner to display above the hits.
+   */
+  banner?: Banner;
 
   /**
    * Sends an event to the Insights middleware.
