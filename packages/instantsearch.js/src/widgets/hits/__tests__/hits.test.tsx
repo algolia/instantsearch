@@ -307,7 +307,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
     test('renders with templates using `html`', async () => {
       const container = document.createElement('div');
       const searchBoxContainer = document.createElement('div');
-      const searchClient = createMockedSearchClient();
+      const searchClient = createMockedSearchClient({
+        // @TODO: remove once algoliasearch js client has been updated
+        // @ts-expect-error
+        renderingContent: bannerWidgetRenderingContent,
+      });
 
       const search = instantsearch({ indexName: 'indexName', searchClient });
 
@@ -334,7 +338,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
             empty({ query }, { html }) {
               return html`<p>No results for <q>${query}</q></p>`;
             },
-            banner(banner, { html }) {
+            banner({ banner }, { html }) {
               // @TODO: remove once algoliasearch js client has been updated
               // @ts-expect-error
               return html`<img src="${banner.image.urls[0].url}" />`;
@@ -352,6 +356,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
           <div
             class="ais-Hits"
           >
+            <img
+              src="https://via.placeholder.com/550x250"
+            />
             <ol
               class="ais-Hits-list"
             >
@@ -527,6 +534,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
           <div
             class="ais-Hits ais-Hits--empty"
           >
+            <img
+              src="https://via.placeholder.com/550x250"
+            />
             <p>
               No results for 
               <q>
@@ -541,7 +551,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
     test('renders with templates using JSX', async () => {
       const container = document.createElement('div');
       const searchBoxContainer = document.createElement('div');
-      const searchClient = createMockedSearchClient();
+      const searchClient = createMockedSearchClient({
+        // @TODO: remove once algoliasearch js client has been updated
+        // @ts-expect-error
+        renderingContent: bannerWidgetRenderingContent,
+      });
 
       const search = instantsearch({ indexName: 'indexName', searchClient });
 
@@ -578,7 +592,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
                 </p>
               );
             },
-            banner(banner) {
+            banner({ banner }) {
               // @TODO: remove once algoliasearch js client has been updated
               // @ts-expect-error
               return <img src={`${banner.image.urls[0].url}`} />;
@@ -596,6 +610,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
           <div
             class="ais-Hits"
           >
+            <img
+              src="https://via.placeholder.com/550x250"
+            />
             <ol
               class="ais-Hits-list"
             >
@@ -771,6 +788,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
           <div
             class="ais-Hits ais-Hits--empty"
           >
+            <img
+              src="https://via.placeholder.com/550x250"
+            />
             <p>
               No results for 
               <q>
