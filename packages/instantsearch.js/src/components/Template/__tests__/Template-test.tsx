@@ -59,9 +59,16 @@ describe('Template', () => {
   it('can have Fragment as rootTagName with string template', () => {
     const props = getProps({
       rootTagName: 'fragment',
-      templates: { test: '<span>test</span>' },
+      templates: { test: 'Hello <span>{{name}}</span> !' },
+      data: { name: 'world' },
     });
     const wrapper = render(<Template {...props} />);
+
+    expect(wrapper.container).toMatchSnapshot();
+
+    props.data = { name: 'world2' };
+
+    wrapper.rerender(<Template {...props} />);
 
     expect(wrapper.container).toMatchSnapshot();
   });
@@ -70,6 +77,16 @@ describe('Template', () => {
     const props = getProps({
       rootTagName: 'fragment',
       templates: { test: () => <span>test</span> },
+    });
+    const wrapper = render(<Template {...props} />);
+
+    expect(wrapper.container).toMatchSnapshot();
+  });
+
+  it('can have Fragment as rootTagName with simple string', () => {
+    const props = getProps({
+      rootTagName: 'fragment',
+      templates: { test: 'test' },
     });
     const wrapper = render(<Template {...props} />);
 

@@ -60,6 +60,96 @@ describe('Hits', () => {
     `);
   });
 
+  test('renders with a banner (navigable)', () => {
+    const props = createProps({
+      banner: {
+        image: {
+          urls: [{ url: 'https://example.com/image.jpg' }],
+        },
+        link: {
+          url: 'https://example.com',
+        },
+      },
+    });
+    const { container } = render(<Hits {...props} />);
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        <div
+          class="ais-Hits"
+        >
+          <aside
+            class="ais-Hits-banner"
+          >
+            <a
+              class="ais-Hits-banner-link"
+              href="https://example.com"
+            >
+              <img
+                class="ais-Hits-banner-image"
+                src="https://example.com/image.jpg"
+              />
+            </a>
+          </aside>
+          <ol
+            class="ais-Hits-list"
+          >
+            <li
+              class="ais-Hits-item"
+            >
+              abc
+            </li>
+            <li
+              class="ais-Hits-item"
+            >
+              def
+            </li>
+          </ol>
+        </div>
+      </div>
+    `);
+  });
+
+  test('renders with a banner (non-navigable)', () => {
+    const props = createProps({
+      banner: {
+        image: {
+          urls: [{ url: 'https://example.com/image.jpg' }],
+        },
+      },
+    });
+    const { container } = render(<Hits {...props} />);
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        <div
+          class="ais-Hits"
+        >
+          <aside
+            class="ais-Hits-banner"
+          >
+            <img
+              class="ais-Hits-banner-image"
+              src="https://example.com/image.jpg"
+            />
+          </aside>
+          <ol
+            class="ais-Hits-list"
+          >
+            <li
+              class="ais-Hits-item"
+            >
+              abc
+            </li>
+            <li
+              class="ais-Hits-item"
+            >
+              def
+            </li>
+          </ol>
+        </div>
+      </div>
+    `);
+  });
+
   test('forwards `div` props to the root element', () => {
     const props = createProps({
       hidden: true,
@@ -194,9 +284,7 @@ describe('Hits', () => {
     test('renders when defined and there are no hits', () => {
       const props = createProps({
         hits: [],
-        emptyComponent: ({ ...rootProps }) => (
-          <div {...rootProps}>No results</div>
-        ),
+        emptyComponent: () => <span>No results</span>,
       });
       const { container } = render(<Hits {...props} />);
       expect(container).toMatchInlineSnapshot(`
@@ -204,7 +292,92 @@ describe('Hits', () => {
           <div
             class="ais-Hits ais-Hits--empty"
           >
-            No results
+            <span>
+              No results
+            </span>
+          </div>
+        </div>
+      `);
+    });
+  });
+
+  describe('bannerComponent', () => {
+    test('renders when defined', () => {
+      const props = createProps({
+        banner: {
+          image: {
+            urls: [{ url: 'https://example.com/image.jpg' }],
+          },
+          link: {
+            url: 'https://example.com',
+          },
+        },
+        bannerComponent: ({ banner }) => (
+          <a href={banner?.link?.url}>
+            <img src={banner.image.urls[0].url} />
+          </a>
+        ),
+      });
+      const { container } = render(<Hits {...props} />);
+      expect(container).toMatchInlineSnapshot(`
+        <div>
+          <div
+            class="ais-Hits"
+          >
+            <a
+              href="https://example.com"
+            >
+              <img
+                src="https://example.com/image.jpg"
+              />
+            </a>
+            <ol
+              class="ais-Hits-list"
+            >
+              <li
+                class="ais-Hits-item"
+              >
+                abc
+              </li>
+              <li
+                class="ais-Hits-item"
+              >
+                def
+              </li>
+            </ol>
+          </div>
+        </div>
+      `);
+    });
+
+    test('does not render when no banner data', () => {
+      const props = createProps({
+        bannerComponent: ({ banner }) => (
+          <a href={banner?.link?.url}>
+            <img src={banner.image.urls[0].url} />
+          </a>
+        ),
+      });
+      const { container } = render(<Hits {...props} />);
+      expect(container).toMatchInlineSnapshot(`
+        <div>
+          <div
+            class="ais-Hits"
+          >
+            <ol
+              class="ais-Hits-list"
+            >
+              <li
+                class="ais-Hits-item"
+              >
+                abc
+              </li>
+              <li
+                class="ais-Hits-item"
+              >
+                def
+              </li>
+            </ol>
           </div>
         </div>
       `);

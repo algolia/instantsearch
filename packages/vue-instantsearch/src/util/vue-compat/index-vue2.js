@@ -9,14 +9,14 @@ export { Vue, Vue2, isVue2, isVue3, version };
 
 const augmentCreateElement =
   (createElement) =>
-  (tag, propsWithClassName = {}, children) => {
+  (tag, propsWithClassName = {}, ...children) => {
     const { className, ...props } = propsWithClassName;
 
     if (typeof tag === 'function') {
       return tag(
         Object.assign(props, {
           class: className || props.class,
-          children,
+          children: children.length > 0 ? children : undefined,
         })
       );
     }
@@ -24,7 +24,7 @@ const augmentCreateElement =
     return createElement(
       tag,
       Object.assign(props, { class: className || props.class }),
-      [children]
+      children
     );
   };
 

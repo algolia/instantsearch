@@ -8,7 +8,8 @@ export { createApp, createSSRApp, h, version, nextTick } from 'vue';
 export { Vue, Vue2, isVue2, isVue3 };
 
 export function renderCompat(fn) {
-  function h(tag, props, children) {
+  function h(tag, props, ...childrenArray) {
+    const children = childrenArray.length > 0 ? childrenArray : undefined;
     if (
       typeof props === 'object' &&
       (props.attrs || props.props || props.scopedSlots || props.on)
