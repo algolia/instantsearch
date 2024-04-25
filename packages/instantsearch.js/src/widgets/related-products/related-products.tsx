@@ -57,7 +57,8 @@ function createRenderer({
   ) {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
-        defaultTemplates: {} as Required<RelatedProductsTemplates>,
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        defaultTemplates: {} as RelatedProductsTemplates,
         templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
