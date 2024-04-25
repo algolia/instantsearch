@@ -68,12 +68,15 @@ function createRenderer({
 
     const headerComponent = (
       templates.header
-        ? ({ classNames, recommendations }) => (
+        ? (data) => (
             <TemplateComponent
               {...renderState.templateProps}
               templateKey="header"
               rootTagName="fragment"
-              data={{ cssClasses: classNames, recommendations }}
+              data={{
+                cssClasses: data.classNames,
+                recommendations: data.recommendations,
+              }}
             />
           )
         : undefined
