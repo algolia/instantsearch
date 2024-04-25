@@ -1,12 +1,7 @@
 'use strict';
 
 var find = require('../functions/find');
-
-function flat(arr) {
-  return arr.reduce(function (acc, val) {
-    return acc.concat(val);
-  }, []);
-}
+var flat = require('../functions/flat');
 
 function getAverageIndices(indexTracker, nrOfObjs) {
   var avgIndices = [];
