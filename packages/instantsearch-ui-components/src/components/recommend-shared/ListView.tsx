@@ -27,13 +27,14 @@ export function createListViewComponent({ createElement }: Renderer) {
       <div className={classNames.container}>
         <ol className={classNames.list}>
           {items.map((item) => (
-            <ItemComponent
+            <li
               key={item.objectID}
               className={classNames.item}
-              item={item}
               onClick={sendEvent}
               onAuxClick={sendEvent}
-            />
+            >
+              <ItemComponent item={item} />
+            </li>
           ))}
         </ol>
       </div>

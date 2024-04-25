@@ -2,8 +2,12 @@
 
 import { cx } from '../lib';
 
-import { createDefaultHeaderComponent } from './recommend-shared/DefaultHeader';
-import { createListViewComponent } from './recommend-shared/ListView';
+import {
+  createDefaultFallbackComponent,
+  createDefaultHeaderComponent,
+  createDefaultItemComponent,
+  createListViewComponent,
+} from './recommend-shared';
 
 import type {
   ComponentProps,
@@ -26,12 +30,18 @@ export function createRelatedProductsComponent({
   ) {
     const {
       classNames = {},
-      fallbackComponent: FallbackComponent = () => null,
+      fallbackComponent: FallbackComponent = createDefaultFallbackComponent({
+        createElement,
+        Fragment,
+      }),
       headerComponent: HeaderComponent = createDefaultHeaderComponent({
         createElement,
         Fragment,
       }),
-      itemComponent: ItemComponent,
+      itemComponent: ItemComponent = createDefaultItemComponent({
+        createElement,
+        Fragment,
+      }),
       view: View = createListViewComponent({ createElement, Fragment }),
       items,
       status,
@@ -47,7 +57,20 @@ export function createRelatedProductsComponent({
     };
 
     if (items.length === 0 && status === 'idle') {
-      return <FallbackComponent />;
+      return (
+        <section
+          {...props}
+          className={cx(
+            'ais-RelatedProducts',
+            classNames.root,
+            'ais-RelatedProducts--empty',
+            classNames.emptyRoot,
+            props.className
+          )}
+        >
+          <FallbackComponent />
+        </section>
+      );
     }
 
     return (

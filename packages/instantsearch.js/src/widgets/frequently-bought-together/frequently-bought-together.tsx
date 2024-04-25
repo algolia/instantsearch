@@ -11,8 +11,6 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
-import defaultTemplates from './defaultTemplates';
-
 import type {
   FrequentlyBoughtTogetherWidgetDescription,
   FrequentlyBoughtTogetherConnectorParams,
@@ -64,52 +62,54 @@ const renderer =
   ) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
-        defaultTemplates,
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        defaultTemplates: {} as Required<FrequentlyBoughtTogetherTemplates>,
         templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;
     }
 
-    const emptyComponent: FrequentlyBoughtTogetherUiProps<Hit>['fallbackComponent'] =
-      ({ ...rootProps }) => (
-        <TemplateComponent
-          {...renderState.templateProps}
-          rootTagName="section"
-          rootProps={rootProps}
-          templateKey="empty"
-          data={results}
-        />
-      );
+    const headerComponent = (
+      templates.header
+        ? ({ classNames, recommendations }) => (
+            <TemplateComponent
+              {...renderState.templateProps}
+              templateKey="header"
+              rootTagName="fragment"
+              data={{ cssClasses: classNames, recommendations }}
+            />
+          )
+        : undefined
+    ) as FrequentlyBoughtTogetherUiProps<Hit>['headerComponent'];
 
-    const headerComponent: FrequentlyBoughtTogetherUiProps<Hit>['headerComponent'] =
-      ({ classNames, recommendations, translations, ...rootProps }) => (
-        <TemplateComponent
-          {...renderState.templateProps}
-          templateKey="header"
-          rootTagName="h3"
-          rootProps={{
-            ...rootProps,
-            className: classNames.title,
-          }}
-          data={{
-            classNames,
-            recommendations,
-            translations,
-          }}
-        />
-      );
+    const itemComponent = (
+      templates.item
+        ? ({ item }) => {
+            return (
+              <TemplateComponent
+                {...renderState.templateProps}
+                templateKey="item"
+                rootTagName="fragment"
+                data={item}
+              />
+            );
+          }
+        : undefined
+    ) as FrequentlyBoughtTogetherUiProps<Hit>['itemComponent'];
 
-    const itemComponent: FrequentlyBoughtTogetherUiProps<Hit>['itemComponent'] =
-      ({ item, ...rootProps }) => (
-        <TemplateComponent
-          {...renderState.templateProps}
-          templateKey="item"
-          rootTagName="li"
-          rootProps={rootProps}
-          data={item}
-        />
-      );
+    const fallbackComponent = (
+      templates.empty
+        ? () => (
+            <TemplateComponent
+              {...renderState.templateProps}
+              templateKey="empty"
+              rootTagName="fragment"
+              data={results}
+            />
+          )
+        : undefined
+    ) as FrequentlyBoughtTogetherUiProps<Hit>['fallbackComponent'];
 
     render(
       <FrequentlyBoughtTogether
@@ -118,7 +118,7 @@ const renderer =
         itemComponent={itemComponent}
         sendEvent={() => {}}
         classNames={cssClasses}
-        fallbackComponent={emptyComponent}
+        fallbackComponent={fallbackComponent}
         status={instantSearchInstance.status}
       />,
       containerNode
@@ -130,26 +130,23 @@ export type FrequentlyBoughtTogetherCSSClasses = Partial<RecommendClassNames>;
 export type FrequentlyBoughtTogetherTemplates = Partial<{
   /**
    * Template to use when there are no results.
-   *
-   * @default 'No Results'
    */
   empty: Template<RecommendResultItem>;
 
   /**
    * Template to use for the header of the widget.
-   *
-   * @default ''
    */
   header: Template<
-    Parameters<
-      NonNullable<FrequentlyBoughtTogetherUiProps<Hit>['headerComponent']>
-    >[0]
+    Pick<
+      Parameters<
+        NonNullable<FrequentlyBoughtTogetherUiProps<Hit>['headerComponent']>
+      >[0],
+      'recommendations'
+    > & { cssClasses: RecommendClassNames }
   >;
 
   /**
    * Template to use for each result. This template will receive an object containing a single record.
-   *
-   * @default ''
    */
   item: Template<Hit>;
 }>;

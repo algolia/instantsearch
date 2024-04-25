@@ -2,8 +2,12 @@
 
 import { cx } from '../lib';
 
-import { createDefaultHeaderComponent } from './recommend-shared/DefaultHeader';
-import { createListViewComponent } from './recommend-shared/ListView';
+import {
+  createDefaultFallbackComponent,
+  createDefaultHeaderComponent,
+  createDefaultItemComponent,
+  createListViewComponent,
+} from './recommend-shared';
 
 import type {
   RecommendTranslations,
@@ -26,12 +30,18 @@ export function createFrequentlyBoughtTogetherComponent({
   ) {
     const {
       classNames = {},
-      fallbackComponent: FallbackComponent = () => null,
+      fallbackComponent: FallbackComponent = createDefaultFallbackComponent({
+        createElement,
+        Fragment,
+      }),
       headerComponent: HeaderComponent = createDefaultHeaderComponent({
         createElement,
         Fragment,
       }),
-      itemComponent: ItemComponent,
+      itemComponent: ItemComponent = createDefaultItemComponent({
+        createElement,
+        Fragment,
+      }),
       view: View = createListViewComponent({ createElement, Fragment }),
       items,
       status,
@@ -47,7 +57,20 @@ export function createFrequentlyBoughtTogetherComponent({
     };
 
     if (items.length === 0 && status === 'idle') {
-      return <FallbackComponent />;
+      return (
+        <section
+          {...props}
+          className={cx(
+            'ais-FrequentlyBoughtTogether',
+            classNames.root,
+            'ais-FrequentlyBoughtTogether--empty',
+            classNames.emptyRoot,
+            props.className
+          )}
+        >
+          <FallbackComponent />
+        </section>
+      );
     }
 
     return (

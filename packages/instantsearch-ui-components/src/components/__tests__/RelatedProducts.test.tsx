@@ -17,11 +17,7 @@ const RelatedProducts = createRelatedProductsComponent({
 });
 
 const ItemComponent: RelatedProductsProps<RecordWithObjectID>['itemComponent'] =
-  ({ item, ...itemProps }) => (
-    <li {...itemProps}>
-      <div>{item.objectID}</div>
-    </li>
-  );
+  ({ item }) => <div>{item.objectID}</div>;
 
 describe('RelatedProducts', () => {
   test('renders items with default view and header', () => {
@@ -90,7 +86,15 @@ describe('RelatedProducts', () => {
       />
     );
 
-    expect(container).toMatchInlineSnapshot(`<div />`);
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        <section
+          class="ais-RelatedProducts ais-RelatedProducts--empty"
+        >
+          No results
+        </section>
+      </div>
+    `);
   });
 
   test('renders custom header', () => {
@@ -180,11 +184,9 @@ describe('RelatedProducts', () => {
               <li
                 class="ais-RelatedProducts-item"
               >
-                <li>
-                  <div>
-                    1
-                  </div>
-                </li>
+                <div>
+                  1
+                </div>
               </li>
             </ol>
           </div>
@@ -198,7 +200,7 @@ describe('RelatedProducts', () => {
       <RelatedProducts
         status="idle"
         items={[]}
-        fallbackComponent={() => <div>My custom fallback</div>}
+        fallbackComponent={() => <Fragment>My custom fallback</Fragment>}
         itemComponent={ItemComponent}
         sendEvent={jest.fn()}
       />
@@ -206,9 +208,11 @@ describe('RelatedProducts', () => {
 
     expect(container).toMatchInlineSnapshot(`
       <div>
-        <div>
+        <section
+          class="ais-RelatedProducts ais-RelatedProducts--empty"
+        >
           My custom fallback
-        </div>
+        </section>
       </div>
     `);
   });
