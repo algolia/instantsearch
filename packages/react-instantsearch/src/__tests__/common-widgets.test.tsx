@@ -25,6 +25,7 @@ import {
   ToggleRefinement,
   SortBy,
   Stats,
+  RelatedProducts,
 } from '..';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -310,8 +311,13 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
-  createRelatedProductsWidgetTests() {
-    throw new Error('RelatedProduct is not supported in React InstantSearch');
+  createRelatedProductsWidgetTests({ instantSearchOptions, widgetParams }) {
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <RelatedProducts {...widgetParams} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
   },
   createFrequentlyBoughtTogetherTests() {
     throw new Error(
@@ -349,12 +355,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
       'NumericMenu widget common tests': true,
     },
   },
-  createRelatedProductsWidgetTests: {
-    act,
-    skippedTests: {
-      'RelatedProducts widget common tests': true,
-    },
-  },
+  createRelatedProductsWidgetTests: { act },
   createFrequentlyBoughtTogetherTests: {
     act,
     skippedTests: {
