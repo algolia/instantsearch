@@ -17,11 +17,7 @@ const FrequentlyBoughtTogether = createFrequentlyBoughtTogetherComponent({
 });
 
 const ItemComponent: FrequentlyBoughtTogetherProps<RecordWithObjectID>['itemComponent'] =
-  ({ item, ...itemProps }) => (
-    <li {...itemProps}>
-      <div>{item.objectID}</div>
-    </li>
-  );
+  ({ item }) => <div>{item.objectID}</div>;
 
 describe('FrequentlyBoughtTogether', () => {
   test('renders items with default view and header', () => {
@@ -62,20 +58,16 @@ describe('FrequentlyBoughtTogether', () => {
               <li
                 class="ais-FrequentlyBoughtTogether-item"
               >
-                <li>
-                  <div>
-                    1
-                  </div>
-                </li>
+                <div>
+                  1
+                </div>
               </li>
               <li
                 class="ais-FrequentlyBoughtTogether-item"
               >
-                <li>
-                  <div>
-                    2
-                  </div>
-                </li>
+                <div>
+                  2
+                </div>
               </li>
             </ol>
           </div>
@@ -137,11 +129,9 @@ describe('FrequentlyBoughtTogether', () => {
               <li
                 class="ais-FrequentlyBoughtTogether-item"
               >
-                <li>
-                  <div>
-                    1
-                  </div>
-                </li>
+                <div>
+                  1
+                </div>
               </li>
             </ol>
           </div>
@@ -194,11 +184,9 @@ describe('FrequentlyBoughtTogether', () => {
               <li
                 class="ais-FrequentlyBoughtTogether-item"
               >
-                <li>
-                  <div>
-                    1
-                  </div>
-                </li>
+                <div>
+                  1
+                </div>
               </li>
             </ol>
           </div>
@@ -281,11 +269,9 @@ describe('FrequentlyBoughtTogether', () => {
               <li
                 class="ais-FrequentlyBoughtTogether-item"
               >
-                <li>
-                  <div>
-                    1
-                  </div>
-                </li>
+                <div>
+                  1
+                </div>
               </li>
             </ol>
           </div>
@@ -347,11 +333,9 @@ describe('FrequentlyBoughtTogether', () => {
               <li
                 class="ais-FrequentlyBoughtTogether-item ITEM"
               >
-                <li>
-                  <div>
-                    1
-                  </div>
-                </li>
+                <div>
+                  1
+                </div>
               </li>
             </ol>
           </div>
