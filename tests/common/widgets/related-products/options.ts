@@ -145,7 +145,14 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      expect(document.querySelector('.ais-RelatedProducts')).toBeNull();
+      expect(document.querySelector('.ais-RelatedProducts'))
+        .toMatchInlineSnapshot(`
+        <section
+          class="ais-RelatedProducts ais-RelatedProducts--empty"
+        >
+          No results
+        </section>
+      `);
     });
   });
 }
