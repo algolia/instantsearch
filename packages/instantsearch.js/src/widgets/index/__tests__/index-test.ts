@@ -1103,6 +1103,40 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         },
       ]);
     });
+
+    it('only gets children results if indexName is not set on main index', async () => {
+      const level0 = index({ indexName: '' });
+      const level1 = index({ indexName: 'level1IndexName' });
+      const level2 = index({ indexName: 'level2IndexName' });
+
+      level0.addWidgets([
+        level1.addWidgets([virtualSearchBox({})]),
+        level2.addWidgets([virtualSearchBox({})]),
+      ]);
+
+      level0.init(createIndexInitOptions({ parent: null }));
+
+      // Simulate a call to search from a widget - this step is required otherwise
+      // the DerivedHelper does not contain the results. The `lastResults` attribute
+      // is set once the `result` event is emitted.
+      level0.getHelper()!.search();
+
+      await wait(0);
+
+      expect(level0.getScopedResults()).toEqual([
+        // Only children
+        {
+          indexId: 'level1IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level1.getHelper(),
+        },
+        {
+          indexId: 'level2IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level2.getHelper(),
+        },
+      ]);
+    });
   });
 
   describe('init', () => {

@@ -303,9 +303,19 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
     getScopedResults() {
       const widgetParent = this.getParent();
+      let widgetSiblings;
 
-      // If the widget is the root, we consider itself as the only sibling.
-      const widgetSiblings = widgetParent ? widgetParent.getWidgets() : [this];
+      if (widgetParent) {
+        widgetSiblings = widgetParent.getWidgets();
+      } else if (indexName.length === 0) {
+        // The widget is the root but has no index name:
+        // we resolve results from its children index widgets
+        widgetSiblings = this.getWidgets();
+      } else {
+        // The widget is the root and has an index name:
+        // we consider itself as the only sibling
+        widgetSiblings = [this];
+      }
 
       return resolveScopedResultsFromWidgets(widgetSiblings);
     },

@@ -1,3 +1,4 @@
+import { isIndexWidget } from 'instantsearch.js/es/lib/utils';
 import { useEffect, useState } from 'react';
 
 import { getIndexSearchResults } from './getIndexSearchResults';
@@ -31,6 +32,15 @@ export function useSearchResults(): SearchResultsApi {
           results,
           scopedResults: searchIndex.getScopedResults(),
         });
+      } else if (search.mainIndex.getIndexName().length === 0) {
+        // If the main index has no name, we get the scoped results from
+        // the first child index instead.
+        const childIndex = search.mainIndex.getWidgets().find(isIndexWidget);
+        childIndex &&
+          setSearchResults({
+            results: getIndexSearchResults(searchIndex).results,
+            scopedResults: childIndex.getScopedResults(),
+          });
       }
     }
 
