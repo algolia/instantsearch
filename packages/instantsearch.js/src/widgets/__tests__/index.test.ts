@@ -155,6 +155,13 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
           objectIDs: ['objectID'],
         });
       }
+      case 'relatedProducts': {
+        const relatedProducts = widget as Widgets['relatedProducts'];
+        return relatedProducts({
+          container,
+          objectIDs: ['objectID'],
+        });
+      }
       default: {
         const defaultWidget = widget as UnknownWidgetFactory;
         return defaultWidget({ container, attribute: 'attr' });
