@@ -21,7 +21,7 @@ export default {
   computed: {
     widgetParams() {
       return {
-        searchParameters: this.$attrs,
+        searchParameters: { ...this.$attrs },
       };
     },
   },
