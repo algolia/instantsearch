@@ -2,7 +2,7 @@ import { omit } from '../../lib/utils';
 
 import type { HitsTemplates } from './hits';
 
-const defaultTemplates: Required<HitsTemplates> = {
+const defaultTemplates: HitsTemplates = {
   empty() {
     return 'No results';
   },

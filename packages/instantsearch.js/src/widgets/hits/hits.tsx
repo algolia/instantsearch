@@ -49,7 +49,7 @@ const renderer =
     containerNode: HTMLElement;
     cssClasses: HitsCSSClasses;
     renderState: {
-      templateProps?: PreparedTemplateProps<Required<HitsTemplates>>;
+      templateProps?: PreparedTemplateProps<HitsTemplates>;
     };
     templates: HitsTemplates;
   }): Renderer<HitsRenderState, Partial<HitsWidgetParams>> =>
@@ -61,6 +61,7 @@ const renderer =
       insights,
       bindEvent,
       sendEvent,
+      banner,
     },
     isFirstRendering
   ) => {
@@ -127,6 +128,17 @@ const renderer =
       />
     );
 
+    const bannerComponent: HitsUiComponentProps<Hit>['bannerComponent'] = (
+      props
+    ) => (
+      <TemplateComponent
+        {...renderState.templateProps}
+        templateKey="banner"
+        data={props}
+        rootTagName="fragment"
+      />
+    );
+
     render(
       <Hits
         hits={receivedHits}
@@ -134,6 +146,8 @@ const renderer =
         sendEvent={sendEvent}
         classNames={cssClasses}
         emptyComponent={emptyComponent}
+        banner={banner}
+        bannerComponent={templates.banner ? bannerComponent : undefined}
       />,
       containerNode
     );
@@ -160,6 +174,14 @@ export type HitsTemplates = Partial<{
       __hitIndex: number;
     }
   >;
+
+  /**
+   * Template to use for the banner.
+   */
+  banner: Template<{
+    banner: Required<HitsRenderState['banner']>;
+    className: string;
+  }>;
 }>;
 
 export type HitsWidgetParams = {
