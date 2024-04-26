@@ -59,7 +59,7 @@ export type RecommendComponentProps<
   TObject,
   TComponentProps extends Record<string, unknown> = Record<string, unknown>
 > = {
-  itemComponent: (
+  itemComponent?: (
     props: RecommendItemComponentProps<RecordWithObjectID<TObject>> &
       TComponentProps
   ) => JSX.Element;

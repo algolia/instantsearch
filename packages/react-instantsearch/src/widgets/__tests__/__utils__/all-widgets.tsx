@@ -91,6 +91,9 @@ function Widget<TWidget extends SingleWidget>({
     case 'SearchBox': {
       return <widget.Component onSubmit={undefined} {...props} />;
     }
+    case 'RelatedProducts': {
+      return <widget.Component objectIDs={['1']} {...props} />;
+    }
     default: {
       return <widget.Component {...props} />;
     }
