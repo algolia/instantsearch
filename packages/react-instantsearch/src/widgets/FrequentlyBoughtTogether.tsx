@@ -14,39 +14,23 @@ import type { UseFrequentlyBoughtTogetherProps } from 'react-instantsearch-core'
 
 type UiProps<THit extends BaseHit> = Pick<
   FrequentlyBoughtTogetherPropsUiComponentProps<Hit<THit>>,
-  | 'itemComponent'
   | 'items'
-  | 'fallbackComponent'
+  | 'itemComponent'
   | 'headerComponent'
+  | 'fallbackComponent'
   | 'status'
-  | 'translations'
   | 'sendEvent'
-  | 'view'
 >;
 
 export type FrequentlyBoughtTogetherProps<THit extends BaseHit> = Omit<
   FrequentlyBoughtTogetherPropsUiComponentProps<Hit<THit>>,
   keyof UiProps<THit>
-> & {
-  itemComponent?: React.JSXElementConstructor<{
-    item: Hit<THit>;
-    // sendEvent: SendEventForHits;
-  }>;
-} & UseFrequentlyBoughtTogetherProps<THit>;
-
-// @MAJOR: Move default hit component back to the UI library
-// once flavour specificities are erased
-function DefaultItemComponent<THit extends BaseHit = BaseHit>({
-  item,
-}: {
-  item: THit;
-}) {
-  return (
-    <div style={{ wordBreak: 'break-all' }}>
-      {JSON.stringify(item).slice(0, 100)}…
-    </div>
-  );
-}
+> &
+  UseFrequentlyBoughtTogetherProps<THit> & {
+    itemComponent?: FrequentlyBoughtTogetherPropsUiComponentProps<THit>['itemComponent'];
+    headerComponent?: FrequentlyBoughtTogetherPropsUiComponentProps<THit>['headerComponent'];
+    fallbackComponent?: FrequentlyBoughtTogetherPropsUiComponentProps<THit>['fallbackComponent'];
+  };
 
 const FrequentlyBoughtTogetherUiComponent =
   createFrequentlyBoughtTogetherComponent({
@@ -55,12 +39,14 @@ const FrequentlyBoughtTogetherUiComponent =
   });
 
 export function FrequentlyBoughtTogether<THit extends BaseHit = BaseHit>({
-  transformItems,
-  itemComponent: ItemComponent = DefaultItemComponent,
   objectIDs,
   maxRecommendations,
   threshold,
   queryParameters,
+  transformItems,
+  itemComponent,
+  headerComponent,
+  fallbackComponent,
   ...props
 }: FrequentlyBoughtTogetherProps<THit>) {
   const { status } = useInstantSearch();
@@ -75,19 +61,13 @@ export function FrequentlyBoughtTogether<THit extends BaseHit = BaseHit>({
     { $$widgetType: 'ais.frequentlyBoughtTogether' }
   );
 
-  const itemComponent: FrequentlyBoughtTogetherPropsUiComponentProps<
-    Hit<THit>
-  >['itemComponent'] = ({ item, index, ...itemProps }) => (
-    <li key={item.objectID} {...itemProps}>
-      <ItemComponent item={item} />
-    </li>
-  );
-
   const uiProps: UiProps<THit> = {
-    items: recommendations,
-    sendEvent: () => {},
+    items: recommendations as Array<Hit<THit>>,
     itemComponent,
+    headerComponent,
+    fallbackComponent,
     status,
+    sendEvent: () => {},
   };
 
   return <FrequentlyBoughtTogetherUiComponent {...props} {...uiProps} />;
