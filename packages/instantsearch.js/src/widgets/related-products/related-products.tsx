@@ -37,7 +37,7 @@ type CreateRendererProps = {
   containerNode: HTMLElement;
   cssClasses: RelatedProductsCSSClasses;
   renderState: {
-    templateProps?: PreparedTemplateProps<Required<RelatedProductsTemplates>>;
+    templateProps?: PreparedTemplateProps<RelatedProductsTemplates>;
   };
   templates: RelatedProductsTemplates;
 };
@@ -58,7 +58,7 @@ function createRenderer({
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        defaultTemplates: {} as Required<RelatedProductsTemplates>,
+        defaultTemplates: {} as RelatedProductsTemplates,
         templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
@@ -184,6 +184,7 @@ const relatedProducts: RelatedProductsWidget = function relatedProducts(
     objectIDs,
     maxRecommendations,
     queryParameters,
+    fallbackParameters,
     threshold,
     transformItems,
     templates = {},
@@ -212,6 +213,7 @@ const relatedProducts: RelatedProductsWidget = function relatedProducts(
       objectIDs,
       maxRecommendations,
       queryParameters,
+      fallbackParameters,
       threshold,
       transformItems,
     }),
