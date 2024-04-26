@@ -116,6 +116,11 @@ describe('widgets', () => {
           "name": "RefinementList",
         },
         {
+          "$$type": "ais.relatedProducts",
+          "$$widgetType": "ais.relatedProducts",
+          "name": "RelatedProducts",
+        },
+        {
           "$$type": "ais.searchBox",
           "$$widgetType": "ais.searchBox",
           "name": "SearchBox",
