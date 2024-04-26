@@ -62,7 +62,7 @@ export function FrequentlyBoughtTogether<THit extends BaseHit = BaseHit>({
   );
 
   const uiProps: UiProps<THit> = {
-    items: recommendations as Array<Hit<THit>>,
+    items: recommendations,
     itemComponent,
     headerComponent,
     fallbackComponent,
