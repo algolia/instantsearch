@@ -23,10 +23,9 @@ a[class^='ais-'] {
 .ais-ClearRefinements,
 .ais-CurrentRefinements,
 .ais-GeoSearch,
+.ais-FrequentlyBoughtTogether,
 .ais-HierarchicalMenu,
 .ais-Hits,
-.ais-FrequentlyBoughtTogether,
-.ais-RelatedProducts,
 .ais-Results,
 .ais-HitsPerPage,
 .ais-ResultsPerPage,
@@ -48,6 +47,7 @@ a[class^='ais-'] {
 .ais-RelevantSort,
 .ais-SortBy,
 .ais-Stats,
+.ais-TrendingItems,
 .ais-ToggleRefinement {
   color: $port-gore;
 }
@@ -291,6 +291,7 @@ a[class^='ais-'] {
 .ais-Hits-list,
 .ais-FrequentlyBoughtTogether-list,
 .ais-RelatedProducts-list,
+.ais-TrendingItems-list,
 .ais-Results-list {
   margin-top: -1rem;
   margin-left: -1rem;
@@ -307,6 +308,7 @@ a[class^='ais-'] {
 .ais-Hits-item,
 .ais-FrequentlyBoughtTogether-item,
 .ais-RelatedProducts-item,
+.ais-TrendingItems-item,
 .ais-Results-item {
   margin-top: 1rem;
   margin-left: 1rem;

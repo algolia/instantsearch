@@ -605,13 +605,14 @@ $break-medium: 767px;
 }
 
 /**
- * Hits, InfiniteHits, FrequentlyBoughtTogether and RelatedProducts
+ * Hits, InfiniteHits, FrequentlyBoughtTogether, RelatedProducts and TrendingItems
  */
 
 .ais-Hits-item,
 .ais-InfiniteHits-item,
 .ais-FrequentlyBoughtTogether-item,
-.ais-RelatedProducts-item {
+.ais-RelatedProducts-item,
+.ais-TrendingItems-item {
   align-items: center;
   background: $white;
   box-shadow: 0 0 0 1px rgba($grey900, 0.05), 0 1px 3px 0 rgba($grey900, 0.15);
@@ -625,21 +626,24 @@ $break-medium: 767px;
 .ais-Hits-item:first-of-type,
 .ais-InfiniteHits-item:first-of-type,
 .ais-FrequentlyBoughtTogether-item:first-of-type,
-.ais-RelatedProducts-item:first-of-type {
+.ais-RelatedProducts-item:first-of-type,
+.ais-TrendingItems-item:first-of-type {
   border-radius: 3px 3px 0 0;
 }
 
 .ais-Hits-item:last-of-type,
 .ais-InfiniteHits-item:last-of-type,
 .ais-FrequentlyBoughtTogether-item:last-of-type,
-.ais-RelatedProducts-item:last-of-type {
+.ais-RelatedProducts-item:last-of-type,
+.ais-TrendingItems-item:last-of-type {
   border-radius: 0 0 3px 3px;
 }
 
 .ais-Hits-item:only-of-type,
 .ais-InfiniteHits-item:only-of-type,
 .ais-FrequentlyBoughtTogether-item:only-of-type,
-.ais-RelatedProducts-item:only-of-type {
+.ais-RelatedProducts-item:only-of-type,
+.ais-TrendingItems-item:only-of-type {
   border-radius: 3px;
 }
 
