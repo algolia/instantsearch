@@ -25,6 +25,7 @@ import {
   stats,
   ratingMenu,
   numericMenu,
+  relatedProducts,
   frequentlyBoughtTogether,
 } from '../widgets';
 
@@ -480,6 +481,22 @@ const testSetups: TestSetupsMap<TestSuites> = {
       })
       .start();
   },
+  createRelatedProductsWidgetTests({ instantSearchOptions, widgetParams }) {
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        relatedProducts({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
   createFrequentlyBoughtTogetherTests({ instantSearchOptions, widgetParams }) {
     instantsearch(instantSearchOptions)
       .addWidgets([
@@ -489,7 +506,7 @@ const testSetups: TestSetupsMap<TestSuites> = {
         }),
       ])
       .on('error', () => {
-        /**
+        /*
          * prevent rethrowing InstantSearch errors, so tests can be asserted.
          * IRL this isn't needed, as the error doesn't stop execution.
          */
@@ -521,6 +538,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createSortByWidgetTests: undefined,
   createStatsWidgetTests: undefined,
   createNumericMenuWidgetTests: undefined,
+  createRelatedProductsWidgetTests: undefined,
   createFrequentlyBoughtTogetherTests: undefined,
 };
 
