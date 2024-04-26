@@ -20,14 +20,13 @@ import {
   useConnector,
   useToggleRefinement,
   useCurrentRefinements,
+  useRelatedProducts,
   useFrequentlyBoughtTogether,
-  useInstantSearch,
 } from '..';
 
 import type {
   UseBreadcrumbProps,
   UseCurrentRefinementsProps,
-  UseFrequentlyBoughtTogetherProps,
   UseHierarchicalMenuProps,
   UseHitsPerPageProps,
   UseMenuProps,
@@ -35,6 +34,8 @@ import type {
   UsePaginationProps,
   UseRefinementListProps,
   UseToggleRefinementProps,
+  UseRelatedProductsProps,
+  UseFrequentlyBoughtTogetherProps,
 } from '..';
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
 import type {
@@ -316,7 +317,28 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
-  createRelatedProductsConnectorTests: () => {},
+  createRelatedProductsConnectorTests: ({
+    instantSearchOptions,
+    widgetParams,
+  }) => {
+    function CustomRelatedProducts(props: UseRelatedProductsProps) {
+      const { recommendations } = useRelatedProducts(props);
+
+      return (
+        <ul>
+          {recommendations.map((recommendation) => (
+            <li key={recommendation.objectID}>{recommendation.objectID}</li>
+          ))}
+        </ul>
+      );
+    }
+
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <CustomRelatedProducts {...widgetParams} />
+      </InstantSearch>
+    );
+  },
   createFrequentlyBoughtTogetherConnectorTests: ({
     instantSearchOptions,
     widgetParams,
@@ -325,6 +347,7 @@ const testSetups: TestSetupsMap<TestSuites> = {
       props: UseFrequentlyBoughtTogetherProps
     ) {
       const { recommendations } = useFrequentlyBoughtTogether(props);
+
       return (
         <ul>
           {recommendations.map((recommendation) => (
@@ -337,7 +360,6 @@ const testSetups: TestSetupsMap<TestSuites> = {
     render(
       <InstantSearch {...instantSearchOptions}>
         <CustomFrequentlyBoughtTogether {...widgetParams} />
-        <GlobalErrorSwallower />
       </InstantSearch>
     );
   },
@@ -360,12 +382,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createNumericMenuConnectorTests: { act },
   createRatingMenuConnectorTests: { act },
   createToggleRefinementConnectorTests: { act },
-  createRelatedProductsConnectorTests: {
-    act,
-    skippedTests: {
-      options: true,
-    },
-  },
+  createRelatedProductsConnectorTests: { act },
   createFrequentlyBoughtTogetherConnectorTests: { act },
 };
 
@@ -376,9 +393,3 @@ describe('Common connector tests (React InstantSearch)', () => {
     testOptions,
   });
 });
-
-function GlobalErrorSwallower() {
-  useInstantSearch({ catchError: true });
-
-  return null;
-}

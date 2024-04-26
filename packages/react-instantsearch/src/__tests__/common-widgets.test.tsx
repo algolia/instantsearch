@@ -25,6 +25,8 @@ import {
   ToggleRefinement,
   SortBy,
   Stats,
+  RelatedProducts,
+  FrequentlyBoughtTogether,
 } from '..';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -310,9 +312,20 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
-  createFrequentlyBoughtTogetherTests() {
-    throw new Error(
-      'FrequentlyBoughtTogether is not implemented in React InstantSearch yet'
+  createRelatedProductsWidgetTests({ instantSearchOptions, widgetParams }) {
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <RelatedProducts {...widgetParams} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+  },
+  createFrequentlyBoughtTogetherTests({ instantSearchOptions, widgetParams }) {
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <FrequentlyBoughtTogether {...widgetParams} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
     );
   },
 };
@@ -346,12 +359,8 @@ const testOptions: TestOptionsMap<TestSuites> = {
       'NumericMenu widget common tests': true,
     },
   },
-  createFrequentlyBoughtTogetherTests: {
-    act,
-    skippedTests: {
-      'FrequentlyBoughtTogether widget common tests': true,
-    },
-  },
+  createRelatedProductsWidgetTests: { act },
+  createFrequentlyBoughtTogetherTests: { act },
 };
 
 /**

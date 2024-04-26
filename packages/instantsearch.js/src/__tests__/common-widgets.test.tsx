@@ -25,6 +25,7 @@ import {
   stats,
   ratingMenu,
   numericMenu,
+  relatedProducts,
   frequentlyBoughtTogether,
 } from '../widgets';
 
@@ -480,37 +481,32 @@ const testSetups: TestSetupsMap<TestSuites> = {
       })
       .start();
   },
+  createRelatedProductsWidgetTests({ instantSearchOptions, widgetParams }) {
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        relatedProducts({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
   createFrequentlyBoughtTogetherTests({ instantSearchOptions, widgetParams }) {
-    const templatesMap: Parameters<
-      typeof frequentlyBoughtTogether
-    >[0]['templates'] = {
-      empty: (_, { html }) => html`No results`,
-      header: (_, { html }) => html`Frequently bought together`,
-      item: (hit, { html }) => html`${hit.objectID}`,
-    };
-
-    const templates = (
-      Object.keys(widgetParams.templates || {}) as Array<
-        keyof typeof templatesMap
-      >
-    ).reduce(
-      (acc, templateKey) => ({
-        ...acc,
-        [templateKey]: templatesMap[templateKey],
-      }),
-      {}
-    );
-
     instantsearch(instantSearchOptions)
       .addWidgets([
         frequentlyBoughtTogether({
           container: document.body.appendChild(document.createElement('div')),
           ...widgetParams,
-          templates,
         }),
       ])
       .on('error', () => {
-        /**
+        /*
          * prevent rethrowing InstantSearch errors, so tests can be asserted.
          * IRL this isn't needed, as the error doesn't stop execution.
          */
@@ -542,6 +538,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createSortByWidgetTests: undefined,
   createStatsWidgetTests: undefined,
   createNumericMenuWidgetTests: undefined,
+  createRelatedProductsWidgetTests: undefined,
   createFrequentlyBoughtTogetherTests: undefined,
 };
 

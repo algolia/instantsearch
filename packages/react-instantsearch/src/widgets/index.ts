@@ -12,6 +12,7 @@ export * from './Pagination';
 export * from './PoweredBy';
 export * from './RangeInput';
 export * from './RefinementList';
+export * from './RelatedProducts';
 export * from './SearchBox';
 export * from './Snippet';
 export * from './SortBy';
