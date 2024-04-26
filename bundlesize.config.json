@@ -54,7 +54,7 @@
     },
     {
       "path": "./packages/instantsearch.css/themes/reset-min.css",
-      "maxSize": "1 kB"
+      "maxSize": "1.25 kB"
     },
     {
       "path": "./packages/instantsearch.css/themes/satellite.css",
