@@ -22,6 +22,7 @@ export * from './connectors/usePoweredBy';
 export * from './connectors/useQueryRules';
 export * from './connectors/useRange';
 export * from './connectors/useRefinementList';
+export * from './connectors/useRelatedProducts';
 export * from './connectors/useSearchBox';
 export * from './connectors/useSortBy';
 export * from './connectors/useStats';

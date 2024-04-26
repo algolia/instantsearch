@@ -20,6 +20,7 @@ import {
   useConnector,
   useToggleRefinement,
   useCurrentRefinements,
+  useRelatedProducts,
 } from '..';
 
 import type {
@@ -32,6 +33,7 @@ import type {
   UsePaginationProps,
   UseRefinementListProps,
   UseToggleRefinementProps,
+  UseRelatedProductsProps,
 } from '..';
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
 import type {
@@ -313,7 +315,28 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
-  createRelatedProductsConnectorTests: () => {},
+  createRelatedProductsConnectorTests: ({
+    instantSearchOptions,
+    widgetParams,
+  }) => {
+    function CustomRelatedProducts(props: UseRelatedProductsProps) {
+      const { recommendations } = useRelatedProducts(props);
+
+      return (
+        <ul>
+          {recommendations.map((recommendation) => (
+            <li key={recommendation.objectID}>{recommendation.objectID}</li>
+          ))}
+        </ul>
+      );
+    }
+
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <CustomRelatedProducts {...widgetParams} />
+      </InstantSearch>
+    );
+  },
   createFrequentlyBoughtTogetherConnectorTests: () => {},
 };
 
@@ -334,12 +357,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createNumericMenuConnectorTests: { act },
   createRatingMenuConnectorTests: { act },
   createToggleRefinementConnectorTests: { act },
-  createRelatedProductsConnectorTests: {
-    act,
-    skippedTests: {
-      options: true,
-    },
-  },
+  createRelatedProductsConnectorTests: { act },
   createFrequentlyBoughtTogetherConnectorTests: {
     act,
     skippedTests: {
