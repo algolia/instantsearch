@@ -29,7 +29,7 @@ type Banner = NonNullable<
   NonNullable<
     Required<SearchResults<Hit>['renderingContent']>
   >['widgets']['banners']
->[0];
+>[number];
 
 export type HitsRenderState<THit extends BaseHit = BaseHit> = {
   /**
