@@ -341,6 +341,7 @@ const testSetups = {
   },
   createRelatedProductsConnectorTests: () => {},
   createFrequentlyBoughtTogetherConnectorTests: () => {},
+  createTrendingItemsConnectorTests: () => {},
 };
 
 function createCustomWidget({
@@ -421,6 +422,11 @@ const testOptions = {
     },
   },
   createFrequentlyBoughtTogetherConnectorTests: {
+    skippedTests: {
+      options: true,
+    },
+  },
+  createTrendingItemsConnectorTests: {
     skippedTests: {
       options: true,
     },
