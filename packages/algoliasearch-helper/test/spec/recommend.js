@@ -19,6 +19,10 @@ describe('recommend()', () => {
       $$id: 1,
       objectID: 'A0E20000000279B',
     });
+    helper.addFrequentlyBoughtTogether({
+      $$id: 1,
+      objectID: 'A0E20000000279C',
+    });
     helper.addTrendingFacets({ $$id: 2, facetName: 'brand' });
 
     // eslint-disable-next-line no-warning-comments
@@ -28,8 +32,10 @@ describe('recommend()', () => {
       // As it also includes '_state' and '_rawResults'
       expect(Object.keys(results)).toHaveLength(4);
 
-      expect(results[1]).toBe(testData.response.results[0]);
-      expect(results[2]).toBe(testData.response.results[1]);
+      // This one should be sorted
+      var hits = testData.response.results[0].hits;
+      expect(results[1]).toEqual([hits[1], hits[0], hits[2]]);
+      expect(results[2]).toBe(testData.response.results[2]);
 
       var state = event.recommend.state;
       expect(state.params).toEqual(testData.recommendParams.params);
@@ -44,6 +50,11 @@ describe('recommend()', () => {
         indexName: 'indexName',
         model: 'bought-together',
         objectID: 'A0E20000000279B',
+      },
+      {
+        indexName: 'indexName',
+        model: 'bought-together',
+        objectID: 'A0E20000000279C',
       },
       { indexName: 'indexName', model: 'trending-facets', facetName: 'brand' },
     ]);
