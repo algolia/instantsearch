@@ -17,11 +17,7 @@ const FrequentlyBoughtTogether = createFrequentlyBoughtTogetherComponent({
 });
 
 const ItemComponent: FrequentlyBoughtTogetherProps<RecordWithObjectID>['itemComponent'] =
-  ({ item, ...itemProps }) => (
-    <li {...itemProps}>
-      <div>{item.objectID}</div>
-    </li>
-  );
+  ({ item }) => <div>{item.objectID}</div>;
 
 describe('FrequentlyBoughtTogether', () => {
   test('renders items with default view and header', () => {
@@ -90,7 +86,15 @@ describe('FrequentlyBoughtTogether', () => {
       />
     );
 
-    expect(container).toMatchInlineSnapshot(`<div />`);
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        <section
+          class="ais-FrequentlyBoughtTogether ais-FrequentlyBoughtTogether--empty"
+        >
+          No results
+        </section>
+      </div>
+    `);
   });
 
   test('renders custom header', () => {
@@ -180,11 +184,9 @@ describe('FrequentlyBoughtTogether', () => {
               <li
                 class="ais-FrequentlyBoughtTogether-item"
               >
-                <li>
-                  <div>
-                    1
-                  </div>
-                </li>
+                <div>
+                  1
+                </div>
               </li>
             </ol>
           </div>
@@ -206,9 +208,13 @@ describe('FrequentlyBoughtTogether', () => {
 
     expect(container).toMatchInlineSnapshot(`
       <div>
-        <div>
-          My custom fallback
-        </div>
+        <section
+          class="ais-FrequentlyBoughtTogether ais-FrequentlyBoughtTogether--empty"
+        >
+          <div>
+            My custom fallback
+          </div>
+        </section>
       </div>
     `);
   });

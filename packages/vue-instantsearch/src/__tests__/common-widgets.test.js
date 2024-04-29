@@ -503,6 +503,14 @@ const testSetups = {
 
     await nextTick();
   },
+  createRelatedProductsWidgetTests() {
+    throw new Error('RelatedProduct is not supported in Vue InstantSearch');
+  },
+  createFrequentlyBoughtTogetherTests() {
+    throw new Error(
+      'FrequentlyBoughtTogether is not supported in Vue InstantSearch'
+    );
+  },
 };
 
 const testOptions = {
@@ -525,6 +533,14 @@ const testOptions = {
   },
   createSortByWidgetTests: undefined,
   createStatsWidgetTests: undefined,
+  createRelatedProductsWidgetTests: {
+    skippedTests: {
+      'RelatedProducts widget common tests': true,
+    },
+  },
+  createFrequentlyBoughtTogetherTests: {
+    skippedTests: { 'FrequentlyBoughtTogether widget common tests': true },
+  },
 };
 
 describe('Common widget tests (Vue InstantSearch)', () => {

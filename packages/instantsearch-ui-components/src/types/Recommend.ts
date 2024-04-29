@@ -6,6 +6,10 @@ export type RecommendClassNames = {
    */
   root: string;
   /**
+   * Class names to apply to the root element without results
+   */
+  emptyRoot: string;
+  /**
    * Class names to apply to the title element
    */
   title: string;
@@ -55,7 +59,7 @@ export type RecommendComponentProps<
   TObject,
   TComponentProps extends Record<string, unknown> = Record<string, unknown>
 > = {
-  itemComponent: (
+  itemComponent?: (
     props: RecommendItemComponentProps<RecordWithObjectID<TObject>> &
       TComponentProps
   ) => JSX.Element;

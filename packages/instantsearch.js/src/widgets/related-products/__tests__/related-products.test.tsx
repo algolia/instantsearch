@@ -3,21 +3,23 @@
  */
 /** @jsx h */
 import {
-  createRecommendResponse,
   createSearchClient,
+  createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import { wait } from '@instantsearch/testutils';
+import { wait } from '@instantsearch/testutils/wait';
 import { h } from 'preact';
 
 import instantsearch from '../../../index.es';
-import frequentlyBoughtTogether from '../frequently-bought-together';
+import relatedProducts from '../related-products';
+
+import type { SearchClient } from 'instantsearch.js';
 
 beforeEach(() => {
   document.body.innerHTML = '';
 });
 
-describe('frequentlyBoughtTogether', () => {
+describe('relatedProducts', () => {
   describe('options', () => {
     test('throws without a `container`', () => {
       expect(() => {
@@ -29,7 +31,7 @@ describe('frequentlyBoughtTogether', () => {
         });
 
         search.addWidgets([
-          frequentlyBoughtTogether({
+          relatedProducts({
             // @ts-expect-error
             container: undefined,
           }),
@@ -37,14 +39,14 @@ describe('frequentlyBoughtTogether', () => {
       }).toThrowErrorMatchingInlineSnapshot(`
         "The \`container\` option is required.
 
-        See documentation: https://www.algolia.com/doc/api-reference/widgets/frequently-bought-together/js/"
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/related-products/js/"
       `);
     });
 
     test('adds custom CSS classes', async () => {
       const container = document.createElement('div');
       const searchClient = createMockedSearchClient();
-      const options: Parameters<typeof frequentlyBoughtTogether>[0] = {
+      const options: Parameters<typeof relatedProducts>[0] = {
         container,
         objectIDs: ['1'],
         cssClasses: {
@@ -58,41 +60,42 @@ describe('frequentlyBoughtTogether', () => {
       };
 
       const search = instantsearch({ indexName: 'indexName', searchClient });
-      const widget = frequentlyBoughtTogether(options);
+      const relatedProductsWidget = relatedProducts(options);
 
-      search.addWidgets([widget]);
+      search.addWidgets([relatedProductsWidget]);
 
       search.start();
 
       await wait(0);
 
+      expect(container.querySelector('.ais-RelatedProducts')).toHaveClass(
+        'ROOT'
+      );
+      expect(container.querySelector('.ais-RelatedProducts-title')).toHaveClass(
+        'TITLE'
+      );
       expect(
-        container.querySelector('.ais-FrequentlyBoughtTogether')
-      ).toHaveClass('ROOT');
-      expect(
-        container.querySelector('.ais-FrequentlyBoughtTogether-title')
-      ).toHaveClass('TITLE');
-      expect(
-        container.querySelector('.ais-FrequentlyBoughtTogether-container')
+        container.querySelector('.ais-RelatedProducts-container')
       ).toHaveClass('CONTAINER');
-      expect(
-        container.querySelector('.ais-FrequentlyBoughtTogether-list')
-      ).toHaveClass('LIST');
-      expect(
-        container.querySelector('.ais-FrequentlyBoughtTogether-item')
-      ).toHaveClass('ITEM');
+      expect(container.querySelector('.ais-RelatedProducts-list')).toHaveClass(
+        'LIST'
+      );
+      expect(container.querySelector('.ais-RelatedProducts-item')).toHaveClass(
+        'ITEM'
+      );
 
-      search
-        .removeWidgets([widget])
-        .addWidgets([
-          frequentlyBoughtTogether({ ...options, maxRecommendations: 0 }),
-        ]);
+      search.removeWidgets([relatedProductsWidget]);
+
+      search.addWidgets([
+        relatedProducts({ ...options, maxRecommendations: 0 }),
+      ]);
 
       await wait(0);
 
-      expect(
-        container.querySelector('.ais-FrequentlyBoughtTogether')
-      ).toHaveClass('ROOT', 'EMPTY_ROOT');
+      expect(container.querySelector('.ais-RelatedProducts')).toHaveClass(
+        'ROOT',
+        'EMPTY_ROOT'
+      );
     });
   });
 
@@ -100,21 +103,22 @@ describe('frequentlyBoughtTogether', () => {
     test('renders default templates', async () => {
       const container = document.createElement('div');
       const searchClient = createMockedSearchClient();
-      const options: Parameters<typeof frequentlyBoughtTogether>[0] = {
+      const options: Parameters<typeof relatedProducts>[0] = {
         container,
         objectIDs: ['1'],
       };
 
       const search = instantsearch({ indexName: 'indexName', searchClient });
-      const widget = frequentlyBoughtTogether(options);
+      const relatedProductsWidget = relatedProducts(options);
 
-      search.addWidgets([widget]);
+      search.addWidgets([relatedProductsWidget]);
 
       // @MAJOR Once Hogan.js and string-based templates are removed,
       // `search.start()` can be moved to the test body and the following
       // assertion can go away.
       expect(async () => {
         search.start();
+
         await wait(0);
       }).not.toWarnDev();
 
@@ -123,28 +127,28 @@ describe('frequentlyBoughtTogether', () => {
       expect(container).toMatchInlineSnapshot(`
         <div>
           <section
-            class="ais-FrequentlyBoughtTogether"
+            class="ais-RelatedProducts"
           >
             <h3
-              class="ais-FrequentlyBoughtTogether-title"
+              class="ais-RelatedProducts-title"
             >
-              Frequently bought together
+              Related products
             </h3>
             <div
-              class="ais-FrequentlyBoughtTogether-container"
+              class="ais-RelatedProducts-container"
             >
               <ol
-                class="ais-FrequentlyBoughtTogether-list"
+                class="ais-RelatedProducts-list"
               >
                 <li
-                  class="ais-FrequentlyBoughtTogether-item"
+                  class="ais-RelatedProducts-item"
                 >
                   {
           "objectID": "1"
         }
                 </li>
                 <li
-                  class="ais-FrequentlyBoughtTogether-item"
+                  class="ais-RelatedProducts-item"
                 >
                   {
           "objectID": "2"
@@ -156,18 +160,18 @@ describe('frequentlyBoughtTogether', () => {
         </div>
       `);
 
-      search
-        .removeWidgets([widget])
-        .addWidgets([
-          frequentlyBoughtTogether({ ...options, maxRecommendations: 0 }),
-        ]);
+      search.removeWidgets([relatedProductsWidget]);
+
+      search.addWidgets([
+        relatedProducts({ ...options, maxRecommendations: 0 }),
+      ]);
 
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
         <div>
           <section
-            class="ais-FrequentlyBoughtTogether ais-FrequentlyBoughtTogether--empty"
+            class="ais-RelatedProducts ais-RelatedProducts--empty"
           >
             No results
           </section>
@@ -178,17 +182,17 @@ describe('frequentlyBoughtTogether', () => {
     test('renders with templates using `html`', async () => {
       const container = document.createElement('div');
       const searchClient = createMockedSearchClient();
-      const options: Parameters<typeof frequentlyBoughtTogether>[0] = {
+      const options: Parameters<typeof relatedProducts>[0] = {
         container,
         objectIDs: ['1'],
         templates: {
           header({ recommendations, cssClasses }, { html }) {
             return html`<h4 class="${cssClasses.title}">
-              Frequently bought together (${recommendations.length})
+              Related products (${recommendations.length})
             </h4>`;
           },
-          item(hit, { html }) {
-            return html`<p>${hit.objectID}</p>`;
+          item(item, { html }) {
+            return html`<p>${item.objectID}</p>`;
           },
           empty(_, { html }) {
             return html`<p>No recommendations.</p>`;
@@ -197,9 +201,10 @@ describe('frequentlyBoughtTogether', () => {
       };
 
       const search = instantsearch({ indexName: 'indexName', searchClient });
-      const widget = frequentlyBoughtTogether(options);
+      const relatedProductsWidget = relatedProducts(options);
 
-      search.addWidgets([widget]);
+      search.addWidgets([relatedProductsWidget]);
+
       search.start();
 
       await wait(0);
@@ -207,30 +212,30 @@ describe('frequentlyBoughtTogether', () => {
       expect(container).toMatchInlineSnapshot(`
         <div>
           <section
-            class="ais-FrequentlyBoughtTogether"
+            class="ais-RelatedProducts"
           >
             <h4
-              class="ais-FrequentlyBoughtTogether-title"
+              class="ais-RelatedProducts-title"
             >
-              Frequently bought together (
+              Related products (
               2
               )
             </h4>
             <div
-              class="ais-FrequentlyBoughtTogether-container"
+              class="ais-RelatedProducts-container"
             >
               <ol
-                class="ais-FrequentlyBoughtTogether-list"
+                class="ais-RelatedProducts-list"
               >
                 <li
-                  class="ais-FrequentlyBoughtTogether-item"
+                  class="ais-RelatedProducts-item"
                 >
                   <p>
                     1
                   </p>
                 </li>
                 <li
-                  class="ais-FrequentlyBoughtTogether-item"
+                  class="ais-RelatedProducts-item"
                 >
                   <p>
                     2
@@ -242,11 +247,10 @@ describe('frequentlyBoughtTogether', () => {
         </div>
       `);
 
-      search.removeWidgets([widget]).addWidgets([
-        frequentlyBoughtTogether({
-          ...options,
-          maxRecommendations: 0,
-        }),
+      search.removeWidgets([relatedProductsWidget]);
+
+      search.addWidgets([
+        relatedProducts({ ...options, maxRecommendations: 0 }),
       ]);
 
       await wait(0);
@@ -254,7 +258,7 @@ describe('frequentlyBoughtTogether', () => {
       expect(container).toMatchInlineSnapshot(`
         <div>
           <section
-            class="ais-FrequentlyBoughtTogether ais-FrequentlyBoughtTogether--empty"
+            class="ais-RelatedProducts ais-RelatedProducts--empty"
           >
             <p>
               No recommendations.
@@ -267,19 +271,19 @@ describe('frequentlyBoughtTogether', () => {
     test('renders with templates using JSX', async () => {
       const container = document.createElement('div');
       const searchClient = createMockedSearchClient();
-      const options: Parameters<typeof frequentlyBoughtTogether>[0] = {
+      const options: Parameters<typeof relatedProducts>[0] = {
         container,
         objectIDs: ['1'],
         templates: {
           header({ recommendations, cssClasses }) {
             return (
               <h4 className={cssClasses.title}>
-                Frequently bought together ({recommendations.length})
+                Related products ({recommendations.length})
               </h4>
             );
           },
-          item(hit) {
-            return <p>{hit.objectID}</p>;
+          item(item) {
+            return <p>{item.objectID}</p>;
           },
           empty() {
             return <p>No recommendations.</p>;
@@ -288,9 +292,10 @@ describe('frequentlyBoughtTogether', () => {
       };
 
       const search = instantsearch({ indexName: 'indexName', searchClient });
-      const widget = frequentlyBoughtTogether(options);
+      const relatedProductsWidget = relatedProducts(options);
 
-      search.addWidgets([widget]);
+      search.addWidgets([relatedProductsWidget]);
+
       search.start();
 
       await wait(0);
@@ -298,30 +303,30 @@ describe('frequentlyBoughtTogether', () => {
       expect(container).toMatchInlineSnapshot(`
         <div>
           <section
-            class="ais-FrequentlyBoughtTogether"
+            class="ais-RelatedProducts"
           >
             <h4
-              class="ais-FrequentlyBoughtTogether-title"
+              class="ais-RelatedProducts-title"
             >
-              Frequently bought together (
+              Related products (
               2
               )
             </h4>
             <div
-              class="ais-FrequentlyBoughtTogether-container"
+              class="ais-RelatedProducts-container"
             >
               <ol
-                class="ais-FrequentlyBoughtTogether-list"
+                class="ais-RelatedProducts-list"
               >
                 <li
-                  class="ais-FrequentlyBoughtTogether-item"
+                  class="ais-RelatedProducts-item"
                 >
                   <p>
                     1
                   </p>
                 </li>
                 <li
-                  class="ais-FrequentlyBoughtTogether-item"
+                  class="ais-RelatedProducts-item"
                 >
                   <p>
                     2
@@ -333,11 +338,10 @@ describe('frequentlyBoughtTogether', () => {
         </div>
       `);
 
-      search.removeWidgets([widget]).addWidgets([
-        frequentlyBoughtTogether({
-          ...options,
-          maxRecommendations: 0,
-        }),
+      search.removeWidgets([relatedProductsWidget]);
+
+      search.addWidgets([
+        relatedProducts({ ...options, maxRecommendations: 0 }),
       ]);
 
       await wait(0);
@@ -345,7 +349,7 @@ describe('frequentlyBoughtTogether', () => {
       expect(container).toMatchInlineSnapshot(`
         <div>
           <section
-            class="ais-FrequentlyBoughtTogether ais-FrequentlyBoughtTogether--empty"
+            class="ais-RelatedProducts ais-RelatedProducts--empty"
           >
             <p>
               No recommendations.
@@ -355,26 +359,26 @@ describe('frequentlyBoughtTogether', () => {
       `);
     });
   });
-
-  function createMockedSearchClient() {
-    return createSearchClient({
-      getRecommendations: jest.fn((requests) =>
-        Promise.resolve(
-          createRecommendResponse(
-            // @ts-ignore
-            // `request` will be implicitly typed as any in type-check:v3
-            // since `getRecommendations` is not available there
-            requests.map((request) => {
-              return createSingleSearchResponse({
-                hits:
-                  request.maxRecommendations === 0
-                    ? []
-                    : [{ objectID: '1' }, { objectID: '2' }],
-              });
-            })
-          )
-        )
-      ),
-    });
-  }
 });
+
+function createMockedSearchClient() {
+  return createSearchClient({
+    getRecommendations: jest.fn((requests) =>
+      Promise.resolve(
+        createMultiSearchResponse(
+          // @ts-ignore
+          // `request` will be implicitly typed as `any` in type-check:v3
+          // since `getRecommendations` is not available there
+          ...requests.map((request) => {
+            return createSingleSearchResponse<any>({
+              hits:
+                request.maxRecommendations === 0
+                  ? []
+                  : [{ objectID: '1' }, { objectID: '2' }],
+            });
+          })
+        )
+      )
+    ) as SearchClient['getRecommendations'],
+  });
+}
