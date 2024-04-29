@@ -18,7 +18,7 @@ describe('addParams', () => {
     expect(recommendParameters.params).toEqual([params1, params2]);
   });
 
-  test('replaces params for the same $$id', () => {
+  test('can have params with the same $$id', () => {
     var recommendParameters = new RecommendParameters({
       params: [params1, params2],
     });
@@ -33,8 +33,12 @@ describe('addParams', () => {
     };
 
     recommendParameters = recommendParameters.addParams(params1Updated);
-    expect(recommendParameters.params).toHaveLength(2);
-    expect(recommendParameters.params).toEqual([params1Updated, params2]);
+    expect(recommendParameters.params).toHaveLength(3);
+    expect(recommendParameters.params).toEqual([
+      params1,
+      params2,
+      params1Updated,
+    ]);
   });
 });
 

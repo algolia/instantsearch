@@ -1,6 +1,6 @@
 'use strict';
 
-var RecommendParameters = require('../../../src/SearchParameters');
+var RecommendParameters = require('../../../src/RecommendParameters');
 
 module.exports = getData;
 
@@ -9,7 +9,7 @@ function getData() {
     results: [
       {
         exhaustiveNbHits: true,
-        ExhaustiveFacetsCount: false,
+        exhaustiveFacetsCount: false,
         hits: [
           {
             _highlightResult: {
@@ -100,8 +100,46 @@ function getData() {
         processingTimeMS: 11,
       },
       {
+        exhaustiveNbHits: true,
+        exhaustiveFacetsCount: false,
+        hits: [
+          {
+            _highlightResult: {
+              brand: {
+                matchLevel: 'none',
+                matchedWords: [],
+                value: 'Gabs',
+              },
+              name: {
+                matchLevel: 'none',
+                matchedWords: [],
+                value: 'Bag “Sabrina“ medium Gabs',
+              },
+            },
+            _score: 40.91,
+            brand: 'Gabs',
+            list_categories: ['Women', 'Bags', 'Shoulder bags'],
+            name: 'Bag “Sabrina“ medium Gabs',
+            objectID: 'A0E200000001WFI',
+            parentID: 'SABRINA',
+            price: {
+              currency: 'EUR',
+              discount_level: -100,
+              discounted_value: 0,
+              on_sales: false,
+              value: 210,
+            },
+          },
+        ],
+        hitsPerPage: 3,
+        nbHits: 3,
+        nbPages: 1,
+        page: 0,
+        processingTimeMS: 11,
+      },
+      {
         exhaustiveNbHits: false,
-        ExhaustiveFacetsCount: false,
+        exhaustiveFacetsCount: false,
         hits: [
           {
             _score: 40.89,
@@ -154,6 +192,11 @@ function getData() {
       {
         $$id: 1,
         objectID: 'A0E20000000279B',
+        model: 'bought-together',
+      },
+      {
+        $$id: 1,
+        objectID: 'A0E20000000279C',
         model: 'bought-together',
       },
       {
