@@ -22,15 +22,19 @@ export type TrendingItemsRenderState<THit extends BaseHit = BaseHit> = {
   recommendations: Array<Hit<THit>>;
 };
 
-export type TrendingItemsConnectorParams<THit extends BaseHit = BaseHit> = {
-  /**
-   * The facet attribute to get recommendations for.
-   */
-  facetName?: string;
-  /**
-   * The facet value to get recommendations for.
-   */
-  facetValue?: string;
+export type TrendingItemsConnectorParams<THit extends BaseHit = BaseHit> = (
+  | {
+      /**
+       * The facet attribute to get recommendations for.
+       */
+      facetName: string;
+      /**
+       * The facet value to get recommendations for.
+       */
+      facetValue: string;
+    }
+  | { facetName?: never; facetValue?: never }
+) & {
   /**
    * The number of recommendations to retrieve.
    */
