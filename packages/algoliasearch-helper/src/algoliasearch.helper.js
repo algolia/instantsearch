@@ -13,6 +13,7 @@ var RecommendResults = require('./RecommendResults');
 var requestBuilder = require('./requestBuilder');
 var SearchParameters = require('./SearchParameters');
 var SearchResults = require('./SearchResults');
+var sortAndMergeRecommendations = require('./utils/sortAndMergeRecommendations');
 var version = require('./version');
 
 /**
@@ -1740,10 +1741,25 @@ AlgoliaSearchHelper.prototype._dispatchRecommendResponse = function (
 
   if (this._currentNbRecommendQueries === 0) this.emit('recommendQueueEmpty');
 
+  var idsMap = {};
+  ids.forEach(function (id, index) {
+    if (!idsMap[id]) idsMap[id] = [];
+
+    idsMap[id].push(index);
+  });
+
   var results = {};
-  content.results.forEach(function (result, index) {
-    var id = ids[index];
-    results[id] = result;
+  Object.keys(idsMap).forEach(function (id) {
+    var indices = idsMap[id];
+    if (indices.length === 1) {
+      results[id] = content.results[indices[0]];
+      return;
+    }
+    results[id] = sortAndMergeRecommendations(
+      indices.map(function (idx) {
+        return content.results[idx].hits;
+      })
+    );
   });
 
   states.forEach(function (s) {
