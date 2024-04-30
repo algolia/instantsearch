@@ -63,11 +63,7 @@ export function Hits<THit extends BaseHit = BaseHit>({
   bannerComponent: BannerComponent,
   ...props
 }: HitsProps<THit>) {
-  const {
-    hits,
-    banner: bannerData,
-    sendEvent,
-  } = useHits<THit>(
+  const { hits, banner, sendEvent } = useHits<THit>(
     { escapeHTML, transformItems },
     { $$widgetType: 'ais.hits' }
   );
@@ -81,8 +77,6 @@ export function Hits<THit extends BaseHit = BaseHit>({
       <HitComponent hit={hit} sendEvent={sendEvent} />
     </li>
   );
-
-  const banner = BannerComponent === false ? undefined : bannerData;
 
   const bannerComponent = (
     BannerComponent === false ? () => null : BannerComponent
