@@ -84,10 +84,9 @@ export function Hits<THit extends BaseHit = BaseHit>({
 
   const banner = BannerComponent === false ? undefined : bannerData;
 
-  const bannerComponent =
-    BannerComponent === false
-      ? undefined
-      : (BannerComponent as HitsUiComponentProps<Hit<THit>>['bannerComponent']);
+  const bannerComponent = (
+    BannerComponent === false ? () => null : BannerComponent
+  ) as HitsUiComponentProps<Hit<THit>>['bannerComponent'];
 
   const uiProps: UiProps<THit> = {
     hits,
