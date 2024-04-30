@@ -1,6 +1,6 @@
 {
   "name": "react-instantsearch-router-nextjs",
-  "version": "7.7.2",
+  "version": "7.7.3",
   "description": "React InstantSearch Router for Next.js",
   "types": "dist/es/index.d.ts",
   "main": "dist/cjs/index.js",
@@ -50,8 +50,8 @@
     "watch:es": "yarn --silent build:es:base --watch"
   },
   "dependencies": {
-    "instantsearch.js": "4.67.0",
-    "react-instantsearch-core": "7.7.2"
+    "instantsearch.js": "4.68.0",
+    "react-instantsearch-core": "7.7.3"
   },
   "devDependencies": {
     "@types/jasmine": "3.3.16",
