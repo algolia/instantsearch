@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.68.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.67.0...instantsearch.js@4.68.0) (2024-04-30)
+
+
+### Bug Fixes
+
+* provide scopedResults when main index has no index name set ([#6161](https://github.com/algolia/instantsearch/issues/6161)) ([cb72e94](https://github.com/algolia/instantsearch/commit/cb72e94dc3c1c9271b847db02348c1850a0ca2b7))
+* **templates:** text nodes with fragment as `rootTagName` ([fb16091](https://github.com/algolia/instantsearch/commit/fb16091859314ebbb2d600b1391e9fb0faebaeb0))
+
+
+### Features
+
+* **hits:** add banner to instantsearch-js hits widget ([#6158](https://github.com/algolia/instantsearch/issues/6158)) ([cfc9016](https://github.com/algolia/instantsearch/commit/cfc9016f1f72c34e2cb34240c5a27a2248b94221))
+* **hits:** return banner from connectHits ([#6130](https://github.com/algolia/instantsearch/issues/6130)) ([5bde60d](https://github.com/algolia/instantsearch/commit/5bde60df53401dc3cdf32b1446ec960ca4060112))
+
+
+
+
+
 # [4.67.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.66.1...instantsearch.js@4.67.0) (2024-04-18)
 
 

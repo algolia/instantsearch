@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.19.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.18.0...algoliasearch-helper@3.19.0) (2024-04-30)
+
+
+### Features
+
+* **hits:** return banner from connectHits ([#6130](https://github.com/algolia/instantsearch/issues/6130)) ([5bde60d](https://github.com/algolia/instantsearch/commit/5bde60df53401dc3cdf32b1446ec960ca4060112))
+
+
+
+
+
 # [3.18.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.17.0...algoliasearch-helper@3.18.0) (2024-04-18)
 
 

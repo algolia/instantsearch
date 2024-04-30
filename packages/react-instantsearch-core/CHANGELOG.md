@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.7.3](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.7.2...react-instantsearch-core@7.7.3) (2024-04-30)
+
+
+### Bug Fixes
+
+* provide scopedResults when main index has no index name set ([#6161](https://github.com/algolia/instantsearch/issues/6161)) ([cb72e94](https://github.com/algolia/instantsearch/commit/cb72e94dc3c1c9271b847db02348c1850a0ca2b7))
+
+
+
+
+
 ## [7.7.2](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.7.1...react-instantsearch-core@7.7.2) (2024-04-18)
 
 **Note:** Version bump only for package react-instantsearch-core
