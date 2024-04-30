@@ -324,6 +324,11 @@ const testSetups: TestSetupsMap<TestSuites> = {
       'FrequentlyBoughtTogether is not implemented in React InstantSearch yet'
     );
   },
+  createTrendingItemsWidgetTests() {
+    throw new Error(
+      'TrendingItems is not implemented in React InstantSearch yet'
+    );
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -360,6 +365,12 @@ const testOptions: TestOptionsMap<TestSuites> = {
     act,
     skippedTests: {
       'FrequentlyBoughtTogether widget common tests': true,
+    },
+  },
+  createTrendingItemsWidgetTests: {
+    act,
+    skippedTests: {
+      'TrendingItems widget common tests': true,
     },
   },
 };
