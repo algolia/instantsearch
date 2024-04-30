@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.16.1](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.16.0...vue-instantsearch@4.16.1) (2024-04-30)
+
+
+### Bug Fixes
+
+* **vue:** avoid passing a proxied object in Configure ([#6166](https://github.com/algolia/instantsearch/issues/6166)) ([93cfd60](https://github.com/algolia/instantsearch/commit/93cfd60f4a4e9517ec942faf8b8e349041e260cb))
+* **vue:** handle multiple children arguments for createElement ([0c99ded](https://github.com/algolia/instantsearch/commit/0c99ded7c4577b8f40b38391c8c10233b42ea948))
+
+
+
+
+
 # [4.16.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.15.0...vue-instantsearch@4.16.0) (2024-04-18)
 
 **Note:** Version bump only for package vue-instantsearch

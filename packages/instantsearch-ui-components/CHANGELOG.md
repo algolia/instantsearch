@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.4.0...instantsearch-ui-components@0.5.0) (2024-04-30)
+
+
+### Bug Fixes
+
+* **templates:** text nodes with fragment as `rootTagName` ([fb16091](https://github.com/algolia/instantsearch/commit/fb16091859314ebbb2d600b1391e9fb0faebaeb0))
+
+
+### Features
+
+* **hits:** add banner to hits UI component ([1b8e1d9](https://github.com/algolia/instantsearch/commit/1b8e1d9680ca141861c715c030448b114b96f435))
+
+
+
+
+
 # [0.4.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.3.0...instantsearch-ui-components@0.4.0) (2024-02-27)
 
 

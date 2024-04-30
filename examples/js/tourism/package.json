@@ -1,6 +1,6 @@
 {
   "name": "example-instantsearch-tourism",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "scripts": {
     "start": "BABEL_ENV=parcel parcel index.html --port 3000",
@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "algoliasearch": "4.23.2",
-    "instantsearch.js": "4.67.0"
+    "instantsearch.js": "4.68.0"
   },
   "devDependencies": {
     "@babel/core": "7.15.5",
