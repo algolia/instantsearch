@@ -12,7 +12,12 @@ import type { UseHitsProps } from 'react-instantsearch-core';
 
 type UiProps<THit extends BaseHit> = Pick<
   HitsUiComponentProps<Hit<THit>>,
-  'hits' | 'sendEvent' | 'itemComponent' | 'emptyComponent'
+  | 'hits'
+  | 'sendEvent'
+  | 'itemComponent'
+  | 'emptyComponent'
+  | 'banner'
+  | 'bannerComponent'
 >;
 
 export type HitsProps<THit extends BaseHit> = Omit<
@@ -23,6 +28,13 @@ export type HitsProps<THit extends BaseHit> = Omit<
     hit: Hit<THit>;
     sendEvent: SendEventForHits;
   }>;
+} & {
+  bannerComponent?:
+    | React.JSXElementConstructor<{
+        banner: Required<HitsUiComponentProps<Hit<THit>>>['banner'];
+        className: string;
+      }>
+    | false;
 } & UseHitsProps<THit>;
 
 // @MAJOR: Move default hit component back to the UI library
@@ -48,9 +60,10 @@ export function Hits<THit extends BaseHit = BaseHit>({
   escapeHTML,
   transformItems,
   hitComponent: HitComponent = DefaultHitComponent,
+  bannerComponent: BannerComponent,
   ...props
 }: HitsProps<THit>) {
-  const { hits, sendEvent } = useHits<THit>(
+  const { hits, banner, sendEvent } = useHits<THit>(
     { escapeHTML, transformItems },
     { $$widgetType: 'ais.hits' }
   );
@@ -65,10 +78,16 @@ export function Hits<THit extends BaseHit = BaseHit>({
     </li>
   );
 
+  const bannerComponent = (
+    BannerComponent === false ? () => null : BannerComponent
+  ) as HitsUiComponentProps<Hit<THit>>['bannerComponent'];
+
   const uiProps: UiProps<THit> = {
     hits,
     sendEvent,
     itemComponent,
+    banner,
+    bannerComponent,
   };
 
   return <HitsUiComponent {...props} {...uiProps} />;
