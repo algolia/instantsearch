@@ -76,6 +76,11 @@ describe('widgets', () => {
           "name": "CurrentRefinements",
         },
         {
+          "$$type": "ais.frequentlyBoughtTogether",
+          "$$widgetType": "ais.frequentlyBoughtTogether",
+          "name": "FrequentlyBoughtTogether",
+        },
+        {
           "$$type": "ais.hierarchicalMenu",
           "$$widgetType": "ais.hierarchicalMenu",
           "name": "HierarchicalMenu",
