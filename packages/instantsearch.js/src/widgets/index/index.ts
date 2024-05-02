@@ -758,7 +758,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
     dispose() {
       localWidgets.forEach((widget) => {
-        if (widget.dispose) {
+        if (widget.dispose && helper) {
           // The dispose function is always called once the instance is started
           // (it's an effect of `removeWidgets`). The index is initialized and
           // the Helper is available. We don't care about the return value of
@@ -766,8 +766,8 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           // because we want to keep the widgets on the instance, to allow idempotent
           // operations on `add` & `remove`.
           widget.dispose({
-            helper: helper!,
-            state: helper!.state,
+            helper,
+            state: helper.state,
             parent: this,
           });
         }

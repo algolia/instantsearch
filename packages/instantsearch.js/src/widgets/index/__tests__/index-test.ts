@@ -3155,6 +3155,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
       expect(mainHelper.derivedHelpers).toHaveLength(0);
     });
+
+    it('does not crash when calling `dispose` before `init`', () => {
+      const instance = index({ indexName: 'indexName' });
+
+      instance.addWidgets([virtualSearchBox({})]);
+
+      expect(() => {
+        instance.dispose(createDisposeOptions());
+      }).not.toThrow();
+    });
   });
 
   describe('getWidgetState', () => {
