@@ -41,7 +41,7 @@ export function createOptionsTests(
       const options: SetupOptions<RelatedProductsConnectorSetup> = {
         instantSearchOptions: { indexName: 'indexName', searchClient },
         widgetParams: {
-          objectIDs: ['1'],
+          objectIDs: ['1', '2'],
           maxRecommendations: 2,
           threshold: 3,
           fallbackParameters: { facetFilters: ['test1'] },
@@ -55,6 +55,13 @@ export function createOptionsTests(
         expect.arrayContaining([
           expect.objectContaining({
             objectID: '1',
+            maxRecommendations: 2,
+            threshold: 3,
+            fallbackParameters: { facetFilters: ['test1'] },
+            queryParameters: { analytics: true },
+          }),
+          expect.objectContaining({
+            objectID: '2',
             maxRecommendations: 2,
             threshold: 3,
             fallbackParameters: { facetFilters: ['test1'] },
