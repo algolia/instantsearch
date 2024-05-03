@@ -22,6 +22,7 @@ import {
   useCurrentRefinements,
   useRelatedProducts,
   useFrequentlyBoughtTogether,
+  useTrendingItems,
 } from '..';
 
 import type {
@@ -36,6 +37,7 @@ import type {
   UseToggleRefinementProps,
   UseRelatedProductsProps,
   UseFrequentlyBoughtTogetherProps,
+  UseTrendingItemsProps,
 } from '..';
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
 import type {
@@ -363,7 +365,28 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
-  createTrendingItemsConnectorTests: () => {},
+  createTrendingItemsConnectorTests: ({
+    instantSearchOptions,
+    widgetParams,
+  }) => {
+    function CustomTrendingItems(props: UseTrendingItemsProps) {
+      const { recommendations } = useTrendingItems(props);
+
+      return (
+        <ul>
+          {recommendations.map((recommendation) => (
+            <li key={recommendation.objectID}>{recommendation.objectID}</li>
+          ))}
+        </ul>
+      );
+    }
+
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <CustomTrendingItems {...widgetParams} />
+      </InstantSearch>
+    );
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -385,12 +408,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createToggleRefinementConnectorTests: { act },
   createRelatedProductsConnectorTests: { act },
   createFrequentlyBoughtTogetherConnectorTests: { act },
-  createTrendingItemsConnectorTests: {
-    act,
-    skippedTests: {
-      options: true,
-    },
-  },
+  createTrendingItemsConnectorTests: { act },
 };
 
 describe('Common connector tests (React InstantSearch)', () => {
