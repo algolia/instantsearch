@@ -67,13 +67,17 @@ RecommendParameters.prototype = {
     );
   },
 
-  _buildQueries: function (indexName) {
-    return this.params.map(function (params) {
-      var query = Object.assign({}, params, { indexName: indexName });
-      delete query.$$id;
+  _buildQueries: function (indexName, cache) {
+    return this.params
+      .filter(function (params) {
+        return cache[params.$$id] === undefined;
+      })
+      .map(function (params) {
+        var query = Object.assign({}, params, { indexName: indexName });
+        delete query.$$id;
 
-      return query;
-    });
+        return query;
+      });
   },
 };
 
