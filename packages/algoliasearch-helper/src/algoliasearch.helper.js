@@ -1751,15 +1751,18 @@ AlgoliaSearchHelper.prototype._dispatchRecommendResponse = function (
   var results = {};
   Object.keys(idsMap).forEach(function (id) {
     var indices = idsMap[id];
+    var firstResult = content.results[indices[0]];
     if (indices.length === 1) {
-      results[id] = content.results[indices[0]];
+      results[id] = firstResult;
       return;
     }
-    results[id] = sortAndMergeRecommendations(
-      indices.map(function (idx) {
-        return content.results[idx].hits;
-      })
-    );
+    results[id] = Object.assign({}, firstResult, {
+      hits: sortAndMergeRecommendations(
+        indices.map(function (idx) {
+          return content.results[idx].hits;
+        })
+      ),
+    });
   });
 
   states.forEach(function (s) {
