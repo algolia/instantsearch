@@ -147,7 +147,7 @@ describe('widgets', () => {
         },
         {
           "$$type": "ais.trendingItems",
-          "$$widgetType": "ais.TrendingItems",
+          "$$widgetType": "ais.trendingItems",
           "name": "TrendingItems",
         },
       ]

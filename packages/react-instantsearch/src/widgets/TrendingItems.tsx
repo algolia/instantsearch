@@ -60,7 +60,7 @@ export function TrendingItems<TItem extends BaseHit = BaseHit>({
       queryParameters,
       transformItems,
     },
-    { $$widgetType: 'ais.TrendingItems' }
+    { $$widgetType: 'ais.trendingItems' }
   );
 
   const uiProps: UiProps<TItem> = {
