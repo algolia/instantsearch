@@ -137,16 +137,17 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
         },
 
         getWidgetParameters(state) {
-          // We only use the first objectID to get the recommendations for
-          // until we implement support for multiple objectIDs in the helper.
-          const objectID = objectIDs[0];
-          return state.addFrequentlyBoughtTogether({
-            objectID,
-            threshold,
-            maxRecommendations,
-            queryParameters,
-            $$id: this.$$id!,
-          });
+          return objectIDs.reduce(
+            (acc, objectID) =>
+              acc.addFrequentlyBoughtTogether({
+                objectID,
+                threshold,
+                maxRecommendations,
+                queryParameters,
+                $$id: this.$$id!,
+              }),
+            state
+          );
         },
       };
     };
