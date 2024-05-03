@@ -59,6 +59,8 @@ export function createOptionsTests(
             threshold: 3,
             fallbackParameters: { facetFilters: ['test1'] },
             queryParameters: { analytics: true },
+            model: 'related-products',
+            indexName: 'indexName',
           }),
           expect.objectContaining({
             objectID: '2',
@@ -66,6 +68,8 @@ export function createOptionsTests(
             threshold: 3,
             fallbackParameters: { facetFilters: ['test1'] },
             queryParameters: { analytics: true },
+            model: 'related-products',
+            indexName: 'indexName',
           }),
         ])
       );
