@@ -136,18 +136,18 @@ const connectRelatedProducts: RelatedProductsConnector =
         },
 
         getWidgetParameters(state) {
-          // We only use the first `objectID` to get the recommendations for
-          // until we implement support for multiple `objectIDs` in the helper.
-          const objectID = objectIDs[0];
-
-          return state.addRelatedProducts({
-            objectID,
-            maxRecommendations,
-            threshold,
-            fallbackParameters,
-            queryParameters,
-            $$id: this.$$id!,
-          });
+          return objectIDs.reduce(
+            (acc, objectID) =>
+              acc.addRelatedProducts({
+                objectID,
+                maxRecommendations,
+                threshold,
+                fallbackParameters,
+                queryParameters,
+                $$id: this.$$id!,
+              }),
+            state
+          );
         },
       };
     };

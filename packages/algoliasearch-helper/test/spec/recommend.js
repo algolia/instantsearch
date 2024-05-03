@@ -34,7 +34,7 @@ describe('recommend()', () => {
 
       // This one should be sorted
       var hits = testData.response.results[0].hits;
-      expect(results[1]).toEqual([hits[1], hits[0], hits[2]]);
+      expect(results[1].hits).toEqual([hits[1], hits[0], hits[2]]);
       expect(results[2]).toBe(testData.response.results[2]);
 
       var state = event.recommend.state;
