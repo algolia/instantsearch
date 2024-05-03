@@ -5,12 +5,11 @@ import { useInstantSearch, useTrendingItems } from 'react-instantsearch-core';
 import type {
   TrendingItemsProps as TrendingItemsUiComponentProps,
   Pragma,
-  RecordWithObjectID,
 } from 'instantsearch-ui-components';
-import type { Hit } from 'instantsearch.js';
+import type { Hit, BaseHit } from 'instantsearch.js';
 import type { UseTrendingItemsProps } from 'react-instantsearch-core';
 
-type UiProps<TItem extends RecordWithObjectID> = Pick<
+type UiProps<TItem extends BaseHit> = Pick<
   TrendingItemsUiComponentProps<TItem>,
   | 'items'
   | 'itemComponent'
@@ -20,7 +19,7 @@ type UiProps<TItem extends RecordWithObjectID> = Pick<
   | 'sendEvent'
 >;
 
-export type TrendingItemsProps<TItem extends RecordWithObjectID> = Omit<
+export type TrendingItemsProps<TItem extends BaseHit> = Omit<
   TrendingItemsUiComponentProps<TItem>,
   keyof UiProps<TItem>
 > &
@@ -35,9 +34,7 @@ const TrendingItemsUiComponent = createTrendingItemsComponent({
   Fragment,
 });
 
-export function TrendingItems<
-  TItem extends RecordWithObjectID = RecordWithObjectID
->({
+export function TrendingItems<TItem extends BaseHit = BaseHit>({
   facetName,
   facetValue,
   maxRecommendations,
