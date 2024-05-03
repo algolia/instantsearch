@@ -82,7 +82,7 @@ describe('connectFrequentlyBoughtTogether', () => {
       const render = () => {};
       const makeWidget = connectFrequentlyBoughtTogether(render);
       const widget = makeWidget({
-        objectIDs: ['1'],
+        objectIDs: ['1', '2'],
         maxRecommendations: 10,
         threshold: 95,
         queryParameters: { userToken: 'token' },
@@ -94,14 +94,23 @@ describe('connectFrequentlyBoughtTogether', () => {
       });
 
       expect(actual).toEqual(
-        new RecommendParameters().addFrequentlyBoughtTogether({
-          // @ts-expect-error
-          $$id: widget.$$id,
-          objectID: '1',
-          maxRecommendations: 10,
-          threshold: 95,
-          queryParameters: { userToken: 'token' },
-        })
+        new RecommendParameters()
+          .addFrequentlyBoughtTogether({
+            // @ts-expect-error
+            $$id: widget.$$id,
+            objectID: '1',
+            maxRecommendations: 10,
+            threshold: 95,
+            queryParameters: { userToken: 'token' },
+          })
+          .addFrequentlyBoughtTogether({
+            // @ts-expect-error
+            $$id: widget.$$id,
+            objectID: '2',
+            maxRecommendations: 10,
+            threshold: 95,
+            queryParameters: { userToken: 'token' },
+          })
       );
     });
   });
