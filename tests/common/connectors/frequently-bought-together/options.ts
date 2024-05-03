@@ -59,12 +59,16 @@ export function createOptionsTests(
             maxRecommendations: 2,
             threshold: 3,
             queryParameters: { analytics: true },
+            model: 'bought-together',
+            indexName: 'indexName',
           }),
           expect.objectContaining({
             objectID: '2',
             maxRecommendations: 2,
             threshold: 3,
             queryParameters: { analytics: true },
+            model: 'bought-together',
+            indexName: 'indexName',
           }),
         ])
       );
