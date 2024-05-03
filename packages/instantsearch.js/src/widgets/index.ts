@@ -47,5 +47,6 @@ export { default as searchBox } from './search-box/search-box';
 export { default as sortBy } from './sort-by/sort-by';
 export { default as stats } from './stats/stats';
 export { default as toggleRefinement } from './toggle-refinement/toggle-refinement';
+export { default as trendingItems } from './trending-items/trending-items';
 export { default as voiceSearch } from './voice-search/voice-search';
 export { default as frequentlyBoughtTogether } from './frequently-bought-together/frequently-bought-together';
