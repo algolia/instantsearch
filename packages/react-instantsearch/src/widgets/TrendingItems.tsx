@@ -1,0 +1,76 @@
+import { createTrendingItemsComponent } from 'instantsearch-ui-components';
+import React, { createElement, Fragment } from 'react';
+import { useInstantSearch, useTrendingItems } from 'react-instantsearch-core';
+
+import type {
+  TrendingItemsProps as TrendingItemsUiComponentProps,
+  Pragma,
+} from 'instantsearch-ui-components';
+import type { Hit, BaseHit } from 'instantsearch.js';
+import type { UseTrendingItemsProps } from 'react-instantsearch-core';
+
+type UiProps<TItem extends BaseHit> = Pick<
+  TrendingItemsUiComponentProps<TItem>,
+  | 'items'
+  | 'itemComponent'
+  | 'headerComponent'
+  | 'fallbackComponent'
+  | 'status'
+  | 'sendEvent'
+>;
+
+export type TrendingItemsProps<TItem extends BaseHit> = Omit<
+  TrendingItemsUiComponentProps<TItem>,
+  keyof UiProps<TItem>
+> &
+  UseTrendingItemsProps & {
+    itemComponent?: TrendingItemsUiComponentProps<TItem>['itemComponent'];
+    headerComponent?: TrendingItemsUiComponentProps<TItem>['headerComponent'];
+    fallbackComponent?: TrendingItemsUiComponentProps<TItem>['fallbackComponent'];
+  };
+
+const TrendingItemsUiComponent = createTrendingItemsComponent({
+  createElement: createElement as Pragma,
+  Fragment,
+});
+
+export function TrendingItems<TItem extends BaseHit = BaseHit>({
+  facetName,
+  facetValue,
+  maxRecommendations,
+  threshold,
+  fallbackParameters,
+  queryParameters,
+  transformItems,
+  itemComponent,
+  headerComponent,
+  fallbackComponent,
+  ...props
+}: TrendingItemsProps<TItem>) {
+  const facetParameters =
+    facetName && facetValue ? { facetName, facetValue } : {};
+
+  const { status } = useInstantSearch();
+  const { recommendations } = useTrendingItems(
+    {
+      ...facetParameters,
+      maxRecommendations,
+      threshold,
+      fallbackParameters,
+      queryParameters,
+      transformItems,
+    },
+    { $$widgetType: 'ais.trendingItems' }
+  );
+
+  const uiProps: UiProps<TItem> = {
+    items: recommendations as Array<Hit<TItem>>,
+    itemComponent,
+    headerComponent,
+    fallbackComponent,
+    status,
+    sendEvent: () => {},
+  };
+
+  return <TrendingItemsUiComponent {...props} {...uiProps} />;
+}

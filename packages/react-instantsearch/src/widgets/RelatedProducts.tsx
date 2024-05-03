@@ -5,12 +5,11 @@ import { useInstantSearch, useRelatedProducts } from 'react-instantsearch-core';
 import type {
   RelatedProductsProps as RelatedProductsUiComponentProps,
   Pragma,
-  RecordWithObjectID,
 } from 'instantsearch-ui-components';
-import type { Hit } from 'instantsearch.js';
+import type { Hit, BaseHit } from 'instantsearch.js';
 import type { UseRelatedProductsProps } from 'react-instantsearch-core';
 
-type UiProps<TItem extends RecordWithObjectID> = Pick<
+type UiProps<TItem extends BaseHit> = Pick<
   RelatedProductsUiComponentProps<TItem>,
   | 'items'
   | 'itemComponent'
@@ -20,7 +19,7 @@ type UiProps<TItem extends RecordWithObjectID> = Pick<
   | 'sendEvent'
 >;
 
-export type RelatedProductsProps<TItem extends RecordWithObjectID> = Omit<
+export type RelatedProductsProps<TItem extends BaseHit> = Omit<
   RelatedProductsUiComponentProps<TItem>,
   keyof UiProps<TItem>
 > &
@@ -35,9 +34,7 @@ const RelatedProductsUiComponent = createRelatedProductsComponent({
   Fragment,
 });
 
-export function RelatedProducts<
-  TItem extends RecordWithObjectID = RecordWithObjectID
->({
+export function RelatedProducts<TItem extends BaseHit = BaseHit>({
   objectIDs,
   maxRecommendations,
   threshold,

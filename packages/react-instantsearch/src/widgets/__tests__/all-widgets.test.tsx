@@ -145,6 +145,11 @@ describe('widgets', () => {
           "$$widgetType": "ais.toggleRefinement",
           "name": "ToggleRefinement",
         },
+        {
+          "$$type": "ais.trendingItems",
+          "$$widgetType": "ais.trendingItems",
+          "name": "TrendingItems",
+        },
       ]
     `);
   });
