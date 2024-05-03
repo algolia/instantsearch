@@ -511,6 +511,9 @@ const testSetups = {
       'FrequentlyBoughtTogether is not supported in Vue InstantSearch'
     );
   },
+  createTrendingItemsWidgetTests() {
+    throw new Error('TrendingItems is not supported in Vue InstantSearch');
+  },
 };
 
 const testOptions = {
@@ -540,6 +543,9 @@ const testOptions = {
   },
   createFrequentlyBoughtTogetherTests: {
     skippedTests: { 'FrequentlyBoughtTogether widget common tests': true },
+  },
+  createTrendingItemsWidgetTests: {
+    skippedTests: { 'TrendingItems widget common tests': true },
   },
 };
 

@@ -328,6 +328,11 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
+  createTrendingItemsWidgetTests() {
+    throw new Error(
+      'TrendingItems is not implemented in React InstantSearch yet'
+    );
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -361,6 +366,12 @@ const testOptions: TestOptionsMap<TestSuites> = {
   },
   createRelatedProductsWidgetTests: { act },
   createFrequentlyBoughtTogetherTests: { act },
+  createTrendingItemsWidgetTests: {
+    act,
+    skippedTests: {
+      'TrendingItems widget common tests': true,
+    },
+  },
 };
 
 /**

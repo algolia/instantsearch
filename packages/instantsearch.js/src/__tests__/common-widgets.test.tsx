@@ -27,6 +27,7 @@ import {
   numericMenu,
   relatedProducts,
   frequentlyBoughtTogether,
+  trendingItems,
 } from '../widgets';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -513,6 +514,27 @@ const testSetups: TestSetupsMap<TestSuites> = {
       })
       .start();
   },
+  createTrendingItemsWidgetTests({ instantSearchOptions, widgetParams }) {
+    const { facetName, facetValue, ...params } = widgetParams;
+    const facetParams =
+      facetName && facetValue ? { facetName, facetValue } : {};
+
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        trendingItems({
+          container: document.body.appendChild(document.createElement('div')),
+          ...facetParams,
+          ...params,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -540,6 +562,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createNumericMenuWidgetTests: undefined,
   createRelatedProductsWidgetTests: undefined,
   createFrequentlyBoughtTogetherTests: undefined,
+  createTrendingItemsWidgetTests: undefined,
 };
 
 describe('Common widget tests (InstantSearch.js)', () => {
