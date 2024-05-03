@@ -27,6 +27,7 @@ import {
   Stats,
   RelatedProducts,
   FrequentlyBoughtTogether,
+  TrendingItems,
 } from '..';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -328,9 +329,16 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
-  createTrendingItemsWidgetTests() {
-    throw new Error(
-      'TrendingItems is not implemented in React InstantSearch yet'
+  createTrendingItemsWidgetTests({ instantSearchOptions, widgetParams }) {
+    const { facetName, facetValue, ...params } = widgetParams;
+    const facetParams =
+      facetName && facetValue ? { facetName, facetValue } : {};
+
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <TrendingItems {...facetParams} {...params} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
     );
   },
 };
@@ -366,12 +374,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   },
   createRelatedProductsWidgetTests: { act },
   createFrequentlyBoughtTogetherTests: { act },
-  createTrendingItemsWidgetTests: {
-    act,
-    skippedTests: {
-      'TrendingItems widget common tests': true,
-    },
-  },
+  createTrendingItemsWidgetTests: { act },
 };
 
 /**

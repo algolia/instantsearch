@@ -18,3 +18,4 @@ export * from './Snippet';
 export * from './SortBy';
 export * from './Stats';
 export * from './ToggleRefinement';
+export * from './TrendingItems';
