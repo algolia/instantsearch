@@ -6,11 +6,11 @@ import {
 import { normalizeSnapshot } from '@instantsearch/testutils';
 import { wait } from '@testing-library/user-event/dist/utils';
 
-import type { FrequentlyBoughtTogetherWidgetSetup } from '.';
+import type { LookingSimilarWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 
 export function createOptionsTests(
-  setup: FrequentlyBoughtTogetherWidgetSetup,
+  setup: LookingSimilarWidgetSetup,
   { act }: Required<TestOptions>
 ) {
   describe('options', () => {
@@ -32,26 +32,26 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-FrequentlyBoughtTogether')
+        document.querySelector('.ais-LookingSimilar')
       ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <section
-          class="ais-FrequentlyBoughtTogether"
+          class="ais-LookingSimilar"
         >
           <h3
-            class="ais-FrequentlyBoughtTogether-title"
+            class="ais-LookingSimilar-title"
           >
-            Frequently bought together
+            Looking similar
           </h3>
           <div
-            class="ais-FrequentlyBoughtTogether-container"
+            class="ais-LookingSimilar-container"
           >
             <ol
-              class="ais-FrequentlyBoughtTogether-list"
+              class="ais-LookingSimilar-list"
             >
               <li
-                class="ais-FrequentlyBoughtTogether-item"
+                class="ais-LookingSimilar-item"
               >
                 {
           "_highlightResult": {
@@ -86,7 +86,7 @@ export function createOptionsTests(
         }
               </li>
               <li
-                class="ais-FrequentlyBoughtTogether-item"
+                class="ais-LookingSimilar-item"
               >
                 {
           "_highlightResult": {
@@ -121,7 +121,7 @@ export function createOptionsTests(
         }
               </li>
               <li
-                class="ais-FrequentlyBoughtTogether-item"
+                class="ais-LookingSimilar-item"
               >
                 {
           "_highlightResult": {
@@ -186,40 +186,40 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-FrequentlyBoughtTogether')
+        document.querySelector('.ais-LookingSimilar')
       ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
         <section
-          class="ais-FrequentlyBoughtTogether"
+          class="ais-LookingSimilar"
         >
           <h3
-            class="ais-FrequentlyBoughtTogether-title"
+            class="ais-LookingSimilar-title"
           >
-            Frequently bought together
+            Looking similar
           </h3>
           <div
-            class="ais-FrequentlyBoughtTogether-container"
+            class="ais-LookingSimilar-container"
           >
             <ol
-              class="ais-FrequentlyBoughtTogether-list"
+              class="ais-LookingSimilar-list"
             >
               <li
-                class="ais-FrequentlyBoughtTogether-item"
+                class="ais-LookingSimilar-item"
               >
                 {
           "objectID": "A0E200000002BLK"
         }
               </li>
               <li
-                class="ais-FrequentlyBoughtTogether-item"
+                class="ais-LookingSimilar-item"
               >
                 {
           "objectID": "A0E200000001WFI"
         }
               </li>
               <li
-                class="ais-FrequentlyBoughtTogether-item"
+                class="ais-LookingSimilar-item"
               >
                 {
           "objectID": "A0E2000000024R1"
@@ -245,6 +245,9 @@ export function createOptionsTests(
           queryParameters: {
             query: 'regular query',
           },
+          fallbackParameters: {
+            query: 'fallback query',
+          },
           threshold: 80,
           maxRecommendations: 3,
         },
@@ -259,6 +262,9 @@ export function createOptionsTests(
           objectID: 'objectID',
           queryParameters: {
             query: 'regular query',
+          },
+          fallbackParameters: {
+            query: 'fallback query',
           },
           threshold: 80,
           maxRecommendations: 3,
