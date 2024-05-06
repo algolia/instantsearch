@@ -387,6 +387,9 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
+  createLookingSimilarConnectorTests: () => {
+    throw new Error('Not implemented');
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -409,6 +412,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createRelatedProductsConnectorTests: { act },
   createFrequentlyBoughtTogetherConnectorTests: { act },
   createTrendingItemsConnectorTests: { act },
+  createLookingSimilarConnectorTests: { act, skippedTests: { options: true } },
 };
 
 describe('Common connector tests (React InstantSearch)', () => {

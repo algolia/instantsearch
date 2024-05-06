@@ -18,6 +18,7 @@ import {
   connectRelatedProducts,
   connectFrequentlyBoughtTogether,
   connectTrendingItems,
+  connectLookingSimilar,
 } from '../connectors';
 import instantsearch from '../index.es';
 import { refinementList } from '../widgets';
@@ -475,6 +476,32 @@ const testSetups: TestSetupsMap<TestSuites> = {
       })
       .start();
   },
+  createLookingSimilarConnectorTests({ instantSearchOptions, widgetParams }) {
+    const customLookingSimilar = connectLookingSimilar<{
+      container: HTMLElement;
+    }>((renderOptions) => {
+      renderOptions.widgetParams.container.innerHTML = `
+        <ul>${renderOptions.recommendations
+          .map((recommendation) => `<li>${recommendation.objectID}</li>`)
+          .join('')}</ul>
+      `;
+    });
+
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        customLookingSimilar({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -491,6 +518,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createRelatedProductsConnectorTests: undefined,
   createFrequentlyBoughtTogetherConnectorTests: undefined,
   createTrendingItemsConnectorTests: undefined,
+  createLookingSimilarConnectorTests: undefined,
 };
 
 describe('Common connector tests (InstantSearch.js)', () => {
