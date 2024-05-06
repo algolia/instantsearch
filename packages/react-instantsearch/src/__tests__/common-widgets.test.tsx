@@ -341,6 +341,9 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
+  createLookingSimilarTests() {
+    throw new Error('LookingSimilar is not supported in React InstantSearch');
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -375,6 +378,12 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createRelatedProductsWidgetTests: { act },
   createFrequentlyBoughtTogetherTests: { act },
   createTrendingItemsWidgetTests: { act },
+  createLookingSimilarTests: {
+    act,
+    skippedTests: {
+      'LookingSimilar widget common tests': true,
+    },
+  },
 };
 
 /**
