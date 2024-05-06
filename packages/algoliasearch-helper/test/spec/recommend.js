@@ -132,4 +132,51 @@ describe('recommend()', () => {
 
     expect(client.getRecommendations).toHaveBeenCalledTimes(1);
   });
+
+  test('does not re-request for cached queries', () => {
+    var testData =
+      require('../datasets/RecommendParameters/recommend.dataset')();
+
+    var client = {
+      getRecommendations: jest.fn().mockImplementation(() => {
+        return Promise.resolve(testData.response);
+      }),
+    };
+
+    var helper = algoliasearchHelper(client, 'indexName', {});
+
+    helper.addFrequentlyBoughtTogether({
+      $$id: 1,
+      objectID: 'A0E20000000279B',
+    });
+
+    helper.recommend();
+
+    expect(client.getRecommendations).toHaveBeenCalledTimes(1);
+    expect(client.getRecommendations).toHaveBeenLastCalledWith([
+      {
+        indexName: 'indexName',
+        model: 'bought-together',
+        objectID: 'A0E20000000279B',
+      },
+    ]);
+
+    helper.once('recommend:result', () => {
+      helper.addFrequentlyBoughtTogether({
+        $$id: 2,
+        objectID: 'A0E20000000279C',
+      });
+
+      helper.recommend();
+
+      expect(client.getRecommendations).toHaveBeenCalledTimes(2);
+      expect(client.getRecommendations).toHaveBeenLastCalledWith([
+        {
+          indexName: 'indexName',
+          model: 'bought-together',
+          objectID: 'A0E20000000279C',
+        },
+      ]);
+    });
+  });
 });

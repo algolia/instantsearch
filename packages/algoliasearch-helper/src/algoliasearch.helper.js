@@ -142,6 +142,7 @@ function AlgoliaSearchHelper(client, index, options, searchResultsOptions) {
   this._currentNbQueries = 0;
   this._currentNbRecommendQueries = 0;
   this._searchResultsOptions = searchResultsOptions;
+  this.recommendCache = {};
 }
 
 inherits(AlgoliaSearchHelper, EventEmitter);
@@ -1590,6 +1591,8 @@ AlgoliaSearchHelper.prototype._recommend = function () {
     },
   });
 
+  var cache = this.recommendCache;
+
   var derivedQueries = this.derivedHelpers.map(function (derivedHelper) {
     var derivedIndex = derivedHelper.getModifiedState(searchState).index;
     if (!derivedIndex) {
@@ -1622,11 +1625,11 @@ AlgoliaSearchHelper.prototype._recommend = function () {
       },
     });
 
-    return derivedState._buildQueries(derivedIndex);
+    return derivedState._buildQueries(derivedIndex, cache);
   });
 
   var queries = Array.prototype.concat.apply(
-    this.recommendState._buildQueries(index),
+    this.recommendState._buildQueries(index, cache),
     derivedQueries
   );
 
@@ -1741,28 +1744,38 @@ AlgoliaSearchHelper.prototype._dispatchRecommendResponse = function (
 
   if (this._currentNbRecommendQueries === 0) this.emit('recommendQueueEmpty');
 
+  var cache = this.recommendCache;
+
   var idsMap = {};
-  ids.forEach(function (id, index) {
-    if (!idsMap[id]) idsMap[id] = [];
+  ids
+    .filter(function (id) {
+      return cache[id] === undefined;
+    })
+    .forEach(function (id, index) {
+      if (!idsMap[id]) idsMap[id] = [];
 
-    idsMap[id].push(index);
-  });
+      idsMap[id].push(index);
+    });
 
-  var results = {};
   Object.keys(idsMap).forEach(function (id) {
     var indices = idsMap[id];
     var firstResult = content.results[indices[0]];
     if (indices.length === 1) {
-      results[id] = firstResult;
+      cache[id] = firstResult;
       return;
     }
-    results[id] = Object.assign({}, firstResult, {
+    cache[id] = Object.assign({}, firstResult, {
       hits: sortAndMergeRecommendations(
         indices.map(function (idx) {
           return content.results[idx].hits;
         })
       ),
     });
+  });
+
+  var results = {};
+  ids.forEach(function (id) {
+    results[id] = cache[id];
   });
 
   states.forEach(function (s) {
