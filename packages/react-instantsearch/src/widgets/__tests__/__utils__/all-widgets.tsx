@@ -92,7 +92,8 @@ function Widget<TWidget extends SingleWidget>({
       return <widget.Component onSubmit={undefined} {...props} />;
     }
     case 'FrequentlyBoughtTogether':
-    case 'RelatedProducts': {
+    case 'RelatedProducts':
+    case 'LookingSimilar': {
       return <widget.Component objectIDs={['1']} {...props} />;
     }
     default: {

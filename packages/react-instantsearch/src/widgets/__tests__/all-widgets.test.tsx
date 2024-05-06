@@ -150,6 +150,11 @@ describe('widgets', () => {
           "$$widgetType": "ais.trendingItems",
           "name": "TrendingItems",
         },
+        {
+          "$$type": "ais.lookingSimilar",
+          "$$widgetType": "ais.lookingSimilar",
+          "name": "LookingSimilar",
+        },
       ]
     `);
   });
