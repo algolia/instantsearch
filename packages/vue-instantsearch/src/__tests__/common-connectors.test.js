@@ -342,6 +342,7 @@ const testSetups = {
   createRelatedProductsConnectorTests: () => {},
   createFrequentlyBoughtTogetherConnectorTests: () => {},
   createTrendingItemsConnectorTests: () => {},
+  createLookingSimilarConnectorTests: () => {},
 };
 
 function createCustomWidget({
@@ -427,6 +428,11 @@ const testOptions = {
     },
   },
   createTrendingItemsConnectorTests: {
+    skippedTests: {
+      options: true,
+    },
+  },
+  createLookingSimilarConnectorTests: {
     skippedTests: {
       options: true,
     },
