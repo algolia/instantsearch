@@ -514,6 +514,9 @@ const testSetups = {
   createTrendingItemsWidgetTests() {
     throw new Error('TrendingItems is not supported in Vue InstantSearch');
   },
+  createLookingSimilarTests() {
+    throw new Error('LookingSimilar is not supported in Vue InstantSearch');
+  },
 };
 
 const testOptions = {
@@ -546,6 +549,9 @@ const testOptions = {
   },
   createTrendingItemsWidgetTests: {
     skippedTests: { 'TrendingItems widget common tests': true },
+  },
+  createLookingSimilarTests: {
+    skippedTests: { 'LookingSimilar widget common tests': true },
   },
 };
 

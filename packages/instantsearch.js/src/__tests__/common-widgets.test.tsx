@@ -28,6 +28,7 @@ import {
   relatedProducts,
   frequentlyBoughtTogether,
   trendingItems,
+  lookingSimilar,
 } from '../widgets';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -535,6 +536,22 @@ const testSetups: TestSetupsMap<TestSuites> = {
       })
       .start();
   },
+  createLookingSimilarTests({ instantSearchOptions, widgetParams }) {
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        lookingSimilar({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -563,6 +580,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createRelatedProductsWidgetTests: undefined,
   createFrequentlyBoughtTogetherTests: undefined,
   createTrendingItemsWidgetTests: undefined,
+  createLookingSimilarTests: undefined,
 };
 
 describe('Common widget tests (InstantSearch.js)', () => {
