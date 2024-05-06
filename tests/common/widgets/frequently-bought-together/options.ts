@@ -231,6 +231,40 @@ export function createOptionsTests(
       `
       );
     });
+
+    test('passes parameters correctly', async () => {
+      const searchClient = createMockedSearchClient();
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          objectIDs: ['objectID'],
+          queryParameters: {
+            query: 'regular query',
+          },
+          threshold: 80,
+          maxRecommendations: 3,
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(searchClient.getRecommendations).toHaveBeenCalledWith([
+        expect.objectContaining({
+          objectID: 'objectID',
+          queryParameters: {
+            query: 'regular query',
+          },
+          threshold: 80,
+          maxRecommendations: 3,
+        }),
+      ]);
+    });
   });
 }
 

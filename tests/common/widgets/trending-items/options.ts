@@ -149,6 +149,46 @@ export function createOptionsTests(
         </section>
       `);
     });
+
+    test('passes parameters correctly', async () => {
+      const searchClient = createMockedSearchClient();
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          queryParameters: {
+            query: 'regular query',
+          },
+          fallbackParameters: {
+            query: 'fallback query',
+          },
+          threshold: 80,
+          maxRecommendations: 3,
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(searchClient.getRecommendations).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            queryParameters: {
+              query: 'regular query',
+            },
+            fallbackParameters: {
+              query: 'fallback query',
+            },
+            threshold: 80,
+            maxRecommendations: 3,
+          }),
+        ])
+      );
+    });
   });
 }
 
