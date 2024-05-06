@@ -3,3 +3,4 @@ export * from './Highlight';
 export * from './Hits';
 export * from './RelatedProducts';
 export * from './TrendingItems';
+export * from './LookingSimilar';
