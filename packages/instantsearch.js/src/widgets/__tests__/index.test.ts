@@ -147,17 +147,12 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
         const EXPERIMENTAL_answers = widget as Widgets['EXPERIMENTAL_answers'];
         return EXPERIMENTAL_answers({ container, queryLanguages: ['en'] });
       }
-      case 'frequentlyBoughtTogether': {
-        const frequentlyBoughtTogether =
+      case 'frequentlyBoughtTogether':
+      case 'relatedProducts':
+      case 'lookingSimilar': {
+        const recommendWidgetWithObjectIDs =
           widget as Widgets['frequentlyBoughtTogether'];
-        return frequentlyBoughtTogether({
-          container,
-          objectIDs: ['objectID'],
-        });
-      }
-      case 'relatedProducts': {
-        const relatedProducts = widget as Widgets['relatedProducts'];
-        return relatedProducts({
+        return recommendWidgetWithObjectIDs({
           container,
           objectIDs: ['objectID'],
         });
