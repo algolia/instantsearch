@@ -76,7 +76,7 @@ describe('_buildQueries', () => {
       params: [params1, params2],
     });
 
-    var queries = recommendParameters._buildQueries('indexName');
+    var queries = recommendParameters._buildQueries('indexName', {});
     expect(queries).toHaveLength(2);
     expect(
       queries.map(function (query) {
@@ -90,7 +90,7 @@ describe('_buildQueries', () => {
       params: [params1, params2],
     });
 
-    var queries = recommendParameters._buildQueries('indexName');
+    var queries = recommendParameters._buildQueries('indexName', {});
     expect(queries).toHaveLength(2);
     expect(queries).toMatchInlineSnapshot(`
       Array [
