@@ -28,6 +28,7 @@ import {
   RelatedProducts,
   FrequentlyBoughtTogether,
   TrendingItems,
+  LookingSimilar,
 } from '..';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -341,8 +342,13 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
-  createLookingSimilarTests() {
-    throw new Error('LookingSimilar is not supported in React InstantSearch');
+  createLookingSimilarTests({ instantSearchOptions, widgetParams }) {
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <LookingSimilar {...widgetParams} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
   },
 };
 
@@ -378,12 +384,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createRelatedProductsWidgetTests: { act },
   createFrequentlyBoughtTogetherTests: { act },
   createTrendingItemsWidgetTests: { act },
-  createLookingSimilarTests: {
-    act,
-    skippedTests: {
-      'LookingSimilar widget common tests': true,
-    },
-  },
+  createLookingSimilarTests: { act },
 };
 
 /**
