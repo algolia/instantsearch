@@ -23,6 +23,7 @@ import {
   useRelatedProducts,
   useFrequentlyBoughtTogether,
   useTrendingItems,
+  useLookingSimilar,
 } from '..';
 
 import type {
@@ -38,6 +39,7 @@ import type {
   UseRelatedProductsProps,
   UseFrequentlyBoughtTogetherProps,
   UseTrendingItemsProps,
+  UseLookingSimilarProps,
 } from '..';
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
 import type {
@@ -387,8 +389,27 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
-  createLookingSimilarConnectorTests: () => {
-    throw new Error('Not implemented');
+  createLookingSimilarConnectorTests: ({
+    instantSearchOptions,
+    widgetParams,
+  }) => {
+    function CustomLookingSimilar(props: UseLookingSimilarProps) {
+      const { recommendations } = useLookingSimilar(props);
+
+      return (
+        <ul>
+          {recommendations.map((recommendation) => (
+            <li key={recommendation.objectID}>{recommendation.objectID}</li>
+          ))}
+        </ul>
+      );
+    }
+
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <CustomLookingSimilar {...widgetParams} />
+      </InstantSearch>
+    );
   },
 };
 
