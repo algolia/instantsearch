@@ -51,7 +51,7 @@
   "devDependencies": {
     "instantsearch.js": "4.68.1",
     "next": "13.5.1",
-    "react-instantsearch-core": "7.7.4"
+    "react-instantsearch-core": "7.8.0"
   },
   "peerDependencies": {
     "next": ">= 13.4 && < 15",
