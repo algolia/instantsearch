@@ -474,9 +474,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
         helper!.setState(newState);
 
-        if (localWidgets.length) {
-          localInstantSearchInstance.scheduleSearch();
-        }
+        localInstantSearchInstance.scheduleSearch();
       }
 
       return this;
