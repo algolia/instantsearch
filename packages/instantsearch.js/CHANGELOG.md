@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.68.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.68.0...instantsearch.js@4.68.1) (2024-05-07)
+
+
+### Bug Fixes
+
+* **index:** allow dispose to be called before init ([#6173](https://github.com/algolia/instantsearch/issues/6173)) ([1405aeb](https://github.com/algolia/instantsearch/commit/1405aebb52cd84b02a4f645ee5395763f4878b79)), closes [#6073](https://github.com/algolia/instantsearch/issues/6073)
+
+
+
+
+
 # [4.68.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.67.0...instantsearch.js@4.68.0) (2024-04-30)
 
 

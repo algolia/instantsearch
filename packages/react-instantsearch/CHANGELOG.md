@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.8.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.7.3...react-instantsearch@7.8.0) (2024-05-07)
+
+
+### Features
+
+* **hits:** add banner to react instantsearch hits ([#6170](https://github.com/algolia/instantsearch/issues/6170)) ([b3139ed](https://github.com/algolia/instantsearch/commit/b3139ed362b92247730fbccd5802a10b6f887214))
+
+
+
+
+
 ## [7.7.3](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.7.2...react-instantsearch@7.7.3) (2024-04-30)
 
 **Note:** Version bump only for package react-instantsearch

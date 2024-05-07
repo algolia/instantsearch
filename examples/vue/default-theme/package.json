@@ -1,6 +1,6 @@
 {
   "name": "example-vue-instantsearch-default-theme",
-  "version": "0.45.0",
+  "version": "0.46.0",
   "private": true,
   "scripts": {
     "serve": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve",
@@ -10,9 +10,9 @@
   "dependencies": {
     "algoliasearch": "4.23.2",
     "core-js": "2",
-    "instantsearch.js": "4.68.0",
+    "instantsearch.js": "4.68.1",
     "vue": "2.7.14",
-    "vue-instantsearch": "4.16.1"
+    "vue-instantsearch": "4.16.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "3.12.1",
