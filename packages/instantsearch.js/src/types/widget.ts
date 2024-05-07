@@ -54,6 +54,7 @@ export type DisposeOptions = {
   parent: IndexWidget;
 };
 
+// @MAJOR: Remove these exported types if we don't need them
 export type BuiltinTypes =
   | 'ais.analytics'
   | 'ais.answers'
@@ -64,12 +65,14 @@ export type BuiltinTypes =
   | 'ais.configureRelatedItems'
   | 'ais.currentRefinements'
   | 'ais.dynamicWidgets'
+  | 'ais.frequentlyBoughtTogether'
   | 'ais.geoSearch'
   | 'ais.hierarchicalMenu'
   | 'ais.hits'
   | 'ais.hitsPerPage'
   | 'ais.index'
   | 'ais.infiniteHits'
+  | 'ais.lookingSimilar'
   | 'ais.menu'
   | 'ais.numericMenu'
   | 'ais.pagination'
@@ -82,11 +85,13 @@ export type BuiltinTypes =
   | 'ais.rangeInput'
   | 'ais.ratingMenu'
   | 'ais.refinementList'
+  | 'ais.relatedProducts'
   | 'ais.searchBox'
   | 'ais.relevantSort'
   | 'ais.sortBy'
   | 'ais.stats'
   | 'ais.toggleRefinement'
+  | 'ais.trendingItems'
   | 'ais.voiceSearch';
 
 export type BuiltinWidgetTypes =
@@ -99,12 +104,14 @@ export type BuiltinWidgetTypes =
   | 'ais.configureRelatedItems'
   | 'ais.currentRefinements'
   | 'ais.dynamicWidgets'
+  | 'ais.frequentlyBoughtTogether'
   | 'ais.geoSearch'
   | 'ais.hierarchicalMenu'
   | 'ais.hits'
   | 'ais.hitsPerPage'
   | 'ais.index'
   | 'ais.infiniteHits'
+  | 'ais.lookingSimilar'
   | 'ais.menu'
   | 'ais.menuSelect'
   | 'ais.numericMenu'
@@ -117,11 +124,13 @@ export type BuiltinWidgetTypes =
   | 'ais.rangeSlider'
   | 'ais.ratingMenu'
   | 'ais.refinementList'
+  | 'ais.relatedProducts'
   | 'ais.searchBox'
   | 'ais.relevantSort'
   | 'ais.sortBy'
   | 'ais.stats'
   | 'ais.toggleRefinement'
+  | 'ais.trendingItems'
   | 'ais.voiceSearch';
 
 export type UnknownWidgetParams = NonNullable<object>;
