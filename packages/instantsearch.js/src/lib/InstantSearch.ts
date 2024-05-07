@@ -742,7 +742,7 @@ See documentation: ${createDocumentationLink({
   }
 
   public scheduleSearch = defer(() => {
-    if (this.started) {
+    if (this.started && this.mainIndex.getWidgets().length > 0) {
       this.mainHelper!.search();
     }
   });
