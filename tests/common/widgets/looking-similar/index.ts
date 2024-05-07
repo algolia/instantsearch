@@ -10,7 +10,7 @@ export type LookingSimilarWidgetSetup = TestSetup<{
   widgetParams: Omit<WidgetParams, 'container'>;
 }>;
 
-export function createLookingSimilarTests(
+export function createLookingSimilarWidgetTests(
   setup: LookingSimilarWidgetSetup,
   { act = fakeAct, skippedTests = {} }: TestOptions = {}
 ) {

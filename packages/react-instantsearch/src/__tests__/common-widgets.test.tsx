@@ -322,7 +322,10 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
-  createFrequentlyBoughtTogetherTests({ instantSearchOptions, widgetParams }) {
+  createFrequentlyBoughtTogetherWidgetTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
     render(
       <InstantSearch {...instantSearchOptions}>
         <FrequentlyBoughtTogether {...widgetParams} />
@@ -342,7 +345,7 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
-  createLookingSimilarTests({ instantSearchOptions, widgetParams }) {
+  createLookingSimilarWidgetTests({ instantSearchOptions, widgetParams }) {
     render(
       <InstantSearch {...instantSearchOptions}>
         <LookingSimilar {...widgetParams} />
@@ -382,9 +385,9 @@ const testOptions: TestOptionsMap<TestSuites> = {
     },
   },
   createRelatedProductsWidgetTests: { act },
-  createFrequentlyBoughtTogetherTests: { act },
+  createFrequentlyBoughtTogetherWidgetTests: { act },
   createTrendingItemsWidgetTests: { act },
-  createLookingSimilarTests: { act },
+  createLookingSimilarWidgetTests: { act },
 };
 
 /**
