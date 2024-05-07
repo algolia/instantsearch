@@ -506,7 +506,7 @@ const testSetups = {
   createRelatedProductsWidgetTests() {
     throw new Error('RelatedProduct is not supported in Vue InstantSearch');
   },
-  createFrequentlyBoughtTogetherTests() {
+  createFrequentlyBoughtTogetherWidgetTests() {
     throw new Error(
       'FrequentlyBoughtTogether is not supported in Vue InstantSearch'
     );
@@ -514,7 +514,7 @@ const testSetups = {
   createTrendingItemsWidgetTests() {
     throw new Error('TrendingItems is not supported in Vue InstantSearch');
   },
-  createLookingSimilarTests() {
+  createLookingSimilarWidgetTests() {
     throw new Error('LookingSimilar is not supported in Vue InstantSearch');
   },
 };
@@ -544,13 +544,13 @@ const testOptions = {
       'RelatedProducts widget common tests': true,
     },
   },
-  createFrequentlyBoughtTogetherTests: {
+  createFrequentlyBoughtTogetherWidgetTests: {
     skippedTests: { 'FrequentlyBoughtTogether widget common tests': true },
   },
   createTrendingItemsWidgetTests: {
     skippedTests: { 'TrendingItems widget common tests': true },
   },
-  createLookingSimilarTests: {
+  createLookingSimilarWidgetTests: {
     skippedTests: { 'LookingSimilar widget common tests': true },
   },
 };

@@ -499,7 +499,10 @@ const testSetups: TestSetupsMap<TestSuites> = {
       })
       .start();
   },
-  createFrequentlyBoughtTogetherTests({ instantSearchOptions, widgetParams }) {
+  createFrequentlyBoughtTogetherWidgetTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
     instantsearch(instantSearchOptions)
       .addWidgets([
         frequentlyBoughtTogether({
@@ -536,7 +539,7 @@ const testSetups: TestSetupsMap<TestSuites> = {
       })
       .start();
   },
-  createLookingSimilarTests({ instantSearchOptions, widgetParams }) {
+  createLookingSimilarWidgetTests({ instantSearchOptions, widgetParams }) {
     instantsearch(instantSearchOptions)
       .addWidgets([
         lookingSimilar({
@@ -578,9 +581,9 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createStatsWidgetTests: undefined,
   createNumericMenuWidgetTests: undefined,
   createRelatedProductsWidgetTests: undefined,
-  createFrequentlyBoughtTogetherTests: undefined,
+  createFrequentlyBoughtTogetherWidgetTests: undefined,
   createTrendingItemsWidgetTests: undefined,
-  createLookingSimilarTests: undefined,
+  createLookingSimilarWidgetTests: undefined,
 };
 
 describe('Common widget tests (InstantSearch.js)', () => {
