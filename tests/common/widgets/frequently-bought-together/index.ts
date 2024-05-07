@@ -10,7 +10,7 @@ export type FrequentlyBoughtTogetherWidgetSetup = TestSetup<{
   widgetParams: Omit<WidgetParams, 'container'>;
 }>;
 
-export function createFrequentlyBoughtTogetherTests(
+export function createFrequentlyBoughtTogetherWidgetTests(
   setup: FrequentlyBoughtTogetherWidgetSetup,
   { act = fakeAct, skippedTests = {} }: TestOptions = {}
 ) {
