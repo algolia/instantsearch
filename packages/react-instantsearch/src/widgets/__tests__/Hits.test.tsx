@@ -114,6 +114,42 @@ describe('Hits', () => {
     });
   });
 
+  test('custom hit component should not remount on rerender', async () => {
+    const searchClient = getSearchClient();
+
+    const mounted = jest.fn();
+
+    const CustomHit = () => {
+      React.useEffect(() => {
+        mounted();
+      }, []);
+
+      return null;
+    };
+
+    const { container, rerender } = render(
+      <InstantSearchTestWrapper searchClient={searchClient}>
+        <Hits hitComponent={CustomHit} />
+      </InstantSearchTestWrapper>
+    );
+
+    await waitFor(() => {
+      expect(container.querySelectorAll('li')).toHaveLength(3);
+      expect(mounted).toHaveBeenCalledTimes(3);
+    });
+
+    rerender(
+      <InstantSearchTestWrapper searchClient={searchClient}>
+        <Hits hitComponent={CustomHit} />
+      </InstantSearchTestWrapper>
+    );
+
+    await waitFor(() => {
+      expect(container.querySelectorAll('li')).toHaveLength(3);
+      expect(mounted).toHaveBeenCalledTimes(3);
+    });
+  });
+
   test('forwards custom class names and `div` props to the root element', () => {
     const { container } = render(
       <InstantSearchTestWrapper>
