@@ -1,5 +1,5 @@
 import { createHitsComponent } from 'instantsearch-ui-components';
-import React, { createElement, Fragment } from 'react';
+import React, { createElement, Fragment, useMemo } from 'react';
 import { useHits } from 'react-instantsearch-core';
 
 import type {
@@ -68,15 +68,17 @@ export function Hits<THit extends BaseHit = BaseHit>({
     { $$widgetType: 'ais.hits' }
   );
 
-  const itemComponent: HitsUiComponentProps<Hit<THit>>['itemComponent'] = ({
-    hit,
-    index,
-    ...itemProps
-  }) => (
-    <li key={hit.objectID} {...itemProps}>
-      <HitComponent hit={hit} sendEvent={sendEvent} />
-    </li>
-  );
+  const itemComponent: HitsUiComponentProps<Hit<THit>>['itemComponent'] =
+    useMemo(
+      () =>
+        ({ hit, index, ...itemProps }) =>
+          (
+            <li key={hit.objectID} {...itemProps}>
+              <HitComponent hit={hit} sendEvent={sendEvent} />
+            </li>
+          ),
+      [HitComponent, sendEvent]
+    );
 
   const bannerComponent = (
     BannerComponent === false ? () => null : BannerComponent
