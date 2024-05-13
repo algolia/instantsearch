@@ -96,7 +96,7 @@ const renderer =
         : undefined
     ) as LookingSimilarUiProps<Hit>['itemComponent'];
 
-    const fallbackComponent = (
+    const emptyComponent = (
       templates.empty
         ? () => (
             <TemplateComponent
@@ -107,7 +107,7 @@ const renderer =
             />
           )
         : undefined
-    ) as LookingSimilarUiProps<Hit>['fallbackComponent'];
+    ) as LookingSimilarUiProps<Hit>['emptyComponent'];
 
     render(
       <LookingSimilar
@@ -116,7 +116,7 @@ const renderer =
         itemComponent={itemComponent}
         sendEvent={() => {}}
         classNames={cssClasses}
-        fallbackComponent={fallbackComponent}
+        emptyComponent={emptyComponent}
         status={instantSearchInstance.status}
       />,
       containerNode

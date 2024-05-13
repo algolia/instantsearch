@@ -3,7 +3,7 @@
 import { cx } from '../lib';
 
 import {
-  createDefaultFallbackComponent,
+  createDefaultEmptyComponent,
   createDefaultHeaderComponent,
   createDefaultItemComponent,
   createListViewComponent,
@@ -30,7 +30,7 @@ export function createFrequentlyBoughtTogetherComponent({
   ) {
     const {
       classNames = {},
-      fallbackComponent: FallbackComponent = createDefaultFallbackComponent({
+      emptyComponent: EmptyComponent = createDefaultEmptyComponent({
         createElement,
         Fragment,
       }),
@@ -68,7 +68,7 @@ export function createFrequentlyBoughtTogetherComponent({
             props.className
           )}
         >
-          <FallbackComponent />
+          <EmptyComponent />
         </section>
       );
     }

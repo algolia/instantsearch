@@ -76,7 +76,7 @@ describe('RelatedProducts', () => {
     `);
   });
 
-  test('renders default fallback', () => {
+  test('renders default empty component', () => {
     const { container } = render(
       <RelatedProducts
         status="idle"
@@ -195,12 +195,12 @@ describe('RelatedProducts', () => {
     `);
   });
 
-  test('renders custom fallback', () => {
+  test('renders custom empty component', () => {
     const { container } = render(
       <RelatedProducts
         status="idle"
         items={[]}
-        fallbackComponent={() => <Fragment>My custom fallback</Fragment>}
+        emptyComponent={() => <Fragment>My custom empty component</Fragment>}
         itemComponent={ItemComponent}
         sendEvent={jest.fn()}
       />
@@ -211,7 +211,7 @@ describe('RelatedProducts', () => {
         <section
           class="ais-RelatedProducts ais-RelatedProducts--empty"
         >
-          My custom fallback
+          My custom empty component
         </section>
       </div>
     `);
