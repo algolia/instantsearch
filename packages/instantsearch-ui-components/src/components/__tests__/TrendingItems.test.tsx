@@ -76,7 +76,7 @@ describe('TrendingItems', () => {
     `);
   });
 
-  test('renders default fallback', () => {
+  test('renders default empty component', () => {
     const { container } = render(
       <TrendingItems
         status="idle"
@@ -195,12 +195,12 @@ describe('TrendingItems', () => {
     `);
   });
 
-  test('renders custom fallback', () => {
+  test('renders custom empty component', () => {
     const { container } = render(
       <TrendingItems
         status="idle"
         items={[]}
-        fallbackComponent={() => <Fragment>My custom fallback</Fragment>}
+        emptyComponent={() => <Fragment>My custom empty component</Fragment>}
         itemComponent={ItemComponent}
         sendEvent={jest.fn()}
       />
@@ -211,7 +211,7 @@ describe('TrendingItems', () => {
         <section
           class="ais-TrendingItems ais-TrendingItems--empty"
         >
-          My custom fallback
+          My custom empty component
         </section>
       </div>
     `);

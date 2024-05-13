@@ -14,7 +14,7 @@ type UiProps<TItem extends BaseHit> = Pick<
   | 'items'
   | 'itemComponent'
   | 'headerComponent'
-  | 'fallbackComponent'
+  | 'emptyComponent'
   | 'status'
   | 'sendEvent'
 >;
@@ -26,7 +26,7 @@ export type RelatedProductsProps<TItem extends BaseHit> = Omit<
   UseRelatedProductsProps & {
     itemComponent?: RelatedProductsUiComponentProps<TItem>['itemComponent'];
     headerComponent?: RelatedProductsUiComponentProps<TItem>['headerComponent'];
-    fallbackComponent?: RelatedProductsUiComponentProps<TItem>['fallbackComponent'];
+    emptyComponent?: RelatedProductsUiComponentProps<TItem>['emptyComponent'];
   };
 
 const RelatedProductsUiComponent = createRelatedProductsComponent({
@@ -43,7 +43,7 @@ export function RelatedProducts<TItem extends BaseHit = BaseHit>({
   transformItems,
   itemComponent,
   headerComponent,
-  fallbackComponent,
+  emptyComponent,
   ...props
 }: RelatedProductsProps<TItem>) {
   const { status } = useInstantSearch();
@@ -63,7 +63,7 @@ export function RelatedProducts<TItem extends BaseHit = BaseHit>({
     items: recommendations as Array<Hit<TItem>>,
     itemComponent,
     headerComponent,
-    fallbackComponent,
+    emptyComponent,
     status,
     sendEvent: () => {},
   };

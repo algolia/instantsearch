@@ -2,11 +2,11 @@
 
 import type { Renderer } from '../../types';
 
-export function createDefaultFallbackComponent({
+export function createDefaultEmptyComponent({
   createElement,
   Fragment,
 }: Renderer) {
-  return function DefaultFallback() {
+  return function DefaultEmpty() {
     return <Fragment>No results</Fragment>;
   };
 }

@@ -98,7 +98,7 @@ const renderer =
         : undefined
     ) as FrequentlyBoughtTogetherUiProps<Hit>['itemComponent'];
 
-    const fallbackComponent = (
+    const emptyComponent = (
       templates.empty
         ? () => (
             <TemplateComponent
@@ -109,7 +109,7 @@ const renderer =
             />
           )
         : undefined
-    ) as FrequentlyBoughtTogetherUiProps<Hit>['fallbackComponent'];
+    ) as FrequentlyBoughtTogetherUiProps<Hit>['emptyComponent'];
 
     render(
       <FrequentlyBoughtTogether
@@ -118,7 +118,7 @@ const renderer =
         itemComponent={itemComponent}
         sendEvent={() => {}}
         classNames={cssClasses}
-        fallbackComponent={fallbackComponent}
+        emptyComponent={emptyComponent}
         status={instantSearchInstance.status}
       />,
       containerNode

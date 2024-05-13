@@ -14,7 +14,7 @@ type UiProps<THit extends BaseHit> = Pick<
   | 'items'
   | 'itemComponent'
   | 'headerComponent'
-  | 'fallbackComponent'
+  | 'emptyComponent'
   | 'status'
   | 'sendEvent'
 >;
@@ -26,7 +26,7 @@ export type LookingSimilarProps<THit extends BaseHit> = Omit<
   UseLookingSimilarProps<THit> & {
     itemComponent?: LookingSimilarPropsUiComponentProps<THit>['itemComponent'];
     headerComponent?: LookingSimilarPropsUiComponentProps<THit>['headerComponent'];
-    fallbackComponent?: LookingSimilarPropsUiComponentProps<THit>['fallbackComponent'];
+    emptyComponent?: LookingSimilarPropsUiComponentProps<THit>['emptyComponent'];
   };
 
 const LookingSimilarUiComponent = createLookingSimilarComponent({
@@ -43,7 +43,7 @@ export function LookingSimilar<THit extends BaseHit = BaseHit>({
   transformItems,
   itemComponent,
   headerComponent,
-  fallbackComponent,
+  emptyComponent,
   ...props
 }: LookingSimilarProps<THit>) {
   const { status } = useInstantSearch();
@@ -63,7 +63,7 @@ export function LookingSimilar<THit extends BaseHit = BaseHit>({
     items: recommendations,
     itemComponent,
     headerComponent,
-    fallbackComponent,
+    emptyComponent,
     status,
     sendEvent: () => {},
   };
