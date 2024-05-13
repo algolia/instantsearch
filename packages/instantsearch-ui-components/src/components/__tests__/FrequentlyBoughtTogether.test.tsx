@@ -76,7 +76,7 @@ describe('FrequentlyBoughtTogether', () => {
     `);
   });
 
-  test('renders default fallback', () => {
+  test('renders default empty component', () => {
     const { container } = render(
       <FrequentlyBoughtTogether
         status="idle"
@@ -195,12 +195,12 @@ describe('FrequentlyBoughtTogether', () => {
     `);
   });
 
-  test('renders custom fallback', () => {
+  test('renders custom empty component', () => {
     const { container } = render(
       <FrequentlyBoughtTogether
         status="idle"
         items={[]}
-        fallbackComponent={() => <div>My custom fallback</div>}
+        emptyComponent={() => <div>My custom empty component</div>}
         itemComponent={ItemComponent}
         sendEvent={jest.fn()}
       />
@@ -212,7 +212,7 @@ describe('FrequentlyBoughtTogether', () => {
           class="ais-FrequentlyBoughtTogether ais-FrequentlyBoughtTogether--empty"
         >
           <div>
-            My custom fallback
+            My custom empty component
           </div>
         </section>
       </div>

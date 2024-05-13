@@ -17,7 +17,7 @@ type UiProps<THit extends BaseHit> = Pick<
   | 'items'
   | 'itemComponent'
   | 'headerComponent'
-  | 'fallbackComponent'
+  | 'emptyComponent'
   | 'status'
   | 'sendEvent'
 >;
@@ -29,7 +29,7 @@ export type FrequentlyBoughtTogetherProps<THit extends BaseHit> = Omit<
   UseFrequentlyBoughtTogetherProps<THit> & {
     itemComponent?: FrequentlyBoughtTogetherPropsUiComponentProps<THit>['itemComponent'];
     headerComponent?: FrequentlyBoughtTogetherPropsUiComponentProps<THit>['headerComponent'];
-    fallbackComponent?: FrequentlyBoughtTogetherPropsUiComponentProps<THit>['fallbackComponent'];
+    emptyComponent?: FrequentlyBoughtTogetherPropsUiComponentProps<THit>['emptyComponent'];
   };
 
 const FrequentlyBoughtTogetherUiComponent =
@@ -46,7 +46,7 @@ export function FrequentlyBoughtTogether<THit extends BaseHit = BaseHit>({
   transformItems,
   itemComponent,
   headerComponent,
-  fallbackComponent,
+  emptyComponent,
   ...props
 }: FrequentlyBoughtTogetherProps<THit>) {
   const { status } = useInstantSearch();
@@ -65,7 +65,7 @@ export function FrequentlyBoughtTogether<THit extends BaseHit = BaseHit>({
     items: recommendations,
     itemComponent,
     headerComponent,
-    fallbackComponent,
+    emptyComponent,
     status,
     sendEvent: () => {},
   };
