@@ -136,7 +136,7 @@ const connectTrendingItems: TrendingItemsConnector =
         dispose({ state }) {
           unmountFn();
 
-          return state;
+          return state.removeParams(this.$$id!);
         },
 
         getWidgetParameters(state) {

@@ -131,7 +131,7 @@ const connectLookingSimilar: LookingSimilarConnector =
         dispose({ state }) {
           unmountFn();
 
-          return state;
+          return state.removeParams(this.$$id!);
         },
 
         getWidgetParameters(state) {
