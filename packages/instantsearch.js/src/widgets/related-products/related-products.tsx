@@ -97,7 +97,7 @@ function createRenderer({
         : undefined
     ) as RelatedProductsUiProps<Hit>['itemComponent'];
 
-    const fallbackComponent = (
+    const emptyComponent = (
       templates.empty
         ? () => (
             <TemplateComponent
@@ -108,7 +108,7 @@ function createRenderer({
             />
           )
         : undefined
-    ) as RelatedProductsUiProps<Hit>['fallbackComponent'];
+    ) as RelatedProductsUiProps<Hit>['emptyComponent'];
 
     render(
       <RelatedProducts
@@ -117,7 +117,7 @@ function createRenderer({
         classNames={cssClasses}
         headerComponent={headerComponent}
         itemComponent={itemComponent}
-        fallbackComponent={fallbackComponent}
+        emptyComponent={emptyComponent}
         status={instantSearchInstance.status}
       />,
       containerNode

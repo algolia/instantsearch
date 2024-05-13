@@ -65,7 +65,7 @@ export type RecommendComponentProps<
   ) => JSX.Element;
   items: Array<RecordWithObjectID<TObject>>;
   classNames?: Partial<RecommendClassNames>;
-  fallbackComponent?: (props: TComponentProps) => JSX.Element;
+  emptyComponent?: (props: TComponentProps) => JSX.Element;
   headerComponent?: (
     props: RecommendInnerComponentProps<TObject> & TComponentProps
   ) => JSX.Element;

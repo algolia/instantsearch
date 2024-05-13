@@ -14,7 +14,7 @@ type UiProps<TItem extends BaseHit> = Pick<
   | 'items'
   | 'itemComponent'
   | 'headerComponent'
-  | 'fallbackComponent'
+  | 'emptyComponent'
   | 'status'
   | 'sendEvent'
 >;
@@ -26,7 +26,7 @@ export type TrendingItemsProps<TItem extends BaseHit> = Omit<
   UseTrendingItemsProps & {
     itemComponent?: TrendingItemsUiComponentProps<TItem>['itemComponent'];
     headerComponent?: TrendingItemsUiComponentProps<TItem>['headerComponent'];
-    fallbackComponent?: TrendingItemsUiComponentProps<TItem>['fallbackComponent'];
+    emptyComponent?: TrendingItemsUiComponentProps<TItem>['emptyComponent'];
   };
 
 const TrendingItemsUiComponent = createTrendingItemsComponent({
@@ -44,7 +44,7 @@ export function TrendingItems<TItem extends BaseHit = BaseHit>({
   transformItems,
   itemComponent,
   headerComponent,
-  fallbackComponent,
+  emptyComponent,
   ...props
 }: TrendingItemsProps<TItem>) {
   const facetParameters =
@@ -67,7 +67,7 @@ export function TrendingItems<TItem extends BaseHit = BaseHit>({
     items: recommendations as Array<Hit<TItem>>,
     itemComponent,
     headerComponent,
-    fallbackComponent,
+    emptyComponent,
     status,
     sendEvent: () => {},
   };

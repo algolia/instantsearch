@@ -76,7 +76,7 @@ describe('LookingSimilar', () => {
     `);
   });
 
-  test('renders default fallback', () => {
+  test('renders default empty component', () => {
     const { container } = render(
       <LookingSimilar
         status="idle"
@@ -195,12 +195,12 @@ describe('LookingSimilar', () => {
     `);
   });
 
-  test('renders custom fallback', () => {
+  test('renders custom empty component', () => {
     const { container } = render(
       <LookingSimilar
         status="idle"
         items={[]}
-        fallbackComponent={() => <Fragment>My custom fallback</Fragment>}
+        emptyComponent={() => <Fragment>My custom empty component</Fragment>}
         itemComponent={ItemComponent}
         sendEvent={jest.fn()}
       />
@@ -211,7 +211,7 @@ describe('LookingSimilar', () => {
         <section
           class="ais-LookingSimilar ais-LookingSimilar--empty"
         >
-          My custom fallback
+          My custom empty component
         </section>
       </div>
     `);
