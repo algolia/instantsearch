@@ -122,7 +122,7 @@ describe('index', () => {
         });
       },
       dispose({ recommendState }) {
-        return recommendState?.removeParams(this.$$id!);
+        return recommendState.removeParams(this.$$id!);
       },
       ...args,
     } as Widget) as unknown as Widget & { $$id: number };

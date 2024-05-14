@@ -131,7 +131,7 @@ const connectRelatedProducts: RelatedProductsConnector =
 
         dispose({ recommendState }) {
           unmountFn();
-          return recommendState?.removeParams(this.$$id!);
+          return recommendState.removeParams(this.$$id!);
         },
 
         getWidgetParameters(state) {
