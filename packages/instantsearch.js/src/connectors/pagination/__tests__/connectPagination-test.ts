@@ -350,7 +350,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
         throw new Error('expect state to be returned');
       }
 
-      expect(nextState.page).toBeUndefined();
+      expect((nextState as SearchParameters).page).toBeUndefined();
     });
   });
 

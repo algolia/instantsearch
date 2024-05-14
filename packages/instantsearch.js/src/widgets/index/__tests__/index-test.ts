@@ -10,6 +10,7 @@ import { wait } from '@instantsearch/testutils';
 import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
+  RecommendParameters,
 } from 'algoliasearch-helper';
 
 import { castToJestMock } from '../../../../../../tests/utils';
@@ -119,6 +120,9 @@ describe('index', () => {
           $$id: this.$$id!,
           objectID: 'abc',
         });
+      },
+      dispose({ recommendState }) {
+        return recommendState.removeParams(this.$$id!);
       },
       ...args,
     } as Widget) as unknown as Widget & { $$id: number };
@@ -552,6 +556,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           },
         });
 
+        const fbt = createFrequentlyBoughtTogether();
+
         instance.addWidgets([
           createSearchBox({
             getWidgetSearchParameters(state) {
@@ -559,6 +565,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             },
           }),
           pagination,
+          fbt,
         ]);
 
         instance.init(createIndexInitOptions({ parent: null }));
@@ -571,13 +578,24 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           })
         );
 
-        instance.removeWidgets([pagination]);
+        expect(instance.getHelper()!.recommendState).toEqual(
+          new RecommendParameters().addFrequentlyBoughtTogether({
+            objectID: 'abc',
+            $$id: fbt.$$id,
+          })
+        );
+
+        instance.removeWidgets([pagination, fbt]);
 
         expect(instance.getHelper()!.state).toEqual(
           new SearchParameters({
             index: 'indexName',
             query: 'Apple',
           })
+        );
+
+        expect(instance.getHelper()!.recommendState).toEqual(
+          new RecommendParameters()
         );
       });
 
@@ -813,6 +831,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           expect(widget.dispose).toHaveBeenCalledWith({
             helper: instance.getHelper(),
             state: instance.getHelper()!.state,
+            recommendState: instance.getHelper()!.recommendState,
             parent: instance,
           });
         });
@@ -3094,6 +3113,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(widget.dispose).toHaveBeenCalledTimes(1);
         expect(widget.dispose).toHaveBeenCalledWith({
           state: helper!.state,
+          recommendState: helper!.recommendState,
           helper,
           parent: instance,
         });
