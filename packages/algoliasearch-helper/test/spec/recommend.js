@@ -92,9 +92,9 @@ describe('recommend()', () => {
     expect(client.getRecommendations).not.toHaveBeenCalled();
   });
 
-  test('warns if the client is not compatible with recommendations', () => {
+  test('warns if the client is not compatible with recommend', () => {
     var message =
-      'Please update algoliasearch/lite to the latest version in order to use recommendations widgets.';
+      'Please update algoliasearch/lite to the latest version in order to use recommend widgets.';
     var client = {};
     console.warn = jest.fn();
 
