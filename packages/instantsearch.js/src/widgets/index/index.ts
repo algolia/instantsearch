@@ -468,15 +468,13 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
               parent: this,
             });
 
-            return {
-              ...states,
-              ...(next instanceof algoliasearchHelper.SearchParameters
-                ? { cleanedSearchState: next }
-                : {}),
-              ...(next instanceof algoliasearchHelper.RecommendParameters
-                ? { cleanedRecommendState: next }
-                : {}),
-            };
+            if (next instanceof algoliasearchHelper.RecommendParameters) {
+              states.cleanedRecommendState = next;
+            } else if (next) {
+              states.cleanedSearchState = next;
+            }
+
+            return states;
           },
           {
             cleanedSearchState: helper!.state,
