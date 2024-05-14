@@ -249,7 +249,7 @@ export function createOptionsTests(
             query: 'fallback query',
           },
           threshold: 80,
-          maxRecommendations: 3,
+          limit: 3,
         },
       });
 

@@ -36,7 +36,7 @@ const LookingSimilarUiComponent = createLookingSimilarComponent({
 
 export function LookingSimilar<THit extends BaseHit = BaseHit>({
   objectIDs,
-  maxRecommendations,
+  limit,
   threshold,
   queryParameters,
   fallbackParameters,
@@ -50,7 +50,7 @@ export function LookingSimilar<THit extends BaseHit = BaseHit>({
   const { recommendations } = useLookingSimilar<THit>(
     {
       objectIDs,
-      maxRecommendations,
+      limit,
       threshold,
       queryParameters,
       fallbackParameters,

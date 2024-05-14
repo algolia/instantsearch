@@ -81,7 +81,7 @@ describe('trendingItems', () => {
 
       search.removeWidgets([trendingItemsWidget]);
 
-      search.addWidgets([trendingItems({ ...options, maxRecommendations: 0 })]);
+      search.addWidgets([trendingItems({ ...options, limit: 0 })]);
 
       await wait(0);
 
@@ -154,7 +154,7 @@ describe('trendingItems', () => {
 
       search.removeWidgets([trendingItemsWidget]);
 
-      search.addWidgets([trendingItems({ ...options, maxRecommendations: 0 })]);
+      search.addWidgets([trendingItems({ ...options, limit: 0 })]);
 
       await wait(0);
 
@@ -238,7 +238,7 @@ describe('trendingItems', () => {
 
       search.removeWidgets([trendingItemsWidget]);
 
-      search.addWidgets([trendingItems({ ...options, maxRecommendations: 0 })]);
+      search.addWidgets([trendingItems({ ...options, limit: 0 })]);
 
       await wait(0);
 
@@ -326,7 +326,7 @@ describe('trendingItems', () => {
 
       search.removeWidgets([trendingItemsWidget]);
 
-      search.addWidgets([trendingItems({ ...options, maxRecommendations: 0 })]);
+      search.addWidgets([trendingItems({ ...options, limit: 0 })]);
 
       await wait(0);
 

@@ -86,9 +86,7 @@ describe('relatedProducts', () => {
 
       search.removeWidgets([relatedProductsWidget]);
 
-      search.addWidgets([
-        relatedProducts({ ...options, maxRecommendations: 0 }),
-      ]);
+      search.addWidgets([relatedProducts({ ...options, limit: 0 })]);
 
       await wait(0);
 
@@ -162,9 +160,7 @@ describe('relatedProducts', () => {
 
       search.removeWidgets([relatedProductsWidget]);
 
-      search.addWidgets([
-        relatedProducts({ ...options, maxRecommendations: 0 }),
-      ]);
+      search.addWidgets([relatedProducts({ ...options, limit: 0 })]);
 
       await wait(0);
 
@@ -249,9 +245,7 @@ describe('relatedProducts', () => {
 
       search.removeWidgets([relatedProductsWidget]);
 
-      search.addWidgets([
-        relatedProducts({ ...options, maxRecommendations: 0 }),
-      ]);
+      search.addWidgets([relatedProducts({ ...options, limit: 0 })]);
 
       await wait(0);
 
@@ -340,9 +334,7 @@ describe('relatedProducts', () => {
 
       search.removeWidgets([relatedProductsWidget]);
 
-      search.addWidgets([
-        relatedProducts({ ...options, maxRecommendations: 0 }),
-      ]);
+      search.addWidgets([relatedProducts({ ...options, limit: 0 })]);
 
       await wait(0);
 

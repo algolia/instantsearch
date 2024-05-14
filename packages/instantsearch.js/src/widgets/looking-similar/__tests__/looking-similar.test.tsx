@@ -84,7 +84,7 @@ describe('lookingSimilar', () => {
 
       search
         .removeWidgets([widget])
-        .addWidgets([lookingSimilar({ ...options, maxRecommendations: 0 })]);
+        .addWidgets([lookingSimilar({ ...options, limit: 0 })]);
 
       await wait(0);
 
@@ -157,7 +157,7 @@ describe('lookingSimilar', () => {
 
       search
         .removeWidgets([widget])
-        .addWidgets([lookingSimilar({ ...options, maxRecommendations: 0 })]);
+        .addWidgets([lookingSimilar({ ...options, limit: 0 })]);
 
       await wait(0);
 
@@ -242,7 +242,7 @@ describe('lookingSimilar', () => {
       search.removeWidgets([widget]).addWidgets([
         lookingSimilar({
           ...options,
-          maxRecommendations: 0,
+          limit: 0,
         }),
       ]);
 
@@ -333,7 +333,7 @@ describe('lookingSimilar', () => {
       search.removeWidgets([widget]).addWidgets([
         lookingSimilar({
           ...options,
-          maxRecommendations: 0,
+          limit: 0,
         }),
       ]);
 

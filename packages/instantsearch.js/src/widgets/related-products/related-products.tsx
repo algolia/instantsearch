@@ -182,7 +182,7 @@ const relatedProducts: RelatedProductsWidget = function relatedProducts(
   const {
     container,
     objectIDs,
-    maxRecommendations,
+    limit,
     queryParameters,
     fallbackParameters,
     threshold,
@@ -211,7 +211,7 @@ const relatedProducts: RelatedProductsWidget = function relatedProducts(
   return {
     ...makeWidget({
       objectIDs,
-      maxRecommendations,
+      limit,
       queryParameters,
       fallbackParameters,
       threshold,

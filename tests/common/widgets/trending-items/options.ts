@@ -132,7 +132,7 @@ export function createOptionsTests(
         },
         widgetParams: {
           // This simulates receiving no recommendations
-          maxRecommendations: 0,
+          limit: 0,
         },
       });
 
@@ -166,7 +166,7 @@ export function createOptionsTests(
             query: 'fallback query',
           },
           threshold: 80,
-          maxRecommendations: 3,
+          limit: 3,
         },
       });
 

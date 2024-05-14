@@ -38,7 +38,7 @@ export type TrendingItemsConnectorParams<THit extends BaseHit = BaseHit> = (
   /**
    * The number of recommendations to retrieve.
    */
-  maxRecommendations?: number;
+  limit?: number;
   /**
    * The threshold for the recommendations confidence score (between 0 and 100).
    */
@@ -81,7 +81,7 @@ const connectTrendingItems: TrendingItemsConnector =
       const {
         facetName,
         facetValue,
-        maxRecommendations,
+        limit,
         threshold,
         fallbackParameters,
         queryParameters,
@@ -143,7 +143,7 @@ const connectTrendingItems: TrendingItemsConnector =
           return state.addTrendingItems({
             facetName,
             facetValue,
-            maxRecommendations,
+            maxRecommendations: limit,
             threshold,
             fallbackParameters,
             queryParameters,
