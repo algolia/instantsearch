@@ -742,6 +742,12 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         }
       });
 
+      // a widget that causes the current state to be incomplete (dynamic widgets)
+      // can prevent following widgets from rendering this pass by setting the
+      // PREVENT_RENDER flag to "true"
+      const { PREVENT_RENDER = false } =
+        instantSearchInstance.renderState?.[this.getIndexId()] ?? {};
+
       widgetsToRender.forEach((widget) => {
         // At this point, all the variables used below are set. Both `helper`
         // and `derivedHelper` have been created at the `init` step. The attribute
@@ -750,7 +756,8 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         // be delayed. The render is triggered for the complete tree but some parts do
         // not have results yet.
 
-        if (widget.render) {
+        // the widget can make itself rendering, even if the rest is prevented
+        if (widget.render && (!PREVENT_RENDER || widget.rendersOnPrevented)) {
           widget.render(createRenderArgs(instantSearchInstance, this));
         }
       });

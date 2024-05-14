@@ -281,6 +281,12 @@ type RequiredRenderStateLifeCycle<
     >,
     renderOptions: InitOptions | RenderOptions
   ) => IndexRenderState & TWidgetDescription['indexRenderState'];
+
+  /**
+   * If PREVENT_RENDER is set in the render state, still render this widget.
+   * This is only useful for cases where this widget is the one setting PREVENT_RENDER
+   */
+  rendersOnPrevented?: boolean;
 };
 
 type RenderStateLifeCycle<
