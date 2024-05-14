@@ -133,10 +133,9 @@ const connectTrendingItems: TrendingItemsConnector =
           };
         },
 
-        dispose({ state }) {
+        dispose({ recommendState }) {
           unmountFn();
-
-          return state;
+          return recommendState.removeParams(this.$$id!);
         },
 
         getWidgetParameters(state) {
