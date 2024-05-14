@@ -1643,7 +1643,7 @@ AlgoliaSearchHelper.prototype._recommend = function () {
   ) {
     // eslint-disable-next-line no-console
     console.warn(
-      'Please update algoliasearch/lite to the latest version in order to use recommendations widgets.'
+      'Please update algoliasearch/lite to the latest version in order to use recommend widgets.'
     );
     return;
   }
