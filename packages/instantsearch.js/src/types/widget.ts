@@ -48,11 +48,10 @@ export type RenderOptions = SharedRenderOptions & {
   results: SearchResults;
 };
 
-export type DisposeOptions<
-  TParameters = SearchParameters | RecommendParameters
-> = {
+export type DisposeOptions = {
   helper: Helper;
-  state: TParameters;
+  state: SearchParameters;
+  recommendState?: RecommendParameters;
   parent: IndexWidget;
 };
 
@@ -159,13 +158,6 @@ type SearchWidget<TWidgetDescription extends WidgetDescription> = {
       >;
     }
   ) => SearchParameters;
-  /**
-   * Called when this widget is unmounted. Used to remove refinements set by
-   * during this widget's initialization and life time.
-   */
-  dispose?: (
-    options: DisposeOptions<SearchParameters>
-  ) => SearchParameters | void;
 };
 
 type RecommendRenderOptions = SharedRenderOptions & {
@@ -199,13 +191,6 @@ type RecommendWidget<
       TWidgetDescription['widgetParams']
     >
   >;
-  /**
-   * Called when this widget is unmounted. Used to remove refinements set by
-   * during this widget's initialization and life time.
-   */
-  dispose?: (
-    options: DisposeOptions<RecommendParameters>
-  ) => RecommendParameters | void;
 };
 
 type RequiredWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
@@ -226,6 +211,13 @@ type RequiredWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
    * Called after each search response has been received.
    */
   render?: (options: RenderOptions) => void;
+  /**
+   * Called when this widget is unmounted. Used to remove refinements set by
+   * during this widget's initialization and life time.
+   */
+  dispose?: (
+    options: DisposeOptions
+  ) => SearchParameters | RecommendParameters | void;
 };
 
 type RequiredWidgetType<TWidgetDescription extends WidgetDescription> = {
