@@ -19,7 +19,7 @@ export type TrendingItemsRenderState<THit extends BaseHit = BaseHit> = {
   /**
    * The matched recommendations from the Algolia API.
    */
-  recommendations: Array<Hit<THit>>;
+  items: Array<Hit<THit>>;
 };
 
 export type TrendingItemsConnectorParams<THit extends BaseHit = BaseHit> = (
@@ -122,11 +122,11 @@ const connectTrendingItems: TrendingItemsConnector =
 
         getWidgetRenderState({ results }) {
           if (results === null || results === undefined) {
-            return { recommendations: [], widgetParams };
+            return { items: [], widgetParams };
           }
 
           return {
-            recommendations: transformItems(results.hits, {
+            items: transformItems(results.hits, {
               results: results as RecommendResultItem,
             }),
             widgetParams,

@@ -175,9 +175,9 @@ describe('trendingItems', () => {
       const options: Parameters<typeof trendingItems>[0] = {
         container,
         templates: {
-          header({ recommendations, cssClasses }, { html }) {
+          header({ items, cssClasses }, { html }) {
             return html`<h4 class="${cssClasses.title}">
-              Trending items (${recommendations.length})
+              Trending items (${items.length})
             </h4>`;
           },
           item(item, { html }) {
@@ -261,10 +261,10 @@ describe('trendingItems', () => {
       const options: Parameters<typeof trendingItems>[0] = {
         container,
         templates: {
-          header({ recommendations, cssClasses }) {
+          header({ items, cssClasses }) {
             return (
               <h4 className={cssClasses.title}>
-                Trending items ({recommendations.length})
+                Trending items ({items.length})
               </h4>
             );
           },
