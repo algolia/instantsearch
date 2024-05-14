@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.8.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.8.0...react-instantsearch@7.8.1) (2024-05-14)
+
+
+### Bug Fixes
+
+* **react:** ensure `hitComponent` does not remount on rerenders ([#6191](https://github.com/algolia/instantsearch/issues/6191)) ([6d477df](https://github.com/algolia/instantsearch/commit/6d477df3672a1c004da12000572e09d7cca63847))
+
+
+
+
+
 # [7.8.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.7.3...react-instantsearch@7.8.0) (2024-05-07)
 
 

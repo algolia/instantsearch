@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.8.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.8.0...react-instantsearch-core@7.8.1) (2024-05-14)
+
+
+### Bug Fixes
+
+* **Configure:** prevent aroundRadius="all" throwing ([#6193](https://github.com/algolia/instantsearch/issues/6193)) ([cf5a326](https://github.com/algolia/instantsearch/commit/cf5a326eba655dfee75c22f7c8e27dfae49c4efc)), closes [#6136](https://github.com/algolia/instantsearch/issues/6136) [/github.com/algolia/instantsearch/blob/d1aa720c8e4e1aad2d7b64e385a29b258240c7df/packages/algoliasearch-helper/src/SearchParameters/index.js#L239-L251](https://github.com//github.com/algolia/instantsearch/blob/d1aa720c8e4e1aad2d7b64e385a29b258240c7df/packages/algoliasearch-helper/src/SearchParameters/index.js/issues/L239-L251)
+
+
+
+
+
 ## [7.8.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.7.3...react-instantsearch-core@7.8.0) (2024-05-07)
 
 **Note:** Version bump only for package react-instantsearch-core
