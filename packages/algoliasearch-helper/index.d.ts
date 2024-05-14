@@ -310,11 +310,11 @@ declare namespace algoliasearchHelper {
      */
     removeExclude(facet: string, value: string): this;
     removeTag(value: string): this;
-    removeFrequentlyBoughtTogether(id: string): this;
-    removeRelatedProducts(id: string): this;
-    removeTrendingItems(id: string): this;
-    removeTrendingFacets(id: string): this;
-    removeLookingSimilar(id: string): this;
+    removeFrequentlyBoughtTogether(id: number): this;
+    removeRelatedProducts(id: number): this;
+    removeTrendingItems(id: number): this;
+    removeTrendingFacets(id: number): this;
+    removeLookingSimilar(id: number): this;
     toggleFacetExclusion(facet: string, value: string): this;
     /**
      * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#toggleFacetExclusion}
@@ -1537,7 +1537,7 @@ declare namespace algoliasearchHelper {
     params: RecommendParametersWithId[];
     constructor(opts?: RecommendParametersOptions);
     addParams(params: RecommendParametersWithId): RecommendParameters;
-    removeParams(id: string): RecommendParameters;
+    removeParams(id: number): RecommendParameters;
     addFrequentlyBoughtTogether(
       params: RecommendParametersWithId<FrequentlyBoughtTogetherQuery>
     ): RecommendParameters;
