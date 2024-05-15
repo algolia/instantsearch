@@ -83,7 +83,7 @@ export function createFrequentlyBoughtTogetherComponent({
             ...classNames,
             title: cx('ais-FrequentlyBoughtTogether-title', classNames.title),
           }}
-          recommendations={items}
+          items={items}
           translations={translations}
         />
 

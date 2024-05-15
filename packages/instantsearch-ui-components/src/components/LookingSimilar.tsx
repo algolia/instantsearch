@@ -80,7 +80,7 @@ export function createLookingSimilarComponent({
             ...classNames,
             title: cx('ais-LookingSimilar-title', classNames.title),
           }}
-          recommendations={items}
+          items={items}
           translations={translations}
         />
 

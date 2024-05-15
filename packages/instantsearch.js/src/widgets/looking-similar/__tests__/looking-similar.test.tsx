@@ -179,9 +179,9 @@ describe('lookingSimilar', () => {
         container,
         objectIDs: ['1'],
         templates: {
-          header({ recommendations, cssClasses }, { html }) {
+          header({ items, cssClasses }, { html }) {
             return html`<h4 class="${cssClasses.title}">
-              Looking similar (${recommendations.length})
+              Looking similar (${items.length})
             </h4>`;
           },
           item(hit, { html }) {
@@ -268,10 +268,10 @@ describe('lookingSimilar', () => {
         container,
         objectIDs: ['1'],
         templates: {
-          header({ recommendations, cssClasses }) {
+          header({ items, cssClasses }) {
             return (
               <h4 className={cssClasses.title}>
-                Looking similar ({recommendations.length})
+                Looking similar ({items.length})
               </h4>
             );
           },

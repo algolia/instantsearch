@@ -182,9 +182,9 @@ describe('frequentlyBoughtTogether', () => {
         container,
         objectIDs: ['1'],
         templates: {
-          header({ recommendations, cssClasses }, { html }) {
+          header({ items, cssClasses }, { html }) {
             return html`<h4 class="${cssClasses.title}">
-              Frequently bought together (${recommendations.length})
+              Frequently bought together (${items.length})
             </h4>`;
           },
           item(hit, { html }) {
@@ -271,10 +271,10 @@ describe('frequentlyBoughtTogether', () => {
         container,
         objectIDs: ['1'],
         templates: {
-          header({ recommendations, cssClasses }) {
+          header({ items, cssClasses }) {
             return (
               <h4 className={cssClasses.title}>
-                Frequently bought together ({recommendations.length})
+                Frequently bought together ({items.length})
               </h4>
             );
           },

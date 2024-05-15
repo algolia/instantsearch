@@ -52,7 +52,7 @@ function createRenderer({
   Partial<TrendingItemsWidgetParams>
 > {
   return function renderer(
-    { recommendations, results, instantSearchInstance },
+    { items, results, instantSearchInstance },
     isFirstRendering
   ) {
     if (isFirstRendering) {
@@ -75,7 +75,7 @@ function createRenderer({
               rootTagName="fragment"
               data={{
                 cssClasses: data.classNames,
-                recommendations: data.recommendations,
+                items: data.items,
               }}
             />
           )
@@ -112,7 +112,7 @@ function createRenderer({
 
     render(
       <TrendingItems
-        items={recommendations}
+        items={items}
         sendEvent={() => {}}
         classNames={cssClasses}
         headerComponent={headerComponent}
@@ -139,7 +139,7 @@ export type TrendingItemsTemplates = Partial<{
   header: Template<
     Pick<
       Parameters<NonNullable<TrendingItemsUiProps<Hit>['headerComponent']>>[0],
-      'recommendations'
+      'items'
     > & { cssClasses: RecommendClassNames }
   >;
 

@@ -326,12 +326,12 @@ const testSetups: TestSetupsMap<TestSuites> = {
     widgetParams,
   }) => {
     function CustomRelatedProducts(props: UseRelatedProductsProps) {
-      const { recommendations } = useRelatedProducts(props);
+      const { items } = useRelatedProducts(props);
 
       return (
         <ul>
-          {recommendations.map((recommendation) => (
-            <li key={recommendation.objectID}>{recommendation.objectID}</li>
+          {items.map((item) => (
+            <li key={item.objectID}>{item.objectID}</li>
           ))}
         </ul>
       );
@@ -350,12 +350,12 @@ const testSetups: TestSetupsMap<TestSuites> = {
     function CustomFrequentlyBoughtTogether(
       props: UseFrequentlyBoughtTogetherProps
     ) {
-      const { recommendations } = useFrequentlyBoughtTogether(props);
+      const { items } = useFrequentlyBoughtTogether(props);
 
       return (
         <ul>
-          {recommendations.map((recommendation) => (
-            <li key={recommendation.objectID}>{recommendation.objectID}</li>
+          {items.map((item) => (
+            <li key={item.objectID}>{item.objectID}</li>
           ))}
         </ul>
       );
@@ -372,12 +372,12 @@ const testSetups: TestSetupsMap<TestSuites> = {
     widgetParams,
   }) => {
     function CustomTrendingItems(props: UseTrendingItemsProps) {
-      const { recommendations } = useTrendingItems(props);
+      const { items } = useTrendingItems(props);
 
       return (
         <ul>
-          {recommendations.map((recommendation) => (
-            <li key={recommendation.objectID}>{recommendation.objectID}</li>
+          {items.map((item) => (
+            <li key={item.objectID}>{item.objectID}</li>
           ))}
         </ul>
       );
@@ -394,12 +394,12 @@ const testSetups: TestSetupsMap<TestSuites> = {
     widgetParams,
   }) => {
     function CustomLookingSimilar(props: UseLookingSimilarProps) {
-      const { recommendations } = useLookingSimilar(props);
+      const { items } = useLookingSimilar(props);
 
       return (
         <ul>
-          {recommendations.map((recommendation) => (
-            <li key={recommendation.objectID}>{recommendation.objectID}</li>
+          {items.map((item) => (
+            <li key={item.objectID}>{item.objectID}</li>
           ))}
         </ul>
       );

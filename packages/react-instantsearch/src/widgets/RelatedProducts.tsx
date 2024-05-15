@@ -47,7 +47,7 @@ export function RelatedProducts<TItem extends BaseHit = BaseHit>({
   ...props
 }: RelatedProductsProps<TItem>) {
   const { status } = useInstantSearch();
-  const { recommendations } = useRelatedProducts(
+  const { items } = useRelatedProducts(
     {
       objectIDs,
       maxRecommendations,
@@ -60,7 +60,7 @@ export function RelatedProducts<TItem extends BaseHit = BaseHit>({
   );
 
   const uiProps: UiProps<TItem> = {
-    items: recommendations as Array<Hit<TItem>>,
+    items: items as Array<Hit<TItem>>,
     itemComponent,
     headerComponent,
     emptyComponent,
