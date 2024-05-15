@@ -401,8 +401,8 @@ const testSetups: TestSetupsMap<TestSuites> = {
       container: HTMLElement;
     }>((renderOptions) => {
       renderOptions.widgetParams.container.innerHTML = `
-        <ul>${renderOptions.recommendations
-          .map((recommendation) => `<li>${recommendation.objectID}</li>`)
+        <ul>${renderOptions.items
+          .map((item) => `<li>${item.objectID}</li>`)
           .join('')}</ul>`;
     });
 
@@ -429,8 +429,8 @@ const testSetups: TestSetupsMap<TestSuites> = {
       container: HTMLElement;
     }>((renderOptions) => {
       renderOptions.widgetParams.container.innerHTML = `
-        <ul>${renderOptions.recommendations
-          .map((recommendation) => `<li>${recommendation.objectID}</li>`)
+        <ul>${renderOptions.items
+          .map((item) => `<li>${item.objectID}</li>`)
           .join('')}</ul>
       `;
     });
@@ -455,8 +455,8 @@ const testSetups: TestSetupsMap<TestSuites> = {
       container: HTMLElement;
     }>((renderOptions) => {
       renderOptions.widgetParams.container.innerHTML = `
-        <ul>${renderOptions.recommendations
-          .map((recommendation) => `<li>${recommendation.objectID}</li>`)
+        <ul>${renderOptions.items
+          .map((item) => `<li>${item.objectID}</li>`)
           .join('')}</ul>
       `;
     });
@@ -481,8 +481,8 @@ const testSetups: TestSetupsMap<TestSuites> = {
       container: HTMLElement;
     }>((renderOptions) => {
       renderOptions.widgetParams.container.innerHTML = `
-        <ul>${renderOptions.recommendations
-          .map((recommendation) => `<li>${recommendation.objectID}</li>`)
+        <ul>${renderOptions.items
+          .map((item) => `<li>${item.objectID}</li>`)
           .join('')}</ul>
       `;
     });
