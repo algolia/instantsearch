@@ -58,18 +58,18 @@ export function createTrendingItemsComponent({
     };
 
     const cssClasses: RecommendClassNames = {
-      root: cx('ais-RelatedProducts', classNames.root),
+      root: cx('ais-TrendingItems', classNames.root),
       emptyRoot: cx(
-        'ais-RelatedProducts',
+        'ais-TrendingItems',
         classNames.root,
-        'ais-RelatedProducts--empty',
+        'ais-TrendingItems--empty',
         classNames.emptyRoot,
         props.className
       ),
-      title: cx('ais-RelatedProducts-title', classNames.title),
-      container: cx('ais-RelatedProducts-container', classNames.container),
-      list: cx('ais-RelatedProducts-list', classNames.list),
-      item: cx('ais-RelatedProducts-item', classNames.item),
+      title: cx('ais-TrendingItems-title', classNames.title),
+      container: cx('ais-TrendingItems-container', classNames.container),
+      list: cx('ais-TrendingItems-list', classNames.list),
+      item: cx('ais-TrendingItems-item', classNames.item),
     };
 
     if (items.length === 0 && status === 'idle') {
