@@ -40,6 +40,7 @@ export function LookingSimilar<THit extends BaseHit = BaseHit>({
   threshold,
   queryParameters,
   fallbackParameters,
+  escapeHTML,
   transformItems,
   itemComponent,
   headerComponent,
@@ -54,6 +55,7 @@ export function LookingSimilar<THit extends BaseHit = BaseHit>({
       threshold,
       queryParameters,
       fallbackParameters,
+      escapeHTML,
       transformItems,
     },
     { $$widgetType: 'ais.lookingSimilar' }
