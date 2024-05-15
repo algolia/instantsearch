@@ -27,6 +27,7 @@ export function createOptionsTests(
           threshold: 3,
           fallbackParameters: { facetFilters: ['test1'] },
           queryParameters: { analytics: true },
+          escapeHTML: false,
         },
       };
 
