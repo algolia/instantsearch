@@ -83,7 +83,7 @@ export function createRelatedProductsComponent({
             ...classNames,
             title: cx('ais-RelatedProducts-title', classNames.title),
           }}
-          recommendations={items}
+          items={items}
           translations={translations}
         />
 

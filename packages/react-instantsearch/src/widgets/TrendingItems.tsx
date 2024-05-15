@@ -51,7 +51,7 @@ export function TrendingItems<TItem extends BaseHit = BaseHit>({
     facetName && facetValue ? { facetName, facetValue } : {};
 
   const { status } = useInstantSearch();
-  const { recommendations } = useTrendingItems(
+  const { items } = useTrendingItems(
     {
       ...facetParameters,
       maxRecommendations,
@@ -64,7 +64,7 @@ export function TrendingItems<TItem extends BaseHit = BaseHit>({
   );
 
   const uiProps: UiProps<TItem> = {
-    items: recommendations as Array<Hit<TItem>>,
+    items: items as Array<Hit<TItem>>,
     itemComponent,
     headerComponent,
     emptyComponent,

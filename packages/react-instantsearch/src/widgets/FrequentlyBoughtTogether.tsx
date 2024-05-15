@@ -50,7 +50,7 @@ export function FrequentlyBoughtTogether<THit extends BaseHit = BaseHit>({
   ...props
 }: FrequentlyBoughtTogetherProps<THit>) {
   const { status } = useInstantSearch();
-  const { recommendations } = useFrequentlyBoughtTogether<THit>(
+  const { items } = useFrequentlyBoughtTogether<THit>(
     {
       objectIDs,
       maxRecommendations,
@@ -62,7 +62,7 @@ export function FrequentlyBoughtTogether<THit extends BaseHit = BaseHit>({
   );
 
   const uiProps: UiProps<THit> = {
-    items: recommendations,
+    items,
     itemComponent,
     headerComponent,
     emptyComponent,

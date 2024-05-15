@@ -80,7 +80,7 @@ export function createTrendingItemsComponent({
             ...classNames,
             title: cx('ais-TrendingItems-title', classNames.title),
           }}
-          recommendations={items}
+          items={items}
           translations={translations}
         />
 

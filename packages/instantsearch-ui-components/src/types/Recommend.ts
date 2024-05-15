@@ -84,7 +84,7 @@ export type RecommendComponentProps<
 
 export type RecommendInnerComponentProps<TObject> = {
   classNames: Partial<RecommendClassNames>;
-  recommendations: TObject[];
+  items: TObject[];
   translations: Partial<RecommendTranslations>;
 };
 
