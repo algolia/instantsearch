@@ -47,6 +47,7 @@ export function createOptionsTests(
           maxRecommendations: 2,
           threshold: 3,
           queryParameters: { analytics: true },
+          escapeHTML: false,
         },
       };
 
