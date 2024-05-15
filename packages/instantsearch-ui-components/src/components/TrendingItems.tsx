@@ -11,6 +11,7 @@ import {
 
 import type {
   ComponentProps,
+  RecommendClassNames,
   RecommendComponentProps,
   RecommendTranslations,
   Renderer,
@@ -56,41 +57,39 @@ export function createTrendingItemsComponent({
       ...userTranslations,
     };
 
+    const cssClasses: RecommendClassNames = {
+      root: cx('ais-TrendingItems', classNames.root),
+      emptyRoot: cx(
+        'ais-TrendingItems',
+        classNames.root,
+        'ais-TrendingItems--empty',
+        classNames.emptyRoot,
+        props.className
+      ),
+      title: cx('ais-TrendingItems-title', classNames.title),
+      container: cx('ais-TrendingItems-container', classNames.container),
+      list: cx('ais-TrendingItems-list', classNames.list),
+      item: cx('ais-TrendingItems-item', classNames.item),
+    };
+
     if (items.length === 0 && status === 'idle') {
       return (
-        <section
-          {...props}
-          className={cx(
-            'ais-TrendingItems',
-            classNames.root,
-            'ais-TrendingItems--empty',
-            classNames.emptyRoot,
-            props.className
-          )}
-        >
+        <section {...props} className={cssClasses.emptyRoot}>
           <EmptyComponent />
         </section>
       );
     }
 
     return (
-      <section {...props} className={cx('ais-TrendingItems', classNames.root)}>
+      <section {...props} className={cssClasses.root}>
         <HeaderComponent
-          classNames={{
-            ...classNames,
-            title: cx('ais-TrendingItems-title', classNames.title),
-          }}
+          classNames={cssClasses}
           items={items}
           translations={translations}
         />
 
         <View
-          classNames={{
-            ...classNames,
-            container: cx('ais-TrendingItems-container', classNames.container),
-            list: cx('ais-TrendingItems-list', classNames.list),
-            item: cx('ais-TrendingItems-item', classNames.item),
-          }}
+          classNames={cssClasses}
           translations={translations}
           itemComponent={ItemComponent}
           items={items}
