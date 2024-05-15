@@ -11,6 +11,7 @@ import {
 
 import type {
   ComponentProps,
+  RecommendClassNames,
   RecommendComponentProps,
   RecommendTranslations,
   Renderer,
@@ -56,41 +57,39 @@ export function createLookingSimilarComponent({
       ...userTranslations,
     };
 
+    const cssClasses: RecommendClassNames = {
+      root: cx('ais-LookingSimilar', classNames.root),
+      emptyRoot: cx(
+        'ais-LookingSimilar',
+        classNames.root,
+        'ais-LookingSimilar--empty',
+        classNames.emptyRoot,
+        props.className
+      ),
+      title: cx('ais-LookingSimilar-title', classNames.title),
+      container: cx('ais-LookingSimilar-container', classNames.container),
+      list: cx('ais-LookingSimilar-list', classNames.list),
+      item: cx('ais-LookingSimilar-item', classNames.item),
+    };
+
     if (items.length === 0 && status === 'idle') {
       return (
-        <section
-          {...props}
-          className={cx(
-            'ais-LookingSimilar',
-            classNames.root,
-            'ais-LookingSimilar--empty',
-            classNames.emptyRoot,
-            props.className
-          )}
-        >
+        <section {...props} className={cssClasses.emptyRoot}>
           <EmptyComponent />
         </section>
       );
     }
 
     return (
-      <section {...props} className={cx('ais-LookingSimilar', classNames.root)}>
+      <section {...props} className={cssClasses.root}>
         <HeaderComponent
-          classNames={{
-            ...classNames,
-            title: cx('ais-LookingSimilar-title', classNames.title),
-          }}
+          classNames={cssClasses}
           items={items}
           translations={translations}
         />
 
         <View
-          classNames={{
-            ...classNames,
-            container: cx('ais-LookingSimilar-container', classNames.container),
-            list: cx('ais-LookingSimilar-list', classNames.list),
-            item: cx('ais-LookingSimilar-item', classNames.item),
-          }}
+          classNames={cssClasses}
           translations={translations}
           itemComponent={ItemComponent}
           items={items}
