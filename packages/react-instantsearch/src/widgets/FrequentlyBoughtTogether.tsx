@@ -43,6 +43,7 @@ export function FrequentlyBoughtTogether<THit extends BaseHit = BaseHit>({
   maxRecommendations,
   threshold,
   queryParameters,
+  escapeHTML,
   transformItems,
   itemComponent,
   headerComponent,
@@ -56,6 +57,7 @@ export function FrequentlyBoughtTogether<THit extends BaseHit = BaseHit>({
       maxRecommendations,
       threshold,
       queryParameters,
+      escapeHTML,
       transformItems,
     },
     { $$widgetType: 'ais.frequentlyBoughtTogether' }
