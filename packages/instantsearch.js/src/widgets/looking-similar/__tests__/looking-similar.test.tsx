@@ -2,11 +2,7 @@
  * @jest-environment jsdom
  */
 /** @jsx h */
-import {
-  createRecommendResponse,
-  createSearchClient,
-  createSingleSearchResponse,
-} from '@instantsearch/mocks';
+import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { wait } from '@instantsearch/testutils';
 import { h } from 'preact';
 
@@ -21,7 +17,7 @@ describe('lookingSimilar', () => {
   describe('options', () => {
     test('throws without a `container`', () => {
       expect(() => {
-        const searchClient = createSearchClient();
+        const searchClient = createRecommendSearchClient();
 
         const search = instantsearch({
           indexName: 'indexName',
@@ -43,7 +39,7 @@ describe('lookingSimilar', () => {
 
     test('adds custom CSS classes', async () => {
       const container = document.createElement('div');
-      const searchClient = createMockedSearchClient();
+      const searchClient = createRecommendSearchClient();
       const options: Parameters<typeof lookingSimilar>[0] = {
         container,
         objectIDs: ['1'],
@@ -98,7 +94,9 @@ describe('lookingSimilar', () => {
   describe('templates', () => {
     test('renders default templates', async () => {
       const container = document.createElement('div');
-      const searchClient = createMockedSearchClient();
+      const searchClient = createRecommendSearchClient({
+        minimal: true,
+      });
       const options: Parameters<typeof lookingSimilar>[0] = {
         container,
         objectIDs: ['1'],
@@ -174,7 +172,7 @@ describe('lookingSimilar', () => {
 
     test('renders with templates using `html`', async () => {
       const container = document.createElement('div');
-      const searchClient = createMockedSearchClient();
+      const searchClient = createRecommendSearchClient();
       const options: Parameters<typeof lookingSimilar>[0] = {
         container,
         objectIDs: ['1'],
@@ -263,7 +261,7 @@ describe('lookingSimilar', () => {
 
     test('renders with templates using JSX', async () => {
       const container = document.createElement('div');
-      const searchClient = createMockedSearchClient();
+      const searchClient = createRecommendSearchClient();
       const options: Parameters<typeof lookingSimilar>[0] = {
         container,
         objectIDs: ['1'],
@@ -352,26 +350,4 @@ describe('lookingSimilar', () => {
       `);
     });
   });
-
-  function createMockedSearchClient() {
-    return createSearchClient({
-      getRecommendations: jest.fn((requests) =>
-        Promise.resolve(
-          createRecommendResponse(
-            // @ts-ignore
-            // `request` will be implicitly typed as any in type-check:v3
-            // since `getRecommendations` is not available there
-            requests.map((request) => {
-              return createSingleSearchResponse({
-                hits:
-                  request.maxRecommendations === 0
-                    ? []
-                    : [{ objectID: '1' }, { objectID: '2' }],
-              });
-            })
-          )
-        )
-      ),
-    });
-  }
 });

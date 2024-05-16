@@ -2,22 +2,18 @@
  * @jest-environment jsdom
  */
 
-import {
-  createMultiSearchResponse,
-  createSearchClient,
-  createSingleSearchResponse,
-} from '@instantsearch/mocks';
+import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { InstantSearchTestWrapper } from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
 import React from 'react';
 
 import { RelatedProducts } from '../RelatedProducts';
 
-import type { SearchClient } from 'instantsearch.js';
-
 describe('RelatedProducts', () => {
   test('renders with translations', async () => {
-    const client = createMockedSearchClient();
+    const client = createRecommendSearchClient({
+      minimal: true,
+    });
     const { container } = render(
       <InstantSearchTestWrapper searchClient={client}>
         <RelatedProducts
@@ -86,25 +82,3 @@ describe('RelatedProducts', () => {
     expect(root).toHaveAttribute('aria-hidden', 'true');
   });
 });
-
-function createMockedSearchClient() {
-  return createSearchClient({
-    getRecommendations: jest.fn((requests) =>
-      Promise.resolve(
-        createMultiSearchResponse(
-          // @ts-ignore
-          // `request` will be implicitly typed as `any` in type-check:v3
-          // since `getRecommendations` is not available there
-          ...requests.map((request) => {
-            return createSingleSearchResponse<any>({
-              hits:
-                request.maxRecommendations === 0
-                  ? []
-                  : [{ objectID: '1' }, { objectID: '2' }],
-            });
-          })
-        )
-      )
-    ) as SearchClient['getRecommendations'],
-  });
-}
