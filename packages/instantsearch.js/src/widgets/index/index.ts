@@ -273,6 +273,8 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
   let helper: Helper | null = null;
   let derivedHelper: DerivedHelper | null = null;
   let lastValidSearchParameters: SearchParameters | null = null;
+  let hasRecommendWidget: boolean = false;
+  let hasSearchWidget: boolean = false;
 
   return {
     $$type: 'ais.index',
@@ -382,11 +384,20 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           return;
         }
 
+        if (localInstantSearchInstance && widget.dependsOn === 'recommend') {
+          localInstantSearchInstance._hasRecommendWidget = true;
+        } else if (localInstantSearchInstance) {
+          localInstantSearchInstance._hasSearchWidget = true;
+        } else if (widget.dependsOn === 'recommend') {
+          hasRecommendWidget = true;
+        } else {
+          hasSearchWidget = true;
+        }
+
         addWidgetId(widget);
       });
 
       localWidgets = localWidgets.concat(widgets);
-
       if (localInstantSearchInstance && Boolean(widgets.length)) {
         privateHelperSetState(helper!, {
           state: getLocalWidgetsSearchParameters(localWidgets, {
@@ -733,6 +744,13 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         // because we don't trigger an initial search. We therefore need to directly
         // schedule a render that will render the results injected on the helper.
         instantSearchInstance.scheduleRender();
+      }
+
+      if (hasRecommendWidget) {
+        instantSearchInstance._hasRecommendWidget = true;
+      }
+      if (hasSearchWidget) {
+        instantSearchInstance._hasSearchWidget = true;
       }
     },
 

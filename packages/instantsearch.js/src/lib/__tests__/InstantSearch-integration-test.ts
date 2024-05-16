@@ -3,12 +3,13 @@
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
+import { castToJestMock } from '@instantsearch/testutils';
 import { wait } from '@instantsearch/testutils/wait';
 import { getByText, fireEvent } from '@testing-library/dom';
 
 import { connectConfigure, connectSearchBox } from '../../connectors';
 import instantsearch from '../../index.es';
-import { configure, searchBox } from '../../widgets';
+import { configure, frequentlyBoughtTogether, searchBox } from '../../widgets';
 
 import type { MiddlewareDefinition } from '../../types';
 
@@ -154,5 +155,440 @@ describe('errors', () => {
     });
 
     search.start();
+  });
+});
+
+describe('network requests', () => {
+  describe('no insights', () => {
+    it('sends no search or recommend query when there are no widgets', async () => {
+      const searchClient = createSearchClient();
+      instantsearch({
+        indexName: 'indexName',
+        searchClient,
+      }).start();
+
+      await wait(0);
+
+      expect(
+        castToJestMock(searchClient.search).mock.calls[0]?.[0]
+      ).toMatchInlineSnapshot(`undefined`);
+      expect(
+        castToJestMock(searchClient.getRecommendations).mock.calls[0]?.[0]
+      ).toMatchInlineSnapshot(`undefined`);
+    });
+
+    it('sends only one search query when there are search widgets', async () => {
+      const searchClient = createSearchClient();
+      instantsearch({
+        indexName: 'indexName',
+        searchClient,
+      })
+        .addWidgets([searchBox({ container: document.createElement('div') })])
+        .start();
+
+      await wait(0);
+
+      expect(castToJestMock(searchClient.search).mock.calls[0]?.[0])
+        .toMatchInlineSnapshot(`
+        [
+          {
+            "indexName": "indexName",
+            "params": {
+              "facets": [],
+              "query": "",
+              "tagFilters": "",
+            },
+          },
+        ]
+      `);
+      expect(
+        castToJestMock(searchClient.getRecommendations).mock.calls[0]?.[0]
+      ).toMatchInlineSnapshot(`undefined`);
+    });
+
+    it('sends only one recommend query when there are recommend widgets', async () => {
+      const searchClient = createSearchClient();
+      instantsearch({
+        indexName: 'indexName',
+        searchClient,
+      })
+        .addWidgets([
+          frequentlyBoughtTogether({
+            objectIDs: ['one'],
+            container: document.createElement('div'),
+          }),
+        ])
+        .start();
+
+      await wait(0);
+
+      expect(
+        castToJestMock(searchClient.search).mock.calls[0]?.[0]
+      ).toMatchInlineSnapshot(`undefined`);
+      expect(castToJestMock(searchClient.getRecommendations).mock.calls[0]?.[0])
+        .toMatchInlineSnapshot(`
+        [
+          {
+            "indexName": "indexName",
+            "maxRecommendations": undefined,
+            "model": "bought-together",
+            "objectID": "one",
+            "queryParameters": {
+              "highlightPostTag": "__/ais-highlight__",
+              "highlightPreTag": "__ais-highlight__",
+            },
+            "threshold": undefined,
+          },
+        ]
+      `);
+    });
+
+    it('sends only one search and recommend query when there are search and recommend widgets', async () => {
+      const searchClient = createSearchClient();
+      instantsearch({
+        indexName: 'indexName',
+        searchClient,
+      })
+        .addWidgets([
+          searchBox({ container: document.createElement('div') }),
+          frequentlyBoughtTogether({
+            objectIDs: ['one'],
+            container: document.createElement('div'),
+          }),
+        ])
+        .start();
+
+      await wait(0);
+
+      expect(castToJestMock(searchClient.search).mock.calls[0]?.[0])
+        .toMatchInlineSnapshot(`
+        [
+          {
+            "indexName": "indexName",
+            "params": {
+              "facets": [],
+              "query": "",
+              "tagFilters": "",
+            },
+          },
+        ]
+      `);
+      expect(castToJestMock(searchClient.getRecommendations).mock.calls[0]?.[0])
+        .toMatchInlineSnapshot(`
+        [
+          {
+            "indexName": "indexName",
+            "maxRecommendations": undefined,
+            "model": "bought-together",
+            "objectID": "one",
+            "queryParameters": {
+              "highlightPostTag": "__/ais-highlight__",
+              "highlightPreTag": "__ais-highlight__",
+            },
+            "threshold": undefined,
+          },
+        ]
+      `);
+    });
+  });
+
+  describe('with insights', () => {
+    let cookie: string;
+    beforeEach(() => {
+      cookie = document.cookie;
+      document.cookie = '_ALGOLIA=cookie-key';
+    });
+
+    afterEach(() => {
+      document.cookie = cookie;
+    });
+
+    it('sends no search or recommend query when there are no widgets', async () => {
+      const searchClient = createSearchClient();
+      instantsearch({
+        indexName: 'indexName',
+        searchClient,
+        insights: true,
+      }).start();
+
+      await wait(0);
+
+      expect(
+        castToJestMock(searchClient.search).mock.calls[0]?.[0]
+      ).toMatchInlineSnapshot(`undefined`);
+      expect(
+        castToJestMock(searchClient.getRecommendations).mock.calls[0]?.[0]
+      ).toMatchInlineSnapshot(`undefined`);
+    });
+
+    it('sends only one search query when there are search widgets', async () => {
+      const searchClient = createSearchClient();
+      instantsearch({
+        indexName: 'indexName',
+        searchClient,
+        insights: true,
+      })
+        .addWidgets([searchBox({ container: document.createElement('div') })])
+        .start();
+
+      await wait(0);
+
+      expect(castToJestMock(searchClient.search).mock.calls[0]?.[0])
+        .toMatchInlineSnapshot(`
+        [
+          {
+            "indexName": "indexName",
+            "params": {
+              "clickAnalytics": true,
+              "facets": [],
+              "query": "",
+              "tagFilters": "",
+              "userToken": "cookie-key",
+            },
+          },
+        ]
+      `);
+      expect(
+        castToJestMock(searchClient.getRecommendations).mock.calls[0]?.[0]
+      ).toMatchInlineSnapshot(`undefined`);
+    });
+
+    it('sends only one recommend query when there are recommend widgets', async () => {
+      const searchClient = createSearchClient();
+      instantsearch({
+        indexName: 'indexName',
+        searchClient,
+        insights: true,
+      })
+        .addWidgets([
+          frequentlyBoughtTogether({
+            objectIDs: ['one'],
+            container: document.createElement('div'),
+          }),
+        ])
+        .start();
+
+      await wait(0);
+
+      expect(
+        castToJestMock(searchClient.search).mock.calls[0]?.[0]
+      ).toMatchInlineSnapshot(`undefined`);
+      expect(castToJestMock(searchClient.getRecommendations).mock.calls[0]?.[0])
+        .toMatchInlineSnapshot(`
+        [
+          {
+            "indexName": "indexName",
+            "maxRecommendations": undefined,
+            "model": "bought-together",
+            "objectID": "one",
+            "queryParameters": {
+              "highlightPostTag": "__/ais-highlight__",
+              "highlightPreTag": "__ais-highlight__",
+            },
+            "threshold": undefined,
+          },
+        ]
+      `);
+    });
+
+    it('sends only one search and recommend query when there are search and recommend widgets', async () => {
+      const searchClient = createSearchClient();
+      instantsearch({
+        indexName: 'indexName',
+        searchClient,
+        insights: true,
+      })
+        .addWidgets([
+          searchBox({ container: document.createElement('div') }),
+          frequentlyBoughtTogether({
+            objectIDs: ['one'],
+            container: document.createElement('div'),
+          }),
+        ])
+        .start();
+
+      await wait(0);
+
+      expect(castToJestMock(searchClient.search).mock.calls[0]?.[0])
+        .toMatchInlineSnapshot(`
+        [
+          {
+            "indexName": "indexName",
+            "params": {
+              "clickAnalytics": true,
+              "facets": [],
+              "query": "",
+              "tagFilters": "",
+              "userToken": "cookie-key",
+            },
+          },
+        ]
+      `);
+      expect(castToJestMock(searchClient.getRecommendations).mock.calls[0]?.[0])
+        .toMatchInlineSnapshot(`
+        [
+          {
+            "indexName": "indexName",
+            "maxRecommendations": undefined,
+            "model": "bought-together",
+            "objectID": "one",
+            "queryParameters": {
+              "highlightPostTag": "__/ais-highlight__",
+              "highlightPreTag": "__ais-highlight__",
+            },
+            "threshold": undefined,
+          },
+        ]
+      `);
+    });
+  });
+
+  describe('with insights (no cookie)', () => {
+    let cookie: string;
+    beforeEach(() => {
+      cookie = document.cookie;
+      document.cookie = '_ALGOLIA=';
+    });
+
+    afterEach(() => {
+      document.cookie = cookie;
+    });
+
+    it('sends no search or recommend query when there are no widgets', async () => {
+      const searchClient = createSearchClient();
+      instantsearch({
+        indexName: 'indexName',
+        searchClient,
+        insights: true,
+      }).start();
+
+      await wait(0);
+
+      expect(
+        castToJestMock(searchClient.search).mock.calls[0]?.[0]
+      ).toMatchInlineSnapshot(`undefined`);
+      expect(
+        castToJestMock(searchClient.getRecommendations).mock.calls[0]?.[0]
+      ).toMatchInlineSnapshot(`undefined`);
+    });
+
+    it('sends only one search query when there are search widgets', async () => {
+      const searchClient = createSearchClient();
+      instantsearch({
+        indexName: 'indexName',
+        searchClient,
+        insights: true,
+      })
+        .addWidgets([searchBox({ container: document.createElement('div') })])
+        .start();
+
+      await wait(0);
+
+      expect(castToJestMock(searchClient.search).mock.calls[0]?.[0])
+        .toMatchInlineSnapshot(`
+        [
+          {
+            "indexName": "indexName",
+            "params": {
+              "clickAnalytics": true,
+              "facets": [],
+              "query": "",
+              "tagFilters": "",
+            },
+          },
+        ]
+      `);
+      expect(
+        castToJestMock(searchClient.getRecommendations).mock.calls[0]?.[0]
+      ).toMatchInlineSnapshot(`undefined`);
+    });
+
+    it('sends only one recommend query when there are recommend widgets', async () => {
+      const searchClient = createSearchClient();
+      instantsearch({
+        indexName: 'indexName',
+        searchClient,
+        insights: true,
+      })
+        .addWidgets([
+          frequentlyBoughtTogether({
+            objectIDs: ['one'],
+            container: document.createElement('div'),
+          }),
+        ])
+        .start();
+
+      await wait(0);
+
+      expect(
+        castToJestMock(searchClient.search).mock.calls[0]?.[0]
+      ).toMatchInlineSnapshot(`undefined`);
+      expect(castToJestMock(searchClient.getRecommendations).mock.calls[0]?.[0])
+        .toMatchInlineSnapshot(`
+        [
+          {
+            "indexName": "indexName",
+            "maxRecommendations": undefined,
+            "model": "bought-together",
+            "objectID": "one",
+            "queryParameters": {
+              "highlightPostTag": "__/ais-highlight__",
+              "highlightPreTag": "__ais-highlight__",
+            },
+            "threshold": undefined,
+          },
+        ]
+      `);
+    });
+
+    it('sends only one search and recommend query when there are search and recommend widgets', async () => {
+      const searchClient = createSearchClient();
+      instantsearch({
+        indexName: 'indexName',
+        searchClient,
+        insights: true,
+      })
+        .addWidgets([
+          searchBox({ container: document.createElement('div') }),
+          frequentlyBoughtTogether({
+            objectIDs: ['one'],
+            container: document.createElement('div'),
+          }),
+        ])
+        .start();
+
+      await wait(0);
+
+      expect(castToJestMock(searchClient.search).mock.calls[0]?.[0])
+        .toMatchInlineSnapshot(`
+        [
+          {
+            "indexName": "indexName",
+            "params": {
+              "clickAnalytics": true,
+              "facets": [],
+              "query": "",
+              "tagFilters": "",
+            },
+          },
+        ]
+      `);
+      expect(castToJestMock(searchClient.getRecommendations).mock.calls[0]?.[0])
+        .toMatchInlineSnapshot(`
+        [
+          {
+            "indexName": "indexName",
+            "maxRecommendations": undefined,
+            "model": "bought-together",
+            "objectID": "one",
+            "queryParameters": {
+              "highlightPostTag": "__/ais-highlight__",
+              "highlightPreTag": "__ais-highlight__",
+            },
+            "threshold": undefined,
+          },
+        ]
+      `);
+    });
   });
 });
