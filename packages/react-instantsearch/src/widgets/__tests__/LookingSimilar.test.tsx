@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { createMockedSearchClientWithRecommendations } from '@instantsearch/mocks/fixtures';
+import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { InstantSearchTestWrapper } from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
 import React from 'react';
@@ -11,7 +11,7 @@ import { LookingSimilar } from '../LookingSimilar';
 
 describe('LookingSimilar', () => {
   test('renders with translations', async () => {
-    const client = createMockedSearchClientWithRecommendations({
+    const client = createRecommendSearchClient({
       minimal: true,
     });
     const { container } = render(

@@ -1,4 +1,4 @@
-import { createMockedSearchClientWithRecommendations } from '@instantsearch/mocks/fixtures';
+import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { wait } from '@instantsearch/testutils';
 import { TAG_PLACEHOLDER } from 'instantsearch.js/es/lib/utils';
 
@@ -11,7 +11,7 @@ export function createOptionsTests(
 ) {
   describe('options', () => {
     test('renders with default props', async () => {
-      const searchClient = createMockedSearchClientWithRecommendations();
+      const searchClient = createRecommendSearchClient();
 
       await setup({
         instantSearchOptions: {
@@ -80,7 +80,7 @@ export function createOptionsTests(
     });
 
     test('renders transformed items', async () => {
-      const searchClient = createMockedSearchClientWithRecommendations({
+      const searchClient = createRecommendSearchClient({
         minimal: true,
       });
 
@@ -141,7 +141,7 @@ export function createOptionsTests(
     });
 
     test('renders with no results', async () => {
-      const searchClient = createMockedSearchClientWithRecommendations();
+      const searchClient = createRecommendSearchClient();
 
       await setup({
         instantSearchOptions: {
@@ -170,7 +170,7 @@ export function createOptionsTests(
     });
 
     test('passes parameters correctly', async () => {
-      const searchClient = createMockedSearchClientWithRecommendations();
+      const searchClient = createRecommendSearchClient();
 
       await setup({
         instantSearchOptions: {
@@ -211,7 +211,7 @@ export function createOptionsTests(
     });
 
     test('escapes html entities when `escapeHTML` is true', async () => {
-      const searchClient = createMockedSearchClientWithRecommendations();
+      const searchClient = createRecommendSearchClient();
       let recommendItems: Parameters<
         NonNullable<
           Parameters<RelatedProductsWidgetSetup>[0]['widgetParams']['transformItems']

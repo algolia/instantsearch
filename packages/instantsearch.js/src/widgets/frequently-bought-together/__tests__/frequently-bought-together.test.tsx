@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 /** @jsx h */
-import { createMockedSearchClientWithRecommendations } from '@instantsearch/mocks/fixtures';
+import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { wait } from '@instantsearch/testutils';
 import { h } from 'preact';
 
@@ -17,7 +17,7 @@ describe('frequentlyBoughtTogether', () => {
   describe('options', () => {
     test('throws without a `container`', () => {
       expect(() => {
-        const searchClient = createMockedSearchClientWithRecommendations();
+        const searchClient = createRecommendSearchClient();
 
         const search = instantsearch({
           indexName: 'indexName',
@@ -39,7 +39,7 @@ describe('frequentlyBoughtTogether', () => {
 
     test('adds custom CSS classes', async () => {
       const container = document.createElement('div');
-      const searchClient = createMockedSearchClientWithRecommendations();
+      const searchClient = createRecommendSearchClient();
       const options: Parameters<typeof frequentlyBoughtTogether>[0] = {
         container,
         objectIDs: ['1'],
@@ -95,7 +95,7 @@ describe('frequentlyBoughtTogether', () => {
   describe('templates', () => {
     test('renders default templates', async () => {
       const container = document.createElement('div');
-      const searchClient = createMockedSearchClientWithRecommendations({
+      const searchClient = createRecommendSearchClient({
         minimal: true,
       });
       const options: Parameters<typeof frequentlyBoughtTogether>[0] = {
@@ -175,7 +175,7 @@ describe('frequentlyBoughtTogether', () => {
 
     test('renders with templates using `html`', async () => {
       const container = document.createElement('div');
-      const searchClient = createMockedSearchClientWithRecommendations();
+      const searchClient = createRecommendSearchClient();
       const options: Parameters<typeof frequentlyBoughtTogether>[0] = {
         container,
         objectIDs: ['1'],
@@ -264,7 +264,7 @@ describe('frequentlyBoughtTogether', () => {
 
     test('renders with templates using JSX', async () => {
       const container = document.createElement('div');
-      const searchClient = createMockedSearchClientWithRecommendations();
+      const searchClient = createRecommendSearchClient();
       const options: Parameters<typeof frequentlyBoughtTogether>[0] = {
         container,
         objectIDs: ['1'],

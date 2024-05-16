@@ -1,4 +1,4 @@
-import { createMockedSearchClientWithRecommendations } from '@instantsearch/mocks/fixtures';
+import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
 
@@ -16,7 +16,7 @@ export function createOptionsTests(
       const options: SetupOptions<LookingSimilarConnectorSetup> = {
         instantSearchOptions: {
           indexName: 'indexName',
-          searchClient: createMockedSearchClientWithRecommendations(),
+          searchClient: createRecommendSearchClient(),
         },
         // @ts-expect-error missing `objectIDs`
         widgetParams: {},
@@ -32,7 +32,7 @@ export function createOptionsTests(
     });
 
     test('forwards parameters to the client', async () => {
-      const searchClient = createMockedSearchClientWithRecommendations();
+      const searchClient = createRecommendSearchClient();
       const options: SetupOptions<LookingSimilarConnectorSetup> = {
         instantSearchOptions: { indexName: 'indexName', searchClient },
         widgetParams: {
@@ -75,7 +75,7 @@ export function createOptionsTests(
       const options: SetupOptions<LookingSimilarConnectorSetup> = {
         instantSearchOptions: {
           indexName: 'indexName',
-          searchClient: createMockedSearchClientWithRecommendations(),
+          searchClient: createRecommendSearchClient(),
         },
         widgetParams: { objectIDs: ['1'] },
       };
@@ -104,7 +104,7 @@ export function createOptionsTests(
       const options: SetupOptions<LookingSimilarConnectorSetup> = {
         instantSearchOptions: {
           indexName: 'indexName',
-          searchClient: createMockedSearchClientWithRecommendations({
+          searchClient: createRecommendSearchClient({
             minimal: true,
           }),
         },

@@ -38,9 +38,7 @@ const fixture = [
   },
 ];
 
-export function createMockedSearchClientWithRecommendations(
-  options: Options = {}
-) {
+export function createRecommendSearchClient(options: Options = {}) {
   const { minimal = false } = options;
   return createSearchClient({
     getRecommendations: jest.fn((requests) =>

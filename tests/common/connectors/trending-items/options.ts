@@ -1,4 +1,4 @@
-import { createMockedSearchClientWithRecommendations } from '@instantsearch/mocks/fixtures';
+import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
 
@@ -13,7 +13,7 @@ export function createOptionsTests(
 ) {
   skippableDescribe('options', skippedTests, () => {
     test('forwards parameters to the client', async () => {
-      const searchClient = createMockedSearchClientWithRecommendations();
+      const searchClient = createRecommendSearchClient();
       const options: SetupOptions<TrendingItemsConnectorSetup> = {
         instantSearchOptions: { indexName: 'indexName', searchClient },
         widgetParams: {
@@ -47,7 +47,7 @@ export function createOptionsTests(
       const options: SetupOptions<TrendingItemsConnectorSetup> = {
         instantSearchOptions: {
           indexName: 'indexName',
-          searchClient: createMockedSearchClientWithRecommendations(),
+          searchClient: createRecommendSearchClient(),
         },
         widgetParams: {},
       };
@@ -76,7 +76,7 @@ export function createOptionsTests(
       const options: SetupOptions<TrendingItemsConnectorSetup> = {
         instantSearchOptions: {
           indexName: 'indexName',
-          searchClient: createMockedSearchClientWithRecommendations({
+          searchClient: createRecommendSearchClient({
             minimal: true,
           }),
         },
