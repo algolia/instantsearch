@@ -32,7 +32,7 @@ export type LookingSimilarConnectorParams<THit extends BaseHit = BaseHit> = {
   /**
    * The number of recommendations to retrieve.
    */
-  maxRecommendations?: number;
+  limit?: number;
   /**
    * The threshold for the recommendations confidence score (between 0 and 100).
    */
@@ -82,7 +82,7 @@ const connectLookingSimilar: LookingSimilarConnector =
         // @MAJOR: this can default to false
         escapeHTML = true,
         objectIDs,
-        maxRecommendations,
+        limit,
         threshold,
         fallbackParameters,
         queryParameters,
@@ -152,7 +152,7 @@ const connectLookingSimilar: LookingSimilarConnector =
             (acc, objectID) =>
               acc.addLookingSimilar({
                 objectID,
-                maxRecommendations,
+                maxRecommendations: limit,
                 threshold,
                 fallbackParameters: {
                   ...fallbackParameters,

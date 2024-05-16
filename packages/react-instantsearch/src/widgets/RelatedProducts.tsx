@@ -36,7 +36,7 @@ const RelatedProductsUiComponent = createRelatedProductsComponent({
 
 export function RelatedProducts<TItem extends BaseHit = BaseHit>({
   objectIDs,
-  maxRecommendations,
+  limit,
   threshold,
   fallbackParameters,
   queryParameters,
@@ -51,7 +51,7 @@ export function RelatedProducts<TItem extends BaseHit = BaseHit>({
   const { items } = useRelatedProducts(
     {
       objectIDs,
-      maxRecommendations,
+      limit,
       threshold,
       fallbackParameters,
       queryParameters,

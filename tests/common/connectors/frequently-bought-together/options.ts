@@ -39,7 +39,7 @@ export function createOptionsTests(
         instantSearchOptions: { indexName: 'indexName', searchClient },
         widgetParams: {
           objectIDs: ['1', '2'],
-          maxRecommendations: 2,
+          limit: 2,
           threshold: 3,
           queryParameters: { analytics: true },
           escapeHTML: false,

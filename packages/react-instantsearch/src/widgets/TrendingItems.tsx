@@ -37,7 +37,7 @@ const TrendingItemsUiComponent = createTrendingItemsComponent({
 export function TrendingItems<TItem extends BaseHit = BaseHit>({
   facetName,
   facetValue,
-  maxRecommendations,
+  limit,
   threshold,
   fallbackParameters,
   queryParameters,
@@ -55,7 +55,7 @@ export function TrendingItems<TItem extends BaseHit = BaseHit>({
   const { items } = useTrendingItems(
     {
       ...facetParameters,
-      maxRecommendations,
+      limit,
       threshold,
       fallbackParameters,
       queryParameters,

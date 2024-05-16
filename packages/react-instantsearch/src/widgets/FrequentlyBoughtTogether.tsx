@@ -40,7 +40,7 @@ const FrequentlyBoughtTogetherUiComponent =
 
 export function FrequentlyBoughtTogether<THit extends BaseHit = BaseHit>({
   objectIDs,
-  maxRecommendations,
+  limit,
   threshold,
   queryParameters,
   escapeHTML,
@@ -54,7 +54,7 @@ export function FrequentlyBoughtTogether<THit extends BaseHit = BaseHit>({
   const { items } = useFrequentlyBoughtTogether<THit>(
     {
       objectIDs,
-      maxRecommendations,
+      limit,
       threshold,
       queryParameters,
       escapeHTML,

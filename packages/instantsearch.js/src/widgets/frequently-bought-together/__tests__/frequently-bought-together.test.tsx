@@ -80,9 +80,7 @@ describe('frequentlyBoughtTogether', () => {
 
       search
         .removeWidgets([widget])
-        .addWidgets([
-          frequentlyBoughtTogether({ ...options, maxRecommendations: 0 }),
-        ]);
+        .addWidgets([frequentlyBoughtTogether({ ...options, limit: 0 })]);
 
       await wait(0);
 
@@ -156,9 +154,7 @@ describe('frequentlyBoughtTogether', () => {
 
       search
         .removeWidgets([widget])
-        .addWidgets([
-          frequentlyBoughtTogether({ ...options, maxRecommendations: 0 }),
-        ]);
+        .addWidgets([frequentlyBoughtTogether({ ...options, limit: 0 })]);
 
       await wait(0);
 
@@ -243,7 +239,7 @@ describe('frequentlyBoughtTogether', () => {
       search.removeWidgets([widget]).addWidgets([
         frequentlyBoughtTogether({
           ...options,
-          maxRecommendations: 0,
+          limit: 0,
         }),
       ]);
 
@@ -334,7 +330,7 @@ describe('frequentlyBoughtTogether', () => {
       search.removeWidgets([widget]).addWidgets([
         frequentlyBoughtTogether({
           ...options,
-          maxRecommendations: 0,
+          limit: 0,
         }),
       ]);
 

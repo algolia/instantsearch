@@ -83,7 +83,7 @@ describe('connectFrequentlyBoughtTogether', () => {
       const makeWidget = connectFrequentlyBoughtTogether(render);
       const widget = makeWidget({
         objectIDs: ['1', '2'],
-        maxRecommendations: 10,
+        limit: 10,
         threshold: 95,
         queryParameters: { userToken: 'token' },
         escapeHTML: false,

@@ -42,7 +42,7 @@ export type FrequentlyBoughtTogetherConnectorParams<
   /**
    * The maximum number of recommendations to return.
    */
-  maxRecommendations?: number;
+  limit?: number;
 
   /**
    * Parameters to pass to the request.
@@ -90,7 +90,7 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
           FrequentlyBoughtTogetherConnectorParams['transformItems']
         >,
         objectIDs,
-        maxRecommendations,
+        limit,
         threshold,
         queryParameters,
       } = widgetParams || {};
@@ -156,7 +156,7 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
               acc.addFrequentlyBoughtTogether({
                 objectID,
                 threshold,
-                maxRecommendations,
+                maxRecommendations: limit,
                 queryParameters: {
                   ...queryParameters,
                   ...(escapeHTML ? TAG_PLACEHOLDER : {}),

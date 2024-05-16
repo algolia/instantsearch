@@ -174,7 +174,7 @@ const frequentlyBoughtTogether: FrequentlyBoughtTogetherWidget =
     const {
       container,
       objectIDs,
-      maxRecommendations,
+      limit,
       queryParameters,
       threshold,
       escapeHTML,
@@ -203,7 +203,7 @@ const frequentlyBoughtTogether: FrequentlyBoughtTogetherWidget =
     return {
       ...makeWidget({
         objectIDs,
-        maxRecommendations,
+        limit,
         queryParameters,
         threshold,
         escapeHTML,

@@ -19,7 +19,7 @@ export function createOptionsTests(
         widgetParams: {
           facetName: 'facetName',
           facetValue: 'facetValue',
-          maxRecommendations: 2,
+          limit: 2,
           threshold: 3,
           fallbackParameters: { facetFilters: ['test1'] },
           queryParameters: { analytics: true },
