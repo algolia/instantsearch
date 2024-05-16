@@ -163,7 +163,7 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
                 },
                 $$id: this.$$id!,
               }),
-            state
+            state.removeParams(this.$$id!)
           );
         },
       };
