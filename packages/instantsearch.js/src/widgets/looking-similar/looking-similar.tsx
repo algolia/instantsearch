@@ -171,7 +171,7 @@ const lookingSimilar: LookingSimilarWidget = function lookingSimilar(
   const {
     container,
     objectIDs,
-    maxRecommendations,
+    limit,
     queryParameters,
     fallbackParameters,
     threshold,
@@ -200,7 +200,7 @@ const lookingSimilar: LookingSimilarWidget = function lookingSimilar(
   return {
     ...makeWidget({
       objectIDs,
-      maxRecommendations,
+      limit,
       queryParameters,
       fallbackParameters,
       threshold,

@@ -163,7 +163,7 @@ export function createOptionsTests(
             query: 'regular query',
           },
           threshold: 80,
-          maxRecommendations: 3,
+          limit: 3,
           escapeHTML: false,
         },
       });

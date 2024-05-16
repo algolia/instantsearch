@@ -181,7 +181,7 @@ const trendingItems: TrendingItemsWidget = function trendingItems(
     container,
     facetName,
     facetValue,
-    maxRecommendations,
+    limit,
     queryParameters,
     fallbackParameters,
     threshold,
@@ -214,7 +214,7 @@ const trendingItems: TrendingItemsWidget = function trendingItems(
   return {
     ...makeWidget({
       ...facetParameters,
-      maxRecommendations,
+      limit,
       queryParameters,
       fallbackParameters,
       threshold,
