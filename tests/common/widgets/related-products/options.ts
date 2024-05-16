@@ -1,14 +1,9 @@
-import {
-  createMultiSearchResponse,
-  createSearchClient,
-  createSingleSearchResponse,
-} from '@instantsearch/mocks';
+import { createMockedSearchClientWithRecommendations } from '@instantsearch/mocks/fixtures';
 import { wait } from '@instantsearch/testutils';
 import { TAG_PLACEHOLDER } from 'instantsearch.js/es/lib/utils';
 
 import type { RelatedProductsWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
-import type { SearchClient } from 'instantsearch.js';
 
 export function createOptionsTests(
   setup: RelatedProductsWidgetSetup,
@@ -16,7 +11,7 @@ export function createOptionsTests(
 ) {
   describe('options', () => {
     test('renders with default props', async () => {
-      const searchClient = createMockedSearchClient();
+      const searchClient = createMockedSearchClientWithRecommendations();
 
       await setup({
         instantSearchOptions: {
@@ -54,9 +49,12 @@ export function createOptionsTests(
                 {
           "_highlightResult": {
             "name": {
+              "matchLevel": "none",
+              "matchedWords": [],
               "value": "&lt;em&gt;Moschino Love&lt;/em&gt; – Shoulder bag"
             }
           },
+          "name": "Moschino Love – Shoulder bag",
           "objectID": "1"
         }
               </li>
@@ -64,6 +62,14 @@ export function createOptionsTests(
                 class="ais-RelatedProducts-item"
               >
                 {
+          "_highlightResult": {
+            "name": {
+              "matchLevel": "none",
+              "matchedWords": [],
+              "value": "&lt;em&gt;Bag&lt;/em&gt; “Sabrina“ medium Gabs"
+            }
+          },
+          "name": "Bag “Sabrina“ medium Gabs",
           "objectID": "2"
         }
               </li>
@@ -74,7 +80,9 @@ export function createOptionsTests(
     });
 
     test('renders transformed items', async () => {
-      const searchClient = createMockedSearchClient();
+      const searchClient = createMockedSearchClientWithRecommendations({
+        minimal: true,
+      });
 
       await setup({
         instantSearchOptions: {
@@ -116,11 +124,6 @@ export function createOptionsTests(
                 class="ais-RelatedProducts-item"
               >
                 {
-          "_highlightResult": {
-            "name": {
-              "value": "&lt;em&gt;Moschino Love&lt;/em&gt; – Shoulder bag"
-            }
-          },
           "objectID": "(1)"
         }
               </li>
@@ -138,7 +141,7 @@ export function createOptionsTests(
     });
 
     test('renders with no results', async () => {
-      const searchClient = createMockedSearchClient();
+      const searchClient = createMockedSearchClientWithRecommendations();
 
       await setup({
         instantSearchOptions: {
@@ -167,7 +170,7 @@ export function createOptionsTests(
     });
 
     test('passes parameters correctly', async () => {
-      const searchClient = createMockedSearchClient();
+      const searchClient = createMockedSearchClientWithRecommendations();
 
       await setup({
         instantSearchOptions: {
@@ -208,7 +211,7 @@ export function createOptionsTests(
     });
 
     test('escapes html entities when `escapeHTML` is true', async () => {
-      const searchClient = createMockedSearchClient();
+      const searchClient = createMockedSearchClientWithRecommendations();
       let recommendItems: Parameters<
         NonNullable<
           Parameters<RelatedProductsWidgetSetup>[0]['widgetParams']['transformItems']
@@ -247,40 +250,10 @@ export function createOptionsTests(
       ]);
 
       expect(recommendItems[0]._highlightResult!.name).toEqual({
+        matchLevel: 'none',
+        matchedWords: [],
         value: '&lt;em&gt;Moschino Love&lt;/em&gt; – Shoulder bag',
       });
     });
-  });
-}
-
-function createMockedSearchClient() {
-  return createSearchClient({
-    getRecommendations: jest.fn((requests) =>
-      Promise.resolve(
-        createMultiSearchResponse(
-          // @ts-ignore
-          // `request` will be implicitly typed as `any` in type-check:v3
-          // since `getRecommendations` is not available there
-          ...requests.map((request) => {
-            return createSingleSearchResponse<any>({
-              hits:
-                request.maxRecommendations === 0
-                  ? []
-                  : [
-                      {
-                        _highlightResult: {
-                          name: {
-                            value: '<em>Moschino Love</em> – Shoulder bag',
-                          },
-                        },
-                        objectID: '1',
-                      },
-                      { objectID: '2' },
-                    ],
-            });
-          })
-        )
-      )
-    ) as SearchClient['getRecommendations'],
   });
 }
