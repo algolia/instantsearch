@@ -2,18 +2,12 @@
  * @jest-environment jsdom
  */
 /** @jsx h */
-import {
-  createSearchClient,
-  createMultiSearchResponse,
-  createSingleSearchResponse,
-} from '@instantsearch/mocks';
+import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { wait } from '@instantsearch/testutils/wait';
 import { h } from 'preact';
 
 import instantsearch from '../../../index.es';
 import relatedProducts from '../related-products';
-
-import type { SearchClient } from 'instantsearch.js';
 
 beforeEach(() => {
   document.body.innerHTML = '';
@@ -23,7 +17,7 @@ describe('relatedProducts', () => {
   describe('options', () => {
     test('throws without a `container`', () => {
       expect(() => {
-        const searchClient = createSearchClient();
+        const searchClient = createRecommendSearchClient();
 
         const search = instantsearch({
           indexName: 'indexName',
@@ -45,7 +39,7 @@ describe('relatedProducts', () => {
 
     test('adds custom CSS classes', async () => {
       const container = document.createElement('div');
-      const searchClient = createMockedSearchClient();
+      const searchClient = createRecommendSearchClient();
       const options: Parameters<typeof relatedProducts>[0] = {
         container,
         objectIDs: ['1'],
@@ -102,7 +96,9 @@ describe('relatedProducts', () => {
   describe('templates', () => {
     test('renders default templates', async () => {
       const container = document.createElement('div');
-      const searchClient = createMockedSearchClient();
+      const searchClient = createRecommendSearchClient({
+        minimal: true,
+      });
       const options: Parameters<typeof relatedProducts>[0] = {
         container,
         objectIDs: ['1'],
@@ -181,7 +177,7 @@ describe('relatedProducts', () => {
 
     test('renders with templates using `html`', async () => {
       const container = document.createElement('div');
-      const searchClient = createMockedSearchClient();
+      const searchClient = createRecommendSearchClient();
       const options: Parameters<typeof relatedProducts>[0] = {
         container,
         objectIDs: ['1'],
@@ -270,7 +266,7 @@ describe('relatedProducts', () => {
 
     test('renders with templates using JSX', async () => {
       const container = document.createElement('div');
-      const searchClient = createMockedSearchClient();
+      const searchClient = createRecommendSearchClient();
       const options: Parameters<typeof relatedProducts>[0] = {
         container,
         objectIDs: ['1'],
@@ -360,25 +356,3 @@ describe('relatedProducts', () => {
     });
   });
 });
-
-function createMockedSearchClient() {
-  return createSearchClient({
-    getRecommendations: jest.fn((requests) =>
-      Promise.resolve(
-        createMultiSearchResponse(
-          // @ts-ignore
-          // `request` will be implicitly typed as `any` in type-check:v3
-          // since `getRecommendations` is not available there
-          ...requests.map((request) => {
-            return createSingleSearchResponse<any>({
-              hits:
-                request.maxRecommendations === 0
-                  ? []
-                  : [{ objectID: '1' }, { objectID: '2' }],
-            });
-          })
-        )
-      )
-    ) as SearchClient['getRecommendations'],
-  });
-}
