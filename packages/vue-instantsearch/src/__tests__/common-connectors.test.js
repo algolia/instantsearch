@@ -420,21 +420,25 @@ const testOptions = {
   createRelatedProductsConnectorTests: {
     skippedTests: {
       options: true,
+      state: true,
     },
   },
   createFrequentlyBoughtTogetherConnectorTests: {
     skippedTests: {
       options: true,
+      state: true,
     },
   },
   createTrendingItemsConnectorTests: {
     skippedTests: {
       options: true,
+      state: true,
     },
   },
   createLookingSimilarConnectorTests: {
     skippedTests: {
       options: true,
+      state: true,
     },
   },
 };
