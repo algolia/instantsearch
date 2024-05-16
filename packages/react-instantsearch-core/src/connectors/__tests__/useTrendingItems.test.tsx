@@ -14,11 +14,11 @@ describe('useTrendingItems', () => {
     );
 
     // Initial render state from manual `getWidgetRenderState`
-    expect(result.current).toEqual({ recommendations: expect.any(Array) });
+    expect(result.current).toEqual({ items: expect.any(Array) });
 
     await waitForNextUpdate();
 
     // InstantSearch.js state from the `render` lifecycle step
-    expect(result.current).toEqual({ recommendations: expect.any(Array) });
+    expect(result.current).toEqual({ items: expect.any(Array) });
   });
 });

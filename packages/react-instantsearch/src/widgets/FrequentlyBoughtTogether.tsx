@@ -43,6 +43,7 @@ export function FrequentlyBoughtTogether<THit extends BaseHit = BaseHit>({
   limit,
   threshold,
   queryParameters,
+  escapeHTML,
   transformItems,
   itemComponent,
   headerComponent,
@@ -50,19 +51,20 @@ export function FrequentlyBoughtTogether<THit extends BaseHit = BaseHit>({
   ...props
 }: FrequentlyBoughtTogetherProps<THit>) {
   const { status } = useInstantSearch();
-  const { recommendations } = useFrequentlyBoughtTogether<THit>(
+  const { items } = useFrequentlyBoughtTogether<THit>(
     {
       objectIDs,
       limit,
       threshold,
       queryParameters,
+      escapeHTML,
       transformItems,
     },
     { $$widgetType: 'ais.frequentlyBoughtTogether' }
   );
 
   const uiProps: UiProps<THit> = {
-    items: recommendations,
+    items,
     itemComponent,
     headerComponent,
     emptyComponent,

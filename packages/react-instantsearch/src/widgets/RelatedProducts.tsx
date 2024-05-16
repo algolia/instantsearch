@@ -40,6 +40,7 @@ export function RelatedProducts<TItem extends BaseHit = BaseHit>({
   threshold,
   fallbackParameters,
   queryParameters,
+  escapeHTML,
   transformItems,
   itemComponent,
   headerComponent,
@@ -47,20 +48,21 @@ export function RelatedProducts<TItem extends BaseHit = BaseHit>({
   ...props
 }: RelatedProductsProps<TItem>) {
   const { status } = useInstantSearch();
-  const { recommendations } = useRelatedProducts(
+  const { items } = useRelatedProducts(
     {
       objectIDs,
       limit,
       threshold,
       fallbackParameters,
       queryParameters,
+      escapeHTML,
       transformItems,
     },
     { $$widgetType: 'ais.relatedProducts' }
   );
 
   const uiProps: UiProps<TItem> = {
-    items: recommendations as Array<Hit<TItem>>,
+    items: items as Array<Hit<TItem>>,
     itemComponent,
     headerComponent,
     emptyComponent,

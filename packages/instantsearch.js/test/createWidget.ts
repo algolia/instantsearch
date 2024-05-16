@@ -95,6 +95,7 @@ export const createDisposeOptions = (
   return {
     helper,
     state: helper.state,
+    recommendState: helper.recommendState,
     parent: instantSearchInstance.mainIndex,
     ...args,
   };

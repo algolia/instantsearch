@@ -51,6 +51,7 @@ export type RenderOptions = SharedRenderOptions & {
 export type DisposeOptions = {
   helper: Helper;
   state: SearchParameters;
+  recommendState: RecommendParameters;
   parent: IndexWidget;
 };
 
@@ -214,7 +215,9 @@ type RequiredWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
    * Called when this widget is unmounted. Used to remove refinements set by
    * during this widget's initialization and life time.
    */
-  dispose?: (options: DisposeOptions) => SearchParameters | void;
+  dispose?: (
+    options: DisposeOptions
+  ) => SearchParameters | RecommendParameters | void;
 };
 
 type RequiredWidgetType<TWidgetDescription extends WidgetDescription> = {

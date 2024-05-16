@@ -14,6 +14,7 @@ import type {
   Renderer,
   ComponentProps,
   RecommendComponentProps,
+  RecommendClassNames,
 } from '../types';
 
 export type FrequentlyBoughtTogetherProps<
@@ -56,47 +57,42 @@ export function createFrequentlyBoughtTogetherComponent({
       ...userTranslations,
     };
 
+    const cssClasses: RecommendClassNames = {
+      root: cx('ais-FrequentlyBoughtTogether', classNames.root),
+      emptyRoot: cx(
+        'ais-FrequentlyBoughtTogether',
+        classNames.root,
+        'ais-FrequentlyBoughtTogether--empty',
+        classNames.emptyRoot,
+        props.className
+      ),
+      title: cx('ais-FrequentlyBoughtTogether-title', classNames.title),
+      container: cx(
+        'ais-FrequentlyBoughtTogether-container',
+        classNames.container
+      ),
+      list: cx('ais-FrequentlyBoughtTogether-list', classNames.list),
+      item: cx('ais-FrequentlyBoughtTogether-item', classNames.item),
+    };
+
     if (items.length === 0 && status === 'idle') {
       return (
-        <section
-          {...props}
-          className={cx(
-            'ais-FrequentlyBoughtTogether',
-            classNames.root,
-            'ais-FrequentlyBoughtTogether--empty',
-            classNames.emptyRoot,
-            props.className
-          )}
-        >
+        <section {...props} className={cssClasses.emptyRoot}>
           <EmptyComponent />
         </section>
       );
     }
 
     return (
-      <section
-        {...props}
-        className={cx('ais-FrequentlyBoughtTogether', classNames.root)}
-      >
+      <section {...props} className={cssClasses.root}>
         <HeaderComponent
-          classNames={{
-            ...classNames,
-            title: cx('ais-FrequentlyBoughtTogether-title', classNames.title),
-          }}
-          recommendations={items}
+          classNames={cssClasses}
+          items={items}
           translations={translations}
         />
 
         <View
-          classNames={{
-            ...classNames,
-            container: cx(
-              'ais-FrequentlyBoughtTogether-container',
-              classNames.container
-            ),
-            list: cx('ais-FrequentlyBoughtTogether-list', classNames.list),
-            item: cx('ais-FrequentlyBoughtTogether-item', classNames.item),
-          }}
+          classNames={cssClasses}
           translations={translations}
           itemComponent={ItemComponent}
           items={items}

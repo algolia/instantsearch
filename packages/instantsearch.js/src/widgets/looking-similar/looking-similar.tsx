@@ -50,14 +50,7 @@ const renderer =
     LookingSimilarRenderState,
     Partial<LookingSimilarWidgetParams>
   > =>
-  (
-    {
-      recommendations: receivedRecommendations,
-      results,
-      instantSearchInstance,
-    },
-    isFirstRendering
-  ) => {
+  ({ items, results, instantSearchInstance }, isFirstRendering) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
@@ -70,12 +63,12 @@ const renderer =
 
     const headerComponent = (
       templates.header
-        ? ({ classNames, recommendations }) => (
+        ? (data) => (
             <TemplateComponent
               {...renderState.templateProps}
               templateKey="header"
               rootTagName="fragment"
-              data={{ cssClasses: classNames, recommendations }}
+              data={{ cssClasses: data.classNames, items: data.items }}
             />
           )
         : undefined
@@ -111,7 +104,7 @@ const renderer =
 
     render(
       <LookingSimilar
-        items={receivedRecommendations}
+        items={items}
         headerComponent={headerComponent}
         itemComponent={itemComponent}
         sendEvent={() => {}}
@@ -137,7 +130,7 @@ export type LookingSimilarTemplates = Partial<{
   header: Template<
     Pick<
       Parameters<NonNullable<LookingSimilarUiProps<Hit>['headerComponent']>>[0],
-      'recommendations'
+      'items'
     > & { cssClasses: RecommendClassNames }
   >;
 
@@ -182,6 +175,7 @@ const lookingSimilar: LookingSimilarWidget = function lookingSimilar(
     queryParameters,
     fallbackParameters,
     threshold,
+    escapeHTML,
     transformItems,
     templates = {},
     cssClasses = {},
@@ -210,6 +204,7 @@ const lookingSimilar: LookingSimilarWidget = function lookingSimilar(
       queryParameters,
       fallbackParameters,
       threshold,
+      escapeHTML,
       transformItems,
     }),
     $$widgetType: 'ais.lookingSimilar',

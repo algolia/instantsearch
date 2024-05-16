@@ -5,7 +5,7 @@ import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/connectors';
 import { act, render } from '@testing-library/react';
 import { connectRatingMenu } from 'instantsearch.js/es/connectors';
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   InstantSearch,
@@ -326,22 +326,28 @@ const testSetups: TestSetupsMap<TestSuites> = {
     widgetParams,
   }) => {
     function CustomRelatedProducts(props: UseRelatedProductsProps) {
-      const { recommendations } = useRelatedProducts(props);
+      const { items } = useRelatedProducts(props);
 
       return (
         <ul>
-          {recommendations.map((recommendation) => (
-            <li key={recommendation.objectID}>{recommendation.objectID}</li>
+          {items.map((item) => (
+            <li key={item.objectID}>{item.objectID}</li>
           ))}
         </ul>
       );
     }
 
-    render(
-      <InstantSearch {...instantSearchOptions}>
-        <CustomRelatedProducts {...widgetParams} />
-      </InstantSearch>
-    );
+    function App() {
+      const [visible, setVisible] = useState(true);
+      return (
+        <InstantSearch {...instantSearchOptions}>
+          {visible && <CustomRelatedProducts {...widgetParams} />}
+          <button onClick={() => setVisible(!visible)}>toggle</button>
+        </InstantSearch>
+      );
+    }
+
+    render(<App />);
   },
   createFrequentlyBoughtTogetherConnectorTests: ({
     instantSearchOptions,
@@ -350,66 +356,84 @@ const testSetups: TestSetupsMap<TestSuites> = {
     function CustomFrequentlyBoughtTogether(
       props: UseFrequentlyBoughtTogetherProps
     ) {
-      const { recommendations } = useFrequentlyBoughtTogether(props);
+      const { items } = useFrequentlyBoughtTogether(props);
 
       return (
         <ul>
-          {recommendations.map((recommendation) => (
-            <li key={recommendation.objectID}>{recommendation.objectID}</li>
+          {items.map((item) => (
+            <li key={item.objectID}>{item.objectID}</li>
           ))}
         </ul>
       );
     }
 
-    render(
-      <InstantSearch {...instantSearchOptions}>
-        <CustomFrequentlyBoughtTogether {...widgetParams} />
-      </InstantSearch>
-    );
+    function App() {
+      const [visible, setVisible] = useState(true);
+      return (
+        <InstantSearch {...instantSearchOptions}>
+          {visible && <CustomFrequentlyBoughtTogether {...widgetParams} />}
+          <button onClick={() => setVisible(!visible)}>toggle</button>
+        </InstantSearch>
+      );
+    }
+
+    render(<App />);
   },
   createTrendingItemsConnectorTests: ({
     instantSearchOptions,
     widgetParams,
   }) => {
     function CustomTrendingItems(props: UseTrendingItemsProps) {
-      const { recommendations } = useTrendingItems(props);
+      const { items } = useTrendingItems(props);
 
       return (
         <ul>
-          {recommendations.map((recommendation) => (
-            <li key={recommendation.objectID}>{recommendation.objectID}</li>
+          {items.map((item) => (
+            <li key={item.objectID}>{item.objectID}</li>
           ))}
         </ul>
       );
     }
 
-    render(
-      <InstantSearch {...instantSearchOptions}>
-        <CustomTrendingItems {...widgetParams} />
-      </InstantSearch>
-    );
+    function App() {
+      const [visible, setVisible] = useState(true);
+      return (
+        <InstantSearch {...instantSearchOptions}>
+          {visible && <CustomTrendingItems {...widgetParams} />}
+          <button onClick={() => setVisible(!visible)}>toggle</button>
+        </InstantSearch>
+      );
+    }
+
+    render(<App />);
   },
   createLookingSimilarConnectorTests: ({
     instantSearchOptions,
     widgetParams,
   }) => {
     function CustomLookingSimilar(props: UseLookingSimilarProps) {
-      const { recommendations } = useLookingSimilar(props);
+      const { items } = useLookingSimilar(props);
 
       return (
         <ul>
-          {recommendations.map((recommendation) => (
-            <li key={recommendation.objectID}>{recommendation.objectID}</li>
+          {items.map((item) => (
+            <li key={item.objectID}>{item.objectID}</li>
           ))}
         </ul>
       );
     }
 
-    render(
-      <InstantSearch {...instantSearchOptions}>
-        <CustomLookingSimilar {...widgetParams} />
-      </InstantSearch>
-    );
+    function App() {
+      const [visible, setVisible] = useState(true);
+      return (
+        <InstantSearch {...instantSearchOptions}>
+          {visible && <CustomLookingSimilar {...widgetParams} />}
+          <button onClick={() => setVisible(!visible)}>toggle</button>
+        </InstantSearch>
+      );
+    }
+
+    render(<App />);
   },
 };
 

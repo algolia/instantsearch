@@ -1,10 +1,7 @@
-import {
-  createRecommendResponse,
-  createSearchClient,
-  createSingleSearchResponse,
-} from '@instantsearch/mocks';
+import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { normalizeSnapshot } from '@instantsearch/testutils';
 import { wait } from '@testing-library/user-event/dist/utils';
+import { TAG_PLACEHOLDER } from 'instantsearch.js/es/lib/utils';
 
 import type { FrequentlyBoughtTogetherWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
@@ -15,7 +12,7 @@ export function createOptionsTests(
 ) {
   describe('options', () => {
     test('renders with default props', async () => {
-      const searchClient = createMockedSearchClient();
+      const searchClient = createRecommendSearchClient();
 
       await setup({
         instantSearchOptions: {
@@ -55,34 +52,14 @@ export function createOptionsTests(
               >
                 {
           "_highlightResult": {
-            "brand": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Moschino Love"
-            },
             "name": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Moschino Love – Shoulder bag"
+              "value": "&lt;em&gt;Moschino Love&lt;/em&gt; – Shoulder bag"
             }
           },
-          "_score": 40.87,
-          "brand": "Moschino Love",
-          "list_categories": [
-            "Women",
-            "Bags",
-            "Shoulder bags"
-          ],
           "name": "Moschino Love – Shoulder bag",
-          "objectID": "A0E200000002BLK",
-          "parentID": "JC4052PP10LB100A",
-          "price": {
-            "currency": "EUR",
-            "discount_level": -100,
-            "discounted_value": 0,
-            "on_sales": false,
-            "value": 227.5
-          }
+          "objectID": "1"
         }
               </li>
               <li
@@ -90,69 +67,14 @@ export function createOptionsTests(
               >
                 {
           "_highlightResult": {
-            "brand": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Gabs"
-            },
             "name": {
               "matchLevel": "none",
               "matchedWords": [],
-              "value": "Bag “Sabrina“ medium Gabs"
+              "value": "&lt;em&gt;Bag&lt;/em&gt; “Sabrina“ medium Gabs"
             }
           },
-          "_score": 40.91,
-          "brand": "Gabs",
-          "list_categories": [
-            "Women",
-            "Bags",
-            "Shoulder bags"
-          ],
           "name": "Bag “Sabrina“ medium Gabs",
-          "objectID": "A0E200000001WFI",
-          "parentID": "SABRINA",
-          "price": {
-            "currency": "EUR",
-            "discount_level": -100,
-            "discounted_value": 0,
-            "on_sales": false,
-            "value": 210
-          }
-        }
-              </li>
-              <li
-                class="ais-FrequentlyBoughtTogether-item"
-              >
-                {
-          "_highlightResult": {
-            "brand": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "La Carrie Bag"
-            },
-            "name": {
-              "matchLevel": "none",
-              "matchedWords": [],
-              "value": "Bag La Carrie Bag small black"
-            }
-          },
-          "_score": 39.92,
-          "brand": "La Carrie Bag",
-          "list_categories": [
-            "Women",
-            "Bags",
-            "Shoulder bags"
-          ],
-          "name": "Bag La Carrie Bag small black",
-          "objectID": "A0E2000000024R1",
-          "parentID": "151",
-          "price": {
-            "currency": "EUR",
-            "discount_level": -100,
-            "discounted_value": 0,
-            "on_sales": false,
-            "value": 161.25
-          }
+          "objectID": "2"
         }
               </li>
             </ol>
@@ -163,7 +85,9 @@ export function createOptionsTests(
     });
 
     test('renders transformed items', async () => {
-      const searchClient = createMockedSearchClient();
+      const searchClient = createRecommendSearchClient({
+        minimal: true,
+      });
 
       await setup({
         instantSearchOptions: {
@@ -174,8 +98,8 @@ export function createOptionsTests(
           objectIDs: ['objectID'],
           transformItems(items) {
             return items.map((item) => ({
-              objectID: item.objectID,
-              __position: item.__position,
+              ...item,
+              objectID: `(${item.objectID})`,
             }));
           },
         },
@@ -208,21 +132,14 @@ export function createOptionsTests(
                 class="ais-FrequentlyBoughtTogether-item"
               >
                 {
-          "objectID": "A0E200000002BLK"
+          "objectID": "(1)"
         }
               </li>
               <li
                 class="ais-FrequentlyBoughtTogether-item"
               >
                 {
-          "objectID": "A0E200000001WFI"
-        }
-              </li>
-              <li
-                class="ais-FrequentlyBoughtTogether-item"
-              >
-                {
-          "objectID": "A0E2000000024R1"
+          "objectID": "(2)"
         }
               </li>
             </ol>
@@ -233,7 +150,7 @@ export function createOptionsTests(
     });
 
     test('passes parameters correctly', async () => {
-      const searchClient = createMockedSearchClient();
+      const searchClient = createRecommendSearchClient();
 
       await setup({
         instantSearchOptions: {
@@ -247,6 +164,7 @@ export function createOptionsTests(
           },
           threshold: 80,
           limit: 3,
+          escapeHTML: false,
         },
       });
 
@@ -265,109 +183,51 @@ export function createOptionsTests(
         }),
       ]);
     });
-  });
-}
 
-function createMockedSearchClient() {
-  return createSearchClient({
-    getRecommendations: jest.fn((requests) =>
-      Promise.resolve(
-        createRecommendResponse(
-          // @ts-ignore
-          // `request` will be implicitly typed as any in type-check:v3
-          // since `getRecommendations` is not available there
-          requests.map((request) => {
-            return createSingleSearchResponse<any>({
-              hits:
-                request.maxRecommendations === 0
-                  ? []
-                  : [
-                      {
-                        _highlightResult: {
-                          brand: {
-                            matchLevel: 'none',
-                            matchedWords: [],
-                            value: 'Moschino Love',
-                          },
-                          name: {
-                            matchLevel: 'none',
-                            matchedWords: [],
-                            value: 'Moschino Love – Shoulder bag',
-                          },
-                        },
-                        _score: 40.87,
-                        brand: 'Moschino Love',
-                        list_categories: ['Women', 'Bags', 'Shoulder bags'],
-                        name: 'Moschino Love – Shoulder bag',
-                        objectID: 'A0E200000002BLK',
-                        parentID: 'JC4052PP10LB100A',
-                        price: {
-                          currency: 'EUR',
-                          discount_level: -100,
-                          discounted_value: 0,
-                          on_sales: false,
-                          value: 227.5,
-                        },
-                      },
-                      {
-                        _highlightResult: {
-                          brand: {
-                            matchLevel: 'none',
-                            matchedWords: [],
-                            value: 'Gabs',
-                          },
-                          name: {
-                            matchLevel: 'none',
-                            matchedWords: [],
-                            value: 'Bag “Sabrina“ medium Gabs',
-                          },
-                        },
-                        _score: 40.91,
-                        brand: 'Gabs',
-                        list_categories: ['Women', 'Bags', 'Shoulder bags'],
-                        name: 'Bag “Sabrina“ medium Gabs',
-                        objectID: 'A0E200000001WFI',
-                        parentID: 'SABRINA',
-                        price: {
-                          currency: 'EUR',
-                          discount_level: -100,
-                          discounted_value: 0,
-                          on_sales: false,
-                          value: 210,
-                        },
-                      },
-                      {
-                        _highlightResult: {
-                          brand: {
-                            matchLevel: 'none',
-                            matchedWords: [],
-                            value: 'La Carrie Bag',
-                          },
-                          name: {
-                            matchLevel: 'none',
-                            matchedWords: [],
-                            value: 'Bag La Carrie Bag small black',
-                          },
-                        },
-                        _score: 39.92,
-                        brand: 'La Carrie Bag',
-                        list_categories: ['Women', 'Bags', 'Shoulder bags'],
-                        name: 'Bag La Carrie Bag small black',
-                        objectID: 'A0E2000000024R1',
-                        parentID: '151',
-                        price: {
-                          currency: 'EUR',
-                          discount_level: -100,
-                          discounted_value: 0,
-                          on_sales: false,
-                          value: 161.25,
-                        },
-                      },
-                    ],
-            });
-          })
-        )
-      )
-    ),
+    test('escapes html entities when `escapeHTML` is true', async () => {
+      const searchClient = createRecommendSearchClient();
+      let recommendItems: Parameters<
+        NonNullable<
+          Parameters<FrequentlyBoughtTogetherWidgetSetup>[0]['widgetParams']['transformItems']
+        >
+      >[0] = [];
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          objectIDs: ['objectID'],
+          queryParameters: {
+            query: 'regular query',
+          },
+          transformItems: (items) => {
+            recommendItems = items;
+            return items;
+          },
+          escapeHTML: true,
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(searchClient.getRecommendations).toHaveBeenCalledWith([
+        expect.objectContaining({
+          queryParameters: {
+            query: 'regular query',
+            ...TAG_PLACEHOLDER,
+          },
+        }),
+      ]);
+
+      expect(recommendItems[0]._highlightResult!.name).toEqual({
+        matchLevel: 'none',
+        matchedWords: [],
+        value: '&lt;em&gt;Moschino Love&lt;/em&gt; – Shoulder bag',
+      });
+    });
   });
 }

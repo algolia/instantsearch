@@ -931,7 +931,7 @@ AlgoliaSearchHelper.prototype.removeTag = function (tag) {
 /**
  * Removes a "frequently bought together" recommendation query.
  *
- * @param {string} id identifier of the recommendation widget
+ * @param {number} id identifier of the recommendation widget
  * @returns {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @fires change
  * @chainable
@@ -947,7 +947,7 @@ AlgoliaSearchHelper.prototype.removeFrequentlyBoughtTogether = function (id) {
 /**
  * Removes a "related products" recommendation query.
  *
- * @param {string} id identifier of the recommendation widget
+ * @param {number} id identifier of the recommendation widget
  * @returns {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @fires change
  * @chainable
@@ -963,7 +963,7 @@ AlgoliaSearchHelper.prototype.removeRelatedProducts = function (id) {
 /**
  * Removes a "trending items" recommendation query.
  *
- * @param {string} id identifier of the recommendation widget
+ * @param {number} id identifier of the recommendation widget
  * @returns {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @fires change
  * @chainable
@@ -979,7 +979,7 @@ AlgoliaSearchHelper.prototype.removeTrendingItems = function (id) {
 /**
  * Removes a "trending facets" recommendation query.
  *
- * @param {string} id identifier of the recommendation widget
+ * @param {number} id identifier of the recommendation widget
  * @returns {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @fires change
  * @chainable
@@ -995,7 +995,7 @@ AlgoliaSearchHelper.prototype.removeTrendingFacets = function (id) {
 /**
  * Removes a "looking similar" recommendation query.
  *
- * @param {string} id identifier of the recommendation widget
+ * @param {number} id identifier of the recommendation widget
  * @returns {AlgoliaSearchHelper} Method is chainable, it returns itself
  * @fires change
  * @chainable
@@ -1643,7 +1643,7 @@ AlgoliaSearchHelper.prototype._recommend = function () {
   ) {
     // eslint-disable-next-line no-console
     console.warn(
-      'Please update algoliasearch/lite to the latest version in order to use recommendations widgets.'
+      'Please update algoliasearch/lite to the latest version in order to use recommend widgets.'
     );
     return;
   }

@@ -2,6 +2,8 @@ import {
   createDocumentationMessageGenerator,
   checkRendering,
   noop,
+  escapeHits,
+  TAG_PLACEHOLDER,
 } from '../../lib/utils';
 
 import type { Connector, TransformItems, Hit, BaseHit } from '../../types';
@@ -19,7 +21,7 @@ export type LookingSimilarRenderState<THit extends BaseHit = BaseHit> = {
   /**
    * The matched recommendations from the Algolia API.
    */
-  recommendations: Array<Hit<THit>>;
+  items: Array<Hit<THit>>;
 };
 
 export type LookingSimilarConnectorParams<THit extends BaseHit = BaseHit> = {
@@ -50,6 +52,12 @@ export type LookingSimilarConnectorParams<THit extends BaseHit = BaseHit> = {
     'page' | 'hitsPerPage' | 'offset' | 'length'
   >;
   /**
+   * Whether to escape HTML tags from items string values.
+   *
+   * @default true
+   */
+  escapeHTML?: boolean;
+  /**
    * Function to transform the items passed to the templates.
    */
   transformItems?: TransformItems<Hit<THit>, { results: RecommendResultItem }>;
@@ -71,6 +79,8 @@ const connectLookingSimilar: LookingSimilarConnector =
 
     return function LookingSimilar(widgetParams) {
       const {
+        // @MAJOR: this can default to false
+        escapeHTML = true,
         objectIDs,
         limit,
         threshold,
@@ -117,21 +127,24 @@ const connectLookingSimilar: LookingSimilarConnector =
 
         getWidgetRenderState({ results }) {
           if (results === null || results === undefined) {
-            return { recommendations: [], widgetParams };
+            return { items: [], widgetParams };
+          }
+
+          if (escapeHTML && results.hits.length > 0) {
+            results.hits = escapeHits(results.hits);
           }
 
           return {
-            recommendations: transformItems(results.hits, {
+            items: transformItems(results.hits, {
               results: results as RecommendResultItem,
             }),
             widgetParams,
           };
         },
 
-        dispose({ state }) {
+        dispose({ recommendState }) {
           unmountFn();
-
-          return state;
+          return recommendState.removeParams(this.$$id!);
         },
 
         getWidgetParameters(state) {
@@ -141,11 +154,17 @@ const connectLookingSimilar: LookingSimilarConnector =
                 objectID,
                 maxRecommendations: limit,
                 threshold,
-                fallbackParameters,
-                queryParameters,
+                fallbackParameters: {
+                  ...fallbackParameters,
+                  ...(escapeHTML ? TAG_PLACEHOLDER : {}),
+                },
+                queryParameters: {
+                  ...queryParameters,
+                  ...(escapeHTML ? TAG_PLACEHOLDER : {}),
+                },
                 $$id: this.$$id!,
               }),
-            state
+            state.removeParams(this.$$id!)
           );
         },
       };

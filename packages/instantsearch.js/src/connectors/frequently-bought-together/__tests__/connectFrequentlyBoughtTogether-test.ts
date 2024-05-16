@@ -86,6 +86,7 @@ describe('connectFrequentlyBoughtTogether', () => {
         limit: 10,
         threshold: 95,
         queryParameters: { userToken: 'token' },
+        escapeHTML: false,
       });
 
       // @ts-expect-error

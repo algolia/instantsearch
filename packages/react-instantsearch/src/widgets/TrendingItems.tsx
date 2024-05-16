@@ -41,6 +41,7 @@ export function TrendingItems<TItem extends BaseHit = BaseHit>({
   threshold,
   fallbackParameters,
   queryParameters,
+  escapeHTML,
   transformItems,
   itemComponent,
   headerComponent,
@@ -51,20 +52,21 @@ export function TrendingItems<TItem extends BaseHit = BaseHit>({
     facetName && facetValue ? { facetName, facetValue } : {};
 
   const { status } = useInstantSearch();
-  const { recommendations } = useTrendingItems(
+  const { items } = useTrendingItems(
     {
       ...facetParameters,
       limit,
       threshold,
       fallbackParameters,
       queryParameters,
+      escapeHTML,
       transformItems,
     },
     { $$widgetType: 'ais.trendingItems' }
   );
 
   const uiProps: UiProps<TItem> = {
-    items: recommendations as Array<Hit<TItem>>,
+    items: items as Array<Hit<TItem>>,
     itemComponent,
     headerComponent,
     emptyComponent,

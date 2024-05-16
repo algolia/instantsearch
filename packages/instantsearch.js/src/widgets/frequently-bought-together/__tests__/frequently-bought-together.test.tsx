@@ -2,11 +2,7 @@
  * @jest-environment jsdom
  */
 /** @jsx h */
-import {
-  createRecommendResponse,
-  createSearchClient,
-  createSingleSearchResponse,
-} from '@instantsearch/mocks';
+import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { wait } from '@instantsearch/testutils';
 import { h } from 'preact';
 
@@ -21,7 +17,7 @@ describe('frequentlyBoughtTogether', () => {
   describe('options', () => {
     test('throws without a `container`', () => {
       expect(() => {
-        const searchClient = createSearchClient();
+        const searchClient = createRecommendSearchClient();
 
         const search = instantsearch({
           indexName: 'indexName',
@@ -43,7 +39,7 @@ describe('frequentlyBoughtTogether', () => {
 
     test('adds custom CSS classes', async () => {
       const container = document.createElement('div');
-      const searchClient = createMockedSearchClient();
+      const searchClient = createRecommendSearchClient();
       const options: Parameters<typeof frequentlyBoughtTogether>[0] = {
         container,
         objectIDs: ['1'],
@@ -97,7 +93,9 @@ describe('frequentlyBoughtTogether', () => {
   describe('templates', () => {
     test('renders default templates', async () => {
       const container = document.createElement('div');
-      const searchClient = createMockedSearchClient();
+      const searchClient = createRecommendSearchClient({
+        minimal: true,
+      });
       const options: Parameters<typeof frequentlyBoughtTogether>[0] = {
         container,
         objectIDs: ['1'],
@@ -173,14 +171,14 @@ describe('frequentlyBoughtTogether', () => {
 
     test('renders with templates using `html`', async () => {
       const container = document.createElement('div');
-      const searchClient = createMockedSearchClient();
+      const searchClient = createRecommendSearchClient();
       const options: Parameters<typeof frequentlyBoughtTogether>[0] = {
         container,
         objectIDs: ['1'],
         templates: {
-          header({ recommendations, cssClasses }, { html }) {
+          header({ items, cssClasses }, { html }) {
             return html`<h4 class="${cssClasses.title}">
-              Frequently bought together (${recommendations.length})
+              Frequently bought together (${items.length})
             </h4>`;
           },
           item(hit, { html }) {
@@ -262,15 +260,15 @@ describe('frequentlyBoughtTogether', () => {
 
     test('renders with templates using JSX', async () => {
       const container = document.createElement('div');
-      const searchClient = createMockedSearchClient();
+      const searchClient = createRecommendSearchClient();
       const options: Parameters<typeof frequentlyBoughtTogether>[0] = {
         container,
         objectIDs: ['1'],
         templates: {
-          header({ recommendations, cssClasses }) {
+          header({ items, cssClasses }) {
             return (
               <h4 className={cssClasses.title}>
-                Frequently bought together ({recommendations.length})
+                Frequently bought together ({items.length})
               </h4>
             );
           },
@@ -351,26 +349,4 @@ describe('frequentlyBoughtTogether', () => {
       `);
     });
   });
-
-  function createMockedSearchClient() {
-    return createSearchClient({
-      getRecommendations: jest.fn((requests) =>
-        Promise.resolve(
-          createRecommendResponse(
-            // @ts-ignore
-            // `request` will be implicitly typed as any in type-check:v3
-            // since `getRecommendations` is not available there
-            requests.map((request) => {
-              return createSingleSearchResponse({
-                hits:
-                  request.maxRecommendations === 0
-                    ? []
-                    : [{ objectID: '1' }, { objectID: '2' }],
-              });
-            })
-          )
-        )
-      ),
-    });
-  }
 });

@@ -6,9 +6,9 @@ export function createDefaultHeaderComponent({ createElement }: Renderer) {
   return function DefaultHeader<TObject>(
     userProps: RecommendInnerComponentProps<TObject>
   ) {
-    const { classNames = {}, recommendations, translations } = userProps;
+    const { classNames = {}, items, translations } = userProps;
 
-    if (!recommendations || recommendations.length < 1) {
+    if (!items || items.length < 1) {
       return null;
     }
 

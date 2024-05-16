@@ -40,6 +40,7 @@ export function LookingSimilar<THit extends BaseHit = BaseHit>({
   threshold,
   queryParameters,
   fallbackParameters,
+  escapeHTML,
   transformItems,
   itemComponent,
   headerComponent,
@@ -47,20 +48,21 @@ export function LookingSimilar<THit extends BaseHit = BaseHit>({
   ...props
 }: LookingSimilarProps<THit>) {
   const { status } = useInstantSearch();
-  const { recommendations } = useLookingSimilar<THit>(
+  const { items } = useLookingSimilar<THit>(
     {
       objectIDs,
       limit,
       threshold,
       queryParameters,
       fallbackParameters,
+      escapeHTML,
       transformItems,
     },
     { $$widgetType: 'ais.lookingSimilar' }
   );
 
   const uiProps: UiProps<THit> = {
-    items: recommendations,
+    items,
     itemComponent,
     headerComponent,
     emptyComponent,

@@ -2,6 +2,8 @@ import {
   createDocumentationMessageGenerator,
   checkRendering,
   noop,
+  escapeHits,
+  TAG_PLACEHOLDER,
 } from '../../lib/utils';
 
 import type { Connector, TransformItems, Hit, BaseHit } from '../../types';
@@ -21,7 +23,7 @@ export type FrequentlyBoughtTogetherRenderState<
   /**
    * The matched recommendations from Algolia API.
    */
-  recommendations: Array<Hit<THit>>;
+  items: Array<Hit<THit>>;
 };
 
 export type FrequentlyBoughtTogetherConnectorParams<
@@ -51,6 +53,13 @@ export type FrequentlyBoughtTogetherConnectorParams<
   >;
 
   /**
+   * Whether to escape HTML tags from items string values.
+   *
+   * @default true
+   */
+  escapeHTML?: boolean;
+
+  /**
    * Function to transform the items passed to the templates.
    */
   transformItems?: TransformItems<Hit<THit>, { results: RecommendResultItem }>;
@@ -75,6 +84,8 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
 
     return (widgetParams) => {
       const {
+        // @MAJOR: this can default to false
+        escapeHTML = true,
         transformItems = ((items) => items) as NonNullable<
           FrequentlyBoughtTogetherConnectorParams['transformItems']
         >,
@@ -120,20 +131,23 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
 
         getWidgetRenderState({ results }) {
           if (results === null || results === undefined) {
-            return { recommendations: [], widgetParams };
+            return { items: [], widgetParams };
+          }
+
+          if (escapeHTML && results.hits.length > 0) {
+            results.hits = escapeHits(results.hits);
           }
 
           const transformedItems = transformItems(results.hits, {
             results: results as RecommendResultItem,
           });
 
-          return { recommendations: transformedItems, widgetParams };
+          return { items: transformedItems, widgetParams };
         },
 
-        dispose({ state }) {
+        dispose({ recommendState }) {
           unmountFn();
-
-          return state;
+          return recommendState.removeParams(this.$$id!);
         },
 
         getWidgetParameters(state) {
@@ -143,10 +157,13 @@ const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
                 objectID,
                 threshold,
                 maxRecommendations: limit,
-                queryParameters,
+                queryParameters: {
+                  ...queryParameters,
+                  ...(escapeHTML ? TAG_PLACEHOLDER : {}),
+                },
                 $$id: this.$$id!,
               }),
-            state
+            state.removeParams(this.$$id!)
           );
         },
       };

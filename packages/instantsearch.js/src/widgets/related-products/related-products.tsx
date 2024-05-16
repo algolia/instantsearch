@@ -52,7 +52,7 @@ function createRenderer({
   Partial<RelatedProductsWidgetParams>
 > {
   return function renderer(
-    { recommendations, results, instantSearchInstance },
+    { items, results, instantSearchInstance },
     isFirstRendering
   ) {
     if (isFirstRendering) {
@@ -75,7 +75,7 @@ function createRenderer({
               rootTagName="fragment"
               data={{
                 cssClasses: data.classNames,
-                recommendations: data.recommendations,
+                items: data.items,
               }}
             />
           )
@@ -112,7 +112,7 @@ function createRenderer({
 
     render(
       <RelatedProducts
-        items={recommendations}
+        items={items}
         sendEvent={() => {}}
         classNames={cssClasses}
         headerComponent={headerComponent}
@@ -141,7 +141,7 @@ export type RelatedProductsTemplates = Partial<{
       Parameters<
         NonNullable<RelatedProductsUiProps<Hit>['headerComponent']>
       >[0],
-      'recommendations'
+      'items'
     > & { cssClasses: RecommendClassNames }
   >;
 
@@ -186,6 +186,7 @@ const relatedProducts: RelatedProductsWidget = function relatedProducts(
     queryParameters,
     fallbackParameters,
     threshold,
+    escapeHTML,
     transformItems,
     templates = {},
     cssClasses = {},
@@ -215,6 +216,7 @@ const relatedProducts: RelatedProductsWidget = function relatedProducts(
       queryParameters,
       fallbackParameters,
       threshold,
+      escapeHTML,
       transformItems,
     }),
     $$widgetType: 'ais.relatedProducts',
