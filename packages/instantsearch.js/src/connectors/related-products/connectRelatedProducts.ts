@@ -165,7 +165,7 @@ const connectRelatedProducts: RelatedProductsConnector =
                 },
                 $$id: this.$$id!,
               }),
-            state
+            state.removeParams(this.$$id!)
           );
         },
       };

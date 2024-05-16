@@ -5,7 +5,7 @@ import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/connectors';
 import { act, render } from '@testing-library/react';
 import { connectRatingMenu } from 'instantsearch.js/es/connectors';
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   InstantSearch,
@@ -337,11 +337,17 @@ const testSetups: TestSetupsMap<TestSuites> = {
       );
     }
 
-    render(
-      <InstantSearch {...instantSearchOptions}>
-        <CustomRelatedProducts {...widgetParams} />
-      </InstantSearch>
-    );
+    function App() {
+      const [visible, setVisible] = useState(true);
+      return (
+        <InstantSearch {...instantSearchOptions}>
+          {visible && <CustomRelatedProducts {...widgetParams} />}
+          <button onClick={() => setVisible(!visible)}>toggle</button>
+        </InstantSearch>
+      );
+    }
+
+    render(<App />);
   },
   createFrequentlyBoughtTogetherConnectorTests: ({
     instantSearchOptions,
@@ -361,11 +367,17 @@ const testSetups: TestSetupsMap<TestSuites> = {
       );
     }
 
-    render(
-      <InstantSearch {...instantSearchOptions}>
-        <CustomFrequentlyBoughtTogether {...widgetParams} />
-      </InstantSearch>
-    );
+    function App() {
+      const [visible, setVisible] = useState(true);
+      return (
+        <InstantSearch {...instantSearchOptions}>
+          {visible && <CustomFrequentlyBoughtTogether {...widgetParams} />}
+          <button onClick={() => setVisible(!visible)}>toggle</button>
+        </InstantSearch>
+      );
+    }
+
+    render(<App />);
   },
   createTrendingItemsConnectorTests: ({
     instantSearchOptions,
@@ -383,11 +395,17 @@ const testSetups: TestSetupsMap<TestSuites> = {
       );
     }
 
-    render(
-      <InstantSearch {...instantSearchOptions}>
-        <CustomTrendingItems {...widgetParams} />
-      </InstantSearch>
-    );
+    function App() {
+      const [visible, setVisible] = useState(true);
+      return (
+        <InstantSearch {...instantSearchOptions}>
+          {visible && <CustomTrendingItems {...widgetParams} />}
+          <button onClick={() => setVisible(!visible)}>toggle</button>
+        </InstantSearch>
+      );
+    }
+
+    render(<App />);
   },
   createLookingSimilarConnectorTests: ({
     instantSearchOptions,
@@ -405,11 +423,17 @@ const testSetups: TestSetupsMap<TestSuites> = {
       );
     }
 
-    render(
-      <InstantSearch {...instantSearchOptions}>
-        <CustomLookingSimilar {...widgetParams} />
-      </InstantSearch>
-    );
+    function App() {
+      const [visible, setVisible] = useState(true);
+      return (
+        <InstantSearch {...instantSearchOptions}>
+          {visible && <CustomLookingSimilar {...widgetParams} />}
+          <button onClick={() => setVisible(!visible)}>toggle</button>
+        </InstantSearch>
+      );
+    }
+
+    render(<App />);
   },
 };
 

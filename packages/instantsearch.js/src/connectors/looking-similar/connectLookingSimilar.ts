@@ -164,7 +164,7 @@ const connectLookingSimilar: LookingSimilarConnector =
                 },
                 $$id: this.$$id!,
               }),
-            state
+            state.removeParams(this.$$id!)
           );
         },
       };
