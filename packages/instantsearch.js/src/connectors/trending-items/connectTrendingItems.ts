@@ -153,7 +153,7 @@ const connectTrendingItems: TrendingItemsConnector =
         },
 
         getWidgetParameters(state) {
-          return state.addTrendingItems({
+          return state.removeParams(this.$$id!).addTrendingItems({
             facetName,
             facetValue,
             maxRecommendations,

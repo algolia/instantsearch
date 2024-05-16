@@ -1,6 +1,7 @@
 import { fakeAct } from '../../common';
 
 import { createOptionsTests } from './options';
+import { createStateTests } from './state';
 
 import type { TestOptions, TestSetup } from '../../common';
 import type { LookingSimilarConnectorParams } from 'instantsearch.js/src/connectors/looking-similar/connectLookingSimilar';
@@ -19,5 +20,6 @@ export function createLookingSimilarConnectorTests(
 
   describe('LookingSimilar connector common tests', () => {
     createOptionsTests(setup, { act, skippedTests });
+    createStateTests(setup, { act, skippedTests });
   });
 }

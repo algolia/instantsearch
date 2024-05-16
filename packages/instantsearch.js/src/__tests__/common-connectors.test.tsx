@@ -23,6 +23,7 @@ import {
 import instantsearch from '../index.es';
 import { refinementList } from '../widgets';
 
+import type { InstantSearch, Widget } from '../index.es';
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
 
 type TestSuites = typeof suites;
@@ -406,7 +407,12 @@ const testSetups: TestSetupsMap<TestSuites> = {
           .join('')}</ul>`;
     });
 
-    instantsearch(instantSearchOptions)
+    const widget = customRelatedProducts({
+      container: document.body.appendChild(document.createElement('div')),
+      ...widgetParams,
+    });
+
+    const search = instantsearch(instantSearchOptions)
       .addWidgets([
         customRelatedProducts({
           container: document.body.appendChild(document.createElement('div')),
@@ -418,8 +424,11 @@ const testSetups: TestSetupsMap<TestSuites> = {
          * prevent rethrowing InstantSearch errors, so tests can be asserted.
          * IRL this isn't needed, as the error doesn't stop execution.
          */
-      })
-      .start();
+      });
+
+    addWidgetToggleUi(search, widget);
+
+    search.start();
   },
   createFrequentlyBoughtTogetherConnectorTests({
     instantSearchOptions,
@@ -435,7 +444,12 @@ const testSetups: TestSetupsMap<TestSuites> = {
       `;
     });
 
-    instantsearch(instantSearchOptions)
+    const widget = customFrequentlyBoughtTogether({
+      container: document.body.appendChild(document.createElement('div')),
+      ...widgetParams,
+    });
+
+    const search = instantsearch(instantSearchOptions)
       .addWidgets([
         customFrequentlyBoughtTogether({
           container: document.body.appendChild(document.createElement('div')),
@@ -447,8 +461,11 @@ const testSetups: TestSetupsMap<TestSuites> = {
          * prevent rethrowing InstantSearch errors, so tests can be asserted.
          * IRL this isn't needed, as the error doesn't stop execution.
          */
-      })
-      .start();
+      });
+
+    addWidgetToggleUi(search, widget);
+
+    search.start();
   },
   createTrendingItemsConnectorTests({ instantSearchOptions, widgetParams }) {
     const customTrendingItems = connectTrendingItems<{
@@ -461,7 +478,12 @@ const testSetups: TestSetupsMap<TestSuites> = {
       `;
     });
 
-    instantsearch(instantSearchOptions)
+    const widget = customTrendingItems({
+      container: document.body.appendChild(document.createElement('div')),
+      ...widgetParams,
+    });
+
+    const search = instantsearch(instantSearchOptions)
       .addWidgets([
         customTrendingItems({
           container: document.body.appendChild(document.createElement('div')),
@@ -473,8 +495,11 @@ const testSetups: TestSetupsMap<TestSuites> = {
          * prevent rethrowing InstantSearch errors, so tests can be asserted.
          * IRL this isn't needed, as the error doesn't stop execution.
          */
-      })
-      .start();
+      });
+
+    addWidgetToggleUi(search, widget);
+
+    search.start();
   },
   createLookingSimilarConnectorTests({ instantSearchOptions, widgetParams }) {
     const customLookingSimilar = connectLookingSimilar<{
@@ -487,22 +512,39 @@ const testSetups: TestSetupsMap<TestSuites> = {
       `;
     });
 
-    instantsearch(instantSearchOptions)
-      .addWidgets([
-        customLookingSimilar({
-          container: document.body.appendChild(document.createElement('div')),
-          ...widgetParams,
-        }),
-      ])
+    const widget = customLookingSimilar({
+      container: document.body.appendChild(document.createElement('div')),
+      ...widgetParams,
+    });
+
+    const search = instantsearch(instantSearchOptions)
+      .addWidgets([widget])
       .on('error', () => {
         /*
          * prevent rethrowing InstantSearch errors, so tests can be asserted.
          * IRL this isn't needed, as the error doesn't stop execution.
          */
-      })
-      .start();
+      });
+
+    addWidgetToggleUi(search, widget);
+
+    search.start();
   },
 };
+
+function addWidgetToggleUi(search: InstantSearch, widget: Widget) {
+  const button = document.createElement('button');
+  button.addEventListener('click', () => {
+    const hasWidget = search.mainIndex.getWidgets().includes(widget);
+    if (hasWidget) {
+      search.removeWidgets([widget]);
+    } else {
+      search.addWidgets([widget]);
+    }
+  });
+
+  document.body.appendChild(button);
+}
 
 const testOptions: TestOptionsMap<TestSuites> = {
   createHierarchicalMenuConnectorTests: undefined,
