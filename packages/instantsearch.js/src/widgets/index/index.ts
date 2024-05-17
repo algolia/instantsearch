@@ -468,6 +468,22 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         (widget) => widgets.indexOf(widget) === -1
       );
 
+      localWidgets.forEach((widget) => {
+        if (isIndexWidget(widget)) {
+          return;
+        }
+
+        if (localInstantSearchInstance && widget.dependsOn === 'recommend') {
+          localInstantSearchInstance._hasRecommendWidget = true;
+        } else if (localInstantSearchInstance) {
+          localInstantSearchInstance._hasSearchWidget = true;
+        } else if (widget.dependsOn === 'recommend') {
+          hasRecommendWidget = true;
+        } else {
+          hasSearchWidget = true;
+        }
+      });
+
       if (localInstantSearchInstance && Boolean(widgets.length)) {
         const { cleanedSearchState, cleanedRecommendState } = widgets.reduce(
           (states, widget) => {
@@ -767,9 +783,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
       // We only render index widgets if there are no results.
       // This makes sure `render` is never called with `results` being `null`.
-      let widgetsToRender = this.getResults()
-        ? localWidgets
-        : localWidgets.filter(isIndexWidget);
+      let widgetsToRender =
+        this.getResults() || derivedHelper?.lastRecommendResults
+          ? localWidgets
+          : localWidgets.filter(isIndexWidget);
 
       widgetsToRender = widgetsToRender.filter((widget) => {
         if (!widget.shouldRender) {

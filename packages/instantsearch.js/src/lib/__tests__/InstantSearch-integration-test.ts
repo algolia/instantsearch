@@ -591,4 +591,75 @@ describe('network requests', () => {
       `);
     });
   });
+
+  describe('interactive life cycle', () => {
+    it('sends no queries when widgets are removed', async () => {
+      const searchClient = createSearchClient();
+      const searchBoxWidget = searchBox({
+        container: document.createElement('div'),
+      });
+      const frequentlyBoughtTogetherWidget = frequentlyBoughtTogether({
+        objectIDs: ['one'],
+        container: document.createElement('div'),
+      });
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+      }).addWidgets([searchBoxWidget, frequentlyBoughtTogetherWidget]);
+
+      search.start();
+      await wait(0);
+
+      expect(castToJestMock(searchClient.search).mock.calls[0]?.[0])
+        .toMatchInlineSnapshot(`
+        [
+          {
+            "indexName": "indexName",
+            "params": {
+              "facets": [],
+              "query": "",
+              "tagFilters": "",
+            },
+          },
+        ]
+      `);
+      expect(castToJestMock(searchClient.getRecommendations).mock.calls[0]?.[0])
+        .toMatchInlineSnapshot(`
+        [
+          {
+            "indexName": "indexName",
+            "maxRecommendations": undefined,
+            "model": "bought-together",
+            "objectID": "one",
+            "queryParameters": {
+              "highlightPostTag": "__/ais-highlight__",
+              "highlightPreTag": "__ais-highlight__",
+            },
+            "threshold": undefined,
+          },
+        ]
+      `);
+
+      search.removeWidgets([searchBoxWidget, frequentlyBoughtTogetherWidget]);
+
+      await wait(0);
+
+      expect(
+        castToJestMock(searchClient.search).mock.calls[1]?.[0]
+      ).toMatchInlineSnapshot(`undefined`);
+      expect(
+        castToJestMock(searchClient.getRecommendations).mock.calls[1]?.[0]
+      ).toMatchInlineSnapshot(`undefined`);
+
+      // Ensure that calling search() after removing all widgets doesn't trigger a new search
+      search.helper!.search();
+
+      expect(
+        castToJestMock(searchClient.search).mock.calls[2]?.[0]
+      ).toMatchInlineSnapshot(`undefined`);
+      expect(
+        castToJestMock(searchClient.getRecommendations).mock.calls[2]?.[0]
+      ).toMatchInlineSnapshot(`undefined`);
+    });
+  });
 });
