@@ -3,6 +3,7 @@
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
+import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { castToJestMock } from '@instantsearch/testutils';
 import { wait } from '@instantsearch/testutils/wait';
 import { getByText, fireEvent } from '@testing-library/dom';
@@ -161,7 +162,7 @@ describe('errors', () => {
 describe('network requests', () => {
   describe('no insights', () => {
     it('sends no search or recommend query when there are no widgets', async () => {
-      const searchClient = createSearchClient();
+      const searchClient = createRecommendSearchClient();
       instantsearch({
         indexName: 'indexName',
         searchClient,
@@ -178,7 +179,7 @@ describe('network requests', () => {
     });
 
     it('sends only one search query when there are search widgets', async () => {
-      const searchClient = createSearchClient();
+      const searchClient = createRecommendSearchClient();
       instantsearch({
         indexName: 'indexName',
         searchClient,
@@ -207,7 +208,7 @@ describe('network requests', () => {
     });
 
     it('sends only one recommend query when there are recommend widgets', async () => {
-      const searchClient = createSearchClient();
+      const searchClient = createRecommendSearchClient();
       instantsearch({
         indexName: 'indexName',
         searchClient,
@@ -244,7 +245,7 @@ describe('network requests', () => {
     });
 
     it('sends only one search and recommend query when there are search and recommend widgets', async () => {
-      const searchClient = createSearchClient();
+      const searchClient = createRecommendSearchClient();
       instantsearch({
         indexName: 'indexName',
         searchClient,
@@ -304,7 +305,7 @@ describe('network requests', () => {
     });
 
     it('sends no search or recommend query when there are no widgets', async () => {
-      const searchClient = createSearchClient();
+      const searchClient = createRecommendSearchClient();
       instantsearch({
         indexName: 'indexName',
         searchClient,
@@ -322,7 +323,7 @@ describe('network requests', () => {
     });
 
     it('sends only one search query when there are search widgets', async () => {
-      const searchClient = createSearchClient();
+      const searchClient = createRecommendSearchClient();
       instantsearch({
         indexName: 'indexName',
         searchClient,
@@ -354,7 +355,7 @@ describe('network requests', () => {
     });
 
     it('sends only one recommend query when there are recommend widgets', async () => {
-      const searchClient = createSearchClient();
+      const searchClient = createRecommendSearchClient();
       instantsearch({
         indexName: 'indexName',
         searchClient,
@@ -392,7 +393,7 @@ describe('network requests', () => {
     });
 
     it('sends only one search and recommend query when there are search and recommend widgets', async () => {
-      const searchClient = createSearchClient();
+      const searchClient = createRecommendSearchClient();
       instantsearch({
         indexName: 'indexName',
         searchClient,
@@ -455,7 +456,7 @@ describe('network requests', () => {
     });
 
     it('sends no search or recommend query when there are no widgets', async () => {
-      const searchClient = createSearchClient();
+      const searchClient = createRecommendSearchClient();
       instantsearch({
         indexName: 'indexName',
         searchClient,
@@ -473,7 +474,7 @@ describe('network requests', () => {
     });
 
     it('sends only one search query when there are search widgets', async () => {
-      const searchClient = createSearchClient();
+      const searchClient = createRecommendSearchClient();
       instantsearch({
         indexName: 'indexName',
         searchClient,
@@ -504,7 +505,7 @@ describe('network requests', () => {
     });
 
     it('sends only one recommend query when there are recommend widgets', async () => {
-      const searchClient = createSearchClient();
+      const searchClient = createRecommendSearchClient();
       instantsearch({
         indexName: 'indexName',
         searchClient,
@@ -542,7 +543,7 @@ describe('network requests', () => {
     });
 
     it('sends only one search and recommend query when there are search and recommend widgets', async () => {
-      const searchClient = createSearchClient();
+      const searchClient = createRecommendSearchClient();
       instantsearch({
         indexName: 'indexName',
         searchClient,
@@ -594,7 +595,7 @@ describe('network requests', () => {
 
   describe('interactive life cycle', () => {
     it('sends no queries when widgets are removed', async () => {
-      const searchClient = createSearchClient();
+      const searchClient = createRecommendSearchClient();
       const searchBoxWidget = searchBox({
         container: document.createElement('div'),
       });
