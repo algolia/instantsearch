@@ -222,6 +222,8 @@ class InstantSearch<
   public _createURL: CreateURL<TUiState>;
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
+  public _hasSearchWidget: boolean = false;
+  public _hasRecommendWidget: boolean = false;
   public _insights: InstantSearchOptions['insights'];
   public middleware: Array<{
     creator: Middleware<TUiState>;
@@ -580,9 +582,15 @@ See documentation: ${createDocumentationLink({
       // under the hood, we have a different implementation. It should be
       // completely transparent for the rest of the codebase. Only this module
       // is impacted.
-      return (
-        mainHelper.searchOnlyWithDerivedHelpers() && mainHelper.recommend()
-      );
+      if (this._hasSearchWidget) {
+        mainHelper.searchOnlyWithDerivedHelpers();
+      }
+
+      if (this._hasRecommendWidget) {
+        mainHelper.recommend();
+      }
+
+      return mainHelper;
     };
 
     if (this._searchFunction) {
