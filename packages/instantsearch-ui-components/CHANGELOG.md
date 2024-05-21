@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.5.0...instantsearch-ui-components@0.6.0) (2024-05-21)
+
+
+### Features
+
+* **recommend:** harmonize UI component for FBT and Related Products ([#6157](https://github.com/algolia/instantsearch/issues/6157)) ([82d3001](https://github.com/algolia/instantsearch/commit/82d30012c7051531ca7f906571c74663bdce2fcc))
+* **recommend:** introduce `<RelatedProducts>` widget ([#6162](https://github.com/algolia/instantsearch/issues/6162)) ([313b0ea](https://github.com/algolia/instantsearch/commit/313b0eae9313925a305fbee17a9eac8c3b433938))
+* **recommend:** introduce `FrequentlyBoughtTogether` UI component ([#6114](https://github.com/algolia/instantsearch/issues/6114)) ([7d78f63](https://github.com/algolia/instantsearch/commit/7d78f633628eb615cc8ef7377a3368f15e3adf98))
+* **recommend:** introduce `frequentlyBoughtTogether` widget ([#6126](https://github.com/algolia/instantsearch/issues/6126)) ([984704e](https://github.com/algolia/instantsearch/commit/984704e6070f220a357791279f6864a4624073f2))
+* **recommend:** introduce `LookingSimilar` UI component ([#6179](https://github.com/algolia/instantsearch/issues/6179)) ([07b0d9e](https://github.com/algolia/instantsearch/commit/07b0d9e82d5ec995464a13c6380dd335d83f351c))
+* **recommend:** introduce `RelatedProducts` UI component ([#6129](https://github.com/algolia/instantsearch/issues/6129)) ([08e39e2](https://github.com/algolia/instantsearch/commit/08e39e20067a264eec386f54587f4c8a0d02c7b4))
+* **recommend:** introduce `TrendingItems` UI component ([#6167](https://github.com/algolia/instantsearch/issues/6167)) ([a9f6535](https://github.com/algolia/instantsearch/commit/a9f65358ce585e01b282e381f4998ad32f942a41))
+* **recommend:** rename `fallbackComponent` into `emptyComponent` ([#6190](https://github.com/algolia/instantsearch/issues/6190)) ([8e65ebf](https://github.com/algolia/instantsearch/commit/8e65ebf350261d996011142ce72cab841001e09a))
+
+
+
+
+
 # [0.5.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.4.0...instantsearch-ui-components@0.5.0) (2024-04-30)
 
 

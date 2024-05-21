@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.9.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.8.1...react-instantsearch@7.9.0) (2024-05-21)
+
+
+### Features
+
+* **recommend:** introduce `<RelatedProducts>` widget ([#6162](https://github.com/algolia/instantsearch/issues/6162)) ([313b0ea](https://github.com/algolia/instantsearch/commit/313b0eae9313925a305fbee17a9eac8c3b433938))
+* **recommend:** introduce `<TrendingItems>` widget ([#6178](https://github.com/algolia/instantsearch/issues/6178)) ([e2c43eb](https://github.com/algolia/instantsearch/commit/e2c43eb4f1f0708523e95d439a30f9a3bbee2276))
+* **recommend:** introduce `connectLookingSimilar` connector ([#6180](https://github.com/algolia/instantsearch/issues/6180)) ([78a7723](https://github.com/algolia/instantsearch/commit/78a772329de7958fe3bfcff8014c1a9e3c5c6764))
+* **recommend:** introduce `connectRelatedProducts` connector ([#6142](https://github.com/algolia/instantsearch/issues/6142)) ([89c4409](https://github.com/algolia/instantsearch/commit/89c44091ac69245ea5b2fe5b5e38efbaf10f8c69))
+* **recommend:** introduce `connectTrendingItems` connector ([#6169](https://github.com/algolia/instantsearch/issues/6169)) ([fa165ab](https://github.com/algolia/instantsearch/commit/fa165abd5a3b4b23121f4d752e46ad1141960591))
+* **recommend:** introduce `lookingSimilar` widget ([#6183](https://github.com/algolia/instantsearch/issues/6183)) ([6fae57c](https://github.com/algolia/instantsearch/commit/6fae57c96fdb96bf65d1ab1754ff18803f19929f))
+* **recommend:** introduce `relatedProducts` widget ([#6154](https://github.com/algolia/instantsearch/issues/6154)) ([b8602af](https://github.com/algolia/instantsearch/commit/b8602afc042ec28158cdd70e12a01630adce11fa))
+* **recommend:** introduce `trendingItems` widget ([#6171](https://github.com/algolia/instantsearch/issues/6171)) ([fdbd8ce](https://github.com/algolia/instantsearch/commit/fdbd8ce59bb4d319168bacf064100a59f9f029b6))
+* **recommend:** introduce `useRelatedProducts` Hook ([#6159](https://github.com/algolia/instantsearch/issues/6159)) ([0eedb22](https://github.com/algolia/instantsearch/commit/0eedb2233d3b6caebb98759de8e27ae155548094))
+* **recommend:** introduce `useTrendingItems` Hook ([#6177](https://github.com/algolia/instantsearch/issues/6177)) ([2185725](https://github.com/algolia/instantsearch/commit/2185725c7d1c321d622ae98f2a2037b551ee534d))
+* **recommend:** introduce Frequently Bought Together React Hook and widget ([#6155](https://github.com/algolia/instantsearch/issues/6155)) ([0ef0ce6](https://github.com/algolia/instantsearch/commit/0ef0ce60b06f6971856b0ad74d88b290101e0028))
+* **recommend:** introduce Looking Similar React Hook and widget ([#6184](https://github.com/algolia/instantsearch/issues/6184)) ([bc395c5](https://github.com/algolia/instantsearch/commit/bc395c54dc88d5452804fce6f13231a7fa189fdb))
+* **recommend:** rename `fallbackComponent` into `emptyComponent` ([#6190](https://github.com/algolia/instantsearch/issues/6190)) ([8e65ebf](https://github.com/algolia/instantsearch/commit/8e65ebf350261d996011142ce72cab841001e09a))
+* **recommend:** support `escapeHTML` in recommend widgets ([#6199](https://github.com/algolia/instantsearch/issues/6199)) ([720e700](https://github.com/algolia/instantsearch/commit/720e70040e549e3169e66658c3289e68b6d5830a))
+
+
+
+
+
 ## [7.8.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.8.0...react-instantsearch@7.8.1) (2024-05-14)
 
 
