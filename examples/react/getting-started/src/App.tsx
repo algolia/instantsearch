@@ -72,11 +72,14 @@ function HitComponent({ hit }: HitProps) {
   return (
     <article>
       <h1>
-        <Highlight attribute="name" hit={hit} />
+        <a href={`/products.html?pid=${hit.objectID}`}>
+          <Highlight attribute="name" hit={hit} />
+        </a>
       </h1>
       <p>
         <Highlight attribute="description" hit={hit} />
       </p>
+      <a href={`/products.html?pid=${hit.objectID}`}>See product</a>
     </article>
   );
 }
