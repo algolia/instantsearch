@@ -1,53 +1,53 @@
 ---
 layout: ../../layouts/WidgetLayout.astro
-title: TrendingItems
+title: LookingSimilar
 type: widget
 html: |
-  <div class="ais-TrendingItems">
-    <h3 class="ais-TrendingItems-title">Trending items</h3>
-    <div class="ais-TrendingItems-container">
-      <ol class="ais-TrendingItems-list">
-        <li class="ais-TrendingItems-item">
+  <div class="ais-LookingSimilar">
+    <h3 class="ais-LookingSimilar-title">Looking Similar</h3>
+    <div class="ais-LookingSimilar-container">
+      <ol class="ais-LookingSimilar-list">
+        <li class="ais-LookingSimilar-item">
           Hit 5477500: Amazon - Fire TV Stick with Alexa Voice Remote - Black
         </li>
-        <li class="ais-TrendingItems-item">
+        <li class="ais-LookingSimilar-item">
           Hit 4397400: Google - Chromecast - Black
         </li>
-        <li class="ais-TrendingItems-item">
+        <li class="ais-LookingSimilar-item">
           Hit 4397400: Google - Chromecast - Black
         </li>
-        <li class="ais-TrendingItems-item">
+        <li class="ais-LookingSimilar-item">
           Hit 5477500: Amazon - Fire TV Stick with Alexa Voice Remote - Black
         </li>
-        <li class="ais-TrendingItems-item">
+        <li class="ais-LookingSimilar-item">
           Hit 4397400: Google - Chromecast - Black
         </li>
-        <li class="ais-TrendingItems-item">
+        <li class="ais-LookingSimilar-item">
           Hit 4397400: Google - Chromecast - Black
         </li>
-        <li class="ais-TrendingItems-item">
+        <li class="ais-LookingSimilar-item">
           Hit 5477500: Amazon - Fire TV Stick with Alexa Voice Remote - Black
         </li>
-        <li class="ais-TrendingItems-item">
+        <li class="ais-LookingSimilar-item">
           Hit 4397400: Google - Chromecast - Black
         </li>
       </ol>
     </div>
   </div>
 classes:
-  - name: .ais-TrendingItems
+  - name: .ais-LookingSimilar
     description: the root div of the widget
-  - name: .ais-TrendingItems-title
+  - name: .ais-LookingSimilar-title
     description: the title heading of the widget
-  - name: .ais-TrendingItems-container
+  - name: .ais-LookingSimilar-container
     description: the container for the list of results
-  - name: .ais-TrendingItems-list
+  - name: .ais-LookingSimilar-list
     description: the list of results
-  - name: .ais-TrendingItems-item
+  - name: .ais-LookingSimilar-item
     description: the hit list item
 options:
   - name: objectIDs
-    description: objectIDs of the items to get the Trending Items from
+    description: objectIDs of the items to get the Looking Similar items from
   - name: limit
     description: Number of recommendations to retrieve
   - name: fallbackParameters
@@ -56,17 +56,13 @@ options:
     description: List of search parameters to send
   - name: threshold
     description: Threshold for the recommendations confidence score (between 0 and 100)
-  - name: facetName
-    description: Facet attribute to get recommendations for.
-  - name: facetValue
-    description: Value of the targeted facet attribute.
   - name: transformItems
     description: Function which receives the items, which will be called before displaying them. Should return a new array with the same shape as the original array. Useful for mapping over the items to transform, remove or reorder them
 translations:
   - name: title
-    default: "Trending items"
+    default: "Looking Similar"
     description: The text for the header element
   - name: sliderLabel
-    default: "Trending items"
+    default: "Looking Similar"
     description: The label for the horizontal slider
 ---
