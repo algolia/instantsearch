@@ -23,9 +23,9 @@ export function Product({ pid }: { pid: string }) {
           <a href="/">Getting started</a>
         </h1>
         <p className="header-subtitle">
-          using
+          using{' '}
           <a href="https://github.com/algolia/instantsearch">
-            InstantSearch.js
+            React InstantSearch
           </a>
         </p>
       </header>
