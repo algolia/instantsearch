@@ -8,6 +8,7 @@ import { useInstantSearchServerContext } from '../lib/useInstantSearchServerCont
 import { useStableValue } from '../lib/useStableValue';
 import { useWidget } from '../lib/useWidget';
 
+import type algoliasearchHelper from 'algoliasearch-helper';
 import type {
   Connector,
   UiState,
@@ -116,7 +117,12 @@ export function useConnector<
         helper,
         parent: parentIndex,
         instantSearchInstance: search,
-        results,
+        results:
+          widget.dependsOn === 'recommend'
+            ? // @TODO: this is to avoid using wrong hits in SSR,
+              // will be replace with SSR support for recommend
+              (null as unknown as algoliasearchHelper.SearchResults<any>)
+            : results,
         scopedResults,
         state: helper.state,
         renderState: search.renderState,
