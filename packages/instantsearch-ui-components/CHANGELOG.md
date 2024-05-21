@@ -15,7 +15,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **recommend:** introduce `LookingSimilar` UI component ([#6179](https://github.com/algolia/instantsearch/issues/6179)) ([07b0d9e](https://github.com/algolia/instantsearch/commit/07b0d9e82d5ec995464a13c6380dd335d83f351c))
 * **recommend:** introduce `RelatedProducts` UI component ([#6129](https://github.com/algolia/instantsearch/issues/6129)) ([08e39e2](https://github.com/algolia/instantsearch/commit/08e39e20067a264eec386f54587f4c8a0d02c7b4))
 * **recommend:** introduce `TrendingItems` UI component ([#6167](https://github.com/algolia/instantsearch/issues/6167)) ([a9f6535](https://github.com/algolia/instantsearch/commit/a9f65358ce585e01b282e381f4998ad32f942a41))
-* **recommend:** rename `fallbackComponent` into `emptyComponent` ([#6190](https://github.com/algolia/instantsearch/issues/6190)) ([8e65ebf](https://github.com/algolia/instantsearch/commit/8e65ebf350261d996011142ce72cab841001e09a))
 
 
 
