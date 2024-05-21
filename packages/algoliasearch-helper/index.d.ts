@@ -1359,7 +1359,7 @@ declare namespace algoliasearchHelper {
             /**
              * URL to navigate to when the banner is clicked
              */
-            url?: string;
+            url: string;
             /**
              * Target of the navigation
              * - `_blank` opens the URL in a new tab

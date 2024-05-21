@@ -16,7 +16,7 @@ type Banner = {
     title?: string;
   };
   link?: {
-    url?: string;
+    url: string;
     target?: '_blank' | '_self';
   };
 };
@@ -36,7 +36,7 @@ function createDefaultBannerComponent({ createElement }: Renderer) {
     }
     return (
       <aside className={cx('ais-Hits-banner', classNames.bannerRoot)}>
-        {banner.link?.url ? (
+        {banner.link ? (
           <a
             className={cx('ais-Hits-banner-link', classNames.bannerLink)}
             href={banner.link.url}
