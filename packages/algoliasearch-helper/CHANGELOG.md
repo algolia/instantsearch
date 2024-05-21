@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.20.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.19.0...algoliasearch-helper@3.20.0) (2024-05-21)
+
+
+### Features
+
+* **recommend:** cache results per `$$id` ([#6181](https://github.com/algolia/instantsearch/issues/6181)) ([c0f4802](https://github.com/algolia/instantsearch/commit/c0f480238f25cf03a8b0f861389d04a8c7a99b14))
+* **recommend:** enable multiple `objectIDs` in connectors ([#6176](https://github.com/algolia/instantsearch/issues/6176)) ([ffe6a1c](https://github.com/algolia/instantsearch/commit/ffe6a1c2ff60e31c1e91ff3dc0791948d0a4c0f5))
+* **recommend:** handle multiple `objectIDs` for one widget ([#6160](https://github.com/algolia/instantsearch/issues/6160)) ([f6a1c1c](https://github.com/algolia/instantsearch/commit/f6a1c1cedf693662850a35cef6636e4b9b746cdd))
+* **recommend:** map recommend results to widgets ([a5a87dd](https://github.com/algolia/instantsearch/commit/a5a87dd0315606ce70bf1787ba0566de8944d134))
+
+
+
+
+
 # [3.19.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.18.0...algoliasearch-helper@3.19.0) (2024-04-30)
 
 

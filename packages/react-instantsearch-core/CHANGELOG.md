@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.9.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.8.1...react-instantsearch-core@7.9.0) (2024-05-21)
+
+
+### Features
+
+* **recommend:** introduce `useRelatedProducts` Hook ([#6159](https://github.com/algolia/instantsearch/issues/6159)) ([0eedb22](https://github.com/algolia/instantsearch/commit/0eedb2233d3b6caebb98759de8e27ae155548094))
+* **recommend:** introduce `useTrendingItems` Hook ([#6177](https://github.com/algolia/instantsearch/issues/6177)) ([2185725](https://github.com/algolia/instantsearch/commit/2185725c7d1c321d622ae98f2a2037b551ee534d))
+* **recommend:** introduce Frequently Bought Together React Hook and widget ([#6155](https://github.com/algolia/instantsearch/issues/6155)) ([0ef0ce6](https://github.com/algolia/instantsearch/commit/0ef0ce60b06f6971856b0ad74d88b290101e0028))
+* **recommend:** introduce Looking Similar React Hook and widget ([#6184](https://github.com/algolia/instantsearch/issues/6184)) ([bc395c5](https://github.com/algolia/instantsearch/commit/bc395c54dc88d5452804fce6f13231a7fa189fdb))
+
+
+
+
+
 ## [7.8.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.8.0...react-instantsearch-core@7.8.1) (2024-05-14)
 
 
