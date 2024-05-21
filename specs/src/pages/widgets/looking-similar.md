@@ -48,7 +48,7 @@ classes:
 options:
   - name: objectIDs
     description: objectIDs of the items to get the Looking Similar items from
-  - name: maxRecommendations
+  - name: limit
     description: Number of recommendations to retrieve
   - name: fallbackParameters
     description: List of search parameters to send as additional filters to use as fallback when there aren't enough recommendations.
