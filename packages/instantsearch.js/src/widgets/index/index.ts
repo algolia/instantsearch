@@ -273,6 +273,8 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
   let helper: Helper | null = null;
   let derivedHelper: DerivedHelper | null = null;
   let lastValidSearchParameters: SearchParameters | null = null;
+  let hasRecommendWidget: boolean = false;
+  let hasSearchWidget: boolean = false;
 
   return {
     $$type: 'ais.index',
@@ -392,11 +394,20 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           return;
         }
 
+        if (localInstantSearchInstance && widget.dependsOn === 'recommend') {
+          localInstantSearchInstance._hasRecommendWidget = true;
+        } else if (localInstantSearchInstance) {
+          localInstantSearchInstance._hasSearchWidget = true;
+        } else if (widget.dependsOn === 'recommend') {
+          hasRecommendWidget = true;
+        } else {
+          hasSearchWidget = true;
+        }
+
         addWidgetId(widget);
       });
 
       localWidgets = localWidgets.concat(widgets);
-
       if (localInstantSearchInstance && Boolean(widgets.length)) {
         privateHelperSetState(helper!, {
           state: getLocalWidgetsSearchParameters(localWidgets, {
@@ -466,6 +477,22 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       localWidgets = localWidgets.filter(
         (widget) => widgets.indexOf(widget) === -1
       );
+
+      localWidgets.forEach((widget) => {
+        if (isIndexWidget(widget)) {
+          return;
+        }
+
+        if (localInstantSearchInstance && widget.dependsOn === 'recommend') {
+          localInstantSearchInstance._hasRecommendWidget = true;
+        } else if (localInstantSearchInstance) {
+          localInstantSearchInstance._hasSearchWidget = true;
+        } else if (widget.dependsOn === 'recommend') {
+          hasRecommendWidget = true;
+        } else {
+          hasSearchWidget = true;
+        }
+      });
 
       if (localInstantSearchInstance && Boolean(widgets.length)) {
         const { cleanedSearchState, cleanedRecommendState } = widgets.reduce(
@@ -744,6 +771,13 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         // schedule a render that will render the results injected on the helper.
         instantSearchInstance.scheduleRender();
       }
+
+      if (hasRecommendWidget) {
+        instantSearchInstance._hasRecommendWidget = true;
+      }
+      if (hasSearchWidget) {
+        instantSearchInstance._hasSearchWidget = true;
+      }
     },
 
     render({ instantSearchInstance }: IndexRenderOptions) {
@@ -759,9 +793,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
       // We only render index widgets if there are no results.
       // This makes sure `render` is never called with `results` being `null`.
-      let widgetsToRender = this.getResults()
-        ? localWidgets
-        : localWidgets.filter(isIndexWidget);
+      let widgetsToRender =
+        this.getResults() || derivedHelper?.lastRecommendResults
+          ? localWidgets
+          : localWidgets.filter(isIndexWidget);
 
       widgetsToRender = widgetsToRender.filter((widget) => {
         if (!widget.shouldRender) {

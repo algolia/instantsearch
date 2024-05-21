@@ -21,7 +21,7 @@ describe('LookingSimilar', () => {
     );
 
     await waitFor(() => {
-      expect(client.search).toHaveBeenCalledTimes(1);
+      expect(client.getRecommendations).toHaveBeenCalledTimes(1);
     });
 
     await waitFor(() => {
