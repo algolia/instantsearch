@@ -36,7 +36,7 @@ search.addWidgets([
   relatedProducts({
     container: '#related-products',
     objectIDs: [pid],
-    maxRecommendations: 4,
+    limit: 4,
     templates: {
       item: (hit, { html }) => html`
         <article>
