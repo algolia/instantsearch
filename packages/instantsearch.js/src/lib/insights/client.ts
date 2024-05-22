@@ -121,12 +121,12 @@ export default function withInsights<TConnector extends Connector<any, any>>(
 ): TConnector {
   return ((renderFn, unmountFn) =>
     connector((renderOptions, isFirstRender) => {
-      const { results, items, instantSearchInstance } = renderOptions;
-      if (results && items && instantSearchInstance) {
+      const { results, hits, instantSearchInstance } = renderOptions;
+      if (results && hits && instantSearchInstance) {
         const insights = wrapInsightsClient(
           instantSearchInstance.insightsClient,
           results,
-          items
+          hits
         );
         return renderFn({ ...renderOptions, insights }, isFirstRender);
       }
