@@ -8,6 +8,7 @@ import {
   createSendEventForHits,
   createBindEventForHits,
   noop,
+  warning,
 } from '../../lib/utils';
 
 import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
@@ -34,8 +35,14 @@ type Banner = NonNullable<
 export type HitsRenderState<THit extends BaseHit = BaseHit> = {
   /**
    * The matched hits from Algolia API.
+   * @deprecated use `items` instead
    */
   hits: Array<Hit<THit>>;
+
+  /**
+   * The matched hits from Algolia API.
+   */
+  items: Array<Hit<THit>>;
 
   /**
    * The response from the Algolia API.
@@ -126,7 +133,7 @@ const connectHits: HitsConnector = function connectHits(
           false
         );
 
-        renderState.sendEvent('view:internal', renderState.hits);
+        renderState.sendEvent('view:internal', renderState.items);
       },
 
       getRenderState(renderState, renderOptions) {
@@ -155,7 +162,14 @@ const connectHits: HitsConnector = function connectHits(
 
         if (!results) {
           return {
-            hits: [],
+            get hits() {
+              warning(
+                false,
+                'The `hits` property is deprecated. Use `items` instead.'
+              );
+              return [];
+            },
+            items: [],
             results: undefined,
             banner: undefined,
             sendEvent,
@@ -179,15 +193,21 @@ const connectHits: HitsConnector = function connectHits(
           results.queryID
         );
 
-        const transformedHits = transformItems(
-          hitsWithAbsolutePositionAndQueryID,
-          { results }
-        );
+        const items = transformItems(hitsWithAbsolutePositionAndQueryID, {
+          results,
+        });
 
         const banner = results.renderingContent?.widgets?.banners?.[0];
 
         return {
-          hits: transformedHits,
+          get hits() {
+            warning(
+              false,
+              'The `hits` property is deprecated. Use `items` instead.'
+            );
+            return items;
+          },
+          items,
           results,
           banner,
           sendEvent,

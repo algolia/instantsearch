@@ -29,9 +29,6 @@ export default {
     },
   },
   computed: {
-    items() {
-      return this.state.hits;
-    },
     widgetParams() {
       return {
         escapeHTML: this.escapeHTML,
@@ -91,7 +88,7 @@ export default {
         },
         [
           defaultSlot({
-            items: this.state.hits,
+            items: this.state.items,
             insights: this.state.insights,
             sendEvent: this.state.sendEvent,
           }),
@@ -100,7 +97,7 @@ export default {
     }
 
     return h(createHitsComponent({ createElement: h }), {
-      hits: this.state.hits,
+      hits: this.state.items,
       itemComponent,
       sendEvent: this.state.sendEvent,
       classNames: this.classNames && {

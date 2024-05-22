@@ -158,7 +158,7 @@ const renderer =
   }): Renderer<InfiniteHitsRenderState, Partial<InfiniteHitsWidgetParams>> =>
   (
     {
-      hits,
+      items,
       results,
       showMore,
       showPrevious,
@@ -183,7 +183,7 @@ const renderer =
     render(
       <InfiniteHits
         cssClasses={cssClasses}
-        hits={hits}
+        hits={items}
         results={results!}
         hasShowPrevious={hasShowPrevious!}
         showPrevious={showPrevious}
