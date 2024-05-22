@@ -10,7 +10,7 @@ import '../../../test/utils/sortedHtmlSerializer';
 jest.mock('../../mixins/widget');
 
 const defaultState = {
-  hits: [{ objectID: 'one' }, { objectID: 'two' }],
+  items: [{ objectID: 'one' }, { objectID: 'two' }],
   sendEvent: jest.fn(),
 };
 

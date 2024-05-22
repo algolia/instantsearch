@@ -16,7 +16,7 @@ const defaultState = {
     transformItems: (items) => items,
   },
   sendEvent: jest.fn(),
-  hits: [
+  items: [
     {
       objectID: '00001',
     },
