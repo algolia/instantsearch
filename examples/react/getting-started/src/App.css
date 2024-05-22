@@ -87,22 +87,26 @@ em {
   flex-shrink: 0;
 }
 
+.ais-TrendingItems-list,
 .ais-RelatedProducts-list {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
 }
 
+.ais-TrendingItems-item,
 .ais-RelatedProducts-item {
   align-items: start;
 }
 
+.ais-TrendingItems-item img,
 .ais-RelatedProducts-item img {
   width: 100%;
   height: 100px;
   object-fit: contain;
 }
 
+.ais-TrendingItems-item article,
 .ais-RelatedProducts-item article {
   display: flex;
   flex-direction: column;

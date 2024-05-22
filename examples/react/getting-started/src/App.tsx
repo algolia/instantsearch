@@ -9,6 +9,7 @@ import {
   Pagination,
   RefinementList,
   SearchBox,
+  TrendingItems,
 } from 'react-instantsearch';
 
 import { Panel } from './Panel';
@@ -56,6 +57,9 @@ export function App() {
               <div className="pagination">
                 <Pagination />
               </div>
+              <div>
+                <TrendingItems itemComponent={ItemComponent} limit={4} />
+              </div>
             </div>
           </div>
         </InstantSearch>
@@ -64,11 +68,13 @@ export function App() {
   );
 }
 
-type HitProps = {
-  hit: Hit;
-};
+type HitType = Hit<{
+  image: string;
+  name: string;
+  description: string;
+}>;
 
-function HitComponent({ hit }: HitProps) {
+function HitComponent({ hit }: { hit: HitType }) {
   return (
     <article>
       <h1>
@@ -80,6 +86,18 @@ function HitComponent({ hit }: HitProps) {
         <Highlight attribute="description" hit={hit} />
       </p>
       <a href={`/products.html?pid=${hit.objectID}`}>See product</a>
+    </article>
+  );
+}
+
+function ItemComponent({ item }: { item: Hit }) {
+  return (
+    <article>
+      <div>
+        <img src={item.image} />
+        <h2>{item.name}</h2>
+      </div>
+      <a href={`/products.html?pid=${item.objectID}`}>See product</a>
     </article>
   );
 }
