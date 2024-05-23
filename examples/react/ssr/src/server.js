@@ -27,7 +27,7 @@ app.get('/', async (req, res) => {
 <html>
   <head>
     <title>React InstantSearch SSR</title>
-    <link href="https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/satellite-min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/instantsearch.css@8/themes/satellite-min.css" rel="stylesheet" />
     <script>window.__SERVER_STATE__ = ${JSON.stringify(serverState)}</script>
   </head>
 
