@@ -36,15 +36,15 @@ search.addWidgets([
   relatedProducts({
     container: '#related-products',
     objectIDs: [pid],
-    maxRecommendations: 4,
+    limit: 4,
     templates: {
-      item: (hit, { html }) => html`
+      item: (item, { html }) => html`
         <article>
           <div>
-            <img src="${hit.image}" />
-            <h2>${hit.name}</h2>
+            <img src="${item.image}" />
+            <h2>${item.name}</h2>
           </div>
-          <a href="/products.html?pid=${hit.objectID}">See product</a>
+          <a href="/products.html?pid=${item.objectID}">See product</a>
         </article>
       `,
     },
