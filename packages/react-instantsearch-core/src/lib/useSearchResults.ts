@@ -16,9 +16,13 @@ export type SearchResultsApi = {
 export function useSearchResults(): SearchResultsApi {
   const search = useInstantSearchContext();
   const searchIndex = useIndexContext();
-  const [searchResults, setSearchResults] = useState(() =>
-    getIndexSearchResults(searchIndex)
-  );
+  const [searchResults, setSearchResults] = useState(() => {
+    const indexSearchResults = getIndexSearchResults(searchIndex);
+    return {
+      results: indexSearchResults.results,
+      scopedResults: indexSearchResults.scopedResults,
+    };
+  });
 
   useEffect(() => {
     function handleRender() {

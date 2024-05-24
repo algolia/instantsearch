@@ -2,6 +2,7 @@
 
 var AlgoliaSearchHelper = require('./src/algoliasearch.helper');
 var RecommendParameters = require('./src/RecommendParameters');
+var RecommendResults = require('./src/RecommendResults');
 var SearchParameters = require('./src/SearchParameters');
 var SearchResults = require('./src/SearchResults');
 
@@ -75,5 +76,12 @@ algoliasearchHelper.RecommendParameters = RecommendParameters;
  * @type {SearchResults}
  */
 algoliasearchHelper.SearchResults = SearchResults;
+
+/**
+ * Constructor for the object containing the results for Recommend.
+ * @member module:algoliasearchHelper.RecommendResults
+ * @type {RecommendResults}
+ */
+algoliasearchHelper.RecommendResults = RecommendResults;
 
 module.exports = algoliasearchHelper;

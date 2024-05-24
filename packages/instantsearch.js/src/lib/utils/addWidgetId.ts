@@ -9,3 +9,7 @@ export function addWidgetId(widget: Widget) {
 
   widget.$$id = id++;
 }
+
+export function resetWidgetId() {
+  id = 0;
+}

@@ -5,10 +5,11 @@ import { getIndexSearchResults } from '../lib/getIndexSearchResults';
 import { useIndexContext } from '../lib/useIndexContext';
 import { useInstantSearchContext } from '../lib/useInstantSearchContext';
 import { useInstantSearchServerContext } from '../lib/useInstantSearchServerContext';
+import { useInstantSearchSSRContext } from '../lib/useInstantSearchSSRContext';
 import { useStableValue } from '../lib/useStableValue';
 import { useWidget } from '../lib/useWidget';
 
-import type algoliasearchHelper from 'algoliasearch-helper';
+import type { SearchResults } from 'algoliasearch-helper';
 import type {
   Connector,
   UiState,
@@ -27,6 +28,7 @@ export function useConnector<
   additionalWidgetProperties: AdditionalWidgetProperties = {}
 ): TDescription['renderState'] {
   const serverContext = useInstantSearchServerContext();
+  const ssrContext = useInstantSearchSSRContext();
   const search = useInstantSearchContext();
   const parentIndex = useIndexContext();
   const stableProps = useStableValue(props);
@@ -108,7 +110,8 @@ export function useConnector<
       helper.state =
         widget.getWidgetSearchParameters?.(helper.state, { uiState }) ||
         helper.state;
-      const { results, scopedResults } = getIndexSearchResults(parentIndex);
+      const { results, scopedResults, recommendResults } =
+        getIndexSearchResults(parentIndex);
 
       // We get the widget render state by providing the same parameters as
       // InstantSearch provides to the widget's `render` method.
@@ -118,10 +121,10 @@ export function useConnector<
         parent: parentIndex,
         instantSearchInstance: search,
         results:
-          widget.dependsOn === 'recommend'
-            ? // @TODO: this is to avoid using wrong hits in SSR,
-              // will be replace with SSR support for recommend
-              (null as unknown as algoliasearchHelper.SearchResults<any>)
+          widget.dependsOn === 'recommend' && recommendResults && ssrContext
+            ? (recommendResults[
+                ssrContext.recommendIdx.current++
+              ] as unknown as SearchResults)
             : results,
         scopedResults,
         state: helper.state,

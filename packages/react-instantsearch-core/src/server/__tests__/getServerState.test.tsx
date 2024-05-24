@@ -11,7 +11,7 @@ import {
 } from '@instantsearch/mocks';
 import React, { version as ReactVersion } from 'react';
 import { renderToString } from 'react-dom/server';
-import { Hits, RefinementList } from 'react-instantsearch';
+import { Hits, RefinementList, TrendingItems } from 'react-instantsearch';
 import {
   InstantSearch,
   InstantSearchSSRProvider,
@@ -439,6 +439,66 @@ describe('getServerState', () => {
     });
   });
 
+  test('does not call recommend if there is no recommend widget', async () => {
+    const searchClient = createAlgoliaSearchClient({
+      search: jest.fn((requests) => {
+        return Promise.resolve(
+          createMultiSearchResponse(
+            ...requests.map(() =>
+              createSingleSearchResponse({
+                renderingContent: defaultRenderingContent,
+              })
+            )
+          )
+        );
+      }),
+      getRecommendations: jest.fn(),
+    });
+    const spiedGetRecommendations = jest.spyOn(
+      searchClient,
+      'getRecommendations'
+    );
+    const { App } = createTestEnvironment({
+      searchClient,
+    });
+
+    await getServerState(<App />, { renderToString });
+
+    expect(spiedGetRecommendations).not.toHaveBeenCalled();
+  });
+
+  test('calls `getRecommendations` but does not call `search` when there are only recommend widgets', async () => {
+    const searchClient = createAlgoliaSearchClient({
+      search: jest.fn((requests) => {
+        return Promise.resolve(
+          createMultiSearchResponse(
+            ...requests.map(() =>
+              createSingleSearchResponse({
+                renderingContent: defaultRenderingContent,
+              })
+            )
+          )
+        );
+      }),
+      getRecommendations: jest.fn().mockResolvedValue({ results: {} }),
+    });
+    const spiedGetRecommendations = jest.spyOn(
+      searchClient,
+      'getRecommendations'
+    );
+    const spiedSearch = jest.spyOn(searchClient, 'search');
+
+    await getServerState(
+      <InstantSearch searchClient={searchClient} indexName="instant_search">
+        <TrendingItems />
+      </InstantSearch>,
+      { renderToString }
+    );
+
+    expect(spiedGetRecommendations).toHaveBeenCalledTimes(1);
+    expect(spiedSearch).not.toHaveBeenCalled();
+  });
+
   test('returns HTML from server state', async () => {
     const searchClient = createSearchClient({
       search: jest.fn((requests) =>
@@ -452,13 +512,40 @@ describe('getServerState', () => {
           )
         )
       ) as MockSearchClient['search'],
+      getRecommendations: jest.fn().mockResolvedValue({
+        results: [createSingleSearchResponse({ hits: [{ objectID: '3' }] })],
+      }),
     });
     const { App } = createTestEnvironment({ searchClient });
+    const trendingItemsElement = (
+      <TrendingItems
+        itemComponent={({ item }) => <span>{item.objectID}</span>}
+      />
+    );
 
-    const serverState = await getServerState(<App />, { renderToString });
-    const html = renderToString(<App serverState={serverState} />);
+    const serverState = await getServerState(
+      <App>{trendingItemsElement}</App>,
+      { renderToString }
+    );
+    const html = renderToString(
+      <App serverState={serverState}>{trendingItemsElement}</App>
+    );
 
     expect(html).toMatchInlineSnapshot(`
+      <section class="ais-TrendingItems">
+        <h3 class="ais-TrendingItems-title">
+          Trending items
+        </h3>
+        <div class="ais-TrendingItems-container">
+          <ol class="ais-TrendingItems-list">
+            <li class="ais-TrendingItems-item">
+              <span>
+                3
+              </span>
+            </li>
+          </ol>
+        </div>
+      </section>
       <div class="ais-RefinementList ais-RefinementList--noRefinement">
         <ul class="ais-RefinementList-list">
         </ul>

@@ -2,7 +2,7 @@ import {
   getInitialResults,
   waitForResults,
 } from 'instantsearch.js/es/lib/server';
-import { walkIndex } from 'instantsearch.js/es/lib/utils';
+import { walkIndex, resetWidgetId } from 'instantsearch.js/es/lib/utils';
 import React from 'react';
 
 import { InstantSearchServerContext, InstantSearchSSRProvider } from '..';
@@ -32,6 +32,8 @@ export function getServerState(
   const searchRef: SearchRef = {
     current: undefined,
   };
+
+  resetWidgetId();
 
   const createNotifyServer = () => {
     let hasBeenNotified = false;
@@ -71,6 +73,8 @@ export function getServerState(
     });
 
     if (shouldRefetch) {
+      resetWidgetId();
+
       return execute({
         children: (
           <InstantSearchSSRProvider {...serverState}>
@@ -80,6 +84,7 @@ export function getServerState(
         renderToString,
         searchRef,
         notifyServer: createNotifyServer(),
+        skipRecommend: true,
       });
     }
 
@@ -92,6 +97,7 @@ type ExecuteArgs = {
   renderToString: RenderToString;
   notifyServer: InstantSearchServerContextApi<UiState, UiState>['notifyServer'];
   searchRef: SearchRef;
+  skipRecommend?: boolean;
 };
 
 function execute({
@@ -99,6 +105,7 @@ function execute({
   renderToString,
   notifyServer,
   searchRef,
+  skipRecommend,
 }: ExecuteArgs) {
   return Promise.resolve()
     .then(() => {
@@ -127,7 +134,7 @@ function execute({
         );
       }
 
-      return waitForResults(searchRef.current);
+      return waitForResults(searchRef.current, skipRecommend);
     })
     .then((requestParamsList) => {
       return {

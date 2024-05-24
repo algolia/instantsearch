@@ -8,7 +8,9 @@ export function TriggerSearch() {
   const waitForResultsRef = useRSCContext();
 
   if (waitForResultsRef?.current?.status === 'pending') {
-    instantsearch.mainHelper?.searchOnlyWithDerivedHelpers();
+    instantsearch._hasSearchWidget &&
+      instantsearch.mainHelper?.searchOnlyWithDerivedHelpers();
+    instantsearch._hasRecommendWidget && instantsearch.mainHelper?.recommend();
   }
 
   return null;

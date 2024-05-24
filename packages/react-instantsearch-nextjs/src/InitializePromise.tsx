@@ -1,5 +1,5 @@
 import { getInitialResults } from 'instantsearch.js/es/lib/server';
-import { walkIndex } from 'instantsearch.js/es/lib/utils';
+import { resetWidgetId, walkIndex } from 'instantsearch.js/es/lib/utils';
 import { ServerInsertedHTMLContext } from 'next/navigation';
 import React, { useContext } from 'react';
 import {
@@ -25,16 +25,30 @@ export function InitializePromise() {
   // later during hydration.
   let requestParamsList: SearchOptions[];
   search.mainHelper!.setClient({
+    ...search.mainHelper!.getClient(),
     search(queries) {
       requestParamsList = queries.map(({ params }) => params!);
       return search.client.search(queries);
     },
   });
 
+  resetWidgetId();
+
   const waitForResults = () =>
     new Promise<void>((resolve) => {
-      search.mainHelper!.derivedHelpers[0].on('result', () => {
-        resolve();
+      let searchReceived = false;
+      let recommendReceived = false;
+      search.mainHelper!.derivedHelpers[0].once('result', () => {
+        searchReceived = true;
+        if (!search._hasRecommendWidget || recommendReceived) {
+          resolve();
+        }
+      });
+      search.mainHelper!.derivedHelpers[0].once('recommend:result', () => {
+        recommendReceived = true;
+        if (!search._hasSearchWidget || searchReceived) {
+          resolve();
+        }
       });
     });
 
