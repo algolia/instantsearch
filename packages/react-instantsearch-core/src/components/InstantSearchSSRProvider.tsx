@@ -30,6 +30,7 @@ export function InstantSearchSSRProvider<
     TRouteState
   > | null>(null);
 
+  // This is used to re-map the result index to the requesting widget
   const recommendIdx = React.useRef(0);
 
   // When <DynamicWidgets> is mounted, a second provider is used above the user-land
