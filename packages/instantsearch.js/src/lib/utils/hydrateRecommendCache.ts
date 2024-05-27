@@ -9,7 +9,7 @@ export function hydrateRecommendCache(
     (acc, indexName) => {
       const initialResult = initialResults[indexName];
       if (initialResult.recommendResults) {
-        return { ...acc, ...initialResult.recommendResults.results };
+        return Object.assign(acc, initialResult.recommendResults.results);
       }
       return acc;
     },

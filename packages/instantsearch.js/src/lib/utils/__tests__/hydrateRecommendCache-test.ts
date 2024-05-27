@@ -2,13 +2,15 @@ import {
   createSearchClient,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils';
 import algoliaSearchHelper from 'algoliasearch-helper';
 
 import { hydrateRecommendCache } from '../hydrateRecommendCache';
 
 describe('hydrateRecommendCache', () => {
-  it('should hydrate the helper with the recommend cache', () => {
-    const helper = algoliaSearchHelper(createSearchClient(), '');
+  it('should hydrate the helper with the recommend cache', async () => {
+    const searchClient = createSearchClient();
+    const helper = algoliaSearchHelper(searchClient, '');
 
     const response0 = createSingleSearchResponse();
     const response1 = createSingleSearchResponse();
@@ -32,5 +34,26 @@ describe('hydrateRecommendCache', () => {
       0: response0,
       1: response1,
     });
+
+    helper.recommend();
+
+    await wait(0);
+
+    expect(searchClient.getRecommendations).not.toHaveBeenCalled();
+  });
+
+  it('should handle empty responses', async () => {
+    const searchClient = createSearchClient();
+    const helper = algoliaSearchHelper(searchClient, '');
+
+    hydrateRecommendCache(helper, {
+      a: {},
+    });
+
+    helper.addFrequentlyBoughtTogether({ $$id: 0, objectID: 'a' }).recommend();
+
+    await wait(0);
+
+    expect(searchClient.getRecommendations).toHaveBeenCalledTimes(1);
   });
 });
