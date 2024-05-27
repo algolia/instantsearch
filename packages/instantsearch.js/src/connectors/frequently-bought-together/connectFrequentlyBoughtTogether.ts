@@ -6,7 +6,14 @@ import {
   TAG_PLACEHOLDER,
 } from '../../lib/utils';
 
-import type { Connector, TransformItems, Hit, BaseHit } from '../../types';
+import type {
+  Connector,
+  TransformItems,
+  Hit,
+  BaseHit,
+  Renderer,
+  Unmounter,
+} from '../../types';
 import type {
   PlainSearchParameters,
   RecommendResultItem,
@@ -18,7 +25,7 @@ const withUsage = createDocumentationMessageGenerator({
 });
 
 export type FrequentlyBoughtTogetherRenderState<
-  THit extends BaseHit = BaseHit
+  THit extends NonNullable<object> = BaseHit
 > = {
   /**
    * The matched recommendations from Algolia API.
@@ -27,7 +34,7 @@ export type FrequentlyBoughtTogetherRenderState<
 };
 
 export type FrequentlyBoughtTogetherConnectorParams<
-  THit extends BaseHit = BaseHit
+  THit extends NonNullable<object> = BaseHit
 > = {
   /**
    * The objectIDs of the items to get the frequently bought together items for.
@@ -66,108 +73,114 @@ export type FrequentlyBoughtTogetherConnectorParams<
 };
 
 export type FrequentlyBoughtTogetherWidgetDescription<
-  THit extends BaseHit = BaseHit
+  THit extends NonNullable<object> = BaseHit
 > = {
   $$type: 'ais.frequentlyBoughtTogether';
   renderState: FrequentlyBoughtTogetherRenderState<THit>;
 };
 
-export type FrequentlyBoughtTogetherConnector<THit extends BaseHit = BaseHit> =
-  Connector<
-    FrequentlyBoughtTogetherWidgetDescription<THit>,
-    FrequentlyBoughtTogetherConnectorParams<THit>
-  >;
+export type FrequentlyBoughtTogetherConnector<
+  THit extends NonNullable<object> = BaseHit
+> = Connector<
+  FrequentlyBoughtTogetherWidgetDescription<THit>,
+  FrequentlyBoughtTogetherConnectorParams<THit>
+>;
 
-const connectFrequentlyBoughtTogether: FrequentlyBoughtTogetherConnector =
-  function connectFrequentlyBoughtTogether(renderFn, unmountFn = noop) {
-    checkRendering(renderFn, withUsage());
+export default (function connectFrequentlyBoughtTogether<TBaseWidgetParams>(
+  renderFn: Renderer<FrequentlyBoughtTogetherRenderState, TBaseWidgetParams>,
+  unmountFn: Unmounter = noop
+) {
+  checkRendering(renderFn, withUsage());
 
-    return (widgetParams) => {
-      const {
-        // @MAJOR: this can default to false
-        escapeHTML = true,
-        transformItems = ((items) => items) as NonNullable<
-          FrequentlyBoughtTogetherConnectorParams['transformItems']
-        >,
-        objectIDs,
-        limit,
-        threshold,
-        queryParameters,
-      } = widgetParams || {};
+  return <
+    TWidgetParams extends FrequentlyBoughtTogetherConnectorParams<THit>,
+    THit extends NonNullable<object> = BaseHit
+  >(
+    widgetParams: TWidgetParams & TBaseWidgetParams
+  ) => {
+    const {
+      // @MAJOR: this can default to false
+      escapeHTML = true,
+      transformItems = ((items) => items) as NonNullable<
+        TWidgetParams['transformItems']
+      >,
+      objectIDs,
+      limit,
+      threshold,
+      queryParameters,
+    } = widgetParams || {};
 
-      if (!objectIDs || objectIDs.length === 0) {
-        throw new Error(withUsage('The `objectIDs` option is required.'));
-      }
+    if (!objectIDs || objectIDs.length === 0) {
+      throw new Error(withUsage('The `objectIDs` option is required.'));
+    }
 
-      return {
-        dependsOn: 'recommend',
-        $$type: 'ais.frequentlyBoughtTogether',
+    return {
+      dependsOn: 'recommend',
+      $$type: 'ais.frequentlyBoughtTogether',
 
-        init(initOptions) {
-          renderFn(
-            {
-              ...this.getWidgetRenderState(initOptions),
-              instantSearchInstance: initOptions.instantSearchInstance,
-            },
-            true
-          );
-        },
+      init(initOptions) {
+        renderFn(
+          {
+            ...this.getWidgetRenderState(initOptions),
+            instantSearchInstance: initOptions.instantSearchInstance,
+          },
+          true
+        );
+      },
 
-        render(renderOptions) {
-          const renderState = this.getWidgetRenderState(renderOptions);
+      render(renderOptions) {
+        const renderState = this.getWidgetRenderState(renderOptions);
 
-          renderFn(
-            {
-              ...renderState,
-              instantSearchInstance: renderOptions.instantSearchInstance,
-            },
-            false
-          );
-        },
+        renderFn(
+          {
+            ...renderState,
+            instantSearchInstance: renderOptions.instantSearchInstance,
+          },
+          false
+        );
+      },
 
-        getRenderState(renderState) {
-          return renderState;
-        },
+      getRenderState(renderState) {
+        return renderState;
+      },
 
-        getWidgetRenderState({ results }) {
-          if (results === null || results === undefined) {
-            return { items: [], widgetParams };
-          }
+      getWidgetRenderState({ results }) {
+        if (results === null || results === undefined) {
+          return { items: [], widgetParams };
+        }
 
-          if (escapeHTML && results.hits.length > 0) {
-            results.hits = escapeHits(results.hits);
-          }
+        if (escapeHTML && results.hits.length > 0) {
+          results.hits = escapeHits(results.hits);
+        }
 
-          const transformedItems = transformItems(results.hits, {
-            results: results as RecommendResultItem,
-          });
+        const transformedItems = transformItems(results.hits, {
+          results: results as RecommendResultItem,
+        });
 
-          return { items: transformedItems, widgetParams };
-        },
+        return { items: transformedItems, widgetParams };
+      },
 
-        dispose({ recommendState }) {
-          unmountFn();
-          return recommendState.removeParams(this.$$id!);
-        },
+      dispose({ recommendState }) {
+        unmountFn();
+        return recommendState.removeParams(this.$$id!);
+      },
 
-        getWidgetParameters(state) {
-          return objectIDs.reduce(
-            (acc, objectID) =>
-              acc.addFrequentlyBoughtTogether({
-                objectID,
-                threshold,
-                maxRecommendations: limit,
-                queryParameters: {
-                  ...queryParameters,
-                  ...(escapeHTML ? TAG_PLACEHOLDER : {}),
-                },
-                $$id: this.$$id!,
-              }),
-            state.removeParams(this.$$id!)
-          );
-        },
-      };
+      getWidgetParameters(state) {
+        return objectIDs.reduce(
+          (acc, objectID) =>
+            acc.addFrequentlyBoughtTogether({
+              objectID,
+              threshold,
+              maxRecommendations: limit,
+              queryParameters: {
+                ...queryParameters,
+                ...(escapeHTML ? TAG_PLACEHOLDER : {}),
+              },
+              $$id: this.$$id!,
+            }),
+          state.removeParams(this.$$id!)
+        );
+      },
     };
   };
-
-export default connectFrequentlyBoughtTogether;
+} satisfies FrequentlyBoughtTogetherConnector);

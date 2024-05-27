@@ -4,9 +4,17 @@ import {
   noop,
   escapeHits,
   TAG_PLACEHOLDER,
+  getObjectType,
 } from '../../lib/utils';
 
-import type { Connector, TransformItems, Hit, BaseHit } from '../../types';
+import type {
+  Connector,
+  TransformItems,
+  Hit,
+  BaseHit,
+  Renderer,
+  Unmounter,
+} from '../../types';
 import type {
   PlainSearchParameters,
   RecommendResultItem,
@@ -17,14 +25,18 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
-export type TrendingItemsRenderState<THit extends BaseHit = BaseHit> = {
+export type TrendingItemsRenderState<
+  THit extends NonNullable<object> = BaseHit
+> = {
   /**
    * The matched recommendations from the Algolia API.
    */
   items: Array<Hit<THit>>;
 };
 
-export type TrendingItemsConnectorParams<THit extends BaseHit = BaseHit> = (
+export type TrendingItemsConnectorParams<
+  THit extends NonNullable<object> = BaseHit
+> = (
   | {
       /**
        * The facet attribute to get recommendations for.
@@ -35,7 +47,10 @@ export type TrendingItemsConnectorParams<THit extends BaseHit = BaseHit> = (
        */
       facetValue: string;
     }
-  | { facetName?: never; facetValue?: never }
+  | {
+      facetName?: string;
+      facetValue?: string;
+    }
 ) & {
   /**
    * The number of recommendations to retrieve.
@@ -71,106 +86,126 @@ export type TrendingItemsConnectorParams<THit extends BaseHit = BaseHit> = (
   transformItems?: TransformItems<Hit<THit>, { results: RecommendResultItem }>;
 };
 
-export type TrendingItemsWidgetDescription<THit extends BaseHit = BaseHit> = {
+export type TrendingItemsWidgetDescription<
+  THit extends NonNullable<object> = BaseHit
+> = {
   $$type: 'ais.trendingItems';
   renderState: TrendingItemsRenderState<THit>;
 };
 
-export type TrendingItemsConnector<THit extends BaseHit = BaseHit> = Connector<
-  TrendingItemsWidgetDescription<THit>,
-  TrendingItemsConnectorParams<THit>
->;
+export type TrendingItemsConnector<THit extends NonNullable<object> = BaseHit> =
+  Connector<
+    TrendingItemsWidgetDescription<THit>,
+    TrendingItemsConnectorParams<THit>
+  >;
 
-const connectTrendingItems: TrendingItemsConnector =
-  function connectTrendingItems(renderFn, unmountFn = noop) {
-    checkRendering(renderFn, withUsage());
+export default (function connectTrendingItems<TBaseWidgetParams>(
+  renderFn: Renderer<TrendingItemsRenderState, TBaseWidgetParams>,
+  unmountFn: Unmounter = noop
+) {
+  checkRendering(renderFn, withUsage());
 
-    return function trendingItems(widgetParams) {
-      const {
-        facetName,
-        facetValue,
-        limit,
-        threshold,
-        fallbackParameters,
-        queryParameters,
-        // @MAJOR: this can default to false
-        escapeHTML = true,
-        transformItems = ((items) => items) as NonNullable<
-          TrendingItemsConnectorParams['transformItems']
-        >,
-      } = widgetParams || {};
+  return <
+    TWidgetParams extends TrendingItemsConnectorParams<THit>,
+    THit extends NonNullable<object> = BaseHit
+  >(
+    widgetParams: TWidgetParams & TBaseWidgetParams
+  ) => {
+    const {
+      facetName,
+      facetValue,
+      limit,
+      threshold,
+      fallbackParameters,
+      queryParameters,
+      // @MAJOR: this can default to false
+      escapeHTML = true,
+      transformItems = ((items) => items) as NonNullable<
+        TWidgetParams['transformItems']
+      >,
+    } = widgetParams || {};
 
-      return {
-        dependsOn: 'recommend',
-        $$type: 'ais.trendingItems',
+    if ((facetName && !facetValue) || (!facetName && facetValue)) {
+      throw new Error(
+        withUsage(
+          `When you provide facetName (received type ${getObjectType(
+            facetName
+          )}), you must also provide facetValue (received type ${getObjectType(
+            facetValue
+          )}).`
+        )
+      );
+    }
 
-        init(initOptions) {
-          renderFn(
-            {
-              ...this.getWidgetRenderState(initOptions),
-              instantSearchInstance: initOptions.instantSearchInstance,
-            },
-            true
-          );
-        },
+    return {
+      dependsOn: 'recommend',
+      $$type: 'ais.trendingItems',
 
-        render(renderOptions) {
-          const renderState = this.getWidgetRenderState(renderOptions);
+      init(initOptions) {
+        renderFn(
+          {
+            ...this.getWidgetRenderState(initOptions),
+            instantSearchInstance: initOptions.instantSearchInstance,
+          },
+          true
+        );
+      },
 
-          renderFn(
-            {
-              ...renderState,
-              instantSearchInstance: renderOptions.instantSearchInstance,
-            },
-            false
-          );
-        },
+      render(renderOptions) {
+        const renderState = this.getWidgetRenderState(renderOptions);
 
-        getRenderState(renderState) {
-          return renderState;
-        },
+        renderFn(
+          {
+            ...renderState,
+            instantSearchInstance: renderOptions.instantSearchInstance,
+          },
+          false
+        );
+      },
 
-        getWidgetRenderState({ results }) {
-          if (results === null || results === undefined) {
-            return { items: [], widgetParams };
-          }
+      getRenderState(renderState) {
+        return renderState;
+      },
 
-          if (escapeHTML && results.hits.length > 0) {
-            results.hits = escapeHits(results.hits);
-          }
+      getWidgetRenderState({ results }) {
+        if (results === null || results === undefined) {
+          return { items: [], widgetParams };
+        }
 
-          return {
-            items: transformItems(results.hits, {
-              results: results as RecommendResultItem,
-            }),
-            widgetParams,
-          };
-        },
+        if (escapeHTML && results.hits.length > 0) {
+          results.hits = escapeHits(results.hits);
+        }
 
-        dispose({ recommendState }) {
-          unmountFn();
-          return recommendState.removeParams(this.$$id!);
-        },
+        return {
+          items: transformItems(results.hits, {
+            results: results as RecommendResultItem,
+          }),
+          widgetParams,
+        };
+      },
 
-        getWidgetParameters(state) {
-          return state.removeParams(this.$$id!).addTrendingItems({
-            facetName,
-            facetValue,
-            maxRecommendations: limit,
-            threshold,
-            fallbackParameters: {
-              ...fallbackParameters,
-              ...(escapeHTML ? TAG_PLACEHOLDER : {}),
-            },
-            queryParameters: {
-              ...queryParameters,
-              ...(escapeHTML ? TAG_PLACEHOLDER : {}),
-            },
-            $$id: this.$$id!,
-          });
-        },
-      };
+      dispose({ recommendState }) {
+        unmountFn();
+        return recommendState.removeParams(this.$$id!);
+      },
+
+      getWidgetParameters(state) {
+        return state.removeParams(this.$$id!).addTrendingItems({
+          facetName,
+          facetValue,
+          maxRecommendations: limit,
+          threshold,
+          fallbackParameters: {
+            ...fallbackParameters,
+            ...(escapeHTML ? TAG_PLACEHOLDER : {}),
+          },
+          queryParameters: {
+            ...queryParameters,
+            ...(escapeHTML ? TAG_PLACEHOLDER : {}),
+          },
+          $$id: this.$$id!,
+        });
+      },
     };
   };
-
-export default connectTrendingItems;
+} satisfies TrendingItemsConnector);

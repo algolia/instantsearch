@@ -28,6 +28,7 @@ import type {
   Hit,
   WidgetFactory,
   Renderer,
+  BaseHit,
 } from '../../types';
 import type { SearchResults } from 'algoliasearch-helper';
 import type {
@@ -40,7 +41,7 @@ const withUsage = createDocumentationMessageGenerator({ name: 'hits' });
 const Hits = createHitsComponent({ createElement: h, Fragment });
 
 const renderer =
-  ({
+  <THit extends NonNullable<object> = BaseHit>({
     renderState,
     cssClasses,
     containerNode,
@@ -49,9 +50,9 @@ const renderer =
     containerNode: HTMLElement;
     cssClasses: HitsCSSClasses;
     renderState: {
-      templateProps?: PreparedTemplateProps<HitsTemplates>;
+      templateProps?: PreparedTemplateProps<HitsTemplates<THit>>;
     };
-    templates: HitsTemplates;
+    templates: HitsTemplates<THit>;
   }): Renderer<HitsRenderState, Partial<HitsWidgetParams>> =>
   (
     {
@@ -66,7 +67,7 @@ const renderer =
     isFirstRendering
   ) => {
     if (isFirstRendering) {
-      renderState.templateProps = prepareTemplateProps({
+      renderState.templateProps = prepareTemplateProps<HitsTemplates<THit>>({
         defaultTemplates,
         templatesConfig: instantSearchInstance.templatesConfig,
         templates,
@@ -155,36 +156,37 @@ const renderer =
 
 export type HitsCSSClasses = Partial<HitsUiComponentClassNames>;
 
-export type HitsTemplates = Partial<{
-  /**
-   * Template to use when there are no results.
-   *
-   * @default 'No Results'
-   */
-  empty: Template<SearchResults>;
+export type HitsTemplates<THit extends NonNullable<object> = BaseHit> =
+  Partial<{
+    /**
+     * Template to use when there are no results.
+     *
+     * @default 'No Results'
+     */
+    empty: Template<SearchResults<THit>>;
 
-  /**
-   * Template to use for each result. This template will receive an object containing a single record.
-   *
-   * @default ''
-   */
-  item: TemplateWithBindEvent<
-    Hit & {
-      /** @deprecated the index in the hits array, use __position instead, which is the absolute position */
-      __hitIndex: number;
-    }
-  >;
+    /**
+     * Template to use for each result. This template will receive an object containing a single record.
+     *
+     * @default ''
+     */
+    item: TemplateWithBindEvent<
+      Hit<THit> & {
+        /** @deprecated the index in the hits array, use __position instead, which is the absolute position */
+        __hitIndex: number;
+      }
+    >;
 
-  /**
-   * Template to use for the banner.
-   */
-  banner: Template<{
-    banner: Required<HitsRenderState['banner']>;
-    className: string;
+    /**
+     * Template to use for the banner.
+     */
+    banner: Template<{
+      banner: Required<HitsRenderState['banner']>;
+      className: string;
+    }>;
   }>;
-}>;
 
-export type HitsWidgetParams = {
+export type HitsWidgetParams<THit extends NonNullable<object> = BaseHit> = {
   /**
    * CSS Selector or HTMLElement to insert the widget.
    */
@@ -193,7 +195,7 @@ export type HitsWidgetParams = {
   /**
    * Templates to use for the widget.
    */
-  templates?: HitsTemplates;
+  templates?: HitsTemplates<THit>;
 
   /**
    * CSS classes to add.
@@ -207,7 +209,9 @@ export type HitsWidget = WidgetFactory<
   HitsWidgetParams
 >;
 
-const hits: HitsWidget = function hits(widgetParams) {
+export default (function hits<THit extends NonNullable<object> = BaseHit>(
+  widgetParams: HitsWidgetParams<THit> & HitsConnectorParams<THit>
+) {
   const {
     container,
     escapeHTML,
@@ -222,7 +226,7 @@ const hits: HitsWidget = function hits(widgetParams) {
 
   const containerNode = getContainerNode(container);
 
-  const specializedRenderer = renderer({
+  const specializedRenderer = renderer<THit>({
     containerNode,
     cssClasses,
     renderState: {},
@@ -234,9 +238,10 @@ const hits: HitsWidget = function hits(widgetParams) {
   );
 
   return {
-    ...makeWidget({ escapeHTML, transformItems }),
+    ...makeWidget<HitsConnectorParams<THit>, THit>({
+      escapeHTML,
+      transformItems,
+    }),
     $$widgetType: 'ais.hits',
   };
-};
-
-export default hits;
+} satisfies HitsWidget);

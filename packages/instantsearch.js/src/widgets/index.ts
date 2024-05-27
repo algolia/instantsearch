@@ -26,7 +26,7 @@ export { default as geoSearch } from './geo-search/geo-search';
 export { default as hierarchicalMenu } from './hierarchical-menu/hierarchical-menu';
 export { default as hits } from './hits/hits';
 export { default as hitsPerPage } from './hits-per-page/hits-per-page';
-export { default as index } from './index/index';
+export { default as index, type IndexWidget } from './index/index';
 export { default as infiniteHits } from './infinite-hits/infinite-hits';
 export { default as menu } from './menu/menu';
 export { default as menuSelect } from './menu-select/menu-select';

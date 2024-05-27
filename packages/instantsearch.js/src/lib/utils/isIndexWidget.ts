@@ -1,5 +1,4 @@
-import type { Widget } from '../../types';
-import type { IndexWidget } from '../../widgets/index/index';
+import type { Widget, IndexWidget } from '../../types';
 
 export function isIndexWidget(
   widget: Widget | IndexWidget

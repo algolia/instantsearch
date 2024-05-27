@@ -64,7 +64,7 @@ function getRefinement(
     name,
     escapedValue: escapeFacetValue(name),
   };
-  let facet: any = find(
+  let facet: any = find<SearchResults.Facet | SearchResults.HierarchicalFacet>(
     resultsFacets,
     (resultsFacet) => resultsFacet.name === attribute
   );

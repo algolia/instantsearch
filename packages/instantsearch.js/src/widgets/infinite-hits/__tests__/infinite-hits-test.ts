@@ -68,7 +68,7 @@ describe('infiniteHits()', () => {
       cssClasses: { root: ['root', 'cx'] },
       showPrevious: false,
     });
-    widget.init!(createInitOptions({ helper }));
+    widget.init(createInitOptions({ helper }));
     results = new SearchResults(helper.state, [
       createSingleSearchResponse({
         hits: [{ objectID: '1' }, { objectID: '2' }],
@@ -81,10 +81,10 @@ describe('infiniteHits()', () => {
   it('calls twice render(<Hits props />, container)', () => {
     const state = new SearchParameters({ page: 0 });
     const instantSearchInstance = createInstantSearch();
-    widget.init!(createInitOptions({ helper, instantSearchInstance }));
+    widget.init(createInitOptions({ helper, instantSearchInstance }));
 
-    widget.render!(createRenderOptions({ results, state }));
-    widget.render!(createRenderOptions({ results, state }));
+    widget.render(createRenderOptions({ results, state }));
+    widget.render(createRenderOptions({ results, state }));
 
     const firstRender = render.mock.calls[0][0] as VNode<InfiniteHitsProps>;
     const secondRender = render.mock.calls[1][0] as VNode<InfiniteHitsProps>;
@@ -109,9 +109,9 @@ describe('infiniteHits()', () => {
       showPrevious: false,
     });
 
-    widget.init!(createInitOptions({ helper }));
+    widget.init(createInitOptions({ helper }));
 
-    widget.render!(
+    widget.render(
       createRenderOptions({
         results,
         state,
@@ -124,9 +124,9 @@ describe('infiniteHits()', () => {
   });
 
   it('if it is the last page, then the props should contain isLastPage true', () => {
-    widget.init!(createInitOptions({ helper }));
+    widget.init(createInitOptions({ helper }));
     const state1 = new SearchParameters({ page: 0 });
-    widget.render!(
+    widget.render(
       createRenderOptions({
         results: new SearchResults(state1, [
           createSingleSearchResponse({ page: 0, nbPages: 2 }),
@@ -135,7 +135,7 @@ describe('infiniteHits()', () => {
       })
     );
     const state2 = new SearchParameters({ page: 1 });
-    widget.render!(
+    widget.render(
       createRenderOptions({
         results: new SearchResults(state2, [
           createSingleSearchResponse({ page: 1, nbPages: 2 }),
@@ -163,9 +163,9 @@ describe('infiniteHits()', () => {
 
     const state = new SearchParameters({ page: 0 });
     const instantSearchInstance = createInstantSearch();
-    widget.init!(createInitOptions({ helper, instantSearchInstance }));
+    widget.init(createInitOptions({ helper, instantSearchInstance }));
 
-    widget.render!(createRenderOptions({ results, state }));
+    widget.render(createRenderOptions({ results, state }));
 
     const firstRender = render.mock.calls[0][0] as VNode<InfiniteHitsProps>;
     const { showMore } = firstRender.props as InfiniteHitsProps;
@@ -185,8 +185,8 @@ describe('infiniteHits()', () => {
         hitsPerPage: 10,
       }),
     ]);
-    widget.init!(createInitOptions({ helper }));
-    widget.render!(createRenderOptions({ results, state }));
+    widget.init(createInitOptions({ helper }));
+    widget.render(createRenderOptions({ results, state }));
 
     expect(render).toHaveBeenCalledTimes(1);
     const firstRender = render.mock.calls[0][0] as VNode<InfiniteHitsProps>;
@@ -196,11 +196,11 @@ describe('infiniteHits()', () => {
   });
 
   it('if it is the first page, then the props should contain isFirstPage true', () => {
-    widget.init!(createInitOptions({ helper }));
+    widget.init(createInitOptions({ helper }));
     {
       const state = new SearchParameters({ page: 0 });
 
-      widget.render!(
+      widget.render(
         createRenderOptions({
           results: new SearchResults(state, [
             createSingleSearchResponse({ page: state.page, nbPages: 2 }),
@@ -212,7 +212,7 @@ describe('infiniteHits()', () => {
     {
       const state = new SearchParameters({ page: 1 });
 
-      widget.render!(
+      widget.render(
         createRenderOptions({
           results: new SearchResults(state, [
             createSingleSearchResponse({ page: state.page, nbPages: 2 }),
@@ -240,11 +240,11 @@ describe('infiniteHits()', () => {
 
   it('if it is not the first page, then the props should contain isFirstPage false', () => {
     helper.setPage(1);
-    widget.init!(createInitOptions({ helper }));
+    widget.init(createInitOptions({ helper }));
 
     const state = new SearchParameters({ page: 1 });
 
-    widget.render!(
+    widget.render(
       createRenderOptions({
         results: new SearchResults(state, [
           createSingleSearchResponse({ page: state.page, nbPages: 2 }),
@@ -296,14 +296,14 @@ describe('infiniteHits()', () => {
         showPrevious: false,
         cache: customCache,
       });
-      widget.init!(createInitOptions({ helper }));
+      widget.init(createInitOptions({ helper }));
       expect(cachedState).toMatchInlineSnapshot(`undefined`);
       expect(cachedHits).toMatchInlineSnapshot(`undefined`);
 
       {
         const state = new SearchParameters({ page: 0, query: 'hello' });
 
-        widget.render!(
+        widget.render(
           createRenderOptions({
             results: new SearchResults(state, [
               createSingleSearchResponse({
@@ -395,8 +395,8 @@ describe('infiniteHits()', () => {
         showPrevious: false,
         cache: customCache,
       });
-      widget.init!(createInitOptions({ helper }));
-      widget.render!(
+      widget.init(createInitOptions({ helper }));
+      widget.render(
         createRenderOptions({
           results: new SearchResults(state, [
             createSingleSearchResponse({

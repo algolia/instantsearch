@@ -30,9 +30,10 @@ import type {
   WidgetFactory,
   Template,
   TemplateWithBindEvent,
-  Hit,
   InsightsClient,
   Renderer,
+  BaseHit,
+  Hit,
 } from '../../types';
 import type { SearchResults } from 'algoliasearch-helper';
 
@@ -83,34 +84,37 @@ export type InfiniteHitsCSSClasses = Partial<{
   disabledLoadMore: string | string[];
 }>;
 
-export type InfiniteHitsTemplates = Partial<{
-  /**
-   * The template to use when there are no results.
-   */
-  empty: Template<SearchResults>;
+export type InfiniteHitsTemplates<THit extends NonNullable<object> = BaseHit> =
+  Partial<{
+    /**
+     * The template to use when there are no results.
+     */
+    empty: Template<SearchResults<THit>>;
 
-  /**
-   * The template to use for the “Show previous” label.
-   */
-  showPreviousText: Template;
+    /**
+     * The template to use for the “Show previous” label.
+     */
+    showPreviousText: Template;
 
-  /**
-   * The template to use for the “Show more” label.
-   */
-  showMoreText: Template;
+    /**
+     * The template to use for the “Show more” label.
+     */
+    showMoreText: Template;
 
-  /**
-   * The template to use for each result.
-   */
-  item: TemplateWithBindEvent<
-    Hit & {
-      /** @deprecated the index in the hits array, use __position instead, which is the absolute position */
-      __hitIndex: number;
-    }
-  >;
-}>;
+    /**
+     * The template to use for each result.
+     */
+    item: TemplateWithBindEvent<
+      Hit<THit> & {
+        /** @deprecated the index in the hits array, use __position instead, which is the absolute position */
+        __hitIndex: number;
+      }
+    >;
+  }>;
 
-export type InfiniteHitsWidgetParams = {
+export type InfiniteHitsWidgetParams<
+  THit extends NonNullable<object> = BaseHit
+> = {
   /**
    * The CSS Selector or `HTMLElement` to insert the widget into.
    */
@@ -124,7 +128,7 @@ export type InfiniteHitsWidgetParams = {
   /**
    * The templates to use for the widget.
    */
-  templates?: InfiniteHitsTemplates;
+  templates?: InfiniteHitsTemplates<THit>;
 
   /**
    * Reads and writes hits from/to cache.
@@ -141,7 +145,7 @@ export type InfiniteHitsWidget = WidgetFactory<
 >;
 
 const renderer =
-  ({
+  <THit extends NonNullable<object> = BaseHit>({
     containerNode,
     cssClasses,
     renderState,
@@ -153,7 +157,7 @@ const renderer =
     renderState: {
       templateProps?: PreparedTemplateProps<InfiniteHitsComponentTemplates>;
     };
-    templates: InfiniteHitsTemplates;
+    templates: InfiniteHitsTemplates<THit>;
     showPrevious?: boolean;
   }): Renderer<InfiniteHitsRenderState, Partial<InfiniteHitsWidgetParams>> =>
   (
@@ -172,11 +176,12 @@ const renderer =
     isFirstRendering
   ) => {
     if (isFirstRendering) {
-      renderState.templateProps = prepareTemplateProps({
-        defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
-        templates,
-      });
+      renderState.templateProps =
+        prepareTemplateProps<InfiniteHitsComponentTemplates>({
+          defaultTemplates,
+          templatesConfig: instantSearchInstance.templatesConfig,
+          templates: templates as InfiniteHitsComponentTemplates,
+        });
       return;
     }
 
@@ -199,7 +204,12 @@ const renderer =
     );
   };
 
-const infiniteHits: InfiniteHitsWidget = (widgetParams) => {
+export default (function infiniteHits<
+  THit extends NonNullable<object> = BaseHit
+>(
+  widgetParams: InfiniteHitsWidgetParams<THit> &
+    InfiniteHitsConnectorParams<THit>
+) {
   const {
     container,
     escapeHTML,
@@ -235,7 +245,7 @@ const infiniteHits: InfiniteHitsWidget = (widgetParams) => {
     ),
   };
 
-  const specializedRenderer = renderer({
+  const specializedRenderer = renderer<THit>({
     containerNode,
     cssClasses,
     templates,
@@ -249,7 +259,7 @@ const infiniteHits: InfiniteHitsWidget = (widgetParams) => {
   );
 
   return {
-    ...makeWidget({
+    ...makeWidget<InfiniteHitsConnectorParams<THit>, THit>({
       escapeHTML,
       transformItems,
       showPrevious,
@@ -257,6 +267,4 @@ const infiniteHits: InfiniteHitsWidget = (widgetParams) => {
     }),
     $$widgetType: 'ais.infiniteHits',
   };
-};
-
-export default infiniteHits;
+} satisfies InfiniteHitsWidget);

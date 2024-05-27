@@ -2,8 +2,7 @@ import { capitalize } from './capitalize';
 import { warning } from './logger';
 import { keys } from './typedObject';
 
-import type { Widget, IndexUiState } from '../../types';
-import type { IndexWidget } from '../../widgets/index/index';
+import type { Widget, IndexUiState, IndexWidget } from '../../types';
 
 // Some connectors are responsible for multiple widgets so we need
 // to map them.

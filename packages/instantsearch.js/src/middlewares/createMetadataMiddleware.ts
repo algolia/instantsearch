@@ -1,7 +1,11 @@
 import { createInitArgs, safelyRunOnBrowser } from '../lib/utils';
 
-import type { InstantSearch, InternalMiddleware, Widget } from '../types';
-import type { IndexWidget } from '../widgets/index/index';
+import type {
+  InstantSearch,
+  InternalMiddleware,
+  Widget,
+  IndexWidget,
+} from '../types';
 
 type WidgetMetadata =
   | {

@@ -17,6 +17,8 @@ import type {
   Hit,
   WidgetRenderState,
   BaseHit,
+  Unmounter,
+  Renderer,
 } from '../../types';
 import type { SearchResults } from 'algoliasearch-helper';
 
@@ -31,7 +33,7 @@ type Banner = NonNullable<
   >['widgets']['banners']
 >[number];
 
-export type HitsRenderState<THit extends BaseHit = BaseHit> = {
+export type HitsRenderState<THit extends NonNullable<object> = BaseHit> = {
   /**
    * The matched hits from Algolia API.
    */
@@ -58,7 +60,7 @@ export type HitsRenderState<THit extends BaseHit = BaseHit> = {
   bindEvent: BindEventForHits;
 };
 
-export type HitsConnectorParams<THit extends BaseHit = BaseHit> = {
+export type HitsConnectorParams<THit extends NonNullable<object> = BaseHit> = {
   /**
    * Whether to escape HTML tags from hits string values.
    *
@@ -72,26 +74,30 @@ export type HitsConnectorParams<THit extends BaseHit = BaseHit> = {
   transformItems?: TransformItems<Hit<THit>>;
 };
 
-export type HitsWidgetDescription<THit extends BaseHit = BaseHit> = {
-  $$type: 'ais.hits';
-  renderState: HitsRenderState<THit>;
-  indexRenderState: {
-    hits: WidgetRenderState<HitsRenderState<THit>, HitsConnectorParams<THit>>;
+export type HitsWidgetDescription<THit extends NonNullable<object> = BaseHit> =
+  {
+    $$type: 'ais.hits';
+    renderState: HitsRenderState<THit>;
+    indexRenderState: {
+      hits: WidgetRenderState<HitsRenderState<THit>, HitsConnectorParams<THit>>;
+    };
   };
-};
 
-export type HitsConnector<THit extends BaseHit = BaseHit> = Connector<
-  HitsWidgetDescription<THit>,
-  HitsConnectorParams<THit>
->;
+export type HitsConnector<THit extends NonNullable<object> = BaseHit> =
+  Connector<HitsWidgetDescription<THit>, HitsConnectorParams<THit>>;
 
-const connectHits: HitsConnector = function connectHits(
-  renderFn,
-  unmountFn = noop
+export default (function connectHits<TBaseWidgetParams>(
+  renderFn: Renderer<HitsRenderState, TBaseWidgetParams>,
+  unmountFn: Unmounter = noop
 ) {
   checkRendering(renderFn, withUsage());
 
-  return (widgetParams) => {
+  return <
+    TWidgetParams extends HitsConnectorParams<THit>,
+    THit extends NonNullable<object> = BaseHit
+  >(
+    widgetParams: TWidgetParams & TBaseWidgetParams
+  ) => {
     const {
       // @MAJOR: this can default to false
       escapeHTML = true,
@@ -214,7 +220,7 @@ const connectHits: HitsConnector = function connectHits(
         );
       },
 
-      getWidgetSearchParameters(state) {
+      getWidgetSearchParameters(state, _uiState) {
         if (!escapeHTML) {
           return state;
         }
@@ -224,6 +230,4 @@ const connectHits: HitsConnector = function connectHits(
       },
     };
   };
-};
-
-export default connectHits;
+} satisfies HitsConnector);

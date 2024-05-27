@@ -11,17 +11,21 @@ import type { SendEventForHits } from '../../lib/utils';
 import type {
   BaseHit,
   Connector,
+  GeoHit,
   GeoLoc,
-  Hit,
   InitOptions,
+  Renderer,
   RenderOptions,
   TransformItems,
+  Unmounter,
   WidgetRenderState,
 } from '../../types';
 import type {
   AlgoliaSearchHelper,
   SearchParameters,
 } from 'algoliasearch-helper';
+
+export type { GeoHit } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'geo-search',
@@ -41,8 +45,8 @@ function setBoundingBoxAsString(state: SearchParameters, value: string) {
   );
 }
 
-export type GeoHit<THit extends BaseHit = Record<string, any>> = Hit<THit> &
-  Required<Pick<Hit, '_geoloc'>>;
+// export type GeoHit<THit extends NonNullable<object> = BaseHit> = Hit<THit> &
+//   Required<Pick<Hit, '_geoloc'>>;
 
 type Bounds = {
   /**
@@ -55,7 +59,7 @@ type Bounds = {
   southWest: GeoLoc;
 };
 
-export type GeoSearchRenderState<THit extends BaseHit = Record<string, any>> = {
+export type GeoSearchRenderState<THit extends NonNullable<object> = BaseHit> = {
   /**
    * Reset the current bounding box refinement.
    */
@@ -104,9 +108,7 @@ export type GeoSearchRenderState<THit extends BaseHit = Record<string, any>> = {
   toggleRefineOnMapMove: () => void;
 };
 
-export type GeoSearchConnectorParams<
-  THit extends BaseHit = Record<string, any>
-> = {
+export type GeoSearchConnectorParams<THit extends GeoHit = GeoHit> = {
   /**
    * If true, refine will be triggered as you move the map.
    * @default true
@@ -121,9 +123,7 @@ export type GeoSearchConnectorParams<
 
 const $$type = 'ais.geoSearch';
 
-export type GeoSearchWidgetDescription<
-  THit extends BaseHit = Record<string, any>
-> = {
+export type GeoSearchWidgetDescription<THit extends GeoHit = GeoHit> = {
   $$type: 'ais.geoSearch';
   renderState: GeoSearchRenderState<THit>;
   indexRenderState: {
@@ -146,8 +146,10 @@ export type GeoSearchWidgetDescription<
   };
 };
 
-export type GeoSearchConnector<THit extends BaseHit = Record<string, any>> =
-  Connector<GeoSearchWidgetDescription<THit>, GeoSearchConnectorParams<THit>>;
+export type GeoSearchConnector<THit extends GeoHit = GeoHit> = Connector<
+  GeoSearchWidgetDescription<THit>,
+  GeoSearchConnectorParams<THit>
+>;
 
 /**
  * The **GeoSearch** connector provides the logic to build a widget that will display the results on a map. It also provides a way to search for results based on their position. The connector provides functions to manage the search experience (search on map interaction or control the interaction for example).
@@ -158,10 +160,18 @@ export type GeoSearchConnector<THit extends BaseHit = Record<string, any>> =
  *
  * Currently, the feature is not compatible with multiple values in the _geoloc attribute.
  */
-const connectGeoSearch: GeoSearchConnector = (renderFn, unmountFn = noop) => {
+export default (function connectGeoSearch<TBaseWidgetParams>(
+  renderFn: Renderer<GeoSearchRenderState, TBaseWidgetParams>,
+  unmountFn: Unmounter = noop
+) {
   checkRendering(renderFn, withUsage());
 
-  return (widgetParams) => {
+  return <
+    TWidgetParams extends GeoSearchConnectorParams<THit>,
+    THit extends GeoHit = GeoHit
+  >(
+    widgetParams: TWidgetParams & TBaseWidgetParams
+  ) => {
     const {
       enableRefineOnMapMove = true,
       transformItems = ((items) => items) as NonNullable<
@@ -409,6 +419,4 @@ const connectGeoSearch: GeoSearchConnector = (renderFn, unmountFn = noop) => {
       },
     };
   };
-};
-
-export default connectGeoSearch;
+} satisfies GeoSearchConnector);

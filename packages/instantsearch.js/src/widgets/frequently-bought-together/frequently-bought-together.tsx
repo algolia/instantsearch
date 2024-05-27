@@ -17,7 +17,13 @@ import type {
   FrequentlyBoughtTogetherRenderState,
 } from '../../connectors/frequently-bought-together/connectFrequentlyBoughtTogether';
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type { Template, WidgetFactory, Hit, Renderer } from '../../types';
+import type {
+  Template,
+  WidgetFactory,
+  Hit,
+  Renderer,
+  BaseHit,
+} from '../../types';
 import type { RecommendResultItem } from 'algoliasearch-helper';
 import type {
   RecommendClassNames,
@@ -34,7 +40,7 @@ const FrequentlyBoughtTogether = createFrequentlyBoughtTogetherComponent({
 });
 
 const renderer =
-  ({
+  <THit extends NonNullable<object> = BaseHit>({
     renderState,
     cssClasses,
     containerNode,
@@ -44,10 +50,10 @@ const renderer =
     cssClasses: FrequentlyBoughtTogetherCSSClasses;
     renderState: {
       templateProps?: PreparedTemplateProps<
-        Required<FrequentlyBoughtTogetherTemplates>
+        Required<FrequentlyBoughtTogetherTemplates<THit>>
       >;
     };
-    templates: FrequentlyBoughtTogetherTemplates;
+    templates: FrequentlyBoughtTogetherTemplates<THit>;
   }): Renderer<
     FrequentlyBoughtTogetherRenderState,
     Partial<FrequentlyBoughtTogetherWidgetParams>
@@ -55,8 +61,9 @@ const renderer =
   ({ items, results, instantSearchInstance }, isFirstRendering) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        defaultTemplates: {} as Required<FrequentlyBoughtTogetherTemplates>,
+        defaultTemplates: {} as unknown as Required<
+          FrequentlyBoughtTogetherTemplates<THit>
+        >,
         templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
@@ -120,11 +127,13 @@ const renderer =
 
 export type FrequentlyBoughtTogetherCSSClasses = Partial<RecommendClassNames>;
 
-export type FrequentlyBoughtTogetherTemplates = Partial<{
+export type FrequentlyBoughtTogetherTemplates<
+  THit extends NonNullable<object> = BaseHit
+> = Partial<{
   /**
    * Template to use when there are no results.
    */
-  empty: Template<RecommendResultItem>;
+  empty: Template<RecommendResultItem<Hit<THit>>>;
 
   /**
    * Template to use for the header of the widget.
@@ -132,7 +141,9 @@ export type FrequentlyBoughtTogetherTemplates = Partial<{
   header: Template<
     Pick<
       Parameters<
-        NonNullable<FrequentlyBoughtTogetherUiProps<Hit>['headerComponent']>
+        NonNullable<
+          FrequentlyBoughtTogetherUiProps<Hit<THit>>['headerComponent']
+        >
       >[0],
       'items'
     > & { cssClasses: RecommendClassNames }
@@ -141,10 +152,12 @@ export type FrequentlyBoughtTogetherTemplates = Partial<{
   /**
    * Template to use for each result. This template will receive an object containing a single record.
    */
-  item: Template<Hit>;
+  item: Template<Hit<THit>>;
 }>;
 
-type FrequentlyBoughtTogetherWidgetParams = {
+type FrequentlyBoughtTogetherWidgetParams<
+  THit extends NonNullable<object> = BaseHit
+> = {
   /**
    * CSS Selector or HTMLElement to insert the widget.
    */
@@ -153,7 +166,7 @@ type FrequentlyBoughtTogetherWidgetParams = {
   /**
    * Templates to use for the widget.
    */
-  templates?: FrequentlyBoughtTogetherTemplates;
+  templates?: FrequentlyBoughtTogetherTemplates<THit>;
 
   /**
    * CSS classes to add.
@@ -169,48 +182,49 @@ export type FrequentlyBoughtTogetherWidget = WidgetFactory<
   FrequentlyBoughtTogetherWidgetParams
 >;
 
-const frequentlyBoughtTogether: FrequentlyBoughtTogetherWidget =
-  function frequentlyBoughtTogether(widgetParams) {
-    const {
-      container,
+export default (function frequentlyBoughtTogether<
+  THit extends NonNullable<object> = BaseHit
+>(
+  widgetParams: FrequentlyBoughtTogetherWidgetParams<THit> &
+    FrequentlyBoughtTogetherConnectorParams<THit>
+) {
+  const {
+    container,
+    objectIDs,
+    limit,
+    queryParameters,
+    threshold,
+    escapeHTML,
+    transformItems,
+    templates = {},
+    cssClasses = {},
+  } = widgetParams || {};
+
+  if (!container) {
+    throw new Error(withUsage('The `container` option is required.'));
+  }
+
+  const containerNode = getContainerNode(container);
+
+  const specializedRenderer = renderer({
+    containerNode,
+    cssClasses,
+    renderState: {},
+    templates,
+  });
+
+  const makeWidget = connectFrequentlyBoughtTogether(specializedRenderer, () =>
+    render(null, containerNode)
+  );
+  return {
+    ...makeWidget<FrequentlyBoughtTogetherConnectorParams<THit>, THit>({
       objectIDs,
       limit,
       queryParameters,
       threshold,
       escapeHTML,
       transformItems,
-      templates = {},
-      cssClasses = {},
-    } = widgetParams || {};
-
-    if (!container) {
-      throw new Error(withUsage('The `container` option is required.'));
-    }
-
-    const containerNode = getContainerNode(container);
-
-    const specializedRenderer = renderer({
-      containerNode,
-      cssClasses,
-      renderState: {},
-      templates,
-    });
-
-    const makeWidget = connectFrequentlyBoughtTogether(
-      specializedRenderer,
-      () => render(null, containerNode)
-    );
-    return {
-      ...makeWidget({
-        objectIDs,
-        limit,
-        queryParameters,
-        threshold,
-        escapeHTML,
-        transformItems,
-      }),
-      $$widgetType: 'ais.frequentlyBoughtTogether',
-    };
+    }),
+    $$widgetType: 'ais.frequentlyBoughtTogether',
   };
-
-export default frequentlyBoughtTogether;
+});
