@@ -26,41 +26,43 @@
           :key="key"
           :class="[suit('item'), item.isRefined && suit('item', 'selected')]"
         >
-          <a
-            :href="state.createURL(item.value)"
-            :aria-label="`${item.value} & Up`"
-            :class="suit('link')"
-            @click.prevent="state.refine(item.value)"
-          >
-            <template v-for="(full, n) in item.stars">
-              <svg
-                v-if="full"
-                aria-hidden="true"
-                width="24"
-                height="24"
-                :class="[suit('starIcon'), suit('starIcon--full')]"
-                :key="n + '-full'"
-              >
-                <use xlink:href="#ais-RatingMenu-starSymbol" />
-              </svg>
+          <div>
+            <a
+              :href="state.createURL(item.value)"
+              :aria-label="`${item.value} & up`"
+              :class="suit('link')"
+              @click.prevent="state.refine(item.value)"
+            >
+              <template v-for="(full, n) in item.stars">
+                <svg
+                  v-if="full"
+                  aria-hidden="true"
+                  width="24"
+                  height="24"
+                  :class="[suit('starIcon'), suit('starIcon--full')]"
+                  :key="n + '-full'"
+                >
+                  <use xlink:href="#ais-RatingMenu-starSymbol" />
+                </svg>
 
-              <svg
-                v-else
-                :class="[suit('starIcon'), suit('starIcon--empty')]"
-                aria-hidden="true"
-                width="24"
-                height="24"
-                :key="n + '-empty'"
-              >
-                <use xlink:href="#ais-RatingMenu-starEmptySymbol" />
-              </svg>
-            </template>
+                <svg
+                  v-else
+                  :class="[suit('starIcon'), suit('starIcon--empty')]"
+                  aria-hidden="true"
+                  width="24"
+                  height="24"
+                  :key="n + '-empty'"
+                >
+                  <use xlink:href="#ais-RatingMenu-starEmptySymbol" />
+                </svg>
+              </template>
 
-            <span :class="suit('label')" aria-hidden="true">
-              <slot name="andUp">&amp; Up</slot>
-            </span>
-            <span :class="suit('count')">{{ item.count }}</span>
-          </a>
+              <span :class="suit('label')" aria-hidden="true">
+                <slot name="andUp">&amp; Up</slot>
+              </span>
+              <span :class="suit('count')">{{ item.count }}</span>
+            </a>
+          </div>
         </li>
       </ul>
     </slot>
