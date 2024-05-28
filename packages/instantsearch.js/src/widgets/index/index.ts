@@ -645,7 +645,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       const indexInitialResults =
         instantSearchInstance._initialResults?.[this.getIndexId()];
 
-      if (indexInitialResults) {
+      if (indexInitialResults?.results) {
         // We restore the shape of the results provided to the instance to respect
         // the helper's structure.
         const results = new algoliasearchHelper.SearchResults(
@@ -655,6 +655,17 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
         derivedHelper.lastResults = results;
         helper.lastResults = results;
+      }
+
+      if (indexInitialResults?.recommendResults) {
+        const recommendResults = new algoliasearchHelper.RecommendResults(
+          new algoliasearchHelper.RecommendParameters({
+            params: indexInitialResults.recommendResults.params,
+          }),
+          indexInitialResults.recommendResults.results
+        );
+        derivedHelper.lastRecommendResults = recommendResults;
+        helper.lastRecommendResults = recommendResults;
       }
 
       // Subscribe to the Helper state changes for the page before widgets

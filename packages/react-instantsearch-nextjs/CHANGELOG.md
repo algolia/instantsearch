@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.2.5...react-instantsearch-nextjs@0.3.0) (2024-05-28)
+
+
+### Features
+
+* **recommend:** enable server-side rendering ([#6215](https://github.com/algolia/instantsearch/issues/6215)) ([21404fc](https://github.com/algolia/instantsearch/commit/21404fc530a9aad640a88fac1a48244f4e665828))
+
+
+
+
+
 ## [0.2.5](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.2.4...react-instantsearch-nextjs@0.2.5) (2024-05-21)
 
 **Note:** Version bump only for package react-instantsearch-nextjs
