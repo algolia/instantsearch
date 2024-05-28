@@ -168,7 +168,7 @@ const renderer =
         templateProps={renderState.templateProps!}
         toggleRefinement={refine}
       >
-        <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+        <svg style="display:none;">
           <symbol
             id={suit({ descendantName: 'starSymbol' })}
             viewBox="0 0 24 24"
