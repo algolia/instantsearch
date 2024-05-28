@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.10.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.9.0...react-instantsearch-core@7.10.0) (2024-05-28)
+
+
+### Features
+
+* **recommend:** enable server-side rendering ([#6215](https://github.com/algolia/instantsearch/issues/6215)) ([21404fc](https://github.com/algolia/instantsearch/commit/21404fc530a9aad640a88fac1a48244f4e665828))
+
+
+
+
+
 # [7.9.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.8.1...react-instantsearch-core@7.9.0) (2024-05-21)
 
 
