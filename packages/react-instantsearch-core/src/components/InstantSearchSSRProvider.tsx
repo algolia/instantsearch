@@ -30,6 +30,9 @@ export function InstantSearchSSRProvider<
     TRouteState
   > | null>(null);
 
+  // This is used to re-map the result index to the requesting widget
+  const recommendIdx = React.useRef(0);
+
   // When <DynamicWidgets> is mounted, a second provider is used above the user-land
   // <InstantSearchSSRProvider> in `getServerState()`.
   // To avoid the user's provider overriding the context value with an empty object,
@@ -39,7 +42,9 @@ export function InstantSearchSSRProvider<
   }
 
   return (
-    <InstantSearchSSRContext.Provider value={{ ...props, ssrSearchRef }}>
+    <InstantSearchSSRContext.Provider
+      value={{ ...props, ssrSearchRef, recommendIdx }}
+    >
       {children}
     </InstantSearchSSRContext.Provider>
   );

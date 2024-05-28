@@ -14,6 +14,7 @@ import {
   createDocumentationMessageGenerator,
   createDocumentationLink,
   defer,
+  hydrateRecommendCache,
   hydrateSearchClient,
   noop,
   warning,
@@ -661,6 +662,7 @@ See documentation: ${createDocumentationLink({
 
     if (this._initialResults) {
       hydrateSearchClient(this.client, this._initialResults);
+      hydrateRecommendCache(this.mainHelper, this._initialResults);
 
       const originalScheduleSearch = this.scheduleSearch;
       // We don't schedule a first search when initial results are provided

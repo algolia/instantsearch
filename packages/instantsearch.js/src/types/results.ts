@@ -1,6 +1,8 @@
 import type { SearchOptions } from './algoliasearch';
 import type {
   PlainSearchParameters,
+  RecommendParametersOptions,
+  RecommendResults,
   SearchForFacetValues,
   SearchResults,
 } from 'algoliasearch-helper';
@@ -93,8 +95,12 @@ export type NumericRefinement = {
 export type Refinement = FacetRefinement | NumericRefinement;
 
 type InitialResult = {
-  state: PlainSearchParameters;
-  results: SearchResults['_rawResults'];
+  state?: PlainSearchParameters;
+  results?: SearchResults['_rawResults'];
+  recommendResults?: {
+    params: RecommendParametersOptions['params'];
+    results: RecommendResults['_rawResults'];
+  };
   requestParams?: SearchOptions;
 };
 

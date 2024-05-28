@@ -44,6 +44,7 @@ declare namespace algoliasearchHelper {
     recommendState: RecommendParameters;
     lastResults: SearchResults | null;
     lastRecommendResults: RecommendResults | null;
+    _recommendCache: RecommendResults['_rawResults'];
     derivedHelpers: DerivedHelper[];
 
     on(
@@ -1602,12 +1603,13 @@ declare namespace algoliasearchHelper {
     RecommendQueriesResponse<TObject>['results'];
 
   type RecommendResultItem<TObject = any> = RecommendResponse<TObject>[0];
+  type RecommendResultMap<T> = { [index: number]: RecommendResultItem<T> };
 
   export class RecommendResults<T = any> {
-    constructor(state: RecommendParameters, results: RecommendResponse<T>);
+    constructor(state: RecommendParameters, results: RecommendResultMap<T>);
 
     _state: RecommendParameters;
-    _rawResults: RecommendResponse<T>;
+    _rawResults: RecommendResultMap<T>;
 
     [index: number]: RecommendResultItem<T>;
   }

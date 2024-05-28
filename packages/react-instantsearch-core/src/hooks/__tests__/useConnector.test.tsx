@@ -18,6 +18,7 @@ import React, { StrictMode, useState } from 'react';
 
 import { Index } from '../../components/Index';
 import { InstantSearch } from '../../components/InstantSearch';
+import { InstantSearchSSRProvider } from '../../components/InstantSearchSSRProvider';
 import { useHits } from '../../connectors/useHits';
 import { IndexContext } from '../../lib/IndexContext';
 import { noop } from '../../lib/noop';
@@ -394,6 +395,54 @@ describe('useConnector', () => {
       status: 'idle',
       error: undefined,
     });
+  });
+
+  test('calls getWidgetRenderState with recommend results if available', () => {
+    const result = createSingleSearchResponse();
+    const getWidgetRenderState = jest.fn();
+    const searchClient = createSearchClient({});
+    const { InstantSearchSpy } = createInstantSearchSpy();
+
+    function SearchProvider({ children }: { children: React.ReactNode }) {
+      return (
+        <InstantSearchSSRProvider
+          initialResults={{
+            indexName: {
+              recommendResults: {
+                params: [{ $$id: 0, objectID: 'a' }],
+                results: { 0: result },
+              },
+            },
+          }}
+        >
+          <InstantSearchSpy searchClient={searchClient} indexName="indexName">
+            {children}
+          </InstantSearchSpy>
+        </InstantSearchSSRProvider>
+      );
+    }
+
+    renderHook(
+      () =>
+        useConnector(
+          () => () => ({
+            $$type: '',
+            dependsOn: 'recommend',
+            getWidgetParameters: jest.fn(),
+            getRenderState: jest.fn(),
+            getWidgetRenderState,
+          }),
+          {},
+          {}
+        ),
+      {
+        wrapper: SearchProvider,
+      }
+    );
+
+    expect(getWidgetRenderState).toHaveBeenCalledWith(
+      expect.objectContaining({ results: result })
+    );
   });
 
   test('returns state from artificial results', () => {

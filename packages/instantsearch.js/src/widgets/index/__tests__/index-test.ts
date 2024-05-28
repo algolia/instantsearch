@@ -11,6 +11,7 @@ import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
   RecommendParameters,
+  RecommendResults,
 } from 'algoliasearch-helper';
 
 import { castToJestMock } from '../../../../../../tests/utils';
@@ -3471,6 +3472,62 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       expect(derivedHelperResults).toBeInstanceOf(SearchResults);
       expect(helperResults).toEqual(expectedResults);
       expect(helperResults).toBeInstanceOf(SearchResults);
+    });
+
+    it('injects recommend results to the index helper', () => {
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+      search._initialResults = {
+        indexName: {
+          recommendResults: {
+            params: [{ $$id: 0, objectID: '1' }],
+            results: {
+              0: createSingleSearchResponse({ hits: [{ objectID: '1' }] }),
+            },
+          },
+        },
+      };
+
+      search.start();
+
+      const expectedResults = {
+        _rawResults: {
+          0: {
+            exhaustiveFacetsCount: true,
+            exhaustiveNbHits: true,
+            hits: [{ objectID: '1' }],
+            hitsPerPage: 20,
+            nbHits: 1,
+            nbPages: 1,
+            page: 0,
+            params: '',
+            processingTimeMS: 0,
+            query: '',
+          },
+        },
+        _state: {
+          params: [{ $$id: 0, objectID: '1' }],
+        },
+        0: {
+          exhaustiveFacetsCount: true,
+          exhaustiveNbHits: true,
+          hits: [{ objectID: '1' }],
+          hitsPerPage: 20,
+          nbHits: 1,
+          nbPages: 1,
+          page: 0,
+          params: '',
+          processingTimeMS: 0,
+          query: '',
+        },
+      };
+
+      const helperResults = search.mainIndex.getHelper()!.lastRecommendResults;
+
+      expect(helperResults).toEqual(expectedResults);
+      expect(helperResults).toBeInstanceOf(RecommendResults);
     });
 
     it('supports nested indices', () => {

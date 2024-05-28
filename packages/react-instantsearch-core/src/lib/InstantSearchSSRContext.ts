@@ -13,6 +13,7 @@ export type InstantSearchSSRContextApi<
     TUiState,
     TRouteState
   > | null>;
+  recommendIdx: MutableRefObject<number>;
 };
 
 export const InstantSearchSSRContext = createContext<Partial<

@@ -147,4 +147,24 @@ describe('hydrateSearchClient', () => {
       } as unknown as InitialResults);
     }).not.toThrow();
   });
+
+  it('should not throw if state or results are missing', () => {
+    const setCache = jest.fn();
+    client = {
+      transporter: { responsesCache: { set: setCache } },
+      addAlgoliaAgent: jest.fn(),
+    } as unknown as SearchClient;
+
+    hydrateSearchClient(client, {
+      instant_search: {},
+    } as unknown as InitialResults);
+
+    expect(setCache).toHaveBeenCalledWith(
+      expect.objectContaining({
+        args: [[]],
+        method: 'search',
+      }),
+      { results: [] }
+    );
+  });
 });
