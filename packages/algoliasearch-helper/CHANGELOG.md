@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.21.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.20.0...algoliasearch-helper@3.21.0) (2024-05-28)
+
+
+### Features
+
+* **recommend:** enable server-side rendering ([#6215](https://github.com/algolia/instantsearch/issues/6215)) ([21404fc](https://github.com/algolia/instantsearch/commit/21404fc530a9aad640a88fac1a48244f4e665828))
+
+
+
+
+
 # [3.20.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.19.0...algoliasearch-helper@3.20.0) (2024-05-21)
 
 

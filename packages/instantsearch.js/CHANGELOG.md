@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.70.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.69.0...instantsearch.js@4.70.0) (2024-05-28)
+
+
+### Features
+
+* **recommend:** enable server-side rendering ([#6215](https://github.com/algolia/instantsearch/issues/6215)) ([21404fc](https://github.com/algolia/instantsearch/commit/21404fc530a9aad640a88fac1a48244f4e665828))
+
+
+
+
+
 # [4.69.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.68.1...instantsearch.js@4.69.0) (2024-05-21)
 
 
