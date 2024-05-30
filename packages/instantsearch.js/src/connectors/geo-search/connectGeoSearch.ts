@@ -13,6 +13,7 @@ import type {
   Connector,
   GeoHit,
   GeoLoc,
+  IndexRenderState,
   InitOptions,
   Renderer,
   RenderOptions,
@@ -372,7 +373,11 @@ export default (function connectGeoSearch<
         };
       },
 
-      getRenderState(renderState, renderOptions) {
+      getRenderState(
+        renderState,
+        renderOptions
+        // Type is explicitly redefined, to avoid having the TWidgetParams type in the definition
+      ): IndexRenderState & GeoSearchWidgetDescription['indexRenderState'] {
         return {
           ...renderState,
           geoSearch: this.getWidgetRenderState(renderOptions),

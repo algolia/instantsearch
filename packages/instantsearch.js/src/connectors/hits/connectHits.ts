@@ -19,6 +19,7 @@ import type {
   BaseHit,
   Unmounter,
   Renderer,
+  IndexRenderState,
 } from '../../types';
 import type { SearchResults } from 'algoliasearch-helper';
 
@@ -132,7 +133,11 @@ export default (function connectHits<TWidgetParams>(
         renderState.sendEvent('view:internal', renderState.hits);
       },
 
-      getRenderState(renderState, renderOptions) {
+      getRenderState(
+        renderState,
+        renderOptions
+        // Type is explicitly redefined, to avoid having the TWidgetParams type in the definition
+      ): IndexRenderState & HitsWidgetDescription['indexRenderState'] {
         return {
           ...renderState,
           hits: this.getWidgetRenderState(renderOptions),

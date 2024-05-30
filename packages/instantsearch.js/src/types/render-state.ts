@@ -63,10 +63,7 @@ export type RenderState = {
   [indexId: string]: IndexRenderState;
 };
 
-// @MAJOR: remove the TWidgetParams generic
-// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/naming-convention
-export type WidgetRenderState<TWidgetRenderState, _TWidgetParams> =
+export type WidgetRenderState<TWidgetRenderState, TWidgetParams> =
   TWidgetRenderState & {
-    // This is only exposed to users through the `renderState` property
-    widgetParams: any;
+    widgetParams: TWidgetParams;
   };

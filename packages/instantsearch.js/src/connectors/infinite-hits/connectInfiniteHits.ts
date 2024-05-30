@@ -22,6 +22,7 @@ import type {
   Renderer,
   Unmounter,
   UnknownWidgetParams,
+  IndexRenderState,
 } from '../../types';
 import type {
   AlgoliaSearchHelper as Helper,
@@ -306,7 +307,11 @@ export default (function connectInfiniteHits<
         sendEvent('view:internal', widgetRenderState.currentPageHits);
       },
 
-      getRenderState(renderState, renderOptions) {
+      getRenderState(
+        renderState,
+        renderOptions
+        // Type is explicitly redefined, to avoid having the TWidgetParams type in the definition
+      ): IndexRenderState & InfiniteHitsWidgetDescription['indexRenderState'] {
         return {
           ...renderState,
           infiniteHits: this.getWidgetRenderState(renderOptions),
