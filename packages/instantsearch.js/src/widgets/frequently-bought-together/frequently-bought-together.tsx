@@ -227,4 +227,4 @@ export default (function frequentlyBoughtTogether<
     }),
     $$widgetType: 'ais.frequentlyBoughtTogether',
   };
-});
+} satisfies FrequentlyBoughtTogetherWidget);

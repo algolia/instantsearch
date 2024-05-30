@@ -1,6 +1,8 @@
 import { omit } from '../../lib/utils';
 
-import { HitsTemplates } from './hits';
+// false positive lint error
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+import type { HitsTemplates } from './hits';
 
 const defaultTemplates = {
   empty() {
