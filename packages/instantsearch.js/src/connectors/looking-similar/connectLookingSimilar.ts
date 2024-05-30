@@ -13,6 +13,7 @@ import type {
   BaseHit,
   Renderer,
   Unmounter,
+  UnknownWidgetParams,
 } from '../../types';
 import type {
   PlainSearchParameters,
@@ -88,17 +89,19 @@ export type LookingSimilarConnector<
   LookingSimilarConnectorParams<THit>
 >;
 
-export default (function connectLookingSimilar<TBaseWidgetParams>(
-  renderFn: Renderer<LookingSimilarRenderState, TBaseWidgetParams>,
+export default (function connectLookingSimilar<
+  TWidgetParams extends UnknownWidgetParams
+>(
+  renderFn: Renderer<
+    LookingSimilarRenderState,
+    TWidgetParams & LookingSimilarConnectorParams
+  >,
   unmountFn: Unmounter = noop
 ) {
   checkRendering(renderFn, withUsage());
 
-  return <
-    TWidgetParams extends LookingSimilarConnectorParams<THit>,
-    THit extends NonNullable<object> = BaseHit
-  >(
-    widgetParams: TWidgetParams & TBaseWidgetParams
+  return <THit extends NonNullable<object> = BaseHit>(
+    widgetParams: TWidgetParams & LookingSimilarConnectorParams<THit>
   ) => {
     const {
       // @MAJOR: this can default to false
@@ -109,7 +112,7 @@ export default (function connectLookingSimilar<TBaseWidgetParams>(
       fallbackParameters,
       queryParameters,
       transformItems = ((items) => items) as NonNullable<
-        TWidgetParams['transformItems']
+        LookingSimilarConnectorParams<THit>['transformItems']
       >,
     } = widgetParams || {};
 

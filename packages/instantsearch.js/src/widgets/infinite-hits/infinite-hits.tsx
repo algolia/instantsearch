@@ -245,7 +245,7 @@ export default (function infiniteHits<
     ),
   };
 
-  const specializedRenderer = renderer<THit>({
+  const specializedRenderer = renderer({
     containerNode,
     cssClasses,
     templates,
@@ -259,7 +259,7 @@ export default (function infiniteHits<
   );
 
   return {
-    ...makeWidget<InfiniteHitsConnectorParams<THit>, THit>({
+    ...makeWidget({
       escapeHTML,
       transformItems,
       showPrevious,

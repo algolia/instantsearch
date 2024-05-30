@@ -13,6 +13,7 @@ import type {
   BaseHit,
   Renderer,
   Unmounter,
+  UnknownWidgetParams,
 } from '../../types';
 import type {
   PlainSearchParameters,
@@ -88,17 +89,19 @@ export type RelatedProductsConnector<
   RelatedProductsConnectorParams<THit>
 >;
 
-export default (function connectRelatedProducts<TBaseWidgetParams>(
-  renderFn: Renderer<RelatedProductsRenderState, TBaseWidgetParams>,
+export default (function connectRelatedProducts<
+  TWidgetParams extends UnknownWidgetParams
+>(
+  renderFn: Renderer<
+    RelatedProductsRenderState,
+    RelatedProductsConnectorParams & TWidgetParams
+  >,
   unmountFn: Unmounter = noop
 ) {
   checkRendering(renderFn, withUsage());
 
-  return <
-    TWidgetParams extends RelatedProductsConnectorParams<THit>,
-    THit extends NonNullable<object> = BaseHit
-  >(
-    widgetParams: TWidgetParams & TBaseWidgetParams
+  return <THit extends NonNullable<object> = BaseHit>(
+    widgetParams: TWidgetParams & RelatedProductsConnectorParams<THit>
   ) => {
     const {
       // @MAJOR: this can default to false
@@ -109,7 +112,7 @@ export default (function connectRelatedProducts<TBaseWidgetParams>(
       fallbackParameters,
       queryParameters,
       transformItems = ((items) => items) as NonNullable<
-        TWidgetParams['transformItems']
+        RelatedProductsConnectorParams['transformItems']
       >,
     } = widgetParams || {};
 

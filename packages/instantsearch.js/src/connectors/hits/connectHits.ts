@@ -86,17 +86,14 @@ export type HitsWidgetDescription<THit extends NonNullable<object> = BaseHit> =
 export type HitsConnector<THit extends NonNullable<object> = BaseHit> =
   Connector<HitsWidgetDescription<THit>, HitsConnectorParams<THit>>;
 
-export default (function connectHits<TBaseWidgetParams>(
-  renderFn: Renderer<HitsRenderState, TBaseWidgetParams>,
+export default (function connectHits<TWidgetParams>(
+  renderFn: Renderer<HitsRenderState, TWidgetParams & HitsConnectorParams>,
   unmountFn: Unmounter = noop
 ) {
   checkRendering(renderFn, withUsage());
 
-  return <
-    TWidgetParams extends HitsConnectorParams<THit>,
-    THit extends NonNullable<object> = BaseHit
-  >(
-    widgetParams: TWidgetParams & TBaseWidgetParams
+  return <THit extends NonNullable<object> = BaseHit>(
+    widgetParams: TWidgetParams & HitsConnectorParams<THit>
   ) => {
     const {
       // @MAJOR: this can default to false

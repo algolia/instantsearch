@@ -210,7 +210,7 @@ export default (function relatedProducts<
 
   const containerNode = getContainerNode(container);
 
-  const specializedRenderer = createRenderer<THit>({
+  const specializedRenderer = createRenderer({
     containerNode,
     cssClasses,
     renderState: {},
@@ -222,7 +222,7 @@ export default (function relatedProducts<
   );
 
   return {
-    ...makeWidget<RelatedProductsConnectorParams<THit>, THit>({
+    ...makeWidget({
       objectIDs,
       limit,
       queryParameters,

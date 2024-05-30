@@ -288,11 +288,10 @@ export default (function geoSearch<THit extends GeoHit = GeoHit>(
   );
 
   return {
-    ...makeWidget<GeoSearchConnectorParams<THit>, THit>({
+    ...makeWidget<THit>({
       ...otherWidgetParams,
-      // @TODO: these types don't preserve the generic correctly,
+      // @TODO: this type doesn't preserve the generic correctly,
       // (but as they're internal only it's not a big problem)
-      transformItems: otherWidgetParams.transformItems as any,
       templates: templates as any,
       renderState: {},
       container: containerNode,

@@ -200,7 +200,7 @@ export default (function lookingSimilar<
 
   const containerNode = getContainerNode(container);
 
-  const specializedRenderer = createRenderer<THit>({
+  const specializedRenderer = createRenderer({
     containerNode,
     cssClasses,
     renderState: {},
@@ -211,7 +211,7 @@ export default (function lookingSimilar<
     render(null, containerNode)
   );
   return {
-    ...makeWidget<LookingSimilarConnectorParams<THit>, THit>({
+    ...makeWidget({
       objectIDs,
       limit,
       queryParameters,

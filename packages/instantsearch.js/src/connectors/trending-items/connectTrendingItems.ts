@@ -14,6 +14,7 @@ import type {
   BaseHit,
   Renderer,
   Unmounter,
+  UnknownWidgetParams,
 } from '../../types';
 import type {
   PlainSearchParameters,
@@ -99,17 +100,19 @@ export type TrendingItemsConnector<THit extends NonNullable<object> = BaseHit> =
     TrendingItemsConnectorParams<THit>
   >;
 
-export default (function connectTrendingItems<TBaseWidgetParams>(
-  renderFn: Renderer<TrendingItemsRenderState, TBaseWidgetParams>,
+export default (function connectTrendingItems<
+  TWidgetParams extends UnknownWidgetParams
+>(
+  renderFn: Renderer<
+    TrendingItemsRenderState,
+    TWidgetParams & TrendingItemsConnectorParams
+  >,
   unmountFn: Unmounter = noop
 ) {
   checkRendering(renderFn, withUsage());
 
-  return <
-    TWidgetParams extends TrendingItemsConnectorParams<THit>,
-    THit extends NonNullable<object> = BaseHit
-  >(
-    widgetParams: TWidgetParams & TBaseWidgetParams
+  return <THit extends NonNullable<object> = BaseHit>(
+    widgetParams: TWidgetParams & TrendingItemsConnectorParams<THit>
   ) => {
     const {
       facetName,
@@ -121,7 +124,7 @@ export default (function connectTrendingItems<TBaseWidgetParams>(
       // @MAJOR: this can default to false
       escapeHTML = true,
       transformItems = ((items) => items) as NonNullable<
-        TWidgetParams['transformItems']
+        TrendingItemsConnectorParams<THit>['transformItems']
       >,
     } = widgetParams || {};
 

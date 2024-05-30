@@ -210,7 +210,7 @@ export default (function trendingItems<
 
   const containerNode = getContainerNode(container);
 
-  const specializedRenderer = createRenderer<THit>({
+  const specializedRenderer = createRenderer({
     containerNode,
     cssClasses,
     renderState: {},
@@ -225,7 +225,7 @@ export default (function trendingItems<
     facetName && facetValue ? { facetName, facetValue } : {};
 
   return {
-    ...makeWidget<TrendingItemsConnectorParams<THit>, THit>({
+    ...makeWidget({
       ...facetParameters,
       limit,
       queryParameters,

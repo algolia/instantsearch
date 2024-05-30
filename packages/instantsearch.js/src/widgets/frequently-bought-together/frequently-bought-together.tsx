@@ -217,7 +217,7 @@ export default (function frequentlyBoughtTogether<
     render(null, containerNode)
   );
   return {
-    ...makeWidget<FrequentlyBoughtTogetherConnectorParams<THit>, THit>({
+    ...makeWidget({
       objectIDs,
       limit,
       queryParameters,

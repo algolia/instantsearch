@@ -226,7 +226,7 @@ export default (function hits<THit extends NonNullable<object> = BaseHit>(
 
   const containerNode = getContainerNode(container);
 
-  const specializedRenderer = renderer<THit>({
+  const specializedRenderer = renderer({
     containerNode,
     cssClasses,
     renderState: {},
@@ -238,7 +238,7 @@ export default (function hits<THit extends NonNullable<object> = BaseHit>(
   );
 
   return {
-    ...makeWidget<HitsConnectorParams<THit>, THit>({
+    ...makeWidget({
       escapeHTML,
       transformItems,
     }),

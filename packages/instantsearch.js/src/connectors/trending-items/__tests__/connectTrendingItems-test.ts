@@ -145,7 +145,6 @@ describe('connectTrendingItems', () => {
       const widget = makeWidget({
         facetName: 'key',
         facetValue: 'value',
-        swag: true,
         limit: 10,
         threshold: 95,
         queryParameters: { userToken: 'token' },

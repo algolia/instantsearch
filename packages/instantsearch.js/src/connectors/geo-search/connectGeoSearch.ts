@@ -17,6 +17,7 @@ import type {
   Renderer,
   RenderOptions,
   TransformItems,
+  UnknownWidgetParams,
   Unmounter,
   WidgetRenderState,
 } from '../../types';
@@ -160,22 +161,24 @@ export type GeoSearchConnector<THit extends GeoHit = GeoHit> = Connector<
  *
  * Currently, the feature is not compatible with multiple values in the _geoloc attribute.
  */
-export default (function connectGeoSearch<TBaseWidgetParams>(
-  renderFn: Renderer<GeoSearchRenderState, TBaseWidgetParams>,
+export default (function connectGeoSearch<
+  TWidgetParams extends UnknownWidgetParams
+>(
+  renderFn: Renderer<
+    GeoSearchRenderState,
+    TWidgetParams & GeoSearchConnectorParams
+  >,
   unmountFn: Unmounter = noop
 ) {
   checkRendering(renderFn, withUsage());
 
-  return <
-    TWidgetParams extends GeoSearchConnectorParams<THit>,
-    THit extends GeoHit = GeoHit
-  >(
-    widgetParams: TWidgetParams & TBaseWidgetParams
+  return <THit extends GeoHit = GeoHit>(
+    widgetParams: TWidgetParams & GeoSearchConnectorParams<THit>
   ) => {
     const {
       enableRefineOnMapMove = true,
       transformItems = ((items) => items) as NonNullable<
-        GeoSearchConnectorParams['transformItems']
+        GeoSearchConnectorParams<THit>['transformItems']
       >,
     } = widgetParams || {};
 

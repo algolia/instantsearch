@@ -13,6 +13,7 @@ import type {
   BaseHit,
   Renderer,
   Unmounter,
+  UnknownWidgetParams,
 } from '../../types';
 import type {
   PlainSearchParameters,
@@ -86,23 +87,25 @@ export type FrequentlyBoughtTogetherConnector<
   FrequentlyBoughtTogetherConnectorParams<THit>
 >;
 
-export default (function connectFrequentlyBoughtTogether<TBaseWidgetParams>(
-  renderFn: Renderer<FrequentlyBoughtTogetherRenderState, TBaseWidgetParams>,
+export default (function connectFrequentlyBoughtTogether<
+  TWidgetParams extends UnknownWidgetParams
+>(
+  renderFn: Renderer<
+    FrequentlyBoughtTogetherRenderState,
+    TWidgetParams & FrequentlyBoughtTogetherConnectorParams
+  >,
   unmountFn: Unmounter = noop
 ) {
   checkRendering(renderFn, withUsage());
 
-  return <
-    TWidgetParams extends FrequentlyBoughtTogetherConnectorParams<THit>,
-    THit extends NonNullable<object> = BaseHit
-  >(
-    widgetParams: TWidgetParams & TBaseWidgetParams
+  return <THit extends NonNullable<object> = BaseHit>(
+    widgetParams: TWidgetParams & FrequentlyBoughtTogetherConnectorParams<THit>
   ) => {
     const {
       // @MAJOR: this can default to false
       escapeHTML = true,
       transformItems = ((items) => items) as NonNullable<
-        TWidgetParams['transformItems']
+        FrequentlyBoughtTogetherConnectorParams<THit>['transformItems']
       >,
       objectIDs,
       limit,

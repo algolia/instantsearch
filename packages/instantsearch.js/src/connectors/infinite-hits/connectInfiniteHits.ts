@@ -21,6 +21,7 @@ import type {
   BaseHit,
   Renderer,
   Unmounter,
+  UnknownWidgetParams,
 } from '../../types';
 import type {
   AlgoliaSearchHelper as Helper,
@@ -198,23 +199,22 @@ function extractHitsFromCachedHits<THit extends NonNullable<object>>(
     }, []);
 }
 
-export default (function connectInfiniteHits<TBaseWidgetParams>(
-  renderFn: Renderer<InfiniteHitsRenderState, TBaseWidgetParams>,
+export default (function connectInfiniteHits<
+  TWidgetParams extends UnknownWidgetParams
+>(
+  renderFn: Renderer<InfiniteHitsRenderState, TWidgetParams>,
   unmountFn: Unmounter = noop
 ) {
   checkRendering(renderFn, withUsage());
 
-  return <
-    TWidgetParams extends InfiniteHitsConnectorParams<THit>,
-    THit extends NonNullable<object> = BaseHit
-  >(
-    widgetParams: TWidgetParams & TBaseWidgetParams
+  return <THit extends NonNullable<object> = BaseHit>(
+    widgetParams: TWidgetParams & InfiniteHitsConnectorParams<THit>
   ) => {
     const {
       // @MAJOR: this can default to false
       escapeHTML = true,
       transformItems = ((items) => items) as NonNullable<
-        TWidgetParams['transformItems']
+        InfiniteHitsConnectorParams<THit>['transformItems']
       >,
       cache = getInMemoryCache<THit>(),
     } = widgetParams || {};
