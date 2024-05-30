@@ -10,7 +10,6 @@ import {
   createSendEventForHits,
   createBindEventForHits,
   walkIndex,
-  warning,
 } from '../../lib/utils';
 
 import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
@@ -404,13 +403,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
           : true;
 
         return {
-          get hits() {
-            warning(
-              false,
-              'The `hits` property is deprecated. Use `items` instead.'
-            );
-            return items;
-          },
+          hits: items,
           items,
           currentPageHits,
           sendEvent,

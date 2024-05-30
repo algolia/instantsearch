@@ -8,7 +8,6 @@ import {
   createSendEventForHits,
   createBindEventForHits,
   noop,
-  warning,
 } from '../../lib/utils';
 
 import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
@@ -162,13 +161,7 @@ const connectHits: HitsConnector = function connectHits(
 
         if (!results) {
           return {
-            get hits() {
-              warning(
-                false,
-                'The `hits` property is deprecated. Use `items` instead.'
-              );
-              return [];
-            },
+            hits: [],
             items: [],
             results: undefined,
             banner: undefined,
@@ -200,13 +193,7 @@ const connectHits: HitsConnector = function connectHits(
         const banner = results.renderingContent?.widgets?.banners?.[0];
 
         return {
-          get hits() {
-            warning(
-              false,
-              'The `hits` property is deprecated. Use `items` instead.'
-            );
-            return items;
-          },
+          hits: items,
           items,
           results,
           banner,
