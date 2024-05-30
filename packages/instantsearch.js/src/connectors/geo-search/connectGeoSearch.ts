@@ -46,9 +46,6 @@ function setBoundingBoxAsString(state: SearchParameters, value: string) {
   );
 }
 
-// export type GeoHit<THit extends NonNullable<object> = BaseHit> = Hit<THit> &
-//   Required<Pick<Hit, '_geoloc'>>;
-
 type Bounds = {
   /**
    * The top right corner of the map view.
