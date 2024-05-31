@@ -13,7 +13,7 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import index from '../../../widgets/index/index';
+import { index } from '../../../widgets';
 import connectSortBy from '../connectSortBy';
 
 import type { SortByRenderState } from '../connectSortBy';

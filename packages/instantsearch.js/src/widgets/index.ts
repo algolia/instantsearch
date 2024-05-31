@@ -27,6 +27,7 @@ export { default as hierarchicalMenu } from './hierarchical-menu/hierarchical-me
 export { default as hits } from './hits/hits';
 export { default as hitsPerPage } from './hits-per-page/hits-per-page';
 export { default as index } from './index/index';
+export type { IndexWidget } from './index/index';
 export { default as infiniteHits } from './infinite-hits/infinite-hits';
 export { default as menu } from './menu/menu';
 export { default as menuSelect } from './menu-select/menu-select';

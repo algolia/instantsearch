@@ -1,4 +1,4 @@
-import type { IndexWidget } from '../widgets/index/index';
+import type { IndexWidget } from '../widgets';
 import type { InstantSearch } from './instantsearch';
 import type { IndexRenderState, WidgetRenderState } from './render-state';
 import type { IndexUiState, UiState } from './ui-state';
@@ -335,6 +335,8 @@ export type Widget<
     RenderStateLifeCycle<TWidgetDescription>
 > &
   (SearchWidget<TWidgetDescription> | RecommendWidget<TWidgetDescription>);
+
+export type { IndexWidget } from '../widgets';
 
 export type TransformItemsMetadata = {
   results?: SearchResults;

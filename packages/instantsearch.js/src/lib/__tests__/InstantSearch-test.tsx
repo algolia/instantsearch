@@ -30,8 +30,7 @@ import type {
   SearchBoxWidgetDescription,
   SearchBoxConnectorParams,
 } from '../../connectors/search-box/connectSearchBox';
-import type { UiState, Widget } from '../../types';
-import type { IndexWidget } from '../../widgets/index/index';
+import type { UiState, Widget, IndexWidget } from '../../types';
 import type { RefObject } from 'preact';
 
 type SearchBoxWidgetInstance = Widget<

@@ -41,6 +41,11 @@
 
       "ae-missing-release-tag": {
         "logLevel": "none"
+      },
+
+      "ae-wrong-input-file-type": {
+        // This may be returned falsely, to investigate!
+        "logLevel": "warning"
       }
     },
 

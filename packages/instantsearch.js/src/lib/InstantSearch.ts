@@ -7,7 +7,7 @@ import {
   isMetadataEnabled,
 } from '../middlewares/createMetadataMiddleware';
 import { createRouterMiddleware } from '../middlewares/createRouterMiddleware';
-import index from '../widgets/index/index';
+import { index } from '../widgets';
 
 import createHelpers from './createHelpers';
 import {
@@ -32,6 +32,7 @@ import type {
   InsightsClient as AlgoliaInsightsClient,
   SearchClient,
   Widget,
+  IndexWidget,
   UiState,
   CreateURL,
   Middleware,
@@ -39,7 +40,6 @@ import type {
   RenderState,
   InitialResults,
 } from '../types';
-import type { IndexWidget } from '../widgets/index/index';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({

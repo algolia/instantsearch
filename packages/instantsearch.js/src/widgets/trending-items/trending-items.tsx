@@ -17,7 +17,13 @@ import type {
   TrendingItemsRenderState,
 } from '../../connectors/trending-items/connectTrendingItems';
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type { Template, WidgetFactory, Hit, Renderer } from '../../types';
+import type {
+  Template,
+  WidgetFactory,
+  Hit,
+  Renderer,
+  BaseHit,
+} from '../../types';
 import type { RecommendResultItem } from 'algoliasearch-helper';
 import type {
   RecommendClassNames,
@@ -33,21 +39,21 @@ const TrendingItems = createTrendingItemsComponent({
   Fragment,
 });
 
-type CreateRendererProps = {
+type CreateRendererProps<THit extends NonNullable<object> = BaseHit> = {
   containerNode: HTMLElement;
   cssClasses: TrendingItemsCSSClasses;
   renderState: {
-    templateProps?: PreparedTemplateProps<TrendingItemsTemplates>;
+    templateProps?: PreparedTemplateProps<TrendingItemsTemplates<THit>>;
   };
-  templates: TrendingItemsTemplates;
+  templates: TrendingItemsTemplates<THit>;
 };
 
-function createRenderer({
+function createRenderer<THit extends NonNullable<object> = BaseHit>({
   renderState,
   cssClasses,
   containerNode,
   templates,
-}: CreateRendererProps): Renderer<
+}: CreateRendererProps<THit>): Renderer<
   TrendingItemsRenderState,
   Partial<TrendingItemsWidgetParams>
 > {
@@ -57,8 +63,9 @@ function createRenderer({
   ) {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        defaultTemplates: {} as TrendingItemsTemplates,
+        defaultTemplates: {} as unknown as Required<
+          TrendingItemsTemplates<THit>
+        >,
         templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
@@ -127,29 +134,32 @@ function createRenderer({
 
 export type TrendingItemsCSSClasses = Partial<RecommendClassNames>;
 
-export type TrendingItemsTemplates = Partial<{
-  /**
-   * Template to use when there are no results.
-   */
-  empty: Template<RecommendResultItem>;
+export type TrendingItemsTemplates<THit extends NonNullable<object> = BaseHit> =
+  Partial<{
+    /**
+     * Template to use when there are no results.
+     */
+    empty: Template<RecommendResultItem<Hit<THit>>>;
 
-  /**
-   * Template to use for the header of the widget.
-   */
-  header: Template<
-    Pick<
-      Parameters<NonNullable<TrendingItemsUiProps<Hit>['headerComponent']>>[0],
-      'items'
-    > & { cssClasses: RecommendClassNames }
-  >;
+    /**
+     * Template to use for the header of the widget.
+     */
+    header: Template<
+      Pick<
+        Parameters<
+          NonNullable<TrendingItemsUiProps<Hit<THit>>['headerComponent']>
+        >[0],
+        'items'
+      > & { cssClasses: RecommendClassNames }
+    >;
 
-  /**
-   * Template to use for each result. This template will receive an object containing a single record.
-   */
-  item: Template<Hit>;
-}>;
+    /**
+     * Template to use for each result. This template will receive an object containing a single record.
+     */
+    item: Template<Hit<THit>>;
+  }>;
 
-type TrendingItemsWidgetParams = {
+type TrendingItemsWidgetParams<THit extends NonNullable<object> = BaseHit> = {
   /**
    * CSS selector or `HTMLElement` to insert the widget into.
    */
@@ -158,7 +168,7 @@ type TrendingItemsWidgetParams = {
   /**
    * Templates to customize the widget.
    */
-  templates?: TrendingItemsTemplates;
+  templates?: TrendingItemsTemplates<THit>;
 
   /**
    * CSS classes to add to the widget elements.
@@ -174,8 +184,11 @@ export type TrendingItemsWidget = WidgetFactory<
   TrendingItemsWidgetParams
 >;
 
-const trendingItems: TrendingItemsWidget = function trendingItems(
-  widgetParams
+export default (function trendingItems<
+  THit extends NonNullable<object> = BaseHit
+>(
+  widgetParams: TrendingItemsWidgetParams<THit> &
+    TrendingItemsConnectorParams<THit>
 ) {
   const {
     container,
@@ -223,6 +236,4 @@ const trendingItems: TrendingItemsWidget = function trendingItems(
     }),
     $$widgetType: 'ais.trendingItems',
   };
-};
-
-export default trendingItems;
+} satisfies TrendingItemsWidget);

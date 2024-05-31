@@ -9,17 +9,17 @@ import {
   createInitOptions,
   createRenderOptions,
 } from '../../../../test/createWidget';
-import connectFrequentlyBoughtTogether from '../connectFrequentlyBoughtTogether';
+import connectLookingSimilar from '../connectLookingSimilar';
 
-describe('connectFrequentlyBoughtTogether', () => {
+describe('connectLookingSimilar', () => {
   it('throws without render function', () => {
     expect(() => {
       // @ts-expect-error
-      connectFrequentlyBoughtTogether()({});
+      connectLookingSimilar()({});
     }).toThrowErrorMatchingInlineSnapshot(`
       "The render function is not valid (received type Undefined).
 
-      See documentation: https://www.algolia.com/doc/api-reference/widgets/frequently-bought-together/js/#connector"
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/looking-similar/js/#connector"
     `);
   });
 
@@ -27,12 +27,12 @@ describe('connectFrequentlyBoughtTogether', () => {
     const render = jest.fn();
     const unmount = jest.fn();
 
-    const customFbt = connectFrequentlyBoughtTogether(render, unmount);
-    const widget = customFbt({ objectIDs: ['1'] });
+    const customLookingSimilar = connectLookingSimilar(render, unmount);
+    const widget = customLookingSimilar({ objectIDs: ['1'] });
 
     expect(widget).toEqual(
       expect.objectContaining({
-        $$type: 'ais.frequentlyBoughtTogether',
+        $$type: 'ais.lookingSimilar',
         init: expect.any(Function),
         render: expect.any(Function),
         dispose: expect.any(Function),
@@ -44,20 +44,20 @@ describe('connectFrequentlyBoughtTogether', () => {
     const render = jest.fn();
     const unmount = jest.fn();
 
-    const customFrequentlyBoughtTogether = connectFrequentlyBoughtTogether<{
+    const customLookingSimilar = connectLookingSimilar<{
       container: string;
     }>(render, unmount);
-    const widget = customFrequentlyBoughtTogether({
+    const widget = customLookingSimilar({
       container: '#container',
       objectIDs: ['1'],
     });
 
-    expect(widget.$$type).toBe('ais.frequentlyBoughtTogether');
+    expect(widget.$$type).toBe('ais.lookingSimilar');
   });
 
   it('Renders during init and render', () => {
     const renderFn = jest.fn();
-    const makeWidget = connectFrequentlyBoughtTogether(renderFn);
+    const makeWidget = connectLookingSimilar(renderFn);
     const widget = makeWidget({ objectIDs: ['1'] });
 
     // test if widget is not rendered yet at this point
@@ -95,7 +95,7 @@ describe('connectFrequentlyBoughtTogether', () => {
   describe('getWidgetParameters', () => {
     it('forwards widgetParams to the recommend state', () => {
       const render = () => {};
-      const makeWidget = connectFrequentlyBoughtTogether(render);
+      const makeWidget = connectLookingSimilar(render);
       const widget = makeWidget({
         objectIDs: ['1', '2'],
         limit: 10,
@@ -111,21 +111,23 @@ describe('connectFrequentlyBoughtTogether', () => {
 
       expect(actual).toEqual(
         new RecommendParameters()
-          .addFrequentlyBoughtTogether({
+          .addLookingSimilar({
             // @ts-expect-error
             $$id: widget.$$id,
             objectID: '1',
             maxRecommendations: 10,
             threshold: 95,
             queryParameters: { userToken: 'token' },
+            fallbackParameters: {},
           })
-          .addFrequentlyBoughtTogether({
+          .addLookingSimilar({
             // @ts-expect-error
             $$id: widget.$$id,
             objectID: '2',
             maxRecommendations: 10,
             threshold: 95,
             queryParameters: { userToken: 'token' },
+            fallbackParameters: {},
           })
       );
     });

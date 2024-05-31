@@ -17,6 +17,9 @@ import type {
   Hit,
   WidgetRenderState,
   BaseHit,
+  Unmounter,
+  Renderer,
+  IndexRenderState,
 } from '../../types';
 import type { SearchResults } from 'algoliasearch-helper';
 
@@ -31,7 +34,7 @@ type Banner = NonNullable<
   >['widgets']['banners']
 >[number];
 
-export type HitsRenderState<THit extends BaseHit = BaseHit> = {
+export type HitsRenderState<THit extends NonNullable<object> = BaseHit> = {
   /**
    * The matched hits from Algolia API.
    */
@@ -58,7 +61,7 @@ export type HitsRenderState<THit extends BaseHit = BaseHit> = {
   bindEvent: BindEventForHits;
 };
 
-export type HitsConnectorParams<THit extends BaseHit = BaseHit> = {
+export type HitsConnectorParams<THit extends NonNullable<object> = BaseHit> = {
   /**
    * Whether to escape HTML tags from hits string values.
    *
@@ -72,26 +75,27 @@ export type HitsConnectorParams<THit extends BaseHit = BaseHit> = {
   transformItems?: TransformItems<Hit<THit>>;
 };
 
-export type HitsWidgetDescription<THit extends BaseHit = BaseHit> = {
-  $$type: 'ais.hits';
-  renderState: HitsRenderState<THit>;
-  indexRenderState: {
-    hits: WidgetRenderState<HitsRenderState<THit>, HitsConnectorParams<THit>>;
+export type HitsWidgetDescription<THit extends NonNullable<object> = BaseHit> =
+  {
+    $$type: 'ais.hits';
+    renderState: HitsRenderState<THit>;
+    indexRenderState: {
+      hits: WidgetRenderState<HitsRenderState<THit>, HitsConnectorParams<THit>>;
+    };
   };
-};
 
-export type HitsConnector<THit extends BaseHit = BaseHit> = Connector<
-  HitsWidgetDescription<THit>,
-  HitsConnectorParams<THit>
->;
+export type HitsConnector<THit extends NonNullable<object> = BaseHit> =
+  Connector<HitsWidgetDescription<THit>, HitsConnectorParams<THit>>;
 
-const connectHits: HitsConnector = function connectHits(
-  renderFn,
-  unmountFn = noop
+export default (function connectHits<TWidgetParams>(
+  renderFn: Renderer<HitsRenderState, TWidgetParams & HitsConnectorParams>,
+  unmountFn: Unmounter = noop
 ) {
   checkRendering(renderFn, withUsage());
 
-  return (widgetParams) => {
+  return <THit extends NonNullable<object> = BaseHit>(
+    widgetParams: TWidgetParams & HitsConnectorParams<THit>
+  ) => {
     const {
       // @MAJOR: this can default to false
       escapeHTML = true,
@@ -129,7 +133,11 @@ const connectHits: HitsConnector = function connectHits(
         renderState.sendEvent('view:internal', renderState.hits);
       },
 
-      getRenderState(renderState, renderOptions) {
+      getRenderState(
+        renderState,
+        renderOptions
+        // Type is explicitly redefined, to avoid having the TWidgetParams type in the definition
+      ): IndexRenderState & HitsWidgetDescription['indexRenderState'] {
         return {
           ...renderState,
           hits: this.getWidgetRenderState(renderOptions),
@@ -214,7 +222,7 @@ const connectHits: HitsConnector = function connectHits(
         );
       },
 
-      getWidgetSearchParameters(state) {
+      getWidgetSearchParameters(state, _uiState) {
         if (!escapeHTML) {
           return state;
         }
@@ -224,6 +232,4 @@ const connectHits: HitsConnector = function connectHits(
       },
     };
   };
-};
-
-export default connectHits;
+} satisfies HitsConnector);

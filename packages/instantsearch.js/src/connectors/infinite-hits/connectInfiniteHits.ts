@@ -19,6 +19,10 @@ import type {
   Hit,
   WidgetRenderState,
   BaseHit,
+  Renderer,
+  Unmounter,
+  UnknownWidgetParams,
+  IndexRenderState,
 } from '../../types';
 import type {
   AlgoliaSearchHelper as Helper,
@@ -27,17 +31,17 @@ import type {
   SearchResults,
 } from 'algoliasearch-helper';
 
-export type InfiniteHitsCachedHits<THit extends BaseHit> = {
+export type InfiniteHitsCachedHits<THit extends NonNullable<object>> = {
   [page: number]: Array<Hit<THit>>;
 };
 
-type Read<THit extends BaseHit> = ({
+type Read<THit extends NonNullable<object>> = ({
   state,
 }: {
   state: PlainSearchParameters;
 }) => InfiniteHitsCachedHits<THit> | null;
 
-type Write<THit extends BaseHit> = ({
+type Write<THit extends NonNullable<object>> = ({
   state,
   hits,
 }: {
@@ -45,12 +49,14 @@ type Write<THit extends BaseHit> = ({
   hits: InfiniteHitsCachedHits<THit>;
 }) => void;
 
-export type InfiniteHitsCache<THit extends BaseHit = BaseHit> = {
+export type InfiniteHitsCache<THit extends NonNullable<object> = BaseHit> = {
   read: Read<THit>;
   write: Write<THit>;
 };
 
-export type InfiniteHitsConnectorParams<THit extends BaseHit = BaseHit> = {
+export type InfiniteHitsConnectorParams<
+  THit extends NonNullable<object> = BaseHit
+> = {
   /**
    * Escapes HTML entities from hits string values.
    *
@@ -79,7 +85,9 @@ export type InfiniteHitsConnectorParams<THit extends BaseHit = BaseHit> = {
   cache?: InfiniteHitsCache<THit>;
 };
 
-export type InfiniteHitsRenderState<THit extends BaseHit = BaseHit> = {
+export type InfiniteHitsRenderState<
+  THit extends NonNullable<object> = BaseHit
+> = {
   /**
    * Loads the previous results.
    */
@@ -131,7 +139,9 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
-export type InfiniteHitsWidgetDescription<THit extends BaseHit = BaseHit> = {
+export type InfiniteHitsWidgetDescription<
+  THit extends NonNullable<object> = BaseHit
+> = {
   $$type: 'ais.infiniteHits';
   renderState: InfiniteHitsRenderState<THit>;
   indexRenderState: {
@@ -145,10 +155,11 @@ export type InfiniteHitsWidgetDescription<THit extends BaseHit = BaseHit> = {
   };
 };
 
-export type InfiniteHitsConnector<THit extends BaseHit = BaseHit> = Connector<
-  InfiniteHitsWidgetDescription<THit>,
-  InfiniteHitsConnectorParams<THit>
->;
+export type InfiniteHitsConnector<THit extends NonNullable<object> = BaseHit> =
+  Connector<
+    InfiniteHitsWidgetDescription<THit>,
+    InfiniteHitsConnectorParams<THit>
+  >;
 
 function getStateWithoutPage(state: PlainSearchParameters) {
   const { page, ...rest } = state || {};
@@ -160,7 +171,9 @@ function normalizeState(state: PlainSearchParameters) {
   return rest;
 }
 
-function getInMemoryCache<THit extends BaseHit>(): InfiniteHitsCache<THit> {
+function getInMemoryCache<
+  THit extends NonNullable<object>
+>(): InfiniteHitsCache<THit> {
   let cachedHits: InfiniteHitsCachedHits<THit> | null = null;
   let cachedState: PlainSearchParameters | null = null;
   return {
@@ -176,7 +189,7 @@ function getInMemoryCache<THit extends BaseHit>(): InfiniteHitsCache<THit> {
   };
 }
 
-function extractHitsFromCachedHits<THit extends BaseHit>(
+function extractHitsFromCachedHits<THit extends NonNullable<object>>(
   cachedHits: InfiniteHitsCachedHits<THit>
 ) {
   return Object.keys(cachedHits)
@@ -187,23 +200,24 @@ function extractHitsFromCachedHits<THit extends BaseHit>(
     }, []);
 }
 
-const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
-  renderFn,
-  unmountFn = noop
+export default (function connectInfiniteHits<
+  TWidgetParams extends UnknownWidgetParams
+>(
+  renderFn: Renderer<InfiniteHitsRenderState, TWidgetParams>,
+  unmountFn: Unmounter = noop
 ) {
   checkRendering(renderFn, withUsage());
 
-  // @TODO: this should be a generic, but a Connector can not yet be generic itself
-  type THit = BaseHit;
-
-  return (widgetParams) => {
+  return <THit extends NonNullable<object> = BaseHit>(
+    widgetParams: TWidgetParams & InfiniteHitsConnectorParams<THit>
+  ) => {
     const {
       // @MAJOR: this can default to false
       escapeHTML = true,
       transformItems = ((items) => items) as NonNullable<
-        InfiniteHitsConnectorParams['transformItems']
+        InfiniteHitsConnectorParams<THit>['transformItems']
       >,
-      cache = getInMemoryCache(),
+      cache = getInMemoryCache<THit>(),
     } = widgetParams || {};
     let showPrevious: () => void;
     let showMore: () => void;
@@ -293,7 +307,11 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
         sendEvent('view:internal', widgetRenderState.currentPageHits);
       },
 
-      getRenderState(renderState, renderOptions) {
+      getRenderState(
+        renderState,
+        renderOptions
+        // Type is explicitly redefined, to avoid having the TWidgetParams type in the definition
+      ): IndexRenderState & InfiniteHitsWidgetDescription['indexRenderState'] {
         return {
           ...renderState,
           infiniteHits: this.getWidgetRenderState(renderOptions),
@@ -464,6 +482,4 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
       },
     };
   };
-};
-
-export default connectInfiniteHits;
+} satisfies InfiniteHitsConnector);

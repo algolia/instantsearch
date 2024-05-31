@@ -17,7 +17,13 @@ import type {
   RelatedProductsRenderState,
 } from '../../connectors/related-products/connectRelatedProducts';
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type { Template, WidgetFactory, Hit, Renderer } from '../../types';
+import type {
+  Template,
+  WidgetFactory,
+  Hit,
+  Renderer,
+  BaseHit,
+} from '../../types';
 import type { RecommendResultItem } from 'algoliasearch-helper';
 import type {
   RecommendClassNames,
@@ -33,21 +39,21 @@ const RelatedProducts = createRelatedProductsComponent({
   Fragment,
 });
 
-type CreateRendererProps = {
+type CreateRendererProps<THit extends NonNullable<object> = BaseHit> = {
   containerNode: HTMLElement;
   cssClasses: RelatedProductsCSSClasses;
   renderState: {
-    templateProps?: PreparedTemplateProps<RelatedProductsTemplates>;
+    templateProps?: PreparedTemplateProps<RelatedProductsTemplates<THit>>;
   };
-  templates: RelatedProductsTemplates;
+  templates: RelatedProductsTemplates<THit>;
 };
 
-function createRenderer({
+function createRenderer<THit extends NonNullable<object> = BaseHit>({
   renderState,
   cssClasses,
   containerNode,
   templates,
-}: CreateRendererProps): Renderer<
+}: CreateRendererProps<THit>): Renderer<
   RelatedProductsRenderState,
   Partial<RelatedProductsWidgetParams>
 > {
@@ -57,8 +63,9 @@ function createRenderer({
   ) {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        defaultTemplates: {} as RelatedProductsTemplates,
+        defaultTemplates: {} as unknown as Required<
+          RelatedProductsTemplates<THit>
+        >,
         templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
@@ -127,11 +134,13 @@ function createRenderer({
 
 export type RelatedProductsCSSClasses = Partial<RecommendClassNames>;
 
-export type RelatedProductsTemplates = Partial<{
+export type RelatedProductsTemplates<
+  THit extends NonNullable<object> = BaseHit
+> = Partial<{
   /**
    * Template to use when there are no results.
    */
-  empty: Template<RecommendResultItem>;
+  empty: Template<RecommendResultItem<Hit<THit>>>;
 
   /**
    * Template to use for the header of the widget.
@@ -139,7 +148,7 @@ export type RelatedProductsTemplates = Partial<{
   header: Template<
     Pick<
       Parameters<
-        NonNullable<RelatedProductsUiProps<Hit>['headerComponent']>
+        NonNullable<RelatedProductsUiProps<Hit<THit>>['headerComponent']>
       >[0],
       'items'
     > & { cssClasses: RecommendClassNames }
@@ -148,10 +157,10 @@ export type RelatedProductsTemplates = Partial<{
   /**
    * Template to use for each result. This template will receive an object containing a single record.
    */
-  item: Template<Hit>;
+  item: Template<Hit<THit>>;
 }>;
 
-type RelatedProductsWidgetParams = {
+type RelatedProductsWidgetParams<THit extends NonNullable<object> = BaseHit> = {
   /**
    * CSS selector or `HTMLElement` to insert the widget into.
    */
@@ -160,7 +169,7 @@ type RelatedProductsWidgetParams = {
   /**
    * Templates to customize the widget.
    */
-  templates?: RelatedProductsTemplates;
+  templates?: RelatedProductsTemplates<THit>;
 
   /**
    * CSS classes to add to the widget elements.
@@ -176,8 +185,11 @@ export type RelatedProductsWidget = WidgetFactory<
   RelatedProductsWidgetParams
 >;
 
-const relatedProducts: RelatedProductsWidget = function relatedProducts(
-  widgetParams
+export default (function relatedProducts<
+  THit extends NonNullable<object> = BaseHit
+>(
+  widgetParams: RelatedProductsWidgetParams<THit> &
+    RelatedProductsConnectorParams<THit>
 ) {
   const {
     container,
@@ -221,6 +233,4 @@ const relatedProducts: RelatedProductsWidget = function relatedProducts(
     }),
     $$widgetType: 'ais.relatedProducts',
   };
-};
-
-export default relatedProducts;
+} satisfies RelatedProductsWidget);
