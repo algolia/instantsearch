@@ -7,13 +7,14 @@ import {
   isMetadataEnabled,
 } from '../middlewares/createMetadataMiddleware';
 import { createRouterMiddleware } from '../middlewares/createRouterMiddleware';
-import index from '../widgets/index/index';
+import { index } from '../widgets';
 
 import createHelpers from './createHelpers';
 import {
   createDocumentationMessageGenerator,
   createDocumentationLink,
   defer,
+  hydrateRecommendCache,
   hydrateSearchClient,
   noop,
   warning,
@@ -31,6 +32,7 @@ import type {
   InsightsClient as AlgoliaInsightsClient,
   SearchClient,
   Widget,
+  IndexWidget,
   UiState,
   CreateURL,
   Middleware,
@@ -38,7 +40,6 @@ import type {
   RenderState,
   InitialResults,
 } from '../types';
-import type { IndexWidget } from '../widgets/index/index';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -661,6 +662,7 @@ See documentation: ${createDocumentationLink({
 
     if (this._initialResults) {
       hydrateSearchClient(this.client, this._initialResults);
+      hydrateRecommendCache(this.mainHelper, this._initialResults);
 
       const originalScheduleSearch = this.scheduleSearch;
       // We don't schedule a first search when initial results are provided

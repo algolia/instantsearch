@@ -1,6 +1,15 @@
 import { hits } from 'instantsearch.js/es/widgets';
 
-export const products = hits({
+type Hit = {
+  name: string;
+  image: string;
+  categories: string[];
+  description: string;
+  price: number;
+  rating: number;
+};
+
+export const products = hits<Hit>({
   container: '[data-widget="hits"]',
   templates: {
     item(hit, { html, components }) {

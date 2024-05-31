@@ -10,7 +10,7 @@
  **/
 function RecommendResults(state, results) {
   this._state = state;
-  this._rawResults = results;
+  this._rawResults = {};
 
   // eslint-disable-next-line consistent-this
   var self = this;
@@ -18,6 +18,7 @@ function RecommendResults(state, results) {
   state.params.forEach(function (param) {
     var id = param.$$id;
     self[id] = results[id];
+    self._rawResults[id] = results[id];
   });
 }
 

@@ -1,5 +1,4 @@
-import type { InstantSearch, UiState, Widget } from '../../types';
-import type { IndexWidget } from '../../widgets/index/index';
+import type { InstantSearch, UiState, Widget, IndexWidget } from '../../types';
 
 export function createInitArgs(
   instantSearchInstance: InstantSearch,

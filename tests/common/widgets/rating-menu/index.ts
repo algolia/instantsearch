@@ -1,6 +1,7 @@
 import { fakeAct, skippableDescribe } from '../../common';
 
 import { createBehaviourTests } from './behaviour';
+import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
 import type { RatingMenuWidget } from 'instantsearch.js/es/widgets/rating-menu/rating-menu';
@@ -20,5 +21,6 @@ export function createRatingMenuWidgetTests(
 
   skippableDescribe('RatingMenu widget common tests', skippedTests, () => {
     createBehaviourTests(setup, { act, skippedTests });
+    createOptionsTests(setup, { act, skippedTests });
   });
 }

@@ -7,6 +7,7 @@ import {
   panel,
   refinementList,
   searchBox,
+  trendingItems,
 } from 'instantsearch.js/es/widgets';
 
 const searchClient = algoliasearch(
@@ -51,6 +52,21 @@ search.addWidgets([
   }),
   pagination({
     container: '#pagination',
+  }),
+  trendingItems({
+    container: '#trending',
+    limit: 4,
+    templates: {
+      item: (item, { html }) => html`
+        <article>
+          <div>
+            <img src="${item.image}" />
+            <h2>${item.name}</h2>
+          </div>
+          <a href="/products.html?pid=${item.objectID}">See product</a>
+        </article>
+      `,
+    },
   }),
 ]);
 

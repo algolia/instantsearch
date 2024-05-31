@@ -17,7 +17,13 @@ import type {
   LookingSimilarRenderState,
 } from '../../connectors/looking-similar/connectLookingSimilar';
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type { Template, WidgetFactory, Hit, Renderer } from '../../types';
+import type {
+  Template,
+  WidgetFactory,
+  Hit,
+  Renderer,
+  BaseHit,
+} from '../../types';
 import type { RecommendResultItem } from 'algoliasearch-helper';
 import type {
   RecommendClassNames,
@@ -33,28 +39,27 @@ const LookingSimilar = createLookingSimilarComponent({
   Fragment,
 });
 
-const renderer =
-  ({
-    renderState,
-    cssClasses,
-    containerNode,
-    templates,
-  }: {
-    containerNode: HTMLElement;
-    cssClasses: LookingSimilarCSSClasses;
-    renderState: {
-      templateProps?: PreparedTemplateProps<Required<LookingSimilarTemplates>>;
-    };
-    templates: LookingSimilarTemplates;
-  }): Renderer<
-    LookingSimilarRenderState,
-    Partial<LookingSimilarWidgetParams>
-  > =>
-  ({ items, results, instantSearchInstance }, isFirstRendering) => {
+function createRenderer<THit extends NonNullable<object> = BaseHit>({
+  renderState,
+  cssClasses,
+  containerNode,
+  templates,
+}: {
+  containerNode: HTMLElement;
+  cssClasses: LookingSimilarCSSClasses;
+  renderState: {
+    templateProps?: PreparedTemplateProps<
+      Required<LookingSimilarTemplates<THit>>
+    >;
+  };
+  templates: LookingSimilarTemplates<THit>;
+}): Renderer<LookingSimilarRenderState, Partial<LookingSimilarWidgetParams>> {
+  return ({ items, results, instantSearchInstance }, isFirstRendering) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        defaultTemplates: {} as Required<LookingSimilarTemplates>,
+        defaultTemplates: {} as unknown as Required<
+          LookingSimilarTemplates<THit>
+        >,
         templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
@@ -115,21 +120,26 @@ const renderer =
       containerNode
     );
   };
+}
 
 export type LookingSimilarCSSClasses = Partial<RecommendClassNames>;
 
-export type LookingSimilarTemplates = Partial<{
+export type LookingSimilarTemplates<
+  THit extends NonNullable<object> = BaseHit
+> = Partial<{
   /**
    * Template to use when there are no results.
    */
-  empty: Template<RecommendResultItem>;
+  empty: Template<RecommendResultItem<Hit<THit>>>;
 
   /**
    * Template to use for the header of the widget.
    */
   header: Template<
     Pick<
-      Parameters<NonNullable<LookingSimilarUiProps<Hit>['headerComponent']>>[0],
+      Parameters<
+        NonNullable<LookingSimilarUiProps<Hit<THit>>['headerComponent']>
+      >[0],
       'items'
     > & { cssClasses: RecommendClassNames }
   >;
@@ -137,10 +147,10 @@ export type LookingSimilarTemplates = Partial<{
   /**
    * Template to use for each result. This template will receive an object containing a single record.
    */
-  item: Template<Hit>;
+  item: Template<Hit<THit>>;
 }>;
 
-type LookingSimilarWidgetParams = {
+type LookingSimilarWidgetParams<THit extends NonNullable<object> = BaseHit> = {
   /**
    * CSS Selector or HTMLElement to insert the widget.
    */
@@ -149,7 +159,7 @@ type LookingSimilarWidgetParams = {
   /**
    * Templates to use for the widget.
    */
-  templates?: LookingSimilarTemplates;
+  templates?: LookingSimilarTemplates<THit>;
 
   /**
    * CSS classes to add.
@@ -165,8 +175,11 @@ export type LookingSimilarWidget = WidgetFactory<
   LookingSimilarWidgetParams
 >;
 
-const lookingSimilar: LookingSimilarWidget = function lookingSimilar(
-  widgetParams
+export default (function lookingSimilar<
+  THit extends NonNullable<object> = BaseHit
+>(
+  widgetParams: LookingSimilarWidgetParams<THit> &
+    LookingSimilarConnectorParams<THit>
 ) {
   const {
     container,
@@ -187,7 +200,7 @@ const lookingSimilar: LookingSimilarWidget = function lookingSimilar(
 
   const containerNode = getContainerNode(container);
 
-  const specializedRenderer = renderer({
+  const specializedRenderer = createRenderer({
     containerNode,
     cssClasses,
     renderState: {},
@@ -209,6 +222,4 @@ const lookingSimilar: LookingSimilarWidget = function lookingSimilar(
     }),
     $$widgetType: 'ais.lookingSimilar',
   };
-};
-
-export default lookingSimilar;
+} satisfies LookingSimilarWidget);

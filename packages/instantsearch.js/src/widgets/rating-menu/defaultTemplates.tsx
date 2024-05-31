@@ -72,7 +72,9 @@ const defaultTemplates: RatingMenuComponentTemplates = {
             />
           </svg>
         ))}
-        <span className={cx(cssClasses.label)}>&amp; Up</span>
+        <span aria-hidden="true" className={cx(cssClasses.label)}>
+          &amp; Up
+        </span>
         {count && (
           <span className={cx(cssClasses.count)}>{formatNumber(count)}</span>
         )}

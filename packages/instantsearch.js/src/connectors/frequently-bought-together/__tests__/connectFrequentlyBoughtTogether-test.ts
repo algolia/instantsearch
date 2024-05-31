@@ -40,6 +40,21 @@ describe('connectFrequentlyBoughtTogether', () => {
     );
   });
 
+  it('accepts custom parameters', () => {
+    const render = jest.fn();
+    const unmount = jest.fn();
+
+    const customFrequentlyBoughtTogether = connectFrequentlyBoughtTogether<{
+      container: string;
+    }>(render, unmount);
+    const widget = customFrequentlyBoughtTogether({
+      container: '#container',
+      objectIDs: ['1'],
+    });
+
+    expect(widget.$$type).toBe('ais.frequentlyBoughtTogether');
+  });
+
   it('Renders during init and render', () => {
     const renderFn = jest.fn();
     const makeWidget = connectFrequentlyBoughtTogether(renderFn);
@@ -51,7 +66,7 @@ describe('connectFrequentlyBoughtTogether', () => {
     const helper = algoliasearchHelper(createSearchClient(), '', {});
     helper.search = jest.fn();
 
-    widget.init!(
+    widget.init(
       createInitOptions({
         helper,
         state: helper.state,
@@ -68,7 +83,7 @@ describe('connectFrequentlyBoughtTogether', () => {
       helper,
     });
 
-    widget.render!(renderOptions);
+    widget.render(renderOptions);
 
     expect(renderFn).toHaveBeenCalledTimes(2);
     expect(renderFn).toHaveBeenLastCalledWith(
@@ -90,7 +105,7 @@ describe('connectFrequentlyBoughtTogether', () => {
       });
 
       // @ts-expect-error
-      const actual = widget.getWidgetParameters!(new RecommendParameters(), {
+      const actual = widget.getWidgetParameters(new RecommendParameters(), {
         uiState: {},
       });
 

@@ -354,7 +354,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
             hierarchicalMenu: {},
             queryRules: {
               items: ['lions', 'eggs'],
-              widgetParams: { transformItems: (items) => items },
+              widgetParams: {},
             },
           },
           createRenderOptions({

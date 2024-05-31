@@ -1,6 +1,8 @@
 import type { SearchOptions } from './algoliasearch';
 import type {
   PlainSearchParameters,
+  RecommendParametersOptions,
+  RecommendResults,
   SearchForFacetValues,
   SearchResults,
 } from 'algoliasearch-helper';
@@ -38,37 +40,41 @@ export type GeoLoc = {
   lng: number;
 };
 
-export type AlgoliaHit<THit extends BaseHit = Record<string, any>> = {
-  objectID: string;
-  _highlightResult?: HitHighlightResult;
-  _snippetResult?: HitSnippetResult;
-  _rankingInfo?: {
-    promoted: boolean;
-    nbTypos: number;
-    firstMatchedWord: number;
-    proximityDistance?: number;
-    geoDistance: number;
-    geoPrecision?: number;
-    nbExactWords: number;
-    words: number;
-    filters: number;
-    userScore: number;
-    matchedGeoLocation?: {
-      lat: number;
-      lng: number;
-      distance: number;
+export type AlgoliaHit<THit extends NonNullable<object> = Record<string, any>> =
+  {
+    objectID: string;
+    _highlightResult?: HitHighlightResult;
+    _snippetResult?: HitSnippetResult;
+    _rankingInfo?: {
+      promoted: boolean;
+      nbTypos: number;
+      firstMatchedWord: number;
+      proximityDistance?: number;
+      geoDistance: number;
+      geoPrecision?: number;
+      nbExactWords: number;
+      words: number;
+      filters: number;
+      userScore: number;
+      matchedGeoLocation?: {
+        lat: number;
+        lng: number;
+        distance: number;
+      };
     };
-  };
-  _distinctSeqID?: number;
-  _geoloc?: GeoLoc;
-} & THit;
+    _distinctSeqID?: number;
+    _geoloc?: GeoLoc;
+  } & THit;
 
-export type BaseHit = Record<string, unknown>;
+export type BaseHit = Record<string, any>;
 
-export type Hit<THit extends BaseHit = Record<string, any>> = {
+export type Hit<THit extends NonNullable<object> = Record<string, any>> = {
   __position: number;
   __queryID?: string;
 } & AlgoliaHit<THit>;
+
+export type GeoHit<THit extends NonNullable<object> = BaseHit> = Hit<THit> &
+  Required<Pick<Hit, '_geoloc'>>;
 
 /**
  * @deprecated use Hit[] directly instead
@@ -93,8 +99,12 @@ export type NumericRefinement = {
 export type Refinement = FacetRefinement | NumericRefinement;
 
 type InitialResult = {
-  state: PlainSearchParameters;
-  results: SearchResults['_rawResults'];
+  state?: PlainSearchParameters;
+  results?: SearchResults['_rawResults'];
+  recommendResults?: {
+    params: RecommendParametersOptions['params'];
+    results: RecommendResults['_rawResults'];
+  };
   requestParams?: SearchOptions;
 };
 

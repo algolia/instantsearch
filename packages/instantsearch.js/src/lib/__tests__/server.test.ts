@@ -99,7 +99,7 @@ describe('getInitialResults', () => {
     const search = instantsearch({
       indexName: 'indexName',
       searchClient: createSearchClient(),
-    });
+    }).addWidgets([connectSearchBox(() => {})({})]);
 
     search.start();
 
@@ -118,6 +118,7 @@ describe('getInitialResults', () => {
           index: 'indexName',
           numericRefinements: {},
           tagRefinements: [],
+          query: '',
         },
         results: [
           {
@@ -140,7 +141,9 @@ describe('getInitialResults', () => {
   test('returns the current results from one non-rootindex', async () => {
     const search = instantsearch({
       searchClient: createSearchClient(),
-    }).addWidgets([index({ indexName: 'indexName' })]);
+    })
+      .addWidgets([connectSearchBox(() => {})({})])
+      .addWidgets([index({ indexName: 'indexName' })]);
 
     search.start();
 
@@ -182,7 +185,7 @@ describe('getInitialResults', () => {
     const search = instantsearch({
       indexName: 'indexName',
       searchClient: createSearchClient(),
-    });
+    }).addWidgets([connectSearchBox(() => {})({})]);
 
     search.addWidgets([index({ indexName: 'indexName2' })]);
 
@@ -203,6 +206,7 @@ describe('getInitialResults', () => {
           index: 'indexName',
           numericRefinements: {},
           tagRefinements: [],
+          query: '',
         },
         results: [
           {

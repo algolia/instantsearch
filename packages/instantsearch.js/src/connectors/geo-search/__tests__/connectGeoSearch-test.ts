@@ -37,7 +37,7 @@ describe('connectGeoSearch', () => {
 
     const helper = createFakeHelper();
 
-    widget.init!(createInitOptions({ helper }));
+    widget.init(createInitOptions({ helper }));
 
     const { refine } = widget.getWidgetRenderState(
       createInitOptions({ helper })
@@ -76,7 +76,7 @@ describe('connectGeoSearch', () => {
     const instantSearchInstance = createInstantSearch();
     const helper = instantSearchInstance.mainHelper!;
 
-    widget.init!(
+    widget.init(
       createInitOptions({
         instantSearchInstance,
       })
@@ -88,7 +88,7 @@ describe('connectGeoSearch', () => {
       }),
     ]);
 
-    widget.render!(
+    widget.render(
       createRenderOptions({
         instantSearchInstance,
         results,
@@ -141,6 +141,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     });
   });
 
+  it('accepts custom parameters', () => {
+    const render = jest.fn();
+    const unmount = jest.fn();
+
+    const customGeoSearch = connectGeoSearch<{
+      container: string;
+    }>(render, unmount);
+    const widget = customGeoSearch({ container: '#container' });
+
+    expect(widget.$$type).toBe('ais.geoSearch');
+  });
+
   it('expect to render twice during init and render', () => {
     const render = jest.fn();
     const unmount = jest.fn();
@@ -151,7 +163,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     const instantSearchInstance = createInstantSearch();
     const { mainHelper: helper } = instantSearchInstance;
 
-    widget.init!(createInitOptions({ instantSearchInstance }));
+    widget.init(createInitOptions({ instantSearchInstance }));
 
     expect(render).toHaveBeenCalledTimes(1);
     expect(render).toHaveBeenLastCalledWith(
@@ -176,7 +188,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
 
-    widget.render!(
+    widget.render(
       createRenderOptions({
         results: new SearchResults(helper!.state, [
           createSingleSearchResponse({
@@ -226,12 +238,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
     const helper = createFakeHelper();
 
-    widget.init!(createInitOptions());
+    widget.init(createInitOptions());
 
     expect(render).toHaveBeenCalledTimes(1);
     expect(lastRenderArgs(render).isRefineOnMapMove()).toBe(false);
 
-    widget.render!(
+    widget.render(
       createRenderOptions({
         results: new SearchResults(helper.state, [
           createSingleSearchResponse({
@@ -254,9 +266,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     const widget = customGeoSearch({});
 
     const helper = createFakeHelper();
-    widget.init!(createInitOptions());
+    widget.init(createInitOptions());
 
-    widget.render!(
+    widget.render(
       createRenderOptions({
         results: new SearchResults(helper.state, [
           createSingleSearchResponse({
@@ -299,9 +311,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     });
 
     const helper = createFakeHelper();
-    widget.init!(createInitOptions());
+    widget.init(createInitOptions());
 
-    widget.render!(
+    widget.render(
       createRenderOptions({
         results: new SearchResults(helper.state, [
           createSingleSearchResponse({
@@ -338,7 +350,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     // Simulate the configuration or external setter
     helper.setQueryParameter('aroundLatLng', '10, 12');
 
-    widget.init!(
+    widget.init(
       createInitOptions({
         helper,
         state: helper.state,
@@ -356,7 +368,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       true
     );
 
-    widget.render!(
+    widget.render(
       createRenderOptions({
         results: new SearchResults(helper.state, [
           createSingleSearchResponse({
@@ -381,7 +393,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     // Simulate the configuration or external setter
     helper.setQueryParameter('aroundLatLng', '12, 14');
 
-    widget.render!(
+    widget.render(
       createRenderOptions({
         results: new SearchResults(helper.state, [
           createSingleSearchResponse({
@@ -416,8 +428,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       createSingleSearchResponse(),
     ]);
 
-    widget.init!(createInitOptions({ helper, state: helper.state }));
-    widget.render!(
+    widget.init(createInitOptions({ helper, state: helper.state }));
+    widget.render(
       createRenderOptions({
         results,
         helper,
@@ -461,14 +473,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
     helper.setQueryParameter('aroundLatLng', '10,12');
 
-    widget.init!(
+    widget.init(
       createInitOptions({
         state: helper.state,
         helper,
       })
     );
 
-    widget.render!(
+    widget.render(
       createRenderOptions({
         results,
         helper,
@@ -477,7 +489,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
     lastRenderArgs(render).refine({ northEast, southWest });
 
-    widget.render!(
+    widget.render(
       createRenderOptions({
         results,
         helper,
@@ -496,7 +508,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
     helper.setQueryParameter('aroundLatLng', '14,16');
 
-    widget.render!(
+    widget.render(
       createRenderOptions({
         results,
         helper,
@@ -539,14 +551,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
     helper.setQueryParameter('aroundLatLng', '10,12');
 
-    widget.init!(
+    widget.init(
       createInitOptions({
         state: helper.state,
         helper,
       })
     );
 
-    widget.render!(
+    widget.render(
       createRenderOptions({
         results,
         helper,
@@ -555,7 +567,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
     lastRenderArgs(render).refine({ northEast, southWest });
 
-    widget.render!(
+    widget.render(
       createRenderOptions({
         results,
         helper,
@@ -574,7 +586,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
     helper.setQueryParameter('aroundLatLng', '10,12');
 
-    widget.render!(
+    widget.render(
       createRenderOptions({
         results,
         helper,
@@ -618,14 +630,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     // @ts-ignore
     helper.setQueryParameter('insideBoundingBox', '10,12,14,16');
 
-    widget.init!(
+    widget.init(
       createInitOptions({
         state: helper.state,
         helper,
       })
     );
 
-    widget.render!(
+    widget.render(
       createRenderOptions({
         results,
         helper,
@@ -634,7 +646,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
     lastRenderArgs(render).refine({ northEast, southWest });
 
-    widget.render!(
+    widget.render(
       createRenderOptions({
         results,
         helper,
@@ -653,7 +665,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
     helper.setQueryParameter('insideBoundingBox', undefined);
 
-    widget.render!(
+    widget.render(
       createRenderOptions({
         results,
         helper,
@@ -697,14 +709,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     // @ts-ignore
     helper.setQueryParameter('insideBoundingBox', '10,12,14,16');
 
-    widget.init!(
+    widget.init(
       createInitOptions({
         state: helper.state,
         helper,
       })
     );
 
-    widget.render!(
+    widget.render(
       createRenderOptions({
         results,
         helper,
@@ -713,7 +725,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
     lastRenderArgs(render).refine({ northEast, southWest });
 
-    widget.render!(
+    widget.render(
       createRenderOptions({
         results,
         helper,
@@ -733,7 +745,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     // @ts-ignore
     helper.setQueryParameter('insideBoundingBox', '12,14,16,18');
 
-    widget.render!(
+    widget.render(
       createRenderOptions({
         results,
         helper,
@@ -758,7 +770,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       // @ts-ignore
       helper.setQueryParameter('insideBoundingBox', '10,12,12,14');
 
-      widget.init!(
+      widget.init(
         createInitOptions({
           helper,
           state: helper.state,
@@ -778,7 +790,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         },
       });
 
-      widget.render!(
+      widget.render(
         createRenderOptions({
           results: new SearchResults(helper.state, [
             createSingleSearchResponse({
@@ -805,7 +817,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       // Simulate the configuration or external setter (like URLSync)
       helper.setQueryParameter('insideBoundingBox', undefined);
 
-      widget.render!(
+      widget.render(
         createRenderOptions({
           results: new SearchResults(helper.state, [
             createSingleSearchResponse({
@@ -830,7 +842,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       helper.setQueryParameter('insideBoundingBox', [[10, 12, 12, 14]]);
 
-      widget.init!(
+      widget.init(
         createInitOptions({
           helper,
           state: helper.state,
@@ -850,7 +862,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         },
       });
 
-      widget.render!(
+      widget.render(
         createRenderOptions({
           results: new SearchResults(helper.state, [
             createSingleSearchResponse({
@@ -877,7 +889,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       // Simulate the configuration or external setter (like URLSync)
       helper.setQueryParameter('insideBoundingBox', undefined);
 
-      widget.render!(
+      widget.render(
         createRenderOptions({
           results: new SearchResults(helper.state, [
             createSingleSearchResponse({
@@ -919,7 +931,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         }),
       ]);
 
-      widget.init!(
+      widget.init(
         createInitOptions({
           state: helper.state,
           helper,
@@ -934,7 +946,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       lastRenderArgs(render).refine({ northEast, southWest });
 
-      widget.render!(
+      widget.render(
         createRenderOptions({
           results,
           helper,
@@ -973,14 +985,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         }),
       ]);
 
-      widget.init!(
+      widget.init(
         createInitOptions({
           state: helper.state,
           helper,
         })
       );
 
-      widget.render!(
+      widget.render(
         createRenderOptions({
           results,
           helper,
@@ -995,7 +1007,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       lastRenderArgs(render).refine({ northEast, southWest });
 
-      widget.render!(
+      widget.render(
         createRenderOptions({
           results,
           helper,
@@ -1036,7 +1048,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         }),
       ]);
 
-      widget.init!(
+      widget.init(
         createInitOptions({
           state: helper.state,
           helper,
@@ -1051,7 +1063,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       lastRenderArgs(render).refine({ northEast, southWest });
 
-      widget.render!(
+      widget.render(
         createRenderOptions({
           results,
           helper,
@@ -1066,7 +1078,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       lastRenderArgs(render).clearMapRefinement();
 
-      widget.render!(
+      widget.render(
         createRenderOptions({
           results,
           helper,
@@ -1105,14 +1117,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         }),
       ]);
 
-      widget.init!(
+      widget.init(
         createInitOptions({
           state: helper.state,
           helper,
         })
       );
 
-      widget.render!(
+      widget.render(
         createRenderOptions({
           results,
           helper,
@@ -1127,7 +1139,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       lastRenderArgs(render).refine({ northEast, southWest });
 
-      widget.render!(
+      widget.render(
         createRenderOptions({
           results,
           helper,
@@ -1142,7 +1154,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       lastRenderArgs(render).clearMapRefinement();
 
-      widget.render!(
+      widget.render(
         createRenderOptions({
           results,
           helper,
@@ -1167,7 +1179,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       const helper = createFakeHelper();
 
-      widget.init!(
+      widget.init(
         createInitOptions({
           state: helper.state,
           helper,
@@ -1182,7 +1194,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       expect(render).toHaveBeenCalledTimes(1);
       expect(lastRenderArgs(render).isRefineOnMapMove()).toBe(false);
 
-      widget.render!(
+      widget.render(
         createRenderOptions({
           results: new SearchResults(helper.state, [
             createSingleSearchResponse({
@@ -1209,14 +1221,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       const helper = createFakeHelper();
 
-      widget.init!(
+      widget.init(
         createInitOptions({
           state: helper.state,
           helper,
         })
       );
 
-      widget.render!(
+      widget.render(
         createRenderOptions({
           results: new SearchResults(helper.state, [
             createSingleSearchResponse({
@@ -1248,7 +1260,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       const customGeoSearch = connectGeoSearch(render, unmount);
       const widget = customGeoSearch({});
 
-      widget.init!(createInitOptions());
+      widget.init(createInitOptions());
 
       expect(render).toHaveBeenCalledTimes(1);
       expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
@@ -1258,7 +1270,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       expect(render).toHaveBeenCalledTimes(1);
       expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
 
-      widget.render!(
+      widget.render(
         createRenderOptions({
           results: new SearchResults(createFakeHelper().state, [
             createSingleSearchResponse({
@@ -1292,14 +1304,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         ),
       ]);
 
-      widget.init!(
+      widget.init(
         createInitOptions({
           state: helper.state,
           helper,
         })
       );
 
-      widget.render!(
+      widget.render(
         createRenderOptions({
           results,
           helper,
@@ -1335,14 +1347,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         ),
       ]);
 
-      widget.init!(
+      widget.init(
         createInitOptions({
           state: helper.state,
           helper,
         })
       );
 
-      widget.render!(
+      widget.render(
         createRenderOptions({
           results,
           helper,
@@ -1381,7 +1393,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       const expectation = new SearchParameters({ index: '' });
 
-      const actual = widget.dispose!(
+      const actual = widget.dispose(
         createDisposeOptions({ state: helper.state })
       );
 
@@ -1393,7 +1405,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       const render = () => {};
       const customGeoSearch = connectGeoSearch(render);
       const widget = customGeoSearch({});
-      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
+      expect(() => widget.dispose(createDisposeOptions())).not.toThrow();
     });
   });
 

@@ -31,7 +31,7 @@ describe('connectHitsWithInsights', () => {
     const helper = algoliasearchHelper(createSearchClient(), '', {});
     helper.search = jest.fn();
 
-    widget.init!(
+    widget.init(
       createInitOptions({
         instantSearchInstance,
         state: helper.state,
@@ -50,7 +50,7 @@ describe('connectHitsWithInsights', () => {
       createSingleSearchResponse({ hits }),
     ]);
 
-    widget.render!(
+    widget.render(
       createRenderOptions({
         instantSearchInstance,
         state: helper.state,
@@ -71,7 +71,7 @@ describe('connectHitsWithInsights', () => {
     const helper = algoliasearchHelper(createSearchClient(), '', {});
     helper.search = jest.fn();
 
-    widget.init!(
+    widget.init(
       createInitOptions({
         state: helper.state,
         helper,
@@ -86,7 +86,7 @@ describe('connectHitsWithInsights', () => {
       createSingleSearchResponse({ hits }),
     ]);
 
-    widget.render!(
+    widget.render(
       createRenderOptions({
         state: helper.state,
         results,
@@ -105,7 +105,7 @@ describe('connectHitsWithInsights', () => {
     const widget = makeWidget({});
     const helper = algoliasearchHelper(createSearchClient(), '', {});
     expect(() => {
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
+      widget.dispose(createDisposeOptions({ helper, state: helper.state }));
     }).not.toThrow();
   });
 });

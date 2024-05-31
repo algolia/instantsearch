@@ -3,7 +3,7 @@ import algoliasearchHelper from 'algoliasearch-helper';
 
 import { INSTANTSEARCH_FUTURE_DEFAULTS } from '../src/lib/InstantSearch';
 import { defer } from '../src/lib/utils';
-import index from '../src/widgets/index/index';
+import { index } from '../src/widgets';
 
 import type { InstantSearch } from '../src/types';
 

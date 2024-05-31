@@ -31,9 +31,9 @@ export type CreateMarker = (args: {
 const withUsage = createDocumentationMessageGenerator({ name: 'geo-search' });
 const suit = component('GeoSearch');
 
-export type GeoSearchTemplates = Partial<{
+export type GeoSearchTemplates<THit extends GeoHit = GeoHit> = Partial<{
   /** Template to use for the marker. */
-  HTMLMarker: Template<GeoHit>;
+  HTMLMarker: Template<THit>;
   /** Template for the reset button. */
   reset: Template;
   /** Template for the toggle label. */
@@ -65,13 +65,13 @@ export type GeoSearchCSSClasses = Partial<{
   reset: string | string[];
 }>;
 
-export type GeoSearchMarker<TOptions> = {
+export type GeoSearchMarker<TOptions, THit extends GeoHit = GeoHit> = {
   /**
    * Function used to create the options passed to the Google Maps marker.
    * See the documentation for more information:
    * https://developers.google.com/maps/documentation/javascript/reference/3/#MarkerOptions
    */
-  createOptions?: (item: GeoHit) => TOptions;
+  createOptions?: (item: THit) => TOptions;
   /**
    * Object that takes an event type (ex: `click`, `mouseover`) as key and a
    * listener as value. The listener is provided with an object that contains:
@@ -87,7 +87,7 @@ export type GeoSearchMarker<TOptions> = {
   };
 };
 
-export type GeoSearchWidgetParams = {
+export type GeoSearchWidgetParams<THit extends GeoHit = GeoHit> = {
   /**
    * By default the map will set the zoom accordingly to the markers displayed on it.
    * When we refine it may happen that the results are empty. For those situations we
@@ -104,7 +104,7 @@ export type GeoSearchWidgetParams = {
    */
   initialPosition?: GeoLoc;
   /** Templates to use for the widget. */
-  templates?: GeoSearchTemplates;
+  templates?: GeoSearchTemplates<THit>;
   /** CSS classes to add to the wrapping elements. */
   cssClasses?: GeoSearchCSSClasses;
   /**
@@ -172,7 +172,9 @@ export type GeoSearchWidget = WidgetFactory<
  *
  * Don't forget to explicitly set the `height` of the map container (default class `.ais-geo-search--map`), otherwise it won't be shown (it's a requirement of Google Maps).
  */
-const geoSearch: GeoSearchWidget = (widgetParams) => {
+export default (function geoSearch<THit extends GeoHit = GeoHit>(
+  widgetParams: GeoSearchWidgetParams<THit> & GeoSearchConnectorParams<THit>
+) {
   const {
     initialZoom = 1,
     initialPosition = { lat: 0, lng: 0 },
@@ -229,7 +231,7 @@ const geoSearch: GeoSearchWidget = (widgetParams) => {
     reset: cx(suit({ descendantName: 'reset' }), userCssClasses.reset),
   };
 
-  const templates = {
+  const templates: GeoSearchTemplates<THit> = {
     ...defaultTemplates,
     ...userTemplates,
   };
@@ -286,14 +288,16 @@ const geoSearch: GeoSearchWidget = (widgetParams) => {
   );
 
   return {
-    ...makeWidget({
+    ...makeWidget<THit>({
       ...otherWidgetParams,
+      // @TODO: this type doesn't preserve the generic correctly,
+      // (but as they're internal only it's not a big problem)
+      templates: templates as any,
       renderState: {},
       container: containerNode,
       googleReference,
       initialZoom,
       initialPosition,
-      templates,
       cssClasses,
       createMarker,
       markerOptions,
@@ -303,6 +307,4 @@ const geoSearch: GeoSearchWidget = (widgetParams) => {
     }),
     $$widgetType: 'ais.geoSearch',
   };
-};
-
-export default geoSearch;
+} satisfies GeoSearchWidget);

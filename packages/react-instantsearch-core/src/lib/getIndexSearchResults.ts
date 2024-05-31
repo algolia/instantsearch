@@ -25,5 +25,6 @@ export function getIndexSearchResults(indexWidget: IndexWidget) {
   return {
     results,
     scopedResults,
+    recommendResults: helper.lastRecommendResults,
   };
 }

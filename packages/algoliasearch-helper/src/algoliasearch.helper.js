@@ -142,7 +142,7 @@ function AlgoliaSearchHelper(client, index, options, searchResultsOptions) {
   this._currentNbQueries = 0;
   this._currentNbRecommendQueries = 0;
   this._searchResultsOptions = searchResultsOptions;
-  this.recommendCache = {};
+  this._recommendCache = {};
 }
 
 inherits(AlgoliaSearchHelper, EventEmitter);
@@ -1591,7 +1591,7 @@ AlgoliaSearchHelper.prototype._recommend = function () {
     },
   });
 
-  var cache = this.recommendCache;
+  var cache = this._recommendCache;
 
   var derivedQueries = this.derivedHelpers.map(function (derivedHelper) {
     var derivedIndex = derivedHelper.getModifiedState(searchState).index;
@@ -1744,7 +1744,7 @@ AlgoliaSearchHelper.prototype._dispatchRecommendResponse = function (
 
   if (this._currentNbRecommendQueries === 0) this.emit('recommendQueueEmpty');
 
-  var cache = this.recommendCache;
+  var cache = this._recommendCache;
 
   var idsMap = {};
   ids
