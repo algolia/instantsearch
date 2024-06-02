@@ -56,7 +56,7 @@ const renderer =
   }): Renderer<HitsRenderState, Partial<HitsWidgetParams>> =>
   (
     {
-      hits: receivedHits,
+      items,
       results,
       instantSearchInstance,
       insights,
@@ -142,7 +142,7 @@ const renderer =
 
     render(
       <Hits
-        hits={receivedHits}
+        hits={items}
         itemComponent={itemComponent}
         sendEvent={sendEvent}
         classNames={cssClasses}

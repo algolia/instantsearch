@@ -14,6 +14,7 @@ describe('useInfiniteHits', () => {
     expect(result.current).toEqual({
       bindEvent: undefined,
       hits: [],
+      items: [],
       results: expect.objectContaining({ nbHits: 0 }),
       sendEvent: undefined,
       currentPageHits: [],
@@ -29,6 +30,7 @@ describe('useInfiniteHits', () => {
     expect(result.current).toEqual({
       bindEvent: expect.any(Function),
       hits: [],
+      items: [],
       results: expect.objectContaining({ nbHits: 0 }),
       sendEvent: expect.any(Function),
       currentPageHits: [],

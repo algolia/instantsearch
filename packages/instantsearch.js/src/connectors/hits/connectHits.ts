@@ -37,8 +37,14 @@ type Banner = NonNullable<
 export type HitsRenderState<THit extends NonNullable<object> = BaseHit> = {
   /**
    * The matched hits from Algolia API.
+   * @deprecated use `items` instead
    */
   hits: Array<Hit<THit>>;
+
+  /**
+   * The matched hits from Algolia API.
+   */
+  items: Array<Hit<THit>>;
 
   /**
    * The response from the Algolia API.
@@ -130,7 +136,7 @@ export default (function connectHits<TWidgetParams>(
           false
         );
 
-        renderState.sendEvent('view:internal', renderState.hits);
+        renderState.sendEvent('view:internal', renderState.items);
       },
 
       getRenderState(
@@ -164,6 +170,7 @@ export default (function connectHits<TWidgetParams>(
         if (!results) {
           return {
             hits: [],
+            items: [],
             results: undefined,
             banner: undefined,
             sendEvent,
@@ -187,15 +194,15 @@ export default (function connectHits<TWidgetParams>(
           results.queryID
         );
 
-        const transformedHits = transformItems(
-          hitsWithAbsolutePositionAndQueryID,
-          { results }
-        );
+        const items = transformItems(hitsWithAbsolutePositionAndQueryID, {
+          results,
+        });
 
         const banner = results.renderingContent?.widgets?.banners?.[0];
 
         return {
-          hits: transformedHits,
+          hits: items,
+          items,
           results,
           banner,
           sendEvent,

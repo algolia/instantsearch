@@ -1325,6 +1325,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
       expect(renderState1.infiniteHits).toEqual({
         hits: [],
+        items: [],
         currentPageHits: [],
         sendEvent: expect.any(Function),
         bindEvent: expect.any(Function),
@@ -1387,6 +1388,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
       expect(renderState2.infiniteHits).toEqual({
         hits: expectedHits,
+        items: expectedHits,
         currentPageHits: expectedCurrentPageHits,
         sendEvent: renderState1.infiniteHits.sendEvent,
         bindEvent: renderState1.infiniteHits.bindEvent,
@@ -1416,6 +1418,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
       expect(renderState1).toEqual({
         hits: [],
+        items: [],
         currentPageHits: [],
         sendEvent: expect.any(Function),
         bindEvent: expect.any(Function),
@@ -1479,6 +1482,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
 
       expect(renderState2).toEqual({
         hits: expectedHits,
+        items: expectedHits,
         currentPageHits: expectedCurrentPageHits,
         sendEvent: renderState1.sendEvent,
         bindEvent: renderState1.bindEvent,

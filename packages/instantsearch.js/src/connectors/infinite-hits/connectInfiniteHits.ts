@@ -125,8 +125,14 @@ export type InfiniteHitsRenderState<
 
   /**
    * Hits for current and cached pages
+   * @deprecated use `items` instead
    */
   hits: Array<Hit<THit>>;
+
+  /**
+   * Hits for current and cached pages
+   */
+  items: Array<Hit<THit>>;
 
   /**
    * The response from the Algolia API.
@@ -409,13 +415,14 @@ export default (function connectInfiniteHits<
           isFirstPage = getFirstReceivedPage(state, cachedHits) === 0;
         }
 
-        const hits = extractHitsFromCachedHits(cachedHits);
+        const items = extractHitsFromCachedHits(cachedHits);
         const isLastPage = results
           ? results.nbPages <= getLastReceivedPage(state, cachedHits) + 1
           : true;
 
         return {
-          hits,
+          hits: items,
+          items,
           currentPageHits,
           sendEvent,
           bindEvent,

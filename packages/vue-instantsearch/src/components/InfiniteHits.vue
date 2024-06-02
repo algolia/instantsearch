@@ -20,7 +20,7 @@
     </slot>
 
     <slot
-      :items="items"
+      :items="state.items"
       :results="state.results"
       :is-last-page="state.isLastPage"
       :refine-previous="refinePrevious"
@@ -31,7 +31,7 @@
     >
       <ol :class="suit('list')">
         <li
-          v-for="(item, index) in items"
+          v-for="(item, index) in state.items"
           :class="suit('item')"
           :key="item.objectID"
           @click="state.sendEvent('click:internal', item, 'Hit Clicked')"
@@ -116,11 +116,6 @@ export default {
         transformItems: this.transformItems,
         cache: this.cache,
       };
-    },
-    items() {
-      // Fixes InstantSearch.js connectors API: every list
-      // of things must be called `items`
-      return this.state.hits;
     },
   },
   methods: {
