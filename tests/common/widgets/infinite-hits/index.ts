@@ -2,6 +2,7 @@ import { fakeAct } from '../../common';
 
 import { createInsightsTests } from './insights';
 import { createOptimisticUiTests } from './optimistic-ui';
+import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
 import type { InfiniteHitsWidget } from 'instantsearch.js/es/widgets/infinite-hits/infinite-hits';
@@ -22,5 +23,6 @@ export function createInfiniteHitsWidgetTests(
   describe('InfiniteHits widget common tests', () => {
     createOptimisticUiTests(setup, { act, skippedTests });
     createInsightsTests(setup, { act, skippedTests });
+    createOptionsTests(setup, { act, skippedTests });
   });
 }

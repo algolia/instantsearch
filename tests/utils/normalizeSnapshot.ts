@@ -29,6 +29,8 @@ export function normalizeSnapshot(html: string) {
       .replace(/<\/ul> </g, '</ul><')
       // Vue renders extra whitespace after input elements
       .replace(/(<input.+?>)\s/gs, '$1')
+      // Vue renders extra whitespace before button elements
+      .replace(/\s(<button.+?>(.+?)<\/button>)/gs, '$1')
       // Vue renders extra whitespace after button elements
       .replace(/(<button.+?>(.+?)<\/button>)\s/gs, '$1')
       // Vue renders extra whitespace after div elements

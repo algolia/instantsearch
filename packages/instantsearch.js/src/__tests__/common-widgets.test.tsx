@@ -156,6 +156,14 @@ const testSetups: TestSetupsMap<TestSuites> = {
           },
           ...widgetParams,
         }),
+        infiniteHits({
+          container: document.body.appendChild(
+            Object.assign(document.createElement('div'), {
+              id: 'hits-with-defaults',
+            })
+          ),
+          ...widgetParams,
+        }),
         index({ indexName: 'nested' }).addWidgets([
           infiniteHits({
             container: document.body.appendChild(
