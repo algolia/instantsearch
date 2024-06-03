@@ -13,7 +13,7 @@ import type { InfiniteHitsWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 import type { MockSearchClient } from '@instantsearch/mocks';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
-import type { BaseHit, Hit, SearchResponse } from 'instantsearch.js';
+import type { BaseHit, SearchResponse } from 'instantsearch.js';
 import type {
   InfiniteHitsCache,
   InfiniteHitsCachedHits,
