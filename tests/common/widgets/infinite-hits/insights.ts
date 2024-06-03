@@ -81,7 +81,7 @@ export function createInsightsTests(
 
       // View event called for each index once
       {
-        expect(window.aa).toHaveBeenCalledTimes(2);
+        expect(window.aa).toHaveBeenCalledTimes(3);
         expect(window.aa).toHaveBeenCalledWith(
           'viewedObjectIDs',
           {
@@ -132,7 +132,7 @@ export function createInsightsTests(
 
         // @TODO: This is a bug, we should not send a view event when the results are the same.
         // see: https://github.com/algolia/instantsearch/issues/5442
-        expect(window.aa).toHaveBeenCalledTimes(2);
+        expect(window.aa).toHaveBeenCalledTimes(3);
       }
     });
 
@@ -195,7 +195,7 @@ export function createInsightsTests(
 
       // View event called for each index, batched in chunks of 20
       {
-        expect(window.aa).toHaveBeenCalledTimes(4);
+        expect(window.aa).toHaveBeenCalledTimes(6);
         expect(window.aa).toHaveBeenCalledWith(
           'viewedObjectIDs',
           {
