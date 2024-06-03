@@ -556,7 +556,10 @@ function createCustomCache() {
     return Object.entries(obj).sort();
   }
 
-  function isEqual<TValue extends BaseHit>(a: TValue, b: TValue) {
+  function isEqual<TValue extends BaseHit>(
+    a: TValue | undefined,
+    b: TValue | undefined
+  ) {
     return JSON.stringify(sort(a)) === JSON.stringify(sort(b));
   }
 
