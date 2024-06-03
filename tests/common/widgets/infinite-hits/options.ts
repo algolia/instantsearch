@@ -116,12 +116,10 @@ export function createOptionsTests(
         },
         widgetParams: {
           transformItems(items) {
-            return (items as unknown as Array<Hit<CustomRecord>>).map(
-              (item) => ({
-                ...item,
-                objectID: `(${item.objectID})`,
-              })
-            );
+            return items.map((item) => ({
+              ...item,
+              objectID: `(${item.objectID})`,
+            }));
           },
         },
       });
@@ -510,10 +508,8 @@ export function createOptionsTests(
   });
 }
 
-type CustomRecord = { somethingSpecial?: string };
-
 function createMockedSearchClient(
-  subset: Partial<SearchResponse<CustomRecord>> = {}
+  subset: Partial<SearchResponse<BaseHit>> = {}
 ) {
   return createSearchClient({
     search: jest.fn((requests) =>
@@ -528,7 +524,7 @@ function createMockedSearchClient(
                 return { objectID: (i + offset).toString() };
               });
 
-              return createSingleSearchResponse<CustomRecord>({
+              return createSingleSearchResponse({
                 index: request.indexName,
                 query: request.params?.query,
                 hits,
