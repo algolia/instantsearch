@@ -1,4 +1,5 @@
 import { safelyRunOnBrowser } from 'instantsearch.js/es/lib/utils';
+import { headers } from 'next/headers';
 import React, { useEffect, useRef } from 'react';
 import {
   InstantSearch,
@@ -72,7 +73,9 @@ This message will only be displayed in development mode.`
     <InstantSearchRSCContext.Provider value={promiseRef}>
       <InstantSearchSSRProvider initialResults={initialResults}>
         <InstantSearch {...instantSearchProps} routing={routing}>
-          {!initialResults && <InitializePromise />}
+          {!initialResults && (
+            <InitializePromise nonce={headers().get('x-nonce') || undefined} />
+          )}
           {children}
           {!initialResults && <TriggerSearch />}
         </InstantSearch>

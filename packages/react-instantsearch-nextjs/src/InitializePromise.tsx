@@ -12,7 +12,16 @@ import { htmlEscapeJsonString } from './htmlEscape';
 
 import type { SearchOptions } from 'instantsearch.js';
 
-export function InitializePromise() {
+type InitializePromiseProps = {
+  /**
+   * The nonce to use for the injected script tag.
+   *
+   * @see https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy#nonces
+   */
+  nonce?: string;
+};
+
+export function InitializePromise({ nonce }: InitializePromiseProps) {
   const search = useInstantSearchContext();
   const waitForResultsRef = useRSCContext();
   const insertHTML =
@@ -62,6 +71,7 @@ export function InitializePromise() {
       inserted = true;
       return (
         <script
+          nonce={nonce}
           dangerouslySetInnerHTML={{
             __html: `window[Symbol.for("InstantSearchInitialResults")] = ${htmlEscapeJsonString(
               JSON.stringify(results)

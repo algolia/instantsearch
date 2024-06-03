@@ -30,21 +30,28 @@ jest.mock('instantsearch.js/es/lib/utils', () => ({
 const renderComponent = ({
   children,
   ref = { current: null },
+  nonce,
+  insertedHTML,
 }: {
   children?: React.ReactNode;
   ref?: { current: PromiseWithState<void> | null };
+  nonce?: string;
+  insertedHTML?: jest.Mock;
 } = {}) => {
   const client = createSearchClient({
     getRecommendations: jest.fn().mockResolvedValue({
       results: [createSingleSearchResponse()],
     }),
   });
+
   render(
     <InstantSearchRSCContext.Provider value={ref}>
       <InstantSearchSSRProvider>
         <InstantSearch searchClient={client} indexName="indexName">
-          <ServerInsertedHTMLContext.Provider value={() => {}}>
-            <InitializePromise />
+          <ServerInsertedHTMLContext.Provider
+            value={(cb) => insertedHTML?.(cb())}
+          >
+            <InitializePromise nonce={nonce} />
             {children}
             <TriggerSearch />
           </ServerInsertedHTMLContext.Provider>
@@ -52,6 +59,7 @@ const renderComponent = ({
       </InstantSearchSSRProvider>
     </InstantSearchRSCContext.Provider>
   );
+
   return client;
 };
 
@@ -59,6 +67,29 @@ test('it calls resetWidgetId', () => {
   renderComponent();
 
   expect(utils.resetWidgetId).toHaveBeenCalledTimes(1);
+});
+
+test('it applies provided nonce on the injected script tag', async () => {
+  const ref: { current: PromiseWithState<void> | null } = { current: null };
+  const insertedHTML = jest.fn();
+  renderComponent({
+    ref,
+    children: <SearchBox />,
+    nonce: 'csp-nonce',
+    insertedHTML,
+  });
+
+  await act(async () => {
+    await ref.current;
+  });
+
+  expect(insertedHTML).toHaveBeenLastCalledWith(
+    expect.objectContaining({
+      props: expect.objectContaining({
+        nonce: 'csp-nonce',
+      }),
+    })
+  );
 });
 
 test('it waits for both search and recommend results', async () => {
