@@ -334,6 +334,15 @@ a[class^='ais-'] {
   margin-bottom: 1rem;
 }
 
+.ais-Hits-banner {
+  display: flex;
+  justify-content: center;
+}
+
+.ais-Hits-banner-image {
+  max-width: 100%;
+}
+
 .ais-MenuSelect-select,
 .ais-NumericSelector-select,
 .ais-HitsPerPage-select,
