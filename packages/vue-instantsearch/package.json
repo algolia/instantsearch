@@ -16,7 +16,7 @@
     "autocomplete"
   ],
   "license": "MIT",
-  "version": "4.17.1",
+  "version": "4.17.2",
   "files": [
     "vue2",
     "vue3",
@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "instantsearch-ui-components": "0.6.0",
-    "instantsearch.js": "4.70.0",
+    "instantsearch.js": "4.71.0",
     "mitt": "^2.1.0"
   },
   "peerDependencies": {
@@ -63,7 +63,7 @@
     "@vue/test-utils2": "npm:@vue/test-utils@2.0.0-rc.11",
     "algoliasearch": "4.23.2",
     "algoliasearch-helper": "3.21.0",
-    "instantsearch.css": "8.2.0",
+    "instantsearch.css": "8.2.1",
     "rollup": "1.32.1",
     "rollup-plugin-babel": "4.4.0",
     "rollup-plugin-buble": "0.19.6",

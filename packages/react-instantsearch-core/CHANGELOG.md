@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.11.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.10.0...react-instantsearch-core@7.11.0) (2024-06-04)
+
+
+### Bug Fixes
+
+* **hits:** rename the exposed "hits" to "items" ([#6212](https://github.com/algolia/instantsearch/issues/6212)) ([1b99e39](https://github.com/algolia/instantsearch/commit/1b99e3951345a4054c6ff302dc09dd901bec984d))
+
+
+### Features
+
+* **typescript:** allow generics for the Hit type in all hit-displaying connectors and widgets ([#6218](https://github.com/algolia/instantsearch/issues/6218)) ([89dd7ae](https://github.com/algolia/instantsearch/commit/89dd7ae4d45dea4dafbe451e55b01f2e45caf07e))
+
+
+
+
+
 # [7.10.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.9.0...react-instantsearch-core@7.10.0) (2024-05-28)
 
 
