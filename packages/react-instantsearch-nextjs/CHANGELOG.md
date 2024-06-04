@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.3.0...react-instantsearch-nextjs@0.3.1) (2024-06-04)
+
+
+### Bug Fixes
+
+* **next-app-router:** set nonce in injected script when provided ([#6223](https://github.com/algolia/instantsearch/issues/6223)) ([7cd2be9](https://github.com/algolia/instantsearch/commit/7cd2be91e29f0b93c187c4e813ee24d6b1d16c9b))
+
+
+
+
+
 # [0.3.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.2.5...react-instantsearch-nextjs@0.3.0) (2024-05-28)
 
 

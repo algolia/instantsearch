@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.17.2](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.17.1...vue-instantsearch@4.17.2) (2024-06-04)
+
+
+### Bug Fixes
+
+* **hits:** rename the exposed "hits" to "items" ([#6212](https://github.com/algolia/instantsearch/issues/6212)) ([1b99e39](https://github.com/algolia/instantsearch/commit/1b99e3951345a4054c6ff302dc09dd901bec984d))
+
+
+
+
+
 ## [4.17.1](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.17.0...vue-instantsearch@4.17.1) (2024-05-28)
 
 **Note:** Version bump only for package vue-instantsearch
