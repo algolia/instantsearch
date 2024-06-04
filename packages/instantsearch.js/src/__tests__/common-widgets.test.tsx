@@ -29,6 +29,7 @@ import {
   frequentlyBoughtTogether,
   trendingItems,
   lookingSimilar,
+  poweredBy,
 } from '../widgets';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -563,6 +564,25 @@ const testSetups: TestSetupsMap<TestSuites> = {
       })
       .start();
   },
+  createPoweredByWidgetTests({ instantSearchOptions, widgetParams }) {
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        poweredBy({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         */
+      })
+      .start();
+
+    return {
+      flavor: 'instantsearch.js',
+    };
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -592,6 +612,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createFrequentlyBoughtTogetherWidgetTests: undefined,
   createTrendingItemsWidgetTests: undefined,
   createLookingSimilarWidgetTests: undefined,
+  createPoweredByWidgetTests: undefined,
 };
 
 describe('Common widget tests (InstantSearch.js)', () => {
