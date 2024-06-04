@@ -8,20 +8,142 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
-import { within, fireEvent } from '@testing-library/dom';
+import { within, fireEvent, getByText } from '@testing-library/dom';
+import userEvent from '@testing-library/user-event';
 import { Fragment, h } from 'preact';
 
 import instantsearch from '../../../index.es';
+import { createInsightsMiddleware } from '../../../middlewares';
 import searchBox from '../../search-box/search-box';
 import infiniteHits from '../infinite-hits';
 
 import type { SearchResponse } from '../../../../src/types';
+import type { MockSearchClient } from '@instantsearch/mocks';
 
 beforeEach(() => {
   document.body.innerHTML = '';
 });
 
 describe('infiniteHits', () => {
+  describe('options', () => {
+    test('throws without a `container`', () => {
+      expect(() => {
+        const searchClient = createSearchClient();
+
+        const search = instantsearch({
+          indexName: 'indexName',
+          searchClient,
+        });
+
+        search.addWidgets([
+          infiniteHits({
+            // @ts-expect-error
+            container: undefined,
+          }),
+        ]);
+      }).toThrowErrorMatchingInlineSnapshot(`
+        "The \`container\` option is required.
+
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hits/js/"
+      `);
+    });
+
+    test('adds custom CSS classes', async () => {
+      const container = document.createElement('div');
+      const searchClient = createMockedSearchClient();
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+        initialUiState: {
+          indexName: {
+            refinementList: {
+              brand: ['Apple', 'Samsung'],
+              categories: ['Audio'],
+            },
+          },
+        },
+      });
+
+      search.addWidgets([
+        infiniteHits({
+          container,
+          showPrevious: true,
+          cssClasses: {
+            root: 'ROOT',
+            emptyRoot: 'EMPTY_ROOT',
+            list: 'LIST',
+            item: 'ITEM',
+            loadPrevious: 'LOAD_PREVIOUS',
+            loadMore: 'LOAD_MORE',
+            disabledLoadPrevious: 'DISABLED_LOAD_PREVIOUS',
+            disabledLoadMore: 'DISABLED_LOAD_MORE',
+          },
+        }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      expect(container.querySelector('.ais-InfiniteHits')).toHaveClass('ROOT');
+      expect(container.querySelector('.ais-InfiniteHits-list')).toHaveClass(
+        'LIST'
+      );
+      expect(container.querySelector('.ais-InfiniteHits-item')).toHaveClass(
+        'ITEM'
+      );
+      expect(
+        container.querySelector('.ais-InfiniteHits-loadPrevious')
+      ).toHaveClass('LOAD_PREVIOUS DISABLED_LOAD_PREVIOUS');
+      expect(container.querySelector('.ais-InfiniteHits-loadMore')).toHaveClass(
+        'LOAD_MORE DISABLED_LOAD_MORE'
+      );
+    });
+
+    type CustomRecord = { somethingSpecial: string };
+
+    function createMockedSearchClient(
+      subset: Partial<SearchResponse<CustomRecord>> = {}
+    ) {
+      return createSearchClient({
+        search: jest.fn((requests) =>
+          Promise.resolve(
+            createMultiSearchResponse(
+              ...requests.map(
+                (
+                  request: Parameters<MockSearchClient['search']>[0][number]
+                ) => {
+                  const { hitsPerPage = 3, page = 0 } = request.params!;
+                  const hits = Array.from({ length: hitsPerPage }, (_, i) => {
+                    const offset = hitsPerPage * page;
+
+                    return {
+                      objectID: (i + offset).toString(),
+                      somethingSpecial: String.fromCharCode(
+                        'a'.charCodeAt(0) + i + offset
+                      ),
+                    };
+                  });
+
+                  return createSingleSearchResponse<CustomRecord>({
+                    index: request.indexName,
+                    query: request.params?.query,
+                    hits,
+                    page,
+                    nbPages: 1,
+                    hitsPerPage,
+                    ...subset,
+                  });
+                }
+              )
+            )
+          )
+        ) as MockSearchClient['search'],
+      });
+    }
+  });
+
   describe('templates', () => {
     test('renders default templates', async () => {
       const container = document.createElement('div');
@@ -726,6 +848,410 @@ describe('infiniteHits', () => {
                             },
                           },
                         ],
+                  ...subset,
+                });
+              })
+            )
+          );
+        }),
+      });
+    }
+  });
+
+  describe('insights', () => {
+    const createInsightsMiddlewareWithOnEvent = () => {
+      const onEvent = jest.fn();
+
+      const insights = createInsightsMiddleware({
+        insightsClient: null,
+        onEvent,
+      });
+
+      return { onEvent, insights };
+    };
+
+    test('sends view event when hits are rendered', async () => {
+      const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createMockedSearchClient(),
+      });
+
+      search.use(insights);
+      search.addWidgets([
+        infiniteHits({ container: document.createElement('div') }),
+      ]);
+      search.start();
+
+      await wait(0);
+
+      expect(onEvent).toHaveBeenCalledTimes(1);
+      expect(onEvent).toHaveBeenCalledWith(
+        {
+          eventType: 'view',
+          eventModifier: 'internal',
+          hits: [
+            {
+              __position: 1,
+              objectID: '1',
+              name: 'Name 1',
+            },
+            {
+              __position: 2,
+              objectID: '2',
+              name: 'Name 2',
+            },
+          ],
+          insightsMethod: 'viewedObjectIDs',
+          payload: {
+            eventName: 'Hits Viewed',
+            index: 'indexName',
+            objectIDs: ['1', '2'],
+          },
+          widgetType: 'ais.infiniteHits',
+        },
+        expect.any(Function)
+      );
+    });
+
+    test('sends a default `click` event when clicking on a hit', async () => {
+      const container = document.createElement('div');
+      const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createMockedSearchClient(),
+      });
+
+      search.use(insights);
+      search.addWidgets([infiniteHits({ container })]);
+      search.start();
+
+      await wait(0);
+
+      onEvent.mockClear();
+
+      userEvent.click(container.querySelectorAll('.ais-InfiniteHits-item')[0]);
+
+      expect(onEvent).toHaveBeenCalledTimes(1);
+      expect(onEvent).toHaveBeenCalledWith(
+        {
+          eventType: 'click',
+          eventModifier: 'internal',
+          hits: [
+            {
+              __position: 1,
+              objectID: '1',
+              name: 'Name 1',
+            },
+          ],
+          insightsMethod: 'clickedObjectIDsAfterSearch',
+          payload: {
+            eventName: 'Hit Clicked',
+            index: 'indexName',
+            objectIDs: ['1'],
+            positions: [1],
+          },
+          widgetType: 'ais.infiniteHits',
+        },
+        expect.any(Function)
+      );
+    });
+
+    test('sends `click` event with `sendEvent`', async () => {
+      const container = document.createElement('div');
+      const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createMockedSearchClient(),
+      });
+
+      search.use(insights);
+
+      search.addWidgets([
+        infiniteHits({
+          container,
+          templates: {
+            item: (item, { html, sendEvent }) => html`
+              <button
+                type="button"
+                onClick=${() => sendEvent('click', item, 'Item Clicked')}
+              >
+                ${item.name}
+              </button>
+            `,
+          },
+        }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      // view event by render
+      expect(onEvent).toHaveBeenCalledTimes(1);
+      onEvent.mockClear();
+
+      fireEvent.click(getByText(container, 'Name 1'));
+
+      // The custom one only
+      expect(onEvent).toHaveBeenCalledTimes(1);
+      expect(onEvent.mock.calls[0][0]).toEqual({
+        eventType: 'click',
+        hits: [
+          {
+            __hitIndex: 0,
+            __position: 1,
+            objectID: '1',
+            name: 'Name 1',
+          },
+        ],
+        insightsMethod: 'clickedObjectIDsAfterSearch',
+        payload: {
+          eventName: 'Item Clicked',
+          index: 'indexName',
+          objectIDs: ['1'],
+          positions: [1],
+        },
+        widgetType: 'ais.infiniteHits',
+      });
+    });
+
+    test('sends `conversion` event with `sendEvent`', async () => {
+      const container = document.createElement('div');
+      const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createMockedSearchClient(),
+      });
+
+      search.use(insights);
+
+      search.addWidgets([
+        infiniteHits({
+          container,
+          templates: {
+            item: (item, { html, sendEvent }) => html`
+              <button
+                type="button"
+                onClick=${() =>
+                  sendEvent('conversion', item, 'Product Ordered')}
+              >
+                ${item.name}
+              </button>
+            `,
+          },
+        }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      // view event by render
+      expect(onEvent).toHaveBeenCalledTimes(1);
+      onEvent.mockClear();
+
+      fireEvent.click(getByText(container, 'Name 2'));
+      // The custom one + default click
+      expect(onEvent).toHaveBeenCalledTimes(2);
+      expect(onEvent.mock.calls[0][0]).toEqual({
+        eventType: 'conversion',
+        hits: [
+          {
+            __hitIndex: 1,
+            __position: 2,
+            objectID: '2',
+            name: 'Name 2',
+          },
+        ],
+        insightsMethod: 'convertedObjectIDsAfterSearch',
+        payload: {
+          eventName: 'Product Ordered',
+          index: 'indexName',
+          objectIDs: ['2'],
+        },
+        widgetType: 'ais.infiniteHits',
+      });
+      expect(onEvent.mock.calls[1][0]).toEqual({
+        eventType: 'click',
+        eventModifier: 'internal',
+        hits: [
+          {
+            __position: 2,
+            objectID: '2',
+            name: 'Name 2',
+          },
+        ],
+        insightsMethod: 'clickedObjectIDsAfterSearch',
+        payload: {
+          eventName: 'Hit Clicked',
+          index: 'indexName',
+          objectIDs: ['2'],
+          positions: [2],
+        },
+        widgetType: 'ais.infiniteHits',
+      });
+    });
+
+    test('sends `click` event with `bindEvent`', async () => {
+      const container = document.createElement('div');
+      const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createMockedSearchClient(),
+      });
+
+      search.use(insights);
+
+      search.addWidgets([
+        infiniteHits({
+          container,
+          templates: {
+            item: (item, bindEvent) => `
+              <button type='button' ${bindEvent('click', item, 'Item Clicked')}>
+                ${item.name}
+              </button>
+            `,
+          },
+        }),
+      ]);
+      search.start();
+      await wait(0);
+
+      // view event by render
+      expect(onEvent).toHaveBeenCalledTimes(1);
+      onEvent.mockClear();
+
+      fireEvent.click(getByText(container, 'Name 1'));
+      // The custom one only
+      expect(onEvent).toHaveBeenCalledTimes(1);
+      expect(onEvent.mock.calls[0][0]).toEqual({
+        eventType: 'click',
+        hits: [
+          {
+            __hitIndex: 0,
+            __position: 1,
+            objectID: '1',
+            name: 'Name 1',
+          },
+        ],
+        insightsMethod: 'clickedObjectIDsAfterSearch',
+        payload: {
+          eventName: 'Item Clicked',
+          index: 'indexName',
+          objectIDs: ['1'],
+          positions: [1],
+        },
+        widgetType: 'ais.infiniteHits',
+      });
+    });
+
+    test('sends `conversion` event with `bindEvent`', async () => {
+      const container = document.createElement('div');
+      const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createMockedSearchClient(),
+      });
+
+      search.use(insights);
+
+      search.addWidgets([
+        infiniteHits({
+          container,
+          templates: {
+            item: (item, bindEvent) => `
+              <button type='button' ${bindEvent(
+                'conversion',
+                item,
+                'Product Ordered'
+              )}>
+                ${item.name}
+              </button>
+            `,
+          },
+        }),
+      ]);
+      search.start();
+      await wait(0);
+
+      // view event by render
+      expect(onEvent).toHaveBeenCalledTimes(1);
+      onEvent.mockClear();
+
+      fireEvent.click(getByText(container, 'Name 2'));
+
+      // The custom one + default click
+      expect(onEvent).toHaveBeenCalledTimes(2);
+      expect(onEvent.mock.calls[0][0]).toEqual({
+        eventType: 'conversion',
+        hits: [
+          {
+            __hitIndex: 1,
+            __position: 2,
+            objectID: '2',
+            name: 'Name 2',
+          },
+        ],
+        insightsMethod: 'convertedObjectIDsAfterSearch',
+        payload: {
+          eventName: 'Product Ordered',
+          index: 'indexName',
+          objectIDs: ['2'],
+        },
+        widgetType: 'ais.infiniteHits',
+      });
+      expect(onEvent.mock.calls[1][0]).toEqual({
+        eventType: 'click',
+        eventModifier: 'internal',
+        hits: [
+          {
+            __position: 2,
+            objectID: '2',
+            name: 'Name 2',
+          },
+        ],
+        insightsMethod: 'clickedObjectIDsAfterSearch',
+        payload: {
+          eventName: 'Hit Clicked',
+          index: 'indexName',
+          objectIDs: ['2'],
+          positions: [2],
+        },
+        widgetType: 'ais.infiniteHits',
+      });
+    });
+
+    type CustomHit = { name: string };
+
+    function createMockedSearchClient(
+      subset: Partial<SearchResponse<CustomHit>> & {
+        clickAnalytics?: boolean;
+      } = { hitsPerPage: 2, page: 0, clickAnalytics: false }
+    ) {
+      return createSearchClient({
+        search: jest.fn((requests) => {
+          return Promise.resolve(
+            createMultiSearchResponse(
+              ...requests.map((request) => {
+                return createSingleSearchResponse<any>({
+                  index: request.indexName,
+                  query: request.params?.query,
+                  hits: Array(subset.hitsPerPage)
+                    .fill(undefined)
+                    .map((_, index) => ({
+                      objectID: `${index + 1}`,
+                      name: `Name ${index + 1}`,
+                      ...(subset.clickAnalytics && {
+                        __queryID: 'test-query-id',
+                      }),
+                    })),
                   ...subset,
                 });
               })

@@ -174,6 +174,9 @@ const testSetups = {
                   ),
               },
             }),
+            h('div', { attrs: { id: 'hits-with-defaults' } }, [
+              h(AisInfiniteHits, { props: widgetParams }),
+            ]),
             h(AisIndex, { props: { indexName: 'nested' } }, [
               h(AisInfiniteHits, {
                 attrs: { id: 'nested-hits' },
