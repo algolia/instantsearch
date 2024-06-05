@@ -18,8 +18,9 @@ function normalizeSnapshot(html: string) {
     commonNormalizeSnapshot(html)
       // With Vue it puts whitespace around option label, we should remove it
       .replace(/>\s+(.*)\s+</g, '>$1<')
+      .replace(/\s+</g, '<')
       // Also, Vue puts whitespace between option tags
-      .replace(/<\/option>\s*<option/, '</option><option')
+      .replace(/<\/option>\s*(.*)\s*<option/g, '</option>$1<option')
   );
 }
 
