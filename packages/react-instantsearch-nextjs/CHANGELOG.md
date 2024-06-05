@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.2](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.3.1...react-instantsearch-nextjs@0.3.2) (2024-06-05)
+
+
+### Bug Fixes
+
+* **next-app-router:** do not retrieve headers in csr ([#6228](https://github.com/algolia/instantsearch/issues/6228)) ([4fca256](https://github.com/algolia/instantsearch/commit/4fca256a117b0cd04686873230a30e6999b608de))
+
+
+
+
+
 ## [0.3.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.3.0...react-instantsearch-nextjs@0.3.1) (2024-06-04)
 
 
