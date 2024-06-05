@@ -29,6 +29,7 @@ import {
   FrequentlyBoughtTogether,
   TrendingItems,
   LookingSimilar,
+  PoweredBy,
 } from '..';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -356,6 +357,18 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
+  createPoweredByWidgetTests({ instantSearchOptions, widgetParams }) {
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <PoweredBy {...widgetParams} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+
+    return {
+      flavor: 'react-instantsearch',
+    };
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -391,6 +404,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createFrequentlyBoughtTogetherWidgetTests: { act },
   createTrendingItemsWidgetTests: { act },
   createLookingSimilarWidgetTests: { act },
+  createPoweredByWidgetTests: { act },
 };
 
 /**

@@ -26,6 +26,7 @@ import {
   AisStats,
   AisRatingMenu,
   AisNumericMenu,
+  AisPoweredBy,
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
 
@@ -520,6 +521,23 @@ const testSetups = {
   createLookingSimilarWidgetTests() {
     throw new Error('LookingSimilar is not supported in Vue InstantSearch');
   },
+  createPoweredByWidgetTests({ instantSearchOptions, widgetParams }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(AisPoweredBy, { props: widgetParams }),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+
+    return {
+      flavor: 'vue-instantsearch',
+    };
+  },
 };
 
 const testOptions = {
@@ -556,6 +574,7 @@ const testOptions = {
   createLookingSimilarWidgetTests: {
     skippedTests: { 'LookingSimilar widget common tests': true },
   },
+  createPoweredByWidgetTests: undefined,
 };
 
 describe('Common widget tests (Vue InstantSearch)', () => {
