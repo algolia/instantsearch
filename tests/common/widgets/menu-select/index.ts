@@ -6,14 +6,9 @@ import type { TestOptions, TestSetup } from '../../common';
 import type { MenuSelectWidget } from 'instantsearch.js/es/widgets/menu-select/menu-select';
 
 type WidgetParams = Parameters<MenuSelectWidget>[0];
-export type MenuSelectWidgetSetup = TestSetup<
-  {
-    widgetParams: Omit<WidgetParams, 'container'>;
-  },
-  {
-    flavor: string;
-  }
->;
+export type MenuSelectWidgetSetup = TestSetup<{
+  widgetParams: Omit<WidgetParams, 'container'>;
+}>;
 
 export function createMenuSelectWidgetTests(
   setup: MenuSelectWidgetSetup,

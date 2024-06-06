@@ -593,10 +593,6 @@ const testSetups: TestSetupsMap<TestSuites> = {
         }),
       ])
       .start();
-
-    return {
-      flavor: 'instantsearch.js',
-    };
   },
 };
 
