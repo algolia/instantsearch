@@ -85,6 +85,12 @@ export type InfiniteHitsConnectorParams<
   cache?: InfiniteHitsCache<THit>;
 };
 
+type Banner = NonNullable<
+  NonNullable<
+    Required<SearchResults<Hit>['renderingContent']>
+  >['widgets']['banners']
+>[number];
+
 export type InfiniteHitsRenderState<
   THit extends NonNullable<object> = BaseHit
 > = {
@@ -138,6 +144,11 @@ export type InfiniteHitsRenderState<
    * The response from the Algolia API.
    */
   results?: SearchResults<Hit<THit>>;
+
+  /**
+   * The banner to display above the hits.
+   */
+  banner?: Banner;
 };
 
 const withUsage = createDocumentationMessageGenerator({
@@ -342,6 +353,8 @@ export default (function connectInfiniteHits<
 
         const cachedHits = cache.read({ state: normalizeState(state) }) || {};
 
+        const banner = results?.renderingContent?.widgets?.banners?.[0];
+
         if (!results) {
           showPrevious = getShowPrevious(helper);
           showMore = getShowMore(helper);
@@ -426,6 +439,7 @@ export default (function connectInfiniteHits<
           currentPageHits,
           sendEvent,
           bindEvent,
+          banner,
           results,
           showPrevious,
           showMore,

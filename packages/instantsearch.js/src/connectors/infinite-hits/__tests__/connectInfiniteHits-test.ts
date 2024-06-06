@@ -1331,6 +1331,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         bindEvent: expect.any(Function),
         isFirstPage: true,
         isLastPage: true,
+        banner: undefined,
         results: undefined,
         showMore: expect.any(Function),
         showPrevious: expect.any(Function),
@@ -1394,6 +1395,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         bindEvent: renderState1.infiniteHits.bindEvent,
         isFirstPage: true,
         isLastPage: true,
+        banner: undefined,
         results,
         showMore: renderState1.infiniteHits.showMore,
         showPrevious: renderState1.infiniteHits.showPrevious,
@@ -1424,6 +1426,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         bindEvent: expect.any(Function),
         isFirstPage: true,
         isLastPage: true,
+        banner: undefined,
         results: undefined,
         showMore: expect.any(Function),
         showPrevious: expect.any(Function),
@@ -1439,6 +1442,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
         index: 'indexName',
       });
+      const banner = { image: { urls: [{ url: 'https://example.com' }] } };
+      const renderingContent = {
+        widgets: {
+          banners: [banner],
+        },
+      };
 
       const initOptions = createInitOptions({ state: helper.state, helper });
 
@@ -1450,7 +1459,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
       ];
 
       const results = new SearchResults(helper.state, [
-        createSingleSearchResponse({ hits, queryID: 'theQueryID' }),
+        createSingleSearchResponse({
+          hits,
+          queryID: 'theQueryID',
+          // @TODO: remove once algoliasearch js client has been updated
+          // @ts-expect-error
+          renderingContent,
+        }),
       ]);
 
       const renderOptions = createRenderOptions({
@@ -1488,6 +1503,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         bindEvent: renderState1.bindEvent,
         isFirstPage: true,
         isLastPage: true,
+        banner,
         results,
         showMore: renderState1.showMore,
         showPrevious: renderState1.showPrevious,
