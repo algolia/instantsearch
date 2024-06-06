@@ -55,6 +55,10 @@ export function InstantSearchNext<
     };
   }, []);
 
+  const nonce = safelyRunOnBrowser(() => undefined, {
+    fallback: () => headers().get('x-nonce') || undefined,
+  });
+
   const routing = useInstantSearchRouting(passedRouting, isMounting);
 
   const promiseRef = useRef<PromiseWithState<void> | null>(null);
@@ -73,9 +77,7 @@ This message will only be displayed in development mode.`
     <InstantSearchRSCContext.Provider value={promiseRef}>
       <InstantSearchSSRProvider initialResults={initialResults}>
         <InstantSearch {...instantSearchProps} routing={routing}>
-          {!initialResults && (
-            <InitializePromise nonce={headers().get('x-nonce') || undefined} />
-          )}
+          {!initialResults && <InitializePromise nonce={nonce} />}
           {children}
           {!initialResults && <TriggerSearch />}
         </InstantSearch>
