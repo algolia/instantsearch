@@ -498,12 +498,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
         index: 'indexName',
       });
-      const banner = { image: { urls: [{ url: 'https://example.com' }] } };
-      const renderingContent = {
-        widgets: {
-          banners: [banner],
-        },
-      };
 
       const renderState1 = hitsWidget.getRenderState(
         {},
@@ -511,6 +505,69 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       );
 
       expect(renderState1.hits).toEqual({
+        hits: [],
+        items: [],
+        sendEvent: expect.any(Function),
+        bindEvent: expect.any(Function),
+        results: undefined,
+        widgetParams: {},
+      });
+
+      const hits = [
+        { objectID: '1', name: 'name 1' },
+        { objectID: '2', name: 'name 2' },
+      ];
+
+      const results = new SearchResults(helper.state, [
+        createSingleSearchResponse({ hits, queryID: 'theQueryID' }),
+      ]);
+
+      const renderState2 = hitsWidget.getRenderState(
+        {},
+        createRenderOptions({
+          helper,
+          state: helper.state,
+          results,
+        })
+      );
+
+      const expectedHits = [
+        { objectID: '1', name: 'name 1', __queryID: 'theQueryID' },
+        { objectID: '2', name: 'name 2', __queryID: 'theQueryID' },
+      ];
+
+      expect(renderState2.hits).toEqual({
+        hits: expectedHits,
+        items: expectedHits,
+        sendEvent: renderState1.hits.sendEvent,
+        bindEvent: renderState1.hits.bindEvent,
+        results,
+        widgetParams: {},
+      });
+    });
+  });
+
+  describe('getWidgetRenderState', () => {
+    it('returns the widget render state', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createHits = connectHits(renderFn, unmountFn);
+      const hitsWidget = createHits({});
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        index: 'indexName',
+      });
+      const banner = { image: { urls: [{ url: 'https://example.com' }] } };
+      const renderingContent = {
+        widgets: {
+          banners: [banner],
+        },
+      };
+
+      const renderState1 = hitsWidget.getWidgetRenderState(
+        createInitOptions({ state: helper.state, helper })
+      );
+
+      expect(renderState1).toEqual({
         hits: [],
         items: [],
         banner: undefined,
@@ -535,64 +592,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
         }),
       ]);
 
-      const renderState2 = hitsWidget.getRenderState(
-        {},
-        createRenderOptions({
-          helper,
-          state: helper.state,
-          results,
-        })
-      );
-
-      const expectedHits = [
-        { objectID: '1', name: 'name 1', __queryID: 'theQueryID' },
-        { objectID: '2', name: 'name 2', __queryID: 'theQueryID' },
-      ];
-
-      expect(renderState2.hits).toEqual({
-        hits: expectedHits,
-        items: expectedHits,
-        banner,
-        sendEvent: renderState1.hits.sendEvent,
-        bindEvent: renderState1.hits.bindEvent,
-        results,
-        widgetParams: {},
-      });
-    });
-  });
-
-  describe('getWidgetRenderState', () => {
-    it('returns the widget render state', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
-      const createHits = connectHits(renderFn, unmountFn);
-      const hitsWidget = createHits({});
-      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
-        index: 'indexName',
-      });
-
-      const renderState1 = hitsWidget.getWidgetRenderState(
-        createInitOptions({ state: helper.state, helper })
-      );
-
-      expect(renderState1).toEqual({
-        hits: [],
-        items: [],
-        sendEvent: expect.any(Function),
-        bindEvent: expect.any(Function),
-        results: undefined,
-        widgetParams: {},
-      });
-
-      const hits = [
-        { objectID: '1', name: 'name 1' },
-        { objectID: '2', name: 'name 2' },
-      ];
-
-      const results = new SearchResults(helper.state, [
-        createSingleSearchResponse({ hits, queryID: 'theQueryID' }),
-      ]);
-
       const renderState2 = hitsWidget.getWidgetRenderState(
         createRenderOptions({
           helper,
@@ -609,6 +608,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       expect(renderState2).toEqual({
         hits: expectedHits,
         items: expectedHits,
+        banner,
         sendEvent: renderState1.sendEvent,
         bindEvent: renderState2.bindEvent,
         results,
