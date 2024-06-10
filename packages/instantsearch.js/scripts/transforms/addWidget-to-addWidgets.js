@@ -1,29 +1,9 @@
-/* eslint-disable no-shadow */
+/* eslint-disable no-console, import/no-commonjs */
 
-export default function transform(file, api, options) {
-  const j = api.jscodeshift;
-  const printOptions = options.printOptions || { quote: 'single' };
-  const root = j(file.source);
+// @MAJOR: remove this file and only keep only the `instantsearch-codemods` one
+// also ensure this is removed from package.json
+console.warn(
+  "This file is deprecated. Please use `npx @codeshift/cli --packages 'instantsearch-codemods#addWidget-to-addWidgets' <path>` instead."
+);
 
-  // replace xxx[from](arguments) to xxx[to]([arguments])
-  const replaceSingularToPlural = (from, to) => (root) =>
-    root
-      .find(j.CallExpression, { callee: { property: { name: from } } })
-      .replaceWith((path) =>
-        j.callExpression(
-          j.memberExpression(path.value.callee.object, j.identifier(to), false),
-          [j.arrayExpression(path.value.arguments)]
-        )
-      );
-
-  const replaceAddWidget = replaceSingularToPlural('addWidget', 'addWidgets');
-  const replaceRemoveWidget = replaceSingularToPlural(
-    'removeWidget',
-    'removeWidgets'
-  );
-
-  replaceAddWidget(root);
-  replaceRemoveWidget(root);
-
-  return root.toSource(printOptions);
-}
+module.exports = require('instantsearch-codemods/src/addWidget-to-addWidgets');

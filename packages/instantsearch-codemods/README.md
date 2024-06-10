@@ -33,6 +33,14 @@ This will:
 npx @codeshift/cli --packages 'instantsearch-codemods#ris-v6-to-v7' <path>
 ```
 
+### `addWidget-to-addWidgets`
+
+This will replace all `addWidget` calls to `addWidgets` and `removeWidget` calls to `removeWidgets`.
+
+```
+npx @codeshift/cli --packages 'instantsearch-codemods#addWidget-to-addWidgets' <path>
+```
+
 ### Notes
 
 If you are using Prettier or ESLint, make sure to run its autofixing after this transformation, since code can be formatted differently after it has been transformed. For example, in our repository, the Prettier command would be:

@@ -369,6 +369,9 @@ const testSetups: TestSetupsMap<TestSuites> = {
       flavor: 'react-instantsearch',
     };
   },
+  createMenuSelectWidgetTests() {
+    throw new Error('MenuSelect is not supported in React InstantSearch');
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -405,6 +408,12 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createTrendingItemsWidgetTests: { act },
   createLookingSimilarWidgetTests: { act },
   createPoweredByWidgetTests: { act },
+  createMenuSelectWidgetTests: {
+    act,
+    skippedTests: {
+      'MenuSelect widget common tests': true,
+    },
+  },
 };
 
 /**
