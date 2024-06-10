@@ -19,6 +19,58 @@ beforeEach(() => {
 
 describe('menuSelect', () => {
   describe('templates', () => {
+    test('sets provided CSS classes', async () => {
+      const container = document.createElement('div');
+      const searchClient = createMockedSearchClient();
+
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient,
+        initialUiState: {
+          indexName: {
+            menu: {
+              brand: 'Apple',
+            },
+          },
+        },
+      });
+
+      search.addWidgets([
+        menuSelect({
+          container,
+          attribute: 'brand',
+          limit: 0,
+          cssClasses: {
+            noRefinementRoot: 'noRefinementRoot',
+            root: 'root',
+            option: 'option',
+            select: 'select',
+          },
+        }),
+      ]);
+
+      search.start();
+
+      await wait(0);
+
+      expect(container.firstChild).toMatchInlineSnapshot(`
+        <div
+          class="ais-MenuSelect root ais-MenuSelect--noRefinement noRefinementRoot"
+        >
+          <select
+            class="ais-MenuSelect-select select"
+          >
+            <option
+              class="ais-MenuSelect-option option"
+              value=""
+            >
+              See all
+            </option>
+          </select>
+        </div>
+      `);
+    });
+
     test('renders with templates using `html`', async () => {
       const container = document.createElement('div');
       const searchClient = createMockedSearchClient();
@@ -60,67 +112,67 @@ describe('menuSelect', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-MenuSelect"
-  >
-    <select
-      class="ais-MenuSelect-select"
-    >
-      <option
-        class="ais-MenuSelect-option"
-        value=""
-      >
-        <span>
-          See all
-        </span>
-      </option>
-      <option
-        class="ais-MenuSelect-option"
-        value="Apple"
-      >
-        <span
-          style="font-weight: bold;"
-          title="Apple"
-        >
-          Apple
-           - (
-          442
-          )
-        </span>
-      </option>
-      <option
-        class="ais-MenuSelect-option"
-        value="Canon"
-      >
-        <span
-          style="font-weight: normal;"
-          title="Canon"
-        >
-          Canon
-           - (
-          287
-          )
-        </span>
-      </option>
-      <option
-        class="ais-MenuSelect-option"
-        value="Dell"
-      >
-        <span
-          style="font-weight: normal;"
-          title="Dell"
-        >
-          Dell
-           - (
-          174
-          )
-        </span>
-      </option>
-    </select>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-MenuSelect"
+          >
+            <select
+              class="ais-MenuSelect-select"
+            >
+              <option
+                class="ais-MenuSelect-option"
+                value=""
+              >
+                <span>
+                  See all
+                </span>
+              </option>
+              <option
+                class="ais-MenuSelect-option"
+                value="Apple"
+              >
+                <span
+                  style="font-weight: bold;"
+                  title="Apple"
+                >
+                  Apple
+                   - (
+                  442
+                  )
+                </span>
+              </option>
+              <option
+                class="ais-MenuSelect-option"
+                value="Canon"
+              >
+                <span
+                  style="font-weight: normal;"
+                  title="Canon"
+                >
+                  Canon
+                   - (
+                  287
+                  )
+                </span>
+              </option>
+              <option
+                class="ais-MenuSelect-option"
+                value="Dell"
+              >
+                <span
+                  style="font-weight: normal;"
+                  title="Dell"
+                >
+                  Dell
+                   - (
+                  174
+                  )
+                </span>
+              </option>
+            </select>
+          </div>
+        </div>
+      `);
     });
 
     test('renders with templates using JSX', async () => {
@@ -167,67 +219,67 @@ describe('menuSelect', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-MenuSelect"
-  >
-    <select
-      class="ais-MenuSelect-select"
-    >
-      <option
-        class="ais-MenuSelect-option"
-        value=""
-      >
-        <span>
-          See all
-        </span>
-      </option>
-      <option
-        class="ais-MenuSelect-option"
-        value="Apple"
-      >
-        <span
-          style="font-weight: bold;"
-          title="Apple"
-        >
-          Apple
-           - (
-          442
-          )
-        </span>
-      </option>
-      <option
-        class="ais-MenuSelect-option"
-        value="Canon"
-      >
-        <span
-          style="font-weight: normal;"
-          title="Canon"
-        >
-          Canon
-           - (
-          287
-          )
-        </span>
-      </option>
-      <option
-        class="ais-MenuSelect-option"
-        value="Dell"
-      >
-        <span
-          style="font-weight: normal;"
-          title="Dell"
-        >
-          Dell
-           - (
-          174
-          )
-        </span>
-      </option>
-    </select>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-MenuSelect"
+          >
+            <select
+              class="ais-MenuSelect-select"
+            >
+              <option
+                class="ais-MenuSelect-option"
+                value=""
+              >
+                <span>
+                  See all
+                </span>
+              </option>
+              <option
+                class="ais-MenuSelect-option"
+                value="Apple"
+              >
+                <span
+                  style="font-weight: bold;"
+                  title="Apple"
+                >
+                  Apple
+                   - (
+                  442
+                  )
+                </span>
+              </option>
+              <option
+                class="ais-MenuSelect-option"
+                value="Canon"
+              >
+                <span
+                  style="font-weight: normal;"
+                  title="Canon"
+                >
+                  Canon
+                   - (
+                  287
+                  )
+                </span>
+              </option>
+              <option
+                class="ais-MenuSelect-option"
+                value="Dell"
+              >
+                <span
+                  style="font-weight: normal;"
+                  title="Dell"
+                >
+                  Dell
+                   - (
+                  174
+                  )
+                </span>
+              </option>
+            </select>
+          </div>
+        </div>
+      `);
     });
 
     function createMockedSearchClient() {
