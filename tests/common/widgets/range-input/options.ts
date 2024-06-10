@@ -159,27 +159,73 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      userEvent.type(
-        document.querySelector('.ais-RangeInput-input--min')!,
-        '100'
-      );
-      userEvent.type(
-        document.querySelector('.ais-RangeInput-input--max')!,
-        '200'
-      );
+      const inputMin = document.querySelector('.ais-RangeInput-input--min')!;
+      const inputMax = document.querySelector('.ais-RangeInput-input--max')!;
+      const submit = document.querySelector('.ais-RangeInput-submit')!;
+
+      userEvent.type(inputMin, '10');
 
       await act(async () => {
         await wait(0);
       });
 
-      userEvent.click(document.querySelector('.ais-RangeInput-submit')!);
+      userEvent.click(submit);
 
       await act(async () => {
         await wait(0);
       });
 
       expect(searchClient.search).toHaveBeenCalledTimes(2);
+      expect(searchClient.search).toHaveBeenLastCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            params: expect.objectContaining({
+              numericFilters: ['price>=10'],
+            }),
+          }),
+        ])
+      );
 
+      userEvent.clear(inputMin);
+      userEvent.type(inputMax, '20');
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      userEvent.click(submit);
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(searchClient.search).toHaveBeenCalledTimes(3);
+      expect(searchClient.search).toHaveBeenLastCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            params: expect.objectContaining({
+              numericFilters: ['price<=20'],
+            }),
+          }),
+        ])
+      );
+
+      userEvent.clear(inputMin);
+      userEvent.clear(inputMax);
+      userEvent.type(inputMin, '100');
+      userEvent.type(inputMax, '200');
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      userEvent.click(submit);
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(searchClient.search).toHaveBeenCalledTimes(4);
       expect(searchClient.search).toHaveBeenLastCalledWith(
         expect.arrayContaining([
           expect.objectContaining({
