@@ -25,6 +25,7 @@ import type {
   IndexRenderState,
 } from '../../types';
 import type {
+  Banner,
   AlgoliaSearchHelper as Helper,
   PlainSearchParameters,
   SearchParameters,
@@ -84,12 +85,6 @@ export type InfiniteHitsConnectorParams<
    */
   cache?: InfiniteHitsCache<THit>;
 };
-
-type Banner = NonNullable<
-  NonNullable<
-    Required<SearchResults<Hit>['renderingContent']>
-  >['widgets']['banners']
->[number];
 
 export type InfiniteHitsRenderState<
   THit extends NonNullable<object> = BaseHit

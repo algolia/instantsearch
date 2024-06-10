@@ -2,22 +2,11 @@
 import { cx } from '../lib';
 
 import type { ComponentProps, Renderer, SendEventForHits } from '../types';
+import type { Banner } from 'algoliasearch-helper';
 
 // Should be imported from a shared package in the future
 type Hit = Record<string, unknown> & {
   objectID: string;
-};
-type Banner = {
-  image: {
-    urls: Array<{
-      url: string;
-    }>;
-    title?: string;
-  };
-  link?: {
-    url: string;
-    target?: '_blank' | '_self';
-  };
 };
 
 type BannerProps = ComponentProps<'aside'> & {
