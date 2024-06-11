@@ -21,18 +21,12 @@ import type {
   Renderer,
   IndexRenderState,
 } from '../../types';
-import type { SearchResults } from 'algoliasearch-helper';
+import type { Banner, SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'hits',
   connector: true,
 });
-
-type Banner = NonNullable<
-  NonNullable<
-    Required<SearchResults<Hit>['renderingContent']>
-  >['widgets']['banners']
->[number];
 
 export type HitsRenderState<THit extends NonNullable<object> = BaseHit> = {
   /**
