@@ -107,32 +107,38 @@ const connectLayout: LayoutConnector = function connectLayout(
               children: [
                 {
                   type: 'text',
-                  params: { text: 'Top Thriller Books' },
+                  params: { value: 'Top Thriller Books' },
                 },
               ],
             },
             {
-              type: 'configure',
+              type: 'ais.configure',
               params: { facetFilters: [['genre:Thriller']] },
             },
             {
-              type: 'hits',
+              type: 'ais.hits',
               children: [
-                { type: 'image', params: { attribute: 'largeImg' } },
+                {
+                  type: 'image',
+                  params: {
+                    src: 'hit.largeImage',
+                    alt: 'hit.name',
+                  },
+                },
                 {
                   type: 'heading-3',
                   children: [
                     {
                       type: 'text',
-                      params: { attribute: 'title' },
+                      params: { value: 'hit.title' },
                     },
                   ],
                 },
                 {
                   type: 'paragraph',
                   children: [
-                    { type: 'text', params: { text: 'By ' } },
-                    { type: 'text', params: { attribute: 'author' } },
+                    { type: 'text', params: { value: 'By ' } },
+                    { type: 'text', params: { value: 'hit.author' } },
                   ],
                 },
               ],
