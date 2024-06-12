@@ -160,6 +160,45 @@ type SearchWidget<TWidgetDescription extends WidgetDescription> = {
   ) => SearchParameters;
 };
 
+export type ConfigurationParameters = {
+  id?: string;
+  path?: string;
+};
+
+type ConfigurationResultItem = {};
+
+type ConfigurationRenderOptions = SharedRenderOptions & {
+  results: ConfigurationResultItem;
+};
+
+type ConfigurationWidget<
+  TWidgetDescription extends WidgetDescription & WidgetParams
+> = {
+  dependsOn?: 'configuration';
+  getWidgetParameters?: (
+    state: ConfigurationParameters,
+    widgetParametersOptions: {
+      uiState: Expand<
+        Partial<TWidgetDescription['indexUiState'] & IndexUiState>
+      >;
+    }
+  ) => ConfigurationParameters;
+  // getRenderState: (
+  //   renderState: Expand<
+  //     IndexRenderState & Partial<TWidgetDescription['indexRenderState']>
+  //   >,
+  //   renderOptions: InitOptions | ConfigurationRenderOptions
+  // ) => IndexRenderState & TWidgetDescription['indexRenderState'];
+  // getWidgetRenderState: (
+  //   renderOptions: InitOptions | ConfigurationRenderOptions
+  // ) => Expand<
+  //   WidgetRenderState<
+  //     TWidgetDescription['renderState'],
+  //     TWidgetDescription['widgetParams']
+  //   >
+  // >;
+};
+
 type RecommendRenderOptions = SharedRenderOptions & {
   results: RecommendResultItem;
 };
@@ -334,7 +373,11 @@ export type Widget<
     UiStateLifeCycle<TWidgetDescription> &
     RenderStateLifeCycle<TWidgetDescription>
 > &
-  (SearchWidget<TWidgetDescription> | RecommendWidget<TWidgetDescription>);
+  (
+    | SearchWidget<TWidgetDescription>
+    | RecommendWidget<TWidgetDescription>
+    | ConfigurationWidget<TWidgetDescription>
+  );
 
 export type { IndexWidget } from '../widgets';
 

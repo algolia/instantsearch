@@ -21,6 +21,7 @@ import type {
   SearchClient,
   IndexRenderState,
   RenderOptions,
+  ConfigurationParameters,
 } from '../../types';
 import type {
   AlgoliaSearchHelper as Helper,
@@ -61,6 +62,10 @@ type LocalWidgetSearchParametersOptions = WidgetSearchParametersOptions & {
 type LocalWidgetRecommendParametersOptions = WidgetSearchParametersOptions & {
   initialRecommendParameters: RecommendParameters;
 };
+type LocalWidgetConfigurationParametersOptions =
+  WidgetSearchParametersOptions & {
+    initialConfigurationParameters: ConfigurationParameters;
+  };
 
 export type IndexWidgetDescription = {
   $$type: 'ais.index';
@@ -220,6 +225,27 @@ function getLocalWidgetsRecommendParameters(
     }
     return state;
   }, initialRecommendParameters);
+}
+
+function getLocalWidgetsConfigurationParameters(
+  widgets: Array<Widget | IndexWidget>,
+  widgetConfigurationParametersOptions: LocalWidgetConfigurationParametersOptions
+): ConfigurationParameters[] {
+  const { initialConfigurationParameters, ...rest } =
+    widgetConfigurationParametersOptions;
+
+  return widgets
+    .map((widget) => {
+      if (
+        !isIndexWidget(widget) &&
+        widget.dependsOn === 'configuration' &&
+        widget.getWidgetParameters
+      ) {
+        return widget.getWidgetParameters(initialConfigurationParameters, rest);
+      }
+      return null;
+    })
+    .filter((x) => x !== null);
 }
 
 function resetPageFromWidgets(widgets: Array<Widget | IndexWidget>): void {
@@ -418,6 +444,13 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
             uiState: localUiState,
             initialRecommendParameters: helper!.recommendState,
           }),
+          configurationState: getLocalWidgetsConfigurationParameters(
+            localWidgets,
+            {
+              uiState: localUiState,
+              initialConfigurationParameters: helper!.configurationState,
+            }
+          ),
           _uiState: localUiState,
         });
 
