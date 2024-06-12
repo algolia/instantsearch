@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { cx } from 'instantsearch-ui-components';
-import { h, render } from 'preact';
+import { Fragment, h, render } from 'preact';
 
 import connectLayout from '../../connectors/layout/connectLayout';
 import { component } from '../../lib/suit';
@@ -16,6 +16,9 @@ import type {
   LayoutWidgetDescription,
 } from '../../connectors/layout/connectLayout';
 import type { ComponentCSSClasses, WidgetFactory, Renderer } from '../../types';
+import { configure } from '../../../es/widgets';
+import { ConfigureWidgetParams } from '../configure/configure';
+import hits, { HitsWidgetParams } from '../hits/hits';
 
 export type LayoutCSSClasses = Partial<{
   /**
@@ -46,6 +49,22 @@ const suit = component('Layout');
 const withUsage = createDocumentationMessageGenerator({ name: 'layout' });
 
 type LayoutComponentCSSClasses = ComponentCSSClasses<LayoutCSSClasses>;
+
+const components = {
+  'ais.configure': (widgetParams: ConfigureWidgetParams) =>
+    configure(widgetParams),
+  'ais.hits': (widgetParams: HitsWidgetParams) => hits(widgetParams),
+  'heading-1': ({ children, ...props }: any) => <h1 {...props}>{children}</h1>,
+  'heading-2': ({ children, ...props }: any) => <h2 {...props}>{children}</h2>,
+  'heading-3': ({ children, ...props }: any) => <h3 {...props}>{children}</h3>,
+  'heading-4': ({ children, ...props }: any) => <h4 {...props}>{children}</h4>,
+  'heading-5': ({ children, ...props }: any) => <h5 {...props}>{children}</h5>,
+  'heading-6': ({ children, ...props }: any) => <h6 {...props}>{children}</h6>,
+  paragraph: ({ children, ...props }: any) => <p {...props}>{children}</p>,
+  image: (props: any) => <img {...props} />,
+  link: ({ children, ...props }: any) => <a {...props}>{children}</a>,
+  text: ({ children }: any) => <Fragment>{children}</Fragment>,
+};
 
 type RendererParams = {
   containerNode: HTMLElement;
