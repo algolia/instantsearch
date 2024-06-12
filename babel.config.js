@@ -73,6 +73,10 @@ module.exports = (api) => {
             'Array.prototype.values',
             'Function.prototype.name',
 
+            // TODO revert
+            'Array.from',
+            'Object.assign',
+
             // we require polyfills for this already
             'Array.prototype.includes',
 

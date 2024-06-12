@@ -19,4 +19,6 @@ search.addWidgets([
   }),
 ]);
 
+window.search = search;
+
 search.start();

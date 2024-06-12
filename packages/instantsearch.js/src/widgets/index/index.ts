@@ -21,7 +21,6 @@ import type {
   SearchClient,
   IndexRenderState,
   RenderOptions,
-  ConfigurationParameters,
 } from '../../types';
 import type {
   AlgoliaSearchHelper as Helper,
@@ -32,6 +31,7 @@ import type {
   AlgoliaSearchHelper,
   RecommendParameters,
   RecommendResultItem,
+  ConfigurationParameters,
 } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -62,10 +62,6 @@ type LocalWidgetSearchParametersOptions = WidgetSearchParametersOptions & {
 type LocalWidgetRecommendParametersOptions = WidgetSearchParametersOptions & {
   initialRecommendParameters: RecommendParameters;
 };
-type LocalWidgetConfigurationParametersOptions =
-  WidgetSearchParametersOptions & {
-    initialConfigurationParameters: ConfigurationParameters;
-  };
 
 export type IndexWidgetDescription = {
   $$type: 'ais.index';
@@ -135,11 +131,13 @@ function privateHelperSetState(
   {
     state,
     recommendState,
+    configurationState,
     isPageReset,
     _uiState,
   }: {
     state: SearchParameters;
     recommendState: RecommendParameters;
+    configurationState: ConfigurationParameters[];
     isPageReset?: boolean;
     _uiState?: IndexUiState;
   }
@@ -160,6 +158,10 @@ function privateHelperSetState(
 
     // eslint-disable-next-line no-warning-comments
     // TODO: emit "change" event when events for Recommend are implemented
+  }
+
+  if (configurationState !== helper.configurationState) {
+    helper.configurationState = configurationState;
   }
 }
 
@@ -229,11 +231,8 @@ function getLocalWidgetsRecommendParameters(
 
 function getLocalWidgetsConfigurationParameters(
   widgets: Array<Widget | IndexWidget>,
-  widgetConfigurationParametersOptions: LocalWidgetConfigurationParametersOptions
+  widgetConfigurationParametersOptions: WidgetSearchParametersOptions
 ): ConfigurationParameters[] {
-  const { initialConfigurationParameters, ...rest } =
-    widgetConfigurationParametersOptions;
-
   return widgets
     .map((widget) => {
       if (
@@ -241,7 +240,10 @@ function getLocalWidgetsConfigurationParameters(
         widget.dependsOn === 'configuration' &&
         widget.getWidgetParameters
       ) {
-        return widget.getWidgetParameters(initialConfigurationParameters, rest);
+        return widget.getWidgetParameters(
+          {},
+          widgetConfigurationParametersOptions
+        );
       }
       return null;
     })
@@ -261,6 +263,7 @@ function resetPageFromWidgets(widgets: Array<Widget | IndexWidget>): void {
     privateHelperSetState(widgetHelper, {
       state: widgetHelper.state.resetPage(),
       recommendState: widgetHelper.recommendState,
+      configurationState: widgetHelper.configurationState,
       isPageReset: true,
     });
 
@@ -446,10 +449,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           }),
           configurationState: getLocalWidgetsConfigurationParameters(
             localWidgets,
-            {
-              uiState: localUiState,
-              initialConfigurationParameters: helper!.configurationState,
-            }
+            { uiState: localUiState }
           ),
           _uiState: localUiState,
         });

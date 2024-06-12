@@ -42,6 +42,7 @@ declare namespace algoliasearchHelper {
   export class AlgoliaSearchHelper extends EventEmitter {
     state: SearchParameters;
     recommendState: RecommendParameters;
+    configurationState: ConfigurationParameters[];
     lastResults: SearchResults | null;
     lastRecommendResults: RecommendResults | null;
     _recommendCache: RecommendResults['_rawResults'];
@@ -1576,6 +1577,11 @@ declare namespace algoliasearchHelper {
   export type RecommendParametersOptions = {
     params?: Array<RecommendParametersWithId<PlainRecommendParameters>>;
   };
+
+  export interface ConfigurationParameters {
+    id?: string;
+    path?: string;
+  }
 
   export class RecommendParameters {
     params: RecommendParametersWithId[];

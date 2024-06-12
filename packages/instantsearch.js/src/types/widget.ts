@@ -9,6 +9,7 @@ import type {
   SearchResults,
   RecommendParameters,
   RecommendResultItem,
+  ConfigurationParameters,
 } from 'algoliasearch-helper';
 
 export type ScopedResult = {
@@ -158,11 +159,6 @@ type SearchWidget<TWidgetDescription extends WidgetDescription> = {
       >;
     }
   ) => SearchParameters;
-};
-
-export type ConfigurationParameters = {
-  id?: string;
-  path?: string;
 };
 
 type ConfigurationResultItem = {};

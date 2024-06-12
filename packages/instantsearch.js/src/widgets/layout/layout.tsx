@@ -2,7 +2,6 @@
 
 import { Fragment, h } from 'preact';
 
-import { configure } from '../../../es/widgets';
 import connectLayout from '../../connectors/layout/connectLayout';
 import { component } from '../../lib/suit';
 import {
@@ -10,6 +9,7 @@ import {
   getContainerNode,
   getWidgetName,
 } from '../../lib/utils';
+import configure from '../configure/configure';
 import hits from '../hits/hits';
 
 import type {
