@@ -3,12 +3,12 @@ import instantsearch from 'instantsearch.js';
 import { layout } from 'instantsearch.js/es/widgets';
 
 const searchClient = algoliasearch(
-  'latency',
-  '6be0576ff61c053d5f9a3225e2a90f76'
+  'F4T6CUV2AH',
+  '02022fd5de7c24bcde770bfab52ea473'
 );
 
 const search = instantsearch({
-  indexName: 'instant_search',
+  indexName: 'products',
   searchClient,
   insights: true,
 });

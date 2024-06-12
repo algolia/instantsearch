@@ -1,10 +1,12 @@
 import {
   checkRendering,
   createDocumentationMessageGenerator,
+  getWidgetAttribute,
+  getWidgetName,
   noop,
 } from '../../lib/utils';
 
-import type { Connector, WidgetRenderState } from '../../types';
+import type { Connector, Widget, WidgetRenderState } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'layout',
@@ -41,6 +43,11 @@ export type LayoutConnectorParams = {
    * When undefined, InstantSearch uses the current path of the page.
    */
   path?: string;
+
+  /**
+   * An array of widgets, displayed in the order defined by `facetOrdering`.
+   */
+  widgets: Widget[];
 };
 
 export type LayoutConnector = Connector<
@@ -61,11 +68,19 @@ const connectLayout: LayoutConnector = function connectLayout(
       );
     }
 
+    const localWidgets: Map<string, { widget: Widget; isMounted: boolean }> =
+      new Map();
+
     return {
       $$type: 'ais.layout',
       dependsOn: 'configuration',
 
       init(initOptions) {
+        widgetParams.widgets.forEach((widget) => {
+          const attribute = getWidgetName(widget);
+          localWidgets.set(attribute, { widget, isMounted: false });
+        });
+
         renderFn(
           {
             ...this.getWidgetRenderState(initOptions),
@@ -78,6 +93,34 @@ const connectLayout: LayoutConnector = function connectLayout(
       render(renderOptions) {
         const renderState = this.getWidgetRenderState(renderOptions);
 
+        const widgetsToUnmount: Widget[] = [];
+        const widgetsToMount: Widget[] = [];
+
+        localWidgets.forEach(({ widget, isMounted }, attribute) => {
+          const shouldMount = true;
+
+          if (!isMounted && shouldMount) {
+            widgetsToMount.push(widget);
+            localWidgets.set(attribute, {
+              widget,
+              isMounted: true,
+            });
+          } else if (isMounted && !shouldMount) {
+            widgetsToUnmount.push(widget);
+            localWidgets.set(attribute, {
+              widget,
+              isMounted: false,
+            });
+          }
+        });
+
+        renderOptions.parent.addWidgets(widgetsToMount);
+
+        setTimeout(
+          () => renderOptions.parent.removeWidgets(widgetsToUnmount),
+          0
+        );
+
         renderFn(
           {
             ...renderState,
@@ -87,7 +130,15 @@ const connectLayout: LayoutConnector = function connectLayout(
         );
       },
 
-      dispose() {
+      dispose({ parent }) {
+        const toRemove: Widget[] = [];
+        localWidgets.forEach(({ widget, isMounted }) => {
+          if (isMounted) {
+            toRemove.push(widget);
+          }
+        });
+        parent.removeWidgets(toRemove);
+
         unmountFn();
       },
 
@@ -102,18 +153,18 @@ const connectLayout: LayoutConnector = function connectLayout(
         return {
           // blocks: results.blocks,
           blocks: [
-            {
-              type: 'heading-1',
-              children: [
-                {
-                  type: 'text',
-                  params: { value: 'Top Thriller Books' },
-                },
-              ],
-            },
+            // {
+            //   type: 'heading-1',
+            //   children: [
+            //     {
+            //       type: 'text',
+            //       params: { value: 'Top Thriller Books' },
+            //     },
+            //   ],
+            // },
             {
               type: 'ais.configure',
-              params: { facetFilters: [['genre:Thriller']] },
+              params: { facetFilters: [['type:book']] },
             },
             {
               type: 'ais.hits',
@@ -125,22 +176,22 @@ const connectLayout: LayoutConnector = function connectLayout(
                     alt: 'hit.name',
                   },
                 },
-                {
-                  type: 'heading-3',
-                  children: [
-                    {
-                      type: 'text',
-                      params: { value: 'hit.title' },
-                    },
-                  ],
-                },
-                {
-                  type: 'paragraph',
-                  children: [
-                    { type: 'text', params: { value: 'By ' } },
-                    { type: 'text', params: { value: 'hit.author' } },
-                  ],
-                },
+                // {
+                //   type: 'heading-3',
+                //   children: [
+                //     {
+                //       type: 'text',
+                //       params: { value: 'hit.title' },
+                //     },
+                //   ],
+                // },
+                // {
+                //   type: 'paragraph',
+                //   children: [
+                //     { type: 'text', params: { value: 'By ' } },
+                //     { type: 'text', params: { value: 'hit.author' } },
+                //   ],
+                // },
               ],
             },
           ],
