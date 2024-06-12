@@ -9,29 +9,29 @@ import {
 import type { Connector, Widget, WidgetRenderState } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
-  name: 'layout',
+  name: 'page',
   connector: true,
 });
 
-export type LayoutNode = {
+export type PageNode = {
   type: string;
   params: Record<string, any>;
-  children: LayoutNode[];
+  children: PageNode[];
 };
 
-export type LayoutRenderState = {
-  blocks: LayoutNode[];
+export type PageRenderState = {
+  blocks: PageNode[];
 };
 
-export type LayoutWidgetDescription = {
-  $$type: 'ais.layout';
-  renderState: LayoutRenderState;
+export type PageWidgetDescription = {
+  $$type: 'ais.page';
+  renderState: PageRenderState;
   indexRenderState: {
-    Layout: WidgetRenderState<LayoutRenderState, LayoutConnectorParams>;
+    Page: WidgetRenderState<PageRenderState, PageConnectorParams>;
   };
 };
 
-export type LayoutConnectorParams = {
+export type PageConnectorParams = {
   /**
    * The id to fetch the page for.
    * When undefined, InstantSearch uses the current path of the page.
@@ -50,12 +50,12 @@ export type LayoutConnectorParams = {
   widgets: Widget[];
 };
 
-export type LayoutConnector = Connector<
-  LayoutWidgetDescription,
-  LayoutConnectorParams
+export type PageConnector = Connector<
+  PageWidgetDescription,
+  PageConnectorParams
 >;
 
-const connectLayout: LayoutConnector = function connectLayout(
+const connectPage: PageConnector = function connectPage(
   renderFn,
   unmountFn = noop
 ) {
@@ -72,7 +72,7 @@ const connectLayout: LayoutConnector = function connectLayout(
       new Map();
 
     return {
-      $$type: 'ais.layout',
+      $$type: 'ais.page',
       dependsOn: 'configuration',
 
       init(initOptions) {
@@ -145,7 +145,7 @@ const connectLayout: LayoutConnector = function connectLayout(
       getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
-          layout: this.getWidgetRenderState(renderOptions),
+          page: this.getWidgetRenderState(renderOptions),
         };
       },
 
@@ -219,4 +219,4 @@ const connectLayout: LayoutConnector = function connectLayout(
   };
 };
 
-export default connectLayout;
+export default connectPage;

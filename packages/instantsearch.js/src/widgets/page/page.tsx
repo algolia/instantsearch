@@ -2,7 +2,7 @@
 
 import { Fragment, h } from 'preact';
 
-import connectLayout from '../../connectors/layout/connectLayout';
+import connectPage from '../../connectors/page/connectPage';
 import { component } from '../../lib/suit';
 import {
   createDocumentationMessageGenerator,
@@ -13,22 +13,22 @@ import configure from '../configure/configure';
 import hits from '../hits/hits';
 
 import type {
-  LayoutConnectorParams,
-  LayoutNode,
-  LayoutWidgetDescription,
-} from '../../connectors/layout/connectLayout';
+  PageConnectorParams,
+  PageNode,
+  PageWidgetDescription,
+} from '../../connectors/page/connectPage';
 import type { WidgetFactory, Widget } from '../../types';
 import type { ConfigureWidgetParams } from '../configure/configure';
 import type { HitsWidgetParams } from '../hits/hits';
 
-export type LayoutCSSClasses = Partial<{
+export type PageCSSClasses = Partial<{
   /**
    * CSS class to add to the wrapping element.
    */
   root: string | string[];
 }>;
 
-export type LayoutWidgetParams = {
+export type PageWidgetParams = {
   /**
    * CSS Selector or HTMLElement to insert the widget.
    */
@@ -37,13 +37,13 @@ export type LayoutWidgetParams = {
   /**
    * CSS classes to add.
    */
-  cssClasses?: LayoutCSSClasses;
+  cssClasses?: PageCSSClasses;
 };
 
-type LayoutWidget = WidgetFactory<
-  LayoutWidgetDescription & { $$widgetType: 'ais.layout' },
-  LayoutConnectorParams,
-  LayoutWidgetParams
+type PageWidget = WidgetFactory<
+  PageWidgetDescription & { $$widgetType: 'ais.page' },
+  PageConnectorParams,
+  PageWidgetParams
 >;
 
 const components = {
@@ -64,8 +64,8 @@ const components = {
   text: ({ children }: any) => <Fragment>{children}</Fragment>,
 };
 
-const suit = component('Layout');
-const withUsage = createDocumentationMessageGenerator({ name: 'layout' });
+const suit = component('Page');
+const withUsage = createDocumentationMessageGenerator({ name: 'page' });
 
 function createContainer(rootContainer: HTMLElement) {
   const container = document.createElement('div');
@@ -76,7 +76,7 @@ function createContainer(rootContainer: HTMLElement) {
   return container;
 }
 
-const layout: LayoutWidget = function layout(widgetParams) {
+const page: PageWidget = function page(widgetParams) {
   const {
     container: containerSelector,
     cssClasses: userCssClasses = {},
@@ -94,7 +94,7 @@ const layout: LayoutWidget = function layout(widgetParams) {
   const containers = new Map<string, HTMLElement>();
   const connectorWidgets: Widget[] = [];
 
-  const makeWidget = connectLayout(
+  const makeWidget = connectPage(
     ({ blocks }, isFirstRender) => {
       if (isFirstRender) {
         userContainer.appendChild(rootContainer);
@@ -125,7 +125,7 @@ const layout: LayoutWidget = function layout(widgetParams) {
     ...widget,
     init(initOptions) {
       const { blocks } =
-        initOptions.renderState[initOptions.parent.getIndexId()].layout;
+        initOptions.renderState[initOptions.parent.getIndexId()].page;
 
       const widgets = getWidgetsFromBlocks(blocks);
 
@@ -141,11 +141,11 @@ const layout: LayoutWidget = function layout(widgetParams) {
 
       widget.init!(initOptions);
     },
-    $$widgetType: 'ais.layout',
+    $$widgetType: 'ais.page',
   };
 };
 
-function getWidgetsFromBlocks(blocks: LayoutNode[]) {
+function getWidgetsFromBlocks(blocks: PageNode[]) {
   const widgets = blocks
     .map((block) => {
       const { type, params, children } = block;
@@ -207,7 +207,7 @@ function getWidgetsFromBlocks(blocks: LayoutNode[]) {
   return widgets as Array<(container: HTMLElement) => Widget>;
 }
 
-function renderHitsItemTemplate(children: LayoutNode[], hit: any) {
+function renderHitsItemTemplate(children: PageNode[], hit: any) {
   return (
     <Fragment>
       {children.map((child) => {
@@ -239,4 +239,4 @@ function renderHitsItemTemplate(children: LayoutNode[], hit: any) {
   );
 }
 
-export default layout;
+export default page;
