@@ -103,13 +103,37 @@ const connectLayout: LayoutConnector = function connectLayout(
           // blocks: results.blocks,
           blocks: [
             {
-              type: 'heading-2',
+              type: 'heading-1',
               children: [
                 {
                   type: 'text',
-                  params: {
-                    value: 'Summer BBQ',
-                  },
+                  params: { text: 'Top Thriller Books' },
+                },
+              ],
+            },
+            {
+              type: 'configure',
+              params: { facetFilters: [['genre:Thriller']] },
+            },
+            {
+              type: 'hits',
+              children: [
+                { type: 'image', params: { attribute: 'largeImg' } },
+                {
+                  type: 'heading-3',
+                  children: [
+                    {
+                      type: 'text',
+                      params: { attribute: 'title' },
+                    },
+                  ],
+                },
+                {
+                  type: 'paragraph',
+                  children: [
+                    { type: 'text', params: { text: 'By ' } },
+                    { type: 'text', params: { attribute: 'author' } },
+                  ],
                 },
               ],
             },
