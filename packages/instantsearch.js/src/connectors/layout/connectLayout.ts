@@ -21,13 +21,9 @@ export type LayoutWidgetDescription = {
   };
 };
 
-export type LayoutConnectorParams =
-  | {
-      id: string;
-    }
-  | {
-      path: string;
-    };
+export type LayoutConnectorParams = {
+  id?: string;
+};
 
 export type LayoutConnector = Connector<
   LayoutWidgetDescription,
@@ -85,14 +81,15 @@ const connectLayout: LayoutConnector = function connectLayout(
       },
 
       getWidgetParameters() {
-        if ('path' in widgetParams) {
+        if (widgetParams.id) {
           return {
-            path: widgetParams.path,
+            id: widgetParams.id,
           };
         }
 
         return {
-          id: widgetParams.id,
+          // TODO: ssr, via routing?
+          path: location.pathname,
         };
       },
     };
