@@ -22,7 +22,17 @@ export type LayoutWidgetDescription = {
 };
 
 export type LayoutConnectorParams = {
+  /**
+   * The id to fetch the page for.
+   * When undefined, InstantSearch uses the current path of the page.
+   */
   id?: string;
+
+  /**
+   * The path to fetch the page for.
+   * When undefined, InstantSearch uses the current path of the page.
+   */
+  path?: string;
 };
 
 export type LayoutConnector = Connector<
@@ -37,6 +47,12 @@ const connectLayout: LayoutConnector = function connectLayout(
   checkRendering(renderFn, withUsage());
 
   return (widgetParams) => {
+    if (widgetParams.path && widgetParams.id) {
+      throw new Error(
+        withUsage('The `path` and `id` options are mutually exclusive.')
+      );
+    }
+
     return {
       $$type: 'ais.layout',
       dependsOn: 'configuration',
@@ -85,10 +101,14 @@ const connectLayout: LayoutConnector = function connectLayout(
           return {
             id: widgetParams.id,
           };
+        } else if (widgetParams.path) {
+          return {
+            path: widgetParams.path,
+          };
         }
 
         return {
-          // TODO: ssr, via routing?
+          // @TODO: use routing?
           path: location.pathname,
         };
       },

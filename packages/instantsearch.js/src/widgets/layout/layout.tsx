@@ -34,12 +34,6 @@ export type LayoutWidgetParams = {
    * CSS classes to add.
    */
   cssClasses?: LayoutCSSClasses;
-
-  /**
-   * The path to fetch the page for.
-   * When undefined, InstantSearch uses the current path of the page.
-   */
-  path?: string;
 };
 
 type LayoutWidget = WidgetFactory<
@@ -56,20 +50,18 @@ type LayoutComponentCSSClasses = ComponentCSSClasses<LayoutCSSClasses>;
 type RendererParams = {
   containerNode: HTMLElement;
   cssClasses: LayoutComponentCSSClasses;
-  path: string;
 };
 
 const renderer =
   ({
     containerNode,
-    path,
   }: RendererParams): Renderer<
     LayoutRenderState,
     Partial<LayoutWidgetParams>
   > =>
   (_, isFirstRendering) => {
     if (isFirstRendering) {
-      render(<div>Layout for {path}</div>, containerNode);
+      render(<div>Layout</div>, containerNode);
 
       return;
     }
@@ -79,7 +71,8 @@ const layout: LayoutWidget = function layout(widgetParams) {
   const {
     container,
     cssClasses: userCssClasses = {},
-    path: userPath,
+    path,
+    id,
   } = widgetParams || {};
 
   if (!container) {
@@ -92,13 +85,9 @@ const layout: LayoutWidget = function layout(widgetParams) {
     root: cx(suit(), userCssClasses.root),
   };
 
-  const path =
-    userPath || new URL(window.location.href).pathname.replace(/^\//, '');
-
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
-    path,
   });
 
   const makeWidget = connectLayout(specializedRenderer, () =>
@@ -106,7 +95,10 @@ const layout: LayoutWidget = function layout(widgetParams) {
   );
 
   return {
-    ...makeWidget({ path }),
+    ...makeWidget({
+      id,
+      path,
+    }),
     $$widgetType: 'ais.layout',
   };
 };
