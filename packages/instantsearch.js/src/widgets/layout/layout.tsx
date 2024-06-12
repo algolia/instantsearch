@@ -1,6 +1,10 @@
-import { render } from 'preact';
+/** @jsx h */
+
+import { cx } from 'instantsearch-ui-components';
+import { h, render } from 'preact';
 
 import connectLayout from '../../connectors/layout/connectLayout';
+import { component } from '../../lib/suit';
 import {
   createDocumentationMessageGenerator,
   getContainerNode,
@@ -11,12 +15,31 @@ import type {
   LayoutRenderState,
   LayoutWidgetDescription,
 } from '../../connectors/layout/connectLayout';
-import type { Renderer, WidgetFactory } from '../../types';
+import type { ComponentCSSClasses, WidgetFactory, Renderer } from '../../types';
 
-const withUsage = createDocumentationMessageGenerator({ name: 'layout' });
+export type LayoutCSSClasses = Partial<{
+  /**
+   * CSS class to add to the wrapping element.
+   */
+  root: string | string[];
+}>;
 
 export type LayoutWidgetParams = {
-  container: string;
+  /**
+   * CSS Selector or HTMLElement to insert the widget.
+   */
+  container: string | HTMLElement;
+
+  /**
+   * CSS classes to add.
+   */
+  cssClasses?: LayoutCSSClasses;
+
+  /**
+   * The path to fetch the page for.
+   * When undefined, InstantSearch uses the current path of the page.
+   */
+  path?: string;
 };
 
 type LayoutWidget = WidgetFactory<
@@ -25,18 +48,39 @@ type LayoutWidget = WidgetFactory<
   LayoutWidgetParams
 >;
 
-const renderer = ({
-  containerNode,
-}: {
+const suit = component('Layout');
+const withUsage = createDocumentationMessageGenerator({ name: 'layout' });
+
+type LayoutComponentCSSClasses = ComponentCSSClasses<LayoutCSSClasses>;
+
+type RendererParams = {
   containerNode: HTMLElement;
-}): Renderer<LayoutRenderState, Partial<LayoutWidgetParams>> => {
-  return (_renderState, _isFirstRendering) => {
-    render('Hello world', containerNode);
-  };
+  cssClasses: LayoutComponentCSSClasses;
+  path: string;
 };
 
+const renderer =
+  ({
+    containerNode,
+    path,
+  }: RendererParams): Renderer<
+    LayoutRenderState,
+    Partial<LayoutWidgetParams>
+  > =>
+  (_, isFirstRendering) => {
+    if (isFirstRendering) {
+      render(<div>Layout for {path}</div>, containerNode);
+
+      return;
+    }
+  };
+
 const layout: LayoutWidget = function layout(widgetParams) {
-  const { container, id } = widgetParams || {};
+  const {
+    container,
+    cssClasses: userCssClasses = {},
+    path: userPath,
+  } = widgetParams || {};
 
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
@@ -44,11 +88,17 @@ const layout: LayoutWidget = function layout(widgetParams) {
 
   const containerNode = getContainerNode(container);
 
+  const cssClasses = {
+    root: cx(suit(), userCssClasses.root),
+  };
+
+  const path =
+    userPath || new URL(window.location.href).pathname.replace(/^\//, '');
+
   const specializedRenderer = renderer({
     containerNode,
-    // cssClasses,
-    // renderState: {},
-    // templates,
+    cssClasses,
+    path,
   });
 
   const makeWidget = connectLayout(specializedRenderer, () =>
@@ -56,9 +106,7 @@ const layout: LayoutWidget = function layout(widgetParams) {
   );
 
   return {
-    ...makeWidget({
-      id,
-    }),
+    ...makeWidget({ path }),
     $$widgetType: 'ais.layout',
   };
 };
