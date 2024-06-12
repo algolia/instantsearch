@@ -1,0 +1,22 @@
+.ais-Hits-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.ais-Hits-item {
+  align-items: start;
+}
+
+.ais-Hits-item img {
+  width: 100%;
+  height: 100px;
+  object-fit: contain;
+}
+
+.ais-Hits-item article {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+}
