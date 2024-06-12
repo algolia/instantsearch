@@ -164,7 +164,7 @@ const connectPage: PageConnector = function connectPage(
             // },
             {
               type: 'ais.configure',
-              params: { facetFilters: [['type:book']] },
+              params: { facetFilters: [['brand_label:Apple']] },
             },
             {
               type: 'ais.hits',
@@ -172,8 +172,8 @@ const connectPage: PageConnector = function connectPage(
                 {
                   type: 'image',
                   params: {
-                    src: 'hit.largeImage',
-                    alt: 'hit.name',
+                    src: 'hit.image1',
+                    alt: 'hit.title_model',
                   },
                 },
                 // {

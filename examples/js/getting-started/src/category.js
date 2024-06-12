@@ -8,7 +8,7 @@ const searchClient = algoliasearch(
 );
 
 const search = instantsearch({
-  indexName: 'products',
+  indexName: 'devcon22_bm_products',
   searchClient,
   insights: true,
 });
