@@ -59,12 +59,12 @@ const renderer =
     LayoutRenderState,
     Partial<LayoutWidgetParams>
   > =>
-  (_, isFirstRendering) => {
+  ({ blocks }, isFirstRendering) => {
     if (isFirstRendering) {
-      render(<div>Layout</div>, containerNode);
-
       return;
     }
+
+    render(<div>Layout {JSON.stringify(blocks)}</div>, containerNode);
   };
 
 const layout: LayoutWidget = function layout(widgetParams) {

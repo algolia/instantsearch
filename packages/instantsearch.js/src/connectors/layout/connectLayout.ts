@@ -11,7 +11,15 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
-export type LayoutRenderState = {};
+export type LayoutNode = {
+  type: string;
+  params: Record<string, any>;
+  children: LayoutNode[];
+};
+
+export type LayoutRenderState = {
+  blocks: LayoutNode[];
+};
 
 export type LayoutWidgetDescription = {
   $$type: 'ais.layout';
@@ -92,6 +100,20 @@ const connectLayout: LayoutConnector = function connectLayout(
 
       getWidgetRenderState({ results }) {
         return {
+          // blocks: results.blocks,
+          blocks: [
+            {
+              type: 'heading-2',
+              children: [
+                {
+                  type: 'text',
+                  params: {
+                    value: 'Summer BBQ',
+                  },
+                },
+              ],
+            },
+          ],
           widgetParams,
         };
       },
