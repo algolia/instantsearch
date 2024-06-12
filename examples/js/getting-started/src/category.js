@@ -13,8 +13,6 @@ const search = instantsearch({
   insights: true,
 });
 
-search.addWidgets([
-  layout({
-    containers: '[data-layout-id]',
-  }),
-]);
+search.addWidgets([]);
+
+search.start();
