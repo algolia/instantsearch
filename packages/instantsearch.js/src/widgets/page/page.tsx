@@ -1,13 +1,12 @@
 /** @jsx h */
 
-import { Fragment, h } from 'preact';
+import { Fragment, h, render } from 'preact';
 
 import connectPage from '../../connectors/page/connectPage';
 import { component } from '../../lib/suit';
 import {
   createDocumentationMessageGenerator,
   getContainerNode,
-  getWidgetName,
 } from '../../lib/utils';
 import configure from '../configure/configure';
 import hits from '../hits/hits';
@@ -49,9 +48,7 @@ type PageWidget = WidgetFactory<
 const components = {
   'ais.configure': ({ container, ...widgetParams }: ConfigureWidgetParams) =>
     configure(widgetParams),
-  'ais.hits': (widgetParams: HitsWidgetParams) => {
-    return hits(widgetParams);
-  },
+  'ais.hits': (widgetParams: HitsWidgetParams) => hits(widgetParams),
   'heading-1': ({ children, ...props }: any) => <h1 {...props}>{children}</h1>,
   'heading-2': ({ children, ...props }: any) => <h2 {...props}>{children}</h2>,
   'heading-3': ({ children, ...props }: any) => <h3 {...props}>{children}</h3>,
@@ -97,7 +94,7 @@ const page: PageWidget = function page(widgetParams) {
         userContainer.appendChild(rootContainer);
       }
 
-      const widgets = getWidgetsFromBlocks(blocks);
+      const widgets = getWidgetsFromBlocks(blocks, rootContainer);
 
       widgets.forEach((widget) => {
         if (!containers.has(widget.$$name)) {
@@ -128,10 +125,41 @@ const page: PageWidget = function page(widgetParams) {
   };
 };
 
-function getWidgetsFromBlocks(blocks: PageNode[]) {
+function getWidgetsFromBlocks(blocks: PageNode[], containerNode: HTMLElement) {
   const widgets = blocks
     .map((block) => {
       const { type, params, children } = block;
+
+      if (type.substring(0, 4) !== 'ais.') {
+        const widget = () => {
+          const aisWidget = () => {
+            return {
+              init() {
+                render(
+                  components[type]({
+                    children: renderHitsItemTemplate(children, {}),
+                  }),
+                  containerNode
+                );
+              },
+              render() {
+                render(
+                  components[type]({
+                    children: renderHitsItemTemplate(children, {}),
+                  }),
+                  containerNode
+                );
+              },
+            };
+          };
+
+          return aisWidget({});
+        };
+
+        widget.$$name = type;
+
+        return widget;
+      }
 
       if (type.substring(0, 4) === 'ais.') {
         const widget = (container: HTMLElement) => {
