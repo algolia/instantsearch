@@ -8,7 +8,7 @@ const searchClient = algoliasearch(
 );
 
 const search = instantsearch({
-  indexName: 'devcon22_bm_products',
+  indexName: 'fx_hackathon_24_bm_products',
   searchClient,
   insights: true,
 });
@@ -16,7 +16,7 @@ const search = instantsearch({
 search.addWidgets([
   page({
     container: '#page',
-    id: '5173cac0-e9cd-4f30-bea4-a298968fae0c',
+    id: '920a446c-9cc5-47ea-ad19-3270bf2623a0',
   }),
 ]);
 
