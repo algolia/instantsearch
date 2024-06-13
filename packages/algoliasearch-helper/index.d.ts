@@ -386,7 +386,10 @@ declare namespace algoliasearchHelper {
       deriveFn: (oldParams: SearchParameters) => SearchParameters,
       deriveRecommendFn?: (
         oldParams: RecommendParameters
-      ) => RecommendParameters
+      ) => RecommendParameters,
+      configurationRecommendFn?: (
+        oldParams: ConfigurationParameters
+      ) => ConfigurationParameters[]
     ): DerivedHelper;
     detachDerivedHelper(derivedHelper: DerivedHelper): void;
     hasPendingRequests(): boolean;

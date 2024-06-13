@@ -672,7 +672,8 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
             mainHelper.state,
             ...resolveSearchParameters(this)
           ),
-        () => this.getHelper()!.recommendState
+        () => this.getHelper()!.recommendState,
+        () => this.getHelper()!.configurationState
       );
 
       const indexInitialResults =

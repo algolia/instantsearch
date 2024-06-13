@@ -211,7 +211,7 @@ const connectPage: PageConnector = function connectPage(
 
         return {
           // @TODO: use routing?
-          path: location.pathname,
+          path: location.pathname.slice(1),
         };
       },
     };

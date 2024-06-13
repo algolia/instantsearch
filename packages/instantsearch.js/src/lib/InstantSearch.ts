@@ -591,7 +591,7 @@ See documentation: ${createDocumentationLink({
         mainHelper.recommend();
       }
 
-      console.log('mainHelper.search()', mainHelper);
+      console.log('mainHelper.search()', mainHelper._configuration());
 
       return mainHelper;
     };
