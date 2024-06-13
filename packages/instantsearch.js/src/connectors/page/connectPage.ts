@@ -1,7 +1,6 @@
 import {
   checkRendering,
   createDocumentationMessageGenerator,
-  getWidgetAttribute,
   getWidgetName,
   noop,
 } from '../../lib/utils';

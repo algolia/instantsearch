@@ -150,7 +150,7 @@ function getWidgetsFromBlocks(blocks: PageNode[]) {
     .map((block) => {
       const { type, params, children } = block;
 
-      if (type.startsWith('ais.')) {
+      if (type.substring(0, 4) === 'ais.') {
         function widget(container: HTMLElement) {
           const component = components[type];
           let templates = undefined;
