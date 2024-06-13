@@ -1,3 +1,7 @@
+h1 {
+  margin: 1rem 0;
+}
+
 .ais-Hits-list {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
