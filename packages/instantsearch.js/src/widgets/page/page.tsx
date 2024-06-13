@@ -92,7 +92,7 @@ const page: PageWidget = function page(widgetParams) {
   const connectorWidgets: Widget[] = [];
 
   const makeWidget = connectPage(
-    ({ blocks }, isFirstRender) => {
+    ({ blocks, instantSearchInstance }, isFirstRender) => {
       if (isFirstRender) {
         userContainer.appendChild(rootContainer);
       }
@@ -101,7 +101,12 @@ const page: PageWidget = function page(widgetParams) {
 
       widgets.forEach((widget) => {
         if (!containers.has(widget.$$name)) {
-          return;
+          const container = createContainer(rootContainer);
+          const childWidget = widget(container);
+
+          containers.set(widget.$$name, container);
+          connectorWidgets.push(childWidget);
+          instantSearchInstance.addWidgets([childWidget]);
         }
         const container = containers.get(widget.$$name)!;
         rootContainer.appendChild(container);
@@ -118,26 +123,7 @@ const page: PageWidget = function page(widgetParams) {
   });
 
   return {
-    // ...makeWidget({ id, path }),
     ...widget,
-    init(initOptions) {
-      const { blocks } =
-        initOptions.renderState[initOptions.parent.getIndexId()].page;
-
-      const widgets = getWidgetsFromBlocks(blocks);
-
-      widgets.forEach((cb) => {
-        const container = createContainer(rootContainer);
-
-        const childWidget = cb(container);
-        const attribute = getWidgetName(childWidget);
-
-        containers.set(attribute, container);
-        connectorWidgets.push(childWidget);
-      });
-
-      widget.init!(initOptions);
-    },
     $$widgetType: 'ais.page',
   };
 };

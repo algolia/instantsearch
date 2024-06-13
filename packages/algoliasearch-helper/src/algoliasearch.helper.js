@@ -1580,14 +1580,15 @@ AlgoliaSearchHelper.prototype._search = function (options) {
   return undefined;
 };
 
-export function getAppIdAndApiKey(searchClient) {
+function getAppIdAndApiKey(searchClient) {
   if (searchClient.transporter) {
     // searchClient v4
-    const { headers, queryParameters } = searchClient.transporter;
-    const APP_ID = 'x-algolia-application-id';
-    const API_KEY = 'x-algolia-api-key';
-    const appId = headers[APP_ID] || queryParameters[APP_ID];
-    const apiKey = headers[API_KEY] || queryParameters[API_KEY];
+    var headers = searchClient.transporter.headers;
+    var queryParameters = searchClient.transporter.queryParameters;
+    var APP_ID = 'x-algolia-application-id';
+    var API_KEY = 'x-algolia-api-key';
+    var appId = headers[APP_ID] || queryParameters[APP_ID];
+    var apiKey = headers[API_KEY] || queryParameters[API_KEY];
     return [appId, apiKey];
   } else {
     // searchClient v3
@@ -1633,9 +1634,9 @@ AlgoliaSearchHelper.prototype._configuration = function () {
 
   var queries = Array.prototype.concat
     .apply(this.configurationState, derivedQueries)
-    .filter(
-      (query) => Object.keys(query).length > 0 && (query.id || query.path)
-    );
+    .filter(function (query) {
+      return Object.keys(query).length > 0 && (query.id || query.path);
+    });
 
   if (queries.length === 0) {
     return;
@@ -1644,14 +1645,15 @@ AlgoliaSearchHelper.prototype._configuration = function () {
   var queryId = this._configurationQueryId++;
   this._currentNbConfigurationQueries++;
 
-  const appId = getAppIdAndApiKey(this.client)[0];
+  var appId = getAppIdAndApiKey(this.client)[0];
 
   try {
     Promise.all(
-      queries.map((query) => {
+      queries.map(function (query) {
         if (query.path) {
           return fetch(
-            `https://configuration-dev.platform.algolia.net/1/pages/getByUrl/${query.path}`,
+            'https://configuration-dev.platform.algolia.net/1/pages/getByUrl/' +
+              query.path,
             {
               headers: {
                 'X-Algolia-Application-Id': appId,
@@ -1659,16 +1661,15 @@ AlgoliaSearchHelper.prototype._configuration = function () {
               method: 'GET',
             }
           )
-            .then((res) => res.json())
-            .then((res) => {
-              return {
-                ...res,
-                $$id: query.path,
-              };
+            .then(function (res) {
+              return res.json();
+            })
+            .then(function (res) {
+              return Object.assign({ $$id: query.path }, res);
             });
         }
         return fetch(
-          `https://configuration-dev.platform.algolia.net/1/pages/${query.id}`,
+          'https://configuration-dev.platform.algolia.net/1/pages/' + query.id,
           {
             headers: {
               'X-Algolia-Application-Id': appId,
@@ -1676,12 +1677,11 @@ AlgoliaSearchHelper.prototype._configuration = function () {
             method: 'GET',
           }
         )
-          .then((res) => res.json())
-          .then((res) => {
-            return {
-              ...res,
-              $$id: query.id,
-            };
+          .then(function (res) {
+            return res.json();
+          })
+          .then(function (res) {
+            return Object.assign({ $$id: query.id }, res);
           });
       })
     )

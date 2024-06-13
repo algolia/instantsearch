@@ -637,6 +637,11 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       );
       helper.recommendState = recommendParameters;
 
+      helper.configurationState = getLocalWidgetsConfigurationParameters(
+        localWidgets,
+        { uiState: localUiState }
+      );
+
       // We forward the call to `search` to the "main" instance of the Helper
       // which is responsible for managing the queries (it's the only one that is
       // aware of the `searchClient`).
@@ -968,11 +973,6 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
     },
 
     getWidgetSearchParameters(searchParameters, { uiState }) {
-      helper!.configurationState = getLocalWidgetsConfigurationParameters(
-        localWidgets,
-        { uiState: localUiState }
-      );
-
       return getLocalWidgetsSearchParameters(localWidgets, {
         uiState,
         initialSearchParameters: searchParameters,

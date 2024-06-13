@@ -166,7 +166,6 @@ const connectPage: PageConnector = function connectPage(
       },
 
       getWidgetParameters() {
-        console.log('gwp');
         if (widgetParams.id) {
           return {
             id: widgetParams.id,
