@@ -1644,7 +1644,7 @@ AlgoliaSearchHelper.prototype._configuration = function () {
   var queryId = this._configurationQueryId++;
   this._currentNbConfigurationQueries++;
 
-  const [appId, apiKey] = getAppIdAndApiKey(this.client);
+  const appId = getAppIdAndApiKey(this.client)[0];
 
   try {
     Promise.all(
@@ -1658,7 +1658,14 @@ AlgoliaSearchHelper.prototype._configuration = function () {
               },
               method: 'GET',
             }
-          ).then((res) => res.json());
+          )
+            .then((res) => res.json())
+            .then((res) => {
+              return {
+                ...res,
+                $$id: query.path,
+              };
+            });
         }
         return fetch(
           `https://configuration-dev.platform.algolia.net/1/pages/${query.id}`,
@@ -1668,7 +1675,14 @@ AlgoliaSearchHelper.prototype._configuration = function () {
             },
             method: 'GET',
           }
-        ).then((res) => res.json());
+        )
+          .then((res) => res.json())
+          .then((res) => {
+            return {
+              ...res,
+              $$id: query.id,
+            };
+          });
       })
     )
       .then(this._dispatchConfigurationResponse.bind(this, queryId, states))

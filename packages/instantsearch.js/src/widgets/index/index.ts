@@ -233,6 +233,7 @@ function getLocalWidgetsConfigurationParameters(
   widgets: Array<Widget | IndexWidget>,
   widgetConfigurationParametersOptions: WidgetSearchParametersOptions
 ): ConfigurationParameters[] {
+  console.log('this called');
   return widgets
     .map((widget) => {
       if (
@@ -344,15 +345,20 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       }
 
       if (widget.dependsOn === 'configuration') {
-        // TODO get the right index? could be the widget index maybe, but then the results need to be per derivedHelper
-        return helper?.lastConfigurationResults;
+        return (helper as any)?.lastConfigurationResults?.find(
+          (result: { $$id: string }) => result.$$id === (widget as any).$$id
+        );
       }
 
-      if (!helper?.lastRecommendResults) {
-        return null;
+      if (widget.dependsOn === 'recommend' && widget.$$id) {
+        if (!helper?.lastRecommendResults) {
+          return null;
+        }
+
+        return helper.lastRecommendResults[widget.$$id];
       }
 
-      return helper.lastRecommendResults[widget.$$id];
+      return this.getResults();
     },
 
     getPreviousState() {
@@ -962,6 +968,11 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
     },
 
     getWidgetSearchParameters(searchParameters, { uiState }) {
+      helper!.configurationState = getLocalWidgetsConfigurationParameters(
+        localWidgets,
+        { uiState: localUiState }
+      );
+
       return getLocalWidgetsSearchParameters(localWidgets, {
         uiState,
         initialSearchParameters: searchParameters,

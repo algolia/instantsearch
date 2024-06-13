@@ -67,12 +67,15 @@ const connectPage: PageConnector = function connectPage(
       );
     }
 
+    const path = location.pathname.slice(1);
+
     const localWidgets: Map<string, { widget: Widget; isMounted: boolean }> =
       new Map();
 
     return {
       $$type: 'ais.page',
       dependsOn: 'configuration',
+      $$id: widgetParams.id || widgetParams.path || path,
 
       init(initOptions) {
         widgetParams.widgets.forEach((widget) => {
@@ -149,72 +152,21 @@ const connectPage: PageConnector = function connectPage(
       },
 
       getWidgetRenderState({ results }) {
-        console.log('gwrs', results);
+        if (!results || 'query' in results) {
+          return {
+            blocks: [],
+            widgetParams,
+          };
+        }
+
         return {
-          blocks: [
-            // {
-            //   type: 'heading-1',
-            //   children: [
-            //     {
-            //       type: 'text',
-            //       params: {
-            //         value: 'Apple products',
-            //       },
-            //     },
-            //   ],
-            // },
-            {
-              type: 'ais.configure',
-              params: {
-                facetFilters: [['brand_label:Apple']],
-              },
-            },
-            {
-              type: 'ais.hits',
-              children: [
-                {
-                  type: 'image',
-                  params: {
-                    src: 'hit.image1',
-                    alt: 'hit.title_model',
-                  },
-                },
-                {
-                  type: 'heading-3',
-                  children: [
-                    {
-                      type: 'text',
-                      params: {
-                        value: 'hit.title_model',
-                      },
-                    },
-                  ],
-                },
-                {
-                  type: 'paragraph',
-                  children: [
-                    {
-                      type: 'text',
-                      params: {
-                        value: 'Condition: ',
-                      },
-                    },
-                    {
-                      type: 'text',
-                      params: {
-                        value: 'hit.backbox_grade_label',
-                      },
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
+          blocks: results.blocks,
           widgetParams,
         };
       },
 
       getWidgetParameters() {
+        console.log('gwp');
         if (widgetParams.id) {
           return {
             id: widgetParams.id,
@@ -227,7 +179,7 @@ const connectPage: PageConnector = function connectPage(
 
         return {
           // @TODO: use routing?
-          path: location.pathname.slice(1),
+          path,
         };
       },
     };

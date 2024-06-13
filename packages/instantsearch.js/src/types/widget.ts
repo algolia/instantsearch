@@ -161,16 +161,23 @@ type SearchWidget<TWidgetDescription extends WidgetDescription> = {
   ) => SearchParameters;
 };
 
-type ConfigurationResultItem = {};
+type PageNode = {
+  type: string;
+  params: Record<string, any>;
+  children: PageNode[];
+};
 
 type ConfigurationRenderOptions = SharedRenderOptions & {
-  results: ConfigurationResultItem;
+  results: {
+    blocks: PageNode[];
+  };
 };
 
 type ConfigurationWidget<
   TWidgetDescription extends WidgetDescription & WidgetParams
 > = {
   dependsOn?: 'configuration';
+  $$id: string;
   getWidgetParameters?: (
     state: ConfigurationParameters,
     widgetParametersOptions: {
@@ -179,20 +186,20 @@ type ConfigurationWidget<
       >;
     }
   ) => ConfigurationParameters;
-  // getRenderState: (
-  //   renderState: Expand<
-  //     IndexRenderState & Partial<TWidgetDescription['indexRenderState']>
-  //   >,
-  //   renderOptions: InitOptions | ConfigurationRenderOptions
-  // ) => IndexRenderState & TWidgetDescription['indexRenderState'];
-  // getWidgetRenderState: (
-  //   renderOptions: InitOptions | ConfigurationRenderOptions
-  // ) => Expand<
-  //   WidgetRenderState<
-  //     TWidgetDescription['renderState'],
-  //     TWidgetDescription['widgetParams']
-  //   >
-  // >;
+  getRenderState: (
+    renderState: Expand<
+      IndexRenderState & Partial<TWidgetDescription['indexRenderState']>
+    >,
+    renderOptions: InitOptions | ConfigurationRenderOptions
+  ) => IndexRenderState & TWidgetDescription['indexRenderState'];
+  getWidgetRenderState: (
+    renderOptions: InitOptions | ConfigurationRenderOptions
+  ) => Expand<
+    WidgetRenderState<
+      TWidgetDescription['renderState'],
+      TWidgetDescription['widgetParams']
+    >
+  >;
 };
 
 type RecommendRenderOptions = SharedRenderOptions & {
