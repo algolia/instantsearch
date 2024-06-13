@@ -151,20 +151,23 @@ const connectPage: PageConnector = function connectPage(
       getWidgetRenderState({ results }) {
         console.log('gwrs', results);
         return {
-          // blocks: results.blocks,
           blocks: [
             // {
             //   type: 'heading-1',
             //   children: [
             //     {
             //       type: 'text',
-            //       params: { value: 'Top Thriller Books' },
+            //       params: {
+            //         value: 'Apple products',
+            //       },
             //     },
             //   ],
             // },
             {
               type: 'ais.configure',
-              params: { facetFilters: [['brand_label:Apple']] },
+              params: {
+                facetFilters: [['brand_label:Apple']],
+              },
             },
             {
               type: 'ais.hits',
@@ -176,22 +179,34 @@ const connectPage: PageConnector = function connectPage(
                     alt: 'hit.title_model',
                   },
                 },
-                // {
-                //   type: 'heading-3',
-                //   children: [
-                //     {
-                //       type: 'text',
-                //       params: { value: 'hit.title' },
-                //     },
-                //   ],
-                // },
-                // {
-                //   type: 'paragraph',
-                //   children: [
-                //     { type: 'text', params: { value: 'By ' } },
-                //     { type: 'text', params: { value: 'hit.author' } },
-                //   ],
-                // },
+                {
+                  type: 'heading-3',
+                  children: [
+                    {
+                      type: 'text',
+                      params: {
+                        value: 'hit.title_model',
+                      },
+                    },
+                  ],
+                },
+                {
+                  type: 'paragraph',
+                  children: [
+                    {
+                      type: 'text',
+                      params: {
+                        value: 'Condition: ',
+                      },
+                    },
+                    {
+                      type: 'text',
+                      params: {
+                        value: 'hit.backbox_grade_label',
+                      },
+                    },
+                  ],
+                },
               ],
             },
           ],

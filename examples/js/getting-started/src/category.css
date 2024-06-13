@@ -5,18 +5,16 @@
 }
 
 .ais-Hits-item {
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
 }
 
 .ais-Hits-item img {
   width: 100%;
   height: 100px;
   object-fit: contain;
-}
-
-.ais-Hits-item article {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: space-between;
 }

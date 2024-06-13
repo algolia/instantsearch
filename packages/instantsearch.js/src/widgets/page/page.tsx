@@ -77,11 +77,8 @@ function createContainer(rootContainer: HTMLElement) {
 }
 
 const page: PageWidget = function page(widgetParams) {
-  const {
-    container: containerSelector,
-    cssClasses: userCssClasses = {},
-    ...otherWidgetParams
-  } = widgetParams || {};
+  const { container: containerSelector, ...otherWidgetParams } =
+    widgetParams || {};
 
   if (!containerSelector) {
     throw new Error(withUsage('The `container` option is required.'));
@@ -151,49 +148,32 @@ function getWidgetsFromBlocks(blocks: PageNode[]) {
       const { type, params, children } = block;
 
       if (type.substring(0, 4) === 'ais.') {
-        function widget(container: HTMLElement) {
-          const component = components[type];
+        const widget = (container: HTMLElement) => {
+          const aisWidget = components[type];
           let templates = undefined;
 
           if (type === 'ais.hits') {
             templates = {
               item: (hit) => {
                 return (
-                  <Fragment>
-                    {children.map((child) => {
-                      const SubComponent = components[child.type];
-
-                      const subComponentParams = Object.fromEntries(
-                        Object.entries(child.params).map(([key, value]) => {
-                          return [
-                            key,
-                            value.startsWith('hit.')
-                              ? hit[value.replace('hit.', '')]
-                              : value,
-                          ];
-                        })
-                      );
-
-                      return <SubComponent {...subComponentParams} />;
-                    })}
-                  </Fragment>
+                  <Fragment>{renderHitsItemTemplate(children, hit)}</Fragment>
                 );
               },
             };
           }
 
-          const componentParams = {
+          const widgetParams = {
             container,
             templates,
             ...params,
           };
 
-          if (!componentParams.templates) {
-            delete componentParams.templates;
+          if (!widgetParams.templates) {
+            delete widgetParams.templates;
           }
 
-          return component(componentParams);
-        }
+          return aisWidget(widgetParams);
+        };
 
         widget.$$name = type;
 
@@ -207,33 +187,34 @@ function getWidgetsFromBlocks(blocks: PageNode[]) {
   return widgets as Array<(container: HTMLElement) => Widget>;
 }
 
-function renderHitsItemTemplate(children: PageNode[], hit: any) {
+function renderHitsItemTemplate(blocks: PageNode[], hit: any) {
   return (
     <Fragment>
-      {children.map((child) => {
-        const hasChildren = Array.isArray(child.children);
-        const SubComponent = components[child.type];
-
-        const subComponentParams = Object.fromEntries(
-          Object.entries(child.params).map(([key, value]) => {
-            const actualKey = key === 'value' ? 'children' : key;
-
-            return [
-              actualKey,
-              value.startsWith('hit.') ? hit[value.replace('hit.', '')] : value,
-            ];
-          })
-        );
-
+      {blocks.map((block) => {
+        const Component = components[block.type];
         let children = null;
+        let params = null;
 
-        if (hasChildren) {
-          console.log('here');
-
-          children = renderHitsItemTemplate(child.children, hit);
+        if (block.children?.length) {
+          children = renderHitsItemTemplate(block.children, hit);
         }
 
-        return <SubComponent {...subComponentParams}>{children}</SubComponent>;
+        if (block.params) {
+          params = Object.fromEntries(
+            Object.entries(block.params).map(([key, value]) => {
+              const actualKey = key === 'value' ? 'children' : key;
+              const actualValue = value.startsWith('hit.')
+                ? hit[value.replace('hit.', '')]
+                : value;
+
+              return [actualKey, actualValue];
+            })
+          );
+        }
+
+        return (
+          <Component {...params}>{children || params?.children}</Component>
+        );
       })}
     </Fragment>
   );
