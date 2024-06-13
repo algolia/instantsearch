@@ -1608,8 +1608,6 @@ AlgoliaSearchHelper.prototype._configuration = function () {
     },
   });
 
-  var cache = this._recommendCache;
-
   var derivedQueries = this.derivedHelpers.map(function (derivedHelper) {
     var derivedIndex = derivedHelper.getModifiedState(searchState).index;
     if (!derivedIndex) {
@@ -1631,7 +1629,6 @@ AlgoliaSearchHelper.prototype._configuration = function () {
     });
 
     return derivedState;
-    // return derivedState._buildQueries(derivedIndex, cache);
   });
 
   var queries = Array.prototype.concat
@@ -1872,7 +1869,7 @@ AlgoliaSearchHelper.prototype._dispatchConfigurationResponse = function (
     helper.lastConfigurationResults = results;
 
     helper.emit('configuration:result', {
-      recommend: {
+      configuration: {
         results: helper.lastConfigurationResults,
         state: state,
       },

@@ -336,11 +336,16 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
     getResultsForWidget(widget) {
       if (
-        widget.dependsOn !== 'recommend' ||
-        isIndexWidget(widget) ||
-        widget.$$id === undefined
+        widget.dependsOn === 'search' ||
+        widget.dependsOn === undefined ||
+        isIndexWidget(widget)
       ) {
         return this.getResults();
+      }
+
+      if (widget.dependsOn === 'configuration') {
+        // TODO get the right index? could be the widget index maybe, but then the results need to be per derivedHelper
+        return helper?.lastConfigurationResults;
       }
 
       if (!helper?.lastRecommendResults) {
@@ -750,6 +755,20 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         // which is exposed e.g. via instance.helper, doesn't search, and thus
         // does not have access to lastRecommendResults.
         helper!.lastRecommendResults = recommend.results;
+      });
+
+      // eslint-disable-next-line no-warning-comments
+      // TODO: listen to "result" event when events for Recommend are implemented
+      derivedHelper.on('configuration:result', ({ configuration }) => {
+        // The index does not render the results it schedules a new render
+        // to let all the other indices emit their own results. It allows us to
+        // run the render process in one pass.
+        instantSearchInstance.scheduleRender();
+
+        // the derived helper is the one which actually searches, but the helper
+        // which is exposed e.g. via instance.helper, doesn't search, and thus
+        // does not have access to lastRecommendResults.
+        helper!.lastConfigurationResults = configuration.results;
       });
 
       // We compute the render state before calling `init` in a separate loop

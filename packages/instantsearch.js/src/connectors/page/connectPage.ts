@@ -149,6 +149,7 @@ const connectPage: PageConnector = function connectPage(
       },
 
       getWidgetRenderState({ results }) {
+        console.log('gwrs', results);
         return {
           // blocks: results.blocks,
           blocks: [
