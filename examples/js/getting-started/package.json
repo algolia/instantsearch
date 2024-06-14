@@ -3,8 +3,8 @@
   "version": "1.7.0",
   "private": true,
   "scripts": {
-    "start": "BABEL_ENV=parcel parcel index.html products.html category.html --port 3000",
-    "build": "BABEL_ENV=parcel parcel build index.html products.html category.html",
+    "start": "BABEL_ENV=parcel parcel index.html products.html excellent-apple.html --port 3000",
+    "build": "BABEL_ENV=parcel parcel build index.html products.html excellent-apple.html",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix"
   },

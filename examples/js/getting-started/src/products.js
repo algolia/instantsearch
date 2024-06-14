@@ -7,12 +7,12 @@ const searchParams = new URLSearchParams(document.location.search);
 const pid = searchParams.get('pid');
 
 const searchClient = algoliasearch(
-  'latency',
-  '6be0576ff61c053d5f9a3225e2a90f76'
+  'F4T6CUV2AH',
+  '02022fd5de7c24bcde770bfab52ea473'
 );
 
 const search = instantsearch({
-  indexName: 'instant_search',
+  indexName: 'fx_hackathon_24_bm_products',
   searchClient,
   insights: true,
 });
@@ -23,28 +23,12 @@ search.addWidgets([
     templates: {
       item: (hit, { html, components }) => html`
         <article>
-          <img src="${hit.image}" />
+          <img src="${hit.image1}" />
           <div>
-            <h1>${components.Highlight({ hit, attribute: 'name' })}</h1>
-            <p>${components.Highlight({ hit, attribute: 'description' })}</p>
+            <h1>${components.Highlight({ hit, attribute: 'title_model' })}</h1>
+
+            <p>${hit.price}</p>
           </div>
-        </article>
-      `,
-    },
-    cssClasses: { root: 'ais-Hits--single' },
-  }),
-  relatedProducts({
-    container: '#related-products',
-    objectIDs: [pid],
-    limit: 4,
-    templates: {
-      item: (item, { html }) => html`
-        <article>
-          <div>
-            <img src="${item.image}" />
-            <h2>${item.name}</h2>
-          </div>
-          <a href="/products.html?pid=${item.objectID}">See product</a>
         </article>
       `,
     },
