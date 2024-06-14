@@ -1665,7 +1665,7 @@ AlgoliaSearchHelper.prototype._configuration = function () {
               return res.json();
             })
             .then(function (res) {
-              return Object.assign({ $$id: query.path }, res);
+              return Object.assign({ $$id: query.path }, res[0]);
             });
         }
         return fetch(
