@@ -21,4 +21,9 @@ h1 {
   width: 100%;
   height: 100px;
   object-fit: contain;
+  margin: 1.2rem 0;
+}
+
+.ais-Hits-item a {
+  font-size: 1.2rem;
 }
