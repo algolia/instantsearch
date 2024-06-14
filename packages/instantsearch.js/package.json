@@ -43,7 +43,7 @@
     "algoliasearch": ">= 3.1 < 6"
   },
   "scripts": {
-    "build": "yarn run build:cjs && yarn run build:es && yarn run build:umd && yarn run build:types",
+    "build": "yarn run build:cjs && yarn run build:es && yarn run build:umd",
     "build:umd": "rm -rf dist && BABEL_ENV=umd rollup --config ./scripts/rollup/rollup.config.js",
     "build:cjs": "rm -rf cjs && BABEL_ENV=cjs babel --root-mode upward src --extensions '.js,.ts,.tsx' --out-dir cjs/ --ignore 'src/index.es.ts','**/__tests__','**/__mocks__' --quiet",
     "build:es:base": "BABEL_ENV=es babel --root-mode upward src --extensions '.js,.ts,.tsx' --out-dir es/ --ignore 'src/index.es.ts','**/__tests__','**/__mocks__'",
