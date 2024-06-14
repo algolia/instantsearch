@@ -74,8 +74,11 @@ function createContainer(rootContainer: HTMLElement) {
 }
 
 const page: PageWidget = function page(widgetParams) {
-  const { container: containerSelector, ...otherWidgetParams } =
-    widgetParams || {};
+  const {
+    container: containerSelector,
+    path = new URL(window.location.href).pathname.substring(1),
+    ...otherWidgetParams
+  } = widgetParams || {};
 
   if (!containerSelector) {
     throw new Error(withUsage('The `container` option is required.'));
@@ -116,6 +119,7 @@ const page: PageWidget = function page(widgetParams) {
 
   const widget = makeWidget({
     ...otherWidgetParams,
+    path,
     widgets: connectorWidgets,
   });
 
