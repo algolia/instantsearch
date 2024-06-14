@@ -16,7 +16,6 @@ const search = instantsearch({
 search.addWidgets([
   page({
     container: '#page',
-    id: '920a446c-9cc5-47ea-ad19-3270bf2623a0',
   }),
 ]);
 
