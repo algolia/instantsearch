@@ -14,7 +14,6 @@ export function createPaginationTestSuite(flavor: string) {
       const hitsTitles = await browser.getHitsTitles();
 
       expect(hitsTitles).toEqual([
-        'Sony - BDP-S3700 - Streaming Wi-Fi Built-In Blu-ray Player - Black',
         'Insignia™ - 55" Class - (54.6" Diag.) - LED - 1080p - HDTV - Black',
         'HP - 15.6" Laptop - AMD A6-Series - 4GB Memory - 500GB Hard Drive - Black',
         'Nintendo - amiibo Figure (The Legend of Zelda: Breath of the Wild Series Bokoblin)',
@@ -30,6 +29,7 @@ export function createPaginationTestSuite(flavor: string) {
         'Amazon - Fire TV (2015 Model) - Black',
         'GoPro - HERO5 Black 4K Action Camera',
         'Epson - Expression Home XP-430 Small-in-One Wireless All-In-One Printer',
+        'Beats by Dr. Dre - Powerbeats2 Wireless Earbud Headphones - Black/Red',
       ]);
     });
 
