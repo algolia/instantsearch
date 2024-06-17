@@ -1,6 +1,6 @@
 import algoliasearch from 'algoliasearch/lite';
 
 export const searchClient = algoliasearch(
-  'latency',
-  '6be0576ff61c053d5f9a3225e2a90f76'
+  'F4T6CUV2AH',
+  '4e9f457696362671d337c42a0220bbf4'
 );

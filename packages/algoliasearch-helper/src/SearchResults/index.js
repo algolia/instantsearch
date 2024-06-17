@@ -806,20 +806,6 @@ function vanillaSortFn(order, data) {
  */
 
 /**
- * Hides facet values from array
- * @param {Array} facetValues the facet values
- * @param {Array} hide facet values
- * @returns {Array} the facet values with with hidden values removed
- */
-function removeHiddenFacetValues(facetValues, hide) {
-  facetValues = facetValues.filter(function (item) {
-    return hide.indexOf(item.name) === -1;
-  });
-
-  return facetValues;
-}
-
-/**
  * Sorts facet arrays via their facet ordering
  * @param {Array} facetValues the values
  * @param {FacetOrdering} facetOrdering the ordering
@@ -840,16 +826,13 @@ function sortViaFacetOrdering(facetValues, facetOrdering) {
     return acc;
   }, {});
 
-  if (hide.length > 0) {
-    facetValues = removeHiddenFacetValues(facetValues, hide);
-  }
-
   facetValues.forEach(function (item) {
     // hierarchical facets get sorted using their raw name
     var name = item.path || item.name;
-    if (reverseOrder[name] !== undefined) {
+    var hidden = hide.indexOf(name) > -1;
+    if (!hidden && reverseOrder[name] !== undefined) {
       orderedFacets[reverseOrder[name]] = item;
-    } else {
+    } else if (!hidden) {
       remainingFacets.push(item);
     }
   });
