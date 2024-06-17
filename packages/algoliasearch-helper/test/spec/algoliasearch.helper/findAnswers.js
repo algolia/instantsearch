@@ -96,7 +96,6 @@ test('runs findAnswers with facets', function () {
           facetFilters: ['facet1:facetValue'],
           facets: ['facet1'],
           query: 'hello',
-          tagFilters: '',
         },
       });
     });

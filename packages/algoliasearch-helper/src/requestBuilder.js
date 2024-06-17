@@ -139,10 +139,15 @@ var requestBuilder = {
     var facetFilters = requestBuilder._getFacetFilters(state);
     var numericFilters = requestBuilder._getNumericFilters(state);
     var tagFilters = requestBuilder._getTagFilters(state);
-    var additionalParams = {
-      facets: facets.indexOf('*') > -1 ? ['*'] : facets,
-      tagFilters: tagFilters,
-    };
+    var additionalParams = {};
+
+    if (facets.length > 0) {
+      additionalParams.facets = facets.indexOf('*') > -1 ? ['*'] : facets;
+    }
+
+    if (tagFilters.length > 0) {
+      additionalParams.tagFilters = tagFilters;
+    }
 
     if (facetFilters.length > 0) {
       additionalParams.facetFilters = facetFilters;
