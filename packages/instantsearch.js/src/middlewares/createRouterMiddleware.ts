@@ -1,6 +1,6 @@
 import historyRouter from '../lib/routers/history';
 import simpleStateMapping from '../lib/stateMappings/simple';
-import { isEqual } from '../lib/utils';
+import { isEqual, warning } from '../lib/utils';
 
 import type {
   Router,
@@ -97,6 +97,11 @@ export const createRouterMiddleware = <
       },
 
       subscribe() {
+        warning(
+          Object.keys(initialUiState).length === 0,
+          'Using `initialUiState` together with routing is not recommended. The `initialUiState` will be overwritten by the URL parameters.'
+        );
+
         instantSearchInstance._initialUiState = {
           ...initialUiState,
           ...stateMapping.routeToState(router.read()),
