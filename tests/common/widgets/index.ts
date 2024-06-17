@@ -1,6 +1,7 @@
 export * from './breadcrumb';
 export * from './clear-refinements';
 export * from './current-refinements';
+export * from './dynamic-widgets';
 export * from './hierarchical-menu';
 export * from './hits';
 export * from './infinite-hits';

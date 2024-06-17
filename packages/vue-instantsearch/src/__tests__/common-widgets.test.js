@@ -28,6 +28,7 @@ import {
   AisNumericMenu,
   AisPoweredBy,
   AisMenuSelect,
+  AisDynamicWidgets,
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
 
@@ -554,6 +555,24 @@ const testSetups = {
 
     await nextTick();
   },
+  createDynamicWidgetsWidgetTests({ instantSearchOptions, widgetParams }) {
+    mountApp(
+      {
+        render: renderCompat((h) =>
+          h(AisInstantSearch, { props: instantSearchOptions }, [
+            h(
+              AisDynamicWidgets,
+              { props: widgetParams },
+              h(AisRefinementList, { props: { attribute: 'brand' } }),
+              h(AisMenu, { props: { attribute: 'category' } })
+            ),
+            h(GlobalErrorSwallower),
+          ])
+        ),
+      },
+      document.body.appendChild(document.createElement('div'))
+    );
+  },
 };
 
 const testOptions = {
@@ -591,6 +610,7 @@ const testOptions = {
     skippedTests: { 'LookingSimilar widget common tests': true },
   },
   createPoweredByWidgetTests: undefined,
+  createDynamicWidgetsWidgetTests: undefined,
 };
 
 describe('Common widget tests (Vue InstantSearch)', () => {

@@ -31,6 +31,7 @@ import {
   lookingSimilar,
   poweredBy,
   menuSelect,
+  dynamicWidgets,
 } from '../widgets';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -594,6 +595,20 @@ const testSetups: TestSetupsMap<TestSuites> = {
       ])
       .start();
   },
+  createDynamicWidgetsWidgetTests({ instantSearchOptions, widgetParams }) {
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        dynamicWidgets({
+          container: document.body.appendChild(document.createElement('div')),
+          widgets: [
+            (container) => refinementList({ attribute: 'brand', container }),
+            (container) => menu({ attribute: 'category', container }),
+          ],
+          ...widgetParams,
+        }),
+      ])
+      .start();
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -625,6 +640,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createLookingSimilarWidgetTests: undefined,
   createPoweredByWidgetTests: undefined,
   createMenuSelectWidgetTests: undefined,
+  createDynamicWidgetsWidgetTests: undefined,
 };
 
 describe('Common widget tests (InstantSearch.js)', () => {
