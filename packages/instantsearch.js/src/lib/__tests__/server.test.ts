@@ -291,26 +291,18 @@ describe('getInitialResults', () => {
     expect(requestParams).toMatchInlineSnapshot(`
       [
         {
-          "facets": [],
           "query": "apple",
-          "tagFilters": "",
         },
         {
-          "facets": [],
           "query": "samsung",
-          "tagFilters": "",
         },
         {
-          "facets": [],
           "hitsPerPage": 2,
           "query": "apple",
-          "tagFilters": "",
         },
         {
-          "facets": [],
           "hitsPerPage": 3,
           "query": "apple",
-          "tagFilters": "",
         },
       ]
     `);

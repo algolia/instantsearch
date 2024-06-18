@@ -214,7 +214,6 @@ export function createOptionsTests(
             params: {
               facetFilters: [['free_shipping:true']],
               facets: ['free_shipping'],
-              tagFilters: '',
             },
           }),
         ])
@@ -233,7 +232,6 @@ export function createOptionsTests(
           expect.objectContaining({
             params: expect.objectContaining({
               facets: ['free_shipping'],
-              tagFilters: '',
             }),
           }),
         ])
@@ -278,7 +276,6 @@ export function createOptionsTests(
             params: {
               facetFilters: [['free_shipping:yes']],
               facets: ['free_shipping'],
-              tagFilters: '',
             },
           }),
         ])

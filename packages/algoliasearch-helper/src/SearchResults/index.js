@@ -231,7 +231,7 @@ function findMatchingHierarchicalFacetFromAttributeName(
 }
  **/
 function SearchResults(state, results, options) {
-  var mainSubResponse = results[0];
+  var mainSubResponse = results[0] || {};
 
   this._rawResults = results;
 

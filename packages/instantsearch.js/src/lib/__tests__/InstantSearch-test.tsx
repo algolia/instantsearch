@@ -1289,9 +1289,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       {
         indexName: 'indexName',
         params: {
-          facets: [],
           query: '',
-          tagFilters: '',
         },
       },
     ]);

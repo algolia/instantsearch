@@ -190,7 +190,7 @@ describe('InstantSearch', () => {
     expect(searchClient.search).toHaveBeenLastCalledWith([
       {
         indexName: 'indexName',
-        params: { facets: [], query: '', tagFilters: '' },
+        params: { query: '' },
       },
       {
         indexName: 'subIndexName',
@@ -198,7 +198,6 @@ describe('InstantSearch', () => {
           facets: ['brand'],
           maxValuesPerFacet: 10,
           query: '',
-          tagFilters: '',
         },
       },
     ]);
@@ -225,7 +224,7 @@ describe('InstantSearch', () => {
     expect(searchClient.search).toHaveBeenLastCalledWith([
       {
         indexName: 'indexName',
-        params: { facets: [], query: '', tagFilters: '' },
+        params: { query: '' },
       },
       {
         indexName: 'subIndexName',
@@ -233,7 +232,6 @@ describe('InstantSearch', () => {
           facets: ['brand'],
           maxValuesPerFacet: 10,
           query: '',
-          tagFilters: '',
         },
       },
     ]);
