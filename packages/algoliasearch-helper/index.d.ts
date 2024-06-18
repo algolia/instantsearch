@@ -1315,6 +1315,10 @@ declare namespace algoliasearchHelper {
         values?: {
           [facet: string]: {
             /**
+             * Hide facet values
+             */
+            hide?: string[];
+            /**
              * Ordered facet values
              */
             order?: string[];

@@ -814,8 +814,9 @@ function vanillaSortFn(order, data) {
 function sortViaFacetOrdering(facetValues, facetOrdering) {
   var orderedFacets = [];
   var remainingFacets = [];
-
+  var hide = facetOrdering.hide || [];
   var order = facetOrdering.order || [];
+
   /**
    * an object with the keys being the values in order, the values their index:
    * ['one', 'two'] -> { one: 0, two: 1 }
@@ -828,9 +829,10 @@ function sortViaFacetOrdering(facetValues, facetOrdering) {
   facetValues.forEach(function (item) {
     // hierarchical facets get sorted using their raw name
     var name = item.path || item.name;
-    if (reverseOrder[name] !== undefined) {
+    var hidden = hide.indexOf(name) > -1;
+    if (!hidden && reverseOrder[name] !== undefined) {
       orderedFacets[reverseOrder[name]] = item;
-    } else {
+    } else if (!hidden) {
       remainingFacets.push(item);
     }
   });
