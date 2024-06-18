@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.6.0...instantsearch-ui-components@0.7.0) (2024-06-18)
+
+
+### Features
+
+* **infinite-hits:** return banner info with connectInfiniteHits ([#6230](https://github.com/algolia/instantsearch/issues/6230)) ([0d50f0d](https://github.com/algolia/instantsearch/commit/0d50f0deaa20602d0fe51043f58ec2cf40d6c107))
+
+
+
+
+
 # [0.6.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.5.0...instantsearch-ui-components@0.6.0) (2024-05-21)
 
 

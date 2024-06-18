@@ -4,6 +4,7 @@
 - [Codemods](#codemods)
   - [`rish-to-ris`](#rish-to-ris)
   - [`ris-v6-to-v7`](#ris-v6-to-v7)
+  - [`addWidget-to-addWidgets`](#addwidget-to-addwidgets)
   - [Notes](#notes)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
