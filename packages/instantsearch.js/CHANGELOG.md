@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.72.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.71.1...instantsearch.js@4.72.0) (2024-06-18)
+
+
+### Bug Fixes
+
+* **routing:** warn if initialUiState is used ([#6238](https://github.com/algolia/instantsearch/issues/6238)) ([7b4cc3f](https://github.com/algolia/instantsearch/commit/7b4cc3fa2c6df9ca7435ac2d0092b2a883d984cc))
+
+
+### Features
+
+* **infinite-hits:** return banner info with connectInfiniteHits ([#6230](https://github.com/algolia/instantsearch/issues/6230)) ([0d50f0d](https://github.com/algolia/instantsearch/commit/0d50f0deaa20602d0fe51043f58ec2cf40d6c107))
+
+
+
+
+
 ## [4.71.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.71.0...instantsearch.js@4.71.1) (2024-06-05)
 
 **Note:** Version bump only for package instantsearch.js
