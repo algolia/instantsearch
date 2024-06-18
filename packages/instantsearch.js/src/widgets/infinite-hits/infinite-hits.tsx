@@ -82,6 +82,21 @@ export type InfiniteHitsCSSClasses = Partial<{
    * The disabled “Show more” button.
    */
   disabledLoadMore: string | string[];
+
+  /**
+   * Class names to apply to the banner element
+   */
+  bannerRoot: string | string[];
+
+  /**
+   * Class names to apply to the banner image element
+   */
+  bannerImage: string | string[];
+
+  /**
+   * Class names to apply to the banner link element
+   */
+  bannerLink: string | string[];
 }>;
 
 export type InfiniteHitsTemplates<THit extends NonNullable<object> = BaseHit> =
@@ -110,6 +125,14 @@ export type InfiniteHitsTemplates<THit extends NonNullable<object> = BaseHit> =
         __hitIndex: number;
       }
     >;
+
+    /**
+     * Template to use for the banner.
+     */
+    banner: Template<{
+      banner: Required<InfiniteHitsRenderState['banner']>;
+      className: string;
+    }>;
   }>;
 
 export type InfiniteHitsWidgetParams<
@@ -172,6 +195,7 @@ const renderer =
       insights,
       bindEvent,
       sendEvent,
+      banner,
     },
     isFirstRendering
   ) => {
@@ -199,6 +223,7 @@ const renderer =
         insights={insights as InsightsClient}
         sendEvent={sendEvent}
         bindEvent={bindEvent}
+        banner={banner}
       />,
       containerNode
     );
@@ -242,6 +267,18 @@ export default (function infiniteHits<
     disabledLoadMore: cx(
       suit({ descendantName: 'loadMore', modifierName: 'disabled' }),
       userCssClasses.disabledLoadMore
+    ),
+    bannerRoot: cx(
+      suit({ descendantName: 'banner' }),
+      userCssClasses.bannerRoot
+    ),
+    bannerImage: cx(
+      suit({ descendantName: 'banner-image' }),
+      userCssClasses.bannerImage
+    ),
+    bannerLink: cx(
+      suit({ descendantName: 'banner-link' }),
+      userCssClasses.bannerLink
     ),
   };
 

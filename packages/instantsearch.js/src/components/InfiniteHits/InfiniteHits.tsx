@@ -13,11 +13,11 @@ import type {
   InfiniteHitsCSSClasses,
   InfiniteHitsTemplates,
 } from '../../widgets/infinite-hits/infinite-hits';
-import type { SearchResults } from 'algoliasearch-helper';
+import type { Banner, SearchResults } from 'algoliasearch-helper';
 
 export type InfiniteHitsComponentCSSClasses =
   ComponentCSSClasses<InfiniteHitsCSSClasses>;
-export type InfiniteHitsComponentTemplates = Required<InfiniteHitsTemplates>;
+export type InfiniteHitsComponentTemplates = InfiniteHitsTemplates;
 
 export type InfiniteHitsProps = {
   cssClasses: InfiniteHitsComponentCSSClasses;
@@ -35,6 +35,7 @@ export type InfiniteHitsProps = {
   insights?: InsightsClient;
   sendEvent: SendEventForHits;
   bindEvent: BindEventForHits;
+  banner?: Banner;
 };
 
 const InfiniteHits = ({
@@ -50,6 +51,7 @@ const InfiniteHits = ({
   isLastPage,
   cssClasses,
   templateProps,
+  banner,
 }: InfiniteHitsProps) => {
   const handleInsightsClick = createInsightsEventHandler({
     insights,
@@ -58,15 +60,30 @@ const InfiniteHits = ({
 
   if (results.hits.length === 0) {
     return (
-      <Template
-        {...templateProps}
-        templateKey="empty"
-        rootProps={{
-          className: cx(cssClasses.root, cssClasses.emptyRoot),
-          onClick: handleInsightsClick,
-        }}
-        data={results}
-      />
+      <div className={cssClasses.root}>
+        {banner && templateProps.templates.banner ? (
+          <Template
+            {...templateProps}
+            templateKey="banner"
+            rootTagName="aside"
+            rootProps={{
+              className: cssClasses.bannerRoot,
+            }}
+            data={banner}
+          />
+        ) : (
+          <aside>default component goes here</aside>
+        )}
+        <Template
+          {...templateProps}
+          templateKey="empty"
+          rootProps={{
+            className: cssClasses.emptyRoot,
+            onClick: handleInsightsClick,
+          }}
+          data={results}
+        />
+      </div>
     );
   }
 
@@ -86,6 +103,20 @@ const InfiniteHits = ({
             onClick: showPrevious,
           }}
         />
+      )}
+
+      {banner && templateProps.templates.banner ? (
+        <Template
+          {...templateProps}
+          templateKey="banner"
+          rootTagName="aside"
+          rootProps={{
+            className: cssClasses.bannerRoot,
+          }}
+          data={banner}
+        />
+      ) : (
+        <aside>default component goes here</aside>
       )}
 
       <ol className={cssClasses.list}>
