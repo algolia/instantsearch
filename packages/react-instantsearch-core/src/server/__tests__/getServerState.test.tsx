@@ -232,7 +232,6 @@ describe('getServerState', () => {
           highlightPreTag: '__ais-highlight__',
           maxValuesPerFacet: 10,
           query: 'iphone',
-          tagFilters: '',
         },
       },
       {
@@ -258,7 +257,6 @@ describe('getServerState', () => {
           highlightPreTag: '__ais-highlight__',
           maxValuesPerFacet: 10,
           query: 'iphone',
-          tagFilters: '',
         },
       },
       {
@@ -284,7 +282,6 @@ describe('getServerState', () => {
           highlightPreTag: '__ais-highlight__',
           maxValuesPerFacet: 10,
           query: 'iphone',
-          tagFilters: '',
         },
       },
       {
@@ -310,7 +307,6 @@ describe('getServerState', () => {
           highlightPreTag: '__ais-highlight__',
           maxValuesPerFacet: 10,
           query: 'iphone',
-          tagFilters: '',
         },
       },
       {
@@ -420,7 +416,6 @@ describe('getServerState', () => {
         highlightPreTag: '__ais-highlight__',
         maxValuesPerFacet: 20,
         query: '',
-        tagFilters: '',
       },
     });
 
@@ -434,7 +429,6 @@ describe('getServerState', () => {
         highlightPreTag: '__ais-highlight__',
         maxValuesPerFacet: 20,
         query: '',
-        tagFilters: '',
       },
     });
   });

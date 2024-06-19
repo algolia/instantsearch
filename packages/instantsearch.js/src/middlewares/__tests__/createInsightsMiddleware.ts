@@ -846,9 +846,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         {
           indexName: 'my-index',
           params: {
-            facets: [],
             query: '',
-            tagFilters: '',
           },
         },
       ]);
@@ -868,9 +866,8 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           indexName: 'my-index',
           params: {
             clickAnalytics: true,
-            facets: [],
+
             query: '',
-            tagFilters: '',
           },
         },
       ]);

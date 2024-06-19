@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.22.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.21.0...algoliasearch-helper@3.22.0) (2024-06-18)
+
+
+### Features
+
+* **facets:** allow hiding values through renderingContent ([#6239](https://github.com/algolia/instantsearch/issues/6239)) ([b7eef90](https://github.com/algolia/instantsearch/commit/b7eef90a6b0650afe5f42f6904a239c74fa6ad37))
+* **infinite-hits:** return banner info with connectInfiniteHits ([#6230](https://github.com/algolia/instantsearch/issues/6230)) ([0d50f0d](https://github.com/algolia/instantsearch/commit/0d50f0deaa20602d0fe51043f58ec2cf40d6c107))
+
+
+
+
+
 # [3.21.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.20.0...algoliasearch-helper@3.21.0) (2024-05-28)
 
 

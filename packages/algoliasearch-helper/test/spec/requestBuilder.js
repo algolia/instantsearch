@@ -152,7 +152,6 @@ test('orders parameters alphabetically in every query', function () {
       ],
       facets: ['test', 'test_disjunctive', 'test_numeric', 'whatever'],
       numericFilters: ['test_numeric>=10'],
-      tagFilters: '',
     })
   );
   expect(JSON.stringify(queries[1].params)).toBe(

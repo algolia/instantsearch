@@ -195,9 +195,7 @@ describe('network requests', () => {
           {
             "indexName": "indexName",
             "params": {
-              "facets": [],
               "query": "",
-              "tagFilters": "",
             },
           },
         ]
@@ -268,9 +266,7 @@ describe('network requests', () => {
           {
             "indexName": "indexName",
             "params": {
-              "facets": [],
               "query": "",
-              "tagFilters": "",
             },
           },
         ]
@@ -343,9 +339,7 @@ describe('network requests', () => {
             "indexName": "indexName",
             "params": {
               "clickAnalytics": true,
-              "facets": [],
               "query": "",
-              "tagFilters": "",
               "userToken": "cookie-key",
             },
           },
@@ -420,9 +414,7 @@ describe('network requests', () => {
             "indexName": "indexName",
             "params": {
               "clickAnalytics": true,
-              "facets": [],
               "query": "",
-              "tagFilters": "",
               "userToken": "cookie-key",
             },
           },
@@ -496,9 +488,7 @@ describe('network requests', () => {
             "indexName": "indexName",
             "params": {
               "clickAnalytics": true,
-              "facets": [],
               "query": "",
-              "tagFilters": "",
             },
           },
         ]
@@ -572,9 +562,7 @@ describe('network requests', () => {
             "indexName": "indexName",
             "params": {
               "clickAnalytics": true,
-              "facets": [],
               "query": "",
-              "tagFilters": "",
             },
           },
         ]
@@ -623,9 +611,7 @@ describe('network requests', () => {
           {
             "indexName": "indexName",
             "params": {
-              "facets": [],
               "query": "",
-              "tagFilters": "",
             },
           },
         ]
