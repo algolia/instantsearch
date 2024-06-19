@@ -380,6 +380,12 @@ const testSetups: TestSetupsMap<TestSuites> = {
           <DynamicWidgets {...widgetParams}>
             <RefinementList attribute="brand" />
             <Menu attribute="category" />
+            <HierarchicalMenu
+              attributes={[
+                'hierarchicalCategories.lvl0',
+                'hierarchicalCategories.lvl1',
+              ]}
+            />
           </DynamicWidgets>
         </div>
         <GlobalErrorSwallower />

@@ -14,41 +14,9 @@ export function createOptionsTests(
   { act }: Required<TestOptions>
 ) {
   describe('options', () => {
-    const searchClient = createAlgoliaSearchClient({
-      search: jest.fn((requests) => {
-        return Promise.resolve(
-          createMultiSearchResponse(
-            ...requests.map(() => {
-              return createSingleSearchResponse({
-                facets: {
-                  brand: {
-                    Samsung: 633,
-                    Metra: 591,
-                  },
-                  category: {
-                    TV: 633,
-                    Radio: 591,
-                  },
-                },
-                renderingContent: {
-                  facetOrdering: {
-                    facets: {
-                      order: ['category', 'brand'],
-                    },
-                  },
-                },
-              });
-            })
-          )
-        );
-      }),
-    });
-
-    beforeEach(() => {
-      searchClient.search.mockClear();
-    });
-
     it('renders with default options', async () => {
+      const searchClient = createMockedSearchClient();
+
       await setup({
         instantSearchOptions: {
           searchClient,
@@ -69,7 +37,7 @@ export function createOptionsTests(
         // Vue 3 outputs comment nodes
       ).filter((node) => node.nodeType === Node.ELEMENT_NODE);
 
-      expect(dynamicWidgets).toHaveLength(2);
+      expect(dynamicWidgets).toHaveLength(3);
 
       expect(
         within(dynamicWidgets[0] as HTMLElement).getByRole('link', {
@@ -82,9 +50,17 @@ export function createOptionsTests(
           name: /samsung/i,
         })
       ).toBeInTheDocument();
+
+      expect(
+        within(dynamicWidgets[2] as HTMLElement).getByRole('link', {
+          name: /books/i,
+        })
+      ).toBeInTheDocument();
     });
 
     it('forwards the `maxValuesPerFacet` option', async () => {
+      const searchClient = createMockedSearchClient();
+
       await setup({
         instantSearchOptions: {
           searchClient,
@@ -112,6 +88,8 @@ export function createOptionsTests(
     });
 
     it('forwards the `facets` option', async () => {
+      const searchClient = createMockedSearchClient();
+
       await setup({
         instantSearchOptions: {
           searchClient,
@@ -139,6 +117,8 @@ export function createOptionsTests(
     });
 
     it('transforms items by calling the `transformItem` option', async () => {
+      const searchClient = createMockedSearchClient();
+
       await setup({
         instantSearchOptions: {
           searchClient,
@@ -164,5 +144,41 @@ export function createOptionsTests(
         screen.queryByRole('link', { name: /tv/i })
       ).not.toBeInTheDocument();
     });
+  });
+}
+
+function createMockedSearchClient() {
+  return createAlgoliaSearchClient({
+    search: jest.fn((requests) => {
+      return Promise.resolve(
+        createMultiSearchResponse(
+          ...requests.map(() => {
+            return createSingleSearchResponse({
+              facets: {
+                brand: {
+                  Samsung: 633,
+                  Metra: 591,
+                },
+                category: {
+                  TV: 633,
+                  Radio: 591,
+                },
+                'hierarchicalCategories.lvl0': {
+                  Electronics: 633,
+                  Books: 591,
+                },
+              },
+              renderingContent: {
+                facetOrdering: {
+                  facets: {
+                    order: ['category', 'brand', 'hierarchicalCategories.lvl0'],
+                  },
+                },
+              },
+            });
+          })
+        )
+      );
+    }),
   });
 }

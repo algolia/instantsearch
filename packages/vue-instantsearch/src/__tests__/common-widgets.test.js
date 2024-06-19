@@ -564,7 +564,15 @@ const testSetups = {
               AisDynamicWidgets,
               { props: widgetParams },
               h(AisRefinementList, { props: { attribute: 'brand' } }),
-              h(AisMenu, { props: { attribute: 'category' } })
+              h(AisMenu, { props: { attribute: 'category' } }),
+              h(AisHierarchicalMenu, {
+                props: {
+                  attributes: [
+                    'hierarchicalCategories.lvl0',
+                    'hierarchicalCategories.lvl1',
+                  ],
+                },
+              })
             ),
             h(GlobalErrorSwallower),
           ])

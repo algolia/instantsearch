@@ -603,6 +603,14 @@ const testSetups: TestSetupsMap<TestSuites> = {
           widgets: [
             (container) => refinementList({ attribute: 'brand', container }),
             (container) => menu({ attribute: 'category', container }),
+            (container) =>
+              hierarchicalMenu({
+                attributes: [
+                  'hierarchicalCategories.lvl0',
+                  'hierarchicalCategories.lvl1',
+                ],
+                container,
+              }),
           ],
           ...widgetParams,
         }),
