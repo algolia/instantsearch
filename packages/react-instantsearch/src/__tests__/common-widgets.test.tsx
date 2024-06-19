@@ -30,6 +30,7 @@ import {
   TrendingItems,
   LookingSimilar,
   PoweredBy,
+  DynamicWidgets,
 } from '..';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -372,6 +373,25 @@ const testSetups: TestSetupsMap<TestSuites> = {
   createMenuSelectWidgetTests() {
     throw new Error('MenuSelect is not supported in React InstantSearch');
   },
+  createDynamicWidgetsWidgetTests({ instantSearchOptions, widgetParams }) {
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <div className="ais-DynamicWidgets">
+          <DynamicWidgets {...widgetParams}>
+            <RefinementList attribute="brand" />
+            <Menu attribute="category" />
+            <HierarchicalMenu
+              attributes={[
+                'hierarchicalCategories.lvl0',
+                'hierarchicalCategories.lvl1',
+              ]}
+            />
+          </DynamicWidgets>
+        </div>
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -414,6 +434,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
       'MenuSelect widget common tests': true,
     },
   },
+  createDynamicWidgetsWidgetTests: { act },
 };
 
 /**
