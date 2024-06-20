@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.22.1](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.22.0...algoliasearch-helper@3.22.1) (2024-06-20)
+
+
+### Bug Fixes
+
+* **helper:** don't send empty "tagRefinements" and "facets" parameters ([#6204](https://github.com/algolia/instantsearch/issues/6204)) ([fb7cc23](https://github.com/algolia/instantsearch/commit/fb7cc23acfaad55579032587a4222647e240838b))
+* **types:** make algoliasearch detection compatible with TS 5.4.5 ([#6244](https://github.com/algolia/instantsearch/issues/6244)) ([4a7afc3](https://github.com/algolia/instantsearch/commit/4a7afc3924f1c9f4ea92024cd137dd46835a9323)), closes [#5989](https://github.com/algolia/instantsearch/issues/5989)
+
+
+
+
+
 # [3.22.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.21.0...algoliasearch-helper@3.22.0) (2024-06-18)
 
 

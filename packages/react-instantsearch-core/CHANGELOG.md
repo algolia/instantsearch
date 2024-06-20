@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.11.3](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.11.2...react-instantsearch-core@7.11.3) (2024-06-20)
+
+
+### Bug Fixes
+
+* **helper:** don't send empty "tagRefinements" and "facets" parameters ([#6204](https://github.com/algolia/instantsearch/issues/6204)) ([fb7cc23](https://github.com/algolia/instantsearch/commit/fb7cc23acfaad55579032587a4222647e240838b))
+
+
+
+
+
 ## [7.11.2](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.11.1...react-instantsearch-core@7.11.2) (2024-06-18)
 
 **Note:** Version bump only for package react-instantsearch-core
