@@ -1,6 +1,6 @@
 {
   "name": "example-vue-instantsearch-media",
-  "version": "0.51.0",
+  "version": "0.52.0",
   "private": true,
   "scripts": {
     "serve": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve",
@@ -10,9 +10,9 @@
   "dependencies": {
     "algoliasearch": "4.23.2",
     "core-js": "2",
-    "instantsearch.js": "4.72.0",
+    "instantsearch.js": "4.72.1",
     "vue": "2.7.14",
-    "vue-instantsearch": "4.17.4"
+    "vue-instantsearch": "4.17.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "3.12.1",
