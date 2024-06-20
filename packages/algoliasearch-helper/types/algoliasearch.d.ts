@@ -28,18 +28,24 @@ type SearchClientShape = {
 // @ts-ignore
 type ClientV3_4 = ReturnType<typeof algoliasearch>;
 
-type ClientLiteV5 = AnyToUnknown<
-  // @ts-ignore
-  ReturnType<typeof AlgoliaSearchLite.liteClient>
->;
-type ClientFullV5 = AnyToUnknown<
-  // @ts-ignore
-  ReturnType<typeof AlgoliaSearch.algoliasearch>
->;
-type ClientSearchV5 = AnyToUnknown<
-  // @ts-ignore
-  ReturnType<typeof ClientSearch.searchClient>
->;
+type ClientLiteV5 = AnyToUnknown<typeof AlgoliaSearchLite> extends unknown
+  ? unknown
+  : AnyToUnknown<
+      // @ts-ignore
+      ReturnType<typeof AlgoliaSearchLite.liteClient>
+    >;
+type ClientFullV5 = AnyToUnknown<typeof AlgoliaSearch> extends unknown
+  ? unknown
+  : AnyToUnknown<
+      // @ts-ignore
+      ReturnType<typeof AlgoliaSearch.algoliasearch>
+    >;
+type ClientSearchV5 = AnyToUnknown<typeof ClientSearch> extends unknown
+  ? unknown
+  : AnyToUnknown<
+      // @ts-ignore
+      ReturnType<typeof ClientSearch.searchClient>
+    >;
 type ClientV5 = ClientLiteV5 extends SearchClientShape
   ? ClientLiteV5
   : ClientSearchV5 extends SearchClientShape
