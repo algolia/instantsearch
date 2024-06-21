@@ -10,6 +10,8 @@ import type { UseInfiniteHitsProps } from 'react-instantsearch-core';
 type UiProps<THit extends BaseHit = BaseHit> = Pick<
   InfiniteHitsUiComponentProps<Hit<THit>>,
   | 'hits'
+  | 'banner'
+  | 'bannerComponent'
   | 'sendEvent'
   | 'onShowPrevious'
   | 'onShowMore'
@@ -21,8 +23,14 @@ type UiProps<THit extends BaseHit = BaseHit> = Pick<
 export type InfiniteHitsProps<THit extends BaseHit = BaseHit> = Omit<
   InfiniteHitsUiComponentProps<Hit<THit>>,
   keyof UiProps<THit>
-> &
-  UseInfiniteHitsProps<THit> & {
+> & {
+  bannerComponent?:
+    | React.JSXElementConstructor<{
+        banner: Required<InfiniteHitsUiComponentProps<Hit<THit>>>['banner'];
+        className: string;
+      }>
+    | false;
+} & UseInfiniteHitsProps<THit> & {
     /**
      * Displays the "Show Previous" button when the UI is loaded from a page
      * beyond the first one.
@@ -39,16 +47,30 @@ export function InfiniteHits<THit extends BaseHit = BaseHit>({
   showPrevious: userShowPrevious,
   transformItems,
   translations,
+  bannerComponent: BannerComponent,
   ...props
 }: InfiniteHitsProps<THit>) {
-  const { hits, sendEvent, showPrevious, showMore, isFirstPage, isLastPage } =
-    useInfiniteHits<THit>(
-      { cache, escapeHTML, showPrevious: userShowPrevious, transformItems },
-      { $$widgetType: 'ais.infiniteHits' }
-    );
+  const {
+    hits,
+    banner,
+    sendEvent,
+    showPrevious,
+    showMore,
+    isFirstPage,
+    isLastPage,
+  } = useInfiniteHits<THit>(
+    { cache, escapeHTML, showPrevious: userShowPrevious, transformItems },
+    { $$widgetType: 'ais.infiniteHits' }
+  );
+
+  const bannerComponent = (
+    BannerComponent === false ? () => null : BannerComponent
+  ) as InfiniteHitsUiComponentProps<THit>['bannerComponent'];
 
   const uiProps: UiProps<THit> = {
     hits,
+    banner,
+    bannerComponent,
     sendEvent,
     onShowPrevious: shouldShowPrevious ? showPrevious : undefined,
     onShowMore: showMore,
