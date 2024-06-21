@@ -38,6 +38,45 @@ export type InfiniteHitsProps = {
   banner?: Banner;
 };
 
+const DefaultBanner = ({
+  banner,
+  classNames,
+}: {
+  banner: Banner;
+  classNames: Pick<
+    InfiniteHitsCSSClasses,
+    'bannerRoot' | 'bannerLink' | 'bannerImage'
+  >;
+}) => {
+  if (!banner.image.urls[0].url) {
+    return null;
+  }
+
+  return (
+    <aside className={cx(classNames.bannerRoot)}>
+      {banner.link ? (
+        <a
+          className={cx(classNames.bannerLink)}
+          href={banner.link.url}
+          target={banner.link.target}
+        >
+          <img
+            className={cx(classNames.bannerImage)}
+            src={banner.image.urls[0].url}
+            alt={banner.image.title}
+          />
+        </a>
+      ) : (
+        <img
+          className={cx(classNames.bannerImage)}
+          src={banner.image.urls[0].url}
+          alt={banner.image.title}
+        />
+      )}
+    </aside>
+  );
+};
+
 const InfiniteHits = ({
   results,
   hits,
@@ -60,27 +99,28 @@ const InfiniteHits = ({
 
   if (results.hits.length === 0) {
     return (
-      <div className={cssClasses.root}>
-        {banner && templateProps.templates.banner ? (
-          <Template
-            {...templateProps}
-            templateKey="banner"
-            rootTagName="aside"
-            rootProps={{
-              className: cssClasses.bannerRoot,
-            }}
-            data={banner}
-          />
-        ) : (
-          <aside>default component goes here</aside>
-        )}
+      <div
+        className={cx(cssClasses.root, cssClasses.emptyRoot)}
+        onClick={handleInsightsClick}
+      >
+        {banner &&
+          (templateProps.templates.banner ? (
+            <Template
+              {...templateProps}
+              templateKey="banner"
+              rootTagName="fragment"
+              rootProps={{
+                className: cssClasses.bannerRoot,
+              }}
+              data={banner}
+            />
+          ) : (
+            <DefaultBanner banner={banner} classNames={cssClasses} />
+          ))}
         <Template
           {...templateProps}
           templateKey="empty"
-          rootProps={{
-            className: cssClasses.emptyRoot,
-            onClick: handleInsightsClick,
-          }}
+          rootTagName="fragment"
           data={results}
         />
       </div>
@@ -105,19 +145,20 @@ const InfiniteHits = ({
         />
       )}
 
-      {banner && templateProps.templates.banner ? (
-        <Template
-          {...templateProps}
-          templateKey="banner"
-          rootTagName="aside"
-          rootProps={{
-            className: cssClasses.bannerRoot,
-          }}
-          data={banner}
-        />
-      ) : (
-        <aside>default component goes here</aside>
-      )}
+      {banner &&
+        (templateProps.templates.banner ? (
+          <Template
+            {...templateProps}
+            templateKey="banner"
+            rootTagName="fragment"
+            rootProps={{
+              className: cssClasses.bannerRoot,
+            }}
+            data={banner}
+          />
+        ) : (
+          <DefaultBanner banner={banner} classNames={cssClasses} />
+        ))}
 
       <ol className={cssClasses.list}>
         {hits.map((hit, index) => (
