@@ -20,6 +20,21 @@ import infiniteHits from '../infinite-hits';
 import type { SearchResponse } from '../../../../src/types';
 import type { MockSearchClient } from '@instantsearch/mocks';
 
+const bannerWidgetRenderingContent = {
+  widgets: {
+    banners: [
+      {
+        image: {
+          urls: [{ url: 'https://via.placeholder.com/550x250' }],
+        },
+        link: {
+          url: 'https://www.algolia.com',
+        },
+      },
+    ],
+  },
+};
+
 beforeEach(() => {
   document.body.innerHTML = '';
 });
@@ -50,7 +65,11 @@ describe('infiniteHits', () => {
 
     test('adds custom CSS classes', async () => {
       const container = document.createElement('div');
-      const searchClient = createMockedSearchClient();
+      const searchClient = createMockedSearchClient({
+        // @TODO: remove once algoliasearch js client has been updated
+        // @ts-expect-error
+        renderingContent: bannerWidgetRenderingContent,
+      });
 
       const search = instantsearch({
         indexName: 'indexName',
@@ -78,6 +97,9 @@ describe('infiniteHits', () => {
             loadMore: 'LOAD_MORE',
             disabledLoadPrevious: 'DISABLED_LOAD_PREVIOUS',
             disabledLoadMore: 'DISABLED_LOAD_MORE',
+            bannerRoot: 'BANNER_ROOT',
+            bannerImage: 'BANNER_IMAGE',
+            bannerLink: 'BANNER_LINK',
           },
         }),
       ]);
@@ -99,6 +121,15 @@ describe('infiniteHits', () => {
       expect(container.querySelector('.ais-InfiniteHits-loadMore')).toHaveClass(
         'LOAD_MORE DISABLED_LOAD_MORE'
       );
+      expect(container.querySelector('.ais-InfiniteHits-banner')).toHaveClass(
+        'BANNER_ROOT'
+      );
+      expect(
+        container.querySelector('.ais-InfiniteHits-banner-image')
+      ).toHaveClass('BANNER_IMAGE');
+      expect(
+        container.querySelector('.ais-InfiniteHits-banner-link')
+      ).toHaveClass('BANNER_LINK');
     });
 
     type CustomRecord = { somethingSpecial: string };
@@ -274,7 +305,11 @@ describe('infiniteHits', () => {
     test('renders with templates using `html`', async () => {
       const container = document.createElement('div');
       const searchBoxContainer = document.createElement('div');
-      const searchClient = createMockedSearchClient();
+      const searchClient = createMockedSearchClient({
+        // @TODO: remove once algoliasearch js client has been updated
+        // @ts-expect-error
+        renderingContent: bannerWidgetRenderingContent,
+      });
 
       const search = instantsearch({ indexName: 'indexName', searchClient });
 
@@ -308,6 +343,9 @@ describe('infiniteHits', () => {
             empty({ query }, { html }) {
               return html`<p>No results for <q>${query}</q></p>`;
             },
+            banner(_, { html }) {
+              return html`<p>Banner</p>`;
+            },
           },
         }),
       ]);
@@ -329,6 +367,9 @@ describe('infiniteHits', () => {
                 Show previous
               </span>
             </button>
+            <p>
+              Banner
+            </p>
             <ol
               class="ais-InfiniteHits-list"
             >
@@ -512,6 +553,9 @@ describe('infiniteHits', () => {
           <div
             class="ais-InfiniteHits ais-InfiniteHits--empty"
           >
+            <p>
+              Banner
+            </p>
             <p>
               No results for 
               <q>
