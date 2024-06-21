@@ -402,7 +402,7 @@ describe('InfiniteHits', () => {
 
     const { container } = render(<InfiniteHits {...props} />);
 
-    userEvent.click(container.querySelectorAll('.ais-InfiniteHits-item')[0]!);
+    userEvent.click(container.querySelectorAll('.ais-InfiniteHits-item')[0]);
 
     expect(props.sendEvent).toHaveBeenCalledTimes(1);
     expect(props.sendEvent).toHaveBeenLastCalledWith(

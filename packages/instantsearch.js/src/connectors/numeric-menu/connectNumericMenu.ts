@@ -482,7 +482,7 @@ function hasNumericRefinement(
 ) {
   return (
     currentRefinements[operator] !== undefined &&
-    currentRefinements[operator]!.includes(value)
+    currentRefinements[operator].includes(value)
   );
 }
 

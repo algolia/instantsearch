@@ -116,8 +116,9 @@ it('unmountFn gets called on dispose', () => {
 });
 
 it('unmountFn is optional', () => {
-  const unmountFn = jest.fn();
-  const widgetFactory = connectStateResults(() => {}, unmountFn);
-  const widgetInstance = widgetFactory();
-  widgetInstance.dispose();
+  const widgetFactory = connectStateResults(() => {});
+  expect(() => {
+    const widgetInstance = widgetFactory();
+    widgetInstance.dispose();
+  }).not.toThrow();
 });

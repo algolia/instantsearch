@@ -233,7 +233,7 @@ describe('FrequentlyBoughtTogether', () => {
     );
 
     userEvent.click(
-      container.querySelectorAll('.ais-FrequentlyBoughtTogether-item')[0]!
+      container.querySelectorAll('.ais-FrequentlyBoughtTogether-item')[0]
     );
 
     expect(sendEvent).toHaveBeenCalledTimes(1);

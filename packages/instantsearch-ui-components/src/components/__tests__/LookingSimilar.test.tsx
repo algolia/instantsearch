@@ -230,7 +230,7 @@ describe('LookingSimilar', () => {
       />
     );
 
-    userEvent.click(container.querySelectorAll('.ais-LookingSimilar-item')[0]!);
+    userEvent.click(container.querySelectorAll('.ais-LookingSimilar-item')[0]);
 
     expect(sendEvent).toHaveBeenCalledTimes(1);
   });

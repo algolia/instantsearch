@@ -222,7 +222,7 @@ describe('Hits', () => {
     const props = createProps({});
     const { container } = render(<Hits {...props} />);
 
-    userEvent.click(container.querySelectorAll('.ais-Hits-item')[0]!);
+    userEvent.click(container.querySelectorAll('.ais-Hits-item')[0]);
     expect(props.sendEvent).toHaveBeenCalledTimes(1);
     expect(props.sendEvent).toHaveBeenLastCalledWith(
       'click:internal',

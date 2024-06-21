@@ -91,7 +91,7 @@ const createHTMLMarker = (
     }
 
     public draw() {
-      const position = this.getProjection().fromLatLngToDivPixel(this.latLng)!;
+      const position = this.getProjection().fromLatLngToDivPixel(this.latLng);
 
       this.element.style.left = `${Math.round(position.x - this.offset!.x)}px`;
       this.element.style.top = `${Math.round(position.y - this.offset!.y)}px`;

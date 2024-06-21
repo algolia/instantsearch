@@ -19,7 +19,7 @@ export function toMatchNormalizedInlineSnapshot(
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace jest {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/naming-convention
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface Matchers<R> {
       /**
        * This ensures that a value matches the inline snapshot after

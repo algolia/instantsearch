@@ -8,8 +8,8 @@ type CallbackReturn = {
   env: 'client' | 'server';
 };
 
-const CLIENT = 'client' as const;
-const SERVER = 'server' as const;
+const CLIENT: 'client' = 'client';
+const SERVER: 'server' = 'server';
 
 describe('safelyRunOnBrowser', () => {
   const originalWindow = (global as any).window;

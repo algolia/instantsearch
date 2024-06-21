@@ -14,7 +14,7 @@ import { createWidgetMixin } from '../mixins/widget';
 // Uncomment and change here ⬇️
 // import { connectorName } from 'instantsearch.js/es/connectors';
 
-/* eslint-disable @typescript-eslint/no-unused-vars,no-unused-vars */
+/* eslint-disable no-unused-vars */
 // Remove this part ⬇,️ only here for testing the template
 const connectorName =
   (renderFn, unmountFn) =>

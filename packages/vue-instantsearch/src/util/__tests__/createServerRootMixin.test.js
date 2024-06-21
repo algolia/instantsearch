@@ -740,7 +740,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
             }),
           ],
           render: renderCompat(function (h) {
-            // eslint-disable-next-line @typescript-eslint/no-use-before-define
             expect(this.$root).toBe(wrapper);
             return h(InstantSearchSsr, {}, [
               h(Configure, {

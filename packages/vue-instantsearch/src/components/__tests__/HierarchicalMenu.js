@@ -295,7 +295,6 @@ describe('custom default render', () => {
     __setState({
       ...defaultState,
       toggleShowMore: () => {
-        // eslint-disable-next-line @typescript-eslint/no-use-before-define
         const component = wrapper.findComponent(HierarchicalMenu);
         component.setData({ state: { isShowingMore: true } });
       },
@@ -379,7 +378,6 @@ describe('custom default render', () => {
     __setState({
       ...defaultState,
       toggleShowMore: () => {
-        // eslint-disable-next-line @typescript-eslint/no-use-before-define
         const component = wrapper.findComponent(HierarchicalMenu);
         component.setData({ state: { isShowingMore: true } });
       },
@@ -451,7 +449,6 @@ describe('custom showMoreLabel render', () => {
     __setState({
       ...defaultState,
       toggleShowMore: () => {
-        // eslint-disable-next-line @typescript-eslint/no-use-before-define
         const component = wrapper.findComponent(HierarchicalMenu);
         component.setData({ state: { isShowingMore: true } });
       },

@@ -230,7 +230,7 @@ describe('TrendingItems', () => {
       />
     );
 
-    userEvent.click(container.querySelectorAll('.ais-TrendingItems-item')[0]!);
+    userEvent.click(container.querySelectorAll('.ais-TrendingItems-item')[0]);
 
     expect(sendEvent).toHaveBeenCalledTimes(1);
   });
