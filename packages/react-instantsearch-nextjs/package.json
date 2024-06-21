@@ -1,6 +1,6 @@
 {
   "name": "react-instantsearch-nextjs",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "React InstantSearch SSR utilities for Next.js",
   "types": "dist/es/index.d.ts",
   "main": "dist/cjs/index.js",
@@ -49,9 +49,9 @@
     "watch:es": "yarn --silent build:es:base --watch"
   },
   "devDependencies": {
-    "instantsearch.js": "4.72.0",
+    "instantsearch.js": "4.72.1",
     "next": "13.5.1",
-    "react-instantsearch-core": "7.11.2"
+    "react-instantsearch-core": "7.11.3"
   },
   "peerDependencies": {
     "next": ">= 13.4 && < 15",

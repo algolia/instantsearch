@@ -16,7 +16,6 @@ exports[`getServerState returns initialResults 1`] = `
       "highlightPreTag": "__ais-highlight__",
       "maxValuesPerFacet": 10,
       "query": "iphone",
-      "tagFilters": "",
     },
     "results": [
       {
@@ -28,7 +27,7 @@ exports[`getServerState returns initialResults 1`] = `
         "nbHits": 0,
         "nbPages": 0,
         "page": 0,
-        "params": "facetFilters=%5B%5B%22brand%3AApple%22%5D%5D&facets=%5B%22brand%22%5D&highlightPostTag=__%2Fais-highlight__&highlightPreTag=__ais-highlight__&maxValuesPerFacet=10&query=iphone&tagFilters=",
+        "params": "facetFilters=%5B%5B%22brand%3AApple%22%5D%5D&facets=%5B%22brand%22%5D&highlightPostTag=__%2Fais-highlight__&highlightPreTag=__ais-highlight__&maxValuesPerFacet=10&query=iphone",
         "processingTimeMS": 0,
         "query": "",
       },
@@ -91,7 +90,7 @@ exports[`getServerState returns initialResults 1`] = `
         "nbHits": 0,
         "nbPages": 0,
         "page": 0,
-        "params": "facetFilters=%5B%5B%22brand%3AApple%22%5D%5D&facets=%5B%22brand%22%5D&highlightPostTag=__%2Fais-highlight__&highlightPreTag=__ais-highlight__&maxValuesPerFacet=10&query=iphone&tagFilters=",
+        "params": "facetFilters=%5B%5B%22brand%3AApple%22%5D%5D&facets=%5B%22brand%22%5D&highlightPostTag=__%2Fais-highlight__&highlightPreTag=__ais-highlight__&maxValuesPerFacet=10&query=iphone",
         "processingTimeMS": 0,
         "query": "",
       },
@@ -146,7 +145,7 @@ exports[`getServerState returns initialResults 1`] = `
         "nbHits": 0,
         "nbPages": 0,
         "page": 0,
-        "params": "facetFilters=%5B%5B%22brand%3AApple%22%5D%5D&facets=%5B%22brand%22%5D&highlightPostTag=__%2Fais-highlight__&highlightPreTag=__ais-highlight__&maxValuesPerFacet=10&query=iphone&tagFilters=",
+        "params": "facetFilters=%5B%5B%22brand%3AApple%22%5D%5D&facets=%5B%22brand%22%5D&highlightPostTag=__%2Fais-highlight__&highlightPreTag=__ais-highlight__&maxValuesPerFacet=10&query=iphone",
         "processingTimeMS": 0,
         "query": "",
       },
@@ -193,7 +192,6 @@ exports[`getServerState returns initialResults 1`] = `
       "highlightPreTag": "__ais-highlight__",
       "maxValuesPerFacet": 10,
       "query": "iphone",
-      "tagFilters": "",
     },
     "results": [
       {
@@ -205,7 +203,7 @@ exports[`getServerState returns initialResults 1`] = `
         "nbHits": 0,
         "nbPages": 0,
         "page": 0,
-        "params": "facetFilters=%5B%5B%22brand%3AApple%22%5D%5D&facets=%5B%22brand%22%5D&highlightPostTag=__%2Fais-highlight__&highlightPreTag=__ais-highlight__&maxValuesPerFacet=10&query=iphone&tagFilters=",
+        "params": "facetFilters=%5B%5B%22brand%3AApple%22%5D%5D&facets=%5B%22brand%22%5D&highlightPostTag=__%2Fais-highlight__&highlightPreTag=__ais-highlight__&maxValuesPerFacet=10&query=iphone",
         "processingTimeMS": 0,
         "query": "",
       },

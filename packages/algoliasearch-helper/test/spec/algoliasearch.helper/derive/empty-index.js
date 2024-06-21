@@ -27,10 +27,7 @@ describe('searches', function () {
     expect(client.search).toHaveBeenCalledWith([
       {
         indexName: 'indexName',
-        params: {
-          facets: [],
-          tagFilters: '',
-        },
+        params: {},
       },
     ]);
   });

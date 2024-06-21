@@ -24,7 +24,6 @@ test('getQuery', function () {
     minWordSizefor1Typo: 8,
     ignorePlurals: true,
     facets: ['df1', 'df2', 'df3', 'facet1', 'facet2', 'facet3'],
-    tagFilters: '',
     facetFilters: [
       'facet1:FACET1-VAL-1',
       'facet2:FACET2-VAL-1',
