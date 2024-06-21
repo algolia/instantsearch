@@ -139,7 +139,7 @@ describe('DOM component', () => {
       expect(installedName).toBe(name);
       const expectedClass =
         {
-          AisInstantSearch: 'ais-InstantSearch',
+          AisInstantSearchSsr: 'ais-InstantSearch',
           AisExperimentalDynamicWidgets: 'ais-DynamicWidgets',
         }[name] || `ais-${name.substr(3)}`;
 
