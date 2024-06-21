@@ -226,7 +226,7 @@ const infiniteHits = connectInfiniteHits<{ container: string }>(
     }
 
     const hitsOffset = hits.findIndex(
-      ({ objectID }) => results!.hits[0].objectID === objectID
+      ({ objectID }) => results.hits[0].objectID === objectID
     );
     const hitsWindow = {
       start: results.hitsPerPage * results.page - hitsOffset + 1,
@@ -251,7 +251,7 @@ const infiniteHits = connectInfiniteHits<{ container: string }>(
           .map((hit, index: number) =>
             createHit(hit as unknown as Hit, {
               isHighlighted:
-                results!.nbHits !== 3 && (index === 0 || results!.nbHits === 2),
+                results.nbHits !== 3 && (index === 0 || results.nbHits === 2),
               refinedCategory,
             })
           )
