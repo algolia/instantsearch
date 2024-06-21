@@ -343,8 +343,10 @@ describe('infiniteHits', () => {
             empty({ query }, { html }) {
               return html`<p>No results for <q>${query}</q></p>`;
             },
-            banner(_, { html }) {
-              return html`<p>Banner</p>`;
+            banner({ banner, className }, { html }) {
+              return html`<div class="${className}">
+                <img src="${banner?.image.urls[0].url}" />
+              </div>`;
             },
           },
         }),
@@ -367,9 +369,13 @@ describe('infiniteHits', () => {
                 Show previous
               </span>
             </button>
-            <p>
-              Banner
-            </p>
+            <div
+              class="ais-InfiniteHits-banner"
+            >
+              <img
+                src="https://via.placeholder.com/550x250"
+              />
+            </div>
             <ol
               class="ais-InfiniteHits-list"
             >
@@ -553,9 +559,13 @@ describe('infiniteHits', () => {
           <div
             class="ais-InfiniteHits ais-InfiniteHits--empty"
           >
-            <p>
-              Banner
-            </p>
+            <div
+              class="ais-InfiniteHits-banner"
+            >
+              <img
+                src="https://via.placeholder.com/550x250"
+              />
+            </div>
             <p>
               No results for 
               <q>

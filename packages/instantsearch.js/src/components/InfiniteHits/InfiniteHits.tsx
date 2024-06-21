@@ -109,10 +109,10 @@ const InfiniteHits = ({
               {...templateProps}
               templateKey="banner"
               rootTagName="fragment"
-              rootProps={{
+              data={{
+                banner,
                 className: cssClasses.bannerRoot,
               }}
-              data={banner}
             />
           ) : (
             <DefaultBanner banner={banner} classNames={cssClasses} />
@@ -151,10 +151,10 @@ const InfiniteHits = ({
             {...templateProps}
             templateKey="banner"
             rootTagName="fragment"
-            rootProps={{
+            data={{
+              banner,
               className: cssClasses.bannerRoot,
             }}
-            data={banner}
           />
         ) : (
           <DefaultBanner banner={banner} classNames={cssClasses} />
