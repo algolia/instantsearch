@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-next-app-dir-example",
-  "version": "8.26.0",
+  "version": "8.27.0",
   "private": true,
   "scripts": {
     "dev": "next dev",

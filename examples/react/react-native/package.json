@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-react-native-example",
-  "version": "35.0.0",
+  "version": "36.0.0",
   "private": true,
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {

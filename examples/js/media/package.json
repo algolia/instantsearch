@@ -1,6 +1,6 @@
 {
   "name": "example-instantsearch-media",
-  "version": "1.51.0",
+  "version": "1.52.0",
   "private": true,
   "scripts": {
     "start": "BABEL_ENV=parcel parcel index.html --port 3000",
