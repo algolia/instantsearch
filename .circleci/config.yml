@@ -187,6 +187,8 @@ jobs:
   lint:
     <<: *defaults
     resource_class: large
+    environment:
+      NODE_OPTIONS: '--max-old-space-size=4096'
     steps:
       - checkout
       - *attach_workspace
@@ -195,7 +197,7 @@ jobs:
       - *run_yarn_install
       - run:
           name: Lint & Code styles
-          command: export NODE_OPTIONS="--max-old-space-size=2048" && yarn run lint
+          command: yarn run lint
       - run:
           name: Type Checking
           command: yarn run type-check
