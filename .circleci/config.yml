@@ -195,7 +195,7 @@ jobs:
       - *run_yarn_install
       - run:
           name: Lint & Code styles
-          command: yarn run lint
+          command: export NODE_OPTIONS="--max-old-space-size=4096" && yarn run lint
       - run:
           name: Type Checking
           command: yarn run type-check
