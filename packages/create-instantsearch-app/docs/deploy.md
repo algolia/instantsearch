@@ -10,7 +10,6 @@ Your app can be deployed in a single command, assuming you're located in its fol
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [CodeSandbox](#codesandbox)
 - [Surge](#surge)
 - [Vercel](#vercel)

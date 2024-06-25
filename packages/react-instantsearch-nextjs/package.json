@@ -49,9 +49,9 @@
     "watch:es": "yarn --silent build:es:base --watch"
   },
   "devDependencies": {
-    "instantsearch.js": "4.72.1",
+    "instantsearch.js": "4.72.2",
     "next": "13.5.1",
-    "react-instantsearch-core": "7.11.3"
+    "react-instantsearch-core": "7.11.4"
   },
   "peerDependencies": {
     "next": ">= 13.4 && < 15",

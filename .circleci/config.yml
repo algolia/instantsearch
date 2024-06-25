@@ -187,6 +187,8 @@ jobs:
   lint:
     <<: *defaults
     resource_class: large
+    environment:
+      NODE_OPTIONS: '--max-old-space-size=4096'
     steps:
       - checkout
       - *attach_workspace
