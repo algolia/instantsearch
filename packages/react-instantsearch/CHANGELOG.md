@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.11.4](https://github.com/algolia/instantsearch/compare/instantsearch.js@7.11.5...instantsearch.js@7.11.4) (2024-06-25)
+
+
+### Bug Fixes
+
+* **typescript**: compile definitions using latest version of TypeScript ([54978fec1](https://https://github.com/algolia/instantsearch/commit/54978fec1))
+
+
+
 ## [7.11.3](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.11.2...react-instantsearch@7.11.3) (2024-06-20)
 
 **Note:** Version bump only for package react-instantsearch

@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "algoliasearch": "4.23.2",
-    "instantsearch.js": "4.72.1"
+    "instantsearch.js": "4.72.2"
   },
   "devDependencies": {
     "@babel/core": "7.15.5",

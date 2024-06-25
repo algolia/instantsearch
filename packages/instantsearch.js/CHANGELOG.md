@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.72.2](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.72.1...instantsearch.js@4.72.2) (2024-06-25)
+
+
+### Bug Fixes
+
+* **typescript**: compile definitions using latest version of TypeScript ([54978fec1](https://https://github.com/algolia/instantsearch/commit/54978fec1))
+
+
 ## [4.72.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.72.0...instantsearch.js@4.72.1) (2024-06-20)
 
 
