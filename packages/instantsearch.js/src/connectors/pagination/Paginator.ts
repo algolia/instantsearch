@@ -65,7 +65,7 @@ class Paginator {
   }
 
   public isFirstPage() {
-    return this.currentPage === 0;
+    return this.currentPage <= 0;
   }
 }
 

@@ -922,7 +922,7 @@ export function createOptionsTests(
       );
     });
 
-    test("does not display a next page when that doesn't exist", async () => {
+    test('does not display a next page when outside of range', async () => {
       const searchClient = createMockedSearchClient({ nbHits: 120 });
 
       await setup({
@@ -948,6 +948,35 @@ export function createOptionsTests(
       ).toHaveClass('ais-Pagination-item--disabled');
       expect(
         document.querySelector('.ais-Pagination-item--lastPage')
+      ).toHaveClass('ais-Pagination-item--disabled');
+    });
+
+    test('does not display a next previous page when outside of range', async () => {
+      const searchClient = createMockedSearchClient({ nbHits: 120 });
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+          initialUiState: {
+            indexName: { page: -4 },
+          },
+        },
+        widgetParams: { padding: 4 },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(
+        document.querySelectorAll('.ais-Pagination-item--page')
+      ).toHaveLength(6);
+      expect(
+        document.querySelector('.ais-Pagination-item--previousPage')
+      ).toHaveClass('ais-Pagination-item--disabled');
+      expect(
+        document.querySelector('.ais-Pagination-item--firstPage')
       ).toHaveClass('ais-Pagination-item--disabled');
     });
 
