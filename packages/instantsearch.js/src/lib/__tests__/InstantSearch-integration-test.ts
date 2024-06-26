@@ -237,7 +237,7 @@ describe('network requests', () => {
               "highlightPostTag": "__/ais-highlight__",
               "highlightPreTag": "__ais-highlight__",
             },
-            "threshold": undefined,
+            "threshold": 0,
           },
         ]
       `);
@@ -284,7 +284,7 @@ describe('network requests', () => {
               "highlightPostTag": "__/ais-highlight__",
               "highlightPreTag": "__ais-highlight__",
             },
-            "threshold": undefined,
+            "threshold": 0,
           },
         ]
       `);
@@ -383,7 +383,7 @@ describe('network requests', () => {
               "highlightPostTag": "__/ais-highlight__",
               "highlightPreTag": "__ais-highlight__",
             },
-            "threshold": undefined,
+            "threshold": 0,
           },
         ]
       `);
@@ -433,7 +433,7 @@ describe('network requests', () => {
               "highlightPostTag": "__/ais-highlight__",
               "highlightPreTag": "__ais-highlight__",
             },
-            "threshold": undefined,
+            "threshold": 0,
           },
         ]
       `);
@@ -531,7 +531,7 @@ describe('network requests', () => {
               "highlightPostTag": "__/ais-highlight__",
               "highlightPreTag": "__ais-highlight__",
             },
-            "threshold": undefined,
+            "threshold": 0,
           },
         ]
       `);
@@ -580,7 +580,7 @@ describe('network requests', () => {
               "highlightPostTag": "__/ais-highlight__",
               "highlightPreTag": "__ais-highlight__",
             },
-            "threshold": undefined,
+            "threshold": 0,
           },
         ]
       `);
@@ -629,7 +629,7 @@ describe('network requests', () => {
               "highlightPostTag": "__/ais-highlight__",
               "highlightPreTag": "__ais-highlight__",
             },
-            "threshold": undefined,
+            "threshold": 0,
           },
         ]
       `);

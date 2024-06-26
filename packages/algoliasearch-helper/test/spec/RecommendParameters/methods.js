@@ -109,4 +109,23 @@ describe('_buildQueries', () => {
       ]
     `);
   });
+
+  test('does not override threshold', () => {
+    var recommendParameters = new RecommendParameters({
+      params: [{ ...params1, threshold: 10 }],
+    });
+
+    var queries = recommendParameters._buildQueries('indexName', {});
+    expect(queries).toHaveLength(1);
+    expect(queries).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "indexName": "indexName",
+          "model": "bought-together",
+          "objectID": "objectID1",
+          "threshold": 10,
+        },
+      ]
+    `);
+  });
 });
