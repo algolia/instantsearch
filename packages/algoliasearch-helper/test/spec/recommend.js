@@ -50,13 +50,20 @@ describe('recommend()', () => {
         indexName: 'indexName',
         model: 'bought-together',
         objectID: 'A0E20000000279B',
+        threshold: 0,
       },
       {
         indexName: 'indexName',
         model: 'bought-together',
         objectID: 'A0E20000000279C',
+        threshold: 0,
       },
-      { indexName: 'indexName', model: 'trending-facets', facetName: 'brand' },
+      {
+        indexName: 'indexName',
+        model: 'trending-facets',
+        facetName: 'brand',
+        threshold: 0,
+      },
     ]);
   });
 
@@ -158,6 +165,7 @@ describe('recommend()', () => {
         indexName: 'indexName',
         model: 'bought-together',
         objectID: 'A0E20000000279B',
+        threshold: 0,
       },
     ]);
 
@@ -175,6 +183,7 @@ describe('recommend()', () => {
           indexName: 'indexName',
           model: 'bought-together',
           objectID: 'A0E20000000279C',
+          threshold: 0,
         },
       ]);
     });

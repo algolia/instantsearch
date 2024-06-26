@@ -73,7 +73,11 @@ RecommendParameters.prototype = {
         return cache[params.$$id] === undefined;
       })
       .map(function (params) {
-        var query = Object.assign({}, params, { indexName: indexName });
+        var query = Object.assign({}, params, {
+          indexName: indexName,
+          // @TODO: remove this if it ever gets handled by the API
+          threshold: params.threshold || 0,
+        });
         delete query.$$id;
 
         return query;
