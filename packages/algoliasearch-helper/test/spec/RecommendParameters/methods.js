@@ -98,11 +98,13 @@ describe('_buildQueries', () => {
           "indexName": "indexName",
           "model": "bought-together",
           "objectID": "objectID1",
+          "threshold": 0,
         },
         Object {
           "facetName": "brand",
           "indexName": "indexName",
           "model": "trending-facets",
+          "threshold": 0,
         },
       ]
     `);
