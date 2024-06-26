@@ -61,7 +61,7 @@ class Paginator {
   }
 
   public isLastPage() {
-    return this.currentPage === this.total - 1 || this.total === 0;
+    return this.currentPage >= this.total - 1;
   }
 
   public isFirstPage() {

@@ -106,6 +106,28 @@ describe('paginator: simple cases', () => {
       expect(pager.isFirstPage()).toBe(false);
     });
 
+    it('should be the last page', () => {
+      expect(pager.isLastPage()).toBe(true);
+    });
+  });
+
+  describe('past last page', () => {
+    const pager = new Paginator({
+      currentPage: 10,
+      total: 10,
+      padding: 2,
+    });
+
+    it('should return the pages', () => {
+      const pages = pager.pages();
+      expect(pages).toHaveLength(5);
+      expect(pages).toEqual([5, 6, 7, 8, 9]);
+    });
+
+    it('should not be the first page', () => {
+      expect(pager.isFirstPage()).toBe(false);
+    });
+
     it('should not be the last page', () => {
       expect(pager.isLastPage()).toBe(true);
     });

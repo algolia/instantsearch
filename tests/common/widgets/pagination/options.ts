@@ -922,6 +922,35 @@ export function createOptionsTests(
       );
     });
 
+    test("does not display a next page when that doesn't exist", async () => {
+      const searchClient = createMockedSearchClient({ nbHits: 120 });
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+          initialUiState: {
+            indexName: { page: 200 },
+          },
+        },
+        widgetParams: { padding: 4 },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(
+        document.querySelectorAll('.ais-Pagination-item--page')
+      ).toHaveLength(6);
+      expect(
+        document.querySelector('.ais-Pagination-item--nextPage')
+      ).toHaveClass('ais-Pagination-item--disabled');
+      expect(
+        document.querySelector('.ais-Pagination-item--lastPage')
+      ).toHaveClass('ais-Pagination-item--disabled');
+    });
+
     test('limits the total pages to display', async () => {
       const searchClient = createMockedSearchClient();
 
