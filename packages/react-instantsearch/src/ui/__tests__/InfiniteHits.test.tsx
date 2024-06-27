@@ -83,6 +83,140 @@ describe('InfiniteHits', () => {
     `);
   });
 
+  test('renders with a banner (navigable)', () => {
+    const props = createProps({
+      banner: {
+        image: {
+          urls: [{ url: 'https://example.com/image.jpg' }],
+        },
+        link: {
+          url: 'https://example.com',
+        },
+      },
+    });
+
+    const { container } = render(<InfiniteHits {...props} />);
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        <div
+          class="ais-InfiniteHits"
+        >
+          <button
+            class="ais-InfiniteHits-loadPrevious ais-InfiniteHits-loadPrevious--disabled"
+            disabled=""
+          >
+            Show previous results
+          </button>
+          <aside
+            class="ais-InfiniteHits-banner"
+          >
+            <a
+              class="ais-InfiniteHits-banner-link"
+              href="https://example.com"
+            >
+              <img
+                class="ais-InfiniteHits-banner-image"
+                src="https://example.com/image.jpg"
+              />
+            </a>
+          </aside>
+          <ol
+            class="ais-InfiniteHits-list"
+          >
+            <li
+              class="ais-InfiniteHits-item"
+            >
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"abc","__position":1}
+                …
+              </div>
+            </li>
+            <li
+              class="ais-InfiniteHits-item"
+            >
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"def","__position":2}
+                …
+              </div>
+            </li>
+          </ol>
+          <button
+            class="ais-InfiniteHits-loadMore"
+          >
+            Show more results
+          </button>
+        </div>
+      </div>
+    `);
+  });
+
+  test('renders with a banner (non-navigable)', () => {
+    const props = createProps({
+      banner: {
+        image: {
+          urls: [{ url: 'https://example.com/image.jpg' }],
+        },
+      },
+    });
+
+    const { container } = render(<InfiniteHits {...props} />);
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        <div
+          class="ais-InfiniteHits"
+        >
+          <button
+            class="ais-InfiniteHits-loadPrevious ais-InfiniteHits-loadPrevious--disabled"
+            disabled=""
+          >
+            Show previous results
+          </button>
+          <aside
+            class="ais-InfiniteHits-banner"
+          >
+            <img
+              class="ais-InfiniteHits-banner-image"
+              src="https://example.com/image.jpg"
+            />
+          </aside>
+          <ol
+            class="ais-InfiniteHits-list"
+          >
+            <li
+              class="ais-InfiniteHits-item"
+            >
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"abc","__position":1}
+                …
+              </div>
+            </li>
+            <li
+              class="ais-InfiniteHits-item"
+            >
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"def","__position":2}
+                …
+              </div>
+            </li>
+          </ol>
+          <button
+            class="ais-InfiniteHits-loadMore"
+          >
+            Show more results
+          </button>
+        </div>
+      </div>
+    `);
+  });
+
   test('renders with translations', () => {
     const props = createProps({
       translations: {
@@ -203,6 +337,128 @@ describe('InfiniteHits', () => {
 
     expect(props.sendEvent).toHaveBeenCalledTimes(2);
     expect((props.sendEvent as jest.Mock).mock.calls[0][0]).toBe(props.hits[0]);
+  });
+
+  describe('bannerComponent', () => {
+    test('renders when defined', () => {
+      const props = createProps({
+        banner: {
+          image: {
+            urls: [{ url: 'https://example.com/image.jpg' }],
+          },
+        },
+      });
+
+      const { container } = render(<InfiniteHits {...props} />);
+
+      expect(container).toMatchInlineSnapshot(`
+        <div>
+          <div
+            class="ais-InfiniteHits"
+          >
+            <button
+              class="ais-InfiniteHits-loadPrevious ais-InfiniteHits-loadPrevious--disabled"
+              disabled=""
+            >
+              Show previous results
+            </button>
+            <aside
+              class="ais-InfiniteHits-banner"
+            >
+              <img
+                class="ais-InfiniteHits-banner-image"
+                src="https://example.com/image.jpg"
+              />
+            </aside>
+            <ol
+              class="ais-InfiniteHits-list"
+            >
+              <li
+                class="ais-InfiniteHits-item"
+              >
+                <div
+                  style="word-break: break-all;"
+                >
+                  {"objectID":"abc","__position":1}
+                  …
+                </div>
+              </li>
+              <li
+                class="ais-InfiniteHits-item"
+              >
+                <div
+                  style="word-break: break-all;"
+                >
+                  {"objectID":"def","__position":2}
+                  …
+                </div>
+              </li>
+            </ol>
+            <button
+              class="ais-InfiniteHits-loadMore"
+            >
+              Show more results
+            </button>
+          </div>
+        </div>
+      `);
+    });
+
+    test('does not render when no banner data', () => {
+      const props = createProps({
+        bannerComponent: ({ banner }) => (
+          <a href={banner?.link?.url}>
+            <img src={banner.image.urls[0].url} />
+          </a>
+        ),
+      });
+
+      const { container } = render(<InfiniteHits {...props} />);
+
+      expect(container).toMatchInlineSnapshot(`
+        <div>
+          <div
+            class="ais-InfiniteHits"
+          >
+            <button
+              class="ais-InfiniteHits-loadPrevious ais-InfiniteHits-loadPrevious--disabled"
+              disabled=""
+            >
+              Show previous results
+            </button>
+            <ol
+              class="ais-InfiniteHits-list"
+            >
+              <li
+                class="ais-InfiniteHits-item"
+              >
+                <div
+                  style="word-break: break-all;"
+                >
+                  {"objectID":"abc","__position":1}
+                  …
+                </div>
+              </li>
+              <li
+                class="ais-InfiniteHits-item"
+              >
+                <div
+                  style="word-break: break-all;"
+                >
+                  {"objectID":"def","__position":2}
+                  …
+                </div>
+              </li>
+            </ol>
+            <button
+              class="ais-InfiniteHits-loadMore"
+            >
+              Show more results
+            </button>
+          </div>
+        </div>
+      `);
+    });
   });
 
   describe('showPrevious', () => {
