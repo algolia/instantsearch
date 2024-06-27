@@ -13,11 +13,11 @@ import type {
   InfiniteHitsCSSClasses,
   InfiniteHitsTemplates,
 } from '../../widgets/infinite-hits/infinite-hits';
-import type { SearchResults } from 'algoliasearch-helper';
+import type { Banner, SearchResults } from 'algoliasearch-helper';
 
 export type InfiniteHitsComponentCSSClasses =
   ComponentCSSClasses<InfiniteHitsCSSClasses>;
-export type InfiniteHitsComponentTemplates = Required<InfiniteHitsTemplates>;
+export type InfiniteHitsComponentTemplates = InfiniteHitsTemplates;
 
 export type InfiniteHitsProps = {
   cssClasses: InfiniteHitsComponentCSSClasses;
@@ -35,6 +35,46 @@ export type InfiniteHitsProps = {
   insights?: InsightsClient;
   sendEvent: SendEventForHits;
   bindEvent: BindEventForHits;
+  banner?: Banner;
+};
+
+const DefaultBanner = ({
+  banner,
+  classNames,
+}: {
+  banner: Banner;
+  classNames: Pick<
+    InfiniteHitsCSSClasses,
+    'bannerRoot' | 'bannerLink' | 'bannerImage'
+  >;
+}) => {
+  if (!banner.image.urls[0].url) {
+    return null;
+  }
+
+  return (
+    <aside className={cx(classNames.bannerRoot)}>
+      {banner.link ? (
+        <a
+          className={cx(classNames.bannerLink)}
+          href={banner.link.url}
+          target={banner.link.target}
+        >
+          <img
+            className={cx(classNames.bannerImage)}
+            src={banner.image.urls[0].url}
+            alt={banner.image.title}
+          />
+        </a>
+      ) : (
+        <img
+          className={cx(classNames.bannerImage)}
+          src={banner.image.urls[0].url}
+          alt={banner.image.title}
+        />
+      )}
+    </aside>
+  );
 };
 
 const InfiniteHits = ({
@@ -50,6 +90,7 @@ const InfiniteHits = ({
   isLastPage,
   cssClasses,
   templateProps,
+  banner,
 }: InfiniteHitsProps) => {
   const handleInsightsClick = createInsightsEventHandler({
     insights,
@@ -58,15 +99,31 @@ const InfiniteHits = ({
 
   if (results.hits.length === 0) {
     return (
-      <Template
-        {...templateProps}
-        templateKey="empty"
-        rootProps={{
-          className: cx(cssClasses.root, cssClasses.emptyRoot),
-          onClick: handleInsightsClick,
-        }}
-        data={results}
-      />
+      <div
+        className={cx(cssClasses.root, cssClasses.emptyRoot)}
+        onClick={handleInsightsClick}
+      >
+        {banner &&
+          (templateProps.templates.banner ? (
+            <Template
+              {...templateProps}
+              templateKey="banner"
+              rootTagName="fragment"
+              data={{
+                banner,
+                className: cssClasses.bannerRoot,
+              }}
+            />
+          ) : (
+            <DefaultBanner banner={banner} classNames={cssClasses} />
+          ))}
+        <Template
+          {...templateProps}
+          templateKey="empty"
+          rootTagName="fragment"
+          data={results}
+        />
+      </div>
     );
   }
 
@@ -87,6 +144,21 @@ const InfiniteHits = ({
           }}
         />
       )}
+
+      {banner &&
+        (templateProps.templates.banner ? (
+          <Template
+            {...templateProps}
+            templateKey="banner"
+            rootTagName="fragment"
+            data={{
+              banner,
+              className: cssClasses.bannerRoot,
+            }}
+          />
+        ) : (
+          <DefaultBanner banner={banner} classNames={cssClasses} />
+        ))}
 
       <ol className={cssClasses.list}>
         {hits.map((hit, index) => (

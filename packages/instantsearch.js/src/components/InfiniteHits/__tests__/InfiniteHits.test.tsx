@@ -63,6 +63,9 @@ describe('InfiniteHits', () => {
         disabledLoadPrevious: '',
         loadMore: '',
         disabledLoadMore: '',
+        bannerRoot: '',
+        bannerImage: '',
+        bannerLink: '',
       },
       templateProps: prepareTemplateProps({
         defaultTemplates: {

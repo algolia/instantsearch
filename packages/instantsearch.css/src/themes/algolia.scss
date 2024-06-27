@@ -334,12 +334,14 @@ a[class^='ais-'] {
   margin-bottom: 1rem;
 }
 
-.ais-Hits-banner {
+.ais-Hits-banner,
+.ais-InfiniteHits-banner {
   display: flex;
   justify-content: center;
 }
 
-.ais-Hits-banner-image {
+.ais-Hits-banner-image
+.ais-InfiniteHits-banner-image {
   max-width: 100%;
 }
 

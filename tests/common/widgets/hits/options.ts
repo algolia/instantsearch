@@ -171,6 +171,80 @@ export function createOptionsTests(
         );
       });
     });
+
+    skippableDescribe('banner option', skippedTests, () => {
+      test('renders default banner element with banner widget renderingContent', async () => {
+        const searchClient = createMockedSearchClient({
+          renderingContent: {
+            // @TODO: remove once algoliasearch js client has been updated
+            // @ts-expect-error
+            widgets: {
+              banners: [
+                {
+                  image: {
+                    urls: [{ url: 'https://via.placeholder.com/550x250' }],
+                  },
+                  link: {
+                    url: 'https://www.algolia.com',
+                  },
+                },
+              ],
+            },
+          },
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {},
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('#hits-with-defaults .ais-Hits')
+        ).toMatchNormalizedInlineSnapshot(
+          normalizeSnapshot,
+          `
+          <div
+            class="ais-Hits"
+          >
+            <aside
+              class="ais-Hits-banner"
+            >
+              <a
+                class="ais-Hits-banner-link"
+                href="https://www.algolia.com"
+              >
+                <img
+                  class="ais-Hits-banner-image"
+                  src="https://via.placeholder.com/550x250"
+                />
+              </a>
+            </aside>
+            <ol
+              class="ais-Hits-list"
+            >
+              <li
+                class="ais-Hits-item"
+              >
+                {"objectID":"1"}
+              </li>
+              <li
+                class="ais-Hits-item"
+              >
+                {"objectID":"2"}
+              </li>
+            </ol>
+          </div>
+          `
+        );
+      });
+    });
   });
 }
 
