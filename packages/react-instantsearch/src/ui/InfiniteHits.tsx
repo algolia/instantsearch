@@ -1,15 +1,21 @@
 import { cx } from 'instantsearch-ui-components';
 import React from 'react';
 
+import type { Banner } from 'algoliasearch-helper';
 import type { Hit } from 'instantsearch.js';
 import type { SendEventForHits } from 'instantsearch.js/es/lib/utils';
 
 export type InfiniteHitsProps<THit> = React.ComponentProps<'div'> & {
   hits: THit[];
+  banner?: Banner;
   sendEvent: SendEventForHits;
   hitComponent?: React.JSXElementConstructor<{
     hit: THit;
     sendEvent: SendEventForHits;
+  }>;
+  bannerComponent?: React.JSXElementConstructor<{
+    className: string;
+    banner: Banner;
   }>;
   isFirstPage: boolean;
   isLastPage: boolean;
@@ -52,6 +58,20 @@ export type InfiniteHitsClassNames = {
    * Class names to apply to each item element
    */
   item: string;
+  /**
+   * Class names to apply to the banner element
+   */
+  bannerRoot: string | string[];
+
+  /**
+   * Class names to apply to the banner image element
+   */
+  bannerImage: string | string[];
+
+  /**
+   * Class names to apply to the banner link element
+   */
+  bannerLink: string | string[];
 };
 
 export type InfiniteHitsTranslations = {
@@ -67,9 +87,54 @@ function DefaultHitComponent({ hit }: { hit: Hit }) {
   );
 }
 
+type BannerProps = {
+  banner: Banner;
+  classNames: Pick<
+    Partial<InfiniteHitsClassNames>,
+    'bannerRoot' | 'bannerLink' | 'bannerImage'
+  >;
+};
+
+function DefaultBanner({ classNames, banner }: BannerProps) {
+  if (!banner.image.urls[0].url) {
+    return null;
+  }
+  return (
+    <aside className={cx('ais-InfiniteHits-banner', classNames.bannerRoot)}>
+      {banner.link ? (
+        <a
+          className={cx('ais-InfiniteHits-banner-link', classNames.bannerLink)}
+          href={banner.link.url}
+          target={banner.link.target}
+        >
+          <img
+            className={cx(
+              'ais-InfiniteHits-banner-image',
+              classNames.bannerImage
+            )}
+            src={banner.image.urls[0].url}
+            alt={banner.image.title}
+          />
+        </a>
+      ) : (
+        <img
+          className={cx(
+            'ais-InfiniteHits-banner-image',
+            classNames.bannerImage
+          )}
+          src={banner.image.urls[0].url}
+          alt={banner.image.title}
+        />
+      )}
+    </aside>
+  );
+}
+
 export function InfiniteHits<THit extends Hit>({
   hitComponent: HitComponent = DefaultHitComponent,
   hits,
+  bannerComponent: BannerComponent,
+  banner,
   sendEvent,
   isFirstPage,
   isLastPage,
@@ -107,6 +172,15 @@ export function InfiniteHits<THit extends Hit>({
           {translations.showPreviousButtonText}
         </button>
       )}
+      {banner &&
+        (BannerComponent ? (
+          <BannerComponent
+            className={cx('ais-InfiniteHits-banner', classNames.bannerRoot)}
+            banner={banner}
+          />
+        ) : (
+          <DefaultBanner classNames={classNames} banner={banner} />
+        ))}
       <ol className={cx('ais-InfiniteHits-list', classNames.list)}>
         {hits.map((hit) => (
           <li
