@@ -121,7 +121,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/#up
 
     // This is to handle Hogan templates with Fragment as rootTagName
     if (RootTagName === Fragment) {
-      return <RawHtml content={content} key={content} />;
+      return <RawHtml content={content} key={Math.random()} />;
     }
 
     return (
