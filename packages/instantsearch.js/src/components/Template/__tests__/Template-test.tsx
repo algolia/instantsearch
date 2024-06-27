@@ -93,6 +93,27 @@ describe('Template', () => {
     expect(wrapper.container).toMatchSnapshot();
   });
 
+  it('remounts RawHtml component when using Fragment with a string template', () => {
+    const props = getProps({
+      rootTagName: 'fragment',
+      templates: { test: 'test' },
+    });
+    const wrapper = render(
+      <div>
+        <Template {...props} />
+      </div>
+    );
+    wrapper.rerender(
+      <div>
+        <div>Hello</div>
+        {/* It won't rerender if props don't change in testing-library */}
+        <Template {...props} data={{ a: 'a' }} />
+      </div>
+    );
+
+    expect(wrapper.container).toMatchSnapshot();
+  });
+
   it('forward rootProps to the first node', () => {
     function onClick() {}
 

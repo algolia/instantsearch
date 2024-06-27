@@ -67,3 +67,15 @@ exports[`Template forward rootProps to the first node 1`] = `
   onClick={[Function]}
 />
 `;
+
+exports[`Template remounts RawHtml component when using Fragment with a string template 1`] = `
+<div>
+  <div>
+    
+    <div>
+      Hello
+    </div>
+    test
+  </div>
+</div>
+`;
