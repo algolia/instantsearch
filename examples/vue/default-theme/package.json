@@ -10,7 +10,7 @@
   "dependencies": {
     "algoliasearch": "4.23.2",
     "core-js": "2",
-    "instantsearch.js": "4.72.1",
+    "instantsearch.js": "4.72.2",
     "vue": "2.7.14",
     "vue-instantsearch": "4.17.5"
   },

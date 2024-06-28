@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "instantsearch-ui-components": "0.7.0",
-    "instantsearch.js": "4.72.1",
+    "instantsearch.js": "4.72.2",
     "mitt": "^2.1.0"
   },
   "peerDependencies": {
