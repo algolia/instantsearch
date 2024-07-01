@@ -1,3 +1,5 @@
+import algoliasearch from 'algoliasearch';
+
 import * as connectors from './connectors/index';
 import * as helpers from './helpers/index';
 import { createInfiniteHitsSessionStorageCache } from './lib/infiniteHitsCache/index';
@@ -76,5 +78,40 @@ instantsearch.reverseHighlight = helpers.reverseHighlight;
 instantsearch.snippet = helpers.snippet;
 instantsearch.reverseSnippet = helpers.reverseSnippet;
 instantsearch.insights = helpers.insights;
+
+const config = {
+  appId: (document.querySelector('meta[name="appId"]') as HTMLMetaElement)
+    .content,
+  apiKey: (document.querySelector('meta[name="apiKey"]') as HTMLMetaElement)
+    .content,
+};
+
+const searchClient = algoliasearch(config.appId, config.apiKey);
+const search = instantsearch({
+  // This is hardcoded for the purpose of the PoC, wouldn't be in a real bundle
+  indexName: 'fx_hackathon_24_bm_products',
+  searchClient,
+});
+
+const observer = new MutationObserver(() => {
+  const block = document.getElementById('block');
+
+  if (!block) {
+    return;
+  }
+
+  observer.disconnect();
+  search.addWidgets([
+    // @ts-ignore
+    // Path is hardcoded for the purpose of the PoC as well
+    widgets.page({ container: block, path: 'excellent-apple.html' }),
+  ]);
+  search.start();
+});
+
+observer.observe(document.documentElement, {
+  childList: true,
+  subtree: true,
+});
 
 export default instantsearch;
