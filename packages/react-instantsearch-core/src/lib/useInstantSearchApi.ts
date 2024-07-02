@@ -1,6 +1,7 @@
 import InstantSearch, {
   INSTANTSEARCH_FUTURE_DEFAULTS,
 } from 'instantsearch.js/es/lib/InstantSearch';
+import { createConfigurationMiddleware } from 'instantsearch.js/es/middlewares';
 import { useCallback, useRef, version as ReactVersion } from 'react';
 import { useSyncExternalStore } from 'use-sync-external-store/shim';
 
@@ -85,6 +86,10 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
       TUiState,
       TRouteState
     >;
+
+    search.use(
+      createConfigurationMiddleware({ renderTrigger: () => forceUpdate() })
+    );
 
     search._schedule = function _schedule(cb: () => void) {
       search._schedule.queue.push(cb);
