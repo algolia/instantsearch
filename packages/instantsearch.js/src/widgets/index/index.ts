@@ -809,6 +809,11 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           ? localWidgets
           : localWidgets.filter(isIndexWidget);
 
+      console.log('index:render()', {
+        results: this.getResults(),
+        localWidgets,
+      });
+
       widgetsToRender = widgetsToRender.filter((widget) => {
         if (!widget.shouldRender) {
           return true;

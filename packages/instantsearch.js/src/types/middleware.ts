@@ -7,6 +7,10 @@ export type MiddlewareDefinition<TUiState extends UiState = UiState> = {
    * string to identify the middleware
    */
   $$type: string;
+
+  $$behavior?: 'blocking' | 'non-blocking';
+  isReady?: () => boolean;
+
   /**
    * @internal indicator for the default middleware
    */
@@ -18,7 +22,7 @@ export type MiddlewareDefinition<TUiState extends UiState = UiState> = {
   /**
    * Called when the middleware is added to InstantSearch
    */
-  subscribe: () => void;
+  subscribe: ({ done }: { done: () => void }) => void;
   /**
    * Called when InstantSearch is started
    */
