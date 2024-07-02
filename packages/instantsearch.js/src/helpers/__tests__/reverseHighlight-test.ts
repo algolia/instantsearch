@@ -1,7 +1,7 @@
 import reverseHighlight from '../reverseHighlight';
 
-const NONE = 'none' as const;
-const FULL = 'full' as const;
+const NONE: 'none' = 'none';
+const FULL: 'full' = 'full';
 
 const hit = {
   name: 'Amazon - Fire TV Stick with Alexa Voice Remote - Black',

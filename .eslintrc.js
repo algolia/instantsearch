@@ -9,6 +9,7 @@ const config = {
     'algolia/typescript',
     'plugin:react-hooks/recommended',
   ],
+  parser: '@typescript-eslint/parser',
   plugins: ['react-hooks', 'deprecation'],
   globals: {
     __DEV__: false,
@@ -35,7 +36,6 @@ const config = {
     'import/no-extraneous-dependencies': 'off',
     '@typescript-eslint/explicit-member-accessibility': ['off'],
     'import/extensions': 'off',
-    'eslint-comments/disable-enable-pair': 'off',
     'react/jsx-no-bind': 'off',
     // We can't display an error message with the ESLint version we're using
     // See https://github.com/eslint/eslint/pull/14580
@@ -68,7 +68,6 @@ const config = {
     // Avoid errors about `UNSAFE` lifecycles (e.g. `UNSAFE_componentWillMount`)
     'react/no-deprecated': 'off',
     'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'warn',
     'eslint-comments/disable-enable-pair': ['error', { allowWholeFile: true }],
     '@typescript-eslint/no-unused-vars': [
       'error',
@@ -186,7 +185,7 @@ const config = {
       },
     },
     {
-      files: ['scripts/**/*', '*.config.js', '*.conf.js'],
+      files: ['scripts/**/*', '*.config.js', '*.conf.js', '.eslintrc.js'],
       rules: {
         'import/no-commonjs': 'off',
       },

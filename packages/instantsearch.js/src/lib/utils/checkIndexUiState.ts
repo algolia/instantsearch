@@ -170,7 +170,7 @@ ${missingWidgets
     return connectors.length > 0;
   })
   .map(([_stateParameter, { connectors, widgets }]) => {
-    const capitalizedWidget = capitalize(widgets[0]!);
+    const capitalizedWidget = capitalize(widgets[0]);
     const connectorName = connectors[0];
 
     return `const virtual${capitalizedWidget} = ${connectorName}(() => null);`;
@@ -183,7 +183,7 @@ search.addWidgets([
       return connectors.length > 0;
     })
     .map(([_stateParameter, { widgets }]) => {
-      const capitalizedWidget = capitalize(widgets[0]!);
+      const capitalizedWidget = capitalize(widgets[0]);
 
       return `virtual${capitalizedWidget}({ /* ... */ })`;
     })

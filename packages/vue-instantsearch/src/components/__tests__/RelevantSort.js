@@ -62,7 +62,6 @@ it("calls the connector's refine function with 0 and undefined", async () => {
     isRelevantSorted: true,
     isVirtualReplica: true,
     refine: jest.fn(() => {
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
       wrapper.vm.state.isRelevantSorted = !wrapper.vm.state.isRelevantSorted;
     }),
   });

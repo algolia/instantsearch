@@ -634,7 +634,7 @@ class Rheostat extends Component<Props, State> {
     );
   };
 
-  public render = () => {
+  public render() {
     const {
       children,
       disabled,
@@ -713,7 +713,7 @@ class Rheostat extends Component<Props, State> {
         {children}
       </div>
     );
-  };
+  }
 }
 
 export default Rheostat;

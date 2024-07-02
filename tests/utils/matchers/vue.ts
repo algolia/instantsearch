@@ -58,7 +58,7 @@ export const vueToBeAutofocused = toHaveBooleanAttribute('autofocus');
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace jest {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/naming-convention
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface Matchers<R> {
       vueToHaveEmptyHTML: () => jest.CustomMatcherResult;
       vueToBeDisabled: () => jest.CustomMatcherResult;
