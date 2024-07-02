@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.12.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.11.4...react-instantsearch@7.12.0) (2024-07-02)
+
+
+### Features
+
+* **infinite-hits:** add top banner to InfiniteHits widget ([#6243](https://github.com/algolia/instantsearch/issues/6243)) ([9287532](https://github.com/algolia/instantsearch/commit/9287532ec277da963cfddcff82f46bec50ad9a14))
+
+
+
+
+
 ## [7.11.4](https://github.com/algolia/instantsearch/compare/instantsearch.js@7.11.5...instantsearch.js@7.11.4) (2024-06-25)
 
 

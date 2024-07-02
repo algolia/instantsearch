@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.22.2](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.22.1...algoliasearch-helper@3.22.2) (2024-07-02)
+
+
+### Bug Fixes
+
+* **algoliasearch:** v5 does not default threshold to 0 ([#6251](https://github.com/algolia/instantsearch/issues/6251)) ([762e633](https://github.com/algolia/instantsearch/commit/762e6335692bc0f05243edbf168f1be0b8d31f0c))
+
+
+
+
+
 ## [3.22.1](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.22.0...algoliasearch-helper@3.22.1) (2024-06-20)
 
 
