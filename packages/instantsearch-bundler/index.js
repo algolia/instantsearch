@@ -17,10 +17,13 @@ http
 
     res.writeHead(200, { 'Content-Type': 'text/javascript' });
 
+    // This would be computed based on the configuration
+    const mappedWidgets = ['searchBox', 'hits', 'pagination'];
+
     const script = `
 import algoliasearch from 'algoliasearch/lite';
 import instantsearch from 'instantsearch.js';
-import { hits } from 'instantsearch.js/es/widgets';
+import { ${mappedWidgets.join(', ')} } from 'instantsearch.js/es/widgets';
 
 const searchClient = algoliasearch('${appId}', '${apiKey}');
 const search = instantsearch({
@@ -30,11 +33,11 @@ const search = instantsearch({
 });
 
 search.addWidgets([
-  hits({ container: '#hits' }),
-])
+  block({ container: '#block', widgets: [${mappedWidgets.join(', ')}] }),
+]);
 
 search.start();
-    `;
+`;
 
     const bundle = buildSync({
       bundle: true,
