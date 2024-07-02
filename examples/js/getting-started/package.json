@@ -1,6 +1,6 @@
 {
   "name": "example-instantsearch-getting-started",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "private": true,
   "scripts": {
     "start": "BABEL_ENV=parcel parcel index.html products.html --port 3000",
@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "algoliasearch": "4.23.2",
-    "instantsearch.js": "4.72.2"
+    "instantsearch.js": "4.73.0"
   },
   "devDependencies": {
     "@babel/core": "7.15.5",

@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.73.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.72.2...instantsearch.js@4.73.0) (2024-07-02)
+
+
+### Bug Fixes
+
+* **algoliasearch:** v5 does not default threshold to 0 ([#6251](https://github.com/algolia/instantsearch/issues/6251)) ([762e633](https://github.com/algolia/instantsearch/commit/762e6335692bc0f05243edbf168f1be0b8d31f0c))
+* **pagination:** any page outside the range is also first or last ([#6252](https://github.com/algolia/instantsearch/issues/6252)) ([7cbaf53](https://github.com/algolia/instantsearch/commit/7cbaf538418f68af83dfe5ac3d880790f31a5739))
+* **RawHtml:** force component to remount ([#6254](https://github.com/algolia/instantsearch/issues/6254)) ([b7d8f04](https://github.com/algolia/instantsearch/commit/b7d8f04196986d91860a6ad7158e3606676df9e4))
+
+
+### Features
+
+* **infinite-hits:** add top banner to InfiniteHits widget ([#6243](https://github.com/algolia/instantsearch/issues/6243)) ([9287532](https://github.com/algolia/instantsearch/commit/9287532ec277da963cfddcff82f46bec50ad9a14))
+
+
+
+
+
 ## [4.72.2](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.72.1...instantsearch.js@4.72.2) (2024-06-25)
 
 

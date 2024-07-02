@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.3.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.2.1...instantsearch.css@8.3.0) (2024-07-02)
+
+
+### Features
+
+* **infinite-hits:** add top banner to InfiniteHits widget ([#6243](https://github.com/algolia/instantsearch/issues/6243)) ([9287532](https://github.com/algolia/instantsearch/commit/9287532ec277da963cfddcff82f46bec50ad9a14))
+
+
+
+
+
 ## [8.2.1](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.2.0...instantsearch.css@8.2.1) (2024-06-04)
 
 **Note:** Version bump only for package instantsearch.css

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.18.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.17.5...vue-instantsearch@4.18.0) (2024-07-02)
+
+
+### Features
+
+* **infinite-hits:** add top banner to InfiniteHits widget ([#6243](https://github.com/algolia/instantsearch/issues/6243)) ([9287532](https://github.com/algolia/instantsearch/commit/9287532ec277da963cfddcff82f46bec50ad9a14))
+
+
+
+
+
 ## [4.17.5](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.17.4...vue-instantsearch@4.17.5) (2024-06-20)
 
 
