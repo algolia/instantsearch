@@ -16,7 +16,7 @@
     "expo-status-bar": "~1.2.0",
     "instantsearch.js": "4.73.0",
     "react": "17.0.1",
-    "react-instantsearch-core": "7.11.5",
+    "react-instantsearch-core": "7.12.0",
     "react-native": "0.64.3",
     "react-native-web": "0.17.1"
   },
