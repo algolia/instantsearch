@@ -562,9 +562,9 @@ See documentation: ${createDocumentationLink({
     }
 
     if (
-      !this.middleware.find(
+      this.middleware.filter(
         ({ instance }) => instance.$$type === 'ais.configuration'
-      )
+      ).length === 0
     ) {
       this.use(createConfigurationMiddleware({}));
     }
