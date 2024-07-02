@@ -414,7 +414,7 @@ See documentation: ${createDocumentationLink({
       };
       this.middleware.push({
         creator: fn,
-        instance: newMiddleware,
+        instance: newMiddleware as any,
       });
       return newMiddleware;
     });
@@ -423,7 +423,7 @@ See documentation: ${createDocumentationLink({
     // middleware so they're notified of changes.
     if (this.started) {
       newMiddlewareList.forEach((m) => {
-        m.subscribe();
+        m.subscribe({ done: noop });
         m.started();
       });
     }
@@ -651,7 +651,7 @@ See documentation: ${createDocumentationLink({
     this.mainHelper = mainHelper;
 
     this.middleware.forEach(({ instance }) => {
-      instance.subscribe();
+      instance.subscribe({ done: () => this._finalizeStart() });
     });
 
     this.mainIndex.init({
@@ -660,9 +660,28 @@ See documentation: ${createDocumentationLink({
       uiState: this._initialUiState,
     });
 
+    this._finalizeStart();
+  }
+
+  private _finalizeStart() {
+    const hasBlockingMiddleware = this.middleware.some(
+      ({ instance }) =>
+        instance.$$behavior === 'blocking' && !instance.isReady!()
+    );
+
+    // There could also be some limits set on blocking middlewares here,
+    // to ensure start finalizes in a reasonable time.
+
+    // eslint-disable-next-line no-console
+    console.log('_afterStart', { hasBlockingMiddleware });
+
+    if (hasBlockingMiddleware) {
+      return;
+    }
+
     if (this._initialResults) {
       hydrateSearchClient(this.client, this._initialResults);
-      hydrateRecommendCache(this.mainHelper, this._initialResults);
+      hydrateRecommendCache(this.mainHelper!, this._initialResults);
 
       const originalScheduleSearch = this.scheduleSearch;
       // We don't schedule a first search when initial results are provided
@@ -706,7 +725,7 @@ See documentation: ${createDocumentationLink({
     // added when `insights` is unset and the initial results possess `queryID`.
     // Any user-provided middleware will be added later and override this one.
     if (typeof this._insights === 'undefined') {
-      mainHelper.derivedHelpers[0].once('result', () => {
+      this.mainHelper!.derivedHelpers[0].once('result', () => {
         const hasAutomaticInsights = this.mainIndex
           .getScopedResults()
           .some(({ results }) => results?._automaticInsights);

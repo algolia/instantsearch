@@ -21,6 +21,33 @@ const search = instantsearch({
   insights: true,
 });
 
+// eslint-disable-next-line valid-jsdoc
+/**
+ * @type {import('instantsearch.js').Middleware}
+ */
+const middleware = () => {
+  let isReady = false;
+  return {
+    $$type: 'ais.configuration',
+    $$behavior: 'blocking',
+    isReady() {
+      return isReady;
+    },
+    subscribe({ done }) {
+      // Walk through widgets until "block()" to retrieve configuration
+      // Send request to configuration API
+      setTimeout(() => {
+        // Inject initial configuration results to instantSearchInstance
+        // Release from blocking
+        isReady = true;
+        done();
+      }, 1000);
+    },
+  };
+};
+
+search.use(middleware);
+
 search.addWidgets([
   searchBox({
     container: '#searchbox',
@@ -45,7 +72,7 @@ search.addWidgets([
     hitsPerPage: 8,
   }),
   panel({
-    templates: { header: 'brand' },
+    templates: { header: () => 'brand' },
   })(refinementList)({
     container: '#brand-list',
     attribute: 'brand',
