@@ -591,6 +591,8 @@ See documentation: ${createDocumentationLink({
         mainHelper.recommend();
       }
 
+      mainHelper._configuration();
+
       return mainHelper;
     };
 

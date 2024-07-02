@@ -66,6 +66,9 @@ module.exports = (api) => {
           ie: 11,
         },
         shouldInjectPolyfill(name, defaultShouldInject) {
+          // TODO: revert
+          return false;
+
           const exclude = [
             // false positives (we access these from objects only)
             'Array.prototype.item',

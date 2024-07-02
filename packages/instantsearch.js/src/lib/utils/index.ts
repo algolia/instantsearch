@@ -26,6 +26,7 @@ export * from './getObjectType';
 export * from './getPropertyByPath';
 export * from './getRefinements';
 export * from './getWidgetAttribute';
+export * from './getWidgetName';
 export * from './hits-absolute-position';
 export * from './hits-query-id';
 export * from './hydrateRecommendCache';

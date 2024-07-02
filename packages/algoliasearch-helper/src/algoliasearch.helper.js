@@ -132,15 +132,20 @@ function AlgoliaSearchHelper(client, index, options, searchResultsOptions) {
   this.recommendState = new RecommendParameters({
     params: opts.recommendState,
   });
+  this.configurationState = {};
   this.lastResults = null;
   this.lastRecommendResults = null;
+  this.lastConfigurationResults = null;
   this._queryId = 0;
   this._recommendQueryId = 0;
+  this._configurationQueryId = 0;
   this._lastQueryIdReceived = -1;
   this._lastRecommendQueryIdReceived = -1;
+  this._lastConfigurationQueryIdReceived = -1;
   this.derivedHelpers = [];
   this._currentNbQueries = 0;
   this._currentNbRecommendQueries = 0;
+  this._currentNbConfigurationQueries = 0;
   this._searchResultsOptions = searchResultsOptions;
   this._recommendCache = {};
 }
@@ -1575,6 +1580,123 @@ AlgoliaSearchHelper.prototype._search = function (options) {
   return undefined;
 };
 
+function getAppIdAndApiKey(searchClient) {
+  if (searchClient.transporter) {
+    // searchClient v4
+    var headers = searchClient.transporter.headers;
+    var queryParameters = searchClient.transporter.queryParameters;
+    var APP_ID = 'x-algolia-application-id';
+    var API_KEY = 'x-algolia-api-key';
+    var appId = headers[APP_ID] || queryParameters[APP_ID];
+    var apiKey = headers[API_KEY] || queryParameters[API_KEY];
+    return [appId, apiKey];
+  } else {
+    // searchClient v3
+    return [searchClient.applicationID, searchClient.apiKey];
+  }
+}
+
+AlgoliaSearchHelper.prototype._configuration = function () {
+  var searchState = this.state;
+  var configurationState = this.configurationState;
+  var index = this.getIndex();
+  var states = [{ state: configurationState, index: index, helper: this }];
+
+  this.emit('fetch', {
+    configuration: {
+      state: configurationState,
+      results: this.lastConfigurationResults,
+    },
+  });
+
+  var derivedQueries = this.derivedHelpers.map(function (derivedHelper) {
+    var derivedIndex = derivedHelper.getModifiedState(searchState).index;
+    if (!derivedIndex) {
+      return [];
+    }
+
+    var derivedState = derivedHelper.getModifiedConfigurationState({});
+    states.push({
+      state: derivedState,
+      index: derivedIndex,
+      helper: derivedHelper,
+    });
+
+    derivedHelper.emit('fetch', {
+      configuration: {
+        state: derivedState,
+        results: derivedHelper.lastConfigurationResults,
+      },
+    });
+
+    return derivedState;
+  });
+
+  var queries = Array.prototype.concat
+    .apply(this.configurationState, derivedQueries)
+    .filter(function (query) {
+      return Object.keys(query).length > 0 && (query.id || query.path);
+    });
+
+  if (queries.length === 0) {
+    return;
+  }
+
+  var queryId = this._configurationQueryId++;
+  this._currentNbConfigurationQueries++;
+
+  var appId = getAppIdAndApiKey(this.client)[0];
+
+  try {
+    Promise.all(
+      queries.map(function (query) {
+        if (query.path) {
+          return fetch(
+            'https://configuration-dev.platform.algolia.net/1/pages/getByUrl/' +
+              query.path,
+            {
+              headers: {
+                'X-Algolia-Application-Id': appId,
+              },
+              method: 'GET',
+            }
+          )
+            .then(function (res) {
+              return res.json();
+            })
+            .then(function (res) {
+              return Object.assign({ $$id: query.path }, res[0]);
+            });
+        }
+        return fetch(
+          'https://configuration-dev.platform.algolia.net/1/pages/' + query.id,
+          {
+            headers: {
+              'X-Algolia-Application-Id': appId,
+            },
+            method: 'GET',
+          }
+        )
+          .then(function (res) {
+            return res.json();
+          })
+          .then(function (res) {
+            return Object.assign({ $$id: query.id }, res);
+          });
+      })
+    )
+      .then(this._dispatchConfigurationResponse.bind(this, queryId, states))
+      .catch(this._dispatchConfigurationError.bind(this, queryId));
+  } catch (error) {
+    // If we reach this part, we're in an internal error state
+    this.emit('error', {
+      error: error,
+    });
+  }
+
+  return;
+};
+
 AlgoliaSearchHelper.prototype._recommend = function () {
   var searchState = this.state;
   var recommendState = this.recommendState;
@@ -1725,6 +1847,50 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function (
   });
 };
 
+AlgoliaSearchHelper.prototype._dispatchConfigurationResponse = function (
+  queryId,
+  states,
+  content
+) {
+  // @TODO remove the number of outdated queries discarded instead of just one
+
+  if (queryId < this._lastConfigurationQueryIdReceived) {
+    // Outdated answer
+    return;
+  }
+
+  this._currentNbConfigurationQueries -=
+    queryId - this._lastConfigurationQueryIdReceived;
+  this._lastConfigurationQueryIdReceived = queryId;
+
+  if (this._currentNbConfigurationQueries === 0)
+    this.emit('configurationQueueEmpty');
+
+  var results = content;
+
+  states.forEach(function (s) {
+    var state = s.state;
+    var helper = s.helper;
+
+    if (!s.index) {
+      helper.emit('configuration:result', {
+        results: null,
+        state: state,
+      });
+      return;
+    }
+
+    helper.lastConfigurationResults = results;
+
+    helper.emit('configuration:result', {
+      configuration: {
+        results: helper.lastConfigurationResults,
+        state: state,
+      },
+    });
+  });
+};
+
 AlgoliaSearchHelper.prototype._dispatchRecommendResponse = function (
   queryId,
   states,
@@ -1844,6 +2010,27 @@ AlgoliaSearchHelper.prototype._dispatchRecommendError = function (
   if (this._currentNbRecommendQueries === 0) this.emit('recommendQueueEmpty');
 };
 
+AlgoliaSearchHelper.prototype._dispatchConfigurationError = function (
+  queryId,
+  error
+) {
+  if (queryId < this._lastConfigurationQueryIdReceived) {
+    // Outdated answer
+    return;
+  }
+
+  this._currentNbConfigurationQueries -=
+    queryId - this._lastConfigurationQueryIdReceived;
+  this._lastConfigurationQueryIdReceived = queryId;
+
+  this.emit('error', {
+    error: error,
+  });
+
+  if (this._currentNbConfigurationQueries === 0)
+    this.emit('configurationQueueEmpty');
+};
+
 AlgoliaSearchHelper.prototype.containsRefinement = function (
   query,
   facetFilters,
@@ -1959,10 +2146,15 @@ AlgoliaSearchHelper.prototype.getClient = function () {
  * parameter function.
  * @param {function} fn SearchParameters -> SearchParameters
  * @param {function} recommendFn RecommendParameters -> RecommendParameters
+ * @param {function} configurationFn ConfigurationParameters -> ConfigurationParameters
  * @return {DerivedHelper} a new DerivedHelper
  */
-AlgoliaSearchHelper.prototype.derive = function (fn, recommendFn) {
-  var derivedHelper = new DerivedHelper(this, fn, recommendFn);
+AlgoliaSearchHelper.prototype.derive = function (
+  fn,
+  recommendFn,
+  configurationFn
+) {
+  var derivedHelper = new DerivedHelper(this, fn, recommendFn, configurationFn);
   this.derivedHelpers.push(derivedHelper);
   return derivedHelper;
 };

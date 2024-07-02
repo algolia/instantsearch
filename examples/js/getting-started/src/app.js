@@ -7,16 +7,15 @@ import {
   panel,
   refinementList,
   searchBox,
-  trendingItems,
 } from 'instantsearch.js/es/widgets';
 
 const searchClient = algoliasearch(
-  'latency',
-  '6be0576ff61c053d5f9a3225e2a90f76'
+  'F4T6CUV2AH',
+  '02022fd5de7c24bcde770bfab52ea473'
 );
 
 const search = instantsearch({
-  indexName: 'instant_search',
+  indexName: 'fx_hackathon_24_bm_products',
   searchClient,
   insights: true,
 });
@@ -32,11 +31,11 @@ search.addWidgets([
         <article>
           <h1>
             <a href="/products.html?pid=${hit.objectID}"
-              >${components.Highlight({ hit, attribute: 'name' })}</a
+              >${components.Highlight({ hit, attribute: 'title_model' })}</a
             >
           </h1>
-          <p>${components.Highlight({ hit, attribute: 'description' })}</p>
-          <a href="/products.html?pid=${hit.objectID}">See product</a>
+          <img src="${hit.image1}" />
+          <p>${hit.price}</p>
         </article>
       `,
     },
@@ -48,25 +47,10 @@ search.addWidgets([
     templates: { header: 'brand' },
   })(refinementList)({
     container: '#brand-list',
-    attribute: 'brand',
+    attribute: 'brand_label',
   }),
   pagination({
     container: '#pagination',
-  }),
-  trendingItems({
-    container: '#trending',
-    limit: 4,
-    templates: {
-      item: (item, { html }) => html`
-        <article>
-          <div>
-            <img src="${item.image}" />
-            <h2>${item.name}</h2>
-          </div>
-          <a href="/products.html?pid=${item.objectID}">See product</a>
-        </article>
-      `,
-    },
   }),
 ]);
 

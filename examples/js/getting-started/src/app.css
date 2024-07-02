@@ -76,29 +76,35 @@
   flex-shrink: 0;
 }
 
-.ais-TrendingItems-list,
-.ais-RelatedProducts-list {
+.ais-Hits-item img {
+  width: 100%;
+  height: 100px;
+  object-fit: contain;
+  margin: 1.2rem 0;
+}
+
+.ais-Hits-list {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
 }
 
-.ais-TrendingItems-item,
-.ais-RelatedProducts-item {
-  align-items: start;
-}
-
-.ais-TrendingItems-item img,
-.ais-RelatedProducts-item img {
-  width: 100%;
-  height: 100px;
-  object-fit: contain;
-}
-
-.ais-TrendingItems-item article,
-.ais-RelatedProducts-item article {
+.ais-Hits-item {
   display: flex;
   flex-direction: column;
   height: 100%;
   justify-content: space-between;
+  align-items: center;
+  text-align: center;
+}
+
+.ais-Hits-item img {
+  width: 100%;
+  height: 100px;
+  object-fit: contain;
+  margin: 1.2rem 0;
+}
+
+.ais-Hits-item a {
+  font-size: 1.2rem;
 }
