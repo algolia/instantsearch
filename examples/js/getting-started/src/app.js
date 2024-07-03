@@ -45,7 +45,7 @@ search.addWidgets([
     hitsPerPage: 8,
   }),
   panel({
-    templates: { header: () => 'brand' },
+    templates: { header: 'brand' },
   })(refinementList)({
     container: '#brand-list',
     attribute: 'brand',

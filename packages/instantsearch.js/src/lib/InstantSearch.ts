@@ -41,7 +41,6 @@ import type {
   InitialResults,
 } from '../types';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
-import { createConfigurationMiddleware } from '../middlewares';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',
@@ -221,6 +220,7 @@ class InstantSearch<
   public _searchStalledTimer: any;
   public _initialUiState: TUiState;
   public _initialResults: InitialResults | null;
+  public _configuration: any;
   public _createURL: CreateURL<TUiState>;
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
@@ -415,7 +415,7 @@ See documentation: ${createDocumentationLink({
       };
       this.middleware.push({
         creator: fn,
-        instance: newMiddleware as any,
+        instance: newMiddleware,
       });
       return newMiddleware;
     });
@@ -424,7 +424,7 @@ See documentation: ${createDocumentationLink({
     // middleware so they're notified of changes.
     if (this.started) {
       newMiddlewareList.forEach((m) => {
-        m.subscribe({ done: noop });
+        m.subscribe();
         m.started();
       });
     }
@@ -561,14 +561,6 @@ See documentation: ${createDocumentationLink({
       );
     }
 
-    if (
-      this.middleware.filter(
-        ({ instance }) => instance.$$type === 'ais.configuration'
-      ).length === 0
-    ) {
-      this.use(createConfigurationMiddleware({}));
-    }
-
     // This Helper is used for the queries, we don't care about its state. The
     // states are managed at the `index` level. We use this Helper to create
     // DerivedHelper scoped into the `index` widgets.
@@ -661,8 +653,9 @@ See documentation: ${createDocumentationLink({
 
     this.mainHelper = mainHelper;
 
+    const middlewareSubscriptions: Array<Promise<void> | void> = [];
     this.middleware.forEach(({ instance }) => {
-      instance.subscribe({ done: () => this._finalizeStart() });
+      middlewareSubscriptions.push(instance.subscribe());
     });
 
     this.mainIndex.init({
@@ -671,22 +664,12 @@ See documentation: ${createDocumentationLink({
       uiState: this._initialUiState,
     });
 
-    this._finalizeStart();
+    Promise.all(middlewareSubscriptions.filter(Boolean)).then(() =>
+      this._finalizeStart()
+    );
   }
 
   private _finalizeStart() {
-    const hasBlockingMiddleware = this.middleware.some(
-      ({ instance }) =>
-        instance.$$behavior === 'blocking' && !instance.isReady!()
-    );
-
-    // There could also be some limits set on blocking middlewares here,
-    // to ensure start finalizes in a reasonable time.
-
-    if (hasBlockingMiddleware) {
-      return;
-    }
-
     if (this._initialResults) {
       hydrateSearchClient(this.client, this._initialResults);
       hydrateRecommendCache(this.mainHelper!, this._initialResults);

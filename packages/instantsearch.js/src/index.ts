@@ -57,8 +57,11 @@ type InstantSearchModule = {
  * If you want to get up and running quickly with InstantSearch.js, have a
  * look at the [getting started](https://www.algolia.com/doc/guides/building-search-ui/getting-started/js/).
  */
-const instantsearch: InstantSearchModule = (options) =>
-  new InstantSearch(options);
+const instantsearch: InstantSearchModule = (options) => {
+  const search = new InstantSearch(options);
+  search.use(middlewares.createConfigurationMiddleware());
+  return search;
+};
 
 instantsearch.version = version;
 

@@ -1,36 +1,36 @@
 /* eslint-disable no-console */
 import type { InternalMiddleware } from '../types';
 
-export function createConfigurationMiddleware({
-  renderTrigger = () => {},
-}: {
-  renderTrigger?: () => void;
-}): InternalMiddleware {
-  return () => {
-    let isReady = false;
+type ConfigurationMiddlewareOptions = {
+  renderTrigger: () => void;
+};
+
+export function createConfigurationMiddleware(
+  options?: ConfigurationMiddlewareOptions
+): InternalMiddleware {
+  const { renderTrigger = () => {} } = options || {};
+
+  return ({ instantSearchInstance }) => {
     return {
       $$type: 'ais.configuration',
-      $$behavior: 'blocking',
       $$internal: true,
-      isReady() {
-        return isReady;
-      },
-      subscribe({ done }) {
+      // eslint-disable-next-line no-restricted-syntax
+      async subscribe() {
         // Walk through widgets until "block()" to retrieve configuration
         // Send request to configuration API
         console.log('Requesting configuration...');
-        setTimeout(() => {
-          // Inject initial configuration results to instantSearchInstance
-          // Release from blocking
-          console.log('Configuration received');
-          isReady = true;
-          renderTrigger();
-          done();
-        }, 1000);
+        await getConfigurationFromApi();
+        console.log('Configuration received');
+        instantSearchInstance._configuration = { foo: 'bar' };
+        renderTrigger();
       },
       onStateChange() {},
       started() {},
       unsubscribe() {},
     };
   };
+}
+
+function getConfigurationFromApi() {
+  return new Promise((resolve) => setTimeout(resolve, 1000));
 }

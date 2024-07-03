@@ -1,4 +1,5 @@
 import type InstantSearch from '../lib/InstantSearch';
+import type { MaybePromise } from '../lib/utils';
 import type { UiState } from './ui-state';
 import type { AtLeastOne } from './utils';
 
@@ -7,10 +8,6 @@ export type MiddlewareDefinition<TUiState extends UiState = UiState> = {
    * string to identify the middleware
    */
   $$type: string;
-
-  $$behavior?: 'blocking' | 'non-blocking';
-  isReady?: () => boolean;
-
   /**
    * @internal indicator for the default middleware
    */
@@ -22,7 +19,7 @@ export type MiddlewareDefinition<TUiState extends UiState = UiState> = {
   /**
    * Called when the middleware is added to InstantSearch
    */
-  subscribe: ({ done }: { done: () => void }) => void;
+  subscribe: () => MaybePromise<void>;
   /**
    * Called when InstantSearch is started
    */
