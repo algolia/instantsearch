@@ -1,5 +1,6 @@
 import algoliasearchV4 from 'algoliasearch';
 import algoliasearchV3 from 'algoliasearch-v3';
+import { liteClient as algoliasearchV5 } from 'algoliasearch-v5/lite';
 
 import { getAppIdAndApiKey } from '../getAppIdAndApiKey';
 
@@ -21,31 +22,8 @@ describe('getAppIdAndApiKey', () => {
     expect(apiKey).toEqual(API_KEY);
   });
 
-  it("fallsback to baseHeaders if headers doesn't exist", () => {
-    const searchClient = {
-      transporter: {
-        baseHeaders: {
-          'x-algolia-application-id': APP_ID,
-          'x-algolia-api-key': API_KEY,
-        },
-        baseQueryParameters: {},
-      },
-    };
-    const [appId, apiKey] = getAppIdAndApiKey(searchClient);
-    expect(appId).toEqual(APP_ID);
-    expect(apiKey).toEqual(API_KEY);
-  });
-
-  it("fallsback to baseQueryParameters if queryParameters doesn't exist", () => {
-    const searchClient = {
-      transporter: {
-        baseHeaders: {},
-        baseQueryParameters: {
-          'x-algolia-application-id': APP_ID,
-          'x-algolia-api-key': API_KEY,
-        },
-      },
-    };
+  it('gets appId and apiKey from searchClient@v5', () => {
+    const searchClient = algoliasearchV5(APP_ID, API_KEY);
     const [appId, apiKey] = getAppIdAndApiKey(searchClient);
     expect(appId).toEqual(APP_ID);
     expect(apiKey).toEqual(API_KEY);
