@@ -36,4 +36,12 @@ shell.sed(
   packageJsonPaths
 );
 
+// remove v5 dependency
+shell.sed(
+  '-i',
+  /"algoliasearch-v5": "npm:algoliasearch@5.*"(,?)/,
+  '',
+  packageJsonPaths
+);
+
 shell.exec('yarn install');
