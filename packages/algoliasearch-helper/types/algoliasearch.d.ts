@@ -167,8 +167,34 @@ export type FindAnswersResponse<T> = PickForClient<{
   v5: any; // answers only exists in v4
 }>;
 
+type RemoveReadOnly<T> = {
+  -readonly [P in keyof T]: RemoveReadOnly<T[P]>;
+};
+
 export interface SearchClient {
-  search: DefaultSearchClient['search'];
+  search: <T>(
+    queries: Array<
+      | {
+          indexName: string;
+          type?: 'default';
+          params: RemoveReadOnly<SearchOptions> & {
+            // This is not the way to go, there are too many differences
+            insideBoundingBox?: any;
+            naturalLanguages?: any;
+          };
+        }
+      | {
+          indexName: string;
+          type: 'facet';
+          facet: string;
+          maxFacetHits?: number;
+          facetQuery: string;
+          params: SearchOptions;
+        }
+    >
+  ) => Promise<{
+    results: Array<SearchResponse<T> | SearchForFacetValuesResponse>;
+  }>;
   searchForFacetValues?: DefaultSearchClient extends {
     searchForFacetValues: unknown;
   }
