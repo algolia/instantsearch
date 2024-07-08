@@ -1,0 +1,26 @@
+{
+  "name": "example-instantsearch-experience-management",
+  "version": "1.7.0",
+  "private": true,
+  "scripts": {
+    "start": "BABEL_ENV=parcel parcel collections/excellent-apple.html --port 3000",
+    "build": "BABEL_ENV=parcel parcel build collections/excellent-apple.html",
+    "lint": "eslint .",
+    "lint:fix": "npm run lint -- --fix"
+  },
+  "dependencies": {
+    "algoliasearch": "4.23.2",
+    "instantsearch.js": "4.71.1"
+  },
+  "devDependencies": {
+    "@babel/core": "7.15.5",
+    "@parcel/core": "2.10.0",
+    "@parcel/packager-raw-url": "2.10.0",
+    "@parcel/transformer-webmanifest": "2.10.0",
+    "autoprefixer": "10.4.19",
+    "parcel": "2.10.0",
+    "postcss": "8.4.39",
+    "posthtml-include": "2.0.1",
+    "tailwindcss": "3.4.4"
+  }
+}
