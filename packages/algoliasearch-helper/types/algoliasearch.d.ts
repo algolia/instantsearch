@@ -16,6 +16,12 @@ import type * as AlgoliaSearchLite from 'algoliasearch/lite';
 type AnyToUnknown<T> = (0 extends 1 & T ? true : false) extends true
   ? unknown
   : T;
+type IsNull<T> = [T] extends [null] ? true : false;
+type IsUnknown<T> = unknown extends T // `T` can be `unknown` or `any`
+  ? IsNull<T> extends false // `any` can be `null`, but `unknown` can't be
+    ? true
+    : false
+  : false;
 
 type SearchClientV4Shape = {
   transporter: unknown;
@@ -28,19 +34,21 @@ type SearchClientShape = {
 // @ts-ignore
 type ClientV3_4 = ReturnType<typeof algoliasearch>;
 
-type ClientLiteV5 = AnyToUnknown<typeof AlgoliaSearchLite> extends unknown
+type ClientLiteV5 = IsUnknown<
+  AnyToUnknown<typeof AlgoliaSearchLite>
+> extends true
   ? unknown
   : AnyToUnknown<
       // @ts-ignore
       ReturnType<typeof AlgoliaSearchLite.liteClient>
     >;
-type ClientFullV5 = AnyToUnknown<typeof AlgoliaSearch> extends unknown
+type ClientFullV5 = IsUnknown<AnyToUnknown<typeof AlgoliaSearch>> extends true
   ? unknown
   : AnyToUnknown<
       // @ts-ignore
       ReturnType<typeof AlgoliaSearch.algoliasearch>
     >;
-type ClientSearchV5 = AnyToUnknown<typeof ClientSearch> extends unknown
+type ClientSearchV5 = IsUnknown<AnyToUnknown<typeof ClientSearch>> extends true
   ? unknown
   : AnyToUnknown<
       // @ts-ignore
@@ -66,6 +74,12 @@ type PickForClient<
   ClientV3_4 extends SearchClientV4Shape
   ? T['v4']
   : T['v3'];
+
+type ClientVersion = PickForClient<{
+  v3: '3';
+  v4: '4';
+  v5: '5';
+}>;
 
 type DefaultSearchClient = PickForClient<{
   v3: ClientV3_4;
@@ -167,34 +181,8 @@ export type FindAnswersResponse<T> = PickForClient<{
   v5: any; // answers only exists in v4
 }>;
 
-type RemoveReadOnly<T> = {
-  -readonly [P in keyof T]: RemoveReadOnly<T[P]>;
-};
-
 export interface SearchClient {
-  search: <T>(
-    queries: Array<
-      | {
-          indexName: string;
-          type?: 'default';
-          params: RemoveReadOnly<SearchOptions> & {
-            // This is not the way to go, there are too many differences
-            insideBoundingBox?: any;
-            naturalLanguages?: any;
-          };
-        }
-      | {
-          indexName: string;
-          type: 'facet';
-          facet: string;
-          maxFacetHits?: number;
-          facetQuery: string;
-          params: SearchOptions;
-        }
-    >
-  ) => Promise<{
-    results: Array<SearchResponse<T> | SearchForFacetValuesResponse>;
-  }>;
+  search: DefaultSearchClient['search'];
   searchForFacetValues?: DefaultSearchClient extends {
     searchForFacetValues: unknown;
   }
