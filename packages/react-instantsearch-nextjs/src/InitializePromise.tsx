@@ -36,7 +36,11 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
   search.mainHelper!.setClient({
     ...search.mainHelper!.getClient(),
     search(queries) {
-      requestParamsList = queries.map(({ params }) => params!);
+      if (Array.isArray(queries)) {
+        requestParamsList = queries.map(({ params }) => params!);
+      } else {
+        requestParamsList = queries.requests.map(({ params }) => params!);
+      }
       return search.client.search(queries);
     },
   });
