@@ -8,7 +8,7 @@
     "website:examples": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build --dest ../../../website/examples/vue/media"
   },
   "dependencies": {
-    "algoliasearch": "4.23.2",
+    "algoliasearch": "5.0.0",
     "core-js": "2",
     "instantsearch.js": "4.73.4",
     "vue": "2.7.14",

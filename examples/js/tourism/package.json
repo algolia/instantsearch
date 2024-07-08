@@ -8,7 +8,7 @@
     "website:examples": "BABEL_ENV=parcel parcel build index.html --public-url . --dist-dir=../../../website/examples/js/tourism"
   },
   "dependencies": {
-    "algoliasearch": "4.23.2",
+    "algoliasearch": "5.0.0",
     "instantsearch.js": "4.73.4"
   },
   "devDependencies": {

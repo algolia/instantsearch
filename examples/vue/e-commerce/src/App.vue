@@ -489,7 +489,7 @@
 </template>
 
 <script>
-import algoliasearch from 'algoliasearch/lite';
+import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import VueSlider from 'vue-slider-component';
 
 import getRouting from './routing';
