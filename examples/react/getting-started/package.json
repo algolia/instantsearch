@@ -7,7 +7,7 @@
     "start": "BABEL_ENV=parcel parcel index.html products.html --port 3000"
   },
   "dependencies": {
-    "algoliasearch": "4.23.2",
+    "algoliasearch-v5": "npm:algoliasearch@5.0.0-beta.8",
     "instantsearch.js": "4.73.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",

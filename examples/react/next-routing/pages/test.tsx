@@ -1,5 +1,5 @@
 // This is only to test `onStateChange` does not get called twice
-import algoliasearch from 'algoliasearch/lite';
+import { liteClient as algoliasearch } from 'algoliasearch-v5/lite';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';

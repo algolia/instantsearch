@@ -7,7 +7,7 @@
     "build": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build"
   },
   "dependencies": {
-    "algoliasearch": "4.23.2",
+    "algoliasearch-v5": "npm:algoliasearch@5.0.0-beta.8",
     "core-js": "2",
     "instantsearch.js": "4.73.0",
     "vue": "2.7.14",

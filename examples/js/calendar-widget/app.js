@@ -1,5 +1,5 @@
 /* global moment Calendar $ */
-import algoliasearch from 'algoliasearch/lite';
+import { liteClient as algoliasearch } from 'algoliasearch-v5/lite';
 import instantsearch from 'instantsearch.js';
 import { connectRange } from 'instantsearch.js/es/connectors';
 import { searchBox, hits } from 'instantsearch.js/es/widgets';

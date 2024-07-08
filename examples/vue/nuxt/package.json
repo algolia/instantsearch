@@ -11,7 +11,7 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
-    "algoliasearch": "4.23.2",
+    "algoliasearch-v5": "npm:algoliasearch@5.0.0-beta.8",
     "cross-env": "^5.2.0",
     "css-loader": "^4.3.0",
     "nuxt": "^2.4.5",
