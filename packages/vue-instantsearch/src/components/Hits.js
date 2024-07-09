@@ -43,6 +43,7 @@ export default {
 
     const defaultSlot = getScopedSlot(this, 'default');
     const itemSlot = getScopedSlot(this, 'item');
+    const bannerSlot = getScopedSlot(this, 'banner');
 
     const itemComponent = ({
       hit,
@@ -99,6 +100,7 @@ export default {
     return h(createHitsComponent({ createElement: h }), {
       hits: this.state.items,
       itemComponent,
+      banner: this.state.banner,
       sendEvent: this.state.sendEvent,
       classNames: this.classNames && {
         root: this.classNames['ais-Hits'],
