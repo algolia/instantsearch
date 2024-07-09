@@ -8,38 +8,38 @@ import {
 import type { Connector, Widget, WidgetRenderState } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
-  name: 'page',
+  name: 'block',
   connector: true,
 });
 
-export type PageNode = {
+export type BlockNode = {
   type: string;
   params: Record<string, any>;
-  children: PageNode[];
+  children: BlockNode[];
 };
 
-export type PageRenderState = {
-  blocks: PageNode[];
+export type BlockRenderState = {
+  blocks: BlockNode[];
 };
 
-export type PageWidgetDescription = {
-  $$type: 'ais.page';
-  renderState: PageRenderState;
+export type BlockWidgetDescription = {
+  $$type: 'ais.block';
+  renderState: BlockRenderState;
   indexRenderState: {
-    Page: WidgetRenderState<PageRenderState, PageConnectorParams>;
+    block: WidgetRenderState<BlockRenderState, BlockConnectorParams>;
   };
 };
 
-export type PageConnectorParams = {
+export type BlockConnectorParams = {
   /**
-   * The id to fetch the page for.
-   * When undefined, InstantSearch uses the current path of the page.
+   * The id to fetch the block for.
+   * When undefined, InstantSearch uses the current path of the block.
    */
   id?: string;
 
   /**
-   * The path to fetch the page for.
-   * When undefined, InstantSearch uses the current path of the page.
+   * The path to fetch the block for.
+   * When undefined, InstantSearch uses the current path of the block.
    */
   path?: string;
 
@@ -49,12 +49,12 @@ export type PageConnectorParams = {
   widgets: Widget[];
 };
 
-export type PageConnector = Connector<
-  PageWidgetDescription,
-  PageConnectorParams
+export type BlockConnector = Connector<
+  BlockWidgetDescription,
+  BlockConnectorParams
 >;
 
-const connectPage: PageConnector = function connectPage(
+const connectBlock: BlockConnector = function connectBlock(
   renderFn,
   unmountFn = noop
 ) {
@@ -73,7 +73,7 @@ const connectPage: PageConnector = function connectPage(
       new Map();
 
     return {
-      $$type: 'ais.page',
+      $$type: 'ais.block',
       dependsOn: 'configuration',
       $$id: widgetParams.id || widgetParams.path || path,
 
@@ -147,7 +147,7 @@ const connectPage: PageConnector = function connectPage(
       getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
-          page: this.getWidgetRenderState(renderOptions),
+          block: this.getWidgetRenderState(renderOptions),
         };
       },
 
@@ -185,4 +185,4 @@ const connectPage: PageConnector = function connectPage(
   };
 };
 
-export default connectPage;
+export default connectBlock;

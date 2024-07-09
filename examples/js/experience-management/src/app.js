@@ -1,6 +1,6 @@
 import algoliasearch from 'algoliasearch/lite';
 import instantsearch from 'instantsearch.js';
-import { page } from 'instantsearch.js/es/widgets';
+import { block } from 'instantsearch.js/es/widgets';
 
 const searchClient = algoliasearch(
   'F4T6CUV2AH',
@@ -13,6 +13,6 @@ const search = instantsearch({
   insights: true,
 });
 
-search.addWidgets([page({ container: '#page' })]);
+search.addWidgets([block({ container: '#block' })]);
 
 search.start();

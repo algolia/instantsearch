@@ -52,4 +52,4 @@ export { default as trendingItems } from './trending-items/trending-items';
 export { default as voiceSearch } from './voice-search/voice-search';
 export { default as frequentlyBoughtTogether } from './frequently-bought-together/frequently-bought-together';
 export { default as lookingSimilar } from './looking-similar/looking-similar';
-export { default as page } from './page/page';
+export { default as block } from './block/block';
