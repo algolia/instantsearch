@@ -15,8 +15,8 @@ try {
   delete window.AlgoliaAnalyticsObject;
 } catch (error) {} // eslint-disable-line no-empty
 
-export function createInsights<TVersion extends string | undefined = '2.13.0'>({
-  forceVersion = '2.13.0',
+export function createInsights<TVersion extends string | undefined = '2.15.0'>({
+  forceVersion = '2.15.0',
 }: {
   forceVersion?: TVersion;
 } = {}) {
