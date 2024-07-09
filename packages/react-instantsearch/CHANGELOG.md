@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.12.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.12.0...react-instantsearch@7.12.1) (2024-07-09)
+
+
+### Bug Fixes
+
+* **algoliasearch:** correctly retrieve headers for v5 ([#6268](https://github.com/algolia/instantsearch/issues/6268)) ([25c72cf](https://github.com/algolia/instantsearch/commit/25c72cf2f1957b72dc237b32a8a73a006753d5e1))
+
+
+
+
+
 # [7.12.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.11.4...react-instantsearch@7.12.0) (2024-07-02)
 
 
