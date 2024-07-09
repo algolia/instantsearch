@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.73.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.73.0...instantsearch.js@4.73.1) (2024-07-09)
+
+
+### Bug Fixes
+
+* **algoliasearch:** correctly retrieve headers for v5 ([#6268](https://github.com/algolia/instantsearch/issues/6268)) ([25c72cf](https://github.com/algolia/instantsearch/commit/25c72cf2f1957b72dc237b32a8a73a006753d5e1))
+* **deps:** update dependency search-insights to 2.15.0 ([#6273](https://github.com/algolia/instantsearch/issues/6273)) ([efeed39](https://github.com/algolia/instantsearch/commit/efeed39ae23a2ff244e40878a0a11eec5dd18211))
+
+
+
+
+
 # [4.73.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.72.2...instantsearch.js@4.73.0) (2024-07-02)
 
 
