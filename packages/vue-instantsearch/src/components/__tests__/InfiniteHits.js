@@ -11,6 +11,7 @@ jest.mock('../../mixins/widget');
 
 const defaultState = {
   widgetParams: {
+    showBanner: true,
     showPrevious: false,
     escapeHTML: true,
     transformItems: (items) => items,
@@ -81,6 +82,79 @@ it('renders correctly with a custom item rendering', () => {
         </template>
       </InfiniteHits>
     `,
+  });
+
+  expect(wrapper.html()).toMatchSnapshot();
+});
+
+it('renders correctly with banner data', () => {
+  __setState({
+    ...defaultState,
+    banner: {
+      image: {
+        urls: [{ url: 'https://via.placeholder.com/550x250' }],
+      },
+      link: {
+        url: 'https://www.algolia.com',
+      },
+    },
+  });
+
+  const wrapper = mount({
+    components: { InfiniteHits },
+    template: `<InfiniteHits />`,
+  });
+
+  expect(wrapper.html()).toMatchSnapshot();
+});
+
+it('renders correctly with banner data and custom banner rendering', () => {
+  __setState({
+    ...defaultState,
+    banner: {
+      image: {
+        urls: [{ url: 'https://via.placeholder.com/550x250' }],
+      },
+      link: {
+        url: 'https://www.algolia.com',
+      },
+    },
+  });
+
+  const wrapper = mount({
+    components: { InfiniteHits },
+    template: `
+      <InfiniteHits>
+        <template v-slot:banner="{ banner }">
+          <img :src="banner.image.urls[0].url" />
+        </template>
+      </InfiniteHits>
+    `,
+  });
+
+  expect(wrapper.html()).toMatchSnapshot();
+});
+
+it('does not render a banner when showBanner is false', () => {
+  __setState({
+    ...defaultState,
+    banner: {
+      image: {
+        urls: [{ url: 'https://via.placeholder.com/550x250' }],
+      },
+      link: {
+        url: 'https://www.algolia.com',
+      },
+    },
+    widgetParams: {
+      ...defaultState.widgetParams,
+      showBanner: false,
+    },
+  });
+
+  const wrapper = mount({
+    components: { InfiniteHits },
+    template: `<InfiniteHits />`,
   });
 
   expect(wrapper.html()).toMatchSnapshot();

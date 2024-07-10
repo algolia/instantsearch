@@ -9,8 +9,6 @@ import {
 } from '@instantsearch/testutils';
 import userEvent from '@testing-library/user-event';
 
-import { skippableDescribe } from '../../common';
-
 import type { InfiniteHitsWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 import type { MockSearchClient } from '@instantsearch/mocks';
@@ -53,7 +51,7 @@ function normalizeSnapshot(html: string) {
 
 export function createOptionsTests(
   setup: InfiniteHitsWidgetSetup,
-  { act, skippedTests }: Required<TestOptions>
+  { act }: Required<TestOptions>
 ) {
   describe('options', () => {
     test('renders with default props', async () => {
@@ -108,88 +106,86 @@ export function createOptionsTests(
       );
     });
 
-    skippableDescribe('banner option', skippedTests, () => {
-      test('renders default banner element with banner widget renderingContent', async () => {
-        const searchClient = createMockedSearchClient({
-          renderingContent: {
-            // @TODO: remove once algoliasearch js client has been updated
-            // @ts-expect-error
-            widgets: {
-              banners: [
-                {
-                  image: {
-                    urls: [{ url: 'https://via.placeholder.com/550x250' }],
-                  },
-                  link: {
-                    url: 'https://www.algolia.com',
-                  },
+    test('renders default banner element with banner widget renderingContent', async () => {
+      const searchClient = createMockedSearchClient({
+        renderingContent: {
+          // @TODO: remove once algoliasearch js client has been updated
+          // @ts-expect-error
+          widgets: {
+            banners: [
+              {
+                image: {
+                  urls: [{ url: 'https://via.placeholder.com/550x250' }],
                 },
-              ],
-            },
+                link: {
+                  url: 'https://www.algolia.com',
+                },
+              },
+            ],
           },
-        });
-
-        await setup({
-          instantSearchOptions: {
-            indexName: 'indexName',
-            searchClient,
-          },
-          widgetParams: {},
-        });
-
-        await act(async () => {
-          await wait(0);
-        });
-
-        expect(
-          document.querySelector('#hits-with-defaults .ais-InfiniteHits')
-        ).toMatchNormalizedInlineSnapshot(
-          normalizeSnapshot,
-          `
-          <div
-            class="ais-InfiniteHits"
-          >
-            <aside
-              class="ais-InfiniteHits-banner"
-            >
-              <a
-                class="ais-InfiniteHits-banner-link"
-                href="https://www.algolia.com"
-              >
-                <img
-                  class="ais-InfiniteHits-banner-image"
-                  src="https://via.placeholder.com/550x250"
-                />
-              </a>
-            </aside>
-            <ol
-              class="ais-InfiniteHits-list"
-            >
-              <li
-                class="ais-InfiniteHits-item"
-              >
-                {"objectID":"0"}
-              </li>
-              <li
-                class="ais-InfiniteHits-item"
-              >
-                {"objectID":"1"}
-              </li>
-              <li
-                class="ais-InfiniteHits-item"
-              >
-                {"objectID":"2"}
-              </li>
-            </ol>
-            <button
-              class="ais-InfiniteHits-loadMore"
-            >
-              Show more results
-            </button>
-          </div>
-          `
-        );
+        },
       });
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {},
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(
+        document.querySelector('#hits-with-defaults .ais-InfiniteHits')
+      ).toMatchNormalizedInlineSnapshot(
+        normalizeSnapshot,
+        `
+        <div
+          class="ais-InfiniteHits"
+        >
+          <aside
+            class="ais-InfiniteHits-banner"
+          >
+            <a
+              class="ais-InfiniteHits-banner-link"
+              href="https://www.algolia.com"
+            >
+              <img
+                class="ais-InfiniteHits-banner-image"
+                src="https://via.placeholder.com/550x250"
+              />
+            </a>
+          </aside>
+          <ol
+            class="ais-InfiniteHits-list"
+          >
+            <li
+              class="ais-InfiniteHits-item"
+            >
+              {"objectID":"0"}
+            </li>
+            <li
+              class="ais-InfiniteHits-item"
+            >
+              {"objectID":"1"}
+            </li>
+            <li
+              class="ais-InfiniteHits-item"
+            >
+              {"objectID":"2"}
+            </li>
+          </ol>
+          <button
+            class="ais-InfiniteHits-loadMore"
+          >
+            Show more results
+          </button>
+        </div>
+        `
+      );
     });
 
     test('renders transformed items', async () => {
