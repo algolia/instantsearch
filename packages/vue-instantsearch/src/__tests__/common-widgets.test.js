@@ -589,9 +589,7 @@ const testOptions = {
   createBreadcrumbWidgetTests: undefined,
   createMenuWidgetTests: undefined,
   createPaginationWidgetTests: undefined,
-  createInfiniteHitsWidgetTests: {
-    skippedTests: { 'banner option': true },
-  },
+  createInfiniteHitsWidgetTests: undefined,
   createHitsWidgetTests: {
     skippedTests: { 'banner option': true },
   },

@@ -105,7 +105,7 @@ type InitialResult = {
     params: RecommendParametersOptions['params'];
     results: RecommendResults['_rawResults'];
   };
-  requestParams?: SearchOptions;
+  requestParams?: SearchOptions[];
 };
 
 export type InitialResults = Record<string, InitialResult>;

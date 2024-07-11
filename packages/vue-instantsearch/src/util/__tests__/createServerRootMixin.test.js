@@ -315,10 +315,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
               });
 
               expect(state.hello).toEqual({
-                requestParams: {
-                  hitsPerPage: 100,
-                  query: '',
-                },
+                requestParams: [
+                  {
+                    hitsPerPage: 100,
+                    query: '',
+                  },
+                ],
                 results: [
                   {
                     query: '',
@@ -342,10 +344,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
               // Parent's widgets state should not be merged into nested index state
               expect(state.nestedIndex).toEqual({
-                requestParams: {
-                  hitsPerPage: 100,
-                  query: '',
-                },
+                requestParams: [
+                  {
+                    hitsPerPage: 100,
+                    query: '',
+                  },
+                ],
                 results: [
                   {
                     query: '',
