@@ -88,15 +88,83 @@ describe('hydrateSearchClient', () => {
         rawResults: [
           { index: 'instant_search', params: 'source=results', nbHits: 1000 },
         ],
-        requestParams: {
-          source: 'request',
-        },
+        requestParams: [
+          {
+            source: 'request',
+          },
+        ],
       },
     } as unknown as InitialResults);
 
     expect(setCache).toHaveBeenCalledWith(
       expect.objectContaining({
         args: [[{ indexName: 'instant_search', params: 'source=request' }]],
+        method: 'search',
+      }),
+      expect.anything()
+    );
+  });
+
+  it('should handle multiple indices and multiple queries per index', () => {
+    const setCache = jest.fn();
+    client = {
+      transporter: { responsesCache: { set: setCache } },
+      addAlgoliaAgent: jest.fn(),
+    } as unknown as SearchClient;
+
+    hydrateSearchClient(client, {
+      instant_search: {
+        results: [
+          { index: 'instant_search', params: 'source=results', nbHits: 1000 },
+          {
+            index: 'instant_search',
+            params: 'source=results&hitsPerPage=0',
+            nbHits: 1000,
+          },
+        ],
+        state: {},
+        requestParams: [
+          {
+            source: 'request',
+          },
+          {
+            source: 'request',
+            hitsPerPage: 0,
+          },
+        ],
+      },
+      instant_search_price_desc: {
+        results: [
+          {
+            index: 'instant_search_price_desc',
+            params: 'source=results',
+            nbHits: 1000,
+          },
+        ],
+        state: {},
+        requestParams: [
+          {
+            source: 'request',
+          },
+        ],
+      },
+    } as unknown as InitialResults);
+
+    expect(setCache).toHaveBeenCalledWith(
+      expect.objectContaining({
+        args: [
+          [
+            { indexName: 'instant_search', params: 'source=request' },
+            {
+              indexName: 'instant_search',
+              params: 'source=request&hitsPerPage=0',
+            },
+            {
+              indexName: 'instant_search_price_desc',
+              params: 'source=request',
+            },
+          ],
+        ],
         method: 'search',
       }),
       expect.anything()

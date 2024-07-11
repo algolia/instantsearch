@@ -84,7 +84,14 @@ export function getInitialResults(
     const searchResults = widget.getResults();
     const recommendResults = widget.getHelper()?.lastRecommendResults;
     if (searchResults || recommendResults) {
-      const requestParams = requestParamsList?.[requestParamsIndex++];
+      const resultsCount = searchResults?._rawResults?.length || 0;
+      const requestParams = resultsCount
+        ? requestParamsList?.slice(
+            requestParamsIndex,
+            requestParamsIndex + resultsCount
+          )
+        : [];
+      requestParamsIndex += resultsCount;
       initialResults[widget.getIndexId()] = {
         // We convert the Helper state to a plain object to pass parsable data
         // structures from server to client.
