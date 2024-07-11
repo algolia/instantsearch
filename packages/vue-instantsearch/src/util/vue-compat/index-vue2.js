@@ -21,6 +21,23 @@ const augmentCreateElement =
       );
     }
 
+    if (typeof tag === 'string') {
+      const { on, style, attrs, domProps, nativeOn, key, ...rest } = props;
+      return createElement(
+        tag,
+        {
+          class: className || props.class,
+          attrs: attrs || rest,
+          on,
+          nativeOn,
+          style,
+          domProps,
+          key,
+        },
+        children
+      );
+    }
+
     return createElement(
       tag,
       Object.assign(props, { class: className || props.class }),
