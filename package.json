@@ -147,9 +147,9 @@
     "typescript": "5.5.2"
   },
   "resolutions": {
+    "places.js/algoliasearch": "5.0.0-beta.9",
     "brotli-size": "4.0.0",
     "webpack": "4.47.0",
-    "babel-loader": "8.2.2",
-    "places.js/algoliasearch": "5.0.0-beta.9"
+    "babel-loader": "8.2.2"
   }
 }
