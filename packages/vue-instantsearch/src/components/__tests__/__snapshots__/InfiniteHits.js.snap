@@ -1,5 +1,39 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`does not render a banner when showBanner is false 1`] = `
+<div class="ais-InfiniteHits">
+  <aside class="ais-InfiniteHits-banner">
+    <a class="ais-InfiniteHits-banner-link"
+       href="https://www.algolia.com"
+    >
+      <img class="ais-InfiniteHits-banner-image"
+           src="https://via.placeholder.com/550x250"
+      >
+    </a>
+  </aside>
+  <ol class="ais-InfiniteHits-list">
+    <li class="ais-InfiniteHits-item">
+      objectID: 00001, index: 0
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00002, index: 1
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00003, index: 2
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00004, index: 3
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00005, index: 4
+    </li>
+  </ol>
+  <button class="ais-InfiniteHits-loadMore">
+    Show more results
+  </button>
+</div>
+`;
+
 exports[`renders correctly with a custom item rendering 1`] = `
 <div class="ais-InfiniteHits">
   <ol class="ais-InfiniteHits-list">
@@ -54,5 +88,65 @@ exports[`renders correctly with a custom rendering 1`] = `
       00005
     </div>
   </div>
+</div>
+`;
+
+exports[`renders correctly with banner data 1`] = `
+<div class="ais-InfiniteHits">
+  <aside class="ais-InfiniteHits-banner">
+    <a class="ais-InfiniteHits-banner-link"
+       href="https://www.algolia.com"
+    >
+      <img class="ais-InfiniteHits-banner-image"
+           src="https://via.placeholder.com/550x250"
+      >
+    </a>
+  </aside>
+  <ol class="ais-InfiniteHits-list">
+    <li class="ais-InfiniteHits-item">
+      objectID: 00001, index: 0
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00002, index: 1
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00003, index: 2
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00004, index: 3
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00005, index: 4
+    </li>
+  </ol>
+  <button class="ais-InfiniteHits-loadMore">
+    Show more results
+  </button>
+</div>
+`;
+
+exports[`renders correctly with banner data and custom banner rendering 1`] = `
+<div class="ais-InfiniteHits">
+  <img src="https://via.placeholder.com/550x250">
+  <ol class="ais-InfiniteHits-list">
+    <li class="ais-InfiniteHits-item">
+      objectID: 00001, index: 0
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00002, index: 1
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00003, index: 2
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00004, index: 3
+    </li>
+    <li class="ais-InfiniteHits-item">
+      objectID: 00005, index: 4
+    </li>
+  </ol>
+  <button class="ais-InfiniteHits-loadMore">
+    Show more results
+  </button>
 </div>
 `;
