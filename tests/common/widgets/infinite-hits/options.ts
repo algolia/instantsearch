@@ -45,6 +45,8 @@ function normalizeSnapshot(html: string) {
           return `{"objectID":"${captured[1]}"}`;
         }
       )
+      // Vue InstantSearch adds new line between banner and hits
+      .replace(/>\s*</g, '><')
       .replace(/"__position":\d,/g, '')
   );
 }
