@@ -314,20 +314,26 @@ describe('getInitialResults', () => {
     // ...and only the latest duplicate params are in the returned results
     const expectedInitialResults = {
       indexName: expect.objectContaining({
-        requestParams: expect.objectContaining({
-          query: 'apple',
-        }),
+        requestParams: expect.arrayContaining([
+          expect.objectContaining({
+            query: 'apple',
+          }),
+        ]),
       }),
       indexName2: expect.objectContaining({
-        requestParams: expect.objectContaining({
-          query: 'samsung',
-        }),
+        requestParams: expect.arrayContaining([
+          expect.objectContaining({
+            query: 'samsung',
+          }),
+        ]),
       }),
       indexId: expect.objectContaining({
-        requestParams: expect.objectContaining({
-          query: 'apple',
-          hitsPerPage: 3,
-        }),
+        requestParams: expect.arrayContaining([
+          expect.objectContaining({
+            query: 'apple',
+            hitsPerPage: 3,
+          }),
+        ]),
       }),
     };
 
