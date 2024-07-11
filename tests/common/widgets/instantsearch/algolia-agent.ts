@@ -1,7 +1,16 @@
-import algoliasearch from 'algoliasearch';
+import {
+  algoliasearch as namedConstructor,
+  default as defaultConstructor,
+} from 'algoliasearch';
 
 import type { InstantSearchWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
+import type { SearchClient } from 'instantsearch.js';
+
+const algoliasearch = (namedConstructor || defaultConstructor) as unknown as (
+  appId: string,
+  apiKey: string
+) => SearchClient;
 
 export function createAlgoliaAgentTests(
   setup: InstantSearchWidgetSetup,

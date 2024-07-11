@@ -48,7 +48,7 @@ export function createInsightsTests(
                             Apple: 200,
                           },
                         },
-                        page: params!.page,
+                        page: params.page,
                         nbPages: 20,
                       })
                   )
@@ -131,7 +131,7 @@ export function createInsightsTests(
                             Apple: 200,
                           },
                         },
-                        page: params!.page,
+                        page: params.page,
                         nbPages: 20,
                       })
                   )

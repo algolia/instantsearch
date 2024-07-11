@@ -9,7 +9,10 @@ import {
 } from '@instantsearch/mocks';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import algoliasearch from 'algoliasearch';
+import {
+  algoliasearch as namedConstructor,
+  default as defaultConstructor,
+} from 'algoliasearch';
 import { history } from 'instantsearch.js/es/lib/routers';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
 import React, { StrictMode } from 'react';
@@ -18,7 +21,13 @@ import { Hits, RefinementList, SearchBox } from 'react-instantsearch';
 import { InstantSearch } from '../InstantSearch';
 import { InstantSearchSSRProvider } from '../InstantSearchSSRProvider';
 
-import type { Hit as AlgoliaHit } from 'instantsearch.js';
+import type { Hit as AlgoliaHit, SearchClient } from 'instantsearch.js';
+
+const algoliasearch = (namedConstructor || defaultConstructor) as unknown as (
+  appId: string,
+  apiKey: string,
+  options: any
+) => SearchClient;
 
 function HitComponent({ hit }: { hit: AlgoliaHit }) {
   return <>{hit.objectID}</>;

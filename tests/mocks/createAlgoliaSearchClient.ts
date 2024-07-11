@@ -50,10 +50,12 @@ const algoliasearch = ifActualFunction(
 
 export type MockSearchClient = OverrideKeys<
   SearchClient,
-  {
-    search: jest.Mock<any, any>;
-    searchForFacetValues: jest.Mock<any, any>;
-  }
+  SearchClient extends { searchForFacetValues: (...args: any[]) => any }
+    ? {
+        search: jest.Mock<any, any>;
+        searchForFacetValues: jest.Mock<any, any>;
+      }
+    : { search: jest.Mock<any, any> }
 >;
 
 export function createAlgoliaSearchClient<

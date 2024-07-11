@@ -41,7 +41,7 @@ export function createRoutingTests(
                 return createMultiSearchResponse(
                   ...requests.map(({ params }) =>
                     createSingleSearchResponse({
-                      page: params!.page,
+                      page: params.page,
                       nbPages: 20,
                     })
                   )

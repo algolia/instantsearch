@@ -51,7 +51,7 @@ export function createRoutingTests(
                           Apple: 200,
                         },
                       },
-                      page: params!.page,
+                      page: params.page,
                       nbPages: 20,
                     })
                   )
