@@ -23,7 +23,7 @@ console.log(
 // change main dependency
 shell.sed(
   '-i',
-  /"algoliasearch": "4.*"(,?)/,
+  /"algoliasearch": "5.*"(,?)/,
   '"algoliasearch": "3.35.1","@types/algoliasearch": "3.34.10"$1',
   packageJsonPaths
 );

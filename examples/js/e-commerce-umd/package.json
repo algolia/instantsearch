@@ -9,7 +9,7 @@
   },
   "browserslist": "firefox 68, chrome 78, IE 11",
   "dependencies": {
-    "algoliasearch-v5": "npm:algoliasearch@5.0.0-beta.9",
+    "algoliasearch": "npm:algoliasearch@5.0.0-beta.9",
     "instantsearch.js": "4.73.0"
   },
   "devDependencies": {
