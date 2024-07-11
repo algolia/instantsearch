@@ -109,11 +109,10 @@ var requestBuilder = {
             params.facetFilters = filteredFacetFilters.concat(
               parent.attribute + ':' + parent.value
             );
+          } else if (filteredFacetFilters.length > 0) {
+            params.facetFilters = filteredFacetFilters;
           } else {
-            params.facetFilters =
-              filteredFacetFilters.length > 0
-                ? filteredFacetFilters
-                : undefined;
+            delete params.facetFilters;
           }
 
           queries.push({ indexName: index, params: params });
