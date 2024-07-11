@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "algoliasearch-v5": "npm:algoliasearch@5.0.0-beta.8",
+    "algoliasearch-v5": "npm:algoliasearch@5.0.0-beta.9",
     "instantsearch.css": "8.3.0",
     "next": "13.5.1",
     "react": "18.2.0",

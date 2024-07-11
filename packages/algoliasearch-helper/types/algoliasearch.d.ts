@@ -146,7 +146,7 @@ export type SearchResponse<T> = PickForClient<{
   // @ts-ignore
   v4: ClientSearch.SearchResponse<T>;
   // @ts-ignore
-  v5: AlgoliaSearch.SearchResponse; // TODO: should be generic https://github.com/algolia/api-clients-automation/issues/853
+  v5: AlgoliaSearch.SearchResponse<T>;
 }>;
 
 export type SearchResponses<T> = PickForClient<{
@@ -155,7 +155,7 @@ export type SearchResponses<T> = PickForClient<{
   // @ts-ignore
   v4: ClientSearch.MultipleQueriesResponse<T>;
   // @ts-ignore
-  v5: AlgoliaSearch.SearchResponses; // TODO: should be generic https://github.com/algolia/api-clients-automation/issues/853
+  v5: AlgoliaSearch.SearchResponses<T>;
 }>;
 
 export type SearchForFacetValuesResponse = PickForClient<{
@@ -181,8 +181,17 @@ export type FindAnswersResponse<T> = PickForClient<{
   v5: any; // answers only exists in v4
 }>;
 
+export type SupportedLanguage = PickForClient<{
+  v3: string;
+  v4: string;
+  // @ts-ignore
+  v5: AlgoliaSearch.SupportedLanguage;
+}>;
+
 export interface SearchClient {
-  search: DefaultSearchClient['search'];
+  search: <T>(
+    requests: Array<{ indexName: string; params: SearchOptions }>
+  ) => Promise<SearchResponses<T>>;
   searchForFacetValues?: DefaultSearchClient extends {
     searchForFacetValues: unknown;
   }

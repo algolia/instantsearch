@@ -1,8 +1,8 @@
-import type { RecommendQueriesResponse } from '@algolia/recommend';
 import type {
   SearchResponse,
   SearchResponses,
   SearchForFacetValuesResponse,
+  SearchClient,
 } from 'instantsearch.js';
 
 export const defaultRenderingContent: SearchResponse<any>['renderingContent'] =
@@ -90,6 +90,10 @@ export const createSFFVResponse = (
 
 export const createRecommendResponse = (
   requests: readonly any[]
-): RecommendQueriesResponse<any> => {
-  return { results: requests.map(createSingleSearchResponse) };
+): Awaited<ReturnType<NonNullable<SearchClient['getRecommendations']>>> => {
+  return {
+    results: requests.map(createSingleSearchResponse),
+  } as unknown as Awaited<
+    ReturnType<NonNullable<SearchClient['getRecommendations']>>
+  >;
 };

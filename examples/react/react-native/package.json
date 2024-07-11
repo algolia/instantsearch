@@ -11,7 +11,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "algoliasearch-v5": "npm:algoliasearch@5.0.0-beta.8",
+    "algoliasearch-v5": "npm:algoliasearch@5.0.0-beta.9",
     "expo": "~44.0.0",
     "expo-status-bar": "~1.2.0",
     "instantsearch.js": "4.73.0",

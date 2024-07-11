@@ -8,6 +8,7 @@ import type {
   SearchOptions,
   SearchResponse,
   SnippetResult,
+  SupportedLanguage,
 } from './types/algoliasearch';
 // @ts-ignore
 import type {
@@ -539,7 +540,7 @@ declare namespace algoliasearchHelper {
     // types missing in @types/algoliasearch, so duplicated from v4
     ruleContexts?: string[];
     optionalFilters?: Array<string | string[]>;
-    queryLanguages?: string[];
+    queryLanguages?: SupportedLanguage[];
 
     /**
      * The relevancy threshold to apply to search in a virtual index [0-100]. A bigger
@@ -1021,7 +1022,7 @@ declare namespace algoliasearchHelper {
      * a list of language ISO codes (as a comma-separated string) for which stop words should be enable
      * https://www.algolia.com/doc/api-reference/api-parameters/removeStopWords/
      */
-    removeStopWords?: boolean | string[];
+    removeStopWords?: boolean | SupportedLanguage[];
     /**
      * List of attributes on which you want to disable the computation of exact criteria
      * default: []
