@@ -5,6 +5,8 @@
 // @ts-ignore
 import type * as ClientSearch from '@algolia/client-search';
 // @ts-ignore
+import type * as RecommendClient from '@algolia/recommend';
+// @ts-ignore
 import type * as AlgoliaSearch from 'algoliasearch';
 // @ts-ignore
 import type algoliasearch from 'algoliasearch/lite';
@@ -158,6 +160,117 @@ export type SearchResponses<T> = PickForClient<{
   v5: AlgoliaSearch.SearchResponses<T>;
 }>;
 
+export type RecommendResponse<T> = PickForClient<{
+  v3: any;
+  // @ts-ignore
+  v4: ClientSearch.SearchResponse<T>;
+  // @ts-ignore
+  v5: AlgoliaSearch.RecommendationsResults;
+}>;
+
+export type RecommendResponses<T> = {
+  results: Array<RecommendResponse<T>>;
+};
+
+// We remove `indexName` from the Recommend query types as the helper
+// will fill in this value before sending the queries
+type _OmitIndexName<T> = Omit<T, 'indexName'>;
+type _OptionalKeys<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+type _RequiredKeys<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
+
+export type FrequentlyBoughtTogetherQuery = _OmitIndexName<
+  PickForClient<{
+    v3: any;
+    // @ts-ignore
+    v4: RecommendClient.FrequentlyBoughtTogetherQuery;
+    // @ts-ignore
+    v5: OptionalKeys<
+      Omit<AlgoliaSearch.BoughtTogetherQuery, 'model'>,
+      'threshold'
+    >;
+  }>
+>;
+export type LookingSimilarQuery = _OmitIndexName<
+  PickForClient<{
+    v3: any;
+    // @ts-ignore
+    v4: RecommendClient.LookingSimilarQuery;
+    // @ts-ignore
+    v5: OptionalKeys<
+      Omit<AlgoliaSearch.LookingSimilarQuery, 'model'>,
+      'threshold'
+    >;
+  }>
+>;
+export type RelatedProductsQuery = _OmitIndexName<
+  PickForClient<{
+    v3: any;
+    // @ts-ignore
+    v4: RecommendClient.RelatedProductsQuery;
+    // @ts-ignore
+    v5: OptionalKeys<
+      Omit<AlgoliaSearch.LookingSimilarQuery, 'model'>,
+      'threshold'
+    >;
+  }>
+>;
+export type TrendingFacetsQuery = _OmitIndexName<
+  PickForClient<{
+    v3: any;
+    // @ts-ignore
+    v4: RecommendClient.TrendingFacetsQuery;
+    // @ts-ignore
+    v5: OptionalKeys<
+      Omit<AlgoliaSearch.TrendingFacetsQuery, 'model'>,
+      'threshold'
+    >;
+  }>
+>;
+export type TrendingItemsQuery = _OmitIndexName<
+  PickForClient<{
+    v3: any;
+    // @ts-ignore
+    v4: RecommendClient.TrendingItemsQuery;
+    // @ts-ignore
+    v5: OptionalKeys<
+      Omit<AlgoliaSearch.TrendingItemsQuery, 'model'>,
+      'threshold'
+    >;
+  }>
+>;
+
+export type RecommendOptions =
+  | _RequiredKeys<
+      FrequentlyBoughtTogetherQuery & {
+        indexName: string;
+        model: 'bought-together';
+      },
+      'threshold'
+    >
+  | _RequiredKeys<
+      LookingSimilarQuery & { indexName: string; model: 'looking-similar' },
+      'threshold'
+    >
+  | _RequiredKeys<
+      RelatedProductsQuery & { indexName: string; model: 'related-products' },
+      'threshold'
+    >
+  | _RequiredKeys<
+      TrendingFacetsQuery & { indexName: string; model: 'trending-facets' },
+      'threshold'
+    >
+  | _RequiredKeys<
+      TrendingItemsQuery & { indexName: string; model: 'trending-items' },
+      'threshold'
+    >;
+
+export type PlainRecommendParameters =
+  | FrequentlyBoughtTogetherQuery
+  | LookingSimilarQuery
+  | RelatedProductsQuery
+  | TrendingFacetsQuery
+  | TrendingItemsQuery;
+
 export type SearchForFacetValuesResponse = PickForClient<{
   // @ts-ignore
   v3: AlgoliaSearch.SearchForFacetValues.Response;
@@ -192,6 +305,9 @@ export interface SearchClient {
   search: <T>(
     requests: Array<{ indexName: string; params: SearchOptions }>
   ) => Promise<SearchResponses<T>>;
+  getRecommendations?: <T>(
+    requests: RecommendOptions[]
+  ) => Promise<RecommendResponses<T>>;
   searchForFacetValues?: DefaultSearchClient extends {
     searchForFacetValues: unknown;
   }
@@ -201,5 +317,4 @@ export interface SearchClient {
     ? DefaultSearchClient['initIndex']
     : never;
   addAlgoliaAgent?: DefaultSearchClient['addAlgoliaAgent'];
-  getRecommendations?: DefaultSearchClient['getRecommendations'];
 }

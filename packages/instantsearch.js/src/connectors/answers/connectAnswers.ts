@@ -156,14 +156,21 @@ const connectAnswers: AnswersConnector = function connectAnswers(
 
       init(initOptions) {
         const { state, instantSearchInstance } = initOptions;
-        const answersIndex = instantSearchInstance.client.initIndex!(
+        if (typeof instantSearchInstance.client.initIndex !== 'function') {
+          throw new Error(withUsage('`algoliasearch` <5 required.'));
+        }
+        const answersIndex = (instantSearchInstance.client.initIndex as any)(
           state.index
         );
         if (!hasFindAnswersMethod(answersIndex)) {
           throw new Error(withUsage('`algoliasearch` >= 4.8.0 required.'));
         }
         debouncedRefine = debounce(
-          answersIndex.findAnswers,
+          answersIndex.findAnswers as unknown as SearchClient extends {
+            initIndex: (...args: any[]) => any;
+          }
+            ? ReturnType<SearchClient['initIndex']>['findAnswers']
+            : any,
           searchDebounceTime
         );
 

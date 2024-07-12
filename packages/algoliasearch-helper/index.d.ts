@@ -1,24 +1,23 @@
 import EventEmitter from '@algolia/events';
 
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type {
   FindAnswersResponse,
+  FrequentlyBoughtTogetherQuery,
   HighlightResult,
+  LookingSimilarQuery,
   RankingInfo,
+  RecommendResponse,
+  RelatedProductsQuery,
   SearchClient,
   SearchOptions,
   SearchResponse,
   SnippetResult,
   SupportedLanguage,
+  TrendingFacetsQuery,
+  TrendingItemsQuery,
+  PlainRecommendParameters as ClientPlainRecommendParameters,
 } from './types/algoliasearch';
-// @ts-ignore
-import type {
-  FrequentlyBoughtTogetherQuery as RecommendFrequentlyBoughtTogetherQuery,
-  LookingSimilarQuery as RecommendLookingSimilarQuery,
-  RelatedProductsQuery as RecommendRelatedProductsQuery,
-  TrendingFacetsQuery as RecommendTrendingFacetsQuery,
-  TrendingItemsQuery as RecommendTrendingItemsQuery,
-  RecommendQueriesResponse,
-} from '@algolia/recommend';
 
 /**
  * The algoliasearchHelper module is the function that will let its
@@ -1556,23 +1555,7 @@ declare namespace algoliasearchHelper {
     }
   }
 
-  // We remove `indexName` from the Recommend query types as the helper
-  // will fill in this value before sending the queries
-  type FrequentlyBoughtTogetherQuery = Omit<
-    RecommendFrequentlyBoughtTogetherQuery,
-    'indexName'
-  >;
-  type LookingSimilarQuery = Omit<RecommendLookingSimilarQuery, 'indexName'>;
-  type RelatedProductsQuery = Omit<RecommendRelatedProductsQuery, 'indexName'>;
-  type TrendingFacetsQuery = Omit<RecommendTrendingFacetsQuery, 'indexName'>;
-  type TrendingItemsQuery = Omit<RecommendTrendingItemsQuery, 'indexName'>;
-
-  export type PlainRecommendParameters =
-    | FrequentlyBoughtTogetherQuery
-    | LookingSimilarQuery
-    | RelatedProductsQuery
-    | TrendingFacetsQuery
-    | TrendingItemsQuery;
+  export type PlainRecommendParameters = ClientPlainRecommendParameters;
 
   export type RecommendParametersWithId<
     T extends PlainRecommendParameters = PlainRecommendParameters
@@ -1606,11 +1589,7 @@ declare namespace algoliasearchHelper {
     ): RecommendParameters;
   }
 
-  type RecommendResponse<TObject> =
-    RecommendQueriesResponse<TObject>['results'];
-
-  type RecommendResultItem<TObject = any> = RecommendResponse<TObject>[0];
-  type RecommendResultMap<T> = { [index: number]: RecommendResultItem<T> };
+  type RecommendResultMap<T> = { [index: number]: RecommendResponse<T> };
 
   export class RecommendResults<T = any> {
     constructor(state: RecommendParameters, results: RecommendResultMap<T>);
@@ -1618,7 +1597,7 @@ declare namespace algoliasearchHelper {
     _state: RecommendParameters;
     _rawResults: RecommendResultMap<T>;
 
-    [index: number]: RecommendResultItem<T>;
+    [index: number]: RecommendResponse<T>;
   }
 }
 

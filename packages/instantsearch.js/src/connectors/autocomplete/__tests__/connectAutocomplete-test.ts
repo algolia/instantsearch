@@ -240,6 +240,8 @@ search.addWidgets([
         _highlightResult: {
           foobar: {
             value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${TAG_PLACEHOLDER.highlightPostTag}</script>`,
+            matchLevel: 'full' as const,
+            matchedWords: ['foobar'],
           },
         },
         objectID: '1',
@@ -268,7 +270,9 @@ search.addWidgets([
           {
             indexId: 'index0',
             results: new SearchResults(helper.state, [
-              createSingleSearchResponse({ hits }),
+              createSingleSearchResponse({
+                hits,
+              }),
             ]),
             helper,
           },
@@ -295,9 +299,12 @@ search.addWidgets([
 
     const hits = [
       {
+        foobar: 'foobar',
         _highlightResult: {
           foobar: {
             value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${TAG_PLACEHOLDER.highlightPostTag}</script>`,
+            matchLevel: 'full' as const,
+            matchedWords: ['foobar'],
           },
         },
         objectID: '1',

@@ -39,7 +39,7 @@ export function createInsightsTests(
                       params,
                     }: Parameters<SearchClient['search']>[0][number]) =>
                       createSingleSearchResponse({
-                        // @ts-expect-error this key is private, thus not in the types
+                        // @ts-ignore this key doesn't exist in v3, v4 types
                         _automaticInsights: true,
                         hits: [{ objectID: '1' }],
                         facets: {

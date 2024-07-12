@@ -4,6 +4,7 @@
 
 import {
   createSearchClient,
+  createSingleRecommendResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
@@ -3484,7 +3485,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           recommendResults: {
             params: [{ $$id: 0, objectID: '1' }],
             results: {
-              0: createSingleSearchResponse({ hits: [{ objectID: '1' }] }),
+              0: createSingleRecommendResponse({
+                hits: [{ objectID: '1', _score: 0 }],
+              }),
             },
           },
         },

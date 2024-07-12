@@ -2,7 +2,7 @@ import type {
   SearchResponse,
   SearchResponses,
   SearchForFacetValuesResponse,
-  SearchClient,
+  RecommendResponse,
 } from 'instantsearch.js';
 
 export const defaultRenderingContent: SearchResponse<any>['renderingContent'] =
@@ -89,11 +89,25 @@ export const createSFFVResponse = (
 });
 
 export const createRecommendResponse = (
-  requests: readonly any[]
-): Awaited<ReturnType<NonNullable<SearchClient['getRecommendations']>>> => {
+  requests: any[]
+): { results: Array<RecommendResponse<any>> } => {
   return {
     results: requests.map(createSingleSearchResponse),
-  } as unknown as Awaited<
-    ReturnType<NonNullable<SearchClient['getRecommendations']>>
-  >;
+  } as unknown as { results: Array<RecommendResponse<any>> };
+};
+
+export const createSingleRecommendResponse = (
+  response: Partial<RecommendResponse<any>> = {}
+): RecommendResponse<any> => {
+  return {
+    hits: [],
+    nbHits: 0,
+    processingTimeMS: 0,
+    query: '',
+    params: '',
+    hitsPerPage: 0,
+    nbPages: 0,
+    page: 0,
+    ...response,
+  };
 };
