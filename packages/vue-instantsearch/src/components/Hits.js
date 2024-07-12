@@ -104,6 +104,7 @@ export default {
         },
         [
           defaultSlot({
+            banner: this.state.banner,
             items: this.state.items,
             insights: this.state.insights,
             sendEvent: this.state.sendEvent,
