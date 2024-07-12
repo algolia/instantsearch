@@ -14,6 +14,20 @@ const defaultState = {
   sendEvent: jest.fn(),
 };
 
+it('accepts a showBanner prop', () => {
+  __setState({
+    ...defaultState,
+  });
+
+  const wrapper = mount(Hits, {
+    propsData: {
+      showBanner: true,
+    },
+  });
+
+  expect(wrapper.vm.widgetParams.showBanner).toBe(true);
+});
+
 it('accepts an escapeHTML prop', () => {
   __setState({
     ...defaultState,
@@ -26,6 +40,37 @@ it('accepts an escapeHTML prop', () => {
   });
 
   expect(wrapper.vm.widgetParams.escapeHTML).toBe(true);
+});
+
+it('exposes banner prop to the banner slot', () => {
+  __setState({
+    ...defaultState,
+    banner: {
+      image: {
+        urls: [{ url: 'https://via.placeholder.com/550x250' }],
+      },
+    },
+  });
+
+  const wrapper = mount(
+    {
+      components: { Hits },
+      template: `
+      <Hits>
+        <template v-slot:banner="{ banner }">
+          <img :src=banner.image.urls[0].url />
+        </template>
+      </Hits>
+    `,
+    },
+    {
+      propsData: {
+        showBanner: true,
+      },
+    }
+  );
+
+  expect(wrapper.html()).toMatchSnapshot();
 });
 
 it('exposes insights prop to the default slot', async () => {

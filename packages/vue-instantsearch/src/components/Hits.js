@@ -36,6 +36,7 @@ export default {
   computed: {
     widgetParams() {
       return {
+        showBanner: this.showBanner,
         escapeHTML: this.escapeHTML,
         transformItems: this.transformItems,
       };
@@ -93,7 +94,7 @@ export default {
 
     // We only want to render the default slot
     // if no other slots are defined
-    if (!itemSlot && defaultSlot) {
+    if (!itemSlot && !bannerSlot && defaultSlot) {
       return h(
         'div',
         {
@@ -121,6 +122,9 @@ export default {
         root: this.classNames['ais-Hits'],
         list: this.classNames['ais-Hits-list'],
         item: this.classNames['ais-Hits-item'],
+        bannerRoot: this.classNames['ais-Hits-banner'],
+        bannerImage: this.classNames['ais-Hits-banner-image'],
+        bannerLink: this.classNames['ais-Hits-banner-link'],
       },
     });
   }),
