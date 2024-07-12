@@ -2,6 +2,7 @@
 
 test('hierarchical facets: combined with a disjunctive facet', function () {
   var algoliasearch = require('algoliasearch');
+  algoliasearch = algoliasearch.algoliasearch || algoliasearch;
 
   var algoliasearchHelper = require('../../../');
 

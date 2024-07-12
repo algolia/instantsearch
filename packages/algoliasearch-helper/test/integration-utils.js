@@ -1,6 +1,7 @@
 'use strict';
 
 var algoliasearch = require('algoliasearch');
+algoliasearch = algoliasearch.algoliasearch || algoliasearch;
 
 function setup(indexName, fn) {
   var appID = process.env.INTEGRATION_TEST_APPID;
