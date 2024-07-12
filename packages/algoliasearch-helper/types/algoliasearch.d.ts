@@ -168,76 +168,69 @@ export type RecommendResponse<T> = PickForClient<{
   v5: AlgoliaSearch.RecommendationsResults;
 }>;
 
-export type RecommendResponses<T> = {
-  results: Array<RecommendResponse<T>>;
-};
+export type RecommendResponses<T> = PickForClient<{
+  v3: any;
+  // @ts-ignore
+  v4: { results: Array<RecommendResponse<T>> };
+  // @ts-ignore
+  v5: AlgoliaSearch.GetRecommendationsResponse;
+}>;
 
 // We remove `indexName` from the Recommend query types as the helper
 // will fill in this value before sending the queries
-type _OmitIndexName<T> = Omit<T, 'indexName'>;
 type _OptionalKeys<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 type _RequiredKeys<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
-export type FrequentlyBoughtTogetherQuery = _OmitIndexName<
-  PickForClient<{
-    v3: any;
-    // @ts-ignore
-    v4: RecommendClient.FrequentlyBoughtTogetherQuery;
-    // @ts-ignore
-    v5: OptionalKeys<
-      Omit<AlgoliaSearch.BoughtTogetherQuery, 'model'>,
-      'threshold'
-    >;
-  }>
->;
-export type LookingSimilarQuery = _OmitIndexName<
-  PickForClient<{
-    v3: any;
-    // @ts-ignore
-    v4: RecommendClient.LookingSimilarQuery;
-    // @ts-ignore
-    v5: OptionalKeys<
-      Omit<AlgoliaSearch.LookingSimilarQuery, 'model'>,
-      'threshold'
-    >;
-  }>
->;
-export type RelatedProductsQuery = _OmitIndexName<
-  PickForClient<{
-    v3: any;
-    // @ts-ignore
-    v4: RecommendClient.RelatedProductsQuery;
-    // @ts-ignore
-    v5: OptionalKeys<
-      Omit<AlgoliaSearch.LookingSimilarQuery, 'model'>,
-      'threshold'
-    >;
-  }>
->;
-export type TrendingFacetsQuery = _OmitIndexName<
-  PickForClient<{
-    v3: any;
-    // @ts-ignore
-    v4: RecommendClient.TrendingFacetsQuery;
-    // @ts-ignore
-    v5: OptionalKeys<
-      Omit<AlgoliaSearch.TrendingFacetsQuery, 'model'>,
-      'threshold'
-    >;
-  }>
->;
-export type TrendingItemsQuery = _OmitIndexName<
-  PickForClient<{
-    v3: any;
-    // @ts-ignore
-    v4: RecommendClient.TrendingItemsQuery;
-    // @ts-ignore
-    v5: OptionalKeys<
-      Omit<AlgoliaSearch.TrendingItemsQuery, 'model'>,
-      'threshold'
-    >;
-  }>
->;
+export type FrequentlyBoughtTogetherQuery = PickForClient<{
+  v3: any;
+  // @ts-ignore
+  v4: Omit<RecommendClient.FrequentlyBoughtTogetherQuery, 'indexName'>;
+  // @ts-ignore
+  v5: OptionalKeys<
+    Omit<AlgoliaSearch.BoughtTogetherQuery, 'model' | 'indexName'>,
+    'threshold'
+  >;
+}>;
+export type LookingSimilarQuery = PickForClient<{
+  v3: any;
+  // @ts-ignore
+  v4: Omit<RecommendClient.LookingSimilarQuery, 'indexName'>;
+  // @ts-ignore
+  v5: OptionalKeys<
+    Omit<AlgoliaSearch.LookingSimilarQuery, 'model' | 'indexName'>,
+    'threshold'
+  >;
+}>;
+export type RelatedProductsQuery = PickForClient<{
+  v3: any;
+  // @ts-ignore
+  v4: Omit<RecommendClient.RelatedProductsQuery, 'indexName'>;
+  // @ts-ignore
+  v5: OptionalKeys<
+    Omit<AlgoliaSearch.LookingSimilarQuery, 'model' | 'indexName'>,
+    'threshold'
+  >;
+}>;
+export type TrendingFacetsQuery = PickForClient<{
+  v3: any;
+  // @ts-ignore
+  v4: Omit<RecommendClient.TrendingFacetsQuery, 'indexName'>;
+  // @ts-ignore
+  v5: OptionalKeys<
+    Omit<AlgoliaSearch.TrendingFacetsQuery, 'model' | 'indexName'>,
+    'threshold'
+  >;
+}>;
+export type TrendingItemsQuery = PickForClient<{
+  v3: any;
+  // @ts-ignore
+  v4: Omit<RecommendClient.TrendingItemsQuery, 'indexName'>;
+  // @ts-ignore
+  v5: _OptionalKeys<
+    Omit<AlgoliaSearch.TrendingItemsQuery, 'model' | 'indexName'>,
+    'threshold'
+  >;
+}>;
 
 export type RecommendOptions =
   | _RequiredKeys<
@@ -245,23 +238,23 @@ export type RecommendOptions =
         indexName: string;
         model: 'bought-together';
       },
-      'threshold'
+      'threshold' | 'indexName' | 'model'
     >
   | _RequiredKeys<
       LookingSimilarQuery & { indexName: string; model: 'looking-similar' },
-      'threshold'
+      'threshold' | 'indexName' | 'model'
     >
   | _RequiredKeys<
       RelatedProductsQuery & { indexName: string; model: 'related-products' },
-      'threshold'
+      'threshold' | 'indexName' | 'model'
     >
   | _RequiredKeys<
       TrendingFacetsQuery & { indexName: string; model: 'trending-facets' },
-      'threshold'
+      'threshold' | 'indexName' | 'model'
     >
   | _RequiredKeys<
       TrendingItemsQuery & { indexName: string; model: 'trending-items' },
-      'threshold'
+      'threshold' | 'indexName' | 'model'
     >;
 
 export type PlainRecommendParameters =
