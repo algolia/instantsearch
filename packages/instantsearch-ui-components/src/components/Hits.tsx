@@ -22,7 +22,6 @@ function createDefaultBannerComponent({ createElement }: Renderer) {
     if (!banner.image.urls[0].url) {
       return null;
     }
-    console.log('test: banner data', banner);
     return (
       <aside className={cx('ais-Hits-banner', classNames.bannerRoot)}>
         {banner.link ? (

@@ -17,7 +17,7 @@
     <div class="container">
       <ais-instant-search
         :search-client="searchClient"
-        index-name="products"
+        index-name="instant_search"
         :insights="true"
       >
         <ais-configure :hits-per-page.camel="8" />
@@ -34,7 +34,7 @@
               <ais-search-box placeholder="" />
             </div>
             <ais-hits :show-banner="true">
-              <!-- <template slot="item" slot-scope="{ item }">
+              <template slot="item" slot-scope="{ item }">
                 <article>
                   <h1>
                     <ais-highlight :hit="item" attribute="name" />
@@ -43,12 +43,6 @@
                     <ais-highlight :hit="item" attribute="description" />
                   </p>
                 </article>
-              </template> -->
-              <template slot="banner" slot-scope="{ banner }">
-                <img
-                  :src="banner.image.urls[0].url"
-                  :alt="banner.image.title"
-                />
               </template>
             </ais-hits>
 
@@ -69,8 +63,8 @@ export default {
   data() {
     return {
       searchClient: algoliasearch(
-        'F4T6CUV2AH',
-        '8d81020afc66363220c7f59b3e87cda4'
+        'latency',
+        '6be0576ff61c053d5f9a3225e2a90f76'
       ),
     };
   },
