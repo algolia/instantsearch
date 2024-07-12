@@ -33,7 +33,7 @@
             <div class="searchbox">
               <ais-search-box placeholder="" />
             </div>
-            <ais-hits :show-banner="true">
+            <ais-hits>
               <template slot="item" slot-scope="{ item }">
                 <article>
                   <h1>
