@@ -3500,7 +3500,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           0: {
             exhaustiveFacetsCount: true,
             exhaustiveNbHits: true,
-            hits: [{ objectID: '1' }],
+            hits: [{ objectID: '1', _score: 0 }],
             hitsPerPage: 20,
             nbHits: 1,
             nbPages: 1,
@@ -3516,7 +3516,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         0: {
           exhaustiveFacetsCount: true,
           exhaustiveNbHits: true,
-          hits: [{ objectID: '1' }],
+          hits: [{ objectID: '1', _score: 0 }],
           hitsPerPage: 20,
           nbHits: 1,
           nbPages: 1,

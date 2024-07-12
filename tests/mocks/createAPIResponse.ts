@@ -97,17 +97,33 @@ export const createRecommendResponse = (
 };
 
 export const createSingleRecommendResponse = (
-  response: Partial<RecommendResponse<any>> = {}
+  subset: Partial<RecommendResponse<any>> = {}
 ): RecommendResponse<any> => {
+  const {
+    query = '',
+    page = 0,
+    hitsPerPage = 20,
+    hits = [],
+    nbHits = hits.length,
+    nbPages = Math.ceil(nbHits / hitsPerPage),
+    params = '',
+    exhaustiveNbHits = true,
+    exhaustiveFacetsCount = true,
+    processingTimeMS = 0,
+    ...rest
+  } = subset;
+
   return {
-    hits: [],
-    nbHits: 0,
-    processingTimeMS: 0,
-    query: '',
-    params: '',
-    hitsPerPage: 0,
-    nbPages: 0,
-    page: 0,
-    ...response,
+    page,
+    hitsPerPage,
+    nbHits,
+    nbPages,
+    processingTimeMS,
+    hits,
+    query,
+    params,
+    exhaustiveNbHits,
+    exhaustiveFacetsCount,
+    ...rest,
   };
 };

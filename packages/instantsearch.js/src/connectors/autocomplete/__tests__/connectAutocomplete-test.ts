@@ -254,6 +254,8 @@ search.addWidgets([
           _highlightResult: {
             foobar: {
               value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
+              matchLevel: 'full',
+              matchedWords: ['foobar'],
             },
           },
           objectID: '1',

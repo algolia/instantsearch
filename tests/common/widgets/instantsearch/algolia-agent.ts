@@ -29,13 +29,25 @@ export function createAlgoliaAgentTests(
 
       const { algoliaAgents } = await setup(options);
 
-      const algoliaAgent: string = (searchClient as any).transporter
-        ? (searchClient as any).transporter.userAgent.value
-        : (searchClient as any)._ua;
+      const algoliaAgent: string = getAgent(searchClient);
 
       expect(algoliaAgent.split(';').map((agent) => agent.trim())).toEqual(
         expect.arrayContaining(algoliaAgents)
       );
     });
   });
+}
+
+function getAgent(searchClient: any) {
+  if (searchClient.transporter && searchClient.transporter.userAgent) {
+    return searchClient.transporter.userAgent.value;
+  }
+  if (searchClient.transporter && searchClient.transporter.algoliaAgent) {
+    return searchClient.transporter.algoliaAgent.value;
+  }
+  if (searchClient._ua) {
+    return searchClient._ua;
+  }
+
+  throw new Error('Could not find the algolia agent');
 }
