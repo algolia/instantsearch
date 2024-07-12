@@ -1,5 +1,6 @@
 import { createHitsComponent } from 'instantsearch-ui-components';
 import { connectHitsWithInsights } from 'instantsearch.js/es/connectors';
+import { Fragment } from 'preact';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
@@ -19,6 +20,10 @@ export default {
     createSuitMixin({ name: 'Hits' }),
   ],
   props: {
+    showBanner: {
+      type: Boolean,
+      default: true,
+    },
     escapeHTML: {
       type: Boolean,
       default: true,
@@ -77,6 +82,15 @@ export default {
       );
     };
 
+    const bannerComponent = ({ banner }) => {
+      return h(Fragment, {}, [
+        bannerSlot &&
+          bannerSlot({
+            banner,
+          }),
+      ]);
+    };
+
     // We only want to render the default slot
     // if no other slots are defined
     if (!itemSlot && defaultSlot) {
@@ -100,7 +114,8 @@ export default {
     return h(createHitsComponent({ createElement: h }), {
       hits: this.state.items,
       itemComponent,
-      banner: this.state.banner,
+      banner: this.showBanner ? this.state.banner : undefined,
+      bannerComponent: bannerSlot ? bannerComponent : undefined,
       sendEvent: this.state.sendEvent,
       classNames: this.classNames && {
         root: this.classNames['ais-Hits'],

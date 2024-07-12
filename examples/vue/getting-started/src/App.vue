@@ -33,16 +33,22 @@
             <div class="searchbox">
               <ais-search-box placeholder="" />
             </div>
-            <ais-hits>
-              <template slot="item" slot-scope="{ item }">
-                <!-- <article>
+            <ais-hits :show-banner="true">
+              <!-- <template slot="item" slot-scope="{ item }">
+                <article>
                   <h1>
                     <ais-highlight :hit="item" attribute="name" />
                   </h1>
                   <p>
                     <ais-highlight :hit="item" attribute="description" />
                   </p>
-                </article> -->
+                </article>
+              </template> -->
+              <template slot="banner" slot-scope="{ banner }">
+                <img
+                  :src="banner.image.urls[0].url"
+                  :alt="banner.image.title"
+                />
               </template>
             </ais-hits>
 
