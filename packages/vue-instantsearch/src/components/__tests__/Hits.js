@@ -69,8 +69,8 @@ it('exposes banner prop to the banner slot', () => {
       },
     }
   );
-
-  expect(wrapper.html()).toMatchSnapshot();
+  const img = wrapper.find('img');
+  expect(img.attributes('src')).toBe('https://via.placeholder.com/550x250');
 });
 
 it('exposes insights prop to the default slot', async () => {
