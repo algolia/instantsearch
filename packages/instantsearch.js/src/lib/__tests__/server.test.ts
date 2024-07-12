@@ -3,7 +3,11 @@ import {
   createSearchClient,
 } from '@instantsearch/mocks';
 
-import { connectConfigure, connectSearchBox } from '../../connectors';
+import {
+  connectConfigure,
+  connectHierarchicalMenu,
+  connectSearchBox,
+} from '../../connectors';
 import instantsearch from '../../index.es';
 import { index } from '../../widgets';
 import { getInitialResults, waitForResults } from '../server';
@@ -346,5 +350,75 @@ describe('getInitialResults', () => {
     expect(getInitialResults(search.mainIndex, requestParams)).toEqual(
       expectedInitialResults
     );
+  });
+
+  test('returns correct requestParams with nested hierarchical facets', async () => {
+    const search = instantsearch({
+      indexName: 'indexName',
+      searchClient: createSearchClient(),
+      initialUiState: {
+        indexName: {
+          hierarchicalMenu: {
+            'hierarchicalCategories.lvl0': ['Appliances', 'Fans'],
+          },
+        },
+      },
+    });
+
+    search.addWidgets([
+      connectHierarchicalMenu(() => {})({
+        attributes: [
+          'hierarchicalCategories.lvl0',
+          'hierarchicalCategories.lvl1',
+        ],
+      }),
+    ]);
+
+    search.start();
+
+    const requestParams = await waitForResults(search);
+
+    expect(requestParams).toMatchInlineSnapshot(`
+      [
+        {
+          "facetFilters": [
+            [
+              "hierarchicalCategories.lvl1:Appliances > Fans",
+            ],
+          ],
+          "facets": [
+            "hierarchicalCategories.lvl0",
+            "hierarchicalCategories.lvl1",
+          ],
+          "maxValuesPerFacet": 10,
+        },
+        {
+          "analytics": false,
+          "clickAnalytics": false,
+          "facetFilters": [
+            [
+              "hierarchicalCategories.lvl0:Appliances",
+            ],
+          ],
+          "facets": [
+            "hierarchicalCategories.lvl0",
+            "hierarchicalCategories.lvl1",
+          ],
+          "hitsPerPage": 0,
+          "maxValuesPerFacet": 10,
+          "page": 0,
+        },
+        {
+          "analytics": false,
+          "clickAnalytics": false,
+          "facets": [
+            "hierarchicalCategories.lvl0",
+          ],
+          "hitsPerPage": 0,
+          "maxValuesPerFacet": 10,
+          "page": 0,
+        },
+      ]
+    `);
   });
 });
