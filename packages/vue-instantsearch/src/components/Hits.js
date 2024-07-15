@@ -82,9 +82,6 @@ export default {
       );
     };
 
-    const bannerComponent =
-      bannerSlot && (({ banner }) => bannerSlot({ banner }));
-
     // We only want to render the default slot
     // if no other slots are defined
     if (!itemSlot && !bannerSlot && defaultSlot) {
@@ -110,7 +107,7 @@ export default {
       hits: this.state.items,
       itemComponent,
       banner: this.showBanner ? this.state.banner : undefined,
-      bannerComponent: bannerSlot ? bannerComponent : undefined,
+      bannerComponent: bannerSlot,
       sendEvent: this.state.sendEvent,
       classNames: this.classNames && {
         root: this.classNames['ais-Hits'],
