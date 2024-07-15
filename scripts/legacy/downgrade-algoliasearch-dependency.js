@@ -36,14 +36,6 @@ shell.sed(
   packageJsonPaths
 );
 
-// remove v5 dependency
-shell.sed(
-  '-i',
-  /"algoliasearch-v5": "npm:algoliasearch@5.*"(,?)/,
-  '',
-  packageJsonPaths
-);
-
 // remove resolution
 shell.sed('-i', /"places.js\/algoliasearch": "5.*"(,?)/, '', packageJsonPaths);
 
