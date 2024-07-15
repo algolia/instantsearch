@@ -9,6 +9,7 @@ import {
   createUserAgent,
 } from '@algolia/transporter';
 import {
+  // @ts-ignore fails in v3, v4
   algoliasearch as namedConstructor,
   default as defaultConstructor,
 } from 'algoliasearch';

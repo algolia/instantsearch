@@ -1,5 +1,6 @@
 import { action } from '@storybook/addon-actions';
 import {
+  // @ts-ignore fails in v3, v4
   liteClient as namedConstructor,
   default as defaultConstructor,
 } from 'algoliasearch/lite';
