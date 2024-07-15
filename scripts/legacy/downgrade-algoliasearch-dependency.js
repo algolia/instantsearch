@@ -56,4 +56,4 @@ shell.sed(
   ...shell.ls('examples/*/*/package.json')
 );
 
-// shell.exec('yarn install');
+shell.exec('yarn install');
