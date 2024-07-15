@@ -169,7 +169,11 @@ const connectAnswers: AnswersConnector = function connectAnswers(
           answersIndex.findAnswers as unknown as SearchClient extends {
             initIndex: (...args: any[]) => any;
           }
-            ? ReturnType<SearchClient['initIndex']>['findAnswers']
+            ? ReturnType<SearchClient['initIndex']> extends {
+                findAnswers: unknown;
+              }
+              ? ReturnType<SearchClient['initIndex']>['findAnswers']
+              : any
             : any,
           searchDebounceTime
         );
