@@ -40,22 +40,28 @@ type ClientLiteV5 = IsUnknown<
   AnyToUnknown<typeof AlgoliaSearchLite>
 > extends true
   ? unknown
-  : AnyToUnknown<
+  : typeof AlgoliaSearchLite extends { liteClient: unknown }
+  ? AnyToUnknown<
       // @ts-ignore
       ReturnType<typeof AlgoliaSearchLite.liteClient>
-    >;
+    >
+  : unknown;
 type ClientFullV5 = IsUnknown<AnyToUnknown<typeof AlgoliaSearch>> extends true
   ? unknown
-  : AnyToUnknown<
+  : typeof AlgoliaSearch extends { algoliasearch: unknown }
+  ? AnyToUnknown<
       // @ts-ignore
       ReturnType<typeof AlgoliaSearch.algoliasearch>
-    >;
+    >
+  : unknown;
 type ClientSearchV5 = IsUnknown<AnyToUnknown<typeof ClientSearch>> extends true
   ? unknown
-  : AnyToUnknown<
+  : typeof ClientSearch extends { searchClient: unknown }
+  ? AnyToUnknown<
       // @ts-ignore
       ReturnType<typeof ClientSearch.searchClient>
-    >;
+    >
+  : unknown;
 type ClientV5 = ClientLiteV5 extends SearchClientShape
   ? ClientLiteV5
   : ClientSearchV5 extends SearchClientShape
@@ -186,7 +192,8 @@ export type FrequentlyBoughtTogetherQuery = PickForClient<{
   // @ts-ignore
   v4: Omit<RecommendClient.FrequentlyBoughtTogetherQuery, 'indexName'>;
   // @ts-ignore
-  v5: OptionalKeys<
+  v5: _OptionalKeys<
+    // @ts-ignore
     Omit<AlgoliaSearch.BoughtTogetherQuery, 'model' | 'indexName'>,
     'threshold'
   >;
@@ -195,8 +202,8 @@ export type LookingSimilarQuery = PickForClient<{
   v3: any;
   // @ts-ignore
   v4: Omit<RecommendClient.LookingSimilarQuery, 'indexName'>;
-  // @ts-ignore
-  v5: OptionalKeys<
+  v5: _OptionalKeys<
+    // @ts-ignore
     Omit<AlgoliaSearch.LookingSimilarQuery, 'model' | 'indexName'>,
     'threshold'
   >;
@@ -205,8 +212,8 @@ export type RelatedProductsQuery = PickForClient<{
   v3: any;
   // @ts-ignore
   v4: Omit<RecommendClient.RelatedProductsQuery, 'indexName'>;
-  // @ts-ignore
-  v5: OptionalKeys<
+  v5: _OptionalKeys<
+    // @ts-ignore
     Omit<AlgoliaSearch.LookingSimilarQuery, 'model' | 'indexName'>,
     'threshold'
   >;
@@ -215,8 +222,8 @@ export type TrendingFacetsQuery = PickForClient<{
   v3: any;
   // @ts-ignore
   v4: Omit<RecommendClient.TrendingFacetsQuery, 'indexName'>;
-  // @ts-ignore
-  v5: OptionalKeys<
+  v5: _OptionalKeys<
+    // @ts-ignore
     Omit<AlgoliaSearch.TrendingFacetsQuery, 'model' | 'indexName'>,
     'threshold'
   >;
@@ -225,8 +232,8 @@ export type TrendingItemsQuery = PickForClient<{
   v3: any;
   // @ts-ignore
   v4: Omit<RecommendClient.TrendingItemsQuery, 'indexName'>;
-  // @ts-ignore
   v5: _OptionalKeys<
+    // @ts-ignore
     Omit<AlgoliaSearch.TrendingItemsQuery, 'model' | 'indexName'>,
     'threshold'
   >;
