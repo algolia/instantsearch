@@ -39,4 +39,21 @@ shell.sed(
 // remove resolution
 shell.sed('-i', /"places.js\/algoliasearch": "5.*"(,?)/, '', packageJsonPaths);
 
-shell.exec('yarn install');
+// replace import in examples
+shell.sed(
+  '-i',
+  /import { liteClient as algoliasearch } from 'algoliasearch\/lite'/,
+  "import algoliasearch from 'algoliasearch/lite'",
+  ...shell.ls('examples/*/*/*.{js,ts,tsx,vue}'),
+  ...shell.ls('examples/*/*/{src,pages,app}/*.{js,ts,tsx,vue}')
+);
+
+// replace dependency in examples
+shell.sed(
+  '-i',
+  /"algoliasearch": ".*"(,)?/,
+  '"algoliasearch": "3.35.1","@types/algoliasearch": "3.34.10"$1',
+  ...shell.ls('examples/*/*/package.json')
+);
+
+// shell.exec('yarn install');
