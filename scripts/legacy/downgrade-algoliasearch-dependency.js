@@ -31,7 +31,7 @@ shell.sed(
 // remove other v4 dependencies
 shell.sed(
   '-i',
-  /"@algolia\/(cache-.*|client-.*|logger-.*|requester-.*|transporter)": "4.*",?/,
+  /"@algolia\/(cache-.*|client-.*|logger-.*|requester-.*|transporter|recommend)": "(4|5).*",?/,
   '',
   packageJsonPaths
 );
