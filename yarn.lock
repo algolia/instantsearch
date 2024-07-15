@@ -8105,7 +8105,7 @@ algoliasearch-helper@3.14.0:
     "@algolia/requester-node-http" "4.23.2"
     "@algolia/transporter" "4.23.2"
 
-"algoliasearch-v5@npm:algoliasearch@5.0.0-beta.9", algoliasearch@5.0.0-beta.9, algoliasearch@^3.35.1:
+"algoliasearch-v5@npm:algoliasearch@5.0.0-beta.9", algoliasearch@5.0.0-beta.9, algoliasearch@^3.35.1, "algoliasearch@npm:algoliasearch@5.0.0-beta.9":
   version "5.0.0-beta.9"
   resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-5.0.0-beta.9.tgz#4853eef95d13c857dd37baf0fb8593096018a7f4"
   integrity sha512-wJgeoNeq34OG9VjXGxQ0Q+DdjLBLUR8nkOHwQt/1+Stoy9PmXo357sINUx6N2e2upIsrFhkHjd0b2GYjUrhliA==
