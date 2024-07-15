@@ -4,9 +4,9 @@
 
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
-import { algoliasearch as algoliasearchV5 } from 'algoliasearch';
 import algoliasearchV3 from 'algoliasearch-v3';
 import algoliasearchV4 from 'algoliasearch-v4';
+import { algoliasearch as algoliasearchV5 } from 'algoliasearch-v5';
 
 import { createMetadataMiddleware } from '..';
 import instantsearch from '../..';
