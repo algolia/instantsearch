@@ -1,7 +1,7 @@
 import { createNullCache } from '@algolia/cache-common';
 import { createInMemoryCache } from '@algolia/cache-in-memory';
 import { createNullLogger } from '@algolia/logger-common';
-import { createNodeHttpRequester } from '@algolia/requester-node-http';
+import * as HTTPRequester from '@algolia/requester-node-http';
 import {
   serializeQueryParameters,
   createTransporter,
@@ -73,7 +73,10 @@ export function createAlgoliaSearchClient<
           write: 30,
         },
         userAgent: createUserAgent('test'),
-        requester: createNodeHttpRequester(),
+        requester: (
+          (HTTPRequester as any) /* v4*/.createNodeHttpRequester ||
+          (HTTPRequester as any) /* v5*/.createHttpRequester
+        )(),
         logger: createNullLogger(),
         responsesCache: createNullCache(),
         requestsCache: createNullCache(),
