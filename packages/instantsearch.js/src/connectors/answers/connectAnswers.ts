@@ -16,7 +16,7 @@ import type {
   FindAnswersOptions,
   FindAnswersResponse,
   WidgetRenderState,
-  SearchClient,
+  FindAnswers,
 } from '../../types';
 
 type IndexWithAnswers = {
@@ -140,16 +140,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
     let isLoading = false;
     const debouncedRender = debounce(renderFn, renderDebounceTime);
 
-    // this does not directly use DebouncedFunction<findAnswers>, since then the generic will disappear
-    let debouncedRefine: DebouncedFunction<
-      SearchClient['initIndex'] extends (...args: any[]) => any
-        ? ReturnType<NonNullable<SearchClient['initIndex']>> extends {
-            findAnswers: infer FindAnswers;
-          }
-          ? FindAnswers
-          : any
-        : any
-    >;
+    let debouncedRefine: DebouncedFunction<FindAnswers>;
 
     return {
       $$type: 'ais.answers',
@@ -166,15 +157,7 @@ const connectAnswers: AnswersConnector = function connectAnswers(
           throw new Error(withUsage('`algoliasearch` >= 4.8.0 required.'));
         }
         debouncedRefine = debounce(
-          answersIndex.findAnswers as unknown as SearchClient extends {
-            initIndex: (...args: any[]) => any;
-          }
-            ? ReturnType<SearchClient['initIndex']> extends {
-                findAnswers: unknown;
-              }
-              ? ReturnType<SearchClient['initIndex']>['findAnswers']
-              : any
-            : any,
+          answersIndex.findAnswers as unknown as FindAnswers,
           searchDebounceTime
         );
 

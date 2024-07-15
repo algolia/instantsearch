@@ -286,11 +286,16 @@ export type FindAnswersOptions = PickForClient<{
   v4: ClientSearch.FindAnswersOptions;
   v5: any; // answers only exists in v4
 }>;
-
 export type FindAnswersResponse<T> = PickForClient<{
   v3: any; // answers only exists in v4
   // @ts-ignore
   v4: ClientSearch.FindAnswersResponse<T>;
+  v5: any; // answers only exists in v4
+}>;
+export type FindAnswers = PickForClient<{
+  v3: any; // answers only exists in v4
+  // @ts-ignore
+  v4: ReturnType<DefaultSearchClient['initIndex']>['findAnswers'];
   v5: any; // answers only exists in v4
 }>;
 
