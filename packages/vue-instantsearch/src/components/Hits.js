@@ -1,6 +1,5 @@
 import { createHitsComponent } from 'instantsearch-ui-components';
 import { connectHitsWithInsights } from 'instantsearch.js/es/connectors';
-import { Fragment } from 'preact';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
@@ -83,14 +82,8 @@ export default {
       );
     };
 
-    const bannerComponent = ({ banner }) => {
-      return h(Fragment, {}, [
-        bannerSlot &&
-          bannerSlot({
-            banner,
-          }),
-      ]);
-    };
+    const bannerComponent =
+      bannerSlot && (({ banner }) => bannerSlot({ banner }));
 
     // We only want to render the default slot
     // if no other slots are defined
