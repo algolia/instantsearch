@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.12.2](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.12.1...react-instantsearch-core@7.12.2) (2024-07-16)
+
+
+### Bug Fixes
+
+* **cache:** support multi-index and multiple queries per index ([#6275](https://github.com/algolia/instantsearch/issues/6275)) ([60c3f20](https://github.com/algolia/instantsearch/commit/60c3f2066bc24d7af7884094b3f7293bf77d5d2a))
+
+
+
+
+
 ## [7.12.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.12.0...react-instantsearch-core@7.12.1) (2024-07-09)
 
 

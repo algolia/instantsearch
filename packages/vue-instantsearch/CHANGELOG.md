@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.19.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.18.1...vue-instantsearch@4.19.0) (2024-07-16)
+
+
+### Bug Fixes
+
+* **cache:** support multi-index and multiple queries per index ([#6275](https://github.com/algolia/instantsearch/issues/6275)) ([60c3f20](https://github.com/algolia/instantsearch/commit/60c3f2066bc24d7af7884094b3f7293bf77d5d2a))
+* **vue2:** `augmentedCreateElement` should pass HTML attributes ([#6282](https://github.com/algolia/instantsearch/issues/6282)) ([e0d4c68](https://github.com/algolia/instantsearch/commit/e0d4c682bdcc485973d20363db82db2cf587e8c2))
+
+
+### Features
+
+* **infinite-hits:** add banners to vue flavor ([#6281](https://github.com/algolia/instantsearch/issues/6281)) ([6022197](https://github.com/algolia/instantsearch/commit/602219719e06360625b1caa8d1f10f3ad0595cdd))
+
+
+
+
+
 ## [4.18.1](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.18.0...vue-instantsearch@4.18.1) (2024-07-09)
 
 
