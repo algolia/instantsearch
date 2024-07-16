@@ -1,17 +1,17 @@
 {
   "name": "example-vue-instantsearch-getting-started",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "private": true,
   "scripts": {
     "start": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve --port 3000",
     "build": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build"
   },
   "dependencies": {
-    "algoliasearch": "npm:algoliasearch@5.0.0-beta.9",
+    "algoliasearch": "5.0.0-beta.9",
     "core-js": "2",
-    "instantsearch.js": "4.73.0",
+    "instantsearch.js": "4.73.1",
     "vue": "2.7.14",
-    "vue-instantsearch": "4.18.0"
+    "vue-instantsearch": "4.18.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "3.12.1",

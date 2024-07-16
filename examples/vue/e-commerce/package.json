@@ -1,6 +1,6 @@
 {
   "name": "example-vue-instantsearch-e-commerce",
-  "version": "0.53.0",
+  "version": "0.54.0",
   "private": true,
   "scripts": {
     "serve": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve",
@@ -8,11 +8,11 @@
     "website:examples": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build --dest ../../../website/examples/vue/e-commerce"
   },
   "dependencies": {
-    "algoliasearch": "npm:algoliasearch@5.0.0-beta.9",
+    "algoliasearch": "5.0.0-beta.9",
     "core-js": "2",
-    "instantsearch.js": "4.73.0",
+    "instantsearch.js": "4.73.1",
     "vue": "2.7.14",
-    "vue-instantsearch": "4.18.0",
+    "vue-instantsearch": "4.18.1",
     "vue-slider-component": "3.0.32"
   },
   "devDependencies": {

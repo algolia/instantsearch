@@ -1,6 +1,6 @@
 {
   "name": "example-instantsearch-ecommerce-umd",
-  "version": "1.40.0",
+  "version": "1.41.0",
   "private": true,
   "scripts": {
     "start": "BABEL_ENV=parcel parcel index.html --port 3000",
@@ -9,8 +9,8 @@
   },
   "browserslist": "firefox 68, chrome 78, IE 11",
   "dependencies": {
-    "algoliasearch": "npm:algoliasearch@5.0.0-beta.9",
-    "instantsearch.js": "4.73.0"
+    "algoliasearch": "5.0.0-beta.9",
+    "instantsearch.js": "4.73.1"
   },
   "devDependencies": {
     "@babel/core": "7.15.5",

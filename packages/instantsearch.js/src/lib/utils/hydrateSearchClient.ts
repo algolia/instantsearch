@@ -34,25 +34,35 @@ export function hydrateSearchClient(
     return;
   }
 
-  const cachedRequest = Object.keys(results).map((key) => {
-    const { state, requestParams, results: serverResults } = results[key];
-    return serverResults && state
-      ? serverResults.map((result) => ({
-          indexName: state.index || result.index,
-          // We normalize the params received from the server as they can
-          // be serialized differently depending on the engine.
-          // We use search parameters from the server request to craft the cache
-          // if possible, and fallback to those from results if not.
-          ...(requestParams || result.params
-            ? {
-                params: serializeQueryParameters(
-                  requestParams || deserializeQueryParameters(result.params)
-                ),
-              }
-            : {}),
-        }))
-      : [];
-  });
+  const cachedRequest = [
+    Object.keys(results).reduce<
+      Array<{
+        params?: string;
+        indexName?: string;
+      }>
+    >((acc, key) => {
+      const { state, requestParams, results: serverResults } = results[key];
+      const mappedResults =
+        serverResults && state
+          ? serverResults.map((result, idx) => ({
+              indexName: state.index || result.index,
+              // We normalize the params received from the server as they can
+              // be serialized differently depending on the engine.
+              // We use search parameters from the server request to craft the cache
+              // if possible, and fallback to those from results if not.
+              ...(requestParams?.[idx] || result.params
+                ? {
+                    params: serializeQueryParameters(
+                      requestParams?.[idx] ||
+                        deserializeQueryParameters(result.params)
+                    ),
+                  }
+                : {}),
+            }))
+          : [];
+      return acc.concat(mappedResults);
+    }, []),
+  ];
 
   const cachedResults = Object.keys(results).reduce<Array<SearchResponse<any>>>(
     (acc, key) => {

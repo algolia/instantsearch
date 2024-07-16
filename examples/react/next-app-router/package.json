@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-next-app-dir-example",
-  "version": "8.28.0",
+  "version": "8.29.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,13 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "algoliasearch": "npm:algoliasearch@5.0.0-beta.9",
+    "algoliasearch": "5.0.0-beta.9",
     "instantsearch.css": "8.3.0",
     "next": "13.5.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-instantsearch": "7.12.0",
-    "react-instantsearch-nextjs": "0.3.5"
+    "react-instantsearch": "7.12.1",
+    "react-instantsearch-nextjs": "0.3.6"
   },
   "devDependencies": {
     "@types/node": "17.0.40",
