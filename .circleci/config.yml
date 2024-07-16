@@ -227,6 +227,7 @@ jobs:
 
   legacy algoliasearch v4:
     <<: *defaults
+    resource_class: large
     steps:
       - checkout
       - *attach_workspace
@@ -240,6 +241,8 @@ jobs:
       - run:
           name: Unit & Integration tests
           command: yarn run test:ci
+      - store_test_results:
+          path: junit/jest/
       - run:
           name: Type Checking
           command: yarn run type-check
