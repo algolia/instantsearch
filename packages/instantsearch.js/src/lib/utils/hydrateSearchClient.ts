@@ -83,7 +83,7 @@ export function hydrateSearchClient(
     client.search = (requests, ...methodArgs) => {
       const requestsWithSerializedParams = requests.map((request) => ({
         ...request,
-        params: serializeQueryParameters(request.params!),
+        params: serializeQueryParameters(request.params),
       }));
 
       return (client as ClientWithTransporter).transporter.responsesCache.get(

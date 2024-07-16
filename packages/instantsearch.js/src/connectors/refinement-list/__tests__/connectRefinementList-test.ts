@@ -1598,6 +1598,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
       const helper = jsHelper(
         createSearchClient({
+          // @ts-ignore v5 expects `search({ type: 'facet' })` only
           searchForFacetValues() {
             return Promise.resolve([
               {
@@ -1719,6 +1720,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
       const helper = jsHelper(
         createSearchClient({
+          // @ts-ignore v5 expects `search({ type: 'facet' })` only
           searchForFacetValues() {
             return Promise.resolve([
               {
@@ -1801,6 +1803,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
       const helper = jsHelper(
         createSearchClient({
+          // @ts-ignore v5 expects `search({ type: 'facet' })` only
           searchForFacetValues() {
             return Promise.resolve([
               {
@@ -1911,6 +1914,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
       const helper = jsHelper(
         createSearchClient({
+          // @ts-ignore v5 expects `search({ type: 'facet' })` only
           searchForFacetValues() {
             return Promise.resolve([
               {
@@ -2029,6 +2033,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
       const helper = jsHelper(
         createSearchClient({
+          // @ts-ignore v5 expects `search({ type: 'facet' })` only
           searchForFacetValues() {
             return Promise.resolve([
               {

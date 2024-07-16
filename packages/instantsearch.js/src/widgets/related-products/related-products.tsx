@@ -20,11 +20,11 @@ import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   Template,
   WidgetFactory,
-  Hit,
+  AlgoliaHit,
   Renderer,
   BaseHit,
+  RecommendResponse,
 } from '../../types';
-import type { RecommendResultItem } from 'algoliasearch-helper';
 import type {
   RecommendClassNames,
   RelatedProductsProps as RelatedProductsUiProps,
@@ -87,7 +87,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
             />
           )
         : undefined
-    ) as RelatedProductsUiProps<Hit>['headerComponent'];
+    ) as RelatedProductsUiProps<AlgoliaHit>['headerComponent'];
 
     const itemComponent = (
       templates.item
@@ -102,7 +102,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
             );
           }
         : undefined
-    ) as RelatedProductsUiProps<Hit>['itemComponent'];
+    ) as RelatedProductsUiProps<AlgoliaHit>['itemComponent'];
 
     const emptyComponent = (
       templates.empty
@@ -115,7 +115,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
             />
           )
         : undefined
-    ) as RelatedProductsUiProps<Hit>['emptyComponent'];
+    ) as RelatedProductsUiProps<AlgoliaHit>['emptyComponent'];
 
     render(
       <RelatedProducts
@@ -140,7 +140,7 @@ export type RelatedProductsTemplates<
   /**
    * Template to use when there are no results.
    */
-  empty: Template<RecommendResultItem<Hit<THit>>>;
+  empty: Template<RecommendResponse<AlgoliaHit<THit>>>;
 
   /**
    * Template to use for the header of the widget.
@@ -148,7 +148,7 @@ export type RelatedProductsTemplates<
   header: Template<
     Pick<
       Parameters<
-        NonNullable<RelatedProductsUiProps<Hit<THit>>['headerComponent']>
+        NonNullable<RelatedProductsUiProps<AlgoliaHit<THit>>['headerComponent']>
       >[0],
       'items'
     > & { cssClasses: RecommendClassNames }
@@ -157,7 +157,7 @@ export type RelatedProductsTemplates<
   /**
    * Template to use for each result. This template will receive an object containing a single record.
    */
-  item: Template<Hit<THit>>;
+  item: Template<AlgoliaHit<THit>>;
 }>;
 
 type RelatedProductsWidgetParams<THit extends NonNullable<object> = BaseHit> = {

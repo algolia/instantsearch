@@ -1,14 +1,18 @@
 import { createNullCache } from '@algolia/cache-common';
 import { createInMemoryCache } from '@algolia/cache-in-memory';
 import { createNullLogger } from '@algolia/logger-common';
-import { createNodeHttpRequester } from '@algolia/requester-node-http';
+import * as HTTPRequester from '@algolia/requester-node-http';
 import {
   serializeQueryParameters,
   createTransporter,
   CallEnum,
   createUserAgent,
 } from '@algolia/transporter';
-import algoliasearch from 'algoliasearch';
+import {
+  // @ts-ignore fails in v3, v4
+  algoliasearch as namedConstructor,
+  default as defaultConstructor,
+} from 'algoliasearch';
 
 import {
   createSingleSearchResponse,
@@ -17,19 +21,25 @@ import {
 } from './createAPIResponse';
 
 import type { HostOptions } from '@algolia/transporter';
+import type { SearchClient } from 'algoliasearch-helper/types/algoliasearch';
 
 type OverrideKeys<TTarget, TOptions> = TOptions extends Record<string, never>
   ? TTarget
   : Omit<TTarget, keyof TOptions> & TOptions;
 
-type SearchClient = ReturnType<typeof algoliasearch>;
+const algoliasearch = (namedConstructor || defaultConstructor) as unknown as (
+  appId: string,
+  apiKey: string
+) => SearchClient;
 
 export type MockSearchClient = OverrideKeys<
   SearchClient,
-  {
-    search: jest.Mock<any, any>;
-    searchForFacetValues: jest.Mock<any, any>;
-  }
+  SearchClient extends { searchForFacetValues: (...args: any[]) => any }
+    ? {
+        search: jest.Mock<any, any>;
+        searchForFacetValues: jest.Mock<any, any>;
+      }
+    : { search: jest.Mock<any, any> }
 >;
 
 export function createAlgoliaSearchClient<
@@ -47,7 +57,10 @@ export function createAlgoliaSearchClient<
           write: 30,
         },
         userAgent: createUserAgent('test'),
-        requester: createNodeHttpRequester(),
+        requester: (
+          (HTTPRequester as any) /* v4*/.createNodeHttpRequester ||
+          (HTTPRequester as any) /* v5*/.createHttpRequester
+        )(),
         logger: createNullLogger(),
         responsesCache: createNullCache(),
         requestsCache: createNullCache(),

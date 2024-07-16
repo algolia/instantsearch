@@ -2,6 +2,7 @@
 
 test('hierarchical facets: facet value called length', function (done) {
   var algoliasearch = require('algoliasearch');
+  algoliasearch = algoliasearch.algoliasearch || algoliasearch;
   var algoliasearchHelper = require('../../../');
 
   var appId = 'hierarchical-simple-appId';

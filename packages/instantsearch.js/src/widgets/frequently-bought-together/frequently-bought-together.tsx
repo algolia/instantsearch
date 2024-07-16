@@ -20,11 +20,11 @@ import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   Template,
   WidgetFactory,
-  Hit,
+  AlgoliaHit,
   Renderer,
   BaseHit,
+  RecommendResponse,
 } from '../../types';
-import type { RecommendResultItem } from 'algoliasearch-helper';
 import type {
   RecommendClassNames,
   FrequentlyBoughtTogetherProps as FrequentlyBoughtTogetherUiProps,
@@ -81,7 +81,7 @@ const renderer =
             />
           )
         : undefined
-    ) as FrequentlyBoughtTogetherUiProps<Hit>['headerComponent'];
+    ) as FrequentlyBoughtTogetherUiProps<AlgoliaHit>['headerComponent'];
 
     const itemComponent = (
       templates.item
@@ -96,7 +96,7 @@ const renderer =
             );
           }
         : undefined
-    ) as FrequentlyBoughtTogetherUiProps<Hit>['itemComponent'];
+    ) as FrequentlyBoughtTogetherUiProps<AlgoliaHit>['itemComponent'];
 
     const emptyComponent = (
       templates.empty
@@ -109,7 +109,7 @@ const renderer =
             />
           )
         : undefined
-    ) as FrequentlyBoughtTogetherUiProps<Hit>['emptyComponent'];
+    ) as FrequentlyBoughtTogetherUiProps<AlgoliaHit>['emptyComponent'];
 
     render(
       <FrequentlyBoughtTogether
@@ -133,7 +133,7 @@ export type FrequentlyBoughtTogetherTemplates<
   /**
    * Template to use when there are no results.
    */
-  empty: Template<RecommendResultItem<Hit<THit>>>;
+  empty: Template<RecommendResponse<AlgoliaHit<THit>>>;
 
   /**
    * Template to use for the header of the widget.
@@ -142,7 +142,7 @@ export type FrequentlyBoughtTogetherTemplates<
     Pick<
       Parameters<
         NonNullable<
-          FrequentlyBoughtTogetherUiProps<Hit<THit>>['headerComponent']
+          FrequentlyBoughtTogetherUiProps<AlgoliaHit<THit>>['headerComponent']
         >
       >[0],
       'items'
@@ -152,7 +152,7 @@ export type FrequentlyBoughtTogetherTemplates<
   /**
    * Template to use for each result. This template will receive an object containing a single record.
    */
-  item: Template<Hit<THit>>;
+  item: Template<AlgoliaHit<THit>>;
 }>;
 
 type FrequentlyBoughtTogetherWidgetParams<

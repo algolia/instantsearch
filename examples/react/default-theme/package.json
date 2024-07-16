@@ -7,7 +7,7 @@
     "start": "BABEL_ENV=parcel parcel index.html"
   },
   "dependencies": {
-    "algoliasearch-v5": "npm:algoliasearch@5.0.0-beta.8",
+    "algoliasearch": "npm:algoliasearch@5.0.0-beta.9",
     "instantsearch.js": "4.73.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",

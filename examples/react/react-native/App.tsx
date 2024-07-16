@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { liteClient as algoliasearch } from 'algoliasearch-v5/lite';
+import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import { InstantSearch } from 'react-instantsearch-core';
 
 import { InfiniteHits } from './src/InfiniteHits';

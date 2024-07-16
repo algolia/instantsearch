@@ -20,11 +20,11 @@ import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   Template,
   WidgetFactory,
-  Hit,
+  AlgoliaHit,
   Renderer,
   BaseHit,
+  RecommendResponse,
 } from '../../types';
-import type { RecommendResultItem } from 'algoliasearch-helper';
 import type {
   RecommendClassNames,
   LookingSimilarProps as LookingSimilarUiProps,
@@ -77,7 +77,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
             />
           )
         : undefined
-    ) as LookingSimilarUiProps<Hit>['headerComponent'];
+    ) as LookingSimilarUiProps<AlgoliaHit>['headerComponent'];
 
     const itemComponent = (
       templates.item
@@ -92,7 +92,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
             );
           }
         : undefined
-    ) as LookingSimilarUiProps<Hit>['itemComponent'];
+    ) as LookingSimilarUiProps<AlgoliaHit>['itemComponent'];
 
     const emptyComponent = (
       templates.empty
@@ -105,7 +105,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
             />
           )
         : undefined
-    ) as LookingSimilarUiProps<Hit>['emptyComponent'];
+    ) as LookingSimilarUiProps<AlgoliaHit>['emptyComponent'];
 
     render(
       <LookingSimilar
@@ -130,7 +130,7 @@ export type LookingSimilarTemplates<
   /**
    * Template to use when there are no results.
    */
-  empty: Template<RecommendResultItem<Hit<THit>>>;
+  empty: Template<RecommendResponse<AlgoliaHit<THit>>>;
 
   /**
    * Template to use for the header of the widget.
@@ -138,7 +138,7 @@ export type LookingSimilarTemplates<
   header: Template<
     Pick<
       Parameters<
-        NonNullable<LookingSimilarUiProps<Hit<THit>>['headerComponent']>
+        NonNullable<LookingSimilarUiProps<AlgoliaHit<THit>>['headerComponent']>
       >[0],
       'items'
     > & { cssClasses: RecommendClassNames }
@@ -147,7 +147,7 @@ export type LookingSimilarTemplates<
   /**
    * Template to use for each result. This template will receive an object containing a single record.
    */
-  item: Template<Hit<THit>>;
+  item: Template<AlgoliaHit<THit>>;
 }>;
 
 type LookingSimilarWidgetParams<THit extends NonNullable<object> = BaseHit> = {

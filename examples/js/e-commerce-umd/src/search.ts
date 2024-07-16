@@ -1,4 +1,4 @@
-import { liteClient as algoliasearch } from 'algoliasearch-v5/lite';
+import { liteClient as algoliasearch } from 'algoliasearch/lite';
 
 import getRouting from './routing';
 import {

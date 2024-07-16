@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import { liteClient as algoliasearch } from 'algoliasearch-v5/lite';
+import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import qs from 'qs';
 import Vue from 'vue';
 import { createServerRootMixin } from 'vue-instantsearch';
