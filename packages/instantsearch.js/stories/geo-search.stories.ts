@@ -1,6 +1,5 @@
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/html';
-import algoliaPlaces from 'places.js';
 import injectScript from 'scriptjs';
 
 import { withHits, withLifecycle } from '../.storybook/decorators';
@@ -95,40 +94,6 @@ stories
       })
     )
   );
-
-// With Places
-stories.add(
-  'with position from Places',
-  withHitsAndConfigure(({ search, container, instantsearch }) =>
-    injectGoogleMaps(() => {
-      const placesElement = document.createElement('input');
-      const mapElement = document.createElement('div');
-      mapElement.style.marginTop = '20px';
-
-      container.appendChild(placesElement);
-      container.appendChild(mapElement);
-
-      search.addWidgets([
-        instantsearch.widgets.configure({
-          aroundRadius: 20000,
-        }),
-
-        instantsearch.widgets.places({
-          placesReference: algoliaPlaces,
-          container: placesElement,
-          defaultPosition: ['37.7793', '-122.419'],
-        }),
-
-        instantsearch.widgets.geoSearch({
-          googleReference: window.google,
-          container: mapElement,
-          enableClearMapRefinement: false,
-          initialZoom,
-        }),
-      ]);
-    })
-  )
-);
 
 // Only UI
 stories

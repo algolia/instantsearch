@@ -38,7 +38,8 @@
   "devDependencies": {
     "@algolia/cache-common": "4.23.2",
     "@algolia/cache-in-memory": "4.23.2",
-    "@algolia/client-search": "4.23.2",
+    "@algolia/client-search": "5.0.0",
+    "@algolia/client-common": "5.0.0",
     "@algolia/logger-common": "4.23.2",
     "@algolia/requester-node-http": "4.23.2",
     "@algolia/transporter": "4.23.2",
@@ -87,9 +88,10 @@
     "@wdio/selenium-standalone-service": "5.16.5",
     "@wdio/spec-reporter": "5.16.5",
     "@wdio/static-server-service": "5.16.5",
-    "algoliasearch": "4.23.2",
     "algoliasearch-v3": "npm:algoliasearch@3.35.0",
+    "algoliasearch-v4": "npm:algoliasearch@4.23.2",
     "algoliasearch-v5": "npm:algoliasearch@5.0.0",
+    "algoliasearch": "5.0.0",
     "babel-eslint": "10.1.0",
     "babel-jest": "27.4.6",
     "babel-plugin-inline-replace-variables": "1.3.1",
@@ -145,6 +147,7 @@
     "typescript": "5.5.2"
   },
   "resolutions": {
+    "places.js/algoliasearch": "5.0.0",
     "brotli-size": "4.0.0",
     "webpack": "4.47.0",
     "babel-loader": "8.2.2"

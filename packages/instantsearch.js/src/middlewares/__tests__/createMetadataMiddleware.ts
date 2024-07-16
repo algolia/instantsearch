@@ -4,8 +4,9 @@
 
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
-import algoliasearch from 'algoliasearch';
 import algoliasearchV3 from 'algoliasearch-v3';
+import algoliasearchV4 from 'algoliasearch-v4';
+import { algoliasearch as algoliasearchV5 } from 'algoliasearch-v5';
 
 import { createMetadataMiddleware } from '..';
 import instantsearch from '../..';
@@ -236,10 +237,9 @@ describe('createMetadataMiddleware', () => {
     });
 
     describe('fills it with user agent after start', () => {
-      it('for the v4 client', async () => {
+      it('for the v5 client', async () => {
         const fakeSearchClient = createSearchClient();
-        const searchClient = algoliasearch('', '');
-        // @ts-expect-error overriding the search method for testing
+        const searchClient = algoliasearchV5('qsdf', 'qsdf') as any;
         searchClient.search = fakeSearchClient.search;
 
         // not using createMetadataMiddleware() here,
@@ -256,20 +256,29 @@ describe('createMetadataMiddleware', () => {
         expect(document.head.children).toHaveLength(1);
         expect(document.head.children[0]).toEqual(expect.any(HTMLMetaElement));
 
-        expect(
-          JSON.parse(document.head.querySelector('meta')!.content)
-        ).toEqual({
-          ua: expect.stringMatching(
-            /^Algolia for JavaScript \(4\.(\d+\.?)+\); Node\.js \((\d+\.?)+\); instantsearch\.js \((\d+\.?)+\); JS Helper \((\d+\.?)+\)$/
-          ),
+        const metadata = JSON.parse(
+          document.head.querySelector('meta')!.content
+        );
+
+        expect(metadata).toEqual({
+          ua: expect.any(String),
           widgets: expect.any(Array),
         });
+
+        expect(
+          metadata.ua.split(';').map((part: string) => part.trim())
+        ).toEqual([
+          expect.stringMatching(/Algolia for JavaScript \(5\..*\)/),
+          expect.stringMatching(/Search \(5\..*\)/),
+          expect.stringMatching(/Node.js \(.*\)/),
+          expect.stringMatching(/instantsearch.js \(4\..*\)/),
+          expect.stringMatching(/JS Helper \(3\..*\)/),
+        ]);
       });
 
-      it('for the v4 client with custom user agent', async () => {
+      it('for the v5 client with custom user agent', async () => {
         const fakeSearchClient = createSearchClient();
-        const searchClient = algoliasearch('', '');
-        // @ts-expect-error overriding the search method for testing
+        const searchClient = algoliasearchV5('qsdf', 'qsdf') as any;
         searchClient.search = fakeSearchClient.search;
 
         // not using createMetadataMiddleware() here,
@@ -288,14 +297,104 @@ describe('createMetadataMiddleware', () => {
         expect(document.head.children).toHaveLength(1);
         expect(document.head.children[0]).toEqual(expect.any(HTMLMetaElement));
 
-        expect(
-          JSON.parse(document.head.querySelector('meta')!.content)
-        ).toEqual({
-          ua: expect.stringMatching(
-            /^Algolia for JavaScript \(4\.(\d+\.?)+\); Node\.js \((\d+\.?)+\); instantsearch\.js \((\d+\.?)+\); JS Helper \((\d+\.?)+\); test \(cool\)$/
-          ),
+        const metadata = JSON.parse(
+          document.head.querySelector('meta')!.content
+        );
+
+        expect(metadata).toEqual({
+          ua: expect.any(String),
           widgets: expect.any(Array),
         });
+
+        expect(
+          metadata.ua.split(';').map((part: string) => part.trim())
+        ).toEqual([
+          expect.stringMatching(/Algolia for JavaScript \(5\..*\)/),
+          expect.stringMatching(/Search \(5\..*\)/),
+          expect.stringMatching(/Node.js \(.*\)/),
+          expect.stringMatching(/instantsearch.js \(4\..*\)/),
+          expect.stringMatching(/JS Helper \(3\..*\)/),
+          'test (cool)',
+        ]);
+      });
+
+      it('for the v4 client', async () => {
+        const fakeSearchClient = createSearchClient();
+        const searchClient = algoliasearchV4('', '') as any;
+        searchClient.search = fakeSearchClient.search;
+
+        // not using createMetadataMiddleware() here,
+        // since metadata is built into instantsearch
+        const search = instantsearch({
+          searchClient,
+          indexName: 'test',
+        });
+
+        search.start();
+
+        await wait(100);
+
+        expect(document.head.children).toHaveLength(1);
+        expect(document.head.children[0]).toEqual(expect.any(HTMLMetaElement));
+
+        const metadata = JSON.parse(
+          document.head.querySelector('meta')!.content
+        );
+
+        expect(metadata).toEqual({
+          ua: expect.any(String),
+          widgets: expect.any(Array),
+        });
+
+        expect(
+          metadata.ua.split(';').map((part: string) => part.trim())
+        ).toEqual([
+          expect.stringMatching(/Algolia for JavaScript \(4\..*\)/),
+          expect.stringMatching(/Node.js \(.*\)/),
+          expect.stringMatching(/instantsearch.js \(4\..*\)/),
+          expect.stringMatching(/JS Helper \(3\..*\)/),
+        ]);
+      });
+
+      it('for the v4 client with custom user agent', async () => {
+        const fakeSearchClient = createSearchClient();
+        const searchClient = algoliasearchV4('', '') as any;
+        searchClient.search = fakeSearchClient.search;
+
+        // not using createMetadataMiddleware() here,
+        // since metadata is built into instantsearch
+        const search = instantsearch({
+          searchClient,
+          indexName: 'test',
+        });
+
+        search.start();
+
+        searchClient.addAlgoliaAgent('test', 'cool');
+
+        await wait(100);
+
+        expect(document.head.children).toHaveLength(1);
+        expect(document.head.children[0]).toEqual(expect.any(HTMLMetaElement));
+
+        const metadata = JSON.parse(
+          document.head.querySelector('meta')!.content
+        );
+
+        expect(metadata).toEqual({
+          ua: expect.any(String),
+          widgets: expect.any(Array),
+        });
+
+        expect(
+          metadata.ua.split(';').map((part: string) => part.trim())
+        ).toEqual([
+          expect.stringMatching(/Algolia for JavaScript \(4\..*\)/),
+          expect.stringMatching(/Node.js \(.*\)/),
+          expect.stringMatching(/instantsearch.js \(4\..*\)/),
+          expect.stringMatching(/JS Helper \(3\..*\)/),
+          'test (cool)',
+        ]);
       });
 
       it('for the v3 client', async () => {
@@ -317,14 +416,23 @@ describe('createMetadataMiddleware', () => {
         expect(document.head.children).toHaveLength(1);
         expect(document.head.children[0]).toEqual(expect.any(HTMLMetaElement));
 
-        expect(
-          JSON.parse(document.head.querySelector('meta')!.content)
-        ).toEqual({
-          ua: expect.stringMatching(
-            /^Algolia for JavaScript \(3\.(\d+\.?)+\); Node\.js \((\d+\.?)+\); instantsearch\.js \((\d+\.?)+\); JS Helper \((\d+\.?)+\)$/
-          ),
+        const metadata = JSON.parse(
+          document.head.querySelector('meta')!.content
+        );
+
+        expect(metadata).toEqual({
+          ua: expect.any(String),
           widgets: expect.any(Array),
         });
+
+        expect(
+          metadata.ua.split(';').map((part: string) => part.trim())
+        ).toEqual([
+          expect.stringMatching(/Algolia for JavaScript \(3\..*\)/),
+          expect.stringMatching(/Node.js \(.*\)/),
+          expect.stringMatching(/instantsearch.js \(4\..*\)/),
+          expect.stringMatching(/JS Helper \(3\..*\)/),
+        ]);
       });
 
       it('for the v3 client with custom user agent', async () => {
@@ -348,14 +456,24 @@ describe('createMetadataMiddleware', () => {
         expect(document.head.children).toHaveLength(1);
         expect(document.head.children[0]).toEqual(expect.any(HTMLMetaElement));
 
-        expect(
-          JSON.parse(document.head.querySelector('meta')!.content)
-        ).toEqual({
-          ua: expect.stringMatching(
-            /^Algolia for JavaScript \(3\.(\d+\.?)+\); Node\.js \((\d+\.?)+\); instantsearch\.js \((\d+\.?)+\); JS Helper \((\d+\.?)+\); test \(cool\)$/
-          ),
+        const metadata = JSON.parse(
+          document.head.querySelector('meta')!.content
+        );
+
+        expect(metadata).toEqual({
+          ua: expect.any(String),
           widgets: expect.any(Array),
         });
+
+        expect(
+          metadata.ua.split(';').map((part: string) => part.trim())
+        ).toEqual([
+          expect.stringMatching(/Algolia for JavaScript \(3\..*\)/),
+          expect.stringMatching(/Node.js \(.*\)/),
+          expect.stringMatching(/instantsearch.js \(4\..*\)/),
+          expect.stringMatching(/JS Helper \(3\..*\)/),
+          'test (cool)',
+        ]);
       });
 
       it('for a custom client (does not error)', async () => {

@@ -24,7 +24,7 @@ export function waitForResults(
   helper.setClient({
     ...client,
     search(queries) {
-      requestParamsList = queries.map(({ params }) => params!);
+      requestParamsList = queries.map(({ params }) => params);
       return client.search(queries);
     },
   });

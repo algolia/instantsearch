@@ -9,6 +9,10 @@ const searchParams = new URLSearchParams(document.location.search);
 
 const pid = searchParams.get('pid');
 
+if (!pid) {
+  throw new Error('No product ID provided');
+}
+
 const searchClient = algoliasearch(
   'latency',
   '6be0576ff61c053d5f9a3225e2a90f76'

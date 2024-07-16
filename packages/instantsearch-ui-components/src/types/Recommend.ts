@@ -90,8 +90,7 @@ export type RecommendInnerComponentProps<TObject> = {
 
 export type RecordWithObjectID<TObject = Record<string, unknown>> = TObject & {
   objectID: string;
-  __position: number;
-  __queryID?: string;
+  // @TODO: once events are implemented, this type needs `__position` and `__queryID`
 };
 
 export type RecommendItemComponentProps<TObject> = {
