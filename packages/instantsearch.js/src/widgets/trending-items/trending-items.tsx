@@ -20,11 +20,11 @@ import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   Template,
   WidgetFactory,
-  Hit,
+  AlgoliaHit,
   Renderer,
   BaseHit,
+  RecommendResponse,
 } from '../../types';
-import type { RecommendResultItem } from 'algoliasearch-helper';
 import type {
   RecommendClassNames,
   TrendingItemsProps as TrendingItemsUiProps,
@@ -87,7 +87,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
             />
           )
         : undefined
-    ) as TrendingItemsUiProps<Hit>['headerComponent'];
+    ) as TrendingItemsUiProps<AlgoliaHit>['headerComponent'];
 
     const itemComponent = (
       templates.item
@@ -102,7 +102,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
             );
           }
         : undefined
-    ) as TrendingItemsUiProps<Hit>['itemComponent'];
+    ) as TrendingItemsUiProps<AlgoliaHit>['itemComponent'];
 
     const emptyComponent = (
       templates.empty
@@ -115,7 +115,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
             />
           )
         : undefined
-    ) as TrendingItemsUiProps<Hit>['emptyComponent'];
+    ) as TrendingItemsUiProps<AlgoliaHit>['emptyComponent'];
 
     render(
       <TrendingItems
@@ -139,7 +139,7 @@ export type TrendingItemsTemplates<THit extends NonNullable<object> = BaseHit> =
     /**
      * Template to use when there are no results.
      */
-    empty: Template<RecommendResultItem<Hit<THit>>>;
+    empty: Template<RecommendResponse<AlgoliaHit<THit>>>;
 
     /**
      * Template to use for the header of the widget.
@@ -147,7 +147,7 @@ export type TrendingItemsTemplates<THit extends NonNullable<object> = BaseHit> =
     header: Template<
       Pick<
         Parameters<
-          NonNullable<TrendingItemsUiProps<Hit<THit>>['headerComponent']>
+          NonNullable<TrendingItemsUiProps<AlgoliaHit<THit>>['headerComponent']>
         >[0],
         'items'
       > & { cssClasses: RecommendClassNames }
@@ -156,7 +156,7 @@ export type TrendingItemsTemplates<THit extends NonNullable<object> = BaseHit> =
     /**
      * Template to use for each result. This template will receive an object containing a single record.
      */
-    item: Template<Hit<THit>>;
+    item: Template<AlgoliaHit<THit>>;
   }>;
 
 type TrendingItemsWidgetParams<THit extends NonNullable<object> = BaseHit> = {

@@ -9,16 +9,14 @@ import {
 import type {
   Connector,
   TransformItems,
-  Hit,
   BaseHit,
   Renderer,
   Unmounter,
   UnknownWidgetParams,
+  RecommendResponse,
+  AlgoliaHit,
 } from '../../types';
-import type {
-  PlainSearchParameters,
-  RecommendResultItem,
-} from 'algoliasearch-helper';
+import type { PlainSearchParameters } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'frequently-bought-together',
@@ -31,7 +29,7 @@ export type FrequentlyBoughtTogetherRenderState<
   /**
    * The matched recommendations from Algolia API.
    */
-  items: Array<Hit<THit>>;
+  items: Array<AlgoliaHit<THit>>;
 };
 
 export type FrequentlyBoughtTogetherConnectorParams<
@@ -70,7 +68,10 @@ export type FrequentlyBoughtTogetherConnectorParams<
   /**
    * Function to transform the items passed to the templates.
    */
-  transformItems?: TransformItems<Hit<THit>, { results: RecommendResultItem }>;
+  transformItems?: TransformItems<
+    AlgoliaHit<THit>,
+    { results: RecommendResponse<AlgoliaHit<THit>> }
+  >;
 };
 
 export type FrequentlyBoughtTogetherWidgetDescription<
@@ -156,9 +157,12 @@ export default (function connectFrequentlyBoughtTogether<
           results.hits = escapeHits(results.hits);
         }
 
-        const transformedItems = transformItems(results.hits, {
-          results: results as RecommendResultItem,
-        });
+        const transformedItems = transformItems(
+          results.hits as Array<AlgoliaHit<THit>>,
+          {
+            results: results as RecommendResponse<AlgoliaHit<THit>>,
+          }
+        );
 
         return { items: transformedItems, widgetParams };
       },

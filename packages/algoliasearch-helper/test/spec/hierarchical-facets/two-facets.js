@@ -2,6 +2,7 @@
 
 test('hierarchical facets: two hierarchical facets', function (done) {
   var algoliasearch = require('algoliasearch');
+  algoliasearch = algoliasearch.algoliasearch || algoliasearch;
 
   var algoliasearchHelper = require('../../../');
 

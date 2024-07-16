@@ -1,12 +1,13 @@
 'use strict';
 
-var algoliaSearch = require('algoliasearch');
+var algoliasearch = require('algoliasearch');
+algoliasearch = algoliasearch.algoliasearch || algoliasearch;
 
 var algoliasearchHelper = require('../../../index');
 
 test('When searchOnce with callback, hasPendingRequests is true', function (done) {
   var testData = require('../../datasets/SearchParameters/search.dataset')();
-  var client = algoliaSearch('dsf', 'dsfdf');
+  var client = algoliasearch('dsf', 'dsfdf');
 
   var triggerCb;
   client.search = function () {
@@ -39,7 +40,7 @@ test('When searchOnce with callback, hasPendingRequests is true', function (done
 
 test('When searchOnce with promises, hasPendingRequests is true', function (done) {
   var testData = require('../../datasets/SearchParameters/search.dataset')();
-  var client = algoliaSearch('dsf', 'dsfdf');
+  var client = algoliasearch('dsf', 'dsfdf');
 
   var triggerCb;
   client.search = function () {
@@ -71,7 +72,7 @@ test('When searchOnce with promises, hasPendingRequests is true', function (done
 });
 
 test('When searchForFacetValues, hasPendingRequests is true', function (done) {
-  var client = algoliaSearch('dsf', 'dsfdf');
+  var client = algoliasearch('dsf', 'dsfdf');
 
   var triggerCb;
   client.searchForFacetValues = function () {
@@ -110,7 +111,7 @@ test('When searchForFacetValues, hasPendingRequests is true', function (done) {
 
 test('When helper.search(), hasPendingRequests is true', function (done) {
   var testData = require('../../datasets/SearchParameters/search.dataset')();
-  var client = algoliaSearch('dsf', 'dsfdf');
+  var client = algoliasearch('dsf', 'dsfdf');
 
   var triggerCb;
   client.search = function () {
@@ -145,7 +146,7 @@ test('When helper.search(), hasPendingRequests is true', function (done) {
 
 test('When helper.search() and one request is discarded, hasPendingRequests is true unless all come back', function (done) {
   var testData = require('../../datasets/SearchParameters/search.dataset')();
-  var client = algoliaSearch('dsf', 'dsfdf');
+  var client = algoliasearch('dsf', 'dsfdf');
 
   var triggerCbs = [];
   client.search = function () {

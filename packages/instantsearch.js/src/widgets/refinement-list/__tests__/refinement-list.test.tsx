@@ -1182,6 +1182,7 @@ function createMockedSearchClient() {
         )
       );
     }),
+    // @ts-ignore v5 only accepts `search({ type: 'facet' })`, but v4, v3 has an explicit method
     searchForFacetValues: jest.fn((requests) => {
       return Promise.resolve([
         createSFFVResponse({

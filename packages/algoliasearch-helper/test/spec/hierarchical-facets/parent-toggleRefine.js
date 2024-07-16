@@ -2,6 +2,7 @@
 
 test('hierarchical facets: toggleRefine behavior', function () {
   var algoliasearch = require('algoliasearch');
+  algoliasearch = algoliasearch.algoliasearch || algoliasearch;
 
   var algoliasearchHelper = require('../../../');
 
@@ -52,6 +53,7 @@ test('hierarchical facets: toggleRefine behavior', function () {
 
 test('hierarchical facets: toggleRefine behavior when root level', function () {
   var algoliasearch = require('algoliasearch');
+  algoliasearch = algoliasearch.algoliasearch || algoliasearch;
 
   var algoliasearchHelper = require('../../../');
 
@@ -93,6 +95,7 @@ test('hierarchical facets: toggleRefine behavior when root level', function () {
 
 test('hierarchical facets: toggleRefine behavior when different root level', function () {
   var algoliasearch = require('algoliasearch');
+  algoliasearch = algoliasearch.algoliasearch || algoliasearch;
 
   var algoliasearchHelper = require('../../../');
 

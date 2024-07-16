@@ -1,5 +1,6 @@
 'use strict';
 var algoliasearch = require('algoliasearch');
+algoliasearch = algoliasearch.algoliasearch || algoliasearch;
 
 var algoliasearchHelper = require('../../../');
 

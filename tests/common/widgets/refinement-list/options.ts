@@ -1,6 +1,6 @@
 import {
-  createAlgoliaSearchClient,
   createMultiSearchResponse,
+  createSearchClient,
   createSFFVResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
@@ -1491,7 +1491,7 @@ const FACET_HITS = [
 ];
 
 function createMockedSearchClient(parameters: Record<string, any> = {}) {
-  return createAlgoliaSearchClient({
+  return createSearchClient({
     search: jest.fn((requests) => {
       return Promise.resolve(
         createMultiSearchResponse(
@@ -1532,7 +1532,7 @@ function createMockedSearchClient(parameters: Record<string, any> = {}) {
           facetHits: FACET_HITS,
         }),
       ])
-    ),
+    ) as any, // @TODO: for now casted as any, because v5 only has `type: facet` in search
     ...parameters,
   });
 }

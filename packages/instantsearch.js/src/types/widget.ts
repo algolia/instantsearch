@@ -1,4 +1,5 @@
 import type { IndexWidget } from '../widgets';
+import type { RecommendResponse } from './algoliasearch';
 import type { InstantSearch } from './instantsearch';
 import type { IndexRenderState, WidgetRenderState } from './render-state';
 import type { IndexUiState, UiState } from './ui-state';
@@ -8,7 +9,6 @@ import type {
   SearchParameters,
   SearchResults,
   RecommendParameters,
-  RecommendResultItem,
 } from 'algoliasearch-helper';
 
 export type ScopedResult = {
@@ -161,7 +161,7 @@ type SearchWidget<TWidgetDescription extends WidgetDescription> = {
 };
 
 type RecommendRenderOptions = SharedRenderOptions & {
-  results: RecommendResultItem;
+  results: RecommendResponse<any>;
 };
 
 type RecommendWidget<

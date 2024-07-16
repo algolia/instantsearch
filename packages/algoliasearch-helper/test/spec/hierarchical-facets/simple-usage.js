@@ -2,6 +2,7 @@
 
 describe('hierarchical facets: simple usage', function () {
   var algoliasearch = require('algoliasearch');
+  algoliasearch = algoliasearch.algoliasearch || algoliasearch;
   var algoliasearchHelper = require('../../../');
   var appId = 'hierarchical-toggleRefine-appId';
   var apiKey = 'hierarchical-toggleRefine-apiKey';

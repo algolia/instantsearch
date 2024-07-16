@@ -15,6 +15,7 @@ if (require.main === module) {
     path.join(__dirname.replace('datasets', 'spec'), 'getFacetValues')
   );
   var algoliasearch = require('algoliasearch');
+  algoliasearch = algoliasearch.algoliasearch || algoliasearch;
 
   var client = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');
   var helper = new HelperSaver(client, 'instant_search', {

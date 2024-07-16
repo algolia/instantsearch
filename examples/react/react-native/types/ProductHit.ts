@@ -1,4 +1,4 @@
-import { Hit as AlgoliaHit } from '@algolia/client-search';
+import { Hit as AlgoliaHit } from 'instantsearch.js';
 
 export type ProductHit = AlgoliaHit<{
   brand: string;

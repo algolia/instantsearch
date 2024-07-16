@@ -2,6 +2,7 @@
 
 test('hierarchical facets: using getHierarchicalFacetBreadcrumb()', function () {
   var algoliasearch = require('algoliasearch');
+  algoliasearch = algoliasearch.algoliasearch || algoliasearch;
 
   var algoliasearchHelper = require('../../../');
 
@@ -35,6 +36,7 @@ test('hierarchical facets: using getHierarchicalFacetBreadcrumb()', function () 
 
 test('hierarchical facets: using getHierarchicalFacetBreadcrumb before the first refinement', function () {
   var algoliasearch = require('algoliasearch');
+  algoliasearch = algoliasearch.algoliasearch || algoliasearch;
 
   var algoliasearchHelper = require('../../../');
 
@@ -62,6 +64,7 @@ test('hierarchical facets: using getHierarchicalFacetBreadcrumb before the first
 
 test('hierarchical facets: using getHierarchicalFacetBreadcrumb on an undefined facet', function () {
   var algoliasearch = require('algoliasearch');
+  algoliasearch = algoliasearch.algoliasearch || algoliasearch;
 
   var algoliasearchHelper = require('../../../');
 

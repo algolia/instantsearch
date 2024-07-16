@@ -33,11 +33,11 @@ export function createOptimisticUiTests(
                     createSingleSearchResponse({
                       hits: Array.from({ length: hitsPerPage }).map(
                         (_, index) => ({
-                          objectID: `${params!.page! * hitsPerPage + index}`,
+                          objectID: `${params.page! * hitsPerPage + index}`,
                         })
                       ),
-                      query: params!.query,
-                      page: params!.page,
+                      query: params.query,
+                      page: params.page,
                       nbPages: 20,
                     })
                 )
@@ -108,11 +108,11 @@ export function createOptimisticUiTests(
                     createSingleSearchResponse({
                       hits: Array.from({ length: hitsPerPage }).map(
                         (_, index) => ({
-                          objectID: `${params!.page! * hitsPerPage + index}`,
+                          objectID: `${params.page! * hitsPerPage + index}`,
                         })
                       ),
-                      query: params!.query,
-                      page: params!.page,
+                      query: params.query,
+                      page: params.page,
                       nbPages: 20,
                     })
                 )
@@ -186,11 +186,11 @@ export function createOptimisticUiTests(
                     createSingleSearchResponse({
                       hits: Array.from({ length: hitsPerPage }).map(
                         (_, index) => ({
-                          objectID: `${params!.page! * hitsPerPage + index}`,
+                          objectID: `${params.page! * hitsPerPage + index}`,
                         })
                       ),
-                      query: params!.query,
-                      page: params!.page,
+                      query: params.query,
+                      page: params.page,
                       nbPages: 20,
                     })
                 )
