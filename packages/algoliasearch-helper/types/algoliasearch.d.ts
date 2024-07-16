@@ -177,7 +177,7 @@ export type RecommendResponse<T> = PickForClient<{
 export type RecommendResponses<T> = PickForClient<{
   v3: any;
   // @ts-ignore
-  v4: { results: Array<RecommendResponse<T>> };
+  v4: RecommendClient.RecommendQueriesResponse<T>;
   // @ts-ignore
   v5: AlgoliaSearch.GetRecommendationsResponse;
 }>;
