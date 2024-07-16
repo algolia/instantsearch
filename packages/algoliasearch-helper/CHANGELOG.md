@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.22.3](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.22.2...algoliasearch-helper@3.22.3) (2024-07-16)
+
+
+### Bug Fixes
+
+* **cache:** support nested hierarchical refinements ([#6283](https://github.com/algolia/instantsearch/issues/6283)) ([8a0ae01](https://github.com/algolia/instantsearch/commit/8a0ae01ddfceec129075256b19a0cc634ae5bb6e))
+
+
+
+
+
 ## [3.22.2](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.22.1...algoliasearch-helper@3.22.2) (2024-07-02)
 
 

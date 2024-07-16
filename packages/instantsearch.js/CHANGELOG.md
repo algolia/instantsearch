@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.73.2](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.73.1...instantsearch.js@4.73.2) (2024-07-16)
+
+
+### Bug Fixes
+
+* **cache:** support multi-index and multiple queries per index ([#6275](https://github.com/algolia/instantsearch/issues/6275)) ([60c3f20](https://github.com/algolia/instantsearch/commit/60c3f2066bc24d7af7884094b3f7293bf77d5d2a))
+* **cache:** support nested hierarchical refinements ([#6283](https://github.com/algolia/instantsearch/issues/6283)) ([8a0ae01](https://github.com/algolia/instantsearch/commit/8a0ae01ddfceec129075256b19a0cc634ae5bb6e))
+
+
+
+
+
 ## [4.73.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.73.0...instantsearch.js@4.73.1) (2024-07-09)
 
 
