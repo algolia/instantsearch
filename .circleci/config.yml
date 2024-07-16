@@ -239,7 +239,7 @@ jobs:
             ./scripts/legacy/downgrade-algoliasearch-v4.js
       - run:
           name: Unit & Integration tests
-          command: yarn run test
+          command: yarn run test:ci
       - run:
           name: Type Checking
           command: yarn run type-check
