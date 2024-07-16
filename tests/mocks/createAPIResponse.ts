@@ -3,6 +3,7 @@ import type {
   SearchResponses,
   SearchForFacetValuesResponse,
   RecommendResponse,
+  RecommendResponses,
 } from 'instantsearch.js';
 
 export const defaultRenderingContent: SearchResponse<any>['renderingContent'] =
@@ -88,14 +89,6 @@ export const createSFFVResponse = (
   ...args,
 });
 
-export const createRecommendResponse = (
-  requests: any[]
-): { results: Array<RecommendResponse<any>> } => {
-  return {
-    results: requests.map(createSingleSearchResponse),
-  } as unknown as { results: Array<RecommendResponse<any>> };
-};
-
 export const createSingleRecommendResponse = (
   subset: Partial<RecommendResponse<any>> = {}
 ): RecommendResponse<any> => {
@@ -125,5 +118,13 @@ export const createSingleRecommendResponse = (
     exhaustiveNbHits,
     exhaustiveFacetsCount,
     ...rest,
+  };
+};
+
+export const createRecommendResponse = (
+  requests: any[]
+): RecommendResponses<any> => {
+  return {
+    results: requests.map(createSingleRecommendResponse),
   };
 };

@@ -27,27 +27,10 @@ type OverrideKeys<TTarget, TOptions> = TOptions extends Record<string, never>
   ? TTarget
   : Omit<TTarget, keyof TOptions> & TOptions;
 
-type IfAny<TTest, TFallback> = (0 extends 1 & TTest ? true : false) extends true
-  ? IfAny<TFallback, never>
-  : TTest;
-
-function ifActualFunction<TTest, TFallback>(
-  test: TTest,
-  fallback: TFallback
-): IfAny<TTest, TFallback> {
-  if (typeof test === 'function') {
-    return test as IfAny<TTest, TFallback>;
-  }
-  if (typeof fallback === 'function') {
-    return fallback as IfAny<TTest, TFallback>;
-  }
-  throw new Error('Neither test nor fallback is a function');
-}
-
-const algoliasearch = ifActualFunction(
-  namedConstructor,
-  defaultConstructor
-) as unknown as (appId: string, apiKey: string) => SearchClient;
+const algoliasearch = (namedConstructor || defaultConstructor) as unknown as (
+  appId: string,
+  apiKey: string
+) => SearchClient;
 
 export type MockSearchClient = OverrideKeys<
   SearchClient,
