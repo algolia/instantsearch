@@ -19,6 +19,10 @@ export default {
     createSuitMixin({ name: 'Hits' }),
   ],
   props: {
+    showBanner: {
+      type: Boolean,
+      default: true,
+    },
     escapeHTML: {
       type: Boolean,
       default: true,
@@ -31,6 +35,7 @@ export default {
   computed: {
     widgetParams() {
       return {
+        showBanner: this.showBanner,
         escapeHTML: this.escapeHTML,
         transformItems: this.transformItems,
       };
@@ -43,6 +48,7 @@ export default {
 
     const defaultSlot = getScopedSlot(this, 'default');
     const itemSlot = getScopedSlot(this, 'item');
+    const bannerSlot = getScopedSlot(this, 'banner');
 
     const itemComponent = ({
       hit,
@@ -78,7 +84,7 @@ export default {
 
     // We only want to render the default slot
     // if no other slots are defined
-    if (!itemSlot && defaultSlot) {
+    if (!itemSlot && !bannerSlot && defaultSlot) {
       return h(
         'div',
         {
@@ -88,6 +94,7 @@ export default {
         },
         [
           defaultSlot({
+            banner: this.state.banner,
             items: this.state.items,
             insights: this.state.insights,
             sendEvent: this.state.sendEvent,
@@ -99,11 +106,16 @@ export default {
     return h(createHitsComponent({ createElement: h }), {
       hits: this.state.items,
       itemComponent,
+      banner: this.showBanner ? this.state.banner : undefined,
+      bannerComponent: bannerSlot,
       sendEvent: this.state.sendEvent,
       classNames: this.classNames && {
         root: this.classNames['ais-Hits'],
         list: this.classNames['ais-Hits-list'],
         item: this.classNames['ais-Hits-item'],
+        bannerRoot: this.classNames['ais-Hits-banner'],
+        bannerImage: this.classNames['ais-Hits-banner-image'],
+        bannerLink: this.classNames['ais-Hits-banner-link'],
       },
     });
   }),
