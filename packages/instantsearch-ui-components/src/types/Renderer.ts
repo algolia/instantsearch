@@ -52,6 +52,10 @@ export type ElementType<TProps = any> =
 export type ComponentProps<TComponent extends keyof IntrinsicElements> =
   IntrinsicElements[TComponent];
 
+export type MutableRef<T> = {
+  current: T;
+};
+
 export type VNode<TProps = any> = {
   type: any;
   props: TProps & {
@@ -73,4 +77,5 @@ export type Renderer = {
    * @default preact.Fragment
    */
   Fragment: PragmaFrag;
+  useRef?: <T = undefined>(initialValue?: T | null) => MutableRef<T>;
 };
