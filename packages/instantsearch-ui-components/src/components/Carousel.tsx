@@ -89,6 +89,14 @@ export function createCarouselComponent({ createElement, useRef }: Renderer) {
   return function Carousel<TObject extends RecordWithObjectID>(
     userProps: CarouselProps<TObject>
   ) {
+    const {
+      classNames = {},
+      itemComponent: ItemComponent,
+      items,
+      translations: userTranslations,
+      ...props
+    } = userProps;
+
     const listRef = useRef?.<HTMLOListElement>(null);
     const nextButtonRef = useRef?.<HTMLButtonElement>(null);
     const previousButtonRef = useRef?.<HTMLButtonElement>(null);
@@ -100,9 +108,23 @@ export function createCarouselComponent({ createElement, useRef }: Renderer) {
       nextButtonTitle: 'Next',
       previousButtonLabel: 'Previous',
       previousButtonTitle: 'Previous',
-      ...userProps.translations,
+      ...userTranslations,
     };
-    const classNames = userProps.classNames ?? {};
+
+    const cssClasses: CarouselClassNames = {
+      root: cx('ais-Carousel', classNames.root),
+      list: cx('ais-Carousel-list', classNames.list),
+      item: cx('ais-Carousel-item', classNames.item),
+      navigation: cx('ais-Carousel-navigation', classNames.navigation),
+      navigationNext: cx(
+        'ais-Carousel-navigation--next',
+        classNames.navigationNext
+      ),
+      navigationPrevious: cx(
+        'ais-Carousel-navigation--previous',
+        classNames.navigationPrevious
+      ),
+    };
 
     function scrollLeft() {
       if (listRef?.current) {
@@ -131,24 +153,19 @@ export function createCarouselComponent({ createElement, useRef }: Renderer) {
         listRef.current.scrollWidth;
     }
 
-    if (userProps.items.length === 0) {
+    if (items.length === 0) {
       return null;
     }
 
     return (
-      <div className={cx('ais-Carousel', classNames.root)}>
+      <div {...props} className={cx(cssClasses.root)}>
         <button
           ref={previousButtonRef}
           title={translations.previousButtonTitle}
           aria-label={translations.previousButtonLabel}
           hidden
           aria-controls={carouselIdRef?.current}
-          className={cx(
-            'ais-Carousel-navigation',
-            'ais-Carousel-navigation--previous',
-            classNames.navigation,
-            classNames.navigationPrevious
-          )}
+          className={cx(cssClasses.navigation, cssClasses.navigationPrevious)}
           onClick={(event) => {
             event.preventDefault();
             scrollLeft();
@@ -163,7 +180,7 @@ export function createCarouselComponent({ createElement, useRef }: Renderer) {
         </button>
 
         <ol
-          className={cx('ais-Carousel-list', classNames.list)}
+          className={cx(cssClasses.list)}
           ref={listRef}
           tabIndex={0}
           id={carouselIdRef?.current}
@@ -181,14 +198,14 @@ export function createCarouselComponent({ createElement, useRef }: Renderer) {
             }
           }}
         >
-          {userProps.items.map((item, index) => (
+          {items.map((item, index) => (
             <li
               key={item.objectID}
-              className={cx('ais-Carousel-item', classNames.item)}
+              className={cx(cssClasses.item)}
               aria-roledescription="slide"
-              aria-label={`${index + 1} of ${userProps.items.length}`}
+              aria-label={`${index + 1} of ${items.length}`}
             >
-              <userProps.itemComponent item={item} />
+              <ItemComponent item={item} />
             </li>
           ))}
         </ol>
@@ -198,12 +215,7 @@ export function createCarouselComponent({ createElement, useRef }: Renderer) {
           title={translations.nextButtonTitle}
           aria-label={translations.nextButtonLabel}
           aria-controls={carouselIdRef?.current}
-          className={cx(
-            'ais-Carousel-navigation',
-            'ais-Carousel-navigation--next',
-            classNames.navigation,
-            classNames.navigationNext
-          )}
+          className={cx(cssClasses.navigation, cssClasses.navigationNext)}
           onClick={(event) => {
             event.preventDefault();
             scrollRight();
