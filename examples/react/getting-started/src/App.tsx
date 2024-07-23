@@ -1,7 +1,11 @@
 // @ts-nocheck
 import { HorizontalSlider } from '@algolia/ui-components-horizontal-slider-react';
 import algoliasearch from 'algoliasearch/lite';
-import { createCarouselComponent } from 'instantsearch-ui-components';
+import {
+  CarouselProps,
+  createCarouselComponent,
+  generateCarouselId,
+} from 'instantsearch-ui-components';
 import { Hit } from 'instantsearch.js';
 import React, { createElement, Fragment, useRef } from 'react';
 import {
@@ -85,11 +89,7 @@ function CustomTrendingItems({
   itemComponent,
   ...props
 }: TrendingItemsProps<HitType>) {
-  const Carousel = createCarouselComponent({
-    createElement,
-    Fragment,
-    useRef,
-  });
+  const Carousel = createCarouselComponent({ createElement, Fragment });
 
   const { items } = useTrendingItems({
     facetName,
@@ -102,12 +102,24 @@ function CustomTrendingItems({
     transformItems,
   });
 
+  const carouselRefs: Partial<CarouselProps<HitType>> = {
+    listRef: useRef(null),
+    nextButtonRef: useRef(null),
+    previousButtonRef: useRef(null),
+    carouselIdRef: useRef(generateCarouselId()),
+  };
+
   return (
     <div>
       <h2>HorizontalSlider</h2>
       <HorizontalSlider items={items} itemComponent={itemComponent} />
       <h2>Carousel</h2>
-      <Carousel items={items} itemComponent={itemComponent} {...props} />
+      <Carousel
+        items={items}
+        itemComponent={itemComponent}
+        {...carouselRefs}
+        {...props}
+      />
     </div>
   );
 }

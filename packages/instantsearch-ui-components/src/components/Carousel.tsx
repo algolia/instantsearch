@@ -3,6 +3,7 @@ import { cx } from '../lib';
 
 import type {
   ComponentProps,
+  MutableRef,
   RecommendItemComponentProps,
   RecordWithObjectID,
   Renderer,
@@ -12,6 +13,10 @@ export type CarouselProps<
   TObject,
   TComponentProps extends Record<string, unknown> = Record<string, unknown>
 > = ComponentProps<'div'> & {
+  listRef: MutableRef<HTMLOListElement | null>;
+  nextButtonRef: MutableRef<HTMLButtonElement | null>;
+  previousButtonRef: MutableRef<HTMLButtonElement | null>;
+  carouselIdRef: MutableRef<string>;
   items: Array<RecordWithObjectID<TObject>>;
   itemComponent: (
     props: RecommendItemComponentProps<RecordWithObjectID<TObject>> &
@@ -73,26 +78,25 @@ export type CarouselTranslations = {
 
 let lastCarouselId = 0;
 
-function generateCarouselId() {
+export function generateCarouselId() {
   return `ais-Carousel-${lastCarouselId++}`;
 }
 
-export function createCarouselComponent({ createElement, useRef }: Renderer) {
+export function createCarouselComponent({ createElement }: Renderer) {
   return function Carousel<TObject extends RecordWithObjectID>(
     userProps: CarouselProps<TObject>
   ) {
     const {
+      listRef,
+      nextButtonRef,
+      previousButtonRef,
+      carouselIdRef,
       classNames = {},
       itemComponent: ItemComponent,
       items,
       translations: userTranslations,
       ...props
     } = userProps;
-
-    const listRef = useRef?.<HTMLOListElement>(null);
-    const nextButtonRef = useRef?.<HTMLButtonElement>(null);
-    const previousButtonRef = useRef?.<HTMLButtonElement>(null);
-    const carouselIdRef = useRef?.(generateCarouselId());
 
     const translations: Required<CarouselTranslations> = {
       listLabel: 'Items',
@@ -119,22 +123,22 @@ export function createCarouselComponent({ createElement, useRef }: Renderer) {
     };
 
     function scrollLeft() {
-      if (listRef?.current) {
+      if (listRef.current) {
         listRef.current.scrollLeft -= listRef.current.offsetWidth * 0.75;
       }
     }
 
     function scrollRight() {
-      if (listRef?.current) {
+      if (listRef.current) {
         listRef.current.scrollLeft += listRef.current.offsetWidth * 0.75;
       }
     }
 
     function updateNavigationButtonsProps() {
       if (
-        !listRef?.current ||
-        !previousButtonRef?.current ||
-        !nextButtonRef?.current
+        !listRef.current ||
+        !previousButtonRef.current ||
+        !nextButtonRef.current
       ) {
         return;
       }
@@ -156,7 +160,7 @@ export function createCarouselComponent({ createElement, useRef }: Renderer) {
           title={translations.previousButtonTitle}
           aria-label={translations.previousButtonLabel}
           hidden
-          aria-controls={carouselIdRef?.current}
+          aria-controls={carouselIdRef.current}
           className={cx(cssClasses.navigation, cssClasses.navigationPrevious)}
           onClick={(event) => {
             event.preventDefault();
@@ -177,7 +181,7 @@ export function createCarouselComponent({ createElement, useRef }: Renderer) {
           className={cx(cssClasses.list)}
           ref={listRef}
           tabIndex={0}
-          id={carouselIdRef?.current}
+          id={carouselIdRef.current}
           aria-roledescription="carousel"
           aria-label={translations.listLabel}
           aria-live="polite"
@@ -208,7 +212,7 @@ export function createCarouselComponent({ createElement, useRef }: Renderer) {
           ref={nextButtonRef}
           title={translations.nextButtonTitle}
           aria-label={translations.nextButtonLabel}
-          aria-controls={carouselIdRef?.current}
+          aria-controls={carouselIdRef.current}
           className={cx(cssClasses.navigation, cssClasses.navigationNext)}
           onClick={(event) => {
             event.preventDefault();

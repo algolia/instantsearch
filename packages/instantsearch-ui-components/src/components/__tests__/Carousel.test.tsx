@@ -6,7 +6,7 @@ import { render } from '@testing-library/preact';
 import { createElement, Fragment } from 'preact';
 import { useRef } from 'preact/hooks';
 
-import { createCarouselComponent } from '../Carousel';
+import { createCarouselComponent, generateCarouselId } from '../Carousel';
 
 import type { Pragma, RecordWithObjectID } from '../../types';
 import type { CarouselProps } from '../Carousel';
@@ -14,17 +14,35 @@ import type { CarouselProps } from '../Carousel';
 const Carousel = createCarouselComponent({
   createElement: createElement as Pragma,
   Fragment,
-  useRef,
 });
+
+function CarouselWithRefs(
+  props: Omit<
+    CarouselProps<RecordWithObjectID>,
+    'listRef' | 'nextButtonRef' | 'previousButtonRef' | 'carouselIdRef'
+  >
+) {
+  const carouselRefs: Pick<
+    CarouselProps<RecordWithObjectID>,
+    'listRef' | 'nextButtonRef' | 'previousButtonRef' | 'carouselIdRef'
+  > = {
+    listRef: useRef(null),
+    nextButtonRef: useRef(null),
+    previousButtonRef: useRef(null),
+    carouselIdRef: useRef(generateCarouselId()),
+  };
+
+  return <Carousel {...carouselRefs} {...props} />;
+}
 
 const ItemComponent: CarouselProps<RecordWithObjectID>['itemComponent'] = ({
   item,
-}) => <div>{item.objectID}</div>;
+}) => (<div>{item.objectID}</div>) as JSX.Element;
 
 describe('Carousel', () => {
   test('renders items', () => {
     const { container } = render(
-      <Carousel
+      <CarouselWithRefs
         items={[
           {
             objectID: '1',
@@ -119,7 +137,7 @@ describe('Carousel', () => {
 
   test('accepts custom translations', () => {
     const { container } = render(
-      <Carousel
+      <CarouselWithRefs
         items={[{ objectID: '1', __position: 1 }]}
         itemComponent={ItemComponent}
         translations={{
@@ -152,7 +170,7 @@ describe('Carousel', () => {
 
   test('forwards `div` props to the root element', () => {
     const { container } = render(
-      <Carousel
+      <CarouselWithRefs
         items={[{ objectID: '1', __position: 1 }]}
         itemComponent={ItemComponent}
         hidden={true}
@@ -166,7 +184,7 @@ describe('Carousel', () => {
 
   test('accepts custom class names', () => {
     const { container } = render(
-      <Carousel
+      <CarouselWithRefs
         items={[{ objectID: '1', __position: 1 }]}
         itemComponent={ItemComponent}
         classNames={{

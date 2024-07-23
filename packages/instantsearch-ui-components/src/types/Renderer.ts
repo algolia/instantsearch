@@ -77,5 +77,4 @@ export type Renderer = {
    * @default preact.Fragment
    */
   Fragment: PragmaFrag;
-  useRef?: <T = undefined>(initialValue?: T | null) => MutableRef<T>;
 };
