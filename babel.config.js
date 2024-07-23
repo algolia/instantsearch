@@ -1,12 +1,16 @@
 module.exports = (api) => {
   const clean = (x) => x.filter(Boolean);
 
-  const isTest = api.env('test');
-  const isCJS = api.env('cjs');
-  const isES = api.env('es');
-  const isUMD = api.env('umd');
-  const isRollup = api.env('rollup');
-  const isParcel = api.env('parcel');
+  const env = api.env().split(',');
+
+  const isTest = env.includes('test');
+  const isCJS = env.includes('cjs');
+  const isES = env.includes('es');
+  const isUMD = env.includes('umd');
+  const isRollup = env.includes('rollup');
+  const isParcel = env.includes('parcel');
+
+  const disableHoisting = env.includes('disableHoisting');
 
   const modules = isTest || isCJS ? 'commonjs' : false;
   const targets = {};
@@ -27,6 +31,7 @@ module.exports = (api) => {
     '@babel/plugin-proposal-private-methods',
     '@babel/plugin-proposal-private-property-in-object',
     (isCJS || isES || isUMD || isRollup) &&
+      !disableHoisting &&
       '@babel/plugin-transform-react-constant-elements',
     'babel-plugin-transform-react-pure-class-to-function',
     './scripts/babel/wrap-warning-with-dev-check',
