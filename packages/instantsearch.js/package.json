@@ -30,13 +30,12 @@
     "@types/dom-speech-recognition": "^0.0.1",
     "@types/google.maps": "^3.45.3",
     "@types/hogan.js": "^3.0.0",
-    "@types/qs": "^6.5.3",
     "algoliasearch-helper": "3.22.3",
     "hogan.js": "^3.0.2",
     "htm": "^3.0.0",
     "instantsearch-ui-components": "0.7.0",
     "preact": "^10.10.0",
-    "qs": "^6.5.1 < 6.10",
+    "neoqs": "^6.2.12",
     "search-insights": "^2.15.0"
   },
   "peerDependencies": {

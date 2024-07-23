@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import algoliasearch from 'algoliasearch/lite';
-import qs from 'qs';
+import * as qs from 'neoqs/legacy';
 import Vue from 'vue';
 import { createServerRootMixin } from 'vue-instantsearch';
 import _renderToString from 'vue-server-renderer/basic';

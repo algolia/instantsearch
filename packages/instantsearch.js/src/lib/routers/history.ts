@@ -1,4 +1,4 @@
-import qs from 'qs';
+import * as qs from 'neoqs/legacy';
 
 import { createDocumentationLink, safelyRunOnBrowser, warning } from '../utils';
 

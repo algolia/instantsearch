@@ -4,7 +4,7 @@
 
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
-import qs from 'qs';
+import * as qs from 'neoqs/legacy';
 
 import instantsearch from '../..';
 import { createWidget } from '../../../test/createWidget';
