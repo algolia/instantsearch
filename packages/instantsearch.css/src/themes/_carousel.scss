@@ -1,0 +1,98 @@
+// Colors
+$primary-color: #9698c3;
+$muted-color: #c4c4c4;
+$dark-color: #0f0f0f;
+
+.ais-Carousel {
+  position: relative;
+}
+
+.ais-Carousel-navigation {
+  align-items: center;
+  background: #f1f1f1;
+  border: 1px solid #fff;
+  border-radius: 2px;
+  box-shadow: 0px 2px 6px rgba(90, 94, 154, 0.44);
+  color: $primary-color;
+  cursor: pointer;
+  display: flex;
+  height: 40px;
+  justify-content: center;
+  outline-color: $primary-color;
+  padding: 0;
+  position: absolute;
+  top: 35%;
+  transition: opacity 150ms;
+  width: 32px;
+  z-index: 1;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .ais-Carousel-navigation {
+    display: none;
+  }
+}
+
+.ais-Carousel:hover
+  .ais-Carousel-navigation:not([hidden]) {
+  opacity: 1;
+  visibility: visible;
+}
+
+.ais-Carousel-navigation,
+.ais-Carousel-navigation[hidden] {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.ais-Carousel-navigation--previous {
+  left: 0;
+  transform: translateX(-25%);
+}
+
+.ais-Carousel-navigation--next {
+  right: 0;
+  transform: translateX(25%);
+}
+
+.ais-Carousel-list {
+  display: grid;
+  grid-auto-columns: 42%;
+  grid-auto-flow: column;
+  padding-bottom: 0.5rem;
+  gap: 0.5rem;
+  overflow-x: auto;
+  outline-color: $primary-color;
+  outline-offset: 0.5rem;
+  scroll-behavior: smooth;
+  scroll-snap-type: x proximity;
+  scrollbar-color: $dark-color $muted-color;
+  scrollbar-width: thin;
+}
+
+.ais-Carousel-list::-webkit-scrollbar {
+  height: 2px;
+}
+
+.ais-Carousel-list::-webkit-scrollbar-track {
+  background-color: $muted-color;
+}
+
+.ais-Carousel-list::-webkit-scrollbar-thumb {
+  background-color: $dark-color;
+}
+
+@media (min-width: 999px) {
+  .ais-Carousel-list {
+    grid-auto-columns: 20%;
+  }
+}
+
+.ais-Carousel-item {
+  scroll-snap-align: start;
+}
+
+.ais-Carousel-item * {
+  outline-color: $primary-color;
+  outline-offset: 3px;
+}

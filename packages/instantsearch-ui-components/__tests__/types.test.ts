@@ -14,6 +14,7 @@ function delint(sourceFile: ts.SourceFile) {
     message: string;
   }> = [];
 
+  let exportsValidFunctionName = false;
   delintNode(sourceFile);
 
   function delintNode(node: ts.Node) {
@@ -22,6 +23,7 @@ function delint(sourceFile: ts.SourceFile) {
         const functionDeclaration = node as ts.FunctionDeclaration;
         const fileNameSegment = sourceFile.fileName.replace('.d.ts', '');
         const componentName = `create${fileNameSegment}Component`;
+        let hasError = false;
         if (
           functionDeclaration.modifiers?.some(
             (modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword
@@ -32,6 +34,7 @@ function delint(sourceFile: ts.SourceFile) {
         ) {
           const actualName = functionDeclaration.name?.getText();
           if (actualName !== componentName) {
+            hasError = true;
             report(
               node,
               `Exported component should be named '${componentName}', but was '${actualName}' instead.`
@@ -41,6 +44,7 @@ function delint(sourceFile: ts.SourceFile) {
           const returnType = functionDeclaration.type as ts.FunctionTypeNode;
 
           if (returnType.kind !== ts.SyntaxKind.FunctionType) {
+            hasError = true;
             report(
               node,
               `Exported component's return type should be a function.`
@@ -51,6 +55,7 @@ function delint(sourceFile: ts.SourceFile) {
             returnType.kind === ts.SyntaxKind.FunctionType &&
             returnType.parameters.length !== 1
           ) {
+            hasError = true;
             report(
               node,
               `Exported component's return type should have exactly one parameter`
@@ -63,10 +68,15 @@ function delint(sourceFile: ts.SourceFile) {
               functionDeclaration.type as ts.FunctionTypeNode
             ).parameters[0].name.getText() !== 'userProps'
           ) {
+            hasError = true;
             report(
               node,
               `Exported component's return type should be called 'userProps'.`
             );
+          }
+
+          if (!hasError) {
+            exportsValidFunctionName = true;
           }
         }
 
@@ -92,7 +102,7 @@ function delint(sourceFile: ts.SourceFile) {
     });
   }
 
-  return errors;
+  return !exportsValidFunctionName ? errors : [];
 }
 
 const files = fs
