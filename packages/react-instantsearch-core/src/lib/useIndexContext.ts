@@ -1,8 +1,7 @@
 import { useContext } from 'react';
 
-import { invariant } from '../lib/invariant';
-
 import { IndexContext } from './IndexContext';
+import { invariant } from './invariant';
 
 import type { IndexWidget, UiState } from 'instantsearch.js';
 import type { Context } from 'react';
