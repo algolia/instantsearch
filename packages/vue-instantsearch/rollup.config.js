@@ -156,6 +156,12 @@ export * from './src/instantsearch.js';`
         },
       },
     ],
+    onwarn(warning, warn) {
+      if (warning.code === 'CIRCULAR_DEPENDENCY')
+        throw new Error(warning.message);
+
+      warn(warning);
+    },
     plugins: [
       ...plugins,
       resolve({

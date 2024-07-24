@@ -5,12 +5,11 @@ import {
 import { walkIndex, resetWidgetId } from 'instantsearch.js/es/lib/utils';
 import React from 'react';
 
-import { InstantSearchServerContext, InstantSearchSSRProvider } from '..';
+import { InstantSearchServerContext } from '../components/InstantSearchServerContext';
+import { InstantSearchSSRProvider } from '../components/InstantSearchSSRProvider';
 
-import type {
-  InstantSearchServerContextApi,
-  InstantSearchServerState,
-} from '..';
+import type { InstantSearchServerContextApi } from '../components/InstantSearchServerContext';
+import type { InstantSearchServerState } from '../components/InstantSearchSSRProvider';
 import type { InstantSearch, UiState } from 'instantsearch.js';
 import type { ReactNode } from 'react';
 
