@@ -57,6 +57,12 @@ const createConfiguration = ({ name, minify = false } = {}) => ({
     banner: createBanner(name),
     sourcemap: true,
   },
+  onwarn(warning, warn) {
+    if (warning.code === 'CIRCULAR_DEPENDENCY')
+      throw new Error(warning.message);
+
+    warn(warning);
+  },
   plugins: plugins.concat(
     clear([
       minify &&
