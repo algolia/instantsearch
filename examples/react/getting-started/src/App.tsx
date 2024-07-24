@@ -1,23 +1,19 @@
-// @ts-nocheck
-import { HorizontalSlider } from '@algolia/ui-components-horizontal-slider-react';
 import algoliasearch from 'algoliasearch/lite';
-import {
-  CarouselProps,
-  createCarouselComponent,
-  generateCarouselId,
-} from 'instantsearch-ui-components';
 import { Hit } from 'instantsearch.js';
-import React, { createElement, Fragment, useRef } from 'react';
+import React from 'react';
 import {
   Configure,
+  Highlight,
+  Hits,
   InstantSearch,
+  Pagination,
+  RefinementList,
   SearchBox,
-  TrendingItemsProps,
-  useTrendingItems,
+  TrendingItems,
 } from 'react-instantsearch';
 
-import '@algolia/ui-components-horizontal-slider-theme/dist/theme.css';
-import 'instantsearch.css/themes/satellite.css';
+import { Panel } from './Panel';
+
 import './App.css';
 
 const searchClient = algoliasearch(
@@ -48,9 +44,22 @@ export function App() {
         >
           <Configure hitsPerPage={8} />
           <div className="search-panel">
+            <div className="search-panel__filters">
+              <Panel header="brand">
+                <RefinementList attribute="brand" />
+              </Panel>
+            </div>
+
             <div className="search-panel__results">
               <SearchBox placeholder="" className="searchbox" />
-              <CustomTrendingItems itemComponent={ItemComponent} limit={8} />
+              <Hits hitComponent={HitComponent} />
+
+              <div className="pagination">
+                <Pagination />
+              </div>
+              <div>
+                <TrendingItems itemComponent={ItemComponent} limit={4} />
+              </div>
             </div>
           </div>
         </InstantSearch>
@@ -65,61 +74,30 @@ type HitType = Hit<{
   description: string;
 }>;
 
+function HitComponent({ hit }: { hit: HitType }) {
+  return (
+    <article>
+      <h1>
+        <a href={`/products.html?pid=${hit.objectID}`}>
+          <Highlight attribute="name" hit={hit} />
+        </a>
+      </h1>
+      <p>
+        <Highlight attribute="description" hit={hit} />
+      </p>
+      <a href={`/products.html?pid=${hit.objectID}`}>See product</a>
+    </article>
+  );
+}
+
 function ItemComponent({ item }: { item: Hit }) {
   return (
     <article>
       <div>
         <img src={item.image} />
-        <p>{item.name}</p>
+        <h2>{item.name}</h2>
       </div>
       <a href={`/products.html?pid=${item.objectID}`}>See product</a>
     </article>
-  );
-}
-
-function CustomTrendingItems({
-  facetName,
-  facetValue,
-  limit,
-  threshold,
-  fallbackParameters,
-  queryParameters,
-  escapeHTML,
-  transformItems,
-  itemComponent,
-  ...props
-}: TrendingItemsProps<HitType>) {
-  const Carousel = createCarouselComponent({ createElement, Fragment });
-
-  const { items } = useTrendingItems({
-    facetName,
-    facetValue,
-    limit,
-    threshold,
-    fallbackParameters,
-    queryParameters,
-    escapeHTML,
-    transformItems,
-  });
-
-  const carouselRefs: Partial<CarouselProps<HitType>> = {
-    listRef: useRef(null),
-    nextButtonRef: useRef(null),
-    previousButtonRef: useRef(null),
-    carouselIdRef: useRef(generateCarouselId()),
-  };
-
-  return (
-    <div>
-      <h2>HorizontalSlider</h2>
-      <HorizontalSlider items={items} itemComponent={itemComponent} />
-      <h2>Carousel</h2>
-      <Carousel
-        items={items}
-        itemComponent={itemComponent}
-        {...carouselRefs}
-        {...props}
-      />
-    </div>
   );
 }
