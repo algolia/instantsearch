@@ -102,7 +102,7 @@ type InitialResult = {
   state?: PlainSearchParameters;
   results?: SearchResults['_rawResults'];
   recommendResults?: {
-    params: RecommendParametersOptions['params'];
+    params: NonNullable<RecommendParametersOptions['params']>;
     results: RecommendResults['_rawResults'];
   };
   requestParams?: SearchOptions[];
