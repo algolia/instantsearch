@@ -1,0 +1,12 @@
+{
+  "name": "instantsearch-bundled",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "instantsearch.js": "^4.73.2",
+    "preact": "^10.10.0"
+  },
+  "scripts": {
+    "build": "rollup -c rollup.config.js"
+  }
+}
