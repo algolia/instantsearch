@@ -179,7 +179,7 @@ describe('widgets', () => {
       const widgetInstances = initiateAllWidgets();
 
       widgetInstances.forEach(([name, widget]) =>
-        expect([name, widget.$$type.substr(0, 4)]).toEqual([name, 'ais.'])
+        expect([name, widget.$$type.substring(0, 4)]).toEqual([name, 'ais.'])
       );
     });
   });

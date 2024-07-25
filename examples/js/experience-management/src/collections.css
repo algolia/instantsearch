@@ -1,0 +1,23 @@
+h1 {
+  @apply px-4 py-16 text-center sm:px-6 lg:px-8 text-4xl font-bold tracking-tight text-gray-900;
+}
+
+.ais-Hits {
+  @apply mx-auto max-w-7xl overflow-hidden sm:px-6 lg:px-8;
+}
+
+.ais-Hits-list {
+  @apply -mx-px grid grid-cols-2 border-l border-t border-gray-200 sm:mx-0 md:grid-cols-3 lg:grid-cols-4;
+}
+
+.ais-Hits-item {
+  @apply border-b border-r border-gray-200 p-4 sm:p-6 text-center text-sm font-medium text-gray-900;
+}
+
+.ais-Hits-item img {
+  @apply w-auto object-cover object-center my-4;
+}
+
+.ais-Hits-item a {
+  @apply text-base font-medium text-gray-900 block;
+}

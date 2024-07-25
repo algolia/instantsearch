@@ -9,6 +9,7 @@ import type {
   SearchResults,
   RecommendParameters,
   RecommendResultItem,
+  ConfigurationParameters,
 } from 'algoliasearch-helper';
 
 export type ScopedResult = {
@@ -158,6 +159,47 @@ type SearchWidget<TWidgetDescription extends WidgetDescription> = {
       >;
     }
   ) => SearchParameters;
+};
+
+type PageNode = {
+  type: string;
+  params: Record<string, any>;
+  children: PageNode[];
+};
+
+type ConfigurationRenderOptions = SharedRenderOptions & {
+  results: {
+    blocks: PageNode[];
+  };
+};
+
+type ConfigurationWidget<
+  TWidgetDescription extends WidgetDescription & WidgetParams
+> = {
+  dependsOn?: 'configuration';
+  $$id: string;
+  getWidgetParameters?: (
+    state: ConfigurationParameters,
+    widgetParametersOptions: {
+      uiState: Expand<
+        Partial<TWidgetDescription['indexUiState'] & IndexUiState>
+      >;
+    }
+  ) => ConfigurationParameters;
+  getRenderState: (
+    renderState: Expand<
+      IndexRenderState & Partial<TWidgetDescription['indexRenderState']>
+    >,
+    renderOptions: InitOptions | ConfigurationRenderOptions
+  ) => IndexRenderState & TWidgetDescription['indexRenderState'];
+  getWidgetRenderState: (
+    renderOptions: InitOptions | ConfigurationRenderOptions
+  ) => Expand<
+    WidgetRenderState<
+      TWidgetDescription['renderState'],
+      TWidgetDescription['widgetParams']
+    >
+  >;
 };
 
 type RecommendRenderOptions = SharedRenderOptions & {
@@ -334,7 +376,11 @@ export type Widget<
     UiStateLifeCycle<TWidgetDescription> &
     RenderStateLifeCycle<TWidgetDescription>
 > &
-  (SearchWidget<TWidgetDescription> | RecommendWidget<TWidgetDescription>);
+  (
+    | SearchWidget<TWidgetDescription>
+    | RecommendWidget<TWidgetDescription>
+    | ConfigurationWidget<TWidgetDescription>
+  );
 
 export type { IndexWidget } from '../widgets';
 
