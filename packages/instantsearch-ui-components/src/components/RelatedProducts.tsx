@@ -58,6 +58,7 @@ export function createRelatedProductsComponent({
     };
 
     const cssClasses: RecommendClassNames = {
+      ...classNames,
       root: cx('ais-RelatedProducts', classNames.root),
       emptyRoot: cx(
         'ais-RelatedProducts',
