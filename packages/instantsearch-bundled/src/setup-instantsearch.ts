@@ -1,11 +1,10 @@
 import algoliasearch from 'algoliasearch/lite';
-import instantsearch from 'instantsearch.js';
+import InstantSearch from 'instantsearch.js/es/lib/InstantSearch';
 
 import { fakeFetchConfiguration } from './fake-configuration';
 import { widgets } from './widgets';
 
 import type { Configuration } from './types';
-import type { InstantSearch } from 'instantsearch.js';
 
 const VERBOSE = true;
 
@@ -20,7 +19,7 @@ export function setupInstantSearch() {
     const settings = getSettings();
 
     const searchClient = algoliasearch(settings.appId, settings.apiKey);
-    const search = instantsearch({
+    const search = new InstantSearch({
       searchClient,
     });
     window.__search = search;
