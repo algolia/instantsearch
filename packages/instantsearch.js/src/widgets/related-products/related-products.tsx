@@ -26,9 +26,14 @@ import type {
 } from '../../types';
 import type { RecommendResultItem } from 'algoliasearch-helper';
 import type {
+  CarouselClassNames,
+  CarouselProps,
   RecommendClassNames,
+  RecordWithObjectID,
   RelatedProductsProps as RelatedProductsUiProps,
 } from 'instantsearch-ui-components';
+import { createCarouselComponent } from 'instantsearch-ui-components';
+import { useRef } from 'preact/hooks';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'related-products',
@@ -46,6 +51,7 @@ type CreateRendererProps<THit extends NonNullable<object> = BaseHit> = {
     templateProps?: PreparedTemplateProps<RelatedProductsTemplates<THit>>;
   };
   templates: RelatedProductsTemplates<THit>;
+  view: any;
 };
 
 function createRenderer<THit extends NonNullable<object> = BaseHit>({
@@ -53,6 +59,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
   cssClasses,
   containerNode,
   templates,
+  view,
 }: CreateRendererProps<THit>): Renderer<
   RelatedProductsRenderState,
   Partial<RelatedProductsWidgetParams>
@@ -126,6 +133,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
         itemComponent={itemComponent}
         emptyComponent={emptyComponent}
         status={instantSearchInstance.status}
+        view={view}
       />,
       containerNode
     );
@@ -160,6 +168,17 @@ export type RelatedProductsTemplates<
   item: Template<Hit<THit>>;
 }>;
 
+type RelatedProductsLayouts = {
+  carousel: {
+    view: RelatedProductsUiProps<Hit>['view'];
+    cssClasses?: Partial<CarouselClassNames>;
+  };
+};
+
+type RelatedProductsLayout<TLayout extends keyof RelatedProductsLayouts> = {
+  name: TLayout;
+} & Omit<RelatedProductsLayouts[TLayout], 'view'>;
+
 type RelatedProductsWidgetParams<THit extends NonNullable<object> = BaseHit> = {
   /**
    * CSS selector or `HTMLElement` to insert the widget into.
@@ -175,6 +194,12 @@ type RelatedProductsWidgetParams<THit extends NonNullable<object> = BaseHit> = {
    * CSS classes to add to the widget elements.
    */
   cssClasses?: RelatedProductsCSSClasses;
+  /**
+   * Layout to customize the way the widget is rendered.
+   */
+  layout?:
+    | keyof RelatedProductsLayouts
+    | RelatedProductsLayout<keyof RelatedProductsLayouts>;
 };
 
 export type RelatedProductsWidget = WidgetFactory<
@@ -184,6 +209,40 @@ export type RelatedProductsWidget = WidgetFactory<
   RelatedProductsConnectorParams,
   RelatedProductsWidgetParams
 >;
+
+let lastHorizontalSliderId = 0;
+
+function generateCarouselId() {
+  return `ais-horizontal-slider-${lastHorizontalSliderId++}`;
+}
+
+const Carousel = createCarouselComponent({
+  createElement: h,
+  Fragment,
+});
+
+function CarouselWithRefs(
+  props: Omit<
+    CarouselProps<RecordWithObjectID>,
+    'listRef' | 'nextButtonRef' | 'previousButtonRef' | 'carouselIdRef'
+  >
+) {
+  const carouselRefs: Pick<
+    CarouselProps<RecordWithObjectID>,
+    'listRef' | 'nextButtonRef' | 'previousButtonRef' | 'carouselIdRef'
+  > = {
+    listRef: useRef(null),
+    nextButtonRef: useRef(null),
+    previousButtonRef: useRef(null),
+    carouselIdRef: useRef(generateCarouselId()),
+  };
+
+  return <Carousel {...carouselRefs} {...props} />;
+}
+
+const LAYOUTS = {
+  carousel: CarouselWithRefs,
+};
 
 export default (function relatedProducts<
   THit extends NonNullable<object> = BaseHit
@@ -202,6 +261,7 @@ export default (function relatedProducts<
     transformItems,
     templates = {},
     cssClasses = {},
+    layout = undefined,
   } = widgetParams || {};
 
   if (!container) {
@@ -210,11 +270,18 @@ export default (function relatedProducts<
 
   const containerNode = getContainerNode(container);
 
+  let view: RelatedProductsUiProps<Hit>['view'] | undefined = undefined;
+
+  if (layout) {
+    view = typeof layout === 'string' ? LAYOUTS[layout] : LAYOUTS[layout.name];
+  }
+
   const specializedRenderer = createRenderer({
     containerNode,
-    cssClasses,
+    cssClasses: { ...cssClasses, ...(layout?.cssClasses || {}) },
     renderState: {},
     templates,
+    view,
   });
 
   const makeWidget = connectRelatedProducts(specializedRenderer, () =>

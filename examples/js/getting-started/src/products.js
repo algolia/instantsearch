@@ -37,6 +37,12 @@ search.addWidgets([
     container: '#related-products',
     objectIDs: [pid],
     limit: 4,
+    layout: {
+      name: 'carousel',
+      cssClasses: {
+        navigationNext: 'NAVIGATION_NEXT',
+      },
+    },
     templates: {
       item: (item, { html }) => html`
         <article>

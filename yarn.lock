@@ -222,6 +222,32 @@
     "@algolia/logger-common" "4.23.2"
     "@algolia/requester-common" "4.23.2"
 
+"@algolia/ui-components-horizontal-slider-react@1.2.3":
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@algolia/ui-components-horizontal-slider-react/-/ui-components-horizontal-slider-react-1.2.3.tgz#a307aa84b3790578e017d0e69297c8c0573d180f"
+  integrity sha512-KgPDqiWm2YVRcQP2QKuTD2TXY3gQshyvgQrkWFo6cPWPR4p1X5MHs2uyCbUulcg8KJJIJWIWuxhOdK526VmFWQ==
+  dependencies:
+    "@algolia/ui-components-horizontal-slider-vdom" "1.2.3"
+    "@babel/runtime" "^7.0.0"
+
+"@algolia/ui-components-horizontal-slider-theme@1.2.3":
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@algolia/ui-components-horizontal-slider-theme/-/ui-components-horizontal-slider-theme-1.2.3.tgz#69dbe65af887f358553b77fadeceb13639419c82"
+  integrity sha512-r1kyB8pF7/Vc19HVDlOp03K2iHfPdrKAO4aSbCpAUwh+oJO2rWA4pVmEWG/wX3drEPYdoBW735oDfJ69zOHmLQ==
+
+"@algolia/ui-components-horizontal-slider-vdom@1.2.3":
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@algolia/ui-components-horizontal-slider-vdom/-/ui-components-horizontal-slider-vdom-1.2.3.tgz#8b6f23aa108e268dc865484455c53b9e41bee1a8"
+  integrity sha512-NzrJZukSAGSdE2Hjj+aP0dlzrdrtCLvbWQ7Es0Jjquyb9HtdMRmVWQOfO5I+0UoaePimv67l1iKsEHw3pP20LA==
+  dependencies:
+    "@algolia/ui-components-shared" "1.2.3"
+    "@babel/runtime" "^7.0.0"
+
+"@algolia/ui-components-shared@1.2.3":
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@algolia/ui-components-shared/-/ui-components-shared-1.2.3.tgz#c27d448627583edc71cfc1864dd39d2a689d9ca1"
+  integrity sha512-Nk4stv4FW9qIpvmdkJMf6oS49xA8Ns/IAAYNngpaFFQTErZupegXvyr8W+6NVvBSzHzeE4H8YO7spg3xWR8e8A==
+
 "@ampproject/remapping@^2.2.0":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@ampproject/remapping/-/remapping-2.2.1.tgz#99e8e11851128b8702cd57c33684f1d0f260b630"
