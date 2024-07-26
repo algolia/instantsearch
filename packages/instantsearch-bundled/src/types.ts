@@ -1,4 +1,4 @@
-import type * as widgets from 'instantsearch.js/es/widgets';
+import type { widgets } from './widgets';
 
 export type Child = {
   [key in keyof typeof widgets]: {

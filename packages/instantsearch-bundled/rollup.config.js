@@ -41,8 +41,7 @@ const createConfiguration = ({ mode, filename }) => ({
     name: 'instantsearch',
     format: 'umd',
     banner: license,
-    // @TODO: true, but for now they seem to be broken
-    sourcemap: false,
+    sourcemap: true,
   },
   onwarn(warning, warn) {
     if (warning.code === 'CIRCULAR_DEPENDENCY')
@@ -70,8 +69,8 @@ export default [
     mode: 'development',
     filename: 'instantsearch-bundled.development.js',
   }),
-  // createConfiguration({
-  //   mode: 'production',
-  //   filename: 'instantsearch-bundled.production.min.js',
-  // }),
+  createConfiguration({
+    mode: 'production',
+    filename: 'instantsearch-bundled.production.min.js',
+  }),
 ];
