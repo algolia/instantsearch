@@ -283,6 +283,11 @@ Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algo
 
   private shouldWrite(url: string): boolean {
     return safelyRunOnBrowser(({ window }) => {
+      // When disposed and the cleanUrlOnDispose is set to false, we do not want to write the URL.
+      if (this.isDisposed && !this._cleanUrlOnDispose) {
+        return false;
+      }
+
       // We do want to `pushState` if:
       // - the router is not disposed, IS.js needs to update the URL
       // OR
