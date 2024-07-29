@@ -6,25 +6,59 @@ const CONFIGURATION_OBJECT: Record<string, Configuration> = {
     indexName: 'instant_search',
     children: [
       {
-        type: 'searchBox',
+        type: 'ais.searchBox',
         parameters: {},
       },
       {
-        type: 'configure',
+        type: 'columns',
+        children: [
+          [
+            {
+              type: 'ais.refinementList',
+              parameters: {
+                attribute: 'brand',
+              },
+            },
+          ],
+          [
+            {
+              type: 'ais.hits',
+              parameters: {},
+              children: [
+                {
+                  type: 'div',
+                  parameters: {
+                    text: [
+                      { type: 'string', value: 'cols: ' },
+                      { type: 'highlight', path: ['name'] },
+                    ],
+                  },
+                },
+              ],
+            },
+          ],
+        ],
+      },
+      {
+        type: 'ais.configure',
         parameters: {
           hitsPerPage: 2,
         },
       },
       {
-        type: 'hits',
-        parameters: {
-          templates: {
-            item: (hit: any, { html, components }) =>
-              html`<div>
-                one: ${components.Highlight({ hit, attribute: 'name' })}
-              </div>`,
+        type: 'ais.hits',
+        parameters: {},
+        children: [
+          {
+            type: 'div',
+            parameters: {
+              text: [
+                { type: 'string', value: 'one: ' },
+                { type: 'highlight', path: ['name'] },
+              ],
+            },
           },
-        },
+        ],
       },
     ],
   },
@@ -33,21 +67,46 @@ const CONFIGURATION_OBJECT: Record<string, Configuration> = {
     indexName: 'instant_search',
     children: [
       {
-        type: 'hits',
+        type: 'ais.configure',
         parameters: {
-          templates: {
-            item: (hit: any, { html, components }) =>
-              html`<div>
-                other: ${components.Highlight({ hit, attribute: 'name' })}
-              </div>`,
-          },
+          hitsPerPage: 3,
         },
       },
       {
-        type: 'pagination',
+        type: 'ais.hits',
+        parameters: {},
+        children: [
+          {
+            type: 'div',
+            parameters: {
+              text: [
+                { type: 'string', value: 'other: ' },
+                { type: 'attribute', path: ['name'] },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        type: 'ais.pagination',
         parameters: {
           padding: 2,
         },
+      },
+      {
+        type: 'ais.trendingItems',
+        parameters: { limit: 4 },
+        children: [
+          {
+            type: 'div',
+            parameters: {
+              text: [
+                { type: 'string', value: 'trending: ' },
+                { type: 'attribute', path: ['name'] },
+              ],
+            },
+          },
+        ],
       },
     ],
   },

@@ -1,11 +1,19 @@
 import algoliasearch from 'algoliasearch/lite';
 import InstantSearch from 'instantsearch.js/es/lib/InstantSearch';
+import { getPropertyByPath } from 'instantsearch.js/es/lib/utils';
 
 import { fakeFetchConfiguration } from './fake-configuration';
 import { widgets } from './widgets';
 
-import type { Configuration } from './types';
+import type {
+  Child,
+  Configuration,
+  TemplateChild,
+  TemplateText,
+} from './types';
+import type { Widget } from 'instantsearch.js';
 
+// @TODO: hook up to some way it can be set runtime, maybe query params
 const VERBOSE = true;
 
 declare global {
@@ -26,6 +34,8 @@ export function setupInstantSearch() {
 
     const elements = getElements();
 
+    injectStyles();
+
     fakeFetchConfiguration([...elements.keys()]).then((configuration) => {
       search
         .addWidgets(
@@ -36,6 +46,17 @@ export function setupInstantSearch() {
   } catch (err) {
     error((err as Error).message);
   }
+}
+
+function injectStyles() {
+  const style = document.createElement('style');
+  style.textContent = `
+    .ais-Columns {
+      display: grid;
+      grid-template-columns: minmax(min-content, 200px) 1fr;
+    }
+  `;
+  document.head.appendChild(style);
 }
 
 function getSettings(): { appId: string; apiKey: string } {
@@ -79,27 +100,154 @@ function configToIndex(
   }
 
   return [
-    widgets
-      .index({
-        indexName: config.indexName,
-        indexId: config.id,
-      })
-      .addWidgets(
-        config.children.flatMap((child) => {
-          const widget: any = widgets[child.type];
+    widgets['ais.index']({
+      indexName: config.indexName,
+      indexId: config.id,
+    }).addWidgets(
+      config.children.flatMap((child) => childToWidget(child, container))
+    ),
+  ];
+}
 
-          return widget({
-            ...child.parameters,
-            ...(child.type !== 'configure'
-              ? {
-                  container: container.appendChild(
-                    document.createElement('div')
-                  ),
-                }
-              : {}),
-          });
-        })
-      ),
+const hitWidgets = new Set([
+  'ais.hits',
+  'ais.infiniteHits',
+  'ais.frequentlyBoughtTogether',
+  'ais.lookingSimilar',
+  'ais.relatedProducts',
+  'ais.trendingItems',
+]);
+
+function isTemplateWidget(
+  child: Child
+): child is Child & { children: TemplateChild[] } {
+  return hitWidgets.has(child.type);
+}
+
+const textChildrenObject = {
+  paragraph: 'p',
+  div: 'div',
+  span: 'span',
+  h2: 'h2',
+};
+const textChildren = new Map(Object.entries(textChildrenObject));
+
+type TextChildType = keyof typeof textChildrenObject;
+function isTextChild(child: TemplateChild): child is TemplateChild & {
+  type: TextChildType;
+} {
+  return textChildren.has(child.type as any);
+}
+
+function renderText(text: TemplateText[number], hit: any, components: any) {
+  if (text.type === 'string') {
+    return text.value;
+  }
+
+  if (text.type === 'attribute') {
+    return getPropertyByPath(hit, text.path);
+  }
+
+  if (text.type === 'highlight') {
+    return components.Highlight({
+      hit,
+      attribute: text.path,
+    });
+  }
+
+  if (text.type === 'snippet') {
+    return components.Snippet({
+      hit,
+      attribute: text.path,
+    });
+  }
+
+  return null;
+}
+
+function renderAttribute(text: TemplateText[number], hit: any) {
+  if (text.type === 'string') {
+    return text.value;
+  }
+
+  if (text.type === 'attribute') {
+    return getPropertyByPath(hit, text.path);
+  }
+
+  return null;
+}
+
+function childToWidget(child: Child, container: HTMLElement): Widget[] {
+  const widgetContainer = container.appendChild(document.createElement('div'));
+
+  if (child.type === 'columns') {
+    widgetContainer.classList.add('ais-Columns');
+
+    return child.children
+      .map((column) => column.map((ch) => childToWidget(ch, widgetContainer)))
+      .flat(2);
+  }
+
+  if (child.type === 'ais.configure') {
+    return [widgets[child.type]({ ...child.parameters })];
+  }
+
+  if (isTemplateWidget(child)) {
+    // type cast is needed here because the spread adding `container` and `templates` loses the type discriminant
+    const parameters = child.parameters as Parameters<
+      typeof widgets['ais.hits']
+    >[0];
+    const widget = widgets[child.type] as typeof widgets['ais.hits'];
+
+    return [
+      widget({
+        ...parameters,
+        container: widgetContainer,
+        templates: {
+          item: (hit: any, { html, components }) => {
+            if (!child.children.length) {
+              return html`<code> no item template given</code>`;
+            }
+
+            return child.children.map((ch) => {
+              if (isTextChild(ch)) {
+                const Tag = textChildren.get(ch.type)!;
+                return html`<${Tag}>
+                    ${ch.parameters.text.map((text) =>
+                      renderText(text, hit, components)
+                    )}
+                  </${Tag}>`;
+              }
+
+              if (ch.type === 'image') {
+                return html`<img
+                  src="${ch.parameters.src
+                    .map((src) => renderAttribute(src, hit))
+                    .join('')}"
+                  alt="${ch.parameters.alt
+                    .map((alt) => renderAttribute(alt, hit))
+                    .join('')}"
+                />`;
+              }
+
+              return html``;
+            });
+          },
+        },
+      }),
+    ];
+  }
+
+  // type cast is needed here because the spread adding `container` loses the type discriminant
+  const parameters = child.parameters as Parameters<
+    typeof widgets['ais.pagination']
+  >[0];
+  const widget = widgets[child.type] as typeof widgets['ais.pagination'];
+  return [
+    widget({
+      ...parameters,
+      container: widgetContainer,
+    }),
   ];
 }
 
