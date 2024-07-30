@@ -135,6 +135,83 @@ describe('Carousel', () => {
     `);
   });
 
+  test('renders custom "Previous" and "Next" components', () => {
+    const { container } = render(
+      <CarouselWithRefs
+        items={[
+          {
+            objectID: '1',
+            __position: 1,
+          },
+          {
+            objectID: '2',
+            __position: 2,
+          },
+        ]}
+        itemComponent={ItemComponent}
+        previousIconComponent={() => <span>Previous</span>}
+        nextIconComponent={() => <span>Next</span>}
+      />
+    );
+
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        <div
+          class="ais-Carousel"
+        >
+          <button
+            aria-controls="ais-Carousel-1"
+            aria-label="Previous"
+            class="ais-Carousel-navigation ais-Carousel-navigation--previous"
+            hidden=""
+            title="Previous"
+          >
+            <span>
+              Previous
+            </span>
+          </button>
+          <ol
+            aria-label="Items"
+            aria-live="polite"
+            aria-roledescription="carousel"
+            class="ais-Carousel-list"
+            id="ais-Carousel-1"
+            tabindex="0"
+          >
+            <li
+              aria-label="1 of 2"
+              aria-roledescription="slide"
+              class="ais-Carousel-item"
+            >
+              <div>
+                1
+              </div>
+            </li>
+            <li
+              aria-label="2 of 2"
+              aria-roledescription="slide"
+              class="ais-Carousel-item"
+            >
+              <div>
+                2
+              </div>
+            </li>
+          </ol>
+          <button
+            aria-controls="ais-Carousel-1"
+            aria-label="Next"
+            class="ais-Carousel-navigation ais-Carousel-navigation--next"
+            title="Next"
+          >
+            <span>
+              Next
+            </span>
+          </button>
+        </div>
+      </div>
+    `);
+  });
+
   test('accepts custom translations', () => {
     const { container } = render(
       <CarouselWithRefs

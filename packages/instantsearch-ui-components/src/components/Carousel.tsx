@@ -22,6 +22,8 @@ export type CarouselProps<
     props: RecommendItemComponentProps<RecordWithObjectID<TObject>> &
       TComponentProps
   ) => JSX.Element;
+  previousIconComponent?: () => JSX.Element;
+  nextIconComponent?: () => JSX.Element;
   classNames?: Partial<CarouselClassNames>;
   translations?: Partial<CarouselTranslations>;
 };
@@ -82,6 +84,36 @@ export function generateCarouselId() {
   return `ais-Carousel-${lastCarouselId++}`;
 }
 
+function PreviousIconDefaultComponent({
+  createElement,
+}: Pick<Renderer, 'createElement'>) {
+  return (
+    <svg width="8" height="16" viewBox="0 0 8 16" fill="none">
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        fill="currentColor"
+        d="M7.13809 0.744078C7.39844 1.06951 7.39844 1.59715 7.13809 1.92259L2.27616 8L7.13809 14.0774C7.39844 14.4028 7.39844 14.9305 7.13809 15.2559C6.87774 15.5814 6.45563 15.5814 6.19528 15.2559L0.861949 8.58926C0.6016 8.26382 0.6016 7.73618 0.861949 7.41074L6.19528 0.744078C6.45563 0.418641 6.87774 0.418641 7.13809 0.744078Z"
+      />
+    </svg>
+  );
+}
+
+function NextIconDefaultComponent({
+  createElement,
+}: Pick<Renderer, 'createElement'>) {
+  return (
+    <svg width="8" height="16" viewBox="0 0 8 16" fill="none">
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        fill="currentColor"
+        d="M0.861908 15.2559C0.601559 14.9305 0.601559 14.4028 0.861908 14.0774L5.72384 8L0.861908 1.92259C0.601559 1.59715 0.601559 1.06952 0.861908 0.744079C1.12226 0.418642 1.54437 0.418642 1.80472 0.744079L7.13805 7.41074C7.3984 7.73618 7.3984 8.26382 7.13805 8.58926L1.80472 15.2559C1.54437 15.5814 1.12226 15.5814 0.861908 15.2559Z"
+      />
+    </svg>
+  );
+}
+
 export function createCarouselComponent({ createElement }: Renderer) {
   return function Carousel<TObject extends RecordWithObjectID>(
     userProps: CarouselProps<TObject>
@@ -93,6 +125,9 @@ export function createCarouselComponent({ createElement }: Renderer) {
       carouselIdRef,
       classNames = {},
       itemComponent: ItemComponent,
+      previousIconComponent:
+        PreviousIconComponent = PreviousIconDefaultComponent,
+      nextIconComponent: NextIconComponent = NextIconDefaultComponent,
       items,
       translations: userTranslations,
       ...props
@@ -167,14 +202,7 @@ export function createCarouselComponent({ createElement }: Renderer) {
             scrollLeft();
           }}
         >
-          <svg width="8" height="16" viewBox="0 0 8 16" fill="none">
-            <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              fill="currentColor"
-              d="M7.13809 0.744078C7.39844 1.06951 7.39844 1.59715 7.13809 1.92259L2.27616 8L7.13809 14.0774C7.39844 14.4028 7.39844 14.9305 7.13809 15.2559C6.87774 15.5814 6.45563 15.5814 6.19528 15.2559L0.861949 8.58926C0.6016 8.26382 0.6016 7.73618 0.861949 7.41074L6.19528 0.744078C6.45563 0.418641 6.87774 0.418641 7.13809 0.744078Z"
-            />
-          </svg>
+          <PreviousIconComponent createElement={createElement} />
         </button>
 
         <ol
@@ -219,14 +247,7 @@ export function createCarouselComponent({ createElement }: Renderer) {
             scrollRight();
           }}
         >
-          <svg width="8" height="16" viewBox="0 0 8 16" fill="none">
-            <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              fill="currentColor"
-              d="M0.861908 15.2559C0.601559 14.9305 0.601559 14.4028 0.861908 14.0774L5.72384 8L0.861908 1.92259C0.601559 1.59715 0.601559 1.06952 0.861908 0.744079C1.12226 0.418642 1.54437 0.418642 1.80472 0.744079L7.13805 7.41074C7.3984 7.73618 7.3984 8.26382 7.13805 8.58926L1.80472 15.2559C1.54437 15.5814 1.12226 15.5814 0.861908 15.2559Z"
-            />
-          </svg>
+          <NextIconComponent createElement={createElement} />
         </button>
       </div>
     );
