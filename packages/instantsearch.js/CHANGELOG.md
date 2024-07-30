@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.73.3](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.73.2...instantsearch.js@4.73.3) (2024-07-30)
+
+
+### Bug Fixes
+
+* **history:** cleanUrlOnDispose also prevents write after dispose ([#6305](https://github.com/algolia/instantsearch/issues/6305)) ([e6fbc05](https://github.com/algolia/instantsearch/commit/e6fbc05ccc0d1d8eb540a3bbb2fa9ad046051d14)), closes [#5966](https://github.com/algolia/instantsearch/issues/5966)
+* **typescript:** make recommendResults.params non-nullable ([#6296](https://github.com/algolia/instantsearch/issues/6296)) ([0f87fc3](https://github.com/algolia/instantsearch/commit/0f87fc3e9c6feb0f0f5d1fdb8e183cd4d583a670)), closes [#6295](https://github.com/algolia/instantsearch/issues/6295)
+
+
+
+
+
 ## [4.73.2](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.73.1...instantsearch.js@4.73.2) (2024-07-16)
 
 
