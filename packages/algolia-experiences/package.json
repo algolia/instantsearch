@@ -1,11 +1,11 @@
 {
-  "name": "instantsearch-bundled",
+  "name": "algolia-experiences",
   "license": "MIT",
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
     "instantsearch.js": "^4.73.2",
-    "preact": "^10.10.0"
+    "algoliasearch": "^4.23.2"
   },
   "scripts": {
     "build": "rollup -c rollup.config.js"

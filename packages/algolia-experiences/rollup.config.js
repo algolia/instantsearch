@@ -13,7 +13,7 @@ const version =
     : `UNRELEASED (${new Date().toUTCString()})`;
 const algolia = '© Algolia, Inc. and contributors; MIT License';
 const link = 'https://github.com/algolia/instantsearch';
-const license = `/*! InstantSearch-bundled ${version} | ${algolia} | ${link} */`;
+const license = `/*! algolia-experiences ${version} | ${algolia} | ${link} */`;
 
 const plugins = [
   resolve({
@@ -67,10 +67,10 @@ const createConfiguration = ({ mode, filename }) => ({
 export default [
   createConfiguration({
     mode: 'development',
-    filename: 'instantsearch-bundled.development.js',
+    filename: 'algolia-experiences.development.js',
   }),
   createConfiguration({
     mode: 'production',
-    filename: 'instantsearch-bundled.production.min.js',
+    filename: 'algolia-experiences.production.min.js',
   }),
 ];
