@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.4.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.3.0...instantsearch.css@8.4.0) (2024-07-30)
+
+
+### Features
+
+* **ui-components:** introduce `Carousel` ([#6289](https://github.com/algolia/instantsearch/issues/6289)) ([6085d11](https://github.com/algolia/instantsearch/commit/6085d110c90ebb3ce51e6afed0157f76da6996a7))
+
+
+
+
+
 # [8.3.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.2.1...instantsearch.css@8.3.0) (2024-07-02)
 
 

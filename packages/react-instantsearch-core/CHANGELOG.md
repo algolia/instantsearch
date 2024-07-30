@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.12.3](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.12.2...react-instantsearch-core@7.12.3) (2024-07-30)
+
+
+### Bug Fixes
+
+* **imports:** prevent circular import ([#6294](https://github.com/algolia/instantsearch/issues/6294)) ([25fc44f](https://github.com/algolia/instantsearch/commit/25fc44fe113c9bea10c57529a4fc2d16f2c4d18c)), closes [#6292](https://github.com/algolia/instantsearch/issues/6292)
+
+
+
+
+
 ## [7.12.2](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.12.1...react-instantsearch-core@7.12.2) (2024-07-16)
 
 

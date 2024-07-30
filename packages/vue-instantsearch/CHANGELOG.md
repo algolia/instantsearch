@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.19.1](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.19.0...vue-instantsearch@4.19.1) (2024-07-30)
+
+
+### Bug Fixes
+
+* **imports:** prevent circular import ([#6294](https://github.com/algolia/instantsearch/issues/6294)) ([25fc44f](https://github.com/algolia/instantsearch/commit/25fc44fe113c9bea10c57529a4fc2d16f2c4d18c)), closes [#6292](https://github.com/algolia/instantsearch/issues/6292)
+
+
+
+
+
 # [4.19.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.18.1...vue-instantsearch@4.19.0) (2024-07-16)
 
 
