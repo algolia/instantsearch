@@ -26,7 +26,7 @@ export function createOptimisticUiTests(
               return createMultiSearchResponse(
                 ...requests.map(({ params }) =>
                   createSingleSearchResponse({
-                    page: params!.page,
+                    page: params.page,
                     nbPages: 20,
                   })
                 )
@@ -148,7 +148,7 @@ export function createOptimisticUiTests(
               return createMultiSearchResponse(
                 ...requests.map(({ params }) =>
                   createSingleSearchResponse({
-                    page: params!.page,
+                    page: params.page,
                     nbPages: 20,
                   })
                 )

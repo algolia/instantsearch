@@ -10,16 +10,14 @@ import {
 import type {
   Connector,
   TransformItems,
-  Hit,
   BaseHit,
   Renderer,
   Unmounter,
   UnknownWidgetParams,
+  RecommendResponse,
+  AlgoliaHit,
 } from '../../types';
-import type {
-  PlainSearchParameters,
-  RecommendResultItem,
-} from 'algoliasearch-helper';
+import type { PlainSearchParameters } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'trending-items',
@@ -32,7 +30,7 @@ export type TrendingItemsRenderState<
   /**
    * The matched recommendations from the Algolia API.
    */
-  items: Array<Hit<THit>>;
+  items: Array<AlgoliaHit<THit>>;
 };
 
 export type TrendingItemsConnectorParams<
@@ -84,7 +82,10 @@ export type TrendingItemsConnectorParams<
   /**
    * Function to transform the items passed to the templates.
    */
-  transformItems?: TransformItems<Hit<THit>, { results: RecommendResultItem }>;
+  transformItems?: TransformItems<
+    AlgoliaHit<THit>,
+    { results: RecommendResponse<AlgoliaHit<THit>> }
+  >;
 };
 
 export type TrendingItemsWidgetDescription<
@@ -180,8 +181,8 @@ export default (function connectTrendingItems<
         }
 
         return {
-          items: transformItems(results.hits, {
-            results: results as RecommendResultItem,
+          items: transformItems(results.hits as Array<AlgoliaHit<THit>>, {
+            results: results as RecommendResponse<AlgoliaHit<THit>>,
           }),
           widgetParams,
         };
@@ -194,8 +195,8 @@ export default (function connectTrendingItems<
 
       getWidgetParameters(state) {
         return state.removeParams(this.$$id!).addTrendingItems({
-          facetName,
-          facetValue,
+          facetName: facetName as string,
+          facetValue: facetValue as string,
           maxRecommendations: limit,
           threshold,
           fallbackParameters: {

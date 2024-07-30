@@ -2,6 +2,7 @@
 
 test('hierarchical facets: do not show parent level', function (done) {
   var algoliasearch = require('algoliasearch');
+  algoliasearch = algoliasearch.algoliasearch || algoliasearch;
 
   var algoliasearchHelper = require('../../../');
 

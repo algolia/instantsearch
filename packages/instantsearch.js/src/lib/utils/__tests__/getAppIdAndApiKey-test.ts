@@ -1,5 +1,5 @@
-import algoliasearchV4 from 'algoliasearch';
 import algoliasearchV3 from 'algoliasearch-v3';
+import algoliasearchV4 from 'algoliasearch-v4';
 import { liteClient as algoliasearchV5 } from 'algoliasearch-v5/lite';
 
 import { getAppIdAndApiKey } from '../getAppIdAndApiKey';

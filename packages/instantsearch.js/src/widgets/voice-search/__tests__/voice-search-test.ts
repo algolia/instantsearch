@@ -2,9 +2,11 @@
  * @jest-environment jsdom
  */
 
-import { createSingleSearchResponse } from '@instantsearch/mocks';
+import {
+  createSearchClient,
+  createSingleSearchResponse,
+} from '@instantsearch/mocks';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
-import algoliasearch from 'algoliasearch';
 import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
@@ -84,7 +86,7 @@ describe('voiceSearch()', () => {
   beforeEach(() => {
     render.mockClear();
 
-    helper = algoliasearchHelper(algoliasearch('APP_ID', 'API_KEY'), '', {});
+    helper = algoliasearchHelper(createSearchClient(), '', {});
     helper.setQuery = jest.fn();
     helper.search = jest.fn();
     helper.state = new SearchParameters({ query: '' });

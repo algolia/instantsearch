@@ -129,8 +129,9 @@ describe('connectTrendingItems', () => {
         new RecommendParameters().addTrendingItems({
           // @ts-expect-error
           $$id: widget.$$id,
-          facetName: undefined,
-          facetValue: undefined,
+          // v5 expects only string values for facetName and facetValue
+          facetName: undefined as unknown as string,
+          facetValue: undefined as unknown as string,
           maxRecommendations: 10,
           threshold: 95,
           queryParameters: { userToken: 'token' },

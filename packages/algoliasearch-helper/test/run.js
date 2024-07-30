@@ -3,6 +3,7 @@
 var path = require('path');
 
 var algoliasearch = require('algoliasearch');
+algoliasearch = algoliasearch.algoliasearch || algoliasearch;
 var jest = require('jest');
 
 var staticJestConfig = require('../jest.config');

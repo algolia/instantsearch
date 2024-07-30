@@ -16,7 +16,7 @@ const packageJsonPaths = [
 ];
 
 console.log(
-  `Downgrading algoliasearch dependency to v3 in:
+  `Downgrading algoliasearch dependency to v4 in:
 - ${packageJsonPaths.join('\n- ')}`
 );
 
@@ -24,20 +24,26 @@ console.log(
 shell.sed(
   '-i',
   /"algoliasearch": "5.*"(,?)/,
-  '"algoliasearch": "3.35.1","@types/algoliasearch": "3.34.10"$1',
+  '"algoliasearch": "4.23.2"$1',
   packageJsonPaths
 );
 
-// remove other v4 dependencies
+// Downgrade other dependency
 shell.sed(
   '-i',
-  /"@algolia\/(cache-.*|client-.*|logger-.*|requester-.*|transporter|recommend)": "(4|5).*",?/,
-  '',
+  /"@algolia\/client-search": "5.*"(,?)/,
+  '"@algolia/client-search": "4.23.2"$1',
   packageJsonPaths
 );
 
 // remove resolution
-shell.sed('-i', /"places.js\/algoliasearch": "5.*"(,?)/, '', packageJsonPaths);
+shell.sed('-i', /"@algolia\/client-common": "5.*"(,?)/, '', packageJsonPaths);
+shell.sed(
+  '-i',
+  /"places.js\/algoliasearch": "5.*"(,?)/,
+  '"places.js/algoliasearch": "4.23.2"$1',
+  packageJsonPaths
+);
 
 // replace import in examples
 shell.sed(
@@ -52,8 +58,10 @@ shell.sed(
 shell.sed(
   '-i',
   /"algoliasearch": ".*"(,)?/,
-  '"algoliasearch": "3.35.1","@types/algoliasearch": "3.34.10"$1',
+  '"algoliasearch": "4.23.2"$1',
   ...shell.ls('examples/*/*/package.json')
 );
 
 shell.exec('yarn install');
+
+shell.exec('cp -r node_modules/algoliasearch-v4 node_modules/algoliasearch');

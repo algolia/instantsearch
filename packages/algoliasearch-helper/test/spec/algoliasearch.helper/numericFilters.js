@@ -1,13 +1,14 @@
 'use strict';
 
-var algoliaSearch = require('algoliasearch');
+var algoliasearch = require('algoliasearch');
+algoliasearch = algoliasearch.algoliasearch || algoliasearch;
 
 var algoliasearchHelper = require('../../../index');
 
 var fakeClient = {};
 
 test('Numeric filters: numeric filters from constructor', function (done) {
-  var client = algoliaSearch('dsf', 'dsfdf');
+  var client = algoliasearch('dsf', 'dsfdf');
 
   client.search = function (queries) {
     var ps = queries[0].params;
@@ -42,7 +43,7 @@ test('Numeric filters: numeric filters from constructor', function (done) {
 });
 
 test('Numeric filters: numeric filters from setters', function (done) {
-  var client = algoliaSearch('dsf', 'dsfdf');
+  var client = algoliasearch('dsf', 'dsfdf');
 
   client.search = function (queries) {
     var ps = queries[0].params;
