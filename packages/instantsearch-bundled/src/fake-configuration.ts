@@ -106,6 +106,13 @@ const CONFIGURATION_OBJECT: Record<string, Configuration> = {
               ],
             },
           },
+          {
+            type: 'image',
+            parameters: {
+              src: [{ type: 'attribute', path: ['image'] }],
+              alt: [{ type: 'string', value: '' }],
+            },
+          },
         ],
       },
     ],
