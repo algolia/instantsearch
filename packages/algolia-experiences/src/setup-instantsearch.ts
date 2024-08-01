@@ -128,7 +128,17 @@ function isTemplateWidget(
   return hitWidgets.has(child.type as any);
 }
 
-const panelWidgets = new Set<PanelWidgetTypes>(['ais.refinementList']);
+const panelWidgets = new Set<PanelWidgetTypes>([
+  'ais.refinementList',
+  'ais.menu',
+  'ais.hierarchicalMenu',
+  'ais.breadcrumb',
+  'ais.numericMenu',
+  'ais.rangeInput',
+  'ais.rangeSlider',
+  'ais.ratingMenu',
+  'ais.toggleRefinement',
+]);
 function isPanelWidget(child: Child): child is PanelWidget {
   return panelWidgets.has(child.type as any);
 }

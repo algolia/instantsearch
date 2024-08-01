@@ -137,9 +137,34 @@ const CONFIGURATION_OBJECT: Record<string, Configuration> = {
               type: 'ais.refinementList',
               parameters: {
                 attribute: 'brand',
-                header: 'Brand',
+                header: 'brand',
                 collapsed: true,
                 searchable: true,
+              },
+            },
+            {
+              type: 'ais.refinementList',
+              parameters: {
+                attribute: 'type',
+                header: 'type',
+                collapsed: true,
+                searchable: true,
+              },
+            },
+            {
+              type: 'ais.rangeInput',
+              parameters: {
+                attribute: 'price',
+                header: 'price',
+                collapsed: true,
+              },
+            },
+            {
+              type: 'ais.toggleRefinement',
+              parameters: {
+                attribute: 'free_shipping',
+                header: 'free shipping',
+                collapsed: true,
               },
             },
           ],
@@ -174,7 +199,11 @@ const CONFIGURATION_OBJECT: Record<string, Configuration> = {
             },
             {
               type: 'ais.trendingItems',
-              parameters: { limit: 4 },
+              parameters: {
+                limit: 4,
+                facetName: 'categories',
+                facetValue: 'Audio',
+              },
               children: [
                 {
                   type: 'image',
