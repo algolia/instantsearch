@@ -20,27 +20,62 @@ export type TemplateChild =
       };
     };
 
+export type TemplateWidgetTypes =
+  | 'ais.hits'
+  | 'ais.infiniteHits'
+  | 'ais.frequentlyBoughtTogether'
+  | 'ais.lookingSimilar'
+  | 'ais.relatedProducts'
+  | 'ais.trendingItems';
+
+export type TemplateWidget<
+  TKeys extends TemplateWidgetTypes = TemplateWidgetTypes
+> = {
+  [key in TKeys]: {
+    type: key;
+    parameters: Omit<
+      Parameters<typeof widgets[key]>[0],
+      'container' | 'templates'
+    >;
+    children: TemplateChild[];
+  };
+}[TKeys];
+
+export type PanelWidgetTypes =
+  | 'ais.refinementList'
+  | 'ais.menu'
+  | 'ais.hierarchicalMenu'
+  | 'ais.breadcrumb'
+  | 'ais.numericMenu'
+  | 'ais.rangeInput'
+  | 'ais.rangeSlider'
+  | 'ais.ratingMenu'
+  | 'ais.toggleRefinement';
+export type PanelWidget<TKeys extends PanelWidgetTypes = PanelWidgetTypes> = {
+  [key in TKeys]: {
+    type: key;
+    parameters: Omit<Parameters<typeof widgets[key]>[0], 'container'> & {
+      header?: string;
+      collapsed?: boolean;
+    };
+  };
+}[TKeys];
+
+type RegularWidget<TKeys extends keyof typeof widgets = keyof typeof widgets> =
+  {
+    [key in TKeys]: {
+      type: key;
+      parameters: Omit<Parameters<typeof widgets[key]>[0], 'container'>;
+    };
+  }[TKeys];
+
 export type Child =
   | {
-      [key in keyof typeof widgets]: key extends
-        | 'ais.hits'
-        | 'ais.infiniteHits'
-        | 'ais.frequentlyBoughtTogether'
-        | 'ais.lookingSimilar'
-        | 'ais.relatedProducts'
-        | 'ais.trendingItems'
-        ? {
-            type: key;
-            parameters: Omit<
-              Parameters<typeof widgets[key]>[0],
-              'container' | 'templates'
-            >;
-            children: TemplateChild[];
-          }
-        : {
-            type: key;
-            parameters: Omit<Parameters<typeof widgets[key]>[0], 'container'>;
-          };
+      [key in keyof typeof widgets]: key extends TemplateWidgetTypes
+        ? TemplateWidget<key>
+        : key extends PanelWidgetTypes
+        ? PanelWidget<key>
+        : RegularWidget<key>;
     }[keyof typeof widgets]
   | {
       type: 'columns';

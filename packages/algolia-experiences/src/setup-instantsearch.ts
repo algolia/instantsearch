@@ -1,6 +1,7 @@
 import algoliasearch from 'algoliasearch/lite';
 import InstantSearch from 'instantsearch.js/es/lib/InstantSearch';
 import { getPropertyByPath } from 'instantsearch.js/es/lib/utils';
+import { index, panel } from 'instantsearch.js/es/widgets';
 
 import { fakeFetchConfiguration } from './fake-configuration';
 import { widgets } from './widgets';
@@ -8,8 +9,11 @@ import { widgets } from './widgets';
 import type {
   Child,
   Configuration,
+  PanelWidget,
+  PanelWidgetTypes,
   TemplateChild,
   TemplateText,
+  TemplateWidgetTypes,
 } from './types';
 import type { Widget } from 'instantsearch.js';
 
@@ -54,6 +58,7 @@ function injectStyles() {
     .ais-Columns {
       display: grid;
       grid-template-columns: minmax(min-content, 200px) 1fr;
+      gap: 1em;
     }
   `;
   document.head.appendChild(style);
@@ -100,7 +105,7 @@ function configToIndex(
   }
 
   return [
-    widgets['ais.index']({
+    index({
       indexName: config.indexName,
       indexId: config.id,
     }).addWidgets(
@@ -109,7 +114,7 @@ function configToIndex(
   ];
 }
 
-const hitWidgets = new Set([
+const hitWidgets = new Set<TemplateWidgetTypes>([
   'ais.hits',
   'ais.infiniteHits',
   'ais.frequentlyBoughtTogether',
@@ -117,11 +122,15 @@ const hitWidgets = new Set([
   'ais.relatedProducts',
   'ais.trendingItems',
 ]);
-
 function isTemplateWidget(
   child: Child
 ): child is Child & { children: TemplateChild[] } {
-  return hitWidgets.has(child.type);
+  return hitWidgets.has(child.type as any);
+}
+
+const panelWidgets = new Set<PanelWidgetTypes>(['ais.refinementList']);
+function isPanelWidget(child: Child): child is PanelWidget {
+  return panelWidgets.has(child.type as any);
 }
 
 const textChildrenObject = {
@@ -184,7 +193,14 @@ function childToWidget(child: Child, container: HTMLElement): Widget[] {
     widgetContainer.classList.add('ais-Columns');
 
     return child.children
-      .map((column) => column.map((ch) => childToWidget(ch, widgetContainer)))
+      .map((column) => {
+        const columnContainer = widgetContainer.appendChild(
+          Object.assign(document.createElement('div'), {
+            className: 'ais-Column',
+          })
+        );
+        return column.map((ch) => childToWidget(ch, columnContainer));
+      })
       .flat(2);
   }
 
@@ -234,6 +250,35 @@ function childToWidget(child: Child, container: HTMLElement): Widget[] {
             });
           },
         },
+      }),
+    ];
+  }
+
+  if (isPanelWidget(child)) {
+    // type cast is needed here because the spread adding `container` loses the type discriminant
+    const {
+      header,
+      collapsed: defaultCollapsed,
+      ...parameters
+    } = child.parameters as Parameters<
+      typeof widgets['ais.refinementList']
+    >[0] & { header: string; collapsed: boolean };
+    const widget = widgets[child.type] as typeof widgets['ais.refinementList'];
+    return [
+      panel<typeof widgets['ais.refinementList']>({
+        templates: {
+          header,
+          collapseButtonText: ({ collapsed }, { html }) =>
+            // @TODO: put this style in a stylesheet
+            html`<span style="cursor: pointer">${collapsed ? '+' : '-'}</span>`,
+        },
+        collapsed:
+          typeof defaultCollapsed === 'undefined'
+            ? undefined
+            : () => defaultCollapsed,
+      })(widget)({
+        ...parameters,
+        container: widgetContainer,
       }),
     ];
   }

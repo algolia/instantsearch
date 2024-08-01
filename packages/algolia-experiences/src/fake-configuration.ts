@@ -17,6 +17,7 @@ const CONFIGURATION_OBJECT: Record<string, Configuration> = {
               type: 'ais.refinementList',
               parameters: {
                 attribute: 'brand',
+                header: 'Brand',
               },
             },
           ],
@@ -113,6 +114,84 @@ const CONFIGURATION_OBJECT: Record<string, Configuration> = {
               alt: [{ type: 'string', value: '' }],
             },
           },
+        ],
+      },
+    ],
+  },
+  'category:audio': {
+    id: 'category:audio',
+    indexName: 'instant_search',
+    children: [
+      {
+        type: 'ais.configure',
+        parameters: {
+          hitsPerPage: 9,
+          filters: 'categories:"Audio"',
+        },
+      },
+      {
+        type: 'columns',
+        children: [
+          [
+            {
+              type: 'ais.refinementList',
+              parameters: {
+                attribute: 'brand',
+                header: 'Brand',
+                collapsed: true,
+                searchable: true,
+              },
+            },
+          ],
+          [
+            {
+              type: 'ais.hits',
+              parameters: {},
+              children: [
+                {
+                  type: 'image',
+                  parameters: {
+                    src: [{ type: 'attribute', path: ['image'] }],
+                    alt: [{ type: 'string', value: '' }],
+                  },
+                },
+                {
+                  type: 'div',
+                  parameters: {
+                    text: [{ type: 'attribute', path: ['name'] }],
+                  },
+                },
+                {
+                  type: 'div',
+                  parameters: {
+                    text: [
+                      { type: 'string', value: '$' },
+                      { type: 'attribute', path: ['price'] },
+                    ],
+                  },
+                },
+              ],
+            },
+            {
+              type: 'ais.trendingItems',
+              parameters: { limit: 4 },
+              children: [
+                {
+                  type: 'image',
+                  parameters: {
+                    src: [{ type: 'attribute', path: ['image'] }],
+                    alt: [{ type: 'string', value: '' }],
+                  },
+                },
+              ],
+            },
+            {
+              type: 'ais.pagination',
+              parameters: {
+                padding: 2,
+              },
+            },
+          ],
         ],
       },
     ],
