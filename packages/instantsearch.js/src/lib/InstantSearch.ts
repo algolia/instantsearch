@@ -7,7 +7,7 @@ import {
   isMetadataEnabled,
 } from '../middlewares/createMetadataMiddleware';
 import { createRouterMiddleware } from '../middlewares/createRouterMiddleware';
-import { index } from '../widgets';
+import index from '../widgets/index/index';
 
 import createHelpers from './createHelpers';
 import {
