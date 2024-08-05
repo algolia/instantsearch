@@ -1,12 +1,19 @@
 import { deprecate } from '../lib/utils';
 
 import answers from './answers/answers';
+import configureRelatedItems from './configure-related-items/configure-related-items';
 import dynamicWidgets from './dynamic-widgets/dynamic-widgets';
 
 /** @deprecated answers is no longer supported */
 export const EXPERIMENTAL_answers = deprecate(
   answers,
   'answers is no longer supported'
+);
+
+/** @deprecated use relatedItems instead */
+export const EXPERIMENTAL_configureRelatedItems = deprecate(
+  configureRelatedItems,
+  'use relatedItems instead'
 );
 
 /** @deprecated use dynamicWidgets */
@@ -21,7 +28,6 @@ export { default as breadcrumb } from './breadcrumb/breadcrumb';
 export { default as clearRefinements } from './clear-refinements/clear-refinements';
 export { default as configure } from './configure/configure';
 export { default as currentRefinements } from './current-refinements/current-refinements';
-export { default as EXPERIMENTAL_configureRelatedItems } from './configure-related-items/configure-related-items';
 export { default as geoSearch } from './geo-search/geo-search';
 export { default as hierarchicalMenu } from './hierarchical-menu/hierarchical-menu';
 export { default as hits } from './hits/hits';

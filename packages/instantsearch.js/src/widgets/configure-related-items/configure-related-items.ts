@@ -28,4 +28,5 @@ const configureRelatedItems: ConfigureRelatedItemsWidget =
     };
   };
 
+/** @deprecated use relatedItems instead */
 export default configureRelatedItems;

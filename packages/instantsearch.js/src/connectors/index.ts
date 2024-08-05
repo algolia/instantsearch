@@ -1,12 +1,19 @@
 import { deprecate } from '../lib/utils';
 
 import connectAnswers from './answers/connectAnswers';
+import connectConfigureRelatedItems from './configure-related-items/connectConfigureRelatedItems';
 import connectDynamicWidgets from './dynamic-widgets/connectDynamicWidgets';
 
 /** @deprecated answers is no longer supported */
 export const EXPERIMENTAL_connectAnswers = deprecate(
   connectAnswers,
   'answers is no longer supported'
+);
+
+/** @deprecated use connectRelatedItems instead */
+export const EXPERIMENTAL_connectConfigureRelatedItems = deprecate(
+  connectConfigureRelatedItems,
+  'use connectRelatedItems instead'
 );
 
 /** @deprecated use connectDynamicWidgets */
@@ -41,7 +48,6 @@ export { default as connectBreadcrumb } from './breadcrumb/connectBreadcrumb';
 export { default as connectGeoSearch } from './geo-search/connectGeoSearch';
 export { default as connectPoweredBy } from './powered-by/connectPoweredBy';
 export { default as connectConfigure } from './configure/connectConfigure';
-export { default as EXPERIMENTAL_connectConfigureRelatedItems } from './configure-related-items/connectConfigureRelatedItems';
 export { default as connectAutocomplete } from './autocomplete/connectAutocomplete';
 export { default as connectQueryRules } from './query-rules/connectQueryRules';
 export { default as connectVoiceSearch } from './voice-search/connectVoiceSearch';
