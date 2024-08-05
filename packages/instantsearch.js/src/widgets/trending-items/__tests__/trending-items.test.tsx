@@ -253,6 +253,55 @@ describe('trendingItems', () => {
       `);
     });
 
+    test('renders with a custom layout using `html`', async () => {
+      const container = document.createElement('div');
+      const searchClient = createRecommendSearchClient();
+      const options: Parameters<typeof trendingItems>[0] = {
+        container,
+        templates: {
+          layout({ items }, { html }) {
+            return html`<ul>
+              ${items.map((item) => html`<li><p>${item.objectID}</p></li>`)}
+            </ul>`;
+          },
+        },
+      };
+
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+      const widget = trendingItems(options);
+
+      search.addWidgets([widget]);
+      search.start();
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
+        <div>
+          <section
+            class="ais-TrendingItems"
+          >
+            <h3
+              class="ais-TrendingItems-title"
+            >
+              Trending items
+            </h3>
+            <ul>
+              <li>
+                <p>
+                  1
+                </p>
+              </li>
+              <li>
+                <p>
+                  2
+                </p>
+              </li>
+            </ul>
+          </section>
+        </div>
+      `);
+    });
+
     test('renders with templates using JSX', async () => {
       const container = document.createElement('div');
       const searchClient = createRecommendSearchClient();
@@ -336,6 +385,61 @@ describe('trendingItems', () => {
             <p>
               No recommendations.
             </p>
+          </section>
+        </div>
+      `);
+    });
+
+    test('renders with a custom layout using JSX', async () => {
+      const container = document.createElement('div');
+      const searchClient = createRecommendSearchClient();
+      const options: Parameters<typeof trendingItems>[0] = {
+        container,
+        templates: {
+          layout({ items }) {
+            return (
+              <ul>
+                {items.map((item) => (
+                  <li>
+                    <p>{item.objectID}</p>
+                  </li>
+                ))}
+              </ul>
+            );
+          },
+        },
+      };
+
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+      const widget = trendingItems(options);
+
+      search.addWidgets([widget]);
+      search.start();
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
+        <div>
+          <section
+            class="ais-TrendingItems"
+          >
+            <h3
+              class="ais-TrendingItems-title"
+            >
+              Trending items
+            </h3>
+            <ul>
+              <li>
+                <p>
+                  1
+                </p>
+              </li>
+              <li>
+                <p>
+                  2
+                </p>
+              </li>
+            </ul>
           </section>
         </div>
       `);

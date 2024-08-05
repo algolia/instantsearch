@@ -107,6 +107,33 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
         : undefined
     ) as LookingSimilarUiProps<Hit>['emptyComponent'];
 
+    const layoutComponent = (
+      templates.layout
+        ? (data) => (
+            <TemplateComponent
+              {...renderState.templateProps}
+              templateKey="layout"
+              rootTagName="fragment"
+              data={{
+                items: data.items,
+                templates: {
+                  item: templates.item
+                    ? ({ item }: { item: Hit<THit> }) => (
+                        <TemplateComponent
+                          {...renderState.templateProps}
+                          templateKey="item"
+                          rootTagName="fragment"
+                          data={item}
+                        />
+                      )
+                    : undefined,
+                },
+              }}
+            />
+          )
+        : undefined
+    ) as LookingSimilarUiProps<Hit>['view'];
+
     render(
       <LookingSimilar
         items={items}
@@ -115,6 +142,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
         sendEvent={() => {}}
         classNames={cssClasses}
         emptyComponent={emptyComponent}
+        view={layoutComponent}
         status={instantSearchInstance.status}
       />,
       containerNode
@@ -148,6 +176,16 @@ export type LookingSimilarTemplates<
    * Template to use for each result. This template will receive an object containing a single record.
    */
   item: Template<Hit<THit>>;
+
+  /**
+   * Template to use to wrap all items.
+   */
+  layout: Template<
+    Pick<
+      Parameters<NonNullable<LookingSimilarUiProps<Hit<THit>>['view']>>[0],
+      'items'
+    > & { templates: { item: Exclude<Template<Hit<THit>>, string> } }
+  >;
 }>;
 
 type LookingSimilarWidgetParams<THit extends NonNullable<object> = BaseHit> = {

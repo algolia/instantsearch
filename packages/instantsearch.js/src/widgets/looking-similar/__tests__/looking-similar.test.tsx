@@ -259,6 +259,56 @@ describe('lookingSimilar', () => {
       `);
     });
 
+    test('renders with a custom layout using `html`', async () => {
+      const container = document.createElement('div');
+      const searchClient = createRecommendSearchClient();
+      const options: Parameters<typeof lookingSimilar>[0] = {
+        container,
+        objectIDs: ['1'],
+        templates: {
+          layout({ items }, { html }) {
+            return html`<ul>
+              ${items.map((item) => html`<li><p>${item.objectID}</p></li>`)}
+            </ul>`;
+          },
+        },
+      };
+
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+      const widget = lookingSimilar(options);
+
+      search.addWidgets([widget]);
+      search.start();
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
+        <div>
+          <section
+            class="ais-LookingSimilar"
+          >
+            <h3
+              class="ais-LookingSimilar-title"
+            >
+              Looking similar
+            </h3>
+            <ul>
+              <li>
+                <p>
+                  1
+                </p>
+              </li>
+              <li>
+                <p>
+                  2
+                </p>
+              </li>
+            </ul>
+          </section>
+        </div>
+      `);
+    });
+
     test('renders with templates using JSX', async () => {
       const container = document.createElement('div');
       const searchClient = createRecommendSearchClient();
@@ -345,6 +395,62 @@ describe('lookingSimilar', () => {
             <p>
               No recommendations.
             </p>
+          </section>
+        </div>
+      `);
+    });
+
+    test('renders with a custom layout using JSX', async () => {
+      const container = document.createElement('div');
+      const searchClient = createRecommendSearchClient();
+      const options: Parameters<typeof lookingSimilar>[0] = {
+        container,
+        objectIDs: ['1'],
+        templates: {
+          layout({ items }) {
+            return (
+              <ul>
+                {items.map((item) => (
+                  <li>
+                    <p>{item.objectID}</p>
+                  </li>
+                ))}
+              </ul>
+            );
+          },
+        },
+      };
+
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+      const widget = lookingSimilar(options);
+
+      search.addWidgets([widget]);
+      search.start();
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
+        <div>
+          <section
+            class="ais-LookingSimilar"
+          >
+            <h3
+              class="ais-LookingSimilar-title"
+            >
+              Looking similar
+            </h3>
+            <ul>
+              <li>
+                <p>
+                  1
+                </p>
+              </li>
+              <li>
+                <p>
+                  2
+                </p>
+              </li>
+            </ul>
           </section>
         </div>
       `);

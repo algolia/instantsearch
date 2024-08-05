@@ -111,6 +111,33 @@ const renderer =
         : undefined
     ) as FrequentlyBoughtTogetherUiProps<Hit>['emptyComponent'];
 
+    const layoutComponent = (
+      templates.layout
+        ? (data) => (
+            <TemplateComponent
+              {...renderState.templateProps}
+              templateKey="layout"
+              rootTagName="fragment"
+              data={{
+                items: data.items,
+                templates: {
+                  item: templates.item
+                    ? ({ item }: { item: Hit<THit> }) => (
+                        <TemplateComponent
+                          {...renderState.templateProps}
+                          templateKey="item"
+                          rootTagName="fragment"
+                          data={item}
+                        />
+                      )
+                    : undefined,
+                },
+              }}
+            />
+          )
+        : undefined
+    ) as FrequentlyBoughtTogetherUiProps<Hit>['view'];
+
     render(
       <FrequentlyBoughtTogether
         items={items}
@@ -119,6 +146,7 @@ const renderer =
         sendEvent={() => {}}
         classNames={cssClasses}
         emptyComponent={emptyComponent}
+        view={layoutComponent}
         status={instantSearchInstance.status}
       />,
       containerNode
@@ -153,6 +181,18 @@ export type FrequentlyBoughtTogetherTemplates<
    * Template to use for each result. This template will receive an object containing a single record.
    */
   item: Template<Hit<THit>>;
+
+  /**
+   * Template to use to wrap all items.
+   */
+  layout: Template<
+    Pick<
+      Parameters<
+        NonNullable<FrequentlyBoughtTogetherUiProps<Hit<THit>>['view']>
+      >[0],
+      'items'
+    > & { templates: { item: Exclude<Template<Hit<THit>>, string> } }
+  >;
 }>;
 
 type FrequentlyBoughtTogetherWidgetParams<
