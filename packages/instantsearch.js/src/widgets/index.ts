@@ -13,7 +13,7 @@ export const EXPERIMENTAL_answers = deprecate(
 /** @deprecated use relatedItems instead */
 export const EXPERIMENTAL_configureRelatedItems = deprecate(
   configureRelatedItems,
-  'use relatedItems instead'
+  'EXPERIMENTAL_configureRelatedItems is deprecated and will be removed in a next minor version of InstantSearch. Please use relatedItems instead.'
 );
 
 /** @deprecated use dynamicWidgets */

@@ -13,7 +13,7 @@ export const EXPERIMENTAL_connectAnswers = deprecate(
 /** @deprecated use connectRelatedItems instead */
 export const EXPERIMENTAL_connectConfigureRelatedItems = deprecate(
   connectConfigureRelatedItems,
-  'use connectRelatedItems instead'
+  'EXPERIMENTAL_connectConfigureRelatedItems is deprecated and will be removed in a next minor version of InstantSearch. Please use connectRelatedItems instead.'
 );
 
 /** @deprecated use connectDynamicWidgets */
