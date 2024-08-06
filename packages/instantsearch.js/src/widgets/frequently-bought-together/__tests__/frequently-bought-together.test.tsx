@@ -7,8 +7,8 @@ import { wait } from '@instantsearch/testutils';
 import { h } from 'preact';
 
 import instantsearch from '../../../index.es';
-import frequentlyBoughtTogether from '../frequently-bought-together';
 import { carousel } from '../../../templates';
+import frequentlyBoughtTogether from '../frequently-bought-together';
 
 beforeEach(() => {
   document.body.innerHTML = '';
@@ -517,7 +517,7 @@ describe('frequentlyBoughtTogether', () => {
             return (
               <ul>
                 {items.map((item) => (
-                  <li>
+                  <li key={item.objectID}>
                     <p>{item.objectID}</p>
                   </li>
                 ))}

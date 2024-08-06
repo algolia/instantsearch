@@ -7,8 +7,8 @@ import { wait } from '@instantsearch/testutils/wait';
 import { h } from 'preact';
 
 import instantsearch from '../../../index.es';
-import trendingItems from '../trending-items';
 import { carousel } from '../../../templates';
+import trendingItems from '../trending-items';
 
 beforeEach(() => {
   document.body.innerHTML = '';
@@ -506,7 +506,7 @@ describe('trendingItems', () => {
             return (
               <ul>
                 {items.map((item) => (
-                  <li>
+                  <li key={item.objectID}>
                     <p>{item.objectID}</p>
                   </li>
                 ))}
