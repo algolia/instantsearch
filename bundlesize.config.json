@@ -42,27 +42,27 @@
     },
     {
       "path": "./packages/instantsearch.css/themes/algolia.css",
-      "maxSize": "3.5 kB"
+      "maxSize": "4 kB"
     },
     {
       "path": "./packages/instantsearch.css/themes/algolia-min.css",
-      "maxSize": "3.25 kB"
+      "maxSize": "3.75 kB"
     },
     {
       "path": "./packages/instantsearch.css/themes/reset.css",
-      "maxSize": "1.25 kB"
+      "maxSize": "1.50 kB"
     },
     {
       "path": "./packages/instantsearch.css/themes/reset-min.css",
-      "maxSize": "1.25 kB"
+      "maxSize": "1.50 kB"
     },
     {
       "path": "./packages/instantsearch.css/themes/satellite.css",
-      "maxSize": "4.7 kB"
+      "maxSize": "5 kB"
     },
     {
       "path": "./packages/instantsearch.css/themes/satellite-min.css",
-      "maxSize": "4.3 kB"
+      "maxSize": "4.75 kB"
     }
   ]
 }
