@@ -224,23 +224,6 @@
   z-index: 1;
 }
 
-@media (hover: none) and (pointer: coarse) {
-  .ais-Carousel-navigation {
-    display: none;
-  }
-}
-
-.ais-Carousel:hover .ais-Carousel-navigation:not([hidden]) {
-  opacity: 1;
-  visibility: visible;
-}
-
-.ais-Carousel-navigation,
-.ais-Carousel-navigation[hidden] {
-  opacity: 0;
-  visibility: hidden;
-}
-
 .ais-Carousel-navigation--previous {
   left: 0;
   transform: translateX(-25%);

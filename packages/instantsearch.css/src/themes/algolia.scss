@@ -127,6 +127,23 @@ a[class^='ais-'] {
   display: none;
 }
 
+@media (hover: none) and (pointer: coarse) {
+  .ais-Carousel-navigation {
+    display: none;
+  }
+}
+
+.ais-Carousel-navigation,
+.ais-Carousel-navigation[hidden] {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.ais-Carousel:hover .ais-Carousel-navigation:not([hidden]) {
+  opacity: 1;
+  visibility: visible;
+}
+
 .ais-Carousel-list {
   padding-bottom: 0.5rem;
   gap: 0.5rem;
