@@ -39,7 +39,7 @@ html: |
         aria-roledescription="slide"
         class="ais-Carousel-item"
       >
-        <div style="height: 100px;background: red;">
+        <div style="height: 100px;border: 1px solid red; display:flex; justify-content: center;align-items: center;">
           1
         </div>
       </li>
@@ -48,7 +48,7 @@ html: |
         aria-roledescription="slide"
         class="ais-Carousel-item"
       >
-        <div style="height: 100px;background: red;">
+        <div style="height: 100px;border: 1px solid red; display:flex; justify-content: center;align-items: center;">
           2
         </div>
       </li>
@@ -57,7 +57,7 @@ html: |
         aria-roledescription="slide"
         class="ais-Carousel-item"
       >
-        <div style="height: 100px;background: red;">
+        <div style="height: 100px;border: 1px solid red; display:flex; justify-content: center;align-items: center;">
           3
         </div>
       </li>
@@ -66,7 +66,7 @@ html: |
         aria-roledescription="slide"
         class="ais-Carousel-item"
       >
-        <div style="height: 100px;background: red;">
+        <div style="height: 100px;border: 1px solid red; display:flex; justify-content: center;align-items: center;">
           4
         </div>
       </li>
@@ -75,7 +75,7 @@ html: |
         aria-roledescription="slide"
         class="ais-Carousel-item"
       >
-        <div style="height: 100px;background: red;">
+        <div style="height: 100px;border: 1px solid red; display:flex; justify-content: center;align-items: center;">
           5
         </div>
       </li>
@@ -84,7 +84,7 @@ html: |
         aria-roledescription="slide"
         class="ais-Carousel-item"
       >
-        <div style="height: 100px;background: red;">
+        <div style="height: 100px;border: 1px solid red; display:flex; justify-content: center;align-items: center;">
           6
         </div>
       </li>
