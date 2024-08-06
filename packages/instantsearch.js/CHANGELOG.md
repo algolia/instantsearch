@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.73.4](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.73.3...instantsearch.js@4.73.4) (2024-08-06)
+
+
+### Bug Fixes
+
+* import `index` from its specific file ([#6310](https://github.com/algolia/instantsearch/issues/6310)) ([209bb00](https://github.com/algolia/instantsearch/commit/209bb0030519e94aa1708268137b83e60b46de68)), closes [#6309](https://github.com/algolia/instantsearch/issues/6309)
+
+
+
+
+
 ## [4.73.3](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.73.2...instantsearch.js@4.73.3) (2024-07-30)
 
 
