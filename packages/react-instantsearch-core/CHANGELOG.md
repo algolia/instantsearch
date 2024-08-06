@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.12.4](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.12.3...react-instantsearch-core@7.12.4) (2024-08-06)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+
+
 ## [7.12.3](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.12.2...react-instantsearch-core@7.12.3) (2024-07-30)
 
 
