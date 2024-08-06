@@ -29,6 +29,17 @@ describe('instantsearch()', () => {
     `);
   });
 
+  it('does not include the templates', () => {
+    // @ts-expect-error
+    expect(() => instantsearch.templates).toThrowErrorMatchingInlineSnapshot(`
+      "\\"instantsearch.templates\\" are not available from the ES build.
+
+      To import the templates:
+
+      import { carousel } from 'instantsearch.js/es/templates'"
+    `);
+  });
+
   it('includes the helper functions', () => {
     expect(Object.keys(instantsearch)).toMatchInlineSnapshot(`
       [
