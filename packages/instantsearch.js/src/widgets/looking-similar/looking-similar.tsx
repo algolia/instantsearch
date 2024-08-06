@@ -184,7 +184,11 @@ export type LookingSimilarTemplates<
     Pick<
       Parameters<NonNullable<LookingSimilarUiProps<Hit<THit>>['view']>>[0],
       'items'
-    > & { templates: { item: Exclude<Template<Hit<THit>>, string> } }
+    > & {
+      templates: {
+        item: LookingSimilarUiProps<Hit>['itemComponent'];
+      };
+    }
   >;
 }>;
 

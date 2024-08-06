@@ -191,7 +191,11 @@ export type FrequentlyBoughtTogetherTemplates<
         NonNullable<FrequentlyBoughtTogetherUiProps<Hit<THit>>['view']>
       >[0],
       'items'
-    > & { templates: { item: Exclude<Template<Hit<THit>>, string> } }
+    > & {
+      templates: {
+        item: FrequentlyBoughtTogetherUiProps<Hit>['itemComponent'];
+      };
+    }
   >;
 }>;
 

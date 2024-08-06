@@ -1,6 +1,8 @@
 /** @jsx createElement */
 import { cx } from '../lib';
 
+import { createDefaultItemComponent } from './recommend-shared';
+
 import type {
   ComponentProps,
   MutableRef,
@@ -18,7 +20,7 @@ export type CarouselProps<
   previousButtonRef: MutableRef<HTMLButtonElement | null>;
   carouselIdRef: MutableRef<string>;
   items: Array<RecordWithObjectID<TObject>>;
-  itemComponent: (
+  itemComponent?: (
     props: RecommendItemComponentProps<RecordWithObjectID<TObject>> &
       TComponentProps
   ) => JSX.Element;
@@ -114,7 +116,7 @@ function NextIconDefaultComponent({
   );
 }
 
-export function createCarouselComponent({ createElement }: Renderer) {
+export function createCarouselComponent({ createElement, Fragment }: Renderer) {
   return function Carousel<TObject extends Record<string, unknown>>(
     userProps: CarouselProps<TObject>
   ) {
@@ -124,7 +126,10 @@ export function createCarouselComponent({ createElement }: Renderer) {
       previousButtonRef,
       carouselIdRef,
       classNames = {},
-      itemComponent: ItemComponent,
+      itemComponent: ItemComponent = createDefaultItemComponent({
+        createElement,
+        Fragment,
+      }),
       previousIconComponent:
         PreviousIconComponent = PreviousIconDefaultComponent,
       nextIconComponent: NextIconComponent = NextIconDefaultComponent,

@@ -52,7 +52,7 @@ type CarouselTemplateProps<TObject extends Record<string, unknown>> = Pick<
   'items'
 > & {
   templates: {
-    item: CarouselUiProps<TObject>['itemComponent'];
+    item?: CarouselUiProps<TObject>['itemComponent'];
   };
 };
 

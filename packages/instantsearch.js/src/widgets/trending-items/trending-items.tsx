@@ -193,7 +193,11 @@ export type TrendingItemsTemplates<THit extends NonNullable<object> = BaseHit> =
       Pick<
         Parameters<NonNullable<TrendingItemsUiProps<Hit<THit>>['view']>>[0],
         'items'
-      > & { templates: { item: Exclude<Template<Hit<THit>>, string> } }
+      > & {
+        templates: {
+          item: TrendingItemsUiProps<Hit>['itemComponent'];
+        };
+      }
     >;
   }>;
 

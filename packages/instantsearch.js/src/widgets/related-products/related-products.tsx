@@ -194,7 +194,11 @@ export type RelatedProductsTemplates<
     Pick<
       Parameters<NonNullable<RelatedProductsUiProps<Hit<THit>>['view']>>[0],
       'items'
-    > & { templates: { item: Exclude<Template<Hit<THit>>, string> } }
+    > & {
+      templates: {
+        item: RelatedProductsUiProps<Hit>['itemComponent'];
+      };
+    }
   >;
 }>;
 
