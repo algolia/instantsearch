@@ -90,7 +90,8 @@ a[class^='ais-'] {
 .ais-InfiniteResults-loadMore,
 .ais-Menu-showMore,
 .ais-RefinementList-showMore,
-.ais-RelevantSort-button {
+.ais-RelevantSort-button,
+.ais-Carousel-navigation {
   padding: 0.3rem 0.5rem;
   font-size: 0.8rem;
   color: #fff;
@@ -124,6 +125,32 @@ a[class^='ais-'] {
 
 .ais-InfiniteHits-loadPrevious--disabled {
   display: none;
+}
+
+.ais-Carousel-list {
+  padding-bottom: 0.5rem;
+  gap: 0.5rem;
+  outline-color: $algolia-blue;
+  outline-offset: 0.5rem;
+  scrollbar-color: $port-gore $ghost;
+  scrollbar-width: thin;
+}
+
+.ais-Carousel-list::-webkit-scrollbar {
+  height: 2px;
+}
+
+.ais-Carousel-list::-webkit-scrollbar-track {
+  background-color: $ghost;
+}
+
+.ais-Carousel-list::-webkit-scrollbar-thumb {
+  background-color: $port-gore;
+}
+
+.ais-Carousel-item * {
+  outline-color: $algolia-blue;
+  outline-offset: 3px;
 }
 
 .ais-CurrentRefinements {

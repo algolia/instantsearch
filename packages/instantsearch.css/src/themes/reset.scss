@@ -1,7 +1,7 @@
 // Reset all lists
 
 .ais-Breadcrumb-list,
-// .ais-Carousel-list,
+.ais-Carousel-list,
 .ais-CurrentRefinements-list,
 .ais-HierarchicalMenu-list,
 .ais-Hits-list,
@@ -25,7 +25,7 @@
 
 // Reset all buttons
 
-// .ais-Carousel-navigation,
+.ais-Carousel-navigation,
 .ais-ClearRefinements-button,
 .ais-CurrentRefinements-delete,
 .ais-CurrentRefinements-reset,
@@ -195,4 +195,62 @@
   top: -22px;
   text-align: center;
   transform: translateX(-50%);
+}
+
+// Reset Carousel
+
+.ais-Carousel {
+  position: relative;
+}
+
+.ais-Carousel-list {
+  grid-auto-columns: 42%;
+  display: grid;
+  grid-auto-flow: column;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x proximity;
+}
+
+@media (min-width: 999px) {
+  .ais-Carousel-list {
+    grid-auto-columns: 20%;
+  }
+}
+
+.ais-Carousel-navigation {
+  position: absolute;
+  top: 35%;
+  z-index: 1;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .ais-Carousel-navigation {
+    display: none;
+  }
+}
+
+.ais-Carousel:hover .ais-Carousel-navigation:not([hidden]) {
+  opacity: 1;
+  visibility: visible;
+}
+
+.ais-Carousel-navigation,
+.ais-Carousel-navigation[hidden] {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.ais-Carousel-navigation--previous {
+  left: 0;
+  transform: translateX(-25%);
+}
+
+.ais-Carousel-navigation--next {
+  right: 0;
+  transform: translateX(25%);
+}
+
+.ais-Carousel-item {
+  scroll-snap-align: start;
 }
