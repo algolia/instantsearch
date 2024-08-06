@@ -115,7 +115,7 @@ function NextIconDefaultComponent({
 }
 
 export function createCarouselComponent({ createElement }: Renderer) {
-  return function Carousel<TObject extends RecordWithObjectID>(
+  return function Carousel<TObject extends Record<string, unknown>>(
     userProps: CarouselProps<TObject>
   ) {
     const {
