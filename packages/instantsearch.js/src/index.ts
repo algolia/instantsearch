@@ -7,6 +7,7 @@ import * as stateMappings from './lib/stateMappings/index';
 import version from './lib/version';
 import * as middlewares from './middlewares/index';
 import * as widgets from './widgets/index';
+import * as templates from './templates';
 
 import type { InstantSearchOptions } from './lib/InstantSearch';
 import type { Expand, UiState } from './types';
@@ -23,6 +24,7 @@ type InstantSearchModule = {
 
   routers: typeof routers;
   stateMappings: typeof stateMappings;
+  templates: typeof templates;
 
   createInfiniteHitsSessionStorageCache: typeof createInfiniteHitsSessionStorageCache;
 
@@ -68,6 +70,7 @@ instantsearch.middlewares = middlewares;
 
 instantsearch.routers = routers;
 instantsearch.stateMappings = stateMappings;
+instantsearch.templates = templates;
 
 instantsearch.createInfiniteHitsSessionStorageCache =
   createInfiniteHitsSessionStorageCache;
