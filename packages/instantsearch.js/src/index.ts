@@ -6,8 +6,8 @@ import * as routers from './lib/routers/index';
 import * as stateMappings from './lib/stateMappings/index';
 import version from './lib/version';
 import * as middlewares from './middlewares/index';
+import * as templates from './templates/index';
 import * as widgets from './widgets/index';
-import * as templates from './templates';
 
 import type { InstantSearchOptions } from './lib/InstantSearch';
 import type { Expand, UiState } from './types';
