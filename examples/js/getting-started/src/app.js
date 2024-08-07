@@ -10,6 +10,8 @@ import {
   trendingItems,
 } from 'instantsearch.js/es/widgets';
 
+import 'instantsearch.css/themes/satellite.css';
+
 const searchClient = algoliasearch(
   'latency',
   '6be0576ff61c053d5f9a3225e2a90f76'

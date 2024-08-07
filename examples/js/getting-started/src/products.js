@@ -3,6 +3,8 @@ import instantsearch from 'instantsearch.js';
 import { carousel } from 'instantsearch.js/es/templates';
 import { configure, hits, relatedProducts } from 'instantsearch.js/es/widgets';
 
+import 'instantsearch.css/themes/satellite.css';
+
 const searchParams = new URLSearchParams(document.location.search);
 
 const pid = searchParams.get('pid');
