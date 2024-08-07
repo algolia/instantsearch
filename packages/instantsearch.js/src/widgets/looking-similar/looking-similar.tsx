@@ -132,7 +132,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
             />
           )
         : undefined
-    ) as LookingSimilarUiProps<Hit>['view'];
+    ) as LookingSimilarUiProps<Hit>['layout'];
 
     render(
       <LookingSimilar
@@ -142,7 +142,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
         sendEvent={() => {}}
         classNames={cssClasses}
         emptyComponent={emptyComponent}
-        view={layoutComponent}
+        layout={layoutComponent}
         status={instantSearchInstance.status}
       />,
       containerNode
@@ -182,7 +182,7 @@ export type LookingSimilarTemplates<
    */
   layout: Template<
     Pick<
-      Parameters<NonNullable<LookingSimilarUiProps<Hit<THit>>['view']>>[0],
+      Parameters<NonNullable<LookingSimilarUiProps<Hit<THit>>['layout']>>[0],
       'items'
     > & {
       templates: {

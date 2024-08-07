@@ -20,7 +20,7 @@ const ItemComponent: TrendingItemsProps<RecordWithObjectID>['itemComponent'] =
   ({ item }) => <div>{item.objectID}</div>;
 
 describe('TrendingItems', () => {
-  test('renders items with default view and header', () => {
+  test('renders items with default layout and header', () => {
     const { container } = render(
       <TrendingItems
         status="idle"
@@ -140,13 +140,13 @@ describe('TrendingItems', () => {
     `);
   });
 
-  test('renders custom view', () => {
+  test('renders custom layout', () => {
     const { container } = render(
       <TrendingItems
         status="idle"
         items={[{ objectID: '1', __position: 1 }]}
         itemComponent={ItemComponent}
-        view={(props) => (
+        layout={(props) => (
           <div className={props.classNames.container}>
             <ol className={props.classNames.list}>
               {props.items.map((item) => (

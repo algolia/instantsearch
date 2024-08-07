@@ -20,7 +20,7 @@ const ItemComponent: FrequentlyBoughtTogetherProps<RecordWithObjectID>['itemComp
   ({ item }) => <div>{item.objectID}</div>;
 
 describe('FrequentlyBoughtTogether', () => {
-  test('renders items with default view and header', () => {
+  test('renders items with default layout and header', () => {
     const { container } = render(
       <FrequentlyBoughtTogether
         status="idle"
@@ -140,13 +140,13 @@ describe('FrequentlyBoughtTogether', () => {
     `);
   });
 
-  test('renders custom view', () => {
+  test('renders custom layout', () => {
     const { container } = render(
       <FrequentlyBoughtTogether
         status="idle"
         items={[{ objectID: '1', __position: 1 }]}
         itemComponent={ItemComponent}
-        view={(props) => (
+        layout={(props) => (
           <div className={props.classNames.container}>
             <ol className={props.classNames.list}>
               {props.items.map((item) => (

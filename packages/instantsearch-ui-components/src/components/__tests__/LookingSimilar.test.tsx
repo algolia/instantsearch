@@ -20,7 +20,7 @@ const ItemComponent: LookingSimilarProps<RecordWithObjectID>['itemComponent'] =
   ({ item }) => <div>{item.objectID}</div>;
 
 describe('LookingSimilar', () => {
-  test('renders items with default view and header', () => {
+  test('renders items with default layout and header', () => {
     const { container } = render(
       <LookingSimilar
         status="idle"
@@ -140,13 +140,13 @@ describe('LookingSimilar', () => {
     `);
   });
 
-  test('renders custom view', () => {
+  test('renders custom layout', () => {
     const { container } = render(
       <LookingSimilar
         status="idle"
         items={[{ objectID: '1', __position: 1 }]}
         itemComponent={ItemComponent}
-        view={(props) => (
+        layout={(props) => (
           <div className={props.classNames.container}>
             <ol className={props.classNames.list}>
               {props.items.map((item) => (

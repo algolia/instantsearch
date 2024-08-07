@@ -38,7 +38,7 @@ export type RecommendTranslations = {
   sliderLabel: string;
 };
 
-export type RecommendViewProps<
+export type RecommendLayoutProps<
   TItem extends RecordWithObjectID,
   TTranslations extends Record<string, string>,
   TClassNames extends Record<string, string>
@@ -72,8 +72,8 @@ export type RecommendComponentProps<
   status: RecommendStatus;
   translations?: Partial<RecommendTranslations>;
   sendEvent: SendEventForHits;
-  view?: (
-    props: RecommendViewProps<
+  layout?: (
+    props: RecommendLayoutProps<
       RecordWithObjectID<TObject>,
       Required<RecommendTranslations>,
       Record<string, string>
