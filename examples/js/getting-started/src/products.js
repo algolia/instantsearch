@@ -39,16 +39,18 @@ search.addWidgets([
   relatedProducts({
     container: '#related-products',
     objectIDs: [pid],
-    limit: 4,
+    limit: 6,
     templates: {
       item: (item, { html }) => html`
-        <article>
-          <div>
-            <img src="${item.image}" />
-            <h2>${item.name}</h2>
-          </div>
-          <a href="/products.html?pid=${item.objectID}">See product</a>
-        </article>
+        <div class="ais-RelatedProducts-item">
+          <article>
+            <div>
+              <img src="${item.image}" />
+              <h2>${item.name}</h2>
+            </div>
+            <a href="/products.html?pid=${item.objectID}">See product</a>
+          </article>
+        </div>
       `,
       layout: carousel(),
     },
