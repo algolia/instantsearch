@@ -1,6 +1,7 @@
 import algoliasearch from 'algoliasearch/lite';
 import instantsearch from 'instantsearch.js';
 import { configure, hits, relatedProducts } from 'instantsearch.js/es/widgets';
+import { carousel } from 'instantsearch.js/es/templates';
 
 const searchParams = new URLSearchParams(document.location.search);
 
@@ -47,6 +48,7 @@ search.addWidgets([
           <a href="/products.html?pid=${item.objectID}">See product</a>
         </article>
       `,
+      layout: carousel(),
     },
   }),
   configure({
