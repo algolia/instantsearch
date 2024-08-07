@@ -19,6 +19,19 @@ import type {
 import type { Widget } from 'instantsearch.js';
 import type { ComponentChildren, JSX } from 'preact';
 
+export function injectStyles() {
+  const style = document.createElement('style');
+  // @TODO: decide if this should be for all columns or only a specific type
+  style.textContent = `
+    .ais-Columns {
+      display: grid;
+      grid-template-columns: minmax(min-content, 200px) 1fr;
+      gap: 1em;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
 export function configToIndex(
   config: Configuration,
   elements: Map<string, HTMLElement>

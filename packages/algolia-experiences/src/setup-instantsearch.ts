@@ -4,7 +4,7 @@ import InstantSearch from 'instantsearch.js/es/lib/InstantSearch';
 
 import { fakeFetchConfiguration } from './fake-configuration';
 import { getElements, getSettings } from './get-information';
-import { configToIndex } from './render';
+import { configToIndex, injectStyles } from './render';
 import { error } from './util';
 
 declare global {
@@ -37,16 +37,4 @@ export function setupInstantSearch() {
   } catch (err) {
     error((err as Error).message);
   }
-}
-
-function injectStyles() {
-  const style = document.createElement('style');
-  style.textContent = `
-    .ais-Columns {
-      display: grid;
-      grid-template-columns: minmax(min-content, 200px) 1fr;
-      gap: 1em;
-    }
-  `;
-  document.head.appendChild(style);
 }
