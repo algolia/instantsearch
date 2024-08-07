@@ -13,6 +13,44 @@
           Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
           sans-serif;
       }
+      .ais-Hits-list,
+      .ais-TrendingItems-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1em;
+      }
+      .ais-TrendingItems-item,
+      .ais-Hits-item {
+        padding: 0;
+      }
+      .ais-TrendingItems-item a,
+      .ais-Hits-item a {
+        padding: 1.5em;
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+      }
+      .ais-TrendingItems-item img,
+      .ais-Hits-item img {
+        width: 100%;
+        height: 10em;
+        border-radius: 4px;
+        object-fit: contain;
+      }
+      .__flex {
+        display: flex;
+        gap: 1em;
+      }
+      .__bold {
+        font-weight: bold;
+      }
+      div:has(> .ais-Pagination) {
+        display: flex;
+      }
+      .ais-Pagination {
+        margin: 1em auto;
+      }
     </style>
     <script src="/packages/algolia-experiences/dist/algolia-experiences.development.js"></script>
     <meta
@@ -21,6 +59,7 @@
     />
   </head>
   <body>
+    <h2>Buy audio equipment online</h2>
     <div data-instantsearch-id="category:audio"></div>
   </body>
 </html>

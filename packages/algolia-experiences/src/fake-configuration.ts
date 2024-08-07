@@ -27,7 +27,7 @@ const CONFIGURATION_OBJECT: Record<string, Configuration> = {
               parameters: {},
               children: [
                 {
-                  type: 'div',
+                  type: 'span',
                   parameters: {
                     text: [
                       { type: 'string', value: 'cols: ' },
@@ -51,7 +51,7 @@ const CONFIGURATION_OBJECT: Record<string, Configuration> = {
         parameters: {},
         children: [
           {
-            type: 'div',
+            type: 'span',
             parameters: {
               text: [
                 { type: 'string', value: 'one: ' },
@@ -78,7 +78,7 @@ const CONFIGURATION_OBJECT: Record<string, Configuration> = {
         parameters: {},
         children: [
           {
-            type: 'div',
+            type: 'span',
             parameters: {
               text: [
                 { type: 'string', value: 'other: ' },
@@ -99,7 +99,7 @@ const CONFIGURATION_OBJECT: Record<string, Configuration> = {
         parameters: { limit: 4 },
         children: [
           {
-            type: 'div',
+            type: 'span',
             parameters: {
               text: [
                 { type: 'string', value: 'trending: ' },
@@ -174,28 +174,49 @@ const CONFIGURATION_OBJECT: Record<string, Configuration> = {
               parameters: {},
               children: [
                 {
-                  type: 'image',
-                  parameters: {
-                    src: [{ type: 'attribute', path: ['image'] }],
-                    alt: [{ type: 'string', value: '' }],
-                  },
-                },
-                {
-                  type: 'div',
-                  parameters: {
-                    text: [{ type: 'attribute', path: ['name'] }],
-                  },
-                },
-                {
-                  type: 'div',
-                  parameters: {
-                    text: [
-                      { type: 'string', value: '$' },
-                      { type: 'attribute', path: ['price'] },
-                    ],
-                  },
+                  type: 'link',
+                  parameters: { href: [{ type: 'attribute', path: ['url'] }] },
+                  children: [
+                    {
+                      type: 'image',
+                      parameters: {
+                        src: [{ type: 'attribute', path: ['image'] }],
+                        alt: [{ type: 'string', value: '' }],
+                      },
+                    },
+                    {
+                      type: 'div',
+                      parameters: {
+                        class: [{ type: 'string', value: '__flex' }],
+                      },
+                      children: [
+                        {
+                          type: 'span',
+                          parameters: {
+                            text: [{ type: 'attribute', path: ['name'] }],
+                          },
+                        },
+                        {
+                          type: 'span',
+                          parameters: {
+                            class: [{ type: 'string', value: '__bold' }],
+                            text: [
+                              { type: 'string', value: '$' },
+                              { type: 'attribute', path: ['price'] },
+                            ],
+                          },
+                        },
+                      ],
+                    },
+                  ],
                 },
               ],
+            },
+            {
+              type: 'ais.pagination',
+              parameters: {
+                padding: 2,
+              },
             },
             {
               type: 'ais.trendingItems',
@@ -206,19 +227,43 @@ const CONFIGURATION_OBJECT: Record<string, Configuration> = {
               },
               children: [
                 {
-                  type: 'image',
-                  parameters: {
-                    src: [{ type: 'attribute', path: ['image'] }],
-                    alt: [{ type: 'string', value: '' }],
-                  },
+                  type: 'link',
+                  parameters: { href: [{ type: 'attribute', path: ['url'] }] },
+                  children: [
+                    {
+                      type: 'image',
+                      parameters: {
+                        src: [{ type: 'attribute', path: ['image'] }],
+                        alt: [{ type: 'string', value: '' }],
+                      },
+                    },
+                    {
+                      type: 'div',
+                      parameters: {
+                        class: [{ type: 'string', value: '__flex' }],
+                      },
+                      children: [
+                        {
+                          type: 'span',
+                          parameters: {
+                            text: [{ type: 'attribute', path: ['name'] }],
+                          },
+                        },
+                        {
+                          type: 'span',
+                          parameters: {
+                            class: [{ type: 'string', value: '__bold' }],
+                            text: [
+                              { type: 'string', value: '$' },
+                              { type: 'attribute', path: ['price'] },
+                            ],
+                          },
+                        },
+                      ],
+                    },
+                  ],
                 },
               ],
-            },
-            {
-              type: 'ais.pagination',
-              parameters: {
-                padding: 2,
-              },
             },
           ],
         ],

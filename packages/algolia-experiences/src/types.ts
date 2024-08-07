@@ -5,19 +5,34 @@ type Attribute = { type: 'attribute'; path: string[] };
 type Highlight = { type: 'highlight' | 'snippet'; path: string[] };
 export type TemplateText = Array<Attribute | StaticString | Highlight>;
 export type TemplateAttribute = Array<Attribute | StaticString>;
+type RegularParameters = {
+  class?: TemplateAttribute;
+};
 export type TemplateChild =
   | {
-      type: 'paragraph' | 'div' | 'span' | 'h2';
+      type: 'paragraph' | 'span' | 'h2';
       parameters: {
         text: TemplateText;
-      };
+      } & RegularParameters;
+    }
+  | {
+      type: 'div';
+      parameters: RegularParameters;
+      children: TemplateChild[];
     }
   | {
       type: 'image';
       parameters: {
         src: TemplateAttribute;
         alt: TemplateAttribute;
-      };
+      } & RegularParameters;
+    }
+  | {
+      type: 'link';
+      parameters: {
+        href: TemplateAttribute;
+      } & RegularParameters;
+      children: TemplateChild[];
     };
 
 export type TemplateWidgetTypes =
