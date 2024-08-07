@@ -117,6 +117,33 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
         : undefined
     ) as RelatedProductsUiProps<Hit>['emptyComponent'];
 
+    const layoutComponent = (
+      templates.layout
+        ? (data) => (
+            <TemplateComponent
+              {...renderState.templateProps}
+              templateKey="layout"
+              rootTagName="fragment"
+              data={{
+                items: data.items,
+                templates: {
+                  item: templates.item
+                    ? ({ item }: { item: Hit<THit> }) => (
+                        <TemplateComponent
+                          {...renderState.templateProps}
+                          templateKey="item"
+                          rootTagName="fragment"
+                          data={item}
+                        />
+                      )
+                    : undefined,
+                },
+              }}
+            />
+          )
+        : undefined
+    ) as RelatedProductsUiProps<Hit>['view'];
+
     render(
       <RelatedProducts
         items={items}
@@ -125,6 +152,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
         headerComponent={headerComponent}
         itemComponent={itemComponent}
         emptyComponent={emptyComponent}
+        view={layoutComponent}
         status={instantSearchInstance.status}
       />,
       containerNode
@@ -158,6 +186,20 @@ export type RelatedProductsTemplates<
    * Template to use for each result. This template will receive an object containing a single record.
    */
   item: Template<Hit<THit>>;
+
+  /**
+   * Template to use to wrap all items.
+   */
+  layout: Template<
+    Pick<
+      Parameters<NonNullable<RelatedProductsUiProps<Hit<THit>>['view']>>[0],
+      'items'
+    > & {
+      templates: {
+        item: RelatedProductsUiProps<Hit>['itemComponent'];
+      };
+    }
+  >;
 }>;
 
 type RelatedProductsWidgetParams<THit extends NonNullable<object> = BaseHit> = {

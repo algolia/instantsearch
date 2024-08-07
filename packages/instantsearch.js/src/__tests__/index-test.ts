@@ -28,6 +28,7 @@ describe('instantsearch()', () => {
         "middlewares",
         "routers",
         "stateMappings",
+        "templates",
         "createInfiniteHitsSessionStorageCache",
         "highlight",
         "reverseHighlight",

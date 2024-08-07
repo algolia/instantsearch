@@ -110,6 +110,18 @@ import { connectSearchBox } from 'instantsearch.js/es/connectors'`
   },
 });
 
+Object.defineProperty(instantsearch, 'templates', {
+  get() {
+    throw new ReferenceError(
+      `"instantsearch.templates" are not available from the ES build.
+
+To import the templates:
+
+import { carousel } from 'instantsearch.js/es/templates'`
+    );
+  },
+});
+
 export default instantsearch;
 
 export * from './types';
