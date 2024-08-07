@@ -6,7 +6,7 @@ import {
   createDefaultEmptyComponent,
   createDefaultHeaderComponent,
   createDefaultItemComponent,
-  createListViewComponent,
+  createListComponent,
 } from './recommend-shared';
 
 import type {
@@ -43,7 +43,7 @@ export function createFrequentlyBoughtTogetherComponent({
         createElement,
         Fragment,
       }),
-      view: View = createListViewComponent({ createElement, Fragment }),
+      layout: Layout = createListComponent({ createElement, Fragment }),
       items,
       status,
       translations: userTranslations,
@@ -91,7 +91,7 @@ export function createFrequentlyBoughtTogetherComponent({
           translations={translations}
         />
 
-        <View
+        <Layout
           classNames={cssClasses}
           translations={translations}
           itemComponent={ItemComponent}

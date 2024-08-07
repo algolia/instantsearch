@@ -6,7 +6,7 @@ import {
   createDefaultEmptyComponent,
   createDefaultHeaderComponent,
   createDefaultItemComponent,
-  createListViewComponent,
+  createListComponent,
 } from './recommend-shared';
 
 import type {
@@ -43,7 +43,7 @@ export function createTrendingItemsComponent({
         createElement,
         Fragment,
       }),
-      view: View = createListViewComponent({ createElement, Fragment }),
+      layout: Layout = createListComponent({ createElement, Fragment }),
       items,
       status,
       translations: userTranslations,
@@ -88,7 +88,7 @@ export function createTrendingItemsComponent({
           translations={translations}
         />
 
-        <View
+        <Layout
           classNames={cssClasses}
           translations={translations}
           itemComponent={ItemComponent}

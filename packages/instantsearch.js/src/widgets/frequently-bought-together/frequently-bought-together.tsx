@@ -136,7 +136,7 @@ const renderer =
             />
           )
         : undefined
-    ) as FrequentlyBoughtTogetherUiProps<Hit>['view'];
+    ) as FrequentlyBoughtTogetherUiProps<Hit>['layout'];
 
     render(
       <FrequentlyBoughtTogether
@@ -146,7 +146,7 @@ const renderer =
         sendEvent={() => {}}
         classNames={cssClasses}
         emptyComponent={emptyComponent}
-        view={layoutComponent}
+        layout={layoutComponent}
         status={instantSearchInstance.status}
       />,
       containerNode
@@ -188,7 +188,7 @@ export type FrequentlyBoughtTogetherTemplates<
   layout: Template<
     Pick<
       Parameters<
-        NonNullable<FrequentlyBoughtTogetherUiProps<Hit<THit>>['view']>
+        NonNullable<FrequentlyBoughtTogetherUiProps<Hit<THit>>['layout']>
       >[0],
       'items'
     > & {

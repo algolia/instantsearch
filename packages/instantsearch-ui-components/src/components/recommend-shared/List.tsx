@@ -5,12 +5,12 @@ import type {
   RecommendTranslations,
   RecordWithObjectID,
   Renderer,
-  RecommendViewProps,
+  RecommendLayoutProps,
 } from '../../types';
 
-export function createListViewComponent({ createElement }: Renderer) {
-  return function ListView<TItem extends RecordWithObjectID>(
-    userProps: RecommendViewProps<
+export function createListComponent({ createElement }: Renderer) {
+  return function List<TItem extends RecordWithObjectID>(
+    userProps: RecommendLayoutProps<
       TItem,
       RecommendTranslations,
       Partial<RecommendClassNames>

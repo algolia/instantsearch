@@ -142,7 +142,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
             />
           )
         : undefined
-    ) as RelatedProductsUiProps<Hit>['view'];
+    ) as RelatedProductsUiProps<Hit>['layout'];
 
     render(
       <RelatedProducts
@@ -152,7 +152,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
         headerComponent={headerComponent}
         itemComponent={itemComponent}
         emptyComponent={emptyComponent}
-        view={layoutComponent}
+        layout={layoutComponent}
         status={instantSearchInstance.status}
       />,
       containerNode
@@ -192,7 +192,7 @@ export type RelatedProductsTemplates<
    */
   layout: Template<
     Pick<
-      Parameters<NonNullable<RelatedProductsUiProps<Hit<THit>>['view']>>[0],
+      Parameters<NonNullable<RelatedProductsUiProps<Hit<THit>>['layout']>>[0],
       'items'
     > & {
       templates: {
