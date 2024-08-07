@@ -58,26 +58,28 @@ type CarouselTemplateProps<TObject extends Record<string, unknown>> = Pick<
 
 export function carousel<TObject extends Record<string, unknown>>({
   cssClasses,
-  templates,
+  templates = {},
 }: CreateCarouselTemplateProps<TObject> = {}) {
   return function CarouselTemplate({
     items,
     templates: userTemplates,
   }: CarouselTemplateProps<TObject>) {
-    const previousIconComponent = (
-      templates?.previous ? () => templates.previous?.({ html }) : undefined
-    ) as CarouselUiProps<TObject>['previousIconComponent'];
-
-    const nextIconComponent = (
-      templates?.next ? () => templates.next?.({ html }) : undefined
-    ) as CarouselUiProps<TObject>['previousIconComponent'];
+    const { previous, next } = templates;
 
     return (
       <CarouselWithRefs
         items={items}
         itemComponent={userTemplates.item}
-        previousIconComponent={previousIconComponent}
-        nextIconComponent={nextIconComponent}
+        previousIconComponent={
+          (previous
+            ? () => previous({ html })
+            : undefined) as CarouselUiProps<TObject>['previousIconComponent']
+        }
+        nextIconComponent={
+          (next
+            ? () => next({ html })
+            : undefined) as CarouselUiProps<TObject>['nextIconComponent']
+        }
         classNames={cssClasses}
       />
     );
