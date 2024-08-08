@@ -132,7 +132,9 @@ describe('GeoSearch', () => {
     lastRenderArgs(fn).widgetParams.renderState;
 
   const simulateMapReadyEvent = (google: typeof window['google']) => {
-    castToJestMock(google.maps.event.addListenerOnce).mock.calls[0][2]();
+    castToJestMock(
+      google.maps.event.addListenerOnce.bind(google.maps.event)
+    ).mock.calls[0][2]();
   };
 
   const simulateEvent = (
