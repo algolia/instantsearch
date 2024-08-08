@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-react-native-example",
-  "version": "41.0.0",
+  "version": "42.0.0",
   "private": true,
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
@@ -14,9 +14,9 @@
     "algoliasearch": "4.23.2",
     "expo": "~44.0.0",
     "expo-status-bar": "~1.2.0",
-    "instantsearch.js": "4.73.4",
+    "instantsearch.js": "4.74.0",
     "react": "17.0.1",
-    "react-instantsearch-core": "7.12.4",
+    "react-instantsearch-core": "7.12.5",
     "react-native": "0.64.3",
     "react-native-web": "0.17.1"
   },

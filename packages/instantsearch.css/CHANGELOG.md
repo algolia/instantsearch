@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.5.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.4.0...instantsearch.css@8.5.0) (2024-08-08)
+
+
+### Features
+
+* **carousel:** introduce styling for all themes ([#6313](https://github.com/algolia/instantsearch/issues/6313)) ([73b760a](https://github.com/algolia/instantsearch/commit/73b760a241e47bbd4aabb281beb38c3da169b87f))
+
+
+
+
+
 # [8.4.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.3.0...instantsearch.css@8.4.0) (2024-07-30)
 
 
