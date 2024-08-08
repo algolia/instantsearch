@@ -37,8 +37,10 @@ type SharedRenderOptions = {
   ) => string;
 };
 
-export type InitOptions = SharedRenderOptions & {
-  uiState: UiState;
+export type InitOptions<
+  TWidgetDescription extends WidgetDescription = { $$type: string }
+> = SharedRenderOptions & {
+  uiState: UiState<TWidgetDescription['indexUiState']>;
   results?: undefined;
 };
 
@@ -153,9 +155,7 @@ type SearchWidget<TWidgetDescription extends WidgetDescription> = {
   getWidgetParameters?: (
     state: SearchParameters,
     widgetParametersOptions: {
-      uiState: Expand<
-        Partial<TWidgetDescription['indexUiState'] & IndexUiState>
-      >;
+      uiState: Expand<IndexUiState<TWidgetDescription['indexUiState']>>;
     }
   ) => SearchParameters;
 };
@@ -172,9 +172,7 @@ type RecommendWidget<
   getWidgetParameters: (
     state: RecommendParameters,
     widgetParametersOptions: {
-      uiState: Expand<
-        Partial<TWidgetDescription['indexUiState'] & IndexUiState>
-      >;
+      uiState: Expand<IndexUiState<TWidgetDescription['indexUiState']>>;
     }
   ) => RecommendParameters;
   getRenderState: (
@@ -202,7 +200,7 @@ type RequiredWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
   /**
    * Called once before the first search.
    */
-  init?: (options: InitOptions) => void;
+  init?: (options: InitOptions<TWidgetDescription>) => void;
   /**
    * Whether `render` should be called
    */
@@ -247,12 +245,12 @@ type RequiredUiStateLifeCycle<TWidgetDescription extends WidgetDescription> = {
    * @param widgetStateOptions - Extra information to calculate uiState.
    */
   getWidgetUiState: (
-    uiState: Expand<Partial<TWidgetDescription['indexUiState'] & IndexUiState>>,
+    uiState: Expand<IndexUiState<TWidgetDescription['indexUiState']>>,
     widgetUiStateOptions: {
       searchParameters: SearchParameters;
       helper: Helper;
     }
-  ) => Partial<IndexUiState & TWidgetDescription['indexUiState']>;
+  ) => IndexUiState<TWidgetDescription['indexUiState']>;
 
   /**
    * This function is required for a widget to be taken in account for routing.
@@ -276,9 +274,7 @@ type RequiredUiStateLifeCycle<TWidgetDescription extends WidgetDescription> = {
   getWidgetSearchParameters: (
     state: SearchParameters,
     widgetSearchParametersOptions: {
-      uiState: Expand<
-        Partial<TWidgetDescription['indexUiState'] & IndexUiState>
-      >;
+      uiState: Expand<IndexUiState<TWidgetDescription['indexUiState']>>;
     }
   ) => SearchParameters;
 };
