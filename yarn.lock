@@ -6323,10 +6323,10 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
-"@types/google.maps@^3.45.3":
-  version "3.45.6"
-  resolved "https://registry.yarnpkg.com/@types/google.maps/-/google.maps-3.45.6.tgz#441a7bc76424243b307596fc8d282a435a979ebd"
-  integrity sha512-BzGzxs8UXFxeP8uN/0nRgGbsbpYQxSCKsv/7S8OitU7wwhfFcqQSm5aAcL1nbwueMiJ/VVmIZKPq69s0kX5W+Q==
+"@types/google.maps@^3.55.12":
+  version "3.55.12"
+  resolved "https://registry.yarnpkg.com/@types/google.maps/-/google.maps-3.55.12.tgz#66b50be48533d116dddb3d705d277d06457735b0"
+  integrity sha512-Q8MsLE+YYIrE1H8wdN69YHHAF8h7ApvF5MiMXh/zeCpP9Ut745mV9M0F4X4eobZ2WJe9k8tW2ryYjLa87IO2Sg==
 
 "@types/googlemaps@^3.30.16":
   version "3.30.16"

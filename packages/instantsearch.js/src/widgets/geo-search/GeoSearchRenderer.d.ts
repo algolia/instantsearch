@@ -29,7 +29,7 @@ type GeoSearchRendererParams = {
   cssClasses: ComponentCSSClasses<GeoSearchWidgetParams['cssClasses']>;
   createMarker: CreateMarker;
   markerOptions: GeoSearchMarker<
-    typeof google.maps.MarkerOptions | Partial<HTMLMarkerArguments>
+    google.maps.MarkerOptions | Partial<HTMLMarkerArguments>
   >;
   enableRefine: GeoSearchWidgetParams['enableRefine'];
   enableClearMapRefinement: GeoSearchWidgetParams['enableClearMapRefinement'];
