@@ -5,6 +5,7 @@
     "es",
     "tests/e2e",
     "packages/create-instantsearch-app/src/templates/**/*",
+    "packages/algolia-experiences",
 
     // this test has specific code for v3 and v4, so already checked in the v4 test
     "packages/instantsearch.js/src/middlewares/__tests__/createMetadataMiddleware.ts",
