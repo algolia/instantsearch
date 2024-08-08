@@ -220,6 +220,7 @@ class InstantSearch<
   public _searchStalledTimer: any;
   public _initialUiState: TUiState;
   public _initialResults: InitialResults | null;
+  public _configuration: any;
   public _createURL: CreateURL<TUiState>;
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
@@ -552,6 +553,8 @@ See documentation: ${createDocumentationLink({
    * first search.
    */
   public start() {
+    // eslint-disable-next-line no-console
+    console.log('start()');
     if (this.started) {
       throw new Error(
         withUsage('The `start` method has already been called once.')
@@ -650,8 +653,9 @@ See documentation: ${createDocumentationLink({
 
     this.mainHelper = mainHelper;
 
+    const middlewareSubscriptions: Array<Promise<void> | void> = [];
     this.middleware.forEach(({ instance }) => {
-      instance.subscribe();
+      middlewareSubscriptions.push(instance.subscribe());
     });
 
     this.mainIndex.init({
@@ -660,9 +664,15 @@ See documentation: ${createDocumentationLink({
       uiState: this._initialUiState,
     });
 
+    Promise.all(middlewareSubscriptions.filter(Boolean)).then(() =>
+      this._finalizeStart()
+    );
+  }
+
+  private _finalizeStart() {
     if (this._initialResults) {
       hydrateSearchClient(this.client, this._initialResults);
-      hydrateRecommendCache(this.mainHelper, this._initialResults);
+      hydrateRecommendCache(this.mainHelper!, this._initialResults);
 
       const originalScheduleSearch = this.scheduleSearch;
       // We don't schedule a first search when initial results are provided
@@ -706,7 +716,7 @@ See documentation: ${createDocumentationLink({
     // added when `insights` is unset and the initial results possess `queryID`.
     // Any user-provided middleware will be added later and override this one.
     if (typeof this._insights === 'undefined') {
-      mainHelper.derivedHelpers[0].once('result', () => {
+      this.mainHelper!.derivedHelpers[0].once('result', () => {
         const hasAutomaticInsights = this.mainIndex
           .getScopedResults()
           .some(({ results }) => results?._automaticInsights);
