@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.74.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.73.4...instantsearch.js@4.74.0) (2024-08-08)
+
+
+### Bug Fixes
+
+* **ExperimentalConfigureRelatedItems:** deprecate in favor of RelatedItems ([#6312](https://github.com/algolia/instantsearch/issues/6312)) ([857f4ec](https://github.com/algolia/instantsearch/commit/857f4ec278fce24b0aef6428f7b9f3d36be9edd6))
+
+
+### Features
+
+* **instantsearch.js:** introduce `carousel` template ([#6314](https://github.com/algolia/instantsearch/issues/6314)) ([b40f2a9](https://github.com/algolia/instantsearch/commit/b40f2a93dfba64e7963f2500ec45c703937bcaed))
+
+
+
+
+
 ## [4.73.4](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.73.3...instantsearch.js@4.73.4) (2024-08-06)
 
 
