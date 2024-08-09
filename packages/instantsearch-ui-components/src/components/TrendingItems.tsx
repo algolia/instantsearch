@@ -90,7 +90,6 @@ export function createTrendingItemsComponent({
 
         <Layout
           classNames={cssClasses}
-          translations={translations}
           itemComponent={ItemComponent}
           items={items}
           sendEvent={sendEvent}
