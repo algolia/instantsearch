@@ -7,8 +7,10 @@ import {
   InstantSearch,
   RelatedProducts,
 } from 'react-instantsearch';
+import { Carousel } from 'react-instantsearch/src/templates/Carousel';
 
 import './App.css';
+import 'instantsearch.css/themes/satellite.css';
 
 const searchClient = algoliasearch(
   'latency',
@@ -48,7 +50,10 @@ export function Product({ pid }: { pid: string }) {
             itemComponent={ItemComponent}
             emptyComponent={() => <></>}
             objectIDs={[pid]}
-            limit={4}
+            limit={6}
+            layoutComponent={(props) => {
+              return <Carousel {...props} />;
+            }}
           />
         </InstantSearch>
       </div>
