@@ -10,8 +10,8 @@ import {
   RefinementList,
   SearchBox,
   TrendingItems,
+  Carousel,
 } from 'react-instantsearch';
-import { Carousel } from 'react-instantsearch/src/templates/Carousel';
 
 import { Panel } from './Panel';
 
