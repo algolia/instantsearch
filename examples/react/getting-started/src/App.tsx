@@ -11,10 +11,12 @@ import {
   SearchBox,
   TrendingItems,
 } from 'react-instantsearch';
+import { Carousel } from 'react-instantsearch/src/templates/Carousel';
 
 import { Panel } from './Panel';
 
 import './App.css';
+import 'instantsearch.css/themes/satellite.css';
 
 const searchClient = algoliasearch(
   'latency',
@@ -58,7 +60,11 @@ export function App() {
                 <Pagination />
               </div>
               <div>
-                <TrendingItems itemComponent={ItemComponent} limit={4} />
+                <TrendingItems
+                  itemComponent={ItemComponent}
+                  limit={6}
+                  layoutComponent={(props) => <Carousel {...props} />}
+                />
               </div>
             </div>
           </div>
