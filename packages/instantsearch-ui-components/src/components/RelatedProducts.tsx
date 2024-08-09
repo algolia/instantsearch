@@ -90,7 +90,6 @@ export function createRelatedProductsComponent({
 
         <Layout
           classNames={cssClasses}
-          translations={translations}
           itemComponent={ItemComponent}
           items={items}
           sendEvent={sendEvent}
