@@ -155,6 +155,21 @@ describe('RelatedProducts', () => {
                 {...props}
                 previousIconComponent={() => <p>Previous</p>}
                 nextIconComponent={() => <p>Next</p>}
+                classNames={{
+                  root: 'ROOT',
+                  list: 'LIST',
+                  item: 'ITEM',
+                  navigation: 'NAVIGATION',
+                  navigationNext: 'NAVIGATION_NEXT',
+                  navigationPrevious: 'NAVIGATION_PREVIOUS',
+                }}
+                translations={{
+                  nextButtonLabel: 'NEXT_BUTTON_LABEL',
+                  nextButtonTitle: 'NEXT_BUTTON_TITLE',
+                  previousButtonLabel: 'PREVIOUS_BUTTON_LABEL',
+                  previousButtonTitle: 'PREVIOUS_BUTTON_TITLE',
+                  listLabel: 'LIST_LABEL',
+                }}
               />
             );
           }}
@@ -178,31 +193,31 @@ describe('RelatedProducts', () => {
             Related products
           </h3>
           <div
-            class="ais-Carousel ais-RelatedProducts"
+            class="ais-Carousel ROOT"
           >
             <button
               aria-controls="ais-Carousel-0"
-              aria-label="Previous"
-              class="ais-Carousel-navigation ais-Carousel-navigation--previous"
+              aria-label="PREVIOUS_BUTTON_LABEL"
+              class="ais-Carousel-navigation NAVIGATION ais-Carousel-navigation--previous NAVIGATION_PREVIOUS"
               hidden=""
-              title="Previous"
+              title="PREVIOUS_BUTTON_TITLE"
             >
               <p>
                 Previous
               </p>
             </button>
             <ol
-              aria-label="Items"
+              aria-label="LIST_LABEL"
               aria-live="polite"
               aria-roledescription="carousel"
-              class="ais-Carousel-list ais-RelatedProducts-list"
+              class="ais-Carousel-list LIST"
               id="ais-Carousel-0"
               tabindex="0"
             >
               <li
                 aria-label="1 of 2"
                 aria-roledescription="slide"
-                class="ais-Carousel-item ais-RelatedProducts-item"
+                class="ais-Carousel-item ITEM"
               >
                 <p>
                   1
@@ -211,7 +226,7 @@ describe('RelatedProducts', () => {
               <li
                 aria-label="2 of 2"
                 aria-roledescription="slide"
-                class="ais-Carousel-item ais-RelatedProducts-item"
+                class="ais-Carousel-item ITEM"
               >
                 <p>
                   2
@@ -220,9 +235,9 @@ describe('RelatedProducts', () => {
             </ol>
             <button
               aria-controls="ais-Carousel-0"
-              aria-label="Next"
-              class="ais-Carousel-navigation ais-Carousel-navigation--next"
-              title="Next"
+              aria-label="NEXT_BUTTON_LABEL"
+              class="ais-Carousel-navigation NAVIGATION ais-Carousel-navigation--next NAVIGATION_NEXT"
+              title="NEXT_BUTTON_TITLE"
             >
               <p>
                 Next
