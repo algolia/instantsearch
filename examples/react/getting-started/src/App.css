@@ -19,7 +19,7 @@ em {
   align-items: center;
   min-height: 50px;
   padding: 0.5rem 1rem;
-  background-image: linear-gradient(284deg, #fedd4e, #fcb43a);
+  background-image: linear-gradient(to right, #8e43e7, #00aeff);
   color: #fff;
   margin-bottom: 1rem;
 }
@@ -61,16 +61,11 @@ em {
   flex: 3;
 }
 
-.ais-Highlight-highlighted {
-  color: inherit;
-  font-size: inherit;
-}
-
 #searchbox {
   margin-bottom: 2rem;
 }
 
-#pagination {
+.pagination {
   margin: 2rem auto;
   text-align: center;
 }
