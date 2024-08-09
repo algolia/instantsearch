@@ -51,9 +51,7 @@ export function Product({ pid }: { pid: string }) {
             emptyComponent={() => <></>}
             objectIDs={[pid]}
             limit={6}
-            layoutComponent={(props) => {
-              return <Carousel {...props} />;
-            }}
+            layoutComponent={Carousel}
           />
         </InstantSearch>
       </div>

@@ -63,7 +63,7 @@ export function App() {
                 <TrendingItems
                   itemComponent={ItemComponent}
                   limit={6}
-                  layoutComponent={(props) => <Carousel {...props} />}
+                  layoutComponent={Carousel}
                 />
               </div>
             </div>
