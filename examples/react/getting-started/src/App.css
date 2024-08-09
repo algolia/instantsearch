@@ -61,7 +61,7 @@ em {
   flex: 3;
 }
 
-#searchbox {
+.searchbox {
   margin-bottom: 2rem;
 }
 
