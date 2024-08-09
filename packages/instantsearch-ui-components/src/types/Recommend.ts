@@ -40,7 +40,6 @@ export type RecommendTranslations = {
 
 export type RecommendLayoutProps<
   TItem extends RecordWithObjectID,
-  TTranslations extends Partial<Record<string, string>>,
   TClassNames extends Record<string, string>
 > = {
   classNames: TClassNames;
@@ -51,14 +50,12 @@ export type RecommendLayoutProps<
       TComponentProps
   ) => JSX.Element;
   items: TItem[];
-  translations: TTranslations;
   sendEvent: SendEventForHits;
 };
 
 export type RecommendComponentProps<
   TObject,
-  TComponentProps extends Record<string, unknown> = Record<string, unknown>,
-  TLayoutTranslations extends Record<string, string> = Record<string, string>
+  TComponentProps extends Record<string, unknown> = Record<string, unknown>
 > = {
   itemComponent?: (
     props: RecommendItemComponentProps<RecordWithObjectID<TObject>> &
@@ -76,7 +73,6 @@ export type RecommendComponentProps<
   layout?: (
     props: RecommendLayoutProps<
       RecordWithObjectID<TObject>,
-      Partial<TLayoutTranslations>,
       Record<string, string>
     > &
       TComponentProps
