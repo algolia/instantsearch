@@ -6,8 +6,8 @@ import {
   Hits,
   InstantSearch,
   RelatedProducts,
+  Carousel,
 } from 'react-instantsearch';
-import { Carousel } from 'react-instantsearch/src/templates/Carousel';
 
 import './App.css';
 import 'instantsearch.css/themes/satellite.css';
