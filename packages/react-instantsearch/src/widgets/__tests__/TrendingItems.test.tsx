@@ -7,7 +7,7 @@ import { InstantSearchTestWrapper } from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
 import React from 'react';
 
-import { Carousel } from '../../templates/Carousel';
+import { Carousel } from '../../components/Carousel';
 import { TrendingItems } from '../TrendingItems';
 
 describe('TrendingItems', () => {
