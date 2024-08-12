@@ -98,12 +98,14 @@ function HitComponent({ hit }: { hit: HitType }) {
 
 function ItemComponent({ item }: { item: Hit }) {
   return (
-    <article>
-      <div>
-        <img src={item.image} />
-        <h2>{item.name}</h2>
-      </div>
-      <a href={`/products.html?pid=${item.objectID}`}>See product</a>
-    </article>
+    <div>
+      <article>
+        <div>
+          <img src={item.image} />
+          <h2>{item.name}</h2>
+        </div>
+        <a href={`/products.html?pid=${item.objectID}`}>See product</a>
+      </article>
+    </div>
   );
 }
