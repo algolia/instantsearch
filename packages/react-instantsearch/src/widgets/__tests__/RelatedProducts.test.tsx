@@ -5,12 +5,11 @@
 import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { InstantSearchTestWrapper } from '@instantsearch/testutils';
 import { render, waitFor } from '@testing-library/react';
+import { cx } from 'instantsearch-ui-components';
 import React from 'react';
 
 import { Carousel } from '../../components/Carousel';
 import { RelatedProducts } from '../RelatedProducts';
-
-import { cx } from './__utils__/cx';
 
 describe('RelatedProducts', () => {
   test('renders with translations', async () => {
