@@ -200,7 +200,8 @@ export type TrendingItemsTemplates<THit extends NonNullable<object> = BaseHit> =
       > & {
         templates: {
           item: TrendingItemsUiProps<Hit>['itemComponent'];
-        } & { cssClasses: Pick<TrendingItemsCSSClasses, 'list' | 'item'> };
+        };
+        cssClasses: Pick<TrendingItemsCSSClasses, 'list' | 'item'>;
       }
     >;
   }>;

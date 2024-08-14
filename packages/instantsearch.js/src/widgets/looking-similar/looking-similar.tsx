@@ -191,7 +191,8 @@ export type LookingSimilarTemplates<
     > & {
       templates: {
         item: LookingSimilarUiProps<Hit>['itemComponent'];
-      } & { cssClasses: Pick<LookingSimilarCSSClasses, 'list' | 'item'> };
+      };
+      cssClasses: Pick<LookingSimilarCSSClasses, 'list' | 'item'>;
     }
   >;
 }>;
