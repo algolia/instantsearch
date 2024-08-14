@@ -132,6 +132,10 @@ const renderer =
                       )
                     : undefined,
                 },
+                cssClasses: {
+                  list: data.classNames.list,
+                  item: data.classNames.item,
+                },
               }}
             />
           )
@@ -195,6 +199,7 @@ export type FrequentlyBoughtTogetherTemplates<
       templates: {
         item: FrequentlyBoughtTogetherUiProps<Hit>['itemComponent'];
       };
+      cssClasses: Pick<FrequentlyBoughtTogetherCSSClasses, 'list' | 'item'>;
     }
   >;
 }>;

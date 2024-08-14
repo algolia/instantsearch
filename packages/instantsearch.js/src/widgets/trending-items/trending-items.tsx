@@ -138,6 +138,10 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
                       )
                     : undefined,
                 },
+                cssClasses: {
+                  list: data.classNames.list,
+                  item: data.classNames.item,
+                },
               }}
             />
           )
@@ -196,7 +200,7 @@ export type TrendingItemsTemplates<THit extends NonNullable<object> = BaseHit> =
       > & {
         templates: {
           item: TrendingItemsUiProps<Hit>['itemComponent'];
-        };
+        } & { cssClasses: Pick<TrendingItemsCSSClasses, 'list' | 'item'> };
       }
     >;
   }>;

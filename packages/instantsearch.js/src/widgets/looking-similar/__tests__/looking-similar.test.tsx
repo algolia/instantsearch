@@ -310,7 +310,7 @@ describe('lookingSimilar', () => {
       `);
     });
 
-    test('renders with a carousel layout using `html`', async () => {
+    test('renders with a carousel layout without options using `html`', async () => {
       const container = document.createElement('div');
       const searchClient = createRecommendSearchClient();
       const options: Parameters<typeof lookingSimilar>[0] = {
@@ -377,14 +377,14 @@ describe('lookingSimilar', () => {
                 aria-label="Items"
                 aria-live="polite"
                 aria-roledescription="carousel"
-                class="ais-Carousel-list LIST"
+                class="ais-Carousel-list LIST ais-LookingSimilar-list"
                 id="ais-Carousel-0"
                 tabindex="0"
               >
                 <li
                   aria-label="1 of 2"
                   aria-roledescription="slide"
-                  class="ais-Carousel-item ITEM"
+                  class="ais-Carousel-item ITEM ais-LookingSimilar-item"
                 >
                   <p>
                     1
@@ -393,7 +393,7 @@ describe('lookingSimilar', () => {
                 <li
                   aria-label="2 of 2"
                   aria-roledescription="slide"
-                  class="ais-Carousel-item ITEM"
+                  class="ais-Carousel-item ITEM ais-LookingSimilar-item"
                 >
                   <p>
                     2
@@ -402,6 +402,112 @@ describe('lookingSimilar', () => {
               </ol>
               <button
                 aria-controls="ais-Carousel-0"
+                aria-label="Next"
+                class="ais-Carousel-navigation NAVIGATION ais-Carousel-navigation--next NAVIGATION_NEXT"
+                title="Next"
+              >
+                <p>
+                  Next
+                </p>
+              </button>
+            </div>
+          </section>
+        </div>
+      `);
+    });
+
+    test('renders with a carousel layout with options using `html`', async () => {
+      const container = document.createElement('div');
+      const searchClient = createRecommendSearchClient();
+      const options: Parameters<typeof lookingSimilar>[0] = {
+        container,
+        objectIDs: ['1'],
+        templates: {
+          item(hit, { html }) {
+            return html`<p>${hit.objectID}</p>`;
+          },
+          layout: carousel({
+            cssClasses: {
+              root: 'ROOT',
+              list: 'LIST',
+              item: 'ITEM',
+              navigation: 'NAVIGATION',
+              navigationNext: 'NAVIGATION_NEXT',
+              navigationPrevious: 'NAVIGATION_PREVIOUS',
+            },
+            templates: {
+              previous({ html }) {
+                return html`<p>Previous</p>`;
+              },
+              next({ html }) {
+                return html`<p>Next</p>`;
+              },
+            },
+          }),
+        },
+      };
+
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+      const widget = lookingSimilar(options);
+
+      search.addWidgets([widget]);
+      search.start();
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
+        <div>
+          <section
+            class="ais-LookingSimilar"
+          >
+            <h3
+              class="ais-LookingSimilar-title"
+            >
+              Looking similar
+            </h3>
+            <div
+              class="ais-Carousel ROOT"
+            >
+              <button
+                aria-controls="ais-Carousel-1"
+                aria-label="Previous"
+                class="ais-Carousel-navigation NAVIGATION ais-Carousel-navigation--previous NAVIGATION_PREVIOUS"
+                hidden=""
+                title="Previous"
+              >
+                <p>
+                  Previous
+                </p>
+              </button>
+              <ol
+                aria-label="Items"
+                aria-live="polite"
+                aria-roledescription="carousel"
+                class="ais-Carousel-list LIST ais-LookingSimilar-list"
+                id="ais-Carousel-1"
+                tabindex="0"
+              >
+                <li
+                  aria-label="1 of 2"
+                  aria-roledescription="slide"
+                  class="ais-Carousel-item ITEM ais-LookingSimilar-item"
+                >
+                  <p>
+                    1
+                  </p>
+                </li>
+                <li
+                  aria-label="2 of 2"
+                  aria-roledescription="slide"
+                  class="ais-Carousel-item ITEM ais-LookingSimilar-item"
+                >
+                  <p>
+                    2
+                  </p>
+                </li>
+              </ol>
+              <button
+                aria-controls="ais-Carousel-1"
                 aria-label="Next"
                 class="ais-Carousel-navigation NAVIGATION ais-Carousel-navigation--next NAVIGATION_NEXT"
                 title="Next"
@@ -563,7 +669,7 @@ describe('lookingSimilar', () => {
       `);
     });
 
-    test('renders with a carousel layout using JSX', async () => {
+    test('renders with a carousel layout without options using JSX', async () => {
       const container = document.createElement('div');
       const searchClient = createRecommendSearchClient();
       const options: Parameters<typeof lookingSimilar>[0] = {
@@ -616,7 +722,7 @@ describe('lookingSimilar', () => {
               class="ais-Carousel ROOT"
             >
               <button
-                aria-controls="ais-Carousel-1"
+                aria-controls="ais-Carousel-2"
                 aria-label="Previous"
                 class="ais-Carousel-navigation NAVIGATION ais-Carousel-navigation--previous NAVIGATION_PREVIOUS"
                 hidden=""
@@ -630,14 +736,14 @@ describe('lookingSimilar', () => {
                 aria-label="Items"
                 aria-live="polite"
                 aria-roledescription="carousel"
-                class="ais-Carousel-list LIST"
-                id="ais-Carousel-1"
+                class="ais-Carousel-list LIST ais-LookingSimilar-list"
+                id="ais-Carousel-2"
                 tabindex="0"
               >
                 <li
                   aria-label="1 of 2"
                   aria-roledescription="slide"
-                  class="ais-Carousel-item ITEM"
+                  class="ais-Carousel-item ITEM ais-LookingSimilar-item"
                 >
                   <p>
                     1
@@ -646,7 +752,7 @@ describe('lookingSimilar', () => {
                 <li
                   aria-label="2 of 2"
                   aria-roledescription="slide"
-                  class="ais-Carousel-item ITEM"
+                  class="ais-Carousel-item ITEM ais-LookingSimilar-item"
                 >
                   <p>
                     2
@@ -654,7 +760,113 @@ describe('lookingSimilar', () => {
                 </li>
               </ol>
               <button
-                aria-controls="ais-Carousel-1"
+                aria-controls="ais-Carousel-2"
+                aria-label="Next"
+                class="ais-Carousel-navigation NAVIGATION ais-Carousel-navigation--next NAVIGATION_NEXT"
+                title="Next"
+              >
+                <p>
+                  Next
+                </p>
+              </button>
+            </div>
+          </section>
+        </div>
+      `);
+    });
+
+    test('renders with a carousel layout with options using JSX', async () => {
+      const container = document.createElement('div');
+      const searchClient = createRecommendSearchClient();
+      const options: Parameters<typeof lookingSimilar>[0] = {
+        container,
+        objectIDs: ['1'],
+        templates: {
+          item(hit) {
+            return <p>{hit.objectID}</p>;
+          },
+          layout: carousel({
+            cssClasses: {
+              root: 'ROOT',
+              list: 'LIST',
+              item: 'ITEM',
+              navigation: 'NAVIGATION',
+              navigationNext: 'NAVIGATION_NEXT',
+              navigationPrevious: 'NAVIGATION_PREVIOUS',
+            },
+            templates: {
+              previous() {
+                return <p>Previous</p>;
+              },
+              next() {
+                return <p>Next</p>;
+              },
+            },
+          }),
+        },
+      };
+
+      const search = instantsearch({ indexName: 'indexName', searchClient });
+      const widget = lookingSimilar(options);
+
+      search.addWidgets([widget]);
+      search.start();
+
+      await wait(0);
+
+      expect(container).toMatchInlineSnapshot(`
+        <div>
+          <section
+            class="ais-LookingSimilar"
+          >
+            <h3
+              class="ais-LookingSimilar-title"
+            >
+              Looking similar
+            </h3>
+            <div
+              class="ais-Carousel ROOT"
+            >
+              <button
+                aria-controls="ais-Carousel-3"
+                aria-label="Previous"
+                class="ais-Carousel-navigation NAVIGATION ais-Carousel-navigation--previous NAVIGATION_PREVIOUS"
+                hidden=""
+                title="Previous"
+              >
+                <p>
+                  Previous
+                </p>
+              </button>
+              <ol
+                aria-label="Items"
+                aria-live="polite"
+                aria-roledescription="carousel"
+                class="ais-Carousel-list LIST ais-LookingSimilar-list"
+                id="ais-Carousel-3"
+                tabindex="0"
+              >
+                <li
+                  aria-label="1 of 2"
+                  aria-roledescription="slide"
+                  class="ais-Carousel-item ITEM ais-LookingSimilar-item"
+                >
+                  <p>
+                    1
+                  </p>
+                </li>
+                <li
+                  aria-label="2 of 2"
+                  aria-roledescription="slide"
+                  class="ais-Carousel-item ITEM ais-LookingSimilar-item"
+                >
+                  <p>
+                    2
+                  </p>
+                </li>
+              </ol>
+              <button
+                aria-controls="ais-Carousel-3"
                 aria-label="Next"
                 class="ais-Carousel-navigation NAVIGATION ais-Carousel-navigation--next NAVIGATION_NEXT"
                 title="Next"
