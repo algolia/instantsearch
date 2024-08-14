@@ -224,4 +224,42 @@ describe('carousel', () => {
       </div>
     `);
   });
+
+  test('forwards additional CSS classes', () => {
+    const template = carousel({
+      cssClasses: {
+        root: 'ROOT',
+        list: 'LIST',
+        item: 'ITEM',
+        navigation: 'NAVIGATION',
+        navigationNext: 'NAVIGATION_NEXT',
+        navigationPrevious: 'NAVIGATION_PREVIOUS',
+      },
+    });
+
+    const { container } = render(
+      template({
+        items: [
+          { objectID: '1', __position: 1 },
+          { objectID: '2', __position: 2 },
+        ],
+        templates: {
+          item({ item }) {
+            return <p>{item}</p>;
+          },
+        },
+        cssClasses: {
+          list: 'EXTRA_LIST',
+          item: 'EXTRA_ITEM',
+        },
+      })
+    );
+
+    expect(container.querySelector('.ais-Carousel-list')).toHaveClass(
+      'LIST EXTRA_LIST'
+    );
+    expect(container.querySelector('.ais-Carousel-item')).toHaveClass(
+      'ITEM EXTRA_ITEM'
+    );
+  });
 });
