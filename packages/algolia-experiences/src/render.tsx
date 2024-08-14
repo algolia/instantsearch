@@ -21,6 +21,8 @@ import type { ComponentChildren, JSX } from 'preact';
 
 export function injectStyles() {
   const style = document.createElement('style');
+  style.dataset.source = 'instantsearch';
+
   // @TODO: decide if this should be for all columns or only a specific type
   style.textContent = `
     .ais-Columns {
