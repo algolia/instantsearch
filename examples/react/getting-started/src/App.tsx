@@ -10,11 +10,13 @@ import {
   RefinementList,
   SearchBox,
   TrendingItems,
+  Carousel,
 } from 'react-instantsearch';
 
 import { Panel } from './Panel';
 
 import './App.css';
+import 'instantsearch.css/themes/satellite.css';
 
 const searchClient = algoliasearch(
   'latency',
@@ -58,7 +60,11 @@ export function App() {
                 <Pagination />
               </div>
               <div>
-                <TrendingItems itemComponent={ItemComponent} limit={4} />
+                <TrendingItems
+                  itemComponent={ItemComponent}
+                  limit={6}
+                  layoutComponent={Carousel}
+                />
               </div>
             </div>
           </div>
@@ -92,12 +98,14 @@ function HitComponent({ hit }: { hit: HitType }) {
 
 function ItemComponent({ item }: { item: Hit }) {
   return (
-    <article>
-      <div>
-        <img src={item.image} />
-        <h2>{item.name}</h2>
-      </div>
-      <a href={`/products.html?pid=${item.objectID}`}>See product</a>
-    </article>
+    <div>
+      <article>
+        <div>
+          <img src={item.image} />
+          <h2>{item.name}</h2>
+        </div>
+        <a href={`/products.html?pid=${item.objectID}`}>See product</a>
+      </article>
+    </div>
   );
 }
