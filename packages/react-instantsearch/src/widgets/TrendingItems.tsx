@@ -68,12 +68,23 @@ export function TrendingItems<TItem extends BaseHit = BaseHit>({
     { $$widgetType: 'ais.trendingItems' }
   );
 
+  const layout: typeof layoutComponent = layoutComponent
+    ? (layoutProps) =>
+        layoutComponent({
+          ...layoutProps,
+          classNames: {
+            list: layoutProps.classNames.list,
+            item: layoutProps.classNames.item,
+          },
+        })
+    : undefined;
+
   const uiProps: UiProps<TItem> = {
     items: items as Array<Hit<TItem>>,
     itemComponent,
     headerComponent,
     emptyComponent,
-    layout: layoutComponent,
+    layout,
     status,
     sendEvent: () => {},
   };

@@ -64,12 +64,23 @@ export function LookingSimilar<THit extends BaseHit = BaseHit>({
     { $$widgetType: 'ais.lookingSimilar' }
   );
 
+  const layout: typeof layoutComponent = layoutComponent
+    ? (layoutProps) =>
+        layoutComponent({
+          ...layoutProps,
+          classNames: {
+            list: layoutProps.classNames.list,
+            item: layoutProps.classNames.item,
+          },
+        })
+    : undefined;
+
   const uiProps: UiProps<THit> = {
     items,
     itemComponent,
     headerComponent,
     emptyComponent,
-    layout: layoutComponent,
+    layout,
     status,
     sendEvent: () => {},
   };

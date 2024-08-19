@@ -170,7 +170,7 @@ describe('RelatedProducts', () => {
             Related products
           </h3>
           <div
-            class="ais-Carousel ais-RelatedProducts"
+            class="ais-Carousel"
           >
             <button
               aria-controls="ais-Carousel-0"
@@ -263,7 +263,7 @@ describe('RelatedProducts', () => {
                 previousIconComponent={() => <p>Previous</p>}
                 nextIconComponent={() => <p>Next</p>}
                 classNames={{
-                  root: cx('ROOT', props.classNames.root),
+                  root: 'ROOT',
                   list: cx('LIST', props.classNames.list),
                   item: cx('ITEM', props.classNames.item),
                   navigation: 'NAVIGATION',
@@ -300,7 +300,7 @@ describe('RelatedProducts', () => {
             Related products
           </h3>
           <div
-            class="ais-Carousel ROOT ais-RelatedProducts"
+            class="ais-Carousel ROOT"
           >
             <button
               aria-controls="ais-Carousel-1"

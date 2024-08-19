@@ -164,7 +164,7 @@ describe('LookingSimilar', () => {
             Looking similar
           </h3>
           <div
-            class="ais-Carousel ais-LookingSimilar"
+            class="ais-Carousel"
           >
             <button
               aria-controls="ais-Carousel-0"
@@ -257,7 +257,7 @@ describe('LookingSimilar', () => {
                 previousIconComponent={() => <p>Previous</p>}
                 nextIconComponent={() => <p>Next</p>}
                 classNames={{
-                  root: cx('ROOT', props.classNames.root),
+                  root: 'ROOT',
                   list: cx('LIST', props.classNames.list),
                   item: cx('ITEM', props.classNames.item),
                   navigation: 'NAVIGATION',
@@ -294,7 +294,7 @@ describe('LookingSimilar', () => {
             Looking similar
           </h3>
           <div
-            class="ais-Carousel ROOT ais-LookingSimilar"
+            class="ais-Carousel ROOT"
           >
             <button
               aria-controls="ais-Carousel-1"

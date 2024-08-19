@@ -66,12 +66,23 @@ export function FrequentlyBoughtTogether<THit extends BaseHit = BaseHit>({
     { $$widgetType: 'ais.frequentlyBoughtTogether' }
   );
 
+  const layout: typeof layoutComponent = layoutComponent
+    ? (layoutProps) =>
+        layoutComponent({
+          ...layoutProps,
+          classNames: {
+            list: layoutProps.classNames.list,
+            item: layoutProps.classNames.item,
+          },
+        })
+    : undefined;
+
   const uiProps: UiProps<THit> = {
     items,
     itemComponent,
     headerComponent,
     emptyComponent,
-    layout: layoutComponent,
+    layout,
     status,
     sendEvent: () => {},
   };
