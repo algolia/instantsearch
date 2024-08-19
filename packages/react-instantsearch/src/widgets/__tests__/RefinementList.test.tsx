@@ -104,7 +104,7 @@ function createMockedSearchClient(parameters: Record<string, any> = {}) {
         )
       );
     }),
-    // @ts-ignore v5 accepts only `search({ type: 'facet' })`, v3, v4 accept `searchForFacetValues`
+    // @ts-ignore v5 does not have this method, but it's easier to have it here. In a future version we can replace this method and its usages with search({ type: 'facet })
     searchForFacetValues: jest.fn(() =>
       Promise.resolve([
         createSFFVResponse({
