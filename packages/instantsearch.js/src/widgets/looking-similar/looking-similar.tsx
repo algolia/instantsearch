@@ -128,6 +128,10 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
                       )
                     : undefined,
                 },
+                cssClasses: {
+                  list: data.classNames.list,
+                  item: data.classNames.item,
+                },
               }}
             />
           )
@@ -188,6 +192,7 @@ export type LookingSimilarTemplates<
       templates: {
         item: LookingSimilarUiProps<Hit>['itemComponent'];
       };
+      cssClasses: Pick<LookingSimilarCSSClasses, 'list' | 'item'>;
     }
   >;
 }>;

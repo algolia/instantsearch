@@ -3,6 +3,7 @@
 import { html } from 'htm/preact';
 import {
   createCarouselComponent,
+  cx,
   generateCarouselId,
 } from 'instantsearch-ui-components';
 import { Fragment, h } from 'preact';
@@ -54,6 +55,7 @@ type CarouselTemplateProps<TObject extends Record<string, unknown>> = Pick<
   templates: {
     item?: CarouselUiProps<TObject>['itemComponent'];
   };
+  cssClasses?: Partial<CarouselUiProps<TObject>['classNames']>;
 };
 
 export function carousel<TObject extends Record<string, unknown>>({
@@ -62,14 +64,15 @@ export function carousel<TObject extends Record<string, unknown>>({
 }: CreateCarouselTemplateProps<TObject> = {}) {
   return function CarouselTemplate({
     items,
-    templates: userTemplates,
+    templates: widgetTemplates,
+    cssClasses: widgetCssClasses = {},
   }: CarouselTemplateProps<TObject>) {
     const { previous, next } = templates;
 
     return (
       <CarouselWithRefs
         items={items}
-        itemComponent={userTemplates.item}
+        itemComponent={widgetTemplates.item}
         previousIconComponent={
           (previous
             ? () => previous({ html })
@@ -80,7 +83,13 @@ export function carousel<TObject extends Record<string, unknown>>({
             ? () => next({ html })
             : undefined) as CarouselUiProps<TObject>['nextIconComponent']
         }
-        classNames={cssClasses}
+        classNames={{
+          ...cssClasses,
+          ...{
+            list: cx(cssClasses?.list, widgetCssClasses?.list),
+            item: cx(cssClasses?.item, widgetCssClasses?.item),
+          },
+        }}
       />
     );
   };

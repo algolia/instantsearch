@@ -61,7 +61,7 @@ search.addWidgets([
     limit: 6,
     templates: {
       item: (item, { html }) => html`
-        <div class="ais-TrendingItems-item">
+        <div>
           <article>
             <div>
               <img src="${item.image}" />

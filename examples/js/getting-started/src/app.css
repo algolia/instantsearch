@@ -78,8 +78,20 @@
 
 .ais-TrendingItems-item,
 .ais-RelatedProducts-item {
+  background: none !important;
+  align-items: stretch !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+.ais-TrendingItems-item > div,
+.ais-RelatedProducts-item > div {
   align-items: start;
-  height: 100%;
+  background: #fff;
+  align-items: center;
+  padding: 1.5rem;
+  display: flex;
+  box-shadow: 0 0 0 1px #23263b0d, 0 1px 3px #23263b26;
 }
 
 .ais-TrendingItems-item img,
@@ -107,12 +119,12 @@
 }
 
 .ais-Carousel-item {
-  padding: 0.5rem;
+  padding: 0.5rem !important;
 }
 
 .ais-Carousel-list {
-  margin: -0.5rem;
-  grid-auto-columns: calc(22% - 0.5rem);
+  margin: -0.5rem !important;
+  grid-auto-columns: calc(22% - 0.5rem) !important;
 }
 
 .ais-Carousel::before,
