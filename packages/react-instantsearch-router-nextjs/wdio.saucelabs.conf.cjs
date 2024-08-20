@@ -74,7 +74,7 @@ exports.config = {
   capabilities: [
     {
       browserName: 'chrome',
-      browserVersion: '76.0',
+      browserVersion: '125.0',
       /*
        * Sauce Labs specific options
        * https://wiki.saucelabs.com/display/DOCS/Test+Configuration+Options
