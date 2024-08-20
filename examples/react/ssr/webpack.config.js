@@ -26,7 +26,7 @@ module.exports = [
       rules: [
         {
           test: /\.js$/,
-          exclude: /node_modules/,
+          exclude: /node_modules\/(?!(algoliasearch)\/).*/,
           use: [
             {
               loader: 'babel-loader',
@@ -48,7 +48,7 @@ module.exports = [
       rules: [
         {
           test: /\.js$/,
-          exclude: /node_modules/,
+          exclude: /node_modules\/(?!(algoliasearch)\/).*/,
           use: [
             {
               loader: 'babel-loader',

@@ -1,4 +1,4 @@
-import algoliasearch from 'algoliasearch/lite';
+import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import instantsearch from 'instantsearch.js';
 import { carousel } from 'instantsearch.js/es/templates';
 import { configure, hits, relatedProducts } from 'instantsearch.js/es/widgets';
@@ -8,6 +8,10 @@ import 'instantsearch.css/themes/satellite.css';
 const searchParams = new URLSearchParams(document.location.search);
 
 const pid = searchParams.get('pid');
+
+if (!pid) {
+  throw new Error('No product ID provided');
+}
 
 const searchClient = algoliasearch(
   'latency',

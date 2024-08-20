@@ -1,8 +1,9 @@
-import type { RecommendQueriesResponse } from '@algolia/recommend';
 import type {
   SearchResponse,
   SearchResponses,
   SearchForFacetValuesResponse,
+  RecommendResponse,
+  RecommendResponses,
 } from 'instantsearch.js';
 
 export const defaultRenderingContent: SearchResponse<any>['renderingContent'] =
@@ -88,8 +89,42 @@ export const createSFFVResponse = (
   ...args,
 });
 
+export const createSingleRecommendResponse = (
+  subset: Partial<RecommendResponse<any>> = {}
+): RecommendResponse<any> => {
+  const {
+    query = '',
+    page = 0,
+    hitsPerPage = 20,
+    hits = [],
+    nbHits = hits.length,
+    nbPages = Math.ceil(nbHits / hitsPerPage),
+    params = '',
+    exhaustiveNbHits = true,
+    exhaustiveFacetsCount = true,
+    processingTimeMS = 0,
+    ...rest
+  } = subset;
+
+  return {
+    page,
+    hitsPerPage,
+    nbHits,
+    nbPages,
+    processingTimeMS,
+    hits,
+    query,
+    params,
+    exhaustiveNbHits,
+    exhaustiveFacetsCount,
+    ...rest,
+  };
+};
+
 export const createRecommendResponse = (
-  requests: readonly any[]
-): RecommendQueriesResponse<any> => {
-  return { results: requests.map(createSingleSearchResponse) };
+  requests: any[]
+): RecommendResponses<any> => {
+  return {
+    results: requests.map(createSingleRecommendResponse),
+  };
 };

@@ -9,16 +9,14 @@ import {
 import type {
   Connector,
   TransformItems,
-  Hit,
   BaseHit,
   Renderer,
   Unmounter,
   UnknownWidgetParams,
+  RecommendResponse,
+  AlgoliaHit,
 } from '../../types';
-import type {
-  PlainSearchParameters,
-  RecommendResultItem,
-} from 'algoliasearch-helper';
+import type { PlainSearchParameters } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'related-products',
@@ -31,7 +29,7 @@ export type RelatedProductsRenderState<
   /**
    * The matched recommendations from the Algolia API.
    */
-  items: Array<Hit<THit>>;
+  items: Array<AlgoliaHit<THit>>;
 };
 
 export type RelatedProductsConnectorParams<
@@ -72,7 +70,10 @@ export type RelatedProductsConnectorParams<
   /**
    * Function to transform the items passed to the templates.
    */
-  transformItems?: TransformItems<Hit<THit>, { results: RecommendResultItem }>;
+  transformItems?: TransformItems<
+    AlgoliaHit<THit>,
+    { results: RecommendResponse<AlgoliaHit<THit>> }
+  >;
 };
 
 export type RelatedProductsWidgetDescription<
@@ -160,8 +161,8 @@ export default (function connectRelatedProducts<
         }
 
         return {
-          items: transformItems(results.hits, {
-            results: results as RecommendResultItem,
+          items: transformItems(results.hits as Array<AlgoliaHit<THit>>, {
+            results: results as RecommendResponse<AlgoliaHit<THit>>,
           }),
           widgetParams,
         };

@@ -6,7 +6,7 @@ import type {
   TrendingItemsProps as TrendingItemsUiComponentProps,
   Pragma,
 } from 'instantsearch-ui-components';
-import type { Hit, BaseHit } from 'instantsearch.js';
+import type { AlgoliaHit, BaseHit } from 'instantsearch.js';
 import type { UseTrendingItemsProps } from 'react-instantsearch-core';
 
 type UiProps<TItem extends BaseHit> = Pick<
@@ -80,7 +80,7 @@ export function TrendingItems<TItem extends BaseHit = BaseHit>({
     : undefined;
 
   const uiProps: UiProps<TItem> = {
-    items: items as Array<Hit<TItem>>,
+    items: items as Array<AlgoliaHit<TItem>>,
     itemComponent,
     headerComponent,
     emptyComponent,

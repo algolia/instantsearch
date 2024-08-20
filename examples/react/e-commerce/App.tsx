@@ -1,4 +1,4 @@
-import algoliasearch from 'algoliasearch/lite';
+import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import React, { useRef } from 'react';
 import {
   Configure,
