@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.13.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.12.4...react-instantsearch-core@7.13.0) (2024-08-20)
+
+
+### Bug Fixes
+
+* **client:** support v5 fully ([#6270](https://github.com/algolia/instantsearch/issues/6270)) ([c3b5e80](https://github.com/algolia/instantsearch/commit/c3b5e80bbb449acb3b9719a7449c6c926d034e34)), closes [#6271](https://github.com/algolia/instantsearch/issues/6271) [#6286](https://github.com/algolia/instantsearch/issues/6286)
+
+
+
+
+
 ## [7.12.4](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.12.3...react-instantsearch-core@7.12.4) (2024-08-06)
 
 **Note:** Version bump only for package react-instantsearch-core
