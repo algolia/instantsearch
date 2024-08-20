@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.9.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.8.0...instantsearch-ui-components@0.9.0) (2024-08-20)
+
+
+### Bug Fixes
+
+* **client:** support v5 fully ([#6270](https://github.com/algolia/instantsearch/issues/6270)) ([c3b5e80](https://github.com/algolia/instantsearch/commit/c3b5e80bbb449acb3b9719a7449c6c926d034e34)), closes [#6271](https://github.com/algolia/instantsearch/issues/6271) [#6286](https://github.com/algolia/instantsearch/issues/6286)
+
+
+### Features
+
+* **instantsearch.js:** introduce `carousel` template ([#6314](https://github.com/algolia/instantsearch/issues/6314)) ([b40f2a9](https://github.com/algolia/instantsearch/commit/b40f2a93dfba64e7963f2500ec45c703937bcaed))
+* **react-instantsearch:** add `Carousel` layout component ([#6321](https://github.com/algolia/instantsearch/issues/6321)) ([41b0c96](https://github.com/algolia/instantsearch/commit/41b0c96f3d215d24eb1fb17109f911c11a71f434))
+
+
+
+
+
 # [0.8.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.7.0...instantsearch-ui-components@0.8.0) (2024-07-30)
 
 
