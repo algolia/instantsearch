@@ -27,6 +27,8 @@
  * - _ESAbstract.GetV, License: CC0
  * - _ESAbstract.GetMethod, License: CC0
  * - _ESAbstract.Type, License: CC0
+ * - _ESAbstract.StringIndexOf, License: CC0
+ * - _ESAbstract.GetSubstitution, License: CC0
  * - Number.isNaN, License: MIT
  * - Object.isExtensible, License: CC0
  * - _ESAbstract.CreateIterResultObject, License: CC0
@@ -57,6 +59,9 @@
  * - String.prototype.endsWith, License: CC0
  * - String.prototype.includes, License: CC0
  * - String.prototype.startsWith, License: CC0
+ * - _ESAbstract.TrimString, License: CC0
+ * - String.prototype.trim, License: CC0
+ * - String.prototype.replaceAll, License: CC0
  * - _ESAbstract.ToPropertyKey, License: CC0
  * - Object.getOwnPropertyDescriptor, License: CC0
  * - Object.assign, License: CC0
@@ -72,8 +77,6 @@
  * - Promise, License: MIT
  * - _ESAbstract.EnumerableOwnProperties, License: CC0
  * - Object.entries, License: CC0
- * - _ESAbstract.TrimString, License: CC0
- * - String.prototype.trim, License: CC0
  * - _mutation, License: CC0
  * - DocumentFragment.prototype.append, License: CC0
  * - DocumentFragment.prototype.prepend, License: CC0
@@ -921,7 +924,120 @@
     }
   }
 
-  // Number.isNaN
+  // _ESAbstract.StringIndexOf
+  // 6.1.4.1 StringIndexOf ( string, searchValue, fromIndex )
+  function StringIndexOf(string, searchValue, fromIndex) {
+    // eslint-disable-line no-unused-vars
+    // 1. Assert: Type(string) is String.
+    // 2. Assert: Type(searchValue) is String.
+    // 3. Assert: ! IsNonNegativeInteger(fromIndex) is true.
+    // 4. Let len be the length of string.
+    var len = string.length;
+    // 5. If searchValue is the empty String and fromIndex ≤ len, return fromIndex.
+    if (searchValue === "" && fromIndex <= len) {
+      return fromIndex;
+    }
+    // 6. Let searchLen be the length of searchValue.
+    var searchLen = searchValue.length;
+    // 7. If there exists any integer k such that fromIndex ≤ k ≤ len - searchLen
+    // and for all nonnegative integers j less than searchLen, the code unit at
+    // index k + j within string is the same as the code unit at index j within searchValue,
+    // let pos be the smallest (closest to -∞) such integer. Otherwise, let pos be -1.
+    var k = fromIndex;
+    var pos = -1;
+    while (k + searchLen <= len) {
+      var match = true;
+      for (var j = 0; j < searchLen; j += 1) {
+        if (string[j] !== searchValue[k + j]) {
+          match = false;
+          break;
+        }
+      }
+      if (match) {
+        pos = k;
+        break;
+      }
+      k += 1;
+    }
+    // 8. Return pos.
+    return pos;
+  };
+
+
+  // _ESAbstract.GetSubstitution
+  /* global Type */
+  // 21.1.3.17.1 GetSubstitution ( matched, str, position, captures, namedCaptures, replacement )
+  function isDigit(string) {
+    return /^[0-9]$/.test(string);
+  }
+  function GetSubstitution ( matched, str, position, captures, namedCaptures, replacement ) { // eslint-disable-line no-unused-vars
+    // 1. Assert: Type(matched) is String.
+    // 2. Let matchLength be the number of code units in matched.
+    var matchLength = matched.length;
+    // 3. Assert: Type(str) is String.
+    // 4. Let stringLength be the number of code units in str.
+    var stringLength = str.length;
+    // 5. Assert: ! IsNonNegativeInteger(position) is true.
+    // 6. Assert: position ≤ stringLength.
+    // 7. Assert: captures is a possibly empty List of Strings.
+    // 8. Assert: Type(replacement) is String.
+    // 9. Let tailPos be position + matchLength.
+    var tailPos = position + matchLength;
+    // 10. Let m be the number of elements in captures.
+    var m = captures.length;
+    // 11. Let result be the String value derived from replacement by copying
+    // code unit elements from replacement to result while performing replacements
+    // as specified in Table 53. These $ replacements are done left-to-right, and,
+    // once such a replacement is performed, the new replacement text is not subject to further replacements.
+    var result = '';
+    for (var i = 0; i < replacement.length; i += 1) {
+      // if this is a $, and it's not the end of the replacement
+      var current = replacement.charAt(i);
+      var isLast = (i + 1) >= replacement.length;
+      var nextIsLast = (i + 2) >= replacement.length;
+      if (current === '$' && !isLast) {
+        var next = replacement.charAt(i + 1);
+        if (next === '$') {
+          result += '$';
+          i += 1;
+        } else if (next === '&') {
+          result += matched;
+          i += 1;
+        } else if (next === '`') {
+          result += position === 0 ? '' : str.slice(0, position - 1);
+          i += 1;
+        } else if (next === "'") {
+          result += tailPos >= stringLength ? '' : str.slice(tailPos);
+          i += 1;
+        } else {
+          var nextNext = nextIsLast ? null : replacement.charAt(i + 2);
+          if (isDigit(next) && next !== '0' && (nextIsLast || !isDigit(nextNext))) {
+            // $1 through $9, and not followed by a digit
+            var n = parseInt(next, 10);
+            // if (n > m, impl-defined)
+            result += n <= m && Type(captures[n - 1]) === 'Undefined' ? '' : captures[n - 1];
+            i += 1;
+          } else if (isDigit(next) && (nextIsLast || isDigit(nextNext))) {
+            // $00 through $99
+            var nn = next + nextNext;
+            var nnI = parseInt(nn, 10) - 1;
+            // if nn === '00' or nn > m, impl-defined
+            result += nn <= m && Type(captures[nnI]) === 'Undefined' ? '' : captures[nnI];
+            i += 2;
+          } else {
+            result += '$';
+          }
+        }
+      } else {
+        // the final $, or else not a $
+        result += replacement.charAt(i);
+      }
+    }
+    // 12. Return result.
+    return result;
+  };
+
+    // Number.isNaN
   /* global CreateMethodProperty, Type */
   (function () {
     var that = self;
@@ -1354,7 +1470,7 @@
   |---------------|--------------------------------------------------------|
   | Undefined     | Return "undefined".                                    |
   |---------------|--------------------------------------------------------|
-  | Null	        | Return "null".                                         |
+  | Null          | Return "null".                                         |
   |---------------|--------------------------------------------------------|
   | Boolean       | If argument is true, return "true".                    |
   |               | If argument is false, return "false".                  |
@@ -1902,6 +2018,106 @@
     return false;
   });
 
+  // String.prototype.replaceAll
+  /* global CreateMethodProperty, RequireObjectCoercible, ToString, IsRegExp, Get, GetMethod, Call, IsCallable, StringIndexOf, GetSubstitution */
+  // 21.1.3.18 String.prototype.replaceAll ( searchValue, replaceValue )
+  CreateMethodProperty(String.prototype, 'replaceAll', function replaceAll(searchValue, replaceValue ) {
+    'use strict';
+    // 1. Let O be ? RequireObjectCoercible(this value).
+    var O = RequireObjectCoercible(this);
+    // 2. If searchValue is neither undefined nor null, then
+    if (searchValue !== undefined && searchValue !== null) {
+      // 2.a. Let isRegExp be ? IsRegExp(searchValue).
+      var isRegExp = IsRegExp(searchValue);
+      // 2.b. If isRegExp is true, then
+      if (isRegExp) {
+        // 2.b.i. Let flags be ? Get(searchValue, "flags").
+        var flags = Get(searchValue, "flags");
+
+        // IE8 doesn't have RegExp.prototype.flags support, it does have RegExp.prototype.global
+        // 2.b.iii. If ? ToString(flags) does not contain "g", throw a TypeError exception.
+        if (!('flags' in RegExp.prototype) && searchValue.global !== true) {
+          throw TypeError('');
+        } else if ('flags' in RegExp.prototype) {
+          // 2.b.ii. Perform ? RequireObjectCoercible(flags).
+          RequireObjectCoercible(flags)
+          // 2.b.iii. If ? ToString(flags) does not contain "g", throw a TypeError exception.
+          if (ToString(flags).indexOf('g') === -1) {
+            throw TypeError('');
+          }
+        }
+      }
+      // 2.c. Let replacer be ? GetMethod(searchValue, @@replace).
+      var replacer = 'Symbol' in self && 'replace' in self.Symbol ? GetMethod(searchValue, self.Symbol.replace) : undefined;
+      // 2.d. If replacer is not undefined, then
+      if (replacer !== undefined) {
+        // 2.d.i. Return ? Call(replacer, searchValue, « O, replaceValue »).
+        return Call(replacer, searchValue, [ O, replaceValue ]);
+      }
+    }
+    // 3. Let string be ? ToString(O).
+    var string = ToString(O);
+    // 4. Let searchString be ? ToString(searchValue).
+    var searchString = ToString(searchValue);
+
+    // 5. Let functionalReplace be IsCallable(replaceValue).
+    var functionalReplace = IsCallable(replaceValue);
+    // 6. If functionalReplace is false, then
+    if (functionalReplace === false) {
+      // 6.a. Set replaceValue to ? ToString(replaceValue).
+      replaceValue = ToString(replaceValue);
+    }
+
+    // 7. Let searchLength be the length of searchString.
+    var searchLength = searchString.length;
+    // 8. Let advanceBy be max(1, searchLength).
+    var advanceBy = Math.max(1, searchLength);
+    // 9. Let matchPositions be a new empty List.
+    var matchPositions = [];
+    // 10. Let position be ! StringIndexOf(string, searchString, 0).
+    var position = StringIndexOf(string, searchString, 0);
+    // 11. Repeat, while position is not -1,
+    while (position !== -1) {
+      // 11.a. Append position to the end of matchPositions.
+      matchPositions.push(position);
+      // 11.b. Set position to ! StringIndexOf(string, searchString, position + advanceBy).
+      position = StringIndexOf(string, searchString, position + advanceBy);
+    }
+
+    // 12. Let endOfLastMatch be 0.
+    var endOfLastMatch = 0;
+    // 13. Let result be the empty String.
+    var result = '';
+    // 14. For each element position of matchPositions, do
+    for (var i = 0; i < matchPositions.length; i++) {
+      // 14.a. Let preserved be the substring of string from endOfLastMatch to position.
+      var preserved = string.substring(endOfLastMatch, matchPositions[i]);
+      // 14.b. If functionalReplace is true, then
+      if (functionalReplace) {
+        // 14.b.i. Let replacement be ? ToString(? Call(replaceValue, undefined, « searchString, position, string »)).
+        var replacement = ToString(Call(replaceValue, undefined, [searchString, matchPositions[i], string]));
+        // 14.c. Else,
+      } else {
+        // 14.c.i. Assert: Type(replaceValue) is String.
+        // 14.c.ii. Let captures be a new empty List.
+        var captures = [];
+        // 14.c.iii. Let replacement be ! GetSubstitution(searchString, string, position, captures, undefined, replaceValue).
+        replacement = GetSubstitution(searchString, string, matchPositions[i], captures, undefined, replaceValue);
+      }
+      // 14.d. Set result to the string-concatenation of result, preserved, and replacement.
+      result = result + preserved + replacement;
+      // 14.e. Set endOfLastMatch to position + searchLength.
+      endOfLastMatch = matchPositions[i] + searchLength;
+    }
+    // 15. If endOfLastMatch < the length of string, then
+    if (endOfLastMatch < string.length) {
+      // 15.a. Set result to the string-concatenation of result and the substring of string from endOfLastMatch.
+      result = result + string.substring(endOfLastMatch);
+    }
+    // 16. Return result.
+    return result;
+  });
+
   // String.prototype.includes
   /* global CreateMethodProperty, IsRegExp, RequireObjectCoercible, ToInteger, ToString */
   // 21.1.3.7. String.prototype.includes ( searchString [ , position ] )
@@ -2127,7 +2343,7 @@
       }
     }());
 
-    var	setDescriptor;
+    var  setDescriptor;
     var id = 0;
     var random = '' + Math.random();
     var prefix = '__\x01symbol:';

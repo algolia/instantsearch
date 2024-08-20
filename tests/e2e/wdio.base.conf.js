@@ -19,14 +19,14 @@ module.exports = {
       path: `./website/examples/${flavor}/e-commerce`,
     })),
   ],
-  staticServerPort: 5000,
+  staticServerPort: 3000,
   /*
    * Set the static server, started above, as the base URL
    * Will be prepended to the `url` parameter of `browser.url()` calls
    * https://webdriver.io/docs/configurationfile.html
    * https://webdriver.io/docs/api/browser/url.html
    */
-  baseUrl: 'http://localhost:5000',
+  baseUrl: 'http://localhost:3000',
 
   /*
    * Specify Test Files
