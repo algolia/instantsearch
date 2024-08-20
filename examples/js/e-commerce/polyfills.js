@@ -925,123 +925,117 @@
   }
 
   // _ESAbstract.StringIndexOf
-  /* global */
-  (function () {
-
-    // 6.1.4.1 StringIndexOf ( string, searchValue, fromIndex )
-    return function StringIndexOf(string, searchValue, fromIndex) {
-      // eslint-disable-line no-unused-vars
-      // 1. Assert: Type(string) is String.
-      // 2. Assert: Type(searchValue) is String.
-      // 3. Assert: ! IsNonNegativeInteger(fromIndex) is true.
-      // 4. Let len be the length of string.
-      var len = string.length;
-      // 5. If searchValue is the empty String and fromIndex ≤ len, return fromIndex.
-      if (searchValue === "" && fromIndex <= len) {
-        return fromIndex;
-      }
-      // 6. Let searchLen be the length of searchValue.
-      var searchLen = searchValue.length;
-      // 7. If there exists any integer k such that fromIndex ≤ k ≤ len - searchLen
-      // and for all nonnegative integers j less than searchLen, the code unit at
-      // index k + j within string is the same as the code unit at index j within searchValue,
-      // let pos be the smallest (closest to -∞) such integer. Otherwise, let pos be -1.
-      var k = fromIndex;
-      var pos = -1;
-      while (k + searchLen <= len) {
-        var match = true;
-        for (var j = 0; j < searchLen; j += 1) {
-          if (string[j] !== searchValue[k + j]) {
-            match = false;
-            break;
-          }
-        }
-        if (match) {
-          pos = k;
+  // 6.1.4.1 StringIndexOf ( string, searchValue, fromIndex )
+  function StringIndexOf(string, searchValue, fromIndex) {
+    // eslint-disable-line no-unused-vars
+    // 1. Assert: Type(string) is String.
+    // 2. Assert: Type(searchValue) is String.
+    // 3. Assert: ! IsNonNegativeInteger(fromIndex) is true.
+    // 4. Let len be the length of string.
+    var len = string.length;
+    // 5. If searchValue is the empty String and fromIndex ≤ len, return fromIndex.
+    if (searchValue === "" && fromIndex <= len) {
+      return fromIndex;
+    }
+    // 6. Let searchLen be the length of searchValue.
+    var searchLen = searchValue.length;
+    // 7. If there exists any integer k such that fromIndex ≤ k ≤ len - searchLen
+    // and for all nonnegative integers j less than searchLen, the code unit at
+    // index k + j within string is the same as the code unit at index j within searchValue,
+    // let pos be the smallest (closest to -∞) such integer. Otherwise, let pos be -1.
+    var k = fromIndex;
+    var pos = -1;
+    while (k + searchLen <= len) {
+      var match = true;
+      for (var j = 0; j < searchLen; j += 1) {
+        if (string[j] !== searchValue[k + j]) {
+          match = false;
           break;
         }
-        k += 1;
       }
-      // 8. Return pos.
-      return pos;
-    };
-  })();
+      if (match) {
+        pos = k;
+        break;
+      }
+      k += 1;
+    }
+    // 8. Return pos.
+    return pos;
+  };
 
 
   // _ESAbstract.GetSubstitution
   /* global Type */
   // 21.1.3.17.1 GetSubstitution ( matched, str, position, captures, namedCaptures, replacement )
-  (function() {
-    function isDigit(string) {
-      return /^[0-9]$/.test(string);
-    }
-    return function GetSubstitution ( matched, str, position, captures, namedCaptures, replacement ) { // eslint-disable-line no-unused-vars
-      // 1. Assert: Type(matched) is String.
-      // 2. Let matchLength be the number of code units in matched.
-      var matchLength = matched.length;
-      // 3. Assert: Type(str) is String.
-      // 4. Let stringLength be the number of code units in str.
-      var stringLength = str.length;
-      // 5. Assert: ! IsNonNegativeInteger(position) is true.
-      // 6. Assert: position ≤ stringLength.
-      // 7. Assert: captures is a possibly empty List of Strings.
-      // 8. Assert: Type(replacement) is String.
-      // 9. Let tailPos be position + matchLength.
-      var tailPos = position + matchLength;
-      // 10. Let m be the number of elements in captures.
-      var m = captures.length;
-      // 11. Let result be the String value derived from replacement by copying
-      // code unit elements from replacement to result while performing replacements
-      // as specified in Table 53. These $ replacements are done left-to-right, and,
-      // once such a replacement is performed, the new replacement text is not subject to further replacements.
-      var result = '';
-      for (var i = 0; i < replacement.length; i += 1) {
-        // if this is a $, and it's not the end of the replacement
-        var current = replacement.charAt(i);
-        var isLast = (i + 1) >= replacement.length;
-        var nextIsLast = (i + 2) >= replacement.length;
-        if (current === '$' && !isLast) {
-          var next = replacement.charAt(i + 1);
-          if (next === '$') {
-            result += '$';
-            i += 1;
-          } else if (next === '&') {
-            result += matched;
-            i += 1;
-          } else if (next === '`') {
-            result += position === 0 ? '' : str.slice(0, position - 1);
-            i += 1;
-          } else if (next === "'") {
-            result += tailPos >= stringLength ? '' : str.slice(tailPos);
-            i += 1;
-          } else {
-            var nextNext = nextIsLast ? null : replacement.charAt(i + 2);
-            if (isDigit(next) && next !== '0' && (nextIsLast || !isDigit(nextNext))) {
-              // $1 through $9, and not followed by a digit
-              var n = parseInt(next, 10);
-              // if (n > m, impl-defined)
-              result += n <= m && Type(captures[n - 1]) === 'Undefined' ? '' : captures[n - 1];
-              i += 1;
-            } else if (isDigit(next) && (nextIsLast || isDigit(nextNext))) {
-              // $00 through $99
-              var nn = next + nextNext;
-              var nnI = parseInt(nn, 10) - 1;
-              // if nn === '00' or nn > m, impl-defined
-              result += nn <= m && Type(captures[nnI]) === 'Undefined' ? '' : captures[nnI];
-              i += 2;
-            } else {
-              result += '$';
-            }
-          }
+  function isDigit(string) {
+    return /^[0-9]$/.test(string);
+  }
+  return function GetSubstitution ( matched, str, position, captures, namedCaptures, replacement ) { // eslint-disable-line no-unused-vars
+    // 1. Assert: Type(matched) is String.
+    // 2. Let matchLength be the number of code units in matched.
+    var matchLength = matched.length;
+    // 3. Assert: Type(str) is String.
+    // 4. Let stringLength be the number of code units in str.
+    var stringLength = str.length;
+    // 5. Assert: ! IsNonNegativeInteger(position) is true.
+    // 6. Assert: position ≤ stringLength.
+    // 7. Assert: captures is a possibly empty List of Strings.
+    // 8. Assert: Type(replacement) is String.
+    // 9. Let tailPos be position + matchLength.
+    var tailPos = position + matchLength;
+    // 10. Let m be the number of elements in captures.
+    var m = captures.length;
+    // 11. Let result be the String value derived from replacement by copying
+    // code unit elements from replacement to result while performing replacements
+    // as specified in Table 53. These $ replacements are done left-to-right, and,
+    // once such a replacement is performed, the new replacement text is not subject to further replacements.
+    var result = '';
+    for (var i = 0; i < replacement.length; i += 1) {
+      // if this is a $, and it's not the end of the replacement
+      var current = replacement.charAt(i);
+      var isLast = (i + 1) >= replacement.length;
+      var nextIsLast = (i + 2) >= replacement.length;
+      if (current === '$' && !isLast) {
+        var next = replacement.charAt(i + 1);
+        if (next === '$') {
+          result += '$';
+          i += 1;
+        } else if (next === '&') {
+          result += matched;
+          i += 1;
+        } else if (next === '`') {
+          result += position === 0 ? '' : str.slice(0, position - 1);
+          i += 1;
+        } else if (next === "'") {
+          result += tailPos >= stringLength ? '' : str.slice(tailPos);
+          i += 1;
         } else {
-          // the final $, or else not a $
-          result += replacement.charAt(i);
+          var nextNext = nextIsLast ? null : replacement.charAt(i + 2);
+          if (isDigit(next) && next !== '0' && (nextIsLast || !isDigit(nextNext))) {
+            // $1 through $9, and not followed by a digit
+            var n = parseInt(next, 10);
+            // if (n > m, impl-defined)
+            result += n <= m && Type(captures[n - 1]) === 'Undefined' ? '' : captures[n - 1];
+            i += 1;
+          } else if (isDigit(next) && (nextIsLast || isDigit(nextNext))) {
+            // $00 through $99
+            var nn = next + nextNext;
+            var nnI = parseInt(nn, 10) - 1;
+            // if nn === '00' or nn > m, impl-defined
+            result += nn <= m && Type(captures[nnI]) === 'Undefined' ? '' : captures[nnI];
+            i += 2;
+          } else {
+            result += '$';
+          }
         }
+      } else {
+        // the final $, or else not a $
+        result += replacement.charAt(i);
       }
-      // 12. Return result.
-      return result;
-    };
-  }())
+    }
+    // 12. Return result.
+    return result;
+  };
 
     // Number.isNaN
   /* global CreateMethodProperty, Type */
