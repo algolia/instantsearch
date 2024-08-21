@@ -23,9 +23,5 @@
       "autoprefixer": {}
     }
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ]
+  "browserslist": "Firefox 127, Chrome 125, IE 11"
 }
