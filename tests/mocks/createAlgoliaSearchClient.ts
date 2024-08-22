@@ -47,8 +47,13 @@ export function createAlgoliaSearchClient<
 >(options: TOptions): OverrideKeys<MockSearchClient, TOptions> {
   const appId = (options as Record<string, unknown>).appId || 'appId';
 
+  const isV4orV5 =
+    ((algoliasearch as any).version &&
+      (algoliasearch as any).version.startsWith('4.')) ||
+    (algoliasearch as any).version.startsWith('5.');
+
   // check if algoliasearch is v4 (has transporter)
-  if ('transporter' in algoliasearch('appId', 'apiKey')) {
+  if (isV4orV5) {
     options = {
       transporter: createTransporter({
         timeouts: {
