@@ -61,7 +61,7 @@
     "@vue/server-renderer": "3.2.47",
     "@vue/test-utils": "1.3.0",
     "@vue/test-utils2": "npm:@vue/test-utils@2.0.0-rc.11",
-    "algoliasearch": "4.23.2",
+    "algoliasearch": "5.0.0",
     "algoliasearch-helper": "3.22.4",
     "instantsearch.css": "8.5.0",
     "rollup": "1.32.1",

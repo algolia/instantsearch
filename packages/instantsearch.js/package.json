@@ -61,7 +61,7 @@
     "@instantsearch/testutils": "1.44.0",
     "@storybook/html": "5.3.9",
     "@types/scriptjs": "0.0.2",
-    "algoliasearch": "4.23.2",
+    "algoliasearch": "5.0.0",
     "places.js": "1.17.1",
     "scriptjs": "2.5.9",
     "webpack": "4.47.0"
