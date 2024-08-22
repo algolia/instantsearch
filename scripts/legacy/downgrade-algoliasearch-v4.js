@@ -67,3 +67,4 @@ shell.exec('yarn install');
 // fix mistake in the dependency resolution
 shell.exec('cp -r node_modules/algoliasearch-v4 node_modules/algoliasearch');
 shell.exec('rm -rf node_modules/algoliasearch/node_modules');
+shell.exec('rm -rf node_modules/@algolia/client-search/node_modules');
