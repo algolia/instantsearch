@@ -47,10 +47,8 @@ export function createAlgoliaSearchClient<
 >(options: TOptions): OverrideKeys<MockSearchClient, TOptions> {
   const appId = (options as Record<string, unknown>).appId || 'appId';
 
-  const isV4orV5 =
-    ((algoliasearch as any).version &&
-      (algoliasearch as any).version.startsWith('4.')) ||
-    (algoliasearch as any).version.startsWith('5.');
+  const version = (algoliasearch as any).version || '';
+  const isV4orV5 = version.startsWith('4.') || version.startsWith('5.');
 
   // check if algoliasearch is v4 (has transporter)
   if (isV4orV5) {
