@@ -70,12 +70,12 @@ shell.sed(
 shell.exec('yarn install');
 
 // Make sure a specific version of algoliasearch is installed
-shell.exec('yarn install --cwd scripts/legacy/v4-dependency-container');
-shell.exec('yarn install --cwd scripts/legacy/v5-dependency-container');
+shell.exec('yarn install --force --cwd scripts/legacy/v4-dependency-container');
+shell.exec('yarn install --force --cwd scripts/legacy/v5-dependency-container');
 shell.rm('-rf', 'node_modules/@algolia');
 shell.exec(
-  'cp -rf scripts/legacy/v4-dependency-container/node_modules/ node_modules/'
+  'cp -rf scripts/legacy/v4-dependency-container/node_modules/* node_modules/'
 );
 shell.exec(
-  'cp -rf scripts/legacy/v5-dependency-container/node_modules/ node_modules/'
+  'cp -rf scripts/legacy/v5-dependency-container/node_modules/* node_modules/'
 );
