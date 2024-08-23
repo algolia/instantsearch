@@ -8083,7 +8083,7 @@ algoliasearch-helper@3.14.0:
     semver "^5.1.0"
     tunnel-agent "^0.6.0"
 
-"algoliasearch-v4@npm:algoliasearch@4.23.2", algoliasearch@4, algoliasearch@4.23.2:
+"algoliasearch-v4@npm:algoliasearch@4.23.2", algoliasearch@4:
   name algoliasearch-v4
   version "4.23.2"
   resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-4.23.2.tgz#3b7bc93d98f3965628c73a06cbf9203531324a9d"

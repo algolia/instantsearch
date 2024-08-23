@@ -1,0 +1,12 @@
+{
+  "name": "v5-dependency-container",
+  "private": true,
+  "scripts": {
+    "make-directories": "mkdir -p node_modules/algoliasearch-v5/node_modules",
+    "move-directories": "mv node_modules/@algolia node_modules/algoliasearch-v5/node_modules/@algolia",
+    "postinstall": "yarn make-directories && yarn move-directories"
+  },
+  "dependencies": {
+    "algoliasearch-v5": "npm:algoliasearch@5.0.0"
+  }
+}
