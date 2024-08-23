@@ -37,7 +37,12 @@ shell.sed(
 );
 
 // remove resolution
-shell.sed('-i', /"@algolia\/client-common": "5.*"(,?)/, '', packageJsonPaths);
+shell.sed(
+  '-i',
+  /"@algolia\/client-common": "5.*"(,?)/,
+  '"@algolia/client-common": "4.23.2"$1',
+  packageJsonPaths
+);
 shell.sed(
   '-i',
   /"places.js\/algoliasearch": "5.*"(,?)/,
@@ -62,10 +67,15 @@ shell.sed(
   ...shell.ls('examples/*/*/package.json')
 );
 
-shell.exec('yarn install');
+// shell.exec('yarn install');
 
-// fix mistake in the dependency resolution
-shell.exec('cp -r node_modules/algoliasearch-v4 node_modules/algoliasearch');
-shell.exec('cp -r node_modules/algoliasearch-v4/node_modules node_modules');
-shell.exec('rm -rf node_modules/algoliasearch/node_modules');
-shell.exec('rm -rf node_modules/@algolia/client-search/node_modules');
+// Make sure a specific version of algoliasearch is installed
+// shell.exec('yarn install --cwd scripts/legacy/v4-dependency-container');
+// shell.exec('yarn install --cwd scripts/legacy/v5-dependency-container');
+shell.rm('-rf', 'node_modules/@algolia');
+shell.exec(
+  'cp -rf scripts/legacy/v4-dependency-container/node_modules/ node_modules/'
+);
+shell.exec(
+  'cp -rf scripts/legacy/v5-dependency-container/node_modules/ node_modules/'
+);
