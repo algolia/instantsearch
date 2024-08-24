@@ -1,5 +1,6 @@
+'use client';
+
 import { safelyRunOnBrowser } from 'instantsearch.js/es/lib/utils';
-import { headers } from 'next/headers';
 import React, { useEffect, useRef } from 'react';
 import {
   InstantSearch,
@@ -36,6 +37,7 @@ export type InstantSearchNextProps<
   TRouteState = TUiState
 > = Omit<InstantSearchProps<TUiState, TRouteState>, 'routing'> & {
   routing?: InstantSearchNextRouting<TUiState, TRouteState> | boolean;
+  nonce?: string;
 };
 
 export function InstantSearchNext<
@@ -44,6 +46,7 @@ export function InstantSearchNext<
 >({
   children,
   routing: passedRouting,
+  nonce,
   ...instantSearchProps
 }: InstantSearchNextProps<TUiState, TRouteState>) {
   const isMounting = useRef(true);
@@ -56,7 +59,7 @@ export function InstantSearchNext<
   }, []);
 
   const nonce = safelyRunOnBrowser(() => undefined, {
-    fallback: () => headers().get('x-nonce') || undefined,
+    fallback: () => nonce,
   });
 
   const routing = useInstantSearchRouting(passedRouting, isMounting);
