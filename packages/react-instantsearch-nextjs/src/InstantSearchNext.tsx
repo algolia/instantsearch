@@ -46,7 +46,7 @@ export function InstantSearchNext<
 >({
   children,
   routing: passedRouting,
-  nonce,
+  nonce: _nonce,
   ...instantSearchProps
 }: InstantSearchNextProps<TUiState, TRouteState>) {
   const isMounting = useRef(true);
@@ -59,7 +59,7 @@ export function InstantSearchNext<
   }, []);
 
   const nonce = safelyRunOnBrowser(() => undefined, {
-    fallback: () => nonce,
+    fallback: () => _nonce,
   });
 
   const routing = useInstantSearchRouting(passedRouting, isMounting);
