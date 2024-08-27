@@ -240,7 +240,7 @@ jobs:
             ./scripts/legacy/downgrade-algoliasearch-v4.js
       - run:
           name: Unit & Integration tests
-          command: yarn run test:ci
+          command: yarn run test:ci:v4
       - store_test_results:
           path: junit/jest/
       - run:

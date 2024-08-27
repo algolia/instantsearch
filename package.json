@@ -23,6 +23,7 @@
     "type-check:v3": "tsc --project tsconfig.v3.json",
     "test": "jest && lerna run test",
     "test:ci": "./scripts/retry.sh 3 'jest --maxWorkers=4 --ci' && lerna run test --concurrency=1",
+    "test:ci:v4": "./scripts/retry.sh 3 'jest --maxWorkers=4 --ci' && lerna run test:v4 --concurrency=1",
     "test:size": "bundlesize",
     "test:exports": "lerna run test:exports",
     "test:versions": "./tests/versions/index.js",

@@ -5321,7 +5321,7 @@ exports[`Templates React InstantSearch Native File content: tsconfig.json 1`] = 
 `;
 
 exports[`Templates React InstantSearch Native File content: types/ProductHit.ts 1`] = `
-"import { Hit as AlgoliaHit } from '@algolia/client-search';
+"import { Hit as AlgoliaHit } from 'instantsearch.js';
 
 export type ProductHit = AlgoliaHit<{
   brand: string;

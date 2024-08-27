@@ -1,19 +1,5 @@
-/* eslint-disable import/no-unresolved, import/order */
-
-// @ts-ignore v4 only
-import * as CacheCommon from '@algolia/cache-common';
-// @ts-ignore v4 only
-import * as CacheInMemory from '@algolia/cache-in-memory';
-// @ts-ignore v4 only
-import * as LoggerCommon from '@algolia/logger-common';
-// @ts-ignore v4 only
-import * as Transporter from '@algolia/transporter';
-
-// v4 and v5
 import * as ClientCommon from '@algolia/client-common';
-// v4 and v5
 import * as HTTPRequester from '@algolia/requester-node-http';
-// v4 and v5
 import * as AlgoliaSearch from 'algoliasearch';
 
 import {
@@ -100,6 +86,11 @@ export function createAlgoliaSearchClient<
       ...options,
     };
   } else if (version.startsWith('4.')) {
+    const CacheCommon = require('@algolia/cache-common');
+    const CacheInMemory = require('@algolia/cache-in-memory');
+    const LoggerCommon = require('@algolia/logger-common');
+    const Transporter = require('@algolia/transporter');
+
     options = {
       transporter: Transporter.createTransporter({
         timeouts: {
@@ -109,10 +100,10 @@ export function createAlgoliaSearchClient<
         },
         userAgent: Transporter.createUserAgent('test'),
         requester: (HTTPRequester as any).createNodeHttpRequester(),
-        logger: (LoggerCommon as any).createNullLogger(),
-        responsesCache: (CacheCommon as any).createNullCache(),
-        requestsCache: (CacheCommon as any).createNullCache(),
-        hostsCache: (CacheInMemory as any).createInMemoryCache(),
+        logger: LoggerCommon.createNullLogger(),
+        responsesCache: CacheCommon.createNullCache(),
+        requestsCache: CacheCommon.createNullCache(),
+        hostsCache: CacheInMemory.createInMemoryCache(),
         hosts: (
           [
             {
@@ -120,7 +111,7 @@ export function createAlgoliaSearchClient<
               accept: Transporter.CallEnum.Read,
             },
             { url: `${appId}.algolia.net`, accept: Transporter.CallEnum.Write },
-          ] as readonly Transporter.HostOptions[]
+          ] as ReadonlyArray<typeof Transporter.HostOptions>
         ).concat([
           { url: `${appId}-1.algolianet.com` },
           { url: `${appId}-2.algolianet.com` },
@@ -171,6 +162,7 @@ function getParams(params: Record<string, any>) {
     return ClientCommon.serializeQueryParameters(params);
   }
   if (version.startsWith('4.')) {
+    const Transporter = require('@algolia/transporter');
     return Transporter.serializeQueryParameters(params);
   }
 
