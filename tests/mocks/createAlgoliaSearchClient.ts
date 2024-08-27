@@ -35,9 +35,14 @@ export function createAlgoliaSearchClient<
 >(options: TOptions): OverrideKeys<MockSearchClient, TOptions> {
   const appId = (options as Record<string, unknown>).appId || 'appId';
 
-  const version = (algoliasearch as any).version || '';
+  const version =
+    (AlgoliaSearch as any).apiClientVersion ||
+    (algoliasearch as any).version ||
+    '';
 
   if (version.startsWith('5.')) {
+    // @ts-ignore (v4)
+    type Host = typeof ClientCommon['Host'];
     options = {
       transporter: (ClientCommon as any).createTransporter({
         timeouts: {
@@ -62,7 +67,7 @@ export function createAlgoliaSearchClient<
               protocol: 'https',
             },
             { url: `${appId}.algolia.net`, accept: 'write', protocol: 'https' },
-          ] as readonly ClientCommon.Host[]
+          ] as readonly Host[]
         ).concat([
           {
             url: `${appId}-1.algolianet.com`,
@@ -142,7 +147,7 @@ export function createAlgoliaSearchClient<
           ...requests.map((request) =>
             createSingleSearchResponse({
               index: request.indexName,
-              params: getParams(request.params || {}),
+              params: getParams(version, request.params || {}),
             })
           )
         )
@@ -155,11 +160,9 @@ export function createAlgoliaSearchClient<
   } as SearchClient as OverrideKeys<MockSearchClient, TOptions>;
 }
 
-function getParams(params: Record<string, any>) {
-  const anysearch = algoliasearch as any;
-  const version = anysearch.version || '';
+function getParams(version: string, params: Record<string, any>) {
   if (version.startsWith('5.')) {
-    return ClientCommon.serializeQueryParameters(params);
+    return (ClientCommon as any).serializeQueryParameters(params);
   }
   if (version.startsWith('4.')) {
     const Transporter = require('@algolia/transporter');
@@ -167,7 +170,7 @@ function getParams(params: Record<string, any>) {
   }
 
   if (version.startsWith('3.')) {
-    return anysearch('appid', 'apikey')._getSearchParams(params);
+    return (algoliasearch('appid', 'apikey') as any)._getSearchParams(params);
   }
 
   return 'wrong version, no params';
