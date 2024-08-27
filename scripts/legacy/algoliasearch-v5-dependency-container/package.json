@@ -8,6 +8,6 @@
     "postinstall": "yarn make-directories && yarn move-directories && yarn remove-directories"
   },
   "dependencies": {
-    "algoliasearch-v5": "npm:algoliasearch@5.0.0"
+    "algoliasearch-v5": "npm:algoliasearch@5.1.1"
   }
 }
