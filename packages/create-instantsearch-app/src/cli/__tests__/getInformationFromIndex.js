@@ -1,4 +1,4 @@
-const algoliasearch = require('algoliasearch');
+const { algoliasearch } = require('algoliasearch');
 
 const getInformationFromIndex = require('../getInformationFromIndex');
 
@@ -15,7 +15,7 @@ jest.mock('algoliasearch', () => {
     })
   );
 
-  return _algoliasearch;
+  return { algoliasearch: _algoliasearch };
 });
 
 test('returns default information', async () => {
