@@ -1,9 +1,18 @@
 /**
  * @jest-environment jsdom
  */
-import { wait } from '@instantsearch/testutils';
+import { castToJestMock, wait } from '@instantsearch/testutils';
 
+import { fetchConfiguration } from '../get-configuration';
 import { setupInstantSearch } from '../setup-instantsearch';
+
+jest.mock('../get-configuration', () => {
+  const actual = jest.requireActual('../get-configuration');
+  return {
+    ...actual,
+    fetchConfiguration: jest.fn(() => Promise.resolve([])),
+  };
+});
 
 describe('setup of InstantSearch', () => {
   const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
@@ -25,7 +34,7 @@ describe('setup of InstantSearch', () => {
 
   test('no error logged if no elements found', () => {
     document.head.innerHTML = `
-      <meta name="instantsearch-configuration" content='{"appId":"appId","apiKey":"apiKey"}'>
+      <meta name="algolia-configuration" content='{"appId":"appId","apiKey":"apiKey"}'>
     `;
 
     setupInstantSearch();
@@ -35,7 +44,7 @@ describe('setup of InstantSearch', () => {
 
   test('search is exposed on the window', () => {
     document.head.innerHTML = `
-      <meta name="instantsearch-configuration" content='{"appId":"appId","apiKey":"apiKey"}'>
+      <meta name="algolia-configuration" content='{"appId":"appId","apiKey":"apiKey"}'>
     `;
 
     setupInstantSearch();
@@ -45,7 +54,7 @@ describe('setup of InstantSearch', () => {
 
   test('styles are injected', () => {
     document.head.innerHTML = `
-      <meta name="instantsearch-configuration" content='{"appId":"appId","apiKey":"apiKey"}'>
+      <meta name="algolia-configuration" content='{"appId":"appId","apiKey":"apiKey"}'>
     `;
 
     setupInstantSearch();
@@ -56,23 +65,51 @@ describe('setup of InstantSearch', () => {
   });
 
   test('configuration is fetched and rendered', async () => {
+    castToJestMock(fetchConfiguration).mockImplementationOnce(() =>
+      Promise.resolve([
+        {
+          id: 'fake-configuration',
+          name: 'Fake Configuration',
+          indexName: 'fake-index-name',
+          blocks: [
+            {
+              type: 'grid',
+              children: [],
+            },
+          ],
+          createdAt: '2021-01-01',
+          updatedAt: '2021-01-01',
+        },
+      ])
+    );
+
     document.head.innerHTML = `
-      <meta name="instantsearch-configuration" content='{"appId":"latency","apiKey":"6be0576ff61c053d5f9a3225e2a90f76"}'>
+      <meta name="algolia-configuration" content='{"appId":"latency","apiKey":"6be0576ff61c053d5f9a3225e2a90f76"}'>
     `;
     document.body.innerHTML = `
-      <div data-instantsearch-id="qsdfqsdf"></div>
+      <div data-experience-id="fake-configuration"></div>
     `;
 
     setupInstantSearch();
 
     expect(
-      document.querySelector('[data-instantsearch-id="qsdfqsdf"]')!.children
+      document.querySelector('[data-experience-id="fake-configuration"]')!
+        .children
     ).toHaveLength(0);
 
-    await wait(2000);
+    await wait(0);
 
     expect(
-      document.querySelector('[data-instantsearch-id="qsdfqsdf"]')!.children
+      document.querySelector('[data-experience-id="fake-configuration"]')!
+        .children
     ).not.toHaveLength(0);
+
+    expect(
+      document.querySelector('[data-experience-id="fake-configuration"]')!
+        .innerHTML
+    ).toMatchInlineSnapshot(`
+      <div class="ais-Grid">
+      </div>
+    `);
   });
 });

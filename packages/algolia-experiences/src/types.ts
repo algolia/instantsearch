@@ -84,7 +84,7 @@ type RegularWidget<TKeys extends keyof typeof widgets = keyof typeof widgets> =
     };
   }[TKeys];
 
-export type Child =
+export type Block =
   | {
       [key in keyof typeof widgets]: key extends TemplateWidgetTypes
         ? TemplateWidget<key>
@@ -93,12 +93,17 @@ export type Child =
         : RegularWidget<key>;
     }[keyof typeof widgets]
   | {
-      type: 'columns';
-      children: Child[][];
+      type: 'grid';
+      children: Block[];
+    }
+  | {
+      type: 'column';
+      children: Block[];
     };
 
 export type Configuration = {
   id: string;
+  name: string;
   indexName: string;
-  children: Child[];
+  blocks: Block[];
 };

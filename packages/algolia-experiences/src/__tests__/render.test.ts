@@ -29,7 +29,7 @@ describe('configToIndex', () => {
 
   it('errors if element not found', () => {
     const elements = new Map<string, HTMLElement>();
-    const config = { id: 'foo', indexName: 'bar', children: [] };
+    const config = { id: 'foo', indexName: 'bar', name: 'Foo', blocks: [] };
     const result = configToIndex(config, elements);
     expect(result).toEqual([]);
     expect(error).toHaveBeenCalledTimes(1);
@@ -45,7 +45,8 @@ describe('configToIndex', () => {
     const config: Configuration = {
       id: 'foo',
       indexName: 'bar',
-      children: [{ type: 'ais.hits', parameters: {}, children: [] }],
+      name: 'Foo',
+      blocks: [{ type: 'ais.hits', parameters: {}, children: [] }],
     };
     const result = configToIndex(config, elements);
     expect(result).toHaveLength(1);
@@ -62,7 +63,8 @@ describe('configToIndex', () => {
     const config: Configuration = {
       id: 'foo',
       indexName: 'bar',
-      children: [
+      name: 'Foo',
+      blocks: [
         { type: 'ais.hits', parameters: {}, children: [] },
         { type: 'ais.infiniteHits', parameters: {}, children: [] },
         {
@@ -121,7 +123,7 @@ describe('configToIndex', () => {
     };
     const result = configToIndex(config, elements);
     expect(result).toHaveLength(1);
-    expect(result[0].getWidgets()).toHaveLength(config.children.length);
+    expect(result[0].getWidgets()).toHaveLength(config.blocks.length);
     expect(result[0].getWidgets().map((w) => w.$$type)).toEqual([
       'ais.hits',
       'ais.infiniteHits',
@@ -171,7 +173,8 @@ describe('configToIndex', () => {
       const config: Configuration = {
         id: 'foo',
         indexName: 'bar',
-        children: [
+        name: 'Foo',
+        blocks: [
           {
             type: 'ais.hits',
             parameters: {},
@@ -280,7 +283,8 @@ describe('configToIndex', () => {
       const config: Configuration = {
         id: 'foo',
         indexName: 'bar',
-        children: [
+        name: 'Foo',
+        blocks: [
           {
             type: 'ais.refinementList',
             parameters: { attribute: 'a', header: 'header text' },
@@ -354,7 +358,8 @@ describe('configToIndex', () => {
       const config: Configuration = {
         id: 'foo',
         indexName: 'bar',
-        children: [
+        name: 'Foo',
+        blocks: [
           {
             type: 'ais.configure',
             parameters: { hitsPerPage: 5 },
@@ -367,10 +372,7 @@ describe('configToIndex', () => {
       expect(result).toHaveLength(1);
       expect(result[0].getWidgets()).toHaveLength(1);
 
-      expect(elements.get('foo')?.innerHTML).toMatchInlineSnapshot(`
-        <div>
-        </div>
-      `);
+      expect(elements.get('foo')).toBeEmptyDOMElement();
 
       search.addWidgets(result);
       search.start();
@@ -405,7 +407,8 @@ describe('configToIndex', () => {
       const config: Configuration = {
         id: 'foo',
         indexName: 'bar',
-        children: [
+        name: 'Foo',
+        blocks: [
           {
             type: 'ais.pagination',
             parameters: {},

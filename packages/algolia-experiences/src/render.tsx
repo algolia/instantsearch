@@ -7,7 +7,7 @@ import { error } from './util';
 import { widgets } from './widgets';
 
 import type {
-  Child,
+  Block,
   Configuration,
   PanelWidget,
   PanelWidgetTypes,
@@ -25,7 +25,7 @@ export function injectStyles() {
 
   // @TODO: decide if this should be for all columns or only a specific type
   style.textContent = `
-    .ais-Columns {
+    .ais-Grid {
       display: grid;
       grid-template-columns: minmax(min-content, 200px) 1fr;
       gap: 1em;
@@ -49,7 +49,7 @@ export function configToIndex(
       indexName: config.indexName,
       indexId: config.id,
     }).addWidgets(
-      config.children.flatMap((child) => childToWidget(child, container))
+      config.blocks.flatMap((block) => blockToWidget(block, container))
     ),
   ];
 }
@@ -63,8 +63,8 @@ const hitWidgets = new Set<TemplateWidgetTypes>([
   'ais.trendingItems',
 ]);
 function isTemplateWidget(
-  child: Child
-): child is Child & { children: TemplateChild[] } {
+  child: Block
+): child is Block & { children: TemplateChild[] } {
   return hitWidgets.has(child.type as any);
 }
 
@@ -79,7 +79,7 @@ const panelWidgets = new Set<PanelWidgetTypes>([
   'ais.ratingMenu',
   'ais.toggleRefinement',
 ]);
-function isPanelWidget(child: Child): child is PanelWidget {
+function isPanelWidget(child: Block): child is PanelWidget {
   return panelWidgets.has(child.type as any);
 }
 
@@ -132,26 +132,31 @@ function renderAttribute(text: TemplateAttribute[number], hit: any) {
   return null;
 }
 
-function childToWidget(child: Child, container: HTMLElement): Widget[] {
+function blockToWidget(child: Block, container: HTMLElement): Widget[] {
+  if (child.type === 'ais.configure') {
+    return [widgets[child.type]({ ...child.parameters })];
+  }
+
   const widgetContainer = container.appendChild(document.createElement('div'));
 
-  if (child.type === 'columns') {
-    widgetContainer.classList.add('ais-Columns');
+  if (child.type === 'grid') {
+    widgetContainer.classList.add('ais-Grid');
 
     return child.children
       .map((column) => {
-        const columnContainer = widgetContainer.appendChild(
-          Object.assign(document.createElement('div'), {
-            className: 'ais-Column',
-          })
-        );
-        return column.map((ch) => childToWidget(ch, columnContainer));
+        return blockToWidget(column, widgetContainer);
       })
-      .flat(2);
+      .flat(1);
   }
 
-  if (child.type === 'ais.configure') {
-    return [widgets[child.type]({ ...child.parameters })];
+  if (child.type === 'column') {
+    widgetContainer.classList.add('ais-Column');
+
+    return child.children
+      .map((column) => {
+        return blockToWidget(column, widgetContainer);
+      })
+      .flat(1);
   }
 
   if (isTemplateWidget(child)) {

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "BABEL_ENV=parcel parcel index.html local.html --port 3000",
+    "start": "BABEL_ENV=parcel parcel index.html local.html",
     "build": "BABEL_ENV=parcel parcel build index.html local.html --public-url .",
     "website:examples": "BABEL_ENV=parcel parcel build index.html local.html --public-url . --dist-dir=../../../website/examples/js/algolia-experiences"
   },

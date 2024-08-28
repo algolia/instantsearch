@@ -1,22 +1,18 @@
 /** @jsx h */
-// @ts-ignore
-import { liteClient } from 'algoliasearch/dist/lite/lite.esm.browser.js';
+
+import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import InstantSearch from 'instantsearch.js/es/lib/InstantSearch';
 
-import { fakeFetchConfiguration } from './fake-configuration';
+import { fetchConfiguration } from './get-configuration';
 import { getElements, getSettings } from './get-information';
 import { configToIndex, injectStyles } from './render';
 import { error } from './util';
-
-import type { liteClient as liteClientType } from 'algoliasearch/lite';
 
 declare global {
   interface Window {
     __search: InstantSearch;
   }
 }
-
-const algoliasearch = liteClient as typeof liteClientType;
 
 export function setupInstantSearch() {
   try {
@@ -32,7 +28,7 @@ export function setupInstantSearch() {
 
     injectStyles();
 
-    fakeFetchConfiguration([...elements.keys()]).then((configuration) => {
+    fetchConfiguration([...elements.keys()], settings).then((configuration) => {
       search
         .addWidgets(
           configuration.flatMap((config) => configToIndex(config, elements))

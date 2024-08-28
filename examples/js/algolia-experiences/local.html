@@ -29,6 +29,7 @@
       }
       .ais-TrendingItems-item a,
       .ais-Hits-item a {
+        width: 100%;
         padding: 1.5em;
         text-decoration: none;
         color: inherit;
@@ -45,6 +46,7 @@
       .__flex {
         display: flex;
         gap: 1em;
+        justify-content: space-between;
       }
       .__bold {
         font-weight: bold;
@@ -58,14 +60,14 @@
     </style>
     <script src="/packages/algolia-experiences/dist/algolia-experiences.development.js"></script>
     <meta
-      name="instantsearch-configuration"
-      content='{"appId":"latency","apiKey":"6be0576ff61c053d5f9a3225e2a90f76"}'
+      name="algolia-configuration"
+      content='{"appId":"F4T6CUV2AH","apiKey":"72d500963987bc97ff899d350a00f7a8"}'
     />
   </head>
   <body>
     <main>
-      <h2>Buy audio equipment online</h2>
-      <div data-instantsearch-id="category:audio"></div>
+      <h2>Buy historical books now!</h2>
+      <div data-experience-id="category:historical"></div>
     </main>
   </body>
 </html>

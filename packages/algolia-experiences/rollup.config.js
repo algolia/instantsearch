@@ -1,3 +1,5 @@
+import path from 'path';
+
 import babel from 'rollup-plugin-babel';
 import commonjs from 'rollup-plugin-commonjs';
 import resolve from 'rollup-plugin-node-resolve';
@@ -15,6 +17,22 @@ const link = 'https://github.com/algolia/instantsearch';
 const license = `/*! algolia-experiences ${version} | ${algolia} | ${link} */`;
 
 const plugins = [
+  {
+    /**
+     * This plugin is a workaround for the fact that the `algoliasearch/lite`
+     * package resolves to the UMD by default in this version of rollup.
+     * Revisit when rollup > 1.
+     */
+    name: 'handle-algoliasearch-lite',
+    resolveId(source) {
+      if (source !== 'algoliasearch/lite') return null;
+      return path.join(
+        path.dirname(path.resolve(require.resolve('algoliasearch'))),
+        'lite',
+        'lite.esm.browser.js'
+      );
+    },
+  },
   resolve({
     browser: true,
     preferBuiltins: false,

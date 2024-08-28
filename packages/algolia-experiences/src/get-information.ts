@@ -1,6 +1,11 @@
-export function getSettings(): { appId: string; apiKey: string } {
+export type Settings = {
+  appId: string;
+  apiKey: string;
+};
+
+export function getSettings(): Settings {
   const metaConfiguration = document.querySelector<HTMLMetaElement>(
-    'meta[name="instantsearch-configuration"]'
+    'meta[name="algolia-configuration"]'
   );
 
   if (!metaConfiguration || !metaConfiguration.content) {
@@ -19,9 +24,9 @@ export function getSettings(): { appId: string; apiKey: string } {
 export function getElements() {
   const elements = new Map<string, HTMLElement>();
   document
-    .querySelectorAll<HTMLElement>('[data-instantsearch-id]')
+    .querySelectorAll<HTMLElement>('[data-experience-id]')
     .forEach((element) => {
-      const id = element.dataset.instantsearchId!;
+      const id = element.dataset.experienceId!;
       elements.set(id, element);
     });
 

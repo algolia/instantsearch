@@ -11,7 +11,7 @@ beforeEach(() => {
 describe('getSettings', () => {
   test('should return the settings', () => {
     document.head.innerHTML = `
-      <meta name="instantsearch-configuration" content='{"appId":"appId","apiKey":"apiKey"}'>
+      <meta name="algolia-configuration" content='{"appId":"appId","apiKey":"apiKey"}'>
     `;
 
     expect(getSettings()).toEqual({ appId: 'appId', apiKey: 'apiKey' });
@@ -27,14 +27,14 @@ describe('getSettings', () => {
 describe('getElements', () => {
   test('should return the elements', () => {
     document.body.innerHTML = `
-      <div data-instantsearch-id="1"></div>
-      <div data-instantsearch-id="2"></div>
+      <div data-experience-id="1"></div>
+      <div data-experience-id="2"></div>
     `;
 
     expect(getElements()).toEqual(
       new Map([
-        ['1', document.querySelector('[data-instantsearch-id="1"]')!],
-        ['2', document.querySelector('[data-instantsearch-id="2"]')!],
+        ['1', document.querySelector('[data-experience-id="1"]')!],
+        ['2', document.querySelector('[data-experience-id="2"]')!],
       ])
     );
   });

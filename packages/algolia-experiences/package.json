@@ -9,8 +9,11 @@
     "dist"
   ],
   "dependencies": {
-    "instantsearch.js": "^4.73.2",
-    "algoliasearch": "^5.0.0"
+    "instantsearch.js": "4.74.0",
+    "algoliasearch": "5.1.1"
+  },
+  "devDependencies": {
+    "@instantsearch/testutils": "1.44.0"
   },
   "scripts": {
     "build": "rollup -c rollup.config.js"
