@@ -4,9 +4,10 @@
   "scripts": {
     "make-directories": "mkdir -p node_modules/algoliasearch-v5/node_modules",
     "move-directories": "mv node_modules/@algolia node_modules/algoliasearch-v5/node_modules/@algolia",
-    "postinstall": "yarn make-directories && yarn move-directories"
+    "remove-directories": "rm -rf node_modules/algoliasearch node_modules/@algolia",
+    "postinstall": "yarn make-directories && yarn move-directories && yarn remove-directories"
   },
   "dependencies": {
-    "algoliasearch-v5": "npm:algoliasearch@5.0.0"
+    "algoliasearch-v5": "npm:algoliasearch@5.1.1"
   }
 }
