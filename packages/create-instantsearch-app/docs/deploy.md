@@ -1,6 +1,6 @@
 # Deploy an InstantSearch app
 
-Create InstantSearch App generates applications that are ready to be deployed. They rely on bundlers and framework toolkits (Parcel, Create React App, Vue CLI, Angular CLI, etc.).
+Create InstantSearch App generates applications that are ready to be deployed. They rely on bundlers and framework toolkits (Parcel, Create React App, Vue CLI, etc.).
 
 Your app can be deployed in a single command, assuming you're located in its folder.
 
