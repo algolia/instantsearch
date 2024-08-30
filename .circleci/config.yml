@@ -245,7 +245,7 @@ jobs:
           path: junit/jest/
       - run:
           name: Type Checking
-          command: yarn run type-check
+          command: yarn run type-check:v4
 
   vue v3:
     <<: *defaults

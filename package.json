@@ -21,6 +21,7 @@
     "lint:fix": "eslint --ext .js,.ts,.tsx,.vue --fix .",
     "type-check": "tsc && lerna run type-check",
     "type-check:v3": "tsc --project tsconfig.v3.json",
+    "type-check:v4": "tsc --project tsconfig.v4.json",
     "test": "jest && lerna run test",
     "test:ci": "./scripts/retry.sh 3 'jest --maxWorkers=4 --ci' && lerna run test --concurrency=1",
     "test:ci:v4": "./scripts/retry.sh 3 'jest --maxWorkers=4 --ci' && lerna run test:v4 --concurrency=1",
