@@ -39,8 +39,8 @@
     "postinstall": "yarn install --force --cwd scripts/legacy/algoliasearch@5-dependency-container && yarn install --force --cwd scripts/legacy/algoliasearch-v4-dependency-container && cp -r scripts/legacy/algoliasearch@5-dependency-container/node_modules/* node_modules/ && cp -r scripts/legacy/algoliasearch-v4-dependency-container/node_modules/* node_modules/"
   },
   "devDependencies": {
-    "@algolia/client-search": "5.1.1",
-    "@algolia/client-common": "5.1.1",
+    "@algolia/client-search": "5.2.4",
+    "@algolia/client-common": "5.2.4",
     "@babel/cli": "7.15.4",
     "@babel/core": "7.15.5",
     "@babel/plugin-proposal-class-properties": "7.14.5",
@@ -87,8 +87,8 @@
     "@wdio/spec-reporter": "5.16.5",
     "@wdio/static-server-service": "5.16.5",
     "algoliasearch-v3": "npm:algoliasearch@3.35.0",
-    "algoliasearch-v5": "npm:algoliasearch@5.1.1",
-    "algoliasearch": "5.1.1",
+    "algoliasearch-v5": "npm:algoliasearch@5.2.4",
+    "algoliasearch": "5.2.4",
     "babel-eslint": "10.1.0",
     "babel-jest": "27.4.6",
     "babel-plugin-inline-replace-variables": "1.3.1",
@@ -144,7 +144,7 @@
     "typescript": "5.5.2"
   },
   "resolutions": {
-    "places.js/algoliasearch": "5.1.1",
+    "places.js/algoliasearch": "5.2.4",
     "brotli-size": "4.0.0",
     "webpack": "4.47.0",
     "babel-loader": "8.2.2"

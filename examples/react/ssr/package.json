@@ -22,7 +22,7 @@
     "webpack-node-externals": "1.7.2"
   },
   "dependencies": {
-    "algoliasearch": "5.1.1",
+    "algoliasearch": "5.2.4",
     "express": "4.17.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
