@@ -166,6 +166,7 @@ jobs:
       - persist_to_workspace:
           root: *workspace_root
           paths:
+            - packages/algolia-experiences/dist
             - packages/algoliasearch-helper/dist
             - packages/instantsearch.js/es
             - packages/instantsearch.js/cjs
