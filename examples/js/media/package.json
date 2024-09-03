@@ -8,7 +8,7 @@
     "website:examples": "BABEL_ENV=parcel parcel build index.html --public-url . --dist-dir=../../../website/examples/js/media"
   },
   "dependencies": {
-    "algoliasearch": "5.2.4",
+    "algoliasearch": "5.2.4-beta.2",
     "date-fns": "2.25.0",
     "instantsearch.js": "4.74.0"
   },

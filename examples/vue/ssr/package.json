@@ -8,7 +8,7 @@
     "start": "NODE_ENV=production NODE_OPTIONS=--openssl-legacy-provider vue-cli-service ssr:serve --mode production"
   },
   "dependencies": {
-    "algoliasearch": "5.2.4",
+    "algoliasearch": "5.2.4-beta.2",
     "core-js": "2",
     "instantsearch.css": "8.5.0",
     "qs": "6.9.7",

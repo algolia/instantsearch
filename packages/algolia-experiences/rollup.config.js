@@ -27,9 +27,8 @@ const plugins = [
     resolveId(source) {
       if (source !== 'algoliasearch/lite') return null;
       return path.join(
-        path.dirname(path.resolve(require.resolve('algoliasearch'))),
-        'lite',
-        'lite.esm.browser.js'
+        path.dirname(require.resolve('algoliasearch/lite')),
+        'browser.min.js'
       );
     },
   },
@@ -41,7 +40,7 @@ const plugins = [
   babel({
     rootMode: 'upward',
     runtimeHelpers: true,
-    exclude: /node_modules|algoliasearch-helper/,
+    exclude: /node_modules\/(?!(algoliasearch|algoliasearch-helper)\/).*/,
     extensions: ['.js', '.ts', '.tsx'],
   }),
   commonjs(),

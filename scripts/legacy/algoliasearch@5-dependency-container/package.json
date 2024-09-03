@@ -8,8 +8,8 @@
     "postinstall": "yarn make-directories && yarn move-directories && yarn copy-directories"
   },
   "dependencies": {
-    "algoliasearch": "5.2.4",
-    "algoliasearch-v5": "npm:algoliasearch@5.2.4",
+    "algoliasearch": "5.2.4-beta.2",
+    "algoliasearch-v5": "npm:algoliasearch@5.2.4-beta.2",
     "@algolia/events": "^4.0.1"
   }
 }
