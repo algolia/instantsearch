@@ -50,4 +50,84 @@ translations:
   - name: separatorText
     default: '" > "'
     description: The text for the breadcrumb’s separator.
+examples:
+  - flavor: js
+    library: instantsearch.js
+    code: |
+      import { breadcrumb, hierarchicalMenu } from 'instantsearch.js/es/widgets';
+
+      export const createWidgets = (createContainer) => [
+        breadcrumb({
+          container: createContainer(),
+          attributes: [
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+          ],
+        }),
+        hierarchicalMenu({
+          container: createContainer(),
+          attributes: [
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+          ],
+        }),
+      ];
+  - flavor: react
+    library: react-instantsearch
+    code: |
+      import React from 'react';
+      import { Breadcrumb, HierarchicalMenu } from 'react-instantsearch';
+
+      export const widgets = (
+        <>
+          <Breadcrumb
+            attributes={[
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ]}
+          />
+          <HierarchicalMenu
+            attributes={[
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ]}
+          />
+        </>
+      );
+  - flavor: vue
+    library: vue-instantsearch
+    code: |
+      <template>
+        <div>
+          <ais-breadcrumb
+            :attributes="[
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ]"
+          />
+          <ais-hierarchical-menu
+            :attributes="[
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ]"
+          />
+        </div>
+      </template>
+
+      <script>
+      import { AisBreadcrumb, AisHierarchicalMenu } from 'vue-instantsearch';
+
+      export default {
+        components: {
+          AisBreadcrumb,
+          AisHierarchicalMenu,
+        },
+      };
+      </script>
 ---

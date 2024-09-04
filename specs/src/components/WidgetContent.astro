@@ -2,6 +2,11 @@
 import { Code } from 'astro/components';
 import type { WidgetFrontmatter } from '../types';
 import ThemeSelector from './ThemeSelector.astro';
+import Sandbox from './Sandbox.jsx';
+import { getSandpackCssText } from '@codesandbox/sandpack-react';
+import getFiles from '../getDependencyContent';
+
+const modules = await getFiles();
 
 type Props = {
   frontmatter: WidgetFrontmatter;
@@ -23,7 +28,8 @@ const title = frontmatter.title;
   {
     frontmatter.info && (
       <div class="info">
-        <p>{frontmatter.info}</p>
+        {' '}
+        <p>{frontmatter.info}</p>{' '}
       </div>
     )
   }
@@ -108,6 +114,30 @@ const title = frontmatter.title;
         </small>
       </p>
     )
+  }
+
+  {
+    frontmatter.examples ? (
+      <>
+        <h3 id="example">Usage</h3>
+        <style id="sandpack" is:inline set:html={getSandpackCssText()} />
+        {frontmatter.examples.map(({ code, flavor, library }) => (
+          <details class="example">
+            <summary style="cursor: pointer">
+              <h4 style="display: inline-block; margin: 0;">{library}</h4>
+            </summary>
+            <div class="code-output">
+              <Sandbox
+                code={code}
+                flavor={flavor}
+                modules={modules[flavor]}
+                client:load
+              />
+            </div>
+          </details>
+        ))}
+      </>
+    ) : null
   }
 
   <h3 id="css-classes">CSS classes</h3>
