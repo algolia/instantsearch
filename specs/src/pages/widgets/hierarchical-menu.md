@@ -136,4 +136,61 @@ translations:
   - name: showMoreButtonText
     default: '({ isShowingMore }) => isShowingMore ? "Show less" : "Show more"'
     description: The text for the “Show more” button.
+examples:
+  - flavor: js
+    library: instantsearch.js
+    code: |
+      import { hierarchicalMenu } from 'instantsearch.js/es/widgets';
+
+      export const createWidgets = (createContainer) => [
+        hierarchicalMenu({
+          container: createContainer(),
+          attributes: [
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+          ],
+        })
+      ];
+  - flavor: react
+    library: react-instantsearch
+    code: |
+      import React from 'react';
+      import { HierarchicalMenu } from 'react-instantsearch';
+
+      export const widgets = (
+        <>
+          <HierarchicalMenu
+            attributes={[
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ]}
+          />
+        </>
+      );
+  - flavor: vue
+    library: vue-instantsearch
+    code: |
+      <template>
+        <div>
+          <ais-hierarchical-menu
+            :attributes="[
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ]"
+          />
+        </div>
+      </template>
+
+      <script>
+      import { AisHierarchicalMenu } from 'vue-instantsearch';
+
+      export default {
+        components: {
+          AisHierarchicalMenu,
+        },
+      };
+      </script>
 ---

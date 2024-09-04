@@ -12,12 +12,13 @@ const settings = {
         }
       </style>
       <div id="custom"></div>
+      <hr />
       <div id="searchbox"></div>
       <div id="hits"></div>
     `,
     preamble: /* JS */ `
     import 'instantsearch.css/themes/satellite-min.css';
-    import algoliasearch from 'algoliasearch/lite';
+    import { liteClient as algoliasearch } from 'algoliasearch/lite';
     import instantsearch from 'instantsearch.js';
     import { history } from 'instantsearch.js/es/lib/routers';
     import { searchBox, hits } from 'instantsearch.js/es/widgets';
@@ -32,19 +33,22 @@ const settings = {
       routing: {
         router: history({
           cleanUrlOnDispose: false,
-        })
-      }
+        }),
+      },
     });
 
     search.addWidgets([
-      ...createWidgets(document.querySelector('#custom')),
+      ...createWidgets(() =>
+        document.querySelector('#custom').appendChild(document.createElement('div'))
+      ),
       searchBox({
         container: '#searchbox',
       }),
       hits({
         container: '#hits',
         templates: {
-          item: (hit, { components }) => components.Highlight({ attribute: 'name', hit }),
+          item: (hit, { components }) =>
+            components.Highlight({ attribute: 'name', hit }),
         },
       }),
     ]);
@@ -52,10 +56,7 @@ const settings = {
     search.start();
     `,
     dependencies: {
-      // TODO: use current version somehow, both locally and in the built website
-      'instantsearch.js': 'latest',
-      'instantsearch.css': 'latest',
-      algoliasearch: 'latest',
+      algoliasearch: '5.1.1',
     },
     filename: '/widget.ts',
   },
@@ -72,7 +73,7 @@ const settings = {
     import 'instantsearch.css/themes/satellite-min.css';
     import React from "react";
     import { createRoot } from "react-dom/client";
-    import algoliasearch from "algoliasearch/lite";
+    import { liteClient as algoliasearch } from "algoliasearch/lite";
     import { history } from "instantsearch.js/es/lib/routers";
     import { InstantSearch, SearchBox, Hits, Highlight } from "react-instantsearch";
     import { widgets } from "./widget.tsx";
@@ -91,6 +92,7 @@ const settings = {
         }}
       >
         {widgets}
+        <hr />
         <SearchBox />
         <Hits hitComponent={Hit}/>
       </InstantSearch>
@@ -101,11 +103,9 @@ const settings = {
     }
     `,
     dependencies: {
-      react: 'latest',
-      'react-dom': 'latest',
-      algoliasearch: 'latest',
-      'instantsearch.css': 'latest',
-      'react-instantsearch': 'latest',
+      react: '18.2.0',
+      'react-dom': '18.2.0',
+      algoliasearch: '5.1.1',
     },
     filename: '/widget.tsx',
   },
@@ -121,7 +121,7 @@ const settings = {
     preamble: `
     import "instantsearch.css/themes/satellite-min.css";
     import Vue from "vue";
-    import algoliasearch from "algoliasearch/lite";
+    import { liteClient as algoliasearch } from "algoliasearch/lite";
     import { history } from "instantsearch.js/es/lib/routers";
     import { AisInstantSearch, AisHits, AisSearchBox } from "vue-instantsearch/vue2/es";
     import Widget from "./Widget.vue";
@@ -149,15 +149,13 @@ const settings = {
               }
             },
           },
-          [h(Widget), h(AisSearchBox), h(AisHits)]
+          [h(Widget), h('hr'), h(AisSearchBox), h(AisHits)]
         ),
     }).$mount("#app");
     `,
     dependencies: {
-      vue: '2',
-      algoliasearch: 'latest',
-      'instantsearch.css': 'latest',
-      'vue-instantsearch': 'latest',
+      vue: '2.7.14',
+      algoliasearch: '5.1.1',
     },
     filename: '/Widget.vue',
   },
@@ -166,9 +164,14 @@ const settings = {
 export default function Sandbox({
   code,
   flavor,
+  modules,
 }: {
   code: string;
   flavor: 'react' | 'js' | 'vue';
+  modules: {
+    files: Record<string, string>;
+    dependencies: Record<string, string>;
+  };
 }) {
   const { preamble, html, filename, dependencies } = settings[flavor];
   return (
@@ -184,12 +187,17 @@ export default function Sandbox({
         [filename]: {
           code,
         },
+        ...modules.files,
       }}
       customSetup={{
-        dependencies,
+        dependencies: {
+          ...dependencies,
+          ...modules.dependencies,
+        },
         entry: '/index.js',
       }}
       options={{
+        editorHeight: 500,
         activeFile: filename,
         showNavigator: true,
       }}

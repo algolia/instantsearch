@@ -54,11 +54,19 @@ examples:
   - flavor: js
     library: instantsearch.js
     code: |
-      import { breadcrumb } from 'instantsearch.js/es/widgets';
+      import { breadcrumb, hierarchicalMenu } from 'instantsearch.js/es/widgets';
 
-      export const createWidgets = (container) => [
+      export const createWidgets = (createContainer) => [
         breadcrumb({
-          container,
+          container: createContainer(),
+          attributes: [
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+          ],
+        }),
+        hierarchicalMenu({
+          container: createContainer(),
           attributes: [
             'hierarchicalCategories.lvl0',
             'hierarchicalCategories.lvl1',
@@ -70,36 +78,55 @@ examples:
     library: react-instantsearch
     code: |
       import React from 'react';
-      import { Breadcrumb } from 'react-instantsearch';
+      import { Breadcrumb, HierarchicalMenu } from 'react-instantsearch';
 
       export const widgets = (
-        <Breadcrumb
-          attributes={[
-            'hierarchicalCategories.lvl0',
-            'hierarchicalCategories.lvl1',
-            'hierarchicalCategories.lvl2',
-          ]}
-        />
+        <>
+          <Breadcrumb
+            attributes={[
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ]}
+          />
+          <HierarchicalMenu
+            attributes={[
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ]}
+          />
+        </>
       );
   - flavor: vue
     library: vue-instantsearch
     code: |
       <template>
-        <ais-breadcrumb
-          :attributes="[
-            'hierarchicalCategories.lvl0',
-            'hierarchicalCategories.lvl1',
-            'hierarchicalCategories.lvl2',
-          ]"
-        />
+        <div>
+          <ais-breadcrumb
+            :attributes="[
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ]"
+          />
+          <ais-hierarchical-menu
+            :attributes="[
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ]"
+          />
+        </div>
       </template>
 
       <script>
-      import { AisBreadcrumb } from 'vue-instantsearch';
+      import { AisBreadcrumb, AisHierarchicalMenu } from 'vue-instantsearch';
 
       export default {
         components: {
           AisBreadcrumb,
+          AisHierarchicalMenu,
         },
       };
       </script>

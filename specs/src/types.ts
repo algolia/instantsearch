@@ -9,4 +9,9 @@ export type WidgetFrontmatter = {
   classes?: Array<{ name: string; description: string }>;
   options?: Array<{ name: string; description: string; default?: string }>;
   translations?: Array<{ name: string; description: string; default?: string }>;
+  examples?: Array<{
+    library: 'instantsearch.js' | 'react-instantsearch' | 'vue';
+    flavor: 'js' | 'react' | 'vue';
+    code: string;
+  }>;
 };
