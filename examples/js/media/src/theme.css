@@ -11,11 +11,6 @@ a[class^='ais-'] {
 }
 
 /*
-  We need to target the root element because Angular InstantSearch
-  creates web components which are not targetable with the `*` selector.
-*/
-[class^='ais-'][class$='--disabled'],
-/*
   We need to target all elements for widgets containing
   multiple sub elements (e.g. RangeSlider)
 */

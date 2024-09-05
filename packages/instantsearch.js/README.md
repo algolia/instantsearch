@@ -12,7 +12,7 @@
 
 InstantSearch.js is a vanilla JavaScript library that lets you create an instant-search result experience using [Algolia][algolia-website]’s search API. It is part of the InstantSearch family:
 
-**InstantSearch.js** | [React InstantSearch][instantsearch-github] | [Vue InstantSearch][instantsearch-github] | [Angular InstantSearch][instantsearch-angular-github] | [React InstantSearch Native][instantsearch-github] | [InstantSearch Android][instantsearch-android-github] | [InstantSearch iOS][instantsearch-ios-github]
+**InstantSearch.js** | [React InstantSearch][instantsearch-github] | [Vue InstantSearch][instantsearch-github] | [React InstantSearch Native][instantsearch-github] | [InstantSearch Android][instantsearch-android-github] | [InstantSearch iOS][instantsearch-ios-github]
 
 <details>
   <summary><strong>Table of contents</strong></summary>
@@ -181,7 +181,6 @@ InstantSearch.js is [MIT licensed][license-url].
 [instantsearch-github]: https://github.com/algolia/instantsearch/
 [instantsearch-android-github]: https://github.com/algolia/instantsearch-android
 [instantsearch-ios-github]: https://github.com/algolia/instantsearch-ios
-[instantsearch-angular-github]: https://github.com/algolia/angular-instantsearch
 [contributing-bugreport]: https://github.com/algolia/instantsearch/issues/new?template=BUG_REPORT.yml&labels=triage,Library%3A%20InstantSearch.js
 [contributing-featurerequest]: https://github.com/algolia/instantsearch/discussions/new?category=ideas&labels=triage,Library%3A%20InstantSearch.js&title=Feature%20request%3A%20
 [contributing-newissue]: https://github.com/algolia/instantsearch/issues/new?labels=triage,Library%3A%20InstantSearch.js

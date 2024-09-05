@@ -6,10 +6,10 @@ exports[`Options with invalid name throws 1`] = `
   - name can only contain URL-friendly characters"
 `;
 
-exports[`Options with unknown template throws 1`] = `"The template directory must contain a configuration file \`.template.js\` or must be one of those: Angular InstantSearch, Autocomplete, InstantSearch Android, InstantSearch iOS, InstantSearch.js, InstantSearch.js widget, JavaScript Client, JavaScript Helper, React InstantSearch, React InstantSearch Native, Vue InstantSearch, Vue InstantSearch with Vue 3"`;
+exports[`Options with unknown template throws 1`] = `"The template directory must contain a configuration file \`.template.js\` or must be one of those: Autocomplete, InstantSearch Android, InstantSearch iOS, InstantSearch.js, InstantSearch.js widget, JavaScript Client, JavaScript Helper, React InstantSearch, React InstantSearch Native, Vue InstantSearch, Vue InstantSearch with Vue 3"`;
 
-exports[`Options with wrong template path throws 1`] = `"The template directory must contain a configuration file \`.template.js\` or must be one of those: Angular InstantSearch, Autocomplete, InstantSearch Android, InstantSearch iOS, InstantSearch.js, InstantSearch.js widget, JavaScript Client, JavaScript Helper, React InstantSearch, React InstantSearch Native, Vue InstantSearch, Vue InstantSearch with Vue 3"`;
+exports[`Options with wrong template path throws 1`] = `"The template directory must contain a configuration file \`.template.js\` or must be one of those: Autocomplete, InstantSearch Android, InstantSearch iOS, InstantSearch.js, InstantSearch.js widget, JavaScript Client, JavaScript Helper, React InstantSearch, React InstantSearch Native, Vue InstantSearch, Vue InstantSearch with Vue 3"`;
 
 exports[`Options without path throws 1`] = `"The option \`path\` is required."`;
 
-exports[`Options without template throws 1`] = `"The template directory must contain a configuration file \`.template.js\` or must be one of those: Angular InstantSearch, Autocomplete, InstantSearch Android, InstantSearch iOS, InstantSearch.js, InstantSearch.js widget, JavaScript Client, JavaScript Helper, React InstantSearch, React InstantSearch Native, Vue InstantSearch, Vue InstantSearch with Vue 3"`;
+exports[`Options without template throws 1`] = `"The template directory must contain a configuration file \`.template.js\` or must be one of those: Autocomplete, InstantSearch Android, InstantSearch iOS, InstantSearch.js, InstantSearch.js widget, JavaScript Client, JavaScript Helper, React InstantSearch, React InstantSearch Native, Vue InstantSearch, Vue InstantSearch with Vue 3"`;

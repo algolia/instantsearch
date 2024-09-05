@@ -37,7 +37,6 @@ body:
             <td><a href="https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/instantsearch.js" target="_blank">InstantSearch.js</a></td>
             <td><a href="https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/react-instantsearch" target="_blank">React InstantSearch</a></td>
             <td><a href="https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/vue-instantsearch" target="_blank">Vue InstantSearch</a></td>
-            <td><a href="https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/angular-instantsearch" target="_blank">Angular InstantSearch</a></td>
           </tr>
         </table>
 
