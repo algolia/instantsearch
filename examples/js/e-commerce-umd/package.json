@@ -9,7 +9,7 @@
   },
   "browserslist": "Firefox 127, Chrome 125, IE 11",
   "dependencies": {
-    "algoliasearch": "5.2.4-beta.2",
+    "algoliasearch": "5.2.5",
     "instantsearch.js": "4.74.0"
   },
   "devDependencies": {
