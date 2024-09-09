@@ -1,3 +1,7 @@
+import algoliasearchV3 from 'algoliasearch-v3';
+import algoliasearchV4 from 'algoliasearch-v4';
+import { liteClient as algoliasearchV5 } from 'algoliasearch-v5/lite';
+
 import { hydrateSearchClient } from '../hydrateSearchClient';
 
 import type { SearchClient, InitialResults } from '../../../types';
@@ -44,6 +48,7 @@ describe('hydrateSearchClient', () => {
     client = {
       transporter: { responsesCache: { set: setCache } },
       addAlgoliaAgent: jest.fn(),
+      search: jest.fn(),
     } as unknown as SearchClient;
 
     hydrateSearchClient(client, initialResults);
@@ -64,6 +69,7 @@ describe('hydrateSearchClient', () => {
   it('should populate the cache for < v4 if there is no transporter object', () => {
     client = {
       addAlgoliaAgent: jest.fn(),
+      search: jest.fn(),
       _useCache: true,
     } as unknown as SearchClient;
 
@@ -77,6 +83,7 @@ describe('hydrateSearchClient', () => {
     client = {
       transporter: { responsesCache: { set: setCache } },
       addAlgoliaAgent: jest.fn(),
+      search: jest.fn(),
     } as unknown as SearchClient;
 
     hydrateSearchClient(client, {
@@ -110,6 +117,7 @@ describe('hydrateSearchClient', () => {
     client = {
       transporter: { responsesCache: { set: setCache } },
       addAlgoliaAgent: jest.fn(),
+      search: jest.fn(),
     } as unknown as SearchClient;
 
     hydrateSearchClient(client, {
@@ -176,6 +184,7 @@ describe('hydrateSearchClient', () => {
     client = {
       transporter: { responsesCache: { set: setCache } },
       addAlgoliaAgent: jest.fn(),
+      search: jest.fn(),
     } as unknown as SearchClient;
 
     hydrateSearchClient(client, {
@@ -204,6 +213,7 @@ describe('hydrateSearchClient', () => {
       client = {
         transporter: { responsesCache: { set: jest.fn() } },
         addAlgoliaAgent: jest.fn(),
+        search: jest.fn(),
       } as unknown as SearchClient;
 
       hydrateSearchClient(client, {
@@ -221,6 +231,7 @@ describe('hydrateSearchClient', () => {
     client = {
       transporter: { responsesCache: { set: setCache } },
       addAlgoliaAgent: jest.fn(),
+      search: jest.fn(),
     } as unknown as SearchClient;
 
     hydrateSearchClient(client, {
@@ -234,5 +245,48 @@ describe('hydrateSearchClient', () => {
       }),
       { results: [] }
     );
+  });
+
+  it('should not throw if search requires to be bound (v5)', async () => {
+    const send = jest.fn().mockResolvedValue({ status: 200, content: '{}' });
+    const searchClient = algoliasearchV5('appId', 'apiKey', {
+      requester: {
+        send,
+      },
+    });
+
+    hydrateSearchClient(searchClient, initialResults);
+
+    await searchClient.search([{ indexName: 'another', params: {} }]);
+
+    expect(send).toHaveBeenCalled();
+  });
+
+  it('should not throw if search requires to be bound (v4)', async () => {
+    const send = jest.fn().mockResolvedValue({ status: 200, content: '{}' });
+    const searchClient = algoliasearchV4('appId', 'apiKey', {
+      requester: {
+        send,
+      },
+    });
+
+    hydrateSearchClient(searchClient, initialResults);
+
+    await searchClient.search([{ indexName: 'another', params: {} }]);
+
+    expect(send).toHaveBeenCalled();
+  });
+
+  it('should not throw if search requires to be bound (v3)', async () => {
+    const searchClient: any = algoliasearchV3('appId', 'apiKey');
+    searchClient._request = jest
+      .fn()
+      .mockResolvedValue({ body: { status: 200 } });
+
+    hydrateSearchClient(searchClient, initialResults);
+
+    await searchClient.search([{ indexName: 'another', params: {} }]);
+
+    expect(searchClient._request).toHaveBeenCalled();
   });
 });
