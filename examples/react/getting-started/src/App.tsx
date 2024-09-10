@@ -15,8 +15,9 @@ import {
 
 import { Panel } from './Panel';
 
-import './App.css';
 import 'instantsearch.css/themes/satellite.css';
+
+import './App.css';
 
 const searchClient = algoliasearch(
   'latency',
