@@ -371,7 +371,10 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function (
   maxFacetHits,
   userState
 ) {
-  var clientHasSFFV = typeof this.client.searchForFacetValues === 'function';
+  var clientHasSFFV =
+    typeof this.client.searchForFacetValues === 'function' &&
+    // v5 has a wrong sffv signature
+    typeof this.client.searchForFacets !== 'function';
   var clientHasInitIndex = typeof this.client.initIndex === 'function';
   if (
     !clientHasSFFV &&
