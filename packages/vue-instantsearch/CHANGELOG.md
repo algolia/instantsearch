@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.19.4](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.19.3...vue-instantsearch@4.19.4) (2024-09-10)
+
+
+### Bug Fixes
+
+* **flavors:** remove mentions of angular instantsearch ([#6341](https://github.com/algolia/instantsearch/issues/6341)) ([735e8d1](https://github.com/algolia/instantsearch/commit/735e8d1bc32e5532258a5551b11650b8362013b4))
+
+
+
+
+
 ## [4.19.3](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.19.2...vue-instantsearch@4.19.3) (2024-08-20)
 
 
