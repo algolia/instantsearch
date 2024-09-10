@@ -1187,6 +1187,7 @@ function createMockedSearchClient() {
       return Promise.resolve([
         createSFFVResponse({
           facetHits:
+            // @ts-ignore for v5, which has a different definition of `searchForFacetValues`
             requests[0].params.facetQuery === 'query with no results'
               ? []
               : [
