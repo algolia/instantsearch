@@ -1,6 +1,6 @@
 {
   "name": "@instantsearch/specs-website",
-  "version": "0.5.0",
+  "version": "0.7.0",
   "private": true,
   "description": "The specs website for InstantSearch.",
   "repository": {
@@ -20,7 +20,7 @@
   "devDependencies": {
     "@types/node": "18.11.13",
     "astro": "1.6.14",
-    "instantsearch.css": "8.4.0",
+    "instantsearch.css": "8.5.1",
     "sass": "1.56.2"
   }
 }

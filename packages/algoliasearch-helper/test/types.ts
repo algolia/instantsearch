@@ -1,13 +1,11 @@
-import algoliasearch from 'algoliasearch';
-
 import algoliasearchHelper, { SearchParameters, SearchResults } from '..';
 
 import type { AlgoliaSearchHelper } from '..';
+import type { SearchClient } from '../types/algoliasearch';
 
-const helper: AlgoliaSearchHelper = algoliasearchHelper(
-  algoliasearch('', ''),
-  ''
-);
+const client: SearchClient = {} as any;
+
+const helper: AlgoliaSearchHelper = algoliasearchHelper(client, '');
 
 helper.derive(
   () =>

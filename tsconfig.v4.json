@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig",
+  "exclude": [
+    "**/es",
+    "**/dist",
+    "tests/e2e",
+    "examples/react/next/next-env.d.ts",
+    "examples/react/react-native",
+    "packages/create-instantsearch-app/src/templates/**/*",
+    "packages/algolia-experiences"
+  ]
+}

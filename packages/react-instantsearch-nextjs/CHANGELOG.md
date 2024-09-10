@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.11](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.3.10...react-instantsearch-nextjs@0.3.11) (2024-09-10)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [0.3.10](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.3.9...react-instantsearch-nextjs@0.3.10) (2024-08-20)
+
+
+### Bug Fixes
+
+* **client:** support v5 fully ([#6270](https://github.com/algolia/instantsearch/issues/6270)) ([c3b5e80](https://github.com/algolia/instantsearch/commit/c3b5e80bbb449acb3b9719a7449c6c926d034e34)), closes [#6271](https://github.com/algolia/instantsearch/issues/6271) [#6286](https://github.com/algolia/instantsearch/issues/6286)
+
+
+
+
+
 ## [0.3.9](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.3.8...react-instantsearch-nextjs@0.3.9) (2024-08-06)
 
 **Note:** Version bump only for package react-instantsearch-nextjs

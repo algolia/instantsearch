@@ -40,7 +40,6 @@ export type RecommendTranslations = {
 
 export type RecommendLayoutProps<
   TItem extends RecordWithObjectID,
-  TTranslations extends Record<string, string>,
   TClassNames extends Record<string, string>
 > = {
   classNames: TClassNames;
@@ -51,7 +50,6 @@ export type RecommendLayoutProps<
       TComponentProps
   ) => JSX.Element;
   items: TItem[];
-  translations: TTranslations;
   sendEvent: SendEventForHits;
 };
 
@@ -75,7 +73,6 @@ export type RecommendComponentProps<
   layout?: (
     props: RecommendLayoutProps<
       RecordWithObjectID<TObject>,
-      Required<RecommendTranslations>,
       Record<string, string>
     > &
       TComponentProps
@@ -90,8 +87,7 @@ export type RecommendInnerComponentProps<TObject> = {
 
 export type RecordWithObjectID<TObject = Record<string, unknown>> = TObject & {
   objectID: string;
-  __position: number;
-  __queryID?: string;
+  // @TODO: once events are implemented, this type needs `__position` and `__queryID`
 };
 
 export type RecommendItemComponentProps<TObject> = {

@@ -9,27 +9,29 @@ import type {
   FrequentlyBoughtTogetherProps as FrequentlyBoughtTogetherPropsUiComponentProps,
   Pragma,
 } from 'instantsearch-ui-components';
-import type { Hit, BaseHit } from 'instantsearch.js';
+import type { AlgoliaHit, BaseHit } from 'instantsearch.js';
 import type { UseFrequentlyBoughtTogetherProps } from 'react-instantsearch-core';
 
 type UiProps<THit extends BaseHit> = Pick<
-  FrequentlyBoughtTogetherPropsUiComponentProps<Hit<THit>>,
+  FrequentlyBoughtTogetherPropsUiComponentProps<AlgoliaHit<THit>>,
   | 'items'
   | 'itemComponent'
   | 'headerComponent'
   | 'emptyComponent'
+  | 'layout'
   | 'status'
   | 'sendEvent'
 >;
 
 export type FrequentlyBoughtTogetherProps<THit extends BaseHit> = Omit<
-  FrequentlyBoughtTogetherPropsUiComponentProps<Hit<THit>>,
+  FrequentlyBoughtTogetherPropsUiComponentProps<AlgoliaHit<THit>>,
   keyof UiProps<THit>
 > &
   UseFrequentlyBoughtTogetherProps<THit> & {
     itemComponent?: FrequentlyBoughtTogetherPropsUiComponentProps<THit>['itemComponent'];
     headerComponent?: FrequentlyBoughtTogetherPropsUiComponentProps<THit>['headerComponent'];
     emptyComponent?: FrequentlyBoughtTogetherPropsUiComponentProps<THit>['emptyComponent'];
+    layoutComponent?: FrequentlyBoughtTogetherPropsUiComponentProps<THit>['layout'];
   };
 
 const FrequentlyBoughtTogetherUiComponent =
@@ -48,6 +50,7 @@ export function FrequentlyBoughtTogether<THit extends BaseHit = BaseHit>({
   itemComponent,
   headerComponent,
   emptyComponent,
+  layoutComponent,
   ...props
 }: FrequentlyBoughtTogetherProps<THit>) {
   const { status } = useInstantSearch();
@@ -63,11 +66,23 @@ export function FrequentlyBoughtTogether<THit extends BaseHit = BaseHit>({
     { $$widgetType: 'ais.frequentlyBoughtTogether' }
   );
 
+  const layout: typeof layoutComponent = layoutComponent
+    ? (layoutProps) =>
+        layoutComponent({
+          ...layoutProps,
+          classNames: {
+            list: layoutProps.classNames.list,
+            item: layoutProps.classNames.item,
+          },
+        })
+    : undefined;
+
   const uiProps: UiProps<THit> = {
     items,
     itemComponent,
     headerComponent,
     emptyComponent,
+    layout,
     status,
     sendEvent: () => {},
   };

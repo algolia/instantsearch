@@ -56,6 +56,26 @@ test('searchForFacetValues calls the index method if no client method', function
   });
 });
 
+test('searchForFacetValues calls client.search if client.searchForFacets exists', function () {
+  var clientSearch = jest.fn(function () {
+    return Promise.resolve({
+      results: [makeFakeSearchForFacetValuesResponse()],
+    });
+  });
+
+  var fakeClient = {
+    searchForFacets: jest.fn(),
+    searchForFacetValues: jest.fn(),
+    search: clientSearch,
+  };
+
+  var helper = algoliasearchHelper(fakeClient, 'index');
+
+  return helper.searchForFacetValues('facet', 'query', 1).then(function () {
+    expect(clientSearch).toHaveBeenCalledTimes(1);
+  });
+});
+
 test('searchForFacetValues resolve with the correct response from client', function () {
   var fakeClient = {
     addAlgoliaAgent: function () {},

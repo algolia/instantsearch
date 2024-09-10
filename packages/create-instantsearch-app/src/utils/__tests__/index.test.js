@@ -121,7 +121,6 @@ describe('getTemplatesByCategory', () => {
   beforeAll(() => {
     mockReaddirSync.mockImplementation(() => [
       'InstantSearch.js',
-      'Angular InstantSearch',
       'React InstantSearch',
       'Vue InstantSearch',
       'React InstantSearch Native',
@@ -135,7 +134,6 @@ describe('getTemplatesByCategory', () => {
     expect(utils.getTemplatesByCategory()).toEqual({
       Web: expect.arrayContaining([
         'InstantSearch.js',
-        'Angular InstantSearch',
         'React InstantSearch',
         'Vue InstantSearch',
       ]),

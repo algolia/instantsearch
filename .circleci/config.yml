@@ -51,7 +51,10 @@ workflows:
       - unit tests:
           requires:
             - build
-      - legacy algoliasearch:
+      - legacy algoliasearch v3:
+          requires:
+            - build
+      - legacy algoliasearch v4:
           requires:
             - build
       - vue v3:
@@ -97,7 +100,8 @@ workflows:
             - lint
             - unit tests
             - examples
-            - legacy algoliasearch
+            - legacy algoliasearch v3
+            - legacy algoliasearch v4
             - helper docs
             - e2e tests
           filters:
@@ -162,6 +166,7 @@ jobs:
       - persist_to_workspace:
           root: *workspace_root
           paths:
+            - packages/algolia-experiences/dist
             - packages/algoliasearch-helper/dist
             - packages/instantsearch.js/es
             - packages/instantsearch.js/cjs
@@ -202,7 +207,7 @@ jobs:
           name: Type Checking
           command: yarn run type-check
 
-  legacy algoliasearch:
+  legacy algoliasearch v3:
     <<: *defaults
     steps:
       - checkout
@@ -220,6 +225,28 @@ jobs:
       - run:
           name: Type Checking
           command: yarn run type-check:v3
+
+  legacy algoliasearch v4:
+    <<: *defaults
+    resource_class: large
+    steps:
+      - checkout
+      - *attach_workspace
+      - *install_yarn_version
+      - *restore_yarn_cache
+      - *run_yarn_install
+      - run:
+          name: Update dependencies
+          command: |
+            ./scripts/legacy/downgrade-algoliasearch-v4.js
+      - run:
+          name: Unit & Integration tests
+          command: yarn run test:ci:v4
+      - store_test_results:
+          path: junit/jest/
+      - run:
+          name: Type Checking
+          command: yarn run type-check:v4
 
   vue v3:
     <<: *defaults

@@ -11,7 +11,7 @@
 
 [![Vue InstantSearch logo][logo]][website]
 
-InstantSearch projects: **Vue InstantSearch** | [InstantSearch.js][instantsearch-github] | [React InstantSearch][instantsearch-github] | [Angular InstantSearch][angular-instantsearch-github] | [InstantSearch Android][instantsearch-android-github] | [InstantSearch iOS][instantsearch-ios-github].
+InstantSearch projects: **Vue InstantSearch** | [InstantSearch.js][instantsearch-github] | [React InstantSearch][instantsearch-github] | [InstantSearch Android][instantsearch-android-github] | [InstantSearch iOS][instantsearch-ios-github].
 
 ## Vue InstantSearch
 
@@ -54,4 +54,3 @@ We welcome all contributors, from casual to regular. You are only one command aw
 [instantsearch-github]: https://github.com/algolia/instantsearch
 [instantsearch-android-github]: https://github.com/algolia/instantsearch-android
 [instantsearch-ios-github]: https://github.com/algolia/instantsearch-ios
-[angular-instantsearch-github]: https://github.com/algolia/angular-instantsearch

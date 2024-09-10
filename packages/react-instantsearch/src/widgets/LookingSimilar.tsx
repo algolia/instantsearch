@@ -6,27 +6,29 @@ import type {
   LookingSimilarProps as LookingSimilarPropsUiComponentProps,
   Pragma,
 } from 'instantsearch-ui-components';
-import type { Hit, BaseHit } from 'instantsearch.js';
+import type { AlgoliaHit, BaseHit } from 'instantsearch.js';
 import type { UseLookingSimilarProps } from 'react-instantsearch-core';
 
 type UiProps<THit extends BaseHit> = Pick<
-  LookingSimilarPropsUiComponentProps<Hit<THit>>,
+  LookingSimilarPropsUiComponentProps<AlgoliaHit<THit>>,
   | 'items'
   | 'itemComponent'
   | 'headerComponent'
   | 'emptyComponent'
+  | 'layout'
   | 'status'
   | 'sendEvent'
 >;
 
 export type LookingSimilarProps<THit extends BaseHit> = Omit<
-  LookingSimilarPropsUiComponentProps<Hit<THit>>,
+  LookingSimilarPropsUiComponentProps<AlgoliaHit<THit>>,
   keyof UiProps<THit>
 > &
   UseLookingSimilarProps<THit> & {
     itemComponent?: LookingSimilarPropsUiComponentProps<THit>['itemComponent'];
     headerComponent?: LookingSimilarPropsUiComponentProps<THit>['headerComponent'];
     emptyComponent?: LookingSimilarPropsUiComponentProps<THit>['emptyComponent'];
+    layoutComponent?: LookingSimilarPropsUiComponentProps<THit>['layout'];
   };
 
 const LookingSimilarUiComponent = createLookingSimilarComponent({
@@ -45,6 +47,7 @@ export function LookingSimilar<THit extends BaseHit = BaseHit>({
   itemComponent,
   headerComponent,
   emptyComponent,
+  layoutComponent,
   ...props
 }: LookingSimilarProps<THit>) {
   const { status } = useInstantSearch();
@@ -61,11 +64,23 @@ export function LookingSimilar<THit extends BaseHit = BaseHit>({
     { $$widgetType: 'ais.lookingSimilar' }
   );
 
+  const layout: typeof layoutComponent = layoutComponent
+    ? (layoutProps) =>
+        layoutComponent({
+          ...layoutProps,
+          classNames: {
+            list: layoutProps.classNames.list,
+            item: layoutProps.classNames.item,
+          },
+        })
+    : undefined;
+
   const uiProps: UiProps<THit> = {
     items,
     itemComponent,
     headerComponent,
     emptyComponent,
+    layout,
     status,
     sendEvent: () => {},
   };

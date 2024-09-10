@@ -38,7 +38,6 @@ To learn more about the library, follow the guide on how to style your InstantSe
 - [InstantSearch.js](https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-existing-widget/js/#style-your-widgets)
 - [React InstantSearch](https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-existing-widget/react/#style-your-widgets)
 - [Vue InstantSearch](https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-existing-widget/vue/#style-your-widgets)
-- [Angular InstantSearch](https://www.algolia.com/doc/guides/building-search-ui/widgets/customize-an-existing-widget/angular/#style-your-widgets)
 
 ## Installation
 
@@ -67,12 +66,11 @@ We support the **last two versions of major browsers** (Chrome, Edge, Firefox, S
 
 InstantSearch.css is a living standard. This table tracks down the version implemented in each InstantSearch flavor.
 
-| Project               | Version |
-| --------------------- | ------- |
-| InstantSearch.js      | 7       |
-| React InstantSearch   | 7       |
-| Vue InstantSearch     | 7       |
-| Angular InstantSearch | 7       |
+| Project             | Version |
+| ------------------- | ------- |
+| InstantSearch.js    | 7       |
+| React InstantSearch | 7       |
+| Vue InstantSearch   | 7       |
 
 ## Contributing
 

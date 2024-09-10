@@ -132,6 +132,7 @@ describe('GeoSearch', () => {
     lastRenderArgs(fn).widgetParams.renderState;
 
   const simulateMapReadyEvent = (google: typeof window['google']) => {
+    // eslint-disable-next-line jest/unbound-method
     castToJestMock(google.maps.event.addListenerOnce).mock.calls[0][2]();
   };
 

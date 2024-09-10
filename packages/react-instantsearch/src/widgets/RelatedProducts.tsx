@@ -6,7 +6,7 @@ import type {
   RelatedProductsProps as RelatedProductsUiComponentProps,
   Pragma,
 } from 'instantsearch-ui-components';
-import type { Hit, BaseHit } from 'instantsearch.js';
+import type { AlgoliaHit, BaseHit } from 'instantsearch.js';
 import type { UseRelatedProductsProps } from 'react-instantsearch-core';
 
 type UiProps<TItem extends BaseHit> = Pick<
@@ -15,6 +15,7 @@ type UiProps<TItem extends BaseHit> = Pick<
   | 'itemComponent'
   | 'headerComponent'
   | 'emptyComponent'
+  | 'layout'
   | 'status'
   | 'sendEvent'
 >;
@@ -27,6 +28,7 @@ export type RelatedProductsProps<TItem extends BaseHit> = Omit<
     itemComponent?: RelatedProductsUiComponentProps<TItem>['itemComponent'];
     headerComponent?: RelatedProductsUiComponentProps<TItem>['headerComponent'];
     emptyComponent?: RelatedProductsUiComponentProps<TItem>['emptyComponent'];
+    layoutComponent?: RelatedProductsUiComponentProps<TItem>['layout'];
   };
 
 const RelatedProductsUiComponent = createRelatedProductsComponent({
@@ -45,6 +47,7 @@ export function RelatedProducts<TItem extends BaseHit = BaseHit>({
   itemComponent,
   headerComponent,
   emptyComponent,
+  layoutComponent,
   ...props
 }: RelatedProductsProps<TItem>) {
   const { status } = useInstantSearch();
@@ -61,11 +64,23 @@ export function RelatedProducts<TItem extends BaseHit = BaseHit>({
     { $$widgetType: 'ais.relatedProducts' }
   );
 
+  const layout: typeof layoutComponent = layoutComponent
+    ? (layoutProps) =>
+        layoutComponent({
+          ...layoutProps,
+          classNames: {
+            list: layoutProps.classNames.list,
+            item: layoutProps.classNames.item,
+          },
+        })
+    : undefined;
+
   const uiProps: UiProps<TItem> = {
-    items: items as Array<Hit<TItem>>,
+    items: items as Array<AlgoliaHit<TItem>>,
     itemComponent,
     headerComponent,
     emptyComponent,
+    layout,
     status,
     sendEvent: () => {},
   };

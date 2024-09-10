@@ -6,7 +6,7 @@ import type {
   TrendingItemsProps as TrendingItemsUiComponentProps,
   Pragma,
 } from 'instantsearch-ui-components';
-import type { Hit, BaseHit } from 'instantsearch.js';
+import type { AlgoliaHit, BaseHit } from 'instantsearch.js';
 import type { UseTrendingItemsProps } from 'react-instantsearch-core';
 
 type UiProps<TItem extends BaseHit> = Pick<
@@ -15,6 +15,7 @@ type UiProps<TItem extends BaseHit> = Pick<
   | 'itemComponent'
   | 'headerComponent'
   | 'emptyComponent'
+  | 'layout'
   | 'status'
   | 'sendEvent'
 >;
@@ -27,6 +28,7 @@ export type TrendingItemsProps<TItem extends BaseHit> = Omit<
     itemComponent?: TrendingItemsUiComponentProps<TItem>['itemComponent'];
     headerComponent?: TrendingItemsUiComponentProps<TItem>['headerComponent'];
     emptyComponent?: TrendingItemsUiComponentProps<TItem>['emptyComponent'];
+    layoutComponent?: TrendingItemsUiComponentProps<TItem>['layout'];
   };
 
 const TrendingItemsUiComponent = createTrendingItemsComponent({
@@ -46,6 +48,7 @@ export function TrendingItems<TItem extends BaseHit = BaseHit>({
   itemComponent,
   headerComponent,
   emptyComponent,
+  layoutComponent,
   ...props
 }: TrendingItemsProps<TItem>) {
   const facetParameters =
@@ -65,11 +68,23 @@ export function TrendingItems<TItem extends BaseHit = BaseHit>({
     { $$widgetType: 'ais.trendingItems' }
   );
 
+  const layout: typeof layoutComponent = layoutComponent
+    ? (layoutProps) =>
+        layoutComponent({
+          ...layoutProps,
+          classNames: {
+            list: layoutProps.classNames.list,
+            item: layoutProps.classNames.item,
+          },
+        })
+    : undefined;
+
   const uiProps: UiProps<TItem> = {
-    items: items as Array<Hit<TItem>>,
+    items: items as Array<AlgoliaHit<TItem>>,
     itemComponent,
     headerComponent,
     emptyComponent,
+    layout,
     status,
     sendEvent: () => {},
   };

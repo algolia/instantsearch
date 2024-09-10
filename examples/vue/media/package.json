@@ -1,6 +1,6 @@
 {
   "name": "example-vue-instantsearch-media",
-  "version": "0.57.0",
+  "version": "0.59.0",
   "private": true,
   "scripts": {
     "serve": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve",
@@ -8,11 +8,11 @@
     "website:examples": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build --dest ../../../website/examples/vue/media"
   },
   "dependencies": {
-    "algoliasearch": "4.23.2",
+    "algoliasearch": "5.1.1",
     "core-js": "2",
-    "instantsearch.js": "4.73.4",
+    "instantsearch.js": "4.74.1",
     "vue": "2.7.14",
-    "vue-instantsearch": "4.19.2"
+    "vue-instantsearch": "4.19.4"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "3.12.1",
@@ -24,9 +24,5 @@
       "autoprefixer": {}
     }
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ]
+  "browserslist": "Firefox 127, Chrome 125, IE 11"
 }

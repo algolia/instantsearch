@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.22.5](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.22.4...algoliasearch-helper@3.22.5) (2024-09-10)
+
+
+### Bug Fixes
+
+* **client:** use client.search in sffv for v5 ([#6354](https://github.com/algolia/instantsearch/issues/6354)) ([11399e6](https://github.com/algolia/instantsearch/commit/11399e6fd232f005c4e3e8aba842c50110869ae5))
+
+
+
+
+
+## [3.22.4](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.22.3...algoliasearch-helper@3.22.4) (2024-08-20)
+
+
+### Bug Fixes
+
+* **client:** support v5 fully ([#6270](https://github.com/algolia/instantsearch/issues/6270)) ([c3b5e80](https://github.com/algolia/instantsearch/commit/c3b5e80bbb449acb3b9719a7449c6c926d034e34)), closes [#6271](https://github.com/algolia/instantsearch/issues/6271) [#6286](https://github.com/algolia/instantsearch/issues/6286)
+
+
+
+
+
 ## [3.22.3](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.22.2...algoliasearch-helper@3.22.3) (2024-07-16)
 
 

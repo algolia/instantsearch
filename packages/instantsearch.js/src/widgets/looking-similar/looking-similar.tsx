@@ -20,11 +20,11 @@ import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   Template,
   WidgetFactory,
-  Hit,
+  AlgoliaHit,
   Renderer,
   BaseHit,
+  RecommendResponse,
 } from '../../types';
-import type { RecommendResultItem } from 'algoliasearch-helper';
 import type {
   RecommendClassNames,
   LookingSimilarProps as LookingSimilarUiProps,
@@ -77,7 +77,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
             />
           )
         : undefined
-    ) as LookingSimilarUiProps<Hit>['headerComponent'];
+    ) as LookingSimilarUiProps<AlgoliaHit>['headerComponent'];
 
     const itemComponent = (
       templates.item
@@ -92,7 +92,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
             );
           }
         : undefined
-    ) as LookingSimilarUiProps<Hit>['itemComponent'];
+    ) as LookingSimilarUiProps<AlgoliaHit>['itemComponent'];
 
     const emptyComponent = (
       templates.empty
@@ -105,7 +105,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
             />
           )
         : undefined
-    ) as LookingSimilarUiProps<Hit>['emptyComponent'];
+    ) as LookingSimilarUiProps<AlgoliaHit>['emptyComponent'];
 
     const layoutComponent = (
       templates.layout
@@ -118,7 +118,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
                 items: data.items,
                 templates: {
                   item: templates.item
-                    ? ({ item }: { item: Hit<THit> }) => (
+                    ? ({ item }: { item: AlgoliaHit<THit> }) => (
                         <TemplateComponent
                           {...renderState.templateProps}
                           templateKey="item"
@@ -128,15 +128,19 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
                       )
                     : undefined,
                 },
+                cssClasses: {
+                  list: data.classNames.list,
+                  item: data.classNames.item,
+                },
               }}
             />
           )
         : undefined
-    ) as LookingSimilarUiProps<Hit>['layout'];
+    ) as LookingSimilarUiProps<AlgoliaHit<THit>>['layout'];
 
     render(
       <LookingSimilar
-        items={items}
+        items={items as Array<AlgoliaHit<THit>>}
         headerComponent={headerComponent}
         itemComponent={itemComponent}
         sendEvent={() => {}}
@@ -158,7 +162,7 @@ export type LookingSimilarTemplates<
   /**
    * Template to use when there are no results.
    */
-  empty: Template<RecommendResultItem<Hit<THit>>>;
+  empty: Template<RecommendResponse<AlgoliaHit<THit>>>;
 
   /**
    * Template to use for the header of the widget.
@@ -166,7 +170,7 @@ export type LookingSimilarTemplates<
   header: Template<
     Pick<
       Parameters<
-        NonNullable<LookingSimilarUiProps<Hit<THit>>['headerComponent']>
+        NonNullable<LookingSimilarUiProps<AlgoliaHit<THit>>['headerComponent']>
       >[0],
       'items'
     > & { cssClasses: RecommendClassNames }
@@ -175,19 +179,22 @@ export type LookingSimilarTemplates<
   /**
    * Template to use for each result. This template will receive an object containing a single record.
    */
-  item: Template<Hit<THit>>;
+  item: Template<AlgoliaHit<THit>>;
 
   /**
    * Template to use to wrap all items.
    */
   layout: Template<
     Pick<
-      Parameters<NonNullable<LookingSimilarUiProps<Hit<THit>>['layout']>>[0],
+      Parameters<
+        NonNullable<LookingSimilarUiProps<AlgoliaHit<THit>>['layout']>
+      >[0],
       'items'
     > & {
       templates: {
-        item: LookingSimilarUiProps<Hit>['itemComponent'];
+        item: LookingSimilarUiProps<AlgoliaHit<THit>>['itemComponent'];
       };
+      cssClasses: Pick<LookingSimilarCSSClasses, 'list' | 'item'>;
     }
   >;
 }>;

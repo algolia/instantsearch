@@ -4,7 +4,7 @@
 
 [![Version][version-svg]][package-url] [![License][license-image]][license-url] [![Build Status][ci-svg]][ci-url]
 
-`create-instantsearch-app` is a command line utility that helps you quick start your InstantSearch app using any [Algolia][algolia-website] InstantSearch flavor ([InstantSearch.js][instantsearchjs-github], [React InstantSearch][react-instantsearch-github], [Vue InstantSearch][vue-instantsearch-github], [Angular InstantSearch][angular-instantsearch-github], [InstantSearch iOS][instantsearch-ios-github] and [InstantSearch Android][instantsearch-android-github]).
+`create-instantsearch-app` is a command line utility that helps you quick start your InstantSearch app using any [Algolia][algolia-website] InstantSearch flavor ([InstantSearch.js][instantsearchjs-github], [React InstantSearch][react-instantsearch-github], [Vue InstantSearch][vue-instantsearch-github], [InstantSearch iOS][instantsearch-ios-github] and [InstantSearch Android][instantsearch-android-github]).
 
 <p align="center">
   <img src="preview.png" width="800" alt="Preview">
@@ -50,9 +50,7 @@ cd my-app
 yarn start
 ```
 
-> **Important**
-> Selecting 'Y' when being prompted to ‘Enable user events’ activates the [`insights`](https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/#widget-param-insights) option for compatible templates, allowing Algolia to process your user Events. Events can unlock powerful features, enhancing your application's effectiveness and we encourage you to consider enabling this valuable functionality. Please review our [API reference](https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/#widget-param-insights) for more details about Events collection and settings.
-
+> **Important** Selecting 'Y' when being prompted to ‘Enable user events’ activates the [`insights`](https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/#widget-param-insights) option for compatible templates, allowing Algolia to process your user Events. Events can unlock powerful features, enhancing your application's effectiveness and we encourage you to consider enabling this valuable functionality. Please review our [API reference](https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/#widget-param-insights) for more details about Events collection and settings.
 
 ## Usage
 
@@ -89,7 +87,6 @@ Supported templates are:
 - [`React InstantSearch`][react-instantsearch-github]
 - [`React InstantSearch Native`][react-instantsearch-github]
 - [`Vue InstantSearch`][vue-instantsearch-github]
-- [`Angular InstantSearch`][angular-instantsearch-github]
 - [`InstantSearch iOS`][instantsearch-ios-github]
 - [`InstantSearch Android`][instantsearch-android-github]
 
@@ -158,7 +155,6 @@ You can use the web templates on CodeSandbox:
 - [InstantSearch.js](https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/instantsearch.js)
 - [React InstantSearch](https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/react-instantsearch)
 - [Vue InstantSearch](https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/vue-instantsearch)
-- [Angular InstantSearch](https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/angular-instantsearch)
 - [Autocomplete.js](https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/autocomplete.js)
 - [JavaScript Client](https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/javascript-client)
 - [JavaScript Helper](https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/javascript-helper)
@@ -198,7 +194,6 @@ Create InstantSearch App is [MIT licensed](LICENSE).
 [instantsearchjs-github]: https://github.com/algolia/instantsearch/tree/master/packages/instantsearch.js
 [react-instantsearch-github]: https://github.com/algolia/instantsearch/tree/master/packages/react-instantsearch
 [vue-instantsearch-github]: https://github.com/algolia/instantsearch/tree/master/packages/vue-instantsearch
-[angular-instantsearch-github]: https://github.com/algolia/angular-instantsearch
 [instantsearch-ios-github]: https://github.com/algolia/instantsearch-ios
 [instantsearch-android-github]: https://github.com/algolia/instantsearch-android
 [contributing-bugreport]: https://github.com/algolia/instantsearch/issues/new?template=BUG_REPORT.yml&labels=triage,Library%3A%20Create+InstantSearch+App

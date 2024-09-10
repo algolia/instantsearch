@@ -85,7 +85,7 @@ export function hydrateSearchClient(
   if ('transporter' in client && !client._cacheHydrated) {
     client._cacheHydrated = true;
 
-    const baseMethod = client.search as unknown as (
+    const baseMethod = client.search.bind(client) as unknown as (
       query: any,
       ...args: any[]
     ) => any;
@@ -93,7 +93,7 @@ export function hydrateSearchClient(
     client.search = (requests, ...methodArgs) => {
       const requestsWithSerializedParams = requests.map((request) => ({
         ...request,
-        params: serializeQueryParameters(request.params!),
+        params: serializeQueryParameters(request.params),
       }));
 
       return (client as ClientWithTransporter).transporter.responsesCache.get(

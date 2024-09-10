@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.74.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.74.0...instantsearch.js@4.74.1) (2024-09-10)
+
+
+### Bug Fixes
+
+* **client:** ensure client.search is bound ([#6352](https://github.com/algolia/instantsearch/issues/6352)) ([2a171a9](https://github.com/algolia/instantsearch/commit/2a171a9b63e9c3bec1fb8991b533c61b824dd736)), closes [#6350](https://github.com/algolia/instantsearch/issues/6350) [algolia/algoliasearch-client-javascript#1549](https://github.com/algolia/algoliasearch-client-javascript/issues/1549) [#6348](https://github.com/algolia/instantsearch/issues/6348)
+* **client:** use client.search in sffv for v5 ([#6354](https://github.com/algolia/instantsearch/issues/6354)) ([11399e6](https://github.com/algolia/instantsearch/commit/11399e6fd232f005c4e3e8aba842c50110869ae5))
+* **flavors:** remove mentions of angular instantsearch ([#6341](https://github.com/algolia/instantsearch/issues/6341)) ([735e8d1](https://github.com/algolia/instantsearch/commit/735e8d1bc32e5532258a5551b11650b8362013b4))
+
+
+
+
+
+# [4.74.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.73.4...instantsearch.js@4.74.0) (2024-08-20)
+
+
+### Bug Fixes
+
+* **client:** support v5 fully ([#6270](https://github.com/algolia/instantsearch/issues/6270)) ([c3b5e80](https://github.com/algolia/instantsearch/commit/c3b5e80bbb449acb3b9719a7449c6c926d034e34)), closes [#6271](https://github.com/algolia/instantsearch/issues/6271) [#6286](https://github.com/algolia/instantsearch/issues/6286)
+* **ExperimentalConfigureRelatedItems:** deprecate in favor of RelatedItems ([#6312](https://github.com/algolia/instantsearch/issues/6312)) ([857f4ec](https://github.com/algolia/instantsearch/commit/857f4ec278fce24b0aef6428f7b9f3d36be9edd6))
+* **geoSearch:** correct type of MarkerOptions ([#6319](https://github.com/algolia/instantsearch/issues/6319)) ([849190e](https://github.com/algolia/instantsearch/commit/849190e41072ed0e0ec1311df69ab923adf22252)), closes [#6253](https://github.com/algolia/instantsearch/issues/6253)
+* **instantsearch.js:** forward widget classes to carousel ([#6326](https://github.com/algolia/instantsearch/issues/6326)) ([62b6e4b](https://github.com/algolia/instantsearch/commit/62b6e4bbd27743cd0008548d7d59bd7cdb680b82))
+
+
+### Features
+
+* **instantsearch.js:** introduce `carousel` template ([#6314](https://github.com/algolia/instantsearch/issues/6314)) ([b40f2a9](https://github.com/algolia/instantsearch/commit/b40f2a93dfba64e7963f2500ec45c703937bcaed))
+
+
+
+
+
 ## [4.73.4](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.73.3...instantsearch.js@4.73.4) (2024-08-06)
 
 

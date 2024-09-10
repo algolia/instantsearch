@@ -327,7 +327,7 @@ describe('getServerState', () => {
   });
 
   test('returns initialResults', async () => {
-    const searchClient = createAlgoliaSearchClient({});
+    const searchClient = createSearchClient({});
     const { App } = createTestEnvironment({ searchClient });
 
     const serverState = await getServerState(<App />, { renderToString });

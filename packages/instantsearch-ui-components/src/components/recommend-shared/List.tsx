@@ -2,7 +2,6 @@
 
 import type {
   RecommendClassNames,
-  RecommendTranslations,
   RecordWithObjectID,
   Renderer,
   RecommendLayoutProps,
@@ -10,11 +9,7 @@ import type {
 
 export function createListComponent({ createElement }: Renderer) {
   return function List<TItem extends RecordWithObjectID>(
-    userProps: RecommendLayoutProps<
-      TItem,
-      RecommendTranslations,
-      Partial<RecommendClassNames>
-    >
+    userProps: RecommendLayoutProps<TItem, Partial<RecommendClassNames>>
   ) {
     const {
       classNames = {},

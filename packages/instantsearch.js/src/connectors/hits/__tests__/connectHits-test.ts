@@ -178,21 +178,23 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
       expect.anything()
     );
 
-    const hits = [
-      {
-        objectID: '1',
-        _highlightResult: {
-          foobar: {
-            value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${TAG_PLACEHOLDER.highlightPostTag}</script>`,
-            matchLevel: 'partial',
-            matchedWords: ['foobar'],
-          },
-        },
-      },
-    ];
-
     const results = new SearchResults(helper.state, [
-      createSingleSearchResponse(createSingleSearchResponse({ hits })),
+      createSingleSearchResponse(
+        createSingleSearchResponse({
+          hits: [
+            {
+              objectID: '1',
+              _highlightResult: {
+                foobar: {
+                  value: `<script>${TAG_PLACEHOLDER.highlightPreTag}foobar${TAG_PLACEHOLDER.highlightPostTag}</script>`,
+                  matchLevel: 'partial',
+                  matchedWords: ['foobar'],
+                },
+              },
+            },
+          ],
+        })
+      ),
     ]);
     widget.render(
       createRenderOptions({

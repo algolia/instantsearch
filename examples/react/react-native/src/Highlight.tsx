@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { StyleSheet, Text } from 'react-native';
-import { Hit as AlgoliaHit } from '@algolia/client-search';
+import { Hit as AlgoliaHit } from 'instantsearch.js';
 import {
   getHighlightedParts,
   getPropertyByPath,
@@ -26,7 +26,7 @@ type HighlightProps<THit> = {
   separator?: string;
 };
 
-export function Highlight<THit extends AlgoliaHit<Record<string, unknown>>>({
+export function Highlight<THit extends AlgoliaHit>({
   hit,
   attribute,
   separator = ', ',

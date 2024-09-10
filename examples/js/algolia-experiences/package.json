@@ -1,0 +1,19 @@
+{
+  "name": "example-algolia-experiences",
+  "version": "1.1.0",
+  "private": true,
+  "scripts": {
+    "start": "BABEL_ENV=parcel parcel index.html local.html",
+    "build": "BABEL_ENV=parcel parcel build index.html local.html --public-url .",
+    "website:examples": "BABEL_ENV=parcel parcel build index.html local.html --public-url . --dist-dir=../../../website/examples/js/algolia-experiences"
+  },
+  "browserslist": "firefox 68, chrome 78, IE 11",
+  "devDependencies": {
+    "@babel/core": "7.15.5",
+    "@parcel/core": "2.10.0",
+    "@parcel/packager-raw-url": "2.10.0",
+    "@parcel/transformer-webmanifest": "2.10.0",
+    "parcel": "2.10.0",
+    "typescript": "5.5.2"
+  }
+}

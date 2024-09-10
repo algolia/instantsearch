@@ -4,7 +4,7 @@
   </a>
 
   <p align="center">
-    InstantSearch is a JavaScript library for building performant and instant search experiences in vanilla JS, React, Vue and Angular with <a href="https://www.algolia.com/?utm_source=instantsearch.js&utm_campaign=repository">Algolia</a>.
+    InstantSearch is a JavaScript library for building performant and instant search experiences in vanilla JS, React and Vue with <a href="https://www.algolia.com/?utm_source=instantsearch.js&utm_campaign=repository">Algolia</a>.
   </p>
 </p>
 
@@ -14,11 +14,11 @@
 
 [InstantSearch][instantsearch-docs] is a JavaScript library that lets you create an instant-search result experience using [Algolia][algolia-website]’s search API.
 
-There are multiple wrappers for popular frameworks, such as [React InstantSearch][react-instantsearch-docs], [Vue InstantSearch][vue-instantsearch-docs], and [Angular InstantSearch][angular-instantsearch-docs].
+There are multiple wrappers for popular frameworks, such as [React InstantSearch][react-instantsearch-docs] and [Vue InstantSearch][vue-instantsearch-docs].
 
 It is part of the InstantSearch family which is designed for different platforms:
 
-**InstantSearch** | [Angular InstantSearch][instantsearch-angular-github] | [InstantSearch Android][instantsearch-android-github] | [InstantSearch iOS][instantsearch-ios-github]
+**InstantSearch** | [InstantSearch Android][instantsearch-android-github] | [InstantSearch iOS][instantsearch-ios-github]
 
 <details>
   <summary><strong>Table of contents</strong></summary>
@@ -81,10 +81,8 @@ InstantSearch is [MIT licensed][license-url].
 [instantsearch-docs]: https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/?utm_source=instantsearch.js&utm_campaign=repository 'InstantSearch.js documentation'
 [react-instantsearch-docs]: https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/?utm_source=instantsearch.js&utm_campaign=repository 'React InstantSearch documentation'
 [vue-instantsearch-docs]: https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/vue/?utm_source=instantsearch.js&utm_campaign=repository 'Vue InstantSearch documentation'
-[angular-instantsearch-docs]: https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/angular/?utm_source=instantsearch.js&utm_campaign=repository 'Angular InstantSearch documentation'
 [instantsearch-android-github]: https://github.com/algolia/instantsearch-android
 [instantsearch-ios-github]: https://github.com/algolia/instantsearch-ios
-[instantsearch-angular-github]: https://github.com/algolia/angular-instantsearch
 [contributing-bugreport]: https://github.com/algolia/instantsearch/issues/new?template=BUG_REPORT.yml&labels=triage
 [contributing-featurerequest]: https://github.com/algolia/instantsearch/discussions/new?category=ideas&labels=triage&title=Feature%20request%3A%20
 [contributing-newissue]: https://github.com/algolia/instantsearch/issues/new?labels=triage

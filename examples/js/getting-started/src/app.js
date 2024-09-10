@@ -1,4 +1,4 @@
-import algoliasearch from 'algoliasearch/lite';
+import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import instantsearch from 'instantsearch.js';
 import { carousel } from 'instantsearch.js/es/templates';
 import {
@@ -61,7 +61,7 @@ search.addWidgets([
     limit: 6,
     templates: {
       item: (item, { html }) => html`
-        <div class="ais-TrendingItems-item">
+        <div>
           <article>
             <div>
               <img src="${item.image}" />

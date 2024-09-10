@@ -55,7 +55,7 @@ See: https://alg.li/highlighting
 
   const { value: attributeValue = '' } = highlightAttributeResult || {};
 
-  // cx is not used, since it would be bundled as a dependency for Vue & Angular
+  // cx is not used, since it would be bundled as a dependency for Vue
   const className =
     suit({
       descendantName: 'highlighted',

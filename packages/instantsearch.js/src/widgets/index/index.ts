@@ -21,6 +21,7 @@ import type {
   SearchClient,
   IndexRenderState,
   RenderOptions,
+  RecommendResponse,
 } from '../../types';
 import type {
   AlgoliaSearchHelper as Helper,
@@ -30,7 +31,6 @@ import type {
   SearchResults,
   AlgoliaSearchHelper,
   RecommendParameters,
-  RecommendResultItem,
 } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -77,7 +77,7 @@ export type IndexWidget<TUiState extends UiState = UiState> = Omit<
   getResults: () => SearchResults | null;
   getResultsForWidget: (
     widget: IndexWidget | Widget
-  ) => SearchResults | RecommendResultItem | null;
+  ) => SearchResults | RecommendResponse<any> | null;
   getPreviousState: () => SearchParameters | null;
   getScopedResults: () => ScopedResult[];
   getParent: () => IndexWidget | null;

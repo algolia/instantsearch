@@ -22,7 +22,7 @@
 
 React InstantSearch is an open-source React library that lets you create an instant search result experience using [Algolia][algolia-website]’s search API. It is part of the InstantSearch family:
 
-**React InstantSearch** | [InstantSearch.js][instantsearch-github] | [Angular InstantSearch][instantsearch-angular-github] | [Vue InstantSearch][instantsearch-github] | [InstantSearch Android][instantsearch-android-github] | [InstantSearch iOS][instantsearch-ios-github]
+**React InstantSearch** | [InstantSearch.js][instantsearch-github] | [Vue InstantSearch][instantsearch-github] | [InstantSearch Android][instantsearch-android-github] | [InstantSearch iOS][instantsearch-ios-github]
 
 ## Why
 
@@ -116,7 +116,6 @@ React InstantSearch is [MIT licensed](../../LICENSE).
 [instantsearch-github]: https://github.com/algolia/instantsearch
 [instantsearch-android-github]: https://github.com/algolia/instantsearch-android
 [instantsearch-ios-github]: https://github.com/algolia/instantsearch-ios
-[instantsearch-angular-github]: https://github.com/algolia/angular-instantsearch
 [contributing-bugreport]: https://github.com/algolia/instantsearch/issues/new?template=BUG_REPORT.yml&labels=triage,Library%3A%20React+InstantSearch
 [contributing-featurerequest]: https://github.com/algolia/instantsearch/discussions/new?category=ideas&labels=triage,Library%3A%20React+InstantSearch&title=Feature%20request%3A%20
 [contributing-newissue]: https://github.com/algolia/instantsearch/issues/new?labels=triage,Library%3A%20React+InstantSearch
