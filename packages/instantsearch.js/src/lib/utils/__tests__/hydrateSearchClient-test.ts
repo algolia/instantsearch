@@ -249,7 +249,7 @@ describe('hydrateSearchClient', () => {
 
   it('should not throw if search requires to be bound (v5)', async () => {
     const send = jest.fn().mockResolvedValue({ status: 200, content: '{}' });
-    const searchClient = algoliasearchV5('appId', 'apiKey', {
+    const searchClient: any = algoliasearchV5('appId', 'apiKey', {
       requester: {
         send,
       },
@@ -264,7 +264,7 @@ describe('hydrateSearchClient', () => {
 
   it('should not throw if search requires to be bound (v4)', async () => {
     const send = jest.fn().mockResolvedValue({ status: 200, content: '{}' });
-    const searchClient = algoliasearchV4('appId', 'apiKey', {
+    const searchClient: any = algoliasearchV4('appId', 'apiKey', {
       requester: {
         send,
       },
