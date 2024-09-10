@@ -99,6 +99,9 @@ export type Block =
   | {
       type: 'column';
       children: Block[];
+    }
+  | {
+      type: 'banner';
     };
 
 export type Configuration = {

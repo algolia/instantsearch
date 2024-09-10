@@ -159,6 +159,14 @@ function blockToWidget(child: Block, container: HTMLElement): Widget[] {
       .flat(1);
   }
 
+  if (child.type === 'banner') {
+    return [
+      widgets.banner({
+        container: widgetContainer,
+      }),
+    ];
+  }
+
   if (isTemplateWidget(child)) {
     // type cast is needed here because the spread adding `container` and `templates` loses the type discriminant
     const parameters = child.parameters as Parameters<
@@ -171,6 +179,7 @@ function blockToWidget(child: Block, container: HTMLElement): Widget[] {
         ...parameters,
         container: widgetContainer,
         templates: {
+          banner: () => null,
           item: (hit: any, { components }) => {
             if (!child.children.length) {
               return <code> no item template given</code>;
