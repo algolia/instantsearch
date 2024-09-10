@@ -85,7 +85,7 @@ export function hydrateSearchClient(
   if ('transporter' in client && !client._cacheHydrated) {
     client._cacheHydrated = true;
 
-    const baseMethod = client.search as unknown as (
+    const baseMethod = client.search.bind(client) as unknown as (
       query: any,
       ...args: any[]
     ) => any;
