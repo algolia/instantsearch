@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.74.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.74.0...instantsearch.js@4.74.1) (2024-09-10)
+
+
+### Bug Fixes
+
+* **client:** ensure client.search is bound ([#6352](https://github.com/algolia/instantsearch/issues/6352)) ([2a171a9](https://github.com/algolia/instantsearch/commit/2a171a9b63e9c3bec1fb8991b533c61b824dd736)), closes [#6350](https://github.com/algolia/instantsearch/issues/6350) [algolia/algoliasearch-client-javascript#1549](https://github.com/algolia/algoliasearch-client-javascript/issues/1549) [#6348](https://github.com/algolia/instantsearch/issues/6348)
+* **client:** use client.search in sffv for v5 ([#6354](https://github.com/algolia/instantsearch/issues/6354)) ([11399e6](https://github.com/algolia/instantsearch/commit/11399e6fd232f005c4e3e8aba842c50110869ae5))
+* **flavors:** remove mentions of angular instantsearch ([#6341](https://github.com/algolia/instantsearch/issues/6341)) ([735e8d1](https://github.com/algolia/instantsearch/commit/735e8d1bc32e5532258a5551b11650b8362013b4))
+
+
+
+
+
 # [4.74.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.73.4...instantsearch.js@4.74.0) (2024-08-20)
 
 
