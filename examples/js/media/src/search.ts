@@ -2,6 +2,8 @@ import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import instantsearch from 'instantsearch.js';
 import { singleIndex } from 'instantsearch.js/es/lib/stateMappings';
 
+import 'instantsearch.css/themes/reset.css';
+
 import {
   articles,
   createAuthors,

@@ -11,6 +11,8 @@ import {
   geoSearch,
 } from 'instantsearch.js/es/widgets';
 
+import 'instantsearch.css/themes/reset.css';
+
 const search = instantsearch({
   searchClient: algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76'),
   indexName: 'airbnb',

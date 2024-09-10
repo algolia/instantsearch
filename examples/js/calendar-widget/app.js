@@ -4,6 +4,8 @@ import instantsearch from 'instantsearch.js';
 import { connectRange } from 'instantsearch.js/es/connectors';
 import { searchBox, hits } from 'instantsearch.js/es/widgets';
 
+import 'instantsearch.css/themes/algolia.css';
+
 const ONE_DAY_IN_MS = 3600 * 24 * 1000;
 
 const search = instantsearch({
