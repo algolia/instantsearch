@@ -7,7 +7,7 @@
     "start": "BABEL_ENV=parcel parcel index.html products.html --port 3000"
   },
   "dependencies": {
-    "algoliasearch": "5.1.1",
+    "algoliasearch": "5.4.0",
     "instantsearch.css": "8.5.1",
     "instantsearch.js": "4.74.1",
     "react": "18.2.0",
@@ -21,5 +21,8 @@
     "@types/react": "^18.0.9",
     "parcel": "2.10.0",
     "typescript": "5.5.2"
+  },
+  "@parcel/resolver-default": {
+     "packageExports": true
   }
 }
