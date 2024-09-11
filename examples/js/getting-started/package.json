@@ -19,5 +19,8 @@
     "@parcel/packager-raw-url": "2.10.0",
     "@parcel/transformer-webmanifest": "2.10.0",
     "parcel": "2.10.0"
+  },
+  "@parcel/resolver-default": {
+     "packageExports": true
   }
 }
