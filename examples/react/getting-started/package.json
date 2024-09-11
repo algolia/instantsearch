@@ -21,5 +21,8 @@
     "@types/react": "^18.0.9",
     "parcel": "2.10.0",
     "typescript": "5.5.2"
+  },
+  "@parcel/resolver-default": {
+     "packageExports": true
   }
 }
