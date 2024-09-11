@@ -24,7 +24,10 @@ import {
   trendingItems,
 } from 'instantsearch.js/es/widgets';
 
+import { banner } from './banner';
+
 export const widgets = {
+  banner,
   'ais.breadcrumb': breadcrumb,
   'ais.clearRefinements': clearRefinements,
   'ais.configure': configure,
