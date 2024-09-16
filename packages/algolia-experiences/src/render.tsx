@@ -3,6 +3,7 @@ import { getPropertyByPath } from 'instantsearch.js/es/lib/utils';
 import { index, panel } from 'instantsearch.js/es/widgets';
 import { h, Fragment } from 'preact';
 
+import { banner } from './banner';
 import { error } from './util';
 import { widgets } from './widgets';
 
@@ -161,8 +162,9 @@ function blockToWidget(child: Block, container: HTMLElement): Widget[] {
 
   if (child.type === 'banner') {
     return [
-      widgets.banner({
+      banner({
         container: widgetContainer,
+        data: child.parameters,
       }),
     ];
   }
