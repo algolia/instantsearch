@@ -7958,6 +7958,7 @@ algoliasearch-helper@3.14.0:
     tunnel-agent "^0.6.0"
 
 "algoliasearch-v5@npm:algoliasearch@5.1.1", algoliasearch@5.1.1, algoliasearch@^3.35.1:
+  name algoliasearch-v5
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-5.1.1.tgz#48ac9f0501e746ac1544cbef7192d7efe36b39dd"
   integrity sha512-Bmi456esf2+/nY1w3Xa2etGjQPOBw+RPtfdKRN33mWJ4hNs9cug/F4w9KAb0wiYqDjW1fduXYwu6+YKLHFMMew==

@@ -31,6 +31,8 @@ import {
 } from './components';
 import { Tab, Tabs } from './components/layout';
 
+import 'instantsearch.css/themes/satellite.css';
+
 import './App.css';
 
 const searchClient = algoliasearch(

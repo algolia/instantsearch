@@ -30,6 +30,9 @@ import {
 import { ScrollTo } from './components/ScrollTo';
 import getRouting from './routing';
 import { formatNumber } from './utils';
+
+import 'instantsearch.css/themes/reset.css';
+
 import './Theme.css';
 import './App.css';
 import './components/Pagination.css';
