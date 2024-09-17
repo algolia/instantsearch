@@ -27,7 +27,9 @@ export function setupInstantSearch() {
     });
     window.__search = search;
 
-    registerComponents(search, settings);
+    if (!customElements.get('algolia-experience')) {
+      registerComponents(search, settings);
+    }
 
     const elements = getElements();
 
