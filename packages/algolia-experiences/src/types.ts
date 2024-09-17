@@ -1,4 +1,5 @@
 import type { widgets } from './widgets';
+import type { Banner } from 'algoliasearch-helper';
 
 type StaticString = { type: 'string'; value: string };
 type Attribute = { type: 'attribute'; path: string[] };
@@ -102,6 +103,7 @@ export type Block =
     }
   | {
       type: 'banner';
+      parameters: Banner;
     };
 
 export type Configuration = {

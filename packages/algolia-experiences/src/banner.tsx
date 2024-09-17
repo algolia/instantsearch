@@ -1,7 +1,6 @@
 /** @jsx h */
 
 import { cx } from 'instantsearch-ui-components';
-import { connectHits } from 'instantsearch.js/es/connectors';
 import { h, render } from 'preact';
 
 import type { Banner } from 'algoliasearch-helper';
@@ -13,6 +12,7 @@ import type { HitsConnectorParams } from 'instantsearch.js/es/connectors/hits/co
 
 export type BannerWidgetParams = {
   container: HTMLElement;
+  data: Banner;
   classNames?: BannerClassNames;
 };
 
@@ -64,19 +64,33 @@ function DefaultBanner(props: BannerProps) {
 function renderer({
   container,
   classNames,
+  data,
 }: {
   container: HTMLElement;
   classNames: BannerClassNames;
+  data: Banner;
 }) {
-  return (props: { banner?: Banner }) =>
-    render(
-      <DefaultBanner banner={props.banner} classNames={classNames} />,
-      container
-    );
+  return () =>
+    render(<DefaultBanner banner={data} classNames={classNames} />, container);
+}
+
+function connectNoop(renderFn: () => void, unmountFn: () => void) {
+  return () => ({
+    $$type: 'ais.experiences-noop',
+    init() {
+      renderFn();
+    },
+    render() {
+      renderFn();
+    },
+    dispose() {
+      unmountFn();
+    },
+  });
 }
 
 export function banner(widgetParams: BannerWidgetParams & HitsConnectorParams) {
-  const { container, classNames = {} } = widgetParams || {};
+  const { container, data, classNames = {} } = widgetParams || {};
 
   if (!container) {
     throw new Error('The `container` option is required.');
@@ -85,14 +99,15 @@ export function banner(widgetParams: BannerWidgetParams & HitsConnectorParams) {
   const specializedRenderer = renderer({
     container,
     classNames,
+    data,
   });
 
-  const makeWidget = connectHits(specializedRenderer, () =>
+  const makeWidget = connectNoop(specializedRenderer, () =>
     render(null, container)
   );
 
   return {
     $$widgetType: 'ais.experiences-banner',
-    ...makeWidget({}),
+    ...makeWidget(),
   };
 }
