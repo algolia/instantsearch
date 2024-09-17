@@ -1,6 +1,6 @@
 {
   "name": "example-instantsearch-media",
-  "version": "1.59.0",
+  "version": "1.60.0",
   "private": true,
   "scripts": {
     "start": "BABEL_ENV=parcel parcel index.html --port 3000",
@@ -22,6 +22,6 @@
     "typescript": "5.5.2"
   },
   "@parcel/resolver-default": {
-     "packageExports": true
+    "packageExports": true
   }
 }

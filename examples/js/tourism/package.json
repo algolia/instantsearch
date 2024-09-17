@@ -1,6 +1,6 @@
 {
   "name": "example-instantsearch-tourism",
-  "version": "1.16.0",
+  "version": "1.17.0",
   "private": true,
   "scripts": {
     "start": "BABEL_ENV=parcel parcel index.html --port 3000",
@@ -20,6 +20,6 @@
     "parcel": "2.10.0"
   },
   "@parcel/resolver-default": {
-     "packageExports": true
+    "packageExports": true
   }
 }

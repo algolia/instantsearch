@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-getting-started",
-  "version": "6.75.0",
+  "version": "6.76.0",
   "private": true,
   "scripts": {
     "build": "BABEL_ENV=parcel parcel build index.html products.html",
@@ -23,6 +23,6 @@
     "typescript": "5.5.2"
   },
   "@parcel/resolver-default": {
-     "packageExports": true
+    "packageExports": true
   }
 }
