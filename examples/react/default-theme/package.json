@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-default-theme",
-  "version": "43.0.0",
+  "version": "44.0.0",
   "private": true,
   "scripts": {
     "build": "BABEL_ENV=parcel parcel build index.html",
@@ -23,6 +23,6 @@
     "typescript": "5.5.2"
   },
   "@parcel/resolver-default": {
-     "packageExports": true
+    "packageExports": true
   }
 }
