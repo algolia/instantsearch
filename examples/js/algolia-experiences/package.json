@@ -3,9 +3,9 @@
   "version": "1.1.0",
   "private": true,
   "scripts": {
-    "start": "BABEL_ENV=parcel parcel index.html local.html",
-    "build": "BABEL_ENV=parcel parcel build index.html local.html --public-url .",
-    "website:examples": "BABEL_ENV=parcel parcel build index.html local.html --public-url . --dist-dir=../../../website/examples/js/algolia-experiences"
+    "start": "BABEL_ENV=parcel parcel index.html local.html custom-element.html",
+    "build": "BABEL_ENV=parcel parcel build index.html local.html custom-element.html --public-url .",
+    "website:examples": "BABEL_ENV=parcel parcel build index.html local.html custom-element.html --public-url . --dist-dir=../../../website/examples/js/algolia-experiences"
   },
   "browserslist": "firefox 68, chrome 78, IE 11",
   "devDependencies": {
