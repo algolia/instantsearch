@@ -4,7 +4,6 @@ import { index, panel } from 'instantsearch.js/es/widgets';
 import { h, Fragment } from 'preact';
 
 import { banner } from './banner';
-import { error } from './util';
 import { widgets } from './widgets';
 
 import type {
@@ -35,16 +34,7 @@ export function injectStyles() {
   document.head.appendChild(style);
 }
 
-export function configToIndex(
-  config: Configuration,
-  elements: Map<string, HTMLElement>
-) {
-  const container = elements.get(config.id);
-  if (!container) {
-    error(`Element with id ${config.id} not found`);
-    return [];
-  }
-
+export function configToIndex(config: Configuration, container: HTMLElement) {
   return [
     index({
       indexName: config.indexName,

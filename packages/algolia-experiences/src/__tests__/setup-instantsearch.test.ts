@@ -66,50 +66,124 @@ describe('setup of InstantSearch', () => {
 
   test('configuration is fetched and rendered', async () => {
     castToJestMock(fetchConfiguration).mockImplementationOnce(() =>
-      Promise.resolve([
-        {
-          id: 'fake-configuration',
-          name: 'Fake Configuration',
-          indexName: 'fake-index-name',
-          blocks: [
-            {
-              type: 'grid',
-              children: [],
-            },
-          ],
-          createdAt: '2021-01-01',
-          updatedAt: '2021-01-01',
-        },
-      ])
+      Promise.resolve({
+        id: 'fake-configuration',
+        name: 'Fake Configuration',
+        indexName: 'fake-index-name',
+        blocks: [
+          {
+            type: 'grid',
+            children: [],
+          },
+        ],
+        createdAt: '2021-01-01',
+        updatedAt: '2021-01-01',
+      })
     );
 
     document.head.innerHTML = `
       <meta name="algolia-configuration" content='{"appId":"latency","apiKey":"6be0576ff61c053d5f9a3225e2a90f76"}'>
     `;
     document.body.innerHTML = `
-      <div data-experience-id="fake-configuration"></div>
+      <algolia-experience experience-id="fake-configuration"></algolia-experience>
     `;
 
     setupInstantSearch();
 
-    expect(
-      document.querySelector('[data-experience-id="fake-configuration"]')!
-        .children
-    ).toHaveLength(0);
+    expect(document.querySelector('algolia-experience')!.children).toHaveLength(
+      0
+    );
 
     await wait(0);
 
     expect(
-      document.querySelector('[data-experience-id="fake-configuration"]')!
-        .children
+      document.querySelector('algolia-experience')!.children
     ).not.toHaveLength(0);
 
-    expect(
-      document.querySelector('[data-experience-id="fake-configuration"]')!
-        .innerHTML
-    ).toMatchInlineSnapshot(`
+    expect(document.querySelector('algolia-experience')!.innerHTML)
+      .toMatchInlineSnapshot(`
       <div class="ais-Grid">
       </div>
     `);
+  });
+
+  test('algolia-experience can be added after setup', async () => {
+    castToJestMock(fetchConfiguration).mockImplementationOnce(() =>
+      Promise.resolve({
+        id: 'fake-configuration',
+        name: 'Fake Configuration',
+        indexName: 'fake-index-name',
+        blocks: [
+          {
+            type: 'grid',
+            children: [],
+          },
+        ],
+        createdAt: '2021-01-01',
+        updatedAt: '2021-01-01',
+      })
+    );
+
+    document.head.innerHTML = `
+      <meta name="algolia-configuration" content='{"appId":"latency","apiKey":"6be0576ff61c053d5f9a3225e2a90f76"}'>
+    `;
+    document.body.innerHTML = '';
+
+    setupInstantSearch();
+
+    await wait(0);
+
+    document.body.innerHTML = `
+      <algolia-experience experience-id="fake-configuration"></algolia-experience>
+    `;
+
+    await wait(0);
+
+    expect(
+      document.querySelector('algolia-experience')!.children
+    ).not.toHaveLength(0);
+  });
+
+  test('algolia-experience reacts to id change', async () => {
+    castToJestMock(fetchConfiguration).mockImplementation(() =>
+      Promise.resolve({
+        id: 'fake-configuration',
+        name: 'Fake Configuration',
+        indexName: 'fake-index-name',
+        blocks: [
+          {
+            type: 'grid',
+            children: [],
+          },
+        ],
+        createdAt: '2021-01-01',
+        updatedAt: '2021-01-01',
+      })
+    );
+
+    document.head.innerHTML = `
+      <meta name="algolia-configuration" content='{"appId":"latency","apiKey":"6be0576ff61c053d5f9a3225e2a90f76"}'>
+    `;
+    document.body.innerHTML = '';
+
+    setupInstantSearch();
+
+    await wait(0);
+
+    document.body.innerHTML = `
+      <algolia-experience experience-id="1"></algolia-experience>
+    `;
+
+    await wait(0);
+
+    expect(fetchConfiguration).toHaveBeenLastCalledWith('1', expect.anything());
+
+    document
+      .querySelector('algolia-experience')!
+      .setAttribute('experience-id', '2');
+
+    await wait(0);
+
+    expect(fetchConfiguration).toHaveBeenLastCalledWith('2', expect.anything());
   });
 });

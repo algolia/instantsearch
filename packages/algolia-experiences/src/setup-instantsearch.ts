@@ -4,7 +4,7 @@ import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import InstantSearch from 'instantsearch.js/es/lib/InstantSearch';
 
 import { fetchConfiguration } from './get-configuration';
-import { getElements, getSettings } from './get-information';
+import { getSettings } from './get-information';
 import { configToIndex, injectStyles } from './render';
 import { error } from './util';
 
@@ -27,45 +27,33 @@ export function setupInstantSearch() {
     });
     window.__search = search;
 
-    if (!customElements.get('algolia-experience')) {
-      registerComponents(search, settings);
-    }
-
-    const elements = getElements();
-
     injectStyles();
 
-    fetchConfiguration([...elements.keys()], settings).then((configuration) => {
-      search
-        .addWidgets(
-          configuration.flatMap((config) => configToIndex(config, elements))
-        )
-        .start();
-    });
+    if (!customElements.get('algolia-experience')) {
+      registerComponent(search, settings);
+    }
   } catch (err) {
     error((err as Error).message);
   }
 }
 
-function registerComponents(search: InstantSearch, settings: Settings) {
+function registerComponent(search: InstantSearch, settings: Settings) {
   class AlgoliaExperience extends HTMLElement {
     static observedAttributes = ['experience-id'];
 
     widgets: IndexWidget[] = [];
 
     connectedCallback() {
-      const experienceId = this.getAttribute('experience-id');
-      if (!experienceId) {
+      const id = this.getAttribute('experience-id');
+      if (!id) {
         error('Experience ID is required');
         return;
       }
 
-      fetchConfiguration([experienceId], settings).then((configuration) => {
-        this.widgets = configToIndex(
-          configuration[0],
-          new Map([[experienceId, this]])
-        );
+      fetchConfiguration(id, settings).then((config) => {
+        this.widgets = configToIndex(config, this);
         search.addWidgets(this.widgets);
+
         if (!search.started) {
           search.start();
         }
@@ -74,6 +62,17 @@ function registerComponents(search: InstantSearch, settings: Settings) {
 
     disconnectedCallback() {
       search.removeWidgets(this.widgets);
+    }
+
+    attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+      if (oldValue === null || name !== 'experience-id') {
+        return;
+      }
+
+      if (oldValue !== newValue) {
+        this.disconnectedCallback();
+        this.connectedCallback();
+      }
     }
   }
   customElements.define('algolia-experience', AlgoliaExperience);
