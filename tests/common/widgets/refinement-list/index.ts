@@ -1,5 +1,6 @@
 import { fakeAct } from '../../common';
 
+import { createLinksTests } from './links';
 import { createOptimisticUiTests } from './optimistic-ui';
 import { createOptionsTests } from './options';
 
@@ -22,5 +23,6 @@ export function createRefinementListWidgetTests(
   describe('RefinementList widget common tests', () => {
     createOptimisticUiTests(setup, { act, skippedTests });
     createOptionsTests(setup, { act, skippedTests });
+    createLinksTests(setup, { act, skippedTests });
   });
 }

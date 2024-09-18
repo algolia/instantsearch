@@ -22,7 +22,7 @@
           <a
             :href="state.createURL(item.value)"
             :class="suit('link')"
-            @click.prevent="state.refine(item.value)"
+            @click.exact.left.prevent="state.refine(item.value)"
           >
             <span :class="suit('label')">{{ item.label }}</span>
             <span :class="suit('count')">{{ item.count }}</span>
@@ -37,7 +37,7 @@
           !state.canToggleShowMore && suit('showMore', 'disabled'),
         ]"
         :disabled="!state.canToggleShowMore"
-        @click.prevent="state.toggleShowMore()"
+        @click.prevent="state.toggleShowMore"
       >
         <slot name="showMoreLabel" :is-showing-more="state.isShowingMore">{{
           state.isShowingMore ? 'Show less' : 'Show more'

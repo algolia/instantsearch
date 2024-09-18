@@ -1,6 +1,7 @@
 import { fakeAct } from '../../common';
 
 import { createInsightsTests } from './insights';
+import { createLinksTests } from './links';
 import { createOptimisticUiTests } from './optimistic-ui';
 import { createOptionsTests } from './options';
 
@@ -24,5 +25,6 @@ export function createInfiniteHitsWidgetTests(
     createOptimisticUiTests(setup, { act, skippedTests });
     createInsightsTests(setup, { act, skippedTests });
     createOptionsTests(setup, { act, skippedTests });
+    createLinksTests(setup, { act, skippedTests });
   });
 }
