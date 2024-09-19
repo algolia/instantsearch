@@ -4,9 +4,12 @@ import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import InstantSearch from 'instantsearch.js/es/lib/InstantSearch';
 
 import { fetchConfiguration } from './get-configuration';
-import { getElements, getSettings } from './get-information';
+import { getSettings } from './get-information';
 import { configToIndex, injectStyles } from './render';
 import { error } from './util';
+
+import type { Settings } from './get-information';
+import type { IndexWidget } from 'instantsearch.js';
 
 declare global {
   interface Window {
@@ -24,18 +27,53 @@ export function setupInstantSearch() {
     });
     window.__search = search;
 
-    const elements = getElements();
-
     injectStyles();
 
-    fetchConfiguration([...elements.keys()], settings).then((configuration) => {
-      search
-        .addWidgets(
-          configuration.flatMap((config) => configToIndex(config, elements))
-        )
-        .start();
-    });
+    if (!customElements.get('algolia-experience')) {
+      registerComponent(search, settings);
+    }
   } catch (err) {
     error((err as Error).message);
   }
+}
+
+function registerComponent(search: InstantSearch, settings: Settings) {
+  class AlgoliaExperience extends HTMLElement {
+    static observedAttributes = ['experience-id'];
+
+    widgets: IndexWidget[] = [];
+
+    connectedCallback() {
+      const id = this.getAttribute('experience-id');
+      if (!id) {
+        error('Experience ID is required');
+        return;
+      }
+
+      fetchConfiguration(id, settings).then((config) => {
+        this.widgets = configToIndex(config, this);
+        search.addWidgets(this.widgets);
+
+        if (!search.started) {
+          search.start();
+        }
+      });
+    }
+
+    disconnectedCallback() {
+      search.removeWidgets(this.widgets);
+    }
+
+    attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+      if (oldValue === null || name !== 'experience-id') {
+        return;
+      }
+
+      if (oldValue !== newValue) {
+        this.disconnectedCallback();
+        this.connectedCallback();
+      }
+    }
+  }
+  customElements.define('algolia-experience', AlgoliaExperience);
 }

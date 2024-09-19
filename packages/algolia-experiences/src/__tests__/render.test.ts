@@ -27,28 +27,15 @@ describe('configToIndex', () => {
     error.mockClear();
   });
 
-  it('errors if element not found', () => {
-    const elements = new Map<string, HTMLElement>();
-    const config = { id: 'foo', indexName: 'bar', name: 'Foo', blocks: [] };
-    const result = configToIndex(config, elements);
-    expect(result).toEqual([]);
-    expect(error).toHaveBeenCalledTimes(1);
-    expect(error).toHaveBeenCalledWith(
-      '[Algolia Experiences] Element with id foo not found'
-    );
-  });
-
   it('returns index with widgets', () => {
-    const elements = new Map<string, HTMLElement>([
-      ['foo', document.createElement('div')],
-    ]);
+    const element = document.createElement('div');
     const config: Configuration = {
       id: 'foo',
       indexName: 'bar',
       name: 'Foo',
       blocks: [{ type: 'ais.hits', parameters: {}, children: [] }],
     };
-    const result = configToIndex(config, elements);
+    const result = configToIndex(config, element);
     expect(result).toHaveLength(1);
     expect(result[0].getIndexName()).toEqual('bar');
     expect(result[0].getIndexId()).toEqual('foo');
@@ -57,9 +44,7 @@ describe('configToIndex', () => {
   });
 
   it('maps to the right widget types', () => {
-    const elements = new Map<string, HTMLElement>([
-      ['foo', document.createElement('div')],
-    ]);
+    const element = document.createElement('div');
     const config: Configuration = {
       id: 'foo',
       indexName: 'bar',
@@ -121,7 +106,7 @@ describe('configToIndex', () => {
         },
       ],
     };
-    const result = configToIndex(config, elements);
+    const result = configToIndex(config, element);
     expect(result).toHaveLength(1);
     expect(result[0].getWidgets()).toHaveLength(config.blocks.length);
     expect(result[0].getWidgets().map((w) => w.$$type)).toEqual([
@@ -167,9 +152,7 @@ describe('configToIndex', () => {
           ),
       });
       const search = instantsearch({ searchClient });
-      const elements = new Map<string, HTMLElement>([
-        ['foo', document.createElement('div')],
-      ]);
+      const element = document.createElement('div');
       const config: Configuration = {
         id: 'foo',
         indexName: 'bar',
@@ -210,11 +193,11 @@ describe('configToIndex', () => {
           },
         ],
       };
-      const result = configToIndex(config, elements);
+      const result = configToIndex(config, element);
       expect(result).toHaveLength(1);
       expect(result[0].getWidgets()).toHaveLength(1);
 
-      expect(elements.get('foo')?.innerHTML).toMatchInlineSnapshot(`
+      expect(element.innerHTML).toMatchInlineSnapshot(`
         <div>
         </div>
       `);
@@ -223,7 +206,7 @@ describe('configToIndex', () => {
       search.start();
       await wait(100);
 
-      expect(elements.get('foo')?.innerHTML).toMatchInlineSnapshot(`
+      expect(element.innerHTML).toMatchInlineSnapshot(`
         <div>
           <div class="ais-Hits">
             <ol class="ais-Hits-list">
@@ -276,9 +259,7 @@ describe('configToIndex', () => {
           ),
       });
       const search = instantsearch({ searchClient });
-      const elements = new Map<string, HTMLElement>([
-        ['foo', document.createElement('div')],
-      ]);
+      const element = document.createElement('div');
 
       const config: Configuration = {
         id: 'foo',
@@ -292,12 +273,12 @@ describe('configToIndex', () => {
         ],
       };
 
-      const result = configToIndex(config, elements);
+      const result = configToIndex(config, element);
 
       expect(result).toHaveLength(1);
       expect(result[0].getWidgets()).toHaveLength(1);
 
-      expect(elements.get('foo')?.innerHTML).toMatchInlineSnapshot(`
+      expect(element.innerHTML).toMatchInlineSnapshot(`
         <div>
         </div>
       `);
@@ -306,7 +287,7 @@ describe('configToIndex', () => {
       search.start();
       await wait(100);
 
-      expect(elements.get('foo')?.innerHTML).toMatchInlineSnapshot(`
+      expect(element.innerHTML).toMatchInlineSnapshot(`
         <div>
           <div class="ais-Panel">
             <div class="ais-Panel-header">
@@ -351,9 +332,7 @@ describe('configToIndex', () => {
         ),
       });
       const search = instantsearch({ searchClient });
-      const elements = new Map<string, HTMLElement>([
-        ['foo', document.createElement('div')],
-      ]);
+      const element = document.createElement('div');
 
       const config: Configuration = {
         id: 'foo',
@@ -367,12 +346,12 @@ describe('configToIndex', () => {
         ],
       };
 
-      const result = configToIndex(config, elements);
+      const result = configToIndex(config, element);
 
       expect(result).toHaveLength(1);
       expect(result[0].getWidgets()).toHaveLength(1);
 
-      expect(elements.get('foo')).toBeEmptyDOMElement();
+      expect(element).toBeEmptyDOMElement();
 
       search.addWidgets(result);
       search.start();
@@ -400,9 +379,7 @@ describe('configToIndex', () => {
           ),
       });
       const search = instantsearch({ searchClient });
-      const elements = new Map<string, HTMLElement>([
-        ['foo', document.createElement('div')],
-      ]);
+      const element = document.createElement('div');
 
       const config: Configuration = {
         id: 'foo',
@@ -416,12 +393,12 @@ describe('configToIndex', () => {
         ],
       };
 
-      const result = configToIndex(config, elements);
+      const result = configToIndex(config, element);
 
       expect(result).toHaveLength(1);
       expect(result[0].getWidgets()).toHaveLength(1);
 
-      expect(elements.get('foo')?.innerHTML).toMatchInlineSnapshot(`
+      expect(element?.innerHTML).toMatchInlineSnapshot(`
         <div>
         </div>
       `);
@@ -430,7 +407,7 @@ describe('configToIndex', () => {
       search.start();
       await wait(100);
 
-      expect(elements.get('foo')?.innerHTML).toMatchInlineSnapshot(`
+      expect(element?.innerHTML).toMatchInlineSnapshot(`
         <div>
           <div class="ais-Pagination ais-Pagination--noRefinement">
             <ul class="ais-Pagination-list">

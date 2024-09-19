@@ -1,18 +1,20 @@
 import type { Settings } from './get-information';
 import type { Block, Configuration } from './types';
 
+const cache = new Map<string, Configuration>();
+
 export function fetchConfiguration(
-  ids: string[],
+  id: string,
   settings: Settings
-): Promise<Configuration[]> {
-  return Promise.all(
-    ids.map((id) =>
-      getExperience({
-        id,
-        ...settings,
-      })
-    )
-  );
+): Promise<Configuration> {
+  if (cache.has(id)) {
+    return Promise.resolve(cache.get(id)!);
+  }
+
+  return getExperience({ id, ...settings }).then((experience) => {
+    cache.set(id, experience);
+    return experience;
+  });
 }
 
 export type Experience = {

@@ -1,5 +1,9 @@
 import { setupInstantSearch } from './setup-instantsearch';
 
 if (typeof window === 'object') {
-  document.addEventListener('DOMContentLoaded', setupInstantSearch);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupInstantSearch);
+  } else {
+    setupInstantSearch();
+  }
 }

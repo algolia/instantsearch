@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Algolia Experiences local demo</title>
+    <title>Algolia Experiences demo</title>
     <link
       rel="stylesheet"
       href="/packages/instantsearch.css/themes/satellite-min.css"
@@ -63,13 +63,27 @@
       name="algolia-configuration"
       content='{"appId":"F4T6CUV2AH","apiKey":"72d500963987bc97ff899d350a00f7a8"}'
     />
+    <script>
+      let isMounted = false;
+      function toggle() {
+        if (isMounted) {
+          document.querySelector('algolia-experience').remove();
+          isMounted = false;
+          return;
+        }
+        const element = document.createElement('template');
+        document.querySelector('main').appendChild(element);
+        element.outerHTML = `
+          <algolia-experience experience-id="category:historical" />
+        `;
+        isMounted = true;
+      }
+    </script>
   </head>
   <body>
     <main>
       <h2>Buy historical books now!</h2>
-      <algolia-experience
-        experience-id="category:historical"
-      ></algolia-experience>
+      <button onclick="toggle()">Toggle</button>
     </main>
   </body>
 </html>
