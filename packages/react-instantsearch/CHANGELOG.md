@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.13.2](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.13.1...react-instantsearch@7.13.2) (2024-09-24)
+
+
+### Bug Fixes
+
+* **links:** ensure cmd-click always opens in new tab ([#5994](https://github.com/algolia/instantsearch/issues/5994)) ([1109091](https://github.com/algolia/instantsearch/commit/1109091cb090e25bb9871c9105cfc16cfe5501e5))
+
+
+
+
+
 ## [7.13.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.13.0...react-instantsearch@7.13.1) (2024-09-10)
 
 

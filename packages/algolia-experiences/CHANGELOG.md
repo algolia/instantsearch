@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.2.0...algolia-experiences@1.3.0) (2024-09-24)
+
+
+### Features
+
+* **experiences:** implement custom element ([#6364](https://github.com/algolia/instantsearch/issues/6364)) ([7eeffe6](https://github.com/algolia/instantsearch/commit/7eeffe6862e3f6d8bf02ba778772ae3550e8ab42))
+
+
+
+
+
 # [1.2.0](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.1.0...algolia-experiences@1.2.0) (2024-09-17)
 
 
