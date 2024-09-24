@@ -168,6 +168,10 @@ const config = {
         '@typescript-eslint/no-unnecessary-type-assertion': 'error',
         '@typescript-eslint/method-signature-style': 'error',
         '@typescript-eslint/unbound-method': 'error',
+        'import/no-unresolved': [
+          'error',
+          { ignore: ['instantsearch-core/types'] },
+        ],
       },
     },
     {

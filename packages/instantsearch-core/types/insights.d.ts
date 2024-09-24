@@ -1,4 +1,4 @@
-import type { Hit } from './results';
+import type { Hit } from './results.d.ts';
 import type {
   InsightsMethodMap as _InsightsMethodMap,
   InsightsClient as _InsightsClient,
