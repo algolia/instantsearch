@@ -7,7 +7,6 @@ export * from './component';
 export * from './instantsearch';
 export * from './middleware';
 export * from './router';
-export * from './insights';
 
 // widget-related
 export * from './connector';

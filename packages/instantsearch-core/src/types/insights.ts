@@ -1,8 +1,8 @@
-import type { Hit } from 'instantsearch-core';
 import type {
   InsightsMethodMap as _InsightsMethodMap,
   InsightsClient as _InsightsClient,
 } from 'search-insights';
+import type { Hit } from './results';
 
 export type {
   Init as InsightsInit,
