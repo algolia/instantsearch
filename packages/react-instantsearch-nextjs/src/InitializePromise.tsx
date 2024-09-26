@@ -10,7 +10,7 @@ import {
 
 import { htmlEscapeJsonString } from './htmlEscape';
 
-import type { SearchOptions } from 'instantsearch.js';
+import type { InitialResults, SearchOptions } from 'instantsearch.js';
 
 type InitializePromiseProps = {
   /**
@@ -20,6 +20,33 @@ type InitializePromiseProps = {
    */
   nonce?: string;
 };
+
+const createInsertHTML =
+  ({
+    options,
+    results,
+    nonce,
+  }: {
+    options: { inserted: boolean };
+    results: InitialResults;
+    nonce?: string;
+  }) =>
+  () => {
+    if (options.inserted) {
+      return <></>;
+    }
+    options.inserted = true;
+    return (
+      <script
+        nonce={nonce}
+        dangerouslySetInnerHTML={{
+          __html: `window[Symbol.for("InstantSearchInitialResults")] = ${htmlEscapeJsonString(
+            JSON.stringify(results)
+          )}`,
+        }}
+      />
+    );
+  };
 
 export function InitializePromise({ nonce }: InitializePromiseProps) {
   const search = useInstantSearchContext();
@@ -62,24 +89,9 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
     });
 
   const injectInitialResults = () => {
-    let inserted = false;
+    const options = { inserted: false };
     const results = getInitialResults(search.mainIndex, requestParamsList);
-    insertHTML(() => {
-      if (inserted) {
-        return <></>;
-      }
-      inserted = true;
-      return (
-        <script
-          nonce={nonce}
-          dangerouslySetInnerHTML={{
-            __html: `window[Symbol.for("InstantSearchInitialResults")] = ${htmlEscapeJsonString(
-              JSON.stringify(results)
-            )}`,
-          }}
-        />
-      );
-    });
+    insertHTML(createInsertHTML({ options, results, nonce }));
   };
 
   if (waitForResultsRef?.current === null) {
@@ -106,6 +118,7 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
             return;
           }
           injectInitialResults();
+          search.dispose();
         })
     );
   }
