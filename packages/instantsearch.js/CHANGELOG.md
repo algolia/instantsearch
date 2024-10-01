@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.75.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.74.2...instantsearch.js@4.75.0) (2024-10-01)
+
+
+### Features
+
+* **sessionStorage:** allow a cache key suffix ([#6370](https://github.com/algolia/instantsearch/issues/6370)) ([96e73ae](https://github.com/algolia/instantsearch/commit/96e73aece53b5cb78a3823359ae3b340afd5d295))
+
+
+
+
+
 ## [4.74.2](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.74.1...instantsearch.js@4.74.2) (2024-09-24)
 
 

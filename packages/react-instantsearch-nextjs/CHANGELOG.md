@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.13](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.3.12...react-instantsearch-nextjs@0.3.13) (2024-10-01)
+
+
+### Bug Fixes
+
+* **next-app-router:** mitigate memory leak ([#6372](https://github.com/algolia/instantsearch/issues/6372)) ([b24c858](https://github.com/algolia/instantsearch/commit/b24c858b66de50d8dde6c85ce7ffc90ab0f712e8))
+
+
+
+
+
 ## [0.3.12](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.3.11...react-instantsearch-nextjs@0.3.12) (2024-09-24)
 
 **Note:** Version bump only for package react-instantsearch-nextjs
