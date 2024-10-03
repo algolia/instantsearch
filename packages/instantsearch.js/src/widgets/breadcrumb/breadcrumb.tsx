@@ -43,14 +43,10 @@ const renderer =
     };
     templates: BreadcrumbTemplates;
   }): Renderer<BreadcrumbRenderState, Partial<BreadcrumbWidgetParams>> =>
-  (
-    { canRefine, createURL, instantSearchInstance, items, refine },
-    isFirstRendering
-  ) => {
+  ({ canRefine, createURL, items, refine }, isFirstRendering) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
 

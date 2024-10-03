@@ -227,7 +227,7 @@ function blockToWidget(child: Block, container: HTMLElement): Widget[] {
     return [
       panel<typeof widgets['ais.refinementList']>({
         templates: {
-          header,
+          header: () => header,
           collapseButtonText: ({ collapsed }) => (
             // @TODO: put this style in a stylesheet
             <span style="cursor: pointer">{collapsed ? '+' : '-'}</span>

@@ -9,7 +9,6 @@ import {
 import { createRouterMiddleware } from '../middlewares/createRouterMiddleware';
 import index from '../widgets/index/index';
 
-import createHelpers from './createHelpers';
 import {
   createDocumentationMessageGenerator,
   createDocumentationLink,
@@ -214,7 +213,6 @@ class InstantSearch<
   public mainHelper: AlgoliaSearchHelper | null;
   public mainIndex: IndexWidget;
   public started: boolean;
-  public templatesConfig: Record<string, unknown>;
   public renderState: RenderState = {};
   public _stalledSearchDelay: number;
   public _searchStalledTimer: any;
@@ -263,7 +261,6 @@ Use \`InstantSearch.status === "stalled"\` instead.`
 
     const {
       indexName = '',
-      numberLocale,
       initialUiState = {} as TUiState,
       routing = null,
       insights = undefined,
@@ -349,10 +346,6 @@ See documentation: ${createDocumentationLink({
     this.onStateChange = onStateChange;
 
     this.started = false;
-    this.templatesConfig = {
-      helpers: createHelpers({ numberLocale }),
-      compileOptions: {},
-    };
 
     this._stalledSearchDelay = stalledSearchDelay;
     this._searchStalledTimer = null;

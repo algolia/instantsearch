@@ -1,24 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Template can configure compilation options 1`] = `
-<div
-  dangerouslySetInnerHTML={
-    {
-      "__html": "it configures compilation delimiters",
-    }
-  }
-/>
-`;
-
-exports[`Template can configure custom rootTagName 1`] = `
-<span
-  dangerouslySetInnerHTML={
-    {
-      "__html": "",
-    }
-  }
-/>
-`;
+exports[`Template can configure custom rootTagName 1`] = `<span />`;
 
 exports[`Template can have Fragment as rootTagName with Preact template 1`] = `
 <div>
@@ -28,54 +10,9 @@ exports[`Template can have Fragment as rootTagName with Preact template 1`] = `
 </div>
 `;
 
-exports[`Template can have Fragment as rootTagName with simple string 1`] = `
-<div>
-  test
-</div>
-`;
-
-exports[`Template can have Fragment as rootTagName with string template 1`] = `
-<div>
-  Hello 
-  <span>
-    world
-  </span>
-   !
-</div>
-`;
-
-exports[`Template can have Fragment as rootTagName with string template 2`] = `
-<div>
-  
-  
-  Hello 
-  <span>
-    world2
-  </span>
-   !
-</div>
-`;
-
 exports[`Template forward rootProps to the first node 1`] = `
 <div
   className="className"
-  dangerouslySetInnerHTML={
-    {
-      "__html": "",
-    }
-  }
   onClick={[Function]}
 />
-`;
-
-exports[`Template remounts RawHtml component when using Fragment with a string template 1`] = `
-<div>
-  <div>
-    
-    <div>
-      Hello
-    </div>
-    test
-  </div>
-</div>
 `;

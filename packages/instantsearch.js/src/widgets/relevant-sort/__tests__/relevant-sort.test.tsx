@@ -27,36 +27,31 @@ describe('relevantSort', () => {
 
       search.addWidgets([relevantSort({ container })]);
 
-      // @MAJOR Once Hogan.js and string-based templates are removed,
-      // `search.start()` can be moved to the test body and the following
-      // assertion can go away.
-      expect(async () => {
-        search.start();
-
-        await wait(0);
-      }).not.toWarnDev();
+      search.start();
 
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-RelevantSort"
-  >
-    <div
-      class="ais-RelevantSort-text"
-    />
-    <button
-      class="ais-RelevantSort-button"
-      type="button"
-    >
-      <span>
-        See all results
-      </span>
-    </button>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-RelevantSort"
+          >
+            <div
+              class="ais-RelevantSort-text"
+            >
+
+            </div>
+            <button
+              class="ais-RelevantSort-button"
+              type="button"
+            >
+              <span>
+                See all results
+              </span>
+            </button>
+          </div>
+        </div>
+      `);
     });
 
     test('renders with templates using `html`', async () => {
@@ -93,31 +88,31 @@ describe('relevantSort', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-RelevantSort"
-  >
-    <div
-      class="ais-RelevantSort-text"
-    >
-      <p>
-        Click the button to
-        see all results.
-      </p>
-    </div>
-    <button
-      class="ais-RelevantSort-button"
-      type="button"
-    >
-      <span>
-        <span>
-          See all results
-        </span>
-      </span>
-    </button>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-RelevantSort"
+          >
+            <div
+              class="ais-RelevantSort-text"
+            >
+              <p>
+                Click the button to
+                see all results.
+              </p>
+            </div>
+            <button
+              class="ais-RelevantSort-button"
+              type="button"
+            >
+              <span>
+                <span>
+                  See all results
+                </span>
+              </span>
+            </button>
+          </div>
+        </div>
+      `);
     });
 
     test('renders with templates using JSX', async () => {
@@ -158,32 +153,32 @@ describe('relevantSort', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-RelevantSort"
-  >
-    <div
-      class="ais-RelevantSort-text"
-    >
-      <p>
-        Click the button to
-         
-        see all results.
-      </p>
-    </div>
-    <button
-      class="ais-RelevantSort-button"
-      type="button"
-    >
-      <span>
-        <span>
-          See all results
-        </span>
-      </span>
-    </button>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-RelevantSort"
+          >
+            <div
+              class="ais-RelevantSort-text"
+            >
+              <p>
+                Click the button to
+
+                see all results.
+              </p>
+            </div>
+            <button
+              class="ais-RelevantSort-button"
+              type="button"
+            >
+              <span>
+                <span>
+                  See all results
+                </span>
+              </span>
+            </button>
+          </div>
+        </div>
+      `);
     });
 
     function createMockedSearchClient() {

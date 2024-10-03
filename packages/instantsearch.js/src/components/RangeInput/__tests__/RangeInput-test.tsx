@@ -30,8 +30,8 @@ describe('RangeInput', () => {
     },
     templateProps: {
       templates: {
-        separatorText: 'to',
-        submitText: 'Go',
+        separatorText: () => 'to',
+        submitText: () => 'Go',
       },
     },
     refine: () => {},
