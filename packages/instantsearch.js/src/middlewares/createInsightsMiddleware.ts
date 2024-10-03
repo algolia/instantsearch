@@ -289,6 +289,21 @@ export function createInsightsMiddleware<
           );
         }
 
+        // By the time the first query is sent, the token would not be set by the insights
+        // onChange callbacks. It is explicitly being set here so that the first query
+        // has the initial tokens set and inturn a second query isn't automatically made
+        // when the onChange callback actually changes the state.
+        if (
+          typeof instantSearchInstance._insights !== 'boolean' &&
+          instantSearchInstance._insights?.insightsInitParams
+        ) {
+          if (instantSearchInstance._insights.insightsInitParams.authenticatedUserToken) {
+            setUserTokenToSearch(instantSearchInstance._insights.insightsInitParams.authenticatedUserToken, true);
+          } else if (instantSearchInstance._insights.insightsInitParams.userToken) {
+            setUserTokenToSearch(instantSearchInstance._insights.insightsInitParams.userToken, true);
+          }
+        }
+
         // This updates userToken which is set explicitly by `aa('setUserToken', userToken)`
         insightsClient('onUserTokenChange', setUserTokenToSearch, {
           immediate: true,
