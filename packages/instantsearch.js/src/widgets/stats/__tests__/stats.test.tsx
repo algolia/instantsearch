@@ -82,18 +82,18 @@ describe('stats', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-Stats"
-  >
-    <span
-      class="ais-Stats-text"
-    >
-      2 results found in 0ms
-    </span>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-Stats"
+          >
+            <span
+              class="ais-Stats-text"
+            >
+              2 results found in 0ms
+            </span>
+          </div>
+        </div>
+      `);
 
       fireEvent.input(within(searchBoxContainer).getByRole('searchbox'), {
         target: { value: 'query with no results' },
@@ -102,18 +102,18 @@ describe('stats', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-Stats"
-  >
-    <span
-      class="ais-Stats-text"
-    >
-      No results found in 0ms
-    </span>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-Stats"
+          >
+            <span
+              class="ais-Stats-text"
+            >
+              No results found in 0ms
+            </span>
+          </div>
+        </div>
+      `);
     });
 
     test('renders with templates using `html`', async () => {
@@ -151,29 +151,29 @@ describe('stats', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-Stats"
-  >
-    <span
-      class="ais-Stats-text"
-    >
-      <span>
-        <strong>
-
-        </strong>
-         returned
-        2
-        result
-        s
-         found in
-        0
-        ms
-      </span>
-    </span>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-Stats"
+          >
+            <span
+              class="ais-Stats-text"
+            >
+              <span>
+                <strong>
+                  
+                </strong>
+                 returned 
+                2
+                result
+                s
+                 found in
+                0
+                ms
+              </span>
+            </span>
+          </div>
+        </div>
+      `);
 
       fireEvent.input(within(searchBoxContainer).getByRole('searchbox'), {
         target: { value: 'query with no results' },
@@ -182,20 +182,20 @@ describe('stats', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-Stats"
-  >
-    <span
-      class="ais-Stats-text"
-    >
-      <span>
-        No results
-      </span>
-    </span>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-Stats"
+          >
+            <span
+              class="ais-Stats-text"
+            >
+              <span>
+                No results
+              </span>
+            </span>
+          </div>
+        </div>
+      `);
     });
 
     test('renders with templates using JSX', async () => {
@@ -235,29 +235,29 @@ describe('stats', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-Stats"
-  >
-    <span
-      class="ais-Stats-text"
-    >
-      <span>
-        <strong>
-
-        </strong>
-         returned
-        2
-        result
-        s
-         found in
-        0
-        ms
-      </span>
-    </span>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-Stats"
+          >
+            <span
+              class="ais-Stats-text"
+            >
+              <span>
+                <strong>
+                  
+                </strong>
+                 returned 
+                2
+                result
+                s
+                 found in
+                0
+                ms
+              </span>
+            </span>
+          </div>
+        </div>
+      `);
 
       fireEvent.input(within(searchBoxContainer).getByRole('searchbox'), {
         target: { value: 'query with no results' },
@@ -266,20 +266,20 @@ describe('stats', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-Stats"
-  >
-    <span
-      class="ais-Stats-text"
-    >
-      <span>
-        No results
-      </span>
-    </span>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-Stats"
+          >
+            <span
+              class="ais-Stats-text"
+            >
+              <span>
+                No results
+              </span>
+            </span>
+          </div>
+        </div>
+      `);
     });
 
     type CustomHit = { name: string; description: string };

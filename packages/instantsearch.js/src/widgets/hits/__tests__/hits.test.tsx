@@ -14,7 +14,6 @@ import { Fragment, h } from 'preact';
 
 import instantsearch from '../../../index.es';
 import { createInsightsMiddleware } from '../../../middlewares';
-import configure from '../../configure/configure';
 import searchBox from '../../search-box/search-box';
 import hits from '../hits';
 

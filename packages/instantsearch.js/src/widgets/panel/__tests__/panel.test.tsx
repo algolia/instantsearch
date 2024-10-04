@@ -109,7 +109,7 @@ describe('panel', () => {
             >
               <span>
                 <span>
-                  Header
+                  Header 
                   (10 results)
                 </span>
               </span>
@@ -145,7 +145,7 @@ describe('panel', () => {
               <a
                 href="#"
               >
-                Footer
+                Footer 
                 (10 results)
               </a>
             </div>
@@ -200,7 +200,7 @@ describe('panel', () => {
             >
               <span>
                 <span>
-                  Header
+                  Header 
                   (10 results)
                 </span>
               </span>
@@ -236,7 +236,7 @@ describe('panel', () => {
               <a
                 href="#"
               >
-                Footer
+                Footer 
                 (10 results)
               </a>
             </div>

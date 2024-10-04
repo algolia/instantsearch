@@ -39,7 +39,7 @@ describe('relevantSort', () => {
             <div
               class="ais-RelevantSort-text"
             >
-
+              
             </div>
             <button
               class="ais-RelevantSort-button"
@@ -162,7 +162,7 @@ describe('relevantSort', () => {
             >
               <p>
                 Click the button to
-
+                 
                 see all results.
               </p>
             </div>
