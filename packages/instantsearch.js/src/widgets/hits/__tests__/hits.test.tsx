@@ -364,7 +364,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
                     <span
                       class="ais-Highlight-nonHighlighted"
                     >
-                      Apple iPhone
+                      Apple iPhone 
                     </span>
                     <mark
                       class="ais-Highlight-highlighted"
@@ -380,7 +380,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
                     <mark
                       class="ais-ReverseHighlight-highlighted"
                     >
-                      Apple iPhone
+                      Apple iPhone 
                     </mark>
                     <span
                       class="ais-ReverseHighlight-nonHighlighted"
@@ -396,7 +396,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
                     <span
                       class="ais-Snippet-nonHighlighted"
                     >
-                      A
+                      A 
                     </span>
                     <mark
                       class="ais-Snippet-highlighted"
@@ -417,7 +417,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
                     <mark
                       class="ais-ReverseSnippet-highlighted"
                     >
-                      A
+                      A 
                     </mark>
                     <span
                       class="ais-ReverseSnippet-nonHighlighted"
@@ -442,7 +442,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
                     <span
                       class="ais-Highlight-nonHighlighted"
                     >
-                      Samsung Galaxy
+                      Samsung Galaxy 
                     </span>
                     <mark
                       class="ais-Highlight-highlighted"
@@ -458,7 +458,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
                     <mark
                       class="ais-ReverseHighlight-highlighted"
                     >
-                      Samsung Galaxy
+                      Samsung Galaxy 
                     </mark>
                     <span
                       class="ais-ReverseHighlight-nonHighlighted"
@@ -474,7 +474,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
                     <span
                       class="ais-Snippet-nonHighlighted"
                     >
-                      A
+                      A 
                     </span>
                     <mark
                       class="ais-Snippet-highlighted"
@@ -495,7 +495,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
                     <mark
                       class="ais-ReverseSnippet-highlighted"
                     >
-                      A
+                      A 
                     </mark>
                     <span
                       class="ais-ReverseSnippet-nonHighlighted"
@@ -530,7 +530,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
               src="https://via.placeholder.com/550x250"
             />
             <p>
-              No results for
+              No results for 
               <q>
                 query with no results
               </q>
@@ -618,7 +618,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
                     <span
                       class="ais-Highlight-nonHighlighted"
                     >
-                      Apple iPhone
+                      Apple iPhone 
                     </span>
                     <mark
                       class="ais-Highlight-highlighted"
@@ -634,7 +634,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
                     <mark
                       class="ais-ReverseHighlight-highlighted"
                     >
-                      Apple iPhone
+                      Apple iPhone 
                     </mark>
                     <span
                       class="ais-ReverseHighlight-nonHighlighted"
@@ -650,7 +650,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
                     <span
                       class="ais-Snippet-nonHighlighted"
                     >
-                      A
+                      A 
                     </span>
                     <mark
                       class="ais-Snippet-highlighted"
@@ -671,7 +671,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
                     <mark
                       class="ais-ReverseSnippet-highlighted"
                     >
-                      A
+                      A 
                     </mark>
                     <span
                       class="ais-ReverseSnippet-nonHighlighted"
@@ -696,7 +696,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
                     <span
                       class="ais-Highlight-nonHighlighted"
                     >
-                      Samsung Galaxy
+                      Samsung Galaxy 
                     </span>
                     <mark
                       class="ais-Highlight-highlighted"
@@ -712,7 +712,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
                     <mark
                       class="ais-ReverseHighlight-highlighted"
                     >
-                      Samsung Galaxy
+                      Samsung Galaxy 
                     </mark>
                     <span
                       class="ais-ReverseHighlight-nonHighlighted"
@@ -728,7 +728,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
                     <span
                       class="ais-Snippet-nonHighlighted"
                     >
-                      A
+                      A 
                     </span>
                     <mark
                       class="ais-Snippet-highlighted"
@@ -749,7 +749,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
                     <mark
                       class="ais-ReverseSnippet-highlighted"
                     >
-                      A
+                      A 
                     </mark>
                     <span
                       class="ais-ReverseSnippet-nonHighlighted"
@@ -784,7 +784,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
               src="https://via.placeholder.com/550x250"
             />
             <p>
-              No results for
+              No results for 
               <q>
                 query with no results
               </q>
