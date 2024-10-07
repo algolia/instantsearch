@@ -1,11 +1,13 @@
 import { renderTemplate } from '../renderTemplate';
 
+import type { Template } from '../../../types';
+
 describe('renderTemplate', () => {
   it('expect to process templates as function', () => {
     const templateKey = 'test';
     const data = { type: 'functions' };
-    const templates = {
-      test: (d: typeof data) => `it works with ${d.type}`,
+    const templates: { [key: string]: Template<typeof data> } = {
+      test: (d) => `it works with ${d.type}`,
     };
 
     const actual = renderTemplate({
@@ -15,6 +17,40 @@ describe('renderTemplate', () => {
     });
 
     const expectation = 'it works with functions';
+
+    expect(actual).toBe(expectation);
+  });
+
+  it('expect to process templates as html function', () => {
+    const templateKey = 'test';
+    const data = { type: 'functions' };
+    const templates: { [key: string]: Template<typeof data> } = {
+      test: (d, { html }) => html`<p>it works with ${d.type}</p>`,
+    };
+
+    const actual = renderTemplate({
+      templateKey,
+      templates,
+      data,
+    });
+
+    expect(actual).toEqual(expect.objectContaining({ type: 'p' }));
+  });
+
+  it('expect to process templates as string', () => {
+    const templateKey = 'test';
+    const data = { type: 'functions' };
+    const templates = {
+      test: 'it works with simple strings',
+    };
+
+    const actual = renderTemplate({
+      templateKey,
+      templates,
+      data,
+    });
+
+    const expectation = 'it works with simple strings';
 
     expect(actual).toBe(expectation);
   });
@@ -40,21 +76,12 @@ describe('renderTemplate', () => {
         templates: { test: 10 },
       });
 
-    const actual3 = () =>
-      renderTemplate({
-        templateKey: 'test',
-        // @ts-expect-error wrong usage
-        templates: { test: 'test' },
-      });
-
     const expectation0 = `Template must be 'function', was 'undefined' (key: test)`;
     const expectation1 = `Template must be 'function', was 'object' (key: test)`;
     const expectation2 = `Template must be 'function', was 'number' (key: test)`;
-    const expectation3 = `Template must be 'function', was 'string' (key: test)`;
 
     expect(() => actual0()).toThrow(expectation0);
     expect(() => actual1()).toThrow(expectation1);
     expect(() => actual2()).toThrow(expectation2);
-    expect(() => actual3()).toThrow(expectation3);
   });
 });

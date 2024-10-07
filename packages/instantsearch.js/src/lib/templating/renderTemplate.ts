@@ -6,6 +6,7 @@ import {
   ReverseSnippet,
   Snippet,
 } from '../../helpers/components';
+import { warning } from '../utils';
 
 import type { Templates } from '../../types';
 import type { SendEventForHits } from '../utils/createSendEventForHits';
@@ -22,6 +23,14 @@ export function renderTemplate({
   sendEvent?: SendEventForHits;
 }) {
   const template = templates[templateKey];
+
+  if (typeof template === 'string') {
+    warning(
+      template.indexOf('<') === -1,
+      `Template '${templateKey}' is a string, it will be rendered as text, not as html`
+    );
+    return template;
+  }
 
   if (typeof template !== 'function') {
     throw new Error(

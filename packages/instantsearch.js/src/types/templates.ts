@@ -34,5 +34,9 @@ export type TemplateWithSendEvent<TTemplateData = void> = (
 ) => VNode | VNode[] | string;
 
 export type Templates = {
-  [key: string]: Template<any> | TemplateWithSendEvent<any> | undefined;
+  [key: string]:
+    | Template<any>
+    | TemplateWithSendEvent<any>
+    | string
+    | undefined;
 };
