@@ -1,11 +1,13 @@
 import { renderTemplate } from '../renderTemplate';
 
+import type { Template } from '../../../types';
+
 describe('renderTemplate', () => {
   it('expect to process templates as function', () => {
     const templateKey = 'test';
     const data = { type: 'functions' };
-    const templates = {
-      test: (d: typeof data) => `it works with ${d.type}`,
+    const templates: { [key: string]: Template<typeof data> } = {
+      test: (d) => `it works with ${d.type}`,
     };
 
     const actual = renderTemplate({
@@ -22,8 +24,8 @@ describe('renderTemplate', () => {
   it('expect to process templates as html function', () => {
     const templateKey = 'test';
     const data = { type: 'functions' };
-    const templates = {
-      test: (d: typeof data, { html }) => html`<p>it works with ${d.type}</p>`,
+    const templates: { [key: string]: Template<typeof data> } = {
+      test: (d, { html }) => html`<p>it works with ${d.type}</p>`,
     };
 
     const actual = renderTemplate({
