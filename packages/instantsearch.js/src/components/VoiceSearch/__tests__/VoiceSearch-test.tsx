@@ -25,8 +25,8 @@ const defaultProps: VoiceSearchProps = {
     transcript: '',
   },
   templates: {
-    buttonText: 'button',
-    status: 'status',
+    buttonText: () => 'button',
+    status: () => 'status',
   },
 };
 
@@ -72,7 +72,7 @@ describe('VoiceSearch', () => {
         isListening: true,
         templates: {
           buttonText: ({ isListening }) => (isListening ? 'Stop' : 'Start'),
-          status: ``,
+          status: () => ``,
         },
       };
 
@@ -88,7 +88,7 @@ describe('VoiceSearch', () => {
         isListening: false,
         templates: {
           buttonText: ({ isListening }) => (isListening ? 'Stop' : 'Start'),
-          status: ``,
+          status: () => ``,
         },
       };
 
@@ -109,14 +109,24 @@ describe('VoiceSearch', () => {
           errorCode: undefined,
         },
         templates: {
-          buttonText: ``,
-          status: `
-            <p>status: {{status}}</p>
-            <p>errorCode: {{errorCode}}</p>
-            <p>isListening: {{isListening}}</p>
-            <p>transcript: {{transcript}}</p>
-            <p>isSpeechFinal: {{isSpeechFinal}}</p>
-            <p>isBrowserSupported: {{isBrowserSupported}}</p>
+          buttonText: () => ``,
+          status: (
+            {
+              status,
+              errorCode,
+              isListening,
+              transcript,
+              isSpeechFinal,
+              isBrowserSupported,
+            },
+            { html }
+          ) => html`
+            <p>status: ${status}</p>
+            <p>errorCode: ${errorCode}</p>
+            <p>isListening: ${isListening}</p>
+            <p>transcript: ${transcript}</p>
+            <p>isSpeechFinal: ${isSpeechFinal}</p>
+            <p>isBrowserSupported: ${isBrowserSupported}</p>
           `,
         },
       };
