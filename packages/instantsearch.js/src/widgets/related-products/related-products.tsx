@@ -66,7 +66,6 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
         defaultTemplates: {} as unknown as Required<
           RelatedProductsTemplates<THit>
         >,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
 

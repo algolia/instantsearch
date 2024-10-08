@@ -23,69 +23,62 @@ describe('voiceSearch', () => {
 
       search.addWidgets([voiceSearch({ container })]);
 
-      // @MAJOR Once Hogan.js and string-based templates are removed,
-      // `search.start()` can be moved to the test body and the following
-      // assertion can go away.
-      expect(async () => {
-        search.start();
-
-        await wait(0);
-      }).not.toWarnDev();
+      search.start();
 
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-VoiceSearch"
-  >
-    <button
-      class="ais-VoiceSearch-button"
-      disabled=""
-      title="Search by voice (not supported on this browser)"
-      type="button"
-    >
-      <svg
-        fill="none"
-        height="16"
-        stroke="currentColor"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        viewBox="0 0 24 24"
-        width="16"
-      >
-        <path
-          d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"
-          fill="none"
-        />
-        <path
-          d="M19 10v2a7 7 0 0 1-14 0v-2"
-        />
-        <line
-          x1="12"
-          x2="12"
-          y1="19"
-          y2="23"
-        />
-        <line
-          x1="8"
-          x2="16"
-          y1="23"
-          y2="23"
-        />
-      </svg>
-    </button>
-    <div
-      class="ais-VoiceSearch-status"
-    >
-      <p>
-        
-      </p>
-    </div>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-VoiceSearch"
+          >
+            <button
+              class="ais-VoiceSearch-button"
+              disabled=""
+              title="Search by voice (not supported on this browser)"
+              type="button"
+            >
+              <svg
+                fill="none"
+                height="16"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="16"
+              >
+                <path
+                  d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"
+                  fill="none"
+                />
+                <path
+                  d="M19 10v2a7 7 0 0 1-14 0v-2"
+                />
+                <line
+                  x1="12"
+                  x2="12"
+                  y1="19"
+                  y2="23"
+                />
+                <line
+                  x1="8"
+                  x2="16"
+                  y1="23"
+                  y2="23"
+                />
+              </svg>
+            </button>
+            <div
+              class="ais-VoiceSearch-status"
+            >
+              <p>
+                
+              </p>
+            </div>
+          </div>
+        </div>
+      `);
     });
 
     test('renders with templates using `html`', async () => {
@@ -117,34 +110,34 @@ describe('voiceSearch', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-VoiceSearch"
-  >
-    <button
-      class="ais-VoiceSearch-button"
-      disabled=""
-      title="Search by voice (not supported on this browser)"
-      type="button"
-    >
-      <span>
-        Start
-      </span>
-    </button>
-    <div
-      class="ais-VoiceSearch-status"
-    >
-      <div
-        class="NOT-LISTENING"
-      >
-        <span>
-          initial
-        </span>
-      </div>
-    </div>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-VoiceSearch"
+          >
+            <button
+              class="ais-VoiceSearch-button"
+              disabled=""
+              title="Search by voice (not supported on this browser)"
+              type="button"
+            >
+              <span>
+                Start
+              </span>
+            </button>
+            <div
+              class="ais-VoiceSearch-status"
+            >
+              <div
+                class="NOT-LISTENING"
+              >
+                <span>
+                  initial
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `);
     });
 
     test('renders with templates using JSX', async () => {
@@ -176,34 +169,34 @@ describe('voiceSearch', () => {
       await wait(0);
 
       expect(container).toMatchInlineSnapshot(`
-<div>
-  <div
-    class="ais-VoiceSearch"
-  >
-    <button
-      class="ais-VoiceSearch-button"
-      disabled=""
-      title="Search by voice (not supported on this browser)"
-      type="button"
-    >
-      <span>
-        Start
-      </span>
-    </button>
-    <div
-      class="ais-VoiceSearch-status"
-    >
-      <div
-        class="NOT-LISTENING"
-      >
-        <span>
-          initial
-        </span>
-      </div>
-    </div>
-  </div>
-</div>
-`);
+        <div>
+          <div
+            class="ais-VoiceSearch"
+          >
+            <button
+              class="ais-VoiceSearch-button"
+              disabled=""
+              title="Search by voice (not supported on this browser)"
+              type="button"
+            >
+              <span>
+                Start
+              </span>
+            </button>
+            <div
+              class="ais-VoiceSearch-status"
+            >
+              <div
+                class="NOT-LISTENING"
+              >
+                <span>
+                  initial
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `);
     });
   });
 });
