@@ -129,7 +129,6 @@ export function useConnector<
         scopedResults,
         state: helper.state,
         renderState: search.renderState,
-        templatesConfig: search.templatesConfig,
         createURL: parentIndex.createURL,
         searchMetadata: {
           isSearchStalled: search.status === 'stalled',

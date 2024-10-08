@@ -48,11 +48,10 @@ const renderer =
     ClearRefinementsRenderState,
     Partial<ClearRefinementsWidgetParams>
   > =>
-  ({ refine, canRefine, instantSearchInstance }, isFirstRendering) => {
+  ({ refine, canRefine }, isFirstRendering) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;
