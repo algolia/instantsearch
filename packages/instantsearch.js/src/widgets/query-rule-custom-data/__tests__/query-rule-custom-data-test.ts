@@ -165,10 +165,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
 
       test('applies custom template', () => {
         const helper = createFakeHelper();
+        const defaultTemplate = () => 'default';
         const widget = queryRuleCustomData({
           container: document.createElement('div'),
           templates: {
-            default: 'default',
+            default: defaultTemplate,
           },
         });
 
@@ -184,7 +185,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
         const { templates } = firstRender.props as QueryRuleCustomDataProps;
 
         expect(templates).toEqual({
-          default: 'default',
+          default: defaultTemplate,
         });
       });
     });

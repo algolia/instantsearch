@@ -158,14 +158,12 @@ const renderer =
       page,
       processingTimeMS,
       query,
-      instantSearchInstance,
     },
     isFirstRendering
   ) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
 
