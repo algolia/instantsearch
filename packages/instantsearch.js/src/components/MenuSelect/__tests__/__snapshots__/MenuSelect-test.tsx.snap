@@ -11,31 +11,22 @@ exports[`MenuSelect should render <MenuSelect /> with custom templates 1`] = `
   >
     <option
       className="option"
-      dangerouslySetInnerHTML={
-        {
-          "__html": "defaultOption",
-        }
-      }
       value=""
-    />
+    >
+      defaultOption
+    </option>
     <option
       className="option"
-      dangerouslySetInnerHTML={
-        {
-          "__html": "foo",
-        }
-      }
       value="foo"
-    />
+    >
+      foo
+    </option>
     <option
       className="option"
-      dangerouslySetInnerHTML={
-        {
-          "__html": "bar",
-        }
-      }
       value="bar"
-    />
+    >
+      bar
+    </option>
   </select>
 </div>
 `;
@@ -51,31 +42,22 @@ exports[`MenuSelect should render <MenuSelect /> with items 1`] = `
   >
     <option
       className="option"
-      dangerouslySetInnerHTML={
-        {
-          "__html": "See all",
-        }
-      }
       value=""
-    />
+    >
+      See all
+    </option>
     <option
       className="option"
-      dangerouslySetInnerHTML={
-        {
-          "__html": "foo (0)",
-        }
-      }
       value="foo"
-    />
+    >
+      foo (0)
+    </option>
     <option
       className="option"
-      dangerouslySetInnerHTML={
-        {
-          "__html": "bar (0)",
-        }
-      }
       value="bar"
-    />
+    >
+      bar (0)
+    </option>
   </select>
 </div>
 `;
@@ -91,13 +73,10 @@ exports[`MenuSelect should render <MenuSelect /> with no items 1`] = `
   >
     <option
       className="option"
-      dangerouslySetInnerHTML={
-        {
-          "__html": "See all",
-        }
-      }
       value=""
-    />
+    >
+      See all
+    </option>
   </select>
 </div>
 `;

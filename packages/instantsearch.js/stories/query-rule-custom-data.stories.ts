@@ -55,37 +55,6 @@ storiesOf('Metadata/QueryRuleCustomData', module)
     }, searchOptions)
   )
   .add(
-    'with Hogan',
-    withHits(({ search, container, instantsearch }) => {
-      const widgetContainer = document.createElement('div');
-      const description = document.createElement('p');
-      description.innerHTML = 'Type <q>music</q> and a banner will appear.';
-
-      container.appendChild(description);
-      container.appendChild(widgetContainer);
-
-      search.addWidgets([
-        instantsearch.widgets.queryRuleCustomData({
-          container: widgetContainer,
-          templates: {
-            default: `
-            {{#items}}
-              {{#banner}}
-                <section>
-                  <h2>{{title}}</h2>
-
-                  <a href="{{link}}">
-                    <img src="{{banner}}" alt="{{title}}">
-                  </a>
-                </section>
-              {{/banner}}
-            {{/items}}`,
-          },
-        }),
-      ]);
-    }, searchOptions)
-  )
-  .add(
     'with default and single banner',
     withHits(({ search, container, instantsearch }) => {
       const widgetContainer = document.createElement('div');

@@ -240,7 +240,6 @@ const renderer =
       createURL,
       searchForItems,
       isFromSearch,
-      instantSearchInstance,
       toggleShowMore,
       isShowingMore,
       hasExhaustiveItems,
@@ -251,12 +250,10 @@ const renderer =
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       renderState.searchBoxTemplateProps = prepareTemplateProps({
         defaultTemplates: searchBoxDefaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates: searchBoxTemplates,
       });
       return;

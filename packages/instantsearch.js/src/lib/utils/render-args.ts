@@ -13,7 +13,6 @@ export function createInitArgs(
     instantSearchInstance,
     state: helper.state,
     renderState: instantSearchInstance.renderState,
-    templatesConfig: instantSearchInstance.templatesConfig,
     createURL: parent.createURL,
     scopedResults: [],
     searchMetadata: {
@@ -40,7 +39,6 @@ export function createRenderArgs(
     scopedResults: parent.getScopedResults(),
     state: results && '_state' in results ? results._state : helper.state,
     renderState: instantSearchInstance.renderState,
-    templatesConfig: instantSearchInstance.templatesConfig,
     createURL: parent.createURL,
     searchMetadata: {
       isSearchStalled: instantSearchInstance.status === 'stalled',

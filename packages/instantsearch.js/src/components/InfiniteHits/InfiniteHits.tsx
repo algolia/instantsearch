@@ -81,7 +81,6 @@ const InfiniteHits = ({
   results,
   hits,
   insights,
-  bindEvent,
   sendEvent,
   hasShowPrevious,
   showPrevious,
@@ -188,7 +187,6 @@ const InfiniteHits = ({
                 return index;
               },
             }}
-            bindEvent={bindEvent}
             sendEvent={sendEvent}
           />
         ))}
