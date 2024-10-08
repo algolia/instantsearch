@@ -14,7 +14,6 @@ import { Fragment, h } from 'preact';
 
 import instantsearch from '../../../index.es';
 import { createInsightsMiddleware } from '../../../middlewares';
-import configure from '../../configure/configure';
 import searchBox from '../../search-box/search-box';
 import hits from '../hits';
 
@@ -202,17 +201,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
         hits({ container }),
       ]);
 
-      // @MAJOR Once Hogan.js and string-based templates are removed,
-      // `search.start()` can be moved to the test body and the following
-      // assertion can go away.
-      expect(async () => {
-        search.start();
-        // prevent warning from insights view event because insightsClient isn't yet loaded
-        // @ts-ignore
-        search.helper!.state.userToken = 'userToken';
-
-        await wait(0);
-      }).not.toWarnDev();
+      search.start();
+      // prevent warning from insights view event because insightsClient isn't yet loaded
+      // @ts-ignore
+      search.helper!.state.userToken = 'userToken';
 
       await wait(0);
 
@@ -1143,187 +1135,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
           positions: [2],
         },
         widgetType: 'ais.hits',
-      });
-    });
-
-    test('sends `click` event with `bindEvent`', async () => {
-      const container = document.createElement('div');
-      const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
-
-      const search = instantsearch({
-        indexName: 'indexName',
-        searchClient: createMockedSearchClient(),
-      });
-
-      search.use(insights);
-
-      search.addWidgets([
-        hits({
-          container,
-          templates: {
-            item: (item, bindEvent) => `
-              <button type='button' ${bindEvent('click', item, 'Item Clicked')}>
-                ${item.name}
-              </button>
-            `,
-          },
-        }),
-      ]);
-      search.start();
-      await wait(0);
-
-      // view event by render
-      expect(onEvent).toHaveBeenCalledTimes(1);
-      onEvent.mockClear();
-
-      fireEvent.click(getByText(container, 'Name 1'));
-      // The custom one only
-      expect(onEvent).toHaveBeenCalledTimes(1);
-      expect(onEvent.mock.calls[0][0]).toEqual({
-        eventType: 'click',
-        hits: [
-          {
-            __hitIndex: 0,
-            __position: 1,
-            objectID: '1',
-            name: 'Name 1',
-          },
-        ],
-        insightsMethod: 'clickedObjectIDsAfterSearch',
-        payload: {
-          eventName: 'Item Clicked',
-          index: 'indexName',
-          objectIDs: ['1'],
-          positions: [1],
-        },
-        widgetType: 'ais.hits',
-      });
-    });
-
-    test('sends `conversion` event with `bindEvent`', async () => {
-      const container = document.createElement('div');
-      const { insights, onEvent } = createInsightsMiddlewareWithOnEvent();
-
-      const search = instantsearch({
-        indexName: 'indexName',
-        searchClient: createMockedSearchClient(),
-      });
-
-      search.use(insights);
-
-      search.addWidgets([
-        hits({
-          container,
-          templates: {
-            item: (item, bindEvent) => `
-              <button type='button' ${bindEvent(
-                'conversion',
-                item,
-                'Product Ordered'
-              )}>
-                ${item.name}
-              </button>
-            `,
-          },
-        }),
-      ]);
-      search.start();
-      await wait(0);
-
-      // view event by render
-      expect(onEvent).toHaveBeenCalledTimes(1);
-      onEvent.mockClear();
-
-      fireEvent.click(getByText(container, 'Name 2'));
-
-      // The custom one + default click
-      expect(onEvent).toHaveBeenCalledTimes(2);
-      expect(onEvent.mock.calls[0][0]).toEqual({
-        eventType: 'conversion',
-        hits: [
-          {
-            __hitIndex: 1,
-            __position: 2,
-            objectID: '2',
-            name: 'Name 2',
-          },
-        ],
-        insightsMethod: 'convertedObjectIDsAfterSearch',
-        payload: {
-          eventName: 'Product Ordered',
-          index: 'indexName',
-          objectIDs: ['2'],
-        },
-        widgetType: 'ais.hits',
-      });
-      expect(onEvent.mock.calls[1][0]).toEqual({
-        eventType: 'click',
-        eventModifier: 'internal',
-        hits: [
-          {
-            __position: 2,
-            objectID: '2',
-            name: 'Name 2',
-          },
-        ],
-        insightsMethod: 'clickedObjectIDsAfterSearch',
-        payload: {
-          eventName: 'Hit Clicked',
-          index: 'indexName',
-          objectIDs: ['2'],
-          positions: [2],
-        },
-        widgetType: 'ais.hits',
-      });
-    });
-
-    describe('old insights methods', () => {
-      it('sends event', async () => {
-        const aa = jest.fn();
-        const hitsPerPage = 2;
-        const search = instantsearch({
-          indexName: 'indexName',
-          searchClient: createMockedSearchClient({
-            hitsPerPage,
-            clickAnalytics: true,
-          }),
-          insightsClient: aa,
-        });
-
-        const container = document.createElement('div');
-
-        search.addWidgets([configure({ hitsPerPage })]);
-
-        search.addWidgets([
-          hits({
-            container,
-            templates: {
-              item: (item) => `
-                <button type='button' ${instantsearch.insights(
-                  'clickedObjectIDsAfterSearch',
-                  {
-                    objectIDs: [item.objectID],
-                    eventName: 'Add to cart',
-                  }
-                )}>
-                  ${item.name}
-                </button>
-              `,
-            },
-          }),
-        ]);
-        search.start();
-        await wait(0);
-
-        fireEvent.click(getByText(container, 'Name 1'));
-        expect(aa).toHaveBeenCalledTimes(1);
-        expect(aa).toHaveBeenCalledWith('clickedObjectIDsAfterSearch', {
-          eventName: 'Add to cart',
-          index: 'indexName',
-          objectIDs: ['1'],
-          positions: [1],
-          queryID: 'test-query-id',
-        });
       });
     });
 
