@@ -13,12 +13,10 @@ import Template from '../Template';
 import type { TemplateProps } from '../Template';
 
 function getProps({
-  templates = { test: '' },
+  templates = { test: () => '' },
   data = {},
   templateKey = 'test',
   rootProps = {},
-  useCustomCompileOptions = {},
-  templatesConfig = { helpers: {}, compileOptions: {} },
   ...props
 }: Partial<TemplateProps>) {
   return {
@@ -27,26 +25,12 @@ function getProps({
     data,
     templateKey,
     rootProps,
-    useCustomCompileOptions,
-    templatesConfig,
   };
 }
 
 describe('Template', () => {
   afterEach(() => {
     warning.cache = {};
-  });
-
-  it('can configure compilation options', () => {
-    const props = getProps({
-      templates: { test: 'it configures compilation <%options%>' },
-      data: { options: 'delimiters' },
-      useCustomCompileOptions: { test: true },
-      templatesConfig: { helpers: {}, compileOptions: { delimiters: '<% %>' } },
-    });
-    const wrapper = mount(<Template {...props} />);
-
-    expect(wrapper).toMatchSnapshot();
   });
 
   it('can configure custom rootTagName', () => {
@@ -56,60 +40,12 @@ describe('Template', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
-  it('can have Fragment as rootTagName with string template', () => {
-    const props = getProps({
-      rootTagName: 'fragment',
-      templates: { test: 'Hello <span>{{name}}</span> !' },
-      data: { name: 'world' },
-    });
-    const wrapper = render(<Template {...props} />);
-
-    expect(wrapper.container).toMatchSnapshot();
-
-    props.data = { name: 'world2' };
-
-    wrapper.rerender(<Template {...props} />);
-
-    expect(wrapper.container).toMatchSnapshot();
-  });
-
   it('can have Fragment as rootTagName with Preact template', () => {
     const props = getProps({
       rootTagName: 'fragment',
       templates: { test: () => <span>test</span> },
     });
     const wrapper = render(<Template {...props} />);
-
-    expect(wrapper.container).toMatchSnapshot();
-  });
-
-  it('can have Fragment as rootTagName with simple string', () => {
-    const props = getProps({
-      rootTagName: 'fragment',
-      templates: { test: 'test' },
-    });
-    const wrapper = render(<Template {...props} />);
-
-    expect(wrapper.container).toMatchSnapshot();
-  });
-
-  it('remounts RawHtml component when using Fragment with a string template', () => {
-    const props = getProps({
-      rootTagName: 'fragment',
-      templates: { test: 'test' },
-    });
-    const wrapper = render(
-      <div>
-        <Template {...props} />
-      </div>
-    );
-    wrapper.rerender(
-      <div>
-        <div>Hello</div>
-        {/* It won't rerender if props don't change in testing-library */}
-        <Template {...props} data={{ a: 'a' }} />
-      </div>
-    );
 
     expect(wrapper.container).toMatchSnapshot();
   });
@@ -123,29 +59,6 @@ describe('Template', () => {
     const wrapper = mount(<Template {...props} />);
 
     expect(wrapper).toMatchSnapshot();
-  });
-
-  it('warns when using string-based templates', () => {
-    expect(() =>
-      render(
-        <Template
-          {...getProps({ templates: { test: 'test', test2: () => 'test' } })}
-        />
-      )
-    )
-      .toWarnDev(`[InstantSearch.js]: Hogan.js and string-based templates are deprecated and will not be supported in InstantSearch.js 5.x.
-
-You can replace them with function-form templates and use either the provided \`html\` function or JSX templates.
-
-String-based templates: test.
-
-See: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/#upgrade-templates`);
-  });
-
-  it('does not warn when using exclusively function-based templates', () => {
-    expect(() =>
-      render(<Template {...getProps({ templates: { test: () => 'test' } })} />)
-    ).not.toWarnDev();
   });
 
   describe('shouldComponentUpdate', () => {
@@ -185,7 +98,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/js/#up
       wrapper.setProps({
         templateKey: 'newTemplateKey',
         templates: {
-          newTemplateKey: '',
+          newTemplateKey: () => '',
         },
       });
 

@@ -23,9 +23,9 @@ const defaultProps: AnswersProps = {
   },
   templateProps: {
     templates: {
-      header: 'header',
-      loader: 'loader',
-      item: 'item',
+      header: () => 'header',
+      loader: () => 'loader',
+      item: () => 'item',
     },
   },
 };

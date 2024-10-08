@@ -46,14 +46,10 @@ const renderer =
     };
     templates: NumericMenuTemplates;
   }): Renderer<NumericMenuRenderState, Partial<NumericMenuWidgetParams>> =>
-  (
-    { createURL, instantSearchInstance, refine, items },
-    isFirstRendering: boolean
-  ) => {
+  ({ createURL, refine, items }, isFirstRendering: boolean) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;
