@@ -1152,7 +1152,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
             "isSearchStalled": false,
           },
           "state": Anything,
-          "templatesConfig": {},
         }
       `
       );
