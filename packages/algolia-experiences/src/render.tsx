@@ -1,7 +1,7 @@
 /** @jsx h */
 import { getPropertyByPath } from 'instantsearch.js/es/lib/utils';
-import { index, panel } from 'instantsearch.js/es/widgets';
 import { carousel } from 'instantsearch.js/es/templates';
+import { index, panel } from 'instantsearch.js/es/widgets';
 import { h, Fragment } from 'preact';
 
 import { banner } from './banner';
