@@ -5,13 +5,13 @@ import {
   createMultiSearchResponse,
   createSearchClient,
 } from '@instantsearch/mocks';
+import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { wait } from '@instantsearch/testutils';
 import instantsearch from 'instantsearch.js';
 
 import { configToIndex, injectStyles } from '../render';
 
 import type { Configuration } from '../types';
-import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 
 describe('injectStyles', () => {
   it('should inject styles', () => {
@@ -382,8 +382,8 @@ describe('configToIndex', () => {
         </section>
       </div>
       `);
-    })
-  })
+    });
+  });
 
   describe('panel widgets', () => {
     it('maps header parameter to panel header', async () => {
