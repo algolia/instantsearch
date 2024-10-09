@@ -28,7 +28,6 @@ const defaultProps: BreadcrumbProps = {
   templateProps: prepareTemplateProps({
     defaultTemplates,
     templates: {},
-    templatesConfig: {},
   }),
 };
 

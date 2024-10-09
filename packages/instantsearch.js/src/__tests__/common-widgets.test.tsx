@@ -418,7 +418,7 @@ const testSetups: TestSetupsMap<TestSuites> = {
           container: document.body.appendChild(document.createElement('div')),
           ...widgetParams,
           templates: {
-            labelText: label,
+            labelText: label ? () => label : undefined,
           },
         }),
       ])

@@ -44,11 +44,10 @@ const renderer =
     };
     templates: AnswersTemplates;
   }): Renderer<AnswersRenderState, Partial<AnswersWidgetParams>> =>
-  ({ hits, isLoading, instantSearchInstance }, isFirstRendering) => {
+  ({ hits, isLoading }, isFirstRendering) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;

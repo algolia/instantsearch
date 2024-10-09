@@ -54,7 +54,6 @@ const renderer = (
     hasMapMoveSinceLastRefine,
     isRefinedWithMap,
     widgetParams,
-    instantSearchInstance,
   },
   isFirstRendering
 ) => {
@@ -136,7 +135,6 @@ const renderer = (
     );
 
     renderState.templateProps = prepareTemplateProps({
-      templatesConfig: instantSearchInstance.templatesConfig,
       templates,
     });
 

@@ -24,13 +24,12 @@ describe('GeoSearchControls', () => {
 
   const templateProps = prepareTemplateProps({
     defaultTemplates: {
-      toggle: 'toggle',
-      redo: 'redo',
-      reset: 'reset',
-      HTMLMarker: '',
+      toggle: () => 'toggle',
+      redo: () => 'redo',
+      reset: () => 'reset',
+      HTMLMarker: () => '',
     },
     templates: {},
-    templatesConfig: {},
   });
 
   const defaultProps = {

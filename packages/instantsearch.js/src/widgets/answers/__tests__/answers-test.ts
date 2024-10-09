@@ -136,7 +136,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/answers/js/
             item: 'item',
           },
           templates: {
-            loader: 'loading...',
+            loader: () => 'loading...',
             item: (hit) => `title: ${hit.title}`,
           },
         }),

@@ -26,7 +26,7 @@ jest.mock('preact', () => {
 });
 
 const templates: RelevantSortTemplates = {
-  text: '',
+  text: () => '',
   button: ({ isRelevantSorted }) => {
     return isRelevantSorted ? 'See all results' : 'See relevant results';
   },
