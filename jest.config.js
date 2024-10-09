@@ -54,6 +54,7 @@ const config = {
     '^instantsearch.js/(.*)$': '<rootDir>/packages/instantsearch.js/$1',
     '^instantsearch-ui-components/(.*)$':
       '<rootDir>/packages/instantsearch-ui-components/$1',
+    '^instantsearch-core/(.*)$': '<rootDir>/packages/instantsearch-core/$1',
   },
   modulePathIgnorePatterns: [
     '<rootDir>/packages/create-instantsearch-app/src/templates',
