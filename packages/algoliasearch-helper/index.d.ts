@@ -99,6 +99,11 @@ declare namespace algoliasearchHelper {
     searchOnlyWithDerivedHelpers(): this;
 
     /**
+     * Private method to search using composition API
+     */
+    searchWithComposition(): this;
+
+    /**
      * Private method for search, without triggering events
      */
     searchWithoutTriggeringOnStateChange(): this;
