@@ -193,6 +193,22 @@ type RecommendWidget<
   >;
 };
 
+type CompositionWidget<
+  TWidgetDescription extends WidgetDescription & WidgetParams
+> = {
+  dependsOn: 'composition';
+  getCompositionId: () => string;
+  getHelper: () => Helper;
+  getWidgetParameters?: (
+    state: SearchParameters,
+    widgetParametersOptions: {
+      uiState: Expand<
+        Partial<TWidgetDescription['indexUiState'] & IndexUiState>
+      >;
+    }
+  ) => SearchParameters;
+};
+
 type RequiredWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
   /**
    * Identifier for connectors and widgets.
@@ -334,7 +350,11 @@ export type Widget<
     UiStateLifeCycle<TWidgetDescription> &
     RenderStateLifeCycle<TWidgetDescription>
 > &
-  (SearchWidget<TWidgetDescription> | RecommendWidget<TWidgetDescription>);
+  (
+    | SearchWidget<TWidgetDescription>
+    | RecommendWidget<TWidgetDescription>
+    | CompositionWidget<TWidgetDescription>
+  );
 
 export type { IndexWidget } from '../widgets';
 

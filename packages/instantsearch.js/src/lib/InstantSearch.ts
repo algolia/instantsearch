@@ -1,5 +1,5 @@
 import EventEmitter from '@algolia/events';
-import algoliasearchHelper from 'algoliasearch-helper';
+import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 
 import { createInsightsMiddleware } from '../middlewares/createInsightsMiddleware';
 import {
@@ -20,6 +20,7 @@ import {
   warning,
   setIndexHelperState,
   isIndexWidget,
+  walkIndex,
 } from './utils';
 import version from './version';
 
@@ -225,6 +226,7 @@ class InstantSearch<
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
   public _hasSearchWidget: boolean = false;
   public _hasRecommendWidget: boolean = false;
+  public _hasCompositionWidget: boolean = false;
   public _insights: InstantSearchOptions['insights'];
   public middleware: Array<{
     creator: Middleware<TUiState>;
@@ -589,6 +591,98 @@ See documentation: ${createDocumentationLink({
 
       if (this._hasRecommendWidget) {
         mainHelper.recommend();
+      }
+
+      if (this._hasCompositionWidget) {
+        const compositionWidgets: Array<Widget & { dependsOn: 'composition' }> =
+          [];
+        walkIndex(this.mainIndex, (widget) => {
+          compositionWidgets.push(
+            ...(widget.getWidgets() as Widget[]).filter(
+              (child) => child.dependsOn === 'composition'
+            )
+          );
+        });
+
+        if (compositionWidgets.length > 1) {
+          throw new Error(
+            'Only one composition widget is allowed per InstantSearch instance.'
+          );
+        }
+
+        if (
+          !(this.client as any).transporter ||
+          !(this.client as any).transporter.request
+        ) {
+          throw new Error(
+            'Your client needs to have a transporter with a `request` method to use the composition widget (algoliasearch v5).'
+          );
+        }
+
+        const compositionWidget = compositionWidgets[0];
+
+        const compositionId = compositionWidget.getCompositionId();
+        const compositionHelper = compositionWidget.getHelper();
+        const searchParameters = compositionHelper.state;
+        const params = compositionWidget.getWidgetParameters!(
+          new SearchParameters(),
+          {
+            uiState: compositionWidget.getWidgetUiState!(
+              {},
+              {
+                helper: compositionHelper,
+                searchParameters,
+              }
+            ),
+          }
+        ).getQueryParams();
+        // params.facets = ([] as string[]).concat(
+        //   ...(searchParameters.facets || []),
+        //   ...searchParameters.disjunctiveFacets,
+        //   // ...searchParameters.hierarchicalFacets,
+        // );
+        delete params.hitsPerPage;
+        delete params.highlightPreTag;
+        delete params.highlightPostTag;
+        delete params.maxValuesPerFacet;
+
+        (this.client as any).transporter
+          .request({
+            method: 'POST',
+            path: `/1/compositions/${compositionId}/run`,
+            data: { params },
+          })
+          .then((response: Awaited<ReturnType<typeof this.client.search>>) => {
+            const results = new algoliasearchHelper.SearchResults(
+              new algoliasearchHelper.SearchParameters(),
+              response.results as any
+            );
+            compositionWidget.render!({
+              helper: compositionWidget.getHelper(),
+              parent: this.mainIndex,
+              instantSearchInstance: this as unknown as InstantSearch<
+                UiState,
+                UiState
+              >,
+              results,
+              scopedResults: [
+                {
+                  helper: compositionWidget.getHelper(),
+                  indexId: compositionId,
+                  results,
+                },
+              ],
+              state: new SearchParameters(),
+              renderState: this.renderState,
+              templatesConfig: {},
+              createURL: () => '',
+              searchMetadata: {
+                isSearchStalled: false,
+              },
+              status: 'idle',
+              error: undefined,
+            });
+          });
       }
 
       return mainHelper;
