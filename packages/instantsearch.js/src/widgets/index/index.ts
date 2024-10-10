@@ -191,7 +191,11 @@ function getLocalWidgetsSearchParameters(
   const { initialSearchParameters, ...rest } = widgetSearchParametersOptions;
 
   return widgets.reduce<SearchParameters>((state, widget) => {
-    if (!widget.getWidgetSearchParameters || isIndexWidget(widget)) {
+    if (
+      !widget.getWidgetSearchParameters ||
+      isIndexWidget(widget) ||
+      widget.$$type === 'ais.composition'
+    ) {
       return state;
     }
 
@@ -213,6 +217,7 @@ function getLocalWidgetsRecommendParameters(
   return widgets.reduce((state, widget) => {
     if (
       !isIndexWidget(widget) &&
+      widget.$$type !== 'ais.composition' &&
       widget.dependsOn === 'recommend' &&
       widget.getWidgetParameters
     ) {
@@ -274,6 +279,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
   let derivedHelper: DerivedHelper | null = null;
   let lastValidSearchParameters: SearchParameters | null = null;
   let hasRecommendWidget: boolean = false;
+  let hasCompositionWidget: boolean = false;
   let hasSearchWidget: boolean = false;
 
   return {
@@ -396,10 +402,17 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
         if (localInstantSearchInstance && widget.dependsOn === 'recommend') {
           localInstantSearchInstance._hasRecommendWidget = true;
+        } else if (
+          localInstantSearchInstance &&
+          widget.dependsOn === 'composition'
+        ) {
+          localInstantSearchInstance._hasCompositionWidget = true;
         } else if (localInstantSearchInstance) {
           localInstantSearchInstance._hasSearchWidget = true;
         } else if (widget.dependsOn === 'recommend') {
           hasRecommendWidget = true;
+        } else if (widget.dependsOn === 'composition') {
+          hasCompositionWidget = true;
         } else {
           hasSearchWidget = true;
         }
@@ -786,6 +799,9 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       if (hasRecommendWidget) {
         instantSearchInstance._hasRecommendWidget = true;
       }
+      if (hasCompositionWidget) {
+        instantSearchInstance._hasCompositionWidget = true;
+      }
       if (hasSearchWidget) {
         instantSearchInstance._hasSearchWidget = true;
       }
@@ -885,10 +901,13 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
     getWidgetUiState<TUiState extends UiState = UiState>(uiState: TUiState) {
       return localWidgets
-        .filter(isIndexWidget)
+        .filter(
+          (widget) => widget.$$type === 'ais.index'
+          // || widget.$$type === 'ais.composition'
+        )
         .reduce<TUiState>(
           (previousUiState, innerIndex) =>
-            innerIndex.getWidgetUiState(previousUiState),
+            (innerIndex as any).getWidgetUiState(previousUiState),
           {
             ...uiState,
             [indexId]: {
