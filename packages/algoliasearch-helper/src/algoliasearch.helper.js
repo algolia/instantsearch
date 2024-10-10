@@ -168,6 +168,11 @@ AlgoliaSearchHelper.prototype.searchOnlyWithDerivedHelpers = function () {
   return this;
 };
 
+AlgoliaSearchHelper.prototype.searchWithComposition = function () {
+  this._searchWithComposition({ onlyWithDerivedHelpers: true });
+  return this;
+};
+
 /**
  * Sends the recommendation queries set in the state. When the method is
  * called, it triggers a `fetch` event. The results will be available through
@@ -1667,6 +1672,68 @@ AlgoliaSearchHelper.prototype._recommend = function () {
   }
 
   return;
+};
+
+AlgoliaSearchHelper.prototype._searchWithComposition = function () {
+  var state = this.state;
+  var states = [];
+  var mainQueries = [];
+
+  var derivedQueries = this.derivedHelpers.map(function (derivedHelper) {
+    var derivedState = derivedHelper.getModifiedState(state);
+    var derivedStateQueries = derivedState.index
+      ? requestBuilder._getCompositionQueries(derivedState.index, derivedState)
+      : [];
+
+    states.push({
+      state: derivedState,
+      queriesCount: derivedStateQueries.length,
+      helper: derivedHelper,
+    });
+
+    derivedHelper.emit('search', {
+      state: derivedState,
+      results: derivedHelper.lastResults,
+    });
+
+    return derivedStateQueries;
+  });
+
+  var queries = Array.prototype.concat.apply(mainQueries, derivedQueries);
+
+  var queryId = this._queryId++;
+  this._currentNbQueries++;
+
+  if (!queries.length) {
+    return Promise.resolve({ results: [] }).then(
+      this._dispatchAlgoliaResponse.bind(this, states, queryId)
+    );
+  }
+
+  if (queries.length > 1) {
+    throw new Error(
+      'Only one query is allowed when using a composition. Please use the regular search method.'
+    );
+  }
+  var query = queries[0];
+
+  try {
+    this.client.transporter
+      .request({
+        method: 'POST',
+        path: `/1/compositions/${query.indexName}/run`,
+        data: { params: query.params },
+      })
+      .then(this._dispatchAlgoliaResponse.bind(this, states, queryId))
+      .catch(this._dispatchAlgoliaError.bind(this, queryId));
+  } catch (error) {
+    // If we reach this part, we're in an internal error state
+    this.emit('error', {
+      error: error,
+    });
+  }
+
+  return undefined;
 };
 
 /**
