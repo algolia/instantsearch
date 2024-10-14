@@ -1721,7 +1721,7 @@ AlgoliaSearchHelper.prototype._searchWithComposition = function () {
     this.client.transporter
       .request({
         method: 'POST',
-        path: `/1/compositions/${query.indexName}/run`,
+        path: '/1/compositions/' + query.indexName '/run',
         data: { params: query.params },
       })
       .then(this._dispatchAlgoliaResponse.bind(this, states, queryId))
