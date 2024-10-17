@@ -94,17 +94,12 @@ const renderer =
     templates: MenuSelectTemplates;
   }) =>
   (
-    {
-      refine,
-      items,
-      instantSearchInstance,
-    }: MenuRenderState & RendererOptions<MenuConnectorParams>,
+    { refine, items }: MenuRenderState & RendererOptions<MenuConnectorParams>,
     isFirstRendering: boolean
   ) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;

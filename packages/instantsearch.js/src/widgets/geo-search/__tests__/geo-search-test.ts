@@ -121,8 +121,7 @@ describe('GeoSearch', () => {
   });
 
   const createContainer = () => document.createElement('div');
-  const createFakeInstantSearch = () =>
-    createInstantSearch({ templatesConfig: undefined });
+  const createFakeInstantSearch = () => createInstantSearch();
   const createFakeHelper = () =>
     algoliasearchHelper(createSearchClient(), 'indexName');
 
@@ -259,11 +258,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     const helper = createFakeHelper();
     const googleReference = createFakeGoogleReference();
 
+    const toggleTemplate = () => 'Search when the map moves';
     const widget = geoSearch({
       googleReference,
       container,
       templates: {
-        toggle: 'Search when the map move',
+        toggle: toggleTemplate,
       },
     });
 
@@ -292,7 +292,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     expect((firstRender[0] as any).props.templateProps.templates).toEqual({
       HTMLMarker: expect.any(Function),
       reset: expect.any(Function),
-      toggle: 'Search when the map move',
+      toggle: toggleTemplate,
       redo: expect.any(Function),
     });
   });
@@ -1072,7 +1072,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
           }),
         },
         templates: {
-          HTMLMarker: '<p>{{objectID}}</p>',
+          HTMLMarker: ({ objectID }, { html }) => html`<p>${objectID}</p>`,
         },
       });
 
@@ -1106,21 +1106,30 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
           expect.objectContaining({
             __id: '123',
             title: 'ID: 123',
-            template: '<p>123</p>',
+            template: expect.objectContaining({
+              props: expect.objectContaining({ children: '123' }),
+              type: 'p',
+            }),
           }),
         ],
         [
           expect.objectContaining({
             __id: '456',
             title: 'ID: 456',
-            template: '<p>456</p>',
+            template: expect.objectContaining({
+              props: expect.objectContaining({ children: '456' }),
+              type: 'p',
+            }),
           }),
         ],
         [
           expect.objectContaining({
             __id: '789',
             title: 'ID: 789',
-            template: '<p>789</p>',
+            template: expect.objectContaining({
+              props: expect.objectContaining({ children: '789' }),
+              type: 'p',
+            }),
           }),
         ],
       ]);
@@ -1141,7 +1150,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         googleReference,
         container,
         templates: {
-          HTMLMarker: '<p>{{objectID}}</p>',
+          HTMLMarker: ({ objectID }, { html }) => html`<p>${objectID}</p>`,
         },
       });
 
@@ -1174,19 +1183,28 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         [
           expect.objectContaining({
             __id: '123',
-            template: '<p>123</p>',
+            template: expect.objectContaining({
+              props: expect.objectContaining({ children: '123' }),
+              type: 'p',
+            }),
           }),
         ],
         [
           expect.objectContaining({
             __id: '456',
-            template: '<p>456</p>',
+            template: expect.objectContaining({
+              props: expect.objectContaining({ children: '456' }),
+              type: 'p',
+            }),
           }),
         ],
         [
           expect.objectContaining({
             __id: '789',
-            template: '<p>789</p>',
+            template: expect.objectContaining({
+              props: expect.objectContaining({ children: '789' }),
+              type: 'p',
+            }),
           }),
         ],
       ]);

@@ -51,19 +51,6 @@ storiesOf('Results/Hits', module)
     })
   )
   .add(
-    'with highlight helper',
-    withHits(({ search, container, instantsearch }) => {
-      search.addWidgets([
-        instantsearch.widgets.hits({
-          container,
-          templates: {
-            item: '{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}',
-          },
-        }),
-      ]);
-    })
-  )
-  .add(
     'with reverseHighlight function',
     withHits(({ search, container, instantsearch }) => {
       search.addWidgets([
@@ -76,19 +63,6 @@ storiesOf('Results/Hits', module)
                 hit,
               });
             },
-          },
-        }),
-      ]);
-    })
-  )
-  .add(
-    'with reverseHighlight helper',
-    withHits(({ search, container, instantsearch }) => {
-      search.addWidgets([
-        instantsearch.widgets.hits({
-          container,
-          templates: {
-            item: '{{#helpers.reverseHighlight}}{ "attribute": "name" }{{/helpers.reverseHighlight}}',
           },
         }),
       ]);
@@ -129,27 +103,6 @@ storiesOf('Results/Hits', module)
     })
   )
   .add(
-    'with snippet helper',
-    withHits(({ search, container, instantsearch }) => {
-      search.addWidgets([
-        instantsearch.widgets.configure({
-          attributesToSnippet: ['name', 'description'],
-        }),
-      ]);
-
-      search.addWidgets([
-        instantsearch.widgets.hits({
-          container,
-          templates: {
-            item: `
-              <h4>{{#helpers.snippet}}{ "attribute": "name", "highlightedTagName": "mark" }{{/helpers.snippet}}</h4>
-              <p>{{#helpers.snippet}}{ "attribute": "description", "highlightedTagName": "mark" }{{/helpers.snippet}}</p>`,
-          },
-        }),
-      ]);
-    })
-  )
-  .add(
     'with reverseSnippet function',
     withHits(({ search, container, instantsearch }) => {
       search.addWidgets([
@@ -180,27 +133,6 @@ storiesOf('Results/Hits', module)
     })
   )
   .add(
-    'with reverseSnippet helper',
-    withHits(({ search, container, instantsearch }) => {
-      search.addWidgets([
-        instantsearch.widgets.configure({
-          attributesToSnippet: ['name', 'description'],
-        }),
-      ]);
-
-      search.addWidgets([
-        instantsearch.widgets.hits({
-          container,
-          templates: {
-            item: `
-              <h4>{{#helpers.reverseSnippet}}{ "attribute": "name", "highlightedTagName": "mark" }{{/helpers.reverseSnippet}}</h4>
-              <p>{{#helpers.reverseSnippet}}{ "attribute": "description", "highlightedTagName": "mark" }{{/helpers.reverseSnippet}}</p>`,
-          },
-        }),
-      ]);
-    })
-  )
-  .add(
     'with insights function',
     withHits(
       ({ search, container, instantsearch }) => {
@@ -223,38 +155,6 @@ storiesOf('Results/Hits', module)
                   Add to cart
                 </button>
               `,
-            },
-          }),
-        ]);
-      },
-      {
-        insightsClient: fakeInsightsClient,
-      }
-    )
-  )
-  .add(
-    'with insights helper',
-    withHits(
-      ({ search, container, instantsearch }) => {
-        search.addWidgets([
-          instantsearch.widgets.configure({
-            attributesToSnippet: ['name', 'description'],
-            clickAnalytics: true,
-          }),
-        ]);
-
-        search.addWidgets([
-          instantsearch.widgets.hits({
-            container,
-            templates: {
-              item: `
-              <h4>{{name}}</h4>
-              <button {{#helpers.insights}} {
-               "method": "clickedObjectIDsAfterSearch",
-               "payload": { "eventName": "Add to cart" }
-              } {{/helpers.insights}}>
-                Add to cart
-              </button>`,
             },
           }),
         ]);

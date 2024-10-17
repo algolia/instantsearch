@@ -87,6 +87,10 @@ module.exports = (api) => {
 
             // false positive (spread)
             'Object.getOwnPropertyDescriptors',
+
+            // @TODO: see when we remove IE11 support
+            'Object.fromEntries',
+            'Object.entries',
           ];
           if (defaultShouldInject && !exclude.includes(name)) {
             throw new Error(
