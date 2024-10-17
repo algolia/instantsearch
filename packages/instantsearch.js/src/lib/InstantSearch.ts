@@ -68,6 +68,12 @@ export type InstantSearchOptions<
   indexName?: string;
 
   /**
+   * If this is passed, the composition API will be used for search.
+   * Multi-index search and recommend is not supported with this option.
+   */
+  composition?: boolean;
+
+  /**
    * The search client to plug to InstantSearch.js
    *
    * Usage:
@@ -206,6 +212,7 @@ class InstantSearch<
 > extends EventEmitter {
   public client: InstantSearchOptions['searchClient'];
   public indexName: string;
+  public composition: InstantSearchOptions['composition'];
   public insightsClient: AlgoliaInsightsClient | null;
   public onStateChange: InstantSearchOptions<TUiState>['onStateChange'] | null =
     null;
@@ -263,6 +270,7 @@ Use \`InstantSearch.status === "stalled"\` instead.`
 
     const {
       indexName = '',
+      composition = false,
       numberLocale,
       initialUiState = {} as TUiState,
       routing = null,
@@ -341,6 +349,7 @@ See documentation: ${createDocumentationLink({
     this.future = future;
     this.insightsClient = insightsClient;
     this.indexName = indexName;
+    this.composition = composition;
     this.helper = null;
     this.mainHelper = null;
     this.mainIndex = index({
@@ -584,7 +593,11 @@ See documentation: ${createDocumentationLink({
       // completely transparent for the rest of the codebase. Only this module
       // is impacted.
       if (this._hasSearchWidget) {
-        mainHelper.searchOnlyWithDerivedHelpers();
+        if (this.composition) {
+          mainHelper.searchWithComposition();
+        } else {
+          mainHelper.searchOnlyWithDerivedHelpers();
+        }
       }
 
       if (this._hasRecommendWidget) {
