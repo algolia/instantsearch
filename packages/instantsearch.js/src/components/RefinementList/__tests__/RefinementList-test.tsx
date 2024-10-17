@@ -4,6 +4,7 @@
 /** @jsx h */
 
 import { render, fireEvent } from '@testing-library/preact';
+import userEvent from '@testing-library/user-event';
 import { h } from 'preact';
 
 import defaultTemplates from '../../../widgets/refinement-list/defaultTemplates';
@@ -14,7 +15,6 @@ import type {
   RefinementListTemplates,
 } from '../../../widgets/refinement-list/refinement-list';
 import type { RefinementListProps } from '../RefinementList';
-import userEvent from '@testing-library/user-event';
 
 const defaultProps = {
   createURL: () => '#',
