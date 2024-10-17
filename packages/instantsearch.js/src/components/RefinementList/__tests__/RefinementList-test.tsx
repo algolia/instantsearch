@@ -4,6 +4,7 @@
 /** @jsx h */
 
 import { render, fireEvent } from '@testing-library/preact';
+import userEvent from '@testing-library/user-event';
 import { h } from 'preact';
 
 import defaultTemplates from '../../../widgets/refinement-list/defaultTemplates';
@@ -660,7 +661,7 @@ describe('RefinementList', () => {
               <label>
                 <input type="radio" checked="${item.isRefined}" />
                 ${item.value}
-              </span>
+              </label>
             `,
         showMoreText: '',
       };
@@ -691,6 +692,58 @@ describe('RefinementList', () => {
       fireEvent.click(checkedItem!);
 
       expect(toggleRefinement).toHaveBeenCalledTimes(0);
+    });
+
+    it('should keep focus on toggled input between re-renders', () => {
+      const templates = {
+        item: (item: RefinementListItemData) => `
+          <label>
+            <input type="checkbox" value="${item.value}" checked="${item.isRefined}" />
+            ${item.value}
+          </label>
+        `,
+      };
+
+      const props: Omit<
+        RefinementListProps<typeof templates>,
+        'facetValues'
+      > = {
+        cssClasses: defaultProps.cssClasses,
+        templateProps: {
+          templatesConfig: {},
+          templates,
+          useCustomCompileOptions: {},
+        },
+        toggleRefinement: () => {},
+        createURL: () => '',
+      };
+
+      const { container, rerender } = render(
+        <RefinementList
+          {...props}
+          facetValues={[
+            { value: 'foo', label: 'foo', count: 1, isRefined: false },
+            { value: 'bar', label: 'bar', count: 1, isRefined: false },
+          ]}
+        />
+      );
+
+      const initialTargetItem = container.querySelector('input[value="foo"]')!;
+      userEvent.click(initialTargetItem);
+      expect(document.activeElement).toBe(initialTargetItem);
+
+      rerender(
+        <RefinementList
+          {...props}
+          facetValues={[
+            { value: 'foo', label: 'foo', count: 1, isRefined: true },
+            { value: 'bar', label: 'bar', count: 1, isRefined: false },
+          ]}
+        />
+      );
+
+      const updatedTargetItem = container.querySelector('input[value="foo"]')!;
+      expect(document.activeElement).toBe(updatedTargetItem);
     });
   });
 });
