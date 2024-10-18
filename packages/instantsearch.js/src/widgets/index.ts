@@ -39,7 +39,6 @@ export { default as menuSelect } from './menu-select/menu-select';
 export { default as numericMenu } from './numeric-menu/numeric-menu';
 export { default as pagination } from './pagination/pagination';
 export { default as panel } from './panel/panel';
-export { default as places } from './places/places';
 export { default as poweredBy } from './powered-by/powered-by';
 export { default as queryRuleContext } from './query-rule-context/query-rule-context';
 export { default as queryRuleCustomData } from './query-rule-custom-data/query-rule-custom-data';

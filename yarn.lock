@@ -8080,7 +8080,7 @@ algoliasearch-helper@3.14.0:
     semver "^5.1.0"
     tunnel-agent "^0.6.0"
 
-"algoliasearch-v5@npm:algoliasearch@5.1.1", algoliasearch@5.1.1, algoliasearch@^3.35.1:
+"algoliasearch-v5@npm:algoliasearch@5.1.1", algoliasearch@5.1.1:
   name algoliasearch-v5
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-5.1.1.tgz#48ac9f0501e746ac1544cbef7192d7efe36b39dd"
@@ -8770,13 +8770,6 @@ atob@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
-
-autocomplete.js@^0.37.0:
-  version "0.37.0"
-  resolved "https://registry.yarnpkg.com/autocomplete.js/-/autocomplete.js-0.37.0.tgz#bcfbfd7bcabe90e90fad4c2b1aaa931379a10c38"
-  integrity sha512-MxYfNb89sl7IRhNdEJv6z8dSfA7lVeU7Dk6m/+/ih0/tPLsbxIM7uPVsnWEUh4j7dFqJktlM7hCeU7jmx6VC8A==
-  dependencies:
-    immediate "^3.2.3"
 
 autoprefixer@10.4.13:
   version "10.4.13"
@@ -17468,11 +17461,6 @@ image-size@^1.0.0:
   dependencies:
     queue "6.0.2"
 
-immediate@^3.2.3:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/immediate/-/immediate-3.3.0.tgz#1aef225517836bcdf7f2a2de2600c79ff0269266"
-  integrity sha512-HR7EVodfFUdQCTIeySw+WDRFJlPcLOJbXfwwZ7Oom6tjsvZ3bOkCDJHehQC3nxJrv7+f9XecwazynjU8e4Vw3Q==
-
 immer@1.10.0:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/immer/-/immer-1.10.0.tgz#bad67605ba9c810275d91e1c2a47d4582e98286d"
@@ -17745,11 +17733,6 @@ inquirer@^8.2.4:
     strip-ansi "^6.0.0"
     through "^2.3.6"
     wrap-ansi "^7.0.0"
-
-insert-css@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/insert-css/-/insert-css-2.0.0.tgz#eb5d1097b7542f4c79ea3060d3aee07d053880f4"
-  integrity sha1-610Ql7dUL0x56jBg067gfQU4gPQ=
 
 insert-module-globals@^7.0.0:
   version "7.2.1"
@@ -24322,16 +24305,6 @@ pkg-up@3.1.0, pkg-up@^3.1.0:
   integrity sha512-nDywThFk1i4BQK4twPQ6TA4RT8bDY96yeuCVBWL3ePARCiEKDRSrNGbFIgUJpLp+XeIR65v8ra7WuJOFUBtkMA==
   dependencies:
     find-up "^3.0.0"
-
-places.js@1.17.1:
-  version "1.17.1"
-  resolved "https://registry.yarnpkg.com/places.js/-/places.js-1.17.1.tgz#fc6ef07f5ee87ec332820d7d03ac4c894a8ff764"
-  integrity sha512-TzDw893Uo3121vmEg0oV5L0HVbxcHUyanaSmnwcMs0Zll1F83/06lNJRcMiiuwNQWIik6xY3BeDDZzpaMaOILA==
-  dependencies:
-    algoliasearch "^3.35.1"
-    autocomplete.js "^0.37.0"
-    events "^3.0.0"
-    insert-css "^2.0.0"
 
 plist@^3.0.1, plist@^3.0.4:
   version "3.0.4"

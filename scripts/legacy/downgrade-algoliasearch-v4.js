@@ -43,12 +43,6 @@ shell.sed(
   '"@algolia/client-common": "4.23.2"$1',
   packageJsonPaths
 );
-shell.sed(
-  '-i',
-  /"places.js\/algoliasearch": "5.*"(,?)/,
-  '"places.js/algoliasearch": "4.23.2"$1',
-  packageJsonPaths
-);
 
 // replace import in examples
 shell.sed(
