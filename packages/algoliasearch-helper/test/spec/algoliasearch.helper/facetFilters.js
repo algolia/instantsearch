@@ -11,11 +11,11 @@ test('The filters should contain the different filters for a single conjunctive 
     facets: [facetName],
   });
 
-  helper.addRefine(facetName, 'value1');
+  helper.addFacetRefinement(facetName, 'value1');
   expect(requestBuilder._getFacetFilters(helper.state)).toEqual([
     facetName + ':value1',
   ]);
-  helper.addRefine(facetName, 'value2');
+  helper.addFacetRefinement(facetName, 'value2');
   expect(requestBuilder._getFacetFilters(helper.state)).toEqual([
     facetName + ':value1',
     facetName + ':value2',
@@ -31,7 +31,7 @@ test('The filters should contain the different filters for a single conjunctive 
     facetName + ':value1',
     facetName + ':value2',
   ]);
-  helper.addRefine(facetName, 'value1');
+  helper.addFacetRefinement(facetName, 'value1');
   expect(requestBuilder._getFacetFilters(helper.state)).toEqual([
     facetName + ':value1',
     facetName + ':value2',

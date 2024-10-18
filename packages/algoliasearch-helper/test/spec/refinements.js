@@ -13,10 +13,10 @@ test('Adding refinements should add an entry to the refinements attribute', func
   });
 
   expect(Object.keys(helper.state.facetsRefinements).length).toBe(0);
-  helper.addRefine(facetName, facetValue);
+  helper.addFacetRefinement(facetName, facetValue);
   expect(Object.keys(helper.state.facetsRefinements).length).toBe(1);
   expect(helper.state.facetsRefinements.facet1).toEqual([facetValue]);
-  helper.addRefine(facetName, facetValue);
+  helper.addFacetRefinement(facetName, facetValue);
   expect(Object.keys(helper.state.facetsRefinements).length).toBe(1);
   helper.removeRefine(facetName, facetValue);
   expect(Object.keys(helper.state.facetsRefinements).length).toBe(1);
@@ -31,11 +31,11 @@ test('Adding several refinements for a single attribute should be handled', func
   });
 
   expect(Object.keys(helper.state.facetsRefinements).length).toBe(0);
-  helper.addRefine(facetName, 'value1');
+  helper.addFacetRefinement(facetName, 'value1');
   expect(Object.keys(helper.state.facetsRefinements[facetName]).length).toBe(1);
-  helper.addRefine(facetName, 'value2');
+  helper.addFacetRefinement(facetName, 'value2');
   expect(Object.keys(helper.state.facetsRefinements[facetName]).length).toBe(2);
-  helper.addRefine(facetName, 'value1');
+  helper.addFacetRefinement(facetName, 'value1');
   expect(Object.keys(helper.state.facetsRefinements[facetName]).length).toBe(2);
 });
 
@@ -72,9 +72,9 @@ test('Removing several refinements for a single attribute should be handled', fu
   });
 
   expect(Object.keys(helper.state.facetsRefinements).length).toBe(0);
-  helper.addRefine(facetName, 'value1');
-  helper.addRefine(facetName, 'value2');
-  helper.addRefine(facetName, 'value3');
+  helper.addFacetRefinement(facetName, 'value1');
+  helper.addFacetRefinement(facetName, 'value2');
+  helper.addFacetRefinement(facetName, 'value3');
   expect(Object.keys(helper.state.facetsRefinements[facetName]).length).toBe(3);
   helper.removeRefine(facetName, 'value2');
   expect(Object.keys(helper.state.facetsRefinements[facetName]).length).toBe(2);
@@ -109,7 +109,7 @@ test('hasRefinements(facet) should return true if the facet is refined.', functi
 
   expect(helper.hasRefinements('facet1')).toBe(false);
 
-  helper.addRefine('facet1', 'boom');
+  helper.addFacetRefinement('facet1', 'boom');
 
   expect(helper.hasRefinements('facet1')).toBe(true);
 
@@ -125,8 +125,8 @@ test('getRefinements should return all the refinements for a given facet', funct
   });
 
   helper
-    .addRefine('facet1', 'val1')
-    .addRefine('facet1', 'val2')
+    .addFacetRefinement('facet1', 'val1')
+    .addFacetRefinement('facet1', 'val2')
     .addExclude('facet1', 'val-1')
     .toggleRefine('facet1', 'val3');
 
@@ -174,7 +174,7 @@ test('[Conjunctive] Facets should be resilient to user attempt to use numbers', 
     disjunctiveFacets: ['facet2'],
   });
 
-  helper.addRefine('facet1', 42);
+  helper.addFacetRefinement('facet1', 42);
   expect(helper.hasRefinements('facet1', 42)).toBe(true);
   expect(helper.hasRefinements('facet1', '42')).toBe(true);
 

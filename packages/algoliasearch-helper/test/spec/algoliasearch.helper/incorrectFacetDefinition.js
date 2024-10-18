@@ -7,7 +7,7 @@ var fakeClient = {};
 test('Conjunctive facet should be declared to be refined', function () {
   var h = algoliasearchHelper(fakeClient, '', {});
 
-  expect(h.addRefine.bind(h, 'undeclaredFacet', 'value')).toThrow();
+  expect(h.addFacetRefinement.bind(h, 'undeclaredFacet', 'value')).toThrow();
   expect(h.removeRefine.bind(h, 'undeclaredFacet', 'value')).toThrow();
 });
 

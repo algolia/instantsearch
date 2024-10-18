@@ -49,7 +49,7 @@ test('[INT][FILTERS] Should retrieve different values for multi facetted records
         f3: 1,
       });
 
-      helper.addRefine('facet', 'f2').search();
+      helper.addFacetRefinement('facet', 'f2').search();
     }
 
     if (calls === 2) {
@@ -86,5 +86,5 @@ test('[INT][FILTERS] Should retrieve different values for multi facetted records
     }
   });
 
-  helper.addRefine('facet', 'f1').search();
+  helper.addFacetRefinement('facet', 'f1').search();
 });

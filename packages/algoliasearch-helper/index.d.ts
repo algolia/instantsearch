@@ -260,10 +260,6 @@ declare namespace algoliasearchHelper {
       value?: number | number[]
     ): this;
     addFacetRefinement(facet: string, value: string): this;
-    /**
-     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addFacetRefinement}
-     */
-    addRefine: AlgoliaSearchHelper['addFacetRefinement'];
     addFacetExclusion(facet: string, value: string): this;
     /**
      * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addFacetExclusion}
