@@ -1,8 +1,9 @@
 import { formatDistanceToNow } from 'date-fns';
 import { connectInfiniteHits } from 'instantsearch.js/es/connectors';
-import { highlight, snippet } from 'instantsearch.js/es/helpers';
 
-type Hit = {
+import type { AlgoliaHit } from 'instantsearch.js';
+
+type Hit = AlgoliaHit<{
   slug: string;
   primary_category: {
     slug: string;
@@ -16,7 +17,7 @@ type Hit = {
   created_at_timestamp: number;
   cloudinary_url: string;
   title: string;
-};
+}>;
 
 const getBlogPostUrl = (hit: Hit) =>
   `https://algolia.com/blog/${hit.primary_category.slug}/${hit.slug}`;
@@ -56,18 +57,12 @@ function createHit(
               <span class="card-timestamp">${date}</span>
 
               <h1 class="card-title">
-                ${highlight({
-                  attribute: 'title',
-                  hit,
-                })}
+                ${(hit as any)._highlightResult.title.value}
               </h1>
             </header>
 
             <p class="card-description">
-              ${snippet({
-                attribute: 'content',
-                hit,
-              })}
+              ${(hit as any)._snippetResult.content.value}
             </p>
 
             <footer>
