@@ -24,11 +24,11 @@ import type {
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   Template,
-  TemplateWithBindEvent,
   Hit,
   WidgetFactory,
   Renderer,
   BaseHit,
+  TemplateWithSendEvent,
 } from '../../types';
 import type { SearchResults } from 'algoliasearch-helper';
 import type {
@@ -54,22 +54,10 @@ const renderer =
     };
     templates: HitsTemplates<THit>;
   }): Renderer<HitsRenderState, Partial<HitsWidgetParams>> =>
-  (
-    {
-      items,
-      results,
-      instantSearchInstance,
-      insights,
-      bindEvent,
-      sendEvent,
-      banner,
-    },
-    isFirstRendering
-  ) => {
+  ({ items, results, insights, sendEvent, banner }, isFirstRendering) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps<HitsTemplates<THit>>({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;
@@ -124,7 +112,6 @@ const renderer =
             return index;
           },
         }}
-        bindEvent={bindEvent}
         sendEvent={sendEvent}
       />
     );
@@ -170,7 +157,7 @@ export type HitsTemplates<THit extends NonNullable<object> = BaseHit> =
      *
      * @default ''
      */
-    item: TemplateWithBindEvent<
+    item: TemplateWithSendEvent<
       Hit<THit> & {
         /** @deprecated the index in the hits array, use __position instead, which is the absolute position */
         __hitIndex: number;

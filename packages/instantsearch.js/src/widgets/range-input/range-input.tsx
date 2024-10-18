@@ -134,14 +134,10 @@ const renderer =
     };
     templates: RangeInputTemplates;
   }): Renderer<RangeRenderState, Partial<RangeInputWidgetParams>> =>
-  (
-    { refine, range, start, widgetParams, instantSearchInstance },
-    isFirstRendering
-  ) => {
+  ({ refine, range, start, widgetParams }, isFirstRendering) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;

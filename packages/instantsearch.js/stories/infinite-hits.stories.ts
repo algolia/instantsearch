@@ -33,7 +33,7 @@ storiesOf('Results/InfiniteHits', module)
           container,
           templates: {
             item: ({ name }) => name,
-            showMoreText: 'Load more',
+            showMoreText: () => 'Load more',
           },
         }),
       ]);
@@ -46,7 +46,7 @@ storiesOf('Results/InfiniteHits', module)
         instantsearch.widgets.infiniteHits({
           container,
           templates: {
-            item: '{{name}}',
+            item: ({ name }) => name,
           },
           transformItems: (items) =>
             items.map((item) => ({
@@ -103,7 +103,7 @@ storiesOf('Results/InfiniteHits', module)
             container,
             showPrevious: true,
             templates: {
-              item: '{{name}}',
+              item: ({ name }) => name,
             },
           }),
         ]);

@@ -73,13 +73,11 @@ exports[`Panel default should render component with default props 1`] = `
   <div
     class="root"
   >
-    
     <div
       class="body"
     >
       <div />
     </div>
-    
   </div>
 </div>
 `;

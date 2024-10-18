@@ -6,7 +6,6 @@ import * as widgets from '..';
 
 import type { UnknownWidgetFactory, Widget } from '../../types';
 import type { IndexWidget } from '../index/index';
-import type { PlacesInstance } from 'places.js';
 
 /**
  * Checklist when adding a new widget
@@ -100,12 +99,6 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
           items: [{ label: 'x', value: 'x' }],
         });
       }
-      case 'analytics': {
-        const analytics = widget as Widgets['analytics'];
-        return analytics({
-          pushFunction() {},
-        });
-      }
       case 'queryRuleContext': {
         const queryRuleContext = widget as Widgets['queryRuleContext'];
         return queryRuleContext({
@@ -114,15 +107,6 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
               return values;
             },
           },
-        });
-      }
-      case 'places': {
-        const places = widget as Widgets['places'];
-        // @ts-expect-error
-        const placesInstance: PlacesInstance = {};
-        return places({
-          container: document.createElement('input'),
-          placesReference: () => placesInstance,
         });
       }
       case 'panel': {
@@ -142,10 +126,6 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
           container,
           widgets: [],
         });
-      }
-      case 'EXPERIMENTAL_answers': {
-        const EXPERIMENTAL_answers = widget as Widgets['EXPERIMENTAL_answers'];
-        return EXPERIMENTAL_answers({ container, queryLanguages: ['en'] });
       }
       case 'frequentlyBoughtTogether':
       case 'relatedProducts':

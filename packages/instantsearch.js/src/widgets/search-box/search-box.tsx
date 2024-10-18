@@ -29,15 +29,15 @@ const suit = component('SearchBox');
 
 export type SearchBoxTemplates = Partial<{
   /**
-   * Template used for displaying the submit button. Can accept a function or a Hogan string.
+   * Template used for displaying the submit button.
    */
   submit: Template<{ cssClasses: SearchBoxComponentCSSClasses }>;
   /**
-   * Template used for displaying the reset button. Can accept a function or a Hogan string.
+   * Template used for displaying the reset button.
    */
   reset: Template<{ cssClasses: SearchBoxComponentCSSClasses }>;
   /**
-   * Template used for displaying the loading indicator. Can accept a function or a Hogan string.
+   * Template used for displaying the loading indicator.
    */
   loadingIndicator: Template<{ cssClasses: SearchBoxComponentCSSClasses }>;
 }>;

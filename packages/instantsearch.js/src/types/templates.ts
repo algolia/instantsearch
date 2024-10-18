@@ -4,20 +4,14 @@ import type {
   ReverseSnippet,
   Snippet,
 } from '../helpers/components';
-import type {
-  BuiltInBindEventForHits,
-  CustomBindEventForHits,
-  SendEventForHits,
-} from '../lib/utils';
+import type { SendEventForHits } from '../lib/utils';
 import type { html } from 'htm/preact';
 import type { VNode } from 'preact';
 
-export type Template<TTemplateData = void> =
-  | string
-  | ((
-      data: TTemplateData,
-      params: TemplateParams
-    ) => VNode | VNode[] | string | null);
+export type Template<TTemplateData = void> = (
+  data: TTemplateData,
+  params: TemplateParams
+) => VNode | VNode[] | string | null;
 
 export type TemplateParams = {
   html: typeof html;
@@ -30,30 +24,19 @@ export type TemplateParams = {
   sendEvent?: SendEventForHits;
 };
 
-interface TemplateWithBindEventParams extends TemplateParams {
-  /** @deprecated use sendEvent instead */
-  (
-    ...args: Parameters<BuiltInBindEventForHits>
-  ): ReturnType<BuiltInBindEventForHits>;
-  /** @deprecated use sendEvent instead */
-  (
-    ...args: Parameters<CustomBindEventForHits>
-  ): ReturnType<CustomBindEventForHits>;
+interface TemplateWithSendEventParams extends TemplateParams {
   sendEvent: SendEventForHits;
 }
 
-export type TemplateWithBindEvent<TTemplateData = void> =
-  | string
-  | ((
-      data: TTemplateData,
-      params: TemplateWithBindEventParams
-    ) => VNode | VNode[] | string);
+export type TemplateWithSendEvent<TTemplateData = void> = (
+  data: TTemplateData,
+  params: TemplateWithSendEventParams
+) => VNode | VNode[] | string;
 
 export type Templates = {
-  [key: string]: Template<any> | TemplateWithBindEvent<any> | undefined;
+  [key: string]:
+    | Template<any>
+    | TemplateWithSendEvent<any>
+    | string
+    | undefined;
 };
-
-export type HoganHelpers<TKeys extends string = string> = Record<
-  TKeys,
-  (text: string, render: (value: string) => string) => string
->;
