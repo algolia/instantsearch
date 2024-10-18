@@ -6,7 +6,6 @@ import * as widgets from '..';
 
 import type { UnknownWidgetFactory, Widget } from '../../types';
 import type { IndexWidget } from '../index/index';
-import type { PlacesInstance } from 'places.js';
 
 /**
  * Checklist when adding a new widget
@@ -108,15 +107,6 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
               return values;
             },
           },
-        });
-      }
-      case 'places': {
-        const places = widget as Widgets['places'];
-        // @ts-expect-error
-        const placesInstance: PlacesInstance = {};
-        return places({
-          container: document.createElement('input'),
-          placesReference: () => placesInstance,
         });
       }
       case 'panel': {
