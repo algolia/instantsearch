@@ -123,9 +123,9 @@ test('hierarchical facets: attributes order', function (done) {
 
   helper.once('result', function (event) {
     expect(event.results.hierarchicalFacets).toEqual(expectedHelperResponse);
-    expect(event.results.getFacetByName('categories')).toEqual(
-      expectedHelperResponse[0]
-    );
+    expect(
+      event.results.hierarchicalFacets.find((f) => f.name === 'categories')
+    ).toEqual(expectedHelperResponse[0]);
 
     done();
   });

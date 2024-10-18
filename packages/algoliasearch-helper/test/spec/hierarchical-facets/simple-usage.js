@@ -234,9 +234,9 @@ describe('hierarchical facets: simple usage', function () {
       ]);
 
       expect(event.results.hierarchicalFacets).toEqual(expectedHelperResponse);
-      expect(event.results.getFacetByName('categories')).toEqual(
-        expectedHelperResponse[0]
-      );
+      expect(
+        event.results.hierarchicalFacets.find((f) => f.name === 'categories')
+      ).toEqual(expectedHelperResponse[0]);
 
       // we do not yet support multiple values for hierarchicalFacetsRefinements
       // but at some point we may want to open multiple leafs of a hierarchical menu
@@ -403,9 +403,9 @@ describe('hierarchical facets: simple usage', function () {
       ]);
 
       expect(event.results.hierarchicalFacets).toEqual(expectedHelperResponse);
-      expect(event.results.getFacetByName('categories')).toEqual(
-        expectedHelperResponse[0]
-      );
+      expect(
+        event.results.hierarchicalFacets.find((f) => f.name === 'categories')
+      ).toEqual(expectedHelperResponse[0]);
 
       // we do not yet support multiple values for hierarchicalFacetsRefinements
       // but at some point we may want to open multiple leafs of a hierarchical menu

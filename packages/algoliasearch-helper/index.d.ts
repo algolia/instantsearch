@@ -1345,14 +1345,6 @@ declare namespace algoliasearchHelper {
     );
 
     /**
-     * Get a facet object with its name
-     * @deprecated
-     * @param name name of the faceted attribute
-     * @return  the facet object
-     */
-    getFacetByName(name: string): SearchResults.Facet;
-
-    /**
      * Get a the list of values for a given facet attribute. Those values are sorted
      * refinement first, descending count (bigger value on top), and name ascending
      * (alphabetical order). The sort formula can overridden using either string based
