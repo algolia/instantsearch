@@ -127,10 +127,6 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
           widgets: [],
         });
       }
-      case 'EXPERIMENTAL_answers': {
-        const EXPERIMENTAL_answers = widget as Widgets['EXPERIMENTAL_answers'];
-        return EXPERIMENTAL_answers({ container, queryLanguages: ['en'] });
-      }
       case 'frequentlyBoughtTogether':
       case 'relatedProducts':
       case 'lookingSimilar': {
