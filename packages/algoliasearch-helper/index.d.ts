@@ -318,16 +318,6 @@ declare namespace algoliasearchHelper {
 
     overrideStateWithoutTriggeringChangeEvent: AlgoliaSearchHelper['setState'];
     hasRefinements(facet: string): boolean;
-    isExcluded: SearchParameters['isExcludeRefined'];
-    /**
-     * @deprecated since 2.4.0, see {@link AlgoliaSearchHelper#hasRefinements}
-     */
-    isDisjunctiveRefined: SearchParameters['isDisjunctiveFacetRefined'];
-    hasTag: SearchParameters['isTagRefined'];
-    /**
-     * @deprecated since 2.4.0, see {@link AlgoliaSearchHelper#hasTag}
-     */
-    isTagRefined: SearchParameters['isTagRefined'];
     getIndex(): string;
     /**
      * @deprecated

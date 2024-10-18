@@ -1217,54 +1217,6 @@ AlgoliaSearchHelper.prototype.hasRefinements = function (attribute) {
 };
 
 /**
- * Check if a value is excluded for a specific faceted attribute. If the value
- * is omitted then the function checks if there is any excluding refinements.
- *
- * @param  {string}  facet name of the attribute for used for faceting
- * @param  {string}  [value] optional value. If passed will test that this value
- * is filtering the given facet.
- * @return {boolean} true if refined
- * @example
- * helper.isExcludeRefined('color'); // false
- * helper.isExcludeRefined('color', 'blue') // false
- * helper.isExcludeRefined('color', 'red') // false
- *
- * helper.addFacetExclusion('color', 'red');
- *
- * helper.isExcludeRefined('color'); // true
- * helper.isExcludeRefined('color', 'blue') // false
- * helper.isExcludeRefined('color', 'red') // true
- */
-AlgoliaSearchHelper.prototype.isExcluded = function (facet, value) {
-  return this.state.isExcludeRefined(facet, value);
-};
-
-// eslint-disable-next-line valid-jsdoc
-/**
- * @deprecated since 2.4.0, see {@link AlgoliaSearchHelper#hasRefinements}
- */
-AlgoliaSearchHelper.prototype.isDisjunctiveRefined = function (facet, value) {
-  return this.state.isDisjunctiveFacetRefined(facet, value);
-};
-
-/**
- * Check if the string is a currently filtering tag.
- * @param {string} tag tag to check
- * @return {boolean} true if the tag is currently refined
- */
-AlgoliaSearchHelper.prototype.hasTag = function (tag) {
-  return this.state.isTagRefined(tag);
-};
-
-// eslint-disable-next-line valid-jsdoc
-/**
- * @deprecated since 2.4.0, see {@link AlgoliaSearchHelper#hasTag}
- */
-AlgoliaSearchHelper.prototype.isTagRefined = function () {
-  return this.hasTagRefinements.apply(this, arguments);
-};
-
-/**
  * Get the name of the currently used index.
  * @return {string} name of the index
  * @example

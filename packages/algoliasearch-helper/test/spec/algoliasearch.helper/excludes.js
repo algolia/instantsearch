@@ -55,13 +55,21 @@ test('isExcluded should allow to omit the value', function () {
     facets: [facetName],
   });
 
-  expect(helper.isExcluded(facetName, facetValueToExclude)).toBeFalsy();
-  expect(helper.isExcluded(facetName, facetValueNotExcluded)).toBeFalsy();
-  expect(helper.isExcluded(facetName)).toBeFalsy();
+  expect(
+    helper.state.isExcludeRefined(facetName, facetValueToExclude)
+  ).toBeFalsy();
+  expect(
+    helper.state.isExcludeRefined(facetName, facetValueNotExcluded)
+  ).toBeFalsy();
+  expect(helper.state.isExcludeRefined(facetName)).toBeFalsy();
   helper.addFacetExclusion(facetName, facetValueToExclude);
-  expect(helper.isExcluded(facetName, facetValueToExclude)).toBeTruthy();
-  expect(helper.isExcluded(facetName, facetValueNotExcluded)).toBeFalsy();
-  expect(helper.isExcluded(facetName)).toBeTruthy();
+  expect(
+    helper.state.isExcludeRefined(facetName, facetValueToExclude)
+  ).toBeTruthy();
+  expect(
+    helper.state.isExcludeRefined(facetName, facetValueNotExcluded)
+  ).toBeFalsy();
+  expect(helper.state.isExcludeRefined(facetName)).toBeTruthy();
 });
 
 test('isExcluded should report exclusion correctly', function () {
@@ -74,9 +82,15 @@ test('isExcluded should report exclusion correctly', function () {
   var facetName = 'facet';
   var facetValueToExclude = 'brand';
 
-  expect(helper.isExcluded(facetName, facetValueToExclude)).toBeFalsy();
+  expect(
+    helper.state.isExcludeRefined(facetName, facetValueToExclude)
+  ).toBeFalsy();
   helper.addFacetExclusion(facetName, facetValueToExclude);
-  expect(helper.isExcluded(facetName, facetValueToExclude)).toBeTruthy();
+  expect(
+    helper.state.isExcludeRefined(facetName, facetValueToExclude)
+  ).toBeTruthy();
   helper.removeFacetExclusion(facetName, facetValueToExclude);
-  expect(helper.isExcluded(facetName, facetValueToExclude)).toBeFalsy();
+  expect(
+    helper.state.isExcludeRefined(facetName, facetValueToExclude)
+  ).toBeFalsy();
 });

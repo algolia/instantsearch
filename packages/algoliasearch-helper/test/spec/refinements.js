@@ -84,24 +84,6 @@ test('Removing several refinements for a single attribute should be handled', fu
   ]);
 });
 
-test('isDisjunctiveRefined', function () {
-  var facet = 'MyFacet';
-
-  var helper = algoliasearchHelper(emptyClient, null, {
-    disjunctiveFacets: [facet],
-  });
-
-  var value = 'MyValue';
-
-  expect(helper.isDisjunctiveRefined(facet, value)).toBe(false);
-
-  helper.addDisjunctiveFacetRefinement(facet, value);
-  expect(helper.isDisjunctiveRefined(facet, value)).toBe(true);
-
-  helper.removeDisjunctiveFacetRefinement(facet, value);
-  expect(helper.isDisjunctiveRefined(facet, value)).toBe(false);
-});
-
 test('hasRefinements(facet) should return true if the facet is refined.', function () {
   var helper = algoliasearchHelper(emptyClient, null, {
     facets: ['facet1'],
@@ -195,17 +177,17 @@ test('[Exclude] Facets should be resilient to user attempt to use numbers', func
   });
 
   helper.addFacetExclusion('facet1', 42);
-  expect(helper.isExcluded('facet1', 42)).toBe(true);
-  expect(helper.isExcluded('facet1', '42')).toBe(true);
+  expect(helper.state.isExcludeRefined('facet1', 42)).toBe(true);
+  expect(helper.state.isExcludeRefined('facet1', '42')).toBe(true);
 
   var stateWithFacet1Without42 = helper.state;
 
   helper.removeFacetExclusion('facet1', '42');
-  expect(helper.isExcluded('facet1', '42')).toBe(false);
+  expect(helper.state.isExcludeRefined('facet1', '42')).toBe(false);
 
   helper.setState(stateWithFacet1Without42);
   helper.removeFacetExclusion('facet1', 42);
-  expect(helper.isExcluded('facet1', 42)).toBe(false);
+  expect(helper.state.isExcludeRefined('facet1', 42)).toBe(false);
 });
 
 test('[Disjunctive] Facets should be resilient to user attempt to use numbers', function () {
@@ -215,15 +197,15 @@ test('[Disjunctive] Facets should be resilient to user attempt to use numbers', 
   });
 
   helper.addDisjunctiveFacetRefinement('facet2', 42);
-  expect(helper.isDisjunctiveRefined('facet2', 42)).toBe(true);
-  expect(helper.isDisjunctiveRefined('facet2', '42')).toBe(true);
+  expect(helper.state.isDisjunctiveFacetRefined('facet2', 42)).toBe(true);
+  expect(helper.state.isDisjunctiveFacetRefined('facet2', '42')).toBe(true);
 
   var stateWithFacet2and42 = helper.state;
 
   helper.removeDisjunctiveFacetRefinement('facet2', '42');
-  expect(helper.isDisjunctiveRefined('facet2', '42')).toBe(false);
+  expect(helper.state.isDisjunctiveFacetRefined('facet2', '42')).toBe(false);
   helper.setState(stateWithFacet2and42);
 
   helper.removeDisjunctiveFacetRefinement('facet2', 42);
-  expect(helper.isDisjunctiveRefined('facet2', 42)).toBe(false);
+  expect(helper.state.isDisjunctiveFacetRefined('facet2', 42)).toBe(false);
 });
