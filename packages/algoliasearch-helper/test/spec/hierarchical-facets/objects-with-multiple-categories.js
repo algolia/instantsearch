@@ -20,7 +20,7 @@ test('hierarchical facets: objects with multiple categories', function (done) {
     ],
   });
 
-  helper.toggleRefine('categories', 'beers > IPA');
+  helper.toggleFacetRefinement('categories', 'beers > IPA');
 
   var algoliaResponse = {
     results: [

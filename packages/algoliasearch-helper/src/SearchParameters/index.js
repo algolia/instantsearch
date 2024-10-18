@@ -1056,18 +1056,6 @@ SearchParameters.prototype = {
    * @param  {string} value the associated value
    * @return {SearchParameters} new instance
    * @throws will throw an error if the facet is not declared in the settings of the helper
-   * @deprecated since version 2.19.0, see {@link SearchParameters#toggleFacetRefinement}
-   */
-  toggleRefinement: function toggleRefinement(facet, value) {
-    return this.toggleFacetRefinement(facet, value);
-  },
-  /**
-   * Generic toggle refinement method to use with facet, disjunctive facets
-   * and hierarchical facets
-   * @param  {string} facet the facet to refine
-   * @param  {string} value the associated value
-   * @return {SearchParameters} new instance
-   * @throws will throw an error if the facet is not declared in the settings of the helper
    */
   toggleFacetRefinement: function toggleFacetRefinement(facet, value) {
     if (this.isHierarchicalFacet(facet)) {
@@ -1190,11 +1178,11 @@ SearchParameters.prototype = {
       this.hierarchicalFacetsRefinements[facet] !== undefined &&
       this.hierarchicalFacetsRefinements[facet].length > 0 &&
       // remove current refinement:
-      // refinement was 'beer > IPA', call is toggleRefine('beer > IPA'), refinement should be `beer`
+      // refinement was 'beer > IPA', call is toggleFacetRefinement('beer > IPA'), refinement should be `beer`
       (this.hierarchicalFacetsRefinements[facet][0] === value ||
         // remove a parent refinement of the current refinement:
         //  - refinement was 'beer > IPA > Flying dog'
-        //  - call is toggleRefine('beer > IPA')
+        //  - call is toggleFacetRefinement('beer > IPA')
         //  - refinement should be `beer`
         this.hierarchicalFacetsRefinements[facet][0].indexOf(
           value + separator
