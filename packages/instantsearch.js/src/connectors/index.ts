@@ -1,28 +1,13 @@
 import { deprecate } from '../lib/utils';
 
 import connectAnswers from './answers/connectAnswers';
-import connectConfigureRelatedItems from './configure-related-items/connectConfigureRelatedItems';
-import connectDynamicWidgets from './dynamic-widgets/connectDynamicWidgets';
+export { default as connectDynamicWidgets } from './dynamic-widgets/connectDynamicWidgets';
 
 /** @deprecated answers is no longer supported */
 export const EXPERIMENTAL_connectAnswers = deprecate(
   connectAnswers,
   'answers is no longer supported'
 );
-
-/** @deprecated use connectRelatedItems instead */
-export const EXPERIMENTAL_connectConfigureRelatedItems = deprecate(
-  connectConfigureRelatedItems,
-  'EXPERIMENTAL_connectConfigureRelatedItems is deprecated and will be removed in a next minor version of InstantSearch. Please use connectRelatedItems instead.'
-);
-
-/** @deprecated use connectDynamicWidgets */
-export const EXPERIMENTAL_connectDynamicWidgets = deprecate(
-  connectDynamicWidgets,
-  'use connectDynamicWidgets'
-);
-
-export { connectDynamicWidgets };
 
 export { default as connectClearRefinements } from './clear-refinements/connectClearRefinements';
 export { default as connectCurrentRefinements } from './current-refinements/connectCurrentRefinements';
