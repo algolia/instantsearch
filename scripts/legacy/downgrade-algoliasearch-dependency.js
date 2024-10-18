@@ -36,9 +36,6 @@ shell.sed(
   packageJsonPaths
 );
 
-// remove resolution
-shell.sed('-i', /"places.js\/algoliasearch": "5.*"(,?)/, '', packageJsonPaths);
-
 // replace import in examples
 shell.sed(
   '-i',
