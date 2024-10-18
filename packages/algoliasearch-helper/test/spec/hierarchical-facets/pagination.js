@@ -85,7 +85,7 @@ test('hierarchical facets: pagination', function (done) {
   });
 
   helper.setQuery('');
-  helper.setCurrentPage(1);
+  helper.setPage(1);
   helper.toggleFacetRefinement('categories', 'beers > IPA > Flying dog');
   helper.search();
 

@@ -298,10 +298,6 @@ declare namespace algoliasearchHelper {
     nextPage(): this;
     previousPage(): this;
     setPage(page: number): this;
-    /**
-     * @deprecated
-     */
-    setCurrentPage(page: number): this;
     setQueryParameter<SearchParameter extends keyof PlainSearchParameters>(
       parameter: SearchParameter,
       value: PlainSearchParameters[SearchParameter]

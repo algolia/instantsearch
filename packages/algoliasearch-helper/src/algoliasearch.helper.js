@@ -1054,13 +1054,14 @@ AlgoliaSearchHelper.prototype.previousPage = function () {
 };
 
 /**
- * @private
- * @param {number} page The page number
+ * Updates the current page.
+ * @function
+ * @param  {number} page The page number
  * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
- * @chainable
  * @fires change
+ * @chainable
  */
-function setCurrentPage(page) {
+AlgoliaSearchHelper.prototype.setPage = function setPage(page) {
   if (page < 0) throw new Error('Page requested below 0.');
 
   this._change({
@@ -1069,27 +1070,7 @@ function setCurrentPage(page) {
   });
 
   return this;
-}
-
-/**
- * Change the current page
- * @deprecated
- * @param  {number} page The page number
- * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
- * @fires change
- * @chainable
- */
-AlgoliaSearchHelper.prototype.setCurrentPage = setCurrentPage;
-
-/**
- * Updates the current page.
- * @function
- * @param  {number} page The page number
- * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
- * @fires change
- * @chainable
- */
-AlgoliaSearchHelper.prototype.setPage = setCurrentPage;
+};
 
 /**
  * Updates the name of the index that will be targeted by the query.
