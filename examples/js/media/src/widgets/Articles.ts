@@ -77,10 +77,7 @@ function createHit(
           <div class="card-content" data-layout="mobile">
             <header>
               <h1 class="card-title">
-                ${highlight({
-                  attribute: 'title',
-                  hit,
-                })}
+                ${(hit as any)._highlightResult.title.value}
               </h1>
             </header>
 
