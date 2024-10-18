@@ -1689,20 +1689,6 @@ AlgoliaSearchHelper.prototype._dispatchRecommendError = function (
   if (this._currentNbRecommendQueries === 0) this.emit('recommendQueueEmpty');
 };
 
-AlgoliaSearchHelper.prototype.containsRefinement = function (
-  query,
-  facetFilters,
-  numericFilters,
-  tagFilters
-) {
-  return (
-    query ||
-    facetFilters.length !== 0 ||
-    numericFilters.length !== 0 ||
-    tagFilters.length !== 0
-  );
-};
-
 /**
  * Test if there are some disjunctive refinements on the facet
  * @private

@@ -320,10 +320,6 @@ declare namespace algoliasearchHelper {
     getRefinements(facetName: string): any[];
     getNumericRefinement: SearchParameters['getNumericRefinement'];
     getHierarchicalFacetBreadcrumb: SearchParameters['getHierarchicalFacetBreadcrumb'];
-    /**
-     * @deprecated
-     */
-    containsRefinement(...any: any[]): any;
     clearCache(): this;
     setClient(client: SearchClient): this;
     getClient(): SearchClient;
