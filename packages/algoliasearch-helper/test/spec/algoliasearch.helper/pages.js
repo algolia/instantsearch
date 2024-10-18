@@ -70,7 +70,7 @@ test('pages should be reset if the mutation might change the number of pages', f
     ['removeDisjunctiveFacetRefinement', 'f1', 'val'],
 
     ['toggleRefine', 'f1', 'v1'],
-    ['toggleExclude', 'facet1', '55'],
+    ['toggleFacetExclusion', 'facet1', '55'],
   ].forEach(function ([fn, ...args]) {
     helper.setPage(10);
 

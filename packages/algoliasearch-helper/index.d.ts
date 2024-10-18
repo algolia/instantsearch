@@ -293,10 +293,6 @@ declare namespace algoliasearchHelper {
     removeTrendingFacets(id: number): this;
     removeLookingSimilar(id: number): this;
     toggleFacetExclusion(facet: string, value: string): this;
-    /**
-     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#toggleFacetExclusion}
-     */
-    toggleExclude(facet: string, value: string): this;
     toggleFacetRefinement(facet: string, value: string): this;
     /**
      * @deprecated since version 2.19.0, see {@link AlgoliaSearchHelper#toggleFacetRefinement}
