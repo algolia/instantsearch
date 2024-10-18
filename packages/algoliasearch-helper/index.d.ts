@@ -294,10 +294,6 @@ declare namespace algoliasearchHelper {
     removeLookingSimilar(id: number): this;
     toggleFacetExclusion(facet: string, value: string): this;
     toggleFacetRefinement(facet: string, value: string): this;
-    /**
-     * @deprecated since version 2.19.0, see {@link AlgoliaSearchHelper#toggleFacetRefinement}
-     */
-    toggleRefinement(facet: string, value: string): this;
     toggleTag(tag: string): this;
     nextPage(): this;
     previousPage(): this;

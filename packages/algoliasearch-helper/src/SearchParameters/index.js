@@ -1056,18 +1056,6 @@ SearchParameters.prototype = {
    * @param  {string} value the associated value
    * @return {SearchParameters} new instance
    * @throws will throw an error if the facet is not declared in the settings of the helper
-   * @deprecated since version 2.19.0, see {@link SearchParameters#toggleFacetRefinement}
-   */
-  toggleRefinement: function toggleRefinement(facet, value) {
-    return this.toggleFacetRefinement(facet, value);
-  },
-  /**
-   * Generic toggle refinement method to use with facet, disjunctive facets
-   * and hierarchical facets
-   * @param  {string} facet the facet to refine
-   * @param  {string} value the associated value
-   * @return {SearchParameters} new instance
-   * @throws will throw an error if the facet is not declared in the settings of the helper
    */
   toggleFacetRefinement: function toggleFacetRefinement(facet, value) {
     if (this.isHierarchicalFacet(facet)) {
