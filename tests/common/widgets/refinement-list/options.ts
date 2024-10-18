@@ -580,6 +580,40 @@ export function createOptionsTests(
       ]);
     });
 
+    test('keeps focus on toggled input between re-renders', async () => {
+      const searchClient = createMockedSearchClient();
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: { attribute: 'brand' },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(document.activeElement).toEqual(document.body);
+
+      const initialTargetItem = document.querySelector(
+        '.ais-RefinementList-checkbox[value="Samsung"]'
+      )!;
+
+      await act(async () => {
+        userEvent.click(initialTargetItem);
+        expect(document.activeElement).toEqual(initialTargetItem);
+        await wait(0);
+      });
+
+      const updatedTargetItem = document.querySelector(
+        '.ais-RefinementList-checkbox[value="Samsung"]'
+      )!;
+
+      expect(document.activeElement).toEqual(updatedTargetItem);
+    });
+
     describe('sorting', () => {
       test('sorts the items by ascending name', async () => {
         const searchClient = createMockedSearchClient();
