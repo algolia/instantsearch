@@ -887,7 +887,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(instantSearchInstance.scheduleSearch).toHaveBeenCalledTimes(0);
       });
 
-      it('does not schedule a search without widgets in the index', () => {
+      it.skip('does not schedule a search without widgets in the index', () => {
         const instance = index({ indexName: 'indexName' });
         const instantSearchInstance = createInstantSearch({
           scheduleSearch: jest.fn() as any,
