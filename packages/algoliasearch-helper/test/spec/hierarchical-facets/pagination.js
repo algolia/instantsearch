@@ -6,9 +6,9 @@ test('hierarchical facets: pagination', function (done) {
 
   var algoliasearchHelper = require('../../../');
 
-  var appId = 'hierarchical-toggleRefine-appId';
-  var apiKey = 'hierarchical-toggleRefine-apiKey';
-  var indexName = 'hierarchical-toggleRefine-indexName';
+  var appId = 'hierarchical-toggleFacetRefinement-appId';
+  var apiKey = 'hierarchical-toggleFacetRefinement-apiKey';
+  var indexName = 'hierarchical-toggleFacetRefinement-indexName';
 
   var client = algoliasearch(appId, apiKey);
   var helper = algoliasearchHelper(client, indexName, {
@@ -25,7 +25,7 @@ test('hierarchical facets: pagination', function (done) {
     ],
   });
 
-  helper.toggleRefine('categories', 'beers > IPA > Flying dog');
+  helper.toggleFacetRefinement('categories', 'beers > IPA > Flying dog');
 
   var algoliaResponse = {
     results: [
@@ -86,7 +86,7 @@ test('hierarchical facets: pagination', function (done) {
 
   helper.setQuery('');
   helper.setCurrentPage(1);
-  helper.toggleRefine('categories', 'beers > IPA > Flying dog');
+  helper.toggleFacetRefinement('categories', 'beers > IPA > Flying dog');
   helper.search();
 
   helper.once('result', function () {

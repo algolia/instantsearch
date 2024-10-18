@@ -19,10 +19,10 @@ function fixture() {
   });
 
   return helper
-    .toggleRefine('facet1', '0')
-    .toggleRefine('facet2', '0')
-    .toggleRefine('disjunctiveFacet1', '0')
-    .toggleRefine('disjunctiveFacet2', '0')
+    .toggleFacetRefinement('facet1', '0')
+    .toggleFacetRefinement('facet2', '0')
+    .toggleFacetRefinement('disjunctiveFacet1', '0')
+    .toggleFacetRefinement('disjunctiveFacet2', '0')
     .toggleFacetExclusion('excluded1', '0')
     .toggleFacetExclusion('excluded2', '0')
     .addHierarchicalFacetRefinement('hierarchy1', '0')

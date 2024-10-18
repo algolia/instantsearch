@@ -8,9 +8,9 @@ test('hierarchical facets: attributes order', function (done) {
 
   var algoliasearchHelper = require('../../../');
 
-  var appId = 'hierarchical-toggleRefine-appId';
-  var apiKey = 'hierarchical-toggleRefine-apiKey';
-  var indexName = 'hierarchical-toggleRefine-indexName';
+  var appId = 'hierarchical-toggleFacetRefinement-appId';
+  var apiKey = 'hierarchical-toggleFacetRefinement-apiKey';
+  var indexName = 'hierarchical-toggleFacetRefinement-indexName';
 
   var client = algoliasearch(appId, apiKey);
   var helper = algoliasearchHelper(client, indexName, {

@@ -298,10 +298,6 @@ declare namespace algoliasearchHelper {
      * @deprecated since version 2.19.0, see {@link AlgoliaSearchHelper#toggleFacetRefinement}
      */
     toggleRefinement(facet: string, value: string): this;
-    /**
-     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#toggleFacetRefinement}
-     */
-    toggleRefine(facet: string, value: string): this;
     toggleTag(tag: string): this;
     nextPage(): this;
     previousPage(): this;

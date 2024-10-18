@@ -4,9 +4,9 @@ describe('hierarchical facets: simple usage', function () {
   var algoliasearch = require('algoliasearch');
   algoliasearch = algoliasearch.algoliasearch || algoliasearch;
   var algoliasearchHelper = require('../../../');
-  var appId = 'hierarchical-toggleRefine-appId';
-  var apiKey = 'hierarchical-toggleRefine-apiKey';
-  var indexName = 'hierarchical-toggleRefine-indexName';
+  var appId = 'hierarchical-toggleFacetRefinement-appId';
+  var apiKey = 'hierarchical-toggleFacetRefinement-apiKey';
+  var indexName = 'hierarchical-toggleFacetRefinement-indexName';
 
   var algoliaResponse = {
     results: [
@@ -101,7 +101,7 @@ describe('hierarchical facets: simple usage', function () {
       ],
     });
 
-    helper.toggleRefine('categories', 'beers > IPA > Flying dog');
+    helper.toggleFacetRefinement('categories', 'beers > IPA > Flying dog');
 
     var expectedHelperResponse = [
       {
@@ -270,7 +270,7 @@ describe('hierarchical facets: simple usage', function () {
       }
     );
 
-    helper.toggleRefine('categories', 'beers > IPA > Flying dog');
+    helper.toggleFacetRefinement('categories', 'beers > IPA > Flying dog');
 
     var expectedHelperResponse = [
       {

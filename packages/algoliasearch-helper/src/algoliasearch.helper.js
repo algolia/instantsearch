@@ -1025,14 +1025,6 @@ AlgoliaSearchHelper.prototype.toggleFacetRefinement = function (facet, value) {
   return this;
 };
 
-// eslint-disable-next-line valid-jsdoc
-/**
- * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#toggleFacetRefinement}
- */
-AlgoliaSearchHelper.prototype.toggleRefine = function () {
-  return this.toggleFacetRefinement.apply(this, arguments);
-};
-
 /**
  * Adds or removes a tag filter with the `value` provided. If
  * the value is set then it removes it, otherwise it adds the filter.

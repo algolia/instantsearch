@@ -1190,11 +1190,11 @@ SearchParameters.prototype = {
       this.hierarchicalFacetsRefinements[facet] !== undefined &&
       this.hierarchicalFacetsRefinements[facet].length > 0 &&
       // remove current refinement:
-      // refinement was 'beer > IPA', call is toggleRefine('beer > IPA'), refinement should be `beer`
+      // refinement was 'beer > IPA', call is toggleFacetRefinement('beer > IPA'), refinement should be `beer`
       (this.hierarchicalFacetsRefinements[facet][0] === value ||
         // remove a parent refinement of the current refinement:
         //  - refinement was 'beer > IPA > Flying dog'
-        //  - call is toggleRefine('beer > IPA')
+        //  - call is toggleFacetRefinement('beer > IPA')
         //  - refinement should be `beer`
         this.hierarchicalFacetsRefinements[facet][0].indexOf(
           value + separator

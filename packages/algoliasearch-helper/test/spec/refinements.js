@@ -47,20 +47,20 @@ test('Toggling several refinements for a single attribute should be handled', fu
   });
 
   expect(Object.keys(helper.state.facetsRefinements).length).toBe(0);
-  helper.toggleRefine(facetName, 'value1');
+  helper.toggleFacetRefinement(facetName, 'value1');
   expect(Object.keys(helper.state.facetsRefinements[facetName]).length).toBe(1);
-  helper.toggleRefine(facetName, 'value2');
+  helper.toggleFacetRefinement(facetName, 'value2');
   expect(Object.keys(helper.state.facetsRefinements[facetName]).length).toBe(2);
-  helper.toggleRefine(facetName, 'value1');
+  helper.toggleFacetRefinement(facetName, 'value1');
   expect(Object.keys(helper.state.facetsRefinements[facetName]).length).toBe(1);
   expect(helper.state.facetsRefinements[facetName]).toEqual(['value2']);
 });
 
-test('Using toggleRefine on a non specified facet should throw an exception', function () {
+test('Using toggleFacetRefinement on a non specified facet should throw an exception', function () {
   var helper = algoliasearchHelper(emptyClient, null, {});
 
   expect(function () {
-    helper.toggleRefine('unknown', 'value');
+    helper.toggleFacetRefinement('unknown', 'value');
   }).toThrow();
 });
 
@@ -128,12 +128,12 @@ test('getRefinements should return all the refinements for a given facet', funct
     .addFacetRefinement('facet1', 'val1')
     .addFacetRefinement('facet1', 'val2')
     .addFacetExclusion('facet1', 'val-1')
-    .toggleRefine('facet1', 'val3');
+    .toggleFacetRefinement('facet1', 'val3');
 
   helper
     .addDisjunctiveFacetRefinement('facet2', 'val4')
     .addDisjunctiveFacetRefinement('facet2', 'val5')
-    .toggleRefine('facet2', 'val6');
+    .toggleFacetRefinement('facet2', 'val6');
 
   helper
     .addNumericRefinement('sales', '>', '3')
