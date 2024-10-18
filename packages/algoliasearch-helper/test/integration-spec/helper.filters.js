@@ -66,7 +66,7 @@ test('[INT][FILTERS] Should retrieve different values for multi facetted records
       expect(results.hits.length).toBe(0);
       expect(results.facets[0]).toBe(undefined);
 
-      helper.removeRefine('facet', 'f2').search();
+      helper.removeFacetRefinement('facet', 'f2').search();
     }
 
     if (calls === 4) {

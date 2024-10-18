@@ -132,7 +132,7 @@ test('no mutating methods should trigger a search', function () {
   helper.addFacetExclusion('tower', 'Empire State Building');
   helper.removeExclude('tower', 'Empire State Building');
   helper.addFacetRefinement('tower', 'Empire State Building');
-  helper.removeRefine('tower', 'Empire State Building');
+  helper.removeFacetRefinement('tower', 'Empire State Building');
 
   expect(client.search).toHaveBeenCalledTimes(0);
 

@@ -285,10 +285,6 @@ declare namespace algoliasearchHelper {
     removeDisjunctiveFacetRefinement(facet: string, value?: string): this;
     removeHierarchicalFacetRefinement(facet: string): this;
     removeFacetRefinement(facet: string, value?: string): this;
-    /**
-     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeFacetRefinement}
-     */
-    removeRefine(facet: string, value: string): this;
     removeFacetExclusion(facet: string, value: string): this;
     /**
      * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeFacetExclusion}

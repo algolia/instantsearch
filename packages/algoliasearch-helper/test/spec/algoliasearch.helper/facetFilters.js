@@ -26,7 +26,7 @@ test('The filters should contain the different filters for a single conjunctive 
     facetName + ':value2',
     facetName + ':value3',
   ]);
-  helper.removeRefine(facetName, 'value3');
+  helper.removeFacetRefinement(facetName, 'value3');
   expect(requestBuilder._getFacetFilters(helper.state)).toEqual([
     facetName + ':value1',
     facetName + ':value2',

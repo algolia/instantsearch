@@ -841,14 +841,6 @@ AlgoliaSearchHelper.prototype.removeFacetRefinement = function (facet, value) {
   return this;
 };
 
-// eslint-disable-next-line valid-jsdoc
-/**
- * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeFacetRefinement}
- */
-AlgoliaSearchHelper.prototype.removeRefine = function () {
-  return this.removeFacetRefinement.apply(this, arguments);
-};
-
 /**
  * Removes an exclusion filter to a faceted attribute with the `value` provided. If the
  * filter is not set, it doesn't change the filters.
