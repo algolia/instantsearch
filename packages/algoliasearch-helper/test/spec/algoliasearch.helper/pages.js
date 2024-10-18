@@ -61,7 +61,7 @@ test('pages should be reset if the mutation might change the number of pages', f
     ['removeNumericRefinement', 'facet', '>'],
 
     ['addFacetExclusion', 'facet1', 'val2'],
-    ['removeExclude', 'facet1', 'val2'],
+    ['removeFacetExclusion', 'facet1', 'val2'],
 
     ['addFacetRefinement', 'f2', 'val'],
     ['removeFacetRefinement', 'f2', 'val'],

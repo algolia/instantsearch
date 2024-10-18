@@ -200,11 +200,11 @@ test('[Exclude] Facets should be resilient to user attempt to use numbers', func
 
   var stateWithFacet1Without42 = helper.state;
 
-  helper.removeExclude('facet1', '42');
+  helper.removeFacetExclusion('facet1', '42');
   expect(helper.isExcluded('facet1', '42')).toBe(false);
 
   helper.setState(stateWithFacet1Without42);
-  helper.removeExclude('facet1', 42);
+  helper.removeFacetExclusion('facet1', 42);
   expect(helper.isExcluded('facet1', 42)).toBe(false);
 });
 

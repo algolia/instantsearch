@@ -286,10 +286,6 @@ declare namespace algoliasearchHelper {
     removeHierarchicalFacetRefinement(facet: string): this;
     removeFacetRefinement(facet: string, value?: string): this;
     removeFacetExclusion(facet: string, value: string): this;
-    /**
-     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeFacetExclusion}
-     */
-    removeExclude(facet: string, value: string): this;
     removeTag(value: string): this;
     removeFrequentlyBoughtTogether(id: number): this;
     removeRelatedProducts(id: number): this;

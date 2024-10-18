@@ -864,14 +864,6 @@ AlgoliaSearchHelper.prototype.removeFacetExclusion = function (facet, value) {
   return this;
 };
 
-// eslint-disable-next-line valid-jsdoc
-/**
- * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeFacetExclusion}
- */
-AlgoliaSearchHelper.prototype.removeExclude = function () {
-  return this.removeFacetExclusion.apply(this, arguments);
-};
-
 /**
  * Removes a tag filter with the `tag` provided. If the
  * filter is not set, it doesn't change the filters.
