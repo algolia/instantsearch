@@ -22,8 +22,7 @@
   "files": [
     "dist",
     "cjs",
-    "es",
-    "scripts/transforms"
+    "es"
   ],
   "dependencies": {
     "@algolia/events": "^4.0.1",
