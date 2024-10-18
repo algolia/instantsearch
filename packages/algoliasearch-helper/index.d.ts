@@ -315,10 +315,6 @@ declare namespace algoliasearchHelper {
     overrideStateWithoutTriggeringChangeEvent: AlgoliaSearchHelper['setState'];
     hasRefinements(facet: string): boolean;
     getIndex(): string;
-    /**
-     * @deprecated
-     */
-    getCurrentPage(): number;
     getPage(): number;
     getTags(): string[];
     getRefinements(facetName: string): any[];
