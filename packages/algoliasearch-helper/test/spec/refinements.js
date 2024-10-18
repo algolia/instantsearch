@@ -98,7 +98,7 @@ test('isDisjunctiveRefined', function () {
   helper.addDisjunctiveFacetRefinement(facet, value);
   expect(helper.isDisjunctiveRefined(facet, value)).toBe(true);
 
-  helper.removeDisjunctiveRefine(facet, value);
+  helper.removeDisjunctiveFacetRefinement(facet, value);
   expect(helper.isDisjunctiveRefined(facet, value)).toBe(false);
 });
 
@@ -220,10 +220,10 @@ test('[Disjunctive] Facets should be resilient to user attempt to use numbers', 
 
   var stateWithFacet2and42 = helper.state;
 
-  helper.removeDisjunctiveRefine('facet2', '42');
+  helper.removeDisjunctiveFacetRefinement('facet2', '42');
   expect(helper.isDisjunctiveRefined('facet2', '42')).toBe(false);
   helper.setState(stateWithFacet2and42);
 
-  helper.removeDisjunctiveRefine('facet2', 42);
+  helper.removeDisjunctiveFacetRefinement('facet2', 42);
   expect(helper.isDisjunctiveRefined('facet2', 42)).toBe(false);
 });

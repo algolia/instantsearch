@@ -291,10 +291,6 @@ declare namespace algoliasearchHelper {
       value?: number | number[]
     ): this;
     removeDisjunctiveFacetRefinement(facet: string, value?: string): this;
-    /**
-     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeDisjunctiveFacetRefinement}
-     */
-    removeDisjunctiveRefine(facet: string, value?: string): this;
     removeHierarchicalFacetRefinement(facet: string): this;
     removeFacetRefinement(facet: string, value?: string): this;
     /**

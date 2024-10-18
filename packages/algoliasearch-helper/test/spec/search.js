@@ -128,7 +128,7 @@ test('no mutating methods should trigger a search', function () {
   helper.setQuery('');
   helper.clearRefinements();
   helper.addDisjunctiveFacetRefinement('city', 'Paris');
-  helper.removeDisjunctiveRefine('city', 'Paris');
+  helper.removeDisjunctiveFacetRefinement('city', 'Paris');
   helper.addExclude('tower', 'Empire State Building');
   helper.removeExclude('tower', 'Empire State Building');
   helper.addRefine('tower', 'Empire State Building');

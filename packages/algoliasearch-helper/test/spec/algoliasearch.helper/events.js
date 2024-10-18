@@ -112,7 +112,7 @@ test('Change events should be emitted as soon as the state change, but search sh
   expect(changeEventCount).toBe(3);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.removeDisjunctiveRefine('city', 'Paris');
+  helper.removeDisjunctiveFacetRefinement('city', 'Paris');
   expect(changeEventCount).toBe(4);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
@@ -192,7 +192,7 @@ test('Change events should only be emitted for meaningful changes', function () 
   expect(changeEventCount).toBe(1);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.removeDisjunctiveRefine('city', 'Paris');
+  helper.removeDisjunctiveFacetRefinement('city', 'Paris');
   expect(changeEventCount).toBe(1);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
@@ -231,7 +231,7 @@ test('search event should be emitted once when the search is triggered and befor
   expect(searched).toHaveBeenCalledTimes(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.removeDisjunctiveRefine('city', 'Paris');
+  helper.removeDisjunctiveFacetRefinement('city', 'Paris');
   expect(searched).toHaveBeenCalledTimes(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 

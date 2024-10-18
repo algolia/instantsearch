@@ -25,6 +25,6 @@ test('Conjuctive facet should be declared to be refine', function () {
     h.addDisjunctiveFacetRefinement.bind(h, 'undeclaredFacet', 'value')
   ).toThrow();
   expect(
-    h.removeDisjunctiveRefine.bind(h, 'undeclaredFacet', 'value')
+    h.removeDisjunctiveFacetRefinement.bind(h, 'undeclaredFacet', 'value')
   ).toThrow();
 });

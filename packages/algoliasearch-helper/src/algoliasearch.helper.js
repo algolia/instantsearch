@@ -815,14 +815,6 @@ AlgoliaSearchHelper.prototype.removeDisjunctiveFacetRefinement = function (
   return this;
 };
 
-// eslint-disable-next-line valid-jsdoc
-/**
- * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeDisjunctiveFacetRefinement}
- */
-AlgoliaSearchHelper.prototype.removeDisjunctiveRefine = function () {
-  return this.removeDisjunctiveFacetRefinement.apply(this, arguments);
-};
-
 /**
  * Removes the refinement set on a hierarchical facet.
  * @param {string} facet the facet name
