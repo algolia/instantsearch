@@ -3,7 +3,6 @@
 import { cx } from 'instantsearch-ui-components';
 import { h } from 'preact';
 
-import { createInsightsEventHandler } from '../../lib/insights/listener';
 import { warning } from '../../lib/utils';
 import Template from '../Template/Template';
 
@@ -80,7 +79,7 @@ const DefaultBanner = ({
 const InfiniteHits = ({
   results,
   hits,
-  insights,
+
   sendEvent,
   hasShowPrevious,
   showPrevious,
@@ -91,17 +90,9 @@ const InfiniteHits = ({
   templateProps,
   banner,
 }: InfiniteHitsProps) => {
-  const handleInsightsClick = createInsightsEventHandler({
-    insights,
-    sendEvent,
-  });
-
   if (results.hits.length === 0) {
     return (
-      <div
-        className={cx(cssClasses.root, cssClasses.emptyRoot)}
-        onClick={handleInsightsClick}
-      >
+      <div className={cx(cssClasses.root, cssClasses.emptyRoot)}>
         {banner &&
           (templateProps.templates.banner ? (
             <Template
@@ -167,12 +158,10 @@ const InfiniteHits = ({
             rootTagName="li"
             rootProps={{
               className: cssClasses.item,
-              onClick: (event: MouseEvent) => {
-                handleInsightsClick(event);
+              onClick: () => {
                 sendEvent('click:internal', hit, 'Hit Clicked');
               },
-              onAuxClick: (event: MouseEvent) => {
-                handleInsightsClick(event);
+              onAuxClick: () => {
                 sendEvent('click:internal', hit, 'Hit Clicked');
               },
             }}

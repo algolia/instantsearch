@@ -22,6 +22,7 @@ export * from './getAppIdAndApiKey';
 export * from './getContainerNode';
 export * from './getHighlightedParts';
 export * from './getHighlightFromSiblings';
+export * from './getInsightsAnonymousToken';
 export * from './getObjectType';
 export * from './getPropertyByPath';
 export * from './getRefinements';

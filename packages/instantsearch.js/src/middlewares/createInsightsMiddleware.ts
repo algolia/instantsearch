@@ -1,10 +1,10 @@
-import { getInsightsAnonymousUserTokenInternal } from '../helpers';
 import {
   warning,
   noop,
   getAppIdAndApiKey,
   find,
   safelyRunOnBrowser,
+  getInsightsAnonymousUserToken,
 } from '../lib/utils';
 
 import type {
@@ -247,7 +247,7 @@ export function createInsightsMiddleware<
           }
         };
 
-        const anonymousUserToken = getInsightsAnonymousUserTokenInternal();
+        const anonymousUserToken = getInsightsAnonymousUserToken();
         if (anonymousUserToken) {
           // When `aa('init', { ... })` is called, it creates an anonymous user token in cookie.
           // We can set it as userToken.
