@@ -161,12 +161,6 @@ body {
   margin: 0 auto;
 }
 
-.algolia-places {
-  display: block !important;
-  width: 100%;
-  margin: 0 auto;
-}
-
 .my-custom-marker {
   position: relative;
   background-color: white;
