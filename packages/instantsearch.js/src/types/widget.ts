@@ -56,7 +56,6 @@ export type DisposeOptions = {
 
 // @MAJOR: Remove these exported types if we don't need them
 export type BuiltinTypes =
-  | 'ais.answers'
   | 'ais.autocomplete'
   | 'ais.breadcrumb'
   | 'ais.clearRefinements'
@@ -93,7 +92,6 @@ export type BuiltinTypes =
   | 'ais.voiceSearch';
 
 export type BuiltinWidgetTypes =
-  | 'ais.answers'
   | 'ais.autocomplete'
   | 'ais.breadcrumb'
   | 'ais.clearRefinements'
