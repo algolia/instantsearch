@@ -452,16 +452,6 @@ See documentation: ${createDocumentationLink({
     return this;
   }
 
-  // @major we shipped with EXPERIMENTAL_use, but have changed that to just `use` now
-  public EXPERIMENTAL_use(...middleware: Middleware[]): this {
-    warning(
-      false,
-      'The middleware API is now considered stable, so we recommend replacing `EXPERIMENTAL_use` with `use` before upgrading to the next major version.'
-    );
-
-    return this.use(...middleware);
-  }
-
   /**
    * Adds a widget to the search instance.
    * A widget can be added either before or after InstantSearch has started.
