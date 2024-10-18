@@ -116,7 +116,7 @@ test('Change events should be emitted as soon as the state change, but search sh
   expect(changeEventCount).toBe(4);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.addExclude('tower', 'Empire State Building');
+  helper.addFacetExclusion('tower', 'Empire State Building');
   expect(changeEventCount).toBe(5);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
@@ -171,7 +171,7 @@ test('Change events should only be emitted for meaningful changes', function () 
   expect(changeEventCount).toBe(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.addExclude('tower', 'Empire State Building');
+  helper.addFacetExclusion('tower', 'Empire State Building');
   expect(changeEventCount).toBe(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
@@ -235,7 +235,7 @@ test('search event should be emitted once when the search is triggered and befor
   expect(searched).toHaveBeenCalledTimes(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.addExclude('tower', 'Empire State Building');
+  helper.addFacetExclusion('tower', 'Empire State Building');
   expect(searched).toHaveBeenCalledTimes(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 

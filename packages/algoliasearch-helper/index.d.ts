@@ -261,10 +261,6 @@ declare namespace algoliasearchHelper {
     ): this;
     addFacetRefinement(facet: string, value: string): this;
     addFacetExclusion(facet: string, value: string): this;
-    /**
-     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addFacetExclusion}
-     */
-    addExclude: AlgoliaSearchHelper['addFacetExclusion'];
     addTag(tag: string): this;
     addFrequentlyBoughtTogether(
       params: RecommendParametersWithId<FrequentlyBoughtTogetherQuery>

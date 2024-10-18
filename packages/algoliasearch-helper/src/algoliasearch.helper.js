@@ -639,14 +639,6 @@ AlgoliaSearchHelper.prototype.addFacetExclusion = function (facet, value) {
   return this;
 };
 
-// eslint-disable-next-line valid-jsdoc
-/**
- * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addFacetExclusion}
- */
-AlgoliaSearchHelper.prototype.addExclude = function () {
-  return this.addFacetExclusion.apply(this, arguments);
-};
-
 /**
  * Adds a tag filter with the `tag` provided. If the
  * filter is already set, it doesn't change the filters.

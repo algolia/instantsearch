@@ -127,7 +127,7 @@ test('getRefinements should return all the refinements for a given facet', funct
   helper
     .addFacetRefinement('facet1', 'val1')
     .addFacetRefinement('facet1', 'val2')
-    .addExclude('facet1', 'val-1')
+    .addFacetExclusion('facet1', 'val-1')
     .toggleRefine('facet1', 'val3');
 
   helper
@@ -194,7 +194,7 @@ test('[Exclude] Facets should be resilient to user attempt to use numbers', func
     disjunctiveFacets: ['facet2'],
   });
 
-  helper.addExclude('facet1', 42);
+  helper.addFacetExclusion('facet1', 42);
   expect(helper.isExcluded('facet1', 42)).toBe(true);
   expect(helper.isExcluded('facet1', '42')).toBe(true);
 

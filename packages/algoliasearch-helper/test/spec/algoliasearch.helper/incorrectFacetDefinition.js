@@ -14,7 +14,7 @@ test('Conjunctive facet should be declared to be refined', function () {
 test('Conjunctive facet should be declared to be excluded', function () {
   var h = algoliasearchHelper(fakeClient, '', {});
 
-  expect(h.addExclude.bind(h, 'undeclaredFacet', 'value')).toThrow();
+  expect(h.addFacetExclusion.bind(h, 'undeclaredFacet', 'value')).toThrow();
   expect(h.removeExclude.bind(h, 'undeclaredFacet', 'value')).toThrow();
 });
 
