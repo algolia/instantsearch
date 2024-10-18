@@ -253,10 +253,6 @@ declare namespace algoliasearchHelper {
     setIndex(name: string): this;
 
     addDisjunctiveFacetRefinement(facet: string, value: string): this;
-    /**
-     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addDisjunctiveFacetRefinement}
-     */
-    addDisjunctiveRefine(facet: string, value: string): this;
     addHierarchicalFacetRefinement(facet: string, path: string): this;
     addNumericRefinement(
       facet: string,

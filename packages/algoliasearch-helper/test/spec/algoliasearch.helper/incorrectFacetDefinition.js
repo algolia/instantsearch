@@ -21,7 +21,9 @@ test('Conjunctive facet should be declared to be excluded', function () {
 test('Conjuctive facet should be declared to be refine', function () {
   var h = algoliasearchHelper(fakeClient, '', {});
 
-  expect(h.addDisjunctiveRefine.bind(h, 'undeclaredFacet', 'value')).toThrow();
+  expect(
+    h.addDisjunctiveFacetRefinement.bind(h, 'undeclaredFacet', 'value')
+  ).toThrow();
   expect(
     h.removeDisjunctiveRefine.bind(h, 'undeclaredFacet', 'value')
   ).toThrow();

@@ -95,7 +95,7 @@ test('isDisjunctiveRefined', function () {
 
   expect(helper.isDisjunctiveRefined(facet, value)).toBe(false);
 
-  helper.addDisjunctiveRefine(facet, value);
+  helper.addDisjunctiveFacetRefinement(facet, value);
   expect(helper.isDisjunctiveRefined(facet, value)).toBe(true);
 
   helper.removeDisjunctiveRefine(facet, value);
@@ -131,8 +131,8 @@ test('getRefinements should return all the refinements for a given facet', funct
     .toggleRefine('facet1', 'val3');
 
   helper
-    .addDisjunctiveRefine('facet2', 'val4')
-    .addDisjunctiveRefine('facet2', 'val5')
+    .addDisjunctiveFacetRefinement('facet2', 'val4')
+    .addDisjunctiveFacetRefinement('facet2', 'val5')
     .toggleRefine('facet2', 'val6');
 
   helper
@@ -214,7 +214,7 @@ test('[Disjunctive] Facets should be resilient to user attempt to use numbers', 
     disjunctiveFacets: ['facet2'],
   });
 
-  helper.addDisjunctiveRefine('facet2', 42);
+  helper.addDisjunctiveFacetRefinement('facet2', 42);
   expect(helper.isDisjunctiveRefined('facet2', 42)).toBe(true);
   expect(helper.isDisjunctiveRefined('facet2', '42')).toBe(true);
 

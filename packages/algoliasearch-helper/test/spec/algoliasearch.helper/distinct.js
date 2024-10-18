@@ -31,7 +31,7 @@ test('Distinct not set', function () {
   });
 
   helper.setState(state0);
-  helper.addDisjunctiveRefine('facet', 'value');
+  helper.addDisjunctiveFacetRefinement('facet', 'value');
   disjunctiveFacetSearchParam = requestBuilder._getDisjunctiveFacetSearchParams(
     helper.state
   );
@@ -93,7 +93,7 @@ test('Distinct set to true', function () {
   expect(facetSearchParam.distinct).toBe(true);
 
   helper.setState(state0);
-  helper.addDisjunctiveRefine('facet', 'value');
+  helper.addDisjunctiveFacetRefinement('facet', 'value');
   disjunctiveFacetSearchParam = requestBuilder._getDisjunctiveFacetSearchParams(
     helper.state
   );
@@ -146,7 +146,7 @@ test('Distinct to false', function () {
   expect(facetSearchParam.distinct).toBe(false);
 
   helper.setState(state0);
-  helper.addDisjunctiveRefine('facet', 'value');
+  helper.addDisjunctiveFacetRefinement('facet', 'value');
   disjunctiveFacetSearchParam = requestBuilder._getDisjunctiveFacetSearchParams(
     helper.state
   );
@@ -199,7 +199,7 @@ test('Distinct as a number', function () {
   expect(facetSearchParam.distinct).toBe(distinctValue);
 
   helper.setState(state0);
-  helper.addDisjunctiveRefine('facet', 'value');
+  helper.addDisjunctiveFacetRefinement('facet', 'value');
   disjunctiveFacetSearchParam = requestBuilder._getDisjunctiveFacetSearchParams(
     helper.state
   );

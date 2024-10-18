@@ -547,14 +547,6 @@ AlgoliaSearchHelper.prototype.addDisjunctiveFacetRefinement = function (
   return this;
 };
 
-// eslint-disable-next-line valid-jsdoc
-/**
- * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addDisjunctiveFacetRefinement}
- */
-AlgoliaSearchHelper.prototype.addDisjunctiveRefine = function () {
-  return this.addDisjunctiveFacetRefinement.apply(this, arguments);
-};
-
 /**
  * Adds a refinement on a hierarchical facet. It will throw
  * an exception if the facet is not defined or if the facet

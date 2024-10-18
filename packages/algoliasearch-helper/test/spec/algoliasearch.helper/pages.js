@@ -66,7 +66,7 @@ test('pages should be reset if the mutation might change the number of pages', f
     ['addRefine', 'f2', 'val'],
     ['removeRefine', 'f2', 'val'],
 
-    ['addDisjunctiveRefine', 'f1', 'val'],
+    ['addDisjunctiveFacetRefinement', 'f1', 'val'],
     ['removeDisjunctiveRefine', 'f1', 'val'],
 
     ['toggleRefine', 'f1', 'v1'],
