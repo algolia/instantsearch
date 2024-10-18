@@ -23,7 +23,6 @@ export const EXPERIMENTAL_dynamicWidgets = deprecate(
 );
 export { dynamicWidgets };
 
-export { default as analytics } from './analytics/analytics';
 export { default as breadcrumb } from './breadcrumb/breadcrumb';
 export { default as clearRefinements } from './clear-refinements/clear-refinements';
 export { default as configure } from './configure/configure';
