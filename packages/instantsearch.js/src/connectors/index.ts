@@ -1,14 +1,7 @@
 import { deprecate } from '../lib/utils';
 
-import connectAnswers from './answers/connectAnswers';
 import connectConfigureRelatedItems from './configure-related-items/connectConfigureRelatedItems';
 import connectDynamicWidgets from './dynamic-widgets/connectDynamicWidgets';
-
-/** @deprecated answers is no longer supported */
-export const EXPERIMENTAL_connectAnswers = deprecate(
-  connectAnswers,
-  'answers is no longer supported'
-);
 
 /** @deprecated use connectRelatedItems instead */
 export const EXPERIMENTAL_connectConfigureRelatedItems = deprecate(
