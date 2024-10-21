@@ -50,6 +50,8 @@ export type InsightsClientWithGlobals = InsightsClient & {
 
 export type CreateInsightsMiddleware = typeof createInsightsMiddleware;
 
+type TokenType = 'authenticated' | 'default';
+
 export function createInsightsMiddleware<
   TInsightsClient extends ProvidedInsightsClient
 >(props: InsightsProps<TInsightsClient> = {}): InternalMiddleware {
@@ -61,6 +63,7 @@ export function createInsightsMiddleware<
     $$automatic = false,
   } = props;
 
+  let currentTokenType: TokenType | undefined;
   let potentialInsightsClient: ProvidedInsightsClient = _insightsClient;
 
   if (!_insightsClient && _insightsClient !== null) {
@@ -217,7 +220,9 @@ export function createInsightsMiddleware<
 
         const setUserTokenToSearch = (
           userToken?: string | number,
-          immediate = false
+          tokenType?: TokenType,
+          immediate = false,
+          unsetAuthToken = false
         ) => {
           const normalizedUserToken = normalizeUserToken(userToken);
 
@@ -237,6 +242,19 @@ export function createInsightsMiddleware<
             if (existingToken && existingToken !== userToken) {
               instantSearchInstance.scheduleSearch();
             }
+
+            currentTokenType = tokenType;
+          }
+
+          // the authenticated user token cannot be overridden by a user or anonymous token
+          // for instant search query requests
+          if (
+            currentTokenType &&
+            currentTokenType === 'authenticated' &&
+            tokenType === 'default' &&
+            unsetAuthToken
+          ) {
+            return;
           }
 
           // Delay the token application to the next render cycle
@@ -250,8 +268,10 @@ export function createInsightsMiddleware<
         const anonymousUserToken = getInsightsAnonymousUserTokenInternal();
         if (anonymousUserToken) {
           // When `aa('init', { ... })` is called, it creates an anonymous user token in cookie.
-          // We can set it as userToken.
-          setUserTokenToSearch(anonymousUserToken, true);
+          // We can set it as userToken. We also need to set the insights userToken to this cookie
+          // value since, if that's not set before a sendEvent, insights automatically generates a
+          // new anonymous token, causing a state change and an unnecessary query on instantsearch.
+          setUserToken(anonymousUserToken, anonymousUserToken, undefined);
         }
 
         function setUserToken(
@@ -259,7 +279,11 @@ export function createInsightsMiddleware<
           userToken?: string | number,
           authenticatedUserToken?: string | number
         ) {
-          setUserTokenToSearch(token, true);
+          setUserTokenToSearch(
+            token,
+            authenticatedUserToken ? 'authenticated' : 'default',
+            true
+          );
 
           if (userToken) {
             insightsClient('setUserToken', userToken);
@@ -269,13 +293,48 @@ export function createInsightsMiddleware<
           }
         }
 
+        let authenticatedUserTokenFromInit: string | undefined;
+        let userTokenFromInit: string | undefined;
+
+        // By the time the first query is sent, the token would not be set by the insights
+        // onChange callbacks. It is explicitly being set here so that the first query
+        // has the initial tokens set and inturn a second query isn't automatically made
+        // when the onChange callback actually changes the state.
+        if (
+          typeof instantSearchInstance._insights !== 'boolean' &&
+          instantSearchInstance._insights?.insightsInitParams
+        ) {
+          if (
+            instantSearchInstance._insights.insightsInitParams
+              .authenticatedUserToken
+          ) {
+            authenticatedUserTokenFromInit =
+              instantSearchInstance._insights.insightsInitParams
+                .authenticatedUserToken;
+          } else if (
+            instantSearchInstance._insights.insightsInitParams.userToken
+          ) {
+            userTokenFromInit =
+              instantSearchInstance._insights.insightsInitParams.userToken;
+          }
+        }
+
         // We consider the `userToken` or `authenticatedUserToken` before an
-        // `init` call of higher importance than one from the queue.
+        // `init` call of higher importance than one from the queue and ones set
+        // from the init props to be higher than that.
+        const tokenFromInit =
+          authenticatedUserTokenFromInit || userTokenFromInit;
         const tokenBeforeInit =
           authenticatedUserTokenBeforeInit || userTokenBeforeInit;
         const queuedToken = queuedAuthenticatedUserToken || queuedUserToken;
 
-        if (tokenBeforeInit) {
+        if (tokenFromInit) {
+          setUserToken(
+            tokenFromInit,
+            userTokenFromInit,
+            authenticatedUserTokenFromInit
+          );
+        } else if (tokenBeforeInit) {
           setUserToken(
             tokenBeforeInit,
             userTokenBeforeInit,
@@ -289,25 +348,14 @@ export function createInsightsMiddleware<
           );
         }
 
-        // By the time the first query is sent, the token would not be set by the insights
-        // onChange callbacks. It is explicitly being set here so that the first query
-        // has the initial tokens set and inturn a second query isn't automatically made
-        // when the onChange callback actually changes the state.
-        if (
-          typeof instantSearchInstance._insights !== 'boolean' &&
-          instantSearchInstance._insights?.insightsInitParams
-        ) {
-          if (instantSearchInstance._insights.insightsInitParams.authenticatedUserToken) {
-            setUserTokenToSearch(instantSearchInstance._insights.insightsInitParams.authenticatedUserToken, true);
-          } else if (instantSearchInstance._insights.insightsInitParams.userToken) {
-            setUserTokenToSearch(instantSearchInstance._insights.insightsInitParams.userToken, true);
-          }
-        }
-
         // This updates userToken which is set explicitly by `aa('setUserToken', userToken)`
-        insightsClient('onUserTokenChange', setUserTokenToSearch, {
-          immediate: true,
-        });
+        insightsClient(
+          'onUserTokenChange',
+          (token) => setUserTokenToSearch(token, 'default', true),
+          {
+            immediate: true,
+          }
+        );
 
         // This updates userToken which is set explicitly by `aa('setAuthenticatedtUserToken', authenticatedUserToken)`
         insightsClient(
@@ -316,11 +364,11 @@ export function createInsightsMiddleware<
             // If we're unsetting the `authenticatedUserToken`, we revert to the `userToken`
             if (!authenticatedUserToken) {
               insightsClient('getUserToken', null, (_, userToken) => {
-                setUserTokenToSearch(userToken);
+                setUserTokenToSearch(userToken, 'default', true, true);
               });
             }
 
-            setUserTokenToSearch(authenticatedUserToken);
+            setUserTokenToSearch(authenticatedUserToken, 'authenticated', true);
           },
           {
             immediate: true,
