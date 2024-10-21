@@ -663,24 +663,6 @@ function SearchResults(state, results, options) {
 }
 
 /**
- * Get a facet object with its name
- * @deprecated
- * @param {string} name name of the faceted attribute
- * @return {SearchResults.Facet} the facet object
- */
-SearchResults.prototype.getFacetByName = function (name) {
-  function predicate(facet) {
-    return facet.name === name;
-  }
-
-  return (
-    find(this.facets, predicate) ||
-    find(this.disjunctiveFacets, predicate) ||
-    find(this.hierarchicalFacets, predicate)
-  );
-};
-
-/**
  * Get the facet values of a specified attribute from a SearchResults object.
  * @private
  * @param {SearchResults} results the search results to search in
