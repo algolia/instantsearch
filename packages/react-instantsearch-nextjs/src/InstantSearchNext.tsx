@@ -7,6 +7,7 @@ import {
   InstantSearchSSRProvider,
 } from 'react-instantsearch-core';
 
+import { HydrationScript } from './HydrationScript';
 import { InitializePromise } from './InitializePromise';
 import { TriggerSearch } from './TriggerSearch';
 import { useInstantSearchRouting } from './useInstantSearchRouting';
@@ -61,7 +62,7 @@ export function InstantSearchNext<
 
   const routing = useInstantSearchRouting(passedRouting, isMounting);
 
-  const promiseRef = useRef<PromiseWithState<void> | null>(null);
+  const promiseRef = useRef<PromiseWithState<InitialResults> | null>(null);
 
   const initialResults = safelyRunOnBrowser(
     () => window[InstantSearchInitialResults]
@@ -77,9 +78,10 @@ This message will only be displayed in development mode.`
     <InstantSearchRSCContext.Provider value={promiseRef}>
       <InstantSearchSSRProvider initialResults={initialResults}>
         <InstantSearch {...instantSearchProps} routing={routing}>
-          {!initialResults && <InitializePromise nonce={nonce} />}
+          {!initialResults && <InitializePromise />}
           {children}
           {!initialResults && <TriggerSearch />}
+          <HydrationScript nonce={nonce} initialResults={initialResults} />
         </InstantSearch>
       </InstantSearchSSRProvider>
     </InstantSearchRSCContext.Provider>
