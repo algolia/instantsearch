@@ -111,9 +111,9 @@ angular.module('searchApp', ['ngSanitize', 'algoliasearch'])
       $scope.content = event.results;
     });
   });
-  $scope.toggleRefine = function($event, facet, value) {
+  $scope.toggleFacetRefinement = function($event, facet, value) {
     $event.preventDefault();
-    $scope.helper.toggleRefine(facet, value).search();
+    $scope.helper.toggleFacetRefinement(facet, value).search();
   };
   $scope.$watch('q', function(q) {
     $scope.helper.setQuery(q).search();

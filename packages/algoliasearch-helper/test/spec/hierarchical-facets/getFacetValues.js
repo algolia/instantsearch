@@ -17,7 +17,7 @@ test('hierarchical facets: getFacetValues', function () {
     ],
   });
 
-  helper.toggleRefine('categories', 'beers | IPA').setQuery('a');
+  helper.toggleFacetRefinement('categories', 'beers | IPA').setQuery('a');
 
   var algoliaResponse = {
     results: [

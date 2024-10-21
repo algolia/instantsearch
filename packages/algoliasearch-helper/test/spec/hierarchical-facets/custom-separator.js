@@ -21,7 +21,7 @@ test('hierarchical facets: custom separator', function (done) {
     ],
   });
 
-  helper.toggleRefine('categories', 'beers | IPA');
+  helper.toggleFacetRefinement('categories', 'beers | IPA');
 
   var algoliaResponse = {
     results: [
