@@ -498,14 +498,6 @@ AlgoliaSearchHelper.prototype.addDisjunctiveFacetRefinement = function (
   return this;
 };
 
-// eslint-disable-next-line valid-jsdoc
-/**
- * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addDisjunctiveFacetRefinement}
- */
-AlgoliaSearchHelper.prototype.addDisjunctiveRefine = function () {
-  return this.addDisjunctiveFacetRefinement.apply(this, arguments);
-};
-
 /**
  * Adds a refinement on a hierarchical facet. It will throw
  * an exception if the facet is not defined or if the facet
@@ -578,14 +570,6 @@ AlgoliaSearchHelper.prototype.addFacetRefinement = function (facet, value) {
   return this;
 };
 
-// eslint-disable-next-line valid-jsdoc
-/**
- * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addFacetRefinement}
- */
-AlgoliaSearchHelper.prototype.addRefine = function () {
-  return this.addFacetRefinement.apply(this, arguments);
-};
-
 /**
  * Adds a an exclusion filter to a faceted attribute with the `value` provided. If the
  * filter is already set, it doesn't change the filters.
@@ -604,14 +588,6 @@ AlgoliaSearchHelper.prototype.addFacetExclusion = function (facet, value) {
   });
 
   return this;
-};
-
-// eslint-disable-next-line valid-jsdoc
-/**
- * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addFacetExclusion}
- */
-AlgoliaSearchHelper.prototype.addExclude = function () {
-  return this.addFacetExclusion.apply(this, arguments);
 };
 
 /**
@@ -774,14 +750,6 @@ AlgoliaSearchHelper.prototype.removeDisjunctiveFacetRefinement = function (
   return this;
 };
 
-// eslint-disable-next-line valid-jsdoc
-/**
- * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeDisjunctiveFacetRefinement}
- */
-AlgoliaSearchHelper.prototype.removeDisjunctiveRefine = function () {
-  return this.removeDisjunctiveFacetRefinement.apply(this, arguments);
-};
-
 /**
  * Removes the refinement set on a hierarchical facet.
  * @param {string} facet the facet name
@@ -824,14 +792,6 @@ AlgoliaSearchHelper.prototype.removeFacetRefinement = function (facet, value) {
   return this;
 };
 
-// eslint-disable-next-line valid-jsdoc
-/**
- * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeFacetRefinement}
- */
-AlgoliaSearchHelper.prototype.removeRefine = function () {
-  return this.removeFacetRefinement.apply(this, arguments);
-};
-
 /**
  * Removes an exclusion filter to a faceted attribute with the `value` provided. If the
  * filter is not set, it doesn't change the filters.
@@ -853,14 +813,6 @@ AlgoliaSearchHelper.prototype.removeFacetExclusion = function (facet, value) {
   });
 
   return this;
-};
-
-// eslint-disable-next-line valid-jsdoc
-/**
- * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeFacetExclusion}
- */
-AlgoliaSearchHelper.prototype.removeExclude = function () {
-  return this.removeFacetExclusion.apply(this, arguments);
 };
 
 /**
@@ -982,33 +934,6 @@ AlgoliaSearchHelper.prototype.toggleFacetExclusion = function (facet, value) {
   return this;
 };
 
-// eslint-disable-next-line valid-jsdoc
-/**
- * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#toggleFacetExclusion}
- */
-AlgoliaSearchHelper.prototype.toggleExclude = function () {
-  return this.toggleFacetExclusion.apply(this, arguments);
-};
-
-/**
- * Adds or removes a filter to a faceted attribute with the `value` provided. If
- * the value is set then it removes it, otherwise it adds the filter.
- *
- * This method can be used for conjunctive, disjunctive and hierarchical filters.
- *
- * This method resets the current page to 0.
- * @param  {string} facet the facet to refine
- * @param  {string} value the associated value
- * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
- * @throws Error will throw an error if the facet is not declared in the settings of the helper
- * @fires change
- * @chainable
- * @deprecated since version 2.19.0, see {@link AlgoliaSearchHelper#toggleFacetRefinement}
- */
-AlgoliaSearchHelper.prototype.toggleRefinement = function (facet, value) {
-  return this.toggleFacetRefinement(facet, value);
-};
-
 /**
  * Adds or removes a filter to a faceted attribute with the `value` provided. If
  * the value is set then it removes it, otherwise it adds the filter.
@@ -1030,14 +955,6 @@ AlgoliaSearchHelper.prototype.toggleFacetRefinement = function (facet, value) {
   });
 
   return this;
-};
-
-// eslint-disable-next-line valid-jsdoc
-/**
- * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#toggleFacetRefinement}
- */
-AlgoliaSearchHelper.prototype.toggleRefine = function () {
-  return this.toggleFacetRefinement.apply(this, arguments);
 };
 
 /**
@@ -1088,13 +1005,14 @@ AlgoliaSearchHelper.prototype.previousPage = function () {
 };
 
 /**
- * @private
- * @param {number} page The page number
+ * Updates the current page.
+ * @function
+ * @param  {number} page The page number
  * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
- * @chainable
  * @fires change
+ * @chainable
  */
-function setCurrentPage(page) {
+AlgoliaSearchHelper.prototype.setPage = function setPage(page) {
   if (page < 0) throw new Error('Page requested below 0.');
 
   this._change({
@@ -1103,27 +1021,7 @@ function setCurrentPage(page) {
   });
 
   return this;
-}
-
-/**
- * Change the current page
- * @deprecated
- * @param  {number} page The page number
- * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
- * @fires change
- * @chainable
- */
-AlgoliaSearchHelper.prototype.setCurrentPage = setCurrentPage;
-
-/**
- * Updates the current page.
- * @function
- * @param  {number} page The page number
- * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
- * @fires change
- * @chainable
- */
-AlgoliaSearchHelper.prototype.setPage = setCurrentPage;
+};
 
 /**
  * Updates the name of the index that will be targeted by the query.
@@ -1251,54 +1149,6 @@ AlgoliaSearchHelper.prototype.hasRefinements = function (attribute) {
 };
 
 /**
- * Check if a value is excluded for a specific faceted attribute. If the value
- * is omitted then the function checks if there is any excluding refinements.
- *
- * @param  {string}  facet name of the attribute for used for faceting
- * @param  {string}  [value] optional value. If passed will test that this value
- * is filtering the given facet.
- * @return {boolean} true if refined
- * @example
- * helper.isExcludeRefined('color'); // false
- * helper.isExcludeRefined('color', 'blue') // false
- * helper.isExcludeRefined('color', 'red') // false
- *
- * helper.addFacetExclusion('color', 'red');
- *
- * helper.isExcludeRefined('color'); // true
- * helper.isExcludeRefined('color', 'blue') // false
- * helper.isExcludeRefined('color', 'red') // true
- */
-AlgoliaSearchHelper.prototype.isExcluded = function (facet, value) {
-  return this.state.isExcludeRefined(facet, value);
-};
-
-// eslint-disable-next-line valid-jsdoc
-/**
- * @deprecated since 2.4.0, see {@link AlgoliaSearchHelper#hasRefinements}
- */
-AlgoliaSearchHelper.prototype.isDisjunctiveRefined = function (facet, value) {
-  return this.state.isDisjunctiveFacetRefined(facet, value);
-};
-
-/**
- * Check if the string is a currently filtering tag.
- * @param {string} tag tag to check
- * @return {boolean} true if the tag is currently refined
- */
-AlgoliaSearchHelper.prototype.hasTag = function (tag) {
-  return this.state.isTagRefined(tag);
-};
-
-// eslint-disable-next-line valid-jsdoc
-/**
- * @deprecated since 2.4.0, see {@link AlgoliaSearchHelper#hasTag}
- */
-AlgoliaSearchHelper.prototype.isTagRefined = function () {
-  return this.hasTagRefinements.apply(this, arguments);
-};
-
-/**
  * Get the name of the currently used index.
  * @return {string} name of the index
  * @example
@@ -1309,22 +1159,14 @@ AlgoliaSearchHelper.prototype.getIndex = function () {
   return this.state.index;
 };
 
-function getCurrentPage() {
-  return this.state.page;
-}
-
-/**
- * Get the currently selected page
- * @deprecated
- * @return {number} the current page
- */
-AlgoliaSearchHelper.prototype.getCurrentPage = getCurrentPage;
 /**
  * Get the currently selected page
  * @function
  * @return {number} the current page
  */
-AlgoliaSearchHelper.prototype.getPage = getCurrentPage;
+AlgoliaSearchHelper.prototype.getPage = function () {
+  return this.state.page;
+};
 
 /**
  * Get all the tags currently set to filters the results.
@@ -1796,20 +1638,6 @@ AlgoliaSearchHelper.prototype._dispatchRecommendError = function (
   });
 
   if (this._currentNbRecommendQueries === 0) this.emit('recommendQueueEmpty');
-};
-
-AlgoliaSearchHelper.prototype.containsRefinement = function (
-  query,
-  facetFilters,
-  numericFilters,
-  tagFilters
-) {
-  return (
-    query ||
-    facetFilters.length !== 0 ||
-    numericFilters.length !== 0 ||
-    tagFilters.length !== 0
-  );
 };
 
 /**
