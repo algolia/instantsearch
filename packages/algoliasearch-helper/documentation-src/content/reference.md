@@ -385,8 +385,6 @@ The facet exclusions are not a type of facets by themselves, they are conjunctiv
 
 {{> jsdoc jsdoc/helper/hasRefinements}}
 
-{{> jsdoc jsdoc/helper/isExcluded}}
-
 ### Numeric filters
 
 The numeric filters don't require any configuration. However they require that the attribute is stored as a number in Algolia.
@@ -408,8 +406,6 @@ The tag filters don't require any configuration. However, they require to be sto
 {{> jsdoc jsdoc/helper/removeTag}}
 
 {{> jsdoc jsdoc/helper/toggleTag}}
-
-{{> jsdoc jsdoc/helper/hasTag}}
 
 {{> jsdoc jsdoc/helper/getTags}}
 
