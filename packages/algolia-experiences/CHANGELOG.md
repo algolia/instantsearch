@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.3.1...algolia-experiences@1.4.0) (2024-10-15)
+
+
+### Features
+
+* **experiences:** add a default layout carousel for recommend widgets ([#6386](https://github.com/algolia/instantsearch/issues/6386)) ([794d244](https://github.com/algolia/instantsearch/commit/794d2441f7c5dcbcff5b75fdb6205fe9c0653720))
+
+
+
+
+
+## [1.3.1](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.3.0...algolia-experiences@1.3.1) (2024-10-08)
+
+**Note:** Version bump only for package algolia-experiences
+
+
+
+
+
 # [1.3.0](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.2.0...algolia-experiences@1.3.0) (2024-09-24)
 
 

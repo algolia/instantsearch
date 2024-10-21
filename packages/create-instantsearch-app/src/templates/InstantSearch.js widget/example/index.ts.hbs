@@ -20,12 +20,12 @@ search.addWidgets([
   hits({
     container: '#hits',
     templates: {
-      item: `
+      item: (hit, { html, components }) => html`
       <p>
-        {{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}
+        ${components.Highlight({ hit, attribute: 'name' })}
       </p>
       <small>
-        {{#helpers.snippet}}{ "attribute": "description" }{{/helpers.snippet}}
+        ${components.Snippet({ hit, attribute: 'description' })}
       </small>
     `,
     },

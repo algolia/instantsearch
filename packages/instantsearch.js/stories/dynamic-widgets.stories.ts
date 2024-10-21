@@ -21,8 +21,8 @@ storiesOf('Basics/DynamicWidgets', module)
               typeof instantsearch.widgets.refinementList
             >({
               templates: {
-                header(stuff) {
-                  return stuff.widgetParams.attribute;
+                header({ widgetParams }) {
+                  return widgetParams.attribute;
                 },
               },
             })(instantsearch.widgets.refinementList)({ attribute, container }),
@@ -66,8 +66,8 @@ storiesOf('Basics/DynamicWidgets', module)
               typeof instantsearch.widgets.refinementList
             >({
               templates: {
-                header(stuff) {
-                  return stuff.widgetParams.attribute;
+                header({ widgetParams }) {
+                  return widgetParams.attribute;
                 },
               },
             })(instantsearch.widgets.refinementList)({ attribute, container }),

@@ -2808,12 +2808,12 @@ search.addWidgets([
   hits({
     container: '#hits',
     templates: {
-      item: \`
+      item: (hit, { html, components }) => html\`
       <p>
-        
+        \${components.Highlight({ hit, attribute: 'name' })}
       </p>
       <small>
-        
+        \${components.Snippet({ hit, attribute: 'description' })}
       </small>
     \`,
     },

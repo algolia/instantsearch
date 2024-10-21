@@ -1,5 +1,6 @@
 /** @jsx h */
 import { getPropertyByPath } from 'instantsearch.js/es/lib/utils';
+import { carousel } from 'instantsearch.js/es/templates';
 import { index, panel } from 'instantsearch.js/es/widgets';
 import { h, Fragment } from 'preact';
 
@@ -48,15 +49,23 @@ export function configToIndex(config: Configuration, container: HTMLElement) {
 const hitWidgets = new Set<TemplateWidgetTypes>([
   'ais.hits',
   'ais.infiniteHits',
-  'ais.frequentlyBoughtTogether',
-  'ais.lookingSimilar',
-  'ais.relatedProducts',
-  'ais.trendingItems',
 ]);
 function isTemplateWidget(
   child: Block
 ): child is Block & { children: TemplateChild[] } {
   return hitWidgets.has(child.type as any);
+}
+
+const layoutWidgets = new Set<TemplateWidgetTypes>([
+  'ais.frequentlyBoughtTogether',
+  'ais.lookingSimilar',
+  'ais.relatedProducts',
+  'ais.trendingItems',
+]);
+function isLayoutWidget(
+  child: Block
+): child is Block & { children: TemplateChild[] } {
+  return layoutWidgets.has(child.type as any);
 }
 
 const panelWidgets = new Set<PanelWidgetTypes>([
@@ -209,6 +218,63 @@ function blockToWidget(child: Block, container: HTMLElement): Widget[] {
 
             return child.children.map(renderChild);
           },
+        },
+      }),
+    ];
+  }
+
+  if (isLayoutWidget(child)) {
+    // type cast is needed here because the spread adding `container` and `templates` loses the type discriminant
+    const parameters = child.parameters as Parameters<
+      typeof widgets['ais.trendingItems']
+    >[0];
+    const widget = widgets[
+      child.type
+    ] as unknown as typeof widgets['ais.trendingItems'];
+
+    return [
+      widget({
+        ...parameters,
+        container: widgetContainer,
+        templates: {
+          item: (hit: any, { components }) => {
+            if (!child.children.length) {
+              return <code> no item template given</code>;
+            }
+
+            function renderChild(ch: TemplateChild) {
+              const Tag = tagNames.get(ch.type) as keyof JSX.IntrinsicElements;
+              if (!Tag) {
+                return <Fragment></Fragment>;
+              }
+
+              let children: ComponentChildren = null;
+              if ('text' in ch.parameters) {
+                children = ch.parameters.text.map((text) =>
+                  renderText(text, hit, components)
+                );
+              } else if ('children' in ch) {
+                children = ch.children.map(renderChild);
+              }
+
+              const attributes = Object.fromEntries(
+                Object.entries(ch.parameters)
+                  .filter(
+                    (tuple): tuple is [string, TemplateAttribute] =>
+                      tuple[0] !== 'text'
+                  )
+                  .map(([key, value]) => [
+                    key,
+                    value.map((item) => renderAttribute(item, hit)).join(''),
+                  ])
+              );
+
+              return <Tag {...attributes}>{children}</Tag>;
+            }
+
+            return child.children.map(renderChild);
+          },
+          layout: carousel(),
         },
       }),
     ];

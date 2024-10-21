@@ -1,6 +1,6 @@
 import historyRouter from 'instantsearch.js/es/lib/routers/history';
 import { headers } from 'next/headers';
-import { usePathname, useSearchParams, useRouter } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { useRef, useEffect } from 'react';
 
 import type { InstantSearchNextProps } from './InstantSearchNext';
@@ -17,7 +17,6 @@ export function useInstantSearchRouting<
 ) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const router = useRouter();
   const routingRef =
     useRef<InstantSearchProps<TUiState, TRouteState>['routing']>();
   const onUpdateRef = useRef<() => void>();
@@ -54,7 +53,7 @@ export function useInstantSearchRouting<
       if (this.isDisposed) {
         return;
       }
-      router.push(url, { scroll: false });
+      history.pushState({}, '', url);
     };
     browserHistoryOptions.start = function start(onUpdate) {
       onUpdateRef.current = onUpdate;
