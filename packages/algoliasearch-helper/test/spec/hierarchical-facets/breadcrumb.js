@@ -25,7 +25,7 @@ test('hierarchical facets: using getHierarchicalFacetBreadcrumb()', function () 
     ],
   });
 
-  helper.toggleRefine('categories', 'beers > IPA > Flying dog');
+  helper.toggleFacetRefinement('categories', 'beers > IPA > Flying dog');
 
   expect(helper.getHierarchicalFacetBreadcrumb('categories')).toEqual([
     'beers',
