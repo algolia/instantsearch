@@ -602,6 +602,13 @@ export function createOptionsTests(
       )!;
 
       await act(async () => {
+        /**
+         * Jest wrongly fails the last assertion when running in Vue 3
+         * (`activeElement` is reset to body).
+         * Duplicating the following call fixes this as a workaround,
+         * and doesn't change the objective of this test.
+         */
+        userEvent.click(initialTargetItem);
         userEvent.click(initialTargetItem);
         expect(document.activeElement).toEqual(initialTargetItem);
         await wait(0);
