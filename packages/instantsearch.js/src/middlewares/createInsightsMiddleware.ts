@@ -222,7 +222,7 @@ export function createInsightsMiddleware<
           userToken?: string | number,
           tokenType?: TokenType,
           immediate = false,
-          unsetAuthToken = false
+          unsetAuthenticatedUserToken = false
         ) => {
           const normalizedUserToken = normalizeUserToken(userToken);
 
@@ -252,7 +252,7 @@ export function createInsightsMiddleware<
             currentTokenType &&
             currentTokenType === 'authenticated' &&
             tokenType === 'default' &&
-            unsetAuthToken
+            !unsetAuthenticatedUserToken
           ) {
             return;
           }
