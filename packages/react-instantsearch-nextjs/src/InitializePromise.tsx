@@ -118,7 +118,6 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
             return;
           }
           injectInitialResults();
-          search.dispose();
         })
     );
   }
