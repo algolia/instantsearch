@@ -268,9 +268,9 @@ export function createInsightsMiddleware<
         const anonymousUserToken = getInsightsAnonymousUserTokenInternal();
         if (anonymousUserToken) {
           // When `aa('init', { ... })` is called, it creates an anonymous user token in cookie.
-          // We can set it as userToken. We also need to set the insights userToken to this cookie
-          // value since, if that's not set before a sendEvent, insights automatically generates a
-          // new anonymous token, causing a state change and an unnecessary query on instantsearch.
+          // We can set it as userToken on instantsearch and insights. If it's not set as an insights
+          // userToken before a sendEvent, insights automatically generates a new anonymous token,
+          // causing a state change and an unnecessary query on instantsearch.
           setUserToken(anonymousUserToken, anonymousUserToken, undefined);
         }
 
