@@ -76,7 +76,7 @@ export function createInsightsTests(
         });
 
         // initial calls because the middleware is attached
-        expect(window.aa).toHaveBeenCalledTimes(6);
+        expect(window.aa).toHaveBeenCalledTimes(7);
         expect(window.aa).toHaveBeenCalledWith(
           'addAlgoliaAgent',
           'insights-middleware'
@@ -151,7 +151,7 @@ export function createInsightsTests(
         await setup(options);
 
         // initial calls because the middleware is attached
-        expect(window.aa).toHaveBeenCalledTimes(5);
+        expect(window.aa).toHaveBeenCalledTimes(6);
         expect(window.aa).toHaveBeenCalledWith(
           'addAlgoliaAgent',
           'insights-middleware'
@@ -164,7 +164,7 @@ export function createInsightsTests(
         });
 
         // Once result is available
-        expect(window.aa).toHaveBeenCalledTimes(6);
+        expect(window.aa).toHaveBeenCalledTimes(7);
         expect(window.aa).toHaveBeenCalledWith(
           'viewedObjectIDs',
           {

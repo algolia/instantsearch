@@ -489,6 +489,7 @@ describe('network requests', () => {
             "params": {
               "clickAnalytics": true,
               "query": "",
+              "userToken": "cookie-key",
             },
           },
         ]
@@ -563,6 +564,7 @@ describe('network requests', () => {
             "params": {
               "clickAnalytics": true,
               "query": "",
+              "userToken": "cookie-key",
             },
           },
         ]

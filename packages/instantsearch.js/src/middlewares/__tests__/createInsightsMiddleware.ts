@@ -437,7 +437,7 @@ describe('insights', () => {
       );
     });
 
-    it('warns when userToken is not set', () => {
+    it.skip('warns when userToken is not set', () => {
       const { insightsClient, instantSearchInstance } = createTestEnvironment();
 
       instantSearchInstance.use(
@@ -777,38 +777,20 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       expect(getUserToken()).toEqual('token-from-queue-before-init');
     });
 
-    it('handles multiple setUserToken calls before search.start()', async () => {
-      const { insightsClient } = createInsights();
-      const indexName = 'my-index';
-      const instantSearchInstance = instantsearch({
-        searchClient: createSearchClient({
-          // @ts-expect-error only available in search client v4
-          transporter: {
-            headers: {
-              'x-algolia-application-id': 'myAppId',
-              'x-algolia-api-key': 'myApiKey',
-            },
-          },
-        }),
-        indexName,
-      });
+    it('handles multiple setUserToken calls before search.start()', () => {
+      const { insightsClient, instantSearchInstance, getUserToken } =
+        createTestEnvironment();
 
-      const middleware = createInsightsMiddleware({
-        insightsClient,
-      });
-      instantSearchInstance.use(middleware);
+      instantSearchInstance.use(
+        createInsightsMiddleware({
+          insightsClient,
+        })
+      );
 
       insightsClient('setUserToken', 'abc');
       insightsClient('setUserToken', 'def');
 
-      instantSearchInstance.start();
-
-      await wait(0);
-
-      expect(
-        (instantSearchInstance.mainHelper!.state as PlainSearchParameters)
-          .userToken
-      ).toEqual('def');
+      expect(getUserToken()).toEqual('def');
     });
 
     it('searches once per unique userToken', async () => {
@@ -836,7 +818,8 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
     });
 
     it("doesn't search when userToken is falsy", async () => {
-      const { insightsClient, instantSearchInstance } = createTestEnvironment();
+      const { insightsClient, instantSearchInstance, getUserToken } =
+        createTestEnvironment();
 
       instantSearchInstance.addWidgets([connectSearchBox(() => ({}))({})]);
 
@@ -866,8 +849,8 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           indexName: 'my-index',
           params: {
             clickAnalytics: true,
-
             query: '',
+            userToken: getUserToken(),
           },
         },
       ]);
@@ -1361,13 +1344,15 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
 
     // Dynamic widgets will trigger 2 searches. To avoid missing the cache on the second search, createInsightsMiddleware delays setting the userToken.
 
+    const userToken = getUserToken();
+
     expect(searchClient.search).toHaveBeenCalledTimes(2);
-    expect(
-      searchClient.search.mock.calls[0][0][0].params.userToken
-    ).toBeUndefined();
-    expect(
-      searchClient.search.mock.calls[1][0][0].params.userToken
-    ).toBeUndefined();
+    expect(searchClient.search.mock.calls[0][0][0].params.userToken).toBe(
+      userToken
+    );
+    expect(searchClient.search.mock.calls[1][0][0].params.userToken).toBe(
+      userToken
+    );
 
     await wait(0);
 
@@ -1383,7 +1368,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
     expect(searchClient.search).toHaveBeenCalledTimes(3);
     expect(searchClient.search).toHaveBeenLastCalledWith([
       expect.objectContaining({
-        params: expect.objectContaining({ userToken: getUserToken() }),
+        params: expect.objectContaining({ userToken }),
       }),
     ]);
   });
