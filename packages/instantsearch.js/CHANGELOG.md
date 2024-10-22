@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.75.2](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.75.1...instantsearch.js@4.75.2) (2024-10-22)
+
+
+### Bug Fixes
+
+* **refinement-list:** re-apply focus on facet checkbox after render ([#6392](https://github.com/algolia/instantsearch/issues/6392)) ([17e6658](https://github.com/algolia/instantsearch/commit/17e6658ff45c35bc5676d4b8569271b90e2328f2))
+
+
+
+
+
 ## [4.75.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.75.0...instantsearch.js@4.75.1) (2024-10-15)
 
 **Note:** Version bump only for package instantsearch.js

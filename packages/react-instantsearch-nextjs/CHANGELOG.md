@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.15](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.3.14...react-instantsearch-nextjs@0.3.15) (2024-10-22)
+
+
+### Bug Fixes
+
+* **dependencies:** strict semver for peerDependencies ([#6395](https://github.com/algolia/instantsearch/issues/6395)) ([1a9f6d6](https://github.com/algolia/instantsearch/commit/1a9f6d6b334315a6cb3053f3d89523a497e07194))
+* **next-app-router:** remove search.dispose ([#6406](https://github.com/algolia/instantsearch/issues/6406)) ([51f94c2](https://github.com/algolia/instantsearch/commit/51f94c268725754b1ab0177aad5b4fdf2cc1ba0e))
+
+
+
+
+
 ## [0.3.14](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.3.13...react-instantsearch-nextjs@0.3.14) (2024-10-15)
 
 
