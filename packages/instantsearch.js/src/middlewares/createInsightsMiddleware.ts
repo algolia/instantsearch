@@ -199,7 +199,6 @@ export function createInsightsMiddleware<
           instantSearchInstance.emit('error', new Error(errorMessage));
         }
       },
-      // eslint-disable-next-line complexity
       started() {
         insightsClient('addAlgoliaAgent', 'insights-middleware');
 
@@ -208,9 +207,10 @@ export function createInsightsMiddleware<
         const { queue: queueAtStart } = insightsClient;
 
         if (Array.isArray(queueAtStart)) {
-          [queuedUserToken, queuedAuthenticatedUserToken] = [
+          [queuedUserToken, queuedAuthenticatedUserToken, queuedInitParams] = [
             'setUserToken',
             'setAuthenticatedUserToken',
+            'init',
           ].map((key) => {
             const [, value] =
               find(
@@ -373,15 +373,11 @@ export function createInsightsMiddleware<
           setUserToken(anonymousUserToken, anonymousUserToken, undefined);
 
           if (insightsInitParams?.useCookie || queuedInitParams?.useCookie) {
-            const d = new Date();
-            d.setTime(
-              d.getTime() +
-                (insightsInitParams?.cookieDuration ||
-                  queuedInitParams?.cookieDuration ||
-                  30 * 24 * 60 * 60 * 1000 * 6)
+            saveTokenAsCookie(
+              anonymousUserToken,
+              insightsInitParams?.cookieDuration ||
+                queuedInitParams?.cookieDuration
             );
-            const expires = `expires=${d.toUTCString()}`;
-            document.cookie = `_ALGOLIA=${anonymousUserToken};${expires};path=/`;
           }
         }
 
@@ -492,6 +488,14 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
       },
     };
   };
+}
+
+function saveTokenAsCookie(token: string, cookieDuration?: number) {
+  const MONTH = 30 * 24 * 60 * 60 * 1000;
+  const d = new Date();
+  d.setTime(d.getTime() + (cookieDuration || MONTH * 6));
+  const expires = `expires=${d.toUTCString()}`;
+  document.cookie = `_ALGOLIA=${token};${expires};path=/`;
 }
 
 /**
