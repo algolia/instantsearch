@@ -6,6 +6,7 @@ import {
   find,
   safelyRunOnBrowser,
 } from '../lib/utils';
+import { createUUID } from '../lib/utils/uuid';
 
 import type {
   InsightsClient,
@@ -114,6 +115,8 @@ export function createInsightsMiddleware<
       'could not extract Algolia credentials from searchClient in insights middleware.'
     );
 
+    let queuedInitParams: Partial<InsightsMethodMap['init'][0]> | undefined =
+      undefined;
     let queuedUserToken: string | undefined = undefined;
     let queuedAuthenticatedUserToken: string | undefined = undefined;
     let userTokenBeforeInit: string | undefined = undefined;
@@ -132,9 +135,10 @@ export function createInsightsMiddleware<
       // At this point, even though `search-insights` is not loaded yet,
       // we still want to read the token from the queue.
       // Otherwise, the first search call will be fired without the token.
-      [queuedUserToken, queuedAuthenticatedUserToken] = [
+      [queuedUserToken, queuedAuthenticatedUserToken, queuedInitParams] = [
         'setUserToken',
         'setAuthenticatedUserToken',
+        'init',
       ].map((key) => {
         const [, value] =
           find(queue.slice().reverse(), ([method]) => method === key) || [];
@@ -195,10 +199,28 @@ export function createInsightsMiddleware<
           instantSearchInstance.emit('error', new Error(errorMessage));
         }
       },
+      // eslint-disable-next-line complexity
       started() {
         insightsClient('addAlgoliaAgent', 'insights-middleware');
 
         helper = instantSearchInstance.mainHelper!;
+
+        const { queue: queueAtStart } = insightsClient;
+
+        if (Array.isArray(queueAtStart)) {
+          [queuedUserToken, queuedAuthenticatedUserToken] = [
+            'setUserToken',
+            'setAuthenticatedUserToken',
+          ].map((key) => {
+            const [, value] =
+              find(
+                queueAtStart.slice().reverse(),
+                ([method]) => method === key
+              ) || [];
+
+            return value;
+          });
+        }
 
         initialParameters = {
           userToken: (helper.state as PlainSearchParameters).userToken,
@@ -265,15 +287,6 @@ export function createInsightsMiddleware<
           }
         };
 
-        const anonymousUserToken = getInsightsAnonymousUserTokenInternal();
-        if (anonymousUserToken) {
-          // When `aa('init', { ... })` is called, it creates an anonymous user token in cookie.
-          // We can set it as userToken on instantsearch and insights. If it's not set as an insights
-          // userToken before a sendEvent, insights automatically generates a new anonymous token,
-          // causing a state change and an unnecessary query on instantsearch.
-          setUserToken(anonymousUserToken, anonymousUserToken, undefined);
-        }
-
         function setUserToken(
           token: string | number,
           userToken?: string | number,
@@ -293,6 +306,20 @@ export function createInsightsMiddleware<
           }
         }
 
+        let anonymousUserToken: string | undefined = undefined;
+        const anonymousTokenFromInsights =
+          getInsightsAnonymousUserTokenInternal();
+        if (anonymousTokenFromInsights) {
+          // When `aa('init', { ... })` is called, it creates an anonymous user token in cookie.
+          // We can set it as userToken on instantsearch and insights. If it's not set as an insights
+          // userToken before a sendEvent, insights automatically generates a new anonymous token,
+          // causing a state change and an unnecessary query on instantsearch.
+          anonymousUserToken = anonymousTokenFromInsights;
+        } else {
+          const token = `anonymous-${createUUID()}`;
+          anonymousUserToken = token;
+        }
+
         let authenticatedUserTokenFromInit: string | undefined;
         let userTokenFromInit: string | undefined;
 
@@ -300,22 +327,12 @@ export function createInsightsMiddleware<
         // onChange callbacks. It is explicitly being set here so that the first query
         // has the initial tokens set and inturn a second query isn't automatically made
         // when the onChange callback actually changes the state.
-        if (
-          typeof instantSearchInstance._insights !== 'boolean' &&
-          instantSearchInstance._insights?.insightsInitParams
-        ) {
-          if (
-            instantSearchInstance._insights.insightsInitParams
-              .authenticatedUserToken
-          ) {
+        if (insightsInitParams) {
+          if (insightsInitParams.authenticatedUserToken) {
             authenticatedUserTokenFromInit =
-              instantSearchInstance._insights.insightsInitParams
-                .authenticatedUserToken;
-          } else if (
-            instantSearchInstance._insights.insightsInitParams.userToken
-          ) {
-            userTokenFromInit =
-              instantSearchInstance._insights.insightsInitParams.userToken;
+              insightsInitParams.authenticatedUserToken;
+          } else if (insightsInitParams.userToken) {
+            userTokenFromInit = insightsInitParams.userToken;
           }
         }
 
@@ -334,6 +351,12 @@ export function createInsightsMiddleware<
             userTokenFromInit,
             authenticatedUserTokenFromInit
           );
+        } else if (initialParameters.userToken) {
+          setUserToken(
+            initialParameters.userToken,
+            initialParameters.userToken,
+            undefined
+          );
         } else if (tokenBeforeInit) {
           setUserToken(
             tokenBeforeInit,
@@ -346,6 +369,20 @@ export function createInsightsMiddleware<
             queuedUserToken,
             queuedAuthenticatedUserToken
           );
+        } else if (anonymousUserToken) {
+          setUserToken(anonymousUserToken, anonymousUserToken, undefined);
+
+          if (insightsInitParams?.useCookie || queuedInitParams?.useCookie) {
+            const d = new Date();
+            d.setTime(
+              d.getTime() +
+                (insightsInitParams?.cookieDuration ||
+                  queuedInitParams?.cookieDuration ||
+                  30 * 24 * 60 * 60 * 1000 * 6)
+            );
+            const expires = `expires=${d.toUTCString()}`;
+            document.cookie = `_ALGOLIA=${anonymousUserToken};${expires};path=/`;
+          }
         }
 
         // This updates userToken which is set explicitly by `aa('setUserToken', userToken)`
