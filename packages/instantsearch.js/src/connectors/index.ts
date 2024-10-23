@@ -1,22 +1,4 @@
-import { deprecate } from '../lib/utils';
-
-import connectConfigureRelatedItems from './configure-related-items/connectConfigureRelatedItems';
-import connectDynamicWidgets from './dynamic-widgets/connectDynamicWidgets';
-
-/** @deprecated use connectRelatedItems instead */
-export const EXPERIMENTAL_connectConfigureRelatedItems = deprecate(
-  connectConfigureRelatedItems,
-  'EXPERIMENTAL_connectConfigureRelatedItems is deprecated and will be removed in a next minor version of InstantSearch. Please use connectRelatedItems instead.'
-);
-
-/** @deprecated use connectDynamicWidgets */
-export const EXPERIMENTAL_connectDynamicWidgets = deprecate(
-  connectDynamicWidgets,
-  'use connectDynamicWidgets'
-);
-
-export { connectDynamicWidgets };
-
+export { default as connectDynamicWidgets } from './dynamic-widgets/connectDynamicWidgets';
 export { default as connectClearRefinements } from './clear-refinements/connectClearRefinements';
 export { default as connectCurrentRefinements } from './current-refinements/connectCurrentRefinements';
 export { default as connectHierarchicalMenu } from './hierarchical-menu/connectHierarchicalMenu';
