@@ -323,10 +323,16 @@ export function createInsightsMiddleware<
         let authenticatedUserTokenFromInit: string | undefined;
         let userTokenFromInit: string | undefined;
 
-        // By the time the first query is sent, the token would not be set by the insights
-        // onChange callbacks. It is explicitly being set here so that the first query
-        // has the initial tokens set and inturn a second query isn't automatically made
-        // when the onChange callback actually changes the state.
+        // With SSR, the token could be be set on the state. We make sure
+        // that insights is in sync with that token since, there is no
+        // insights lib on the server.
+        const tokenFromSearchParameters = initialParameters.userToken;
+
+        // When the first query is sent, the token is possibly not yet be set by
+        // the insights onChange callbacks (if insights isn't yet loaded).
+        // It is explicitly being set here so that the first query has the
+        // initial tokens set and ensure a second query isn't automatically
+        // made when the onChange callback actually changes the state.
         if (insightsInitParams) {
           if (insightsInitParams.authenticatedUserToken) {
             authenticatedUserTokenFromInit =
@@ -343,7 +349,7 @@ export function createInsightsMiddleware<
           authenticatedUserTokenFromInit || userTokenFromInit;
         const tokenBeforeInit =
           authenticatedUserTokenBeforeInit || userTokenBeforeInit;
-        const queuedToken = queuedAuthenticatedUserToken || queuedUserToken;
+        const tokenFromQueue = queuedAuthenticatedUserToken || queuedUserToken;
 
         if (tokenFromInit) {
           setUserToken(
@@ -351,10 +357,10 @@ export function createInsightsMiddleware<
             userTokenFromInit,
             authenticatedUserTokenFromInit
           );
-        } else if (initialParameters.userToken) {
+        } else if (tokenFromSearchParameters) {
           setUserToken(
-            initialParameters.userToken,
-            initialParameters.userToken,
+            tokenFromSearchParameters,
+            tokenFromSearchParameters,
             undefined
           );
         } else if (tokenBeforeInit) {
@@ -363,9 +369,9 @@ export function createInsightsMiddleware<
             userTokenBeforeInit,
             authenticatedUserTokenBeforeInit
           );
-        } else if (queuedToken) {
+        } else if (tokenFromQueue) {
           setUserToken(
-            queuedToken,
+            tokenFromQueue,
             queuedUserToken,
             queuedAuthenticatedUserToken
           );
