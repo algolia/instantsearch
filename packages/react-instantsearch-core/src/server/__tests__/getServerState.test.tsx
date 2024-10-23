@@ -608,4 +608,48 @@ describe('getServerState', () => {
       </div>
     `);
   });
+
+  describe('insights', () => {
+    test('userToken is set when insights has been set to true', async () => {
+      const searchClient = createSearchClient({});
+      const spiedSearch = jest.spyOn(searchClient, 'search');
+
+      function App({
+        serverState,
+      }: {
+        serverState?: InstantSearchServerState;
+      }) {
+        return (
+          <InstantSearchSSRProvider {...serverState}>
+            <InstantSearch
+              searchClient={searchClient}
+              // initialUiState={{
+              //   instant_search: {
+              //     refinementList: {
+              //       categories: ['refined!'],
+              //     },
+              //   },
+              // }}
+              indexName="index"
+              insights={true}
+            >
+              <RefinementList attribute="brand" />
+              <SearchBox />
+
+              <h2>instant_search</h2>
+              <Hits hitComponent={Hit} />
+            </InstantSearch>
+          </InstantSearchSSRProvider>
+        );
+      }
+
+      await getServerState(<App />, { renderToString });
+
+      expect(spiedSearch).toHaveBeenCalledTimes(1);
+
+      const userToken = (spiedSearch.mock.calls[0][0] as any)[0].params
+        ?.userToken;
+      expect(userToken).toEqual(expect.stringMatching(/^anonymous-/));
+    });
+  });
 });
