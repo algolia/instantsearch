@@ -623,13 +623,6 @@ describe('getServerState', () => {
           <InstantSearchSSRProvider {...serverState}>
             <InstantSearch
               searchClient={searchClient}
-              // initialUiState={{
-              //   instant_search: {
-              //     refinementList: {
-              //       categories: ['refined!'],
-              //     },
-              //   },
-              // }}
               indexName="index"
               insights={true}
             >
