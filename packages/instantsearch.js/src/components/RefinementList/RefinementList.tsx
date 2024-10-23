@@ -108,7 +108,10 @@ class RefinementList<TTemplates extends Templates> extends Component<
 > {
   public static defaultProps = defaultProps;
 
+  private listRef = createRef<HTMLUListElement>();
   private searchBox = createRef<SearchBox>();
+
+  private lastRefinedValue: string | undefined = undefined;
 
   public shouldComponentUpdate(
     nextProps: RefinementListPropsWithDefaultProps<TTemplates>
@@ -122,6 +125,7 @@ class RefinementList<TTemplates extends Templates> extends Component<
   }
 
   private refine(facetValueToRefine: string) {
+    this.lastRefinedValue = facetValueToRefine;
     this.props.toggleRefinement(facetValueToRefine);
   }
 
@@ -270,6 +274,20 @@ class RefinementList<TTemplates extends Templates> extends Component<
     }
   }
 
+  /**
+   * This sets focus on the last refined input element after a render
+   * because Preact does not perform it automatically.
+   * @see https://github.com/preactjs/preact/issues/3242
+   */
+  public componentDidUpdate() {
+    this.listRef.current
+      ?.querySelector<HTMLInputElement>(
+        `input[value="${this.lastRefinedValue}"]`
+      )
+      ?.focus();
+    this.lastRefinedValue = undefined;
+  }
+
   private refineFirstValue() {
     const firstValue = this.props.facetValues && this.props.facetValues[0];
     if (firstValue) {
@@ -330,7 +348,7 @@ class RefinementList<TTemplates extends Templates> extends Component<
 
     const facetValues = this.props.facetValues &&
       this.props.facetValues.length > 0 && (
-        <ul className={this.props.cssClasses.list}>
+        <ul ref={this.listRef} className={this.props.cssClasses.list}>
           {this.props.facetValues.map(this._generateFacetItem, this)}
         </ul>
       );

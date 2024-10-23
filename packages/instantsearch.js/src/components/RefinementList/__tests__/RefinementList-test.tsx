@@ -660,7 +660,7 @@ describe('RefinementList', () => {
               <label>
                 <input type="radio" checked="${item.isRefined}" />
                 ${item.value}
-              </span>
+              </label>
             `,
         showMoreText: '',
       };
