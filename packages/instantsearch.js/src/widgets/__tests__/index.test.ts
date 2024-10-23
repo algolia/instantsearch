@@ -44,14 +44,6 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
         const index = widget as Widgets['index'];
         return index({ indexName: 'index' });
       }
-      case 'EXPERIMENTAL_configureRelatedItems': {
-        const EXPERIMENTAL_configureRelatedItems =
-          widget as Widgets['EXPERIMENTAL_configureRelatedItems'];
-        return EXPERIMENTAL_configureRelatedItems({
-          hit: { objectID: 'x' },
-          matchingPatterns: {},
-        });
-      }
       case 'geoSearch': {
         const geoSearch = widget as Widgets['geoSearch'];
         return geoSearch({
@@ -116,10 +108,9 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
           attributes: ['attr1', 'attr2'],
         });
       }
-      case 'dynamicWidgets':
-      case 'EXPERIMENTAL_dynamicWidgets': {
-        const EXPERIMENTAL_dynamicWidgets = widget as Widgets['dynamicWidgets'];
-        return EXPERIMENTAL_dynamicWidgets({
+      case 'dynamicWidgets': {
+        const dynamicWidgets = widget as Widgets['dynamicWidgets'];
+        return dynamicWidgets({
           transformItems(items) {
             return items;
           },
