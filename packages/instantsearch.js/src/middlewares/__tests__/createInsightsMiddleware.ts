@@ -21,6 +21,7 @@ import { history } from '../../lib/routers';
 import { warning } from '../../lib/utils';
 import { dynamicWidgets, hits, refinementList } from '../../widgets';
 
+import type { InsightsProps } from '..';
 import type { SearchClient } from '../../index.es';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
 import type { JSDOM } from 'jsdom';
@@ -50,6 +51,10 @@ describe('insights', () => {
     searchClient = searchClientWithCredentials,
     started = true,
     insights = false,
+  }: {
+    searchClient?: SearchClient;
+    started?: boolean;
+    insights?: InsightsProps | boolean;
   } = {}) => {
     castToJestMock(searchClient.search).mockClear();
     const { analytics, insightsClient } = createInsights();
@@ -437,37 +442,6 @@ describe('insights', () => {
       );
     });
 
-    it('warns when userToken is not set', () => {
-      const { insightsClient, instantSearchInstance } = createTestEnvironment();
-
-      instantSearchInstance.use(
-        createInsightsMiddleware({
-          insightsClient,
-          insightsInitParams: {
-            useCookie: false,
-            anonymousUserToken: false,
-          },
-        })
-      );
-
-      expect(() =>
-        instantSearchInstance.sendEventToInsights({
-          eventType: 'view',
-          insightsMethod: 'viewedObjectIDs',
-          payload: {
-            eventName: 'Hits Viewed',
-            index: '',
-            objectIDs: ['1', '2'],
-          },
-          widgetType: 'ais.hits',
-        })
-      ).toWarnDev(
-        `[InstantSearch.js]: Cannot send event to Algolia Insights because \`userToken\` is not set.
-
-See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-further/send-insights-events/js/#setting-the-usertoken`
-      );
-    });
-
     it('applies clickAnalytics if $$automatic: undefined', () => {
       const { insightsClient, instantSearchInstance } = createTestEnvironment();
       instantSearchInstance.use(
@@ -778,37 +752,34 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
     });
 
     it('handles multiple setUserToken calls before search.start()', async () => {
-      const { insightsClient } = createInsights();
-      const indexName = 'my-index';
-      const instantSearchInstance = instantsearch({
-        searchClient: createSearchClient({
-          // @ts-expect-error only available in search client v4
-          transporter: {
-            headers: {
-              'x-algolia-application-id': 'myAppId',
-              'x-algolia-api-key': 'myApiKey',
-            },
-          },
-        }),
-        indexName,
-      });
+      const { insightsClient, instantSearchInstance, getUserToken } =
+        createTestEnvironment();
 
-      const middleware = createInsightsMiddleware({
-        insightsClient,
-      });
-      instantSearchInstance.use(middleware);
+      instantSearchInstance.use(
+        createInsightsMiddleware({
+          insightsClient,
+        })
+      );
 
       insightsClient('setUserToken', 'abc');
       insightsClient('setUserToken', 'def');
 
-      instantSearchInstance.start();
+      expect(getUserToken()).toEqual('def');
+
+      instantSearchInstance.addWidgets([connectSearchBox(() => ({}))({})]);
 
       await wait(0);
-
-      expect(
-        (instantSearchInstance.mainHelper!.state as PlainSearchParameters)
-          .userToken
-      ).toEqual('def');
+      expect(instantSearchInstance.client.search).toHaveBeenCalledTimes(1);
+      expect(instantSearchInstance.client.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'my-index',
+          params: {
+            clickAnalytics: true,
+            query: '',
+            userToken: getUserToken(),
+          },
+        },
+      ]);
     });
 
     it('searches once per unique userToken', async () => {
@@ -836,7 +807,8 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
     });
 
     it("doesn't search when userToken is falsy", async () => {
-      const { insightsClient, instantSearchInstance } = createTestEnvironment();
+      const { insightsClient, instantSearchInstance, getUserToken } =
+        createTestEnvironment();
 
       instantSearchInstance.addWidgets([connectSearchBox(() => ({}))({})]);
 
@@ -866,8 +838,8 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           indexName: 'my-index',
           params: {
             clickAnalytics: true,
-
             query: '',
+            userToken: getUserToken(),
           },
         },
       ]);
@@ -876,6 +848,81 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
 
       await wait(0);
       expect(instantSearchInstance.client.search).toHaveBeenCalledTimes(2);
+    });
+
+    it('sets an anonymous token as the userToken if none given', async () => {
+      const { instantSearchInstance, getUserToken } = createTestEnvironment({
+        insights: true,
+      });
+
+      instantSearchInstance.addWidgets([connectSearchBox(() => ({}))({})]);
+
+      await wait(0);
+      expect(instantSearchInstance.client.search).toHaveBeenCalledTimes(1);
+      expect(instantSearchInstance.client.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'my-index',
+          params: {
+            clickAnalytics: true,
+            query: '',
+            userToken: getUserToken(),
+          },
+        },
+      ]);
+
+      expect(getUserToken()).toEqual(expect.stringMatching(/^anonymous-/));
+    });
+
+    it('saves an anonymous token to a cookie if useCookie is true in insights init props', () => {
+      const { getUserToken } = createTestEnvironment({
+        insights: {
+          insightsInitParams: {
+            useCookie: true,
+          },
+        },
+      });
+
+      const userToken = getUserToken();
+      expect(userToken).toEqual(expect.stringMatching(/^anonymous-/));
+      expect(document.cookie).toBe(`_ALGOLIA=${userToken}`);
+    });
+
+    it('saves an anonymous token to a cookie if useCookie is true insights init method', async () => {
+      const { instantSearchInstance, insightsClient, getUserToken } =
+        createTestEnvironment({
+          insights: true,
+          started: false,
+        });
+
+      insightsClient('init', { partial: true, useCookie: true });
+
+      instantSearchInstance.start();
+
+      await wait(0);
+      const userToken = getUserToken();
+      expect(userToken).toEqual(expect.stringMatching(/^anonymous-/));
+      expect(document.cookie).toBe(`_ALGOLIA=${userToken}`);
+    });
+
+    it('uses `userToken` from insights init props over anything else', async () => {
+      document.cookie = '_ALGOLIA=abc';
+
+      const { instantSearchInstance, insightsClient, getUserToken } =
+        createTestEnvironment({
+          insights: {
+            insightsInitParams: {
+              userToken: 'def',
+            },
+          },
+          started: false,
+        });
+
+      insightsClient('init', { partial: true, userToken: 'ghi' });
+
+      instantSearchInstance.start();
+
+      await wait(0);
+      expect(getUserToken()).toBe('def');
     });
 
     describe('authenticatedUserToken', () => {
@@ -918,6 +965,39 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
           instantSearchInstance.use(
             createInsightsMiddleware({ insightsClient })
           );
+
+          expect(getUserToken()).toEqual('abc');
+        });
+
+        it('uses the `authenticatedUserToken` when a `userToken` is set after', () => {
+          const { insightsClient, instantSearchInstance, getUserToken } =
+            createTestEnvironment();
+
+          insightsClient('setAuthenticatedUserToken', 'def');
+
+          instantSearchInstance.use(
+            createInsightsMiddleware({ insightsClient })
+          );
+
+          insightsClient('setUserToken', 'abc');
+
+          expect(getUserToken()).toEqual('def');
+        });
+
+        it('resets the token to the `userToken` when `authenticatedUserToken` is set as undefined', () => {
+          const { insightsClient, instantSearchInstance, getUserToken } =
+            createTestEnvironment();
+
+          insightsClient('setUserToken', 'abc');
+          insightsClient('setAuthenticatedUserToken', 'def');
+
+          instantSearchInstance.use(
+            createInsightsMiddleware({ insightsClient })
+          );
+
+          expect(getUserToken()).toEqual('def');
+
+          insightsClient('setAuthenticatedUserToken', undefined);
 
           expect(getUserToken()).toEqual('abc');
         });
@@ -1361,13 +1441,15 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
 
     // Dynamic widgets will trigger 2 searches. To avoid missing the cache on the second search, createInsightsMiddleware delays setting the userToken.
 
+    const userToken = getUserToken();
+
     expect(searchClient.search).toHaveBeenCalledTimes(2);
-    expect(
-      searchClient.search.mock.calls[0][0][0].params.userToken
-    ).toBeUndefined();
-    expect(
-      searchClient.search.mock.calls[1][0][0].params.userToken
-    ).toBeUndefined();
+    expect(searchClient.search.mock.calls[0][0][0].params.userToken).toBe(
+      userToken
+    );
+    expect(searchClient.search.mock.calls[1][0][0].params.userToken).toBe(
+      userToken
+    );
 
     await wait(0);
 
@@ -1383,7 +1465,7 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
     expect(searchClient.search).toHaveBeenCalledTimes(3);
     expect(searchClient.search).toHaveBeenLastCalledWith([
       expect.objectContaining({
-        params: expect.objectContaining({ userToken: getUserToken() }),
+        params: expect.objectContaining({ userToken }),
       }),
     ]);
   });

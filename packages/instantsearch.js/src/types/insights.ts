@@ -56,7 +56,7 @@ type QueueItemMap = {
   ];
 };
 
-type QueueItem = QueueItemMap[keyof QueueItemMap];
+export type QueueItem = QueueItemMap[keyof QueueItemMap];
 
 export type InsightsClient = _InsightsClient & {
   queue?: QueueItem[];
