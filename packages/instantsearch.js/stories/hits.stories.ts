@@ -115,16 +115,20 @@ storiesOf('Results/Hits', module)
         instantsearch.widgets.hits({
           container,
           templates: {
-            item(hit) {
-              return `
-                <h4>${instantsearch.reverseSnippet({
-                  attribute: 'name',
-                  hit,
-                })}</h4>
-                <p>${instantsearch.reverseSnippet({
-                  attribute: 'description',
-                  hit,
-                })}</p>
+            item(hit, { html, components }) {
+              return html`
+                <h4>
+                  ${components.ReverseSnippet({
+                    attribute: 'name',
+                    hit,
+                  })}
+                </h4>
+                <p>
+                  ${components.ReverseSnippet({
+                    attribute: 'description',
+                    hit,
+                  })}
+                </p>
               `;
             },
           },
