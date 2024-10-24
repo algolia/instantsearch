@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-next-example",
-  "version": "47.0.0",
+  "version": "48.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -14,8 +14,8 @@
     "next": "13.5.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-instantsearch": "7.13.5",
-    "react-instantsearch-router-nextjs": "7.13.5"
+    "react-instantsearch": "7.13.6",
+    "react-instantsearch-router-nextjs": "7.13.6"
   },
   "devDependencies": {
     "@types/node": "17.0.40",

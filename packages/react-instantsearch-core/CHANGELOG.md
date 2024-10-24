@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.13.6](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.13.5...react-instantsearch-core@7.13.6) (2024-10-24)
+
+
+### Bug Fixes
+
+* **instantsearch.js:** fix user token not being set in time for the first query ([#6377](https://github.com/algolia/instantsearch/issues/6377)) ([22016b0](https://github.com/algolia/instantsearch/commit/22016b02a7aa8d6736ea02e2c3998d878fdd0031))
+
+
+
+
+
 ## [7.13.5](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.13.4...react-instantsearch-core@7.13.5) (2024-10-22)
 
 **Note:** Version bump only for package react-instantsearch-core
