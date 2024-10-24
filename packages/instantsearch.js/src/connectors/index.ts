@@ -1,37 +1,10 @@
-import { deprecate } from '../lib/utils';
-
-import connectAnswers from './answers/connectAnswers';
-import connectConfigureRelatedItems from './configure-related-items/connectConfigureRelatedItems';
-import connectDynamicWidgets from './dynamic-widgets/connectDynamicWidgets';
-
-/** @deprecated answers is no longer supported */
-export const EXPERIMENTAL_connectAnswers = deprecate(
-  connectAnswers,
-  'answers is no longer supported'
-);
-
-/** @deprecated use connectRelatedItems instead */
-export const EXPERIMENTAL_connectConfigureRelatedItems = deprecate(
-  connectConfigureRelatedItems,
-  'EXPERIMENTAL_connectConfigureRelatedItems is deprecated and will be removed in a next minor version of InstantSearch. Please use connectRelatedItems instead.'
-);
-
-/** @deprecated use connectDynamicWidgets */
-export const EXPERIMENTAL_connectDynamicWidgets = deprecate(
-  connectDynamicWidgets,
-  'use connectDynamicWidgets'
-);
-
-export { connectDynamicWidgets };
-
+export { default as connectDynamicWidgets } from './dynamic-widgets/connectDynamicWidgets';
 export { default as connectClearRefinements } from './clear-refinements/connectClearRefinements';
 export { default as connectCurrentRefinements } from './current-refinements/connectCurrentRefinements';
 export { default as connectHierarchicalMenu } from './hierarchical-menu/connectHierarchicalMenu';
 export { default as connectHits } from './hits/connectHits';
-export { default as connectHitsWithInsights } from './hits/connectHitsWithInsights';
 export { default as connectHitsPerPage } from './hits-per-page/connectHitsPerPage';
 export { default as connectInfiniteHits } from './infinite-hits/connectInfiniteHits';
-export { default as connectInfiniteHitsWithInsights } from './infinite-hits/connectInfiniteHitsWithInsights';
 export { default as connectMenu } from './menu/connectMenu';
 export { default as connectNumericMenu } from './numeric-menu/connectNumericMenu';
 export { default as connectPagination } from './pagination/connectPagination';

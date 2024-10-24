@@ -24,8 +24,8 @@ test('hierarchical facets: two hierarchical facets', function (done) {
     ],
   });
 
-  helper.toggleRefine('beers', 'IPA');
-  helper.toggleRefine('fruits', 'oranges');
+  helper.toggleFacetRefinement('beers', 'IPA');
+  helper.toggleFacetRefinement('fruits', 'oranges');
 
   var algoliaResponse = {
     results: [

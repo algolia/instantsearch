@@ -20,7 +20,6 @@ export type ScopedResult = {
 type SharedRenderOptions = {
   instantSearchInstance: InstantSearch;
   parent: IndexWidget;
-  templatesConfig: Record<string, unknown>;
   scopedResults: ScopedResult[];
   state: SearchParameters;
   renderState: IndexRenderState;
@@ -57,13 +56,10 @@ export type DisposeOptions = {
 
 // @MAJOR: Remove these exported types if we don't need them
 export type BuiltinTypes =
-  | 'ais.analytics'
-  | 'ais.answers'
   | 'ais.autocomplete'
   | 'ais.breadcrumb'
   | 'ais.clearRefinements'
   | 'ais.configure'
-  | 'ais.configureRelatedItems'
   | 'ais.currentRefinements'
   | 'ais.dynamicWidgets'
   | 'ais.frequentlyBoughtTogether'
@@ -77,7 +73,6 @@ export type BuiltinTypes =
   | 'ais.menu'
   | 'ais.numericMenu'
   | 'ais.pagination'
-  | 'ais.places'
   | 'ais.poweredBy'
   | 'ais.queryRules'
   // @TODO: remove individual types for rangeSlider & rangeInput once updating checkIndexUiState
@@ -96,13 +91,10 @@ export type BuiltinTypes =
   | 'ais.voiceSearch';
 
 export type BuiltinWidgetTypes =
-  | 'ais.analytics'
-  | 'ais.answers'
   | 'ais.autocomplete'
   | 'ais.breadcrumb'
   | 'ais.clearRefinements'
   | 'ais.configure'
-  | 'ais.configureRelatedItems'
   | 'ais.currentRefinements'
   | 'ais.dynamicWidgets'
   | 'ais.frequentlyBoughtTogether'
@@ -117,7 +109,6 @@ export type BuiltinWidgetTypes =
   | 'ais.menuSelect'
   | 'ais.numericMenu'
   | 'ais.pagination'
-  | 'ais.places'
   | 'ais.poweredBy'
   | 'ais.queryRuleCustomData'
   | 'ais.queryRuleContext'

@@ -160,68 +160,6 @@ it('does not render a banner when showBanner is false', () => {
   expect(wrapper.html()).toMatchSnapshot();
 });
 
-it('exposes insights prop to the default slot', async () => {
-  const insights = jest.fn();
-
-  __setState({
-    ...defaultState,
-    insights,
-  });
-
-  const wrapper = mount({
-    components: { InfiniteHits },
-    template: `
-      <InfiniteHits>
-        <template v-slot="{ items, insights }">
-        <ul>
-        <li v-for="(item, itemIndex) in items" >
-          <button :id="'add-to-cart-' + item.objectID" @click="insights('clickedObjectIDsAfterSearch', {eventName: 'Add to cart', objectIDs: [item.objectID]})">
-            Add to cart
-          </button>
-        </li>
-      </ul>
-        </template>
-      </InfiniteHits>
-    `,
-  });
-
-  await wrapper.find('#add-to-cart-00002').trigger('click');
-  expect(insights).toHaveBeenCalledWith('clickedObjectIDsAfterSearch', {
-    eventName: 'Add to cart',
-    objectIDs: ['00002'],
-  });
-});
-
-it('exposes insights prop to the item slot', async () => {
-  const insights = jest.fn();
-
-  __setState({
-    ...defaultState,
-    insights,
-  });
-
-  const wrapper = mount({
-    components: { InfiniteHits },
-    template: `
-      <InfiniteHits>
-        <template v-slot:item="{ item, insights }">
-          <div>
-            <button :id="'add-to-cart-' + item.objectID" @click="insights('clickedObjectIDsAfterSearch', {eventName: 'Add to cart', objectIDs: [item.objectID]})">
-              Add to cart
-            </button>
-          </div>
-        </template>
-      </InfiniteHits>
-    `,
-  });
-
-  await wrapper.find('#add-to-cart-00002').trigger('click');
-  expect(insights).toHaveBeenCalledWith('clickedObjectIDsAfterSearch', {
-    eventName: 'Add to cart',
-    objectIDs: ['00002'],
-  });
-});
-
 it('exposes send-event method for insights middleware', async () => {
   const sendEvent = jest.fn();
   __setState({

@@ -294,29 +294,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 `);
   });
 
-  it('warns dev with EXPERIMENTAL_use', () => {
-    const searchClient = createSearchClient({
-      addAlgoliaAgent: jest.fn(),
-    });
-
-    const search = new InstantSearch({
-      indexName: 'indexName',
-      searchClient,
-    });
-
-    const middleware = () => ({
-      onStateChange: () => {},
-      subscribe: () => {},
-      unsubscribe: () => {},
-    });
-
-    expect(() => {
-      search.EXPERIMENTAL_use(middleware);
-    }).toWarnDev(
-      '[InstantSearch.js]: The middleware API is now considered stable, so we recommend replacing `EXPERIMENTAL_use` with `use` before upgrading to the next major version.'
-    );
-  });
-
   it('does not warn dev with use', () => {
     const searchClient = createSearchClient({
       addAlgoliaAgent: jest.fn(),
@@ -3133,10 +3110,6 @@ describe('initialUiState', () => {
           menu: {
             category: 'Hardware',
           },
-          places: {
-            query: 'Paris',
-            position: '1,1',
-          },
           // This is a UI parameter that is not supported by default but that
           // can be added when using custom widgets. Having it in `initialUiState`
           // makes sure that it doesn't throw if it happens.
@@ -3167,7 +3140,6 @@ To fully reflect the state, some widgets need to be added to the index "indexNam
 - \`hierarchicalMenu\` needs one of these widgets: "hierarchicalMenu"
 - \`range\` needs one of these widgets: "rangeInput", "rangeSlider"
 - \`menu\` needs one of these widgets: "menu", "menuSelect"
-- \`places\` needs one of these widgets: "places"
 
 If you do not wish to display widgets but still want to support their search parameters, you can mount "virtual widgets" that don't render anything:
 

@@ -2,7 +2,6 @@ import EventEmitter from '@algolia/events';
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type {
-  FindAnswersResponse,
   FrequentlyBoughtTogetherQuery,
   HighlightResult,
   LookingSimilarQuery,
@@ -158,21 +157,6 @@ declare namespace algoliasearchHelper {
     ): void;
 
     /**
-     * Start the search for answers with the parameters set in the state.
-     * This method returns a promise.
-     * @param {Object} options - the options for answers API call
-     * @param {string[]} options.attributesForPrediction - Attributes to use for predictions. If empty, `searchableAttributes` is used instead.
-     * @param {string[]} options.queryLanguages - The languages in the query. Currently only supports ['en'].
-     * @param {number} options.nbHits - Maximum number of answers to retrieve from the Answers Engine. Cannot be greater than 1000.
-     * @deprecated answers is deprecated and will be replaced with new initiatives
-     */
-    findAnswers<TObject>(options: {
-      attributesForPrediction: string[];
-      queryLanguages: string[];
-      nbHits: number;
-    }): Promise<FindAnswersResponse<TObject>>;
-
-    /**
      * Search for facet values based on an query and the name of a faceted attribute. This
      * triggers a search and will return a promise. On top of using the query, it also sends
      * the parameters from the state so that the search is narrowed down to only the possible values.
@@ -253,10 +237,6 @@ declare namespace algoliasearchHelper {
     setIndex(name: string): this;
 
     addDisjunctiveFacetRefinement(facet: string, value: string): this;
-    /**
-     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addDisjunctiveFacetRefinement}
-     */
-    addDisjunctiveRefine(facet: string, value: string): this;
     addHierarchicalFacetRefinement(facet: string, path: string): this;
     addNumericRefinement(
       facet: string,
@@ -264,15 +244,7 @@ declare namespace algoliasearchHelper {
       value?: number | number[]
     ): this;
     addFacetRefinement(facet: string, value: string): this;
-    /**
-     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addFacetRefinement}
-     */
-    addRefine: AlgoliaSearchHelper['addFacetRefinement'];
     addFacetExclusion(facet: string, value: string): this;
-    /**
-     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addFacetExclusion}
-     */
-    addExclude: AlgoliaSearchHelper['addFacetExclusion'];
     addTag(tag: string): this;
     addFrequentlyBoughtTogether(
       params: RecommendParametersWithId<FrequentlyBoughtTogetherQuery>
@@ -295,21 +267,9 @@ declare namespace algoliasearchHelper {
       value?: number | number[]
     ): this;
     removeDisjunctiveFacetRefinement(facet: string, value?: string): this;
-    /**
-     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeDisjunctiveFacetRefinement}
-     */
-    removeDisjunctiveRefine(facet: string, value?: string): this;
     removeHierarchicalFacetRefinement(facet: string): this;
     removeFacetRefinement(facet: string, value?: string): this;
-    /**
-     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeFacetRefinement}
-     */
-    removeRefine(facet: string, value: string): this;
     removeFacetExclusion(facet: string, value: string): this;
-    /**
-     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeFacetExclusion}
-     */
-    removeExclude(facet: string, value: string): this;
     removeTag(value: string): this;
     removeFrequentlyBoughtTogether(id: number): this;
     removeRelatedProducts(id: number): this;
@@ -317,27 +277,11 @@ declare namespace algoliasearchHelper {
     removeTrendingFacets(id: number): this;
     removeLookingSimilar(id: number): this;
     toggleFacetExclusion(facet: string, value: string): this;
-    /**
-     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#toggleFacetExclusion}
-     */
-    toggleExclude(facet: string, value: string): this;
     toggleFacetRefinement(facet: string, value: string): this;
-    /**
-     * @deprecated since version 2.19.0, see {@link AlgoliaSearchHelper#toggleFacetRefinement}
-     */
-    toggleRefinement(facet: string, value: string): this;
-    /**
-     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#toggleFacetRefinement}
-     */
-    toggleRefine(facet: string, value: string): this;
     toggleTag(tag: string): this;
     nextPage(): this;
     previousPage(): this;
     setPage(page: number): this;
-    /**
-     * @deprecated
-     */
-    setCurrentPage(page: number): this;
     setQueryParameter<SearchParameter extends keyof PlainSearchParameters>(
       parameter: SearchParameter,
       value: PlainSearchParameters[SearchParameter]
@@ -354,30 +298,12 @@ declare namespace algoliasearchHelper {
 
     overrideStateWithoutTriggeringChangeEvent: AlgoliaSearchHelper['setState'];
     hasRefinements(facet: string): boolean;
-    isExcluded: SearchParameters['isExcludeRefined'];
-    /**
-     * @deprecated since 2.4.0, see {@link AlgoliaSearchHelper#hasRefinements}
-     */
-    isDisjunctiveRefined: SearchParameters['isDisjunctiveFacetRefined'];
-    hasTag: SearchParameters['isTagRefined'];
-    /**
-     * @deprecated since 2.4.0, see {@link AlgoliaSearchHelper#hasTag}
-     */
-    isTagRefined: SearchParameters['isTagRefined'];
     getIndex(): string;
-    /**
-     * @deprecated
-     */
-    getCurrentPage(): number;
     getPage(): number;
     getTags(): string[];
     getRefinements(facetName: string): any[];
     getNumericRefinement: SearchParameters['getNumericRefinement'];
     getHierarchicalFacetBreadcrumb: SearchParameters['getHierarchicalFacetBreadcrumb'];
-    /**
-     * @deprecated
-     */
-    containsRefinement(...any: any[]): any;
     clearCache(): this;
     setClient(client: SearchClient): this;
     getClient(): SearchClient;
@@ -1397,14 +1323,6 @@ declare namespace algoliasearchHelper {
       results: Array<SearchResponse<T>>,
       options?: SearchResultsOptions
     );
-
-    /**
-     * Get a facet object with its name
-     * @deprecated
-     * @param name name of the faceted attribute
-     * @return  the facet object
-     */
-    getFacetByName(name: string): SearchResults.Facet;
 
     /**
      * Get a the list of values for a given facet attribute. Those values are sorted

@@ -1,12 +1,12 @@
-import { getInsightsAnonymousUserTokenInternal } from '../helpers';
 import {
   warning,
   noop,
   getAppIdAndApiKey,
   find,
   safelyRunOnBrowser,
+  getInsightsAnonymousUserToken,
+  createUUID,
 } from '../lib/utils';
-import { createUUID } from '../lib/utils/uuid';
 
 import type {
   InsightsClient,
@@ -307,8 +307,7 @@ export function createInsightsMiddleware<
         }
 
         let anonymousUserToken: string | undefined = undefined;
-        const anonymousTokenFromInsights =
-          getInsightsAnonymousUserTokenInternal();
+        const anonymousTokenFromInsights = getInsightsAnonymousUserToken();
         if (anonymousTokenFromInsights) {
           // When `aa('init', { ... })` is called, it creates an anonymous user token in cookie.
           // We can set it as userToken on instantsearch and insights. If it's not set as an insights

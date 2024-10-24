@@ -5,7 +5,6 @@ import { h, render } from 'preact';
 
 import InfiniteHits from '../../components/InfiniteHits/InfiniteHits';
 import connectInfiniteHits from '../../connectors/infinite-hits/connectInfiniteHits';
-import { withInsights } from '../../lib/insights';
 import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
@@ -29,11 +28,11 @@ import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   WidgetFactory,
   Template,
-  TemplateWithBindEvent,
   InsightsClient,
   Renderer,
   BaseHit,
   Hit,
+  TemplateWithSendEvent,
 } from '../../types';
 import type { SearchResults } from 'algoliasearch-helper';
 
@@ -119,7 +118,7 @@ export type InfiniteHitsTemplates<THit extends NonNullable<object> = BaseHit> =
     /**
      * The template to use for each result.
      */
-    item: TemplateWithBindEvent<
+    item: TemplateWithSendEvent<
       Hit<THit> & {
         /** @deprecated the index in the hits array, use __position instead, which is the absolute position */
         __hitIndex: number;
@@ -191,7 +190,6 @@ const renderer =
       showPrevious,
       isFirstPage,
       isLastPage,
-      instantSearchInstance,
       insights,
       bindEvent,
       sendEvent,
@@ -203,7 +201,6 @@ const renderer =
       renderState.templateProps =
         prepareTemplateProps<InfiniteHitsComponentTemplates>({
           defaultTemplates,
-          templatesConfig: instantSearchInstance.templatesConfig,
           templates: templates as InfiniteHitsComponentTemplates,
         });
       return;
@@ -290,9 +287,8 @@ export default (function infiniteHits<
     renderState: {},
   });
 
-  const makeWidget = withInsights(connectInfiniteHits)(
-    specializedRenderer,
-    () => render(null, containerNode)
+  const makeWidget = connectInfiniteHits(specializedRenderer, () =>
+    render(null, containerNode)
   );
 
   return {

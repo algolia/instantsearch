@@ -1,29 +1,4 @@
-import { deprecate } from '../lib/utils';
-
-import answers from './answers/answers';
-import configureRelatedItems from './configure-related-items/configure-related-items';
-import dynamicWidgets from './dynamic-widgets/dynamic-widgets';
-
-/** @deprecated answers is no longer supported */
-export const EXPERIMENTAL_answers = deprecate(
-  answers,
-  'answers is no longer supported'
-);
-
-/** @deprecated use relatedItems instead */
-export const EXPERIMENTAL_configureRelatedItems = deprecate(
-  configureRelatedItems,
-  'EXPERIMENTAL_configureRelatedItems is deprecated and will be removed in a next minor version of InstantSearch. Please use relatedItems instead.'
-);
-
-/** @deprecated use dynamicWidgets */
-export const EXPERIMENTAL_dynamicWidgets = deprecate(
-  dynamicWidgets,
-  'use dynamicWidgets'
-);
-export { dynamicWidgets };
-
-export { default as analytics } from './analytics/analytics';
+export { default as dynamicWidgets } from './dynamic-widgets/dynamic-widgets';
 export { default as breadcrumb } from './breadcrumb/breadcrumb';
 export { default as clearRefinements } from './clear-refinements/clear-refinements';
 export { default as configure } from './configure/configure';
@@ -40,7 +15,6 @@ export { default as menuSelect } from './menu-select/menu-select';
 export { default as numericMenu } from './numeric-menu/numeric-menu';
 export { default as pagination } from './pagination/pagination';
 export { default as panel } from './panel/panel';
-export { default as places } from './places/places';
 export { default as poweredBy } from './powered-by/powered-by';
 export { default as queryRuleContext } from './query-rule-context/query-rule-context';
 export { default as queryRuleCustomData } from './query-rule-custom-data/query-rule-custom-data';

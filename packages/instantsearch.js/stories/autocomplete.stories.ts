@@ -35,12 +35,7 @@ storiesOf('Basics/Autocomplete', module).add(
 <li>
   Index: <strong>${indexName}</strong>
   <ol>
-    ${hits
-      .map(
-        (hit) =>
-          `<li>${instantsearch.highlight({ attribute: 'name', hit })}</li>`
-      )
-      .join('')}
+    ${hits.map((hit) => `<li>${hit.name}</li>`).join('')}
   </ol>
 </li>
 `
