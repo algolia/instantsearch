@@ -1,24 +1,19 @@
-// internal
-export * from './utils';
-
-// Algolia-related
-// eslint-disable-next-line import/export
-export * from './algoliasearch';
-export * from './results';
+export type * from 'instantsearch-core/types';
 
 // component-related
-export * from './component';
+export type * from './component';
 
 // instantsearch-related
-export * from './instantsearch';
-export * from './middleware';
-export * from './router';
-export * from './insights';
+export type * from './instantsearch';
+export type * from './middleware';
+export type * from './router';
 
 // widget-related
-export * from './connector';
-export * from './widget-factory';
-export * from './widget';
-export * from './ui-state';
-export * from './render-state';
-export * from './templates';
+export type * from './connector';
+export type * from './widget-factory';
+export type * from './widget';
+export type * from './ui-state';
+export type * from './render-state';
+export type * from './templates';
+
+export {};

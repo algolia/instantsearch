@@ -1,15 +1,18 @@
 import type { IndexWidget } from '../widgets';
-import type { RecommendResponse } from './algoliasearch';
 import type { InstantSearch } from './instantsearch';
 import type { IndexRenderState, WidgetRenderState } from './render-state';
 import type { IndexUiState, UiState } from './ui-state';
-import type { Expand, RequiredKeys } from './utils';
 import type {
   AlgoliaSearchHelper as Helper,
   SearchParameters,
   SearchResults,
   RecommendParameters,
 } from 'algoliasearch-helper';
+import type {
+  RecommendResponse,
+  Expand,
+  RequiredKeys,
+} from 'instantsearch-core/types';
 
 export type ScopedResult = {
   indexId: string;
