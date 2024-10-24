@@ -1,5 +1,5 @@
 import { createHitsComponent } from 'instantsearch-ui-components';
-import { connectHitsWithInsights } from 'instantsearch.js/es/connectors';
+import { connectHits } from 'instantsearch.js/es/connectors';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
@@ -10,7 +10,7 @@ export default {
   mixins: [
     createWidgetMixin(
       {
-        connector: connectHitsWithInsights,
+        connector: connectHits,
       },
       {
         $$widgetType: 'ais.hits',
@@ -74,7 +74,6 @@ export default {
             itemSlot({
               item: hit,
               index,
-              insights: this.state.insights,
               sendEvent: this.state.sendEvent,
             })) ||
             `objectID: ${hit.objectID}, index: ${index}`,
@@ -96,7 +95,6 @@ export default {
           defaultSlot({
             banner: this.state.banner,
             items: this.state.items,
-            insights: this.state.insights,
             sendEvent: this.state.sendEvent,
           }),
         ]
