@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.75.3](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.75.2...instantsearch.js@4.75.3) (2024-10-24)
+
+
+### Bug Fixes
+
+* **instantsearch.js:** fix user token not being set in time for the first query ([#6377](https://github.com/algolia/instantsearch/issues/6377)) ([22016b0](https://github.com/algolia/instantsearch/commit/22016b02a7aa8d6736ea02e2c3998d878fdd0031))
+
+
+
+
+
 ## [4.75.2](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.75.1...instantsearch.js@4.75.2) (2024-10-22)
 
 
