@@ -19,7 +19,7 @@ describe('instantsearch()', () => {
     });
   });
 
-  it('includes the API and the helper functions', () => {
+  it('includes the API', () => {
     expect(Object.keys(instantsearch)).toMatchInlineSnapshot(`
       [
         "version",
@@ -30,11 +30,6 @@ describe('instantsearch()', () => {
         "stateMappings",
         "templates",
         "createInfiniteHitsSessionStorageCache",
-        "highlight",
-        "reverseHighlight",
-        "snippet",
-        "reverseSnippet",
-        "insights",
       ]
     `);
   });
