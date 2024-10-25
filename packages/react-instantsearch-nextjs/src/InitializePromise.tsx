@@ -1,5 +1,8 @@
-import { getInitialResults } from 'instantsearch.js/es/lib/server';
-import { resetWidgetId, walkIndex } from 'instantsearch.js/es/lib/utils';
+import {
+  getInitialResults,
+  resetWidgetId,
+  walkIndex,
+} from 'instantsearch-core';
 import { ServerInsertedHTMLContext } from 'next/navigation';
 import React, { useContext } from 'react';
 import {
@@ -15,7 +18,7 @@ import type {
   SearchOptions,
   CompositionClient,
   SearchClient,
-} from 'instantsearch.js';
+} from 'instantsearch-core';
 
 type InitializePromiseProps = {
   /**

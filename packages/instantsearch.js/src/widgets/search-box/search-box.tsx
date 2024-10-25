@@ -4,7 +4,7 @@ import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import SearchBox from '../../components/SearchBox/SearchBox';
-import connectSearchBox from '../../connectors/search-box/connectSearchBox';
+import { connectSearchBox } from '../../connectors';
 import { component } from '../../lib/suit';
 import {
   getContainerNode,
@@ -21,7 +21,7 @@ import type {
   SearchBoxConnectorParams,
   SearchBoxRenderState,
   SearchBoxWidgetDescription,
-} from '../../connectors/search-box/connectSearchBox';
+} from '../../connectors';
 import type { WidgetFactory, Template, RendererOptions } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'search-box' });

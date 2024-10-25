@@ -1,6 +1,6 @@
-import { safelyRunOnBrowser } from 'instantsearch.js/es/lib/utils';
+import { safelyRunOnBrowser } from 'instantsearch-core';
 
-import type { PoweredByRenderState } from 'instantsearch.js/es/connectors/powered-by/connectPoweredBy';
+import type { PoweredByRenderState } from 'instantsearch-core';
 
 export function usePoweredBy(): PoweredByRenderState {
   const hostname = safelyRunOnBrowser(

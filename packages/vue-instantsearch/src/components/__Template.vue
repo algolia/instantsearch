@@ -12,7 +12,7 @@
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
 // Uncomment and change here ⬇️
-// import { connectorName } from 'instantsearch.js/es/connectors';
+// import { connectorName } from 'instantsearch-core';
 
 /* eslint-disable @typescript-eslint/no-unused-vars,no-unused-vars */
 // Remove this part ⬇,️ only here for testing the template

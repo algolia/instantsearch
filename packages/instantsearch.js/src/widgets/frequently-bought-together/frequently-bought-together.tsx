@@ -4,7 +4,7 @@ import { createFrequentlyBoughtTogetherComponent } from 'instantsearch-ui-compon
 import { Fragment, h, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectFrequentlyBoughtTogether from '../../connectors/frequently-bought-together/connectFrequentlyBoughtTogether';
+import { connectFrequentlyBoughtTogether } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
@@ -15,7 +15,7 @@ import type {
   FrequentlyBoughtTogetherWidgetDescription,
   FrequentlyBoughtTogetherConnectorParams,
   FrequentlyBoughtTogetherRenderState,
-} from '../../connectors/frequently-bought-together/connectFrequentlyBoughtTogether';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   Template,
@@ -24,7 +24,8 @@ import type {
   BaseHit,
   RecommendResponse,
   Hit,
-  TemplateWithBindEvent,
+  TemplateWithSendEvent,
+  Widget,
 } from '../../types';
 import type {
   RecommendClassNames,
@@ -188,7 +189,7 @@ export type FrequentlyBoughtTogetherTemplates<
   /**
    * Template to use for each result. This template will receive an object containing a single record.
    */
-  item: TemplateWithBindEvent<Hit<THit>>;
+  item: TemplateWithSendEvent<Hit<THit>>;
 
   /**
    * Template to use to wrap all items.
@@ -227,12 +228,14 @@ type FrequentlyBoughtTogetherWidgetParams<
   cssClasses?: FrequentlyBoughtTogetherCSSClasses;
 };
 
-export type FrequentlyBoughtTogetherWidget = WidgetFactory<
-  FrequentlyBoughtTogetherWidgetDescription & {
+export type FrequentlyBoughtTogetherWidget<
+  THit extends NonNullable<object> = BaseHit
+> = WidgetFactory<
+  FrequentlyBoughtTogetherWidgetDescription<THit> & {
     $$widgetType: 'ais.frequentlyBoughtTogether';
   },
-  FrequentlyBoughtTogetherConnectorParams,
-  FrequentlyBoughtTogetherWidgetParams
+  FrequentlyBoughtTogetherConnectorParams<THit>,
+  FrequentlyBoughtTogetherWidgetParams<THit>
 >;
 
 export default (function frequentlyBoughtTogether<
@@ -269,7 +272,8 @@ export default (function frequentlyBoughtTogether<
   const makeWidget = connectFrequentlyBoughtTogether(specializedRenderer, () =>
     render(null, containerNode)
   );
-  return {
+
+  const widget = {
     ...makeWidget({
       objectIDs,
       limit,
@@ -280,4 +284,12 @@ export default (function frequentlyBoughtTogether<
     }),
     $$widgetType: 'ais.frequentlyBoughtTogether',
   };
+
+  // explicitly cast this type to have a small type output.
+  return widget as Widget<
+    FrequentlyBoughtTogetherWidgetDescription & {
+      $$widgetType: 'ais.frequentlyBoughtTogether';
+      widgetParams: FrequentlyBoughtTogetherConnectorParams<THit>;
+    }
+  >;
 } satisfies FrequentlyBoughtTogetherWidget);

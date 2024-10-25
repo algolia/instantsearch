@@ -15,7 +15,7 @@ import type {
   UiState,
   Widget,
   WidgetDescription,
-} from 'instantsearch.js';
+} from 'instantsearch-core';
 
 export type AdditionalWidgetProperties = Partial<Widget<WidgetDescription>>;
 

@@ -1,8 +1,7 @@
 import InstantSearch from './lib/InstantSearch';
 import version from './lib/version';
 
-import type { InstantSearchOptions } from './lib/InstantSearch';
-import type { Expand, UiState } from './types';
+import type { Expand, InstantSearchOptions, UiState } from 'instantsearch-core';
 
 type InstantSearchModule = {
   <TUiState = Record<string, unknown>, TRouteState = TUiState>(
@@ -26,9 +25,9 @@ type InstantSearchModule = {
  * If you want to get up and running quickly with InstantSearch.js, have a
  * look at the [getting started](https://www.algolia.com/doc/guides/building-search-ui/getting-started/js/).
  */
-const instantsearch: InstantSearchModule = (options) =>
-  new InstantSearch(options);
-
+const instantsearch: InstantSearchModule = function instantsearch(options) {
+  return new InstantSearch(options);
+};
 instantsearch.version = version;
 
 Object.defineProperty(instantsearch, 'widgets', {
@@ -69,4 +68,4 @@ import { carousel } from 'instantsearch.js/es/templates'`
 
 export default instantsearch;
 
-export * from './types';
+export type * from './types';

@@ -5,11 +5,11 @@ import {
   useInstantSearch,
 } from 'react-instantsearch-core';
 
+import type { BaseHit, Hit } from 'instantsearch-core';
 import type {
   FrequentlyBoughtTogetherProps as FrequentlyBoughtTogetherPropsUiComponentProps,
   Pragma,
 } from 'instantsearch-ui-components';
-import type { Hit, BaseHit } from 'instantsearch.js';
 import type { UseFrequentlyBoughtTogetherProps } from 'react-instantsearch-core';
 
 type UiProps<THit extends BaseHit> = Pick<
