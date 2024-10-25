@@ -35,9 +35,6 @@
     "instantsearch",
     "react",
     "search",
-    "jsx",
-    "vdom",
-    "hyperscript"
   ],
   "files": [
     "README.md",
