@@ -21,7 +21,6 @@ export const createInstantSearch = (
     client,
     started: false,
     status: 'idle',
-    _isSearchStalled: false,
     error: undefined,
     start() {
       this.started = true;

@@ -89,7 +89,7 @@ describe('ReverseHighlight', () => {
           <span
             class="ais-ReverseHighlight-separator"
           >
-            , 
+            ,
           </span>
           <mark
             class="ais-ReverseHighlight-highlighted"
@@ -292,7 +292,7 @@ describe('ReverseHighlight', () => {
             class="ais-ReverseHighlight-separator"
           >
             <strong>
-               - 
+               -
             </strong>
           </span>
           <strong>
@@ -343,7 +343,7 @@ describe('ReverseHighlight', () => {
         />
       );
     })
-      .toWarnDev(`[InstantSearch.js]: Could not enable highlight for "does.not.exist", will display an empty string.
+      .toWarnDev(`[InstantSearch]: Could not enable highlight for "does.not.exist", will display an empty string.
 Please check whether this attribute exists and is either searchable or specified in \`attributesToHighlight\`.
 
 See: https://alg.li/highlighting`);
@@ -370,7 +370,7 @@ See: https://alg.li/highlighting`);
         />
       );
     })
-      .toWarnDev(`[InstantSearch.js]: Could not enable highlight for "title", will display an empty string.
+      .toWarnDev(`[InstantSearch]: Could not enable highlight for "title", will display an empty string.
 Please check whether this attribute exists and is either searchable or specified in \`attributesToHighlight\`.
 
 See: https://alg.li/highlighting`);

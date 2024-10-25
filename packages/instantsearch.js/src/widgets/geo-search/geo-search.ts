@@ -153,10 +153,10 @@ export type GeoSearchWidgetParams<THit extends GeoHit = GeoHit> = {
   googleReference: typeof window['google'];
 };
 
-export type GeoSearchWidget = WidgetFactory<
-  GeoSearchWidgetDescription & { $$widgetType: 'ais.geoSearch' },
-  GeoSearchConnectorParams,
-  GeoSearchWidgetParams
+export type GeoSearchWidget<THit extends GeoHit = GeoHit> = WidgetFactory<
+  GeoSearchWidgetDescription<THit> & { $$widgetType: 'ais.geoSearch' },
+  GeoSearchConnectorParams<THit>,
+  GeoSearchWidgetParams<THit>
 >;
 
 /**
@@ -287,8 +287,10 @@ export default (function geoSearch<THit extends GeoHit = GeoHit>(
     render(null, containerNode)
   );
 
-  return {
-    ...makeWidget<THit>({
+  type GeoSearchWidgetActual = ReturnType<GeoSearchWidget<THit>>;
+
+  const widget: GeoSearchWidgetActual = {
+    ...(makeWidget<THit>({
       ...otherWidgetParams,
       // @TODO: this type doesn't preserve the generic correctly,
       // (but as they're internal only it's not a big problem)
@@ -304,7 +306,9 @@ export default (function geoSearch<THit extends GeoHit = GeoHit>(
       enableRefine,
       enableClearMapRefinement,
       enableRefineControl,
-    }),
+    }) as unknown as GeoSearchWidgetActual),
     $$widgetType: 'ais.geoSearch',
   };
+
+  return widget as GeoSearchWidgetActual;
 } satisfies GeoSearchWidget);

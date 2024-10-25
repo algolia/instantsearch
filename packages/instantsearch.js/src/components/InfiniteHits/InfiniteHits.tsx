@@ -3,11 +3,15 @@
 import { cx } from 'instantsearch-ui-components';
 import { h } from 'preact';
 
-import { warning } from '../../lib/utils';
 import Template from '../Template/Template';
 
-import type { SendEventForHits, BindEventForHits } from '../../lib/utils';
-import type { ComponentCSSClasses, Hit, InsightsClient } from '../../types';
+import type {
+  ComponentCSSClasses,
+  Hit,
+  InsightsClient,
+  SendEventForHits,
+  BindEventForHits,
+} from '../../types';
 import type {
   InfiniteHitsCSSClasses,
   InfiniteHitsTemplates,
@@ -151,7 +155,7 @@ const InfiniteHits = ({
         ))}
 
       <ol className={cssClasses.list}>
-        {hits.map((hit, index) => (
+        {hits.map((hit) => (
           <Template
             {...templateProps}
             templateKey="item"
@@ -166,16 +170,7 @@ const InfiniteHits = ({
               },
             }}
             key={hit.objectID}
-            data={{
-              ...hit,
-              get __hitIndex() {
-                warning(
-                  false,
-                  'The `__hitIndex` property is deprecated. Use the absolute `__position` instead.'
-                );
-                return index;
-              },
-            }}
+            data={hit}
             sendEvent={sendEvent}
           />
         ))}

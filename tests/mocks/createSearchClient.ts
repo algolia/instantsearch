@@ -5,7 +5,7 @@ import {
   createSFFVResponse,
 } from './createAPIResponse';
 
-import type { SearchClient, SearchResponses } from 'instantsearch.js';
+import type { SearchClient, SearchResponses } from 'instantsearch-core';
 
 export const createSearchClient = (
   args: Partial<SearchClient> = {}

@@ -235,7 +235,7 @@ describe('Hits', () => {
     test('renders with props', () => {
       const props = createProps({
         hits: [{ objectID: 'abc', __position: 1, custom: 'value' }],
-        itemComponent: jest.fn(({ hit, index, ...itemProps }) => (
+        itemComponent: jest.fn(({ hit, ...itemProps }) => (
           <li {...itemProps}>
             {hit.objectID}:{hit.custom}
           </li>

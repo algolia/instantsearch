@@ -9,7 +9,6 @@ import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
-  warning,
 } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
@@ -77,7 +76,6 @@ const renderer =
     // once flavour specificities are erased
     const itemComponent: HitsUiComponentProps<Hit>['itemComponent'] = ({
       hit,
-      index,
       ...rootProps
     }) => (
       <TemplateComponent
@@ -87,16 +85,7 @@ const renderer =
         rootProps={{
           ...rootProps,
         }}
-        data={{
-          ...hit,
-          get __hitIndex() {
-            warning(
-              false,
-              'The `__hitIndex` property is deprecated. Use the absolute `__position` instead.'
-            );
-            return index;
-          },
-        }}
+        data={hit}
         sendEvent={sendEvent}
       />
     );
@@ -142,12 +131,7 @@ export type HitsTemplates<THit extends NonNullable<object> = BaseHit> =
      *
      * @default ''
      */
-    item: TemplateWithSendEvent<
-      Hit<THit> & {
-        /** @deprecated the index in the hits array, use __position instead, which is the absolute position */
-        __hitIndex: number;
-      }
-    >;
+    item: TemplateWithSendEvent<Hit<THit>>;
 
     /**
      * Template to use for the banner.
