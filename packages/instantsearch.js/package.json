@@ -31,6 +31,7 @@
     "@types/qs": "^6.5.3",
     "algoliasearch-helper": "3.22.6",
     "htm": "^3.0.0",
+    "instantsearch-core": "0.1.0",
     "instantsearch-ui-components": "0.9.0",
     "preact": "^10.10.0",
     "qs": "^6.5.1 < 6.10",

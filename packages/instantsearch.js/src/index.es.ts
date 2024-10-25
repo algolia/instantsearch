@@ -69,4 +69,4 @@ import { carousel } from 'instantsearch.js/es/templates'`
 
 export default instantsearch;
 
-export * from './types';
+export type * from './types';
