@@ -192,6 +192,8 @@ export function createInsightsMiddleware<
           script.onerror = () => {
             instantSearchInstance.emit('error', new Error(errorMessage));
           };
+          // Does not work from Firefox 55 to 59
+          // eslint-disable-next-line compat/compat
           document.body.appendChild(script);
           insightsClient.shouldAddScript = false;
         } catch (cause) {

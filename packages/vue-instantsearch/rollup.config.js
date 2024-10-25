@@ -1,7 +1,6 @@
 import path from 'path';
 
 import babel from 'rollup-plugin-babel';
-import buble from 'rollup-plugin-buble';
 import commonjs from 'rollup-plugin-commonjs';
 import filesize from 'rollup-plugin-filesize';
 import json from 'rollup-plugin-json';
@@ -54,11 +53,6 @@ function outputs(vueVersion) {
     vuePlugin({ compileTemplate: true, css: false }),
     commonjs(),
     json(),
-    buble({
-      transforms: {
-        dangerousForOf: true,
-      },
-    }),
     replace(processEnv({ NODE_ENV: 'production' })),
     aliasVueCompat(vueVersion),
     terser({
