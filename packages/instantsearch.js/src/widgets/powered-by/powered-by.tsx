@@ -4,7 +4,7 @@ import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import PoweredBy from '../../components/PoweredBy/PoweredBy';
-import connectPoweredBy from '../../connectors/powered-by/connectPoweredBy';
+import { connectPoweredBy } from '../../connectors';
 import { component } from '../../lib/suit';
 import {
   getContainerNode,
@@ -16,7 +16,7 @@ import type {
   PoweredByConnectorParams,
   PoweredByRenderState,
   PoweredByWidgetDescription,
-} from '../../connectors/powered-by/connectPoweredBy';
+} from '../../connectors';
 import type { Renderer, WidgetFactory } from '../../types';
 
 const suit = component('PoweredBy');

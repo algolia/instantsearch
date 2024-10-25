@@ -25,16 +25,14 @@
     "es"
   ],
   "dependencies": {
-    "@algolia/events": "^4.0.1",
     "@types/dom-speech-recognition": "^0.0.1",
     "@types/google.maps": "^3.55.12",
     "@types/qs": "^6.5.3",
     "algoliasearch-helper": "3.24.1",
     "htm": "^3.0.0",
+    "instantsearch-core": "0.1.0",
     "instantsearch-ui-components": "0.11.1",
-    "preact": "^10.10.0",
-    "qs": "^6.5.1 < 6.10",
-    "search-insights": "^2.17.2"
+    "preact": "^10.10.0"
   },
   "peerDependencies": {
     "algoliasearch": ">= 3.1 < 6"

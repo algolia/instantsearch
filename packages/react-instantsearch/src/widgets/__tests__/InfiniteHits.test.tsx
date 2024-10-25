@@ -14,7 +14,7 @@ import React from 'react';
 import { InfiniteHits } from '../InfiniteHits';
 
 import type { MockSearchClient } from '@instantsearch/mocks';
-import type { AlgoliaHit } from 'instantsearch.js';
+import type { AlgoliaHit } from 'instantsearch-core';
 
 type CustomHit = { somethingSpecial: string };
 

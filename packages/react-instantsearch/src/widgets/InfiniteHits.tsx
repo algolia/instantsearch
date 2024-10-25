@@ -4,7 +4,7 @@ import { useInfiniteHits } from 'react-instantsearch-core';
 import { InfiniteHits as InfiniteHitsUiComponent } from '../ui/InfiniteHits';
 
 import type { InfiniteHitsProps as InfiniteHitsUiComponentProps } from '../ui/InfiniteHits';
-import type { BaseHit, Hit } from 'instantsearch.js';
+import type { BaseHit, Hit } from 'instantsearch-core';
 import type { UseInfiniteHitsProps } from 'react-instantsearch-core';
 
 type UiProps<THit extends BaseHit = BaseHit> = Pick<
@@ -51,7 +51,7 @@ export function InfiniteHits<THit extends BaseHit = BaseHit>({
   ...props
 }: InfiniteHitsProps<THit>) {
   const {
-    hits,
+    items,
     banner,
     sendEvent,
     showPrevious,
@@ -68,7 +68,7 @@ export function InfiniteHits<THit extends BaseHit = BaseHit>({
   ) as InfiniteHitsUiComponentProps<THit>['bannerComponent'];
 
   const uiProps: UiProps<THit> = {
-    hits,
+    hits: items,
     banner,
     bannerComponent,
     sendEvent,

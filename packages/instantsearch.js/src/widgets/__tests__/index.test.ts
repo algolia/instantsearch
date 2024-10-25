@@ -4,8 +4,8 @@
 /* global google */
 import * as widgets from '..';
 
+import type { IndexWidget } from '..';
 import type { UnknownWidgetFactory, Widget } from '../../types';
-import type { IndexWidget } from '../index/index';
 
 /**
  * Checklist when adding a new widget
@@ -168,7 +168,7 @@ describe('widgets', () => {
       const widgetInstances = initiateAllWidgets();
 
       widgetInstances.forEach(([name, widget]) =>
-        expect([name, widget.$$widgetType!.substr(0, 4)]).toEqual([
+        expect([name, widget.$$widgetType?.substr(0, 4)]).toEqual([
           name,
           'ais.',
         ])

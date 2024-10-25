@@ -1,4 +1,4 @@
-import { INSTANTSEARCH_FUTURE_DEFAULTS } from 'instantsearch.js/es/lib/InstantSearch';
+import { INSTANTSEARCH_FUTURE_DEFAULTS } from 'instantsearch-core';
 
 import { version } from '../../package.json'; // rollup does pick only what needed from json
 import { createSuitMixin } from '../mixins/suit';
@@ -23,10 +23,23 @@ export const createInstantSearchComponent = (component) =>
             'The `search-client` prop of `<ais-instant-search>` changed between renders, which may cause more search requests than necessary. If this is an unwanted behavior, please provide a stable reference: https://www.algolia.com/doc/api-reference/widgets/instantsearch/vue/#widget-param-search-client'
           );
 
-          this.instantSearchInstance.helper.setClient(searchClient).search();
+          this.instantSearchInstance.client = searchClient;
+          if (this.instantSearchInstance.mainHelper) {
+            this.instantSearchInstance.mainHelper
+              .setClient(searchClient)
+              .search();
+          }
         },
         indexName(indexName) {
-          this.instantSearchInstance.helper.setIndex(indexName || '').search();
+          if (
+            this.instantSearchInstance.helper &&
+            this.instantSearchInstance.mainHelper
+          ) {
+            this.instantSearchInstance.helper.setIndex(indexName || '');
+            this.instantSearchInstance.mainHelper
+              .setIndex(indexName || '')
+              .search();
+          }
         },
         compositionID(compositionID) {
           this.instantSearchInstance.helper

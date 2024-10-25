@@ -6,8 +6,7 @@ import { useInstantSearchContext } from './useInstantSearchContext';
 import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect';
 import { useRSCContext } from './useRSCContext';
 
-import type { Widget } from 'instantsearch.js';
-import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
+import type { Widget, IndexWidget } from 'instantsearch-core';
 
 export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
   widget,

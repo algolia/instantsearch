@@ -4,8 +4,8 @@ import type {
   ReverseSnippet,
   Snippet,
 } from '../helpers/components';
-import type { SendEventForHits } from '../lib/utils';
 import type { html } from 'htm/preact';
+import type { SendEventForHits } from 'instantsearch-core';
 import type { VNode } from 'preact';
 
 export type Template<TTemplateData = void> = (

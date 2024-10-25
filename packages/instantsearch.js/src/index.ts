@@ -1,15 +1,14 @@
-import * as connectors from './connectors/index';
+import * as connectors from './connectors';
 import { createInfiniteHitsSessionStorageCache } from './lib/infiniteHitsCache/index';
 import InstantSearch from './lib/InstantSearch';
 import * as routers from './lib/routers/index';
 import * as stateMappings from './lib/stateMappings/index';
 import version from './lib/version';
-import * as middlewares from './middlewares/index';
+import * as middlewares from './middlewares';
 import * as templates from './templates/index';
 import * as widgets from './widgets/index';
 
-import type { InstantSearchOptions } from './lib/InstantSearch';
-import type { Expand, UiState } from './types';
+import type { Expand, UiState, InstantSearchOptions } from 'instantsearch-core';
 
 type InstantSearchModule = {
   <TUiState = Record<string, unknown>, TRouteState = TUiState>(
@@ -43,19 +42,16 @@ type InstantSearchModule = {
  * If you want to get up and running quickly with InstantSearch.js, have a
  * look at the [getting started](https://www.algolia.com/doc/guides/building-search-ui/getting-started/js/).
  */
-const instantsearch: InstantSearchModule = (options) =>
-  new InstantSearch(options);
-
+const instantsearch: InstantSearchModule = function instantsearch(options) {
+  return new InstantSearch(options);
+};
 instantsearch.version = version;
-
 instantsearch.connectors = connectors;
 instantsearch.widgets = widgets;
 instantsearch.middlewares = middlewares;
-
 instantsearch.routers = routers;
 instantsearch.stateMappings = stateMappings;
 instantsearch.templates = templates;
-
 instantsearch.createInfiniteHitsSessionStorageCache =
   createInfiniteHitsSessionStorageCache;
 

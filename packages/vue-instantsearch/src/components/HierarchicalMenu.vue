@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { connectHierarchicalMenu } from 'instantsearch.js/es/connectors';
+import { connectHierarchicalMenu } from 'instantsearch-core';
 
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';

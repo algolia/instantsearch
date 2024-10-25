@@ -47,9 +47,9 @@
     "watch:es": "yarn --silent build:es:base --watch"
   },
   "dependencies": {
-    "@babel/runtime": "^7.1.2",
+    "@babel/runtime": "^7.25.9",
+    "instantsearch-core": "0.1.0",
     "instantsearch-ui-components": "0.11.1",
-    "instantsearch.js": "4.77.3",
     "react-instantsearch-core": "7.15.3"
   },
   "peerDependencies": {

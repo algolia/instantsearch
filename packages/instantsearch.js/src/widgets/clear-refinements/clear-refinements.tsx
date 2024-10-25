@@ -4,7 +4,7 @@ import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import ClearRefinements from '../../components/ClearRefinements/ClearRefinements';
-import connectClearRefinements from '../../connectors/clear-refinements/connectClearRefinements';
+import { connectClearRefinements } from '../../connectors';
 import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
@@ -22,7 +22,7 @@ import type {
   ClearRefinementsConnectorParams,
   ClearRefinementsRenderState,
   ClearRefinementsWidgetDescription,
-} from '../../connectors/clear-refinements/connectClearRefinements';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { WidgetFactory, Template, Renderer } from '../../types';
 

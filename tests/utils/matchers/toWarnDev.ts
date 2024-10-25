@@ -63,6 +63,13 @@ export const toWarnDev: jest.CustomMatcher = (
       };
     }
 
+    if (!actualWarning) {
+      return {
+        pass: false,
+        message: () => 'No warning recorded.',
+      };
+    }
+
     // Expectation with a message.
     if (expectedMessage !== undefined && actualWarning !== expectedMessage) {
       return {
