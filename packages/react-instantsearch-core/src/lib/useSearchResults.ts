@@ -1,4 +1,4 @@
-import { isIndexWidget } from 'instantsearch.js/es/lib/utils';
+import { isIndexWidget } from 'instantsearch-core';
 import { useEffect, useState } from 'react';
 
 import { getIndexSearchResults } from './getIndexSearchResults';
@@ -6,7 +6,7 @@ import { useIndexContext } from './useIndexContext';
 import { useInstantSearchContext } from './useInstantSearchContext';
 
 import type { SearchResults } from 'algoliasearch-helper';
-import type { ScopedResult } from 'instantsearch.js';
+import type { ScopedResult } from 'instantsearch-core';
 
 export type SearchResultsApi = {
   results: SearchResults<any>;

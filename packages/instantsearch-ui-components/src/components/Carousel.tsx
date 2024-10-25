@@ -9,8 +9,8 @@ import type {
   RecommendItemComponentProps,
   RecordWithObjectID,
   Renderer,
-  SendEventForHits,
 } from '../types';
+import type { SendEventForHits } from 'instantsearch-core';
 
 export type CarouselProps<
   TObject,

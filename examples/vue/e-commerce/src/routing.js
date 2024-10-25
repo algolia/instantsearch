@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 /* eslint-disable complexity */
-import { history as historyRouter } from 'instantsearch.js/es/lib/routers';
+import { historyRouter } from 'instantsearch-core';
 
 const hitsPerPageItemsValue = [16, 32, 64];
 

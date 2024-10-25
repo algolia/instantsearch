@@ -3,10 +3,9 @@
 import { cx } from 'instantsearch-ui-components';
 import { h } from 'preact';
 
-import { find } from '../../lib/utils';
 import Template from '../Template/Template';
 
-import type { MenuRenderState } from '../../connectors/menu/connectMenu';
+import type { MenuRenderState } from '../../connectors';
 import type { ComponentCSSClasses } from '../../types';
 import type {
   MenuSelectCSSClasses,
@@ -47,7 +46,7 @@ type Props = {
 };
 
 function MenuSelect({ cssClasses, templateProps, items, refine }: Props) {
-  const { value: selectedValue } = find(items, (item) => item.isRefined) || {
+  const { value: selectedValue } = items.find((item) => item.isRefined) || {
     value: '',
   };
 

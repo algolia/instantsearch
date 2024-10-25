@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import { connectRatingMenu } from 'instantsearch.js/es/connectors';
+import { connectRatingMenu } from 'instantsearch-core';
 
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';

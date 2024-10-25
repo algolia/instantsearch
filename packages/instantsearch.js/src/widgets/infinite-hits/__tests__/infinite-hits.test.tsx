@@ -212,60 +212,22 @@ describe('infiniteHits', () => {
               <li
                 class="ais-InfiniteHits-item"
               >
-                {
-          "objectID": "1",
-          "name": "Apple iPhone smartphone",
-          "description": "A smartphone by Apple.",
-          "_highlightResult": {
-            "name": {
-              "value": "Apple iPhone &lt;mark&gt;smartphone&lt;/mark&gt;",
-              "matchLevel": "full",
-              "matchedWords": [
-                "smartphone"
-              ]
-            }
-          },
-          "_snippetResult": {
-            "name": {
-              "value": "Apple iPhone &lt;mark&gt;smartphone&lt;/mark&gt;",
-              "matchLevel": "full"
-            },
-            "description": {
-              "value": "A &lt;mark&gt;smartphone&lt;/mark&gt; by Apple.",
-              "matchLevel": "full"
-            }
-          },
-          "__position": 1
-        }
+                <div
+                  style="word-break: break-all;"
+                >
+                  {"objectID":"1","name":"Apple iPhone smartphone","description":"A smartphone by Apple.","_highlightR
+                  …
+                </div>
               </li>
               <li
                 class="ais-InfiniteHits-item"
               >
-                {
-          "objectID": "2",
-          "name": "Samsung Galaxy smartphone",
-          "description": "A smartphone by Samsung.",
-          "_highlightResult": {
-            "name": {
-              "value": "Samsung Galaxy &lt;mark&gt;smartphone&lt;/mark&gt;",
-              "matchLevel": "full",
-              "matchedWords": [
-                "smartphone"
-              ]
-            }
-          },
-          "_snippetResult": {
-            "name": {
-              "value": "Samsung Galaxy &lt;mark&gt;smartphone&lt;/mark&gt;",
-              "matchLevel": "full"
-            },
-            "description": {
-              "value": "A &lt;mark&gt;smartphone&lt;/mark&gt; by Samsung.",
-              "matchLevel": "full"
-            }
-          },
-          "__position": 2
-        }
+                <div
+                  style="word-break: break-all;"
+                >
+                  {"objectID":"2","name":"Samsung Galaxy smartphone","description":"A smartphone by Samsung.","_highli
+                  …
+                </div>
               </li>
             </ol>
             <button
@@ -1049,7 +1011,6 @@ describe('infiniteHits', () => {
         eventType: 'click',
         hits: [
           {
-            __hitIndex: 0,
             __position: 1,
             objectID: '1',
             name: 'Name 1',
@@ -1109,7 +1070,6 @@ describe('infiniteHits', () => {
         eventType: 'conversion',
         hits: [
           {
-            __hitIndex: 1,
             __position: 2,
             objectID: '2',
             name: 'Name 2',

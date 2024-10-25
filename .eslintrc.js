@@ -168,6 +168,7 @@ const config = {
         '@typescript-eslint/no-unnecessary-type-assertion': 'error',
         '@typescript-eslint/method-signature-style': 'error',
         '@typescript-eslint/unbound-method': 'error',
+        'import/no-unresolved': ['error'],
       },
     },
     {
@@ -265,7 +266,10 @@ const config = {
       },
     },
     {
-      files: ['packages/instantsearch.js/src/**/*'],
+      files: [
+        'packages/instantsearch.js/src/**/*',
+        'packages/instantsearch-core/src/**/*',
+      ],
       excludedFiles: [
         '**/__tests__/**/*',
         'packages/instantsearch.js/src/widgets/**/*',

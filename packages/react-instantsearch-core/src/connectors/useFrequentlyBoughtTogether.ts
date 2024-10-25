@@ -1,14 +1,14 @@
-import connectFrequentlyBoughtTogether from 'instantsearch.js/es/connectors/frequently-bought-together/connectFrequentlyBoughtTogether';
+import { connectFrequentlyBoughtTogether } from 'instantsearch-core';
 
 import { useConnector } from '../hooks/useConnector';
 
 import type { AdditionalWidgetProperties } from '../hooks/useConnector';
-import type { BaseHit } from 'instantsearch.js';
 import type {
+  BaseHit,
   FrequentlyBoughtTogetherConnector,
   FrequentlyBoughtTogetherConnectorParams,
   FrequentlyBoughtTogetherWidgetDescription,
-} from 'instantsearch.js/es/connectors/frequently-bought-together/connectFrequentlyBoughtTogether';
+} from 'instantsearch-core';
 
 export type UseFrequentlyBoughtTogetherProps<THit extends BaseHit = BaseHit> =
   FrequentlyBoughtTogetherConnectorParams<THit>;

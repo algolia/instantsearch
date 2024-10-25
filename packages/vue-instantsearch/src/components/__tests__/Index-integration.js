@@ -1,9 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-
-jest.unmock('instantsearch.js/es');
-import instantsearch from 'instantsearch.js/es';
+import { instantsearch } from 'instantsearch-core';
 
 import { mount } from '../../../test/utils';
 import { createWidgetMixin } from '../../mixins/widget';

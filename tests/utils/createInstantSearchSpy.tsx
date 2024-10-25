@@ -5,8 +5,10 @@ import { IndexContext } from '../../packages/react-instantsearch-core/src/lib/In
 import { InstantSearchContext } from '../../packages/react-instantsearch-core/src/lib/InstantSearchContext';
 
 import type { InstantSearchProps } from '../../packages/react-instantsearch-core/src';
-import type { InstantSearch as InstantSearchType } from 'instantsearch.js';
-import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
+import type {
+  InstantSearch as InstantSearchType,
+  IndexWidget,
+} from 'instantsearch-core';
 
 export function createInstantSearchSpy() {
   const searchContext = createRef<InstantSearchType>();

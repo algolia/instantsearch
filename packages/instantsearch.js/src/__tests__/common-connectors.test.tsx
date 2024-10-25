@@ -23,8 +23,8 @@ import {
 import instantsearch from '../index.es';
 import { refinementList } from '../widgets';
 
-import type { InstantSearch, Widget } from '../index.es';
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
+import type { InstantSearch, Widget } from 'instantsearch-core';
 
 type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;

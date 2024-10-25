@@ -25,8 +25,6 @@ import { createFakeClient } from '../testutils/client';
 import { createSerializedState } from '../testutils/helper';
 import { isVue3, isVue2, Vue2, renderCompat } from '../vue-compat';
 
-jest.unmock('instantsearch.js/es');
-
 function renderToString(app) {
   if (isVue3) {
     return require('@vue/server-renderer').renderToString(app);

@@ -3,6 +3,7 @@
  */
 
 /* eslint-disable jest/no-conditional-expect */
+import { createSearchClient } from '@instantsearch/mocks';
 
 import { mount } from '../../test/utils';
 import InstantSearch from '../instantsearch';
@@ -86,11 +87,7 @@ function getAllComponents() {
             {
               props: {
                 indexName: 'instant_search',
-                searchClient: {
-                  search() {
-                    return new Promise({ results: [] });
-                  },
-                },
+                searchClient: createSearchClient(),
               },
             },
             [

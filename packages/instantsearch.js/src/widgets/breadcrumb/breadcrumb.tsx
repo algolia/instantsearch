@@ -4,7 +4,7 @@ import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
-import connectBreadcrumb from '../../connectors/breadcrumb/connectBreadcrumb';
+import { connectBreadcrumb } from '../../connectors';
 import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
@@ -22,7 +22,7 @@ import type {
   BreadcrumbWidgetDescription,
   BreadcrumbConnectorParams,
   BreadcrumbRenderState,
-} from '../../connectors/breadcrumb/connectBreadcrumb';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { WidgetFactory, Template, Renderer } from '../../types';
 

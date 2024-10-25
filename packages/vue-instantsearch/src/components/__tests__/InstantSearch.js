@@ -2,36 +2,59 @@
  * @jest-environment jsdom
  */
 
-import { createAlgoliaSearchClient } from '@instantsearch/mocks';
-import instantsearch from 'instantsearch.js/es';
+import {
+  createAlgoliaSearchClient,
+  createSearchClient,
+} from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils';
+import {
+  historyRouter,
+  instantsearch,
+  simpleStateMapping,
+} from 'instantsearch-core';
 
 import { version } from '../../../package.json';
 import { mount, nextTick } from '../../../test/utils';
-import { isVue3, version as vueVersion } from '../../util/vue-compat';
+import {
+  isVue3,
+  renderCompat,
+  version as vueVersion,
+} from '../../util/vue-compat';
 import { warn } from '../../util/warn';
+import { AisSearchBox } from '../../widgets';
 import InstantSearch from '../InstantSearch';
 import '../../../test/utils/sortedHtmlSerializer';
 
 jest.mock('../../util/warn');
+
+jest.mock('instantsearch-core', () => {
+  const actual = jest.requireActual('instantsearch-core');
+
+  return {
+    ...actual,
+    instantsearch: jest.fn(actual.instantsearch),
+  };
+});
 
 beforeEach(() => {
   jest.clearAllMocks();
 });
 
 it('passes props to InstantSearch.js', () => {
-  const searchClient = {};
+  const searchClient = createSearchClient();
   const insightsClient = jest.fn();
   const searchFunction = (helper) => helper.search();
+  const routing = {
+    router: historyRouter(),
+    stateMapping: simpleStateMapping(),
+  };
 
   mount(InstantSearch, {
     propsData: {
       searchClient,
       insightsClient,
       indexName: 'something',
-      routing: {
-        router: {},
-        stateMapping: {},
-      },
+      routing,
       stalledSearchDelay: 250,
       searchFunction,
     },
@@ -39,10 +62,7 @@ it('passes props to InstantSearch.js', () => {
 
   expect(instantsearch).toHaveBeenCalledWith({
     indexName: 'something',
-    routing: {
-      router: {},
-      stateMapping: {},
-    },
+    routing,
     searchClient,
     insightsClient,
     searchFunction,
@@ -56,7 +76,7 @@ it('throws on usage of appId or apiKey', () => {
 
   mount(InstantSearch, {
     propsData: {
-      searchClient: {},
+      searchClient: createSearchClient(),
       apiKey: 'bla',
       appId: 'blabla',
       indexName: 'something',
@@ -105,10 +125,12 @@ found in
 it('calls `start` on the next tick', async () => {
   const wrapper = mount(InstantSearch, {
     propsData: {
-      searchClient: {},
+      searchClient: createSearchClient(),
       indexName: 'something',
     },
   });
+
+  jest.spyOn(wrapper.vm.instantSearchInstance, 'start');
 
   await nextTick();
   expect(wrapper.vm.instantSearchInstance.start).toHaveBeenCalledTimes(1);
@@ -117,7 +139,7 @@ it('calls `start` on the next tick', async () => {
 it('renders correctly (empty)', () => {
   const wrapper = mount(InstantSearch, {
     propsData: {
-      searchClient: {},
+      searchClient: createSearchClient(),
       indexName: 'bla',
     },
   });
@@ -128,7 +150,7 @@ it('renders correctly (empty)', () => {
 it('renders correctly (with slot used)', () => {
   const wrapper = mount(InstantSearch, {
     propsData: {
-      searchClient: {},
+      searchClient: createSearchClient(),
       indexName: 'bla',
     },
     slots: {
@@ -140,43 +162,61 @@ it('renders correctly (with slot used)', () => {
 });
 
 it('Allows a change in `index-name`', async () => {
+  const searchClient = createSearchClient();
   const wrapper = mount(InstantSearch, {
     propsData: {
-      searchClient: {},
-      indexName: 'bla',
+      searchClient,
+      indexName: 'before',
+    },
+    slots: {
+      default: { render: renderCompat((h) => h(AisSearchBox)) },
+    },
+    components: {
+      AisSearchBox,
     },
   });
 
+  await wait(0);
+
+  expect(searchClient.search).toHaveBeenCalledTimes(1);
+  expect(searchClient.search).toHaveBeenCalledWith([
+    { indexName: 'before', params: { query: '' } },
+  ]);
+
   await wrapper.setProps({
-    indexName: 'doggie_bowl',
+    indexName: 'after',
   });
 
-  const helper = wrapper.vm.instantSearchInstance.helper;
-
-  expect(helper.setIndex).toHaveBeenCalledTimes(1);
-  expect(helper.setIndex).toHaveBeenCalledWith('doggie_bowl');
-  expect(helper.search).toHaveBeenCalledTimes(1);
+  expect(searchClient.search).toHaveBeenCalledTimes(2);
+  expect(searchClient.search).toHaveBeenCalledWith([
+    { indexName: 'after', params: { query: '' } },
+  ]);
 });
 
 it('Allows a change in `search-client`', async () => {
+  const searchClient = createSearchClient();
   const wrapper = mount(InstantSearch, {
     propsData: {
-      searchClient: {},
-      indexName: 'bla',
+      searchClient,
+      indexName: 'indexName',
+    },
+    components: { AisSearchBox },
+    slots: {
+      default: { render: renderCompat((h) => h(AisSearchBox)) },
     },
   });
 
-  const newClient = { cats: 'rule', dogs: 'drool' };
+  await wait(0);
 
+  expect(searchClient.search).toHaveBeenCalledTimes(1);
+
+  const newClient = createSearchClient();
   await wrapper.setProps({
     searchClient: newClient,
   });
 
-  const helper = wrapper.vm.instantSearchInstance.helper;
-
-  expect(helper.setClient).toHaveBeenCalledTimes(1);
-  expect(helper.setClient).toHaveBeenCalledWith(newClient);
-  expect(helper.search).toHaveBeenCalledTimes(1);
+  expect(newClient.search).toHaveBeenCalledTimes(1);
+  expect(searchClient.search).toHaveBeenCalledTimes(1);
 });
 
 it('warns when the `search-client` changes', async () => {
@@ -216,7 +256,7 @@ it('Allows a change in `search-function`', async () => {
 
   const wrapper = mount(InstantSearch, {
     propsData: {
-      searchClient: {},
+      searchClient: createSearchClient(),
       indexName: 'bla',
       searchFunction: oldValue,
     },
@@ -234,7 +274,7 @@ it('Allows a change in `search-function`', async () => {
 it('Allows a change in `stalled-search-delay`', async () => {
   const wrapper = mount(InstantSearch, {
     propsData: {
-      searchClient: {},
+      searchClient: createSearchClient(),
       indexName: 'bla',
       searchFunction: () => {},
       stalledSearchDelay: 200,
@@ -255,7 +295,7 @@ it('does not allow `routing` to be a boolean', () => {
   global.console.warn = jest.fn();
   mount(InstantSearch, {
     propsData: {
-      searchClient: {},
+      searchClient: createSearchClient(),
       indexName: 'bla',
       routing: true,
     },
@@ -287,7 +327,7 @@ See https://www.algolia.com/doc/api-reference/widgets/instantsearch/vue/#widget-
 it('warns when `routing` does not have `router` or `stateMapping`', () => {
   mount(InstantSearch, {
     propsData: {
-      searchClient: {},
+      searchClient: createSearchClient(),
       indexName: 'indexName',
       routing: {},
     },
@@ -302,16 +342,16 @@ See https://www.algolia.com/doc/api-reference/widgets/instantsearch/vue/#widget-
 it('does not warn when `routing` have either `router` or `stateMapping`', () => {
   mount(InstantSearch, {
     propsData: {
-      searchClient: {},
+      searchClient: createSearchClient(),
       indexName: 'indexName',
-      routing: { router: {} },
+      routing: { router: historyRouter() },
     },
   });
   mount(InstantSearch, {
     propsData: {
-      searchClient: {},
+      searchClient: createSearchClient(),
       indexName: 'indexName',
-      routing: { stateMapping: {} },
+      routing: { stateMapping: simpleStateMapping() },
     },
   });
 
@@ -322,7 +362,7 @@ it('does not warn when `routing` have either `router` or `stateMapping`', () => 
 it.skip('Does not allow a change in `routing`', async () => {
   const wrapper = mount(InstantSearch, {
     propsData: {
-      searchClient: {},
+      searchClient: createSearchClient(),
       indexName: 'bla',
     },
   });
@@ -339,7 +379,7 @@ Please open a new issue: https://github.com/algolia/instantsearch/discussions/ne
 });
 
 it('will call client.addAlgoliaAgent if present', () => {
-  const client = { addAlgoliaAgent: jest.fn() };
+  const client = createAlgoliaSearchClient({});
 
   mount(InstantSearch, {
     propsData: {
@@ -348,7 +388,10 @@ it('will call client.addAlgoliaAgent if present', () => {
     },
   });
 
-  expect(client.addAlgoliaAgent).toHaveBeenCalledTimes(2);
+  expect(client.addAlgoliaAgent).toHaveBeenCalledTimes(3);
+  expect(client.addAlgoliaAgent).toHaveBeenCalledWith(
+    expect.stringMatching(/instantsearch-core \(.*\)/)
+  );
   expect(client.addAlgoliaAgent).toHaveBeenCalledWith(`Vue (${vueVersion})`);
   expect(client.addAlgoliaAgent).toHaveBeenCalledWith(
     `Vue InstantSearch (${version})`
@@ -359,7 +402,9 @@ it('will not call client.addAlgoliaAgent if not function (so nothing to assert)'
   expect(() =>
     mount(InstantSearch, {
       propsData: {
-        searchClient: { addAlgoliaAgent: true },
+        searchClient: createSearchClient({
+          addAlgoliaAgent: false,
+        }),
         indexName: 'bla',
       },
     })
@@ -369,10 +414,12 @@ it('will not call client.addAlgoliaAgent if not function (so nothing to assert)'
 it('disposes the instantsearch instance on unmount', async () => {
   const wrapper = mount(InstantSearch, {
     propsData: {
-      searchClient: {},
+      searchClient: createSearchClient(),
       indexName: 'something',
     },
   });
+
+  jest.spyOn(wrapper.vm.instantSearchInstance, 'dispose');
 
   await nextTick();
 
@@ -414,7 +461,7 @@ it('provides the instantsearch instance', (done) => {
     data() {
       return {
         props: {
-          searchClient: {},
+          searchClient: createSearchClient(),
           indexName: 'something',
         },
       };

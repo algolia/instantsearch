@@ -69,7 +69,10 @@
             :index="index"
             :send-event="state.sendEvent"
           >
-            objectID: {{ item.objectID }}, index: {{ index }}
+            <!-- prettier-ignore -->
+            <div style="word-break: break-all">{{
+              defaultItemComponent(item)
+            }}</div>
           </slot>
         </li>
       </ol>
@@ -97,7 +100,7 @@
 </template>
 
 <script>
-import { connectInfiniteHits } from 'instantsearch.js/es/connectors';
+import { connectInfiniteHits } from 'instantsearch-core';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
@@ -154,6 +157,9 @@ export default {
     },
     refineNext() {
       this.state.showMore();
+    },
+    defaultItemComponent(hit) {
+      return `${JSON.stringify(hit).slice(0, 100)}…`;
     },
   },
 };

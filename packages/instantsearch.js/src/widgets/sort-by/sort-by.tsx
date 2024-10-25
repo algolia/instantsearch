@@ -4,7 +4,7 @@ import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import Selector from '../../components/Selector/Selector';
-import connectSortBy from '../../connectors/sort-by/connectSortBy';
+import { connectSortBy } from '../../connectors';
 import { component } from '../../lib/suit';
 import {
   getContainerNode,
@@ -17,7 +17,7 @@ import type {
   SortByItem,
   SortByRenderState,
   SortByWidgetDescription,
-} from '../../connectors/sort-by/connectSortBy';
+} from '../../connectors';
 import type { Renderer, TransformItems, WidgetFactory } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'sort-by' });

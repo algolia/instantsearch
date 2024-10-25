@@ -7,7 +7,7 @@ import { mount, shallow } from '@instantsearch/testutils/enzyme';
 import { render } from '@testing-library/preact';
 import { h } from 'preact';
 
-import { warning } from '../../../lib/utils';
+import { warnCache } from '../../../lib/utils';
 import Template from '../Template';
 
 import type { TemplateProps } from '../Template';
@@ -30,7 +30,7 @@ function getProps({
 
 describe('Template', () => {
   afterEach(() => {
-    warning.cache = {};
+    warnCache.current = {};
   });
 
   it('can configure custom rootTagName', () => {

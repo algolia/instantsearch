@@ -4,19 +4,18 @@ import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import Selector from '../../components/Selector/Selector';
-import connectHitsPerPage from '../../connectors/hits-per-page/connectHitsPerPage';
+import { connectHitsPerPage } from '../../connectors';
 import { component } from '../../lib/suit';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
-  find,
 } from '../../lib/utils';
 
 import type {
   HitsPerPageConnectorParams,
   HitsPerPageRenderState,
   HitsPerPageWidgetDescription,
-} from '../../connectors/hits-per-page/connectHitsPerPage';
+} from '../../connectors';
 import type { ComponentCSSClasses, WidgetFactory } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -36,7 +35,7 @@ const renderer =
     if (isFirstRendering) return;
 
     const { value: currentValue } =
-      find(items, ({ isRefined }) => isRefined) || {};
+      items.find(({ isRefined }) => isRefined) || {};
 
     render(
       <div className={cssClasses.root}>

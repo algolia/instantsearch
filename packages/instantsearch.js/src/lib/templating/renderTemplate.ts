@@ -9,7 +9,7 @@ import {
 import { warning } from '../utils';
 
 import type { Templates } from '../../types';
-import type { SendEventForHits } from '../utils/createSendEventForHits';
+import type { SendEventForHits } from 'instantsearch-core';
 
 export function renderTemplate({
   templates,

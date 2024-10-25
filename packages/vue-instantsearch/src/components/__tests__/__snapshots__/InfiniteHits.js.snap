@@ -13,19 +13,29 @@ exports[`does not render a banner when showBanner is false 1`] = `
   </aside>
   <ol class="ais-InfiniteHits-list">
     <li class="ais-InfiniteHits-item">
-      objectID: 00001, index: 0
+      <div style="word-break: break-all;">
+        {"objectID":"00001"}…
+      </div>
     </li>
     <li class="ais-InfiniteHits-item">
-      objectID: 00002, index: 1
+      <div style="word-break: break-all;">
+        {"objectID":"00002"}…
+      </div>
     </li>
     <li class="ais-InfiniteHits-item">
-      objectID: 00003, index: 2
+      <div style="word-break: break-all;">
+        {"objectID":"00003"}…
+      </div>
     </li>
     <li class="ais-InfiniteHits-item">
-      objectID: 00004, index: 3
+      <div style="word-break: break-all;">
+        {"objectID":"00004"}…
+      </div>
     </li>
     <li class="ais-InfiniteHits-item">
-      objectID: 00005, index: 4
+      <div style="word-break: break-all;">
+        {"objectID":"00005"}…
+      </div>
     </li>
   </ol>
   <button class="ais-InfiniteHits-loadMore">
@@ -104,19 +114,29 @@ exports[`renders correctly with banner data 1`] = `
   </aside>
   <ol class="ais-InfiniteHits-list">
     <li class="ais-InfiniteHits-item">
-      objectID: 00001, index: 0
+      <div style="word-break: break-all;">
+        {"objectID":"00001"}…
+      </div>
     </li>
     <li class="ais-InfiniteHits-item">
-      objectID: 00002, index: 1
+      <div style="word-break: break-all;">
+        {"objectID":"00002"}…
+      </div>
     </li>
     <li class="ais-InfiniteHits-item">
-      objectID: 00003, index: 2
+      <div style="word-break: break-all;">
+        {"objectID":"00003"}…
+      </div>
     </li>
     <li class="ais-InfiniteHits-item">
-      objectID: 00004, index: 3
+      <div style="word-break: break-all;">
+        {"objectID":"00004"}…
+      </div>
     </li>
     <li class="ais-InfiniteHits-item">
-      objectID: 00005, index: 4
+      <div style="word-break: break-all;">
+        {"objectID":"00005"}…
+      </div>
     </li>
   </ol>
   <button class="ais-InfiniteHits-loadMore">
@@ -130,19 +150,29 @@ exports[`renders correctly with banner data and custom banner rendering 1`] = `
   <img src="https://via.placeholder.com/550x250">
   <ol class="ais-InfiniteHits-list">
     <li class="ais-InfiniteHits-item">
-      objectID: 00001, index: 0
+      <div style="word-break: break-all;">
+        {"objectID":"00001"}…
+      </div>
     </li>
     <li class="ais-InfiniteHits-item">
-      objectID: 00002, index: 1
+      <div style="word-break: break-all;">
+        {"objectID":"00002"}…
+      </div>
     </li>
     <li class="ais-InfiniteHits-item">
-      objectID: 00003, index: 2
+      <div style="word-break: break-all;">
+        {"objectID":"00003"}…
+      </div>
     </li>
     <li class="ais-InfiniteHits-item">
-      objectID: 00004, index: 3
+      <div style="word-break: break-all;">
+        {"objectID":"00004"}…
+      </div>
     </li>
     <li class="ais-InfiniteHits-item">
-      objectID: 00005, index: 4
+      <div style="word-break: break-all;">
+        {"objectID":"00005"}…
+      </div>
     </li>
   </ol>
   <button class="ais-InfiniteHits-loadMore">

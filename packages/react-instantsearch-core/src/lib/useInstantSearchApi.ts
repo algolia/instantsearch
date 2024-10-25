@@ -1,6 +1,7 @@
-import InstantSearch, {
+import {
+  InstantSearch,
   INSTANTSEARCH_FUTURE_DEFAULTS,
-} from 'instantsearch.js/es/lib/InstantSearch';
+} from 'instantsearch-core';
 import { useCallback, useRef, version as ReactVersion } from 'react';
 import { useSyncExternalStore } from 'use-sync-external-store/shim';
 
@@ -18,7 +19,7 @@ import type {
   InstantSearchOptions,
   SearchClient,
   UiState,
-} from 'instantsearch.js';
+} from 'instantsearch-core';
 
 const defaultUserAgents = [
   `react (${ReactVersion})`,

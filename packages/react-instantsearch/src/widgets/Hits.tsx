@@ -2,12 +2,11 @@ import { createHitsComponent } from 'instantsearch-ui-components';
 import React, { createElement, Fragment, useMemo } from 'react';
 import { useHits } from 'react-instantsearch-core';
 
+import type { SendEventForHits, Hit, BaseHit } from 'instantsearch-core';
 import type {
   HitsProps as HitsUiComponentProps,
   Pragma,
 } from 'instantsearch-ui-components';
-import type { Hit, BaseHit } from 'instantsearch.js';
-import type { SendEventForHits } from 'instantsearch.js/es/lib/utils';
 import type { UseHitsProps } from 'react-instantsearch-core';
 
 type UiProps<THit extends BaseHit> = Pick<
@@ -63,7 +62,7 @@ export function Hits<THit extends BaseHit = BaseHit>({
   bannerComponent: BannerComponent,
   ...props
 }: HitsProps<THit>) {
-  const { hits, banner, sendEvent } = useHits<THit>(
+  const { items, banner, sendEvent } = useHits<THit>(
     { escapeHTML, transformItems },
     { $$widgetType: 'ais.hits' }
   );
@@ -71,7 +70,7 @@ export function Hits<THit extends BaseHit = BaseHit>({
   const itemComponent: HitsUiComponentProps<Hit<THit>>['itemComponent'] =
     useMemo(
       () =>
-        ({ hit, index, ...itemProps }) =>
+        ({ hit, ...itemProps }) =>
           (
             <li key={hit.objectID} {...itemProps}>
               <HitComponent hit={hit} sendEvent={sendEvent} />
@@ -85,7 +84,7 @@ export function Hits<THit extends BaseHit = BaseHit>({
   ) as HitsUiComponentProps<Hit<THit>>['bannerComponent'];
 
   const uiProps: UiProps<THit> = {
-    hits,
+    hits: items,
     sendEvent,
     itemComponent,
     banner,

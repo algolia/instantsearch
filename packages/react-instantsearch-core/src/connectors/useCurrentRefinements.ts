@@ -1,4 +1,4 @@
-import connectCurrentRefinements from 'instantsearch.js/es/connectors/current-refinements/connectCurrentRefinements';
+import { connectCurrentRefinements } from 'instantsearch-core';
 
 import { useConnector } from '../hooks/useConnector';
 
@@ -6,7 +6,7 @@ import type { AdditionalWidgetProperties } from '../hooks/useConnector';
 import type {
   CurrentRefinementsConnectorParams,
   CurrentRefinementsWidgetDescription,
-} from 'instantsearch.js/es/connectors/current-refinements/connectCurrentRefinements';
+} from 'instantsearch-core';
 
 export type UseCurrentRefinementsProps = CurrentRefinementsConnectorParams;
 

@@ -8,7 +8,7 @@ import {
 
 import * as widgets from '../..';
 
-import type { InstantSearch as InstantSearchClass } from 'instantsearch.js';
+import type { InstantSearch as InstantSearchClass } from 'instantsearch-core';
 import type { ComponentProps } from 'react';
 
 type AllWidgets = typeof widgets;
