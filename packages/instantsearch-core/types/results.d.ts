@@ -1,4 +1,4 @@
-import type { SearchOptions } from './algoliasearch';
+import type { SearchOptions } from './algoliasearch.d.ts';
 import type {
   PlainSearchParameters,
   RecommendParametersOptions,
