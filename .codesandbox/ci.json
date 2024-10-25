@@ -15,7 +15,8 @@
     "packages/react-instantsearch-nextjs",
     "packages/vue-instantsearch",
     "packages/instantsearch.css",
-    "packages/instantsearch-ui-components"
+    "packages/instantsearch-ui-components",
+    "packages/instantsearch-core"
   ],
   "node": "16"
 }
