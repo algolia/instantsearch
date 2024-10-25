@@ -219,60 +219,22 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
               <li
                 class="ais-Hits-item"
               >
-                {
-          "objectID": "1",
-          "name": "Apple iPhone smartphone",
-          "description": "A smartphone by Apple.",
-          "_highlightResult": {
-            "name": {
-              "value": "Apple iPhone &lt;mark&gt;smartphone&lt;/mark&gt;",
-              "matchLevel": "full",
-              "matchedWords": [
-                "smartphone"
-              ]
-            }
-          },
-          "_snippetResult": {
-            "name": {
-              "value": "Apple iPhone &lt;mark&gt;smartphone&lt;/mark&gt;",
-              "matchLevel": "full"
-            },
-            "description": {
-              "value": "A &lt;mark&gt;smartphone&lt;/mark&gt; by Apple.",
-              "matchLevel": "full"
-            }
-          },
-          "__position": 1
-        }
+                <div
+                  style="word-break: break-all;"
+                >
+                  {"objectID":"1","name":"Apple iPhone smartphone","description":"A smartphone by Apple.","_highlightR
+                  …
+                </div>
               </li>
               <li
                 class="ais-Hits-item"
               >
-                {
-          "objectID": "2",
-          "name": "Samsung Galaxy smartphone",
-          "description": "A smartphone by Samsung.",
-          "_highlightResult": {
-            "name": {
-              "value": "Samsung Galaxy &lt;mark&gt;smartphone&lt;/mark&gt;",
-              "matchLevel": "full",
-              "matchedWords": [
-                "smartphone"
-              ]
-            }
-          },
-          "_snippetResult": {
-            "name": {
-              "value": "Samsung Galaxy &lt;mark&gt;smartphone&lt;/mark&gt;",
-              "matchLevel": "full"
-            },
-            "description": {
-              "value": "A &lt;mark&gt;smartphone&lt;/mark&gt; by Samsung.",
-              "matchLevel": "full"
-            }
-          },
-          "__position": 2
-        }
+                <div
+                  style="word-break: break-all;"
+                >
+                  {"objectID":"2","name":"Samsung Galaxy smartphone","description":"A smartphone by Samsung.","_highli
+                  …
+                </div>
               </li>
             </ol>
           </div>
@@ -794,41 +756,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
       `);
     });
 
-    test('provides __hitIndex in the list to each item', async () => {
-      const container = document.createElement('div');
-      const searchBoxContainer = document.createElement('div');
-      const searchClient = createMockedSearchClient();
-
-      const search = instantsearch({ indexName: 'indexName', searchClient });
-
-      search.addWidgets([
-        searchBox({ container: searchBoxContainer }),
-        hits({
-          container,
-          templates: {
-            item(hit, { html }) {
-              return html`${hit.__hitIndex.toString()}`;
-            },
-          },
-        }),
-      ]);
-
-      search.start();
-
-      await wait(0);
-
-      expect(
-        [...container.querySelectorAll('.ais-Hits-item')].map(
-          (item) => item.textContent
-        )
-      ).toMatchInlineSnapshot(`
-        [
-          "0",
-          "1",
-        ]
-      `);
-    });
-
     type CustomHit = { name: string; description: string };
 
     function createMockedSearchClient(
@@ -1043,7 +970,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
         eventType: 'click',
         hits: [
           {
-            __hitIndex: 0,
             __position: 1,
             objectID: '1',
             name: 'Name 1',
@@ -1103,7 +1029,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
         eventType: 'conversion',
         hits: [
           {
-            __hitIndex: 1,
             __position: 2,
             objectID: '2',
             name: 'Name 2',

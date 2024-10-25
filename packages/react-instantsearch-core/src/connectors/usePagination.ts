@@ -1,4 +1,4 @@
-import connectPagination from 'instantsearch.js/es/connectors/pagination/connectPagination';
+import { connectPagination } from 'instantsearch-core';
 
 import { useConnector } from '../hooks/useConnector';
 
@@ -6,7 +6,7 @@ import type { AdditionalWidgetProperties } from '../hooks/useConnector';
 import type {
   PaginationConnectorParams,
   PaginationWidgetDescription,
-} from 'instantsearch.js/es/connectors/pagination/connectPagination';
+} from 'instantsearch-core';
 
 export type UsePaginationProps = PaginationConnectorParams;
 

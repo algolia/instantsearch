@@ -2,15 +2,15 @@ import { createTrendingItemsComponent } from 'instantsearch-ui-components';
 import React, { createElement, Fragment, useMemo } from 'react';
 import { useInstantSearch, useTrendingItems } from 'react-instantsearch-core';
 
+import type { Hit, BaseHit } from 'instantsearch-core';
 import type {
   TrendingItemsProps as TrendingItemsUiComponentProps,
   Pragma,
 } from 'instantsearch-ui-components';
-import type { BaseHit, Hit } from 'instantsearch.js';
 import type { UseTrendingItemsProps } from 'react-instantsearch-core';
 
 type UiProps<TItem extends BaseHit> = Pick<
-  TrendingItemsUiComponentProps<TItem>,
+  TrendingItemsUiComponentProps<Hit<TItem>>,
   | 'items'
   | 'itemComponent'
   | 'headerComponent'
@@ -21,7 +21,7 @@ type UiProps<TItem extends BaseHit> = Pick<
 >;
 
 export type TrendingItemsProps<TItem extends BaseHit> = Omit<
-  TrendingItemsUiComponentProps<TItem>,
+  TrendingItemsUiComponentProps<Hit<TItem>>,
   keyof UiProps<TItem>
 > &
   UseTrendingItemsProps & {

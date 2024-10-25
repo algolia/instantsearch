@@ -4,7 +4,7 @@ import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import Pagination from '../../components/Pagination/Pagination';
-import connectPagination from '../../connectors/pagination/connectPagination';
+import { connectPagination } from '../../connectors';
 import { component } from '../../lib/suit';
 import {
   getContainerNode,
@@ -19,7 +19,7 @@ import type {
   PaginationConnectorParams,
   PaginationRenderState,
   PaginationWidgetDescription,
-} from '../../connectors/pagination/connectPagination';
+} from '../../connectors';
 import type { Renderer, Template, WidgetFactory } from '../../types';
 
 const suit = component('Pagination');

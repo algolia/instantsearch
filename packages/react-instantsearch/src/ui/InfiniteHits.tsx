@@ -2,8 +2,7 @@ import { cx } from 'instantsearch-ui-components';
 import React from 'react';
 
 import type { Banner } from 'algoliasearch-helper';
-import type { Hit } from 'instantsearch.js';
-import type { SendEventForHits } from 'instantsearch.js/es/lib/utils';
+import type { SendEventForHits, Hit } from 'instantsearch-core';
 
 export type InfiniteHitsProps<THit> = React.ComponentProps<'div'> & {
   hits: THit[];

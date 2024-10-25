@@ -1,0 +1,56 @@
+{
+  "name": "instantsearch-core",
+  "version": "0.1.0",
+  "description": "Common utilities and types for InstantSearch.",
+  "types": "dist/es/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "module": "dist/es/index.js",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/es/index.d.ts",
+      "require": "./dist/cjs/index.js",
+      "default": "./dist/es/index.js"
+    }
+  },
+  "sideEffects": false,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/algolia/instantsearch"
+  },
+  "author": {
+    "name": "Algolia, Inc.",
+    "url": "https://www.algolia.com"
+  },
+  "keywords": [
+    "algolia",
+    "components",
+    "fast",
+    "instantsearch",
+    "react",
+    "search"
+  ],
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "yarn build:cjs && yarn build:es && yarn build:types",
+    "build:es:base": "BABEL_ENV=es,disableHoisting babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --ignore '**/__tests__/**/*','**/__mocks__/**/*'",
+    "build:es": "yarn build:es:base --quiet",
+    "build:cjs": "BABEL_ENV=cjs,disableHoisting babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/cjs --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet && ../../scripts/prepare-cjs.sh",
+    "build:types": "tsc -p ./tsconfig.declaration.json",
+    "version": "./scripts/version.cjs",
+    "prepare": "yarn build",
+    "watch:es": "yarn --silent build:es:base --watch"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.25.9",
+    "algoliasearch-helper": "3.23.1",
+    "@algolia/events": "^4.0.1",
+    "@types/qs": "^6.5.3",
+    "qs": "^6.5.1 < 6.10",
+    "search-insights": "^2.17.2"
+  }
+}

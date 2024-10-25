@@ -1,0 +1,10 @@
+export { default as version } from './version';
+export * from './connectors';
+export * from './instantsearch';
+export * from './lib/infiniteHitsCache';
+export * from './lib/public';
+export * from './middlewares';
+export * from './routing';
+export * from './server';
+export * from './widgets';
+export type * from './types';

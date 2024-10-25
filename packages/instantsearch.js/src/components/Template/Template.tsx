@@ -6,8 +6,8 @@ import { renderTemplate } from '../../lib/templating';
 import { isEqual } from '../../lib/utils';
 
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type { SendEventForHits } from '../../lib/utils';
 import type { Templates } from '../../types';
+import type { SendEventForHits } from 'instantsearch-core';
 import type { JSX } from 'preact';
 
 const defaultProps = {
