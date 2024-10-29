@@ -29,7 +29,7 @@ export type Experience = {
 const LOCAL = false;
 const API_BASE = LOCAL
   ? 'http://localhost:3000/1'
-  : 'https://experiences-main.platform.algolia.net/1';
+  : 'https://experiences-beta.algolia.com/1';
 
 type ApiParams<TEndpointParams> = {
   appId: string;
@@ -51,7 +51,7 @@ export function deleteExperience({
   return buildRequest({
     appId,
     apiKey,
-    endpoint: `collections/${id}`,
+    endpoint: `experiences/${id}`,
     method: 'DELETE',
   });
 }
@@ -65,7 +65,7 @@ export function getExperience({
   return buildRequest({
     appId,
     apiKey,
-    endpoint: `collections/${id}`,
+    endpoint: `experiences/${id}`,
   });
 }
 
@@ -78,7 +78,7 @@ export function upsertExperience({
   return buildRequest({
     appId,
     apiKey,
-    endpoint: `collections`,
+    endpoint: `experiences`,
     method: 'POST',
     data: experience,
   });
@@ -92,7 +92,7 @@ export function listExperiences({
   return buildRequest({
     appId,
     apiKey,
-    endpoint: 'collections',
+    endpoint: 'experiences',
   });
 }
 
