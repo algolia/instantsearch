@@ -438,6 +438,18 @@ export function createInsightsMiddleware<
           };
         }
 
+        const viewedObjectIDs = new Set<string>();
+        let lastQueryId: string | undefined;
+        instantSearchInstance.mainHelper!.derivedHelpers[0].on(
+          'result',
+          ({ results }) => {
+            if (!results.queryID || results.queryID !== lastQueryId) {
+              lastQueryId = results.queryID;
+              viewedObjectIDs.clear();
+            }
+          }
+        );
+
         instantSearchInstance.sendEventToInsights = (event: InsightsEvent) => {
           if (onEvent) {
             onEvent(
@@ -445,6 +457,20 @@ export function createInsightsMiddleware<
               insightsClientWithLocalCredentials as TInsightsClient
             );
           } else if (event.insightsMethod) {
+            if (event.insightsMethod === 'viewedObjectIDs') {
+              const payload = event.payload as {
+                objectIDs: string[];
+              };
+              const difference = payload.objectIDs.filter(
+                (objectID) => !viewedObjectIDs.has(objectID)
+              );
+              if (difference.length === 0) {
+                return;
+              }
+              difference.forEach((objectID) => viewedObjectIDs.add(objectID));
+              payload.objectIDs = difference;
+            }
+
             // Source is used to differentiate events sent by instantsearch from those sent manually.
             (event.payload as any).algoliaSource = ['instantsearch'];
             if ($$automatic) {

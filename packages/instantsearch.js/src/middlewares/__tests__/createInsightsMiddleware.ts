@@ -1326,6 +1326,135 @@ describe('insights', () => {
       }).toWarnDev();
       expect(insightsClient).toHaveBeenCalledTimes(numberOfCalls); // still the same
     });
+
+    it('does not send view events that were previously sent for the current query', () => {
+      const { insightsClient, instantSearchInstance } = createTestEnvironment();
+
+      instantSearchInstance.use(
+        createInsightsMiddleware({
+          insightsClient,
+        })
+      );
+
+      insightsClient('setUserToken', 'token');
+
+      instantSearchInstance.sendEventToInsights({
+        insightsMethod: 'viewedObjectIDs',
+        widgetType: 'ais.customWidget',
+        eventType: 'view',
+        payload: {
+          index: 'my-index',
+          eventName: 'My Hits Viewed',
+          objectIDs: ['obj1'],
+        },
+      });
+
+      instantSearchInstance.sendEventToInsights({
+        insightsMethod: 'viewedObjectIDs',
+        widgetType: 'ais.customWidget',
+        eventType: 'view',
+        payload: {
+          index: 'my-index',
+          eventName: 'My Hits Viewed',
+          objectIDs: ['obj1'],
+        },
+      });
+
+      expect(
+        insightsClient.mock.calls.filter(
+          (call) => call[0] === 'viewedObjectIDs'
+        )
+      ).toHaveLength(1);
+    });
+
+    it('clears saved view events when the query changes', () => {
+      const { insightsClient, instantSearchInstance } = createTestEnvironment();
+
+      instantSearchInstance.use(
+        createInsightsMiddleware({
+          insightsClient,
+        })
+      );
+
+      insightsClient('setUserToken', 'token');
+
+      instantSearchInstance.sendEventToInsights({
+        insightsMethod: 'viewedObjectIDs',
+        widgetType: 'ais.customWidget',
+        eventType: 'view',
+        payload: {
+          index: 'my-index',
+          eventName: 'My Hits Viewed',
+          objectIDs: ['obj1'],
+        },
+      });
+
+      instantSearchInstance.mainHelper!.derivedHelpers[0].emit('result', {
+        results: { queryId: '2' },
+      });
+
+      instantSearchInstance.sendEventToInsights({
+        insightsMethod: 'viewedObjectIDs',
+        widgetType: 'ais.customWidget',
+        eventType: 'view',
+        payload: {
+          index: 'my-index',
+          eventName: 'My Hits Viewed',
+          objectIDs: ['obj1'],
+        },
+      });
+
+      expect(
+        insightsClient.mock.calls.filter(
+          (call) => call[0] === 'viewedObjectIDs'
+        )
+      ).toHaveLength(2);
+    });
+
+    it("only sends view events that haven't been sent yet for current query", () => {
+      const { insightsClient, instantSearchInstance } = createTestEnvironment();
+
+      instantSearchInstance.use(
+        createInsightsMiddleware({
+          insightsClient,
+        })
+      );
+
+      insightsClient('setUserToken', 'token');
+
+      instantSearchInstance.sendEventToInsights({
+        insightsMethod: 'viewedObjectIDs',
+        widgetType: 'ais.customWidget',
+        eventType: 'view',
+        payload: {
+          index: 'my-index',
+          eventName: 'My Hits Viewed',
+          objectIDs: ['obj1'],
+        },
+      });
+
+      instantSearchInstance.sendEventToInsights({
+        insightsMethod: 'viewedObjectIDs',
+        widgetType: 'ais.customWidget',
+        eventType: 'view',
+        payload: {
+          index: 'my-index',
+          eventName: 'My Hits Viewed',
+          objectIDs: ['obj1', 'obj2'],
+        },
+      });
+
+      expect(
+        insightsClient.mock.calls.filter(
+          (call) => call[0] === 'viewedObjectIDs'
+        )
+      ).toHaveLength(2);
+      expect(insightsClient).toHaveBeenLastCalledWith(
+        'viewedObjectIDs',
+        expect.objectContaining({ objectIDs: ['obj2'] }),
+        expect.any(Object)
+      );
+    });
   });
 
   test("does not write to the URL on load when there's an existing anonymous cookie", async () => {
