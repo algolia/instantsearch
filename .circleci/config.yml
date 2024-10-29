@@ -80,7 +80,7 @@ workflows:
             - examples
           matrix:
             parameters:
-              browser: [chrome, firefox, internet explorer]
+              browser: [chrome, firefox]
           filters:
             branches:
               only:
@@ -137,7 +137,7 @@ workflows:
             - examples
           matrix:
             parameters:
-              browser: [chrome, firefox, internet explorer]
+              browser: [chrome, firefox]
       - e2e tests router nextjs:
           context: fx-libraries
           requires:
