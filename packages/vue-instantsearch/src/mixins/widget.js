@@ -1,4 +1,3 @@
-import { _objectSpread } from '../util/polyfills';
 import { isVue3 } from '../util/vue-compat';
 import { warn } from '../util/warn';
 
@@ -31,10 +30,10 @@ export const createWidgetMixin = (
   created() {
     if (typeof connector === 'function') {
       this.factory = connector(this.updateState, () => {});
-      this.widget = _objectSpread(
-        this.factory(this.widgetParams),
-        additionalProperties
-      );
+      this.widget = {
+        ...this.factory(this.widgetParams),
+        ...additionalProperties,
+      };
       this.getParentIndex().addWidgets([this.widget]);
 
       if (
@@ -73,10 +72,10 @@ Read more on using connectors: https://alg.li/vue-custom`
       handler(nextWidgetParams) {
         this.state = null;
         this.getParentIndex().removeWidgets([this.widget]);
-        this.widget = _objectSpread(
-          this.factory(nextWidgetParams),
-          additionalProperties
-        );
+        this.widget = {
+          ...this.factory(nextWidgetParams),
+          ...additionalProperties,
+        };
         this.getParentIndex().addWidgets([this.widget]);
       },
       deep: true,

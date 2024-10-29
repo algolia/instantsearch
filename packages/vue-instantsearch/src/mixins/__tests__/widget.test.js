@@ -425,7 +425,12 @@ describe('general', () => {
     expect(wrapper.vm.state).toBe(null);
 
     expect(instance.mainIndex.removeWidgets).toHaveBeenCalledTimes(1);
-    expect(instance.mainIndex.removeWidgets).toHaveBeenCalledWith([widget]);
+    expect(instance.mainIndex.removeWidgets).toHaveBeenCalledWith([
+      {
+        ...widget,
+        ...additionalProperties,
+      },
+    ]);
 
     expect(factory).toHaveBeenCalledTimes(2);
     expect(factory).toHaveBeenCalledWith(nextWidgetParams);
