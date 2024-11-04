@@ -184,6 +184,8 @@ export type InstantSearchOptions<
     // @MAJOR: Remove legacy behaviour here and in algoliasearch-helper
     persistHierarchicalRootCount?: boolean;
   };
+
+  collection?: string;
 };
 
 export type InstantSearchStatus = 'idle' | 'loading' | 'stalled' | 'error';
@@ -254,6 +256,8 @@ Use \`InstantSearch.status === "stalled"\` instead.`
 
     return this.status === 'stalled';
   }
+
+  public _collection: string | undefined = undefined;
 
   public constructor(options: InstantSearchOptions<TUiState, TRouteState>) {
     super();
@@ -390,6 +394,18 @@ See documentation: ${createDocumentationLink({
 
     if (isMetadataEnabled()) {
       this.use(createMetadataMiddleware({ $$internal: true }));
+    }
+
+    if (options.collection) {
+      this._collection = options.collection;
+      // @ts-ignore
+      this._initialUiState = {
+        [indexName]: {
+          hierarchicalMenu: {
+            '_collections.lvl0': [options.collection],
+          },
+        },
+      };
     }
   }
 

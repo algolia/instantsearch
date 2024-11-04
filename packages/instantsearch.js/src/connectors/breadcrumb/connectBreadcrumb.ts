@@ -36,7 +36,7 @@ export type BreadcrumbConnectorParams = {
   /**
    * Attributes to use to generate the hierarchy of the breadcrumb.
    */
-  attributes: string[];
+  attributes?: string[];
 
   /**
    * Prefix path to use if the first level is not the root level.
@@ -111,7 +111,7 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
 
   return (widgetParams) => {
     const {
-      attributes,
+      attributes: providedAttributes,
       separator = ' > ',
       rootPath = null,
       transformItems = ((items) => items) as NonNullable<
@@ -119,13 +119,8 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
       >,
     } = widgetParams || {};
 
-    if (!attributes || !Array.isArray(attributes) || attributes.length === 0) {
-      throw new Error(
-        withUsage('The `attributes` option expects an array of strings.')
-      );
-    }
-
-    const [hierarchicalFacetName] = attributes;
+    let attributes = providedAttributes || [];
+    let [hierarchicalFacetName] = attributes || [];
 
     function getRefinedState(
       state: SearchParameters,
@@ -256,7 +251,31 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
         );
       },
 
-      getWidgetSearchParameters(searchParameters, { uiState }) {
+      getWidgetSearchParameters(
+        searchParameters,
+        { instantSearchInstance, uiState }
+      ) {
+        if (!hierarchicalFacetName && !instantSearchInstance) {
+          return searchParameters;
+        }
+
+        if (
+          !hierarchicalFacetName &&
+          !instantSearchInstance._collection &&
+          (!Array.isArray(attributes) || attributes.length === 0)
+        ) {
+          throw new Error(
+            withUsage('The `attributes` option expects an array of strings.')
+          );
+        }
+
+        if (!hierarchicalFacetName && instantSearchInstance._collection) {
+          attributes = Array(5)
+            .fill(undefined)
+            .map((_, i) => `_collections.lvl${i}`);
+          hierarchicalFacetName = attributes[0];
+        }
+
         const values =
           uiState.hierarchicalMenu &&
           uiState.hierarchicalMenu[hierarchicalFacetName];

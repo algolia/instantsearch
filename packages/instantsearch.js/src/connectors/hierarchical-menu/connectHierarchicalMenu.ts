@@ -54,7 +54,7 @@ export type HierarchicalMenuConnectorParams = {
   /**
    *  Attributes to use to generate the hierarchy of the menu.
    */
-  attributes: string[];
+  attributes?: string[];
   /**
    * Separator used in the attributes to separate level values.
    */
@@ -171,7 +171,7 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
 
     return (widgetParams) => {
       const {
-        attributes,
+        attributes: providedAttributes,
         separator = ' > ',
         rootPath = null,
         showParentLevel = true,
@@ -183,16 +183,6 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
           HierarchicalMenuConnectorParams['transformItems']
         >,
       } = widgetParams || {};
-
-      if (
-        !attributes ||
-        !Array.isArray(attributes) ||
-        attributes.length === 0
-      ) {
-        throw new Error(
-          withUsage('The `attributes` option expects an array of strings.')
-        );
-      }
 
       if (showMore === true && showMoreLimit <= limit) {
         throw new Error(
@@ -209,7 +199,8 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
       // we need to provide a hierarchicalFacet name for the search state
       // so that we can always map $hierarchicalFacetName => real attributes
       // we use the first attribute name
-      const [hierarchicalFacetName] = attributes;
+      let attributes = providedAttributes || [];
+      let [hierarchicalFacetName] = attributes || [];
 
       let sendEvent: HierarchicalMenuRenderState['sendEvent'];
 
@@ -409,7 +400,32 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
           );
         },
 
-        getWidgetSearchParameters(searchParameters, { uiState }) {
+        getWidgetSearchParameters(
+          searchParameters,
+          { instantSearchInstance, uiState }
+        ) {
+          if (!hierarchicalFacetName && !instantSearchInstance) {
+            return searchParameters;
+          }
+
+          if (
+            !hierarchicalFacetName &&
+            !instantSearchInstance._collection &&
+            (!Array.isArray(attributes) || attributes.length === 0)
+          ) {
+            throw new Error(
+              withUsage('The `attributes` option expects an array of strings.')
+            );
+          } else {
+          }
+
+          if (!hierarchicalFacetName && instantSearchInstance._collection) {
+            attributes = Array(5)
+              .fill(undefined)
+              .map((_, i) => `_collections.lvl${i}`);
+            hierarchicalFacetName = attributes[0];
+          }
+
           const values =
             uiState.hierarchicalMenu &&
             uiState.hierarchicalMenu[hierarchicalFacetName];

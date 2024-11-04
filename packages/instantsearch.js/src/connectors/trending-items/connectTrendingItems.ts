@@ -193,7 +193,16 @@ export default (function connectTrendingItems<
         return recommendState.removeParams(this.$$id!);
       },
 
-      getWidgetParameters(state) {
+      getWidgetParameters(state, { instantSearchInstance }) {
+        const collectionParameters = instantSearchInstance._collection
+          ? {
+              facetFilters: [
+                `_collections.lvl${
+                  instantSearchInstance._collection.split(' > ').length - 1
+                }:${instantSearchInstance._collection}`,
+              ],
+            }
+          : {};
         return state.removeParams(this.$$id!).addTrendingItems({
           facetName: facetName as string,
           facetValue: facetValue as string,
@@ -201,10 +210,12 @@ export default (function connectTrendingItems<
           threshold,
           fallbackParameters: {
             ...fallbackParameters,
+            ...collectionParameters,
             ...(escapeHTML ? TAG_PLACEHOLDER : {}),
           },
           queryParameters: {
             ...queryParameters,
+            ...collectionParameters,
             ...(escapeHTML ? TAG_PLACEHOLDER : {}),
           },
           $$id: this.$$id!,
