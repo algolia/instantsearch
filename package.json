@@ -93,7 +93,6 @@
     "babel-eslint": "10.1.0",
     "babel-jest": "27.4.6",
     "babel-plugin-inline-replace-variables": "1.3.1",
-    "babel-plugin-polyfill-es-shims": "0.10.5",
     "babel-plugin-transform-react-pure-class-to-function": "1.0.1",
     "babel-plugin-transform-react-remove-prop-types": "0.4.24",
     "babel-preset-vue": "2.0.2",
