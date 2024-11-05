@@ -201,17 +201,14 @@ function blockToWidget(child: Block, container: HTMLElement): Widget[] {
                 children = ch.children.map(renderChild);
               }
 
-              const attributes = Object.fromEntries(
-                Object.entries(ch.parameters)
-                  .filter(
-                    (tuple): tuple is [string, TemplateAttribute] =>
-                      tuple[0] !== 'text'
-                  )
-                  .map(([key, value]) => [
-                    key,
-                    value.map((item) => renderAttribute(item, hit)).join(''),
-                  ])
-              );
+              const attributes: Record<string, string> = {};
+              for (const [key, value] of Object.entries(ch.parameters)) {
+                if (key !== 'text') {
+                  attributes[key] = (value as TemplateAttribute)
+                    .map((item) => renderAttribute(item, hit))
+                    .join('');
+                }
+              }
 
               return <Tag {...attributes}>{children}</Tag>;
             }
@@ -257,17 +254,14 @@ function blockToWidget(child: Block, container: HTMLElement): Widget[] {
                 children = ch.children.map(renderChild);
               }
 
-              const attributes = Object.fromEntries(
-                Object.entries(ch.parameters)
-                  .filter(
-                    (tuple): tuple is [string, TemplateAttribute] =>
-                      tuple[0] !== 'text'
-                  )
-                  .map(([key, value]) => [
-                    key,
-                    value.map((item) => renderAttribute(item, hit)).join(''),
-                  ])
-              );
+              const attributes: Record<string, string> = {};
+              for (const [key, value] of Object.entries(ch.parameters)) {
+                if (key !== 'text') {
+                  attributes[key] = (value as TemplateAttribute)
+                    .map((item) => renderAttribute(item, hit))
+                    .join('');
+                }
+              }
 
               return <Tag {...attributes}>{children}</Tag>;
             }
