@@ -238,7 +238,12 @@ const config = {
     },
     {
       files: 'packages/**/*',
-      excludedFiles: ['*.test.*', '**/__tests__/**', '**/stories/**'],
+      excludedFiles: [
+        '*.test.*',
+        '**/__tests__/**',
+        '**/stories/**',
+        'packages/algoliasearch-helper/documentation-src/**',
+      ],
       plugins: ['compat'],
       extends: ['plugin:compat/recommended'],
       env: {

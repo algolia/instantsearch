@@ -110,7 +110,6 @@ function activeLinks(sidebarContainer) {
 
 function getPositionsKeyElements(sidebarContainer) {
   const sidebarBBox = sidebarContainer.getBoundingClientRect();
-  // eslint-disable-next-line compat/compat
   const bodyBBox = document.body.getBoundingClientRect();
   const sidebarTop = sidebarBBox.top - bodyBBox.top;
   const footer = document.querySelector('.ac-footer');
