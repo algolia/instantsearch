@@ -581,9 +581,23 @@ See documentation: ${createDocumentationLink({
     // we need to respect this helper as a way to keep all listeners correct.
     const mainHelper =
       this.mainHelper ||
-      algoliasearchHelper(this.client, this.indexName, undefined, {
-        persistHierarchicalRootCount: this.future.persistHierarchicalRootCount,
-      });
+      algoliasearchHelper(
+        this.client,
+        this.indexName,
+        this._collection
+          ? {
+              facetFilters: [
+                `_collections.lvl${this._collection.split(' > ').length - 1}:${
+                  this._collection
+                }`,
+              ],
+            }
+          : undefined,
+        {
+          persistHierarchicalRootCount:
+            this.future.persistHierarchicalRootCount,
+        }
+      );
 
     mainHelper.search = () => {
       this.status = 'loading';
