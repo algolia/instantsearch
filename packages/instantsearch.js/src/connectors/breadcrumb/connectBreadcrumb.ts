@@ -251,17 +251,10 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
         );
       },
 
-      getWidgetSearchParameters(
-        searchParameters,
-        { instantSearchInstance, uiState }
-      ) {
-        if (!hierarchicalFacetName && !instantSearchInstance) {
-          return searchParameters;
-        }
-
+      getWidgetSearchParameters(searchParameters, { collection, uiState }) {
         if (
           !hierarchicalFacetName &&
-          !instantSearchInstance._collection &&
+          !collection &&
           (!Array.isArray(attributes) || attributes.length === 0)
         ) {
           throw new Error(
@@ -269,7 +262,7 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
           );
         }
 
-        if (!hierarchicalFacetName && instantSearchInstance._collection) {
+        if (!hierarchicalFacetName && collection) {
           attributes = Array(5)
             .fill(undefined)
             .map((_, i) => `_collections.lvl${i}`);

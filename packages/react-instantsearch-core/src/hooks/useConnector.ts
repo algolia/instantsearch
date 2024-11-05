@@ -109,7 +109,7 @@ export function useConnector<
       ];
       helper.state =
         widget.getWidgetSearchParameters?.(helper.state, {
-          instantSearchInstance: search,
+          collection: parentIndex.getCollection(),
           uiState,
         }) || helper.state;
       const { results, scopedResults, recommendResults } =

@@ -40,6 +40,7 @@ const withUsage = createDocumentationMessageGenerator({
 export type IndexWidgetParams = {
   indexName: string;
   indexId?: string;
+  collection?: string;
 };
 
 export type IndexInitOptions = {
@@ -60,7 +61,6 @@ type LocalWidgetSearchParametersOptions = WidgetSearchParametersOptions & {
 };
 type LocalWidgetRecommendParametersOptions = WidgetSearchParametersOptions & {
   initialRecommendParameters: RecommendParameters;
-  instantSearchInstance: InstantSearch;
 };
 
 export type IndexWidgetDescription = {
@@ -72,6 +72,7 @@ export type IndexWidget<TUiState extends UiState = UiState> = Omit<
   Widget<IndexWidgetDescription & { widgetParams: IndexWidgetParams }>,
   'getWidgetUiState' | 'getWidgetState'
 > & {
+  getCollection: () => string | undefined;
   getIndexName: () => string;
   getIndexId: () => string;
   getHelper: () => Helper | null;
@@ -265,7 +266,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
     throw new Error(withUsage('The `indexName` option is required.'));
   }
 
-  const { indexName, indexId = indexName } = widgetParams;
+  const { indexName, indexId = indexName, collection } = widgetParams;
 
   let localWidgets: Array<Widget | IndexWidget> = [];
   let localUiState: IndexUiState = {};
@@ -280,6 +281,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
   return {
     $$type: 'ais.index',
     $$widgetType: 'ais.index',
+
+    getCollection() {
+      return collection;
+    },
 
     getIndexName() {
       return indexName;
@@ -412,12 +417,12 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       if (localInstantSearchInstance && Boolean(widgets.length)) {
         privateHelperSetState(helper!, {
           state: getLocalWidgetsSearchParameters(localWidgets, {
-            instantSearchInstance: localInstantSearchInstance,
+            collection,
             uiState: localUiState,
             initialSearchParameters: helper!.state,
           }),
           recommendState: getLocalWidgetsRecommendParameters(localWidgets, {
-            instantSearchInstance: localInstantSearchInstance,
+            collection,
             uiState: localUiState,
             initialRecommendParameters: helper!.recommendState,
           }),
@@ -525,7 +530,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         const newState = localInstantSearchInstance.future
           .preserveSharedStateOnUnmount
           ? getLocalWidgetsSearchParameters(localWidgets, {
-              instantSearchInstance: localInstantSearchInstance,
+              collection,
               uiState: localUiState,
               initialSearchParameters: new algoliasearchHelper.SearchParameters(
                 {
@@ -534,7 +539,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
               ),
             })
           : getLocalWidgetsSearchParameters(localWidgets, {
-              instantSearchInstance: localInstantSearchInstance,
+              collection,
               uiState: getLocalWidgetsUiState(localWidgets, {
                 searchParameters: cleanedSearchState,
                 helper: helper!,
@@ -567,23 +572,38 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
       localInstantSearchInstance = instantSearchInstance;
       localParent = parent;
-      localUiState = uiState[indexId] || {};
+      localUiState = {
+        ...(uiState[indexId] || {}),
+        hierarchicalMenu: {
+          ...uiState[indexId]?.hierarchicalMenu,
+          ...(collection ? { '_collections.lvl0': [collection] } : {}),
+        },
+      };
 
       // The `mainHelper` is already defined at this point. The instance is created
       // inside InstantSearch at the `start` method, which occurs before the `init`
       // step.
       const mainHelper = instantSearchInstance.mainHelper!;
       const parameters = getLocalWidgetsSearchParameters(localWidgets, {
-        instantSearchInstance: localInstantSearchInstance,
+        collection,
         uiState: localUiState,
         initialSearchParameters: new algoliasearchHelper.SearchParameters({
           index: indexName,
+          ...(collection
+            ? {
+                facetFilters: [
+                  `_collections.lvl${
+                    collection.split(' > ').length - 1
+                  }:${collection}`,
+                ],
+              }
+            : {}),
         }),
       });
       const recommendParameters = getLocalWidgetsRecommendParameters(
         localWidgets,
         {
-          instantSearchInstance: localInstantSearchInstance,
+          collection,
           uiState: localUiState,
           initialRecommendParameters:
             new algoliasearchHelper.RecommendParameters(),
@@ -917,8 +937,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
     getWidgetSearchParameters(searchParameters, { uiState }) {
       return getLocalWidgetsSearchParameters(localWidgets, {
-        // @ts-ignore
-        instantSearchInstance: localInstantSearchInstance,
+        collection,
         uiState,
         initialSearchParameters: searchParameters,
       });

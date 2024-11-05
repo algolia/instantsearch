@@ -193,13 +193,13 @@ export default (function connectTrendingItems<
         return recommendState.removeParams(this.$$id!);
       },
 
-      getWidgetParameters(state, { instantSearchInstance }) {
-        const collectionParameters = instantSearchInstance._collection
+      getWidgetParameters(state, { collection }) {
+        const collectionParameters = collection
           ? {
               facetFilters: [
                 `_collections.lvl${
-                  instantSearchInstance._collection.split(' > ').length - 1
-                }:${instantSearchInstance._collection}`,
+                  collection.split(' > ').length - 1
+                }:${collection}`,
               ],
             }
           : {};

@@ -257,8 +257,6 @@ Use \`InstantSearch.status === "stalled"\` instead.`
     return this.status === 'stalled';
   }
 
-  public _collection: string | undefined = undefined;
-
   public constructor(options: InstantSearchOptions<TUiState, TRouteState>) {
     super();
 
@@ -349,6 +347,7 @@ See documentation: ${createDocumentationLink({
     this.mainHelper = null;
     this.mainIndex = index({
       indexName,
+      collection: options.collection,
     });
     this.onStateChange = onStateChange;
 
@@ -394,18 +393,6 @@ See documentation: ${createDocumentationLink({
 
     if (isMetadataEnabled()) {
       this.use(createMetadataMiddleware({ $$internal: true }));
-    }
-
-    if (options.collection) {
-      this._collection = options.collection;
-      // @ts-ignore
-      this._initialUiState = {
-        [indexName]: {
-          hierarchicalMenu: {
-            '_collections.lvl0': [options.collection],
-          },
-        },
-      };
     }
   }
 
@@ -581,23 +568,9 @@ See documentation: ${createDocumentationLink({
     // we need to respect this helper as a way to keep all listeners correct.
     const mainHelper =
       this.mainHelper ||
-      algoliasearchHelper(
-        this.client,
-        this.indexName,
-        this._collection
-          ? {
-              facetFilters: [
-                `_collections.lvl${this._collection.split(' > ').length - 1}:${
-                  this._collection
-                }`,
-              ],
-            }
-          : undefined,
-        {
-          persistHierarchicalRootCount:
-            this.future.persistHierarchicalRootCount,
-        }
-      );
+      algoliasearchHelper(this.client, this.indexName, undefined, {
+        persistHierarchicalRootCount: this.future.persistHierarchicalRootCount,
+      });
 
     mainHelper.search = () => {
       this.status = 'loading';
