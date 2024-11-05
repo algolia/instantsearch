@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.75.4](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.75.3...instantsearch.js@4.75.4) (2024-11-05)
+
+
+### Bug Fixes
+
+* **insights:** deduplicate view events ([#6414](https://github.com/algolia/instantsearch/issues/6414)) ([76b0247](https://github.com/algolia/instantsearch/commit/76b0247108a0597809a543a8c925aa7ae14c6b18))
+
+
+
+
+
 ## [4.75.3](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.75.2...instantsearch.js@4.75.3) (2024-10-24)
 
 

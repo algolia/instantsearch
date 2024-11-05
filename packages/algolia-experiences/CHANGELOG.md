@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.3](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.4.2...algolia-experiences@1.4.3) (2024-11-05)
+
+
+### Bug Fixes
+
+* **fetch:** change endpoint and path ([#6416](https://github.com/algolia/instantsearch/issues/6416)) ([f82ebab](https://github.com/algolia/instantsearch/commit/f82ebab24d689fe92f732b24794952447299589a))
+
+
+
+
+
 ## [1.4.2](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.4.1...algolia-experiences@1.4.2) (2024-10-24)
 
 **Note:** Version bump only for package algolia-experiences
