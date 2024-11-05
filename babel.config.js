@@ -18,7 +18,7 @@ module.exports = (api) => {
   if (isTest) {
     targets.node = true;
   } else {
-    targets.browsers = ['last 2 versions', 'ie >= 9'];
+    targets.browsers = require('./package.json').browserslist;
   }
 
   const testPlugins = [
@@ -59,46 +59,6 @@ module.exports = (api) => {
           // `next` imports as peer dependencies fail if paths are incomplete
           'next',
         ],
-      },
-    ],
-    // this plugin is used to test if we need polyfills, not to actually insert them
-    // only UMD, since cjs & esm have false positives due to imports
-    isUMD && [
-      'polyfill-es-shims',
-      {
-        method: 'usage-global',
-        targets: {
-          ie: 11,
-        },
-        shouldInjectPolyfill(name, defaultShouldInject) {
-          const exclude = [
-            // false positives (we access these from objects only)
-            'Array.prototype.item',
-            'String.prototype.item',
-            'Array.prototype.values',
-            'Function.prototype.name',
-
-            // we require polyfills for this already
-            'Array.prototype.includes',
-
-            // false positive (babel doesn't know types)
-            // this is actually only called on arrays
-            'String.prototype.includes',
-
-            // false positive (spread)
-            'Object.getOwnPropertyDescriptors',
-
-            // @TODO: see when we remove IE11 support
-            'Object.fromEntries',
-            'Object.entries',
-          ];
-          if (defaultShouldInject && !exclude.includes(name)) {
-            throw new Error(
-              `Usage of a builtin which isn't allowed to be polyfilled: ${name}`
-            );
-          }
-          return false;
-        },
       },
     ],
   ]);

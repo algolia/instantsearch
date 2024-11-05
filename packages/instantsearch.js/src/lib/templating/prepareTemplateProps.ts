@@ -14,9 +14,12 @@ export function prepareTemplateProps<TTemplates extends Templates>({
   defaultTemplates: TTemplates;
   templates?: Partial<TTemplates>;
 }): PreparedTemplateProps<TTemplates> {
-  const filteredTemplates = Object.fromEntries(
-    Object.entries(templates || {}).filter(([, value]) => Boolean(value))
-  );
+  const filteredTemplates: Templates = {};
+  for (const [key, value] of Object.entries(templates || {})) {
+    if (value) {
+      filteredTemplates[key] = value;
+    }
+  }
 
   return { templates: { ...defaultTemplates, ...filteredTemplates } };
 }
