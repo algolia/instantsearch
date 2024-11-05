@@ -13,7 +13,7 @@
     "instantsearch.js": "4.77.1"
   },
   "devDependencies": {
-    "@babel/core": "7.15.5",
+    "@babel/core": "7.25.9",
     "@parcel/packager-raw-url": "2.10.0",
     "@parcel/transformer-webmanifest": "2.10.0",
     "parcel": "2.10.0"
