@@ -16,6 +16,6 @@
     "@instantsearch/testutils": "1.52.0"
   },
   "scripts": {
-    "build": "rollup -c rollup.config.js"
+    "build": "rollup -c rollup.config.js --bundleConfigAsCjs"
   }
 }
