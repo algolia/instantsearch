@@ -219,19 +219,9 @@ const config = {
         'no-restricted-syntax': [
           'error',
           {
-            selector: '[async=true]',
-            message:
-              'The polyfill for async/await is very large, which is why we use promise chains',
-          },
-          {
             selector: 'ForInStatement',
             message:
               'for..in loops iterate over the entire prototype chain, which is virtually never what you want. Use Object.{keys,values,entries}, and iterate over the resulting array.',
-          },
-          {
-            selector: 'ForOfStatement',
-            message:
-              'iterators/generators require regenerator-runtime, which is too heavyweight for this guide to allow them. Separately, loops should be avoided in favor of array iterations.',
           },
           {
             selector: 'LabeledStatement',
@@ -244,6 +234,23 @@ const config = {
               '`with` is disallowed in strict mode because it makes code impossible to predict and optimize.',
           },
         ],
+      },
+    },
+    {
+      files: 'packages/**/*',
+      excludedFiles: [
+        '*.test.*',
+        '**/__tests__/**',
+        '**/stories/**',
+        'packages/algoliasearch-helper/documentation-src/**',
+      ],
+      plugins: ['compat'],
+      extends: ['plugin:compat/recommended'],
+      env: {
+        browser: true,
+      },
+      settings: {
+        lintAllEsApis: true,
       },
     },
     // Disable stricter rules introduced for the next versions of the libraries.
