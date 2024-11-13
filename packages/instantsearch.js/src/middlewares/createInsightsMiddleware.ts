@@ -41,7 +41,7 @@ export type InsightsProps<
   $$automatic?: boolean;
 };
 
-const ALGOLIA_INSIGHTS_VERSION = '2.15.0';
+const ALGOLIA_INSIGHTS_VERSION = '2.17.2';
 const ALGOLIA_INSIGHTS_SRC = `https://cdn.jsdelivr.net/npm/search-insights@${ALGOLIA_INSIGHTS_VERSION}/dist/search-insights.min.js`;
 
 export type InsightsClientWithGlobals = InsightsClient & {

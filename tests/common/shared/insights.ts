@@ -25,7 +25,7 @@ export function createInsightsTests(
         const delay = 100;
         const margin = 10;
         const attribute = 'one';
-        window.aa = Object.assign(jest.fn(), { version: '2.15.0' });
+        window.aa = Object.assign(jest.fn(), { version: '2.17.2' });
 
         const options = {
           instantSearchOptions: {
@@ -109,7 +109,7 @@ export function createInsightsTests(
         const delay = 100;
         const margin = 10;
         const attribute = 'one';
-        window.aa = Object.assign(jest.fn(), { version: '2.15.0' });
+        window.aa = Object.assign(jest.fn(), { version: '2.17.2' });
 
         const options = {
           instantSearchOptions: {
