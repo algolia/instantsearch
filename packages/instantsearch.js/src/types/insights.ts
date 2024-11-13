@@ -33,7 +33,7 @@ export type InsightsMethod =
  */
 export type InsightsEvent<TMethod extends InsightsMethod = InsightsMethod> = {
   insightsMethod?: TMethod;
-  payload: InsightsMethodMap[TMethod][0];
+  payload: InsightsMethodMap[TMethod][0][0];
   widgetType: string;
   eventType: string; // 'view' | 'click' | 'conversion', but we're not restricting.
   eventModifier?: string; // 'internal', but we're not restricting.
@@ -52,7 +52,7 @@ export type InsightsClientPayload = {
 type QueueItemMap = {
   [MethodName in keyof InsightsMethodMap]: [
     methodName: MethodName,
-    ...args: InsightsMethodMap[MethodName]
+    ...args: InsightsMethodMap[MethodName][0][0]
   ];
 };
 
