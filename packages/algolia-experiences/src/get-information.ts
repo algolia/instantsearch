@@ -1,6 +1,7 @@
 export type Settings = {
   appId: string;
   apiKey: string;
+  environment: 'local' | 'beta' | 'prod';
 };
 
 export function getSettings(): Settings {
@@ -12,13 +13,17 @@ export function getSettings(): Settings {
     throw new Error('No meta tag found');
   }
 
-  const { appId, apiKey } = JSON.parse(metaConfiguration.content);
+  const {
+    appId,
+    apiKey,
+    environment = 'prod',
+  } = JSON.parse(metaConfiguration.content) as unknown as Settings;
 
   if (!appId || !apiKey) {
     throw new Error('Missing appId or apiKey in the meta tag');
   }
 
-  return { appId, apiKey };
+  return { appId, apiKey, environment };
 }
 
 export function getElements() {

@@ -14,7 +14,21 @@ describe('getSettings', () => {
       <meta name="algolia-configuration" content='{"appId":"appId","apiKey":"apiKey"}'>
     `;
 
-    expect(getSettings()).toEqual({ appId: 'appId', apiKey: 'apiKey' });
+    expect(getSettings()).toEqual({
+      appId: 'appId',
+      apiKey: 'apiKey',
+      environment: 'prod',
+    });
+
+    document.head.innerHTML = `
+      <meta name="algolia-configuration" content='{"appId":"appId","apiKey":"apiKey", "environment": "beta"}'>
+    `;
+
+    expect(getSettings()).toEqual({
+      appId: 'appId',
+      apiKey: 'apiKey',
+      environment: 'beta',
+    });
   });
 
   test('should throw if no meta tag found', () => {
