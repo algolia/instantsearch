@@ -114,20 +114,30 @@ var version = require('./version');
  *    {@link SearchParameters} corresponding to this answer.
  *  - error: when the response is an error. This event contains the error returned by the server.
  * @param  {AlgoliaSearch} client an AlgoliaSearch client
- * @param  {string} index the index name to query
+ * @param  {string | object} indexOptions the index name to query or an object containing the compositionID
  * @param  {SearchParameters | object} options an object defining the initial
  * config of the search. It doesn't have to be a {SearchParameters},
  * just an object containing the properties you need from it.
  * @param {SearchResultsOptions|object} searchResultsOptions an object defining the options to use when creating the search results.
  */
-function AlgoliaSearchHelper(client, index, options, searchResultsOptions) {
+function AlgoliaSearchHelper(
+  client,
+  indexOptions,
+  options,
+  searchResultsOptions
+) {
   if (typeof client.addAlgoliaAgent === 'function') {
     client.addAlgoliaAgent('JS Helper (' + version + ')');
   }
 
   this.setClient(client);
   var opts = options || {};
-  opts.index = index;
+  if (typeof indexOptions === 'string') {
+    opts.index = indexOptions;
+  } else {
+    this.compositionID = indexOptions.compositionID;
+    opts.index = indexOptions.index;
+  }
   this.state = SearchParameters.make(opts);
   this.recommendState = new RecommendParameters({
     params: opts.recommendState,
@@ -168,6 +178,10 @@ AlgoliaSearchHelper.prototype.searchOnlyWithDerivedHelpers = function () {
   return this;
 };
 
+AlgoliaSearchHelper.prototype.searchWithComposition = function () {
+  this._runComposition({ onlyWithDerivedHelpers: true });
+  return this;
+};
 /**
  * Sends the recommendation queries set in the state. When the method is
  * called, it triggers a `fetch` event. The results will be available through
@@ -1566,6 +1580,77 @@ AlgoliaSearchHelper.prototype._search = function (options) {
   try {
     this.client
       .search(queries)
+      .then(this._dispatchAlgoliaResponse.bind(this, states, queryId))
+      .catch(this._dispatchAlgoliaError.bind(this, queryId));
+  } catch (error) {
+    // If we reach this part, we're in an internal error state
+    this.emit('error', {
+      error: error,
+    });
+  }
+
+  return undefined;
+};
+
+/**
+ * Perform the underlying queries
+ * @private
+ * @param {boolean} [options.onlyWithDerivedHelpers=false] if true, only the derived helpers will be queried
+ * @return {undefined} does not return anything
+ * @fires search
+ * @fires result
+ * @fires error
+ */
+AlgoliaSearchHelper.prototype._runComposition = function () {
+  var state = this.state;
+  var states = [];
+  var mainQueries = [];
+  const thisCompositionID = this.compositionID;
+
+  var derivedQueries = this.derivedHelpers.map(function (derivedHelper) {
+    var derivedState = derivedHelper.getModifiedState(state);
+    var derivedStateQueries = thisCompositionID
+      ? requestBuilder._getCompositionQueries(thisCompositionID, derivedState)
+      : [];
+
+    states.push({
+      state: derivedState,
+      queriesCount: derivedStateQueries.length,
+      helper: derivedHelper,
+    });
+
+    derivedHelper.emit('search', {
+      state: derivedState,
+      results: derivedHelper.lastResults,
+    });
+
+    return derivedStateQueries;
+  });
+
+  var queries = Array.prototype.concat.apply(mainQueries, derivedQueries);
+
+  var queryId = this._queryId++;
+  this._currentNbQueries++;
+
+  if (!queries.length) {
+    return Promise.resolve({ results: [] }).then(
+      this._dispatchAlgoliaResponse.bind(this, states, queryId)
+    );
+  }
+
+  if (queries.length > 1) {
+    throw new Error('Only one query is allowed when using a composition.');
+  }
+
+  var query = queries[0];
+
+  delete query.params.maxValuesPerFacet;
+  delete query.params.facets;
+
+  const { compositionID, params } = query;
+  try {
+    this.client
+      .search({ compositionID, requestBody: { params } })
       .then(this._dispatchAlgoliaResponse.bind(this, states, queryId))
       .catch(this._dispatchAlgoliaError.bind(this, queryId));
   } catch (error) {

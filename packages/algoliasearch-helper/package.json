@@ -6,7 +6,6 @@
   "types": "index.d.ts",
   "homepage": "https://community.algolia.com/algoliasearch-helper-js/",
   "scripts": {
-    "build": "./scripts/build.sh",
     "lint": "eslint .",
     "doc": "node documentation-src/metalsmith.js",
     "test": "../../scripts/retry.sh 3 'scripts/test.sh'",

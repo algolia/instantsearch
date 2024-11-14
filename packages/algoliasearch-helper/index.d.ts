@@ -19,6 +19,17 @@ import type {
   PlainRecommendParameters as ClientPlainRecommendParameters,
 } from './types/algoliasearch';
 
+interface IndexOptions {
+  /**
+   * Targeted index. This parameter is mandatory.
+   */
+  compositionID?: string;
+  /**
+   * the name of the index to query
+   */
+  index?: string;
+}
+
 /**
  * The algoliasearchHelper module is the function that will let its
  * contains everything needed to use the Algoliasearch
@@ -31,7 +42,7 @@ import type {
  */
 declare function algoliasearchHelper(
   client: SearchClient,
-  index: string,
+  index: string | IndexOptions,
   opts?: algoliasearchHelper.PlainSearchParameters,
   searchResultsOptions?: algoliasearchHelper.SearchResultsOptions
 ): algoliasearchHelper.AlgoliaSearchHelper;
@@ -97,6 +108,11 @@ declare namespace algoliasearchHelper {
      * Private method to only search on derived helpers
      */
     searchOnlyWithDerivedHelpers(): this;
+
+    /**
+     * Private method to search using composition API
+     */
+    searchWithComposition(): this;
 
     /**
      * Private method for search, without triggering events
@@ -389,6 +405,7 @@ declare namespace algoliasearchHelper {
     ): DerivedHelper;
     detachDerivedHelper(derivedHelper: DerivedHelper): void;
     hasPendingRequests(): boolean;
+    compositionID?: string;
   }
 
   interface DerivedHelper extends EventEmitter {
