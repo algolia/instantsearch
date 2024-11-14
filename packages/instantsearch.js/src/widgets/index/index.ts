@@ -588,7 +588,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       // level is aware of the client.
       helper = algoliasearchHelper(
         {} as SearchClient,
-        parameters.index,
+        { index: parameters.index, compositionID: mainHelper.compositionID },
         parameters
       );
       helper.recommendState = recommendParameters;
