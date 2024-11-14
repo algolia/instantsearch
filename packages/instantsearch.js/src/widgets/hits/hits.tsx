@@ -195,15 +195,7 @@ export default (function hits<THit extends NonNullable<object> = BaseHit>(
     render(null, containerNode)
   );
 
-  // explicitly create this type to have a small type output.
-  type HitsWidgetActual = Widget<
-    HitsWidgetDescription<THit> & {
-      $$widgetType: 'ais.hits';
-      widgetParams: HitsConnectorParams<THit>;
-    }
-  >;
-
-  const widget: HitsWidgetActual = {
+  const widget = {
     ...makeWidget({
       escapeHTML,
       transformItems,
@@ -211,5 +203,11 @@ export default (function hits<THit extends NonNullable<object> = BaseHit>(
     $$widgetType: 'ais.hits',
   };
 
-  return widget as unknown as HitsWidgetActual;
+  // explicitly cast this type to have a small type output.
+  return widget as Widget<
+    HitsWidgetDescription & {
+      $$widgetType: 'ais.hits';
+      widgetParams: HitsConnectorParams<THit>;
+    }
+  >;
 } satisfies HitsWidget);

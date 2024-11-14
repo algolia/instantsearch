@@ -260,14 +260,8 @@ export default (function lookingSimilar<
   const makeWidget = connectLookingSimilar(specializedRenderer, () =>
     render(null, containerNode)
   );
-  // explicitly create this type to have a small type output.
-  type LookingSimilarWidgetActual = Widget<
-    LookingSimilarWidgetDescription<THit> & {
-      $$widgetType: 'ais.lookingSimilar';
-      widgetParams: LookingSimilarConnectorParams<THit>;
-    }
-  >;
-  const widget: LookingSimilarWidgetActual = {
+
+  const widget = {
     ...makeWidget({
       objectIDs,
       limit,
@@ -279,5 +273,12 @@ export default (function lookingSimilar<
     }),
     $$widgetType: 'ais.lookingSimilar',
   };
-  return widget as unknown as LookingSimilarWidgetActual;
+
+  // explicitly cast this type to have a small type output.
+  return widget as Widget<
+    LookingSimilarWidgetDescription & {
+      $$widgetType: 'ais.lookingSimilar';
+      widgetParams: LookingSimilarConnectorParams<THit>;
+    }
+  >;
 } satisfies LookingSimilarWidget);

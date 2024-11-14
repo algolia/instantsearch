@@ -124,7 +124,7 @@ describe('Templates', () => {
       container: document.createElement('div'),
     });
 
-    widget.init(createInitOptions());
+    widget.init!(createInitOptions());
 
     const firstRender = render.mock.calls[0][0] as VNode<
       PanelProps<typeof widgetFactory>
@@ -148,7 +148,7 @@ describe('Templates', () => {
       container: document.createElement('div'),
     });
 
-    widget.init(createInitOptions());
+    widget.init!(createInitOptions());
 
     const firstRender = render.mock.calls[0][0] as VNode<
       PanelProps<typeof widgetFactory>
@@ -170,7 +170,7 @@ describe('Templates', () => {
       container: document.createElement('div'),
     });
 
-    widget.init(createInitOptions());
+    widget.init!(createInitOptions());
 
     const firstRender = render.mock.calls[0][0] as VNode<
       PanelProps<typeof widgetFactory>
@@ -192,7 +192,7 @@ describe('Templates', () => {
       container: document.createElement('div'),
     });
 
-    widget.init(createInitOptions());
+    widget.init!(createInitOptions());
 
     const firstRender = render.mock.calls[0][0] as VNode<
       PanelProps<typeof widgetFactory>
@@ -221,9 +221,9 @@ describe('Lifecycle', () => {
       container: document.createElement('div'),
     });
 
-    widgetWithPanel.init(createInitOptions());
-    widgetWithPanel.render(createRenderOptions());
-    widgetWithPanel.dispose(createDisposeOptions());
+    widgetWithPanel.init!(createInitOptions());
+    widgetWithPanel.render!(createRenderOptions());
+    widgetWithPanel.dispose!(createDisposeOptions());
 
     expect(widget.init).toHaveBeenCalledTimes(1);
     expect(widget.render).toHaveBeenCalledTimes(1);
@@ -244,7 +244,7 @@ describe('Lifecycle', () => {
 
       const initOptions = createInitOptions();
 
-      widgetWithPanel.init(initOptions);
+      widgetWithPanel.init!(initOptions);
 
       expect(widget.init).toHaveBeenCalledTimes(1);
       expect(widget.init).toHaveBeenCalledWith(initOptions);
@@ -278,7 +278,7 @@ describe('Lifecycle', () => {
 
       const initOptions = createInitOptions();
 
-      widgetWithPanel.init(initOptions);
+      widgetWithPanel.init!(initOptions);
 
       expect(hiddenFn).toHaveBeenCalledTimes(0);
       expect(collapsedFn).toHaveBeenCalledTimes(0);
@@ -306,7 +306,7 @@ describe('Lifecycle', () => {
 
       const initOptions = createInitOptions();
 
-      widgetWithPanel.init(initOptions);
+      widgetWithPanel.init!(initOptions);
 
       const firstRender = render.mock.calls[0][0] as VNode<
         PanelProps<typeof widgetFactory>
@@ -340,7 +340,7 @@ describe('Lifecycle', () => {
 
       const renderOptions = createRenderOptions();
 
-      widgetWithPanel.render(renderOptions);
+      widgetWithPanel.render!(renderOptions);
 
       expect(widget.render).toHaveBeenCalledTimes(1);
       expect(widget.render).toHaveBeenCalledWith(renderOptions);
@@ -374,7 +374,7 @@ describe('Lifecycle', () => {
 
       const renderOptions = createRenderOptions();
 
-      widgetWithPanel.render(renderOptions);
+      widgetWithPanel.render!(renderOptions);
 
       expect(hiddenFn).toHaveBeenCalledTimes(1);
       expect(hiddenFn).toHaveBeenCalledWith({
@@ -411,7 +411,7 @@ describe('Lifecycle', () => {
 
       const renderOptions = createRenderOptions();
 
-      widgetWithPanel.render(renderOptions);
+      widgetWithPanel.render!(renderOptions);
 
       const firstRender = render.mock.calls[0][0] as VNode<
         PanelProps<typeof widgetFactory>
@@ -447,7 +447,7 @@ describe('Lifecycle', () => {
         container: document.createElement('div'),
       });
 
-      const nextState = widgetWithPanel.dispose(createDisposeOptions());
+      const nextState = widgetWithPanel.dispose!(createDisposeOptions());
 
       expect(nextState).toEqual(nextSearchParameters);
     });

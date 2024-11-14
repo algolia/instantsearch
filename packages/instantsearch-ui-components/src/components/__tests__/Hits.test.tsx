@@ -24,7 +24,7 @@ describe('Hits', () => {
         { objectID: 'def', __position: 2 },
       ] as THit[],
       sendEvent: jest.fn(),
-      itemComponent: ({ hit, index: _index, ...itemProps }) => (
+      itemComponent: ({ hit, ...itemProps }) => (
         <li key={hit.objectID} {...itemProps}>
           {hit.objectID}
         </li>

@@ -176,7 +176,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       container,
     });
 
-    widget.init(
+    widget.init!(
       createInitOptions({
         instantSearchInstance,
         helper,
@@ -184,7 +184,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       })
     );
 
-    widget.render(
+    widget.render!(
       createRenderOptions({
         helper,
         instantSearchInstance,
@@ -225,7 +225,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       },
     });
 
-    widget.init(
+    widget.init!(
       createInitOptions({
         helper,
         instantSearchInstance,
@@ -233,7 +233,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       })
     );
 
-    widget.render(
+    widget.render!(
       createRenderOptions({
         helper,
         instantSearchInstance,
@@ -267,7 +267,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       },
     });
 
-    widget.init(
+    widget.init!(
       createInitOptions({
         helper,
         instantSearchInstance,
@@ -275,7 +275,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       })
     );
 
-    widget.render(
+    widget.render!(
       createRenderOptions({
         helper,
         instantSearchInstance,
@@ -308,7 +308,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       container,
     });
 
-    widget.init(
+    widget.init!(
       createInitOptions({
         helper,
         instantSearchInstance,
@@ -346,7 +346,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       },
     });
 
-    widget.init(
+    widget.init!(
       createInitOptions({
         helper,
         instantSearchInstance,
@@ -377,7 +377,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       container,
     });
 
-    widget.init(
+    widget.init!(
       createInitOptions({
         helper,
         instantSearchInstance,
@@ -385,7 +385,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       })
     );
 
-    widget.render(
+    widget.render!(
       createRenderOptions({
         helper,
         instantSearchInstance,
@@ -399,7 +399,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
     expect(render).toHaveBeenCalledTimes(1);
 
-    widget.dispose(
+    widget.dispose!(
       createDisposeOptions({
         helper,
         state: helper.state,
@@ -423,7 +423,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           instantSearchInstance,
@@ -476,7 +476,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           instantSearchInstance,
@@ -514,7 +514,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           instantSearchInstance,
@@ -556,7 +556,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           instantSearchInstance,
@@ -591,7 +591,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
           container,
         });
 
-        widget.init(
+        widget.init!(
           createInitOptions({
             helper,
             instantSearchInstance,
@@ -606,7 +606,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
           expect.any(Function)
         );
 
-        widget.render(
+        widget.render!(
           createRenderOptions({
             helper,
             instantSearchInstance,
@@ -639,7 +639,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
           container,
         });
 
-        widget.init(
+        widget.init!(
           createInitOptions({
             helper,
             instantSearchInstance,
@@ -654,7 +654,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
           expect.any(Function)
         );
 
-        widget.render(
+        widget.render!(
           createRenderOptions({
             helper,
             instantSearchInstance,
@@ -686,7 +686,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
           enableRefineOnMapMove: false,
         });
 
-        widget.init(
+        widget.init!(
           createInitOptions({
             helper,
             instantSearchInstance,
@@ -701,7 +701,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
           expect.any(Function)
         );
 
-        widget.render(
+        widget.render!(
           createRenderOptions({
             helper,
             instantSearchInstance,
@@ -732,7 +732,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
           container,
         });
 
-        widget.init(
+        widget.init!(
           createInitOptions({
             helper,
             instantSearchInstance,
@@ -776,7 +776,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
           enableRefine: false,
         });
 
-        widget.init(
+        widget.init!(
           createInitOptions({
             helper,
             instantSearchInstance,
@@ -818,7 +818,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           instantSearchInstance,
@@ -826,7 +826,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         })
       );
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
           helper,
           instantSearchInstance,
@@ -868,7 +868,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         },
       });
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           instantSearchInstance,
@@ -876,7 +876,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         })
       );
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
           helper,
           instantSearchInstance,
@@ -927,7 +927,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         },
       });
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           instantSearchInstance,
@@ -935,7 +935,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         })
       );
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
           helper,
           instantSearchInstance,
@@ -990,7 +990,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         customHTMLMarker: true,
       });
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           instantSearchInstance,
@@ -998,7 +998,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         })
       );
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
           helper,
           instantSearchInstance,
@@ -1076,7 +1076,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         },
       });
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           instantSearchInstance,
@@ -1084,7 +1084,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         })
       );
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
           helper,
           instantSearchInstance,
@@ -1154,7 +1154,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         },
       });
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           instantSearchInstance,
@@ -1162,7 +1162,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         })
       );
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
           helper,
           instantSearchInstance,
@@ -1231,7 +1231,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         },
       });
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           instantSearchInstance,
@@ -1239,7 +1239,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         })
       );
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
           helper,
           instantSearchInstance,
@@ -1326,7 +1326,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         },
       });
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           instantSearchInstance,
@@ -1334,7 +1334,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         })
       );
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
           helper,
           instantSearchInstance,
@@ -1390,7 +1390,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           instantSearchInstance,
@@ -1398,7 +1398,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         })
       );
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
           helper,
           instantSearchInstance,
@@ -1437,7 +1437,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           instantSearchInstance,
@@ -1445,7 +1445,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         })
       );
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
           helper,
           instantSearchInstance,
@@ -1474,7 +1474,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           instantSearchInstance,
@@ -1482,7 +1482,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         })
       );
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
           helper,
           instantSearchInstance,
@@ -1500,7 +1500,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       (googleReference.maps.Marker as unknown as jest.Mock).mockClear();
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
           helper,
           instantSearchInstance,
@@ -1541,7 +1541,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           instantSearchInstance,
@@ -1549,7 +1549,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         })
       );
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
           helper,
           instantSearchInstance,
@@ -1567,7 +1567,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       (googleReference.maps.Marker as unknown as jest.Mock).mockClear();
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
           helper,
           instantSearchInstance,
@@ -1600,7 +1600,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           instantSearchInstance,
@@ -1608,7 +1608,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         })
       );
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
           helper,
           instantSearchInstance,
@@ -1630,7 +1630,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       );
       expect(renderer).toHaveBeenCalledTimes(2);
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
           helper,
           instantSearchInstance,
@@ -1683,7 +1683,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           instantSearchInstance,
@@ -1693,7 +1693,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       simulateMapReadyEvent(googleReference);
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
           helper,
           instantSearchInstance,
@@ -1735,7 +1735,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       // Simulate refine
       simulateEvent(mapInstance, 'idle');
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
           helper,
           instantSearchInstance,
@@ -1781,7 +1781,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           instantSearchInstance,
@@ -1789,7 +1789,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         })
       );
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
           helper,
           instantSearchInstance,
@@ -1812,7 +1812,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       );
       expect(renderer).toHaveBeenCalledTimes(2);
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
           helper,
           instantSearchInstance,
@@ -1851,7 +1851,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           instantSearchInstance,
@@ -1859,7 +1859,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         })
       );
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
           helper,
           instantSearchInstance,
@@ -1877,7 +1877,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       expect(renderer).toHaveBeenCalledTimes(2);
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
           helper,
           instantSearchInstance,
@@ -1918,7 +1918,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           instantSearchInstance,
@@ -1926,7 +1926,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         })
       );
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
           helper,
           instantSearchInstance,
@@ -1943,7 +1943,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
       expect(mapInstance.setCenter).toHaveBeenCalledTimes(0);
       expect(renderer).toHaveBeenCalledTimes(2);
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
           helper,
           instantSearchInstance,
@@ -1981,7 +1981,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         container,
       });
 
-      widget.init(
+      widget.init!(
         createInitOptions({
           helper,
           instantSearchInstance,
@@ -1991,7 +1991,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
 
       simulateMapReadyEvent(googleReference);
 
-      widget.render(
+      widget.render!(
         createRenderOptions({
           helper,
           instantSearchInstance,

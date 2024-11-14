@@ -101,8 +101,8 @@ Please check whether the widget's getWidgetRenderState returns widgetParams.attr
   it('does not read the attribute from a custom widget without widgetParams in getWidgetRenderState', () => {
     expect(() =>
       getWidgetAttribute(
-        // @ts-expect-error testing invalid input
         {
+          // @ts-expect-error testing invalid input
           getWidgetRenderState() {
             return { yo: true };
           },
@@ -119,8 +119,8 @@ Please check whether the widget's getWidgetRenderState returns widgetParams.attr
   it('does not read the attribute from a custom widget with nothing in getWidgetRenderState', () => {
     expect(() =>
       getWidgetAttribute(
-        // @ts-expect-error testing invalid input
         {
+          // @ts-expect-error testing invalid input
           getWidgetRenderState() {},
         },
         createInitOptions()

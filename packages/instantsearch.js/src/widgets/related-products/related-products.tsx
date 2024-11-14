@@ -271,14 +271,7 @@ export default (function relatedProducts<
     render(null, containerNode)
   );
 
-  // explicitly create this type to have a small type output.
-  type RelatedProductsWidgetActual = Widget<
-    RelatedProductsWidgetDescription<THit> & {
-      $$widgetType: 'ais.relatedProducts';
-      widgetParams: RelatedProductsConnectorParams<THit>;
-    }
-  >;
-  const widget: RelatedProductsWidgetActual = {
+  const widget = {
     ...makeWidget({
       objectIDs,
       limit,
@@ -291,5 +284,11 @@ export default (function relatedProducts<
     $$widgetType: 'ais.relatedProducts',
   };
 
-  return widget as unknown as RelatedProductsWidgetActual;
+  // explicitly cast this type to have a small type output.
+  return widget as Widget<
+    RelatedProductsWidgetDescription & {
+      $$widgetType: 'ais.relatedProducts';
+      widgetParams: RelatedProductsConnectorParams<THit>;
+    }
+  >;
 } satisfies RelatedProductsWidget);

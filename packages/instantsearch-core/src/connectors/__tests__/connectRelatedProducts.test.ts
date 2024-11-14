@@ -66,7 +66,7 @@ describe('connectRelatedProducts', () => {
     const helper = algoliasearchHelper(createSearchClient(), '', {});
     helper.search = jest.fn();
 
-    widget.init(
+    widget.init!(
       createInitOptions({
         helper,
         state: helper.state,
@@ -83,7 +83,7 @@ describe('connectRelatedProducts', () => {
       helper,
     });
 
-    widget.render(renderOptions);
+    widget.render!(renderOptions);
 
     expect(renderFn).toHaveBeenCalledTimes(2);
     expect(renderFn).toHaveBeenLastCalledWith(

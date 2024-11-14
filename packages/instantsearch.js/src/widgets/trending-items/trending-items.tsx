@@ -274,14 +274,7 @@ export default (function trendingItems<
   const facetParameters =
     facetName && facetValue ? { facetName, facetValue } : {};
 
-  // explicitly create this type to have a small type output.
-  type TrendingItemsWidgetActual = Widget<
-    TrendingItemsWidgetDescription<THit> & {
-      $$widgetType: 'ais.trendingItems';
-      widgetParams: TrendingItemsConnectorParams<THit>;
-    }
-  >;
-  const widget: TrendingItemsWidgetActual = {
+  const widget = {
     ...makeWidget({
       ...facetParameters,
       limit,
@@ -294,5 +287,11 @@ export default (function trendingItems<
     $$widgetType: 'ais.trendingItems',
   };
 
-  return widget as unknown as TrendingItemsWidgetActual;
+  // explicitly cast this type to have a small type output.
+  return widget as Widget<
+    TrendingItemsWidgetDescription & {
+      $$widgetType: 'ais.trendingItems';
+      widgetParams: TrendingItemsConnectorParams<THit>;
+    }
+  >;
 } satisfies TrendingItemsWidget);

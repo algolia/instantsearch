@@ -270,15 +270,7 @@ export default (function frequentlyBoughtTogether<
     render(null, containerNode)
   );
 
-  // explicitly create this type to have a small type output.
-  type FrequentlyBoughtTogetherWidgetActual = Widget<
-    FrequentlyBoughtTogetherWidgetDescription<THit> & {
-      $$widgetType: 'ais.frequentlyBoughtTogether';
-      widgetParams: FrequentlyBoughtTogetherConnectorParams<THit>;
-    }
-  >;
-
-  const widget: FrequentlyBoughtTogetherWidgetActual = {
+  const widget = {
     ...makeWidget({
       objectIDs,
       limit,
@@ -290,5 +282,11 @@ export default (function frequentlyBoughtTogether<
     $$widgetType: 'ais.frequentlyBoughtTogether',
   };
 
-  return widget as unknown as FrequentlyBoughtTogetherWidgetActual;
+  // explicitly cast this type to have a small type output.
+  return widget as Widget<
+    FrequentlyBoughtTogetherWidgetDescription & {
+      $$widgetType: 'ais.frequentlyBoughtTogether';
+      widgetParams: FrequentlyBoughtTogetherConnectorParams<THit>;
+    }
+  >;
 } satisfies FrequentlyBoughtTogetherWidget);

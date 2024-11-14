@@ -287,16 +287,8 @@ export default (function geoSearch<THit extends GeoHit = GeoHit>(
     render(null, containerNode)
   );
 
-  // explicitly create this type to have a small type output.
-  type GeoSearchWidgetActual = Widget<
-    GeoSearchWidgetDescription<THit> & {
-      $$widgetType: 'ais.geoSearch';
-      widgetParams: GeoSearchConnectorParams<THit>;
-    }
-  >;
-
-  const widget: GeoSearchWidgetActual = {
-    ...(makeWidget<THit>({
+  const widget = {
+    ...makeWidget<THit>({
       ...otherWidgetParams,
       // @TODO: this type doesn't preserve the generic correctly,
       // (but as they're internal only it's not a big problem)
@@ -312,9 +304,15 @@ export default (function geoSearch<THit extends GeoHit = GeoHit>(
       enableRefine,
       enableClearMapRefinement,
       enableRefineControl,
-    }) as unknown as GeoSearchWidgetActual),
+    }),
     $$widgetType: 'ais.geoSearch',
   };
 
-  return widget as unknown as GeoSearchWidgetActual;
+  // explicitly cast this type to have a small type output.
+  return widget as Widget<
+    GeoSearchWidgetDescription & {
+      $$widgetType: 'ais.geoSearch';
+      widgetParams: GeoSearchConnectorParams<THit>;
+    }
+  >;
 } satisfies GeoSearchWidget);

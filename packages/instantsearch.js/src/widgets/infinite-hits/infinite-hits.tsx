@@ -288,14 +288,7 @@ export default (function infiniteHits<
     render(null, containerNode)
   );
 
-  // explicitly create this type to have a small type output.
-  type InfiniteHitsWidgetActual = Widget<
-    InfiniteHitsWidgetDescription<THit> & {
-      $$widgetType: 'ais.infiniteHits';
-      widgetParams: InfiniteHitsConnectorParams<THit>;
-    }
-  >;
-  const widget: InfiniteHitsWidgetActual = {
+  const widget = {
     ...makeWidget({
       escapeHTML,
       transformItems,
@@ -305,5 +298,11 @@ export default (function infiniteHits<
     $$widgetType: 'ais.infiniteHits',
   };
 
-  return widget as unknown as InfiniteHitsWidgetActual;
+  // explicitly cast this type to have a small type output.
+  return widget as Widget<
+    InfiniteHitsWidgetDescription & {
+      $$widgetType: 'ais.infiniteHits';
+      widgetParams: InfiniteHitsConnectorParams<THit>;
+    }
+  >;
 } satisfies InfiniteHitsWidget);
