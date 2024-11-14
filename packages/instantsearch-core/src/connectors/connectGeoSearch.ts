@@ -377,12 +377,9 @@ export const connectGeoSearch = function connectGeoSearch<
       getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
-          geoSearch: this.getWidgetRenderState(
-            renderOptions
-          ) as GeoSearchRenderState<THit> & {
-            widgetParams: GeoSearchConnectorParams<THit> &
-              GeoSearchConnectorParams<GeoHit>;
-          },
+          geoSearch: this.getWidgetRenderState(renderOptions) as NonNullable<
+            typeof renderState['geoSearch']
+          >,
         };
       },
 

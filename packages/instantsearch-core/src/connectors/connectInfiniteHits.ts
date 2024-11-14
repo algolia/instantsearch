@@ -331,12 +331,9 @@ export const connectInfiniteHits = function connectInfiniteHits<
       getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
-          infiniteHits: this.getWidgetRenderState(
-            renderOptions
-          ) as InfiniteHitsRenderState<THit> & {
-            widgetParams: InfiniteHitsConnectorParams<THit> &
-              InfiniteHitsConnectorParams<BaseHit>;
-          },
+          infiniteHits: this.getWidgetRenderState(renderOptions) as NonNullable<
+            typeof renderState['infiniteHits']
+          >,
         };
       },
 

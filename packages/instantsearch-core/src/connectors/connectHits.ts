@@ -145,12 +145,9 @@ export const connectHits = function connectHits<TWidgetParams>(
       getRenderState(renderState, renderOptions) {
         return {
           ...renderState,
-          hits: this.getWidgetRenderState(
-            renderOptions
-          ) as HitsRenderState<THit> & {
-            widgetParams: HitsConnectorParams<THit> &
-              HitsConnectorParams<BaseHit>;
-          },
+          hits: this.getWidgetRenderState(renderOptions) as NonNullable<
+            typeof renderState['hits']
+          >,
         };
       },
 
