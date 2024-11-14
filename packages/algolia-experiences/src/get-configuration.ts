@@ -5,7 +5,7 @@ const cache = new Map<string, Configuration>();
 
 export function fetchConfiguration(
   id: string,
-  settings: Required<Settings>
+  settings: Settings
 ): Promise<Configuration> {
   if (cache.has(id)) {
     return Promise.resolve(cache.get(id)!);
@@ -32,7 +32,7 @@ export const API_BASE = {
   prod: 'https://experiences.algolia.com/1',
 };
 
-type ApiParams<TEndpointParams> = Required<Settings> & TEndpointParams;
+type ApiParams<TEndpointParams> = Settings & TEndpointParams;
 
 type RequestParams = ApiParams<{
   endpoint: string;

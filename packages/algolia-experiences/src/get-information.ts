@@ -1,10 +1,10 @@
 export type Settings = {
   appId: string;
   apiKey: string;
-  environment?: 'local' | 'beta' | 'prod';
+  environment: 'local' | 'beta' | 'prod';
 };
 
-export function getSettings(): Required<Settings> {
+export function getSettings(): Settings {
   const metaConfiguration = document.querySelector<HTMLMetaElement>(
     'meta[name="algolia-configuration"]'
   );
