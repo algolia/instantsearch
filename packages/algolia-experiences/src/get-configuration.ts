@@ -26,7 +26,7 @@ export type Experience = {
   updatedAt: string;
 };
 
-const API_BASE = {
+export const API_BASE = {
   local: 'http://localhost:3000/1',
   beta: 'https://experiences-beta.algolia.com/1',
   prod: 'https://experiences.algolia.com/1',
