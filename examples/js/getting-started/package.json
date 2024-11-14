@@ -9,6 +9,7 @@
     "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
+    "@algolia/client-composition": "0.0.1-alpha.1",
     "algoliasearch": "5.1.1",
     "instantsearch.css": "8.5.1",
     "instantsearch.js": "4.75.6"
@@ -22,5 +23,8 @@
   },
   "@parcel/resolver-default": {
     "packageExports": true
+  },
+  "alias": {
+    "@algolia/client-composition": "../../../node_modules/@algolia/client-composition/dist/builds/browser.js"
   }
 }
