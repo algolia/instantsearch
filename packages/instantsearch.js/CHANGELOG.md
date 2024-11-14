@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.75.5](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.75.4...instantsearch.js@4.75.5) (2024-11-14)
+
+
+### Bug Fixes
+
+* **deps:** update search-insights ([#6433](https://github.com/algolia/instantsearch/issues/6433)) ([05d93de](https://github.com/algolia/instantsearch/commit/05d93deb05d219f5d124175119d2e55707fb51c9)), closes [#6432](https://github.com/algolia/instantsearch/issues/6432)
+
+
+
+
+
 ## [4.75.4](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.75.3...instantsearch.js@4.75.4) (2024-11-05)
 
 
