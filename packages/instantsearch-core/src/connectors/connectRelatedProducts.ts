@@ -118,6 +118,10 @@ export const connectRelatedProducts = function connectRelatedProducts<
       >,
     } = widgetParams || {};
 
+    if (!objectIDs || objectIDs.length === 0) {
+      throw new Error(withUsage('The `objectIDs` option is required.'));
+    }
+
     type RelatedProductsWidget = Widget<
       RelatedProductsWidgetDescription<THit> & {
         widgetParams: typeof widgetParams;

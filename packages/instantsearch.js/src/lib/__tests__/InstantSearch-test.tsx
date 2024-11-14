@@ -22,14 +22,14 @@ import InstantSearch from '../InstantSearch';
 import version from '../version';
 
 import type {
+  UiState,
+  Widget,
+  IndexWidget,
   PaginationConnectorParams,
   PaginationWidgetDescription,
-} from '../../connectors/pagination/connectPagination';
-import type {
   SearchBoxWidgetDescription,
   SearchBoxConnectorParams,
-} from '../../connectors/search-box/connectSearchBox';
-import type { UiState, Widget, IndexWidget } from '../../types';
+} from '../../types';
 import type { RefObject } from 'preact';
 
 type SearchBoxWidgetInstance = Widget<

@@ -10,7 +10,7 @@ import * as widgets from './widgets/index';
 
 import type { Expand, UiState, InstantSearchOptions } from 'instantsearch-core';
 
-type InstantSearchUMDModule = {
+type InstantSearchModule = {
   <TUiState = Record<string, unknown>, TRouteState = TUiState>(
     options: InstantSearchOptions<Expand<UiState & TUiState>, TRouteState>
   ): InstantSearch<Expand<UiState & TUiState>, TRouteState>;
@@ -42,19 +42,17 @@ type InstantSearchUMDModule = {
  * If you want to get up and running quickly with InstantSearch.js, have a
  * look at the [getting started](https://www.algolia.com/doc/guides/building-search-ui/getting-started/js/).
  */
-const instantsearchUmd: InstantSearchUMDModule = function instantsearch(
-  options
-) {
+const instantsearch: InstantSearchModule = function instantsearch(options) {
   return new InstantSearch(options);
 };
-instantsearchUmd.version = version;
-instantsearchUmd.connectors = connectors;
-instantsearchUmd.widgets = widgets;
-instantsearchUmd.middlewares = middlewares;
-instantsearchUmd.routers = routers;
-instantsearchUmd.stateMappings = stateMappings;
-instantsearchUmd.templates = templates;
-instantsearchUmd.createInfiniteHitsSessionStorageCache =
+instantsearch.version = version;
+instantsearch.connectors = connectors;
+instantsearch.widgets = widgets;
+instantsearch.middlewares = middlewares;
+instantsearch.routers = routers;
+instantsearch.stateMappings = stateMappings;
+instantsearch.templates = templates;
+instantsearch.createInfiniteHitsSessionStorageCache =
   createInfiniteHitsSessionStorageCache;
 
-export default instantsearchUmd;
+export default instantsearch;

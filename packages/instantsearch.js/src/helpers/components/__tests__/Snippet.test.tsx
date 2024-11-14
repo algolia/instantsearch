@@ -87,7 +87,7 @@ describe('Snippet', () => {
           <span
             class="ais-Snippet-separator"
           >
-            ,
+            , 
           </span>
           <span
             class="ais-Snippet-nonHighlighted"
@@ -287,7 +287,7 @@ describe('Snippet', () => {
             class="ais-Snippet-separator"
           >
             <strong>
-               -
+               - 
             </strong>
           </span>
           <small>

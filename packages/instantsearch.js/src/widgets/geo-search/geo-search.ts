@@ -20,7 +20,7 @@ import type {
   GeoSearchWidgetDescription,
   GeoHit,
 } from '../../connectors/geo-search/connectGeoSearch';
-import type { GeoLoc, Template, WidgetFactory } from '../../types';
+import type { GeoLoc, Template, Widget, WidgetFactory } from '../../types';
 import type { HTMLMarkerArguments } from './createHTMLMarker';
 
 export type CreateMarker = (args: {
@@ -287,7 +287,13 @@ export default (function geoSearch<THit extends GeoHit = GeoHit>(
     render(null, containerNode)
   );
 
-  type GeoSearchWidgetActual = ReturnType<GeoSearchWidget<THit>>;
+  // explicitly create this type to have a small type output.
+  type GeoSearchWidgetActual = Widget<
+    GeoSearchWidgetDescription<THit> & {
+      $$widgetType: 'ais.geoSearch';
+      widgetParams: GeoSearchConnectorParams<THit>;
+    }
+  >;
 
   const widget: GeoSearchWidgetActual = {
     ...(makeWidget<THit>({
@@ -310,5 +316,5 @@ export default (function geoSearch<THit extends GeoHit = GeoHit>(
     $$widgetType: 'ais.geoSearch',
   };
 
-  return widget as GeoSearchWidgetActual;
+  return widget as unknown as GeoSearchWidgetActual;
 } satisfies GeoSearchWidget);

@@ -26,6 +26,7 @@ import type {
   Renderer,
   BaseHit,
   TemplateWithSendEvent,
+  Widget,
 } from '../../types';
 import type { SearchResults } from 'algoliasearch-helper';
 import type {
@@ -159,11 +160,12 @@ export type HitsWidgetParams<THit extends NonNullable<object> = BaseHit> = {
   cssClasses?: HitsCSSClasses;
 };
 
-export type HitsWidget = WidgetFactory<
-  HitsWidgetDescription & { $$widgetType: 'ais.hits' },
-  HitsConnectorParams,
-  HitsWidgetParams
->;
+export type HitsWidget<THit extends NonNullable<object> = BaseHit> =
+  WidgetFactory<
+    HitsWidgetDescription<THit> & { $$widgetType: 'ais.hits' },
+    HitsConnectorParams<THit>,
+    HitsWidgetParams<THit>
+  >;
 
 export default (function hits<THit extends NonNullable<object> = BaseHit>(
   widgetParams: HitsWidgetParams<THit> & HitsConnectorParams<THit>
@@ -193,11 +195,21 @@ export default (function hits<THit extends NonNullable<object> = BaseHit>(
     render(null, containerNode)
   );
 
-  return {
+  // explicitly create this type to have a small type output.
+  type HitsWidgetActual = Widget<
+    HitsWidgetDescription<THit> & {
+      $$widgetType: 'ais.hits';
+      widgetParams: HitsConnectorParams<THit>;
+    }
+  >;
+
+  const widget: HitsWidgetActual = {
     ...makeWidget({
       escapeHTML,
       transformItems,
     }),
     $$widgetType: 'ais.hits',
   };
+
+  return widget as unknown as HitsWidgetActual;
 } satisfies HitsWidget);

@@ -33,6 +33,7 @@ import type {
   BaseHit,
   Hit,
   TemplateWithSendEvent,
+  Widget,
 } from '../../types';
 import type { SearchResults } from 'algoliasearch-helper';
 
@@ -155,11 +156,12 @@ export type InfiniteHitsWidgetParams<
   cache?: InfiniteHitsCache;
 };
 
-export type InfiniteHitsWidget = WidgetFactory<
-  InfiniteHitsWidgetDescription & { $$widgetType: 'ais.infiniteHits' },
-  InfiniteHitsConnectorParams,
-  InfiniteHitsWidgetParams
->;
+export type InfiniteHitsWidget<THit extends NonNullable<object> = BaseHit> =
+  WidgetFactory<
+    InfiniteHitsWidgetDescription<THit> & { $$widgetType: 'ais.infiniteHits' },
+    InfiniteHitsConnectorParams<THit>,
+    InfiniteHitsWidgetParams<THit>
+  >;
 
 const renderer =
   <THit extends NonNullable<object> = BaseHit>({
@@ -286,7 +288,14 @@ export default (function infiniteHits<
     render(null, containerNode)
   );
 
-  return {
+  // explicitly create this type to have a small type output.
+  type InfiniteHitsWidgetActual = Widget<
+    InfiniteHitsWidgetDescription<THit> & {
+      $$widgetType: 'ais.infiniteHits';
+      widgetParams: InfiniteHitsConnectorParams<THit>;
+    }
+  >;
+  const widget: InfiniteHitsWidgetActual = {
     ...makeWidget({
       escapeHTML,
       transformItems,
@@ -295,4 +304,6 @@ export default (function infiniteHits<
     }),
     $$widgetType: 'ais.infiniteHits',
   };
+
+  return widget as unknown as InfiniteHitsWidgetActual;
 } satisfies InfiniteHitsWidget);

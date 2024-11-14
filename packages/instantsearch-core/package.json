@@ -11,11 +11,6 @@
       "types": "./dist/es/index.d.ts",
       "require": "./dist/cjs/index.js",
       "default": "./dist/es/index.js"
-    },
-    "./types": {
-      "types": "./types/index.d.ts",
-      "require": "./types/index.cjs",
-      "default": "./types/index.mjs"
     }
   },
   "sideEffects": false,
@@ -37,8 +32,7 @@
     "search"
   ],
   "files": [
-    "dist",
-    "types"
+    "dist"
   ],
   "scripts": {
     "clean": "rm -rf dist",

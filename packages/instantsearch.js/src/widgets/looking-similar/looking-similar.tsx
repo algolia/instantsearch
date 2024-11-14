@@ -24,6 +24,7 @@ import type {
   Renderer,
   BaseHit,
   RecommendResponse,
+  Widget,
 } from '../../types';
 import type {
   RecommendClassNames,
@@ -215,13 +216,14 @@ type LookingSimilarWidgetParams<THit extends NonNullable<object> = BaseHit> = {
   cssClasses?: LookingSimilarCSSClasses;
 };
 
-export type LookingSimilarWidget = WidgetFactory<
-  LookingSimilarWidgetDescription & {
-    $$widgetType: 'ais.lookingSimilar';
-  },
-  LookingSimilarConnectorParams,
-  LookingSimilarWidgetParams
->;
+export type LookingSimilarWidget<THit extends NonNullable<object> = BaseHit> =
+  WidgetFactory<
+    LookingSimilarWidgetDescription<THit> & {
+      $$widgetType: 'ais.lookingSimilar';
+    },
+    LookingSimilarConnectorParams<THit>,
+    LookingSimilarWidgetParams<THit>
+  >;
 
 export default (function lookingSimilar<
   THit extends NonNullable<object> = BaseHit
@@ -258,7 +260,14 @@ export default (function lookingSimilar<
   const makeWidget = connectLookingSimilar(specializedRenderer, () =>
     render(null, containerNode)
   );
-  return {
+  // explicitly create this type to have a small type output.
+  type LookingSimilarWidgetActual = Widget<
+    LookingSimilarWidgetDescription<THit> & {
+      $$widgetType: 'ais.lookingSimilar';
+      widgetParams: LookingSimilarConnectorParams<THit>;
+    }
+  >;
+  const widget: LookingSimilarWidgetActual = {
     ...makeWidget({
       objectIDs,
       limit,
@@ -270,4 +279,5 @@ export default (function lookingSimilar<
     }),
     $$widgetType: 'ais.lookingSimilar',
   };
+  return widget as unknown as LookingSimilarWidgetActual;
 } satisfies LookingSimilarWidget);

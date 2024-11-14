@@ -24,6 +24,7 @@ import type {
   Renderer,
   BaseHit,
   RecommendResponse,
+  Widget,
 } from '../../types';
 import type {
   RecommendClassNames,
@@ -224,13 +225,14 @@ type TrendingItemsWidgetParams<THit extends NonNullable<object> = BaseHit> = {
   cssClasses?: TrendingItemsCSSClasses;
 };
 
-export type TrendingItemsWidget = WidgetFactory<
-  TrendingItemsWidgetDescription & {
-    $$widgetType: 'ais.trendingItems';
-  },
-  TrendingItemsConnectorParams,
-  TrendingItemsWidgetParams
->;
+export type TrendingItemsWidget<THit extends NonNullable<object> = BaseHit> =
+  WidgetFactory<
+    TrendingItemsWidgetDescription<THit> & {
+      $$widgetType: 'ais.trendingItems';
+    },
+    TrendingItemsConnectorParams<THit>,
+    TrendingItemsWidgetParams<THit>
+  >;
 
 export default (function trendingItems<
   THit extends NonNullable<object> = BaseHit
@@ -272,7 +274,14 @@ export default (function trendingItems<
   const facetParameters =
     facetName && facetValue ? { facetName, facetValue } : {};
 
-  return {
+  // explicitly create this type to have a small type output.
+  type TrendingItemsWidgetActual = Widget<
+    TrendingItemsWidgetDescription<THit> & {
+      $$widgetType: 'ais.trendingItems';
+      widgetParams: TrendingItemsConnectorParams<THit>;
+    }
+  >;
+  const widget: TrendingItemsWidgetActual = {
     ...makeWidget({
       ...facetParameters,
       limit,
@@ -284,4 +293,6 @@ export default (function trendingItems<
     }),
     $$widgetType: 'ais.trendingItems',
   };
+
+  return widget as unknown as TrendingItemsWidgetActual;
 } satisfies TrendingItemsWidget);
