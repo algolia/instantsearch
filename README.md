@@ -46,6 +46,8 @@ It is part of the InstantSearch family which is designed for different platforms
 | [`react-instantsearch-core`](packages/react-instantsearch-core) | [![react-instantsearch-core npm version](https://img.shields.io/npm/v/react-instantsearch-core.svg?style=flat-square)](https://npmjs.org/package/react-instantsearch-core) | Runtime-independent React InstantSearch version |
 | [`vue-instantsearch`](packages/vue-instantsearch) | [![vue-instantsearch npm version](https://img.shields.io/npm/v/vue-instantsearch.svg?style=flat-square)](https://npmjs.org/package/vue-instantsearch) | Vue InstantSearch |
 
+[Usage Trend of InstantSearch Family](https://npm-compare.com/algoliasearch-helper,create-instantsearch-app,instantsearch.css,instantsearch.js,react-instantsearch,react-instantsearch-core,vue-instantsearch/#timeRange=THREE_YEARS)
+
 ## Contributing
 
 We welcome all contributors, from casual to regular 💙
