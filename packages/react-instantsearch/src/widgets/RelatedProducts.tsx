@@ -2,11 +2,11 @@ import { createRelatedProductsComponent } from 'instantsearch-ui-components';
 import React, { createElement, Fragment } from 'react';
 import { useInstantSearch, useRelatedProducts } from 'react-instantsearch-core';
 
+import type { AlgoliaHit, BaseHit } from 'instantsearch-core';
 import type {
   RelatedProductsProps as RelatedProductsUiComponentProps,
   Pragma,
 } from 'instantsearch-ui-components';
-import type { AlgoliaHit, BaseHit } from 'instantsearch.js';
 import type { UseRelatedProductsProps } from 'react-instantsearch-core';
 
 type UiProps<TItem extends BaseHit> = Pick<

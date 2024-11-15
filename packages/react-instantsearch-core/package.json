@@ -50,7 +50,7 @@
   "dependencies": {
     "@babel/runtime": "7.25.9",
     "algoliasearch-helper": "3.22.5",
-    "instantsearch.js": "4.75.3",
+    "instantsearch-core": "0.1.0",
     "use-sync-external-store": "^1.0.0"
   },
   "devDependencies": {
