@@ -1,4 +1,4 @@
-import type { InstantSearchOptions } from 'instantsearch.js';
+import type { InstantSearchOptions } from 'instantsearch-core';
 
 type MaybePromise<TResolution> = Promise<TResolution> | TResolution;
 
