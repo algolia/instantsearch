@@ -1644,6 +1644,7 @@ AlgoliaSearchHelper.prototype._runComposition = function () {
 
   var query = queries[0];
 
+  // TODO: delete once allowed in the Composition API
   delete query.params.maxValuesPerFacet;
   delete query.params.facets;
 
