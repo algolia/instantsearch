@@ -70,7 +70,7 @@ export type InstantSearchOptions<
   /**
    * The objectID of the composition.
    * If this is passed, the composition API will be used for search.
-   * Multi-index search and recommend is not supported with this option.
+   * Multi-index search is not supported with this option.
    */
   compositionID?: string;
 
