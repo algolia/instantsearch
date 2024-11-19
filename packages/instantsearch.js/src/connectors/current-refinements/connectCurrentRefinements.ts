@@ -232,7 +232,7 @@ const connectCurrentRefinements: CurrentRefinementsConnector =
             if (!results) {
               return transformItems(
                 getRefinementsItems({
-                  results: {},
+                  results: null,
                   helper,
                   indexId: helper.state.index,
                   includedAttributes,
@@ -282,7 +282,7 @@ function getRefinementsItems({
   includedAttributes,
   excludedAttributes,
 }: {
-  results: SearchResults | Record<string, never>;
+  results: SearchResults | null;
   helper: AlgoliaSearchHelper;
   indexId: string;
   includedAttributes: CurrentRefinementsConnectorParams['includedAttributes'];

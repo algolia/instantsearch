@@ -443,7 +443,10 @@ export function createInsightsMiddleware<
         instantSearchInstance.mainHelper!.derivedHelpers[0].on(
           'result',
           ({ results }) => {
-            if (!results.queryID || results.queryID !== lastQueryId) {
+            if (
+              results &&
+              (!results.queryID || results.queryID !== lastQueryId)
+            ) {
               lastQueryId = results.queryID;
               viewedObjectIDs.clear();
             }

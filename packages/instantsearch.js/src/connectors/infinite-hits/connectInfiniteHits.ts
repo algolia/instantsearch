@@ -138,7 +138,7 @@ export type InfiniteHitsRenderState<
   /**
    * The response from the Algolia API.
    */
-  results?: SearchResults<Hit<THit>>;
+  results?: SearchResults<Hit<THit>> | null;
 
   /**
    * The banner to display above the hits.
@@ -435,7 +435,7 @@ export default (function connectInfiniteHits<
           sendEvent,
           bindEvent,
           banner,
-          results,
+          results: results || undefined,
           showPrevious,
           showMore,
           isFirstPage,
