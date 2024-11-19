@@ -970,6 +970,39 @@ describe('insights', () => {
         });
       });
 
+      describe('from `init` props', () => {
+        it('does not use the `authenticatedUserToken` as the `userToken` when defined', () => {
+          const { insightsClient, instantSearchInstance, getUserToken } =
+            createTestEnvironment();
+
+          instantSearchInstance.use(
+            createInsightsMiddleware({
+              insightsClient,
+              insightsInitParams: { authenticatedUserToken: 'abc' },
+            })
+          );
+
+          expect(getUserToken()).not.toEqual('abc');
+        });
+
+        it('does not use the `authenticatedUserToken` as the `userToken` when both are defined', () => {
+          const { insightsClient, instantSearchInstance, getUserToken } =
+            createTestEnvironment();
+
+          instantSearchInstance.use(
+            createInsightsMiddleware({
+              insightsClient,
+              insightsInitParams: {
+                authenticatedUserToken: 'abc',
+                userToken: 'def',
+              },
+            })
+          );
+
+          expect(getUserToken()).toEqual('def');
+        });
+      });
+
       describe('after `init`', () => {
         it('does not use the `authenticatedUserToken` as the `userToken` when defined', async () => {
           const { insightsClient, instantSearchInstance, getUserToken } =
@@ -1002,7 +1035,7 @@ describe('insights', () => {
       });
 
       describe('from queue', () => {
-        it('does not use the `authenticatedUserToken` as the `userToken` when defined', async () => {
+        it('does not use the `authenticatedUserToken` as the `userToken` when defined', () => {
           const {
             insightsClient,
             libraryLoadedAndProcessQueue,
