@@ -1645,13 +1645,12 @@ AlgoliaSearchHelper.prototype._runComposition = function () {
   var query = queries[0];
 
   // TODO: delete once allowed in the Composition API
-  delete query.params.maxValuesPerFacet;
-  delete query.params.facets;
+  delete query.requestBody.params.maxValuesPerFacet;
+  delete query.requestBody.params.facets;
 
-  const { compositionID, params } = query;
   try {
     this.client
-      .search({ compositionID, requestBody: { params } })
+      .search(query)
       .then(this._dispatchAlgoliaResponse.bind(this, states, queryId))
       .catch(this._dispatchAlgoliaError.bind(this, queryId));
   } catch (error) {

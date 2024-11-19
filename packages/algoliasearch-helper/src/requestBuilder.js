@@ -135,7 +135,9 @@ var requestBuilder = {
     return [
       {
         compositionID: compositionID,
-        params: requestBuilder._getCompositionHitsSearchParams(state),
+        requestBody: {
+          params: requestBuilder._getCompositionHitsSearchParams(state),
+        },
       },
     ];
   },
