@@ -16,7 +16,7 @@ export type SearchResultsApi = {
 export function useSearchResults(): SearchResultsApi {
   const search = useInstantSearchContext();
   const searchIndex = useIndexContext();
-  const [searchResults, setSearchResults] = useState(() => {
+  const [searchResults, setSearchResults] = useState<SearchResultsApi>(() => {
     const indexSearchResults = getIndexSearchResults(searchIndex);
     // We do this not to leak `recommendResults` in the API.
     return {
