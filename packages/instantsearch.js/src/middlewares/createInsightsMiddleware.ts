@@ -258,15 +258,10 @@ export function createInsightsMiddleware<
           }
         };
 
-        function setUserToken(
-          token: string | number,
-          userToken?: string | number
-        ) {
+        function setUserToken(token: string | number) {
           setUserTokenToSearch(token, true);
 
-          if (userToken) {
-            insightsClient('setUserToken', userToken);
-          }
+          insightsClient('setUserToken', token);
         }
 
         let anonymousUserToken: string | undefined = undefined;
@@ -290,7 +285,7 @@ export function createInsightsMiddleware<
         // insights lib on the server.
         const tokenFromSearchParameters = initialParameters.userToken;
 
-        // When the first query is sent, the token is possibly not yet be set by
+        // When the first query is sent, the token is possibly not yet set by
         // the insights onChange callbacks (if insights isn't yet loaded).
         // It is explicitly being set here so that the first query has the
         // initial tokens set and ensure a second query isn't automatically
@@ -299,23 +294,16 @@ export function createInsightsMiddleware<
           userTokenFromInit = insightsInitParams.userToken;
         }
 
-        // We consider the `userToken` or `authenticatedUserToken` before an
-        // `init` call of higher importance than one from the queue and ones set
-        // from the init props to be higher than that.
-        const tokenFromInit = userTokenFromInit;
-        const tokenBeforeInit = userTokenBeforeInit;
-        const tokenFromQueue = queuedUserToken;
-
-        if (tokenFromInit) {
-          setUserToken(tokenFromInit, userTokenFromInit);
+        if (userTokenFromInit) {
+          setUserToken(userTokenFromInit);
         } else if (tokenFromSearchParameters) {
           setUserToken(tokenFromSearchParameters);
-        } else if (tokenBeforeInit) {
-          setUserToken(tokenBeforeInit);
-        } else if (tokenFromQueue) {
-          setUserToken(tokenFromQueue);
+        } else if (userTokenBeforeInit) {
+          setUserToken(userTokenBeforeInit);
+        } else if (queuedUserToken) {
+          setUserToken(queuedUserToken);
         } else if (anonymousUserToken) {
-          setUserToken(anonymousUserToken, anonymousUserToken);
+          setUserToken(anonymousUserToken);
 
           if (insightsInitParams?.useCookie || queuedInitParams?.useCookie) {
             saveTokenAsCookie(
