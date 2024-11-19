@@ -1,6 +1,6 @@
-// import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import { compositionClient } from '@algolia/client-composition';
+import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import instantsearch from 'instantsearch.js';
+import { carousel } from 'instantsearch.js/es/templates';
 import {
   configure,
   hits,
@@ -8,32 +8,20 @@ import {
   panel,
   refinementList,
   searchBox,
+  trendingItems,
 } from 'instantsearch.js/es/widgets';
 
 import 'instantsearch.css/themes/satellite.css';
 
-// const searchClient = algoliasearch(
-//   'betaHPHOEH9N8M',
-//   '7eab041484d3e9f1deace88d93690b0a'
-// );
-
-const searchClient = compositionClient(
-  'betaHPHOEH9N8M',
-  '7eab041484d3e9f1deace88d93690b0a',
-  { authMode: 'WithinHeaders' }
+const searchClient = algoliasearch(
+  'latency',
+  '6be0576ff61c053d5f9a3225e2a90f76'
 );
 
-searchClient.search = ({ compositionID, requestBody }) =>
-  searchClient.customPost({
-    path: `1/compositions/${compositionID}/simulate`,
-    body: requestBody,
-  });
-
 const search = instantsearch({
-  // indexName: 'products',
-  compositionID: 'composition-2',
+  indexName: 'instant_search',
   searchClient,
-  // insights: true,
+  insights: true,
 });
 
 search.addWidgets([
@@ -45,33 +33,46 @@ search.addWidgets([
     templates: {
       item: (hit, { html, components }) => html`
         <article>
-          <h1>${components.Highlight({ hit, attribute: 'title' })}</h1>
-          <div class="group">${hit._rankingInfo.composed?.inset}</div>
-          <img src=${hit.largeImage} />
-          <p>${components.Highlight({ hit, attribute: 'title' })}</p>
-          <div style="display: flex;justify-content: space-between;">
-            <span>$${hit.price}</span>
-            <a href="${hit.url}" target="_blank">See product</a>
-          </div>
+          <h1>
+            <a href="/products.html?pid=${hit.objectID}"
+              >${components.Highlight({ hit, attribute: 'name' })}</a
+            >
+          </h1>
+          <p>${components.Highlight({ hit, attribute: 'description' })}</p>
+          <a href="/products.html?pid=${hit.objectID}">See product</a>
         </article>
       `,
     },
   }),
   configure({
-    hitsPerPage: 40,
-    getRankingInfo: true,
-    // highlightPreTag: '__ais-highlight__',
-    // highlightPostTag: '__/ais-highlight__',
-    explain: true,
+    hitsPerPage: 8,
   }),
   panel({
-    templates: { header: () => 'brand' },
+    templates: { header: 'brand' },
   })(refinementList)({
     container: '#brand-list',
     attribute: 'brand',
   }),
   pagination({
     container: '#pagination',
+  }),
+  trendingItems({
+    container: '#trending',
+    limit: 6,
+    templates: {
+      item: (item, { html }) => html`
+        <div>
+          <article>
+            <div>
+              <img src="${item.image}" />
+              <h2>${item.name}</h2>
+            </div>
+            <a href="/products.html?pid=${item.objectID}">See product</a>
+          </article>
+        </div>
+      `,
+      layout: carousel(),
+    },
   }),
 ]);
 
