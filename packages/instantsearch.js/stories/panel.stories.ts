@@ -90,7 +90,7 @@ storiesOf('Basics/Panel', module)
           header: () => 'Price',
           footer: () => 'The panel is hidden when there are no results.',
         },
-        hidden: ({ results }) => results.nbHits === 0,
+        hidden: ({ results }) => results?.nbHits === 0,
       })(instantsearch.widgets.rangeInput);
 
       search.addWidgets([
