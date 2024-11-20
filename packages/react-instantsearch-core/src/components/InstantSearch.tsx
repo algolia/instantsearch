@@ -8,7 +8,7 @@ import type { UseInstantSearchApiProps } from '../lib/useInstantSearchApi';
 import type {
   InstantSearch as InstantSearchType,
   UiState,
-} from 'instantsearch.js';
+} from 'instantsearch-core';
 
 export type InstantSearchProps<
   TUiState extends UiState = UiState,
