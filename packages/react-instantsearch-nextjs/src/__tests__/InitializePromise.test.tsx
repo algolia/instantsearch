@@ -7,7 +7,7 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { act, render } from '@testing-library/react';
-import * as utils from 'instantsearch.js/es/lib/utils';
+import { addWidgetId } from 'instantsearch-core';
 import { ServerInsertedHTMLContext } from 'next/navigation';
 import React from 'react';
 import { SearchBox, TrendingItems } from 'react-instantsearch';
@@ -20,12 +20,8 @@ import {
 import { InitializePromise } from '../InitializePromise';
 import { TriggerSearch } from '../TriggerSearch';
 
+import type { Widget } from 'instantsearch-core';
 import type { PromiseWithState } from 'react-instantsearch-core';
-
-jest.mock('instantsearch.js/es/lib/utils', () => ({
-  ...jest.requireActual('instantsearch.js/es/lib/utils'),
-  resetWidgetId: jest.fn(),
-}));
 
 const renderComponent = ({
   children,
@@ -63,10 +59,22 @@ const renderComponent = ({
   return client;
 };
 
-test('it calls resetWidgetId', () => {
+test('resets the widgetId', () => {
+  const widget = { dependsOn: 'recommend' } as Widget;
+
+  // increments correctly
+  addWidgetId(widget);
+  expect(widget.$$id).toBe(0);
+  addWidgetId(widget);
+  expect(widget.$$id).toBe(1);
+
   renderComponent();
 
-  expect(utils.resetWidgetId).toHaveBeenCalledTimes(1);
+  // starts back from 0
+  addWidgetId(widget);
+  expect(widget.$$id).toBe(0);
+  addWidgetId(widget);
+  expect(widget.$$id).toBe(1);
 });
 
 test('it applies provided nonce on the injected script tag', async () => {

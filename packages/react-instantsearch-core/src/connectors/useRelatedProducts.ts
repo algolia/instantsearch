@@ -1,14 +1,14 @@
-import connectRelatedProducts from 'instantsearch.js/es/connectors/related-products/connectRelatedProducts';
+import { connectRelatedProducts } from 'instantsearch-core';
 
 import { useConnector } from '../hooks/useConnector';
 
 import type { AdditionalWidgetProperties } from '../hooks/useConnector';
-import type { BaseHit } from 'instantsearch.js';
 import type {
+  BaseHit,
   RelatedProductsConnector,
   RelatedProductsConnectorParams,
   RelatedProductsWidgetDescription,
-} from 'instantsearch.js/es/connectors/related-products/connectRelatedProducts';
+} from 'instantsearch-core';
 
 export type UseRelatedProductsProps<THit extends BaseHit = BaseHit> =
   RelatedProductsConnectorParams<THit>;

@@ -1,14 +1,14 @@
-import connectInfiniteHits from 'instantsearch.js/es/connectors/infinite-hits/connectInfiniteHits';
+import { connectInfiniteHits } from 'instantsearch-core';
 
 import { useConnector } from '../hooks/useConnector';
 
 import type { AdditionalWidgetProperties } from '../hooks/useConnector';
-import type { BaseHit } from 'instantsearch.js';
 import type {
+  BaseHit,
   InfiniteHitsConnectorParams,
   InfiniteHitsWidgetDescription,
   InfiniteHitsConnector,
-} from 'instantsearch.js/es/connectors/infinite-hits/connectInfiniteHits';
+} from 'instantsearch-core';
 
 export type UseInfiniteHitsProps<THit extends BaseHit = BaseHit> =
   InfiniteHitsConnectorParams<THit>;
