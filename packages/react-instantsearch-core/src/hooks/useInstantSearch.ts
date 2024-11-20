@@ -7,7 +7,7 @@ import { useSearchState } from '../lib/useSearchState';
 
 import type { SearchResultsApi } from '../lib/useSearchResults';
 import type { SearchStateApi } from '../lib/useSearchState';
-import type { InstantSearch, Middleware, UiState } from 'instantsearch.js';
+import type { InstantSearch, Middleware, UiState } from 'instantsearch-core';
 
 export type InstantSearchApi<TUiState extends UiState = UiState> =
   SearchStateApi<TUiState> &

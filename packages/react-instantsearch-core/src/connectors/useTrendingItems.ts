@@ -1,14 +1,14 @@
-import connectTrendingItems from 'instantsearch.js/es/connectors/trending-items/connectTrendingItems';
+import { connectTrendingItems } from 'instantsearch-core';
 
 import { useConnector } from '../hooks/useConnector';
 
 import type { AdditionalWidgetProperties } from '../hooks/useConnector';
-import type { BaseHit } from 'instantsearch.js';
 import type {
+  BaseHit,
   TrendingItemsConnector,
   TrendingItemsConnectorParams,
   TrendingItemsWidgetDescription,
-} from 'instantsearch.js/es/connectors/trending-items/connectTrendingItems';
+} from 'instantsearch-core';
 
 export type UseTrendingItemsProps<THit extends BaseHit = BaseHit> =
   TrendingItemsConnectorParams<THit>;

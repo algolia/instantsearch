@@ -25,7 +25,7 @@ import {
 import { getServerState } from '../getServerState';
 
 import type { MockSearchClient } from '@instantsearch/mocks';
-import type { Hit as AlgoliaHit } from 'instantsearch.js';
+import type { Hit as AlgoliaHit } from 'instantsearch-core';
 import type {
   InstantSearchServerState,
   InstantSearchProps,

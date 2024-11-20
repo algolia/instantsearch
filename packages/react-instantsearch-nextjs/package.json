@@ -49,7 +49,7 @@
     "watch:es": "yarn --silent build:es:base --watch"
   },
   "devDependencies": {
-    "instantsearch.js": "4.75.6",
+    "instantsearch-core": "0.1.0",
     "next": "13.5.1",
     "react-instantsearch-core": "7.13.9"
   },

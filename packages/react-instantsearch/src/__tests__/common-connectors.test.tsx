@@ -4,7 +4,7 @@
 import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/connectors';
 import { act, render } from '@testing-library/react';
-import { connectRatingMenu } from 'instantsearch.js/es/connectors';
+import { connectRatingMenu } from 'instantsearch-core';
 import React, { useState } from 'react';
 
 import {
@@ -45,7 +45,7 @@ import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
 import type {
   RatingMenuConnectorParams,
   RatingMenuWidgetDescription,
-} from 'instantsearch.js/es/connectors/rating-menu/connectRatingMenu';
+} from 'instantsearch-core';
 
 type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
