@@ -52,7 +52,6 @@ export default {
 
     const itemComponent = ({
       hit,
-      index,
       onClick,
       onAuxClick,
       // We don't want to pass the Preact key as a prop
@@ -73,10 +72,17 @@ export default {
           (itemSlot &&
             itemSlot({
               item: hit,
-              index,
               sendEvent: this.state.sendEvent,
             })) ||
-            `objectID: ${hit.objectID}, index: ${index}`,
+            h(
+              'div',
+              {
+                style: {
+                  wordBreak: 'break-all',
+                },
+              },
+              [`${JSON.stringify(hit).slice(0, 100)}…`]
+            ),
         ]
       );
     };

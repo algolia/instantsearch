@@ -7,7 +7,7 @@
     "enzyme": "3.11.0",
     "enzyme-adapter-preact-pure": "2.2.0",
     "enzyme-to-json": "3.6.2",
-    "instantsearch.js": "4.75.6",
+    "instantsearch-core": "0.1.0",
     "jest-serializer-html": "7.1.0",
     "preact": "^10.10.0"
   }

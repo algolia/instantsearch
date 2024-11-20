@@ -337,7 +337,7 @@ describe('Snippet', () => {
         />
       );
     })
-      .toWarnDev(`[InstantSearch.js]: Could not enable snippet for "does.not.exist", will display an empty string.
+      .toWarnDev(`[InstantSearch]: Could not enable snippet for "does.not.exist", will display an empty string.
 Please check whether this attribute exists and is specified in \`attributesToSnippet\`.
 
 See: https://alg.li/highlighting`);
@@ -363,7 +363,7 @@ See: https://alg.li/highlighting`);
         />
       );
     })
-      .toWarnDev(`[InstantSearch.js]: Could not enable snippet for "title", will display an empty string.
+      .toWarnDev(`[InstantSearch]: Could not enable snippet for "title", will display an empty string.
 Please check whether this attribute exists and is specified in \`attributesToSnippet\`.
 
 See: https://alg.li/highlighting`);

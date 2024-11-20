@@ -24,6 +24,7 @@ import type {
   Renderer,
   BaseHit,
   RecommendResponse,
+  Widget,
 } from '../../types';
 import type {
   RecommendClassNames,
@@ -225,13 +226,14 @@ type RelatedProductsWidgetParams<THit extends NonNullable<object> = BaseHit> = {
   cssClasses?: RelatedProductsCSSClasses;
 };
 
-export type RelatedProductsWidget = WidgetFactory<
-  RelatedProductsWidgetDescription & {
-    $$widgetType: 'ais.relatedProducts';
-  },
-  RelatedProductsConnectorParams,
-  RelatedProductsWidgetParams
->;
+export type RelatedProductsWidget<THit extends NonNullable<object> = BaseHit> =
+  WidgetFactory<
+    RelatedProductsWidgetDescription<THit> & {
+      $$widgetType: 'ais.relatedProducts';
+    },
+    RelatedProductsConnectorParams<THit>,
+    RelatedProductsWidgetParams<THit>
+  >;
 
 export default (function relatedProducts<
   THit extends NonNullable<object> = BaseHit
@@ -269,7 +271,7 @@ export default (function relatedProducts<
     render(null, containerNode)
   );
 
-  return {
+  const widget = {
     ...makeWidget({
       objectIDs,
       limit,
@@ -281,4 +283,12 @@ export default (function relatedProducts<
     }),
     $$widgetType: 'ais.relatedProducts',
   };
+
+  // explicitly cast this type to have a small type output.
+  return widget as Widget<
+    RelatedProductsWidgetDescription & {
+      $$widgetType: 'ais.relatedProducts';
+      widgetParams: RelatedProductsConnectorParams<THit>;
+    }
+  >;
 } satisfies RelatedProductsWidget);
