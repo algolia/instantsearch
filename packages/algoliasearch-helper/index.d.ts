@@ -19,17 +19,6 @@ import type {
   PlainRecommendParameters as ClientPlainRecommendParameters,
 } from './types/algoliasearch';
 
-interface IndexOptions {
-  /**
-   * Targeted index. This parameter is mandatory.
-   */
-  compositionID?: string;
-  /**
-   * the name of the index to query
-   */
-  index?: string;
-}
-
 /**
  * The algoliasearchHelper module is the function that will let its
  * contains everything needed to use the Algoliasearch
@@ -42,7 +31,7 @@ interface IndexOptions {
  */
 declare function algoliasearchHelper(
   client: SearchClient,
-  index: string | IndexOptions,
+  index: string,
   opts?: algoliasearchHelper.PlainSearchParameters,
   searchResultsOptions?: algoliasearchHelper.SearchResultsOptions
 ): algoliasearchHelper.AlgoliaSearchHelper;
@@ -405,7 +394,6 @@ declare namespace algoliasearchHelper {
     ): DerivedHelper;
     detachDerivedHelper(derivedHelper: DerivedHelper): void;
     hasPendingRequests(): boolean;
-    compositionID?: string;
   }
 
   interface DerivedHelper extends EventEmitter {
@@ -464,6 +452,12 @@ declare namespace algoliasearchHelper {
      * Targeted index. This parameter is mandatory.
      */
     index?: string;
+    /**
+     * Targeted compositionID.
+     * This parameter is only expected (and mandatory) when initializing instantSearch with a compositionID.
+     * It will be stripped from the Search Parameters send to the Composition API as it leaves in the URL.
+     */
+    compositionID?: string;
     /**
      * This attribute contains the list of all the disjunctive facets
      * used. This list will be added to requested facets in the

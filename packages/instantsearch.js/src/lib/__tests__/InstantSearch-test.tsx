@@ -950,7 +950,7 @@ describe('start', () => {
     expect(algoliasearchHelper).toHaveBeenCalledTimes(2);
     expect(algoliasearchHelper).toHaveBeenCalledWith(
       searchClient,
-      { index: indexName },
+      indexName,
       undefined,
       { persistHierarchicalRootCount: false }
     );
@@ -972,7 +972,7 @@ describe('start', () => {
 
     expect(algoliasearchHelper).toHaveBeenCalledWith(
       searchClient,
-      { index: indexName },
+      indexName,
       undefined,
       future
     );

@@ -114,7 +114,7 @@ var version = require('./version');
  *    {@link SearchParameters} corresponding to this answer.
  *  - error: when the response is an error. This event contains the error returned by the server.
  * @param  {AlgoliaSearch} client an AlgoliaSearch client
- * @param  {string | object} indexOptions the index name to query or an object containing the compositionID
+ * @param  {string} indexOptions the index name to query or an object containing the compositionID
  * @param  {SearchParameters | object} options an object defining the initial
  * config of the search. It doesn't have to be a {SearchParameters},
  * just an object containing the properties you need from it.
@@ -132,12 +132,7 @@ function AlgoliaSearchHelper(
 
   this.setClient(client);
   var opts = options || {};
-  if (typeof indexOptions === 'string') {
-    opts.index = indexOptions;
-  } else if (indexOptions) {
-    this.compositionID = indexOptions.compositionID;
-    opts.index = indexOptions.index;
-  }
+  opts.index = indexOptions;
   this.state = SearchParameters.make(opts);
   this.recommendState = new RecommendParameters({
     params: opts.recommendState,
@@ -1605,13 +1600,11 @@ AlgoliaSearchHelper.prototype._runComposition = function () {
   var state = this.state;
   var states = [];
   var mainQueries = [];
-  const thisCompositionID = this.compositionID;
 
   var derivedQueries = this.derivedHelpers.map(function (derivedHelper) {
     var derivedState = derivedHelper.getModifiedState(state);
-    var derivedStateQueries = thisCompositionID
-      ? requestBuilder._getCompositionQueries(thisCompositionID, derivedState)
-      : [];
+    var derivedStateQueries =
+      requestBuilder._getCompositionQueries(derivedState);
 
     states.push({
       state: derivedState,
