@@ -114,25 +114,20 @@ var version = require('./version');
  *    {@link SearchParameters} corresponding to this answer.
  *  - error: when the response is an error. This event contains the error returned by the server.
  * @param  {AlgoliaSearch} client an AlgoliaSearch client
- * @param  {string} indexOptions the index name to query or an object containing the compositionID
+ * @param  {string} index the index name to query
  * @param  {SearchParameters | object} options an object defining the initial
  * config of the search. It doesn't have to be a {SearchParameters},
  * just an object containing the properties you need from it.
  * @param {SearchResultsOptions|object} searchResultsOptions an object defining the options to use when creating the search results.
  */
-function AlgoliaSearchHelper(
-  client,
-  indexOptions,
-  options,
-  searchResultsOptions
-) {
+function AlgoliaSearchHelper(client, index, options, searchResultsOptions) {
   if (typeof client.addAlgoliaAgent === 'function') {
     client.addAlgoliaAgent('JS Helper (' + version + ')');
   }
 
   this.setClient(client);
   var opts = options || {};
-  opts.index = indexOptions;
+  opts.index = index;
   this.state = SearchParameters.make(opts);
   this.recommendState = new RecommendParameters({
     params: opts.recommendState,
