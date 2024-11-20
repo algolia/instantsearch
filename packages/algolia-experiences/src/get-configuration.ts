@@ -26,15 +26,13 @@ export type Experience = {
   updatedAt: string;
 };
 
-const LOCAL = false;
-const API_BASE = LOCAL
-  ? 'http://localhost:3000/1'
-  : 'https://experiences-beta.algolia.com/1';
+export const API_BASE = {
+  local: 'http://localhost:3000/1',
+  beta: 'https://experiences-beta.algolia.com/1',
+  prod: 'https://experiences.algolia.com/1',
+};
 
-type ApiParams<TEndpointParams> = {
-  appId: string;
-  apiKey: string;
-} & TEndpointParams;
+type ApiParams<TEndpointParams> = Settings & TEndpointParams;
 
 type RequestParams = ApiParams<{
   endpoint: string;
@@ -47,10 +45,12 @@ export function deleteExperience({
   id,
   appId,
   apiKey,
+  environment,
 }: DeleteExperienceParams) {
   return buildRequest({
     appId,
     apiKey,
+    environment,
     endpoint: `experiences/${id}`,
     method: 'DELETE',
   });
@@ -61,10 +61,12 @@ export function getExperience({
   id,
   appId,
   apiKey,
+  environment,
 }: GetExperienceParams): Promise<Experience> {
   return buildRequest({
     appId,
     apiKey,
+    environment,
     endpoint: `experiences/${id}`,
   });
 }
@@ -74,10 +76,12 @@ export function upsertExperience({
   experience,
   appId,
   apiKey,
+  environment,
 }: UpsertExperienceParams): Promise<Pick<Experience, 'id'>> {
   return buildRequest({
     appId,
     apiKey,
+    environment,
     endpoint: `experiences`,
     method: 'POST',
     data: experience,
@@ -88,10 +92,12 @@ export type ListExperiencesParams = ApiParams<Record<string, never>>;
 export function listExperiences({
   appId,
   apiKey,
+  environment,
 }: ListExperiencesParams): Promise<Experience[]> {
   return buildRequest({
     appId,
     apiKey,
+    environment,
     endpoint: 'experiences',
   });
 }
@@ -99,11 +105,12 @@ export function listExperiences({
 function buildRequest({
   appId,
   apiKey,
+  environment,
   endpoint,
   method = 'GET',
   data,
 }: RequestParams) {
-  return fetch(`${API_BASE}/${endpoint}`, {
+  return fetch(`${API_BASE[environment]}/${endpoint}`, {
     method,
     headers: {
       'X-Algolia-Application-ID': appId,

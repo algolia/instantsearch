@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.4.4...algolia-experiences@1.5.0) (2024-11-14)
+
+
+### Features
+
+* **experiences:** add `environment` setting and default to prod ([#6435](https://github.com/algolia/instantsearch/issues/6435)) ([950349c](https://github.com/algolia/instantsearch/commit/950349ce6e536b6a5421b5f951ae26a50652588a))
+
+
+
+
+
+## [1.4.4](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.4.3...algolia-experiences@1.4.4) (2024-11-14)
+
+**Note:** Version bump only for package algolia-experiences
+
+
+
+
+
 ## [1.4.3](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.4.2...algolia-experiences@1.4.3) (2024-11-05)
 
 

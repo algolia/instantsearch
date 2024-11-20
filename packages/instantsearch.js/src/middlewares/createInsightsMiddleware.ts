@@ -29,7 +29,7 @@ export type InsightsProps<
   TInsightsClient extends ProvidedInsightsClient = ProvidedInsightsClient
 > = {
   insightsClient?: TInsightsClient;
-  insightsInitParams?: Partial<InsightsMethodMap['init'][0]>;
+  insightsInitParams?: Partial<InsightsMethodMap['init'][0][0]>;
   onEvent?: (event: InsightsEvent, insightsClient: TInsightsClient) => void;
   /**
    * @internal indicator for the default insights middleware
@@ -41,7 +41,7 @@ export type InsightsProps<
   $$automatic?: boolean;
 };
 
-const ALGOLIA_INSIGHTS_VERSION = '2.15.0';
+const ALGOLIA_INSIGHTS_VERSION = '2.17.2';
 const ALGOLIA_INSIGHTS_SRC = `https://cdn.jsdelivr.net/npm/search-insights@${ALGOLIA_INSIGHTS_VERSION}/dist/search-insights.min.js`;
 
 export type InsightsClientWithGlobals = InsightsClient & {
@@ -115,7 +115,7 @@ export function createInsightsMiddleware<
       'could not extract Algolia credentials from searchClient in insights middleware.'
     );
 
-    let queuedInitParams: Partial<InsightsMethodMap['init'][0]> | undefined =
+    let queuedInitParams: Partial<InsightsMethodMap['init'][0][0]> | undefined =
       undefined;
     let queuedUserToken: string | undefined = undefined;
     let queuedAuthenticatedUserToken: string | undefined = undefined;
@@ -143,7 +143,7 @@ export function createInsightsMiddleware<
         const [, value] =
           find(queue.slice().reverse(), ([method]) => method === key) || [];
 
-        return value;
+        return value as any as NonNullable<typeof value>;
       });
     }
 
@@ -418,7 +418,7 @@ export function createInsightsMiddleware<
           TMethod extends InsightsMethod
         >(
           method: TMethod,
-          payload: InsightsMethodMap[TMethod][0]
+          payload: InsightsMethodMap[TMethod][0][0]
         ) => void;
 
         let insightsClientWithLocalCredentials =
