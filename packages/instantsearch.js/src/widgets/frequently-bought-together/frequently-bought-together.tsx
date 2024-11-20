@@ -24,6 +24,7 @@ import type {
   Renderer,
   BaseHit,
   RecommendResponse,
+  Widget,
 } from '../../types';
 import type {
   RecommendClassNames,
@@ -224,12 +225,14 @@ type FrequentlyBoughtTogetherWidgetParams<
   cssClasses?: FrequentlyBoughtTogetherCSSClasses;
 };
 
-export type FrequentlyBoughtTogetherWidget = WidgetFactory<
-  FrequentlyBoughtTogetherWidgetDescription & {
+export type FrequentlyBoughtTogetherWidget<
+  THit extends NonNullable<object> = BaseHit
+> = WidgetFactory<
+  FrequentlyBoughtTogetherWidgetDescription<THit> & {
     $$widgetType: 'ais.frequentlyBoughtTogether';
   },
-  FrequentlyBoughtTogetherConnectorParams,
-  FrequentlyBoughtTogetherWidgetParams
+  FrequentlyBoughtTogetherConnectorParams<THit>,
+  FrequentlyBoughtTogetherWidgetParams<THit>
 >;
 
 export default (function frequentlyBoughtTogether<
@@ -266,7 +269,8 @@ export default (function frequentlyBoughtTogether<
   const makeWidget = connectFrequentlyBoughtTogether(specializedRenderer, () =>
     render(null, containerNode)
   );
-  return {
+
+  const widget = {
     ...makeWidget({
       objectIDs,
       limit,
@@ -277,4 +281,12 @@ export default (function frequentlyBoughtTogether<
     }),
     $$widgetType: 'ais.frequentlyBoughtTogether',
   };
+
+  // explicitly cast this type to have a small type output.
+  return widget as Widget<
+    FrequentlyBoughtTogetherWidgetDescription & {
+      $$widgetType: 'ais.frequentlyBoughtTogether';
+      widgetParams: FrequentlyBoughtTogetherConnectorParams<THit>;
+    }
+  >;
 } satisfies FrequentlyBoughtTogetherWidget);

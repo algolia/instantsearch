@@ -24,30 +24,14 @@ function normalizeSnapshot(html: string) {
   // @MAJOR: Remove this once all flavors are aligned.
   return (
     commonNormalizeSnapshot(html)
-      .replace(
-        /(?:<div\s+style="word-break: break-all;"\s*?>)?\s*?({.+?})…?\s*?(?:<\/div>)?/gs,
-        (_, captured) => {
-          return (captured as string)
-            .replace(/\s/g, '')
-            .replace(/,"__position":\d/, '');
-        }
-      )
       // React InstantSearch shows the "Load Previous" button by default, unlike
       // the other flavors
       .replace(
         /<button class="ais-InfiniteHits-loadPrevious .*?">.*?<\/button>/,
         ''
       )
-      // Vue InstantSearch doesn't render defaults hits like the other flavors
-      .replace(
-        /\s{0,}(objectID): (.+?), index: \d\s{0,}/gs,
-        (_, ...captured) => {
-          return `{"objectID":"${captured[1]}"}`;
-        }
-      )
       // Vue InstantSearch adds new line between banner and hits
       .replace(/>\s*</g, '><')
-      .replace(/"__position":\d,/g, '')
   );
 }
 
@@ -85,17 +69,29 @@ export function createOptionsTests(
             <li
               class="ais-InfiniteHits-item"
             >
-              {"objectID":"0"}
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"0","__position":1}…
+              </div>
             </li>
             <li
               class="ais-InfiniteHits-item"
             >
-              {"objectID":"1"}
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"1","__position":2}…
+              </div>
             </li>
             <li
               class="ais-InfiniteHits-item"
             >
-              {"objectID":"2"}
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"2","__position":3}…
+              </div>
             </li>
           </ol>
           <button
@@ -167,17 +163,29 @@ export function createOptionsTests(
             <li
               class="ais-InfiniteHits-item"
             >
-              {"objectID":"0"}
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"0","__position":1}…
+              </div>
             </li>
             <li
               class="ais-InfiniteHits-item"
             >
-              {"objectID":"1"}
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"1","__position":2}…
+              </div>
             </li>
             <li
               class="ais-InfiniteHits-item"
             >
-              {"objectID":"2"}
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"2","__position":3}…
+              </div>
             </li>
           </ol>
           <button
@@ -186,7 +194,7 @@ export function createOptionsTests(
             Show more results
           </button>
         </div>
-        `
+      `
       );
     });
 
@@ -226,17 +234,29 @@ export function createOptionsTests(
             <li
               class="ais-InfiniteHits-item"
             >
-              {"objectID":"(0)"}
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"(0)","__position":1}…
+              </div>
             </li>
             <li
               class="ais-InfiniteHits-item"
             >
-              {"objectID":"(1)"}
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"(1)","__position":2}…
+              </div>
             </li>
             <li
               class="ais-InfiniteHits-item"
             >
-              {"objectID":"(2)"}
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"(2)","__position":3}…
+              </div>
             </li>
           </ol>
           <button
@@ -567,17 +587,29 @@ export function createOptionsTests(
             <li
               class="ais-InfiniteHits-item"
             >
-              {"objectID":"one"}
+              <div
+                style="word-break: break-all;"
+              >
+                {"__position":1,"objectID":"one"}…
+              </div>
             </li>
             <li
               class="ais-InfiniteHits-item"
             >
-              {"objectID":"two"}
+              <div
+                style="word-break: break-all;"
+              >
+                {"__position":2,"objectID":"two"}…
+              </div>
             </li>
             <li
               class="ais-InfiniteHits-item"
             >
-              {"objectID":"three"}
+              <div
+                style="word-break: break-all;"
+              >
+                {"__position":3,"objectID":"three"}…
+              </div>
             </li>
           </ol>
           <button

@@ -4,7 +4,7 @@ import { h } from 'preact';
 
 import Template from '../Template/Template';
 
-import type { VoiceListeningState } from '../../lib/voiceSearchHelper/types';
+import type { VoiceListeningState } from '../../connectors/voice-search/connectVoiceSearch';
 import type { ComponentCSSClasses } from '../../types';
 import type {
   VoiceSearchCSSClasses,

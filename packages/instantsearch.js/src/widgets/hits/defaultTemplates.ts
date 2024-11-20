@@ -1,16 +1,14 @@
-import { omit } from '../../lib/utils';
-
-// false positive lint error
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { HitsTemplates } from './hits';
 
-const defaultTemplates = {
+const defaultTemplates: HitsTemplates = {
   empty() {
     return 'No results';
   },
-  item(data) {
-    return JSON.stringify(omit(data, ['__hitIndex']), null, 2);
+  item(data, { html }) {
+    return html`<div style="word-break: break-all;">
+      ${JSON.stringify(data).slice(0, 100)}…
+    </div>`;
   },
-} satisfies HitsTemplates;
+};
 
 export default defaultTemplates;
