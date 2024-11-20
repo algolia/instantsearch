@@ -2,12 +2,11 @@ import { createHitsComponent } from 'instantsearch-ui-components';
 import React, { createElement, Fragment, useMemo } from 'react';
 import { useHits } from 'react-instantsearch-core';
 
-import type { SendEventForHits } from 'instantsearch-core';
+import type { SendEventForHits, Hit, BaseHit } from 'instantsearch-core';
 import type {
   HitsProps as HitsUiComponentProps,
   Pragma,
 } from 'instantsearch-ui-components';
-import type { Hit, BaseHit } from 'instantsearch.js';
 import type { UseHitsProps } from 'react-instantsearch-core';
 
 type UiProps<THit extends BaseHit> = Pick<

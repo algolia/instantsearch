@@ -13,7 +13,7 @@ import {
 import { render, waitFor } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
-import connectHits from 'instantsearch.js/es/connectors/hits/connectHits';
+import { connectHits } from 'instantsearch-core';
 import React, { StrictMode, useState } from 'react';
 
 import { Index } from '../../components/Index';
@@ -25,11 +25,11 @@ import { noop } from '../../lib/noop';
 import { useConnector } from '../useConnector';
 
 import type { UseHitsProps } from '../../connectors/useHits';
-import type { Connector } from 'instantsearch.js';
 import type {
+  Connector,
   HitsConnectorParams,
   HitsWidgetDescription,
-} from 'instantsearch.js/es/connectors/hits/connectHits';
+} from 'instantsearch-core';
 
 type CustomSearchBoxWidgetDescription = {
   $$type: 'test.searchBox';

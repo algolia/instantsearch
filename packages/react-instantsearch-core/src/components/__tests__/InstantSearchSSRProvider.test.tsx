@@ -11,15 +11,17 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import algoliasearchV4 from 'algoliasearch-v4';
 import { algoliasearch as algoliasearchV5 } from 'algoliasearch-v5';
-import { history } from 'instantsearch.js/es/lib/routers';
-import { simple } from 'instantsearch.js/es/lib/stateMappings';
+import {
+  historyRouter as history,
+  simpleStateMapping as simple,
+} from 'instantsearch-core';
 import React, { StrictMode } from 'react';
 import { Hits, RefinementList, SearchBox } from 'react-instantsearch';
 
 import { InstantSearch } from '../InstantSearch';
 import { InstantSearchSSRProvider } from '../InstantSearchSSRProvider';
 
-import type { Hit as AlgoliaHit, SearchClient } from 'instantsearch.js';
+import type { Hit as AlgoliaHit, SearchClient } from 'instantsearch-core';
 
 function HitComponent({ hit }: { hit: AlgoliaHit }) {
   return <>{hit.objectID}</>;

@@ -21,7 +21,7 @@ import type { UseMenuProps } from '../../connectors/useMenu';
 import type { UsePaginationProps } from '../../connectors/usePagination';
 import type { UseRefinementListProps } from '../../connectors/useRefinementList';
 import type { InstantSearchProps } from '../InstantSearch';
-import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
+import type { IndexWidget } from 'instantsearch-core';
 
 expect.addSnapshotSerializer(widgetSnapshotSerializer);
 
