@@ -29,7 +29,7 @@ import {
   connectSearchBox,
 } from '../../../connectors';
 import instantsearch from '../../../index.es';
-import { warning } from '../../../lib/utils';
+import { warnCache } from '../../../lib/utils';
 import index from '../index';
 
 import type { Widget } from '../../../types';
@@ -3254,19 +3254,19 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
   describe('getWidgetState', () => {
     test('warns when index has this method', () => {
-      warning.cache = {};
+      warnCache.current = {};
 
       const instance = index({ indexName: 'indexName' });
 
       expect(() => {
         instance.getWidgetState({});
       }).toWarnDev(
-        '[InstantSearch.js]: The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
+        '[InstantSearch]: The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
       );
     });
 
     test('warns when widget has this method', () => {
-      warning.cache = {};
+      warnCache.current = {};
 
       const createDeprecatedSearchBox = (args: Partial<Widget> = {}): Widget =>
         createWidget({
@@ -3311,12 +3311,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           })
         );
       }).toWarnDev(
-        '[InstantSearch.js]: The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
+        '[InstantSearch]: The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
       );
     });
 
     test('does not warn for index itself', () => {
-      warning.cache = {};
+      warnCache.current = {};
 
       const instance = index({ indexName: 'indexName' });
       const searchClient = createSearchClient();
@@ -3335,7 +3335,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           })
         );
       }).not.toWarnDev(
-        '[InstantSearch.js]: The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
+        '[InstantSearch]: The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
       );
     });
   });

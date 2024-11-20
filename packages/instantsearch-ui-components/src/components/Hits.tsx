@@ -1,13 +1,9 @@
 /** @jsx createElement */
 import { cx } from '../lib';
 
-import type { ComponentProps, Renderer, SendEventForHits } from '../types';
+import type { ComponentProps, Renderer } from '../types';
 import type { Banner } from 'algoliasearch-helper';
-
-// Should be imported from a shared package in the future
-type Hit = Record<string, unknown> & {
-  objectID: string;
-};
+import type { SendEventForHits, Hit } from 'instantsearch-core';
 
 type BannerProps = ComponentProps<'aside'> & {
   banner: Banner;
@@ -52,7 +48,6 @@ export type HitsProps<THit> = ComponentProps<'div'> & {
   hits: THit[];
   itemComponent: (props: {
     hit: THit;
-    index: number;
     className: string;
     onClick: () => void;
     onAuxClick: () => void;
@@ -139,11 +134,10 @@ export function createHitsComponent({ createElement, Fragment }: Renderer) {
           <EmptyComponent />
         ) : (
           <ol className={cx('ais-Hits-list', classNames.list)}>
-            {hits.map((hit, index) => (
+            {hits.map((hit) => (
               <ItemComponent
                 key={hit.objectID}
                 hit={hit}
-                index={index}
                 className={cx('ais-Hits-item', classNames.item)}
                 onClick={() => {
                   sendEvent('click:internal', hit, 'Hit Clicked');

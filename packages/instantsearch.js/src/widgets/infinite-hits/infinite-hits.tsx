@@ -33,6 +33,7 @@ import type {
   BaseHit,
   Hit,
   TemplateWithSendEvent,
+  Widget,
 } from '../../types';
 import type { SearchResults } from 'algoliasearch-helper';
 
@@ -118,12 +119,7 @@ export type InfiniteHitsTemplates<THit extends NonNullable<object> = BaseHit> =
     /**
      * The template to use for each result.
      */
-    item: TemplateWithSendEvent<
-      Hit<THit> & {
-        /** @deprecated the index in the hits array, use __position instead, which is the absolute position */
-        __hitIndex: number;
-      }
-    >;
+    item: TemplateWithSendEvent<Hit<THit>>;
 
     /**
      * Template to use for the banner.
@@ -160,11 +156,12 @@ export type InfiniteHitsWidgetParams<
   cache?: InfiniteHitsCache;
 };
 
-export type InfiniteHitsWidget = WidgetFactory<
-  InfiniteHitsWidgetDescription & { $$widgetType: 'ais.infiniteHits' },
-  InfiniteHitsConnectorParams,
-  InfiniteHitsWidgetParams
->;
+export type InfiniteHitsWidget<THit extends NonNullable<object> = BaseHit> =
+  WidgetFactory<
+    InfiniteHitsWidgetDescription<THit> & { $$widgetType: 'ais.infiniteHits' },
+    InfiniteHitsConnectorParams<THit>,
+    InfiniteHitsWidgetParams<THit>
+  >;
 
 const renderer =
   <THit extends NonNullable<object> = BaseHit>({
@@ -291,7 +288,7 @@ export default (function infiniteHits<
     render(null, containerNode)
   );
 
-  return {
+  const widget = {
     ...makeWidget({
       escapeHTML,
       transformItems,
@@ -300,4 +297,12 @@ export default (function infiniteHits<
     }),
     $$widgetType: 'ais.infiniteHits',
   };
+
+  // explicitly cast this type to have a small type output.
+  return widget as Widget<
+    InfiniteHitsWidgetDescription & {
+      $$widgetType: 'ais.infiniteHits';
+      widgetParams: InfiniteHitsConnectorParams<THit>;
+    }
+  >;
 } satisfies InfiniteHitsWidget);

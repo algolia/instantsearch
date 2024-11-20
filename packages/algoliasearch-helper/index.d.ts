@@ -324,7 +324,10 @@ declare namespace algoliasearchHelper {
     ): this;
     on(
       event: 'result',
-      cb: (res: { results: SearchResults; state: SearchParameters }) => void
+      cb: (res: {
+        results: SearchResults | null;
+        state: SearchParameters;
+      }) => void
     ): this;
     on(
       event: 'recommend:result',
