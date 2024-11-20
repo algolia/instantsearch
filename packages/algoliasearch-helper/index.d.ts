@@ -453,12 +453,6 @@ declare namespace algoliasearchHelper {
      */
     index?: string;
     /**
-     * Targeted compositionID.
-     * This parameter is only expected (and mandatory) when targeting the Composition API.
-     * It will be ignored when using the  Search API.
-     */
-    compositionID?: string;
-    /**
      * This attribute contains the list of all the disjunctive facets
      * used. This list will be added to requested facets in the
      * [facets attribute](https://www.algolia.com/doc/rest-api/search#param-facets) sent to algolia.
