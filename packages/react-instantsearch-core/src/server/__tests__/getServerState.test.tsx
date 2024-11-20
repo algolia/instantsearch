@@ -8,6 +8,7 @@ import {
   createAlgoliaSearchClient,
   createSingleSearchResponse,
   defaultRenderingContent,
+  createSingleRecommendResponse,
 } from '@instantsearch/mocks';
 import React, { version as ReactVersion } from 'react';
 import { renderToString } from 'react-dom/server';
@@ -509,8 +510,14 @@ describe('getServerState', () => {
           )
         )
       ) as MockSearchClient['search'],
-      getRecommendations: jest.fn().mockResolvedValue({
-        results: [createSingleSearchResponse({ hits: [{ objectID: '3' }] })],
+      getRecommendations: jest.fn(() => {
+        return Promise.resolve({
+          results: [
+            createSingleRecommendResponse({
+              hits: [{ objectID: '3', _score: 1 }],
+            }),
+          ],
+        });
       }),
     });
     const { App } = createTestEnvironment({ searchClient });

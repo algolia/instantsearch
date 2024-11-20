@@ -9,7 +9,6 @@ import { component } from '../../lib/suit';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
-  find,
 } from '../../lib/utils';
 
 import type {
@@ -36,7 +35,7 @@ const renderer =
     if (isFirstRendering) return;
 
     const { value: currentValue } =
-      find(items, ({ isRefined }) => isRefined) || {};
+      items.find(({ isRefined }) => isRefined) || {};
 
     render(
       <div className={cssClasses.root}>
