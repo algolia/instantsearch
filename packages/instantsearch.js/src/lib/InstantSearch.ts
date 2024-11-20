@@ -355,6 +355,7 @@ See documentation: ${createDocumentationLink({
     this.mainHelper = null;
     this.mainIndex = index({
       // we use an index widget to render compositions
+      // this only works because there's only one composition index allow for now
       indexName: this.compositionID || this.indexName,
     });
     this.onStateChange = onStateChange;
