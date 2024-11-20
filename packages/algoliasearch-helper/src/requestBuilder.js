@@ -133,7 +133,7 @@ var requestBuilder = {
   _getCompositionQueries: function getQueries(state) {
     return [
       {
-        compositionID: state.compositionID,
+        compositionID: state.index,
         requestBody: {
           params: requestBuilder._getCompositionHitsSearchParams(state),
         },
@@ -217,7 +217,7 @@ var requestBuilder = {
     delete params.highlightPreTag;
     delete params.highlightPostTag;
     // not a valid search parameter, it is handled in _getCompositionQueries
-    delete params.compositionID;
+    delete params.index;
 
     return sortObject(merge({}, params, additionalParams));
   },

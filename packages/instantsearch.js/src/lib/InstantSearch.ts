@@ -576,15 +576,9 @@ See documentation: ${createDocumentationLink({
     // we need to respect this helper as a way to keep all listeners correct.
     const mainHelper =
       this.mainHelper ||
-      algoliasearchHelper(
-        this.client,
-        this.indexName,
-        this.compositionID ? { compositionID: this.compositionID } : undefined,
-        {
-          persistHierarchicalRootCount:
-            this.future.persistHierarchicalRootCount,
-        }
-      );
+      algoliasearchHelper(this.client, this.indexName, undefined, {
+        persistHierarchicalRootCount: this.future.persistHierarchicalRootCount,
+      });
 
     mainHelper.search = () => {
       this.status = 'loading';
