@@ -937,7 +937,7 @@ describe('insights', () => {
             createInsightsMiddleware({ insightsClient })
           );
 
-          expect(getUserToken()).not.toEqual('abc');
+          expect(getUserToken()).toEqual(expect.stringMatching(/^anonymous-/));
         });
 
         it('does not use `authenticatedUserToken` as the `userToken` when both are defined', () => {
@@ -982,7 +982,7 @@ describe('insights', () => {
             })
           );
 
-          expect(getUserToken()).not.toEqual('abc');
+          expect(getUserToken()).toEqual(expect.stringMatching(/^anonymous-/));
         });
 
         it('does not use `authenticatedUserToken` as the `userToken` when both are defined', () => {
@@ -1015,7 +1015,7 @@ describe('insights', () => {
 
           await wait(0);
 
-          expect(getUserToken()).not.toEqual('abc');
+          expect(getUserToken()).toEqual(expect.stringMatching(/^anonymous-/));
         });
 
         it('does not use `authenticatedUserToken` as the `userToken` when both are defined', async () => {
@@ -1053,7 +1053,7 @@ describe('insights', () => {
           );
           libraryLoadedAndProcessQueue();
 
-          expect(getUserToken()).not.toEqual('abc');
+          expect(getUserToken()).toEqual(expect.stringMatching(/^anonymous-/));
         });
 
         it('does not use `authenticatedUserToken` as the `userToken` when both are defined', () => {
