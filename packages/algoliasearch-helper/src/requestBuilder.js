@@ -127,14 +127,13 @@ var requestBuilder = {
    * Get all the queries to send to the client, those queries can used directly
    * with the Algolia client.
    * @private
-   * @param  {string} compositionID The objectID of the composition
    * @param  {SearchParameters} state The state from which to get the queries
    * @return {object[]} The queries
    */
-  _getCompositionQueries: function getQueries(compositionID, state) {
+  _getCompositionQueries: function getQueries(state) {
     return [
       {
-        compositionID: compositionID,
+        compositionID: state.compositionID,
         requestBody: {
           params: requestBuilder._getCompositionHitsSearchParams(state),
         },
@@ -217,6 +216,8 @@ var requestBuilder = {
 
     delete params.highlightPreTag;
     delete params.highlightPostTag;
+    // not a valid search parameter, it is handled in _getCompositionQueries
+    delete params.compositionID;
 
     return sortObject(merge({}, params, additionalParams));
   },

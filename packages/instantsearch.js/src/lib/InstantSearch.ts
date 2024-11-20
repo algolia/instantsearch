@@ -578,8 +578,8 @@ See documentation: ${createDocumentationLink({
       this.mainHelper ||
       algoliasearchHelper(
         this.client,
-        { index: this.indexName, compositionID: this.compositionID },
-        undefined,
+        this.indexName,
+        this.compositionID ? { compositionID: this.compositionID } : undefined,
         {
           persistHierarchicalRootCount:
             this.future.persistHierarchicalRootCount,
@@ -628,10 +628,7 @@ See documentation: ${createDocumentationLink({
         const mainIndexHelper = this.mainIndex.getHelper();
         const searchFunctionHelper = algoliasearchHelper(
           fakeClient,
-          {
-            index: mainIndexHelper!.state.index,
-            compositionID: this.compositionID,
-          },
+          mainIndexHelper!.state.index,
           mainIndexHelper!.state
         );
         searchFunctionHelper.once('search', ({ state }) => {
