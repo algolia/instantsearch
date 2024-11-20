@@ -729,3 +729,24 @@ test('getFacetValues(hierarchical) when current state is different to constructo
 
   expect(facetValues).toEqual(expected);
 });
+
+test.only('getFacetValues(facetName) prefers the "main" facet result', function () {
+  var data = require('./getFacetValues/disjunctive-non-exhaustive.json');
+  var searchParams = new SearchParameters(data.state);
+  var result = new SearchResults(searchParams, data.content.results);
+
+  var facetValues = result.getFacetValues('brand');
+
+  var expected = [
+    { count: 1000, isRefined: true, name: 'Apple', escapedValue: 'Apple' },
+    {
+      count: 551,
+      isRefined: false,
+      name: 'Insignia™',
+      escapedValue: 'Insignia™',
+    },
+    { count: 511, isRefined: false, name: 'Samsung', escapedValue: 'Samsung' },
+  ];
+
+  expect(facetValues).toEqual(expected);
+});

@@ -529,7 +529,7 @@ function SearchResults(state, results, options) {
 
         self.disjunctiveFacets[position] = {
           name: dfacet,
-          data: defaultsPure({}, facetResults, dataFromMainRequest),
+          data: defaultsPure(dataFromMainRequest, facetResults),
           exhaustive: result.exhaustiveFacetsCount,
         };
         assignFacetStats(
@@ -927,7 +927,7 @@ SearchResults.prototype.getFacetValues = function (attribute, opts) {
     return undefined;
   }
 
-  var options = defaultsPure({}, opts, {
+  var options = defaultsPure(opts, {
     sortBy: SearchResults.DEFAULT_SORT,
     // if no sortBy is given, attempt to sort based on facetOrdering
     // if it is given, we still allow to sort via facet ordering first

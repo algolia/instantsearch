@@ -1213,7 +1213,6 @@ SearchParameters.prototype = {
 
     return this.setQueryParameters({
       hierarchicalFacetsRefinements: defaultsPure(
-        {},
         mod,
         this.hierarchicalFacetsRefinements
       ),
@@ -1241,7 +1240,6 @@ SearchParameters.prototype = {
     mod[facet] = [path];
     return this.setQueryParameters({
       hierarchicalFacetsRefinements: defaultsPure(
-        {},
         mod,
         this.hierarchicalFacetsRefinements
       ),
@@ -1262,7 +1260,6 @@ SearchParameters.prototype = {
     mod[facet] = [];
     return this.setQueryParameters({
       hierarchicalFacetsRefinements: defaultsPure(
-        {},
         mod,
         this.hierarchicalFacetsRefinements
       ),
