@@ -454,8 +454,8 @@ declare namespace algoliasearchHelper {
     index?: string;
     /**
      * Targeted compositionID.
-     * This parameter is only expected (and mandatory) when initializing instantSearch with a compositionID.
-     * It will be stripped from the Search Parameters send to the Composition API as it leaves in the URL.
+     * This parameter is only expected (and mandatory) when targeting the Composition API.
+     * It will be ignored when using the  Search API.
      */
     compositionID?: string;
     /**
