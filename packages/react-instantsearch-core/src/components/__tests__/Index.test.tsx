@@ -17,7 +17,7 @@ import { Index } from '../Index';
 import { InstantSearch } from '../InstantSearch';
 import { InstantSearchSSRProvider } from '../InstantSearchSSRProvider';
 
-import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
+import type { IndexWidget } from 'instantsearch-core';
 
 describe('Index', () => {
   test('throws when used outside of <InstantSearch>', () => {
