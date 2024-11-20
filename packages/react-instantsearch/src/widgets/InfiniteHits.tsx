@@ -51,7 +51,7 @@ export function InfiniteHits<THit extends BaseHit = BaseHit>({
   ...props
 }: InfiniteHitsProps<THit>) {
   const {
-    hits,
+    items,
     banner,
     sendEvent,
     showPrevious,
@@ -68,7 +68,7 @@ export function InfiniteHits<THit extends BaseHit = BaseHit>({
   ) as InfiniteHitsUiComponentProps<THit>['bannerComponent'];
 
   const uiProps: UiProps<THit> = {
-    hits,
+    hits: items,
     banner,
     bannerComponent,
     sendEvent,

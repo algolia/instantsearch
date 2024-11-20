@@ -11,11 +11,6 @@
       "types": "./dist/es/index.d.ts",
       "require": "./dist/cjs/index.js",
       "default": "./dist/es/index.js"
-    },
-    "./types": {
-      "types": "./types/index.d.ts",
-      "require": "./types/index.cjs",
-      "default": "./types/index.mjs"
     }
   },
   "sideEffects": false,
@@ -37,7 +32,6 @@
     "search"
   ],
   "files": [
-    "README.md",
     "dist"
   ],
   "scripts": {
@@ -46,8 +40,9 @@
     "build:es:base": "BABEL_ENV=es,disableHoisting babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --ignore '**/__tests__/**/*','**/__mocks__/**/*'",
     "build:es": "yarn build:es:base --quiet",
     "build:cjs": "BABEL_ENV=cjs,disableHoisting babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/cjs --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet && ../../scripts/prepare-cjs.sh",
-    "build:types": "tsc -p ./tsconfig.declaration.json --outDir ./dist/es",
+    "build:types": "tsc -p ./tsconfig.declaration.json",
     "version": "./scripts/version.cjs",
+    "prepare": "yarn build",
     "watch:es": "yarn --silent build:es:base --watch"
   },
   "dependencies": {
