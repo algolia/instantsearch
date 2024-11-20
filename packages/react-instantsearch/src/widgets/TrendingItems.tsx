@@ -2,11 +2,11 @@ import { createTrendingItemsComponent } from 'instantsearch-ui-components';
 import React, { createElement, Fragment } from 'react';
 import { useInstantSearch, useTrendingItems } from 'react-instantsearch-core';
 
+import type { AlgoliaHit, BaseHit } from 'instantsearch-core';
 import type {
   TrendingItemsProps as TrendingItemsUiComponentProps,
   Pragma,
 } from 'instantsearch-ui-components';
-import type { AlgoliaHit, BaseHit } from 'instantsearch.js';
 import type { UseTrendingItemsProps } from 'react-instantsearch-core';
 
 type UiProps<TItem extends BaseHit> = Pick<

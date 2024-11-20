@@ -1,8 +1,9 @@
 import {
   getInitialResults,
   waitForResults,
-} from 'instantsearch.js/es/lib/server';
-import { walkIndex, resetWidgetId } from 'instantsearch.js/es/lib/utils';
+  walkIndex,
+  resetWidgetId,
+} from 'instantsearch-core';
 import React from 'react';
 
 import { InstantSearchServerContext } from '../components/InstantSearchServerContext';
@@ -10,7 +11,7 @@ import { InstantSearchSSRProvider } from '../components/InstantSearchSSRProvider
 
 import type { InstantSearchServerContextApi } from '../components/InstantSearchServerContext';
 import type { InstantSearchServerState } from '../components/InstantSearchSSRProvider';
-import type { InstantSearch, UiState } from 'instantsearch.js';
+import type { InstantSearch, UiState } from 'instantsearch-core';
 import type { ReactNode } from 'react';
 
 type SearchRef = { current: InstantSearch | undefined };
