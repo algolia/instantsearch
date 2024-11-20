@@ -730,7 +730,7 @@ test('getFacetValues(hierarchical) when current state is different to constructo
   expect(facetValues).toEqual(expected);
 });
 
-test.only('getFacetValues(facetName) prefers the "main" facet result', function () {
+test('getFacetValues(facetName) prefers the "main" facet result', function () {
   var data = require('./getFacetValues/disjunctive-non-exhaustive.json');
   var searchParams = new SearchParameters(data.state);
   var result = new SearchResults(searchParams, data.content.results);
