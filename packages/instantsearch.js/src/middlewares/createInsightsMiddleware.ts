@@ -226,7 +226,10 @@ export function createInsightsMiddleware<
           instantSearchInstance.scheduleSearch();
         }
 
-        const setUserTokenToSearch = (userToken?: string | number) => {
+        const setUserTokenToSearch = (
+          userToken?: string | number,
+          immediate = false
+        ) => {
           const normalizedUserToken = normalizeUserToken(userToken);
 
           if (!normalizedUserToken) {
@@ -247,11 +250,16 @@ export function createInsightsMiddleware<
             }
           }
 
-          applyToken();
+          // Delay the token application to the next render cycle
+          if (!immediate) {
+            setTimeout(applyToken, 0);
+          } else {
+            applyToken();
+          }
         };
 
         function setUserToken(token: string | number) {
-          setUserTokenToSearch(token);
+          setUserTokenToSearch(token, true);
           insightsClient('setUserToken', token);
         }
 
@@ -308,7 +316,7 @@ export function createInsightsMiddleware<
         // This updates userToken which is set explicitly by `aa('setUserToken', userToken)`
         insightsClient(
           'onUserTokenChange',
-          (token) => setUserTokenToSearch(token),
+          (token) => setUserTokenToSearch(token, true),
           {
             immediate: true,
           }
