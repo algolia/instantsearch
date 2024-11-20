@@ -19,18 +19,17 @@ import { connectSearchBox, connectPagination } from '../../connectors';
 import { createInsightsMiddleware } from '../../middlewares';
 import { index } from '../../widgets';
 import InstantSearch from '../InstantSearch';
-import { noop, warning } from '../utils';
 import version from '../version';
 
 import type {
+  UiState,
+  Widget,
+  IndexWidget,
   PaginationConnectorParams,
   PaginationWidgetDescription,
-} from '../../connectors/pagination/connectPagination';
-import type {
   SearchBoxWidgetDescription,
   SearchBoxConnectorParams,
-} from '../../connectors/search-box/connectSearchBox';
-import type { UiState, Widget, IndexWidget } from '../../types';
+} from '../../types';
 import type { RefObject } from 'preact';
 
 type SearchBoxWidgetInstance = Widget<
@@ -76,10 +75,6 @@ beforeEach(() => {
 });
 
 describe('Usage', () => {
-  beforeEach(() => {
-    warning.cache = {};
-  });
-
   it('throws without searchClient', () => {
     expect(() => {
       // @ts-expect-error
@@ -114,7 +109,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
         search.start();
         await wait(0);
       }).toWarnDev(
-        '[InstantSearch.js]: No indexName provided, nor an explicit index widget in the widgets tree. This is required to be able to display results.'
+        '[InstantSearch]: No indexName provided, nor an explicit index widget in the widgets tree. This is required to be able to display results.'
       );
     });
 
@@ -129,7 +124,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
         search.start();
         await wait(0);
       }).not.toWarnDev(
-        '[InstantSearch.js]: No indexName provided, nor an explicit index widget in the widgets tree. This is required to be able to display results.'
+        '[InstantSearch]: No indexName provided, nor an explicit index widget in the widgets tree. This is required to be able to display results.'
       );
     });
 
@@ -142,7 +137,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
         search.start();
         await wait(0);
       }).not.toWarnDev(
-        '[InstantSearch.js]: No indexName provided, nor an explicit index widget in the widgets tree. This is required to be able to display results.'
+        '[InstantSearch]: No indexName provided, nor an explicit index widget in the widgets tree. This is required to be able to display results.'
       );
     });
 
@@ -156,7 +151,7 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
         search.start();
         await wait(0);
       }).not.toWarnDev(
-        '[InstantSearch.js]: No indexName provided, nor an explicit index widget in the widgets tree. This is required to be able to display results.'
+        '[InstantSearch]: No indexName provided, nor an explicit index widget in the widgets tree. This is required to be able to display results.'
       );
     });
   });
@@ -330,7 +325,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
         insightsClient: () => {},
       });
     }).toWarnDev(
-      `[InstantSearch.js]: \`insightsClient\` property has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by the \`insights\` middleware.
+      `[InstantSearch]: \`insightsClient\` property has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by the \`insights\` middleware.
 
 For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/`
     );
@@ -363,7 +358,10 @@ describe('InstantSearch', () => {
       searchClient,
     });
 
-    expect(searchClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
+    expect(searchClient.addAlgoliaAgent).toHaveBeenCalledTimes(2);
+    expect(searchClient.addAlgoliaAgent).toHaveBeenCalledWith(
+      expect.stringMatching(/^instantsearch-core \(.*\)$/)
+    );
     expect(searchClient.addAlgoliaAgent).toHaveBeenCalledWith(
       `instantsearch.js (${version})`
     );
@@ -380,7 +378,6 @@ describe('InstantSearch', () => {
   });
 
   it('warns deprecated usage of `searchParameters`', () => {
-    warning.cache = {};
     const warn = jest.spyOn(global.console, 'warn');
     warn.mockImplementation(() => {});
 
@@ -398,7 +395,7 @@ describe('InstantSearch', () => {
         },
       });
     })
-      .toWarnDev(`[InstantSearch.js]: The \`searchParameters\` option is deprecated and will not be supported in InstantSearch.js 4.x.
+      .toWarnDev(`[InstantSearch]: The \`searchParameters\` option is deprecated and will not be supported in InstantSearch.js 4.x.
 
 You can replace it with the \`configure\` widget:
 
@@ -730,10 +727,6 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
 });
 
 describe('addWidget(s)', () => {
-  beforeEach(() => {
-    warning.cache = {};
-  });
-
   it('forwards the call of `addWidget` to the main index', () => {
     const warn = jest.spyOn(global.console, 'warn');
     warn.mockImplementation(() => {});
@@ -747,7 +740,7 @@ describe('addWidget(s)', () => {
     expect(search.mainIndex.getWidgets()).toHaveLength(0);
 
     expect(() => search.addWidget(createWidget())).toWarnDev(
-      '[InstantSearch.js]: addWidget will still be supported in 4.x releases, but not further. It is replaced by `addWidgets([widget])`'
+      '[InstantSearch]: addWidget will still be supported in 4.x releases, but not further. It is replaced by `addWidgets([widget])`'
     );
 
     expect(search.mainIndex.getWidgets()).toHaveLength(1);
@@ -782,7 +775,7 @@ describe('addWidget(s)', () => {
     expect(() => {
       result = search.addWidget(createWidget());
     }).toWarnDev(
-      '[InstantSearch.js]: addWidget will still be supported in 4.x releases, but not further. It is replaced by `addWidgets([widget])`'
+      '[InstantSearch]: addWidget will still be supported in 4.x releases, but not further. It is replaced by `addWidgets([widget])`'
     );
 
     expect(result).toBe(search);
@@ -825,10 +818,6 @@ describe('addWidget(s)', () => {
 });
 
 describe('removeWidget(s)', () => {
-  beforeEach(() => {
-    warning.cache = {};
-  });
-
   it('forwards the call to `removeWidget` to the main index', () => {
     const warn = jest.spyOn(global.console, 'warn');
     warn.mockImplementation(() => {});
@@ -846,7 +835,7 @@ describe('removeWidget(s)', () => {
     expect(search.mainIndex.getWidgets()).toHaveLength(1);
 
     expect(() => search.removeWidget(widget)).toWarnDev(
-      '[InstantSearch.js]: removeWidget will still be supported in 4.x releases, but not further. It is replaced by `removeWidgets([widget])`'
+      '[InstantSearch]: removeWidget will still be supported in 4.x releases, but not further. It is replaced by `removeWidgets([widget])`'
     );
 
     expect(search.mainIndex.getWidgets()).toHaveLength(0);
@@ -883,7 +872,7 @@ describe('removeWidget(s)', () => {
     const widget = createWidget();
 
     expect(() => search.addWidget(widget)).toWarnDev(
-      '[InstantSearch.js]: addWidget will still be supported in 4.x releases, but not further. It is replaced by `addWidgets([widget])`'
+      '[InstantSearch]: addWidget will still be supported in 4.x releases, but not further. It is replaced by `addWidgets([widget])`'
     );
 
     let result: InstantSearch | null = null;
@@ -891,7 +880,7 @@ describe('removeWidget(s)', () => {
     expect(() => {
       result = search.removeWidget(widget);
     }).toWarnDev(
-      '[InstantSearch.js]: removeWidget will still be supported in 4.x releases, but not further. It is replaced by `removeWidgets([widget])`'
+      '[InstantSearch]: removeWidget will still be supported in 4.x releases, but not further. It is replaced by `removeWidgets([widget])`'
     );
 
     expect(result).toBe(search);
@@ -1821,7 +1810,7 @@ describe('createURL', () => {
       },
     });
 
-    search.addWidgets([connectSearchBox(noop)({})]);
+    search.addWidgets([connectSearchBox(() => {})({})]);
     search.start();
 
     expect(search.createURL({ indexName: { query: 'Apple' } })).toBe(
@@ -1844,7 +1833,7 @@ describe('createURL', () => {
       },
     });
 
-    search.addWidgets([connectSearchBox(noop)({})]);
+    search.addWidgets([connectSearchBox(() => {})({})]);
     search.start();
     search.createURL();
 
@@ -1877,12 +1866,12 @@ describe('createURL', () => {
     });
 
     search.addWidgets([
-      connectSearchBox(noop)({}),
+      connectSearchBox(() => {})({}),
       index({ indexName: 'indexNameLvl1' }).addWidgets([
-        connectSearchBox(noop)({}),
+        connectSearchBox(() => {})({}),
         index({ indexName: 'indexNameLvl2' }).addWidgets([
-          connectSearchBox(noop)({}),
-          connectPagination(noop)({}),
+          connectSearchBox(() => {})({}),
+          connectPagination(() => {})({}),
           createWidget({
             render({ helper, createURL }) {
               createURL(helper.state.setPage(3).setQuery('Apple'));
@@ -2146,7 +2135,7 @@ describe('unuse', () => {
     };
     const middleware2 = jest.fn(() => middlewareSpy2);
 
-    search.addWidgets([connectSearchBox(noop)({})]);
+    search.addWidgets([connectSearchBox(() => {})({})]);
     search.use(middleware1, middleware2);
     search.start();
 
@@ -2180,10 +2169,6 @@ describe('unuse', () => {
 });
 
 describe('setUiState', () => {
-  beforeEach(() => {
-    warning.cache = {};
-  });
-
   test('throws if the instance has not started', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
@@ -2571,7 +2556,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
         },
       });
     })
-      .toWarnDev(`[InstantSearch.js]: The UI state for the index "indexName" is not consistent with the widgets mounted.
+      .toWarnDev(`[InstantSearch]: The UI state for the index "indexName" is not consistent with the widgets mounted.
 
 This can happen when the UI state is specified via \`initialUiState\`, \`routing\` or \`setUiState\` but that the widgets responsible for this state were not added. This results in those query parameters not being sent to the API.
 
@@ -2714,7 +2699,7 @@ describe('getUiState', () => {
 
     search.start();
 
-    (search.mainIndex.getWidgets()[0] as SearchBoxWidgetInstance)
+    (search.mainIndex.getWidgets()[0] as unknown as SearchBoxWidgetInstance)
       .getWidgetRenderState(createRenderOptions())
       .refine('test');
 
@@ -2740,11 +2725,11 @@ describe('getUiState', () => {
 
     search.start();
 
-    (search.mainIndex.getWidgets()[0] as SearchBoxWidgetInstance)
+    (search.mainIndex.getWidgets()[0] as unknown as SearchBoxWidgetInstance)
       .getWidgetRenderState(createRenderOptions())
       .refine('test');
 
-    (search.mainIndex.getWidgets()[1] as PaginationWidgetInstance)
+    (search.mainIndex.getWidgets()[1] as unknown as PaginationWidgetInstance)
       .getWidgetRenderState(createRenderOptions())
       .refine(3);
 
@@ -2776,11 +2761,11 @@ describe('getUiState', () => {
 
     search.start();
 
-    (search.mainIndex.getWidgets()[0] as SearchBoxWidgetInstance)
+    (search.mainIndex.getWidgets()[0] as unknown as SearchBoxWidgetInstance)
       .getWidgetRenderState(createRenderOptions())
       .refine('test');
 
-    (search.mainIndex.getWidgets()[1] as PaginationWidgetInstance)
+    (search.mainIndex.getWidgets()[1] as unknown as PaginationWidgetInstance)
       .getWidgetRenderState(createRenderOptions())
       .refine(3);
 
@@ -3129,7 +3114,7 @@ describe('initialUiState', () => {
       search.start();
       await wait(0);
     })
-      .toWarnDev(`[InstantSearch.js]: The UI state for the index "indexName" is not consistent with the widgets mounted.
+      .toWarnDev(`[InstantSearch]: The UI state for the index "indexName" is not consistent with the widgets mounted.
 
 This can happen when the UI state is specified via \`initialUiState\`, \`routing\` or \`setUiState\` but that the widgets responsible for this state were not added. This results in those query parameters not being sent to the API.
 

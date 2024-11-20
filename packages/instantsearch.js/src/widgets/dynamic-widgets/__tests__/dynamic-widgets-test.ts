@@ -19,7 +19,7 @@ import {
 } from '../../../../test/createWidget';
 import refinementList from '../../refinement-list/refinement-list';
 
-import type { SearchResponse } from 'instantsearch-core/types';
+import type { SearchResponse } from 'instantsearch-core';
 
 expect.addSnapshotSerializer(widgetSnapshotSerializer);
 

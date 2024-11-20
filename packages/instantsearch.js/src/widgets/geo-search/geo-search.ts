@@ -20,7 +20,7 @@ import type {
   GeoSearchWidgetDescription,
   GeoHit,
 } from '../../connectors/geo-search/connectGeoSearch';
-import type { GeoLoc, Template, WidgetFactory } from '../../types';
+import type { GeoLoc, Template, Widget, WidgetFactory } from '../../types';
 import type { HTMLMarkerArguments } from './createHTMLMarker';
 
 export type CreateMarker = (args: {
@@ -153,10 +153,10 @@ export type GeoSearchWidgetParams<THit extends GeoHit = GeoHit> = {
   googleReference: typeof window['google'];
 };
 
-export type GeoSearchWidget = WidgetFactory<
-  GeoSearchWidgetDescription & { $$widgetType: 'ais.geoSearch' },
-  GeoSearchConnectorParams,
-  GeoSearchWidgetParams
+export type GeoSearchWidget<THit extends GeoHit = GeoHit> = WidgetFactory<
+  GeoSearchWidgetDescription<THit> & { $$widgetType: 'ais.geoSearch' },
+  GeoSearchConnectorParams<THit>,
+  GeoSearchWidgetParams<THit>
 >;
 
 /**
@@ -287,7 +287,7 @@ export default (function geoSearch<THit extends GeoHit = GeoHit>(
     render(null, containerNode)
   );
 
-  return {
+  const widget = {
     ...makeWidget<THit>({
       ...otherWidgetParams,
       // @TODO: this type doesn't preserve the generic correctly,
@@ -307,4 +307,12 @@ export default (function geoSearch<THit extends GeoHit = GeoHit>(
     }),
     $$widgetType: 'ais.geoSearch',
   };
+
+  // explicitly cast this type to have a small type output.
+  return widget as Widget<
+    GeoSearchWidgetDescription & {
+      $$widgetType: 'ais.geoSearch';
+      widgetParams: GeoSearchConnectorParams<THit>;
+    }
+  >;
 } satisfies GeoSearchWidget);

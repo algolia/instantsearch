@@ -1,7 +1,7 @@
 /** @jsx h */
 
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import InstantSearch from 'instantsearch.js/es/lib/InstantSearch';
+import { instantsearch } from 'instantsearch-core';
 
 import { fetchConfiguration } from './get-configuration';
 import { getSettings } from './get-information';
@@ -9,7 +9,7 @@ import { configToIndex, injectStyles } from './render';
 import { error } from './util';
 
 import type { Settings } from './get-information';
-import type { IndexWidget } from 'instantsearch.js';
+import type { IndexWidget, InstantSearch } from 'instantsearch-core';
 
 declare global {
   interface Window {
@@ -22,7 +22,7 @@ export function setupInstantSearch() {
     const settings = getSettings();
 
     const searchClient = algoliasearch(settings.appId, settings.apiKey);
-    const search = new InstantSearch({
+    const search = instantsearch({
       searchClient,
     });
     window.__search = search;

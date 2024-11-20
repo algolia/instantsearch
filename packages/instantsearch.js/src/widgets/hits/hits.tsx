@@ -9,7 +9,6 @@ import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
-  warning,
 } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
@@ -27,6 +26,7 @@ import type {
   Renderer,
   BaseHit,
   TemplateWithSendEvent,
+  Widget,
 } from '../../types';
 import type { SearchResults } from 'algoliasearch-helper';
 import type {
@@ -77,7 +77,6 @@ const renderer =
     // once flavour specificities are erased
     const itemComponent: HitsUiComponentProps<Hit>['itemComponent'] = ({
       hit,
-      index,
       ...rootProps
     }) => (
       <TemplateComponent
@@ -87,16 +86,7 @@ const renderer =
         rootProps={{
           ...rootProps,
         }}
-        data={{
-          ...hit,
-          get __hitIndex() {
-            warning(
-              false,
-              'The `__hitIndex` property is deprecated. Use the absolute `__position` instead.'
-            );
-            return index;
-          },
-        }}
+        data={hit}
         sendEvent={sendEvent}
       />
     );
@@ -142,12 +132,7 @@ export type HitsTemplates<THit extends NonNullable<object> = BaseHit> =
      *
      * @default ''
      */
-    item: TemplateWithSendEvent<
-      Hit<THit> & {
-        /** @deprecated the index in the hits array, use __position instead, which is the absolute position */
-        __hitIndex: number;
-      }
-    >;
+    item: TemplateWithSendEvent<Hit<THit>>;
 
     /**
      * Template to use for the banner.
@@ -175,11 +160,12 @@ export type HitsWidgetParams<THit extends NonNullable<object> = BaseHit> = {
   cssClasses?: HitsCSSClasses;
 };
 
-export type HitsWidget = WidgetFactory<
-  HitsWidgetDescription & { $$widgetType: 'ais.hits' },
-  HitsConnectorParams,
-  HitsWidgetParams
->;
+export type HitsWidget<THit extends NonNullable<object> = BaseHit> =
+  WidgetFactory<
+    HitsWidgetDescription<THit> & { $$widgetType: 'ais.hits' },
+    HitsConnectorParams<THit>,
+    HitsWidgetParams<THit>
+  >;
 
 export default (function hits<THit extends NonNullable<object> = BaseHit>(
   widgetParams: HitsWidgetParams<THit> & HitsConnectorParams<THit>
@@ -209,11 +195,19 @@ export default (function hits<THit extends NonNullable<object> = BaseHit>(
     render(null, containerNode)
   );
 
-  return {
+  const widget = {
     ...makeWidget({
       escapeHTML,
       transformItems,
     }),
     $$widgetType: 'ais.hits',
   };
+
+  // explicitly cast this type to have a small type output.
+  return widget as Widget<
+    HitsWidgetDescription & {
+      $$widgetType: 'ais.hits';
+      widgetParams: HitsConnectorParams<THit>;
+    }
+  >;
 } satisfies HitsWidget);
