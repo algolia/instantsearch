@@ -15,7 +15,11 @@ import {
 
 import { version } from '../../../package.json';
 import { mount, nextTick } from '../../../test/utils';
-import { isVue3, version as vueVersion } from '../../util/vue-compat';
+import {
+  isVue3,
+  renderCompat,
+  version as vueVersion,
+} from '../../util/vue-compat';
 import { warn } from '../../util/warn';
 import { AisSearchBox } from '../../widgets';
 import InstantSearch from '../InstantSearch';
@@ -165,7 +169,7 @@ it('Allows a change in `index-name`', async () => {
       indexName: 'before',
     },
     slots: {
-      default: '<ais-search-box></ais-search-box>',
+      default: renderCompat((h) => h(AisSearchBox)),
     },
     components: {
       AisSearchBox,
@@ -198,7 +202,7 @@ it('Allows a change in `search-client`', async () => {
     },
     components: { AisSearchBox },
     slots: {
-      default: '<ais-search-box></ais-search-box>',
+      default: renderCompat((h) => h(AisSearchBox)),
     },
   });
 
