@@ -169,7 +169,7 @@ it('Allows a change in `index-name`', async () => {
       indexName: 'before',
     },
     slots: {
-      default: renderCompat((h) => h(AisSearchBox)),
+      default: { render: renderCompat((h) => h(AisSearchBox)) },
     },
     components: {
       AisSearchBox,
@@ -202,7 +202,7 @@ it('Allows a change in `search-client`', async () => {
     },
     components: { AisSearchBox },
     slots: {
-      default: renderCompat((h) => h(AisSearchBox)),
+      default: { render: renderCompat((h) => h(AisSearchBox)) },
     },
   });
 
