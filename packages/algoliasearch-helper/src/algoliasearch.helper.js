@@ -1632,11 +1632,6 @@ AlgoliaSearchHelper.prototype._runComposition = function () {
 
   var query = queries[0];
 
-  // eslint-disable-next-line no-warning-comments
-  // TODO: delete once allowed in the Composition API
-  delete query.requestBody.params.maxValuesPerFacet;
-  delete query.requestBody.params.facets;
-
   try {
     this.client
       .search(query)
