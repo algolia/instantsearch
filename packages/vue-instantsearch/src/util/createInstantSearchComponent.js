@@ -31,12 +31,11 @@ export const createInstantSearchComponent = (component) =>
           }
         },
         indexName(indexName) {
-          if (this.instantSearchInstance.helper) {
-            this.instantSearchInstance.helper
-              .setIndex(indexName || '')
-              .search();
-          }
-          if (this.instantSearchInstance.mainHelper) {
+          if (
+            this.instantSearchInstance.helper &&
+            this.instantSearchInstance.mainHelper
+          ) {
+            this.instantSearchInstance.helper.setIndex(indexName || '');
             this.instantSearchInstance.mainHelper
               .setIndex(indexName || '')
               .search();
