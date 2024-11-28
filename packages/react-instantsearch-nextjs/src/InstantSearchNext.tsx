@@ -47,6 +47,8 @@ export function InstantSearchNext<
   ...instantSearchProps
 }: InstantSearchNextProps<TUiState, TRouteState>) {
   const isMounting = useRef(true);
+  const isServer = typeof window === 'undefined';
+
   useEffect(() => {
     isMounting.current = false;
     return () => {
@@ -77,9 +79,9 @@ This message will only be displayed in development mode.`
     <InstantSearchRSCContext.Provider value={promiseRef}>
       <InstantSearchSSRProvider initialResults={initialResults}>
         <InstantSearch {...instantSearchProps} routing={routing}>
-          {!initialResults && <InitializePromise nonce={nonce} />}
+          {isServer && <InitializePromise nonce={nonce} />}
           {children}
-          {!initialResults && <TriggerSearch />}
+          {isServer && <TriggerSearch />}
         </InstantSearch>
       </InstantSearchSSRProvider>
     </InstantSearchRSCContext.Provider>
