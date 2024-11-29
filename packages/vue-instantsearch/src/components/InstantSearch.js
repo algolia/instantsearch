@@ -1,4 +1,4 @@
-import instantsearch from 'instantsearch.js/es';
+import { instantsearch } from 'instantsearch-core';
 
 import { createInstantSearchComponent } from '../util/createInstantSearchComponent';
 import { renderCompat, getDefaultSlot } from '../util/vue-compat';

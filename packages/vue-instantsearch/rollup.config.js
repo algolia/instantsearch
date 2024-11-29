@@ -82,6 +82,7 @@ function outputs(vueVersion) {
     [
       'algoliasearch-helper',
       'instantsearch.js',
+      'instantsearch-core',
       'instantsearch-ui-components',
       'vue',
       'mitt',
