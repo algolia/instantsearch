@@ -115,7 +115,7 @@
 </template>
 
 <script>
-import { connectHits } from 'instantsearch.js/es/connectors';
+import { connectHits } from 'instantsearch-core';
 import { createWidgetMixin } from 'vue-instantsearch';
 
 export default {

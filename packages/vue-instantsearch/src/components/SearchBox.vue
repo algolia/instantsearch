@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { connectSearchBox } from 'instantsearch.js/es/connectors';
+import { connectSearchBox } from 'instantsearch-core';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';

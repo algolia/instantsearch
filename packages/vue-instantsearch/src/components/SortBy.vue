@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { connectSortBy } from 'instantsearch.js/es/connectors';
+import { connectSortBy } from 'instantsearch-core';
 
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';

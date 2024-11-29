@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { connectClearRefinements } from 'instantsearch.js/es/connectors';
+import { connectClearRefinements } from 'instantsearch-core';
 
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
