@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { connectStats } from 'instantsearch.js/es/connectors';
+import { connectStats } from 'instantsearch-core';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
