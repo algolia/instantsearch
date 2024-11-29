@@ -1,6 +1,7 @@
 import { warning, noop, safelyRunOnBrowser, createUUID } from '../lib/public';
 import { getAppIdAndApiKey, getInsightsAnonymousUserToken } from '../lib/utils';
 
+import type { InstantSearch } from '../instantsearch';
 import type {
   InsightsClient,
   InsightsMethod,
@@ -201,10 +202,7 @@ export function createInsightsMiddleware<
           });
         }
 
-        initialParameters = {
-          userToken: (helper.state as PlainSearchParameters).userToken,
-          clickAnalytics: helper.state.clickAnalytics,
-        };
+        initialParameters = getInitialParameters(instantSearchInstance);
 
         // We don't want to force clickAnalytics when the insights is enabled from the search response.
         // This means we don't enable insights for indices that don't opt in
@@ -497,6 +495,23 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
         }
       },
     };
+  };
+}
+
+function getInitialParameters(
+  instantSearchInstance: InstantSearch
+): PlainSearchParameters {
+  // in SSR, the initial state we use in this domain is set on the main index
+  const stateFromInitialResults =
+    instantSearchInstance._initialResults?.[instantSearchInstance.indexName]
+      ?.state || {};
+
+  const stateFromHelper = instantSearchInstance.mainHelper!.state;
+
+  return {
+    userToken: stateFromInitialResults.userToken || stateFromHelper.userToken,
+    clickAnalytics:
+      stateFromInitialResults.clickAnalytics || stateFromHelper.clickAnalytics,
   };
 }
 

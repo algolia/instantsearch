@@ -92,7 +92,11 @@ export function getInitialResults(
         // We convert the Helper state to a plain object to pass parsable data
         // structures from server to client.
         ...(searchResults && {
-          state: { ...searchResults._state },
+          state: {
+            ...searchResults._state,
+            clickAnalytics: requestParams?.[0]?.clickAnalytics,
+            userToken: requestParams?.[0]?.userToken,
+          },
           results: searchResults._rawResults,
         }),
         ...(recommendResults && {
