@@ -64,7 +64,7 @@ shell.sed(
   '-i',
   /import { createMemoryCache } from '@algolia\/client-common';/,
   "import { createInMemoryCache as createMemoryCache } from '@algolia/cache-in-memory';",
-  ...shell.ls('examples/*/*/{src,pages,app}/*.{js,ts,tsx,vue}')
+  ...shell.ls('examples/*/*/{src,lib,pages,app}/*.{js,ts,tsx,vue}')
 );
 
 // replace dependency in examples
