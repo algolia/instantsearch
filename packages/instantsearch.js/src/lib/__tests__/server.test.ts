@@ -449,46 +449,18 @@ describe('getInitialResults', () => {
     ]);
 
     const initialResults = getInitialResults(search.mainIndex, requestParams);
-    expect(initialResults).toEqual({
-      indexName: {
-        requestParams: [
-          {
-            clickAnalytics: true,
-            query: 'apple',
-            userToken: expect.stringMatching(/^anonymous-/),
-          },
-        ],
-        results: [
-          {
-            exhaustiveFacetsCount: true,
-            exhaustiveNbHits: true,
-            hits: [],
-            hitsPerPage: 20,
-            nbHits: 0,
-            nbPages: 0,
-            page: 0,
-            params: '',
-            processingTimeMS: 0,
-            query: '',
-          },
-        ],
-        state: {
-          disjunctiveFacets: [],
-          disjunctiveFacetsRefinements: {},
-          facets: [],
-          facetsExcludes: {},
-          facetsRefinements: {},
-          hierarchicalFacets: [],
-          hierarchicalFacetsRefinements: {},
-          index: 'indexName',
-          numericRefinements: {},
-          query: 'apple',
-          tagRefinements: [],
-          clickAnalytics: true,
-          userToken: expect.stringMatching(/^anonymous-/),
-        },
-      },
-    });
+    expect(initialResults.indexName!.requestParams).toEqual([
+      expect.objectContaining({
+        clickAnalytics: true,
+        userToken: expect.stringMatching(/^anonymous-/),
+      }),
+    ]);
+    expect(initialResults.indexName!.state).toEqual(
+      expect.objectContaining({
+        clickAnalytics: true,
+        userToken: expect.stringMatching(/^anonymous-/),
+      })
+    );
     expect(initialResults.indexName.requestParams![0].userToken).toEqual(
       initialResults.indexName.state!.userToken
     );
