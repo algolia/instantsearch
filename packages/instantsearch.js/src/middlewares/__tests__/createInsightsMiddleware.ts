@@ -925,6 +925,28 @@ describe('insights', () => {
       expect(getUserToken()).toBe('def');
     });
 
+    it('uses `userToken` from initial results', () => {
+      const { insightsClient, instantSearchInstance, getUserToken } =
+        createTestEnvironment();
+
+      instantSearchInstance._initialResults = {
+        [instantSearchInstance.indexName]: {
+          state: {
+            userToken: 'from-initial-results',
+            clickAnalytics: true,
+          },
+        },
+      };
+
+      instantSearchInstance.use(
+        createInsightsMiddleware({
+          insightsClient,
+        })
+      );
+
+      expect(getUserToken()).toEqual('from-initial-results');
+    });
+
     describe('authenticatedUserToken', () => {
       describe('before `init`', () => {
         it('uses the `authenticatedUserToken` as the `userToken` when defined', () => {

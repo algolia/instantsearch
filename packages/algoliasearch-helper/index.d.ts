@@ -1099,6 +1099,12 @@ declare namespace algoliasearchHelper {
      */
     optionalFilters?: Array<string | string[]>;
     /**
+     * Unique pseudonymous or anonymous user identifier.
+     * This helps with analytics and click and conversion events.
+     * For more information, see [user token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/).
+     */
+    userToken?: string;
+    /**
      * If set to false, this query will not be taken into account in the analytics feature.
      * default true
      * https://www.algolia.com/doc/api-reference/api-parameters/analytics/

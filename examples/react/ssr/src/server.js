@@ -6,6 +6,7 @@ import { renderToString } from 'react-dom/server';
 import { getServerState } from 'react-instantsearch';
 
 import App from './App';
+import { requestsCache } from './searchClient';
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.get('/', async (req, res) => {
   const serverState = await getServerState(<App location={location} />, {
     renderToString,
   });
+  requestsCache.clear();
   const html = renderToString(
     <App serverState={serverState} location={location} />
   );

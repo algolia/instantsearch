@@ -421,4 +421,65 @@ describe('getInitialResults', () => {
       ]
     `);
   });
+
+  test('injects clickAnalytics and userToken into the state', async () => {
+    const search = instantsearch({
+      indexName: 'indexName',
+      searchClient: createSearchClient(),
+      initialUiState: {
+        indexName: {
+          query: 'apple',
+        },
+      },
+      insights: true,
+    });
+
+    search.addWidgets([connectSearchBox(() => {})({})]);
+
+    search.start();
+
+    const requestParams = await waitForResults(search);
+
+    expect(requestParams).toEqual([
+      {
+        clickAnalytics: true,
+        query: 'apple',
+        userToken: expect.stringMatching(/^anonymous-/),
+      },
+    ]);
+
+    expect(getInitialResults(search.mainIndex)).toEqual({
+      indexName: {
+        results: [
+          {
+            exhaustiveFacetsCount: true,
+            exhaustiveNbHits: true,
+            hits: [],
+            hitsPerPage: 20,
+            nbHits: 0,
+            nbPages: 0,
+            page: 0,
+            params: '',
+            processingTimeMS: 0,
+            query: '',
+          },
+        ],
+        state: {
+          disjunctiveFacets: [],
+          disjunctiveFacetsRefinements: {},
+          facets: [],
+          facetsExcludes: {},
+          facetsRefinements: {},
+          hierarchicalFacets: [],
+          hierarchicalFacetsRefinements: {},
+          index: 'indexName',
+          numericRefinements: {},
+          query: 'apple',
+          tagRefinements: [],
+          clickAnalytics: true,
+          userToken: expect.stringMatching(/^anonymous-/),
+        },
+      },
+    });
+  });
 });

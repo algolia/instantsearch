@@ -59,6 +59,14 @@ shell.sed(
   ...shell.ls('examples/*/*/{src,pages,app}/*.{js,ts,tsx,vue}')
 );
 
+// replace common import in examples
+shell.sed(
+  '-i',
+  /import { createMemoryCache } from '@algolia\/client-common'/,
+  "import { createInMemoryCache as createMemoryCache } from '@algolia/client-common';",
+  ...shell.ls('examples/*/*/{src,pages,app}/*.{js,ts,tsx,vue}')
+);
+
 // replace dependency in examples
 shell.sed(
   '-i',

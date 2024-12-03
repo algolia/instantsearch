@@ -57,6 +57,7 @@ exports[`getServerState returns initialResults 1`] = `
       },
     ],
     "state": {
+      "clickAnalytics": undefined,
       "disjunctiveFacets": [
         "brand",
       ],
@@ -77,6 +78,7 @@ exports[`getServerState returns initialResults 1`] = `
       "numericRefinements": {},
       "query": "iphone",
       "tagRefinements": [],
+      "userToken": undefined,
     },
   },
   "instant_search_price_asc": {
@@ -134,6 +136,7 @@ exports[`getServerState returns initialResults 1`] = `
       },
     ],
     "state": {
+      "clickAnalytics": undefined,
       "disjunctiveFacets": [],
       "disjunctiveFacetsRefinements": {},
       "facets": [],
@@ -146,6 +149,7 @@ exports[`getServerState returns initialResults 1`] = `
       "index": "instant_search_price_asc",
       "numericRefinements": {},
       "tagRefinements": [],
+      "userToken": undefined,
     },
   },
   "instant_search_price_desc": {
@@ -203,6 +207,7 @@ exports[`getServerState returns initialResults 1`] = `
       },
     ],
     "state": {
+      "clickAnalytics": undefined,
       "disjunctiveFacets": [],
       "disjunctiveFacetsRefinements": {},
       "facets": [],
@@ -215,6 +220,7 @@ exports[`getServerState returns initialResults 1`] = `
       "index": "instant_search_price_desc",
       "numericRefinements": {},
       "tagRefinements": [],
+      "userToken": undefined,
     },
   },
   "instant_search_rating_desc": {
@@ -272,6 +278,7 @@ exports[`getServerState returns initialResults 1`] = `
       },
     ],
     "state": {
+      "clickAnalytics": undefined,
       "disjunctiveFacets": [],
       "disjunctiveFacetsRefinements": {},
       "facets": [],
@@ -284,6 +291,7 @@ exports[`getServerState returns initialResults 1`] = `
       "index": "instant_search_rating_desc",
       "numericRefinements": {},
       "tagRefinements": [],
+      "userToken": undefined,
     },
   },
 }
