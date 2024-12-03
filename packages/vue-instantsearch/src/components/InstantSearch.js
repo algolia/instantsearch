@@ -117,6 +117,7 @@ export default createInstantSearchComponent({
   },
   render: renderCompat(function (h) {
     if (!this.indexName && !this.compositionID) {
+      // eslint-disable-next-line no-console
       console.error(
         'Missing either "index-name" or "compositionID" property on "ais-instant-search"'
       );
