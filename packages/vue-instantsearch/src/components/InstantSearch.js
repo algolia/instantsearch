@@ -22,7 +22,11 @@ export default createInstantSearchComponent({
     },
     indexName: {
       type: String,
-      required: true,
+      required: false,
+    },
+    compositionID: {
+      type: String,
+      required: false,
     },
     routing: {
       default: undefined,
@@ -101,6 +105,7 @@ export default createInstantSearchComponent({
         insightsClient: this.insightsClient,
         insights: this.insights,
         indexName: this.indexName,
+        compositionID: this.compositionID,
         routing: this.routing,
         stalledSearchDelay: this.stalledSearchDelay,
         searchFunction: this.searchFunction,
@@ -111,6 +116,12 @@ export default createInstantSearchComponent({
     };
   },
   render: renderCompat(function (h) {
+    if (!this.indexName && !this.compositionID) {
+      console.error(
+        'Missing either "index-name" or "compositionID" property on "ais-instant-search"'
+      );
+    }
+
     return h(
       'div',
       {
