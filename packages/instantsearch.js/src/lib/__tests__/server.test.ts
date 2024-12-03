@@ -448,8 +448,16 @@ describe('getInitialResults', () => {
       },
     ]);
 
-    expect(getInitialResults(search.mainIndex)).toEqual({
+    const initialResults = getInitialResults(search.mainIndex, requestParams);
+    expect(initialResults).toEqual({
       indexName: {
+        requestParams: [
+          {
+            clickAnalytics: true,
+            query: 'apple',
+            userToken: expect.stringMatching(/^anonymous-/),
+          },
+        ],
         results: [
           {
             exhaustiveFacetsCount: true,
@@ -481,5 +489,8 @@ describe('getInitialResults', () => {
         },
       },
     });
+    expect(initialResults.indexName.requestParams![0].userToken).toEqual(
+      initialResults.indexName.state!.userToken
+    );
   });
 });
