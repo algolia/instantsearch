@@ -62,8 +62,8 @@ shell.sed(
 // replace common import in examples
 shell.sed(
   '-i',
-  /import { createMemoryCache } from '@algolia\/client-common'/,
-  "import { createInMemoryCache as createMemoryCache } from '@algolia/client-common';",
+  /import { createMemoryCache } from '@algolia\/client-common';/,
+  "import { createInMemoryCache as createMemoryCache } from '@algolia/cache-in-memory';",
   ...shell.ls('examples/*/*/{src,pages,app}/*.{js,ts,tsx,vue}')
 );
 
