@@ -1,6 +1,5 @@
 'use strict';
 
-var find = require('../functions/find');
 var flat = require('../functions/flat');
 
 function getAverageIndices(indexTracker, nrOfObjs) {
@@ -43,7 +42,7 @@ function sortAndMergeRecommendations(results) {
     orderedHits,
     avgIndexRef
   ) {
-    var result = find(flat(results), function (hit) {
+    var result = flat(results).find(function (hit) {
       return hit.objectID === avgIndexRef.objectID;
     });
     return result ? orderedHits.concat(result) : orderedHits;
