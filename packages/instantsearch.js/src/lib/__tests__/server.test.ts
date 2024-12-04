@@ -449,20 +449,16 @@ describe('getInitialResults', () => {
     ]);
 
     const initialResults = getInitialResults(search.mainIndex, requestParams);
-    expect(initialResults.indexName!.requestParams).toEqual([
-      expect.objectContaining({
-        clickAnalytics: true,
-        userToken: expect.stringMatching(/^anonymous-/),
-      }),
-    ]);
-    expect(initialResults.indexName!.state).toEqual(
-      expect.objectContaining({
-        clickAnalytics: true,
-        userToken: expect.stringMatching(/^anonymous-/),
-      })
-    );
-    expect(initialResults.indexName.requestParams![0].userToken).toEqual(
-      initialResults.indexName.state!.userToken
-    );
+
+    const indexRequestParams = initialResults.indexName!.requestParams![0];
+    expect(indexRequestParams.clickAnalytics).toBe(true);
+    expect(indexRequestParams.userToken).toMatch(/^anonymous-/);
+
+    const indexState = initialResults.indexName!.state!;
+    expect(indexState.clickAnalytics).toBe(true);
+    expect(indexState.userToken).toMatch(/^anonymous-/);
+
+    expect(indexRequestParams.userToken).toEqual(requestParams[0].userToken);
+    expect(indexState.userToken).toEqual(indexRequestParams.userToken);
   });
 });
