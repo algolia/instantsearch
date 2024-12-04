@@ -512,6 +512,14 @@ See documentation: ${createDocumentationLink({
       );
     }
 
+    if (this.compositionID && widgets.some(isIndexWidget)) {
+      throw new Error(
+        withUsage(
+          'The `index` widget cannot be used with a composition-based InstantSearch implementation.'
+        )
+      );
+    }
+
     this.mainIndex.addWidgets(widgets);
 
     return this;
