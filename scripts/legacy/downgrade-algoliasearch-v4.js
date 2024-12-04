@@ -56,7 +56,7 @@ shell.sed(
   /import { liteClient as algoliasearch } from 'algoliasearch\/lite'/,
   "import algoliasearch from 'algoliasearch/lite'",
   ...shell.ls('examples/*/*/*.{js,ts,tsx,vue}'),
-  ...shell.ls('examples/*/*/{src,pages,app}/*.{js,ts,tsx,vue}')
+  ...shell.ls('examples/*/*/{src,lib,pages,app}/*.{js,ts,tsx,vue}')
 );
 
 // replace common import in examples
