@@ -45,7 +45,7 @@ it('child widgets get added to its parent instantsearch', () => {
     wrapper
       .findComponent(InstantSearch)
       .vm.instantSearchInstance.mainIndex.getWidgets()
-  ).toContain(widgetInstance);
+  ).toContainEqual(widgetInstance);
 });
 
 describe('middlewares', () => {

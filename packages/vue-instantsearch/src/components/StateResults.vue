@@ -16,7 +16,6 @@
 <script>
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
-import { _objectSpread } from '../util/polyfills';
 import { isVue3 } from '../util/vue-compat';
 
 export default {
@@ -78,7 +77,13 @@ export default {
   computed: {
     stateResults() {
       const { results, state, status, error } = this.state;
-      return _objectSpread({}, results, { results, state, status, error });
+      return {
+        ...results,
+        results,
+        state,
+        status,
+        error,
+      };
     },
   },
 };
