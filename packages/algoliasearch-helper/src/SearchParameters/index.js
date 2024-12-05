@@ -1,7 +1,6 @@
 'use strict';
 
 var defaultsPure = require('../functions/defaultsPure');
-var find = require('../functions/find');
 var intersection = require('../functions/intersection');
 var merge = require('../functions/merge');
 var objectHasKeys = require('../functions/objectHasKeys');
@@ -42,7 +41,10 @@ function isEqualNumericRefinement(a, b) {
  * @return {any} the searched value or undefined
  */
 function findArray(array, searchedValue) {
-  return find(array, function (currentValue) {
+  if (!Array.isArray(array)) {
+    return undefined;
+  }
+  return array.find(function (currentValue) {
     return isEqualNumericRefinement(currentValue, searchedValue);
   });
 }
@@ -1631,7 +1633,7 @@ SearchParameters.prototype = {
    * @return {object} a hierarchicalFacet
    */
   getHierarchicalFacetByName: function (hierarchicalFacetName) {
-    return find(this.hierarchicalFacets, function (f) {
+    return this.hierarchicalFacets.find(function (f) {
       return f.name === hierarchicalFacetName;
     });
   },
