@@ -42,7 +42,7 @@ it('child widgets get added to their parent index', () => {
   });
 
   const indexWidget = wrapper.findComponent(Index).vm.widget;
-  expect(indexWidget.getWidgets()).toContain(widgetInstance);
+  expect(indexWidget.getWidgets()).toContainEqual(widgetInstance);
 
   expect(rootAddWidgets).toHaveBeenCalledTimes(1);
   expect(rootAddWidgets).toHaveBeenCalledWith([
@@ -88,7 +88,7 @@ it('child widgets render with right data', () => {
 
   const indexWidget = wrapper.findComponent(Index).vm.widget;
 
-  expect(indexWidget.getWidgets()).toContain(widgetInstance);
+  expect(indexWidget.getWidgets()).toContainEqual(widgetInstance);
 
   expect(widgetInstance.render).not.toHaveBeenCalled();
   expect(widgetInstance.init).toHaveBeenCalledTimes(1);
