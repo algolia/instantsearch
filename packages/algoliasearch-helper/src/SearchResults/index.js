@@ -3,8 +3,6 @@
 var compact = require('../functions/compact');
 var defaultsPure = require('../functions/defaultsPure');
 var fv = require('../functions/escapeFacetValue');
-var find = require('../functions/find');
-var findIndex = require('../functions/findIndex');
 var formatSort = require('../functions/formatSort');
 var orderBy = require('../functions/orderBy');
 var escapeFacetValue = fv.escapeFacetValue;
@@ -89,13 +87,12 @@ function findMatchingHierarchicalFacetFromAttributeName(
   hierarchicalFacets,
   hierarchicalAttributeName
 ) {
-  return find(
-    hierarchicalFacets,
-    function facetKeyMatchesAttribute(hierarchicalFacet) {
-      var facetNames = hierarchicalFacet.attributes || [];
-      return facetNames.indexOf(hierarchicalAttributeName) > -1;
-    }
-  );
+  return hierarchicalFacets.find(function facetKeyMatchesAttribute(
+    hierarchicalFacet
+  ) {
+    var facetNames = hierarchicalFacet.attributes || [];
+    return facetNames.indexOf(hierarchicalAttributeName) > -1;
+  });
 }
 
 /**
@@ -439,7 +436,7 @@ function SearchResults(state, results, options) {
       // Place the hierarchicalFacet data at the correct index depending on
       // the attributes order that was defined at the helper initialization
       var facetIndex = hierarchicalFacet.attributes.indexOf(facetKey);
-      var idxAttributeName = findIndex(state.hierarchicalFacets, function (f) {
+      var idxAttributeName = state.hierarchicalFacets.findIndex(function (f) {
         return f.name === hierarchicalFacet.name;
       });
       self.hierarchicalFacets[idxAttributeName][facetIndex] = {
@@ -497,11 +494,10 @@ function SearchResults(state, results, options) {
       var position;
 
       if (hierarchicalFacet) {
-        position = findIndex(state.hierarchicalFacets, function (f) {
+        position = state.hierarchicalFacets.findIndex(function (f) {
           return f.name === hierarchicalFacet.name;
         });
-        var attributeIndex = findIndex(
-          self.hierarchicalFacets[position],
+        var attributeIndex = self.hierarchicalFacets[position].findIndex(
           function (f) {
             return f.attribute === dfacet;
           }
@@ -579,11 +575,10 @@ function SearchResults(state, results, options) {
 
       Object.keys(facets).forEach(function (dfacet) {
         var facetResults = facets[dfacet];
-        var position = findIndex(state.hierarchicalFacets, function (f) {
+        var position = state.hierarchicalFacets.findIndex(function (f) {
           return f.name === hierarchicalFacet.name;
         });
-        var attributeIndex = findIndex(
-          self.hierarchicalFacets[position],
+        var attributeIndex = self.hierarchicalFacets[position].findIndex(
           function (f) {
             return f.attribute === dfacet;
           }
@@ -674,7 +669,7 @@ function extractNormalizedFacetValues(results, attribute) {
   }
 
   if (results._state.isConjunctiveFacet(attribute)) {
-    var facet = find(results.facets, predicate);
+    var facet = results.facets.find(predicate);
     if (!facet) return [];
 
     return Object.keys(facet.data).map(function (name) {
@@ -688,7 +683,7 @@ function extractNormalizedFacetValues(results, attribute) {
       };
     });
   } else if (results._state.isDisjunctiveFacet(attribute)) {
-    var disjunctiveFacet = find(results.disjunctiveFacets, predicate);
+    var disjunctiveFacet = results.disjunctiveFacets.find(predicate);
     if (!disjunctiveFacet) return [];
 
     return Object.keys(disjunctiveFacet.data).map(function (name) {
@@ -701,7 +696,7 @@ function extractNormalizedFacetValues(results, attribute) {
       };
     });
   } else if (results._state.isHierarchicalFacet(attribute)) {
-    var hierarchicalFacetValues = find(results.hierarchicalFacets, predicate);
+    var hierarchicalFacetValues = results.hierarchicalFacets.find(predicate);
     if (!hierarchicalFacetValues) return hierarchicalFacetValues;
 
     var hierarchicalFacet =
@@ -979,7 +974,7 @@ SearchResults.prototype.getFacetStats = function (attribute) {
  * @return {object|undefined} The stats of the facet
  */
 function getFacetStatsIfAvailable(facetList, facetName) {
-  var data = find(facetList, function (facet) {
+  var data = facetList.find(function (facet) {
     return facet.name === facetName;
   });
   return data && data.stats;
@@ -1088,7 +1083,7 @@ SearchResults.prototype.getRefinements = function () {
  * @return {Refinement} the refinement
  */
 function getRefinement(state, type, attributeName, name, resultsFacets) {
-  var facet = find(resultsFacets, function (f) {
+  var facet = resultsFacets.find(function (f) {
     return f.name === attributeName;
   });
   var count = facet && facet.data && facet.data[name] ? facet.data[name] : 0;
@@ -1114,14 +1109,14 @@ function getHierarchicalRefinement(state, attributeName, name, resultsFacets) {
   var facetDeclaration = state.getHierarchicalFacetByName(attributeName);
   var separator = state._getHierarchicalFacetSeparator(facetDeclaration);
   var split = name.split(separator);
-  var rootFacet = find(resultsFacets, function (facet) {
+  var rootFacet = resultsFacets.find(function (facet) {
     return facet.name === attributeName;
   });
 
   var facet = split.reduce(function (intermediateFacet, part) {
     var newFacet =
       intermediateFacet &&
-      find(intermediateFacet.data, function (f) {
+      intermediateFacet.data.find(function (f) {
         return f.name === part;
       });
     return newFacet !== undefined ? newFacet : intermediateFacet;
