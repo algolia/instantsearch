@@ -1,4 +1,3 @@
-import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/vue';
 import { createInfiniteHitsSessionStorageCache } from 'instantsearch.js/es/lib/infiniteHitsCache';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
