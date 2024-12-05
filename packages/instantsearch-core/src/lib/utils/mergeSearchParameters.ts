@@ -38,7 +38,7 @@ const mergeDisjunctiveFacets: Merger = (left, right) =>
 const mergeHierarchicalFacets: Merger = (left, right) =>
   left.setQueryParameters({
     hierarchicalFacets: right.hierarchicalFacets.reduce((facets, facet) => {
-      const index = facets.findIndex((_) => _.name === facet.name);
+      const index = facets.findIndex(({ name }) => name === facet.name);
 
       if (index === -1) {
         return facets.concat(facet);
