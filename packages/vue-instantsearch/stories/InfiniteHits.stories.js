@@ -139,12 +139,7 @@ storiesOf('ais-infinite-hits', module)
   }));
 
 storiesOf('ais-infinite-hits', module)
-  .addDecorator(
-    previewWrapper({
-      insightsClient: (method, payload) =>
-        action(`[InsightsClient] sent ${method} with payload`)(payload),
-    })
-  )
+  .addDecorator(previewWrapper({}))
   .add('with insights on default slot', () => ({
     template: `
       <div>

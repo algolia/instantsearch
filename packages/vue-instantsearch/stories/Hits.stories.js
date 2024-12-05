@@ -68,12 +68,7 @@ storiesOf('ais-hits', module)
   }));
 
 storiesOf('ais-hits', module)
-  .addDecorator(
-    previewWrapper({
-      insightsClient: (method, payload) =>
-        action(`[InsightsClient] sent ${method} with payload`)(payload),
-    })
-  )
+  .addDecorator(previewWrapper({}))
   .add('with insights default slot', () => ({
     template: `
       <div>
