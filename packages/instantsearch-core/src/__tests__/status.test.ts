@@ -1,10 +1,10 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 
-import { connectSearchBox } from '../../connectors';
-import instantsearch from '../../index.es';
+import { connectSearchBox } from '../connectors';
+import { instantsearch } from '../instantsearch';
 
-import type InstantSearch from '../InstantSearch';
+import type { InstantSearch } from '../instantsearch';
 
 function createDelayedSearchClient(timeout: number) {
   const searchClient = createSearchClient();

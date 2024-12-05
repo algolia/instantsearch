@@ -8,11 +8,14 @@ import { castToJestMock } from '@instantsearch/testutils';
 import { wait } from '@instantsearch/testutils/wait';
 import { getByText, fireEvent } from '@testing-library/dom';
 
-import { connectConfigure, connectSearchBox } from '../../connectors';
-import instantsearch from '../../index.es';
-import { configure, frequentlyBoughtTogether, searchBox } from '../../widgets';
+import {
+  instantsearch,
+  connectConfigure,
+  connectSearchBox,
+  connectFrequentlyBoughtTogether,
+} from '..';
 
-import type { MiddlewareDefinition } from '../../types';
+import type { MiddlewareDefinition } from '../types';
 
 describe('configure', () => {
   it('provides up-to-date uiState to onStateChange', () => {
@@ -38,8 +41,10 @@ describe('configure', () => {
       }
     });
     search.addWidgets([
-      configure({
-        hitsPerPage: 10,
+      connectConfigure(() => {})({
+        searchParameters: {
+          hitsPerPage: 10,
+        },
       }),
       customComp({ searchParameters: {} }),
     ]);
@@ -57,7 +62,6 @@ describe('configure', () => {
 
 describe('middleware', () => {
   it("runs middlewares' onStateChange when uiState changes", async () => {
-    const container = document.createElement('div');
     const search = instantsearch({
       indexName: 'instant_search',
       searchClient: createSearchClient(),
@@ -74,25 +78,17 @@ describe('middleware', () => {
 
     search.use(() => middlewareDefinition);
 
-    search.addWidgets([
-      searchBox({
-        container,
-        placeholder: 'search',
-      }),
-    ]);
+    search.addWidgets([connectSearchBox(() => {})({})]);
 
     search.start();
 
-    fireEvent.input(container.querySelector('input')!, {
-      target: { value: 'q' },
-    });
+    search.renderState.instant_search.searchBox!.refine('q');
 
     await wait(0);
     expect(middlewareDefinition.onStateChange).toHaveBeenCalledTimes(1);
   });
 
   it("runs middlewares' onStateChange when uiState changes with user-provided onStateChange param", async () => {
-    const container = document.createElement('div');
     const search = instantsearch({
       indexName: 'instant_search',
       searchClient: createSearchClient(),
@@ -112,18 +108,11 @@ describe('middleware', () => {
 
     search.use(() => middlewareDefinition);
 
-    search.addWidgets([
-      searchBox({
-        container,
-        placeholder: 'search',
-      }),
-    ]);
+    search.addWidgets([connectSearchBox(() => {})({})]);
 
     search.start();
 
-    fireEvent.input(container.querySelector('input')!, {
-      target: { value: 'q' },
-    });
+    search.renderState.instant_search.searchBox!.refine('q');
 
     await wait(0);
     expect(middlewareDefinition.onStateChange).toHaveBeenCalledTimes(1);
@@ -131,8 +120,6 @@ describe('middleware', () => {
 });
 
 describe('errors', () => {
-  const virtualSearchBox = connectSearchBox(() => {});
-
   it('client errors can be handled', () => {
     const search = instantsearch({
       searchClient: createSearchClient({
@@ -143,7 +130,7 @@ describe('errors', () => {
       indexName: '123',
     });
 
-    search.addWidgets([virtualSearchBox({})]);
+    search.addWidgets([connectSearchBox(() => {})({})]);
 
     expect.assertions(4);
 
@@ -184,7 +171,7 @@ describe('network requests', () => {
         indexName: 'indexName',
         searchClient,
       })
-        .addWidgets([searchBox({ container: document.createElement('div') })])
+        .addWidgets([connectSearchBox(() => {})({})])
         .start();
 
       await wait(0);
@@ -212,9 +199,8 @@ describe('network requests', () => {
         searchClient,
       })
         .addWidgets([
-          frequentlyBoughtTogether({
+          connectFrequentlyBoughtTogether(() => {})({
             objectIDs: ['one'],
-            container: document.createElement('div'),
           }),
         ])
         .start();
@@ -250,10 +236,9 @@ describe('network requests', () => {
         searchClient,
       })
         .addWidgets([
-          searchBox({ container: document.createElement('div') }),
-          frequentlyBoughtTogether({
+          connectSearchBox(() => {})({}),
+          connectFrequentlyBoughtTogether(() => {})({
             objectIDs: ['one'],
-            container: document.createElement('div'),
           }),
         ])
         .start();
@@ -327,7 +312,7 @@ describe('network requests', () => {
         searchClient,
         insights: true,
       })
-        .addWidgets([searchBox({ container: document.createElement('div') })])
+        .addWidgets([connectSearchBox(() => {})({})])
         .start();
 
       await wait(0);
@@ -358,9 +343,8 @@ describe('network requests', () => {
         insights: true,
       })
         .addWidgets([
-          frequentlyBoughtTogether({
+          connectFrequentlyBoughtTogether(() => {})({
             objectIDs: ['one'],
-            container: document.createElement('div'),
           }),
         ])
         .start();
@@ -397,10 +381,9 @@ describe('network requests', () => {
         insights: true,
       })
         .addWidgets([
-          searchBox({ container: document.createElement('div') }),
-          frequentlyBoughtTogether({
+          connectSearchBox(() => {})({}),
+          connectFrequentlyBoughtTogether(() => {})({
             objectIDs: ['one'],
-            container: document.createElement('div'),
           }),
         ])
         .start();
@@ -476,7 +459,7 @@ describe('network requests', () => {
         searchClient,
         insights: true,
       })
-        .addWidgets([searchBox({ container: document.createElement('div') })])
+        .addWidgets([connectSearchBox(() => {})({})])
         .start();
 
       await wait(0);
@@ -507,9 +490,8 @@ describe('network requests', () => {
         insights: true,
       })
         .addWidgets([
-          frequentlyBoughtTogether({
+          connectFrequentlyBoughtTogether(() => {})({
             objectIDs: ['one'],
-            container: document.createElement('div'),
           }),
         ])
         .start();
@@ -546,10 +528,9 @@ describe('network requests', () => {
         insights: true,
       })
         .addWidgets([
-          searchBox({ container: document.createElement('div') }),
-          frequentlyBoughtTogether({
+          connectSearchBox(() => {})({}),
+          connectFrequentlyBoughtTogether(() => {})({
             objectIDs: ['one'],
-            container: document.createElement('div'),
           }),
         ])
         .start();
@@ -592,12 +573,11 @@ describe('network requests', () => {
   describe('interactive life cycle', () => {
     it('sends no queries when widgets are removed', async () => {
       const searchClient = createRecommendSearchClient();
-      const searchBoxWidget = searchBox({
-        container: document.createElement('div'),
-      });
-      const frequentlyBoughtTogetherWidget = frequentlyBoughtTogether({
+      const searchBoxWidget = connectSearchBox(() => {})({});
+      const frequentlyBoughtTogetherWidget = connectFrequentlyBoughtTogether(
+        () => {}
+      )({
         objectIDs: ['one'],
-        container: document.createElement('div'),
       });
       const search = instantsearch({
         indexName: 'indexName',

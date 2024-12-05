@@ -5,10 +5,13 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 
-import { connectPagination, connectSearchBox } from '../../../connectors';
-import instantsearch from '../../../index.es';
-import { index } from '../../../widgets';
-import historyRouter from '../../routers/history';
+import {
+  instantsearch,
+  index,
+  historyRouter,
+  connectPagination,
+  connectSearchBox,
+} from '../..';
 
 beforeEach(() => {
   window.history.pushState({}, '', '/');

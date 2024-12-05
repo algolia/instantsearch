@@ -4,13 +4,14 @@ import {
 } from '@instantsearch/mocks';
 
 import {
+  getInitialResults,
+  waitForResults,
+  instantsearch,
+  index,
   connectConfigure,
   connectHierarchicalMenu,
   connectSearchBox,
-} from '../../connectors';
-import instantsearch from '../../index.es';
-import { index } from '../../widgets';
-import { getInitialResults, waitForResults } from '../server';
+} from '..';
 
 describe('waitForResults', () => {
   test('waits for the results from the search instance', async () => {

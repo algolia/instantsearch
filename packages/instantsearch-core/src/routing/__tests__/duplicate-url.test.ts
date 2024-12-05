@@ -5,9 +5,12 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 
-import instantsearch from '../../..';
-import { connectPagination, connectSearchBox } from '../../../connectors';
-import historyRouter from '../../routers/history';
+import {
+  instantsearch,
+  historyRouter,
+  connectPagination,
+  connectSearchBox,
+} from '../..';
 
 /* eslint no-lone-blocks: "off" */
 

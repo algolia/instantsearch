@@ -14,22 +14,23 @@ import { wait } from '@instantsearch/testutils/wait';
 import originalHelper from 'algoliasearch-helper';
 import { h, render, createRef } from 'preact';
 
-import { createRenderOptions, createWidget } from '../../../test/createWidget';
-import { connectSearchBox, connectPagination } from '../../connectors';
-import { createInsightsMiddleware } from '../../middlewares';
-import { index } from '../../widgets';
-import InstantSearch from '../InstantSearch';
+import {
+  InstantSearch,
+  index,
+  createInsightsMiddleware,
+  connectSearchBox,
+  connectPagination,
+} from '..';
+import { createRenderOptions, createWidget } from '../../test/createWidget';
 import version from '../version';
 
 import type {
-  UiState,
-  Widget,
-  IndexWidget,
   PaginationConnectorParams,
   PaginationWidgetDescription,
   SearchBoxWidgetDescription,
   SearchBoxConnectorParams,
-} from '../../types';
+} from '..';
+import type { UiState, Widget, IndexWidget } from '../types';
 import type { RefObject } from 'preact';
 
 type SearchBoxWidgetInstance = Widget<
@@ -318,12 +319,9 @@ describe('InstantSearch', () => {
       searchClient,
     });
 
-    expect(searchClient.addAlgoliaAgent).toHaveBeenCalledTimes(2);
+    expect(searchClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
     expect(searchClient.addAlgoliaAgent).toHaveBeenCalledWith(
-      expect.stringMatching(/^instantsearch-core \(.*\)$/)
-    );
-    expect(searchClient.addAlgoliaAgent).toHaveBeenCalledWith(
-      `instantsearch.js (${version})`
+      `instantsearch-core (${version})`
     );
   });
 
