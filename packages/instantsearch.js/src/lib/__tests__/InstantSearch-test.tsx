@@ -156,25 +156,6 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     });
   });
 
-  it('throws if insightsClient is not a function', () => {
-    const warn = jest.spyOn(global.console, 'warn');
-    warn.mockImplementation(() => {});
-
-    expect(() => {
-      // eslint-disable-next-line no-new
-      new InstantSearch({
-        indexName: 'indexName',
-        searchClient: createSearchClient(),
-        // @ts-expect-error
-        insightsClient: 'insights',
-      });
-    }).toThrowErrorMatchingInlineSnapshot(`
-"The \`insightsClient\` option should be a function.
-
-See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
-`);
-  });
-
   it('throws if addWidgets is called with a single widget', () => {
     expect(() => {
       const search = new InstantSearch({
@@ -310,27 +291,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     }).not.toWarnDev();
   });
 
-  it('warns dev when insightsClient is given', () => {
-    const searchClient = createSearchClient({
-      addAlgoliaAgent: jest.fn(),
-    });
-    const warn = jest.spyOn(global.console, 'warn');
-    warn.mockImplementation(() => {});
-
-    expect(() => {
-      // eslint-disable-next-line no-new
-      new InstantSearch({
-        indexName: 'indexName',
-        searchClient,
-        insightsClient: () => {},
-      });
-    }).toWarnDev(
-      `[InstantSearch]: \`insightsClient\` property has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by the \`insights\` middleware.
-
-For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/`
-    );
-  });
-
   it('accepts middleware with partial methods', () => {
     const search = new InstantSearch({
       indexName: 'indexName',
@@ -415,17 +375,6 @@ search.addWidgets([
 \`\`\`
 
 See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
-  });
-
-  it('does store insightsClient on the instance', () => {
-    const insightsClient = () => {};
-    const search = new InstantSearch({
-      indexName: 'indexName',
-      searchClient: createSearchClient(),
-      insightsClient,
-    });
-
-    expect(search.insightsClient).toBe(insightsClient);
   });
 
   it("exposes helper's last results", async () => {

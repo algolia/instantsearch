@@ -1,8 +1,5 @@
 import type { SearchClient } from './algoliasearch';
-import type {
-  InsightsClient as AlgoliaInsightsClient,
-  InsightsProps,
-} from './insights';
+import type { InsightsProps } from './insights';
 import type { RouterProps } from './router';
 import type { UiState } from './ui-state';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
@@ -93,13 +90,6 @@ export type InstantSearchOptions<
    * @default false
    */
   insights?: InsightsProps | boolean;
-  /**
-   * the instance of search-insights to use for sending insights events inside
-   * widgets like `hits`.
-   *
-   * @deprecated This property will be still supported in 4.x releases, but not further. It is replaced by the `insights` middleware. For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/
-   */
-  insightsClient?: AlgoliaInsightsClient;
   future?: {
     /**
      * Changes the way `dispose` is used in InstantSearch lifecycle.
