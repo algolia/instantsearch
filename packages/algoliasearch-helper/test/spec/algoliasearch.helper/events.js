@@ -7,9 +7,6 @@ function makeFakeClient() {
     search: jest.fn(function () {
       return new Promise(function () {});
     }),
-    searchForFacetValues: jest.fn(function () {
-      return new Promise(function () {});
-    }),
   };
 }
 
@@ -297,7 +294,7 @@ test(
     helper.on('searchForFacetValues', searchedForFacetValues);
 
     expect(searchedForFacetValues).toHaveBeenCalledTimes(0);
-    expect(fakeClient.searchForFacetValues).toHaveBeenCalledTimes(0);
+    expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
     helper.searchForFacetValues('city', 'NYC');
     expect(searchedForFacetValues).toHaveBeenCalledTimes(1);
@@ -306,7 +303,7 @@ test(
       facet: 'city',
       query: 'NYC',
     });
-    expect(fakeClient.searchForFacetValues).toHaveBeenCalledTimes(1);
+    expect(fakeClient.search).toHaveBeenCalledTimes(1);
   }
 );
 

@@ -434,7 +434,6 @@ var requestBuilder = {
       : state;
     var searchForFacetSearchParameters = {
       facetQuery: query,
-      facetName: facetName,
     };
     if (typeof maxFacetHits === 'number') {
       searchForFacetSearchParameters.maxFacetHits = maxFacetHits;
