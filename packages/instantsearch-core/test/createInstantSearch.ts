@@ -28,7 +28,6 @@ export const createInstantSearch = (
     },
     refresh: jest.fn(),
     helper: mainHelper, // @TODO: use the Helper from the index once the RoutingManger uses the index
-    insightsClient: null,
     middleware: [],
     renderState: {},
     scheduleStalledRender: defer(jest.fn()),

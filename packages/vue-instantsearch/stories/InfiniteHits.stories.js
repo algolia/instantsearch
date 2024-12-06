@@ -1,4 +1,3 @@
-import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/vue';
 import { createInfiniteHitsSessionStorageCache } from 'instantsearch.js/es/lib/infiniteHitsCache';
 import { simple } from 'instantsearch.js/es/lib/stateMappings';
@@ -139,12 +138,7 @@ storiesOf('ais-infinite-hits', module)
   }));
 
 storiesOf('ais-infinite-hits', module)
-  .addDecorator(
-    previewWrapper({
-      insightsClient: (method, payload) =>
-        action(`[InsightsClient] sent ${method} with payload`)(payload),
-    })
-  )
+  .addDecorator(previewWrapper({}))
   .add('with insights on default slot', () => ({
     template: `
       <div>

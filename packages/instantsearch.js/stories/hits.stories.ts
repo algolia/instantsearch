@@ -1,14 +1,6 @@
-import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/html';
 
 import { withHits } from '../.storybook/decorators';
-
-import type { InsightsClient } from '../src/types';
-
-const fakeInsightsClient: InsightsClient = (method, ...payloads) => {
-  const [payload] = payloads;
-  action(`[InsightsClient] sent ${method} with payload`)(payload);
-};
 
 storiesOf('Results/Hits', module)
   .add(
@@ -138,33 +130,28 @@ storiesOf('Results/Hits', module)
   )
   .add(
     'with insights function',
-    withHits(
-      ({ search, container, instantsearch }) => {
-        search.addWidgets([
-          instantsearch.widgets.configure({
-            attributesToSnippet: ['name', 'description'],
-            clickAnalytics: true,
-          }),
-        ]);
+    withHits(({ search, container, instantsearch }) => {
+      search.addWidgets([
+        instantsearch.widgets.configure({
+          attributesToSnippet: ['name', 'description'],
+          clickAnalytics: true,
+        }),
+      ]);
 
-        search.addWidgets([
-          instantsearch.widgets.hits({
-            container,
-            templates: {
-              item: (item, { html, sendEvent }) => html`
-                <h4>${item.name}</h4>
-                <button
-                  onClick=${() => sendEvent('click', [item], 'Add to cart')}
-                >
-                  Add to cart
-                </button>
-              `,
-            },
-          }),
-        ]);
-      },
-      {
-        insightsClient: fakeInsightsClient,
-      }
-    )
+      search.addWidgets([
+        instantsearch.widgets.hits({
+          container,
+          templates: {
+            item: (item, { html, sendEvent }) => html`
+              <h4>${item.name}</h4>
+              <button
+                onClick=${() => sendEvent('click', [item], 'Add to cart')}
+              >
+                Add to cart
+              </button>
+            `,
+          },
+        }),
+      ]);
+    })
   );
