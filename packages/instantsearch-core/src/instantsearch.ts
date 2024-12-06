@@ -24,7 +24,6 @@ import version from './version';
 import { index } from './widgets/index-widget';
 
 import type {
-  InsightsClient as AlgoliaInsightsClient,
   SearchClient,
   Widget,
   IndexWidget,
@@ -68,7 +67,6 @@ export class InstantSearch<
   client: InstantSearchOptions['searchClient'];
   indexName: string;
   compositionID?: string;
-  insightsClient: AlgoliaInsightsClient | null;
   onStateChange: InstantSearchOptions<TUiState>['onStateChange'] | null = null;
   future: NonNullable<InstantSearchOptions<TUiState>['future']>;
   helper: AlgoliaSearchHelper | null;
@@ -116,7 +114,6 @@ export class InstantSearch<
       searchFunction,
       stalledSearchDelay = 200,
       searchClient = null,
-      insightsClient = null,
       onStateChange = null,
       future = {
         ...INSTANTSEARCH_FUTURE_DEFAULTS,
@@ -138,19 +135,6 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
 
     if (typeof searchClient.addAlgoliaAgent === 'function') {
       searchClient.addAlgoliaAgent(`instantsearch-core (${version})`);
-    }
-
-    warning(
-      insightsClient === null,
-      `\`insightsClient\` property has been deprecated. It is still supported in 4.x releases, but not further. It is replaced by the \`insights\` middleware.
-
-For more information, visit https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/how-to/send-click-and-conversion-events-with-instantsearch/js/`
-    );
-
-    if (insightsClient && typeof insightsClient !== 'function') {
-      throw new Error(
-        withUsage('The `insightsClient` option should be a function.')
-      );
     }
 
     warning(
@@ -185,7 +169,6 @@ See documentation: ${createDocumentationLink({
 
     this.client = searchClient;
     this.future = future;
-    this.insightsClient = insightsClient;
     this.indexName = indexName;
     this.compositionID = compositionID;
     this.helper = null;
