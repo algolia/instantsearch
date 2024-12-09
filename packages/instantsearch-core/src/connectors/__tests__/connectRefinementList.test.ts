@@ -1,9 +1,11 @@
 import {
   createSingleSearchResponse,
   createSearchClient,
+  createSFFVResponse,
+  createMultiSearchResponse,
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
-import jsHelper, {
+import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
@@ -181,7 +183,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         showMoreLimit: 30,
       });
 
-      const helper = jsHelper(
+      const helper = algoliasearchHelper(
         createSearchClient(),
         '',
         widget.getWidgetSearchParameters(new SearchParameters({}), {
@@ -266,7 +268,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         showMoreLimit: 30,
       });
 
-      const helper = jsHelper(
+      const helper = algoliasearchHelper(
         createSearchClient(),
         '',
         widget.getWidgetSearchParameters(new SearchParameters({}), {
@@ -374,7 +376,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     // test if widget is not rendered yet at this point
     expect(rendering).not.toHaveBeenCalled();
 
-    const helper = jsHelper(createSearchClient(), '', config);
+    const helper = algoliasearchHelper(createSearchClient(), '', config);
     helper.search = jest.fn();
 
     widget.init!(
@@ -428,7 +430,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       limit: 9,
     });
 
-    const helper = jsHelper(createSearchClient(), '');
+    const helper = algoliasearchHelper(createSearchClient(), '');
 
     widget.render!(
       createRenderOptions({
@@ -462,7 +464,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         })),
     });
 
-    const helper = jsHelper(
+    const helper = algoliasearchHelper(
       createSearchClient(),
       '',
       widget.getWidgetSearchParameters(new SearchParameters({}), {
@@ -530,7 +532,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       transformItems,
     });
 
-    const helper = jsHelper(createSearchClient(), '');
+    const helper = algoliasearchHelper(createSearchClient(), '');
     const results = new SearchResults(helper.state, [
       createSingleSearchResponse(),
     ]);
@@ -557,7 +559,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       attribute: 'category',
     });
 
-    const helper = jsHelper(
+    const helper = algoliasearchHelper(
       createSearchClient(),
       '',
       widget.getWidgetSearchParameters(new SearchParameters({}), {
@@ -612,7 +614,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       operator: 'and',
     });
 
-    const helper = jsHelper(
+    const helper = algoliasearchHelper(
       createSearchClient(),
       '',
       widget.getWidgetSearchParameters(new SearchParameters({}), {
@@ -668,7 +670,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       showMoreLimit: 10,
     });
 
-    const helper = jsHelper(
+    const helper = algoliasearchHelper(
       createSearchClient(),
       '',
       widget.getWidgetSearchParameters(new SearchParameters({}), {
@@ -723,7 +725,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       limit: 1,
     });
 
-    const helper = jsHelper(
+    const helper = algoliasearchHelper(
       createSearchClient(),
       '',
       widget.getWidgetSearchParameters(new SearchParameters({}), {
@@ -784,7 +786,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       showMoreLimit: 10,
     });
 
-    const helper = jsHelper(
+    const helper = algoliasearchHelper(
       createSearchClient(),
       '',
       widget.getWidgetSearchParameters(new SearchParameters({}), {
@@ -845,7 +847,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       showMoreLimit: 10,
     });
 
-    const helper = jsHelper(
+    const helper = algoliasearchHelper(
       createSearchClient(),
       '',
       widget.getWidgetSearchParameters(new SearchParameters({}), {
@@ -909,7 +911,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       showMoreLimit: 3,
     });
 
-    const helper = jsHelper(
+    const helper = algoliasearchHelper(
       createSearchClient(),
       '',
       widget.getWidgetSearchParameters(new SearchParameters({}), {
@@ -1014,17 +1016,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       showMoreLimit,
     });
 
-    const helper = jsHelper(
-      createSearchClient(),
+    const client = createSearchClient();
+    const helper = algoliasearchHelper(
+      client,
       '',
       widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
-      })
-    );
-    helper.search = jest.fn();
-    helper.searchForFacetValues = jest.fn().mockReturnValue(
-      Promise.resolve({
-        facetHits: [],
       })
     );
 
@@ -1101,12 +1098,21 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     renderingOptions2.searchForItems('query triggering no results');
     await wait(0);
 
-    expect(helper.searchForFacetValues).toHaveBeenCalledWith(
-      expect.anything(),
-      expect.anything(),
-      limit,
-      expect.anything()
-    );
+    expect(client.search).toHaveBeenCalledWith([
+      {
+        type: 'facet',
+        facet: 'category',
+        indexName: '',
+        params: {
+          facetQuery: 'query triggering no results',
+          facets: ['category'],
+          highlightPostTag: '__/ais-highlight__',
+          highlightPreTag: '__ais-highlight__',
+          maxFacetHits: limit,
+          maxValuesPerFacet: showMoreLimit,
+        },
+      },
+    ]);
 
     expect(rendering).toHaveBeenCalledTimes(3);
     const renderingOptions3 = rendering.mock.calls[2][0];
@@ -1208,12 +1214,21 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
 
     renderingOptions5.searchForItems('new search');
-    expect(helper.searchForFacetValues).toHaveBeenCalledWith(
-      expect.anything(),
-      expect.anything(),
-      showMoreLimit,
-      expect.anything()
-    );
+    expect(client.search).toHaveBeenCalledWith([
+      {
+        type: 'facet',
+        facet: 'category',
+        indexName: '',
+        params: {
+          facetQuery: 'new search',
+          facets: ['category'],
+          highlightPostTag: '__/ais-highlight__',
+          highlightPreTag: '__ais-highlight__',
+          maxFacetHits: showMoreLimit,
+          maxValuesPerFacet: showMoreLimit,
+        },
+      },
+    ]);
   });
 
   it('Toggle show more should be enabled when refinement list is expanded and number of facet is above limit and below showMoreLimit', () => {
@@ -1225,7 +1240,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       showMoreLimit: 3,
     });
 
-    const helper = jsHelper(createSearchClient(), '', {
+    const helper = algoliasearchHelper(createSearchClient(), '', {
       ...widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
       }),
@@ -1323,7 +1338,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       showMoreLimit: 3,
     });
 
-    const helper = jsHelper(createSearchClient(), '', {
+    const helper = algoliasearchHelper(createSearchClient(), '', {
       ...widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
       }),
@@ -1417,7 +1432,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       limit: 2,
     });
 
-    const helper = jsHelper(
+    const helper = algoliasearchHelper(
       createSearchClient(),
       '',
       widget.getWidgetSearchParameters(new SearchParameters({}), {
@@ -1505,7 +1520,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       limit: 2,
     });
 
-    const helper = jsHelper(createSearchClient(), '', {
+    const helper = algoliasearchHelper(createSearchClient(), '', {
       ...widget.getWidgetSearchParameters(new SearchParameters({}), {
         uiState: {},
       }),
@@ -1594,42 +1609,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         limit: 2,
         escapeFacetValues: false,
       });
-
-      const helper = jsHelper(
-        createSearchClient({
-          // @ts-ignore v5 does not have this method, but it's easier to have it here. In a future version we can replace this method and its usages with search({ type: 'facet })
-          searchForFacetValues() {
-            return Promise.resolve([
-              {
-                exhaustiveFacetsCount: true,
-                facetHits: [
-                  {
-                    count: 33,
-                    highlighted: 'Salvador <mark>Da</mark>li',
-                    value: 'Salvador Dali',
-                  },
-                  {
-                    count: 9,
-                    highlighted: '<mark>Da</mark>vidoff',
-                    value: 'Davidoff',
-                  },
-                ],
-                processingTimeMS: 1,
-              },
-            ]);
-          },
-        }),
+      const client = createMockClient();
+      const helper = algoliasearchHelper(
+        client,
         '',
         widget.getWidgetSearchParameters(new SearchParameters({}), {
           uiState: {},
         })
       );
       helper.search = jest.fn();
-
-      const searchForFacetValuesSpy = jest.spyOn(
-        helper,
-        'searchForFacetValues'
-      );
 
       // Simulate the lifecycle
       widget.init!(
@@ -1677,16 +1665,21 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       const search = rendering.mock.calls[1][0].searchForItems;
       search('da');
 
-      const [sffvFacet, sffvQuery, maxNbItems, paramOverride] =
-        searchForFacetValuesSpy.mock.calls[0];
-
-      expect(sffvQuery).toBe('da');
-      expect(sffvFacet).toBe('category');
-      expect(maxNbItems).toBe(2);
-      expect(paramOverride).toEqual({
-        highlightPreTag: '<mark>',
-        highlightPostTag: '</mark>',
-      });
+      expect(client.search).toHaveBeenCalledWith([
+        {
+          type: 'facet',
+          facet: 'category',
+          indexName: '',
+          params: {
+            facetQuery: 'da',
+            facets: ['category'],
+            highlightPostTag: '</mark>',
+            highlightPreTag: '<mark>',
+            maxFacetHits: 2,
+            maxValuesPerFacet: 2,
+          },
+        },
+      ]);
 
       await wait(0);
 
@@ -1717,28 +1710,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         showMoreLimit: 1000,
       });
 
-      const helper = jsHelper(
-        createSearchClient({
-          // @ts-ignore v5 does not have this method, but it's easier to have it here. In a future version we can replace this method and its usages with search({ type: 'facet })
-          searchForFacetValues() {
-            return Promise.resolve([
-              {
-                exhaustiveFacetsCount: true,
-                facetHits: [],
-                processingTimeMS: 1,
-              },
-            ]);
-          },
-        }),
+      const client = createMockClient();
+      const helper = algoliasearchHelper(
+        client,
         '',
         widget.getWidgetSearchParameters(new SearchParameters({}), {
           uiState: {},
         })
-      );
-      helper.search = jest.fn();
-      const searchForFacetValuesSpy = jest.spyOn(
-        helper,
-        'searchForFacetValues'
       );
 
       widget.init!(
@@ -1780,9 +1758,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       const { searchForItems } = rendering.mock.calls[2][0];
       searchForItems('query');
 
-      const maxNbItems = searchForFacetValuesSpy.mock.calls[0][2];
-
-      expect(maxNbItems).toBe(100);
+      expect(client.search).toHaveBeenCalledWith([
+        expect.objectContaining({
+          params: expect.objectContaining({ maxFacetHits: 100 }),
+        }),
+      ]);
     });
 
     it('can search in facet values with transformed items', async () => {
@@ -1800,39 +1780,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           })),
       });
 
-      const helper = jsHelper(
-        createSearchClient({
-          // @ts-ignore v5 does not have this method, but it's easier to have it here. In a future version we can replace this method and its usages with search({ type: 'facet })
-          searchForFacetValues() {
-            return Promise.resolve([
-              {
-                exhaustiveFacetsCount: true,
-                facetHits: [
-                  {
-                    count: 33,
-                    highlighted: 'will be transformed',
-                    value: 'will be transformed',
-                  },
-                  {
-                    count: 9,
-                    highlighted: 'will be transformed',
-                    value: 'will be transformed',
-                  },
-                ],
-                processingTimeMS: 1,
-              },
-            ]);
-          },
-        }),
+      const client = createMockClient();
+      const helper = algoliasearchHelper(
+        client,
         '',
         widget.getWidgetSearchParameters(new SearchParameters({}), {
           uiState: {},
         })
-      );
-      helper.search = jest.fn();
-      const searchForFacetValuesSpy = jest.spyOn(
-        helper,
-        'searchForFacetValues'
       );
 
       // Simulate the lifecycle
@@ -1875,16 +1829,21 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       const search = rendering.mock.calls[1][0].searchForItems;
       search('transfo');
 
-      const [sffvFacet, sffvQuery, maxNbItems, paramOverride] =
-        searchForFacetValuesSpy.mock.calls[0];
-
-      expect(sffvQuery).toBe('transfo');
-      expect(sffvFacet).toBe('category');
-      expect(maxNbItems).toBe(2);
-      expect(paramOverride).toEqual({
-        highlightPreTag: '<mark>',
-        highlightPostTag: '</mark>',
-      });
+      expect(client.search).toHaveBeenCalledWith([
+        {
+          type: 'facet',
+          facet: 'category',
+          indexName: '',
+          params: {
+            facetQuery: 'transfo',
+            facets: ['category'],
+            highlightPostTag: '</mark>',
+            highlightPreTag: '<mark>',
+            maxFacetHits: 2,
+            maxValuesPerFacet: 2,
+          },
+        },
+      ]);
 
       await wait(0);
 
@@ -1911,44 +1870,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         escapeFacetValues: false,
       });
 
-      const helper = jsHelper(
-        createSearchClient({
-          // @ts-ignore v5 does not have this method, but it's easier to have it here. In a future version we can replace this method and its usages with search({ type: 'facet })
-          searchForFacetValues() {
-            return Promise.resolve([
-              {
-                exhaustiveFacetsCount: true,
-                facetHits: [
-                  {
-                    count: 33,
-                    highlighted: 'Salvador <mark>Da</mark>li',
-                    value: 'Salvador Dali',
-                  },
-                  {
-                    count: 9,
-                    highlighted: '<mark>Da</mark>vidoff',
-                    value: 'Davidoff',
-                  },
-                ],
-                processingTimeMS: 1,
-              },
-            ]);
-          },
+      const client = createMockClient();
+      const helper = algoliasearchHelper(client, '', {
+        ...widget.getWidgetSearchParameters(new SearchParameters({}), {
+          uiState: {},
         }),
-        '',
-        {
-          ...widget.getWidgetSearchParameters(new SearchParameters({}), {
-            uiState: {},
-          }),
-          // Here we simulate that another widget has set some highlight tags
-          ...TAG_PLACEHOLDER,
-        }
-      );
+        // Here we simulate that another widget has set some highlight tags
+        ...TAG_PLACEHOLDER,
+      });
       helper.search = jest.fn();
-      const searchForFacetValuesSpy = jest.spyOn(
-        helper,
-        'searchForFacetValues'
-      );
 
       // Simulate the lifecycle
       widget.init!(
@@ -1990,16 +1920,21 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       const search = rendering.mock.calls[1][0].searchForItems;
       search('da');
 
-      const [sffvFacet, sffvQuery, maxNbItems, paramOverride] =
-        searchForFacetValuesSpy.mock.calls[0];
-
-      expect(sffvQuery).toBe('da');
-      expect(sffvFacet).toBe('category');
-      expect(maxNbItems).toBe(2);
-      expect(paramOverride).toEqual({
-        highlightPreTag: '<mark>',
-        highlightPostTag: '</mark>',
-      });
+      expect(client.search).toHaveBeenCalledWith([
+        {
+          type: 'facet',
+          facet: 'category',
+          indexName: '',
+          params: {
+            facetQuery: 'da',
+            facets: ['category'],
+            highlightPostTag: '</mark>',
+            highlightPreTag: '<mark>',
+            maxFacetHits: 2,
+            maxValuesPerFacet: 2,
+          },
+        },
+      ]);
 
       await wait(0);
 
@@ -2030,44 +1965,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         escapeFacetValues: true,
       });
 
-      const helper = jsHelper(
-        createSearchClient({
-          // @ts-ignore v5 does not have this method, but it's easier to have it here. In a future version we can replace this method and its usages with search({ type: 'facet })
-          searchForFacetValues() {
-            return Promise.resolve([
-              {
-                exhaustiveFacetsCount: true,
-                facetHits: [
-                  {
-                    count: 33,
-                    highlighted: `Salvador ${TAG_PLACEHOLDER.highlightPreTag}Da${TAG_PLACEHOLDER.highlightPostTag}li`,
-                    value: 'Salvador Dali',
-                  },
-                  {
-                    count: 9,
-                    highlighted: `${TAG_PLACEHOLDER.highlightPreTag}Da${TAG_PLACEHOLDER.highlightPostTag}vidoff`,
-                    value: 'Davidoff',
-                  },
-                ],
-                processingTimeMS: 1,
-              },
-            ]);
-          },
+      const client = createMockClient();
+      const helper = algoliasearchHelper(client, '', {
+        ...widget.getWidgetSearchParameters(new SearchParameters({}), {
+          uiState: {},
         }),
-        '',
-        {
-          ...widget.getWidgetSearchParameters(new SearchParameters({}), {
-            uiState: {},
-          }),
-          // Here we simulate that another widget has set some highlight tags
-          ...TAG_PLACEHOLDER,
-        }
-      );
-      helper.search = jest.fn();
-      const searchForFacetValuesSpy = jest.spyOn(
-        helper,
-        'searchForFacetValues'
-      );
+        // Here we simulate that another widget has set some highlight tags
+        ...TAG_PLACEHOLDER,
+      });
 
       // Simulate the lifecycle
       widget.init!(
@@ -2109,13 +2014,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       const search = rendering.mock.calls[1][0].searchForItems;
       search('da');
 
-      const [sffvFacet, sffvQuery, maxNbItems, paramOverride] =
-        searchForFacetValuesSpy.mock.calls[0];
-
-      expect(sffvQuery).toBe('da');
-      expect(sffvFacet).toBe('category');
-      expect(maxNbItems).toBe(2);
-      expect(paramOverride).toEqual(TAG_PLACEHOLDER);
+      expect(client.search).toHaveBeenCalledWith([
+        {
+          type: 'facet',
+          facet: 'category',
+          indexName: '',
+          params: {
+            facetQuery: 'da',
+            facets: ['category'],
+            ...TAG_PLACEHOLDER,
+            maxFacetHits: 2,
+            maxValuesPerFacet: 2,
+          },
+        },
+      ]);
 
       await wait(0);
 
@@ -2145,7 +2057,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const widget = makeWidget({
       attribute: 'myFacet',
     });
-    const helper = jsHelper(
+    const helper = algoliasearchHelper(
       createSearchClient(),
       '',
       widget.getWidgetSearchParameters(new SearchParameters({}), {
@@ -2170,7 +2082,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       });
 
       const indexName = 'my-index';
-      const helper = jsHelper(
+      const helper = algoliasearchHelper(
         createSearchClient(),
         indexName,
         widget.getWidgetSearchParameters(new SearchParameters({}), {
@@ -2265,7 +2177,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       });
 
       const indexName = 'my-index';
-      const helper = jsHelper(
+      const helper = algoliasearchHelper(
         createSearchClient(),
         indexName,
         widget.getWidgetSearchParameters(new SearchParameters({}), {
@@ -2354,7 +2266,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     test('returns the `uiState` empty', () => {
       const render = () => {};
       const makeWidget = connectRefinementList(render);
-      const helper = jsHelper(createSearchClient(), '');
+      const helper = algoliasearchHelper(createSearchClient(), '');
       const widget = makeWidget({
         attribute: 'brand',
       });
@@ -2373,7 +2285,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     test('returns the `uiState` with a refinement', () => {
       const render = () => {};
       const makeWidget = connectRefinementList(render);
-      const helper = jsHelper(createSearchClient(), '', {
+      const helper = algoliasearchHelper(createSearchClient(), '', {
         disjunctiveFacets: ['brand'],
         disjunctiveFacetsRefinements: {
           brand: ['Apple', 'Microsoft'],
@@ -2402,7 +2314,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     test('returns the `uiState` without namespace overridden', () => {
       const render = () => {};
       const makeWidget = connectRefinementList(render);
-      const helper = jsHelper(createSearchClient(), '', {
+      const helper = algoliasearchHelper(createSearchClient(), '', {
         disjunctiveFacets: ['brand'],
         disjunctiveFacetsRefinements: {
           brand: ['Apple', 'Microsoft'],
@@ -2440,7 +2352,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       const unmountFn = jest.fn();
       const createRefinementList = connectRefinementList(renderFn, unmountFn);
       const refinementListWidget = createRefinementList({ attribute: 'brand' });
-      const helper = jsHelper(createSearchClient(), 'indexName', {
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: ['brand'],
         disjunctiveFacetsRefinements: {
           brand: ['Apple', 'Microsoft'],
@@ -2476,7 +2388,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       const unmountFn = jest.fn();
       const createRefinementList = connectRefinementList(renderFn, unmountFn);
       const refinementListWidget = createRefinementList({ attribute: 'brand' });
-      const helper = jsHelper(createSearchClient(), 'indexName', {
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: ['brand'],
         disjunctiveFacetsRefinements: {
           brand: ['Apple', 'Microsoft'],
@@ -2560,7 +2472,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       const unmountFn = jest.fn();
       const createRefinementList = connectRefinementList(renderFn, unmountFn);
       const refinementListWidget = createRefinementList({ attribute: 'brand' });
-      const helper = jsHelper(createSearchClient(), 'indexName', {
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: ['brand'],
         disjunctiveFacetsRefinements: {
           brand: ['Apple', 'Microsoft'],
@@ -2593,7 +2505,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     it('returns the widget render state with results', () => {
       const createRefinementList = connectRefinementList(jest.fn(), jest.fn());
       const refinementListWidget = createRefinementList({ attribute: 'brand' });
-      const helper = jsHelper(createSearchClient(), 'indexName', {
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: ['brand'],
         disjunctiveFacetsRefinements: {
           brand: ['Apple', 'Microsoft'],
@@ -2682,7 +2594,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         const refinementListWidget = createRefinementList({
           attribute: 'discounts',
         });
-        const helper = jsHelper(createSearchClient(), 'indexName', {
+        const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
           disjunctiveFacets: ['discounts'],
           disjunctiveFacetsRefinements: {
             discounts: ['\\-10%', '\\-2€'],
@@ -2833,7 +2745,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
             attribute: 'brand',
             sortBy,
           });
-          const helper = jsHelper(
+          const helper = algoliasearchHelper(
             createSearchClient(),
             'indexName',
             refinementList.getWidgetSearchParameters(new SearchParameters(), {
@@ -2885,7 +2797,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       test('returns the `SearchParameters` with default `limit`', () => {
         const render = () => {};
         const makeWidget = connectRefinementList(render);
-        const helper = jsHelper(createSearchClient(), '');
+        const helper = algoliasearchHelper(createSearchClient(), '');
         const widget = makeWidget({
           attribute: 'brand',
         });
@@ -2900,7 +2812,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       test('returns the `SearchParameters` with provided `limit`', () => {
         const render = () => {};
         const makeWidget = connectRefinementList(render);
-        const helper = jsHelper(createSearchClient(), '');
+        const helper = algoliasearchHelper(createSearchClient(), '');
         const widget = makeWidget({
           attribute: 'brand',
           limit: 5,
@@ -2916,7 +2828,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       test('returns the `SearchParameters` with default `showMoreLimit`', () => {
         const render = () => {};
         const makeWidget = connectRefinementList(render);
-        const helper = jsHelper(createSearchClient(), '');
+        const helper = algoliasearchHelper(createSearchClient(), '');
         const widget = makeWidget({
           attribute: 'brand',
           showMore: true,
@@ -2932,7 +2844,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       test('returns the `SearchParameters` with provided `showMoreLimit`', () => {
         const render = () => {};
         const makeWidget = connectRefinementList(render);
-        const helper = jsHelper(createSearchClient(), '');
+        const helper = algoliasearchHelper(createSearchClient(), '');
         const widget = makeWidget({
           attribute: 'brand',
           showMore: true,
@@ -2949,7 +2861,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       test('returns the `SearchParameters` with the previous value if higher than `limit`/`showMoreLimit`', () => {
         const render = () => {};
         const makeWidget = connectRefinementList(render);
-        const helper = jsHelper(createSearchClient(), '', {
+        const helper = algoliasearchHelper(createSearchClient(), '', {
           maxValuesPerFacet: 100,
         });
 
@@ -2967,7 +2879,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       test('returns the `SearchParameters` with `limit`/`showMoreLimit` if higher than previous value', () => {
         const render = () => {};
         const makeWidget = connectRefinementList(render);
-        const helper = jsHelper(createSearchClient(), '', {
+        const helper = algoliasearchHelper(createSearchClient(), '', {
           maxValuesPerFacet: 100,
         });
 
@@ -2988,7 +2900,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       test('returns the `SearchParameters` with the default value', () => {
         const render = () => {};
         const makeWidget = connectRefinementList(render);
-        const helper = jsHelper(createSearchClient(), '');
+        const helper = algoliasearchHelper(createSearchClient(), '');
         const widget = makeWidget({
           attribute: 'brand',
           operator: 'and',
@@ -3007,7 +2919,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       test('returns the `SearchParameters` with the default value without the previous refinement', () => {
         const render = () => {};
         const makeWidget = connectRefinementList(render);
-        const helper = jsHelper(createSearchClient(), '', {
+        const helper = algoliasearchHelper(createSearchClient(), '', {
           facets: ['brand'],
           facetsRefinements: {
             brand: ['Apple', 'Samsung'],
@@ -3032,7 +2944,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       test('returns the `SearchParameters` with the value from `uiState`', () => {
         const render = () => {};
         const makeWidget = connectRefinementList(render);
-        const helper = jsHelper(createSearchClient(), '');
+        const helper = algoliasearchHelper(createSearchClient(), '');
         const widget = makeWidget({
           attribute: 'brand',
           operator: 'and',
@@ -3055,7 +2967,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       test('returns the `SearchParameters` with the value from `uiState` without the previous refinement', () => {
         const render = () => {};
         const makeWidget = connectRefinementList(render);
-        const helper = jsHelper(createSearchClient(), '', {
+        const helper = algoliasearchHelper(createSearchClient(), '', {
           facets: ['brand'],
           facetsRefinements: {
             brand: ['Microsoft'],
@@ -3085,7 +2997,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         warnCache.current = {};
         const render = () => {};
         const makeWidget = connectRefinementList(render);
-        const helper = jsHelper(createSearchClient(), '', {
+        const helper = algoliasearchHelper(createSearchClient(), '', {
           disjunctiveFacets: ['brand'],
         });
 
@@ -3106,7 +3018,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       test('returns the `SearchParameters` with the default value', () => {
         const render = () => {};
         const makeWidget = connectRefinementList(render);
-        const helper = jsHelper(createSearchClient(), '');
+        const helper = algoliasearchHelper(createSearchClient(), '');
         const widget = makeWidget({
           attribute: 'brand',
         });
@@ -3124,7 +3036,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       test('returns the `SearchParameters` with the default value without the previous refinement', () => {
         const render = () => {};
         const makeWidget = connectRefinementList(render);
-        const helper = jsHelper(createSearchClient(), '', {
+        const helper = algoliasearchHelper(createSearchClient(), '', {
           disjunctiveFacets: ['brand'],
           disjunctiveFacetsRefinements: {
             brand: ['Apple', 'Samsung'],
@@ -3148,7 +3060,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       test('returns the `SearchParameters` with the value from `uiState`', () => {
         const render = () => {};
         const makeWidget = connectRefinementList(render);
-        const helper = jsHelper(createSearchClient(), '');
+        const helper = algoliasearchHelper(createSearchClient(), '');
         const widget = makeWidget({
           attribute: 'brand',
         });
@@ -3170,7 +3082,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       test('returns the `SearchParameters` with the value from `uiState` without the previous refinement', () => {
         const render = () => {};
         const makeWidget = connectRefinementList(render);
-        const helper = jsHelper(createSearchClient(), '', {
+        const helper = algoliasearchHelper(createSearchClient(), '', {
           disjunctiveFacets: ['brand'],
           disjunctiveFacetsRefinements: {
             brand: ['Microsoft'],
@@ -3199,7 +3111,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         warnCache.current = {};
         const render = () => {};
         const makeWidget = connectRefinementList(render);
-        const helper = jsHelper(createSearchClient(), '', {
+        const helper = algoliasearchHelper(createSearchClient(), '', {
           facets: ['brand'],
         });
 
@@ -3217,7 +3129,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
 
     test('warns when attribute is used for hierarchical faceting and does not change `SearchParameters`', () => {
       warnCache.current = {};
-      const helper = jsHelper(createSearchClient(), '', {
+      const helper = algoliasearchHelper(createSearchClient(), '', {
         hierarchicalFacets: [{ name: 'brand', attributes: ['brand'] }],
       });
       const widget = connectRefinementList(jest.fn())({ attribute: 'brand' });
@@ -3242,7 +3154,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
         attribute: 'category',
       });
 
-      const helper = jsHelper(
+      const helper = algoliasearchHelper(
         createSearchClient(),
         '',
         widget.getWidgetSearchParameters(new SearchParameters({}), {
@@ -3306,3 +3218,36 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
   });
 });
+
+function createMockClient() {
+  const client = createSearchClient({
+    search: jest.fn((requests) => {
+      return Promise.resolve(
+        createMultiSearchResponse(
+          ...requests.map((request) =>
+            request.type === 'facet'
+              ? createSFFVResponse({
+                  facetHits:
+                    request.params.facetQuery === 'nothing'
+                      ? []
+                      : [
+                          {
+                            count: 33,
+                            highlighted: `Salvador ${request.params.highlightPreTag}Da${request.params.highlightPostTag}li`,
+                            value: 'Salvador Dali',
+                          },
+                          {
+                            count: 9,
+                            highlighted: `${request.params.highlightPreTag}Da${request.params.highlightPostTag}vidoff`,
+                            value: 'Davidoff',
+                          },
+                        ],
+                })
+              : createSingleSearchResponse()
+          )
+        )
+      );
+    }),
+  });
+  return client;
+}
