@@ -7,7 +7,7 @@ import {
   createSingleRecommendResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import { wait } from '@instantsearch/testutils';
+import { wait, castToJestMock } from '@instantsearch/testutils';
 import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
@@ -15,24 +15,23 @@ import algoliasearchHelper, {
   RecommendResults,
 } from 'algoliasearch-helper';
 
-import { castToJestMock } from '../../../../../../tests/utils';
-import { createInstantSearch } from '../../../../test/createInstantSearch';
 import {
-  createWidget,
-  createIndexInitOptions,
-  createDisposeOptions,
-} from '../../../../test/createWidget';
-import {
+  instantsearch,
+  index,
   connectHits,
   connectPagination,
   connectRefinementList,
   connectSearchBox,
-} from '../../../connectors';
-import instantsearch from '../../../index.es';
-import { warnCache } from '../../../lib/utils';
-import index from '../index';
+} from '../..';
+import { createInstantSearch } from '../../../test/createInstantSearch';
+import {
+  createWidget,
+  createIndexInitOptions,
+  createDisposeOptions,
+} from '../../../test/createWidget';
+import { warnCache } from '../../lib/public';
 
-import type { Widget } from '../../../types';
+import type { Widget } from '../../types';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
 
 describe('index', () => {
@@ -972,15 +971,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
     it('create URLs with non-namesake helper state', () => {
       const instance = index({ indexName: 'indexName' });
-      const searchBox = virtualSearchBox({});
-      const pagination = virtualPagination({});
-
-      const container = document.createElement('div');
-      document.body.append(container);
 
       instance.addWidgets([
-        searchBox,
-        pagination,
+        virtualSearchBox({}),
+        virtualPagination({}),
         virtualRefinementList({ attribute: 'doggies' }),
       ]);
 
@@ -1452,7 +1446,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       instance.addWidgets([
         createSearchBox({
           getWidgetSearchParameters(state) {
-            return state.setQueryParameter('query', 'Apple');
+            return state.setQueryParameter('query', 'Global Query');
           },
         }),
         createPagination({
@@ -1475,22 +1469,22 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         highlightPostTag: '</mark>',
       });
 
-      expect(searchClient.searchForFacetValues).toHaveBeenCalledTimes(1);
-      expect(searchClient.searchForFacetValues).toHaveBeenCalledWith(
-        expect.arrayContaining([
-          {
-            indexName: 'indexName',
-            params: expect.objectContaining({
-              facetName: 'brand',
-              facetQuery: 'Apple',
-              maxFacetHits: 10,
-              highlightPreTag: '<mark>',
-              highlightPostTag: '</mark>',
-              page: 5,
-            }),
-          },
-        ])
-      );
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+      expect(searchClient.search).toHaveBeenCalledWith([
+        {
+          type: 'facet',
+          indexName: 'indexName',
+          facet: 'brand',
+          params: expect.objectContaining({
+            facetQuery: 'Apple',
+            query: 'Global Query',
+            maxFacetHits: 10,
+            highlightPreTag: '<mark>',
+            highlightPostTag: '</mark>',
+            page: 5,
+          }),
+        },
+      ]);
     });
 
     it('schedules a render on DerivedHelper results', async () => {
