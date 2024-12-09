@@ -1,0 +1,63 @@
+{
+  "content": {
+    "results": [
+      {
+        "hits": [],
+        "nbHits": 1000,
+        "page": 0,
+        "nbPages": 16,
+        "hitsPerPage": 8,
+        "facets": {
+          "brand": {
+            "Apple": 1000
+          }
+        },
+        "exhaustiveFacetsCount": true,
+        "exhaustiveNbHits": true,
+        "query": "",
+        "index": "instant_search"
+      },
+      {
+        "hits": [],
+        "nbHits": 3988,
+        "page": 0,
+        "nbPages": 0,
+        "hitsPerPage": 0,
+        "facets": {
+          "brand": {
+            "Apple": 50,
+            "Insignia™": 551,
+            "Samsung": 551
+          }
+        },
+        "exhaustiveFacetsCount": true,
+        "exhaustiveNbHits": true,
+        "query": "",
+        "index": "instant_search"
+      }
+    ]
+  },
+  "state": {
+    "index": "instant_search",
+    "query": "",
+    "facets": [],
+    "disjunctiveFacets": [],
+    "hierarchicalFacets": [
+      {
+        "name": "brand",
+        "attributes": ["brand"]
+      }
+    ],
+    "facetsRefinements": {},
+    "facetsExcludes": {},
+    "disjunctiveFacetsRefinements": {},
+    "numericRefinements": {},
+    "tagRefinements": [],
+    "hierarchicalFacetsRefinements": {
+      "brand": ["Apple"]
+    },
+    "maxValuesPerFacet": 3,
+    "page": 0
+  },
+  "error": null
+}

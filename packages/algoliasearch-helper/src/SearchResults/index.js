@@ -6,7 +6,6 @@ var fv = require('../functions/escapeFacetValue');
 var find = require('../functions/find');
 var findIndex = require('../functions/findIndex');
 var formatSort = require('../functions/formatSort');
-var merge = require('../functions/merge');
 var orderBy = require('../functions/orderBy');
 var escapeFacetValue = fv.escapeFacetValue;
 var unescapeFacetValue = fv.unescapeFacetValue;
@@ -244,12 +243,9 @@ function SearchResults(state, results, options) {
   });
 
   // Make every key of the result options reachable from the instance
-  var opts = merge(
-    {
-      persistHierarchicalRootCount: false,
-    },
-    options
-  );
+  var opts = defaultsPure(options, {
+    persistHierarchicalRootCount: false,
+  });
   Object.keys(opts).forEach(function (key) {
     self[key] = opts[key];
   });
@@ -516,11 +512,16 @@ function SearchResults(state, results, options) {
           return;
         }
 
-        self.hierarchicalFacets[position][attributeIndex].data = merge(
-          {},
-          self.hierarchicalFacets[position][attributeIndex].data,
-          facetResults
-        );
+        self.hierarchicalFacets[position][attributeIndex].data =
+          self.persistHierarchicalRootCount
+            ? defaultsPure(
+                self.hierarchicalFacets[position][attributeIndex].data,
+                facetResults
+              )
+            : defaultsPure(
+                facetResults,
+                self.hierarchicalFacets[position][attributeIndex].data
+              );
       } else {
         position = disjunctiveFacetsIndices[dfacet];
 
@@ -529,7 +530,7 @@ function SearchResults(state, results, options) {
 
         self.disjunctiveFacets[position] = {
           name: dfacet,
-          data: defaultsPure({}, facetResults, dataFromMainRequest),
+          data: defaultsPure(dataFromMainRequest, facetResults),
           exhaustive: result.exhaustiveFacetsCount,
         };
         assignFacetStats(
@@ -927,7 +928,7 @@ SearchResults.prototype.getFacetValues = function (attribute, opts) {
     return undefined;
   }
 
-  var options = defaultsPure({}, opts, {
+  var options = defaultsPure(opts, {
     sortBy: SearchResults.DEFAULT_SORT,
     // if no sortBy is given, attempt to sort based on facetOrdering
     // if it is given, we still allow to sort via facet ordering first

@@ -39,7 +39,7 @@ var lib = {
 
     mod[attribute] = facetRefinement;
 
-    return defaultsPure({}, mod, refinementList);
+    return defaultsPure(mod, refinementList);
   },
   /**
    * Removes refinement(s) for an attribute:
