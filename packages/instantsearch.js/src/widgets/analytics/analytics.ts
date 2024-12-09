@@ -252,6 +252,9 @@ For the migration, visit https://www.algolia.com/doc/guides/building-search-ui/u
     },
 
     render({ results, state }) {
+      if (!results) {
+        return;
+      }
       if (isInitialSearch === true) {
         isInitialSearch = false;
 

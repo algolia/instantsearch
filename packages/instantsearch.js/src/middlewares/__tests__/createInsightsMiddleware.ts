@@ -949,7 +949,7 @@ describe('insights', () => {
 
     describe('authenticatedUserToken', () => {
       describe('before `init`', () => {
-        it('uses the `authenticatedUserToken` as the `userToken` when defined', () => {
+        it('does not use `authenticatedUserToken` as the `userToken` when defined', () => {
           const { insightsClient, instantSearchInstance, getUserToken } =
             createTestEnvironment();
 
@@ -959,30 +959,15 @@ describe('insights', () => {
             createInsightsMiddleware({ insightsClient })
           );
 
-          expect(getUserToken()).toEqual('abc');
+          expect(getUserToken()).toEqual(expect.stringMatching(/^anonymous-/));
         });
 
-        it('uses the `authenticatedUserToken` as the `userToken` when both are defined', () => {
+        it('does not use `authenticatedUserToken` as the `userToken` when both are defined', () => {
           const { insightsClient, instantSearchInstance, getUserToken } =
             createTestEnvironment();
 
           insightsClient('setUserToken', 'abc');
           insightsClient('setAuthenticatedUserToken', 'def');
-
-          instantSearchInstance.use(
-            createInsightsMiddleware({ insightsClient })
-          );
-
-          expect(getUserToken()).toEqual('def');
-        });
-
-        it('reverts to the `userToken` when unsetting the `authenticatedUserToken`', () => {
-          const { insightsClient, instantSearchInstance, getUserToken } =
-            createTestEnvironment();
-
-          insightsClient('setUserToken', 'abc');
-          insightsClient('setAuthenticatedUserToken', 'def');
-          insightsClient('setAuthenticatedUserToken', undefined);
 
           instantSearchInstance.use(
             createInsightsMiddleware({ insightsClient })
@@ -991,7 +976,7 @@ describe('insights', () => {
           expect(getUserToken()).toEqual('abc');
         });
 
-        it('uses the `authenticatedUserToken` when a `userToken` is set after', () => {
+        it('does not use `authenticatedUserToken` when a `userToken` is set after', () => {
           const { insightsClient, instantSearchInstance, getUserToken } =
             createTestEnvironment();
 
@@ -1002,31 +987,46 @@ describe('insights', () => {
           );
 
           insightsClient('setUserToken', 'abc');
-
-          expect(getUserToken()).toEqual('def');
-        });
-
-        it('resets the token to the `userToken` when `authenticatedUserToken` is set as undefined', () => {
-          const { insightsClient, instantSearchInstance, getUserToken } =
-            createTestEnvironment();
-
-          insightsClient('setUserToken', 'abc');
-          insightsClient('setAuthenticatedUserToken', 'def');
-
-          instantSearchInstance.use(
-            createInsightsMiddleware({ insightsClient })
-          );
-
-          expect(getUserToken()).toEqual('def');
-
-          insightsClient('setAuthenticatedUserToken', undefined);
 
           expect(getUserToken()).toEqual('abc');
         });
       });
 
+      describe('from `init` props', () => {
+        it('does not use `authenticatedUserToken` as the `userToken` when defined', () => {
+          const { insightsClient, instantSearchInstance, getUserToken } =
+            createTestEnvironment();
+
+          instantSearchInstance.use(
+            createInsightsMiddleware({
+              insightsClient,
+              insightsInitParams: { authenticatedUserToken: 'abc' },
+            })
+          );
+
+          expect(getUserToken()).toEqual(expect.stringMatching(/^anonymous-/));
+        });
+
+        it('does not use `authenticatedUserToken` as the `userToken` when both are defined', () => {
+          const { insightsClient, instantSearchInstance, getUserToken } =
+            createTestEnvironment();
+
+          instantSearchInstance.use(
+            createInsightsMiddleware({
+              insightsClient,
+              insightsInitParams: {
+                authenticatedUserToken: 'abc',
+                userToken: 'def',
+              },
+            })
+          );
+
+          expect(getUserToken()).toEqual('def');
+        });
+      });
+
       describe('after `init`', () => {
-        it('uses the `authenticatedUserToken` as the `userToken` when defined', async () => {
+        it('does not use `authenticatedUserToken` as the `userToken` when defined', async () => {
           const { insightsClient, instantSearchInstance, getUserToken } =
             createTestEnvironment();
           instantSearchInstance.use(
@@ -1037,10 +1037,10 @@ describe('insights', () => {
 
           await wait(0);
 
-          expect(getUserToken()).toEqual('abc');
+          expect(getUserToken()).toEqual(expect.stringMatching(/^anonymous-/));
         });
 
-        it('uses the `authenticatedUserToken` as the `userToken` when both are defined', async () => {
+        it('does not use `authenticatedUserToken` as the `userToken` when both are defined', async () => {
           const { insightsClient, instantSearchInstance, getUserToken } =
             createTestEnvironment();
           instantSearchInstance.use(
@@ -1049,22 +1049,6 @@ describe('insights', () => {
 
           insightsClient('setUserToken', 'abc');
           insightsClient('setAuthenticatedUserToken', 'def');
-
-          await wait(0);
-
-          expect(getUserToken()).toEqual('def');
-        });
-
-        it('reverts to the `userToken` when unsetting the `authenticatedUserToken`', async () => {
-          const { insightsClient, instantSearchInstance, getUserToken } =
-            createTestEnvironment();
-          instantSearchInstance.use(
-            createInsightsMiddleware({ insightsClient })
-          );
-
-          insightsClient('setUserToken', 'abc');
-          insightsClient('setAuthenticatedUserToken', 'def');
-          insightsClient('setAuthenticatedUserToken', undefined);
 
           await wait(0);
 
@@ -1073,7 +1057,7 @@ describe('insights', () => {
       });
 
       describe('from queue', () => {
-        it('uses the `authenticatedUserToken` as the `userToken` when defined', () => {
+        it('does not use `authenticatedUserToken` as the `userToken` when defined', () => {
           const {
             insightsClient,
             libraryLoadedAndProcessQueue,
@@ -1091,10 +1075,10 @@ describe('insights', () => {
           );
           libraryLoadedAndProcessQueue();
 
-          expect(getUserToken()).toEqual('abc');
+          expect(getUserToken()).toEqual(expect.stringMatching(/^anonymous-/));
         });
 
-        it('uses the `authenticatedUserToken` as the `userToken` when both are defined', () => {
+        it('does not use `authenticatedUserToken` as the `userToken` when both are defined', () => {
           const {
             insightsClient,
             libraryLoadedAndProcessQueue,
@@ -1105,28 +1089,6 @@ describe('insights', () => {
           insightsClient('init', { appId: 'myAppId', apiKey: 'myApiKey' });
           insightsClient('setUserToken', 'abc');
           insightsClient('setAuthenticatedUserToken', 'def');
-
-          instantSearchInstance.use(
-            createInsightsMiddleware({
-              insightsClient,
-            })
-          );
-          libraryLoadedAndProcessQueue();
-
-          expect(getUserToken()).toEqual('def');
-        });
-
-        it('reverts to the `userToken` when unsetting the `authenticatedUserToken`', () => {
-          const {
-            insightsClient,
-            libraryLoadedAndProcessQueue,
-            instantSearchInstance,
-            getUserToken,
-          } = createUmdTestEnvironment();
-
-          insightsClient('setUserToken', 'abc');
-          insightsClient('setAuthenticatedUserToken', 'def');
-          insightsClient('setAuthenticatedUserToken', undefined);
 
           instantSearchInstance.use(
             createInsightsMiddleware({
