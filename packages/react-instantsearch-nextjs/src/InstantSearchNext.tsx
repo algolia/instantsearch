@@ -1,5 +1,6 @@
 import { safelyRunOnBrowser } from 'instantsearch.js/es/lib/utils';
 import { headers } from 'next/headers';
+import { usePathname } from 'next/navigation';
 import React, { useEffect, useRef } from 'react';
 import {
   InstantSearch,
@@ -20,9 +21,11 @@ import type {
 } from 'react-instantsearch-core';
 
 const InstantSearchInitialResults = Symbol.for('InstantSearchInitialResults');
+const InstantSearchLastPath = Symbol.for('InstantSearchLastPath');
 declare global {
   interface Window {
     [InstantSearchInitialResults]?: InitialResults;
+    [InstantSearchLastPath]?: string;
   }
 }
 
@@ -47,6 +50,17 @@ export function InstantSearchNext<
   ...instantSearchProps
 }: InstantSearchNextProps<TUiState, TRouteState>) {
   const isMounting = useRef(true);
+  const isServer = typeof window === 'undefined';
+  const pathname = usePathname();
+  const hasRouteChanged =
+    !isServer &&
+    window[InstantSearchLastPath] &&
+    window[InstantSearchLastPath] !== pathname;
+
+  // We only want to trigger a search from a server environment
+  // or if a Next.js route change has happened on the client
+  const shouldTriggerSearch = isServer || hasRouteChanged;
+
   useEffect(() => {
     isMounting.current = false;
     return () => {
@@ -54,6 +68,10 @@ export function InstantSearchNext<
       delete window[InstantSearchInitialResults];
     };
   }, []);
+
+  useEffect(() => {
+    window[InstantSearchLastPath] = pathname;
+  }, [pathname]);
 
   const nonce = safelyRunOnBrowser(() => undefined, {
     fallback: () => headers().get('x-nonce') || undefined,
@@ -77,9 +95,9 @@ This message will only be displayed in development mode.`
     <InstantSearchRSCContext.Provider value={promiseRef}>
       <InstantSearchSSRProvider initialResults={initialResults}>
         <InstantSearch {...instantSearchProps} routing={routing}>
-          {!initialResults && <InitializePromise nonce={nonce} />}
+          {shouldTriggerSearch && <InitializePromise nonce={nonce} />}
           {children}
-          {!initialResults && <TriggerSearch />}
+          {shouldTriggerSearch && <TriggerSearch />}
         </InstantSearch>
       </InstantSearchSSRProvider>
     </InstantSearchRSCContext.Provider>
