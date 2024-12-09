@@ -287,31 +287,27 @@ export type SupportedLanguage = PickForClient<{
   v5: AlgoliaSearch.SupportedLanguage;
 }>;
 
-// v5 only has the `searchForFacetValues` method in the `search` client, not in `lite`.
-// We need to check both clients to get the correct type.
-// (this is not actually used in the codebase, but it's here for completeness)
-type SearchForFacetValuesV5 = ClientSearchV5 | ClientFullV5 extends {
-  searchForFacetValues: unknown;
-}
-  ?
-      | ClientSearchV5['searchForFacetValues']
-      | ClientFullV5['searchForFacetValues']
-  : never;
-
 export interface SearchClient {
   search: <T>(
-    requests: Array<{ indexName: string; params: SearchOptions }>
+    requests: Array<
+      | {
+          type?: 'default';
+          indexName: string;
+          params: SearchOptions;
+        }
+      | {
+          type: 'facet';
+          indexName: string;
+          facet: string;
+          params: SearchOptions & {
+            maxFacetHits?: number;
+            facetQuery?: string;
+          };
+        }
+    >
   ) => Promise<SearchResponses<T>>;
   getRecommendations?: <T>(
     requests: RecommendOptions[]
   ) => Promise<RecommendResponses<T>>;
-  searchForFacetValues?: DefaultSearchClient extends {
-    searchForFacetValues: unknown;
-  }
-    ? DefaultSearchClient['searchForFacetValues']
-    : SearchForFacetValuesV5;
-  initIndex?: DefaultSearchClient extends { initIndex: unknown }
-    ? DefaultSearchClient['initIndex']
-    : never;
   addAlgoliaAgent?: DefaultSearchClient['addAlgoliaAgent'];
 }

@@ -322,21 +322,6 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function (
   maxFacetHits,
   userState
 ) {
-  var clientHasSFFV =
-    typeof this.client.searchForFacetValues === 'function' &&
-    // v5 has a wrong sffv signature
-    typeof this.client.searchForFacets !== 'function';
-  var clientHasInitIndex = typeof this.client.initIndex === 'function';
-  if (
-    !clientHasSFFV &&
-    !clientHasInitIndex &&
-    typeof this.client.search !== 'function'
-  ) {
-    throw new Error(
-      'search for facet values (searchable) was called, but this client does not have a function client.searchForFacetValues or client.initIndex(index).searchForFacetValues'
-    );
-  }
-
   var state = this.state.setQueryParameters(userState || {});
   var isDisjunctive = state.isDisjunctiveFacet(facet);
   var algoliaQuery = requestBuilder.getSearchForFacetQuery(
@@ -349,34 +334,15 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function (
   this._currentNbQueries++;
   // eslint-disable-next-line consistent-this
   var self = this;
-  var searchForFacetValuesPromise;
-  // newer algoliasearch ^3.27.1 - ~4.0.0
-  if (clientHasSFFV) {
-    searchForFacetValuesPromise = this.client.searchForFacetValues([
-      { indexName: state.index, params: algoliaQuery },
-    ]);
-    // algoliasearch < 3.27.1
-  } else if (clientHasInitIndex) {
-    searchForFacetValuesPromise = this.client
-      .initIndex(state.index)
-      .searchForFacetValues(algoliaQuery);
-    // algoliasearch ~5.0.0
-  } else {
-    // @MAJOR only use client.search
-    delete algoliaQuery.facetName;
-    searchForFacetValuesPromise = this.client
-      .search([
-        {
-          type: 'facet',
-          facet: facet,
-          indexName: state.index,
-          params: algoliaQuery,
-        },
-      ])
-      .then(function processResponse(response) {
-        return response.results[0];
-      });
-  }
+
+  var searchForFacetValuesPromise = this.client.search([
+    {
+      type: 'facet',
+      facet: facet,
+      indexName: state.index,
+      params: algoliaQuery,
+    },
+  ]);
 
   this.emit('searchForFacetValues', {
     state: state,
@@ -389,16 +355,16 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function (
       self._currentNbQueries--;
       if (self._currentNbQueries === 0) self.emit('searchQueueEmpty');
 
-      content = Array.isArray(content) ? content[0] : content;
+      var result = content.results[0];
 
-      content.facetHits.forEach(function (f) {
+      result.facetHits.forEach(function (f) {
         f.escapedValue = escapeFacetValue(f.value);
         f.isRefined = isDisjunctive
           ? state.isDisjunctiveFacetRefined(facet, f.escapedValue)
           : state.isFacetRefined(facet, f.escapedValue);
       });
 
-      return content;
+      return result;
     },
     function (e) {
       self._currentNbQueries--;
