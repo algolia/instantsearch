@@ -905,17 +905,22 @@ export function createOptionsTests(
         });
 
         // One call per keystroke
-        expect(searchClient.searchForFacetValues).toHaveBeenCalledTimes(3);
-        expect(searchClient.searchForFacetValues).toHaveBeenLastCalledWith(
-          expect.arrayContaining([
-            expect.objectContaining({
-              params: expect.objectContaining({
-                facetName: 'brand',
-                facetQuery: 'app',
-              }),
-            }),
-          ])
-        );
+        expect(searchClient.search).toHaveBeenCalledTimes(1 + 'app'.length);
+        expect(searchClient.search).toHaveBeenLastCalledWith([
+          {
+            type: 'facet',
+            indexName: 'indexName',
+            facet: 'brand',
+            params: {
+              facetQuery: 'app',
+              facets: ['brand'],
+              highlightPostTag: '__/ais-highlight__',
+              highlightPreTag: '__ais-highlight__',
+              maxFacetHits: 10,
+              maxValuesPerFacet: 10,
+            },
+          },
+        ]);
         expect(
           document.querySelector('.ais-RefinementList-labelText')
         ).toMatchNormalizedInlineSnapshot(
@@ -960,11 +965,7 @@ export function createOptionsTests(
       });
 
       test('displays a fallback when there are no results', async () => {
-        const searchClient = createMockedSearchClient({
-          searchForFacetValues: jest.fn(() =>
-            Promise.resolve([createSFFVResponse({ facetHits: [] })])
-          ),
-        });
+        const searchClient = createMockedSearchClient();
 
         await setup({
           instantSearchOptions: {
@@ -993,7 +994,7 @@ export function createOptionsTests(
           await wait(0);
         });
 
-        expect(searchClient.searchForFacetValues).toHaveBeenCalledTimes(7);
+        expect(searchClient.search).toHaveBeenCalledTimes(1 + 'nothing'.length);
 
         expect(
           document.querySelector('.ais-RefinementList-noResults')
@@ -1568,23 +1569,21 @@ function createMockedSearchClient(
     search: jest.fn((requests) => {
       return Promise.resolve(
         createMultiSearchResponse(
-          ...requests.map(() =>
-            createSingleSearchResponse({
-              facets: {
-                brand: values,
-              },
-            })
+          ...requests.map((request) =>
+            request.type === 'facet'
+              ? createSFFVResponse({
+                  facetHits:
+                    request.params.facetQuery === 'nothing' ? [] : FACET_HITS,
+                })
+              : createSingleSearchResponse({
+                  facets: {
+                    brand: values,
+                  },
+                })
           )
         )
       );
     }),
-    searchForFacetValues: jest.fn(() =>
-      Promise.resolve([
-        createSFFVResponse({
-          facetHits: FACET_HITS,
-        }),
-      ])
-    ) as any, // @TODO: for now casted as any, because v5 only has `type: facet` in search
     ...parameters,
   });
 }
