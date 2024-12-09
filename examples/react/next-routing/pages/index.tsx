@@ -1,3 +1,4 @@
+import { createMemoryCache } from '@algolia/client-common';
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import { Hit as AlgoliaHit } from 'instantsearch.js';
 import { GetServerSideProps } from 'next';
@@ -21,7 +22,10 @@ import { createInstantSearchRouterNext } from 'react-instantsearch-router-nextjs
 
 import { Panel } from '../components/Panel';
 
-const client = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');
+const requestsCache = createMemoryCache();
+const client = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76', {
+  requestsCache,
+});
 
 type HitProps = {
   hit: AlgoliaHit<{
@@ -99,6 +103,7 @@ export const getServerSideProps: GetServerSideProps<HomePageProps> =
     const serverState = await getServerState(<HomePage url={url} />, {
       renderToString,
     });
+    requestsCache.clear();
 
     return {
       props: {

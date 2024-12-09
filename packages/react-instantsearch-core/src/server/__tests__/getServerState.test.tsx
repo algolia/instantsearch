@@ -49,6 +49,7 @@ function Hit({ hit }: { hit: AlgoliaHit }) {
 type CreateTestEnvironmentProps = {
   searchClient: InstantSearchProps['searchClient'];
   initialUiState?: InstantSearchProps['initialUiState'];
+  insights?: InstantSearchProps['insights'];
 };
 
 function createTestEnvironment({
@@ -67,6 +68,7 @@ function createTestEnvironment({
       },
     },
   },
+  insights = false,
 }: CreateTestEnvironmentProps) {
   function Search({ children }: { children?: React.ReactNode }) {
     return (
@@ -74,6 +76,7 @@ function createTestEnvironment({
         searchClient={searchClient}
         indexName="instant_search"
         initialUiState={initialUiState}
+        insights={insights}
       >
         {children}
         <RefinementList attribute="brand" />
@@ -643,6 +646,44 @@ describe('getServerState', () => {
       const userToken = (spiedSearch.mock.calls[0][0] as any)[0].params
         ?.userToken;
       expect(userToken).toEqual(expect.stringMatching(/^anonymous-/));
+    });
+
+    test('only a single user token is generated', async () => {
+      const searchClient = createSearchClient({});
+      const spiedSearch = jest.spyOn(searchClient, 'search');
+
+      function App({
+        serverState,
+      }: {
+        serverState?: InstantSearchServerState;
+      }) {
+        return (
+          <InstantSearchSSRProvider {...serverState}>
+            <InstantSearch
+              searchClient={searchClient}
+              indexName="index"
+              insights={true}
+            >
+              <RefinementList attribute="brand" />
+              <SearchBox />
+              <DynamicWidgets fallbackComponent={RefinementList} />
+
+              <h2>instant_search</h2>
+              <Hits hitComponent={Hit} />
+            </InstantSearch>
+          </InstantSearchSSRProvider>
+        );
+      }
+
+      await getServerState(<App />, { renderToString });
+
+      expect(spiedSearch).toHaveBeenCalledTimes(2);
+
+      const userToken1 = (spiedSearch.mock.calls[0][0] as any)[0].params
+        ?.userToken;
+      const userToken2 = (spiedSearch.mock.calls[1][0] as any)[0].params
+        ?.userToken;
+      expect(userToken1).toEqual(userToken2);
     });
   });
 });

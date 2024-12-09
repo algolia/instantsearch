@@ -421,4 +421,44 @@ describe('getInitialResults', () => {
       ]
     `);
   });
+
+  test('injects clickAnalytics and userToken into the state', async () => {
+    const search = instantsearch({
+      indexName: 'indexName',
+      searchClient: createSearchClient(),
+      initialUiState: {
+        indexName: {
+          query: 'apple',
+        },
+      },
+      insights: true,
+    });
+
+    search.addWidgets([connectSearchBox(() => {})({})]);
+
+    search.start();
+
+    const requestParams = await waitForResults(search);
+
+    expect(requestParams).toEqual([
+      {
+        clickAnalytics: true,
+        query: 'apple',
+        userToken: expect.stringMatching(/^anonymous-/),
+      },
+    ]);
+
+    const initialResults = getInitialResults(search.mainIndex, requestParams);
+
+    const indexRequestParams = initialResults.indexName!.requestParams![0];
+    expect(indexRequestParams.clickAnalytics).toBe(true);
+    expect(indexRequestParams.userToken).toMatch(/^anonymous-/);
+
+    const indexState = initialResults.indexName!.state!;
+    expect(indexState.clickAnalytics).toBe(true);
+    expect(indexState.userToken).toMatch(/^anonymous-/);
+
+    expect(indexRequestParams.userToken).toEqual(requestParams[0].userToken);
+    expect(indexState.userToken).toEqual(indexRequestParams.userToken);
+  });
 });

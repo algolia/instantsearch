@@ -1,6 +1,5 @@
 'use client';
 
-import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import { Hit as AlgoliaHit } from 'instantsearch.js';
 import React from 'react';
 import {
@@ -13,8 +12,7 @@ import {
 import { InstantSearchNext } from 'react-instantsearch-nextjs';
 
 import { Panel } from '../components/Panel';
-
-const client = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');
+import { client } from '../lib/client';
 
 type HitProps = {
   hit: AlgoliaHit<{

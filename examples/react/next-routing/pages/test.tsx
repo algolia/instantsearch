@@ -1,4 +1,5 @@
 // This is only to test `onStateChange` does not get called twice
+import { createMemoryCache } from '@algolia/client-common';
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
@@ -16,7 +17,10 @@ import {
 } from 'react-instantsearch';
 import { createInstantSearchRouterNext } from 'react-instantsearch-router-nextjs';
 
-const client = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');
+const requestsCache = createMemoryCache();
+const client = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76', {
+  requestsCache,
+});
 
 type HomePageProps = {
   serverState?: InstantSearchServerState;
@@ -74,6 +78,7 @@ export const getServerSideProps: GetServerSideProps<HomePageProps> =
     const serverState = await getServerState(<HomePage url={url} />, {
       renderToString,
     });
+    requestsCache.clear();
 
     return {
       props: {
