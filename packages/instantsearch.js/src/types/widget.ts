@@ -13,7 +13,7 @@ import type {
 
 export type ScopedResult = {
   indexId: string;
-  results: SearchResults;
+  results: SearchResults | null;
   helper: Helper;
 };
 
@@ -45,7 +45,7 @@ export type InitOptions = SharedRenderOptions & {
 export type ShouldRenderOptions = { instantSearchInstance: InstantSearch };
 
 export type RenderOptions = SharedRenderOptions & {
-  results: SearchResults;
+  results: SearchResults | null;
 };
 
 export type DisposeOptions = {
@@ -339,7 +339,7 @@ export type Widget<
 export type { IndexWidget } from '../widgets';
 
 export type TransformItemsMetadata = {
-  results?: SearchResults;
+  results: SearchResults | undefined | null;
 };
 
 /**

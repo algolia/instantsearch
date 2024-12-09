@@ -2,7 +2,7 @@ const { pagination: paginationWidget, panel } = window.instantsearch.widgets;
 
 const paginationWithMultiplePages = panel<typeof paginationWidget>({
   hidden({ results }) {
-    return results.nbPages <= 1;
+    return Boolean(results && results.nbPages <= 1);
   },
 })(paginationWidget);
 

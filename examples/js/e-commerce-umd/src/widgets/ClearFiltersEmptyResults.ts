@@ -1,8 +1,8 @@
 const { panel, clearRefinements } = window.instantsearch.widgets;
 
 const clearFilters = panel<typeof clearRefinements>({
-  hidden(options) {
-    return options.results.nbHits > 0;
+  hidden({ results }) {
+    return Boolean(results && results.nbHits > 0);
   },
 })(clearRefinements);
 
