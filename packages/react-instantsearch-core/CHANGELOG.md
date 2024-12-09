@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.13.9](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.13.8...react-instantsearch-core@7.13.9) (2024-12-09)
+
+
+### Bug Fixes
+
+* **insights:** ensure the same token is used when rendered multiple times server side ([#6456](https://github.com/algolia/instantsearch/issues/6456)) ([c3a1c70](https://github.com/algolia/instantsearch/commit/c3a1c70fa79109a9ed7eb4509274887d8b0c972e))
+* **rendering:** ensure resilience against "null" results ([#6442](https://github.com/algolia/instantsearch/issues/6442)) ([a3f0e18](https://github.com/algolia/instantsearch/commit/a3f0e1830ca8c765b21feaf84657249d7f1f5857)), closes [#6441](https://github.com/algolia/instantsearch/issues/6441)
+
+
+
+
+
 ## [7.13.8](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.13.7...react-instantsearch-core@7.13.8) (2024-11-14)
 
 
