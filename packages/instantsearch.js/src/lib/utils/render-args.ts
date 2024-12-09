@@ -29,7 +29,7 @@ export function createRenderArgs(
   parent: IndexWidget,
   widget: IndexWidget | Widget
 ) {
-  const results = parent.getResultsForWidget(widget)!;
+  const results = parent.getResultsForWidget(widget);
   const helper = parent.getHelper()!;
 
   return {

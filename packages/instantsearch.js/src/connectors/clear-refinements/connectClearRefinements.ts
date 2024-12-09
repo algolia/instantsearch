@@ -233,7 +233,7 @@ function getAttributesToClear({
   includedAttributes: string[];
   excludedAttributes: string[];
   transformItems: TransformItems<string>;
-  results: SearchResults | undefined;
+  results: SearchResults | undefined | null;
 }): AttributesToClear {
   const includesQuery =
     includedAttributes.indexOf('query') !== -1 ||
