@@ -73,33 +73,38 @@ function createMockedSearchClient(parameters: Record<string, any> = {}) {
     search: jest.fn((requests) => {
       return Promise.resolve(
         createMultiSearchResponse(
-          ...requests.map(() =>
-            createSingleSearchResponse({
-              facets: {
-                brand: {
-                  'Insignia™': 746,
-                  Samsung: 633,
-                  Metra: 591,
-                  HP: 530,
-                  Apple: 442,
-                  GE: 394,
-                  Sony: 350,
-                  Incipio: 320,
-                  KitchenAid: 318,
-                  Whirlpool: 298,
-                  LG: 291,
-                  Canon: 287,
-                  Frigidaire: 275,
-                  Speck: 216,
-                  OtterBox: 214,
-                  Epson: 204,
-                  'Dynex™': 184,
-                  Dell: 174,
-                  'Hamilton Beach': 173,
-                  Platinum: 155,
-                },
-              },
-            })
+          ...requests.map((request) =>
+            request.type === 'facet'
+              ? createSFFVResponse({
+                  facetHits:
+                    request.params.facetQuery === 'nothing' ? [] : FACET_HITS,
+                })
+              : createSingleSearchResponse({
+                  facets: {
+                    brand: {
+                      'Insignia™': 746,
+                      Samsung: 633,
+                      Metra: 591,
+                      HP: 530,
+                      Apple: 442,
+                      GE: 394,
+                      Sony: 350,
+                      Incipio: 320,
+                      KitchenAid: 318,
+                      Whirlpool: 298,
+                      LG: 291,
+                      Canon: 287,
+                      Frigidaire: 275,
+                      Speck: 216,
+                      OtterBox: 214,
+                      Epson: 204,
+                      'Dynex™': 184,
+                      Dell: 174,
+                      'Hamilton Beach': 173,
+                      Platinum: 155,
+                    },
+                  },
+                })
           )
         )
       );
@@ -136,21 +141,7 @@ describe('RefinementList', () => {
   });
 
   test('renders with translations', async () => {
-    const searchClient = createMockedSearchClient({
-      searchForFacetValues: jest.fn(
-        ([
-          {
-            params: { facetQuery },
-          },
-        ]) => {
-          return Promise.resolve([
-            createSFFVResponse({
-              facetHits: facetQuery === 'nothing' ? [] : FACET_HITS,
-            }),
-          ]);
-        }
-      ),
-    });
+    const searchClient = createMockedSearchClient();
     const { container, getByRole } = render(
       <InstantSearchTestWrapper searchClient={searchClient}>
         <RefinementList
@@ -181,6 +172,7 @@ describe('RefinementList', () => {
 
     expect(getByRole('button', { name: 'Submit' })).toBeInTheDocument();
 
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
     userEvent.type(
       container.querySelector('.ais-SearchBox-input') as HTMLInputElement,
       'nothing'
@@ -189,7 +181,7 @@ describe('RefinementList', () => {
     expect(getByRole('button', { name: 'Reset' })).toBeInTheDocument();
 
     await waitFor(() => {
-      expect(searchClient.searchForFacetValues).toHaveBeenCalledTimes(7);
+      expect(searchClient.search).toHaveBeenCalledTimes(1 + 'nothing'.length);
 
       expect(
         container.querySelector('.ais-RefinementList-noResults')
