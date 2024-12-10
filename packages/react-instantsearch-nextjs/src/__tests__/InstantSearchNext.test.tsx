@@ -10,6 +10,15 @@ import { SearchBox } from 'react-instantsearch';
 
 import { InstantSearchNext } from '../InstantSearchNext';
 
+import type { InitialResults } from 'instantsearch.js';
+
+const InstantSearchInitialResults = Symbol.for('InstantSearchInitialResults');
+declare global {
+  interface Window {
+    [InstantSearchInitialResults]?: InitialResults;
+  }
+}
+
 const mockPathname = jest.fn();
 jest.mock('next/navigation', () => ({
   ...jest.requireActual('next/navigation'),
@@ -31,6 +40,9 @@ describe('rerendering', () => {
 
   beforeEach(() => {
     (client.search as jest.Mock).mockClear();
+
+    // Simulate initialResults injection
+    window[InstantSearchInitialResults] = {};
   });
 
   it('does not trigger a client-side search by default', async () => {
@@ -50,21 +62,24 @@ describe('rerendering', () => {
   });
 
   it('triggers a client-side search on route change', async () => {
-    mockPathname.mockImplementation(() => '/a');
-    const { rerender } = render(<Component />);
+    // Render InstantSearch
+    const { unmount } = render(<Component />);
+
+    // Unmount InstantSearch due to route change
+    await act(async () => {
+      await wait(0);
+      unmount();
+      await wait(0);
+    });
+
+    // Render InstantSearch on new route
+    render(<Component />);
 
     await act(async () => {
       await wait(0);
     });
 
-    mockPathname.mockImplementation(() => '/b');
-    rerender(<Component />);
-
-    await act(async () => {
-      await wait(0);
-    });
-
-    expect(client.search).not.toHaveBeenCalledTimes(0);
+    expect(client.search).toHaveBeenCalledTimes(1);
   });
 });
 
