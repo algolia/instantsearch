@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.20](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.3.19...react-instantsearch-nextjs@0.3.20) (2024-12-10)
+
+
+### Bug Fixes
+
+* **next-app-router:** better detection of route change ([#6467](https://github.com/algolia/instantsearch/issues/6467)) ([8da8096](https://github.com/algolia/instantsearch/commit/8da8096e9bb135d35e0aaa6a9bda5ce3a3704b6a))
+
+
+
+
+
 ## [0.3.19](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.3.18...react-instantsearch-nextjs@0.3.19) (2024-12-09)
 
 
