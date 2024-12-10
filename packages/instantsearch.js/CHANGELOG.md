@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.75.6](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.75.5...instantsearch.js@4.75.6) (2024-12-09)
+
+
+### Bug Fixes
+
+* **insights:** ensure the same token is used when rendered multiple times server side ([#6456](https://github.com/algolia/instantsearch/issues/6456)) ([c3a1c70](https://github.com/algolia/instantsearch/commit/c3a1c70fa79109a9ed7eb4509274887d8b0c972e))
+* **instantsearch.js:** prevent authenticated token being set as the `userToken` ([#6443](https://github.com/algolia/instantsearch/issues/6443)) ([2f1f397](https://github.com/algolia/instantsearch/commit/2f1f397aa9583de89731c7c623712d171c10b4cf))
+* **rendering:** ensure resilience against "null" results ([#6442](https://github.com/algolia/instantsearch/issues/6442)) ([a3f0e18](https://github.com/algolia/instantsearch/commit/a3f0e1830ca8c765b21feaf84657249d7f1f5857)), closes [#6441](https://github.com/algolia/instantsearch/issues/6441)
+
+
+
+
+
 ## [4.75.5](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.75.4...instantsearch.js@4.75.5) (2024-11-14)
 
 
