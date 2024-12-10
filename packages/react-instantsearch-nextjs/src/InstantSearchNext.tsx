@@ -1,7 +1,6 @@
 import { safelyRunOnBrowser } from 'instantsearch.js/es/lib/utils';
 import { headers } from 'next/headers';
-import { usePathname } from 'next/navigation';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import {
   InstantSearch,
   InstantSearchRSCContext,
@@ -21,11 +20,9 @@ import type {
 } from 'react-instantsearch-core';
 
 const InstantSearchInitialResults = Symbol.for('InstantSearchInitialResults');
-const InstantSearchLastPath = Symbol.for('InstantSearchLastPath');
 declare global {
   interface Window {
     [InstantSearchInitialResults]?: InitialResults;
-    [InstantSearchLastPath]?: string;
   }
 }
 
@@ -51,11 +48,17 @@ export function InstantSearchNext<
 }: InstantSearchNextProps<TUiState, TRouteState>) {
   const isMounting = useRef(true);
   const isServer = typeof window === 'undefined';
-  const pathname = usePathname();
-  const hasRouteChanged =
-    !isServer &&
-    window[InstantSearchLastPath] &&
-    window[InstantSearchLastPath] !== pathname;
+
+  const hasRouteChanged = useMemo(() => {
+    // On server, always return false
+    if (isServer) {
+      return false;
+    }
+
+    // On client, route has changed if initialResults have been cleaned up
+    const hasInitialResults = window[InstantSearchInitialResults] !== undefined;
+    return !hasInitialResults;
+  }, [isServer]);
 
   // We only want to trigger a search from a server environment
   // or if a Next.js route change has happened on the client
@@ -68,10 +71,6 @@ export function InstantSearchNext<
       delete window[InstantSearchInitialResults];
     };
   }, []);
-
-  useEffect(() => {
-    window[InstantSearchLastPath] = pathname;
-  }, [pathname]);
 
   const nonce = safelyRunOnBrowser(() => undefined, {
     fallback: () => headers().get('x-nonce') || undefined,
