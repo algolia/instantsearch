@@ -14,7 +14,7 @@ describe('useGeoSearch', () => {
     expect(result.current).toEqual({
       clearMapRefinement: expect.any(Function),
       currentRefinement: undefined,
-      hasMapMoveSinceLastRefine: expect.any(Function),
+      hasMapMovedSinceLastRefine: expect.any(Function),
       isRefinedWithMap: expect.any(Function),
       isRefineOnMapMove: expect.any(Function),
       items: [],
@@ -31,7 +31,7 @@ describe('useGeoSearch', () => {
     expect(result.current).toEqual({
       clearMapRefinement: expect.any(Function),
       currentRefinement: undefined,
-      hasMapMoveSinceLastRefine: expect.any(Function),
+      hasMapMovedSinceLastRefine: expect.any(Function),
       isRefinedWithMap: expect.any(Function),
       isRefineOnMapMove: expect.any(Function),
       items: [],
