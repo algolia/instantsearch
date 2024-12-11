@@ -356,9 +356,7 @@ test('error event should be emitted once the request is complete with errors', f
 
   return runAllMicroTasks().then(function () {
     expect(errored).toHaveBeenCalledTimes(1);
-    expect(errored).toHaveBeenLastCalledWith({
-      error: expect.any(Error),
-    });
+    expect(errored).toHaveBeenLastCalledWith(expect.any(Error));
   });
 });
 

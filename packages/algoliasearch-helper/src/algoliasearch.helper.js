@@ -1329,9 +1329,7 @@ AlgoliaSearchHelper.prototype._search = function (options) {
       .catch(this._dispatchAlgoliaError.bind(this, queryId));
   } catch (error) {
     // If we reach this part, we're in an internal error state
-    this.emit('error', {
-      error: error,
-    });
+    this.emit('error', error);
   }
 
   return undefined;
@@ -1420,9 +1418,7 @@ AlgoliaSearchHelper.prototype._recommend = function () {
       .catch(this._dispatchRecommendError.bind(this, queryId));
   } catch (error) {
     // If we reach this part, we're in an internal error state
-    this.emit('error', {
-      error: error,
-    });
+    this.emit('error', error);
   }
 
   return;
@@ -1579,9 +1575,7 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaError = function (
   this._currentNbQueries -= queryId - this._lastQueryIdReceived;
   this._lastQueryIdReceived = queryId;
 
-  this.emit('error', {
-    error: error,
-  });
+  this.emit('error', error);
 
   if (this._currentNbQueries === 0) this.emit('searchQueueEmpty');
 };
@@ -1599,9 +1593,7 @@ AlgoliaSearchHelper.prototype._dispatchRecommendError = function (
     queryId - this._lastRecommendQueryIdReceived;
   this._lastRecommendQueryIdReceived = queryId;
 
-  this.emit('error', {
-    error: error,
-  });
+  this.emit('error', error);
 
   if (this._currentNbRecommendQueries === 0) this.emit('recommendQueueEmpty');
 };
