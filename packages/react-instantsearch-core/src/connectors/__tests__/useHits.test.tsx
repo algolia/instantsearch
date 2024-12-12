@@ -17,7 +17,6 @@ describe('useHits', () => {
     // Initial render state from manual `getWidgetRenderState`
     expect(result.current).toEqual({
       banner: undefined,
-      bindEvent: expect.any(Function),
       hits: [],
       items: [],
       results: expect.objectContaining({ nbHits: 0 }),
@@ -28,7 +27,6 @@ describe('useHits', () => {
       // InstantSearch.js state from the `render` lifecycle step
       expect(result.current).toEqual({
         banner: undefined,
-        bindEvent: expect.any(Function),
         hits: [],
         items: [],
         results: expect.objectContaining({ nbHits: 0 }),
