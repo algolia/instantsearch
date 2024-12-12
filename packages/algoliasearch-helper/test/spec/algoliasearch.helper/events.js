@@ -379,7 +379,5 @@ test('error event should be emitted if an error happens at request time', functi
   helper.search();
 
   expect(errored).toHaveBeenCalledTimes(1);
-  expect(errored).toHaveBeenLastCalledWith({
-    error: expect.any(Error),
-  });
+  expect(errored).toHaveBeenLastCalledWith(expect.any(Error));
 });
