@@ -45,10 +45,9 @@ export function createSendEventForFacet({
     } else if (__DEV__) {
       throw new Error(
         `You need to pass between two and four arguments like:
-  sendEvent('click', facetValue, eventName?, additionalData?);
+sendEvent('click', facetValue, eventName?, additionalData?);
 
-If you want to send a custom payload, you can pass one object: sendEvent(customPayload);
-`
+If you want to send a custom payload, you can pass one object: sendEvent(customPayload);`
       );
     }
   };

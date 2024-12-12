@@ -11,7 +11,6 @@ import {
   addAbsolutePosition,
   addQueryID,
   createSendEventForHits,
-  createBindEventForHits,
 } from '../lib/utils';
 
 import type {
@@ -24,7 +23,6 @@ import type {
   Unmounter,
   UnknownWidgetParams,
   SendEventForHits,
-  BindEventForHits,
   Widget,
 } from '../types';
 import type {
@@ -116,11 +114,6 @@ export type InfiniteHitsRenderState<
    * Send event to insights middleware
    */
   sendEvent: SendEventForHits;
-
-  /**
-   * Returns a string of data-insights-event attribute for insights middleware
-   */
-  bindEvent: BindEventForHits;
 
   /**
    * Hits for the current page
@@ -237,7 +230,6 @@ export const connectInfiniteHits = function connectInfiniteHits<
     let showPrevious: () => void;
     let showMore: () => void;
     let sendEvent: SendEventForHits;
-    let bindEvent: BindEventForHits;
     const getFirstReceivedPage = (
       state: SearchParameters,
       cachedHits: InfiniteHitsCachedHits<THit>
@@ -365,11 +357,6 @@ export const connectInfiniteHits = function connectInfiniteHits<
             helper,
             widgetType: this.$$type,
           });
-          bindEvent = createBindEventForHits({
-            helper,
-            widgetType: this.$$type,
-            instantSearchInstance,
-          });
           isFirstPage =
             state.page === undefined ||
             getFirstReceivedPage(state, cachedHits) === 0;
@@ -440,7 +427,6 @@ export const connectInfiniteHits = function connectInfiniteHits<
           items,
           currentPageHits,
           sendEvent,
-          bindEvent,
           banner,
           results: results || undefined,
           showPrevious,
