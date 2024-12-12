@@ -1,11 +1,8 @@
-import { serializePayload } from './serializer';
-
 import type { InstantSearch } from '../../instantsearch';
 import type {
   Hit,
   EscapedHits,
   InsightsEvent,
-  BindEventForHits,
   SendEventForHits,
 } from '../../types';
 
@@ -20,13 +17,11 @@ function chunk<TItem>(arr: TItem[], chunkSize: number = 20): TItem[][] {
 export function _buildEventPayloadsForHits({
   getIndex,
   widgetType,
-  methodName,
   args,
   instantSearchInstance,
 }: {
   widgetType: string;
   getIndex: () => string;
-  methodName: 'sendEvent' | 'bindEvent';
   args: any[];
   instantSearchInstance: InstantSearch;
 }): InsightsEvent[] {
@@ -44,8 +39,7 @@ export function _buildEventPayloadsForHits({
     if (__DEV__) {
       throw new Error(
         `You need to pass hit or hits as the second argument like:
-  ${methodName}(eventType, hit);
-  `
+sendEvent(eventType, hit);`
       );
     } else {
       return [];
@@ -55,10 +49,9 @@ export function _buildEventPayloadsForHits({
     if (__DEV__) {
       throw new Error(
         `You need to pass eventName as the third argument for 'click' or 'conversion' events like:
-  ${methodName}('click', hit, 'Product Purchased');
+sendEvent('click', hit, 'Product Purchased');
 
-  To learn more about event naming: https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/in-depth/clicks-conversions-best-practices/
-  `
+To learn more about event naming: https://www.algolia.com/doc/guides/getting-insights-and-analytics/search-analytics/click-through-and-conversions/in-depth/clicks-conversions-best-practices/`
       );
     } else {
       return [];
@@ -134,8 +127,7 @@ export function _buildEventPayloadsForHits({
     });
   } else if (__DEV__) {
     throw new Error(`eventType("${eventType}") is not supported.
-    If you want to send a custom payload, you can pass one object: ${methodName}(customPayload);
-    `);
+If you want to send a custom payload, you can pass one object: sendEvent(customPayload);`);
   } else {
     return [];
   }
@@ -157,7 +149,6 @@ export function createSendEventForHits({
     const payloads = _buildEventPayloadsForHits({
       widgetType,
       getIndex,
-      methodName: 'sendEvent',
       args,
       instantSearchInstance,
     });
@@ -181,32 +172,4 @@ export function createSendEventForHits({
     }, 0);
   };
   return sendEventForHits;
-}
-
-/**
- * @deprecated
- */
-export function createBindEventForHits({
-  getIndex,
-  widgetType,
-  instantSearchInstance,
-}: {
-  getIndex: () => string;
-  widgetType: string;
-  instantSearchInstance: InstantSearch;
-}): BindEventForHits {
-  const bindEventForHits: BindEventForHits = (...args: any[]) => {
-    const payloads = _buildEventPayloadsForHits({
-      widgetType,
-      getIndex,
-      methodName: 'bindEvent',
-      args,
-      instantSearchInstance,
-    });
-
-    return payloads.length
-      ? `data-insights-event=${serializePayload(payloads)}`
-      : '';
-  };
-  return bindEventForHits;
 }

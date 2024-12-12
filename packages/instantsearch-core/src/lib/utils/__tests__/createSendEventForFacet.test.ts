@@ -34,12 +34,11 @@ describe('createSendEventForFacet', () => {
       expect(() => {
         sendEvent('click');
       }).toThrowErrorMatchingInlineSnapshot(`
-"You need to pass between two and four arguments like:
-  sendEvent('click', facetValue, eventName?, additionalData?);
+        "You need to pass between two and four arguments like:
+        sendEvent('click', facetValue, eventName?, additionalData?);
 
-If you want to send a custom payload, you can pass one object: sendEvent(customPayload);
-"
-`);
+        If you want to send a custom payload, you can pass one object: sendEvent(customPayload);"
+      `);
     });
 
     it('throws with unknown eventType', () => {
@@ -47,12 +46,11 @@ If you want to send a custom payload, you can pass one object: sendEvent(customP
       expect(() => {
         sendEvent('my custom event type');
       }).toThrowErrorMatchingInlineSnapshot(`
-"You need to pass between two and four arguments like:
-  sendEvent('click', facetValue, eventName?, additionalData?);
+        "You need to pass between two and four arguments like:
+        sendEvent('click', facetValue, eventName?, additionalData?);
 
-If you want to send a custom payload, you can pass one object: sendEvent(customPayload);
-"
-`);
+        If you want to send a custom payload, you can pass one object: sendEvent(customPayload);"
+      `);
     });
 
     it('throws when eventType is not click', () => {
@@ -60,12 +58,11 @@ If you want to send a custom payload, you can pass one object: sendEvent(customP
       expect(() => {
         sendEvent('custom event type');
       }).toThrowErrorMatchingInlineSnapshot(`
-"You need to pass between two and four arguments like:
-  sendEvent('click', facetValue, eventName?, additionalData?);
+        "You need to pass between two and four arguments like:
+        sendEvent('click', facetValue, eventName?, additionalData?);
 
-If you want to send a custom payload, you can pass one object: sendEvent(customPayload);
-"
-`);
+        If you want to send a custom payload, you can pass one object: sendEvent(customPayload);"
+      `);
     });
 
     it('does not send event when a facet is removed', () => {
