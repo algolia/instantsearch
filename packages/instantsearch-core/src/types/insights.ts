@@ -98,15 +98,3 @@ type BuiltInSendEventForFacet = (
 type CustomSendEventForFacet = (customPayload: any) => void;
 export type SendEventForFacet = BuiltInSendEventForFacet &
   CustomSendEventForFacet;
-
-/** @deprecated */
-type BuiltInBindEventForHits = (
-  eventType: string,
-  hits: Hit | Hit[],
-  eventName?: string,
-  additionalData?: Record<string, any>
-) => string;
-/** @deprecated */
-export type CustomBindEventForHits = (customPayload: any) => string;
-/** @deprecated */
-export type BindEventForHits = BuiltInBindEventForHits & CustomBindEventForHits;

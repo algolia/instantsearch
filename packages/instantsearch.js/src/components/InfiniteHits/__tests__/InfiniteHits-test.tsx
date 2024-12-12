@@ -34,7 +34,6 @@ describe('InfiniteHits', () => {
   };
 
   const sendEvent = () => {};
-  const bindEvent = () => '';
 
   describe('markup', () => {
     it('should render <InfiniteHits /> on first page', () => {
@@ -69,7 +68,6 @@ describe('InfiniteHits', () => {
         },
         cssClasses,
         sendEvent,
-        bindEvent,
       };
 
       const { container } = render(<InfiniteHits {...props} />);
@@ -109,7 +107,6 @@ describe('InfiniteHits', () => {
         },
         cssClasses,
         sendEvent,
-        bindEvent,
       };
 
       const { container } = render(<InfiniteHits {...props} />);
@@ -138,7 +135,6 @@ describe('InfiniteHits', () => {
         },
         cssClasses,
         sendEvent,
-        bindEvent,
       };
 
       const { container } = render(<InfiniteHits {...props} />);
@@ -167,7 +163,6 @@ describe('InfiniteHits', () => {
         },
         cssClasses,
         sendEvent,
-        bindEvent,
       };
 
       const { container } = render(<InfiniteHits {...props} />);
@@ -207,7 +202,6 @@ describe('InfiniteHits', () => {
         },
         cssClasses,
         sendEvent,
-        bindEvent,
       };
 
       const { container } = render(<InfiniteHits {...props} />);
@@ -252,7 +246,6 @@ describe('InfiniteHits', () => {
         },
         cssClasses,
         sendEvent,
-        bindEvent,
       };
 
       const { container } = render(<InfiniteHits {...props} />);
