@@ -78,10 +78,9 @@ var version = require('./version');
  * Event triggered when Algolia sends back an error. For example, if an unknown parameter is
  * used, the error can be caught using this event.
  * @event AlgoliaSearchHelper#event:error
- * @property {object} event
- * @property {Error} event.error the error returned by the Algolia.
+ * @property {Error} error the error returned by the Algolia.
  * @example
- * helper.on('error', function(event) {
+ * helper.on('error', function(error) {
  *   console.log('Houston we got a problem.');
  * });
  */
@@ -1329,9 +1328,7 @@ AlgoliaSearchHelper.prototype._search = function (options) {
       .catch(this._dispatchAlgoliaError.bind(this, queryId));
   } catch (error) {
     // If we reach this part, we're in an internal error state
-    this.emit('error', {
-      error: error,
-    });
+    this.emit('error', error);
   }
 
   return undefined;
@@ -1420,9 +1417,7 @@ AlgoliaSearchHelper.prototype._recommend = function () {
       .catch(this._dispatchRecommendError.bind(this, queryId));
   } catch (error) {
     // If we reach this part, we're in an internal error state
-    this.emit('error', {
-      error: error,
-    });
+    this.emit('error', error);
   }
 
   return;
@@ -1579,9 +1574,7 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaError = function (
   this._currentNbQueries -= queryId - this._lastQueryIdReceived;
   this._lastQueryIdReceived = queryId;
 
-  this.emit('error', {
-    error: error,
-  });
+  this.emit('error', error);
 
   if (this._currentNbQueries === 0) this.emit('searchQueueEmpty');
 };
@@ -1599,9 +1592,7 @@ AlgoliaSearchHelper.prototype._dispatchRecommendError = function (
     queryId - this._lastRecommendQueryIdReceived;
   this._lastRecommendQueryIdReceived = queryId;
 
-  this.emit('error', {
-    error: error,
-  });
+  this.emit('error', error);
 
   if (this._currentNbRecommendQueries === 0) this.emit('recommendQueueEmpty');
 };

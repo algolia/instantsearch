@@ -402,28 +402,22 @@ See documentation: ${createDocumentationLink({
 
     // Only the "main" Helper emits the `error` event vs the one for `search`
     // and `results` that are also emitted on the derived one.
-    mainHelper.on('error', ({ error }) => {
+    mainHelper.on('error', (error) => {
       if (!(error instanceof Error)) {
         // typescript lies here, error is in some cases { name: string, message: string }
         const err = error as Record<string, any>;
-        error = Object.keys(err).reduce((acc, key) => {
+        this.error = Object.keys(err).reduce((acc, key) => {
           (acc as any)[key] = err[key];
           return acc;
         }, new Error(err.message));
+      } else {
+        this.error = error;
       }
-      // If an error is emitted, it is re-thrown by events. In previous versions
-      // we emitted {error}, which is thrown as:
-      // "Uncaught, unspecified \"error\" event. ([object Object])"
-      // To avoid breaking changes, we make the error available in both
-      // `error` and `error.error`
-      // @MAJOR emit only error
-      (error as any).error = error;
-      this.error = error;
       this.status = 'error';
       this.scheduleRender(false);
 
       // This needs to execute last because it throws the error.
-      this.emit('error', error);
+      this.emit('error', this.error);
     });
 
     this.mainHelper = mainHelper;

@@ -1108,9 +1108,9 @@ describe('start', () => {
     search.addWidgets([virtualSearchBox({})]);
     search.start();
 
-    search.on('error', (event) => {
+    search.on('error', (error) => {
       expect(searchClient.search).toHaveBeenCalledTimes(1);
-      expect(event.error).toEqual(new Error('SERVER_ERROR'));
+      expect(error).toEqual(new Error('SERVER_ERROR'));
       done();
     });
   });
