@@ -67,7 +67,7 @@ export type GeoSearchRenderState<THit extends NonNullable<object> = BaseHit> = {
   /**
    * Return true if the map has move since the last refinement.
    */
-  hasMapMoveSinceLastRefine: () => boolean;
+  hasMapMovedSinceLastRefine: () => boolean;
   /**
    * Return true if the current refinement is set with the map bounds.
    */
@@ -179,8 +179,7 @@ export const connectGeoSearch = function connectGeoSearch<
 
     const widgetState = {
       isRefineOnMapMove: enableRefineOnMapMove,
-      // @MAJOR hasMapMoveSinceLastRefine -> hasMapMovedSinceLastRefine
-      hasMapMoveSinceLastRefine: false,
+      hasMapMovedSinceLastRefine: false,
       lastRefinePosition: '',
       lastRefineBoundingBox: '',
       internalToggleRefineOnMapMove: noop,
@@ -207,7 +206,7 @@ export const connectGeoSearch = function connectGeoSearch<
           )
           .search();
 
-        widgetState.hasMapMoveSinceLastRefine = false;
+        widgetState.hasMapMovedSinceLastRefine = false;
         widgetState.lastRefineBoundingBox = boundingBox;
       };
 
@@ -246,17 +245,17 @@ export const connectGeoSearch = function connectGeoSearch<
       ) =>
       () => {
         const shouldTriggerRender =
-          widgetState.hasMapMoveSinceLastRefine !== true;
+          widgetState.hasMapMovedSinceLastRefine !== true;
 
-        widgetState.hasMapMoveSinceLastRefine = true;
+        widgetState.hasMapMovedSinceLastRefine = true;
 
         if (shouldTriggerRender) {
           render(renderOptions);
         }
       };
 
-    const hasMapMoveSinceLastRefine = () =>
-      widgetState.hasMapMoveSinceLastRefine;
+    const hasMapMovedSinceLastRefine = () =>
+      widgetState.hasMapMovedSinceLastRefine;
 
     let sendEvent: SendEventForHits;
 
@@ -307,7 +306,7 @@ export const connectGeoSearch = function connectGeoSearch<
           positionChangedSinceLastRefine ||
           boundingBoxChangedSinceLastRefine
         ) {
-          widgetState.hasMapMoveSinceLastRefine = false;
+          widgetState.hasMapMovedSinceLastRefine = false;
         }
 
         widgetState.lastRefinePosition = state.aroundLatLng || '';
@@ -369,7 +368,7 @@ export const connectGeoSearch = function connectGeoSearch<
           toggleRefineOnMapMove,
           isRefineOnMapMove,
           setMapMoveSinceLastRefine,
-          hasMapMoveSinceLastRefine,
+          hasMapMovedSinceLastRefine,
           widgetParams,
         };
       },
