@@ -311,7 +311,6 @@ describe('useSearchState', () => {
             searchBox: {
               query: '',
               widgetParams: {},
-              isSearchStalled: false,
             },
           },
         })
@@ -328,7 +327,6 @@ describe('useSearchState', () => {
             searchBox: {
               query: 'new query',
               widgetParams: {},
-              isSearchStalled: false,
             },
           },
         })
@@ -373,7 +371,6 @@ describe('useSearchState', () => {
           searchBox: {
             query: '',
             widgetParams: {},
-            isSearchStalled: false,
           },
         })
       );
@@ -388,7 +385,6 @@ describe('useSearchState', () => {
           searchBox: {
             query: 'new query',
             widgetParams: {},
-            isSearchStalled: false,
           },
         })
       );

@@ -13,7 +13,6 @@ describe('useSearchBox', () => {
     // Initial render state from manual `getWidgetRenderState`
     expect(result.current).toEqual({
       query: '',
-      isSearchStalled: false,
       clear: expect.any(Function),
       refine: expect.any(Function),
     });
@@ -23,7 +22,6 @@ describe('useSearchBox', () => {
     // InstantSearch.js state from the `render` lifecycle step
     expect(result.current).toEqual({
       query: '',
-      isSearchStalled: false,
       clear: expect.any(Function),
       refine: expect.any(Function),
     });
@@ -44,7 +42,6 @@ describe('useSearchBox', () => {
     // Initial render state from manual `getWidgetRenderState`
     expect(result.current).toEqual({
       query: 'testio',
-      isSearchStalled: false,
       clear: expect.any(Function),
       refine: expect.any(Function),
     });
@@ -54,7 +51,6 @@ describe('useSearchBox', () => {
     // InstantSearch.js state from the `render` lifecycle step
     expect(result.current).toEqual({
       query: 'testio',
-      isSearchStalled: false,
       clear: expect.any(Function),
       refine: expect.any(Function),
     });

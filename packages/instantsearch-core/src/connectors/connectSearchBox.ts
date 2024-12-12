@@ -41,13 +41,6 @@ export type SearchBoxRenderState = {
    * Remove the query and perform search.
    */
   clear: () => void;
-  /**
-   * `true` if the search results takes more than a certain time to come back
-   * from Algolia servers. This can be configured on the InstantSearch constructor with the attribute
-   * `stalledSearchDelay` which is 200ms, by default.
-   * @deprecated use `instantSearchInstance.status` instead
-   */
-  isSearchStalled: boolean;
 };
 
 export type SearchBoxWidgetDescription = {
@@ -130,7 +123,7 @@ export const connectSearchBox: SearchBoxConnector = function connectSearchBox(
         };
       },
 
-      getWidgetRenderState({ helper, instantSearchInstance, state }) {
+      getWidgetRenderState({ helper, state }) {
         if (!_refine) {
           _refine = (query) => {
             queryHook(query, (q) => helper.setQuery(q).search());
@@ -146,7 +139,6 @@ export const connectSearchBox: SearchBoxConnector = function connectSearchBox(
           refine: _refine,
           clear: _clear,
           widgetParams,
-          isSearchStalled: instantSearchInstance.status === 'stalled',
         };
       },
 
