@@ -188,7 +188,6 @@ const renderer =
       isFirstPage,
       isLastPage,
       insights,
-      bindEvent,
       sendEvent,
       banner,
     },
@@ -216,7 +215,6 @@ const renderer =
         isLastPage={isLastPage}
         insights={insights as InsightsClient}
         sendEvent={sendEvent}
-        bindEvent={bindEvent}
         banner={banner}
       />,
       containerNode

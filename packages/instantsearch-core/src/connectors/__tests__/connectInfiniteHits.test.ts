@@ -18,7 +18,6 @@ import {
   createRenderOptions,
 } from '../../../test/createWidget';
 import { createInfiniteHitsSessionStorageCache } from '../../lib/infiniteHitsCache';
-import { deserializePayload } from '../../lib/utils';
 
 import type {
   SearchClient,
@@ -1328,7 +1327,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         items: [],
         currentPageHits: [],
         sendEvent: expect.any(Function),
-        bindEvent: expect.any(Function),
         isFirstPage: true,
         isLastPage: true,
         banner: undefined,
@@ -1392,7 +1390,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         items: expectedHits,
         currentPageHits: expectedCurrentPageHits,
         sendEvent: renderState1.infiniteHits.sendEvent,
-        bindEvent: renderState1.infiniteHits.bindEvent,
         isFirstPage: true,
         isLastPage: true,
         banner: undefined,
@@ -1423,7 +1420,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         items: [],
         currentPageHits: [],
         sendEvent: expect.any(Function),
-        bindEvent: expect.any(Function),
         isFirstPage: true,
         isLastPage: true,
         banner: undefined,
@@ -1500,7 +1496,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         items: expectedHits,
         currentPageHits: expectedCurrentPageHits,
         sendEvent: renderState1.sendEvent,
-        bindEvent: renderState1.bindEvent,
         isFirstPage: true,
         isLastPage: true,
         banner,
@@ -1868,71 +1863,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
             },
             widgetType: 'ais.infiniteHits',
           });
-        });
-      });
-
-      describe('bindEvent', () => {
-        it('returns a payload for click event', () => {
-          const { renderFn, hits } = createRenderedWidget();
-          const { bindEvent } =
-            renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
-          const payload = bindEvent('click', hits[0], 'Product Added');
-          expect(payload.startsWith('data-insights-event=')).toBe(true);
-          expect(
-            deserializePayload(payload.substr('data-insights-event='.length))
-          ).toEqual([
-            {
-              eventType: 'click',
-              hits: [
-                {
-                  __position: 0,
-                  __queryID: 'test-query-id',
-                  fake: 'data',
-                  objectID: '1',
-                },
-              ],
-              insightsMethod: 'clickedObjectIDsAfterSearch',
-              payload: {
-                eventName: 'Product Added',
-                index: '',
-                objectIDs: ['1'],
-                positions: [0],
-                queryID: 'test-query-id',
-              },
-              widgetType: 'ais.infiniteHits',
-            },
-          ]);
-        });
-
-        it('returns a payload for conversion event', () => {
-          const { renderFn, hits } = createRenderedWidget();
-          const { bindEvent } =
-            renderFn.mock.calls[renderFn.mock.calls.length - 1][0];
-          const payload = bindEvent('conversion', hits[1], 'Product Ordered');
-          expect(payload.startsWith('data-insights-event=')).toBe(true);
-          expect(
-            deserializePayload(payload.substr('data-insights-event='.length))
-          ).toEqual([
-            {
-              eventType: 'conversion',
-              hits: [
-                {
-                  __position: 1,
-                  __queryID: 'test-query-id',
-                  objectID: '2',
-                  sample: 'infos',
-                },
-              ],
-              insightsMethod: 'convertedObjectIDsAfterSearch',
-              payload: {
-                eventName: 'Product Ordered',
-                index: '',
-                objectIDs: ['2'],
-                queryID: 'test-query-id',
-              },
-              widgetType: 'ais.infiniteHits',
-            },
-          ]);
         });
       });
     });

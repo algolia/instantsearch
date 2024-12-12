@@ -9,7 +9,6 @@ import {
   addAbsolutePosition,
   addQueryID,
   createSendEventForHits,
-  createBindEventForHits,
 } from '../lib/utils';
 
 import type {
@@ -21,7 +20,6 @@ import type {
   Unmounter,
   Renderer,
   SendEventForHits,
-  BindEventForHits,
   Widget,
 } from '../types';
 import type { Banner, SearchResults } from 'algoliasearch-helper';
@@ -57,11 +55,6 @@ export type HitsRenderState<THit extends NonNullable<object> = BaseHit> = {
    * Sends an event to the Insights middleware.
    */
   sendEvent: SendEventForHits;
-
-  /**
-   * Returns a string for the `data-insights-event` attribute for the Insights middleware
-   */
-  bindEvent: BindEventForHits;
 };
 
 export type HitsConnectorParams<THit extends NonNullable<object> = BaseHit> = {
@@ -107,7 +100,6 @@ export const connectHits = function connectHits<TWidgetParams>(
       >,
     } = (widgetParams || {}) as HitsConnectorParams<THit>;
     let sendEvent: SendEventForHits;
-    let bindEvent: BindEventForHits;
 
     type HitsWidget = Widget<
       HitsWidgetDescription<THit> & {
@@ -160,14 +152,6 @@ export const connectHits = function connectHits<TWidgetParams>(
           });
         }
 
-        if (!bindEvent) {
-          bindEvent = createBindEventForHits({
-            getIndex: () => helper.getIndex(),
-            widgetType: this.$$type,
-            instantSearchInstance,
-          });
-        }
-
         if (!results) {
           return {
             hits: [],
@@ -175,7 +159,6 @@ export const connectHits = function connectHits<TWidgetParams>(
             results: undefined,
             banner: undefined,
             sendEvent,
-            bindEvent,
             widgetParams,
           };
         }
@@ -207,7 +190,6 @@ export const connectHits = function connectHits<TWidgetParams>(
           results,
           banner,
           sendEvent,
-          bindEvent,
           widgetParams,
         };
       },

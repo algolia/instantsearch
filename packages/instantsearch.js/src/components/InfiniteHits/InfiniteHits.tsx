@@ -10,7 +10,6 @@ import type {
   Hit,
   InsightsClient,
   SendEventForHits,
-  BindEventForHits,
 } from '../../types';
 import type {
   InfiniteHitsCSSClasses,
@@ -37,7 +36,6 @@ export type InfiniteHitsProps = {
   isLastPage: boolean;
   insights?: InsightsClient;
   sendEvent: SendEventForHits;
-  bindEvent: BindEventForHits;
   banner?: Banner;
 };
 

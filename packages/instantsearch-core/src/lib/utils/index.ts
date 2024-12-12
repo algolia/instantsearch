@@ -16,5 +16,4 @@ export * from './hydrateRecommendCache';
 export * from './hydrateSearchClient';
 export * from './mergeSearchParameters';
 export * from './resolveSearchParameters';
-export * from './serializer';
 export * from './setIndexHelperState';
