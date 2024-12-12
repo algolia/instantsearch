@@ -30,8 +30,8 @@ test('[INT][SEARCHONCE] Should be able to search once with custom parameters wit
   var state0 = helper.state;
 
   var calls = 1;
-  helper.on('error', function (event) {
-    done.fail(event.error);
+  helper.on('error', function (error) {
+    done.fail(error);
   });
 
   helper.on('result', function (event) {

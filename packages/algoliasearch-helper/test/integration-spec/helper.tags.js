@@ -32,8 +32,8 @@ test('[INT][TAGS]Test tags operations on the helper and their results on the alg
 
   var calls = 0;
 
-  helper.on('error', function (event) {
-    done.fail(event.error);
+  helper.on('error', function (error) {
+    done.fail(error);
   });
 
   helper.on('result', function (event) {

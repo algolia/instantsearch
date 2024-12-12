@@ -132,14 +132,11 @@ describe('errors', () => {
 
     search.addWidgets([connectSearchBox(() => {})({})]);
 
-    expect.assertions(4);
+    expect.assertions(2);
 
     search.on('error', (error) => {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toBe('test!');
-
-      expect(error.error).toBeInstanceOf(Error);
-      expect(error.error.message).toBe('test!');
     });
 
     search.start();
