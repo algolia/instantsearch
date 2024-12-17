@@ -13,15 +13,15 @@ const app = express();
 app.use('/assets', express.static(join(__dirname, 'assets')));
 
 app.get('/', async (req, res) => {
-  const location = new URL(
+  const currentURL = new URL(
     `${req.protocol}://${req.get('host')}${req.originalUrl}`
   );
-  const serverState = await getServerState(<App location={location} />, {
+  const serverState = await getServerState(<App currentURL={currentURL} />, {
     renderToString,
   });
   requestsCache.clear();
   const html = renderToString(
-    <App serverState={serverState} location={location} />
+    <App serverState={serverState} currentURL={currentURL} />
   );
 
   res.send(
