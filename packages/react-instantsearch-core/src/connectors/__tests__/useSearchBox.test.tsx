@@ -15,6 +15,7 @@ describe('useSearchBox', () => {
       query: '',
       clear: expect.any(Function),
       refine: expect.any(Function),
+      isSearchStalled: false,
     });
 
     await waitForNextUpdate();
@@ -24,6 +25,7 @@ describe('useSearchBox', () => {
       query: '',
       clear: expect.any(Function),
       refine: expect.any(Function),
+      isSearchStalled: false,
     });
   });
 
@@ -44,6 +46,7 @@ describe('useSearchBox', () => {
       query: 'testio',
       clear: expect.any(Function),
       refine: expect.any(Function),
+      isSearchStalled: false,
     });
 
     await waitForNextUpdate();
@@ -53,6 +56,7 @@ describe('useSearchBox', () => {
       query: 'testio',
       clear: expect.any(Function),
       refine: expect.any(Function),
+      isSearchStalled: false,
     });
   });
 });

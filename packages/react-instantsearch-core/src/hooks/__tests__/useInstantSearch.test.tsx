@@ -210,6 +210,7 @@ describe('useInstantSearch', () => {
               searchBox: {
                 query: '',
                 widgetParams: {},
+                isSearchStalled: false,
               },
             },
           })
@@ -226,6 +227,7 @@ describe('useInstantSearch', () => {
               searchBox: {
                 query: 'new query',
                 widgetParams: {},
+                isSearchStalled: false,
               },
             },
           })
@@ -271,6 +273,7 @@ describe('useInstantSearch', () => {
             searchBox: {
               query: '',
               widgetParams: {},
+              isSearchStalled: false,
             },
           })
         );
@@ -285,6 +288,7 @@ describe('useInstantSearch', () => {
             searchBox: {
               query: 'new query',
               widgetParams: {},
+              isSearchStalled: false,
             },
           })
         );

@@ -432,6 +432,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
         query: '',
         refine: expect.any(Function),
         widgetParams: { queryHook },
+        isSearchStalled: false,
       });
 
       searchBox.init!(createInitOptions());
@@ -445,6 +446,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
         widgetParams: {
           queryHook,
         },
+        isSearchStalled: false,
       });
     });
 
@@ -469,6 +471,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
         query: 'query',
         refine: expect.any(Function),
         widgetParams: {},
+        isSearchStalled: false,
       });
     });
   });
@@ -490,6 +493,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
         query: '',
         refine: expect.any(Function),
         widgetParams: { queryHook },
+        isSearchStalled: false,
       });
 
       searchBox.init!(createInitOptions());
@@ -503,6 +507,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
         widgetParams: {
           queryHook,
         },
+        isSearchStalled: false,
       });
 
       searchBox.render!(createRenderOptions());
@@ -532,6 +537,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
         query: 'query',
         refine: expect.any(Function),
         widgetParams: {},
+        isSearchStalled: false,
       });
     });
   });
