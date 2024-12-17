@@ -2460,6 +2460,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
               refine: searchBoxRefine,
               clear: searchBoxClear,
               widgetParams: {},
+              isSearchStalled: false,
             },
           };
         }),
@@ -2572,6 +2573,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
               refine: () => {},
               clear: () => {},
               widgetParams: {},
+              isSearchStalled: false,
             },
           };
         }),
