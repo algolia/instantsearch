@@ -2493,6 +2493,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
                 refine: searchBoxRefine,
                 clear: searchBoxClear,
                 widgetParams: {},
+                isSearchStalled: false,
               },
             },
             indexName1: {
@@ -2501,6 +2502,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
                 refine: searchBoxRefine,
                 clear: searchBoxClear,
                 widgetParams: {},
+                isSearchStalled: false,
               },
               pagination: {
                 refine: paginationRefine,
@@ -2525,6 +2527,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
                 refine: searchBoxRefine,
                 clear: searchBoxClear,
                 widgetParams: {},
+                isSearchStalled: false,
               },
             },
             indexName1: {
@@ -2533,6 +2536,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
                 refine: searchBoxRefine,
                 clear: searchBoxClear,
                 widgetParams: {},
+                isSearchStalled: false,
               },
               pagination: {
                 refine: paginationRefine,
@@ -2631,6 +2635,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             query: '',
             refine: expect.any(Function),
             widgetParams: {},
+            isSearchStalled: false,
           },
         },
         expect.anything()
