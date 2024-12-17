@@ -3247,18 +3247,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
   });
 
   describe('getWidgetState', () => {
-    test('warns when index has this method', () => {
-      warnCache.current = {};
-
-      const instance = index({ indexName: 'indexName' });
-
-      expect(() => {
-        instance.getWidgetState({});
-      }).toWarnDev(
-        '[InstantSearch]: The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
-      );
-    });
-
     test('warns when widget has this method', () => {
       warnCache.current = {};
 
@@ -3267,6 +3255,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           dispose: jest.fn(({ state }) => {
             return state.setQueryParameter('query', undefined);
           }),
+          // @ts-expect-error old method
           getWidgetState: jest.fn((uiState, { searchParameters }) => {
             if (!searchParameters.query) {
               return uiState;
@@ -3305,31 +3294,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           })
         );
       }).toWarnDev(
-        '[InstantSearch]: The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
-      );
-    });
-
-    test('does not warn for index itself', () => {
-      warnCache.current = {};
-
-      const instance = index({ indexName: 'indexName' });
-      const searchClient = createSearchClient();
-      const mainHelper = algoliasearchHelper(searchClient, '', {});
-      const instantSearchInstance = createInstantSearch({
-        mainHelper,
-      });
-
-      instance.addWidgets([index({ indexName: 'other' })]);
-
-      expect(() => {
-        instance.init(
-          createIndexInitOptions({
-            instantSearchInstance,
-            parent: null,
-          })
-        );
-      }).not.toWarnDev(
-        '[InstantSearch]: The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
+        '[InstantSearch]: The `getWidgetState` method is renamed `getWidgetUiState` and no longer exists under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
       );
     });
   });

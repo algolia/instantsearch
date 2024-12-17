@@ -252,17 +252,6 @@ type RequiredUiStateLifeCycle<TWidgetDescription extends WidgetDescription> = {
   ) => Partial<IndexUiState & TWidgetDescription['indexUiState']>;
 
   /**
-   * This function is required for a widget to be taken in account for routing.
-   * It will derive a uiState for this widget based on the existing uiState and
-   * the search parameters applied.
-   *
-   * @deprecated Use `getWidgetUiState` instead.
-   * @param uiState - Current state.
-   * @param widgetStateOptions - Extra information to calculate uiState.
-   */
-  getWidgetState?: RequiredUiStateLifeCycle<TWidgetDescription>['getWidgetUiState'];
-
-  /**
    * This function is required for a widget to behave correctly when a URL is
    * loaded via e.g. Routing. It receives the current UiState and applied search
    * parameters, and is expected to return a new search parameters.
@@ -335,7 +324,7 @@ export type Widget<
 
 export type IndexWidget<TUiState extends UiState = UiState> = Omit<
   Widget<IndexWidgetDescription & { widgetParams: IndexWidgetParams }>,
-  'getWidgetUiState' | 'getWidgetState'
+  'getWidgetUiState'
 > & {
   // public API
   addWidgets: (widgets: Array<Widget | IndexWidget>) => IndexWidget;
@@ -376,10 +365,6 @@ export type IndexWidget<TUiState extends UiState = UiState> = Omit<
   init: (options: IndexInitOptions) => void;
   render: (options: IndexRenderOptions) => void;
   dispose: (options?: DisposeOptions) => void;
-  /**
-   * @deprecated
-   */
-  getWidgetState: (uiState: UiState) => UiState;
   getWidgetUiState: <TSpecificUiState extends UiState = TUiState>(
     uiState: TSpecificUiState
   ) => TSpecificUiState;

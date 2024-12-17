@@ -1240,7 +1240,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
         expect(renderArgs.createURL()).toBe('#');
       });
 
-      it('allows for widgets without getWidgetState', () => {
+      it('allows for widgets without getWidgetUiState', () => {
         let instantSearchInstance;
         mount({
           mixins: [
@@ -1258,12 +1258,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
         const widget = {
           init: jest.fn(),
           render: jest.fn(),
-          getWidgetState(uiState) {
+          getWidgetUiState(uiState) {
             return uiState;
           },
         };
 
-        const widgetWithoutGetWidgetState = {
+        const widgetWithoutGetWidgetUiState = {
           init: jest.fn(),
           render: jest.fn(),
         };
@@ -1272,7 +1272,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
           lol: createSerializedState(),
         });
 
-        instantSearchInstance.addWidgets([widget, widgetWithoutGetWidgetState]);
+        instantSearchInstance.addWidgets([
+          widget,
+          widgetWithoutGetWidgetUiState,
+        ]);
 
         instantSearchInstance.__forceRender(
           widget,
