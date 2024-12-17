@@ -41,6 +41,11 @@ export type SearchBoxRenderState = {
    * Remove the query and perform search.
    */
   clear: () => void;
+  /**
+   * @deprecated Use `status === 'stalled'` on the instantsearch instance instead.
+   * This can be removed in a future patch version.
+   */
+  isSearchStalled: boolean;
 };
 
 export type SearchBoxWidgetDescription = {
@@ -123,7 +128,7 @@ export const connectSearchBox: SearchBoxConnector = function connectSearchBox(
         };
       },
 
-      getWidgetRenderState({ helper, state }) {
+      getWidgetRenderState({ helper, state, instantSearchInstance }) {
         if (!_refine) {
           _refine = (query) => {
             queryHook(query, (q) => helper.setQuery(q).search());
@@ -139,6 +144,8 @@ export const connectSearchBox: SearchBoxConnector = function connectSearchBox(
           refine: _refine,
           clear: _clear,
           widgetParams,
+          // This is only exposed because Vue InstantSearch crashes if `instantSearchInstance` is accessed in render
+          isSearchStalled: instantSearchInstance.status === 'stalled',
         };
       },
 

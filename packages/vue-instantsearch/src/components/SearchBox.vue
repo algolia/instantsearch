@@ -2,7 +2,7 @@
   <div v-if="state" :class="suit()">
     <slot
       :current-refinement="currentRefinement"
-      :is-search-stalled="isSearchStalled"
+      :is-search-stalled="state.isSearchStalled"
       :refine="state.refine"
     >
       <search-input
@@ -12,7 +12,7 @@
         :placeholder="placeholder"
         :autofocus="autofocus"
         :show-loading-indicator="showLoadingIndicator"
-        :should-show-loading-indicator="isSearchStalled"
+        :should-show-loading-indicator="state.isSearchStalled"
         :ignore-composition-events="ignoreCompositionEvents"
         :submit-title="submitTitle"
         :reset-title="resetTitle"
@@ -153,9 +153,6 @@ export default {
           this.$emit('update:modelValue', val);
         }
       },
-    },
-    isSearchStalled() {
-      return this.state.instantSearchInstance.status === 'stalled';
     },
   },
 };
