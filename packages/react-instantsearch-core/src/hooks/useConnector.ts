@@ -130,9 +130,6 @@ export function useConnector<
         state: helper.state,
         renderState: search.renderState,
         createURL: parentIndex.createURL,
-        searchMetadata: {
-          isSearchStalled: search.status === 'stalled',
-        },
         status: search.status,
         error: search.error,
       });
