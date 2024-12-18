@@ -864,30 +864,7 @@ describe('start', () => {
     expect(algoliasearchHelper).toHaveBeenCalledWith(
       searchClient,
       indexName,
-      undefined,
-      { persistHierarchicalRootCount: true }
-    );
-  });
-
-  it('creates a Helper with `persistHierarchicalRootCount` set to true when specified with a future flag', () => {
-    const searchClient = createSearchClient();
-    const indexName = 'indexName';
-    const future = {
-      persistHierarchicalRootCount: true,
-    };
-    const search = new InstantSearch({
-      indexName,
-      searchClient,
-      future,
-    });
-
-    search.start();
-
-    expect(algoliasearchHelper).toHaveBeenCalledWith(
-      searchClient,
-      indexName,
-      undefined,
-      { persistHierarchicalRootCount: true }
+      undefined
     );
   });
 

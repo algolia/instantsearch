@@ -3346,7 +3346,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         nbPages: 1,
         page: 0,
         params: '',
-        persistHierarchicalRootCount: true,
         processingTimeMS: 0,
         query: 'iphone',
       };
