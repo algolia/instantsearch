@@ -29,7 +29,6 @@ import {
   createIndexInitOptions,
   createDisposeOptions,
 } from '../../../test/createWidget';
-import { warnCache } from '../../lib/public';
 
 import type { Widget } from '../../types';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
