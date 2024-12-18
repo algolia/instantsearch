@@ -3246,59 +3246,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
     });
   });
 
-  describe('getWidgetState', () => {
-    test('warns when widget has this method', () => {
-      warnCache.current = {};
-
-      const createDeprecatedSearchBox = (args: Partial<Widget> = {}): Widget =>
-        createWidget({
-          dispose: jest.fn(({ state }) => {
-            return state.setQueryParameter('query', undefined);
-          }),
-          // @ts-expect-error old method
-          getWidgetState: jest.fn((uiState, { searchParameters }) => {
-            if (!searchParameters.query) {
-              return uiState;
-            }
-
-            return {
-              ...uiState,
-              query: searchParameters.query,
-            };
-          }),
-          getWidgetSearchParameters: jest.fn(
-            (searchParameters, { uiState }) => {
-              return searchParameters.setQueryParameter(
-                'query',
-                uiState.query || ''
-              );
-            }
-          ),
-          ...args,
-        });
-
-      const instance = index({ indexName: 'indexName' });
-      const searchClient = createSearchClient();
-      const mainHelper = algoliasearchHelper(searchClient, '', {});
-      const instantSearchInstance = createInstantSearch({
-        mainHelper,
-      });
-
-      instance.addWidgets([createDeprecatedSearchBox()]);
-
-      expect(() => {
-        instance.init(
-          createIndexInitOptions({
-            instantSearchInstance,
-            parent: null,
-          })
-        );
-      }).toWarnDev(
-        '[InstantSearch]: The `getWidgetState` method is renamed `getWidgetUiState` and no longer exists under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
-      );
-    });
-  });
-
   describe('setIndexUiState', () => {
     it('updates main UI state with an object', () => {
       const instance = index({ indexName: 'indexName' });

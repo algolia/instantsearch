@@ -3,7 +3,6 @@ import algoliasearchHelper from 'algoliasearch-helper';
 import {
   addWidgetId,
   createDocumentationMessageGenerator,
-  warning,
   isIndexWidget,
   createInitArgs,
   createRenderArgs,
@@ -681,11 +680,6 @@ export const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       });
 
       localWidgets.forEach((widget) => {
-        warning(
-          !(widget as any).getWidgetState,
-          'The `getWidgetState` method is renamed `getWidgetUiState` and no longer exists under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
-        );
-
         if (widget.init) {
           widget.init(createInitArgs(instantSearchInstance, this, uiState));
         }
