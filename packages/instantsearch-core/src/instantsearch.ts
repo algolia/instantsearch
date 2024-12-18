@@ -52,7 +52,7 @@ export const INSTANTSEARCH_FUTURE_DEFAULTS: Required<
   InstantSearchOptions['future']
 > = {
   preserveSharedStateOnUnmount: false,
-  persistHierarchicalRootCount: false,
+  persistHierarchicalRootCount: true,
 };
 
 /**

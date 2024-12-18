@@ -865,7 +865,7 @@ describe('start', () => {
       searchClient,
       indexName,
       undefined,
-      { persistHierarchicalRootCount: false }
+      { persistHierarchicalRootCount: true }
     );
   });
 
@@ -887,7 +887,7 @@ describe('start', () => {
       searchClient,
       indexName,
       undefined,
-      future
+      { persistHierarchicalRootCount: true }
     );
   });
 

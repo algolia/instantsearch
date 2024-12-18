@@ -108,9 +108,9 @@ export type InstantSearchOptions<
      *
      * If `true`, the count of the root level stays the same as the count of all children levels.
      *
-     * @default false
+     * @default true
      */
-    persistHierarchicalRootCount?: boolean; // @MAJOR change the default to true
+    persistHierarchicalRootCount?: boolean; // @MAJOR remove the option
   };
 };
 

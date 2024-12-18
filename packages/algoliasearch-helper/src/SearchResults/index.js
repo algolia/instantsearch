@@ -241,7 +241,7 @@ function SearchResults(state, results, options) {
 
   // Make every key of the result options reachable from the instance
   var opts = defaultsPure(options, {
-    persistHierarchicalRootCount: false,
+    persistHierarchicalRootCount: true,
   });
   Object.keys(opts).forEach(function (key) {
     self[key] = opts[key];

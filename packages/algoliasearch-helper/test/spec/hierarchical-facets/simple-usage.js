@@ -87,19 +87,26 @@ describe('hierarchical facets: simple usage', function () {
   });
 
   test('persistHierarchicalRootCount: false', function (done) {
-    var helper = algoliasearchHelper(client, indexName, {
-      hierarchicalFacets: [
-        {
-          name: 'categories',
-          attributes: [
-            'categories.lvl0',
-            'categories.lvl1',
-            'categories.lvl2',
-            'categories.lvl3',
-          ],
-        },
-      ],
-    });
+    var helper = algoliasearchHelper(
+      client,
+      indexName,
+      {
+        hierarchicalFacets: [
+          {
+            name: 'categories',
+            attributes: [
+              'categories.lvl0',
+              'categories.lvl1',
+              'categories.lvl2',
+              'categories.lvl3',
+            ],
+          },
+        ],
+      },
+      {
+        persistHierarchicalRootCount: false,
+      }
+    );
 
     helper.toggleFacetRefinement('categories', 'beers > IPA > Flying dog');
 
