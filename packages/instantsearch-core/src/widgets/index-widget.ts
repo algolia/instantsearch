@@ -3,7 +3,6 @@ import algoliasearchHelper from 'algoliasearch-helper';
 import {
   addWidgetId,
   createDocumentationMessageGenerator,
-  warning,
   isIndexWidget,
   createInitArgs,
   createRenderArgs,
@@ -120,15 +119,11 @@ function getLocalWidgetsUiState(
       return uiState;
     }
 
-    if (!widget.getWidgetUiState && !widget.getWidgetState) {
-      return uiState;
-    }
-
     if (widget.getWidgetUiState) {
       return widget.getWidgetUiState(uiState, widgetStateOptions);
     }
 
-    return widget.getWidgetState!(uiState, widgetStateOptions);
+    return uiState;
   }, initialUiState);
 }
 
@@ -685,13 +680,6 @@ export const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       });
 
       localWidgets.forEach((widget) => {
-        warning(
-          // if it has NO getWidgetState or if it has getWidgetUiState, we don't warn
-          // aka we warn if there's _only_ getWidgetState
-          !widget.getWidgetState || Boolean(widget.getWidgetUiState),
-          'The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
-        );
-
         if (widget.init) {
           widget.init(createInitArgs(instantSearchInstance, this, uiState));
         }
@@ -845,15 +833,6 @@ export const index = (widgetParams: IndexWidgetParams): IndexWidget => {
             },
           }
         );
-    },
-
-    getWidgetState(uiState: UiState) {
-      warning(
-        false,
-        'The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
-      );
-
-      return this.getWidgetUiState(uiState);
     },
 
     getWidgetSearchParameters(searchParameters, { uiState }) {
