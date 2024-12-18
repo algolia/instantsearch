@@ -1146,9 +1146,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
               "results": Anything,
             },
           ],
-          "searchMetadata": {
-            "isSearchStalled": false,
-          },
           "state": Anything,
         }
       `
