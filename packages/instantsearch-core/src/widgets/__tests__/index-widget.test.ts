@@ -29,7 +29,6 @@ import {
   createIndexInitOptions,
   createDisposeOptions,
 } from '../../../test/createWidget';
-import { warnCache } from '../../lib/public';
 
 import type { Widget } from '../../types';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
@@ -3228,94 +3227,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       expect(() => {
         instance.dispose(createDisposeOptions());
       }).not.toThrow();
-    });
-  });
-
-  describe('getWidgetState', () => {
-    test('warns when index has this method', () => {
-      warnCache.current = {};
-
-      const instance = index({ indexName: 'indexName' });
-
-      expect(() => {
-        instance.getWidgetState({});
-      }).toWarnDev(
-        '[InstantSearch]: The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
-      );
-    });
-
-    test('warns when widget has this method', () => {
-      warnCache.current = {};
-
-      const createDeprecatedSearchBox = (args: Partial<Widget> = {}): Widget =>
-        createWidget({
-          dispose: jest.fn(({ state }) => {
-            return state.setQueryParameter('query', undefined);
-          }),
-          getWidgetState: jest.fn((uiState, { searchParameters }) => {
-            if (!searchParameters.query) {
-              return uiState;
-            }
-
-            return {
-              ...uiState,
-              query: searchParameters.query,
-            };
-          }),
-          getWidgetSearchParameters: jest.fn(
-            (searchParameters, { uiState }) => {
-              return searchParameters.setQueryParameter(
-                'query',
-                uiState.query || ''
-              );
-            }
-          ),
-          ...args,
-        });
-
-      const instance = index({ indexName: 'indexName' });
-      const searchClient = createSearchClient();
-      const mainHelper = algoliasearchHelper(searchClient, '', {});
-      const instantSearchInstance = createInstantSearch({
-        mainHelper,
-      });
-
-      instance.addWidgets([createDeprecatedSearchBox()]);
-
-      expect(() => {
-        instance.init(
-          createIndexInitOptions({
-            instantSearchInstance,
-            parent: null,
-          })
-        );
-      }).toWarnDev(
-        '[InstantSearch]: The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
-      );
-    });
-
-    test('does not warn for index itself', () => {
-      warnCache.current = {};
-
-      const instance = index({ indexName: 'indexName' });
-      const searchClient = createSearchClient();
-      const mainHelper = algoliasearchHelper(searchClient, '', {});
-      const instantSearchInstance = createInstantSearch({
-        mainHelper,
-      });
-
-      instance.addWidgets([index({ indexName: 'other' })]);
-
-      expect(() => {
-        instance.init(
-          createIndexInitOptions({
-            instantSearchInstance,
-            parent: null,
-          })
-        );
-      }).not.toWarnDev(
-        '[InstantSearch]: The `getWidgetState` method is renamed `getWidgetUiState` and will no longer exist under that name in InstantSearch.js 5.x. Please use `getWidgetUiState` instead.'
-      );
     });
   });
 
