@@ -16,9 +16,6 @@ export function createInitArgs(
     renderState: instantSearchInstance.renderState,
     createURL: parent.createURL,
     scopedResults: [],
-    searchMetadata: {
-      isSearchStalled: instantSearchInstance.status === 'stalled',
-    },
     status: instantSearchInstance.status,
     error: instantSearchInstance.error,
   };
@@ -41,9 +38,6 @@ export function createRenderArgs(
     state: results && '_state' in results ? results._state : helper.state,
     renderState: instantSearchInstance.renderState,
     createURL: parent.createURL,
-    searchMetadata: {
-      isSearchStalled: instantSearchInstance.status === 'stalled',
-    },
     status: instantSearchInstance.status,
     error: instantSearchInstance.error,
   };
