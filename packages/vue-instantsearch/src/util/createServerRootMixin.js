@@ -168,9 +168,6 @@ function augmentInstantSearch(instantSearchOptions, cloneComponent) {
       state,
       createURL: parent.createURL,
       instantSearchInstance: search,
-      searchMetadata: {
-        isSearchStalled: false,
-      },
     });
   };
 
