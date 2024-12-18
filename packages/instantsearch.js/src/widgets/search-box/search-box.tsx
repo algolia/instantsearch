@@ -162,7 +162,7 @@ const renderer =
   ({
     refine,
     query,
-    isSearchStalled,
+    instantSearchInstance,
   }: SearchBoxRenderState & RendererOptions<SearchBoxConnectorParams>) => {
     render(
       <SearchBox
@@ -176,7 +176,7 @@ const renderer =
         showSubmit={showSubmit}
         showReset={showReset}
         showLoadingIndicator={showLoadingIndicator}
-        isSearchStalled={isSearchStalled}
+        isSearchStalled={instantSearchInstance.status === 'stalled'}
         cssClasses={cssClasses}
       />,
       containerNode

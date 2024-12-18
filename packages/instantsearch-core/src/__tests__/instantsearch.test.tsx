@@ -1658,9 +1658,6 @@ describe('scheduleStalledRender', () => {
     expect(widget.render).toHaveBeenCalledTimes(1);
     expect(widget.render).toHaveBeenLastCalledWith(
       expect.objectContaining({
-        searchMetadata: {
-          isSearchStalled: false,
-        },
         status: 'idle',
       })
     );
@@ -1677,9 +1674,6 @@ describe('scheduleStalledRender', () => {
     expect(widget.render).toHaveBeenCalledTimes(1);
     expect(widget.render).toHaveBeenLastCalledWith(
       expect.objectContaining({
-        searchMetadata: {
-          isSearchStalled: false,
-        },
         status: 'loading',
       })
     );
@@ -1692,9 +1686,6 @@ describe('scheduleStalledRender', () => {
     expect(widget.render).toHaveBeenCalledTimes(1);
     expect(widget.render).toHaveBeenLastCalledWith(
       expect.objectContaining({
-        searchMetadata: {
-          isSearchStalled: true,
-        },
         status: 'stalled',
       })
     );
@@ -1710,9 +1701,6 @@ describe('scheduleStalledRender', () => {
     expect(widget.render).toHaveBeenCalledTimes(1);
     expect(widget.render).toHaveBeenLastCalledWith(
       expect.objectContaining({
-        searchMetadata: {
-          isSearchStalled: false,
-        },
         status: 'idle',
       })
     );

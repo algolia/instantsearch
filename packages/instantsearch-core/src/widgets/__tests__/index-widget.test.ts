@@ -344,9 +344,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             createURL: expect.any(Function),
             scopedResults: [],
             status: instantSearchInstance.status,
-            searchMetadata: {
-              isSearchStalled: instantSearchInstance.status === 'stalled',
-            },
           });
         });
       });
@@ -403,9 +400,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             createURL: expect.any(Function),
             scopedResults: [],
             status: instantSearchInstance.status,
-            searchMetadata: {
-              isSearchStalled: instantSearchInstance.status === 'stalled',
-            },
           });
         });
 
@@ -1566,9 +1560,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           createURL: expect.any(Function),
           scopedResults: [],
           status: instantSearchInstance.status,
-          searchMetadata: {
-            isSearchStalled: instantSearchInstance.status === 'stalled',
-          },
         });
       });
     });
@@ -2461,15 +2452,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
       const searchBox = createSearchBox({
         dependsOn: 'search',
-        getRenderState: jest.fn((renderState, { helper, searchMetadata }) => {
+        getRenderState: jest.fn((renderState, { helper }) => {
           return {
             ...renderState,
             searchBox: {
               query: helper.state.query || '',
               refine: searchBoxRefine,
               clear: searchBoxClear,
-              isSearchStalled: searchMetadata.isSearchStalled,
               widgetParams: {},
+              isSearchStalled: false,
             },
           };
         }),
@@ -2501,8 +2492,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
                 query: '',
                 refine: searchBoxRefine,
                 clear: searchBoxClear,
-                isSearchStalled: false,
                 widgetParams: {},
+                isSearchStalled: false,
               },
             },
             indexName1: {
@@ -2510,8 +2501,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
                 query: '',
                 refine: searchBoxRefine,
                 clear: searchBoxClear,
-                isSearchStalled: false,
                 widgetParams: {},
+                isSearchStalled: false,
               },
               pagination: {
                 refine: paginationRefine,
@@ -2535,8 +2526,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
                 query: '',
                 refine: searchBoxRefine,
                 clear: searchBoxClear,
-                isSearchStalled: false,
                 widgetParams: {},
+                isSearchStalled: false,
               },
             },
             indexName1: {
@@ -2544,8 +2535,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
                 query: '',
                 refine: searchBoxRefine,
                 clear: searchBoxClear,
-                isSearchStalled: false,
                 widgetParams: {},
+                isSearchStalled: false,
               },
               pagination: {
                 refine: paginationRefine,
@@ -2578,15 +2569,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const instantSearchInstance = createInstantSearch({ mainHelper });
       const searchBox = createSearchBox({
         dependsOn: 'search',
-        getRenderState: jest.fn((renderState, { helper, searchMetadata }) => {
+        getRenderState: jest.fn((renderState, { helper }) => {
           return {
             ...renderState,
             searchBox: {
               query: helper.state.query || '',
               refine: () => {},
               clear: () => {},
-              isSearchStalled: searchMetadata.isSearchStalled,
               widgetParams: {},
+              isSearchStalled: false,
             },
           };
         }),
@@ -2633,9 +2624,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           createURL: expect.any(Function),
           scopedResults: [],
           status: instantSearchInstance.status,
-          searchMetadata: {
-            isSearchStalled: instantSearchInstance.status === 'stalled',
-          },
         })
       );
 
@@ -2644,10 +2632,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         {
           searchBox: {
             clear: expect.any(Function),
-            isSearchStalled: instantSearchInstance.status === 'stalled',
             query: '',
             refine: expect.any(Function),
             widgetParams: {},
+            isSearchStalled: false,
           },
         },
         expect.anything()
@@ -2761,9 +2749,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           helper: instance.getHelper(),
           createURL: expect.any(Function),
           status: instantSearchInstance.status,
-          searchMetadata: {
-            isSearchStalled: instantSearchInstance.status === 'stalled',
-          },
         });
       });
     });

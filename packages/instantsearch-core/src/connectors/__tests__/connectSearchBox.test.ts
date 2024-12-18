@@ -8,7 +8,6 @@ import algoliasearchHelper, {
 } from 'algoliasearch-helper';
 
 import { connectSearchBox, instantsearch } from '../..';
-import { createInstantSearch } from '../../../test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
@@ -430,10 +429,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
       expect(renderState1.searchBox).toEqual({
         clear: expect.any(Function),
-        isSearchStalled: false,
         query: '',
         refine: expect.any(Function),
         widgetParams: { queryHook },
+        isSearchStalled: false,
       });
 
       searchBox.init!(createInitOptions());
@@ -442,12 +441,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
       expect(renderState2.searchBox).toEqual({
         clear: renderState1.searchBox.clear,
-        isSearchStalled: false,
         query: '',
         refine: renderState1.searchBox.refine,
         widgetParams: {
           queryHook,
         },
+        isSearchStalled: false,
       });
     });
 
@@ -469,34 +468,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
       expect(renderState.searchBox).toEqual({
         clear: expect.any(Function),
-        isSearchStalled: false,
         query: 'query',
         refine: expect.any(Function),
         widgetParams: {},
-      });
-    });
-
-    test('returns the render state with stalled search', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
-      const createSearchBox = connectSearchBox(renderFn, unmountFn);
-      const searchBox = createSearchBox({});
-
-      searchBox.init!(createInitOptions());
-
-      const renderState = searchBox.getRenderState(
-        {},
-        createRenderOptions({
-          instantSearchInstance: createInstantSearch({ status: 'stalled' }),
-        })
-      );
-
-      expect(renderState.searchBox).toEqual({
-        clear: expect.any(Function),
-        isSearchStalled: true,
-        query: '',
-        refine: expect.any(Function),
-        widgetParams: {},
+        isSearchStalled: false,
       });
     });
   });
@@ -515,10 +490,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
       expect(renderState1).toEqual({
         clear: expect.any(Function),
-        isSearchStalled: false,
         query: '',
         refine: expect.any(Function),
         widgetParams: { queryHook },
+        isSearchStalled: false,
       });
 
       searchBox.init!(createInitOptions());
@@ -527,12 +502,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
       );
       expect(renderState2).toEqual({
         clear: renderState2.clear,
-        isSearchStalled: false,
         query: '',
         refine: expect.any(Function),
         widgetParams: {
           queryHook,
         },
+        isSearchStalled: false,
       });
 
       searchBox.render!(createRenderOptions());
@@ -559,33 +534,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
 
       expect(renderState).toEqual({
         clear: expect.any(Function),
-        isSearchStalled: false,
         query: 'query',
         refine: expect.any(Function),
         widgetParams: {},
-      });
-    });
-
-    test('returns the widget render state with stalled search', () => {
-      const renderFn = jest.fn();
-      const unmountFn = jest.fn();
-      const createSearchBox = connectSearchBox(renderFn, unmountFn);
-      const searchBox = createSearchBox({});
-
-      searchBox.init!(createInitOptions());
-
-      const renderState = searchBox.getWidgetRenderState(
-        createRenderOptions({
-          instantSearchInstance: createInstantSearch({ status: 'stalled' }),
-        })
-      );
-
-      expect(renderState).toEqual({
-        clear: expect.any(Function),
-        isSearchStalled: true,
-        query: '',
-        refine: expect.any(Function),
-        widgetParams: {},
+        isSearchStalled: false,
       });
     });
   });

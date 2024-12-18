@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { useSearchBox } from 'react-instantsearch-core';
+import { useInstantSearch, useSearchBox } from 'react-instantsearch-core';
 
 import { SearchBox as SearchBoxUiComponent } from '../ui/SearchBox';
 
@@ -44,7 +44,8 @@ export function SearchBox({
   translations,
   ...props
 }: SearchBoxProps) {
-  const { query, refine, isSearchStalled } = useSearchBox(
+  const { status } = useInstantSearch();
+  const { query, refine } = useSearchBox(
     { queryHook },
     { $$widgetType: 'ais.searchBox' }
   );
@@ -96,7 +97,7 @@ export function SearchBox({
 
   const uiProps: UiProps = {
     inputRef,
-    isSearchStalled,
+    isSearchStalled: status === 'stalled',
     onChange,
     onReset,
     onSubmit,

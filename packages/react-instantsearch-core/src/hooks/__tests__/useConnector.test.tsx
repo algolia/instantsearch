@@ -386,9 +386,6 @@ describe('useConnector', () => {
       state: helperState,
       renderState: searchContext.current!.renderState,
       createURL: indexContext.current!.createURL,
-      searchMetadata: {
-        isSearchStalled: false,
-      },
       status: 'idle',
       error: undefined,
     });
