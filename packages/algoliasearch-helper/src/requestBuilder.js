@@ -185,9 +185,7 @@ var requestBuilder = {
    */
   _getCompositionHitsSearchParams: function (state) {
     var facets = state.facets
-      // eslint-disable-next-line no-warning-comments
-      // TODO: annotate with `disjunctive`
-      .concat(state.disjunctiveFacets)
+      .concat(state.disjunctiveFacets.map((value) => `disjunctive(${value})`))
       .concat(requestBuilder._getHitsHierarchicalFacetsAttributes(state))
       .sort();
 
