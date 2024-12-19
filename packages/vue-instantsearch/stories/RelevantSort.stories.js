@@ -1,5 +1,5 @@
 import { storiesOf } from '@storybook/vue';
-import algoliasearch from 'algoliasearch/lite';
+import { liteClient as algoliasearch } from 'algoliasearch/lite';
 
 import { previewWrapper } from './utils';
 
