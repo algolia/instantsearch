@@ -12,7 +12,6 @@ describe('useInfiniteHits', () => {
 
     // Initial render state from manual `getWidgetRenderState`
     expect(result.current).toEqual({
-      hits: [],
       items: [],
       results: expect.objectContaining({ nbHits: 0 }),
       sendEvent: undefined,
@@ -27,7 +26,6 @@ describe('useInfiniteHits', () => {
 
     // InstantSearch.js state from the `render` lifecycle step
     expect(result.current).toEqual({
-      hits: [],
       items: [],
       results: expect.objectContaining({ nbHits: 0 }),
       sendEvent: expect.any(Function),
