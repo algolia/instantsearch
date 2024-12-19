@@ -185,7 +185,11 @@ var requestBuilder = {
    */
   _getCompositionHitsSearchParams: function (state) {
     var facets = state.facets
-      .concat(state.disjunctiveFacets.map((value) => `disjunctive(${value})`))
+      .concat(
+        state.disjunctiveFacets.map(function (value) {
+          return `disjunctive(${value})`;
+        })
+      )
       .concat(requestBuilder._getHitsHierarchicalFacetsAttributes(state))
       .sort();
 
