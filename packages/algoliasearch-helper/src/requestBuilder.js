@@ -187,7 +187,7 @@ var requestBuilder = {
     var facets = state.facets
       .concat(
         state.disjunctiveFacets.map(function (value) {
-          return `disjunctive(${value})`;
+          return ['disjunctive(', value, ')'].join('');
         })
       )
       .concat(requestBuilder._getHitsHierarchicalFacetsAttributes(state))
