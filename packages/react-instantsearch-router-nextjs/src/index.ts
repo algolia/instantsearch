@@ -85,8 +85,8 @@ export function createInstantSearchRouterNext<TRouteState = UiState>(
   // If we're rendering on the server, we create a simpler router
   if (typeof window === 'undefined') {
     return history({
-      getLocation() {
-        return new URL(serverUrl!) as unknown as Location;
+      getCurrentURL() {
+        return new URL(serverUrl!);
       },
       ...routerOptions,
     });

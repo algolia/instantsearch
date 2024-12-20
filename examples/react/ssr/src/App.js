@@ -21,7 +21,7 @@ function Hit({ hit }) {
   return <Highlight hit={hit} attribute="name" />;
 }
 
-function App({ serverState, location }) {
+function App({ serverState, currentURL }) {
   return (
     <InstantSearchSSRProvider {...serverState}>
       <InstantSearch
@@ -31,12 +31,12 @@ function App({ serverState, location }) {
           stateMapping: simple(),
           router: history({
             cleanUrlOnDispose: false,
-            getLocation() {
+            getCurrentURL() {
               if (typeof window === 'undefined') {
-                return location;
+                return currentURL;
               }
 
-              return window.location;
+              return new URL(window.location.href);
             },
           }),
         }}

@@ -80,50 +80,50 @@ describe('life cycle', () => {
     });
   });
 
-  describe('getLocation', () => {
-    test('calls getLocation on windowTitle', () => {
-      const getLocation = jest.fn(() => window.location);
+  describe('getCurrentURL', () => {
+    test('calls getCurrentURL on windowTitle', () => {
+      const getCurrentURL = jest.fn(() => new URL(window.location.href));
 
       historyRouter<UiState>({
         windowTitle() {
           return 'Search';
         },
-        getLocation,
+        getCurrentURL,
         cleanUrlOnDispose: true,
       });
 
-      expect(getLocation).toHaveBeenCalledTimes(1);
+      expect(getCurrentURL).toHaveBeenCalledTimes(1);
     });
 
-    test('calls getLocation on read', () => {
-      const getLocation = jest.fn(() => window.location);
+    test('calls getCurrentURL on read', () => {
+      const getCurrentURL = jest.fn(() => new URL(window.location.href));
       const router = historyRouter<UiState>({
-        getLocation,
+        getCurrentURL,
         cleanUrlOnDispose: true,
       });
 
-      expect(getLocation).toHaveBeenCalledTimes(0);
+      expect(getCurrentURL).toHaveBeenCalledTimes(0);
 
       router.write({ indexName: { query: 'query1' } });
       jest.runAllTimers();
 
-      expect(getLocation).toHaveBeenCalledTimes(1);
+      expect(getCurrentURL).toHaveBeenCalledTimes(1);
 
       router.read();
 
-      expect(getLocation).toHaveBeenCalledTimes(2);
+      expect(getCurrentURL).toHaveBeenCalledTimes(2);
     });
 
-    test('calls getLocation on createURL', () => {
-      const getLocation = jest.fn(() => window.location);
+    test('calls getCurrentURL on createURL', () => {
+      const getCurrentURL = jest.fn(() => new URL(window.location.href));
       const router = historyRouter<UiState>({
-        getLocation,
+        getCurrentURL,
         cleanUrlOnDispose: true,
       });
 
       router.createURL({ indexName: { query: 'query1' } });
 
-      expect(getLocation).toHaveBeenCalledTimes(1);
+      expect(getCurrentURL).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -188,25 +188,18 @@ describe('life cycle', () => {
         search.start();
         jest.runAllTimers();
       }).toThrowErrorMatchingInlineSnapshot(
-        `"You need to provide \`getLocation\` to the \`history\` router in environments where \`window\` does not exist."`
+        `"You need to provide \`getCurrentURL\` to the \`history\` router in environments where \`window\` does not exist."`
       );
     });
 
-    test('does not fail on environments without window with provided getLocation', () => {
+    test('does not fail on environments without window with provided getCurrentURL', () => {
       // @ts-expect-error
       delete global.window;
 
       expect(() => {
         const router = historyRouter<UiState>({
-          getLocation() {
-            return {
-              protocol: '',
-              hostname: '',
-              port: '',
-              pathname: '',
-              hash: '',
-              search: '',
-            } as unknown as Location;
+          getCurrentURL() {
+            return new URL('http://localhost/');
           },
           cleanUrlOnDispose: true,
         });
@@ -224,21 +217,14 @@ describe('life cycle', () => {
       }).not.toThrow();
     });
 
-    test('does not fail when running the whole router lifecycle with getLocation', () => {
+    test('does not fail when running the whole router lifecycle with getCurrentURL', () => {
       // @ts-expect-error
       delete global.window;
 
       expect(() => {
         const router = historyRouter<UiState>({
-          getLocation() {
-            return {
-              protocol: '',
-              hostname: '',
-              port: '',
-              pathname: '',
-              hash: '',
-              search: '',
-            } as unknown as Location;
+          getCurrentURL() {
+            return new URL('http://localhost/');
           },
           cleanUrlOnDispose: true,
         });
