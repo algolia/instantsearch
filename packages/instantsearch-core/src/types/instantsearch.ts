@@ -101,16 +101,6 @@ export type InstantSearchOptions<
      * @default false
      */
     preserveSharedStateOnUnmount?: boolean; // @MAJOR remove option, only keep the "true" behaviour
-    /**
-     * Changes the way root levels of hierarchical facets have their count displayed.
-     *
-     * If `false` (by default), the count of the refined root level is updated to match the count of the actively refined parent level.
-     *
-     * If `true`, the count of the root level stays the same as the count of all children levels.
-     *
-     * @default false
-     */
-    persistHierarchicalRootCount?: boolean; // @MAJOR change the default to true
   };
 };
 
