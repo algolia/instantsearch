@@ -28,21 +28,21 @@ export function useInstantSearchRouting<
   if (passedRouting && !routingRef.current) {
     let browserHistoryOptions: Partial<BrowserHistoryArgs<TRouteState>> = {};
 
-    browserHistoryOptions.getLocation = () => {
+    browserHistoryOptions.getCurrentURL = () => {
       if (typeof window === 'undefined') {
         const url = `${
           headers().get('x-forwarded-proto') || 'http'
         }://${headers().get('host')}${pathname}?${searchParams}`;
-        return new URL(url) as unknown as Location;
+        return new URL(url);
       }
 
       if (isMounting.current) {
         return new URL(
           `${window.location.protocol}//${window.location.host}${pathname}?${searchParams}`
-        ) as unknown as Location;
+        );
       }
 
-      return window.location;
+      return new URL(window.location.href);
     };
     browserHistoryOptions.push = function push(
       this: ReturnType<typeof historyRouter>,
