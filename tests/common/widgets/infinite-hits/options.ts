@@ -16,7 +16,7 @@ import type { PlainSearchParameters } from 'algoliasearch-helper';
 import type { BaseHit, SearchResponse } from 'instantsearch.js';
 import type {
   InfiniteHitsCache,
-  InfiniteHitsCachedHits,
+  InfiniteHitsCachedItems,
 } from 'instantsearch.js/es/connectors/infinite-hits/connectInfiniteHits';
 
 function normalizeSnapshot(html: string) {
@@ -677,7 +677,7 @@ function createCustomCache() {
 
   let cachedState: PlainSearchParameters | undefined = undefined;
 
-  let cachedHits: InfiniteHitsCachedHits<Record<string, any>> | undefined =
+  let cachedHits: InfiniteHitsCachedItems<Record<string, any>> | undefined =
     undefined;
 
   type Cache = InfiniteHitsCache<Record<string, any>> & { clear: () => void };
