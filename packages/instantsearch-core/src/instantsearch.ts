@@ -52,7 +52,6 @@ export const INSTANTSEARCH_FUTURE_DEFAULTS: Required<
   InstantSearchOptions['future']
 > = {
   preserveSharedStateOnUnmount: false,
-  persistHierarchicalRootCount: false,
 };
 
 /**
@@ -356,9 +355,7 @@ See documentation: ${createDocumentationLink({
     // we need to respect this helper as a way to keep all listeners correct.
     const mainHelper =
       this.mainHelper ||
-      algoliasearchHelper(this.client, this.indexName, undefined, {
-        persistHierarchicalRootCount: this.future.persistHierarchicalRootCount,
-      });
+      algoliasearchHelper(this.client, this.indexName, undefined);
 
     if (this.compositionID) {
       mainHelper.searchForFacetValues =
