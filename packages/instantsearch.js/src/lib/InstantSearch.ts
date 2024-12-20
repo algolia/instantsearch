@@ -589,6 +589,11 @@ See documentation: ${createDocumentationLink({
         persistHierarchicalRootCount: this.future.persistHierarchicalRootCount,
       });
 
+    if (this.compositionID) {
+      mainHelper.searchForFacetValues =
+        mainHelper.searchForCompositionFacetValues.bind(mainHelper);
+    }
+
     mainHelper.search = () => {
       this.status = 'loading';
       this.scheduleRender(false);
