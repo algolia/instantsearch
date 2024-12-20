@@ -14,5 +14,11 @@ module.exports = ({ config, mode }) => {
     ],
   });
 
+  config.plugins.push(
+    new webpack.DefinePlugin({
+      __DEV__: JSON.stringify(mode === 'DEVELOPMENT'),
+    })
+  );
+
   return config;
 };
