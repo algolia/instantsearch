@@ -198,6 +198,26 @@ declare namespace algoliasearchHelper {
     ): Promise<SearchForFacetValues.Result>;
 
     /**
+     * Search for facet values using the Composition API & based on a query and the name of a faceted attribute.
+     * This triggers a search and will return a promise. On top of using the query, it also sends
+     * the parameters from the state so that the search is narrowed down to only the possible values.
+     *
+     * See the description of [FacetSearchResult](reference.html#FacetSearchResult)
+     * @param facet the name of the faceted attribute
+     * @param query the string query for the search
+     * @param [maxFacetHits] the maximum number values returned. Should be > 0 and <= 100
+     * @param [userState] the set of custom parameters to use on top of the current state. Setting a property to `undefined` removes
+     * it in the generated query.
+     * @return the results of the search
+     */
+    searchForCompositionFacetValues(
+      facet: string,
+      query: string,
+      maxFacetHits: number,
+      userState?: PlainSearchParameters
+    ): Promise<SearchForFacetValues.Result>;
+
+    /**
      * Sets the text query used for the search.
      *
      * This method resets the current page to 0.
