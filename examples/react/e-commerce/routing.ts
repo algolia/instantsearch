@@ -85,10 +85,10 @@ const router = historyRouter<RouteState>({
       .join(' | ');
   },
 
-  createURL({ qsModule, routeState, location }): string {
-    const { protocol, hostname, port = '', pathname, hash } = location;
+  createURL({ qsModule, routeState, currentURL }): string {
+    const { protocol, hostname, port = '', pathname, hash } = currentURL;
     const portWithPrefix = port === '' ? '' : `:${port}`;
-    const urlParts = location.href.match(/^(.*?)\/search/);
+    const urlParts = currentURL.href.match(/^(.*?)\/search/);
     const baseUrl =
       (urlParts && urlParts[0]) ||
       `${protocol}//${hostname}${portWithPrefix}${pathname}search`;
@@ -152,13 +152,15 @@ const router = historyRouter<RouteState>({
     return `${baseUrl}/${categoryPath}${queryString}${hash}`;
   },
 
-  parseURL({ qsModule, location }): RouteState {
-    const pathnameMatches = location.pathname.match(/search\/(.*?)\/?$/);
+  parseURL({ qsModule, currentURL }): RouteState {
+    const pathnameMatches = currentURL.pathname.match(/search\/(.*?)\/?$/);
     const category = getCategoryName(
       (pathnameMatches && pathnameMatches[1]) || ''
     );
 
-    const queryParameters = qsModule.parse(location.search.slice(1));
+    const queryParameters = qsModule.parse(currentURL.search, {
+      ignoreQueryPrefix: true,
+    });
     const {
       query = '',
       page = 1,
