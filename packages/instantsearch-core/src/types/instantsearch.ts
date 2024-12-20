@@ -90,18 +90,7 @@ export type InstantSearchOptions<
    * @default false
    */
   insights?: InsightsProps | boolean;
-  future?: {
-    /**
-     * Changes the way `dispose` is used in InstantSearch lifecycle.
-     *
-     * If `false` (by default), each widget unmounting will remove its state as well, even if there are multiple widgets reading that UI State.
-     *
-     * If `true`, each widget unmounting will only remove its own state if it's the last of its type. This allows for dynamically adding and removing widgets without losing their state.
-     *
-     * @default false
-     */
-    preserveSharedStateOnUnmount?: boolean; // @MAJOR remove option, only keep the "true" behaviour
-  };
+  future?: Record<string, never>;
 };
 
 export type InstantSearchStatus = 'idle' | 'loading' | 'stalled' | 'error';

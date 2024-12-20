@@ -1,177 +1,105 @@
 const { algoliasearch, instantsearch } = window;
 {{#if flags.autocomplete}}
-const { autocomplete } = window['@algolia/autocomplete-js'];
-const { createLocalStorageRecentSearchesPlugin } = window[
-  '@algolia/autocomplete-plugin-recent-searches'
-];
-const { createQuerySuggestionsPlugin } = window[
-  '@algolia/autocomplete-plugin-query-suggestions'
-];
+  const { autocomplete } = window['@algolia/autocomplete-js']; const {
+  createLocalStorageRecentSearchesPlugin } = window[
+  '@algolia/autocomplete-plugin-recent-searches' ]; const {
+  createQuerySuggestionsPlugin } = window[
+  '@algolia/autocomplete-plugin-query-suggestions' ];
 {{/if}}
 
-const searchClient = algoliasearch('{{appId}}', '{{apiKey}}');
-
-const search = instantsearch({
-  indexName: '{{indexName}}',
-  searchClient,
-  future: { preserveSharedStateOnUnmount: true },
-  {{#if flags.insights}}insights: true,{{/if}}
+const searchClient = algoliasearch('{{appId}}', '{{apiKey}}'); const search =
+instantsearch({ indexName: '{{indexName}}', searchClient,
+{{#if flags.insights}}insights: true,{{/if}}
 });
 
 {{#if flags.autocomplete}}
-const virtualSearchBox = instantsearch.connectors.connectSearchBox(() => {});
+  const virtualSearchBox = instantsearch.connectors.connectSearchBox(() => {});
 {{/if}}
 
 search.addWidgets([
-  {{#unless flags.autocomplete}}
-  instantsearch.widgets.searchBox({
-    container: '#searchbox',
-    {{#if searchPlaceholder}}
-    placeholder: '{{searchPlaceholder}}',
-    {{/if}}
-  }),
-  {{else}}
-  virtualSearchBox({}),
-  {{/unless}}
-  instantsearch.widgets.hits({
-    container: '#hits',
-    {{#if attributesToDisplay}}
-    templates: {
-      item: (hit, { html, components }) => html`
-<article>
-  {{#if imageAttribute}}
-  <img src=${ hit.{{imageAttribute}} } alt=${ hit.{{attributesToDisplay.[0]}} } />
-  {{/if}}
-  <div>
-    <h1>${components.Highlight({hit, attribute: "{{attributesToDisplay.[0]}}"})}</h1>
-    {{#each attributesToDisplay}}
-    {{#unless @first}}
-    <p>${components.Highlight({hit, attribute: "{{this}}"})}</p>
-    {{/unless}}
-    {{/each}}
-  </div>
-</article>
-`,
-    },
-    {{/if}}
-  }),
-  instantsearch.widgets.configure({
-    hitsPerPage: 8,
-  }),
-  {{#if flags.dynamicWidgets}}
-  instantsearch.widgets.dynamicWidgets({
-    container: '#dynamic-widgets',
-    fallbackWidget({ container, attribute }) {
-      return instantsearch.widgets.panel({ templates: { header: () => attribute } })(
-        instantsearch.widgets.refinementList
-      )({
-        container,
-        attribute,
-      });
-    },
-    widgets: [
-      {{#each attributesForFaceting}}
-      container =>
-        instantsearch.widgets.panel({
-          templates: { header: () => '{{this}}' },
-        })(instantsearch.widgets.refinementList)({
-          container,
-          attribute: '{{this}}',
-        }),
-      {{/each}}
-    ],
-  }),
-  {{else}}
-  {{#each attributesForFaceting}}
-  instantsearch.widgets.panel({
-    templates: { header: () => '{{this}}' },
-  })(instantsearch.widgets.refinementList)({
-    container: '#{{this}}-list',
-    attribute: '{{this}}',
-  }),
-  {{/each}}
-  {{/if}}
-  instantsearch.widgets.pagination({
-    container: '#pagination',
-  }),
-]);
-
-search.start();
-
-{{#if flags.autocomplete}}
-const recentSearchesPlugin = createLocalStorageRecentSearchesPlugin({
-  key: 'instantsearch',
-  limit: 3,
-  transformSource({ source }) {
-    return {
-      ...source,
-      onSelect({ setIsOpen, setQuery, item, event }) {
-        onSelect({ setQuery, setIsOpen, event, query: item.label });
-      },
-    };
-  },
-});
-
-const querySuggestionsPlugin = createQuerySuggestionsPlugin({
-  searchClient,
-  indexName: '{{querySuggestionsIndexName}}',
-  getSearchParams() {
-    return recentSearchesPlugin.data.getAlgoliaSearchParams({ hitsPerPage: 6 });
-  },
-  transformSource({ source }) {
-    return {
-      ...source,
-      sourceId: 'querySuggestionsPlugin',
-      onSelect({ setIsOpen, setQuery, event, item }) {
-        onSelect({ setQuery, setIsOpen, event, query: item.query });
-      },
-      getItems(params) {
-        if (!params.state.query) {
-          return [];
-        }
-
-        return source.getItems(params);
-      },
-    };
-  },
-});
-
-autocomplete({
-  container: '#searchbox',
+{{#unless flags.autocomplete}}
+  instantsearch.widgets.searchBox({ container: '#searchbox',
   {{#if searchPlaceholder}}
     placeholder: '{{searchPlaceholder}}',
   {{/if}}
-  openOnFocus: true,
-  detachedMediaQuery: 'none',
-  onSubmit({ state }) {
-    setInstantSearchUiState({ query: state.query });
-  },
-  plugins: [recentSearchesPlugin, querySuggestionsPlugin],
-});
+  }),
+{{else}}
+  virtualSearchBox({}),
+{{/unless}}
+instantsearch.widgets.hits({ container: '#hits',
+{{#if attributesToDisplay}}
+  templates: { item: (hit, { html, components }) => html`
+  <article>
+    {{#if imageAttribute}}
+      <img
+        src='${'
+        hit.
+        {{imageAttribute}}
+        }
+        alt='${'
+        hit.
+        {{attributesToDisplay.0}}
+        }
+      />
+    {{/if}}
+    <div>
+      <h1>${components.Highlight({hit, attribute: "{{attributesToDisplay.0}}"})}</h1>
+      {{#each attributesToDisplay}}
+        {{#unless @first}}
+          <p>${components.Highlight({hit, attribute: "{{this}}"})}</p>
+        {{/unless}}
+      {{/each}}
+    </div>
+  </article>
+  `, },
+{{/if}}
+}), instantsearch.widgets.configure({ hitsPerPage: 8, }),
+{{#if flags.dynamicWidgets}}
+  instantsearch.widgets.dynamicWidgets({ container: '#dynamic-widgets',
+  fallbackWidget({ container, attribute }) { return
+  instantsearch.widgets.panel({ templates: { header: () => attribute } })(
+  instantsearch.widgets.refinementList )({ container, attribute, }); }, widgets:
+  [
+  {{#each attributesForFaceting}}
+    container => instantsearch.widgets.panel({ templates: { header: () => '{{this}}'
+    }, })(instantsearch.widgets.refinementList)({ container, attribute: '{{this}}',
+    }),
+  {{/each}}
+  ], }),
+{{else}}
+  {{#each attributesForFaceting}}
+    instantsearch.widgets.panel({ templates: { header: () => '{{this}}' },
+    })(instantsearch.widgets.refinementList)({ container: '#{{this}}-list',
+    attribute: '{{this}}', }),
+  {{/each}}
+{{/if}}
+instantsearch.widgets.pagination({ container: '#pagination', }), ]);
+search.start();
 
-function setInstantSearchUiState(indexUiState) {
-  search.mainIndex.setIndexUiState({ page: 1, ...indexUiState });
-}
-
-function onSelect({ setIsOpen, setQuery, event, query }) {
-  if (isModifierEvent(event)) {
-    return;
-  }
-
-  setQuery(query);
-  setIsOpen(false);
-  setInstantSearchUiState({ query });
-}
-
-function isModifierEvent(event) {
-  const isMiddleClick = event.button === 1;
-
-  return (
-    isMiddleClick ||
-    event.altKey ||
-    event.ctrlKey ||
-    event.metaKey ||
-    event.shiftKey
-  );
-}
+{{#if flags.autocomplete}}
+  const recentSearchesPlugin = createLocalStorageRecentSearchesPlugin({ key:
+  'instantsearch', limit: 3, transformSource({ source }) { return { ...source,
+  onSelect({ setIsOpen, setQuery, item, event }) { onSelect({ setQuery,
+  setIsOpen, event, query: item.label }); }, }; }, }); const
+  querySuggestionsPlugin = createQuerySuggestionsPlugin({ searchClient,
+  indexName: '{{querySuggestionsIndexName}}', getSearchParams() { return
+  recentSearchesPlugin.data.getAlgoliaSearchParams({ hitsPerPage: 6 }); },
+  transformSource({ source }) { return { ...source, sourceId:
+  'querySuggestionsPlugin', onSelect({ setIsOpen, setQuery, event, item }) {
+  onSelect({ setQuery, setIsOpen, event, query: item.query }); },
+  getItems(params) { if (!params.state.query) { return []; } return
+  source.getItems(params); }, }; }, }); autocomplete({ container: '#searchbox',
+  {{#if searchPlaceholder}}
+    placeholder: '{{searchPlaceholder}}',
+  {{/if}}
+  openOnFocus: true, detachedMediaQuery: 'none', onSubmit({ state }) {
+  setInstantSearchUiState({ query: state.query }); }, plugins:
+  [recentSearchesPlugin, querySuggestionsPlugin], }); function
+  setInstantSearchUiState(indexUiState) { search.mainIndex.setIndexUiState({
+  page: 1, ...indexUiState }); } function onSelect({ setIsOpen, setQuery, event,
+  query }) { if (isModifierEvent(event)) { return; } setQuery(query);
+  setIsOpen(false); setInstantSearchUiState({ query }); } function
+  isModifierEvent(event) { const isMiddleClick = event.button === 1; return (
+  isMiddleClick || event.altKey || event.ctrlKey || event.metaKey ||
+  event.shiftKey ); }
 {{/if}}
