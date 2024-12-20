@@ -505,10 +505,6 @@ AlgoliaSearchHelper.prototype.searchForCompositionFacetValues = function (
       },
     },
   });
-  // searchForFacetValuesPromise = this.client.searchForFacetValues([
-  //   { indexName: state.index, params: algoliaQuery },
-  // ]);
-  // algoliasearch < 3.27.1
 
   this.emit('searchForFacetValues', {
     state: state,
