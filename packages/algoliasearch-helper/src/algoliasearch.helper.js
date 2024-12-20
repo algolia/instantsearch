@@ -500,8 +500,8 @@ AlgoliaSearchHelper.prototype.searchForCompositionFacetValues = function (
     searchForFacetValuesRequest: {
       params: {
         query: state.query,
-        maxFacetHits,
-        searchQuery: { query },
+        maxFacetHits: maxFacetHits,
+        searchQuery: { query: query },
       },
     },
   });
