@@ -241,11 +241,8 @@ function SearchResults(state, results, options) {
   });
 
   // Make every key of the result options reachable from the instance
-  var opts = defaultsPure(options, {
-    persistHierarchicalRootCount: false,
-  });
-  Object.keys(opts).forEach(function (key) {
-    self[key] = opts[key];
+  Object.keys(options || {}).forEach(function (key) {
+    self[key] = options[key];
   });
 
   /**
@@ -510,15 +507,10 @@ function SearchResults(state, results, options) {
         }
 
         self.hierarchicalFacets[position][attributeIndex].data =
-          self.persistHierarchicalRootCount
-            ? mergeNumericMax(
-                self.hierarchicalFacets[position][attributeIndex].data,
-                facetResults
-              )
-            : defaultsPure(
-                facetResults,
-                self.hierarchicalFacets[position][attributeIndex].data
-              );
+          mergeNumericMax(
+            self.hierarchicalFacets[position][attributeIndex].data,
+            facetResults
+          );
       } else {
         position = disjunctiveFacetsIndices[dfacet];
 
@@ -590,28 +582,7 @@ function SearchResults(state, results, options) {
           return;
         }
 
-        // when we always get root levels, if the hits refinement is `beers > IPA` (count: 5),
-        // then the disjunctive values will be `beers` (count: 100),
-        // but we do not want to display
-        //   | beers (100)
-        //     > IPA (5)
-        // We want
-        //   | beers (5)
-        //     > IPA (5)
-        // @MAJOR: remove this legacy behaviour in next major version
-        var defaultData = {};
-
-        if (
-          currentRefinement.length > 0 &&
-          !self.persistHierarchicalRootCount
-        ) {
-          var root = currentRefinement[0].split(separator)[0];
-          defaultData[root] =
-            self.hierarchicalFacets[position][attributeIndex].data[root];
-        }
-
         self.hierarchicalFacets[position][attributeIndex].data = defaultsPure(
-          defaultData,
           facetResults,
           self.hierarchicalFacets[position][attributeIndex].data
         );

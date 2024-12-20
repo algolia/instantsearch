@@ -1140,7 +1140,6 @@ declare namespace algoliasearchHelper {
      * This is for internal use, e.g., avoiding caching in infinite hits, or delaying the display of these results.
      */
     __isArtificial?: boolean | undefined;
-    persistHierarchicalRootCount?: boolean;
   }
 
   type ISearchResponse<T> = Omit<SearchResponse<T>, 'facets' | 'params'> &
