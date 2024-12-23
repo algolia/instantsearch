@@ -153,6 +153,7 @@ type SearchWidget<TWidgetDescription extends WidgetDescription> = {
   getWidgetParameters?: (
     state: SearchParameters,
     widgetParametersOptions: {
+      collection?: string;
       uiState: Expand<
         Partial<TWidgetDescription['indexUiState'] & IndexUiState>
       >;
@@ -172,6 +173,7 @@ type RecommendWidget<
   getWidgetParameters: (
     state: RecommendParameters,
     widgetParametersOptions: {
+      collection?: string;
       uiState: Expand<
         Partial<TWidgetDescription['indexUiState'] & IndexUiState>
       >;
@@ -276,6 +278,7 @@ type RequiredUiStateLifeCycle<TWidgetDescription extends WidgetDescription> = {
   getWidgetSearchParameters: (
     state: SearchParameters,
     widgetSearchParametersOptions: {
+      collection?: string;
       uiState: Expand<
         Partial<TWidgetDescription['indexUiState'] & IndexUiState>
       >;

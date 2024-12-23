@@ -184,6 +184,8 @@ export type InstantSearchOptions<
     // @MAJOR: Remove legacy behaviour here and in algoliasearch-helper
     persistHierarchicalRootCount?: boolean;
   };
+
+  collection?: string;
 };
 
 export type InstantSearchStatus = 'idle' | 'loading' | 'stalled' | 'error';
@@ -345,6 +347,7 @@ See documentation: ${createDocumentationLink({
     this.mainHelper = null;
     this.mainIndex = index({
       indexName,
+      collection: options.collection,
     });
     this.onStateChange = onStateChange;
 

@@ -2,11 +2,12 @@ import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import instantsearch from 'instantsearch.js';
 import { carousel } from 'instantsearch.js/es/templates';
 import {
+  breadcrumb,
   configure,
+  hierarchicalMenu,
   hits,
   pagination,
   panel,
-  refinementList,
   searchBox,
   trendingItems,
 } from 'instantsearch.js/es/widgets';
@@ -14,14 +15,15 @@ import {
 import 'instantsearch.css/themes/satellite.css';
 
 const searchClient = algoliasearch(
-  'latency',
-  '6be0576ff61c053d5f9a3225e2a90f76'
+  'LOEC74WPH7',
+  '3b38713a560044da51e7b1e56fac000f'
 );
 
 const search = instantsearch({
-  indexName: 'instant_search',
+  indexName: 'pokedex-fr',
   searchClient,
   insights: true,
+  collection: 'Gen 1 > Pokémon Souris',
 });
 
 search.addWidgets([
@@ -33,13 +35,18 @@ search.addWidgets([
     templates: {
       item: (hit, { html, components }) => html`
         <article>
-          <h1>
-            <a href="/products.html?pid=${hit.objectID}"
-              >${components.Highlight({ hit, attribute: 'name' })}</a
-            >
-          </h1>
-          <p>${components.Highlight({ hit, attribute: 'description' })}</p>
-          <a href="/products.html?pid=${hit.objectID}">See product</a>
+          <div style="display: flex; align-items: center">
+            <img
+              src=${hit.sprites.regular}
+              alt=${hit.name.fr}
+              style="margin-right: 1rem"
+              width="64"
+            />
+            <div>
+              <h2>${components.Highlight({ hit, attribute: 'name.fr' })}</h2>
+              <p>${components.Highlight({ hit, attribute: 'category' })}</p>
+            </div>
+          </div>
         </article>
       `,
     },
@@ -49,9 +56,11 @@ search.addWidgets([
   }),
   panel({
     templates: { header: 'brand' },
-  })(refinementList)({
+  })(hierarchicalMenu)({
     container: '#brand-list',
-    attribute: 'brand',
+  }),
+  breadcrumb({
+    container: '#breadcrumb',
   }),
   pagination({
     container: '#pagination',
@@ -64,10 +73,9 @@ search.addWidgets([
         <div>
           <article>
             <div>
-              <img src="${item.image}" />
-              <h2>${item.name}</h2>
+              <img src="${item.sprites.regular}" />
+              <h2>${item.name.fr}</h2>
             </div>
-            <a href="/products.html?pid=${item.objectID}">See product</a>
           </article>
         </div>
       `,

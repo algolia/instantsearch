@@ -108,8 +108,10 @@ export function useConnector<
         parentIndex.getIndexId()
       ];
       helper.state =
-        widget.getWidgetSearchParameters?.(helper.state, { uiState }) ||
-        helper.state;
+        widget.getWidgetSearchParameters?.(helper.state, {
+          collection: parentIndex.getCollection(),
+          uiState,
+        }) || helper.state;
       const { results, scopedResults, recommendResults } =
         getIndexSearchResults(parentIndex);
 

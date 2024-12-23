@@ -7,10 +7,11 @@ import {
   Hits,
   InstantSearch,
   Pagination,
-  RefinementList,
   SearchBox,
   TrendingItems,
   Carousel,
+  Breadcrumb,
+  HierarchicalMenu,
 } from 'react-instantsearch';
 
 import { Panel } from './Panel';
@@ -20,8 +21,8 @@ import 'instantsearch.css/themes/satellite.css';
 import './App.css';
 
 const searchClient = algoliasearch(
-  'latency',
-  '6be0576ff61c053d5f9a3225e2a90f76'
+  'LOEC74WPH7',
+  '3b38713a560044da51e7b1e56fac000f'
 );
 
 export function App() {
@@ -42,18 +43,20 @@ export function App() {
       <div className="container">
         <InstantSearch
           searchClient={searchClient}
-          indexName="instant_search"
+          indexName="pokedex-fr"
           insights={true}
+          collection="Gen 1 > Pokémon Souris"
         >
           <Configure hitsPerPage={8} />
           <div className="search-panel">
             <div className="search-panel__filters">
               <Panel header="brand">
-                <RefinementList attribute="brand" />
+                <HierarchicalMenu />
               </Panel>
             </div>
 
             <div className="search-panel__results">
+              <Breadcrumb style={{ marginBottom: '1rem' }} />
               <SearchBox placeholder="" className="searchbox" />
               <Hits hitComponent={HitComponent} />
 
@@ -76,36 +79,48 @@ export function App() {
 }
 
 type HitType = Hit<{
-  image: string;
-  name: string;
-  description: string;
+  category: string;
+  name: {
+    fr: string;
+  };
+  pokedex_id: number;
+  sprites: {
+    regular: string;
+  };
 }>;
 
 function HitComponent({ hit }: { hit: HitType }) {
   return (
     <article>
-      <h1>
-        <a href={`/products.html?pid=${hit.objectID}`}>
-          <Highlight attribute="name" hit={hit} />
-        </a>
-      </h1>
-      <p>
-        <Highlight attribute="description" hit={hit} />
-      </p>
-      <a href={`/products.html?pid=${hit.objectID}`}>See product</a>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <img
+          src={hit.sprites.regular}
+          alt={hit.name.fr}
+          style={{ marginRight: '1rem' }}
+          width="64"
+        />
+        <div>
+          <h2>
+            {/* @ts-ignore */}
+            <Highlight attribute="name.fr" hit={hit} /> ({hit.pokedex_id})
+          </h2>
+          <p>
+            <Highlight attribute="category" hit={hit} />
+          </p>
+        </div>
+      </div>
     </article>
   );
 }
 
-function ItemComponent({ item }: { item: Hit }) {
+function ItemComponent({ item }: { item: HitType }) {
   return (
     <div>
       <article>
         <div>
-          <img src={item.image} />
-          <h2>{item.name}</h2>
+          <img src={item.sprites.regular} />
+          <h2>{item.name.fr}</h2>
         </div>
-        <a href={`/products.html?pid=${item.objectID}`}>See product</a>
       </article>
     </div>
   );
