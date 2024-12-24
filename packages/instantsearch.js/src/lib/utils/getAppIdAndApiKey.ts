@@ -2,9 +2,9 @@
 export function getAppIdAndApiKey(
   searchClient: any
 ): [appId: string, apiKey: string] | [appId: undefined, apiKey: undefined] {
-  if (searchClient.applicationID && searchClient.apiKey) {
-    // searchClient v3
-    return [searchClient.applicationID, searchClient.apiKey];
+  if (searchClient.appId && searchClient.apiKey) {
+    // searchClient v5
+    return [searchClient.appId, searchClient.apiKey];
   } else if (searchClient.transporter) {
     // searchClient v4 or v5
     const transporter = searchClient.transporter;
@@ -16,6 +16,8 @@ export function getAppIdAndApiKey(
     const appId = headers[APP_ID] || queryParameters[APP_ID];
     const apiKey = headers[API_KEY] || queryParameters[API_KEY];
     return [appId, apiKey];
+  } else {
+    // searchClient v3
+    return [searchClient.applicationID, searchClient.apiKey];
   }
-  return [undefined, undefined];
 }
