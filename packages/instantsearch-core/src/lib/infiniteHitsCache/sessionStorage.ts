@@ -49,7 +49,7 @@ export function createInfiniteHitsSessionStorageCache({
         return null;
       }
     },
-    write({ state, hits }) {
+    write({ state, items }) {
       const sessionStorage = safelyRunOnBrowser<Storage | undefined>(
         ({ window }) => window.sessionStorage
       );
@@ -63,7 +63,7 @@ export function createInfiniteHitsSessionStorageCache({
           KEY,
           JSON.stringify({
             state: getStateWithoutPage(state),
-            hits,
+            hits: items,
           })
         );
       } catch (error) {

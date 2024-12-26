@@ -15,7 +15,7 @@ import type { MockSearchClient } from '@instantsearch/mocks';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
 import type {
   InfiniteHitsCache,
-  InfiniteHitsCachedHits,
+  InfiniteHitsCachedItems,
 } from 'instantsearch-core';
 import type { BaseHit, SearchResponse } from 'instantsearch.js';
 
@@ -493,7 +493,7 @@ export function createOptionsTests(
       });
 
       expect(cache.write).toHaveBeenCalledTimes(1);
-      expect(cache.write.mock.calls[0][0].hits).toEqual({
+      expect(cache.write.mock.calls[0][0].items).toEqual({
         '0': [
           { __position: 1, objectID: '0' },
           { __position: 2, objectID: '1' },
@@ -514,7 +514,7 @@ export function createOptionsTests(
       });
 
       expect(cache.write).toHaveBeenCalledTimes(2);
-      expect(cache.write.mock.calls[0][0].hits).toEqual({
+      expect(cache.write.mock.calls[0][0].items).toEqual({
         '0': [
           { __position: 1, objectID: '0' },
           { __position: 2, objectID: '1' },
@@ -535,7 +535,7 @@ export function createOptionsTests(
       // We write in cache before instantiating InstantSearch to mimic a
       // pre-filled cache from previous searches (e.g., after a page refresh)
       cache.write({
-        hits: {
+        items: {
           '0': [
             { __position: 1, objectID: 'one' },
             { __position: 2, objectID: 'two' },
@@ -677,7 +677,7 @@ function createCustomCache() {
 
   let cachedState: PlainSearchParameters | undefined = undefined;
 
-  let cachedHits: InfiniteHitsCachedHits<Record<string, any>> | undefined =
+  let cachedHits: InfiniteHitsCachedItems<Record<string, any>> | undefined =
     undefined;
 
   type Cache = InfiniteHitsCache<Record<string, any>> & { clear: () => void };
@@ -697,9 +697,9 @@ function createCustomCache() {
 
       return null;
     }),
-    write: jest.fn(({ state, hits }) => {
+    write: jest.fn(({ state, items }) => {
       cachedState = getStateWithoutPage(state);
-      cachedHits = hits;
+      cachedHits = items;
     }),
     clear: jest.fn(() => {
       cachedState = undefined;
