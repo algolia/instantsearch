@@ -3,14 +3,14 @@ import algoliasearchHelper from 'algoliasearch-helper';
 
 import { createInstantSearch } from './createInstantSearch';
 
+import type { SearchResponse } from 'algoliasearch-helper/types/algoliasearch';
 import type {
   InitOptions,
   RenderOptions,
   DisposeOptions,
   Widget,
-} from '../src/types';
-import type { IndexInitOptions } from '../src/widgets/index/index';
-import type { SearchResponse } from 'algoliasearch-helper/types/algoliasearch';
+  IndexInitOptions,
+} from 'instantsearch-core';
 
 export const createInitOptions = (
   args: Partial<InitOptions> = {}
