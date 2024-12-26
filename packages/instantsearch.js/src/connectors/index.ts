@@ -99,7 +99,7 @@ export type {
   InfiniteHitsWidgetDescription,
   InfiniteHitsConnectorParams,
   InfiniteHitsCache,
-  InfiniteHitsCachedHits,
+  InfiniteHitsCachedItems,
 } from 'instantsearch-core';
 
 export { connectLookingSimilar } from 'instantsearch-core';
