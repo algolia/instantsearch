@@ -3612,7 +3612,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       search.start();
       await wait(0);
 
-      const receivedHits = renderFn.mock.calls[1][0].hits;
+      const receivedHits = renderFn.mock.calls[1][0].items;
       expect(receivedHits).toEqual([
         expect.objectContaining({ objectID: '1' }),
         expect.objectContaining({ objectID: '2' }),

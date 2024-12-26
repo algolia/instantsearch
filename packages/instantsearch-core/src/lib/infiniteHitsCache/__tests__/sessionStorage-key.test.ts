@@ -59,7 +59,7 @@ describe('createInfiniteHitsSessionStorageCache', () => {
     const hits = {
       1: defaultHits,
     };
-    cache.write({ state, hits });
+    cache.write({ state, items: hits });
     expect(cache.read({ state })).toEqual(hits);
   });
 
@@ -68,7 +68,7 @@ describe('createInfiniteHitsSessionStorageCache', () => {
     const state = { query: 'hello' };
     const newState = { query: 'world' };
     const hits = { 1: defaultHits };
-    cache.write({ state, hits });
+    cache.write({ state, items: hits });
     expect(cache.read({ state: newState })).toBeNull();
   });
 
@@ -94,7 +94,7 @@ describe('createInfiniteHitsSessionStorageCache', () => {
     });
     const cache = createInfiniteHitsSessionStorageCache({ key: 'myKey' });
     expect(() => {
-      cache.write({ state: {}, hits: [] });
+      cache.write({ state: {}, items: [] });
     }).not.toThrow();
   });
 });
