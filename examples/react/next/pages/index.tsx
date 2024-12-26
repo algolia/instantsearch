@@ -67,9 +67,6 @@ export default function HomePage({ serverState, url }: HomePageProps) {
           }),
         }}
         insights={true}
-        future={{
-          preserveSharedStateOnUnmount: true,
-        }}
       >
         <div className="Container">
           <div>
