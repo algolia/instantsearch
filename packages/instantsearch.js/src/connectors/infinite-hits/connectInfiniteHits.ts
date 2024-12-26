@@ -5,5 +5,5 @@ export type {
   InfiniteHitsWidgetDescription,
   InfiniteHitsConnectorParams,
   InfiniteHitsCache,
-  InfiniteHitsCachedHits,
+  InfiniteHitsCachedItems,
 } from 'instantsearch-core';
