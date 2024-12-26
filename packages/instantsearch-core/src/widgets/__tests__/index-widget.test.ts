@@ -603,11 +603,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           hitsPerPage: 5,
         });
 
-        instance.addWidgets([
-          configureTopLevel,
-          configureSubLevel,
-          virtualSearchBox({}),
-        ]);
+        const searchBox = virtualSearchBox({});
+
+        instance.addWidgets([configureTopLevel, configureSubLevel, searchBox]);
 
         instance.init(
           createIndexInitOptions({
@@ -628,12 +626,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           })
         );
 
-        instance.removeWidgets([configureSubLevel]);
+        instance.removeWidgets([searchBox]);
 
         expect(instance.getHelper()!.state).toEqual(
           new SearchParameters({
             index: 'indexName',
-            query: 'Apple iPhone',
+            hitsPerPage: 5,
             distinct: true,
           })
         );
@@ -646,111 +644,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         ).toHaveBeenCalledTimes(2);
       });
 
-      it('cleans shared refinements when `preserveSharedStateOnUnmount` is unset', () => {
+      it('preserves shared refinements', () => {
         const instance = index({ indexName: 'indexName' });
-        const instantSearchInstance = createInstantSearch();
-
-        const refinementList1 = virtualRefinementList({
-          attribute: 'brand',
-        });
-
-        const refinementList2 = virtualRefinementList({
-          attribute: 'brand',
-        });
-
-        instance.addWidgets([refinementList1, refinementList2]);
-
-        instance.init(
-          createIndexInitOptions({
-            instantSearchInstance,
-            parent: null,
-          })
-        );
-
-        // Simulate a state change
-        instance.getHelper()!.addDisjunctiveFacetRefinement('brand', 'Apple');
-
-        expect(instance.getHelper()!.state).toEqual(
-          new SearchParameters({
-            index: 'indexName',
-            maxValuesPerFacet: 10,
-            disjunctiveFacets: ['brand'],
-            disjunctiveFacetsRefinements: {
-              brand: ['Apple'],
-            },
-          })
-        );
-
-        instance.removeWidgets([refinementList2]);
-
-        expect(instance.getHelper()!.state).toEqual(
-          new SearchParameters({
-            index: 'indexName',
-            maxValuesPerFacet: 10,
-            disjunctiveFacets: ['brand'],
-            disjunctiveFacetsRefinements: {
-              brand: [],
-            },
-          })
-        );
-      });
-
-      it('cleans shared refinements when `preserveSharedStateOnUnmount` is false', () => {
-        const instance = index({ indexName: 'indexName' });
-        const instantSearchInstance = createInstantSearch({
-          future: { preserveSharedStateOnUnmount: false },
-        });
-
-        const refinementList1 = virtualRefinementList({
-          attribute: 'brand',
-        });
-
-        const refinementList2 = virtualRefinementList({
-          attribute: 'brand',
-        });
-
-        instance.addWidgets([refinementList1, refinementList2]);
-
-        instance.init(
-          createIndexInitOptions({
-            instantSearchInstance,
-            parent: null,
-          })
-        );
-
-        // Simulate a state change
-        instance.getHelper()!.addDisjunctiveFacetRefinement('brand', 'Apple');
-
-        expect(instance.getHelper()!.state).toEqual(
-          new SearchParameters({
-            index: 'indexName',
-            maxValuesPerFacet: 10,
-            disjunctiveFacets: ['brand'],
-            disjunctiveFacetsRefinements: {
-              brand: ['Apple'],
-            },
-          })
-        );
-
-        instance.removeWidgets([refinementList2]);
-
-        expect(instance.getHelper()!.state).toEqual(
-          new SearchParameters({
-            index: 'indexName',
-            maxValuesPerFacet: 10,
-            disjunctiveFacets: ['brand'],
-            disjunctiveFacetsRefinements: {
-              brand: [],
-            },
-          })
-        );
-      });
-
-      it('preserves shared refinements when `preserveSharedStateOnUnmount` is true', () => {
-        const instance = index({ indexName: 'indexName' });
-        const instantSearchInstance = createInstantSearch({
-          future: { preserveSharedStateOnUnmount: true },
-        });
+        const instantSearchInstance = createInstantSearch({});
 
         const refinementList1 = virtualRefinementList({
           attribute: 'brand',
@@ -816,13 +712,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           expect(widget.dispose).toHaveBeenCalledTimes(0);
         });
 
+        const stateBefore = instance.getHelper()!.state;
+
         instance.removeWidgets(widgets);
 
         widgets.forEach((widget) => {
           expect(widget.dispose).toHaveBeenCalledTimes(1);
           expect(widget.dispose).toHaveBeenCalledWith({
             helper: instance.getHelper(),
-            state: instance.getHelper()!.state,
+            state: stateBefore,
             recommendState: instance.getHelper()!.recommendState,
             parent: instance,
           });

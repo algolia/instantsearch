@@ -91,7 +91,6 @@ export default {
   data() {
     return {
       searchClient: algoliasearch('{{appId}}', '{{apiKey}}'),
-      future: { preserveSharedStateOnUnmount: true },
     };
   },
 };

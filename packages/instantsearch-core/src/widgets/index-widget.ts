@@ -438,8 +438,9 @@ export const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       });
 
       if (localInstantSearchInstance && Boolean(widgets.length)) {
-        const { cleanedSearchState, cleanedRecommendState } = widgets.reduce(
+        const { cleanedRecommendState } = widgets.reduce(
           (states, widget) => {
+            // @MAJOR remove the "cleanup" part of the dispose method
             // the `dispose` method exists at this point we already assert it
             const next = widget.dispose!({
               helper: helper!,
@@ -462,24 +463,12 @@ export const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           }
         );
 
-        const newState = localInstantSearchInstance.future
-          .preserveSharedStateOnUnmount
-          ? getLocalWidgetsSearchParameters(localWidgets, {
-              uiState: localUiState,
-              initialSearchParameters: new algoliasearchHelper.SearchParameters(
-                {
-                  index: this.getIndexName(),
-                }
-              ),
-            })
-          : getLocalWidgetsSearchParameters(localWidgets, {
-              uiState: getLocalWidgetsUiState(localWidgets, {
-                searchParameters: cleanedSearchState,
-                helper: helper!,
-              }),
-              initialSearchParameters: cleanedSearchState,
-            });
-
+        const newState = getLocalWidgetsSearchParameters(localWidgets, {
+          uiState: localUiState,
+          initialSearchParameters: new algoliasearchHelper.SearchParameters({
+            index: this.getIndexName(),
+          }),
+        });
         localUiState = getLocalWidgetsUiState(localWidgets, {
           searchParameters: newState,
           helper: helper!,
