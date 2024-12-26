@@ -32,12 +32,6 @@ const withUsage = createDocumentationMessageGenerator({
 export type HitsRenderState<THit extends NonNullable<object> = BaseHit> = {
   /**
    * The matched hits from Algolia API.
-   * @deprecated use `items` instead
-   */
-  hits: Array<Hit<THit>>;
-
-  /**
-   * The matched hits from Algolia API.
    */
   items: Array<Hit<THit>>;
 
@@ -154,7 +148,6 @@ export const connectHits = function connectHits<TWidgetParams>(
 
         if (!results) {
           return {
-            hits: [],
             items: [],
             results: undefined,
             banner: undefined,
@@ -185,7 +178,6 @@ export const connectHits = function connectHits<TWidgetParams>(
         const banner = results.renderingContent?.widgets?.banners?.[0];
 
         return {
-          hits: items,
           items,
           results,
           banner,

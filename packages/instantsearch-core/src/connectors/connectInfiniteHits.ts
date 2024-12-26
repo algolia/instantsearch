@@ -33,7 +33,7 @@ import type {
   SearchResults,
 } from 'algoliasearch-helper';
 
-export type InfiniteHitsCachedHits<THit extends NonNullable<object>> = {
+export type InfiniteHitsCachedItems<THit extends NonNullable<object>> = {
   [page: number]: Array<Hit<THit>>;
 };
 
@@ -41,14 +41,14 @@ type Read<THit extends NonNullable<object>> = ({
   state,
 }: {
   state: PlainSearchParameters;
-}) => InfiniteHitsCachedHits<THit> | null;
+}) => InfiniteHitsCachedItems<THit> | null;
 
 type Write<THit extends NonNullable<object>> = ({
   state,
-  hits,
+  items,
 }: {
   state: PlainSearchParameters;
-  hits: InfiniteHitsCachedHits<THit>;
+  items: InfiniteHitsCachedItems<THit>;
 }) => void;
 
 export type InfiniteHitsCache<THit extends NonNullable<object> = BaseHit> = {
@@ -122,12 +122,6 @@ export type InfiniteHitsRenderState<
 
   /**
    * Hits for current and cached pages
-   * @deprecated use `items` instead
-   */
-  hits: Array<Hit<THit>>;
-
-  /**
-   * Hits for current and cached pages
    */
   items: Array<Hit<THit>>;
 
@@ -182,29 +176,29 @@ function normalizeState(state: PlainSearchParameters) {
 function getInMemoryCache<
   THit extends NonNullable<object>
 >(): InfiniteHitsCache<THit> {
-  let cachedHits: InfiniteHitsCachedHits<THit> | null = null;
+  let cachedItems: InfiniteHitsCachedItems<THit> | null = null;
   let cachedState: PlainSearchParameters | null = null;
   return {
     read({ state }) {
       return isEqual(cachedState, getStateWithoutPage(state))
-        ? cachedHits
+        ? cachedItems
         : null;
     },
-    write({ state, hits }) {
+    write({ state, items }) {
       cachedState = getStateWithoutPage(state);
-      cachedHits = hits;
+      cachedItems = items;
     },
   };
 }
 
-function extractHitsFromCachedHits<THit extends NonNullable<object>>(
-  cachedHits: InfiniteHitsCachedHits<THit>
+function extractHitsFromCachedItems<THit extends NonNullable<object>>(
+  cachedItems: InfiniteHitsCachedItems<THit>
 ) {
-  return Object.keys(cachedHits)
+  return Object.keys(cachedItems)
     .map(Number)
     .sort((a, b) => a - b)
     .reduce((acc: Array<Hit<THit>>, page) => {
-      return acc.concat(cachedHits[page]);
+      return acc.concat(cachedItems[page]);
     }, []);
 }
 
@@ -232,10 +226,10 @@ export const connectInfiniteHits = function connectInfiniteHits<
     let sendEvent: SendEventForHits;
     const getFirstReceivedPage = (
       state: SearchParameters,
-      cachedHits: InfiniteHitsCachedHits<THit>
+      cachedItems: InfiniteHitsCachedItems<THit>
     ) => {
       const { page = 0 } = state;
-      const pages = Object.keys(cachedHits).map(Number);
+      const pages = Object.keys(cachedItems).map(Number);
       if (pages.length === 0) {
         return page;
       } else {
@@ -244,10 +238,10 @@ export const connectInfiniteHits = function connectInfiniteHits<
     };
     const getLastReceivedPage = (
       state: SearchParameters,
-      cachedHits: InfiniteHitsCachedHits<THit>
+      cachedItems: InfiniteHitsCachedItems<THit>
     ) => {
       const { page = 0 } = state;
-      const pages = Object.keys(cachedHits).map(Number);
+      const pages = Object.keys(cachedItems).map(Number);
       if (pages.length === 0) {
         return page;
       } else {
@@ -345,7 +339,7 @@ export const connectInfiniteHits = function connectInfiniteHits<
          */
         const state = parent.getPreviousState() || existingState;
 
-        const cachedHits = cache.read({ state: normalizeState(state) }) || {};
+        const cachedItems = cache.read({ state: normalizeState(state) }) || {};
 
         const banner = results?.renderingContent?.widgets?.banners?.[0];
 
@@ -359,7 +353,7 @@ export const connectInfiniteHits = function connectInfiniteHits<
           });
           isFirstPage =
             state.page === undefined ||
-            getFirstReceivedPage(state, cachedHits) === 0;
+            getFirstReceivedPage(state, cachedItems) === 0;
         } else {
           const { page = 0 } = state;
 
@@ -404,26 +398,25 @@ export const connectInfiniteHits = function connectInfiniteHits<
             !state.hierarchicalFacets?.length;
 
           if (
-            cachedHits[page] === undefined &&
+            cachedItems[page] === undefined &&
             !results.__isArtificial &&
             instantSearchInstance.status === 'idle' &&
             !(hasDynamicWidgets && hasNoFacets)
           ) {
-            cachedHits[page] = transformedHits;
-            cache.write({ state: normalizeState(state), hits: cachedHits });
+            cachedItems[page] = transformedHits;
+            cache.write({ state: normalizeState(state), items: cachedItems });
           }
           currentPageHits = transformedHits;
 
-          isFirstPage = getFirstReceivedPage(state, cachedHits) === 0;
+          isFirstPage = getFirstReceivedPage(state, cachedItems) === 0;
         }
 
-        const items = extractHitsFromCachedHits(cachedHits);
+        const items = extractHitsFromCachedItems(cachedItems);
         const isLastPage = results
-          ? results.nbPages <= getLastReceivedPage(state, cachedHits) + 1
+          ? results.nbPages <= getLastReceivedPage(state, cachedItems) + 1
           : true;
 
         return {
-          hits: items,
           items,
           currentPageHits,
           sendEvent,
