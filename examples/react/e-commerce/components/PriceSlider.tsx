@@ -1,7 +1,4 @@
-import {
-  Range,
-  RangeBoundaries,
-} from 'instantsearch.js/es/connectors/range/connectRange';
+import { Range, RangeBoundaries } from 'instantsearch-core';
 import React, { useState } from 'react';
 import {
   Slider,
