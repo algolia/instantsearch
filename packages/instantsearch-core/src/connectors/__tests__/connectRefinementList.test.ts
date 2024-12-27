@@ -1122,7 +1122,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       refine: expect.any(Function),
       searchForItems: expect.any(Function),
       isFromSearch: true,
-      canRefine: true,
+      canRefine: false,
       widgetParams: {
         attribute: 'category',
         limit: 1,
