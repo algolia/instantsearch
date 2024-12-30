@@ -83,12 +83,6 @@ export type NumericMenuRenderState = {
   createURL: CreateURL<NumericMenuRenderStateItem['value']>;
 
   /**
-   * `true` if the last search contains no result
-   * @deprecated Use `canRefine` instead.
-   */
-  hasNoResults: boolean;
-
-  /**
    * Indicates if search state can be refined.
    *
    * This is `true` if the last search contains no result and
@@ -340,7 +334,6 @@ export const connectNumericMenu: NumericMenuConnector =
           return {
             createURL: connectorState.createURL(state),
             items: transformItems(preparedItems, { results }),
-            hasNoResults,
             canRefine: !(hasNoResults && allIsSelected),
             refine: connectorState.refine,
             sendEvent: connectorState.sendEvent,

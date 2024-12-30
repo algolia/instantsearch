@@ -89,12 +89,6 @@ export type HitsPerPageRenderState = {
   refine: (value: number) => void;
 
   /**
-   * Indicates whether or not the search has results.
-   * @deprecated Use `canRefine` instead.
-   */
-  hasNoResults: boolean;
-
-  /**
    * Indicates if search state can be refined.
    */
   canRefine: boolean;
@@ -278,7 +272,6 @@ You may want to add another entry to the \`items\` option with this value.`
               getWidgetUiState: this.getWidgetUiState,
               helper,
             }),
-            hasNoResults: !canRefine,
             canRefine,
             widgetParams,
           };
