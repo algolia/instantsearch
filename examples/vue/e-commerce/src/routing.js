@@ -87,7 +87,6 @@ function getCategoryName(slug) {
 const originalWindowTitle = document.title;
 
 const router = historyRouter({
-  cleanUrlOnDispose: false,
   windowTitle({ category, query }) {
     const queryTitle = query ? `Results for "${query}"` : '';
 

@@ -1,10 +1,6 @@
 import qs from 'qs';
 
-import {
-  createDocumentationLink,
-  safelyRunOnBrowser,
-  warning,
-} from '../lib/public';
+import { safelyRunOnBrowser, warning } from '../lib/public';
 
 import type { Router, UiState } from '../types';
 
@@ -34,7 +30,6 @@ export type BrowserHistoryArgs<TRouteState> = {
    * remove active refinements from the URL.
    * @default true
    */
-  // @MAJOR: Switch the default to `false` and remove the console info in the next major version.
   cleanUrlOnDispose?: boolean;
 };
 
@@ -134,20 +129,7 @@ class BrowserHistory<TRouteState> implements Router<TRouteState> {
     this._start = start;
     this._dispose = dispose;
     this._push = push;
-    this._cleanUrlOnDispose =
-      typeof cleanUrlOnDispose === 'undefined' ? true : cleanUrlOnDispose;
-
-    if (__DEV__ && typeof cleanUrlOnDispose === 'undefined') {
-      // eslint-disable-next-line no-console
-      console.info(`Starting from the next major version, InstantSearch will not clean up the URL from active refinements when it is disposed.
-
-We recommend setting \`cleanUrlOnDispose\` to false to adopt this change today.
-To stay with the current behaviour and remove this warning, set the option to true.
-
-See documentation: ${createDocumentationLink({
-        name: 'history-router',
-      })}#widget-param-cleanurlondispose`);
-    }
+    this._cleanUrlOnDispose = Boolean(cleanUrlOnDispose);
 
     safelyRunOnBrowser(({ window }) => {
       const title = this.windowTitle && this.windowTitle(this.read());
