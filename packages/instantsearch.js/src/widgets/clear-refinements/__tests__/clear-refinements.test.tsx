@@ -158,11 +158,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         clearRefinements({
           container,
           templates: {
-            resetLabel({ hasRefinements }, { html }) {
+            resetLabel({ canRefine }, { html }) {
               return html`<span
-                >${hasRefinements
-                  ? 'Clear refinements'
-                  : 'No refinements'}</span
+                >${canRefine ? 'Clear refinements' : 'No refinements'}</span
               >`;
             },
           },
@@ -235,10 +233,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         clearRefinements({
           container,
           templates: {
-            resetLabel({ hasRefinements }) {
+            resetLabel({ canRefine }) {
               return (
                 <span>
-                  {hasRefinements ? 'Clear refinements' : 'No refinements'}
+                  {canRefine ? 'Clear refinements' : 'No refinements'}
                 </span>
               );
             },

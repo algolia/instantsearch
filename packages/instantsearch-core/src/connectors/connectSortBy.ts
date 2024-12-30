@@ -58,11 +58,6 @@ export type SortByRenderState = {
    */
   refine: (value: string) => void;
   /**
-   * `true` if the last search contains no result.
-   * @deprecated Use `canRefine` instead.
-   */
-  hasNoResults: boolean;
-  /**
    * `true` if we can refine.
    */
   canRefine: boolean;
@@ -179,7 +174,6 @@ export const connectSortBy: SortByConnector = function connectSortBy(
           currentRefinement: state.index,
           options: transformItems(items, { results }),
           refine: connectorState.setIndex,
-          hasNoResults,
           canRefine: !hasNoResults && items.length > 0,
           widgetParams,
         };
