@@ -769,7 +769,6 @@ You may want to add another entry to the \`items\` option with this value.`);
             ],
             createURL: expect.any(Function),
             refine: expect.any(Function),
-            hasNoResults: false,
             canRefine: true,
             widgetParams: {
               items: [
@@ -804,7 +803,6 @@ You may want to add another entry to the \`items\` option with this value.`);
           },
         ],
         createURL: expect.any(Function),
-        hasNoResults: true,
         canRefine: false,
         refine: expect.any(Function),
         widgetParams: {
@@ -841,7 +839,6 @@ You may want to add another entry to the \`items\` option with this value.`);
             ],
             createURL: () => '',
             refine: () => {},
-            hasNoResults: true,
             canRefine: false,
             widgetParams: {
               items: [
@@ -889,7 +886,6 @@ You may want to add another entry to the \`items\` option with this value.`);
           },
         ],
         createURL: expect.any(Function),
-        hasNoResults: true,
         canRefine: false,
         refine: expect.any(Function),
         widgetParams: {
@@ -944,7 +940,6 @@ You may want to add another entry to the \`items\` option with this value.`);
         ],
         refine: expect.any(Function),
         createURL: expect.any(Function),
-        hasNoResults: true,
         canRefine: false,
         widgetParams: {
           items: [
@@ -995,7 +990,6 @@ You may want to add another entry to the \`items\` option with this value.`);
           },
         ],
         createURL: expect.any(Function),
-        hasNoResults: true,
         canRefine: false,
         refine: expect.any(Function),
         widgetParams: {

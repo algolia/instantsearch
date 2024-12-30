@@ -1172,7 +1172,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
       expect(renderState1.numericMenu).toEqual({
         numerics: {
           createURL: expect.any(Function),
-          hasNoResults: true,
           canRefine: false,
           items: [
             {
@@ -1232,7 +1231,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
           createURL: expect.any(Function),
           refine: renderState1.numericMenu.numerics.refine,
           sendEvent: renderState1.numericMenu.numerics.sendEvent,
-          hasNoResults: true,
           canRefine: false,
           items: [
             {
@@ -1314,7 +1312,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
         createURL: expect.any(Function),
         refine: expect.any(Function),
         sendEvent: expect.any(Function),
-        hasNoResults: true,
         canRefine: false,
         widgetParams: {
           attribute: 'numerics',
@@ -1365,7 +1362,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
         createURL: expect.any(Function),
         refine: expect.any(Function),
         sendEvent: expect.any(Function),
-        hasNoResults: true,
         canRefine: false,
         widgetParams: {
           attribute: 'numerics',
@@ -1401,7 +1397,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
 
       expect(renderState2).toEqual({
         createURL: expect.any(Function),
-        hasNoResults: true,
         canRefine: false,
         items: [
           {

@@ -132,13 +132,6 @@ export type RatingMenuRenderState = {
   refine: (value: string) => void;
 
   /**
-   * `true` if the last search contains no result.
-   *
-   * @deprecated Use `canRefine` instead.
-   */
-  hasNoResults: boolean;
-
-  /**
    * Send event to insights middleware
    */
   sendEvent: SendEvent;
@@ -415,7 +408,6 @@ export const connectRatingMenu: RatingMenuConnector =
 
           return {
             items: facetValues,
-            hasNoResults,
             canRefine: (!hasNoResults || refinementIsApplied) && totalCount > 0,
             refine: connectorState.toggleRefinementFactory(helper),
             sendEvent,

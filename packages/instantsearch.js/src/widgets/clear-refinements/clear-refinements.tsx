@@ -61,7 +61,7 @@ const renderer =
       <ClearRefinements
         refine={refine}
         cssClasses={cssClasses}
-        hasRefinements={canRefine}
+        canRefine={canRefine}
         templateProps={renderState.templateProps!}
       />,
       containerNode
@@ -89,7 +89,7 @@ export type ClearRefinementsTemplates = Partial<{
   /**
    * Template for the content of the button
    */
-  resetLabel: Template<{ hasRefinements: boolean }>;
+  resetLabel: Template<{ canRefine: boolean }>;
 }>;
 
 export type ClearRefinementsWidgetParams = {
