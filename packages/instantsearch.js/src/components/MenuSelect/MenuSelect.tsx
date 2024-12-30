@@ -5,7 +5,7 @@ import { h } from 'preact';
 
 import Template from '../Template/Template';
 
-import type { MenuRenderState } from '../../connectors/menu/connectMenu';
+import type { MenuRenderState } from '../../connectors';
 import type { ComponentCSSClasses } from '../../types';
 import type {
   MenuSelectCSSClasses,

@@ -4,8 +4,8 @@
 /* global google */
 import * as widgets from '..';
 
+import type { IndexWidget } from '..';
 import type { UnknownWidgetFactory, Widget } from '../../types';
-import type { IndexWidget } from '../index/index';
 
 /**
  * Checklist when adding a new widget

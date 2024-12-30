@@ -3,7 +3,7 @@
 import { cx } from 'instantsearch-ui-components';
 import { render } from 'preact';
 
-import connectGeoSearch from '../../connectors/geo-search/connectGeoSearch';
+import { connectGeoSearch } from '../../connectors';
 import { component } from '../../lib/suit';
 import { renderTemplate } from '../../lib/templating';
 import {
@@ -19,7 +19,7 @@ import type {
   GeoSearchConnectorParams,
   GeoSearchWidgetDescription,
   GeoHit,
-} from '../../connectors/geo-search/connectGeoSearch';
+} from '../../connectors';
 import type { GeoLoc, Template, Widget, WidgetFactory } from '../../types';
 import type { HTMLMarkerArguments } from './createHTMLMarker';
 
