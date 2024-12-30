@@ -6,13 +6,13 @@ import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-
-import { connectHitsPerPage } from '../..';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+
+import { connectHitsPerPage } from '../..';
 
 import type { HitsPerPageConnectorParams } from '../connectHitsPerPage';
 
@@ -662,74 +662,28 @@ You may want to add another entry to the \`items\` option with this value.`);
   });
 
   describe('dispose', () => {
-    it('calls the unmount function', () => {
-      const searchClient = createSearchClient();
-      const helper = algoliasearchHelper(searchClient, '');
+    it('calls unmount function', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
 
-      const renderFn = () => {};
-      const unmountFn = jest.fn();
-      const makeWidget = connectHitsPerPage(renderFn, unmountFn);
-      const widget = makeWidget({
-        items: [
-          { value: 3, label: '3 items per page', default: true },
-          { value: 10, label: '10 items per page' },
-        ],
-      });
+      const widget = connectHitsPerPage(
+        render,
+        unmount
+      )({ items: [{ label: '10 items per page', value: 10, default: true }] });
 
-      expect(unmountFn).toHaveBeenCalledTimes(0);
+      widget.dispose!(createDisposeOptions());
 
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
-
-      expect(unmountFn).toHaveBeenCalledTimes(1);
+      expect(unmount).toHaveBeenCalled();
     });
 
     it('does not throw without the unmount function', () => {
-      const searchClient = createSearchClient();
-      const helper = algoliasearchHelper(searchClient, '');
-
-      const renderFn = () => {};
-      const makeWidget = connectHitsPerPage(renderFn);
-      const widget = makeWidget({
-        items: [
-          { value: 3, label: '3 items per page', default: true },
-          { value: 10, label: '10 items per page' },
-        ],
+      const render = () => {};
+      const widget = connectHitsPerPage(render)({
+        items: [{ label: '10 items per page', value: 10, default: true }],
       });
-
-      expect(() =>
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-      ).not.toThrow();
-    });
-
-    it('removes `hitsPerPage` from the `SearchParameters`', () => {
-      const searchClient = createSearchClient();
-      const helper = algoliasearchHelper(searchClient, '', {
-        hitsPerPage: 5,
-      });
-
-      const renderFn = () => {};
-      const unmountFn = jest.fn();
-      const makeWidget = connectHitsPerPage(renderFn, unmountFn);
-      const widget = makeWidget({
-        items: [
-          { value: 3, label: '3 items per page', default: true },
-          { value: 10, label: '10 items per page' },
-        ],
-      });
-
-      expect(helper.state.hitsPerPage).toBe(5);
-
-      const nextState = widget.dispose!(
-        createDisposeOptions({
-          helper,
-          state: helper.state,
-        })
-      ) as SearchParameters;
-
-      expect(nextState.hitsPerPage).toBeUndefined();
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
     });
   });
-
   describe('getRenderState', () => {
     test('returns the render state', () => {
       const renderFn = jest.fn();

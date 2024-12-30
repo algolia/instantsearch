@@ -6,59 +6,14 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { castToJestMock } from '@instantsearch/testutils';
 import { wait } from '@instantsearch/testutils/wait';
-import { getByText, fireEvent } from '@testing-library/dom';
 
 import {
   instantsearch,
-  connectConfigure,
   connectSearchBox,
   connectFrequentlyBoughtTogether,
 } from '..';
 
 import type { MiddlewareDefinition } from '../types';
-
-describe('configure', () => {
-  it('provides up-to-date uiState to onStateChange', () => {
-    const container = document.createElement('div');
-    const onStateChange = jest.fn();
-    const search = instantsearch({
-      indexName: 'instant_search',
-      searchClient: createSearchClient(),
-      onStateChange({ uiState, setUiState }) {
-        onStateChange(uiState);
-        setUiState(uiState);
-      },
-    });
-    const customComp = connectConfigure(({ refine }, isFirstRendering) => {
-      if (isFirstRendering) {
-        const button = document.createElement('button');
-        button.setAttribute('type', 'button');
-        button.textContent = 'click me';
-        container.appendChild(button);
-        container.querySelector('button')!.addEventListener('click', () => {
-          refine({ hitsPerPage: 4 });
-        });
-      }
-    });
-    search.addWidgets([
-      connectConfigure(() => {})({
-        searchParameters: {
-          hitsPerPage: 10,
-        },
-      }),
-      customComp({ searchParameters: {} }),
-    ]);
-
-    search.start();
-    expect(onStateChange).not.toHaveBeenCalled();
-
-    fireEvent.click(getByText(container, 'click me'));
-    expect(onStateChange).toHaveBeenCalledTimes(1);
-    expect(onStateChange).toHaveBeenCalledWith({
-      instant_search: { configure: { hitsPerPage: 4 } },
-    });
-  });
-});
 
 describe('middleware', () => {
   it("runs middlewares' onStateChange when uiState changes", async () => {

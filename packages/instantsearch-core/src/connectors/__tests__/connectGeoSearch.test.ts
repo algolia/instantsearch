@@ -8,14 +8,14 @@ import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-
-import { connectGeoSearch, instantsearch } from '../..';
-import { createInstantSearch } from '../../../test/createInstantSearch';
+import { createInstantSearch } from 'instantsearch-core/test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+
+import { connectGeoSearch, instantsearch } from '../..';
 
 import type { SearchResponse } from '../../types';
 
@@ -1379,31 +1379,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
   });
 
   describe('dispose', () => {
-    it('expect reset insideBoundingBox', () => {
+    it('calls unmount function', () => {
       const render = jest.fn();
       const unmount = jest.fn();
 
-      const customGeoSearch = connectGeoSearch(render, unmount);
-      const widget = customGeoSearch({});
-      const helper = createFakeHelper();
+      const widget = connectGeoSearch(render, unmount)({});
 
-      // @ts-ignore
-      helper.setQueryParameter('insideBoundingBox', '10,12,12,14');
-
-      const expectation = new SearchParameters({ index: '' });
-
-      const actual = widget.dispose!(
-        createDisposeOptions({ state: helper.state })
-      );
+      widget.dispose!(createDisposeOptions());
 
       expect(unmount).toHaveBeenCalled();
-      expect(actual).toEqual(expectation);
     });
 
     it('does not throw without the unmount function', () => {
       const render = () => {};
-      const customGeoSearch = connectGeoSearch(render);
-      const widget = customGeoSearch({});
+      const widget = connectGeoSearch(render)({});
       expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
     });
   });

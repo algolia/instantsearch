@@ -390,12 +390,8 @@ export const connectRange: RangeConnector = function connectRange(
         };
       },
 
-      dispose({ state }) {
+      dispose() {
         unmountFn();
-
-        return state
-          .removeDisjunctiveFacet(attribute)
-          .removeNumericRefinement(attribute);
       },
 
       getWidgetUiState(uiState, { searchParameters }) {
