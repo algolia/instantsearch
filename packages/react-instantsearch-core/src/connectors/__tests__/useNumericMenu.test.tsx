@@ -25,7 +25,6 @@ describe('useNumericMenu', () => {
     // Initial render state from manual `getWidgetRenderState`
     expect(result.current).toEqual({
       createURL: expect.any(Function),
-      hasNoResults: true,
       canRefine: false,
       items: [
         {
@@ -58,7 +57,6 @@ describe('useNumericMenu', () => {
     // InstantSearch.js state from the `render` lifecycle step
     expect(result.current).toEqual({
       createURL: expect.any(Function),
-      hasNoResults: true,
       canRefine: false,
       items: [
         {

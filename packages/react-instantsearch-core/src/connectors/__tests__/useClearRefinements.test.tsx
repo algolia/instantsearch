@@ -19,7 +19,6 @@ describe('useClearRefinements', () => {
 
     // Initial render state from manual `getWidgetRenderState`
     expect(result.current).toEqual({
-      hasRefinements: false,
       canRefine: false,
       refine: expect.any(Function),
       createURL: expect.any(Function),
@@ -29,7 +28,6 @@ describe('useClearRefinements', () => {
 
     // InstantSearch.js state from the `render` lifecycle step
     expect(result.current).toEqual({
-      hasRefinements: false,
       canRefine: false,
       refine: expect.any(Function),
       createURL: expect.any(Function),
@@ -64,7 +62,6 @@ describe('useClearRefinements', () => {
 
     // Initial render state from manual `getWidgetRenderState`
     expect(result.current).toEqual({
-      hasRefinements: true,
       canRefine: true,
       refine: expect.any(Function),
       createURL: expect.any(Function),
@@ -74,7 +71,6 @@ describe('useClearRefinements', () => {
 
     // InstantSearch.js state from the `render` lifecycle step
     expect(result.current).toEqual({
-      hasRefinements: true,
       canRefine: true,
       refine: expect.any(Function),
       createURL: expect.any(Function),
