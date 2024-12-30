@@ -8,7 +8,7 @@ import { range } from '../../lib/utils';
 import Pit from './Pit';
 import Rheostat from './Rheostat';
 
-import type { RangeBoundaries } from '../../connectors/range/connectRange';
+import type { RangeBoundaries } from '../../connectors';
 import type { ComponentCSSClasses } from '../../types';
 import type {
   RangeSliderCssClasses,

@@ -4,7 +4,7 @@ import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import Slider from '../../components/Slider/Slider';
-import connectRange from '../../connectors/range/connectRange';
+import { connectRange } from '../../connectors';
 import { component } from '../../lib/suit';
 import {
   getContainerNode,
@@ -17,7 +17,7 @@ import type {
   RangeConnectorParams,
   RangeRenderState,
   RangeWidgetDescription,
-} from '../../connectors/range/connectRange';
+} from '../../connectors';
 import type { Renderer, WidgetFactory } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'range-slider' });

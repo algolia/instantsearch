@@ -4,7 +4,7 @@ import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import InfiniteHits from '../../components/InfiniteHits/InfiniteHits';
-import connectInfiniteHits from '../../connectors/infinite-hits/connectInfiniteHits';
+import { connectInfiniteHits } from '../../connectors';
 import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
@@ -23,7 +23,7 @@ import type {
   InfiniteHitsRenderState,
   InfiniteHitsCache,
   InfiniteHitsWidgetDescription,
-} from '../../connectors/infinite-hits/connectInfiniteHits';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   WidgetFactory,

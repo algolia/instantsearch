@@ -4,7 +4,7 @@ import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import RefinementList from '../../components/RefinementList/RefinementList';
-import connectHierarchicalMenu from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
+import { connectHierarchicalMenu } from '../../connectors';
 import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
@@ -19,7 +19,7 @@ import type {
   HierarchicalMenuConnectorParams,
   HierarchicalMenuRenderState,
   HierarchicalMenuWidgetDescription,
-} from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   TransformItems,

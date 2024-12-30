@@ -1,10 +1,10 @@
-import * as connectors from './connectors/index';
+import * as connectors from './connectors';
 import { createInfiniteHitsSessionStorageCache } from './lib/infiniteHitsCache/index';
 import InstantSearch from './lib/InstantSearch';
 import * as routers from './lib/routers/index';
 import * as stateMappings from './lib/stateMappings/index';
 import version from './lib/version';
-import * as middlewares from './middlewares/index';
+import * as middlewares from './middlewares';
 import * as templates from './templates/index';
 import * as widgets from './widgets/index';
 

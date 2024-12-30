@@ -4,7 +4,7 @@ import { createHitsComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectHits from '../../connectors/hits/connectHits';
+import { connectHits } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
@@ -17,7 +17,7 @@ import type {
   HitsConnectorParams,
   HitsRenderState,
   HitsWidgetDescription,
-} from '../../connectors/hits/connectHits';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   Template,

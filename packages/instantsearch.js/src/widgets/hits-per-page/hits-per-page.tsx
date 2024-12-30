@@ -4,7 +4,7 @@ import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import Selector from '../../components/Selector/Selector';
-import connectHitsPerPage from '../../connectors/hits-per-page/connectHitsPerPage';
+import { connectHitsPerPage } from '../../connectors';
 import { component } from '../../lib/suit';
 import {
   getContainerNode,
@@ -15,7 +15,7 @@ import type {
   HitsPerPageConnectorParams,
   HitsPerPageRenderState,
   HitsPerPageWidgetDescription,
-} from '../../connectors/hits-per-page/connectHitsPerPage';
+} from '../../connectors';
 import type { ComponentCSSClasses, WidgetFactory } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({

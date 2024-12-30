@@ -4,7 +4,7 @@ import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import VoiceSearchComponent from '../../components/VoiceSearch/VoiceSearch';
-import connectVoiceSearch from '../../connectors/voice-search/connectVoiceSearch';
+import { connectVoiceSearch } from '../../connectors';
 import { component } from '../../lib/suit';
 import {
   getContainerNode,
@@ -21,7 +21,7 @@ import type {
   VoiceSearchConnectorParams,
   VoiceSearchRenderState,
   VoiceSearchWidgetDescription,
-} from '../../connectors/voice-search/connectVoiceSearch';
+} from '../../connectors';
 import type { WidgetFactory, Template, Renderer } from '../../types';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
 import type { CreateVoiceSearchHelper } from 'instantsearch-core';
