@@ -30,7 +30,6 @@ function App({ serverState, currentURL }) {
         routing={{
           stateMapping: simple(),
           router: history({
-            cleanUrlOnDispose: false,
             getCurrentURL() {
               if (typeof window === 'undefined') {
                 return currentURL;
