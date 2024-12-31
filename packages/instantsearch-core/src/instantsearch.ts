@@ -24,7 +24,6 @@ import version from './version';
 import { index } from './widgets/index-widget';
 
 import type {
-  SearchClient,
   Widget,
   IndexWidget,
   UiState,
@@ -75,7 +74,6 @@ export class InstantSearch<
   _initialUiState: TUiState;
   _initialResults: InitialResults | null;
   _createURL: CreateURL<TUiState>;
-  _searchFunction?: InstantSearchOptions['searchFunction'];
   _mainHelperSearch?: AlgoliaSearchHelper['search'];
   _hasSearchWidget: boolean = false;
   _hasRecommendWidget: boolean = false;
@@ -106,7 +104,6 @@ export class InstantSearch<
       initialUiState = {} as TUiState,
       routing = null,
       insights = undefined,
-      searchFunction,
       stalledSearchDelay = 200,
       searchClient = null,
       onStateChange = null,
@@ -169,14 +166,6 @@ See ${createDocumentationLink({
     this._initialResults = null;
 
     this._insights = insights;
-
-    if (searchFunction) {
-      warning(
-        false,
-        `The \`searchFunction\` option is deprecated. Use \`onStateChange\` instead.`
-      );
-      this._searchFunction = searchFunction;
-    }
 
     this.sendEventToInsights = noop;
 
@@ -335,34 +324,6 @@ See ${createDocumentationLink({
 
       return mainHelper;
     };
-
-    if (this._searchFunction) {
-      // this client isn't used to actually search, but required for the helper
-      // to not throw errors
-      const fakeClient = {
-        search: () => new Promise(noop),
-      } as any as SearchClient;
-
-      this._mainHelperSearch = mainHelper.search.bind(mainHelper);
-      mainHelper.search = () => {
-        const mainIndexHelper = this.mainIndex.getHelper()!;
-        const searchFunctionHelper = algoliasearchHelper(
-          fakeClient,
-          mainIndexHelper.state.index,
-          mainIndexHelper.state
-        );
-        searchFunctionHelper.once('search', ({ state }) => {
-          mainIndexHelper.overrideStateWithoutTriggeringChangeEvent(state);
-          this._mainHelperSearch!();
-        });
-        // Forward state changes from `searchFunctionHelper` to `mainIndexHelper`
-        searchFunctionHelper.on('change', ({ state }) => {
-          mainIndexHelper.setState(state);
-        });
-        this._searchFunction!(searchFunctionHelper);
-        return mainHelper;
-      };
-    }
 
     // Only the "main" Helper emits the `error` event vs the one for `search`
     // and `results` that are also emitted on the derived one.

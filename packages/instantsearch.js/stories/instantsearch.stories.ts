@@ -4,16 +4,16 @@ import { withHits } from '../.storybook/decorators';
 
 storiesOf('Basics/InstantSearch', module)
   .add(
-    'with searchFunction to prevent search',
+    'with onStateChange to prevent search',
     withHits(() => {}, {
-      searchFunction: (helper) => {
-        const query = helper.state.query;
+      onStateChange({ uiState, setUiState }) {
+        const query = uiState.instant_search?.query ?? '';
 
         if (query === '') {
           return;
         }
 
-        helper.search();
+        setUiState(uiState);
       },
     })
   )
