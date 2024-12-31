@@ -137,7 +137,7 @@
     "rollup-plugin-node-globals": "1.4.0",
     "rollup-plugin-node-resolve": "5.2.0",
     "rollup-plugin-replace": "2.2.0",
-    "rollup-plugin-uglify": "6.0.4",
+    "@rollup/plugin-terser": "0.4.4",
     "shelljs": "0.8.5",
     "shipjs": "0.26.0",
     "ts-jest": "27",
