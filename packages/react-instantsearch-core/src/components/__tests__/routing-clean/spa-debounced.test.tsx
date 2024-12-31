@@ -14,10 +14,10 @@ describe('routing with debounced third-party client-side router', () => {
     // -- Flow
     // 1. Initial: '/'
     // 2. Refine: '/?indexName[query]=Apple'
-    // 3. Dispose: '/?indexName[query]=Apple'
+    // 3. Dispose: '/'
     // 4. Route change: '/about'
-    // 5. Back: '/?indexName[query]=Apple'
-    // 6. Back: '/'
+    // 5. Back: '/'
+    // 6. Back: '/?indexName[query]=Apple'
 
     const pushState = jest.spyOn(window.history, 'pushState');
     const searchClient = createSearchClient({});
@@ -27,7 +27,9 @@ describe('routing with debounced third-party client-side router', () => {
         <InstantSearch
           searchClient={searchClient}
           indexName="indexName"
-          routing={{ router: historyRouter({ writeDelay: 0 }) }}
+          routing={{
+            router: historyRouter({ writeDelay: 0, cleanUrlOnDispose: true }),
+          }}
         >
           <SearchBox />
         </InstantSearch>
@@ -52,16 +54,14 @@ describe('routing with debounced third-party client-side router', () => {
     });
     expect(pushState).toHaveBeenCalledTimes(1);
 
-    // 3. Dispose: '/?indexName[query]=Apple'
+    // 3. Dispose: '/'
     unmount();
 
     await waitFor(() => {
       expect(window.location.pathname).toEqual('/');
-      expect(window.location.search).toEqual(
-        `?${encodeURI('indexName[query]=Apple')}`
-      );
+      expect(window.location.search).toEqual('');
     });
-    expect(pushState).toHaveBeenCalledTimes(1);
+    expect(pushState).toHaveBeenCalledTimes(2);
 
     // 4. Route change: '/about'
     window.history.pushState({}, '', '/about');
@@ -70,9 +70,17 @@ describe('routing with debounced third-party client-side router', () => {
       expect(window.location.pathname).toEqual('/about');
       expect(window.location.search).toEqual('');
     });
-    expect(pushState).toHaveBeenCalledTimes(2);
+    expect(pushState).toHaveBeenCalledTimes(3);
 
-    // 5. Back: '/?indexName[query]=Apple'
+    // 5. Back: '/'
+    window.history.back();
+
+    await waitFor(() => {
+      expect(window.location.pathname).toEqual('/');
+      expect(window.location.search).toEqual('');
+    });
+
+    // 6. Back: '/?indexName[query]=Apple'
     window.history.back();
 
     await waitFor(() => {
@@ -81,14 +89,6 @@ describe('routing with debounced third-party client-side router', () => {
         `?${encodeURI('indexName[query]=Apple')}`
       );
     });
-
-    // 6. Back: '/
-    window.history.back();
-
-    await waitFor(() => {
-      expect(window.location.pathname).toEqual('/');
-      expect(window.location.search).toEqual('');
-    });
-    expect(pushState).toHaveBeenCalledTimes(2);
+    expect(pushState).toHaveBeenCalledTimes(3);
   });
 });

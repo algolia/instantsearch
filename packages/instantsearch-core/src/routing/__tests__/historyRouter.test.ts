@@ -276,17 +276,9 @@ describe('life cycle', () => {
         consoleSpy.mockReset();
       });
 
-      test('cleans refinements from URL if not defined', () => {
+      test('does not clean refinements from URL if not defined', () => {
         const windowPushState = jest.spyOn(window.history, 'pushState');
         const router = historyRouter<UiState>();
-
-        expect(consoleSpy)
-          .toHaveBeenCalledWith(`Starting from the next major version, InstantSearch will not clean up the URL from active refinements when it is disposed.
-
-We recommend setting \`cleanUrlOnDispose\` to false to adopt this change today.
-To stay with the current behaviour and remove this warning, set the option to true.
-
-See documentation: https://www.algolia.com/doc/api-reference/widgets/history-router/js/#widget-param-cleanurlondispose`);
 
         router.write({ indexName: { query: 'query1' } });
         jest.runAllTimers();
@@ -303,12 +295,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/history-rou
         router.dispose();
         jest.runAllTimers();
 
-        expect(windowPushState).toHaveBeenCalledTimes(2);
-        expect(windowPushState).toHaveBeenLastCalledWith(
-          {},
-          '',
-          'http://localhost/'
-        );
+        expect(windowPushState).toHaveBeenCalledTimes(1);
       });
 
       test('cleans refinements from URL if `true`', () => {

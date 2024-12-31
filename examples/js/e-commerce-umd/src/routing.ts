@@ -80,7 +80,6 @@ function getCategoryName(slug: string): string {
 const originalWindowTitle = document.title;
 
 const router = window.instantsearch.routers.history<RouteState>({
-  cleanUrlOnDispose: false,
   windowTitle({ category, query }) {
     const queryTitle = query ? `Results for "${query}"` : '';
 

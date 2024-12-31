@@ -9,15 +9,17 @@ import { historyRouter } from 'instantsearch-core';
 import React from 'react';
 import { InstantSearch, SearchBox } from 'react-instantsearch';
 
-describe('routing with debounced third-party client-side router', () => {
-  test('does not clean the URL after navigating', async () => {
+describe('routing using `replaceState`', () => {
+  // We can't assert whether another router did update the URL
+  // So there's no way to prevent `write` after `dispose`
+  test('cleans the URL after navigating', async () => {
     // -- Flow
     // 1. Initial: '/'
     // 2. Refine: '/?indexName[query]=Apple'
-    // 3. Dispose: '/?indexName[query]=Apple'
-    // 4. Route change: '/about'
-    // 5. Back: '/?indexName[query]=Apple'
-    // 6. Back: '/'
+    // 3. Dispose: does not yet write
+    // 4. Route change (with `replaceState`): '/about?external=true', replaces state 2
+    // 5. Dispose: writes '/about' (this is a bug, and should be fixed when we have a way to prevent it)
+    // 6. Back: '/about?external=true'
 
     const pushState = jest.spyOn(window.history, 'pushState');
     const searchClient = createSearchClient({});
@@ -27,7 +29,9 @@ describe('routing with debounced third-party client-side router', () => {
         <InstantSearch
           searchClient={searchClient}
           indexName="indexName"
-          routing={{ router: historyRouter({ writeDelay: 0 }) }}
+          routing={{
+            router: historyRouter({ writeDelay: 0, cleanUrlOnDispose: true }),
+          }}
         >
           <SearchBox />
         </InstantSearch>
@@ -52,43 +56,30 @@ describe('routing with debounced third-party client-side router', () => {
     });
     expect(pushState).toHaveBeenCalledTimes(1);
 
-    // 3. Dispose: '/?indexName[query]=Apple'
+    // 3. Dispose: '/about'
     unmount();
 
-    await waitFor(() => {
-      expect(window.location.pathname).toEqual('/');
-      expect(window.location.search).toEqual(
-        `?${encodeURI('indexName[query]=Apple')}`
-      );
-    });
+    // 4. Route change (with `replaceState`): '/about'
+    window.history.replaceState({}, '', '/about?external=true');
+
+    // Asserting `replaceState` call
+    expect(window.location.pathname).toEqual('/about');
+    expect(window.location.search).toEqual('?external=true');
     expect(pushState).toHaveBeenCalledTimes(1);
 
-    // 4. Route change: '/about'
-    window.history.pushState({}, '', '/about');
-
+    // Asserting `dispose` calling `pushState`
     await waitFor(() => {
       expect(window.location.pathname).toEqual('/about');
       expect(window.location.search).toEqual('');
     });
     expect(pushState).toHaveBeenCalledTimes(2);
 
-    // 5. Back: '/?indexName[query]=Apple'
+    // 5. Back: '/about'
     window.history.back();
 
     await waitFor(() => {
-      expect(window.location.pathname).toEqual('/');
-      expect(window.location.search).toEqual(
-        `?${encodeURI('indexName[query]=Apple')}`
-      );
+      expect(window.location.pathname).toEqual('/about');
+      expect(window.location.search).toEqual('?external=true');
     });
-
-    // 6. Back: '/
-    window.history.back();
-
-    await waitFor(() => {
-      expect(window.location.pathname).toEqual('/');
-      expect(window.location.search).toEqual('');
-    });
-    expect(pushState).toHaveBeenCalledTimes(2);
   });
 });

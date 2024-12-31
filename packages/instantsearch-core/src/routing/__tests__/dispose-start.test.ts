@@ -24,10 +24,10 @@ describe('routing back and forth to an InstantSearch instance', () => {
     // -- Flow
     // 1. Initial: '/'
     // 2. Refine: '/?indexName[query]=Apple'
-    // 3. Dispose: '/'
-    // 4. Refine: '/'
-    // 5. Start: '/'
-    // 6. Refine: '/?indexName[query]=Apple'
+    // 3. Dispose: '/?indexName[query]=Apple'
+    // 4. Refine: '/?indexName[query]=Apple'
+    // 5. Start: '/?indexName[query]=Apple'
+    // 6. Refine: '/?indexName[query]=Samsung'
 
     const pushState = jest.spyOn(window.history, 'pushState');
 
@@ -61,34 +61,40 @@ describe('routing back and forth to an InstantSearch instance', () => {
       expect(pushState).toHaveBeenCalledTimes(1);
     }
 
-    // 3. Dispose: '/'
+    // 3. Dispose: '/?indexName[query]=Apple'
     {
       search.dispose();
 
       await wait(writeWait);
-      expect(window.location.search).toEqual('');
-      expect(pushState).toHaveBeenCalledTimes(2);
+      expect(window.location.search).toEqual(
+        `?${encodeURI('indexName[query]=Apple')}`
+      );
+      expect(pushState).toHaveBeenCalledTimes(1);
     }
 
-    // 4. Refine: '/'
+    // 4. Refine: '/?indexName[query]=Apple'
     {
-      search.renderState.indexName.searchBox!.refine('Apple');
+      search.renderState.indexName.searchBox!.refine('Samsung');
 
       await wait(writeWait);
-      expect(window.location.search).toEqual('');
-      expect(pushState).toHaveBeenCalledTimes(2);
+      expect(window.location.search).toEqual(
+        `?${encodeURI('indexName[query]=Apple')}`
+      );
+      expect(pushState).toHaveBeenCalledTimes(1);
     }
 
-    // 5. Start: '/'
+    // 5. Start: '/?indexName[query]=Apple'
     {
       addWidgetsAndStart(search);
 
       await wait(writeWait);
-      expect(window.location.search).toEqual('');
-      expect(pushState).toHaveBeenCalledTimes(2);
+      expect(window.location.search).toEqual(
+        `?${encodeURI('indexName[query]=Apple')}`
+      );
+      expect(pushState).toHaveBeenCalledTimes(1);
     }
 
-    // 6. Refine: '/?indexName[query]=Apple'
+    // 6. Refine: '/?indexName[query]=Samsung'
     {
       search.renderState.indexName.searchBox!.refine('Samsung');
 
@@ -96,7 +102,7 @@ describe('routing back and forth to an InstantSearch instance', () => {
       expect(window.location.search).toEqual(
         `?${encodeURI('indexName[query]=Samsung')}`
       );
-      expect(pushState).toHaveBeenCalledTimes(3);
+      expect(pushState).toHaveBeenCalledTimes(2);
     }
   });
 });
