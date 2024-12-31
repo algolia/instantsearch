@@ -28,7 +28,7 @@ export type BrowserHistoryArgs<TRouteState> = {
    * Whether the URL should be cleaned up when the router is disposed.
    * This can be useful when closing a modal containing InstantSearch, to
    * remove active refinements from the URL.
-   * @default true
+   * @default false
    */
   cleanUrlOnDispose?: boolean;
 };
