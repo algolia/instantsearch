@@ -99,7 +99,7 @@ test('clears url with cleanUrlOnDispose: true', async () => {
   expect(window.location.search).toBe('');
 });
 
-test('clears url with cleanUrlOnDispose: undefined', async () => {
+test('does not clear url with cleanUrlOnDispose: undefined', async () => {
   const router = historyRouter({ writeDelay });
 
   const indexName = 'indexName';
@@ -135,6 +135,8 @@ test('clears url with cleanUrlOnDispose: undefined', async () => {
 
   await wait(writeWait);
 
-  // URL has been cleaned
-  expect(window.location.search).toBe('');
+  // URL has not been cleaned
+  expect(window.location.search).toBe(
+    `?${encodeURI('indexName[page]=40&indexName[query]=test')}`
+  );
 });

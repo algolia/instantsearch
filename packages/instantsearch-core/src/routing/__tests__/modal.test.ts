@@ -13,11 +13,11 @@ const writeDelay = 10;
 const writeWait = 10 * writeDelay;
 
 describe('routing with no navigation', () => {
-  test('cleans the URL when InstantSearch is disposed within the same page', async () => {
+  test('does not clean the URL when InstantSearch is disposed within the same page', async () => {
     // -- Flow
     // 1. Initial: '/'
     // 2. Refine: '/?indexName[query]=Apple'
-    // 3. Dispose: '/'
+    // 3. Dispose: '/?indexName[query]=Apple'
 
     const pushState = jest.spyOn(window.history, 'pushState');
 
@@ -59,8 +59,10 @@ describe('routing with no navigation', () => {
 
       await wait(writeWait);
       expect(window.location.pathname).toEqual('/');
-      expect(window.location.search).toEqual('');
-      expect(pushState).toHaveBeenCalledTimes(2);
+      expect(window.location.search).toEqual(
+        `?${encodeURI('indexName[query]=Apple')}`
+      );
+      expect(pushState).toHaveBeenCalledTimes(1);
     }
   });
 });
