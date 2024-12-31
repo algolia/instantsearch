@@ -17,10 +17,10 @@ describe('routing with debounced third-party client-side router', () => {
     // -- Flow
     // 1. Initial: '/'
     // 2. Refine: '/?indexName[query]=Apple'
-    // 3. Dispose: '/'
+    // 3. Dispose: '/?indexName[query]=Apple'
     // 4. Route change: '/about'
-    // 5. Back: '/'
-    // 6. Back: '/?indexName[query]=Apple'
+    // 5. Back: '/?indexName[query]=Apple'
+    // 6. Back: '/'
 
     const pushState = jest.spyOn(window.history, 'pushState');
 
@@ -55,14 +55,16 @@ describe('routing with debounced third-party client-side router', () => {
       expect(pushState).toHaveBeenCalledTimes(1);
     }
 
-    // 3. Dispose: '/'
+    // 3. Dispose: '/?indexName[query]=Apple'
     {
       search.dispose();
 
       await wait(writeWait);
       expect(window.location.pathname).toEqual('/');
-      expect(window.location.search).toEqual('');
-      expect(pushState).toHaveBeenCalledTimes(2);
+      expect(window.location.search).toEqual(
+        `?${encodeURI('indexName[query]=Apple')}`
+      );
+      expect(pushState).toHaveBeenCalledTimes(1);
     }
 
     // 4. Route change: '/about'
@@ -72,19 +74,10 @@ describe('routing with debounced third-party client-side router', () => {
       await wait(writeWait);
       expect(window.location.pathname).toEqual('/about');
       expect(window.location.search).toEqual('');
-      expect(pushState).toHaveBeenCalledTimes(3);
+      expect(pushState).toHaveBeenCalledTimes(2);
     }
 
-    // 5. Back: '/'
-    {
-      window.history.back();
-
-      await wait(writeWait);
-      expect(window.location.pathname).toEqual('/');
-      expect(window.location.search).toEqual('');
-    }
-
-    // 6. Back: '/?indexName[query]=Apple'
+    // 5. Back: '/?indexName[query]=Apple'
     {
       window.history.back();
 
@@ -93,7 +86,16 @@ describe('routing with debounced third-party client-side router', () => {
       expect(window.location.search).toEqual(
         `?${encodeURI('indexName[query]=Apple')}`
       );
-      expect(pushState).toHaveBeenCalledTimes(3);
+    }
+
+    // 6. Back: '/'
+    {
+      window.history.back();
+
+      await wait(writeWait);
+      expect(window.location.pathname).toEqual('/');
+      expect(window.location.search).toEqual('');
+      expect(pushState).toHaveBeenCalledTimes(2);
     }
   });
 });
