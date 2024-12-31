@@ -1,10 +1,10 @@
+import terser from '@rollup/plugin-terser';
 import babel from 'rollup-plugin-babel';
 import commonjs from 'rollup-plugin-commonjs';
 import filesize from 'rollup-plugin-filesize';
 import globals from 'rollup-plugin-node-globals';
 import resolve from 'rollup-plugin-node-resolve';
 import replace from 'rollup-plugin-replace';
-import { uglify } from 'rollup-plugin-uglify';
 
 const clear = (x) => x.filter(Boolean);
 
@@ -63,16 +63,7 @@ const createConfiguration = ({ name, minify = false } = {}) => ({
 
     warn(warning);
   },
-  plugins: plugins.concat(
-    clear([
-      minify &&
-        uglify({
-          output: {
-            preamble: createBanner(name),
-          },
-        }),
-    ])
-  ),
+  plugins: plugins.concat(clear([minify && terser()])),
 });
 
 export default [
