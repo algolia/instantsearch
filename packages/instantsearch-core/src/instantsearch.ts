@@ -252,15 +252,6 @@ See ${createDocumentationLink({
     return this;
   }
 
-  addWidget(widget: Widget | IndexWidget) {
-    warning(
-      false,
-      'addWidget will still be supported in 4.x releases, but not further. It is replaced by `addWidgets([widget])`'
-    );
-
-    return this.addWidgets([widget]);
-  }
-
   addWidgets(widgets: Array<Widget | IndexWidget>) {
     if (!Array.isArray(widgets)) {
       throw new Error(
@@ -295,15 +286,6 @@ See ${createDocumentationLink({
     this.mainIndex.addWidgets(widgets);
 
     return this;
-  }
-
-  removeWidget(widget: Widget | IndexWidget) {
-    warning(
-      false,
-      'removeWidget will still be supported in 4.x releases, but not further. It is replaced by `removeWidgets([widget])`'
-    );
-
-    return this.removeWidgets([widget]);
   }
 
   removeWidgets(widgets: Array<Widget | IndexWidget>) {
