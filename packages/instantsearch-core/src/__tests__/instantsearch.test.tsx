@@ -673,26 +673,7 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
   });
 });
 
-describe('addWidget(s)', () => {
-  it('forwards the call of `addWidget` to the main index', () => {
-    const warn = jest.spyOn(global.console, 'warn');
-    warn.mockImplementation(() => {});
-
-    const searchClient = createSearchClient();
-    const search = new InstantSearch({
-      indexName: 'indexName',
-      searchClient,
-    });
-
-    expect(search.mainIndex.getWidgets()).toHaveLength(0);
-
-    expect(() => search.addWidget(createWidget())).toWarnDev(
-      '[InstantSearch]: addWidget will still be supported in 4.x releases, but not further. It is replaced by `addWidgets([widget])`'
-    );
-
-    expect(search.mainIndex.getWidgets()).toHaveLength(1);
-  });
-
+describe('addWidgets', () => {
   it('forwards the call of `addWidgets` to the main index', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
@@ -705,27 +686,6 @@ describe('addWidget(s)', () => {
     search.addWidgets([createWidget()]);
 
     expect(search.mainIndex.getWidgets()).toHaveLength(1);
-  });
-
-  it('returns the search instance when calling `addWidget`', () => {
-    const warn = jest.spyOn(global.console, 'warn');
-    warn.mockImplementation(() => {});
-
-    const searchClient = createSearchClient();
-    const search = new InstantSearch({
-      indexName: 'indexName',
-      searchClient,
-    });
-
-    let result: InstantSearch | null = null;
-
-    expect(() => {
-      result = search.addWidget(createWidget());
-    }).toWarnDev(
-      '[InstantSearch]: addWidget will still be supported in 4.x releases, but not further. It is replaced by `addWidgets([widget])`'
-    );
-
-    expect(result).toBe(search);
   });
 
   it('returns the search instance when calling `addWidgets`', () => {
@@ -764,30 +724,7 @@ describe('addWidget(s)', () => {
   });
 });
 
-describe('removeWidget(s)', () => {
-  it('forwards the call to `removeWidget` to the main index', () => {
-    const warn = jest.spyOn(global.console, 'warn');
-    warn.mockImplementation(() => {});
-
-    const searchClient = createSearchClient();
-    const search = new InstantSearch({
-      indexName: 'indexName',
-      searchClient,
-    });
-
-    const widget = createWidget();
-
-    search.addWidgets([widget]);
-
-    expect(search.mainIndex.getWidgets()).toHaveLength(1);
-
-    expect(() => search.removeWidget(widget)).toWarnDev(
-      '[InstantSearch]: removeWidget will still be supported in 4.x releases, but not further. It is replaced by `removeWidgets([widget])`'
-    );
-
-    expect(search.mainIndex.getWidgets()).toHaveLength(0);
-  });
-
+describe('removeWidgets', () => {
   it('forwards the call to `removeWidgets` to the main index', () => {
     const searchClient = createSearchClient();
     const search = new InstantSearch({
@@ -804,33 +741,6 @@ describe('removeWidget(s)', () => {
     search.removeWidgets([widget]);
 
     expect(search.mainIndex.getWidgets()).toHaveLength(0);
-  });
-
-  it('returns the search instance when calling `removeWidget`', () => {
-    const warn = jest.spyOn(global.console, 'warn');
-    warn.mockImplementation(() => {});
-
-    const searchClient = createSearchClient();
-    const search = new InstantSearch({
-      indexName: 'indexName',
-      searchClient,
-    });
-
-    const widget = createWidget();
-
-    expect(() => search.addWidget(widget)).toWarnDev(
-      '[InstantSearch]: addWidget will still be supported in 4.x releases, but not further. It is replaced by `addWidgets([widget])`'
-    );
-
-    let result: InstantSearch | null = null;
-
-    expect(() => {
-      result = search.removeWidget(widget);
-    }).toWarnDev(
-      '[InstantSearch]: removeWidget will still be supported in 4.x releases, but not further. It is replaced by `removeWidgets([widget])`'
-    );
-
-    expect(result).toBe(search);
   });
 
   it('returns the search instance when calling `removeWidgets`', () => {
