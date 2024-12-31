@@ -2,7 +2,6 @@ import type { CompositionClient, SearchClient } from './algoliasearch';
 import type { InsightsProps } from './insights';
 import type { RouterProps } from './router';
 import type { UiState } from './ui-state';
-import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 
 export type InstantSearchOptions<
   TUiState extends UiState = UiState,
@@ -51,13 +50,6 @@ export type InstantSearchOptions<
    * to `Number.prototype.toLocaleString()`
    */
   numberLocale?: string;
-  /**
-   * A hook that will be called each time a search needs to be done, with the
-   * helper as a parameter. It's your responsibility to call `helper.search()`.
-   * This option allows you to avoid doing searches at page load for example.
-   * @deprecated use onStateChange instead
-   */
-  searchFunction?: (helper: AlgoliaSearchHelper) => void;
   /**
    * Function called when the state changes.
    *

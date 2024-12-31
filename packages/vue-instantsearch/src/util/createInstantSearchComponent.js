@@ -57,10 +57,6 @@ export const createInstantSearchComponent = (component) => ({
           'Please open a new issue: https://github.com/algolia/instantsearch/discussions/new?category=ideas&labels=triage%2cLibrary%3A+Vue+InstantSearch&title=Feature%20request%3A%20dynamic%20props'
       );
     },
-    searchFunction(searchFunction) {
-      // private InstantSearch.js API:
-      this.instantSearchInstance._searchFunction = searchFunction;
-    },
     middlewares: {
       immediate: true,
       handler(next, prev) {

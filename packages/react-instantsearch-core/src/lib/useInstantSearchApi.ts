@@ -164,14 +164,6 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
       prevPropsRef.current = props;
     }
 
-    if (prevProps.searchFunction !== props.searchFunction) {
-      // Updating the `searchFunction` to `undefined` is not supported by
-      // InstantSearch.js, so it will throw an error.
-      // This is a fair behavior until we add an update API in InstantSearch.js.
-      search._searchFunction = props.searchFunction;
-      prevPropsRef.current = props;
-    }
-
     if (prevProps.stalledSearchDelay !== props.stalledSearchDelay) {
       // The default `stalledSearchDelay` in InstantSearch.js is 200ms.
       // We need to reset it when it's undefined to get back to the original value.

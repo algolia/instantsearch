@@ -29,13 +29,6 @@ const clients = {
   fake: new FakeClient(),
 };
 
-const searchFunctions = {
-  working: undefined,
-  broken(helper) {
-    helper.setQuery('bingo').search();
-  },
-};
-
 storiesOf('ais-instant-search', module)
   .add('simple usage', () => ({
     template: `
@@ -74,7 +67,6 @@ storiesOf('ais-instant-search', module)
         <ais-instant-search
           :index-name="indexName"
           :search-client="searchClient"
-          :search-function="searchFunction"
           :stalled-search-delay="stalledSearchDelay"
         >
           <p>This is inside a <code>ais-instant-search</code>: <code>{{indexName}}</code></p>
@@ -91,8 +83,6 @@ storiesOf('ais-instant-search', module)
       return {
         searchClientName: 'working',
         searchClient: clients.working,
-        searchFunctionName: 'working',
-        searchFunction: searchFunctions.working,
         stalledSearchDelay: undefined,
         indexName: 'instant_search',
       };
@@ -101,10 +91,6 @@ storiesOf('ais-instant-search', module)
       searchClientName(newName) {
         this.searchClientName = newName;
         this.searchClient = clients[newName];
-      },
-      searchFunctionName(newName) {
-        this.searchFunctionName = newName;
-        this.searchFunction = searchFunctions[newName];
       },
     },
   }));

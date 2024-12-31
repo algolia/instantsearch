@@ -42,7 +42,6 @@ beforeEach(() => {
 
 it('passes props to InstantSearch.js', () => {
   const searchClient = createSearchClient();
-  const searchFunction = (helper) => helper.search();
   const routing = {
     router: historyRouter(),
     stateMapping: simpleStateMapping(),
@@ -54,7 +53,6 @@ it('passes props to InstantSearch.js', () => {
       indexName: 'something',
       routing,
       stalledSearchDelay: 250,
-      searchFunction,
     },
   });
 
@@ -62,7 +60,6 @@ it('passes props to InstantSearch.js', () => {
     indexName: 'something',
     routing,
     searchClient,
-    searchFunction,
     stalledSearchDelay: 250,
   });
 });
@@ -247,33 +244,11 @@ it('does not warn when the `search-client` does not change', async () => {
   expect(warn).not.toHaveBeenCalled();
 });
 
-it('Allows a change in `search-function`', async () => {
-  const oldValue = () => {};
-  const newValue = () => {};
-
-  const wrapper = mount(InstantSearch, {
-    propsData: {
-      searchClient: createSearchClient(),
-      indexName: 'bla',
-      searchFunction: oldValue,
-    },
-  });
-
-  expect(wrapper.vm.instantSearchInstance._searchFunction).toEqual(oldValue);
-
-  await wrapper.setProps({
-    searchFunction: newValue,
-  });
-
-  expect(wrapper.vm.instantSearchInstance._searchFunction).toEqual(newValue);
-});
-
 it('Allows a change in `stalled-search-delay`', async () => {
   const wrapper = mount(InstantSearch, {
     propsData: {
       searchClient: createSearchClient(),
       indexName: 'bla',
-      searchFunction: () => {},
       stalledSearchDelay: 200,
     },
   });

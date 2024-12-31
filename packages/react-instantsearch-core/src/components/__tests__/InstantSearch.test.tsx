@@ -775,55 +775,6 @@ describe('InstantSearch', () => {
     });
   });
 
-  test('updates searchFunction on searchFunction prop change', async () => {
-    const searchClient = createAlgoliaSearchClient({});
-    const searchFunction1 = jest.fn((helper) => {
-      helper.search();
-    });
-    const searchFunction2 = jest.fn((helper) => {
-      helper.search();
-    });
-
-    function App({
-      searchFunction,
-    }: Pick<InstantSearchProps, 'searchFunction'>) {
-      return (
-        <StrictMode>
-          <InstantSearch
-            searchClient={searchClient}
-            indexName="indexName"
-            searchFunction={searchFunction}
-          >
-            <SearchBox />
-          </InstantSearch>
-        </StrictMode>
-      );
-    }
-
-    const { rerender } = render(<App searchFunction={searchFunction1} />);
-
-    await waitFor(() => {
-      expect(searchFunction1).toHaveBeenCalledTimes(1);
-    });
-
-    userEvent.type(screen.getByRole('searchbox'), 'iphone');
-
-    await waitFor(() => {
-      expect(searchFunction1).toHaveBeenCalledTimes(7);
-    });
-
-    rerender(<App searchFunction={searchFunction2} />);
-
-    userEvent.type(screen.getByRole('searchbox'), ' case', {
-      initialSelectionStart: 6,
-    });
-
-    await waitFor(() => {
-      expect(searchFunction1).toHaveBeenCalledTimes(7);
-      expect(searchFunction2).toHaveBeenCalledTimes(5);
-    });
-  });
-
   test('triggers no search on unmount', async () => {
     const searchClient = createAlgoliaSearchClient({});
 
