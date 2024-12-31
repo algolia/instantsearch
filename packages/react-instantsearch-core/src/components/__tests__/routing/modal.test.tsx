@@ -14,7 +14,7 @@ describe('routing with no navigation', () => {
     // -- Flow
     // 1. Initial: '/'
     // 2. Refine: '/?indexName[query]=Apple'
-    // 3. Dispose: '/'
+    // 3. Dispose: '/?indexName[query]=Apple'
 
     const pushState = jest.spyOn(window.history, 'pushState');
     const searchClient = createSearchClient({});
@@ -50,13 +50,15 @@ describe('routing with no navigation', () => {
     });
     expect(pushState).toHaveBeenCalledTimes(1);
 
-    // 3. Dispose: '/'
+    // 3. Dispose: '/?indexName[query]=Apple'
     unmount();
 
     await waitFor(() => {
       expect(window.location.pathname).toEqual('/');
-      expect(window.location.search).toEqual('');
+      expect(window.location.search).toEqual(
+        `?${encodeURI('indexName[query]=Apple')}`
+      );
     });
-    expect(pushState).toHaveBeenCalledTimes(2);
+    expect(pushState).toHaveBeenCalledTimes(1);
   });
 });

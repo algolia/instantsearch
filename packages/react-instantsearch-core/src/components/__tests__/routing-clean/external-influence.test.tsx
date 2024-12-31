@@ -8,15 +8,13 @@ import { historyRouter } from 'instantsearch-core';
 import React, { useEffect } from 'react';
 import { InstantSearch, SearchBox, useSearchBox } from 'react-instantsearch';
 
-describe('routing back and forth to an InstantSearch instance', () => {
-  test('updates the URL after the instance is disposed then restarted', async () => {
+describe('routing with external influence', () => {
+  test('keeps on working when the URL is updated by another program', async () => {
     // -- Flow
     // 1. Initial: '/'
     // 2. Refine: '/?indexName[query]=Apple'
-    // 3. Dispose: '/?indexName[query]=Apple'
-    // 4. Refine: '/?indexName[query]=Apple'
-    // 5. Start: '/?indexName[query]=Apple'
-    // 6. Refine: '/?indexName[query]=Samsung'
+    // 3. External influence: '/about'
+    // 4. Refine: '/about?indexName[query]=Samsung'
 
     const pushState = jest.spyOn(window.history, 'pushState');
     const searchClient = createSearchClient({});
@@ -37,7 +35,9 @@ describe('routing back and forth to an InstantSearch instance', () => {
         <InstantSearch
           searchClient={searchClient}
           indexName="indexName"
-          routing={{ router: historyRouter({ writeDelay: 0 }) }}
+          routing={{
+            router: historyRouter({ writeDelay: 0, cleanUrlOnDispose: true }),
+          }}
         >
           <QueryController />
           <SearchBox />
@@ -45,7 +45,7 @@ describe('routing back and forth to an InstantSearch instance', () => {
       );
     }
 
-    const { unmount } = render(<App />);
+    render(<App />);
 
     // 1. Initial: '/'
     await waitFor(() => {
@@ -63,44 +63,23 @@ describe('routing back and forth to an InstantSearch instance', () => {
     });
     expect(pushState).toHaveBeenCalledTimes(1);
 
-    // 3. Dispose: '/'
-    unmount();
+    // 3. External influence: '/about'
+    window.history.pushState({}, '', '/about');
 
     await waitFor(() => {
-      expect(window.location.search).toEqual(
-        `?${encodeURI('indexName[query]=Apple')}`
-      );
+      expect(window.location.pathname).toEqual('/about');
+      expect(window.location.search).toEqual('');
     });
-    expect(pushState).toHaveBeenCalledTimes(1);
+    expect(pushState).toHaveBeenCalledTimes(2);
 
-    // 4. Refine: '/'
+    // 4. Refine: '/about?indexName[query]=Samsung'
     setQuery('Samsung');
 
     await waitFor(() => {
-      expect(window.location.search).toEqual(
-        `?${encodeURI('indexName[query]=Apple')}`
-      );
-    });
-    expect(pushState).toHaveBeenCalledTimes(1);
-
-    // 5. Start: '/'
-    render(<App />);
-
-    await waitFor(() => {
-      expect(window.location.search).toEqual(
-        `?${encodeURI('indexName[query]=Apple')}`
-      );
-    });
-    expect(pushState).toHaveBeenCalledTimes(1);
-
-    // 6. Refine: '/?indexName[query]=Samsung'
-    setQuery('Samsung');
-
-    await waitFor(() => {
+      expect(window.location.pathname).toEqual('/about');
       expect(window.location.search).toEqual(
         `?${encodeURI('indexName[query]=Samsung')}`
       );
     });
-    expect(pushState).toHaveBeenCalledTimes(2);
   });
 });

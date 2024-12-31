@@ -15,14 +15,14 @@ const writeWait = 10 * writeDelay;
 describe('routing using `replaceState`', () => {
   // We can't assert whether another router did update the URL
   // So there's no way to prevent `write` after `dispose`
-  test('does not clean the URL after navigating', async () => {
+  test('cleans the URL after navigating', async () => {
     // -- Flow
     // 1. Initial: '/'
     // 2. Refine: '/?indexName[query]=Apple'
     // 3. Dispose: does not yet write
     // 4. Route change (with `replaceState`): '/about?external=true', replaces state 2
-    // 5. Dispose: does not write
-    // 6. Back: '/'
+    // 5. Dispose: writes '/about' (this is a bug, and should be fixed when we have a way to prevent it)
+    // 6. Back: '/about?external=true'
 
     const pushState = jest.spyOn(window.history, 'pushState');
 
@@ -32,6 +32,7 @@ describe('routing using `replaceState`', () => {
       routing: {
         router: historyRouter({
           writeDelay,
+          cleanUrlOnDispose: true,
         }),
       },
     });
@@ -71,8 +72,8 @@ describe('routing using `replaceState`', () => {
       // Asserting `dispose` calling `pushState`
       await wait(writeWait);
       expect(window.location.pathname).toEqual('/about');
-      expect(window.location.search).toEqual('?external=true');
-      expect(pushState).toHaveBeenCalledTimes(1);
+      expect(window.location.search).toEqual('');
+      expect(pushState).toHaveBeenCalledTimes(2);
     }
 
     // 5. Back: '/about'
@@ -80,8 +81,8 @@ describe('routing using `replaceState`', () => {
       window.history.back();
 
       await wait(writeWait);
-      expect(window.location.pathname).toEqual('/');
-      expect(window.location.search).toEqual('');
+      expect(window.location.pathname).toEqual('/about');
+      expect(window.location.search).toEqual('?external=true');
     }
   });
 });
