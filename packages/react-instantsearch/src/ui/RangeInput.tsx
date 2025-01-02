@@ -74,7 +74,7 @@ function stripLeadingZeroFromInput(value: string): string {
 
 export function RangeInput({
   classNames = {},
-  range: { min, max },
+  range: { min: minRange, max: maxRange },
   currentRefinement: { min: minValue, max: maxValue },
   step = 1,
   disabled,
@@ -83,14 +83,8 @@ export function RangeInput({
   ...props
 }: RangeInputProps) {
   const values = {
-    min:
-      minValue !== -Infinity && minValue !== min
-        ? minValue
-        : unsetNumberInputValue,
-    max:
-      maxValue !== Infinity && maxValue !== max
-        ? maxValue
-        : unsetNumberInputValue,
+    min: minValue && minValue !== minRange ? minValue : unsetNumberInputValue,
+    max: maxValue && maxValue !== maxRange ? maxValue : unsetNumberInputValue,
   };
   const [prevValues, setPrevValues] = useState(values);
 
@@ -133,11 +127,11 @@ export function RangeInput({
               classNames.inputMin
             )}
             type="number"
-            min={min}
-            max={max}
+            min={minRange}
+            max={maxRange}
             value={stripLeadingZeroFromInput(from || unsetNumberInputValue)}
             step={step}
-            placeholder={min?.toString()}
+            placeholder={minRange?.toString()}
             disabled={disabled}
             onInput={({ currentTarget }) => {
               const value = currentTarget.value;
@@ -160,11 +154,11 @@ export function RangeInput({
               classNames.inputMax
             )}
             type="number"
-            min={min}
-            max={max}
+            min={minRange}
+            max={maxRange}
             value={stripLeadingZeroFromInput(to || unsetNumberInputValue)}
             step={step}
-            placeholder={max?.toString()}
+            placeholder={maxRange?.toString()}
             disabled={disabled}
             onInput={({ currentTarget }) => {
               const value = currentTarget.value;

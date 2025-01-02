@@ -28,8 +28,7 @@ export type Range = {
 export type RangeRenderState = {
   /**
    * Sets a range to filter the results on. Both values
-   * are optional, and will default to the higher and lower bounds. You can use `undefined` to remove a
-   * previously set bound or to set an infinite bound.
+   * are optional, and will default to the higher and lower bounds. You can use `undefined` to remove a previously set bound.
    * @param rangeValue object with min and max bounds
    */
   refine: (rangeValue: Expand<Partial<Range>>) => void;
@@ -99,7 +98,6 @@ export type RangeWidgetDescription = {
   };
   indexUiState: {
     range: {
-      // @TODO: this could possibly become `${number}:${number}` later
       [attribute: string]: string;
     };
   };
@@ -294,11 +292,11 @@ export const connectRange: RangeConnector = function connectRange(
       const min =
         typeof minValue === 'number' && Number.isFinite(minValue)
           ? minValue
-          : -Infinity;
+          : undefined;
       const max =
         typeof maxValue === 'number' && Number.isFinite(maxValue)
           ? maxValue
-          : Infinity;
+          : undefined;
 
       return { min, max };
     }

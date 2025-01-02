@@ -44,17 +44,12 @@ const renderer =
     }
 
     const { min: minRange, max: maxRange } = range;
-
     const { min: minValue, max: maxValue } = currentRefinement;
-    const minFinite = minValue === -Infinity ? minRange : minValue;
-    const maxFinite = maxValue === Infinity ? maxRange : maxValue;
 
-    // Clamp values to the range for avoid extra rendering & refinement
-    // Should probably be done on the connector side, but we need to stay
-    // backward compatible so we still need to pass [-Infinity, Infinity]
+    // Clamp values to the range to avoid extra rendering & refinement.
     const values: Range = {
-      min: minFinite! > maxRange! ? maxRange : minFinite,
-      max: maxFinite! < minRange! ? minRange : maxFinite,
+      min: minValue && minValue !== minRange ? minValue : minRange,
+      max: maxValue && maxValue !== maxRange ? maxValue : maxRange,
     };
 
     render(

@@ -62,10 +62,7 @@ function convertToTicks({ min, max }: Range, range: Range): number[] {
       ? { min: undefined, max: undefined }
       : range;
 
-  return [
-    min === -Infinity ? domain.min! : min!,
-    max === Infinity ? domain.max! : max!,
-  ];
+  return [min || domain.min!, max || domain.max!];
 }
 
 export function PriceSlider({
@@ -117,7 +114,10 @@ export function PriceSlider({
       step={1}
       domain={[range.min!, range.max!]}
       values={
-        [currentRefinement.min, currentRefinement.max] as [number, number]
+        [
+          currentRefinement.min || range.min!,
+          currentRefinement.max || range.max!,
+        ] as [number, number]
       }
       disabled={!canRefine}
       onChange={onChange}
