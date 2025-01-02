@@ -121,7 +121,7 @@ export default {
       return 1 / Math.pow(10, this.precision);
     },
     values() {
-      const [minValue, maxValue] = this.state.start;
+      const { min: minValue, max: maxValue } = this.state.currentRefinement;
       const { min: minRange, max: maxRange } = this.state.range;
 
       return {
@@ -143,7 +143,7 @@ export default {
       }
     },
     refine({ min, max }) {
-      this.state.refine([min, max]);
+      this.state.refine({ min, max });
     },
   },
 };

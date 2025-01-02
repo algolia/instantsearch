@@ -6,7 +6,7 @@ import type { useRange } from 'react-instantsearch-core';
 type RangeRenderState = ReturnType<typeof useRange>;
 
 export type RangeInputProps = Omit<React.ComponentProps<'div'>, 'onSubmit'> &
-  Pick<RangeRenderState, 'range' | 'start'> & {
+  Pick<RangeRenderState, 'range' | 'currentRefinement'> & {
     classNames?: Partial<RangeInputClassNames>;
     disabled: boolean;
     onSubmit: RangeRenderState['refine'];
@@ -75,7 +75,7 @@ function stripLeadingZeroFromInput(value: string): string {
 export function RangeInput({
   classNames = {},
   range: { min, max },
-  start: [minValue, maxValue],
+  currentRefinement: { min: minValue, max: maxValue },
   step = 1,
   disabled,
   onSubmit,
@@ -118,10 +118,10 @@ export function RangeInput({
         className={cx('ais-RangeInput-form', classNames.form)}
         onSubmit={(event) => {
           event.preventDefault();
-          onSubmit([
-            from ? Number(from) : undefined,
-            to ? Number(to) : undefined,
-          ]);
+          onSubmit({
+            min: from ? Number(from) : undefined,
+            max: to ? Number(to) : undefined,
+          });
         }}
       >
         <label className={cx('ais-RangeInput-label', classNames.label)}>
