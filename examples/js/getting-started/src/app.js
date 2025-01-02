@@ -31,7 +31,7 @@ search.addWidgets([
   hits({
     container: '#hits',
     templates: {
-      item: (hit, { html }) => html`
+      item: (hit, { html, components }) => html`
         <article>
           <h1>
             <a href="/products.html?pid=${hit.objectID}"
