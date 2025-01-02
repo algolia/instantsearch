@@ -499,9 +499,9 @@ AlgoliaSearchHelper.prototype.searchForCompositionFacetValues = function (
     facetName: facet,
     searchForFacetValuesRequest: {
       params: {
-        query: state.query,
+        query: query,
         maxFacetHits: maxFacetHits,
-        searchQuery: { query: query },
+        searchQuery: requestBuilder._getCompositionHitsSearchParams(state),
       },
     },
   });
