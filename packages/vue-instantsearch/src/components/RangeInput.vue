@@ -125,8 +125,14 @@ export default {
       const { min: minRange, max: maxRange } = this.state.range;
 
       return {
-        min: minValue && minValue !== minRange ? minValue : undefined,
-        max: maxValue && maxValue !== maxRange ? maxValue : undefined,
+        min:
+          typeof minValue === 'number' && minValue !== minRange
+            ? minValue
+            : undefined,
+        max:
+          typeof maxValue === 'number' && maxValue !== maxRange
+            ? maxValue
+            : undefined,
       };
     },
   },

@@ -48,8 +48,14 @@ const renderer =
 
     // Clamp values to the range to avoid extra rendering & refinement.
     const values: Range = {
-      min: minValue && minValue !== minRange ? minValue : minRange,
-      max: maxValue && maxValue !== maxRange ? maxValue : maxRange,
+      min:
+        typeof minValue === 'number' && minValue !== minRange
+          ? Math.min(minValue, maxRange!)
+          : minRange,
+      max:
+        typeof maxValue === 'number' && maxValue !== maxRange
+          ? Math.max(maxValue, minRange!)
+          : maxRange,
     };
 
     render(

@@ -149,8 +149,14 @@ const renderer =
     const step = 1 / Math.pow(10, widgetParams.precision || 0);
 
     const values = {
-      min: minValue && minValue !== rangeMin ? minValue : undefined,
-      max: maxValue && maxValue !== rangeMax ? maxValue : undefined,
+      min:
+        typeof minValue === 'number' && minValue !== rangeMin
+          ? minValue
+          : undefined,
+      max:
+        typeof maxValue === 'number' && maxValue !== rangeMax
+          ? maxValue
+          : undefined,
     };
 
     render(
