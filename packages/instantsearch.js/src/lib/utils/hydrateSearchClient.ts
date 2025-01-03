@@ -91,10 +91,14 @@ export function hydrateSearchClient(
     ) => any;
     // @ts-ignore wanting type checks for v3 on this would make this too complex
     client.search = (requests, ...methodArgs) => {
-      const requestsWithSerializedParams = requests.map((request) => ({
-        ...request,
-        params: serializeQueryParameters(request.params),
-      }));
+      const requestsWithSerializedParams =
+        'requestBody' in requests
+          ? // for composition client
+            serializeQueryParameters(requests.requestBody as any)
+          : requests.map((request) => ({
+              ...request,
+              params: serializeQueryParameters(request.params),
+            }));
 
       return (client as ClientWithTransporter).transporter.responsesCache.get(
         {

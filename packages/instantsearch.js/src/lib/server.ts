@@ -24,12 +24,20 @@ export function waitForResults(
   helper.setClient({
     ...client,
     search(queries) {
-      requestParamsList = queries.map(({ params }) => params);
+      requestParamsList = search.compositionID
+        ? [(queries as any).requestBody.params]
+        : queries.map(({ params }) => params);
       return client.search(queries);
     },
   });
 
-  search._hasSearchWidget && helper.searchOnlyWithDerivedHelpers();
+  if (search._hasSearchWidget) {
+    if (search.compositionID) {
+      helper.searchWithComposition();
+    } else {
+      helper.searchOnlyWithDerivedHelpers();
+    }
+  }
   !skipRecommend && search._hasRecommendWidget && helper.recommend();
 
   return new Promise((resolve, reject) => {
