@@ -4,6 +4,7 @@ import type {
   ClientV3_4,
   SearchOptions,
   SearchResponse,
+  CompositionClient,
 } from '../../types';
 
 type ClientWithCache = SearchClient & { cache: Record<string, string> };
@@ -13,7 +14,7 @@ type ClientWithTransporter = ClientV3_4 & {
 };
 
 export function hydrateSearchClient(
-  client: SearchClient & {
+  client: (SearchClient | CompositionClient) & {
     _cacheHydrated?: boolean;
     _useCache?: boolean;
   },
@@ -89,16 +90,19 @@ export function hydrateSearchClient(
       query: any,
       ...args: any[]
     ) => any;
-    // @ts-ignore wanting type checks for v3 on this would make this too complex
-    client.search = (requests, ...methodArgs) => {
-      const requestsWithSerializedParams =
-        'requestBody' in requests
-          ? // for composition client
-            serializeQueryParameters(requests.requestBody as any)
-          : requests.map((request) => ({
-              ...request,
-              params: serializeQueryParameters(request.params),
-            }));
+    client.search = (
+      requests: Parameters<(SearchClient | CompositionClient)['search']>[0],
+      // @ts-ignore wanting type checks for v3 on this would make this too complex
+      ...methodArgs
+    ) => {
+      const requestsWithSerializedParams = Array.isArray(requests)
+        ? // search client
+          requests.map((request) => ({
+            ...request,
+            params: serializeQueryParameters(request.params),
+          }))
+        : // composition client
+          serializeQueryParameters(requests.requestBody.params);
 
       return (client as ClientWithTransporter).transporter.responsesCache.get(
         {

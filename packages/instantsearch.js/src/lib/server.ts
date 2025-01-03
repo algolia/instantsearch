@@ -1,6 +1,8 @@
 import { walkIndex } from './utils';
 
 import type {
+  SearchClient,
+  CompositionClient,
   IndexWidget,
   InitialResults,
   InstantSearch,
@@ -21,15 +23,23 @@ export function waitForResults(
   // later during hydration.
   let requestParamsList: SearchOptions[];
   const client = helper.getClient();
-  helper.setClient({
-    ...client,
-    search(queries) {
-      requestParamsList = search.compositionID
-        ? [(queries as any).requestBody.params]
-        : queries.map(({ params }) => params);
-      return client.search(queries);
-    },
-  });
+  if (search.compositionID) {
+    helper.setClient({
+      ...client,
+      search(query) {
+        requestParamsList = [query.requestBody.params];
+        return (client as CompositionClient).search(query);
+      },
+    } as CompositionClient);
+  } else {
+    helper.setClient({
+      ...client,
+      search(queries) {
+        requestParamsList = queries.map(({ params }) => params);
+        return (client as SearchClient).search(queries);
+      },
+    } as SearchClient);
+  }
 
   if (search._hasSearchWidget) {
     if (search.compositionID) {
