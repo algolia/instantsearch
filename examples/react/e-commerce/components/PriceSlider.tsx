@@ -56,7 +56,7 @@ function Handle({
   );
 }
 
-function convertToTicks({ min, max }: Range, range: Range): number[] {
+function convertToTicks({ min, max }: Range, range: Range): readonly number[] {
   const domain =
     range.min === 0 && range.max === 0
       ? { min: undefined, max: undefined }
@@ -92,14 +92,6 @@ export function PriceSlider({
     setPrevRefinement(currentRefinement);
   }
 
-  const onChange = ([newMin, newMax]: readonly number[]) => {
-    refine({ min: newMin, max: newMax });
-  };
-
-  const onUpdate = (values: readonly number[]) => {
-    setTicksValues(values as [number, number]);
-  };
-
   if (
     !canRefine ||
     ticksValues[0] === undefined ||
@@ -113,15 +105,13 @@ export function PriceSlider({
       mode={2}
       step={1}
       domain={[range.min!, range.max!]}
-      values={
-        [
-          currentRefinement.min || range.min!,
-          currentRefinement.max || range.max!,
-        ] as [number, number]
-      }
+      values={[
+        currentRefinement.min || range.min!,
+        currentRefinement.max || range.max!,
+      ]}
       disabled={!canRefine}
-      onChange={onChange}
-      onUpdate={onUpdate}
+      onChange={([newMin, newMax]) => refine({ min: newMin, max: newMax })}
+      onUpdate={(values) => setTicksValues(values)}
       rootStyle={{ position: 'relative', marginTop: '1.5rem' }}
       className="ais-RangeSlider"
     >
