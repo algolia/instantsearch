@@ -17,6 +17,7 @@ import type {
   TrendingFacetsQuery,
   TrendingItemsQuery,
   PlainRecommendParameters as ClientPlainRecommendParameters,
+  CompositionClient,
 } from './types/algoliasearch';
 
 /**
@@ -30,7 +31,7 @@ import type {
  * @param searchResultsOptions
  */
 declare function algoliasearchHelper(
-  client: SearchClient,
+  client: SearchClient | CompositionClient,
   index: string,
   opts?: algoliasearchHelper.PlainSearchParameters,
   searchResultsOptions?: algoliasearchHelper.SearchResultsOptions
@@ -404,8 +405,8 @@ declare namespace algoliasearchHelper {
      */
     containsRefinement(...any: any[]): any;
     clearCache(): this;
-    setClient(client: SearchClient): this;
-    getClient(): SearchClient;
+    setClient(client: SearchClient | CompositionClient): this;
+    getClient(): SearchClient | CompositionClient;
     derive(
       deriveFn: (oldParams: SearchParameters) => SearchParameters,
       deriveRecommendFn?: (

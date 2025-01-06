@@ -39,6 +39,7 @@ import type {
   MiddlewareDefinition,
   RenderState,
   InitialResults,
+  CompositionClient,
 } from '../types';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 
@@ -101,7 +102,7 @@ export type InstantSearchOptions<
    * });
    * ```
    */
-  searchClient: SearchClient;
+  searchClient: SearchClient | CompositionClient;
 
   /**
    * The locale used to display numbers. This will be passed
