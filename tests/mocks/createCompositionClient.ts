@@ -5,13 +5,12 @@ import {
 
 import type { CompositionClient } from 'instantsearch.js';
 
-export const createCompositionClient = (
-  args: Partial<CompositionClient> = {}
+export const createCompositionClient = <T extends Record<string, unknown>>(
+  args: Partial<CompositionClient & T> = {}
 ): CompositionClient => ({
   search: jest.fn(() =>
     Promise.resolve({ results: [createSingleSearchResponse()] })
   ),
-  // @ts-expect-error
   searchForFacetValues: jest.fn(() =>
     Promise.resolve({ results: [createSFFVResponse()] })
   ),
