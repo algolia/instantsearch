@@ -132,6 +132,9 @@ test('it waits for search only if there are only search widgets', async () => {
 
   expect(ref.current!.status).toBe('fulfilled');
   expect(client.search).toHaveBeenCalledTimes(1);
+  expect(client.search).toHaveBeenNthCalledWith(1, [
+    expect.objectContaining({ indexName: 'indexName' }),
+  ]);
   expect(client.getRecommendations).not.toHaveBeenCalled();
 });
 
