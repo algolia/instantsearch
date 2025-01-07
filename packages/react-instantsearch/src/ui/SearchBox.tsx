@@ -67,8 +67,8 @@ export type SearchBoxProps = Omit<
         | React.ChangeEvent<HTMLInputElement>
         | React.CompositionEvent<HTMLInputElement>
     ) => void;
-    formRef?: React.RefObject<HTMLFormElement>;
-    inputRef: React.RefObject<HTMLInputElement>;
+    formRef?: React.RefObject<HTMLFormElement | null>;
+    inputRef: React.RefObject<HTMLInputElement | null>;
     isSearchStalled: boolean;
     value: string;
     resetIconComponent?: React.JSXElementConstructor<IconProps>;

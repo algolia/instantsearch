@@ -50,7 +50,9 @@ export function Tabs({ children }: { children: React.ReactNode }) {
               id={getTabId(index, 'title')}
               tabIndex={isSelected ? 0 : -1}
               className={cx('Tabs-title', isSelected && 'Tabs-title--active')}
-              ref={(element) => (tabsRefs.current[index] = element!)}
+              ref={(element) => {
+                tabsRefs.current[index] = element!;
+              }}
               key={getTabId(index)}
               onClick={() => setCurrentTab(index)}
               onKeyDown={onKeyDown}

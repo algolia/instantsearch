@@ -605,7 +605,7 @@ describe('InstantSearch', () => {
           }),
         },
       ]);
-      expect(warn).toHaveBeenCalledTimes(4);
+      expect(warn).toHaveBeenCalledTimes(3);
     });
   });
 

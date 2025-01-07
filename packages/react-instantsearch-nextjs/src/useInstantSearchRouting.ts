@@ -13,13 +13,13 @@ export function useInstantSearchRouting<
   TRouteState = TUiState
 >(
   passedRouting: InstantSearchNextProps<TUiState, TRouteState>['routing'],
-  isMounting: React.MutableRefObject<boolean>
+  isMounting: React.RefObject<boolean>
 ) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const routingRef =
-    useRef<InstantSearchProps<TUiState, TRouteState>['routing']>();
-  const onUpdateRef = useRef<() => void>();
+    useRef<InstantSearchProps<TUiState, TRouteState>['routing']>(null);
+  const onUpdateRef = useRef<() => void>(null);
   useEffect(() => {
     if (onUpdateRef.current) {
       onUpdateRef.current();

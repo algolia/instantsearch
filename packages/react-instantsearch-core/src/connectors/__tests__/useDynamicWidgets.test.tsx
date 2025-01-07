@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import {
   createMultiSearchResponse,
   createSearchClient,
@@ -5,7 +9,7 @@ import {
   defaultRenderingContent,
 } from '@instantsearch/mocks';
 import { createInstantSearchTestWrapper } from '@instantsearch/testutils';
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, waitFor } from '@testing-library/react';
 
 import { useDynamicWidgets } from '../useDynamicWidgets';
 
@@ -26,27 +30,24 @@ describe('useDynamicWidgets', () => {
         }),
       }),
     });
-    const { result, waitForNextUpdate } = renderHook(
-      () => useDynamicWidgets(),
-      {
-        wrapper,
-      }
-    );
+    const { result } = renderHook(() => useDynamicWidgets(), {
+      wrapper,
+    });
 
     // Initial render state from manual `getWidgetRenderState`
     expect(result.current).toEqual({
       attributesToRender: [],
     });
 
-    await waitForNextUpdate();
-
-    // InstantSearch.js state from the `render` lifecycle step
-    expect(result.current).toEqual({
-      attributesToRender: [
-        'brand',
-        'hierarchicalCategories.lvl0',
-        'categories',
-      ],
+    await waitFor(() => {
+      // InstantSearch.js state from the `render` lifecycle step
+      expect(result.current).toEqual({
+        attributesToRender: [
+          'brand',
+          'hierarchicalCategories.lvl0',
+          'categories',
+        ],
+      });
     });
   });
 });

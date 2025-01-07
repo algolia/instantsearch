@@ -1,12 +1,16 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { createInstantSearchTestWrapper } from '@instantsearch/testutils';
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, waitFor } from '@testing-library/react';
 
 import { useNumericMenu } from '../useNumericMenu';
 
 describe('useNumericMenu', () => {
   test('returns the connector render state', async () => {
     const wrapper = createInstantSearchTestWrapper();
-    const { result, waitForNextUpdate } = renderHook(
+    const { result } = renderHook(
       () =>
         useNumericMenu({
           attribute: 'attribute',
@@ -53,37 +57,37 @@ describe('useNumericMenu', () => {
       sendEvent: expect.any(Function),
     });
 
-    await waitForNextUpdate();
-
-    // InstantSearch.js state from the `render` lifecycle step
-    expect(result.current).toEqual({
-      createURL: expect.any(Function),
-      hasNoResults: true,
-      canRefine: false,
-      items: [
-        {
-          isRefined: true,
-          label: 'All',
-          value: '%7B%7D',
-        },
-        {
-          isRefined: false,
-          label: 'Less than 500$',
-          value: '%7B%22end%22:500%7D',
-        },
-        {
-          isRefined: false,
-          label: 'Between 500$ - 1000$',
-          value: '%7B%22start%22:500,%22end%22:1000%7D',
-        },
-        {
-          isRefined: false,
-          label: 'More than 1000$',
-          value: '%7B%22start%22:1000%7D',
-        },
-      ],
-      refine: expect.any(Function),
-      sendEvent: expect.any(Function),
+    await waitFor(() => {
+      // InstantSearch.js state from the `render` lifecycle step
+      expect(result.current).toEqual({
+        createURL: expect.any(Function),
+        hasNoResults: true,
+        canRefine: false,
+        items: [
+          {
+            isRefined: true,
+            label: 'All',
+            value: '%7B%7D',
+          },
+          {
+            isRefined: false,
+            label: 'Less than 500$',
+            value: '%7B%22end%22:500%7D',
+          },
+          {
+            isRefined: false,
+            label: 'Between 500$ - 1000$',
+            value: '%7B%22start%22:500,%22end%22:1000%7D',
+          },
+          {
+            isRefined: false,
+            label: 'More than 1000$',
+            value: '%7B%22start%22:1000%7D',
+          },
+        ],
+        refine: expect.any(Function),
+        sendEvent: expect.any(Function),
+      });
     });
   });
 });

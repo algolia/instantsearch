@@ -54,7 +54,7 @@
   },
   "peerDependencies": {
     "algoliasearch": ">= 3.1 < 6",
-    "react": ">= 16.8.0 < 19",
-    "react-dom": ">= 16.8.0 < 19"
+    "react": ">= 16.8.0 < 20",
+    "react-dom": ">= 16.8.0 < 20"
   }
 }

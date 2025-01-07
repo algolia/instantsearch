@@ -1,12 +1,16 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { createInstantSearchTestWrapper } from '@instantsearch/testutils';
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, waitFor } from '@testing-library/react';
 
 import { useHits } from '../useHits';
 
 describe('useHits', () => {
   test('returns the connector render state', async () => {
     const wrapper = createInstantSearchTestWrapper();
-    const { result, waitForNextUpdate } = renderHook(() => useHits(), {
+    const { result } = renderHook(() => useHits(), {
       wrapper,
     });
 
@@ -20,16 +24,16 @@ describe('useHits', () => {
       sendEvent: expect.any(Function),
     });
 
-    await waitForNextUpdate();
-
-    // InstantSearch.js state from the `render` lifecycle step
-    expect(result.current).toEqual({
-      banner: undefined,
-      bindEvent: expect.any(Function),
-      hits: [],
-      items: [],
-      results: expect.objectContaining({ nbHits: 0 }),
-      sendEvent: expect.any(Function),
+    await waitFor(() => {
+      // InstantSearch.js state from the `render` lifecycle step
+      expect(result.current).toEqual({
+        banner: undefined,
+        bindEvent: expect.any(Function),
+        hits: [],
+        items: [],
+        results: expect.objectContaining({ nbHits: 0 }),
+        sendEvent: expect.any(Function),
+      });
     });
   });
 });
