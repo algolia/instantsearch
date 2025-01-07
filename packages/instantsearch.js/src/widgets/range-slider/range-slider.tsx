@@ -13,7 +13,6 @@ import {
 
 import type { RangeSliderComponentCSSClasses } from '../../components/Slider/Slider';
 import type {
-  Range,
   RangeConnectorParams,
   RangeRenderState,
   RangeWidgetDescription,
