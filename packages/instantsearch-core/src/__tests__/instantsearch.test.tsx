@@ -827,52 +827,6 @@ describe('start', () => {
     ).toHaveBeenCalledTimes(1);
   });
 
-  it('calls the provided `searchFunction` with a single request', async () => {
-    const searchFunction = jest.fn((helper) =>
-      helper.setQuery('test').search()
-    );
-    const searchClient = createSearchClient();
-    const search = new InstantSearch({
-      indexName: 'indexName',
-      searchFunction,
-      searchClient,
-    });
-
-    search.addWidgets([virtualSearchBox({})]);
-
-    expect(searchFunction).toHaveBeenCalledTimes(0);
-    expect(searchClient.search).toHaveBeenCalledTimes(0);
-
-    search.start();
-
-    await wait(0);
-
-    expect(searchFunction).toHaveBeenCalledTimes(1);
-    expect(searchClient.search).toHaveBeenCalledTimes(1);
-    expect(search.mainIndex.getHelper()!.state.query).toBe('test');
-  });
-
-  it('calls the provided `searchFunction` with multiple requests', () => {
-    const searchClient = createSearchClient();
-    const search = new InstantSearch({
-      indexName: 'indexName',
-      searchClient,
-      searchFunction(helper) {
-        const nextState = helper.state
-          .addDisjunctiveFacet('brand')
-          .addDisjunctiveFacetRefinement('brand', 'Apple');
-
-        helper.setState(nextState).search();
-      },
-    });
-
-    search.addWidgets([virtualSearchBox({})]);
-
-    expect(() => {
-      search.start();
-    }).not.toThrow();
-  });
-
   it('forwards the `initialUiState` to the main index', () => {
     const search = new InstantSearch({
       indexName: 'indexName',

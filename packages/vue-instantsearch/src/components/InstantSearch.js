@@ -49,10 +49,6 @@ export default createInstantSearchComponent({
       type: Number,
       default: undefined,
     },
-    searchFunction: {
-      type: Function,
-      default: undefined,
-    },
     onStateChange: {
       type: Function,
       default: undefined,
@@ -98,7 +94,6 @@ export default createInstantSearchComponent({
         indexName: this.indexName,
         routing: this.routing,
         stalledSearchDelay: this.stalledSearchDelay,
-        searchFunction: this.searchFunction,
         onStateChange: this.onStateChange,
         initialUiState: this.initialUiState,
         future: this.future,

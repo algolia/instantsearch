@@ -67,6 +67,7 @@ workflows:
             branches:
               only:
                 - master
+                - next
       - helper docs:
           requires:
             - build
@@ -85,6 +86,7 @@ workflows:
             branches:
               only:
                 - master
+                - next
       - e2e tests router nextjs:
           context: fx-libraries
           requires:
@@ -93,6 +95,7 @@ workflows:
             branches:
               only:
                 - master
+                - next
       - release if needed:
           context: fx-libraries
           requires:
