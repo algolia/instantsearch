@@ -340,12 +340,7 @@ export interface CompositionClient {
     compositionID: string;
     requestBody: { params: SearchOptions };
   }) => Promise<{
-    results: Array<
-      // AlgoliaSearch.SearchResponse<T>
-      AlgoliaSearch.BaseSearchResponse &
-        Pick<AlgoliaSearch.SearchHits<T>, 'hits'> &
-        AlgoliaSearch.SearchPagination
-    >;
+    results: Array<AlgoliaSearch.SearchResponse<T>>;
   }>;
   initIndex?: never;
   addAlgoliaAgent?: DefaultSearchClient['addAlgoliaAgent'];
