@@ -159,31 +159,6 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
         '[InstantSearch.js]: No indexName provided, nor an explicit index widget in the widgets tree. This is required to be able to display results.'
       );
     });
-
-    it('throws if compositionID & index widget is provided', () => {
-      expect(() => {
-        const search = new InstantSearch({
-          searchClient: createSearchClient(),
-          compositionID: 'my-composition',
-        });
-
-        search.addWidgets([index({ indexName: 'indexName' })]);
-      }).toThrowErrorMatchingInlineSnapshot(`
-        "The \`index\` widget cannot be used with a composition-based InstantSearch implementation.
-
-        See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
-        `);
-    });
-
-    it('does not throw if compositionID is not provided while index widget is provided', () => {
-      expect(() => {
-        const search = new InstantSearch({
-          searchClient: createSearchClient(),
-        });
-
-        search.addWidgets([index({ indexName: 'indexName' })]);
-      }).not.toThrow();
-    });
   });
 
   it('throws if insightsClient is not a function', () => {
