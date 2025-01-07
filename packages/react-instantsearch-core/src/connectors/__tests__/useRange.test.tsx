@@ -26,7 +26,7 @@ describe('useRange', () => {
       },
       refine: expect.any(Function),
       sendEvent: expect.any(Function),
-      start: [-Infinity, Infinity],
+      currentRefinement: { min: undefined, max: undefined },
     });
 
     await waitForNextUpdate();
@@ -44,7 +44,7 @@ describe('useRange', () => {
       },
       refine: expect.any(Function),
       sendEvent: expect.any(Function),
-      start: [-Infinity, Infinity],
+      currentRefinement: { min: undefined, max: undefined },
     });
   });
 });
