@@ -134,7 +134,7 @@ const renderer =
     };
     templates: RangeInputTemplates;
   }): Renderer<RangeRenderState, Partial<RangeInputWidgetParams>> =>
-  ({ refine, range, start, widgetParams }, isFirstRendering) => {
+  ({ refine, range, currentRefinement, widgetParams }, isFirstRendering) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
@@ -144,23 +144,15 @@ const renderer =
     }
 
     const { min: rangeMin, max: rangeMax } = range;
-    const [minValue, maxValue] = start;
 
     const step = 1 / Math.pow(10, widgetParams.precision || 0);
-
-    const values = {
-      min:
-        minValue !== -Infinity && minValue !== rangeMin ? minValue : undefined,
-      max:
-        maxValue !== Infinity && maxValue !== rangeMax ? maxValue : undefined,
-    };
 
     render(
       <RangeInput
         min={rangeMin}
         max={rangeMax}
         step={step}
-        values={values}
+        values={currentRefinement}
         cssClasses={cssClasses}
         refine={refine}
         templateProps={renderState.templateProps!}

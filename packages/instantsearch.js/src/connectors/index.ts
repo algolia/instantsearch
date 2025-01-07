@@ -160,7 +160,6 @@ export type {
   RangeWidgetDescription,
   RangeConnectorParams,
   Range,
-  RangeBoundaries,
 } from 'instantsearch-core';
 
 export { connectRatingMenu } from 'instantsearch-core';

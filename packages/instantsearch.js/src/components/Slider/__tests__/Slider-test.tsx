@@ -17,7 +17,7 @@ describe('Slider', () => {
         refine={() => undefined}
         min={0}
         max={500}
-        values={[0, 0]}
+        values={{ min: 0, max: 0 }}
         pips={true}
         step={2}
         tooltips={true}
@@ -37,7 +37,7 @@ describe('Slider', () => {
         refine={() => undefined}
         min={0}
         max={500}
-        values={[0, 0]}
+        values={{ min: 0, max: 0 }}
         pips={false}
         step={2}
         tooltips={true}
@@ -57,7 +57,7 @@ describe('Slider', () => {
         refine={() => undefined}
         min={0}
         max={500}
-        values={[0, 0]}
+        values={{ min: 0, max: 0 }}
         pips={false}
         step={2}
         tooltips={true}
@@ -76,7 +76,7 @@ describe('Slider', () => {
       refine: jest.fn(),
       min: 0,
       max: 500,
-      values: [0, 0],
+      values: { min: 0, max: 0 },
       pips: true,
       step: 2,
       tooltips: true,
@@ -92,6 +92,6 @@ describe('Slider', () => {
     Rheostat.props().onChange!({ values: [0, 100] });
 
     expect(props.refine).toHaveBeenCalledTimes(1);
-    expect(props.refine).toHaveBeenCalledWith([0, 100]);
+    expect(props.refine).toHaveBeenCalledWith({ min: 0, max: 100 });
   });
 });

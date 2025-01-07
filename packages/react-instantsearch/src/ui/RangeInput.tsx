@@ -6,7 +6,7 @@ import type { useRange } from 'react-instantsearch-core';
 type RangeRenderState = ReturnType<typeof useRange>;
 
 export type RangeInputProps = Omit<React.ComponentProps<'div'>, 'onSubmit'> &
-  Pick<RangeRenderState, 'range' | 'start'> & {
+  Pick<RangeRenderState, 'range' | 'currentRefinement'> & {
     classNames?: Partial<RangeInputClassNames>;
     disabled: boolean;
     onSubmit: RangeRenderState['refine'];
@@ -74,8 +74,8 @@ function stripLeadingZeroFromInput(value: string): string {
 
 export function RangeInput({
   classNames = {},
-  range: { min, max },
-  start: [minValue, maxValue],
+  range: { min: minRange, max: maxRange },
+  currentRefinement: { min: minValue, max: maxValue },
   step = 1,
   disabled,
   onSubmit,
@@ -83,14 +83,8 @@ export function RangeInput({
   ...props
 }: RangeInputProps) {
   const values = {
-    min:
-      minValue !== -Infinity && minValue !== min
-        ? minValue
-        : unsetNumberInputValue,
-    max:
-      maxValue !== Infinity && maxValue !== max
-        ? maxValue
-        : unsetNumberInputValue,
+    min: minValue ?? unsetNumberInputValue,
+    max: maxValue ?? unsetNumberInputValue,
   };
   const [prevValues, setPrevValues] = useState(values);
 
@@ -118,10 +112,10 @@ export function RangeInput({
         className={cx('ais-RangeInput-form', classNames.form)}
         onSubmit={(event) => {
           event.preventDefault();
-          onSubmit([
-            from ? Number(from) : undefined,
-            to ? Number(to) : undefined,
-          ]);
+          onSubmit({
+            min: from ? Number(from) : undefined,
+            max: to ? Number(to) : undefined,
+          });
         }}
       >
         <label className={cx('ais-RangeInput-label', classNames.label)}>
@@ -133,11 +127,11 @@ export function RangeInput({
               classNames.inputMin
             )}
             type="number"
-            min={min}
-            max={max}
+            min={minRange}
+            max={maxRange}
             value={stripLeadingZeroFromInput(from || unsetNumberInputValue)}
             step={step}
-            placeholder={min?.toString()}
+            placeholder={minRange?.toString()}
             disabled={disabled}
             onInput={({ currentTarget }) => {
               const value = currentTarget.value;
@@ -160,11 +154,11 @@ export function RangeInput({
               classNames.inputMax
             )}
             type="number"
-            min={min}
-            max={max}
+            min={minRange}
+            max={maxRange}
             value={stripLeadingZeroFromInput(to || unsetNumberInputValue)}
             step={step}
-            placeholder={max?.toString()}
+            placeholder={maxRange?.toString()}
             disabled={disabled}
             onInput={({ currentTarget }) => {
               const value = currentTarget.value;
