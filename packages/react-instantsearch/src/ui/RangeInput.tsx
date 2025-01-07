@@ -83,14 +83,8 @@ export function RangeInput({
   ...props
 }: RangeInputProps) {
   const values = {
-    min:
-      typeof minValue === 'number' && minValue !== minRange
-        ? minValue
-        : unsetNumberInputValue,
-    max:
-      typeof maxValue === 'number' && maxValue !== maxRange
-        ? maxValue
-        : unsetNumberInputValue,
+    min: minValue ?? unsetNumberInputValue,
+    max: maxValue ?? unsetNumberInputValue,
   };
   const [prevValues, setPrevValues] = useState(values);
 

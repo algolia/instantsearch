@@ -656,6 +656,84 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
 
       expect(currentRefinement).toEqual({ min: 10.9, max: 99.1 });
     });
+
+    it('expect to return undefined values when refinement is equal to range', () => {
+      const widget = connectRange(rendering)({ attribute });
+      const helper = createHelper();
+
+      helper.setState(
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
+      );
+      helper.addNumericRefinement(attribute, '>=', 1);
+      helper.addNumericRefinement(attribute, '<=', 4999);
+
+      const { currentRefinement } = widget.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          results: createFacetStatsResults({
+            helper,
+            attribute,
+            min: 1,
+            max: 4999,
+          }),
+        })
+      );
+
+      expect(currentRefinement).toEqual({
+        min: undefined,
+        max: undefined,
+      });
+    });
+
+    it('expect to clamp min refinement value to max range', () => {
+      const widget = connectRange(rendering)({ attribute });
+      const helper = createHelper();
+
+      helper.setState(
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
+      );
+      helper.addNumericRefinement(attribute, '>=', 5000);
+      helper.addNumericRefinement(attribute, '<=', 6000);
+
+      const { currentRefinement } = widget.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          results: createFacetStatsResults({
+            helper,
+            attribute,
+            min: 1,
+            max: 4999,
+          }),
+        })
+      );
+
+      expect(currentRefinement.min).toBe(4999);
+    });
+
+    it('expect to clamp max refinement value to min range', () => {
+      const widget = connectRange(rendering)({ attribute });
+      const helper = createHelper();
+
+      helper.setState(
+        widget.getWidgetSearchParameters(helper.state, { uiState: {} })
+      );
+      helper.addNumericRefinement(attribute, '>=', -50);
+      helper.addNumericRefinement(attribute, '<=', 0);
+
+      const { currentRefinement } = widget.getWidgetRenderState(
+        createRenderOptions({
+          helper,
+          results: createFacetStatsResults({
+            helper,
+            attribute,
+            min: 1,
+            max: 4999,
+          }),
+        })
+      );
+
+      expect(currentRefinement.max).toBe(1);
+    });
   });
 
   describe('refine', () => {
@@ -1624,7 +1702,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
           canRefine: false,
           refine: expect.any(Function),
           sendEvent: expect.any(Function),
-          currentRefinement: { min: 0, max: 1000 },
+          currentRefinement: { min: undefined, max: 1000 },
           widgetParams: {
             attribute: 'price',
             precision: 0,
@@ -1703,7 +1781,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
         canRefine: false,
         refine: expect.any(Function),
         sendEvent: expect.any(Function),
-        currentRefinement: { min: 0, max: 1000 },
+        currentRefinement: { min: undefined, max: 1000 },
         widgetParams: {
           attribute: 'price',
           precision: 0,

@@ -4,7 +4,7 @@
     :class="[suit(), !state.canRefine && suit('', 'noRefinement')]"
   >
     <slot
-      :current-refinement="values"
+      :current-refinement="state.currentRefinement"
       :refine="refine"
       :can-refine="state.canRefine"
       :range="state.range"
@@ -14,8 +14,8 @@
         :class="suit('form')"
         @submit.prevent="
           refine({
-            min: pick(minInput, values.min),
-            max: pick(maxInput, values.max),
+            min: pick(minInput, state.currentRefinement.min),
+            max: pick(maxInput, state.currentRefinement.max),
           })
         "
       >
@@ -28,7 +28,7 @@
             :min="state.range.min"
             :max="state.range.max"
             :placeholder="state.range.min"
-            :value="values.min"
+            :value="state.currentRefinement.min"
             @change="minInput = $event.currentTarget.value"
           />
         </label>
@@ -44,7 +44,7 @@
             :min="state.range.min"
             :max="state.range.max"
             :placeholder="state.range.max"
-            :value="values.max"
+            :value="state.currentRefinement.max"
             @change="maxInput = $event.currentTarget.value"
           />
         </label>
@@ -119,21 +119,6 @@ export default {
     },
     step() {
       return 1 / Math.pow(10, this.precision);
-    },
-    values() {
-      const { min: minValue, max: maxValue } = this.state.currentRefinement;
-      const { min: minRange, max: maxRange } = this.state.range;
-
-      return {
-        min:
-          typeof minValue === 'number' && minValue !== minRange
-            ? minValue
-            : undefined,
-        max:
-          typeof maxValue === 'number' && maxValue !== maxRange
-            ? maxValue
-            : undefined,
-      };
     },
   },
   methods: {

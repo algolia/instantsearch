@@ -107,20 +107,6 @@ describe('RangeInput', () => {
       ).toEqual(['', '']);
     });
 
-    test('renders with empty values when refinement is equal to range', () => {
-      const props = createProps({
-        range: { min: 100, max: 1000 },
-        currentRefinement: { min: 100, max: 1000 },
-      });
-      const { container } = render(<RangeInput {...props} />);
-
-      expect(
-        Array.from(
-          container.querySelectorAll<HTMLInputElement>('.ais-RangeInput-input')
-        ).map((input) => input.value)
-      ).toEqual(['', '']);
-    });
-
     test('renders with refined values', () => {
       const props = createProps({
         currentRefinement: { min: 100, max: 1000 },

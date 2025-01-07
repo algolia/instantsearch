@@ -46,25 +46,16 @@ const renderer =
     const { min: minRange, max: maxRange } = range;
     const { min: minValue, max: maxValue } = currentRefinement;
 
-    // Clamp values to the range to avoid extra rendering & refinement.
-    const values: Range = {
-      min:
-        typeof minValue === 'number' && minValue !== minRange
-          ? Math.min(minValue, maxRange!)
-          : minRange,
-      max:
-        typeof maxValue === 'number' && maxValue !== maxRange
-          ? Math.max(maxValue, minRange!)
-          : maxRange,
-    };
-
     render(
       <Slider
         cssClasses={cssClasses}
         refine={refine}
         min={minRange}
         max={maxRange}
-        values={values}
+        values={{
+          min: minValue ?? minRange,
+          max: maxValue ?? maxRange,
+        }}
         tooltips={tooltips}
         step={step}
         pips={pips}

@@ -437,46 +437,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
             .addNumericRefinement(attribute, '<=', 4999)
         );
       });
-
-      it("expect to clamp the min value to the max range when it's greater than range", () => {
-        widget = rangeSlider({
-          container,
-          attribute,
-          step: 1,
-          cssClasses: { root: '' },
-        });
-
-        widget.init!(createInitOptions({ helper, instantSearchInstance }));
-
-        helper.addNumericRefinement(attribute, '>=', 5550);
-        helper.addNumericRefinement(attribute, '<=', 6000);
-
-        widget.render!(createRenderOptions({ results, helper }));
-
-        const firstRender = render.mock.calls[0][0] as VNode<SliderProps>;
-
-        expect((firstRender.props as SliderProps).values.min).toBe(5000);
-      });
-
-      it("expect to clamp the max value to the min range when it's lower than range", () => {
-        widget = rangeSlider({
-          container,
-          attribute,
-          step: 1,
-          cssClasses: { root: '' },
-        });
-
-        widget.init!(createInitOptions({ helper, instantSearchInstance }));
-
-        helper.addNumericRefinement(attribute, '>=', -50);
-        helper.addNumericRefinement(attribute, '<=', 0);
-
-        widget.render!(createRenderOptions({ results, helper }));
-
-        const firstRender = render.mock.calls[0][0] as VNode<SliderProps>;
-
-        expect((firstRender.props as SliderProps).values.max).toBe(1);
-      });
     });
   });
 });

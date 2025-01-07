@@ -284,18 +284,25 @@ export const connectRange: RangeConnector = function connectRange(
       return toPrecision({ min, max, precision });
     }
 
-    function _getCurrentRefinement(helper: AlgoliaSearchHelper): Range {
+    function _getCurrentRefinement(
+      helper: AlgoliaSearchHelper,
+      range: Range
+    ): Range {
       const [minValue] = helper.getNumericRefinement(attribute, '>=') || [];
 
       const [maxValue] = helper.getNumericRefinement(attribute, '<=') || [];
 
       const min =
-        typeof minValue === 'number' && Number.isFinite(minValue)
-          ? minValue
+        typeof minValue === 'number' &&
+        Number.isFinite(minValue) &&
+        minValue !== range.min
+          ? Math.min(minValue, range.max!)
           : undefined;
       const max =
-        typeof maxValue === 'number' && Number.isFinite(maxValue)
-          ? maxValue
+        typeof maxValue === 'number' &&
+        Number.isFinite(maxValue) &&
+        maxValue !== range.max
+          ? Math.max(maxValue, range.min!)
           : undefined;
 
       return { min, max };
@@ -359,7 +366,7 @@ export const connectRange: RangeConnector = function connectRange(
         };
 
         const currentRange = _getCurrentRange(stats);
-        const currentRefinement = _getCurrentRefinement(helper);
+        const currentRefinement = _getCurrentRefinement(helper, currentRange);
 
         let refine: ReturnType<typeof _refine>;
 

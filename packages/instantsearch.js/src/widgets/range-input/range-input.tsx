@@ -144,27 +144,15 @@ const renderer =
     }
 
     const { min: rangeMin, max: rangeMax } = range;
-    const { min: minValue, max: maxValue } = currentRefinement;
 
     const step = 1 / Math.pow(10, widgetParams.precision || 0);
-
-    const values = {
-      min:
-        typeof minValue === 'number' && minValue !== rangeMin
-          ? minValue
-          : undefined,
-      max:
-        typeof maxValue === 'number' && maxValue !== rangeMax
-          ? maxValue
-          : undefined,
-    };
 
     render(
       <RangeInput
         min={rangeMin}
         max={rangeMax}
         step={step}
-        values={values}
+        values={currentRefinement}
         cssClasses={cssClasses}
         refine={refine}
         templateProps={renderState.templateProps!}
