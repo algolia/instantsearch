@@ -176,9 +176,8 @@ export const connectFrequentlyBoughtTogether =
           return { items: transformedItems, widgetParams };
         },
 
-        dispose({ recommendState }) {
+        dispose() {
           unmountFn();
-          return recommendState.removeParams(this.$$id!);
         },
 
         getWidgetParameters(state) {

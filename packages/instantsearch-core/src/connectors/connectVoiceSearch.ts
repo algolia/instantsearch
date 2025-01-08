@@ -108,6 +108,8 @@ export const connectVoiceSearch: VoiceSearchConnector =
 
                 if (typeof additionalQueryParameters === 'function') {
                   helper.setState(
+                    // These parameters are only set with a refine, so they are not persisted.
+                    // If a searchbox query happens, the parameters are reset.
                     helper.state.setQueryParameters({
                       ignorePlurals: true,
                       removeStopWords: true,
@@ -166,34 +168,10 @@ export const connectVoiceSearch: VoiceSearchConnector =
           };
         },
 
-        dispose({ state }) {
-          (this as any)._voiceSearchHelper.dispose();
+        dispose() {
+          (this as any)._voiceSearchHelper?.dispose();
 
           unmountFn();
-
-          let newState = state;
-          if (typeof additionalQueryParameters === 'function') {
-            const additional = additionalQueryParameters({ query: '' });
-            const toReset = additional
-              ? (
-                  Object.keys(additional) as Array<keyof PlainSearchParameters>
-                ).reduce<PlainSearchParameters>((acc, current) => {
-                  // @ts-ignore search parameters is typed as readonly in v4
-                  acc[current] = undefined;
-                  return acc;
-                }, {})
-              : {};
-            newState = state.setQueryParameters({
-              // @ts-ignore (queryLanguages is not added to algoliasearch v3)
-              queryLanguages: undefined,
-              ignorePlurals: undefined,
-              removeStopWords: undefined,
-              optionalWords: undefined,
-              ...toReset,
-            });
-          }
-
-          return newState.setQueryParameter('query', undefined);
         },
 
         getWidgetUiState(uiState, { searchParameters }) {

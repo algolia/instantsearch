@@ -430,24 +430,8 @@ export const connectInfiniteHits = function connectInfiniteHits<
         };
       },
 
-      dispose({ state }) {
+      dispose() {
         unmountFn();
-
-        const stateWithoutPage = state.setQueryParameter('page', undefined);
-
-        if (!escapeHTML) {
-          return stateWithoutPage;
-        }
-
-        return stateWithoutPage.setQueryParameters(
-          Object.keys(TAG_PLACEHOLDER).reduce(
-            (acc, key) => ({
-              ...acc,
-              [key]: undefined,
-            }),
-            {}
-          )
-        );
       },
 
       getWidgetUiState(uiState, { searchParameters }) {

@@ -6,13 +6,13 @@ import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-
-import { connectCurrentRefinements } from '../..';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+
+import { connectCurrentRefinements } from '../..';
 
 import type { CurrentRefinementsConnectorParamsItem } from '../connectCurrentRefinements';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
@@ -116,15 +116,23 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/current-ref
       });
     });
 
-    it('does not throw without the unmount function', () => {
-      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {});
-      const rendering = () => {};
-      const customCurrentRefinements = connectCurrentRefinements(rendering);
-      const widget = customCurrentRefinements({});
+    describe('dispose', () => {
+      it('calls unmount function', () => {
+        const render = jest.fn();
+        const unmount = jest.fn();
 
-      expect(() =>
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-      ).not.toThrow();
+        const widget = connectCurrentRefinements(render, unmount)({});
+
+        widget.dispose!(createDisposeOptions());
+
+        expect(unmount).toHaveBeenCalled();
+      });
+
+      it('does not throw without the unmount function', () => {
+        const render = () => {};
+        const widget = connectCurrentRefinements(render)({});
+        expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
+      });
     });
 
     describe('getRenderState', () => {

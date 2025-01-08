@@ -29,7 +29,7 @@ describe('widgets', () => {
 
     test('starts with "ais."', () => {
       widgets.forEach(({ name, widget }) =>
-        expect([name, widget.$$type.substr(0, 4)]).toEqual([name, 'ais.'])
+        expect([name, widget.$$type.slice(0, 4)]).toEqual([name, 'ais.'])
       );
     });
   });
@@ -43,10 +43,7 @@ describe('widgets', () => {
 
     test('starts with "ais."', () => {
       widgets.forEach(({ name, widget }) =>
-        expect([name, widget.$$widgetType!.substr(0, 4)]).toEqual([
-          name,
-          'ais.',
-        ])
+        expect([name, widget.$$widgetType!.slice(0, 4)]).toEqual([name, 'ais.'])
       );
     });
   });

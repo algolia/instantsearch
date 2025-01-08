@@ -3,14 +3,13 @@
  */
 
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
-import algoliasearchHelper from 'algoliasearch-helper';
-import { render as preactRender } from 'preact';
-
 import {
   createInitOptions,
   createRenderOptions,
   createDisposeOptions,
-} from '../../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+import { render as preactRender } from 'preact';
+
 import panel from '../panel';
 
 import type { PanelProps } from '../../../components/Panel/Panel';
@@ -433,13 +432,10 @@ describe('Lifecycle', () => {
 
   describe('dispose', () => {
     test("returns the state from the widget's dispose function", () => {
-      const nextSearchParameters = new algoliasearchHelper.SearchParameters({
-        facets: ['brands'],
-      });
       const widget = {
         $$type: 'mock.widget',
         init: jest.fn(),
-        dispose: jest.fn(() => nextSearchParameters),
+        dispose: jest.fn(),
       };
       const widgetFactory = () => widget;
 
@@ -447,9 +443,9 @@ describe('Lifecycle', () => {
         container: document.createElement('div'),
       });
 
-      const nextState = widgetWithPanel.dispose!(createDisposeOptions());
+      widgetWithPanel.dispose!(createDisposeOptions());
 
-      expect(nextState).toEqual(nextSearchParameters);
+      expect(widget.dispose).toHaveBeenCalled();
     });
   });
 });

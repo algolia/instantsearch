@@ -1,12 +1,12 @@
 import { createSearchClient } from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils';
 import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
-
-import { connectConfigure, noop } from '../..';
 import {
   createInitOptions,
   createRenderOptions,
-  createDisposeOptions,
-} from '../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+
+import { connectConfigure, instantsearch, noop } from '../..';
 
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 
@@ -88,7 +88,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     });
 
     expect(
-      widget.getWidgetSearchParameters(new SearchParameters({}), {
+      widget.getWidgetSearchParameters!(new SearchParameters({}), {
         uiState: {},
       })
     ).toEqual(
@@ -107,11 +107,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     });
 
     expect(
-      widget.getWidgetSearchParameters(
+      widget.getWidgetSearchParameters!(
         new SearchParameters({
           analytics: false,
         }),
-        { uiState: { configure: { analytics: true } } }
+        { uiState: {} }
       )
     ).toEqual(
       new SearchParameters({
@@ -120,12 +120,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     );
 
     expect(
-      widget.getWidgetSearchParameters(
+      widget.getWidgetSearchParameters!(
         new SearchParameters({
           analytics: false,
           clickAnalytics: true,
         }),
-        { uiState: { configure: { analytics: true } } }
+        { uiState: {} }
       )
     ).toEqual(
       new SearchParameters({
@@ -135,7 +135,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     );
   });
 
-  it('should apply new searchParameters on refine()', () => {
+  it('should apply new searchParameters on refine()', async () => {
+    const searchClient = createSearchClient();
+    const search = instantsearch({
+      searchClient,
+      indexName: 'indexName',
+    });
+    search.start();
     const renderFn = jest.fn();
     const makeWidget = connectConfigure(renderFn, jest.fn());
     const widget = makeWidget({
@@ -144,41 +150,45 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
       },
     });
 
-    helper.setState(
-      widget.getWidgetSearchParameters(
+    search.addWidgets([widget]);
+
+    search.helper!.setState(
+      widget.getWidgetSearchParameters!(
         new SearchParameters({
           // This facet is added outside of the widget params
           // so it shouldn't be overridden when calling `refine`.
           facets: ['brand'],
         }),
-        { uiState: { configure: { analytics: true } } }
+        { uiState: {} }
       )
     );
-    widget.init!(createInitOptions({ helper }));
 
     expect(
-      widget.getWidgetSearchParameters(new SearchParameters({}), {
-        uiState: { configure: { analytics: true } },
+      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+        uiState: {},
       })
     ).toEqual(
       new SearchParameters({
         analytics: true,
       })
     );
-    expect(helper.state).toEqual(
-      new SearchParameters({
-        analytics: true,
-        facets: ['brand'],
-      })
-    );
+
+    await wait(100);
+    expect(searchClient.search).toHaveBeenCalledTimes(1);
+    expect(searchClient.search).toHaveBeenLastCalledWith([
+      {
+        indexName: 'indexName',
+        params: { analytics: true, facets: ['brand'] },
+      },
+    ]);
 
     const { refine } = renderFn.mock.calls[0][0];
 
     refine({ hitsPerPage: 3, facets: ['rating'] });
 
     expect(
-      widget.getWidgetSearchParameters(new SearchParameters({}), {
-        uiState: { configure: { hitsPerPage: 3, facets: ['rating'] } },
+      widget.getWidgetSearchParameters!(new SearchParameters({}), {
+        uiState: {},
       })
     ).toEqual(
       new SearchParameters({
@@ -186,57 +196,57 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
         facets: ['rating'],
       })
     );
-    expect(helper.state).toEqual(
-      new SearchParameters({
-        hitsPerPage: 3,
-        facets: ['brand', 'rating'],
-      })
-    );
+    await wait(100);
+    expect(searchClient.search).toHaveBeenCalledTimes(2);
+    expect(searchClient.search).toHaveBeenLastCalledWith([
+      {
+        indexName: 'indexName',
+        params: {
+          hitsPerPage: 3,
+          analytics: true,
+          facets: ['brand', 'rating'],
+        },
+      },
+    ]);
   });
 
-  it('should dispose only the state set by configure', () => {
-    const makeWidget = connectConfigure(noop);
-    const widget = makeWidget({
-      searchParameters: {
-        analytics: true,
-      },
+  it('should dispose only the state set by configure', async () => {
+    const search = instantsearch({
+      searchClient: createSearchClient(),
+      indexName: 'indexName',
+    });
+    search.start();
+
+    const analytics = connectConfigure(noop)({
+      searchParameters: { analytics: true },
+    });
+    const clickAnalytics = connectConfigure(noop)({
+      searchParameters: { clickAnalytics: true },
     });
 
-    helper.setState(
-      widget.getWidgetSearchParameters(
-        new SearchParameters({
-          clickAnalytics: true,
-        }),
-        { uiState: { configure: { analytics: true } } }
-      )
-    );
-    widget.init!(createInitOptions({ helper }));
+    search.addWidgets([analytics]);
 
-    expect(
-      widget.getWidgetSearchParameters(new SearchParameters({}), {
-        uiState: { configure: { analytics: true } },
-      })
-    ).toEqual(
-      new SearchParameters({
-        analytics: true,
-      })
-    );
-    expect(helper.state).toEqual(
-      new SearchParameters({
-        analytics: true,
-        clickAnalytics: true,
-      })
-    );
+    await wait(100);
+    expect(search.client.search).toHaveBeenCalledWith([
+      { indexName: 'indexName', params: { analytics: true } },
+    ]);
 
-    const nextState = widget.dispose!(
-      createDisposeOptions({ state: helper.state })
-    );
+    search.addWidgets([clickAnalytics]);
 
-    expect(nextState).toEqual(
-      new SearchParameters({
-        clickAnalytics: true,
-      })
-    );
+    await wait(100);
+    expect(search.client.search).toHaveBeenCalledWith([
+      {
+        indexName: 'indexName',
+        params: { analytics: true, clickAnalytics: true },
+      },
+    ]);
+
+    search.removeWidgets([analytics]);
+
+    await wait(100);
+    expect(search.client.search).toHaveBeenCalledWith([
+      { indexName: 'indexName', params: { clickAnalytics: true } },
+    ]);
   });
 
   describe('getRenderState', () => {
@@ -364,101 +374,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
     });
   });
 
-  describe('getWidgetUiState', () => {
-    it('adds default parameters', () => {
-      const makeWidget = connectConfigure(noop);
-      const widget = makeWidget({
-        searchParameters: {
-          analytics: true,
-        },
-      });
-
-      expect(
-        widget.getWidgetUiState({}, { helper, searchParameters: helper.state })
-      ).toEqual({
-        configure: { analytics: true },
-      });
-    });
-
-    it('adds refined parameters', () => {
-      const renderFn = jest.fn();
-      const makeWidget = connectConfigure(renderFn);
-      const widget = makeWidget({
-        searchParameters: {
-          analytics: true,
-        },
-      });
-
-      widget.init!(createInitOptions({ helper }));
-      const { refine } = renderFn.mock.calls[0][0];
-
-      refine({ analytics: false });
-
-      expect(
-        widget.getWidgetUiState({}, { helper, searchParameters: helper.state })
-      ).toEqual({
-        configure: { analytics: false },
-      });
-    });
-
-    it('adds refined (new) parameters', () => {
-      const renderFn = jest.fn();
-      const makeWidget = connectConfigure(renderFn);
-      const widget = makeWidget({
-        searchParameters: {
-          analytics: true,
-        },
-      });
-
-      widget.init!(createInitOptions({ helper }));
-      const { refine } = renderFn.mock.calls[0][0];
-
-      refine({ query: 'unsafe toys' });
-
-      expect(
-        widget.getWidgetUiState({}, { helper, searchParameters: helper.state })
-      ).toEqual({
-        configure: { query: 'unsafe toys' },
-      });
-    });
-
-    it('merges with existing configuration', () => {
-      const makeWidget = connectConfigure(noop);
-      const widget = makeWidget({
-        searchParameters: {
-          analytics: true,
-        },
-      });
-
-      expect(
-        widget.getWidgetUiState(
-          { configure: { queryType: 'prefixAll' } },
-          { helper, searchParameters: helper.state }
-        )
-      ).toEqual({
-        configure: { analytics: true, queryType: 'prefixAll' },
-      });
-    });
-
-    it('overwrites existing configuration', () => {
-      const makeWidget = connectConfigure(noop);
-      const widget = makeWidget({
-        searchParameters: {
-          analytics: true,
-        },
-      });
-
-      expect(
-        widget.getWidgetUiState(
-          { configure: { analytics: false } },
-          { helper, searchParameters: helper.state }
-        )
-      ).toEqual({
-        configure: { analytics: true },
-      });
-    });
-  });
-
   describe('getWidgetSearchParameters', () => {
     it('returns parameters set by default', () => {
       const makeWidget = connectConfigure(noop);
@@ -468,69 +383,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
         },
       });
 
-      const sp = widget.getWidgetSearchParameters(new SearchParameters(), {
+      const sp = widget.getWidgetSearchParameters!(new SearchParameters(), {
         uiState: {},
       });
 
       expect(sp).toEqual(new SearchParameters({ analytics: true }));
-    });
-
-    it('returns parameters set by uiState', () => {
-      const makeWidget = connectConfigure(noop);
-      const widget = makeWidget({ searchParameters: {} });
-
-      const sp = widget.getWidgetSearchParameters(new SearchParameters(), {
-        uiState: {
-          configure: {
-            analytics: false,
-          },
-        },
-      });
-
-      expect(sp).toEqual(new SearchParameters({ analytics: false }));
-    });
-
-    it('overrides parameters set by uiState', () => {
-      const makeWidget = connectConfigure(noop);
-      const widget = makeWidget({
-        searchParameters: {
-          analytics: true,
-        },
-      });
-
-      const sp = widget.getWidgetSearchParameters(new SearchParameters(), {
-        uiState: {
-          configure: {
-            analytics: false,
-          },
-        },
-      });
-
-      expect(sp).toEqual(new SearchParameters({ analytics: true }));
-    });
-
-    it('merges parameters set by uiState', () => {
-      const makeWidget = connectConfigure(noop);
-      const widget = makeWidget({
-        searchParameters: {
-          analyticsTags: ['best-website-in-the-world'],
-        },
-      });
-
-      const sp = widget.getWidgetSearchParameters(new SearchParameters(), {
-        uiState: {
-          configure: {
-            analytics: false,
-          },
-        },
-      });
-
-      expect(sp).toEqual(
-        new SearchParameters({
-          analytics: false,
-          analyticsTags: ['best-website-in-the-world'],
-        })
-      );
     });
 
     it('merges with the previous parameters', () => {
@@ -544,7 +401,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
         },
       });
 
-      const sp = widget.getWidgetSearchParameters(
+      const sp = widget.getWidgetSearchParameters!(
         new SearchParameters({
           disjunctiveFacets: ['categories'],
           disjunctiveFacetsRefinements: {
@@ -581,7 +438,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/configure/j
 
       refine({ analyticsTags: ['worst-site-now'] });
 
-      const sp = widget.getWidgetSearchParameters(new SearchParameters(), {
+      const sp = widget.getWidgetSearchParameters!(new SearchParameters(), {
         uiState: {},
       });
 
