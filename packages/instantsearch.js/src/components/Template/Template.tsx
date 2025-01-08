@@ -25,7 +25,6 @@ export type TemplateProps = {
 } & PreparedTemplateProps<Templates> &
   Readonly<typeof defaultProps>;
 
-// @TODO: Template should be a generic and receive TData to pass to Templates (to avoid TTemplateData to be set as `any`)
 class Template extends Component<TemplateProps> {
   public static readonly defaultProps = defaultProps;
 
