@@ -12,14 +12,14 @@ import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-
-import { connectHits, instantsearch, TAG_PLACEHOLDER } from '../..';
-import { createInstantSearch } from '../../../test/createInstantSearch';
+import { createInstantSearch } from 'instantsearch-core/test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+
+import { connectHits, instantsearch, TAG_PLACEHOLDER } from '../..';
 
 import type {
   EscapedHits,
@@ -638,85 +638,21 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
   });
 
   describe('dispose', () => {
-    it('calls the unmount function', () => {
-      const helper = algoliasearchHelper(createSearchClient(), '');
+    it('calls unmount function', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
 
-      const renderFn = () => {};
-      const unmountFn = jest.fn();
-      const makeWidget = connectHits(renderFn, unmountFn);
-      const widget = makeWidget({});
+      const widget = connectHits(render, unmount)({});
 
-      expect(unmountFn).toHaveBeenCalledTimes(0);
+      widget.dispose!(createDisposeOptions());
 
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
-
-      expect(unmountFn).toHaveBeenCalledTimes(1);
+      expect(unmount).toHaveBeenCalled();
     });
 
     it('does not throw without the unmount function', () => {
-      const helper = algoliasearchHelper(createSearchClient(), '');
-
-      const renderFn = () => {};
-      const makeWidget = connectHits(renderFn);
-      const widget = makeWidget({});
-
-      expect(() =>
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-      ).not.toThrow();
-    });
-
-    it('removes the TAG_PLACEHOLDER from the `SearchParameters`', () => {
-      const helper = algoliasearchHelper(createSearchClient(), '', {
-        ...TAG_PLACEHOLDER,
-      });
-
-      const renderFn = () => {};
-      const makeWidget = connectHits(renderFn);
-      const widget = makeWidget({});
-
-      expect(helper.state.highlightPreTag).toBe(
-        TAG_PLACEHOLDER.highlightPreTag
-      );
-
-      expect(helper.state.highlightPostTag).toBe(
-        TAG_PLACEHOLDER.highlightPostTag
-      );
-
-      const nextState = widget.dispose!(
-        createDisposeOptions({
-          helper,
-          state: helper.state,
-        })
-      );
-
-      expect((nextState as SearchParameters).highlightPreTag).toBeUndefined();
-      expect((nextState as SearchParameters).highlightPostTag).toBeUndefined();
-    });
-
-    it('does not remove the TAG_PLACEHOLDER from the `SearchParameters` with `escapeHTML` disabled', () => {
-      const helper = algoliasearchHelper(createSearchClient(), '', {
-        highlightPreTag: '<mark>',
-        highlightPostTag: '</mark>',
-      });
-
-      const renderFn = () => {};
-      const makeWidget = connectHits(renderFn);
-      const widget = makeWidget({
-        escapeHTML: false,
-      });
-
-      expect(helper.state.highlightPreTag).toBe('<mark>');
-      expect(helper.state.highlightPostTag).toBe('</mark>');
-
-      const nextState = widget.dispose!(
-        createDisposeOptions({
-          helper,
-          state: helper.state,
-        })
-      );
-
-      expect((nextState as SearchParameters).highlightPreTag).toBe('<mark>');
-      expect((nextState as SearchParameters).highlightPostTag).toBe('</mark>');
+      const render = () => {};
+      const widget = connectHits(render)({});
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
     });
   });
 

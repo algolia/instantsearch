@@ -200,9 +200,8 @@ export const connectNumericMenu: NumericMenuConnector =
           );
         },
 
-        dispose({ state }) {
+        dispose() {
           unmountFn();
-          return state.removeNumericRefinement(attribute);
         },
 
         getWidgetUiState(uiState, { searchParameters }) {

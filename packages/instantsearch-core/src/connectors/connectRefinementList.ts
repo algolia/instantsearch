@@ -456,17 +456,8 @@ export const connectRefinementList: RefinementListConnector =
           };
         },
 
-        dispose({ state }) {
+        dispose() {
           unmountFn();
-
-          const withoutMaxValuesPerFacet = state.setQueryParameter(
-            'maxValuesPerFacet',
-            undefined
-          );
-          if (operator === 'and') {
-            return withoutMaxValuesPerFacet.removeFacet(attribute);
-          }
-          return withoutMaxValuesPerFacet.removeDisjunctiveFacet(attribute);
         },
 
         getWidgetUiState(uiState, { searchParameters }) {

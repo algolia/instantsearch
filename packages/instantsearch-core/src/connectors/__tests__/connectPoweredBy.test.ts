@@ -2,15 +2,13 @@
  * @jest-environment jsdom
  */
 
-import { createSearchClient } from '@instantsearch/mocks';
-import jsHelper from 'algoliasearch-helper';
-
-import { connectPoweredBy } from '../..';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+
+import { connectPoweredBy } from '../..';
 
 describe('connectPoweredBy', () => {
   it('throws without rendering function', () => {
@@ -117,14 +115,23 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/powered-by/
     );
   });
 
-  it('does not throw without the unmount function', () => {
-    const rendering = () => {};
-    const makeWidget = connectPoweredBy(rendering);
-    const widget = makeWidget({});
-    const helper = jsHelper(createSearchClient(), '');
-    expect(() =>
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-    ).not.toThrow();
+  describe('dispose', () => {
+    it('calls unmount function', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const widget = connectPoweredBy(render, unmount)({});
+
+      widget.dispose!(createDisposeOptions());
+
+      expect(unmount).toHaveBeenCalled();
+    });
+
+    it('does not throw without the unmount function', () => {
+      const render = () => {};
+      const widget = connectPoweredBy(render)({});
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
+    });
   });
 
   describe('getWidgetRenderState', () => {
