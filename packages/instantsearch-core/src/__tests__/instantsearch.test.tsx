@@ -378,7 +378,7 @@ search.addWidgets([
 See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
   });
 
-  it("exposes helper's last results", async () => {
+  it("helper's results are null", async () => {
     const searchClient = createSearchClient();
 
     const search = new InstantSearch({
@@ -388,14 +388,13 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
 
     search.addWidgets([virtualSearchBox({})]);
 
-    expect(search.helper).toBe(null);
+    expect(search.mainHelper).toBe(null);
 
     search.start();
 
     await wait(0);
 
-    // could be null if we don't pretend the main helper is the one who searched
-    expect(search.helper!.lastResults).not.toBe(null);
+    expect(search.mainHelper!.lastResults).toBe(null);
   });
 
   describe('insights middleware', () => {
@@ -1240,7 +1239,7 @@ describe('dispose', () => {
     expect(onRender).toHaveBeenCalledTimes(2);
   });
 
-  it('removes the Helpers references', () => {
+  it('removes the helper references', () => {
     const search = new InstantSearch({
       indexName: 'indexName',
       searchClient: createSearchClient(),
@@ -1249,17 +1248,14 @@ describe('dispose', () => {
     search.start();
 
     expect(search.mainHelper).not.toBe(null);
-    expect(search.helper).not.toBe(null);
 
     search.dispose();
 
     expect(search.mainHelper).toBe(null);
-    expect(search.helper).toBe(null);
 
     search.start();
 
     expect(search.mainHelper).not.toBe(null);
-    expect(search.helper).not.toBe(null);
   });
 
   it("doesn't throw without starting", () => {

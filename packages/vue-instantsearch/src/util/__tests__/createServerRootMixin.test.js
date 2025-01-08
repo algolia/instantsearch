@@ -1052,14 +1052,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
         vm: { instantsearch },
       } = mount(app);
 
-      expect(instantsearch.helper).toBe(null);
       expect(instantsearch.mainHelper).toBe(null);
 
       instantsearch.hydrate({
         hello: serialized,
       });
 
-      expect(instantsearch.helper).toEqual(expect.any(AlgoliaSearchHelper));
       expect(instantsearch.mainHelper).toEqual(expect.any(AlgoliaSearchHelper));
     });
   });

@@ -205,7 +205,7 @@ describe('menuSelect', () => {
 
       search.start();
 
-      expect(search.helper!.state).toEqual(
+      expect(search.mainHelper!.state).toEqual(
         new SearchParameters({
           index: 'test',
         })
@@ -215,7 +215,7 @@ describe('menuSelect', () => {
 
       await wait(0);
 
-      expect(search.helper!.state).toEqual(
+      expect(search.mainIndex.getHelper()!.state).toEqual(
         new SearchParameters({
           index: 'test',
           hierarchicalFacets: [{ attributes: ['test'], name: 'test' }],
@@ -230,7 +230,7 @@ describe('menuSelect', () => {
 
       expect(render).toHaveBeenCalledTimes(2);
       expect(render).toHaveBeenLastCalledWith(null, container);
-      expect(search.helper!.state).toEqual(
+      expect(search.mainHelper!.state).toEqual(
         new SearchParameters({ index: 'test' })
       );
     });

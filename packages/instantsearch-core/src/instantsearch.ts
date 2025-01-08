@@ -64,7 +64,6 @@ export class InstantSearch<
   indexName: string;
   onStateChange: InstantSearchOptions<TUiState>['onStateChange'] | null = null;
   future: NonNullable<InstantSearchOptions<TUiState>['future']>;
-  helper: AlgoliaSearchHelper | null;
   mainHelper: AlgoliaSearchHelper | null;
   mainIndex: IndexWidget;
   started: boolean;
@@ -149,7 +148,6 @@ See ${createDocumentationLink({
     this.client = searchClient;
     this.future = future;
     this.indexName = indexName;
-    this.helper = null;
     this.mainHelper = null;
     this.mainIndex = index({
       indexName,
@@ -387,10 +385,6 @@ See ${createDocumentationLink({
       this.scheduleSearch();
     }
 
-    // Keep the previous reference for legacy purpose, some pattern use
-    // the direct Helper access `search.helper` (e.g multi-index).
-    this.helper = this.mainIndex.getHelper();
-
     // track we started the search if we add more widgets,
     // to init them directly after add
     this.started = true;
@@ -437,7 +431,6 @@ See ${createDocumentationLink({
     this.removeAllListeners();
     this.mainHelper?.removeAllListeners();
     this.mainHelper = null;
-    this.helper = null;
 
     this.middleware.forEach(({ instance }) => {
       instance.unsubscribe();

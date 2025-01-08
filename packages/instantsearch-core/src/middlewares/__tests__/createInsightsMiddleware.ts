@@ -475,7 +475,7 @@ describe('insights', () => {
         })
       );
       expect(
-        instantSearchInstance.helper!.state.clickAnalytics
+        instantSearchInstance.mainHelper!.state.clickAnalytics
       ).toBeUndefined();
     });
 
@@ -1566,7 +1566,7 @@ describe('insights', () => {
     await wait(0);
 
     instantSearchInstance
-      .helper!.setState({
+      .mainHelper!.setState({
         ...instantSearchInstance.mainHelper!.state,
         query: 'test',
       })

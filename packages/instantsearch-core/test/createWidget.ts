@@ -18,7 +18,7 @@ export const createInitOptions = (
   args: Partial<InitOptions> = {}
 ): InitOptions => {
   const { instantSearchInstance = createInstantSearch(), ...rest } = args;
-  const helper = args.helper || instantSearchInstance.helper!;
+  const helper = args.helper || instantSearchInstance.mainHelper!;
 
   return {
     instantSearchInstance,
@@ -53,9 +53,9 @@ export const createRenderOptions = (
 ): RenderOptions => {
   const { instantSearchInstance = createInstantSearch(), ...rest } = args;
   const response = createMultiSearchResponse();
-  const helper = args.helper || instantSearchInstance.helper!;
+  const helper = args.helper || instantSearchInstance.mainHelper!;
   const results = new algoliasearchHelper.SearchResults(
-    instantSearchInstance.helper!.state,
+    helper.state,
     response.results as Array<SearchResponse<any>>
   );
 

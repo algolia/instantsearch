@@ -1,9 +1,6 @@
 <template>
   <div v-if="state" :class="suit()">
-    <slot
-      v-bind="state"
-      :results="state.instantSearchInstance.helper.lastResults"
-    >
+    <slot v-bind="state">
       <!-- prettier-ignore -->
       <span :class="suit('text')"
         ><template v-if="state.areHitsSorted"
