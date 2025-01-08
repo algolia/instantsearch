@@ -570,7 +570,7 @@ declare namespace algoliasearchHelper {
     removeNumericRefinement(
       attribute: string,
       operator?: string,
-      value?: string
+      value?: number
     ): SearchParameters;
     removeTagRefinement(tag: string): SearchParameters;
     resetPage(): SearchParameters;
