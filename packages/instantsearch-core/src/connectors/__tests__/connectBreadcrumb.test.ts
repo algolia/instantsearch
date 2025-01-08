@@ -6,13 +6,13 @@ import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-
-import { connectBreadcrumb, warnCache } from '../..';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+
+import { connectBreadcrumb, warnCache } from '../..';
 
 describe('connectBreadcrumb', () => {
   describe('Usage', () => {
@@ -1243,42 +1243,24 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
   });
 
   describe('dispose', () => {
-    it('does not throw without the unmount function', () => {
-      const helper = algoliasearchHelper(createSearchClient(), '');
+    it('calls unmount function', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
 
-      const renderFn = () => {};
-      const makeWidget = connectBreadcrumb(renderFn);
-      const widget = makeWidget({ attributes: ['category'] });
+      const widget = connectBreadcrumb(
+        render,
+        unmount
+      )({ attributes: ['cat'] });
 
-      expect(() =>
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-      ).not.toThrow();
+      widget.dispose!(createDisposeOptions());
+
+      expect(unmount).toHaveBeenCalled();
     });
 
-    it('does not remove refinement', () => {
-      const renderFn = () => {};
-      const makeWidget = connectBreadcrumb(renderFn);
-      const widget = makeWidget({ attributes: ['category'] });
-
-      const helper = algoliasearchHelper(createSearchClient(), '', {
-        hierarchicalFacetsRefinements: {
-          category: ['boxes'],
-        },
-      });
-      helper.search = jest.fn();
-
-      widget.init!(
-        createInitOptions({
-          helper,
-          state: helper.state,
-        })
-      );
-
-      const newState = widget.dispose!(
-        createDisposeOptions({ helper, state: helper.state })
-      );
-
-      expect(newState).toBeUndefined();
+    it('does not throw without the unmount function', () => {
+      const render = () => {};
+      const widget = connectBreadcrumb(render)({ attributes: ['cat'] });
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
     });
   });
 });

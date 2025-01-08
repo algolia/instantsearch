@@ -438,44 +438,33 @@ export const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       });
 
       if (localInstantSearchInstance && Boolean(widgets.length)) {
-        const { cleanedRecommendState } = widgets.reduce(
-          (states, widget) => {
-            // @MAJOR remove the "cleanup" part of the dispose method
-            // the `dispose` method exists at this point we already assert it
-            const next = widget.dispose!({
-              helper: helper!,
-              state: states.cleanedSearchState,
-              recommendState: states.cleanedRecommendState,
-              parent: this,
-            });
+        widgets.forEach((widget) =>
+          widget.dispose!({
+            parent: this,
+          })
+        );
 
-            if (next instanceof algoliasearchHelper.RecommendParameters) {
-              states.cleanedRecommendState = next;
-            } else if (next) {
-              states.cleanedSearchState = next;
-            }
-
-            return states;
-          },
+        helper!.setState(
+          getLocalWidgetsSearchParameters(localWidgets, {
+            uiState: localUiState,
+            initialSearchParameters: new algoliasearchHelper.SearchParameters({
+              index: this.getIndexName(),
+            }),
+          })
+        );
+        helper!.recommendState = getLocalWidgetsRecommendParameters(
+          localWidgets,
           {
-            cleanedSearchState: helper!.state,
-            cleanedRecommendState: helper!.recommendState,
+            uiState: localUiState,
+            initialRecommendParameters:
+              new algoliasearchHelper.RecommendParameters(),
           }
         );
 
-        const newState = getLocalWidgetsSearchParameters(localWidgets, {
-          uiState: localUiState,
-          initialSearchParameters: new algoliasearchHelper.SearchParameters({
-            index: this.getIndexName(),
-          }),
-        });
         localUiState = getLocalWidgetsUiState(localWidgets, {
-          searchParameters: newState,
+          searchParameters: helper!.state,
           helper: helper!,
         });
-
-        helper!.setState(newState);
-        helper!.recommendState = cleanedRecommendState;
 
         if (localWidgets.length) {
           localInstantSearchInstance.scheduleSearch();
@@ -791,9 +780,6 @@ export const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           // because we want to keep the widgets on the instance, to allow idempotent
           // operations on `add` & `remove`.
           widget.dispose({
-            helper,
-            state: helper.state,
-            recommendState: helper.recommendState,
             parent: this,
           });
         }

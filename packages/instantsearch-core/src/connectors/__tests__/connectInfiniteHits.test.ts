@@ -9,14 +9,14 @@ import {
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
-
-import { connectInfiniteHits, instantsearch, TAG_PLACEHOLDER } from '../..';
-import { createInstantSearch } from '../../../test/createInstantSearch';
+import { createInstantSearch } from 'instantsearch-core/test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+
+import { connectInfiniteHits, instantsearch, TAG_PLACEHOLDER } from '../..';
 import { createInfiniteHitsSessionStorageCache } from '../../lib/infiniteHitsCache';
 
 import type {
@@ -26,7 +26,6 @@ import type {
   EscapedHits,
   SearchResponse,
 } from '../../types';
-import type { SearchParameters } from 'algoliasearch-helper';
 
 jest.mock('../../lib/utils/addAbsolutePosition', () => ({
   // The real implementation creates a new array instance, which can cause bugs,
@@ -1127,106 +1126,21 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
   });
 
   describe('dispose', () => {
-    it('calls the unmount function', () => {
-      const helper = algoliasearchHelper({} as SearchClient, '', {});
+    it('calls unmount function', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
 
-      const renderFn = (): void => {};
-      const unmountFn = jest.fn();
-      const makeWidget = connectInfiniteHits(renderFn, unmountFn);
-      const widget = makeWidget({});
+      const widget = connectInfiniteHits(render, unmount)({});
 
-      expect(unmountFn).toHaveBeenCalledTimes(0);
+      widget.dispose!(createDisposeOptions());
 
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
-
-      expect(unmountFn).toHaveBeenCalledTimes(1);
+      expect(unmount).toHaveBeenCalled();
     });
 
     it('does not throw without the unmount function', () => {
-      const helper = algoliasearchHelper({} as SearchClient, '', {});
-
-      const renderFn = (): void => {};
-      const makeWidget = connectInfiniteHits(renderFn);
-      const widget = makeWidget({});
-
-      expect(() =>
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-      ).not.toThrow();
-    });
-
-    it('removes the TAG_PLACEHOLDER from the `SearchParameters`', () => {
-      const helper = algoliasearchHelper({} as SearchClient, '', {
-        ...TAG_PLACEHOLDER,
-      });
-
-      const renderFn = (): void => {};
-      const makeWidget = connectInfiniteHits(renderFn);
-      const widget = makeWidget({});
-
-      expect(helper.state.highlightPreTag).toBe(
-        TAG_PLACEHOLDER.highlightPreTag
-      );
-
-      expect(helper.state.highlightPostTag).toBe(
-        TAG_PLACEHOLDER.highlightPostTag
-      );
-
-      const nextState = widget.dispose!(
-        createDisposeOptions({
-          helper,
-          state: helper.state,
-        })
-      );
-
-      expect((nextState as SearchParameters).highlightPreTag).toBeUndefined();
-      expect((nextState as SearchParameters).highlightPostTag).toBeUndefined();
-    });
-
-    it('does not remove the TAG_PLACEHOLDER from the `SearchParameters` with `escapeHTML` disabled', () => {
-      const helper = algoliasearchHelper({} as SearchClient, '', {
-        highlightPreTag: '<mark>',
-        highlightPostTag: '</mark>',
-      });
-
-      const renderFn = (): void => {};
-      const makeWidget = connectInfiniteHits(renderFn);
-      const widget = makeWidget({
-        escapeHTML: false,
-      });
-
-      expect(helper.state.highlightPreTag).toBe('<mark>');
-      expect(helper.state.highlightPostTag).toBe('</mark>');
-
-      const nextState = widget.dispose!(
-        createDisposeOptions({
-          helper,
-          state: helper.state,
-        })
-      );
-
-      expect((nextState as SearchParameters).highlightPreTag).toBe('<mark>');
-      expect((nextState as SearchParameters).highlightPostTag).toBe('</mark>');
-    });
-
-    it('removes the `page` from the `SearchParameters`', () => {
-      const helper = algoliasearchHelper({} as SearchClient, '', {
-        page: 5,
-      });
-
-      const renderFn = (): void => {};
-      const makeWidget = connectInfiniteHits(renderFn);
-      const widget = makeWidget({});
-
-      expect(helper.state.page).toBe(5);
-
-      const nextState = widget.dispose!(
-        createDisposeOptions({
-          helper,
-          state: helper.state,
-        })
-      );
-
-      expect((nextState as SearchParameters).page).toBeUndefined();
+      const render = () => {};
+      const widget = connectInfiniteHits(render)({});
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
     });
   });
 

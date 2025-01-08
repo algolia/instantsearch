@@ -1,6 +1,5 @@
 import type {
   AutocompleteWidgetDescription,
-  ConfigureWidgetDescription,
   GeoSearchWidgetDescription,
   HierarchicalMenuWidgetDescription,
   HitsPerPageWidgetDescription,
@@ -19,7 +18,6 @@ import type {
 } from '../connectors';
 
 type ConnectorUiStates = AutocompleteWidgetDescription['indexUiState'] &
-  ConfigureWidgetDescription['indexUiState'] &
   GeoSearchWidgetDescription['indexUiState'] &
   HierarchicalMenuWidgetDescription['indexUiState'] &
   HitsPerPageWidgetDescription['indexUiState'] &

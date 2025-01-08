@@ -211,9 +211,8 @@ export const connectLookingSimilar = function connectLookingSimilar<
         };
       },
 
-      dispose({ recommendState }) {
+      dispose() {
         unmountFn();
-        return recommendState.removeParams(this.$$id!);
       },
 
       getWidgetParameters(state) {

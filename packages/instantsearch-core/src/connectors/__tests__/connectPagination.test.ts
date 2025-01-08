@@ -6,13 +6,13 @@ import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-
-import { connectPagination } from '../..';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+
+import { connectPagination } from '../..';
 
 import type {
   PaginationConnectorParams,
@@ -303,54 +303,21 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/pagination/
   });
 
   describe('dispose', () => {
-    it('calls the unmount function', () => {
-      const helper = algoliasearchHelper(createSearchClient(), '');
+    it('calls unmount function', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
 
-      const renderFn = () => {};
-      const unmountFn = jest.fn();
-      const makeWidget = connectPagination(renderFn, unmountFn);
-      const widget = makeWidget({});
+      const widget = connectPagination(render, unmount)({});
 
-      expect(unmountFn).toHaveBeenCalledTimes(0);
+      widget.dispose!(createDisposeOptions());
 
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
-
-      expect(unmountFn).toHaveBeenCalledTimes(1);
+      expect(unmount).toHaveBeenCalled();
     });
 
     it('does not throw without the unmount function', () => {
-      const helper = algoliasearchHelper(createSearchClient(), '');
-
-      const renderFn = () => {};
-      const makeWidget = connectPagination(renderFn);
-      const widget = makeWidget({});
-
-      expect(() =>
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-      ).not.toThrow();
-    });
-
-    it('removes the `page` from the `SearchParameters`', () => {
-      const helper = algoliasearchHelper(createSearchClient(), '', {
-        page: 5,
-      });
-
-      const renderFn = () => {};
-      const makeWidget = connectPagination(renderFn);
-      const widget = makeWidget({});
-
-      expect(helper.state.page).toBe(5);
-
-      const nextState = widget.dispose!(
-        createDisposeOptions({ helper, state: helper.state })
-      );
-
-      // error used for typescript
-      if (!nextState) {
-        throw new Error('expect state to be returned');
-      }
-
-      expect((nextState as SearchParameters).page).toBeUndefined();
+      const render = () => {};
+      const widget = connectPagination(render)({});
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
     });
   });
 

@@ -87,10 +87,6 @@ const stateToWidgetsMap: StateToWidgets = {
     connectors: ['connectHitsPerPage'],
     widgets: ['ais.hitsPerPage'],
   },
-  configure: {
-    connectors: ['connectConfigure'],
-    widgets: ['ais.configure'],
-  },
 };
 
 type CheckIndexUiStateParams = {

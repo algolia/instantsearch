@@ -6,14 +6,14 @@ import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-
-import { connectHierarchicalMenu, warnCache } from '../..';
-import { createInstantSearch } from '../../../test/createInstantSearch';
+import { createInstantSearch } from 'instantsearch-core/test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+
+import { connectHierarchicalMenu, warnCache } from '../..';
 
 describe('connectHierarchicalMenu', () => {
   describe('Usage', () => {
@@ -513,78 +513,24 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
   });
 
   describe('dispose', () => {
+    it('calls unmount function', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const widget = connectHierarchicalMenu(
+        render,
+        unmount
+      )({ attributes: ['cat'] });
+
+      widget.dispose!(createDisposeOptions());
+
+      expect(unmount).toHaveBeenCalled();
+    });
+
     it('does not throw without the unmount function', () => {
-      const rendering = jest.fn();
-      const makeWidget = connectHierarchicalMenu(rendering);
-      const widget = makeWidget({
-        attributes: ['category'],
-      });
-      const helper = algoliasearchHelper(
-        createSearchClient(),
-        '',
-        widget.getWidgetSearchParameters(new SearchParameters(), {
-          uiState: {},
-        })
-      );
-      expect(() =>
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-      ).not.toThrow();
-    });
-
-    it('unsets maxValuesPerFacet fully', () => {
-      const rendering = jest.fn();
-      const makeWidget = connectHierarchicalMenu(rendering);
-      const indexName = '';
-      const widget = makeWidget({
-        attributes: ['category'],
-      });
-      const helper = algoliasearchHelper(
-        createSearchClient(),
-        indexName,
-        widget.getWidgetSearchParameters(new SearchParameters(), {
-          uiState: {},
-        })
-      );
-
-      expect(
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-      ).toEqual(new SearchParameters({ index: indexName }));
-    });
-
-    it('unsets refinement', () => {
-      const rendering = jest.fn();
-      const makeWidget = connectHierarchicalMenu(rendering);
-      const indexName = '';
-      const widget = makeWidget({
-        attributes: ['category'],
-      });
-      const helper = algoliasearchHelper(
-        createSearchClient(),
-        indexName,
-        widget.getWidgetSearchParameters(new SearchParameters(), {
-          uiState: {},
-        })
-      );
-      helper.search = jest.fn();
-
-      widget.init!(
-        createInitOptions({
-          helper,
-          state: helper.state,
-        })
-      );
-
-      const firstRenderingOptions = rendering.mock.calls[0][0];
-      const { refine } = firstRenderingOptions;
-      refine('zombo.com');
-
-      expect(helper.state.hierarchicalFacetsRefinements).toEqual({
-        category: ['zombo.com'],
-      });
-
-      expect(
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-      ).toEqual(new SearchParameters({ index: indexName }));
+      const render = () => {};
+      const widget = connectHierarchicalMenu(render)({ attributes: ['cat'] });
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
     });
   });
 

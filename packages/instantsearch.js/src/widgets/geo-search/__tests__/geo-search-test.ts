@@ -9,14 +9,13 @@ import {
 } from '@instantsearch/mocks';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
-import { render as preactRender } from 'preact';
-
-import { createInstantSearch } from '../../../../test/createInstantSearch';
+import { createInstantSearch } from 'instantsearch-core/test/createInstantSearch';
 import {
-  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+import { render as preactRender } from 'preact';
+
 import createHTMLMarker from '../createHTMLMarker';
 import geoSearch from '../geo-search';
 import originalRenderer from '../GeoSearchRenderer';
@@ -364,50 +363,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
         position: 'right:bottom',
       },
     });
-  });
-
-  it('expect to unmount', () => {
-    const container = createContainer();
-    const instantSearchInstance = createFakeInstantSearch();
-    const helper = createFakeHelper();
-    const googleReference = createFakeGoogleReference();
-
-    const widget = geoSearch({
-      googleReference,
-      container,
-    });
-
-    widget.init!(
-      createInitOptions({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      })
-    );
-
-    widget.render!(
-      createRenderOptions({
-        helper,
-        instantSearchInstance,
-        results: new SearchResults(helper.state, [
-          createSingleSearchResponse({
-            hits: [],
-          }),
-        ]),
-      })
-    );
-
-    expect(render).toHaveBeenCalledTimes(1);
-
-    widget.dispose!(
-      createDisposeOptions({
-        helper,
-        state: helper.state,
-      })
-    );
-
-    expect(render).toHaveBeenCalledTimes(2);
-    expect(render).toHaveBeenCalledWith(null, container);
   });
 
   describe('setup events', () => {

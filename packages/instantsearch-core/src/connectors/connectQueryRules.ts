@@ -158,8 +158,8 @@ export type QueryRulesConnector = Connector<
 >;
 
 export const connectQueryRules: QueryRulesConnector =
-  function connectQueryRules(render, unmount = noop) {
-    checkRendering(render, withUsage());
+  function connectQueryRules(renderFn, unmountFn = noop) {
+    checkRendering(renderFn, withUsage());
 
     return (widgetParams) => {
       const {
@@ -219,7 +219,7 @@ export const connectQueryRules: QueryRulesConnector =
             helper.on('change', onHelperChange);
           }
 
-          render(
+          renderFn(
             {
               ...this.getWidgetRenderState(initOptions),
               instantSearchInstance,
@@ -231,7 +231,7 @@ export const connectQueryRules: QueryRulesConnector =
         render(renderOptions) {
           const { instantSearchInstance } = renderOptions;
 
-          render(
+          renderFn(
             {
               ...this.getWidgetRenderState(renderOptions),
               instantSearchInstance,
@@ -257,16 +257,8 @@ export const connectQueryRules: QueryRulesConnector =
           };
         },
 
-        dispose({ helper, state }) {
-          unmount();
-
-          if (hasTrackedFilters) {
-            helper.removeListener('change', onHelperChange);
-
-            return state.setQueryParameter('ruleContexts', initialRuleContexts);
-          }
-
-          return state;
+        dispose() {
+          unmountFn();
         },
       };
     };

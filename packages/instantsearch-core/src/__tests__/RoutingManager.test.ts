@@ -4,6 +4,7 @@
 
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
+import { createWidget } from 'instantsearch-core/test/createWidget';
 import qs from 'qs';
 
 import {
@@ -12,7 +13,6 @@ import {
   connectHitsPerPage,
   connectSearchBox,
 } from '..';
-import { createWidget } from '../../test/createWidget';
 
 import type { Router, UiState, StateMapping, IndexUiState } from '../types';
 import type { JSDOM } from 'jsdom';

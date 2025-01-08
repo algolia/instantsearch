@@ -6,13 +6,13 @@ import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-
-import { connectSearchBox, instantsearch } from '../..';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+
+import { connectSearchBox, instantsearch } from '../..';
 
 describe('connectSearchBox', () => {
   const getInitializedWidget = (config = {}) => {
@@ -543,52 +543,21 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/search-box/
   });
 
   describe('dispose', () => {
-    it('calls the unmount function', () => {
-      const helper = algoliasearchHelper(createSearchClient(), '');
+    it('calls unmount function', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
 
-      const renderFn = () => {};
-      const unmountFn = jest.fn();
-      const makeWidget = connectSearchBox(renderFn, unmountFn);
-      const widget = makeWidget({});
+      const widget = connectSearchBox(render, unmount)({});
 
-      expect(unmountFn).toHaveBeenCalledTimes(0);
+      widget.dispose!(createDisposeOptions());
 
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
-
-      expect(unmountFn).toHaveBeenCalledTimes(1);
+      expect(unmount).toHaveBeenCalled();
     });
 
     it('does not throw without the unmount function', () => {
-      const helper = algoliasearchHelper(createSearchClient(), '');
-
-      const renderFn = () => {};
-      const makeWidget = connectSearchBox(renderFn);
-      const widget = makeWidget({});
-
-      expect(() =>
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-      ).not.toThrow();
-    });
-
-    it('removes the `query` from the `SearchParameters`', () => {
-      const helper = algoliasearchHelper(createSearchClient(), '', {
-        query: 'Apple',
-      });
-
-      const renderFn = () => {};
-      const makeWidget = connectSearchBox(renderFn);
-      const widget = makeWidget({});
-
-      expect(helper.state.query).toBe('Apple');
-
-      const nextState = widget.dispose!(
-        createDisposeOptions({
-          helper,
-          state: helper.state,
-        })
-      ) as SearchParameters;
-
-      expect(nextState.query).toBeUndefined();
+      const render = () => {};
+      const widget = connectSearchBox(render)({});
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
     });
   });
 

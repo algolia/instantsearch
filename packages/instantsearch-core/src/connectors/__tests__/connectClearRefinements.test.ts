@@ -3,13 +3,13 @@ import {
   createSearchClient,
 } from '@instantsearch/mocks';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
-
-import { connectClearRefinements } from '../..';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+
+import { connectClearRefinements } from '../..';
 
 describe('connectClearRefinements', () => {
   describe('Usage', () => {
@@ -123,15 +123,23 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
       expect(secondRenderingOptions.canRefine).toBe(false);
     });
 
-    it('does not throw without the unmount function', () => {
-      const helper = algoliasearchHelper(createSearchClient(), 'indexName');
-      const rendering = () => {};
-      const makeWidget = connectClearRefinements(rendering);
-      const widget = makeWidget({});
+    describe('dispose', () => {
+      it('calls unmount function', () => {
+        const render = jest.fn();
+        const unmount = jest.fn();
 
-      expect(() =>
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-      ).not.toThrow();
+        const widget = connectClearRefinements(render, unmount)({});
+
+        widget.dispose!(createDisposeOptions());
+
+        expect(unmount).toHaveBeenCalled();
+      });
+
+      it('does not throw without the unmount function', () => {
+        const render = () => {};
+        const widget = connectClearRefinements(render)({});
+        expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
+      });
     });
 
     describe('getRenderState', () => {

@@ -8,13 +8,13 @@ import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-
-import { connectAutocomplete, instantsearch, TAG_PLACEHOLDER } from '../..';
 import {
   createInitOptions,
   createRenderOptions,
   createDisposeOptions,
-} from '../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+
+import { connectAutocomplete, instantsearch, TAG_PLACEHOLDER } from '../..';
 
 import type { AutocompleteRenderState } from '../..';
 import type { SearchClient, SearchResponse } from '../../types';
@@ -336,112 +336,21 @@ search.addWidgets([
   });
 
   describe('dispose', () => {
-    it('calls the unmount function', () => {
-      const searchClient = createSearchClient();
-      const helper = algoliasearchHelper(searchClient, '');
-
+    it('calls unmount function', () => {
       const render = jest.fn();
       const unmount = jest.fn();
-      const makeWidget = connectAutocomplete(render, unmount);
-      const widget = makeWidget({});
 
-      widget.init!(createInitOptions({ helper }));
+      const widget = connectAutocomplete(render, unmount)({});
 
-      expect(unmount).toHaveBeenCalledTimes(0);
+      widget.dispose!(createDisposeOptions());
 
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
-
-      expect(unmount).toHaveBeenCalledTimes(1);
+      expect(unmount).toHaveBeenCalled();
     });
 
     it('does not throw without the unmount function', () => {
-      const searchClient = createSearchClient();
-      const helper = algoliasearchHelper(searchClient, '');
-
-      const render = jest.fn();
-      const makeWidget = connectAutocomplete(render);
-      const widget = makeWidget({});
-
-      widget.init!(createInitOptions({ helper }));
-
-      expect(() =>
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-      ).not.toThrow();
-    });
-
-    it('removes the `query` from the `SearchParameters`', () => {
-      const searchClient = createSearchClient();
-      const helper = algoliasearchHelper(searchClient, '', {
-        query: 'Apple',
-      });
-
-      const render = jest.fn();
-      const makeWidget = connectAutocomplete(render);
-      const widget = makeWidget({});
-
-      widget.init!(createInitOptions({ helper }));
-
-      expect(helper.state.query).toBe('Apple');
-
-      const nextState = widget.dispose!(
-        createDisposeOptions({ helper, state: helper.state })
-      ) as SearchParameters;
-
-      expect(nextState.query).toBeUndefined();
-    });
-
-    it('removes the TAG_PLACEHOLDER from the `SearchParameters`', () => {
-      const searchClient = createSearchClient();
-      const helper = algoliasearchHelper(searchClient, '', {
-        ...TAG_PLACEHOLDER,
-      });
-
-      const render = jest.fn();
-      const makeWidget = connectAutocomplete(render);
-      const widget = makeWidget({});
-
-      expect(helper.state.highlightPreTag).toBe(
-        TAG_PLACEHOLDER.highlightPreTag
-      );
-
-      expect(helper.state.highlightPostTag).toBe(
-        TAG_PLACEHOLDER.highlightPostTag
-      );
-
-      widget.init!(createInitOptions({ helper }));
-
-      const nextState = widget.dispose!(
-        createDisposeOptions({ helper, state: helper.state })
-      ) as SearchParameters;
-
-      expect(nextState.highlightPreTag).toBeUndefined();
-      expect(nextState.highlightPostTag).toBeUndefined();
-    });
-
-    it('does not remove the TAG_PLACEHOLDER from the `SearchParameters` with `escapeHTML` disabled', () => {
-      const searchClient = createSearchClient();
-      const helper = algoliasearchHelper(searchClient, '', {
-        highlightPreTag: '<mark>',
-        highlightPostTag: '</mark>',
-      });
-
-      const render = jest.fn();
-      const makeWidget = connectAutocomplete(render);
-      const widget = makeWidget({
-        escapeHTML: false,
-      });
-
-      expect(helper.state.highlightPreTag).toBe('<mark>');
-      expect(helper.state.highlightPostTag).toBe('</mark>');
-
-      widget.init!(createInitOptions({ helper }));
-
-      const nextState = widget.dispose!(
-        createDisposeOptions({ helper, state: helper.state })
-      ) as SearchParameters;
-
-      expect(nextState.highlightPreTag).toBe('<mark>');
-      expect(nextState.highlightPostTag).toBe('</mark>');
+      const render = () => {};
+      const widget = connectAutocomplete(render)({});
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
     });
   });
 

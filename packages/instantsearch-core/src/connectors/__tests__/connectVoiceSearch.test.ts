@@ -1,12 +1,13 @@
 import { createSearchClient } from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils';
 import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
-
-import { connectVoiceSearch } from '../..';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+
+import { connectSearchBox, connectVoiceSearch, instantsearch } from '../..';
 
 import type {
   VoiceSearchHelperParams,
@@ -185,30 +186,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
   });
 
   describe('dispose', () => {
-    it('calls the unmount function', () => {
-      const helper = algoliasearchHelper(createSearchClient(), '');
+    it('calls unmount function', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
 
-      const renderFn = () => {};
-      const unmountFn = jest.fn();
-      const makeWidget = connectVoiceSearch(renderFn, unmountFn);
-      const widget = makeWidget({});
+      const widget = connectVoiceSearch(render, unmount)({});
 
-      widget.init!(createInitOptions({ helper }));
+      widget.dispose!(createDisposeOptions());
 
-      expect(unmountFn).toHaveBeenCalledTimes(0);
-
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
-
-      expect(unmountFn).toHaveBeenCalledTimes(1);
+      expect(unmount).toHaveBeenCalled();
     });
 
     it('does not throw without the unmount function', () => {
-      const renderFn = () => {};
-      const makeWidget = connectVoiceSearch(renderFn);
-      const widget = makeWidget({});
-
-      widget.init!(createInitOptions());
-
+      const render = () => {};
+      const widget = connectVoiceSearch(render)({});
       expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
     });
 
@@ -225,31 +216,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
         0
       );
 
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
+      widget.dispose!(createDisposeOptions({}));
 
       expect((widget as any)._voiceSearchHelper.dispose).toHaveBeenCalledTimes(
         1
       );
-    });
-
-    it('removes the `query` from the `SearchParameters`', () => {
-      const helper = algoliasearchHelper(createSearchClient(), '', {
-        query: 'Apple',
-      });
-
-      const renderFn = () => {};
-      const makeWidget = connectVoiceSearch(renderFn);
-      const widget = makeWidget({});
-
-      widget.init!(createInitOptions({ helper }));
-
-      expect(helper.state.query).toBe('Apple');
-
-      const nextState = widget.dispose!(
-        createDisposeOptions({ helper, state: helper.state })
-      ) as SearchParameters;
-
-      expect(nextState.query).toBeUndefined();
     });
   });
 
@@ -527,51 +498,68 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/voice-searc
         })
       );
     });
+  });
 
-    it('removes additional parameters when disposed', () => {
-      const { widget, helper, refine } = getInitializedWidget({
-        widgetParams: {
-          additionalQueryParameters: () => {},
-        },
+  describe('interaction with searchbox', () => {
+    it('sets voice parameters only for voice queries', async () => {
+      const searchClient = createSearchClient();
+      const search = instantsearch({ searchClient, indexName: 'indexName' });
+      search.start();
+
+      const voice = connectVoiceSearch(() => {})({
+        additionalQueryParameters: () => ({ exactOnSingleWordQuery: 'word' }),
       });
+      const searchBox = connectSearchBox(() => {})({});
+      search.addWidgets([voice, searchBox]);
 
-      refine('query');
-      const newState = widget.dispose!(
-        createDisposeOptions({ state: helper.state })
-      );
-      expect(newState).toEqual(
-        new SearchParameters({
-          ignorePlurals: undefined,
-          removeStopWords: undefined,
-          optionalWords: undefined,
-          queryLanguages: undefined,
-          index: '',
-        })
-      );
-    });
-
-    it('removes additional parameters and extra parameters when disposed', () => {
-      const { widget, helper, refine } = getInitializedWidget({
-        widgetParams: {
-          additionalQueryParameters: () => ({
-            distinct: true,
-          }),
+      await wait(100);
+      expect(search.client.search).toHaveBeenCalledTimes(1);
+      expect(search.client.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'indexName',
+          params: { query: '' },
         },
-      });
+      ]);
 
-      refine('query');
-      const newState = widget.dispose!(
-        createDisposeOptions({ state: helper.state })
-      );
-      expect(newState).toEqual(
-        new SearchParameters({
-          ignorePlurals: undefined,
-          removeStopWords: undefined,
-          optionalWords: undefined,
-          queryLanguages: undefined,
-          index: '',
-        })
-      );
+      search.renderState.indexName.searchBox?.refine('query');
+
+      await wait(100);
+      expect(search.client.search).toHaveBeenCalledTimes(2);
+      expect(search.client.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'indexName',
+          params: { query: 'query' },
+        },
+      ]);
+
+      // not testing the browser API here
+      (voice as any)._refine('voice query');
+
+      await wait(100);
+      expect(search.client.search).toHaveBeenCalledTimes(3);
+      expect(search.client.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'indexName',
+          params: {
+            query: 'voice query',
+            ignorePlurals: true,
+            removeStopWords: true,
+            optionalWords: 'voice query',
+            exactOnSingleWordQuery: 'word',
+          },
+        },
+      ]);
+
+      search.removeWidgets([voice]);
+
+      await wait(100);
+      expect(search.client.search).toHaveBeenCalledTimes(4);
+      expect(search.client.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'indexName',
+          params: { query: 'voice query' },
+        },
+      ]);
     });
   });
 });

@@ -211,9 +211,8 @@ export const connectFrequentlyBoughtTogether =
           };
         },
 
-        dispose({ recommendState }) {
+        dispose() {
           unmountFn();
-          return recommendState.removeParams(this.$$id!);
         },
 
         getWidgetParameters(state) {

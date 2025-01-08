@@ -9,6 +9,11 @@ import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
+import {
+  createDisposeOptions,
+  createInitOptions,
+  createRenderOptions,
+} from 'instantsearch-core/test/createWidget';
 
 import {
   connectHierarchicalMenu,
@@ -17,11 +22,6 @@ import {
   connectDynamicWidgets,
   index,
 } from '../..';
-import {
-  createDisposeOptions,
-  createInitOptions,
-  createRenderOptions,
-} from '../../../test/createWidget';
 
 import type { SearchResponse } from '../../types';
 import type { DynamicWidgetsConnectorParams } from '../connectDynamicWidgets';

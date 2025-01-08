@@ -186,22 +186,8 @@ export const connectHits = function connectHits<TWidgetParams>(
         };
       },
 
-      dispose({ state }) {
+      dispose() {
         unmountFn();
-
-        if (!escapeHTML) {
-          return state;
-        }
-
-        return state.setQueryParameters(
-          Object.keys(TAG_PLACEHOLDER).reduce(
-            (acc, key) => ({
-              ...acc,
-              [key]: undefined,
-            }),
-            {}
-          )
-        );
       },
 
       getWidgetSearchParameters(state, _uiState) {

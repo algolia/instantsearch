@@ -10,13 +10,13 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-
-import { connectNumericMenu } from '../..';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+
+import { connectNumericMenu } from '../..';
 
 import type {
   NumericMenuConnectorParamsItem,
@@ -828,26 +828,40 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     expect(helper.state.page).toBeUndefined();
   });
 
-  it('does not throw without the unmount function', () => {
-    const rendering = () => {};
-    const makeWidget = connectNumericMenu(rendering);
+  describe('dispose', () => {
+    it('calls unmount function', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
 
-    const widget = makeWidget({
-      attribute: 'numerics',
-      items: [
-        { label: 'below 10', end: 10 },
-        { label: '10 - 20', start: 10, end: 20 },
-        { label: 'more than 20', start: 20 },
-        { label: '42', start: 42, end: 42 },
-        { label: 'void' },
-      ],
+      const widget = connectNumericMenu(
+        render,
+        unmount
+      )({
+        attribute: 'a',
+        items: [
+          { label: 'below 10', end: 10 },
+          { label: '10 - 20', start: 10, end: 20 },
+          { label: 'more than 20', start: 20 },
+        ],
+      });
+
+      widget.dispose!(createDisposeOptions());
+
+      expect(unmount).toHaveBeenCalled();
     });
 
-    const helper = jsHelper(createSearchClient(), '');
-
-    expect(() =>
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-    ).not.toThrow();
+    it('does not throw without the unmount function', () => {
+      const render = () => {};
+      const widget = connectNumericMenu(render)({
+        attribute: 'a',
+        items: [
+          { label: 'below 10', end: 10 },
+          { label: '10 - 20', start: 10, end: 20 },
+          { label: 'more than 20', start: 20 },
+        ],
+      });
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
+    });
   });
 
   describe('getWidgetUiState', () => {

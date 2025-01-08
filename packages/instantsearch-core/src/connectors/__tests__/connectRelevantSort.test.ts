@@ -6,13 +6,13 @@ import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-
-import { connectRelevantSort, noop } from '../..';
 import {
   createInitOptions,
   createRenderOptions,
   createDisposeOptions,
-} from '../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+
+import { connectRelevantSort, noop } from '../..';
 
 const createHelper = () => {
   return algoliasearchHelper(createSearchClient(), '', {});
@@ -36,27 +36,23 @@ describe('connectRelevantSort', () => {
     );
   });
 
-  it('dispose relevancyStrictness set by the widget', () => {
-    const helper = createHelper();
-    const makeWidget = connectRelevantSort(noop);
-    const widget = makeWidget({});
-    widget.init!(createInitOptions({ helper }));
-    const { refine } = widget.getWidgetRenderState(
-      createRenderOptions({
-        helper,
-      })
-    );
-    refine(10);
-    expect(
-      widget.getWidgetSearchParameters(helper.state, {
-        uiState: {},
-      }).relevancyStrictness
-    ).toEqual(10);
+  describe('dispose', () => {
+    it('calls unmount function', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
 
-    const nextState = widget.dispose!(
-      createDisposeOptions({ state: helper.state })
-    ) as SearchParameters;
-    expect(nextState.relevancyStrictness).toBeUndefined();
+      const widget = connectRelevantSort(render, unmount)({});
+
+      widget.dispose!(createDisposeOptions());
+
+      expect(unmount).toHaveBeenCalled();
+    });
+
+    it('does not throw without the unmount function', () => {
+      const render = () => {};
+      const widget = connectRelevantSort(render)({});
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
+    });
   });
 
   it('apply relevancyStrictness to helper on refine()', () => {

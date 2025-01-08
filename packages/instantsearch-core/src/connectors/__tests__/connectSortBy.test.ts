@@ -6,14 +6,14 @@ import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-
-import { connectSortBy, index } from '../..';
-import { createInstantSearch } from '../../../test/createInstantSearch';
+import { createInstantSearch } from 'instantsearch-core/test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+
+import { connectSortBy, index } from '../..';
 
 import type { SortByRenderState } from '../connectSortBy';
 
@@ -137,19 +137,40 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
     );
   });
 
-  it('does not throw without the unmount function', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectSortBy(rendering);
-    const items = [
-      { label: 'Sort products by relevance', value: 'relevance' },
-      { label: 'Sort products by price', value: 'priceASC' },
-    ];
-    const widget = makeWidget({ items });
-    const helper = algoliasearchHelper(createSearchClient(), items[0].value);
+  describe('dispose', () => {
+    it('calls unmount function', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
 
-    expect(() =>
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-    ).not.toThrow();
+      const widget = connectSortBy(
+        render,
+        unmount
+      )({
+        items: [
+          {
+            label: 'Sort products by relevance',
+            value: 'relevance',
+          },
+        ],
+      });
+
+      widget.dispose!(createDisposeOptions());
+
+      expect(unmount).toHaveBeenCalled();
+    });
+
+    it('does not throw without the unmount function', () => {
+      const render = () => {};
+      const widget = connectSortBy(render)({
+        items: [
+          {
+            label: 'Sort products by relevance',
+            value: 'relevance',
+          },
+        ],
+      });
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
+    });
   });
 
   it('Renders with transformed items', () => {

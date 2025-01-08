@@ -11,12 +11,12 @@ import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { render as preactRender } from 'preact';
-
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+import { render as preactRender } from 'preact';
+
 import voiceSearch from '../voice-search';
 
 import type { VoiceSearchProps } from '../../../components/VoiceSearch/VoiceSearch';

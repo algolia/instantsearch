@@ -1,7 +1,7 @@
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import algoliasearchHelper from 'algoliasearch-helper';
+import { createInstantSearch } from 'instantsearch-core/test/createInstantSearch';
 
-import { createInstantSearch } from '../../../../test/createInstantSearch';
 import { isFacetRefined } from '../../public/isFacetRefined';
 import { createSendEventForFacet } from '../createSendEventForFacet';
 

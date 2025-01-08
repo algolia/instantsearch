@@ -382,10 +382,8 @@ export const connectGeoSearch = function connectGeoSearch<
         };
       },
 
-      dispose({ state }) {
+      dispose() {
         unmountFn();
-
-        return state.setQueryParameter('insideBoundingBox', undefined);
       },
 
       getWidgetUiState(uiState, { searchParameters }) {

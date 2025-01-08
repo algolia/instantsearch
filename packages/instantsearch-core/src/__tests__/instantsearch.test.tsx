@@ -12,6 +12,10 @@ import {
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import { wait } from '@instantsearch/testutils/wait';
 import originalHelper from 'algoliasearch-helper';
+import {
+  createRenderOptions,
+  createWidget,
+} from 'instantsearch-core/test/createWidget';
 import { h, render, createRef } from 'preact';
 
 import {
@@ -21,7 +25,6 @@ import {
   connectSearchBox,
   connectPagination,
 } from '..';
-import { createRenderOptions, createWidget } from '../../test/createWidget';
 import version from '../version';
 
 import type {

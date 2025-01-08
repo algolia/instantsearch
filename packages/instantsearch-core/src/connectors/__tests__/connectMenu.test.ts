@@ -6,14 +6,14 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-
-import { connectMenu, warnCache } from '../..';
-import { createInstantSearch } from '../../../test/createInstantSearch';
+import { createInstantSearch } from 'instantsearch-core/test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+
+import { connectMenu, warnCache } from '../..';
 
 import type { MenuRenderState, MenuConnector } from '../..';
 
@@ -576,20 +576,23 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
     );
   });
 
-  it('does not throw without the unmount function', () => {
-    const widget = connectMenu(() => {})({
-      attribute: 'category',
+  describe('dispose', () => {
+    it('calls unmount function', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const widget = connectMenu(render, unmount)({ attribute: 's' });
+
+      widget.dispose!(createDisposeOptions());
+
+      expect(unmount).toHaveBeenCalled();
     });
-    const helper = jsHelper(
-      createSearchClient(),
-      '',
-      widget.getWidgetSearchParameters(new SearchParameters(), {
-        uiState: {},
-      })
-    );
-    expect(() =>
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-    ).not.toThrow();
+
+    it('does not throw without the unmount function', () => {
+      const render = () => {};
+      const widget = connectMenu(render)({ attribute: 's' });
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
+    });
   });
 
   describe('getRenderState', () => {
@@ -1452,171 +1455,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/menu/js/#co
           expect(searchParams.hierarchicalFacets).toHaveLength(0);
         }).toWarnDev();
       });
-    });
-  });
-
-  describe('dispose', () => {
-    it('removes hierarchical refinements', () => {
-      const widget = makeWidget({
-        attribute: 'myFacet',
-        limit: 10,
-        showMore: true,
-      });
-      const indexName = 'instant_search';
-
-      const helper = jsHelper(
-        createSearchClient(),
-        indexName,
-        widget.getWidgetSearchParameters(new SearchParameters(), {
-          uiState: {},
-        })
-      );
-      helper.search = jest.fn();
-
-      expect(helper.state).toEqual(
-        new SearchParameters({
-          hierarchicalFacets: [
-            {
-              attributes: ['myFacet'],
-              name: 'myFacet',
-            },
-          ],
-          hierarchicalFacetsRefinements: {
-            myFacet: [],
-          },
-          maxValuesPerFacet: 20,
-          index: indexName,
-        })
-      );
-
-      widget.init!(
-        createInitOptions({
-          helper,
-          state: helper.state,
-          createURL: () => '#',
-          instantSearchInstance: createInstantSearch(),
-        })
-      );
-
-      widget.render!(
-        createRenderOptions({
-          results: new SearchResults(helper.state, [
-            createSingleSearchResponse({
-              hits: [],
-              facets: {
-                myFacet: {
-                  Decoration: 880,
-                },
-              },
-            }),
-            createSingleSearchResponse({
-              facets: {
-                myFacet: {
-                  Decoration: 880,
-                  Outdoor: 47,
-                },
-              },
-            }),
-          ]),
-          state: helper.state,
-          helper,
-          createURL: () => '#',
-        })
-      );
-
-      const { refine } = rendering.mock.calls[0][0];
-
-      refine('Decoration');
-
-      expect(helper.state).toEqual(
-        new SearchParameters({
-          hierarchicalFacets: [
-            {
-              attributes: ['myFacet'],
-              name: 'myFacet',
-            },
-          ],
-          hierarchicalFacetsRefinements: {
-            myFacet: ['Decoration'],
-          },
-          index: indexName,
-          maxValuesPerFacet: 20,
-        })
-      );
-
-      const newState = widget.dispose!(
-        createDisposeOptions({ state: helper.state, helper })
-      );
-
-      expect(newState).toEqual(
-        new SearchParameters({
-          index: indexName,
-        })
-      );
-    });
-
-    it('removes unrefined state', () => {
-      const widget = makeWidget({
-        attribute: 'myFacet',
-        limit: 10,
-        showMore: true,
-      });
-      const indexName = 'instant_search';
-
-      const helper = jsHelper(
-        createSearchClient(),
-        indexName,
-        widget.getWidgetSearchParameters(new SearchParameters(), {
-          uiState: {},
-        })
-      );
-      helper.search = jest.fn();
-
-      expect(helper.state).toEqual(
-        new SearchParameters({
-          hierarchicalFacets: [
-            {
-              attributes: ['myFacet'],
-              name: 'myFacet',
-            },
-          ],
-          hierarchicalFacetsRefinements: {
-            myFacet: [],
-          },
-          maxValuesPerFacet: 20,
-          index: indexName,
-        })
-      );
-
-      const newState = widget.dispose!(
-        createDisposeOptions({ state: helper.state, helper })
-      );
-
-      expect(newState).toEqual(
-        new SearchParameters({
-          index: indexName,
-        })
-      );
-    });
-
-    it('leaves empty state intact', () => {
-      const state = new SearchParameters();
-      const widget = makeWidget({
-        attribute: 'myFacet',
-        limit: 10,
-        showMore: true,
-      });
-      const helper = jsHelper(
-        createSearchClient(),
-        'test',
-        widget.getWidgetSearchParameters(new SearchParameters(), {
-          uiState: {},
-        })
-      );
-      helper.search = jest.fn();
-      const newState = widget.dispose!(createDisposeOptions({ state, helper }));
-
-      expect(newState).toEqual(new SearchParameters());
     });
   });
 

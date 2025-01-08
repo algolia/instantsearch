@@ -2,7 +2,8 @@
  * @jest-environment jsdom
  */
 
-import { createInstantSearch } from '../../../../test/createInstantSearch';
+import { createInstantSearch } from 'instantsearch-core/test/createInstantSearch';
+
 import { createSendEventForHits } from '../createSendEventForHits';
 
 import type { EscapedHits } from '../../../types';

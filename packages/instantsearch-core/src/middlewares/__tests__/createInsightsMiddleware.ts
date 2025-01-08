@@ -12,6 +12,7 @@ import {
 import { castToJestMock } from '@instantsearch/testutils';
 import { wait } from '@instantsearch/testutils/wait';
 import { fireEvent } from '@testing-library/dom';
+import { createInstantSearch } from 'instantsearch-core/test/createInstantSearch';
 
 import {
   createInsightsMiddleware,
@@ -23,7 +24,6 @@ import {
   instantsearch,
   historyRouter,
 } from '../..';
-import { createInstantSearch } from '../../../test/createInstantSearch';
 
 import type { SearchClient, InsightsProps } from '../../types';
 import type { PlainSearchParameters } from 'algoliasearch-helper';

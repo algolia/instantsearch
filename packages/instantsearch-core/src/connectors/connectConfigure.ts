@@ -7,12 +7,9 @@ import {
 } from '../lib/public';
 import { mergeSearchParameters } from '../lib/utils';
 
+import type { InstantSearch } from '../instantsearch';
 import type { Connector, WidgetRenderState } from '../types';
-import type {
-  SearchParameters,
-  PlainSearchParameters,
-  AlgoliaSearchHelper,
-} from 'algoliasearch-helper';
+import type { PlainSearchParameters } from 'algoliasearch-helper';
 
 /**
  * Refine the given search parameters.
@@ -39,24 +36,6 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
-function getInitialSearchParameters(
-  state: SearchParameters,
-  widgetParams: ConfigureConnectorParams
-): SearchParameters {
-  // We leverage the helper internals to remove the `widgetParams` from
-  // the state. The function `setQueryParameters` omits the values that
-  // are `undefined` on the next state.
-  return state.setQueryParameters(
-    Object.keys(widgetParams.searchParameters).reduce(
-      (acc, key) => ({
-        ...acc,
-        [key]: undefined,
-      }),
-      {}
-    )
-  );
-}
-
 export type ConfigureWidgetDescription = {
   $$type: 'ais.configure';
   renderState: ConfigureRenderState;
@@ -65,9 +44,6 @@ export type ConfigureWidgetDescription = {
       ConfigureRenderState,
       ConfigureConnectorParams
     >;
-  };
-  indexUiState: {
-    configure: PlainSearchParameters;
   };
 };
 
@@ -93,23 +69,12 @@ export const connectConfigure: ConfigureConnector = function connectConfigure(
 
     const connectorState: ConnectorState = {};
 
-    function refine(helper: AlgoliaSearchHelper): Refine {
+    function refine(search: InstantSearch): Refine {
       return (searchParameters: PlainSearchParameters) => {
-        // Merge new `searchParameters` with the ones set from other widgets
-        const actualState = getInitialSearchParameters(
-          helper.state,
-          widgetParams
-        );
-        const nextSearchParameters = mergeSearchParameters(
-          actualState,
-          new algoliasearchHelper.SearchParameters(searchParameters)
-        );
-
         // Update original `widgetParams.searchParameters` to the new refined one
         widgetParams.searchParameters = searchParameters;
-
-        // Trigger a search with the resolved search parameters
-        helper.setState(nextSearchParameters).search();
+        // Trigger a search with the new parameters
+        search.setUiState((prev) => prev);
       };
     }
 
@@ -139,10 +104,8 @@ export const connectConfigure: ConfigureConnector = function connectConfigure(
         );
       },
 
-      dispose({ state }) {
+      dispose() {
         unmountFn();
-
-        return getInitialSearchParameters(state, widgetParams);
       },
 
       getRenderState(renderState, renderOptions) {
@@ -166,9 +129,9 @@ export const connectConfigure: ConfigureConnector = function connectConfigure(
         };
       },
 
-      getWidgetRenderState({ helper }) {
+      getWidgetRenderState({ instantSearchInstance }) {
         if (!connectorState.refine) {
-          connectorState.refine = refine(helper);
+          connectorState.refine = refine(instantSearchInstance);
         }
 
         return {
@@ -177,24 +140,19 @@ export const connectConfigure: ConfigureConnector = function connectConfigure(
         };
       },
 
-      getWidgetSearchParameters(state, { uiState }) {
+      getWidgetSearchParameters(state) {
         return mergeSearchParameters(
           state,
-          new algoliasearchHelper.SearchParameters({
-            ...uiState.configure,
-            ...widgetParams.searchParameters,
-          })
+          new algoliasearchHelper.SearchParameters(
+            widgetParams.searchParameters
+          )
         );
       },
 
       getWidgetUiState(uiState) {
-        return {
-          ...uiState,
-          configure: {
-            ...uiState.configure,
-            ...widgetParams.searchParameters,
-          },
-        };
+        // Configure is not part of the UI state, its internal state is what applies
+        // the parameters to the search. These are not synced with the routing.
+        return uiState;
       },
     };
   };

@@ -4,12 +4,13 @@
 
 import { createSearchClient } from '@instantsearch/mocks';
 import algoliasearchHelper, { RecommendParameters } from 'algoliasearch-helper';
-
-import { connectTrendingItems } from '../..';
 import {
+  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+
+import { connectTrendingItems } from '../..';
 
 describe('connectTrendingItems', () => {
   it('throws without render function', () => {
@@ -168,6 +169,25 @@ describe('connectTrendingItems', () => {
           fallbackParameters: {},
         })
       );
+    });
+  });
+
+  describe('dispose', () => {
+    it('calls unmount function', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const widget = connectTrendingItems(render, unmount)({});
+
+      widget.dispose!(createDisposeOptions());
+
+      expect(unmount).toHaveBeenCalled();
+    });
+
+    it('does not throw without the unmount function', () => {
+      const render = () => {};
+      const widget = connectTrendingItems(render)({});
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
     });
   });
 });

@@ -115,10 +115,8 @@ export const connectSearchBox: SearchBoxConnector = function connectSearchBox(
         );
       },
 
-      dispose({ state }) {
+      dispose() {
         unmountFn();
-
-        return state.setQueryParameter('query', undefined);
       },
 
       getRenderState(renderState, renderOptions) {

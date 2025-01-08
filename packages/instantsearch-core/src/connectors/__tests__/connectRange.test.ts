@@ -6,14 +6,14 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-
-import { connectRange, instantsearch } from '../..';
-import { createInstantSearch } from '../../../test/createInstantSearch';
+import { createInstantSearch } from 'instantsearch-core/test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+
+import { connectRange, instantsearch } from '../..';
 
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 
@@ -1344,88 +1344,21 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-input
   });
 
   describe('dispose', () => {
+    it('calls unmount function', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const widget = connectRange(render, unmount)({ attribute: 's' });
+
+      widget.dispose!(createDisposeOptions());
+
+      expect(unmount).toHaveBeenCalled();
+    });
+
     it('does not throw without the unmount function', () => {
-      const rendering = () => {};
-      const makeWidget = connectRange(rendering);
-      const attribute = 'price';
-      const widget = makeWidget({ attribute });
-      const helper = jsHelper(
-        createSearchClient(),
-        '',
-        widget.getWidgetSearchParameters(new SearchParameters(), {
-          uiState: {},
-        })
-      );
-      expect(() =>
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-      ).not.toThrow();
-    });
-
-    it('removes empty refinement', () => {
-      const rendering = () => {};
-      const makeWidget = connectRange(rendering);
-      const attribute = 'price';
-      const indexName = '';
-      const widget = makeWidget({ attribute });
-      const helper = jsHelper(
-        createSearchClient(),
-        indexName,
-        widget.getWidgetSearchParameters(new SearchParameters(), {
-          uiState: {},
-        })
-      );
-
-      const newState = widget.dispose!(
-        createDisposeOptions({ helper, state: helper.state })
-      );
-
-      expect(newState).toEqual(new SearchParameters({ index: indexName }));
-    });
-
-    it('removes active refinement', () => {
-      const rendering = jest.fn();
-      const makeWidget = connectRange(rendering);
-      const attribute = 'price';
-      const indexName = '';
-      const widget = makeWidget({ attribute });
-      const helper = jsHelper(
-        createSearchClient(),
-        indexName,
-        widget.getWidgetSearchParameters(new SearchParameters(), {
-          uiState: {},
-        })
-      );
-      helper.search = jest.fn();
-
-      widget.init!(
-        createInitOptions({
-          helper,
-        })
-      );
-
-      const renderOptions = rendering.mock.calls[0][0];
-      const { refine } = renderOptions;
-
-      refine({ min: 100, max: 1000 });
-
-      expect(helper.state).toEqual(
-        new SearchParameters({
-          index: indexName,
-          disjunctiveFacets: ['price'],
-          numericRefinements: {
-            price: {
-              '<=': [1000],
-              '>=': [100],
-            },
-          },
-        })
-      );
-
-      const newState = widget.dispose!(
-        createDisposeOptions({ helper, state: helper.state })
-      );
-
-      expect(newState).toEqual(new SearchParameters({ index: indexName }));
+      const render = () => {};
+      const widget = connectRange(render)({ attribute: 's' });
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
     });
   });
 

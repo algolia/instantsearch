@@ -6,14 +6,14 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-
-import { connectRatingMenu } from '../..';
-import { createInstantSearch } from '../../../test/createInstantSearch';
+import { createInstantSearch } from 'instantsearch-core/test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+
+import { connectRatingMenu } from '../..';
 
 describe('connectRatingMenu', () => {
   const getInitializedWidget = (config = {}, unmount = () => {}) => {
@@ -311,69 +311,21 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
   });
 
   describe('dispose', () => {
-    it('does not throw without the unmount function', () => {
-      const { widget, helper } = getInitializedWidget();
-
-      expect(() =>
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-      ).not.toThrow();
-    });
-
-    test('calls the unmount function', () => {
-      const unmount = jest.fn();
-      const { widget, helper } = getInitializedWidget({}, unmount);
-
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
-
-      expect(unmount).toHaveBeenCalledTimes(1);
-    });
-
-    test('resets the state', () => {
+    it('calls unmount function', () => {
       const render = jest.fn();
-      const makeWidget = connectRatingMenu(render);
-      const indexName = 'indexName';
-      const attribute = 'grade';
-      const helper = jsHelper(createSearchClient(), indexName, {
-        disjunctiveFacets: [attribute],
-        numericRefinements: {
-          [attribute]: {
-            '>=': [4],
-          },
-        },
-      });
-      helper.search = jest.fn();
+      const unmount = jest.fn();
 
-      const widget = makeWidget({
-        attribute,
-      });
+      const widget = connectRatingMenu(render, unmount)({ attribute: 's' });
 
-      expect(helper.state).toEqual(
-        new SearchParameters({
-          index: indexName,
-          disjunctiveFacets: [attribute],
-          numericRefinements: {
-            grade: {
-              '>=': [4],
-            },
-          },
-        })
-      );
+      widget.dispose!(createDisposeOptions());
 
-      const nextState = widget.dispose!(
-        createDisposeOptions({ helper, state: helper.state })
-      );
+      expect(unmount).toHaveBeenCalled();
+    });
 
-      expect(nextState).toEqual(
-        new SearchParameters({
-          index: indexName,
-          disjunctiveFacets: [attribute],
-          numericRefinements: {
-            grade: {
-              '>=': [],
-            },
-          },
-        })
-      );
+    it('does not throw without the unmount function', () => {
+      const render = () => {};
+      const widget = connectRatingMenu(render)({ attribute: 's' });
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
     });
   });
 

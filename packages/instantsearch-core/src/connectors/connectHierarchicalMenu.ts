@@ -287,12 +287,8 @@ export const connectHierarchicalMenu: HierarchicalMenuConnector =
           );
         },
 
-        dispose({ state }) {
+        dispose() {
           unmountFn();
-
-          return state
-            .removeHierarchicalFacet(hierarchicalFacetName)
-            .setQueryParameter('maxValuesPerFacet', undefined);
         },
 
         getRenderState(renderState, renderOptions) {

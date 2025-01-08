@@ -9,14 +9,14 @@ import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-
-import { connectRefinementList, TAG_PLACEHOLDER, warnCache } from '../..';
-import { createInstantSearch } from '../../../test/createInstantSearch';
+import { createInstantSearch } from 'instantsearch-core/test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+
+import { connectRefinementList, TAG_PLACEHOLDER, warnCache } from '../..';
 
 describe('connectRefinementList', () => {
   const createWidgetFactory = () => {
@@ -2057,208 +2057,26 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     const widget = makeWidget({
       attribute: 'myFacet',
     });
-    const helper = algoliasearchHelper(
-      createSearchClient(),
-      '',
-      widget.getWidgetSearchParameters(new SearchParameters({}), {
-        uiState: {},
-      })
-    );
 
-    expect(() =>
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-    ).not.toThrow();
+    expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
   });
 
   describe('dispose', () => {
-    it('removes refinements completely on dispose (and)', () => {
-      const rendering = jest.fn();
-      const makeWidget = connectRefinementList(rendering);
-      const instantSearchInstance = createInstantSearch();
+    it('calls unmount function', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
 
-      const widget = makeWidget({
-        attribute: 'category',
-        operator: 'and',
-      });
+      const widget = connectRefinementList(render, unmount)({ attribute: 's' });
 
-      const indexName = 'my-index';
-      const helper = algoliasearchHelper(
-        createSearchClient(),
-        indexName,
-        widget.getWidgetSearchParameters(new SearchParameters({}), {
-          uiState: {},
-        })
-      );
-      helper.search = jest.fn();
+      widget.dispose!(createDisposeOptions());
 
-      widget.init!(
-        createInitOptions({
-          helper,
-          state: helper.state,
-          createURL: () => '#',
-          instantSearchInstance,
-        })
-      );
-
-      widget.render!(
-        createRenderOptions({
-          results: new SearchResults(helper.state, [
-            createSingleSearchResponse({
-              hits: [],
-              facets: {
-                category: {
-                  c1: 880,
-                  c2: 47,
-                },
-              },
-            }),
-            createSingleSearchResponse({
-              facets: {
-                category: {
-                  c1: 880,
-                  c2: 47,
-                },
-              },
-            }),
-          ]),
-          state: helper.state,
-          helper,
-        })
-      );
-
-      const { refine } = rendering.mock.calls[0][0];
-
-      expect(helper.state).toEqual(
-        new SearchParameters({
-          facets: ['category'],
-          facetsRefinements: {
-            category: [],
-          },
-          index: indexName,
-          maxValuesPerFacet: 10,
-        })
-      );
-
-      refine('zimbo');
-
-      expect(helper.state).toEqual(
-        new SearchParameters({
-          facets: ['category'],
-          facetsRefinements: {
-            category: ['zimbo'],
-          },
-          index: indexName,
-          maxValuesPerFacet: 10,
-        })
-      );
-
-      const newState = widget.dispose!(
-        createDisposeOptions({
-          state: helper.state,
-          helper,
-        })
-      );
-
-      expect(newState).toEqual(
-        new SearchParameters({
-          index: indexName,
-        })
-      );
+      expect(unmount).toHaveBeenCalled();
     });
 
-    it('removes refinements completely on dispose (or)', () => {
-      const rendering = jest.fn();
-      const makeWidget = connectRefinementList(rendering);
-      const instantSearchInstance = createInstantSearch();
-
-      const widget = makeWidget({
-        attribute: 'category',
-        operator: 'or',
-      });
-
-      const indexName = 'my-index';
-      const helper = algoliasearchHelper(
-        createSearchClient(),
-        indexName,
-        widget.getWidgetSearchParameters(new SearchParameters({}), {
-          uiState: {},
-        })
-      );
-      helper.search = jest.fn();
-
-      widget.init!(
-        createInitOptions({
-          helper,
-          state: helper.state,
-          createURL: () => '#',
-          instantSearchInstance,
-        })
-      );
-
-      widget.render!(
-        createRenderOptions({
-          results: new SearchResults(helper.state, [
-            createSingleSearchResponse({
-              hits: [],
-              facets: {
-                category: {
-                  c1: 880,
-                  c2: 47,
-                },
-              },
-            }),
-            createSingleSearchResponse({
-              facets: {
-                category: {
-                  c1: 880,
-                  c2: 47,
-                },
-              },
-            }),
-          ]),
-          state: helper.state,
-          helper,
-        })
-      );
-
-      const { refine } = rendering.mock.calls[0][0];
-
-      expect(helper.state).toEqual(
-        new SearchParameters({
-          disjunctiveFacets: ['category'],
-          disjunctiveFacetsRefinements: {
-            category: [],
-          },
-          index: indexName,
-          maxValuesPerFacet: 10,
-        })
-      );
-
-      refine('zimbo');
-
-      expect(helper.state).toEqual(
-        new SearchParameters({
-          disjunctiveFacets: ['category'],
-          disjunctiveFacetsRefinements: {
-            category: ['zimbo'],
-          },
-          index: indexName,
-          maxValuesPerFacet: 10,
-        })
-      );
-
-      const newState = widget.dispose!(
-        createDisposeOptions({
-          state: helper.state,
-          helper,
-        })
-      );
-
-      expect(newState).toEqual(
-        new SearchParameters({
-          index: indexName,
-        })
-      );
+    it('does not throw without the unmount function', () => {
+      const render = () => {};
+      const widget = connectRefinementList(render)({ attribute: 's' });
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
     });
   });
 

@@ -6,14 +6,14 @@ import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-
-import { connectQueryRules } from '../..';
-import { createInstantSearch } from '../../../test/createInstantSearch';
+import { createInstantSearch } from 'instantsearch-core/test/createInstantSearch';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+
+import { connectQueryRules } from '../..';
 
 import type { TransformItems } from '../../types';
 import type { AlgoliaSearchHelper as Helper } from 'algoliasearch-helper';
@@ -183,40 +183,24 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rules
         expect(widgetParams).toEqual({});
       }
     });
+  });
 
-    test('calls the unmount function on dispose', () => {
-      const helper = createFakeHelper();
-      const { makeWidget, unmountFn } = createWidget();
-      const widget = makeWidget({});
+  describe('dispose', () => {
+    it('calls unmount function', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
 
-      widget.init!(
-        createInitOptions({
-          helper,
-          state: helper.state,
-        })
-      );
+      const widget = connectQueryRules(render, unmount)({});
 
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
+      widget.dispose!(createDisposeOptions());
 
-      expect(unmountFn).toHaveBeenCalledTimes(1);
+      expect(unmount).toHaveBeenCalled();
     });
 
-    test('does not throw without the unmount function', () => {
-      const helper = createFakeHelper();
-      const rendering = () => {};
-      const makeWidget = connectQueryRules(rendering);
-      const widget = makeWidget({});
-
-      widget.init!(
-        createInitOptions({
-          state: helper.state,
-          helper,
-        })
-      );
-
-      expect(() =>
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-      ).not.toThrow();
+    it('does not throw without the unmount function', () => {
+      const render = () => {};
+      const widget = connectQueryRules(render)({});
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
     });
   });
 
@@ -919,104 +903,6 @@ Consider using \`transformRuleContexts\` to minimize the number of rules sent to
           'ais-brand-Samsung',
           'ais-brand-Speck',
         ]);
-      });
-
-      test('reinitializes the rule contexts on dispose', () => {
-        const helper = createFakeHelper({
-          disjunctiveFacets: ['brand'],
-          ruleContexts: ['initial-rule'],
-        });
-        const { makeWidget } = createWidget();
-        const widget = makeWidget({
-          trackedFilters: {
-            brand: (values) => values,
-          },
-        });
-
-        widget.init!(
-          createInitOptions({
-            helper,
-            state: helper.state,
-          })
-        );
-
-        helper.setState({
-          disjunctiveFacetsRefinements: {
-            brand: ['Samsung', 'Apple'],
-          },
-        });
-
-        widget.render!(
-          createRenderOptions({
-            helper,
-            state: helper.state,
-            results: new SearchResults(helper.state, [
-              createSingleSearchResponse(),
-              createSingleSearchResponse({
-                facets: {
-                  brand: {
-                    Samsung: 100,
-                    Apple: 100,
-                  },
-                },
-              }),
-            ]),
-          })
-        );
-
-        expect(helper.state.ruleContexts).toEqual([
-          'initial-rule',
-          'ais-brand-Samsung',
-          'ais-brand-Apple',
-        ]);
-
-        const nextState = widget.dispose!(
-          createDisposeOptions({ helper, state: helper.state })
-        );
-
-        expect((nextState as SearchParameters).ruleContexts).toEqual([
-          'initial-rule',
-        ]);
-      });
-
-      test('stops tracking filters after dispose', () => {
-        const helper = createFakeHelper({
-          disjunctiveFacets: ['brand'],
-          disjunctiveFacetsRefinements: {
-            brand: ['Samsung'],
-          },
-        });
-        const brandFilterSpy = jest.fn((values) => values);
-        const { makeWidget } = createWidget();
-        const widget = makeWidget({
-          trackedFilters: {
-            brand: brandFilterSpy,
-          },
-        });
-
-        expect(helper.state.ruleContexts).toEqual(undefined);
-
-        widget.init!(
-          createInitOptions({
-            helper,
-            state: helper.state,
-          })
-        );
-
-        expect(helper.state.ruleContexts).toEqual(['ais-brand-Samsung']);
-        expect(brandFilterSpy).toHaveBeenCalledTimes(1);
-        expect(brandFilterSpy).toHaveBeenCalledWith(['Samsung']);
-
-        widget.dispose!(createDisposeOptions({ helper, state: helper.state }));
-
-        helper.setState({
-          disjunctiveFacetsRefinements: {
-            brand: ['Samsung', 'Apple'],
-          },
-        });
-
-        expect(helper.state.ruleContexts).toEqual(undefined);
-        expect(brandFilterSpy).toHaveBeenCalledTimes(1);
       });
     });
 

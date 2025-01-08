@@ -1,6 +1,8 @@
 import { createMultiSearchResponse } from '@instantsearch/mocks';
 import algoliasearchHelper from 'algoliasearch-helper';
 
+import { index } from '../src';
+
 import { createInstantSearch } from './createInstantSearch';
 
 import type {
@@ -81,14 +83,8 @@ export const createRenderOptions = (
 export const createDisposeOptions = (
   args: Partial<DisposeOptions> = {}
 ): DisposeOptions => {
-  const instantSearchInstance = createInstantSearch();
-  const helper = args.helper || instantSearchInstance.helper!;
-
   return {
-    helper,
-    state: helper.state,
-    recommendState: helper.recommendState,
-    parent: instantSearchInstance.mainIndex,
+    parent: index({ indexName: 'indexName' }),
     ...args,
   };
 };

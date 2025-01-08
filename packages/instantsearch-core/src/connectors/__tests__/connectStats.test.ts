@@ -2,15 +2,14 @@ import {
   createSearchClient,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import jsHelper from 'algoliasearch-helper';
-const SearchResults = jsHelper.SearchResults;
-
-import { connectStats } from '../..';
+import jsHelper, { SearchResults } from 'algoliasearch-helper';
 import {
   createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+
+import { connectStats } from '../..';
 
 import type { StatsRenderState } from '../connectStats';
 
@@ -420,13 +419,22 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/stats/js/#c
     }
   });
 
-  it('does not throw without the unmount function', () => {
-    const rendering = () => {};
-    const makeWidget = connectStats(rendering);
-    const widget = makeWidget({});
-    const helper = jsHelper(createSearchClient(), '');
-    expect(() =>
-      widget.dispose!(createDisposeOptions({ helper, state: helper.state }))
-    ).not.toThrow();
+  describe('dispose', () => {
+    it('calls unmount function', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const widget = connectStats(render, unmount)({});
+
+      widget.dispose!(createDisposeOptions());
+
+      expect(unmount).toHaveBeenCalled();
+    });
+
+    it('does not throw without the unmount function', () => {
+      const render = () => {};
+      const widget = connectStats(render)({});
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
+    });
   });
 });
