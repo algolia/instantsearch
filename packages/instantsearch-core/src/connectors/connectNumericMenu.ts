@@ -34,6 +34,8 @@ export type NumericMenuConnectorParamsItem = {
   end?: number;
 };
 
+type NumericMenuValue = Omit<NumericMenuConnectorParamsItem, 'label'>;
+
 export type NumericMenuRenderStateItem = {
   /**
    *  Name of the option.
@@ -114,7 +116,6 @@ export type NumericMenuWidgetDescription = {
   };
   indexUiState: {
     numericMenu: {
-      // @TODO: this could possibly become `${number}:${number}` later
       [attribute: string]: string;
     };
   };
@@ -169,7 +170,7 @@ export const connectNumericMenu: NumericMenuConnector =
         items.map(({ start, end, label }) => ({
           label,
           value: encodeURI(JSON.stringify({ start, end })),
-          isRefined: isRefined(state, attribute, { start, end, label }),
+          isRefined: isRefined(state, attribute, { start, end }),
         }));
 
       const connectorState: ConnectorState = {};
@@ -346,9 +347,8 @@ export const connectNumericMenu: NumericMenuConnector =
 function isRefined(
   state: SearchParameters,
   attribute: string,
-  option: NumericMenuConnectorParamsItem
+  option: NumericMenuValue
 ) {
-  // @TODO: same as another spot, why is this mixing arrays & elements?
   const currentRefinements = state.getNumericRefinements(attribute);
 
   if (option.start !== undefined && option.end !== undefined) {
@@ -385,10 +385,7 @@ function getRefinedState(
   facetValue: string
 ) {
   let resolvedState = state;
-
-  const refinedOption = JSON.parse(decodeURI(facetValue));
-
-  // @TODO: why is array / element mixed here & hasRefinements; seems wrong?
+  const refinedOption: NumericMenuValue = JSON.parse(decodeURI(facetValue));
   const currentRefinements = resolvedState.getNumericRefinements(attribute);
 
   if (refinedOption.start === undefined && refinedOption.end === undefined) {
