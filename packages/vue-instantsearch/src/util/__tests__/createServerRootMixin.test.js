@@ -1026,7 +1026,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       expect(instantsearch.mainIndex.getHelper()).not.toBeNull();
     });
 
-    it('sets helper & mainHelper', () => {
+    it('sets helper', () => {
       const serialized = createSerializedState();
 
       const app = {
@@ -1052,13 +1052,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
         vm: { instantsearch },
       } = mount(app);
 
-      expect(instantsearch.mainHelper).toBe(null);
+      expect(instantsearch.helper).toBe(null);
 
       instantsearch.hydrate({
         hello: serialized,
       });
 
-      expect(instantsearch.mainHelper).toEqual(expect.any(AlgoliaSearchHelper));
+      expect(instantsearch.helper).toEqual(expect.any(AlgoliaSearchHelper));
     });
   });
 

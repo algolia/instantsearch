@@ -9,13 +9,13 @@ export const createInstantSearch = (
   args: Partial<InstantSearch> = {}
 ): InstantSearch => {
   const { indexName = 'indexName', client = createSearchClient() } = args;
-  const mainHelper = algoliasearchHelper(client, indexName, {});
+  const helper = algoliasearchHelper(client, indexName, {});
   const mainIndex = index({ indexName });
 
   return {
     indexName,
     mainIndex,
-    mainHelper,
+    helper,
     client,
     started: false,
     status: 'idle',

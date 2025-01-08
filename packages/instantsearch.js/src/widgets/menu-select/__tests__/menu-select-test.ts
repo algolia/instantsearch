@@ -205,7 +205,7 @@ describe('menuSelect', () => {
 
       search.start();
 
-      expect(search.mainHelper!.state).toEqual(
+      expect(search.helper!.state).toEqual(
         new SearchParameters({
           index: 'test',
         })
@@ -230,7 +230,7 @@ describe('menuSelect', () => {
 
       expect(render).toHaveBeenCalledTimes(2);
       expect(render).toHaveBeenLastCalledWith(null, container);
-      expect(search.mainHelper!.state).toEqual(
+      expect(search.helper!.state).toEqual(
         new SearchParameters({ index: 'test' })
       );
     });

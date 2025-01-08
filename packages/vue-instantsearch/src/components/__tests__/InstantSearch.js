@@ -181,8 +181,6 @@ it('Allows a change in `index-name`', async () => {
     indexName: 'after',
   });
 
-  await wait(0);
-
   expect(searchClient.search).toHaveBeenCalledTimes(2);
   expect(searchClient.search).toHaveBeenCalledWith([
     { indexName: 'after', params: { query: '' } },

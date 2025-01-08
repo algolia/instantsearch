@@ -21,8 +21,8 @@ export const createInstantSearchComponent = (component) => ({
       );
 
       this.instantSearchInstance.client = searchClient;
-      if (this.instantSearchInstance.mainHelper) {
-        this.instantSearchInstance.mainHelper.setClient(searchClient).search();
+      if (this.instantSearchInstance.helper) {
+        this.instantSearchInstance.helper.setClient(searchClient).search();
       }
     },
     indexName(indexName) {

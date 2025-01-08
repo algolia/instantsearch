@@ -13,7 +13,7 @@ const createTestEnvironment = ({
   index = 'testIndex',
 }: { nbHits?: number; index?: string } = {}) => {
   const instantSearchInstance = createInstantSearch({ indexName: index });
-  const helper = instantSearchInstance.mainHelper!;
+  const helper = instantSearchInstance.helper!;
   const widgetType = 'ais.testWidget';
   const hits = Array.from({ length: nbHits }, (_, i) => ({
     __position: i,

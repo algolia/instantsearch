@@ -190,7 +190,7 @@ describe('infiniteHits', () => {
 
       search.start();
       // prevent warning from insights view event because insightsClient isn't yet loaded
-      search.mainHelper!.state.userToken = 'userToken';
+      search.helper!.state.userToken = 'userToken';
 
       await wait(0);
 

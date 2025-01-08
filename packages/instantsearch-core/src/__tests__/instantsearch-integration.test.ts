@@ -580,7 +580,7 @@ describe('network requests', () => {
       ).toMatchInlineSnapshot(`undefined`);
 
       // Ensure that calling search() after removing all widgets doesn't trigger a new search
-      search.mainHelper!.search();
+      search.helper!.search();
 
       expect(
         castToJestMock(searchClient.search).mock.calls[2]?.[0]

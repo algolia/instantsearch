@@ -157,7 +157,7 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
         ...defaultUserAgents,
         serverContext && serverUserAgent,
       ]);
-      search.mainHelper!.setClient(props.searchClient).search();
+      search.helper!.setClient(props.searchClient).search();
       prevPropsRef.current = props;
     }
 
