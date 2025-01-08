@@ -143,12 +143,8 @@ export const connectSortBy: SortByConnector = function connectSortBy(
         );
       },
 
-      dispose({ state }) {
+      dispose() {
         unmountFn();
-
-        return connectorState.initialIndex
-          ? state.setIndex(connectorState.initialIndex)
-          : state;
       },
 
       getRenderState(renderState, renderOptions) {

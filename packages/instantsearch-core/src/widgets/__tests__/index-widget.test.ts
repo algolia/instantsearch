@@ -14,6 +14,12 @@ import algoliasearchHelper, {
   RecommendParameters,
   RecommendResults,
 } from 'algoliasearch-helper';
+import { createInstantSearch } from 'instantsearch-core/test/createInstantSearch';
+import {
+  createWidget,
+  createIndexInitOptions,
+  createDisposeOptions,
+} from 'instantsearch-core/test/createWidget';
 
 import {
   instantsearch,
@@ -23,12 +29,6 @@ import {
   connectRefinementList,
   connectSearchBox,
 } from '../..';
-import { createInstantSearch } from '../../../test/createInstantSearch';
-import {
-  createWidget,
-  createIndexInitOptions,
-  createDisposeOptions,
-} from '../../../test/createWidget';
 
 import type { Widget } from '../../types';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
@@ -36,9 +36,7 @@ import type { PlainSearchParameters } from 'algoliasearch-helper';
 describe('index', () => {
   const createSearchBox = (args: Partial<Widget> = {}): Widget =>
     createWidget({
-      dispose: jest.fn(({ state }) => {
-        return state.setQueryParameter('query', undefined);
-      }),
+      dispose: jest.fn(() => {}),
       getWidgetUiState: jest.fn((uiState, { searchParameters }) => {
         if (!searchParameters.query) {
           return uiState;
@@ -57,9 +55,7 @@ describe('index', () => {
 
   const createPagination = (args: Partial<Widget> = {}): Widget =>
     createWidget({
-      dispose: jest.fn(({ state }) => {
-        return state.setQueryParameter('page', undefined);
-      }),
+      dispose: jest.fn(() => {}),
       getWidgetUiState: jest.fn((uiState, { searchParameters }) => {
         if (!searchParameters.page) {
           return uiState;
@@ -81,29 +77,19 @@ describe('index', () => {
     args: Partial<Widget> = {}
   ): Widget =>
     createWidget({
-      dispose: jest.fn(({ state }) => {
-        return state.setQueryParameters(
-          Object.keys(params).reduce(
-            (acc, key) => ({
-              ...acc,
-              [key]: undefined,
-            }),
-            {}
-          )
-        );
-      }),
+      dispose: jest.fn(() => {}),
       getWidgetUiState(uiState) {
         return {
           ...uiState,
           configure: {
-            ...uiState.configure,
+            ...(uiState as any).configure,
             ...params,
           },
         };
       },
       getWidgetSearchParameters(searchParameters, { uiState }) {
         return searchParameters.setQueryParameters({
-          ...uiState.configure,
+          ...(uiState as any).configure,
           ...params,
         });
       },
@@ -121,9 +107,7 @@ describe('index', () => {
           objectID: 'abc',
         });
       },
-      dispose({ recommendState }) {
-        return recommendState.removeParams(this.$$id!);
-      },
+      dispose() {},
       ...args,
     } as Widget) as unknown as Widget & { $$id: number };
 
@@ -712,16 +696,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           expect(widget.dispose).toHaveBeenCalledTimes(0);
         });
 
-        const stateBefore = instance.getHelper()!.state;
-
         instance.removeWidgets(widgets);
 
         widgets.forEach((widget) => {
           expect(widget.dispose).toHaveBeenCalledTimes(1);
           expect(widget.dispose).toHaveBeenCalledWith({
-            helper: instance.getHelper(),
-            state: stateBefore,
-            recommendState: instance.getHelper()!.recommendState,
             parent: instance,
           });
         });
@@ -1968,7 +1947,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
                   brand: ['Samsung'],
                 },
               },
-            },
+            } as any,
           })
         );
 
@@ -2972,22 +2951,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(widget.dispose).toHaveBeenCalledTimes(0);
       });
 
-      // Save the Helper to be able to simulate the search
-      const helper = instance.getHelper();
-
-      instance.dispose(
-        createDisposeOptions({
-          helper: instantSearchInstance.helper!,
-          state: instantSearchInstance.helper!.state,
-        })
-      );
+      instance.dispose(createDisposeOptions());
 
       widgets.forEach((widget) => {
         expect(widget.dispose).toHaveBeenCalledTimes(1);
         expect(widget.dispose).toHaveBeenCalledWith({
-          state: helper!.state,
-          recommendState: helper!.recommendState,
-          helper,
           parent: instance,
         });
       });

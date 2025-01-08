@@ -304,10 +304,8 @@ export const connectToggleRefinement: ToggleRefinementConnector =
           );
         },
 
-        dispose({ state }) {
+        dispose() {
           unmountFn();
-
-          return state.removeDisjunctiveFacet(attribute);
         },
 
         getRenderState(renderState, renderOptions) {
