@@ -232,9 +232,8 @@ export const connectTrendingItems = function connectTrendingItems<
         };
       },
 
-      dispose({ recommendState }) {
+      dispose() {
         unmountFn();
-        return recommendState.removeParams(this.$$id!);
       },
 
       getWidgetParameters(state) {

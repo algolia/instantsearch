@@ -2,6 +2,8 @@
  * @jest-environment jsdom
  */
 
+import { createInitOptions } from 'instantsearch-core/test/createWidget';
+
 import { getWidgetAttribute } from '..';
 import {
   connectHits,
@@ -9,7 +11,6 @@ import {
   connectHierarchicalMenu,
   connectToggleRefinement,
 } from '../../..';
-import { createInitOptions } from '../../../../test/createWidget';
 
 const hierarchicalMenu = connectHierarchicalMenu(() => {});
 const hits = connectHits(() => {});

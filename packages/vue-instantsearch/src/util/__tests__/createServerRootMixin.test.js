@@ -244,28 +244,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
       await renderToString(wrapper);
 
-      expect(mainIndex.getWidgetUiState({})).toMatchInlineSnapshot(`
-        {
-          "hello": {
-            "configure": {
-              "hitsPerPage": 100,
-            },
-          },
-        }
-      `);
+      expect(mainIndex.getWidgetUiState({})).toEqual({
+        hello: {},
+      });
 
       expect(searchClient.search).toHaveBeenCalledTimes(1);
-      expect(searchClient.search.mock.calls[0][0]).toMatchInlineSnapshot(`
-        [
-          {
-            "indexName": "hello",
-            "params": {
-              "hitsPerPage": 100,
-              "query": "",
-            },
+      expect(searchClient.search.mock.calls[0][0]).toEqual([
+        {
+          indexName: 'hello',
+          params: {
+            hitsPerPage: 100,
+            query: '',
           },
-        ]
-      `);
+        },
+      ]);
     });
 
     it('returns correct results state', () => {
@@ -870,17 +862,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
         await renderToString(wrapper);
 
         expect(searchClient.search).toHaveBeenCalledTimes(1);
-        expect(searchClient.search.mock.calls[0][0]).toMatchInlineSnapshot(`
-          [
-            {
-              "indexName": "hello",
-              "params": {
-                "hitsPerPage": 100,
-                "query": "",
-              },
+        expect(searchClient.search.mock.calls[0][0]).toEqual([
+          {
+            indexName: 'hello',
+            params: {
+              hitsPerPage: 100,
+              query: '',
             },
-          ]
-        `);
+          },
+        ]);
       });
 
       it('works when component is at root (and therefore has no $vnode)', async () => {
@@ -933,28 +923,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
         await renderToString(wrapper);
 
-        expect(mainIndex.getWidgetUiState({})).toMatchInlineSnapshot(`
-          {
-            "hello": {
-              "configure": {
-                "hitsPerPage": 100,
-              },
-            },
-          }
-        `);
+        expect(mainIndex.getWidgetUiState({})).toEqual({
+          hello: {},
+        });
 
         expect(searchClient.search).toHaveBeenCalledTimes(1);
-        expect(searchClient.search.mock.calls[0][0]).toMatchInlineSnapshot(`
-          [
-            {
-              "indexName": "hello",
-              "params": {
-                "hitsPerPage": 100,
-                "query": "",
-              },
+        expect(searchClient.search.mock.calls[0][0]).toEqual([
+          {
+            indexName: 'hello',
+            params: {
+              hitsPerPage: 100,
+              query: '',
             },
-          ]
-        `);
+          },
+        ]);
       });
     }
   });
@@ -1117,39 +1099,21 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
       const renderArgs = widget.render.mock.calls[0][0];
 
-      expect(renderArgs).toMatchInlineSnapshot(
-        {
-          helper: expect.anything(),
-          results: expect.anything(),
-          scopedResults: expect.arrayContaining([
-            expect.objectContaining({
-              helper: expect.anything(),
-              indexId: expect.any(String),
-              results: expect.anything(),
-            }),
-          ]),
-          parent: expect.anything(),
-          state: expect.anything(),
-          instantSearchInstance: expect.anything(),
-        },
-        `
-        {
-          "createURL": [Function],
-          "helper": Anything,
-          "instantSearchInstance": Anything,
-          "parent": Anything,
-          "results": Anything,
-          "scopedResults": ArrayContaining [
-            ObjectContaining {
-              "helper": Anything,
-              "indexId": Any<String>,
-              "results": Anything,
-            },
-          ],
-          "state": Anything,
-        }
-      `
-      );
+      expect(renderArgs).toEqual({
+        createURL: expect.any(Function),
+        helper: expect.anything(),
+        results: expect.anything(),
+        scopedResults: expect.arrayContaining([
+          expect.objectContaining({
+            helper: expect.anything(),
+            indexId: expect.any(String),
+            results: expect.anything(),
+          }),
+        ]),
+        parent: expect.anything(),
+        state: expect.anything(),
+        instantSearchInstance: expect.anything(),
+      });
     });
 
     it('uses the results passed to hydrate for rendering', () => {

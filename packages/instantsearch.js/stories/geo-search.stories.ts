@@ -490,7 +490,7 @@ stories
           if (hitElement) {
             removeActiveMarkerClassNames();
 
-            const objectID = parseInt(hitElement.id.substr(4), 10);
+            const objectID = parseInt(hitElement.id.slice(4), 10);
             const selector = `.my-custom-marker[data-id="${objectID}"]`;
             const marker = document.querySelector(selector);
 

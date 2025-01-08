@@ -48,9 +48,6 @@ export type RenderOptions = SharedRenderOptions & {
 };
 
 export type DisposeOptions = {
-  helper: Helper;
-  state: SearchParameters;
-  recommendState: RecommendParameters;
   parent: IndexWidget;
 };
 

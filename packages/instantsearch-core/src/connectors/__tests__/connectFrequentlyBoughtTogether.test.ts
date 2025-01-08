@@ -4,12 +4,13 @@
 
 import { createSearchClient } from '@instantsearch/mocks';
 import algoliasearchHelper, { RecommendParameters } from 'algoliasearch-helper';
-
-import { connectFrequentlyBoughtTogether } from '../..';
 import {
+  createDisposeOptions,
   createInitOptions,
   createRenderOptions,
-} from '../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+
+import { connectFrequentlyBoughtTogether } from '../..';
 
 describe('connectFrequentlyBoughtTogether', () => {
   it('throws without render function', () => {
@@ -90,6 +91,30 @@ describe('connectFrequentlyBoughtTogether', () => {
       expect.objectContaining({ widgetParams: { objectIDs: ['1'] } }),
       false
     );
+  });
+
+  describe('dispose', () => {
+    it('calls unmount function', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const widget = connectFrequentlyBoughtTogether(
+        render,
+        unmount
+      )({ objectIDs: ['1'] });
+
+      widget.dispose!(createDisposeOptions());
+
+      expect(unmount).toHaveBeenCalled();
+    });
+
+    it('does not throw without the unmount function', () => {
+      const render = () => {};
+      const widget = connectFrequentlyBoughtTogether(render)({
+        objectIDs: ['1'],
+      });
+      expect(() => widget.dispose!(createDisposeOptions())).not.toThrow();
+    });
   });
 
   describe('getWidgetParameters', () => {

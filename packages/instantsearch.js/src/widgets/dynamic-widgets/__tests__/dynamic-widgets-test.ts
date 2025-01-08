@@ -9,14 +9,14 @@ import {
 import { wait } from '@instantsearch/testutils/wait';
 import { widgetSnapshotSerializer } from '@instantsearch/testutils/widgetSnapshotSerializer';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
-
-import { index, searchBox, menu, dynamicWidgets } from '../..';
-import instantsearch from '../../..';
-import { createInstantSearch } from '../../../../test/createInstantSearch';
+import { createInstantSearch } from 'instantsearch-core/test/createInstantSearch';
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+
+import { index, searchBox, menu, dynamicWidgets } from '../..';
+import instantsearch from '../../..';
 import refinementList from '../../refinement-list/refinement-list';
 
 import type { SearchResponse } from 'instantsearch-core';
