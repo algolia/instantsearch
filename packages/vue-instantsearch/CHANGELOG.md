@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.19.13](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.19.12...vue-instantsearch@4.19.13) (2025-01-07)
+
+
+### Bug Fixes
+
+* **storybook:** update algoliasearch import statement in vue stories ([#6483](https://github.com/algolia/instantsearch/issues/6483)) ([3215f76](https://github.com/algolia/instantsearch/commit/3215f768489e2e9fc39eec68c3c966846a5d7521))
+
+
+
+
+
 ## [4.19.12](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.19.11...vue-instantsearch@4.19.12) (2024-12-09)
 
 **Note:** Version bump only for package vue-instantsearch

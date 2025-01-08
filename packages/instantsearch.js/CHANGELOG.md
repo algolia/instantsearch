@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.75.7](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.75.6...instantsearch.js@4.75.7) (2025-01-07)
+
+
+### Bug Fixes
+
+* **insights:** detect appId and apiKey from client directly in v5 ([#6492](https://github.com/algolia/instantsearch/issues/6492)) ([392a65b](https://github.com/algolia/instantsearch/commit/392a65bd92465e3b392632597dd82ac3120bdfda))
+
+
+
+
+
 ## [4.75.6](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.75.5...instantsearch.js@4.75.6) (2024-12-09)
 
 

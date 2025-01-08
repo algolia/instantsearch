@@ -59,12 +59,12 @@ async function postProcessAnswers({
   );
 
   return {
+    currentYear: new Date().getFullYear(),
     ...combinedAnswers,
     ...alternativeNames,
     libraryVersion,
     template: templatePath,
     installation: optionsFromArguments.installation,
-    currentYear: new Date().getFullYear(),
     attributesToDisplay:
       Array.isArray(combinedAnswers.attributesToDisplay) &&
       combinedAnswers.attributesToDisplay.filter(
