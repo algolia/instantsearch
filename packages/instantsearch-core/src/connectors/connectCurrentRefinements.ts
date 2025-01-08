@@ -349,7 +349,7 @@ function clearRefinementFromState(
       return state.removeNumericRefinement(
         refinement.attribute,
         refinement.operator,
-        String(refinement.value)
+        refinement.value as number
       );
     case 'tag':
       return state.removeTagRefinement(String(refinement.value));
