@@ -17,5 +17,5 @@
     "packages/instantsearch.css",
     "packages/instantsearch-ui-components"
   ],
-  "node": "16"
+  "node": "18"
 }
