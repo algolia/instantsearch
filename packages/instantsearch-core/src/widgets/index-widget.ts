@@ -485,10 +485,10 @@ export const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       localParent = parent;
       localUiState = uiState[indexId] || {};
 
-      // The `mainHelper` is already defined at this point. The instance is created
+      // The helper is already defined at this point. The instance is created
       // inside InstantSearch at the `start` method, which occurs before the `init`
       // step.
-      const mainHelper = instantSearchInstance.mainHelper!;
+      const searchHelper = instantSearchInstance.helper!;
       const parameters = getLocalWidgetsSearchParameters(localWidgets, {
         uiState: localUiState,
         initialSearchParameters: new algoliasearchHelper.SearchParameters({
@@ -527,14 +527,14 @@ export const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
           // We don't trigger a search when controlled because it becomes the
           // responsibility of `setUiState`.
-          return mainHelper;
+          return searchHelper;
         }
 
-        return mainHelper.search();
+        return searchHelper.search();
       };
 
       helper.searchWithoutTriggeringOnStateChange = () => {
-        return mainHelper.search();
+        return searchHelper.search();
       };
 
       // We use the same pattern for the `searchForFacetValues`.
@@ -546,7 +546,7 @@ export const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       ) => {
         const state = helper!.state.setQueryParameters(userState);
 
-        return mainHelper.searchForFacetValues(
+        return searchHelper.searchForFacetValues(
           facetName,
           facetValue,
           maxFacetHits,
@@ -554,10 +554,10 @@ export const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         );
       };
 
-      derivedHelper = mainHelper.derive(
+      derivedHelper = searchHelper.derive(
         () =>
           mergeSearchParameters(
-            mainHelper.state,
+            searchHelper.state,
             ...resolveSearchParameters(this)
           ),
         () => this.getHelper()!.recommendState
@@ -710,7 +710,7 @@ export const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       // then would no longer be thrown for global handlers.
       if (
         instantSearchInstance.status === 'error' &&
-        !instantSearchInstance.mainHelper!.hasPendingRequests() &&
+        !instantSearchInstance.helper!.hasPendingRequests() &&
         lastValidSearchParameters
       ) {
         helper!.setState(lastValidSearchParameters);
