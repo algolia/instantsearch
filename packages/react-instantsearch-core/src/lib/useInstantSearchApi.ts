@@ -141,7 +141,10 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
     const prevProps = prevPropsRef.current;
 
     if (prevProps.indexName !== props.indexName) {
-      search.helper!.setIndex(props.indexName || '').search();
+      search.mainIndex
+        .getHelper()!
+        .setIndex(props.indexName || '')
+        .search();
       prevPropsRef.current = props;
     }
 
@@ -155,7 +158,7 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
         ...defaultUserAgents,
         serverContext && serverUserAgent,
       ]);
-      search.mainHelper!.setClient(props.searchClient).search();
+      search.helper!.setClient(props.searchClient).search();
       prevPropsRef.current = props;
     }
 

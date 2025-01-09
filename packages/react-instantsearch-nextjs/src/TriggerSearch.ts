@@ -10,12 +10,14 @@ export function TriggerSearch() {
   if (waitForResultsRef?.current?.status === 'pending') {
     if (instantsearch._hasSearchWidget) {
       if (instantsearch.compositionID) {
-        instantsearch.mainHelper?.searchWithComposition();
+        instantsearch.helper?.searchWithComposition();
       } else {
-        instantsearch.mainHelper?.searchOnlyWithDerivedHelpers();
+        instantsearch.helper?.searchOnlyWithDerivedHelpers();
       }
     }
-    instantsearch._hasRecommendWidget && instantsearch.mainHelper?.recommend();
+    if (instantsearch._hasRecommendWidget) {
+      instantsearch.helper?.recommend();
+    }
   }
 
   return null;

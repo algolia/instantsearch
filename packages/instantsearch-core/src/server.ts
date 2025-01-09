@@ -17,7 +17,7 @@ export function waitForResults(
   search: InstantSearch,
   skipRecommend: boolean = false
 ): Promise<SearchOptions[]> {
-  const helper = search.mainHelper!;
+  const helper = search.helper!;
 
   // Extract search parameters from the search client to use them
   // later during hydration.
