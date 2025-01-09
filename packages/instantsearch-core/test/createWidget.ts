@@ -55,7 +55,7 @@ export const createRenderOptions = (
   const response = createMultiSearchResponse();
   const helper = args.helper || instantSearchInstance.helper!;
   const results = new algoliasearchHelper.SearchResults(
-    instantSearchInstance.helper!.state,
+    helper.state,
     response.results as Array<SearchResponse<any>>
   );
 

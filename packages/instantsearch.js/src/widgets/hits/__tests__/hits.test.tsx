@@ -203,7 +203,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/"
 
       search.start();
       // prevent warning from insights view event because insightsClient isn't yet loaded
-      // @ts-ignore
       search.helper!.state.userToken = 'userToken';
 
       await wait(0);

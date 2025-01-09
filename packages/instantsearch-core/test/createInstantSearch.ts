@@ -9,13 +9,13 @@ export const createInstantSearch = (
   args: Partial<InstantSearch> = {}
 ): InstantSearch => {
   const { indexName = 'indexName', client = createSearchClient() } = args;
-  const mainHelper = algoliasearchHelper(client, indexName, {});
+  const helper = algoliasearchHelper(client, indexName, {});
   const mainIndex = index({ indexName });
 
   return {
     indexName,
     mainIndex,
-    mainHelper,
+    helper,
     client,
     started: false,
     status: 'idle',
@@ -27,7 +27,6 @@ export const createInstantSearch = (
       this.started = false;
     },
     refresh: jest.fn(),
-    helper: mainHelper, // @TODO: use the Helper from the index once the RoutingManger uses the index
     middleware: [],
     renderState: {},
     scheduleStalledRender: defer(jest.fn()),

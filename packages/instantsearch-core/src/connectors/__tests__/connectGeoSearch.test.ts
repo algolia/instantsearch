@@ -73,7 +73,7 @@ describe('connectGeoSearch', () => {
     const widget = customGeoSearch({});
 
     const instantSearchInstance = createInstantSearch();
-    const helper = instantSearchInstance.mainHelper!;
+    const helper = instantSearchInstance.helper!;
 
     widget.init!(
       createInitOptions({
@@ -160,7 +160,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/geo-search/
     const widget = customGeoSearch({});
 
     const instantSearchInstance = createInstantSearch();
-    const { mainHelper: helper } = instantSearchInstance;
+    const { helper } = instantSearchInstance;
 
     widget.init!(createInitOptions({ instantSearchInstance }));
 

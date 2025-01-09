@@ -215,7 +215,7 @@ describe('menuSelect', () => {
 
       await wait(0);
 
-      expect(search.helper!.state).toEqual(
+      expect(search.mainIndex.getHelper()!.state).toEqual(
         new SearchParameters({
           index: 'test',
           hierarchicalFacets: [{ attributes: ['test'], name: 'test' }],
