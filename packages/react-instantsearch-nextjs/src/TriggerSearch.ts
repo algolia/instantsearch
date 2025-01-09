@@ -9,8 +9,8 @@ export function TriggerSearch() {
 
   if (waitForResultsRef?.current?.status === 'pending') {
     instantsearch._hasSearchWidget &&
-      instantsearch.mainHelper?.searchOnlyWithDerivedHelpers();
-    instantsearch._hasRecommendWidget && instantsearch.mainHelper?.recommend();
+      instantsearch.helper?.searchOnlyWithDerivedHelpers();
+    instantsearch._hasRecommendWidget && instantsearch.helper?.recommend();
   }
 
   return null;

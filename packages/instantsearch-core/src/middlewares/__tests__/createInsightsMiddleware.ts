@@ -72,8 +72,7 @@ describe('insights', () => {
     }
 
     const getUserToken = () =>
-      (instantSearchInstance.mainHelper!.state as PlainSearchParameters)
-        .userToken;
+      (instantSearchInstance.helper!.state as PlainSearchParameters).userToken;
 
     return {
       analytics,
@@ -103,11 +102,10 @@ describe('insights', () => {
     });
     instantSearchInstance.start();
 
-    const helper = instantSearchInstance.mainHelper!;
+    const helper = instantSearchInstance.helper!;
 
     const getUserToken = () =>
-      (instantSearchInstance.mainHelper!.state as PlainSearchParameters)
-        .userToken;
+      (instantSearchInstance.helper!.state as PlainSearchParameters).userToken;
 
     return {
       analytics,
@@ -452,7 +450,7 @@ describe('insights', () => {
           insightsClient,
         })
       );
-      expect(instantSearchInstance.mainHelper!.state.clickAnalytics).toBe(true);
+      expect(instantSearchInstance.helper!.state.clickAnalytics).toBe(true);
     });
 
     it('applies clickAnalytics if $$automatic: false', () => {
@@ -463,7 +461,7 @@ describe('insights', () => {
           $$automatic: false,
         })
       );
-      expect(instantSearchInstance.mainHelper!.state.clickAnalytics).toBe(true);
+      expect(instantSearchInstance.helper!.state.clickAnalytics).toBe(true);
     });
 
     it('does not apply clickAnalytics if $$automatic: true', () => {
@@ -484,9 +482,9 @@ describe('insights', () => {
       const middleware = createInsightsMiddleware({
         insightsClient,
       })({ instantSearchInstance });
-      instantSearchInstance.mainHelper!.setPage(100);
+      instantSearchInstance.helper!.setPage(100);
       middleware.subscribe();
-      expect(instantSearchInstance.mainHelper!.state.page).toBe(100);
+      expect(instantSearchInstance.helper!.state.page).toBe(100);
     });
 
     it('adds user agent', () => {
@@ -679,7 +677,7 @@ describe('insights', () => {
 
       insightsClient('setUserToken', 'abc');
       instantSearchInstance.start();
-      instantSearchInstance.mainHelper!.setPage(100);
+      instantSearchInstance.helper!.setPage(100);
 
       instantSearchInstance.use(
         createInsightsMiddleware({
@@ -687,7 +685,7 @@ describe('insights', () => {
         })
       );
 
-      expect(instantSearchInstance.mainHelper!.state.page).toBe(100);
+      expect(instantSearchInstance.helper!.state.page).toBe(100);
       expect(getUserToken()).toEqual('abc');
     });
 
@@ -711,7 +709,7 @@ describe('insights', () => {
         createTestEnvironment({ started: false });
 
       instantSearchInstance.start();
-      instantSearchInstance.mainHelper!.setPage(100);
+      instantSearchInstance.helper!.setPage(100);
 
       instantSearchInstance.use(
         createInsightsMiddleware({
@@ -723,7 +721,7 @@ describe('insights', () => {
 
       await wait(0);
 
-      expect(instantSearchInstance.mainHelper!.state.page).toEqual(100);
+      expect(instantSearchInstance.helper!.state.page).toEqual(100);
       expect(getUserToken()).toEqual('def');
     });
 
@@ -1376,7 +1374,7 @@ describe('insights', () => {
         },
       });
 
-      instantSearchInstance.mainHelper!.derivedHelpers[0].emit('result', {
+      instantSearchInstance.helper!.derivedHelpers[0].emit('result', {
         results: { queryId: '2' },
       });
 
@@ -1567,7 +1565,7 @@ describe('insights', () => {
 
     instantSearchInstance
       .helper!.setState({
-        ...instantSearchInstance.mainHelper!.state,
+        ...instantSearchInstance.helper!.state,
         query: 'test',
       })
       .search();

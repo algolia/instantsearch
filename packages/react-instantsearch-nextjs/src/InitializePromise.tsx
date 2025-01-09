@@ -63,8 +63,8 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
   // Extract search parameters from the search client to use them
   // later during hydration.
   let requestParamsList: SearchOptions[];
-  search.mainHelper!.setClient({
-    ...search.mainHelper!.getClient(),
+  search.helper!.setClient({
+    ...search.helper!.getClient(),
     search(queries) {
       requestParamsList = queries.map(({ params }) => params);
       return search.client.search(queries);
@@ -77,13 +77,13 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
     new Promise<void>((resolve) => {
       let searchReceived = false;
       let recommendReceived = false;
-      search.mainHelper!.derivedHelpers[0].once('result', () => {
+      search.helper!.derivedHelpers[0].once('result', () => {
         searchReceived = true;
         if (!search._hasRecommendWidget || recommendReceived) {
           resolve();
         }
       });
-      search.mainHelper!.derivedHelpers[0].once('recommend:result', () => {
+      search.helper!.derivedHelpers[0].once('recommend:result', () => {
         recommendReceived = true;
         if (!search._hasSearchWidget || searchReceived) {
           resolve();
