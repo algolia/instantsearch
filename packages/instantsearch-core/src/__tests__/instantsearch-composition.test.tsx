@@ -84,10 +84,10 @@ describe('Composition implementation', () => {
 
     search.start();
 
-    search.mainHelper?.searchForFacetValues('brand', 'algolia', 20);
+    search.helper?.searchForFacetValues('brand', 'algolia', 20);
 
     expect(
-      search.mainHelper!.searchForCompositionFacetValues
+      search.helper!.searchForCompositionFacetValues
     ).toHaveBeenNthCalledWith(1, 'brand', 'algolia', 20);
   });
 
@@ -97,10 +97,10 @@ describe('Composition implementation', () => {
 
     search.start();
 
-    search.mainHelper?.searchForFacetValues('brand', 'algolia', 20);
+    search.helper?.searchForFacetValues('brand', 'algolia', 20);
 
     expect(
-      search.mainHelper!.searchForCompositionFacetValues
+      search.helper!.searchForCompositionFacetValues
     ).not.toHaveBeenCalled();
   });
 
@@ -116,7 +116,7 @@ describe('Composition implementation', () => {
 
     await wait(0);
 
-    expect(search.mainHelper!.searchWithComposition).toHaveBeenCalledTimes(1);
+    expect(search.helper!.searchWithComposition).toHaveBeenCalledTimes(1);
   });
 
   describe('when performing a search', () => {
@@ -140,7 +140,7 @@ describe('Composition implementation', () => {
 
       await wait(0);
 
-      expect(search.mainHelper!.searchWithComposition).toHaveBeenCalledTimes(1);
+      expect(search.helper!.searchWithComposition).toHaveBeenCalledTimes(1);
       expect(searchClient.search).toHaveBeenNthCalledWith(1, {
         compositionID: 'my-composition',
         requestBody: { params: { query: '' } },
@@ -164,7 +164,7 @@ describe('Composition implementation', () => {
 
       await wait(0);
 
-      expect(search.mainHelper!.searchWithComposition).toHaveBeenCalledTimes(1);
+      expect(search.helper!.searchWithComposition).toHaveBeenCalledTimes(1);
       expect(searchClient.search).toHaveBeenNthCalledWith(1, {
         compositionID: 'please-do-not-do-that',
         requestBody: { params: { query: '' } },
@@ -191,7 +191,7 @@ describe('Composition implementation', () => {
 
       await wait(0);
 
-      expect(search.mainHelper!.searchWithComposition).toHaveBeenCalledTimes(1);
+      expect(search.helper!.searchWithComposition).toHaveBeenCalledTimes(1);
       expect(searchClient.search).toHaveBeenNthCalledWith(1, {
         compositionID: 'my-composition',
         requestBody: {
@@ -221,7 +221,7 @@ describe('Composition implementation', () => {
 
       await wait(0);
 
-      expect(search.mainHelper!.searchWithComposition).toHaveBeenCalledTimes(1);
+      expect(search.helper!.searchWithComposition).toHaveBeenCalledTimes(1);
       expect(searchClient.search).toHaveBeenNthCalledWith(1, {
         compositionID: 'my-composition',
         requestBody: {

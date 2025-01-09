@@ -66,7 +66,6 @@ export class InstantSearch<
   onStateChange: InstantSearchOptions<TUiState>['onStateChange'] | null = null;
   future: NonNullable<InstantSearchOptions<TUiState>['future']>;
   helper: AlgoliaSearchHelper | null;
-  mainHelper: AlgoliaSearchHelper | null;
   mainIndex: IndexWidget;
   started: boolean;
   renderState: RenderState = {};
@@ -75,7 +74,7 @@ export class InstantSearch<
   _initialUiState: TUiState;
   _initialResults: InitialResults | null;
   _createURL: CreateURL<TUiState>;
-  _mainHelperSearch?: AlgoliaSearchHelper['search'];
+  _helperSearch?: AlgoliaSearchHelper['search'];
   _hasSearchWidget: boolean = false;
   _hasRecommendWidget: boolean = false;
   _insights: InstantSearchOptions['insights'];
@@ -153,7 +152,6 @@ See ${createDocumentationLink({
     this.indexName = indexName;
     this.compositionID = compositionID;
     this.helper = null;
-    this.mainHelper = null;
     this.mainIndex = index({
       // we use an index widget to render compositions
       // this only works because there's only one composition index allow for now
@@ -309,16 +307,16 @@ See ${createDocumentationLink({
     // DerivedHelper scoped into the `index` widgets.
     // In Vue InstantSearch' hydrate, a main helper gets set before start, so
     // we need to respect this helper as a way to keep all listeners correct.
-    const mainHelper =
-      this.mainHelper ||
+    const helper =
+      this.helper ||
       algoliasearchHelper(this.client, this.indexName, undefined);
 
     if (this.compositionID) {
-      mainHelper.searchForFacetValues =
-        mainHelper.searchForCompositionFacetValues.bind(mainHelper);
+      helper.searchForFacetValues =
+        helper.searchForCompositionFacetValues.bind(helper);
     }
 
-    mainHelper.search = () => {
+    helper.search = () => {
       this.status = 'loading';
       this.scheduleRender(false);
 
@@ -335,22 +333,22 @@ See ${createDocumentationLink({
       // is impacted.
       if (this._hasSearchWidget) {
         if (this.compositionID) {
-          mainHelper.searchWithComposition();
+          helper.searchWithComposition();
         } else {
-          mainHelper.searchOnlyWithDerivedHelpers();
+          helper.searchOnlyWithDerivedHelpers();
         }
       }
 
       if (this._hasRecommendWidget) {
-        mainHelper.recommend();
+        helper.recommend();
       }
 
-      return mainHelper;
+      return helper;
     };
 
     // Only the "main" Helper emits the `error` event vs the one for `search`
     // and `results` that are also emitted on the derived one.
-    mainHelper.on('error', (error) => {
+    helper.on('error', (error) => {
       if (!(error instanceof Error)) {
         // typescript lies here, error is in some cases { name: string, message: string }
         const err = error as Record<string, any>;
@@ -368,7 +366,7 @@ See ${createDocumentationLink({
       this.emit('error', this.error);
     });
 
-    this.mainHelper = mainHelper;
+    this.helper = helper;
 
     this.middleware.forEach(({ instance }) => {
       instance.subscribe();
@@ -382,7 +380,7 @@ See ${createDocumentationLink({
 
     if (this._initialResults) {
       hydrateSearchClient(this.client, this._initialResults);
-      hydrateRecommendCache(this.mainHelper, this._initialResults);
+      hydrateRecommendCache(this.helper, this._initialResults);
 
       const originalScheduleSearch = this.scheduleSearch;
       // We don't schedule a first search when initial results are provided
@@ -410,10 +408,6 @@ See ${createDocumentationLink({
       this.scheduleSearch();
     }
 
-    // Keep the previous reference for legacy purpose, some pattern use
-    // the direct Helper access `search.helper` (e.g multi-index).
-    this.helper = this.mainIndex.getHelper();
-
     // track we started the search if we add more widgets,
     // to init them directly after add
     this.started = true;
@@ -426,7 +420,7 @@ See ${createDocumentationLink({
     // added when `insights` is unset and the initial results possess `queryID`.
     // Any user-provided middleware will be added later and override this one.
     if (typeof this._insights === 'undefined') {
-      mainHelper.derivedHelpers[0].once('result', () => {
+      helper.derivedHelpers[0].once('result', () => {
         const hasAutomaticInsights = this.mainIndex
           .getScopedResults()
           .some(({ results }) => results?._automaticInsights);
@@ -458,8 +452,7 @@ See ${createDocumentationLink({
     // The helper needs to be reset to perform the next search from a fresh state.
     // If not reset, it would use the state stored before calling `dispose()`.
     this.removeAllListeners();
-    this.mainHelper?.removeAllListeners();
-    this.mainHelper = null;
+    this.helper?.removeAllListeners();
     this.helper = null;
 
     this.middleware.forEach(({ instance }) => {
@@ -469,12 +462,12 @@ See ${createDocumentationLink({
 
   scheduleSearch = defer(() => {
     if (this.started) {
-      this.mainHelper!.search();
+      this.helper!.search();
     }
   });
 
   scheduleRender = defer((shouldResetStatus: boolean = true) => {
-    if (!this.mainHelper?.hasPendingRequests()) {
+    if (!this.helper?.hasPendingRequests()) {
       clearTimeout(this._searchStalledTimer);
       this._searchStalledTimer = null;
 
@@ -504,7 +497,7 @@ See ${createDocumentationLink({
     uiState: TUiState | ((previousUiState: TUiState) => TUiState),
     callOnStateChange = true
   ) {
-    if (!this.mainHelper) {
+    if (!this.helper) {
       throw new Error(
         withUsage('The `start` method needs to be called before `setUiState`.')
       );
@@ -571,13 +564,13 @@ See ${createDocumentationLink({
   }
 
   refresh() {
-    if (!this.mainHelper) {
+    if (!this.helper) {
       throw new Error(
         withUsage('The `start` method needs to be called before `refresh`.')
       );
     }
 
-    this.mainHelper.clearCache().search();
+    this.helper.clearCache().search();
   }
 }
 
