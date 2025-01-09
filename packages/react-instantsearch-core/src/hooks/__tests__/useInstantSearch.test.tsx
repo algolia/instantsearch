@@ -21,10 +21,9 @@ import type { UseInstantSearchProps } from '../useInstantSearch';
 describe('useInstantSearch', () => {
   describe('usage', () => {
     test('it errors when not nested in InstantSearch', () => {
-      const { result } = renderHook(() => useInstantSearch());
-
-      expect(result.current.error).toBeInstanceOf(Error);
-      expect(result.current.error?.message).toMatchInlineSnapshot(`
+      expect(() => {
+        renderHook(() => useInstantSearch());
+      }).toThrowErrorMatchingInlineSnapshot(`
         "[InstantSearch] Hooks must be used inside the <InstantSearch> component.
 
         They are not compatible with the \`react-instantsearch-core@6.x\` and \`react-instantsearch-dom\` packages, so make sure to use the <InstantSearch> component from \`react-instantsearch-core@7.x\`."
