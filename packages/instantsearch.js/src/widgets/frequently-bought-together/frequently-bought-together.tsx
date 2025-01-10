@@ -24,6 +24,7 @@ import type {
   Renderer,
   BaseHit,
   RecommendResponse,
+  Hit,
 } from '../../types';
 import type {
   RecommendClassNames,
@@ -58,7 +59,7 @@ const renderer =
     FrequentlyBoughtTogetherRenderState,
     Partial<FrequentlyBoughtTogetherWidgetParams>
   > =>
-  ({ items, results, instantSearchInstance }, isFirstRendering) => {
+  ({ items, results, instantSearchInstance, sendEvent }, isFirstRendering) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates: {} as unknown as Required<
@@ -92,6 +93,7 @@ const renderer =
                 templateKey="item"
                 rootTagName="fragment"
                 data={item}
+                sendEvent={sendEvent}
               />
             );
           }
@@ -128,6 +130,7 @@ const renderer =
                           templateKey="item"
                           rootTagName="fragment"
                           data={item}
+                          sendEvent={sendEvent}
                         />
                       )
                     : undefined,
@@ -137,6 +140,7 @@ const renderer =
                   item: data.classNames.item,
                 },
               }}
+              sendEvent={sendEvent}
             />
           )
         : undefined
@@ -144,10 +148,10 @@ const renderer =
 
     render(
       <FrequentlyBoughtTogether
-        items={items as Array<AlgoliaHit<THit>>}
+        items={items as Array<Hit<THit>>}
         headerComponent={headerComponent}
         itemComponent={itemComponent}
-        sendEvent={() => {}}
+        sendEvent={sendEvent}
         classNames={cssClasses}
         emptyComponent={emptyComponent}
         layout={layoutComponent}

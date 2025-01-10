@@ -51,7 +51,7 @@ export function LookingSimilar<THit extends BaseHit = BaseHit>({
   ...props
 }: LookingSimilarProps<THit>) {
   const { status } = useInstantSearch();
-  const { items } = useLookingSimilar<THit>(
+  const { items, sendEvent } = useLookingSimilar<THit>(
     {
       objectIDs,
       limit,
@@ -82,7 +82,7 @@ export function LookingSimilar<THit extends BaseHit = BaseHit>({
     emptyComponent,
     layout,
     status,
-    sendEvent: () => {},
+    sendEvent,
   };
 
   return <LookingSimilarUiComponent {...props} {...uiProps} />;

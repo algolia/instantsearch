@@ -24,6 +24,7 @@ import type {
   Renderer,
   BaseHit,
   RecommendResponse,
+  Hit,
 } from '../../types';
 import type {
   RecommendClassNames,
@@ -58,7 +59,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
   Partial<RelatedProductsWidgetParams>
 > {
   return function renderer(
-    { items, results, instantSearchInstance },
+    { items, results, instantSearchInstance, sendEvent },
     isFirstRendering
   ) {
     if (isFirstRendering) {
@@ -98,6 +99,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
                 templateKey="item"
                 rootTagName="fragment"
                 data={item}
+                sendEvent={sendEvent}
               />
             );
           }
@@ -134,6 +136,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
                           templateKey="item"
                           rootTagName="fragment"
                           data={item}
+                          sendEvent={sendEvent}
                         />
                       )
                     : undefined,
@@ -143,6 +146,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
                   item: data.classNames.item,
                 },
               }}
+              sendEvent={sendEvent}
             />
           )
         : undefined
@@ -150,8 +154,8 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
 
     render(
       <RelatedProducts
-        items={items as Array<AlgoliaHit<THit>>}
-        sendEvent={() => {}}
+        items={items as Array<Hit<THit>>}
+        sendEvent={sendEvent}
         classNames={cssClasses}
         headerComponent={headerComponent}
         itemComponent={itemComponent}

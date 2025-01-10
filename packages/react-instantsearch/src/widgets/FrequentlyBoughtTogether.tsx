@@ -54,7 +54,7 @@ export function FrequentlyBoughtTogether<THit extends BaseHit = BaseHit>({
   ...props
 }: FrequentlyBoughtTogetherProps<THit>) {
   const { status } = useInstantSearch();
-  const { items } = useFrequentlyBoughtTogether<THit>(
+  const { items, sendEvent } = useFrequentlyBoughtTogether<THit>(
     {
       objectIDs,
       limit,
@@ -84,7 +84,7 @@ export function FrequentlyBoughtTogether<THit extends BaseHit = BaseHit>({
     emptyComponent,
     layout,
     status,
-    sendEvent: () => {},
+    sendEvent,
   };
 
   return <FrequentlyBoughtTogetherUiComponent {...props} {...uiProps} />;

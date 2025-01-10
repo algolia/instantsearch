@@ -6,7 +6,7 @@ import type {
   RelatedProductsProps as RelatedProductsUiComponentProps,
   Pragma,
 } from 'instantsearch-ui-components';
-import type { AlgoliaHit, BaseHit } from 'instantsearch.js';
+import type { Hit, BaseHit } from 'instantsearch.js';
 import type { UseRelatedProductsProps } from 'react-instantsearch-core';
 
 type UiProps<TItem extends BaseHit> = Pick<
@@ -51,7 +51,7 @@ export function RelatedProducts<TItem extends BaseHit = BaseHit>({
   ...props
 }: RelatedProductsProps<TItem>) {
   const { status } = useInstantSearch();
-  const { items } = useRelatedProducts(
+  const { items, sendEvent } = useRelatedProducts(
     {
       objectIDs,
       limit,
@@ -76,13 +76,13 @@ export function RelatedProducts<TItem extends BaseHit = BaseHit>({
     : undefined;
 
   const uiProps: UiProps<TItem> = {
-    items: items as Array<AlgoliaHit<TItem>>,
+    items: items as Array<Hit<TItem>>,
     itemComponent,
     headerComponent,
     emptyComponent,
     layout,
     status,
-    sendEvent: () => {},
+    sendEvent,
   };
 
   return <RelatedProductsUiComponent {...props} {...uiProps} />;

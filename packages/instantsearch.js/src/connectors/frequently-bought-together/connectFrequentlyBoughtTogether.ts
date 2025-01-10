@@ -4,6 +4,10 @@ import {
   noop,
   escapeHits,
   TAG_PLACEHOLDER,
+  SendEventForHits,
+  createSendEventForHits,
+  addAbsolutePosition,
+  addQueryID,
 } from '../../lib/utils';
 
 import type {
@@ -30,6 +34,11 @@ export type FrequentlyBoughtTogetherRenderState<
    * The matched recommendations from Algolia API.
    */
   items: Array<AlgoliaHit<THit>>;
+
+  /**
+   * Sends an event to the Insights middleware.
+   */
+  sendEvent: SendEventForHits;
 };
 
 export type FrequentlyBoughtTogetherConnectorParams<
@@ -118,6 +127,8 @@ export default (function connectFrequentlyBoughtTogether<
       throw new Error(withUsage('The `objectIDs` option is required.'));
     }
 
+    let sendEvent: SendEventForHits;
+
     return {
       dependsOn: 'recommend',
       $$type: 'ais.frequentlyBoughtTogether',
@@ -148,23 +159,45 @@ export default (function connectFrequentlyBoughtTogether<
         return renderState;
       },
 
-      getWidgetRenderState({ results }) {
+      getWidgetRenderState({ results, helper, instantSearchInstance }) {
+        if (!sendEvent) {
+          sendEvent = createSendEventForHits({
+            instantSearchInstance,
+            getIndex: () => helper.getIndex(),
+            widgetType: this.$$type,
+          });
+        }
         if (results === null || results === undefined) {
-          return { items: [], widgetParams };
+          return { items: [], widgetParams, sendEvent };
         }
 
         if (escapeHTML && results.hits.length > 0) {
           results.hits = escapeHits(results.hits);
         }
 
+        const itemsWithAbsolutePosition = addAbsolutePosition(
+          results.hits,
+          0,
+          1
+        );
+
+        const itemsWithAbsolutePositionAndQueryID = addQueryID(
+          itemsWithAbsolutePosition,
+          results.queryID
+        );
+
         const transformedItems = transformItems(
-          results.hits as Array<AlgoliaHit<THit>>,
+          itemsWithAbsolutePositionAndQueryID,
           {
             results: results as RecommendResponse<AlgoliaHit<THit>>,
           }
         );
 
-        return { items: transformedItems, widgetParams };
+        return {
+          items: transformedItems,
+          widgetParams,
+          sendEvent,
+        };
       },
 
       dispose({ recommendState }) {
