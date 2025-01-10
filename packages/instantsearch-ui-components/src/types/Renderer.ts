@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
-import type { JSX as ReactJSX } from 'react';
-
 // Ensure that the JSX namespace is available in this file and its dependents.
 declare global {
   namespace JSX {
-    interface Element extends ReactJSX.Element {}
-    interface IntrinsicElements extends ReactJSX.IntrinsicElements {}
+    interface Element {}
+    interface IntrinsicElements {}
   }
 }
 
