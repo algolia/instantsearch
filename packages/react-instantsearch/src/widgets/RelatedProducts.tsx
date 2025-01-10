@@ -6,7 +6,7 @@ import type {
   RelatedProductsProps as RelatedProductsUiComponentProps,
   Pragma,
 } from 'instantsearch-ui-components';
-import type { Hit, BaseHit } from 'instantsearch.js';
+import type { BaseHit, Hit } from 'instantsearch.js';
 import type { UseRelatedProductsProps } from 'react-instantsearch-core';
 
 type UiProps<TItem extends BaseHit> = Pick<

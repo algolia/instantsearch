@@ -6,7 +6,7 @@ import type {
   LookingSimilarProps as LookingSimilarPropsUiComponentProps,
   Pragma,
 } from 'instantsearch-ui-components';
-import type { AlgoliaHit, BaseHit } from 'instantsearch.js';
+import type { AlgoliaHit, BaseHit, Hit } from 'instantsearch.js';
 import type { UseLookingSimilarProps } from 'react-instantsearch-core';
 
 type UiProps<THit extends BaseHit> = Pick<
@@ -76,7 +76,7 @@ export function LookingSimilar<THit extends BaseHit = BaseHit>({
     : undefined;
 
   const uiProps: UiProps<THit> = {
-    items,
+    items: items as Array<Hit<THit>>,
     itemComponent,
     headerComponent,
     emptyComponent,
