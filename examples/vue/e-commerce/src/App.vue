@@ -497,11 +497,6 @@ import { formatNumber } from './utils';
 import ClearRefinements from './widgets/ClearRefinements.vue';
 import NoResults from './widgets/NoResults.vue';
 
-import './Theme.css';
-import './App.css';
-import './App.mobile.css';
-import './widgets/PriceSlider.css';
-
 export default {
   components: {
     VueSlider,

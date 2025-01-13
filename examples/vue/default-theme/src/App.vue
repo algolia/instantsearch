@@ -127,8 +127,6 @@ import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import { history as historyRouter } from 'instantsearch.js/es/lib/routers';
 import { simple as simpleMapping } from 'instantsearch.js/es/lib/stateMappings';
 
-import './App.css';
-
 export default {
   data() {
     return {
