@@ -17,7 +17,10 @@ describe('useRelatedProducts', () => {
     );
 
     // Initial render state from manual `getWidgetRenderState`
-    expect(result.current).toEqual({ items: [] });
+    expect(result.current).toEqual({
+      items: [],
+      sendEvent: expect.any(Function),
+    });
 
     await waitForNextUpdate();
 

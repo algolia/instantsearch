@@ -50,14 +50,14 @@ describe('RelatedProducts', () => {
                 class="ais-RelatedProducts-item"
               >
                 {
-          "objectID": "1"
+          "objectID": "1", "__position":1
         }
               </li>
               <li
                 class="ais-RelatedProducts-item"
               >
                 {
-          "objectID": "2"
+          "objectID": "2", "__position":2
         }
               </li>
             </ol>
