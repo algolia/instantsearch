@@ -27,12 +27,6 @@ jest.mock('next/navigation', () => ({
   },
 }));
 
-// const mockHeaders = jest.fn(() => Promise.resolve({}));
-jest.mock('next/headers', () => ({
-  ...jest.requireActual('next/headers'),
-  headers: () => Promise.resolve({}),
-}));
-
 describe('rerendering', () => {
   const client = createSearchClient();
 

@@ -1,5 +1,5 @@
 import { createMemoryCache } from '@algolia/client-common';
-import { liteClient as algoliasearch } from 'algoliasearch-v5/lite';
+import { liteClient as algoliasearch } from 'algoliasearch/lite';
 
 export const responsesCache = createMemoryCache();
 export const client = algoliasearch(
