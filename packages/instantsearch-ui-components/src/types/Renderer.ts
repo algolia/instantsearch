@@ -4,7 +4,7 @@
 // Ensure that the JSX namespace is available in this file and its dependents.
 declare global {
   namespace JSX {
-    interface Element {}
+    interface Element extends VNode {}
     interface IntrinsicElements {}
   }
 }
@@ -60,8 +60,8 @@ export type VNode<TProps = any> = {
   type: any;
   props: TProps & {
     children: ComponentChildren;
-    key?: string | number | null;
   };
+  key: string | null;
 };
 
 export type Renderer = {

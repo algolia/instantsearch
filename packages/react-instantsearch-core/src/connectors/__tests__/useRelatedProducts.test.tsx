@@ -1,6 +1,10 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { createInstantSearchTestWrapper } from '@instantsearch/testutils';
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, waitFor } from '@testing-library/react';
 
 import { useRelatedProducts } from '../useRelatedProducts';
 
@@ -9,7 +13,7 @@ describe('useRelatedProducts', () => {
     const wrapper = createInstantSearchTestWrapper({
       searchClient: createRecommendSearchClient({ minimal: true }),
     });
-    const { result, waitForNextUpdate } = renderHook(
+    const { result } = renderHook(
       () => useRelatedProducts({ objectIDs: ['1'] }),
       {
         wrapper,
@@ -19,11 +23,11 @@ describe('useRelatedProducts', () => {
     // Initial render state from manual `getWidgetRenderState`
     expect(result.current).toEqual({ items: [] });
 
-    await waitForNextUpdate();
-
-    // InstantSearch.js state from the `render` lifecycle step
-    expect(result.current).toEqual({
-      items: expect.arrayContaining([{ objectID: '1' }, { objectID: '2' }]),
+    await waitFor(() => {
+      // InstantSearch.js state from the `render` lifecycle step
+      expect(result.current).toEqual({
+        items: expect.arrayContaining([{ objectID: '1' }, { objectID: '2' }]),
+      });
     });
   });
 });

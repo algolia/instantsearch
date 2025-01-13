@@ -4,7 +4,7 @@ import { useClearRefinements } from 'react-instantsearch';
 export function ClearFiltersMobile({
   containerRef,
 }: {
-  containerRef: React.RefObject<HTMLElement>;
+  containerRef: React.RefObject<HTMLElement | null>;
 }) {
   const { refine } = useClearRefinements();
 

@@ -548,9 +548,9 @@ describe('getServerState', () => {
         </ul>
       </div>
       <div class="ais-SearchBox">
-        <form action
-              class="ais-SearchBox-form"
+        <form class="ais-SearchBox-form"
               novalidate
+              action
         >
           <input class="ais-SearchBox-input"
                  value="iphone"

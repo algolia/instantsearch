@@ -93,7 +93,7 @@ This message will only be displayed in development mode.`
   return (
     <InstantSearchRSCContext.Provider value={promiseRef}>
       <InstantSearchSSRProvider initialResults={initialResults}>
-        <InstantSearch {...instantSearchProps} routing={routing}>
+        <InstantSearch {...instantSearchProps} routing={routing!}>
           {shouldTriggerSearch && <InitializePromise nonce={nonce} />}
           {children}
           {shouldTriggerSearch && <TriggerSearch />}

@@ -1,10 +1,14 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import {
   createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { createInstantSearchTestWrapper } from '@instantsearch/testutils';
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, waitFor } from '@testing-library/react';
 import React from 'react';
 
 import { useBreadcrumb } from '../useBreadcrumb';
@@ -16,7 +20,7 @@ import type { MockSearchClient } from '@instantsearch/mocks';
 describe('useBreadcrumb', () => {
   it('returns the connector render state', async () => {
     const wrapper = createInstantSearchTestWrapper();
-    const { result, waitForNextUpdate } = renderHook(
+    const { result } = renderHook(
       () =>
         useBreadcrumb({
           attributes: [
@@ -38,14 +42,14 @@ describe('useBreadcrumb', () => {
       refine: expect.any(Function),
     });
 
-    await waitForNextUpdate();
-
-    // InstantSearch.js state from the `render` lifecycle step
-    expect(result.current).toEqual({
-      canRefine: false,
-      createURL: expect.any(Function),
-      items: [],
-      refine: expect.any(Function),
+    await waitFor(() => {
+      // InstantSearch.js state from the `render` lifecycle step
+      expect(result.current).toEqual({
+        canRefine: false,
+        createURL: expect.any(Function),
+        items: [],
+        refine: expect.any(Function),
+      });
     });
   });
 
@@ -98,7 +102,7 @@ describe('useBreadcrumb', () => {
         ) as MockSearchClient['search'],
       }),
     });
-    const { result, waitForNextUpdate } = renderHook(
+    const { result } = renderHook(
       () =>
         useBreadcrumb({
           attributes: [
@@ -134,28 +138,28 @@ describe('useBreadcrumb', () => {
       refine: expect.any(Function),
     });
 
-    await waitForNextUpdate();
-
-    // InstantSearch.js state from the `render` lifecycle step
-    expect(result.current).toEqual({
-      canRefine: true,
-      createURL: expect.any(Function),
-      items: [
-        {
-          label: 'Appliances',
-          value: 'Appliances > Small Kitchen Appliances',
-        },
-        {
-          label: 'Small Kitchen Appliances',
-          value:
-            'Appliances > Small Kitchen Appliances > Coffee, Tea & Espresso',
-        },
-        {
-          label: 'Coffee, Tea & Espresso',
-          value: null,
-        },
-      ],
-      refine: expect.any(Function),
+    await waitFor(() => {
+      // InstantSearch.js state from the `render` lifecycle step
+      expect(result.current).toEqual({
+        canRefine: true,
+        createURL: expect.any(Function),
+        items: [
+          {
+            label: 'Appliances',
+            value: 'Appliances > Small Kitchen Appliances',
+          },
+          {
+            label: 'Small Kitchen Appliances',
+            value:
+              'Appliances > Small Kitchen Appliances > Coffee, Tea & Espresso',
+          },
+          {
+            label: 'Coffee, Tea & Espresso',
+            value: null,
+          },
+        ],
+        refine: expect.any(Function),
+      });
     });
   });
 });

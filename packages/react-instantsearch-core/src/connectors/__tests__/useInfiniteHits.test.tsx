@@ -1,12 +1,16 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { createInstantSearchTestWrapper } from '@instantsearch/testutils';
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, waitFor } from '@testing-library/react';
 
 import { useInfiniteHits } from '../useInfiniteHits';
 
 describe('useInfiniteHits', () => {
   test('returns the connector render state', async () => {
     const wrapper = createInstantSearchTestWrapper();
-    const { result, waitForNextUpdate } = renderHook(() => useInfiniteHits(), {
+    const { result } = renderHook(() => useInfiniteHits(), {
       wrapper,
     });
 
@@ -24,20 +28,20 @@ describe('useInfiniteHits', () => {
       showPrevious: undefined,
     });
 
-    await waitForNextUpdate();
-
-    // InstantSearch.js state from the `render` lifecycle step
-    expect(result.current).toEqual({
-      bindEvent: expect.any(Function),
-      hits: [],
-      items: [],
-      results: expect.objectContaining({ nbHits: 0 }),
-      sendEvent: expect.any(Function),
-      currentPageHits: [],
-      isFirstPage: true,
-      isLastPage: true,
-      showMore: expect.any(Function),
-      showPrevious: expect.any(Function),
+    await waitFor(() => {
+      // InstantSearch.js state from the `render` lifecycle step
+      expect(result.current).toEqual({
+        bindEvent: expect.any(Function),
+        hits: [],
+        items: [],
+        results: expect.objectContaining({ nbHits: 0 }),
+        sendEvent: expect.any(Function),
+        currentPageHits: [],
+        isFirstPage: true,
+        isLastPage: true,
+        showMore: expect.any(Function),
+        showPrevious: expect.any(Function),
+      });
     });
   });
 });

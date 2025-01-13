@@ -10,8 +10,7 @@ import {
   createInstantSearchTestWrapper,
   createInstantSearchSpy,
 } from '@instantsearch/testutils';
-import { render, waitFor } from '@testing-library/react';
-import { renderHook } from '@testing-library/react-hooks';
+import { render, waitFor, renderHook } from '@testing-library/react';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import connectHits from 'instantsearch.js/es/connectors/hits/connectHits';
 import React, { StrictMode, useState } from 'react';
@@ -244,7 +243,7 @@ describe('useConnector', () => {
   test('returns the connector render state', async () => {
     const wrapper = createInstantSearchTestWrapper();
 
-    const { result, waitForNextUpdate } = renderHook(
+    const { result } = renderHook(
       () => useConnector(connectCustomSearchBox, {}, {}),
       { wrapper }
     );
@@ -255,18 +254,18 @@ describe('useConnector', () => {
       refine: expect.any(Function),
     });
 
-    await waitForNextUpdate();
+    await waitFor(() => {
+      // It should never be "query at init" because we skip the `init` step.
+      expect(result.current).not.toEqual({
+        query: 'query at init',
+        refine: expect.any(Function),
+      });
 
-    // It should never be "query at init" because we skip the `init` step.
-    expect(result.current).not.toEqual({
-      query: 'query at init',
-      refine: expect.any(Function),
-    });
-
-    // Render state provided by InstantSearch Core during `render`.
-    expect(result.current).toEqual({
-      query: 'query',
-      refine: expect.any(Function),
+      // Render state provided by InstantSearch Core during `render`.
+      expect(result.current).toEqual({
+        query: 'query',
+        refine: expect.any(Function),
+      });
     });
   });
 
@@ -281,7 +280,7 @@ describe('useConnector', () => {
       );
     }
 
-    const { result, waitForNextUpdate } = renderHook(
+    const { result } = renderHook(
       () => useConnector(connectCustomSearchBox, {}, {}),
       { wrapper: Wrapper }
     );
@@ -292,41 +291,40 @@ describe('useConnector', () => {
       refine: expect.any(Function),
     });
 
-    await waitForNextUpdate();
+    await waitFor(() => {
+      // It should never be "query at init" because we skip the `init` step.
+      expect(result.current).not.toEqual({
+        query: 'query at init',
+        refine: expect.any(Function),
+      });
 
-    // It should never be "query at init" because we skip the `init` step.
-    expect(result.current).not.toEqual({
-      query: 'query at init',
-      refine: expect.any(Function),
-    });
-
-    // Render state provided by InstantSearch Core during `render`.
-    expect(result.current).toEqual({
-      query: 'query',
-      refine: expect.any(Function),
+      // Render state provided by InstantSearch Core during `render`.
+      expect(result.current).toEqual({
+        query: 'query',
+        refine: expect.any(Function),
+      });
     });
   });
 
-  test('returns empty connector initial render state without getWidgetRenderState', async () => {
+  test('returns empty connector initial render state without getWidgetRenderState', () => {
     const wrapper = createInstantSearchTestWrapper();
 
-    const { result, waitForNextUpdate } = renderHook(
+    const { result } = renderHook(
       () => useConnector(connectCustomSearchBoxWithoutRenderState, {}, {}),
       { wrapper }
     );
 
     expect(result.current).toEqual({});
-
-    await waitForNextUpdate();
   });
 
   test('calls getWidgetRenderState with the InstantSearch render options and artificial results', () => {
-    const getWidgetRenderState = jest.fn();
+    const getWidgetRenderState = jest.fn(() => ({}));
     const connectCustomSearchBoxMock: Connector<
       CustomSearchBoxWidgetDescription,
-      Record<string, never>
+      Record<string, unknown>
     > = (renderFn, unmountFn) => (widgetParams) => ({
       ...connectCustomSearchBox(renderFn, unmountFn)(widgetParams),
+      // @ts-expect-error
       getWidgetRenderState,
     });
     const searchClient = createSearchClient({});
@@ -367,7 +365,7 @@ describe('useConnector', () => {
       tagRefinements: [],
     };
 
-    expect(getWidgetRenderState).toHaveBeenCalledTimes(1);
+    expect(getWidgetRenderState).toHaveBeenCalledTimes(2);
     expect(getWidgetRenderState).toHaveBeenCalledWith({
       helper: expect.objectContaining({
         state: helperState,
@@ -399,7 +397,7 @@ describe('useConnector', () => {
 
   test('calls getWidgetRenderState with recommend results if available', () => {
     const result = createSingleSearchResponse();
-    const getWidgetRenderState = jest.fn();
+    const getWidgetRenderState = jest.fn(() => ({}));
     const searchClient = createSearchClient({});
     const { InstantSearchSpy } = createInstantSearchSpy();
 
@@ -428,8 +426,12 @@ describe('useConnector', () => {
           () => () => ({
             $$type: '',
             dependsOn: 'recommend',
+            init: jest.fn(),
+            render: jest.fn(),
+            dispose: jest.fn(),
             getWidgetParameters: jest.fn(),
             getRenderState: jest.fn(),
+            // @ts-expect-error
             getWidgetRenderState,
           }),
           {},

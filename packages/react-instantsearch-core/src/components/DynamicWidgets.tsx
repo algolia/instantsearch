@@ -66,7 +66,9 @@ export function DynamicWidgets({
   );
 }
 
-function isReactElement(element: any): element is ReactElement {
+function isReactElement(
+  element: any
+): element is ReactElement<Record<string, any>> {
   return typeof element === 'object' && element.props;
 }
 

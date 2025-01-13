@@ -1,12 +1,16 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { createInstantSearchTestWrapper } from '@instantsearch/testutils';
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, waitFor } from '@testing-library/react';
 
 import { useToggleRefinement } from '../useToggleRefinement';
 
 describe('useToggleRefinement', () => {
   test('returns the connector render state', async () => {
     const wrapper = createInstantSearchTestWrapper();
-    const { result, waitForNextUpdate } = renderHook(
+    const { result } = renderHook(
       () => useToggleRefinement({ attribute: 'test' }),
       {
         wrapper,
@@ -34,27 +38,27 @@ describe('useToggleRefinement', () => {
       },
     });
 
-    await waitForNextUpdate();
-
-    // InstantSearch.js state from the `render` lifecycle step
-    expect(result.current).toEqual({
-      canRefine: false,
-      createURL: expect.any(Function),
-      refine: expect.any(Function),
-      sendEvent: expect.any(Function),
-      value: {
-        count: null,
-        isRefined: false,
-        name: 'test',
-        offFacetValue: {
-          count: 0,
-          isRefined: false,
-        },
-        onFacetValue: {
+    await waitFor(() => {
+      // InstantSearch.js state from the `render` lifecycle step
+      expect(result.current).toEqual({
+        canRefine: false,
+        createURL: expect.any(Function),
+        refine: expect.any(Function),
+        sendEvent: expect.any(Function),
+        value: {
           count: null,
           isRefined: false,
+          name: 'test',
+          offFacetValue: {
+            count: 0,
+            isRefined: false,
+          },
+          onFacetValue: {
+            count: null,
+            isRefined: false,
+          },
         },
-      },
+      });
     });
   });
 });
