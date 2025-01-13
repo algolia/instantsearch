@@ -124,6 +124,24 @@ var requestBuilder = {
   },
 
   /**
+   * Get all the queries to send to the client, those queries can used directly
+   * with the Algolia client.
+   * @private
+   * @param  {SearchParameters} state The state from which to get the queries
+   * @return {object[]} The queries
+   */
+  _getCompositionQueries: function getQueries(state) {
+    return [
+      {
+        compositionID: state.index,
+        requestBody: {
+          params: requestBuilder._getCompositionHitsSearchParams(state),
+        },
+      },
+    ];
+  },
+
+  /**
    * Build search parameters used to fetch hits
    * @private
    * @param  {SearchParameters} state The state from which to get the queries
@@ -157,6 +175,53 @@ var requestBuilder = {
     }
 
     return sortObject(merge({}, state.getQueryParams(), additionalParams));
+  },
+
+  /**
+   * Build search parameters used to fetch hits
+   * @private
+   * @param  {SearchParameters} state The state from which to get the queries
+   * @return {object.<string, any>} The search parameters for hits
+   */
+  _getCompositionHitsSearchParams: function (state) {
+    var facets = state.facets
+      .concat(
+        state.disjunctiveFacets.map(function (value) {
+          return 'disjunctive(' + value + ')';
+        })
+      )
+      .concat(requestBuilder._getHitsHierarchicalFacetsAttributes(state))
+      .sort();
+
+    var facetFilters = requestBuilder._getFacetFilters(state);
+    var numericFilters = requestBuilder._getNumericFilters(state);
+    var tagFilters = requestBuilder._getTagFilters(state);
+    var additionalParams = {};
+
+    if (facets.length > 0) {
+      additionalParams.facets = facets.indexOf('*') > -1 ? ['*'] : facets;
+    }
+
+    if (tagFilters.length > 0) {
+      additionalParams.tagFilters = tagFilters;
+    }
+
+    if (facetFilters.length > 0) {
+      additionalParams.facetFilters = facetFilters;
+    }
+
+    if (numericFilters.length > 0) {
+      additionalParams.numericFilters = numericFilters;
+    }
+
+    var params = state.getQueryParams();
+
+    delete params.highlightPreTag;
+    delete params.highlightPostTag;
+    // not a valid search parameter, it is handled in _getCompositionQueries
+    delete params.index;
+
+    return sortObject(merge({}, params, additionalParams));
   },
 
   /**

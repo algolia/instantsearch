@@ -8,8 +8,13 @@ export function TriggerSearch() {
   const waitForResultsRef = useRSCContext();
 
   if (waitForResultsRef?.current?.status === 'pending') {
-    instantsearch._hasSearchWidget &&
-      instantsearch.mainHelper?.searchOnlyWithDerivedHelpers();
+    if (instantsearch._hasSearchWidget) {
+      if (instantsearch.compositionID) {
+        instantsearch.mainHelper?.searchWithComposition();
+      } else {
+        instantsearch.mainHelper?.searchOnlyWithDerivedHelpers();
+      }
+    }
     instantsearch._hasRecommendWidget && instantsearch.mainHelper?.recommend();
   }
 

@@ -28,6 +28,11 @@ export const createInstantSearchComponent = (component) =>
         indexName(indexName) {
           this.instantSearchInstance.helper.setIndex(indexName || '').search();
         },
+        compositionID(compositionID) {
+          this.instantSearchInstance.helper
+            .setIndex(compositionID || '')
+            .search();
+        },
         stalledSearchDelay(stalledSearchDelay) {
           // private InstantSearch.js API:
           this.instantSearchInstance._stalledSearchDelay = stalledSearchDelay;

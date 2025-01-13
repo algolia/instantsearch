@@ -22,7 +22,11 @@ export default createInstantSearchComponent({
     },
     indexName: {
       type: String,
-      required: true,
+      required: false,
+    },
+    compositionID: {
+      type: String,
+      required: false,
     },
     routing: {
       default: undefined,
@@ -101,6 +105,7 @@ export default createInstantSearchComponent({
         insightsClient: this.insightsClient,
         insights: this.insights,
         indexName: this.indexName,
+        compositionID: this.compositionID,
         routing: this.routing,
         stalledSearchDelay: this.stalledSearchDelay,
         searchFunction: this.searchFunction,
