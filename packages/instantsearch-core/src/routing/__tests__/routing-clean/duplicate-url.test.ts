@@ -10,7 +10,7 @@ import {
   historyRouter,
   connectPagination,
   connectSearchBox,
-} from '../..';
+} from '../../..';
 
 /* eslint no-lone-blocks: "off" */
 
@@ -43,6 +43,7 @@ test('does not write the same URL twice', async () => {
         },
       },
       router: historyRouter({
+        cleanUrlOnDispose: true,
         writeDelay,
       }),
     },

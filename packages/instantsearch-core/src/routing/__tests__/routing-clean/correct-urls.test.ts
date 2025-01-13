@@ -11,7 +11,7 @@ import {
   historyRouter,
   connectPagination,
   connectSearchBox,
-} from '../..';
+} from '../../..';
 
 beforeEach(() => {
   window.history.pushState({}, '', '/');
@@ -21,7 +21,7 @@ const writeDelay = 10;
 const writeWait = 10 * writeDelay;
 
 test('correct URL for widgets', async () => {
-  const router = historyRouter({ writeDelay });
+  const router = historyRouter({ cleanUrlOnDispose: true, writeDelay });
 
   const indexName = 'indexName';
   const search = instantsearch({
@@ -54,7 +54,7 @@ test('correct URL for widgets', async () => {
 });
 
 test('correct URL for widgets in indices with repeated indexId', async () => {
-  const router = historyRouter({ writeDelay });
+  const router = historyRouter({ cleanUrlOnDispose: true, writeDelay });
 
   const indexName = 'indexName';
   const search = instantsearch({
