@@ -581,7 +581,14 @@ export function createOptionsTests(
     });
 
     test('keeps focus on toggled input between re-renders', async () => {
-      const searchClient = createMockedSearchClient();
+      const searchClient = createMockedSearchClient(
+        {},
+        {
+          Apple: 100,
+          '2" inch': 200,
+          Samsung: 300,
+        }
+      );
 
       await setup({
         instantSearchOptions: {
@@ -598,7 +605,7 @@ export function createOptionsTests(
       expect(document.activeElement).toEqual(document.body);
 
       const initialTargetItem = document.querySelector(
-        '.ais-RefinementList-checkbox[value="Samsung"]'
+        '.ais-RefinementList-checkbox[value="2\\" inch"]'
       )!;
 
       await act(async () => {
@@ -615,9 +622,10 @@ export function createOptionsTests(
       });
 
       const updatedTargetItem = document.querySelector(
-        '.ais-RefinementList-checkbox[value="Samsung"]'
+        '.ais-RefinementList-checkbox[value="2\\" inch"]'
       )!;
 
+      expect(updatedTargetItem).not.toBeChecked();
       expect(document.activeElement).toEqual(updatedTargetItem);
     });
 
@@ -1531,7 +1539,31 @@ const FACET_HITS = [
   },
 ];
 
-function createMockedSearchClient(parameters: Record<string, any> = {}) {
+function createMockedSearchClient(
+  parameters: Record<string, any> = {},
+  values: Record<string, number> = {
+    'Insignia™': 746,
+    Samsung: 633,
+    Metra: 591,
+    HP: 530,
+    Apple: 442,
+    GE: 394,
+    Sony: 350,
+    Incipio: 320,
+    KitchenAid: 318,
+    Whirlpool: 298,
+    LG: 291,
+    Canon: 287,
+    Frigidaire: 275,
+    Speck: 216,
+    OtterBox: 214,
+    Epson: 204,
+    'Dynex™': 184,
+    Dell: 174,
+    'Hamilton Beach': 173,
+    Platinum: 155,
+  }
+) {
   return createSearchClient({
     search: jest.fn((requests) => {
       return Promise.resolve(
@@ -1539,28 +1571,7 @@ function createMockedSearchClient(parameters: Record<string, any> = {}) {
           ...requests.map(() =>
             createSingleSearchResponse({
               facets: {
-                brand: {
-                  'Insignia™': 746,
-                  Samsung: 633,
-                  Metra: 591,
-                  HP: 530,
-                  Apple: 442,
-                  GE: 394,
-                  Sony: 350,
-                  Incipio: 320,
-                  KitchenAid: 318,
-                  Whirlpool: 298,
-                  LG: 291,
-                  Canon: 287,
-                  Frigidaire: 275,
-                  Speck: 216,
-                  OtterBox: 214,
-                  Epson: 204,
-                  'Dynex™': 184,
-                  Dell: 174,
-                  'Hamilton Beach': 173,
-                  Platinum: 155,
-                },
+                brand: values,
               },
             })
           )
