@@ -10,13 +10,14 @@ import {
   instantsearch,
   noop,
   warnCache,
+  connectSearchBox,
 } from '../..';
 
-import type { UiState } from '../../types';
+import type { IndexUiState, UiState } from '../../types';
 
 jest.useFakeTimers();
 
-describe('life cycle', () => {
+describe('historyRouter', () => {
   const originalWindow = (global as any).window;
 
   beforeEach(() => {
@@ -81,7 +82,7 @@ describe('life cycle', () => {
   });
 
   describe('getCurrentURL', () => {
-    test('calls getCurrentURL on windowTitle', () => {
+    test('calls getCurrentURL on load', () => {
       const getCurrentURL = jest.fn(() => new URL(window.location.href));
 
       historyRouter<UiState>({
@@ -365,6 +366,128 @@ describe('life cycle', () => {
       expect(() => router.createURL({ indexName: {} }))
         .toWarnDev(`[InstantSearch]: The URL returned by the \`createURL\` function is invalid.
 Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algolia.com/search?query=iphone\`.`);
+    });
+
+    it('returns an URL for a `routeState` with refinements', () => {
+      const router = historyRouter<IndexUiState>();
+      const actual = router.createURL({
+        query: 'iPhone',
+        page: 5,
+      });
+
+      expect(actual).toBe('http://localhost/?query=iPhone&page=5');
+    });
+
+    it('returns an URL for an empty `routeState` with index', () => {
+      const router = historyRouter();
+      const actual = router.createURL({
+        indexName: {},
+      });
+
+      expect(actual).toBe('http://localhost/');
+    });
+
+    it('returns an URL for an empty `routeState`', () => {
+      const router = historyRouter();
+      const actual = router.createURL({});
+
+      expect(actual).toBe('http://localhost/');
+    });
+  });
+
+  describe('read', () => {
+    const createFakeUrlWithRefinements: ({
+      length,
+    }: {
+      length: number;
+    }) => string = ({ length }) =>
+      `http://localhost/?${Array.from(
+        { length },
+        (_v, i) => `refinementList[brand][${i}]=brand-${i}`
+      ).join('&')}`;
+
+    test('should parse refinements with more than 20 filters per category as array', () => {
+      history.pushState({}, '', createFakeUrlWithRefinements({ length: 22 }));
+
+      const router = historyRouter<IndexUiState>();
+      const parsedUrl = router.read();
+
+      expect(parsedUrl.refinementList!.brand).toBeInstanceOf(Array);
+      expect(parsedUrl.refinementList!.brand).toHaveLength(22);
+      expect(parsedUrl).toMatchInlineSnapshot(`
+        {
+          "refinementList": {
+            "brand": [
+              "brand-0",
+              "brand-1",
+              "brand-2",
+              "brand-3",
+              "brand-4",
+              "brand-5",
+              "brand-6",
+              "brand-7",
+              "brand-8",
+              "brand-9",
+              "brand-10",
+              "brand-11",
+              "brand-12",
+              "brand-13",
+              "brand-14",
+              "brand-15",
+              "brand-16",
+              "brand-17",
+              "brand-18",
+              "brand-19",
+              "brand-20",
+              "brand-21",
+            ],
+          },
+        }
+      `);
+    });
+
+    test('should support returning 100 refinements as array', () => {
+      history.pushState({}, '', createFakeUrlWithRefinements({ length: 100 }));
+
+      const router = historyRouter<IndexUiState>();
+      const parsedUrl = router.read();
+
+      expect(parsedUrl.refinementList!.brand).toBeInstanceOf(Array);
+      expect(parsedUrl.refinementList!.brand).toHaveLength(100);
+    });
+  });
+
+  describe('windowTitle', () => {
+    test('should update the window title with URL query params on first render', () => {
+      history.pushState({}, '', 'http://localhost/?query=query');
+
+      const setWindowTitle = jest.spyOn(window.document, 'title', 'set');
+      const searchClient = createSearchClient();
+      const router = historyRouter({
+        windowTitle(routeState) {
+          return `Searching for "${routeState.query}"`;
+        },
+      });
+
+      const search = instantsearch({
+        indexName: 'instant_search',
+        searchClient,
+        routing: {
+          router,
+        },
+      });
+
+      const fakeSearchBox = connectSearchBox(() => {})({});
+
+      search.addWidgets([fakeSearchBox]);
+      search.start();
+
+      expect(true).toBe(true);
+
+      expect(setWindowTitle).toHaveBeenCalledTimes(1);
+      expect(setWindowTitle).toHaveBeenLastCalledWith('Searching for "query"');
+
+      setWindowTitle.mockRestore();
     });
   });
 });
