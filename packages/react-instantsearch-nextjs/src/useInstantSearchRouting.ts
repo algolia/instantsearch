@@ -1,11 +1,12 @@
 import historyRouter from 'instantsearch.js/es/lib/routers/history';
-import { headers } from 'next/headers';
+import { headers as nextHeaders } from 'next/headers';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, use } from 'react';
 
 import type { InstantSearchNextProps } from './InstantSearchNext';
 import type { UiState } from 'instantsearch.js';
 import type { BrowserHistoryArgs } from 'instantsearch.js/es/lib/routers/history';
+import type { ReadonlyHeaders } from 'next/dist/server/web/spec-extension/adapters/headers';
 import type { InstantSearchProps } from 'react-instantsearch-core';
 
 export function useInstantSearchRouting<
@@ -15,6 +16,7 @@ export function useInstantSearchRouting<
   passedRouting: InstantSearchNextProps<TUiState, TRouteState>['routing'],
   isMounting: React.RefObject<boolean>
 ) {
+  const isServer = typeof window === 'undefined';
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const routingRef =
@@ -26,14 +28,19 @@ export function useInstantSearchRouting<
     }
   }, [pathname, searchParams]);
 
+  let headers: ReadonlyHeaders | undefined;
+  if (isServer) {
+    headers = use(nextHeaders());
+  }
+
   if (passedRouting && !routingRef.current) {
     let browserHistoryOptions: Partial<BrowserHistoryArgs<TRouteState>> = {};
 
     browserHistoryOptions.getLocation = () => {
-      if (typeof window === 'undefined') {
+      if (isServer) {
         const url = `${
-          headers().get('x-forwarded-proto') || 'http'
-        }://${headers().get('host')}${pathname}?${searchParams}`;
+          headers?.get('x-forwarded-proto') || 'http'
+        }://${headers?.get('host')}${pathname}?${searchParams}`;
         return new URL(url) as unknown as Location;
       }
 

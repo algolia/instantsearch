@@ -35,5 +35,6 @@ export * from './hooks/useInstantSearch';
 export * from './lib/wrapPromiseWithState';
 export * from './lib/useInstantSearchContext';
 export * from './lib/useRSCContext';
+export * from './lib/use';
 export * from './lib/InstantSearchRSCContext';
 export * from './server';
