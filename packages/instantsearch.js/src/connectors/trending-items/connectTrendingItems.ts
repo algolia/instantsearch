@@ -5,12 +5,12 @@ import {
   escapeHits,
   TAG_PLACEHOLDER,
   getObjectType,
-  SendEventForHits,
   createSendEventForHits,
   addAbsolutePosition,
   addQueryID,
 } from '../../lib/utils';
 
+import type { SendEventForHits } from '../../lib/utils';
 import type {
   Connector,
   TransformItems,

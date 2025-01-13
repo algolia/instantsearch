@@ -4,12 +4,12 @@ import {
   noop,
   escapeHits,
   TAG_PLACEHOLDER,
-  SendEventForHits,
   createSendEventForHits,
   addAbsolutePosition,
   addQueryID,
 } from '../../lib/utils';
 
+import type { SendEventForHits } from '../../lib/utils';
 import type {
   Connector,
   TransformItems,
