@@ -137,14 +137,16 @@ describe('frequentlyBoughtTogether', () => {
                   class="ais-FrequentlyBoughtTogether-item"
                 >
                   {
-          "objectID": "1", "__position":1
+          "objectID": "1",
+          "__position":1
         }
                 </li>
                 <li
                   class="ais-FrequentlyBoughtTogether-item"
                 >
                   {
-          "objectID": "2", "__position":2
+          "objectID": "2",
+          "__position":2
         }
                 </li>
               </ol>
