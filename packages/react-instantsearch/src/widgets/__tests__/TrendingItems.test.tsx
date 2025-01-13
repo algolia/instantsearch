@@ -48,7 +48,7 @@ describe('TrendingItems', () => {
               >
                 {
           "objectID": "1",
-          "__position":1
+          "__position": 1
         }
               </li>
               <li
@@ -56,7 +56,7 @@ describe('TrendingItems', () => {
               >
                 {
           "objectID": "2",
-          "__position":2
+          "__position": 2
         }
               </li>
             </ol>

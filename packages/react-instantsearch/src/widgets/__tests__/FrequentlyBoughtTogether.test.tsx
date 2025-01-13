@@ -51,7 +51,7 @@ describe('FrequentlyBoughtTogether', () => {
               >
                 {
           "objectID": "1",
-          "__position":1
+          "__position": 1
         }
               </li>
               <li
@@ -59,7 +59,7 @@ describe('FrequentlyBoughtTogether', () => {
               >
                 {
           "objectID": "2",
-          "__position":2
+          "__position": 2
         }
               </li>
             </ol>
