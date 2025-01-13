@@ -5,22 +5,22 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 
-import { instantsearch, historyRouter, connectSearchBox } from '../..';
+import { instantsearch, historyRouter, connectSearchBox } from '../../..';
 
 /* eslint no-lone-blocks: "off" */
 
 const writeDelay = 10;
 const writeWait = 10 * writeDelay;
 
-describe('routing with third-party client-side router', () => {
+describe('routing with debounced third-party client-side router', () => {
   test('does not clean the URL after navigating', async () => {
     // -- Flow
     // 1. Initial: '/'
     // 2. Refine: '/?indexName[query]=Apple'
-    // 3. Navigate: '/about'
-    // 4. Back: '/?indexName[query]=Apple'
-    // 5. Restart: '/?indexName[query]=Apple'
-    // 6. Refine: '/?indexName[query]=Samsung'
+    // 3. Dispose: '/'
+    // 4. Route change: '/about'
+    // 5. Back: '/'
+    // 6. Back: '/?indexName[query]=Apple'
 
     const pushState = jest.spyOn(window.history, 'pushState');
 
@@ -29,6 +29,7 @@ describe('routing with third-party client-side router', () => {
       searchClient: createSearchClient(),
       routing: {
         router: historyRouter({
+          cleanUrlOnDispose: true,
           writeDelay,
         }),
       },
@@ -55,18 +56,36 @@ describe('routing with third-party client-side router', () => {
       expect(pushState).toHaveBeenCalledTimes(1);
     }
 
-    // 3. Navigate: '/about'
+    // 3. Dispose: '/'
     {
       search.dispose();
+
+      await wait(writeWait);
+      expect(window.location.pathname).toEqual('/');
+      expect(window.location.search).toEqual('');
+      expect(pushState).toHaveBeenCalledTimes(2);
+    }
+
+    // 4. Route change: '/about'
+    {
       window.history.pushState({}, '', '/about');
 
       await wait(writeWait);
       expect(window.location.pathname).toEqual('/about');
       expect(window.location.search).toEqual('');
-      expect(pushState).toHaveBeenCalledTimes(2);
+      expect(pushState).toHaveBeenCalledTimes(3);
     }
 
-    // 4. Back to previous page
+    // 5. Back: '/'
+    {
+      window.history.back();
+
+      await wait(writeWait);
+      expect(window.location.pathname).toEqual('/');
+      expect(window.location.search).toEqual('');
+    }
+
+    // 6. Back: '/?indexName[query]=Apple'
     {
       window.history.back();
 
@@ -74,28 +93,6 @@ describe('routing with third-party client-side router', () => {
       expect(window.location.pathname).toEqual('/');
       expect(window.location.search).toEqual(
         `?${encodeURI('indexName[query]=Apple')}`
-      );
-    }
-
-    // 5. Restart InstantSearch
-    {
-      search.addWidgets([connectSearchBox(() => {})({})]);
-      search.start();
-
-      await wait(writeWait);
-      expect(window.location.pathname).toEqual('/');
-      expect(window.location.search).toEqual(
-        `?${encodeURI('indexName[query]=Apple')}`
-      );
-    }
-
-    // 6. Refine: '/?indexName[query]=Samsung'
-    {
-      search.renderState.indexName.searchBox!.refine('Samsung');
-
-      await wait(writeWait);
-      expect(window.location.search).toEqual(
-        `?${encodeURI('indexName[query]=Samsung')}`
       );
       expect(pushState).toHaveBeenCalledTimes(3);
     }

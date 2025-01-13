@@ -41,258 +41,9 @@ const setWindowTitle = (title?: string): void => {
   }
 };
 
-class BrowserHistory<TRouteState> implements Router<TRouteState> {
-  public $$type = 'ais.browser';
-  /**
-   * Transforms a UI state into a title for the page.
-   */
-  private readonly windowTitle?: BrowserHistoryArgs<TRouteState>['windowTitle'];
-  /**
-   * Time in milliseconds before performing a write in the history.
-   * It prevents from adding too many entries in the history and
-   * makes the back button more usable.
-   *
-   * @default 400
-   */
-  private readonly writeDelay: Required<
-    BrowserHistoryArgs<TRouteState>
-  >['writeDelay'];
-  /**
-   * Creates a full URL based on the route state.
-   * The storage adaptor maps all syncable keys to the query string of the URL.
-   */
-  private readonly _createURL: Required<
-    BrowserHistoryArgs<TRouteState>
-  >['createURL'];
-  /**
-   * Parses the URL into a route state.
-   * It should be symmetrical to `createURL`.
-   */
-  private readonly parseURL: Required<
-    BrowserHistoryArgs<TRouteState>
-  >['parseURL'];
-  /**
-   * Returns the location to store in the history.
-   * @default () => new URL(window.location.href)
-   */
-  private readonly getCurrentURL: Required<
-    BrowserHistoryArgs<TRouteState>
-  >['getCurrentURL'];
-
-  private writeTimer?: ReturnType<typeof setTimeout>;
-  private _onPopState?: (event: PopStateEvent) => void;
-
-  /**
-   * Indicates if last action was back/forward in the browser.
-   */
-  private inPopState: boolean = false;
-
-  /**
-   * Indicates whether the history router is disposed or not.
-   */
-  protected isDisposed: boolean = false;
-
-  /**
-   * Indicates the window.history.length before the last call to
-   * window.history.pushState (called in `write`).
-   * It allows to determine if a `pushState` has been triggered elsewhere,
-   * and thus to prevent the `write` method from calling `pushState`.
-   */
-  private latestAcknowledgedHistory: number = 0;
-
-  private _start?: (onUpdate: () => void) => void;
-  private _dispose?: () => void;
-  private _push?: (url: string) => void;
-  private _cleanUrlOnDispose: boolean;
-
-  /**
-   * Initializes a new storage provider that syncs the search state to the URL
-   * using web APIs (`window.location.pushState` and `onpopstate` event).
-   */
-  public constructor({
-    windowTitle,
-    writeDelay = 400,
-    createURL,
-    parseURL,
-    getCurrentURL,
-    start,
-    dispose,
-    push,
-    cleanUrlOnDispose,
-  }: BrowserHistoryArgs<TRouteState>) {
-    this.windowTitle = windowTitle;
-    this.writeTimer = undefined;
-    this.writeDelay = writeDelay;
-    this._createURL = createURL;
-    this.parseURL = parseURL;
-    this.getCurrentURL = getCurrentURL;
-    this._start = start;
-    this._dispose = dispose;
-    this._push = push;
-    this._cleanUrlOnDispose = Boolean(cleanUrlOnDispose);
-
-    safelyRunOnBrowser(({ window }) => {
-      const title = this.windowTitle && this.windowTitle(this.read());
-      setWindowTitle(title);
-
-      this.latestAcknowledgedHistory = window.history.length;
-    });
-  }
-
-  /**
-   * Reads the URL and returns a syncable UI search state.
-   */
-  public read(): TRouteState {
-    return this.parseURL({ qsModule: qs, currentURL: this.getCurrentURL() });
-  }
-
-  /**
-   * Pushes a search state into the URL.
-   */
-  public write(routeState: TRouteState): void {
-    safelyRunOnBrowser(({ window }) => {
-      const url = this.createURL(routeState);
-      const title = this.windowTitle && this.windowTitle(routeState);
-
-      if (this.writeTimer) {
-        clearTimeout(this.writeTimer);
-      }
-
-      this.writeTimer = setTimeout(() => {
-        setWindowTitle(title);
-
-        if (this.shouldWrite(url)) {
-          if (this._push) {
-            this._push(url);
-          } else {
-            window.history.pushState(routeState, title || '', url);
-          }
-          this.latestAcknowledgedHistory = window.history.length;
-        }
-        this.inPopState = false;
-        this.writeTimer = undefined;
-      }, this.writeDelay);
-    });
-  }
-
-  /**
-   * Sets a callback on the `onpopstate` event of the history API of the current page.
-   * It enables the URL sync to keep track of the changes.
-   */
-  public onUpdate(callback: (routeState: TRouteState) => void): void {
-    if (this._start) {
-      this._start(() => {
-        callback(this.read());
-      });
-    }
-
-    this._onPopState = () => {
-      if (this.writeTimer) {
-        clearTimeout(this.writeTimer);
-        this.writeTimer = undefined;
-      }
-
-      this.inPopState = true;
-
-      // We always read the state from the URL because the state of the history
-      // can be incorect in some cases (e.g. using React Router).
-      callback(this.read());
-    };
-
-    safelyRunOnBrowser(({ window }) => {
-      window.addEventListener('popstate', this._onPopState!);
-    });
-  }
-
-  /**
-   * Creates a complete URL from a given syncable UI state.
-   *
-   * It always generates the full URL, not a relative one.
-   * This allows to handle cases like using a <base href>.
-   * See: https://github.com/algolia/instantsearch/issues/790
-   */
-  public createURL(routeState: TRouteState): string {
-    const url = this._createURL({
-      qsModule: qs,
-      routeState,
-      currentURL: this.getCurrentURL(),
-    });
-
-    if (__DEV__) {
-      try {
-        // We just want to check if the URL is valid.
-        // eslint-disable-next-line no-new
-        new URL(url);
-      } catch (e) {
-        warning(
-          false,
-          `The URL returned by the \`createURL\` function is invalid.
-Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algolia.com/search?query=iphone\`.`
-        );
-      }
-    }
-
-    return url;
-  }
-
-  /**
-   * Removes the event listener and cleans up the URL.
-   */
-  public dispose(): void {
-    if (this._dispose) {
-      this._dispose();
-    }
-
-    this.isDisposed = true;
-
-    safelyRunOnBrowser(({ window }) => {
-      if (this._onPopState) {
-        window.removeEventListener('popstate', this._onPopState);
-      }
-    });
-
-    if (this.writeTimer) {
-      clearTimeout(this.writeTimer);
-    }
-
-    if (this._cleanUrlOnDispose) {
-      this.write({} as TRouteState);
-    }
-  }
-
-  public start() {
-    this.isDisposed = false;
-  }
-
-  private shouldWrite(url: string): boolean {
-    return safelyRunOnBrowser(({ window }) => {
-      // When disposed and the cleanUrlOnDispose is set to false, we do not want to write the URL.
-      if (this.isDisposed && !this._cleanUrlOnDispose) {
-        return false;
-      }
-
-      // We do want to `pushState` if:
-      // - the router is not disposed, IS.js needs to update the URL
-      // OR
-      // - the last write was from InstantSearch.js
-      // (unlike a SPA, where it would have last written)
-      const lastPushWasByISAfterDispose = !(
-        this.isDisposed &&
-        this.latestAcknowledgedHistory !== window.history.length
-      );
-
-      return (
-        // When the last state change was through popstate, the IS.js state changes,
-        // but that should not write the URL.
-        !this.inPopState &&
-        // When the previous pushState after dispose was by IS.js, we want to write the URL.
-        lastPushWasByISAfterDispose &&
-        // When the URL is the same as the current one, we do not want to write it.
-        url !== window.location.href
-      );
-    });
-  }
-}
+type HistoryRouter<TRouteState> = Router<TRouteState> & {
+  isDisposed: boolean;
+};
 
 export function historyRouter<TRouteState = UiState>({
   createURL = ({ qsModule, routeState, currentURL }) => {
@@ -334,16 +85,186 @@ export function historyRouter<TRouteState = UiState>({
   dispose,
   push,
   cleanUrlOnDispose,
-}: Partial<BrowserHistoryArgs<TRouteState>> = {}): BrowserHistory<TRouteState> {
-  return new BrowserHistory({
-    createURL,
-    parseURL,
-    writeDelay,
-    windowTitle,
-    getCurrentURL,
-    start,
-    dispose,
-    push,
-    cleanUrlOnDispose,
+}: Partial<BrowserHistoryArgs<TRouteState>> = {}) {
+  let writeTimer: ReturnType<typeof setTimeout> | undefined;
+  let inPopState = false;
+  let onPopState: (() => void) | undefined;
+  let latestAcknowledgedHistory = 0;
+
+  function shouldWrite(
+    url: string,
+    router: HistoryRouter<TRouteState>
+  ): boolean {
+    return safelyRunOnBrowser(({ window }) => {
+      // When disposed and the cleanUrlOnDispose is set to false, we do not want to write the URL.
+      if (router.isDisposed && !cleanUrlOnDispose) {
+        return false;
+      }
+
+      // We do want to `pushState` if:
+      // - the router is not disposed, IS.js needs to update the URL
+      // OR
+      // - the last write was from InstantSearch.js
+      // (unlike a SPA, where it would have last written)
+      const lastPushWasByISAfterDispose = !(
+        router.isDisposed && latestAcknowledgedHistory !== window.history.length
+      );
+
+      return (
+        // When the last state change was through popstate, the IS.js state changes,
+        // but that should not write the URL.
+        !inPopState &&
+        // When the previous pushState after dispose was by IS.js, we want to write the URL.
+        lastPushWasByISAfterDispose &&
+        // When the URL is the same as the current one, we do not want to write it.
+        url !== window.location.href
+      );
+    });
+  }
+
+  const router: HistoryRouter<TRouteState> = {
+    /**
+     * Identifier of the router.
+     */
+    $$type: 'ais.browser',
+
+    /**
+     * Whether the router has been disposed (no longer active).
+     */
+    isDisposed: false,
+
+    /**
+     * Reads the URL and returns a syncable UI search state.
+     */
+    read(): TRouteState {
+      return parseURL({ qsModule: qs, currentURL: getCurrentURL() });
+    },
+
+    /**
+     * Pushes a search state into the URL.
+     */
+    write(routeState: TRouteState): void {
+      safelyRunOnBrowser(({ window }) => {
+        const url = this.createURL(routeState);
+        const title = windowTitle && windowTitle(routeState);
+
+        if (writeTimer) {
+          clearTimeout(writeTimer);
+        }
+
+        writeTimer = setTimeout(() => {
+          setWindowTitle(title);
+
+          if (shouldWrite(url, router)) {
+            if (push) {
+              push(url);
+            } else {
+              window.history.pushState(routeState, title || '', url);
+            }
+            latestAcknowledgedHistory = window.history.length;
+          }
+          inPopState = false;
+          writeTimer = undefined;
+        }, writeDelay);
+      });
+    },
+
+    /**
+     * Sets a callback on the `onpopstate` event of the history API of the current page.
+     * It enables the URL sync to keep track of the changes.
+     */
+    onUpdate(callback: (routeState: TRouteState) => void): void {
+      if (start) {
+        start(() => {
+          callback(this.read());
+        });
+      }
+
+      onPopState = () => {
+        if (writeTimer) {
+          clearTimeout(writeTimer);
+          writeTimer = undefined;
+        }
+
+        inPopState = true;
+
+        // We always read the state from the URL because the state of the history
+        // can be incorrect in some cases (e.g. using React Router).
+        callback(this.read());
+      };
+
+      safelyRunOnBrowser(({ window }) => {
+        window.addEventListener('popstate', onPopState!);
+      });
+    },
+
+    /**
+     * Creates a complete URL from a given syncable UI state.
+     *
+     * It always generates the full URL, not a relative one.
+     * This allows to handle cases like using a <base href>.
+     * See: https://github.com/algolia/instantsearch/issues/790
+     */
+    createURL(routeState: TRouteState): string {
+      const url = createURL({
+        qsModule: qs,
+        routeState,
+        currentURL: getCurrentURL(),
+      });
+
+      if (__DEV__) {
+        try {
+          // We just want to check if the URL is valid.
+          // eslint-disable-next-line no-new
+          new URL(url);
+        } catch (e) {
+          warning(
+            false,
+            `The URL returned by the \`createURL\` function is invalid.
+Please make sure it returns an absolute URL to avoid issues, e.g: \`https://algolia.com/search?query=iphone\`.`
+          );
+        }
+      }
+
+      return url;
+    },
+
+    /**
+     * Removes the event listener and cleans up the URL.
+     */
+    dispose(): void {
+      if (dispose) {
+        dispose();
+      }
+
+      this.isDisposed = true;
+
+      safelyRunOnBrowser(({ window }) => {
+        if (onPopState) {
+          window.removeEventListener('popstate', onPopState);
+        }
+      });
+
+      if (writeTimer) {
+        clearTimeout(writeTimer);
+      }
+
+      if (cleanUrlOnDispose) {
+        this.write({} as TRouteState);
+      }
+    },
+
+    start() {
+      this.isDisposed = false;
+    },
+  };
+
+  safelyRunOnBrowser(({ window }) => {
+    const title = windowTitle && windowTitle(router.read());
+    setWindowTitle(title);
+
+    latestAcknowledgedHistory = window.history.length;
   });
+
+  return router;
 }

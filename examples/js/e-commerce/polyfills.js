@@ -1,6 +1,6 @@
 /*
  * Polyfill service v3.111.0
- * For detailed credits and licence information see https://polyfill.io.
+ * For detailed credits and license information see https://polyfill.io.
  *
  * Features requested: Array.prototype.find,Array.prototype.findIndex,Array.prototype.includes,Object.assign,Object.entries,Promise,default
  *
