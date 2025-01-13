@@ -7,7 +7,7 @@ import { wait } from '@instantsearch/testutils/wait';
 import originalHelper from 'algoliasearch-helper';
 
 import { connectSearchBox } from '../../connectors';
-import { index } from '../../widgets';
+import { index, configure } from '../../widgets';
 import InstantSearch from '../InstantSearch';
 
 type AlgoliaHelperModule = typeof algoliasearchHelper;
@@ -118,5 +118,114 @@ describe('Composition implementation', () => {
     await wait(0);
 
     expect(search.mainHelper!.searchWithComposition).toHaveBeenCalledTimes(1);
+  });
+
+  describe('when performing a search', () => {
+    it('should remove highlightTags parameters', async () => {
+      const searchClient = createCompositionClient();
+      const search = new InstantSearch({
+        compositionID: 'my-composition',
+        searchClient,
+      });
+
+      search.addWidgets([
+        configure({
+          highlightPreTag: 'whatever',
+          highlightPostTag: 'whenever',
+        }),
+        virtualSearchBox({}),
+      ]);
+      search.start();
+
+      await wait(0);
+
+      expect(search.mainHelper!.searchWithComposition).toHaveBeenCalledTimes(1);
+      expect(searchClient.search).toHaveBeenNthCalledWith(1, {
+        compositionID: 'my-composition',
+        requestBody: { params: { query: '' } },
+      });
+    });
+
+    it('should transform index parameter into compositionID and remove it from parameters', async () => {
+      const searchClient = createCompositionClient();
+      const search = new InstantSearch({
+        compositionID: 'my-composition',
+        searchClient,
+      });
+
+      search.addWidgets([
+        configure({ index: 'please-do-not-do-that' }),
+        virtualSearchBox({}),
+      ]);
+      search.start();
+
+      await wait(0);
+
+      expect(search.mainHelper!.searchWithComposition).toHaveBeenCalledTimes(1);
+      expect(searchClient.search).toHaveBeenNthCalledWith(1, {
+        compositionID: 'please-do-not-do-that',
+        requestBody: { params: { query: '' } },
+      });
+    });
+
+    it('should handle facets & disjunctiveFacets', async () => {
+      const searchClient = createCompositionClient();
+      const search = new InstantSearch({
+        compositionID: 'my-composition',
+        searchClient,
+      });
+
+      search.addWidgets([
+        configure({
+          facets: ['brand'],
+          disjunctiveFacets: ['categories'],
+        }),
+        virtualSearchBox({}),
+      ]);
+      search.start();
+
+      await wait(0);
+
+      expect(search.mainHelper!.searchWithComposition).toHaveBeenCalledTimes(1);
+      expect(searchClient.search).toHaveBeenNthCalledWith(1, {
+        compositionID: 'my-composition',
+        requestBody: {
+          params: { query: '', facets: ['brand', 'disjunctive(categories)'] },
+        },
+      });
+    });
+
+    it('should handle various filters', async () => {
+      const searchClient = createCompositionClient();
+      const search = new InstantSearch({
+        compositionID: 'my-composition',
+        searchClient,
+      });
+
+      search.addWidgets([
+        configure({
+          tagFilters: ['tags'],
+          facetFilters: ['brand'],
+          numericFilters: ['price'],
+        }),
+        virtualSearchBox({}),
+      ]);
+      search.start();
+
+      await wait(0);
+
+      expect(search.mainHelper!.searchWithComposition).toHaveBeenCalledTimes(1);
+      expect(searchClient.search).toHaveBeenNthCalledWith(1, {
+        compositionID: 'my-composition',
+        requestBody: {
+          params: {
+            query: '',
+            tagFilters: ['tags'],
+            facetFilters: ['brand'],
+            numericFilters: ['price'],
+          },
+        },
+      });
+    });
   });
 });
