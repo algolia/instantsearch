@@ -14,6 +14,7 @@ describe('carousel', () => {
 
     const { container } = render(
       template({
+        sendEvent: jest.fn(),
         items: [
           { objectID: '1', __position: 1 },
           { objectID: '2', __position: 2 },
@@ -118,6 +119,7 @@ describe('carousel', () => {
 
     const { container } = render(
       template({
+        sendEvent: jest.fn(),
         items: [
           { objectID: '1', __position: 1 },
           { objectID: '2', __position: 2 },
@@ -155,6 +157,7 @@ describe('carousel', () => {
 
     const { container } = render(
       template({
+        sendEvent: jest.fn(),
         items: [
           { objectID: '1', __position: 1 },
           { objectID: '2', __position: 2 },
@@ -239,6 +242,7 @@ describe('carousel', () => {
 
     const { container } = render(
       template({
+        sendEvent: jest.fn(),
         items: [
           { objectID: '1', __position: 1 },
           { objectID: '2', __position: 2 },
