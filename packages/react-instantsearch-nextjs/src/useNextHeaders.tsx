@@ -17,10 +17,11 @@ export const useNextHeaders = () => {
   let h: Headers;
 
   if (isServer) {
+    const nextHeaders = headers();
     if (isPromise(headers())) {
-      h = use(headers());
+      h = use(nextHeaders);
     } else {
-      h = headers() as unknown as Headers; // assert that headers come from the synchronous nextjs function
+      h = nextHeaders as unknown as Headers; // assert that headers come from the synchronous nextjs function
     }
   }
 
