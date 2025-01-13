@@ -53,7 +53,8 @@ export function createOptionsTests(
             }
           },
           "name": "Moschino Love – Shoulder bag",
-          "objectID": "1"
+          "objectID": "1",
+          "__position": 1
         }
               </li>
               <li
@@ -68,7 +69,8 @@ export function createOptionsTests(
             }
           },
           "name": "Bag “Sabrina“ medium Gabs",
-          "objectID": "2"
+          "objectID": "2",
+          "__position": 2
         }
               </li>
             </ol>
@@ -121,14 +123,16 @@ export function createOptionsTests(
                 class="ais-TrendingItems-item"
               >
                 {
-          "objectID": "(1)"
+          "objectID": "(1)",
+          "__position": 1
         }
               </li>
               <li
                 class="ais-TrendingItems-item"
               >
                 {
-          "objectID": "(2)"
+          "objectID": "(2)",
+          "__position": 2
         }
               </li>
             </ol>

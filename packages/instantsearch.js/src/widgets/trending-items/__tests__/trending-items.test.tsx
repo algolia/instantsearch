@@ -136,7 +136,7 @@ describe('trendingItems', () => {
                 >
                   {
           "objectID": "1",
-          "__position":1
+          "__position": 1
         }
                 </li>
                 <li
