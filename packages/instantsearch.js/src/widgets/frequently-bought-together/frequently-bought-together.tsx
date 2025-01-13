@@ -121,7 +121,6 @@ const renderer =
               templateKey="layout"
               rootTagName="fragment"
               data={{
-                sendEvent,
                 items: data.items,
                 templates: {
                   item: templates.item
