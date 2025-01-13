@@ -6,7 +6,6 @@ import { useRef, useEffect, use } from 'react';
 import type { InstantSearchNextProps } from './InstantSearchNext';
 import type { UiState } from 'instantsearch.js';
 import type { BrowserHistoryArgs } from 'instantsearch.js/es/lib/routers/history';
-import type { ReadonlyHeaders } from 'next/dist/server/web/spec-extension/adapters/headers';
 import type { InstantSearchProps } from 'react-instantsearch-core';
 
 export function useInstantSearchRouting<
@@ -28,7 +27,7 @@ export function useInstantSearchRouting<
     }
   }, [pathname, searchParams]);
 
-  let headers: ReadonlyHeaders | undefined;
+  let headers: Awaited<ReturnType<typeof nextHeaders>> | undefined;
   if (isServer) {
     headers = use(nextHeaders());
   }
