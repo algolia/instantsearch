@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import {
   createSearchClient,
   createMultiSearchResponse,
@@ -5,7 +9,7 @@ import {
   defaultUserData,
 } from '@instantsearch/mocks';
 import { createInstantSearchTestWrapper } from '@instantsearch/testutils';
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, waitFor } from '@testing-library/react';
 
 import { useQueryRules } from '../useQueryRules';
 
@@ -46,7 +50,7 @@ describe('useQueryRules', () => {
         title: `${item.title} (transformed)`,
       }));
 
-    const { result, waitForNextUpdate } = renderHook(
+    const { result } = renderHook(
       () =>
         useQueryRules({
           trackedFilters,
@@ -63,17 +67,17 @@ describe('useQueryRules', () => {
       items: [],
     });
 
-    await waitForNextUpdate();
-
-    // InstantSearch.js state from the `render` lifecycle step
-    expect(result.current).toEqual({
-      items: [
-        {
-          title: 'Banner title (transformed)',
-          banner: 'https://banner.jpg',
-          link: 'https://banner.com/link/',
-        },
-      ],
+    await waitFor(() => {
+      // InstantSearch.js state from the `render` lifecycle step
+      expect(result.current).toEqual({
+        items: [
+          {
+            title: 'Banner title (transformed)',
+            banner: 'https://banner.jpg',
+            link: 'https://banner.com/link/',
+          },
+        ],
+      });
     });
   });
 });

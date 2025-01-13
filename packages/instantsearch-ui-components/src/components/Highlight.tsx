@@ -9,11 +9,12 @@ import type {
 } from '../types';
 
 type HighlightPartProps = {
-  children: ComponentChildren;
+  children?: ComponentChildren;
   classNames: Partial<HighlightClassNames>;
   highlightedTagName: ElementType;
   nonHighlightedTagName: ElementType;
   isHighlighted: boolean;
+  key?: string | number;
 };
 
 function createHighlightPartComponent({ createElement }: Renderer) {

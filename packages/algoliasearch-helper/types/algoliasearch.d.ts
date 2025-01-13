@@ -334,3 +334,14 @@ export interface SearchClient {
     : never;
   addAlgoliaAgent?: DefaultSearchClient['addAlgoliaAgent'];
 }
+
+export interface CompositionClient {
+  search: <T>(request: {
+    compositionID: string;
+    requestBody: { params: SearchOptions };
+  }) => Promise<{
+    results: Array<AlgoliaSearch.SearchResponse<T>>;
+  }>;
+  initIndex?: never;
+  addAlgoliaAgent?: DefaultSearchClient['addAlgoliaAgent'];
+}

@@ -8,8 +8,7 @@ import {
   InstantSearchTestWrapper,
   wait,
 } from '@instantsearch/testutils';
-import { render, waitFor } from '@testing-library/react';
-import { renderHook } from '@testing-library/react-hooks';
+import { render, waitFor, renderHook } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
 import React, { useEffect } from 'react';
@@ -22,10 +21,9 @@ import type { UseInstantSearchProps } from '../useInstantSearch';
 describe('useInstantSearch', () => {
   describe('usage', () => {
     test('it errors when not nested in InstantSearch', () => {
-      const { result } = renderHook(() => useInstantSearch());
-
-      expect(result.error).toBeInstanceOf(Error);
-      expect(result.error?.message).toMatchInlineSnapshot(`
+      expect(() => {
+        renderHook(() => useInstantSearch());
+      }).toThrowErrorMatchingInlineSnapshot(`
         "[InstantSearch] Hooks must be used inside the <InstantSearch> component.
 
         They are not compatible with the \`react-instantsearch-core@6.x\` and \`react-instantsearch-dom\` packages, so make sure to use the <InstantSearch> component from \`react-instantsearch-core@7.x\`."

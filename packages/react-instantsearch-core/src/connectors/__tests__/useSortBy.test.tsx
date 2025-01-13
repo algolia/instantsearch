@@ -1,5 +1,9 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { createInstantSearchTestWrapper } from '@instantsearch/testutils';
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, waitFor } from '@testing-library/react';
 
 import { useSortBy } from '../useSortBy';
 
@@ -12,10 +16,7 @@ const items = [
 describe('useSortBy', () => {
   test('returns the connector render state', async () => {
     const wrapper = createInstantSearchTestWrapper();
-    const { result, waitForNextUpdate } = renderHook(
-      () => useSortBy({ items }),
-      { wrapper }
-    );
+    const { result } = renderHook(() => useSortBy({ items }), { wrapper });
 
     expect(result.current).toEqual({
       currentRefinement: 'indexName',
@@ -25,14 +26,14 @@ describe('useSortBy', () => {
       canRefine: expect.any(Boolean),
     });
 
-    await waitForNextUpdate();
-
-    expect(result.current).toEqual({
-      currentRefinement: 'indexName',
-      options: items,
-      refine: expect.any(Function),
-      hasNoResults: expect.any(Boolean),
-      canRefine: expect.any(Boolean),
+    await waitFor(() => {
+      expect(result.current).toEqual({
+        currentRefinement: 'indexName',
+        options: items,
+        refine: expect.any(Function),
+        hasNoResults: expect.any(Boolean),
+        canRefine: expect.any(Boolean),
+      });
     });
   });
 });

@@ -1,12 +1,16 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { createInstantSearchTestWrapper } from '@instantsearch/testutils';
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, waitFor } from '@testing-library/react';
 
 import { useHierarchicalMenu } from '../useHierarchicalMenu';
 
 describe('useHierarchicalMenu', () => {
   test('returns the connector render state', async () => {
     const wrapper = createInstantSearchTestWrapper();
-    const { result, waitForNextUpdate } = renderHook(
+    const { result } = renderHook(
       () => useHierarchicalMenu({ attributes: ['attribute'] }),
       {
         wrapper,
@@ -25,18 +29,18 @@ describe('useHierarchicalMenu', () => {
       toggleShowMore: expect.any(Function),
     });
 
-    await waitForNextUpdate();
-
-    // InstantSearch.js state from the `render` lifecycle step
-    expect(result.current).toEqual({
-      canRefine: false,
-      canToggleShowMore: false,
-      createURL: expect.any(Function),
-      isShowingMore: false,
-      items: [],
-      refine: expect.any(Function),
-      sendEvent: expect.any(Function),
-      toggleShowMore: expect.any(Function),
+    await waitFor(() => {
+      // InstantSearch.js state from the `render` lifecycle step
+      expect(result.current).toEqual({
+        canRefine: false,
+        canToggleShowMore: false,
+        createURL: expect.any(Function),
+        isShowingMore: false,
+        items: [],
+        refine: expect.any(Function),
+        sendEvent: expect.any(Function),
+        toggleShowMore: expect.any(Function),
+      });
     });
   });
 });

@@ -1,5 +1,4 @@
 import { safelyRunOnBrowser } from 'instantsearch.js/es/lib/utils';
-import { headers } from 'next/headers';
 import React, { useEffect, useMemo, useRef } from 'react';
 import {
   InstantSearch,
@@ -10,6 +9,7 @@ import {
 import { InitializePromise } from './InitializePromise';
 import { TriggerSearch } from './TriggerSearch';
 import { useInstantSearchRouting } from './useInstantSearchRouting';
+import { useNextHeaders } from './useNextHeaders';
 import { warn } from './warn';
 
 import type { InitialResults, StateMapping, UiState } from 'instantsearch.js';
@@ -72,8 +72,10 @@ export function InstantSearchNext<
     };
   }, []);
 
+  const headers = useNextHeaders();
+
   const nonce = safelyRunOnBrowser(() => undefined, {
-    fallback: () => headers().get('x-nonce') || undefined,
+    fallback: () => headers?.get('x-nonce') || undefined,
   });
 
   const routing = useInstantSearchRouting(passedRouting, isMounting);
@@ -93,7 +95,7 @@ This message will only be displayed in development mode.`
   return (
     <InstantSearchRSCContext.Provider value={promiseRef}>
       <InstantSearchSSRProvider initialResults={initialResults}>
-        <InstantSearch {...instantSearchProps} routing={routing}>
+        <InstantSearch {...instantSearchProps} routing={routing!}>
           {shouldTriggerSearch && <InitializePromise nonce={nonce} />}
           {children}
           {shouldTriggerSearch && <TriggerSearch />}

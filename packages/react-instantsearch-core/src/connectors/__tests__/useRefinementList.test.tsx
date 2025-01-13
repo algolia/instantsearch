@@ -1,12 +1,16 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { createInstantSearchTestWrapper } from '@instantsearch/testutils';
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, waitFor } from '@testing-library/react';
 
 import { useRefinementList } from '../useRefinementList';
 
 describe('useRefinementList', () => {
   test('returns the connector render state', async () => {
     const wrapper = createInstantSearchTestWrapper();
-    const { result, waitForNextUpdate } = renderHook(
+    const { result } = renderHook(
       () => useRefinementList({ attribute: 'attribute' }),
       {
         wrapper,
@@ -28,21 +32,21 @@ describe('useRefinementList', () => {
       toggleShowMore: expect.any(Function),
     });
 
-    await waitForNextUpdate();
-
-    // InstantSearch.js state from the `render` lifecycle step
-    expect(result.current).toEqual({
-      canRefine: false,
-      canToggleShowMore: false,
-      createURL: expect.any(Function),
-      hasExhaustiveItems: true,
-      isFromSearch: false,
-      isShowingMore: false,
-      items: [],
-      refine: expect.any(Function),
-      searchForItems: expect.any(Function),
-      sendEvent: expect.any(Function),
-      toggleShowMore: expect.any(Function),
+    await waitFor(() => {
+      // InstantSearch.js state from the `render` lifecycle step
+      expect(result.current).toEqual({
+        canRefine: false,
+        canToggleShowMore: false,
+        createURL: expect.any(Function),
+        hasExhaustiveItems: true,
+        isFromSearch: false,
+        isShowingMore: false,
+        items: [],
+        refine: expect.any(Function),
+        searchForItems: expect.any(Function),
+        sendEvent: expect.any(Function),
+        toggleShowMore: expect.any(Function),
+      });
     });
   });
 });

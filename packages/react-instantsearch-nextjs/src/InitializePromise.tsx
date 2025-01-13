@@ -10,7 +10,12 @@ import {
 
 import { htmlEscapeJsonString } from './htmlEscape';
 
-import type { InitialResults, SearchOptions } from 'instantsearch.js';
+import type {
+  InitialResults,
+  SearchOptions,
+  CompositionClient,
+  SearchClient,
+} from 'instantsearch.js';
 
 type InitializePromiseProps = {
   /**
@@ -60,13 +65,24 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
   // Extract search parameters from the search client to use them
   // later during hydration.
   let requestParamsList: SearchOptions[];
-  search.mainHelper!.setClient({
-    ...search.mainHelper!.getClient(),
-    search(queries) {
-      requestParamsList = queries.map(({ params }) => params);
-      return search.client.search(queries);
-    },
-  });
+
+  if (search.compositionID) {
+    search.mainHelper!.setClient({
+      ...search.mainHelper!.getClient(),
+      search(query) {
+        requestParamsList = [query.requestBody.params];
+        return (search.client as CompositionClient).search(query);
+      },
+    } as CompositionClient);
+  } else {
+    search.mainHelper!.setClient({
+      ...search.mainHelper!.getClient(),
+      search(queries) {
+        requestParamsList = queries.map(({ params }) => params);
+        return (search.client as SearchClient).search(queries);
+      },
+    } as SearchClient);
+  }
 
   resetWidgetId();
 

@@ -56,6 +56,7 @@ export type HitsProps<THit> = ComponentProps<'div'> & {
     className: string;
     onClick: () => void;
     onAuxClick: () => void;
+    key?: string | number;
   }) => JSX.Element;
   sendEvent: SendEventForHits;
   classNames?: Partial<HitsClassNames>;

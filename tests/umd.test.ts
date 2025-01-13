@@ -29,18 +29,6 @@ describe('UMD bundle', () => {
       globalName: 'instantsearch',
     },
     {
-      name: 'react-instantsearch',
-      bundle: 'dist/umd/ReactInstantSearch.min.js',
-      globalName: 'ReactInstantSearch',
-      dependency: 'node_modules/react/umd/react.production.min.js',
-    },
-    {
-      name: 'react-instantsearch-core',
-      bundle: 'dist/umd/ReactInstantSearchCore.min.js',
-      globalName: 'ReactInstantSearchCore',
-      dependency: 'node_modules/react/umd/react.production.min.js',
-    },
-    {
       name: 'vue-instantsearch',
       bundle: 'vue2/umd/index.js',
       globalName: 'VueInstantSearch',

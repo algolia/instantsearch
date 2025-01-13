@@ -14,6 +14,7 @@ import { useRSCContext } from './useRSCContext';
 import { warn } from './warn';
 
 import type {
+  CompositionClient,
   InstantSearchOptions,
   SearchClient,
   UiState,
@@ -243,7 +244,7 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
 }
 
 function addAlgoliaAgents(
-  searchClient: SearchClient,
+  searchClient: SearchClient | CompositionClient,
   userAgents: Array<string | null>
 ) {
   if (typeof searchClient.addAlgoliaAgent !== 'function') {
