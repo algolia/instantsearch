@@ -1,7 +1,8 @@
 import historyRouter from 'instantsearch.js/es/lib/routers/history';
-import { headers as nextHeaders } from 'next/headers';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { useRef, useEffect, use } from 'react';
+import { useRef, useEffect } from 'react';
+
+import { useNextHeaders } from './useNextHeaders';
 
 import type { InstantSearchNextProps } from './InstantSearchNext';
 import type { UiState } from 'instantsearch.js';
@@ -27,10 +28,7 @@ export function useInstantSearchRouting<
     }
   }, [pathname, searchParams]);
 
-  let headers: Awaited<ReturnType<typeof nextHeaders>> | undefined;
-  if (isServer) {
-    headers = use(nextHeaders());
-  }
+  const headers = useNextHeaders();
 
   if (passedRouting && !routingRef.current) {
     let browserHistoryOptions: Partial<BrowserHistoryArgs<TRouteState>> = {};

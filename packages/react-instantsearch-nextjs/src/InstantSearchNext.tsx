@@ -1,6 +1,5 @@
 import { safelyRunOnBrowser } from 'instantsearch.js/es/lib/utils';
-import { headers } from 'next/headers';
-import React, { use, useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import {
   InstantSearch,
   InstantSearchRSCContext,
@@ -10,6 +9,7 @@ import {
 import { InitializePromise } from './InitializePromise';
 import { TriggerSearch } from './TriggerSearch';
 import { useInstantSearchRouting } from './useInstantSearchRouting';
+import { useNextHeaders } from './useNextHeaders';
 import { warn } from './warn';
 
 import type { InitialResults, StateMapping, UiState } from 'instantsearch.js';
@@ -72,14 +72,11 @@ export function InstantSearchNext<
     };
   }, []);
 
-  let nonce: string | undefined;
-  if (isServer) {
-    const h = use(headers());
+  const headers = useNextHeaders();
 
-    nonce = safelyRunOnBrowser(() => undefined, {
-      fallback: () => h.get('x-nonce') || undefined,
-    });
-  }
+  const nonce = safelyRunOnBrowser(() => undefined, {
+    fallback: () => headers?.get('x-nonce') || undefined,
+  });
 
   const routing = useInstantSearchRouting(passedRouting, isMounting);
 
