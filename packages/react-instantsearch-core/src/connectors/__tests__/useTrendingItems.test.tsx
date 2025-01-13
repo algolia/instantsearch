@@ -17,13 +17,19 @@ describe('useTrendingItems', () => {
     );
 
     // Initial render state from manual `getWidgetRenderState`
-    expect(result.current).toEqual({ items: [] });
+    expect(result.current).toEqual({
+      items: [],
+      sendEvent: expect.any(Function),
+    });
 
     await waitForNextUpdate();
 
     // InstantSearch.js state from the `render` lifecycle step
     expect(result.current).toEqual({
-      items: expect.arrayContaining([{ objectID: '1' }, { objectID: '2' }]),
+      items: expect.arrayContaining([
+        { __position: 1, objectID: '1' },
+        { __position: 2, objectID: '2' },
+      ]),
     });
   });
 });
