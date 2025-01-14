@@ -39,6 +39,7 @@ import type {
   MiddlewareDefinition,
   RenderState,
   InitialResults,
+  CompositionClient,
 } from '../types';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 
@@ -68,6 +69,13 @@ export type InstantSearchOptions<
   indexName?: string;
 
   /**
+   * The objectID of the composition.
+   * If this is passed, the composition API will be used for search.
+   * Multi-index search is not supported with this option.
+   */
+  compositionID?: string;
+
+  /**
    * The search client to plug to InstantSearch.js
    *
    * Usage:
@@ -94,7 +102,7 @@ export type InstantSearchOptions<
    * });
    * ```
    */
-  searchClient: SearchClient;
+  searchClient: SearchClient | CompositionClient;
 
   /**
    * The locale used to display numbers. This will be passed
@@ -206,6 +214,7 @@ class InstantSearch<
 > extends EventEmitter {
   public client: InstantSearchOptions['searchClient'];
   public indexName: string;
+  public compositionID?: string;
   public insightsClient: AlgoliaInsightsClient | null;
   public onStateChange: InstantSearchOptions<TUiState>['onStateChange'] | null =
     null;
@@ -263,6 +272,7 @@ Use \`InstantSearch.status === "stalled"\` instead.`
 
     const {
       indexName = '',
+      compositionID,
       numberLocale,
       initialUiState = {} as TUiState,
       routing = null,
@@ -341,10 +351,13 @@ See documentation: ${createDocumentationLink({
     this.future = future;
     this.insightsClient = insightsClient;
     this.indexName = indexName;
+    this.compositionID = compositionID;
     this.helper = null;
     this.mainHelper = null;
     this.mainIndex = index({
-      indexName,
+      // we use an index widget to render compositions
+      // this only works because there's only one composition index allow for now
+      indexName: this.compositionID || this.indexName,
     });
     this.onStateChange = onStateChange;
 
@@ -500,6 +513,14 @@ See documentation: ${createDocumentationLink({
       );
     }
 
+    if (this.compositionID && widgets.some(isIndexWidget)) {
+      throw new Error(
+        withUsage(
+          'The `index` widget cannot be used with a composition-based InstantSearch implementation.'
+        )
+      );
+    }
+
     this.mainIndex.addWidgets(widgets);
 
     return this;
@@ -569,12 +590,18 @@ See documentation: ${createDocumentationLink({
         persistHierarchicalRootCount: this.future.persistHierarchicalRootCount,
       });
 
+    if (this.compositionID) {
+      mainHelper.searchForFacetValues =
+        mainHelper.searchForCompositionFacetValues.bind(mainHelper);
+    }
+
     mainHelper.search = () => {
       this.status = 'loading';
       this.scheduleRender(false);
 
       warning(
         Boolean(this.indexName) ||
+          Boolean(this.compositionID) ||
           this.mainIndex.getWidgets().some(isIndexWidget),
         'No indexName provided, nor an explicit index widget in the widgets tree. This is required to be able to display results.'
       );
@@ -584,7 +611,11 @@ See documentation: ${createDocumentationLink({
       // completely transparent for the rest of the codebase. Only this module
       // is impacted.
       if (this._hasSearchWidget) {
-        mainHelper.searchOnlyWithDerivedHelpers();
+        if (this.compositionID) {
+          mainHelper.searchWithComposition();
+        } else {
+          mainHelper.searchOnlyWithDerivedHelpers();
+        }
       }
 
       if (this._hasRecommendWidget) {

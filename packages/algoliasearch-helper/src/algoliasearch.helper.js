@@ -168,6 +168,10 @@ AlgoliaSearchHelper.prototype.searchOnlyWithDerivedHelpers = function () {
   return this;
 };
 
+AlgoliaSearchHelper.prototype.searchWithComposition = function () {
+  this._runComposition({ onlyWithDerivedHelpers: true });
+  return this;
+};
 /**
  * Sends the recommendation queries set in the state. When the method is
  * called, it triggers a `fetch` event. The results will be available through
@@ -439,6 +443,81 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function (
       if (self._currentNbQueries === 0) self.emit('searchQueueEmpty');
 
       content = Array.isArray(content) ? content[0] : content;
+
+      content.facetHits.forEach(function (f) {
+        f.escapedValue = escapeFacetValue(f.value);
+        f.isRefined = isDisjunctive
+          ? state.isDisjunctiveFacetRefined(facet, f.escapedValue)
+          : state.isFacetRefined(facet, f.escapedValue);
+      });
+
+      return content;
+    },
+    function (e) {
+      self._currentNbQueries--;
+      if (self._currentNbQueries === 0) self.emit('searchQueueEmpty');
+      throw e;
+    }
+  );
+};
+
+/**
+ * Search for facet values using the Composition API & based on a query and the name of a faceted attribute.
+ * This triggers a search and will return a promise. On top of using the query, it also sends
+ * the parameters from the state so that the search is narrowed down to only the possible values.
+ *
+ * See the description of [FacetSearchResult](reference.html#FacetSearchResult)
+ * @param {string} facet the name of the faceted attribute
+ * @param {string} query the string query for the search
+ * @param {number} [maxFacetHits] the maximum number values returned. Should be > 0 and <= 100
+ * @param {object} [userState] the set of custom parameters to use on top of the current state. Setting a property to `undefined` removes
+ * it in the generated query.
+ * @return {promise.<FacetSearchResult>} the results of the search
+ */
+AlgoliaSearchHelper.prototype.searchForCompositionFacetValues = function (
+  facet,
+  query,
+  maxFacetHits,
+  userState
+) {
+  if (typeof this.client.searchForFacetValues !== 'function') {
+    throw new Error(
+      'search for facet values (searchable) was called, but this client does not have a function client.searchForFacetValues'
+    );
+  }
+
+  var state = this.state.setQueryParameters(userState || {});
+  var isDisjunctive = state.isDisjunctiveFacet(facet);
+
+  this._currentNbQueries++;
+  // eslint-disable-next-line consistent-this
+  var self = this;
+  var searchForFacetValuesPromise;
+
+  searchForFacetValuesPromise = this.client.searchForFacetValues({
+    compositionID: state.index,
+    facetName: facet,
+    searchForFacetValuesRequest: {
+      params: {
+        query: query,
+        maxFacetHits: maxFacetHits,
+        searchQuery: requestBuilder._getCompositionHitsSearchParams(state),
+      },
+    },
+  });
+
+  this.emit('searchForFacetValues', {
+    state: state,
+    facet: facet,
+    query: query,
+  });
+
+  return searchForFacetValuesPromise.then(
+    function addIsRefined(content) {
+      self._currentNbQueries--;
+      if (self._currentNbQueries === 0) self.emit('searchQueueEmpty');
+
+      content = content.results[0];
 
       content.facetHits.forEach(function (f) {
         f.escapedValue = escapeFacetValue(f.value);
@@ -1566,6 +1645,71 @@ AlgoliaSearchHelper.prototype._search = function (options) {
   try {
     this.client
       .search(queries)
+      .then(this._dispatchAlgoliaResponse.bind(this, states, queryId))
+      .catch(this._dispatchAlgoliaError.bind(this, queryId));
+  } catch (error) {
+    // If we reach this part, we're in an internal error state
+    this.emit('error', {
+      error: error,
+    });
+  }
+
+  return undefined;
+};
+
+/**
+ * Perform the underlying queries
+ * @private
+ * @param {boolean} [options.onlyWithDerivedHelpers=false] if true, only the derived helpers will be queried
+ * @return {undefined} does not return anything
+ * @fires search
+ * @fires result
+ * @fires error
+ */
+AlgoliaSearchHelper.prototype._runComposition = function () {
+  var state = this.state;
+  var states = [];
+  var mainQueries = [];
+
+  var derivedQueries = this.derivedHelpers.map(function (derivedHelper) {
+    var derivedState = derivedHelper.getModifiedState(state);
+    var derivedStateQueries =
+      requestBuilder._getCompositionQueries(derivedState);
+
+    states.push({
+      state: derivedState,
+      queriesCount: derivedStateQueries.length,
+      helper: derivedHelper,
+    });
+
+    derivedHelper.emit('search', {
+      state: derivedState,
+      results: derivedHelper.lastResults,
+    });
+
+    return derivedStateQueries;
+  });
+
+  var queries = Array.prototype.concat.apply(mainQueries, derivedQueries);
+
+  var queryId = this._queryId++;
+  this._currentNbQueries++;
+
+  if (!queries.length) {
+    return Promise.resolve({ results: [] }).then(
+      this._dispatchAlgoliaResponse.bind(this, states, queryId)
+    );
+  }
+
+  if (queries.length > 1) {
+    throw new Error('Only one query is allowed when using a composition.');
+  }
+
+  var query = queries[0];
+
+  try {
+    this.client
+      .search(query)
       .then(this._dispatchAlgoliaResponse.bind(this, states, queryId))
       .catch(this._dispatchAlgoliaError.bind(this, queryId));
   } catch (error) {
