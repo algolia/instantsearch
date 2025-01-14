@@ -39,27 +39,25 @@ export function createInitialStateFromRouteTestSuite(flavor: string) {
         expect(brand).toEqual('KitchenAid');
       });
 
-      if (flavor !== 'vue') {
-        it('must have lower price set to $50 and the upper price set to $350 in the price range', async () => {
-          const lowerPrice = await browser.getRangeSliderLowerBoundValue();
-          const upperPrice = await browser.getRangeSliderUpperBoundValue();
+      it('must have lower price set to $50 and the upper price set to $350 in the price range', async () => {
+        const lowerPrice = await browser.getRangeSliderLowerBoundValue();
+        const upperPrice = await browser.getRangeSliderUpperBoundValue();
 
-          expect(lowerPrice).toEqual(50);
-          expect(upperPrice).toEqual(350);
-        });
+        expect(lowerPrice).toEqual(50);
+        expect(upperPrice).toEqual(350);
+      });
 
-        it('must have free shipping box checked', async () => {
-          const freeShipping = await browser.getToggleRefinementStatus();
+      it('must have free shipping box checked', async () => {
+        const freeShipping = await browser.getToggleRefinementStatus();
 
-          expect(freeShipping).toEqual(true);
-        });
+        expect(freeShipping).toEqual(true);
+      });
 
-        it('must have rating "4 & up" selected in the rating menu', async () => {
-          const rating = await browser.getSelectedRatingMenuItem();
+      it('must have rating "4 & up" selected in the rating menu', async () => {
+        const rating = await browser.getSelectedRatingMenuItem();
 
-          expect(rating).toEqual('4 & up');
-        });
-      }
+        expect(rating).toEqual('4 & up');
+      });
 
       it('must have "Price descending" selected in the sort select', async () => {
         const sortBy = await browser.getSortByValue();
@@ -129,15 +127,13 @@ export function createInitialStateFromRouteTestSuite(flavor: string) {
         await browser.setSortByValue('Price ascending');
       });
 
-      if (flavor !== 'vue') {
-        it('sets lower price to $250 and the upper price to $1250 in the price range', async () => {
-          // Depending of the steps calculation there can be a difference between
-          // the wanted value and the actual value of the slider, so we store
-          // the actual value to use it in for subsequent tests
-          priceBounds.lower = await browser.dragRangeSliderLowerBoundTo(250);
-          priceBounds.upper = await browser.dragRangeSliderUpperBoundTo(1250);
-        });
-      }
+      it('sets lower price to $250 and the upper price to $1250 in the price range', async () => {
+        // Depending of the steps calculation there can be a difference between
+        // the wanted value and the actual value of the slider, so we store
+        // the actual value to use it in for subsequent tests
+        priceBounds.lower = await browser.dragRangeSliderLowerBoundTo(250);
+        priceBounds.upper = await browser.dragRangeSliderUpperBoundTo(1250);
+      });
 
       it('selects "64 hits per page" in the hits per page select', async () => {
         await browser.setHitsPerPage('64 hits per page');
@@ -153,11 +149,6 @@ export function createInitialStateFromRouteTestSuite(flavor: string) {
             const url = await browser.getUrl();
             const { pathname, searchParams } = new URL(url);
 
-            const range =
-              flavor === 'vue' ||
-              searchParams.get('price') ===
-                `${priceBounds.lower}:${priceBounds.upper}`;
-
             return (
               pathname ===
                 `/${root}search/Appliances%2FRanges%2C+Cooktops+%26+Ovens/` &&
@@ -165,7 +156,8 @@ export function createInitialStateFromRouteTestSuite(flavor: string) {
               searchParams.get('page') === '2' &&
               searchParams.get('brands') === 'Whirlpool' &&
               searchParams.get('rating') === '3' &&
-              range &&
+              searchParams.get('price') ===
+                `${priceBounds.lower}:${priceBounds.upper}` &&
               searchParams.get('sortBy') === 'instant_search_price_asc' &&
               searchParams.get('hitsPerPage') === '64'
             );
