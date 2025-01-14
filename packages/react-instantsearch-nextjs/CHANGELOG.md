@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.3.21...react-instantsearch-nextjs@0.4.0) (2025-01-14)
+
+
+### Features
+
+* composition ([#6437](https://github.com/algolia/instantsearch/issues/6437)) ([cee83ab](https://github.com/algolia/instantsearch/commit/cee83ab4473dc738dda7c6d928ebed88e3ec4c8d))
+* support for Next.js 15 ([#6524](https://github.com/algolia/instantsearch/issues/6524)) ([cdd35df](https://github.com/algolia/instantsearch/commit/cdd35df3802cb9f20e51c16ffea98574f64bb47a))
+* support for React 19 ([#6520](https://github.com/algolia/instantsearch/issues/6520)) ([3283795](https://github.com/algolia/instantsearch/commit/32837951f11e49fbe01a7b46f5ec9c3fe2a4ae0f))
+
+
+
+
+
 ## [0.3.21](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.3.20...react-instantsearch-nextjs@0.3.21) (2025-01-07)
 
 **Note:** Version bump only for package react-instantsearch-nextjs

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.23.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.22.6...algoliasearch-helper@3.23.0) (2025-01-14)
+
+
+### Features
+
+* composition ([#6437](https://github.com/algolia/instantsearch/issues/6437)) ([cee83ab](https://github.com/algolia/instantsearch/commit/cee83ab4473dc738dda7c6d928ebed88e3ec4c8d))
+
+
+
+
+
 ## [3.22.6](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.22.5...algoliasearch-helper@3.22.6) (2024-12-09)
 
 
