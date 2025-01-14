@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.14.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.13.10...react-instantsearch-core@7.14.0) (2025-01-14)
+
+
+### Features
+
+* composition ([#6437](https://github.com/algolia/instantsearch/issues/6437)) ([cee83ab](https://github.com/algolia/instantsearch/commit/cee83ab4473dc738dda7c6d928ebed88e3ec4c8d))
+* support for React 19 ([#6520](https://github.com/algolia/instantsearch/issues/6520)) ([3283795](https://github.com/algolia/instantsearch/commit/32837951f11e49fbe01a7b46f5ec9c3fe2a4ae0f))
+
+
+
+
+
 ## [7.13.10](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.13.9...react-instantsearch-core@7.13.10) (2025-01-07)
 
 **Note:** Version bump only for package react-instantsearch-core
