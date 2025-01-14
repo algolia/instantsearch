@@ -25,6 +25,7 @@ describe('useTrendingItems', () => {
 
     await waitFor(() => {
       expect(result.current).toEqual({
+        sendEvent: expect.any(Function),
         items: expect.arrayContaining([
           { __position: 1, objectID: '1' },
           { __position: 2, objectID: '2' },

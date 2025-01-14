@@ -120,6 +120,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
               templateKey="layout"
               rootTagName="fragment"
               data={{
+                sendEvent,
                 items: data.items,
                 templates: {
                   item: templates.item

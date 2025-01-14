@@ -29,6 +29,7 @@ describe('useRelatedProducts', () => {
     await waitFor(() => {
       // InstantSearch.js state from the `render` lifecycle step
       expect(result.current).toEqual({
+        sendEvent: expect.any(Function),
         items: expect.arrayContaining([
           { __position: 1, objectID: '1' },
           { __position: 2, objectID: '2' },

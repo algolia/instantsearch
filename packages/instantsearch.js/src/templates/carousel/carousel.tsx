@@ -56,6 +56,8 @@ type CarouselTemplateProps<TObject extends Record<string, unknown>> = Pick<
     item?: CarouselUiProps<TObject>['itemComponent'];
   };
   cssClasses?: Partial<CarouselUiProps<TObject>['classNames']>;
+} & {
+  sendEvent?: CarouselUiProps<TObject>['sendEvent'];
 };
 
 export function carousel<TObject extends Record<string, unknown>>({
@@ -66,12 +68,14 @@ export function carousel<TObject extends Record<string, unknown>>({
     items,
     templates: widgetTemplates,
     cssClasses: widgetCssClasses = {},
+    sendEvent = () => {},
   }: CarouselTemplateProps<TObject>) {
     const { previous, next } = templates;
 
     return (
       <CarouselWithRefs
         items={items}
+        sendEvent={sendEvent}
         itemComponent={widgetTemplates.item}
         previousIconComponent={
           (previous
