@@ -26,6 +26,7 @@ examples/**/polyfills.js
 examples/react/react-native
 ## Excluded from global typescript config
 examples/react/next/next-env.d.ts
+specs/src/env.d.ts
 ## templates that don't get installed
 packages/create-instantsearch-app/src/templates
 ## test fixtures for codemods
