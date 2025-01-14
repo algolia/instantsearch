@@ -1,6 +1,11 @@
 export function createPriceRangeTestSuite(flavor: string) {
   const root = `examples/${flavor}/e-commerce/`;
 
+  if (flavor === 'vue') {
+    // currently no slider on Vue
+    return;
+  }
+
   describe('search on specific price range', () => {
     let lowerBound: number;
     let upperBound: number;

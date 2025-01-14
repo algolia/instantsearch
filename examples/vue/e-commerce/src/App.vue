@@ -116,46 +116,6 @@
               </ais-panel>
 
               <ais-panel>
-                <template #header> Price </template>
-
-                <template #default>
-                  <ais-range-input attribute="price">
-                    <template
-                      #default="{ currentRefinement, range, refine, canRefine }"
-                    >
-                      <vue-slider
-                        :min="range.min"
-                        :max="range.max"
-                        :value="toValue(currentRefinement, range)"
-                        :disabled="!canRefine"
-                        :lazy="true"
-                        :use-keyboard="true"
-                        :enable-cross="false"
-                        tooltip="always"
-                        :duration="0"
-                        @change="refine({ min: $event[0], max: $event[1] })"
-                      >
-                        <template #dot="{ index, value }">
-                          <div
-                            :aria-valuemin="range.min"
-                            :aria-valuemax="range.max"
-                            :aria-valuenow="value"
-                            :data-handle-key="index"
-                            class="vue-slider-dot-handle"
-                            role="slider"
-                            tabindex="0"
-                          />
-                        </template>
-                        <template #tooltip="{ value }">
-                          {{ formatNumber(value) }}
-                        </template>
-                      </vue-slider>
-                    </template>
-                  </ais-range-input>
-                </template>
-              </ais-panel>
-
-              <ais-panel>
                 <template #header> Free shipping </template>
 
                 <template #default>
@@ -490,7 +450,6 @@
 
 <script>
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import VueSlider from 'vue-slider-component';
 
 import getRouting from './routing';
 import { formatNumber } from './utils';
@@ -499,7 +458,6 @@ import NoResults from './widgets/NoResults.vue';
 
 export default {
   components: {
-    VueSlider,
     ClearRefinements,
     NoResults,
   },
