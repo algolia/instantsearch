@@ -5,8 +5,12 @@ import {
   escapeHits,
   TAG_PLACEHOLDER,
   getObjectType,
+  createSendEventForHits,
+  addAbsolutePosition,
+  addQueryID,
 } from '../../lib/utils';
 
+import type { SendEventForHits } from '../../lib/utils';
 import type {
   Connector,
   TransformItems,
@@ -31,6 +35,11 @@ export type TrendingItemsRenderState<
    * The matched recommendations from the Algolia API.
    */
   items: Array<AlgoliaHit<THit>>;
+
+  /**
+   * Sends an event to the Insights middleware.
+   */
+  sendEvent: SendEventForHits;
 };
 
 export type TrendingItemsConnectorParams<
@@ -141,6 +150,8 @@ export default (function connectTrendingItems<
       );
     }
 
+    let sendEvent: SendEventForHits;
+
     return {
       dependsOn: 'recommend',
       $$type: 'ais.trendingItems',
@@ -171,20 +182,44 @@ export default (function connectTrendingItems<
         return renderState;
       },
 
-      getWidgetRenderState({ results }) {
+      getWidgetRenderState({ results, helper, instantSearchInstance }) {
+        if (!sendEvent) {
+          sendEvent = createSendEventForHits({
+            instantSearchInstance,
+            getIndex: () => helper.getIndex(),
+            widgetType: this.$$type,
+          });
+        }
         if (results === null || results === undefined) {
-          return { items: [], widgetParams };
+          return { items: [], widgetParams, sendEvent };
         }
 
         if (escapeHTML && results.hits.length > 0) {
           results.hits = escapeHits(results.hits);
         }
 
-        return {
-          items: transformItems(results.hits as Array<AlgoliaHit<THit>>, {
+        const itemsWithAbsolutePosition = addAbsolutePosition(
+          results.hits,
+          0,
+          1
+        );
+
+        const itemsWithAbsolutePositionAndQueryID = addQueryID(
+          itemsWithAbsolutePosition,
+          results.queryID
+        );
+
+        const transformedItems = transformItems(
+          itemsWithAbsolutePositionAndQueryID,
+          {
             results: results as RecommendResponse<AlgoliaHit<THit>>,
-          }),
+          }
+        );
+
+        return {
+          items: transformedItems,
           widgetParams,
+          sendEvent,
         };
       },
 

@@ -43,6 +43,7 @@ describe('Carousel', () => {
   test('renders items', () => {
     const { container } = render(
       <CarouselWithRefs
+        sendEvent={jest.fn()}
         items={[
           {
             objectID: '1',
@@ -138,6 +139,7 @@ describe('Carousel', () => {
   test('renders custom "Previous" and "Next" components', () => {
     const { container } = render(
       <CarouselWithRefs
+        sendEvent={jest.fn()}
         items={[
           {
             objectID: '1',
@@ -215,6 +217,7 @@ describe('Carousel', () => {
   test('accepts custom translations', () => {
     const { container } = render(
       <CarouselWithRefs
+        sendEvent={jest.fn()}
         items={[{ objectID: '1', __position: 1 }]}
         itemComponent={ItemComponent}
         translations={{
@@ -248,6 +251,7 @@ describe('Carousel', () => {
   test('forwards `div` props to the root element', () => {
     const { container } = render(
       <CarouselWithRefs
+        sendEvent={jest.fn()}
         items={[{ objectID: '1', __position: 1 }]}
         itemComponent={ItemComponent}
         hidden={true}
@@ -262,6 +266,7 @@ describe('Carousel', () => {
   test('accepts custom class names', () => {
     const { container } = render(
       <CarouselWithRefs
+        sendEvent={jest.fn()}
         items={[{ objectID: '1', __position: 1 }]}
         itemComponent={ItemComponent}
         classNames={{

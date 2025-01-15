@@ -9,6 +9,7 @@ import type {
   RecommendItemComponentProps,
   RecordWithObjectID,
   Renderer,
+  SendEventForHits,
 } from '../types';
 
 export type CarouselProps<
@@ -28,6 +29,7 @@ export type CarouselProps<
   nextIconComponent?: () => JSX.Element;
   classNames?: Partial<CarouselClassNames>;
   translations?: Partial<CarouselTranslations>;
+  sendEvent: SendEventForHits;
 };
 
 export type CarouselClassNames = {
@@ -135,6 +137,7 @@ export function createCarouselComponent({ createElement, Fragment }: Renderer) {
       nextIconComponent: NextIconComponent = NextIconDefaultComponent,
       items,
       translations: userTranslations,
+      sendEvent,
       ...props
     } = userProps;
 
@@ -235,6 +238,12 @@ export function createCarouselComponent({ createElement, Fragment }: Renderer) {
               className={cx(cssClasses.item)}
               aria-roledescription="slide"
               aria-label={`${index + 1} of ${items.length}`}
+              onClick={() => {
+                sendEvent('click:internal', item, 'Item Clicked');
+              }}
+              onAuxClick={() => {
+                sendEvent('click:internal', item, 'Item Clicked');
+              }}
             >
               <ItemComponent item={item} />
             </li>

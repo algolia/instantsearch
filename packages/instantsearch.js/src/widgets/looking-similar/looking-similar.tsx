@@ -24,6 +24,7 @@ import type {
   Renderer,
   BaseHit,
   RecommendResponse,
+  Hit,
 } from '../../types';
 import type {
   RecommendClassNames,
@@ -54,7 +55,10 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
   };
   templates: LookingSimilarTemplates<THit>;
 }): Renderer<LookingSimilarRenderState, Partial<LookingSimilarWidgetParams>> {
-  return ({ items, results, instantSearchInstance }, isFirstRendering) => {
+  return (
+    { items, results, instantSearchInstance, sendEvent },
+    isFirstRendering
+  ) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates: {} as unknown as Required<
@@ -88,6 +92,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
                 templateKey="item"
                 rootTagName="fragment"
                 data={item}
+                sendEvent={sendEvent}
               />
             );
           }
@@ -115,6 +120,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
               templateKey="layout"
               rootTagName="fragment"
               data={{
+                sendEvent,
                 items: data.items,
                 templates: {
                   item: templates.item
@@ -124,6 +130,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
                           templateKey="item"
                           rootTagName="fragment"
                           data={item}
+                          sendEvent={sendEvent}
                         />
                       )
                     : undefined,
@@ -133,6 +140,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
                   item: data.classNames.item,
                 },
               }}
+              sendEvent={sendEvent}
             />
           )
         : undefined
@@ -140,7 +148,7 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
 
     render(
       <LookingSimilar
-        items={items as Array<AlgoliaHit<THit>>}
+        items={items as Array<Hit<THit>>}
         headerComponent={headerComponent}
         itemComponent={itemComponent}
         sendEvent={() => {}}

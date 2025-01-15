@@ -25,8 +25,12 @@ export function createListComponent({ createElement }: Renderer) {
             <li
               key={item.objectID}
               className={classNames.item}
-              onClick={sendEvent}
-              onAuxClick={sendEvent}
+              onClick={() => {
+                sendEvent('click:internal', item, 'Item Clicked');
+              }}
+              onAuxClick={() => {
+                sendEvent('click:internal', item, 'Item Clicked');
+              }}
             >
               <ItemComponent item={item} />
             </li>
