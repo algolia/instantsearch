@@ -31,8 +31,15 @@ search.addWidgets([
   hits({
     container: '#hits',
     templates: {
-      item: (hit, { html, components }) => html`
-        <article>
+      item: (hit, { html, components, sendEvent }) => html`
+        <article
+          onclick="${(event) => {
+            event.stopPropagation();
+            event.preventDefault();
+            // sendEvent is always defined !!
+            sendEvent('click', hit, 'some event');
+          }}"
+        >
           <h1>
             <a href="/products.html?pid=${hit.objectID}"
               >${components.Highlight({ hit, attribute: 'name' })}</a
@@ -60,8 +67,16 @@ search.addWidgets([
     container: '#trending',
     limit: 6,
     templates: {
-      item: (item, { html }) => html`
-        <div>
+      item: (item, { html, sendEvent }) => html`
+        <div
+          onclick="${(event) => {
+            event.stopPropagation();
+            event.preventDefault();
+            if (sendEvent) {
+              sendEvent('click', item, 'some event');
+            }
+          }}"
+        >
           <article>
             <div>
               <img src="${item.image}" />

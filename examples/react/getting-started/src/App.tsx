@@ -19,6 +19,12 @@ import 'instantsearch.css/themes/satellite.css';
 
 import './App.css';
 
+type Record = {
+  image: string;
+  name: string;
+  description: string;
+};
+
 const searchClient = algoliasearch(
   'latency',
   '6be0576ff61c053d5f9a3225e2a90f76'
@@ -55,14 +61,37 @@ export function App() {
 
             <div className="search-panel__results">
               <SearchBox placeholder="" className="searchbox" />
-              <Hits hitComponent={HitComponent} />
+              <Hits<Record>
+                hitComponent={({ hit, sendEvent }) => {
+                  return (
+                    <div
+                      onClick={() => sendEvent('click', hit, 'product_clicked')}
+                    >
+                      <HitComponent hit={hit} />
+                    </div>
+                  );
+                }}
+              />
 
               <div className="pagination">
                 <Pagination />
               </div>
               <div>
-                <TrendingItems
-                  itemComponent={ItemComponent}
+                <TrendingItems<Record>
+                  queryParameters={{
+                    clickAnalytics: true,
+                  }}
+                  itemComponent={({ item, sendEvent }) => {
+                    return (
+                      <div
+                        onClick={() =>
+                          sendEvent('click', item, 'product_clicked')
+                        }
+                      >
+                        <ItemComponent item={item} />
+                      </div>
+                    );
+                  }}
                   limit={6}
                   layoutComponent={Carousel}
                 />
@@ -75,13 +104,7 @@ export function App() {
   );
 }
 
-type HitType = Hit<{
-  image: string;
-  name: string;
-  description: string;
-}>;
-
-function HitComponent({ hit }: { hit: HitType }) {
+function HitComponent({ hit }: { hit: Hit<Record> }) {
   return (
     <article>
       <h1>
@@ -97,7 +120,7 @@ function HitComponent({ hit }: { hit: HitType }) {
   );
 }
 
-function ItemComponent({ item }: { item: Hit }) {
+function ItemComponent({ item }: { item: Hit<Record> }) {
   return (
     <div>
       <article>

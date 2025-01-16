@@ -155,6 +155,7 @@ describe('RelatedProducts', () => {
                     item={item}
                     onClick={jest.fn()}
                     onAuxClick={jest.fn()}
+                    sendEvent={jest.fn()}
                   />
                 </li>
               ))}
