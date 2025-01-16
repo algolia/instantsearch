@@ -16,7 +16,7 @@
     "autocomplete"
   ],
   "license": "MIT",
-  "version": "4.20.0",
+  "version": "4.20.1",
   "files": [
     "vue2",
     "vue3",
@@ -36,8 +36,8 @@
     "watch:es": "yarn --silent build --watch"
   },
   "dependencies": {
-    "instantsearch-ui-components": "0.10.0",
-    "instantsearch.js": "4.76.0",
+    "instantsearch-ui-components": "0.11.0",
+    "instantsearch.js": "4.77.0",
     "mitt": "^2.1.0"
   },
   "peerDependencies": {
