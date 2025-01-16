@@ -36,7 +36,7 @@ search.addWidgets([
           onclick="${(event) => {
             event.stopPropagation();
             event.preventDefault();
-            // sendEvent is always defined !!
+
             sendEvent('click', hit, 'some event');
           }}"
         >
@@ -72,9 +72,8 @@ search.addWidgets([
           onclick="${(event) => {
             event.stopPropagation();
             event.preventDefault();
-            if (sendEvent) {
-              sendEvent('click', item, 'some event');
-            }
+
+            sendEvent('click', item, 'some event');
           }}"
         >
           <article>
