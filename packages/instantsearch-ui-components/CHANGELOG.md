@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.11.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.10.0...instantsearch-ui-components@0.11.0) (2025-01-16)
+
+
+### Features
+
+* **recommend:** add support for event collection in recommend ([#6523](https://github.com/algolia/instantsearch/issues/6523)) ([2679a5e](https://github.com/algolia/instantsearch/commit/2679a5e6a5e5767fc3b1c1e074c53ab6a084e7f3))
+
+
+
+
+
 # [0.10.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.9.0...instantsearch-ui-components@0.10.0) (2025-01-14)
 
 

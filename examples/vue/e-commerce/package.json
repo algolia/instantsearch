@@ -1,6 +1,6 @@
 {
   "name": "example-vue-instantsearch-e-commerce",
-  "version": "0.69.0",
+  "version": "0.70.0",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -10,9 +10,9 @@
   },
   "dependencies": {
     "algoliasearch": "5.1.1",
-    "instantsearch.js": "4.76.0",
+    "instantsearch.js": "4.77.0",
     "vue": "2.7.14",
-    "vue-instantsearch": "4.20.0",
+    "vue-instantsearch": "4.20.1",
     "vue-slider-component": "3.0.32"
   },
   "devDependencies": {
