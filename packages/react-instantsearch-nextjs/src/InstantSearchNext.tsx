@@ -1,5 +1,5 @@
 import { safelyRunOnBrowser } from 'instantsearch.js/es/lib/utils';
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   InstantSearch,
   InstantSearchRSCContext,
@@ -49,21 +49,6 @@ export function InstantSearchNext<
   const isMounting = useRef(true);
   const isServer = typeof window === 'undefined';
 
-  const hasRouteChanged = useMemo(() => {
-    // On server, always return false
-    if (isServer) {
-      return false;
-    }
-
-    // On client, route has changed if initialResults have been cleaned up
-    const hasInitialResults = window[InstantSearchInitialResults] !== undefined;
-    return !hasInitialResults;
-  }, [isServer]);
-
-  // We only want to trigger a search from a server environment
-  // or if a Next.js route change has happened on the client
-  const shouldTriggerSearch = isServer || hasRouteChanged;
-
   useEffect(() => {
     isMounting.current = false;
     return () => {
@@ -80,12 +65,6 @@ export function InstantSearchNext<
 
   const routing = useInstantSearchRouting(passedRouting, isMounting);
 
-  const promiseRef = useRef<PromiseWithState<void> | null>(null);
-
-  const initialResults = safelyRunOnBrowser(
-    () => window[InstantSearchInitialResults]
-  );
-
   warn(
     false,
     `InstantSearchNext relies on experimental APIs and may break in the future.
@@ -93,13 +72,37 @@ This message will only be displayed in development mode.`
   );
 
   return (
+    <ServerOrHydrationProvider isServer={isServer}>
+      <InstantSearch {...instantSearchProps} routing={routing!}>
+        {isServer && <InitializePromise nonce={nonce} />}
+        {children}
+        {isServer && <TriggerSearch />}
+      </InstantSearch>
+    </ServerOrHydrationProvider>
+  );
+}
+
+function ServerOrHydrationProvider({
+  isServer,
+  children,
+}: {
+  isServer: boolean;
+  children: React.ReactNode;
+}) {
+  const promiseRef = useRef<PromiseWithState<void> | null>(null);
+  const initialResults = safelyRunOnBrowser(
+    () => window[InstantSearchInitialResults]
+  );
+
+  // If we're not on the server and we don't need to hydrate, we don't need SSR context
+  if (!isServer && !initialResults) {
+    return children;
+  }
+
+  return (
     <InstantSearchRSCContext.Provider value={promiseRef}>
       <InstantSearchSSRProvider initialResults={initialResults}>
-        <InstantSearch {...instantSearchProps} routing={routing!}>
-          {shouldTriggerSearch && <InitializePromise nonce={nonce} />}
-          {children}
-          {shouldTriggerSearch && <TriggerSearch />}
-        </InstantSearch>
+        {children}
       </InstantSearchSSRProvider>
     </InstantSearchRSCContext.Provider>
   );
