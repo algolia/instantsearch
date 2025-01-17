@@ -282,7 +282,7 @@ class RefinementList<TTemplates extends Templates> extends Component<
   public componentDidUpdate() {
     this.listRef.current
       ?.querySelector<HTMLInputElement>(
-        `input[value="${this.lastRefinedValue}"]`
+        `input[value="${this.lastRefinedValue?.replace('"', '\\"')}"]`
       )
       ?.focus();
     this.lastRefinedValue = undefined;
