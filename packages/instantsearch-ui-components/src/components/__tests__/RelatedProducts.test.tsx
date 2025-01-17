@@ -236,6 +236,12 @@ describe('RelatedProducts', () => {
     );
 
     expect(sendEvent).toHaveBeenCalledTimes(1);
+    expect(sendEvent).toHaveBeenNthCalledWith(
+      1,
+      'click:internal',
+      items[0],
+      'Item Clicked'
+    );
   });
 
   test('accepts custom title translation', () => {
