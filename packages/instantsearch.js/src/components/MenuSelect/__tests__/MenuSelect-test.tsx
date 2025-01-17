@@ -55,8 +55,8 @@ describe('MenuSelect', () => {
       refine: () => {},
       templateProps: {
         templates: {
-          item: '{{label}}',
-          defaultOption: 'defaultOption',
+          item: ({ label }: { label: string }) => label,
+          defaultOption: () => 'defaultOption',
         },
       },
       cssClasses,

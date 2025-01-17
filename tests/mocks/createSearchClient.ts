@@ -5,7 +5,7 @@ import {
   createSFFVResponse,
 } from './createAPIResponse';
 
-import type { SearchClient, SearchResponses } from 'instantsearch.js';
+import type { SearchClient, SearchResponses } from 'instantsearch-core';
 
 export const createSearchClient = (
   args: Partial<SearchClient> = {}
@@ -16,12 +16,14 @@ export const createSearchClient = (
   search: jest.fn((requests) =>
     Promise.resolve(
       createMultiSearchResponse(
-        ...requests.map(() => createSingleSearchResponse())
+        ...requests.map((request) =>
+          request.type === 'facet'
+            ? createSFFVResponse()
+            : createSingleSearchResponse()
+        )
       )
     )
   ),
-  // @ts-ignore v5 does not have this method, but it's easier to have it here. In a future version we can replace this method and its usages with search({ type: 'facet })
-  searchForFacetValues: jest.fn(() => Promise.resolve([createSFFVResponse()])),
   // @ts-ignore this allows us to test insights initialization without warning
   applicationID: 'appId',
   apiKey: 'apiKey',

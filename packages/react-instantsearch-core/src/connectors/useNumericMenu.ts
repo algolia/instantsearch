@@ -1,4 +1,4 @@
-import connectNumericMenu from 'instantsearch.js/es/connectors/numeric-menu/connectNumericMenu';
+import { connectNumericMenu } from 'instantsearch-core';
 
 import { useConnector } from '../hooks/useConnector';
 
@@ -6,7 +6,7 @@ import type { AdditionalWidgetProperties } from '../hooks/useConnector';
 import type {
   NumericMenuConnectorParams,
   NumericMenuWidgetDescription,
-} from 'instantsearch.js/es/connectors/numeric-menu/connectNumericMenu';
+} from 'instantsearch-core';
 
 export type UseNumericMenuProps = NumericMenuConnectorParams;
 

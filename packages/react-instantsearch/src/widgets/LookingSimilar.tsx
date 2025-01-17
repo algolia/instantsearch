@@ -2,15 +2,15 @@ import { createLookingSimilarComponent } from 'instantsearch-ui-components';
 import React, { createElement, Fragment } from 'react';
 import { useLookingSimilar, useInstantSearch } from 'react-instantsearch-core';
 
+import type { Hit, BaseHit } from 'instantsearch-core';
 import type {
   LookingSimilarProps as LookingSimilarPropsUiComponentProps,
   Pragma,
 } from 'instantsearch-ui-components';
-import type { AlgoliaHit, BaseHit, Hit } from 'instantsearch.js';
 import type { UseLookingSimilarProps } from 'react-instantsearch-core';
 
 type UiProps<THit extends BaseHit> = Pick<
-  LookingSimilarPropsUiComponentProps<AlgoliaHit<THit>>,
+  LookingSimilarPropsUiComponentProps<Hit<THit>>,
   | 'items'
   | 'itemComponent'
   | 'headerComponent'
@@ -21,7 +21,7 @@ type UiProps<THit extends BaseHit> = Pick<
 >;
 
 export type LookingSimilarProps<THit extends BaseHit> = Omit<
-  LookingSimilarPropsUiComponentProps<AlgoliaHit<THit>>,
+  LookingSimilarPropsUiComponentProps<Hit<THit>>,
   keyof UiProps<THit>
 > &
   UseLookingSimilarProps<THit> & {

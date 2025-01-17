@@ -5,10 +5,7 @@ import { h, Component } from 'preact';
 
 import Template from '../Template/Template';
 
-import type {
-  Range,
-  RangeBoundaries,
-} from '../../connectors/range/connectRange';
+import type { Range } from '../../connectors';
 import type { ComponentCSSClasses } from '../../types';
 import type {
   RangeInputCSSClasses,
@@ -29,7 +26,7 @@ export type RangeInputProps = {
   templateProps: {
     templates: RangeInputComponentTemplates;
   };
-  refine: (rangeValue: RangeBoundaries) => void;
+  refine: (rangeValue: Range) => void;
 };
 
 // Strips leading `0` from a positive number value
@@ -65,10 +62,10 @@ class RangeInput extends Component<
     event.preventDefault();
 
     const { min, max } = this.state;
-    this.props.refine([
-      min ? Number(min) : undefined,
-      max ? Number(max) : undefined,
-    ]);
+    this.props.refine({
+      min: min ? Number(min) : undefined,
+      max: max ? Number(max) : undefined,
+    });
   };
 
   public render() {

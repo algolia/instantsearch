@@ -3,6 +3,7 @@
  */
 
 /* eslint-disable jest/no-conditional-expect */
+import { createSearchClient } from '@instantsearch/mocks';
 
 import { mount } from '../../test/utils';
 import InstantSearch from '../instantsearch';
@@ -15,7 +16,7 @@ import {
 } from '../util/vue-compat';
 import { AisInstantSearch } from '../widgets';
 
-const renderlessComponents = ['AisExperimentalConfigureRelatedItems'];
+const renderlessComponents = [];
 const nonWidgetComponents = [
   'AisInstantSearch',
   'AisInstantSearchSsr',
@@ -60,9 +61,6 @@ function getAllComponents() {
       const props = {};
       if (name === 'AisHierarchicalMenu' || name === 'AisBreadcrumb') {
         props.attributes = ['attr'];
-      } else if (name === 'AisExperimentalConfigureRelatedItems') {
-        props.hit = {};
-        props.matchingPatterns = {};
       } else if (name === 'AisToggleRefinement') {
         props.attribute = 'attr';
         props.label = 'label';
@@ -89,11 +87,7 @@ function getAllComponents() {
             {
               props: {
                 indexName: 'instant_search',
-                searchClient: {
-                  search() {
-                    return new Promise({ results: [] });
-                  },
-                },
+                searchClient: createSearchClient(),
               },
             },
             [
@@ -141,8 +135,6 @@ describe('DOM component', () => {
       expect(installedName).toBe(name);
       if (name === 'AisInstantSearchSsr') {
         expect(suitClass).toBe(`ais-InstantSearch`);
-      } else if (name === 'AisExperimentalDynamicWidgets') {
-        expect(suitClass).toBe(`ais-DynamicWidgets`);
       } else {
         expect(suitClass).toBe(`ais-${name.substr(3)}`);
       }
@@ -156,14 +148,8 @@ describe('installed widget', () => {
       ({ name }) => nonWidgetComponents.includes(name) === false
     )
   )('sets widgetType $name', ({ name, widget }) => {
-    if (name === 'AisExperimentalDynamicWidgets') {
-      expect(widget.$$widgetType).toBe('ais.dynamicWidgets');
-    } else if (name === 'AisExperimentalConfigureRelatedItems') {
-      expect(widget.$$widgetType).toBe('ais.configureRelatedItems');
-    } else {
-      expect(widget.$$widgetType).toBe(
-        `ais.${name[3].toLowerCase()}${name.substr(4)}`
-      );
-    }
+    expect(widget.$$widgetType).toBe(
+      `ais.${name[3].toLowerCase()}${name.substr(4)}`
+    );
   });
 });

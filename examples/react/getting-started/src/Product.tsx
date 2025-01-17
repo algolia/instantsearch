@@ -1,5 +1,4 @@
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import { type Hit } from 'instantsearch.js';
 import React from 'react';
 import {
   Configure,
@@ -8,6 +7,8 @@ import {
   RelatedProducts,
   Carousel,
 } from 'react-instantsearch';
+
+import type { Hit } from 'instantsearch-core';
 
 import './App.css';
 import 'instantsearch.css/themes/satellite.css';

@@ -1,4 +1,4 @@
-import connectStats from 'instantsearch.js/es/connectors/stats/connectStats';
+import { connectStats } from 'instantsearch-core';
 
 import { useConnector } from '../hooks/useConnector';
 
@@ -6,7 +6,7 @@ import type { AdditionalWidgetProperties } from '../hooks/useConnector';
 import type {
   StatsConnectorParams,
   StatsWidgetDescription,
-} from 'instantsearch.js/es/connectors/stats/connectStats';
+} from 'instantsearch-core';
 
 export type UseStatsProps = StatsConnectorParams;
 

@@ -12,10 +12,10 @@ exports[`rangeSlider Lifecycle max option will use the results min when only max
   "refine": [Function],
   "step": 1,
   "tooltips": true,
-  "values": [
-    1,
-    100,
-  ],
+  "values": {
+    "max": 100,
+    "min": 1,
+  },
 }
 `;
 
@@ -31,10 +31,10 @@ exports[`rangeSlider Lifecycle min option sets the right range 1`] = `
   "refine": [Function],
   "step": 1,
   "tooltips": true,
-  "values": [
-    100,
-    200,
-  ],
+  "values": {
+    "max": 200,
+    "min": 100,
+  },
 }
 `;
 
@@ -50,10 +50,10 @@ exports[`rangeSlider Lifecycle min option will use the results max when only min
   "refine": [Function],
   "step": 1,
   "tooltips": true,
-  "values": [
-    100,
-    5000,
-  ],
+  "values": {
+    "max": 5000,
+    "min": 100,
+  },
 }
 `;
 
@@ -69,10 +69,10 @@ exports[`rangeSlider Lifecycle should render without results 1`] = `
   "refine": [Function],
   "step": 1,
   "tooltips": true,
-  "values": [
-    0,
-    0,
-  ],
+  "values": {
+    "max": 0,
+    "min": 0,
+  },
 }
 `;
 
@@ -88,10 +88,10 @@ exports[`rangeSlider Lifecycle with results calls twice render 1`] = `
   "refine": [Function],
   "step": 1,
   "tooltips": true,
-  "values": [
-    1,
-    5000,
-  ],
+  "values": {
+    "max": 5000,
+    "min": 1,
+  },
 }
 `;
 
@@ -107,9 +107,9 @@ exports[`rangeSlider Lifecycle with results calls twice render 2`] = `
   "refine": [Function],
   "step": 1,
   "tooltips": true,
-  "values": [
-    1,
-    5000,
-  ],
+  "values": {
+    "max": 5000,
+    "min": 1,
+  },
 }
 `;

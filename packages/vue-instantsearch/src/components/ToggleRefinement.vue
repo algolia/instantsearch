@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { connectToggleRefinement } from 'instantsearch.js/es/connectors';
+import { connectToggleRefinement } from 'instantsearch-core';
 
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';

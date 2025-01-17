@@ -1,3 +1,2 @@
-export * from './Renderer';
-export * from './Recommend';
-export * from './shared';
+export type * from './Renderer';
+export type * from './Recommend';

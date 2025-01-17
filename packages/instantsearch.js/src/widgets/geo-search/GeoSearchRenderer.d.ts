@@ -2,7 +2,7 @@
 import type {
   GeoSearchConnectorParams,
   GeoSearchRenderState,
-} from '../../connectors/geo-search/connectGeoSearch';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { ComponentCSSClasses, Renderer } from '../../types';
 import type { HTMLMarkerArguments } from './createHTMLMarker';

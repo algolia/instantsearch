@@ -1,5 +1,7 @@
-import { history } from 'instantsearch.js/cjs/lib/routers';
-import { simple } from 'instantsearch.js/cjs/lib/stateMappings';
+import {
+  historyRouter as history,
+  simpleStateMapping as simple,
+} from 'instantsearch-core';
 import React from 'react';
 import {
   Configure,
@@ -12,11 +14,6 @@ import {
   RefinementList,
   SearchBox,
 } from 'react-instantsearch';
-// because this is ran on node without type: "module" set in the package.json
-// we need to use commonjs instead of esm.
-// If you use ESM in Node, you can rely on these import statements instead:
-// import { simple } from 'instantsearch.js/es/lib/stateMappings';
-// import { history } from 'instantsearch.js/es/lib/routers';
 
 import { searchClient } from './searchClient';
 
@@ -24,7 +21,7 @@ function Hit({ hit }) {
   return <Highlight hit={hit} attribute="name" />;
 }
 
-function App({ serverState, location }) {
+function App({ serverState, currentURL }) {
   return (
     <InstantSearchSSRProvider {...serverState}>
       <InstantSearch
@@ -33,13 +30,12 @@ function App({ serverState, location }) {
         routing={{
           stateMapping: simple(),
           router: history({
-            cleanUrlOnDispose: false,
-            getLocation() {
+            getCurrentURL() {
               if (typeof window === 'undefined') {
-                return location;
+                return currentURL;
               }
 
-              return window.location;
+              return new URL(window.location.href);
             },
           }),
         }}

@@ -32,8 +32,6 @@ import {
 } from '../instantsearch';
 import { renderCompat } from '../util/vue-compat';
 
-jest.unmock('instantsearch.js/es');
-
 /**
  * prevent rethrowing InstantSearch errors, so tests can be asserted.
  * IRL this isn't needed, as the error doesn't stop execution.
@@ -327,8 +325,8 @@ const testSetups = {
 
     return {
       algoliaAgents: [
-        `instantsearch.js (${
-          require('../../../instantsearch.js/package.json').version
+        `instantsearch-core (${
+          require('../../../instantsearch-core/package.json').version
         })`,
         `Vue InstantSearch (${
           require('../../../vue-instantsearch/package.json').version

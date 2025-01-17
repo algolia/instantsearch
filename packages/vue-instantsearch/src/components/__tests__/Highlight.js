@@ -6,8 +6,6 @@ import { mount } from '../../../test/utils';
 import Highlight from '../Highlight.vue';
 import '../../../test/utils/sortedHtmlSerializer';
 
-jest.unmock('instantsearch.js/es');
-
 test('renders proper HTML', () => {
   const hit = {
     _highlightResult: {

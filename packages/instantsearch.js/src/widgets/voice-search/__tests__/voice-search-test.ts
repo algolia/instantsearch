@@ -11,19 +11,19 @@ import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { render as preactRender } from 'preact';
-
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+import { render as preactRender } from 'preact';
+
 import voiceSearch from '../voice-search';
 
 import type { VoiceSearchProps } from '../../../components/VoiceSearch/VoiceSearch';
-import type { VoiceSearchHelper } from '../../../lib/voiceSearchHelper/types';
 import type { Widget } from '../../../types';
 import type { VoiceSearchWidgetParams } from '../voice-search';
 import type { AlgoliaSearchHelper as Helper } from 'algoliasearch-helper';
+import type { VoiceSearchHelper } from 'instantsearch-core/src/lib/voiceSearchHelper/types';
 import type { VNode } from 'preact';
 
 const render = castToJestMock(preactRender);

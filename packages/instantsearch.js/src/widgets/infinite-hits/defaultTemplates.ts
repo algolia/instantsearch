@@ -1,5 +1,3 @@
-import { omit } from '../../lib/utils';
-
 import type { InfiniteHitsComponentTemplates } from '../../components/InfiniteHits/InfiniteHits';
 
 const defaultTemplates: InfiniteHitsComponentTemplates = {
@@ -12,8 +10,10 @@ const defaultTemplates: InfiniteHitsComponentTemplates = {
   showMoreText() {
     return 'Show more results';
   },
-  item(data) {
-    return JSON.stringify(omit(data, ['__hitIndex']), null, 2);
+  item(data, { html }) {
+    return html`<div style="word-break: break-all;">
+      ${JSON.stringify(data).slice(0, 100)}…
+    </div>`;
   },
 };
 

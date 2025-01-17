@@ -1,11 +1,7 @@
-import {
-  getWidgetAttribute,
-  isIndexWidget,
-} from 'instantsearch.js/es/lib/utils';
-import { createInitOptions } from 'instantsearch.js/test/createWidget';
+import { isIndexWidget, getWidgetAttribute } from 'instantsearch-core';
+import { createInitOptions } from 'instantsearch-core/test/createWidget';
 
-import type { InitOptions, Widget } from 'instantsearch.js';
-import type { IndexWidget } from 'instantsearch.js/es/widgets/index/index';
+import type { InitOptions, Widget, IndexWidget } from 'instantsearch-core';
 
 function getAttribute(widget: Widget | IndexWidget) {
   try {

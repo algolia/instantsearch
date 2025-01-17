@@ -51,10 +51,9 @@ const renderer = (
     toggleRefineOnMapMove,
     isRefineOnMapMove,
     setMapMoveSinceLastRefine,
-    hasMapMoveSinceLastRefine,
+    hasMapMovedSinceLastRefine,
     isRefinedWithMap,
     widgetParams,
-    instantSearchInstance,
   },
   isFirstRendering
 ) => {
@@ -136,7 +135,6 @@ const renderer = (
     );
 
     renderState.templateProps = prepareTemplateProps({
-      templatesConfig: instantSearchInstance.templatesConfig,
       templates,
     });
 
@@ -182,7 +180,7 @@ const renderer = (
     })
   );
 
-  const shouldUpdate = !hasMapMoveSinceLastRefine();
+  const shouldUpdate = !hasMapMovedSinceLastRefine();
 
   // We use this value for differentiate the padding to apply during
   // fitBounds. When we don't have a currenRefinement (boundingBox)
@@ -220,7 +218,7 @@ const renderer = (
       enableClearMapRefinement={enableClearMapRefinement}
       isRefineOnMapMove={isRefineOnMapMove()}
       isRefinedWithMap={isRefinedWithMap()}
-      hasMapMoveSinceLastRefine={hasMapMoveSinceLastRefine()}
+      hasMapMovedSinceLastRefine={hasMapMovedSinceLastRefine()}
       onRefineToggle={toggleRefineOnMapMove}
       onRefineClick={() =>
         refineWithMap({

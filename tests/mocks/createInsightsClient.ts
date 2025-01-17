@@ -5,7 +5,7 @@ import {
   getFunctionalInterface,
 } from 'search-insights';
 
-import type { InsightsClient } from 'instantsearch.js';
+import type { InsightsClient } from 'instantsearch-core';
 
 /**
  * Tests that rely on this mock interface have side effects caused by

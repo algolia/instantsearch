@@ -22,7 +22,6 @@ describe('useSortBy', () => {
       currentRefinement: 'indexName',
       options: items,
       refine: expect.any(Function),
-      hasNoResults: expect.any(Boolean),
       canRefine: expect.any(Boolean),
     });
 
@@ -31,7 +30,6 @@ describe('useSortBy', () => {
         currentRefinement: 'indexName',
         options: items,
         refine: expect.any(Function),
-        hasNoResults: expect.any(Boolean),
         canRefine: expect.any(Boolean),
       });
     });

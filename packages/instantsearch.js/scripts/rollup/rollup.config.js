@@ -1,9 +1,9 @@
+import terser from '@rollup/plugin-terser';
 import babel from 'rollup-plugin-babel';
 import commonjs from 'rollup-plugin-commonjs';
 import filesize from 'rollup-plugin-filesize';
 import resolve from 'rollup-plugin-node-resolve';
 import replace from 'rollup-plugin-replace';
-import { uglify } from 'rollup-plugin-uglify';
 
 import packageJson from '../../package.json';
 
@@ -55,12 +55,7 @@ const createConfiguration = ({ mode, filename }) => ({
       __DEV__: mode === 'development',
       'process.env.NODE_ENV': JSON.stringify('production'),
     }),
-    mode === 'production' &&
-      uglify({
-        output: {
-          preamble: license,
-        },
-      }),
+    mode === 'production' && terser(),
   ].filter(Boolean),
 });
 

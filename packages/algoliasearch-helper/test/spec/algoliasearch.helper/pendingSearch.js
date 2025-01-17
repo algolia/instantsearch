@@ -1,7 +1,6 @@
 'use strict';
 
 var algoliasearch = require('algoliasearch');
-var isV5 = (algoliasearch.apiClientVersion || '')[0] === '5';
 algoliasearch = algoliasearch.algoliasearch || algoliasearch;
 
 var algoliasearchHelper = require('../../../index');
@@ -72,85 +71,45 @@ test('When searchOnce with promises, hasPendingRequests is true', function (done
   triggerCb();
 });
 
-if (!isV5) {
-  test('When searchForFacetValues, hasPendingRequests is true (v3, v4)', function (done) {
-    var client = algoliasearch('dsf', 'dsfdf');
+test('When searchForFacetValues, hasPendingRequests is true', function (done) {
+  var client = algoliasearch('dsf', 'dsfdf');
 
-    let triggerCb;
-    client.searchForFacetValues = function () {
-      return new Promise(function (resolve) {
-        triggerCb = function () {
-          resolve([
+  let triggerCb;
+  client.search = function () {
+    return new Promise(function (resolve) {
+      triggerCb = function () {
+        resolve({
+          results: [
             {
               exhaustiveFacetsCount: true,
               facetHits: [],
               processingTimeMS: 3,
             },
-          ]);
-        };
-      });
-    };
-
-    var helper = algoliasearchHelper(client, 'test_hotels-node');
-    var countNoMoreSearch = 0;
-    helper.on('searchQueueEmpty', function () {
-      countNoMoreSearch += 1;
+          ],
+        });
+      };
     });
+  };
 
-    expect(helper.hasPendingRequests()).toBe(false);
-
-    helper.searchForFacetValues('').then(function () {
-      expect(helper.hasPendingRequests()).toBe(false);
-      expect(countNoMoreSearch).toBe(1);
-      done();
-    });
-
-    expect(helper.hasPendingRequests()).toBe(true);
-    expect(countNoMoreSearch).toBe(0);
-
-    triggerCb();
+  var helper = algoliasearchHelper(client, 'test_hotels-node');
+  var countNoMoreSearch = 0;
+  helper.on('searchQueueEmpty', function () {
+    countNoMoreSearch += 1;
   });
-} else {
-  test('When searchForFacetValues, hasPendingRequests is true (v5)', function (done) {
-    var client = algoliasearch('dsf', 'dsfdf');
 
-    let triggerCb;
-    client.search = function () {
-      return new Promise(function (resolve) {
-        triggerCb = function () {
-          resolve({
-            results: [
-              {
-                exhaustiveFacetsCount: true,
-                facetHits: [],
-                processingTimeMS: 3,
-              },
-            ],
-          });
-        };
-      });
-    };
+  expect(helper.hasPendingRequests()).toBe(false);
 
-    var helper = algoliasearchHelper(client, 'test_hotels-node');
-    var countNoMoreSearch = 0;
-    helper.on('searchQueueEmpty', function () {
-      countNoMoreSearch += 1;
-    });
-
+  helper.searchForFacetValues('').then(function () {
     expect(helper.hasPendingRequests()).toBe(false);
-
-    helper.searchForFacetValues('').then(function () {
-      expect(helper.hasPendingRequests()).toBe(false);
-      expect(countNoMoreSearch).toBe(1);
-      done();
-    });
-
-    expect(helper.hasPendingRequests()).toBe(true);
-    expect(countNoMoreSearch).toBe(0);
-
-    triggerCb();
+    expect(countNoMoreSearch).toBe(1);
+    done();
   });
-}
+
+  expect(helper.hasPendingRequests()).toBe(true);
+  expect(countNoMoreSearch).toBe(0);
+
+  triggerCb();
+});
 
 test('When helper.search(), hasPendingRequests is true', function (done) {
   var testData = require('../../datasets/SearchParameters/search.dataset')();

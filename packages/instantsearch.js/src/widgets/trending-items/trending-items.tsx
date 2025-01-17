@@ -4,7 +4,7 @@ import { createTrendingItemsComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectTrendingItems from '../../connectors/trending-items/connectTrendingItems';
+import { connectTrendingItems } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
@@ -15,7 +15,7 @@ import type {
   TrendingItemsWidgetDescription,
   TrendingItemsConnectorParams,
   TrendingItemsRenderState,
-} from '../../connectors/trending-items/connectTrendingItems';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   Template,
@@ -25,6 +25,7 @@ import type {
   BaseHit,
   RecommendResponse,
   Hit,
+  Widget,
 } from '../../types';
 import type {
   RecommendClassNames,
@@ -67,7 +68,6 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
         defaultTemplates: {} as unknown as Required<
           TrendingItemsTemplates<THit>
         >,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
 
@@ -230,13 +230,14 @@ type TrendingItemsWidgetParams<THit extends NonNullable<object> = BaseHit> = {
   cssClasses?: TrendingItemsCSSClasses;
 };
 
-export type TrendingItemsWidget = WidgetFactory<
-  TrendingItemsWidgetDescription & {
-    $$widgetType: 'ais.trendingItems';
-  },
-  TrendingItemsConnectorParams,
-  TrendingItemsWidgetParams
->;
+export type TrendingItemsWidget<THit extends NonNullable<object> = BaseHit> =
+  WidgetFactory<
+    TrendingItemsWidgetDescription<THit> & {
+      $$widgetType: 'ais.trendingItems';
+    },
+    TrendingItemsConnectorParams<THit>,
+    TrendingItemsWidgetParams<THit>
+  >;
 
 export default (function trendingItems<
   THit extends NonNullable<object> = BaseHit
@@ -278,7 +279,7 @@ export default (function trendingItems<
   const facetParameters =
     facetName && facetValue ? { facetName, facetValue } : {};
 
-  return {
+  const widget = {
     ...makeWidget({
       ...facetParameters,
       limit,
@@ -290,4 +291,12 @@ export default (function trendingItems<
     }),
     $$widgetType: 'ais.trendingItems',
   };
+
+  // explicitly cast this type to have a small type output.
+  return widget as Widget<
+    TrendingItemsWidgetDescription & {
+      $$widgetType: 'ais.trendingItems';
+      widgetParams: TrendingItemsConnectorParams<THit>;
+    }
+  >;
 } satisfies TrendingItemsWidget);

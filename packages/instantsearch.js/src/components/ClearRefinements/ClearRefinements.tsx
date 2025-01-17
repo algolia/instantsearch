@@ -5,7 +5,7 @@ import { h } from 'preact';
 
 import Template from '../Template/Template';
 
-import type { ClearRefinementsRenderState } from '../../connectors/clear-refinements/connectClearRefinements';
+import type { ClearRefinementsRenderState } from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { ComponentCSSClasses } from '../../types';
 import type {
@@ -22,12 +22,12 @@ export type ClearRefinementsComponentTemplates =
 export type ClearRefinementsProps = {
   refine: ClearRefinementsRenderState['refine'];
   cssClasses: ClearRefinementsComponentCSSClasses;
-  hasRefinements: ClearRefinementsRenderState['hasRefinements'];
+  canRefine: ClearRefinementsRenderState['canRefine'];
   templateProps: PreparedTemplateProps<ClearRefinementsComponentTemplates>;
 };
 
 const ClearRefinements = ({
-  hasRefinements,
+  canRefine,
   refine,
   cssClasses,
   templateProps,
@@ -40,12 +40,12 @@ const ClearRefinements = ({
       rootProps={{
         className: cx(
           cssClasses.button,
-          !hasRefinements && cssClasses.disabledButton
+          !canRefine && cssClasses.disabledButton
         ),
         onClick: refine,
-        disabled: !hasRefinements,
+        disabled: !canRefine,
       }}
-      data={{ hasRefinements }}
+      data={{ canRefine }}
     />
   </div>
 );

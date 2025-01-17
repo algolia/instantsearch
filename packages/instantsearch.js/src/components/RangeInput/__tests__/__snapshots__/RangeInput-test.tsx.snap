@@ -34,12 +34,10 @@ exports[`RangeInput expect to render 1`] = `
       templateKey="separatorText"
       templates={
         {
-          "separatorText": "to",
-          "submitText": "Go",
+          "separatorText": [Function],
+          "submitText": [Function],
         }
       }
-      templatesConfig={{}}
-      useCustomCompileOptions={{}}
     />
     <label
       className="label"
@@ -69,12 +67,10 @@ exports[`RangeInput expect to render 1`] = `
       templateKey="submitText"
       templates={
         {
-          "separatorText": "to",
-          "submitText": "Go",
+          "separatorText": [Function],
+          "submitText": [Function],
         }
       }
-      templatesConfig={{}}
-      useCustomCompileOptions={{}}
     />
   </form>
 </div>
@@ -114,12 +110,10 @@ exports[`RangeInput expect to render with disabled state 1`] = `
       templateKey="separatorText"
       templates={
         {
-          "separatorText": "to",
-          "submitText": "Go",
+          "separatorText": [Function],
+          "submitText": [Function],
         }
       }
-      templatesConfig={{}}
-      useCustomCompileOptions={{}}
     />
     <label
       className="label"
@@ -149,12 +143,10 @@ exports[`RangeInput expect to render with disabled state 1`] = `
       templateKey="submitText"
       templates={
         {
-          "separatorText": "to",
-          "submitText": "Go",
+          "separatorText": [Function],
+          "submitText": [Function],
         }
       }
-      templatesConfig={{}}
-      useCustomCompileOptions={{}}
     />
   </form>
 </div>
@@ -194,12 +186,10 @@ exports[`RangeInput expect to render with values 1`] = `
       templateKey="separatorText"
       templates={
         {
-          "separatorText": "to",
-          "submitText": "Go",
+          "separatorText": [Function],
+          "submitText": [Function],
         }
       }
-      templatesConfig={{}}
-      useCustomCompileOptions={{}}
     />
     <label
       className="label"
@@ -229,12 +219,10 @@ exports[`RangeInput expect to render with values 1`] = `
       templateKey="submitText"
       templates={
         {
-          "separatorText": "to",
-          "submitText": "Go",
+          "separatorText": [Function],
+          "submitText": [Function],
         }
       }
-      templatesConfig={{}}
-      useCustomCompileOptions={{}}
     />
   </form>
 </div>
@@ -274,12 +262,10 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
       templateKey="separatorText"
       templates={
         {
-          "separatorText": "to",
-          "submitText": "Go",
+          "separatorText": [Function],
+          "submitText": [Function],
         }
       }
-      templatesConfig={{}}
-      useCustomCompileOptions={{}}
     />
     <label
       className="label"
@@ -309,12 +295,10 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
       templateKey="submitText"
       templates={
         {
-          "separatorText": "to",
-          "submitText": "Go",
+          "separatorText": [Function],
+          "submitText": [Function],
         }
       }
-      templatesConfig={{}}
-      useCustomCompileOptions={{}}
     />
   </form>
 </div>
@@ -354,12 +338,10 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
       templateKey="separatorText"
       templates={
         {
-          "separatorText": "to",
-          "submitText": "Go",
+          "separatorText": [Function],
+          "submitText": [Function],
         }
       }
-      templatesConfig={{}}
-      useCustomCompileOptions={{}}
     />
     <label
       className="label"
@@ -389,12 +371,10 @@ exports[`RangeInput willReceiveProps expect to update the empty state from given
       templateKey="submitText"
       templates={
         {
-          "separatorText": "to",
-          "submitText": "Go",
+          "separatorText": [Function],
+          "submitText": [Function],
         }
       }
-      templatesConfig={{}}
-      useCustomCompileOptions={{}}
     />
   </form>
 </div>
@@ -434,12 +414,10 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
       templateKey="separatorText"
       templates={
         {
-          "separatorText": "to",
-          "submitText": "Go",
+          "separatorText": [Function],
+          "submitText": [Function],
         }
       }
-      templatesConfig={{}}
-      useCustomCompileOptions={{}}
     />
     <label
       className="label"
@@ -469,12 +447,10 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
       templateKey="submitText"
       templates={
         {
-          "separatorText": "to",
-          "submitText": "Go",
+          "separatorText": [Function],
+          "submitText": [Function],
         }
       }
-      templatesConfig={{}}
-      useCustomCompileOptions={{}}
     />
   </form>
 </div>
@@ -514,12 +490,10 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
       templateKey="separatorText"
       templates={
         {
-          "separatorText": "to",
-          "submitText": "Go",
+          "separatorText": [Function],
+          "submitText": [Function],
         }
       }
-      templatesConfig={{}}
-      useCustomCompileOptions={{}}
     />
     <label
       className="label"
@@ -549,12 +523,10 @@ exports[`RangeInput willReceiveProps expect to update the state from given props
       templateKey="submitText"
       templates={
         {
-          "separatorText": "to",
-          "submitText": "Go",
+          "separatorText": [Function],
+          "submitText": [Function],
         }
       }
-      templatesConfig={{}}
-      useCustomCompileOptions={{}}
     />
   </form>
 </div>

@@ -61,15 +61,9 @@ export default function HomePage({ serverState, url }: HomePageProps) {
           router: createInstantSearchRouterNext({
             serverUrl: url,
             singletonRouter,
-            routerOptions: {
-              cleanUrlOnDispose: false,
-            },
           }),
         }}
         insights={true}
-        future={{
-          preserveSharedStateOnUnmount: true,
-        }}
       >
         <div className="Container">
           <div>

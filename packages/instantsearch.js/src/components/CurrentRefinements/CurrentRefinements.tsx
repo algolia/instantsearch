@@ -8,7 +8,7 @@ import { isSpecialClick, capitalize } from '../../lib/utils';
 import type {
   CurrentRefinementsConnectorParamsItem,
   CurrentRefinementsConnectorParamsRefinement,
-} from '../../connectors/current-refinements/connectCurrentRefinements';
+} from '../../connectors';
 import type { ComponentCSSClasses } from '../../types';
 import type { CurrentRefinementsCSSClasses } from '../../widgets/current-refinements/current-refinements';
 

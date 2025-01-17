@@ -7,12 +7,12 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
-import { render } from 'preact';
-
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+import { render } from 'preact';
+
 import relevantSort from '../relevant-sort';
 
 import type { RelevantSortTemplates } from '../relevant-sort';
@@ -26,7 +26,7 @@ jest.mock('preact', () => {
 });
 
 const templates: RelevantSortTemplates = {
-  text: '',
+  text: () => '',
   button: ({ isRelevantSorted }) => {
     return isRelevantSorted ? 'See all results' : 'See relevant results';
   },

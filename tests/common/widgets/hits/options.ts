@@ -19,18 +19,7 @@ import type { Hit, SearchResponse } from 'instantsearch.js';
 function normalizeSnapshot(html: string) {
   // Each flavor has its own way to render the hit by default.
   // @MAJOR: Remove this once all flavors are aligned.
-  return commonNormalizeSnapshot(html)
-    .replace(
-      /(?:<div\s+style="word-break: break-all;"\s*?>)?\s*?({.+?})…?\s*?(?:<\/div>)?/gs,
-      (_, captured) => {
-        return (captured as string)
-          .replace(/\s/g, '')
-          .replace(/,"__position":\d/, '');
-      }
-    )
-    .replace(/\s{0,}(objectID): (.+?), index: \d\s{0,}/gs, (_, ...captured) => {
-      return `{"objectID":"${captured[1]}"}`;
-    });
+  return commonNormalizeSnapshot(html);
 }
 
 export function createOptionsTests(
@@ -67,12 +56,20 @@ export function createOptionsTests(
             <li
               class="ais-Hits-item"
             >
-              {"objectID":"1"}
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"1","__position":1}…
+              </div>
             </li>
             <li
               class="ais-Hits-item"
             >
-              {"objectID":"2"}
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"2","__position":2}…
+              </div>
             </li>
           </ol>
         </div>
@@ -118,12 +115,20 @@ export function createOptionsTests(
             <li
               class="ais-Hits-item"
             >
-              {"objectID":"(1)"}
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"(1)","__position":1}…
+              </div>
             </li>
             <li
               class="ais-Hits-item"
             >
-              {"objectID":"(2)"}
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"(2)","__position":2}…
+              </div>
             </li>
           </ol>
         </div>
@@ -209,38 +214,46 @@ export function createOptionsTests(
       ).toMatchNormalizedInlineSnapshot(
         normalizeSnapshot,
         `
-          <div
-            class="ais-Hits"
+        <div
+          class="ais-Hits"
+        >
+          <aside
+            class="ais-Hits-banner"
           >
-            <aside
-              class="ais-Hits-banner"
+            <a
+              class="ais-Hits-banner-link"
+              href="https://www.algolia.com"
             >
-              <a
-                class="ais-Hits-banner-link"
-                href="https://www.algolia.com"
-              >
-                <img
-                  class="ais-Hits-banner-image"
-                  src="https://via.placeholder.com/550x250"
-                />
-              </a>
-            </aside>
-            <ol
-              class="ais-Hits-list"
+              <img
+                class="ais-Hits-banner-image"
+                src="https://via.placeholder.com/550x250"
+              />
+            </a>
+          </aside>
+          <ol
+            class="ais-Hits-list"
+          >
+            <li
+              class="ais-Hits-item"
             >
-              <li
-                class="ais-Hits-item"
+              <div
+                style="word-break: break-all;"
               >
-                {"objectID":"1"}
-              </li>
-              <li
-                class="ais-Hits-item"
+                {"objectID":"1","__position":1}…
+              </div>
+            </li>
+            <li
+              class="ais-Hits-item"
+            >
+              <div
+                style="word-break: break-all;"
               >
-                {"objectID":"2"}
-              </li>
-            </ol>
-          </div>
-          `
+                {"objectID":"2","__position":2}…
+              </div>
+            </li>
+          </ol>
+        </div>
+      `
       );
     });
   });
