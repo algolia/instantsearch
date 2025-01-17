@@ -25,6 +25,7 @@ import type {
   BaseHit,
   RecommendResponse,
   Hit,
+  TemplateWithBindEvent,
 } from '../../types';
 import type {
   RecommendClassNames,
@@ -84,21 +85,21 @@ const renderer =
         : undefined
     ) as FrequentlyBoughtTogetherUiProps<AlgoliaHit>['headerComponent'];
 
-    const itemComponent = (
+    const itemComponent: FrequentlyBoughtTogetherUiProps<AlgoliaHit>['itemComponent'] =
       templates.item
-        ? ({ item }) => {
+        ? ({ item, sendEvent: _sendEvent, ...rootProps }) => {
             return (
               <TemplateComponent
                 {...renderState.templateProps}
                 templateKey="item"
                 rootTagName="fragment"
                 data={item}
-                sendEvent={sendEvent}
+                sendEvent={_sendEvent}
+                rootProps={{ ...rootProps }}
               />
             );
           }
-        : undefined
-    ) as FrequentlyBoughtTogetherUiProps<AlgoliaHit>['itemComponent'];
+        : undefined;
 
     const emptyComponent = (
       templates.empty
@@ -189,7 +190,7 @@ export type FrequentlyBoughtTogetherTemplates<
   /**
    * Template to use for each result. This template will receive an object containing a single record.
    */
-  item: Template<AlgoliaHit<THit>>;
+  item: TemplateWithBindEvent<AlgoliaHit<THit>>;
 
   /**
    * Template to use to wrap all items.

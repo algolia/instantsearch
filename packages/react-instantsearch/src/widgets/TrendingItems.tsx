@@ -1,5 +1,5 @@
 import { createTrendingItemsComponent } from 'instantsearch-ui-components';
-import React, { createElement, Fragment } from 'react';
+import React, { createElement, Fragment, useMemo } from 'react';
 import { useInstantSearch, useTrendingItems } from 'react-instantsearch-core';
 
 import type {
@@ -79,9 +79,17 @@ export function TrendingItems<TItem extends BaseHit = BaseHit>({
         })
     : undefined;
 
+  const _itemComponent: typeof itemComponent = useMemo(
+    () =>
+      itemComponent
+        ? (itemProps) => itemComponent({ ...itemProps, sendEvent })
+        : undefined,
+    [itemComponent, sendEvent]
+  );
+
   const uiProps: UiProps<TItem> = {
     items: items as Array<Hit<TItem>>,
-    itemComponent,
+    itemComponent: _itemComponent,
     headerComponent,
     emptyComponent,
     layout,

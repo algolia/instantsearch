@@ -155,6 +155,7 @@ describe('TrendingItems', () => {
                     item={item}
                     onClick={jest.fn()}
                     onAuxClick={jest.fn()}
+                    sendEvent={jest.fn()}
                   />
                 </li>
               ))}
@@ -233,6 +234,12 @@ describe('TrendingItems', () => {
     userEvent.click(container.querySelectorAll('.ais-TrendingItems-item')[0]!);
 
     expect(sendEvent).toHaveBeenCalledTimes(1);
+    expect(sendEvent).toHaveBeenNthCalledWith(
+      1,
+      'click:internal',
+      items[0],
+      'Item Clicked'
+    );
   });
 
   test('accepts custom title translation', () => {

@@ -1,5 +1,5 @@
 import { createLookingSimilarComponent } from 'instantsearch-ui-components';
-import React, { createElement, Fragment } from 'react';
+import React, { createElement, Fragment, useMemo } from 'react';
 import { useLookingSimilar, useInstantSearch } from 'react-instantsearch-core';
 
 import type {
@@ -75,9 +75,17 @@ export function LookingSimilar<THit extends BaseHit = BaseHit>({
         })
     : undefined;
 
+  const _itemComponent: typeof itemComponent = useMemo(
+    () =>
+      itemComponent
+        ? (itemProps) => itemComponent({ ...itemProps, sendEvent })
+        : undefined,
+    [itemComponent, sendEvent]
+  );
+
   const uiProps: UiProps<THit> = {
     items: items as Array<Hit<THit>>,
-    itemComponent,
+    itemComponent: _itemComponent,
     headerComponent,
     emptyComponent,
     layout,

@@ -93,6 +93,7 @@ export type RecordWithObjectID<TObject = Record<string, unknown>> = TObject & {
 
 export type RecommendItemComponentProps<TObject> = {
   item: TObject;
+  sendEvent: SendEventForHits;
   onClick?: () => void;
   onAuxClick?: () => void;
 };
