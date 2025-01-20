@@ -6,6 +6,7 @@ var fv = require('../functions/escapeFacetValue');
 var find = require('../functions/find');
 var findIndex = require('../functions/findIndex');
 var formatSort = require('../functions/formatSort');
+var mergeNumericMax = require('../functions/mergeNumericMax');
 var orderBy = require('../functions/orderBy');
 var escapeFacetValue = fv.escapeFacetValue;
 var unescapeFacetValue = fv.unescapeFacetValue;
@@ -514,7 +515,7 @@ function SearchResults(state, results, options) {
 
         self.hierarchicalFacets[position][attributeIndex].data =
           self.persistHierarchicalRootCount
-            ? defaultsPure(
+            ? mergeNumericMax(
                 self.hierarchicalFacets[position][attributeIndex].data,
                 facetResults
               )
@@ -530,7 +531,7 @@ function SearchResults(state, results, options) {
 
         self.disjunctiveFacets[position] = {
           name: dfacet,
-          data: defaultsPure(dataFromMainRequest, facetResults),
+          data: mergeNumericMax(dataFromMainRequest, facetResults),
           exhaustive: result.exhaustiveFacetsCount,
         };
         assignFacetStats(
