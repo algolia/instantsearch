@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.23.1](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.23.0...algoliasearch-helper@3.23.1) (2025-01-21)
+
+
+### Bug Fixes
+
+* **facets:** choose highest value in disjunctive ([#6536](https://github.com/algolia/instantsearch/issues/6536)) ([e458ee5](https://github.com/algolia/instantsearch/commit/e458ee5c31fdb48f2075899dd7ef35880e8d0873)), closes [#6445](https://github.com/algolia/instantsearch/issues/6445)
+
+
+
+
+
 # [3.23.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.22.6...algoliasearch-helper@3.23.0) (2025-01-14)
 
 

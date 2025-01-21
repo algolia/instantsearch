@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.15.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.15.0...react-instantsearch@7.15.1) (2025-01-21)
+
+
+### Bug Fixes
+
+* **recommend:** fix sendEvent function passing to Recommend components ([#6533](https://github.com/algolia/instantsearch/issues/6533)) ([38d9f95](https://github.com/algolia/instantsearch/commit/38d9f952861164eca01c7cba2403396d4f194bee))
+
+
+
+
+
 # [7.15.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.14.0...react-instantsearch@7.15.0) (2025-01-16)
 
 
