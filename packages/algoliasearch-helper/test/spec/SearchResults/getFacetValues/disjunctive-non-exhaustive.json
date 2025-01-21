@@ -10,7 +10,8 @@
         "processingTimeMS": 1,
         "facets": {
           "brand": {
-            "Apple": 1000
+            "Apple": 1000,
+            "Samsung": 1
           }
         },
         "exhaustiveFacetsCount": true,
@@ -22,6 +23,9 @@
         "hits": [
           {
             "objectID": "1696302"
+          },
+          {
+            "objectID": "1696301"
           }
         ],
         "nbHits": 10000,

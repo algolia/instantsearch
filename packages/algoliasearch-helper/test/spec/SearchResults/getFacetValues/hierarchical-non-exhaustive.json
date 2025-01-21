@@ -9,7 +9,8 @@
         "hitsPerPage": 8,
         "facets": {
           "brand": {
-            "Apple": 1000
+            "Apple": 1000,
+            "Samsung": 1
           }
         },
         "exhaustiveFacetsCount": true,
