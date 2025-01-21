@@ -25,6 +25,7 @@ import type {
   BaseHit,
   RecommendResponse,
   Hit,
+  TemplateWithBindEvent,
 } from '../../types';
 import type {
   RecommendClassNames,
@@ -90,21 +91,21 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
         : undefined
     ) as RelatedProductsUiProps<AlgoliaHit>['headerComponent'];
 
-    const itemComponent = (
+    const itemComponent: RelatedProductsUiProps<AlgoliaHit>['itemComponent'] =
       templates.item
-        ? ({ item }) => {
+        ? ({ item, sendEvent: _sendEvent, ...rootProps }) => {
             return (
               <TemplateComponent
                 {...renderState.templateProps}
                 templateKey="item"
                 rootTagName="fragment"
                 data={item}
-                sendEvent={sendEvent}
+                sendEvent={_sendEvent}
+                rootProps={{ ...rootProps }}
               />
             );
           }
-        : undefined
-    ) as RelatedProductsUiProps<AlgoliaHit>['itemComponent'];
+        : undefined;
 
     const emptyComponent = (
       templates.empty
@@ -194,7 +195,7 @@ export type RelatedProductsTemplates<
   /**
    * Template to use for each result. This template will receive an object containing a single record.
    */
-  item: Template<AlgoliaHit<THit>>;
+  item: TemplateWithBindEvent<AlgoliaHit<THit>>;
 
   /**
    * Template to use to wrap all items.
