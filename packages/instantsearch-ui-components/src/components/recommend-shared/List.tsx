@@ -32,7 +32,7 @@ export function createListComponent({ createElement }: Renderer) {
                 sendEvent('click:internal', item, 'Item Clicked');
               }}
             >
-              <ItemComponent item={item} />
+              <ItemComponent item={item} sendEvent={sendEvent} />
             </li>
           ))}
         </ol>
