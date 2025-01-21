@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.77.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.77.0...instantsearch.js@4.77.1) (2025-01-21)
+
+
+### Bug Fixes
+
+* **refinement list:** prevent error when value has a quote ([#6526](https://github.com/algolia/instantsearch/issues/6526)) ([7721896](https://github.com/algolia/instantsearch/commit/772189605029e8bbb61413737824c096f16269da))
+
+
+
+
+
 # [4.77.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.76.0...instantsearch.js@4.77.0) (2025-01-16)
 
 

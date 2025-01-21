@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.2](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.4.1...react-instantsearch-nextjs@0.4.2) (2025-01-21)
+
+
+### Bug Fixes
+
+* **next-app-router:** do not use SSR context for CSR ([#6534](https://github.com/algolia/instantsearch/issues/6534)) ([81ccb99](https://github.com/algolia/instantsearch/commit/81ccb99a315d752daabaf3432d9a14f78ac82850))
+
+
+
+
+
 ## [0.4.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.4.0...react-instantsearch-nextjs@0.4.1) (2025-01-16)
 
 **Note:** Version bump only for package react-instantsearch-nextjs
