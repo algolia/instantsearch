@@ -19,6 +19,7 @@ import type {
   UnknownWidgetParams,
   RecommendResponse,
   Hit,
+  AlgoliaHit,
 } from '../../types';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
 
@@ -81,7 +82,7 @@ export type RelatedProductsConnectorParams<
    */
   transformItems?: TransformItems<
     Hit<THit>,
-    { results: RecommendResponse<Hit<THit>> }
+    { results: RecommendResponse<AlgoliaHit<THit>> }
   >;
 };
 
@@ -192,7 +193,7 @@ export default (function connectRelatedProducts<
         const transformedItems = transformItems(
           itemsWithAbsolutePositionAndQueryID,
           {
-            results: results as RecommendResponse<Hit<THit>>,
+            results: results as RecommendResponse<AlgoliaHit<THit>>,
           }
         );
 
