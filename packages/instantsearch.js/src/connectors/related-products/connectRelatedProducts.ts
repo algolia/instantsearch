@@ -18,6 +18,7 @@ import type {
   Unmounter,
   UnknownWidgetParams,
   RecommendResponse,
+  Hit,
   AlgoliaHit,
 } from '../../types';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
@@ -33,7 +34,7 @@ export type RelatedProductsRenderState<
   /**
    * The matched recommendations from the Algolia API.
    */
-  items: Array<AlgoliaHit<THit>>;
+  items: Array<Hit<THit>>;
 
   /**
    * Sends an event to the Insights middleware.
@@ -80,7 +81,7 @@ export type RelatedProductsConnectorParams<
    * Function to transform the items passed to the templates.
    */
   transformItems?: TransformItems<
-    AlgoliaHit<THit>,
+    Hit<THit>,
     { results: RecommendResponse<AlgoliaHit<THit>> }
   >;
 };
