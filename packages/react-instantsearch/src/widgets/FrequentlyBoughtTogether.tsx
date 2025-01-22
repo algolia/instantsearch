@@ -9,7 +9,7 @@ import type {
   FrequentlyBoughtTogetherProps as FrequentlyBoughtTogetherPropsUiComponentProps,
   Pragma,
 } from 'instantsearch-ui-components';
-import type { AlgoliaHit, BaseHit, Hit } from 'instantsearch.js';
+import type { AlgoliaHit, BaseHit } from 'instantsearch.js';
 import type { UseFrequentlyBoughtTogetherProps } from 'react-instantsearch-core';
 
 type UiProps<THit extends BaseHit> = Pick<
@@ -86,7 +86,7 @@ export function FrequentlyBoughtTogether<THit extends BaseHit = BaseHit>({
   );
 
   const uiProps: UiProps<THit> = {
-    items: items as Array<Hit<THit>>,
+    items,
     itemComponent: _itemComponent,
     headerComponent,
     emptyComponent,
