@@ -18,7 +18,7 @@ import type {
   Unmounter,
   UnknownWidgetParams,
   RecommendResponse,
-  AlgoliaHit,
+  Hit,
 } from '../../types';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
 
@@ -33,7 +33,7 @@ export type LookingSimilarRenderState<
   /**
    * The matched recommendations from the Algolia API.
    */
-  items: Array<AlgoliaHit<THit>>;
+  items: Array<Hit<THit>>;
   /**
    * Sends an event to the Insights middleware.
    */
@@ -79,8 +79,8 @@ export type LookingSimilarConnectorParams<
    * Function to transform the items passed to the templates.
    */
   transformItems?: TransformItems<
-    AlgoliaHit<THit>,
-    { results: RecommendResponse<AlgoliaHit<THit>> }
+    Hit<THit>,
+    { results: RecommendResponse<Hit<THit>> }
   >;
 };
 
@@ -191,7 +191,7 @@ export default (function connectLookingSimilar<
         const transformedItems = transformItems(
           itemsWithAbsolutePositionAndQueryID,
           {
-            results: results as RecommendResponse<AlgoliaHit<THit>>,
+            results: results as RecommendResponse<Hit<THit>>,
           }
         );
 
