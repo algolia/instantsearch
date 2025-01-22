@@ -20,7 +20,6 @@ import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   Template,
   WidgetFactory,
-  AlgoliaHit,
   Renderer,
   BaseHit,
   RecommendResponse,
@@ -83,9 +82,9 @@ const renderer =
             />
           )
         : undefined
-    ) as FrequentlyBoughtTogetherUiProps<AlgoliaHit>['headerComponent'];
+    ) as FrequentlyBoughtTogetherUiProps<Hit>['headerComponent'];
 
-    const itemComponent: FrequentlyBoughtTogetherUiProps<AlgoliaHit>['itemComponent'] =
+    const itemComponent: FrequentlyBoughtTogetherUiProps<Hit>['itemComponent'] =
       templates.item
         ? ({ item, sendEvent: _sendEvent, ...rootProps }) => {
             return (
@@ -112,7 +111,7 @@ const renderer =
             />
           )
         : undefined
-    ) as FrequentlyBoughtTogetherUiProps<AlgoliaHit>['emptyComponent'];
+    ) as FrequentlyBoughtTogetherUiProps<Hit>['emptyComponent'];
 
     const layoutComponent = (
       templates.layout
@@ -126,7 +125,7 @@ const renderer =
                 items: data.items,
                 templates: {
                   item: templates.item
-                    ? ({ item }: { item: AlgoliaHit<THit> }) => (
+                    ? ({ item }: { item: Hit<THit> }) => (
                         <TemplateComponent
                           {...renderState.templateProps}
                           templateKey="item"
@@ -146,7 +145,7 @@ const renderer =
             />
           )
         : undefined
-    ) as FrequentlyBoughtTogetherUiProps<AlgoliaHit<THit>>['layout'];
+    ) as FrequentlyBoughtTogetherUiProps<Hit<THit>>['layout'];
 
     render(
       <FrequentlyBoughtTogether
@@ -171,7 +170,7 @@ export type FrequentlyBoughtTogetherTemplates<
   /**
    * Template to use when there are no results.
    */
-  empty: Template<RecommendResponse<AlgoliaHit<THit>>>;
+  empty: Template<RecommendResponse<Hit<THit>>>;
 
   /**
    * Template to use for the header of the widget.
@@ -180,7 +179,7 @@ export type FrequentlyBoughtTogetherTemplates<
     Pick<
       Parameters<
         NonNullable<
-          FrequentlyBoughtTogetherUiProps<AlgoliaHit<THit>>['headerComponent']
+          FrequentlyBoughtTogetherUiProps<Hit<THit>>['headerComponent']
         >
       >[0],
       'items'
@@ -190,7 +189,7 @@ export type FrequentlyBoughtTogetherTemplates<
   /**
    * Template to use for each result. This template will receive an object containing a single record.
    */
-  item: TemplateWithBindEvent<AlgoliaHit<THit>>;
+  item: TemplateWithBindEvent<Hit<THit>>;
 
   /**
    * Template to use to wrap all items.
@@ -198,14 +197,12 @@ export type FrequentlyBoughtTogetherTemplates<
   layout: Template<
     Pick<
       Parameters<
-        NonNullable<FrequentlyBoughtTogetherUiProps<AlgoliaHit<THit>>['layout']>
+        NonNullable<FrequentlyBoughtTogetherUiProps<Hit<THit>>['layout']>
       >[0],
       'items'
     > & {
       templates: {
-        item: FrequentlyBoughtTogetherUiProps<
-          AlgoliaHit<THit>
-        >['itemComponent'];
+        item: FrequentlyBoughtTogetherUiProps<Hit<THit>>['itemComponent'];
       };
       cssClasses: Pick<FrequentlyBoughtTogetherCSSClasses, 'list' | 'item'>;
     }
