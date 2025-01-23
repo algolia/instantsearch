@@ -4,8 +4,7 @@ export function matchConditions(
 ): boolean {
   return (
     matchFacetFilters(target, conditions.facetFilters) &&
-    matchNumericFilters(target, conditions.numericFilters) &&
-    matchFilters(target, conditions.filters)
+    matchNumericFilters(target, conditions.numericFilters)
   );
 }
 
@@ -37,7 +36,7 @@ function splitFilter(filter: filter): {
   value: Value;
   negated: boolean;
 } {
-  const [attribute, value] = filter.split(/(?<!\\):/) as [attribute, string];
+  const [attribute, value] = split(filter, ':') as [attribute, string];
   const negated = value[0] === '-';
   const normalizedValue = normalize(value);
   const removedNegation = negated
@@ -84,7 +83,7 @@ function splitNumericFilter(
   condition: numericFilter
 ): Array<{ attribute: string; operator: numericOperator; value: number }> {
   if (condition.match(/(?<!\\):/)) {
-    const [attribute, range] = condition.split(/(?<!\\):/);
+    const [attribute, range] = split(condition, ':') as [attribute, string];
     const [min, max] = range.split('TO');
     return [
       {
@@ -99,7 +98,7 @@ function splitNumericFilter(
       },
     ];
   }
-  const [attribute, operator, value] = condition.split(/(?<!\\)(<=|>=|=|<|>)/);
+  const [attribute, operator, value] = split(condition, '(<=|>=|=|<|>)');
   return [
     {
       attribute,
@@ -135,17 +134,6 @@ function compareNumeric(
 }
 
 //#endregion
-//#region filters
-
-function matchFilters(
-  _target: AlgoliaRecord,
-  filters: Conditions['filters']
-): boolean {
-  if (!filters) return true;
-  throw new Error('Not implemented');
-}
-
-//#endregion
 //#region helpers
 
 /**
@@ -156,7 +144,7 @@ function equals(a: Value | undefined, b: Value, negated: boolean): boolean {
 }
 
 function get(target: AlgoliaRecord, attribute: attribute): Value | undefined {
-  const path = attribute.split(/(?<!\\)\./);
+  const path = split(attribute, '\\.');
   // @ts-expect-error - too JavaScripty
   const value = path.reduce((current, key) => current && current[key], target);
   return normalize(value);
@@ -193,6 +181,13 @@ function removeNegation(value: Value): Value {
   }
 }
 
+/**
+ * Split a string by a separator, unless it is escaped.
+ */
+function split(value: string, separator: string): string[] {
+  return value.split(new RegExp(`(?<!\\\\)${separator}`));
+}
+
 //#endregion
 //#region types
 
@@ -215,12 +210,6 @@ export type Conditions = {
    * If you want to combine filters with OR, you can use an array of filters as an item.
    */
   numericFilters?: Array<numericFilter | numericFilter[]>;
-  /**
-   * SQL-like string format for filtering.
-   * Not Implemented
-   * @deprecated Use `facetFilters` and `numericFilters` instead.
-   */
-  filters?: string;
 };
 
 type Value = string | number | boolean | undefined;
