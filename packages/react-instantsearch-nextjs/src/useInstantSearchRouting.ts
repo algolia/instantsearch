@@ -22,11 +22,20 @@ export function useInstantSearchRouting<
   const routingRef =
     useRef<InstantSearchProps<TUiState, TRouteState>['routing']>(null);
   const onUpdateRef = useRef<() => void>(null);
+  const isUnmounting = useRef(false);
+
   useEffect(() => {
     if (onUpdateRef.current) {
       onUpdateRef.current();
     }
   }, [pathname, searchParams]);
+
+  useEffect(() => {
+    isUnmounting.current = false;
+    return () => {
+      isUnmounting.current = true;
+    };
+  });
 
   const headers = useNextHeaders();
 
@@ -54,7 +63,7 @@ export function useInstantSearchRouting<
       url
     ) {
       // This is to skip the push with empty routeState on dispose as it would clear params set on a <Link>
-      if (this.isDisposed) {
+      if (this.isDisposed && isUnmounting.current) {
         return;
       }
       history.pushState({}, '', url);
