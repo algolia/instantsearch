@@ -1844,7 +1844,7 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function (
   if (this._currentNbQueries === 0) this.emit('searchQueueEmpty');
 
   var results = content.results.slice();
-  var rawContent = content;
+  var rawContent = Object.create(content);
   delete rawContent.results;
 
   states.forEach(function (s) {
@@ -1867,7 +1867,9 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function (
       self._searchResultsOptions
     );
 
-    helper.lastResults._rawContent = rawContent;
+    if (Object.keys(rawContent).length > 0) {
+      helper.lastResults._rawContent = rawContent;
+    }
 
     helper.emit('result', {
       results: helper.lastResults,
