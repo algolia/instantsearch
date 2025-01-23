@@ -1846,6 +1846,9 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function (
   var results = content.results.slice();
   var rawContent = Object.create(content);
   delete rawContent.results;
+  if (Object.keys(rawContent).length <= 0) {
+    rawContent = undefined;
+  }
 
   states.forEach(function (s) {
     var state = s.state;
@@ -1866,14 +1869,12 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function (
       specificResults,
       self._searchResultsOptions
     );
-
-    if (Object.keys(rawContent).length > 0) {
-      helper.lastResults._rawContent = rawContent;
-    }
+    helper.lastResults._rawContent = rawContent;
 
     helper.emit('result', {
       results: helper.lastResults,
       state: state,
+      _rawContent: rawContent,
     });
   });
 };
