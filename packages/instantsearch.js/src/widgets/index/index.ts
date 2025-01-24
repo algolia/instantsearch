@@ -652,12 +652,6 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           new algoliasearchHelper.SearchParameters(indexInitialResults.state),
           indexInitialResults.results
         );
-        if (
-          '_rawContent' in indexInitialResults &&
-          indexInitialResults._rawContent
-        ) {
-          results._rawResults = indexInitialResults?._rawContent as any;
-        }
 
         derivedHelper.lastResults = results;
         helper.lastResults = results;
