@@ -1844,8 +1844,11 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function (
   if (this._currentNbQueries === 0) this.emit('searchQueueEmpty');
 
   var results = content.results.slice();
-  var rawContent = Object.create(content);
-  delete rawContent.results;
+  var rawContent = Object.keys(content).reduce(function (value, key) {
+    if (key !== 'results') value[key] = content[key];
+    return value;
+  }, {});
+
   if (Object.keys(rawContent).length <= 0) {
     rawContent = undefined;
   }
@@ -1869,12 +1872,11 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function (
       specificResults,
       self._searchResultsOptions
     );
-    helper.lastResults._rawContent = rawContent;
+    if (rawContent !== undefined) helper.lastResults._rawContent = rawContent;
 
     helper.emit('result', {
       results: helper.lastResults,
       state: state,
-      _rawContent: rawContent,
     });
   });
 };
