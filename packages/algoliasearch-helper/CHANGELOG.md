@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.24.1](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.24.0...algoliasearch-helper@3.24.1) (2025-01-28)
+
+
+### Bug Fixes
+
+* rawContent was not correctly cloned (hence undefined) ([#6549](https://github.com/algolia/instantsearch/issues/6549)) ([0b2d4af](https://github.com/algolia/instantsearch/commit/0b2d4af313179c86583a5167519de18af45600b3))
+
+
+
+
+
 # [3.24.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.23.1...algoliasearch-helper@3.24.0) (2025-01-28)
 
 
