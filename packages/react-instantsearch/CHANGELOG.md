@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.15.2](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.15.1...react-instantsearch@7.15.2) (2025-01-28)
+
+
+### Bug Fixes
+
+* **recommend:** use Hit type instead of AlgoliaHit ([#6540](https://github.com/algolia/instantsearch/issues/6540)) ([6f2dc2f](https://github.com/algolia/instantsearch/commit/6f2dc2f8586abb11b92cbfe6030c8ada70563695))
+
+
+
+
+
 ## [7.15.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.15.0...react-instantsearch@7.15.1) (2025-01-21)
 
 
