@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.24.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.23.1...algoliasearch-helper@3.24.0) (2025-01-28)
+
+
+### Features
+
+* expose raw request content under _rawContent ([#6544](https://github.com/algolia/instantsearch/issues/6544)) ([5883502](https://github.com/algolia/instantsearch/commit/5883502df95dd423558aa7824721e2e4954ff0ea))
+
+
+
+
+
 ## [3.23.1](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.23.0...algoliasearch-helper@3.23.1) (2025-01-21)
 
 

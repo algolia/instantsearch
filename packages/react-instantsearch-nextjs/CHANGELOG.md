@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.3](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.4.2...react-instantsearch-nextjs@0.4.3) (2025-01-28)
+
+
+### Bug Fixes
+
+* **next-app-router:** hydration error breaks routing ([#6542](https://github.com/algolia/instantsearch/issues/6542)) ([e598230](https://github.com/algolia/instantsearch/commit/e598230f2c73cc01cce091fb67b1435492900c9d))
+
+
+
+
+
 ## [0.4.2](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.4.1...react-instantsearch-nextjs@0.4.2) (2025-01-21)
 
 
