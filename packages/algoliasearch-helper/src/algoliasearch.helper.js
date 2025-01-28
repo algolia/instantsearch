@@ -1844,7 +1844,7 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function (
   if (this._currentNbQueries === 0) this.emit('searchQueueEmpty');
 
   var results = content.results.slice();
-  var rawContent = Object.create(content);
+  var rawContent = Object.assign({}, content);
   delete rawContent.results;
   if (Object.keys(rawContent).length <= 0) {
     rawContent = undefined;
