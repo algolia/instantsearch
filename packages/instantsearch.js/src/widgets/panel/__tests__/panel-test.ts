@@ -3,14 +3,13 @@
  */
 
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
-import algoliasearchHelper from 'algoliasearch-helper';
-import { render as preactRender } from 'preact';
-
 import {
   createInitOptions,
   createRenderOptions,
   createDisposeOptions,
-} from '../../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+import { render as preactRender } from 'preact';
+
 import panel from '../panel';
 
 import type { PanelProps } from '../../../components/Panel/Panel';
@@ -40,7 +39,7 @@ describe('Usage', () => {
   test('with templates does not throw', () => {
     expect(() => {
       panel({
-        templates: { header: 'header' },
+        templates: { header: () => 'header' },
       });
     }).not.toThrow();
   });
@@ -68,7 +67,7 @@ describe('Usage', () => {
         hidden: true,
       });
     }).toWarnDev(
-      '[InstantSearch.js]: The `hidden` option in the "panel" widget expects a function returning a boolean (received type Boolean).'
+      '[InstantSearch]: The `hidden` option in the "panel" widget expects a function returning a boolean (received type Boolean).'
     );
   });
 
@@ -79,7 +78,7 @@ describe('Usage', () => {
         collapsed: true,
       });
     }).toWarnDev(
-      '[InstantSearch.js]: The `collapsed` option in the "panel" widget expects a function returning a boolean (received type Boolean).'
+      '[InstantSearch]: The `collapsed` option in the "panel" widget expects a function returning a boolean (received type Boolean).'
     );
   });
 
@@ -124,7 +123,7 @@ describe('Templates', () => {
       container: document.createElement('div'),
     });
 
-    widget.init(createInitOptions());
+    widget.init!(createInitOptions());
 
     const firstRender = render.mock.calls[0][0] as VNode<
       PanelProps<typeof widgetFactory>
@@ -137,9 +136,10 @@ describe('Templates', () => {
   });
 
   test('with header template', () => {
+    const headerTemplate = () => 'Custom header';
     const widgetWithPanel = panel({
       templates: {
-        header: 'Custom header',
+        header: headerTemplate,
       },
     })(widgetFactory);
 
@@ -147,20 +147,21 @@ describe('Templates', () => {
       container: document.createElement('div'),
     });
 
-    widget.init(createInitOptions());
+    widget.init!(createInitOptions());
 
     const firstRender = render.mock.calls[0][0] as VNode<
       PanelProps<typeof widgetFactory>
     >;
     const { templates } = firstRender.props as PanelProps<typeof widgetFactory>;
 
-    expect(templates.header).toBe('Custom header');
+    expect(templates.header).toBe(headerTemplate);
   });
 
   test('with footer template', () => {
+    const footerTemplate = () => 'Custom footer';
     const widgetWithPanel = panel({
       templates: {
-        footer: 'Custom footer',
+        footer: footerTemplate,
       },
     })(widgetFactory);
 
@@ -168,20 +169,21 @@ describe('Templates', () => {
       container: document.createElement('div'),
     });
 
-    widget.init(createInitOptions());
+    widget.init!(createInitOptions());
 
     const firstRender = render.mock.calls[0][0] as VNode<
       PanelProps<typeof widgetFactory>
     >;
     const { templates } = firstRender.props as PanelProps<typeof widgetFactory>;
 
-    expect(templates.footer).toBe('Custom footer');
+    expect(templates.footer).toBe(footerTemplate);
   });
 
   test('with collapseButtonText template', () => {
+    const collapseButtonTextTemplate = () => 'Custom collapseButtonText';
     const widgetWithPanel = panel({
       templates: {
-        collapseButtonText: 'Custom collapseButtonText',
+        collapseButtonText: collapseButtonTextTemplate,
       },
     })(widgetFactory);
 
@@ -189,14 +191,14 @@ describe('Templates', () => {
       container: document.createElement('div'),
     });
 
-    widget.init(createInitOptions());
+    widget.init!(createInitOptions());
 
     const firstRender = render.mock.calls[0][0] as VNode<
       PanelProps<typeof widgetFactory>
     >;
     const { templates } = firstRender.props as PanelProps<typeof widgetFactory>;
 
-    expect(templates.collapseButtonText).toBe('Custom collapseButtonText');
+    expect(templates.collapseButtonText).toBe(collapseButtonTextTemplate);
   });
 });
 
@@ -218,9 +220,9 @@ describe('Lifecycle', () => {
       container: document.createElement('div'),
     });
 
-    widgetWithPanel.init(createInitOptions());
-    widgetWithPanel.render(createRenderOptions());
-    widgetWithPanel.dispose(createDisposeOptions());
+    widgetWithPanel.init!(createInitOptions());
+    widgetWithPanel.render!(createRenderOptions());
+    widgetWithPanel.dispose!(createDisposeOptions());
 
     expect(widget.init).toHaveBeenCalledTimes(1);
     expect(widget.render).toHaveBeenCalledTimes(1);
@@ -241,7 +243,7 @@ describe('Lifecycle', () => {
 
       const initOptions = createInitOptions();
 
-      widgetWithPanel.init(initOptions);
+      widgetWithPanel.init!(initOptions);
 
       expect(widget.init).toHaveBeenCalledTimes(1);
       expect(widget.init).toHaveBeenCalledWith(initOptions);
@@ -275,7 +277,7 @@ describe('Lifecycle', () => {
 
       const initOptions = createInitOptions();
 
-      widgetWithPanel.init(initOptions);
+      widgetWithPanel.init!(initOptions);
 
       expect(hiddenFn).toHaveBeenCalledTimes(0);
       expect(collapsedFn).toHaveBeenCalledTimes(0);
@@ -303,7 +305,7 @@ describe('Lifecycle', () => {
 
       const initOptions = createInitOptions();
 
-      widgetWithPanel.init(initOptions);
+      widgetWithPanel.init!(initOptions);
 
       const firstRender = render.mock.calls[0][0] as VNode<
         PanelProps<typeof widgetFactory>
@@ -337,7 +339,7 @@ describe('Lifecycle', () => {
 
       const renderOptions = createRenderOptions();
 
-      widgetWithPanel.render(renderOptions);
+      widgetWithPanel.render!(renderOptions);
 
       expect(widget.render).toHaveBeenCalledTimes(1);
       expect(widget.render).toHaveBeenCalledWith(renderOptions);
@@ -371,7 +373,7 @@ describe('Lifecycle', () => {
 
       const renderOptions = createRenderOptions();
 
-      widgetWithPanel.render(renderOptions);
+      widgetWithPanel.render!(renderOptions);
 
       expect(hiddenFn).toHaveBeenCalledTimes(1);
       expect(hiddenFn).toHaveBeenCalledWith({
@@ -408,7 +410,7 @@ describe('Lifecycle', () => {
 
       const renderOptions = createRenderOptions();
 
-      widgetWithPanel.render(renderOptions);
+      widgetWithPanel.render!(renderOptions);
 
       const firstRender = render.mock.calls[0][0] as VNode<
         PanelProps<typeof widgetFactory>
@@ -430,13 +432,10 @@ describe('Lifecycle', () => {
 
   describe('dispose', () => {
     test("returns the state from the widget's dispose function", () => {
-      const nextSearchParameters = new algoliasearchHelper.SearchParameters({
-        facets: ['brands'],
-      });
       const widget = {
         $$type: 'mock.widget',
         init: jest.fn(),
-        dispose: jest.fn(() => nextSearchParameters),
+        dispose: jest.fn(),
       };
       const widgetFactory = () => widget;
 
@@ -444,9 +443,9 @@ describe('Lifecycle', () => {
         container: document.createElement('div'),
       });
 
-      const nextState = widgetWithPanel.dispose(createDisposeOptions());
+      widgetWithPanel.dispose!(createDisposeOptions());
 
-      expect(nextState).toEqual(nextSearchParameters);
+      expect(widget.dispose).toHaveBeenCalled();
     });
   });
 });

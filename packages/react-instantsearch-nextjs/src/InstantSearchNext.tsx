@@ -1,4 +1,4 @@
-import { safelyRunOnBrowser } from 'instantsearch.js/es/lib/utils';
+import { safelyRunOnBrowser } from 'instantsearch-core';
 import React, { useEffect, useRef } from 'react';
 import {
   InstantSearch,
@@ -12,8 +12,12 @@ import { useInstantSearchRouting } from './useInstantSearchRouting';
 import { useNextHeaders } from './useNextHeaders';
 import { warn } from './warn';
 
-import type { InitialResults, StateMapping, UiState } from 'instantsearch.js';
-import type { BrowserHistoryArgs } from 'instantsearch.js/es/lib/routers/history';
+import type {
+  InitialResults,
+  StateMapping,
+  UiState,
+  BrowserHistoryArgs,
+} from 'instantsearch-core';
 import type {
   InstantSearchProps,
   PromiseWithState,

@@ -1,5 +1,5 @@
+import { connectHits } from 'instantsearch-core';
 import { createHitsComponent } from 'instantsearch-ui-components';
-import { connectHitsWithInsights } from 'instantsearch.js/es/connectors';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
@@ -10,7 +10,7 @@ export default {
   mixins: [
     createWidgetMixin(
       {
-        connector: connectHitsWithInsights,
+        connector: connectHits,
       },
       {
         $$widgetType: 'ais.hits',
@@ -52,7 +52,6 @@ export default {
 
     const itemComponent = ({
       hit,
-      index,
       onClick,
       onAuxClick,
       // We don't want to pass the Preact key as a prop
@@ -73,11 +72,17 @@ export default {
           (itemSlot &&
             itemSlot({
               item: hit,
-              index,
-              insights: this.state.insights,
               sendEvent: this.state.sendEvent,
             })) ||
-            `objectID: ${hit.objectID}, index: ${index}`,
+            h(
+              'div',
+              {
+                style: {
+                  wordBreak: 'break-all',
+                },
+              },
+              [`${JSON.stringify(hit).slice(0, 100)}…`]
+            ),
         ]
       );
     };
@@ -96,7 +101,6 @@ export default {
           defaultSlot({
             banner: this.state.banner,
             items: this.state.items,
-            insights: this.state.insights,
             sendEvent: this.state.sendEvent,
           }),
         ]

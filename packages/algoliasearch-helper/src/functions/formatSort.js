@@ -1,7 +1,5 @@
 'use strict';
 
-var find = require('./find');
-
 /**
  * Transform sort format from user friendly notation to lodash format
  * @param {string[]} sortBy array of predicate of the form "attribute:order"
@@ -17,12 +15,11 @@ module.exports = function formatSort(sortBy, defaults) {
     function preparePredicate(out, sort) {
       var sortInstruction = sort.split(':');
 
-      var matchingDefault = find(
-        defaultInstructions,
-        function (defaultInstruction) {
-          return defaultInstruction[0] === sortInstruction[0];
-        }
-      );
+      var matchingDefault = defaultInstructions.find(function (
+        defaultInstruction
+      ) {
+        return defaultInstruction[0] === sortInstruction[0];
+      });
 
       if (sortInstruction.length > 1 || !matchingDefault) {
         out[0].push(sortInstruction[0]);

@@ -1,6 +1,6 @@
 'use strict';
 
-test('hierarchical facets: using sortBy', function (done) {
+test('hierarchical facets: using sortBy', async function () {
   var algoliasearch = require('algoliasearch');
   algoliasearch = algoliasearch.algoliasearch || algoliasearch;
 
@@ -26,10 +26,11 @@ test('hierarchical facets: using sortBy', function (done) {
     ],
   });
 
-  helper.toggleRefine('categories', 'beers > IPA > Flying dog');
+  helper.toggleFacetRefinement('categories', 'beers > IPA > Flying dog');
 
   var algoliaResponse = {
     results: [
+      // for hits
       {
         query: 'a',
         index: indexName,
@@ -45,6 +46,7 @@ test('hierarchical facets: using sortBy', function (done) {
           'categories.lvl2': { 'beers > IPA > Flying dog': 1 },
         },
       },
+      // deepest level
       {
         query: 'a',
         index: indexName,
@@ -54,8 +56,8 @@ test('hierarchical facets: using sortBy', function (done) {
         nbPages: 1,
         hitsPerPage: 1,
         facets: {
-          'categories.lvl0': { beers: 5 },
-          'categories.lvl1': { 'beers > IPA': 5 },
+          'categories.lvl0': { beers: 1 },
+          'categories.lvl1': { 'beers > IPA': 1 },
           'categories.lvl2': {
             'beers > IPA > Flying dog': 1,
             'beers > IPA > Anchor steam': 1,
@@ -63,6 +65,7 @@ test('hierarchical facets: using sortBy', function (done) {
           },
         },
       },
+      // root level
       {
         query: 'a',
         index: indexName,
@@ -73,6 +76,19 @@ test('hierarchical facets: using sortBy', function (done) {
         hitsPerPage: 1,
         facets: {
           'categories.lvl0': { beers: 5 },
+        },
+      },
+      // other levels
+      {
+        query: 'a',
+        index: indexName,
+        hits: [{ objectID: 'one' }],
+        nbHits: 1,
+        page: 0,
+        nbPages: 1,
+        hitsPerPage: 1,
+        facets: {
+          'categories.lvl1': { 'beers > IPA': 5 },
         },
       },
     ],
@@ -143,8 +159,10 @@ test('hierarchical facets: using sortBy', function (done) {
   });
 
   helper.setQuery('a').search();
-  helper.once('result', function (event) {
-    expect(event.results.hierarchicalFacets).toEqual(expectedHelperResponse);
-    done();
+
+  const { results } = await new Promise(function (resolve) {
+    helper.once('result', resolve);
   });
+
+  expect(results.hierarchicalFacets).toEqual(expectedHelperResponse);
 });

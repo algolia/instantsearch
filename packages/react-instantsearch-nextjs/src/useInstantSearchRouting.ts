@@ -1,12 +1,11 @@
-import historyRouter from 'instantsearch.js/es/lib/routers/history';
+import { historyRouter } from 'instantsearch-core';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useRef, useEffect } from 'react';
 
 import { useNextHeaders } from './useNextHeaders';
 
 import type { InstantSearchNextProps } from './InstantSearchNext';
-import type { UiState } from 'instantsearch.js';
-import type { BrowserHistoryArgs } from 'instantsearch.js/es/lib/routers/history';
+import type { UiState, BrowserHistoryArgs } from 'instantsearch-core';
 import type { InstantSearchProps } from 'react-instantsearch-core';
 
 export function useInstantSearchRouting<
@@ -42,21 +41,21 @@ export function useInstantSearchRouting<
   if (passedRouting && !routingRef.current) {
     let browserHistoryOptions: Partial<BrowserHistoryArgs<TRouteState>> = {};
 
-    browserHistoryOptions.getLocation = () => {
+    browserHistoryOptions.getCurrentURL = () => {
       if (isServer) {
         const url = `${
           headers?.get('x-forwarded-proto') || 'http'
         }://${headers?.get('host')}${pathname}?${searchParams}`;
-        return new URL(url) as unknown as Location;
+        return new URL(url);
       }
 
       if (isMounting.current) {
         return new URL(
           `${window.location.protocol}//${window.location.host}${pathname}?${searchParams}`
-        ) as unknown as Location;
+        );
       }
 
-      return window.location;
+      return new URL(window.location.href);
     };
     browserHistoryOptions.push = function push(
       this: ReturnType<typeof historyRouter>,

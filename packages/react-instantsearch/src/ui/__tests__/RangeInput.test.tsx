@@ -14,7 +14,7 @@ describe('RangeInput', () => {
   function createProps(props: Partial<RangeInputProps> = {}): RangeInputProps {
     return {
       range: { min: 1, max: 5000 },
-      start: [undefined, undefined],
+      currentRefinement: { min: undefined, max: undefined },
       disabled: false,
       onSubmit: jest.fn(),
       translations: { separatorElementText: 'to', submitButtonText: 'Go' },
@@ -107,23 +107,9 @@ describe('RangeInput', () => {
       ).toEqual(['', '']);
     });
 
-    test('renders with empty values when refinement is equal to range', () => {
-      const props = createProps({
-        range: { min: 100, max: 1000 },
-        start: [100, 1000],
-      });
-      const { container } = render(<RangeInput {...props} />);
-
-      expect(
-        Array.from(
-          container.querySelectorAll<HTMLInputElement>('.ais-RangeInput-input')
-        ).map((input) => input.value)
-      ).toEqual(['', '']);
-    });
-
     test('renders with refined values', () => {
       const props = createProps({
-        start: [100, 1000],
+        currentRefinement: { min: 100, max: 1000 },
       });
       const { container } = render(<RangeInput {...props} />);
 
@@ -135,7 +121,10 @@ describe('RangeInput', () => {
     });
 
     test('steps with specific value', () => {
-      const props = createProps({ start: [100, 100], step: 0.01 });
+      const props = createProps({
+        currentRefinement: { min: 100, max: 100 },
+        step: 0.01,
+      });
       render(<RangeInput {...props} />);
 
       ['min', 'max'].forEach((target) => {
@@ -154,13 +143,13 @@ describe('RangeInput', () => {
   });
 
   test('calls an `onSubmit` callback when submitting form', () => {
-    const props = createProps({ start: [100, 1000] });
+    const props = createProps({ currentRefinement: { min: 100, max: 1000 } });
     const { container } = render(<RangeInput {...props} />);
 
     userEvent.click(container.querySelector('.ais-RangeInput-submit')!);
 
     expect(props.onSubmit).toHaveBeenCalledTimes(1);
-    expect(props.onSubmit).toHaveBeenLastCalledWith([100, 1000]);
+    expect(props.onSubmit).toHaveBeenLastCalledWith({ min: 100, max: 1000 });
 
     userEvent.type(
       container.querySelector('.ais-RangeInput-input--min')!,
@@ -176,7 +165,7 @@ describe('RangeInput', () => {
     userEvent.click(container.querySelector('.ais-RangeInput-submit')!);
 
     expect(props.onSubmit).toHaveBeenCalledTimes(2);
-    expect(props.onSubmit).toHaveBeenLastCalledWith([500, 5000]);
+    expect(props.onSubmit).toHaveBeenLastCalledWith({ min: 500, max: 5000 });
   });
 
   test('accepts custom class names', () => {

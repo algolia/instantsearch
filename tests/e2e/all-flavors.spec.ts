@@ -5,7 +5,7 @@ import { createInitialStateFromRouteTestSuite } from './specs/initial-state-from
 import { createPaginationTestSuite } from './specs/pagination.spec';
 import { createPriceRangeTestSuite } from './specs/price-range.spec';
 
-getFilteredFlavors(browser).forEach((flavor) => {
+getFilteredFlavors().forEach((flavor) => {
   describe(`${flavor}`, () => {
     createBrandAndQueryTestSuite(flavor);
     createCategoryTestSuite(flavor);

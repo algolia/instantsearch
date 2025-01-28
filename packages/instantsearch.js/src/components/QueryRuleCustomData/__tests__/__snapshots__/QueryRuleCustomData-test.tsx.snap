@@ -4,7 +4,9 @@ exports[`QueryRuleCustomData renders with empty items 1`] = `
 <div>
   <div
     class="root"
-  />
+  >
+    
+  </div>
 </div>
 `;
 

@@ -4,7 +4,7 @@ import { createLookingSimilarComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectLookingSimilar from '../../connectors/looking-similar/connectLookingSimilar';
+import { connectLookingSimilar } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
@@ -15,7 +15,7 @@ import type {
   LookingSimilarWidgetDescription,
   LookingSimilarConnectorParams,
   LookingSimilarRenderState,
-} from '../../connectors/looking-similar/connectLookingSimilar';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   Template,
@@ -24,7 +24,8 @@ import type {
   BaseHit,
   RecommendResponse,
   Hit,
-  TemplateWithBindEvent,
+  TemplateWithSendEvent,
+  Widget,
 } from '../../types';
 import type {
   RecommendClassNames,
@@ -64,7 +65,6 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
         defaultTemplates: {} as unknown as Required<
           LookingSimilarTemplates<THit>
         >,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;
@@ -187,7 +187,7 @@ export type LookingSimilarTemplates<
   /**
    * Template to use for each result. This template will receive an object containing a single record.
    */
-  item: TemplateWithBindEvent<Hit<THit>>;
+  item: TemplateWithSendEvent<Hit<THit>>;
 
   /**
    * Template to use to wrap all items.
@@ -222,13 +222,14 @@ type LookingSimilarWidgetParams<THit extends NonNullable<object> = BaseHit> = {
   cssClasses?: LookingSimilarCSSClasses;
 };
 
-export type LookingSimilarWidget = WidgetFactory<
-  LookingSimilarWidgetDescription & {
-    $$widgetType: 'ais.lookingSimilar';
-  },
-  LookingSimilarConnectorParams,
-  LookingSimilarWidgetParams
->;
+export type LookingSimilarWidget<THit extends NonNullable<object> = BaseHit> =
+  WidgetFactory<
+    LookingSimilarWidgetDescription<THit> & {
+      $$widgetType: 'ais.lookingSimilar';
+    },
+    LookingSimilarConnectorParams<THit>,
+    LookingSimilarWidgetParams<THit>
+  >;
 
 export default (function lookingSimilar<
   THit extends NonNullable<object> = BaseHit
@@ -265,7 +266,8 @@ export default (function lookingSimilar<
   const makeWidget = connectLookingSimilar(specializedRenderer, () =>
     render(null, containerNode)
   );
-  return {
+
+  const widget = {
     ...makeWidget({
       objectIDs,
       limit,
@@ -277,4 +279,12 @@ export default (function lookingSimilar<
     }),
     $$widgetType: 'ais.lookingSimilar',
   };
+
+  // explicitly cast this type to have a small type output.
+  return widget as Widget<
+    LookingSimilarWidgetDescription & {
+      $$widgetType: 'ais.lookingSimilar';
+      widgetParams: LookingSimilarConnectorParams<THit>;
+    }
+  >;
 } satisfies LookingSimilarWidget);

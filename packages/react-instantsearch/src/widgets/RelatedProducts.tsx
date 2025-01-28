@@ -2,15 +2,15 @@ import { createRelatedProductsComponent } from 'instantsearch-ui-components';
 import React, { createElement, Fragment, useMemo } from 'react';
 import { useInstantSearch, useRelatedProducts } from 'react-instantsearch-core';
 
+import type { Hit, BaseHit } from 'instantsearch-core';
 import type {
   RelatedProductsProps as RelatedProductsUiComponentProps,
   Pragma,
 } from 'instantsearch-ui-components';
-import type { BaseHit, Hit } from 'instantsearch.js';
 import type { UseRelatedProductsProps } from 'react-instantsearch-core';
 
 type UiProps<TItem extends BaseHit> = Pick<
-  RelatedProductsUiComponentProps<TItem>,
+  RelatedProductsUiComponentProps<Hit<TItem>>,
   | 'items'
   | 'itemComponent'
   | 'headerComponent'
@@ -21,7 +21,7 @@ type UiProps<TItem extends BaseHit> = Pick<
 >;
 
 export type RelatedProductsProps<TItem extends BaseHit> = Omit<
-  RelatedProductsUiComponentProps<TItem>,
+  RelatedProductsUiComponentProps<Hit<TItem>>,
   keyof UiProps<TItem>
 > &
   UseRelatedProductsProps & {

@@ -8,7 +8,9 @@ import SearchBox from '../SearchBox.vue';
 jest.mock('../../mixins/widget');
 import '../../../test/utils/sortedHtmlSerializer';
 
-const defaultState = {};
+const defaultState = {
+  isSearchStalled: false,
+};
 
 test('with submit title', () => {
   __setState(defaultState);
@@ -50,13 +52,11 @@ test('with stalled search but no `showLoadingIndicator` displays the submit and 
 });
 
 test('with not stalled search displays the submit and hides reset, loader', () => {
-  __setState(defaultState);
+  __setState({ ...defaultState, isSearchStalled: false });
   const wrapper = mount(SearchBox);
 
   expect(wrapper.find('.ais-SearchBox-submit')).not.vueToBeHidden();
-
   expect(wrapper.find('.ais-SearchBox-reset')).vueToBeHidden();
-
   expect(wrapper.find('.ais-SearchBox-loadingIndicator')).vueToBeHidden();
 });
 
@@ -97,10 +97,8 @@ test('keep local query when out of sync and input is focused', async () => {
 });
 
 test('overriding slots', () => {
-  __setState({
-    ...defaultState,
-    isSearchStalled: true,
-  });
+  __setState({ ...defaultState, isSearchStalled: true });
+
   const wrapper = mount({
     components: { SearchBox },
     data() {

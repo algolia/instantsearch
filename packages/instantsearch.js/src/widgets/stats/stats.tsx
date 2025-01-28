@@ -4,7 +4,7 @@ import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import Stats from '../../components/Stats/Stats';
-import connectStats from '../../connectors/stats/connectStats';
+import { connectStats } from '../../connectors';
 import { formatNumber } from '../../lib/formatNumber';
 import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
@@ -21,7 +21,7 @@ import type {
   StatsConnectorParams,
   StatsRenderState,
   StatsWidgetDescription,
-} from '../../connectors/stats/connectStats';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { Renderer, Template, WidgetFactory } from '../../types';
 
@@ -158,14 +158,12 @@ const renderer =
       page,
       processingTimeMS,
       query,
-      instantSearchInstance,
     },
     isFirstRendering
   ) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
 

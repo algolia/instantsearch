@@ -11,12 +11,16 @@ exports[`RefinementList rendering with facets 1`] = `
       <li
         class="item"
       >
-        <div />
+        <div>
+          
+        </div>
       </li>
       <li
         class="item selectedItem"
       >
-        <div />
+        <div>
+          
+        </div>
       </li>
     </ul>
   </div>
@@ -34,12 +38,16 @@ exports[`RefinementList rendering with facets and disabled show more 1`] = `
       <li
         class="item"
       >
-        <div />
+        <div>
+          
+        </div>
       </li>
       <li
         class="item selectedItem"
       >
-        <div />
+        <div>
+          
+        </div>
       </li>
     </ul>
     <button
@@ -63,12 +71,16 @@ exports[`RefinementList rendering with facets and show more 1`] = `
       <li
         class="item"
       >
-        <div />
+        <div>
+          
+        </div>
       </li>
       <li
         class="item selectedItem"
       >
-        <div />
+        <div>
+          
+        </div>
       </li>
     </ul>
     <button
@@ -138,12 +150,16 @@ exports[`RefinementList rendering with facets from search 1`] = `
       <li
         class="item"
       >
-        <div />
+        <div>
+          
+        </div>
       </li>
       <li
         class="item selectedItem"
       >
-        <div />
+        <div>
+          
+        </div>
       </li>
     </ul>
   </div>

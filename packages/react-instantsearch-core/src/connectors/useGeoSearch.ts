@@ -1,14 +1,14 @@
-import connectGeoSearch from 'instantsearch.js/es/connectors/geo-search/connectGeoSearch';
+import { connectGeoSearch } from 'instantsearch-core';
 
 import { useConnector } from '../hooks/useConnector';
 
 import type { AdditionalWidgetProperties } from '../hooks/useConnector';
-import type { GeoHit } from 'instantsearch.js';
 import type {
+  GeoHit,
   GeoSearchConnector,
   GeoSearchConnectorParams,
   GeoSearchWidgetDescription,
-} from 'instantsearch.js/es/connectors/geo-search/connectGeoSearch';
+} from 'instantsearch-core';
 
 export type UseGeoSearchProps<THit extends GeoHit = GeoHit> =
   GeoSearchConnectorParams<THit>;

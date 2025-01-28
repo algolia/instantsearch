@@ -1,4 +1,4 @@
-import type { SendEventForHits } from '.';
+import type { SendEventForHits } from 'instantsearch-core';
 
 export type RecommendClassNames = {
   /**

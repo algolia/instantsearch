@@ -1,10 +1,10 @@
 import { formatDistanceToNow } from 'date-fns';
 import { html, render } from 'htm/preact';
-import { Hit } from 'instantsearch.js';
+import { Hit as AlgoliaHit } from 'instantsearch.js';
 import { connectInfiniteHits } from 'instantsearch.js/es/connectors';
 import { Snippet, Highlight } from 'instantsearch.js/es/helpers/components';
 
-type Result = Hit<{
+type Result = AlgoliaHit<{
   slug: string;
   primary_category: {
     slug: string;

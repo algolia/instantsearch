@@ -17,7 +17,7 @@ const cssClasses = {
 };
 
 const templates: RelevantSortComponentTemplates = {
-  text: '',
+  text: () => '',
   button: ({ isRelevantSorted }) => {
     return isRelevantSorted ? 'See all results' : 'See relevant results';
   },
@@ -54,7 +54,9 @@ describe('RelevantSort', () => {
         >
           <div
             class="text"
-          />
+          >
+            
+          </div>
           <button
             class="button"
             type="button"
@@ -100,7 +102,9 @@ describe('RelevantSort', () => {
         >
           <div
             class="text"
-          />
+          >
+            
+          </div>
           <button
             class="button"
             type="button"

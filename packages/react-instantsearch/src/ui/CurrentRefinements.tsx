@@ -3,7 +3,7 @@ import React from 'react';
 
 import { capitalize, isModifierClick } from './lib';
 
-import type { CurrentRefinementsConnectorParamsItem } from 'instantsearch.js/es/connectors/current-refinements/connectCurrentRefinements';
+import type { CurrentRefinementsConnectorParamsItem } from 'instantsearch-core';
 
 export type CurrentRefinementsProps = React.ComponentProps<'div'> & {
   classNames?: Partial<CurrentRefinementsClassNames>;
@@ -14,7 +14,7 @@ export type CurrentRefinementsProps = React.ComponentProps<'div'> & {
     > &
       Record<string, unknown>
   >;
-  hasRefinements?: boolean;
+  canRefine?: boolean;
 };
 
 export type CurrentRefinementsClassNames = {
@@ -59,7 +59,7 @@ export type CurrentRefinementsClassNames = {
 export function CurrentRefinements({
   classNames = {},
   items = [],
-  hasRefinements = false,
+  canRefine = false,
   ...props
 }: CurrentRefinementsProps) {
   return (
@@ -68,7 +68,7 @@ export function CurrentRefinements({
       className={cx(
         'ais-CurrentRefinements',
         classNames.root,
-        !hasRefinements &&
+        !canRefine &&
           cx(
             'ais-CurrentRefinements--noRefinement',
             classNames.noRefinementRoot
@@ -81,7 +81,7 @@ export function CurrentRefinements({
           'ais-CurrentRefinements-list',
           classNames.list,
           /* @MAJOR remove to ensure conformity with InstantSearch.css specs */
-          !hasRefinements &&
+          !canRefine &&
             cx(
               'ais-CurrentRefinements-list--noRefinement',
               classNames.noRefinementList

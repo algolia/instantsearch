@@ -18,7 +18,6 @@ import type {
   RenderOptions,
   WidgetFactory,
   InitOptions,
-  Widget,
 } from '../../types';
 
 export type PanelCSSClasses = Partial<{
@@ -178,22 +177,13 @@ const renderer =
     );
   };
 
-type AugmentedWidget<
-  TWidgetFactory extends AnyWidgetFactory,
-  TOverriddenKeys extends keyof Widget = 'init' | 'render' | 'dispose'
-> = Omit<
-  ReturnType<TWidgetFactory>,
-  TOverriddenKeys | 'dependsOn' | 'getWidgetParameters'
-> &
-  Pick<Required<Widget>, TOverriddenKeys>;
-
 export type PanelWidget = <TWidgetFactory extends AnyWidgetFactory>(
   panelWidgetParams?: PanelWidgetParams<TWidgetFactory>
 ) => (
   widgetFactory: TWidgetFactory
 ) => (
   widgetParams: Parameters<TWidgetFactory>[0]
-) => AugmentedWidget<TWidgetFactory>;
+) => ReturnType<TWidgetFactory>;
 
 /**
  * The panel widget wraps other widgets in a consistent panel design.
@@ -347,7 +337,7 @@ const panel: PanelWidget = (panelWidgetParams) => {
 
         return undefined;
       },
-    } as AugmentedWidget<typeof widgetFactory>;
+    } as ReturnType<typeof widgetFactory>;
   };
 };
 

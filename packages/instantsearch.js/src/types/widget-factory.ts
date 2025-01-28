@@ -1,4 +1,8 @@
-import type { UnknownWidgetParams, Widget, WidgetDescription } from './widget';
+import type {
+  UnknownWidgetParams,
+  Widget,
+  WidgetDescription,
+} from 'instantsearch-core';
 
 /**
  * The function that creates a new widget.

@@ -1,15 +1,7 @@
-import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/html';
 
 import { withHits } from '../.storybook/decorators';
 import { createInfiniteHitsSessionStorageCache } from '../src/lib/infiniteHitsCache';
-
-import type { InsightsClient } from '../src/types';
-
-const fakeInsightsClient: InsightsClient = (method, ...payloads) => {
-  const [payload] = payloads;
-  action(`[InsightsClient] sent ${method} with payload`)(payload);
-};
 
 storiesOf('Results/InfiniteHits', module)
   .add(
@@ -33,7 +25,7 @@ storiesOf('Results/InfiniteHits', module)
           container,
           templates: {
             item: ({ name }) => name,
-            showMoreText: 'Load more',
+            showMoreText: () => 'Load more',
           },
         }),
       ]);
@@ -46,7 +38,7 @@ storiesOf('Results/InfiniteHits', module)
         instantsearch.widgets.infiniteHits({
           container,
           templates: {
-            item: '{{name}}',
+            item: ({ name }) => name,
           },
           transformItems: (items) =>
             items.map((item) => ({
@@ -59,40 +51,35 @@ storiesOf('Results/InfiniteHits', module)
   )
   .add(
     'with insights helper',
-    withHits(
-      ({ search, container, instantsearch }) => {
-        search.addWidgets([
-          instantsearch.widgets.configure({
-            attributesToSnippet: ['name', 'description'],
-            clickAnalytics: true,
-          }),
-        ]);
+    withHits(({ search, container, instantsearch }) => {
+      search.addWidgets([
+        instantsearch.widgets.configure({
+          attributesToSnippet: ['name', 'description'],
+          clickAnalytics: true,
+        }),
+      ]);
 
-        search.addWidgets([
-          instantsearch.widgets.infiniteHits({
-            container,
-            templates: {
-              item: (item, { html, sendEvent }) => html`
-                <h4>${item.name}</h4>
-                <button
-                  onClick=${() =>
-                    sendEvent(
-                      'clickedObjectIDsAfterSearch',
-                      [item],
-                      'Add to cart'
-                    )}
-                >
-                  Add to cart
-                </button>
-              `,
-            },
-          }),
-        ]);
-      },
-      {
-        insightsClient: fakeInsightsClient,
-      }
-    )
+      search.addWidgets([
+        instantsearch.widgets.infiniteHits({
+          container,
+          templates: {
+            item: (item, { html, sendEvent }) => html`
+              <h4>${item.name}</h4>
+              <button
+                onClick=${() =>
+                  sendEvent(
+                    'clickedObjectIDsAfterSearch',
+                    [item],
+                    'Add to cart'
+                  )}
+              >
+                Add to cart
+              </button>
+            `,
+          },
+        }),
+      ]);
+    })
   )
   .add(
     'with previous button enabled',
@@ -103,7 +90,7 @@ storiesOf('Results/InfiniteHits', module)
             container,
             showPrevious: true,
             templates: {
-              item: '{{name}}',
+              item: ({ name }) => name,
             },
           }),
         ]);

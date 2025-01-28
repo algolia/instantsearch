@@ -48,9 +48,9 @@
     "watch:es": "yarn --silent build:es:base --watch"
   },
   "dependencies": {
-    "@babel/runtime": "^7.1.2",
+    "@babel/runtime": "^7.25.9",
     "algoliasearch-helper": "3.24.1",
-    "instantsearch.js": "4.77.3",
+    "instantsearch-core": "0.1.0",
     "use-sync-external-store": "^1.0.0"
   },
   "devDependencies": {

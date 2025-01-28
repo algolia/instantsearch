@@ -1,4 +1,4 @@
-import connectBreadcrumb from 'instantsearch.js/es/connectors/breadcrumb/connectBreadcrumb';
+import { connectBreadcrumb } from 'instantsearch-core';
 
 import { useConnector } from '../hooks/useConnector';
 
@@ -6,7 +6,7 @@ import type { AdditionalWidgetProperties } from '../hooks/useConnector';
 import type {
   BreadcrumbConnectorParams,
   BreadcrumbWidgetDescription,
-} from 'instantsearch.js/es/connectors/breadcrumb/connectBreadcrumb';
+} from 'instantsearch-core';
 
 export type UseBreadcrumbProps = BreadcrumbConnectorParams;
 

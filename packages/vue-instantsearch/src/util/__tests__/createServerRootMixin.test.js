@@ -25,8 +25,6 @@ import { createFakeClient } from '../testutils/client';
 import { createSerializedState } from '../testutils/helper';
 import { isVue3, isVue2, Vue2, renderCompat } from '../vue-compat';
 
-jest.unmock('instantsearch.js/es');
-
 function renderToString(app) {
   if (isVue3) {
     return require('@vue/server-renderer').renderToString(app);
@@ -246,28 +244,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
       await renderToString(wrapper);
 
-      expect(mainIndex.getWidgetUiState({})).toMatchInlineSnapshot(`
-        {
-          "hello": {
-            "configure": {
-              "hitsPerPage": 100,
-            },
-          },
-        }
-      `);
+      expect(mainIndex.getWidgetUiState({})).toEqual({
+        hello: {},
+      });
 
       expect(searchClient.search).toHaveBeenCalledTimes(1);
-      expect(searchClient.search.mock.calls[0][0]).toMatchInlineSnapshot(`
-        [
-          {
-            "indexName": "hello",
-            "params": {
-              "hitsPerPage": 100,
-              "query": "",
-            },
+      expect(searchClient.search.mock.calls[0][0]).toEqual([
+        {
+          indexName: 'hello',
+          params: {
+            hitsPerPage: 100,
+            query: '',
           },
-        ]
-      `);
+        },
+      ]);
     });
 
     it('returns correct results state', () => {
@@ -872,17 +862,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
         await renderToString(wrapper);
 
         expect(searchClient.search).toHaveBeenCalledTimes(1);
-        expect(searchClient.search.mock.calls[0][0]).toMatchInlineSnapshot(`
-          [
-            {
-              "indexName": "hello",
-              "params": {
-                "hitsPerPage": 100,
-                "query": "",
-              },
+        expect(searchClient.search.mock.calls[0][0]).toEqual([
+          {
+            indexName: 'hello',
+            params: {
+              hitsPerPage: 100,
+              query: '',
             },
-          ]
-        `);
+          },
+        ]);
       });
 
       it('works when component is at root (and therefore has no $vnode)', async () => {
@@ -935,28 +923,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
         await renderToString(wrapper);
 
-        expect(mainIndex.getWidgetUiState({})).toMatchInlineSnapshot(`
-          {
-            "hello": {
-              "configure": {
-                "hitsPerPage": 100,
-              },
-            },
-          }
-        `);
+        expect(mainIndex.getWidgetUiState({})).toEqual({
+          hello: {},
+        });
 
         expect(searchClient.search).toHaveBeenCalledTimes(1);
-        expect(searchClient.search.mock.calls[0][0]).toMatchInlineSnapshot(`
-          [
-            {
-              "indexName": "hello",
-              "params": {
-                "hitsPerPage": 100,
-                "query": "",
-              },
+        expect(searchClient.search.mock.calls[0][0]).toEqual([
+          {
+            indexName: 'hello',
+            params: {
+              hitsPerPage: 100,
+              query: '',
             },
-          ]
-        `);
+          },
+        ]);
       });
     }
   });
@@ -1046,7 +1026,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       expect(instantsearch.mainIndex.getHelper()).not.toBeNull();
     });
 
-    it('sets helper & mainHelper', () => {
+    it('sets helper', () => {
       const serialized = createSerializedState();
 
       const app = {
@@ -1073,14 +1053,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       } = mount(app);
 
       expect(instantsearch.helper).toBe(null);
-      expect(instantsearch.mainHelper).toBe(null);
 
       instantsearch.hydrate({
         hello: serialized,
       });
 
       expect(instantsearch.helper).toEqual(expect.any(AlgoliaSearchHelper));
-      expect(instantsearch.mainHelper).toEqual(expect.any(AlgoliaSearchHelper));
     });
   });
 
@@ -1119,43 +1097,21 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
       const renderArgs = widget.render.mock.calls[0][0];
 
-      expect(renderArgs).toMatchInlineSnapshot(
-        {
-          helper: expect.anything(),
-          results: expect.anything(),
-          scopedResults: expect.arrayContaining([
-            expect.objectContaining({
-              helper: expect.anything(),
-              indexId: expect.any(String),
-              results: expect.anything(),
-            }),
-          ]),
-          parent: expect.anything(),
-          state: expect.anything(),
-          instantSearchInstance: expect.anything(),
-        },
-        `
-        {
-          "createURL": [Function],
-          "helper": Anything,
-          "instantSearchInstance": Anything,
-          "parent": Anything,
-          "results": Anything,
-          "scopedResults": ArrayContaining [
-            ObjectContaining {
-              "helper": Anything,
-              "indexId": Any<String>,
-              "results": Anything,
-            },
-          ],
-          "searchMetadata": {
-            "isSearchStalled": false,
-          },
-          "state": Anything,
-          "templatesConfig": {},
-        }
-      `
-      );
+      expect(renderArgs).toEqual({
+        createURL: expect.any(Function),
+        helper: expect.anything(),
+        results: expect.anything(),
+        scopedResults: expect.arrayContaining([
+          expect.objectContaining({
+            helper: expect.anything(),
+            indexId: expect.any(String),
+            results: expect.anything(),
+          }),
+        ]),
+        parent: expect.anything(),
+        state: expect.anything(),
+        instantSearchInstance: expect.anything(),
+      });
     });
 
     it('uses the results passed to hydrate for rendering', () => {
@@ -1243,7 +1199,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
         expect(renderArgs.createURL()).toBe('#');
       });
 
-      it('allows for widgets without getWidgetState', () => {
+      it('allows for widgets without getWidgetUiState', () => {
         let instantSearchInstance;
         mount({
           mixins: [
@@ -1261,12 +1217,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
         const widget = {
           init: jest.fn(),
           render: jest.fn(),
-          getWidgetState(uiState) {
+          getWidgetUiState(uiState) {
             return uiState;
           },
         };
 
-        const widgetWithoutGetWidgetState = {
+        const widgetWithoutGetWidgetUiState = {
           init: jest.fn(),
           render: jest.fn(),
         };
@@ -1275,7 +1231,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
           lol: createSerializedState(),
         });
 
-        instantSearchInstance.addWidgets([widget, widgetWithoutGetWidgetState]);
+        instantSearchInstance.addWidgets([
+          widget,
+          widgetWithoutGetWidgetUiState,
+        ]);
 
         instantSearchInstance.__forceRender(
           widget,

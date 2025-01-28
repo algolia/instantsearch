@@ -22,29 +22,24 @@
   "files": [
     "dist",
     "cjs",
-    "es",
-    "scripts/transforms"
+    "es"
   ],
   "dependencies": {
-    "@algolia/events": "^4.0.1",
     "@types/dom-speech-recognition": "^0.0.1",
     "@types/google.maps": "^3.55.12",
-    "@types/hogan.js": "^3.0.0",
     "@types/qs": "^6.5.3",
     "algoliasearch-helper": "3.24.1",
-    "hogan.js": "^3.0.2",
     "htm": "^3.0.0",
+    "instantsearch-core": "0.1.0",
     "instantsearch-ui-components": "0.11.1",
-    "preact": "^10.10.0",
-    "qs": "^6.5.1 < 6.10",
-    "search-insights": "^2.17.2"
+    "preact": "^10.10.0"
   },
   "peerDependencies": {
     "algoliasearch": ">= 3.1 < 6"
   },
   "scripts": {
     "build": "yarn run build:cjs && yarn run build:es && yarn run build:umd && yarn run build:types",
-    "build:umd": "rm -rf dist && BABEL_ENV=umd rollup --config ./scripts/rollup/rollup.config.js",
+    "build:umd": "rm -rf dist && BABEL_ENV=umd rollup --config ./scripts/rollup/rollup.config.js --bundleConfigAsCjs",
     "build:cjs": "rm -rf cjs && BABEL_ENV=cjs babel --root-mode upward src --extensions '.js,.ts,.tsx' --out-dir cjs/ --ignore 'src/index.es.ts','**/__tests__','**/__mocks__' --quiet",
     "build:es:base": "BABEL_ENV=es babel --root-mode upward src --extensions '.js,.ts,.tsx' --out-dir es/ --ignore 'src/index.es.ts','**/__tests__','**/__mocks__'",
     "build:es": "rm -rf es && yarn build:es:base --quiet && BABEL_ENV=es babel --root-mode upward src/index.es.ts --out-file es/index.js --quiet && echo '{\"type\":\"module\",\"sideEffects\":false}' > es/package.json",
@@ -62,7 +57,6 @@
     "@storybook/html": "5.3.9",
     "@types/scriptjs": "0.0.2",
     "algoliasearch": "5.1.1",
-    "places.js": "1.17.1",
     "scriptjs": "2.5.9",
     "webpack": "4.47.0"
   }

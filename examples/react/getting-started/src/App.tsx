@@ -1,5 +1,5 @@
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import { Hit } from 'instantsearch.js';
+import { Hit } from 'instantsearch-core';
 import React from 'react';
 import {
   Configure,

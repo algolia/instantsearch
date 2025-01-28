@@ -1,0 +1,99 @@
+import { createMultiSearchResponse } from '@instantsearch/mocks';
+import algoliasearchHelper from 'algoliasearch-helper';
+
+import { index } from '../src';
+
+import { createInstantSearch } from './createInstantSearch';
+
+import type {
+  InitOptions,
+  RenderOptions,
+  DisposeOptions,
+  Widget,
+} from '../src/types';
+import type { IndexInitOptions } from '../src/widgets';
+import type { SearchResponse } from 'algoliasearch-helper/types/algoliasearch';
+
+export const createInitOptions = (
+  args: Partial<InitOptions> = {}
+): InitOptions => {
+  const { instantSearchInstance = createInstantSearch(), ...rest } = args;
+  const helper = args.helper || instantSearchInstance.helper!;
+
+  return {
+    instantSearchInstance,
+    parent: instantSearchInstance.mainIndex,
+    uiState: instantSearchInstance._initialUiState,
+    helper,
+    state: helper.state,
+    renderState: instantSearchInstance.renderState,
+    scopedResults: [],
+    createURL: jest.fn(() => '#'),
+    status: instantSearchInstance.status,
+    error: instantSearchInstance.error,
+    ...rest,
+  };
+};
+
+export const createIndexInitOptions = (
+  args: Partial<IndexInitOptions> = {}
+): IndexInitOptions => {
+  const { instantSearchInstance = createInstantSearch(), ...rest } = args;
+
+  return {
+    instantSearchInstance,
+    parent: instantSearchInstance.mainIndex,
+    uiState: instantSearchInstance._initialUiState,
+    ...rest,
+  };
+};
+
+export const createRenderOptions = (
+  args: Partial<RenderOptions> = {}
+): RenderOptions => {
+  const { instantSearchInstance = createInstantSearch(), ...rest } = args;
+  const response = createMultiSearchResponse();
+  const helper = args.helper || instantSearchInstance.helper!;
+  const results = new algoliasearchHelper.SearchResults(
+    helper.state,
+    response.results as Array<SearchResponse<any>>
+  );
+
+  return {
+    instantSearchInstance,
+    parent: instantSearchInstance.mainIndex,
+    helper,
+    state: helper.state,
+    renderState: instantSearchInstance.renderState,
+    results,
+    scopedResults: [
+      {
+        indexId: helper.state.index,
+        helper,
+        results,
+      },
+    ],
+    status: instantSearchInstance.status,
+    error: instantSearchInstance.error,
+    createURL: jest.fn(() => '#'),
+    ...rest,
+  };
+};
+
+export const createDisposeOptions = (
+  args: Partial<DisposeOptions> = {}
+): DisposeOptions => {
+  return {
+    parent: index({ indexName: 'indexName' }),
+    ...args,
+  };
+};
+
+export const createWidget = (args: Partial<Widget> = {}): Widget =>
+  ({
+    $$type: 'mock.widget',
+    init: jest.fn(),
+    render: jest.fn(),
+    dispose: jest.fn(),
+    ...args,
+  } as unknown as Widget);

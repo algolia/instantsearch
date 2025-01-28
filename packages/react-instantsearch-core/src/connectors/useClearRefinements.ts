@@ -1,4 +1,4 @@
-import connectClearRefinements from 'instantsearch.js/es/connectors/clear-refinements/connectClearRefinements';
+import { connectClearRefinements } from 'instantsearch-core';
 
 import { useConnector } from '../hooks/useConnector';
 
@@ -6,7 +6,7 @@ import type { AdditionalWidgetProperties } from '../hooks/useConnector';
 import type {
   ClearRefinementsConnectorParams,
   ClearRefinementsWidgetDescription,
-} from 'instantsearch.js/es/connectors/clear-refinements/connectClearRefinements';
+} from 'instantsearch-core';
 
 export type UseClearRefinementsProps = ClearRefinementsConnectorParams;
 

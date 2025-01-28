@@ -13,41 +13,25 @@ import type { InfiniteHitsWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 import type { MockSearchClient } from '@instantsearch/mocks';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
-import type { BaseHit, SearchResponse } from 'instantsearch.js';
 import type {
   InfiniteHitsCache,
-  InfiniteHitsCachedHits,
-} from 'instantsearch.js/es/connectors/infinite-hits/connectInfiniteHits';
+  InfiniteHitsCachedItems,
+} from 'instantsearch-core';
+import type { BaseHit, SearchResponse } from 'instantsearch.js';
 
 function normalizeSnapshot(html: string) {
   // Each flavor has its own way to render the hit by default.
   // @MAJOR: Remove this once all flavors are aligned.
   return (
     commonNormalizeSnapshot(html)
-      .replace(
-        /(?:<div\s+style="word-break: break-all;"\s*?>)?\s*?({.+?})…?\s*?(?:<\/div>)?/gs,
-        (_, captured) => {
-          return (captured as string)
-            .replace(/\s/g, '')
-            .replace(/,"__position":\d/, '');
-        }
-      )
       // React InstantSearch shows the "Load Previous" button by default, unlike
       // the other flavors
       .replace(
         /<button class="ais-InfiniteHits-loadPrevious .*?">.*?<\/button>/,
         ''
       )
-      // Vue InstantSearch doesn't render defaults hits like the other flavors
-      .replace(
-        /\s{0,}(objectID): (.+?), index: \d\s{0,}/gs,
-        (_, ...captured) => {
-          return `{"objectID":"${captured[1]}"}`;
-        }
-      )
       // Vue InstantSearch adds new line between banner and hits
       .replace(/>\s*</g, '><')
-      .replace(/"__position":\d,/g, '')
   );
 }
 
@@ -85,17 +69,29 @@ export function createOptionsTests(
             <li
               class="ais-InfiniteHits-item"
             >
-              {"objectID":"0"}
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"0","__position":1}…
+              </div>
             </li>
             <li
               class="ais-InfiniteHits-item"
             >
-              {"objectID":"1"}
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"1","__position":2}…
+              </div>
             </li>
             <li
               class="ais-InfiniteHits-item"
             >
-              {"objectID":"2"}
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"2","__position":3}…
+              </div>
             </li>
           </ol>
           <button
@@ -167,17 +163,29 @@ export function createOptionsTests(
             <li
               class="ais-InfiniteHits-item"
             >
-              {"objectID":"0"}
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"0","__position":1}…
+              </div>
             </li>
             <li
               class="ais-InfiniteHits-item"
             >
-              {"objectID":"1"}
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"1","__position":2}…
+              </div>
             </li>
             <li
               class="ais-InfiniteHits-item"
             >
-              {"objectID":"2"}
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"2","__position":3}…
+              </div>
             </li>
           </ol>
           <button
@@ -186,7 +194,7 @@ export function createOptionsTests(
             Show more results
           </button>
         </div>
-        `
+      `
       );
     });
 
@@ -226,17 +234,29 @@ export function createOptionsTests(
             <li
               class="ais-InfiniteHits-item"
             >
-              {"objectID":"(0)"}
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"(0)","__position":1}…
+              </div>
             </li>
             <li
               class="ais-InfiniteHits-item"
             >
-              {"objectID":"(1)"}
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"(1)","__position":2}…
+              </div>
             </li>
             <li
               class="ais-InfiniteHits-item"
             >
-              {"objectID":"(2)"}
+              <div
+                style="word-break: break-all;"
+              >
+                {"objectID":"(2)","__position":3}…
+              </div>
             </li>
           </ol>
           <button
@@ -473,7 +493,7 @@ export function createOptionsTests(
       });
 
       expect(cache.write).toHaveBeenCalledTimes(1);
-      expect(cache.write.mock.calls[0][0].hits).toEqual({
+      expect(cache.write.mock.calls[0][0].items).toEqual({
         '0': [
           { __position: 1, objectID: '0' },
           { __position: 2, objectID: '1' },
@@ -494,7 +514,7 @@ export function createOptionsTests(
       });
 
       expect(cache.write).toHaveBeenCalledTimes(2);
-      expect(cache.write.mock.calls[0][0].hits).toEqual({
+      expect(cache.write.mock.calls[0][0].items).toEqual({
         '0': [
           { __position: 1, objectID: '0' },
           { __position: 2, objectID: '1' },
@@ -515,7 +535,7 @@ export function createOptionsTests(
       // We write in cache before instantiating InstantSearch to mimic a
       // pre-filled cache from previous searches (e.g., after a page refresh)
       cache.write({
-        hits: {
+        items: {
           '0': [
             { __position: 1, objectID: 'one' },
             { __position: 2, objectID: 'two' },
@@ -567,17 +587,29 @@ export function createOptionsTests(
             <li
               class="ais-InfiniteHits-item"
             >
-              {"objectID":"one"}
+              <div
+                style="word-break: break-all;"
+              >
+                {"__position":1,"objectID":"one"}…
+              </div>
             </li>
             <li
               class="ais-InfiniteHits-item"
             >
-              {"objectID":"two"}
+              <div
+                style="word-break: break-all;"
+              >
+                {"__position":2,"objectID":"two"}…
+              </div>
             </li>
             <li
               class="ais-InfiniteHits-item"
             >
-              {"objectID":"three"}
+              <div
+                style="word-break: break-all;"
+              >
+                {"__position":3,"objectID":"three"}…
+              </div>
             </li>
           </ol>
           <button
@@ -645,7 +677,7 @@ function createCustomCache() {
 
   let cachedState: PlainSearchParameters | undefined = undefined;
 
-  let cachedHits: InfiniteHitsCachedHits<Record<string, any>> | undefined =
+  let cachedHits: InfiniteHitsCachedItems<Record<string, any>> | undefined =
     undefined;
 
   type Cache = InfiniteHitsCache<Record<string, any>> & { clear: () => void };
@@ -665,9 +697,9 @@ function createCustomCache() {
 
       return null;
     }),
-    write: jest.fn(({ state, hits }) => {
+    write: jest.fn(({ state, items }) => {
       cachedState = getStateWithoutPage(state);
-      cachedHits = hits;
+      cachedHits = items;
     }),
     clear: jest.fn(() => {
       cachedState = undefined;

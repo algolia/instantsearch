@@ -1,4 +1,4 @@
-import instantsearch from 'instantsearch.js/es';
+import { instantsearch } from 'instantsearch-core';
 
 import { createInstantSearchComponent } from '../util/createInstantSearchComponent';
 import { renderCompat, getDefaultSlot } from '../util/vue-compat';
@@ -15,10 +15,6 @@ export default createInstantSearchComponent({
     searchClient: {
       type: Object,
       required: true,
-    },
-    insightsClient: {
-      type: Function,
-      default: undefined,
     },
     indexName: {
       type: String,
@@ -55,10 +51,6 @@ export default createInstantSearchComponent({
     },
     stalledSearchDelay: {
       type: Number,
-      default: undefined,
-    },
-    searchFunction: {
-      type: Function,
       default: undefined,
     },
     onStateChange: {
@@ -102,13 +94,11 @@ export default createInstantSearchComponent({
     return {
       instantSearchInstance: instantsearch({
         searchClient: this.searchClient,
-        insightsClient: this.insightsClient,
         insights: this.insights,
         indexName: this.indexName,
         compositionID: this.compositionID,
         routing: this.routing,
         stalledSearchDelay: this.stalledSearchDelay,
-        searchFunction: this.searchFunction,
         onStateChange: this.onStateChange,
         initialUiState: this.initialUiState,
         future: this.future,

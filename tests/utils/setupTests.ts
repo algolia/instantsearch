@@ -4,7 +4,8 @@ import { createSerializer } from 'enzyme-to-json';
 import htmlSerializer from 'jest-serializer-html/createSerializer';
 
 import '@testing-library/jest-dom/extend-expect';
-import { warnCache } from '../../packages/react-instantsearch-core/src/lib/warn';
+import { warnCache as coreLoggerCache } from '../../packages/instantsearch-core/src/lib/public/logger';
+import { warnCache as reactCoreLoggerCache } from '../../packages/react-instantsearch-core/src/lib/warn';
 import {
   Vue2,
   isVue2,
@@ -29,7 +30,8 @@ if (typeof window !== 'undefined') {
 
 beforeEach(() => {
   // We reset the log's cache for our log assertions to be isolated in each test.
-  warnCache.current = {};
+  coreLoggerCache.current = {};
+  reactCoreLoggerCache.current = {};
 });
 
 if (isVue2) {

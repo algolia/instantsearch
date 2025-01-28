@@ -8,7 +8,12 @@ import type { UseRangeProps } from 'react-instantsearch-core';
 
 type UiProps = Pick<
   RangeInputUiProps,
-  'disabled' | 'onSubmit' | 'range' | 'start' | 'step' | 'translations'
+  | 'disabled'
+  | 'onSubmit'
+  | 'range'
+  | 'currentRefinement'
+  | 'step'
+  | 'translations'
 >;
 
 export type RangeInputProps = Omit<RangeInputUiProps, keyof UiProps> &
@@ -22,7 +27,7 @@ export function RangeInput({
   translations,
   ...props
 }: RangeInputProps) {
-  const { range, start, canRefine, refine } = useRange(
+  const { range, currentRefinement, canRefine, refine } = useRange(
     { attribute, min, max, precision },
     { $$widgetType: 'ais.rangeInput' }
   );
@@ -31,7 +36,7 @@ export function RangeInput({
 
   const uiProps: UiProps = {
     range,
-    start,
+    currentRefinement,
     step,
     disabled: !canRefine,
     onSubmit: refine,

@@ -1,10 +1,11 @@
 import React, { forwardRef } from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
-import { Hit as AlgoliaHit } from 'instantsearch.js';
 import {
   useInfiniteHits,
   UseInfiniteHitsProps,
 } from 'react-instantsearch-core';
+
+import type { Hit as AlgoliaHit } from 'instantsearch-core';
 
 type InfiniteHitsProps<THit> = UseInfiniteHitsProps & {
   hitComponent: (props: { hit: THit }) => JSX.Element;

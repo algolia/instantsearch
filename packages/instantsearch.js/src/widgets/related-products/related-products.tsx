@@ -4,7 +4,7 @@ import { createRelatedProductsComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectRelatedProducts from '../../connectors/related-products/connectRelatedProducts';
+import { connectRelatedProducts } from '../../connectors';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
@@ -15,16 +15,17 @@ import type {
   RelatedProductsWidgetDescription,
   RelatedProductsConnectorParams,
   RelatedProductsRenderState,
-} from '../../connectors/related-products/connectRelatedProducts';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   Template,
   WidgetFactory,
-  Hit,
   Renderer,
   BaseHit,
   RecommendResponse,
-  TemplateWithBindEvent,
+  Hit,
+  TemplateWithSendEvent,
+  Widget,
 } from '../../types';
 import type {
   RecommendClassNames,
@@ -67,7 +68,6 @@ function createRenderer<THit extends NonNullable<object> = BaseHit>({
         defaultTemplates: {} as unknown as Required<
           RelatedProductsTemplates<THit>
         >,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
 
@@ -194,7 +194,7 @@ export type RelatedProductsTemplates<
   /**
    * Template to use for each result. This template will receive an object containing a single record.
    */
-  item: TemplateWithBindEvent<Hit<THit>>;
+  item: TemplateWithSendEvent<Hit<THit>>;
 
   /**
    * Template to use to wrap all items.
@@ -229,13 +229,14 @@ type RelatedProductsWidgetParams<THit extends NonNullable<object> = BaseHit> = {
   cssClasses?: RelatedProductsCSSClasses;
 };
 
-export type RelatedProductsWidget = WidgetFactory<
-  RelatedProductsWidgetDescription & {
-    $$widgetType: 'ais.relatedProducts';
-  },
-  RelatedProductsConnectorParams,
-  RelatedProductsWidgetParams
->;
+export type RelatedProductsWidget<THit extends NonNullable<object> = BaseHit> =
+  WidgetFactory<
+    RelatedProductsWidgetDescription<THit> & {
+      $$widgetType: 'ais.relatedProducts';
+    },
+    RelatedProductsConnectorParams<THit>,
+    RelatedProductsWidgetParams<THit>
+  >;
 
 export default (function relatedProducts<
   THit extends NonNullable<object> = BaseHit
@@ -273,7 +274,7 @@ export default (function relatedProducts<
     render(null, containerNode)
   );
 
-  return {
+  const widget = {
     ...makeWidget({
       objectIDs,
       limit,
@@ -285,4 +286,12 @@ export default (function relatedProducts<
     }),
     $$widgetType: 'ais.relatedProducts',
   };
+
+  // explicitly cast this type to have a small type output.
+  return widget as Widget<
+    RelatedProductsWidgetDescription & {
+      $$widgetType: 'ais.relatedProducts';
+      widgetParams: RelatedProductsConnectorParams<THit>;
+    }
+  >;
 } satisfies RelatedProductsWidget);

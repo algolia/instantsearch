@@ -7,7 +7,7 @@ import {
 } from '@instantsearch/mocks';
 import { createRecommendSearchClient } from '@instantsearch/mocks/fixtures';
 import { wait } from '@instantsearch/testutils';
-import instantsearch from 'instantsearch.js';
+import { instantsearch } from 'instantsearch-core';
 
 import { configToIndex, injectStyles } from '../render';
 

@@ -10,12 +10,13 @@
   ],
   "dependencies": {
     "algoliasearch": "5.1.1",
+    "instantsearch-core": "0.1.0",
     "instantsearch.js": "4.77.3"
   },
   "devDependencies": {
     "@instantsearch/testutils": "1.59.0"
   },
   "scripts": {
-    "build": "rollup -c rollup.config.js"
+    "build": "rollup -c rollup.config.js --bundleConfigAsCjs"
   }
 }
