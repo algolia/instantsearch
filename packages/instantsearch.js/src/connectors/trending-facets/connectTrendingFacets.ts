@@ -60,7 +60,7 @@ export type TrendingFacetsConnectorParams = {
 };
 
 export type TrendingFacetsWidgetDescription = {
-  $$type: 'ais.TrendingFacets';
+  $$type: 'ais.trendingFacets';
   renderState: TrendingFacetsRenderState;
 };
 
@@ -94,7 +94,7 @@ export default (function connectTrendingFacets<
 
     return {
       dependsOn: 'recommend',
-      $$type: 'ais.TrendingFacets',
+      $$type: 'ais.trendingFacets',
 
       init(initOptions) {
         renderFn(

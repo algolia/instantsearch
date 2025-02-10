@@ -56,7 +56,7 @@ export function TrendingFacets({
       escapeHTML,
       transformItems,
     },
-    { $$widgetType: 'ais.TrendingFacets' }
+    { $$widgetType: 'ais.trendingFacets' }
   );
 
   const layout: typeof layoutComponent = layoutComponent

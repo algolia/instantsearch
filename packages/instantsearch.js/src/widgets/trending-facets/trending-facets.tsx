@@ -153,6 +153,7 @@ function createRenderer({
         emptyComponent={emptyComponent}
         layout={layoutComponent}
         status={instantSearchInstance.status}
+        sendEvent={() => {}}
       />,
       containerNode
     );
@@ -221,7 +222,7 @@ type TrendingFacetsWidgetParams = {
 
 export type TrendingFacetsWidget = WidgetFactory<
   TrendingFacetsWidgetDescription & {
-    $$widgetType: 'ais.TrendingFacets';
+    $$widgetType: 'ais.trendingFacets';
   },
   TrendingFacetsConnectorParams,
   TrendingFacetsWidgetParams
@@ -268,6 +269,6 @@ export default (function trendingFacets(
       escapeHTML,
       transformItems,
     }),
-    $$widgetType: 'ais.TrendingFacets',
+    $$widgetType: 'ais.trendingFacets',
   };
 } satisfies TrendingFacetsWidget);
