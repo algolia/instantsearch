@@ -96,6 +96,15 @@ function Widget<TWidget extends SingleWidget>({
     case 'LookingSimilar': {
       return <widget.Component objectIDs={['1']} {...props} />;
     }
+    case 'TrendingFacets': {
+      return (
+        <widget.Component
+          facetName="foobar"
+          itemComponent={() => {}}
+          {...props}
+        />
+      );
+    }
     default: {
       return <widget.Component {...props} />;
     }
