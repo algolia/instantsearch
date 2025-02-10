@@ -2,6 +2,7 @@
 import { cx } from '../lib';
 
 import { createDefaultItemComponent } from './recommend-shared';
+import { isTrendingFacetHit } from './TrendingFacets';
 
 import type {
   ComponentProps,
@@ -11,6 +12,7 @@ import type {
   Renderer,
   SendEventForHits,
 } from '../types';
+import type { TrendingFacetHit } from './TrendingFacets';
 
 export type CarouselProps<
   TObject,
@@ -20,7 +22,7 @@ export type CarouselProps<
   nextButtonRef: MutableRef<HTMLButtonElement | null>;
   previousButtonRef: MutableRef<HTMLButtonElement | null>;
   carouselIdRef: MutableRef<string>;
-  items: Array<RecordWithObjectID<TObject>>;
+  items: Array<RecordWithObjectID<TObject> | TrendingFacetHit>;
   itemComponent?: (
     props: RecommendItemComponentProps<RecordWithObjectID<TObject>> &
       TComponentProps
@@ -232,22 +234,41 @@ export function createCarouselComponent({ createElement, Fragment }: Renderer) {
             }
           }}
         >
-          {items.map((item, index) => (
-            <li
-              key={item.objectID}
-              className={cx(cssClasses.item)}
-              aria-roledescription="slide"
-              aria-label={`${index + 1} of ${items.length}`}
-              onClick={() => {
-                sendEvent('click:internal', item, 'Item Clicked');
-              }}
-              onAuxClick={() => {
-                sendEvent('click:internal', item, 'Item Clicked');
-              }}
-            >
-              <ItemComponent item={item} sendEvent={sendEvent} />
-            </li>
-          ))}
+          {items.map((item, index) =>
+            isTrendingFacetHit(item) ? (
+              <li
+                key={item.facetName + item.facetValue}
+                className={cx(cssClasses.item)}
+                aria-roledescription="slide"
+                aria-label={`${index + 1} of ${items.length}`}
+              >
+                <ItemComponent
+                  item={
+                    {
+                      ...item,
+                      objectID: item.facetName + item.facetValue,
+                    } as RecordWithObjectID<any>
+                  }
+                  sendEvent={sendEvent}
+                />
+              </li>
+            ) : (
+              <li
+                key={item.objectID}
+                className={cx(cssClasses.item)}
+                aria-roledescription="slide"
+                aria-label={`${index + 1} of ${items.length}`}
+                onClick={() => {
+                  sendEvent('click:internal', item, 'Item Clicked');
+                }}
+                onAuxClick={() => {
+                  sendEvent('click:internal', item, 'Item Clicked');
+                }}
+              >
+                <ItemComponent item={item} sendEvent={sendEvent} />
+              </li>
+            )
+          )}
         </ol>
 
         <button
