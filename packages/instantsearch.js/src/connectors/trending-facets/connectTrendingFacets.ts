@@ -14,8 +14,8 @@ import type {
   Unmounter,
   UnknownWidgetParams,
   RecommendResponse,
+  TrendingFacetHit,
 } from '../../types';
-import type { TrendingFacetHit } from './types';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'trending-facets',
@@ -171,5 +171,3 @@ export default (function connectTrendingFacets<
     };
   };
 } satisfies TrendingFacetsConnector);
-
-export type { TrendingFacetHit } from './types';

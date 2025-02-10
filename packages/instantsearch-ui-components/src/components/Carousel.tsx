@@ -1,4 +1,5 @@
 /** @jsx createElement */
+
 import { cx } from '../lib';
 
 import { createDefaultItemComponent } from './recommend-shared';
@@ -12,7 +13,7 @@ import type {
   Renderer,
   SendEventForHits,
 } from '../types';
-import type { TrendingFacetHit } from './TrendingFacets';
+import type { TrendingFacetHit } from 'algoliasearch';
 
 export type CarouselProps<
   TObject,

@@ -15,7 +15,6 @@ import type {
   TrendingFacetsWidgetDescription,
   TrendingFacetsConnectorParams,
   TrendingFacetsRenderState,
-  TrendingFacetHit,
 } from '../../connectors/trending-facets/connectTrendingFacets';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
@@ -24,6 +23,7 @@ import type {
   Renderer,
   RecommendResponse,
   TemplateWithBindEvent,
+  TrendingFacetHit,
 } from '../../types';
 import type {
   RecommendClassNames,

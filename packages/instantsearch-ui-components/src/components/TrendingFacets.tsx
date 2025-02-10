@@ -19,12 +19,7 @@ import type {
   Renderer,
   SendEventForHits,
 } from '../types';
-import type { TrendingFacetHit as Base } from 'algoliasearch/lite';
-
-export type TrendingFacetHit = Base & {
-  __position: number;
-  __queryID?: string;
-};
+import type { TrendingFacetHit } from 'algoliasearch';
 
 type TrendingFacetLayoutProps<TClassNames extends Record<string, string>> = {
   classNames: TClassNames;
