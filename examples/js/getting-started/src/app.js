@@ -8,7 +8,7 @@ import {
   panel,
   refinementList,
   searchBox,
-  trendingItems,
+  trendingFacets,
 } from 'instantsearch.js/es/widgets';
 
 import 'instantsearch.css/themes/satellite.css';
@@ -56,19 +56,14 @@ search.addWidgets([
   pagination({
     container: '#pagination',
   }),
-  trendingItems({
+  trendingFacets({
     container: '#trending',
     limit: 6,
+    facetName: 'brand',
     templates: {
       item: (item, { html }) => html`
         <div>
-          <article>
-            <div>
-              <img src="${item.image}" />
-              <h2>${item.name}</h2>
-            </div>
-            <a href="/products.html?pid=${item.objectID}">See product</a>
-          </article>
+          <h2>${item.facetName}: ${item.facetValue}</h2>
         </div>
       `,
       layout: carousel(),

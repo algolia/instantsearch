@@ -9,7 +9,7 @@ import {
   Pagination,
   RefinementList,
   SearchBox,
-  TrendingItems,
+  TrendingFacets,
   Carousel,
 } from 'react-instantsearch';
 
@@ -61,8 +61,8 @@ export function App() {
                 <Pagination />
               </div>
               <div>
-                <TrendingItems
-                  itemComponent={ItemComponent}
+                <TrendingFacets
+                  facetName="brand"
                   limit={6}
                   layoutComponent={Carousel}
                 />
@@ -94,19 +94,5 @@ function HitComponent({ hit }: { hit: HitType }) {
       </p>
       <a href={`/products.html?pid=${hit.objectID}`}>See product</a>
     </article>
-  );
-}
-
-function ItemComponent({ item }: { item: Hit }) {
-  return (
-    <div>
-      <article>
-        <div>
-          <img src={item.image} />
-          <h2>{item.name}</h2>
-        </div>
-        <a href={`/products.html?pid=${item.objectID}`}>See product</a>
-      </article>
-    </div>
   );
 }
