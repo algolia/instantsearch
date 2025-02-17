@@ -121,10 +121,7 @@ declare namespace algoliasearchHelper {
      * same as a search call before calling searchOnce.
      * @param options can contain all the parameters that can be set to SearchParameters
      * plus the index
-     * @param [callback] optional callback executed when the response from the
-     * server is back.
-     * @return if a callback is passed the method returns undefined
-     * otherwise it returns a promise containing an object with two keys :
+     * @return a promise containing an object with two keys :
      *  - content with a SearchResults
      *  - state with the state used for the query as a SearchParameters
      * @example
