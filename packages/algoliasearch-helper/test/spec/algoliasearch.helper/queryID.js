@@ -32,7 +32,7 @@ test('the response handler should check that the query is not outdated', functio
     callCount++;
 
     if (!shouldTriggerResult) {
-      done.fail('The id was outdated');
+      done(new Error('The id was outdated'));
     }
   });
 
@@ -78,7 +78,7 @@ test('the error handler should check that the query is not outdated', function (
     callCount++;
 
     if (!shouldTriggerError) {
-      done.fail('The id was outdated');
+      done(new Error('The id was outdated'));
     }
   });
 

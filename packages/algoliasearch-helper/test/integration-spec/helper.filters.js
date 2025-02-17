@@ -33,7 +33,7 @@ test('[INT][FILTERS] Should retrieve different values for multi facetted records
   var calls = 0;
 
   helper.on('error', function (event) {
-    done.fail(event.error);
+    done(event.error);
   });
 
   helper.on('result', function (event) {

@@ -11,12 +11,48 @@ function setup(indexName, fn) {
     // all indexing requests must be done in https
     protocol: 'https:',
   });
-  client.deleteIndex =
-    client.deleteIndex ||
-    function (deleteIndexName) {
+  var hasInitIndex = !!client.initIndex;
+  var originalDeleteIndex = client.deleteIndex.bind(client);
+
+  client.deleteIndex = function (deleteIndexName) {
+    if (!client.deleteIndex) {
       return client.initIndex(deleteIndexName).delete();
-    };
+    }
+    if (!hasInitIndex) {
+      return originalDeleteIndex({ indexName: deleteIndexName });
+    }
+    return originalDeleteIndex(deleteIndexName);
+  };
   client.listIndexes = client.listIndexes || client.listIndices;
+  client.initIndex =
+    client.initIndex ||
+    function (initIndexName) {
+      return {
+        addObjects: function (objects) {
+          return client.saveObjects({
+            objects: objects,
+            indexName: initIndexName,
+          });
+        },
+        clearObjects: function () {
+          return client.clearObjects({ indexName: initIndexName });
+        },
+        setSettings: function (settings) {
+          return client.setSettings({
+            indexName: initIndexName,
+            indexSettings: settings,
+          });
+        },
+        waitTask: function (taskID) {
+          return client.waitForTask({
+            indexName,
+            initIndexName,
+            taskID: taskID,
+          });
+        },
+      };
+    };
+  client.destroy = client.destroy || function () {};
 
   var index = client.initIndex(indexName);
   index.addObjects =

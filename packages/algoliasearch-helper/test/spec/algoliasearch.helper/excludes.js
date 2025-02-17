@@ -40,7 +40,7 @@ test('removeExclude should remove an exclusion', function (done) {
   try {
     helper.removeExclude(facetName, facetValueToExclude);
   } catch (e) {
-    done.fail('Removing unset exclusions should be ok...');
+    done(new Error('Removing unset exclusions should be ok...'));
   }
 
   done();
