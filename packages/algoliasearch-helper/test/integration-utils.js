@@ -12,7 +12,9 @@ function setup(indexName, fn) {
     protocol: 'https:',
   });
   var hasInitIndex = Boolean(client.initIndex);
-  var originalDeleteIndex = client.deleteIndex.bind(client);
+  var originalDeleteIndex = client.deleteIndex
+    ? client.deleteIndex.bind(client)
+    : undefined;
 
   client.deleteIndex = function (deleteIndexName) {
     if (!client.deleteIndex) {
