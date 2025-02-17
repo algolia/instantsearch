@@ -68,6 +68,9 @@ function setup(indexName, fn) {
     };
   index.clearIndex = index.clearIndex || index.clearObjects;
 
+  // Ensure we go into the right integration branches (and client stays v5)
+  client.initIndex = hasInitIndex ? client.initIndex : undefined;
+
   return index
     .clearIndex()
     .then(function (content) {
