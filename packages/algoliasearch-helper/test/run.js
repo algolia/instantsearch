@@ -42,7 +42,7 @@ jest.runCLI(dynamicJestConfig, projectsRootPaths).then(function (response) {
       ? client.deleteIndex.bind(client)
       : undefined;
     client.deleteIndex = function (deleteIndexName) {
-      if (!client.deleteIndex) {
+      if (!originalDeleteIndex) {
         return client.initIndex(deleteIndexName).delete();
       }
       if (!client.initIndex) {

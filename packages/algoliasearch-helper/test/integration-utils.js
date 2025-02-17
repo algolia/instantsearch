@@ -17,7 +17,7 @@ function setup(indexName, fn) {
     : undefined;
 
   client.deleteIndex = function (deleteIndexName) {
-    if (!client.deleteIndex) {
+    if (!originalDeleteIndex) {
       return client.initIndex(deleteIndexName).delete();
     }
     if (!hasInitIndex) {
