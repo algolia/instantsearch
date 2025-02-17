@@ -11,7 +11,7 @@ function setup(indexName, fn) {
     // all indexing requests must be done in https
     protocol: 'https:',
   });
-  var hasInitIndex = !!client.initIndex;
+  var hasInitIndex = Boolean(client.initIndex);
   var originalDeleteIndex = client.deleteIndex.bind(client);
 
   client.deleteIndex = function (deleteIndexName) {
