@@ -201,26 +201,14 @@ AlgoliaSearchHelper.prototype.getQuery = function () {
  * same as a search call before calling searchOnce.
  * @param {object} options can contain all the parameters that can be set to SearchParameters
  * plus the index
- * @param {function} [cb] optional callback executed when the response from the
- * server is back.
- * @return {promise|undefined} if a callback is passed the method returns undefined
- * otherwise it returns a promise containing an object with two keys :
+ * @return {promise} returns a promise containing an object with two keys :
  *  - content with a SearchResults
  *  - state with the state used for the query as a SearchParameters
  * @example
  * // Changing the number of records returned per page to 1
- * // This example uses the callback API
- * var state = helper.searchOnce({hitsPerPage: 1},
- *   function(error, content, state) {
- *     // if an error occurred it will be passed in error, otherwise its value is null
- *     // content contains the results formatted as a SearchResults
- *     // state is the instance of SearchParameters used for this search
- *   });
- * @example
- * // Changing the number of records returned per page to 1
- * // This example uses the promise API
  * var state1 = helper.searchOnce({hitsPerPage: 1})
  *                 .then(promiseHandler);
+ *                 .catch(errorHandler);
  *
  * function promiseHandler(res) {
  *   // res contains
@@ -229,8 +217,12 @@ AlgoliaSearchHelper.prototype.getQuery = function () {
  *   //   state   : SearchParameters (the one used for this specific search)
  *   // }
  * }
+ *
+ * function errorHandler(err) {
+ *  // handle error
+ * }
  */
-AlgoliaSearchHelper.prototype.searchOnce = function (options, cb) {
+AlgoliaSearchHelper.prototype.searchOnce = function (options) {
   var tempState = !options
     ? this.state
     : this.state.setQueryParameters(options);
@@ -243,29 +235,6 @@ AlgoliaSearchHelper.prototype.searchOnce = function (options, cb) {
   this.emit('searchOnce', {
     state: tempState,
   });
-
-  if (cb) {
-    this.client
-      .search(queries)
-      .then(function (content) {
-        self._currentNbQueries--;
-        if (self._currentNbQueries === 0) {
-          self.emit('searchQueueEmpty');
-        }
-
-        cb(null, new SearchResults(tempState, content.results), tempState);
-      })
-      .catch(function (err) {
-        self._currentNbQueries--;
-        if (self._currentNbQueries === 0) {
-          self.emit('searchQueueEmpty');
-        }
-
-        cb(err, null, tempState);
-      });
-
-    return undefined;
-  }
 
   return this.client.search(queries).then(
     function (content) {
@@ -1748,19 +1717,6 @@ AlgoliaSearchHelper.prototype._dispatchRecommendError = function (
   this.emit('error', error);
 
   if (this._currentNbRecommendQueries === 0) this.emit('recommendQueueEmpty');
-};
-
-/**
- * Test if there are some disjunctive refinements on the facet
- * @private
- * @param {string} facet the attribute to test
- * @return {boolean} true if there are refinements on this attribute
- */
-AlgoliaSearchHelper.prototype._hasDisjunctiveRefinements = function (facet) {
-  return (
-    this.state.disjunctiveRefinements[facet] &&
-    this.state.disjunctiveRefinements[facet].length > 0
-  );
 };
 
 AlgoliaSearchHelper.prototype._change = function (event) {

@@ -29,7 +29,7 @@ test('[INT][SEARCHONCE] Should be able to search once with custom parameters wit
   var helper = algoliasearchHelper(client, indexName);
   var state0 = helper.state;
 
-  var calls = 1;
+  var calls = 0;
   helper.on('error', function (error) {
     done(error);
   });
@@ -45,6 +45,7 @@ test('[INT][SEARCHONCE] Should be able to search once with custom parameters wit
     }
   });
 
+  calls++;
   var state1 = state0.setFacets(['facet']).addFacetRefinement('facet', 'f1');
   helper.searchOnce(state1).then(function (res) {
     expect(helper.state).toBe(state0);
@@ -60,10 +61,10 @@ test('[INT][SEARCHONCE] Should be able to search once with custom parameters wit
         return hit.objectID === '1';
       })
     ).toBeTruthy();
+
     calls++;
     var state2 = state0.setFacets(['facet']).addFacetRefinement('facet', 'f2');
-    helper.searchOnce(state2, function (err, c, s) {
-      expect(err).toBe(null);
+    return helper.searchOnce(state2).then(function ({ content: c, state: s }) {
       expect(helper.state).toBe(state0);
       expect(s).toEqual(state2);
       expect(c.hits.length).toBe(2);
@@ -77,6 +78,7 @@ test('[INT][SEARCHONCE] Should be able to search once with custom parameters wit
           return hit.objectID === '3';
         })
       ).toBeTruthy();
+
       calls++;
       helper.search();
     });

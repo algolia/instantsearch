@@ -121,24 +121,11 @@ declare namespace algoliasearchHelper {
      * same as a search call before calling searchOnce.
      * @param options can contain all the parameters that can be set to SearchParameters
      * plus the index
-     * @param [callback] optional callback executed when the response from the
-     * server is back.
-     * @return if a callback is passed the method returns undefined
-     * otherwise it returns a promise containing an object with two keys :
+     * @return a promise containing an object with two keys :
      *  - content with a SearchResults
      *  - state with the state used for the query as a SearchParameters
      * @example
      * // Changing the number of records returned per page to 1
-     * // This example uses the callback API
-     * var state = helper.searchOnce({hitsPerPage: 1},
-     *   function(error, content, state) {
-     *     // if an error occurred it will be passed in error, otherwise its value is null
-     *     // content contains the results formatted as a SearchResults
-     *     // state is the instance of SearchParameters used for this search
-     *   });
-     * @example
-     * // Changing the number of records returned per page to 1
-     * // This example uses the promise API
      * var state1 = helper.searchOnce({hitsPerPage: 1})
      *                 .then(promiseHandler);
      *
@@ -153,14 +140,6 @@ declare namespace algoliasearchHelper {
     searchOnce(
       options: PlainSearchParameters
     ): Promise<{ content: SearchResults; state: SearchParameters }>;
-    searchOnce(
-      options: PlainSearchParameters,
-      cb: (
-        error: Error,
-        content: SearchResults,
-        state: SearchParameters
-      ) => void
-    ): void;
 
     /**
      * Search for facet values based on an query and the name of a faceted attribute. This
