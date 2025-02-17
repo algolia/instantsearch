@@ -38,7 +38,9 @@ jest.runCLI(dynamicJestConfig, projectsRootPaths).then(function (response) {
       process.env.INTEGRATION_TEST_APPID,
       process.env.INTEGRATION_TEST_API_KEY
     );
-    var originalDeleteIndex = client.deleteIndex.bind(client);
+    var originalDeleteIndex = client.deleteIndex
+      ? client.deleteIndex.bind(client)
+      : undefined;
     client.deleteIndex = function (deleteIndexName) {
       if (!client.deleteIndex) {
         return client.initIndex(deleteIndexName).delete();
