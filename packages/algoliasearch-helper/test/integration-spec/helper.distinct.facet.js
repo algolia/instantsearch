@@ -32,7 +32,7 @@ test('[INT][FILTERS] Using distinct should let me retrieve all facet without dis
   });
 
   helper.on('error', function (event) {
-    done.fail(event.error);
+    done(event.error);
   });
 
   helper.on('result', function (event) {

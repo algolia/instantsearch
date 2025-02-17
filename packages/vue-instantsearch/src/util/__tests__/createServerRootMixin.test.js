@@ -701,7 +701,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
                 })
                 // jest throws an error we need to catch, since stuck in the flow
                 .catch((e) => {
-                  done.fail(e);
+                  done(e);
                 })
             );
           },
