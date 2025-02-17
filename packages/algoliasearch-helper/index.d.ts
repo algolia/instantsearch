@@ -129,16 +129,6 @@ declare namespace algoliasearchHelper {
      *  - state with the state used for the query as a SearchParameters
      * @example
      * // Changing the number of records returned per page to 1
-     * // This example uses the callback API
-     * var state = helper.searchOnce({hitsPerPage: 1},
-     *   function(error, content, state) {
-     *     // if an error occurred it will be passed in error, otherwise its value is null
-     *     // content contains the results formatted as a SearchResults
-     *     // state is the instance of SearchParameters used for this search
-     *   });
-     * @example
-     * // Changing the number of records returned per page to 1
-     * // This example uses the promise API
      * var state1 = helper.searchOnce({hitsPerPage: 1})
      *                 .then(promiseHandler);
      *
