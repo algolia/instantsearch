@@ -1021,34 +1021,6 @@ AlgoliaSearchHelper.prototype.toggleTag = function (tag) {
 };
 
 /**
- * Increments the page number by one.
- * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
- * @fires change
- * @chainable
- * @example
- * helper.setPage(0).nextPage().getPage();
- * // returns 1
- */
-AlgoliaSearchHelper.prototype.nextPage = function () {
-  var page = this.state.page || 0;
-  return this.setPage(page + 1);
-};
-
-/**
- * Decrements the page number by one.
- * @fires change
- * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
- * @chainable
- * @example
- * helper.setPage(1).previousPage().getPage();
- * // returns 0
- */
-AlgoliaSearchHelper.prototype.previousPage = function () {
-  var page = this.state.page || 0;
-  return this.setPage(page - 1);
-};
-
-/**
  * Updates the current page.
  * @function
  * @param  {number} page The page number

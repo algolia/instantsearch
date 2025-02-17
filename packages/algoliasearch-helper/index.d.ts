@@ -305,8 +305,6 @@ declare namespace algoliasearchHelper {
     toggleFacetExclusion(facet: string, value: string): this;
     toggleFacetRefinement(facet: string, value: string): this;
     toggleTag(tag: string): this;
-    nextPage(): this;
-    previousPage(): this;
     setPage(page: number): this;
     setQueryParameter<SearchParameter extends keyof PlainSearchParameters>(
       parameter: SearchParameter,
