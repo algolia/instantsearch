@@ -153,14 +153,6 @@ declare namespace algoliasearchHelper {
     searchOnce(
       options: PlainSearchParameters
     ): Promise<{ content: SearchResults; state: SearchParameters }>;
-    searchOnce(
-      options: PlainSearchParameters,
-      cb: (
-        error: Error,
-        content: SearchResults,
-        state: SearchParameters
-      ) => void
-    ): void;
 
     /**
      * Search for facet values based on an query and the name of a faceted attribute. This
