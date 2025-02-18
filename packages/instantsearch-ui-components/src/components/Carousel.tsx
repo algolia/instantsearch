@@ -12,8 +12,8 @@ import type {
   RecordWithObjectID,
   Renderer,
   SendEventForHits,
+  TrendingFacetHit,
 } from '../types';
-import type { TrendingFacetHit } from 'algoliasearch';
 
 export type CarouselProps<
   TObject,

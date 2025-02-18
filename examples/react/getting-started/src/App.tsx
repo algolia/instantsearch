@@ -65,6 +65,11 @@ export function App() {
                   facetName="brand"
                   limit={6}
                   layoutComponent={Carousel}
+                  itemComponent={({ item }) => (
+                    <div>
+                      {item.facetName}:{item.facetValue}
+                    </div>
+                  )}
                 />
               </div>
             </div>

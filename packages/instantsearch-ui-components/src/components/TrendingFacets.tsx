@@ -5,7 +5,6 @@ import { cx } from '../lib';
 import {
   createDefaultEmptyComponent,
   createDefaultHeaderComponent,
-  createDefaultItemComponent,
 } from './recommend-shared';
 
 import type {
@@ -18,8 +17,8 @@ import type {
   RecordWithObjectID,
   Renderer,
   SendEventForHits,
+  TrendingFacetHit,
 } from '../types';
-import type { TrendingFacetHit } from 'algoliasearch';
 
 type TrendingFacetLayoutProps<TClassNames extends Record<string, string>> = {
   classNames: TClassNames;
@@ -33,7 +32,7 @@ type TrendingFacetLayoutProps<TClassNames extends Record<string, string>> = {
 export type TrendingFacetsComponentProps<
   TComponentProps extends Record<string, unknown> = Record<string, unknown>
 > = {
-  itemComponent?: (
+  itemComponent: (
     props: RecommendItemComponentProps<TrendingFacetHit> & TComponentProps
   ) => JSX.Element;
   items: TrendingFacetHit[];
@@ -69,10 +68,7 @@ export function createTrendingFacetsComponent({
         createElement,
         Fragment,
       }),
-      itemComponent: ItemComponent = createDefaultItemComponent({
-        createElement,
-        Fragment,
-      }),
+      itemComponent: ItemComponent,
       layout: Layout = createListComponent({ createElement, Fragment }),
       items,
       status,

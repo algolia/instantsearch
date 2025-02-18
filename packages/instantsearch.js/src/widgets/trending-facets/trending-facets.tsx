@@ -99,7 +99,7 @@ function createRenderer({
             />
           );
         }
-      : undefined;
+      : () => <div></div>;
 
     const emptyComponent = (
       templates.empty
@@ -181,11 +181,6 @@ export type TrendingFacetsTemplates = Partial<{
   >;
 
   /**
-   * Template to use for each result. This template will receive an object containing a single record.
-   */
-  item: TemplateWithBindEvent<TrendingFacetHit>;
-
-  /**
    * Template to use to wrap all items.
    */
   layout: Template<
@@ -201,7 +196,9 @@ export type TrendingFacetsTemplates = Partial<{
       cssClasses: Pick<TrendingFacetsCSSClasses, 'list' | 'item'>;
     }
   >;
-}>;
+}> & {
+  item: TemplateWithBindEvent<TrendingFacetHit>;
+};
 
 type TrendingFacetsWidgetParams = {
   /**
@@ -212,7 +209,7 @@ type TrendingFacetsWidgetParams = {
   /**
    * Templates to customize the widget.
    */
-  templates?: TrendingFacetsTemplates;
+  templates: TrendingFacetsTemplates;
 
   /**
    * CSS classes to add to the widget elements.
@@ -238,7 +235,7 @@ export default (function trendingFacets(
     threshold,
     escapeHTML,
     transformItems,
-    templates = {},
+    templates,
     cssClasses = {},
   } = widgetParams || {};
 

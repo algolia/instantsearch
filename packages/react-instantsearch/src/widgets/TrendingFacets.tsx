@@ -1,5 +1,5 @@
 import { createTrendingFacetsComponent } from 'instantsearch-ui-components';
-import React, { createElement, Fragment, useMemo } from 'react';
+import React, { createElement, Fragment } from 'react';
 import { useInstantSearch, useTrendingFacets } from 'react-instantsearch-core';
 
 import type {
@@ -24,7 +24,7 @@ export type TrendingFacetsProps = Omit<
   keyof UiProps
 > &
   UseTrendingFacetsProps & {
-    itemComponent?: TrendingFacetsUiComponentProps['itemComponent'];
+    itemComponent: TrendingFacetsUiComponentProps['itemComponent'];
     headerComponent?: TrendingFacetsUiComponentProps['headerComponent'];
     emptyComponent?: TrendingFacetsUiComponentProps['emptyComponent'];
     layoutComponent?: TrendingFacetsUiComponentProps['layout'];
@@ -70,17 +70,9 @@ export function TrendingFacets({
         })
     : undefined;
 
-  const _itemComponent: typeof itemComponent = useMemo(
-    () =>
-      itemComponent
-        ? (itemProps) => itemComponent({ ...itemProps })
-        : undefined,
-    [itemComponent]
-  );
-
   const uiProps: UiProps = {
     items,
-    itemComponent: _itemComponent,
+    itemComponent,
     headerComponent,
     emptyComponent,
     layout,
