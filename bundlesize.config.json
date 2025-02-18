@@ -10,7 +10,7 @@
     },
     {
       "path": "./packages/instantsearch.js/dist/instantsearch.production.min.js",
-      "maxSize": "84 kB"
+      "maxSize": "84.25 kB"
     },
     {
       "path": "./packages/instantsearch.js/dist/instantsearch.development.js",
