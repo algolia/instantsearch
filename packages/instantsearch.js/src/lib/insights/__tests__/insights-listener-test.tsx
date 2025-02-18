@@ -3,6 +3,7 @@
  */
 /** @jsx h */
 
+import { createSearchClient } from '@instantsearch/mocks';
 import { render, fireEvent } from '@testing-library/preact';
 import algoliasearchHelper from 'algoliasearch-helper';
 import { h } from 'preact';
@@ -15,7 +16,6 @@ import {
 import withInsightsListener, { createInsightsEventHandler } from '../listener';
 
 import type { InsightsEventHandlerOptions } from '../listener';
-import type { SearchClient } from 'algoliasearch';
 
 describe('createInsightsEventHandler', () => {
   describe('instantsearch.insights', () => {
@@ -130,7 +130,7 @@ describe('createInsightsEventHandler', () => {
       const payload = serializePayload(
         _buildEventPayloadsForHits({
           widgetType: 'ais.hits',
-          helper: algoliasearchHelper({} as SearchClient, 'instant_search'),
+          helper: algoliasearchHelper(createSearchClient(), 'instant_search'),
           instantSearchInstance: createInstantSearch(),
           methodName: 'bindEvent',
           args: ['click', { objectID: '1', __position: 1 }, 'Hit Clicked'],
@@ -174,7 +174,7 @@ describe('createInsightsEventHandler', () => {
       const payload = serializePayload(
         _buildEventPayloadsForHits({
           widgetType: 'ais.hits',
-          helper: algoliasearchHelper({} as SearchClient, 'instant_search'),
+          helper: algoliasearchHelper(createSearchClient(), 'instant_search'),
           instantSearchInstance: createInstantSearch(),
           methodName: 'bindEvent',
           args: ['click', { objectID: '1', __position: 1 }, 'Hit Clicked'],
@@ -248,7 +248,7 @@ describe('createInsightsEventHandler', () => {
       const modernPayload = serializePayload(
         _buildEventPayloadsForHits({
           widgetType: 'ais.hits',
-          helper: algoliasearchHelper({} as SearchClient, 'instant_search'),
+          helper: algoliasearchHelper(createSearchClient(), 'instant_search'),
           instantSearchInstance: createInstantSearch(),
           methodName: 'bindEvent',
           args: ['click', { objectID: '1', __position: 1 }, 'Product Clicked'],
