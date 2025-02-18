@@ -1,9 +1,10 @@
-import { connectHits } from 'instantsearch.js/es/connectors';
+import { connectCurrentRefinements } from 'instantsearch.js/es/connectors';
 
 import { formatNumber, getDateRangeFromTimestamp } from '../utils';
 
-const statsWidget = connectHits<{ container: string }>(
-  ({ results, widgetParams }) => {
+const statsWidget = connectCurrentRefinements<{ container: string }>(
+  ({ instantSearchInstance, items, widgetParams }) => {
+    const results = instantSearchInstance.mainIndex.getResults();
     if (!results) {
       return;
     }
@@ -12,25 +13,25 @@ const statsWidget = connectHits<{ container: string }>(
     if (!containerNode) {
       throw new Error('container not found');
     }
-    const { nbHits } = results;
+    const { nbHits } = results || {};
 
     const resultsStats = `${formatNumber(nbHits)} articles`;
 
-    const stringRefinements = results
-      .getRefinements()
-      .filter((refinement) => refinement.type !== 'numeric')
-      .filter((refinement) => refinement.attributeName !== 'categories')
-      .map((refinement) => refinement.name);
-    const dateRefinement = getDateRangeFromTimestamp(
-      results
-        .getRefinements()
-        .filter(
-          (refinement) => refinement.attributeName === 'created_at_timestamp'
-        )
-        .map((refinement) => refinement.numericValue)
-    );
-
-    const refinements = [...stringRefinements, dateRefinement]
+    const refinements = items
+      .flatMap((item) => item.refinements)
+      .map((refinement) => {
+        switch (refinement.type) {
+          case 'numeric': {
+            return getDateRangeFromTimestamp([refinement.value]);
+          }
+          default: {
+            if (refinement.attribute === 'categories') {
+              return undefined;
+            }
+            return refinement.label;
+          }
+        }
+      })
       .filter(Boolean)
       .map((refinement) => `<strong>${refinement}</strong>`);
 

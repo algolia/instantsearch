@@ -5,7 +5,6 @@ var EventEmitter = require('@algolia/events');
 var DerivedHelper = require('./DerivedHelper');
 var escapeFacetValue = require('./functions/escapeFacetValue').escapeFacetValue;
 var inherits = require('./functions/inherits');
-var objectHasKeys = require('./functions/objectHasKeys');
 var RecommendParameters = require('./RecommendParameters');
 var RecommendResults = require('./RecommendResults');
 var requestBuilder = require('./requestBuilder');
@@ -1092,48 +1091,6 @@ AlgoliaSearchHelper.prototype.overrideStateWithoutTriggeringChangeEvent =
   };
 
 /**
- * Check if an attribute has any numeric, conjunctive, disjunctive or hierarchical filters.
- * @param {string} attribute the name of the attribute
- * @return {boolean} true if the attribute is filtered by at least one value
- * @example
- * // hasRefinements works with numeric, conjunctive, disjunctive and hierarchical filters
- * helper.hasRefinements('price'); // false
- * helper.addNumericRefinement('price', '>', 100);
- * helper.hasRefinements('price'); // true
- *
- * helper.hasRefinements('color'); // false
- * helper.addFacetRefinement('color', 'blue');
- * helper.hasRefinements('color'); // true
- *
- * helper.hasRefinements('material'); // false
- * helper.addDisjunctiveFacetRefinement('material', 'plastic');
- * helper.hasRefinements('material'); // true
- *
- * helper.hasRefinements('categories'); // false
- * helper.toggleFacetRefinement('categories', 'kitchen > knife');
- * helper.hasRefinements('categories'); // true
- *
- */
-AlgoliaSearchHelper.prototype.hasRefinements = function (attribute) {
-  if (objectHasKeys(this.state.getNumericRefinements(attribute))) {
-    return true;
-  } else if (this.state.isConjunctiveFacet(attribute)) {
-    return this.state.isFacetRefined(attribute);
-  } else if (this.state.isDisjunctiveFacet(attribute)) {
-    return this.state.isDisjunctiveFacetRefined(attribute);
-  } else if (this.state.isHierarchicalFacet(attribute)) {
-    return this.state.isHierarchicalFacetRefined(attribute);
-  }
-
-  // there's currently no way to know that the user did call `addNumericRefinement` at some point
-  // thus we cannot distinguish if there once was a numeric refinement that was cleared
-  // so we will return false in every other situations to be consistent
-  // while what we should do here is throw because we did not find the attribute in any type
-  // of refinement
-  return false;
-};
-
-/**
  * Get the name of the currently used index.
  * @return {string} name of the index
  * @example
@@ -1160,98 +1117,6 @@ AlgoliaSearchHelper.prototype.getPage = function () {
  */
 AlgoliaSearchHelper.prototype.getTags = function () {
   return this.state.tagRefinements;
-};
-
-/**
- * Get the list of refinements for a given attribute. This method works with
- * conjunctive, disjunctive, excluding and numerical filters.
- *
- * See also SearchResults#getRefinements
- *
- * @param {string} facetName attribute name used for faceting
- * @return {Array.<FacetRefinement|NumericRefinement>} All Refinement are objects that contain a value, and
- * a type. Numeric also contains an operator.
- * @example
- * helper.addNumericRefinement('price', '>', 100);
- * helper.getRefinements('price');
- * // [
- * //   {
- * //     "value": [
- * //       100
- * //     ],
- * //     "operator": ">",
- * //     "type": "numeric"
- * //   }
- * // ]
- * @example
- * helper.addFacetRefinement('color', 'blue');
- * helper.addFacetExclusion('color', 'red');
- * helper.getRefinements('color');
- * // [
- * //   {
- * //     "value": "blue",
- * //     "type": "conjunctive"
- * //   },
- * //   {
- * //     "value": "red",
- * //     "type": "exclude"
- * //   }
- * // ]
- * @example
- * helper.addDisjunctiveFacetRefinement('material', 'plastic');
- * // [
- * //   {
- * //     "value": "plastic",
- * //     "type": "disjunctive"
- * //   }
- * // ]
- */
-AlgoliaSearchHelper.prototype.getRefinements = function (facetName) {
-  var refinements = [];
-
-  if (this.state.isConjunctiveFacet(facetName)) {
-    var conjRefinements = this.state.getConjunctiveRefinements(facetName);
-
-    conjRefinements.forEach(function (r) {
-      refinements.push({
-        value: r,
-        type: 'conjunctive',
-      });
-    });
-
-    var excludeRefinements = this.state.getExcludeRefinements(facetName);
-
-    excludeRefinements.forEach(function (r) {
-      refinements.push({
-        value: r,
-        type: 'exclude',
-      });
-    });
-  } else if (this.state.isDisjunctiveFacet(facetName)) {
-    var disjunctiveRefinements =
-      this.state.getDisjunctiveRefinements(facetName);
-
-    disjunctiveRefinements.forEach(function (r) {
-      refinements.push({
-        value: r,
-        type: 'disjunctive',
-      });
-    });
-  }
-
-  var numericRefinements = this.state.getNumericRefinements(facetName);
-
-  Object.keys(numericRefinements).forEach(function (operator) {
-    var value = numericRefinements[operator];
-
-    refinements.push({
-      value: value,
-      operator: operator,
-      type: 'numeric',
-    });
-  });
-
-  return refinements;
 };
 
 /**

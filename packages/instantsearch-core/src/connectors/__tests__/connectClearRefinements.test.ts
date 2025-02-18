@@ -335,13 +335,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         })
       );
 
-      expect(helper.hasRefinements('myFacet')).toBe(true);
+      expect(helper.state.isFacetRefined('myFacet')).toBe(true);
       expect(helper.state.query).toBe('not empty');
 
       const refine = rendering.mock.calls[1][0].refine;
       refine();
 
-      expect(helper.hasRefinements('myFacet')).toBe(false);
+      expect(helper.state.isFacetRefined('myFacet')).toBe(false);
       expect(helper.state.query).toBe('not empty');
     });
 
@@ -379,13 +379,13 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         })
       );
 
-      expect(helper.hasRefinements('myFacet')).toBe(true);
+      expect(helper.state.isFacetRefined('myFacet')).toBe(true);
       expect(helper.state.query).toBe('another query');
 
       const refine = rendering.mock.calls[1][0].refine;
       refine();
 
-      expect(helper.hasRefinements('myFacet')).toBe(false);
+      expect(helper.state.isFacetRefined('myFacet')).toBe(false);
       expect(helper.state.query).toBe('');
     });
 
@@ -590,8 +590,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         })
       );
 
-      expect(helper.hasRefinements('facet1')).toBe(true);
-      expect(helper.hasRefinements('facet2')).toBe(true);
+      expect(helper.state.isFacetRefined('facet1')).toBe(true);
+      expect(helper.state.isFacetRefined('facet2')).toBe(true);
 
       widget.render!(
         createRenderOptions({
@@ -616,8 +616,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         })
       );
 
-      expect(helper.hasRefinements('facet1')).toBe(false);
-      expect(helper.hasRefinements('facet2')).toBe(true);
+      expect(helper.state.isFacetRefined('facet1')).toBe(false);
+      expect(helper.state.isFacetRefined('facet2')).toBe(true);
       expect(rendering.mock.calls[2][0].canRefine).toBe(false);
     });
 
@@ -640,7 +640,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         })
       );
 
-      expect(helper.hasRefinements('facet1')).toBe(true);
+      expect(helper.state.isFacetRefined('facet1')).toBe(true);
       expect(helper.state.query).toBe('not empty');
 
       widget.render!(
@@ -666,7 +666,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         })
       );
 
-      expect(helper.hasRefinements('facet1')).toBe(false);
+      expect(helper.state.isFacetRefined('facet1')).toBe(false);
       expect(helper.state.query).toBe('');
       expect(rendering.mock.calls[2][0].canRefine).toBe(false);
     });
@@ -697,8 +697,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
           })
         );
 
-        expect(helper.hasRefinements('facet1')).toBe(true);
-        expect(helper.hasRefinements('facet2')).toBe(true);
+        expect(helper.state.isFacetRefined('facet1')).toBe(true);
+        expect(helper.state.isFacetRefined('facet2')).toBe(true);
 
         widget.render!(
           createRenderOptions({
@@ -713,8 +713,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         const refine = rendering.mock.calls[1][0].refine;
         refine();
 
-        expect(helper.hasRefinements('facet1')).toBe(false);
-        expect(helper.hasRefinements('facet2')).toBe(true);
+        expect(helper.state.isFacetRefined('facet1')).toBe(false);
+        expect(helper.state.isFacetRefined('facet2')).toBe(true);
         expect(rendering.mock.calls[1][0].canRefine).toBe(true);
       }
 
@@ -732,8 +732,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
           })
         );
 
-        expect(helper.hasRefinements('facet1')).toBe(false);
-        expect(helper.hasRefinements('facet2')).toBe(true);
+        expect(helper.state.isFacetRefined('facet1')).toBe(false);
+        expect(helper.state.isFacetRefined('facet2')).toBe(true);
 
         const refine = rendering.mock.calls[2][0].refine;
         refine();
@@ -748,8 +748,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
           })
         );
 
-        expect(helper.hasRefinements('facet1')).toBe(false);
-        expect(helper.hasRefinements('facet2')).toBe(true);
+        expect(helper.state.isFacetRefined('facet1')).toBe(false);
+        expect(helper.state.isFacetRefined('facet2')).toBe(true);
       }
     });
 
@@ -782,9 +782,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         })
       );
 
-      expect(helper.hasRefinements('facet1')).toBe(true);
-      expect(helper.hasRefinements('facet2')).toBe(true);
-      expect(helper.hasRefinements('facet3')).toBe(true);
+      expect(helper.state.isFacetRefined('facet1')).toBe(true);
+      expect(helper.state.isFacetRefined('facet2')).toBe(true);
+      expect(helper.state.isFacetRefined('facet3')).toBe(true);
       expect(helper.state.query).toBe('not empty');
 
       widget.render!(
@@ -810,9 +810,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/clear-refin
         })
       );
 
-      expect(helper.hasRefinements('facet1')).toBe(true);
-      expect(helper.hasRefinements('facet2')).toBe(true);
-      expect(helper.hasRefinements('facet3')).toBe(false);
+      expect(helper.state.isFacetRefined('facet1')).toBe(true);
+      expect(helper.state.isFacetRefined('facet2')).toBe(true);
+      expect(helper.state.isFacetRefined('facet3')).toBe(false);
       expect(helper.state.query).toBe('');
       expect(rendering.mock.calls[2][0].canRefine).toBe(false);
     });

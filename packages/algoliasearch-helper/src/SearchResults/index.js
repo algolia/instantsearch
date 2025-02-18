@@ -744,10 +744,6 @@ function recSort(sortFn, node, names, level) {
 
 SearchResults.DEFAULT_SORT = ['isRefined:desc', 'count:desc', 'name:asc'];
 
-function vanillaSortFn(order, data) {
-  return data.sort(order);
-}
-
 /**
  * @typedef FacetOrdering
  * @type {Object}
@@ -907,7 +903,7 @@ SearchResults.prototype.getFacetValues = function (attribute, opts) {
         var order = formatSort(options.sortBy, SearchResults.DEFAULT_SORT);
         return orderBy(data, order[0], order[1]);
       } else if (typeof options.sortBy === 'function') {
-        return vanillaSortFn(options.sortBy, data);
+        return data.sort(options.sortBy);
       }
       throw new Error(
         'options.sortBy is optional but if defined it must be ' +
@@ -950,161 +946,6 @@ function getFacetStatsIfAvailable(facetList, facetName) {
     return facet.name === facetName;
   });
   return data && data.stats;
-}
-
-/**
- * Returns all refinements for all filters + tags. It also provides
- * additional information: count and exhaustiveness for each filter.
- *
- * See the [refinement type](#Refinement) for an exhaustive view of the available
- * data.
- *
- * Note that for a numeric refinement, results are grouped per operator, this
- * means that it will return responses for operators which are empty.
- *
- * @return {Array.<Refinement>} all the refinements
- */
-SearchResults.prototype.getRefinements = function () {
-  var state = this._state;
-  // eslint-disable-next-line consistent-this
-  var results = this;
-  var res = [];
-
-  Object.keys(state.facetsRefinements).forEach(function (attributeName) {
-    state.facetsRefinements[attributeName].forEach(function (name) {
-      res.push(
-        getRefinement(state, 'facet', attributeName, name, results.facets)
-      );
-    });
-  });
-
-  Object.keys(state.facetsExcludes).forEach(function (attributeName) {
-    state.facetsExcludes[attributeName].forEach(function (name) {
-      res.push(
-        getRefinement(state, 'exclude', attributeName, name, results.facets)
-      );
-    });
-  });
-
-  Object.keys(state.disjunctiveFacetsRefinements).forEach(function (
-    attributeName
-  ) {
-    state.disjunctiveFacetsRefinements[attributeName].forEach(function (name) {
-      res.push(
-        getRefinement(
-          state,
-          'disjunctive',
-          attributeName,
-          name,
-          results.disjunctiveFacets
-        )
-      );
-    });
-  });
-
-  Object.keys(state.hierarchicalFacetsRefinements).forEach(function (
-    attributeName
-  ) {
-    state.hierarchicalFacetsRefinements[attributeName].forEach(function (name) {
-      res.push(
-        getHierarchicalRefinement(
-          state,
-          attributeName,
-          name,
-          results.hierarchicalFacets
-        )
-      );
-    });
-  });
-
-  Object.keys(state.numericRefinements).forEach(function (attributeName) {
-    var operators = state.numericRefinements[attributeName];
-    Object.keys(operators).forEach(function (operator) {
-      operators[operator].forEach(function (value) {
-        res.push({
-          type: 'numeric',
-          attributeName: attributeName,
-          name: value,
-          numericValue: value,
-          operator: operator,
-        });
-      });
-    });
-  });
-
-  state.tagRefinements.forEach(function (name) {
-    res.push({ type: 'tag', attributeName: '_tags', name: name });
-  });
-
-  return res;
-};
-
-/**
- * @typedef {Object} Facet
- * @property {string} name
- * @property {Object} data
- * @property {boolean} exhaustive
- */
-
-/**
- * @param {SearchParameters} state the current state
- * @param {string} type the type of the refinement
- * @param {string} attributeName The attribute of the facet
- * @param {*} name The name of the facet
- * @param {Facet[]} resultsFacets facets from the results
- * @return {Refinement} the refinement
- */
-function getRefinement(state, type, attributeName, name, resultsFacets) {
-  var facet = resultsFacets.find(function (f) {
-    return f.name === attributeName;
-  });
-  var count = facet && facet.data && facet.data[name] ? facet.data[name] : 0;
-  var exhaustive = (facet && facet.exhaustive) || false;
-
-  return {
-    type: type,
-    attributeName: attributeName,
-    name: name,
-    count: count,
-    exhaustive: exhaustive,
-  };
-}
-
-/**
- * @param {SearchParameters} state the current state
- * @param {string} attributeName the attribute of the hierarchical facet
- * @param {string} name the name of the facet
- * @param {Facet[]} resultsFacets facets from the results
- * @return {HierarchicalFacet} the hierarchical facet
- */
-function getHierarchicalRefinement(state, attributeName, name, resultsFacets) {
-  var facetDeclaration = state.getHierarchicalFacetByName(attributeName);
-  var separator = state._getHierarchicalFacetSeparator(facetDeclaration);
-  var split = name.split(separator);
-  var rootFacet = resultsFacets.find(function (facet) {
-    return facet.name === attributeName;
-  });
-
-  var facet = split.reduce(function (intermediateFacet, part) {
-    var newFacet =
-      intermediateFacet &&
-      intermediateFacet.data.find(function (f) {
-        return f.name === part;
-      });
-    return newFacet !== undefined ? newFacet : intermediateFacet;
-  }, rootFacet);
-
-  var count = (facet && facet.count) || 0;
-  var exhaustive = (facet && facet.exhaustive) || false;
-  var path = (facet && facet.path) || '';
-
-  return {
-    type: 'hierarchical',
-    attributeName: attributeName,
-    name: path,
-    count: count,
-    exhaustive: exhaustive,
-  };
 }
 
 module.exports = SearchResults;
