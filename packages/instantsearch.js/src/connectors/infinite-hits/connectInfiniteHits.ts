@@ -355,11 +355,11 @@ export default (function connectInfiniteHits<
           showMore = getShowMore(helper);
           sendEvent = createSendEventForHits({
             instantSearchInstance,
-            getIndex: () => helper.getIndex(),
+            helper,
             widgetType: this.$$type,
           });
           bindEvent = createBindEventForHits({
-            getIndex: () => helper.getIndex(),
+            helper,
             widgetType: this.$$type,
             instantSearchInstance,
           });

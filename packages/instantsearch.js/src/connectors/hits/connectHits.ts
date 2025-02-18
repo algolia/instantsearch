@@ -148,14 +148,14 @@ export default (function connectHits<TWidgetParams>(
         if (!sendEvent) {
           sendEvent = createSendEventForHits({
             instantSearchInstance,
-            getIndex: () => helper.getIndex(),
+            helper,
             widgetType: this.$$type,
           });
         }
 
         if (!bindEvent) {
           bindEvent = createBindEventForHits({
-            getIndex: () => helper.getIndex(),
+            helper,
             widgetType: this.$$type,
             instantSearchInstance,
           });
