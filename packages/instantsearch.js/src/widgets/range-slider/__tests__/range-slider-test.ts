@@ -11,16 +11,16 @@ import algoliasearchHelper, {
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import { render as preactRender } from 'preact';
-
-import { createInstantSearch } from '../../../../test/createInstantSearch';
+import { createInstantSearch } from 'instantsearch-core/test/createInstantSearch';
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+import { render as preactRender } from 'preact';
+
 import rangeSlider from '../range-slider';
 
-import type { InstantSearch } from '../../../types';
+import type { InstantSearch, Range } from '../../../types';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import type { VNode } from 'preact';
 
@@ -36,7 +36,7 @@ jest.mock('preact', () => {
 type SliderProps = {
   max: number;
   min: number;
-  values: [number, number];
+  values: Range;
 };
 
 function createFacetStatsResults({
@@ -105,9 +105,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
       helper = algoliasearchHelper(createSearchClient(), 'indexName', {
         disjunctiveFacets: [attribute],
       });
-      instantSearchInstance = createInstantSearch({
-        templatesConfig: undefined,
-      });
+      instantSearchInstance = createInstantSearch();
     });
 
     it('should render without results', () => {
@@ -387,7 +385,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
           uiState: {},
         });
         helper.setState(state0);
-        refine([stats!.min + 1, stats!.max]);
+        refine({ min: stats!.min + 1, max: stats!.max });
         const state1 = helper.state;
 
         expect(helper.search).toHaveBeenCalledTimes(1);
@@ -409,7 +407,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
           uiState: {},
         });
         helper.setState(state0);
-        refine([stats!.min, stats!.max - 1]);
+        refine({ min: stats!.min, max: stats!.max - 1 });
         const state1 = helper.state;
 
         expect(helper.search).toHaveBeenCalledTimes(1);
@@ -429,7 +427,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
         );
 
         const state0 = helper.state;
-        refine([stats!.min + 1, stats!.max - 1]);
+        refine({ min: stats!.min + 1, max: stats!.max - 1 });
         const state1 = helper.state;
 
         expect(helper.search).toHaveBeenCalledTimes(1);
@@ -438,46 +436,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/range-slide
             .addNumericRefinement(attribute, '>=', 2)
             .addNumericRefinement(attribute, '<=', 4999)
         );
-      });
-
-      it("expect to clamp the min value to the max range when it's greater than range", () => {
-        widget = rangeSlider({
-          container,
-          attribute,
-          step: 1,
-          cssClasses: { root: '' },
-        });
-
-        widget.init!(createInitOptions({ helper, instantSearchInstance }));
-
-        helper.addNumericRefinement(attribute, '>=', 5550);
-        helper.addNumericRefinement(attribute, '<=', 6000);
-
-        widget.render!(createRenderOptions({ results, helper }));
-
-        const firstRender = render.mock.calls[0][0] as VNode<SliderProps>;
-
-        expect((firstRender.props as SliderProps).values[0]).toBe(5000);
-      });
-
-      it("expect to clamp the max value to the min range when it's lower than range", () => {
-        widget = rangeSlider({
-          container,
-          attribute,
-          step: 1,
-          cssClasses: { root: '' },
-        });
-
-        widget.init!(createInitOptions({ helper, instantSearchInstance }));
-
-        helper.addNumericRefinement(attribute, '>=', -50);
-        helper.addNumericRefinement(attribute, '<=', 0);
-
-        widget.render!(createRenderOptions({ results, helper }));
-
-        const firstRender = render.mock.calls[0][0] as VNode<SliderProps>;
-
-        expect((firstRender.props as SliderProps).values[1]).toBe(1);
       });
     });
   });

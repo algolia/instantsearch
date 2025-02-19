@@ -5,12 +5,9 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import algoliasearchHelper from 'algoliasearch-helper';
+import { createInitOptions } from 'instantsearch-core/test/createWidget';
 import { render as preactRender } from 'preact';
 
-import {
-  createDisposeOptions,
-  createInitOptions,
-} from '../../../../test/createWidget';
 import queryRuleCustomData from '../query-rule-custom-data';
 
 import type { QueryRuleCustomDataProps } from '../../../components/QueryRuleCustomData/QueryRuleCustomData';
@@ -165,10 +162,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
 
       test('applies custom template', () => {
         const helper = createFakeHelper();
+        const defaultTemplate = () => 'default';
         const widget = queryRuleCustomData({
           container: document.createElement('div'),
           templates: {
-            default: 'default',
+            default: defaultTemplate,
           },
         });
 
@@ -184,39 +182,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/query-rule-
         const { templates } = firstRender.props as QueryRuleCustomDataProps;
 
         expect(templates).toEqual({
-          default: 'default',
+          default: defaultTemplate,
         });
-      });
-    });
-  });
-
-  describe('Lifecycle', () => {
-    describe('unmountFn', () => {
-      test('unmounts the component', () => {
-        const container = document.createElement('div');
-        const helper = createFakeHelper();
-        const widget = queryRuleCustomData({
-          container,
-        });
-
-        widget.init!(
-          createInitOptions({
-            helper,
-            state: helper.state,
-          })
-        );
-
-        expect(render).toHaveBeenCalledTimes(1);
-
-        widget.dispose!(
-          createDisposeOptions({
-            helper,
-            state: helper.state,
-          })
-        );
-
-        expect(render).toHaveBeenCalledTimes(2);
-        expect(render).toHaveBeenCalledWith(null, container);
       });
     });
   });

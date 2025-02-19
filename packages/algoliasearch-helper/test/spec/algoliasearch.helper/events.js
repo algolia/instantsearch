@@ -7,9 +7,6 @@ function makeFakeClient() {
     search: jest.fn(function () {
       return new Promise(function () {});
     }),
-    searchForFacetValues: jest.fn(function () {
-      return new Promise(function () {});
-    }),
   };
 }
 
@@ -108,27 +105,27 @@ test('Change events should be emitted as soon as the state change, but search sh
   expect(changeEventCount).toBe(2);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.addDisjunctiveRefine('city', 'Paris');
+  helper.addDisjunctiveFacetRefinement('city', 'Paris');
   expect(changeEventCount).toBe(3);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.removeDisjunctiveRefine('city', 'Paris');
+  helper.removeDisjunctiveFacetRefinement('city', 'Paris');
   expect(changeEventCount).toBe(4);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.addExclude('tower', 'Empire State Building');
+  helper.addFacetExclusion('tower', 'Empire State Building');
   expect(changeEventCount).toBe(5);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.removeExclude('tower', 'Empire State Building');
+  helper.removeFacetExclusion('tower', 'Empire State Building');
   expect(changeEventCount).toBe(6);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.addRefine('tower', 'Empire State Building');
+  helper.addFacetRefinement('tower', 'Empire State Building');
   expect(changeEventCount).toBe(7);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.removeRefine('tower', 'Empire State Building');
+  helper.removeFacetRefinement('tower', 'Empire State Building');
   expect(changeEventCount).toBe(8);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
@@ -167,15 +164,15 @@ test('Change events should only be emitted for meaningful changes', function () 
   expect(changeEventCount).toBe(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.addDisjunctiveRefine('city', 'Paris');
+  helper.addDisjunctiveFacetRefinement('city', 'Paris');
   expect(changeEventCount).toBe(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.addExclude('tower', 'Empire State Building');
+  helper.addFacetExclusion('tower', 'Empire State Building');
   expect(changeEventCount).toBe(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.addRefine('tower', 'Empire State Building');
+  helper.addFacetRefinement('tower', 'Empire State Building');
   expect(changeEventCount).toBe(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
@@ -192,15 +189,15 @@ test('Change events should only be emitted for meaningful changes', function () 
   expect(changeEventCount).toBe(1);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.removeDisjunctiveRefine('city', 'Paris');
+  helper.removeDisjunctiveFacetRefinement('city', 'Paris');
   expect(changeEventCount).toBe(1);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.removeExclude('tower', 'Empire State Building');
+  helper.removeFacetExclusion('tower', 'Empire State Building');
   expect(changeEventCount).toBe(1);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.removeRefine('tower', 'Empire State Building');
+  helper.removeFacetRefinement('tower', 'Empire State Building');
   expect(changeEventCount).toBe(1);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
@@ -227,27 +224,27 @@ test('search event should be emitted once when the search is triggered and befor
   expect(searched).toHaveBeenCalledTimes(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.addDisjunctiveRefine('city', 'Paris');
+  helper.addDisjunctiveFacetRefinement('city', 'Paris');
   expect(searched).toHaveBeenCalledTimes(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.removeDisjunctiveRefine('city', 'Paris');
+  helper.removeDisjunctiveFacetRefinement('city', 'Paris');
   expect(searched).toHaveBeenCalledTimes(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.addExclude('tower', 'Empire State Building');
+  helper.addFacetExclusion('tower', 'Empire State Building');
   expect(searched).toHaveBeenCalledTimes(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.removeExclude('tower', 'Empire State Building');
+  helper.removeFacetExclusion('tower', 'Empire State Building');
   expect(searched).toHaveBeenCalledTimes(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.addRefine('tower', 'Empire State Building');
+  helper.addFacetRefinement('tower', 'Empire State Building');
   expect(searched).toHaveBeenCalledTimes(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.removeRefine('tower', 'Empire State Building');
+  helper.removeFacetRefinement('tower', 'Empire State Building');
   expect(searched).toHaveBeenCalledTimes(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
@@ -297,7 +294,7 @@ test(
     helper.on('searchForFacetValues', searchedForFacetValues);
 
     expect(searchedForFacetValues).toHaveBeenCalledTimes(0);
-    expect(fakeClient.searchForFacetValues).toHaveBeenCalledTimes(0);
+    expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
     helper.searchForFacetValues('city', 'NYC');
     expect(searchedForFacetValues).toHaveBeenCalledTimes(1);
@@ -306,7 +303,7 @@ test(
       facet: 'city',
       query: 'NYC',
     });
-    expect(fakeClient.searchForFacetValues).toHaveBeenCalledTimes(1);
+    expect(fakeClient.search).toHaveBeenCalledTimes(1);
   }
 );
 
@@ -359,9 +356,7 @@ test('error event should be emitted once the request is complete with errors', f
 
   return runAllMicroTasks().then(function () {
     expect(errored).toHaveBeenCalledTimes(1);
-    expect(errored).toHaveBeenLastCalledWith({
-      error: expect.any(Error),
-    });
+    expect(errored).toHaveBeenLastCalledWith(expect.any(Error));
   });
 });
 
@@ -384,7 +379,5 @@ test('error event should be emitted if an error happens at request time', functi
   helper.search();
 
   expect(errored).toHaveBeenCalledTimes(1);
-  expect(errored).toHaveBeenLastCalledWith({
-    error: expect.any(Error),
-  });
+  expect(errored).toHaveBeenLastCalledWith(expect.any(Error));
 });

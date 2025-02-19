@@ -4,7 +4,7 @@ import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import RefinementList from '../../components/RefinementList/RefinementList';
-import connectRatingMenu from '../../connectors/rating-menu/connectRatingMenu';
+import { connectRatingMenu } from '../../connectors';
 import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
@@ -18,7 +18,7 @@ import type {
   RatingMenuWidgetDescription,
   RatingMenuConnectorParams,
   RatingMenuRenderState,
-} from '../../connectors/rating-menu/connectRatingMenu';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   ComponentCSSClasses,
@@ -146,14 +146,12 @@ const renderer =
       refine,
       items,
       createURL,
-      instantSearchInstance,
     }: RatingMenuRenderState & RendererOptions<RatingMenuConnectorParams>,
     isFirstRendering: boolean
   ) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
 

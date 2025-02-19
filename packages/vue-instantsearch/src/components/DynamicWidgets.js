@@ -1,8 +1,7 @@
-import { connectDynamicWidgets } from 'instantsearch.js/es/connectors';
+import { connectDynamicWidgets } from 'instantsearch-core';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
-import { _objectSpread } from '../util/polyfills';
 import { isVue3, renderCompat, getDefaultSlot } from '../util/vue-compat';
 
 function getWidgetAttribute(vnode) {
@@ -87,12 +86,10 @@ export default {
 
       return h(
         'div',
-        _objectSpread(
-          {
-            class: [this.suit()],
-          },
-          { attrs: { hidden: true } }
-        ),
+        {
+          class: [this.suit()],
+          attrs: { hidden: true },
+        },
         allComponents
       );
     }

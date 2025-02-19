@@ -21,9 +21,9 @@ test('hierarchical facets: do not trim facetFilters values', function (done) {
     ],
   });
 
-  helper.toggleRefine('categories', '  beers > IPA   ');
-  helper.toggleRefine('categories', '  beers > IPA   ');
-  helper.toggleRefine('categories', '  beers > IPA   ');
+  helper.toggleFacetRefinement('categories', '  beers > IPA   ');
+  helper.toggleFacetRefinement('categories', '  beers > IPA   ');
+  helper.toggleFacetRefinement('categories', '  beers > IPA   ');
 
   var algoliaResponse = {
     results: [

@@ -4,7 +4,7 @@ import type {
   SearchForFacetValuesResponse,
   RecommendResponse,
   RecommendResponses,
-} from 'instantsearch.js';
+} from 'instantsearch-core';
 
 export const defaultRenderingContent: SearchResponse<any>['renderingContent'] =
   {

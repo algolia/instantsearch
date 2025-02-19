@@ -1,4 +1,4 @@
-import connectHitsPerPage from 'instantsearch.js/es/connectors/hits-per-page/connectHitsPerPage';
+import { connectHitsPerPage } from 'instantsearch-core';
 
 import { useConnector } from '../hooks/useConnector';
 
@@ -6,7 +6,7 @@ import type { AdditionalWidgetProperties } from '../hooks/useConnector';
 import type {
   HitsPerPageConnectorParams,
   HitsPerPageWidgetDescription,
-} from 'instantsearch.js/es/connectors/hits-per-page/connectHitsPerPage';
+} from 'instantsearch-core';
 
 export type UseHitsPerPageProps = HitsPerPageConnectorParams;
 

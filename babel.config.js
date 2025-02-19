@@ -18,7 +18,7 @@ module.exports = (api) => {
   if (isTest) {
     targets.node = true;
   } else {
-    targets.browsers = ['last 2 versions', 'ie >= 9'];
+    targets.browsers = require('./package.json').browserslist;
   }
 
   const testPlugins = [
@@ -61,42 +61,6 @@ module.exports = (api) => {
         ],
       },
     ],
-    // this plugin is used to test if we need polyfills, not to actually insert them
-    // only UMD, since cjs & esm have false positives due to imports
-    isUMD && [
-      'polyfill-es-shims',
-      {
-        method: 'usage-global',
-        targets: {
-          ie: 11,
-        },
-        shouldInjectPolyfill(name, defaultShouldInject) {
-          const exclude = [
-            // false positives (we access these from objects only)
-            'Array.prototype.item',
-            'String.prototype.item',
-            'Array.prototype.values',
-            'Function.prototype.name',
-
-            // we require polyfills for this already
-            'Array.prototype.includes',
-
-            // false positive (babel doesn't know types)
-            // this is actually only called on arrays
-            'String.prototype.includes',
-
-            // false positive (spread)
-            'Object.getOwnPropertyDescriptors',
-          ];
-          if (defaultShouldInject && !exclude.includes(name)) {
-            throw new Error(
-              `Usage of a builtin which isn't allowed to be polyfilled: ${name}`
-            );
-          }
-          return false;
-        },
-      },
-    ],
   ]);
 
   return {
@@ -131,6 +95,19 @@ module.exports = (api) => {
       },
       {
         test: 'packages/instantsearch-ui-components',
+        plugins: [
+          [
+            '@babel/plugin-transform-runtime',
+            {
+              corejs: false,
+              helpers: true,
+              regenerator: false,
+            },
+          ],
+        ],
+      },
+      {
+        test: 'packages/instantsearch-core',
         plugins: [
           [
             '@babel/plugin-transform-runtime',

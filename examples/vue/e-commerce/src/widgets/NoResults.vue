@@ -81,11 +81,13 @@
         Sorry, we can&apos;t find any matches to your query!
       </p>
       <p class="hits-empty-state-description">
-        {{
-          state.results.getRefinements().length > 0
-            ? 'Try to reset your applied filters.'
-            : 'Please try another query.'
-        }}
+        <ais-clear-refinements v-slot="{ canRefine }">
+          {{
+            canRefine
+              ? 'Try to reset your applied filters.'
+              : 'Please try another query.'
+          }}
+        </ais-clear-refinements>
       </p>
 
       <ais-clear-refinements>
@@ -115,7 +117,7 @@
 </template>
 
 <script>
-import { connectHits } from 'instantsearch.js/es/connectors';
+import { connectHits } from 'instantsearch-core';
 import { createWidgetMixin } from 'vue-instantsearch';
 
 export default {

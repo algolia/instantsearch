@@ -1,5 +1,5 @@
 /** @jsx h */
-import { getPropertyByPath } from 'instantsearch.js/es/lib/utils';
+import { getPropertyByPath } from 'instantsearch-core';
 import { carousel } from 'instantsearch.js/es/templates';
 import { index, panel } from 'instantsearch.js/es/widgets';
 import { h, Fragment } from 'preact';
@@ -201,17 +201,14 @@ function blockToWidget(child: Block, container: HTMLElement): Widget[] {
                 children = ch.children.map(renderChild);
               }
 
-              const attributes = Object.fromEntries(
-                Object.entries(ch.parameters)
-                  .filter(
-                    (tuple): tuple is [string, TemplateAttribute] =>
-                      tuple[0] !== 'text'
-                  )
-                  .map(([key, value]) => [
-                    key,
-                    value.map((item) => renderAttribute(item, hit)).join(''),
-                  ])
-              );
+              const attributes: Record<string, string> = {};
+              for (const [key, value] of Object.entries(ch.parameters)) {
+                if (key !== 'text') {
+                  attributes[key] = (value as TemplateAttribute)
+                    .map((item) => renderAttribute(item, hit))
+                    .join('');
+                }
+              }
 
               return <Tag {...attributes}>{children}</Tag>;
             }
@@ -257,17 +254,14 @@ function blockToWidget(child: Block, container: HTMLElement): Widget[] {
                 children = ch.children.map(renderChild);
               }
 
-              const attributes = Object.fromEntries(
-                Object.entries(ch.parameters)
-                  .filter(
-                    (tuple): tuple is [string, TemplateAttribute] =>
-                      tuple[0] !== 'text'
-                  )
-                  .map(([key, value]) => [
-                    key,
-                    value.map((item) => renderAttribute(item, hit)).join(''),
-                  ])
-              );
+              const attributes: Record<string, string> = {};
+              for (const [key, value] of Object.entries(ch.parameters)) {
+                if (key !== 'text') {
+                  attributes[key] = (value as TemplateAttribute)
+                    .map((item) => renderAttribute(item, hit))
+                    .join('');
+                }
+              }
 
               return <Tag {...attributes}>{children}</Tag>;
             }
@@ -293,7 +287,7 @@ function blockToWidget(child: Block, container: HTMLElement): Widget[] {
     return [
       panel<typeof widgets['ais.refinementList']>({
         templates: {
-          header,
+          header: () => header,
           collapseButtonText: ({ collapsed }) => (
             // @TODO: put this style in a stylesheet
             <span style="cursor: pointer">{collapsed ? '+' : '-'}</span>

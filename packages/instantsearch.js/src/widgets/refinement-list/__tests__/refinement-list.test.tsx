@@ -349,14 +349,7 @@ describe('refinementList', () => {
         }),
       ]);
 
-      // @MAJOR Once Hogan.js and string-based templates are removed,
-      // `search.start()` can be moved to the test body and the following
-      // assertion can go away.
-      expect(async () => {
-        search.start();
-
-        await wait(0);
-      }).not.toWarnDev();
+      search.start();
 
       await wait(0);
 
@@ -1164,89 +1157,83 @@ describe('refinementList', () => {
 });
 
 function createMockedSearchClient() {
+  const facetHits = [
+    {
+      value: 'Apple',
+      highlighted: '__ais-highlight__App__/ais-highlight__le',
+      count: 442,
+    },
+    {
+      value: 'Alpine',
+      highlighted: '__ais-highlight__Alp__/ais-highlight__ine',
+      count: 30,
+    },
+    {
+      value: 'APC',
+      highlighted: '__ais-highlight__AP__/ais-highlight__C',
+      count: 24,
+    },
+    {
+      value: 'Amped Wireless',
+      highlighted: '__ais-highlight__Amp__/ais-highlight__ed Wireless',
+      count: 4,
+    },
+    {
+      value: "Applebee's",
+      highlighted: "__ais-highlight__App__/ais-highlight__lebee's",
+      count: 2,
+    },
+    {
+      value: 'Amplicom',
+      highlighted: '__ais-highlight__Amp__/ais-highlight__licom',
+      count: 1,
+    },
+    {
+      value: 'Apollo Enclosures',
+      highlighted: '__ais-highlight__Ap__/ais-highlight__ollo Enclosures',
+      count: 1,
+    },
+    {
+      value: 'Apple®',
+      highlighted: '__ais-highlight__App__/ais-highlight__le®',
+      count: 1,
+    },
+    {
+      value: 'Applica',
+      highlighted: '__ais-highlight__App__/ais-highlight__lica',
+      count: 1,
+    },
+    {
+      value: 'Apricorn',
+      highlighted: '__ais-highlight__Ap__/ais-highlight__ricorn',
+      count: 1,
+    },
+  ];
+
   return createSearchClient({
     search: jest.fn((requests) => {
       return Promise.resolve(
         createMultiSearchResponse(
-          ...requests.map(() =>
-            createSingleSearchResponse({
-              facets: {
-                brand: {
-                  Apple: 746,
-                  Samsung: 633,
-                  Metra: 591,
-                },
-              },
-            })
+          ...requests.map((request) =>
+            request.type === 'facet'
+              ? createSFFVResponse({
+                  facetHits:
+                    request.params.facetQuery === 'query with no results'
+                      ? []
+                      : facetHits,
+                })
+              : createSingleSearchResponse({
+                  facets: {
+                    brand: {
+                      Apple: 746,
+                      Samsung: 633,
+                      Metra: 591,
+                    },
+                  },
+                })
           )
         )
       );
-    }),
-    // @ts-ignore v5 does not have this method, but it's easier to have it here. In a future version we can replace this method and its usages with search({ type: 'facet })
-    searchForFacetValues: jest.fn((requests) => {
-      return Promise.resolve([
-        createSFFVResponse({
-          facetHits:
-            // @ts-ignore for v5, which has a different definition of `searchForFacetValues`
-            requests[0].params.facetQuery === 'query with no results'
-              ? []
-              : [
-                  {
-                    value: 'Apple',
-                    highlighted: '__ais-highlight__App__/ais-highlight__le',
-                    count: 442,
-                  },
-                  {
-                    value: 'Alpine',
-                    highlighted: '__ais-highlight__Alp__/ais-highlight__ine',
-                    count: 30,
-                  },
-                  {
-                    value: 'APC',
-                    highlighted: '__ais-highlight__AP__/ais-highlight__C',
-                    count: 24,
-                  },
-                  {
-                    value: 'Amped Wireless',
-                    highlighted:
-                      '__ais-highlight__Amp__/ais-highlight__ed Wireless',
-                    count: 4,
-                  },
-                  {
-                    value: "Applebee's",
-                    highlighted:
-                      "__ais-highlight__App__/ais-highlight__lebee's",
-                    count: 2,
-                  },
-                  {
-                    value: 'Amplicom',
-                    highlighted: '__ais-highlight__Amp__/ais-highlight__licom',
-                    count: 1,
-                  },
-                  {
-                    value: 'Apollo Enclosures',
-                    highlighted:
-                      '__ais-highlight__Ap__/ais-highlight__ollo Enclosures',
-                    count: 1,
-                  },
-                  {
-                    value: 'Apple®',
-                    highlighted: '__ais-highlight__App__/ais-highlight__le®',
-                    count: 1,
-                  },
-                  {
-                    value: 'Applica',
-                    highlighted: '__ais-highlight__App__/ais-highlight__lica',
-                    count: 1,
-                  },
-                  {
-                    value: 'Apricorn',
-                    highlighted: '__ais-highlight__Ap__/ais-highlight__ricorn',
-                    count: 1,
-                  },
-                ],
-        }),
-      ]);
     }),
   });
 }

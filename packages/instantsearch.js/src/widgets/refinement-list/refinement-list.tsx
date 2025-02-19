@@ -4,7 +4,7 @@ import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import RefinementList from '../../components/RefinementList/RefinementList';
-import connectRefinementList from '../../connectors/refinement-list/connectRefinementList';
+import { connectRefinementList } from '../../connectors';
 import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
@@ -21,7 +21,7 @@ import type {
   RefinementListRenderState,
   RefinementListConnectorParams,
   RefinementListWidgetDescription,
-} from '../../connectors/refinement-list/connectRefinementList';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { Template, WidgetFactory, Renderer } from '../../types';
 import type { SearchBoxTemplates } from '../search-box/search-box';
@@ -240,7 +240,6 @@ const renderer =
       createURL,
       searchForItems,
       isFromSearch,
-      instantSearchInstance,
       toggleShowMore,
       isShowingMore,
       hasExhaustiveItems,
@@ -251,12 +250,10 @@ const renderer =
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       renderState.searchBoxTemplateProps = prepareTemplateProps({
         defaultTemplates: searchBoxDefaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates: searchBoxTemplates,
       });
       return;

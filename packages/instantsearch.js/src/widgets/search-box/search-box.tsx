@@ -4,7 +4,7 @@ import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import SearchBox from '../../components/SearchBox/SearchBox';
-import connectSearchBox from '../../connectors/search-box/connectSearchBox';
+import { connectSearchBox } from '../../connectors';
 import { component } from '../../lib/suit';
 import {
   getContainerNode,
@@ -21,7 +21,7 @@ import type {
   SearchBoxConnectorParams,
   SearchBoxRenderState,
   SearchBoxWidgetDescription,
-} from '../../connectors/search-box/connectSearchBox';
+} from '../../connectors';
 import type { WidgetFactory, Template, RendererOptions } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'search-box' });
@@ -29,15 +29,15 @@ const suit = component('SearchBox');
 
 export type SearchBoxTemplates = Partial<{
   /**
-   * Template used for displaying the submit button. Can accept a function or a Hogan string.
+   * Template used for displaying the submit button.
    */
   submit: Template<{ cssClasses: SearchBoxComponentCSSClasses }>;
   /**
-   * Template used for displaying the reset button. Can accept a function or a Hogan string.
+   * Template used for displaying the reset button.
    */
   reset: Template<{ cssClasses: SearchBoxComponentCSSClasses }>;
   /**
-   * Template used for displaying the loading indicator. Can accept a function or a Hogan string.
+   * Template used for displaying the loading indicator.
    */
   loadingIndicator: Template<{ cssClasses: SearchBoxComponentCSSClasses }>;
 }>;
@@ -162,7 +162,7 @@ const renderer =
   ({
     refine,
     query,
-    isSearchStalled,
+    instantSearchInstance,
   }: SearchBoxRenderState & RendererOptions<SearchBoxConnectorParams>) => {
     render(
       <SearchBox
@@ -176,7 +176,7 @@ const renderer =
         showSubmit={showSubmit}
         showReset={showReset}
         showLoadingIndicator={showLoadingIndicator}
-        isSearchStalled={isSearchStalled}
+        isSearchStalled={instantSearchInstance.status === 'stalled'}
         cssClasses={cssClasses}
       />,
       containerNode

@@ -4,8 +4,7 @@ import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import InfiniteHits from '../../components/InfiniteHits/InfiniteHits';
-import connectInfiniteHits from '../../connectors/infinite-hits/connectInfiniteHits';
-import { withInsights } from '../../lib/insights';
+import { connectInfiniteHits } from '../../connectors';
 import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
@@ -24,16 +23,17 @@ import type {
   InfiniteHitsRenderState,
   InfiniteHitsCache,
   InfiniteHitsWidgetDescription,
-} from '../../connectors/infinite-hits/connectInfiniteHits';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   WidgetFactory,
   Template,
-  TemplateWithBindEvent,
   InsightsClient,
   Renderer,
   BaseHit,
   Hit,
+  TemplateWithSendEvent,
+  Widget,
 } from '../../types';
 import type { SearchResults } from 'algoliasearch-helper';
 
@@ -119,12 +119,7 @@ export type InfiniteHitsTemplates<THit extends NonNullable<object> = BaseHit> =
     /**
      * The template to use for each result.
      */
-    item: TemplateWithBindEvent<
-      Hit<THit> & {
-        /** @deprecated the index in the hits array, use __position instead, which is the absolute position */
-        __hitIndex: number;
-      }
-    >;
+    item: TemplateWithSendEvent<Hit<THit>>;
 
     /**
      * Template to use for the banner.
@@ -161,11 +156,12 @@ export type InfiniteHitsWidgetParams<
   cache?: InfiniteHitsCache;
 };
 
-export type InfiniteHitsWidget = WidgetFactory<
-  InfiniteHitsWidgetDescription & { $$widgetType: 'ais.infiniteHits' },
-  InfiniteHitsConnectorParams,
-  InfiniteHitsWidgetParams
->;
+export type InfiniteHitsWidget<THit extends NonNullable<object> = BaseHit> =
+  WidgetFactory<
+    InfiniteHitsWidgetDescription<THit> & { $$widgetType: 'ais.infiniteHits' },
+    InfiniteHitsConnectorParams<THit>,
+    InfiniteHitsWidgetParams<THit>
+  >;
 
 const renderer =
   <THit extends NonNullable<object> = BaseHit>({
@@ -191,9 +187,7 @@ const renderer =
       showPrevious,
       isFirstPage,
       isLastPage,
-      instantSearchInstance,
       insights,
-      bindEvent,
       sendEvent,
       banner,
     },
@@ -203,7 +197,6 @@ const renderer =
       renderState.templateProps =
         prepareTemplateProps<InfiniteHitsComponentTemplates>({
           defaultTemplates,
-          templatesConfig: instantSearchInstance.templatesConfig,
           templates: templates as InfiniteHitsComponentTemplates,
         });
       return;
@@ -222,7 +215,6 @@ const renderer =
         isLastPage={isLastPage}
         insights={insights as InsightsClient}
         sendEvent={sendEvent}
-        bindEvent={bindEvent}
         banner={banner}
       />,
       containerNode
@@ -290,12 +282,11 @@ export default (function infiniteHits<
     renderState: {},
   });
 
-  const makeWidget = withInsights(connectInfiniteHits)(
-    specializedRenderer,
-    () => render(null, containerNode)
+  const makeWidget = connectInfiniteHits(specializedRenderer, () =>
+    render(null, containerNode)
   );
 
-  return {
+  const widget = {
     ...makeWidget({
       escapeHTML,
       transformItems,
@@ -304,4 +295,12 @@ export default (function infiniteHits<
     }),
     $$widgetType: 'ais.infiniteHits',
   };
+
+  // explicitly cast this type to have a small type output.
+  return widget as Widget<
+    InfiniteHitsWidgetDescription & {
+      $$widgetType: 'ais.infiniteHits';
+      widgetParams: InfiniteHitsConnectorParams<THit>;
+    }
+  >;
 } satisfies InfiniteHitsWidget);

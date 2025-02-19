@@ -4,7 +4,7 @@ import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import ClearRefinements from '../../components/ClearRefinements/ClearRefinements';
-import connectClearRefinements from '../../connectors/clear-refinements/connectClearRefinements';
+import { connectClearRefinements } from '../../connectors';
 import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
@@ -22,7 +22,7 @@ import type {
   ClearRefinementsConnectorParams,
   ClearRefinementsRenderState,
   ClearRefinementsWidgetDescription,
-} from '../../connectors/clear-refinements/connectClearRefinements';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { WidgetFactory, Template, Renderer } from '../../types';
 
@@ -48,11 +48,10 @@ const renderer =
     ClearRefinementsRenderState,
     Partial<ClearRefinementsWidgetParams>
   > =>
-  ({ refine, canRefine, instantSearchInstance }, isFirstRendering) => {
+  ({ refine, canRefine }, isFirstRendering) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;
@@ -62,7 +61,7 @@ const renderer =
       <ClearRefinements
         refine={refine}
         cssClasses={cssClasses}
-        hasRefinements={canRefine}
+        canRefine={canRefine}
         templateProps={renderState.templateProps!}
       />,
       containerNode
@@ -90,7 +89,7 @@ export type ClearRefinementsTemplates = Partial<{
   /**
    * Template for the content of the button
    */
-  resetLabel: Template<{ hasRefinements: boolean }>;
+  resetLabel: Template<{ canRefine: boolean }>;
 }>;
 
 export type ClearRefinementsWidgetParams = {

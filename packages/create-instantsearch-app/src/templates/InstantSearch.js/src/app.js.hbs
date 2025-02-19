@@ -14,7 +14,6 @@ const searchClient = algoliasearch('{{appId}}', '{{apiKey}}');
 const search = instantsearch({
   indexName: '{{indexName}}',
   searchClient,
-  future: { preserveSharedStateOnUnmount: true },
   {{#if flags.insights}}insights: true,{{/if}}
 });
 

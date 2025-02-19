@@ -69,6 +69,7 @@ workflows:
             branches:
               only:
                 - master
+                - next
       - helper docs:
           requires:
             - build
@@ -82,11 +83,12 @@ workflows:
             - examples
           matrix:
             parameters:
-              browser: [chrome, firefox, internet explorer]
+              browser: [chrome, firefox]
           filters:
             branches:
               only:
                 - master
+                - next
       - e2e tests router nextjs:
           context: fx-libraries
           requires:
@@ -95,6 +97,7 @@ workflows:
             branches:
               only:
                 - master
+                - next
       - release if needed:
           context: fx-libraries
           requires:
@@ -139,7 +142,7 @@ workflows:
             - examples
           matrix:
             parameters:
-              browser: [chrome, firefox, internet explorer]
+              browser: [chrome, firefox]
       - e2e tests router nextjs:
           context: fx-libraries
           requires:
@@ -180,6 +183,7 @@ jobs:
             - packages/vue-instantsearch/vue2
             - packages/vue-instantsearch/vue3
             - packages/instantsearch-ui-components/dist
+            - packages/instantsearch-core/dist
 
   test metadata:
     <<: *defaults

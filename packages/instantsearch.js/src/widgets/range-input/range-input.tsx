@@ -4,7 +4,7 @@ import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import RangeInput from '../../components/RangeInput/RangeInput';
-import connectRange from '../../connectors/range/connectRange';
+import { connectRange } from '../../connectors';
 import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
@@ -20,7 +20,7 @@ import type {
   RangeConnectorParams,
   RangeRenderState,
   RangeWidgetDescription,
-} from '../../connectors/range/connectRange';
+} from '../../connectors';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { Renderer, Template, WidgetFactory } from '../../types';
 
@@ -134,37 +134,25 @@ const renderer =
     };
     templates: RangeInputTemplates;
   }): Renderer<RangeRenderState, Partial<RangeInputWidgetParams>> =>
-  (
-    { refine, range, start, widgetParams, instantSearchInstance },
-    isFirstRendering
-  ) => {
+  ({ refine, range, currentRefinement, widgetParams }, isFirstRendering) => {
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;
     }
 
     const { min: rangeMin, max: rangeMax } = range;
-    const [minValue, maxValue] = start;
 
     const step = 1 / Math.pow(10, widgetParams.precision || 0);
-
-    const values = {
-      min:
-        minValue !== -Infinity && minValue !== rangeMin ? minValue : undefined,
-      max:
-        maxValue !== Infinity && maxValue !== rangeMax ? maxValue : undefined,
-    };
 
     render(
       <RangeInput
         min={rangeMin}
         max={rangeMax}
         step={step}
-        values={values}
+        values={currentRefinement}
         cssClasses={cssClasses}
         refine={refine}
         templateProps={renderState.templateProps!}

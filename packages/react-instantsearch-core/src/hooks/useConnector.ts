@@ -15,7 +15,7 @@ import type {
   UiState,
   Widget,
   WidgetDescription,
-} from 'instantsearch.js';
+} from 'instantsearch-core';
 
 export type AdditionalWidgetProperties = Partial<Widget<WidgetDescription>>;
 
@@ -129,11 +129,7 @@ export function useConnector<
         scopedResults,
         state: helper.state,
         renderState: search.renderState,
-        templatesConfig: search.templatesConfig,
         createURL: parentIndex.createURL,
-        searchMetadata: {
-          isSearchStalled: search.status === 'stalled',
-        },
         status: search.status,
         error: search.error,
       });

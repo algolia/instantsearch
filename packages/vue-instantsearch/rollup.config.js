@@ -1,7 +1,6 @@
 import path from 'path';
 
 import babel from 'rollup-plugin-babel';
-import buble from 'rollup-plugin-buble';
 import commonjs from 'rollup-plugin-commonjs';
 import filesize from 'rollup-plugin-filesize';
 import json from 'rollup-plugin-json';
@@ -52,13 +51,26 @@ function outputs(vueVersion) {
 
   const plugins = [
     vuePlugin({ compileTemplate: true, css: false }),
+    babel({
+      exclude: /node_modules|algoliasearch-helper/,
+      extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', '.vue'],
+      rootMode: 'upward',
+      runtimeHelpers: true,
+      plugins: [
+        [
+          require('../../scripts/babel/extension-resolver'),
+          {
+            // For verification, see test/module/packages-are-es-modules.mjs
+            modulesToResolve: [
+              // InstantSearch.js/es is an ES Module, so needs complete paths,
+              'instantsearch.js',
+            ],
+          },
+        ],
+      ],
+    }),
     commonjs(),
     json(),
-    buble({
-      transforms: {
-        dangerousForOf: true,
-      },
-    }),
     replace(processEnv({ NODE_ENV: 'production' })),
     aliasVueCompat(vueVersion),
     terser({
@@ -70,6 +82,7 @@ function outputs(vueVersion) {
     [
       'algoliasearch-helper',
       'instantsearch.js',
+      'instantsearch-core',
       'instantsearch-ui-components',
       'vue',
       'mitt',
@@ -121,23 +134,6 @@ export * from './src/instantsearch.js';`
         'package.json',
         JSON.stringify({ type: 'module', sideEffects: true })
       ),
-      babel({
-        exclude: /node_modules|algoliasearch-helper/,
-        extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', '.vue'],
-        babelrc: false,
-        plugins: [
-          [
-            require('../../scripts/babel/extension-resolver'),
-            {
-              // For verification, see test/module/packages-are-es-modules.mjs
-              modulesToResolve: [
-                // InstantSearch.js/es is an ES Module, so needs complete paths,
-                'instantsearch.js',
-              ],
-            },
-          ],
-        ],
-      }),
     ],
   };
 

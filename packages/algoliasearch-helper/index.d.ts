@@ -2,7 +2,6 @@ import EventEmitter from '@algolia/events';
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type {
-  FindAnswersResponse,
   FrequentlyBoughtTogetherQuery,
   HighlightResult,
   LookingSimilarQuery,
@@ -76,7 +75,7 @@ declare namespace algoliasearchHelper {
       event: 'result',
       cb: (res: { results: SearchResults; state: SearchParameters }) => void
     ): this;
-    on(event: 'error', cb: (res: { error: Error }) => void): this;
+    on(event: 'error', cb: (res: Error) => void): this;
     on(event: 'searchQueueEmpty', cb: () => void): this;
 
     /**
@@ -122,24 +121,11 @@ declare namespace algoliasearchHelper {
      * same as a search call before calling searchOnce.
      * @param options can contain all the parameters that can be set to SearchParameters
      * plus the index
-     * @param [callback] optional callback executed when the response from the
-     * server is back.
-     * @return if a callback is passed the method returns undefined
-     * otherwise it returns a promise containing an object with two keys :
+     * @return a promise containing an object with two keys :
      *  - content with a SearchResults
      *  - state with the state used for the query as a SearchParameters
      * @example
      * // Changing the number of records returned per page to 1
-     * // This example uses the callback API
-     * var state = helper.searchOnce({hitsPerPage: 1},
-     *   function(error, content, state) {
-     *     // if an error occurred it will be passed in error, otherwise its value is null
-     *     // content contains the results formatted as a SearchResults
-     *     // state is the instance of SearchParameters used for this search
-     *   });
-     * @example
-     * // Changing the number of records returned per page to 1
-     * // This example uses the promise API
      * var state1 = helper.searchOnce({hitsPerPage: 1})
      *                 .then(promiseHandler);
      *
@@ -154,29 +140,6 @@ declare namespace algoliasearchHelper {
     searchOnce(
       options: PlainSearchParameters
     ): Promise<{ content: SearchResults; state: SearchParameters }>;
-    searchOnce(
-      options: PlainSearchParameters,
-      cb: (
-        error: Error,
-        content: SearchResults,
-        state: SearchParameters
-      ) => void
-    ): void;
-
-    /**
-     * Start the search for answers with the parameters set in the state.
-     * This method returns a promise.
-     * @param {Object} options - the options for answers API call
-     * @param {string[]} options.attributesForPrediction - Attributes to use for predictions. If empty, `searchableAttributes` is used instead.
-     * @param {string[]} options.queryLanguages - The languages in the query. Currently only supports ['en'].
-     * @param {number} options.nbHits - Maximum number of answers to retrieve from the Answers Engine. Cannot be greater than 1000.
-     * @deprecated answers is deprecated and will be replaced with new initiatives
-     */
-    findAnswers<TObject>(options: {
-      attributesForPrediction: string[];
-      queryLanguages: string[];
-      nbHits: number;
-    }): Promise<FindAnswersResponse<TObject>>;
 
     /**
      * Search for facet values based on an query and the name of a faceted attribute. This
@@ -279,10 +242,6 @@ declare namespace algoliasearchHelper {
     setIndex(name: string): this;
 
     addDisjunctiveFacetRefinement(facet: string, value: string): this;
-    /**
-     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addDisjunctiveFacetRefinement}
-     */
-    addDisjunctiveRefine(facet: string, value: string): this;
     addHierarchicalFacetRefinement(facet: string, path: string): this;
     addNumericRefinement(
       facet: string,
@@ -290,15 +249,7 @@ declare namespace algoliasearchHelper {
       value?: number | number[]
     ): this;
     addFacetRefinement(facet: string, value: string): this;
-    /**
-     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addFacetRefinement}
-     */
-    addRefine: AlgoliaSearchHelper['addFacetRefinement'];
     addFacetExclusion(facet: string, value: string): this;
-    /**
-     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addFacetExclusion}
-     */
-    addExclude: AlgoliaSearchHelper['addFacetExclusion'];
     addTag(tag: string): this;
     addFrequentlyBoughtTogether(
       params: RecommendParametersWithId<FrequentlyBoughtTogetherQuery>
@@ -321,21 +272,9 @@ declare namespace algoliasearchHelper {
       value?: number | number[]
     ): this;
     removeDisjunctiveFacetRefinement(facet: string, value?: string): this;
-    /**
-     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeDisjunctiveFacetRefinement}
-     */
-    removeDisjunctiveRefine(facet: string, value?: string): this;
     removeHierarchicalFacetRefinement(facet: string): this;
     removeFacetRefinement(facet: string, value?: string): this;
-    /**
-     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeFacetRefinement}
-     */
-    removeRefine(facet: string, value: string): this;
     removeFacetExclusion(facet: string, value: string): this;
-    /**
-     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeFacetExclusion}
-     */
-    removeExclude(facet: string, value: string): this;
     removeTag(value: string): this;
     removeFrequentlyBoughtTogether(id: number): this;
     removeRelatedProducts(id: number): this;
@@ -343,27 +282,9 @@ declare namespace algoliasearchHelper {
     removeTrendingFacets(id: number): this;
     removeLookingSimilar(id: number): this;
     toggleFacetExclusion(facet: string, value: string): this;
-    /**
-     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#toggleFacetExclusion}
-     */
-    toggleExclude(facet: string, value: string): this;
     toggleFacetRefinement(facet: string, value: string): this;
-    /**
-     * @deprecated since version 2.19.0, see {@link AlgoliaSearchHelper#toggleFacetRefinement}
-     */
-    toggleRefinement(facet: string, value: string): this;
-    /**
-     * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#toggleFacetRefinement}
-     */
-    toggleRefine(facet: string, value: string): this;
     toggleTag(tag: string): this;
-    nextPage(): this;
-    previousPage(): this;
     setPage(page: number): this;
-    /**
-     * @deprecated
-     */
-    setCurrentPage(page: number): this;
     setQueryParameter<SearchParameter extends keyof PlainSearchParameters>(
       parameter: SearchParameter,
       value: PlainSearchParameters[SearchParameter]
@@ -379,31 +300,11 @@ declare namespace algoliasearchHelper {
     setState(newState: PlainSearchParameters): this;
 
     overrideStateWithoutTriggeringChangeEvent: AlgoliaSearchHelper['setState'];
-    hasRefinements(facet: string): boolean;
-    isExcluded: SearchParameters['isExcludeRefined'];
-    /**
-     * @deprecated since 2.4.0, see {@link AlgoliaSearchHelper#hasRefinements}
-     */
-    isDisjunctiveRefined: SearchParameters['isDisjunctiveFacetRefined'];
-    hasTag: SearchParameters['isTagRefined'];
-    /**
-     * @deprecated since 2.4.0, see {@link AlgoliaSearchHelper#hasTag}
-     */
-    isTagRefined: SearchParameters['isTagRefined'];
     getIndex(): string;
-    /**
-     * @deprecated
-     */
-    getCurrentPage(): number;
     getPage(): number;
     getTags(): string[];
-    getRefinements(facetName: string): any[];
     getNumericRefinement: SearchParameters['getNumericRefinement'];
     getHierarchicalFacetBreadcrumb: SearchParameters['getHierarchicalFacetBreadcrumb'];
-    /**
-     * @deprecated
-     */
-    containsRefinement(...any: any[]): any;
     clearCache(): this;
     setClient(client: SearchClient | CompositionClient): this;
     getClient(): SearchClient | CompositionClient;
@@ -424,7 +325,10 @@ declare namespace algoliasearchHelper {
     ): this;
     on(
       event: 'result',
-      cb: (res: { results: SearchResults; state: SearchParameters }) => void
+      cb: (res: {
+        results: SearchResults | null;
+        state: SearchParameters;
+      }) => void
     ): this;
     on(
       event: 'recommend:result',
@@ -435,7 +339,7 @@ declare namespace algoliasearchHelper {
         };
       }) => void
     ): this;
-    on(event: 'error', cb: (res: { error: Error }) => void): this;
+    on(event: 'error', cb: (res: Error) => void): this;
 
     lastResults: SearchResults | null;
     lastRecommendResults: RecommendResults | null;
@@ -667,7 +571,7 @@ declare namespace algoliasearchHelper {
     removeNumericRefinement(
       attribute: string,
       operator?: string,
-      value?: string
+      value?: number
     ): SearchParameters;
     removeTagRefinement(tag: string): SearchParameters;
     resetPage(): SearchParameters;
@@ -1211,7 +1115,6 @@ declare namespace algoliasearchHelper {
      * This is for internal use, e.g., avoiding caching in infinite hits, or delaying the display of these results.
      */
     __isArtificial?: boolean | undefined;
-    persistHierarchicalRootCount?: boolean;
   }
 
   type ISearchResponse<T> = Omit<SearchResponse<T>, 'facets' | 'params'> &
@@ -1431,14 +1334,6 @@ declare namespace algoliasearchHelper {
     );
 
     /**
-     * Get a facet object with its name
-     * @deprecated
-     * @param name name of the faceted attribute
-     * @return  the facet object
-     */
-    getFacetByName(name: string): SearchResults.Facet;
-
-    /**
      * Get a the list of values for a given facet attribute. Those values are sorted
      * refinement first, descending count (bigger value on top), and name ascending
      * (alphabetical order). The sort formula can overridden using either string based
@@ -1498,17 +1393,6 @@ declare namespace algoliasearchHelper {
      * @return The stats of the facet
      */
     getFacetStats(attribute: string): any;
-
-    /**
-     * Returns all refinements for all filters + tags. It also provides
-     * additional information: count and exhaustiveness for each filter.
-     *
-     * See the [refinement type](#Refinement) for an exhaustive view of the available
-     * data.
-     *
-     * @return all the refinements
-     */
-    getRefinements(): SearchResults.Refinement[];
   }
 
   export type Banner = {

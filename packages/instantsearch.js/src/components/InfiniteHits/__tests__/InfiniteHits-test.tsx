@@ -34,7 +34,6 @@ describe('InfiniteHits', () => {
   };
 
   const sendEvent = () => {};
-  const bindEvent = () => '';
 
   describe('markup', () => {
     it('should render <InfiniteHits /> on first page', () => {
@@ -61,15 +60,14 @@ describe('InfiniteHits', () => {
         isLastPage: false,
         templateProps: {
           templates: {
-            empty: 'empty',
-            showPreviousText: 'showPreviousText',
-            showMoreText: 'showMoreText',
-            item: 'item',
+            empty: () => 'empty',
+            showPreviousText: () => 'showPreviousText',
+            showMoreText: () => 'showMoreText',
+            item: () => 'item',
           },
         },
         cssClasses,
         sendEvent,
-        bindEvent,
       };
 
       const { container } = render(<InfiniteHits {...props} />);
@@ -101,15 +99,14 @@ describe('InfiniteHits', () => {
         isLastPage: true,
         templateProps: {
           templates: {
-            empty: 'empty',
-            showPreviousText: 'showPreviousText',
-            showMoreText: 'showMoreText',
-            item: 'item',
+            empty: () => 'empty',
+            showPreviousText: () => 'showPreviousText',
+            showMoreText: () => 'showMoreText',
+            item: () => 'item',
           },
         },
         cssClasses,
         sendEvent,
-        bindEvent,
       };
 
       const { container } = render(<InfiniteHits {...props} />);
@@ -130,15 +127,14 @@ describe('InfiniteHits', () => {
         isLastPage: false,
         templateProps: {
           templates: {
-            empty: 'empty',
-            showPreviousText: 'showPreviousText',
-            showMoreText: 'showMoreText',
-            item: 'item',
+            empty: () => 'empty',
+            showPreviousText: () => 'showPreviousText',
+            showMoreText: () => 'showMoreText',
+            item: () => 'item',
           },
         },
         cssClasses,
         sendEvent,
-        bindEvent,
       };
 
       const { container } = render(<InfiniteHits {...props} />);
@@ -159,15 +155,14 @@ describe('InfiniteHits', () => {
         isLastPage: true,
         templateProps: {
           templates: {
-            empty: 'empty',
-            showPreviousText: 'showPreviousText',
-            showMoreText: 'showMoreText',
-            item: 'item',
+            empty: () => 'empty',
+            showPreviousText: () => 'showPreviousText',
+            showMoreText: () => 'showMoreText',
+            item: () => 'item',
           },
         },
         cssClasses,
         sendEvent,
-        bindEvent,
       };
 
       const { container } = render(<InfiniteHits {...props} />);
@@ -199,15 +194,14 @@ describe('InfiniteHits', () => {
         isLastPage: false,
         templateProps: {
           templates: {
-            empty: 'empty',
-            showPreviousText: 'showPreviousText',
-            showMoreText: 'showMoreText',
-            item: 'item',
+            empty: () => 'empty',
+            showPreviousText: () => 'showPreviousText',
+            showMoreText: () => 'showMoreText',
+            item: () => 'item',
           },
         },
         cssClasses,
         sendEvent,
-        bindEvent,
       };
 
       const { container } = render(<InfiniteHits {...props} />);
@@ -244,15 +238,14 @@ describe('InfiniteHits', () => {
         isLastPage: true,
         templateProps: {
           templates: {
-            empty: 'empty',
-            showPreviousText: 'showPreviousText',
-            showMoreText: 'showMoreText',
-            item: 'item',
+            empty: () => 'empty',
+            showPreviousText: () => 'showPreviousText',
+            showMoreText: () => 'showMoreText',
+            item: () => 'item',
           },
         },
         cssClasses,
         sendEvent,
-        bindEvent,
       };
 
       const { container } = render(<InfiniteHits {...props} />);

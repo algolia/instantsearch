@@ -9,17 +9,17 @@ import {
 import { wait } from '@instantsearch/testutils/wait';
 import { widgetSnapshotSerializer } from '@instantsearch/testutils/widgetSnapshotSerializer';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
-
-import { index, searchBox, menu, dynamicWidgets } from '../..';
-import instantsearch from '../../..';
-import { createInstantSearch } from '../../../../test/createInstantSearch';
+import { createInstantSearch } from 'instantsearch-core/test/createInstantSearch';
 import {
   createInitOptions,
   createRenderOptions,
-} from '../../../../test/createWidget';
+} from 'instantsearch-core/test/createWidget';
+
+import { index, searchBox, menu, dynamicWidgets } from '../..';
+import instantsearch from '../../..';
 import refinementList from '../../refinement-list/refinement-list';
 
-import type { SearchResponse } from '../../../types/algoliasearch';
+import type { SearchResponse } from 'instantsearch-core';
 
 expect.addSnapshotSerializer(widgetSnapshotSerializer);
 
@@ -185,7 +185,7 @@ describe('dynamicWidgets()', () => {
       indexWidget.init(createInitOptions({ instantSearchInstance }));
 
       // set results to the relevant index, so it renders all children
-      instantSearchInstance.mainHelper!.derivedHelpers[0].lastResults =
+      instantSearchInstance.helper!.derivedHelpers[0].lastResults =
         new SearchResults(
           indexWidget.getWidgetSearchParameters(new SearchParameters(), {
             uiState: {},
@@ -450,7 +450,7 @@ describe('dynamicWidgets()', () => {
       indexWidget.init(createInitOptions({ instantSearchInstance }));
 
       // set results to the relevant index, so it renders all children
-      instantSearchInstance.mainHelper!.derivedHelpers[0].lastResults =
+      instantSearchInstance.helper!.derivedHelpers[0].lastResults =
         new SearchResults(
           indexWidget.getWidgetSearchParameters(new SearchParameters(), {
             uiState: {},

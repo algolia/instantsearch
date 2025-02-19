@@ -1,6 +1,7 @@
-import InstantSearch, {
+import {
+  InstantSearch,
   INSTANTSEARCH_FUTURE_DEFAULTS,
-} from 'instantsearch.js/es/lib/InstantSearch';
+} from 'instantsearch-core';
 import { useCallback, useRef, version as ReactVersion } from 'react';
 import { useSyncExternalStore } from 'use-sync-external-store/shim';
 
@@ -18,7 +19,7 @@ import type {
   InstantSearchOptions,
   SearchClient,
   UiState,
-} from 'instantsearch.js';
+} from 'instantsearch-core';
 
 const defaultUserAgents = [
   `react (${ReactVersion})`,
@@ -140,7 +141,10 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
     const prevProps = prevPropsRef.current;
 
     if (prevProps.indexName !== props.indexName) {
-      search.helper!.setIndex(props.indexName || '').search();
+      search.mainIndex
+        .getHelper()!
+        .setIndex(props.indexName || '')
+        .search();
       prevPropsRef.current = props;
     }
 
@@ -154,20 +158,12 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
         ...defaultUserAgents,
         serverContext && serverUserAgent,
       ]);
-      search.mainHelper!.setClient(props.searchClient).search();
+      search.helper!.setClient(props.searchClient).search();
       prevPropsRef.current = props;
     }
 
     if (prevProps.onStateChange !== props.onStateChange) {
       search.onStateChange = props.onStateChange;
-      prevPropsRef.current = props;
-    }
-
-    if (prevProps.searchFunction !== props.searchFunction) {
-      // Updating the `searchFunction` to `undefined` is not supported by
-      // InstantSearch.js, so it will throw an error.
-      // This is a fair behavior until we add an update API in InstantSearch.js.
-      search._searchFunction = props.searchFunction;
       prevPropsRef.current = props;
     }
 

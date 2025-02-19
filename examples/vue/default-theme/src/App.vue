@@ -124,8 +124,7 @@
 
 <script>
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import { history as historyRouter } from 'instantsearch.js/es/lib/routers';
-import { simple as simpleMapping } from 'instantsearch.js/es/lib/stateMappings';
+import { historyRouter, simpleStateMapping } from 'instantsearch-core';
 
 export default {
   data() {
@@ -135,10 +134,8 @@ export default {
         '6be0576ff61c053d5f9a3225e2a90f76'
       ),
       routing: {
-        router: historyRouter({
-          cleanUrlOnDispose: false,
-        }),
-        stateMapping: simpleMapping(),
+        router: historyRouter(),
+        stateMapping: simpleStateMapping(),
       },
     };
   },

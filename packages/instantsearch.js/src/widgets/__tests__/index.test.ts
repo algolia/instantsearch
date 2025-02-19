@@ -4,9 +4,8 @@
 /* global google */
 import * as widgets from '..';
 
+import type { IndexWidget } from '..';
 import type { UnknownWidgetFactory, Widget } from '../../types';
-import type { IndexWidget } from '../index/index';
-import type { PlacesInstance } from 'places.js';
 
 /**
  * Checklist when adding a new widget
@@ -44,14 +43,6 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
       case 'index': {
         const index = widget as Widgets['index'];
         return index({ indexName: 'index' });
-      }
-      case 'EXPERIMENTAL_configureRelatedItems': {
-        const EXPERIMENTAL_configureRelatedItems =
-          widget as Widgets['EXPERIMENTAL_configureRelatedItems'];
-        return EXPERIMENTAL_configureRelatedItems({
-          hit: { objectID: 'x' },
-          matchingPatterns: {},
-        });
       }
       case 'geoSearch': {
         const geoSearch = widget as Widgets['geoSearch'];
@@ -100,12 +91,6 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
           items: [{ label: 'x', value: 'x' }],
         });
       }
-      case 'analytics': {
-        const analytics = widget as Widgets['analytics'];
-        return analytics({
-          pushFunction() {},
-        });
-      }
       case 'queryRuleContext': {
         const queryRuleContext = widget as Widgets['queryRuleContext'];
         return queryRuleContext({
@@ -116,15 +101,6 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
           },
         });
       }
-      case 'places': {
-        const places = widget as Widgets['places'];
-        // @ts-expect-error
-        const placesInstance: PlacesInstance = {};
-        return places({
-          container: document.createElement('input'),
-          placesReference: () => placesInstance,
-        });
-      }
       case 'panel': {
         const panel = widget as Widgets['panel'];
         return panel()(widgets.hierarchicalMenu)({
@@ -132,20 +108,15 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
           attributes: ['attr1', 'attr2'],
         });
       }
-      case 'dynamicWidgets':
-      case 'EXPERIMENTAL_dynamicWidgets': {
-        const EXPERIMENTAL_dynamicWidgets = widget as Widgets['dynamicWidgets'];
-        return EXPERIMENTAL_dynamicWidgets({
+      case 'dynamicWidgets': {
+        const dynamicWidgets = widget as Widgets['dynamicWidgets'];
+        return dynamicWidgets({
           transformItems(items) {
             return items;
           },
           container,
           widgets: [],
         });
-      }
-      case 'EXPERIMENTAL_answers': {
-        const EXPERIMENTAL_answers = widget as Widgets['EXPERIMENTAL_answers'];
-        return EXPERIMENTAL_answers({ container, queryLanguages: ['en'] });
       }
       case 'frequentlyBoughtTogether':
       case 'relatedProducts':
@@ -197,7 +168,7 @@ describe('widgets', () => {
       const widgetInstances = initiateAllWidgets();
 
       widgetInstances.forEach(([name, widget]) =>
-        expect([name, widget.$$widgetType!.substr(0, 4)]).toEqual([
+        expect([name, widget.$$widgetType?.substr(0, 4)]).toEqual([
           name,
           'ais.',
         ])
