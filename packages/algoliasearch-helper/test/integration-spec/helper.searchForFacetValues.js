@@ -83,7 +83,10 @@ test('[INT][SEARCHFORFACETVALUES] Should be able to search for facet values - co
         },
       ]);
 
-      helper.clearRefinements().addFacetRefinement('f2', 'c');
+      helper
+        .removeDisjunctiveFacetRefinement('f1')
+        .removeDisjunctiveFacetRefinement('f2')
+        .addFacetRefinement('f2', 'c');
 
       return helper.searchForFacetValues('f2', '');
     })
@@ -166,7 +169,10 @@ test('[INT][SEARCHFORFACETVALUES] Should be able to search for facet values - di
         },
       ]);
 
-      helper.clearRefinements().addDisjunctiveFacetRefinement('f2', 'c');
+      helper
+        .removeDisjunctiveFacetRefinement('f1')
+        .removeDisjunctiveFacetRefinement('f2')
+        .addDisjunctiveFacetRefinement('f2', 'c');
 
       return helper.searchForFacetValues('f2', '');
     })

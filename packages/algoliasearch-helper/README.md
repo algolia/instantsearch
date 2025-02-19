@@ -590,30 +590,6 @@ console.log(breadcrumb.join(' | '));
 // 'fruits | citrus'
 ```
 
-#### Clearing filters
-
-##### Clear all the refinements for all the refined attributes
-
-```js
-helper.clearRefinements().search();
-```
-
-##### Clear all the refinements for a specific attribute
-
-```js
-helper.clearRefinements('ANDFacet').search();
-```
-
-##### [ADVANCED] Clear only the exclusions on the "ANDFacet" attribute
-
-```js
-helper
-  .clearRefinements(function (value, attribute, type) {
-    return type === 'exclude' && attribute === 'ANDFacet';
-  })
-  .search();
-```
-
 ### Facet utilities
 
 #### Get the values of a facet with the default sort

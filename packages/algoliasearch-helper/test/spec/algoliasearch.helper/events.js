@@ -101,7 +101,7 @@ test('Change events should be emitted as soon as the state change, but search sh
   expect(changeEventCount).toBe(1);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.clearRefinements();
+  helper.setQuery('b');
   expect(changeEventCount).toBe(2);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
@@ -181,11 +181,12 @@ test('Change events should only be emitted for meaningful changes', function () 
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
   // This is an actual change
-  helper.clearRefinements();
+  helper.setState(new SearchParameters({ query: 'a' }));
   expect(changeEventCount).toBe(1);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.clearRefinements();
+  // Nothing changed
+  helper.setState(new SearchParameters({ query: 'a' }));
   expect(changeEventCount).toBe(1);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
@@ -220,7 +221,7 @@ test('search event should be emitted once when the search is triggered and befor
   expect(searched).toHaveBeenCalledTimes(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 
-  helper.clearRefinements();
+  helper.setQuery('a');
   expect(searched).toHaveBeenCalledTimes(0);
   expect(fakeClient.search).toHaveBeenCalledTimes(0);
 

@@ -439,38 +439,6 @@ AlgoliaSearchHelper.prototype.setQuery = function (q) {
 };
 
 /**
- * Remove all the types of refinements except tags. A string can be provided to remove
- * only the refinements of a specific attribute. For more advanced use case, you can
- * provide a function instead. This function should follow the
- * [clearCallback definition](#SearchParameters.clearCallback).
- *
- * This method resets the current page to 0.
- * @param {string} [name] optional name of the facet / attribute on which we want to remove all refinements
- * @return {AlgoliaSearchHelper} Method is chainable, it returns itself
- * @fires change
- * @chainable
- * @example
- * // Removing all the refinements
- * helper.clearRefinements().search();
- * @example
- * // Removing all the filters on a the category attribute.
- * helper.clearRefinements('category').search();
- * @example
- * // Removing only the exclude filters on the category facet.
- * helper.clearRefinements(function(value, attribute, type) {
- *   return type === 'exclude' && attribute === 'category';
- * }).search();
- */
-AlgoliaSearchHelper.prototype.clearRefinements = function (name) {
-  this._change({
-    state: this.state.resetPage().clearRefinements(name),
-    isPageReset: true,
-  });
-
-  return this;
-};
-
-/**
  * Remove all the tag filters.
  *
  * This method resets the current page to 0.

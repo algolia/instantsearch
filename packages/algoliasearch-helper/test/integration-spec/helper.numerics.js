@@ -104,7 +104,7 @@ test('[INT][NUMERICS][MANAGED-API]Test numeric operations on the helper and thei
     if (calls === 2) {
       expect(results.hits.length).toBe(1);
       expect(results.hits.map(hitsToParsedID).sort()).toEqual([1]);
-      helper.clearRefinements('n');
+      helper.removeNumericRefinement('n');
       helper.addNumericRefinement('n', '=', [6, 45]).search();
     }
 

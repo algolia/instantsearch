@@ -323,7 +323,7 @@ SearchParameters.make = function makeSearchParameters(newParameters) {
         currentRefinement.length > 0 &&
         currentRefinement[0].indexOf(facet.rootPath) !== 0
       ) {
-        instance = instance.clearRefinements(facet.name);
+        instance = instance.removeHierarchicalFacetRefinement(facet.name);
       }
 
       // get it again in case it has been cleared
@@ -910,7 +910,7 @@ SearchParameters.prototype = {
       return this;
     }
 
-    return this.clearRefinements(facet).setQueryParameters({
+    return this.removeFacetRefinement(facet).setQueryParameters({
       facets: this.facets.filter(function (f) {
         return f !== facet;
       }),
@@ -928,7 +928,7 @@ SearchParameters.prototype = {
       return this;
     }
 
-    return this.clearRefinements(facet).setQueryParameters({
+    return this.removeDisjunctiveFacetRefinement(facet).setQueryParameters({
       disjunctiveFacets: this.disjunctiveFacets.filter(function (f) {
         return f !== facet;
       }),
@@ -946,7 +946,7 @@ SearchParameters.prototype = {
       return this;
     }
 
-    return this.clearRefinements(facet).setQueryParameters({
+    return this.removeHierarchicalFacetRefinement(facet).setQueryParameters({
       hierarchicalFacets: this.hierarchicalFacets.filter(function (f) {
         return f.name !== facet;
       }),

@@ -495,7 +495,7 @@ var requestBuilder = {
 
   getSearchForFacetQuery: function (facetName, query, maxFacetHits, state) {
     var stateForSearchForFacetValues = state.isDisjunctiveFacet(facetName)
-      ? state.clearRefinements(facetName)
+      ? state.removeDisjunctiveFacetRefinement(facetName)
       : state;
     var searchForFacetSearchParameters = {
       facetQuery: query,

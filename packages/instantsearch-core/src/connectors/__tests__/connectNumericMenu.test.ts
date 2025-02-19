@@ -614,7 +614,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/numeric-men
     expect(renderingParameters0.items).toEqual(expectedResults0);
 
     // All the refinements are cleared by a third party
-    helper.clearRefinements('numerics');
+    helper.removeNumericRefinement('numerics');
 
     widget.render!(
       createRenderOptions({

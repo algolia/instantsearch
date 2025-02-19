@@ -126,7 +126,6 @@ test('no mutating methods should trigger a search', function () {
   });
 
   helper.setQuery('');
-  helper.clearRefinements();
   helper.addDisjunctiveFacetRefinement('city', 'Paris');
   helper.removeDisjunctiveFacetRefinement('city', 'Paris');
   helper.addFacetExclusion('tower', 'Empire State Building');
