@@ -29,23 +29,6 @@ export type CurrentRefinementsConnectorParamsRefinement = {
   attribute: string;
 
   /**
-   * The type of the refinement.
-   */
-  type:
-    | 'facet'
-    | 'exclude'
-    | 'disjunctive'
-    | 'hierarchical'
-    | 'numeric'
-    | 'query'
-    | 'tag';
-
-  /**
-   * The raw value of the refinement.
-   */
-  value: string | number;
-
-  /**
    * The label of the refinement to display.
    */
   label: string;
@@ -64,7 +47,36 @@ export type CurrentRefinementsConnectorParamsRefinement = {
    * Whether the count is exhaustive (only if applicable).
    */
   exhaustive?: boolean;
-};
+} & (
+  | {
+      /**
+       * The type of the refinement.
+       */
+      type:
+        | 'facet'
+        | 'exclude'
+        | 'disjunctive'
+        | 'hierarchical'
+        | 'query'
+        | 'tag';
+
+      /**
+       * The raw value of the refinement.
+       */
+      value: string;
+    }
+  | {
+      /**
+       * The type of the refinement.
+       */
+      type: 'numeric';
+
+      /**
+       * The raw value of the refinement.
+       */
+      value: number;
+    }
+);
 
 export type CurrentRefinementsConnectorParamsItem = {
   /**
@@ -313,7 +325,7 @@ function getRefinementsItems({
           .filter((result) => result.attribute === currentItem.attribute)
           // We want to keep the order of refinements except the numeric ones.
           .sort((a, b) =>
-            a.type === 'numeric' ? (a.value as number) - (b.value as number) : 0
+            a.type === 'numeric' && b.type === 'numeric' ? a.value - b.value : 0
           ),
         refine: (refinement) => clearRefinement(helper, refinement),
       },
@@ -349,7 +361,7 @@ function clearRefinementFromState(
       return state.removeNumericRefinement(
         refinement.attribute,
         refinement.operator,
-        refinement.value as number
+        refinement.value
       );
     case 'tag':
       return state.removeTagRefinement(String(refinement.value));
@@ -358,7 +370,9 @@ function clearRefinementFromState(
     default:
       warning(
         false,
-        `The refinement type "${refinement.type}" does not exist and cannot be cleared from the current refinements.`
+        `The refinement type "${
+          (refinement as any).type
+        }" does not exist and cannot be cleared from the current refinements.`
       );
       return state;
   }
@@ -392,6 +406,8 @@ function normalizeRefinement(
       )} ${refinement.name}`
     : refinement.name;
 
+  // @ts-expect-error `value` is `string | number`, but checked by `getValue
+  // that it's only a number for `numeric` type.
   const normalizedRefinement: CurrentRefinementsConnectorParamsRefinement = {
     attribute: refinement.attribute,
     type: refinement.type,

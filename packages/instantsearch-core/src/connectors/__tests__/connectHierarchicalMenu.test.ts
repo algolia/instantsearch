@@ -180,9 +180,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     const firstRenderingOptions = rendering.mock.calls[0][0];
     const { refine } = firstRenderingOptions;
     refine('value');
-    expect(helper.hasRefinements('category')).toBe(false);
+    expect(helper.state.isHierarchicalFacetRefined('category')).toBe(false);
     refine('value');
-    expect(helper.hasRefinements('category')).toBe(true);
+    expect(helper.state.isHierarchicalFacetRefined('category')).toBe(true);
 
     widget.render!(
       createRenderOptions({
@@ -198,9 +198,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hierarchica
     const secondRenderingOptions = rendering.mock.calls[1][0];
     const { refine: renderToggleFacetRefinement } = secondRenderingOptions;
     renderToggleFacetRefinement('value');
-    expect(helper.hasRefinements('category')).toBe(false);
+    expect(helper.state.isHierarchicalFacetRefined('category')).toBe(false);
     renderToggleFacetRefinement('value');
-    expect(helper.hasRefinements('category')).toBe(true);
+    expect(helper.state.isHierarchicalFacetRefined('category')).toBe(true);
   });
 
   it('provides the correct facet values', () => {

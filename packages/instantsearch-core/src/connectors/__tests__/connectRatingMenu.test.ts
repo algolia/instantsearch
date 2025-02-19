@@ -179,12 +179,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     });
 
     // first rendering
-    expect(helper.getRefinements(attribute)).toEqual([]);
+    expect(helper.state.getNumericRefinements(attribute)).toEqual({});
     refine('3');
-    expect(helper.getRefinements(attribute)).toEqual([
-      { operator: '<=', type: 'numeric', value: [5] },
-      { operator: '>=', type: 'numeric', value: [3] },
-    ]);
+    expect(helper.state.getNumericRefinements(attribute)).toEqual({
+      '<=': [5],
+      '>=': [3],
+    });
     expect(helper.search).toHaveBeenCalledTimes(1);
 
     widget.render!(
@@ -246,15 +246,15 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
           stars: [true, false, false, false, false],
         },
       ]);
-      expect(helper.getRefinements(attribute)).toEqual([
-        { operator: '<=', type: 'numeric', value: [5] },
-        { operator: '>=', type: 'numeric', value: [3] },
-      ]);
+      expect(helper.state.getNumericRefinements(attribute)).toEqual({
+        '<=': [5],
+        '>=': [3],
+      });
       refine('4');
-      expect(helper.getRefinements(attribute)).toEqual([
-        { operator: '<=', type: 'numeric', value: [5] },
-        { operator: '>=', type: 'numeric', value: [4] },
-      ]);
+      expect(helper.state.getNumericRefinements(attribute)).toEqual({
+        '<=': [5],
+        '>=': [4],
+      });
       expect(helper.search).toHaveBeenCalledTimes(2);
     }
   });
@@ -266,12 +266,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     });
 
     // First rendering
-    expect(helper.getRefinements(attribute)).toEqual([]);
+    expect(helper.state.getNumericRefinements(attribute)).toEqual({});
     refine('3');
-    expect(helper.getRefinements(attribute)).toEqual([
-      { operator: '<=', type: 'numeric', value: [5] },
-      { operator: '>=', type: 'numeric', value: [3] },
-    ]);
+    expect(helper.state.getNumericRefinements(attribute)).toEqual({
+      '<=': [5],
+      '>=': [3],
+    });
     expect(helper.search).toHaveBeenCalledTimes(1);
 
     widget.render!(
@@ -295,17 +295,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/rating-menu
     );
 
     // Second rendering
-    expect(helper.getRefinements(attribute)).toEqual([
-      { operator: '<=', type: 'numeric', value: [5] },
-      { operator: '>=', type: 'numeric', value: [3] },
-    ]);
+    expect(helper.state.getNumericRefinements(attribute)).toEqual({
+      '<=': [5],
+      '>=': [3],
+    });
     refine('3');
-    expect(helper.getRefinements(attribute)).toEqual([
-      { operator: '<=', type: 'numeric', value: [] },
-      { operator: '>=', type: 'numeric', value: [] },
-    ]);
+    expect(helper.state.getNumericRefinements(attribute)).toEqual({
+      '<=': [],
+      '>=': [],
+    });
     expect(helper.state.numericRefinements).toEqual({
-      swag: { '<=': [], '>=': [] },
+      [attribute]: { '<=': [], '>=': [] },
     });
     expect(helper.search).toHaveBeenCalledTimes(2);
   });
