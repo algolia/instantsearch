@@ -39,6 +39,7 @@ export function HitsPerPage({
     >
       <select
         className={cx('ais-HitsPerPage-select', classNames.select)}
+        aria-label="Items per page"
         onChange={(event) => {
           onChange(Number(event.target.value));
         }}
