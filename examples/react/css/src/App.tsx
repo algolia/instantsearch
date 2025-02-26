@@ -41,7 +41,7 @@ export function App() {
     >
       <Configure hitsPerPage={8} snippetEllipsisText="…" />
       <div className="container two-columns">
-        <div>
+        <div className="left-column">
           <Panel header="categories">
             <HierarchicalMenu
               attributes={[
@@ -49,10 +49,11 @@ export function App() {
                 'hierarchicalCategories.lvl1',
                 'hierarchicalCategories.lvl2',
               ]}
+              showMore
             />
           </Panel>
           <Panel header="brand">
-            <RefinementList attribute="brand" />
+            <RefinementList attribute="brand" showMore />
           </Panel>
           <Panel header="price">
             <RangeInput attribute="price" />
@@ -106,11 +107,11 @@ export function App() {
 }
 
 function HitComponent({ hit }: { hit: Hit }) {
-  return Item({ hit });
+  return <Item hit={hit} />;
 }
 
 function ItemComponent({ item }: { item: Hit }) {
-  return Item({ hit: item });
+  return <Item hit={item} />;
 }
 
 function Item({ hit }: { hit: Hit }) {
