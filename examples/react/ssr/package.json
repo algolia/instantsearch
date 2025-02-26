@@ -11,6 +11,7 @@
   "devDependencies": {
     "@babel/core": "7.15.5",
     "@babel/polyfill": "7.4.4",
+    "@babel/plugin-transform-optional-chaining": "7.25.9",
     "@babel/preset-env": "7.4.5",
     "@babel/preset-react": "7.0.0",
     "babel-core": "6.26.3",
