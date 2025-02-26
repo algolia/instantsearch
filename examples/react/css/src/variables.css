@@ -1,0 +1,61 @@
+/* CSS Variables */
+:root {
+  /* Text colors */
+  --ais-text-color-rgb: 38, 38, 38;
+  --ais-text-color-alpha: 1;
+  --ais-primary-color-rgb: 31, 111, 242;
+  --ais-primary-color-alpha: 1;
+  --ais-muted-color-rgb: 127, 137, 164;
+  --ais-muted-color-alpha: 0.6;
+
+  /* Border color */
+  --ais-border-color-rgb: 127, 137, 164;
+  --ais-border-color-alpha: 0.25;
+
+  /* Background color */
+  --ais-background-color-rgb: 250, 250, 250;
+  --ais-background-color-alpha: 1;
+
+  /* Shadow color */
+  --ais-shadow-color-rgb: 34, 46, 58;
+  --ais-shadow-color-alpha: 0.1;
+
+  /* Size and spacing */
+  --ais-base-unit: 16;
+  --ais-spacing-factor: 1;
+  --ais-spacing: calc(var(--ais-base-unit) * var(--ais-spacing-factor) * 1px);
+  --ais-spacing-half: calc(var(--ais-spacing) / 2);
+
+  /* Font */
+  --ais-font-size: calc(var(--ais-base-unit) * 1px);
+  --ais-font-family: inherit;
+  --ais-font-weight-medium: 500;
+  --ais-font-weight-semibold: 600;
+  --ais-font-weight-bold: 700;
+
+  /* Shadows */
+  --ais-shadow-xs: 0 1px 2px 0
+    rgba(var(--ais-shadow-color-rgb), var(--ais-shadow-color-alpha));
+  --ais-shadow-md: 0 4px 6px -1px rgba(var(--ais-shadow-color-rgb), var(--ais-shadow-color-alpha)),
+    0 2px 4px -2px rgba(var(--ais-shadow-color-rgb), var(--ais-shadow-color-alpha));
+
+  /* Transitions */
+  --ais-transition-duration: 0.2s;
+  --ais-transition-timing-function: ease-out;
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Text colors */
+    --ais-text-color-rgb: 235, 235, 235;
+    --ais-primary-color-rgb: 66, 133, 244;
+    --ais-muted-color-rgb: 150, 150, 150;
+
+    /* Border color */
+    --ais-border-color-rgb: 135, 145, 171;
+
+    /* Background color */
+    --ais-background-color-rgb: 18, 18, 18;
+  }
+}
