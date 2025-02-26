@@ -23,7 +23,7 @@ import {
 
 import { Panel } from './Panel';
 
-import 'instantsearch.css/themes/algolia.css';
+import './algolia.css';
 
 import './App.css';
 
