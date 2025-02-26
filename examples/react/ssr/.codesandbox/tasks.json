@@ -1,6 +1,9 @@
 {
   "$schema": "https://codesandbox.io/schemas/tasks.json",
-  "setupTasks": ["yarn install"],
+  "setupTasks": [
+    "yarn config set cache-folder /project/workspace/.cache",
+    "yarn install"
+  ],
   "tasks": {
     "start-app": {
       "name": "Run Dev Server",
