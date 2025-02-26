@@ -106,11 +106,11 @@ export function App() {
 }
 
 function HitComponent({ hit }: { hit: Hit }) {
-  return Item({ hit });
+  return <Item hit={hit} />;
 }
 
 function ItemComponent({ item }: { item: Hit }) {
-  return Item({ hit: item });
+  return <Item hit={item} />;
 }
 
 function Item({ hit }: { hit: Hit }) {
