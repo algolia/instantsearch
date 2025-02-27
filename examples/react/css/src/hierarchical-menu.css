@@ -1,7 +1,7 @@
 /* HierarchicalMenu */
 .ais-HierarchicalMenu-list .ais-HierarchicalMenu-list {
   margin-left: calc(var(--ais-spacing) * 1);
-  padding-left: calc(var(--ais-spacing-half) * 0.75);
+  padding-left: calc(var(--ais-spacing) * 0.375);
   border-left: 1px solid
     rgba(var(--ais-border-color-rgb), var(--ais-border-color-alpha));
 }
@@ -10,15 +10,15 @@
 .ais-HierarchicalMenu-item--parent {
   display: flex;
   flex-direction: column;
-  row-gap: calc(var(--ais-spacing-half) / 2);
+  row-gap: calc(var(--ais-spacing) / 4);
 }
 
 .ais-HierarchicalMenu-link {
   color: rgba(var(--ais-text-color-rgb), 0.9);
   display: flex;
   align-items: center;
-  padding: calc(var(--ais-spacing-half) * 0.75) calc(var(--ais-spacing-half));
-  border-radius: calc(var(--ais-spacing) / 4);
+  padding: calc(var(--ais-spacing) * 0.375) calc(var(--ais-spacing) / 2);
+  border-radius: var(--ais-radius-xs);
   transition: background-color var(--ais-transition-duration)
       var(--ais-transition-timing-function),
     color var(--ais-transition-duration) var(--ais-transition-timing-function);

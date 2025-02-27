@@ -16,17 +16,17 @@ input[class^='ais-']:focus-visible {
 
 /* Widgets */
 [class^='ais-'][class*='-showMore'] {
-  border-radius: calc(var(--ais-spacing) / 4);
+  border-radius: var(--ais-radius-xs);
   font-size: 0.9em;
   font-weight: var(--ais-font-weight-medium);
   color: rgba(var(--ais-color-white-rgb), var(--ais-color-white-alpha));
-  padding: calc(var(--ais-spacing-half) * 0.75)
-    calc(var(--ais-spacing-half) * 1.25);
+  padding: calc(var(--ais-spacing) * 0.375)
+    calc(var(--ais-spacing) * 0.625);
   background-color: rgba(
     var(--ais-primary-color-rgb),
     var(--ais-primary-color-alpha)
   );
-  margin-top: calc(var(--ais-spacing-half) * 1.5);
+  margin-top: calc(var(--ais-spacing) * 0.75);
   transition: background-color var(--ais-transition-duration)
     var(--ais-transition-timing-function);
   box-shadow: var(--ais-shadow-xs);
@@ -49,8 +49,8 @@ input[class^='ais-']:focus-visible {
   margin-left: auto;
   color: rgba(var(--ais-text-color-rgb), 0.7);
   border-radius: calc(infinity * 1px);
-  padding: calc(var(--ais-spacing-half) * 0.25)
-    calc(var(--ais-spacing-half) * 1.25);
+  padding: calc(var(--ais-spacing) * 0.125)
+    calc(var(--ais-spacing) * 0.625);
   border: 1px solid rgba(var(--ais-muted-color-rgb), 0.3);
   background-color: rgba(
     var(--ais-background-color-rgb),
