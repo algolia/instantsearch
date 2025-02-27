@@ -34,13 +34,13 @@ input[class^='ais-']:focus-visible {
 
 @media (hover: hover) {
   [class^='ais-'][class*='-showMore']:not(
-      [class^='ais-'][class*='-showMore--disabled']
+      [class^='ais-'][disabled]
     ):hover {
     background-color: rgba(var(--ais-primary-color-rgb), 0.85);
   }
 }
 
-[class^='ais-'][class*='-showMore--disabled'] {
+[class^='ais-'][disabled] {
   opacity: 0.75;
   cursor: not-allowed;
 }
