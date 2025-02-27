@@ -1,15 +1,16 @@
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
 import { defineConfig } from 'vite';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const _dirname = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        index: resolve(__dirname, 'index.html'),
-        products: resolve(__dirname, 'products/index.html'),
+        index: resolve(_dirname, 'index.html'),
+        products: resolve(_dirname, 'products/index.html'),
       },
     },
     commonjsOptions: {
