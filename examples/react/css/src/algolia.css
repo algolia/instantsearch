@@ -1,1 +1,5 @@
 @import url('variables.css');
+
+/* Widgets */
+
+@import url('searchbox.css');
