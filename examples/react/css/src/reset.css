@@ -1,3 +1,11 @@
+[class^='ais-'] {
+  box-sizing: border-box;
+}
+
+a[class^='ais-'] {
+  text-decoration: none;
+}
+
 /* Reset all lists */
 .ais-Breadcrumb-list,
 .ais-Carousel-list,
@@ -98,163 +106,19 @@
   overflow-anchor: none;
 }
 
-/* Reset widgets */
-.ais-Breadcrumb-list,
-.ais-Breadcrumb-item,
-.ais-Pagination-list,
-.ais-RangeInput-form,
-.ais-RatingMenu-link,
-.ais-PoweredBy {
-  display: flex;
-  align-items: center;
-}
-
-.ais-GeoSearch,
-.ais-GeoSearch-map {
-  height: 100%;
-}
-
-.ais-HierarchicalMenu-list .ais-HierarchicalMenu-list {
-  margin-left: 1em;
-}
-
-.ais-PoweredBy-logo {
-  display: block;
-  height: 1.2em;
-  width: auto;
-}
-
-.ais-PoweredBy-text {
-  margin-right: 0.3rem;
-}
-
-.ais-RatingMenu-starIcon {
-  display: block;
-  width: 20px;
-  height: 20px;
-}
-
 /* Reset SearchBox input */
-.ais-SearchBox-input::-ms-clear,
-.ais-SearchBox-input::-ms-reveal {
-  display: none;
-  width: 0;
-  height: 0;
-}
-
-.ais-SearchBox-input::-webkit-search-decoration,
-.ais-SearchBox-input::-webkit-search-cancel-button,
-.ais-SearchBox-input::-webkit-search-results-button,
-.ais-SearchBox-input::-webkit-search-results-decoration {
-  display: none;
-}
-
-/* Reset RangeSlider */
-.ais-RangeSlider .rheostat {
-  overflow: visible;
-  margin-top: 40px;
-  margin-bottom: 40px;
-}
-
-.ais-RangeSlider .rheostat-background {
-  height: 6px;
-  top: 0px;
-  width: 100%;
-}
-
-.ais-RangeSlider .rheostat-handle {
-  margin-left: -12px;
-  top: -7px;
-}
-
-.ais-RangeSlider .rheostat-background {
-  position: relative;
-  background-color: #ffffff;
-  border: 1px solid #aaa;
-}
-
-.ais-RangeSlider .rheostat-progress {
-  position: absolute;
-  top: 1px;
-  height: 4px;
-  background-color: #333;
-}
-
-.rheostat-handle {
-  position: relative;
-  z-index: 1;
-  width: 20px;
-  height: 20px;
-  background-color: #fff;
-  border: 1px solid #333;
-  border-radius: 50%;
-  cursor: grab;
-}
-
-.rheostat-marker {
-  margin-left: -1px;
-  position: absolute;
-  width: 1px;
-  height: 5px;
-  background-color: #aaa;
-}
-
-.rheostat-marker--large {
-  height: 9px;
-}
-
-.rheostat-value {
-  margin-left: 50%;
-  padding-top: 15px;
-  position: absolute;
-  text-align: center;
-  transform: translateX(-50%);
-}
-
-.rheostat-tooltip {
-  margin-left: 50%;
-  position: absolute;
-  top: -22px;
-  text-align: center;
-  transform: translateX(-50%);
-}
-
-/* Reset Carousel */
-.ais-Carousel {
-  position: relative;
-}
-
-.ais-Carousel-list {
-  grid-auto-columns: 42%;
-  display: grid;
-  grid-auto-flow: column;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  scroll-snap-type: x proximity;
-}
-
-@media (min-width: 999px) {
-  .ais-Carousel-list {
-    grid-auto-columns: 20%;
+.ais-SearchBox-input {
+  :-ms-clear,
+  ::-ms-reveal {
+    display: none;
+    width: 0;
+    height: 0;
   }
-}
 
-.ais-Carousel-navigation {
-  position: absolute;
-  top: 35%;
-  z-index: 1;
-}
-
-.ais-Carousel-navigation--previous {
-  left: 0;
-  transform: translateX(-25%);
-}
-
-.ais-Carousel-navigation--next {
-  right: 0;
-  transform: translateX(25%);
-}
-
-.ais-Carousel-item {
-  scroll-snap-align: start;
+  ::-webkit-search-decoration,
+  ::-webkit-search-cancel-button,
+  ::-webkit-search-results-button,
+  ::-webkit-search-results-decoration {
+    display: none;
+  }
 }
