@@ -1,4 +1,3 @@
-/* HierarchicalMenu */
 .ais-HierarchicalMenu-list .ais-HierarchicalMenu-list {
   margin-left: calc(var(--ais-spacing) * 1);
   padding-left: calc(var(--ais-spacing) * 0.375);
