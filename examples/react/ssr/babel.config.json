@@ -9,5 +9,6 @@
       }
     ],
     "@babel/preset-react"
-  ]
+  ],
+  "plugins": ["@babel/plugin-transform-optional-chaining"]
 }
