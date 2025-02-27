@@ -25,6 +25,7 @@
   --ais-spacing-factor: 1;
   --ais-spacing: calc(var(--ais-base-unit) * var(--ais-spacing-factor) * 1px);
   --ais-spacing-half: calc(var(--ais-spacing) / 2);
+  --ais-spacing-third: calc(var(--ais-spacing) / 3);
 
   /* Font */
   --ais-font-size: calc(var(--ais-base-unit) * 1px);

@@ -1,0 +1,26 @@
+.ais-Breadcrumb-list {
+  display: flex;
+  align-items: center;
+}
+
+.ais-Breadcrumb-item--selected {
+  color: rgb(var(--ais-text-color-rgb));
+  font-weight: var(--ais-font-weight-semibold);
+}
+
+.ais-Breadcrumb-separator {
+  color: rgb(var(--ais-muted-color-rgb));
+  font-weight: initial;
+  margin: 0 var(--ais-spacing-third);
+}
+
+.ais-Breadcrumb-link {
+  color: rgb(var(--ais-muted-color-rgb));
+  transition: color 0.2s ease-out;
+
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+}

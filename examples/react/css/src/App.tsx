@@ -67,13 +67,15 @@ export function App() {
         </div>
         <main>
           <SearchBox placeholder="Search for products…" />
-          <Breadcrumb
-            attributes={[
-              'hierarchicalCategories.lvl0',
-              'hierarchicalCategories.lvl1',
-              'hierarchicalCategories.lvl2',
-            ]}
-          />
+          <div className="breadcrumbs-wrapper">
+            <Breadcrumb
+              attributes={[
+                'hierarchicalCategories.lvl0',
+                'hierarchicalCategories.lvl1',
+                'hierarchicalCategories.lvl2',
+              ]}
+            />
+          </div>
           <CurrentRefinements />
           <ClearRefinements />
           <HitsPerPage
