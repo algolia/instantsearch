@@ -19,7 +19,7 @@ input[class^='ais-']:focus-visible {
   border-radius: calc(var(--ais-spacing) / 4);
   font-size: 0.9em;
   font-weight: var(--ais-font-weight-medium);
-  color: #fff;
+  color: rgba(var(--ais-color-white-rgb), var(--ais-color-white-alpha));
   padding: calc(var(--ais-spacing-half) * 0.75)
     calc(var(--ais-spacing-half) * 1.25);
   background-color: rgba(

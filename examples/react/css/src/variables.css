@@ -7,6 +7,8 @@
   --ais-primary-color-alpha: 1;
   --ais-muted-color-rgb: 127, 137, 164;
   --ais-muted-color-alpha: 0.6;
+  --ais-color-white-rgb: 255, 255, 255;
+  --ais-color-white-alpha: 1;
 
   /* Border color */
   --ais-border-color-rgb: 127, 137, 164;
