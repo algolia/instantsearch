@@ -1,6 +1,18 @@
 .ais-Breadcrumb-list {
-  display: flex;
-  align-items: center;
+  @media screen and (min-width: 768px) {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: var(--ais-spacing-third);
+  }
+}
+
+.ais-Breadcrumb-item {
+  margin-block-end: var(--ais-spacing-half);
+
+  @media screen and (min-width: 768px) {
+    margin-block-end: 0;
+  }
 }
 
 .ais-Breadcrumb-item--selected {
@@ -10,7 +22,7 @@
 
 .ais-Breadcrumb-separator {
   color: rgb(var(--ais-muted-color-rgb));
-  font-weight: initial;
+  font-weight: normal;
   margin: 0 var(--ais-spacing-third);
 }
 
