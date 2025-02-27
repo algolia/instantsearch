@@ -37,7 +37,7 @@
     0 2px 4px -2px rgba(var(--ais-shadow-color-rgb), var(--ais-shadow-color-alpha));
 
   /* Border radius */
-  --ais-radius-xs: 3px;
+  --ais-radius-xs: 4px;
 
   /* Transitions */
   --ais-transition-duration: 0.2s;
