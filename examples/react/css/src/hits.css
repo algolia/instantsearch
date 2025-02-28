@@ -1,0 +1,31 @@
+.ais-Hits-list {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(var(--ais-hit-min-width), 1fr)
+  );
+  gap: var(--ais-spacing);
+}
+
+.ais-Hits-item {
+  overflow: hidden;
+  background-color: rgba(
+    var(--ais-background-color-rgb),
+    var(--ais-background-color-alpha)
+  );
+  border-radius: var(--ais-radius-xs);
+  box-shadow: var(--ais-shadow-xs);
+  border: 1px solid
+    rgba(var(--ais-border-color-rgb), var(--ais-border-color-alpha));
+  transition: box-shadow var(--ais-transition-duration)
+      var(--ais-transition-timing-function),
+    background-color var(--ais-transition-duration)
+      var(--ais-transition-timing-function);
+
+  @media (hover: hover) {
+    &:hover {
+      box-shadow: var(--ais-shadow-md);
+      background-color: rgba(var(--ais-primary-color-rgb), 0.05);
+    }
+  }
+}

@@ -39,7 +39,7 @@ export function App() {
       indexName="instant_search"
       insights={true}
     >
-      <Configure hitsPerPage={8} snippetEllipsisText="…" />
+      <Configure hitsPerPage={12} snippetEllipsisText="…" />
       <header className="header">
         <SearchBox placeholder="Search for products…" />
       </header>
@@ -118,19 +118,34 @@ function ItemComponent({ item }: { item: Hit }) {
   return <Item hit={item} />;
 }
 
+function formatToDollar(amount: number, locale = 'en-US', currency = 'USD') {
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount);
+}
+
 function Item({ hit }: { hit: Hit }) {
   return (
-    <article>
-      <img src={hit.image} />
-      <h2>
-        <a href={`/products.html?pid=${hit.objectID}`}>
-          <Highlight attribute="name" hit={hit} />
-        </a>
-      </h2>
-      <p>
-        <Snippet attribute="description" hit={hit} />
-      </p>
-      <a href={`/products.html?pid=${hit.objectID}`}>See product</a>
+    <article className="hit">
+      <div className="hit-image-container">
+        <img src={hit.image} className="hit-image" />
+      </div>
+      <div className="hit-infos">
+        <p className="hit-category">{hit.categories?.[0]}</p>
+        <h2 className="hit-title">
+          <a href={`/products.html?pid=${hit.objectID}`} className="hit-link">
+            <span aria-hidden className="hit-link-overlay" />
+            <Highlight attribute="name" hit={hit} />
+          </a>
+        </h2>
+        <p className="hit-description">
+          <Snippet attribute="description" hit={hit} />
+        </p>
+        <div className="hit-price">{formatToDollar(hit.price)}</div>
+      </div>
     </article>
   );
 }
