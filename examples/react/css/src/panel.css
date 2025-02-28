@@ -8,3 +8,8 @@
   font-weight: var(--ais-font-weight-medium);
   text-transform: capitalize;
 }
+
+.ais-Panel-footer {
+  margin-top: calc(var(--ais-spacing) * 0.5);
+  font-size: 0.9em;
+}
