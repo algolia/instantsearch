@@ -5,11 +5,11 @@
   --ais-text-color-alpha: 1;
   --ais-primary-color-rgb: 31, 111, 242;
   --ais-primary-color-alpha: 1;
-  --ais-muted-color-rgb: 127, 137, 164;
+  --ais-muted-color-rgb: 109, 115, 151;
   --ais-muted-color-alpha: 0.6;
 
   /* Border color */
-  --ais-border-color-rgb: 127, 137, 164;
+  --ais-border-color-rgb: 109, 115, 151;
   --ais-border-color-alpha: 0.25;
 
   /* Background color */

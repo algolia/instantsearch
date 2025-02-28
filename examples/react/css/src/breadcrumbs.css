@@ -3,7 +3,7 @@
     align-items: center;
     display: flex;
     flex-wrap: wrap;
-    row-gap: var(--ais-spacing-third);
+    row-gap: calc(var(--ais-spacing) / 3);
   }
 }
 
@@ -23,7 +23,7 @@
 .ais-Breadcrumb-separator {
   color: rgb(var(--ais-muted-color-rgb));
   font-weight: normal;
-  margin: 0 var(--ais-spacing-third);
+  margin: 0 calc(var(--ais-spacing) / 3);
 }
 
 .ais-Breadcrumb-link {
