@@ -74,8 +74,10 @@ export function App() {
               'hierarchicalCategories.lvl2',
             ]}
           />
-          <CurrentRefinements />
-          <ClearRefinements />
+          <div className="wrapper">
+            <CurrentRefinements />
+            <ClearRefinements />
+          </div>
           <HitsPerPage
             items={[
               {

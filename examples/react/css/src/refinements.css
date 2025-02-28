@@ -1,0 +1,41 @@
+.ais-ClearRefinements-button {
+  appearance: none;
+  color: rgb(35, 38, 59);
+  cursor: pointer;
+  height: 2rem;
+  user-select: none;
+  background-color: rgb(255, 255, 255);
+  background-image: linear-gradient(
+    -180deg,
+    rgb(255, 255, 255),
+    rgb(252, 252, 253)
+  );
+  justify-content: center;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.25rem;
+  display: inline-flex;
+  box-shadow: rgba(35, 38, 59, 0.05) 0px 1px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(214, 214, 231);
+  border-image: initial;
+  border-radius: 3px;
+  place-items: center;
+  padding: 0px 1rem;
+  text-decoration: none;
+}
+
+.ais-ClearRefinements-button--disabled {
+}
+
+.ais-ClearRefinements-button:disabled[disabled] {
+  box-shadow: none;
+  color: rgb(182, 183, 213);
+  background-image: linear-gradient(
+    -180deg,
+    rgb(255, 255, 255),
+    rgb(245, 245, 250)
+  );
+  border-color: rgb(239, 239, 245);
+}
