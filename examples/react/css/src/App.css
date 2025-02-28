@@ -1,3 +1,11 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -14,10 +22,24 @@ body {
   }
 }
 
+.header {
+  background-color: #fff;
+  box-shadow: 0 0 0 1px rgba(35, 38, 59, 0.05),
+    0 1px 3px 0 rgba(35, 38, 59, 0.15);
+  padding: 0.5rem;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  @media (prefers-color-scheme: dark) {
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05),
+      0 1px 3px 0 rgba(255, 255, 255, 0.15);
+  }
+}
+
 .container {
   width: 100%;
   max-width: 80rem;
-  margin: 0 auto;
+  margin: 4rem auto 0;
   padding: 2rem;
 }
 
