@@ -12,7 +12,7 @@ export function Panel({ header, children, footer }: PanelProps) {
         <span>{header}</span>
       </div>
       <div className="ais-Panel-body">{children}</div>
-      <div className="ais-Panel-footer">{footer}</div>
+      {Boolean(footer) && <div className="ais-Panel-footer">{footer}</div>}
     </div>
   );
 }
