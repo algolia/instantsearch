@@ -1,4 +1,3 @@
-/* RefinementList */
 .ais-RefinementList-item {
   margin-bottom: calc(var(--ais-spacing));
   color: rgba(var(--ais-text-color-rgb), 0.9);
@@ -41,5 +40,5 @@
   height: var(--ais-spacing);
   transition: background-color var(--ais-transition-duration)
     var(--ais-transition-timing-function);
-  margin-right: calc(var(--ais-spacing-half) * 1.25);
+  margin-right: calc(var(--ais-spacing) * 0.625);
 }

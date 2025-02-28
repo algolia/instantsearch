@@ -19,9 +19,11 @@ input[class^='ais-']:focus-visible {
   border-radius: var(--ais-radius-xs);
   font-size: 0.9em;
   font-weight: var(--ais-font-weight-medium);
-  color: rgba(var(--ais-button-text-color-rgb), var(--ais-button-text-color-alpha));
-  padding: calc(var(--ais-spacing) * 0.375)
-    calc(var(--ais-spacing) * 0.625);
+  color: rgba(
+    var(--ais-button-text-color-rgb),
+    var(--ais-button-text-color-alpha)
+  );
+  padding: calc(var(--ais-spacing) * 0.375) calc(var(--ais-spacing) * 0.625);
   background-color: rgba(
     var(--ais-primary-color-rgb),
     var(--ais-primary-color-alpha)
@@ -33,9 +35,7 @@ input[class^='ais-']:focus-visible {
 }
 
 @media (hover: hover) {
-  [class^='ais-'][class*='-showMore']:not(
-      [class^='ais-'][disabled]
-    ):hover {
+  [class^='ais-'][class*='-showMore']:not([class^='ais-'][disabled]):hover {
     background-color: rgba(var(--ais-primary-color-rgb), 0.85);
   }
 }
@@ -49,8 +49,7 @@ input[class^='ais-']:focus-visible {
   margin-left: auto;
   color: rgba(var(--ais-text-color-rgb), 0.7);
   border-radius: calc(infinity * 1px);
-  padding: calc(var(--ais-spacing) * 0.125)
-    calc(var(--ais-spacing) * 0.625);
+  padding: calc(var(--ais-spacing) * 0.125) calc(var(--ais-spacing) * 0.625);
   border: 1px solid rgba(var(--ais-muted-color-rgb), 0.3);
   background-color: rgba(
     var(--ais-background-color-rgb),
@@ -61,9 +60,9 @@ input[class^='ais-']:focus-visible {
 }
 
 input[class^='ais-'][type='checkbox']:checked {
-  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20aria-hidden%3D%22true%22%20viewBox%3D%220%200%2016%2012%22%3E%3Cpath%20stroke%3D%22%23fff%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%223%22%20d%3D%22M1%205.917%205.724%2010.5%2015%201.5%22%2F%3E%3C%2Fsvg%3E");
+  background-image: var(--ais-check-icon);
   background-repeat: no-repeat;
-  background-size: var(--ais-spacing-half);
+  background-size: calc(var(--ais-spacing) * 0.625);
   background-position: 50%;
   background-color: rgba(
     var(--ais-primary-color-rgb),
