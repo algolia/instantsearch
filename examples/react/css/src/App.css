@@ -33,6 +33,7 @@ body {
   @media (prefers-color-scheme: dark) {
     box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05),
       0 1px 3px 0 rgba(255, 255, 255, 0.15);
+    background-color: #222;
   }
 }
 
