@@ -25,6 +25,7 @@
   /* Size and spacing */
   --ais-spacing: 1rem;
   --ais-icon-stroke-width: 1.6;
+  --ais-hit-min-width: 200px;
 
   /* Font */
   --ais-font-family: inherit;
@@ -67,6 +68,9 @@
 
     /* Background color */
     --ais-background-color-rgb: 18, 18, 18;
+
+    /* Shadow color */
+    --ais-shadow-color-rgb: 221, 209, 197;
 
     /* SVG icons */
     /* Use --ais-text-color-rgb: 235, 235, 235; and stroke-width: 1.6; */
