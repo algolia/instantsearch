@@ -25,7 +25,7 @@
   &:before {
     transition: transform var(--ais-transition-duration)
       var(--ais-transition-timing-function);
-    background-image: var(--ais-light-chevron-icon);
+    background-image: var(--ais-chevron-icon);
     background-repeat: no-repeat;
     content: '';
     display: inline-block;
@@ -33,12 +33,6 @@
     margin-right: 0.5rem;
     user-select: none;
     width: 1rem;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  .ais-HierarchicalMenu-link:before {
-    background-image: var(--ais-dark-chevron-icon);
   }
 }
 
@@ -62,7 +56,7 @@
     color: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
 
     &:before {
-      background-image: url(data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%231f6ff2%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E);
+      background-image: var(--ais-selected-chevron-icon);
     }
   }
 
