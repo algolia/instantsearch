@@ -4,4 +4,10 @@
 /* Widgets */
 
 @import url('searchbox.css');
+@import url('common.css');
+@import url('searchbox.css');
+@import url('breadcrumbs.css');
+@import url('hierarchical-menu.css');
+@import url('refinement-list.css');
+@import url('panel.css');
 @import url('pagination.css');

@@ -1,0 +1,15 @@
+.ais-Panel-header {
+  display: flex;
+  align-items: center;
+  padding: var(--ais-spacing);
+  border-bottom: 1px solid
+    rgba(var(--ais-border-color-rgb), var(--ais-border-color-alpha));
+  margin-bottom: var(--ais-spacing);
+  font-weight: var(--ais-font-weight-medium);
+  text-transform: capitalize;
+}
+
+.ais-Panel-footer {
+  margin-top: calc(var(--ais-spacing) * 0.5);
+  font-size: 0.9em;
+}

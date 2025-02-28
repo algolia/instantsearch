@@ -45,7 +45,7 @@ export function App() {
       </header>
       <div className="container two-columns">
         <div className="left-column">
-          <Panel header="categories">
+          <Panel header="categories" footer="This is a footer">
             <HierarchicalMenu
               attributes={[
                 'hierarchicalCategories.lvl0',
@@ -69,13 +69,15 @@ export function App() {
           </Panel>
         </div>
         <main>
-          <Breadcrumb
-            attributes={[
-              'hierarchicalCategories.lvl0',
-              'hierarchicalCategories.lvl1',
-              'hierarchicalCategories.lvl2',
-            ]}
-          />
+          <div className="breadcrumbs-wrapper">
+            <Breadcrumb
+              attributes={[
+                'hierarchicalCategories.lvl0',
+                'hierarchicalCategories.lvl1',
+                'hierarchicalCategories.lvl2',
+              ]}
+            />
+          </div>
           <CurrentRefinements />
           <ClearRefinements />
           <HitsPerPage

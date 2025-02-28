@@ -23,6 +23,7 @@ body {
 }
 
 .header {
+  background-color: #fff;
   box-shadow: 0 0 0 1px rgba(35, 38, 59, 0.05),
     0 1px 3px 0 rgba(35, 38, 59, 0.15);
   padding: 0.5rem;
@@ -32,6 +33,7 @@ body {
   @media (prefers-color-scheme: dark) {
     box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05),
       0 1px 3px 0 rgba(255, 255, 255, 0.15);
+    background-color: #222;
   }
 }
 
@@ -52,4 +54,8 @@ body {
   display: flex;
   flex-direction: column;
   row-gap: 1rem;
+}
+
+.breadcrumbs-wrapper {
+  margin-block: 1rem;
 }
