@@ -69,13 +69,15 @@ export function App() {
           </Panel>
         </div>
         <main>
-          <Breadcrumb
-            attributes={[
-              'hierarchicalCategories.lvl0',
-              'hierarchicalCategories.lvl1',
-              'hierarchicalCategories.lvl2',
-            ]}
-          />
+          <div className="breadcrumbs-wrapper">
+            <Breadcrumb
+              attributes={[
+                'hierarchicalCategories.lvl0',
+                'hierarchicalCategories.lvl1',
+                'hierarchicalCategories.lvl2',
+              ]}
+            />
+          </div>
           <CurrentRefinements />
           <ClearRefinements />
           <HitsPerPage

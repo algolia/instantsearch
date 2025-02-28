@@ -55,3 +55,7 @@ body {
   flex-direction: column;
   row-gap: 1rem;
 }
+
+.breadcrumbs-wrapper {
+  margin-block: 1rem;
+}
