@@ -4,25 +4,21 @@
   cursor: pointer;
   height: 2rem;
   user-select: none;
-  background-color: rgb(255, 255, 255);
+  background-color: rgb(var(--ais-background-color-rgb));
   justify-content: center;
   font-size: 0.875rem;
   line-height: 1.25rem;
   display: inline-flex;
-  border: 1px solid rgb(214, 214, 231);
-  border-radius: 3px;
+  border: 1px solid rgb(var(--ais-border-color-rgb));
+  border-radius: var(--ais-radius-xs);
   place-items: center;
-  padding: 0px 1rem;
+  padding: 0.3rem 0.5rem;
   text-decoration: none;
-}
 
-.ais-ClearRefinements-button--disabled {
-}
-
-.ais-ClearRefinements-button:disabled[disabled] {
-  box-shadow: none;
-  color: rgba(var(--ais-text-color-rgb), 0.2);
-  border-color: rgb(239, 239, 245);
+  &:disabled[disabled] {
+    color: rgba(var(--ais-text-color-rgb), 0.2);
+    border-color: rgba(var(--ais-border-color-rgb), 0.2);
+  }
 }
 
 .ais-CurrentRefinements-list {
@@ -38,9 +34,9 @@
   align-items: center;
   font-size: 0.875rem;
   display: inline-flex;
-  border: 1px solid rgb(182, 183, 213);
-  border-radius: 3px;
-  padding: 0.05rem 0.5rem;
+  border: 1px solid rgb(var(--ais-border-color-rgb));
+  border-radius: var(--ais-radius-xs);
+  padding: 0.3rem 0.5rem;
   color: rgb(var(--ais-text-color-rgb));
 }
 
@@ -56,7 +52,5 @@
 
 .ais-CurrentRefinements-delete {
   color: rgb(var(--ais-muted-color-rgb));
-  height: 100%;
-  outline-width: 0px;
-  margin-left: 0.25rem;
+  margin-left: calc((var(--ais-spacing) / 3));
 }
