@@ -3,8 +3,8 @@
 
 /* Widgets */
 
-@import url('searchbox.css');
 @import url('common.css');
+@import url('searchbox.css');
 @import url('searchbox.css');
 @import url('breadcrumbs.css');
 @import url('hierarchical-menu.css');
