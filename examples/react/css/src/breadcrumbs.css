@@ -28,7 +28,8 @@
 
 .ais-Breadcrumb-link {
   color: rgb(var(--ais-muted-color-rgb));
-  transition: color 0.2s ease-out;
+  transition: color var(--ais-transition-duration)
+    var(--ais-transition-timing-function);
 
   &:hover,
   &:focus {
