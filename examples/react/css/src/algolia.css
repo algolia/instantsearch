@@ -1,3 +1,7 @@
-@import url('variables.css');
 @import url('reset.css');
-@import url('breadcrumbs');
+@import url('variables.css');
+
+/* Widgets */
+
+@import url('searchbox.css');
+@import url('breadcrumbs.css');

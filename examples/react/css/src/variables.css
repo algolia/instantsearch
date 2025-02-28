@@ -21,14 +21,10 @@
   --ais-shadow-color-alpha: 0.1;
 
   /* Size and spacing */
-  --ais-base-unit: 16;
-  --ais-spacing-factor: 1;
-  --ais-spacing: calc(var(--ais-base-unit) * var(--ais-spacing-factor) * 1px);
-  --ais-spacing-half: calc(var(--ais-spacing) / 2);
-  --ais-spacing-third: calc(var(--ais-spacing) / 3);
+  --ais-spacing: 1rem;
+  --ais-icon-stroke-width: 1.6
 
   /* Font */
-  --ais-font-size: calc(var(--ais-base-unit) * 1px);
   --ais-font-family: inherit;
   --ais-font-weight-medium: 500;
   --ais-font-weight-semibold: 600;
@@ -39,6 +35,9 @@
     rgba(var(--ais-shadow-color-rgb), var(--ais-shadow-color-alpha));
   --ais-shadow-md: 0 4px 6px -1px rgba(var(--ais-shadow-color-rgb), var(--ais-shadow-color-alpha)),
     0 2px 4px -2px rgba(var(--ais-shadow-color-rgb), var(--ais-shadow-color-alpha));
+
+  /* Border radius */
+  --ais-radius-xs: 4px;
 
   /* Transitions */
   --ais-transition-duration: 0.2s;

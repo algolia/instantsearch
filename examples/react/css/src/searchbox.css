@@ -1,0 +1,113 @@
+.ais-SearchBox-form {
+  display: flex;
+  align-items: center;
+  border: 1px solid
+    rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha));
+  border-radius: var(--ais-radius-xs);
+  line-height: 1em;
+  margin: 0;
+  width: 100%;
+  height: calc(var(--ais-spacing) * 2.75);
+  &:focus-within {
+    border-color: rgba(var(--ais-primary-color-rgb), 1);
+    box-shadow: rgba(var(--ais-primary-color-rgb), 0.3) 0 0 0 2px,
+      inset rgba(var(--ais-primary-color-rgb), 0.3) 0 0 0 2px;
+    outline: currentColor none medium;
+  }
+  .ais-SearchBox-submit,
+  .ais-SearchBox-loadingIndicator {
+    cursor: initial;
+    flex-shrink: 0;
+    height: 100%;
+    padding-left: var(--ais-spacing);
+    padding-right: calc(var(--ais-spacing) * 0.75);
+    svg {
+      color: rgba(var(--ais-primary-color-rgb), 1);
+      height: auto;
+      max-height: var(--ais-spacing);
+      width: var(--ais-spacing);
+      stroke-width: var(--ais-icon-stroke-width);
+    }
+  }
+  .ais-SearchBox-submit {
+    appearance: none;
+    background: none;
+    border: 0;
+    margin: 0;
+    order: 1;
+    &:has(~ .ais-SearchBox-loadingIndicator:not([hidden])) {
+      display: none;
+    }
+    .ais-SearchBox-submitIcon {
+      fill: currentColor;
+      transform: translateY(1px);
+    }
+  }
+  .ais-SearchBox-loadingIndicator {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    &[hidden] {
+      display: none;
+    }
+    .ais-SearchBox-loadingIcon {
+      stroke: currentColor;
+    }
+  }
+
+  .ais-SearchBox-input {
+    appearance: none;
+    background: none;
+    border: 0;
+    color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+    font: inherit;
+    height: 100%;
+    padding: 0;
+    width: 100%;
+    order: 2;
+    &::placeholder {
+      color: rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha));
+      opacity: 1;
+    }
+    /* Focus is set and styled on the parent, it isn't necessary here */
+    &:focus {
+      border-color: none;
+      box-shadow: none;
+      outline: none;
+    }
+    /* Remove native appearance */
+    &::-webkit-search-decoration,
+    &::-webkit-search-cancel-button,
+    &::-webkit-search-results-button,
+    &::-webkit-search-results-decoration {
+      appearance: none;
+    }
+  }
+
+  .ais-SearchBox-reset {
+    align-items: center;
+    background: none;
+    border: 0;
+    color: rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha));
+    cursor: pointer;
+    display: flex;
+    height: 100%;
+    margin: 0;
+    padding: 0 var(--ais-spacing);
+    order: 3;
+    &:hover,
+    &:focus {
+      color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+    }
+    &[hidden] {
+      display: none;
+    }
+    .ais-SearchBox-resetIcon {
+      stroke-width: var(--ais-icon-stroke-width);
+      height: auto;
+      max-height: calc(var(--ais-spacing) * 0.675);
+      width: calc(var(--ais-spacing) * 0.675);
+      fill: currentColor;
+    }
+  }
+}

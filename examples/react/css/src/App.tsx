@@ -40,6 +40,9 @@ export function App() {
       insights={true}
     >
       <Configure hitsPerPage={8} snippetEllipsisText="…" />
+      <header className="header">
+        <SearchBox placeholder="Search for products…" />
+      </header>
       <div className="container two-columns">
         <div className="left-column">
           <Panel header="categories">
@@ -66,7 +69,6 @@ export function App() {
           </Panel>
         </div>
         <main>
-          <SearchBox placeholder="Search for products…" />
           <div className="breadcrumbs-wrapper">
             <Breadcrumb
               attributes={[
