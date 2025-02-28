@@ -45,7 +45,7 @@ export function App() {
       </header>
       <div className="container two-columns">
         <div className="left-column">
-          <Panel header="categories">
+          <Panel header="categories" footer="This is a footer">
             <HierarchicalMenu
               attributes={[
                 'hierarchicalCategories.lvl0',
