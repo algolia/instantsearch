@@ -54,7 +54,10 @@
         var(--ais-primary-color-rgb),
         var(--ais-primary-color-alpha)
       );
-      color: white;
+      color: rgba(
+        var(--ais-button-text-color-rgb),
+        var(--ais-button-text-color-alpha)
+      );
       cursor: default;
       &:hover {
         background: rgba(var(--ais-primary-color-rgb), 0.8);
