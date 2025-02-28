@@ -122,3 +122,9 @@ a[class^='ais-'] {
     display: none;
   }
 }
+
+/* Reset checkboxes */
+.ais-RefinementList-checkbox,
+.ais-ToggleRefinement-checkbox {
+  margin: 0;
+}
