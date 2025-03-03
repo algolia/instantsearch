@@ -6,6 +6,11 @@ a[class^='ais-'] {
   text-decoration: none;
 }
 
+select[class^='ais-'] {
+  appearance: none;
+  background: none;
+}
+
 /* Reset all lists */
 .ais-Breadcrumb-list,
 .ais-Carousel-list,
