@@ -9,39 +9,36 @@
   display: flex;
 }
 
-.ais-ToggleRefinement-checkbox {
+input[class^='ais-'][class*='ToggleRefinement-checkbox'] {
   appearance: none;
   height: 18px;
   pointer-events: none;
   width: 32px;
   position: relative;
-  border: 1px solid rgba(var(--ais-muted-color-rgb), 0.3);
+  border: 1px solid rgba(var(--ais-border-color-rgb), 0.3);
   background-color: rgb(var(--ais-background-color-rgb));
-  border-radius: 9999px;
-}
+  border-radius: calc(infinity * 1px);
 
-.ais-ToggleRefinement-checkbox:checked {
-  background-image: none !important;
+  &:checked {
+    background-image: none;
+  }
 }
 
 .ais-ToggleRefinement-checkbox::after {
   appearance: none;
   content: '';
-  height: 16px;
-  width: 16px;
+  width: var(--ais-spacing);
+  height: var(--ais-spacing);
   position: absolute;
   top: 0;
   left: 0;
   background: rgb(var(--ais-muted-color-rgb));
-  border-radius: 9999px;
-  transition: 0.1s ease-in-out;
+  border-radius: calc(infinity * 1px);
+  transition: var(--ais-transition-duration)
+    var(--ais-transition-timing-function);
 }
 
 .ais-ToggleRefinement-checkbox:checked::after {
   transform: translateX(14px);
   background-color: rgb(var(--ais-background-color-rgb));
-
-  @media (prefers-color-scheme: dark) {
-    background-color: #fff;
-  }
 }
