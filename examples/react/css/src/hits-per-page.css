@@ -7,7 +7,7 @@
     content: '';
     display: inline-block;
     height: 1rem;
-    margin-left: calc(calc(var(--ais-spacing) * -1) + -1rem);
+    margin-left: calc(var(--ais-spacing) * -1 - 1rem);
     transform: translateY(0.2rem);
     user-select: none;
     width: 1rem;
