@@ -76,7 +76,7 @@ This message will only be displayed in development mode.`
       <InstantSearch {...instantSearchProps} routing={routing!}>
         {isServer && <InitializePromise nonce={nonce} />}
         {children}
-        {isServer && <TriggerSearch />}
+        {isServer && <TriggerSearch nonce={nonce} />}
       </InstantSearch>
     </ServerOrHydrationProvider>
   );

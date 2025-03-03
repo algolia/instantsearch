@@ -1,17 +1,16 @@
 import { getInitialResults } from 'instantsearch.js/es/lib/server';
 import { resetWidgetId, walkIndex } from 'instantsearch.js/es/lib/utils';
 import { ServerInsertedHTMLContext } from 'next/navigation';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import {
   useInstantSearchContext,
   useRSCContext,
   wrapPromiseWithState,
 } from 'react-instantsearch-core';
 
-import { htmlEscapeJsonString } from './htmlEscape';
+import { createInsertHTML } from './createInsertHTML';
 
 import type {
-  InitialResults,
   SearchOptions,
   CompositionClient,
   SearchClient,
@@ -25,33 +24,6 @@ type InitializePromiseProps = {
    */
   nonce?: string;
 };
-
-const createInsertHTML =
-  ({
-    options,
-    results,
-    nonce,
-  }: {
-    options: { inserted: boolean };
-    results: InitialResults;
-    nonce?: string;
-  }) =>
-  () => {
-    if (options.inserted) {
-      return <></>;
-    }
-    options.inserted = true;
-    return (
-      <script
-        nonce={nonce}
-        dangerouslySetInnerHTML={{
-          __html: `window[Symbol.for("InstantSearchInitialResults")] = ${htmlEscapeJsonString(
-            JSON.stringify(results)
-          )}`,
-        }}
-      />
-    );
-  };
 
 export function InitializePromise({ nonce }: InitializePromiseProps) {
   const search = useInstantSearchContext();
