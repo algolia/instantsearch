@@ -13,9 +13,6 @@
     width: 1rem;
   }
   .ais-HitsPerPage-select {
-    appearance: none;
-    background: none;
-    border: 0;
     color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
     font: inherit;
     padding: calc(var(--ais-spacing) / 2) calc(var(--ais-spacing) * 2 + 0.5rem)
