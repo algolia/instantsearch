@@ -8,8 +8,8 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@algolia/autocomplete-js": "1.18.0",
-    "@algolia/autocomplete-theme-classic": "1.18.0",
+    "@algolia/autocomplete-js": "1.18.1",
+    "@algolia/autocomplete-theme-classic": "1.18.1",
     "algoliasearch": "4",
     "preact": "10.5.14"
   },
