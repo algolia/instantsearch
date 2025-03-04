@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.5](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.4.4...react-instantsearch-nextjs@0.4.5) (2025-03-04)
+
+
+### Bug Fixes
+
+* **next:** insert empty initial results for page with no widgets ([#6595](https://github.com/algolia/instantsearch/issues/6595)) ([8e1012f](https://github.com/algolia/instantsearch/commit/8e1012f26562e656867d08f140adccf2fddff4b1))
+
+
+
+
+
 ## [0.4.4](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.4.3...react-instantsearch-nextjs@0.4.4) (2025-01-28)
 
 **Note:** Version bump only for package react-instantsearch-nextjs

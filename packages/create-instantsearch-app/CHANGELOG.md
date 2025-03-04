@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.5.24](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.23...create-instantsearch-app@7.5.24) (2025-03-04)
+
+
+### Bug Fixes
+
+* **create-instantsearch-app:** fix corejs version in vue-is template  ([#6567](https://github.com/algolia/instantsearch/issues/6567)) ([018ee43](https://github.com/algolia/instantsearch/commit/018ee43a0b18b0210cc06bab5b6a451e80a6deab))
+
+
+
+
+
 ## [7.5.23](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.22...create-instantsearch-app@7.5.23) (2025-01-28)
 
 **Note:** Version bump only for package create-instantsearch-app
