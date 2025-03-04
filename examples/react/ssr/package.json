@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-server-side-rendering",
-  "version": "6.88.0",
+  "version": "6.89.0",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -10,8 +10,8 @@
   },
   "devDependencies": {
     "@babel/core": "7.15.5",
-    "@babel/polyfill": "7.4.4",
     "@babel/plugin-transform-optional-chaining": "7.25.9",
+    "@babel/polyfill": "7.4.4",
     "@babel/preset-env": "7.4.5",
     "@babel/preset-react": "7.0.0",
     "babel-core": "6.26.3",
@@ -27,6 +27,6 @@
     "express": "4.17.1",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "react-instantsearch": "7.15.3"
+    "react-instantsearch": "7.15.4"
   }
 }

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.78.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.77.3...instantsearch.js@4.78.0) (2025-03-04)
+
+
+### Features
+
+* make events default implementation compatible with composition API ([#6569](https://github.com/algolia/instantsearch/issues/6569)) ([f43c40f](https://github.com/algolia/instantsearch/commit/f43c40f5d64708f6938ac2843b62b212c4885eff))
+
+
+
+
+
 ## [4.77.3](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.77.2...instantsearch.js@4.77.3) (2025-01-28)
 
 **Note:** Version bump only for package instantsearch.js
