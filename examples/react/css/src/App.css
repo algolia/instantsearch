@@ -13,13 +13,17 @@ body {
     Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
   background-color: #fff;
   color: #222;
-}
 
-@media (prefers-color-scheme: dark) {
-  body {
+  @media (prefers-color-scheme: dark) {
     background-color: #222;
     color: #fff;
   }
+}
+
+a:focus-visible {
+  outline: 2px solid
+    rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+  outline-offset: 2px;
 }
 
 .header {
@@ -30,6 +34,7 @@ body {
   position: fixed;
   top: 0;
   width: 100%;
+  z-index: 10;
   @media (prefers-color-scheme: dark) {
     box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05),
       0 1px 3px 0 rgba(255, 255, 255, 0.15);
@@ -58,4 +63,98 @@ body {
 
 .wrapper {
   margin-block: 1rem;
+}
+
+/* Hits */
+.hit {
+  position: relative;
+  height: 100%;
+  line-height: 1.4;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.hit-image-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  aspect-ratio: 1;
+  padding: 1rem;
+  overflow: hidden;
+  position: relative;
+  &:before {
+    transition: opacity var(--ais-transition-duration)
+      var(--ais-transition-timing-function);
+    content: '';
+    opacity: 0;
+    pointer-events: none;
+    display: block;
+    inset: 0;
+    background-color: rgba(255, 255, 255, 0.2);
+    position: absolute;
+    z-index: 1;
+  }
+}
+
+.hit-image {
+  height: auto;
+  max-height: 100%;
+  max-width: 100%;
+  transition: transform var(--ais-transition-duration)
+    var(--ais-transition-timing-function);
+}
+
+.hit-infos {
+  padding: var(--ais-spacing);
+  display: flex;
+  flex-direction: column;
+  row-gap: calc(var(--ais-spacing) / 2);
+  flex: 1;
+}
+
+.hit-category {
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgb(var(--ais-muted-color-rgb));
+}
+
+.hit-title {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.hit-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.hit-link-overlay {
+  inset: 0;
+  position: absolute;
+  z-index: 1;
+}
+
+.hit-description {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin: 0;
+}
+
+.hit-price {
+  margin-top: auto;
+  font-weight: 500;
+}
+
+@media (hover: hover) {
+  .ais-Hits-item:hover {
+    .hit-image {
+      transform: scale(1.05);
+    }
+
+    .hit-image-container:before {
+      opacity: 1;
+    }
+  }
 }
