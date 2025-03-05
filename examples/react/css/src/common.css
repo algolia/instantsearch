@@ -8,7 +8,8 @@
 /* Focus outline */
 a[class^='ais-']:focus-visible,
 button[class^='ais-']:focus-visible,
-input[class^='ais-']:focus-visible {
+input[class^='ais-']:focus-visible,
+select[class^='ais-']:focus-visible {
   outline: 2px solid
     rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
   outline-offset: 2px;
