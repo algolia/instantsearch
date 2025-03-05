@@ -1,0 +1,44 @@
+.ais-ToggleRefinement-label {
+  font-size: 0.875rem;
+  line-height: 1.75rem;
+  display: block;
+  cursor: pointer;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+}
+
+input[class^='ais-'][class*='ToggleRefinement-checkbox'] {
+  appearance: none;
+  height: 18px;
+  pointer-events: none;
+  width: 32px;
+  position: relative;
+  border: 1px solid rgba(var(--ais-border-color-rgb), 0.3);
+  background-color: rgb(var(--ais-background-color-rgb));
+  border-radius: calc(infinity * 1px);
+
+  &:checked {
+    background-image: none;
+  }
+}
+
+.ais-ToggleRefinement-checkbox::after {
+  appearance: none;
+  content: '';
+  width: var(--ais-spacing);
+  height: var(--ais-spacing);
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgb(var(--ais-muted-color-rgb));
+  border-radius: calc(infinity * 1px);
+  transition: var(--ais-transition-duration)
+    var(--ais-transition-timing-function);
+}
+
+.ais-ToggleRefinement-checkbox:checked::after {
+  transform: translateX(14px);
+  background-color: rgb(var(--ais-background-color-rgb));
+}
