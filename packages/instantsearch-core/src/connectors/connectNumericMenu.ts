@@ -334,7 +334,7 @@ export const connectNumericMenu: NumericMenuConnector =
           return {
             createURL: connectorState.createURL(state),
             items: transformItems(preparedItems, { results }),
-            canRefine: !(hasNoResults && allIsSelected),
+            canRefine: !hasNoResults || !allIsSelected,
             refine: connectorState.refine,
             sendEvent: connectorState.sendEvent,
             widgetParams,

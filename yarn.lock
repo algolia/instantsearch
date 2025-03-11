@@ -14049,6 +14049,11 @@ eslint-plugin-compat@6.0.1:
     lodash.memoize "^4.1.2"
     semver "^7.6.2"
 
+eslint-plugin-de-morgan@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-de-morgan/-/eslint-plugin-de-morgan-1.2.0.tgz#bf3aaa68e82835beee6010179fbf7019bca9ff1d"
+  integrity sha512-XOZxiOMHchXn425a1DS/NOXVkGqKiTOCvVGIPru/l/bfF4Ant7u8d4+rXOqVFEN5Z8K+I/AO19U074gqnnBsJw==
+
 eslint-plugin-deprecation@1.3.2:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/eslint-plugin-deprecation/-/eslint-plugin-deprecation-1.3.2.tgz#a8125d28c56158cdfa1a685197e6be8ed86f189e"

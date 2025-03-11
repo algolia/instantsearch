@@ -299,7 +299,7 @@ class RefinementList<TTemplates extends Templates> extends Component<
   public render() {
     const showMoreButtonClassName = cx(
       this.props.cssClasses.showMore,
-      !(this.props.showMore === true && this.props.canToggleShowMore) &&
+      (this.props.showMore !== true || !this.props.canToggleShowMore) &&
         this.props.cssClasses.disabledShowMore
     );
 
@@ -321,7 +321,8 @@ class RefinementList<TTemplates extends Templates> extends Component<
 
     const shouldDisableSearchBox =
       this.props.searchIsAlwaysActive !== true &&
-      !(this.props.isFromSearch || !this.props.hasExhaustiveItems);
+      !this.props.isFromSearch &&
+      this.props.hasExhaustiveItems;
 
     const searchBox = this.props.searchFacetValues && (
       <div className={this.props.cssClasses.searchBox}>

@@ -8,6 +8,7 @@ const config = {
     'algolia/react',
     'algolia/typescript',
     'plugin:react-hooks/recommended',
+    'plugin:de-morgan/recommended-legacy',
   ],
   plugins: ['react-hooks', 'deprecation'],
   globals: {

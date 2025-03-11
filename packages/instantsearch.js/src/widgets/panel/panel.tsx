@@ -242,7 +242,7 @@ const panel: PanelWidget = (panelWidgetParams) => {
   };
 
   return (widgetFactory) => (widgetParams) => {
-    if (!(widgetParams && widgetParams.container)) {
+    if (!widgetParams || !widgetParams.container) {
       throw new Error(
         withUsage(
           `The \`container\` option is required in the widget within the panel.`

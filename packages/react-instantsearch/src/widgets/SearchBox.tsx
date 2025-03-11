@@ -55,7 +55,7 @@ export function SearchBox({
   function setQuery(newQuery: string, isComposing = false) {
     setInputValue(newQuery);
 
-    if (searchAsYouType && !(ignoreCompositionEvents && isComposing)) {
+    if (searchAsYouType && (!ignoreCompositionEvents || !isComposing)) {
       refine(newQuery);
     }
   }
