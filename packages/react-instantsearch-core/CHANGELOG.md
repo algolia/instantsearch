@@ -1297,7 +1297,7 @@ this will go down afterwards, but for now there's some more duplication
 Previously there were three options to pass a search client: searchClient, appId & apiKey, algoliaClient. The latter two have been removed, and now only `searchClient` is accepted. This searchClient is an instance of the `algoliasearch` module:
 
 ```js
-import { liteClient as algoliasearch } from 'algoliasearch/lite';
+import algoliasearch from 'algoliasearch/lite';
 
 const searchClient = algoliasearch('myAppId', 'myApiKey', {
   _useRequestCache: true,
