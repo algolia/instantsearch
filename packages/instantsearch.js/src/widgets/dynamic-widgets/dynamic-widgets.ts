@@ -71,11 +71,9 @@ const dynamicWidgets: DynamicWidgetsWidget = function dynamicWidgets(
   }
 
   if (
-    !(
-      widgets &&
-      Array.isArray(widgets) &&
-      widgets.every((widget) => typeof widget === 'function')
-    )
+    !widgets ||
+    !Array.isArray(widgets) ||
+    !widgets.every((widget) => typeof widget === 'function')
   ) {
     throw new Error(
       withUsage('The `widgets` option expects an array of callbacks.')

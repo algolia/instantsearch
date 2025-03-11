@@ -90,10 +90,8 @@ class SearchBox extends Component<
     const query = (event.target as HTMLInputElement).value;
 
     if (
-      !(
-        this.props.ignoreCompositionEvents &&
-        (event as KeyboardEvent).isComposing
-      )
+      !this.props.ignoreCompositionEvents ||
+      !(event as KeyboardEvent).isComposing
     ) {
       if (searchAsYouType) {
         refine(query);

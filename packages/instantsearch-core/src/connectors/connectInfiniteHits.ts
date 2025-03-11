@@ -401,7 +401,7 @@ export const connectInfiniteHits = function connectInfiniteHits<
             cachedItems[page] === undefined &&
             !results.__isArtificial &&
             instantSearchInstance.status === 'idle' &&
-            !(hasDynamicWidgets && hasNoFacets)
+            (!hasDynamicWidgets || !hasNoFacets)
           ) {
             cachedItems[page] = transformedHits;
             cache.write({ state: normalizeState(state), items: cachedItems });

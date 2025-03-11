@@ -877,7 +877,7 @@ SearchResults.prototype.getFacetValues = function (attribute, opts) {
     sortBy: SearchResults.DEFAULT_SORT,
     // if no sortBy is given, attempt to sort based on facetOrdering
     // if it is given, we still allow to sort via facet ordering first
-    facetOrdering: !(opts && opts.sortBy),
+    facetOrdering: !opts || !opts.sortBy,
   });
 
   // eslint-disable-next-line consistent-this

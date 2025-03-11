@@ -106,9 +106,9 @@ export function historyRouter<TRouteState = UiState>({
       // OR
       // - the last write was from InstantSearch.js
       // (unlike a SPA, where it would have last written)
-      const lastPushWasByISAfterDispose = !(
-        router.isDisposed && latestAcknowledgedHistory !== window.history.length
-      );
+      const lastPushWasByISAfterDispose =
+        !router.isDisposed ||
+        latestAcknowledgedHistory === window.history.length;
 
       return (
         // When the last state change was through popstate, the IS.js state changes,

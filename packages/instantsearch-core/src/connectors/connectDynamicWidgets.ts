@@ -104,11 +104,9 @@ export const connectDynamicWidgets: DynamicWidgetsConnector =
       } = widgetParams;
 
       if (
-        !(
-          widgets &&
-          Array.isArray(widgets) &&
-          widgets.every((widget) => typeof widget === 'object')
-        )
+        !widgets ||
+        !Array.isArray(widgets) ||
+        !widgets.every((widget) => typeof widget === 'object')
       ) {
         throw new Error(
           withUsage('The `widgets` option expects an array of widgets.')
