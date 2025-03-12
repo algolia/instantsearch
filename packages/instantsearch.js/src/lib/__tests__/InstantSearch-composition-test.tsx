@@ -178,7 +178,8 @@ describe('Composition implementation', () => {
       search.addWidgets([
         configure({
           facets: ['brand'],
-          disjunctiveFacets: ['categories'],
+          disjunctiveFacets: ['categories', 'author'],
+          disjunctiveFacetsRefinements: { author: ['Terry Pratchett'] },
         }),
         virtualSearchBox({}),
       ]);
@@ -190,7 +191,11 @@ describe('Composition implementation', () => {
       expect(searchClient.search).toHaveBeenNthCalledWith(1, {
         compositionID: 'my-composition',
         requestBody: {
-          params: { query: '', facets: ['brand', 'disjunctive(categories)'] },
+          params: {
+            query: '',
+            facets: ['brand', 'categories', 'disjunctive(author)'],
+            facetFilters: [['author:Terry Pratchett']],
+          },
         },
       });
     });
