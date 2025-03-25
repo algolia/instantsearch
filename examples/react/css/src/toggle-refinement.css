@@ -1,0 +1,41 @@
+.ais-ToggleRefinement-label {
+  cursor: pointer;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+}
+
+.ais-ToggleRefinement-checkbox {
+  appearance: none;
+  height: 18px;
+  width: 32px;
+  position: relative;
+  pointer-events: none;
+  border: 1px solid rgba(var(--ais-border-color-rgb), 0.3);
+  background-color: rgb(var(--ais-background-color-rgb));
+  border-radius: calc(infinity * 1px);
+}
+
+.ais-ToggleRefinement-checkbox:checked {
+  background-image: none !important;
+}
+
+.ais-ToggleRefinement-checkbox:checked::after {
+  transform: translateX(14px);
+  background-color: rgb(var(--ais-background-color-rgb));
+}
+
+.ais-ToggleRefinement-checkbox::after {
+  appearance: none;
+  content: '';
+  width: var(--ais-spacing);
+  height: var(--ais-spacing);
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgb(var(--ais-muted-color-rgb));
+  border-radius: calc(infinity * 1px);
+  transition: var(--ais-transition-duration)
+    var(--ais-transition-timing-function);
+}
