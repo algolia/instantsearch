@@ -1,0 +1,35 @@
+.ais-CurrentRefinements-list {
+  display: flex;
+  gap: calc((var(--ais-spacing) / 2));
+  flex-wrap: wrap;
+}
+
+.ais-CurrentRefinements-item {
+  align-items: center;
+  font-size: 0.9em;
+  display: inline-flex;
+  border: 1px solid
+    rgba(var(--ais-border-color-rgb), var(--ais-border-color-alpha));
+  border-radius: var(--ais-radius-xs);
+  padding: calc((var(--ais-spacing) / 3)) calc((var(--ais-spacing) / 2));
+  color: rgb(var(--ais-text-color-rgb));
+}
+
+.ais-CurrentRefinements-label {
+  text-transform: capitalize;
+}
+
+.ais-CurrentRefinements-category {
+  margin-left: calc((var(--ais-spacing) / 2));
+  display: flex;
+  align-items: center;
+}
+
+.ais-CurrentRefinements-delete {
+  color: rgb(var(--ais-muted-color-rgb));
+  margin-left: calc((var(--ais-spacing) / 3));
+
+  &:hover {
+    color: rgba(var(--ais-text-color-rgb), var(--ais-primary-color-alpha));
+  }
+}

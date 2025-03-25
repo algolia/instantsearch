@@ -16,7 +16,8 @@ select[class^='ais-']:focus-visible {
 }
 
 /* Widgets */
-[class^='ais-'][class*='-showMore'] {
+[class^='ais-'][class*='-showMore'],
+[class^='ais-'][class*='-button'] {
   border-radius: var(--ais-radius-xs);
   font-size: 0.9em;
   font-weight: var(--ais-font-weight-medium);
