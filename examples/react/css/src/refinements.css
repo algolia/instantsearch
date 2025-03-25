@@ -28,4 +28,8 @@
 .ais-CurrentRefinements-delete {
   color: rgb(var(--ais-muted-color-rgb));
   margin-left: calc((var(--ais-spacing) / 3));
+
+  &:hover {
+    color: rgba(var(--ais-text-color-rgb), var(--ais-primary-color-alpha));
+  }
 }
