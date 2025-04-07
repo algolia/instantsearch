@@ -125,3 +125,37 @@ test('sorts the items based on their average index thus preserving applied rules
       ]
     `);
 });
+
+test('filters out input objectIDs', () => {
+  const result = sortAndMergeRecommendations(
+    ['A', 'B', 'C'],
+    response.results.map(function (res) {
+      return res.hits;
+    })
+  );
+
+  expect(result).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "_score": 76,
+          "name": "Product E",
+          "objectID": "E",
+        },
+        Object {
+          "_score": 100,
+          "name": "Product F",
+          "objectID": "F",
+        },
+        Object {
+          "_score": 89,
+          "name": "Product D",
+          "objectID": "D",
+        },
+        Object {
+          "_score": 96,
+          "name": "Product G",
+          "objectID": "G",
+        },
+      ]
+    `);
+});
