@@ -21,11 +21,14 @@ function getAverageIndices(indexTracker, nrOfObjs) {
   });
 }
 
-function sortAndMergeRecommendations(results) {
+function sortAndMergeRecommendations(objectIDs, results) {
   var indexTracker = {};
 
   results.forEach(function (hits) {
     hits.forEach(function (hit, index) {
+      // filter out hits that match the source objectIDs
+      if (objectIDs.include(hit.objectID)) return;
+
       if (!indexTracker[hit.objectID]) {
         indexTracker[hit.objectID] = { indexSum: index, count: 1 };
       } else {
