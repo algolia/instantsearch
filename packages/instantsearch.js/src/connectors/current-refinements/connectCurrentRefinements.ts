@@ -384,14 +384,15 @@ function getOperatorSymbol(operator: SearchParameters.Operator): string {
 }
 
 function normalizeRefinement(
-  refinement: Refinement
+  refinement: Refinement,
+  customLabel?: string
 ): CurrentRefinementsConnectorParamsRefinement {
   const value = getValue(refinement);
-  const label = (refinement as NumericRefinement).operator
+  const label = customLabel || ((refinement as NumericRefinement).operator
     ? `${getOperatorSymbol(
         (refinement as NumericRefinement).operator as SearchParameters.Operator
       )} ${refinement.name}`
-    : refinement.name;
+    : refinement.name);
 
   const normalizedRefinement: CurrentRefinementsConnectorParamsRefinement = {
     attribute: refinement.attribute,
