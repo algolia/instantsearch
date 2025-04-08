@@ -1922,6 +1922,7 @@ AlgoliaSearchHelper.prototype._dispatchRecommendResponse = function (
     }
     cache[id] = Object.assign({}, firstResult, {
       hits: sortAndMergeRecommendations(
+        ids,
         indices.map(function (idx) {
           return content.results[idx].hits;
         })
