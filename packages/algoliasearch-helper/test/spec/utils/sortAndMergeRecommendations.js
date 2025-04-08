@@ -147,14 +147,14 @@ test('filters out input objectIDs', () => {
           "objectID": "F",
         },
         Object {
-          "_score": 89,
-          "name": "Product D",
-          "objectID": "D",
-        },
-        Object {
           "_score": 96,
           "name": "Product G",
           "objectID": "G",
+        },
+        Object {
+          "_score": 89,
+          "name": "Product D",
+          "objectID": "D",
         },
       ]
     `);

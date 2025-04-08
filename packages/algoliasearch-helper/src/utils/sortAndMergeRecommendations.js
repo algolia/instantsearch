@@ -25,20 +25,18 @@ function sortAndMergeRecommendations(objectIDs, results) {
   var indexTracker = {};
 
   results.forEach(function (hits) {
-    hits
-      .filter(function (hit) {
-        return !objectIDs.includes(hit.objectID);
-      })
-      .forEach(function (hit, index) {
-        if (!indexTracker[hit.objectID]) {
-          indexTracker[hit.objectID] = { indexSum: index, count: 1 };
-        } else {
-          indexTracker[hit.objectID] = {
-            indexSum: indexTracker[hit.objectID].indexSum + index,
-            count: indexTracker[hit.objectID].count + 1,
-          };
-        }
-      });
+    hits.forEach(function (hit, index) {
+      if (objectIDs.includes(hit.objectID)) return;
+
+      if (!indexTracker[hit.objectID]) {
+        indexTracker[hit.objectID] = { indexSum: index, count: 1 };
+      } else {
+        indexTracker[hit.objectID] = {
+          indexSum: indexTracker[hit.objectID].indexSum + index,
+          count: indexTracker[hit.objectID].count + 1,
+        };
+      }
+    });
   });
 
   var sortedAverageIndices = getAverageIndices(indexTracker, results.length);
