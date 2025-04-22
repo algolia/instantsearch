@@ -1,6 +1,6 @@
 {
   "name": "example-instantsearch-calendar-widget",
-  "version": "1.33.0",
+  "version": "1.34.0",
   "private": true,
   "scripts": {
     "start": "BABEL_ENV=parcel parcel index.html --port 3000",
@@ -10,7 +10,7 @@
   "dependencies": {
     "algoliasearch": "5.1.1",
     "instantsearch.css": "8.5.1",
-    "instantsearch.js": "4.78.1"
+    "instantsearch.js": "4.78.2"
   },
   "devDependencies": {
     "@babel/core": "7.15.5",
