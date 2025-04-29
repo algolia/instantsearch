@@ -1,6 +1,6 @@
 {
   "name": "example-vue-instantsearch-ssr",
-  "version": "0.75.0",
+  "version": "0.76.0",
   "private": true,
   "scripts": {
     "build": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service ssr:build",
@@ -12,7 +12,7 @@
     "instantsearch.css": "8.5.1",
     "qs": "6.9.7",
     "vue": "2.7.14",
-    "vue-instantsearch": "4.20.6",
+    "vue-instantsearch": "4.20.7",
     "vue-router": "^3.0.2",
     "vue-server-renderer": "2.7.14"
   },
