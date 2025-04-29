@@ -1,5 +1,5 @@
 /** @jsx h */
-import { cx } from '@algolia/ui-components-shared';
+import { cx } from 'instantsearch-ui-components';
 import { h } from 'preact';
 
 import { formatNumber } from '../../lib/formatNumber';
@@ -72,7 +72,9 @@ const defaultTemplates: RatingMenuComponentTemplates = {
             />
           </svg>
         ))}
-        <span className={cx(cssClasses.label)}>&amp; Up</span>
+        <span aria-hidden="true" className={cx(cssClasses.label)}>
+          &amp; Up
+        </span>
         {count && (
           <span className={cx(cssClasses.count)}>{formatNumber(count)}</span>
         )}

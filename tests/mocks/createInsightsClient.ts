@@ -1,3 +1,4 @@
+import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 import {
   AlgoliaAnalytics,
   processQueue,
@@ -5,7 +6,6 @@ import {
 } from 'search-insights';
 
 import type { InsightsClient } from 'instantsearch.js';
-import { castToJestMock } from '@instantsearch/testutils/castToJestMock';
 
 /**
  * Tests that rely on this mock interface have side effects caused by
@@ -15,8 +15,8 @@ try {
   delete window.AlgoliaAnalyticsObject;
 } catch (error) {} // eslint-disable-line no-empty
 
-export function createInsights<TVersion extends string | undefined = '2.6.0'>({
-  forceVersion = '2.6.0',
+export function createInsights<TVersion extends string | undefined = '2.17.2'>({
+  forceVersion = '2.17.2',
 }: {
   forceVersion?: TVersion;
 } = {}) {

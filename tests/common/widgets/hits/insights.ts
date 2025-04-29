@@ -1,28 +1,32 @@
-import { wait } from '@instantsearch/testutils';
-import { fireEvent, screen } from '@testing-library/dom';
-import type { MockSearchClient } from '@instantsearch/mocks';
 import {
   createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import type { HitsSetup } from '.';
-import type { Act } from '../../common';
-import type { SearchClient } from 'instantsearch.js';
+import { wait } from '@instantsearch/testutils';
+import { fireEvent, screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
+
+import type { HitsWidgetSetup } from '.';
+import type { TestOptions } from '../../common';
+import type { MockSearchClient } from '@instantsearch/mocks';
+import type { SearchClient } from 'instantsearch.js';
 
 declare const window: Window &
   typeof globalThis & {
     aa: jest.Mock;
   };
 
-export function createInsightsTests(setup: HitsSetup, act: Act) {
+export function createInsightsTests(
+  setup: HitsWidgetSetup,
+  { act }: Required<TestOptions>
+) {
   describe('insights', () => {
     test('sends only one default view event per widget', async () => {
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 2;
-      window.aa = Object.assign(jest.fn(), { version: '2.6.0' });
+      window.aa = Object.assign(jest.fn(), { version: '2.17.2' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
@@ -126,8 +130,6 @@ export function createInsightsTests(setup: HitsSetup, act: Act) {
           await wait(0);
         });
 
-        // @TODO: This is a bug, we should not send a view event when the results are the same.
-        // see: https://github.com/algolia/instantsearch.js/issues/5442
         expect(window.aa).toHaveBeenCalledTimes(2);
       }
     });
@@ -136,7 +138,7 @@ export function createInsightsTests(setup: HitsSetup, act: Act) {
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 25;
-      window.aa = Object.assign(jest.fn(), { version: '2.6.0' });
+      window.aa = Object.assign(jest.fn(), { version: '2.17.2' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
@@ -272,7 +274,7 @@ export function createInsightsTests(setup: HitsSetup, act: Act) {
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 2;
-      window.aa = Object.assign(jest.fn(), { version: '2.6.0' });
+      window.aa = Object.assign(jest.fn(), { version: '2.17.2' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
@@ -354,7 +356,7 @@ export function createInsightsTests(setup: HitsSetup, act: Act) {
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 2;
-      window.aa = Object.assign(jest.fn(), { version: '2.6.0' });
+      window.aa = Object.assign(jest.fn(), { version: '2.17.2' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
@@ -443,7 +445,7 @@ export function createInsightsTests(setup: HitsSetup, act: Act) {
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 2;
-      window.aa = Object.assign(jest.fn(), { version: '2.6.0' });
+      window.aa = Object.assign(jest.fn(), { version: '2.17.2' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
@@ -529,7 +531,7 @@ export function createInsightsTests(setup: HitsSetup, act: Act) {
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 2;
-      window.aa = Object.assign(jest.fn(), { version: '2.6.0' });
+      window.aa = Object.assign(jest.fn(), { version: '2.17.2' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
@@ -626,7 +628,7 @@ export function createInsightsTests(setup: HitsSetup, act: Act) {
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 2;
-      window.aa = Object.assign(jest.fn(), { version: '2.6.0' });
+      window.aa = Object.assign(jest.fn(), { version: '2.17.2' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',
@@ -708,7 +710,7 @@ export function createInsightsTests(setup: HitsSetup, act: Act) {
       const delay = 100;
       const margin = 10;
       const hitsPerPage = 2;
-      window.aa = Object.assign(jest.fn(), { version: '2.6.0' });
+      window.aa = Object.assign(jest.fn(), { version: '2.17.2' });
       const options = {
         instantSearchOptions: {
           indexName: 'indexName',

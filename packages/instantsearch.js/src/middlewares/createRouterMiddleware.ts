@@ -1,6 +1,6 @@
 import historyRouter from '../lib/routers/history';
 import simpleStateMapping from '../lib/stateMappings/simple';
-import { isEqual } from '../lib/utils';
+import { isEqual, warning } from '../lib/utils';
 
 import type {
   Router,
@@ -45,14 +45,25 @@ export const createRouterMiddleware = <
 
   return ({ instantSearchInstance }) => {
     function topLevelCreateURL(nextState: TUiState) {
+      const previousUiState =
+        // If only the mainIndex is initialized, we don't yet know what other
+        // index widgets are used. Therefore we fall back to the initialUiState.
+        // We can't indiscriminately use the initialUiState because then we
+        // reintroduce state that was changed by the user.
+        // When there are no widgets, we are sure the user can't yet have made
+        // any changes.
+        instantSearchInstance.mainIndex.getWidgets().length === 0
+          ? (instantSearchInstance._initialUiState as TUiState)
+          : instantSearchInstance.mainIndex.getWidgetUiState<TUiState>(
+              {} as TUiState
+            );
+
       const uiState: TUiState = Object.keys(nextState).reduce(
         (acc, indexId) => ({
           ...acc,
           [indexId]: nextState[indexId],
         }),
-        instantSearchInstance.mainIndex.getWidgetUiState<TUiState>(
-          {} as TUiState
-        )
+        previousUiState
       );
 
       const route = stateMapping.stateToRoute(uiState);
@@ -86,6 +97,11 @@ export const createRouterMiddleware = <
       },
 
       subscribe() {
+        warning(
+          Object.keys(initialUiState).length === 0,
+          'Using `initialUiState` together with routing is not recommended. The `initialUiState` will be overwritten by the URL parameters.'
+        );
+
         instantSearchInstance._initialUiState = {
           ...initialUiState,
           ...stateMapping.routeToState(router.read()),

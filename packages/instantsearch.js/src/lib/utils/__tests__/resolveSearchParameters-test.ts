@@ -1,5 +1,5 @@
 import { createIndexInitOptions } from '../../../../test/createWidget';
-import index from '../../../widgets/index/index';
+import { index } from '../../../widgets';
 import { resolveSearchParameters } from '../resolveSearchParameters';
 
 describe('mergeSearchParameters', () => {

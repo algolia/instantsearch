@@ -1,0 +1,1439 @@
+{
+  "content": {
+    "results": [
+      {
+        "hits": [
+          {
+            "name": "3M - Eureka RR Pet Micro Allergen Vacuum Bag for Select Eureka Vacuums (3-Pack)",
+            "description": "Equip your Eureka 4800 series vacuum with this odor-absorbent, micro allergen-filtering vacuum bag and help eliminate dust, dander and other airborne allergens as well as undesirable odors from your home.",
+            "brand": "3M",
+            "categories": ["Appliances", "Vacuum Bags"],
+            "hierarchicalCategories": {
+              "lvl0": "Appliances",
+              "lvl1": "Appliances > Vacuum Bags"
+            },
+            "type": "Bags",
+            "price": 7.99,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/9274741_sb.jpg",
+            "url": "http://www.bestbuy.com/site/3m-eureka-rr-pet-micro-allergen-vacuum-bag-for-select-eureka-vacuums-3-pack/9274741.p?id=1218072892585&skuId=9274741&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9994,
+            "rating": 3,
+            "objectID": "9274741",
+            "_highlightResult": {
+              "name": {
+                "value": "3M - Eureka RR Pet Micro Allergen Vacuum Bag for Select Eureka Vacuums (3-Pack)",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Equip your Eureka 4800 series vacuum with this odor-absorbent, micro allergen-filtering vacuum bag and help eliminate dust, dander and other airborne allergens as well as undesirable odors from your home.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "3M",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Appliances",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Vacuum Bags",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "3M - Filtrete Eureka U Replacement Belt",
+            "description": "Keep things running smoothly at home with these replacement vacuum belts on hand in case of a cleaning emergency.",
+            "brand": "3M",
+            "categories": ["Appliances", "Vacuum Belts"],
+            "hierarchicalCategories": {
+              "lvl0": "Appliances",
+              "lvl1": "Appliances > Vacuum Belts"
+            },
+            "type": "Belts",
+            "price": 2.99,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/8507939_sb.jpg",
+            "url": "http://www.bestbuy.com/site/3m-filtrete-eureka-u-replacement-belt/8507939.p?id=1186005356287&skuId=8507939&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9990,
+            "rating": 3,
+            "objectID": "8507939",
+            "_highlightResult": {
+              "name": {
+                "value": "3M - Filtrete Eureka U Replacement Belt",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Keep things running smoothly at home with these replacement vacuum belts on hand in case of a cleaning emergency.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "3M",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Appliances",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Vacuum Belts",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "3M - Filtrete Hoover Windtunnel Replacement Belt",
+            "description": "Be ready for a cleaning emergency with these replacement belts for your Hoover vacuum.",
+            "brand": "3M",
+            "categories": ["Appliances", "Vacuum Belts"],
+            "hierarchicalCategories": {
+              "lvl0": "Appliances",
+              "lvl1": "Appliances > Vacuum Belts"
+            },
+            "type": "Belts",
+            "price": 4.99,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/8507993_sb.jpg",
+            "url": "http://www.bestbuy.com/site/3m-filtrete-hoover-windtunnel-replacement-belt/8507993.p?id=1186005356689&skuId=8507993&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9987,
+            "rating": 3,
+            "objectID": "8507993",
+            "_highlightResult": {
+              "name": {
+                "value": "3M - Filtrete Hoover Windtunnel Replacement Belt",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Be ready for a cleaning emergency with these replacement belts for your Hoover vacuum.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "3M",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Appliances",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Vacuum Belts",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "3M - Hoover Y & Z Pet Micro Allergen Vacuum Bag for Select Hoover Vacuums (3-Pack)",
+            "description": "Help eliminate dust, dander and other airborne allergens as well as undesirable odors from your home by equipping your Hoover Windtunnel upright vacuum with this odor-absorbent, micro allergen-filtering vacuum bag.",
+            "brand": "3M",
+            "categories": ["Appliances", "Vacuum Bags"],
+            "hierarchicalCategories": {
+              "lvl0": "Appliances",
+              "lvl1": "Appliances > Vacuum Bags"
+            },
+            "type": "Bags",
+            "price": 7.99,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/9274732_sb.jpg",
+            "url": "http://www.bestbuy.com/site/3m-hoover-y-z-pet-micro-allergen-vacuum-bag-for-select-hoover-vacuums-3-pack/9274732.p?id=1218072891545&skuId=9274732&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9985,
+            "rating": 3,
+            "objectID": "9274732",
+            "_highlightResult": {
+              "name": {
+                "value": "3M - Hoover Y & Z Pet Micro Allergen Vacuum Bag for Select Hoover Vacuums (3-Pack)",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Help eliminate dust, dander and other airborne allergens as well as undesirable odors from your home by equipping your Hoover Windtunnel upright vacuum with this odor-absorbent, micro allergen-filtering vacuum bag.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "3M",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Appliances",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Vacuum Bags",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Acer - 19\" LED Monitor - Black",
+            "description": "Compatible with PC and Mac, this 19\" Acer V196LB LED monitor allows you to expand your digital workspace and provides a clear view of images, documents and other content. The wall-mountable design enables flexible placement around your workstation.",
+            "brand": "Acer",
+            "categories": ["Computers & Tablets", "Monitors", "All Monitors"],
+            "hierarchicalCategories": {
+              "lvl0": "Computers & Tablets",
+              "lvl1": "Computers & Tablets > Monitors",
+              "lvl2": "Computers & Tablets > Monitors > All Monitors"
+            },
+            "type": "So monitors",
+            "price": 119.99,
+            "price_range": "100 - 200",
+            "image": "https://cdn-demo.algolia.com/bestbuy/8723085_sb.jpg",
+            "url": "http://www.bestbuy.com/site/acer-19-led-monitor-black/8723085.p?id=1219361551818&skuId=8723085",
+            "free_shipping": false,
+            "popularity": 9978,
+            "rating": 3,
+            "objectID": "8723085",
+            "_highlightResult": {
+              "name": {
+                "value": "Acer - 19\" LED Monitor - Black",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Compatible with PC and Mac, this 19\" Acer V196LB LED monitor allows you to expand your digital workspace and provides a clear view of images, documents and other content. The wall-mountable design enables flexible placement around your workstation.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Acer",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Computers & Tablets",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Monitors",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "All Monitors",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Acer - Aspire 17.3\" Laptop - Intel Core i3 - 6GB Memory - 500GB Hard Drive - Steel Gray",
+            "description": "With a 500GB hard drive, this Acer Aspire E17716458 laptop offers plenty of storage space for your important files, documents and data. The 17.3\" high-definition display provides stunningly clear and detailed images.",
+            "brand": "Acer",
+            "categories": [
+              "Computers & Tablets",
+              "Laptops",
+              "All Laptops",
+              "PC Laptops"
+            ],
+            "hierarchicalCategories": {
+              "lvl0": "Computers & Tablets",
+              "lvl1": "Computers & Tablets > Laptops",
+              "lvl2": "Computers & Tablets > Laptops > All Laptops",
+              "lvl3": "Computers & Tablets > Laptops > All Laptops > PC Laptops"
+            },
+            "type": "So laptops",
+            "price": 499.99,
+            "price_range": "200 - 500",
+            "image": "https://cdn-demo.algolia.com/bestbuy/5009277_sb.jpg",
+            "url": "http://www.bestbuy.com/site/acer-aspire-17-3-laptop-intel-core-i3-6gb-memory-500gb-hard-drive-steel-gray/5009277.p?id=1219106277450&skuId=5009277",
+            "free_shipping": false,
+            "popularity": 9972,
+            "rating": 3,
+            "objectID": "5009277",
+            "_highlightResult": {
+              "name": {
+                "value": "Acer - Aspire 17.3\" Laptop - Intel Core i3 - 6GB Memory - 500GB Hard Drive - Steel Gray",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "With a 500GB hard drive, this Acer Aspire E17716458 laptop offers plenty of storage space for your important files, documents and data. The 17.3\" high-definition display provides stunningly clear and detailed images.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Acer",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Computers & Tablets",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Laptops",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "All Laptops",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "PC Laptops",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Acer - Iconia Tab 8 - 8\" - Intel Atom - 16GB - Silver",
+            "description": "Stay connected on the go using this Acer Iconia Tab 8 A1-850-13FQ tablet, which features built-in Wi-Fi for simple Web access. The 8\" 10-finger touch screen delivers high-definition visuals and makes navigation easy.",
+            "brand": "Acer",
+            "categories": ["Computers & Tablets", "Tablets", "All Tablets"],
+            "hierarchicalCategories": {
+              "lvl0": "Computers & Tablets",
+              "lvl1": "Computers & Tablets > Tablets",
+              "lvl2": "Computers & Tablets > Tablets > All Tablets"
+            },
+            "type": "Other android wifi",
+            "price": 139.99,
+            "price_range": "100 - 200",
+            "image": "https://cdn-demo.algolia.com/bestbuy/3261023_sb.jpg",
+            "url": "http://www.bestbuy.com/site/acer-iconia-tab-8-8-intel-atom-16gb-silver/3261023.p?id=1219575793840&skuId=3261023&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9963,
+            "rating": 3,
+            "objectID": "3261023",
+            "_highlightResult": {
+              "name": {
+                "value": "Acer - Iconia Tab 8 - 8\" - Intel Atom - 16GB - Silver",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Stay connected on the go using this Acer Iconia Tab 8 A1-850-13FQ tablet, which features built-in Wi-Fi for simple Web access. The 8\" 10-finger touch screen delivers high-definition visuals and makes navigation easy.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Acer",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Computers & Tablets",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Tablets",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "All Tablets",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Actiontec - 500 Mbps Powerline Home Theater Network Adapter Kit - White",
+            "description": "This Actiontec Powerline PWR511K01 home theater network adapter allows you to turbocharge your home entertainment network. Connect devices including Blu-ray players, gaming consoles and smart TVs to the Internet through your electrical outlets.",
+            "brand": "Actiontec",
+            "categories": [
+              "Computers & Tablets",
+              "Networking & Wireless",
+              "Networking Accessories",
+              "Powerline Networking"
+            ],
+            "hierarchicalCategories": {
+              "lvl0": "Computers & Tablets",
+              "lvl1": "Computers & Tablets > Networking & Wireless",
+              "lvl2": "Computers & Tablets > Networking & Wireless > Networking Accessories",
+              "lvl3": "Computers & Tablets > Networking & Wireless > Networking Accessories > Powerline Networking"
+            },
+            "type": "Multi media network",
+            "price": 49.99,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/5215483_sb.jpg",
+            "url": "http://www.bestbuy.com/site/actiontec-500-mbps-powerline-home-theater-network-adapter-kit-white/5215483.p?id=1218625358741&skuId=5215483&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9954,
+            "rating": 3,
+            "objectID": "5215483",
+            "_highlightResult": {
+              "name": {
+                "value": "Actiontec - 500 Mbps Powerline Home Theater Network Adapter Kit - White",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "This Actiontec Powerline PWR511K01 home theater network adapter allows you to turbocharge your home entertainment network. Connect devices including Blu-ray players, gaming consoles and smart TVs to the Internet through your electrical outlets.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Actiontec",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Computers & Tablets",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Networking & Wireless",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Networking Accessories",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Powerline Networking",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "adidas - Fit Smart Band + Heart Rate (Large) - Black",
+            "description": "adidas Fit Smart Band + Heart Rate: Combining the convenience of precise heart rate measurement from your wrist, all-day activity tracking and personalized fitness coaching, this band helps you reach your fitness goals and enjoy a more active lifestyle.",
+            "brand": "adidas",
+            "categories": ["Health, Fitness & Beauty", "Heart Rate Monitors"],
+            "hierarchicalCategories": {
+              "lvl0": "Health, Fitness & Beauty",
+              "lvl1": "Health, Fitness & Beauty > Heart Rate Monitors"
+            },
+            "type": "Hr watch",
+            "price": 149.99,
+            "price_range": "100 - 200",
+            "image": "https://cdn-demo.algolia.com/bestbuy/8283007_sb.jpg",
+            "url": "http://www.bestbuy.com/site/adidas-fit-smart-band-heart-rate-large-black/8283007.p?id=1219321338011&skuId=8283007&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9947,
+            "rating": 3,
+            "objectID": "8283007",
+            "_highlightResult": {
+              "name": {
+                "value": "adidas - Fit Smart Band + Heart Rate (Large) - Black",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "adidas Fit Smart Band + Heart Rate: Combining the convenience of precise heart rate measurement from your wrist, all-day activity tracking and personalized fitness coaching, this band helps you reach your fitness goals and enjoy a more active lifestyle.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "adidas",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Health, Fitness & Beauty",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Heart Rate Monitors",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "ADOPTED - Leather Folio Case for Apple® iPhone® 6 and 6s - Black",
+            "description": "Ensure your Apple iPhone 6 or 6s is protected and secure by using this ADOPTED APH13116 folio case, which is crafted with leather and features an impact-resistant, metalized frame for reliable defense. An interior pocket offers space for your important cards.",
+            "brand": "ADOPTED",
+            "categories": [
+              "Cell Phones",
+              "Cell Phone Accessories",
+              "Cell Phone Cases & Clips"
+            ],
+            "hierarchicalCategories": {
+              "lvl0": "Cell Phones",
+              "lvl1": "Cell Phones > Cell Phone Accessories",
+              "lvl2": "Cell Phones > Cell Phone Accessories > Cell Phone Cases & Clips"
+            },
+            "type": "Trend cases",
+            "price": 49.99,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/8452148_sb.jpg",
+            "url": "http://www.bestbuy.com/site/adopted-leather-folio-case-for-apple-iphone-6-and-6s-black/8452148.p?id=1219336309744&skuId=8452148&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9942,
+            "rating": 3,
+            "objectID": "8452148",
+            "_highlightResult": {
+              "name": {
+                "value": "ADOPTED - Leather Folio Case for Apple® iPhone® 6 and 6s - Black",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Ensure your Apple iPhone 6 or 6s is protected and secure by using this ADOPTED APH13116 folio case, which is crafted with leather and features an impact-resistant, metalized frame for reliable defense. An interior pocket offers space for your important cards.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "ADOPTED",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Cell Phones",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Cell Phone Accessories",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Cell Phone Cases & Clips",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "ADOPTED - Saddle Leather Wrap Case for Apple® iPhone® 6 Plus and 6s Plus - Saddle Olive/Gunmetal",
+            "description": "Only at Best Buy  Add style to the look of your Apple iPhone 6 Plus or 6s Plus with this low-profile, impact-resistant ADOPTED APH13147 case that is crafted with genuine leather material and offers a metalized frame and trim for a personalized touch.",
+            "brand": "ADOPTED",
+            "categories": [
+              "Cell Phones",
+              "Cell Phone Accessories",
+              "iPhone Accessories",
+              "iPhone Cases & Clips",
+              "iPhone 6 Plus Cases"
+            ],
+            "hierarchicalCategories": {
+              "lvl0": "Cell Phones",
+              "lvl1": "Cell Phones > Cell Phone Accessories",
+              "lvl2": "Cell Phones > Cell Phone Accessories > iPhone Accessories",
+              "lvl3": "Cell Phones > Cell Phone Accessories > iPhone Accessories > iPhone Cases & Clips",
+              "lvl4": "Cell Phones > Cell Phone Accessories > iPhone Accessories > iPhone Cases & Clips > iPhone 6 Plus Cases"
+            },
+            "type": "Trend cases",
+            "price": 39.99,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/8452111_sb.jpg",
+            "url": "http://www.bestbuy.com/site/adopted-saddle-leather-wrap-case-for-apple-iphone-6-plus-and-6s-plus-saddle-olive-gunmetal/8452111.p?id=1219336312693&skuId=8452111&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9927,
+            "rating": 3,
+            "objectID": "8452111",
+            "_highlightResult": {
+              "name": {
+                "value": "ADOPTED - Saddle Leather Wrap Case for Apple® iPhone® 6 Plus and 6s Plus - Saddle Olive/Gunmetal",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Only at Best Buy  Add style to the look of your Apple iPhone 6 Plus or 6s Plus with this low-profile, impact-resistant ADOPTED APH13147 case that is crafted with genuine leather material and offers a metalized frame and trim for a personalized touch.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "ADOPTED",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Cell Phones",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Cell Phone Accessories",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "iPhone Accessories",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "iPhone Cases & Clips",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "iPhone 6 Plus Cases",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Alienware - 17.3\" 4K Ultra HD Laptop - Intel Core i7 - 8GB Memory - 1TB Hard Drive + 128GB Solid State Drive - Epic Silver",
+            "description": "Alienware Laptop: With 3GB dedicated NVIDIA graphics and vivid 4K Ultra HD resolution, this laptop offers stunning graphics and smooth gameplay, so you can take on your most challenging opponents with ease. Built-in 2.1-channel Klipsch speakers offer immersive audio for an enhanced gaming experience.",
+            "brand": "Alienware",
+            "categories": [
+              "Computers & Tablets",
+              "Laptops",
+              "All Laptops",
+              "PC Laptops"
+            ],
+            "hierarchicalCategories": {
+              "lvl0": "Computers & Tablets",
+              "lvl1": "Computers & Tablets > Laptops",
+              "lvl2": "Computers & Tablets > Laptops > All Laptops",
+              "lvl3": "Computers & Tablets > Laptops > All Laptops > PC Laptops"
+            },
+            "type": "Gaming laptops",
+            "price": 1649.99,
+            "price_range": "500 - 2000",
+            "image": "https://cdn-demo.algolia.com/bestbuy/4550902_sb.jpg",
+            "url": "http://www.bestbuy.com/site/alienware-17-3-4k-ultra-hd-laptop-intel-core-i7-8gb-memory-1tb-hard-drive-128gb-solid-state-drive-epic-silver/4550902.p?id=1219765894082&skuId=4550902&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9917,
+            "rating": 3,
+            "objectID": "4550902",
+            "_highlightResult": {
+              "name": {
+                "value": "Alienware - 17.3\" 4K Ultra HD Laptop - Intel Core i7 - 8GB Memory - 1TB Hard Drive + 128GB Solid State Drive - Epic Silver",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Alienware Laptop: With 3GB dedicated NVIDIA graphics and vivid 4K Ultra HD resolution, this laptop offers stunning graphics and smooth gameplay, so you can take on your most challenging opponents with ease. Built-in 2.1-channel Klipsch speakers offer immersive audio for an enhanced gaming experience.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Alienware",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Computers & Tablets",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Laptops",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "All Laptops",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "PC Laptops",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Alpine - 12\" Dual-Voice-Coil 4-Ohm Subwoofer - Black",
+            "description": "Listen to music in your vehicle with rich, clear sound with this Alpine SWS-12D4 12\" dual-voice-coil 4-ohm subwoofer that features improved thermal capacity and mechanical strength for reliable performance.",
+            "brand": "Alpine",
+            "categories": [
+              "Car Electronics & GPS",
+              "Car Audio",
+              "Car Subwoofers"
+            ],
+            "hierarchicalCategories": {
+              "lvl0": "Car Electronics & GPS",
+              "lvl1": "Car Electronics & GPS > Car Audio",
+              "lvl2": "Car Electronics & GPS > Car Audio > Car Subwoofers"
+            },
+            "type": "Subs",
+            "price": 149.99,
+            "price_range": "100 - 200",
+            "image": "https://cdn-demo.algolia.com/bestbuy/4769785_sb.jpg",
+            "url": "http://www.bestbuy.com/site/alpine-12-dual-voice-coil-4-ohm-subwoofer-black/4769785.p?id=1218524494220&skuId=4769785&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9915,
+            "rating": 3,
+            "objectID": "4769785",
+            "_highlightResult": {
+              "name": {
+                "value": "Alpine - 12\" Dual-Voice-Coil 4-Ohm Subwoofer - Black",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Listen to music in your vehicle with rich, clear sound with this Alpine SWS-12D4 12\" dual-voice-coil 4-ohm subwoofer that features improved thermal capacity and mechanical strength for reliable performance.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Alpine",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Car Electronics & GPS",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Car Audio",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Car Subwoofers",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Alpine - 6-1/2\" 2-Way Coaxial Car Speakers with Polypropylene Cones (Pair) - Black",
+            "description": "Listen to your favorite tunes on the go with these 2-way coaxial speakers that feature 240 watts of peak power for impressive sound quality and a 3/4\" silk soft-dome tweeter for clean audio.",
+            "brand": "Alpine",
+            "categories": [
+              "Car Electronics & GPS",
+              "Car Audio",
+              "Car Speakers",
+              "6.5\" Car Speakers"
+            ],
+            "hierarchicalCategories": {
+              "lvl0": "Car Electronics & GPS",
+              "lvl1": "Car Electronics & GPS > Car Audio",
+              "lvl2": "Car Electronics & GPS > Car Audio > Car Speakers",
+              "lvl3": "Car Electronics & GPS > Car Audio > Car Speakers > 6.5\" Car Speakers"
+            },
+            "type": "Speakers",
+            "price": 79.99,
+            "price_range": "50 - 100",
+            "image": "https://cdn-demo.algolia.com/bestbuy/1416147_sb.jpg",
+            "url": "http://www.bestbuy.com/site/alpine-6-1-2-2-way-coaxial-car-speakers-with-polypropylene-cones-pair-black/1416147.p?id=1218256568420&skuId=1416147&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9910,
+            "rating": 3,
+            "objectID": "1416147",
+            "_highlightResult": {
+              "name": {
+                "value": "Alpine - 6-1/2\" 2-Way Coaxial Car Speakers with Polypropylene Cones (Pair) - Black",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Listen to your favorite tunes on the go with these 2-way coaxial speakers that feature 240 watts of peak power for impressive sound quality and a 3/4\" silk soft-dome tweeter for clean audio.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Alpine",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Car Electronics & GPS",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Car Audio",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Car Speakers",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "6.5\" Car Speakers",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Alpine - Bassline 12\" Single-Voice-Coil 4-Ohm Subwoofer - Black",
+            "description": "Enhance your vehicle's audio system with this Alpine Bassline SWA-12S4 single-voice-coil, 4-ohm subwoofer that handles up to 750W peak power and features a 12\" polypropylene/mica woofer cone with a UV-resistant poly foam surround for robust sound.",
+            "brand": "Alpine",
+            "categories": [
+              "Car Electronics & GPS",
+              "Car Audio",
+              "Car Subwoofers"
+            ],
+            "hierarchicalCategories": {
+              "lvl0": "Car Electronics & GPS",
+              "lvl1": "Car Electronics & GPS > Car Audio",
+              "lvl2": "Car Electronics & GPS > Car Audio > Car Subwoofers"
+            },
+            "type": "Subs",
+            "price": 74.99,
+            "price_range": "50 - 100",
+            "image": "https://cdn-demo.algolia.com/bestbuy/8815536_sb.jpg",
+            "url": "http://www.bestbuy.com/site/alpine-bassline-12-single-voice-coil-4-ohm-subwoofer-black/8815536.p?id=1218902549936&skuId=8815536&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": true,
+            "popularity": 9906,
+            "rating": 3,
+            "objectID": "8815536",
+            "_highlightResult": {
+              "name": {
+                "value": "Alpine - Bassline 12\" Single-Voice-Coil 4-Ohm Subwoofer - Black",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Enhance your vehicle's audio system with this Alpine Bassline SWA-12S4 single-voice-coil, 4-ohm subwoofer that handles up to 750W peak power and features a 12\" polypropylene/mica woofer cone with a UV-resistant poly foam surround for robust sound.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Alpine",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Car Electronics & GPS",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Car Audio",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Car Subwoofers",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Alpine - Type R 5-1/4\" 2-Way Coaxial Car Speakers with Hybrid Fiber Cones (Pair) - Black",
+            "description": "Listen to your favorite music in your car with these speakers that feature a neodymium magnet and hybrid fiber cones for powerful sound.",
+            "brand": "Alpine",
+            "categories": [
+              "Car Electronics & GPS",
+              "Car Audio",
+              "Car Speakers",
+              "5.25\" Car Speakers"
+            ],
+            "hierarchicalCategories": {
+              "lvl0": "Car Electronics & GPS",
+              "lvl1": "Car Electronics & GPS > Car Audio",
+              "lvl2": "Car Electronics & GPS > Car Audio > Car Speakers",
+              "lvl3": "Car Electronics & GPS > Car Audio > Car Speakers > 5.25\" Car Speakers"
+            },
+            "type": "Speakers",
+            "price": 199.99,
+            "price_range": "100 - 200",
+            "image": "https://cdn-demo.algolia.com/bestbuy/2305807_sb.jpg",
+            "url": "http://www.bestbuy.com/site/alpine-type-r-5-1-4-2-way-coaxial-car-speakers-with-hybrid-fiber-cones-pair-black/2305807.p?id=1218320406807&skuId=2305807&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9900,
+            "rating": 3,
+            "objectID": "2305807",
+            "_highlightResult": {
+              "name": {
+                "value": "Alpine - Type R 5-1/4\" 2-Way Coaxial Car Speakers with Hybrid Fiber Cones (Pair) - Black",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Listen to your favorite music in your car with these speakers that feature a neodymium magnet and hybrid fiber cones for powerful sound.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Alpine",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Car Electronics & GPS",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Car Audio",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Car Speakers",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "5.25\" Car Speakers",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Altec Lansing - Boom Jacket Bluetooth Speaker - Blue",
+            "description": "Only at Best Buy  This Altec Lansing Boom Jacket IMW576-BLU speaker's Bluetooth interface and NFC (near-field communication) technology let you stream music from select devices from up to 50' away. The water-, sand-, shock- and snow-proof construction offers protection.",
+            "brand": "Altec Lansing",
+            "categories": ["Audio"],
+            "hierarchicalCategories": {
+              "lvl0": "Audio"
+            },
+            "type": "Wireless speakers",
+            "price": 199.99,
+            "price_range": "100 - 200",
+            "image": "https://cdn-demo.algolia.com/bestbuy/6935031_sb.jpg",
+            "url": "http://www.bestbuy.com/site/altec-lansing-boom-jacket-bluetooth-speaker-blue/6935031.p?id=1219667735228&skuId=6935031&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": true,
+            "popularity": 9898,
+            "rating": 3,
+            "objectID": "6935031",
+            "_highlightResult": {
+              "name": {
+                "value": "Altec Lansing - Boom Jacket Bluetooth Speaker - Blue",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Only at Best Buy  This Altec Lansing Boom Jacket IMW576-BLU speaker's Bluetooth interface and NFC (near-field communication) technology let you stream music from select devices from up to 50' away. The water-, sand-, shock- and snow-proof construction offers protection.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Altec Lansing",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Audio",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Altec Lansing - Mini Life Jacket Bluetooth Speaker - Blue",
+            "description": "With a universal mounting mechanism and water-, sand-, shock- and snow-proof construction, this Altec Lansing Mini Life Jacket IMW477-AB speaker lets you listen to music both indoors and outdoors. A Bluetooth interface lets you pair with select devices.",
+            "brand": "Altec Lansing",
+            "categories": ["Audio"],
+            "hierarchicalCategories": {
+              "lvl0": "Audio"
+            },
+            "type": "Wireless speakers",
+            "price": 99.99,
+            "price_range": "50 - 100",
+            "image": "https://cdn-demo.algolia.com/bestbuy/6935128_sb.jpg",
+            "url": "http://www.bestbuy.com/site/altec-lansing-mini-life-jacket-bluetooth-speaker-blue/6935128.p?id=1219667737089&skuId=6935128&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9890,
+            "rating": 3,
+            "objectID": "6935128",
+            "_highlightResult": {
+              "name": {
+                "value": "Altec Lansing - Mini Life Jacket Bluetooth Speaker - Blue",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "With a universal mounting mechanism and water-, sand-, shock- and snow-proof construction, this Altec Lansing Mini Life Jacket IMW477-AB speaker lets you listen to music both indoors and outdoors. A Bluetooth interface lets you pair with select devices.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Altec Lansing",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Audio",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Altra Furniture - AltraMount TV Stand for Flat-Panel TVs Up to 60\" - Black",
+            "description": "Altra AltraMount TV Stand:  Keep your home theater neatly organized with this TV stand, which accommodates your flat-panel LCD or plasma TV and features 3 hollow-core shelves to house A/V components and gaming consoles.",
+            "brand": "Altra Furniture",
+            "categories": ["TV & Home Theater", "TV Stands", "All TV Stands"],
+            "hierarchicalCategories": {
+              "lvl0": "TV & Home Theater",
+              "lvl1": "TV & Home Theater > TV Stands",
+              "lvl2": "TV & Home Theater > TV Stands > All TV Stands"
+            },
+            "type": "So furniture",
+            "price": 149.99,
+            "price_range": "100 - 200",
+            "image": "https://cdn-demo.algolia.com/bestbuy/2345164_sb.jpg",
+            "url": "http://www.bestbuy.com/site/altra-furniture-altramount-tv-stand-for-flat-panel-tvs-up-to-60-black/2345164.p?id=1218323020640&skuId=2345164",
+            "free_shipping": false,
+            "popularity": 9884,
+            "rating": 3,
+            "objectID": "2345164",
+            "_highlightResult": {
+              "name": {
+                "value": "Altra Furniture - AltraMount TV Stand for Flat-Panel TVs Up to 60\" - Black",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Altra AltraMount TV Stand:  Keep your home theater neatly organized with this TV stand, which accommodates your flat-panel LCD or plasma TV and features 3 hollow-core shelves to house A/V components and gaming consoles.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Altra Furniture",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "TV & Home Theater",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "TV Stands",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "All TV Stands",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Amana - 25.4 Cu. Ft. Side-by-Side Refrigerator with Thru-the-Door Ice and Water - White",
+            "description": "Neatly store your fresh and frozen groceries in this 25.4 cu. ft. Amana ASD2575BRW side-by-side refrigerator, which features adjustable Spillsaver glass shelves and gallon-size door storage to help keep contents organized.",
+            "brand": "Amana",
+            "categories": ["Appliances", "Refrigerators", "All Refrigerators"],
+            "hierarchicalCategories": {
+              "lvl0": "Appliances",
+              "lvl1": "Appliances > Refrigerators",
+              "lvl2": "Appliances > Refrigerators > All Refrigerators"
+            },
+            "type": "Side by side",
+            "price": 999.99,
+            "price_range": "500 - 2000",
+            "image": "https://cdn-demo.algolia.com/bestbuy/1609858_sb.jpg",
+            "url": "http://www.bestbuy.com/site/amana-25-4-cu-ft-side-by-side-refrigerator-with-thru-the-door-ice-and-water-white/1609858.p?id=1219056780054&skuId=1609858&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9872,
+            "rating": 3,
+            "objectID": "1609858",
+            "_highlightResult": {
+              "name": {
+                "value": "Amana - 25.4 Cu. Ft. Side-by-Side Refrigerator with Thru-the-Door Ice and Water - White",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Neatly store your fresh and frozen groceries in this 25.4 cu. ft. Amana ASD2575BRW side-by-side refrigerator, which features adjustable Spillsaver glass shelves and gallon-size door storage to help keep contents organized.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Amana",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Appliances",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Refrigerators",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "All Refrigerators",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          }
+        ],
+        "nbHits": 1632,
+        "page": 0,
+        "nbPages": 50,
+        "hitsPerPage": 20,
+        "processingTimeMS": 1,
+        "facets": {
+          "type": {
+            "Trend cases": 87,
+            "Ult protection cases": 47,
+            "Slim cases": 37,
+            "Wireless speakers": 34,
+            "Non ipad cases": 31,
+            "Misc camera acces": 28,
+            "Earbud headphones": 22,
+            "Accessories": 20,
+            "Ink cartridges": 19,
+            "Connectivity": 17,
+            "Food": 17,
+            "Ipad cases": 17,
+            "Photo video bags": 17,
+            "Action cam accy": 16,
+            "Business cases": 16,
+            "Monitoring devices": 16,
+            "Flash drives": 15,
+            "Alternative power": 14,
+            "Misc accy": 14,
+            "Cables/connectors": 12,
+            "Deck harness": 12,
+            "Ink combo packs": 12,
+            "Mice": 12,
+            "Ht misc": 11,
+            "Miscellaneous pcare": 11,
+            "Networking": 11,
+            "55\" + lcd": 10,
+            "Blank media": 10,
+            "Dslr cameras": 10,
+            "Misc. housewares": 10,
+            "Chargers": 9,
+            "Dash kits": 9,
+            "Flat screen monitor": 9,
+            "Multifunction print": 9,
+            "Notebook accessories": 9,
+            "On ear headphones": 9,
+            "Smartwatches": 9,
+            "Spr iphone handset": 9,
+            "Alkaline": 8,
+            "Coffee/cappuccino": 8,
+            "Fitness accessories": 8,
+            "Gas range": 8,
+            "Ht antennas": 8,
+            "Lenses core": 8,
+            "Mht video accy": 8,
+            "Notebooks": 8,
+            "Shave & groom": 8,
+            "So gaming pc": 8,
+            "Speakers": 8,
+            "Special order parts": 8,
+            "Battery cases": 7,
+            "Camera batteries": 7,
+            "French door refrig": 7,
+            "Ht power surge": 7,
+            "Playstation 4 sw": 7,
+            "So ink-toner": 7,
+            "At&t smartphone": 6,
+            "Blenders": 6,
+            "Dc filter": 6,
+            "Dishwasher": 6,
+            "Fans": 6,
+            "Gaming controllers": 6,
+            "Misc accessories": 6,
+            "Mp3 cases": 6,
+            "Novelty lic prod": 6,
+            "Otr microwaves": 6,
+            "So camera accy": 6,
+            "So monitors": 6,
+            "Sprint smartphones": 6,
+            "Streaming media plyr": 6,
+            "Top load gas dryer": 6,
+            "Video monitoring": 6,
+            "Vzn handsets": 6,
+            "Apple third accy": 5,
+            "At&t iphone handset": 5,
+            "Cd decks": 5,
+            "Digital cameras": 5,
+            "Digital video": 5,
+            "Flashes": 5,
+            "Hand-held": 5,
+            "Humidifiers": 5,
+            "Mid size": 5,
+            "Misc posa": 5,
+            "Mobile phone media": 5,
+            "Photo value packs": 5,
+            "Port nav device": 5,
+            "Secure digital memor": 5,
+            "Smartwatch accy": 5,
+            "So coffee makers": 5,
+            "So monitoring device": 5,
+            "So toasters": 5,
+            "Soundbars": 5,
+            "Styluses": 5,
+            "Subs": 5,
+            "Tv mounts": 5,
+            "Wireless in ears": 5,
+            "Wireless on/over ear": 5,
+            "2.5\" prtable storage": 4,
+            "All in one computers": 4,
+            "Apple connected": 4
+          },
+          "brand": {
+            "Samsung": 89,
+            "Insignia™": 80,
+            "Apple": 62,
+            "HP": 42,
+            "Sony": 41,
+            "Dynex™": 40,
+            "LG": 36,
+            "Canon": 30,
+            "Metra": 30,
+            "OtterBox": 26,
+            "Speck": 26,
+            "Platinum": 24,
+            "kate spade new york": 24,
+            "Frigidaire": 23,
+            "Logitech": 21,
+            "GE": 20,
+            "Belkin": 19,
+            "Hamilton Beach": 19,
+            "Keurig": 17,
+            "Microsoft": 17,
+            "Epson": 16,
+            "Garmin": 16,
+            "Griffin Technology": 15,
+            "PNY": 14,
+            "Beats by Dr. Dre": 13,
+            "Nikon": 13,
+            "SanDisk": 13,
+            "Lenovo": 12,
+            "AudioQuest": 11,
+            "Bose®": 11,
+            "Case-Mate": 11,
+            "Fitbit": 11,
+            "NETGEAR": 11,
+            "Brother": 10,
+            "Conair": 10,
+            "KitchenAid": 10,
+            "Modal": 10,
+            "Rocketfish™": 10,
+            "Skullcandy": 10,
+            "Asus": 9,
+            "Case Logic": 9,
+            "Isaac Mizrahi New York": 9,
+            "JBL": 9,
+            "LifeProof": 9,
+            "Lowepro": 9,
+            "Cuisinart": 8,
+            "GoPro": 8,
+            "Kicker": 8,
+            "Pioneer": 8,
+            "Definitive Technology": 7,
+            "Monster": 7,
+            "Motorola": 7,
+            "Nanette Lepore": 7,
+            "Sanus": 7,
+            "Scosche": 7,
+            "Seagate": 7,
+            "DigiPower": 6,
+            "Energizer": 6,
+            "Hoover": 6,
+            "Insignia": 6,
+            "Jensen": 6,
+            "Memorex": 6,
+            "Panasonic": 6,
+            "Polk Audio": 6,
+            "Rayovac": 6,
+            "Sharp": 6,
+            "myCharge": 6,
+            "Axxess": 5,
+            "Ballistic": 5,
+            "Bosch": 5,
+            "Bowers & Wilkins": 5,
+            "Contigo": 5,
+            "CyberPowerPC": 5,
+            "Honeywell": 5,
+            "Hoya": 5,
+            "JVC": 5,
+            "Manfrotto": 5,
+            "Native Union": 5,
+            "Pebble": 5,
+            "Philips Norelco": 5,
+            "Razer": 5,
+            "Sennheiser": 5,
+            "3M": 4,
+            "Activision": 4,
+            "Alpine": 4,
+            "Amazon": 4,
+            "Antennas Direct": 4,
+            "Bower": 4,
+            "Bracketron": 4,
+            "Dyson": 4,
+            "Elite Screens": 4,
+            "French Bull": 4,
+            "Fujifilm": 4,
+            "Google": 4,
+            "HTC": 4,
+            "Incipio": 4,
+            "Klipsch": 4,
+            "NET10": 4,
+            "Oster": 4,
+            "Philips Sonicare": 4
+          },
+          "rating": {
+            "3": 1632
+          },
+          "hierarchicalCategories.lvl0": {
+            "Cell Phones": 317,
+            "Computers & Tablets": 288,
+            "Appliances": 261,
+            "Audio": 156,
+            "Cameras & Camcorders": 131,
+            "TV & Home Theater": 121,
+            "Car Electronics & GPS": 89,
+            "Health, Fitness & Beauty": 60,
+            "Office & School Supplies": 46,
+            "Video Games": 37,
+            "Office Electronics": 17,
+            "Housewares": 16,
+            "Toys, Games & Drones": 15,
+            "Name Brands": 12,
+            "Connected Home": 11,
+            "Telephones & Communication": 10,
+            "Wearable Technology": 10,
+            "Paper": 8,
+            "Best Buy Gift Cards": 5,
+            "Household Essentials": 5,
+            "Musical Instruments": 5,
+            "Scanners, Faxes & Copiers": 5,
+            "Magnolia Home Theater": 2,
+            "Office Furniture & Storage": 2,
+            "Furniture & Decor": 1,
+            "Microwaves": 1,
+            "Movies & Music": 1
+          }
+        },
+        "facets_stats": {
+          "rating": {
+            "min": 3,
+            "max": 3,
+            "avg": 3,
+            "sum": 4896
+          }
+        },
+        "exhaustiveFacetsCount": true,
+        "query": "",
+        "params": "query=&page=0&facets=%5B%22brand%22%2C%22type%22%2C%22rating%22%2C%22hierarchicalCategories.lvl0%22%5D&tagFilters=&numericFilters=%5B%22rating%3D3%22%5D",
+        "index": "instant_search"
+      },
+      {
+        "hits": [
+          {
+            "objectID": "1696302"
+          }
+        ],
+        "nbHits": 10000,
+        "page": 0,
+        "nbPages": 1000,
+        "hitsPerPage": 1,
+        "processingTimeMS": 1,
+        "facets": {
+          "rating": {
+            "1": 1670,
+            "2": 1684,
+            "3": 1632,
+            "4": 1668,
+            "5": 1635,
+            "6": 1711
+          }
+        },
+        "facets_stats": {
+          "rating": {
+            "min": 1,
+            "max": 6,
+            "avg": 3,
+            "sum": 35047
+          }
+        },
+        "exhaustiveFacetsCount": true,
+        "query": "",
+        "params": "query=&page=0&hitsPerPage=1&attributesToRetrieve=%5B%5D&attributesToHighlight=%5B%5D&attributesToSnippet=%5B%5D&tagFilters=&facets=rating",
+        "index": "instant_search"
+      }
+    ]
+  },
+  "state": {
+    "index": "instant_search",
+    "query": "",
+    "facets": ["brand"],
+    "disjunctiveFacets": ["type", "rating"],
+    "hierarchicalFacets": [
+      {
+        "name": "hierarchicalCategories",
+        "attributes": [
+          "hierarchicalCategories.lvl0",
+          "hierarchicalCategories.lvl1",
+          "hierarchicalCategories.lvl2",
+          "hierarchicalCategories.lvl3"
+        ]
+      }
+    ],
+    "facetsRefinements": {},
+    "facetsExcludes": {},
+    "disjunctiveFacetsRefinements": {},
+    "numericRefinements": {
+      "rating": {
+        "=": [3]
+      }
+    },
+    "tagRefinements": [],
+    "hierarchicalFacetsRefinements": {},
+    "page": 0
+  },
+  "error": null
+}

@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+
 const shell = require('shelljs');
 
 console.log('swapping Vue 3 dependency');
@@ -19,6 +20,13 @@ fs.writeFileSync(
     '../packages/vue-instantsearch/src/util/vue-compat/index.js'
   ),
   "export * from './index-vue3';"
+);
+fs.writeFileSync(
+  path.resolve(
+    __dirname,
+    '../packages/vue-instantsearch/src/util/vue-compat/Highlighter/index.js'
+  ),
+  "export { default } from './index-vue3';"
 );
 
 console.log('switching to Vue 3 for Jest');

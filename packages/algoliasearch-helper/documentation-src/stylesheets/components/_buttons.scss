@@ -1,0 +1,74 @@
+.btn {
+  background: $accent-color-darkish;
+  color: #fff;
+  border: 1px solid $accent-color;
+  height: 40px;
+  max-width: 140px;
+  line-height: 40px;
+  padding: 0 1em;
+  text-align: center;
+  display: block;
+  text-decoration: none;
+  border-radius: 3px;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 12px;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  transition: background 0.1s ease;
+  cursor: pointer;
+
+  &:hover,
+  &:active {
+    background: $accent-color;
+  }
+
+  &.btn-cta {
+    max-width: 230px;
+    margin: 32px auto;
+  }
+
+  &.btn-grey {
+    background: $silver;
+    border-color: $light-blue-grey;
+    border-width: 2px;
+    color: $grey-blue;
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1), 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  &.btn-black {
+    background: $black;
+    border-color: mix($black, #fff, 90%);
+  }
+
+  &-ghost {
+    background: transparent;
+    border-color: currentColor;
+    font-weight: bold;
+    max-width: inherit;
+    padding: 0 32px;
+
+    &-grey {
+      color: $steel;
+
+      &:hover {
+        background: $steel;
+        border-color: $steel;
+        color: #fff;
+
+        .ico-triangle {
+          border-left-color: #fff;
+        }
+      }
+    }
+
+    &-pink {
+      color: $accent-color;
+
+      &:hover {
+        background: $accent-color;
+        border-color: $accent-color;
+        color: #fff;
+      }
+    }
+  }
+}

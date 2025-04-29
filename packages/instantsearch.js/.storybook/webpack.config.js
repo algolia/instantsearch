@@ -6,7 +6,7 @@ module.exports = ({ config, mode }) => {
 
   config.module.rules.push({
     test: /\.(js|ts|tsx)$/,
-    exclude: /node_modules/,
+    exclude: /node_modules\/(?!(algoliasearch)\/).*/,
     use: [
       {
         loader: 'babel-loader',

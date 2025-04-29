@@ -5,6 +5,7 @@
     "es",
     "tests/e2e",
     "packages/create-instantsearch-app/src/templates/**/*",
+    "packages/algolia-experiences",
 
     // this test has specific code for v3 and v4, so already checked in the v4 test
     "packages/instantsearch.js/src/middlewares/__tests__/createMetadataMiddleware.ts",
@@ -16,9 +17,15 @@
     // v3 has a wrong definition for optionalWords (only accepts string[])
     "packages/instantsearch.js/src/connectors/voice-search/__tests__/connectVoiceSearch-test.ts",
     // v3 does not have renderingContent (only errors in the test)
+    "packages/instantSearch.js/src/connectors/hits/__tests__/connectHits-test.ts",
     "packages/instantsearch.js/src/connectors/dynamic-widgets/__tests__/connectDynamicWidgets-test.ts",
     "packages/instantsearch.js/src/connectors/hierarchical-menu/__tests__/connectHierarchicalMenu-test.ts",
     "packages/instantsearch.js/src/connectors/menu/__tests__/connectMenu-test.ts",
     "packages/instantsearch.js/src/connectors/refinement-list/__tests__/connectRefinementList-test.ts",
+    // this test has specific code for v4
+    "packages/react-instantsearch-core/src/components/__tests__/InstantSearchSSRProvider.test.tsx",
+    "packages/react-instantsearch-core/src/server/__tests__/getServerState.test.tsx",
+    // test relies on v4, v3 and v5 at once
+    "packages/instantsearch.js/src/lib/utils/__tests__/getAppIdAndApiKey-test.ts"
   ]
 }

@@ -4,12 +4,15 @@
 
 import {
   createSearchClient,
+  createSingleRecommendResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
+  RecommendParameters,
+  RecommendResults,
 } from 'algoliasearch-helper';
 
 import { castToJestMock } from '../../../../../../tests/utils';
@@ -108,6 +111,23 @@ describe('index', () => {
       },
       ...args,
     });
+
+  const createFrequentlyBoughtTogether = (
+    args: Partial<Widget> = {}
+  ): Widget & { $$id: number } =>
+    createWidget({
+      dependsOn: 'recommend',
+      getWidgetParameters(parameters) {
+        return parameters.addFrequentlyBoughtTogether({
+          $$id: this.$$id!,
+          objectID: 'abc',
+        });
+      },
+      dispose({ recommendState }) {
+        return recommendState.removeParams(this.$$id!);
+      },
+      ...args,
+    } as Widget) as unknown as Widget & { $$id: number };
 
   const virtualSearchBox = connectSearchBox(() => {});
   const virtualPagination = connectPagination(() => {});
@@ -214,6 +234,17 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 `);
     });
 
+    it('adds generated `$$id` to widgets that depend on `recommend`', () => {
+      const instance = index({ indexName: 'indexName' });
+      const fbt1 = createFrequentlyBoughtTogether({});
+      const fbt2 = createFrequentlyBoughtTogether({});
+
+      instance.addWidgets([fbt1, fbt2]);
+
+      expect(fbt1.$$id).toBe(0);
+      expect(fbt2.$$id).toBe(1);
+    });
+
     describe('with a started instance', () => {
       it('updates the internal state with added widgets', () => {
         const instance = index({ indexName: 'indexName' });
@@ -250,6 +281,37 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             page: 5,
           })
         );
+      });
+
+      it('calls getWidgetParameters after init on widgets that depend on recommend', () => {
+        const instance = index({ indexName: 'indexName' });
+
+        instance.init(createIndexInitOptions({ parent: null }));
+
+        const fbt = createFrequentlyBoughtTogether({});
+        const getWidgetParameters = jest.spyOn(fbt, 'getWidgetParameters');
+        instance.addWidgets([fbt]);
+
+        expect(getWidgetParameters).toHaveBeenCalledTimes(1);
+      });
+
+      it('calls getWidgetParameters after init on widgets that depend on search and implement the function', () => {
+        const instance = index({ indexName: 'indexName' });
+
+        instance.init(createIndexInitOptions({ parent: null }));
+
+        const searchbox = createSearchBox({
+          dependsOn: 'search',
+          getWidgetParameters: jest.fn((searchParameters, { uiState }) => {
+            return searchParameters.setQueryParameter(
+              'query',
+              uiState.query || ''
+            );
+          }),
+        });
+        instance.addWidgets([searchbox]);
+
+        expect(searchbox.getWidgetParameters).toHaveBeenCalledTimes(1);
       });
 
       it('calls `init` on the added widgets', () => {
@@ -496,6 +558,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           },
         });
 
+        const fbt = createFrequentlyBoughtTogether();
+
         instance.addWidgets([
           createSearchBox({
             getWidgetSearchParameters(state) {
@@ -503,6 +567,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
             },
           }),
           pagination,
+          fbt,
         ]);
 
         instance.init(createIndexInitOptions({ parent: null }));
@@ -515,13 +580,24 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           })
         );
 
-        instance.removeWidgets([pagination]);
+        expect(instance.getHelper()!.recommendState).toEqual(
+          new RecommendParameters().addFrequentlyBoughtTogether({
+            objectID: 'abc',
+            $$id: fbt.$$id,
+          })
+        );
+
+        instance.removeWidgets([pagination, fbt]);
 
         expect(instance.getHelper()!.state).toEqual(
           new SearchParameters({
             index: 'indexName',
             query: 'Apple',
           })
+        );
+
+        expect(instance.getHelper()!.recommendState).toEqual(
+          new RecommendParameters()
         );
       });
 
@@ -580,6 +656,157 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         ).toHaveBeenCalledTimes(2);
       });
 
+      it('cleans shared refinements when `preserveSharedStateOnUnmount` is unset', () => {
+        const instance = index({ indexName: 'indexName' });
+        const instantSearchInstance = createInstantSearch();
+
+        const refinementList1 = virtualRefinementList({
+          attribute: 'brand',
+        });
+
+        const refinementList2 = virtualRefinementList({
+          attribute: 'brand',
+        });
+
+        instance.addWidgets([refinementList1, refinementList2]);
+
+        instance.init(
+          createIndexInitOptions({
+            instantSearchInstance,
+            parent: null,
+          })
+        );
+
+        // Simulate a state change
+        instance.getHelper()!.addDisjunctiveFacetRefinement('brand', 'Apple');
+
+        expect(instance.getHelper()!.state).toEqual(
+          new SearchParameters({
+            index: 'indexName',
+            maxValuesPerFacet: 10,
+            disjunctiveFacets: ['brand'],
+            disjunctiveFacetsRefinements: {
+              brand: ['Apple'],
+            },
+          })
+        );
+
+        instance.removeWidgets([refinementList2]);
+
+        expect(instance.getHelper()!.state).toEqual(
+          new SearchParameters({
+            index: 'indexName',
+            maxValuesPerFacet: 10,
+            disjunctiveFacets: ['brand'],
+            disjunctiveFacetsRefinements: {
+              brand: [],
+            },
+          })
+        );
+      });
+
+      it('cleans shared refinements when `preserveSharedStateOnUnmount` is false', () => {
+        const instance = index({ indexName: 'indexName' });
+        const instantSearchInstance = createInstantSearch({
+          future: { preserveSharedStateOnUnmount: false },
+        });
+
+        const refinementList1 = virtualRefinementList({
+          attribute: 'brand',
+        });
+
+        const refinementList2 = virtualRefinementList({
+          attribute: 'brand',
+        });
+
+        instance.addWidgets([refinementList1, refinementList2]);
+
+        instance.init(
+          createIndexInitOptions({
+            instantSearchInstance,
+            parent: null,
+          })
+        );
+
+        // Simulate a state change
+        instance.getHelper()!.addDisjunctiveFacetRefinement('brand', 'Apple');
+
+        expect(instance.getHelper()!.state).toEqual(
+          new SearchParameters({
+            index: 'indexName',
+            maxValuesPerFacet: 10,
+            disjunctiveFacets: ['brand'],
+            disjunctiveFacetsRefinements: {
+              brand: ['Apple'],
+            },
+          })
+        );
+
+        instance.removeWidgets([refinementList2]);
+
+        expect(instance.getHelper()!.state).toEqual(
+          new SearchParameters({
+            index: 'indexName',
+            maxValuesPerFacet: 10,
+            disjunctiveFacets: ['brand'],
+            disjunctiveFacetsRefinements: {
+              brand: [],
+            },
+          })
+        );
+      });
+
+      it('preserves shared refinements when `preserveSharedStateOnUnmount` is true', () => {
+        const instance = index({ indexName: 'indexName' });
+        const instantSearchInstance = createInstantSearch({
+          future: { preserveSharedStateOnUnmount: true },
+        });
+
+        const refinementList1 = virtualRefinementList({
+          attribute: 'brand',
+        });
+
+        const refinementList2 = virtualRefinementList({
+          attribute: 'brand',
+        });
+
+        instance.addWidgets([refinementList1, refinementList2]);
+
+        instance.init(
+          createIndexInitOptions({
+            instantSearchInstance,
+            parent: null,
+          })
+        );
+
+        // Simulate a state change
+        instance.getHelper()!.addDisjunctiveFacetRefinement('brand', 'Apple');
+
+        expect(instance.getHelper()!.state).toEqual(
+          new SearchParameters({
+            index: 'indexName',
+            maxValuesPerFacet: 10,
+            disjunctiveFacets: ['brand'],
+            disjunctiveFacetsRefinements: {
+              brand: ['Apple'],
+            },
+          })
+        );
+
+        instance.removeWidgets([refinementList2]);
+
+        expect(instance.getHelper()!.state).toEqual(
+          new SearchParameters({
+            index: 'indexName',
+            maxValuesPerFacet: 10,
+            disjunctiveFacets: ['brand'],
+            disjunctiveFacetsRefinements: {
+              brand: ['Apple'],
+            },
+          })
+        );
+      });
+
       it('calls `dispose` on the removed widgets', () => {
         const instance = index({ indexName: 'indexName' });
         const widgets = [
@@ -606,6 +833,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           expect(widget.dispose).toHaveBeenCalledWith({
             helper: instance.getHelper(),
             state: instance.getHelper()!.state,
+            recommendState: instance.getHelper()!.recommendState,
             parent: instance,
           });
         });
@@ -913,6 +1141,40 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         },
       ]);
     });
+
+    it('only gets children results if indexName is not set on main index', async () => {
+      const level0 = index({ indexName: '' });
+      const level1 = index({ indexName: 'level1IndexName' });
+      const level2 = index({ indexName: 'level2IndexName' });
+
+      level0.addWidgets([
+        level1.addWidgets([virtualSearchBox({})]),
+        level2.addWidgets([virtualSearchBox({})]),
+      ]);
+
+      level0.init(createIndexInitOptions({ parent: null }));
+
+      // Simulate a call to search from a widget - this step is required otherwise
+      // the DerivedHelper does not contain the results. The `lastResults` attribute
+      // is set once the `result` event is emitted.
+      level0.getHelper()!.search();
+
+      await wait(0);
+
+      expect(level0.getScopedResults()).toEqual([
+        // Only children
+        {
+          indexId: 'level1IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level1.getHelper(),
+        },
+        {
+          indexId: 'level2IndexName',
+          results: expect.any(algoliasearchHelper.SearchResults),
+          helper: level2.getHelper(),
+        },
+      ]);
+    });
   });
 
   describe('init', () => {
@@ -1017,6 +1279,37 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
           },
         ])
       );
+    });
+
+    it('calls getWidgetParameters on widgets that depend on recommend', () => {
+      const instance = index({ indexName: 'indexName' });
+
+      const fbt = createFrequentlyBoughtTogether({});
+      const getWidgetParameters = jest.spyOn(fbt, 'getWidgetParameters');
+      instance.addWidgets([fbt]);
+
+      instance.init(createIndexInitOptions({ parent: null }));
+
+      expect(getWidgetParameters).toHaveBeenCalledTimes(1);
+    });
+
+    it('calls getWidgetParameters on widgets that depend on search and implement the function', () => {
+      const instance = index({ indexName: 'indexName' });
+
+      const searchbox = createSearchBox({
+        dependsOn: 'search',
+        getWidgetParameters: jest.fn((searchParameters, { uiState }) => {
+          return searchParameters.setQueryParameter(
+            'query',
+            uiState.query || ''
+          );
+        }),
+      });
+      instance.addWidgets([searchbox]);
+
+      instance.init(createIndexInitOptions({ parent: null }));
+
+      expect(searchbox.getWidgetParameters).toHaveBeenCalledTimes(1);
     });
 
     it('uses the index set by the widget for the queries', () => {
@@ -2176,6 +2469,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const paginationCreateURL = jest.fn();
 
       const searchBox = createSearchBox({
+        dependsOn: 'search',
         getRenderState: jest.fn((renderState, { helper, searchMetadata }) => {
           return {
             ...renderState,
@@ -2292,6 +2586,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const mainHelper = algoliasearchHelper(searchClient, 'indexName', {});
       const instantSearchInstance = createInstantSearch({ mainHelper });
       const searchBox = createSearchBox({
+        dependsOn: 'search',
         getRenderState: jest.fn((renderState, { helper, searchMetadata }) => {
           return {
             ...renderState,
@@ -2484,7 +2779,76 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       });
     });
 
-    // https://github.com/algolia/instantsearch.js/pull/2623
+    it('calls `render` when `shouldRender` is undefined', async () => {
+      const instance = index({ indexName: 'indexName' });
+      const instantSearchInstance = createInstantSearch();
+
+      const fbt = createFrequentlyBoughtTogether({ shouldRender: undefined });
+      instance.addWidgets([fbt]);
+
+      instance.init(
+        createIndexInitOptions({
+          instantSearchInstance,
+          parent: null,
+        })
+      );
+      instance.getHelper()!.search();
+      await wait(0);
+
+      instance.render({
+        instantSearchInstance,
+      });
+
+      expect(fbt.render).toHaveBeenCalledTimes(1);
+    });
+
+    it('calls `render` when `shouldRender` returns true', async () => {
+      const instance = index({ indexName: 'indexName' });
+      const instantSearchInstance = createInstantSearch();
+
+      const fbt = createFrequentlyBoughtTogether({ shouldRender: () => true });
+      instance.addWidgets([fbt]);
+
+      instance.init(
+        createIndexInitOptions({
+          instantSearchInstance,
+          parent: null,
+        })
+      );
+      instance.getHelper()!.search();
+      await wait(0);
+
+      instance.render({
+        instantSearchInstance,
+      });
+
+      expect(fbt.render).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not call `render` when `shouldRender` returns false', async () => {
+      const instance = index({ indexName: 'indexName' });
+      const instantSearchInstance = createInstantSearch();
+
+      const fbt = createFrequentlyBoughtTogether({ shouldRender: () => false });
+      instance.addWidgets([fbt]);
+
+      instance.init(
+        createIndexInitOptions({
+          instantSearchInstance,
+          parent: null,
+        })
+      );
+      instance.getHelper()!.search();
+      await wait(0);
+
+      instance.render({
+        instantSearchInstance,
+      });
+
+      expect(fbt.render).toHaveBeenCalledTimes(0);
+    });
+
+    // https://github.com/algolia/instantsearch/pull/2623
     it('does not call `render` without `lastResults`', () => {
       const instance = index({ indexName: 'indexName' });
 
@@ -2667,6 +3031,54 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         })
       );
     });
+
+    it('forwards recommend results when `dependsOn` is `recommend`', async () => {
+      const instance = index({ indexName: 'indexName' });
+      const searchClient = createSearchClient({
+        // @ts-ignore partial response
+        getRecommendations: jest.fn(() =>
+          Promise.resolve({
+            results: [{ hits: [{ objectID: '1', title: 'Recommend' }] }],
+          })
+        ),
+      });
+      const mainHelper = algoliasearchHelper(searchClient, '', {});
+      const instantSearchInstance = createInstantSearch({
+        mainHelper,
+      });
+
+      const fbt = createFrequentlyBoughtTogether({
+        dependsOn: 'recommend',
+        shouldRender: () => true,
+        render: jest.fn(),
+      });
+      instance.addWidgets([fbt]);
+
+      instance.init(
+        createIndexInitOptions({
+          instantSearchInstance,
+          parent: null,
+        })
+      );
+      mainHelper.search();
+      await wait(0);
+      mainHelper.recommend();
+      await wait(0);
+
+      instance.render({
+        instantSearchInstance,
+      });
+
+      expect(fbt.render).toHaveBeenCalledWith(
+        expect.objectContaining({
+          results: expect.objectContaining({
+            hits: expect.arrayContaining([
+              { objectID: '1', title: 'Recommend' },
+            ]),
+          }),
+        })
+      );
+    });
   });
 
   describe('dispose', () => {
@@ -2703,6 +3115,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect(widget.dispose).toHaveBeenCalledTimes(1);
         expect(widget.dispose).toHaveBeenCalledWith({
           state: helper!.state,
+          recommendState: helper!.recommendState,
           helper,
           parent: instance,
         });
@@ -2831,6 +3244,16 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       instance.dispose(createDisposeOptions());
 
       expect(mainHelper.derivedHelpers).toHaveLength(0);
+    });
+
+    it('does not crash when calling `dispose` before `init`', () => {
+      const instance = index({ indexName: 'indexName' });
+
+      instance.addWidgets([virtualSearchBox({})]);
+
+      expect(() => {
+        instance.dispose(createDisposeOptions());
+      }).not.toThrow();
     });
   });
 
@@ -3038,6 +3461,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         nbPages: 1,
         page: 0,
         params: '',
+        persistHierarchicalRootCount: false,
         processingTimeMS: 0,
         query: 'iphone',
       };
@@ -3049,6 +3473,64 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       expect(derivedHelperResults).toBeInstanceOf(SearchResults);
       expect(helperResults).toEqual(expectedResults);
       expect(helperResults).toBeInstanceOf(SearchResults);
+    });
+
+    it('injects recommend results to the index helper', () => {
+      const search = instantsearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+      });
+      search._initialResults = {
+        indexName: {
+          recommendResults: {
+            params: [{ $$id: 0, objectID: '1' }],
+            results: {
+              0: createSingleRecommendResponse({
+                hits: [{ objectID: '1', _score: 0 }],
+              }),
+            },
+          },
+        },
+      };
+
+      search.start();
+
+      const expectedResults = {
+        _rawResults: {
+          0: {
+            exhaustiveFacetsCount: true,
+            exhaustiveNbHits: true,
+            hits: [{ objectID: '1', _score: 0 }],
+            hitsPerPage: 20,
+            nbHits: 1,
+            nbPages: 1,
+            page: 0,
+            params: '',
+            processingTimeMS: 0,
+            query: '',
+          },
+        },
+        _state: {
+          params: [{ $$id: 0, objectID: '1' }],
+        },
+        0: {
+          exhaustiveFacetsCount: true,
+          exhaustiveNbHits: true,
+          hits: [{ objectID: '1', _score: 0 }],
+          hitsPerPage: 20,
+          nbHits: 1,
+          nbPages: 1,
+          page: 0,
+          params: '',
+          processingTimeMS: 0,
+          query: '',
+        },
+      };
+
+      const helperResults = search.mainIndex.getHelper()!.lastRecommendResults;
+
+      expect(helperResults).toEqual(expectedResults);
+      expect(helperResults).toBeInstanceOf(RecommendResults);
     });
 
     it('supports nested indices', () => {

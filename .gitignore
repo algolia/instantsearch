@@ -12,6 +12,7 @@ build/
 
 # Generated files
 /docs
+/website/algoliasearch-helper-js/*
 /website/examples/*
 /website/stories/*
 /website/specs/*
@@ -29,6 +30,7 @@ scripts/*/CHANGELOG.md
 # private files
 .env
 .idea/
+.vscode/
 
 # Caches
 .eslintcache
@@ -37,7 +39,7 @@ scripts/*/CHANGELOG.md
 
 # Test artifacts
 integration/screenshots/
-/junit
+junit
 /coverage
 junit.xml
 

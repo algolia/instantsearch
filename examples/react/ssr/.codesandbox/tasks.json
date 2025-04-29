@@ -1,0 +1,17 @@
+{
+  "$schema": "https://codesandbox.io/schemas/tasks.json",
+  "setupTasks": [
+    "yarn config set cache-folder /project/workspace/.cache",
+    "yarn install"
+  ],
+  "tasks": {
+    "start-app": {
+      "name": "Run Dev Server",
+      "command": "yarn start",
+      "runAtStart": true,
+      "preview": {
+        "port": 8080
+      }
+    }
+  }
+}

@@ -16,15 +16,7 @@ let hasError = false;
     react: [
       'react-instantsearch',
       'react-instantsearch-core',
-      'react-instantsearch-dom',
-      'react-instantsearch-dom-maps',
-      'react-instantsearch-native',
-    ],
-    'react-hooks': [
-      'react-instantsearch-hooks',
-      'react-instantsearch-hooks-web',
-      'react-instantsearch-hooks-server',
-      'react-instantsearch-hooks-router-nextjs',
+      'react-instantsearch-router-nextjs',
     ],
   };
 
@@ -45,38 +37,63 @@ let hasError = false;
     hasError = true;
   } else {
     console.log('Versions are in sync per flavor');
+    console.log(Object.fromEntries(results));
   }
 }
 
 {
   const versions = [
     {
-      name: 'react-instantsearch-hooks',
+      name: 'react-instantsearch-core',
       versionFile: 'src/version.ts',
+      format: 'esm',
     },
     {
       name: 'instantsearch.js',
       versionFile: 'src/lib/version.ts',
+      format: 'esm',
     },
     {
-      name: 'react-instantsearch-core',
-      versionFile: 'src/core/version.js',
+      name: 'algoliasearch-helper',
+      versionFile: 'src/version.js',
+      format: 'cjs',
+    },
+    {
+      name: 'instantsearch-ui-components',
+      versionFile: 'src/version.ts',
+      format: 'esm',
     },
   ];
 
-  const results = versions.map(({ name, versionFile }) => {
+  const results = versions.map(({ name, versionFile, format }) => {
     const version = require(`../../packages/${name}/package.json`).version;
+
     const versionFileContent = fs
       .readFileSync(
         path.join(__dirname, `../../packages/${name}/${versionFile}`)
       )
       .toString();
 
+    const expectedVersionFileContent = (() => {
+      switch (format) {
+        case 'esm': {
+          return `export default '${version}';\n`;
+        }
+        case 'cjs': {
+          return `'use strict';\n\nmodule.exports = '${version}';\n`;
+        }
+        default: {
+          throw new Error(`Unknown format: ${format}`);
+        }
+      }
+    })();
+
     return {
       name,
       version,
       versionFileContent,
-      isValid: `export default '${version}';\n` === versionFileContent,
+      expectedVersionFileContent,
+      isValid: expectedVersionFileContent === versionFileContent,
     };
   });
 
@@ -86,6 +103,7 @@ let hasError = false;
     hasError = true;
   } else {
     console.log('Version files are in sync.');
+    console.log(results);
   }
 }
 

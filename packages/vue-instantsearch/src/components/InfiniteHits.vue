@@ -20,8 +20,9 @@
     </slot>
 
     <slot
-      :items="items"
+      :items="state.items"
       :results="state.results"
+      :banner="state.banner"
       :is-last-page="state.isLastPage"
       :refine-previous="refinePrevious"
       :refine-next="refineNext"
@@ -29,9 +30,35 @@
       :insights="state.insights"
       :send-event="state.sendEvent"
     >
+      <template
+        v-if="showBanner && state.banner && state.banner.image.urls[0].url"
+      >
+        <slot name="banner" :banner="state.banner">
+          <aside :class="suit('banner')">
+            <a
+              v-if="state.banner.link"
+              :href="state.banner.link.url"
+              :target="state.banner.link.target"
+              :class="suit('banner-link')"
+            >
+              <img
+                :src="state.banner.image.urls[0].url"
+                :alt="state.banner.image.title"
+                :class="suit('banner-image')"
+              />
+            </a>
+            <img
+              v-else
+              :src="state.banner.image.urls[0].url"
+              :alt="state.banner.image.title"
+              :class="suit('banner-image')"
+            />
+          </aside>
+        </slot>
+      </template>
       <ol :class="suit('list')">
         <li
-          v-for="(item, index) in items"
+          v-for="(item, index) in state.items"
           :class="suit('item')"
           :key="item.objectID"
           @click="state.sendEvent('click:internal', item, 'Hit Clicked')"
@@ -72,9 +99,10 @@
 </template>
 
 <script>
-import { createWidgetMixin } from '../mixins/widget';
 import { connectInfiniteHitsWithInsights } from 'instantsearch.js/es/connectors';
+
 import { createSuitMixin } from '../mixins/suit';
+import { createWidgetMixin } from '../mixins/widget';
 
 export default {
   name: 'AisInfiniteHits',
@@ -90,6 +118,10 @@ export default {
     createSuitMixin({ name: 'InfiniteHits' }),
   ],
   props: {
+    showBanner: {
+      type: Boolean,
+      default: true,
+    },
     showPrevious: {
       type: Boolean,
       default: false,
@@ -110,16 +142,12 @@ export default {
   computed: {
     widgetParams() {
       return {
+        showBanner: this.showBanner,
         showPrevious: this.showPrevious,
         escapeHTML: this.escapeHTML,
         transformItems: this.transformItems,
         cache: this.cache,
       };
-    },
-    items() {
-      // Fixes InstantSearch.js connectors API: every list
-      // of things must be called `items`
-      return this.state.hits;
     },
   },
   methods: {

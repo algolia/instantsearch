@@ -1,5 +1,6 @@
 const path = require('path');
-const { flavors } = require('./flavors');
+
+const { ALL_FLAVORS } = require('./flavors');
 
 module.exports = {
   /*
@@ -13,7 +14,7 @@ module.exports = {
       mount: '/',
       path: './website',
     },
-    ...flavors.map((flavor) => ({
+    ...ALL_FLAVORS.map((flavor) => ({
       mount: `/examples/${flavor}/e-commerce/*`,
       path: `./website/examples/${flavor}/e-commerce`,
     })),

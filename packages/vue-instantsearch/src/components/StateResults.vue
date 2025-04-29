@@ -14,10 +14,10 @@
 </template>
 
 <script>
-import { isVue3 } from '../util/vue-compat';
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
 import { _objectSpread } from '../util/polyfills';
+import { isVue3 } from '../util/vue-compat';
 
 export default {
   name: 'AisStateResults',

@@ -1,6 +1,7 @@
-import { createWidgetMixin } from '../mixins/widget';
-import { createSuitMixin } from '../mixins/suit';
 import { connectConfigure } from 'instantsearch.js/es/connectors';
+
+import { createSuitMixin } from '../mixins/suit';
+import { createWidgetMixin } from '../mixins/widget';
 import { isVue3, renderCompat } from '../util/vue-compat';
 
 export default {
@@ -20,7 +21,7 @@ export default {
   computed: {
     widgetParams() {
       return {
-        searchParameters: this.$attrs,
+        searchParameters: Object.assign({}, this.$attrs),
       };
     },
   },

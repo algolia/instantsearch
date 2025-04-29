@@ -1,0 +1,212 @@
+.badge {
+  font-size: 14px;
+  line-height: 18px;
+  padding: 2px 4px;
+  border-radius: 5px;
+  display: inline;
+  margin-top: 0.5em;
+
+  &.badge-event {
+    background: $powder-blue;
+  }
+  &.badge-chainable {
+    background: $brand-primary;
+    color: white;
+  }
+}
+
+.method,
+.property,
+.typedef,
+.event {
+  margin: 10px 0;
+  width: 100%;
+  font-size: 16px;
+  line-height: 22px;
+  border: 1px solid $border;
+  border-radius: 5px;
+
+  > * {
+    padding: 0.5em;
+  }
+
+  .api-entry {
+    text-decoration: none;
+    color: black;
+    font-weight: 600;
+    &:hover {
+      color: $accent-color;
+    }
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .summary {
+    border-bottom: 1px solid $pale-grey;
+    font-size: 1.3em;
+    .name {
+      margin-bottom: 5px;
+      .param {
+        &:after {
+          content: ', ';
+        }
+        &:last-child:after {
+          content: initial;
+        }
+        &.optional:before {
+          content: '[';
+        }
+        &.optional:after {
+          content: '], ';
+        }
+        &.optional:last-child:after {
+          content: ']';
+        }
+      }
+    }
+  }
+
+  .description {
+  }
+
+  .parameters {
+    list-style-type: none;
+    margin: 0;
+    display: table;
+    width: 100%;
+
+    &:before {
+      content: 'Parameters';
+      font-size: 1.2em;
+    }
+
+    .parameter {
+      display: table-row;
+      width: 100%;
+      margin-top: 3px;
+
+      .param,
+      .type,
+      .description {
+        display: table-cell;
+      }
+
+      .param {
+        width: 20%;
+        font-family: $font-code;
+      }
+
+      .type {
+        width: 15%;
+        padding-left: 3px;
+      }
+
+      .description {
+        padding-left: 3px;
+        width: 65%;
+      }
+    }
+  }
+
+  .type-properties {
+    list-style-type: none;
+    margin: 0;
+    display: table;
+    width: 100%;
+
+    &:before {
+      content: 'Properties';
+      font-size: 1.2em;
+    }
+
+    .type-property {
+      display: table-row;
+      width: 100%;
+      margin-top: 3px;
+
+      .param,
+      .type,
+      .description {
+        display: table-cell;
+      }
+
+      .param {
+        width: 20%;
+        font-family: $font-code;
+      }
+
+      .type {
+        width: 15%;
+        padding-left: 3px;
+      }
+
+      .description {
+        padding-left: 3px;
+        width: 65%;
+      }
+    }
+  }
+
+  .type {
+    font-family: $font-code;
+    font-size: 0.9em;
+
+    span:after {
+      content: ' | ';
+    }
+
+    span:last-child:after {
+      content: initial;
+    }
+  }
+
+  .returns {
+    display: table;
+    width: 100%;
+
+    &:before {
+      content: 'Returns';
+      font-size: 1.2em;
+      display: block;
+    }
+
+    .return {
+      display: table-row;
+      width: 100%;
+
+      .type,
+      .description {
+        display: table-cell;
+      }
+
+      .type {
+        width: 35%;
+        span:after {
+          content: ' or ';
+        }
+        span:last-child:after {
+          content: initial;
+        }
+      }
+
+      .description {
+        font-family: $font-settings;
+        width: 65%;
+        padding-left: 3px;
+      }
+    }
+  }
+
+  .examples {
+    &:before {
+      content: 'Examples';
+      font-size: 1.2em;
+    }
+  }
+}
+
+.signature .type {
+  font-family: $font-settings;
+  font-size: 1em;
+}

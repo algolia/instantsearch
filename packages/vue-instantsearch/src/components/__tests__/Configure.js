@@ -2,6 +2,8 @@
  * @jest-environment jsdom
  */
 
+import { isProxy } from 'node:util/types';
+
 import { mount } from '../../../test/utils';
 import { __setState } from '../../mixins/widget';
 import Configure from '../Configure';
@@ -41,6 +43,14 @@ it('accepts SearchParameters from attributes', () => {
     hitsPerPage: 5,
     distinct: true,
   });
+});
+
+it('assigns $attrs to a new object not wrapped by a proxy', () => {
+  const wrapper = mount(Configure, {
+    propsData: defaultProps,
+  });
+
+  expect(isProxy(wrapper.vm.widgetParams.searchParameters)).toBe(false);
 });
 
 it('renders null without default slot', () => {

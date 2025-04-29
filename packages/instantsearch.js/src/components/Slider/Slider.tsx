@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { cx } from '@algolia/ui-components-shared';
+import { cx } from 'instantsearch-ui-components';
 import { h, Component } from 'preact';
 
 import { range } from '../../lib/utils';
@@ -92,8 +92,13 @@ class Slider extends Component<SliderProps> {
         props['data-handle-key'] === 1 && 'rheostat-handle-upper'
       );
 
+      const ariaLabel =
+        props['data-handle-key'] === 0
+          ? 'Minimum Filter Handle'
+          : 'Maximum Filter Handle';
+
       return (
-        <div {...props} className={className}>
+        <div {...props} className={className} aria-label={ariaLabel}>
           {tooltips && <div className="rheostat-tooltip">{value}</div>}
         </div>
       );

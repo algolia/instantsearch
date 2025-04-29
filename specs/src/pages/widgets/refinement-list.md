@@ -125,7 +125,7 @@ options:
     description: Whether to add a search box to refine this list
   - name: operator
     default: '"or"'
-    description: "How to apply refinements. Possible values: or, and"
+    description: 'How to apply refinements. Possible values: or, and'
   - name: limit
     default: 10
     description: Number of items to show

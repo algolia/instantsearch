@@ -1,14 +1,15 @@
 import path from 'path';
+
+import babel from 'rollup-plugin-babel';
+import buble from 'rollup-plugin-buble';
+import commonjs from 'rollup-plugin-commonjs';
+import filesize from 'rollup-plugin-filesize';
+import json from 'rollup-plugin-json';
+import resolve from 'rollup-plugin-node-resolve';
+import replace from 'rollup-plugin-replace';
+import { terser } from 'rollup-plugin-terser';
 import vueV2 from 'rollup-plugin-vue2';
 import vueV3 from 'rollup-plugin-vue3';
-import buble from 'rollup-plugin-buble';
-import filesize from 'rollup-plugin-filesize';
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
-import { terser } from 'rollup-plugin-terser';
-import replace from 'rollup-plugin-replace';
-import json from 'rollup-plugin-json';
-import babel from 'rollup-plugin-babel';
 
 const processEnv = (conf) => ({
   // parenthesis to avoid syntax errors in places where {} is interpreted as a block
@@ -44,6 +45,8 @@ const aliasVueCompat = (vueVersion) => ({
   },
 });
 
+const isWatching = process.env.ROLLUP_WATCH;
+
 function outputs(vueVersion) {
   const vuePlugin = vueVersion === 'vue3' ? vueV3 : vueV2;
 
@@ -64,9 +67,13 @@ function outputs(vueVersion) {
   ];
 
   const external = (id) =>
-    ['algoliasearch-helper', 'instantsearch.js', 'vue', 'mitt'].some(
-      (dep) => id === dep || id.startsWith(`${dep}/`)
-    );
+    [
+      'algoliasearch-helper',
+      'instantsearch.js',
+      'instantsearch-ui-components',
+      'vue',
+      'mitt',
+    ].some((dep) => id === dep || id.startsWith(`${dep}/`));
 
   const cjs = {
     input: 'src/instantsearch.js',
@@ -115,6 +122,7 @@ export * from './src/instantsearch.js';`
         JSON.stringify({ type: 'module', sideEffects: true })
       ),
       babel({
+        exclude: /node_modules|algoliasearch-helper/,
         extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', '.vue'],
         babelrc: false,
         plugins: [
@@ -148,6 +156,12 @@ export * from './src/instantsearch.js';`
         },
       },
     ],
+    onwarn(warning, warn) {
+      if (warning.code === 'CIRCULAR_DEPENDENCY')
+        throw new Error(warning.message);
+
+      warn(warning);
+    },
     plugins: [
       ...plugins,
       resolve({
@@ -158,7 +172,11 @@ export * from './src/instantsearch.js';`
     ],
   };
 
+  if (isWatching) {
+    return [esm];
+  }
+
   return [cjs, esm, umd];
 }
 
-export default [...outputs('vue2'), ...outputs('vue3')];
+export default [...outputs('vue2'), ...(isWatching ? [] : outputs('vue3'))];

@@ -140,7 +140,7 @@ const instantSearchPlayground: Playground = function instantSearchPlayground({
 
   const insights = instantsearch.middlewares.createInsightsMiddleware({
     insightsClient: null,
-    onEvent: props => {
+    onEvent: (props) => {
       console.log('insights onEvent', props);
     },
   });

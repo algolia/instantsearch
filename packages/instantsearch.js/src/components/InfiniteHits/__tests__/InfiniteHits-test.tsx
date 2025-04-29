@@ -28,6 +28,9 @@ describe('InfiniteHits', () => {
     disabledLoadPrevious: 'disabledLoadPrevious',
     loadMore: 'loadMore',
     disabledLoadMore: 'disabledLoadMore',
+    bannerRoot: 'bannerRoot',
+    bannerImage: 'bannerImage',
+    bannerLink: 'bannerLink',
   };
 
   const sendEvent = () => {};

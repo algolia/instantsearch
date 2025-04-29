@@ -1,5 +1,5 @@
-const fs = require('fs');
 const { execSync } = require('child_process');
+const fs = require('fs');
 
 describe('Installation', () => {
   let temporaryDirectory;
@@ -150,9 +150,7 @@ describe('Installation', () => {
 
       const { dependencies } = require(`${appPath}/react/package.json`);
 
-      expect(dependencies['react-instantsearch-dom']).toEqual(
-        expect.any(String)
-      );
+      expect(dependencies['react-instantsearch']).toEqual(expect.any(String));
     });
 
     test('without template fails', () => {

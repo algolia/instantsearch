@@ -3,9 +3,9 @@
  */
 
 import { mount } from '../../../test/utils';
-import Index from '../Index';
 import { __setWidget } from '../../mixins/widget';
 import { Vue2, isVue3, isVue2 } from '../../util/vue-compat';
+import Index from '../Index';
 jest.mock('../../mixins/widget');
 import '../../../test/utils/sortedHtmlSerializer';
 

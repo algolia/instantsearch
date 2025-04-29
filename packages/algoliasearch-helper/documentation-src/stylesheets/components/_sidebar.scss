@@ -1,0 +1,86 @@
+nav.sidebar {
+  float: left;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  max-width: $sidebar-width;
+  border-right: 1px solid #d8d8d8;
+  padding-top: 120px;
+  overflow: auto;
+
+  ul {
+    list-style: none;
+    width: 100%;
+    max-width: $sidebar-width;
+    padding: 0;
+    margin: 0;
+    float: left;
+
+    &.fixed {
+      position: fixed;
+      top: $navigation-height;
+      z-index: 9;
+      max-height: calc(100vh - #{$navigation-height});
+      overflow: auto;
+    }
+
+    li {
+      width: 100%;
+      line-height: 32px;
+
+      &.level-h2 {
+      }
+      &.level-h3 {
+        line-height: 24px;
+        font-size: 12px;
+        padding-left: 12px;
+        font-family: 'Open sans';
+      }
+
+      a {
+        text-decoration: none;
+        display: block;
+        width: 100%;
+        color: $charcoal-grey-75;
+        font-weight: 400;
+
+        &:focus,
+        &:target {
+          @extend %active-links;
+        }
+        &.active {
+          @extend %active-links;
+        }
+      }
+    }
+  }
+
+  @include small-mq {
+    width: calc(100% + 16px);
+    max-width: calc(100% + 16px);
+    position: absolute;
+    max-height: 46px;
+    left: 0;
+    top: 16px;
+    border: none;
+    padding-top: 0;
+    display: none;
+
+    select {
+      width: calc(100% - 32px);
+      margin: 8px 8px;
+      visibility: hidden;
+    }
+
+    &.fixed {
+      background: $brand-primary;
+      color: #fff;
+      top: 50px;
+      display: block;
+
+      select {
+        visibility: visible;
+      }
+    }
+  }
+}

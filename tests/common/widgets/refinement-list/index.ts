@@ -1,25 +1,29 @@
-import type { RefinementListWidget } from 'instantsearch.js/es/widgets/refinement-list/refinement-list';
-import type { TestSetup, Act } from '../../common';
 import { fakeAct } from '../../common';
+
+import { createLinksTests } from './links';
 import { createOptimisticUiTests } from './optimistic-ui';
-import { createShowMoreTests } from './show-more';
+import { createOptionsTests } from './options';
+
+import type { TestOptions, TestSetup } from '../../common';
+import type { RefinementListWidget } from 'instantsearch.js/es/widgets/refinement-list/refinement-list';
 
 type WidgetParams = Parameters<RefinementListWidget>[0];
-export type RefinementListSetup = TestSetup<{
+export type RefinementListWidgetSetup = TestSetup<{
   widgetParams: Omit<WidgetParams, 'container'>;
   vueSlots?: Record<string, unknown>;
 }>;
 
-export function createRefinementListTests(
-  setup: RefinementListSetup,
-  act: Act = fakeAct
+export function createRefinementListWidgetTests(
+  setup: RefinementListWidgetSetup,
+  { act = fakeAct, skippedTests = {} }: TestOptions = {}
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
-  describe('RefinementList common tests', () => {
-    createOptimisticUiTests(setup, act);
-    createShowMoreTests(setup, act);
+  describe('RefinementList widget common tests', () => {
+    createOptimisticUiTests(setup, { act, skippedTests });
+    createOptionsTests(setup, { act, skippedTests });
+    createLinksTests(setup, { act, skippedTests });
   });
 }

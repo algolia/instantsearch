@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { cx } from '@algolia/ui-components-shared';
+import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import Answers from '../../components/Answers/Answers';
@@ -9,6 +9,7 @@ import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
   createDocumentationMessageGenerator,
+  deprecate,
   getContainerNode,
 } from '../../lib/utils';
 
@@ -139,6 +140,9 @@ export type AnswersWidget = WidgetFactory<
   AnswersWidgetParams
 >;
 
+/**
+ * @deprecated the answers service is no longer offered, and this widget will be removed in InstantSearch.js v5
+ */
 const answersWidget: AnswersWidget = (widgetParams) => {
   const {
     container,
@@ -192,4 +196,7 @@ const answersWidget: AnswersWidget = (widgetParams) => {
   };
 };
 
-export default answersWidget;
+export default deprecate(
+  answersWidget,
+  'The answers widget is deprecated and will be removed in InstantSearch.js 5.0'
+);

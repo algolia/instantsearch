@@ -3,13 +3,17 @@ import {
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import type { BreadcrumbSetup } from '.';
-import type { Act } from '../../common';
+import { normalizeSnapshot, wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
-import { normalizeSnapshot, wait } from '@instantsearch/testutils';
 
-export function createOptionsTests(setup: BreadcrumbSetup, act: Act) {
+import type { BreadcrumbWidgetSetup } from '.';
+import type { TestOptions } from '../../common';
+
+export function createOptionsTests(
+  setup: BreadcrumbWidgetSetup,
+  { act }: Required<TestOptions>
+) {
   describe('options', () => {
     const hierarchicalFacets = {
       'hierarchicalCategories.lvl0': {
@@ -423,13 +427,13 @@ export function createOptionsTests(setup: BreadcrumbSetup, act: Act) {
         normalizeSnapshot,
         `
         <div
-          class="ais-Breadcrumb ais-Breadcrumb--noRefinement"
+          class="ais-Breadcrumb"
         >
           <ul
             class="ais-Breadcrumb-list"
           >
             <li
-              class="ais-Breadcrumb-item ais-Breadcrumb-item--selected"
+              class="ais-Breadcrumb-item"
             >
               <a
                 class="ais-Breadcrumb-link"
@@ -437,6 +441,17 @@ export function createOptionsTests(setup: BreadcrumbSetup, act: Act) {
               >
                 Home
               </a>
+            </li>
+            <li
+              class="ais-Breadcrumb-item ais-Breadcrumb-item--selected"
+            >
+              <span
+                aria-hidden="true"
+                class="ais-Breadcrumb-separator"
+              >
+                &gt;
+              </span>
+              Digital Cameras
             </li>
           </ul>
         </div>

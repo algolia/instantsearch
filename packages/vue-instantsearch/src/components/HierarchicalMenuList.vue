@@ -12,19 +12,18 @@
       :key="item.value"
       :class="[
         suit('item'),
-        item.data && item.data.length > 0 && suit('item', 'parent'),
         item.isRefined && suit('item', 'selected'),
+        item.data && item.data.length > 0 && suit('item', 'parent'),
       ]"
     >
       <a
         :href="createURL(item.value)"
         :class="[suit('link'), item.isRefined && suit('link', 'selected')]"
-        @click.prevent="refine(item.value)"
+        @click.exact.left.prevent="refine(item.value)"
       >
         <span :class="suit('label')">{{ item.label }}</span>
         <span :class="suit('count')">{{ item.count }}</span>
       </a>
-
       <hierarchical-menu-list
         v-if="item.data"
         :items="item.data"

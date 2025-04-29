@@ -1,0 +1,29 @@
+.form-control {
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: 16px;
+  line-height: 40px;
+  height: 40px;
+  border: 1px solid #cccccc;
+  border-radius: 3px;
+  outline: none;
+}
+
+.form-group {
+  margin-bottom: 1em;
+  clear: both;
+
+  label {
+    display: block;
+    font-weight: bold;
+    font-size: 0.8em;
+  }
+}
+
+#map-example-container,
+#map-example-container-paris {
+  // trigger zindex value otherwise
+  // map goes hover other elements (like header)
+  position: relative;
+  z-index: 0;
+}

@@ -3,6 +3,7 @@ import {
   waitForResults,
   getInitialResults,
 } from 'instantsearch.js/es/lib/server';
+
 import { isVue3, isVue2, Vue2, createSSRApp } from './vue-compat';
 import { warn } from './warn';
 
@@ -115,8 +116,11 @@ function augmentInstantSearch(instantSearchOptions, cloneComponent) {
       })
       .then(() => renderToString(app))
       .then(() => waitForResults(instance))
-      .then(() => {
-        initialResults = getInitialResults(instance.mainIndex);
+      .then((requestParamsList) => {
+        initialResults = getInitialResults(
+          instance.mainIndex,
+          requestParamsList
+        );
         search.hydrate(initialResults);
         return search.getState();
       });

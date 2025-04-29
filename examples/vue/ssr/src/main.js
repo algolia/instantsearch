@@ -1,11 +1,12 @@
 /* eslint-disable no-nested-ternary */
+import { liteClient as algoliasearch } from 'algoliasearch/lite';
+import qs from 'qs';
 import Vue from 'vue';
+import { createServerRootMixin } from 'vue-instantsearch';
+import _renderToString from 'vue-server-renderer/basic';
+
 import App from './App.vue';
 import { createRouter } from './router';
-import { createServerRootMixin } from 'vue-instantsearch';
-import algoliasearch from 'algoliasearch/lite';
-import qs from 'qs';
-import _renderToString from 'vue-server-renderer/basic';
 
 function renderToString(app) {
   return new Promise((resolve, reject) => {
@@ -74,22 +75,13 @@ export async function createApp({
               if (typeof window !== 'object') {
                 return;
               }
-              this._onPopState = (event) => {
+              this._onPopState = () => {
                 if (this.writeTimer) {
                   window.clearTimeout(this.writeTimer);
                   this.writeTimer = undefined;
                 }
 
-                const routeState = event.state;
-
-                // At initial load, the state is read from the URL without update.
-                // Therefore the state object is not available.
-                // In this case, we fallback and read the URL.
-                if (!routeState) {
-                  callback(this.read());
-                } else {
-                  callback(routeState);
-                }
+                callback(this.read());
               };
 
               window.addEventListener('popstate', this._onPopState);

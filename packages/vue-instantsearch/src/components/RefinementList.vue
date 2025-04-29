@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="[suit(), !state.canRefine && suit('', 'noRefinement')]"
+    :class="[suit(), items.length === 0 && suit('', 'noRefinement')]"
     v-if="state"
   >
     <slot
@@ -20,6 +20,7 @@
       <div :class="suit('searchBox')" v-if="searchable">
         <search-input
           v-model="searchForFacetValues"
+          :show-loading-indicator="true"
           :placeholder="searchablePlaceholder"
           :class-names="classNames"
         />
@@ -31,7 +32,7 @@
       >
         <div :class="suit('noResults')">No results.</div>
       </slot>
-      <ul :class="suit('list')">
+      <ul v-if="items.length > 0" :class="suit('list')">
         <li
           :class="[suit('item'), item.isRefined && suit('item', 'selected')]"
           v-for="item in items"
@@ -84,12 +85,14 @@
 </template>
 
 <script>
-import { createWidgetMixin } from '../mixins/widget';
+import { connectRefinementList } from 'instantsearch.js/es/connectors';
+
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
-import { connectRefinementList } from 'instantsearch.js/es/connectors';
-import SearchInput from './SearchInput.vue';
+import { createWidgetMixin } from '../mixins/widget';
+
 import AisHighlight from './Highlight.vue';
+import SearchInput from './SearchInput.vue';
 
 const noop = () => {};
 

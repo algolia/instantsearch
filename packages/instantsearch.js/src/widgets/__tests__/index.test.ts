@@ -147,6 +147,16 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
         const EXPERIMENTAL_answers = widget as Widgets['EXPERIMENTAL_answers'];
         return EXPERIMENTAL_answers({ container, queryLanguages: ['en'] });
       }
+      case 'frequentlyBoughtTogether':
+      case 'relatedProducts':
+      case 'lookingSimilar': {
+        const recommendWidgetWithObjectIDs =
+          widget as Widgets['frequentlyBoughtTogether'];
+        return recommendWidgetWithObjectIDs({
+          container,
+          objectIDs: ['objectID'],
+        });
+      }
       default: {
         const defaultWidget = widget as UnknownWidgetFactory;
         return defaultWidget({ container, attribute: 'attr' });

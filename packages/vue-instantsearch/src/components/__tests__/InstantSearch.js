@@ -3,12 +3,13 @@
  */
 
 import { createAlgoliaSearchClient } from '@instantsearch/mocks';
-import { isVue3, version as vueVersion } from '../../util/vue-compat';
-import { mount, nextTick } from '../../../test/utils';
 import instantsearch from 'instantsearch.js/es';
-import InstantSearch from '../InstantSearch';
+
 import { version } from '../../../package.json';
+import { mount, nextTick } from '../../../test/utils';
+import { isVue3, version as vueVersion } from '../../util/vue-compat';
 import { warn } from '../../util/warn';
+import InstantSearch from '../InstantSearch';
 import '../../../test/utils/sortedHtmlSerializer';
 
 jest.mock('../../util/warn');
@@ -333,7 +334,7 @@ it.skip('Does not allow a change in `routing`', async () => {
   ).rejects.toMatchInlineSnapshot(`
 [Error: routing configuration can not be changed dynamically at this point.
 
-Please open a new issue: https://github.com/algolia/instantsearch.js/discussions/new?category=ideas&labels=triage%2cLibrary%3A+Vue+InstantSearch&title=Feature%20request%3A%20dynamic%20props]
+Please open a new issue: https://github.com/algolia/instantsearch/discussions/new?category=ideas&labels=triage%2cLibrary%3A+Vue+InstantSearch&title=Feature%20request%3A%20dynamic%20props]
 `);
 });
 

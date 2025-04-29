@@ -15,10 +15,7 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css?family=Montserrat:400,600&font-display=swap"
     />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/instantsearch.css@7.3.1/themes/reset-min.css"
-    />
+
     <link rel="stylesheet" href="./src/theme.css" />
     <link rel="stylesheet" href="./src/app.css" />
     <link rel="stylesheet" href="./src/app.desktop.css" />
@@ -143,9 +140,7 @@
               />
             </svg>
 
-            <h2 class="container-filters-title">
-              Filter
-            </h2>
+            <h2 class="container-filters-title">Filter</h2>
           </button>
 
           <div data-widget="stats" class="container-filters-filter"></div>
@@ -164,7 +159,10 @@
           data-layout="desktop"
           class="container-filters-panel-column-wrapper"
         >
-          <div data-widget="dates-desktop" class="container-filters-panel-column container-filters-panel-column--dates"></div>
+          <div
+            data-widget="dates-desktop"
+            class="container-filters-panel-column container-filters-panel-column--dates"
+          ></div>
           <div
             data-widget="categories-desktop"
             class="container-filters-panel-column"
@@ -172,9 +170,7 @@
         </div>
         <div data-layout="mobile" class="container-filters-panel-mobile">
           <div class="container-filters-header">
-            <h2 class="container-filters-title">
-              Filters
-            </h2>
+            <h2 class="container-filters-title">Filters</h2>
             <div data-widget="clear-filters-mobile"></div>
           </div>
           <div data-widget="dates-mobile"></div>
@@ -216,12 +212,18 @@
         </a>
       </aside>
       <div class="mentions">
-        <p>InstantSearch.js is an open-source, production-ready library that lets you quickly build a search interface in your front-end application.</p>
-        <p>This demo uses data from the Algolia blog. Follow <a href="https://algolia.com/blog">this link</a> to benefit from the official blog experience.</p>
+        <p>
+          InstantSearch.js is an open-source, production-ready library that lets
+          you quickly build a search interface in your front-end application.
+        </p>
+        <p>
+          This demo uses data from the Algolia blog. Follow
+          <a href="https://algolia.com/blog">this link</a> to benefit from the
+          official blog experience.
+        </p>
       </div>
     </footer>
 
-    <script type="module" src="./src/env.ts"></script>
     <script type="module" src="./src/app.ts"></script>
   </body>
 </html>

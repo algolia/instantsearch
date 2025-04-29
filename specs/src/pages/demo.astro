@@ -1,8 +1,8 @@
 ---
-import ThemeSelector from "../components/ThemeSelector.astro";
-import MainLayout from "../layouts/MainLayout.astro";
+import ThemeSelector from '../components/ThemeSelector.astro';
+import MainLayout from '../layouts/MainLayout.astro';
 
-const widgetList = await Astro.glob("./widgets/*.md");
+const widgetList = await Astro.glob('./widgets/*.md');
 const widgets = {} as Record<string, string>;
 for (const widget of widgetList) {
   widgets[widget.frontmatter.title] = widget.frontmatter.html;
@@ -20,68 +20,65 @@ for (const widget of widgetList) {
           <div class="demo-widget">
             <div class="ais-Panel">
               <div class="ais-Panel-header">Refinement list</div>
-              <div class="ais-Panel-body" set:html={widgets.RefinementList}>
-              </div>
+              <div class="ais-Panel-body" set:html={widgets.RefinementList} />
             </div>
           </div>
           <div class="demo-widget">
             <div class="ais-Panel">
               <div class="ais-Panel-header">Toggle refinement</div>
-              <div class="ais-Panel-body" set:html={widgets.ToggleRefinement}>
-              </div>
+              <div class="ais-Panel-body" set:html={widgets.ToggleRefinement} />
             </div>
           </div>
           <div class="demo-widget">
             <div class="ais-Panel">
               <div class="ais-Panel-header">Hierarchical menu</div>
-              <div class="ais-Panel-body" set:html={widgets.HierarchicalMenu}>
-              </div>
+              <div class="ais-Panel-body" set:html={widgets.HierarchicalMenu} />
             </div>
           </div>
           <div class="demo-widget">
             <div class="ais-Panel">
               <div class="ais-Panel-header">Menu</div>
-              <div class="ais-Panel-body" set:html={widgets.Menu}></div>
+              <div class="ais-Panel-body" set:html={widgets.Menu} />
             </div>
           </div>
           <div class="demo-widget">
             <div class="ais-Panel">
               <div class="ais-Panel-header">Menu select</div>
-              <div class="ais-Panel-body" set:html={widgets.MenuSelect}></div>
+              <div class="ais-Panel-body" set:html={widgets.MenuSelect} />
             </div>
           </div>
           <div class="demo-widget">
             <div class="ais-Panel">
               <div class="ais-Panel-header">Sort by</div>
-              <div class="ais-Panel-body" set:html={widgets.SortBy}></div>
+              <div class="ais-Panel-body" set:html={widgets.SortBy} />
             </div>
           </div>
           <div class="demo-widget">
             <div class="ais-Panel">
               <div class="ais-Panel-header">Rating menu</div>
-              <div class="ais-Panel-body" set:html={widgets.RatingMenu}></div>
+              <div class="ais-Panel-body" set:html={widgets.RatingMenu} />
             </div>
           </div>
           <div class="demo-widget">
             <div class="ais-Panel">
               <div class="ais-Panel-header">Range input</div>
-              <div class="ais-Panel-body" set:html={widgets.RangeInput}></div>
+              <div class="ais-Panel-body" set:html={widgets.RangeInput} />
             </div>
           </div>
           <div class="demo-widget">
             <div class="ais-Panel">
               <div class="ais-Panel-header">Numeric menu</div>
-              <div class="ais-Panel-body" set:html={widgets.NumericMenu}></div>
+              <div class="ais-Panel-body" set:html={widgets.NumericMenu} />
             </div>
           </div>
           <div class="demo-widget">
             <div class="ais-Panel">
               <div class="ais-Panel-header">Hits per page</div>
-              <div class="ais-Panel-body" set:html={widgets.HitsPerPage}></div>
+              <div class="ais-Panel-body" set:html={widgets.HitsPerPage} />
             </div>
           </div>
-          <div class="demo-widget" set:html={widgets.ClearRefinements}></div>
-          <div class="demo-widget" set:html={widgets.PoweredBy}></div>
+          <div class="demo-widget" set:html={widgets.ClearRefinements} />
+          <div class="demo-widget" set:html={widgets.PoweredBy} />
         </div>
         <div
           class="demo-results"
@@ -93,10 +90,9 @@ for (const widget of widgetList) {
             widgets.Hits,
             widgets.Pagination,
           ])
-            .replaceAll(",", "")
+            .replaceAll(',', '')
             .toString()}
-        >
-        </div>
+        />
       </div>
     </div>
   </div>

@@ -16,9 +16,12 @@ describe('checkAppName', () => {
   });
 
   test('throws with correct error message', () => {
-    expect(() =>
-      utils.checkAppName('./project-name')
-    ).toThrowErrorMatchingSnapshot();
+    expect(() => utils.checkAppName('./project-name'))
+      .toThrowErrorMatchingInlineSnapshot(`
+      "Could not create a project called \\"<red>./project-name</color>\\" because of npm naming restrictions.
+        - name cannot start with a period
+        - name can only contain URL-friendly characters"
+    `);
   });
 });
 
@@ -48,7 +51,7 @@ describe('checkAppPath', () => {
       expect(() =>
         utils.checkAppPath('path')
       ).toThrowErrorMatchingInlineSnapshot(
-        `"Could not create project in destination folder \\"[31mpath[39m\\" because it is not empty."`
+        `"Could not create project in destination folder \\"<red>path</color>\\" because it is not empty."`
       );
     });
 
@@ -71,7 +74,7 @@ describe('checkAppPath', () => {
       expect(() =>
         utils.checkAppPath('path')
       ).toThrowErrorMatchingInlineSnapshot(
-        `"Could not create project at path [31mpath[39m because a file of the same name already exists."`
+        `"Could not create project at path <red>path</color> because a file of the same name already exists."`
       );
     });
 
@@ -118,7 +121,6 @@ describe('getTemplatesByCategory', () => {
   beforeAll(() => {
     mockReaddirSync.mockImplementation(() => [
       'InstantSearch.js',
-      'Angular InstantSearch',
       'React InstantSearch',
       'Vue InstantSearch',
       'React InstantSearch Native',
@@ -132,7 +134,6 @@ describe('getTemplatesByCategory', () => {
     expect(utils.getTemplatesByCategory()).toEqual({
       Web: expect.arrayContaining([
         'InstantSearch.js',
-        'Angular InstantSearch',
         'React InstantSearch',
         'Vue InstantSearch',
       ]),

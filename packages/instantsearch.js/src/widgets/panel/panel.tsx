@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { cx } from '@algolia/ui-components-shared';
+import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import Panel from '../../components/Panel/Panel';
@@ -181,7 +181,10 @@ const renderer =
 type AugmentedWidget<
   TWidgetFactory extends AnyWidgetFactory,
   TOverriddenKeys extends keyof Widget = 'init' | 'render' | 'dispose'
-> = Omit<ReturnType<TWidgetFactory>, TOverriddenKeys> &
+> = Omit<
+  ReturnType<TWidgetFactory>,
+  TOverriddenKeys | 'dependsOn' | 'getWidgetParameters'
+> &
   Pick<Required<Widget>, TOverriddenKeys>;
 
 export type PanelWidget = <TWidgetFactory extends AnyWidgetFactory>(

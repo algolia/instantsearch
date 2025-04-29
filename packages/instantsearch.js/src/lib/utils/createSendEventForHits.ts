@@ -2,11 +2,13 @@ import { serializePayload } from './serializer';
 
 import type { InsightsEvent } from '../../middlewares/createInsightsMiddleware';
 import type { InstantSearch, Hit, EscapedHits } from '../../types';
+import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 
 type BuiltInSendEventForHits = (
   eventType: string,
   hits: Hit | Hit[],
-  eventName?: string
+  eventName?: string,
+  additionalData?: Record<string, any>
 ) => void;
 type CustomSendEventForHits = (customPayload: any) => void;
 export type SendEventForHits = BuiltInSendEventForHits & CustomSendEventForHits;
@@ -14,11 +16,10 @@ export type SendEventForHits = BuiltInSendEventForHits & CustomSendEventForHits;
 export type BuiltInBindEventForHits = (
   eventType: string,
   hits: Hit | Hit[],
-  eventName?: string
+  eventName?: string,
+  additionalData?: Record<string, any>
 ) => string;
-
 export type CustomBindEventForHits = (customPayload: any) => string;
-
 export type BindEventForHits = BuiltInBindEventForHits & CustomBindEventForHits;
 
 function chunk<TItem>(arr: TItem[], chunkSize: number = 20): TItem[][] {
@@ -30,14 +31,14 @@ function chunk<TItem>(arr: TItem[], chunkSize: number = 20): TItem[][] {
 }
 
 export function _buildEventPayloadsForHits({
-  index,
+  helper,
   widgetType,
   methodName,
   args,
   instantSearchInstance,
 }: {
   widgetType: string;
-  index: string;
+  helper: AlgoliaSearchHelper;
   methodName: 'sendEvent' | 'bindEvent';
   args: any[];
   instantSearchInstance: InstantSearch;
@@ -50,6 +51,8 @@ export function _buildEventPayloadsForHits({
 
   const hits: Hit | Hit[] | EscapedHits = args[1];
   const eventName: string | undefined = args[2];
+  const additionalData: Record<string, any> = args[3] || {};
+
   if (!hits) {
     if (__DEV__) {
       throw new Error(
@@ -99,8 +102,9 @@ export function _buildEventPayloadsForHits({
         eventType,
         payload: {
           eventName: eventName || 'Hits Viewed',
-          index,
+          index: helper.lastResults?.index || helper.state.index,
           objectIDs: objectIDsByChunk[i],
+          ...additionalData,
         },
         hits: batch,
         eventModifier,
@@ -114,10 +118,11 @@ export function _buildEventPayloadsForHits({
         eventType,
         payload: {
           eventName: eventName || 'Hit Clicked',
-          index,
+          index: helper.lastResults?.index || helper.state.index,
           queryID,
           objectIDs: objectIDsByChunk[i],
           positions: positionsByChunk[i],
+          ...additionalData,
         },
         hits: batch,
         eventModifier,
@@ -131,9 +136,10 @@ export function _buildEventPayloadsForHits({
         eventType,
         payload: {
           eventName: eventName || 'Hit Converted',
-          index,
+          index: helper.lastResults?.index || helper.state.index,
           queryID,
           objectIDs: objectIDsByChunk[i],
+          ...additionalData,
         },
         hits: batch,
         eventModifier,
@@ -150,11 +156,11 @@ export function _buildEventPayloadsForHits({
 
 export function createSendEventForHits({
   instantSearchInstance,
-  index,
+  helper,
   widgetType,
 }: {
   instantSearchInstance: InstantSearch;
-  index: string;
+  helper: AlgoliaSearchHelper;
   widgetType: string;
 }): SendEventForHits {
   let sentEvents: Record<InsightsEvent['eventType'], boolean> = {};
@@ -163,7 +169,7 @@ export function createSendEventForHits({
   const sendEventForHits: SendEventForHits = (...args: any[]) => {
     const payloads = _buildEventPayloadsForHits({
       widgetType,
-      index,
+      helper,
       methodName: 'sendEvent',
       args,
       instantSearchInstance,
@@ -191,18 +197,18 @@ export function createSendEventForHits({
 }
 
 export function createBindEventForHits({
-  index,
+  helper,
   widgetType,
   instantSearchInstance,
 }: {
-  index: string;
+  helper: AlgoliaSearchHelper;
   widgetType: string;
   instantSearchInstance: InstantSearch;
 }): BindEventForHits {
   const bindEventForHits: BindEventForHits = (...args: any[]) => {
     const payloads = _buildEventPayloadsForHits({
       widgetType,
-      index,
+      helper,
       methodName: 'bindEvent',
       args,
       instantSearchInstance,

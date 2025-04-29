@@ -1,14 +1,18 @@
-import { wait } from '@instantsearch/testutils';
 import {
   createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
+import { wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
-import type { RefinementListSetup } from '.';
-import type { Act } from '../../common';
 
-export function createOptimisticUiTests(setup: RefinementListSetup, act: Act) {
+import type { RefinementListWidgetSetup } from '.';
+import type { TestOptions } from '../../common';
+
+export function createOptimisticUiTests(
+  setup: RefinementListWidgetSetup,
+  { act }: Required<TestOptions>
+) {
   describe('optimistic UI', () => {
     test('checks the clicked refinement immediately regardless of network latency', async () => {
       const delay = 100;

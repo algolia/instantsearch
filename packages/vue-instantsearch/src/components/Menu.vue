@@ -23,7 +23,7 @@
           <a
             :href="state.createURL(item.value)"
             :class="suit('link')"
-            @click.prevent="state.refine(item.value)"
+            @click.exact.left.prevent="state.refine(item.value)"
           >
             <span :class="suit('label')">{{ item.label }}</span>
             <span :class="suit('count')">{{ item.count }}</span>
@@ -38,7 +38,7 @@
           !state.canToggleShowMore && suit('showMore', 'disabled'),
         ]"
         :disabled="!state.canToggleShowMore"
-        @click.prevent="state.toggleShowMore()"
+        @click.prevent="state.toggleShowMore"
       >
         <slot
           name="showMoreLabel"
@@ -54,9 +54,10 @@
 
 <script>
 import { connectMenu } from 'instantsearch.js/es/connectors';
+
 import { createPanelConsumerMixin } from '../mixins/panel';
-import { createWidgetMixin } from '../mixins/widget';
 import { createSuitMixin } from '../mixins/suit';
+import { createWidgetMixin } from '../mixins/widget';
 
 export default {
   name: 'AisMenu',

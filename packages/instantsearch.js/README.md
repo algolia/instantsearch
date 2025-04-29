@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/">
-    <img alt="InstantSearch.js" src=".github/banner.png">
+    <img alt="InstantSearch.js" src="https://github.com/algolia/instantsearch/blob/master/.github/banner.png?raw=true">
   </a>
 
   <p align="center">
@@ -12,14 +12,13 @@
 
 InstantSearch.js is a vanilla JavaScript library that lets you create an instant-search result experience using [Algolia][algolia-website]’s search API. It is part of the InstantSearch family:
 
-**InstantSearch.js** | [React InstantSearch][react-instantsearch-github] | [Vue InstantSearch][vue-instantsearch-github] | [Angular InstantSearch][instantsearch-angular-github] | [React InstantSearch Native][react-instantsearch-github] | [InstantSearch Android][instantsearch-android-github] | [InstantSearch iOS][instantsearch-ios-github]
+**InstantSearch.js** | [React InstantSearch][instantsearch-github] | [Vue InstantSearch][instantsearch-github] | [React InstantSearch Native][instantsearch-github] | [InstantSearch Android][instantsearch-android-github] | [InstantSearch iOS][instantsearch-ios-github]
 
 <details>
   <summary><strong>Table of contents</strong></summary>
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 
 - [Why](#why)
 - [Getting started](#getting-started)
@@ -67,7 +66,11 @@ search.addWidgets([
   instantsearch.widgets.hits({
     container: '#products',
     templates: {
-      item: '{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}',
+      item: (hit, { html, components }) =>
+        html`
+          <h3>${components.Highlight({ attribute: 'name', hit })}</h3>
+          <p>${components.Snippet({ attribute: 'description', hit })}</p>
+        `,
     },
   }),
 
@@ -102,7 +105,7 @@ yarn add instantsearch.js algoliasearch
 
 To use InstantSearch.js in a TypeScript environment, depending on your [`algoliasearch`](https://github.com/algolia/algoliasearch-client-javascript) version, you need to import different types.
 
->You still need to import these types even if you don't use InstantSearch.js with [`algoliasearch`](https://github.com/algolia/algoliasearch-client-javascript).
+> You still need to import these types even if you don't use InstantSearch.js with [`algoliasearch`](https://github.com/algolia/algoliasearch-client-javascript).
 
 #### `algoliasearch` v4.x
 
@@ -118,7 +121,7 @@ yarn add algoliasearch@4 @algolia/client-search
 yarn add @types/algoliasearch@3
 ```
 
->v3.x is deprecated and will soon no longer be supported.
+> v3.x is deprecated and will soon no longer be supported.
 
 ## Documentation
 
@@ -126,9 +129,9 @@ The documentation is available on the [Algolia website](https://www.algolia.com/
 
 ## Demos
 
-| E-commerce                                                                                                                                                                                                                   | Media                                                                                                                                                                                                         | Travel                                                                                                                                                                                                              |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <a href="https://instantsearchjs.netlify.com/examples/e-commerce/"><img src="https://www.algolia.com/doc/assets/images/build-search-ui/demos/e-commerce-2c7ed6b6.png" width="250" alt="E-commerce demo preview"></a> | <a href="https://instantsearchjs.netlify.com/examples/media/"><img src="https://www.algolia.com/doc/assets/images/build-search-ui/demos/media-articles-abc153ab.png" width="250" alt="Media demo preview"></a> | <a href="https://instantsearchjs.netlify.com/examples/tourism/"><img src="https://instantsearchjs.netlify.com/examples/tourism/capture.png" width="250" alt="Tourism demo preview"></a> |
+| E-commerce | Media | Travel |
+| --- | --- | --- |
+| <a href="https://instantsearchjs.netlify.app/examples/e-commerce/"><img src="https://www.algolia.com/doc/assets/images/build-search-ui/demos/e-commerce-2c7ed6b6.png" width="250" alt="E-commerce demo preview"></a> | <a href="https://instantsearchjs.netlify.app/examples/media/"><img src="https://www.algolia.com/doc/assets/images/build-search-ui/demos/media-articles-abc153ab.png" width="250" alt="Media demo preview"></a> | <a href="https://instantsearchjs.netlify.app/examples/tourism/"><img src="https://instantsearchjs.netlify.app/examples/tourism/capture.png" width="250" alt="Tourism demo preview"></a> |
 
 See more demos [on the website](https://www.algolia.com/doc/guides/building-search-ui/resources/demos/js/).
 
@@ -165,7 +168,7 @@ To start contributing to code, you need to:
 1.  Run the development mode: `yarn storybook`
 1.  [Open the stories](http://localhost:6006)
 
-Please read [our contribution process](https://github.com/algolia/instantsearch.js/blob/master/CONTRIBUTING.md) to learn more.
+Please read [our contribution process](https://github.com/algolia/instantsearch/blob/master/CONTRIBUTING.md) to learn more.
 
 ## License
 
@@ -175,14 +178,12 @@ InstantSearch.js is [MIT licensed][license-url].
 
 [license-url]: LICENSE
 [algolia-website]: https://www.algolia.com/?utm_source=instantsearch.js&utm_campaign=repository
-[react-instantsearch-github]: https://github.com/algolia/instantsearch.js/
-[vue-instantsearch-github]: https://github.com/algolia/vue-instantsearch
+[instantsearch-github]: https://github.com/algolia/instantsearch/
 [instantsearch-android-github]: https://github.com/algolia/instantsearch-android
 [instantsearch-ios-github]: https://github.com/algolia/instantsearch-ios
-[instantsearch-angular-github]: https://github.com/algolia/angular-instantsearch
-[contributing-bugreport]: https://github.com/algolia/instantsearch.js/issues/new?template=BUG_REPORT.yml&labels=triage,Library%3A%20InstantSearch.js
-[contributing-featurerequest]: https://github.com/algolia/instantsearch.js/discussions/new?category=ideas&labels=triage,Library%3A%20InstantSearch.js&title=Feature%20request%3A%20
-[contributing-newissue]: https://github.com/algolia/instantsearch.js/issues/new?labels=triage,Library%3A%20InstantSearch.js
-[contributing-label-easy]: https://github.com/algolia/instantsearch.js/issues?q=is%3Aopen+is%3Aissue+label%3A%22Difficulty%3A+Easy%22+label%3A%22Library%3A%20InstantSearch.js%22
-[contributing-label-bug]: https://github.com/algolia/instantsearch.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22Type%3A+Bug%22+label%3A%22Library%3A%20InstantSearch.js%22
-[contributing-label-chore]: https://github.com/algolia/instantsearch.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22Type%3A+Chore%22+label%3A%22Library%3A%20InstantSearch.js%22
+[contributing-bugreport]: https://github.com/algolia/instantsearch/issues/new?template=BUG_REPORT.yml&labels=triage,Library%3A%20InstantSearch.js
+[contributing-featurerequest]: https://github.com/algolia/instantsearch/discussions/new?category=ideas&labels=triage,Library%3A%20InstantSearch.js&title=Feature%20request%3A%20
+[contributing-newissue]: https://github.com/algolia/instantsearch/issues/new?labels=triage,Library%3A%20InstantSearch.js
+[contributing-label-easy]: https://github.com/algolia/instantsearch/issues?q=is%3Aopen+is%3Aissue+label%3A%22Difficulty%3A+Easy%22+label%3A%22Library%3A%20InstantSearch.js%22
+[contributing-label-bug]: https://github.com/algolia/instantsearch/issues?q=is%3Aissue+is%3Aopen+label%3A%22Type%3A+Bug%22+label%3A%22Library%3A%20InstantSearch.js%22
+[contributing-label-chore]: https://github.com/algolia/instantsearch/issues?q=is%3Aissue+is%3Aopen+label%3A%22Type%3A+Chore%22+label%3A%22Library%3A%20InstantSearch.js%22

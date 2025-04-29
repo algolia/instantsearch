@@ -159,4 +159,5 @@ See https://www.algolia.com/doc/api-reference/api-parameters/optionalFilters/
     };
   };
 
+/** @deprecated use connectRelatedItems instead */
 export default connectConfigureRelatedItems;

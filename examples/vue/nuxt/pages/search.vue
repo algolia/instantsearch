@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import {
   AisInstantSearchSsr,
   AisIndex,
@@ -45,7 +46,6 @@ import {
   AisPagination,
   createServerRootMixin,
 } from 'vue-instantsearch';
-import algoliasearch from 'algoliasearch/lite';
 import _renderToString from 'vue-server-renderer/basic';
 
 function renderToString(app) {
@@ -117,7 +117,9 @@ export default {
       link: [
         {
           rel: 'stylesheet',
-          href: 'https://unpkg.com/instantsearch.css@7.1.0/themes/algolia-min.css',
+          // Do not use @8 in production, use a complete version like x.x.x, see website for latest version:
+          // https://www.algolia.com/doc/guides/building-search-ui/installation/js/#load-the-styles
+          href: 'https://unpkg.com/instantsearch.css@8/themes/algolia-min.css',
         },
       ],
     };

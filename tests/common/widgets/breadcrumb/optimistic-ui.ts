@@ -1,15 +1,19 @@
-import { wait } from '@instantsearch/testutils';
 import {
   createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import type { BreadcrumbSetup } from '.';
-import type { Act } from '../../common';
-import userEvent from '@testing-library/user-event';
+import { wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
+import userEvent from '@testing-library/user-event';
 
-export function createOptimisticUiTests(setup: BreadcrumbSetup, act: Act) {
+import type { BreadcrumbWidgetSetup } from '.';
+import type { TestOptions } from '../../common';
+
+export function createOptimisticUiTests(
+  setup: BreadcrumbWidgetSetup,
+  { act }: Required<TestOptions>
+) {
   describe('optimistic UI', () => {
     test('checks the clicked refinement immediately regardless of network latency', async () => {
       const delay = 100;

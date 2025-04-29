@@ -64,7 +64,7 @@ function getRefinement(
     name,
     escapedValue: escapeFacetValue(name),
   };
-  let facet: any = find(
+  let facet: any = find<SearchResults.Facet | SearchResults.HierarchicalFacet>(
     resultsFacets,
     (resultsFacet) => resultsFacet.name === attribute
   );
@@ -106,10 +106,11 @@ function getRefinement(
 }
 
 export function getRefinements(
-  results: SearchResults | Record<string, never>,
+  _results: SearchResults | Record<string, never> | null,
   state: SearchParameters,
   includesQuery: boolean = false
 ): Refinement[] {
+  const results = _results || {};
   const refinements: Refinement[] = [];
   const {
     facetsRefinements = {},

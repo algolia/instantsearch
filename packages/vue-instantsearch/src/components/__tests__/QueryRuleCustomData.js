@@ -3,8 +3,8 @@
  */
 
 import { mount } from '../../../test/utils';
-import QueryRuleCustomData from '../QueryRuleCustomData.vue';
 import { __setState } from '../../mixins/widget';
+import QueryRuleCustomData from '../QueryRuleCustomData.vue';
 import '../../../test/utils/sortedHtmlSerializer';
 
 jest.mock('../../mixins/widget');

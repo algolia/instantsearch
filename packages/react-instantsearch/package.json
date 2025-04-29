@@ -1,23 +1,23 @@
 {
   "name": "react-instantsearch",
-  "version": "6.40.1",
-  "description": "⚡ Lightning-fast search for React and React Native apps, by Algolia",
-  "main": "index.js",
+  "version": "7.15.5",
+  "description": "⚡ Lightning-fast search for React, by Algolia",
+  "types": "dist/es/index.d.ts",
+  "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
-  "files": [
-    "connectors.js",
-    "dom.js",
-    "index.js",
-    "native.js",
-    "server.js",
-    "dist"
-  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/es/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
   "sideEffects": false,
   "license": "MIT",
   "homepage": "https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/algolia/instantsearch.js"
+    "url": "https://github.com/algolia/instantsearch"
   },
   "author": {
     "name": "Algolia, Inc.",
@@ -29,27 +29,32 @@
     "fast",
     "instantsearch",
     "react",
-    "react-dom",
-    "react-native",
     "search"
+  ],
+  "files": [
+    "README.md",
+    "dist"
   ],
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "yarn build:cjs && yarn build:es && yarn build:umd",
-    "build:cjs": "BABEL_ENV=cjs babel connectors.js dom.js index.js native.js server.js --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist --quiet",
-    "build:es": "BABEL_ENV=es babel connectors.js dom.js index.js native.js server.js --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --quiet",
+    "build": "yarn build:cjs && yarn build:es && yarn build:umd && yarn build:types",
+    "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/cjs --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet && ../../scripts/prepare-cjs.sh",
+    "build:es:base": "BABEL_ENV=es babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --ignore '**/__tests__/**/*','**/__mocks__/**/*'",
+    "build:es": "yarn build:es:base --quiet",
     "build:umd": "BABEL_ENV=rollup rollup -c rollup.config.js",
-    "preparePackageFolder": "cp package.json dist && cp ../../README.md dist",
-    "prepublishOnly": "yarn run preparePackageFolder"
+    "build:types": "tsc -p ./tsconfig.declaration.json --outDir ./dist/es",
+    "test:exports": "node ./test/module/is-es-module.mjs && node ./test/module/is-cjs-module.cjs",
+    "watch:es": "yarn --silent build:es:base --watch"
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2",
-    "react-instantsearch-core": "6.40.1",
-    "react-instantsearch-dom": "6.40.1",
-    "react-instantsearch-native": "6.40.1"
+    "instantsearch-ui-components": "0.11.1",
+    "instantsearch.js": "4.78.1",
+    "react-instantsearch-core": "7.15.5"
   },
   "peerDependencies": {
-    "algoliasearch": ">= 3.1 < 5",
-    "react": ">= 16.3.0 < 19"
+    "algoliasearch": ">= 3.1 < 6",
+    "react": ">= 16.8.0 < 20",
+    "react-dom": ">= 16.8.0 < 20"
   }
 }

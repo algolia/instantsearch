@@ -1,6 +1,8 @@
-const process = require('process');
 const { execSync } = require('child_process');
+const process = require('process');
+
 const chalk = require('chalk');
+
 const { isYarnAvailable } = require('../../utils');
 
 module.exports = function install(config) {

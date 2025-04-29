@@ -19,25 +19,30 @@ import type {
   Hit,
   WidgetRenderState,
   BaseHit,
+  Renderer,
+  Unmounter,
+  UnknownWidgetParams,
+  IndexRenderState,
 } from '../../types';
 import type {
+  Banner,
   AlgoliaSearchHelper as Helper,
   PlainSearchParameters,
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
 
-export type InfiniteHitsCachedHits<THit extends BaseHit> = {
+export type InfiniteHitsCachedHits<THit extends NonNullable<object>> = {
   [page: number]: Array<Hit<THit>>;
 };
 
-type Read<THit extends BaseHit> = ({
+type Read<THit extends NonNullable<object>> = ({
   state,
 }: {
   state: PlainSearchParameters;
 }) => InfiniteHitsCachedHits<THit> | null;
 
-type Write<THit extends BaseHit> = ({
+type Write<THit extends NonNullable<object>> = ({
   state,
   hits,
 }: {
@@ -45,12 +50,14 @@ type Write<THit extends BaseHit> = ({
   hits: InfiniteHitsCachedHits<THit>;
 }) => void;
 
-export type InfiniteHitsCache<THit extends BaseHit = BaseHit> = {
+export type InfiniteHitsCache<THit extends NonNullable<object> = BaseHit> = {
   read: Read<THit>;
   write: Write<THit>;
 };
 
-export type InfiniteHitsConnectorParams<THit extends BaseHit = BaseHit> = {
+export type InfiniteHitsConnectorParams<
+  THit extends NonNullable<object> = BaseHit
+> = {
   /**
    * Escapes HTML entities from hits string values.
    *
@@ -79,7 +86,9 @@ export type InfiniteHitsConnectorParams<THit extends BaseHit = BaseHit> = {
   cache?: InfiniteHitsCache<THit>;
 };
 
-export type InfiniteHitsRenderState<THit extends BaseHit = BaseHit> = {
+export type InfiniteHitsRenderState<
+  THit extends NonNullable<object> = BaseHit
+> = {
   /**
    * Loads the previous results.
    */
@@ -117,13 +126,24 @@ export type InfiniteHitsRenderState<THit extends BaseHit = BaseHit> = {
 
   /**
    * Hits for current and cached pages
+   * @deprecated use `items` instead
    */
   hits: Array<Hit<THit>>;
 
   /**
+   * Hits for current and cached pages
+   */
+  items: Array<Hit<THit>>;
+
+  /**
    * The response from the Algolia API.
    */
-  results?: SearchResults<Hit<THit>>;
+  results?: SearchResults<Hit<THit>> | null;
+
+  /**
+   * The banner to display above the hits.
+   */
+  banner?: Banner;
 };
 
 const withUsage = createDocumentationMessageGenerator({
@@ -131,7 +151,9 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
-export type InfiniteHitsWidgetDescription<THit extends BaseHit = BaseHit> = {
+export type InfiniteHitsWidgetDescription<
+  THit extends NonNullable<object> = BaseHit
+> = {
   $$type: 'ais.infiniteHits';
   renderState: InfiniteHitsRenderState<THit>;
   indexRenderState: {
@@ -145,10 +167,11 @@ export type InfiniteHitsWidgetDescription<THit extends BaseHit = BaseHit> = {
   };
 };
 
-export type InfiniteHitsConnector<THit extends BaseHit = BaseHit> = Connector<
-  InfiniteHitsWidgetDescription<THit>,
-  InfiniteHitsConnectorParams<THit>
->;
+export type InfiniteHitsConnector<THit extends NonNullable<object> = BaseHit> =
+  Connector<
+    InfiniteHitsWidgetDescription<THit>,
+    InfiniteHitsConnectorParams<THit>
+  >;
 
 function getStateWithoutPage(state: PlainSearchParameters) {
   const { page, ...rest } = state || {};
@@ -160,7 +183,9 @@ function normalizeState(state: PlainSearchParameters) {
   return rest;
 }
 
-function getInMemoryCache<THit extends BaseHit>(): InfiniteHitsCache<THit> {
+function getInMemoryCache<
+  THit extends NonNullable<object>
+>(): InfiniteHitsCache<THit> {
   let cachedHits: InfiniteHitsCachedHits<THit> | null = null;
   let cachedState: PlainSearchParameters | null = null;
   return {
@@ -176,7 +201,7 @@ function getInMemoryCache<THit extends BaseHit>(): InfiniteHitsCache<THit> {
   };
 }
 
-function extractHitsFromCachedHits<THit extends BaseHit>(
+function extractHitsFromCachedHits<THit extends NonNullable<object>>(
   cachedHits: InfiniteHitsCachedHits<THit>
 ) {
   return Object.keys(cachedHits)
@@ -187,23 +212,24 @@ function extractHitsFromCachedHits<THit extends BaseHit>(
     }, []);
 }
 
-const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
-  renderFn,
-  unmountFn = noop
+export default (function connectInfiniteHits<
+  TWidgetParams extends UnknownWidgetParams
+>(
+  renderFn: Renderer<InfiniteHitsRenderState, TWidgetParams>,
+  unmountFn: Unmounter = noop
 ) {
   checkRendering(renderFn, withUsage());
 
-  // @TODO: this should be a generic, but a Connector can not yet be generic itself
-  type THit = BaseHit;
-
-  return (widgetParams) => {
+  return <THit extends NonNullable<object> = BaseHit>(
+    widgetParams: TWidgetParams & InfiniteHitsConnectorParams<THit>
+  ) => {
     const {
       // @MAJOR: this can default to false
       escapeHTML = true,
       transformItems = ((items) => items) as NonNullable<
-        InfiniteHitsConnectorParams['transformItems']
+        InfiniteHitsConnectorParams<THit>['transformItems']
       >,
-      cache = getInMemoryCache(),
+      cache = getInMemoryCache<THit>(),
     } = widgetParams || {};
     let showPrevious: () => void;
     let showMore: () => void;
@@ -293,7 +319,11 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
         sendEvent('view:internal', widgetRenderState.currentPageHits);
       },
 
-      getRenderState(renderState, renderOptions) {
+      getRenderState(
+        renderState,
+        renderOptions
+        // Type is explicitly redefined, to avoid having the TWidgetParams type in the definition
+      ): IndexRenderState & InfiniteHitsWidgetDescription['indexRenderState'] {
         return {
           ...renderState,
           infiniteHits: this.getWidgetRenderState(renderOptions),
@@ -318,16 +348,18 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
 
         const cachedHits = cache.read({ state: normalizeState(state) }) || {};
 
+        const banner = results?.renderingContent?.widgets?.banners?.[0];
+
         if (!results) {
           showPrevious = getShowPrevious(helper);
           showMore = getShowMore(helper);
           sendEvent = createSendEventForHits({
             instantSearchInstance,
-            index: helper.getIndex(),
+            helper,
             widgetType: this.$$type,
           });
           bindEvent = createBindEventForHits({
-            index: helper.getIndex(),
+            helper,
             widgetType: this.$$type,
             instantSearchInstance,
           });
@@ -391,17 +423,19 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
           isFirstPage = getFirstReceivedPage(state, cachedHits) === 0;
         }
 
-        const hits = extractHitsFromCachedHits(cachedHits);
+        const items = extractHitsFromCachedHits(cachedHits);
         const isLastPage = results
           ? results.nbPages <= getLastReceivedPage(state, cachedHits) + 1
           : true;
 
         return {
-          hits,
+          hits: items,
+          items,
           currentPageHits,
           sendEvent,
           bindEvent,
-          results,
+          banner,
+          results: results || undefined,
           showPrevious,
           showMore,
           isFirstPage,
@@ -451,6 +485,7 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
         let widgetSearchParameters = searchParameters;
 
         if (escapeHTML) {
+          // @MAJOR: set this globally, not in the InfiniteHits widget to allow InfiniteHits to be conditionally used
           widgetSearchParameters =
             searchParameters.setQueryParameters(TAG_PLACEHOLDER);
         }
@@ -463,6 +498,4 @@ const connectInfiniteHits: InfiniteHitsConnector = function connectInfiniteHits(
       },
     };
   };
-};
-
-export default connectInfiniteHits;
+} satisfies InfiniteHitsConnector);

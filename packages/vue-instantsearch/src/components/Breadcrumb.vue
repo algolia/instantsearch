@@ -20,7 +20,7 @@
             v-if="Boolean(state.items.length)"
             :href="state.createURL()"
             :class="suit('link')"
-            @click.prevent="state.refine()"
+            @click.exact.left.prevent="state.refine()"
           >
             <slot name="rootLabel">Home</slot>
           </a>
@@ -28,7 +28,7 @@
             v-else
             :href="state.createURL(null)"
             :class="suit('link')"
-            @click.prevent="state.refine(null)"
+            @click.exact.left.prevent="state.refine(null)"
           >
             <slot name="rootLabel">Home</slot>
           </a>
@@ -44,7 +44,7 @@
             v-if="!isLastItem(index)"
             :href="state.createURL(item.value)"
             :class="suit('link')"
-            @click.prevent="state.refine(item.value)"
+            @click.exact.left.prevent="state.refine(item.value)"
             >{{ item.label }}</a
           >
           <template v-else>{{ item.label }}</template>
@@ -56,6 +56,7 @@
 
 <script>
 import { connectBreadcrumb } from 'instantsearch.js/es/connectors';
+
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';

@@ -20,9 +20,10 @@
 </template>
 
 <script>
-import { createWidgetMixin } from '../mixins/widget';
 import { connectAutocomplete } from 'instantsearch.js/es/connectors';
+
 import { createSuitMixin } from '../mixins/suit';
+import { createWidgetMixin } from '../mixins/widget';
 
 export default {
   name: 'AisAutocomplete',

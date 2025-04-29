@@ -1,7 +1,7 @@
-const metalsmith = require('metalsmith');
 const inPlace = require('@metalsmith/in-place');
-const rename = require('metalsmith-rename');
 const remove = require('@metalsmith/remove');
+const metalsmith = require('metalsmith');
+const rename = require('metalsmith-rename');
 
 module.exports = function build(config) {
   return new Promise((resolve, reject) => {

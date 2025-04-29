@@ -1,0 +1,34 @@
+.icon {
+  text-indent: -99999px;
+  color: transparent;
+  transition: background 0.2s ease;
+
+  &-love {
+    background: url($icon-heart) no-repeat center center / contain;
+  }
+
+  &-love-dark {
+    background: url($icon-heart-dark) no-repeat center center / contain;
+  }
+
+  &-mail {
+    background: url($icon-mail) no-repeat 8px 7px / 70%;
+  }
+
+  &-algolia-small {
+    background: url(../images/algolia-mark-white.svg) no-repeat center center /
+      contain;
+  }
+}
+
+// Small css shape
+.ico-triangle {
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 5px solid $steel;
+  position: relative;
+  display: inline-block;
+  margin-left: 8px;
+}

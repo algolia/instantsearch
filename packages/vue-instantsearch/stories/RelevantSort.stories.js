@@ -1,5 +1,6 @@
-import algoliasearch from 'algoliasearch/lite';
 import { storiesOf } from '@storybook/vue';
+import { liteClient as algoliasearch } from 'algoliasearch/lite';
+
 import { previewWrapper } from './utils';
 
 storiesOf('ais-relevant-sort', module)

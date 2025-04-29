@@ -1,5 +1,8 @@
 <template>
-  <div v-if="state" :class="suit()">
+  <div
+    v-if="state"
+    :class="{ [suit()]: true, [suit('', 'noRefinement')]: state.nbPages <= 1 }"
+  >
     <slot
       :refine="refine"
       :createURL="state.createURL"
@@ -14,8 +17,8 @@
         <li
           :class="{
             [suit('item')]: true,
-            [suit('item', 'firstPage')]: true,
             [suit('item', 'disabled')]: state.isFirstPage,
+            [suit('item', 'firstPage')]: true,
           }"
           v-if="showFirst"
         >
@@ -28,22 +31,22 @@
             <template v-if="!state.isFirstPage">
               <a
                 :class="suit('link')"
-                aria-label="First"
+                aria-label="First Page"
                 :href="state.createURL(0)"
-                @click.prevent="refine(0)"
+                @click.exact.left.prevent="refine(0)"
                 >‹‹</a
               >
             </template>
             <template v-else>
-              <span :class="suit('link')" aria-label="First">‹‹</span>
+              <span :class="suit('link')" aria-label="First Page">‹‹</span>
             </template>
           </slot>
         </li>
         <li
           :class="{
             [suit('item')]: true,
-            [suit('item', 'previousPage')]: true,
             [suit('item', 'disabled')]: state.isFirstPage,
+            [suit('item', 'previousPage')]: true,
           }"
           v-if="showPrevious"
         >
@@ -56,14 +59,14 @@
             <template v-if="!state.isFirstPage">
               <a
                 :class="suit('link')"
-                aria-label="Previous"
+                aria-label="Previous Page"
                 :href="state.createURL(state.currentRefinement - 1)"
-                @click.prevent="refine(state.currentRefinement - 1)"
+                @click.exact.left.prevent="refine(state.currentRefinement - 1)"
                 >‹</a
               >
             </template>
             <template v-else>
-              <span :class="suit('link')" aria-label="Previous">‹</span>
+              <span :class="suit('link')" aria-label="Previous Page">‹</span>
             </template>
           </slot>
         </li>
@@ -89,7 +92,7 @@
               :class="suit('link')"
               :href="state.createURL(page)"
               :aria-label="`Page ${page + 1}`"
-              @click.prevent="refine(page)"
+              @click.exact.left.prevent="refine(page)"
               >{{ page + 1 }}</a
             >
           </slot>
@@ -98,8 +101,8 @@
         <li
           :class="{
             [suit('item')]: true,
-            [suit('item', 'nextPage')]: true,
             [suit('item', 'disabled')]: state.isLastPage,
+            [suit('item', 'nextPage')]: true,
           }"
           v-if="showNext"
         >
@@ -112,22 +115,22 @@
             <template v-if="!state.isLastPage">
               <a
                 :class="suit('link')"
-                aria-label="Next"
+                aria-label="Next Page"
                 :href="state.createURL(state.currentRefinement + 1)"
-                @click.prevent="refine(state.currentRefinement + 1)"
+                @click.exact.left.prevent="refine(state.currentRefinement + 1)"
                 >›</a
               >
             </template>
             <template v-else>
-              <span :class="suit('link')" aria-label="Next">›</span>
+              <span :class="suit('link')" aria-label="Next Page">›</span>
             </template>
           </slot>
         </li>
         <li
           :class="{
             [suit('item')]: true,
-            [suit('item', 'lastPage')]: true,
             [suit('item', 'disabled')]: state.isLastPage,
+            [suit('item', 'lastPage')]: true,
           }"
           v-if="showLast"
         >
@@ -140,14 +143,19 @@
             <template v-if="!state.isLastPage">
               <a
                 :class="suit('link')"
-                aria-label="Last"
+                :aria-label="`Last Page, Page ${state.nbPages}`"
                 :href="state.createURL(state.nbPages - 1)"
-                @click.prevent="refine(state.nbPages - 1)"
+                @click.exact.left.prevent="refine(state.nbPages - 1)"
                 >››</a
               >
             </template>
             <template v-else>
-              <span :class="suit('link')" aria-label="Last">››</span>
+              <span
+                :class="suit('link')"
+                :aria-label="`Last Page, Page ${state.nbPages}`"
+              >
+                ››
+              </span>
             </template>
           </slot>
         </li>
@@ -158,9 +166,10 @@
 
 <script>
 import { connectPagination } from 'instantsearch.js/es/connectors';
+
 import { createPanelConsumerMixin } from '../mixins/panel';
-import { createWidgetMixin } from '../mixins/widget';
 import { createSuitMixin } from '../mixins/suit';
+import { createWidgetMixin } from '../mixins/widget';
 
 export default {
   name: 'AisPagination',

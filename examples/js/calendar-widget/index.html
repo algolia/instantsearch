@@ -1,48 +1,48 @@
 <html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="main.css" />
+    <link rel="stylesheet" type="text/css" href="calendar.css" />
+    <title>InstantSearch Calendar Widget</title>
+  </head>
 
-<head>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.css@7.3.1/themes/algolia.min.css">
-  <link rel="stylesheet" type="text/css" href="main.css">
-  <link rel="stylesheet" type="text/css" href="calendar.css">
-  <title>InstantSearch Calendar Widget</title>
-</head>
+  <body>
+    <header class="topbar">
+      <h1 class="title">
+        <a href=".">Calendar Widget Demo</a>
+      </h1>
+      <p class="subtitle">
+        powered by
+        <a href="https://github.com/algolia/instantsearch/">InstantSearch.js</a>
+      </p>
+    </header>
 
-<body>
-  <header class="topbar">
-    <h1 class="title">
-      <a href=".">Calendar Widget Demo</a>
-    </h1>
-    <p class="subtitle">powered by
-      <a href="https://github.com/algolia/instantsearch.js/">InstantSearch.js</a>
-    </p>
-  </header>
+    <main class="wrapper">
+      <aside class="left">
+        <div id="refinement-list">
+          <h3>Dates</h3>
+          <div id="calendar" class="daterange"></div>
+        </div>
 
-  <main class="wrapper">
-    <aside class="left">
-      <div id="refinement-list">
-        <h3>Dates</h3>
-        <div id="calendar" class="daterange"></div>
+        <footer class="left-footer">
+          <p>
+            <a
+              href="https://github.com/algolia/instantsearch/tree/master/examples/calendar-widget"
+              >View on GitHub</a
+            >.
+          </p>
+        </footer>
+      </aside>
+
+      <div class="right">
+        <div id="search-box"></div>
+
+        <ul id="hits" class="hits-container"></ul>
       </div>
+    </main>
 
-      <footer class="left-footer">
-        <p>
-          <a href="https://github.com/algolia/instantsearch.js/tree/master/examples/calendar-widget">View on GitHub</a>.
-        </p>
-      </footer>
-    </aside>
-
-    <div class="right">
-      <div id="search-box"></div>
-
-      <ul id="hits" class="hits-container"></ul>
-    </div>
-  </main>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
-  <script src="https://unpkg.com/BaremetricsCalendar@1.0.11/public/js/Calendar.js"></script>
-  <script type="module" src="env.js"></script>
-  <script type="module" src="app.js"></script>
-</body>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+    <script src="https://unpkg.com/BaremetricsCalendar@1.0.11/public/js/Calendar.js"></script>
+    <script type="module" src="app.js"></script>
+  </body>
 </html>

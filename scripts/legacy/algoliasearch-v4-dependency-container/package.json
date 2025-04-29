@@ -1,0 +1,14 @@
+{
+  "name": "v4-dependency-container",
+  "private": true,
+  "scripts": {
+    "make-directories": "mkdir -p node_modules/algoliasearch/node_modules node_modules/algoliasearch-v4/node_modules",
+    "move-directories": "mv node_modules/@algolia node_modules/algoliasearch-v4/node_modules/@algolia",
+    "remove-directories": "rm -rf node_modules/algoliasearch node_modules/@algolia",
+    "postinstall": "yarn make-directories && yarn move-directories && yarn remove-directories"
+  },
+  "dependencies": {
+    "algoliasearch-v4": "npm:algoliasearch@4.23.2",
+    "@algolia/events": "^4.0.1"
+  }
+}

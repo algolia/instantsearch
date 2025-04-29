@@ -11,12 +11,13 @@ jest.mock('../../mixins/widget');
 
 const defaultState = {
   widgetParams: {
+    showBanner: true,
     showPrevious: false,
     escapeHTML: true,
     transformItems: (items) => items,
   },
   sendEvent: jest.fn(),
-  hits: [
+  items: [
     {
       objectID: '00001',
     },
@@ -41,79 +42,6 @@ const defaultState = {
   showMore: () => {},
   showPrevious: () => {},
 };
-
-it('accepts a escapeHTML prop', () => {
-  __setState({
-    ...defaultState,
-  });
-
-  const wrapper = mount(InfiniteHits, {
-    propsData: {
-      escapeHTML: true,
-    },
-  });
-
-  expect(wrapper.vm.widgetParams.escapeHTML).toBe(true);
-});
-
-it('accepts a transformItems prop', () => {
-  __setState({
-    ...defaultState,
-  });
-
-  const transformItems = () => {};
-
-  const wrapper = mount(InfiniteHits, {
-    propsData: {
-      transformItems,
-    },
-  });
-
-  expect(wrapper.vm.widgetParams.transformItems).toBe(transformItems);
-});
-
-it('accepts a showPrevious prop', () => {
-  __setState({
-    ...defaultState,
-  });
-
-  const wrapper = mount(InfiniteHits, {
-    propsData: {
-      showPrevious: true,
-    },
-  });
-
-  expect(wrapper.vm.widgetParams.showPrevious).toBe(true);
-});
-
-it('accepts a cache prop', () => {
-  __setState({
-    ...defaultState,
-  });
-
-  const cache = {
-    read: () => {},
-    write: () => {},
-  };
-
-  const wrapper = mount(InfiniteHits, {
-    propsData: {
-      cache,
-    },
-  });
-
-  expect(wrapper.vm.widgetParams.cache).toEqual(cache);
-});
-
-it('renders correctly', () => {
-  __setState({
-    ...defaultState,
-  });
-
-  const wrapper = mount(InfiniteHits);
-
-  expect(wrapper.html()).toMatchSnapshot();
-});
 
 it('renders correctly with a custom rendering', () => {
   __setState({
@@ -159,98 +87,77 @@ it('renders correctly with a custom item rendering', () => {
   expect(wrapper.html()).toMatchSnapshot();
 });
 
-it('renders correctly on the first page', () => {
+it('renders correctly with banner data', () => {
   __setState({
     ...defaultState,
-    isFirstPage: true,
-  });
-
-  const wrapper = mount(InfiniteHits, {
-    propsData: {
-      showPrevious: true,
+    banner: {
+      image: {
+        urls: [{ url: 'https://via.placeholder.com/550x250' }],
+      },
+      link: {
+        url: 'https://www.algolia.com',
+      },
     },
   });
 
-  const previousButton = wrapper.find('.ais-InfiniteHits-loadPrevious');
-
-  expect(previousButton.exists()).toEqual(true);
-  expect(
-    previousButton.classes('ais-InfiniteHits-loadPrevious--disabled')
-  ).toEqual(true);
-  expect(previousButton).vueToBeDisabled();
-  expect(wrapper.htmlCompat()).toMatchSnapshot();
-});
-
-it('renders correctly on the last page', () => {
-  __setState({
-    ...defaultState,
-    isLastPage: true,
+  const wrapper = mount({
+    components: { InfiniteHits },
+    template: `<InfiniteHits />`,
   });
 
-  const wrapper = mount(InfiniteHits);
-
-  expect(wrapper.htmlCompat()).toMatchSnapshot();
-});
-
-it('renders correctly when not on the first page', () => {
-  __setState({
-    ...defaultState,
-    isFirstPage: false,
-    isLastPage: false,
-  });
-
-  const wrapper = mount(InfiniteHits, {
-    propsData: {
-      showPrevious: true,
-    },
-  });
-
-  const previousButton = wrapper.find('.ais-InfiniteHits-loadPrevious');
-
-  expect(previousButton.exists()).toEqual(true);
-  expect(
-    previousButton.classes('ais-InfiniteHits-loadPrevious--disabled')
-  ).toEqual(false);
-  expect(previousButton.attributes('disabled')).toEqual(undefined);
   expect(wrapper.html()).toMatchSnapshot();
 });
 
-it('expect to call showPrevious on click', async () => {
-  const showPrevious = jest.fn();
-
+it('renders correctly with banner data and custom banner rendering', () => {
   __setState({
     ...defaultState,
-    showPrevious,
-  });
-
-  const wrapper = mount(InfiniteHits, {
-    propsData: {
-      showPrevious: true,
+    banner: {
+      image: {
+        urls: [{ url: 'https://via.placeholder.com/550x250' }],
+      },
+      link: {
+        url: 'https://www.algolia.com',
+      },
     },
   });
 
-  expect(showPrevious).toHaveBeenCalledTimes(0);
-
-  await wrapper.find('.ais-InfiniteHits-loadPrevious').trigger('click');
-
-  expect(showPrevious).toHaveBeenCalledTimes(1);
-});
-
-it('expect to call showMore on click', async () => {
-  const showMore = jest.fn();
-
-  __setState({
-    ...defaultState,
-    showMore,
+  const wrapper = mount({
+    components: { InfiniteHits },
+    template: `
+      <InfiniteHits>
+        <template v-slot:banner="{ banner }">
+          <img :src="banner.image.urls[0].url" />
+        </template>
+      </InfiniteHits>
+    `,
   });
 
-  const wrapper = mount(InfiniteHits);
+  expect(wrapper.html()).toMatchSnapshot();
+});
 
-  expect(showMore).not.toHaveBeenCalled();
+it('does not render a banner when showBanner is false', () => {
+  __setState({
+    ...defaultState,
+    banner: {
+      image: {
+        urls: [{ url: 'https://via.placeholder.com/550x250' }],
+      },
+      link: {
+        url: 'https://www.algolia.com',
+      },
+    },
+    widgetParams: {
+      ...defaultState.widgetParams,
+      showBanner: false,
+    },
+  });
 
-  await wrapper.find('.ais-InfiniteHits-loadMore').trigger('click');
+  const wrapper = mount({
+    components: { InfiniteHits },
+    template: `<InfiniteHits />`,
+  });
 
-  expect(showMore).toHaveBeenCalled();
+  expect(wrapper.html()).toMatchSnapshot();
 });
 
 it('exposes insights prop to the default slot', async () => {

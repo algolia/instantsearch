@@ -1,0 +1,319 @@
+.documentation-section {
+  padding-bottom: 200px;
+
+  .container {
+    article {
+      width: 100%;
+      position: relative;
+      margin-top: 60px;
+    }
+  }
+
+  blockquote {
+    background: $pale-grey;
+    margin: 0;
+    padding: 1px 32px;
+    border-radius: 5px;
+  }
+
+  p,
+  ul,
+  ol {
+    font-size: 16px;
+    line-height: 22px;
+
+    li {
+      clear: both;
+      margin-bottom: 10px;
+    }
+
+    ul {
+      font-weight: normal;
+      font-size: 14px;
+      position: relative;
+
+      li {
+        height: 26px;
+        line-height: 26px;
+
+        &:before {
+          content: '-';
+          float: left;
+          margin-right: 6px;
+          color: $greyish;
+        }
+      }
+    }
+  }
+
+  h2 {
+    color: $charcoal-grey;
+    font-size: 28px;
+    padding-right: 1em;
+    border-bottom: 1px solid #d8d8d8;
+    margin-top: 32px;
+
+    &:first-of-type {
+      margin-top: 0;
+    }
+  }
+
+  h3 {
+    margin-top: 32px;
+  }
+
+  h4 {
+    font-weight: normal;
+    text-decoration: underline;
+  }
+
+  .api-entry {
+    margin: 2em 0;
+
+    code {
+      font-size: 100%;
+      font-weight: bold;
+    }
+  }
+
+  .api tr td:first-child {
+    vertical-align: top;
+
+    p,
+    ul {
+      font-size: 90%;
+      margin: 0.5em 0;
+      line-height: 1.5em;
+    }
+    ul {
+      padding-left: 1.5em;
+    }
+    em {
+      text-decoration: underline;
+      font-style: normal;
+    }
+  }
+
+  h2,
+  h3,
+  .api-entry,
+  .css-class {
+    &:before {
+      content: '';
+      display: block;
+      height: $offset-height;
+      margin: -$offset-height 0 0;
+    }
+  }
+
+  .css-class {
+    white-space: nowrap;
+  }
+
+  .chapter-summary {
+    background: $bg-pale-accent;
+    padding: 10px;
+    border-radius: 4px;
+  }
+
+  .documentation-container {
+    float: left;
+    position: relative;
+    left: #{$sidebar-width};
+    width: calc(100% - #{$sidebar-width});
+    padding-left: 30px;
+    padding-top: 120px;
+
+    // Rate-limits table
+    table.rate-limits {
+      padding: 0;
+      border-collapse: collapse;
+      border-spacing: 0;
+      width: 100%;
+      display: block;
+      margin: 0 0;
+
+      tr {
+        th {
+          background: #efefef;
+        }
+        td {
+          vertical-align: top;
+        }
+        th,
+        td {
+          padding: 1em 2em;
+          text-align: center;
+          border: 1px solid #cccccc;
+        }
+      }
+    }
+
+    // API tables
+    table.api {
+      padding: 0;
+      border-collapse: collapse;
+      border-spacing: 0;
+      width: 100%;
+      display: block;
+      margin: 0;
+
+      tr {
+        border-top: 1px solid #cccccc;
+        background-color: white;
+        margin: 0;
+        padding: 0;
+
+        &:nth-child(2n) {
+          background-color: #f8f8f8;
+        }
+
+        th {
+          font-weight: bold;
+          border: 1px solid #cccccc;
+          text-align: left;
+          margin: 0;
+          padding: 6px 13px;
+
+          &:first-child {
+            margin-top: 0;
+          }
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+
+        td {
+          border: 1px solid #cccccc;
+          text-align: left;
+          margin: 0;
+          padding: 6px 13px;
+
+          &:first-child {
+            margin-top: 0;
+          }
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+      & + h2,
+      & + h3 {
+        margin-top: 2em;
+      }
+
+      @include small-mq {
+        display: block;
+        float: left;
+        margin-bottom: 2em;
+
+        thead,
+        tbody,
+        th,
+        td,
+        tr {
+          display: block;
+          float: left;
+          width: 100%;
+        }
+        tbody {
+          border-bottom: 1px solid #cccccc;
+        }
+        tr {
+          border-left: 1px solid #cccccc;
+          border-right: 1px solid #cccccc;
+
+          th {
+            border: none;
+
+            &:nth-of-type(2) {
+              border-left: 1px solid #cccccc;
+            }
+          }
+        }
+        tr td {
+          border: none;
+          overflow: auto;
+
+          &:nth-of-type(2) {
+            border-left: 1px solid #cccccc;
+          }
+        }
+
+        th,
+        td {
+          width: 50%;
+          float: left;
+        }
+
+        tr:nth-child(even) {
+          background: #f8f8f8;
+        }
+      }
+    }
+
+    .anchor {
+      margin-left: 0.2em;
+      display: inline;
+      visibility: hidden;
+    }
+
+    h2 {
+      padding-bottom: 8px;
+    }
+
+    h2,
+    h3,
+    .api-entry {
+      .anchor {
+        color: $accent-color;
+        text-decoration: none;
+      }
+
+      &:hover {
+        .anchor {
+          visibility: visible;
+        }
+      }
+
+      &:target {
+        .anchor {
+          visibility: visible;
+        }
+      }
+    }
+
+    img {
+      max-width: 50%;
+      margin: 0 25%;
+    }
+  }
+
+  @include small-mq {
+    padding-top: 32px;
+
+    .container {
+      .documentation-container {
+        left: 0;
+        width: 100%;
+        padding: 0 16px;
+      }
+
+      article {
+        float: left;
+        margin-top: 40px;
+      }
+    }
+
+    .documentation .hero-section {
+      .fl-left {
+        max-width: 300px !important;
+        width: 300px !important;
+      }
+    }
+  }
+}
+
+@import 'docs/method';

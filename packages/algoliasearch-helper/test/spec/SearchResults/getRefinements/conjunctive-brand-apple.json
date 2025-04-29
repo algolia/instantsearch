@@ -1,0 +1,1113 @@
+{
+  "content": {
+    "results": [
+      {
+        "hits": [
+          {
+            "name": "Apple - $10 iTunes Gift Cards (3-Pack) - Pink",
+            "description": "iTunes Gift Cards are perfect for anyone who enjoys one-stop entertainment. Each card features an iTunes Store code redeemable for music, movies, TV shows, games, apps, and more. Recipients can access content on an iPod, iPad or iPhone, Mac, or PC.",
+            "brand": "Apple",
+            "categories": ["Movies & Music", "Movie & Music Cards"],
+            "hierarchicalCategories": {
+              "lvl0": "Movies & Music",
+              "lvl1": "Movies & Music > Movie & Music Cards"
+            },
+            "type": "Itunes dl cards posa",
+            "price": 30,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/3695194_sb.jpg",
+            "url": "http://www.bestbuy.com/site/apple-10-itunes-gift-cards-3-pack-pink/3695194.p?id=1219093055082&skuId=3695194&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9763,
+            "rating": 5,
+            "objectID": "3695194",
+            "_highlightResult": {
+              "name": {
+                "value": "Apple - $10 iTunes Gift Cards (3-Pack) - Pink",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "iTunes Gift Cards are perfect for anyone who enjoys one-stop entertainment. Each card features an iTunes Store code redeemable for music, movies, TV shows, games, apps, and more. Recipients can access content on an iPod, iPad or iPhone, Mac, or PC.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Apple",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Movies & Music",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Movie & Music Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Apple - $100 iTunes Gift Card - Purple/Pink/Orange",
+            "description": "iTunes Gift Cards are perfect for anyone who enjoys one-stop entertainment. Each card features an iTunes Store code redeemable for music, movies, TV shows, games, apps, and more. Recipients can access content on an iPod, iPad or iPhone, Mac, or PC.",
+            "brand": "Apple",
+            "categories": ["Movies & Music", "Movie & Music Cards"],
+            "hierarchicalCategories": {
+              "lvl0": "Movies & Music",
+              "lvl1": "Movies & Music > Movie & Music Cards"
+            },
+            "type": "Itunes dl cards posa",
+            "price": 100,
+            "price_range": "50 - 100",
+            "image": "https://cdn-demo.algolia.com/bestbuy/3695121_sb.jpg",
+            "url": "http://www.bestbuy.com/site/apple-100-itunes-gift-card-purple-pink-orange/3695121.p?id=1219093057563&skuId=3695121&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": true,
+            "popularity": 9762,
+            "rating": 2,
+            "objectID": "3695121",
+            "_highlightResult": {
+              "name": {
+                "value": "Apple - $100 iTunes Gift Card - Purple/Pink/Orange",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "iTunes Gift Cards are perfect for anyone who enjoys one-stop entertainment. Each card features an iTunes Store code redeemable for music, movies, TV shows, games, apps, and more. Recipients can access content on an iPod, iPad or iPhone, Mac, or PC.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Apple",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Movies & Music",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Movie & Music Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Apple - $15 iTunes Gift Card - Blue/Purple",
+            "description": "iTunes Gift Cards are perfect for anyone who enjoys one-stop entertainment. Each card features an iTunes Store code redeemable for music, movies, TV shows, games, apps, and more. Recipients can access content on an iPod, iPad or iPhone, Mac, or PC.",
+            "brand": "Apple",
+            "categories": ["Movies & Music", "Movie & Music Cards"],
+            "hierarchicalCategories": {
+              "lvl0": "Movies & Music",
+              "lvl1": "Movies & Music > Movie & Music Cards"
+            },
+            "type": "Itunes dl cards posa",
+            "price": 15,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/3695167_sb.jpg",
+            "url": "http://www.bestbuy.com/site/apple-15-itunes-gift-card-blue-purple/3695167.p?id=1219093057698&skuId=3695167&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9761,
+            "rating": 5,
+            "objectID": "3695167",
+            "_highlightResult": {
+              "name": {
+                "value": "Apple - $15 iTunes Gift Card - Blue/Purple",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "iTunes Gift Cards are perfect for anyone who enjoys one-stop entertainment. Each card features an iTunes Store code redeemable for music, movies, TV shows, games, apps, and more. Recipients can access content on an iPod, iPad or iPhone, Mac, or PC.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Apple",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Movies & Music",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Movie & Music Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Apple - $25 iTunes Gift Card - Orange",
+            "description": "iTunes Gift Cards are perfect for anyone who enjoys one-stop entertainment. Each card features an iTunes Store code redeemable for music, movies, TV shows, games, apps, and more. Recipients can access content on an iPod, iPad or iPhone, Mac, or PC.",
+            "brand": "Apple",
+            "categories": ["Movies & Music", "Movie & Music Cards"],
+            "hierarchicalCategories": {
+              "lvl0": "Movies & Music",
+              "lvl1": "Movies & Music > Movie & Music Cards"
+            },
+            "type": "Itunes dl cards posa",
+            "price": 25,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/3695176_sb.jpg",
+            "url": "http://www.bestbuy.com/site/apple-25-itunes-gift-card-orange/3695176.p?id=1219093055202&skuId=3695176&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9760,
+            "rating": 6,
+            "objectID": "3695176",
+            "_highlightResult": {
+              "name": {
+                "value": "Apple - $25 iTunes Gift Card - Orange",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "iTunes Gift Cards are perfect for anyone who enjoys one-stop entertainment. Each card features an iTunes Store code redeemable for music, movies, TV shows, games, apps, and more. Recipients can access content on an iPod, iPad or iPhone, Mac, or PC.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Apple",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Movies & Music",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Movie & Music Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Apple - $50 iTunes Gift Card - Green",
+            "description": "iTunes Gift Cards are perfect for anyone who enjoys one-stop entertainment. Each card features an iTunes Store code redeemable for music, movies, TV shows, games, apps, and more. Recipients can access content on an iPod, iPad or iPhone, Mac, or PC.",
+            "brand": "Apple",
+            "categories": ["Movies & Music", "Movie & Music Cards"],
+            "hierarchicalCategories": {
+              "lvl0": "Movies & Music",
+              "lvl1": "Movies & Music > Movie & Music Cards"
+            },
+            "type": "Itunes dl cards posa",
+            "price": 50,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/3695227_sb.jpg",
+            "url": "http://www.bestbuy.com/site/apple-50-itunes-gift-card-green/3695227.p?id=1219093058224&skuId=3695227&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9759,
+            "rating": 6,
+            "objectID": "3695227",
+            "_highlightResult": {
+              "name": {
+                "value": "Apple - $50 iTunes Gift Card - Green",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "iTunes Gift Cards are perfect for anyone who enjoys one-stop entertainment. Each card features an iTunes Store code redeemable for music, movies, TV shows, games, apps, and more. Recipients can access content on an iPod, iPad or iPhone, Mac, or PC.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Apple",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Movies & Music",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Movie & Music Cards",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Apple - 1.6' Lightning-to-USB Cable - White",
+            "description": "Charge and sync your compatible Apple device with this ME291ZM/A Lightning-to-USB cable that features a 1.6' cord length for easy placement. The reversible design allows flexible use.",
+            "brand": "Apple",
+            "categories": ["Name Brands", "Apple", "Accessories"],
+            "hierarchicalCategories": {
+              "lvl0": "Name Brands",
+              "lvl1": "Name Brands > Apple",
+              "lvl2": "Name Brands > Apple > Accessories"
+            },
+            "type": "Connectivity",
+            "price": 19.99,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/8605046_sb.jpg",
+            "url": "http://www.bestbuy.com/site/apple-1-6-lightning-to-usb-cable-white/8605046.p?id=1218882609380&skuId=8605046&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9758,
+            "rating": 4,
+            "objectID": "8605046",
+            "_highlightResult": {
+              "name": {
+                "value": "Apple - 1.6' Lightning-to-USB Cable - White",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Charge and sync your compatible Apple device with this ME291ZM/A Lightning-to-USB cable that features a 1.6' cord length for easy placement. The reversible design allows flexible use.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Apple",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Name Brands",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Apple",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Accessories",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Apple - 1.6' Thunderbolt Cable - White",
+            "description": "Easily connect your Apple iMac&#174;, MacBook&#174; Pro or MacBook Air&#174; to compatible peripherals with this 1.6' Thunderbolt cable, which features 2 independent channels, each supporting data transfer rates up to 10 Gbps.",
+            "brand": "Apple",
+            "categories": ["Name Brands", "Apple", "Accessories"],
+            "hierarchicalCategories": {
+              "lvl0": "Name Brands",
+              "lvl1": "Name Brands > Apple",
+              "lvl2": "Name Brands > Apple > Accessories"
+            },
+            "type": "Cables/connectors",
+            "price": 29.99,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/7944078_sb.jpg",
+            "url": "http://www.bestbuy.com/site/apple-1-6-thunderbolt-cable-white/7944078.p?id=1218862899283&skuId=7944078&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9757,
+            "rating": 1,
+            "objectID": "7944078",
+            "_highlightResult": {
+              "name": {
+                "value": "Apple - 1.6' Thunderbolt Cable - White",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Easily connect your Apple iMac®, MacBook® Pro or MacBook Air® to compatible peripherals with this 1.6' Thunderbolt cable, which features 2 independent channels, each supporting data transfer rates up to 10 Gbps.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Apple",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Name Brands",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Apple",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Accessories",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Apple - 12W USB Power Adapter - White",
+            "description": "Keep your iPad, iPad mini, iPhone or iPod powered and ready for use with this 12W Apple&#174; MD836LL/A USB adapter that features a Lightning connector for fast, efficient charging. The compact design enables simple on-the-go portability.",
+            "brand": "Apple",
+            "categories": [
+              "Computers & Tablets",
+              "iPad & Tablet Accessories",
+              "iPad Accessories",
+              "iPad A/V Cables & Adapters"
+            ],
+            "hierarchicalCategories": {
+              "lvl0": "Computers & Tablets",
+              "lvl1": "Computers & Tablets > iPad & Tablet Accessories",
+              "lvl2": "Computers & Tablets > iPad & Tablet Accessories > iPad Accessories",
+              "lvl3": "Computers & Tablets > iPad & Tablet Accessories > iPad Accessories > iPad A/V Cables & Adapters"
+            },
+            "type": "Chargers",
+            "price": 21.99,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/7006915_sb.jpg",
+            "url": "http://www.bestbuy.com/site/apple-12w-usb-power-adapter-white/7006915.p?id=1218821197031&skuId=7006915&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9756,
+            "rating": 2,
+            "objectID": "7006915",
+            "_highlightResult": {
+              "name": {
+                "value": "Apple - 12W USB Power Adapter - White",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Keep your iPad, iPad mini, iPhone or iPod powered and ready for use with this 12W Apple® MD836LL/A USB adapter that features a Lightning connector for fast, efficient charging. The compact design enables simple on-the-go portability.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Apple",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Computers & Tablets",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "iPad & Tablet Accessories",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "iPad Accessories",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "iPad A/V Cables & Adapters",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Apple - 21.5\" iMac® - Intel Core i5 (1.6GHz) - 8GB Memory - 1TB Hard Drive - Silver",
+            "description": "Apple iMac MK142LL/A All-in-One: iMac features a gorgeous 21.5\" widescreen display, powerful Intel processors, superfast graphics, and more. All in a stunningly thin enclosure that's only 5mm at its edge.",
+            "brand": "Apple",
+            "categories": ["Computers & Tablets", "All Desktops"],
+            "hierarchicalCategories": {
+              "lvl0": "Computers & Tablets",
+              "lvl1": "Computers & Tablets > All Desktops"
+            },
+            "type": "Apple cpu's",
+            "price": 1099.99,
+            "price_range": "500 - 2000",
+            "image": "https://cdn-demo.algolia.com/bestbuy/3093014_sb.jpg",
+            "url": "http://www.bestbuy.com/site/apple-21-5-imac-intel-core-i5-1-6ghz-8gb-memory-1tb-hard-drive-silver/3093014.p?id=1219570899522&skuId=3093014&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9755,
+            "rating": 4,
+            "objectID": "3093014",
+            "_highlightResult": {
+              "name": {
+                "value": "Apple - 21.5\" iMac® - Intel Core i5 (1.6GHz) - 8GB Memory - 1TB Hard Drive - Silver",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Apple iMac MK142LL/A All-in-One: iMac features a gorgeous 21.5\" widescreen display, powerful Intel processors, superfast graphics, and more. All in a stunningly thin enclosure that's only 5mm at its edge.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Apple",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Computers & Tablets",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "All Desktops",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Apple - 21.5\" iMac® - Intel Core i5 (2.8GHz) - 8GB Memory - 1TB Hard Drive - Silver",
+            "description": "Apple iMac MK442LL/A All-in-One: iMac features a gorgeous 21.5\" widescreen display, a powerful Intel&#174; processor, superfast graphics, and more. All in a stunningly thin enclosure that's only 5 mm at its edge.",
+            "brand": "Apple",
+            "categories": ["Computers & Tablets", "All Desktops"],
+            "hierarchicalCategories": {
+              "lvl0": "Computers & Tablets",
+              "lvl1": "Computers & Tablets > All Desktops"
+            },
+            "type": "Apple cpu's",
+            "price": 1299.99,
+            "price_range": "500 - 2000",
+            "image": "https://cdn-demo.algolia.com/bestbuy/3094013_sb.jpg",
+            "url": "http://www.bestbuy.com/site/apple-21-5-imac-intel-core-i5-2-8ghz-8gb-memory-1tb-hard-drive-silver/3094013.p?id=1219570896831&skuId=3094013&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9754,
+            "rating": 4,
+            "objectID": "3094013",
+            "_highlightResult": {
+              "name": {
+                "value": "Apple - 21.5\" iMac® - Intel Core i5 (2.8GHz) - 8GB Memory - 1TB Hard Drive - Silver",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Apple iMac MK442LL/A All-in-One: iMac features a gorgeous 21.5\" widescreen display, a powerful Intel® processor, superfast graphics, and more. All in a stunningly thin enclosure that's only 5 mm at its edge.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Apple",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Computers & Tablets",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "All Desktops",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Apple - 21.5\" iMac® - Intel Core i5 (2.9GHz) - 8GB Memory - 1TB Hard Drive - Silver",
+            "description": "Apple iMac ME087LL/A All-in-One Computer: Great for managing a business or juggling your family's computing tasks, this computer's boosted processor and dedicated graphics card provide smooth, quick performance. Choose from several advanced connectivity options to link compatible monitors, screens and wireless devices.",
+            "brand": "Apple",
+            "categories": ["Computers & Tablets", "All Desktops"],
+            "hierarchicalCategories": {
+              "lvl0": "Computers & Tablets",
+              "lvl1": "Computers & Tablets > All Desktops"
+            },
+            "type": "Apple cpu's",
+            "price": 1499.99,
+            "price_range": "500 - 2000",
+            "image": "https://cdn-demo.algolia.com/bestbuy/7810143_sb.jpg",
+            "url": "http://www.bestbuy.com/site/apple-21-5-imac-intel-core-i5-2-9ghz-8gb-memory-1tb-hard-drive-silver/7810143.p?id=1218861011780&skuId=7810143&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9753,
+            "rating": 3,
+            "objectID": "7810143",
+            "_highlightResult": {
+              "name": {
+                "value": "Apple - 21.5\" iMac® - Intel Core i5 (2.9GHz) - 8GB Memory - 1TB Hard Drive - Silver",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Apple iMac ME087LL/A All-in-One Computer: Great for managing a business or juggling your family's computing tasks, this computer's boosted processor and dedicated graphics card provide smooth, quick performance. Choose from several advanced connectivity options to link compatible monitors, screens and wireless devices.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Apple",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Computers & Tablets",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "All Desktops",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Apple - 21.5\" iMac® with Retina 4K display - Intel Core i5 (3.1GHz) - 8GB Memory - 1TB Hard Drive - Silver",
+            "description": "Apple iMac MK452LL/A All-in-One: iMac now offers a stunning Retina&#174; 4K display on the 21.5\" model. And a wider color gamut means a palette of up to 25 percent more available colors. So photos and videos look crystal clear and vibrant, and text is razor sharp.",
+            "brand": "Apple",
+            "categories": ["Computers & Tablets", "All Desktops"],
+            "hierarchicalCategories": {
+              "lvl0": "Computers & Tablets",
+              "lvl1": "Computers & Tablets > All Desktops"
+            },
+            "type": "Apple cpu's",
+            "price": 1499.99,
+            "price_range": "500 - 2000",
+            "image": "https://cdn-demo.algolia.com/bestbuy/6293016_sb.jpg",
+            "url": "http://www.bestbuy.com/site/apple-21-5-imac-with-retina-4k-display-intel-core-i5-3-1ghz-8gb-memory-1tb-hard-drive-silver/6293016.p?id=1218725896674&skuId=6293016&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": true,
+            "popularity": 9752,
+            "rating": 1,
+            "objectID": "6293016",
+            "_highlightResult": {
+              "name": {
+                "value": "Apple - 21.5\" iMac® with Retina 4K display - Intel Core i5 (3.1GHz) - 8GB Memory - 1TB Hard Drive - Silver",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Apple iMac MK452LL/A All-in-One: iMac now offers a stunning Retina® 4K display on the 21.5\" model. And a wider color gamut means a palette of up to 25 percent more available colors. So photos and videos look crystal clear and vibrant, and text is razor sharp.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Apple",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Computers & Tablets",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "All Desktops",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Apple - 27\" iMac® - Intel Core i5 (3.2GHz) - 8GB Memory - 1TB Hard Drive - Silver",
+            "description": "Apple iMac ME088LL/A All-in-One Computer: With a beefed up processor and graphics card for seamless gaming and video editing on the expansive display, this stylish computer makes a bold statement in offices or home workstations. The preinstalled creative apps and streamlined design make setup easy so you can get right to work.",
+            "brand": "Apple",
+            "categories": ["Computers & Tablets", "All Desktops"],
+            "hierarchicalCategories": {
+              "lvl0": "Computers & Tablets",
+              "lvl1": "Computers & Tablets > All Desktops"
+            },
+            "type": "Apple cpu's",
+            "price": 1799.99,
+            "price_range": "500 - 2000",
+            "image": "https://cdn-demo.algolia.com/bestbuy/5852008_sb.jpg",
+            "url": "http://www.bestbuy.com/site/apple-27-imac-intel-core-i5-3-2ghz-8gb-memory-1tb-hard-drive-silver/5852008.p?id=1218695416606&skuId=5852008&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9751,
+            "rating": 3,
+            "objectID": "5852008",
+            "_highlightResult": {
+              "name": {
+                "value": "Apple - 27\" iMac® - Intel Core i5 (3.2GHz) - 8GB Memory - 1TB Hard Drive - Silver",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Apple iMac ME088LL/A All-in-One Computer: With a beefed up processor and graphics card for seamless gaming and video editing on the expansive display, this stylish computer makes a bold statement in offices or home workstations. The preinstalled creative apps and streamlined design make setup easy so you can get right to work.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Apple",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Computers & Tablets",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "All Desktops",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Apple - 27\" iMac® with Retina 5K display - Intel Core i5 (3.2GHz) - 8GB Memory - 1TB Fusion Drive - Silver",
+            "description": "Apple iMac MK472LL/A All-in-One: iMac offers a spectacular Retina&#174; 5K display on the 27\" model. And a wider color gamut means a palette of up to 25 percent more available colors. So photos and videos look crystal clear and vibrant, and text is razor sharp.",
+            "brand": "Apple",
+            "categories": ["Computers & Tablets", "All Desktops"],
+            "hierarchicalCategories": {
+              "lvl0": "Computers & Tablets",
+              "lvl1": "Computers & Tablets > All Desktops"
+            },
+            "type": "Apple cpu's",
+            "price": 1999.99,
+            "price_range": "500 - 2000",
+            "image": "https://cdn-demo.algolia.com/bestbuy/4260700_sb.jpg",
+            "url": "http://www.bestbuy.com/site/apple-27-imac-with-retina-5k-display-intel-core-i5-3-2ghz-8gb-memory-1tb-fusion-drive-silver/4260700.p?id=1219747525038&skuId=4260700&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9750,
+            "rating": 3,
+            "objectID": "4260700",
+            "_highlightResult": {
+              "name": {
+                "value": "Apple - 27\" iMac® with Retina 5K display - Intel Core i5 (3.2GHz) - 8GB Memory - 1TB Fusion Drive - Silver",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Apple iMac MK472LL/A All-in-One: iMac offers a spectacular Retina® 5K display on the 27\" model. And a wider color gamut means a palette of up to 25 percent more available colors. So photos and videos look crystal clear and vibrant, and text is razor sharp.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Apple",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Computers & Tablets",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "All Desktops",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Apple - 27\" iMac® with Retina 5K display - Intel Core i5 (3.2GHz) - 8GB Memory - 1TB Hard Drive - Silver",
+            "description": "Apple iMac MK462LL/A All-in-One: iMac offers a spectacular Retina&#174; 5K display on the 27\" model. And a wider color gamut means a palette of up to 25 percent more available colors. So photos and videos look crystal clear and vibrant, and text is razor sharp.",
+            "brand": "Apple",
+            "categories": ["Computers & Tablets", "All Desktops"],
+            "hierarchicalCategories": {
+              "lvl0": "Computers & Tablets",
+              "lvl1": "Computers & Tablets > All Desktops"
+            },
+            "type": "Apple cpu's",
+            "price": 1799.99,
+            "price_range": "500 - 2000",
+            "image": "https://cdn-demo.algolia.com/bestbuy/7815096_sb.jpg",
+            "url": "http://www.bestbuy.com/site/apple-27-imac-with-retina-5k-display-intel-core-i5-3-2ghz-8gb-memory-1tb-hard-drive-silver/7815096.p?id=1218860882295&skuId=7815096&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": true,
+            "popularity": 9749,
+            "rating": 5,
+            "objectID": "7815096",
+            "_highlightResult": {
+              "name": {
+                "value": "Apple - 27\" iMac® with Retina 5K display - Intel Core i5 (3.2GHz) - 8GB Memory - 1TB Hard Drive - Silver",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Apple iMac MK462LL/A All-in-One: iMac offers a spectacular Retina® 5K display on the 27\" model. And a wider color gamut means a palette of up to 25 percent more available colors. So photos and videos look crystal clear and vibrant, and text is razor sharp.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Apple",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Computers & Tablets",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "All Desktops",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Apple - 27\" iMac® with Retina 5K display - Intel Core i5 (3.3GHz) - 8GB Memory - 1TB Hard Drive - Silver",
+            "description": "Apple iMac MF885LL/A All-in-One Computer: Edit brilliant videos, read razor-sharp text, and view stunning photos on this powerful computer's Retina 5K display. The advanced processor and hard drive are enclosed in an elegant aluminum and glass design that's easy to set up with the included keyboard and mouse.",
+            "brand": "Apple",
+            "categories": ["Computers & Tablets", "All Desktops"],
+            "hierarchicalCategories": {
+              "lvl0": "Computers & Tablets",
+              "lvl1": "Computers & Tablets > All Desktops"
+            },
+            "type": "Apple cpu's",
+            "price": 1999.99,
+            "price_range": "500 - 2000",
+            "image": "https://cdn-demo.algolia.com/bestbuy/7815078_sb.jpg",
+            "url": "http://www.bestbuy.com/site/apple-27-imac-with-retina-5k-display-intel-core-i5-3-3ghz-8gb-memory-1tb-hard-drive-silver/7815078.p?id=1218860884056&skuId=7815078&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": true,
+            "popularity": 9748,
+            "rating": 1,
+            "objectID": "7815078",
+            "_highlightResult": {
+              "name": {
+                "value": "Apple - 27\" iMac® with Retina 5K display - Intel Core i5 (3.3GHz) - 8GB Memory - 1TB Hard Drive - Silver",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Apple iMac MF885LL/A All-in-One Computer: Edit brilliant videos, read razor-sharp text, and view stunning photos on this powerful computer's Retina 5K display. The advanced processor and hard drive are enclosed in an elegant aluminum and glass design that's easy to set up with the included keyboard and mouse.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Apple",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Computers & Tablets",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "All Desktops",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Apple - 27\" iMac® with Retina 5K display - Intel Core i5 (3.3GHz) - 8GB Memory - 2TB Fusion Drive - Silver",
+            "description": "Apple iMac MK482LL/A All-in-One: iMac offers a spectacular Retina&#174; 5K display on the 27\" model. And a wider color gamut means a palette of up to 25 percent more available colors. So photos and videos look crystal clear and vibrant, and text is razor sharp.",
+            "brand": "Apple",
+            "categories": ["Computers & Tablets", "All Desktops"],
+            "hierarchicalCategories": {
+              "lvl0": "Computers & Tablets",
+              "lvl1": "Computers & Tablets > All Desktops"
+            },
+            "type": "Apple cpu's",
+            "price": 2299.99,
+            "price_range": "> 2000",
+            "image": "https://cdn-demo.algolia.com/bestbuy/3095328_sb.jpg",
+            "url": "http://www.bestbuy.com/site/apple-27-imac-with-retina-5k-display-intel-core-i5-3-3ghz-8gb-memory-2tb-fusion-drive-silver/3095328.p?id=1219570899521&skuId=3095328&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9747,
+            "rating": 2,
+            "objectID": "3095328",
+            "_highlightResult": {
+              "name": {
+                "value": "Apple - 27\" iMac® with Retina 5K display - Intel Core i5 (3.3GHz) - 8GB Memory - 2TB Fusion Drive - Silver",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Apple iMac MK482LL/A All-in-One: iMac offers a spectacular Retina® 5K display on the 27\" model. And a wider color gamut means a palette of up to 25 percent more available colors. So photos and videos look crystal clear and vibrant, and text is razor sharp.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Apple",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Computers & Tablets",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "All Desktops",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Apple - 27\" iMac® with Retina 5K display - Intel Core i5 (3.5GHz) - 8GB Memory - 1TB Hard Drive - White",
+            "description": "Apple iMac MF886LL/A All-in-One Computer: Combining a gorgeous Retina 5K display with powerful processing in a slim frame, this sleek computer provides incredible detail for editing photos and 4K videos. The spacious Fusion Drive and advanced connectivity features deliver smooth performance and quick file transfers.",
+            "brand": "Apple",
+            "categories": ["Computers & Tablets", "All Desktops"],
+            "hierarchicalCategories": {
+              "lvl0": "Computers & Tablets",
+              "lvl1": "Computers & Tablets > All Desktops"
+            },
+            "type": "Apple cpu's",
+            "price": 2299.99,
+            "price_range": "> 2000",
+            "image": "https://cdn-demo.algolia.com/bestbuy/9034004_sb.jpg",
+            "url": "http://www.bestbuy.com/site/apple-27-imac-with-retina-5k-display-intel-core-i5-3-5ghz-8gb-memory-1tb-hard-drive-white/9034004.p?id=1219385144900&skuId=9034004&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9746,
+            "rating": 3,
+            "objectID": "9034004",
+            "_highlightResult": {
+              "name": {
+                "value": "Apple - 27\" iMac® with Retina 5K display - Intel Core i5 (3.5GHz) - 8GB Memory - 1TB Hard Drive - White",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Apple iMac MF886LL/A All-in-One Computer: Combining a gorgeous Retina 5K display with powerful processing in a slim frame, this sleek computer provides incredible detail for editing photos and 4K videos. The spacious Fusion Drive and advanced connectivity features deliver smooth performance and quick file transfers.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Apple",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Computers & Tablets",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "All Desktops",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Apple - 29W USB-C Power Adapter - White",
+            "description": "The Apple 29W USB-C Power adapter offers fast, efficient charging at home, in the office, or on the go. This adapter is compatible with MacBook computers featuring a USB-C port and requires a USB-C Charge Cable (sold separately).",
+            "brand": "Apple",
+            "categories": [
+              "Computers & Tablets",
+              "Laptop Accessories",
+              "Laptop Chargers & Adapters"
+            ],
+            "hierarchicalCategories": {
+              "lvl0": "Computers & Tablets",
+              "lvl1": "Computers & Tablets > Laptop Accessories",
+              "lvl2": "Computers & Tablets > Laptop Accessories > Laptop Chargers & Adapters"
+            },
+            "type": "Notebook accessories",
+            "price": 49,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/6600069_sb.jpg",
+            "url": "http://www.bestbuy.com/site/apple-29w-usb-c-power-adapter-white/6600069.p?id=1219663250413&skuId=6600069&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": true,
+            "popularity": 9745,
+            "rating": 3,
+            "objectID": "6600069",
+            "_highlightResult": {
+              "name": {
+                "value": "Apple - 29W USB-C Power Adapter - White",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "The Apple 29W USB-C Power adapter offers fast, efficient charging at home, in the office, or on the go. This adapter is compatible with MacBook computers featuring a USB-C port and requires a USB-C Charge Cable (sold separately).",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Apple",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Computers & Tablets",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Laptop Accessories",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Laptop Chargers & Adapters",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          },
+          {
+            "name": "Apple - 3.3' Lightning-to-USB 2.0 Cable - White",
+            "description": "Charge and sync your compatible Apple&#174; device with this Apple MD818ZM/A cable, which features a Lightning connector for use with iPad&#174; mini, iPad with Retina, iPhone&#174; 6s or 6s Plus, iPod&#174; nano 7th generation and iPod touch 5th generation.",
+            "brand": "Apple",
+            "categories": ["Name Brands", "Apple", "Accessories"],
+            "hierarchicalCategories": {
+              "lvl0": "Name Brands",
+              "lvl1": "Name Brands > Apple",
+              "lvl2": "Name Brands > Apple > Accessories"
+            },
+            "type": "Connectivity",
+            "price": 21.99,
+            "price_range": "1 - 50",
+            "image": "https://cdn-demo.algolia.com/bestbuy/6652043_sb.jpg",
+            "url": "http://www.bestbuy.com/site/apple-3-3-lightning-to-usb-2-0-cable-white/6652043.p?id=1218803451837&skuId=6652043&cmp=RMX&ky=1uWSHMdQqBeVJB9cXgEke60s5EjfS6M1W",
+            "free_shipping": false,
+            "popularity": 9744,
+            "rating": 3,
+            "objectID": "6652043",
+            "_highlightResult": {
+              "name": {
+                "value": "Apple - 3.3' Lightning-to-USB 2.0 Cable - White",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "description": {
+                "value": "Charge and sync your compatible Apple® device with this Apple MD818ZM/A cable, which features a Lightning connector for use with iPad® mini, iPad with Retina, iPhone® 6s or 6s Plus, iPod® nano 7th generation and iPod touch 5th generation.",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "brand": {
+                "value": "Apple",
+                "matchLevel": "none",
+                "matchedWords": []
+              },
+              "categories": [
+                {
+                  "value": "Name Brands",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Apple",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                },
+                {
+                  "value": "Accessories",
+                  "matchLevel": "none",
+                  "matchedWords": []
+                }
+              ]
+            }
+          }
+        ],
+        "nbHits": 386,
+        "page": 0,
+        "nbPages": 20,
+        "hitsPerPage": 20,
+        "processingTimeMS": 1,
+        "facets": {
+          "type": {
+            "Spr iphone handset": 36,
+            "Apple connected": 35,
+            "At&t iphone handset": 35,
+            "Apple wifi": 33,
+            "Trend cases": 32,
+            "Vzw iphone handset": 31,
+            "Ipad cases": 27,
+            "Apple watch": 25,
+            "Apple": 18,
+            "Apple first accy": 15,
+            "Mp3 ipod touch": 15,
+            "Apple cpu's": 13,
+            "Connectivity": 13,
+            "Cables/connectors": 10,
+            "Mp3 nano shuffle": 10,
+            "Notebook accessories": 8,
+            "Itunes dl cards posa": 5,
+            "Refurb tblt-ereaders": 5,
+            "Mice": 4,
+            "Keyboards": 3,
+            "So unlocked hardware": 3,
+            "Refurbished laptops": 2,
+            "Streaming media plyr": 2,
+            "Apple monitors": 1,
+            "Chargers": 1,
+            "Earbud headphones": 1,
+            "External": 1,
+            "Multi media network": 1,
+            "T-m iphone handset": 1
+          },
+          "brand": {
+            "Apple": 386
+          },
+          "rating": {
+            "1": 65,
+            "2": 70,
+            "3": 62,
+            "4": 64,
+            "5": 62,
+            "6": 63
+          },
+          "hierarchicalCategories.lvl0": {
+            "Computers & Tablets": 148,
+            "Cell Phones": 138,
+            "Wearable Technology": 40,
+            "Audio": 26,
+            "Name Brands": 26,
+            "Movies & Music": 5,
+            "TV & Home Theater": 2,
+            "Housewares": 1
+          }
+        },
+        "facets_stats": {
+          "rating": {
+            "min": 1,
+            "max": 6,
+            "avg": 3,
+            "sum": 1335
+          }
+        },
+        "exhaustiveFacetsCount": true,
+        "query": "",
+        "params": "query=&page=0&facets=%5B%22brand%22%2C%22type%22%2C%22rating%22%2C%22hierarchicalCategories.lvl0%22%5D&tagFilters=&facetFilters=%5B%22brand%3AApple%22%5D",
+        "index": "instant_search"
+      }
+    ]
+  },
+  "state": {
+    "index": "instant_search",
+    "query": "",
+    "facets": ["brand"],
+    "disjunctiveFacets": ["type", "rating"],
+    "hierarchicalFacets": [
+      {
+        "name": "hierarchicalCategories",
+        "attributes": [
+          "hierarchicalCategories.lvl0",
+          "hierarchicalCategories.lvl1",
+          "hierarchicalCategories.lvl2",
+          "hierarchicalCategories.lvl3"
+        ]
+      }
+    ],
+    "facetsRefinements": {
+      "brand": ["Apple"]
+    },
+    "facetsExcludes": {},
+    "disjunctiveFacetsRefinements": {},
+    "numericRefinements": {},
+    "tagRefinements": [],
+    "hierarchicalFacetsRefinements": {},
+    "page": 0
+  },
+  "error": null
+}

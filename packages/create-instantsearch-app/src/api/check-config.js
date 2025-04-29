@@ -1,5 +1,6 @@
-const path = require('path');
 const fs = require('fs');
+const path = require('path');
+
 const { checkAppName, checkAppPath } = require('../utils');
 
 function getOptions({ supportedTemplates }) {

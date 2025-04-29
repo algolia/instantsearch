@@ -174,13 +174,12 @@
                     <template #default="{ items, refine, createURL }">
                       <ul class="ais-RatingMenu-list">
                         <li
-                          :class="
-                            cx('ais-RatingMenu-item', {
-                              'ais-RatingMenu-item--selected':
-                                items.every((item) => !item.isRefined) ||
-                                item.isRefined,
-                            })
-                          "
+                          :class="{
+                            'ais-RatingMenu-item': true,
+                            'ais-RatingMenu-item--selected':
+                              items.every((item) => !item.isRefined) ||
+                              item.isRefined,
+                          }"
                           v-for="item in items"
                           :key="item.value"
                         >
@@ -195,12 +194,11 @@
                               :key="index"
                             >
                               <svg
-                                :class="
-                                  cx('ais-RatingMenu-starIcon', {
-                                    'ais-RatingMenu-starIcon--full': full,
-                                    'ais-RatingMenu-starIcon--empty': !full,
-                                  })
-                                "
+                                :class="{
+                                  'ais-RatingMenu-starIcon': true,
+                                  'ais-RatingMenu-starIcon--full': full,
+                                  'ais-RatingMenu-starIcon--empty': !full,
+                                }"
                                 aria-hidden="true"
                                 viewBox="0 0 16 16"
                               >
@@ -333,11 +331,7 @@
               >
                 <ul class="ais-Pagination-list">
                   <li
-                    class="
-                      ais-Pagination-item
-                      ais-Pagination-item--previousPage
-                      ais-Pagination-item--disabled
-                    "
+                    class="ais-Pagination-item ais-Pagination-item--previousPage ais-Pagination-item--disabled"
                     v-if="isFirstPage"
                   >
                     <span class="ais-Pagination-link">
@@ -362,9 +356,7 @@
                   </li>
 
                   <li
-                    class="
-                      ais-Pagination-item ais-Pagination-item--previousPage
-                    "
+                    class="ais-Pagination-item ais-Pagination-item--previousPage"
                     v-if="!isFirstPage"
                   >
                     <a
@@ -394,12 +386,12 @@
                   </li>
 
                   <li
-                    :class="
-                      cx('ais-Pagination-item', 'ais-Pagination-item--page', {
-                        'ais-Pagination-item--selected':
-                          page === currentRefinement,
-                      })
-                    "
+                    :class="{
+                      'ais-Pagination-item': true,
+                      'ais-Pagination-item--page': true,
+                      'ais-Pagination-item--selected':
+                        page === currentRefinement,
+                    }"
                     v-for="page in pages"
                     :key="page"
                   >
@@ -445,11 +437,7 @@
                   </li>
 
                   <li
-                    class="
-                      ais-Pagination-item
-                      ais-Pagination-item--nextPage
-                      ais-Pagination-item--disabled
-                    "
+                    class="ais-Pagination-item ais-Pagination-item--nextPage ais-Pagination-item--disabled"
                     v-if="isLastPage"
                   >
                     <span class="ais-Pagination-link">
@@ -501,18 +489,13 @@
 </template>
 
 <script>
-import algoliasearch from 'algoliasearch/lite';
+import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import VueSlider from 'vue-slider-component';
-import cx from 'classnames';
+
+import getRouting from './routing';
+import { formatNumber } from './utils';
 import ClearRefinements from './widgets/ClearRefinements.vue';
 import NoResults from './widgets/NoResults.vue';
-import { formatNumber } from './utils';
-import getRouting from './routing';
-
-import './Theme.css';
-import './App.css';
-import './App.mobile.css';
-import './widgets/PriceSlider.css';
 
 export default {
   components: {
@@ -542,7 +525,6 @@ export default {
   },
   data() {
     return {
-      cx,
       searchClient: algoliasearch(
         'latency',
         '6be0576ff61c053d5f9a3225e2a90f76'

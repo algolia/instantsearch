@@ -4,15 +4,29 @@
 
 import { mount } from '../../../test/utils';
 import { __setState } from '../../mixins/widget';
-import Hits from '../Hits.vue';
+import Hits from '../Hits';
 import '../../../test/utils/sortedHtmlSerializer';
 
 jest.mock('../../mixins/widget');
 
 const defaultState = {
-  hits: [{ objectID: 'one' }, { objectID: 'two' }],
+  items: [{ objectID: 'one' }, { objectID: 'two' }],
   sendEvent: jest.fn(),
 };
+
+it('accepts a showBanner prop', () => {
+  __setState({
+    ...defaultState,
+  });
+
+  const wrapper = mount(Hits, {
+    propsData: {
+      showBanner: true,
+    },
+  });
+
+  expect(wrapper.vm.widgetParams.showBanner).toBe(true);
+});
 
 it('accepts an escapeHTML prop', () => {
   __setState({
@@ -28,30 +42,35 @@ it('accepts an escapeHTML prop', () => {
   expect(wrapper.vm.widgetParams.escapeHTML).toBe(true);
 });
 
-it('accepts a transformItems prop', () => {
+it('exposes banner prop to the banner slot', () => {
   __setState({
     ...defaultState,
-  });
-
-  const transformItems = () => {};
-
-  const wrapper = mount(Hits, {
-    propsData: {
-      transformItems,
+    banner: {
+      image: {
+        urls: [{ url: 'https://via.placeholder.com/550x250' }],
+      },
     },
   });
 
-  expect(wrapper.vm.widgetParams.transformItems).toBe(transformItems);
-});
-
-it('renders correctly', () => {
-  __setState({
-    ...defaultState,
-  });
-
-  const wrapper = mount(Hits);
-
-  expect(wrapper.html()).toMatchSnapshot();
+  const wrapper = mount(
+    {
+      components: { Hits },
+      template: `
+      <Hits>
+        <template v-slot:banner="{ banner }">
+          <img :src=banner.image.urls[0].url />
+        </template>
+      </Hits>
+    `,
+    },
+    {
+      propsData: {
+        showBanner: true,
+      },
+    }
+  );
+  const img = wrapper.find('img');
+  expect(img.attributes('src')).toBe('https://via.placeholder.com/550x250');
 });
 
 it('exposes insights prop to the default slot', async () => {

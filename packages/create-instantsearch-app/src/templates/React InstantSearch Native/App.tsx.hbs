@@ -1,0 +1,74 @@
+import React, { useRef } from 'react';
+import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import algoliasearch from 'algoliasearch/lite';
+import { InstantSearch } from 'react-instantsearch-core';
+
+import { InfiniteHits } from './src/InfiniteHits';
+import { SearchBox } from './src/SearchBox';
+{{#if attributesToDisplay}}
+import { Highlight } from './src/Highlight';
+{{/if}}
+import { ProductHit } from './types/ProductHit';
+
+const searchClient = algoliasearch(
+  '{{appId}}',
+  '{{apiKey}}'
+);
+
+export default function App() {
+  const listRef = useRef<FlatList>(null);
+
+  return (
+    <SafeAreaView style={styles.safe}>
+      <StatusBar style="light" />
+      <View style={styles.container}>
+        <InstantSearch searchClient={searchClient} indexName="{{indexName}}">
+          <SearchBox
+            onChange={() =>
+              listRef.current?.scrollToOffset({ animated: false, offset: 0 })
+            }
+          />
+          <InfiniteHits ref={listRef} hitComponent={Hit} />
+        </InstantSearch>
+      </View>
+    </SafeAreaView>
+  );
+}
+
+type HitProps = {
+  hit: ProductHit;
+};
+
+function Hit({ hit }: HitProps) {
+  return (
+    <>
+      {{#if attributesToDisplay}}
+      <Text>
+        <Highlight hit={hit} attribute="{{attributesToDisplay.[0]}}" />
+      </Text>
+      {{#each attributesToDisplay}}
+      {{#unless @first}}
+      <Text>
+        <Highlight hit={hit} attribute="{{this}}" />
+      </Text>
+      {{/unless}}
+      {{/each}}
+      {{else}}
+      <Text>{JSON.stringify(hit).slice(0, 100)}</Text>
+      {{/if}}
+    </>
+  );
+}
+
+const styles = StyleSheet.create({
+  safe: {
+    flex: 1,
+    backgroundColor: '#252b33',
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+    flexDirection: 'column',
+  },
+});

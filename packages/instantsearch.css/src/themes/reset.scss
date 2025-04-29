@@ -1,9 +1,14 @@
 // Reset all lists
 
 .ais-Breadcrumb-list,
+.ais-Carousel-list,
 .ais-CurrentRefinements-list,
 .ais-HierarchicalMenu-list,
 .ais-Hits-list,
+.ais-FrequentlyBoughtTogether-list,
+.ais-LookingSimilar-list,
+.ais-RelatedProducts-list,
+.ais-TrendingItems-list,
 .ais-Results-list,
 .ais-InfiniteHits-list,
 .ais-InfiniteResults-list,
@@ -20,6 +25,7 @@
 
 // Reset all buttons
 
+.ais-Carousel-navigation,
 .ais-ClearRefinements-button,
 .ais-CurrentRefinements-delete,
 .ais-CurrentRefinements-reset,
@@ -189,4 +195,45 @@
   top: -22px;
   text-align: center;
   transform: translateX(-50%);
+}
+
+// Reset Carousel
+
+.ais-Carousel {
+  position: relative;
+}
+
+.ais-Carousel-list {
+  grid-auto-columns: 42%;
+  display: grid;
+  grid-auto-flow: column;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x proximity;
+}
+
+@media (min-width: 999px) {
+  .ais-Carousel-list {
+    grid-auto-columns: 20%;
+  }
+}
+
+.ais-Carousel-navigation {
+  position: absolute;
+  top: 35%;
+  z-index: 1;
+}
+
+.ais-Carousel-navigation--previous {
+  left: 0;
+  transform: translateX(-25%);
+}
+
+.ais-Carousel-navigation--next {
+  right: 0;
+  transform: translateX(25%);
+}
+
+.ais-Carousel-item {
+  scroll-snap-align: start;
 }

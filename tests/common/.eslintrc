@@ -1,6 +1,6 @@
 {
   "rules": {
     "jest/no-export": "off",
-    "no-lone-blocks": "off",
+    "no-lone-blocks": "off"
   }
 }

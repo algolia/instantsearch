@@ -11,8 +11,8 @@ import { h } from 'preact';
 import { prepareTemplateProps } from '../../../lib/templating';
 import InfiniteHits from '../InfiniteHits';
 
+import type { Hit } from '../../../types';
 import type { InfiniteHitsProps } from '../InfiniteHits';
-import type { Hit } from 'instantsearch.js';
 
 beforeEach(() => {
   document.body.innerHTML = '';
@@ -63,6 +63,9 @@ describe('InfiniteHits', () => {
         disabledLoadPrevious: '',
         loadMore: '',
         disabledLoadMore: '',
+        bannerRoot: '',
+        bannerImage: '',
+        bannerLink: '',
       },
       templateProps: prepareTemplateProps({
         defaultTemplates: {

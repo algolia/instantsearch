@@ -6,6 +6,7 @@ import {
   find,
   safelyRunOnBrowser,
 } from '../lib/utils';
+import { createUUID } from '../lib/utils/uuid';
 
 import type {
   InsightsClient,
@@ -13,6 +14,7 @@ import type {
   InsightsMethod,
   InsightsMethodMap,
   InternalMiddleware,
+  InstantSearch,
 } from '../types';
 import type {
   AlgoliaSearchHelper,
@@ -28,21 +30,19 @@ export type InsightsProps<
   TInsightsClient extends ProvidedInsightsClient = ProvidedInsightsClient
 > = {
   insightsClient?: TInsightsClient;
-  insightsInitParams?: {
-    userHasOptedOut?: boolean;
-    useCookie?: boolean;
-    anonymousUserToken?: boolean;
-    cookieDuration?: number;
-    region?: 'de' | 'us';
-  };
+  insightsInitParams?: Partial<InsightsMethodMap['init'][0][0]>;
   onEvent?: (event: InsightsEvent, insightsClient: TInsightsClient) => void;
   /**
    * @internal indicator for the default insights middleware
    */
   $$internal?: boolean;
+  /**
+   * @internal indicator for sending the `clickAnalytics` search parameter
+   */
+  $$automatic?: boolean;
 };
 
-const ALGOLIA_INSIGHTS_VERSION = '2.6.0';
+const ALGOLIA_INSIGHTS_VERSION = '2.17.2';
 const ALGOLIA_INSIGHTS_SRC = `https://cdn.jsdelivr.net/npm/search-insights@${ALGOLIA_INSIGHTS_VERSION}/dist/search-insights.min.js`;
 
 export type InsightsClientWithGlobals = InsightsClient & {
@@ -60,6 +60,7 @@ export function createInsightsMiddleware<
     insightsInitParams,
     onEvent,
     $$internal = false,
+    $$automatic = false,
   } = props;
 
   let potentialInsightsClient: ProvidedInsightsClient = _insightsClient;
@@ -112,10 +113,14 @@ export function createInsightsMiddleware<
       'could not extract Algolia credentials from searchClient in insights middleware.'
     );
 
+    let queuedInitParams: Partial<InsightsMethodMap['init'][0][0]> | undefined =
+      undefined;
     let queuedUserToken: string | undefined = undefined;
     let userTokenBeforeInit: string | undefined = undefined;
 
-    if (Array.isArray(insightsClient.queue)) {
+    const { queue } = insightsClient;
+
+    if (Array.isArray(queue)) {
       // Context: The umd build of search-insights is asynchronously loaded by the snippet.
       //
       // When user calls `aa('setUserToken', 'my-user-token')` before `search-insights` is loaded,
@@ -126,19 +131,22 @@ export function createInsightsMiddleware<
       // At this point, even though `search-insights` is not loaded yet,
       // we still want to read the token from the queue.
       // Otherwise, the first search call will be fired without the token.
-      [, queuedUserToken] =
-        find(
-          insightsClient.queue.slice().reverse(),
-          ([method]) => method === 'setUserToken'
-        ) || [];
+      [queuedUserToken, queuedInitParams] = ['setUserToken', 'init'].map(
+        (key) => {
+          const [, value] =
+            find(queue.slice().reverse(), ([method]) => method === key) || [];
+
+          return value as any as NonNullable<typeof value>;
+        }
+      );
     }
-    insightsClient('getUserToken', null, (_error: any, userToken: string) => {
-      // If user has called `aa('setUserToken', 'my-user-token')` before creating
-      // the `insights` middleware, we store them temporarily and
-      // set it later on.
-      //
-      // Otherwise, the `init` call might override it with anonymous user token.
-      userTokenBeforeInit = userToken;
+
+    // If user called `aa('setUserToken')` before creating the Insights middleware,
+    // we temporarily store the token and set it later on.
+    //
+    // Otherwise, the `init` call might override them with anonymous user token.
+    insightsClient('getUserToken', null, (_error, userToken) => {
+      userTokenBeforeInit = normalizeUserToken(userToken);
     });
 
     // Only `init` if the `insightsInitParams` option is passed or
@@ -158,6 +166,7 @@ export function createInsightsMiddleware<
     return {
       $$type: 'ais.insights',
       $$internal,
+      $$automatic,
       onStateChange() {},
       subscribe() {
         if (!insightsClient.shouldAddScript) return;
@@ -182,26 +191,46 @@ export function createInsightsMiddleware<
       started() {
         insightsClient('addAlgoliaAgent', 'insights-middleware');
 
-        helper = instantSearchInstance.helper!;
+        helper = instantSearchInstance.mainHelper!;
 
-        initialParameters = {
-          userToken: (helper.state as PlainSearchParameters).userToken,
-          clickAnalytics: helper.state.clickAnalytics,
-        };
+        const { queue: queueAtStart } = insightsClient;
 
-        helper.overrideStateWithoutTriggeringChangeEvent({
-          ...helper.state,
-          clickAnalytics: true,
-        });
+        if (Array.isArray(queueAtStart)) {
+          [queuedUserToken, queuedInitParams] = ['setUserToken', 'init'].map(
+            (key) => {
+              const [, value] =
+                find(
+                  queueAtStart.slice().reverse(),
+                  ([method]) => method === key
+                ) || [];
+
+              return value;
+            }
+          );
+        }
+
+        initialParameters = getInitialParameters(instantSearchInstance);
+
+        // We don't want to force clickAnalytics when the insights is enabled from the search response.
+        // This means we don't enable insights for indices that don't opt in
+        if (!$$automatic) {
+          helper.overrideStateWithoutTriggeringChangeEvent({
+            ...helper.state,
+            clickAnalytics: true,
+          });
+        }
+
         if (!$$internal) {
           instantSearchInstance.scheduleSearch();
         }
 
         const setUserTokenToSearch = (
-          userToken?: string,
+          userToken?: string | number,
           immediate = false
         ) => {
-          if (!userToken) {
+          const normalizedUserToken = normalizeUserToken(userToken);
+
+          if (!normalizedUserToken) {
             return;
           }
 
@@ -211,7 +240,7 @@ export function createInsightsMiddleware<
           function applyToken() {
             helper.overrideStateWithoutTriggeringChangeEvent({
               ...helper.state,
-              userToken,
+              userToken: normalizedUserToken,
             });
 
             if (existingToken && existingToken !== userToken) {
@@ -227,33 +256,75 @@ export function createInsightsMiddleware<
           }
         };
 
-        const anonymousUserToken = getInsightsAnonymousUserTokenInternal();
-        if (anonymousUserToken) {
-          // When `aa('init', { ... })` is called, it creates an anonymous user token in cookie.
-          // We can set it as userToken.
-          setUserTokenToSearch(anonymousUserToken, true);
+        function setUserToken(token: string | number) {
+          setUserTokenToSearch(token, true);
+          insightsClient('setUserToken', token);
         }
 
-        // We consider the `userToken` coming from a `init` call to have a higher
-        // importance than the one coming from the queue.
-        if (userTokenBeforeInit) {
-          setUserTokenToSearch(userTokenBeforeInit, true);
-          insightsClient('setUserToken', userTokenBeforeInit);
+        let anonymousUserToken: string | undefined = undefined;
+        const anonymousTokenFromInsights =
+          getInsightsAnonymousUserTokenInternal();
+        if (anonymousTokenFromInsights) {
+          // When `aa('init', { ... })` is called, it creates an anonymous user token in cookie.
+          // We can set it as userToken on instantsearch and insights. If it's not set as an insights
+          // userToken before a sendEvent, insights automatically generates a new anonymous token,
+          // causing a state change and an unnecessary query on instantsearch.
+          anonymousUserToken = anonymousTokenFromInsights;
+        } else {
+          const token = `anonymous-${createUUID()}`;
+          anonymousUserToken = token;
+        }
+
+        let userTokenFromInit: string | undefined;
+
+        // With SSR, the token could be be set on the state. We make sure
+        // that insights is in sync with that token since, there is no
+        // insights lib on the server.
+        const tokenFromSearchParameters = initialParameters.userToken;
+
+        // When the first query is sent, the token is possibly not yet set by
+        // the insights onChange callbacks (if insights isn't yet loaded).
+        // It is explicitly being set here so that the first query has the
+        // initial tokens set and ensure a second query isn't automatically
+        // made when the onChange callback actually changes the state.
+        if (insightsInitParams?.userToken) {
+          userTokenFromInit = insightsInitParams.userToken;
+        }
+
+        if (userTokenFromInit) {
+          setUserToken(userTokenFromInit);
+        } else if (tokenFromSearchParameters) {
+          setUserToken(tokenFromSearchParameters);
+        } else if (userTokenBeforeInit) {
+          setUserToken(userTokenBeforeInit);
         } else if (queuedUserToken) {
-          setUserTokenToSearch(queuedUserToken, true);
-          insightsClient('setUserToken', queuedUserToken);
+          setUserToken(queuedUserToken);
+        } else if (anonymousUserToken) {
+          setUserToken(anonymousUserToken);
+
+          if (insightsInitParams?.useCookie || queuedInitParams?.useCookie) {
+            saveTokenAsCookie(
+              anonymousUserToken,
+              insightsInitParams?.cookieDuration ||
+                queuedInitParams?.cookieDuration
+            );
+          }
         }
 
         // This updates userToken which is set explicitly by `aa('setUserToken', userToken)`
-        insightsClient('onUserTokenChange', setUserTokenToSearch, {
-          immediate: true,
-        });
+        insightsClient(
+          'onUserTokenChange',
+          (token) => setUserTokenToSearch(token, true),
+          {
+            immediate: true,
+          }
+        );
 
         type InsightsClientWithLocalCredentials = <
           TMethod extends InsightsMethod
         >(
           method: TMethod,
-          payload: InsightsMethodMap[TMethod][0]
+          payload: InsightsMethodMap[TMethod][0][0]
         ) => void;
 
         let insightsClientWithLocalCredentials =
@@ -273,6 +344,21 @@ export function createInsightsMiddleware<
           };
         }
 
+        const viewedObjectIDs = new Set<string>();
+        let lastQueryId: string | undefined;
+        instantSearchInstance.mainHelper!.derivedHelpers[0].on(
+          'result',
+          ({ results }) => {
+            if (
+              results &&
+              (!results.queryID || results.queryID !== lastQueryId)
+            ) {
+              lastQueryId = results.queryID;
+              viewedObjectIDs.clear();
+            }
+          }
+        );
+
         instantSearchInstance.sendEventToInsights = (event: InsightsEvent) => {
           if (onEvent) {
             onEvent(
@@ -280,8 +366,27 @@ export function createInsightsMiddleware<
               insightsClientWithLocalCredentials as TInsightsClient
             );
           } else if (event.insightsMethod) {
+            if (event.insightsMethod === 'viewedObjectIDs') {
+              const payload = event.payload as {
+                objectIDs: string[];
+              };
+              const difference = payload.objectIDs.filter(
+                (objectID) => !viewedObjectIDs.has(objectID)
+              );
+              if (difference.length === 0) {
+                return;
+              }
+              difference.forEach((objectID) => viewedObjectIDs.add(objectID));
+              payload.objectIDs = difference;
+            }
+
             // Source is used to differentiate events sent by instantsearch from those sent manually.
             (event.payload as any).algoliaSource = ['instantsearch'];
+            if ($$automatic) {
+              (event.payload as any).algoliaSource.push(
+                'instantsearch-automatic'
+              );
+            }
             if (event.eventModifier === 'internal') {
               (event.payload as any).algoliaSource.push(
                 'instantsearch-internal'
@@ -325,6 +430,31 @@ See documentation: https://www.algolia.com/doc/guides/building-search-ui/going-f
   };
 }
 
+function getInitialParameters(
+  instantSearchInstance: InstantSearch
+): PlainSearchParameters {
+  // in SSR, the initial state we use in this domain is set on the main index
+  const stateFromInitialResults =
+    instantSearchInstance._initialResults?.[instantSearchInstance.indexName]
+      ?.state || {};
+
+  const stateFromHelper = instantSearchInstance.mainHelper!.state;
+
+  return {
+    userToken: stateFromInitialResults.userToken || stateFromHelper.userToken,
+    clickAnalytics:
+      stateFromInitialResults.clickAnalytics || stateFromHelper.clickAnalytics,
+  };
+}
+
+function saveTokenAsCookie(token: string, cookieDuration?: number) {
+  const MONTH = 30 * 24 * 60 * 60 * 1000;
+  const d = new Date();
+  d.setTime(d.getTime() + (cookieDuration || MONTH * 6));
+  const expires = `expires=${d.toUTCString()}`;
+  document.cookie = `_ALGOLIA=${token};${expires};path=/`;
+}
+
 /**
  * Determines if a given insights `client` supports the optional call to `init`
  * and the ability to set credentials via extra parameters when sending events.
@@ -339,4 +469,16 @@ function isModernInsightsClient(client: InsightsClientWithGlobals): boolean {
   /* eslint-enable @typescript-eslint/naming-convention */
 
   return v3 || v2_6 || v1_10;
+}
+
+/**
+ * While `search-insights` supports both string and number user tokens,
+ * the Search API only accepts strings. This function normalizes the user token.
+ */
+function normalizeUserToken(userToken?: string | number): string | undefined {
+  if (!userToken) {
+    return undefined;
+  }
+
+  return typeof userToken === 'number' ? userToken.toString() : userToken;
 }

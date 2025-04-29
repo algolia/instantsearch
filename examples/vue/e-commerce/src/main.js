@@ -1,5 +1,10 @@
 import Vue from 'vue';
 import InstantSearch from 'vue-instantsearch';
+
+import './Theme.css';
+import './App.css';
+import './App.mobile.css';
+import './widgets/PriceSlider.css';
 import App from './App.vue';
 
 Vue.use(InstantSearch);

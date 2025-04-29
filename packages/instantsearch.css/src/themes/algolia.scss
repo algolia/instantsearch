@@ -23,6 +23,7 @@ a[class^='ais-'] {
 .ais-ClearRefinements,
 .ais-CurrentRefinements,
 .ais-GeoSearch,
+.ais-FrequentlyBoughtTogether,
 .ais-HierarchicalMenu,
 .ais-Hits,
 .ais-Results,
@@ -30,6 +31,7 @@ a[class^='ais-'] {
 .ais-ResultsPerPage,
 .ais-InfiniteHits,
 .ais-InfiniteResults,
+.ais-LookingSimilar,
 .ais-Menu,
 .ais-MenuSelect,
 .ais-NumericMenu,
@@ -41,10 +43,12 @@ a[class^='ais-'] {
 .ais-RangeSlider,
 .ais-RatingMenu,
 .ais-RefinementList,
+.ais-RelatedProducts,
 .ais-SearchBox,
 .ais-RelevantSort,
 .ais-SortBy,
 .ais-Stats,
+.ais-TrendingItems,
 .ais-ToggleRefinement {
   color: $port-gore;
 }
@@ -86,7 +90,8 @@ a[class^='ais-'] {
 .ais-InfiniteResults-loadMore,
 .ais-Menu-showMore,
 .ais-RefinementList-showMore,
-.ais-RelevantSort-button {
+.ais-RelevantSort-button,
+.ais-Carousel-navigation {
   padding: 0.3rem 0.5rem;
   font-size: 0.8rem;
   color: #fff;
@@ -120,6 +125,44 @@ a[class^='ais-'] {
 
 .ais-InfiniteHits-loadPrevious--disabled {
   display: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .ais-Carousel-navigation {
+    display: none;
+  }
+}
+
+.ais-Carousel-navigation,
+.ais-Carousel-navigation[hidden] {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.ais-Carousel:hover .ais-Carousel-navigation:not([hidden]) {
+  opacity: 1;
+  visibility: visible;
+}
+
+.ais-Carousel-list {
+  padding-bottom: 0.5rem;
+  gap: 0.5rem;
+  outline-color: $algolia-blue;
+  outline-offset: 0.5rem;
+  scrollbar-color: $port-gore $ghost;
+  scrollbar-width: thin;
+}
+
+.ais-Carousel-list::-webkit-scrollbar {
+  height: 2px;
+}
+
+.ais-Carousel-list::-webkit-scrollbar-track {
+  background-color: $ghost;
+}
+
+.ais-Carousel-list::-webkit-scrollbar-thumb {
+  background-color: $port-gore;
 }
 
 .ais-CurrentRefinements {
@@ -286,6 +329,10 @@ a[class^='ais-'] {
 .ais-InfiniteHits-list,
 .ais-InfiniteResults-list,
 .ais-Hits-list,
+.ais-FrequentlyBoughtTogether-list,
+.ais-LookingSimilar-list,
+.ais-RelatedProducts-list,
+.ais-TrendingItems-list,
 .ais-Results-list {
   margin-top: -1rem;
   margin-left: -1rem;
@@ -300,6 +347,10 @@ a[class^='ais-'] {
 .ais-InfiniteHits-item,
 .ais-InfiniteResults-item,
 .ais-Hits-item,
+.ais-FrequentlyBoughtTogether-item,
+.ais-LookingSimilar-item,
+.ais-RelatedProducts-item,
+.ais-TrendingItems-item,
 .ais-Results-item {
   margin-top: 1rem;
   margin-left: 1rem;
@@ -320,6 +371,17 @@ a[class^='ais-'] {
 
 .ais-InfiniteHits-loadPrevious {
   margin-bottom: 1rem;
+}
+
+.ais-Hits-banner,
+.ais-InfiniteHits-banner {
+  display: flex;
+  justify-content: center;
+}
+
+.ais-Hits-banner-image
+.ais-InfiniteHits-banner-image {
+  max-width: 100%;
 }
 
 .ais-MenuSelect-select,
@@ -343,8 +405,9 @@ a[class^='ais-'] {
   position: relative;
 
   &.ais-Panel--collapsed {
-    .ais-Panel-body, .ais-Panel-footer{
-      display:none;
+    .ais-Panel-body,
+    .ais-Panel-footer {
+      display: none;
     }
   }
 
@@ -489,17 +552,17 @@ a[class^='ais-'] {
   height: 20px;
   position: relative;
   z-index: 1;
-  background: #FFFFFF;
-  border: 1px solid #46AEDA;
+  background: #ffffff;
+  border: 1px solid #46aeda;
   border-radius: 50%;
   cursor: pointer;
 }
 
 .ais-RangeSlider-tooltip {
   position: absolute;
-  background: #FFFFFF;
+  background: #ffffff;
   top: -22px;
-  font-size: .8em;
+  font-size: 0.8em;
 }
 
 .ais-RangeSlider-value {
@@ -508,12 +571,12 @@ a[class^='ais-'] {
   text-align: center;
   margin-left: -20px;
   padding-top: 15px;
-  font-size: .8em;
+  font-size: 0.8em;
 }
 
 .ais-RangeSlider-marker {
   position: absolute;
-  background: #DDD;
+  background: #ddd;
   margin-left: -1px;
   width: 1px;
   height: 5px;

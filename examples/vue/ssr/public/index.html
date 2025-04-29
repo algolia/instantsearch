@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <link rel="stylesheet" href="https://unpkg.com/instantsearch.css@7.1.0/themes/algolia-min.css">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
+    <!--
+      Do not use @8 in production, use a complete version like x.x.x, see website for latest version:
+      https://www.algolia.com/doc/guides/building-search-ui/installation/js/#load-the-styles
+    -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/instantsearch.css@8/themes/algolia-min.css"
+    />
     <title>{{ title }}</title>
     {{{ renderResourceHints() }}}
     {{{ renderStyles() }}}

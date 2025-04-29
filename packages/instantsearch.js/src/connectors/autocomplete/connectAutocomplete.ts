@@ -42,6 +42,11 @@ export type AutocompleteRenderState = {
     indexName: string;
 
     /**
+     * The id of the index
+     */
+    indexId: string;
+
+    /**
      * The resolved hits from the index matching the query.
      */
     hits: Hit[];
@@ -178,21 +183,23 @@ search.addWidgets([
         const indices = scopedResults.map((scopedResult) => {
           // We need to escape the hits because highlighting
           // exposes HTML tags to the end-user.
-          scopedResult.results.hits = escapeHTML
-            ? escapeHits(scopedResult.results.hits)
-            : scopedResult.results.hits;
+          if (scopedResult.results) {
+            scopedResult.results.hits = escapeHTML
+              ? escapeHits(scopedResult.results.hits)
+              : scopedResult.results.hits;
+          }
 
           const sendEvent = createSendEventForHits({
             instantSearchInstance,
-            index: scopedResult.results.index,
+            helper: scopedResult.helper,
             widgetType: this.$$type,
           });
 
           return {
             indexId: scopedResult.indexId,
-            indexName: scopedResult.results.index,
-            hits: scopedResult.results.hits,
-            results: scopedResult.results,
+            indexName: scopedResult.results?.index || '',
+            hits: scopedResult.results?.hits || [],
+            results: scopedResult.results || ({} as unknown as SearchResults),
             sendEvent,
           };
         });

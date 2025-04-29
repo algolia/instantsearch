@@ -1,12 +1,14 @@
 /* eslint complexity: off */
 
-import type { UiState } from 'instantsearch.js';
 import { history as historyRouter } from 'instantsearch.js/es/lib/routers';
+
 import {
   getFallbackHitsPerPageRoutingValue,
   getFallbackSortByRoutingValue,
   getFallbackRatingsRoutingValue,
 } from './widgets';
+
+import type { UiState } from 'instantsearch.js';
 
 type RouteState = {
   query?: string;
@@ -80,6 +82,7 @@ function getCategoryName(slug: string): string {
 const originalWindowTitle = document.title;
 
 const router = historyRouter<RouteState>({
+  cleanUrlOnDispose: false,
   windowTitle({ category, query }) {
     const queryTitle = query ? `Results for "${query}"` : '';
 

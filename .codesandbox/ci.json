@@ -1,20 +1,21 @@
 {
   "sandboxes": [
-    "instantsearchjs-es-template-pcw1k",
-    "github/algolia/instantsearch.js/tree/templates/react-instantsearch",
-    "/examples/react-hooks/default-theme",
-    "/examples/vue/default-theme"
+    "/examples/js/getting-started",
+    "/examples/react/getting-started",
+    "/examples/react/next-app-router",
+    "/examples/react/next-routing",
+    "/examples/vue/getting-started"
   ],
   "buildCommand": "build --no-private --ignore *-maps --ignore *-native",
   "packages": [
+    "packages/algoliasearch-helper",
     "packages/instantsearch.js",
+    "packages/react-instantsearch",
     "packages/react-instantsearch-core",
-    "packages/react-instantsearch-dom",
-    "packages/react-instantsearch-hooks",
-    "packages/react-instantsearch-hooks-web",
-    "packages/react-instantsearch-hooks-server",
+    "packages/react-instantsearch-nextjs",
     "packages/vue-instantsearch",
-    "packages/instantsearch.css"
+    "packages/instantsearch.css",
+    "packages/instantsearch-ui-components"
   ],
-  "node": "14"
+  "node": "20"
 }

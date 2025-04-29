@@ -1,12 +1,16 @@
 module.exports = (api) => {
   const clean = (x) => x.filter(Boolean);
 
-  const isTest = api.env('test');
-  const isCJS = api.env('cjs');
-  const isES = api.env('es');
-  const isUMD = api.env('umd');
-  const isRollup = api.env('rollup');
-  const isParcel = api.env('parcel');
+  const env = api.env().split(',');
+
+  const isTest = env.includes('test');
+  const isCJS = env.includes('cjs');
+  const isES = env.includes('es');
+  const isUMD = env.includes('umd');
+  const isRollup = env.includes('rollup');
+  const isParcel = env.includes('parcel');
+
+  const disableHoisting = env.includes('disableHoisting');
 
   const modules = isTest || isCJS ? 'commonjs' : false;
   const targets = {};
@@ -27,11 +31,12 @@ module.exports = (api) => {
     '@babel/plugin-proposal-private-methods',
     '@babel/plugin-proposal-private-property-in-object',
     (isCJS || isES || isUMD || isRollup) &&
+      !disableHoisting &&
       '@babel/plugin-transform-react-constant-elements',
     'babel-plugin-transform-react-pure-class-to-function',
     './scripts/babel/wrap-warning-with-dev-check',
     isRollup && 'babel-plugin-transform-react-remove-prop-types',
-    (isCJS || isES) && [
+    (isCJS || isES || isParcel) && [
       'inline-replace-variables',
       {
         __DEV__: {
@@ -51,6 +56,8 @@ module.exports = (api) => {
           'react-dom',
           // `use-sync-external-store` also fails if the paths are incomplete
           'use-sync-external-store',
+          // `next` imports as peer dependencies fail if paths are incomplete
+          'next',
         ],
       },
     ],
@@ -77,6 +84,9 @@ module.exports = (api) => {
             // false positive (babel doesn't know types)
             // this is actually only called on arrays
             'String.prototype.includes',
+
+            // false positive (spread)
+            'Object.getOwnPropertyDescriptors',
           ];
           if (defaultShouldInject && !exclude.includes(name)) {
             throw new Error(
@@ -120,14 +130,20 @@ module.exports = (api) => {
         ],
       },
       {
-        test: 'packages/react-instantsearch-dom-maps',
-        plugins: clean([
-          '@babel/plugin-syntax-dynamic-import',
-          !isRollup && 'babel-plugin-dynamic-import-node',
-        ]),
+        test: 'packages/instantsearch-ui-components',
+        plugins: [
+          [
+            '@babel/plugin-transform-runtime',
+            {
+              corejs: false,
+              helpers: true,
+              regenerator: false,
+            },
+          ],
+        ],
       },
     ],
     // jsx is transpiled, so the comment should no longer be present in the final files
-    shouldPrintComment: (value) => value !== '* @jsx h ',
+    shouldPrintComment: (value) => !value.startsWith('* @jsx'),
   };
 };

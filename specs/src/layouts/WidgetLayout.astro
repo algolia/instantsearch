@@ -1,9 +1,9 @@
 ---
-import { GITHUB_EDIT_URL } from "../config";
-import WidgetContent from "../components/WidgetContent.astro";
-import WidgetsList from "../components/WidgetsList.astro";
-import type { WidgetFrontmatter } from "../types";
-import MainLayout from "./MainLayout.astro";
+import { GITHUB_EDIT_URL } from '../config';
+import WidgetContent from '../components/WidgetContent.astro';
+import WidgetsList from '../components/WidgetsList.astro';
+import type { WidgetFrontmatter } from '../types';
+import MainLayout from './MainLayout.astro';
 
 type Props = {
   frontmatter: WidgetFrontmatter;
@@ -11,8 +11,8 @@ type Props = {
 
 const { frontmatter } = Astro.props;
 const currentPage = Astro.url.pathname;
-const currentFile = `src/pages${currentPage.replace(/\/$/, "")}.md`;
-const githubEditUrl = `${GITHUB_EDIT_URL}/${currentFile}`;
+const currentFile = `${currentPage.replace(/specs/, 'specs/src/pages')}.md`;
+const githubEditUrl = `${GITHUB_EDIT_URL}${currentFile}`;
 ---
 
 <MainLayout title={frontmatter.title}>

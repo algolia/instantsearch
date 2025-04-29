@@ -16,7 +16,7 @@ import type {
   FindAnswersOptions,
   FindAnswersResponse,
   WidgetRenderState,
-  SearchClient,
+  FindAnswers,
 } from '../../types';
 
 type IndexWithAnswers = {
@@ -105,6 +105,9 @@ export type AnswersConnector = Connector<
   AnswersConnectorParams
 >;
 
+/**
+ * @deprecated the answers service is no longer offered, and this widget will be removed in InstantSearch.js v5
+ */
 const connectAnswers: AnswersConnector = function connectAnswers(
   renderFn,
   unmountFn = noop
@@ -137,28 +140,24 @@ const connectAnswers: AnswersConnector = function connectAnswers(
     let isLoading = false;
     const debouncedRender = debounce(renderFn, renderDebounceTime);
 
-    // this does not directly use DebouncedFunction<findAnswers>, since then the generic will disappear
-    let debouncedRefine: DebouncedFunction<
-      ReturnType<NonNullable<SearchClient['initIndex']>> extends {
-        findAnswers: infer FindAnswers;
-      }
-        ? FindAnswers
-        : any
-    >;
+    let debouncedRefine: DebouncedFunction<FindAnswers>;
 
     return {
       $$type: 'ais.answers',
 
       init(initOptions) {
         const { state, instantSearchInstance } = initOptions;
-        const answersIndex = instantSearchInstance.client.initIndex!(
+        if (typeof instantSearchInstance.client.initIndex !== 'function') {
+          throw new Error(withUsage('`algoliasearch` <5 required.'));
+        }
+        const answersIndex = (instantSearchInstance.client.initIndex as any)(
           state.index
         );
         if (!hasFindAnswersMethod(answersIndex)) {
           throw new Error(withUsage('`algoliasearch` >= 4.8.0 required.'));
         }
         debouncedRefine = debounce(
-          answersIndex.findAnswers,
+          answersIndex.findAnswers as unknown as FindAnswers,
           searchDebounceTime
         );
 

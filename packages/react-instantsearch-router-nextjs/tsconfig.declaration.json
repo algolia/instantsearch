@@ -1,0 +1,8 @@
+{
+  "extends": "../../tsconfig.declaration",
+  "exclude": [
+    "**/__tests__/e2e/**/*",
+    "**/src/**/*.test.ts",
+    "**/dist/**/*",
+  ]
+}

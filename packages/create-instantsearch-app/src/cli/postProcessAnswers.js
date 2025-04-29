@@ -59,12 +59,17 @@ async function postProcessAnswers({
   );
 
   return {
+    currentYear: new Date().getFullYear(),
     ...combinedAnswers,
     ...alternativeNames,
     libraryVersion,
     template: templatePath,
     installation: optionsFromArguments.installation,
-    currentYear: new Date().getFullYear(),
+    attributesToDisplay:
+      Array.isArray(combinedAnswers.attributesToDisplay) &&
+      combinedAnswers.attributesToDisplay.filter(
+        (attribute) => attribute !== combinedAnswers.imageAttribute
+      ),
     attributesForFaceting:
       Array.isArray(combinedAnswers.attributesForFaceting) &&
       combinedAnswers.attributesForFaceting.filter(
@@ -76,7 +81,10 @@ async function postProcessAnswers({
         combinedAnswers.attributesForFaceting.includes('ais.dynamicWidgets'),
       insights:
         Boolean(templateConfig.flags && templateConfig.flags.insights) &&
-        semver.satisfies(libraryVersion, templateConfig.flags.insights),
+        combinedAnswers.enableInsights === true,
+      autocomplete:
+        Boolean(templateConfig.flags && templateConfig.flags.autocomplete) &&
+        combinedAnswers.searchInputType === 'autocomplete',
     },
   };
 }

@@ -12,7 +12,7 @@ const connectHits =
     $$type: 'ais.hits',
     init() {},
     render({ results, instantSearchInstance }) {
-      const hits = results.hits;
+      const hits = results?.hits;
       renderFn({ hits, results, instantSearchInstance, widgetParams }, false);
     },
     dispose() {

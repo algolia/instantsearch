@@ -1,9 +1,11 @@
 /* eslint-disable jest/no-conditional-expect */
+const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
-const walkSync = require('walk-sync');
+
 const { toMatchImageSnapshot } = require('jest-image-snapshot');
+const walkSync = require('walk-sync');
+
 const { getEarliestLibraryVersion } = require('../src/utils');
 
 expect.extend({ toMatchImageSnapshot });
@@ -51,8 +53,11 @@ describe('Templates', () => {
           indexName: 'indexName',
           searchPlaceholder: 'Search placeholder',
           attributesToDisplay: ['attribute1', 'attribute2'],
+          imageAttribute: 'imageAttribute',
           attributesForFaceting: ['ais.dynamicWidgets', 'facet1', 'facet2'],
           organization: 'algolia',
+          enableInsights: true,
+          currentYear: '2020',
         };
 
         configFilePath = `${temporaryDirectory}/${templateConfig.appName}.config.json`;

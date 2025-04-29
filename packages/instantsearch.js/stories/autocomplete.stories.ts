@@ -1,6 +1,8 @@
 import { storiesOf } from '@storybook/html';
+import { html, render } from 'htm/preact';
 
 import { withHits } from '../.storybook/decorators';
+import { Highlight } from '../src/helpers/components';
 
 storiesOf('Basics/Autocomplete', module).add(
   'default',
@@ -11,41 +13,39 @@ storiesOf('Basics/Autocomplete', module).add(
 
     const customAutocomplete = instantsearch.connectors.connectAutocomplete<{
       container: HTMLElement;
-    }>((renderOptions, isFirstRender) => {
+    }>((renderOptions) => {
       const { indices, currentRefinement, refine, widgetParams } =
         renderOptions;
 
-      if (isFirstRender) {
-        const input = document.createElement('input');
-        input.classList.add('ais-SearchBox-input');
-        const list = document.createElement('ul');
-
-        input.addEventListener('input', (event: any) => {
-          refine(event.currentTarget.value);
-        });
-
-        widgetParams.container.appendChild(input);
-        widgetParams.container.appendChild(list);
-      }
-
-      widgetParams.container.querySelector('input')!.value = currentRefinement;
-      widgetParams.container.querySelector('ul')!.innerHTML = indices
-        .map(
-          ({ indexName, hits }) => `
-<li>
-  Index: <strong>${indexName}</strong>
-  <ol>
-    ${hits
-      .map(
-        (hit) =>
-          `<li>${instantsearch.highlight({ attribute: 'name', hit })}</li>`
-      )
-      .join('')}
-  </ol>
-</li>
-`
-        )
-        .join('');
+      render(
+        html`<div>
+          <input
+            class="ais-SearchBox-input"
+            value=${currentRefinement}
+            onInput=${(event: any) => {
+              refine(event.currentTarget.value);
+            }}
+          />
+          <ul>
+            ${indices.map(
+              ({ indexName, hits }) => html`
+                <li>
+                  Index: <strong>${indexName}</strong>
+                  <ol>
+                    ${hits.map(
+                      (hit) =>
+                        html`<li>
+                          <${Highlight} attribute="title" hit=${hit} />
+                        </li>`
+                    )}
+                  </ol>
+                </li>
+              `
+            )}
+          </ul>
+        </div>`,
+        widgetParams.container
+      );
     });
 
     search.addWidgets([

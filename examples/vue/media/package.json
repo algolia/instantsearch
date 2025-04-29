@@ -1,32 +1,24 @@
 {
   "name": "example-vue-instantsearch-media",
-  "version": "0.19.0",
+  "version": "0.75.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "website:examples": "vue-cli-service build --dest ../../../website/examples/vue/media"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "website:examples": "vite build --outDir ../../../website/examples/vue/media --base /examples/vue/media"
   },
   "dependencies": {
-    "algoliasearch": "4.14.3",
-    "core-js": "2",
-    "instantsearch.js": "4.56.3",
+    "algoliasearch": "5.1.1",
+    "instantsearch.js": "4.78.1",
     "vue": "2.7.14",
-    "vue-instantsearch": "4.10.3"
+    "vue-instantsearch": "4.20.6"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "3.12.1",
-    "@vue/cli-service": "3.12.1",
+    "@vitejs/plugin-vue2": "2.3.1",
+    "vite": "5.0.7",
+    "vite-plugin-commonjs": "0.10.0",
     "vue-template-compiler": "2.7.14"
   },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ]
+  "browserslist": "Firefox 127, Chrome 125, IE 11"
 }

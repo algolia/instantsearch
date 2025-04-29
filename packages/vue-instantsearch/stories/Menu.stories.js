@@ -1,5 +1,3 @@
-import { storiesOf } from '@storybook/vue';
-import { previewWrapper } from './utils';
 import {
   withKnobs,
   object,
@@ -7,6 +5,9 @@ import {
   number,
   boolean,
 } from '@storybook/addon-knobs';
+import { storiesOf } from '@storybook/vue';
+
+import { previewWrapper } from './utils';
 
 storiesOf('ais-menu', module)
   .addDecorator(previewWrapper())

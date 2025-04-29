@@ -3,26 +3,27 @@
  */
 
 /* eslint-disable jest/no-done-callback */
-import { mount, createSSRApp } from '../../../test/utils';
-import Router from 'vue-router';
-import Vuex from 'vuex';
-import { createStore } from 'vuex4';
-import { createServerRootMixin } from '../createServerRootMixin';
-import InstantSearchSsr from '../../components/InstantSearchSsr';
-import Configure from '../../components/Configure';
-import SearchBox from '../../components/SearchBox.vue';
-import Index from '../../components/Index';
-import { createWidgetMixin } from '../../mixins/widget';
-import { createFakeClient } from '../testutils/client';
-import { createSerializedState } from '../testutils/helper';
-import { isVue3, isVue2, Vue2, renderCompat } from '../vue-compat';
 import {
   AlgoliaSearchHelper,
   SearchParameters,
   SearchResults,
 } from 'algoliasearch-helper';
-import { createI18n } from 'vue-i18n-vue3';
 import VueI18n from 'vue-i18n';
+import { createI18n } from 'vue-i18n-vue3';
+import Router from 'vue-router';
+import Vuex from 'vuex';
+import { createStore } from 'vuex4';
+
+import { mount, createSSRApp } from '../../../test/utils';
+import Configure from '../../components/Configure';
+import Index from '../../components/Index';
+import InstantSearchSsr from '../../components/InstantSearchSsr';
+import SearchBox from '../../components/SearchBox.vue';
+import { createWidgetMixin } from '../../mixins/widget';
+import { createServerRootMixin } from '../createServerRootMixin';
+import { createFakeClient } from '../testutils/client';
+import { createSerializedState } from '../testutils/helper';
+import { isVue3, isVue2, Vue2, renderCompat } from '../vue-compat';
 
 jest.unmock('instantsearch.js/es');
 
@@ -261,10 +262,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
           {
             "indexName": "hello",
             "params": {
-              "facets": [],
               "hitsPerPage": 100,
               "query": "",
-              "tagFilters": "",
             },
           },
         ]
@@ -316,6 +315,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
               });
 
               expect(state.hello).toEqual({
+                requestParams: [
+                  {
+                    hitsPerPage: 100,
+                    query: '',
+                  },
+                ],
                 results: [
                   {
                     query: '',
@@ -339,6 +344,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
 
               // Parent's widgets state should not be merged into nested index state
               expect(state.nestedIndex).toEqual({
+                requestParams: [
+                  {
+                    hitsPerPage: 100,
+                    query: '',
+                  },
+                ],
                 results: [
                   {
                     query: '',
@@ -690,7 +701,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
                 })
                 // jest throws an error we need to catch, since stuck in the flow
                 .catch((e) => {
-                  done.fail(e);
+                  done(e);
                 })
             );
           },
@@ -866,10 +877,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
             {
               "indexName": "hello",
               "params": {
-                "facets": [],
                 "hitsPerPage": 100,
                 "query": "",
-                "tagFilters": "",
               },
             },
           ]
@@ -942,10 +951,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
             {
               "indexName": "hello",
               "params": {
-                "facets": [],
                 "hitsPerPage": 100,
                 "query": "",
-                "tagFilters": "",
               },
             },
           ]

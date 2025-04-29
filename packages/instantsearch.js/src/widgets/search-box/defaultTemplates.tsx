@@ -31,8 +31,13 @@ const defaultTemplate: SearchBoxComponentTemplates = {
     );
   },
   loadingIndicator({ cssClasses }) {
+    /* eslint-disable react/no-unknown-property */
+    // Preact supports kebab case attributes, and using camel case would
+    // require using `preact/compat`.
+    // @TODO: reconsider using the `react` ESLint preset
     return (
       <svg
+        aria-label="Results are loading"
         className={cssClasses.loadingIcon}
         width="16"
         height="16"
@@ -40,9 +45,9 @@ const defaultTemplate: SearchBoxComponentTemplates = {
         stroke="#444"
         aria-hidden="true"
       >
-        <g fill="none" fillRule="evenodd">
-          <g transform="translate(1 1)" strokeWidth="2">
-            <circle strokeOpacity=".5" cx="18" cy="18" r="18" />
+        <g fill="none" fill-rule="evenodd">
+          <g transform="translate(1 1)" stroke-width="2">
+            <circle stroke-opacity=".5" cx="18" cy="18" r="18" />
             <path d="M36 18c0-9.94-8.06-18-18-18">
               <animateTransform
                 attributeName="transform"
@@ -57,6 +62,7 @@ const defaultTemplate: SearchBoxComponentTemplates = {
         </g>
       </svg>
     );
+    /* eslint-enable react/no-unknown-property */
   },
 };
 

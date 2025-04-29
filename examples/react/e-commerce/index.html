@@ -8,24 +8,32 @@
     />
     <meta name="theme-color" content="#e2a400" />
 
-    <link rel="manifest" href="./assets/manifest.webmanifest" />
+    <base href="/examples/react/e-commerce/" />
+
     <link rel="shortcut icon" href="./assets/favicon.png" />
+
+    <link rel="manifest" href="./assets/manifest.webmanifest" />
 
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css?family=Hind:400,600|Open+Sans:300,400,700&display=swap"
     />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/instantsearch.css@7.3.1/themes/reset-min.css"
-    />
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=default%2CArray.prototype.find%2CArray.prototype.includes%2CPromise%2CArray.prototype.findIndex%2CObject.assign%2CObject.entries"></script>
-    <title>E-commerce demo | Algolia</title>
+
+    <!--
+      This ensures the generated CSS asset is not inserted before
+      the <base href> tag.
+      See: https://github.com/parcel-bundler/parcel/issues/4882#issuecomment-872879634
+    -->
+    <script></script>
+
+    <title>React InstantSearch - e-commerce</title>
   </head>
 
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript> You need to enable JavaScript to run this app. </noscript>
 
     <div id="root"></div>
+
+    <script type="module" src="index.tsx"></script>
   </body>
 </html>

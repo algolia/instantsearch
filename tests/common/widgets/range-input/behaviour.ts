@@ -1,14 +1,18 @@
-import { wait } from '@instantsearch/testutils';
 import {
   createSearchClient,
   createMultiSearchResponse,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import type { RangeInputSetup } from '.';
-import type { Act } from '../../common';
+import { wait } from '@instantsearch/testutils';
 import userEvent from '@testing-library/user-event';
 
-export function createBehaviourTests(setup: RangeInputSetup, act: Act) {
+import type { RangeInputWidgetSetup } from '.';
+import type { TestOptions } from '../../common';
+
+export function createBehaviourTests(
+  setup: RangeInputWidgetSetup,
+  { act }: Required<TestOptions>
+) {
   describe('behaviour', () => {
     test('allows input of values containing a dot decimal separator', async () => {
       const delay = 100;

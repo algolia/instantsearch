@@ -1,5 +1,5 @@
-const algoliasearch = require('algoliasearch');
-const { createInMemoryCache } = require('@algolia/cache-in-memory');
+const { createMemoryCache } = require('@algolia/client-common');
+const { algoliasearch } = require('algoliasearch');
 
 const clients = new Map();
 function getClient(appId, apiKey) {
@@ -7,8 +7,8 @@ function getClient(appId, apiKey) {
   let client = clients.get(key);
   if (!client) {
     client = algoliasearch(appId, apiKey, {
-      responsesCache: createInMemoryCache(),
-      requestsCache: createInMemoryCache(),
+      responsesCache: createMemoryCache(),
+      requestsCache: createMemoryCache(),
     });
 
     clients.set(key, client);

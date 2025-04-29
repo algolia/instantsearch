@@ -191,8 +191,8 @@ const connectClearRefinements: ClearRefinementsConnector =
             );
           };
 
-          connectorState.createURL = () =>
-            createURL(
+          connectorState.createURL = () => {
+            return createURL(
               mergeSearchParameters(
                 ...connectorState.attributesToClear.map(
                   ({ helper: indexHelper, items }) => {
@@ -204,6 +204,7 @@ const connectClearRefinements: ClearRefinementsConnector =
                 )
               )
             );
+          };
 
           const canRefine = connectorState.attributesToClear.some(
             (attributeToClear) => attributeToClear.items.length > 0
@@ -232,7 +233,7 @@ function getAttributesToClear({
   includedAttributes: string[];
   excludedAttributes: string[];
   transformItems: TransformItems<string>;
-  results: SearchResults | undefined;
+  results: SearchResults | undefined | null;
 }): AttributesToClear {
   const includesQuery =
     includedAttributes.indexOf('query') !== -1 ||

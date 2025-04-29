@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { cx } from '@algolia/ui-components-shared';
+import { cx } from 'instantsearch-ui-components';
 import { h } from 'preact';
 
 export type SelectorOption = {
@@ -19,6 +19,7 @@ export type SelectorProps = {
   currentValue?: string | number;
   options: SelectorOption[];
   setValue: (value: string) => void;
+  ariaLabel?: string;
 };
 
 function Selector({
@@ -26,12 +27,14 @@ function Selector({
   options,
   cssClasses,
   setValue,
+  ariaLabel,
 }: SelectorProps) {
   return (
     <select
       className={cx(cssClasses.select)}
       onChange={(event) => setValue((event.target as HTMLSelectElement).value)}
       value={`${currentValue}`}
+      aria-label={ariaLabel}
     >
       {options.map((option) => (
         <option

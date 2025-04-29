@@ -6,11 +6,10 @@
 
 Hello and welcome to the contributing guide for InstantSearch. Thanks for considering participating in our project 🙇
 
-If this guide does not contain what you are looking for and thus prevents you from contributing, don't hesitate to leave a message on the [community forum](https://discourse.algolia.com/) or to [open an issue](https://github.com/algolia/instantsearch.js/issues).
+If this guide does not contain what you are looking for and thus prevents you from contributing, don't hesitate to leave a message on the [community forum](https://discourse.algolia.com/) or to [open an issue](https://github.com/algolia/instantsearch/issues).
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 
 - [Reporting an issue](#reporting-an-issue)
 - [The code contribution process](#the-code-contribution-process)
@@ -36,13 +35,21 @@ If this guide does not contain what you are looking for and thus prevents you fr
 
 Opening an issue is very effective way to contribute because many users might also be impacted. We'll make sure to fix it quickly if it's technically feasible and doesn't have important side effects for other users.
 
-Before reporting an issue, first check that there is not an already open issue for the same topic using the [issues page](https://github.com/algolia/instantsearch.js/issues). Don't hesitate to thumb up an issue that corresponds to the problem you have.
+Before reporting an issue, first check that there is not an already open issue for the same topic using the [issues page](https://github.com/algolia/instantsearch/issues). Don't hesitate to thumb up an issue that corresponds to the problem you have.
 
-Another element that will help us go faster at solving the issue is to provide a reproducible test case. We often recommend to [use this CodeSandbox template](https://codesandbox.io/s/github/algolia/instantsearch-templates/tree/master/src/InstantSearch.js).
+Another element that will help us go faster at solving the issue is to provide a reproducible test case. We often recommend to use one of the following CodeSandbox templates:
+
+<table>
+  <tr>
+    <td><a href="https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/instantsearch.js" target="_blank">InstantSearch.js</a></td>
+    <td><a href="https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/react-instantsearch" target="_blank">React InstantSearch</a></td>
+    <td><a href="https://codesandbox.io/s/github/algolia/instantsearch/tree/templates/vue-instantsearch" target="_blank">Vue InstantSearch</a></td>
+  </tr>
+</table>
 
 ## The code contribution process
 
-InstantSearch.js is developed in TypeScript.
+InstantSearch is developed in TypeScript.
 
 For any code contribution, you need to:
 
@@ -61,7 +68,7 @@ Then:
 
 After you create a pull request, a bot will comment with a link to a development version of the website.
 
-You will find a playground for the widgets, for example: https://deploy-preview-3376--instantsearchjs.netlify.com/stories/
+You will find a playground for the widgets, for example: <https://deploy-preview-6609--instantsearchjs.netlify.app/stories/js/>
 
 ## Commit conventions
 
@@ -105,12 +112,28 @@ _Note that no new features will be developed or backported for the `vX` branches
 
 To run this project, you will need:
 
-- Node.js ≥ 14 (current stable version) – [nvm](https://github.com/creationix/nvm#install-script) is recommended
+- Node.js ≥ 20 (current stable version) – [nvm](https://github.com/creationix/nvm#install-script) is recommended
 - [Yarn](https://yarnpkg.com)
 
 ## Launch the dev environment
 
-We use [Storybook](https://github.com/storybooks/storybook) to create stories for widgets.
+Each flavor has a **getting-started** example which can be used for development purposes.
+
+First, build the libraries and watch changes:
+
+```sh
+yarn watch:es
+```
+
+Then start the server of the relevant example:
+
+```sh
+yarn --cwd examples/js/getting-started start
+```
+
+Finally, go to the URL displayed on the terminal (generally http://localhost:3000) to view the example in a browser.
+
+We also use [Storybook](https://github.com/storybooks/storybook) to create stories for widgets:
 
 ```sh
 yarn
@@ -127,17 +150,11 @@ Here are the main files and folders of the project.
 ```
 ▸ examples/                            << Examples, grouped per flavor
 ▸ packages/                            << Packages of the project
-  ▸ react-instantsearch/               << Bundled React InstantSearch library
-  ▸ react-instantsearch-core/          << Runtime-independent React InstantSearch version
-  ▸ react-instantsearch-dom/           << DOM-specific React InstantSearch version
-  ▸ react-instantsearch-native/        << React Native-specific InstantSearch version
-  ▸ react-instantsearch-dom-maps/      << DOM-specific React InstantSearch version with Google Maps
-
-  ▸ react-instantsearch-hooks/        << React InstantSearch Hooks library
-  ▸ react-instantsearch-hooks-web/    << DOM-specific React InstantSearch Hooks version
-  ▸ react-instantsearch-hooks-server/ << Server-specific React InstantSearch Hooks version
-
-  ▸ instantsearch.js/                  << The InstantSearch.js library
+  ▸ instantsearch-ui-components/         << Shared UI components library across all flavors
+  ▸ react-instantsearch/                 << Bundled React InstantSearch library
+  ▸ react-instantsearch-core/            << Runtime-independent React InstantSearch version
+  ▸ instantsearch.js/                    << The InstantSearch.js library
+  ▸ vue-instantsearch/                   << Bundled Vue InstantSearch library
 ▸ tests/                               << The test utilites
   ▸ mocks/                             << Fake versions of the API, for testing
   ▸ utils/                             << Global utilities for the tests
@@ -163,14 +180,15 @@ This monorepo has as goal to be used for all InstantSearch flavors and tools. To
 8. replace commit messages which refer to issues/PRs with #xxx by also referencing the original repo: `git filter-branch --msg-filter 'sed -E "s/(#[[:digit:]]+)/algolia\/myproject\1/"' master..feat/import-myproject`
 9. make any changes necessary to make the project work in the monorepo and commit those
 10. make a pull request and _merge using rebase or merge_ (if you merge using squash the history will be lost)
+11. manually tag and push the latest release commit from the imported project to let shipjs know which version to take into account during the next release process
 
 ## Tests
 
 The general philosophy of testing in InstantSearch follows [Testing Library's guiding principles](https://testing-library.com/docs/guiding-principles):
 
->The more your tests resemble the way your software is used, the more confidence they can give you.
+> The more your tests resemble the way your software is used, the more confidence they can give you.
 
-We rely on [Jest](https://jestjs.io/) for unit tests on all flavors of InstantSearch. In addition, [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) is used to test interactions in React InstantSearch Hooks.
+We rely on [Jest](https://jestjs.io/) for unit tests on all flavors of InstantSearch. In addition, [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) is used to test interactions in React InstantSearch.
 
 ### How to write a test
 
@@ -220,7 +238,9 @@ fireEvent.click(button);
 // Don't manually dispatch with lower-level APIs or create custom-made events,
 // the browser might do other things you don't see or know about.
 fireEvent(button, new MouseEvent('click', { bubbles: true, cancelable: true }));
-button.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+button.dispatchEvent(
+  new MouseEvent('click', { bubbles: true, cancelable: true })
+);
 ```
 
 **✅ Correct**
@@ -290,8 +310,7 @@ await waitFor(() => {
 });
 ```
 
-> **Note**
->Sometimes, a second (focused) snapshot is clearer and shorter than a series of isolated assertions. Use your judgment to determine what will make the test the tersest and easiest to understand.
+> **Note** Sometimes, a second (focused) snapshot is clearer and shorter than a series of isolated assertions. Use your judgment to determine what will make the test the tersest and easiest to understand.
 
 ### Testing a widget
 
@@ -300,6 +319,7 @@ Widgets in InstantSearch are building blocks that have a predefined behavior and
 When testing a widget, you should focus on **user interactions, rendering, and possibly side-effects**.
 
 For example, you should test:
+
 - The rendering of a widget after passing all possible props.
 - The rendering of a widget or its side-effects (e.g., URL updates when used with routing) after interacting with it.
 
@@ -344,12 +364,12 @@ yarn test:e2e:local
 ```
 
 To run them on Sauce Labs:
+
 ```sh
 yarn test:e2e:saucelabs
 ```
 
-> **Note**
->Make sure to set up Sauce Labs credentials with the `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY` environment variables.
+> **Note** Make sure to set up Sauce Labs credentials with the `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY` environment variables.
 
 For more info, including how to write end-to-end tests, check the `tests/e2e` [CONTRIBUTING](./tests/e2e/CONTRIBUTING.md) and [README](./tests/e2e/README.md) files.
 

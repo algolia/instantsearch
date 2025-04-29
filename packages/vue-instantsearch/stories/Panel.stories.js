@@ -1,4 +1,5 @@
 import { storiesOf } from '@storybook/vue';
+
 import { previewWrapper } from './utils';
 
 storiesOf('ais-panel', module)
@@ -7,9 +8,10 @@ storiesOf('ais-panel', module)
     template: `
       <ais-panel>
         <template v-slot:header>Brand</template>
-        <ais-refinement-list attribute="brand" />
+        This is the body of the Panel.
+        <template v-slot:footer>Footer</template>
       </ais-panel>
-  `,
+    `,
   }))
   .add('text content', () => ({
     template: `

@@ -1,5 +1,5 @@
 import { storiesOf } from '@storybook/vue';
-import algoliasearch from 'algoliasearch';
+import { liteClient as algoliasearch } from 'algoliasearch/lite';
 
 storiesOf('ais-configure-related-items', module).add('default', () => ({
   template: `

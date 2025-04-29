@@ -1,22 +1,28 @@
-import type { RangeInputWidget } from 'instantsearch.js/es/widgets/range-input/range-input';
-import type { TestSetup, Act } from '../../common';
 import { fakeAct } from '../../common';
+
 import { createBehaviourTests } from './behaviour';
+import { createLinksTests } from './links';
+import { createOptionsTests } from './options';
+
+import type { TestOptions, TestSetup } from '../../common';
+import type { RangeInputWidget } from 'instantsearch.js/es/widgets/range-input/range-input';
 
 type WidgetParams = Parameters<RangeInputWidget>[0];
-export type RangeInputSetup = TestSetup<{
+export type RangeInputWidgetSetup = TestSetup<{
   widgetParams: Omit<WidgetParams, 'container'>;
 }>;
 
-export function createRangeInputTests(
-  setup: RangeInputSetup,
-  act: Act = fakeAct
+export function createRangeInputWidgetTests(
+  setup: RangeInputWidgetSetup,
+  { act = fakeAct, skippedTests = {} }: TestOptions = {}
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
-  describe('RangeInput common tests', () => {
-    createBehaviourTests(setup, act);
+  describe('RangeInput widget common tests', () => {
+    createBehaviourTests(setup, { act, skippedTests });
+    createOptionsTests(setup, { act, skippedTests });
+    createLinksTests(setup, { act, skippedTests });
   });
 }

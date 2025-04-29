@@ -1,6 +1,7 @@
-import { createWidgetMixin } from '../mixins/widget';
 import { connectDynamicWidgets } from 'instantsearch.js/es/connectors';
+
 import { createSuitMixin } from '../mixins/suit';
+import { createWidgetMixin } from '../mixins/widget';
 import { _objectSpread } from '../util/polyfills';
 import { isVue3, renderCompat, getDefaultSlot } from '../util/vue-compat';
 

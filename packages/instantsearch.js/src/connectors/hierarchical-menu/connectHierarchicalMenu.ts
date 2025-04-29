@@ -16,6 +16,7 @@ import type {
   Widget,
   SortBy,
   WidgetRenderState,
+  IndexUiState,
 } from '../../types';
 import type { SearchResults } from 'algoliasearch-helper';
 
@@ -321,13 +322,16 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
           let canToggleShowMore = false;
 
           // Bind createURL to this specific attribute
-          function _createURL(facetValue: string) {
-            return createURL(
-              state
-                .resetPage()
-                .toggleFacetRefinement(hierarchicalFacetName, facetValue)
+          const _createURL = (facetValue: string) => {
+            return createURL((uiState) =>
+              this.getWidgetUiState(uiState, {
+                searchParameters: state
+                  .resetPage()
+                  .toggleFacetRefinement(hierarchicalFacetName, facetValue),
+                helper,
+              })
             );
-          }
+          };
 
           if (!sendEvent) {
             sendEvent = createSendEventForFacet({
@@ -408,17 +412,16 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
             hierarchicalFacetName
           );
 
-          if (!path.length) {
-            return uiState;
-          }
-
-          return {
-            ...uiState,
-            hierarchicalMenu: {
-              ...uiState.hierarchicalMenu,
-              [hierarchicalFacetName]: path,
+          return removeEmptyRefinementsFromUiState(
+            {
+              ...uiState,
+              hierarchicalMenu: {
+                ...uiState.hierarchicalMenu,
+                [hierarchicalFacetName]: path,
+              },
             },
-          };
+            hierarchicalFacetName
+          );
         },
 
         getWidgetSearchParameters(searchParameters, { uiState }) {
@@ -493,5 +496,27 @@ As this is not supported, please make sure to remove this other widget or this H
       };
     };
   };
+
+function removeEmptyRefinementsFromUiState(
+  indexUiState: IndexUiState,
+  attribute: string
+): IndexUiState {
+  if (!indexUiState.hierarchicalMenu) {
+    return indexUiState;
+  }
+
+  if (
+    !indexUiState.hierarchicalMenu[attribute] ||
+    indexUiState.hierarchicalMenu[attribute].length === 0
+  ) {
+    delete indexUiState.hierarchicalMenu[attribute];
+  }
+
+  if (Object.keys(indexUiState.hierarchicalMenu).length === 0) {
+    delete indexUiState.hierarchicalMenu;
+  }
+
+  return indexUiState;
+}
 
 export default connectHierarchicalMenu;

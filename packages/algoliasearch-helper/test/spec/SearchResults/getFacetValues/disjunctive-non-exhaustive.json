@@ -1,0 +1,68 @@
+{
+  "content": {
+    "results": [
+      {
+        "hits": [],
+        "nbHits": 1000,
+        "page": 0,
+        "nbPages": 20,
+        "hitsPerPage": 0,
+        "processingTimeMS": 1,
+        "facets": {
+          "brand": {
+            "Apple": 1000,
+            "Samsung": 1
+          }
+        },
+        "exhaustiveFacetsCount": true,
+        "query": "",
+        "params": "query=&maxValuesPerFacet=3&page=0&facets=%5B%22brand%22%5D&tagFilters=&facetFilters=%5B%5B%22brand%3AApple%22%5D%5D",
+        "index": "instant_search"
+      },
+      {
+        "hits": [
+          {
+            "objectID": "1696302"
+          },
+          {
+            "objectID": "1696301"
+          }
+        ],
+        "nbHits": 10000,
+        "page": 0,
+        "nbPages": 1000,
+        "hitsPerPage": 1,
+        "processingTimeMS": 1,
+        "facets": {
+          "brand": {
+            "Insignia™": 551,
+            "Samsung": 511,
+            "Apple": 1
+          }
+        },
+        "exhaustiveFacetsCount": false,
+        "query": "",
+        "params": "query=&maxValuesPerFacet=3&page=0&hitsPerPage=1&attributesToRetrieve=%5B%5D&attributesToHighlight=%5B%5D&attributesToSnippet=%5B%5D&tagFilters=&facets=brand",
+        "index": "instant_search"
+      }
+    ]
+  },
+  "state": {
+    "index": "instant_search",
+    "query": "",
+    "facets": [],
+    "disjunctiveFacets": ["brand"],
+    "hierarchicalFacets": [],
+    "facetsRefinements": {},
+    "facetsExcludes": {},
+    "disjunctiveFacetsRefinements": {
+      "brand": ["Apple"]
+    },
+    "numericRefinements": {},
+    "tagRefinements": [],
+    "hierarchicalFacetsRefinements": {},
+    "maxValuesPerFacet": 3,
+    "page": 0
+  },
+  "error": null
+}

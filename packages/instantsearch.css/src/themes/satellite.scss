@@ -116,7 +116,8 @@ $break-medium: 767px;
 .ais-GeoSearch-redo,
 .ais-GeoSearch-reset,
 .ais-VoiceSearch-button,
-.ais-RelevantSort-button {
+.ais-RelevantSort-button,
+.ais-Carousel-navigation {
   appearance: none;
   background-color: $white;
   background-image: linear-gradient(-180deg, $white, $grey50);
@@ -158,11 +159,14 @@ $break-medium: 767px;
 .ais-InfiniteHits-loadMore:hover,
 .ais-RangeInput-submit:hover,
 .ais-InfiniteHits-loadPrevious:hover,
-.ais-Pagination-item:not(.ais-Pagination-item--selected):not(.ais-Pagination-item--disabled)
+.ais-Pagination-item:not(.ais-Pagination-item--selected):not(
+    .ais-Pagination-item--disabled
+  )
   .ais-Pagination-link:hover,
 .ais-GeoSearch-redo:hover,
 .ais-GeoSearch-reset:hover,
-.ais-VoiceSearch-button:hover {
+.ais-VoiceSearch-button:hover,
+.ais-Carousel-navigation:hover {
   background-image: linear-gradient(-180deg, $white, $grey100);
   border-color: $grey200;
 }
@@ -176,7 +180,8 @@ $break-medium: 767px;
 .ais-InfiniteHits-loadPrevious:focus,
 .ais-GeoSearch-redo:focus,
 .ais-GeoSearch-reset:focus,
-.ais-VoiceSearch-button:focus {
+.ais-VoiceSearch-button:focus,
+.ais-Carousel-navigation:focus {
   background-image: linear-gradient(-180deg, $white, $grey100);
   border-color: $nebula600;
   box-shadow: $nebula600 0 0 0 1px, rgba($grey900, 0.05) 0 2px 0 1px;
@@ -193,7 +198,8 @@ $break-medium: 767px;
 .ais-Pagination-link:active,
 .ais-GeoSearch-redo:active,
 .ais-GeoSearch-reset:active,
-.ais-VoiceSearch-button:active {
+.ais-VoiceSearch-button:active,
+.ais-Carousel-navigation:active {
   border-color: $grey200;
   box-shadow: rgba($grey500, 0.4) 0 1px 4px 0 inset,
     rgba($grey500, 0.4) 0 1px 1px 0 inset, rgba($grey900, 0.05) 0 1px 0 0;
@@ -603,11 +609,16 @@ $break-medium: 767px;
 }
 
 /**
- * Hits
+ * Hits, InfiniteHits, FrequentlyBoughtTogether, LookingSimilar,
+ * RelatedProducts and TrendingItems
  */
 
 .ais-Hits-item,
-.ais-InfiniteHits-item {
+.ais-InfiniteHits-item,
+.ais-FrequentlyBoughtTogether-item,
+.ais-LookingSimilar-item,
+.ais-RelatedProducts-item,
+.ais-TrendingItems-item {
   align-items: center;
   background: $white;
   box-shadow: 0 0 0 1px rgba($grey900, 0.05), 0 1px 3px 0 rgba($grey900, 0.15);
@@ -619,17 +630,29 @@ $break-medium: 767px;
 }
 
 .ais-Hits-item:first-of-type,
-.ais-InfiniteHits-item:first-of-type {
+.ais-InfiniteHits-item:first-of-type,
+.ais-FrequentlyBoughtTogether-item:first-of-type,
+.ais-LookingSimilar-item:first-of-type,
+.ais-RelatedProducts-item:first-of-type,
+.ais-TrendingItems-item:first-of-type {
   border-radius: 3px 3px 0 0;
 }
 
 .ais-Hits-item:last-of-type,
-.ais-InfiniteHits-item:last-of-type {
+.ais-InfiniteHits-item:last-of-type,
+.ais-FrequentlyBoughtTogether-item:last-of-type,
+.ais-LookingSimilar-item:last-of-type,
+.ais-RelatedProducts-item:last-of-type,
+.ais-TrendingItems-item:last-of-type {
   border-radius: 0 0 3px 3px;
 }
 
 .ais-Hits-item:only-of-type,
-.ais-InfiniteHits-item:only-of-type {
+.ais-InfiniteHits-item:only-of-type,
+.ais-FrequentlyBoughtTogether-item:only-of-type,
+.ais-LookingSimilar-item:only-of-type,
+.ais-RelatedProducts-item:only-of-type,
+.ais-TrendingItems-item:only-of-type {
   border-radius: 3px;
 }
 
@@ -637,6 +660,17 @@ $break-medium: 767px;
 .ais-InfiniteHits-loadPrevious {
   display: flex;
   margin: 1rem auto;
+}
+
+.ais-Hits-banner,
+.ais-InfiniteHits-banner {
+  display: flex;
+  justify-content: center;
+}
+
+.ais-Hits-banner-image,
+.ais-InfiniteHits-banner-image {
+  max-width: 100%;
 }
 
 /**
@@ -1078,4 +1112,46 @@ $break-medium: 767px;
     // more readable.
     font-size: 1rem;
   }
+}
+
+////////////////
+/// Carousel
+////////////////
+
+@media (hover: none) and (pointer: coarse) {
+  .ais-Carousel-navigation {
+    display: none;
+  }
+}
+
+.ais-Carousel:hover .ais-Carousel-navigation:not([hidden]) {
+  opacity: 1;
+  visibility: visible;
+}
+
+.ais-Carousel-navigation,
+.ais-Carousel-navigation[hidden] {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.ais-Carousel-list {
+  padding-bottom: 0.5rem;
+  gap: 0.5rem;
+  outline-color: $nebula600;
+  outline-offset: 0.5rem;
+  scrollbar-color: $grey950 $grey300;
+  scrollbar-width: thin;
+}
+
+.ais-Carousel-list::-webkit-scrollbar {
+  height: 2px;
+}
+
+.ais-Carousel-list::-webkit-scrollbar-track {
+  background-color: $grey300;
+}
+
+.ais-Carousel-list::-webkit-scrollbar-thumb {
+  background-color: $grey950;
 }
