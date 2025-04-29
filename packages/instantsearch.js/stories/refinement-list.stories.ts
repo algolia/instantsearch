@@ -46,6 +46,24 @@ storiesOf('Refinements/RefinementList', module)
     })
   )
   .add(
+    'with show more templates and showMoreCount',
+    withHits(({ search, container, instantsearch }) => {
+      search.addWidgets([
+        instantsearch.widgets.refinementList({
+          container,
+          attribute: 'brand',
+          limit: 3,
+          showMore: true,
+          showMoreLimit: 10,
+          templates: {
+            showMoreText: ({ isShowingMore, showMoreCount }) =>
+              isShowingMore ? 'Show less' : `Show ${showMoreCount} more`,
+          },
+        }),
+      ]);
+    })
+  )
+  .add(
     'with search inside items',
     withHits(({ search, container, instantsearch }) => {
       search.addWidgets([
