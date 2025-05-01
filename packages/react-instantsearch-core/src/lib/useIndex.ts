@@ -1,5 +1,5 @@
 import index from 'instantsearch.js/es/widgets/index/index';
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 
 import { useForceUpdate } from './useForceUpdate';
 import { useIndexContext } from './useIndexContext';
@@ -20,12 +20,18 @@ export function useIndex(props: UseIndexProps) {
   const parentIndex = useIndexContext();
   const stableProps = useStableValue(props);
   const indexWidget = useMemo(() => index(stableProps), [stableProps]);
-  const helper = indexWidget.getHelper();
+  const helperRef = useRef(indexWidget.getHelper());
   const forceUpdate = useForceUpdate();
 
   useIsomorphicLayoutEffect(() => {
-    forceUpdate();
-  }, [helper, forceUpdate]);
+    // Re-fetch the helper after any potential freeze/unfreeze
+    const currentHelper = indexWidget.getHelper();
+    // Update the helper reference if it changed
+    if (currentHelper !== helperRef.current) {
+      helperRef.current = currentHelper;
+      forceUpdate();
+    }
+  }, [indexWidget, forceUpdate]);
 
   useWidget({
     widget: indexWidget,
@@ -34,5 +40,21 @@ export function useIndex(props: UseIndexProps) {
     shouldSsr: Boolean(serverContext || initialResults),
   });
 
-  return indexWidget;
+  // Extend the indexWidget with a more reliable getHelper method
+  const enhancedIndexWidget = useMemo(
+    () => ({
+      ...indexWidget,
+      getHelper: () => {
+        // Always get the most up-to-date helper when requested
+        const currentHelper = indexWidget.getHelper();
+        if (currentHelper !== null) {
+          helperRef.current = currentHelper;
+        }
+        return helperRef.current;
+      },
+    }),
+    [indexWidget]
+  );
+
+  return enhancedIndexWidget;
 }
