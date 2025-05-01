@@ -20,16 +20,16 @@ export function useIndex(props: UseIndexProps) {
   const parentIndex = useIndexContext();
   const stableProps = useStableValue(props);
   const indexWidget = useMemo(() => index(stableProps), [stableProps]);
-  const helperRef = useRef(indexWidget.getHelper());
+  const helperRef = useRef<any>(null);
   const forceUpdate = useForceUpdate();
 
   useIsomorphicLayoutEffect(() => {
-    // Re-fetch the helper after any potential freeze/unfreeze
     const currentHelper = indexWidget.getHelper();
-    // Update the helper reference if it changed
-    if (currentHelper !== helperRef.current) {
+    if (helperRef.current === null || currentHelper !== helperRef.current) {
       helperRef.current = currentHelper;
-      forceUpdate();
+      if (helperRef.current !== null) {
+        forceUpdate();
+      }
     }
   }, [indexWidget, forceUpdate]);
 
@@ -40,21 +40,24 @@ export function useIndex(props: UseIndexProps) {
     shouldSsr: Boolean(serverContext || initialResults),
   });
 
-  // Extend the indexWidget with a more reliable getHelper method
-  const enhancedIndexWidget = useMemo(
+  return useMemo(
     () => ({
       ...indexWidget,
       getHelper: () => {
-        // Always get the most up-to-date helper when requested
         const currentHelper = indexWidget.getHelper();
+
         if (currentHelper !== null) {
           helperRef.current = currentHelper;
+          return currentHelper;
         }
-        return helperRef.current;
+
+        if (helperRef.current !== null) {
+          return helperRef.current;
+        }
+
+        return null;
       },
     }),
     [indexWidget]
   );
-
-  return enhancedIndexWidget;
 }
