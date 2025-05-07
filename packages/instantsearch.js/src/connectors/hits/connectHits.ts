@@ -173,7 +173,7 @@ export default (function connectHits<TWidgetParams>(
           };
         }
 
-        if (escapeHTML && results.hits.length > 0) {
+        if (escapeHTML && results.hits?.length > 0) {
           results.hits = escapeHits(results.hits);
         }
 
