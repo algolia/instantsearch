@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.78.3](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.78.2...instantsearch.js@4.78.3) (2025-05-06)
+
+
+### Bug Fixes
+
+* **insights:** use latest appId and apiKey ([#6631](https://github.com/algolia/instantsearch/issues/6631)) ([d03d391](https://github.com/algolia/instantsearch/commit/d03d391c088011aee9a2ad290f9531d662c6b905))
+
+
+
+
+
 ## [4.78.2](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.78.1...instantsearch.js@4.78.2) (2025-04-29)
 
 **Note:** Version bump only for package instantsearch.js

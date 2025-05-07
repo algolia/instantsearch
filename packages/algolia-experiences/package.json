@@ -1,7 +1,7 @@
 {
   "name": "algolia-experiences",
   "license": "MIT",
-  "version": "1.5.10",
+  "version": "1.5.11",
   "main": "src/index.ts",
   "jsdelivr": "dist/algolia-experiences.production.min.js",
   "unpkg": "dist/algolia-experiences.production.min.js",
@@ -10,10 +10,10 @@
   ],
   "dependencies": {
     "algoliasearch": "5.1.1",
-    "instantsearch.js": "4.78.2"
+    "instantsearch.js": "4.78.3"
   },
   "devDependencies": {
-    "@instantsearch/testutils": "1.62.0"
+    "@instantsearch/testutils": "1.63.0"
   },
   "scripts": {
     "build": "rollup -c rollup.config.js"
