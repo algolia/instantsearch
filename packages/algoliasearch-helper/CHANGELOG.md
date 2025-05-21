@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.25.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.24.3...algoliasearch-helper@3.25.0) (2025-04-29)
+
+
+### Features
+
+* **recommend:** filter out input objectIDs [RECO-2436] ([#6620](https://github.com/algolia/instantsearch/issues/6620)) ([c737519](https://github.com/algolia/instantsearch/commit/c7375190e6793c2f5134f9a40b6587d2829cb5ea))
+
+
+
+
+
 ## [3.24.3](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.24.2...algoliasearch-helper@3.24.3) (2025-03-18)
 
 **Note:** Version bump only for package algoliasearch-helper
