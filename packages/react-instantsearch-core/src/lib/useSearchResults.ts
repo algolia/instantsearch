@@ -52,7 +52,8 @@ export function useSearchResults(): SearchResultsApi {
     search.addListener('render', handleRender);
 
     // Force setting results to mitigate potential race conditions where
-    // render listener is added after search results have been returned
+    // render listener is added after search results have been returned.
+    // This edge case is currently not covered by the tests.
     handleRender();
 
     return () => {
