@@ -33,9 +33,17 @@ export type SearchBoxTemplates = Partial<{
    */
   submit: Template<{ cssClasses: SearchBoxComponentCSSClasses }>;
   /**
+   * Template used for alternative text for the submit button icon. Only accepts a string.
+   */
+  submitTitle: string;
+  /**
    * Template used for displaying the reset button. Can accept a function or a Hogan string.
    */
   reset: Template<{ cssClasses: SearchBoxComponentCSSClasses }>;
+  /**
+   * Template used for alternative text for the reset button icon. Only accepts a string.
+   */
+  resetTitle: string;
   /**
    * Template used for displaying the loading indicator. Can accept a function or a Hogan string.
    */

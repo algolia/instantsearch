@@ -207,7 +207,7 @@ class SearchBox extends Component<
             rootProps={{
               className: cssClasses.submit,
               type: 'submit',
-              title: 'Submit the search query',
+              title: templates.submitTitle,
               hidden: !showSubmit,
             }}
             templates={templates}
@@ -220,7 +220,7 @@ class SearchBox extends Component<
             rootProps={{
               className: cssClasses.reset,
               type: 'reset',
-              title: 'Clear the search query',
+              title: templates.resetTitle,
               hidden: !(
                 showReset &&
                 this.state.query.trim() &&
