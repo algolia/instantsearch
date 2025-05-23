@@ -74,7 +74,7 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
   // As we need to render on mount with SSR, using the local ref above in `StrictMode` will
   // create and start two instances of InstantSearch. To avoid this, we instead discard it and use
   // an upward ref from `InstantSearchSSRContext` as it has already been mounted a second time at this point.
-  if (serverState) {
+  if (serverState?.ssrSearchRef) {
     searchRef = serverState.ssrSearchRef;
   }
 
@@ -217,10 +217,13 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
       }
 
       return () => {
+        if (serverState?.ssrSearchRef) {
+          return;
+        }
+
         function cleanup() {
           search.dispose();
         }
-
         clearTimeout(search._schedule.timer);
         // We clean up only when the component that uses this subscription unmounts,
         // but not when it updates, because it would dispose the instance, which
@@ -229,13 +232,12 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
         // in the next effect.
         // (There might be better ways to do this.)
         cleanupTimerRef.current = setTimeout(cleanup);
-
         // We need to prevent the `useWidget` cleanup function so that widgets
         // are not removed before the instance is disposed, triggering
         // an unwanted search request.
         search._preventWidgetCleanup = true;
       };
-    }, [forceUpdate]),
+    }, [forceUpdate, serverState]),
     () => searchRef.current!,
     () => searchRef.current!
   );

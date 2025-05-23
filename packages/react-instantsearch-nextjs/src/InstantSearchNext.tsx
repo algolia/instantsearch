@@ -3,11 +3,12 @@ import React, { useEffect, useRef } from 'react';
 import {
   InstantSearch,
   InstantSearchRSCContext,
-  InstantSearchSSRProvider,
+  InstantSearchSSRContext,
 } from 'react-instantsearch-core';
 
 import { InitializePromise } from './InitializePromise';
 import { TriggerSearch } from './TriggerSearch';
+import { useDynamicRouteWarning } from './useDynamicRouteWarning';
 import { useInstantSearchRouting } from './useInstantSearchRouting';
 import { useNextHeaders } from './useNextHeaders';
 import { warn } from './warn';
@@ -16,6 +17,7 @@ import type { InitialResults, StateMapping, UiState } from 'instantsearch.js';
 import type { BrowserHistoryArgs } from 'instantsearch.js/es/lib/routers/history';
 import type {
   InstantSearchProps,
+  InstantSearchSSRContextApi,
   PromiseWithState,
 } from 'react-instantsearch-core';
 
@@ -24,6 +26,13 @@ declare global {
   interface Window {
     [InstantSearchInitialResults]?: InitialResults;
   }
+}
+
+type InstantSearchNextInstance =
+  InstantSearchSSRContextApi<UiState>['ssrSearchRef'];
+
+export function createInstantSearchNextInstance(): InstantSearchNextInstance {
+  return { current: null };
 }
 
 export type InstantSearchNextRouting<TUiState, TRouteState> = {
@@ -36,6 +45,7 @@ export type InstantSearchNextProps<
   TRouteState = TUiState
 > = Omit<InstantSearchProps<TUiState, TRouteState>, 'routing'> & {
   routing?: InstantSearchNextRouting<TUiState, TRouteState> | boolean;
+  instance?: InstantSearchNextInstance;
 };
 
 export function InstantSearchNext<
@@ -44,6 +54,7 @@ export function InstantSearchNext<
 >({
   children,
   routing: passedRouting,
+  instance,
   ...instantSearchProps
 }: InstantSearchNextProps<TUiState, TRouteState>) {
   const isMounting = useRef(true);
@@ -51,10 +62,6 @@ export function InstantSearchNext<
 
   useEffect(() => {
     isMounting.current = false;
-    return () => {
-      // This is to make sure that they're not reused if mounting again on a different route
-      delete window[InstantSearchInitialResults];
-    };
   }, []);
 
   const headers = useNextHeaders();
@@ -62,6 +69,8 @@ export function InstantSearchNext<
   const nonce = safelyRunOnBrowser(() => undefined, {
     fallback: () => headers?.get('x-nonce') || undefined,
   });
+
+  useDynamicRouteWarning({ isServer, isMounting });
 
   const routing = useInstantSearchRouting(passedRouting, isMounting);
 
@@ -72,7 +81,7 @@ This message will only be displayed in development mode.`
   );
 
   return (
-    <ServerOrHydrationProvider isServer={isServer}>
+    <ServerOrHydrationProvider isServer={isServer} instance={instance}>
       <InstantSearch {...instantSearchProps} routing={routing!}>
         {isServer && <InitializePromise nonce={nonce} />}
         {children}
@@ -85,25 +94,27 @@ This message will only be displayed in development mode.`
 function ServerOrHydrationProvider({
   isServer,
   children,
+  instance,
 }: {
   isServer: boolean;
   children: React.ReactNode;
+  instance?: InstantSearchNextInstance;
 }) {
   const promiseRef = useRef<PromiseWithState<void> | null>(null);
   const initialResults = safelyRunOnBrowser(
     () => window[InstantSearchInitialResults]
   );
 
-  // If we're not on the server and we don't need to hydrate, we don't need SSR context
-  if (!isServer && !initialResults) {
-    return children;
-  }
-
   return (
     <InstantSearchRSCContext.Provider value={promiseRef}>
-      <InstantSearchSSRProvider initialResults={initialResults}>
+      <InstantSearchSSRContext.Provider
+        value={{
+          initialResults,
+          ssrSearchRef: isServer ? undefined : instance,
+        }}
+      >
         {children}
-      </InstantSearchSSRProvider>
+      </InstantSearchSSRContext.Provider>
     </InstantSearchRSCContext.Provider>
   );
 }
