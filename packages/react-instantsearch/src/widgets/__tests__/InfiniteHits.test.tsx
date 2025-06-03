@@ -229,6 +229,12 @@ describe('InfiniteHits', () => {
           <div
             class="ais-InfiniteHits ais-InfiniteHits--empty"
           >
+            <button
+              class="ais-InfiniteHits-loadPrevious ais-InfiniteHits-loadPrevious--disabled"
+              disabled=""
+            >
+              Show previous results
+            </button>
             <ol
               class="ais-InfiniteHits-list"
             />
