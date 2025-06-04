@@ -350,9 +350,12 @@ export default (function connectInfiniteHits<
 
         const banner = results?.renderingContent?.widgets?.banners?.[0];
 
-        if (!results) {
+        if (!showPrevious) {
           showPrevious = getShowPrevious(helper);
           showMore = getShowMore(helper);
+        }
+
+        if (!sendEvent) {
           sendEvent = createSendEventForHits({
             instantSearchInstance,
             helper,
@@ -363,6 +366,9 @@ export default (function connectInfiniteHits<
             widgetType: this.$$type,
             instantSearchInstance,
           });
+        }
+
+        if (!results) {
           isFirstPage =
             state.page === undefined ||
             getFirstReceivedPage(state, cachedHits) === 0;
