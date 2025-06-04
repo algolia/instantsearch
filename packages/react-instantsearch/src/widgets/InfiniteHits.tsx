@@ -53,8 +53,8 @@ export function InfiniteHits<THit extends BaseHit = BaseHit>({
     items,
     banner,
     sendEvent,
-    showPrevious = () => {},
-    showMore = () => {},
+    showPrevious,
+    showMore,
     isFirstPage,
     isLastPage,
   } = useInfiniteHits<THit>(
