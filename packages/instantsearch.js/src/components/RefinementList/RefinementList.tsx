@@ -68,6 +68,7 @@ export type RefinementListProps<TTemplates extends Templates> = {
   showMore?: boolean;
   toggleShowMore?: () => void;
   isShowingMore?: boolean;
+  showMoreCount?: number;
   hasExhaustiveItems?: boolean;
   canToggleShowMore?: boolean;
   className?: string;
@@ -315,6 +316,7 @@ class RefinementList<TTemplates extends Templates> extends Component<
         }}
         data={{
           isShowingMore: this.props.isShowingMore,
+          showMoreCount: this.props.showMoreCount,
         }}
       />
     );

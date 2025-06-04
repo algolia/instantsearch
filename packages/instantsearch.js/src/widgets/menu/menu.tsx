@@ -86,11 +86,9 @@ export type MenuTemplates = Partial<{
     value: string;
   }>;
   /**
-   * Template used for the show more text, provided with `isShowingMore` data property.
+   * Template used for the show more text, provided with `isShowingMore`, `showMoreCount` data properties.
    */
-  showMoreText: Template<{
-    isShowingMore: boolean;
-  }>;
+  showMoreText: Template<{ isShowingMore: boolean; showMoreCount: number }>;
 }>;
 
 export type MenuComponentCSSClasses = ComponentCSSClasses<MenuCSSClasses>;
@@ -135,6 +133,7 @@ const renderer =
       createURL,
       instantSearchInstance,
       isShowingMore,
+      showMoreCount,
       toggleShowMore,
       canToggleShowMore,
     }: MenuRenderState & RendererOptions<MenuConnectorParams>,
@@ -164,6 +163,7 @@ const renderer =
         toggleRefinement={refine}
         toggleShowMore={toggleShowMore}
         isShowingMore={isShowingMore}
+        showMoreCount={showMoreCount}
         canToggleShowMore={canToggleShowMore}
       />,
       containerNode

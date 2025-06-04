@@ -21,6 +21,7 @@ type UiProps = Pick<
   | 'canToggleShowMore'
   | 'onToggleShowMore'
   | 'isShowingMore'
+  | 'showMoreCount'
   | 'translations'
 >;
 
@@ -60,6 +61,7 @@ export function RefinementList({
     canToggleShowMore,
     isFromSearch,
     isShowingMore,
+    showMoreCount,
     items,
     refine,
     searchForItems,
@@ -153,6 +155,7 @@ export function RefinementList({
     canToggleShowMore,
     onToggleShowMore: toggleShowMore,
     isShowingMore,
+    showMoreCount,
     translations: {
       showMoreButtonText: mergedTranslations.showMoreButtonText,
     },
