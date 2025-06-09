@@ -194,9 +194,12 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
             return [];
           }
 
-          const [{ name: facetName }] = state.hierarchicalFacets;
+          const facet = state.hierarchicalFacets.find((f) => f.separator);
+          if (!facet) {
+            return [];
+          }
 
-          const facetValues = results.getFacetValues(facetName, {});
+          const facetValues = results.getFacetValues(facet.name, {});
           const facetItems =
             facetValues && !Array.isArray(facetValues) && facetValues.data
               ? facetValues.data
