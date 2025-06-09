@@ -4,6 +4,7 @@ import {
   createDocumentationMessageGenerator,
   isEqual,
   noop,
+  find,
 } from '../../lib/utils';
 
 import type {
@@ -194,7 +195,9 @@ const connectBreadcrumb: BreadcrumbConnector = function connectBreadcrumb(
             return [];
           }
 
-          const facet = state.hierarchicalFacets.find((f) => f.separator);
+          const facet = find(state.hierarchicalFacets, (f) =>
+            Boolean(f.separator)
+          );
           if (!facet) {
             return [];
           }
