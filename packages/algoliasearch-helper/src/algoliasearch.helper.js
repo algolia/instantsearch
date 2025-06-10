@@ -437,6 +437,15 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function (
     query: query,
   });
 
+  var hide =
+    (this.lastResults &&
+      this.lastResults.renderingContent &&
+      this.lastResults.renderingContent.facetOrdering &&
+      this.lastResults.renderingContent.facetOrdering.values &&
+      this.lastResults.renderingContent.facetOrdering.values[facet] &&
+      this.lastResults.renderingContent.facetOrdering.values[facet].hide) ||
+    [];
+
   return searchForFacetValuesPromise.then(
     function addIsRefined(content) {
       self._currentNbQueries--;
@@ -444,7 +453,11 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function (
 
       content = Array.isArray(content) ? content[0] : content;
 
-      content.facetHits.forEach(function (f) {
+      content.facetHits.forEach(function (f, i) {
+        if (hide.indexOf(f.value) > -1) {
+          content.facetHits.splice(i, 1);
+          return;
+        }
         f.escapedValue = escapeFacetValue(f.value);
         f.isRefined = isDisjunctive
           ? state.isDisjunctiveFacetRefined(facet, f.escapedValue)
