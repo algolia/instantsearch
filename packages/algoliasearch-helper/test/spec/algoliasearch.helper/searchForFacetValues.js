@@ -501,6 +501,7 @@ test('hides a facet value that is hidden according to `renderingContent`', funct
       return Promise.resolve({
         results: [
           {
+            index: 'index',
             renderingContent: {
               facetOrdering: {
                 values: {
@@ -566,6 +567,92 @@ test('hides a facet value that is hidden according to `renderingContent`', funct
             isRefined: false,
             escapedValue: 'something',
             value: 'something',
+          },
+        ],
+      });
+    });
+});
+
+test('does not hide if last results are for another index', function () {
+  var fakeClient = {
+    addAlgoliaAgent: function () {},
+    search: function () {
+      return Promise.resolve({
+        results: [
+          {
+            index: 'index1',
+            renderingContent: {
+              facetOrdering: {
+                values: {
+                  facet: {
+                    hide: ['hidden'],
+                  },
+                },
+              },
+            },
+          },
+        ],
+      });
+    },
+    searchForFacetValues: function () {
+      return Promise.resolve([
+        {
+          exhaustiveFacetsCount: true,
+          facetHits: [
+            {
+              count: 318,
+              highlighted: 'something',
+              value: 'something',
+            },
+            {
+              count: 1,
+              highlighted: 'hidden',
+              value: 'hidden',
+            },
+          ],
+          processingTimeMS: 3,
+        },
+      ]);
+    },
+  };
+
+  var helper = algoliasearchHelper(fakeClient, 'index1', {
+    disjunctiveFacets: ['facet'],
+    renderingContent: {
+      facetValues: [
+        {
+          name: 'something',
+          isRefined: true,
+        },
+      ],
+    },
+  });
+
+  return new Promise(function (res) {
+    helper.search();
+    helper.once('result', res);
+  })
+    .then(function () {
+      return helper.searchForFacetValues('facet', 'k', 1, { index: 'index2' });
+    })
+    .then(function (content) {
+      expect(content).toEqual({
+        exhaustiveFacetsCount: true,
+        processingTimeMS: 3,
+        facetHits: [
+          {
+            count: 318,
+            highlighted: 'something',
+            isRefined: false,
+            escapedValue: 'something',
+            value: 'something',
+          },
+          {
+            count: 1,
+            highlighted: 'hidden',
+            isRefined: false,
+            escapedValue: 'hidden',
+            value: 'hidden',
           },
         ],
       });

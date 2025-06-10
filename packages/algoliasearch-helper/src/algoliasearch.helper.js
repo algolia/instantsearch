@@ -439,6 +439,7 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function (
 
   var hide =
     (this.lastResults &&
+      this.lastResults.index === state.index &&
       this.lastResults.renderingContent &&
       this.lastResults.renderingContent.facetOrdering &&
       this.lastResults.renderingContent.facetOrdering.values &&
