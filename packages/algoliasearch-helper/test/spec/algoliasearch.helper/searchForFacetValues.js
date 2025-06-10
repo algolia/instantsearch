@@ -580,7 +580,7 @@ test('does not hide if last results are for another index', function () {
       return Promise.resolve({
         results: [
           {
-            index: 'index1',
+            index: 'index',
             renderingContent: {
               facetOrdering: {
                 values: {
@@ -616,7 +616,7 @@ test('does not hide if last results are for another index', function () {
     },
   };
 
-  var helper = algoliasearchHelper(fakeClient, 'index1', {
+  var helper = algoliasearchHelper(fakeClient, 'index', {
     disjunctiveFacets: ['facet'],
     renderingContent: {
       facetValues: [
