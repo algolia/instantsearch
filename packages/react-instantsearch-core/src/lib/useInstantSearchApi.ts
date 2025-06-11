@@ -108,6 +108,9 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
       // an additional network request. (This is equivalent to monkey-patching
       // `scheduleSearch` to a noop.)
       search._initialResults = initialResults || {};
+      // We don't rely on the `defer` to reset the schedule search, but will call
+      // `search._resetScheduleSearch()` manually in the effect after children
+      // mount in `InstantSearch`.
       search._manuallyResetScheduleSearch = true;
     }
 
