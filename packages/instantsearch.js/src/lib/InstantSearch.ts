@@ -229,6 +229,7 @@ class InstantSearch<
   public _searchStalledTimer: any;
   public _initialUiState: TUiState;
   public _initialResults: InitialResults | null;
+  public _resetScheduleSearch?: (callback: () => void) => void;
   public _createURL: CreateURL<TUiState>;
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
@@ -700,14 +701,25 @@ See documentation: ${createDocumentationLink({
       // because we already have the results to render. This skips the initial
       // network request on the browser on `start`.
       this.scheduleSearch = defer(noop);
-      // We also skip the initial network request when widgets are dynamically
-      // added in the first tick (that's the case in all the framework-based flavors).
-      // When we add a widget to `index`, it calls `scheduleSearch`. We can rely
-      // on our `defer` util to restore the original `scheduleSearch` value once
-      // widgets are added to hook back to the regular lifecycle.
-      defer(() => {
-        this.scheduleSearch = originalScheduleSearch;
-      })();
+      if (typeof this._resetScheduleSearch === 'function') {
+        // If the `resetScheduleSearch` method is available, we call it to
+        // reset the `scheduleSearch` method to its original value when the
+        // method is called. This is the case in the React flavor
+        // where we need to reset the `scheduleSearch` method to its original
+        // value after the initial render.
+        this._resetScheduleSearch(() => {
+          this.scheduleSearch = originalScheduleSearch;
+        });
+      } else {
+        // We also skip the initial network request when widgets are dynamically
+        // added in the first tick (that's the case in all the framework-based flavors).
+        // When we add a widget to `index`, it calls `scheduleSearch`. We can rely
+        // on our `defer` util to restore the original `scheduleSearch` value once
+        // widgets are added to hook back to the regular lifecycle.
+        defer(() => {
+          this.scheduleSearch = originalScheduleSearch;
+        })();
+      }
     }
     // We only schedule a search when widgets have been added before `start()`
     // because there are listeners that can use these results.

@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { IndexContext } from '../lib/IndexContext';
 import { InstantSearchContext } from '../lib/InstantSearchContext';
 import { useInstantSearchApi } from '../lib/useInstantSearchApi';
 
-import type { UseInstantSearchApiProps } from '../lib/useInstantSearchApi';
+import type {
+  InternalInstantSearch,
+  UseInstantSearchApiProps,
+} from '../lib/useInstantSearchApi';
 import type {
   InstantSearch as InstantSearchType,
   UiState,
@@ -33,7 +36,24 @@ export function InstantSearch<
     >
       <IndexContext.Provider value={search.mainIndex}>
         {children}
+        <ResetScheduleSearch
+          search={search as unknown as InternalInstantSearch<UiState, UiState>}
+        />
       </IndexContext.Provider>
     </InstantSearchContext.Provider>
   );
+}
+
+function ResetScheduleSearch({
+  search,
+}: {
+  search: InternalInstantSearch<UiState, UiState>;
+}) {
+  useEffect(() => {
+    if (search._resetScheduleSearchCb) {
+      search._resetScheduleSearchCb();
+    }
+  }, [search]);
+
+  return null;
 }
