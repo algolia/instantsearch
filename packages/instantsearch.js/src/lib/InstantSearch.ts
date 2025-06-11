@@ -703,11 +703,11 @@ See documentation: ${createDocumentationLink({
       // network request on the browser on `start`.
       this.scheduleSearch = defer(noop);
       if (this._manuallyResetScheduleSearch) {
-        // If the `resetScheduleSearch` method is available, we call it to
-        // reset the `scheduleSearch` method to its original value when the
-        // method is called. This is the case in the React flavor
-        // where we need to reset the `scheduleSearch` method to its original
-        // value after the initial render.
+        // If `_manuallyResetScheduleSearch` is passed, it means that we don't
+        // want to rely on a single `defer` to reset the `scheduleSearch`.
+        // Instead, the consumer will call `_resetScheduleSearch` to restore
+        // the original `scheduleSearch` function.
+        // This happens in the React flavour after rendering.
         this._resetScheduleSearch = () => {
           this.scheduleSearch = originalScheduleSearch;
         };
