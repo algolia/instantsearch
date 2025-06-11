@@ -229,7 +229,8 @@ class InstantSearch<
   public _searchStalledTimer: any;
   public _initialUiState: TUiState;
   public _initialResults: InitialResults | null;
-  public _resetScheduleSearch?: (callback: () => void) => void;
+  public _manuallyResetScheduleSearch: boolean = false;
+  public _resetScheduleSearch?: () => void;
   public _createURL: CreateURL<TUiState>;
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
@@ -701,15 +702,15 @@ See documentation: ${createDocumentationLink({
       // because we already have the results to render. This skips the initial
       // network request on the browser on `start`.
       this.scheduleSearch = defer(noop);
-      if (typeof this._resetScheduleSearch === 'function') {
+      if (this._manuallyResetScheduleSearch) {
         // If the `resetScheduleSearch` method is available, we call it to
         // reset the `scheduleSearch` method to its original value when the
         // method is called. This is the case in the React flavor
         // where we need to reset the `scheduleSearch` method to its original
         // value after the initial render.
-        this._resetScheduleSearch(() => {
+        this._resetScheduleSearch = () => {
           this.scheduleSearch = originalScheduleSearch;
-        });
+        };
       } else {
         // We also skip the initial network request when widgets are dynamically
         // added in the first tick (that's the case in all the framework-based flavors).

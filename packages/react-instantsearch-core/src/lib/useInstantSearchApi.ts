@@ -53,11 +53,6 @@ export type InternalInstantSearch<
    * @private
    */
   _preventWidgetCleanup?: boolean;
-  /**
-   * Used to reset the schedule search function.
-   * @private
-   */
-  _resetScheduleSearchCb?: () => void;
 };
 
 export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
@@ -113,9 +108,7 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
       // an additional network request. (This is equivalent to monkey-patching
       // `scheduleSearch` to a noop.)
       search._initialResults = initialResults || {};
-      search._resetScheduleSearch = (cb) => {
-        search._resetScheduleSearchCb = cb;
-      };
+      search._manuallyResetScheduleSearch = true;
     }
 
     addAlgoliaAgents(props.searchClient, [

@@ -50,8 +50,8 @@ function ResetScheduleSearch({
   search: InternalInstantSearch<UiState, UiState>;
 }) {
   useEffect(() => {
-    if (search._resetScheduleSearchCb) {
-      search._resetScheduleSearchCb();
+    if (search._resetScheduleSearch) {
+      search._resetScheduleSearch();
     }
   }, [search]);
 
