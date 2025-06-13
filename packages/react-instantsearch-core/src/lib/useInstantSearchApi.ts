@@ -220,7 +220,6 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
         function cleanup() {
           search.dispose();
         }
-
         clearTimeout(search._schedule.timer);
         // We clean up only when the component that uses this subscription unmounts,
         // but not when it updates, because it would dispose the instance, which
@@ -229,7 +228,6 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
         // in the next effect.
         // (There might be better ways to do this.)
         cleanupTimerRef.current = setTimeout(cleanup);
-
         // We need to prevent the `useWidget` cleanup function so that widgets
         // are not removed before the instance is disposed, triggering
         // an unwanted search request.
