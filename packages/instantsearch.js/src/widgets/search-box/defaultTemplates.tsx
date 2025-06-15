@@ -17,6 +17,7 @@ const defaultTemplate: SearchBoxComponentTemplates = {
       </svg>
     );
   },
+  resetTitle: 'Clear the search query',
   submit({ cssClasses }) {
     return (
       <svg
@@ -30,6 +31,7 @@ const defaultTemplate: SearchBoxComponentTemplates = {
       </svg>
     );
   },
+  submitTitle: 'Submit the search query',
   loadingIndicator({ cssClasses }) {
     /* eslint-disable react/no-unknown-property */
     // Preact supports kebab case attributes, and using camel case would
