@@ -584,7 +584,11 @@ const testSetups = {
 };
 
 const testOptions = {
-  createRefinementListWidgetTests: undefined,
+  createRefinementListWidgetTests: {
+    skippedTests: {
+      'selects first item on submitting the search (with searchableSelectOnSubmit: true)': true,
+    },
+  },
   createHierarchicalMenuWidgetTests: undefined,
   createBreadcrumbWidgetTests: undefined,
   createMenuWidgetTests: undefined,

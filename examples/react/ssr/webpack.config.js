@@ -1,64 +1,62 @@
 const path = require('path');
 
+const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
 
-module.exports = [
-  {
+module.exports = (_, { mode }) => {
+  const common = {
     mode: 'development',
-    entry: ['@babel/polyfill', './src/server.js'],
-    output: {
-      path: path.join(__dirname, 'dist'),
-      filename: 'server.js',
-      libraryTarget: 'commonjs2',
-      publicPath: '/',
-    },
-    target: 'node',
-    node: {
-      console: false,
-      global: false,
-      process: false,
-      Buffer: false,
-      __filename: false,
-      __dirname: false,
-    },
-    externals: nodeExternals(),
+    plugins: [new webpack.DefinePlugin({ __DEV__: mode !== 'production' })],
     module: {
       rules: [
         {
           test: /\.js$/,
-          exclude: /node_modules\/(?!(algoliasearch)\/).*/,
+          exclude: /node_modules\/(?!(algoliasearch|@algolia)\/).*/,
           use: [
             {
               loader: 'babel-loader',
+              options: {
+                rootMode: 'upward',
+              },
             },
           ],
         },
       ],
     },
-  },
-  {
-    mode: 'development',
-    entry: ['@babel/polyfill', './src/browser.js'],
-    output: {
-      path: path.join(__dirname, 'dist/assets'),
-      publicPath: '/',
-      filename: 'bundle.js',
+  };
+
+  return [
+    {
+      ...common,
+      entry: ['@babel/polyfill', './src/server.js'],
+      output: {
+        path: path.join(__dirname, 'dist'),
+        filename: 'server.js',
+        libraryTarget: 'commonjs2',
+        publicPath: '/',
+      },
+      target: 'node',
+      node: {
+        console: false,
+        global: false,
+        process: false,
+        Buffer: false,
+        __filename: false,
+        __dirname: false,
+      },
+      externals: nodeExternals(),
     },
-    module: {
-      rules: [
-        {
-          test: /\.js$/,
-          exclude: /node_modules\/(?!(algoliasearch)\/).*/,
-          use: [
-            {
-              loader: 'babel-loader',
-            },
-          ],
-        },
-      ],
+    {
+      ...common,
+      entry: ['@babel/polyfill', './src/browser.js'],
+      output: {
+        path: path.join(__dirname, 'dist/assets'),
+        publicPath: '/',
+        filename: 'bundle.js',
+      },
+      resolve: {
+        extensions: ['.js', '.jsx'],
+      },
     },
-    resolve: {
-      extensions: ['.js', '.jsx'],
-    },
-  },
-];
+  ];
+};

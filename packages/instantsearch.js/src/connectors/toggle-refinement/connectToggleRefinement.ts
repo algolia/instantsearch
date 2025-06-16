@@ -72,7 +72,7 @@ const createSendEvent = ({
         eventModifier,
         payload: {
           eventName,
-          index: helper.getIndex(),
+          index: helper.lastResults?.index || helper.state.index,
           filters: on.map((value) => `${attribute}:${value}`),
         },
         attribute,

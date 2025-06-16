@@ -167,7 +167,7 @@ export default (function connectRelatedProducts<
         if (!sendEvent) {
           sendEvent = createSendEventForHits({
             instantSearchInstance,
-            getIndex: () => helper.getIndex(),
+            helper,
             widgetType: this.$$type,
           });
         }

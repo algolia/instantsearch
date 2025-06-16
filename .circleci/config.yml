@@ -49,12 +49,14 @@ workflows:
           requires:
             - build
       - unit tests:
+          context: fx-libraries
           requires:
             - build
       - legacy algoliasearch v3:
           requires:
             - build
       - legacy algoliasearch v4:
+          context: fx-libraries
           requires:
             - build
       - vue v3:

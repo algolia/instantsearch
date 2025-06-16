@@ -352,7 +352,7 @@ export default (function connectGeoSearch<
         if (!sendEvent) {
           sendEvent = createSendEventForHits({
             instantSearchInstance,
-            getIndex: () => helper.getIndex(),
+            helper,
             widgetType: $$type,
           });
         }

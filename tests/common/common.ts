@@ -26,6 +26,14 @@ export function skippableDescribe(
   return (skippedTests[name] ? describe.skip : describe)(name, fn);
 }
 
+export function skippableTest(
+  name: string,
+  skippedTests: SkippedTests = {},
+  fn: () => void
+) {
+  return (skippedTests[name] ? test.skip : test)(name, fn);
+}
+
 export type TestOptions = {
   act?: Act;
   skippedTests?: SkippedTests;

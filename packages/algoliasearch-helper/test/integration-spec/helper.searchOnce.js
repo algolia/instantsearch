@@ -31,7 +31,7 @@ test('[INT][SEARCHONCE] Should be able to search once with custom parameters wit
 
   var calls = 1;
   helper.on('error', function (event) {
-    done.fail(event.error);
+    done(event.error);
   });
 
   helper.on('result', function (event) {
@@ -39,7 +39,9 @@ test('[INT][SEARCHONCE] Should be able to search once with custom parameters wit
       expect(event.results.hits.length).toBe(3);
       done();
     } else {
-      done.fail('Should not trigger the result event until the third call');
+      done(
+        new Error('Should not trigger the result event until the third call')
+      );
     }
   });
 

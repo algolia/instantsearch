@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.26.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.25.0...algoliasearch-helper@3.26.0) (2025-06-16)
+
+
+### Features
+
+* **facetOrdering:** implement hidden facets in SFFV ([#6648](https://github.com/algolia/instantsearch/issues/6648)) ([2641a67](https://github.com/algolia/instantsearch/commit/2641a6759db398fa407c84af418a059ac2e1079b))
+
+
+
+
+
+# [3.25.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.24.3...algoliasearch-helper@3.25.0) (2025-04-29)
+
+
+### Features
+
+* **recommend:** filter out input objectIDs [RECO-2436] ([#6620](https://github.com/algolia/instantsearch/issues/6620)) ([c737519](https://github.com/algolia/instantsearch/commit/c7375190e6793c2f5134f9a40b6587d2829cb5ea))
+
+
+
+
+
+## [3.24.3](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.24.2...algoliasearch-helper@3.24.3) (2025-03-18)
+
+**Note:** Version bump only for package algoliasearch-helper
+
+
+
+
+
+## [3.24.2](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.24.1...algoliasearch-helper@3.24.2) (2025-03-04)
+
+**Note:** Version bump only for package algoliasearch-helper
+
+
+
+
+
 ## [3.24.1](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.24.0...algoliasearch-helper@3.24.1) (2025-01-28)
 
 

@@ -187,7 +187,16 @@ var requestBuilder = {
     var facets = state.facets
       .concat(
         state.disjunctiveFacets.map(function (value) {
-          return 'disjunctive(' + value + ')';
+          if (
+            state.disjunctiveFacetsRefinements &&
+            state.disjunctiveFacetsRefinements[value] &&
+            state.disjunctiveFacetsRefinements[value].length > 0
+          ) {
+            // only tag a disjunctiveFacet as disjunctive if it has a value selected
+            // this helps avoid hitting the limit of 20 disjunctive facets in the Composition API
+            return 'disjunctive(' + value + ')';
+          }
+          return value;
         })
       )
       .concat(requestBuilder._getHitsHierarchicalFacetsAttributes(state))

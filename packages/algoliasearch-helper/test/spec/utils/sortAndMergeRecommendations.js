@@ -79,6 +79,7 @@ var response = {
 
 test('sorts the items based on their average index thus preserving applied rules', () => {
   const result = sortAndMergeRecommendations(
+    ['X', 'Y', 'Z'],
     response.results.map(function (res) {
       return res.hits;
     })
@@ -110,6 +111,40 @@ test('sorts the items based on their average index thus preserving applied rules
           "_score": 100,
           "name": "Product A",
           "objectID": "A",
+        },
+        Object {
+          "_score": 96,
+          "name": "Product G",
+          "objectID": "G",
+        },
+        Object {
+          "_score": 89,
+          "name": "Product D",
+          "objectID": "D",
+        },
+      ]
+    `);
+});
+
+test('filters out input objectIDs', () => {
+  const result = sortAndMergeRecommendations(
+    ['A', 'B', 'C'],
+    response.results.map(function (res) {
+      return res.hits;
+    })
+  );
+
+  expect(result).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "_score": 76,
+          "name": "Product E",
+          "objectID": "E",
+        },
+        Object {
+          "_score": 100,
+          "name": "Product F",
+          "objectID": "F",
         },
         Object {
           "_score": 96,

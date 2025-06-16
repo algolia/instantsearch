@@ -6,7 +6,13 @@ import * as suites from '@instantsearch/tests/shared';
 
 import { connectMenu, connectPagination } from '../connectors';
 import instantsearch from '../index.es';
-import { menu, pagination, hits } from '../widgets';
+import {
+  menu,
+  pagination,
+  hits,
+  hierarchicalMenu,
+  breadcrumb,
+} from '../widgets';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
 
@@ -44,9 +50,17 @@ const testSetups: TestSetupsMap<TestSuites> = {
           container: document.body.appendChild(document.createElement('div')),
           ...widgetParams.menu,
         }),
+        hierarchicalMenu({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams.hierarchicalMenu,
+        }),
         menu({
           container: document.body.appendChild(document.createElement('div')),
           ...widgetParams.menu,
+        }),
+        breadcrumb({
+          container: document.body.appendChild(document.createElement('div')),
+          attributes: widgetParams.hierarchicalMenu.attributes,
         }),
         hits({
           container: document.body.appendChild(document.createElement('div')),

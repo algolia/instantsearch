@@ -36,7 +36,11 @@ test('Tags filters: switching between advanced and simple API should be forbidde
 
   try {
     helper.setQueryParameter('tagFilters', complexQuery);
-    done.fail("Can't switch directly from the advanced API to the managed API");
+    done(
+      new Error(
+        "Can't switch directly from the advanced API to the managed API"
+      )
+    );
   } catch (e0) {
     helper.clearTags().setQueryParameter('tagFilters', complexQuery);
     expect(requestBuilder._getTagFilters(helper.state)).toEqual(complexQuery);
@@ -44,7 +48,11 @@ test('Tags filters: switching between advanced and simple API should be forbidde
 
   try {
     helper.addTag('tag').addTag('tag2');
-    done.fail("Can't switch directly from the managed API to the advanced API");
+    done(
+      new Error(
+        "Can't switch directly from the managed API to the advanced API"
+      )
+    );
   } catch (e1) {
     helper
       .setQueryParameter('tagFilters', undefined)

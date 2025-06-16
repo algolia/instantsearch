@@ -3,6 +3,60 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.4.9...react-instantsearch-nextjs@0.5.0) (2025-06-16)
+
+
+### Features
+
+* **server:** reset scheduleSearch only after all components mount ([#6650](https://github.com/algolia/instantsearch/issues/6650)) ([7aca759](https://github.com/algolia/instantsearch/commit/7aca7595d5a5bb026b0bd2e456f144c1eec61664))
+
+
+
+
+
+## [0.4.9](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.4.8...react-instantsearch-nextjs@0.4.9) (2025-05-27)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [0.4.8](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.4.7...react-instantsearch-nextjs@0.4.8) (2025-05-06)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [0.4.7](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.4.6...react-instantsearch-nextjs@0.4.7) (2025-04-29)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [0.4.6](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.4.5...react-instantsearch-nextjs@0.4.6) (2025-03-18)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [0.4.5](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.4.4...react-instantsearch-nextjs@0.4.5) (2025-03-04)
+
+
+### Bug Fixes
+
+* **next:** insert empty initial results for page with no widgets ([#6595](https://github.com/algolia/instantsearch/issues/6595)) ([8e1012f](https://github.com/algolia/instantsearch/commit/8e1012f26562e656867d08f140adccf2fddff4b1))
+
+
+
+
+
 ## [0.4.4](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.4.3...react-instantsearch-nextjs@0.4.4) (2025-01-28)
 
 **Note:** Version bump only for package react-instantsearch-nextjs

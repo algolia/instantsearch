@@ -3,6 +3,62 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.79.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.78.3...instantsearch.js@4.79.0) (2025-06-16)
+
+
+### Bug Fixes
+
+* **breadcrumb:** use hierarchical facets only ([#6645](https://github.com/algolia/instantsearch/issues/6645)) ([c9e50d9](https://github.com/algolia/instantsearch/commit/c9e50d9230426c13fd68cf08b0004fc7e19147ce))
+* **infiniteHits:** always return valid showPrevious and showMore functions ([#6644](https://github.com/algolia/instantsearch/issues/6644)) ([03670aa](https://github.com/algolia/instantsearch/commit/03670aa503f4428708e5fd2d76bd2c960063cf53))
+
+
+### Features
+
+* **refinementList:** add option to disable selecting on searchbox submit ([#6649](https://github.com/algolia/instantsearch/issues/6649)) ([8b9fae6](https://github.com/algolia/instantsearch/commit/8b9fae67738fec4aaf2a2dad93910be9d89ac69b))
+* **server:** reset scheduleSearch only after all components mount ([#6650](https://github.com/algolia/instantsearch/issues/6650)) ([7aca759](https://github.com/algolia/instantsearch/commit/7aca7595d5a5bb026b0bd2e456f144c1eec61664))
+
+
+
+
+
+## [4.78.3](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.78.2...instantsearch.js@4.78.3) (2025-05-06)
+
+
+### Bug Fixes
+
+* **insights:** use latest appId and apiKey ([#6631](https://github.com/algolia/instantsearch/issues/6631)) ([d03d391](https://github.com/algolia/instantsearch/commit/d03d391c088011aee9a2ad290f9531d662c6b905))
+
+
+
+
+
+## [4.78.2](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.78.1...instantsearch.js@4.78.2) (2025-04-29)
+
+**Note:** Version bump only for package instantsearch.js
+
+
+
+
+
+## [4.78.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.78.0...instantsearch.js@4.78.1) (2025-03-18)
+
+**Note:** Version bump only for package instantsearch.js
+
+
+
+
+
+# [4.78.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.77.3...instantsearch.js@4.78.0) (2025-03-04)
+
+
+### Features
+
+* make events default implementation compatible with composition API ([#6569](https://github.com/algolia/instantsearch/issues/6569)) ([f43c40f](https://github.com/algolia/instantsearch/commit/f43c40f5d64708f6938ac2843b62b212c4885eff))
+
+
+
+
+
 ## [4.77.3](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.77.2...instantsearch.js@4.77.3) (2025-01-28)
 
 **Note:** Version bump only for package instantsearch.js

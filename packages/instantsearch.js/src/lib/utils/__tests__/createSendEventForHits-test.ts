@@ -38,11 +38,11 @@ const createTestEnvironment = ({
   };
   const sendEvent = createSendEventForHits({
     instantSearchInstance,
-    getIndex: () => helper.getIndex(),
+    helper,
     widgetType,
   });
   const bindEvent = createBindEventForHits({
-    getIndex: () => helper.getIndex(),
+    helper,
     widgetType,
     instantSearchInstance,
   });

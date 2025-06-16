@@ -752,7 +752,7 @@ search.addWidgets([
               hits: firstIndexHits,
             }),
           ]),
-          helper,
+          helper: algoliasearchHelper(searchClient, 'indexName0'),
         },
         {
           indexId: 'indexId1',
@@ -762,7 +762,7 @@ search.addWidgets([
               hits: secondIndexHits,
             }),
           ]),
-          helper,
+          helper: algoliasearchHelper(searchClient, 'indexName1'),
         },
       ];
 

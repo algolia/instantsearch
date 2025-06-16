@@ -33,7 +33,7 @@ test('[INT][NUMERICS][RAW-API]Test numeric operations on the helper and their re
   var calls = 0;
 
   helper.on('error', function (event) {
-    done.fail(event.error);
+    done(event.error);
   });
 
   helper.on('result', function (event) {
@@ -85,7 +85,7 @@ test('[INT][NUMERICS][MANAGED-API]Test numeric operations on the helper and thei
   var calls = 0;
 
   helper.on('error', function (event) {
-    done.fail(event.error);
+    done(event.error);
   });
 
   helper.on('result', function (event) {
