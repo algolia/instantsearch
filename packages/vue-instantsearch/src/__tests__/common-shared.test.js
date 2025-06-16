@@ -7,6 +7,8 @@ import { connectMenu, connectPagination } from 'instantsearch.js/es/connectors';
 
 import { nextTick, mountApp } from '../../test/utils';
 import {
+  AisBreadcrumb,
+  AisHierarchicalMenu,
   AisHits,
   AisInstantSearch,
   AisMenu,
@@ -35,7 +37,11 @@ const testSetups = {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
             h(CustomMenu, { props: widgetParams.menu }),
+            h(AisHierarchicalMenu, { props: widgetParams.hierarchicalMenu }),
             h(AisMenu, { props: widgetParams.menu }),
+            h(AisBreadcrumb, {
+              props: { attributes: widgetParams.hierarchicalMenu.attributes },
+            }),
             h(AisHits, { props: widgetParams.hits }),
             h(CustomPagination, { props: widgetParams.pagination }),
             h(AisPagination, { props: widgetParams.pagination }),

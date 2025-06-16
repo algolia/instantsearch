@@ -13,6 +13,8 @@ import {
   Hits,
   usePagination,
   useMenu,
+  HierarchicalMenu,
+  Breadcrumb,
 } from '..';
 
 import type { UseMenuProps, UsePaginationProps } from '..';
@@ -44,7 +46,9 @@ const testSetups: TestSetupsMap<TestSuites> = {
     render(
       <InstantSearch {...instantSearchOptions}>
         <MenuURL {...widgetParams.menu} />
+        <HierarchicalMenu {...widgetParams.hierarchicalMenu} />
         <Menu {...widgetParams.menu} />
+        <Breadcrumb attributes={widgetParams.hierarchicalMenu.attributes} />
         <Hits {...widgetParams.hits} />
         <PaginationURL {...widgetParams.pagination} />
         <Pagination {...widgetParams.pagination} />
