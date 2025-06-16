@@ -345,7 +345,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/breadcrumb/
       });
     });
 
-    it('returns an empty array of items if only none hierarchicalFacets result exist', () => {
+    it('returns an empty array of items if only non-hierarchicalFacets result exist', () => {
       const renderFn = jest.fn();
       const unmountFn = jest.fn();
       const createBreadcrumb = connectBreadcrumb(renderFn, unmountFn);
