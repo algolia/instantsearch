@@ -10,6 +10,7 @@ import type { HierarchicalMenuWidget } from 'instantsearch.js/es/widgets/hierarc
 type WidgetParams = Parameters<HierarchicalMenuWidget>[0];
 export type HierarchicalMenuWidgetSetup = TestSetup<{
   widgetParams: Omit<WidgetParams, 'container'>;
+  vueSlots?: Record<string, unknown>;
 }>;
 
 export function createHierarchicalMenuWidgetTests(
