@@ -4,6 +4,7 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
+import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 
 import type { SharedSetup } from '.';
@@ -70,25 +71,20 @@ export function createInteractionTests(
           await wait(0);
         });
 
-        const hierarchicalLink = document.querySelector(
-          '.ais-HierarchicalMenu-link'
-        );
-        if (hierarchicalLink) {
-          userEvent.click(hierarchicalLink);
-        }
+        const hierarchicalLink = screen.getByRole('link', {
+          name: 'Computers & Tablets 148',
+        });
+        userEvent.click(hierarchicalLink);
 
         await act(async () => {
-          await wait(margin + delay);
           await wait(0);
         });
 
-        const breadcrumbLink = document.querySelector(
-          '.ais-Breadcrumb-item ais-Breadcrumb-item--selected'
+        const breadcrumbs = document.querySelectorAll(
+          '.ais-Breadcrumb-item.ais-Breadcrumb-item--selected'
         );
-        if (breadcrumbLink) {
-          // eslint-disable-next-line jest/no-conditional-expect
-          expect(breadcrumbLink).toHaveTextContent('Computers & Tablets');
-        }
+        expect(breadcrumbs).toHaveLength(1);
+        expect(breadcrumbs[0]).toHaveTextContent('Computers & Tablets');
       });
     });
   });
