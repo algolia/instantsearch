@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.4.9...react-instantsearch-nextjs@0.5.0) (2025-06-16)
+
+
+### Features
+
+* **server:** reset scheduleSearch only after all components mount ([#6650](https://github.com/algolia/instantsearch/issues/6650)) ([7aca759](https://github.com/algolia/instantsearch/commit/7aca7595d5a5bb026b0bd2e456f144c1eec61664))
+
+
+
+
+
 ## [0.4.9](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.4.8...react-instantsearch-nextjs@0.4.9) (2025-05-27)
 
 **Note:** Version bump only for package react-instantsearch-nextjs

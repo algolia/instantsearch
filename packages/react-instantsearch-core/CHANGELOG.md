@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.16.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.15.8...react-instantsearch-core@7.16.0) (2025-06-16)
+
+
+### Bug Fixes
+
+* **infiniteHits:** always return valid showPrevious and showMore functions ([#6644](https://github.com/algolia/instantsearch/issues/6644)) ([03670aa](https://github.com/algolia/instantsearch/commit/03670aa503f4428708e5fd2d76bd2c960063cf53))
+
+
+### Features
+
+* **server:** reset scheduleSearch only after all components mount ([#6650](https://github.com/algolia/instantsearch/issues/6650)) ([7aca759](https://github.com/algolia/instantsearch/commit/7aca7595d5a5bb026b0bd2e456f144c1eec61664))
+
+
+
+
+
 ## [7.15.8](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.15.7...react-instantsearch-core@7.15.8) (2025-05-27)
 
 

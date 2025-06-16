@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.26.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.25.0...algoliasearch-helper@3.26.0) (2025-06-16)
+
+
+### Features
+
+* **facetOrdering:** implement hidden facets in SFFV ([#6648](https://github.com/algolia/instantsearch/issues/6648)) ([2641a67](https://github.com/algolia/instantsearch/commit/2641a6759db398fa407c84af418a059ac2e1079b))
+
+
+
+
+
 # [3.25.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.24.3...algoliasearch-helper@3.25.0) (2025-04-29)
 
 
