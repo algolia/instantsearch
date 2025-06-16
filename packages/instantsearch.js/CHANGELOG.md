@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.79.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.78.3...instantsearch.js@4.79.0) (2025-06-16)
+
+
+### Bug Fixes
+
+* **infiniteHits:** always return valid showPrevious and showMore functions ([#6644](https://github.com/algolia/instantsearch/issues/6644)) ([03670aa](https://github.com/algolia/instantsearch/commit/03670aa503f4428708e5fd2d76bd2c960063cf53))
+
+
+### Features
+
+* **refinementList:** add option to disable selecting on searchbox submit ([#6649](https://github.com/algolia/instantsearch/issues/6649)) ([8b9fae6](https://github.com/algolia/instantsearch/commit/8b9fae67738fec4aaf2a2dad93910be9d89ac69b))
+* **server:** reset scheduleSearch only after all components mount ([#6650](https://github.com/algolia/instantsearch/issues/6650)) ([7aca759](https://github.com/algolia/instantsearch/commit/7aca7595d5a5bb026b0bd2e456f144c1eec61664))
+
+
+
+
+
 ## [4.78.3](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.78.2...instantsearch.js@4.78.3) (2025-05-06)
 
 

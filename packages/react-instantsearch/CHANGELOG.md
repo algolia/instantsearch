@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.16.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.15.8...react-instantsearch@7.16.0) (2025-06-16)
+
+
+### Bug Fixes
+
+* **infiniteHits:** always return valid showPrevious and showMore functions ([#6644](https://github.com/algolia/instantsearch/issues/6644)) ([03670aa](https://github.com/algolia/instantsearch/commit/03670aa503f4428708e5fd2d76bd2c960063cf53))
+
+
+### Features
+
+* **refinementList:** add option to disable selecting on searchbox submit ([#6649](https://github.com/algolia/instantsearch/issues/6649)) ([8b9fae6](https://github.com/algolia/instantsearch/commit/8b9fae67738fec4aaf2a2dad93910be9d89ac69b))
+
+
+
+
+
 ## [7.15.8](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.15.7...react-instantsearch@7.15.8) (2025-05-27)
 
 **Note:** Version bump only for package react-instantsearch

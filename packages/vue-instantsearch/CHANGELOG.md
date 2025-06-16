@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.21.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.20.8...vue-instantsearch@4.21.0) (2025-06-16)
+
+
+### Features
+
+* **refinementList:** add option to disable selecting on searchbox submit ([#6649](https://github.com/algolia/instantsearch/issues/6649)) ([8b9fae6](https://github.com/algolia/instantsearch/commit/8b9fae67738fec4aaf2a2dad93910be9d89ac69b))
+
+
+
+
+
 ## [4.20.8](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.20.7...vue-instantsearch@4.20.8) (2025-05-06)
 
 **Note:** Version bump only for package vue-instantsearch
