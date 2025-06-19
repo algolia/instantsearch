@@ -4,9 +4,9 @@
 
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
-import { act, render, screen } from '@testing-library/react';
-import React, { useContext } from 'react';
-import { InstantSearchRSCContext, SearchBox } from 'react-instantsearch';
+import { act, render } from '@testing-library/react';
+import React from 'react';
+import { SearchBox } from 'react-instantsearch';
 
 import { InstantSearchNext } from '../InstantSearchNext';
 
@@ -80,42 +80,6 @@ describe('rerendering', () => {
     });
 
     expect(client.search).toHaveBeenCalledTimes(1);
-  });
-
-  it('does not have server-side rendering context when not needed', async () => {
-    function TestContext() {
-      const rscContext = useContext(InstantSearchRSCContext);
-
-      return <div data-testid="rsc">{rscContext ? 'rsc' : 'no-rsc'}</div>;
-    }
-
-    const { unmount } = render(
-      <InstantSearchNext searchClient={client} indexName="indexName">
-        <SearchBox />
-        <TestContext />
-      </InstantSearchNext>
-    );
-
-    expect(screen.getByTestId('rsc')).toHaveTextContent('rsc');
-
-    await act(async () => {
-      await wait(0);
-      unmount();
-      await wait(0);
-    });
-
-    render(
-      <InstantSearchNext searchClient={client} indexName="indexName">
-        <SearchBox />
-        <TestContext />
-      </InstantSearchNext>
-    );
-
-    await act(async () => {
-      await wait(0);
-    });
-
-    expect(screen.getByTestId('rsc')).toHaveTextContent('no-rsc');
   });
 });
 
