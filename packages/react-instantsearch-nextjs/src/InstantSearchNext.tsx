@@ -101,12 +101,15 @@ function ServerOrHydrationProvider({
   instance?: InstantSearchNextInstance;
 }) {
   const promiseRef = useRef<PromiseWithState<void> | null>(null);
+  const countRef = useRef(0);
   const initialResults = safelyRunOnBrowser(
     () => window[InstantSearchInitialResults]
   );
 
   return (
-    <InstantSearchRSCContext.Provider value={promiseRef}>
+    <InstantSearchRSCContext.Provider
+      value={{ waitForResultsRef: promiseRef, countRef }}
+    >
       <InstantSearchSSRContext.Provider
         value={{
           initialResults,

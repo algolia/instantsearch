@@ -27,7 +27,7 @@ type InitializePromiseProps = {
 
 export function InitializePromise({ nonce }: InitializePromiseProps) {
   const search = useInstantSearchContext();
-  const waitForResultsRef = useRSCContext();
+  const { waitForResultsRef } = useRSCContext();
   const insertHTML =
     useContext(ServerInsertedHTMLContext) ||
     (() => {
