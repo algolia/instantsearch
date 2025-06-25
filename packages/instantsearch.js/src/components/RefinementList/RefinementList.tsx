@@ -79,6 +79,7 @@ export type RefinementListProps<TTemplates extends Templates> = {
   searchFacetValues?: (query: string) => void;
   searchPlaceholder?: string;
   searchBoxTemplateProps?: PreparedTemplateProps<SearchBoxComponentTemplates>;
+  searchableSelectOnSubmit?: boolean;
 };
 
 const defaultProps = {
@@ -289,6 +290,10 @@ class RefinementList<TTemplates extends Templates> extends Component<
   }
 
   private refineFirstValue() {
+    if (this.props.searchableSelectOnSubmit === false) {
+      return;
+    }
+
     const firstValue = this.props.facetValues && this.props.facetValues[0];
     if (firstValue) {
       const actualValue = firstValue.value;

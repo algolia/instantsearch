@@ -10,6 +10,8 @@ import {
 } from '@instantsearch/testutils';
 import userEvent from '@testing-library/user-event';
 
+import { skippableTest } from '../../common';
+
 import type { RefinementListWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 
@@ -45,7 +47,7 @@ function normalizeSnapshot(html: string) {
 
 export function createOptionsTests(
   setup: RefinementListWidgetSetup,
-  { act }: Required<TestOptions>
+  { act, skippedTests }: Required<TestOptions>
 ) {
   describe('options', () => {
     test('renders with props', async () => {
@@ -1120,6 +1122,185 @@ export function createOptionsTests(
         `
         );
       });
+
+      skippableTest(
+        'selects first item on submitting the search (with searchableSelectOnSubmit: true)',
+        skippedTests,
+        async () => {
+          const searchClient = createMockedSearchClient();
+          await setup({
+            instantSearchOptions: {
+              indexName: 'indexName',
+              searchClient,
+            },
+            widgetParams: {
+              attribute: 'brand',
+              searchable: true,
+              searchablePlaceholder: 'Search brands',
+            },
+          });
+          await act(async () => {
+            await wait(0);
+          });
+          const searchInput = document.querySelector(
+            '.ais-SearchBox-input'
+          ) as HTMLInputElement;
+
+          expect(textRepresentation()).toMatchInlineSnapshot(`
+          "Insignia™ ☐
+          Samsung ☐
+          Metra ☐
+          HP ☐
+          Apple ☐
+          GE ☐
+          Sony ☐
+          Incipio ☐
+          KitchenAid ☐
+          Whirlpool ☐"
+        `);
+
+          userEvent.type(searchInput, 'app');
+          await act(async () => {
+            await wait(0);
+          });
+          expect(textRepresentation()).toMatchInlineSnapshot(`
+          "Apple ☐
+          Alpine ☐
+          APC ☐
+          Amped Wireless ☐
+          Applebee's ☐
+          Amplicom ☐
+          Apollo Enclosures ☐
+          Apple® ☐
+          Applica ☐
+          Apricorn ☐"
+        `);
+
+          userEvent.type(searchInput, '{enter}');
+          await act(async () => {
+            await wait(0);
+          });
+          expect(textRepresentation()).toMatchInlineSnapshot(`
+          "Apple ☒
+          Insignia™ ☐
+          Samsung ☐
+          Metra ☐
+          HP ☐
+          GE ☐
+          Sony ☐
+          Incipio ☐
+          KitchenAid ☐
+          Whirlpool ☐"
+        `);
+
+          userEvent.type(searchInput, '{enter}');
+          await act(async () => {
+            await wait(0);
+          });
+          expect(textRepresentation()).toMatchInlineSnapshot(`
+          "Insignia™ ☐
+          Samsung ☐
+          Metra ☐
+          HP ☐
+          Apple ☐
+          GE ☐
+          Sony ☐
+          Incipio ☐
+          KitchenAid ☐
+          Whirlpool ☐"
+        `);
+        }
+      );
+
+      skippableTest(
+        'does not select first item on submitting the search (with searchableSelectOnSubmit: false)',
+        skippedTests,
+        async () => {
+          const searchClient = createMockedSearchClient();
+          await setup({
+            instantSearchOptions: {
+              indexName: 'indexName',
+              searchClient,
+            },
+            widgetParams: {
+              attribute: 'brand',
+              searchable: true,
+              searchablePlaceholder: 'Search brands',
+              searchableSelectOnSubmit: false,
+            },
+          });
+          await act(async () => {
+            await wait(0);
+          });
+          const searchInput = document.querySelector(
+            '.ais-SearchBox-input'
+          ) as HTMLInputElement;
+
+          expect(textRepresentation()).toMatchInlineSnapshot(`
+          "Insignia™ ☐
+          Samsung ☐
+          Metra ☐
+          HP ☐
+          Apple ☐
+          GE ☐
+          Sony ☐
+          Incipio ☐
+          KitchenAid ☐
+          Whirlpool ☐"
+        `);
+
+          userEvent.type(searchInput, 'app');
+          await act(async () => {
+            await wait(0);
+          });
+          expect(textRepresentation()).toMatchInlineSnapshot(`
+          "Apple ☐
+          Alpine ☐
+          APC ☐
+          Amped Wireless ☐
+          Applebee's ☐
+          Amplicom ☐
+          Apollo Enclosures ☐
+          Apple® ☐
+          Applica ☐
+          Apricorn ☐"
+        `);
+
+          userEvent.type(searchInput, '{enter}');
+          await act(async () => {
+            await wait(0);
+          });
+          expect(textRepresentation()).toMatchInlineSnapshot(`
+          "Apple ☐
+          Alpine ☐
+          APC ☐
+          Amped Wireless ☐
+          Applebee's ☐
+          Amplicom ☐
+          Apollo Enclosures ☐
+          Apple® ☐
+          Applica ☐
+          Apricorn ☐"
+        `);
+
+          userEvent.type(searchInput, '{enter}');
+          await act(async () => {
+            await wait(0);
+          });
+          expect(textRepresentation()).toMatchInlineSnapshot(`
+          "Apple ☐
+          Alpine ☐
+          APC ☐
+          Amped Wireless ☐
+          Applebee's ☐
+          Amplicom ☐
+          Apollo Enclosures ☐
+          Apple® ☐
+          Applica ☐
+          Apricorn ☐"
+        `);
+        }
+      );
     });
 
     describe('Show more/less', () => {
@@ -1587,4 +1768,22 @@ function createMockedSearchClient(
     ) as any, // @TODO: for now casted as any, because v5 only has `type: facet` in search
     ...parameters,
   });
+}
+
+/**
+ *
+ * @returns A string representation of the refinement list items and their checked state.
+ */
+function textRepresentation() {
+  return Array.from(document.querySelectorAll('.ais-RefinementList-item'))
+    .map(
+      (item) =>
+        `${item.querySelector('.ais-RefinementList-labelText')!.textContent} ${
+          item.querySelector<HTMLInputElement>('.ais-RefinementList-checkbox')!
+            .checked
+            ? '☒'
+            : '☐'
+        }`
+    )
+    .join('\n');
 }

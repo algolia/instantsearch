@@ -171,11 +171,15 @@ const config = {
       },
     },
     {
-      files: ['**/__tests__/**.ts', '**/__tests__/**.tsx'],
+      files: ['**/__tests__/**.ts', '**/__tests__/**.tsx', 'tests/**/*.ts'],
       rules: {
         'jest/no-done-callback': 'warn',
         '@typescript-eslint/unbound-method': 'off',
         'jest/unbound-method': 'error',
+        'jest/no-standalone-expect': [
+          'off',
+          { additionalTestBlockFunctions: ['skippableTest'] },
+        ],
       },
     },
     {
