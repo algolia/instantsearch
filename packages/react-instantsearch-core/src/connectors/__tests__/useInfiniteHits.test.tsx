@@ -16,16 +16,16 @@ describe('useInfiniteHits', () => {
 
     // Initial render state from manual `getWidgetRenderState`
     expect(result.current).toEqual({
-      bindEvent: undefined,
+      bindEvent: expect.any(Function),
+      sendEvent: expect.any(Function),
       hits: [],
       items: [],
       results: expect.objectContaining({ nbHits: 0 }),
-      sendEvent: undefined,
       currentPageHits: [],
       isFirstPage: true,
       isLastPage: true,
-      showMore: undefined,
-      showPrevious: undefined,
+      showMore: expect.any(Function),
+      showPrevious: expect.any(Function),
     });
 
     await waitFor(() => {

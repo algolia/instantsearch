@@ -1510,6 +1510,51 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         widgetParams: {},
       });
     });
+
+    it('returns the widget render state with artificial results', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createInfiniteHits = connectInfiniteHits(renderFn, unmountFn);
+      const infiniteHitsWidget = createInfiniteHits({});
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        index: 'indexName',
+      });
+
+      const results = new SearchResults(
+        helper.state,
+        [
+          createSingleSearchResponse({
+            hits: [],
+            queryID: 'theQueryID',
+          }),
+        ],
+        { __isArtificial: true }
+      );
+
+      const renderOptions = createRenderOptions({
+        helper,
+        state: helper.state,
+        results,
+      });
+
+      const renderState =
+        infiniteHitsWidget.getWidgetRenderState(renderOptions);
+
+      expect(renderState).toEqual({
+        hits: [],
+        items: [],
+        currentPageHits: [],
+        sendEvent: expect.any(Function),
+        bindEvent: expect.any(Function),
+        isFirstPage: true,
+        isLastPage: true,
+        banner: undefined,
+        results,
+        showMore: expect.any(Function),
+        showPrevious: expect.any(Function),
+        widgetParams: {},
+      });
+    });
   });
 
   describe('getWidgetSearchParameters', () => {
