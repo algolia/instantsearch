@@ -12,11 +12,17 @@ import { InstantSearchNext } from 'react-instantsearch-nextjs';
 
 import { Hit } from '../components/Hit';
 import { Panel } from '../components/Panel';
+import { QueryId } from '../components/QueryId';
 import { client } from '../lib/client';
 
 export default function Search() {
   return (
-    <InstantSearchNext searchClient={client} indexName="instant_search" routing>
+    <InstantSearchNext
+      searchClient={client}
+      indexName="instant_search"
+      routing
+      insights={false}
+    >
       <div className="Container">
         <div>
           <DynamicWidgets fallbackComponent={FallbackComponent} />
@@ -26,6 +32,7 @@ export default function Search() {
           <Hits hitComponent={Hit} />
         </div>
       </div>
+      <QueryId />
       <Link href="/layout" id="link">
         Other page
       </Link>

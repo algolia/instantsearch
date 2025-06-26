@@ -4,6 +4,7 @@ import React from 'react';
 import { Hits } from 'react-instantsearch';
 
 import { Hit } from '../../../components/Hit';
+import { QueryId } from '../../../components/QueryId';
 
 export default function Search() {
   return (
@@ -11,6 +12,7 @@ export default function Search() {
       <div>
         <Hits hitComponent={Hit} />
       </div>
+      <QueryId />
     </div>
   );
 }

@@ -19,6 +19,8 @@ describe('browser back/forward buttons', () => {
     )) as History['state'];
     expect(historyState.__NA).toBe(true);
 
+    const queryId = await (await $('#query-id')).getText();
+
     const link = await $('#link');
     await link.click();
 
@@ -30,6 +32,8 @@ describe('browser back/forward buttons', () => {
 
     const checkbox = await $('.ais-RefinementList-checkbox[value="Apple"]');
     expect(await checkbox.getAttribute('checked')).toBe('true');
+    const queryIdAfterBack = await (await $('#query-id')).getText();
+    expect(queryIdAfterBack).toBe(queryId);
   });
 
   it('works on a page wrapped with a layout containing InstantSearch', async () => {
@@ -43,6 +47,8 @@ describe('browser back/forward buttons', () => {
 
     await waitForUrl('http://localhost:3000/layout/search');
 
+    const queryId = await (await $('#query-id')).getText();
+
     await browser.back();
 
     await waitForUrl('http://localhost:3000/layout');
@@ -51,8 +57,11 @@ describe('browser back/forward buttons', () => {
 
     await waitForUrl('http://localhost:3000/layout/search');
 
+    const queryIdAfterForward = await (await $('#query-id')).getText();
+
     const hits = await $$('.ais-Hits-item');
     expect(hits.length).toBeGreaterThan(0);
+    expect(queryIdAfterForward).toBe(queryId);
   });
 
   it('works on a dynamic route with links', async () => {
