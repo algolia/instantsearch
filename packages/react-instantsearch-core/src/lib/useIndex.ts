@@ -32,6 +32,7 @@ export function useIndex(props: UseIndexProps) {
     parentIndex,
     props: stableProps,
     shouldSsr: Boolean(serverContext || initialResults),
+    skipSuspense: true,
   });
 
   return indexWidget;

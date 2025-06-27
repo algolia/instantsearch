@@ -6,10 +6,10 @@ import {
   createSearchClient,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
+import { render, act } from '@testing-library/react';
 import * as utils from 'instantsearch.js/es/lib/utils';
 import { ServerInsertedHTMLContext } from 'next/navigation';
 import React from 'react';
-import { renderToString } from 'react-dom/server';
 import { SearchBox, TrendingItems } from 'react-instantsearch';
 import {
   InstantSearch,
@@ -44,20 +44,28 @@ const renderComponent = async ({
     }),
   });
 
-  renderToString(
-    <InstantSearchRSCContext.Provider value={ref}>
-      <InstantSearchSSRProvider>
-        <InstantSearch searchClient={client} indexName="indexName">
-          <ServerInsertedHTMLContext.Provider
-            value={(cb) => insertedHTML?.(cb())}
-          >
-            <InitializePromise nonce={nonce} />
-            {children}
-            <TriggerSearch />
-          </ServerInsertedHTMLContext.Provider>
-        </InstantSearch>
-      </InstantSearchSSRProvider>
-    </InstantSearchRSCContext.Provider>
+  await act(() =>
+    render(
+      <InstantSearchRSCContext.Provider
+        value={{
+          waitForResultsRef: ref,
+          countRef: { current: 0 },
+          ignoreMultipleHooksWarning: false,
+        }}
+      >
+        <InstantSearchSSRProvider>
+          <InstantSearch searchClient={client} indexName="indexName">
+            <ServerInsertedHTMLContext.Provider
+              value={(cb) => insertedHTML?.(cb())}
+            >
+              <InitializePromise nonce={nonce} />
+              {children}
+              <TriggerSearch />
+            </ServerInsertedHTMLContext.Provider>
+          </InstantSearch>
+        </InstantSearchSSRProvider>
+      </InstantSearchRSCContext.Provider>
+    )
   );
 
   await ref.current;

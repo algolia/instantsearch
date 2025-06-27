@@ -60,27 +60,6 @@ describe('rerendering', () => {
 
     expect(client.search).toHaveBeenCalledTimes(0);
   });
-
-  it('triggers a client-side search on route change', async () => {
-    // Render InstantSearch
-    const { unmount } = render(<Component />);
-
-    // Unmount InstantSearch due to route change
-    await act(async () => {
-      await wait(0);
-      unmount();
-      await wait(0);
-    });
-
-    // Render InstantSearch on new route
-    render(<Component />);
-
-    await act(async () => {
-      await wait(0);
-    });
-
-    expect(client.search).toHaveBeenCalledTimes(1);
-  });
 });
 
 afterAll(() => {

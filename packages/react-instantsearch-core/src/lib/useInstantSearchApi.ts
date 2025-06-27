@@ -61,12 +61,12 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
   const forceUpdate = useForceUpdate();
   const serverContext = useInstantSearchServerContext<TUiState, TRouteState>();
   const serverState = useInstantSearchSSRContext<TUiState, TRouteState>();
-  const waitingForResultsRef = useRSCContext();
+  const { waitForResultsRef } = useRSCContext();
   const initialResults = serverState?.initialResults;
   const prevPropsRef = useRef(props);
 
   const shouldRenderAtOnce =
-    serverContext || initialResults || waitingForResultsRef;
+    serverContext || initialResults || waitForResultsRef;
 
   let searchRef = useRef<InternalInstantSearch<TUiState, TRouteState> | null>(
     null
@@ -134,7 +134,7 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
     }
 
     warnNextRouter(props.routing);
-    warnNextAppDir(Boolean(waitingForResultsRef));
+    warnNextAppDir(Boolean(waitForResultsRef));
 
     searchRef.current = search;
   }
