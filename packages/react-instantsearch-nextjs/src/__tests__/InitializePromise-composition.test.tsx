@@ -25,7 +25,7 @@ jest.mock('instantsearch.js/es/lib/utils', () => ({
 
 const compositionID = 'my-composition';
 
-const renderComponent = ({
+const renderComponent = async ({
   children,
   ref = { current: null },
   nonce,
@@ -38,20 +38,24 @@ const renderComponent = ({
 } = {}) => {
   const client = createCompositionClient();
 
-  render(
-    <InstantSearchRSCContext.Provider value={ref}>
-      <InstantSearchSSRProvider>
-        <InstantSearch searchClient={client} compositionID={compositionID}>
-          <ServerInsertedHTMLContext.Provider
-            value={(cb) => insertedHTML?.(cb())}
-          >
-            <InitializePromise nonce={nonce} />
-            {children}
-            <TriggerSearch />
-          </ServerInsertedHTMLContext.Provider>
-        </InstantSearch>
-      </InstantSearchSSRProvider>
-    </InstantSearchRSCContext.Provider>
+  await act(() =>
+    render(
+      <InstantSearchRSCContext.Provider
+        value={{ waitForResultsRef: ref, countRef: { current: 0 } }}
+      >
+        <InstantSearchSSRProvider>
+          <InstantSearch searchClient={client} compositionID={compositionID}>
+            <ServerInsertedHTMLContext.Provider
+              value={(cb) => insertedHTML?.(cb())}
+            >
+              <InitializePromise nonce={nonce} />
+              {children}
+              <TriggerSearch />
+            </ServerInsertedHTMLContext.Provider>
+          </InstantSearch>
+        </InstantSearchSSRProvider>
+      </InstantSearchRSCContext.Provider>
+    )
   );
 
   return client;
@@ -60,7 +64,7 @@ const renderComponent = ({
 test('it waits for composition-based search', async () => {
   const ref: { current: PromiseWithState<void> | null } = { current: null };
 
-  const client = renderComponent({
+  const client = await renderComponent({
     ref,
     children: (
       <>

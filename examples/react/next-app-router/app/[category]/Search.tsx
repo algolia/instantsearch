@@ -1,31 +1,15 @@
 'use client';
 
-import { Hit as AlgoliaHit } from 'instantsearch.js';
 import Link from 'next/link';
 import React from 'react';
-import { Hits, Highlight, SearchBox, Configure } from 'react-instantsearch';
+import { Hits, SearchBox, Configure } from 'react-instantsearch';
 import {
   InstantSearchNext,
   createInstantSearchNextInstance,
 } from 'react-instantsearch-nextjs';
 
+import { Hit } from '../../components/Hit';
 import { client } from '../../lib/client';
-
-type HitProps = {
-  hit: AlgoliaHit<{
-    name: string;
-    price: number;
-  }>;
-};
-
-function Hit({ hit }: HitProps) {
-  return (
-    <>
-      <Highlight hit={hit} attribute="name" />
-      <span className="Hit-price">${hit.price}</span>
-    </>
-  );
-}
 
 const categoryInstance = createInstantSearchNextInstance();
 
