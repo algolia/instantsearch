@@ -15,6 +15,7 @@ import type {
   UnknownWidgetParams,
   RecommendResponse,
   TrendingFacetHit,
+  Hit,
 } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -26,7 +27,7 @@ export type TrendingFacetsRenderState = {
   /**
    * The matched recommendations from the Algolia API.
    */
-  items: TrendingFacetHit[];
+  items: Array<Hit<TrendingFacetHit>>;
 };
 
 export type TrendingFacetsConnectorParams = {
@@ -54,8 +55,8 @@ export type TrendingFacetsConnectorParams = {
    * Function to transform the items passed to the templates.
    */
   transformItems?: TransformItems<
-    TrendingFacetHit,
-    { results: RecommendResponse<TrendingFacetHit> }
+    Hit<TrendingFacetHit>,
+    { results: RecommendResponse<Hit<TrendingFacetHit>> }
   >;
 };
 
@@ -143,9 +144,9 @@ export default (function connectTrendingFacets<
         );
 
         const transformedItems = transformItems(
-          itemsWithAbsolutePositionAndQueryID as TrendingFacetHit[],
+          itemsWithAbsolutePositionAndQueryID as Array<Hit<TrendingFacetHit>>,
           {
-            results: results as RecommendResponse<TrendingFacetHit>,
+            results: results as RecommendResponse<Hit<TrendingFacetHit>>,
           }
         );
 

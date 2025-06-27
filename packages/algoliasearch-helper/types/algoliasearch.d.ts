@@ -183,21 +183,18 @@ export type RecommendResponses<T> = PickForClient<{
 }>;
 
 export type TrendingFacetHit = PickForClient<{
-  v3: any;
-  // @ts-ignore
+  v3: {
+    readonly _score: number;
+    readonly facetName: string;
+    readonly facetValue: string;
+  };
   v4: {
     readonly _score: number;
     readonly facetName: string;
     readonly facetValue: string;
-  } & {
-    __position: number;
-    __queryID?: string;
   };
   // @ts-ignore
-  v5: RecommendClient.TrendingFacetHit & {
-    __position: number;
-    __queryID?: string;
-  };
+  v5: RecommendClient.TrendingFacetHit;
 }>;
 
 // We remove `indexName` from the Recommend query types as the helper
