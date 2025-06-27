@@ -23,7 +23,8 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
   shouldSsr: boolean;
   skipSuspense: boolean;
 }) {
-  const { waitForResultsRef, countRef } = useRSCContext();
+  const { waitForResultsRef, countRef, ignoreMultipleHooksWarning } =
+    useRSCContext();
 
   const prevPropsRef = useRef<TProps>(props);
   useEffect(() => {
@@ -109,9 +110,14 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
   if (waitForResultsRef?.current?.status === 'fulfilled') {
     countRef.current += 1;
     warn(
-      countRef.current > parentIndex.getWidgets().length,
+      countRef.current > parentIndex.getWidgets().length &&
+        !ignoreMultipleHooksWarning,
       `We detected you may have a component with multiple InstantSearch hooks.
+
 With Next.js, you need to set \`skipSuspense\` to \`true\` for all but the last hook in the component, otherwise, only the first hook will be rendered on the server.
+
+This warning can be a false positive if you are using dynamic widgets or multi-index, in which case you can ignore it by setting \`ignoreMultipleHooksWarning\` to \`true\` in \`<InstantSearchNext\`.
+
 For more information, see https://www.algolia.com/doc/guides/building-search-ui/going-further/server-side-rendering/react/#app-router`
     );
   }

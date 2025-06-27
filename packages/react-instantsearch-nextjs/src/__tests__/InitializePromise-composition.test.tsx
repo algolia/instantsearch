@@ -41,7 +41,11 @@ const renderComponent = async ({
   await act(() =>
     render(
       <InstantSearchRSCContext.Provider
-        value={{ waitForResultsRef: ref, countRef: { current: 0 } }}
+        value={{
+          waitForResultsRef: ref,
+          countRef: { current: 0 },
+          ignoreMultipleHooksWarning: false,
+        }}
       >
         <InstantSearchSSRProvider>
           <InstantSearch searchClient={client} compositionID={compositionID}>

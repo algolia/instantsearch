@@ -46,6 +46,7 @@ export type InstantSearchNextProps<
 > = Omit<InstantSearchProps<TUiState, TRouteState>, 'routing'> & {
   routing?: InstantSearchNextRouting<TUiState, TRouteState> | boolean;
   instance?: InstantSearchNextInstance;
+  ignoreMultipleHooksWarning?: boolean;
 };
 
 export function InstantSearchNext<
@@ -55,6 +56,7 @@ export function InstantSearchNext<
   children,
   routing: passedRouting,
   instance,
+  ignoreMultipleHooksWarning = false,
   ...instantSearchProps
 }: InstantSearchNextProps<TUiState, TRouteState>) {
   const isMounting = useRef(true);
@@ -81,7 +83,11 @@ This message will only be displayed in development mode.`
   );
 
   return (
-    <ServerOrHydrationProvider isServer={isServer} instance={instance}>
+    <ServerOrHydrationProvider
+      isServer={isServer}
+      instance={instance}
+      ignoreMultipleHooksWarning={ignoreMultipleHooksWarning}
+    >
       <InstantSearch {...instantSearchProps} routing={routing!}>
         {isServer && <InitializePromise nonce={nonce} />}
         {children}
@@ -95,10 +101,12 @@ function ServerOrHydrationProvider({
   isServer,
   children,
   instance,
+  ignoreMultipleHooksWarning,
 }: {
   isServer: boolean;
   children: React.ReactNode;
   instance?: InstantSearchNextInstance;
+  ignoreMultipleHooksWarning: boolean;
 }) {
   const promiseRef = useRef<PromiseWithState<void> | null>(null);
   const countRef = useRef(0);
@@ -108,7 +116,11 @@ function ServerOrHydrationProvider({
 
   return (
     <InstantSearchRSCContext.Provider
-      value={{ waitForResultsRef: promiseRef, countRef }}
+      value={{
+        waitForResultsRef: promiseRef,
+        countRef,
+        ignoreMultipleHooksWarning,
+      }}
     >
       <InstantSearchSSRContext.Provider
         value={{
