@@ -28,7 +28,7 @@ declare global {
   }
 }
 
-type InstantSearchNextInstance =
+export type InstantSearchNextInstance =
   InstantSearchSSRContextApi<UiState>['ssrSearchRef'];
 
 export function createInstantSearchNextInstance(): InstantSearchNextInstance {
@@ -72,7 +72,7 @@ export function InstantSearchNext<
     fallback: () => headers?.get('x-nonce') || undefined,
   });
 
-  useDynamicRouteWarning({ isServer, isMounting });
+  useDynamicRouteWarning({ isServer, isMounting, instance });
 
   const routing = useInstantSearchRouting(passedRouting, isMounting);
 

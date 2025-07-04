@@ -118,7 +118,7 @@ With Next.js, you need to set \`skipSuspense\` to \`true\` for all but the last 
 
 This warning can be a false positive if you are using dynamic widgets or multi-index, in which case you can ignore it by setting \`ignoreMultipleHooksWarning\` to \`true\` in \`<InstantSearchNext\`.
 
-For more information, see https://www.algolia.com/doc/guides/building-search-ui/going-further/server-side-rendering/react/#app-router`
+For more information, see https://www.algolia.com/doc/guides/building-search-ui/going-further/server-side-rendering/react/#composing-hooks`
     );
   }
 }
