@@ -100,7 +100,7 @@ function Widget<TWidget extends SingleWidget>({
       return (
         <widget.Component
           facetName="foobar"
-          itemComponent={({ item }) => <div>{item.facetName}</div>}
+          itemComponent={({ item }) => <div>{item.objectID}</div>}
           {...props}
         />
       );

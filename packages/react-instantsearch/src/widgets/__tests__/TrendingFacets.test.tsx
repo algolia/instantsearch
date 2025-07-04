@@ -14,7 +14,10 @@ import { TrendingFacets } from '../TrendingFacets';
 describe('TrendingFacets', () => {
   test('renders with translations', async () => {
     const client = createRecommendSearchClient({
-      minimal: true,
+      fixture: [
+        { facetName: 'facet1', facetValue: '1' },
+        { facetName: 'facet2', facetValue: '2' },
+      ],
     });
     const { container } = render(
       <InstantSearchTestWrapper searchClient={client}>
@@ -77,7 +80,10 @@ describe('TrendingFacets', () => {
 
   test('renders custom layout component', async () => {
     const client = createRecommendSearchClient({
-      minimal: true,
+      fixture: [
+        { facetName: 'facet1', facetValue: '1' },
+        { facetName: 'facet2', facetValue: '2' },
+      ],
     });
     const { container } = render(
       <InstantSearchTestWrapper searchClient={client}>
@@ -113,23 +119,26 @@ describe('TrendingFacets', () => {
           <ul>
             <li>
               <p>
-                1
+                facet1:1
               </p>
             </li>
             <li>
               <p>
-                2
+                facet2:2
               </p>
             </li>
           </ul>
         </section>
-        `);
+      `);
     });
   });
 
   test('renders Carousel as a layout component', async () => {
     const client = createRecommendSearchClient({
-      minimal: true,
+      fixture: [
+        { facetName: 'facet1', facetValue: '1' },
+        { facetName: 'facet2', facetValue: '2' },
+      ],
     });
     const { container } = render(
       <InstantSearchTestWrapper searchClient={client}>
@@ -193,7 +202,7 @@ describe('TrendingFacets', () => {
                 class="ais-Carousel-item ais-TrendingFacets-item"
               >
                 <p>
-                  1
+                  facet1:1
                 </p>
               </li>
               <li
@@ -202,7 +211,7 @@ describe('TrendingFacets', () => {
                 class="ais-Carousel-item ais-TrendingFacets-item"
               >
                 <p>
-                  2
+                  facet2:2
                 </p>
               </li>
             </ol>
@@ -234,7 +243,10 @@ describe('TrendingFacets', () => {
 
   test('renders Carousel with custom props as a layout component', async () => {
     const client = createRecommendSearchClient({
-      minimal: true,
+      fixture: [
+        { facetName: 'facet1', facetValue: '1' },
+        { facetName: 'facet2', facetValue: '2' },
+      ],
     });
     const { container } = render(
       <InstantSearchTestWrapper searchClient={client}>
@@ -309,7 +321,7 @@ describe('TrendingFacets', () => {
                 class="ais-Carousel-item ITEM ais-TrendingFacets-item"
               >
                 <p>
-                  1
+                  facet1:1
                 </p>
               </li>
               <li
@@ -318,7 +330,7 @@ describe('TrendingFacets', () => {
                 class="ais-Carousel-item ITEM ais-TrendingFacets-item"
               >
                 <p>
-                  2
+                  facet2:2
                 </p>
               </li>
             </ol>
@@ -334,7 +346,7 @@ describe('TrendingFacets', () => {
             </button>
           </div>
         </section>
-        `);
+      `);
     });
   });
 });
