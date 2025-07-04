@@ -2,7 +2,6 @@ import {
   createDocumentationMessageGenerator,
   checkRendering,
   noop,
-  escapeHits,
   addAbsolutePosition,
   addQueryID,
 } from '../../lib/utils';
@@ -14,7 +13,6 @@ import type {
   Unmounter,
   UnknownWidgetParams,
   RecommendResponse,
-  TrendingFacetHit,
   Hit,
 } from '../../types';
 
@@ -22,6 +20,22 @@ const withUsage = createDocumentationMessageGenerator({
   name: 'trending-facets',
   connector: true,
 });
+
+export type TrendingFacetHit = {
+  objectID: string;
+  /**
+   * Recommendation score.
+   */
+  _score: number;
+  /**
+   * The attribute of this trending facet.
+   */
+  attribute: string;
+  /**
+   * The value of this trending facet.
+   */
+  value: string;
+};
 
 export type TrendingFacetsRenderState = {
   /**
@@ -34,8 +48,7 @@ export type TrendingFacetsConnectorParams = {
   /**
    * The facet attribute to get recommendations for.
    */
-  facetName: string;
-} & {
+  attribute: string;
   /**
    * The number of recommendations to retrieve.
    */
@@ -44,13 +57,6 @@ export type TrendingFacetsConnectorParams = {
    * The threshold for the recommendations confidence score (between 0 and 100).
    */
   threshold?: number;
-
-  /**
-   * Whether to escape HTML tags from items string values.
-   *
-   * @default true
-   */
-  escapeHTML?: boolean;
   /**
    * Function to transform the items passed to the templates.
    */
@@ -83,11 +89,9 @@ export default (function connectTrendingFacets<
 
   return (widgetParams: TWidgetParams & TrendingFacetsConnectorParams) => {
     const {
-      facetName,
+      attribute,
       limit,
       threshold,
-      // @MAJOR: this can default to false
-      escapeHTML = true,
       transformItems = ((items) => items) as NonNullable<
         TrendingFacetsConnectorParams['transformItems']
       >,
@@ -128,15 +132,14 @@ export default (function connectTrendingFacets<
           return { items: [], widgetParams };
         }
 
-        if (escapeHTML && results.hits.length > 0) {
-          results.hits = escapeHits(results.hits);
-        }
+        const renamed = results.hits.map((hit) => ({
+          objectID: `${hit.facetName}:${hit.facetValue}`,
+          _score: hit._score,
+          attribute: hit.facetName,
+          value: hit.facetValue,
+        }));
 
-        const itemsWithAbsolutePosition = addAbsolutePosition(
-          results.hits,
-          0,
-          1
-        );
+        const itemsWithAbsolutePosition = addAbsolutePosition(renamed, 0, 1);
 
         const itemsWithAbsolutePositionAndQueryID = addQueryID(
           itemsWithAbsolutePosition,
@@ -144,7 +147,9 @@ export default (function connectTrendingFacets<
         );
 
         const transformedItems = transformItems(
-          itemsWithAbsolutePositionAndQueryID as Array<Hit<TrendingFacetHit>>,
+          itemsWithAbsolutePositionAndQueryID as unknown as Array<
+            Hit<TrendingFacetHit>
+          >,
           {
             results: results as RecommendResponse<Hit<TrendingFacetHit>>,
           }
@@ -163,7 +168,7 @@ export default (function connectTrendingFacets<
 
       getWidgetParameters(state) {
         return state.removeParams(this.$$id!).addTrendingFacets({
-          facetName,
+          facetName: attribute,
           maxRecommendations: limit,
           threshold,
           $$id: this.$$id!,

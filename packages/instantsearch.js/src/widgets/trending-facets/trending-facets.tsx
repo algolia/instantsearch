@@ -15,6 +15,7 @@ import type {
   TrendingFacetsWidgetDescription,
   TrendingFacetsConnectorParams,
   TrendingFacetsRenderState,
+  TrendingFacetHit,
 } from '../../connectors/trending-facets/connectTrendingFacets';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
@@ -23,7 +24,6 @@ import type {
   Renderer,
   RecommendResponse,
   TemplateWithBindEvent,
-  TrendingFacetHit,
 } from '../../types';
 import type {
   RecommendClassNames,
@@ -171,34 +171,39 @@ export type TrendingFacetsTemplates = Partial<{
   /**
    * Template to use for the header of the widget.
    */
-  header: Template<
-    Pick<
-      Parameters<
-        NonNullable<TrendingFacetsUiProps<TrendingFacetHit>['headerComponent']>
-      >[0],
-      'items'
-    > & { cssClasses: RecommendClassNames }
-  >;
-
-  /**
-   * Template to use to wrap all items.
-   */
-  layout: Template<
-    Pick<
-      Parameters<
-        NonNullable<TrendingFacetsUiProps<TrendingFacetHit>['layout']>
-      >[0],
-      'items'
-    > & {
-      templates: {
-        item: TrendingFacetsUiProps<TrendingFacetHit>['itemComponent'];
-      };
-      cssClasses: Pick<TrendingFacetsCSSClasses, 'list' | 'item'>;
-    }
-  >;
-}> & {
-  item: TemplateWithBindEvent<TrendingFacetHit>;
-};
+  header: Template<{
+    items: TrendingFacetHit[];
+    cssClasses: RecommendClassNames;
+  }>;
+}> &
+  (
+    | {
+        /**
+         * Template to use to wrap all items.
+         */
+        layout: Template<{
+          items: TrendingFacetHit[];
+          templates: {
+            item: TrendingFacetsUiProps<TrendingFacetHit>['itemComponent'];
+          };
+          cssClasses: Pick<TrendingFacetsCSSClasses, 'list' | 'item'>;
+        }>;
+        item?: TemplateWithBindEvent<TrendingFacetHit>;
+      }
+    | {
+        /**
+         * Template to use to wrap all items.
+         */
+        layout?: Template<{
+          items: TrendingFacetHit[];
+          templates: {
+            item: TrendingFacetsUiProps<TrendingFacetHit>['itemComponent'];
+          };
+          cssClasses: Pick<TrendingFacetsCSSClasses, 'list' | 'item'>;
+        }>;
+        item: TemplateWithBindEvent<TrendingFacetHit>;
+      }
+  );
 
 type TrendingFacetsWidgetParams = {
   /**
@@ -230,10 +235,9 @@ export default (function trendingFacets(
 ) {
   const {
     container,
-    facetName,
+    attribute,
     limit,
     threshold,
-    escapeHTML,
     transformItems,
     templates,
     cssClasses = {},
@@ -256,14 +260,11 @@ export default (function trendingFacets(
     render(null, containerNode)
   );
 
-  const facetParameters = { facetName };
-
   return {
     ...makeWidget({
-      ...facetParameters,
+      attribute,
       limit,
       threshold,
-      escapeHTML,
       transformItems,
     }),
     $$widgetType: 'ais.trendingFacets',

@@ -182,21 +182,6 @@ export type RecommendResponses<T> = PickForClient<{
   v5: AlgoliaSearch.GetRecommendationsResponse;
 }>;
 
-export type TrendingFacetHit = PickForClient<{
-  v3: {
-    readonly _score: number;
-    readonly facetName: string;
-    readonly facetValue: string;
-  };
-  v4: {
-    readonly _score: number;
-    readonly facetName: string;
-    readonly facetValue: string;
-  };
-  // @ts-ignore
-  v5: RecommendClient.TrendingFacetHit;
-}>;
-
 // We remove `indexName` from the Recommend query types as the helper
 // will fill in this value before sending the queries
 type _OptionalKeys<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;

@@ -14,7 +14,6 @@ import type {
   RecommendItemComponentProps,
   RecommendStatus,
   RecommendTranslations,
-  RecordWithObjectID,
   Renderer,
   SendEventForHits,
   TrendingFacetHit,
@@ -140,10 +139,7 @@ export function createListComponent({ createElement }: Renderer) {
       <div className={classNames.container}>
         <ol className={classNames.list}>
           {items.map((item) => (
-            <li
-              key={item.facetName + item.facetValue}
-              className={classNames.item}
-            >
+            <li key={item.attribute + item.value} className={classNames.item}>
               <ItemComponent item={item} sendEvent={sendEvent} />
             </li>
           ))}
@@ -152,7 +148,3 @@ export function createListComponent({ createElement }: Renderer) {
     );
   };
 }
-
-export const isTrendingFacetHit = (
-  item: RecordWithObjectID<any> | TrendingFacetHit
-): item is TrendingFacetHit => !item.objectID && 'facetValue' in item;

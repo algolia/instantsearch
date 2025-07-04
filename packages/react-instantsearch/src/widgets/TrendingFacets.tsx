@@ -36,10 +36,9 @@ const TrendingFacetsUiComponent = createTrendingFacetsComponent({
 });
 
 export function TrendingFacets({
-  facetName,
+  attribute,
   limit,
   threshold,
-  escapeHTML,
   transformItems,
   itemComponent,
   headerComponent,
@@ -50,10 +49,9 @@ export function TrendingFacets({
   const { status } = useInstantSearch();
   const { items } = useTrendingFacets(
     {
-      facetName,
+      attribute,
       limit,
       threshold,
-      escapeHTML,
       transformItems,
     },
     { $$widgetType: 'ais.trendingFacets' }
