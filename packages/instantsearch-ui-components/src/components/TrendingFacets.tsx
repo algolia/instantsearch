@@ -20,7 +20,16 @@ import type {
 export type TrendingFacetsProps<
   TComponentProps extends Record<string, unknown> = Record<string, unknown>
 > = ComponentProps<'div'> &
-  RecommendComponentProps<TrendingFacetHit, TComponentProps>;
+  Omit<
+    RecommendComponentProps<TrendingFacetHit, TComponentProps>,
+    'itemComponent'
+  > &
+  Required<
+    Pick<
+      RecommendComponentProps<TrendingFacetHit, TComponentProps>,
+      'itemComponent'
+    >
+  >;
 
 export function createTrendingFacetsComponent({
   createElement,
