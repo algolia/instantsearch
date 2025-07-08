@@ -24,6 +24,7 @@ import type {
   Renderer,
   RecommendResponse,
   TemplateWithBindEvent,
+  Hit,
 } from '../../types';
 import type {
   RecommendClassNames,
@@ -114,9 +115,8 @@ function createRenderer({
         : undefined
     ) as TrendingFacetsUiProps['emptyComponent'];
 
-    // @TODO fix data type
     const layoutComponent = templates.layout
-      ? (data: any) => (
+      ? (data) => (
           <TemplateComponent
             {...renderState.templateProps}
             templateKey="layout"
@@ -125,7 +125,7 @@ function createRenderer({
               items: data.items,
               templates: {
                 item: templates.item
-                  ? ({ item }: { item: TrendingFacetHit }) => (
+                  ? ({ item }: { item: Hit<TrendingFacetHit> }) => (
                       <TemplateComponent
                         {...renderState.templateProps}
                         templateKey="item"
@@ -166,13 +166,13 @@ export type TrendingFacetsTemplates = Partial<{
   /**
    * Template to use when there are no results.
    */
-  empty: Template<RecommendResponse<TrendingFacetHit>>;
+  empty: Template<RecommendResponse<Hit<TrendingFacetHit>>>;
 
   /**
    * Template to use for the header of the widget.
    */
   header: Template<{
-    items: TrendingFacetHit[];
+    items: Array<Hit<TrendingFacetHit>>;
     cssClasses: RecommendClassNames;
   }>;
 }> &
@@ -182,26 +182,26 @@ export type TrendingFacetsTemplates = Partial<{
          * Template to use to wrap all items.
          */
         layout: Template<{
-          items: TrendingFacetHit[];
+          items: Array<Hit<TrendingFacetHit>>;
           templates: {
-            item: TrendingFacetsUiProps<TrendingFacetHit>['itemComponent'];
+            item: TrendingFacetsUiProps<Hit<TrendingFacetHit>>['itemComponent'];
           };
           cssClasses: Pick<TrendingFacetsCSSClasses, 'list' | 'item'>;
         }>;
-        item?: TemplateWithBindEvent<TrendingFacetHit>;
+        item?: TemplateWithBindEvent<Hit<TrendingFacetHit>>;
       }
     | {
         /**
          * Template to use to wrap all items.
          */
         layout?: Template<{
-          items: TrendingFacetHit[];
+          items: Array<Hit<TrendingFacetHit>>;
           templates: {
-            item: TrendingFacetsUiProps<TrendingFacetHit>['itemComponent'];
+            item: TrendingFacetsUiProps<Hit<TrendingFacetHit>>['itemComponent'];
           };
           cssClasses: Pick<TrendingFacetsCSSClasses, 'list' | 'item'>;
         }>;
-        item: TemplateWithBindEvent<TrendingFacetHit>;
+        item: TemplateWithBindEvent<Hit<TrendingFacetHit>>;
       }
   );
 
