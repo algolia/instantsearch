@@ -3,12 +3,11 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [0.5.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.5.0...react-instantsearch-nextjs@0.5.1) (2025-07-08)
+## [1.0.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.5.0...react-instantsearch-nextjs@1.0.0) (2025-07-08)
 
-**Note:** Version bump only for package react-instantsearch-nextjs
+### Features
 
-
-
+* **next:** release stable version, with new `instance` option and ways to compose hooks ([#6647](https://github.com/algolia/instantsearch/issues/6647)) ([4769e20](https://github.com/algolia/instantsearch/commit/4769e20c1581ba7b4436b0da0dc9dd03cba3ef38))
 
 
 # [0.5.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.4.9...react-instantsearch-nextjs@0.5.0) (2025-06-16)
