@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.16.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.16.0...react-instantsearch@7.16.1) (2025-07-08)
+
+
+### Bug Fixes
+
+* **babel:** update babel/runtime ([#6666](https://github.com/algolia/instantsearch/issues/6666)) ([33807d7](https://github.com/algolia/instantsearch/commit/33807d728f949555a66d2a930a1b29701354264c)), closes [#6664](https://github.com/algolia/instantsearch/issues/6664) [#6665](https://github.com/algolia/instantsearch/issues/6665)
+
+
+
+
+
 # [7.16.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.15.8...react-instantsearch@7.16.0) (2025-06-16)
 
 
