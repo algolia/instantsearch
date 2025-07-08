@@ -15,20 +15,15 @@ import type {
   RecommendTranslations,
   Renderer,
   TrendingFacetHit,
+  RequiredKeys,
 } from '../types';
 
 export type TrendingFacetsProps<
   TComponentProps extends Record<string, unknown> = Record<string, unknown>
 > = ComponentProps<'div'> &
-  Omit<
+  RequiredKeys<
     RecommendComponentProps<TrendingFacetHit, TComponentProps>,
     'itemComponent'
-  > &
-  Required<
-    Pick<
-      RecommendComponentProps<TrendingFacetHit, TComponentProps>,
-      'itemComponent'
-    >
   >;
 
 export function createTrendingFacetsComponent({
