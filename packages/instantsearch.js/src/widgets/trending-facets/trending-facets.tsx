@@ -115,34 +115,36 @@ function createRenderer({
         : undefined
     ) as TrendingFacetsUiProps['emptyComponent'];
 
-    const layoutComponent = templates.layout
-      ? (data) => (
-          <TemplateComponent
-            {...renderState.templateProps}
-            templateKey="layout"
-            rootTagName="fragment"
-            data={{
-              items: data.items,
-              templates: {
-                item: templates.item
-                  ? ({ item }: { item: Hit<TrendingFacetHit> }) => (
-                      <TemplateComponent
-                        {...renderState.templateProps}
-                        templateKey="item"
-                        rootTagName="fragment"
-                        data={item}
-                      />
-                    )
-                  : undefined,
-              },
-              cssClasses: {
-                list: data.classNames.list,
-                item: data.classNames.item,
-              },
-            }}
-          />
-        )
-      : undefined;
+    const layoutComponent = (
+      templates.layout
+        ? (data) => (
+            <TemplateComponent
+              {...renderState.templateProps}
+              templateKey="layout"
+              rootTagName="fragment"
+              data={{
+                items: data.items,
+                templates: {
+                  item: templates.item
+                    ? ({ item }: { item: Hit<TrendingFacetHit> }) => (
+                        <TemplateComponent
+                          {...renderState.templateProps}
+                          templateKey="item"
+                          rootTagName="fragment"
+                          data={item}
+                        />
+                      )
+                    : undefined,
+                },
+                cssClasses: {
+                  list: data.classNames.list,
+                  item: data.classNames.item,
+                },
+              }}
+            />
+          )
+        : undefined
+    ) as TrendingFacetsUiProps['layout'];
 
     render(
       <TrendingFacets

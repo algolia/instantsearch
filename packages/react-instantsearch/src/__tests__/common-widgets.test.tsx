@@ -345,7 +345,7 @@ const testSetups: TestSetupsMap<TestSuites> = {
     const { templates, ...params } = widgetParams;
     const itemComponent: ComponentProps<
       typeof TrendingFacets
-    >['itemComponent'] = ({ item }: { item: TrendingFacetHit }) =>
+    >['itemComponent'] = ({ item }: { item: Hit<TrendingFacetHit> }) =>
       typeof widgetParams.templates.item === 'function'
         ? (widgetParams.templates.item(item, {} as any) as JSX.Element)
         : ('Error: itemComponent should be a function' as unknown as JSX.Element);
