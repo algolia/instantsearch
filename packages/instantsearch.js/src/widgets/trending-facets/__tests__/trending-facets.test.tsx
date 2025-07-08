@@ -177,8 +177,8 @@ describe('trendingFacets', () => {
       const container = document.createElement('div');
       const searchClient = createRecommendSearchClient({
         fixture: [
-          { attribute: 'value1', value: 'value1' },
-          { attribute: 'value2', value: 'value2' },
+          { facetName: 'attr', facetValue: 'value1' },
+          { facetName: 'attr', facetValue: 'value2' },
         ],
       });
       const options: Parameters<typeof trendingFacets>[0] = {
@@ -230,14 +230,18 @@ describe('trendingFacets', () => {
                   class="ais-TrendingFacets-item"
                 >
                   <p>
-                    :
+                    attr
+                    : 
+                    value1
                   </p>
                 </li>
                 <li
                   class="ais-TrendingFacets-item"
                 >
                   <p>
-                    :
+                    attr
+                    : 
+                    value2
                   </p>
                 </li>
               </ol>
