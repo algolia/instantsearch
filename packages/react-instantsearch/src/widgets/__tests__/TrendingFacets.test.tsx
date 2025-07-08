@@ -24,7 +24,7 @@ describe('TrendingFacets', () => {
         <TrendingFacets
           attribute="attr"
           translations={{ title: 'My trending facets' }}
-          itemComponent={() => null}
+          itemComponent={() => <></>}
         />
       </InstantSearchTestWrapper>
     );
@@ -68,7 +68,7 @@ describe('TrendingFacets', () => {
       <InstantSearchTestWrapper>
         <TrendingFacets
           attribute="attr"
-          itemComponent={() => null}
+          itemComponent={() => <></>}
           className="MyTrendingFacets"
           classNames={{ root: 'ROOT' }}
           aria-hidden={true}
@@ -93,7 +93,7 @@ describe('TrendingFacets', () => {
         <TrendingFacets
           attribute="attr"
           // This isn't used
-          itemComponent={() => null}
+          itemComponent={() => <></>}
           layoutComponent={({ items }) => (
             <ul>
               {items.map((item) => (

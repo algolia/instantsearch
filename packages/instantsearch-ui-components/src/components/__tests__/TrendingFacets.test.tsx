@@ -270,7 +270,15 @@ describe('TrendingFacets', () => {
     const { container } = render(
       <TrendingFacets
         status="idle"
-        items={[{ objectID: '1', __position: 1 }]}
+        items={[
+          {
+            objectID: '1:1',
+            _score: 1,
+            attribute: '1',
+            value: '1',
+            __position: 1,
+          },
+        ]}
         translations={{ title: 'My custom title' }}
         itemComponent={ItemComponent}
         sendEvent={jest.fn()}
@@ -297,7 +305,7 @@ describe('TrendingFacets', () => {
                 class="ais-TrendingFacets-item"
               >
                 <div>
-                  1
+                  1:1
                 </div>
               </li>
             </ol>
@@ -311,7 +319,15 @@ describe('TrendingFacets', () => {
     const { container } = render(
       <TrendingFacets
         status="idle"
-        items={[{ objectID: '1', __position: 1 }]}
+        items={[
+          {
+            objectID: '1:1',
+            _score: 1,
+            attribute: '1',
+            value: '1',
+            __position: 1,
+          },
+        ]}
         hidden={true}
         itemComponent={ItemComponent}
         sendEvent={jest.fn()}
@@ -327,7 +343,15 @@ describe('TrendingFacets', () => {
     const { container } = render(
       <TrendingFacets
         status="idle"
-        items={[{ objectID: '1', __position: 1 }]}
+        items={[
+          {
+            objectID: '1:1',
+            _score: 1,
+            attribute: '1',
+            value: '1',
+            __position: 1,
+          },
+        ]}
         classNames={{
           root: 'ROOT',
           title: 'TITLE',
@@ -360,7 +384,7 @@ describe('TrendingFacets', () => {
                 class="ais-TrendingFacets-item ITEM"
               >
                 <div>
-                  1
+                  1:1
                 </div>
               </li>
             </ol>
