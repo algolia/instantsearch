@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.16.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.16.0...react-instantsearch-core@7.16.1) (2025-07-08)
+
+
+### Bug Fixes
+
+* **babel:** update babel/runtime ([#6666](https://github.com/algolia/instantsearch/issues/6666)) ([33807d7](https://github.com/algolia/instantsearch/commit/33807d728f949555a66d2a930a1b29701354264c)), closes [#6664](https://github.com/algolia/instantsearch/issues/6664) [#6665](https://github.com/algolia/instantsearch/issues/6665)
+
+### Features
+
+* **RSC:** allow hooks to be composed and instance to be shared accross remounts ([#6647](https://github.com/algolia/instantsearch/issues/6647)) ([4769e20](https://github.com/algolia/instantsearch/commit/4769e20c1581ba7b4436b0da0dc9dd03cba3ef38))
+
+
+
 # [7.16.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.15.8...react-instantsearch-core@7.16.0) (2025-06-16)
 
 

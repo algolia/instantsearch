@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.11.2](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.11.1...instantsearch-ui-components@0.11.2) (2025-07-08)
+
+
+### Bug Fixes
+
+* **babel:** update babel/runtime ([#6666](https://github.com/algolia/instantsearch/issues/6666)) ([33807d7](https://github.com/algolia/instantsearch/commit/33807d728f949555a66d2a930a1b29701354264c)), closes [#6664](https://github.com/algolia/instantsearch/issues/6664) [#6665](https://github.com/algolia/instantsearch/issues/6665)
+
+
+
+
+
 ## [0.11.1](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.11.0...instantsearch-ui-components@0.11.1) (2025-01-21)
 
 
