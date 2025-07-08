@@ -8,7 +8,6 @@ import { createElement, Fragment } from 'preact';
 
 import { createTrendingFacetsComponent } from '../TrendingFacets';
 
-import type { RecordWithObjectID } from '../../types';
 import type { TrendingFacetsProps } from '../TrendingFacets';
 
 const TrendingFacets = createTrendingFacetsComponent({
@@ -16,8 +15,9 @@ const TrendingFacets = createTrendingFacetsComponent({
   Fragment,
 });
 
-const ItemComponent: TrendingFacetsProps<RecordWithObjectID>['itemComponent'] =
-  ({ item }) => <div>{item.objectID}</div>;
+const ItemComponent: TrendingFacetsProps['itemComponent'] = ({ item }) => (
+  <div>{item.objectID}</div>
+);
 
 describe('TrendingFacets', () => {
   test('renders items with default layout and header', () => {
@@ -26,11 +26,17 @@ describe('TrendingFacets', () => {
         status="idle"
         items={[
           {
-            objectID: '1',
+            objectID: 'category:electronics',
+            _score: 1,
+            attribute: 'category',
+            value: 'electronics',
             __position: 1,
           },
           {
-            objectID: '2',
+            objectID: 'category:books',
+            _score: 2,
+            attribute: 'category',
+            value: 'books',
             __position: 2,
           },
         ]}
@@ -59,14 +65,14 @@ describe('TrendingFacets', () => {
                 class="ais-TrendingFacets-item"
               >
                 <div>
-                  1
+                  category:electronics
                 </div>
               </li>
               <li
                 class="ais-TrendingFacets-item"
               >
                 <div>
-                  2
+                  category:books
                 </div>
               </li>
             </ol>
@@ -101,7 +107,15 @@ describe('TrendingFacets', () => {
     const { container } = render(
       <TrendingFacets
         status="idle"
-        items={[{ objectID: '1', __position: 1 }]}
+        items={[
+          {
+            objectID: '1:1',
+            _score: 1,
+            attribute: '1',
+            value: '1',
+            __position: 1,
+          },
+        ]}
         headerComponent={({ classNames }) => (
           <div className={classNames.title}>My custom header</div>
         )}
@@ -130,7 +144,7 @@ describe('TrendingFacets', () => {
                 class="ais-TrendingFacets-item"
               >
                 <div>
-                  1
+                  1:1
                 </div>
               </li>
             </ol>
@@ -144,7 +158,15 @@ describe('TrendingFacets', () => {
     const { container } = render(
       <TrendingFacets
         status="idle"
-        items={[{ objectID: '1', __position: 1 }]}
+        items={[
+          {
+            objectID: '1:1',
+            _score: 1,
+            attribute: '1',
+            value: '1',
+            __position: 1,
+          },
+        ]}
         itemComponent={ItemComponent}
         layout={(props) => (
           <div className={props.classNames.container}>
@@ -186,7 +208,7 @@ describe('TrendingFacets', () => {
                 class="ais-TrendingFacets-item"
               >
                 <div>
-                  1
+                  1:1
                 </div>
               </li>
             </ol>
@@ -218,9 +240,11 @@ describe('TrendingFacets', () => {
     `);
   });
 
-  test('does not sends a `click` event when clicking on an item', () => {
+  test('sends a `click` event when clicking on an item', () => {
     const sendEvent = jest.fn();
-    const items = [{ objectID: '1', __position: 1 }];
+    const items = [
+      { objectID: '1:1', _score: 1, attribute: '1', value: '1', __position: 1 },
+    ];
 
     const { container } = render(
       <TrendingFacets
@@ -233,15 +257,13 @@ describe('TrendingFacets', () => {
 
     userEvent.click(container.querySelectorAll('.ais-TrendingFacets-item')[0]!);
 
-    expect(sendEvent).toHaveBeenCalledTimes(0);
-    // When events are implemented, this should be uncommented:
-    // expect(sendEvent).toHaveBeenCalledTimes(1);
-    // expect(sendEvent).toHaveBeenNthCalledWith(
-    //   1,
-    //   'click:internal',
-    //   items[0],
-    //   'Item Clicked'
-    // );
+    expect(sendEvent).toHaveBeenCalledTimes(1);
+    expect(sendEvent).toHaveBeenNthCalledWith(
+      1,
+      'click:internal',
+      items[0],
+      'Item Clicked'
+    );
   });
 
   test('accepts custom title translation', () => {
