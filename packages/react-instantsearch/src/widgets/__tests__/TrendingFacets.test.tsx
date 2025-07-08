@@ -92,6 +92,8 @@ describe('TrendingFacets', () => {
       <InstantSearchTestWrapper searchClient={client}>
         <TrendingFacets
           attribute="attr"
+          // This isn't used
+          itemComponent={() => null}
           layoutComponent={({ items }) => (
             <ul>
               {items.map((item) => (
@@ -147,6 +149,7 @@ describe('TrendingFacets', () => {
     const { container } = render(
       <InstantSearchTestWrapper searchClient={client}>
         <TrendingFacets
+          attribute="attr"
           itemComponent={({ item }) => <p>{item.objectID}</p>}
           layoutComponent={Carousel}
         />
@@ -255,6 +258,7 @@ describe('TrendingFacets', () => {
     const { container } = render(
       <InstantSearchTestWrapper searchClient={client}>
         <TrendingFacets
+          attribute="attr"
           itemComponent={({ item }) => <p>{item.objectID}</p>}
           layoutComponent={(props) => (
             <Carousel

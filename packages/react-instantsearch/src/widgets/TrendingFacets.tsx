@@ -24,18 +24,11 @@ export type TrendingFacetsProps = Omit<
   keyof UiProps
 > &
   UseTrendingFacetsProps & {
+    itemComponent: TrendingFacetsUiComponentProps['itemComponent'];
     headerComponent?: TrendingFacetsUiComponentProps['headerComponent'];
     emptyComponent?: TrendingFacetsUiComponentProps['emptyComponent'];
-  } & (
-    | {
-        itemComponent: TrendingFacetsUiComponentProps['itemComponent'];
-        layoutComponent?: TrendingFacetsUiComponentProps['layout'];
-      }
-    | {
-        itemComponent?: TrendingFacetsUiComponentProps['itemComponent'];
-        layoutComponent: TrendingFacetsUiComponentProps['layout'];
-      }
-  );
+    layoutComponent?: TrendingFacetsUiComponentProps['layout'];
+  };
 
 const TrendingFacetsUiComponent = createTrendingFacetsComponent({
   createElement: createElement as Pragma,

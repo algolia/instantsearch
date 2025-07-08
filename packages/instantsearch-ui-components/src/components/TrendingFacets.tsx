@@ -15,16 +15,20 @@ import type {
   RecommendTranslations,
   Renderer,
   TrendingFacetHit,
-  RequiredKeys,
 } from '../types';
 
 export type TrendingFacetsProps<
   TComponentProps extends Record<string, unknown> = Record<string, unknown>
 > = ComponentProps<'div'> &
-  RequiredKeys<
+  Omit<
     RecommendComponentProps<TrendingFacetHit, TComponentProps>,
     'itemComponent'
-  >;
+  > & {
+    itemComponent: RecommendComponentProps<
+      TrendingFacetHit,
+      TComponentProps
+    >['itemComponent'];
+  };
 
 export function createTrendingFacetsComponent({
   createElement,
@@ -41,7 +45,11 @@ export function createTrendingFacetsComponent({
         createElement,
         Fragment,
       }),
-      itemComponent: ItemComponent,
+      // Fallback to a no-op component if no itemComponent is provided
+      // This is to ensure that the component can render when the layout
+      // the user provided does not need an itemComponent, but still allows
+      // us to later create a default itemComponent that has an action.
+      itemComponent: ItemComponent = () => null as any,
       layout: Layout = createListComponent({ createElement, Fragment }),
       items,
       status,
@@ -89,7 +97,7 @@ export function createTrendingFacetsComponent({
 
         <Layout
           classNames={cssClasses}
-          itemComponent={ItemComponent}
+          itemComponent={ItemComponent || (() => null as any)}
           items={items}
           sendEvent={sendEvent}
         />
