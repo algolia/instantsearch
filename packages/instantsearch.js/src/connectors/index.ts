@@ -54,3 +54,4 @@ export { default as connectVoiceSearch } from './voice-search/connectVoiceSearch
 export { default as connectRelevantSort } from './relevant-sort/connectRelevantSort';
 export { default as connectFrequentlyBoughtTogether } from './frequently-bought-together/connectFrequentlyBoughtTogether';
 export { default as connectLookingSimilar } from './looking-similar/connectLookingSimilar';
+export { default as connectTrendingFacets } from './trending-facets/connectTrendingFacets';

@@ -151,6 +151,11 @@ describe('widgets', () => {
           "name": "TrendingItems",
         },
         {
+          "$$type": "ais.trendingFacets",
+          "$$widgetType": "ais.trendingFacets",
+          "name": "TrendingFacets",
+        },
+        {
           "$$type": "ais.lookingSimilar",
           "$$widgetType": "ais.lookingSimilar",
           "name": "LookingSimilar",
