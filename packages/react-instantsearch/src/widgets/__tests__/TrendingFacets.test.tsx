@@ -22,6 +22,7 @@ describe('TrendingFacets', () => {
     const { container } = render(
       <InstantSearchTestWrapper searchClient={client}>
         <TrendingFacets
+          attribute="attr"
           translations={{ title: 'My trending facets' }}
           itemComponent={() => null}
         />
@@ -66,6 +67,8 @@ describe('TrendingFacets', () => {
     const { container } = render(
       <InstantSearchTestWrapper>
         <TrendingFacets
+          attribute="attr"
+          itemComponent={() => null}
           className="MyTrendingFacets"
           classNames={{ root: 'ROOT' }}
           aria-hidden={true}
@@ -88,6 +91,7 @@ describe('TrendingFacets', () => {
     const { container } = render(
       <InstantSearchTestWrapper searchClient={client}>
         <TrendingFacets
+          attribute="attr"
           layoutComponent={({ items }) => (
             <ul>
               {items.map((item) => (
