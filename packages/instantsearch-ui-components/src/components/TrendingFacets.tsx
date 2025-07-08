@@ -5,52 +5,22 @@ import { cx } from '../lib';
 import {
   createDefaultEmptyComponent,
   createDefaultHeaderComponent,
+  createListComponent,
 } from './recommend-shared';
 
 import type {
   ComponentProps,
   RecommendClassNames,
-  RecommendInnerComponentProps,
-  RecommendItemComponentProps,
-  RecommendStatus,
+  RecommendComponentProps,
   RecommendTranslations,
   Renderer,
-  SendEventForHits,
   TrendingFacetHit,
 } from '../types';
 
-type TrendingFacetLayoutProps<TClassNames extends Record<string, string>> = {
-  classNames: TClassNames;
-  itemComponent: (
-    props: RecommendItemComponentProps<TrendingFacetHit>
-  ) => JSX.Element;
-  items: TrendingFacetHit[];
-  sendEvent: SendEventForHits;
-};
-
-export type TrendingFacetsComponentProps<
-  TComponentProps extends Record<string, unknown> = Record<string, unknown>
-> = {
-  itemComponent: (
-    props: RecommendItemComponentProps<TrendingFacetHit> & TComponentProps
-  ) => JSX.Element;
-  items: TrendingFacetHit[];
-  sendEvent: SendEventForHits;
-  classNames?: Partial<RecommendClassNames>;
-  emptyComponent?: (props: TComponentProps) => JSX.Element;
-  headerComponent?: (
-    props: RecommendInnerComponentProps<TrendingFacetHit> & TComponentProps
-  ) => JSX.Element;
-  status: RecommendStatus;
-  translations?: Partial<RecommendTranslations>;
-  layout?: (
-    props: TrendingFacetLayoutProps<Record<string, string>> & TComponentProps
-  ) => JSX.Element;
-};
-
 export type TrendingFacetsProps<
   TComponentProps extends Record<string, unknown> = Record<string, unknown>
-> = ComponentProps<'div'> & TrendingFacetsComponentProps<TComponentProps>;
+> = ComponentProps<'div'> &
+  RecommendComponentProps<TrendingFacetHit, TComponentProps>;
 
 export function createTrendingFacetsComponent({
   createElement,
@@ -120,31 +90,6 @@ export function createTrendingFacetsComponent({
           sendEvent={sendEvent}
         />
       </section>
-    );
-  };
-}
-
-export function createListComponent({ createElement }: Renderer) {
-  return function List(
-    userProps: TrendingFacetLayoutProps<Partial<RecommendClassNames>>
-  ) {
-    const {
-      classNames = {},
-      itemComponent: ItemComponent,
-      items,
-      sendEvent,
-    } = userProps;
-
-    return (
-      <div className={classNames.container}>
-        <ol className={classNames.list}>
-          {items.map((item) => (
-            <li key={item.attribute + item.value} className={classNames.item}>
-              <ItemComponent item={item} sendEvent={sendEvent} />
-            </li>
-          ))}
-        </ol>
-      </div>
     );
   };
 }

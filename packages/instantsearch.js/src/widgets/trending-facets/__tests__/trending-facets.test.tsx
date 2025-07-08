@@ -230,14 +230,14 @@ describe('trendingFacets', () => {
                   class="ais-TrendingFacets-item"
                 >
                   <p>
-                    : 
+                    :
                   </p>
                 </li>
                 <li
                   class="ais-TrendingFacets-item"
                 >
                   <p>
-                    : 
+                    :
                   </p>
                 </li>
               </ol>
@@ -275,6 +275,7 @@ describe('trendingFacets', () => {
       });
       const options: Parameters<typeof trendingFacets>[0] = {
         container,
+        attribute: 'attribute',
         templates: {
           layout({ items }, { html }) {
             return html`<ul>
@@ -329,6 +330,7 @@ describe('trendingFacets', () => {
       });
       const options: Parameters<typeof trendingFacets>[0] = {
         container,
+        attribute: 'attribute',
         templates: {
           item(hit, { html }) {
             return html`<p>${hit.objectID}</p>`;
@@ -439,6 +441,7 @@ describe('trendingFacets', () => {
       });
       const options: Parameters<typeof trendingFacets>[0] = {
         container,
+        attribute: 'attribute',
         templates: {
           item(hit, { html }) {
             return html`<p>${hit.objectID}</p>`;
@@ -549,6 +552,7 @@ describe('trendingFacets', () => {
       });
       const options: Parameters<typeof trendingFacets>[0] = {
         container,
+        attribute: 'attribute',
         templates: {
           header({ items, cssClasses }) {
             return (
@@ -806,6 +810,7 @@ describe('trendingFacets', () => {
       });
       const options: Parameters<typeof trendingFacets>[0] = {
         container,
+        attribute: 'attribute',
         templates: {
           item(hit) {
             return <p>{hit.objectID}</p>;

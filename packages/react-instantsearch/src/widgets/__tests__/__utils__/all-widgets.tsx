@@ -99,7 +99,7 @@ function Widget<TWidget extends SingleWidget>({
     case 'TrendingFacets': {
       return (
         <widget.Component
-          facetName="foobar"
+          attribute="foobar"
           itemComponent={({ item }) => <div>{item.objectID}</div>}
           {...props}
         />
