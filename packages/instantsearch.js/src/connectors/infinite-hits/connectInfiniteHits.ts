@@ -261,8 +261,12 @@ export default (function connectInfiniteHits<
     };
 
     const getShowPrevious =
-      (helper: Helper, cachedHits: InfiniteHitsCachedHits<any>): (() => void) =>
+      (
+        helper: Helper,
+        getCachedHitsFn: () => InfiniteHitsCachedHits<THit>
+      ): (() => void) =>
       () => {
+        const cachedHits = getCachedHitsFn();
         // Using the helper's `overrideStateWithoutTriggeringChangeEvent` method
         // avoid updating the browser URL when the user displays the previous page.
         helper
@@ -274,8 +278,12 @@ export default (function connectInfiniteHits<
       };
 
     const getShowMore =
-      (helper: Helper, cachedHits: InfiniteHitsCachedHits<any>): (() => void) =>
+      (
+        helper: Helper,
+        getCachedHitsFn: () => InfiniteHitsCachedHits<THit>
+      ): (() => void) =>
       () => {
+        const cachedHits = getCachedHitsFn();
         helper
           .setPage(getLastReceivedPage(helper.state, cachedHits) + 1)
           .search();
@@ -347,8 +355,8 @@ export default (function connectInfiniteHits<
         const banner = results?.renderingContent?.widgets?.banners?.[0];
 
         if (!showPrevious) {
-          showPrevious = () => getShowPrevious(helper, getCacheHits())();
-          showMore = () => getShowMore(helper, getCacheHits())();
+          showPrevious = () => getShowPrevious(helper, getCacheHits)();
+          showMore = () => getShowMore(helper, getCacheHits)();
         }
 
         if (!sendEvent) {
