@@ -263,10 +263,10 @@ export default (function connectInfiniteHits<
     const getShowPrevious =
       (
         helper: Helper,
-        getCachedHitsFn: () => InfiniteHitsCachedHits<THit>
+        getCachedHits: () => InfiniteHitsCachedHits<THit>
       ): (() => void) =>
       () => {
-        const cachedHits = getCachedHitsFn();
+        const cachedHits = getCachedHits();
         // Using the helper's `overrideStateWithoutTriggeringChangeEvent` method
         // avoid updating the browser URL when the user displays the previous page.
         helper
@@ -280,10 +280,10 @@ export default (function connectInfiniteHits<
     const getShowMore =
       (
         helper: Helper,
-        getCachedHitsFn: () => InfiniteHitsCachedHits<THit>
+        getCachedHits: () => InfiniteHitsCachedHits<THit>
       ): (() => void) =>
       () => {
-        const cachedHits = getCachedHitsFn();
+        const cachedHits = getCachedHits();
         helper
           .setPage(getLastReceivedPage(helper.state, cachedHits) + 1)
           .search();
