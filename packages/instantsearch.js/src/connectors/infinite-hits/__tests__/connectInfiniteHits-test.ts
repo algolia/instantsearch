@@ -316,6 +316,48 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     ).toHaveBeenCalledWith(expect.objectContaining({ page: 3 }));
   });
 
+  it('goes to previous page correctly when state is mismatched', () => {
+    const renderFn = jest.fn();
+    const makeWidget = connectInfiniteHits(renderFn);
+    const widget = makeWidget({});
+
+    const helper = algoliasearchHelper(createSearchClient(), '', {
+      page: 4,
+    });
+    helper.overrideStateWithoutTriggeringChangeEvent = jest.fn(() => helper);
+    helper.searchWithoutTriggeringOnStateChange = jest.fn();
+
+    const mainHelper = algoliasearchHelper(createSearchClient(), '', {
+      page: 4,
+      query: 'test', // arbitrary change to state to force cache mismatch
+    });
+    mainHelper.overrideStateWithoutTriggeringChangeEvent = jest.fn(
+      () => mainHelper
+    );
+    mainHelper.searchWithoutTriggeringOnStateChange = jest.fn();
+
+    widget.init(
+      createInitOptions({
+        state: mainHelper.state,
+        helper,
+      })
+    );
+
+    const { showMore, showPrevious } = widget.getWidgetRenderState(
+      createRenderOptions({
+        state: mainHelper.state,
+        helper,
+      })
+    );
+    showMore();
+    expect(helper.state.page).toBe(5);
+
+    showPrevious();
+    expect(
+      helper.overrideStateWithoutTriggeringChangeEvent
+    ).toHaveBeenCalledWith(expect.objectContaining({ page: 3 }));
+  });
+
   it('Provides the hits and flush hists cache on query changes', () => {
     const renderFn = jest.fn();
     const makeWidget = connectInfiniteHits(renderFn);
