@@ -327,25 +327,23 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     helper.overrideStateWithoutTriggeringChangeEvent = jest.fn(() => helper);
     helper.searchWithoutTriggeringOnStateChange = jest.fn();
 
-    const mainHelper = algoliasearchHelper(createSearchClient(), '', {
+    // we add a query to the parent helper to simulate multi-index where
+    // the parent has a query and the infinite hits index does not
+    const parentHelper = algoliasearchHelper(createSearchClient(), '', {
       page: 4,
-      query: 'test', // arbitrary change to state to force cache mismatch
+      query: 'test',
     });
-    mainHelper.overrideStateWithoutTriggeringChangeEvent = jest.fn(
-      () => mainHelper
-    );
-    mainHelper.searchWithoutTriggeringOnStateChange = jest.fn();
 
     widget.init(
       createInitOptions({
-        state: mainHelper.state,
+        state: parentHelper.state,
         helper,
       })
     );
 
     const { showMore, showPrevious } = widget.getWidgetRenderState(
       createRenderOptions({
-        state: mainHelper.state,
+        state: parentHelper.state,
         helper,
       })
     );
