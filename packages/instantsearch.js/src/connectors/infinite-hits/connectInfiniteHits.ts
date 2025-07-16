@@ -261,32 +261,31 @@ export default (function connectInfiniteHits<
     };
 
     const getShowPrevious =
-      (helper: Helper): (() => void) =>
+      (
+        helper: Helper,
+        getCachedHits: () => InfiniteHitsCachedHits<THit>
+      ): (() => void) =>
       () => {
+        const cachedHits = getCachedHits();
         // Using the helper's `overrideStateWithoutTriggeringChangeEvent` method
         // avoid updating the browser URL when the user displays the previous page.
         helper
           .overrideStateWithoutTriggeringChangeEvent({
             ...helper.state,
-            page:
-              getFirstReceivedPage(
-                helper.state,
-                cache.read({ state: normalizeState(helper.state) }) || {}
-              ) - 1,
+            page: getFirstReceivedPage(helper.state, cachedHits) - 1,
           })
           .searchWithoutTriggeringOnStateChange();
       };
 
     const getShowMore =
-      (helper: Helper): (() => void) =>
+      (
+        helper: Helper,
+        getCachedHits: () => InfiniteHitsCachedHits<THit>
+      ): (() => void) =>
       () => {
+        const cachedHits = getCachedHits();
         helper
-          .setPage(
-            getLastReceivedPage(
-              helper.state,
-              cache.read({ state: normalizeState(helper.state) }) || {}
-            ) + 1
-          )
+          .setPage(getLastReceivedPage(helper.state, cachedHits) + 1)
           .search();
       };
 
@@ -337,6 +336,11 @@ export default (function connectInfiniteHits<
         state: existingState,
         instantSearchInstance,
       }) {
+        const getCacheHits = () => {
+          const state = parent.getPreviousState() || existingState;
+          return cache.read({ state: normalizeState(state) }) || {};
+        };
+
         let isFirstPage: boolean;
         let currentPageHits: Array<Hit<THit>> = [];
         /**
@@ -346,13 +350,13 @@ export default (function connectInfiniteHits<
          */
         const state = parent.getPreviousState() || existingState;
 
-        const cachedHits = cache.read({ state: normalizeState(state) }) || {};
+        const cachedHits = getCacheHits();
 
         const banner = results?.renderingContent?.widgets?.banners?.[0];
 
         if (!showPrevious) {
-          showPrevious = getShowPrevious(helper);
-          showMore = getShowMore(helper);
+          showPrevious = () => getShowPrevious(helper, getCacheHits)();
+          showMore = () => getShowMore(helper, getCacheHits)();
         }
 
         if (!sendEvent) {
