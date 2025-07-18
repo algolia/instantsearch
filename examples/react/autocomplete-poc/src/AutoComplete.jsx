@@ -4,6 +4,10 @@ export function AutoComplete({ searchBoxComponent, panelComponent, layoutCompone
   return <div>AutoComplete</div>;
 }
 
+export function QuerySuggestions() {
+  return <div>QuerySuggestions</div>;
+}
+
 export function TwoColumnLayout() {
   return <div>TwoColumnLayout</div>;
 }

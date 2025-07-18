@@ -3,12 +3,14 @@ import React from 'react';
 import {
   Configure,
   Highlight,
+  Hits,
+  Index,
   InstantSearch,
   RefinementList,
   SearchBox,
 } from 'react-instantsearch';
 
-import { AutoComplete, QuerySuggestions } from './AutoComplete';
+import { AutoComplete, TwoColumnLayout } from './AutoComplete';
 import { Panel } from './Panel';
 
 import 'instantsearch.css/themes/satellite.css';
@@ -47,23 +49,13 @@ export function App() {
 
             <div className="search-panel__results">
               <AutoComplete
-                indices={{
-                  instant_search_1: {
-                    name: 'instant_search',
-                    config: {},
-                    template: List,
-                  },
-                  instant_search_2: {
-                    name: 'instant_search',
-                    config: {},
-                    template: List,
-                  },
-                  query_suggestions: {
-                    config: {},
-                    template: QuerySuggestions,
-                  },
-                }}
-                layout={CustomLayout}
+                searchBoxComponent={SearchBoxComponent} // same props passed on as the searchbox widget
+                layoutComponent={
+                  <TwoColumnLayout main="index1" minor="index2" />
+                }
+                // layoutComponent={
+                //   CustomLayout
+                // }
               />
             </div>
           </div>
@@ -73,26 +65,16 @@ export function App() {
   );
 }
 
-function CustomLayout({ indices }) {
-  const { instant_search_1, instant_search_2, query_suggestions } = indices;
-
-  return (
-    <div className="two-column-layout">
-      <div className="first-column">
-        <instant_search_1.template />
-      </div>
-      <div className="second-column">
-        <instant_search_2.template />
-      </div>
-      <div className="third-column">
-        <query_suggestions.template />
-      </div>
-    </div>
-  );
-}
-
 function SearchBoxComponent({ searchBoxProps }) {
   return <SearchBox {...searchBoxProps} />;
+}
+
+function CustomLayout() {
+  return (
+    <Index indexName="index1">
+      <Hits hitComponent={HitComponent} />
+    </Index>
+  );
 }
 
 function HitComponent({ hit }) {
