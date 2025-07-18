@@ -1,20 +1,17 @@
-'use strict';
-
-var EventEmitter = require('@algolia/events');
-
-var DerivedHelper = require('./DerivedHelper');
-var escapeFacetValue = require('./functions/escapeFacetValue').escapeFacetValue;
-var inherits = require('./functions/inherits');
-var merge = require('./functions/merge');
-var objectHasKeys = require('./functions/objectHasKeys');
-var omit = require('./functions/omit');
-var RecommendParameters = require('./RecommendParameters');
-var RecommendResults = require('./RecommendResults');
-var requestBuilder = require('./requestBuilder');
-var SearchParameters = require('./SearchParameters');
-var SearchResults = require('./SearchResults');
-var sortAndMergeRecommendations = require('./utils/sortAndMergeRecommendations');
-var version = require('./version');
+import EventEmitter from '@algolia/events';
+import DerivedHelper from './DerivedHelper/index.js';
+import { escapeFacetValue } from './functions/escapeFacetValue.js';
+import inherits from './functions/inherits.js';
+import merge from './functions/merge.js';
+import objectHasKeys from './functions/objectHasKeys.js';
+import omit from './functions/omit.js';
+import RecommendParameters from './RecommendParameters/index.js';
+import RecommendResults from './RecommendResults/index.js';
+import requestBuilder from './requestBuilder.js';
+import SearchParameters from './SearchParameters/index.js';
+import SearchResults from './SearchResults/index.js';
+import sortAndMergeRecommendations from './utils/sortAndMergeRecommendations.js';
+import version from './version.js';
 
 /**
  * Event triggered when a parameter is set or updated
@@ -2176,4 +2173,4 @@ AlgoliaSearchHelper.prototype.hasPendingRequests = function () {
  * @property {string} type the type of filter: 'conjunctive', 'disjunctive', 'exclude'
  */
 
-module.exports = AlgoliaSearchHelper;
+export default AlgoliaSearchHelper;

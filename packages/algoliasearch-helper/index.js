@@ -1,10 +1,8 @@
-'use strict';
-
-var AlgoliaSearchHelper = require('./src/algoliasearch.helper');
-var RecommendParameters = require('./src/RecommendParameters');
-var RecommendResults = require('./src/RecommendResults');
-var SearchParameters = require('./src/SearchParameters');
-var SearchResults = require('./src/SearchResults');
+import AlgoliaSearchHelper from './src/algoliasearch.helper.js';
+import RecommendParameters from './src/RecommendParameters/index.js';
+import RecommendResults from './src/RecommendResults/index.js';
+import SearchParameters from './src/SearchParameters/index.js';
+import SearchResults from './src/SearchResults/index.js';
 
 /**
  * The algoliasearchHelper module is the function that will let its
@@ -38,16 +36,13 @@ var SearchResults = require('./src/SearchResults');
  * @param {SearchResultsOptions|object} searchResultsOptions an object defining the options to use when creating the search results.
  * @return {AlgoliaSearchHelper} The helper instance
  */
+
 function algoliasearchHelper(client, index, opts, searchResultsOptions) {
   return new AlgoliaSearchHelper(client, index, opts, searchResultsOptions);
 }
 
-/**
- * The version currently used
- * @member module:algoliasearchHelper.version
- * @type {number}
- */
-algoliasearchHelper.version = require('./src/version');
+import version from './src/version.js';
+algoliasearchHelper.version = version;
 
 /**
  * Constructor for the Helper.
@@ -84,4 +79,4 @@ algoliasearchHelper.SearchResults = SearchResults;
  */
 algoliasearchHelper.RecommendResults = RecommendResults;
 
-module.exports = algoliasearchHelper;
+export default algoliasearchHelper;

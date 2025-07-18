@@ -1,5 +1,3 @@
-'use strict';
-
 function clone(value) {
   if (typeof value === 'object' && value !== null) {
     return _merge(Array.isArray(value) ? [] : {}, value);
@@ -81,4 +79,4 @@ function merge(target) {
   return target;
 }
 
-module.exports = merge;
+export default merge;

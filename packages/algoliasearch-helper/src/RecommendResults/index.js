@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Constructor for SearchResults
  * @class
@@ -26,4 +24,4 @@ RecommendResults.prototype = {
   constructor: RecommendResults,
 };
 
-module.exports = RecommendResults;
+export default RecommendResults;

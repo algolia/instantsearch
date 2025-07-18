@@ -1,8 +1,6 @@
-'use strict';
-
 // NOTE: this behaves like lodash/defaults, but doesn't mutate the target
 // it also preserve keys order
-module.exports = function defaultsPure() {
+function defaultsPure() {
   var sources = Array.prototype.slice.call(arguments);
 
   return sources.reduceRight(function (acc, source) {
@@ -18,4 +16,6 @@ module.exports = function defaultsPure() {
     });
     return acc;
   }, {});
-};
+}
+
+export default defaultsPure;

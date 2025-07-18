@@ -1,8 +1,8 @@
 'use strict';
 
-var EventEmitter = require('@algolia/events');
+import EventEmitter from '@algolia/events';
 
-var inherits = require('../functions/inherits');
+import inherits from '../functions/inherits';
 
 /**
  * A DerivedHelper is a way to create sub requests to
@@ -45,4 +45,4 @@ DerivedHelper.prototype.getModifiedRecommendState = function (parameters) {
   return this.recommendFn(parameters);
 };
 
-module.exports = DerivedHelper;
+export default DerivedHelper;

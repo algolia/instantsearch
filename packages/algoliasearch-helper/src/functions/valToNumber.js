@@ -1,5 +1,3 @@
-'use strict';
-
 function valToNumber(v) {
   if (typeof v === 'number') {
     return v;
@@ -14,4 +12,4 @@ function valToNumber(v) {
   );
 }
 
-module.exports = valToNumber;
+export default valToNumber;
