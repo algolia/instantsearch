@@ -1,3 +1,4 @@
+export * from './Autocomplete';
 export * from './Carousel';
 export * from './FrequentlyBoughtTogether';
 export * from './Highlight';
