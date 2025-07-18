@@ -18,7 +18,37 @@ const search = instantsearch({
 search.addWidgets([
   autocomplete({
     container: '#searchbox',
-    placeholder: 'Search for products',
+    translations: {
+      placeholder: 'Search for products',
+    },
+    cssClasses: {
+      root: 'aa-Root',
+      input: 'aa-Input',
+      panel: 'aa-Panel',
+      list: 'aa-List',
+      item: 'aa-Item',
+      itemContent: 'aa-ItemContent',
+      itemActionButton: 'aa-ItemActionButton',
+    },
+    templates: {
+      item({ item }, { html }) {
+        return html`<div>${item}</div>`;
+      },
+      panel({ querySuggestions, Item }, { html }) {
+        return html`
+          <div class="aa-PanelLayout">
+            <section class="aa-Source">
+              <ul class="aa-List">
+                ${querySuggestions.map(
+                  (item) =>
+                    html`<li class="aa-Item"><${Item} item=${item} /></li>`
+                )}
+              </ul>
+            </section>
+          </div>
+        `;
+      },
+    },
   }),
 ]);
 
