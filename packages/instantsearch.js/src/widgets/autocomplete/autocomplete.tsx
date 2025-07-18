@@ -5,6 +5,8 @@
 import { createAutocompleteComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 
+import TemplateComponent from '../../components/Template/Template';
+import { prepareTemplateProps } from '../../lib/templating';
 import { getContainerNode } from '../../lib/utils';
 
 import type { Renderer, WidgetFactory } from '../../types';
@@ -35,11 +37,39 @@ const renderer =
   ({
     placeholder,
     containerNode,
+    templates,
+    renderState,
   }: {
     containerNode: HTMLElement;
     placeholder?: string;
+    templates: { layout: any };
   }): Renderer<AutocompleteRenderState, Partial<AutocompleteWidgetParams>> =>
-  ({ items, isOpen, refine, query }) => {
+  (
+    { items, isOpen, refine, query, instantSearchInstance },
+    isFirstRendering
+  ) => {
+    if (isFirstRendering) {
+      renderState.templateProps = prepareTemplateProps({
+        defaultTemplates: {},
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates,
+      });
+      return;
+    }
+
+    const panelComponent = (
+      templates.panel
+        ? () => (
+            <TemplateComponent
+              {...renderState.templateProps}
+              templateKey="panel"
+              rootTagName="fragment"
+              data={{ items }}
+            />
+          )
+        : undefined
+    ) as FrequentlyBoughtTogetherUiProps<Hit>['emptyComponent'];
+
     render(
       <Autocomplete
         isOpen={isOpen}
@@ -47,6 +77,7 @@ const renderer =
         onInput={(evt) => refine(evt.target.value)}
         query={query}
         placeholder={placeholder}
+        panelComponent={panelComponent}
       />,
       containerNode
     );
@@ -73,13 +104,15 @@ export type AutocompleteWidget = WidgetFactory<
 export default (function autocomplete(
   widgetParams: AutocompleteWidgetParams & AutocompleteConnectorParams
 ) {
-  const { container, placeholder } = widgetParams || {};
+  const { container, placeholder, templates } = widgetParams || {};
 
   const containerNode = getContainerNode(container);
 
   const specializedRenderer = renderer({
     containerNode,
     placeholder,
+    renderState: {},
+    templates,
   });
 
   const makeWidget = connectAutocomplete(specializedRenderer, () =>
