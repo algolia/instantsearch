@@ -1,7 +1,5 @@
-'use strict';
-
 // @MAJOR can be replaced by native Array#find when we change support
-module.exports = function find(array, comparator) {
+function find(array, comparator) {
   if (!Array.isArray(array)) {
     return undefined;
   }
@@ -13,4 +11,6 @@ module.exports = function find(array, comparator) {
   }
 
   return undefined;
-};
+}
+
+export default find;

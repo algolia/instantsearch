@@ -1,5 +1,3 @@
-'use strict';
-
 // https://github.com/babel/babel/blob/3aaafae053fa75febb3aa45d45b6f00646e30ba4/packages/babel-helpers/src/helpers.js#L604-L620
 function _objectWithoutPropertiesLoose(source, excluded) {
   if (source === null) return {};
@@ -16,4 +14,4 @@ function _objectWithoutPropertiesLoose(source, excluded) {
   return target;
 }
 
-module.exports = _objectWithoutPropertiesLoose;
+export default _objectWithoutPropertiesLoose;

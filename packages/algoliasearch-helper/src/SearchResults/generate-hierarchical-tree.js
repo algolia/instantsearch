@@ -1,13 +1,16 @@
 'use strict';
 
-module.exports = generateTrees;
+export default generateTrees;
 
-var fv = require('../functions/escapeFacetValue');
-var find = require('../functions/find');
-var prepareHierarchicalFacetSortBy = require('../functions/formatSort');
-var orderBy = require('../functions/orderBy');
-var escapeFacetValue = fv.escapeFacetValue;
-var unescapeFacetValue = fv.unescapeFacetValue;
+import {
+  escapeFacetValue as _escapeFacetValue,
+  unescapeFacetValue as _unescapeFacetValue,
+} from '../functions/escapeFacetValue';
+import find from '../functions/find';
+import prepareHierarchicalFacetSortBy from '../functions/formatSort';
+import orderBy from '../functions/orderBy';
+var escapeFacetValue = _escapeFacetValue;
+var unescapeFacetValue = _unescapeFacetValue;
 
 function generateTrees(state) {
   return function generate(hierarchicalFacetResult, hierarchicalFacetIndex) {

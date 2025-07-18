@@ -1,5 +1,3 @@
-'use strict';
-
 // NOTE: this behaves like lodash/defaults, but doesn't mutate the target
 // it also preserve keys order and keep the highest numeric value
 function mergeNumericMax() {
@@ -26,4 +24,4 @@ function mergeNumericMax() {
   }, {});
 }
 
-module.exports = mergeNumericMax;
+export default mergeNumericMax;
