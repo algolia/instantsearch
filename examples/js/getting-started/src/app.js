@@ -2,12 +2,12 @@ import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import instantsearch from 'instantsearch.js';
 import { carousel } from 'instantsearch.js/es/templates';
 import {
+  autocomplete2,
   configure,
   hits,
   pagination,
   panel,
   refinementList,
-  searchBox,
   trendingItems,
 } from 'instantsearch.js/es/widgets';
 
@@ -25,7 +25,7 @@ const search = instantsearch({
 });
 
 search.addWidgets([
-  searchBox({
+  autocomplete2({
     container: '#searchbox',
   }),
   hits({
