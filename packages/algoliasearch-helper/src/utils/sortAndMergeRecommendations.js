@@ -1,7 +1,5 @@
-'use strict';
-
-var find = require('../functions/find');
-var flat = require('../functions/flat');
+import find from '../functions/find.js';
+import flat from '../functions/flat.js';
 
 function getAverageIndices(indexTracker, nrOfObjs) {
   var avgIndices = [];
@@ -55,4 +53,4 @@ function sortAndMergeRecommendations(objectIDs, results) {
   return finalOrder;
 }
 
-module.exports = sortAndMergeRecommendations;
+export default sortAndMergeRecommendations;

@@ -1,5 +1,3 @@
-'use strict';
-
 function compareAscending(value, other) {
   if (value !== other) {
     var valIsDefined = value !== undefined;
@@ -77,4 +75,4 @@ function orderBy(collection, iteratees, orders) {
   });
 }
 
-module.exports = orderBy;
+export default orderBy;

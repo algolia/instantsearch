@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * RecommendParameters is the data structure that contains all the information
  * usable for getting recommendations from the Algolia API. It doesn't do the
@@ -85,4 +83,4 @@ RecommendParameters.prototype = {
   },
 };
 
-module.exports = RecommendParameters;
+export default RecommendParameters;

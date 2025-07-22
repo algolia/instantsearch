@@ -1,7 +1,5 @@
-'use strict';
-
 // @MAJOR can be replaced by native Array#findIndex when we change support
-module.exports = function find(array, comparator) {
+function findIndex(array, comparator) {
   if (!Array.isArray(array)) {
     return -1;
   }
@@ -12,4 +10,6 @@ module.exports = function find(array, comparator) {
     }
   }
   return -1;
-};
+}
+
+export default findIndex;
