@@ -12,7 +12,7 @@
     "algoliasearch": "4",
     "core-js": "3.40.0",
     "vue": "2.6.11",
-    "vue-instantsearch": "4.21.1"
+    "vue-instantsearch": "4.21.2"
   },
   "devDependencies": {
     "@babel/eslint-parser": "7.17.0",
