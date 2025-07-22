@@ -20,3 +20,4 @@ export * from './Stats';
 export * from './ToggleRefinement';
 export * from './TrendingItems';
 export * from './LookingSimilar';
+export * from './Autocomplete';
