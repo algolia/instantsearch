@@ -171,6 +171,43 @@ const autocomplete: AutocompleteWidget = (widgetParams) => {
       }
     }
   }
+
+  function renderResults(indices: any, refine: (q: string) => void) {
+    // Placeholder for rendering autocomplete results.
+    // You can customize this to display suggestions below the input.
+    // For now, we'll clear any previous results.
+    const existingResults = containerNode.querySelector(
+      '.ais-Autocomplete-results'
+    );
+    if (existingResults) {
+      existingResults.remove();
+    }
+
+    // Example: render a simple list of hits if available
+    if (
+      indices &&
+      indices.length > 0 &&
+      indices[0].hits &&
+      indices[0].hits.length > 0
+    ) {
+      const resultsContainer = document.createElement('div');
+      resultsContainer.className = 'ais-Autocomplete-results';
+
+      const ul = document.createElement('ul');
+      indices[0].hits.forEach((hit: any) => {
+        const li = document.createElement('li');
+        li.textContent = hit.query || hit.name || JSON.stringify(hit);
+        li.addEventListener('click', () => {
+          refine(li.textContent || '');
+          input.value = li.textContent || '';
+        });
+        ul.appendChild(li);
+      });
+
+      resultsContainer.appendChild(ul);
+      containerNode.appendChild(resultsContainer);
+    }
+  }
 };
 
 export default autocomplete;
