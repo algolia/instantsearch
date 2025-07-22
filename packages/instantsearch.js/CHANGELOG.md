@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.79.2](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.79.1...instantsearch.js@4.79.2) (2025-07-22)
+
+
+### Bug Fixes
+
+* **infiniteHits:** fix cache not using proper state ([#6671](https://github.com/algolia/instantsearch/issues/6671)) ([ec495e0](https://github.com/algolia/instantsearch/commit/ec495e0c79a24de4d012a2c15276b399fce2cdb6))
+
+
+
+
+
 ## [4.79.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.79.0...instantsearch.js@4.79.1) (2025-07-08)
 
 **Note:** Version bump only for package instantsearch.js

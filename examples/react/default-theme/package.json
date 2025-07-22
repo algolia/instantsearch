@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-default-theme",
-  "version": "65.0.0",
+  "version": "66.0.0",
   "private": true,
   "scripts": {
     "build": "BABEL_ENV=parcel parcel build index.html",
@@ -9,10 +9,10 @@
   "dependencies": {
     "algoliasearch": "5.1.1",
     "instantsearch.css": "8.5.1",
-    "instantsearch.js": "4.79.1",
+    "instantsearch.js": "4.79.2",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "react-instantsearch": "7.16.1"
+    "react-instantsearch": "7.16.2"
   },
   "devDependencies": {
     "@parcel/core": "2.10.0",
