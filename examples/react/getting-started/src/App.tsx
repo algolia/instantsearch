@@ -41,6 +41,7 @@ const ChatMessages = createChatMessagesComponent({
 });
 
 const Chat = () => {
+  const [passphrase, setPassphrase] = useState('');
   const {
     messages,
     setMessages,
@@ -51,7 +52,10 @@ const Chat = () => {
     stop,
     reload,
   } = useChat({
-    api: 'http://localhost:8787',
+    api: 'https://satellite-chat-api.algolia-5d2.workers.dev',
+    headers: {
+      Passphrase: passphrase,
+    },
   });
 
   const { contentRef, scrollRef, scrollToBottom, isAtBottom } =
@@ -59,6 +63,14 @@ const Chat = () => {
 
   return (
     <div className="ais-Chat">
+      <div style={{ display: 'flex', gap: '10px', margin: '10px' }}>
+        <label>Passphrase</label>
+        <input
+          type="password"
+          value={passphrase}
+          onChange={(e) => setPassphrase(e.target.value)}
+        />
+      </div>
       <ChatMessages
         messages={messages}
         status={status}
