@@ -5,3 +5,7 @@ export * from './Hits';
 export * from './LookingSimilar';
 export * from './RelatedProducts';
 export * from './TrendingItems';
+export * from './chat/ChatPrompt';
+export * from './chat/ChatMessages';
+export * from './chat/ChatMessage';
+export * from './chat/types';

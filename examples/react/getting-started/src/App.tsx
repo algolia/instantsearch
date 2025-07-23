@@ -1,6 +1,7 @@
+import { useChat } from '@ai-sdk/react';
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import { Hit } from 'instantsearch.js';
-import React from 'react';
+import React, { Fragment, createElement, useState } from 'react';
 import {
   Configure,
   Highlight,
@@ -18,11 +19,93 @@ import { Panel } from './Panel';
 import 'instantsearch.css/themes/satellite.css';
 
 import './App.css';
+import {
+  createChatPromptComponent,
+  // createChatMessageComponent,
+  createChatMessagesComponent,
+  ChatMessageBase,
+} from 'instantsearch-ui-components';
+
+import { useStickToBottom } from './useStickToBottom';
 
 const searchClient = algoliasearch(
   'latency',
   '6be0576ff61c053d5f9a3225e2a90f76'
 );
+
+const ChatPrompt = createChatPromptComponent({ createElement, Fragment });
+// const ChatMessage = createChatMessageComponent({ createElement, Fragment });
+const ChatMessages = createChatMessagesComponent({
+  createElement,
+  Fragment,
+});
+
+const Chat = () => {
+  const [passphrase, setPassphrase] = useState('');
+  const {
+    messages,
+    setMessages,
+    input,
+    handleSubmit,
+    setInput,
+    status,
+    stop,
+    reload,
+  } = useChat({
+    api: 'https://satellite-chat-api.algolia-5d2.workers.dev',
+    headers: {
+      Passphrase: passphrase,
+    },
+  });
+
+  const { contentRef, scrollRef, scrollToBottom, isAtBottom } =
+    useStickToBottom();
+
+  return (
+    <div className="ais-Chat">
+      <div style={{ display: 'flex', gap: '10px', margin: '10px' }}>
+        <label>Passphrase</label>
+        <input
+          type="password"
+          value={passphrase}
+          onChange={(e) => setPassphrase(e.target.value)}
+        />
+      </div>
+      <ChatMessages
+        messages={messages}
+        status={status}
+        onReload={reload}
+        contentRef={contentRef}
+        scrollRef={scrollRef}
+        isScrollAtBottom={isAtBottom}
+        scrollToBottom={scrollToBottom}
+        assistantMessageProps={{
+          actions: [
+            {
+              title: 'Test',
+              onClick: (e, message: ChatMessageBase) => {
+                const idx = messages.findIndex((m) => m.id === message?.id);
+                if (idx === -1) return;
+
+                const history = messages.slice(0, idx + 1);
+                setMessages(history);
+                reload();
+              },
+            },
+          ],
+        }}
+      />
+
+      <ChatPrompt
+        value={input}
+        onInput={setInput}
+        onSubmit={() => handleSubmit()}
+        onStop={stop}
+        status={status}
+      />
+    </div>
+  );
+};
 
 export function App() {
   return (
@@ -40,6 +123,7 @@ export function App() {
       </header>
 
       <div className="container">
+        <Chat />
         <InstantSearch
           searchClient={searchClient}
           indexName="instant_search"
