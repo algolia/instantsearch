@@ -1,4 +1,11 @@
+/** @jsx h */
+// @ts-check
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
+import {
+  createChatPromptComponent,
+  createChatMessageComponent,
+  createChatMessagesComponent,
+} from 'instantsearch-ui-components';
 import instantsearch from 'instantsearch.js';
 import { carousel } from 'instantsearch.js/es/templates';
 import {
@@ -10,6 +17,8 @@ import {
   searchBox,
   trendingItems,
 } from 'instantsearch.js/es/widgets';
+import { h, render, Fragment } from 'preact';
+import { useState } from 'preact/hooks';
 
 import 'instantsearch.css/themes/satellite.css';
 
@@ -23,6 +32,40 @@ const search = instantsearch({
   searchClient,
   insights: true,
 });
+
+const ChatPrompt = createChatPromptComponent({ createElement: h, Fragment });
+// const ChatMessage = createChatMessageComponent({ createElement: h, Fragment });
+const ChatMessages = createChatMessagesComponent({
+  createElement: h,
+  Fragment,
+});
+
+const Chat = () => {
+  const [prompt, setPrompt] = useState('');
+
+  return (
+    <div className="ais-Chat">
+      <ChatMessages
+        messages={[
+          { id: '1', role: 'user', content: 'Hello' },
+          { id: '2', role: 'assistant', content: 'Hello' },
+          { id: '3', role: 'user', content: 'Hello' },
+          { id: '4', role: 'assistant', content: 'Hello' },
+          { id: '5', role: 'user', content: 'Hello' },
+          { id: '6', role: 'assistant', content: 'Hello' },
+          { id: '7', role: 'user', content: 'Hello' },
+          { id: '8', role: 'assistant', content: 'Hello' },
+          { id: '9', role: 'user', content: 'Hello' },
+          { id: '10', role: 'assistant', content: 'Hello' },
+        ]}
+      />
+
+      <ChatPrompt value={prompt} onInput={setPrompt} />
+    </div>
+  );
+};
+
+render(<Chat />, document.getElementById('chat')!);
 
 search.addWidgets([
   searchBox({
