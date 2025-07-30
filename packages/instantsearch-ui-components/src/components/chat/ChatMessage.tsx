@@ -2,6 +2,7 @@
 import { cx } from '../../lib';
 
 import type { ComponentProps, Renderer } from '../../types';
+import type { ChatMessageBase } from './types';
 
 export type ChatMessageSide = 'left' | 'right';
 export type ChatMessageVariant = 'neutral' | 'subtle';
@@ -64,7 +65,7 @@ export type ChatMessageActionProps = {
   /**
    * Click handler for the action
    */
-  onClick?: (event: any, extraData?: any) => void;
+  onClick?: (message: ChatMessageBase) => void;
 };
 
 export type ChatMessageProps = Omit<ComponentProps<'article'>, 'content'> & {
@@ -72,6 +73,10 @@ export type ChatMessageProps = Omit<ComponentProps<'article'>, 'content'> & {
    * The content of the message
    */
   content: JSX.Element;
+  /**
+   * The message object associated with this chat message
+   */
+  message: ChatMessageBase;
   /**
    * Avatar component to render
    */
@@ -107,10 +112,6 @@ export type ChatMessageProps = Omit<ComponentProps<'article'>, 'content'> & {
    */
   footerComponent?: () => JSX.Element;
   /**
-   * Extra data to pass to action handlers
-   */
-  actionsExtraData?: any;
-  /**
    * Optional class names
    */
   classNames?: Partial<ChatMessageClassNames>;
@@ -140,6 +141,7 @@ export function createChatMessageComponent({
     const {
       classNames = {},
       content,
+      message,
       avatarComponent: AvatarComponent,
       side = 'left',
       variant = 'subtle',
@@ -148,7 +150,6 @@ export function createChatMessageComponent({
       leadingComponent: LeadingComponent,
       actionsComponent: ActionsComponent,
       footerComponent: FooterComponent,
-      actionsExtraData,
       translations: userTranslations,
       ...props
     } = userProps;
@@ -182,6 +183,17 @@ export function createChatMessageComponent({
 
     const DefaultActionIcon = createDefaultActionIconComponent;
 
+    function renderAssistantPart(part: ChatMessageBase['parts'][number]) {
+      if (part.type === 'step-start') {
+        return null;
+      }
+      if (part.type === 'text') {
+        return <span>{part.markdown}</span>;
+      }
+      // TODO: handle all part types
+      return <pre className="ais-ChatMessage-code">{JSON.stringify(part)}</pre>;
+    }
+
     const Actions = () => {
       if (ActionsComponent) {
         return <ActionsComponent actions={actions} />;
@@ -196,7 +208,7 @@ export function createChatMessageComponent({
               className="ais-ChatMessage-action"
               disabled={action.disabled}
               title={action.title}
-              onClick={(event) => action.onClick?.(event, actionsExtraData)}
+              onClick={() => action.onClick?.(message)}
             >
               {action.icon ? (
                 <action.icon />
@@ -227,7 +239,11 @@ export function createChatMessageComponent({
           )}
 
           <div className={cx(cssClasses.content)}>
-            <div className={cx(cssClasses.message)}>{content}</div>
+            <div className={cx(cssClasses.message)}>
+              {message.role === 'assistant'
+                ? message.parts.map(renderAssistantPart)
+                : message.content}
+            </div>
 
             {hasActions && (
               <div

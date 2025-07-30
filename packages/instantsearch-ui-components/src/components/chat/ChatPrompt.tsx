@@ -63,7 +63,10 @@ export type ChatPromptClassNames = {
   footer: string | string[];
 };
 
-export type ChatPromptProps = ComponentProps<'form'> & {
+export type ChatPromptProps = Omit<
+  ComponentProps<'form'>,
+  'onInput' | 'onSubmit'
+> & {
   /**
    * Content to render above the textarea
    */

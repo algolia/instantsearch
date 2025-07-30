@@ -231,28 +231,28 @@ $break-medium: 767px;
   cursor: not-allowed;
 }
 
-.ais-ChatPrompt-submit[data-status="submitted"],
-.ais-ChatPrompt-submit[data-status="streaming"] {
+.ais-ChatPrompt-submit[data-status='submitted'],
+.ais-ChatPrompt-submit[data-status='streaming'] {
   background-color: $grey600;
   background-image: linear-gradient(-180deg, $grey500, $grey600);
   border-color: $grey600;
   color: $white;
 }
 
-.ais-ChatPrompt-submit[data-status="submitted"]:hover:not(:disabled),
-.ais-ChatPrompt-submit[data-status="streaming"]:hover:not(:disabled) {
+.ais-ChatPrompt-submit[data-status='submitted']:hover:not(:disabled),
+.ais-ChatPrompt-submit[data-status='streaming']:hover:not(:disabled) {
   background-image: linear-gradient(-180deg, $grey400, $grey500);
   border-color: $grey500;
 }
 
-.ais-ChatPrompt-submit[data-status="error"] {
+.ais-ChatPrompt-submit[data-status='error'] {
   background-color: $red600;
   background-image: linear-gradient(-180deg, $red500, $red600);
   border-color: $red600;
   color: $white;
 }
 
-.ais-ChatPrompt-submit[data-status="error"]:hover:not(:disabled) {
+.ais-ChatPrompt-submit[data-status='error']:hover:not(:disabled) {
   background-image: linear-gradient(-180deg, $red400, $red500);
   border-color: $red500;
 }
@@ -346,6 +346,11 @@ $break-medium: 767px;
   padding: 0;
 }
 
+.ais-ChatMessage-code {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
 .ais-ChatMessage-actions {
   display: flex;
   align-items: center;
@@ -424,12 +429,13 @@ $break-medium: 767px;
   .ais-ChatMessage--right .ais-ChatMessage-container {
     max-width: 85%;
   }
-  
+
   .ais-ChatMessage-container {
     gap: 0.5rem;
   }
-  
-  .ais-ChatMessage--with-leading.ais-ChatMessage--left .ais-ChatMessage-actions {
+
+  .ais-ChatMessage--with-leading.ais-ChatMessage--left
+    .ais-ChatMessage-actions {
     margin-left: 2.25rem;
   }
 }
@@ -648,13 +654,13 @@ $break-medium: 767px;
     padding: 0.75rem;
     gap: 1rem;
   }
-  
+
   .ais-ChatMessages-message-content,
   .ais-ChatMessages-loader,
   .ais-ChatMessages-error {
     max-width: 85%;
   }
-  
+
   .ais-ChatMessages-scrollToBottom {
     height: 2.25rem;
     width: 2.25rem;

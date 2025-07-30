@@ -5,15 +5,7 @@ import { createChatMessageComponent } from './ChatMessage';
 
 import type { ComponentProps, MutableRef, Renderer } from '../../types';
 import type { ChatMessageProps } from './ChatMessage';
-import type { ChatStatus } from './types';
-
-export type ChatRole = 'user' | 'assistant';
-
-export type ChatMessageBase = {
-  id: string;
-  role: ChatRole;
-  content: string;
-};
+import type { ChatMessageBase, ChatStatus } from './types';
 
 export type ChatMessagesTranslations = {
   /**
@@ -130,7 +122,7 @@ function createDefaultMessageComponent({ createElement, Fragment }: Renderer) {
         content={<div>{message.content}</div>}
         side={message.role === 'user' ? 'right' : 'left'}
         variant={message.role === 'user' ? 'neutral' : 'subtle'}
-        actionsExtraData={message}
+        message={message}
         {...messageProps}
       />
     );
