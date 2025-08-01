@@ -667,3 +667,52 @@ $break-medium: 767px;
     bottom: 0.75rem;
   }
 }
+
+// Chat Toggle Button (Open/Close)
+.ais-ChatToggleButton {
+  position: absolute;
+  inset-block-end: 2rem;
+  inset-inline-end: 2rem;
+  z-index: 1100;
+  padding: 0.75em 1.25em;
+  border-radius: 2em;
+  background: $nebula600;
+  color: $white;
+  border: none;
+  font-size: 1rem;
+  box-shadow: 0 0.125em 0.5em rgba($grey900, 0.12);
+  cursor: pointer;
+  transition: inset-inline-end 0.3s;
+}
+
+.ais-ChatToggleButton--open {
+  inset-inline-end: 26%;
+}
+
+// Chat Header
+.ais-ChatHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem 0.5rem 1rem;
+  border-bottom: 1px solid $grey200;
+}
+
+.ais-ChatHeader-title {
+  font-weight: 600;
+}
+
+.ais-ChatHeader-close {
+  position: static;
+  inset-block-end: unset;
+  inset-inline-end: unset;
+  z-index: auto;
+  background: none;
+  color: $grey600;
+  box-shadow: none;
+  padding: 0.25em 0.75em;
+  font-size: 1.2rem;
+  border-radius: 1em;
+  border: none;
+  cursor: pointer;
+}

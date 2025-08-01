@@ -9,3 +9,5 @@ export * from './chat/ChatPrompt';
 export * from './chat/ChatMessages';
 export * from './chat/ChatMessage';
 export * from './chat/types';
+export * from './chat/ChatToggleButton';
+export * from './chat/ChatHeader';
