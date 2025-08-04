@@ -917,6 +917,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
     getWidgetUiState<TUiState extends UiState = UiState>(uiState: TUiState) {
       return localWidgets
         .filter(isIndexWidget)
+        .filter((w) => !w._separate)
         .reduce<TUiState>(
           (previousUiState, innerIndex) =>
             innerIndex.getWidgetUiState(previousUiState),

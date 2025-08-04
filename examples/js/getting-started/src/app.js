@@ -141,6 +141,7 @@ search.addWidgets([
   // Autocomplete widget
   index({
     separate: true,
+    indexId: 'autocomplete',
   }).addWidgets([
     configure({ hitsPerPage: 2 }),
     index({
