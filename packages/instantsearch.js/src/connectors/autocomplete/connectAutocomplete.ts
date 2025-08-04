@@ -6,6 +6,8 @@ import {
   createSendEventForHits,
   noop,
   warning,
+  addQueryID,
+  addAbsolutePosition,
 } from '../../lib/utils';
 
 import type { SendEventForHits } from '../../lib/utils';
@@ -184,9 +186,16 @@ search.addWidgets([
           // We need to escape the hits because highlighting
           // exposes HTML tags to the end-user.
           if (scopedResult.results) {
-            scopedResult.results.hits = escapeHTML
-              ? escapeHits(scopedResult.results.hits)
-              : scopedResult.results.hits;
+            scopedResult.results.hits = addAbsolutePosition(
+              addQueryID(
+                escapeHTML
+                  ? escapeHits(scopedResult.results.hits)
+                  : scopedResult.results.hits,
+                scopedResult.results.queryID
+              ),
+              scopedResult.results.page,
+              scopedResult.results.hitsPerPage
+            );
           }
 
           const sendEvent = createSendEventForHits({

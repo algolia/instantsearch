@@ -18,7 +18,6 @@ import type {
   IndexUiState,
   Widget,
   ScopedResult,
-  SearchClient,
   IndexRenderState,
   RenderOptions,
   RecommendResponse,
@@ -38,8 +37,20 @@ const withUsage = createDocumentationMessageGenerator({
 });
 
 export type IndexWidgetParams = {
+  /**
+   * The index or composition id to target.
+   */
   indexName: string;
+  /**
+   * Id to use for the index if there are multiple indices with the same name.
+   * This will be used to create the URL and the render state.
+   */
   indexId?: string;
+  /**
+   * If `true`, the index will not be merged with the main helper's state.
+   * This means that the index will not be part of the main search request.
+   */
+  separate?: boolean;
 };
 
 export type IndexInitOptions = {
@@ -118,6 +129,12 @@ export type IndexWidget<TUiState extends UiState = UiState> = Omit<
       | TUiState[string]
       | ((previousIndexUiState: TUiState[string]) => TUiState[string])
   ) => void;
+  /**
+   * This index is set as separate, meaning it will not be merged with the
+   * main helper's state.
+   * @private
+   */
+  _separate: boolean;
 };
 
 /**
@@ -260,11 +277,14 @@ function resolveScopedResultsFromWidgets(
 }
 
 const index = (widgetParams: IndexWidgetParams): IndexWidget => {
-  if (widgetParams === undefined || widgetParams.indexName === undefined) {
+  if (
+    widgetParams === undefined ||
+    (widgetParams.indexName === undefined && !widgetParams.separate)
+  ) {
     throw new Error(withUsage('The `indexName` option is required.'));
   }
 
-  const { indexName, indexId = indexName } = widgetParams;
+  const { indexName, indexId = indexName, separate = false } = widgetParams;
 
   let localWidgets: Array<Widget | IndexWidget> = [];
   let localUiState: IndexUiState = {};
@@ -279,6 +299,8 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
   return {
     $$type: 'ais.index',
     $$widgetType: 'ais.index',
+
+    _separate: separate,
 
     getIndexName() {
       return indexName;
@@ -587,7 +609,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       // `searchClient`. Only the "main" Helper created at the `InstantSearch`
       // level is aware of the client.
       helper = algoliasearchHelper(
-        {} as SearchClient,
+        mainHelper.getClient(),
         parameters.index,
         parameters
       );
@@ -597,6 +619,12 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       // which is responsible for managing the queries (it's the only one that is
       // aware of the `searchClient`).
       helper.search = () => {
+        if (separate) {
+          instantSearchInstance.status = 'loading';
+          this.render({ instantSearchInstance });
+          return helper!.searchOnlyWithDerivedHelpers();
+        }
+
         if (instantSearchInstance.onStateChange) {
           instantSearchInstance.onStateChange({
             uiState: instantSearchInstance.mainIndex.getWidgetUiState({}),
@@ -633,7 +661,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         );
       };
 
-      derivedHelper = mainHelper.derive(
+      const derivingHelper = separate
+        ? helper
+        : nearestSeparateHelper(parent, mainHelper);
+      derivedHelper = derivingHelper.derive(
         () =>
           mergeSearchParameters(
             mainHelper.state,
@@ -966,4 +997,20 @@ function storeRenderState({
       ...renderState,
     },
   };
+}
+
+/**
+ * Walk up the parent chain to find the closest separate index, or fall back to mainHelper
+ */
+function nearestSeparateHelper(
+  current: IndexWidget | null,
+  mainHelper: Helper
+): Helper {
+  while (current) {
+    if (current._separate) {
+      return current.getHelper()!;
+    }
+    current = current.getParent();
+  }
+  return mainHelper;
 }
