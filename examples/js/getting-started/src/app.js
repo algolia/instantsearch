@@ -11,8 +11,8 @@ import {
   configure,
   hits,
   refinementList,
+  panel,
 } from 'instantsearch.js/es/widgets';
-import { waitForResults } from 'instantsearch.js/es/lib/server';
 
 import 'instantsearch.css/themes/satellite.css';
 
@@ -30,6 +30,12 @@ const search = instantsearch({
   future: {
     persistHierarchicalRootCount: true,
     preserveSharedStateOnUnmount: true,
+  },
+});
+
+const attributePanel = panel({
+  templates: {
+    header: ({ widgetParams: { attribute } }) => attribute,
   },
 });
 
@@ -67,7 +73,7 @@ const autocomplete = connectAutocomplete(
             }}
           />
           <button
-            class="ais-SearchBox-btn"
+            class="ais-SearchBox-btn ais-RefinementList-showMore"
             type="button"
             onClick=${() => {
               refine('');
@@ -77,7 +83,7 @@ const autocomplete = connectAutocomplete(
             ⊗
           </button>
           <button
-            class="ais-SearchBox-btn"
+            class="ais-SearchBox-btn ais-RefinementList-showMore"
             type="submit"
             title="apply current query"
           >
@@ -113,7 +119,12 @@ const autocomplete = connectAutocomplete(
                       >
                     </td>
                     <td style=${{ textAlign: 'center' }}>
-                      <button onClick=${() => refine(query)}>↖</button>
+                      <button
+                        class="ais-SearchBox-btn ais-RefinementList-showMore"
+                        onClick=${() => refine(query)}
+                      >
+                        ↖
+                      </button>
                     </td>
                   </tr>`;
                 })
@@ -176,7 +187,7 @@ search.addWidgets([
         </div>`,
     },
   }),
-  refinementList({
+  attributePanel(refinementList)({
     container: '#brand-list',
     attribute: 'brand',
   }),
