@@ -1,3 +1,4 @@
+/* eslint-disable new-cap */
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import { html, render } from 'htm/preact';
 import instantsearch from 'instantsearch.js';
@@ -5,6 +6,7 @@ import {
   connectSearchBox,
   connectAutocomplete,
 } from 'instantsearch.js/es/connectors';
+import { Highlight } from 'instantsearch.js/es/helpers/components';
 import { history } from 'instantsearch.js/es/lib/routers';
 import {
   index,
@@ -31,13 +33,24 @@ const search = instantsearch({
     persistHierarchicalRootCount: true,
     preserveSharedStateOnUnmount: true,
   },
+  insights: true,
 });
 
-const attributePanel = panel({
-  templates: {
-    header: ({ widgetParams: { attribute } }) => attribute,
-  },
-});
+const attributePanel = (widget) =>
+  panel({
+    templates: {
+      header: ({ widgetParams: { attribute } }) => attribute,
+    },
+  })(widget);
+
+function QueryID({ hit }) {
+  return html`<code
+    data-query-id=${hit.__queryID}
+    style=${{ '--color': `#${hit.__queryID?.slice(0, 6)}` }}
+  >
+    ${hit.__queryID?.slice(0, 4)}
+  </code>`;
+}
 
 const virtualSearchBox = connectSearchBox(({ query, widgetParams }) => {
   render(
@@ -47,7 +60,13 @@ const virtualSearchBox = connectSearchBox(({ query, widgetParams }) => {
 });
 
 const autocomplete = connectAutocomplete(
-  ({ widgetParams, indices, refine, currentRefinement }) => {
+  ({
+    widgetParams,
+    indices,
+    refine,
+    currentRefinement,
+    instantSearchInstance,
+  }) => {
     render(
       html`<div style=${{ border: '1px solid #ccc', padding: '10px' }}>
         <form
@@ -55,7 +74,7 @@ const autocomplete = connectAutocomplete(
           type="search"
           onSubmit=${(e) => {
             e.preventDefault();
-            search.renderState.instant_search.searchBox.refine(
+            instantSearchInstance.renderState.instant_search.searchBox.refine(
               currentRefinement
             );
           }}
@@ -110,13 +129,7 @@ const autocomplete = connectAutocomplete(
                     <td>${query}</td>
                     <td style=${{ textAlign: 'center' }}>${i.indexId}</td>
                     <td style=${{ textAlign: 'center' }}>
-                      <code
-                        data-query-id=${hit.__queryID}
-                        style=${{
-                          '--color': `#${hit.__queryID.slice(0, 6)}`,
-                        }}
-                        >${hit.__queryID.slice(0, 4)}</code
-                      >
+                      ${QueryID({ hit })}
                     </td>
                     <td style=${{ textAlign: 'center' }}>
                       <button
@@ -139,10 +152,7 @@ const autocomplete = connectAutocomplete(
 
 search.addWidgets([
   // Autocomplete widget
-  index({
-    separate: true,
-    indexId: 'autocomplete',
-  }).addWidgets([
+  index({ isolated: true }).addWidgets([
     configure({ hitsPerPage: 2 }),
     index({
       indexName: 'instant_search',
@@ -177,14 +187,11 @@ search.addWidgets([
         html`<div
           style=${{ display: 'flex', gap: '.5em', alignItems: 'center' }}
         >
-          ${hit.name}
-          <code
-            data-query-id=${hit.__queryID}
-            style=${{
-              '--color': `#${hit.__queryID.slice(0, 6)}`,
-            }}
-            >${hit.__queryID.slice(0, 4)}</code
-          >
+          ${Highlight({
+            attribute: 'name',
+            hit,
+          })}
+          ${QueryID({ hit })}
         </div>`,
     },
   }),

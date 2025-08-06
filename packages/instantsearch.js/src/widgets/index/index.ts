@@ -21,6 +21,7 @@ import type {
   IndexRenderState,
   RenderOptions,
   RecommendResponse,
+  SearchClient,
 } from '../../types';
 import type {
   AlgoliaSearchHelper as Helper,
@@ -36,22 +37,43 @@ const withUsage = createDocumentationMessageGenerator({
   name: 'index-widget',
 });
 
-export type IndexWidgetParams = {
-  /**
-   * The index or composition id to target.
-   */
-  indexName: string;
-  /**
-   * Id to use for the index if there are multiple indices with the same name.
-   * This will be used to create the URL and the render state.
-   */
-  indexId?: string;
-  /**
-   * If `true`, the index will not be merged with the main helper's state.
-   * This means that the index will not be part of the main search request.
-   */
-  separate?: boolean;
-};
+export type IndexWidgetParams =
+  | {
+      /**
+       * The index or composition id to target.
+       */
+      indexName: string;
+      /**
+       * Id to use for the index if there are multiple indices with the same name.
+       * This will be used to create the URL and the render state.
+       */
+      indexId?: string;
+      /**
+       * If `true`, the index will not be merged with the main helper's state.
+       * This means that the index will not be part of the main search request.
+       *
+       * @default false
+       */
+      isolated?: false;
+    }
+  | {
+      /**
+       * If `true`, the index will not be merged with the main helper's state.
+       * This means that the index will not be part of the main search request.
+       *
+       * @default false
+       */
+      isolated: true;
+      /**
+       * The index or composition id to target.
+       */
+      indexName?: string;
+      /**
+       * Id to use for the index if there are multiple indices with the same name.
+       * This will be used to create the URL and the render state.
+       */
+      indexId?: string;
+    };
 
 export type IndexInitOptions = {
   instantSearchInstance: InstantSearch;
@@ -130,11 +152,11 @@ export type IndexWidget<TUiState extends UiState = UiState> = Omit<
       | ((previousIndexUiState: TUiState[string]) => TUiState[string])
   ) => void;
   /**
-   * This index is set as separate, meaning it will not be merged with the
-   * main helper's state.
+   * This index is isolated, meaning it will not be merged with the main
+   * helper's state.
    * @private
    */
-  _separate: boolean;
+  _isolated: boolean;
 };
 
 /**
@@ -279,12 +301,17 @@ function resolveScopedResultsFromWidgets(
 const index = (widgetParams: IndexWidgetParams): IndexWidget => {
   if (
     widgetParams === undefined ||
-    (widgetParams.indexName === undefined && !widgetParams.separate)
+    (widgetParams.indexName === undefined && !widgetParams.isolated)
   ) {
+    console.log(widgetParams);
     throw new Error(withUsage('The `indexName` option is required.'));
   }
 
-  const { indexName, indexId = indexName, separate = false } = widgetParams;
+  const {
+    indexName = '',
+    indexId = indexName,
+    isolated = false,
+  } = widgetParams;
 
   let localWidgets: Array<Widget | IndexWidget> = [];
   let localUiState: IndexUiState = {};
@@ -300,7 +327,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
     $$type: 'ais.index',
     $$widgetType: 'ais.index',
 
-    _separate: separate,
+    _isolated: isolated,
 
     getIndexName() {
       return indexName;
@@ -367,7 +394,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
     },
 
     getParent() {
-      return localParent;
+      return isolated ? null : localParent;
     },
 
     createURL(
@@ -619,10 +646,12 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       // which is responsible for managing the queries (it's the only one that is
       // aware of the `searchClient`).
       helper.search = () => {
-        if (separate) {
+        if (isolated) {
           instantSearchInstance.status = 'loading';
           this.render({ instantSearchInstance });
-          return helper!.searchOnlyWithDerivedHelpers();
+          return instantSearchInstance.compositionID
+            ? helper!.searchWithComposition()
+            : helper!.searchOnlyWithDerivedHelpers();
         }
 
         if (instantSearchInstance.onStateChange) {
@@ -661,9 +690,13 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         );
       };
 
-      const derivingHelper = separate
+      const isolatedHelper = indexName
         ? helper
-        : nearestSeparateHelper(parent, mainHelper);
+        : algoliasearchHelper({} as SearchClient, '__empty_index__', {});
+      const derivingHelper = isolated
+        ? isolatedHelper
+        : nearestIsolatedHelper(parent, mainHelper);
+
       derivedHelper = derivingHelper.derive(
         () =>
           mergeSearchParameters(
@@ -820,6 +853,13 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       if (hasSearchWidget) {
         instantSearchInstance._hasSearchWidget = true;
       }
+
+      // Not yet implemented, but once isolated indices can trigger a search,
+      // we will implement this at the same time as implementing SSR for isolated
+      // indices.
+      // if (isolated && shouldSearchAutomatically) {
+      //   defer(() => helper!.search())();
+      // }
     },
 
     render({ instantSearchInstance }: IndexRenderOptions) {
@@ -835,8 +875,12 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
       // We only render index widgets if there are no results.
       // This makes sure `render` is never called with `results` being `null`.
+      // If it's an isolated index without an index name, we render all widgets,
+      // as there are no results to display for the isolated index itself.
       let widgetsToRender =
-        this.getResults() || derivedHelper?.lastRecommendResults
+        this.getResults() ||
+        derivedHelper?.lastRecommendResults ||
+        (isolated && !indexName)
           ? localWidgets
           : localWidgets.filter(isIndexWidget);
 
@@ -917,7 +961,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
     getWidgetUiState<TUiState extends UiState = UiState>(uiState: TUiState) {
       return localWidgets
         .filter(isIndexWidget)
-        .filter((w) => !w._separate)
+        .filter((w) => !w._isolated)
         .reduce<TUiState>(
           (previousUiState, innerIndex) =>
             innerIndex.getWidgetUiState(previousUiState),
@@ -1001,14 +1045,14 @@ function storeRenderState({
 }
 
 /**
- * Walk up the parent chain to find the closest separate index, or fall back to mainHelper
+ * Walk up the parent chain to find the closest isolated index, or fall back to mainHelper
  */
-function nearestSeparateHelper(
+function nearestIsolatedHelper(
   current: IndexWidget | null,
   mainHelper: Helper
 ): Helper {
   while (current) {
-    if (current._separate) {
+    if (current._isolated) {
       return current.getHelper()!;
     }
     current = current.getParent();

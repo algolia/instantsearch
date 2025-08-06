@@ -9,7 +9,7 @@ export function resolveSearchParameters(
 
   while (parent !== null) {
     states = [parent.getHelper()!.state].concat(states);
-    parent = parent._separate ? null : parent.getParent();
+    parent = parent.getParent();
   }
 
   return states;
