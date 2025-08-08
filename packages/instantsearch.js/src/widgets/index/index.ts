@@ -66,7 +66,7 @@ export type IndexWidgetParams =
        * - which widgets get rendered when a change happens
        * - whether the index searches automatically
        * - whether the index is included in the URL / UiState
-       * - whether the index is include in server-side rendering
+       * - whether the index is included in server-side rendering
        *
        * @default false
        */
@@ -313,6 +313,8 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
     throw new Error(withUsage('The `indexName` option is required.'));
   }
 
+  // When isolated=true, we use an empty string as the default indexName.
+  // This is intentional: isolated indices do not require a real index name.
   const {
     indexName = '',
     indexId = indexName,
