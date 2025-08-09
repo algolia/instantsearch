@@ -545,9 +545,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         helper!.setState(newState);
         helper!.recommendState = cleanedRecommendState;
 
-        if (localWidgets.length) {
-          localInstantSearchInstance.scheduleSearch();
-        }
+        localInstantSearchInstance.scheduleSearch();
       }
 
       return this;
