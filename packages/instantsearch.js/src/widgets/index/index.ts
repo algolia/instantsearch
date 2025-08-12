@@ -54,7 +54,7 @@ export type IndexWidgetParams =
        *
        * @default false
        */
-      isolated?: false;
+      EXPERIMENTAL_isolated?: false;
     }
   | {
       /**
@@ -70,7 +70,7 @@ export type IndexWidgetParams =
        *
        * @default false
        */
-      isolated: true;
+      EXPERIMENTAL_isolated: true;
       /**
        * The index or composition id to target.
        */
@@ -308,7 +308,8 @@ function resolveScopedResultsFromWidgets(
 const index = (widgetParams: IndexWidgetParams): IndexWidget => {
   if (
     widgetParams === undefined ||
-    (widgetParams.indexName === undefined && !widgetParams.isolated)
+    (widgetParams.indexName === undefined &&
+      !widgetParams.EXPERIMENTAL_isolated)
   ) {
     throw new Error(withUsage('The `indexName` option is required.'));
   }
@@ -318,7 +319,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
   const {
     indexName = '',
     indexId = indexName,
-    isolated = false,
+    EXPERIMENTAL_isolated: isolated = false,
   } = widgetParams;
 
   let localWidgets: Array<Widget | IndexWidget> = [];

@@ -158,7 +158,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
   it('does not throw without `indexName` option when `isolated` is true', () => {
     expect(() => {
-      index({ isolated: true });
+      index({ EXPERIMENTAL_isolated: true });
     }).not.toThrow();
   });
 
@@ -3410,9 +3410,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       search.addWidgets([
         instance.addWidgets([
           virtualSearchBox({}),
-          index({ indexName: 'childInstance', isolated: true }).addWidgets([
-            virtualPagination({}),
-          ]),
+          index({
+            indexName: 'childInstance',
+            EXPERIMENTAL_isolated: true,
+          }).addWidgets([virtualPagination({})]),
         ]),
       ]);
 
@@ -3821,7 +3822,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
   describe('isolated', () => {
     it('sets _isolated to true when isolated option is true', () => {
-      const instance = index({ isolated: true });
+      const instance = index({ EXPERIMENTAL_isolated: true });
       expect(instance._isolated).toBe(true);
       expect(instance.getParent()).toBeNull();
     });
@@ -3841,7 +3842,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
     it('returns null parent for isolated indices', () => {
       const parent = index({ indexName: 'parentIndex' });
-      const child = index({ isolated: true });
+      const child = index({ EXPERIMENTAL_isolated: true });
       parent.addWidgets([child]);
       child.init(createIndexInitOptions({ parent }));
       expect(child.getParent()).toBeNull();
@@ -3851,7 +3852,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const search = instantsearch({
         searchClient: createSearchClient(),
       }).addWidgets([
-        index({ isolated: true }).addWidgets([virtualSearchBox({})]),
+        index({ EXPERIMENTAL_isolated: true }).addWidgets([
+          virtualSearchBox({}),
+        ]),
       ]);
       search.start();
 
@@ -3863,7 +3866,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const search = instantsearch({
         searchClient: createSearchClient(),
       }).addWidgets([
-        index({ isolated: false, indexName: 'a' }).addWidgets([
+        index({ EXPERIMENTAL_isolated: false, indexName: 'a' }).addWidgets([
           virtualSearchBox({}),
         ]),
       ]);
@@ -3888,7 +3891,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const search = instantsearch({
         searchClient: createSearchClient(),
       }).addWidgets([
-        index({ isolated: true, indexName: 'a' }).addWidgets([
+        index({ EXPERIMENTAL_isolated: true, indexName: 'a' }).addWidgets([
           virtualSearchBox({}),
         ]),
       ]);
@@ -3917,7 +3920,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const search = instantsearch({
         searchClient: createSearchClient(),
       }).addWidgets([
-        index({ isolated: true }).addWidgets([
+        index({ EXPERIMENTAL_isolated: true }).addWidgets([
           index({ indexName: 'a' }),
           virtualSearchBox({}),
         ]),
@@ -3937,7 +3940,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         searchClient: createCompositionClient(),
         compositionID: 'composition-id',
       }).addWidgets([
-        index({ isolated: true, indexName: 'a' }).addWidgets([
+        index({ EXPERIMENTAL_isolated: true, indexName: 'a' }).addWidgets([
           virtualSearchBox({}),
         ]),
       ]);
