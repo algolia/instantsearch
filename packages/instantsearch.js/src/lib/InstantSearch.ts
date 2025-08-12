@@ -515,7 +515,10 @@ See documentation: ${createDocumentationLink({
       );
     }
 
-    if (this.compositionID && widgets.some(isIndexWidget)) {
+    if (
+      this.compositionID &&
+      widgets.some((w) => isIndexWidget(w) && !w._isolated)
+    ) {
       throw new Error(
         withUsage(
           'The `index` widget cannot be used with a composition-based InstantSearch implementation.'

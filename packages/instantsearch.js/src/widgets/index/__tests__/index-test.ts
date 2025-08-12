@@ -3,6 +3,7 @@
  */
 
 import {
+  createCompositionClient,
   createSearchClient,
   createSingleRecommendResponse,
   createSingleSearchResponse,
@@ -153,6 +154,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
 See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widget/js/"
 `);
+  });
+
+  it('does not throw without `indexName` option when `isolated` is true', () => {
+    expect(() => {
+      index({ EXPERIMENTAL_isolated: true });
+    }).not.toThrow();
   });
 
   it('is a widget', () => {
@@ -3345,6 +3352,82 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
     });
   });
 
+  describe('getWidgetUiState', () => {
+    it('returns the index UI state of its widgets', () => {
+      const instance = index({ indexName: 'instance' });
+      const search = instantsearch({
+        indexName: 'root',
+        searchClient: createSearchClient(),
+      });
+      search.start();
+      search.addWidgets([instance.addWidgets([virtualSearchBox({})])]);
+
+      search.renderState.instance.searchBox!.refine('hello');
+
+      expect(instance.getWidgetUiState({})).toEqual({
+        instance: {
+          query: 'hello',
+        },
+      });
+    });
+
+    it('returns the index of its widgets and child indexes', () => {
+      const instance = index({ indexName: 'instance' });
+      const search = instantsearch({
+        indexName: 'root',
+        searchClient: createSearchClient(),
+      });
+      search.start();
+      search.addWidgets([
+        instance.addWidgets([
+          virtualSearchBox({}),
+          index({ indexName: 'childInstance' }).addWidgets([
+            virtualPagination({}),
+          ]),
+        ]),
+      ]);
+
+      search.renderState.instance.searchBox!.refine('hello');
+      search.renderState.childInstance.pagination!.refine(2);
+
+      expect(instance.getWidgetUiState({})).toEqual({
+        childInstance: {
+          page: 3,
+        },
+        instance: {
+          query: 'hello',
+        },
+      });
+    });
+
+    it('does not include isolated child indexes', () => {
+      const instance = index({ indexName: 'instance' });
+      const search = instantsearch({
+        indexName: 'root',
+        searchClient: createSearchClient(),
+      });
+      search.start();
+      search.addWidgets([
+        instance.addWidgets([
+          virtualSearchBox({}),
+          index({
+            indexName: 'childInstance',
+            EXPERIMENTAL_isolated: true,
+          }).addWidgets([virtualPagination({})]),
+        ]),
+      ]);
+
+      search.renderState.instance.searchBox!.refine('hello');
+      search.renderState.childInstance.pagination!.refine(2);
+
+      expect(instance.getWidgetUiState({})).toEqual({
+        instance: {
+          query: 'hello',
+        },
+      });
+    });
+  });
+
   describe('setIndexUiState', () => {
     it('updates main UI state with an object', () => {
       const instance = index({ indexName: 'indexName' });
@@ -3734,6 +3817,153 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect.objectContaining({ objectID: '2' }),
         expect.objectContaining({ objectID: '3' }),
       ]);
+    });
+  });
+
+  describe('isolated', () => {
+    it('sets _isolated to true when isolated option is true', () => {
+      const instance = index({ EXPERIMENTAL_isolated: true });
+      expect(instance._isolated).toBe(true);
+      expect(instance.getParent()).toBeNull();
+    });
+
+    it('sets _isolated to false when isolated option is false or omitted', () => {
+      const instance = index({ indexName: 'indexName' });
+      expect(instance._isolated).toBe(false);
+    });
+
+    it('returns correct parent for non-isolated indices', () => {
+      const parent = index({ indexName: 'parentIndex' });
+      const child = index({ indexName: 'childIndex' });
+      parent.addWidgets([child]);
+      child.init(createIndexInitOptions({ parent }));
+      expect(child.getParent()).toBe(parent);
+    });
+
+    it('returns null parent for isolated indices', () => {
+      const parent = index({ indexName: 'parentIndex' });
+      const child = index({ EXPERIMENTAL_isolated: true });
+      parent.addWidgets([child]);
+      child.init(createIndexInitOptions({ parent }));
+      expect(child.getParent()).toBeNull();
+    });
+
+    it('does not search by default when isolated', async () => {
+      const search = instantsearch({
+        searchClient: createSearchClient(),
+      }).addWidgets([
+        index({ EXPERIMENTAL_isolated: true }).addWidgets([
+          virtualSearchBox({}),
+        ]),
+      ]);
+      search.start();
+
+      await wait(0);
+      expect(search.client.search).toHaveBeenCalledTimes(0);
+    });
+
+    it('searches by default when not isolated', async () => {
+      const search = instantsearch({
+        searchClient: createSearchClient(),
+      }).addWidgets([
+        index({ EXPERIMENTAL_isolated: false, indexName: 'a' }).addWidgets([
+          virtualSearchBox({}),
+        ]),
+      ]);
+      search.start();
+
+      await wait(0);
+      expect(search.client.search).toHaveBeenCalledTimes(1);
+      expect(castToJestMock(search.client.search).mock.calls[0][0])
+        .toMatchInlineSnapshot(`
+        [
+          {
+            "indexName": "a",
+            "params": {
+              "query": "",
+            },
+          },
+        ]
+      `);
+    });
+
+    it('searches on refine while isolated', async () => {
+      const search = instantsearch({
+        searchClient: createSearchClient(),
+      }).addWidgets([
+        index({ EXPERIMENTAL_isolated: true, indexName: 'a' }).addWidgets([
+          virtualSearchBox({}),
+        ]),
+      ]);
+      search.start();
+
+      await wait(0);
+      expect(search.client.search).toHaveBeenCalledTimes(0);
+
+      search.renderState.a.searchBox?.refine('please search now');
+
+      expect(search.client.search).toHaveBeenCalledTimes(1);
+      expect(castToJestMock(search.client.search).mock.calls[0][0])
+        .toMatchInlineSnapshot(`
+        [
+          {
+            "indexName": "a",
+            "params": {
+              "query": "please search now",
+            },
+          },
+        ]
+      `);
+    });
+
+    it('searches on refine of a child while isolated', async () => {
+      const search = instantsearch({
+        searchClient: createSearchClient(),
+      }).addWidgets([
+        index({ EXPERIMENTAL_isolated: true }).addWidgets([
+          index({ indexName: 'a' }),
+          virtualSearchBox({}),
+        ]),
+      ]);
+      search.start();
+
+      await wait(0);
+      expect(search.client.search).toHaveBeenCalledTimes(0);
+
+      search.renderState[''].searchBox?.refine('please search now');
+
+      expect(search.client.search).toHaveBeenCalledTimes(1);
+    });
+
+    it('triggers composition when root has a compositionId', async () => {
+      const search = instantsearch({
+        searchClient: createCompositionClient(),
+        compositionID: 'composition-id',
+      }).addWidgets([
+        index({ EXPERIMENTAL_isolated: true, indexName: 'a' }).addWidgets([
+          virtualSearchBox({}),
+        ]),
+      ]);
+      search.start();
+
+      await wait(0);
+      // Now called for the root, as a compositionId is set
+      expect(search.client.search).toHaveBeenCalledTimes(1);
+
+      search.renderState.a.searchBox?.refine('please search now');
+
+      expect(search.client.search).toHaveBeenCalledTimes(2);
+      expect(castToJestMock(search.client.search).mock.calls[1][0])
+        .toMatchInlineSnapshot(`
+        {
+          "compositionID": "a",
+          "requestBody": {
+            "params": {
+              "query": "please search now",
+            },
+          },
+        }
+      `);
     });
   });
 
