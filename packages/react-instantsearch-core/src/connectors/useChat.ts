@@ -1,4 +1,4 @@
-import type { ChatMessageBase } from 'instantsearch-ui-components';
+import type { ChatMessageBase, ChatStatus } from 'instantsearch-ui-components';
 
 export type UseChatProps = {
   api: string;
@@ -11,7 +11,7 @@ export function useChat({ api, headers }: UseChatProps) {
   const input = '';
   const handleSubmit = () => {};
   const setInput = () => {};
-  const status = 'loading';
+  const status: ChatStatus = 'ready';
   const stop = () => {};
   const reload = () => {};
 
