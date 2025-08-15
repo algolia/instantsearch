@@ -1,15 +1,12 @@
-'use strict';
-
-var defaultsPure = require('../functions/defaultsPure');
-var find = require('../functions/find');
-var intersection = require('../functions/intersection');
-var merge = require('../functions/merge');
-var objectHasKeys = require('../functions/objectHasKeys');
-var omit = require('../functions/omit');
-var valToNumber = require('../functions/valToNumber');
-var isValidUserToken = require('../utils/isValidUserToken');
-
-var RefinementList = require('./RefinementList');
+import defaultsPure from '../functions/defaultsPure.js';
+import find from '../functions/find.js';
+import intersection from '../functions/intersection.js';
+import merge from '../functions/merge.js';
+import objectHasKeys from '../functions/objectHasKeys.js';
+import omit from '../functions/omit.js';
+import valToNumber from '../functions/valToNumber.js';
+import isValidUserToken from '../utils/isValidUserToken.js';
+import RefinementList from './RefinementList.js';
 
 /**
  * isEqual, but only for numeric refinement values, possible values:
@@ -1681,4 +1678,4 @@ SearchParameters.prototype = {
  * depending on the type of facet
  * @return {boolean} `true` if the element should be removed. `false` otherwise.
  */
-module.exports = SearchParameters;
+export default SearchParameters;

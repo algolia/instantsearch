@@ -1,6 +1,4 @@
-'use strict';
-
-var merge = require('./functions/merge');
+import merge from './functions/merge.js';
 
 function sortObject(obj) {
   return Object.keys(obj)
@@ -523,4 +521,4 @@ var requestBuilder = {
   },
 };
 
-module.exports = requestBuilder;
+export default requestBuilder;

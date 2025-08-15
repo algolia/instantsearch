@@ -1,5 +1,3 @@
-'use strict';
-
 function intersection(arr1, arr2) {
   return arr1.filter(function (value, index) {
     return (
@@ -9,4 +7,4 @@ function intersection(arr1, arr2) {
   });
 }
 
-module.exports = intersection;
+export default intersection;

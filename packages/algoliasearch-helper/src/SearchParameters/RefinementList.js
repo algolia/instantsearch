@@ -12,9 +12,9 @@
  * @typedef {Object.<string, SearchParameters.refinementList.Refinements>} SearchParameters.refinementList.RefinementList
  */
 
-var defaultsPure = require('../functions/defaultsPure');
-var objectHasKeys = require('../functions/objectHasKeys');
-var omit = require('../functions/omit');
+import defaultsPure from '../functions/defaultsPure.js';
+import objectHasKeys from '../functions/objectHasKeys.js';
+import omit from '../functions/omit.js';
 
 var lib = {
   /**
@@ -169,4 +169,4 @@ var lib = {
   },
 };
 
-module.exports = lib;
+export default lib;
