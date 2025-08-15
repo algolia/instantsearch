@@ -1,17 +1,16 @@
 import { noop } from '../../lib/utils';
 
-import type { Connector, WidgetRenderState } from '../../types';
+import type { Connector } from '../../types';
 
 export type ChatConnectorParams = Record<string, unknown>;
 
 export type ChatRenderState = Record<string, unknown>;
 
 export type ChatWidgetDescription = {
-  $$type: 'ais.Chat';
-  renderState: ChatRenderState;
-  indexRenderState: {
-    Chat: WidgetRenderState<ChatRenderState, ChatConnectorParams>;
-  };
+  $$type: 'ais.chat';
+  renderState: any;
+  indexRenderState: any;
+  indexUiState: any;
 };
 
 export type ChatConnector = Connector<
@@ -20,12 +19,12 @@ export type ChatConnector = Connector<
 >;
 
 const connectChat: ChatConnector = function connectChat(
-  renderFn = noop,
+  renderFn,
   unmountFn = noop
 ) {
-  return () => {
+  return (widgetParams) => {
     return {
-      $$type: 'ais.Chat',
+      $$type: 'ais.chat',
 
       init(initOptions) {
         const { instantSearchInstance } = initOptions;
@@ -33,6 +32,7 @@ const connectChat: ChatConnector = function connectChat(
           {
             ...this.getWidgetRenderState(initOptions),
             instantSearchInstance,
+            widgetParams,
           },
           true
         );
@@ -46,11 +46,17 @@ const connectChat: ChatConnector = function connectChat(
 
       getRenderState() {},
 
-      getWidgetRenderState() {},
+      getWidgetRenderState() {
+        return {};
+      },
 
-      getWidgetSearchParameters() {},
+      getWidgetSearchParameters(searchParameters) {
+        return searchParameters;
+      },
 
-      getWidgetUiState() {},
+      getWidgetUiState() {
+        return {};
+      },
     };
   };
 };
