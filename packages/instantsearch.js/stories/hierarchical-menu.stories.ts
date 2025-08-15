@@ -135,6 +135,51 @@ storiesOf('Refinements/HierarchicalMenu', module)
     })
   )
   .add(
+    'with show more and templates',
+    withHits(({ search, container, instantsearch }) => {
+      search.addWidgets([
+        instantsearch.widgets.hierarchicalMenu({
+          container,
+          attributes: [
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+            'hierarchicalCategories.lvl3',
+          ],
+          limit: 3,
+          showMore: true,
+          showMoreLimit: 6,
+          templates: {
+            showMoreText: ({ isShowingMore }) => (isShowingMore ? '⬆️' : '⬇️'),
+          },
+        }),
+      ]);
+    })
+  )
+  .add(
+    'with show more templates and showMoreCount',
+    withHits(({ search, container, instantsearch }) => {
+      search.addWidgets([
+        instantsearch.widgets.hierarchicalMenu({
+          container,
+          attributes: [
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+            'hierarchicalCategories.lvl3',
+          ],
+          limit: 3,
+          showMore: true,
+          showMoreLimit: 6,
+          templates: {
+            showMoreText: ({ isShowingMore, showMoreCount }) =>
+              isShowingMore ? 'Show less' : `Show ${showMoreCount} more`,
+          },
+        }),
+      ]);
+    })
+  )
+  .add(
     'with transformed items',
     withHits(({ search, container, instantsearch }) => {
       search.addWidgets([
