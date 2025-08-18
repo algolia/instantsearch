@@ -1,28 +1,22 @@
-import type { ChatMessageBase, ChatStatus } from 'instantsearch-ui-components';
+import connectChat from 'instantsearch.js/es/connectors/chat/connectChat';
 
-export type UseChatProps = {
-  api: string;
-  headers?: Record<string, string>;
-};
+import { useConnector } from '../hooks/useConnector';
 
-export function useChat({ api, headers }: UseChatProps) {
-  const messages: ChatMessageBase[] = [];
-  const setMessages = () => {};
-  const input = '';
-  const handleSubmit = () => {};
-  const setInput = () => {};
-  const status: ChatStatus = 'ready';
-  const stop = () => {};
-  const reload = () => {};
+import type { AdditionalWidgetProperties } from '../hooks/useConnector';
+import type {
+  ChatConnectorParams,
+  ChatWidgetDescription,
+} from 'instantsearch.js/es/connectors/chat/connectChat';
 
-  return {
-    messages,
-    setMessages,
-    input,
-    handleSubmit,
-    setInput,
-    status,
-    stop,
-    reload,
-  };
+export type UseChatProps = ChatConnectorParams;
+
+export function useChat(
+  props: UseChatProps,
+  additionalWidgetProperties?: AdditionalWidgetProperties
+) {
+  return useConnector<ChatConnectorParams, ChatWidgetDescription>(
+    connectChat,
+    props,
+    additionalWidgetProperties
+  );
 }

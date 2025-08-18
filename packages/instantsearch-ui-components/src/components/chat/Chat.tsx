@@ -2,15 +2,16 @@
 /** @jsxFrag Fragment */
 import { cx } from '../../lib';
 
-import { ChatHeaderProps, createChatHeaderComponent } from './ChatHeader';
-import { ChatMessagesProps, createChatMessagesComponent } from './ChatMessages';
-import { ChatPromptProps, createChatPromptComponent } from './ChatPrompt';
-import {
-  createChatToggleButtonComponent,
-  ChatToggleButtonProps,
-} from './ChatToggleButton';
+import { createChatHeaderComponent } from './ChatHeader';
+import { createChatMessagesComponent } from './ChatMessages';
+import { createChatPromptComponent } from './ChatPrompt';
+import { createChatToggleButtonComponent } from './ChatToggleButton';
 
 import type { Renderer } from '../../types';
+import type { ChatHeaderProps } from './ChatHeader';
+import type { ChatMessagesProps } from './ChatMessages';
+import type { ChatPromptProps } from './ChatPrompt';
+import type { ChatToggleButtonProps } from './ChatToggleButton';
 
 export type ChatClassNames = {
   container?: string | string[];

@@ -183,15 +183,22 @@ export function createChatMessageComponent({
 
     const DefaultActionIcon = createDefaultActionIconComponent;
 
-    function renderAssistantPart(part: ChatMessageBase['parts'][number]) {
+    function renderAssistantPart(
+      part: ChatMessageBase['parts'][number],
+      index: number
+    ) {
       if (part.type === 'step-start') {
         return null;
       }
       if (part.type === 'text') {
-        return <span>{part.markdown}</span>;
+        return <span key={`${message.id}-${index}`}>{part.text}</span>;
       }
       // TODO: handle all part types
-      return <pre className="ais-ChatMessage-code">{JSON.stringify(part)}</pre>;
+      return (
+        <pre key={`${message.id}-${index}`} className="ais-ChatMessage-code">
+          {JSON.stringify(part)}
+        </pre>
+      );
     }
 
     const Actions = () => {
@@ -242,7 +249,7 @@ export function createChatMessageComponent({
             <div className={cx(cssClasses.message)}>
               {message.role === 'assistant'
                 ? message.parts.map(renderAssistantPart)
-                : message.content}
+                : message.parts.map(renderAssistantPart)}
             </div>
 
             {hasActions && (

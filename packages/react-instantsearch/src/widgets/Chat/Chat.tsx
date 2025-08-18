@@ -1,39 +1,27 @@
-import { createChatComponent } from 'instantsearch-ui-components/src/components/chat/Chat';
+import { createChatComponent } from 'instantsearch-ui-components';
 import React, { createElement, Fragment } from 'react';
-import { useChat } from 'react-instantsearch-core/src';
+import { useChat } from 'react-instantsearch-core';
 
-import type { ChatMessageBase } from './ChatMessages';
 import type { Pragma } from 'instantsearch-ui-components';
+import type { UseChatProps } from 'react-instantsearch-core';
 
 const ChatUiComponent = createChatComponent({
   createElement: createElement as Pragma,
   Fragment,
 });
 
-export type ChatProps = {
-  agentId: string;
-  renderMarkdown: (messages: ChatMessageBase[]) => ChatMessageBase[];
-};
-
-export function Chat({ agentId, renderMarkdown }: ChatProps) {
+export function Chat({ ...props }: UseChatProps) {
   const [open, setOpen] = React.useState(false);
   const {
     messages,
-    setMessages,
+    // setMessages,
     input,
-    handleSubmit,
     setInput,
-    status,
-    stop,
-    reload,
-  } = useChat({
-    api: `https://generative-eu.algolia.com/1/agents/${agentId}/completions?stream=true&compatibilityMode=ai-sdk-4`,
-    headers: {
-      'x-algolia-application-id': 'F4T6CUV2AH',
-      'X-Algolia-API-Key': '93aba0bf5908533b213d93b2410ded0c',
-    },
-  });
-  const renderedMessages = renderMarkdown(messages);
+    sendMessage,
+    // status,
+    // stop,
+    // reload,
+  } = useChat(props, { $$widgetType: 'ais.chat' });
 
   return (
     <ChatUiComponent
@@ -43,12 +31,21 @@ export function Chat({ agentId, renderMarkdown }: ChatProps) {
         onClick: () => setOpen(!open),
       }}
       messagesProps={{
-        messages: renderedMessages,
+        messages,
       }}
       headerProps={{
         onClose: () => setOpen(false),
       }}
-      promptProps={{}}
+      promptProps={{
+        value: input,
+        onInput: (event) => {
+          setInput(event);
+        },
+        onSubmit: (event) => {
+          sendMessage({ text: event });
+          setInput('');
+        },
+      }}
     />
   );
 }

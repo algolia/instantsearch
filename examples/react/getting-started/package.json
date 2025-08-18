@@ -13,7 +13,6 @@
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-instantsearch": "7.16.2",
-    "@ai-sdk/react": "1.2.12",
     "markdown-to-jsx": "7.7.12"
   },
   "devDependencies": {
