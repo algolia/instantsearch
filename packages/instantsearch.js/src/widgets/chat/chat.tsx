@@ -1,6 +1,9 @@
 /** @jsx h */
 
-import { createChatComponent } from 'instantsearch-ui-components/src/components/chat/Chat';
+import {
+  ChatClassNames,
+  createChatComponent,
+} from 'instantsearch-ui-components/src/components/chat/Chat';
 import { Fragment, h, render } from 'preact';
 
 import connectChat from '../../connectors/chat/connectChat';
@@ -11,6 +14,12 @@ import {
 
 import type { ChatWidgetDescription } from '../../connectors/chat/connectChat';
 import type { WidgetFactory } from '../../types';
+import {
+  ChatHeaderProps,
+  ChatMessagesProps,
+  ChatPromptProps,
+  ChatToggleButtonProps,
+} from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'chat',
@@ -23,8 +32,14 @@ const Chat = createChatComponent({
 
 type CreateRendererProps = {
   containerNode: HTMLElement;
-  cssClasses: Record<string, string>;
-  renderState: Record<string, string>;
+  cssClasses: ChatClassNames;
+  renderState: {
+    open?: boolean;
+    headerProps?: ChatHeaderProps;
+    toggleButtonProps?: ChatToggleButtonProps;
+    messagesProps?: ChatMessagesProps;
+    promptProps?: ChatPromptProps;
+  };
 };
 
 function createRenderer({
@@ -33,12 +48,32 @@ function createRenderer({
   containerNode,
 }: CreateRendererProps) {
   return function renderer() {
+    const headerProps: ChatHeaderProps = {
+      onClose: () => {
+        renderState.open = false;
+      },
+    };
+    const toggleButtonProps: ChatToggleButtonProps = {
+      open: renderState.open || false,
+      onClick: () => {
+        renderState.open = !renderState.open;
+      },
+    };
+    const messagesProps: ChatMessagesProps = {
+      messages: renderState.messagesProps?.messages || [],
+    };
+    const promptProps: ChatPromptProps = {
+      ...(renderState.promptProps || {}),
+    };
+
     render(
       <Chat
-        messages={[]}
-        onClickHeader={() => {}}
-        onClickToggleButton={() => {}}
-        status="ready"
+        open={renderState.open || false}
+        headerProps={headerProps}
+        toggleButtonProps={toggleButtonProps}
+        messagesProps={messagesProps}
+        promptProps={promptProps}
+        classNames={{ container: cssClasses.container }}
       />,
       containerNode
     );
