@@ -13,7 +13,7 @@ export type ChatPromptProps = {
 };
 
 const ChatPrompt = ({ cssClasses }: ChatPromptProps) => (
-  <ChatPromptUiComponent classNames={cssClasses} onClick={() => {}} />
+  <ChatPromptUiComponent classNames={cssClasses} />
 );
 
 export default ChatPrompt;

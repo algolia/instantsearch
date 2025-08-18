@@ -1,9 +1,6 @@
 /** @jsx h */
 
-import {
-  ChatClassNames,
-  createChatComponent,
-} from 'instantsearch-ui-components/src/components/chat/Chat';
+import { createChatComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 
 import connectChat from '../../connectors/chat/connectChat';
@@ -12,13 +9,17 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
-import type { ChatWidgetDescription } from '../../connectors/chat/connectChat';
+import type {
+  ChatConnectorParams,
+  ChatWidgetDescription,
+} from '../../connectors/chat/connectChat';
 import type { WidgetFactory } from '../../types';
-import {
+import type {
   ChatHeaderProps,
   ChatMessagesProps,
   ChatPromptProps,
   ChatToggleButtonProps,
+  ChatClassNames,
 } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -96,13 +97,11 @@ export type ChatWidget = WidgetFactory<
   ChatWidgetDescription & {
     $$widgetType: 'ais.chat';
   },
-  Record<string, string>,
+  ChatConnectorParams,
   ChatWidgetParams
 >;
 
-export default (function chat(
-  widgetParams: ChatWidgetParams & Record<string, string>
-) {
+const chat: ChatWidget = function chat(widgetParams) {
   const { container, cssClasses = {} } = widgetParams || {};
 
   if (!container) {
@@ -123,6 +122,8 @@ export default (function chat(
 
   return {
     ...makeWidget(widgetParams),
-    $$widgetType: 'ais.trendingItems',
+    $$widgetType: 'ais.chat',
   };
-});
+};
+
+export default chat;
