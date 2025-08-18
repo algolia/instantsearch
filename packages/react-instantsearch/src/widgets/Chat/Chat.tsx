@@ -37,10 +37,18 @@ export function Chat({ agentId, renderMarkdown }: ChatProps) {
 
   return (
     <ChatUiComponent
-      messages={renderedMessages}
-      status={status}
-      onClickHeader={() => {}}
-      onClickToggleButton={() => {}}
+      open={open}
+      toggleButtonProps={{
+        open,
+        onClick: () => setOpen(!open),
+      }}
+      messagesProps={{
+        messages: renderedMessages,
+      }}
+      headerProps={{
+        onClose: () => setOpen(false),
+      }}
+      promptProps={{}}
     />
   );
 }
