@@ -1,27 +1,31 @@
+import { DefaultChatTransport } from 'ai';
 import { createChatComponent } from 'instantsearch-ui-components';
 import React, { createElement, Fragment } from 'react';
 import { useChat } from 'react-instantsearch-core';
 
 import type { Pragma } from 'instantsearch-ui-components';
-import type { UseChatProps } from 'react-instantsearch-core';
 
 const ChatUiComponent = createChatComponent({
   createElement: createElement as Pragma,
   Fragment,
 });
 
-export function Chat({ ...props }: UseChatProps) {
+export type ChatProps = {
+  agentId: string;
+};
+
+export function Chat({ agentId }: ChatProps) {
   const [open, setOpen] = React.useState(false);
-  const {
-    messages,
-    // setMessages,
-    input,
-    setInput,
-    sendMessage,
-    // status,
-    // stop,
-    // reload,
-  } = useChat(props, { $$widgetType: 'ais.chat' });
+  const [input, setInput] = React.useState('');
+  const { messages, sendMessage } = useChat({
+    transport: new DefaultChatTransport({
+      api: `https://generative-eu.algolia.com/1/agents/${agentId}/completions?stream=true&compatibilityMode=ai-sdk-5`,
+      headers: {
+        'x-algolia-application-id': 'F4T6CUV2AH',
+        'X-Algolia-API-Key': '93aba0bf5908533b213d93b2410ded0c',
+      },
+    }),
+  });
 
   return (
     <ChatUiComponent

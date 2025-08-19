@@ -27,7 +27,6 @@
   ],
   "dependencies": {
     "ai": "^5.0.15",
-    "zod": "^4.0.17",
     "@algolia/events": "^4.0.1",
     "@types/dom-speech-recognition": "^0.0.1",
     "@types/google.maps": "^3.55.12",

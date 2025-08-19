@@ -1,3 +1,4 @@
+import alias from '@rollup/plugin-alias';
 import babel from 'rollup-plugin-babel';
 import commonjs from 'rollup-plugin-commonjs';
 import filesize from 'rollup-plugin-filesize';
@@ -15,6 +16,9 @@ const createBanner = (name) =>
   `/*! React InstantSearch${name} ${version} | ${algolia} | ${link} */`;
 
 const plugins = [
+  alias({
+    entries: [{ find: 'useChat.ts', replacement: 'useChatNoop.ts' }],
+  }),
   babel({
     exclude: /node_modules|algoliasearch-helper/,
     extensions: ['.js', '.ts', '.tsx'],
