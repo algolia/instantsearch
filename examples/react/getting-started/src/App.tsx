@@ -1,6 +1,5 @@
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import { Hit } from 'instantsearch.js';
-import { compiler } from 'markdown-to-jsx';
 import React from 'react';
 import {
   Configure,
@@ -12,9 +11,7 @@ import {
   SearchBox,
   TrendingItems,
   Carousel,
-  ChatMessageBase,
 } from 'react-instantsearch';
-import { Chat } from 'react-instantsearch/src/widgets/Chat/Chat';
 
 import { Panel } from './Panel';
 
@@ -26,28 +23,6 @@ const searchClient = algoliasearch(
   'F4T6CUV2AH',
   '93aba0bf5908533b213d93b2410ded0c'
 );
-
-function renderMarkdown(messages: ChatMessageBase[]) {
-  return messages.map((message) => {
-    if (message.role === 'assistant') {
-      return {
-        ...message,
-        parts: message.parts.map((part) => {
-          if (part.type === 'text') {
-            return {
-              ...part,
-              markdown: compiler(part.text, {
-                disableParsingRawHTML: true,
-              }),
-            };
-          }
-          return part;
-        }),
-      };
-    }
-    return message;
-  });
-}
 
 export function App() {
   return (
@@ -65,10 +40,6 @@ export function App() {
       </header>
 
       <div className="container">
-        <Chat
-          agentId="61a4839d-3caf-4258-bc77-32c790fa0be9"
-          renderMarkdown={renderMarkdown}
-        />
         <InstantSearch
           searchClient={searchClient}
           indexName="products"
