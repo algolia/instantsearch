@@ -119,7 +119,7 @@ function createDefaultMessageComponent({ createElement, Fragment }: Renderer) {
 
     return (
       <ChatMessage
-        content={<div>{message.content}</div>}
+        content={<div>{message.parts}</div>}
         side={message.role === 'user' ? 'right' : 'left'}
         variant={message.role === 'user' ? 'neutral' : 'subtle'}
         message={message}

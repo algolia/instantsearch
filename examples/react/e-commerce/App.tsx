@@ -14,6 +14,7 @@ import {
   Highlight,
   Snippet,
 } from 'react-instantsearch';
+import { Chat } from 'react-instantsearch/src';
 
 import {
   AlgoliaSvg,
@@ -31,7 +32,7 @@ import { ScrollTo } from './components/ScrollTo';
 import getRouting from './routing';
 import { formatNumber } from './utils';
 
-import 'instantsearch.css/themes/reset.css';
+import 'instantsearch.css/themes/satellite.css';
 
 import './Theme.css';
 import './App.css';
@@ -89,6 +90,7 @@ export function App() {
       routing={routing}
       insights={true}
     >
+      <Chat agentId="61a4839d-3caf-4258-bc77-32c790fa0be9" />
       <header className="header" ref={headerRef}>
         <p className="header-logo">
           <AlgoliaSvg />

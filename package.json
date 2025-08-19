@@ -52,6 +52,7 @@
     "@babel/preset-typescript": "7.15.0",
     "@googlemaps/jest-mocks": "2.7.5",
     "@microsoft/api-extractor": "7.45.1",
+    "@rollup/plugin-alias": "5.1.1",
     "@storybook/addon-actions": "5.3.9",
     "@storybook/addon-knobs": "5.3.9",
     "@storybook/addon-options": "5.3.9",
