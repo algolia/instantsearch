@@ -193,7 +193,6 @@ export function createChatMessageComponent({
       if (part.type === 'text') {
         return <span key={`${message.id}-${index}`}>{part.text}</span>;
       }
-      // TODO: handle all part types
       return (
         <pre key={`${message.id}-${index}`} className="ais-ChatMessage-code">
           {JSON.stringify(part)}
