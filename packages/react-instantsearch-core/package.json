@@ -51,7 +51,10 @@
     "@babel/runtime": "^7.27.6",
     "algoliasearch-helper": "3.26.0",
     "instantsearch.js": "4.79.2",
-    "use-sync-external-store": "^1.0.0"
+    "use-sync-external-store": "^1.0.0",
+    "ai": "^5.0.18",
+    "zod": "^3.25.76 || ^4",
+    "zod-to-json-schema": "3.24.6"
   },
   "devDependencies": {
     "@types/use-sync-external-store": "0.0.3",
@@ -59,8 +62,6 @@
   },
   "peerDependencies": {
     "algoliasearch": ">= 3.1 < 6",
-    "react": ">= 16.8.0 < 20",
-    "zod": "^3.25.76 || ^4",
-    "zod-to-json-schema": "3.24.6"
+    "react": ">= 16.8.0 < 20"
   }
 }
