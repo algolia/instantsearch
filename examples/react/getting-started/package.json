@@ -12,8 +12,7 @@
     "instantsearch.js": "4.79.2",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "react-instantsearch": "7.16.2",
-    "markdown-to-jsx": "7.7.12"
+    "react-instantsearch": "7.16.2"
   },
   "devDependencies": {
     "@parcel/core": "2.10.0",
