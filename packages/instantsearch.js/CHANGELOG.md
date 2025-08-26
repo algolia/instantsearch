@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.80.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.79.2...instantsearch.js@4.80.0) (2025-08-26)
+
+
+### Features
+
+* **index:** introduce "isolated" option ([#6681](https://github.com/algolia/instantsearch/issues/6681)) ([fcee78a](https://github.com/algolia/instantsearch/commit/fcee78acc7810c133c2bb2b2a0ed39dafdaf8ad7)), closes [#6880](https://github.com/algolia/instantsearch/issues/6880) [#5939](https://github.com/algolia/instantsearch/issues/5939)
+
+
+
+
+
 ## [4.79.2](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.79.1...instantsearch.js@4.79.2) (2025-07-22)
 
 
