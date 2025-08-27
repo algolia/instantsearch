@@ -13,8 +13,8 @@ import './App.css';
 import 'instantsearch.css/themes/satellite.css';
 
 const searchClient = algoliasearch(
-  'latency',
-  '6be0576ff61c053d5f9a3225e2a90f76'
+  'F4T6CUV2AH',
+  '93aba0bf5908533b213d93b2410ded0c'
 );
 
 export function Product({ pid }: { pid: string }) {
@@ -36,7 +36,7 @@ export function Product({ pid }: { pid: string }) {
         <a href="/">← Back to search</a>
         <InstantSearch
           searchClient={searchClient}
-          indexName="instant_search"
+          indexName="products"
           insights={true}
         >
           <Configure hitsPerPage={1} filters={`objectID:${pid}`} />
@@ -60,18 +60,16 @@ export function Product({ pid }: { pid: string }) {
 }
 
 type HitType = Hit<{
-  image: string;
-  name: string;
-  description: string;
+  title: string;
+  mediumImage: string;
 }>;
 
 function HitComponent({ hit }: { hit: HitType }) {
   return (
     <article>
-      <img src={hit.image} />
+      <img src={hit.mediumImage} />
       <div>
-        <h1>{hit.name}</h1>
-        <p>{hit.description}</p>
+        <h1>{hit.title}</h1>
       </div>
     </article>
   );
@@ -82,8 +80,8 @@ function ItemComponent({ item }: { item: HitType }) {
     <div>
       <article>
         <div>
-          <img src={item.image} />
-          <h2>{item.name}</h2>
+          <img src={item.mediumImage} />
+          <h2>{item.title}</h2>
         </div>
         <a href={`/products.html?pid=${item.objectID}`}>See product</a>
       </article>
