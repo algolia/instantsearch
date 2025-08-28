@@ -1,16 +1,10 @@
 /** @jsx createElement */
 import { compiler } from 'markdown-to-jsx';
 
-import { cx, find, startsWith } from '../../lib';
-import { warn } from '../../warn';
+import { cx } from '../../lib';
 
 import type { ComponentProps, Renderer } from '../../types';
-import type {
-  AddToolResult,
-  ChatInit,
-  ChatMessageBase,
-  ChatToolMessage,
-} from './types';
+import type { ChatMessageBase } from './types';
 
 export type ChatMessageSide = 'left' | 'right';
 export type ChatMessageVariant = 'neutral' | 'subtle';
@@ -76,21 +70,6 @@ export type ChatMessageActionProps = {
   onClick?: (message: ChatMessageBase) => void;
 };
 
-export type Tools = Array<{
-  type: string;
-  component: (props: {
-    message: ChatToolMessage;
-    indexUiState: object;
-    setIndexUiState: (state: object) => void;
-  }) => JSX.Element;
-  onToolCall: (params: {
-    toolCall: Parameters<
-      NonNullable<ChatInit<ChatMessageBase>['onToolCall']>
-    >[0]['toolCall'];
-    addToolResult: AddToolResult;
-  }) => void;
-}>;
-
 export type ChatMessageProps = Omit<ComponentProps<'article'>, 'content'> & {
   /**
    * The content of the message
@@ -134,16 +113,10 @@ export type ChatMessageProps = Omit<ComponentProps<'article'>, 'content'> & {
    * Footer content
    */
   footerComponent?: () => JSX.Element;
-  indexUiState: object;
-  setIndexUiState: (state: object) => void;
   /**
-   * Array of tools available for the assistant (for tool messages)
+   * Carousel content
    */
-  tools?: Tools;
-  /**
-   * Optional handler to refine the search query (for tool actions)
-   */
-  handleRefine?: (value: string) => void;
+  carouselComponent: () => JSX.Element;
   /**
    * Optional class names
    */
@@ -180,13 +153,10 @@ export function createChatMessageComponent({
       variant = 'subtle',
       actions = [],
       autoHideActions = false,
-      handleRefine,
       leadingComponent: LeadingComponent,
       actionsComponent: ActionsComponent,
       footerComponent: FooterComponent,
-      tools = [],
-      indexUiState,
-      setIndexUiState,
+      carouselComponent: CarouselComponent,
       translations: userTranslations,
       ...props
     } = userProps;
@@ -220,7 +190,7 @@ export function createChatMessageComponent({
 
     const DefaultActionIcon = createDefaultActionIconComponent;
 
-    function renderMessagePart(
+    function renderAssistantPart(
       part: ChatMessageBase['parts'][number],
       index: number
     ) {
@@ -234,24 +204,9 @@ export function createChatMessageComponent({
         });
         return <span key={`${message.id}-${index}`}>{markdown}</span>;
       }
-      if (startsWith(part.type, 'tool-')) {
-        const tool = find(tools, (t) => t.type === part.type);
-        if (tool) {
-          const ToolComponent = tool.component;
-          return (
-            <div
-              key={`${message.id}-${index}`}
-              className="ais-ChatMessage-tool"
-            >
-              <ToolComponent
-                message={part as ChatToolMessage}
-                indexUiState={indexUiState}
-                setIndexUiState={setIndexUiState}
-              />
-            </div>
-          );
-        } else {
-          warn(false, `No tool found for part type "${part.type}`);
+      if (part.type === 'tool-algolia_search_index') {
+        if (CarouselComponent) {
+          return <CarouselComponent />;
         }
       }
       return (
@@ -308,8 +263,8 @@ export function createChatMessageComponent({
           <div className={cx(cssClasses.content)}>
             <div className={cx(cssClasses.message)}>
               {message.role === 'assistant'
-                ? message.parts.map(renderMessagePart)
-                : message.parts.map(renderMessagePart)}
+                ? message.parts.map(renderAssistantPart)
+                : message.parts.map(renderAssistantPart)}
             </div>
 
             {hasActions && (
