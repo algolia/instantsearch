@@ -59,6 +59,7 @@ export type ChatMessagesProps<
    * Custom error component
    */
   errorComponent?: () => JSX.Element;
+  carouselComponent: () => JSX.Element;
   /**
    * Current chat status
    */
@@ -109,8 +110,10 @@ function createDefaultMessageComponent({ createElement, Fragment }: Renderer) {
     message,
     userMessageProps,
     assistantMessageProps,
+    carouselComponent,
   }: {
     message: ChatMessageBase;
+    carouselComponent: () => JSX.Element;
     userMessageProps?: Omit<ChatMessageProps, 'ref' | 'key'>;
     assistantMessageProps?: Omit<ChatMessageProps, 'ref' | 'key'>;
   }) {
@@ -123,6 +126,7 @@ function createDefaultMessageComponent({ createElement, Fragment }: Renderer) {
         side={message.role === 'user' ? 'right' : 'left'}
         variant={message.role === 'user' ? 'neutral' : 'subtle'}
         message={message}
+        carouselComponent={carouselComponent}
         {...messageProps}
       />
     );
@@ -187,6 +191,7 @@ export function createChatMessagesComponent({
       messageComponent: MessageComponent,
       loaderComponent: LoaderComponent,
       errorComponent: ErrorComponent,
+      carouselComponent: CarouselComponent,
       status = 'ready',
       hideScrollToBottom = false,
       onReload,
@@ -245,6 +250,7 @@ export function createChatMessagesComponent({
             isLast={isLast}
             userMessageProps={userMessageProps}
             assistantMessageProps={assistantMessageProps}
+            carouselComponent={CarouselComponent}
           />
         </div>
       );

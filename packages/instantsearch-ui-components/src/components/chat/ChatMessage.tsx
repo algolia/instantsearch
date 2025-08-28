@@ -112,6 +112,10 @@ export type ChatMessageProps = Omit<ComponentProps<'article'>, 'content'> & {
    */
   footerComponent?: () => JSX.Element;
   /**
+   * Carousel content
+   */
+  carouselComponent: () => JSX.Element;
+  /**
    * Optional class names
    */
   classNames?: Partial<ChatMessageClassNames>;
@@ -150,6 +154,7 @@ export function createChatMessageComponent({
       leadingComponent: LeadingComponent,
       actionsComponent: ActionsComponent,
       footerComponent: FooterComponent,
+      carouselComponent: CarouselComponent,
       translations: userTranslations,
       ...props
     } = userProps;
@@ -192,6 +197,11 @@ export function createChatMessageComponent({
       }
       if (part.type === 'text') {
         return <span key={`${message.id}-${index}`}>{part.text}</span>;
+      }
+      if (part.type === 'tool-algolia_search_index') {
+        if (CarouselComponent) {
+          return <CarouselComponent />;
+        }
       }
       return (
         <pre key={`${message.id}-${index}`} className="ais-ChatMessage-code">

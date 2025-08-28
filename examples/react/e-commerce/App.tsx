@@ -90,7 +90,7 @@ export function App() {
       routing={routing}
       insights={true}
     >
-      <Chat agentId="61a4839d-3caf-4258-bc77-32c790fa0be9" />
+      <Chat agentId="5bc03a4f-4e25-400c-9f52-a7b969d7f3da" />
       <header className="header" ref={headerRef}>
         <p className="header-logo">
           <AlgoliaSvg />
