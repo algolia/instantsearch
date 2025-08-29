@@ -42,7 +42,7 @@ export function Chat(props: ChatProps) {
         onClick: () => setOpen(!open),
       }}
       messagesProps={{
-        messages,
+        messages: messages as any,
       }}
       headerProps={{
         onClose: () => setOpen(false),
