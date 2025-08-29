@@ -57,6 +57,33 @@ function Hit({ hit }: HitProps) {
   );
 }
 
+async function getToken() {
+  const response = await fetch(`https://askai.algolia.com/chat/token`, {
+    method: 'POST',
+    headers: {
+      'X-Algolia-Assistant-Id': 'askAIDemo',
+    },
+  });
+  const data = await response.json();
+  return data.token;
+}
+
+function ChatWithToken() {
+  const [token, setToken] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    getToken().then((newToken) => {
+      setToken(newToken);
+    });
+  }, []);
+
+  if (!token) {
+    return null;
+  }
+
+  return <Chat token={token} />;
+}
+
 export function App() {
   return (
     <InstantSearch
@@ -69,7 +96,7 @@ export function App() {
 
       <div className="Container">
         <div>
-          <Chat agentId="61a4839d-3caf-4258-bc77-32c790fa0be9" />
+          <ChatWithToken />
           <DynamicWidgets>
             <Panel header="Brands">
               <RefinementList
