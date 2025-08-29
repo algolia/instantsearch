@@ -15,9 +15,10 @@ const ChatUiComponent = createChatComponent({
 
 export type ChatProps = {
   agentId: string;
+  itemComponent?: (props: { item: Record<string, unknown> }) => JSX.Element;
 };
 
-export function Chat({ agentId }: ChatProps) {
+export function Chat({ agentId, itemComponent }: ChatProps) {
   const [open, setOpen] = React.useState(false);
   const [input, setInput] = React.useState('');
   const { messages, sendMessage } = useChat({
@@ -32,9 +33,11 @@ export function Chat({ agentId }: ChatProps) {
   });
 
   const DefaultCarousel = <TObject extends Record<string, unknown>>(
-    props: CarouselProps<TObject>
+    props: Pick<CarouselProps<TObject>, 'items'>
   ) => {
-    return <Carousel {...props} />;
+    return (
+      <Carousel {...props} itemComponent={itemComponent} sendEvent={() => {}} />
+    );
   };
 
   return (
@@ -46,12 +49,7 @@ export function Chat({ agentId }: ChatProps) {
       }}
       messagesProps={{
         messages,
-        carouselComponent: () => (
-          <DefaultCarousel
-            items={[{ objectID: 'test', __position: 1 }]}
-            sendEvent={() => {}}
-          />
-        ),
+        carouselComponent: DefaultCarousel,
       }}
       headerProps={{
         onClose: () => setOpen(false),

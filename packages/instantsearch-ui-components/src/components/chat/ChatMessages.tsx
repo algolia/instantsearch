@@ -4,6 +4,7 @@ import { cx } from '../../lib';
 import { createChatMessageComponent } from './ChatMessage';
 
 import type { ComponentProps, MutableRef, Renderer } from '../../types';
+import type { CarouselProps } from '../Carousel';
 import type { ChatMessageProps } from './ChatMessage';
 import type { ChatMessageBase, ChatStatus } from './types';
 
@@ -59,7 +60,12 @@ export type ChatMessagesProps<
    * Custom error component
    */
   errorComponent?: () => JSX.Element;
-  carouselComponent: () => JSX.Element;
+  /**
+   * Custom carousel component
+   */
+  carouselComponent: <TObject extends Record<string, unknown>>(
+    props: Pick<CarouselProps<TObject>, 'items' | 'itemComponent'>
+  ) => JSX.Element;
   /**
    * Current chat status
    */
@@ -113,7 +119,9 @@ function createDefaultMessageComponent({ createElement, Fragment }: Renderer) {
     carouselComponent,
   }: {
     message: ChatMessageBase;
-    carouselComponent: () => JSX.Element;
+    carouselComponent: <TObject extends Record<string, unknown>>(
+      props: Pick<CarouselProps<TObject>, 'items'>
+    ) => JSX.Element;
     userMessageProps?: Omit<ChatMessageProps, 'ref' | 'key'>;
     assistantMessageProps?: Omit<ChatMessageProps, 'ref' | 'key'>;
   }) {
