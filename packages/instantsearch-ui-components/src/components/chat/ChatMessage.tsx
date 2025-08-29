@@ -1,4 +1,6 @@
 /** @jsx createElement */
+import { compiler } from 'markdown-to-jsx';
+
 import { cx } from '../../lib';
 
 import type { ComponentProps, Renderer } from '../../types';
@@ -191,7 +193,11 @@ export function createChatMessageComponent({
         return null;
       }
       if (part.type === 'text') {
-        return <span key={`${message.id}-${index}`}>{part.text}</span>;
+        const markdown = compiler(part.text, {
+          createElement: createElement as any,
+          disableParsingRawHTML: true,
+        });
+        return <span key={`${message.id}-${index}`}>{markdown}</span>;
       }
       return (
         <pre key={`${message.id}-${index}`} className="ais-ChatMessage-code">

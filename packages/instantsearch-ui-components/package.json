@@ -48,6 +48,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.27.6",
-    "ai": "^5.0.18"
+    "ai": "^5.0.18",
+    "markdown-to-jsx": "^7.1.13"
   }
 }
