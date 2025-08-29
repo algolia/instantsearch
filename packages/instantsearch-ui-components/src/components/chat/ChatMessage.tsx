@@ -4,6 +4,7 @@ import { compiler } from 'markdown-to-jsx';
 import { cx } from '../../lib';
 
 import type { ComponentProps, Renderer } from '../../types';
+import type { CarouselProps } from '../Carousel';
 import type { ChatMessageBase } from './types';
 
 export type ChatMessageSide = 'left' | 'right';
@@ -116,7 +117,13 @@ export type ChatMessageProps = Omit<ComponentProps<'article'>, 'content'> & {
   /**
    * Carousel content
    */
-  carouselComponent: () => JSX.Element;
+  carouselComponent?: <TObject extends Record<string, unknown>>(
+    props: Pick<CarouselProps<TObject>, 'items' | 'itemComponent'>
+  ) => JSX.Element;
+  /**
+   * Optional handler to refine the search query (for tool actions)
+   */
+  handleRefine?: (value: string) => void;
   /**
    * Optional class names
    */
@@ -153,6 +160,7 @@ export function createChatMessageComponent({
       variant = 'subtle',
       actions = [],
       autoHideActions = false,
+      handleRefine,
       leadingComponent: LeadingComponent,
       actionsComponent: ActionsComponent,
       footerComponent: FooterComponent,
@@ -190,6 +198,14 @@ export function createChatMessageComponent({
 
     const DefaultActionIcon = createDefaultActionIconComponent;
 
+    const createRefineClickHandler = (query: string) => {
+      return () => {
+        if (handleRefine) {
+          handleRefine(query);
+        }
+      };
+    };
+
     function renderAssistantPart(
       part: ChatMessageBase['parts'][number],
       index: number
@@ -206,7 +222,22 @@ export function createChatMessageComponent({
       }
       if (part.type === 'tool-algolia_search_index') {
         if (CarouselComponent) {
-          return <CarouselComponent />;
+          const items =
+            (
+              part.output as {
+                hits?: Array<{
+                  objectID: string;
+                  __position: number;
+                }>;
+              }
+            )?.hits || [];
+
+          return (
+            <div>
+              <CarouselComponent items={items} />
+              <button onClick={createRefineClickHandler('test')}>Refine</button>
+            </div>
+          );
         }
       }
       return (
