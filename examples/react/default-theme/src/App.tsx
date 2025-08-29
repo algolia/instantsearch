@@ -81,7 +81,19 @@ function ChatWithToken() {
     return null;
   }
 
-  return <Chat token={token} />;
+  return (
+    <Chat
+      api="https://askai.algolia.com/chat"
+      headers={{
+        'Content-Type': 'application/json',
+        'X-Algolia-Application-Id': 'PMZUYBQDAK',
+        'X-Algolia-API-Key': '24b09689d5b4223813d9b8e48563c8f6',
+        'X-Algolia-Index-Name': 'docsearch-markdown',
+        'X-Algolia-Assistant-Id': 'askAIDemo',
+        Authorization: `TOKEN ${token}`,
+      }}
+    />
+  );
 }
 
 export function App() {

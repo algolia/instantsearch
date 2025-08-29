@@ -9,22 +9,28 @@ const ChatUiComponent = createChatComponent({
   Fragment,
 });
 
-export type ChatProps = {
-  token: string;
-};
+export type ChatProps =
+  | {
+      agentID: string;
+    }
+  | {
+      api: string;
+      headers: Record<string, string>;
+    };
 
-export function Chat({ token }: ChatProps) {
+export function Chat(props: ChatProps) {
   const [open, setOpen] = React.useState(false);
+  if ('agentID' in props) {
+    throw new Error('Not implemented in this demo');
+  }
+
   const { messages, handleSubmit, input, setInput } = useChat({
-    api: `https://askai.algolia.com/chat`,
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Algolia-Application-Id': 'PMZUYBQDAK',
-      'X-Algolia-API-Key': '24b09689d5b4223813d9b8e48563c8f6',
-      'X-Algolia-Index-Name': 'docsearch-markdown',
-      'X-Algolia-Assistant-Id': 'askAIDemo',
-      Authorization: `TOKEN ${token}`,
-    },
+    ...('agentID' in props
+      ? {}
+      : {
+          api: props.api,
+          headers: props.headers,
+        }),
     experimental_prepareRequestBody: (body) => body,
   });
 
