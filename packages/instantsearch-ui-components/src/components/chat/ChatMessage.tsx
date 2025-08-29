@@ -1,4 +1,6 @@
 /** @jsx createElement */
+import { compiler } from 'markdown-to-jsx';
+
 import { cx } from '../../lib';
 
 import type { ComponentProps, Renderer } from '../../types';
@@ -183,12 +185,19 @@ export function createChatMessageComponent({
 
     const DefaultActionIcon = createDefaultActionIconComponent;
 
-    function renderAssistantPart(part: ChatMessageBase['parts'][number]) {
+    function renderAssistantPart(
+      part: ChatMessageBase['parts'][number],
+      index: number
+    ) {
       if (part.type === 'step-start') {
         return null;
       }
       if (part.type === 'text') {
-        return <span>{part.markdown}</span>;
+        const markdown = compiler(part.text, {
+          createElement: createElement as any,
+          disableParsingRawHTML: true,
+        });
+        return <span key={`${message.id}-${index}`}>{markdown}</span>;
       }
       return <pre className="ais-ChatMessage-code">{JSON.stringify(part)}</pre>;
     }
