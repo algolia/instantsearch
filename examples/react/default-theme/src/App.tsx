@@ -21,7 +21,6 @@ import {
   SearchBox,
   SortBy,
   ToggleRefinement,
-  Chat,
 } from 'react-instantsearch';
 
 import {
@@ -57,45 +56,6 @@ function Hit({ hit }: HitProps) {
   );
 }
 
-async function getToken() {
-  const response = await fetch(`https://askai.algolia.com/chat/token`, {
-    method: 'POST',
-    headers: {
-      'X-Algolia-Assistant-Id': 'askAIDemo',
-    },
-  });
-  const data = await response.json();
-  return data.token;
-}
-
-function ChatWithToken() {
-  const [token, setToken] = React.useState<string | null>(null);
-
-  React.useEffect(() => {
-    getToken().then((newToken) => {
-      setToken(newToken);
-    });
-  }, []);
-
-  if (!token) {
-    return null;
-  }
-
-  return (
-    <Chat
-      api="https://askai.algolia.com/chat"
-      headers={{
-        'Content-Type': 'application/json',
-        'X-Algolia-Application-Id': 'PMZUYBQDAK',
-        'X-Algolia-API-Key': '24b09689d5b4223813d9b8e48563c8f6',
-        'X-Algolia-Index-Name': 'docsearch-markdown',
-        'X-Algolia-Assistant-Id': 'askAIDemo',
-        Authorization: `TOKEN ${token}`,
-      }}
-    />
-  );
-}
-
 export function App() {
   return (
     <InstantSearch
@@ -108,7 +68,6 @@ export function App() {
 
       <div className="Container">
         <div>
-          <ChatWithToken />
           <DynamicWidgets>
             <Panel header="Brands">
               <RefinementList

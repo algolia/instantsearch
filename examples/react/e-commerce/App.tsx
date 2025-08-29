@@ -13,8 +13,8 @@ import {
   ToggleRefinement,
   Highlight,
   Snippet,
+  Chat,
 } from 'react-instantsearch';
-import { Chat } from 'react-instantsearch/src';
 
 import {
   AlgoliaSvg,
@@ -48,6 +48,45 @@ const searchClient = algoliasearch(
 
 const indexName = 'instant_search';
 const routing = getRouting(indexName);
+
+async function getToken() {
+  const response = await fetch(`https://askai.algolia.com/chat/token`, {
+    method: 'POST',
+    headers: {
+      'X-Algolia-Assistant-Id': 'askAIDemo',
+    },
+  });
+  const data = await response.json();
+  return data.token;
+}
+
+function AskAi() {
+  const [token, setToken] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    getToken().then((newToken) => {
+      setToken(newToken);
+    });
+  }, []);
+
+  if (!token) {
+    return null;
+  }
+
+  return (
+    <Chat
+      api="https://askai.algolia.com/chat"
+      headers={{
+        'Content-Type': 'application/json',
+        'X-Algolia-Application-Id': 'PMZUYBQDAK',
+        'X-Algolia-API-Key': '24b09689d5b4223813d9b8e48563c8f6',
+        'X-Algolia-Index-Name': 'docsearch-markdown',
+        'X-Algolia-Assistant-Id': 'askAIDemo',
+        Authorization: `TOKEN ${token}`,
+      }}
+    />
+  );
+}
 
 export function App() {
   const containerRef = useRef<HTMLElement>(null);
@@ -90,7 +129,7 @@ export function App() {
       routing={routing}
       insights={true}
     >
-      <Chat agentId="61a4839d-3caf-4258-bc77-32c790fa0be9" />
+      <AskAi />
       <header className="header" ref={headerRef}>
         <p className="header-logo">
           <AlgoliaSvg />
