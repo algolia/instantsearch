@@ -4,6 +4,7 @@ import React, { createElement, Fragment } from 'react';
 import { useChat, useInstantSearch } from 'react-instantsearch-core';
 
 import type { Pragma, Tools } from 'instantsearch-ui-components';
+import { Carousel } from '../../components';
 
 const ChatUiComponent = createChatComponent({
   createElement: createElement as Pragma,
@@ -16,26 +17,34 @@ export type ChatProps = {
   tools?: Tools;
 };
 
-export const defaultTools: Tools = [
-  {
-    type: 'tool-algolia_search_index',
-    component: ({ message }) => {
-      console.log(message);
-      message.parts;
-      // const items =
-      //   (
-      //     part.output as {
-      //       hits?: Array<{
-      //         objectID: string;
-      //         __position: number;
-      //       }>;
-      //     }
-      //   )?.hits || [];
+const createDefaultTools = (
+  itemComponent?: (props: { item: Record<string, unknown> }) => JSX.Element
+): Tools => {
+  return [
+    {
+      type: 'tool-algolia_search_index',
+      component: ({ message }) => {
+        const items =
+          (
+            message.output as {
+              hits?: Array<{
+                objectID: string;
+                __position: number;
+              }>;
+            }
+          )?.hits || [];
 
-      return <span>Test</span>;
+        return (
+          <Carousel
+            items={items}
+            itemComponent={itemComponent}
+            sendEvent={() => {}}
+          />
+        );
+      },
     },
-  },
-];
+  ];
+};
 
 export function Chat({ agentId, tools: userTools, itemComponent }: ChatProps) {
   const { indexUiState, setIndexUiState } = useInstantSearch();
@@ -44,7 +53,7 @@ export function Chat({ agentId, tools: userTools, itemComponent }: ChatProps) {
   const [input, setInput] = React.useState('');
 
   const tools = React.useMemo(() => {
-    return [...defaultTools, ...(userTools ?? [])];
+    return [...createDefaultTools(itemComponent), ...(userTools ?? [])];
   }, [userTools]);
 
   const { messages, sendMessage } = useChat({

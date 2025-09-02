@@ -70,10 +70,15 @@ export type ChatMessageActionProps = {
   onClick?: (message: ChatMessageBase) => void;
 };
 
+export type ChatToolMessage = Extract<
+  ChatMessageBase['parts'][number],
+  { type: `tool-${string}` }
+>;
+
 export type Tools = Array<{
   type: string;
   component: (props: {
-    message: ChatMessageBase['parts'][number];
+    message: ChatToolMessage;
     indexUiState: object;
     setIndexUiState: (state: object) => void;
   }) => JSX.Element;
@@ -223,6 +228,9 @@ export function createChatMessageComponent({
         });
         return <span key={`${message.id}-${index}`}>{markdown}</span>;
       }
+      if (part.type === 'tool-start') {
+        part;
+      }
       if (part.type.startsWith('tool-')) {
         const tool = tools.find((t) => t.type === part.type);
         if (tool) {
@@ -233,7 +241,7 @@ export function createChatMessageComponent({
               className="ais-ChatMessage-tool"
             >
               <ToolComponent
-                message={part}
+                message={part as ChatToolMessage}
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
               />
