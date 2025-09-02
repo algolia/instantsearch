@@ -339,3 +339,26 @@ mark {
     display: none;
   }
 }
+
+.ais-Chat-container {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: #fff;
+  border-radius: 1rem 0 0 0;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 0 0 1px #23263b0d, 0 1px 3px #23263b26;
+  width: 25%;
+  height: 700px;
+}
+
+.ais-ChatMessages-scroll {
+  padding: 1rem;
+}
+
+.ais-ChatPrompt {
+  padding: 0 1rem 1rem 1rem;
+}
