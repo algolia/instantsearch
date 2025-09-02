@@ -93,26 +93,6 @@ export function App() {
       <Chat
         agentId="5bc03a4f-4e25-400c-9f52-a7b969d7f3da"
         itemComponent={ItemComponent}
-        tools={[
-          {
-            type: 'tool-algolia_search_index',
-            component: ({ message }) => {
-              console.log(message);
-              message.parts;
-              // const items =
-              //   (
-              //     part.output as {
-              //       hits?: Array<{
-              //         objectID: string;
-              //         __position: number;
-              //       }>;
-              //     }
-              //   )?.hits || [];
-
-              return <span>Test</span>;
-            },
-          },
-        ]}
       />
       <header className="header" ref={headerRef}>
         <p className="header-logo">
