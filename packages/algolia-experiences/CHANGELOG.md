@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.15](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.5.14...algolia-experiences@1.5.15) (2025-09-02)
+
+**Note:** Version bump only for package algolia-experiences
+
+
+
+
+
 ## [1.5.14](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.5.13...algolia-experiences@1.5.14) (2025-07-22)
 
 **Note:** Version bump only for package algolia-experiences
