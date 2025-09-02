@@ -1,12 +1,9 @@
 import { DefaultChatTransport } from 'ai';
 import { createChatComponent } from 'instantsearch-ui-components';
 import React, { createElement, Fragment } from 'react';
-import { useChat } from 'react-instantsearch-core';
+import { useChat, useInstantSearch } from 'react-instantsearch-core';
 
-import { Carousel } from '../../components';
-
-import type { CarouselProps } from '../../components';
-import type { Pragma } from 'instantsearch-ui-components';
+import type { Pragma, Tools } from 'instantsearch-ui-components';
 
 const ChatUiComponent = createChatComponent({
   createElement: createElement as Pragma,
@@ -16,12 +13,43 @@ const ChatUiComponent = createChatComponent({
 export type ChatProps = {
   agentId: string;
   itemComponent?: (props: { item: Record<string, unknown> }) => JSX.Element;
+  tools?: Tools;
 };
 
-export function Chat({ agentId, itemComponent }: ChatProps) {
+export const defaultTools: Tools = [
+  {
+    type: 'tool-algolia_search_index',
+    component: ({ message }) => {
+      console.log(message);
+      message.parts;
+      // const items =
+      //   (
+      //     part.output as {
+      //       hits?: Array<{
+      //         objectID: string;
+      //         __position: number;
+      //       }>;
+      //     }
+      //   )?.hits || [];
+
+      return <span>Test</span>;
+    },
+  },
+];
+
+export function Chat({ agentId, tools: userTools, itemComponent }: ChatProps) {
+  const { indexUiState, setIndexUiState } = useInstantSearch();
+
   const [open, setOpen] = React.useState(false);
   const [input, setInput] = React.useState('');
+
+  const tools = React.useMemo(() => {
+    return [...defaultTools, ...(userTools ?? [])];
+  }, [userTools]);
+
   const { messages, sendMessage } = useChat({
+    // TODO: loading indicator
+    // TODO: override transport here from props
     transport: new DefaultChatTransport({
       // api: `https://generative-eu.algolia.com/1/agents/${agentId}/completions?stream=true&compatibilityMode=ai-sdk-5`,
       api: `https://agent-studio-staging.eu.algolia.com/1/agents/${agentId}/completions?stream=true&compatibilityMode=ai-sdk-5`,
@@ -30,15 +58,14 @@ export function Chat({ agentId, itemComponent }: ChatProps) {
         'X-Algolia-API-Key': '93aba0bf5908533b213d93b2410ded0c',
       },
     }),
+    onToolCall: (params) => {
+      tools?.forEach((tool) => {
+        if (tool.type === params.toolCall.toolName) {
+          tool.onToolCall?.(params.toolCall);
+        }
+      });
+    },
   });
-
-  const DefaultCarousel = <TObject extends Record<string, unknown>>(
-    props: Pick<CarouselProps<TObject>, 'items'>
-  ) => {
-    return (
-      <Carousel {...props} itemComponent={itemComponent} sendEvent={() => {}} />
-    );
-  };
 
   return (
     <ChatUiComponent
@@ -49,7 +76,9 @@ export function Chat({ agentId, itemComponent }: ChatProps) {
       }}
       messagesProps={{
         messages,
-        carouselComponent: DefaultCarousel,
+        tools,
+        indexUiState,
+        setIndexUiState,
       }}
       headerProps={{
         onClose: () => setOpen(false),
