@@ -11,12 +11,6 @@ const ChatUiComponent = createChatComponent({
   Fragment,
 });
 
-export type ChatProps = {
-  agentId: string;
-  itemComponent?: (props: { item: Record<string, unknown> }) => JSX.Element;
-  tools?: Tools;
-};
-
 const createDefaultTools = (
   itemComponent?: (props: { item: Record<string, unknown> }) => JSX.Element
 ): Tools => {
@@ -46,7 +40,25 @@ const createDefaultTools = (
   ];
 };
 
-export function Chat({ agentId, tools: userTools, itemComponent }: ChatProps) {
+export type ChatProps = {
+  itemComponent?: (props: { item: Record<string, unknown> }) => JSX.Element;
+  tools?: Tools;
+} & (
+  | { agentId: string; transport?: never }
+  | {
+      transport: NonNullable<
+        ConstructorParameters<typeof DefaultChatTransport>[0]
+      >;
+      agentId?: never;
+    }
+);
+
+export function Chat({
+  tools: userTools,
+  agentId,
+  transport: userTransport,
+  itemComponent,
+}: ChatProps) {
   const { indexUiState, setIndexUiState } = useInstantSearch();
 
   const [open, setOpen] = React.useState(false);
@@ -56,17 +68,33 @@ export function Chat({ agentId, tools: userTools, itemComponent }: ChatProps) {
     return [...createDefaultTools(itemComponent), ...(userTools ?? [])];
   }, [userTools]);
 
+  const transport = React.useMemo(() => {
+    if (!userTransport && !agentId) {
+      throw new Error(
+        'You need to provide either an `agentId` or a `transport`.'
+      );
+    }
+    if (userTransport && agentId) {
+      throw new Error(
+        'You cannot provide both an `agentId` and a `transport`.'
+      );
+    }
+    if (!userTransport && agentId) {
+      return new DefaultChatTransport({
+        api: `https://agent-studio-staging.eu.algolia.com/1/agents/${agentId}/completions?stream=true&compatibilityMode=ai-sdk-5`,
+        headers: {
+          'x-algolia-application-id': 'F4T6CUV2AH',
+          'X-Algolia-API-Key': '93aba0bf5908533b213d93b2410ded0c',
+        },
+      });
+    }
+
+    return new DefaultChatTransport(userTransport);
+  }, [userTransport]);
+
   const { messages, sendMessage } = useChat({
     // TODO: loading indicator
-    // TODO: override transport here from props
-    transport: new DefaultChatTransport({
-      // api: `https://generative-eu.algolia.com/1/agents/${agentId}/completions?stream=true&compatibilityMode=ai-sdk-5`,
-      api: `https://agent-studio-staging.eu.algolia.com/1/agents/${agentId}/completions?stream=true&compatibilityMode=ai-sdk-5`,
-      headers: {
-        'x-algolia-application-id': 'F4T6CUV2AH',
-        'X-Algolia-API-Key': '93aba0bf5908533b213d93b2410ded0c',
-      },
-    }),
+    transport,
     onToolCall: (params) => {
       tools?.forEach((tool) => {
         if (tool.type === params.toolCall.toolName) {
