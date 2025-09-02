@@ -4,8 +4,7 @@ import { cx } from '../../lib';
 import { createChatMessageComponent } from './ChatMessage';
 
 import type { ComponentProps, MutableRef, Renderer } from '../../types';
-import type { CarouselProps } from '../Carousel';
-import type { ChatMessageProps } from './ChatMessage';
+import type { ChatMessageProps, Tools } from './ChatMessage';
 import type { ChatMessageBase, ChatStatus } from './types';
 
 export type ChatMessagesTranslations = {
@@ -60,12 +59,12 @@ export type ChatMessagesProps<
    * Custom error component
    */
   errorComponent?: () => JSX.Element;
+  indexUiState: object;
+  setIndexUiState: (state: object) => void;
   /**
-   * Custom carousel component
+   * Tools available for the assistant
    */
-  carouselComponent: <TObject extends Record<string, unknown>>(
-    props: Pick<CarouselProps<TObject>, 'items' | 'itemComponent'>
-  ) => JSX.Element;
+  tools?: Tools;
   /**
    * Current chat status
    */
@@ -116,14 +115,16 @@ function createDefaultMessageComponent({ createElement, Fragment }: Renderer) {
     message,
     userMessageProps,
     assistantMessageProps,
-    carouselComponent,
+    tools,
+    indexUiState,
+    setIndexUiState,
   }: {
     message: ChatMessageBase;
-    carouselComponent: <TObject extends Record<string, unknown>>(
-      props: Pick<CarouselProps<TObject>, 'items'>
-    ) => JSX.Element;
     userMessageProps?: Omit<ChatMessageProps, 'ref' | 'key'>;
     assistantMessageProps?: Omit<ChatMessageProps, 'ref' | 'key'>;
+    indexUiState: object;
+    setIndexUiState: (state: object) => void;
+    tools?: Tools;
   }) {
     const messageProps =
       message.role === 'user' ? userMessageProps : assistantMessageProps;
@@ -134,7 +135,9 @@ function createDefaultMessageComponent({ createElement, Fragment }: Renderer) {
         side={message.role === 'user' ? 'right' : 'left'}
         variant={message.role === 'user' ? 'neutral' : 'subtle'}
         message={message}
-        carouselComponent={carouselComponent}
+        tools={tools}
+        indexUiState={indexUiState}
+        setIndexUiState={setIndexUiState}
         {...messageProps}
       />
     );
@@ -199,7 +202,9 @@ export function createChatMessagesComponent({
       messageComponent: MessageComponent,
       loaderComponent: LoaderComponent,
       errorComponent: ErrorComponent,
-      carouselComponent: CarouselComponent,
+      tools,
+      indexUiState,
+      setIndexUiState,
       status = 'ready',
       hideScrollToBottom = false,
       onReload,
@@ -258,7 +263,9 @@ export function createChatMessagesComponent({
             isLast={isLast}
             userMessageProps={userMessageProps}
             assistantMessageProps={assistantMessageProps}
-            carouselComponent={CarouselComponent}
+            tools={tools}
+            indexUiState={indexUiState}
+            setIndexUiState={setIndexUiState}
           />
         </div>
       );
