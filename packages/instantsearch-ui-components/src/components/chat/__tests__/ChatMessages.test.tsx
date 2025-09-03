@@ -3,7 +3,6 @@
  */
 /** @jsx createElement */
 import { render } from '@testing-library/preact';
-import userEvent from '@testing-library/user-event';
 import { Fragment, createElement } from 'preact';
 
 import { createChatMessagesComponent } from '../ChatMessages';
