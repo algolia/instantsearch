@@ -190,7 +190,6 @@ export function createChatMessageComponent({
       if (part.type === 'text') {
         return <span>{part.markdown}</span>;
       }
-      // TODO: handle all part types
       return <pre className="ais-ChatMessage-code">{JSON.stringify(part)}</pre>;
     }
 
