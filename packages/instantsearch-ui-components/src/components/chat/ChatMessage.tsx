@@ -2,6 +2,7 @@
 import { compiler } from 'markdown-to-jsx';
 
 import { cx, find, startsWith } from '../../lib';
+import { warn } from '../../warn';
 
 import type { ComponentProps, Renderer } from '../../types';
 import type { ChatMessageBase, ChatToolMessage } from './types';
@@ -209,7 +210,7 @@ export function createChatMessageComponent({
 
     const DefaultActionIcon = createDefaultActionIconComponent;
 
-    function renderAssistantPart(
+    function renderMessagePart(
       part: ChatMessageBase['parts'][number],
       index: number
     ) {
@@ -239,6 +240,8 @@ export function createChatMessageComponent({
               />
             </div>
           );
+        } else {
+          warn(false, `No tool found for part type "${part.type}`);
         }
       }
       return (
@@ -295,8 +298,8 @@ export function createChatMessageComponent({
           <div className={cx(cssClasses.content)}>
             <div className={cx(cssClasses.message)}>
               {message.role === 'assistant'
-                ? message.parts.map(renderAssistantPart)
-                : message.parts.map(renderAssistantPart)}
+                ? message.parts.map(renderMessagePart)
+                : message.parts.map(renderMessagePart)}
             </div>
 
             {hasActions && (
