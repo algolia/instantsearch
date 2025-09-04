@@ -114,6 +114,28 @@ describe('Template', () => {
     expect(wrapper.container).toMatchSnapshot();
   });
 
+  it('correctly unmounts empty', () => {
+    const props = getProps({
+      rootTagName: 'fragment',
+      templates: { test: '' },
+    });
+    const wrapper = render(
+      <div>
+        <Template {...props} />
+      </div>
+    );
+
+    expect(wrapper.container).toMatchInlineSnapshot(`
+      <div>
+        <div />
+      </div>
+    `);
+
+    wrapper.unmount();
+
+    expect(wrapper.container).toMatchInlineSnapshot(`<div />`);
+  });
+
   it('forward rootProps to the first node', () => {
     function onClick() {}
 
