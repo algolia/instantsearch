@@ -14,7 +14,13 @@ const ChatMessages = createChatMessagesComponent({
 
 describe('ChatMessages', () => {
   test('renders with default props', () => {
-    const { container } = render(<ChatMessages messages={[]} />);
+    const { container } = render(
+      <ChatMessages
+        messages={[]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
+      />
+    );
 
     expect(container).toMatchInlineSnapshot(`
       <div>
@@ -69,6 +75,8 @@ describe('ChatMessages', () => {
             parts: [{ type: 'text', text: 'Test text' }],
           },
         ]}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
         messageComponent={Messages}
       />
     );
@@ -144,6 +152,8 @@ describe('ChatMessages', () => {
           content: 'content',
           scrollToBottom: 'scrollToBottom',
         }}
+        indexUiState={{}}
+        setIndexUiState={jest.fn()}
       />
     );
 

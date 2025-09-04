@@ -4,7 +4,7 @@ import { compiler } from 'markdown-to-jsx';
 import { cx } from '../../lib';
 
 import type { ComponentProps, Renderer } from '../../types';
-import type { ChatMessageBase } from './types';
+import type { ChatMessageBase, ChatToolMessage } from './types';
 
 export type ChatMessageSide = 'left' | 'right';
 export type ChatMessageVariant = 'neutral' | 'subtle';
@@ -70,6 +70,16 @@ export type ChatMessageActionProps = {
   onClick?: (message: ChatMessageBase) => void;
 };
 
+export type Tools = Array<{
+  type: string;
+  component: (props: {
+    message: ChatToolMessage;
+    indexUiState: object;
+    setIndexUiState: (state: object) => void;
+  }) => JSX.Element;
+  onToolCall?: (a: any) => void;
+}>;
+
 export type ChatMessageProps = Omit<ComponentProps<'article'>, 'content'> & {
   /**
    * The content of the message
@@ -113,6 +123,16 @@ export type ChatMessageProps = Omit<ComponentProps<'article'>, 'content'> & {
    * Footer content
    */
   footerComponent?: () => JSX.Element;
+  indexUiState: object;
+  setIndexUiState: (state: object) => void;
+  /**
+   * Array of tools available for the assistant (for tool messages)
+   */
+  tools?: Tools;
+  /**
+   * Optional handler to refine the search query (for tool actions)
+   */
+  handleRefine?: (value: string) => void;
   /**
    * Optional class names
    */
@@ -149,9 +169,13 @@ export function createChatMessageComponent({
       variant = 'subtle',
       actions = [],
       autoHideActions = false,
+      handleRefine,
       leadingComponent: LeadingComponent,
       actionsComponent: ActionsComponent,
       footerComponent: FooterComponent,
+      tools = [],
+      indexUiState,
+      setIndexUiState,
       translations: userTranslations,
       ...props
     } = userProps;
@@ -199,7 +223,29 @@ export function createChatMessageComponent({
         });
         return <span key={`${message.id}-${index}`}>{markdown}</span>;
       }
-      return <pre className="ais-ChatMessage-code">{JSON.stringify(part)}</pre>;
+      if (part.type.startsWith('tool-')) {
+        const tool = tools.find((t) => t.type === part.type);
+        if (tool) {
+          const ToolComponent = tool.component;
+          return (
+            <div
+              key={`${message.id}-${index}`}
+              className="ais-ChatMessage-tool"
+            >
+              <ToolComponent
+                message={part as ChatToolMessage}
+                indexUiState={indexUiState}
+                setIndexUiState={setIndexUiState}
+              />
+            </div>
+          );
+        }
+      }
+      return (
+        <pre key={`${message.id}-${index}`} className="ais-ChatMessage-code">
+          {JSON.stringify(part)}
+        </pre>
+      );
     }
 
     const Actions = () => {
@@ -250,7 +296,7 @@ export function createChatMessageComponent({
             <div className={cx(cssClasses.message)}>
               {message.role === 'assistant'
                 ? message.parts.map(renderAssistantPart)
-                : message.content}
+                : message.parts.map(renderAssistantPart)}
             </div>
 
             {hasActions && (
