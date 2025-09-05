@@ -40,7 +40,9 @@
     "search-insights": "^2.17.2"
   },
   "peerDependencies": {
-    "algoliasearch": ">= 3.1 < 6"
+    "algoliasearch": ">= 3.1 < 6",
+    "zod": "^3.25.76 || ^4",
+    "zod-to-json-schema": "3.24.6"
   },
   "scripts": {
     "build": "yarn run build:cjs && yarn run build:es && yarn run build:umd && yarn run build:types",
