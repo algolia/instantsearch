@@ -5,7 +5,7 @@ import { cx, find, startsWith } from '../../lib';
 import { warn } from '../../warn';
 
 import type { ComponentProps, Renderer } from '../../types';
-import type { ChatMessageBase, ChatToolMessage } from './types';
+import type { ChatInit, ChatMessageBase, ChatToolMessage } from './types';
 
 export type ChatMessageSide = 'left' | 'right';
 export type ChatMessageVariant = 'neutral' | 'subtle';
@@ -78,7 +78,7 @@ export type Tools = Array<{
     indexUiState: object;
     setIndexUiState: (state: object) => void;
   }) => JSX.Element;
-  onToolCall?: (a: any) => void;
+  onToolCall?: ChatInit<ChatMessageBase>['onToolCall'];
 }>;
 
 export type ChatMessageProps = Omit<ComponentProps<'article'>, 'content'> & {

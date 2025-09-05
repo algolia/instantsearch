@@ -9,3 +9,5 @@ export type ChatToolMessage = Extract<
   ChatMessageBase['parts'][number],
   { type: `tool-${string}` }
 >;
+
+export type { ChatInit } from 'ai';
