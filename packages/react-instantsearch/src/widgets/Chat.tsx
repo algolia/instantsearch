@@ -1,4 +1,3 @@
-import { DefaultChatTransport } from 'ai';
 import { createChatComponent } from 'instantsearch-ui-components';
 import React, { createElement, Fragment } from 'react';
 import { useInstantSearch } from 'react-instantsearch-core';
@@ -7,6 +6,7 @@ import { useChat } from 'react-instantsearch-core/src/lib/useChat';
 import { Carousel } from '../components';
 
 import type { Pragma, Tools } from 'instantsearch-ui-components';
+import type { ChatTransport } from 'react-instantsearch-core/src/lib/useChat';
 
 const ChatUiComponent = createChatComponent({
   createElement: createElement as Pragma,
@@ -45,19 +45,11 @@ const createDefaultTools = (
 export type ChatProps = {
   itemComponent?: (props: { item: Record<string, unknown> }) => JSX.Element;
   tools?: Tools;
-} & (
-  | { agentId: string; transport?: never }
-  | {
-      transport: NonNullable<
-        ConstructorParameters<typeof DefaultChatTransport>[0]
-      >;
-      agentId?: never;
-    }
-);
+} & ChatTransport;
 
 export function Chat({
   tools: userTools,
-  agentId,
+  agentId: userAgentId,
   transport: userTransport,
   itemComponent,
 }: ChatProps) {
@@ -70,32 +62,9 @@ export function Chat({
     return [...createDefaultTools(itemComponent), ...(userTools ?? [])];
   }, [itemComponent, userTools]);
 
-  const transport = React.useMemo(() => {
-    if (!userTransport && !agentId) {
-      throw new Error(
-        'You need to provide either an `agentId` or a `transport`.'
-      );
-    }
-    if (userTransport && agentId) {
-      throw new Error(
-        'You cannot provide both an `agentId` and a `transport`.'
-      );
-    }
-    if (!userTransport && agentId) {
-      return new DefaultChatTransport({
-        api: `https://agent-studio-staging.eu.algolia.com/1/agents/${agentId}/completions?stream=true&compatibilityMode=ai-sdk-5`,
-        headers: {
-          'x-algolia-application-id': 'F4T6CUV2AH',
-          'X-Algolia-API-Key': '93aba0bf5908533b213d93b2410ded0c',
-        },
-      });
-    }
-
-    return new DefaultChatTransport(userTransport);
-  }, [agentId, userTransport]);
-
   const { messages, sendMessage } = useChat({
-    transport,
+    agentId: userAgentId,
+    transport: userTransport,
     onToolCall: (params) => {
       tools?.forEach((tool) => {
         if (tool.type === params.toolCall.toolName) {

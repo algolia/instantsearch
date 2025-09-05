@@ -1,9 +1,19 @@
+import { DefaultChatTransport } from 'ai';
 import { Chat } from 'instantsearch.js/es/lib/chat';
-import { useCallback, useEffect, useRef, useSyncExternalStore } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useSyncExternalStore,
+} from 'react';
+
+import { useAppIdAndApiKey } from './useAppIdAndApiKey';
+import { warn } from './warn';
 
 import type {
   AbstractChat,
-  ChatInit,
+  ChatInit as ChatInitAi,
   UIMessage,
 } from 'instantsearch.js/es/lib/chat';
 
@@ -35,6 +45,19 @@ export type UseChatHelpers<TUiMessage extends UIMessage> = {
   | 'clearError'
 >;
 
+export type ChatInitWithoutTransport<TUiMessage extends UIMessage> = Omit<
+  ChatInitAi<TUiMessage>,
+  'transport'
+>;
+
+export type ChatTransport = {
+  agentId?: string;
+  transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
+};
+
+export type ChatInit<TUiMessage extends UIMessage> =
+  ChatInitWithoutTransport<TUiMessage> & ChatTransport;
+
 export type UseChatOptions<TUiMessage extends UIMessage> = (
   | { chat: Chat<TUiMessage> }
   | ChatInit<TUiMessage>
@@ -49,19 +72,71 @@ export function useChat<TUiMessage extends UIMessage = UIMessage>({
   resume = false,
   ...options
 }: UseChatOptions<TUiMessage> = {}): UseChatHelpers<TUiMessage> {
+  const [appId, apiKey] = useAppIdAndApiKey();
+
+  const transport = useMemo(() => {
+    if ('transport' in options && options.transport) {
+      return new DefaultChatTransport(options.transport);
+    }
+    if ('agentId' in options && options.agentId) {
+      const { agentId } = options;
+      if (!appId || !apiKey) {
+        throw new Error(
+          'The `useChat` hook requires an `appId` and `apiKey` to be set on the `InstantSearch` component when using the `agentId` option.'
+        );
+      }
+      return new DefaultChatTransport({
+        api: `https://agent-studio-staging.eu.algolia.com/1/agents/${agentId}/completions?stream=true&compatibilityMode=ai-sdk-5`,
+        headers: {
+          'x-algolia-application-id': appId,
+          'X-Algolia-API-Key': apiKey,
+        },
+      });
+    }
+
+    if ('agentId' in options && 'transport' in options) {
+      warn(
+        false,
+        "`useChat` with `agentId` and `transport` can't be used together. The `transport` option will be used."
+      );
+    }
+
+    throw new Error(
+      'You need to provide either an `agentId` or a `transport`.'
+    );
+  }, [apiKey, appId, options]);
+
+  const optionsWithTransport = useMemo(() => {
+    if ('chat' in options) {
+      return options;
+    }
+    return {
+      ...options,
+      transport,
+    };
+  }, [options, transport]);
+
   const chatRef = useRef<Chat<TUiMessage>>(
-    'chat' in options ? options.chat : new Chat(options)
+    'chat' in optionsWithTransport
+      ? optionsWithTransport.chat
+      : new Chat(optionsWithTransport)
   );
 
   const shouldRecreateChat =
-    ('chat' in options && options.chat !== chatRef.current) ||
-    ('id' in options && chatRef.current.id !== options.id);
+    ('chat' in optionsWithTransport &&
+      optionsWithTransport.chat !== chatRef.current) ||
+    ('id' in optionsWithTransport &&
+      chatRef.current.id !== optionsWithTransport.id);
 
   if (shouldRecreateChat) {
-    chatRef.current = 'chat' in options ? options.chat : new Chat(options);
+    chatRef.current =
+      'chat' in optionsWithTransport
+        ? optionsWithTransport.chat
+        : new Chat(optionsWithTransport);
   }
 
-  const optionsId = 'id' in options ? options.id : null;
+  const optionsId =
+    'id' in optionsWithTransport ? optionsWithTransport.id : null;
 
   const subscribeToMessages = useCallback(
     (update: () => void) =>
