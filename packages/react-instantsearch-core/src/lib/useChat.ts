@@ -86,7 +86,7 @@ export function useChat<TUiMessage extends UIMessage = UIMessage>({
         );
       }
       return new DefaultChatTransport({
-        api: `https://agent-studio-staging.eu.algolia.com/1/agents/${agentId}/completions?stream=true&compatibilityMode=ai-sdk-5`,
+        api: `https://${appId}.algolia.net/agent-studio/1/agents/${agentId}/completions?compatibilityMode=ai-sdk-5`,
         headers: {
           'x-algolia-application-id': appId,
           'X-Algolia-API-Key': apiKey,

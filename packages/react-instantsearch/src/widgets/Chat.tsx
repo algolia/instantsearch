@@ -5,17 +5,24 @@ import { useChat } from 'react-instantsearch-core/src/lib/useChat';
 
 import { Carousel } from '../components';
 
-import type { Pragma, Tools } from 'instantsearch-ui-components';
-import type { ChatTransport } from 'react-instantsearch-core/src/lib/useChat';
+import type {
+  Pragma,
+  Tools,
+  ChatProps as ChatUiProps,
+  RecommendComponentProps,
+  RecordWithObjectID,
+} from 'instantsearch-ui-components';
+import type { UIMessage } from 'instantsearch.js/es/lib/chat';
+import type { UseChatOptions } from 'react-instantsearch-core/src/lib/useChat';
 
 const ChatUiComponent = createChatComponent({
   createElement: createElement as Pragma,
   Fragment,
 });
 
-const createDefaultTools = (
-  itemComponent?: (props: { item: Record<string, unknown> }) => JSX.Element
-): Tools => {
+function createDefaultTools<TObject extends RecordWithObjectID>(
+  itemComponent?: ItemComponent<TObject>
+): Tools {
   return [
     {
       type: 'tool-algolia_search_index',
@@ -23,10 +30,7 @@ const createDefaultTools = (
         const items =
           (
             message.output as {
-              hits?: Array<{
-                objectID: string;
-                __position: number;
-              }>;
+              hits?: Array<RecordWithObjectID<TObject>>;
             }
           )?.hits || [];
 
@@ -40,19 +44,29 @@ const createDefaultTools = (
       },
     },
   ];
-};
+}
 
-export type ChatProps = {
-  itemComponent?: (props: { item: Record<string, unknown> }) => JSX.Element;
+type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
+
+type UiProps = Pick<
+  ChatUiProps,
+  'open' | 'headerProps' | 'toggleButtonProps' | 'messagesProps' | 'promptProps'
+>;
+
+export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
+  ChatUiProps,
+  keyof UiProps
+> & {
+  itemComponent?: ItemComponent<TObject>;
   tools?: Tools;
-} & ChatTransport;
+} & UseChatOptions<TUiMessage>;
 
-export function Chat({
+export function Chat<TObject extends RecordWithObjectID>({
   tools: userTools,
-  agentId: userAgentId,
-  transport: userTransport,
   itemComponent,
-}: ChatProps) {
+  resume,
+  ...options
+}: ChatProps<TObject>) {
   const { indexUiState, setIndexUiState } = useInstantSearch();
 
   const [open, setOpen] = React.useState(false);
@@ -63,8 +77,8 @@ export function Chat({
   }, [itemComponent, userTools]);
 
   const { messages, sendMessage } = useChat({
-    agentId: userAgentId,
-    transport: userTransport,
+    resume,
+    ...options,
     onToolCall: (params) => {
       tools?.forEach((tool) => {
         if (tool.type === params.toolCall.toolName) {
