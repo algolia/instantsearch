@@ -52,17 +52,44 @@ type UiProps = Pick<
   'open' | 'headerProps' | 'toggleButtonProps' | 'messagesProps' | 'promptProps'
 >;
 
+type UserToggleButtonProps = Omit<
+  ChatUiProps['toggleButtonProps'],
+  'open' | 'onClick'
+>;
+
+type UserHeaderProps = Omit<ChatUiProps['headerProps'], 'onClose'>;
+
+type UserMessagesProps = Omit<
+  ChatUiProps['messagesProps'],
+  'messages' | 'tools' | 'indexUiState' | 'setIndexUiState'
+>;
+
+type UserPromptProps = Omit<
+  ChatUiProps['promptProps'],
+  'value' | 'onInput' | 'onSubmit'
+>;
+
 export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
   ChatUiProps,
   keyof UiProps
 > & {
   itemComponent?: ItemComponent<TObject>;
   tools?: Tools;
-} & UseChatOptions<TUiMessage>;
+} & UseChatOptions<TUiMessage> & {
+    toggleButtonProps?: UserToggleButtonProps;
+    headerProps?: UserHeaderProps;
+    messagesProps?: UserMessagesProps;
+    promptProps?: UserPromptProps;
+  };
 
 export function Chat<TObject extends RecordWithObjectID>({
   tools: userTools,
   itemComponent,
+  toggleButtonProps,
+  headerProps,
+  messagesProps,
+  promptProps,
+  classNames,
   resume,
   ...options
 }: ChatProps<TObject>) {
@@ -93,15 +120,18 @@ export function Chat<TObject extends RecordWithObjectID>({
       toggleButtonProps={{
         open,
         onClick: () => setOpen(!open),
+        ...toggleButtonProps,
       }}
       messagesProps={{
         messages,
         tools,
         indexUiState,
         setIndexUiState,
+        ...messagesProps,
       }}
       headerProps={{
         onClose: () => setOpen(false),
+        ...headerProps,
       }}
       promptProps={{
         value: input,
@@ -112,7 +142,9 @@ export function Chat<TObject extends RecordWithObjectID>({
           sendMessage({ text: event });
           setInput('');
         },
+        ...promptProps,
       }}
+      classNames={classNames}
     />
   );
 }
