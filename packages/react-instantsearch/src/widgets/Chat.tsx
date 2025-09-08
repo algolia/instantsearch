@@ -19,13 +19,13 @@ const ChatUiComponent = createChatComponent({
   Fragment,
 });
 
-function createDefaultTools<TObject extends RecordWithObjectID>(
+export function createDefaultTools<TObject extends RecordWithObjectID>(
   itemComponent?: ItemComponent<TObject>
 ): Tools {
   return [
     {
       type: 'tool-algolia_search_index',
-      component: ({ message }) => {
+      component: ({ message, indexUiState, setIndexUiState }) => {
         const items =
           (
             message.output as {
@@ -33,12 +33,32 @@ function createDefaultTools<TObject extends RecordWithObjectID>(
             }
           )?.hits || [];
 
+        const input = message.input as { query: string };
+
         return (
-          <Carousel
-            items={items}
-            itemComponent={itemComponent}
-            sendEvent={() => {}}
-          />
+          <div>
+            <Carousel
+              items={items}
+              itemComponent={itemComponent}
+              sendEvent={() => {}}
+            />
+
+            {input?.query && (
+              <button
+                className="ais-ChatToolSearchIndexRefineButton"
+                onClick={() => {
+                  if (input?.query) {
+                    setIndexUiState({
+                      ...indexUiState,
+                      query: input.query,
+                    });
+                  }
+                }}
+              >
+                Refine on this query
+              </button>
+            )}
+          </div>
         );
       },
     },
