@@ -8,8 +8,8 @@ import {
   useSyncExternalStore,
 } from 'react';
 
-import { useAppIdAndApiKey } from './useAppIdAndApiKey';
-import { warn } from './warn';
+import { useAppIdAndApiKey } from '../lib/useAppIdAndApiKey';
+import { warn } from '../lib/warn';
 
 import type {
   AbstractChat,
@@ -72,6 +72,8 @@ export function useChat<TUiMessage extends UIMessage = UIMessage>({
   resume = false,
   ...options
 }: UseChatOptions<TUiMessage> = {}): UseChatHelpers<TUiMessage> {
+  warn(false, 'Chat is not yet stable and will change in the future.');
+
   const [appId, apiKey] = useAppIdAndApiKey();
 
   const transport = useMemo(() => {

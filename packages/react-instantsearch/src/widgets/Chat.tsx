@@ -1,7 +1,6 @@
 import { createChatComponent } from 'instantsearch-ui-components';
 import React, { createElement, Fragment } from 'react';
-import { useInstantSearch } from 'react-instantsearch-core';
-import { useChat } from 'react-instantsearch-core/src/lib/useChat';
+import { useInstantSearch, useChat } from 'react-instantsearch-core';
 
 import { Carousel } from '../components';
 
