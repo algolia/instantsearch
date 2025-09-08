@@ -12,7 +12,7 @@ import type {
   RecordWithObjectID,
 } from 'instantsearch-ui-components';
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
-import type { UseChatOptions } from 'react-instantsearch-core/src/lib/useChat';
+import type { UseChatOptions } from 'react-instantsearch-core';
 
 const ChatUiComponent = createChatComponent({
   createElement: createElement as Pragma,

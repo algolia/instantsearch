@@ -73,6 +73,12 @@ export function useChat<TUiMessage extends UIMessage = UIMessage>({
   ...options
 }: UseChatOptions<TUiMessage> = {}): UseChatHelpers<TUiMessage> {
   warn(false, 'Chat is not yet stable and will change in the future.');
+  if ('agentId' in options && 'transport' in options) {
+    warn(
+      false,
+      "`useChat` with `agentId` and `transport` can't be used together. The `transport` option will be used."
+    );
+  }
 
   const [appId, apiKey] = useAppIdAndApiKey();
 
@@ -94,13 +100,6 @@ export function useChat<TUiMessage extends UIMessage = UIMessage>({
           'X-Algolia-API-Key': apiKey,
         },
       });
-    }
-
-    if ('agentId' in options && 'transport' in options) {
-      warn(
-        false,
-        "`useChat` with `agentId` and `transport` can't be used together. The `transport` option will be used."
-      );
     }
 
     throw new Error(
