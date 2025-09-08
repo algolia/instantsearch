@@ -186,6 +186,21 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       expect(instance.getWidgets()).toHaveLength(2);
     });
 
+    it('accepts nested widgets', () => {
+      const instance = index({ indexName: 'indexName' });
+      const searchBox = virtualSearchBox({});
+      const pagination = virtualPagination({});
+      const refinementList = virtualRefinementList({ attribute: 'brand' });
+
+      instance.addWidgets([searchBox, [pagination, refinementList]]);
+      expect(instance.getWidgets()).toHaveLength(3);
+      expect(instance.getWidgets()).toEqual([
+        searchBox,
+        pagination,
+        refinementList,
+      ]);
+    });
+
     it('returns the instance to be able to chain the calls', () => {
       const topLevelInstance = index({ indexName: 'topLevelIndexName' });
       const subLevelInstance = index({ indexName: 'subLevelIndexName' });
@@ -496,6 +511,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
       instance.removeWidgets([searchBox, pagination]);
 
+      expect(instance.getWidgets()).toHaveLength(0);
+    });
+
+    it('accepts nested widgets', () => {
+      const instance = index({ indexName: 'indexName' });
+      const searchBox = virtualSearchBox({});
+      const pagination = virtualPagination({});
+      const refinementList = virtualRefinementList({ attribute: 'brand' });
+
+      instance.addWidgets([searchBox, pagination, refinementList]);
+
+      expect(instance.getWidgets()).toHaveLength(3);
+
+      instance.removeWidgets([searchBox, [pagination, refinementList]]);
       expect(instance.getWidgets()).toHaveLength(0);
     });
 
