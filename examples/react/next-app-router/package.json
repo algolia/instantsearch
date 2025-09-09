@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-next-app-dir-example",
-  "version": "8.57.0",
+  "version": "8.58.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -14,8 +14,8 @@
     "next": "15.1.4",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "react-instantsearch": "7.16.2",
-    "react-instantsearch-nextjs": "1.0.1"
+    "react-instantsearch": "7.16.3",
+    "react-instantsearch-nextjs": "1.0.2"
   },
   "devDependencies": {
     "@types/node": "17.0.40",
