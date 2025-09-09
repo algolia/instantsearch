@@ -35,6 +35,7 @@ export * from './hooks/useInstantSearch';
 export * from './lib/wrapPromiseWithState';
 export * from './lib/useInstantSearchContext';
 export * from './lib/useRSCContext';
+export * from './lib/chat/useChat';
 export * from './lib/InstantSearchRSCContext';
 export * from './lib/InstantSearchSSRContext';
 export * from './server';
