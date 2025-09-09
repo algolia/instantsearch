@@ -13,7 +13,7 @@
     "instantsearch.js": "4.80.0"
   },
   "devDependencies": {
-    "@instantsearch/testutils": "1.67.0"
+    "@instantsearch/testutils": "*"
   },
   "scripts": {
     "build": "rollup -c rollup.config.js"

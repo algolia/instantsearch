@@ -56,9 +56,9 @@
     "watch:es": "yarn --silent build:es:base --watch"
   },
   "devDependencies": {
-    "@instantsearch/mocks": "1.78.0",
-    "@instantsearch/tests": "1.78.0",
-    "@instantsearch/testutils": "1.67.0",
+    "@instantsearch/mocks": "*",
+    "@instantsearch/tests": "*",
+    "@instantsearch/testutils": "*",
     "@storybook/html": "5.3.9",
     "@types/scriptjs": "0.0.2",
     "algoliasearch": "5.1.1",
