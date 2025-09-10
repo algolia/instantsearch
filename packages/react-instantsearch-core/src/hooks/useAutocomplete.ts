@@ -1,6 +1,6 @@
 import { useSearchBox } from '../connectors/useSearchBox';
 
-export function useAutocomplete() {
+export function EXPERIMENTAL_useAutocomplete() {
   const { query, refine } = useSearchBox();
 
   return {

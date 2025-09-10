@@ -8,7 +8,9 @@ export type AutocompleteWrapperProps = {
   children: React.ReactNode;
 };
 
-export function AutocompleteWrapper({ children }: AutocompleteWrapperProps) {
+export function EXPERIMENTAL_AutocompleteWrapper({
+  children,
+}: AutocompleteWrapperProps) {
   const parentIndex = useIndexContext();
 
   const parentIndexName = parentIndex.getIndexName();

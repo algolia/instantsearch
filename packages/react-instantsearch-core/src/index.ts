@@ -1,4 +1,5 @@
 export { default as version } from './version';
+export * from './components/AutocompleteWrapper';
 export * from './components/Configure';
 export * from './components/DynamicWidgets';
 export * from './components/Index';
@@ -30,6 +31,7 @@ export * from './connectors/useStats';
 export * from './connectors/useToggleRefinement';
 export * from './connectors/useTrendingItems';
 export * from './connectors/useLookingSimilar';
+export * from './hooks/useAutocomplete';
 export * from './hooks/useConnector';
 export * from './hooks/useInstantSearch';
 export * from './lib/wrapPromiseWithState';

@@ -1,10 +1,10 @@
 import React from 'react';
 import {
-  AutocompleteWrapper,
-  useAutocomplete,
-} from 'react-instantsearch-core/dist/es/autocomplete';
+  EXPERIMENTAL_AutocompleteWrapper as AutocompleteWrapper,
+  EXPERIMENTAL_useAutocomplete as useAutocomplete,
+} from 'react-instantsearch-core';
 
-export function Autocomplete() {
+export function EXPERIMENTAL_Autocomplete() {
   return (
     <AutocompleteWrapper>
       <AutocompleteInner />
