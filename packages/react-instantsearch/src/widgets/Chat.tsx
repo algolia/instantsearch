@@ -61,6 +61,13 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
           </div>
         );
       },
+      onToolCall: ({ toolCall, addToolResult }) => {
+        addToolResult({
+          tool: toolCall.toolName,
+          toolCallId: toolCall.toolCallId,
+          output: '',
+        });
+      },
     },
   ];
 }
@@ -122,14 +129,12 @@ export function Chat<TObject extends RecordWithObjectID>({
     return [...createDefaultTools(itemComponent), ...(userTools ?? [])];
   }, [itemComponent, userTools]);
 
-  const { messages, sendMessage } = useChat({
+  const { messages, sendMessage, addToolResult } = useChat({
     resume,
     ...options,
-    onToolCall: (params) => {
+    onToolCall: ({ toolCall }) => {
       tools?.forEach((tool) => {
-        if (tool.type === params.toolCall.toolName) {
-          tool.onToolCall?.(params);
-        }
+        tool.onToolCall({ toolCall, addToolResult });
       });
     },
   });
