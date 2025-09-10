@@ -126,8 +126,10 @@ export type IndexWidget<TUiState extends UiState = UiState> = Omit<
     nextState: SearchParameters | ((state: IndexUiState) => IndexUiState)
   ) => string;
 
-  addWidgets: (widgets: Array<Widget | IndexWidget>) => IndexWidget;
-  removeWidgets: (widgets: Array<Widget | IndexWidget>) => IndexWidget;
+  addWidgets: (widgets: Array<Widget | IndexWidget | Widget[]>) => IndexWidget;
+  removeWidgets: (
+    widgets: Array<Widget | IndexWidget | Widget[]>
+  ) => IndexWidget;
 
   init: (options: IndexInitOptions) => void;
   render: (options: IndexRenderOptions) => void;
@@ -432,9 +434,13 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           withUsage('The `addWidgets` method expects an array of widgets.')
         );
       }
+      const flatWidgets = widgets.reduce<Array<Widget | IndexWidget>>(
+        (acc, w) => acc.concat(Array.isArray(w) ? w : [w]),
+        []
+      );
 
       if (
-        widgets.some(
+        flatWidgets.some(
           (widget) =>
             typeof widget.init !== 'function' &&
             typeof widget.render !== 'function'
@@ -447,7 +453,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         );
       }
 
-      widgets.forEach((widget) => {
+      flatWidgets.forEach((widget) => {
         if (isIndexWidget(widget)) {
           return;
         }
@@ -465,8 +471,8 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         addWidgetId(widget);
       });
 
-      localWidgets = localWidgets.concat(widgets);
-      if (localInstantSearchInstance && Boolean(widgets.length)) {
+      localWidgets = localWidgets.concat(flatWidgets);
+      if (localInstantSearchInstance && Boolean(flatWidgets.length)) {
         privateHelperSetState(helper!, {
           state: getLocalWidgetsSearchParameters(localWidgets, {
             uiState: localUiState,
@@ -482,7 +488,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         // We compute the render state before calling `init` in a separate loop
         // to construct the whole render state object that is then passed to
         // `init`.
-        widgets.forEach((widget) => {
+        flatWidgets.forEach((widget) => {
           if (widget.getRenderState) {
             const renderState = widget.getRenderState(
               localInstantSearchInstance!.renderState[this.getIndexId()] || {},
@@ -501,7 +507,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           }
         });
 
-        widgets.forEach((widget) => {
+        flatWidgets.forEach((widget) => {
           if (widget.init) {
             widget.init(
               createInitArgs(
@@ -529,15 +535,19 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           withUsage('The `removeWidgets` method expects an array of widgets.')
         );
       }
+      const flatWidgets = widgets.reduce<Array<Widget | IndexWidget>>(
+        (acc, w) => acc.concat(Array.isArray(w) ? w : [w]),
+        []
+      );
 
-      if (widgets.some((widget) => typeof widget.dispose !== 'function')) {
+      if (flatWidgets.some((widget) => typeof widget.dispose !== 'function')) {
         throw new Error(
           withUsage('The widget definition expects a `dispose` method.')
         );
       }
 
       localWidgets = localWidgets.filter(
-        (widget) => widgets.indexOf(widget) === -1
+        (widget) => flatWidgets.indexOf(widget) === -1
       );
 
       localWidgets.forEach((widget) => {
@@ -556,30 +566,31 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         }
       });
 
-      if (localInstantSearchInstance && Boolean(widgets.length)) {
-        const { cleanedSearchState, cleanedRecommendState } = widgets.reduce(
-          (states, widget) => {
-            // the `dispose` method exists at this point we already assert it
-            const next = widget.dispose!({
-              helper: helper!,
-              state: states.cleanedSearchState,
-              recommendState: states.cleanedRecommendState,
-              parent: this,
-            });
+      if (localInstantSearchInstance && Boolean(flatWidgets.length)) {
+        const { cleanedSearchState, cleanedRecommendState } =
+          flatWidgets.reduce(
+            (states, widget) => {
+              // the `dispose` method exists at this point we already assert it
+              const next = widget.dispose!({
+                helper: helper!,
+                state: states.cleanedSearchState,
+                recommendState: states.cleanedRecommendState,
+                parent: this,
+              });
 
-            if (next instanceof algoliasearchHelper.RecommendParameters) {
-              states.cleanedRecommendState = next;
-            } else if (next) {
-              states.cleanedSearchState = next;
+              if (next instanceof algoliasearchHelper.RecommendParameters) {
+                states.cleanedRecommendState = next;
+              } else if (next) {
+                states.cleanedSearchState = next;
+              }
+
+              return states;
+            },
+            {
+              cleanedSearchState: helper!.state,
+              cleanedRecommendState: helper!.recommendState,
             }
-
-            return states;
-          },
-          {
-            cleanedSearchState: helper!.state,
-            cleanedRecommendState: helper!.recommendState,
-          }
-        );
+          );
 
         const newState = localInstantSearchInstance.future
           .preserveSharedStateOnUnmount
