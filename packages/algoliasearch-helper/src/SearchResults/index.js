@@ -1,17 +1,14 @@
-'use strict';
-
-var compact = require('../functions/compact');
-var defaultsPure = require('../functions/defaultsPure');
-var fv = require('../functions/escapeFacetValue');
-var find = require('../functions/find');
-var findIndex = require('../functions/findIndex');
-var formatSort = require('../functions/formatSort');
-var mergeNumericMax = require('../functions/mergeNumericMax');
-var orderBy = require('../functions/orderBy');
-var escapeFacetValue = fv.escapeFacetValue;
-var unescapeFacetValue = fv.unescapeFacetValue;
-
-var generateHierarchicalTree = require('./generate-hierarchical-tree');
+import compact from '../functions/compact.js';
+import defaultsPure from '../functions/defaultsPure.js';
+import * as fv from '../functions/escapeFacetValue.js';
+import find from '../functions/find.js';
+import findIndex from '../functions/findIndex.js';
+import formatSort from '../functions/formatSort.js';
+import mergeNumericMax from '../functions/mergeNumericMax.js';
+import orderBy from '../functions/orderBy.js';
+const escapeFacetValue = fv.escapeFacetValue;
+const unescapeFacetValue = fv.unescapeFacetValue;
+import generateHierarchicalTree from './generate-hierarchical-tree.js';
 
 /**
  * @typedef SearchResults.Facet
@@ -1159,4 +1156,4 @@ function getHierarchicalRefinement(state, attributeName, name, resultsFacets) {
   };
 }
 
-module.exports = SearchResults;
+export default SearchResults;

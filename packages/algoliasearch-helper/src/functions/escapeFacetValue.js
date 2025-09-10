@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Replaces a leading - with \-
  * @private
@@ -24,7 +22,4 @@ function unescapeFacetValue(value) {
   return value.replace(/^\\-/, '-');
 }
 
-module.exports = {
-  escapeFacetValue: escapeFacetValue,
-  unescapeFacetValue: unescapeFacetValue,
-};
+export { escapeFacetValue, unescapeFacetValue };

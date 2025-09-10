@@ -1,6 +1,4 @@
-'use strict';
-
-var find = require('./find');
+import find from './find.js';
 
 /**
  * Transform sort format from user friendly notation to lodash format
@@ -8,7 +6,7 @@ var find = require('./find');
  * @param {string[]} [defaults] array of predicate of the form "attribute:order"
  * @return {array.<string[]>} array containing 2 elements : attributes, orders
  */
-module.exports = function formatSort(sortBy, defaults) {
+function formatSort(sortBy, defaults) {
   var defaultInstructions = (defaults || []).map(function (sort) {
     return sort.split(':');
   });
@@ -36,4 +34,6 @@ module.exports = function formatSort(sortBy, defaults) {
     },
     [[], []]
   );
-};
+}
+
+export default formatSort;
