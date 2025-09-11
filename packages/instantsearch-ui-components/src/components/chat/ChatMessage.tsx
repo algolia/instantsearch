@@ -5,12 +5,7 @@ import { cx, find, startsWith } from '../../lib';
 import { warn } from '../../warn';
 
 import type { ComponentProps, Renderer } from '../../types';
-import type {
-  AddToolResult,
-  ChatInit,
-  ChatMessageBase,
-  ChatToolMessage,
-} from './types';
+import type { ChatMessageBase, ChatToolMessage, ClientSideTool } from './types';
 
 export type ChatMessageSide = 'left' | 'right';
 export type ChatMessageVariant = 'neutral' | 'subtle';
@@ -76,21 +71,6 @@ export type ChatMessageActionProps = {
   onClick?: (message: ChatMessageBase) => void;
 };
 
-export type Tools = Array<{
-  type: string;
-  component: (props: {
-    message: ChatToolMessage;
-    indexUiState: object;
-    setIndexUiState: (state: object) => void;
-  }) => JSX.Element;
-  onToolCall: (params: {
-    toolCall: Parameters<
-      NonNullable<ChatInit<ChatMessageBase>['onToolCall']>
-    >[0]['toolCall'];
-    addToolResult: AddToolResult;
-  }) => void;
-}>;
-
 export type ChatMessageProps = Omit<ComponentProps<'article'>, 'content'> & {
   /**
    * The content of the message
@@ -139,7 +119,7 @@ export type ChatMessageProps = Omit<ComponentProps<'article'>, 'content'> & {
   /**
    * Array of tools available for the assistant (for tool messages)
    */
-  tools?: Tools;
+  tools?: ClientSideTool[];
   /**
    * Optional handler to refine the search query (for tool actions)
    */

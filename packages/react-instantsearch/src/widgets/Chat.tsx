@@ -6,11 +6,11 @@ import { Carousel } from '../components';
 
 import type {
   Pragma,
-  Tools,
   ChatProps as ChatUiProps,
   RecommendComponentProps,
   RecordWithObjectID,
-  ChatToolMessage,
+  ClientSideTool,
+  ChatToolType,
 } from 'instantsearch-ui-components';
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
 import type { UseChatOptions } from 'react-instantsearch-core';
@@ -20,12 +20,13 @@ const ChatUiComponent = createChatComponent({
   Fragment,
 });
 
-export const SearchIndexToolType: ChatToolMessage['type'] =
-  'tool-algolia_search_index';
+export const defaultTools: ChatToolType[] = ['tool-algolia_search_index'];
+
+export const SearchIndexToolType: ChatToolType = 'tool-algolia_search_index';
 
 export function createDefaultTools<TObject extends RecordWithObjectID>(
   itemComponent?: ItemComponent<TObject>
-): Tools {
+): ClientSideTool[] {
   return [
     {
       type: SearchIndexToolType,
@@ -105,7 +106,7 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
   keyof UiProps
 > & {
   itemComponent?: ItemComponent<TObject>;
-  tools?: Tools;
+  tools?: ClientSideTool[];
 } & UseChatOptions<TUiMessage> & {
     toggleButtonProps?: UserToggleButtonProps;
     headerProps?: UserHeaderProps;
@@ -130,11 +131,23 @@ export function Chat<TObject extends RecordWithObjectID>({
   const [input, setInput] = React.useState('');
 
   const tools = React.useMemo(() => {
-    if (userTools?.some((tool) => tool.type === SearchIndexToolType)) {
-      return userTools;
+    const defaults = createDefaultTools(itemComponent);
+
+    if (!userTools) {
+      return defaults;
     }
 
-    return [...createDefaultTools(itemComponent), ...(userTools ?? [])];
+    const userToolsMap = new Map(userTools.map((tool) => [tool.type, tool]));
+
+    const merged = defaults.map(
+      (defaultTool) => userToolsMap.get(defaultTool.type) ?? defaultTool
+    );
+
+    const extraUserTools = userTools.filter(
+      (tool) => !defaultTools.includes(tool.type)
+    );
+
+    return [...merged, ...extraUserTools];
   }, [itemComponent, userTools]);
 
   const { messages, sendMessage, addToolResult } = useChat({

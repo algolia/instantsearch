@@ -4,8 +4,8 @@ import { cx } from '../../lib';
 import { createChatMessageComponent } from './ChatMessage';
 
 import type { ComponentProps, MutableRef, Renderer } from '../../types';
-import type { ChatMessageProps, Tools } from './ChatMessage';
-import type { ChatMessageBase, ChatStatus } from './types';
+import type { ChatMessageProps } from './ChatMessage';
+import type { ChatMessageBase, ChatStatus, ClientSideTool } from './types';
 
 export type ChatMessagesTranslations = {
   /**
@@ -70,7 +70,7 @@ export type ChatMessagesProps<
   /**
    * Tools available for the assistant
    */
-  tools?: Tools;
+  tools?: ClientSideTool[];
   /**
    * Current chat status
    */
@@ -130,7 +130,7 @@ function createDefaultMessageComponent({ createElement, Fragment }: Renderer) {
     assistantMessageProps?: Omit<ChatMessageProps, 'ref' | 'key'>;
     indexUiState: object;
     setIndexUiState: (state: object) => void;
-    tools?: Tools;
+    tools?: ClientSideTool[];
   }) {
     const messageProps =
       message.role === 'user' ? userMessageProps : assistantMessageProps;
