@@ -40,7 +40,7 @@ describe('Chat', () => {
     mockUseChat = {
       messages: [],
       sendMessage: jest.fn(),
-      status: 'idle',
+      addToolResult: jest.fn(),
     };
     const { container } = render(
       <InstantSearchTestWrapper>
@@ -53,6 +53,56 @@ describe('Chat', () => {
 
     const root = container.querySelector('.ais-Chat-container');
     expect(root).toHaveClass('ROOT');
+  });
+
+  test('closes chat when close button is clicked', () => {
+    mockUseChat = {
+      messages: [],
+      sendMessage: jest.fn(),
+      addToolResult: jest.fn(),
+    };
+    const { container } = render(
+      <InstantSearchTestWrapper>
+        <Chat />
+      </InstantSearchTestWrapper>
+    );
+
+    const toggleButton = container.querySelector('.ais-ChatToggleButton');
+    userEvent.click(toggleButton!);
+    const closeButton = container.querySelector('.ais-ChatHeader-close');
+    userEvent.click(closeButton!);
+
+    const root = container.querySelector('.ais-Chat-container');
+    expect(root).not.toBeInTheDocument();
+  });
+
+  test('should send message when form is submitted', () => {
+    const sendMessage = jest.fn();
+    mockUseChat = {
+      messages: [],
+      sendMessage,
+      addToolResult: jest.fn(),
+    };
+    const { container } = render(
+      <InstantSearchTestWrapper>
+        <Chat />
+      </InstantSearchTestWrapper>
+    );
+
+    const toggleButton = container.querySelector('.ais-ChatToggleButton');
+    userEvent.click(toggleButton!);
+
+    const textarea = container.querySelector(
+      '.ais-ChatPrompt-textarea'
+    ) as HTMLTextAreaElement;
+    userEvent.type(textarea, 'Hello, world!');
+
+    const submitBtn = container.querySelector('.ais-ChatPrompt-submit');
+    userEvent.click(submitBtn!);
+
+    expect(sendMessage).toHaveBeenCalledTimes(1);
+    expect(sendMessage).toHaveBeenCalledWith({ text: 'Hello, world!' });
+    expect(textarea.value).toBe('');
   });
 
   test('should render tools and call onToolCall', () => {
