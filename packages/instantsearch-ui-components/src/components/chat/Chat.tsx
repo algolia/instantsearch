@@ -19,6 +19,7 @@ export type ChatClassNames = {
 
 export type ChatProps = {
   open: boolean;
+  maximized?: boolean;
   headerProps: ChatHeaderProps;
   toggleButtonProps: ChatToggleButtonProps;
   messagesProps: ChatMessagesProps;
@@ -37,6 +38,7 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
 
   return function Chat({
     open,
+    maximized = false,
     headerProps,
     toggleButtonProps,
     messagesProps,
@@ -44,18 +46,22 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
     classNames = {},
   }: ChatProps) {
     return (
-      <>
-        {!open ? (
-          <ChatToggleButton {...toggleButtonProps} />
-        ) : (
-          <div className={cx('ais-Chat-container', classNames.container)}>
-            <ChatHeader {...headerProps} />
+      <div className={cx('ais-Chat', maximized && 'ais-Chat--maximized')}>
+        {open && (
+          <div
+            className={cx(
+              'ais-Chat-container',
+              maximized && 'ais-Chat-container--maximized',
+              classNames.container
+            )}
+          >
+            <ChatHeader {...headerProps} maximized={maximized} />
             <ChatMessages {...messagesProps} />
-
             <ChatPrompt {...promptProps} />
           </div>
         )}
-      </>
+        <ChatToggleButton {...toggleButtonProps} />
+      </div>
     );
   };
 }
