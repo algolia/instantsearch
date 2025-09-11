@@ -21,6 +21,7 @@
     "styles:autoprefixer": "postcss themes/ --use autoprefixer --replace --no-map",
     "styles:minify": "sass src/themes/algolia.scss:themes/algolia-min.css src/themes/satellite.scss:themes/satellite-min.css src/themes/reset.scss:themes/reset-min.css --no-source-map --style compressed",
     "styles:build": "sass src/themes:themes --no-source-map",
+    "watch": "sass src/themes:themes --no-source-map --watch",
     "prepare": "yarn build",
     "lint": "stylelint \"**/*.scss\""
   },

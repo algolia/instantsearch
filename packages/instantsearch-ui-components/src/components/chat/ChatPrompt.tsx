@@ -1,9 +1,14 @@
 /** @jsx createElement */
 
+import { useRef, useLayoutEffect, useCallback } from 'react';
+
 import { cx } from '../../lib';
+
+import { ArrowUpIconComponent, StopIconComponent } from './icons';
 
 import type { ComponentProps, Renderer } from '../../types';
 import type { ChatStatus } from './types';
+import type { BaseSyntheticEvent, FormEvent, KeyboardEvent } from 'react';
 
 export type ChatPromptTranslations = {
   /**
@@ -64,8 +69,8 @@ export type ChatPromptClassNames = {
 };
 
 export type ChatPromptProps = Omit<
-  ComponentProps<'form'>,
-  'onInput' | 'onSubmit'
+  ComponentProps<'textarea'>,
+  'key' | 'ref'
 > & {
   /**
    * Content to render above the textarea
@@ -96,6 +101,10 @@ export type ChatPromptProps = Omit<
    */
   maxRows?: number;
   /**
+   * Whether to auto-focus the textarea when mounted
+   */
+  autoFocus?: boolean;
+  /**
    * Optional class names
    */
   classNames?: Partial<ChatPromptClassNames>;
@@ -104,43 +113,16 @@ export type ChatPromptProps = Omit<
    */
   translations?: Partial<ChatPromptTranslations>;
   /**
-   * Callback when the textarea value changes
-   */
-  onInput?: (value: string) => void;
-  /**
    * Callback when the form is submitted
    */
-  onSubmit?: (value: string) => void;
+  onSubmit?: (
+    event: KeyboardEvent<HTMLTextAreaElement> | FormEvent<HTMLFormElement>
+  ) => void;
   /**
    * Callback when the stop button is clicked
    */
   onStop?: () => void;
 };
-
-function createDefaultSubmitIconComponent({
-  createElement,
-}: Pick<Renderer, 'createElement'>) {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        fill="currentColor"
-        d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"
-      />
-    </svg>
-  );
-}
-
-function createDefaultStopIconComponent({
-  createElement,
-}: Pick<Renderer, 'createElement'>) {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <rect x="4" y="4" width="8" height="8" rx="1" fill="currentColor" />
-    </svg>
-  );
-}
 
 export function createChatPromptComponent({ createElement }: Renderer) {
   return function ChatPrompt(userProps: ChatPromptProps) {
@@ -152,10 +134,12 @@ export function createChatPromptComponent({ createElement }: Renderer) {
       placeholder,
       status = 'ready',
       disabled = false,
-      maxRows = 8,
+      maxRows = 5,
+      autoFocus = true,
       translations: userTranslations,
       onInput,
       onSubmit,
+      onKeyDown,
       onStop,
       ...props
     } = userProps;
@@ -174,7 +158,11 @@ export function createChatPromptComponent({ createElement }: Renderer) {
       root: cx('ais-ChatPrompt', classNames.root),
       header: cx('ais-ChatPrompt-header', classNames.header),
       body: cx('ais-ChatPrompt-body', classNames.body),
-      textarea: cx('ais-ChatPrompt-textarea', classNames.textarea),
+      textarea: cx(
+        'ais-ChatPrompt-textarea ais-Scrollbar',
+        disabled && 'ais-ChatPrompt-textarea--disabled',
+        classNames.textarea
+      ),
       actions: cx(
         'ais-ChatPrompt-actions',
         classNames.actions,
@@ -184,51 +172,100 @@ export function createChatPromptComponent({ createElement }: Renderer) {
       footer: cx('ais-ChatPrompt-footer', classNames.footer),
     };
 
+    const internalRef = useRef<HTMLTextAreaElement>(null);
+    const lineHeightRef = useRef(0);
+    const paddingRef = useRef(0);
+
     const hasValue =
       typeof value === 'string' ? value.trim() !== '' : Boolean(value);
     const canStop = status === 'submitted' || status === 'streaming';
     const buttonDisabled = (!hasValue && !canStop) || disabled;
 
-    const handleSubmit = (event: any) => {
+    const adjustHeight = useCallback(() => {
+      if (!internalRef.current) return;
+
+      const textArea = internalRef.current;
+      textArea.style.height = 'auto';
+      const fullHeight = textArea.scrollHeight;
+
+      if (maxRows > 0) {
+        const maxHeight = maxRows * lineHeightRef.current + paddingRef.current;
+        textArea.style.overflowY = fullHeight > maxHeight ? 'auto' : 'hidden';
+        textArea.style.height = `${Math.min(fullHeight, maxHeight)}px`;
+      } else {
+        textArea.style.overflowY = 'hidden';
+        textArea.style.height = `${fullHeight}px`;
+      }
+    }, [maxRows]);
+
+    useLayoutEffect(() => {
+      if (!internalRef.current) return;
+
+      const textArea = internalRef.current;
+      const styles = getComputedStyle(textArea);
+
+      lineHeightRef.current = parseFloat(styles.lineHeight);
+
+      const pt = parseFloat(styles.paddingTop);
+      const pb = parseFloat(styles.paddingBottom);
+      paddingRef.current = pt + pb;
+    }, []);
+
+    useLayoutEffect(() => {
+      adjustHeight();
+    }, [value, maxRows, adjustHeight]);
+
+    useLayoutEffect(() => {
+      if (!internalRef.current) return undefined;
+
+      const ro = new ResizeObserver(() => adjustHeight());
+
+      const textArea = internalRef.current;
+      ro.observe(textArea);
+
+      return () => ro.disconnect();
+    }, [adjustHeight]);
+
+    const handleSubmit = (
+      event: KeyboardEvent<HTMLTextAreaElement> | FormEvent<HTMLFormElement>
+    ) => {
       event.preventDefault();
 
-      if (!hasValue || canStop || disabled) {
+      if (canStop) {
+        onStop?.();
         return;
       }
 
-      onSubmit?.(value || '');
+      if (!hasValue) {
+        return;
+      }
+
+      onSubmit?.(event);
     };
 
-    const handleTextareaInput = (event: any) => {
-      const target = event.target as HTMLTextAreaElement;
-      const newValue = target.value;
-
-      onInput?.(newValue);
+    const handleTextareaInput = (event: FormEvent<HTMLTextAreaElement>) => {
+      adjustHeight();
+      onInput?.(event);
     };
 
-    const handleKeyDown = (event: any) => {
+    const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+      onKeyDown?.(event);
       if (event.key === 'Enter' && !event.shiftKey) {
         handleSubmit(event);
       }
       if (event.key === 'Escape') {
-        (event.target as HTMLTextAreaElement).blur();
+        event.currentTarget.blur();
       }
     };
 
-    const handleButtonClick = (event: any) => {
-      if (canStop) {
-        event.preventDefault();
-        onStop?.();
-      }
-    };
-
-    const SubmitIcon = canStop
-      ? createDefaultStopIconComponent
-      : createDefaultSubmitIconComponent;
+    const submitIcon = canStop ? (
+      <StopIconComponent createElement={createElement} />
+    ) : (
+      <ArrowUpIconComponent createElement={createElement} />
+    );
 
     return (
       <form
-        {...props}
         className={cx(cssClasses.root, props.className)}
         onSubmit={handleSubmit}
       >
@@ -238,37 +275,40 @@ export function createChatPromptComponent({ createElement }: Renderer) {
           </div>
         )}
 
-        <div className={cx(cssClasses.body)}>
+        <div
+          className={cx(cssClasses.body)}
+          onClick={(e: BaseSyntheticEvent) => {
+            if (e.target === internalRef.current) return;
+            internalRef.current?.focus();
+          }}
+        >
           <textarea
+            {...props}
+            ref={internalRef}
             className={cx(cssClasses.textarea)}
             value={value}
             placeholder={placeholder || translations.textareaPlaceholder}
             aria-label={translations.textareaLabel}
             disabled={disabled}
-            rows={2}
-            style={{
-              maxHeight: `${maxRows * 1.5}em`,
-              resize: 'none',
-              overflow: 'auto',
-            }}
+            autoFocus={autoFocus}
             onInput={handleTextareaInput}
             onKeyDown={handleKeyDown}
           />
 
           <div className={cx(cssClasses.actions)}>
             <button
+              type="submit"
               className={cx(cssClasses.submit)}
               disabled={buttonDisabled}
-              title={(() => {
+              aria-label={(() => {
                 if (disabled) return translations.disabledTooltip;
                 if (buttonDisabled) return translations.emptyMessageTooltip;
                 if (canStop) return translations.stopResponseTooltip;
                 return translations.sendMessageTooltip;
               })()}
-              onClick={handleButtonClick}
               data-status={status}
             >
-              <SubmitIcon createElement={createElement} />
+              {submitIcon}
             </button>
           </div>
         </div>

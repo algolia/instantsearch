@@ -1,0 +1,101 @@
+.ais-ChatMessageLoader {
+  .ais-ChatMessage-content {
+    width: 100%;
+  }
+
+  .ais-ChatMessage-message {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--ais-spacing) * 0.5);
+  }
+
+  .ais-ChatMessage-loaderSpinner {
+    width: calc(var(--ais-spacing) * 1.5);
+    height: calc(var(--ais-spacing) * 1.5);
+    color: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+
+    @media (prefers-reduced-motion: no-preference) {
+      animation: ais-chat-loader-spinner 1.4s linear infinite;
+    }
+  }
+
+  .ais-ChatMessage-loaderText {
+    text-fill-color: transparent;
+    -webkit-text-fill-color: transparent;
+    background: rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha))
+      linear-gradient(
+        to right,
+        rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha)) 0%,
+        rgba(255, 255, 255, 0.75) 40%,
+        rgba(255, 255, 255, 0.75) 60%,
+        rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha)) 100%
+      );
+    -webkit-background-clip: text;
+    background-clip: text;
+    background-repeat: no-repeat;
+    background-size: 50% 200%;
+    display: inline-block;
+    background-position: -100% 0;
+    font-weight: 500;
+
+    @media (prefers-reduced-motion: no-preference) {
+      animation-delay: 0.5s;
+      animation-duration: 3s;
+      animation-iteration-count: infinite;
+      animation-name: ais-chat-loader-text;
+    }
+  }
+
+  .ais-ChatMessage-loaderSkeletonWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--ais-spacing) * 0.25);
+  }
+
+  .ais-ChatMessage-loaderSkeletonItem {
+    height: var(--ais-spacing);
+    background-color: rgba(var(--ais-muted-color-rgb), 0.2);
+    border-radius: var(--ais-border-radius-sm);
+
+    @media (prefers-reduced-motion: no-preference) {
+      animation: ais-chat-loader-skeleton 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    &:nth-child(2) {
+      width: 40%;
+    }
+  }
+}
+
+@keyframes ais-chat-loader-spinner {
+  0% {
+    transform: rotate(0deg);
+    stroke-dasharray: 1px, 200px;
+    stroke-dashoffset: 0px;
+  }
+  50% {
+    stroke-dasharray: 100px, 200px;
+    stroke-dashoffset: -15px;
+  }
+  100% {
+    transform: rotate(360deg);
+    stroke-dasharray: 100px, 200px;
+    stroke-dashoffset: -125px;
+  }
+}
+
+@keyframes ais-chat-loader-skeleton {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes ais-chat-loader-text {
+  from {
+    background-position: -100% 0%;
+  }
+  to {
+    background-position: 250% 0%;
+  }
+}

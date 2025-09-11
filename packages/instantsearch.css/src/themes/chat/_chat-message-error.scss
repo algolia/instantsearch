@@ -1,0 +1,9 @@
+@use '../common';
+
+.ais-ChatMessageError .ais-ChatMessage-errorAction {
+  @extend %ais-button-primary;
+  
+  padding: 0 calc(var(--ais-spacing)) 0 calc(var(--ais-spacing));
+  height: calc(var(--ais-spacing) * 2);
+  gap: calc(var(--ais-spacing) * 0.25);
+}
