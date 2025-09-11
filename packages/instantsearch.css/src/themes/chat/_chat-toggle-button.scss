@@ -1,0 +1,37 @@
+@use '../variables';
+@use '../common';
+
+.ais-ChatToggleButton {
+  @extend %ais-button-primary;
+
+  width: calc(var(--ais-spacing) * 3);
+  height: calc(var(--ais-spacing) * 3);
+  border-radius: var(--ais-border-radius-full);
+  box-shadow: var(--ais-shadow-sm);
+  flex-shrink: 0;
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: transform var(--ais-transition-duration)
+        var(--ais-transition-timing-function),
+      background-color var(--ais-transition-duration)
+        var(--ais-transition-timing-function),
+      box-shadow var(--ais-transition-duration)
+        var(--ais-transition-timing-function);
+  }
+}
+
+.ais-ChatToggleButton--open {
+  transform: rotate(180deg);
+}
+
+@media (max-width: variables.$ais-chat-breakpoint) {
+  .ais-ChatToggleButton {
+    position: relative;
+    right: var(--ais-chat-margin);
+    bottom: var(--ais-chat-margin);
+  }
+
+  .ais-ChatToggleButton.ais-ChatToggleButton--open {
+    display: none;
+  }
+}

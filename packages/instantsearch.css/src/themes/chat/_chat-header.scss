@@ -1,0 +1,45 @@
+@use '../variables';
+@use '../common';
+
+.ais-ChatHeader {
+  display: flex;
+  gap: calc(var(--ais-spacing) * 2);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--ais-spacing);
+  border-bottom: 1px solid rgba(var(--ais-border-color-rgb), 0.2);
+  color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+}
+
+.ais-ChatHeader-title {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--ais-spacing) / 2);
+  font-weight: 600;
+}
+
+.ais-ChatHeader-titleIcon {
+  display: inline-flex;
+  align-items: center;
+  color: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+}
+
+.ais-ChatHeader-actions {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--ais-spacing) / 2);
+}
+
+.ais-ChatHeader-maximize,
+.ais-ChatHeader-close {
+  @extend %ais-button-ghost;
+  
+  padding: calc(var(--ais-spacing) * 0.25);
+  border-radius: var(--ais-border-radius-sm);
+}
+
+@media (max-width: variables.$ais-chat-breakpoint) {
+  .ais-ChatHeader-maximize {
+    display: none;
+  }
+}
