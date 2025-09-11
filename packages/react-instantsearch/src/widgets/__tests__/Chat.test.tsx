@@ -138,4 +138,40 @@ describe('Chat', () => {
     expect(toolComponent).toBeInTheDocument();
     expect(toolComponent).toHaveTextContent('The message said hello!');
   });
+
+  test('should not use default search index tool if user provides one', () => {
+    mockUseChat = {
+      messages: [
+        {
+          role: 'assistant',
+          parts: [{ type: 'tool-algolia_search_index' }],
+        },
+      ],
+      sendMessage: jest.fn(),
+    };
+    const onToolCall = jest.fn();
+    const { container } = render(
+      <InstantSearchTestWrapper>
+        <Chat
+          tools={[
+            {
+              type: 'tool-algolia_search_index',
+              component: () => (
+                <div>
+                  <div role="alert">Custom search index tool</div>
+                </div>
+              ),
+              onToolCall,
+            },
+          ]}
+        />
+      </InstantSearchTestWrapper>
+    );
+    const toggleButton = container.querySelector('.ais-ChatToggleButton');
+    userEvent.click(toggleButton!);
+
+    const toolComponent = container.querySelector('[role="alert"]');
+    expect(toolComponent).toBeInTheDocument();
+    expect(toolComponent).toHaveTextContent('Custom search index tool');
+  });
 });

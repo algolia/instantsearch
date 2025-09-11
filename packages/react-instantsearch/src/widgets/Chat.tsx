@@ -10,6 +10,7 @@ import type {
   ChatProps as ChatUiProps,
   RecommendComponentProps,
   RecordWithObjectID,
+  ChatToolMessage,
 } from 'instantsearch-ui-components';
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
 import type { UseChatOptions } from 'react-instantsearch-core';
@@ -19,12 +20,15 @@ const ChatUiComponent = createChatComponent({
   Fragment,
 });
 
+export const SearchIndexToolType: ChatToolMessage['type'] =
+  'tool-algolia_search_index';
+
 export function createDefaultTools<TObject extends RecordWithObjectID>(
   itemComponent?: ItemComponent<TObject>
 ): Tools {
   return [
     {
-      type: 'tool-algolia_search_index',
+      type: SearchIndexToolType,
       component: ({ message, indexUiState, setIndexUiState }) => {
         const items =
           (
@@ -126,6 +130,10 @@ export function Chat<TObject extends RecordWithObjectID>({
   const [input, setInput] = React.useState('');
 
   const tools = React.useMemo(() => {
+    if (userTools?.some((tool) => tool.type === SearchIndexToolType)) {
+      return userTools;
+    }
+
     return [...createDefaultTools(itemComponent), ...(userTools ?? [])];
   }, [itemComponent, userTools]);
 
