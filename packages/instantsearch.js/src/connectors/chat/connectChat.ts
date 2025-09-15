@@ -31,12 +31,10 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
     messages: TUiMessage[] | ((m: TUiMessage[]) => TUiMessage[])
   ) => void;
 
-  open: boolean;
-  setOpen: (open: boolean) => void;
-  input: string;
-  setInput: (input: string) => void;
-
-  error: Error | undefined;
+  getMessages: () => TUiMessage[];
+  getError: () => Error | undefined;
+  getStatus: () => ChatStatus;
+  renderCallback: (callback: () => void) => void;
 } & Pick<
   AbstractChat<TUiMessage>,
   | 'sendMessage'
@@ -44,8 +42,6 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
   | 'stop'
   | 'resumeStream'
   | 'addToolResult'
-  | 'status'
-  | 'messages'
   | 'clearError'
 >;
 
@@ -101,16 +97,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
   ) => {
     const { resume = false, ...options } = widgetParams || {};
     let _chatInstance: Chat<TUiMessage>;
-    let messages = [] as TUiMessage[];
     let setMessages: (
       messagesParam: TUiMessage[] | ((m: TUiMessage[]) => TUiMessage[])
     ) => void;
-    let error: Error | undefined;
-    let status: ChatStatus;
-    let chatOpen = false;
-    let chatInput = '';
-    let chatSetOpen: (open: boolean) => void;
-    let chatSetInput: (input: string) => void;
+    let renderCallback: (callback: () => void) => void;
 
     return {
       $$type: 'ais.chat',
@@ -160,33 +150,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             ? (optionsWithTransport.chat as Chat<TUiMessage>) // TODO: fix assertion
             : new Chat(optionsWithTransport);
 
-        const rerender = () => {
-          renderFn(
-            // @ts-expect-error
-            {
-              // @ts-expect-error
-              ...this.getWidgetRenderState(initOptions),
-              instantSearchInstance: initOptions.instantSearchInstance,
-            },
-            false
-          );
-        };
-
-        _chatInstance['~registerMessagesCallback'](() => {
-          messages = _chatInstance.messages;
-          rerender();
-        });
-
-        _chatInstance['~registerErrorCallback'](() => {
-          error = _chatInstance.error;
-          rerender();
-        });
-
-        _chatInstance['~registerStatusCallback'](() => {
-          status = _chatInstance.status;
-          rerender();
-        });
-
         setMessages = (
           messagesParam: TUiMessage[] | ((m: TUiMessage[]) => TUiMessage[])
         ) => {
@@ -196,14 +159,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           _chatInstance.messages = messagesParam;
         };
 
-        chatSetOpen = (open: boolean) => {
-          chatOpen = open;
-          rerender();
-        };
-
-        chatSetInput = (input: string) => {
-          chatInput = input;
-          rerender();
+        renderCallback = (callback) => {
+          _chatInstance['~registerMessagesCallback'](callback);
+          _chatInstance['~registerErrorCallback'](callback);
+          _chatInstance['~registerStatusCallback'](callback);
         };
 
         renderFn(
@@ -250,20 +209,17 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         return {
           widgetParams,
           id: _chatInstance.id,
-          messages,
+          getMessages: () => _chatInstance.messages,
           setMessages,
+          renderCallback,
           sendMessage: _chatInstance.sendMessage,
+          getError: () => _chatInstance.error,
           regenerate: _chatInstance.regenerate,
           clearError: _chatInstance.clearError,
           stop: _chatInstance.stop,
-          error,
+          getStatus: () => _chatInstance.status,
           resumeStream: _chatInstance.resumeStream,
-          status,
           addToolResult: _chatInstance.addToolResult,
-          open: chatOpen,
-          setOpen: chatSetOpen,
-          input: chatInput,
-          setInput: chatSetInput,
         };
       },
 
