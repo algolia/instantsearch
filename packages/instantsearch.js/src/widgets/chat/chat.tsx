@@ -45,10 +45,10 @@ function createRenderer({
   let open = false;
   let input = '';
 
-  return (
-    { instantSearchInstance, messages, sendMessage },
-    isFirstRendering
-  ) => {
+  return (props, isFirstRendering) => {
+    const { instantSearchInstance, sendMessage, getMessages, renderCallback } =
+      props;
+
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates: {} as unknown as Required<ChatTemplates>,
@@ -58,7 +58,9 @@ function createRenderer({
       return;
     }
 
-    console.log('Rendering');
+    renderCallback(() => {
+      renderChat();
+    });
 
     const setOpen = (o: boolean) => {
       open = o;
@@ -81,7 +83,8 @@ function createRenderer({
             },
           }}
           messagesProps={{
-            messages,
+            messages: getMessages(),
+            // TODO: retrieve proper index name and index ui state
             indexUiState:
               instantSearchInstance.getUiState()[
                 instantSearchInstance.indexName
@@ -91,6 +94,7 @@ function createRenderer({
                 ...instantSearchInstance.getUiState(),
                 [instantSearchInstance.indexName]: state,
               }),
+            // TODO: support tools
           }}
           headerProps={{
             onClose: () => {
