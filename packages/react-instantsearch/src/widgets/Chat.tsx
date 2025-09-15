@@ -169,10 +169,10 @@ export function Chat<TObject extends RecordWithObjectID>({
       promptProps={{
         value: input,
         onInput: (event) => {
-          setInput(event);
+          setInput(event.currentTarget.value);
         },
         onSubmit: (event) => {
-          sendMessage({ text: event });
+          sendMessage({ text: event.currentTarget.value });
           setInput('');
         },
         ...promptProps,

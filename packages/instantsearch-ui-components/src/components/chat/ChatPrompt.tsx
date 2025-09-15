@@ -113,6 +113,10 @@ export type ChatPromptProps = Omit<
    */
   translations?: Partial<ChatPromptTranslations>;
   /**
+   * Callback when the textarea value changes
+   */
+  onInput?: (event: FormEvent<HTMLTextAreaElement>) => void;
+  /**
    * Callback when the form is submitted
    */
   onSubmit?: (
