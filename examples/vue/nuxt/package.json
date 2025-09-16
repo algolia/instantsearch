@@ -1,6 +1,6 @@
 {
   "name": "example-vue-instantsearch-nuxt",
-  "version": "1.80.0",
+  "version": "1.81.0",
   "description": "Vue InstantSearch & Nuxt",
   "private": true,
   "scripts": {
@@ -15,7 +15,7 @@
     "cross-env": "^5.2.0",
     "css-loader": "^4.3.0",
     "nuxt": "^2.4.5",
-    "vue-instantsearch": "4.21.3",
+    "vue-instantsearch": "4.21.4",
     "vue-server-renderer": "2.7.14"
   }
 }

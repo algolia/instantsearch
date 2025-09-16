@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.12.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.11.2...instantsearch-ui-components@0.12.0) (2025-09-16)
+
+
+### Features
+
+* **ui-components:** introduce chat components ([#6678](https://github.com/algolia/instantsearch/issues/6678)) ([4967237](https://github.com/algolia/instantsearch/commit/4967237ebcc73095dd02f686b1fbb161b48b6d3e))
+
+
+
+
+
 ## [0.11.2](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.11.1...instantsearch-ui-components@0.11.2) (2025-07-08)
 
 

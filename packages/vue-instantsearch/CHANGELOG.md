@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.21.4](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.21.3...vue-instantsearch@4.21.4) (2025-09-16)
+
+**Note:** Version bump only for package vue-instantsearch
+
+
+
+
+
 ## [4.21.3](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.21.2...vue-instantsearch@4.21.3) (2025-09-09)
 
 **Note:** Version bump only for package vue-instantsearch
