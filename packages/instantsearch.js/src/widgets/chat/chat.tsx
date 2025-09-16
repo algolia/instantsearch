@@ -9,6 +9,7 @@ import {
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
+import { carousel } from '../../templates';
 
 import type {
   ChatRenderState,
@@ -17,8 +18,69 @@ import type {
 } from '../../connectors/chat/connectChat';
 import type { UIMessage } from '../../lib/chat';
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type { WidgetFactory, Renderer } from '../../types';
-import type { ChatClassNames } from 'instantsearch-ui-components';
+import type {
+  WidgetFactory,
+  Renderer,
+  Hit,
+  TemplateWithBindEvent,
+  BaseHit,
+} from '../../types';
+import type { ChatClassNames, Tools } from 'instantsearch-ui-components';
+
+function createDefaultTools<TObject extends BaseHit = BaseHit>(
+  itemComponent?: (props: { item: Hit<TObject> }) => h.JSX.Element
+): Tools {
+  return [
+    {
+      type: 'tool-algolia_search_index',
+      component: ({ message, indexUiState, setIndexUiState }) => {
+        const items =
+          (
+            message.output as {
+              hits?: Array<Hit<TObject>>;
+            }
+          )?.hits || [];
+
+        const input = message.input as { query: string };
+
+        return (
+          <div>
+            {carousel()({
+              items,
+              // TODO: fix ts error
+              // @ts-expect-error
+              templates: { item: itemComponent },
+              sendEvent: () => {},
+            })}
+
+            {input?.query && (
+              <button
+                className="ais-ChatToolSearchIndexRefineButton"
+                onClick={() => {
+                  if (input?.query) {
+                    setIndexUiState({
+                      ...indexUiState,
+                      query: input.query,
+                    });
+                  }
+                }}
+              >
+                Refine on this query
+              </button>
+            )}
+          </div>
+        );
+      },
+      onToolCall: ({ toolCall, addToolResult }) => {
+        addToolResult({
+          tool: toolCall.toolName,
+          toolCallId: toolCall.toolCallId,
+          output: '',
+        });
+      },
+    },
+  ];
+}
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'chat',
@@ -34,6 +96,7 @@ function createRenderer({
   cssClasses,
   containerNode,
   templates,
+  tools,
 }: {
   containerNode: HTMLElement;
   cssClasses: ChatCSSClasses;
@@ -41,13 +104,23 @@ function createRenderer({
     templateProps?: PreparedTemplateProps<Required<ChatTemplates>>;
   };
   templates: ChatTemplates;
+  tools?: Tools;
 }): Renderer<ChatRenderState, Partial<ChatWidgetParams>> {
+  // TODO: move these to connector
   let open = false;
   let input = '';
 
+  const userTools = tools ?? [];
+  const defaultTools = createDefaultTools();
+  const hasSearchIndexTool = userTools.some(
+    (tool) => tool.type === 'tool-algolia_search_index'
+  );
+  const combinedTools = hasSearchIndexTool
+    ? userTools
+    : [...defaultTools, ...userTools];
+
   return (props, isFirstRendering) => {
-    const { instantSearchInstance, sendMessage, getMessages, renderCallback } =
-      props;
+    const { instantSearchInstance, sendMessage, getMessages } = props;
 
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
@@ -57,10 +130,6 @@ function createRenderer({
       });
       return;
     }
-
-    renderCallback(() => {
-      renderChat();
-    });
 
     const setOpen = (o: boolean) => {
       open = o;
@@ -94,7 +163,7 @@ function createRenderer({
                 ...instantSearchInstance.getUiState(),
                 [instantSearchInstance.indexName]: state,
               }),
-            // TODO: support tools
+            tools: combinedTools,
           }}
           headerProps={{
             onClose: () => {
@@ -123,32 +192,24 @@ function createRenderer({
 
 export type ChatCSSClasses = Partial<ChatClassNames>;
 
-export type ChatTemplates = Partial<{
-  /**
-   * Template to use for each result. This template will receive an object containing a single record.
-   */
-  // item: TemplateWithBindEvent<Hit<THit>>;
-  // /**
-  //  * Template to use to wrap all items.
-  //  */
-  // layout: Template<
-  //   Pick<
-  //     Parameters<NonNullable<LookingSimilarUiProps<Hit<THit>>['layout']>>[0],
-  //     'items'
-  //   > & {
-  //     templates: {
-  //       item: LookingSimilarUiProps<Hit<THit>>['itemComponent'];
-  //     };
-  //     cssClasses: Pick<LookingSimilarCSSClasses, 'list' | 'item'>;
-  //   }
-  // >;
-}>;
+export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
+  Partial<{
+    /**
+     * Template to use for each result. This template will receive an object containing a single record.
+     */
+    item: TemplateWithBindEvent<Hit<THit>>;
+  }>;
 
 type ChatWidgetParams = {
   /**
    * CSS Selector or HTMLElement to insert the widget.
    */
   container: string | HTMLElement;
+
+  /**
+   * Client-side tools to add to the chat
+   */
+  tools?: Tools;
 
   /**
    * Templates to use for the widget.
@@ -178,6 +239,7 @@ export default (function chat<TUiMessage extends UIMessage = UIMessage>(
     templates = {},
     cssClasses = {},
     resume = false,
+    tools,
     ...options
   } = widgetParams || {};
 
@@ -192,6 +254,7 @@ export default (function chat<TUiMessage extends UIMessage = UIMessage>(
     cssClasses,
     renderState: {},
     templates,
+    tools,
   });
 
   const makeWidget = connectChat(specializedRenderer, () =>
