@@ -106,10 +106,6 @@ function createRenderer({
   templates: ChatTemplates;
   tools?: Tools;
 }): Renderer<ChatRenderState, Partial<ChatWidgetParams>> {
-  // TODO: move these to connector
-  let open = false;
-  let input = '';
-
   const userTools = tools ?? [];
   const defaultTools = createDefaultTools();
   const hasSearchIndexTool = userTools.some(
@@ -120,7 +116,15 @@ function createRenderer({
     : [...defaultTools, ...userTools];
 
   return (props, isFirstRendering) => {
-    const { instantSearchInstance, sendMessage, getMessages } = props;
+    const {
+      instantSearchInstance,
+      sendMessage,
+      getMessages,
+      open,
+      setOpen,
+      input,
+      setInput,
+    } = props;
 
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
@@ -130,16 +134,6 @@ function createRenderer({
       });
       return;
     }
-
-    const setOpen = (o: boolean) => {
-      open = o;
-      renderChat();
-    };
-
-    const setInput = (i: string) => {
-      input = i;
-      renderChat();
-    };
 
     function renderChat() {
       render(
