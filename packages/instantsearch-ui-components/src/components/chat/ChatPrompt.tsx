@@ -248,7 +248,7 @@ export function createChatPromptComponent({ createElement }: Renderer) {
 
         <div
           className={cx(cssClasses.body)}
-          onClick={(e: MouseEvent) => {
+          onClick={(e) => {
             if (e.target === textAreaElement) return;
             textAreaElement?.focus();
           }}
