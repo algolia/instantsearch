@@ -67,7 +67,7 @@ export type ChatPromptClassNames = {
 
 export type ChatPromptProps = Omit<
   ComponentProps<'textarea'>,
-  'key' | 'ref'
+  'key' | 'ref' | 'onInput' | 'onSubmit'
 > & {
   /**
    * Content to render above the textarea
@@ -113,6 +113,14 @@ export type ChatPromptProps = Omit<
    * Callback when the stop button is clicked
    */
   onStop?: () => void;
+  /**
+   * Callback when the textarea value changes
+   */
+  onInput?: (value: string) => void;
+  /**
+   * Callback when the form is submitted
+   */
+  onSubmit?: (value: string) => void;
 };
 
 export function createChatPromptComponent({ createElement }: Renderer) {
@@ -229,8 +237,7 @@ export function createChatPromptComponent({ createElement }: Renderer) {
           if (!hasValue) {
             return;
           }
-          // @ts-expect-error `onSubmit` expect `HTMLTextAreaElement`
-          onSubmit?.(event);
+          onSubmit?.(event.currentTarget.value);
         }}
       >
         {HeaderComponent && (
@@ -241,7 +248,7 @@ export function createChatPromptComponent({ createElement }: Renderer) {
 
         <div
           className={cx(cssClasses.body)}
-          onClick={(e: Event) => {
+          onClick={(e: MouseEvent) => {
             if (e.target === textAreaElement) return;
             textAreaElement?.focus();
           }}
@@ -258,7 +265,7 @@ export function createChatPromptComponent({ createElement }: Renderer) {
             autoFocus={autoFocus}
             onInput={(event) => {
               adjustHeight();
-              onInput?.(event);
+              onInput?.(event.currentTarget.value);
             }}
             onKeyDown={(event) => {
               onKeyDown?.(event);
@@ -271,7 +278,7 @@ export function createChatPromptComponent({ createElement }: Renderer) {
                 if (!hasValue) {
                   return;
                 }
-                onSubmit?.(event);
+                onSubmit?.(event.currentTarget.value);
               }
               if (event.key === 'Escape') {
                 if (event.currentTarget && event.currentTarget.blur) {
