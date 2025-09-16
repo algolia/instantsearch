@@ -145,7 +145,7 @@ export * from './src/instantsearch.js';`
 
   const umd = {
     input: 'src/instantsearch.umd.js',
-    external: ['vue'],
+    external: ['vue', 'ai', 'zod'],
     output: [
       {
         sourcemap: true,
