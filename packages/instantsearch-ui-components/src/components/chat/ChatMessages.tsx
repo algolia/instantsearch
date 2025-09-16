@@ -1,5 +1,4 @@
 /** @jsx createElement */
-import { useMemo } from 'react';
 
 import { cx } from '../../lib';
 
@@ -145,6 +144,15 @@ export function createChatMessagesComponent({
   createElement,
   Fragment,
 }: Renderer) {
+  const DefaultMessageComponent =
+    createDefaultMessageComponent<ChatMessageBase>({ createElement, Fragment });
+  const DefaultLoaderComponent = createChatMessageLoaderComponent({
+    createElement,
+  });
+  const DefaultErrorComponent = createChatMessageErrorComponent({
+    createElement,
+  });
+
   return function ChatMessages<
     TMessage extends ChatMessageBase = ChatMessageBase
   >(userProps: ChatMessagesProps<TMessage>) {
@@ -190,22 +198,9 @@ export function createChatMessagesComponent({
       ),
     };
 
-    const DefaultMessage = useMemo(
-      () =>
-        MessageComponent ||
-        createDefaultMessageComponent<TMessage>({ createElement, Fragment }),
-      [MessageComponent]
-    );
-    const DefaultLoader = useMemo(
-      () =>
-        LoaderComponent || createChatMessageLoaderComponent({ createElement }),
-      [LoaderComponent]
-    );
-    const DefaultError = useMemo(
-      () =>
-        ErrorComponent || createChatMessageErrorComponent({ createElement }),
-      [ErrorComponent]
-    );
+    const DefaultMessage = MessageComponent || DefaultMessageComponent;
+    const DefaultLoader = LoaderComponent || DefaultLoaderComponent;
+    const DefaultError = ErrorComponent || DefaultErrorComponent;
 
     return (
       <div

@@ -1,6 +1,5 @@
 /** @jsx createElement */
 import { compiler } from 'markdown-to-jsx';
-import { useMemo } from 'react';
 
 import { cx } from '../../lib';
 
@@ -202,9 +201,6 @@ export function createChatMessageComponent({ createElement }: Renderer) {
         });
         return <span key={`${message.id}-${index}`}>{markdown}</span>;
       }
-      // if (part.type === 'tool-start') {
-      //   part;
-      // }
       if (part.type.startsWith('tool-')) {
         const tool = tools.find((t) => t.type === part.type);
         if (tool) {
@@ -229,29 +225,6 @@ export function createChatMessageComponent({ createElement }: Renderer) {
         </pre>
       );
     }
-
-    const Actions = useMemo(() => {
-      if (ActionsComponent) {
-        return <ActionsComponent actions={actions} />;
-      }
-
-      return actions.map((action, index) => (
-        <button
-          key={index}
-          type="button"
-          className="ais-ChatMessage-action"
-          disabled={action.disabled}
-          aria-label={action.title}
-          onClick={() => action.onClick?.(message)}
-        >
-          {action.icon ? (
-            <action.icon />
-          ) : (
-            <MenuIconComponent createElement={createElement} />
-          )}
-        </button>
-      ));
-    }, [actions, ActionsComponent, message]);
 
     return (
       <article
@@ -278,7 +251,26 @@ export function createChatMessageComponent({ createElement }: Renderer) {
                 className={cx(cssClasses.actions)}
                 aria-label={translations.actionsLabel}
               >
-                {Actions}
+                {ActionsComponent ? (
+                  <ActionsComponent actions={actions} />
+                ) : (
+                  actions.map((action, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      className="ais-ChatMessage-action"
+                      disabled={action.disabled}
+                      aria-label={action.title}
+                      onClick={() => action.onClick?.(message)}
+                    >
+                      {action.icon ? (
+                        <action.icon />
+                      ) : (
+                        <MenuIconComponent createElement={createElement} />
+                      )}
+                    </button>
+                  ))
+                )}
               </div>
             )}
 

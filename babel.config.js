@@ -85,7 +85,7 @@ module.exports = (api) => {
             // this is actually only called on arrays
             'String.prototype.includes',
 
-            // widely supported, safe to use without polyfill
+            // widely supported (except IE), safe to use without polyfill
             'String.prototype.startsWith',
             'Array.prototype.find',
 
