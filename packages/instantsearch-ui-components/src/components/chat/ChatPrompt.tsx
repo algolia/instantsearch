@@ -1,14 +1,11 @@
 /** @jsx createElement */
 
-import { useRef, useLayoutEffect, useCallback } from 'react';
-
 import { cx } from '../../lib';
 
 import { ArrowUpIconComponent, StopIconComponent } from './icons';
 
 import type { ComponentProps, Renderer } from '../../types';
 import type { ChatStatus } from './types';
-import type { BaseSyntheticEvent, FormEvent, KeyboardEvent } from 'react';
 
 export type ChatPromptTranslations = {
   /**
@@ -113,22 +110,55 @@ export type ChatPromptProps = Omit<
    */
   translations?: Partial<ChatPromptTranslations>;
   /**
-   * Callback when the textarea value changes
-   */
-  onInput?: (event: FormEvent<HTMLTextAreaElement>) => void;
-  /**
-   * Callback when the form is submitted
-   */
-  onSubmit?: (
-    event: KeyboardEvent<HTMLTextAreaElement> | FormEvent<HTMLFormElement>
-  ) => void;
-  /**
    * Callback when the stop button is clicked
    */
   onStop?: () => void;
 };
 
 export function createChatPromptComponent({ createElement }: Renderer) {
+  let textAreaElement: HTMLTextAreaElement | null = null;
+  let lineHeight = 0;
+  let padding = 0;
+
+  const adjustHeight = () => {
+    if (!textAreaElement) return;
+
+    textAreaElement.style.height = 'auto';
+    const fullHeight = textAreaElement.scrollHeight;
+
+    if (textAreaElement.getAttribute('data-max-rows')) {
+      const maxRows = parseInt(
+        textAreaElement.getAttribute('data-max-rows') || '0',
+        10
+      );
+      if (maxRows > 0) {
+        const maxHeight = maxRows * lineHeight + padding;
+        textAreaElement.style.overflowY =
+          fullHeight > maxHeight ? 'auto' : 'hidden';
+        textAreaElement.style.height = `${Math.min(fullHeight, maxHeight)}px`;
+        return;
+      }
+    }
+
+    textAreaElement.style.overflowY = 'hidden';
+    textAreaElement.style.height = `${fullHeight}px`;
+  };
+
+  const setTextAreaRef = (element: HTMLTextAreaElement | null) => {
+    textAreaElement = element;
+
+    if (element) {
+      const styles = getComputedStyle(element);
+      lineHeight = parseFloat(styles.lineHeight);
+
+      const pt = parseFloat(styles.paddingTop);
+      const pb = parseFloat(styles.paddingBottom);
+      padding = pt + pb;
+
+      adjustHeight();
+    }
+  };
+
   return function ChatPrompt(userProps: ChatPromptProps) {
     const {
       classNames = {},
@@ -176,91 +206,10 @@ export function createChatPromptComponent({ createElement }: Renderer) {
       footer: cx('ais-ChatPrompt-footer', classNames.footer),
     };
 
-    const internalRef = useRef<HTMLTextAreaElement>(null);
-    const lineHeightRef = useRef(0);
-    const paddingRef = useRef(0);
-
     const hasValue =
       typeof value === 'string' ? value.trim() !== '' : Boolean(value);
     const canStop = status === 'submitted' || status === 'streaming';
     const buttonDisabled = (!hasValue && !canStop) || disabled;
-
-    const adjustHeight = useCallback(() => {
-      if (!internalRef.current) return;
-
-      const textArea = internalRef.current;
-      textArea.style.height = 'auto';
-      const fullHeight = textArea.scrollHeight;
-
-      if (maxRows > 0) {
-        const maxHeight = maxRows * lineHeightRef.current + paddingRef.current;
-        textArea.style.overflowY = fullHeight > maxHeight ? 'auto' : 'hidden';
-        textArea.style.height = `${Math.min(fullHeight, maxHeight)}px`;
-      } else {
-        textArea.style.overflowY = 'hidden';
-        textArea.style.height = `${fullHeight}px`;
-      }
-    }, [maxRows]);
-
-    useLayoutEffect(() => {
-      if (!internalRef.current) return;
-
-      const textArea = internalRef.current;
-      const styles = getComputedStyle(textArea);
-
-      lineHeightRef.current = parseFloat(styles.lineHeight);
-
-      const pt = parseFloat(styles.paddingTop);
-      const pb = parseFloat(styles.paddingBottom);
-      paddingRef.current = pt + pb;
-    }, []);
-
-    useLayoutEffect(() => {
-      adjustHeight();
-    }, [value, maxRows, adjustHeight]);
-
-    useLayoutEffect(() => {
-      if (!internalRef.current) return undefined;
-
-      const ro = new ResizeObserver(() => adjustHeight());
-
-      const textArea = internalRef.current;
-      ro.observe(textArea);
-
-      return () => ro.disconnect();
-    }, [adjustHeight]);
-
-    const handleSubmit = (
-      event: KeyboardEvent<HTMLTextAreaElement> | FormEvent<HTMLFormElement>
-    ) => {
-      event.preventDefault();
-
-      if (canStop) {
-        onStop?.();
-        return;
-      }
-
-      if (!hasValue) {
-        return;
-      }
-
-      onSubmit?.(event);
-    };
-
-    const handleTextareaInput = (event: FormEvent<HTMLTextAreaElement>) => {
-      adjustHeight();
-      onInput?.(event);
-    };
-
-    const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
-      onKeyDown?.(event);
-      if (event.key === 'Enter' && !event.shiftKey) {
-        handleSubmit(event);
-      }
-      if (event.key === 'Escape') {
-        event.currentTarget.blur();
-      }
-    };
 
     const submitIcon = canStop ? (
       <StopIconComponent createElement={createElement} />
@@ -271,7 +220,18 @@ export function createChatPromptComponent({ createElement }: Renderer) {
     return (
       <form
         className={cx(cssClasses.root, props.className)}
-        onSubmit={handleSubmit}
+        onSubmit={(event) => {
+          event.preventDefault();
+          if (canStop) {
+            onStop?.();
+            return;
+          }
+          if (!hasValue) {
+            return;
+          }
+          // @ts-expect-error `onSubmit` expect `HTMLTextAreaElement`
+          onSubmit?.(event);
+        }}
       >
         {HeaderComponent && (
           <div className={cx(cssClasses.header)}>
@@ -281,22 +241,44 @@ export function createChatPromptComponent({ createElement }: Renderer) {
 
         <div
           className={cx(cssClasses.body)}
-          onClick={(e: BaseSyntheticEvent) => {
-            if (e.target === internalRef.current) return;
-            internalRef.current?.focus();
+          onClick={(e: Event) => {
+            if (e.target === textAreaElement) return;
+            textAreaElement?.focus();
           }}
         >
           <textarea
             {...props}
-            ref={internalRef}
+            ref={setTextAreaRef}
+            data-max-rows={maxRows}
             className={cx(cssClasses.textarea)}
             value={value}
             placeholder={placeholder || translations.textareaPlaceholder}
             aria-label={translations.textareaLabel}
             disabled={disabled}
             autoFocus={autoFocus}
-            onInput={handleTextareaInput}
-            onKeyDown={handleKeyDown}
+            onInput={(event) => {
+              adjustHeight();
+              onInput?.(event);
+            }}
+            onKeyDown={(event) => {
+              onKeyDown?.(event);
+              if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                if (canStop) {
+                  onStop?.();
+                  return;
+                }
+                if (!hasValue) {
+                  return;
+                }
+                onSubmit?.(event);
+              }
+              if (event.key === 'Escape') {
+                if (event.currentTarget && event.currentTarget.blur) {
+                  event.currentTarget.blur();
+                }
+              }
+            }}
           />
 
           <div className={cx(cssClasses.actions)}>
