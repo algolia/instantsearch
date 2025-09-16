@@ -13,6 +13,8 @@ import type {
   Renderer,
   Unmounter,
   UnknownWidgetParams,
+  InitOptions,
+  RenderOptions,
 } from '../../types';
 import type { ChatStatus } from 'instantsearch-ui-components';
 
@@ -31,10 +33,13 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
     messages: TUiMessage[] | ((m: TUiMessage[]) => TUiMessage[])
   ) => void;
 
+  open: boolean;
+  input: string;
+  setOpen: (open: boolean) => void;
+  setInput: (input: string) => void;
   getMessages: () => TUiMessage[];
   getError: () => Error | undefined;
   getStatus: () => ChatStatus;
-  renderCallback: (callback: () => void) => void;
 } & Pick<
   AbstractChat<TUiMessage>,
   | 'sendMessage'
@@ -97,15 +102,24 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
   ) => {
     const { resume = false, ...options } = widgetParams || {};
     let _chatInstance: Chat<TUiMessage>;
+    let open = false;
+    let input = '';
+    let setOpen: (o: boolean) => void;
+    let setInput: (i: string) => void;
+
     let setMessages: (
       messagesParam: TUiMessage[] | ((m: TUiMessage[]) => TUiMessage[])
     ) => void;
-    let renderCallback: (callback: () => void) => void;
+    const latestRenderOptions: { value: InitOptions | RenderOptions | null } = {
+      value: null,
+    };
 
     return {
       $$type: 'ais.chat',
 
       init(initOptions) {
+        latestRenderOptions.value = initOptions;
+
         const [appId, apiKey] = getAppIdAndApiKey(
           initOptions.instantSearchInstance.client
         );
@@ -159,33 +173,54 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           _chatInstance.messages = messagesParam;
         };
 
-        renderCallback = (callback) => {
-          _chatInstance['~registerMessagesCallback'](callback);
-          _chatInstance['~registerErrorCallback'](callback);
-          _chatInstance['~registerStatusCallback'](callback);
+        const rerender = () => {
+          renderFn(
+            {
+              ...this.getWidgetRenderState!(latestRenderOptions.value!),
+              instantSearchInstance: initOptions.instantSearchInstance,
+            } as any, // TODO: fix assertion
+            false
+          );
         };
 
+        setOpen = (o: boolean) => {
+          open = o;
+          rerender();
+        };
+
+        setInput = (i: string) => {
+          input = i;
+          rerender();
+        };
+
+        _chatInstance['~registerMessagesCallback'](() => {
+          rerender();
+        });
+        _chatInstance['~registerErrorCallback'](() => {
+          rerender();
+        });
+        _chatInstance['~registerStatusCallback'](() => {
+          rerender();
+        });
+
         renderFn(
-          // @ts-expect-error
           {
-            // @ts-expect-error
-            ...this.getWidgetRenderState(initOptions),
+            ...this.getWidgetRenderState!(initOptions),
             instantSearchInstance: initOptions.instantSearchInstance,
-          },
+          } as any, // TODO: fix assertion
           true
         );
       },
 
       render(renderOptions) {
-        // @ts-expect-error
-        const renderState = this.getWidgetRenderState(renderOptions);
+        const renderState = this.getWidgetRenderState!(renderOptions);
+        latestRenderOptions.value = renderOptions;
 
         renderFn(
-          // @ts-expect-error
           {
             ...renderState,
             instantSearchInstance: renderOptions.instantSearchInstance,
-          },
+          } as any, // TODO: fix assertion
           false
         );
       },
@@ -209,9 +244,12 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         return {
           widgetParams,
           id: _chatInstance.id,
+          open,
+          input,
+          setOpen,
+          setInput,
           getMessages: () => _chatInstance.messages,
           setMessages,
-          renderCallback,
           sendMessage: _chatInstance.sendMessage,
           getError: () => _chatInstance.error,
           regenerate: _chatInstance.regenerate,
