@@ -292,7 +292,7 @@ export function TweakpaneController() {
         label: 'Theme',
       })
       .on('change', (ev) => {
-        applyTheme(ev.value as Theme);
+        applyTheme(ev.value);
 
         // Update the pane values to reflect the new theme without triggering events
         isUpdatingTheme = true;

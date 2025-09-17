@@ -37,7 +37,7 @@ export type ChatHeaderClassNames = {
   close?: string | string[];
 };
 
-export type ChatHeaderProps = Omit<ComponentProps<'div'>, 'key' | 'ref'> & {
+export type ChatHeaderProps = ComponentProps<'div'> & {
   /**
    * Whether the chat is maximized
    */

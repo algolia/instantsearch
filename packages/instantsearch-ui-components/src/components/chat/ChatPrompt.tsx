@@ -65,10 +65,7 @@ export type ChatPromptClassNames = {
   footer: string | string[];
 };
 
-export type ChatPromptProps = Omit<
-  ComponentProps<'textarea'>,
-  'key' | 'ref' | 'onInput' | 'onSubmit'
-> & {
+export type ChatPromptProps = ComponentProps<'textarea'> & {
   /**
    * Content to render above the textarea
    */
@@ -113,14 +110,6 @@ export type ChatPromptProps = Omit<
    * Callback when the stop button is clicked
    */
   onStop?: () => void;
-  /**
-   * Callback when the textarea value changes
-   */
-  onInput?: (value: string) => void;
-  /**
-   * Callback when the form is submitted
-   */
-  onSubmit?: (value: string) => void;
 };
 
 export function createChatPromptComponent({ createElement }: Renderer) {
@@ -237,7 +226,7 @@ export function createChatPromptComponent({ createElement }: Renderer) {
           if (!hasValue) {
             return;
           }
-          onSubmit?.(event.currentTarget.value);
+          onSubmit?.(event as any);
         }}
       >
         {HeaderComponent && (
@@ -265,7 +254,7 @@ export function createChatPromptComponent({ createElement }: Renderer) {
             autoFocus={autoFocus}
             onInput={(event) => {
               adjustHeight();
-              onInput?.(event.currentTarget.value);
+              onInput?.(event);
             }}
             onKeyDown={(event) => {
               onKeyDown?.(event);
@@ -278,7 +267,7 @@ export function createChatPromptComponent({ createElement }: Renderer) {
                 if (!hasValue) {
                   return;
                 }
-                onSubmit?.(event.currentTarget.value);
+                onSubmit?.(event);
               }
               if (event.key === 'Escape') {
                 if (event.currentTarget && event.currentTarget.blur) {

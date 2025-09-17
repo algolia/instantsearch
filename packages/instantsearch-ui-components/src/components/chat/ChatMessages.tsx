@@ -5,10 +5,18 @@ import { cx } from '../../lib';
 import { createChatMessageComponent } from './ChatMessage';
 import { createChatMessageErrorComponent } from './ChatMessageError';
 import { createChatMessageLoaderComponent } from './ChatMessageLoader';
-import { ChevronDownIconComponent } from './icons';
+import {
+  ChevronDownIconComponent,
+  CopyIconComponent,
+  ReloadIconComponent,
+} from './icons';
 
 import type { ComponentProps, MutableRef, Renderer } from '../../types';
-import type { ChatMessageProps, Tools } from './ChatMessage';
+import type {
+  ChatMessageProps,
+  Tools,
+  ChatMessageActionProps,
+} from './ChatMessage';
 import type { ChatMessageErrorProps } from './ChatMessageError';
 import type { ChatMessageLoaderProps } from './ChatMessageLoader';
 import type { ChatMessageBase, ChatStatus } from './types';
@@ -49,8 +57,7 @@ export type ChatMessagesClassNames = {
 
 export type ChatMessagesProps<
   TMessage extends ChatMessageBase = ChatMessageBase
-  // Using `div` is resolving to `any`, so using `main` instead
-> = Omit<ComponentProps<'main'>, 'key' | 'ref'> & {
+> = ComponentProps<'div'> & {
   /**
    * Array of messages to display
    */
@@ -84,7 +91,7 @@ export type ChatMessagesProps<
   /**
    * Callback for reload action
    */
-  onReload?: () => void;
+  onReload?: (messageId?: string) => void;
   /**
    * Optional class names
    */
@@ -101,6 +108,19 @@ export type ChatMessagesProps<
   onScrollToBottom?: () => void;
 };
 
+const copyToClipboard = (message: ChatMessageBase) => {
+  navigator.clipboard.writeText(
+    message.parts
+      .map((part) => {
+        if ('text' in part) {
+          return part.text;
+        }
+        return '';
+      })
+      .join('')
+  );
+};
+
 function createDefaultMessageComponent<
   TMessage extends ChatMessageBase = ChatMessageBase
 >({ createElement, Fragment }: Renderer) {
@@ -113,17 +133,41 @@ function createDefaultMessageComponent<
     tools,
     indexUiState,
     setIndexUiState,
+    onReload,
   }: {
     key: string;
     message: TMessage;
-    userMessageProps?: Partial<Omit<ChatMessageProps, 'ref' | 'key'>>;
-    assistantMessageProps?: Partial<Omit<ChatMessageProps, 'ref' | 'key'>>;
+    userMessageProps?: Partial<ChatMessageProps>;
+    assistantMessageProps?: Partial<ChatMessageProps>;
     indexUiState: object;
     setIndexUiState: (state: object) => void;
     tools?: Tools;
+    onReload?: (messageId?: string) => void;
   }) {
+    const defaultAssistantActions: ChatMessageActionProps[] = [
+      {
+        title: 'Copy to clipboard',
+        icon: () => <CopyIconComponent createElement={createElement} />,
+        onClick: copyToClipboard,
+      },
+      {
+        title: 'Regenerate',
+        icon: () => <ReloadIconComponent createElement={createElement} />,
+        onClick: (m) => onReload?.(m.id),
+      },
+    ];
+
+    const defaultUserActions: ChatMessageActionProps[] = [
+      {
+        title: 'Copy to clipboard',
+        icon: () => <CopyIconComponent createElement={createElement} />,
+        onClick: copyToClipboard,
+      },
+    ];
     const messageProps =
       message.role === 'user' ? userMessageProps : assistantMessageProps;
+    const defaultActions =
+      message.role === 'user' ? defaultUserActions : defaultAssistantActions;
 
     return (
       <ChatMessage
@@ -133,6 +177,7 @@ function createDefaultMessageComponent<
         tools={tools}
         indexUiState={indexUiState}
         setIndexUiState={setIndexUiState}
+        actions={defaultActions}
         data-role={message.role}
         {...messageProps}
       />
@@ -220,15 +265,14 @@ export function createChatMessagesComponent({
                 tools={tools}
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
+                onReload={onReload}
               />
             ))}
 
             {status === 'submitted' && (
-              <div className="ais-ChatMessage">
-                <DefaultLoader
-                  translations={{ loaderText: translations.loaderText }}
-                />
-              </div>
+              <DefaultLoader
+                translations={{ loaderText: translations.loaderText }}
+              />
             )}
 
             {status === 'error' && <DefaultError onReload={onReload} />}

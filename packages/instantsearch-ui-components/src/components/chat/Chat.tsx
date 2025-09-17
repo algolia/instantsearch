@@ -60,7 +60,7 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
     headerProps,
     toggleButtonProps,
     messagesProps,
-    promptProps,
+    promptProps = {},
     classNames = {},
   }: ChatProps) {
     return (

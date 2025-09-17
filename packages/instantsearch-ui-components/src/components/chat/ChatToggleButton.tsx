@@ -9,10 +9,7 @@ export type ChatToggleButtonClassNames = {
   root?: string | string[];
 };
 
-export type ChatToggleButtonProps = Omit<
-  ComponentProps<'button'>,
-  'key' | 'ref'
-> & {
+export type ChatToggleButtonProps = ComponentProps<'button'> & {
   open: boolean;
   onClick: () => void;
   toggleIconComponent?: (props: { isOpen: boolean }) => JSX.Element;
