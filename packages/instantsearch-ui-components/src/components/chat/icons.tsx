@@ -6,7 +6,6 @@ type IconProps = Pick<Renderer, 'createElement'> & {
   height?: number;
 };
 
-// AI/Assistant icon - sparkles
 export function SparklesIconComponent({
   createElement,
   width = 20,
@@ -36,7 +35,6 @@ export function SparklesIconComponent({
   );
 }
 
-// Navigation/Control icons
 export function ArrowUpIconComponent({
   createElement,
   width = 16,
@@ -104,7 +102,6 @@ export function ChevronDownIconComponent({
   );
 }
 
-// Action icons
 export function CloseIconComponent({
   createElement,
   width = 16,
@@ -273,7 +270,6 @@ export function MenuIconComponent({
   );
 }
 
-// Loading/Status icons
 export function LoadingSpinnerIconComponent({
   createElement,
   width = 24,
