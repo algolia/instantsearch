@@ -5,7 +5,12 @@ import { cx, find, startsWith } from '../../lib';
 import { warn } from '../../warn';
 
 import type { ComponentProps, Renderer } from '../../types';
-import type { ChatMessageBase, ChatToolMessage, ClientSideTool } from './types';
+import type {
+  AddToolResultWithOutput,
+  ChatMessageBase,
+  ChatToolMessage,
+  ClientSideTool,
+} from './types';
 
 export type ChatMessageSide = 'left' | 'right';
 export type ChatMessageVariant = 'neutral' | 'subtle';
@@ -218,15 +223,25 @@ export function createChatMessageComponent({
         const tool = find(tools, (t) => t.type === part.type);
         if (tool) {
           const ToolComponent = tool.component;
+          const toolMessage = part as ChatToolMessage;
+
+          const boundAddToolResult: AddToolResultWithOutput = (params) =>
+            tool.addToolResult?.({
+              output: params.output,
+              tool: part.type,
+              toolCallId: toolMessage.toolCallId,
+            });
+
           return (
             <div
               key={`${message.id}-${index}`}
               className="ais-ChatMessage-tool"
             >
               <ToolComponent
-                message={part as ChatToolMessage}
+                message={toolMessage}
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
+                addToolResult={boundAddToolResult}
               />
             </div>
           );

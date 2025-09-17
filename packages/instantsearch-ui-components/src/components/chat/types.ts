@@ -1,4 +1,4 @@
-import type { AbstractChat, ChatInit, UIMessage } from 'ai';
+import type { AbstractChat, UIMessage } from 'ai';
 
 export type ChatStatus = 'ready' | 'submitted' | 'streaming' | 'error';
 export type ChatRole = 'data' | 'user' | 'assistant' | 'system';
@@ -14,17 +14,24 @@ export type ChatToolType = ChatToolMessage['type'];
 export type { ChatInit } from 'ai';
 export type AddToolResult = AbstractChat<UIMessage>['addToolResult'];
 
+export type AddToolResultWithOutput = (
+  params: Pick<Parameters<AddToolResult>[0], 'output'>
+) => ReturnType<AddToolResult>;
+
+export type ClientSideToolComponentProps = {
+  message: ChatToolMessage;
+  indexUiState: object;
+  setIndexUiState: (state: object) => void;
+  addToolResult: AddToolResult;
+};
+
+export type ClientSideToolComponent = (
+  props: ClientSideToolComponentProps
+) => JSX.Element;
+
 export type ClientSideTool = {
   type: ChatToolType;
-  component: (props: {
-    message: ChatToolMessage;
-    indexUiState: object;
-    setIndexUiState: (state: object) => void;
-  }) => JSX.Element;
-  onToolCall: (params: {
-    toolCall: Parameters<
-      NonNullable<ChatInit<ChatMessageBase>['onToolCall']>
-    >[0]['toolCall'];
-    addToolResult: AddToolResult;
-  }) => void;
+  component: ClientSideToolComponent;
+  addToolResult: AddToolResult;
+  onToolCall?: (params: { addToolResult: AddToolResultWithOutput }) => void;
 };
