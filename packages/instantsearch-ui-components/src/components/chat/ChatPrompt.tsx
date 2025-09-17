@@ -65,7 +65,10 @@ export type ChatPromptClassNames = {
   footer: string | string[];
 };
 
-export type ChatPromptProps = ComponentProps<'textarea'> & {
+export type ChatPromptProps = Omit<
+  ComponentProps<'textarea'>,
+  'onInput' | 'onSubmit'
+> & {
   /**
    * Content to render above the textarea
    */
@@ -110,6 +113,14 @@ export type ChatPromptProps = ComponentProps<'textarea'> & {
    * Callback when the stop button is clicked
    */
   onStop?: () => void;
+  /**
+   * Callback when the form is submitted
+   */
+  onSubmit?: ComponentProps<'textarea'>['onSubmit'];
+  /**
+   * Callback when the textarea value changes
+   */
+  onInput?: ComponentProps<'textarea'>['onInput'];
 };
 
 export function createChatPromptComponent({ createElement }: Renderer) {

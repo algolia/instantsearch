@@ -168,10 +168,12 @@ export function Chat<TObject extends RecordWithObjectID>({
       }}
       promptProps={{
         value: input,
-        onInput: (event) => {
+        // Explicit event types are required to prevent TypeScript errors
+        // where parameters would implicitly have 'any' type without type annotations
+        onInput: (event: React.ChangeEvent<HTMLTextAreaElement>) => {
           setInput(event.currentTarget.value);
         },
-        onSubmit: (event) => {
+        onSubmit: (event: React.FormEvent<HTMLTextAreaElement>) => {
           sendMessage({ text: event.currentTarget.value });
           setInput('');
         },
