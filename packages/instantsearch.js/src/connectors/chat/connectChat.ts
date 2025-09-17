@@ -136,7 +136,9 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         const { agentId } = options;
         if (!appId || !apiKey) {
           throw new Error(
-            'The `connectChat` requires an `appId` and `apiKey` to be set on the `InstantSearch` component when using the `agentId` option.'
+            withUsage(
+              'Could not extract Algolia credentials from the search client.'
+            )
           );
         }
         transport = new DefaultChatTransport({
@@ -149,7 +151,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       }
       if (!transport) {
         throw new Error(
-          'You need to provide either an `agentId` or a `transport`.'
+          withUsage('You need to provide either an `agentId` or a `transport`.')
         );
       }
 
