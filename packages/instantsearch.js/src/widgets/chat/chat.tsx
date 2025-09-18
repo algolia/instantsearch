@@ -20,7 +20,6 @@ import type {
   ChatConnectorParams,
   ChatWidgetDescription,
 } from '../../connectors/chat/connectChat';
-import type { UIMessage } from '../../lib/chat';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   WidgetFactory,
@@ -233,10 +232,9 @@ export type ChatWidget = WidgetFactory<
   ChatWidgetParams
 >;
 
-export default (function chat<
-  TUiMessage extends UIMessage = UIMessage,
-  THit extends NonNullable<object> = BaseHit
->(widgetParams: ChatWidgetParams<THit> & ChatConnectorParams<TUiMessage>) {
+export default (function chat<THit extends NonNullable<object> = BaseHit>(
+  widgetParams: ChatWidgetParams<THit> & ChatConnectorParams
+) {
   const {
     container,
     templates = {},
