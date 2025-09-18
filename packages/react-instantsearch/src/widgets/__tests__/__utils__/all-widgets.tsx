@@ -96,9 +96,6 @@ function Widget<TWidget extends SingleWidget>({
     case 'LookingSimilar': {
       return <widget.Component objectIDs={['1']} {...props} />;
     }
-    case 'Chat': {
-      return <widget.Component agentId="" />;
-    }
     default: {
       return <widget.Component {...props} />;
     }
