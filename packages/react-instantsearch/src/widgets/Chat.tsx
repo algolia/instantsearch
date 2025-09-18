@@ -1,6 +1,7 @@
 import { createChatComponent } from 'instantsearch-ui-components';
 import React, { createElement, Fragment } from 'react';
 import { useInstantSearch, useChat } from 'react-instantsearch-core';
+import { useStickToBottom } from 'use-stick-to-bottom';
 
 import { Carousel } from '../components';
 
@@ -11,6 +12,7 @@ import type {
   RecommendComponentProps,
   RecordWithObjectID,
   ChatToolMessage,
+  MutableRef,
 } from 'instantsearch-ui-components';
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
 import type { UseChatOptions } from 'react-instantsearch-core';
@@ -131,6 +133,12 @@ export function Chat<TObject extends RecordWithObjectID>({
   const [input, setInput] = React.useState('');
   const [isClearing, setIsClearing] = React.useState(false);
 
+  const { scrollRef, contentRef, isAtBottom, scrollToBottom } =
+    useStickToBottom({
+      initial: 'instant',
+      resize: 'smooth',
+    });
+
   const tools = React.useMemo(() => {
     if (userTools?.some((tool) => tool.type === SearchIndexToolType)) {
       return userTools;
@@ -196,6 +204,10 @@ export function Chat<TObject extends RecordWithObjectID>({
         setIndexUiState,
         isClearing,
         onClearTransitionEnd: handleClearTransitionEnd,
+        scrollRef: scrollRef as unknown as MutableRef<HTMLDivElement>,
+        contentRef: contentRef as unknown as MutableRef<HTMLDivElement>,
+        isScrollAtBottom: isAtBottom,
+        onScrollToBottom: scrollToBottom,
         ...messagesProps,
       }}
       promptProps={{

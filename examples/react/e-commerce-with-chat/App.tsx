@@ -1,6 +1,5 @@
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import { MutableRef } from 'instantsearch-ui-components';
-import React, { useMemo, useRef } from 'react';
+import React, { useRef } from 'react';
 import {
   Configure,
   HierarchicalMenu,
@@ -16,7 +15,6 @@ import {
   Snippet,
   Chat,
 } from 'react-instantsearch';
-import { useStickToBottom } from 'use-stick-to-bottom';
 
 import {
   AlgoliaSvg,
@@ -56,12 +54,6 @@ export function App() {
   const containerRef = useRef<HTMLElement>(null);
   const headerRef = useRef(null);
 
-  const { scrollRef, contentRef, isAtBottom, scrollToBottom } =
-    useStickToBottom({
-      initial: 'instant',
-      resize: 'smooth',
-    });
-
   function openFilters() {
     document.body.classList.add('filtering');
     window.scrollTo(0, 0);
@@ -92,16 +84,6 @@ export function App() {
     closeFilters();
   }
 
-  const messagesProps = useMemo(
-    () => ({
-      scrollRef: scrollRef as unknown as MutableRef<HTMLDivElement>,
-      contentRef: contentRef as unknown as MutableRef<HTMLDivElement>,
-      isScrollAtBottom: isAtBottom,
-      onScrollToBottom: scrollToBottom,
-    }),
-    [scrollRef, contentRef, isAtBottom, scrollToBottom]
-  );
-
   return (
     <InstantSearch
       searchClient={searchClient}
@@ -112,7 +94,6 @@ export function App() {
       <Chat
         agentId="8f80fec3-f86a-41c8-86bb-426cb067cbbd"
         itemComponent={ItemComponent}
-        messagesProps={messagesProps}
       />
       <header className="header" ref={headerRef}>
         <p className="header-logo">

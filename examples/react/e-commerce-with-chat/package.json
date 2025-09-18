@@ -19,7 +19,6 @@
     "react-dom": "19.0.0",
     "react-instantsearch": "7.16.3",
     "zod": "4.0.17",
-    "use-stick-to-bottom": "^1.1.1",
     "tweakpane": "^4.0.5",
     "@tweakpane/core": "^2.0.5"
   },
