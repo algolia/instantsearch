@@ -288,7 +288,7 @@ function Hit({ hit }: { hit: HitType }) {
       </header>
 
       <div className="hit-info-container">
-        <p className="hit-category">{hit.categories?.[0]}</p>
+        <p className="hit-category">{hit.categories[0]}</p>
         <h1>
           <Highlight attribute="name" highlightedTagName="mark" hit={hit} />
         </h1>
