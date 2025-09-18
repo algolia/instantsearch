@@ -1,9 +1,9 @@
 import { createChatComponent } from 'instantsearch-ui-components';
 import React, { createElement, Fragment } from 'react';
 import { useInstantSearch, useChat } from 'react-instantsearch-core';
-import { useStickToBottom } from 'use-stick-to-bottom';
 
 import { Carousel } from '../components';
+import { useStickToBottom } from '../ui/lib/useStickToBottom';
 
 import type {
   Pragma,
@@ -168,7 +168,6 @@ export function Chat<TObject extends RecordWithObjectID>({
 
   const handleClear = React.useCallback(() => {
     if (messages.length === 0) return;
-
     setIsClearing(true);
   }, [messages.length]);
 
