@@ -22,6 +22,18 @@
   gap: calc(var(--ais-spacing) * 1.5);
   width: 100%;
   flex: 1;
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: opacity var(--ais-transition-duration)
+        var(--ais-transition-timing-function),
+      filter var(--ais-transition-duration)
+        var(--ais-transition-timing-function);
+  }
+}
+
+.ais-ChatMessages-content--clearing {
+  opacity: 0;
+  filter: blur(8px);
 }
 
 .ais-ChatMessages-scrollToBottom {

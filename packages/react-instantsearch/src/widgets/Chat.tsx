@@ -129,6 +129,7 @@ export function Chat<TObject extends RecordWithObjectID>({
   const [open, setOpen] = React.useState(false);
   const [maximized, setMaximized] = React.useState(false);
   const [input, setInput] = React.useState('');
+  const [isClearing, setIsClearing] = React.useState(false);
 
   const tools = React.useMemo(() => {
     if (userTools?.some((tool) => tool.type === SearchIndexToolType)) {
@@ -146,6 +147,7 @@ export function Chat<TObject extends RecordWithObjectID>({
     regenerate,
     stop,
     setMessages,
+    clearError,
   } = useChat({
     resume,
     ...options,
@@ -156,6 +158,18 @@ export function Chat<TObject extends RecordWithObjectID>({
     },
   });
 
+  const handleClear = React.useCallback(() => {
+    if (messages.length === 0) return;
+
+    setIsClearing(true);
+  }, [messages.length]);
+
+  const handleClearTransitionEnd = React.useCallback(() => {
+    setMessages([]);
+    clearError();
+    setIsClearing(false);
+  }, [setMessages, clearError]);
+
   return (
     <ChatUiComponent
       open={open}
@@ -165,6 +179,14 @@ export function Chat<TObject extends RecordWithObjectID>({
         onClick: () => setOpen(!open),
         ...toggleButtonProps,
       }}
+      headerProps={{
+        onClose: () => setOpen(false),
+        maximized,
+        onToggleMaximize: () => setMaximized(!maximized),
+        onClear: handleClear,
+        canClear: messages.length > 0 && !isClearing,
+        ...headerProps,
+      }}
       messagesProps={{
         status,
         onReload: (messageId) => regenerate({ messageId }),
@@ -172,19 +194,15 @@ export function Chat<TObject extends RecordWithObjectID>({
         tools,
         indexUiState,
         setIndexUiState,
+        isClearing,
+        onClearTransitionEnd: handleClearTransitionEnd,
         ...messagesProps,
-      }}
-      headerProps={{
-        onClose: () => setOpen(false),
-        maximized,
-        onToggleMaximize: () => setMaximized(!maximized),
-        ...headerProps,
       }}
       promptProps={{
         status,
         value: input,
-        // Explicit event types are required to prevent TypeScript errors
-        // where parameters would implicitly have 'any' type without type annotations
+        // Explicit event type is required to prevent TypeScript error
+        // where parameter would implicitly have 'any' type without type annotation
         onInput: (event: React.ChangeEvent<HTMLTextAreaElement>) => {
           setInput(event.currentTarget.value);
         },

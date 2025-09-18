@@ -30,12 +30,17 @@
   gap: calc(var(--ais-spacing) / 2);
 }
 
+.ais-ChatHeader-clear {
+  @extend %ais-button-ghost;
+
+  padding: calc(var(--ais-spacing) * 0.25) calc(var(--ais-spacing) * 0.5);
+}
+
 .ais-ChatHeader-maximize,
 .ais-ChatHeader-close {
   @extend %ais-button-ghost;
-  
+
   padding: calc(var(--ais-spacing) * 0.25);
-  border-radius: var(--ais-border-radius-sm);
 }
 
 @media (max-width: variables.$ais-chat-breakpoint) {

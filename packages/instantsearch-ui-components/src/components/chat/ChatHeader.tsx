@@ -27,6 +27,10 @@ export type ChatHeaderTranslations = {
    * Accessible label for the close button
    */
   closeLabel: string;
+  /**
+   * Text for the clear button
+   */
+  clearLabel: string;
 };
 
 export type ChatHeaderClassNames = {
@@ -50,6 +54,10 @@ export type ChatHeaderClassNames = {
    * Class names to apply to the close button element
    */
   close?: string | string[];
+  /**
+   * Class names to apply to the clear button element
+   */
+  clear?: string | string[];
 };
 
 export type ChatHeaderProps = ComponentProps<'div'> & {
@@ -65,6 +73,14 @@ export type ChatHeaderProps = ComponentProps<'div'> & {
    * Callback when the close button is clicked
    */
   onClose: () => void;
+  /**
+   * Callback when the clear button is clicked
+   */
+  onClear?: () => void;
+  /**
+   * Whether the clear button is enabled
+   */
+  canClear?: boolean;
   /**
    * Optional close icon component
    */
@@ -96,6 +112,8 @@ export function createChatHeaderComponent({ createElement }: Renderer) {
     maximized = false,
     onToggleMaximize,
     onClose,
+    onClear,
+    canClear = false,
     closeIconComponent: CloseIconComponent,
     minimizeIconComponent: MinimizeIconComponent,
     maximizeIconComponent: MaximizeIconComponent,
@@ -109,6 +127,7 @@ export function createChatHeaderComponent({ createElement }: Renderer) {
       minimizedLabel: 'Minimize chat',
       maximizeLabel: 'Maximize chat',
       closeLabel: 'Close chat',
+      clearLabel: 'Clear',
       ...userTranslations,
     };
 
@@ -140,6 +159,16 @@ export function createChatHeaderComponent({ createElement }: Renderer) {
           {translations.title}
         </span>
         <div className={cx('ais-ChatHeader-actions')}>
+          {onClear && (
+            <button
+              className={cx('ais-ChatHeader-clear', classNames.clear)}
+              onClick={onClear}
+              disabled={!canClear}
+              type="button"
+            >
+              {translations.clearLabel}
+            </button>
+          )}
           <button
             className={cx('ais-ChatHeader-maximize', classNames.maximize)}
             onClick={onToggleMaximize}

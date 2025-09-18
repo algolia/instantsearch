@@ -28,6 +28,7 @@
   padding: 0;
   margin: 0;
   background-color: transparent;
+  border-radius: var(--ais-border-radius-sm);
 
   &:disabled {
     cursor: not-allowed;
@@ -41,7 +42,8 @@
 
   @media (prefers-reduced-motion: no-preference) {
     transition: background-color var(--ais-transition-duration)
-      var(--ais-transition-timing-function);
+        var(--ais-transition-timing-function),
+      color var(--ais-transition-duration) var(--ais-transition-timing-function);
   }
 }
 
@@ -114,7 +116,11 @@
     var(--ais-background-color-alpha)
   );
   border: 1px solid
-    color-mix(in srgb, rgb(var(--ais-muted-color-rgb)) 30%, rgb(var(--ais-background-color-rgb)));
+    color-mix(
+      in srgb,
+      rgb(var(--ais-muted-color-rgb)) 30%,
+      rgb(var(--ais-background-color-rgb))
+    );
 
   @media (hover: hover) {
     &:hover:not(:disabled) {

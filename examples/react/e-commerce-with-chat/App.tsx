@@ -45,8 +45,8 @@ import './App.mobile.css';
 import type { Hit as AlgoliaHit } from 'instantsearch.js';
 
 const searchClient = algoliasearch(
-  'F4T6CUV2AH',
-  '396259c1cfed9502ac5b07fce3ef16e7'
+  '9HILZG6EJK',
+  'b5a56eabc1c664abd7eab3270ca61de8'
 );
 
 const indexName = 'products';
@@ -110,7 +110,7 @@ export function App() {
       insights={true}
     >
       <Chat
-        agentId="57b80234-d77d-4f39-bbad-e99b506f9b8d"
+        agentId="8f80fec3-f86a-41c8-86bb-426cb067cbbd"
         itemComponent={ItemComponent}
         messagesProps={messagesProps}
       />

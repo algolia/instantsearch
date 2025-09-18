@@ -66,7 +66,6 @@
   @extend %ais-button-ghost;
   
   padding: calc(var(--ais-spacing) * 0.25);
-  border-radius: var(--ais-border-radius-sm);
 }
 
 .ais-ChatMessage--auto-hide-actions .ais-ChatMessage-actions {

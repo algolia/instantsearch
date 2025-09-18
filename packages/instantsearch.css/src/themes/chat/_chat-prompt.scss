@@ -22,6 +22,11 @@
   align-items: center;
   justify-content: space-between;
   gap: calc(var(--ais-spacing) * 0.375);
+
+  .ais-ChatPrompt-disclaimer {
+    font-size: calc(var(--ais-spacing) * 0.75);
+    color: rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha));
+  }
 }
 
 .ais-ChatPrompt-body {

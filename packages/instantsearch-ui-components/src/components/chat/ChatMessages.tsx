@@ -130,6 +130,14 @@ export type ChatMessagesProps<
    * Callback for scroll to bottom
    */
   onScrollToBottom?: () => void;
+  /**
+   * Whether the messages are clearing (for animation)
+   */
+  isClearing?: boolean;
+  /**
+   * Callback for when clearing transition ends
+   */
+  onClearTransitionEnd?: () => void;
 };
 
 const copyToClipboard = (message: ChatMessageBase) => {
@@ -181,17 +189,10 @@ function createDefaultMessageComponent<
       },
     ];
 
-    const defaultUserActions: ChatMessageActionProps[] = [
-      {
-        title: 'Copy to clipboard',
-        icon: () => <CopyIconComponent createElement={createElement} />,
-        onClick: copyToClipboard,
-      },
-    ];
     const messageProps =
       message.role === 'user' ? userMessageProps : assistantMessageProps;
     const defaultActions =
-      message.role === 'user' ? defaultUserActions : defaultAssistantActions;
+      message.role === 'user' ? undefined : defaultAssistantActions;
 
     return (
       <ChatMessage
@@ -244,6 +245,8 @@ export function createChatMessagesComponent({
       contentRef,
       isScrollAtBottom,
       onScrollToBottom,
+      isClearing = false,
+      onClearTransitionEnd,
       ...props
     } = userProps;
 
@@ -279,7 +282,22 @@ export function createChatMessagesComponent({
         aria-live="polite"
       >
         <div className={cx(cssClasses.scroll)} ref={scrollRef}>
-          <div className={cx(cssClasses.content)} ref={contentRef}>
+          <div
+            className={cx(
+              cssClasses.content,
+              isClearing && 'ais-ChatMessages-content--clearing'
+            )}
+            ref={contentRef}
+            onTransitionEnd={(e) => {
+              if (
+                e.target === e.currentTarget &&
+                e.propertyName === 'opacity' &&
+                isClearing
+              ) {
+                onClearTransitionEnd?.();
+              }
+            }}
+          >
             {messages.map((message) => (
               <DefaultMessage
                 key={message.id}
