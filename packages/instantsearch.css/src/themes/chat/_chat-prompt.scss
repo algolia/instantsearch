@@ -22,7 +22,6 @@
       transparent
     );
     pointer-events: none;
-    z-index: 1;
   }
 }
 
@@ -58,6 +57,7 @@
   border: 1px solid
     rgba(var(--ais-border-color-rgb), var(--ais-border-color-alpha));
   outline: 1px solid transparent;
+  z-index: 1;
 
   @media (prefers-reduced-motion: no-preference) {
     transition: border-color var(--ais-transition-duration)
