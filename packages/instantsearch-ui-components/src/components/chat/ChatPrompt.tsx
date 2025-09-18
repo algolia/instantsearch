@@ -32,6 +32,10 @@ export type ChatPromptTranslations = {
    * The tooltip when the chat prompt is disabled
    */
   disabledTooltip: string;
+  /**
+   * The disclaimer text shown in the footer
+   */
+  disclaimer: string;
 };
 
 export type ChatPromptClassNames = {
@@ -193,6 +197,7 @@ export function createChatPromptComponent({ createElement }: Renderer) {
       stopResponseTooltip: 'Stop response',
       sendMessageTooltip: 'Send message',
       disabledTooltip: 'Chat prompt is disabled',
+      disclaimer: 'AI can make mistakes. Verify responses.',
       ...userTranslations,
     };
 
@@ -306,11 +311,15 @@ export function createChatPromptComponent({ createElement }: Renderer) {
           </div>
         </div>
 
-        {FooterComponent && (
-          <div className={cx(cssClasses.footer)}>
+        <div className={cx(cssClasses.footer)}>
+          {FooterComponent ? (
             <FooterComponent />
-          </div>
-        )}
+          ) : (
+            <div className="ais-ChatPrompt-disclaimer">
+              {translations.disclaimer}
+            </div>
+          )}
+        </div>
       </form>
     );
   };
