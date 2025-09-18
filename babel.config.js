@@ -85,10 +85,6 @@ module.exports = (api) => {
             // this is actually only called on arrays
             'String.prototype.includes',
 
-            // widely supported (except IE), safe to use without polyfill
-            'String.prototype.startsWith',
-            'Array.prototype.find',
-
             // false positive (spread)
             'Object.getOwnPropertyDescriptors',
           ];

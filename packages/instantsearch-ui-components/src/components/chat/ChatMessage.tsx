@@ -1,7 +1,7 @@
 /** @jsx createElement */
 import { compiler } from 'markdown-to-jsx';
 
-import { cx } from '../../lib';
+import { cx, find, startsWith } from '../../lib';
 
 import { MenuIconComponent } from './icons';
 
@@ -212,8 +212,8 @@ export function createChatMessageComponent({ createElement }: Renderer) {
         });
         return <span key={`${message.id}-${index}`}>{markdown}</span>;
       }
-      if (part.type.startsWith('tool-')) {
-        const tool = tools.find((t) => t.type === part.type);
+      if (startsWith(part.type, 'tool-')) {
+        const tool = find(tools, (t) => t.type === part.type);
         if (tool) {
           const ToolComponent = tool.component;
           return (
