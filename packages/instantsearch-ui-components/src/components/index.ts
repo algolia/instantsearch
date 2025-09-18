@@ -12,3 +12,4 @@ export * from './chat/ChatMessage';
 export * from './chat/ChatToggleButton';
 export * from './chat/ChatHeader';
 export * from './chat/types';
+export * from './autocomplete';
