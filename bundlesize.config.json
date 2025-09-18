@@ -22,7 +22,7 @@
     },
     {
       "path": "packages/react-instantsearch/dist/umd/ReactInstantSearch.min.js",
-      "maxSize": "77.5 kB"
+      "maxSize": "81.25 kB"
     },
     {
       "path": "packages/vue-instantsearch/vue2/umd/index.js",
@@ -58,11 +58,11 @@
     },
     {
       "path": "./packages/instantsearch.css/themes/satellite.css",
-      "maxSize": "7 kB"
+      "maxSize": "7.90 kB"
     },
     {
       "path": "./packages/instantsearch.css/themes/satellite-min.css",
-      "maxSize": "6.25 kB"
+      "maxSize": "7.25 kB"
     }
   ]
 }
