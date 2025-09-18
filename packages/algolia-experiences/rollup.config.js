@@ -56,6 +56,7 @@ const createConfiguration = ({ mode, filename }) => ({
     banner: license,
     sourcemap: true,
   },
+  external: ['ai', 'zod'],
   onwarn(warning, warn) {
     if (warning.code === 'CIRCULAR_DEPENDENCY')
       throw new Error(warning.message);

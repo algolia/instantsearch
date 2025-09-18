@@ -73,6 +73,8 @@ function outputs(vueVersion) {
       'instantsearch-ui-components',
       'vue',
       'mitt',
+      'ai',
+      'zod',
     ].some((dep) => id === dep || id.startsWith(`${dep}/`));
 
   const cjs = {
@@ -143,7 +145,7 @@ export * from './src/instantsearch.js';`
 
   const umd = {
     input: 'src/instantsearch.umd.js',
-    external: ['vue'],
+    external: ['vue', 'ai', 'zod'],
     output: [
       {
         sourcemap: true,

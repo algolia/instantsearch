@@ -36,6 +36,7 @@ const plugins = [
 
 const createConfiguration = ({ mode, filename }) => ({
   input: 'src/index.ts',
+  external: ['ai', 'zod'],
   output: {
     file: `dist/${filename}`,
     name: 'instantsearch',
