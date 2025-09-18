@@ -21,7 +21,6 @@ import {
   SearchBox,
   SortBy,
   ToggleRefinement,
-  Chat,
 } from 'react-instantsearch';
 
 import {
@@ -69,7 +68,6 @@ export function App() {
 
       <div className="Container">
         <div>
-          <Chat agentId="61a4839d-3caf-4258-bc77-32c790fa0be9" />
           <DynamicWidgets>
             <Panel header="Brands">
               <RefinementList

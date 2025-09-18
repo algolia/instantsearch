@@ -14,7 +14,6 @@ import {
   Highlight,
   Snippet,
 } from 'react-instantsearch';
-import { Chat } from 'react-instantsearch/src';
 
 import {
   AlgoliaSvg,
@@ -32,7 +31,7 @@ import { ScrollTo } from './components/ScrollTo';
 import getRouting from './routing';
 import { formatNumber } from './utils';
 
-import 'instantsearch.css/themes/satellite.css';
+import 'instantsearch.css/themes/reset.css';
 
 import './Theme.css';
 import './App.css';
@@ -90,10 +89,6 @@ export function App() {
       routing={routing}
       insights={true}
     >
-      <Chat
-        agentId="5bc03a4f-4e25-400c-9f52-a7b969d7f3da"
-        itemComponent={ItemComponent}
-      />
       <header className="header" ref={headerRef}>
         <p className="header-logo">
           <AlgoliaSvg />
@@ -276,10 +271,6 @@ function SubmitIcon() {
   );
 }
 
-function ItemComponent({ item }: { item: Record<string, unknown> }) {
-  return <Hit hit={item as HitType} />;
-}
-
 type HitType = AlgoliaHit<{
   image: string;
   name: string;
@@ -297,7 +288,7 @@ function Hit({ hit }: { hit: HitType }) {
       </header>
 
       <div className="hit-info-container">
-        {/* <p className="hit-category">{hit.categories?.[0]}</p> */}
+        <p className="hit-category">{hit.categories?.[0]}</p>
         <h1>
           <Highlight attribute="name" highlightedTagName="mark" hit={hit} />
         </h1>
