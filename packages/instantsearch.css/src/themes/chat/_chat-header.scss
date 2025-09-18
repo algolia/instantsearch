@@ -9,6 +9,24 @@
   padding: var(--ais-spacing);
   border-bottom: 1px solid rgba(var(--ais-border-color-rgb), 0.2);
   color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: var(--ais-spacing);
+    right: var(--ais-spacing);
+    margin-top: 1px;
+    height: calc(var(--ais-spacing) - 1px);
+    background: linear-gradient(
+      to bottom,
+      rgba(var(--ais-background-color-rgb), var(--ais-background-color-alpha)),
+      transparent
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
 }
 
 .ais-ChatHeader-title {

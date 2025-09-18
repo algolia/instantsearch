@@ -8,6 +8,22 @@
   width: 100%;
   position: relative;
   padding: 0 var(--ais-spacing) var(--ais-spacing) var(--ais-spacing);
+
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: var(--ais-spacing);
+    right: var(--ais-spacing);
+    height: var(--ais-spacing);
+    background: linear-gradient(
+      to top,
+      rgba(var(--ais-background-color-rgb), var(--ais-background-color-alpha)),
+      transparent
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
 }
 
 .ais-ChatPrompt-header {
