@@ -5,7 +5,12 @@ import { cx, find, startsWith } from '../../lib';
 import { warn } from '../../warn';
 
 import type { ComponentProps, Renderer } from '../../types';
-import type { ChatInit, ChatMessageBase, ChatToolMessage } from './types';
+import type {
+  AddToolResult,
+  ChatInit,
+  ChatMessageBase,
+  ChatToolMessage,
+} from './types';
 
 export type ChatMessageSide = 'left' | 'right';
 export type ChatMessageVariant = 'neutral' | 'subtle';
@@ -78,7 +83,12 @@ export type Tools = Array<{
     indexUiState: object;
     setIndexUiState: (state: object) => void;
   }) => JSX.Element;
-  onToolCall?: ChatInit<ChatMessageBase>['onToolCall'];
+  onToolCall: (params: {
+    toolCall: Parameters<
+      NonNullable<ChatInit<ChatMessageBase>['onToolCall']>
+    >[0]['toolCall'];
+    addToolResult: AddToolResult;
+  }) => void;
 }>;
 
 export type ChatMessageProps = Omit<ComponentProps<'article'>, 'content'> & {
