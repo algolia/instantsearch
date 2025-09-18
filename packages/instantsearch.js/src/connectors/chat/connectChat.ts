@@ -21,7 +21,8 @@ import type {
   Unmounter,
   UnknownWidgetParams,
   InstantSearch,
-  WidgetRenderState,
+  IndexUiState,
+  IndexWidget,
 } from '../../types';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -30,12 +31,14 @@ const withUsage = createDocumentationMessageGenerator({
 });
 
 export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
+  indexUiState: IndexUiState;
   input: string;
   open: boolean;
   /**
    * Sends an event to the Insights middleware.
    */
   sendEvent: SendEventForHits;
+  setIndexUiState: IndexWidget['setIndexUiState'];
   setInput: (input: string) => void;
   setOpen: (open: boolean) => void;
   /**
@@ -86,12 +89,7 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
 export type ChatWidgetDescription<TUiMessage extends UIMessage = UIMessage> = {
   $$type: 'ais.chat';
   renderState: ChatRenderState<TUiMessage>;
-  indexRenderState: {
-    chat: WidgetRenderState<
-      ChatRenderState<TUiMessage>,
-      ChatConnectorParams<TUiMessage>
-    >;
-  };
+  indexRenderState: Record<string, unknown>;
 };
 
 export type ChatConnector<TUiMessage extends UIMessage = UIMessage> = Connector<
@@ -223,14 +221,12 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         );
       },
 
-      getRenderState(renderState, renderOptions) {
-        return {
-          ...renderState,
-          chat: this.getWidgetRenderState(renderOptions),
-        };
+      getRenderState(renderState) {
+        return renderState;
       },
 
       getWidgetRenderState(renderState) {
+        const { instantSearchInstance, parent } = renderState;
         if (!_chatInstance) {
           this.init!({ ...renderState, uiState: {}, results: undefined });
         }
@@ -244,9 +240,11 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         }
 
         return {
+          indexUiState: instantSearchInstance.getUiState()[parent.getIndexId()],
           input,
           open,
           sendEvent,
+          setIndexUiState: parent.setIndexUiState.bind(parent),
           setInput,
           setOpen,
           setMessages,
