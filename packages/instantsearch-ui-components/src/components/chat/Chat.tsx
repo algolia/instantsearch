@@ -22,6 +22,9 @@ export type ChatProps = {
    * Whether the chat is open or closed.
    */
   open: boolean;
+  /*
+   * Whether the chat is maximized or not.
+   */
   maximized?: boolean;
   /*
    * Props for the ChatHeader component.

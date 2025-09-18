@@ -6,7 +6,12 @@ import { cx } from '../../lib';
 import { MenuIconComponent } from './icons';
 
 import type { ComponentProps, Renderer } from '../../types';
-import type { ChatMessageBase } from './types';
+import type {
+  AddToolResult,
+  ChatInit,
+  ChatMessageBase,
+  ChatToolMessage,
+} from './types';
 
 export type ChatMessageSide = 'left' | 'right';
 export type ChatMessageVariant = 'neutral' | 'subtle';
@@ -72,11 +77,6 @@ export type ChatMessageActionProps = {
   onClick?: (message: ChatMessageBase) => void;
 };
 
-export type ChatToolMessage = Extract<
-  ChatMessageBase['parts'][number],
-  { type: `tool-${string}` }
->;
-
 export type Tools = Array<{
   type: string;
   component: (props: {
@@ -84,7 +84,12 @@ export type Tools = Array<{
     indexUiState: object;
     setIndexUiState: (state: object) => void;
   }) => JSX.Element;
-  onToolCall?: (a: any) => void;
+  onToolCall: (params: {
+    toolCall: Parameters<
+      NonNullable<ChatInit<ChatMessageBase>['onToolCall']>
+    >[0]['toolCall'];
+    addToolResult: AddToolResult;
+  }) => void;
 }>;
 
 export type ChatMessageProps = ComponentProps<'article'> & {
@@ -122,7 +127,13 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    * Footer content
    */
   footerComponent?: () => JSX.Element;
+  /**
+   * The index UI state
+   */
   indexUiState: object;
+  /**
+   * Set the index UI state
+   */
   setIndexUiState: (state: object) => void;
   /**
    * Array of tools available for the assistant (for tool messages)

@@ -45,11 +45,11 @@ import './App.mobile.css';
 import type { Hit as AlgoliaHit } from 'instantsearch.js';
 
 const searchClient = algoliasearch(
-  'latency',
-  '6be0576ff61c053d5f9a3225e2a90f76'
+  'F4T6CUV2AH',
+  '396259c1cfed9502ac5b07fce3ef16e7'
 );
 
-const indexName = 'instant_search';
+const indexName = 'products';
 const routing = getRouting(indexName);
 
 export function App() {
@@ -110,7 +110,7 @@ export function App() {
       insights={true}
     >
       <Chat
-        agentId="5bc03a4f-4e25-400c-9f52-a7b969d7f3da"
+        agentId="57b80234-d77d-4f39-bbad-e99b506f9b8d"
         itemComponent={ItemComponent}
         messagesProps={messagesProps}
       />

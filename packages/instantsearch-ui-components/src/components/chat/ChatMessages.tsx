@@ -74,7 +74,13 @@ export type ChatMessagesProps<
    * Custom error component
    */
   errorComponent?: (props: ChatMessageErrorProps) => JSX.Element;
+  /**
+   * The index UI state
+   */
   indexUiState: object;
+  /**
+   * Set the index UI state
+   */
   setIndexUiState: (state: object) => void;
   /**
    * Tools available for the assistant
@@ -100,11 +106,29 @@ export type ChatMessagesProps<
    * Optional translations
    */
   translations?: Partial<ChatMessagesTranslations>;
+  /**
+   * Optional user message props
+   */
   userMessageProps?: Partial<Omit<ChatMessageProps, 'ref' | 'key'>>;
+  /**
+   * Optional assistant message props
+   */
   assistantMessageProps?: Partial<Omit<ChatMessageProps, 'ref' | 'key'>>;
+  /**
+   * Optional scroll ref
+   */
   scrollRef?: MutableRef<HTMLDivElement>;
+  /**
+   * Optional content ref
+   */
   contentRef?: MutableRef<HTMLDivElement>;
+  /**
+   * Whether the scroll is at the bottom
+   */
   isScrollAtBottom?: boolean;
+  /**
+   * Callback for scroll to bottom
+   */
   onScrollToBottom?: () => void;
 };
 

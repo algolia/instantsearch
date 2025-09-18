@@ -127,6 +127,7 @@ export function Chat<TObject extends RecordWithObjectID>({
   const { indexUiState, setIndexUiState } = useInstantSearch();
 
   const [open, setOpen] = React.useState(false);
+  const [maximized, setMaximized] = React.useState(false);
   const [input, setInput] = React.useState('');
 
   const tools = React.useMemo(() => {
@@ -137,7 +138,15 @@ export function Chat<TObject extends RecordWithObjectID>({
     return [...createDefaultTools(itemComponent), ...(userTools ?? [])];
   }, [itemComponent, userTools]);
 
-  const { messages, sendMessage, addToolResult } = useChat({
+  const {
+    messages,
+    sendMessage,
+    addToolResult,
+    status,
+    regenerate,
+    stop,
+    setMessages,
+  } = useChat({
     resume,
     ...options,
     onToolCall: ({ toolCall }) => {
@@ -150,12 +159,15 @@ export function Chat<TObject extends RecordWithObjectID>({
   return (
     <ChatUiComponent
       open={open}
+      maximized={maximized}
       toggleButtonProps={{
         open,
         onClick: () => setOpen(!open),
         ...toggleButtonProps,
       }}
       messagesProps={{
+        status,
+        onReload: (messageId) => regenerate({ messageId }),
         messages,
         tools,
         indexUiState,
@@ -164,18 +176,24 @@ export function Chat<TObject extends RecordWithObjectID>({
       }}
       headerProps={{
         onClose: () => setOpen(false),
+        maximized,
+        onToggleMaximize: () => setMaximized(!maximized),
         ...headerProps,
       }}
       promptProps={{
+        status,
         value: input,
         // Explicit event types are required to prevent TypeScript errors
         // where parameters would implicitly have 'any' type without type annotations
         onInput: (event: React.ChangeEvent<HTMLTextAreaElement>) => {
           setInput(event.currentTarget.value);
         },
-        onSubmit: (event: React.FormEvent<HTMLTextAreaElement>) => {
-          sendMessage({ text: event.currentTarget.value });
+        onSubmit: () => {
+          sendMessage({ text: input });
           setInput('');
+        },
+        onStop: () => {
+          stop();
         },
         ...promptProps,
       }}

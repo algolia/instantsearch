@@ -30,10 +30,25 @@ export type ChatHeaderTranslations = {
 };
 
 export type ChatHeaderClassNames = {
+  /**
+   * Class names to apply to the root element
+   */
   root?: string | string[];
+  /**
+   * Class names to apply to the title element
+   */
   title?: string | string[];
+  /**
+   * Class names to apply to the title icon element
+   */
   titleIcon?: string | string[];
+  /**
+   * Class names to apply to the maximize button element
+   */
   maximize?: string | string[];
+  /**
+   * Class names to apply to the close button element
+   */
   close?: string | string[];
 };
 

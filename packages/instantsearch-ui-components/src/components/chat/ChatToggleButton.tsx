@@ -6,13 +6,28 @@ import { SparklesIconComponent, ChevronUpIconComponent } from './icons';
 import type { ComponentProps, Renderer } from '../../types';
 
 export type ChatToggleButtonClassNames = {
+  /**
+   * Class names to apply to the root element
+   */
   root?: string | string[];
 };
 
 export type ChatToggleButtonProps = ComponentProps<'button'> & {
+  /**
+   * Whether the chat is open
+   */
   open: boolean;
+  /**
+   * Callback when the button is clicked
+   */
   onClick: () => void;
+  /**
+   * Optional toggle icon component
+   */
   toggleIconComponent?: (props: { isOpen: boolean }) => JSX.Element;
+  /**
+   * Optional class names
+   */
   classNames?: Partial<ChatToggleButtonClassNames>;
 };
 
