@@ -151,7 +151,7 @@ export function Chat<TObject extends RecordWithObjectID>({
     resume,
     ...options,
     onToolCall: ({ toolCall }) => {
-      const tool = find(tools, (t) => t.type === toolCall.toolName);
+      const tool = find(tools, (t) => t.type === `tool-${toolCall.toolName}`);
 
       if (tool && tool.onToolCall) {
         const scopedAddToolResult: AddToolResultWithOutput = ({ output }) => {

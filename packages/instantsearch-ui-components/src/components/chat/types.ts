@@ -22,7 +22,7 @@ export type ClientSideToolComponentProps = {
   message: ChatToolMessage;
   indexUiState: object;
   setIndexUiState: (state: object) => void;
-  addToolResult: AddToolResult;
+  addToolResult: AddToolResultWithOutput;
 };
 
 export type ClientSideToolComponent = (
