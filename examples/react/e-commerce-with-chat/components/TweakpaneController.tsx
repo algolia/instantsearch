@@ -646,9 +646,9 @@ export function TweakpaneController() {
       ref={containerRef}
       style={{
         position: 'fixed',
-        bottom: '1.5rem',
+        top: '1.5rem',
         left: '1.5rem',
-        zIndex: 10000,
+        zIndex: 1000,
       }}
     />
   );

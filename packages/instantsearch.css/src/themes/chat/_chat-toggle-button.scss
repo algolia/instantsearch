@@ -9,13 +9,12 @@
   border-radius: var(--ais-border-radius-full);
   box-shadow: var(--ais-shadow-sm);
   flex-shrink: 0;
+  pointer-events: auto;
 
   @media (prefers-reduced-motion: no-preference) {
     transition: transform var(--ais-transition-duration)
         var(--ais-transition-timing-function),
       background-color var(--ais-transition-duration)
-        var(--ais-transition-timing-function),
-      box-shadow var(--ais-transition-duration)
         var(--ais-transition-timing-function);
   }
 }

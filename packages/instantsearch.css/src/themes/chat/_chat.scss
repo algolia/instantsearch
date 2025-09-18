@@ -14,6 +14,12 @@
   max-width: calc(100% - var(--ais-chat-margin) * 2);
   max-height: calc(100% - var(--ais-chat-margin) * 2);
   z-index: var(--ais-z-index-chat);
+  pointer-events: none;
+
+  &--maximized {
+    width: var(--ais-chat-maximized-width);
+    height: var(--ais-chat-maximized-height);
+  }
 
   @media (prefers-reduced-motion: no-preference) {
     transition: width var(--ais-transition-duration)
@@ -36,24 +42,18 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
+  opacity: 0;
+  transform: scale(0.95) translateY(var(--ais-spacing));
 
   @media (prefers-reduced-motion: no-preference) {
-    animation: ais-chat-fade-in var(--ais-transition-duration)
-      var(--ais-transition-timing-function) forwards;
+    transition: opacity var(--ais-transition-duration)
+        var(--ais-transition-timing-function),
+      transform var(--ais-transition-duration)
+        var(--ais-transition-timing-function);
   }
-}
 
-.ais-Chat--maximized {
-  width: var(--ais-chat-maximized-width);
-  height: var(--ais-chat-maximized-height);
-}
-
-@keyframes ais-chat-fade-in {
-  from {
-    opacity: 0;
-    transform: scale(0.95) translateY(var(--ais-spacing));
-  }
-  to {
+  &--open {
+    pointer-events: auto;
     opacity: 1;
     transform: scale(1) translateY(0);
   }
@@ -62,16 +62,14 @@
 @media (max-width: variables.$ais-chat-breakpoint) {
   .ais-Chat {
     inset: 0;
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
     transition: none;
     max-width: initial;
     max-height: initial;
   }
 
   .ais-Chat-container {
-    width: 100vw;
-    height: 100vh;
     border-radius: 0;
     transition: none;
   }

@@ -4,7 +4,7 @@ import { cx } from '../../lib';
 
 import { ArrowUpIconComponent, StopIconComponent } from './icons';
 
-import type { ComponentProps, Renderer } from '../../types';
+import type { ComponentProps, MutableRef, Renderer } from '../../types';
 import type { ChatStatus } from './types';
 
 export type ChatPromptTranslations = {
@@ -125,6 +125,10 @@ export type ChatPromptProps = Omit<
    * Callback when the textarea value changes
    */
   onInput?: ComponentProps<'textarea'>['onInput'];
+  /**
+   * Ref callback to get access to the focus function
+   */
+  ref?: MutableRef<HTMLTextAreaElement | null>;
 };
 
 export function createChatPromptComponent({ createElement }: Renderer) {
@@ -156,8 +160,15 @@ export function createChatPromptComponent({ createElement }: Renderer) {
     textAreaElement.style.height = `${fullHeight}px`;
   };
 
-  const setTextAreaRef = (element: HTMLTextAreaElement | null) => {
+  const setTextAreaRef = (
+    element: HTMLTextAreaElement | null,
+    ref?: MutableRef<HTMLTextAreaElement | null>
+  ) => {
     textAreaElement = element;
+
+    if (ref) {
+      ref.current = element;
+    }
 
     if (element) {
       const styles = getComputedStyle(element);
@@ -187,6 +198,7 @@ export function createChatPromptComponent({ createElement }: Renderer) {
       onSubmit,
       onKeyDown,
       onStop,
+      ref,
       ...props
     } = userProps;
 
@@ -260,7 +272,7 @@ export function createChatPromptComponent({ createElement }: Renderer) {
         >
           <textarea
             {...props}
-            ref={setTextAreaRef}
+            ref={(element) => setTextAreaRef(element, ref)}
             data-max-rows={maxRows}
             className={cx(cssClasses.textarea)}
             value={value}

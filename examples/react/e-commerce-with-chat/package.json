@@ -5,8 +5,8 @@
   "scripts": {
     "build": "vite build",
     "website:examples": "vite build --base=. --outDir=../../../website/examples/react/e-commerce-with-chat",
-    "start": "vite",
-    "dev": "vite",
+    "start": "vite --host",
+    "dev": "vite --host",
     "preview": "vite preview"
   },
   "browserslist": "Firefox 127, Chrome 125, IE 11",

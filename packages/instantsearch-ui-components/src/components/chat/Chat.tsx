@@ -7,7 +7,7 @@ import { createChatMessagesComponent } from './ChatMessages';
 import { createChatPromptComponent } from './ChatPrompt';
 import { createChatToggleButtonComponent } from './ChatToggleButton';
 
-import type { Renderer } from '../../types';
+import type { MutableRef, Renderer } from '../../types';
 import type { ChatHeaderProps } from './ChatHeader';
 import type { ChatMessagesProps } from './ChatMessages';
 import type { ChatPromptProps } from './ChatPrompt';
@@ -57,6 +57,8 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
   const ChatMessages = createChatMessagesComponent({ createElement, Fragment });
   const ChatPrompt = createChatPromptComponent({ createElement, Fragment });
 
+  const promptRef: MutableRef<HTMLTextAreaElement | null> = { current: null };
+
   return function Chat({
     open,
     maximized = false,
@@ -68,20 +70,26 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
   }: ChatProps) {
     return (
       <div className={cx('ais-Chat', maximized && 'ais-Chat--maximized')}>
-        {open && (
-          <div
-            className={cx(
-              'ais-Chat-container',
-              maximized && 'ais-Chat-container--maximized',
-              classNames.container
-            )}
-          >
-            <ChatHeader {...headerProps} maximized={maximized} />
-            <ChatMessages {...messagesProps} />
-            <ChatPrompt {...promptProps} />
-          </div>
-        )}
-        <ChatToggleButton {...toggleButtonProps} />
+        <div
+          className={cx(
+            'ais-Chat-container',
+            open && 'ais-Chat-container--open',
+            maximized && 'ais-Chat-container--maximized',
+            classNames.container
+          )}
+        >
+          <ChatHeader {...headerProps} maximized={maximized} />
+          <ChatMessages {...messagesProps} />
+          <ChatPrompt {...promptProps} ref={promptRef} />
+        </div>
+
+        <ChatToggleButton
+          {...toggleButtonProps}
+          onClick={() => {
+            toggleButtonProps.onClick?.();
+            promptRef.current?.focus();
+          }}
+        />
       </div>
     );
   };

@@ -1,4 +1,5 @@
 @use '../common';
+@use '../variables';
 
 .ais-ChatPrompt {
   display: flex;
@@ -114,4 +115,10 @@
 
   width: calc(var(--ais-spacing) * 1.5);
   height: calc(var(--ais-spacing) * 1.5);
+}
+
+@media (max-width: variables.$ais-chat-breakpoint) {
+  .ais-ChatPrompt .ais-ChatPrompt-textarea {
+    font-size: var(--ais-spacing);
+  }
 }
