@@ -108,6 +108,7 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
   templates: ChatTemplates<THit>;
   tools?: Tools;
 }): Renderer<ChatRenderState, Partial<ChatWidgetParams>> => {
+  const state = createLocalState();
   return (props, isFirstRendering) => {
     const {
       indexUiState,
@@ -120,7 +121,9 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
       sendMessage,
       setIndexUiState,
       setInput,
+      setMessages,
       setOpen,
+      status,
     } = props;
 
     if (isFirstRendering) {
@@ -166,31 +169,59 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
       ? userTools
       : [...createDefaultTools<THit>(itemComponent), ...userTools];
 
-    render(
-      <Chat
-        classNames={cssClasses}
-        open={open}
-        headerProps={{ onClose: () => setOpen(false) }}
-        messagesProps={{
-          messages,
-          indexUiState,
-          setIndexUiState,
-          tools,
-        }}
-        promptProps={{
-          value: input,
-          onInput: (value) => {
-            setInput(value);
-          },
-          onSubmit: (text) => {
-            sendMessage({ text });
-            setInput('');
-          },
-        }}
-        toggleButtonProps={{ open, onClick: () => setOpen(!open) }}
-      />,
-      containerNode
-    );
+    state.subscribe(rerender);
+
+    function rerender() {
+      state.init();
+
+      const [isClearing, setIsClearing] = state.use(false);
+      const [maximized, setMaximized] = state.use(false);
+
+      const onClear = () => setIsClearing(true);
+      const onClearTransitionEnd = () => {
+        setMessages([]);
+        setIsClearing(false);
+      };
+      render(
+        <Chat
+          classNames={cssClasses}
+          open={open}
+          maximized={maximized}
+          headerProps={{
+            onClose: () => setOpen(false),
+            onToggleMaximize: () => setMaximized(!maximized),
+            onClear,
+            canClear: messages.length > 0 && isClearing !== true,
+          }}
+          messagesProps={{
+            messages,
+            indexUiState,
+            isClearing,
+            onClearTransitionEnd,
+            // temporary until we have a good solution in js
+            // or move logic in ui-component
+            hideScrollToBottom: true,
+            setIndexUiState,
+            tools,
+          }}
+          promptProps={{
+            status,
+            value: input,
+            onInput: (event) => {
+              setInput(event.currentTarget.value);
+            },
+            onSubmit: () => {
+              sendMessage({ text: input });
+              setInput('');
+            },
+          }}
+          toggleButtonProps={{ open, onClick: () => setOpen(!open) }}
+        />,
+        containerNode
+      );
+    }
+
+    rerender();
   };
 };
 
@@ -270,3 +301,42 @@ export default (function chat<THit extends NonNullable<object> = BaseHit>(
     $$widgetType: 'ais.chat',
   };
 } satisfies ChatWidget);
+
+function createLocalState() {
+  const state: unknown[] = [];
+  const subscriptions = new Set<() => void>();
+  let cursor = 0;
+
+  function use<T>(initialValue: T): [T, (value: T) => T] {
+    const index = cursor++;
+    if (state[index] === undefined) {
+      state[index] = initialValue;
+    }
+
+    return [
+      state[index] as T,
+      (value: T) => {
+        const prev = state[index] as T;
+        if (prev === value) {
+          return prev;
+        }
+
+        state[index] = value;
+        subscriptions.forEach((fn) => fn());
+        return value;
+      },
+    ];
+  }
+
+  return {
+    init() {
+      cursor = 0;
+    },
+    subscribe(fn: () => void): () => void {
+      subscriptions.add(fn);
+
+      return () => subscriptions.delete(fn);
+    },
+    use,
+  };
+}

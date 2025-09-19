@@ -22,6 +22,7 @@ export function createOptionsTests(
         widgetParams: {
           agentId: 'foo',
           chat: {
+            messages: [],
             sendMessage: mockSendMessage,
             '~registerErrorCallback': (_onChange: () => void) => {},
             '~registerMessagesCallback': (_onChange: () => void) => {},
