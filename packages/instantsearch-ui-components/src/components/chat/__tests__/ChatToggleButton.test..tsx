@@ -72,13 +72,16 @@ describe('ChatToggleButton', () => {
     );
   });
 
-  test('renders with custom labels', () => {
+  test('renders with custom toggle icon component', () => {
+    const CustomIcon = ({ isOpen }: { isOpen: boolean }) => (
+      <span>{isOpen ? 'Close' : 'Open'}</span>
+    );
+
     const { container } = render(
       <ChatToggleButton
         open={false}
         onClick={jest.fn()}
-        openLabel="Start chat"
-        closeLabel="End chat"
+        toggleIconComponent={CustomIcon}
       />
     );
     expect(container).toMatchInlineSnapshot(`
@@ -87,7 +90,9 @@ describe('ChatToggleButton', () => {
           class="ais-ChatToggleButton"
           type="button"
         >
-          Start chat
+          <span>
+            Open
+          </span>
         </button>
       </div>
     `);
