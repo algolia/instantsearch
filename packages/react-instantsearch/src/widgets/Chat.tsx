@@ -10,14 +10,12 @@ import type {
   ChatProps as ChatUiProps,
   RecommendComponentProps,
   RecordWithObjectID,
-  ClientSideTool,
   ChatToolType,
   AddToolResultWithOutput,
+  UserClientSideTool,
 } from 'instantsearch-ui-components';
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
 import type { UseChatOptions } from 'react-instantsearch-core';
-
-export type UserClientSideTool = Omit<ClientSideTool, 'addToolResult'>;
 
 const ChatUiComponent = createChatComponent({
   createElement: createElement as Pragma,
@@ -111,7 +109,10 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     promptProps?: UserPromptProps;
   };
 
-export function Chat<TObject extends RecordWithObjectID>({
+export function Chat<
+  TObject extends RecordWithObjectID,
+  TUiMessage extends UIMessage
+>({
   tools: userTools,
   itemComponent,
   toggleButtonProps,
@@ -121,7 +122,7 @@ export function Chat<TObject extends RecordWithObjectID>({
   classNames,
   resume,
   ...options
-}: ChatProps<TObject>) {
+}: ChatProps<TObject, TUiMessage>) {
   const { indexUiState, setIndexUiState } = useInstantSearch();
 
   const [open, setOpen] = React.useState(false);
@@ -147,7 +148,7 @@ export function Chat<TObject extends RecordWithObjectID>({
     return [...merged, ...extraUserTools];
   }, [itemComponent, userTools]);
 
-  const { messages, sendMessage, addToolResult } = useChat({
+  const { messages, sendMessage, addToolResult } = useChat<TUiMessage>({
     resume,
     ...options,
     onToolCall: ({ toolCall }) => {

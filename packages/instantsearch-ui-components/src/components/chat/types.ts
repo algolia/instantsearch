@@ -35,3 +35,5 @@ export type ClientSideTool = {
   addToolResult: AddToolResult;
   onToolCall?: (params: { addToolResult: AddToolResultWithOutput }) => void;
 };
+
+export type UserClientSideTool = Omit<ClientSideTool, 'addToolResult'>;

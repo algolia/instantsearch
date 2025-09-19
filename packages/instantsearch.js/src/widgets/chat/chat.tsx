@@ -3,11 +3,14 @@
 import { createChatComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 
+import TemplateComponent from '../../components/Template/Template';
 import connectChat from '../../connectors/chat/connectChat';
+import { defaultTools } from '../../lib/chat';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
+  find,
 } from '../../lib/utils';
 import { carousel } from '../../templates';
 
@@ -25,62 +28,107 @@ import type {
   TemplateWithBindEvent,
   BaseHit,
 } from '../../types';
-import type { ChatClassNames, Tools } from 'instantsearch-ui-components';
+import type {
+  AddToolResultWithOutput,
+  ChatClassNames,
+  ClientSideTool,
+  ClientSideToolComponent,
+  ClientSideToolComponentProps,
+  UserClientSideTool,
+} from 'instantsearch-ui-components';
 
 function createDefaultTools<TObject extends BaseHit = BaseHit>(
-  itemComponent?: (props: { item: Hit<TObject> }) => h.JSX.Element
-): Tools {
+  templates: ChatTemplates
+): UserClientSideToolWithTemplate[] {
+  const Carousel = carousel();
+
+  const Component: ClientSideToolComponent = ({
+    message,
+    indexUiState,
+    setIndexUiState,
+  }) => {
+    const items =
+      (
+        message.output as {
+          hits?: Array<Hit<TObject>>;
+        }
+      )?.hits || [];
+
+    const input = message.input as { query: string };
+
+    return (
+      <div>
+        <Carousel
+          items={items}
+          templates={{
+            item: templates.item
+              ? ({ item, sendEvent }) => (
+                  <TemplateComponent
+                    templates={templates}
+                    templateKey="item"
+                    rootTagName="fragment"
+                    data={item}
+                    sendEvent={sendEvent}
+                  />
+                )
+              : undefined,
+          }}
+          sendEvent={() => {}}
+        />
+
+        {input?.query && (
+          <button
+            className="ais-ChatToolSearchIndexRefineButton"
+            onClick={() => {
+              if (input?.query) {
+                setIndexUiState({
+                  ...indexUiState,
+                  query: input.query,
+                });
+              }
+            }}
+          >
+            Refine on this query
+          </button>
+        )}
+      </div>
+    );
+  };
+
   return [
     {
       type: 'tool-algolia_search_index',
-      component: ({ message, indexUiState, setIndexUiState }) => {
-        const items =
-          (
-            message.output as {
-              hits?: Array<Hit<TObject>>;
-            }
-          )?.hits || [];
-
-        const input = message.input as { query: string };
-
-        return (
-          <div>
-            {carousel()({
-              items,
-              // TODO: fix ts error
-              // @ts-expect-error
-              templates: { item: itemComponent },
-              sendEvent: () => {},
-            })}
-
-            {input?.query && (
-              <button
-                className="ais-ChatToolSearchIndexRefineButton"
-                onClick={() => {
-                  if (input?.query) {
-                    setIndexUiState({
-                      ...indexUiState,
-                      query: input.query,
-                    });
-                  }
-                }}
-              >
-                Refine on this query
-              </button>
-            )}
-          </div>
-        );
-      },
-      onToolCall: ({ toolCall, addToolResult }) => {
-        addToolResult({
-          tool: toolCall.toolName,
-          toolCallId: toolCall.toolCallId,
-          output: '',
-        });
+      template: {
+        component: (props) => {
+          return <Component {...props} />;
+        },
       },
     },
   ];
 }
+
+const combineTools = (
+  templates: ChatTemplates,
+  userTools?: UserClientSideToolWithTemplate[]
+) => {
+  const defaults = createDefaultTools(templates);
+
+  if (!userTools) {
+    return defaults;
+  }
+
+  const userToolsMap = new Map(userTools.map((tool) => [tool.type, tool]));
+
+  const merged = defaults.map(
+    (defaultTool) => userToolsMap.get(defaultTool.type) ?? defaultTool
+  );
+
+  const extraUserTools = userTools.filter(
+    (tool) => !defaultTools.includes(tool.type)
+  );
+
+  return [...merged, ...extraUserTools];
+};
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'chat',
@@ -104,17 +152,8 @@ function createRenderer({
     templateProps?: PreparedTemplateProps<Required<ChatTemplates>>;
   };
   templates: ChatTemplates;
-  tools?: Tools;
+  tools: UserClientSideToolWithTemplate[];
 }): Renderer<ChatRenderState, Partial<ChatWidgetParams>> {
-  const userTools = tools ?? [];
-  const defaultTools = createDefaultTools();
-  const hasSearchIndexTool = userTools.some(
-    (tool) => tool.type === 'tool-algolia_search_index'
-  );
-  const combinedTools = hasSearchIndexTool
-    ? userTools
-    : [...defaultTools, ...userTools];
-
   return (props, isFirstRendering) => {
     const {
       instantSearchInstance,
@@ -124,6 +163,7 @@ function createRenderer({
       setOpen,
       input,
       setInput,
+      addToolResult,
     } = props;
 
     if (isFirstRendering) {
@@ -134,6 +174,19 @@ function createRenderer({
       });
       return;
     }
+
+    const toolsForUi: ClientSideTool[] = tools?.map((t) => ({
+      ...t,
+      component: (componentProps) => (
+        <TemplateComponent
+          templateKey="component"
+          rootTagName="fragment"
+          templates={t.template}
+          data={componentProps}
+        />
+      ),
+      addToolResult,
+    }));
 
     function renderChat() {
       render(
@@ -157,7 +210,7 @@ function createRenderer({
                 ...instantSearchInstance.getUiState(),
                 [instantSearchInstance.indexName]: state,
               }),
-            tools: combinedTools,
+            tools: toolsForUi,
           }}
           headerProps={{
             onClose: () => {
@@ -184,6 +237,17 @@ function createRenderer({
   };
 }
 
+export type UserClientSideToolTemplate = Partial<{
+  component: TemplateWithBindEvent<ClientSideToolComponentProps>;
+}>;
+
+export type UserClientSideToolWithTemplate = Omit<
+  UserClientSideTool,
+  'component'
+> & {
+  template: UserClientSideToolTemplate;
+};
+
 export type ChatCSSClasses = Partial<ChatClassNames>;
 
 export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
@@ -203,7 +267,7 @@ type ChatWidgetParams = {
   /**
    * Client-side tools to add to the chat
    */
-  tools?: Tools;
+  tools?: UserClientSideToolWithTemplate[];
 
   /**
    * Templates to use for the widget.
@@ -233,7 +297,7 @@ export default (function chat<TUiMessage extends UIMessage = UIMessage>(
     templates = {},
     cssClasses = {},
     resume = false,
-    tools,
+    tools: userTools,
     ...options
   } = widgetParams || {};
 
@@ -242,6 +306,8 @@ export default (function chat<TUiMessage extends UIMessage = UIMessage>(
   }
 
   const containerNode = getContainerNode(container);
+
+  const tools = combineTools(templates, userTools);
 
   const specializedRenderer = createRenderer({
     containerNode,
@@ -254,11 +320,33 @@ export default (function chat<TUiMessage extends UIMessage = UIMessage>(
   const makeWidget = connectChat(specializedRenderer, () =>
     render(null, containerNode)
   );
+
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { getWidgetRenderState, ...rest } = makeWidget({
+    resume,
+    ...options,
+    onToolCall: ({ toolCall }) => {
+      const tool = find(tools, (t) => t.type === `tool-${toolCall.toolName}`);
+
+      if (tool && tool.onToolCall) {
+        const scopedAddToolResult: AddToolResultWithOutput = ({ output }) => {
+          return Promise.resolve(
+            getWidgetRenderState().addToolResult({
+              output,
+              tool: toolCall.toolName,
+              toolCallId: toolCall.toolCallId,
+            })
+          );
+        };
+        return tool.onToolCall({ addToolResult: scopedAddToolResult });
+      }
+      return Promise.resolve();
+    },
+  });
+
   return {
-    ...makeWidget({
-      resume,
-      ...options,
-    }),
+    getWidgetRenderState,
+    ...rest,
     $$widgetType: 'ais.chat',
   };
 } satisfies ChatWidget);
