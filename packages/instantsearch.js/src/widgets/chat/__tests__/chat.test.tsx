@@ -39,7 +39,7 @@ describe('chat', () => {
         container,
         agentId: 'agentId',
         cssClasses: {
-          container: 'CONTAINER',
+          root: 'ROOT',
         },
       });
 
@@ -51,7 +51,7 @@ describe('chat', () => {
       await wait(0);
 
       expect(container.querySelector('.ais-Chat-container')).toHaveClass(
-        'CONTAINER'
+        'ROOT'
       );
     });
   });

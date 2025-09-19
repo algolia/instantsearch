@@ -14,10 +14,19 @@ export function mockAiSdk() {
   jest.mock('instantsearch.js/es/lib/chat', () => {
     return {
       Chat: jest.fn().mockImplementation(() => ({
+        id: 'mock-chat-id',
         messages: [],
-        '~registerErrorCallback': (_onChange: () => void) => {},
-        '~registerMessagesCallback': (_onChange: () => void) => {},
-        '~registerStatusCallback': (_onChange: () => void) => {},
+        status: 'idle',
+        error: undefined,
+        sendMessage: jest.fn(),
+        regenerate: jest.fn(),
+        clearError: jest.fn(),
+        stop: jest.fn(),
+        resumeStream: jest.fn(),
+        addToolResult: jest.fn(),
+        '~registerMessagesCallback': jest.fn(),
+        '~registerStatusCallback': jest.fn(),
+        '~registerErrorCallback': jest.fn(),
       })),
     };
   });
