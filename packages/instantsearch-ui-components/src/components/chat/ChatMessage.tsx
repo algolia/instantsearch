@@ -79,10 +79,6 @@ export type ChatMessageActionProps = {
 
 export type ChatMessageProps = ComponentProps<'article'> & {
   /**
-   * The content of the message
-   */
-  content: JSX.Element;
-  /**
    * The message object associated with this chat message
    */
   message: ChatMessageBase;
