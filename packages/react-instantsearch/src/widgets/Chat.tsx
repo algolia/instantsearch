@@ -167,9 +167,9 @@ export function Chat<TObject extends RecordWithObjectID>({
   });
 
   const handleClear = React.useCallback(() => {
-    if (messages.length === 0) return;
+    if (!messages || messages.length === 0) return;
     setIsClearing(true);
-  }, [messages.length]);
+  }, [messages]);
 
   const handleClearTransitionEnd = React.useCallback(() => {
     setMessages([]);
@@ -191,7 +191,7 @@ export function Chat<TObject extends RecordWithObjectID>({
         maximized,
         onToggleMaximize: () => setMaximized(!maximized),
         onClear: handleClear,
-        canClear: messages.length > 0 && !isClearing,
+        canClear: messages && messages.length > 0 && !isClearing,
         ...headerProps,
       }}
       messagesProps={{

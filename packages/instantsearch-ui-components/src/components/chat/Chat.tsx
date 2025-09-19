@@ -14,7 +14,7 @@ import type { ChatPromptProps } from './ChatPrompt';
 import type { ChatToggleButtonProps } from './ChatToggleButton';
 
 export type ChatClassNames = {
-  container?: string | string[];
+  root?: string | string[];
 };
 
 export type ChatProps = {
@@ -75,7 +75,7 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
             'ais-Chat-container',
             open && 'ais-Chat-container--open',
             maximized && 'ais-Chat-container--maximized',
-            classNames.container
+            classNames.root
           )}
         >
           <ChatHeader {...headerProps} maximized={maximized} />

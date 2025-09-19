@@ -44,7 +44,7 @@ describe('Chat', () => {
     };
     const { container } = render(
       <InstantSearchTestWrapper>
-        <Chat classNames={{ container: 'ROOT' }} />
+        <Chat classNames={{ root: 'ROOT' }} />
       </InstantSearchTestWrapper>
     );
 
@@ -73,7 +73,7 @@ describe('Chat', () => {
     userEvent.click(closeButton!);
 
     const root = container.querySelector('.ais-Chat-container');
-    expect(root).not.toBeInTheDocument();
+    expect(root).not.toHaveClass('ais-Chat-container--open');
   });
 
   test('should send message when form is submitted', () => {
