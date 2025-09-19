@@ -5,21 +5,21 @@ import { Fragment, h, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
 import connectChat from '../../connectors/chat/connectChat';
-import { defaultTools } from '../../lib/chat';
+import { createInsightsEventHandler } from '../../lib/insights/listener';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
-  find,
 } from '../../lib/utils';
 import { carousel } from '../../templates';
+
+import defaultTemplates from './defaultTemplates';
 
 import type {
   ChatRenderState,
   ChatConnectorParams,
   ChatWidgetDescription,
 } from '../../connectors/chat/connectChat';
-import type { UIMessage } from '../../lib/chat';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   WidgetFactory,
@@ -28,224 +28,201 @@ import type {
   TemplateWithBindEvent,
   BaseHit,
 } from '../../types';
-import type {
-  AddToolResultWithOutput,
-  ChatClassNames,
-  ClientSideTool,
-  ClientSideToolComponent,
-  ClientSideToolComponentProps,
-  UserClientSideTool,
-} from 'instantsearch-ui-components';
+import type { ChatClassNames, Tools, VNode } from 'instantsearch-ui-components';
 
-function createDefaultTools<TObject extends BaseHit = BaseHit>(
-  templates: ChatTemplates
-): UserClientSideToolWithTemplate[] {
-  const Carousel = carousel();
+type ItemComponent<THit> = (props: {
+  item: THit;
+  onClick: () => void;
+  onAuxClick: () => void;
+}) => VNode | VNode[];
 
-  const Component: ClientSideToolComponent = ({
-    message,
-    indexUiState,
-    setIndexUiState,
-  }) => {
-    const items =
-      (
-        message.output as {
-          hits?: Array<Hit<TObject>>;
-        }
-      )?.hits || [];
+const withUsage = createDocumentationMessageGenerator({ name: 'chat' });
 
-    const input = message.input as { query: string };
+const Chat = createChatComponent({ createElement: h, Fragment });
 
-    return (
-      <div>
-        <Carousel
-          items={items}
-          templates={{
-            item: templates.item
-              ? ({ item, sendEvent }) => (
-                  <TemplateComponent
-                    templates={templates}
-                    templateKey="item"
-                    rootTagName="fragment"
-                    data={item}
-                    sendEvent={sendEvent}
-                  />
-                )
-              : undefined,
-          }}
-          sendEvent={() => {}}
-        />
-
-        {input?.query && (
-          <button
-            className="ais-ChatToolSearchIndexRefineButton"
-            onClick={() => {
-              if (input?.query) {
-                setIndexUiState({
-                  ...indexUiState,
-                  query: input.query,
-                });
-              }
-            }}
-          >
-            Refine on this query
-          </button>
-        )}
-      </div>
-    );
-  };
-
+function createDefaultTools<THit extends NonNullable<object> = BaseHit>(
+  itemComponent?: ItemComponent<THit>
+): Tools {
   return [
     {
       type: 'tool-algolia_search_index',
-      template: {
-        component: (props) => {
-          return <Component {...props} />;
-        },
+      component: ({ message, indexUiState, setIndexUiState }) => {
+        const items =
+          (
+            message.output as {
+              hits?: Array<Hit<THit>>;
+            }
+          )?.hits || [];
+
+        const input = message.input as { query: string };
+
+        return (
+          <div>
+            {carousel()({
+              items,
+              templates: { item: itemComponent },
+              sendEvent: () => {},
+            })}
+
+            {input?.query && (
+              <button
+                className="ais-ChatToolSearchIndexRefineButton"
+                onClick={() => {
+                  if (input?.query) {
+                    setIndexUiState({
+                      ...indexUiState,
+                      query: input.query,
+                    });
+                  }
+                }}
+              >
+                Refine on this query
+              </button>
+            )}
+          </div>
+        );
+      },
+      onToolCall: ({ toolCall, addToolResult }) => {
+        addToolResult({
+          tool: toolCall.toolName,
+          toolCallId: toolCall.toolCallId,
+          output: '',
+        });
       },
     },
   ];
 }
 
-const combineTools = (
-  templates: ChatTemplates,
-  userTools?: UserClientSideToolWithTemplate[]
-) => {
-  const defaults = createDefaultTools(templates);
-
-  if (!userTools) {
-    return defaults;
-  }
-
-  const userToolsMap = new Map(userTools.map((tool) => [tool.type, tool]));
-
-  const merged = defaults.map(
-    (defaultTool) => userToolsMap.get(defaultTool.type) ?? defaultTool
-  );
-
-  const extraUserTools = userTools.filter(
-    (tool) => !defaultTools.includes(tool.type)
-  );
-
-  return [...merged, ...extraUserTools];
-};
-
-const withUsage = createDocumentationMessageGenerator({
-  name: 'chat',
-});
-
-const Chat = createChatComponent({
-  createElement: h,
-  Fragment,
-});
-
-function createRenderer({
+const createRenderer = <THit extends NonNullable<object> = BaseHit>({
   renderState,
   cssClasses,
   containerNode,
   templates,
-  tools,
+  tools: userTools = [],
 }: {
   containerNode: HTMLElement;
   cssClasses: ChatCSSClasses;
   renderState: {
-    templateProps?: PreparedTemplateProps<Required<ChatTemplates>>;
+    templateProps?: PreparedTemplateProps<Required<ChatTemplates<THit>>>;
   };
-  templates: ChatTemplates;
-  tools: UserClientSideToolWithTemplate[];
-}): Renderer<ChatRenderState, Partial<ChatWidgetParams>> {
+  templates: ChatTemplates<THit>;
+  tools?: Tools;
+}): Renderer<ChatRenderState, Partial<ChatWidgetParams>> => {
+  const state = createLocalState();
   return (props, isFirstRendering) => {
     const {
-      instantSearchInstance,
-      sendMessage,
-      getMessages,
-      open,
-      setOpen,
+      indexUiState,
+      insights,
       input,
+      instantSearchInstance,
+      messages,
+      open,
+      sendEvent,
+      sendMessage,
+      setIndexUiState,
       setInput,
-      addToolResult,
+      setMessages,
+      setOpen,
+      status,
     } = props;
 
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
-        defaultTemplates: {} as unknown as Required<ChatTemplates>,
+        defaultTemplates,
         templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
       return;
     }
 
-    const toolsForUi: ClientSideTool[] = tools?.map((t) => ({
-      ...t,
-      component: (componentProps) => (
-        <TemplateComponent
-          templateKey="component"
-          rootTagName="fragment"
-          templates={t.template}
-          data={componentProps}
-        />
-      ),
-      addToolResult,
-    }));
+    const handleInsightsClick = createInsightsEventHandler({
+      insights,
+      sendEvent,
+    });
 
-    function renderChat() {
+    const itemComponent: ItemComponent<THit> = ({ item, ...rootProps }) => (
+      <TemplateComponent
+        {...renderState.templateProps}
+        templateKey="item"
+        rootTagName="div"
+        rootProps={{
+          ...rootProps,
+          onClick: (event: MouseEvent) => {
+            handleInsightsClick(event);
+            rootProps.onClick?.();
+          },
+          onAuxClick: (event: MouseEvent) => {
+            handleInsightsClick(event);
+            rootProps.onAuxClick?.();
+          },
+        }}
+        data={item}
+        sendEvent={sendEvent}
+      />
+    );
+
+    const hasSearchIndexTool = userTools.some(
+      (tool) => tool.type === 'tool-algolia_search_index'
+    );
+
+    const tools = hasSearchIndexTool
+      ? userTools
+      : [...createDefaultTools<THit>(itemComponent), ...userTools];
+
+    state.subscribe(rerender);
+
+    function rerender() {
+      state.init();
+
+      const [isClearing, setIsClearing] = state.use(false);
+      const [maximized, setMaximized] = state.use(false);
+
+      const onClear = () => setIsClearing(true);
+      const onClearTransitionEnd = () => {
+        setMessages([]);
+        setIsClearing(false);
+      };
       render(
         <Chat
+          classNames={cssClasses}
           open={open}
-          toggleButtonProps={{
-            open,
-            onClick: () => {
-              setOpen(!open);
-            },
+          maximized={maximized}
+          headerProps={{
+            onClose: () => setOpen(false),
+            onToggleMaximize: () => setMaximized(!maximized),
+            onClear,
+            canClear: messages.length > 0 && isClearing !== true,
           }}
           messagesProps={{
-            messages: getMessages(),
-            // TODO: retrieve proper index name and index ui state
-            indexUiState:
-              instantSearchInstance.getUiState()[
-                instantSearchInstance.indexName
-              ] || {},
-            setIndexUiState: (state) =>
-              instantSearchInstance.setUiState({
-                ...instantSearchInstance.getUiState(),
-                [instantSearchInstance.indexName]: state,
-              }),
-            tools: toolsForUi,
-          }}
-          headerProps={{
-            onClose: () => {
-              setOpen(false);
-            },
+            messages,
+            indexUiState,
+            isClearing,
+            onClearTransitionEnd,
+            // temporary until we have a good solution in js
+            // or move logic in ui-component
+            hideScrollToBottom: true,
+            setIndexUiState,
+            tools,
           }}
           promptProps={{
+            status,
             value: input,
-            onInput: (e) => {
-              setInput(e);
+            onInput: (event) => {
+              setInput(event.currentTarget.value);
             },
-            onSubmit: (e) => {
-              sendMessage({ text: e });
+            onSubmit: () => {
+              sendMessage({ text: input });
               setInput('');
             },
           }}
-          classNames={cssClasses}
+          toggleButtonProps={{ open, onClick: () => setOpen(!open) }}
         />,
         containerNode
       );
     }
 
-    renderChat();
+    rerender();
   };
-}
-
-export type UserClientSideToolTemplate = Partial<{
-  component: TemplateWithBindEvent<ClientSideToolComponentProps>;
-}>;
-
-export type UserClientSideToolWithTemplate = Omit<
-  UserClientSideTool,
-  'component'
-> & {
-  template: UserClientSideToolTemplate;
 };
 
 export type ChatCSSClasses = Partial<ChatClassNames>;
@@ -258,7 +235,7 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
     item: TemplateWithBindEvent<Hit<THit>>;
   }>;
 
-type ChatWidgetParams = {
+type ChatWidgetParams<THit extends NonNullable<object> = BaseHit> = {
   /**
    * CSS Selector or HTMLElement to insert the widget.
    */
@@ -267,12 +244,12 @@ type ChatWidgetParams = {
   /**
    * Client-side tools to add to the chat
    */
-  tools?: UserClientSideToolWithTemplate[];
+  tools?: Tools;
 
   /**
    * Templates to use for the widget.
    */
-  templates?: ChatTemplates;
+  templates?: ChatTemplates<THit>;
 
   /**
    * CSS classes to add.
@@ -281,23 +258,20 @@ type ChatWidgetParams = {
 };
 
 export type ChatWidget = WidgetFactory<
-  // TODO: fix for generic
-  ChatWidgetDescription<UIMessage> & {
-    $$widgetType: 'ais.chat';
-  },
+  ChatWidgetDescription & { $$widgetType: 'ais.chat' },
   ChatConnectorParams,
   ChatWidgetParams
 >;
 
-export default (function chat<TUiMessage extends UIMessage = UIMessage>(
-  widgetParams: ChatWidgetParams & ChatConnectorParams<TUiMessage>
+export default (function chat<THit extends NonNullable<object> = BaseHit>(
+  widgetParams: ChatWidgetParams<THit> & ChatConnectorParams
 ) {
   const {
     container,
     templates = {},
     cssClasses = {},
     resume = false,
-    tools: userTools,
+    tools,
     ...options
   } = widgetParams || {};
 
@@ -306,8 +280,6 @@ export default (function chat<TUiMessage extends UIMessage = UIMessage>(
   }
 
   const containerNode = getContainerNode(container);
-
-  const tools = combineTools(templates, userTools);
 
   const specializedRenderer = createRenderer({
     containerNode,
@@ -321,32 +293,50 @@ export default (function chat<TUiMessage extends UIMessage = UIMessage>(
     render(null, containerNode)
   );
 
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { getWidgetRenderState, ...rest } = makeWidget({
-    resume,
-    ...options,
-    onToolCall: ({ toolCall }) => {
-      const tool = find(tools, (t) => t.type === `tool-${toolCall.toolName}`);
-
-      if (tool && tool.onToolCall) {
-        const scopedAddToolResult: AddToolResultWithOutput = ({ output }) => {
-          return Promise.resolve(
-            getWidgetRenderState().addToolResult({
-              output,
-              tool: toolCall.toolName,
-              toolCallId: toolCall.toolCallId,
-            })
-          );
-        };
-        return tool.onToolCall({ addToolResult: scopedAddToolResult });
-      }
-      return Promise.resolve();
-    },
-  });
-
   return {
-    getWidgetRenderState,
-    ...rest,
+    ...makeWidget({
+      resume,
+      ...options,
+    }),
     $$widgetType: 'ais.chat',
   };
 } satisfies ChatWidget);
+
+function createLocalState() {
+  const state: unknown[] = [];
+  const subscriptions = new Set<() => void>();
+  let cursor = 0;
+
+  function use<T>(initialValue: T): [T, (value: T) => T] {
+    const index = cursor++;
+    if (state[index] === undefined) {
+      state[index] = initialValue;
+    }
+
+    return [
+      state[index] as T,
+      (value: T) => {
+        const prev = state[index] as T;
+        if (prev === value) {
+          return prev;
+        }
+
+        state[index] = value;
+        subscriptions.forEach((fn) => fn());
+        return value;
+      },
+    ];
+  }
+
+  return {
+    init() {
+      cursor = 0;
+    },
+    subscribe(fn: () => void): () => void {
+      subscriptions.add(fn);
+
+      return () => subscriptions.delete(fn);
+    },
+    use,
+  };
+}

@@ -1,10 +1,20 @@
 /** @jsx createElement */
+
 import { cx } from '../../lib';
 
 import { createChatMessageComponent } from './ChatMessage';
+import { createChatMessageErrorComponent } from './ChatMessageError';
+import { createChatMessageLoaderComponent } from './ChatMessageLoader';
+import {
+  ChevronDownIconComponent,
+  CopyIconComponent,
+  ReloadIconComponent,
+} from './icons';
 
 import type { ComponentProps, MutableRef, Renderer } from '../../types';
-import type { ChatMessageProps } from './ChatMessage';
+import type { ChatMessageProps, ChatMessageActionProps } from './ChatMessage';
+import type { ChatMessageErrorProps } from './ChatMessageError';
+import type { ChatMessageLoaderProps } from './ChatMessageLoader';
 import type { ChatMessageBase, ChatStatus, ClientSideTool } from './types';
 
 export type ChatMessagesTranslations = {
@@ -13,9 +23,9 @@ export type ChatMessagesTranslations = {
    */
   scrollToBottomText: string;
   /**
-   * Label for the messages container
+   * Text to display in the loader
    */
-  messagesLabel: string;
+  loaderText?: string;
 };
 
 export type ChatMessagesClassNames = {
@@ -35,6 +45,10 @@ export type ChatMessagesClassNames = {
    * Class names to apply to the scroll to bottom button
    */
   scrollToBottom: string | string[];
+  /**
+   * Class names to apply to the scroll to bottom button when hidden
+   */
+  scrollToBottomHidden: string | string[];
 };
 
 export type ChatMessagesProps<
@@ -47,24 +61,21 @@ export type ChatMessagesProps<
   /**
    * Custom message renderer
    */
-  messageComponent?: (props: {
-    message: TMessage;
-    isLast: boolean;
-  }) => JSX.Element;
+  messageComponent?: (props: { message: TMessage }) => JSX.Element;
   /**
    * Custom loader component
    */
-  loaderComponent?: () => JSX.Element;
+  loaderComponent?: (props: ChatMessageLoaderProps) => JSX.Element;
   /**
    * Custom error component
    */
-  errorComponent?: () => JSX.Element;
+  errorComponent?: (props: ChatMessageErrorProps) => JSX.Element;
   /**
-   * Current UI state of the index
+   * The index UI state
    */
   indexUiState: object;
   /**
-   * Function to update the UI state of the index
+   * Set the index UI state
    */
   setIndexUiState: (state: object) => void;
   /**
@@ -82,7 +93,7 @@ export type ChatMessagesProps<
   /**
    * Callback for reload action
    */
-  onReload?: () => void;
+  onReload?: (messageId?: string) => void;
   /**
    * Optional class names
    */
@@ -91,30 +102,56 @@ export type ChatMessagesProps<
    * Optional translations
    */
   translations?: Partial<ChatMessagesTranslations>;
-  userMessageProps?: ChatMessageProps;
-  assistantMessageProps?: ChatMessageProps;
+  /**
+   * Optional user message props
+   */
+  userMessageProps?: Partial<Omit<ChatMessageProps, 'ref' | 'key'>>;
+  /**
+   * Optional assistant message props
+   */
+  assistantMessageProps?: Partial<Omit<ChatMessageProps, 'ref' | 'key'>>;
+  /**
+   * Optional scroll ref
+   */
   scrollRef?: MutableRef<HTMLDivElement>;
+  /**
+   * Optional content ref
+   */
   contentRef?: MutableRef<HTMLDivElement>;
+  /**
+   * Whether the scroll is at the bottom
+   */
   isScrollAtBottom?: boolean;
-  scrollToBottom?: () => void;
+  /**
+   * Callback for scroll to bottom
+   */
+  onScrollToBottom?: () => void;
+  /**
+   * Whether the messages are clearing (for animation)
+   */
+  isClearing?: boolean;
+  /**
+   * Callback for when clearing transition ends
+   */
+  onClearTransitionEnd?: () => void;
 };
 
-function createDefaultScrollIconComponent({
-  createElement,
-}: Pick<Renderer, 'createElement'>) {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        fill="currentColor"
-        d="M3.646 5.646a.5.5 0 0 1 .708 0L8 9.293l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z"
-      />
-    </svg>
+const copyToClipboard = (message: ChatMessageBase) => {
+  navigator.clipboard.writeText(
+    message.parts
+      .map((part) => {
+        if ('text' in part) {
+          return part.text;
+        }
+        return '';
+      })
+      .join('')
   );
-}
+};
 
-function createDefaultMessageComponent({ createElement, Fragment }: Renderer) {
+function createDefaultMessageComponent<
+  TMessage extends ChatMessageBase = ChatMessageBase
+>({ createElement, Fragment }: Renderer) {
   const ChatMessage = createChatMessageComponent({ createElement, Fragment });
 
   return function DefaultMessage({
@@ -124,81 +161,64 @@ function createDefaultMessageComponent({ createElement, Fragment }: Renderer) {
     tools,
     indexUiState,
     setIndexUiState,
+    onReload,
   }: {
-    message: ChatMessageBase;
-    userMessageProps?: Omit<ChatMessageProps, 'ref' | 'key'>;
-    assistantMessageProps?: Omit<ChatMessageProps, 'ref' | 'key'>;
+    key: string;
+    message: TMessage;
+    userMessageProps?: Partial<ChatMessageProps>;
+    assistantMessageProps?: Partial<ChatMessageProps>;
     indexUiState: object;
     setIndexUiState: (state: object) => void;
     tools?: ClientSideTool[];
+    onReload?: (messageId?: string) => void;
   }) {
+    const defaultAssistantActions: ChatMessageActionProps[] = [
+      {
+        title: 'Copy to clipboard',
+        icon: () => <CopyIconComponent createElement={createElement} />,
+        onClick: copyToClipboard,
+      },
+      {
+        title: 'Regenerate',
+        icon: () => <ReloadIconComponent createElement={createElement} />,
+        onClick: (m) => onReload?.(m.id),
+      },
+    ];
+
     const messageProps =
       message.role === 'user' ? userMessageProps : assistantMessageProps;
+    const defaultActions =
+      message.role === 'user' ? undefined : defaultAssistantActions;
 
     return (
       <ChatMessage
-        content={<div>{message.parts}</div>}
         side={message.role === 'user' ? 'right' : 'left'}
         variant={message.role === 'user' ? 'neutral' : 'subtle'}
         message={message}
         tools={tools}
         indexUiState={indexUiState}
         setIndexUiState={setIndexUiState}
+        actions={defaultActions}
+        data-role={message.role}
         {...messageProps}
       />
     );
   };
 }
 
-function createDefaultLoaderComponent({
-  createElement,
-}: Pick<Renderer, 'createElement'>) {
-  return function DefaultLoader() {
-    return (
-      <div className="ais-ChatMessages-loader">
-        <div className="ais-ChatMessages-loader-dots">
-          <span />
-          <span />
-          <span />
-        </div>
-      </div>
-    );
-  };
-}
-
-function createDefaultErrorComponent({
-  createElement,
-}: Pick<Renderer, 'createElement'>) {
-  return function DefaultError({ onReload }: { onReload?: () => void }) {
-    return (
-      <div className="ais-ChatMessages-error">
-        <span>Something went wrong</span>
-        {onReload && (
-          <button
-            type="button"
-            className="ais-ChatMessages-error-retry"
-            onClick={onReload}
-          >
-            Retry
-          </button>
-        )}
-      </div>
-    );
-  };
-}
-
-// Simple scroll to bottom functionality
-const handleScrollToBottom = () => {
-  const scrollContainer = document.querySelector('.ais-ChatMessages-scroll');
-  if (scrollContainer) {
-    scrollContainer.scrollTop = scrollContainer.scrollHeight;
-  }
-};
-
 export function createChatMessagesComponent({
   createElement,
   Fragment,
 }: Renderer) {
+  const DefaultMessageComponent =
+    createDefaultMessageComponent<ChatMessageBase>({ createElement, Fragment });
+  const DefaultLoaderComponent = createChatMessageLoaderComponent({
+    createElement,
+  });
+  const DefaultErrorComponent = createChatMessageErrorComponent({
+    createElement,
+  });
+
   return function ChatMessages<
     TMessage extends ChatMessageBase = ChatMessageBase
   >(userProps: ChatMessagesProps<TMessage>) {
@@ -220,62 +240,35 @@ export function createChatMessagesComponent({
       scrollRef,
       contentRef,
       isScrollAtBottom,
-      scrollToBottom = handleScrollToBottom,
+      onScrollToBottom,
+      isClearing = false,
+      onClearTransitionEnd,
       ...props
     } = userProps;
 
     const translations: Required<ChatMessagesTranslations> = {
       scrollToBottomText: 'Scroll to bottom',
-      messagesLabel: 'Chat messages',
+      loaderText: 'Thinking...',
       ...userTranslations,
     };
 
     const cssClasses: ChatMessagesClassNames = {
       root: cx('ais-ChatMessages', classNames.root),
-      scroll: cx('ais-ChatMessages-scroll', classNames.scroll),
+      scroll: cx('ais-ChatMessages-scroll ais-Scrollbar', classNames.scroll),
       content: cx('ais-ChatMessages-content', classNames.content),
       scrollToBottom: cx(
         'ais-ChatMessages-scrollToBottom',
         classNames.scrollToBottom
       ),
+      scrollToBottomHidden: cx(
+        'ais-ChatMessages-scrollToBottom--hidden',
+        classNames.scrollToBottomHidden
+      ),
     };
 
-    const DefaultMessage =
-      MessageComponent ||
-      createDefaultMessageComponent({ createElement, Fragment });
-    const DefaultLoader =
-      LoaderComponent || createDefaultLoaderComponent({ createElement });
-    const DefaultError =
-      ErrorComponent || createDefaultErrorComponent({ createElement });
-    const ScrollIcon = createDefaultScrollIconComponent;
-
-    const renderMessage = (message: TMessage, index: number) => {
-      const isLast = index === messages.length - 1;
-      const isUser = message.role === 'user';
-      const isAssistant = message.role === 'assistant';
-
-      return (
-        <div
-          key={message.id}
-          className={cx(
-            'ais-ChatMessages-message',
-            isUser && 'ais-ChatMessages-message--user',
-            isAssistant && 'ais-ChatMessages-message--assistant'
-          )}
-          data-role={message.role}
-        >
-          <DefaultMessage
-            message={message}
-            isLast={isLast}
-            userMessageProps={userMessageProps}
-            assistantMessageProps={assistantMessageProps}
-            tools={tools}
-            indexUiState={indexUiState}
-            setIndexUiState={setIndexUiState}
-          />
-        </div>
-      );
-    };
+    const DefaultMessage = MessageComponent || DefaultMessageComponent;
+    const DefaultLoader = LoaderComponent || DefaultLoaderComponent;
+    const DefaultError = ErrorComponent || DefaultErrorComponent;
 
     return (
       <div
@@ -283,37 +276,60 @@ export function createChatMessagesComponent({
         className={cx(cssClasses.root, props.className)}
         role="log"
         aria-live="polite"
-        aria-label={translations.messagesLabel}
       >
         <div className={cx(cssClasses.scroll)} ref={scrollRef}>
-          <div className={cx(cssClasses.content)} ref={contentRef}>
-            {messages.map((message, index) => renderMessage(message, index))}
+          <div
+            className={cx(
+              cssClasses.content,
+              isClearing && 'ais-ChatMessages-content--clearing'
+            )}
+            ref={contentRef}
+            onTransitionEnd={(e) => {
+              if (
+                e.target === e.currentTarget &&
+                e.propertyName === 'opacity' &&
+                isClearing
+              ) {
+                onClearTransitionEnd?.();
+              }
+            }}
+          >
+            {messages.map((message) => (
+              <DefaultMessage
+                key={message.id}
+                message={message}
+                userMessageProps={userMessageProps}
+                assistantMessageProps={assistantMessageProps}
+                tools={tools}
+                indexUiState={indexUiState}
+                setIndexUiState={setIndexUiState}
+                onReload={onReload}
+              />
+            ))}
 
             {status === 'submitted' && (
-              <div className="ais-ChatMessages-message ais-ChatMessages-message--assistant">
-                <DefaultLoader />
-              </div>
+              <DefaultLoader
+                translations={{ loaderText: translations.loaderText }}
+              />
             )}
 
-            {status === 'error' && (
-              <div className="ais-ChatMessages-message ais-ChatMessages-message--assistant">
-                <DefaultError onReload={onReload} />
-              </div>
-            )}
+            {status === 'error' && <DefaultError onReload={onReload} />}
           </div>
         </div>
 
-        {!hideScrollToBottom && !isScrollAtBottom && (
-          <button
-            type="button"
-            className={cx(cssClasses.scrollToBottom)}
-            title={translations.scrollToBottomText}
-            onClick={scrollToBottom}
-            aria-label={translations.scrollToBottomText}
-          >
-            <ScrollIcon createElement={createElement} />
-          </button>
-        )}
+        <button
+          type="button"
+          className={cx(
+            cssClasses.scrollToBottom,
+            (hideScrollToBottom || isScrollAtBottom) &&
+              cssClasses.scrollToBottomHidden
+          )}
+          onClick={onScrollToBottom}
+          aria-label={translations.scrollToBottomText}
+          tabIndex={isScrollAtBottom ? -1 : 0}
+        >
+          <ChevronDownIconComponent createElement={createElement} />
+        </button>
       </div>
     );
   };

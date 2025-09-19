@@ -4,6 +4,7 @@ import React, { createElement, Fragment } from 'react';
 import { useInstantSearch, useChat } from 'react-instantsearch-core';
 
 import { Carousel } from '../components';
+import { useStickToBottom } from '../ui/lib/useStickToBottom';
 
 import type {
   Pragma,
@@ -13,6 +14,8 @@ import type {
   ChatToolType,
   AddToolResultWithOutput,
   UserClientSideTool,
+  ChatToolMessage,
+  MutableRef,
 } from 'instantsearch-ui-components';
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
 import type { UseChatOptions } from 'react-instantsearch-core';
@@ -126,7 +129,15 @@ export function Chat<
   const { indexUiState, setIndexUiState } = useInstantSearch();
 
   const [open, setOpen] = React.useState(false);
+  const [maximized, setMaximized] = React.useState(false);
   const [input, setInput] = React.useState('');
+  const [isClearing, setIsClearing] = React.useState(false);
+
+  const { scrollRef, contentRef, isAtBottom, scrollToBottom } =
+    useStickToBottom({
+      initial: 'instant',
+      resize: 'smooth',
+    });
 
   const tools = React.useMemo(() => {
     const defaults = createDefaultTools(itemComponent);
@@ -148,7 +159,16 @@ export function Chat<
     return [...merged, ...extraUserTools];
   }, [itemComponent, userTools]);
 
-  const { messages, sendMessage, addToolResult } = useChat<TUiMessage>({
+  const {
+    messages,
+    sendMessage,
+    addToolResult,
+    status,
+    regenerate,
+    stop,
+    setMessages,
+    clearError,
+  } = useChat({
     resume,
     ...options,
     onToolCall: ({ toolCall }) => {
@@ -178,33 +198,63 @@ export function Chat<
     [tools, addToolResult]
   );
 
+  const handleClear = React.useCallback(() => {
+    if (messages.length === 0) return;
+    setIsClearing(true);
+  }, [messages.length]);
+
+  const handleClearTransitionEnd = React.useCallback(() => {
+    setMessages([]);
+    clearError();
+    setIsClearing(false);
+  }, [setMessages, clearError]);
+
   return (
     <ChatUiComponent
       open={open}
+      maximized={maximized}
       toggleButtonProps={{
         open,
         onClick: () => setOpen(!open),
         ...toggleButtonProps,
       }}
+      headerProps={{
+        onClose: () => setOpen(false),
+        maximized,
+        onToggleMaximize: () => setMaximized(!maximized),
+        onClear: handleClear,
+        canClear: messages.length > 0 && !isClearing,
+        ...headerProps,
+      }}
       messagesProps={{
+        status,
+        onReload: (messageId) => regenerate({ messageId }),
         messages,
         tools: toolsForUi,
         indexUiState,
         setIndexUiState,
+        isClearing,
+        onClearTransitionEnd: handleClearTransitionEnd,
+        scrollRef: scrollRef as unknown as MutableRef<HTMLDivElement>,
+        contentRef: contentRef as unknown as MutableRef<HTMLDivElement>,
+        isScrollAtBottom: isAtBottom,
+        onScrollToBottom: scrollToBottom,
         ...messagesProps,
       }}
-      headerProps={{
-        onClose: () => setOpen(false),
-        ...headerProps,
-      }}
       promptProps={{
+        status,
         value: input,
-        onInput: (event) => {
-          setInput(event);
+        // Explicit event type is required to prevent TypeScript error
+        // where parameter would implicitly have 'any' type without type annotation
+        onInput: (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+          setInput(event.currentTarget.value);
         },
-        onSubmit: (event) => {
-          sendMessage({ text: event });
+        onSubmit: () => {
+          sendMessage({ text: input });
           setInput('');
+        },
+        onStop: () => {
+          stop();
         },
         ...promptProps,
       }}

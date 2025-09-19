@@ -7,7 +7,7 @@ import { createChatMessagesComponent } from './ChatMessages';
 import { createChatPromptComponent } from './ChatPrompt';
 import { createChatToggleButtonComponent } from './ChatToggleButton';
 
-import type { Renderer } from '../../types';
+import type { MutableRef, Renderer } from '../../types';
 import type { ChatHeaderProps } from './ChatHeader';
 import type { ChatMessagesProps } from './ChatMessages';
 import type { ChatPromptProps } from './ChatPrompt';
@@ -22,6 +22,10 @@ export type ChatProps = {
    * Whether the chat is open or closed.
    */
   open: boolean;
+  /*
+   * Whether the chat is maximized or not.
+   */
+  maximized?: boolean;
   /*
    * Props for the ChatHeader component.
    */
@@ -53,27 +57,40 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
   const ChatMessages = createChatMessagesComponent({ createElement, Fragment });
   const ChatPrompt = createChatPromptComponent({ createElement, Fragment });
 
+  const promptRef: MutableRef<HTMLTextAreaElement | null> = { current: null };
+
   return function Chat({
     open,
+    maximized = false,
     headerProps,
     toggleButtonProps,
     messagesProps,
-    promptProps,
+    promptProps = {},
     classNames = {},
   }: ChatProps) {
     return (
-      <>
-        {!open ? (
-          <ChatToggleButton {...toggleButtonProps} />
-        ) : (
-          <div className={cx('ais-Chat-container', classNames.container)}>
-            <ChatHeader {...headerProps} />
-            <ChatMessages {...messagesProps} />
+      <div className={cx('ais-Chat', maximized && 'ais-Chat--maximized')}>
+        <div
+          className={cx(
+            'ais-Chat-container',
+            open && 'ais-Chat-container--open',
+            maximized && 'ais-Chat-container--maximized',
+            classNames.container
+          )}
+        >
+          <ChatHeader {...headerProps} maximized={maximized} />
+          <ChatMessages {...messagesProps} />
+          <ChatPrompt {...promptProps} ref={promptRef} />
+        </div>
 
-            <ChatPrompt {...promptProps} />
-          </div>
-        )}
-      </>
+        <ChatToggleButton
+          {...toggleButtonProps}
+          onClick={() => {
+            toggleButtonProps.onClick?.();
+            promptRef.current?.focus();
+          }}
+        />
+      </div>
     );
   };
 }

@@ -435,6 +435,7 @@ const testSetups: TestSetupsMap<TestSuites> = {
 
     render(<App />);
   },
+  createChatConnectorTests: () => {},
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -458,6 +459,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createFrequentlyBoughtTogetherConnectorTests: { act },
   createTrendingItemsConnectorTests: { act },
   createLookingSimilarConnectorTests: { act, skippedTests: { options: true } },
+  createChatConnectorTests: { act, skippedTests: { options: true } },
 };
 
 describe('Common connector tests (React InstantSearch)', () => {

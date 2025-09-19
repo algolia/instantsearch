@@ -2,7 +2,8 @@
 import { compiler } from 'markdown-to-jsx';
 
 import { cx, find, startsWith } from '../../lib';
-import { warn } from '../../warn';
+
+import { MenuIconComponent } from './icons';
 
 import type { ComponentProps, Renderer } from '../../types';
 import type {
@@ -76,7 +77,7 @@ export type ChatMessageActionProps = {
   onClick?: (message: ChatMessageBase) => void;
 };
 
-export type ChatMessageProps = Omit<ComponentProps<'article'>, 'content'> & {
+export type ChatMessageProps = ComponentProps<'article'> & {
   /**
    * The content of the message
    */
@@ -85,10 +86,6 @@ export type ChatMessageProps = Omit<ComponentProps<'article'>, 'content'> & {
    * The message object associated with this chat message
    */
   message: ChatMessageBase;
-  /**
-   * Avatar component to render
-   */
-  avatarComponent?: () => JSX.Element;
   /**
    * The side of the message
    */
@@ -114,12 +111,18 @@ export type ChatMessageProps = Omit<ComponentProps<'article'>, 'content'> & {
    */
   actionsComponent?: (props: {
     actions: ChatMessageActionProps[];
-  }) => JSX.Element;
+  }) => JSX.Element | null;
   /**
    * Footer content
    */
   footerComponent?: () => JSX.Element;
+  /**
+   * The index UI state
+   */
   indexUiState: object;
+  /**
+   * Set the index UI state
+   */
   setIndexUiState: (state: object) => void;
   /**
    * Array of tools available for the assistant (for tool messages)
@@ -139,28 +142,11 @@ export type ChatMessageProps = Omit<ComponentProps<'article'>, 'content'> & {
   translations?: Partial<ChatMessageTranslations>;
 };
 
-function createDefaultActionIconComponent({
-  createElement,
-}: Pick<Renderer, 'createElement'>) {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <circle cx="8" cy="8" r="2" fill="currentColor" />
-      <circle cx="8" cy="3" r="2" fill="currentColor" />
-      <circle cx="8" cy="13" r="2" fill="currentColor" />
-    </svg>
-  );
-}
-
-export function createChatMessageComponent({
-  createElement,
-  Fragment,
-}: Renderer) {
+export function createChatMessageComponent({ createElement }: Renderer) {
   return function ChatMessage(userProps: ChatMessageProps) {
     const {
       classNames = {},
-      content,
       message,
-      avatarComponent: AvatarComponent,
       side = 'left',
       variant = 'subtle',
       actions = [],
@@ -182,7 +168,7 @@ export function createChatMessageComponent({
       ...userTranslations,
     };
 
-    const hasLeading = Boolean(AvatarComponent || LeadingComponent);
+    const hasLeading = Boolean(LeadingComponent);
     const hasActions = Boolean(actions.length > 0 || ActionsComponent);
 
     const cssClasses: ChatMessageClassNames = {
@@ -190,8 +176,6 @@ export function createChatMessageComponent({
         'ais-ChatMessage',
         `ais-ChatMessage--${side}`,
         `ais-ChatMessage--${variant}`,
-        hasLeading && 'ais-ChatMessage--with-leading',
-        hasActions && 'ais-ChatMessage--with-actions',
         autoHideActions && 'ais-ChatMessage--auto-hide-actions',
         classNames.root
       ),
@@ -203,9 +187,7 @@ export function createChatMessageComponent({
       footer: cx('ais-ChatMessage-footer', classNames.footer),
     };
 
-    const DefaultActionIcon = createDefaultActionIconComponent;
-
-    function renderMessagePart(
+    function renderAssistantPart(
       part: ChatMessageBase['parts'][number],
       index: number
     ) {
@@ -245,8 +227,6 @@ export function createChatMessageComponent({
               />
             </div>
           );
-        } else {
-          warn(false, `No tool found for part type "${part.type}`);
         }
       }
       return (
@@ -255,33 +235,6 @@ export function createChatMessageComponent({
         </pre>
       );
     }
-
-    const Actions = () => {
-      if (ActionsComponent) {
-        return <ActionsComponent actions={actions} />;
-      }
-
-      return (
-        <Fragment>
-          {actions.map((action, index) => (
-            <button
-              key={index}
-              type="button"
-              className="ais-ChatMessage-action"
-              disabled={action.disabled}
-              title={action.title}
-              onClick={() => action.onClick?.(message)}
-            >
-              {action.icon ? (
-                <action.icon />
-              ) : (
-                <DefaultActionIcon createElement={createElement} />
-              )}
-            </button>
-          ))}
-        </Fragment>
-      );
-    };
 
     return (
       <article
@@ -292,19 +245,15 @@ export function createChatMessageComponent({
         <div className={cx(cssClasses.container)}>
           {hasLeading && (
             <div className={cx(cssClasses.leading)}>
-              {LeadingComponent ? (
-                <LeadingComponent />
-              ) : (
-                AvatarComponent && <AvatarComponent />
-              )}
+              {LeadingComponent && <LeadingComponent />}
             </div>
           )}
 
           <div className={cx(cssClasses.content)}>
             <div className={cx(cssClasses.message)}>
               {message.role === 'assistant'
-                ? message.parts.map(renderMessagePart)
-                : message.parts.map(renderMessagePart)}
+                ? message.parts.map(renderAssistantPart)
+                : message.parts.map(renderAssistantPart)}
             </div>
 
             {hasActions && (
@@ -312,7 +261,26 @@ export function createChatMessageComponent({
                 className={cx(cssClasses.actions)}
                 aria-label={translations.actionsLabel}
               >
-                <Actions />
+                {ActionsComponent ? (
+                  <ActionsComponent actions={actions} />
+                ) : (
+                  actions.map((action, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      className="ais-ChatMessage-action"
+                      disabled={action.disabled}
+                      aria-label={action.title}
+                      onClick={() => action.onClick?.(message)}
+                    >
+                      {action.icon ? (
+                        <action.icon />
+                      ) : (
+                        <MenuIconComponent createElement={createElement} />
+                      )}
+                    </button>
+                  ))
+                )}
               </div>
             )}
 

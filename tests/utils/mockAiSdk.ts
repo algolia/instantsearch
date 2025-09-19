@@ -13,7 +13,12 @@ export function mockAiSdk() {
 
   jest.mock('instantsearch.js/es/lib/chat', () => {
     return {
-      Chat: jest.fn().mockImplementation(() => ({})),
+      Chat: jest.fn().mockImplementation(() => ({
+        messages: [],
+        '~registerErrorCallback': (_onChange: () => void) => {},
+        '~registerMessagesCallback': (_onChange: () => void) => {},
+        '~registerStatusCallback': (_onChange: () => void) => {},
+      })),
     };
   });
 }

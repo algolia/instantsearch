@@ -1,17 +1,33 @@
 /** @jsx createElement */
 import { cx } from '../../lib/cx';
 
+import { SparklesIconComponent, ChevronUpIconComponent } from './icons';
+
 import type { ComponentProps, Renderer } from '../../types';
 
 export type ChatToggleButtonClassNames = {
+  /**
+   * Class names to apply to the root element
+   */
   root?: string | string[];
 };
 
-export type ChatToggleButtonProps = Omit<ComponentProps<'button'>, 'open'> & {
+export type ChatToggleButtonProps = ComponentProps<'button'> & {
+  /**
+   * Whether the chat is open
+   */
   open: boolean;
+  /**
+   * Callback when the button is clicked
+   */
   onClick: () => void;
-  openLabel?: string;
-  closeLabel?: string;
+  /**
+   * Optional toggle icon component
+   */
+  toggleIconComponent?: (props: { isOpen: boolean }) => JSX.Element;
+  /**
+   * Optional class names
+   */
   classNames?: Partial<ChatToggleButtonClassNames>;
 };
 
@@ -19,11 +35,24 @@ export function createChatToggleButtonComponent({ createElement }: Renderer) {
   return function ChatToggleButton({
     open,
     onClick,
-    openLabel = 'Open chat',
-    closeLabel = 'Close chat',
+    toggleIconComponent: ToggleIconComponent,
     classNames = {},
     ...props
   }: ChatToggleButtonProps) {
+    const defaultIcon = open ? (
+      <ChevronUpIconComponent
+        createElement={createElement}
+        width={28}
+        height={28}
+      />
+    ) : (
+      <SparklesIconComponent
+        createElement={createElement}
+        width={28}
+        height={28}
+      />
+    );
+
     return (
       <button
         className={cx(
@@ -36,7 +65,11 @@ export function createChatToggleButtonComponent({ createElement }: Renderer) {
         type="button"
         {...props}
       >
-        {open ? closeLabel : openLabel}
+        {ToggleIconComponent ? (
+          <ToggleIconComponent isOpen={open} />
+        ) : (
+          defaultIcon
+        )}
       </button>
     );
   };

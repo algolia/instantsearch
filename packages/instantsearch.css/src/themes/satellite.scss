@@ -1,5 +1,14 @@
-@import 'reset.scss';
-@import '../chat.scss';
+@use 'reset';
+@use 'variables';
+@use 'common';
+@use 'chat/chat';
+@use 'chat/chat-toggle-button';
+@use 'chat/chat-header';
+@use 'chat/chat-messages';
+@use 'chat/chat-message';
+@use 'chat/chat-message-error';
+@use 'chat/chat-message-loader';
+@use 'chat/chat-prompt';
 
 ////////////////
 // Shared
