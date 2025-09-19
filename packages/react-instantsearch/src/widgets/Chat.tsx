@@ -1,4 +1,8 @@
 import { createChatComponent } from 'instantsearch-ui-components';
+import {
+  defaultTools,
+  SearchIndexToolType,
+} from 'instantsearch.js/es/lib/chat';
 import { find } from 'instantsearch.js/es/lib/utils';
 import React, { createElement, Fragment } from 'react';
 import { useInstantSearch, useChat } from 'react-instantsearch-core';
@@ -11,10 +15,8 @@ import type {
   ChatProps as ChatUiProps,
   RecommendComponentProps,
   RecordWithObjectID,
-  ChatToolType,
   AddToolResultWithOutput,
   UserClientSideTool,
-  ChatToolMessage,
   MutableRef,
 } from 'instantsearch-ui-components';
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
@@ -24,10 +26,6 @@ const ChatUiComponent = createChatComponent({
   createElement: createElement as Pragma,
   Fragment,
 });
-
-export const defaultTools: ChatToolType[] = ['tool-algolia_search_index'];
-
-export const SearchIndexToolType: ChatToolType = 'tool-algolia_search_index';
 
 export function createDefaultTools<TObject extends RecordWithObjectID>(
   itemComponent?: ItemComponent<TObject>
