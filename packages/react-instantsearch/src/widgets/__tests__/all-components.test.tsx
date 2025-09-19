@@ -28,7 +28,9 @@ describe('rendering', () => {
         <Component classNames={{ root: 'BASECLASS' }} />
       );
 
-      expect(container.querySelector<HTMLDivElement>('.BASECLASS')).toBeTruthy();
+      expect(
+        container.querySelector<HTMLDivElement>('.BASECLASS')
+      ).toBeTruthy();
     });
   });
 });
