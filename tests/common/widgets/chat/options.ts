@@ -1,6 +1,7 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import userEvent from '@testing-library/user-event';
+import { Chat } from 'instantsearch.js/es/lib/chat';
 
 import type { ChatWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
@@ -11,8 +12,10 @@ export function createOptionsTests(
 ) {
   describe('options', () => {
     test('renders with default props', async () => {
-      const mockSendMessage = jest.fn();
       const searchClient = createSearchClient();
+
+      const chat = new Chat({});
+      const sendMessageSpy = jest.spyOn(chat, 'sendMessage');
 
       await setup({
         instantSearchOptions: {
@@ -20,14 +23,8 @@ export function createOptionsTests(
           searchClient,
         },
         widgetParams: {
-          agentId: 'foo',
-          chat: {
-            messages: [],
-            sendMessage: mockSendMessage,
-            '~registerErrorCallback': (_onChange: () => void) => {},
-            '~registerMessagesCallback': (_onChange: () => void) => {},
-            '~registerStatusCallback': (_onChange: () => void) => {},
-          },
+          agentId: 'agentId',
+          chat,
         },
       });
 
@@ -51,7 +48,7 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      expect(mockSendMessage).toHaveBeenCalledWith({ text: 'Hello, world!' });
+      expect(sendMessageSpy).toHaveBeenCalledWith({ text: 'Hello, world!' });
     });
   });
 }
