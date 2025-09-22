@@ -1,5 +1,3 @@
-'use strict';
-
 function inherits(ctor, superCtor) {
   ctor.prototype = Object.create(superCtor.prototype, {
     constructor: {
@@ -11,4 +9,4 @@ function inherits(ctor, superCtor) {
   });
 }
 
-module.exports = inherits;
+export default inherits;

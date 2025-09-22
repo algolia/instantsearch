@@ -1,3 +1,1 @@
-'use strict';
-
-module.exports = '3.26.0';
+export default '3.26.0';
