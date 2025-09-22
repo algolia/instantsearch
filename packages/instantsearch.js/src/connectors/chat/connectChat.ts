@@ -264,6 +264,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         };
       },
 
+      getChatInstance() {
+        return _chatInstance;
+      },
+
       dispose() {
         unmountFn();
       },
