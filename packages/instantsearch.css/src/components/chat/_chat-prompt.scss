@@ -1,5 +1,5 @@
-@use '../common';
-@use '../variables';
+@use '../../shared/_common';
+@use '../../shared/_variables';
 
 .ais-ChatPrompt {
   display: flex;
