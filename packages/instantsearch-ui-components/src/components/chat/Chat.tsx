@@ -87,7 +87,7 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
           {...toggleButtonProps}
           onClick={() => {
             toggleButtonProps.onClick?.();
-            promptRef.current?.focus();
+            promptRef.current?.focus?.();
           }}
         />
       </div>
