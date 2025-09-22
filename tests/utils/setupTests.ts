@@ -28,6 +28,13 @@ global.console.warn = jest.fn();
 if (typeof window !== 'undefined') {
   // https://github.com/jsdom/jsdom/issues/1695
   window.Element.prototype.scrollIntoView = jest.fn();
+
+  // Mock ResizeObserver for Chat component tests
+  window.ResizeObserver = jest.fn().mockImplementation(() => ({
+    observe: jest.fn(),
+    unobserve: jest.fn(),
+    disconnect: jest.fn(),
+  }));
 }
 
 beforeEach(() => {
