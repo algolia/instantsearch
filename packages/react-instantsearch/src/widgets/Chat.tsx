@@ -122,8 +122,7 @@ export function Chat<TObject extends RecordWithObjectID>({
   messagesProps,
   promptProps,
   classNames,
-  resume,
-  ...options
+  ...props
 }: ChatProps<TObject>) {
   const { indexUiState, setIndexUiState } = useInstantSearch();
 
@@ -156,8 +155,7 @@ export function Chat<TObject extends RecordWithObjectID>({
     setMessages,
     clearError,
   } = useChat({
-    resume,
-    ...options,
+    ...props,
     onToolCall: ({ toolCall }) => {
       tools?.forEach((tool) => {
         tool.onToolCall({ toolCall, addToolResult });
@@ -178,6 +176,7 @@ export function Chat<TObject extends RecordWithObjectID>({
 
   return (
     <ChatUiComponent
+      {...props}
       open={open}
       maximized={maximized}
       toggleButtonProps={{

@@ -25,12 +25,12 @@ describe('rendering', () => {
   describe('root element props', () => {
     test.each(widgets)('set root html attribute $name', ({ Component }) => {
       const { container } = render(
-        <Component classNames={{ root: 'BASECLASS' }} />
+        <Component classNames={{ root: 'BASECLASS' }} title="test title" />
       );
 
-      expect(
-        container.querySelector<HTMLDivElement>('.BASECLASS')
-      ).toBeTruthy();
+      expect(container.querySelector<HTMLDivElement>('.BASECLASS')!.title).toBe(
+        'test title'
+      );
     });
   });
 });
