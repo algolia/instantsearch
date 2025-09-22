@@ -28,12 +28,17 @@ import type {
   TemplateWithBindEvent,
   BaseHit,
 } from '../../types';
-import type { ChatClassNames, Tools, VNode } from 'instantsearch-ui-components';
+import type {
+  ChatClassNames,
+  RecordWithObjectID,
+  Tools,
+  VNode,
+} from 'instantsearch-ui-components';
 
 type ItemComponent<THit> = (props: {
-  item: THit;
-  onClick: () => void;
-  onAuxClick: () => void;
+  item: RecordWithObjectID<THit>;
+  onClick?: () => void;
+  onAuxClick?: () => void;
 }) => VNode | VNode[];
 
 const withUsage = createDocumentationMessageGenerator({ name: 'chat' });
