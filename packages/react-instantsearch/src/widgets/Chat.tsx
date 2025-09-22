@@ -12,7 +12,6 @@ import type {
   RecommendComponentProps,
   RecordWithObjectID,
   ChatToolMessage,
-  MutableRef,
 } from 'instantsearch-ui-components';
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
 import type { UseChatOptions } from 'react-instantsearch-core';
@@ -203,8 +202,8 @@ export function Chat<TObject extends RecordWithObjectID>({
         setIndexUiState,
         isClearing,
         onClearTransitionEnd: handleClearTransitionEnd,
-        scrollRef: scrollRef as unknown as MutableRef<HTMLDivElement>,
-        contentRef: contentRef as unknown as MutableRef<HTMLDivElement>,
+        scrollRef: { current: scrollRef.current as HTMLDivElement },
+        contentRef: { current: contentRef.current as HTMLDivElement },
         isScrollAtBottom: isAtBottom,
         onScrollToBottom: scrollToBottom,
         ...messagesProps,
