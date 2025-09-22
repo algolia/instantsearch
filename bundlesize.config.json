@@ -42,11 +42,11 @@
     },
     {
       "path": "./packages/instantsearch.css/themes/algolia.css",
-      "maxSize": "4 kB"
+      "maxSize": "6.75 kB"
     },
     {
       "path": "./packages/instantsearch.css/themes/algolia-min.css",
-      "maxSize": "3.75 kB"
+      "maxSize": "6.25 kB"
     },
     {
       "path": "./packages/instantsearch.css/themes/reset.css",
@@ -63,6 +63,14 @@
     {
       "path": "./packages/instantsearch.css/themes/satellite-min.css",
       "maxSize": "7.25 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/components/chat.css",
+      "maxSize": "3.50 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/components/chat-min.css",
+      "maxSize": "3.25 kB"
     }
   ]
 }
