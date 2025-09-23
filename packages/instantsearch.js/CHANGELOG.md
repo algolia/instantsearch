@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.81.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.80.0...instantsearch.js@4.81.0) (2025-09-23)
+
+
+### Features
+
+* **chat:** save messages in session storage ([#6710](https://github.com/algolia/instantsearch/issues/6710)) ([bbe5c88](https://github.com/algolia/instantsearch/commit/bbe5c8840045e5742302f30648c08c7eb3b9d039))
+* **react-instantsearch:** introduce chat widget ([#6698](https://github.com/algolia/instantsearch/issues/6698)) ([9e79c1f](https://github.com/algolia/instantsearch/commit/9e79c1f2bca03e37de18c882a7f7dd929894bc06))
+
+
+
+
+
 # [4.80.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.79.2...instantsearch.js@4.80.0) (2025-09-09)
 
 
