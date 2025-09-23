@@ -28,25 +28,20 @@ import type {
   TemplateWithBindEvent,
   BaseHit,
 } from '../../types';
-import type {
-  ChatClassNames,
-  RecordWithObjectID,
-  Tools,
-  VNode,
-} from 'instantsearch-ui-components';
+import type { ChatClassNames, Tools } from 'instantsearch-ui-components';
 
-type ItemComponent<THit> = (props: {
-  item: RecordWithObjectID<THit>;
+type ItemComponent = (props: {
+  item: Record<string, unknown>;
   onClick?: () => void;
   onAuxClick?: () => void;
-}) => VNode | VNode[];
+}) => JSX.Element;
 
 const withUsage = createDocumentationMessageGenerator({ name: 'chat' });
 
 const Chat = createChatComponent({ createElement: h, Fragment });
 
 function createDefaultTools<THit extends NonNullable<object> = BaseHit>(
-  itemComponent?: ItemComponent<THit>
+  itemComponent?: ItemComponent
 ): Tools {
   return [
     {
@@ -145,7 +140,7 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
       sendEvent,
     });
 
-    const itemComponent: ItemComponent<THit> = ({ item, ...rootProps }) => (
+    const itemComponent: ItemComponent = ({ item, ...rootProps }) => (
       <TemplateComponent
         {...renderState.templateProps}
         templateKey="item"
