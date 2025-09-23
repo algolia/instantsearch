@@ -11,6 +11,15 @@ export type { UIMessage };
 export { AbstractChat };
 export { ChatInit };
 
+export const CACHE_KEY = 'instantsearch-chat-initial-messages';
+
+function getDefaultInitialMessages<
+  TUIMessage extends UIMessage
+>(): TUIMessage[] {
+  const initialMessages = sessionStorage.getItem(CACHE_KEY);
+  return initialMessages ? JSON.parse(initialMessages) : [];
+}
+
 export class ChatState<TUiMessage extends UIMessage>
   implements BaseChatState<TUiMessage>
 {
@@ -22,8 +31,21 @@ export class ChatState<TUiMessage extends UIMessage>
   _statusCallbacks = new Set<() => void>();
   _errorCallbacks = new Set<() => void>();
 
-  constructor(initialMessages: TUiMessage[] = []) {
+  constructor(
+    initialMessages: TUiMessage[] = getDefaultInitialMessages<TUiMessage>()
+  ) {
     this._messages = initialMessages;
+    const saveMessagesInLocalStorage = () => {
+      if (this.status === 'ready') {
+        try {
+          sessionStorage.setItem(CACHE_KEY, JSON.stringify(this.messages));
+        } catch (e) {
+          // Do nothing if sessionStorage is not available or full
+        }
+      }
+    };
+    this['~registerMessagesCallback'](saveMessagesInLocalStorage);
+    this['~registerStatusCallback'](saveMessagesInLocalStorage);
   }
 
   get status(): ChatStatus {

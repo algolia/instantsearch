@@ -123,8 +123,7 @@ export function Chat<TObject extends RecordWithObjectID>({
   messagesProps,
   promptProps,
   classNames,
-  resume,
-  ...options
+  ...props
 }: ChatProps<TObject>) {
   const { indexUiState, setIndexUiState } = useInstantSearch();
 
@@ -157,8 +156,7 @@ export function Chat<TObject extends RecordWithObjectID>({
     setMessages,
     clearError,
   } = useChat({
-    resume,
-    ...options,
+    ...props,
     onToolCall: ({ toolCall }) => {
       tools?.forEach((tool) => {
         tool.onToolCall({ toolCall, addToolResult });
@@ -179,6 +177,7 @@ export function Chat<TObject extends RecordWithObjectID>({
 
   return (
     <ChatUiComponent
+      {...props}
       open={open}
       maximized={maximized}
       toggleButtonProps={{
@@ -203,8 +202,8 @@ export function Chat<TObject extends RecordWithObjectID>({
         setIndexUiState,
         isClearing,
         onClearTransitionEnd: handleClearTransitionEnd,
-        scrollRef: scrollRef as unknown as MutableRef<HTMLDivElement>,
-        contentRef: contentRef as unknown as MutableRef<HTMLDivElement>,
+        scrollRef: { current: scrollRef.current as HTMLDivElement },
+        contentRef: { current: contentRef.current as HTMLDivElement },
         isScrollAtBottom: isAtBottom,
         onScrollToBottom: scrollToBottom,
         ...messagesProps,

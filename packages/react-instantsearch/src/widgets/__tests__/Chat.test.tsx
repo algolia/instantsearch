@@ -51,7 +51,7 @@ describe('Chat', () => {
     const toggleButton = container.querySelector('.ais-ChatToggleButton');
     userEvent.click(toggleButton!);
 
-    const root = container.querySelector('.ais-Chat-container');
+    const root = container.querySelector('.ais-Chat');
     expect(root).toHaveClass('ROOT');
   });
 
