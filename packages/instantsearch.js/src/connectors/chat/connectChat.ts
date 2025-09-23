@@ -264,7 +264,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         };
       },
 
-      getChatInstance() {
+      get chatInstance() {
         return _chatInstance;
       },
 

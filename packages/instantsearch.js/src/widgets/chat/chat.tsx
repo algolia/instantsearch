@@ -327,8 +327,7 @@ export default (function chat<THit extends NonNullable<object> = BaseHit>(
     render(null, containerNode)
   );
 
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { getChatInstance, ...rest } = makeWidget({
+  const { chatInstance, ...rest } = makeWidget({
     resume,
     ...options,
     onToolCall: ({ toolCall }) => {
@@ -337,7 +336,7 @@ export default (function chat<THit extends NonNullable<object> = BaseHit>(
       if (tool && tool.onToolCall) {
         const scopedAddToolResult: AddToolResultWithOutput = ({ output }) => {
           return Promise.resolve(
-            getChatInstance().addToolResult({
+            chatInstance.addToolResult({
               output,
               tool: toolCall.toolName,
               toolCallId: toolCall.toolCallId,
