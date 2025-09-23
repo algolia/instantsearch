@@ -40,6 +40,7 @@ describe('chat', () => {
         agentId: 'agentId',
         cssClasses: {
           root: 'ROOT',
+          container: 'CONTAINER',
         },
       });
 
@@ -50,8 +51,9 @@ describe('chat', () => {
       userEvent.click(container.querySelector('.ais-ChatToggleButton')!);
       await wait(0);
 
+      expect(container.querySelector('.ais-Chat')).toHaveClass('ROOT');
       expect(container.querySelector('.ais-Chat-container')).toHaveClass(
-        'ROOT'
+        'CONTAINER'
       );
     });
   });

@@ -12,7 +12,6 @@ import type {
   RecommendComponentProps,
   RecordWithObjectID,
   ChatToolMessage,
-  MutableRef,
 } from 'instantsearch-ui-components';
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
 import type { UseChatOptions } from 'react-instantsearch-core';
