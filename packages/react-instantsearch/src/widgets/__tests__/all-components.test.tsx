@@ -28,9 +28,9 @@ describe('rendering', () => {
         <Component classNames={{ root: 'BASECLASS' }} title="test title" />
       );
 
-      expect(
-        container.querySelector<HTMLDivElement>('.BASECLASS')
-      ).toBeTruthy();
+      expect(container.querySelector<HTMLDivElement>('.BASECLASS')!.title).toBe(
+        'test title'
+      );
     });
   });
 });
