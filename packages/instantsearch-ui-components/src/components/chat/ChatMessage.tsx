@@ -99,7 +99,7 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    */
   autoHideActions?: boolean;
   /**
-   * Leading content (replaces avatar if provided)
+   * Leading content
    */
   leadingComponent?: () => JSX.Element;
   /**
@@ -183,7 +183,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       footer: cx('ais-ChatMessage-footer', classNames.footer),
     };
 
-    function renderAssistantPart(
+    function renderMessagePart(
       part: ChatMessageBase['parts'][number],
       index: number
     ) {
@@ -247,9 +247,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
 
           <div className={cx(cssClasses.content)}>
             <div className={cx(cssClasses.message)}>
-              {message.role === 'assistant'
-                ? message.parts.map(renderAssistantPart)
-                : message.parts.map(renderAssistantPart)}
+              {message.parts.map(renderMessagePart)}
             </div>
 
             {hasActions && (

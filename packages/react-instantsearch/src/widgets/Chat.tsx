@@ -17,7 +17,6 @@ import type {
   RecordWithObjectID,
   AddToolResultWithOutput,
   UserClientSideTool,
-  MutableRef,
 } from 'instantsearch-ui-components';
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
 import type { UseChatOptions } from 'react-instantsearch-core';
@@ -122,7 +121,7 @@ export function Chat<
   promptProps,
   classNames,
   resume,
-  ...options
+  ...props
 }: ChatProps<TObject, TUiMessage>) {
   const { indexUiState, setIndexUiState } = useInstantSearch();
 
@@ -167,8 +166,7 @@ export function Chat<
     setMessages,
     clearError,
   } = useChat({
-    resume,
-    ...options,
+    ...props,
     onToolCall: ({ toolCall }) => {
       const tool = find(tools, (t) => t.type === `tool-${toolCall.toolName}`);
 
@@ -209,6 +207,7 @@ export function Chat<
 
   return (
     <ChatUiComponent
+      {...props}
       open={open}
       maximized={maximized}
       toggleButtonProps={{
@@ -233,8 +232,8 @@ export function Chat<
         setIndexUiState,
         isClearing,
         onClearTransitionEnd: handleClearTransitionEnd,
-        scrollRef: scrollRef as unknown as MutableRef<HTMLDivElement>,
-        contentRef: contentRef as unknown as MutableRef<HTMLDivElement>,
+        scrollRef: { current: scrollRef.current as HTMLDivElement },
+        contentRef: { current: contentRef.current as HTMLDivElement },
         isScrollAtBottom: isAtBottom,
         onScrollToBottom: scrollToBottom,
         ...messagesProps,

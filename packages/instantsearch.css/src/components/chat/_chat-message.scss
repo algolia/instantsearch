@@ -1,4 +1,4 @@
-@use '../common';
+@use '../../shared/_common';
 
 .ais-ChatMessage {
   position: relative;
@@ -45,6 +45,11 @@
   position: relative;
   text-wrap: pretty;
   overflow-x: auto;
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
 }
 
 .ais-ChatMessage--neutral .ais-ChatMessage-message {
@@ -66,7 +71,7 @@
 
 .ais-ChatMessage-action {
   @extend %ais-button-ghost;
-  
+
   padding: calc(var(--ais-spacing) * 0.25);
 }
 

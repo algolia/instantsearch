@@ -1,4 +1,4 @@
-@use '../common';
+@use '../../shared/_common';
 
 .ais-ChatMessageError .ais-ChatMessage-errorAction {
   @extend %ais-button-primary;
