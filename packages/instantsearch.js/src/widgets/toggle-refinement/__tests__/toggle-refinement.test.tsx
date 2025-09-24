@@ -168,7 +168,7 @@ describe('toggleRefinement', () => {
                 <span
                   style="font-weight: normal;"
                 >
-                  Free shipping
+                  Free shipping 
                 </span>
               </span>
             </label>
@@ -221,7 +221,7 @@ describe('toggleRefinement', () => {
                 <span
                   style="font-weight: normal;"
                 >
-                  Free shipping
+                  Free shipping 
                 </span>
               </span>
             </label>

@@ -87,7 +87,7 @@ describe('Highlight', () => {
           <span
             class="ais-Highlight-separator"
           >
-            ,
+            , 
           </span>
           <span
             class="ais-Highlight-nonHighlighted"
@@ -290,7 +290,7 @@ describe('Highlight', () => {
             class="ais-Highlight-separator"
           >
             <strong>
-               -
+               - 
             </strong>
           </span>
           <small>

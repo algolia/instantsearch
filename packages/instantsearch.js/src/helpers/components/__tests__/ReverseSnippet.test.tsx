@@ -87,7 +87,7 @@ describe('Snippet', () => {
           <span
             class="ais-ReverseSnippet-separator"
           >
-            ,
+            , 
           </span>
           <mark
             class="ais-ReverseSnippet-highlighted"
@@ -287,7 +287,7 @@ describe('Snippet', () => {
             class="ais-ReverseSnippet-separator"
           >
             <strong>
-               -
+               - 
             </strong>
           </span>
           <strong>
