@@ -54,4 +54,12 @@ export { default as connectVoiceSearch } from './voice-search/connectVoiceSearch
 export { default as connectRelevantSort } from './relevant-sort/connectRelevantSort';
 export { default as connectFrequentlyBoughtTogether } from './frequently-bought-together/connectFrequentlyBoughtTogether';
 export { default as connectLookingSimilar } from './looking-similar/connectLookingSimilar';
-export { default as connectChat } from './chat/connectChat';
+
+export const connectChat = () => {
+  throw new Error(
+    `"connectChat" is not available from the UMD build.
+
+Please use InstantSearch.js with a packaging system:
+https://www.algolia.com/doc/guides/building-search-ui/installation/js/#with-a-packaging-system`
+  );
+};

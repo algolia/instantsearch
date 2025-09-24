@@ -58,4 +58,12 @@ export { default as trendingItems } from './trending-items/trending-items';
 export { default as voiceSearch } from './voice-search/voice-search';
 export { default as frequentlyBoughtTogether } from './frequently-bought-together/frequently-bought-together';
 export { default as lookingSimilar } from './looking-similar/looking-similar';
-export { default as chat } from './chat/chat';
+
+export const chat = () => {
+  throw new Error(
+    `"chat" is not available from the UMD build.
+
+Please use InstantSearch.js with a packaging system:
+https://www.algolia.com/doc/guides/building-search-ui/installation/js/#with-a-packaging-system`
+  );
+};

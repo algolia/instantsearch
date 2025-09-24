@@ -31,6 +31,7 @@
     "@types/google.maps": "^3.55.12",
     "@types/hogan.js": "^3.0.0",
     "@types/qs": "^6.5.3",
+    "ai": "^5.0.18",
     "algoliasearch-helper": "3.26.0",
     "hogan.js": "^3.0.2",
     "htm": "^3.0.0",
