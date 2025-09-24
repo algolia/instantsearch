@@ -1,30 +1,14 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
 import { InstantSearchTestWrapper } from '@instantsearch/testutils';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { SearchIndexToolType } from 'instantsearch.js/es/lib/chat';
 import React from 'react';
 
 import { Chat } from '../Chat';
-
-jest.mock('ai', () => {
-  return {
-    DefaultChatTransport: jest.fn().mockImplementation(() => ({
-      sendMessage: jest.fn(),
-      onMessage: jest.fn(),
-      onError: jest.fn(),
-      connect: jest.fn(),
-      disconnect: jest.fn(),
-    })),
-  };
-});
-jest.mock('instantsearch.js/es/lib/chat', () => {
-  return {
-    Chat: jest.fn().mockImplementation(() => ({})),
-  };
-});
 
 let mockUseChat: any;
 jest.mock('react-instantsearch-core', () => {
@@ -108,8 +92,8 @@ describe('Chat', () => {
   test('should render tools and call onToolCall', () => {
     mockUseChat = {
       messages: [
-        { role: 'user', parts: [{ type: 'text', content: 'Hello' }] },
-        { role: 'assistant', parts: [{ type: 'tool-hello' }] },
+        { id: '0', role: 'user', parts: [{ type: 'text', content: 'Hello' }] },
+        { id: '1', role: 'assistant', parts: [{ type: 'tool-hello' }] },
       ],
       sendMessage: jest.fn(),
     };
@@ -143,8 +127,9 @@ describe('Chat', () => {
     mockUseChat = {
       messages: [
         {
+          id: '0',
           role: 'assistant',
-          parts: [{ type: 'tool-algolia_search_index' }],
+          parts: [{ type: SearchIndexToolType }],
         },
       ],
       sendMessage: jest.fn(),
@@ -155,7 +140,7 @@ describe('Chat', () => {
         <Chat
           tools={[
             {
-              type: 'tool-algolia_search_index',
+              type: SearchIndexToolType,
               component: () => (
                 <div>
                   <div role="alert">Custom search index tool</div>
