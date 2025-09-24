@@ -14,4 +14,14 @@ export default class Fixed extends JSDOMEnv {
 
     this.global.TransformStream = TransformStream;
   }
+
+  async setup() {
+    await super.setup();
+    this.global.jsdom = this.dom;
+  }
+
+  async teardown() {
+    this.global.jsdom = undefined;
+    await super.teardown();
+  }
 }
