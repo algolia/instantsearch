@@ -10,7 +10,7 @@ const algoliaSearchMajor =
 const config = {
   rootDir: process.cwd(),
   testRunner: 'jest-circus',
-  testEnvironment: 'node',
+  testEnvironment: '@instantsearch/testutils/jest-environment-node.ts',
   setupFilesAfterEnv: ['./tests/utils/setupTests.ts'],
   testPathIgnorePatterns: [
     '<rootDir>/node_modules/',

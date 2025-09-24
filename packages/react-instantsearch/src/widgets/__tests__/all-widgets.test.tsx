@@ -1,7 +1,3 @@
-/**
- * @jest-environment node
- */
-
 import { getAllInstantSearchWidgets } from './__utils__/all-widgets';
 
 describe('widgets', () => {

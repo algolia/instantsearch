@@ -1,7 +1,3 @@
-/**
- * @jest-environment node
- */
-
 import {
   createMultiSearchResponse,
   createSearchClient,
