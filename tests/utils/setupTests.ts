@@ -12,14 +12,11 @@ import {
 } from '../../packages/vue-instantsearch/src/util/vue-compat';
 
 import * as matchers from './matchers';
-import { mockAiSdk } from './mockAiSdk';
 
 Enzyme.configure({ adapter: new Adapter() });
 expect.addSnapshotSerializer(createSerializer({ mode: 'deep' }) as any);
 expect.addSnapshotSerializer(htmlSerializer());
 expect.extend(matchers);
-
-mockAiSdk();
 
 // We hide console infos and warnings to not pollute the test logs.
 global.console.info = jest.fn();
