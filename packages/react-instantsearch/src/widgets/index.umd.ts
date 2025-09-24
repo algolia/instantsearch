@@ -8,6 +8,8 @@ Please use React InstantSearch with a packaging system:
 https://www.algolia.com/doc/guides/building-search-ui/installation/react/#install-react-instantsearch-as-an-npm-package`
   );
 };
+export const SearchIndexToolType = undefined;
+export const createDefaultTools = () => {};
 
 export * from './ClearRefinements';
 export * from './CurrentRefinements';
