@@ -1,5 +1,5 @@
 /**
- * @jest-environment @instantsearch/testutils/jest-environment-node.js
+ * @jest-environment @instantsearch/testutils/jest-environment-node.ts
  */
 
 import { walkIndex } from '..';
