@@ -60,7 +60,7 @@ export { default as frequentlyBoughtTogether } from './frequently-bought-togethe
 export { default as lookingSimilar } from './looking-similar/looking-similar';
 
 export const chat = () => {
-  throw new ReferenceError(
+  throw new Error(
     `"chat" is not available from the UMD build.
 
 Please use InstantSearch.js with a packaging system:
