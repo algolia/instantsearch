@@ -14,7 +14,7 @@ import {
   connectRatingMenu,
   connectRefinementList,
   connectToggleRefinement,
-} from 'instantsearch.js/es/connectors';
+} from 'instantsearch.js/es/connectors/index.umd';
 
 import { nextTick, mountApp } from '../../test/utils';
 import {

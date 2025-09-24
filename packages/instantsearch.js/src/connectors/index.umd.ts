@@ -56,7 +56,7 @@ export { default as connectFrequentlyBoughtTogether } from './frequently-bought-
 export { default as connectLookingSimilar } from './looking-similar/connectLookingSimilar';
 
 export const connectChat = () => {
-  throw new ReferenceError(
+  throw new Error(
     `"connectChat" is not available from the UMD build.
 
 Please use InstantSearch.js with a packaging system:
