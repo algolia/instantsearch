@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment jsdom @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx h */
 import {
@@ -116,7 +116,7 @@ describe('panel', () => {
             >
               <span>
                 <span>
-                  Header 
+                  Header
                   (10 results)
                 </span>
               </span>
@@ -152,7 +152,7 @@ describe('panel', () => {
               <a
                 href="#"
               >
-                Footer 
+                Footer
                 (10 results)
               </a>
             </div>
@@ -207,7 +207,7 @@ describe('panel', () => {
             >
               <span>
                 <span>
-                  Header 
+                  Header
                   (10 results)
                 </span>
               </span>
@@ -243,7 +243,7 @@ describe('panel', () => {
               <a
                 href="#"
               >
-                Footer 
+                Footer
                 (10 results)
               </a>
             </div>

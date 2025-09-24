@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment jsdom @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx h */
 import { createSingleSearchResponse } from '@instantsearch/mocks';

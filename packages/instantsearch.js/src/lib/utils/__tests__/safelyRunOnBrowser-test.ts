@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment jsdom @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
 import { safelyRunOnBrowser } from '../safelyRunOnBrowser';

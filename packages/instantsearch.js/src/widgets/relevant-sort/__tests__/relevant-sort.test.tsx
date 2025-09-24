@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment jsdom @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx h */
 import {
@@ -167,7 +167,7 @@ describe('relevantSort', () => {
     >
       <p>
         Click the button to
-         
+
         see all results.
       </p>
     </div>

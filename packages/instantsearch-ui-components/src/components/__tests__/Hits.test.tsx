@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment jsdom @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx createElement */
 import { fireEvent, render } from '@testing-library/preact';

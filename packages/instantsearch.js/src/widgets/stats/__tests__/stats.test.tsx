@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment jsdom @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx h */
 import {
@@ -167,9 +167,9 @@ describe('stats', () => {
     >
       <span>
         <strong>
-          
+
         </strong>
-         returned 
+         returned
         2
         result
         s
@@ -251,9 +251,9 @@ describe('stats', () => {
     >
       <span>
         <strong>
-          
+
         </strong>
-         returned 
+         returned
         2
         result
         s

@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment jsdom @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx h */
 import { createSearchClient } from '@instantsearch/mocks';
@@ -80,7 +80,7 @@ describe('voiceSearch', () => {
       class="ais-VoiceSearch-status"
     >
       <p>
-        
+
       </p>
     </div>
   </div>

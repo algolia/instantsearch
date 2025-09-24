@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment jsdom @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
 import { render } from '@testing-library/react';
@@ -72,7 +72,7 @@ describe('CurrentRefinements', () => {
               >
                 Brand
                 :
-                 
+
               </span>
               <span
                 class="ais-CurrentRefinements-category"
@@ -203,7 +203,7 @@ describe('CurrentRefinements', () => {
                 >
                   Brand
                   :
-                   
+
                 </span>
                 <span
                   class="ais-CurrentRefinements-category CATEGORY"

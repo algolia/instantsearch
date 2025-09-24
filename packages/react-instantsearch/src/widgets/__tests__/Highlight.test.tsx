@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment jsdom @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
 import { render } from '@testing-library/react';
@@ -87,7 +87,7 @@ describe('Highlight', () => {
           <span
             class="ais-Highlight-separator"
           >
-            , 
+            ,
           </span>
           <span
             class="ais-Highlight-nonHighlighted"
@@ -290,7 +290,7 @@ describe('Highlight', () => {
             class="ais-Highlight-separator"
           >
             <strong>
-               - 
+               -
             </strong>
           </span>
           <small>

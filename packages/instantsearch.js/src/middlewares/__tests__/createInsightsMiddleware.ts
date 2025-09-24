@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom-global
+ * @jest-environment jsdom @instantsearch/testutils/jest-environment-jsdom.ts-global
  */
 
 import {

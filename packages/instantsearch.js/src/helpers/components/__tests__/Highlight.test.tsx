@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment jsdom @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx h */
 import { render } from '@testing-library/preact';
@@ -89,7 +89,7 @@ describe('Highlight', () => {
           <span
             class="ais-Highlight-separator"
           >
-            , 
+            ,
           </span>
           <span
             class="ais-Highlight-nonHighlighted"
@@ -292,7 +292,7 @@ describe('Highlight', () => {
             class="ais-Highlight-separator"
           >
             <strong>
-               - 
+               -
             </strong>
           </span>
           <small>

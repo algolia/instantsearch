@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment jsdom @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx h */
 import {
@@ -389,7 +389,7 @@ describe('infiniteHits', () => {
                     <span
                       class="ais-Highlight-nonHighlighted"
                     >
-                      Apple iPhone 
+                      Apple iPhone
                     </span>
                     <mark
                       class="ais-Highlight-highlighted"
@@ -405,7 +405,7 @@ describe('infiniteHits', () => {
                     <mark
                       class="ais-ReverseHighlight-highlighted"
                     >
-                      Apple iPhone 
+                      Apple iPhone
                     </mark>
                     <span
                       class="ais-ReverseHighlight-nonHighlighted"
@@ -421,7 +421,7 @@ describe('infiniteHits', () => {
                     <span
                       class="ais-Snippet-nonHighlighted"
                     >
-                      A 
+                      A
                     </span>
                     <mark
                       class="ais-Snippet-highlighted"
@@ -442,7 +442,7 @@ describe('infiniteHits', () => {
                     <mark
                       class="ais-ReverseSnippet-highlighted"
                     >
-                      A 
+                      A
                     </mark>
                     <span
                       class="ais-ReverseSnippet-nonHighlighted"
@@ -467,7 +467,7 @@ describe('infiniteHits', () => {
                     <span
                       class="ais-Highlight-nonHighlighted"
                     >
-                      Samsung Galaxy 
+                      Samsung Galaxy
                     </span>
                     <mark
                       class="ais-Highlight-highlighted"
@@ -483,7 +483,7 @@ describe('infiniteHits', () => {
                     <mark
                       class="ais-ReverseHighlight-highlighted"
                     >
-                      Samsung Galaxy 
+                      Samsung Galaxy
                     </mark>
                     <span
                       class="ais-ReverseHighlight-nonHighlighted"
@@ -499,7 +499,7 @@ describe('infiniteHits', () => {
                     <span
                       class="ais-Snippet-nonHighlighted"
                     >
-                      A 
+                      A
                     </span>
                     <mark
                       class="ais-Snippet-highlighted"
@@ -520,7 +520,7 @@ describe('infiniteHits', () => {
                     <mark
                       class="ais-ReverseSnippet-highlighted"
                     >
-                      A 
+                      A
                     </mark>
                     <span
                       class="ais-ReverseSnippet-nonHighlighted"
@@ -567,7 +567,7 @@ describe('infiniteHits', () => {
               />
             </div>
             <p>
-              No results for 
+              No results for
               <q>
                 query with no results
               </q>
@@ -658,7 +658,7 @@ describe('infiniteHits', () => {
                     <span
                       class="ais-Highlight-nonHighlighted"
                     >
-                      Apple iPhone 
+                      Apple iPhone
                     </span>
                     <mark
                       class="ais-Highlight-highlighted"
@@ -674,7 +674,7 @@ describe('infiniteHits', () => {
                     <mark
                       class="ais-ReverseHighlight-highlighted"
                     >
-                      Apple iPhone 
+                      Apple iPhone
                     </mark>
                     <span
                       class="ais-ReverseHighlight-nonHighlighted"
@@ -690,7 +690,7 @@ describe('infiniteHits', () => {
                     <span
                       class="ais-Snippet-nonHighlighted"
                     >
-                      A 
+                      A
                     </span>
                     <mark
                       class="ais-Snippet-highlighted"
@@ -711,7 +711,7 @@ describe('infiniteHits', () => {
                     <mark
                       class="ais-ReverseSnippet-highlighted"
                     >
-                      A 
+                      A
                     </mark>
                     <span
                       class="ais-ReverseSnippet-nonHighlighted"
@@ -736,7 +736,7 @@ describe('infiniteHits', () => {
                     <span
                       class="ais-Highlight-nonHighlighted"
                     >
-                      Samsung Galaxy 
+                      Samsung Galaxy
                     </span>
                     <mark
                       class="ais-Highlight-highlighted"
@@ -752,7 +752,7 @@ describe('infiniteHits', () => {
                     <mark
                       class="ais-ReverseHighlight-highlighted"
                     >
-                      Samsung Galaxy 
+                      Samsung Galaxy
                     </mark>
                     <span
                       class="ais-ReverseHighlight-nonHighlighted"
@@ -768,7 +768,7 @@ describe('infiniteHits', () => {
                     <span
                       class="ais-Snippet-nonHighlighted"
                     >
-                      A 
+                      A
                     </span>
                     <mark
                       class="ais-Snippet-highlighted"
@@ -789,7 +789,7 @@ describe('infiniteHits', () => {
                     <mark
                       class="ais-ReverseSnippet-highlighted"
                     >
-                      A 
+                      A
                     </mark>
                     <span
                       class="ais-ReverseSnippet-nonHighlighted"
@@ -829,7 +829,7 @@ describe('infiniteHits', () => {
             class="ais-InfiniteHits ais-InfiniteHits--empty"
           >
             <p>
-              No results for 
+              No results for
               <q>
                 $
                 query with no results

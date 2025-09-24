@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment jsdom @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx h */
 import { render } from '@testing-library/preact';
@@ -89,7 +89,7 @@ describe('ReverseHighlight', () => {
           <span
             class="ais-ReverseHighlight-separator"
           >
-            , 
+            ,
           </span>
           <mark
             class="ais-ReverseHighlight-highlighted"
@@ -292,7 +292,7 @@ describe('ReverseHighlight', () => {
             class="ais-ReverseHighlight-separator"
           >
             <strong>
-               - 
+               -
             </strong>
           </span>
           <strong>

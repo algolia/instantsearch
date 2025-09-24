@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment jsdom @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
 import { render } from '@testing-library/react';
@@ -85,7 +85,7 @@ describe('Snippet', () => {
           <span
             class="ais-Snippet-separator"
           >
-            , 
+            ,
           </span>
           <span
             class="ais-Snippet-nonHighlighted"
@@ -285,7 +285,7 @@ describe('Snippet', () => {
             class="ais-Snippet-separator"
           >
             <strong>
-               - 
+               -
             </strong>
           </span>
           <small>
