@@ -180,6 +180,14 @@ const config = {
           'off',
           { additionalTestBlockFunctions: ['skippableTest'] },
         ],
+        'no-restricted-syntax': [
+          'error',
+          {
+            selector:
+              'CallExpression[callee.name="runTestSuites"][arguments.0] Property[key.name="only"]',
+            message: 'Do not commit a restricted test',
+          },
+        ],
       },
     },
     {

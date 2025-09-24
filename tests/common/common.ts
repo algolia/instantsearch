@@ -72,10 +72,12 @@ export function runTestSuites<
   testSuites,
   testSetups,
   testOptions,
+  only,
 }: {
   testSuites: TTestSuites;
   testSetups: TestSetupsMap<TTestSuites>;
   testOptions: TestOptionsMap<TTestSuites>;
+  only?: Array<keyof TTestSuites>;
 }) {
   test('has all the tests', () => {
     expect(Object.keys(testSetups).sort()).toEqual(
@@ -83,10 +85,10 @@ export function runTestSuites<
     );
   });
 
-  (Object.keys(testSuites) as Array<keyof TTestSuites>).forEach(
-    <T extends keyof TTestSuites>(key: T) => {
+  (Object.keys(testSuites) as Array<keyof TTestSuites>)
+    .filter((name) => !only || only.includes(name))
+    .forEach(<T extends keyof TTestSuites>(key: T) => {
       const suite: TestSuite<TTestSuites, T> = testSuites[key];
       suite(testSetups[key], testOptions[key]);
-    }
-  );
+    });
 }
