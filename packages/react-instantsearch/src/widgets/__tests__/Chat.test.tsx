@@ -5,7 +5,6 @@
 import { InstantSearchTestWrapper } from '@instantsearch/testutils';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { SearchIndexToolType } from 'instantsearch.js/es/lib/chat';
 import React from 'react';
 
 import { Chat } from '../Chat';
@@ -129,7 +128,7 @@ describe('Chat', () => {
         {
           id: '0',
           role: 'assistant',
-          parts: [{ type: SearchIndexToolType }],
+          parts: [{ type: 'tool-algolia_search_index' }],
         },
       ],
       sendMessage: jest.fn(),
@@ -140,7 +139,7 @@ describe('Chat', () => {
         <Chat
           tools={[
             {
-              type: SearchIndexToolType,
+              type: 'tool-algolia_search_index',
               component: () => (
                 <div>
                   <div role="alert">Custom search index tool</div>
