@@ -1,7 +1,3 @@
-/**
- * @jest-environment @instantsearch/testutils/jest-environment-node.ts
- */
-
 import { createSingleSearchResponse } from '@instantsearch/mocks';
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 

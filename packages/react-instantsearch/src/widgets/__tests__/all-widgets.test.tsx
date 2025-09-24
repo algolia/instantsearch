@@ -1,7 +1,3 @@
-/**
- * @jest-environment @instantsearch/testutils/jest-environment-node.ts
- */
-
 import { getAllInstantSearchWidgets } from './__utils__/all-widgets';
 
 describe('widgets', () => {

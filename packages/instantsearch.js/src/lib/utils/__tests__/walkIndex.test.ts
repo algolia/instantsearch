@@ -1,7 +1,3 @@
-/**
- * @jest-environment @instantsearch/testutils/jest-environment-node.ts
- */
-
 import { walkIndex } from '..';
 import { index } from '../../../widgets';
 
