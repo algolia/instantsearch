@@ -1,3 +1,7 @@
+/**
+ * @jest-environment @instantsearch/testutils/jest-environment-node.js
+ */
+
 import {
   createCompositionClient,
   createControlledCompositionClient,

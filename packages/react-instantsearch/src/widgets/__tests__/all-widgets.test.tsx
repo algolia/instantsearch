@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @jest-environment @instantsearch/testutils/jest-environment-node.js
  */
 
 import { getAllInstantSearchWidgets } from './__utils__/all-widgets';

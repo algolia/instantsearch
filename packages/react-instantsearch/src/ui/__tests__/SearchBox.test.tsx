@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom @instantsearch/testutils/jest-environment-jsdom.ts
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
 import { render, within } from '@testing-library/react';

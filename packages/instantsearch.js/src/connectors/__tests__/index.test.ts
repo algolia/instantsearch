@@ -1,3 +1,7 @@
+/**
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ */
+
 import * as connectors from '..';
 import * as connectorsUmd from '../index.umd';
 
