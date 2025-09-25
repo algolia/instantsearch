@@ -20,6 +20,10 @@ export type CarouselProps<
   nextButtonRef: MutableRef<HTMLButtonElement | null>;
   previousButtonRef: MutableRef<HTMLButtonElement | null>;
   carouselIdRef: MutableRef<string>;
+  canScrollLeft: boolean;
+  canScrollRight: boolean;
+  setCanScrollLeft: (canScrollLeft: boolean) => void;
+  setCanScrollRight: (canScrollRight: boolean) => void;
   items: Array<RecordWithObjectID<TObject>>;
   itemComponent?: (
     props: RecommendItemComponentProps<RecordWithObjectID<TObject>> &
@@ -27,6 +31,13 @@ export type CarouselProps<
   ) => JSX.Element;
   previousIconComponent?: () => JSX.Element;
   nextIconComponent?: () => JSX.Element;
+  headerComponent?: (props: {
+    canScrollLeft: boolean;
+    canScrollRight: boolean;
+    scrollLeft: () => void;
+    scrollRight: () => void;
+  }) => JSX.Element;
+  showNavigation?: boolean;
   classNames?: Partial<CarouselClassNames>;
   translations?: Partial<CarouselTranslations>;
   sendEvent: SendEventForHits;
@@ -127,6 +138,10 @@ export function createCarouselComponent({ createElement, Fragment }: Renderer) {
       nextButtonRef,
       previousButtonRef,
       carouselIdRef,
+      canScrollLeft,
+      canScrollRight,
+      setCanScrollLeft,
+      setCanScrollRight,
       classNames = {},
       itemComponent: ItemComponent = createDefaultItemComponent({
         createElement,
@@ -135,6 +150,8 @@ export function createCarouselComponent({ createElement, Fragment }: Renderer) {
       previousIconComponent:
         PreviousIconComponent = PreviousIconDefaultComponent,
       nextIconComponent: NextIconComponent = NextIconDefaultComponent,
+      headerComponent: HeaderComponent,
+      showNavigation = true,
       items,
       translations: userTranslations,
       sendEvent,
@@ -178,18 +195,24 @@ export function createCarouselComponent({ createElement, Fragment }: Renderer) {
     }
 
     function updateNavigationButtonsProps() {
-      if (
-        !listRef.current ||
-        !previousButtonRef.current ||
-        !nextButtonRef.current
-      ) {
+      if (!listRef.current) {
         return;
       }
 
-      previousButtonRef.current.hidden = listRef.current.scrollLeft <= 0;
-      nextButtonRef.current.hidden =
+      const isLeftHidden = listRef.current.scrollLeft <= 0;
+      const isRightHidden =
         listRef.current.scrollLeft + listRef.current.clientWidth >=
         listRef.current.scrollWidth;
+
+      setCanScrollLeft(!isLeftHidden);
+      setCanScrollRight(!isRightHidden);
+
+      if (previousButtonRef.current) {
+        previousButtonRef.current.hidden = isLeftHidden;
+      }
+      if (nextButtonRef.current) {
+        nextButtonRef.current.hidden = isRightHidden;
+      }
     }
 
     if (items.length === 0) {
@@ -198,20 +221,31 @@ export function createCarouselComponent({ createElement, Fragment }: Renderer) {
 
     return (
       <div {...props} className={cx(cssClasses.root)}>
-        <button
-          ref={previousButtonRef}
-          title={translations.previousButtonTitle}
-          aria-label={translations.previousButtonLabel}
-          hidden
-          aria-controls={carouselIdRef.current}
-          className={cx(cssClasses.navigation, cssClasses.navigationPrevious)}
-          onClick={(event) => {
-            event.preventDefault();
-            scrollLeft();
-          }}
-        >
-          <PreviousIconComponent createElement={createElement} />
-        </button>
+        {HeaderComponent && (
+          <HeaderComponent
+            canScrollLeft={canScrollLeft}
+            canScrollRight={canScrollRight}
+            scrollLeft={scrollLeft}
+            scrollRight={scrollRight}
+          />
+        )}
+
+        {showNavigation && (
+          <button
+            ref={previousButtonRef}
+            title={translations.previousButtonTitle}
+            aria-label={translations.previousButtonLabel}
+            hidden
+            aria-controls={carouselIdRef.current}
+            className={cx(cssClasses.navigation, cssClasses.navigationPrevious)}
+            onClick={(event) => {
+              event.preventDefault();
+              scrollLeft();
+            }}
+          >
+            <PreviousIconComponent createElement={createElement} />
+          </button>
+        )}
 
         <ol
           className={cx(cssClasses.list)}
@@ -250,19 +284,21 @@ export function createCarouselComponent({ createElement, Fragment }: Renderer) {
           ))}
         </ol>
 
-        <button
-          ref={nextButtonRef}
-          title={translations.nextButtonTitle}
-          aria-label={translations.nextButtonLabel}
-          aria-controls={carouselIdRef.current}
-          className={cx(cssClasses.navigation, cssClasses.navigationNext)}
-          onClick={(event) => {
-            event.preventDefault();
-            scrollRight();
-          }}
-        >
-          <NextIconComponent createElement={createElement} />
-        </button>
+        {showNavigation && (
+          <button
+            ref={nextButtonRef}
+            title={translations.nextButtonTitle}
+            aria-label={translations.nextButtonLabel}
+            aria-controls={carouselIdRef.current}
+            className={cx(cssClasses.navigation, cssClasses.navigationNext)}
+            onClick={(event) => {
+              event.preventDefault();
+              scrollRight();
+            }}
+          >
+            <NextIconComponent createElement={createElement} />
+          </button>
+        )}
       </div>
     );
   };

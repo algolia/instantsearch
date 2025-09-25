@@ -5,6 +5,7 @@ export * from './chat/ChatMessage';
 export * from './chat/ChatMessages';
 export * from './chat/ChatPrompt';
 export * from './chat/ChatToggleButton';
+export * from './chat/icons';
 export * from './chat/types';
 export * from './FrequentlyBoughtTogether';
 export * from './Highlight';

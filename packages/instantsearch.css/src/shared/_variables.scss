@@ -53,6 +53,9 @@ $ais-chat-breakpoint: 680px;
   --ais-chat-maximized-width: 70%;
   --ais-chat-maximized-height: 100%;
   --ais-chat-margin: 1.5rem;
+
+  /* Chat carousel component */
+  --ais-chat-carousel-item-width: calc(var(--ais-spacing) * 10);
 }
 
 /* Dark Mode */
@@ -72,12 +75,12 @@ $ais-chat-breakpoint: 680px;
   --ais-shadow-color-rgb: 0, 0, 0;
 }
 
-:root[data-theme="dark"] {
+:root[data-theme='dark'] {
   @include dark-theme;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
+  :root:not([data-theme='light']) {
     @include dark-theme;
   }
 }

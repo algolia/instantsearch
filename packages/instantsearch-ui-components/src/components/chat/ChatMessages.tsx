@@ -19,13 +19,21 @@ import type { ChatMessageBase, ChatStatus, ClientSideTool } from './types';
 
 export type ChatMessagesTranslations = {
   /**
-   * Text for the scroll to bottom button
+   * Label for the scroll to bottom button
    */
-  scrollToBottomText: string;
+  scrollToBottomLabel: string;
   /**
    * Text to display in the loader
    */
   loaderText?: string;
+  /**
+   * Label for the copy to clipboard action
+   */
+  copyToClipboardLabel?: string;
+  /**
+   * Label for the regenerate action
+   */
+  regenerateLabel?: string;
 };
 
 export type ChatMessagesClassNames = {
@@ -136,17 +144,18 @@ export type ChatMessagesProps<
   onClearTransitionEnd?: () => void;
 };
 
+const getTextContent = (message: ChatMessageBase) => {
+  return message.parts
+    .map((part) => ('text' in part ? part.text : ''))
+    .join('');
+};
+
+const hasTextContent = (message: ChatMessageBase) => {
+  return getTextContent(message).trim() !== '';
+};
+
 const copyToClipboard = (message: ChatMessageBase) => {
-  navigator.clipboard.writeText(
-    message.parts
-      .map((part) => {
-        if ('text' in part) {
-          return part.text;
-        }
-        return '';
-      })
-      .join('')
-  );
+  navigator.clipboard.writeText(getTextContent(message));
 };
 
 function createDefaultMessageComponent<
@@ -162,6 +171,7 @@ function createDefaultMessageComponent<
     indexUiState,
     setIndexUiState,
     onReload,
+    translations,
   }: {
     key: string;
     message: TMessage;
@@ -171,15 +181,20 @@ function createDefaultMessageComponent<
     setIndexUiState: (state: object) => void;
     tools?: ClientSideTool[];
     onReload?: (messageId?: string) => void;
+    translations: ChatMessagesTranslations;
   }) {
     const defaultAssistantActions: ChatMessageActionProps[] = [
+      ...(hasTextContent(message)
+        ? [
+            {
+              title: translations.copyToClipboardLabel,
+              icon: () => <CopyIconComponent createElement={createElement} />,
+              onClick: copyToClipboard,
+            },
+          ]
+        : []),
       {
-        title: 'Copy to clipboard',
-        icon: () => <CopyIconComponent createElement={createElement} />,
-        onClick: copyToClipboard,
-      },
-      {
-        title: 'Regenerate',
+        title: translations.regenerateLabel,
         icon: () => <ReloadIconComponent createElement={createElement} />,
         onClick: (m) => onReload?.(m.id),
       },
@@ -246,9 +261,10 @@ export function createChatMessagesComponent({
       ...props
     } = userProps;
 
-    const translations: Required<ChatMessagesTranslations> = {
-      scrollToBottomText: 'Scroll to bottom',
-      loaderText: 'Thinking...',
+    const translations: ChatMessagesTranslations = {
+      scrollToBottomLabel: 'Scroll to bottom',
+      copyToClipboardLabel: 'Copy to clipboard',
+      regenerateLabel: 'Regenerate',
       ...userTranslations,
     };
 
@@ -304,6 +320,7 @@ export function createChatMessagesComponent({
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
                 onReload={onReload}
+                translations={translations}
               />
             ))}
 
@@ -325,7 +342,7 @@ export function createChatMessagesComponent({
               cssClasses.scrollToBottomHidden
           )}
           onClick={onScrollToBottom}
-          aria-label={translations.scrollToBottomText}
+          aria-label={translations.scrollToBottomLabel}
           tabIndex={isScrollAtBottom ? -1 : 0}
         >
           <ChevronDownIconComponent createElement={createElement} />

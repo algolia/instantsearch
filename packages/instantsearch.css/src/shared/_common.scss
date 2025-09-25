@@ -1,7 +1,12 @@
 // Scrollbar
 .ais-Scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgba(var(--ais-muted-color-rgb), 0.4) transparent;
+  scrollbar-color: color-mix(
+      in srgb,
+      rgb(var(--ais-muted-color-rgb)) 40%,
+      rgb(var(--ais-background-color-rgb))
+    )
+    transparent;
 }
 
 .ais-Scrollbar::-webkit-scrollbar {
@@ -13,12 +18,26 @@
 }
 
 .ais-Scrollbar::-webkit-scrollbar-thumb {
-  background-color: rgba(var(--ais-muted-color-rgb), 0.4);
+  background-color: color-mix(
+    in srgb,
+    rgb(var(--ais-muted-color-rgb)) 40%,
+    rgb(var(--ais-background-color-rgb))
+  );
   border-radius: var(--ais-border-radius-sm);
+}
+
+%ais-focus-outline {
+  &:focus-visible {
+    outline: 2px solid
+      rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+    outline-offset: 2px;
+  }
 }
 
 // Shared button styles
 %ais-button-base {
+  @extend %ais-focus-outline;
+
   appearance: none;
   border: none;
   cursor: pointer;
@@ -32,12 +51,6 @@
 
   &:disabled {
     cursor: not-allowed;
-  }
-
-  &:focus-visible {
-    outline: 2px solid
-      rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
-    outline-offset: 2px;
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -121,6 +134,10 @@
       rgb(var(--ais-muted-color-rgb)) 30%,
       rgb(var(--ais-background-color-rgb))
     );
+
+  &:disabled {
+    color: rgba(var(--ais-text-color-rgb), 0.4);
+  }
 
   @media (hover: hover) {
     &:hover:not(:disabled) {
