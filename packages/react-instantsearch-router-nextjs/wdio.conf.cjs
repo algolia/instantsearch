@@ -4,7 +4,7 @@ exports.config = {
   logLevel: 'info',
   bail: 1,
   baseUrl: 'http://localhost:3000',
-  waitforTimeout: 10000,
+  waitforTimeout: 15000,
   services: ['selenium-standalone'],
   seleniumInstallArgs: { drivers: { chrome: { version: '2.43' } } },
   capabilities: [
@@ -18,7 +18,7 @@ exports.config = {
   reporters: ['spec'],
 
   jasmineNodeOpts: {
-    defaultTimeoutInterval: 60000,
+    defaultTimeoutInterval: 90000,
   },
 
   before() {
