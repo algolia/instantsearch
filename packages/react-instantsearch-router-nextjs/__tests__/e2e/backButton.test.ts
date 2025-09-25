@@ -1,4 +1,4 @@
-import { waitForUrl } from './utils';
+import { waitForUrl, waitForElementAttribute } from './utils';
 
 describe('browser back/forward buttons works on routes pushed by InstantSearch', () => {
   it('works when not on a i18n route', async () => {
@@ -28,8 +28,8 @@ describe('browser back/forward buttons works on routes pushed by InstantSearch',
 
     await waitForUrl(urlWithRefinement);
 
-    const checkbox = await $('.ais-RefinementList-checkbox[value="Apple"]');
-    expect(await checkbox.getAttribute('checked')).toBe('true');
+    // Wait for the checkbox to be checked, which ensures the state has been restored
+    await waitForElementAttribute('.ais-RefinementList-checkbox[value="Apple"]', 'checked', 'true');
   });
 
   it('works when on a i18n route', async () => {
@@ -59,7 +59,7 @@ describe('browser back/forward buttons works on routes pushed by InstantSearch',
 
     await waitForUrl(urlWithRefinement);
 
-    const checkbox = await $('.ais-RefinementList-checkbox[value="Apple"]');
-    expect(await checkbox.getAttribute('checked')).toBe('true');
+    // Wait for the checkbox to be checked, which ensures the state has been restored
+    await waitForElementAttribute('.ais-RefinementList-checkbox[value="Apple"]', 'checked', 'true');
   });
 });
