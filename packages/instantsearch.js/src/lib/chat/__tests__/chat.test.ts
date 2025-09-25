@@ -1,11 +1,7 @@
+/**
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ */
 import { ChatState, CACHE_KEY } from '../chat';
-
-// mock AbstractChat to avoid "TypeError: Class extends value undefined is not a constructor or null"
-jest.mock('ai', () => {
-  return {
-    AbstractChat: class {},
-  };
-});
 
 describe('ChatState', () => {
   beforeAll(() => {

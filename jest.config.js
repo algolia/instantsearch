@@ -10,7 +10,7 @@ const algoliaSearchMajor =
 const config = {
   rootDir: process.cwd(),
   testRunner: 'jest-circus',
-  testEnvironment: 'node',
+  testEnvironment: '@instantsearch/testutils/jest-environment-node.ts',
   setupFilesAfterEnv: ['./tests/utils/setupTests.ts'],
   testPathIgnorePatterns: [
     '<rootDir>/node_modules/',
@@ -38,7 +38,7 @@ const config = {
     'jest-watch-typeahead/testname',
   ],
   transformIgnorePatterns: [
-    'node_modules/(?!(search-insights|algoliasearch)/)',
+    'node_modules/(?!(search-insights|algoliasearch|zod)/)',
   ],
   transform: {
     '^.+\\.(j|t)sx?$': 'babel-jest',
