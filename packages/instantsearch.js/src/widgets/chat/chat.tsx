@@ -250,12 +250,11 @@ export type UserClientSideToolTemplate = Partial<{
   component: TemplateWithBindEvent<ClientSideToolComponentProps>;
 }>;
 
-export type UserClientSideToolWithTemplate = Omit<
-  UserClientSideTool,
-  'component'
-> & {
+type UserClientSideToolWithTemplate = Omit<UserClientSideTool, 'component'> & {
   template: UserClientSideToolTemplate;
 };
+
+export type Tool = UserClientSideToolWithTemplate;
 
 export type ChatCSSClasses = Partial<ChatClassNames>;
 

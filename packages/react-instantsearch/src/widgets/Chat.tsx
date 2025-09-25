@@ -102,6 +102,8 @@ type UserPromptProps = Omit<
   'value' | 'onInput' | 'onSubmit'
 >;
 
+export type Tool = UserClientSideTool;
+
 export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
   ChatUiProps,
   keyof UiProps
