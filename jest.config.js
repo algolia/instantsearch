@@ -47,6 +47,8 @@ const config = {
   moduleFileExtensions: ['tsx', 'ts', 'js', 'vue'],
   moduleNameMapper: {
     '^react-instantsearch$': '<rootDir>/packages/react-instantsearch/src/',
+    '^react-instantsearch-core/dist/es(.*)$':
+      '<rootDir>/packages/react-instantsearch-core/src$1',
     '^react-instantsearch-(.*[^v6])$':
       '<rootDir>/packages/react-instantsearch-$1/src/',
     '^instantsearch.js$': '<rootDir>/packages/instantsearch.js/src/',
