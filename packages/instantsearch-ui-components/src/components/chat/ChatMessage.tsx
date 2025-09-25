@@ -7,10 +7,10 @@ import { MenuIconComponent } from './icons';
 
 import type { ComponentProps, Renderer } from '../../types';
 import type {
-  AddToolResult,
-  ChatInit,
+  AddToolResultWithOutput,
   ChatMessageBase,
   ChatToolMessage,
+  ClientSideTool,
 } from './types';
 
 export type ChatMessageSide = 'left' | 'right';
@@ -77,21 +77,6 @@ export type ChatMessageActionProps = {
   onClick?: (message: ChatMessageBase) => void;
 };
 
-export type Tools = Array<{
-  type: string;
-  component: (props: {
-    message: ChatToolMessage;
-    indexUiState: object;
-    setIndexUiState: (state: object) => void;
-  }) => JSX.Element;
-  onToolCall: (params: {
-    toolCall: Parameters<
-      NonNullable<ChatInit<ChatMessageBase>['onToolCall']>
-    >[0]['toolCall'];
-    addToolResult: AddToolResult;
-  }) => void;
-}>;
-
 export type ChatMessageProps = ComponentProps<'article'> & {
   /**
    * The message object associated with this chat message
@@ -138,7 +123,7 @@ export type ChatMessageProps = ComponentProps<'article'> & {
   /**
    * Array of tools available for the assistant (for tool messages)
    */
-  tools?: Tools;
+  tools?: ClientSideTool[];
   /**
    * Optional handler to refine the search query (for tool actions)
    */
@@ -216,15 +201,25 @@ export function createChatMessageComponent({ createElement }: Renderer) {
         const tool = find(tools, (t) => t.type === part.type);
         if (tool) {
           const ToolComponent = tool.component;
+          const toolMessage = part as ChatToolMessage;
+
+          const boundAddToolResult: AddToolResultWithOutput = (params) =>
+            tool.addToolResult?.({
+              output: params.output,
+              tool: part.type,
+              toolCallId: toolMessage.toolCallId,
+            });
+
           return (
             <div
               key={`${message.id}-${index}`}
               className="ais-ChatMessage-tool"
             >
               <ToolComponent
-                message={part as ChatToolMessage}
+                message={toolMessage}
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
+                addToolResult={boundAddToolResult}
               />
             </div>
           );

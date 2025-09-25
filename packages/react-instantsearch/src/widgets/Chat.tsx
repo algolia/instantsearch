@@ -1,4 +1,9 @@
 import { createChatComponent } from 'instantsearch-ui-components';
+import {
+  defaultTools,
+  SearchIndexToolType,
+} from 'instantsearch.js/es/lib/chat';
+import { find } from 'instantsearch.js/es/lib/utils';
 import React, { createElement, Fragment } from 'react';
 import { useInstantSearch, useChat } from 'react-instantsearch-core';
 
@@ -7,11 +12,11 @@ import { useStickToBottom } from '../ui/lib/useStickToBottom';
 
 import type {
   Pragma,
-  Tools,
   ChatProps as ChatUiProps,
   RecommendComponentProps,
   RecordWithObjectID,
-  ChatToolMessage,
+  AddToolResultWithOutput,
+  UserClientSideTool,
   MutableRef,
 } from 'instantsearch-ui-components';
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
@@ -22,12 +27,9 @@ const ChatUiComponent = createChatComponent({
   Fragment,
 });
 
-export const SearchIndexToolType: ChatToolMessage['type'] =
-  'tool-algolia_search_index';
-
 export function createDefaultTools<TObject extends RecordWithObjectID>(
   itemComponent?: ItemComponent<TObject>
-): Tools {
+): UserClientSideTool[] {
   return [
     {
       type: SearchIndexToolType,
@@ -67,13 +69,6 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
           </div>
         );
       },
-      onToolCall: ({ toolCall, addToolResult }) => {
-        addToolResult({
-          tool: toolCall.toolName,
-          toolCallId: toolCall.toolCallId,
-          output: '',
-        });
-      },
     },
   ];
 }
@@ -107,12 +102,14 @@ type UserPromptProps = Omit<
   'value' | 'onInput' | 'onSubmit'
 >;
 
+export type Tool = UserClientSideTool;
+
 export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
   ChatUiProps,
   keyof UiProps
 > & {
   itemComponent?: ItemComponent<TObject>;
-  tools?: Tools;
+  tools?: UserClientSideTool[];
 } & UseChatOptions<TUiMessage> & {
     toggleButtonProps?: UserToggleButtonProps;
     headerProps?: UserHeaderProps;
@@ -120,7 +117,10 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     promptProps?: UserPromptProps;
   };
 
-export function Chat<TObject extends RecordWithObjectID>({
+export function Chat<
+  TObject extends RecordWithObjectID,
+  TUiMessage extends UIMessage
+>({
   tools: userTools,
   itemComponent,
   toggleButtonProps,
@@ -128,8 +128,9 @@ export function Chat<TObject extends RecordWithObjectID>({
   messagesProps,
   promptProps,
   classNames,
+  resume,
   ...props
-}: ChatProps<TObject>) {
+}: ChatProps<TObject, TUiMessage>) {
   const { indexUiState, setIndexUiState } = useInstantSearch();
 
   const [open, setOpen] = React.useState(false);
@@ -144,11 +145,23 @@ export function Chat<TObject extends RecordWithObjectID>({
     });
 
   const tools = React.useMemo(() => {
-    if (userTools?.some((tool) => tool.type === SearchIndexToolType)) {
-      return userTools;
+    const defaults = createDefaultTools(itemComponent);
+
+    if (!userTools) {
+      return defaults;
     }
 
-    return [...createDefaultTools(itemComponent), ...(userTools ?? [])];
+    const userToolsMap = new Map(userTools.map((tool) => [tool.type, tool]));
+
+    const merged = defaults.map(
+      (defaultTool) => userToolsMap.get(defaultTool.type) ?? defaultTool
+    );
+
+    const extraUserTools = userTools.filter(
+      (tool) => !defaultTools.includes(tool.type)
+    );
+
+    return [...merged, ...extraUserTools];
   }, [itemComponent, userTools]);
 
   const {
@@ -163,11 +176,31 @@ export function Chat<TObject extends RecordWithObjectID>({
   } = useChat({
     ...props,
     onToolCall: ({ toolCall }) => {
-      tools?.forEach((tool) => {
-        tool.onToolCall({ toolCall, addToolResult });
-      });
+      const tool = find(tools, (t) => t.type === `tool-${toolCall.toolName}`);
+
+      if (tool && tool.onToolCall) {
+        const scopedAddToolResult: AddToolResultWithOutput = ({ output }) => {
+          return Promise.resolve(
+            addToolResult({
+              output,
+              tool: toolCall.toolName,
+              toolCallId: toolCall.toolCallId,
+            })
+          );
+        };
+        tool.onToolCall({ addToolResult: scopedAddToolResult });
+      }
     },
   });
+
+  const toolsForUi = React.useMemo(
+    () =>
+      tools?.map((t) => ({
+        ...t,
+        addToolResult,
+      })),
+    [tools, addToolResult]
+  );
 
   const handleClear = React.useCallback(() => {
     if (!messages || messages.length === 0) return;
@@ -202,7 +235,7 @@ export function Chat<TObject extends RecordWithObjectID>({
         status,
         onReload: (messageId) => regenerate({ messageId }),
         messages,
-        tools,
+        tools: toolsForUi,
         indexUiState,
         setIndexUiState,
         isClearing,

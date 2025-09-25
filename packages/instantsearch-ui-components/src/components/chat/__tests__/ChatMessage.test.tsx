@@ -215,6 +215,7 @@ describe('ChatMessage', () => {
             component: ({ message }) => (
               <div className="wrapper">{JSON.stringify(message.output)}</div>
             ),
+            addToolResult: jest.fn(),
             onToolCall: jest.fn(),
           },
         ]}

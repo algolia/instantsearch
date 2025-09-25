@@ -12,14 +12,10 @@ import {
 } from './icons';
 
 import type { ComponentProps, MutableRef, Renderer } from '../../types';
-import type {
-  ChatMessageProps,
-  Tools,
-  ChatMessageActionProps,
-} from './ChatMessage';
+import type { ChatMessageProps, ChatMessageActionProps } from './ChatMessage';
 import type { ChatMessageErrorProps } from './ChatMessageError';
 import type { ChatMessageLoaderProps } from './ChatMessageLoader';
-import type { ChatMessageBase, ChatStatus } from './types';
+import type { ChatMessageBase, ChatStatus, ClientSideTool } from './types';
 
 export type ChatMessagesTranslations = {
   /**
@@ -85,7 +81,7 @@ export type ChatMessagesProps<
   /**
    * Tools available for the assistant
    */
-  tools?: Tools;
+  tools?: ClientSideTool[];
   /**
    * Current chat status
    */
@@ -173,7 +169,7 @@ function createDefaultMessageComponent<
     assistantMessageProps?: Partial<ChatMessageProps>;
     indexUiState: object;
     setIndexUiState: (state: object) => void;
-    tools?: Tools;
+    tools?: ClientSideTool[];
     onReload?: (messageId?: string) => void;
   }) {
     const defaultAssistantActions: ChatMessageActionProps[] = [
