@@ -1,6 +1,6 @@
 import { createChatComponent } from 'instantsearch-ui-components';
+import { defaultTools } from 'instantsearch.js/es/lib/chat';
 import { find } from 'instantsearch.js/es/lib/utils';
-import { defaultTools } from 'instantsearch.js/src/lib/chat';
 import React, { createElement, Fragment } from 'react';
 import { useInstantSearch, useChat } from 'react-instantsearch-core';
 
