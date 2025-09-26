@@ -18,7 +18,7 @@ export type ChatClassNames = {
   container?: string | string[];
 };
 
-export type ChatProps = Omit<ComponentProps<'div'>, 'onError'> & {
+export type ChatProps = Omit<ComponentProps<'div'>, 'onError' | 'title'> & {
   /*
    * Whether the chat is open or closed.
    */

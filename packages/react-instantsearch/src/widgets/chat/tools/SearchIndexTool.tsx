@@ -12,8 +12,8 @@ import type {
   RecommendComponentProps,
   RecordWithObjectID,
   ChatToolMessage,
+  UserClientSideTool,
 } from 'instantsearch-ui-components';
-import type { UserClientSideTool } from 'instantsearch-ui-components/src';
 
 export const SearchIndexToolType: ChatToolMessage['type'] =
   'tool-algolia_search_index';
