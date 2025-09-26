@@ -33,7 +33,7 @@ export function createAutocompleteIndexComponent({ createElement }: Renderer) {
 
     return (
       <div className={cx('ais-AutocompleteIndex', classNames.root)}>
-        <ul className={cx('ais-AutocompleteIndexList', classNames.list)}>
+        <ol className={cx('ais-AutocompleteIndexList', classNames.list)}>
           {items.map((item) => (
             <li
               key={item.objectID}
@@ -42,7 +42,7 @@ export function createAutocompleteIndexComponent({ createElement }: Renderer) {
               <ItemComponent {...item} />
             </li>
           ))}
-        </ul>
+        </ol>
       </div>
     );
   };
