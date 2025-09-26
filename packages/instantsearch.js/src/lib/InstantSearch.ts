@@ -241,6 +241,7 @@ class InstantSearch<
     creator: Middleware<TUiState>;
     instance: MiddlewareDefinition<TUiState>;
   }> = [];
+  public _searchPagePathName?: string;
   public sendEventToInsights: (event: InsightsEvent) => void;
   /**
    * The status of the search. Can be "idle", "loading", "stalled", or "error".
