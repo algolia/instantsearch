@@ -14,7 +14,7 @@
     },
     {
       "path": "./packages/instantsearch.js/dist/instantsearch.development.js",
-      "maxSize": "183.75 kB"
+      "maxSize": "184 kB"
     },
     {
       "path": "packages/react-instantsearch-core/dist/umd/ReactInstantSearchCore.min.js",
@@ -42,11 +42,11 @@
     },
     {
       "path": "./packages/instantsearch.css/themes/algolia.css",
-      "maxSize": "6.75 kB"
+      "maxSize": "7.50 kB"
     },
     {
       "path": "./packages/instantsearch.css/themes/algolia-min.css",
-      "maxSize": "6.25 kB"
+      "maxSize": "7 kB"
     },
     {
       "path": "./packages/instantsearch.css/themes/reset.css",
@@ -58,19 +58,19 @@
     },
     {
       "path": "./packages/instantsearch.css/themes/satellite.css",
-      "maxSize": "7.90 kB"
+      "maxSize": "8.50 kB"
     },
     {
       "path": "./packages/instantsearch.css/themes/satellite-min.css",
-      "maxSize": "7.25 kB"
+      "maxSize": "8 kB"
     },
     {
       "path": "./packages/instantsearch.css/components/chat.css",
-      "maxSize": "3.50 kB"
+      "maxSize": "4 kB"
     },
     {
       "path": "./packages/instantsearch.css/components/chat-min.css",
-      "maxSize": "3.25 kB"
+      "maxSize": "3.75 kB"
     }
   ]
 }

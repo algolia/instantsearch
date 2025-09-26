@@ -1,24 +1,26 @@
 import { createChatComponent } from 'instantsearch-ui-components';
-import {
-  defaultTools,
-  SearchIndexToolType,
-} from 'instantsearch.js/es/lib/chat';
+import { defaultTools } from 'instantsearch.js/es/lib/chat';
 import { find } from 'instantsearch.js/es/lib/utils';
 import React, { createElement, Fragment } from 'react';
 import { useInstantSearch, useChat } from 'react-instantsearch-core';
 
-import { Carousel } from '../components';
 import { useStickToBottom } from '../ui/lib/useStickToBottom';
+
+import { createSearchIndexTool } from './chat/tools/SearchIndexTool';
+
+export { SearchIndexToolType } from './chat/tools/SearchIndexTool';
 
 import type {
   Pragma,
   ChatProps as ChatUiProps,
   RecommendComponentProps,
   RecordWithObjectID,
-  AddToolResultWithOutput,
-  UserClientSideTool,
   MutableRef,
 } from 'instantsearch-ui-components';
+import type {
+  AddToolResultWithOutput,
+  UserClientSideTool,
+} from 'instantsearch-ui-components/src/components/chat/types';
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
 import type { UseChatOptions } from 'react-instantsearch-core';
 
@@ -30,47 +32,7 @@ const ChatUiComponent = createChatComponent({
 export function createDefaultTools<TObject extends RecordWithObjectID>(
   itemComponent?: ItemComponent<TObject>
 ): UserClientSideTool[] {
-  return [
-    {
-      type: SearchIndexToolType,
-      component: ({ message, indexUiState, setIndexUiState }) => {
-        const items =
-          (
-            message.output as {
-              hits?: Array<RecordWithObjectID<TObject>>;
-            }
-          )?.hits || [];
-
-        const input = message.input as { query: string };
-
-        return (
-          <div>
-            <Carousel
-              items={items}
-              itemComponent={itemComponent}
-              sendEvent={() => {}}
-            />
-
-            {input?.query && (
-              <button
-                className="ais-ChatToolSearchIndexRefineButton"
-                onClick={() => {
-                  if (input?.query) {
-                    setIndexUiState({
-                      ...indexUiState,
-                      query: input.query,
-                    });
-                  }
-                }}
-              >
-                Refine on this query
-              </button>
-            )}
-          </div>
-        );
-      },
-    },
-  ];
+  return [createSearchIndexTool(itemComponent)];
 }
 
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
@@ -110,6 +72,7 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
 > & {
   itemComponent?: ItemComponent<TObject>;
   tools?: UserClientSideTool[];
+  defaultOpen?: boolean;
 } & UseChatOptions<TUiMessage> & {
     toggleButtonProps?: UserToggleButtonProps;
     headerProps?: UserHeaderProps;
@@ -123,17 +86,18 @@ export function Chat<
 >({
   tools: userTools,
   itemComponent,
+  defaultOpen = false,
   toggleButtonProps,
   headerProps,
   messagesProps,
   promptProps,
   classNames,
-  resume,
+  title,
   ...props
 }: ChatProps<TObject, TUiMessage>) {
   const { indexUiState, setIndexUiState } = useInstantSearch();
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(defaultOpen);
   const [maximized, setMaximized] = React.useState(false);
   const [input, setInput] = React.useState('');
   const [isClearing, setIsClearing] = React.useState(false);
@@ -215,7 +179,7 @@ export function Chat<
 
   return (
     <ChatUiComponent
-      {...props}
+      title={title}
       open={open}
       maximized={maximized}
       toggleButtonProps={{

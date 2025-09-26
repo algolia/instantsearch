@@ -21,7 +21,6 @@
   flex-direction: column;
   gap: calc(var(--ais-spacing) * 1.5);
   width: 100%;
-  flex: 1;
 
   @media (prefers-reduced-motion: no-preference) {
     transition: opacity var(--ais-transition-duration)

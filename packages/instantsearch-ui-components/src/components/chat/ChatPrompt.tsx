@@ -29,10 +29,6 @@ export type ChatPromptTranslations = {
    */
   sendMessageTooltip: string;
   /**
-   * The tooltip when the chat prompt is disabled
-   */
-  disabledTooltip: string;
-  /**
    * The disclaimer text shown in the footer
    */
   disclaimer: string;
@@ -208,7 +204,6 @@ export function createChatPromptComponent({ createElement }: Renderer) {
       emptyMessageTooltip: 'Message is empty',
       stopResponseTooltip: 'Stop response',
       sendMessageTooltip: 'Send message',
-      disabledTooltip: 'Chat prompt is disabled',
       disclaimer: 'AI can make mistakes. Verify responses.',
       ...userTranslations,
     };
@@ -311,7 +306,6 @@ export function createChatPromptComponent({ createElement }: Renderer) {
               className={cx(cssClasses.submit)}
               disabled={buttonDisabled}
               aria-label={(() => {
-                if (disabled) return translations.disabledTooltip;
                 if (buttonDisabled) return translations.emptyMessageTooltip;
                 if (canStop) return translations.stopResponseTooltip;
                 return translations.sendMessageTooltip;

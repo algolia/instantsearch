@@ -44,12 +44,15 @@
 .ais-ChatMessage-message {
   position: relative;
   text-wrap: pretty;
-  overflow-x: auto;
 
   img {
     max-width: 100%;
     height: auto;
   }
+}
+
+.ais-ChatMessage-code {
+  overflow-x: auto;
 }
 
 .ais-ChatMessage--neutral .ais-ChatMessage-message {

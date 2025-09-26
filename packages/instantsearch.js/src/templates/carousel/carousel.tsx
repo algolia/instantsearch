@@ -7,7 +7,7 @@ import {
   generateCarouselId,
 } from 'instantsearch-ui-components';
 import { Fragment, h } from 'preact';
-import { useRef } from 'preact/hooks';
+import { useRef, useState } from 'preact/hooks';
 
 import type {
   CarouselProps as CarouselUiProps,
@@ -22,17 +22,38 @@ const Carousel = createCarouselComponent({
 function CarouselWithRefs<TObject extends Record<string, unknown>>(
   props: Omit<
     CarouselUiProps<TObject>,
-    'listRef' | 'nextButtonRef' | 'previousButtonRef' | 'carouselIdRef'
+    | 'listRef'
+    | 'nextButtonRef'
+    | 'previousButtonRef'
+    | 'carouselIdRef'
+    | 'canScrollLeft'
+    | 'canScrollRight'
+    | 'setCanScrollLeft'
+    | 'setCanScrollRight'
   >
 ) {
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
   const carouselRefs: Pick<
     CarouselUiProps<TObject>,
-    'listRef' | 'nextButtonRef' | 'previousButtonRef' | 'carouselIdRef'
+    | 'listRef'
+    | 'nextButtonRef'
+    | 'previousButtonRef'
+    | 'carouselIdRef'
+    | 'canScrollLeft'
+    | 'canScrollRight'
+    | 'setCanScrollLeft'
+    | 'setCanScrollRight'
   > = {
     listRef: useRef(null),
     nextButtonRef: useRef(null),
     previousButtonRef: useRef(null),
     carouselIdRef: useRef(generateCarouselId()),
+    canScrollLeft,
+    canScrollRight,
+    setCanScrollLeft,
+    setCanScrollRight,
   };
 
   return <Carousel {...carouselRefs} {...props} />;
