@@ -8,6 +8,8 @@ import { useStickToBottom } from '../ui/lib/useStickToBottom';
 
 import { createSearchIndexTool } from './chat/tools/SearchIndexTool';
 
+export { SearchIndexToolType } from './chat/tools/SearchIndexTool';
+
 import type {
   Pragma,
   ChatProps as ChatUiProps,
