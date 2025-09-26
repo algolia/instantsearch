@@ -18,6 +18,7 @@ export type RouterProps<
   // ideally stateMapping should be required if TRouteState is given,
   // but there's no way to check if a generic is provided or the default value.
   stateMapping?: StateMapping<TUiState, TRouteState>;
+  searchPagePathName?: string;
   /**
    * @internal indicator for the default middleware
    */
@@ -74,6 +75,7 @@ export const createRouterMiddleware = <
     // casting to UiState here to keep createURL unaware of custom UiState
     // (as long as it's an object, it's ok)
     instantSearchInstance._createURL = topLevelCreateURL as CreateURL<UiState>;
+    instantSearchInstance._searchPagePathName = props.searchPagePathName;
 
     let lastRouteState: TRouteState | undefined = undefined;
 

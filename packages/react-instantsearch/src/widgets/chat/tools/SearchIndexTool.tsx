@@ -4,6 +4,7 @@ import {
   ArrowRightIconComponent,
 } from 'instantsearch-ui-components';
 import React, { createElement } from 'react';
+import { useInstantSearchContext } from 'react-instantsearch-core';
 
 import { Carousel } from '../../../components';
 
@@ -57,6 +58,8 @@ export function createSearchIndexTool<TObject extends RecordWithObjectID>(
             scrollLeft: () => void;
             scrollRight: () => void;
           }) => {
+            const instantSearch = useInstantSearchContext();
+
             return (
               <div className="ais-ChatToolSearchIndexCarouselHeader">
                 <div className="ais-ChatToolSearchIndexCarouselHeaderResults">
@@ -70,10 +73,34 @@ export function createSearchIndexTool<TObject extends RecordWithObjectID>(
                     type="button"
                     onClick={() => {
                       if (input?.query) {
-                        setIndexUiState({
-                          ...indexUiState,
-                          query: input.query,
-                        });
+                        // 1. When on the search page
+                        if (
+                          instantSearch._searchPagePathName ===
+                          window.location.pathname.replace(/\/$/, '')
+                        ) {
+                          setIndexUiState({
+                            ...indexUiState,
+                            query: input.query,
+                          });
+                        } else {
+                          // 2. When not on the search page
+
+                          // history.pushState(
+                          //   null,
+                          //   '',
+                          //   instantSearch.createURL({
+                          //     [instantSearch.mainIndex.getIndexName()]: {
+                          //       query: input.query,
+                          //     },
+                          //   })
+                          // );
+
+                          window.location.href = instantSearch.createURL({
+                            [instantSearch.mainIndex.getIndexName()]: {
+                              query: input.query,
+                            },
+                          });
+                        }
                       }
                     }}
                     className="ais-ChatToolSearchIndexCarouselHeaderViewAll"
