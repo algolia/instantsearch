@@ -18,7 +18,7 @@ export type ChatClassNames = {
   container?: string | string[];
 };
 
-export type ChatProps = Omit<ComponentProps<'div'>, 'onError'> & {
+export type ChatProps = Omit<ComponentProps<'div'>, 'onError' | 'title'> & {
   /*
    * Whether the chat is open or closed.
    */
@@ -47,6 +47,10 @@ export type ChatProps = Omit<ComponentProps<'div'>, 'onError'> & {
    * Optional class names for elements
    */
   classNames?: Partial<ChatClassNames>;
+  /**
+   * Optional title for the chat
+   */
+  title?: string;
 };
 
 export function createChatComponent({ createElement, Fragment }: Renderer) {

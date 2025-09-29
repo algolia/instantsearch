@@ -15,8 +15,8 @@
     content: '';
     position: absolute;
     top: 100%;
-    left: var(--ais-spacing);
-    right: var(--ais-spacing);
+    left: 0;
+    right: 0;
     margin-top: 1px;
     height: calc(var(--ais-spacing) - 1px);
     background: linear-gradient(
