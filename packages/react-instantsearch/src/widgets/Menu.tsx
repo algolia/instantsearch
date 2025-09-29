@@ -14,6 +14,7 @@ type UiProps = Pick<
   | 'canToggleShowMore'
   | 'onToggleShowMore'
   | 'isShowingMore'
+  | 'showMoreCount'
   | 'translations'
 >;
 
@@ -33,6 +34,7 @@ export function Menu({
   const {
     canToggleShowMore,
     isShowingMore,
+    showMoreCount,
     items,
     refine,
     createURL,
@@ -58,6 +60,7 @@ export function Menu({
     canToggleShowMore,
     onToggleShowMore: toggleShowMore,
     isShowingMore,
+    showMoreCount,
     translations: {
       showMoreButtonText(options) {
         return options.isShowingMore ? 'Show less' : 'Show more';

@@ -36,6 +36,7 @@ describe('RefinementList', () => {
       searchBox: null,
       canToggleShowMore: true,
       isShowingMore: false,
+      showMoreCount: 0,
       onToggleShowMore: jest.fn(),
       translations: {
         showMoreButtonText({ isShowingMore }: { isShowingMore: boolean }) {

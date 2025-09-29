@@ -32,6 +32,7 @@ describe('Menu', () => {
       onToggleShowMore: jest.fn(),
       canToggleShowMore: true,
       isShowingMore: false,
+      showMoreCount: 0,
       translations: {
         showMoreButtonText({ isShowingMore }: { isShowingMore: boolean }) {
           return isShowingMore ? 'Show less' : 'Show more';

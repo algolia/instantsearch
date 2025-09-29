@@ -19,6 +19,7 @@ describe('ShowMoreButton', () => {
     const { container } = render(
       <ShowMoreButton
         isShowingMore={false}
+        showMoreCount={0}
         translations={defaultTranslations}
       />
     );
@@ -34,7 +35,11 @@ describe('ShowMoreButton', () => {
 
   test('changes the button label when is showing more', () => {
     const { container } = render(
-      <ShowMoreButton isShowingMore={true} translations={defaultTranslations} />
+      <ShowMoreButton
+        isShowingMore={true}
+        showMoreCount={0}
+        translations={defaultTranslations}
+      />
     );
 
     expect(container).toMatchInlineSnapshot(`
@@ -51,6 +56,7 @@ describe('ShowMoreButton', () => {
     const { getByRole } = render(
       <ShowMoreButton
         isShowingMore={false}
+        showMoreCount={0}
         onClick={onClick}
         translations={defaultTranslations}
       />
@@ -66,6 +72,7 @@ describe('ShowMoreButton', () => {
     const { container, getByRole } = render(
       <ShowMoreButton
         isShowingMore={false}
+        showMoreCount={0}
         disabled={true}
         onClick={onClick}
         translations={defaultTranslations}
@@ -94,15 +101,56 @@ describe('ShowMoreButton', () => {
       },
     };
     const { getByRole, rerender } = render(
-      <ShowMoreButton isShowingMore translations={translations} />
+      <ShowMoreButton
+        isShowingMore
+        showMoreCount={0}
+        translations={translations}
+      />
     );
 
     expect(getByRole('button', { name: 'Display less' })).toBeInTheDocument();
 
     rerender(
-      <ShowMoreButton isShowingMore={false} translations={translations} />
+      <ShowMoreButton
+        isShowingMore={false}
+        showMoreCount={0}
+        translations={translations}
+      />
     );
 
     expect(getByRole('button', { name: 'Display more' })).toBeInTheDocument();
+  });
+
+  test('renders show more count', () => {
+    const translations = {
+      showMoreButtonText({
+        isShowingMore,
+        showMoreCount,
+      }: {
+        isShowingMore: boolean;
+        showMoreCount: number;
+      }) {
+        return isShowingMore ? 'Display less' : `Display ${showMoreCount} more`;
+      },
+    };
+    const { getByRole, rerender } = render(
+      <ShowMoreButton
+        isShowingMore
+        showMoreCount={5}
+        translations={translations}
+      />
+    );
+
+    expect(getByRole('button', { name: 'Display less' })).toBeInTheDocument();
+
+    rerender(
+      <ShowMoreButton
+        isShowingMore={false}
+        showMoreCount={5}
+        translations={translations}
+      />
+    );
+
+    expect(getByRole('button', { name: 'Display 5 more' })).toBeInTheDocument();
   });
 });

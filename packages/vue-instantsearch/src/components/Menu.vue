@@ -8,6 +8,7 @@
       :can-refine="state.canRefine"
       :can-toggle-show-more="state.canToggleShowMore"
       :is-showing-more="state.isShowingMore"
+      :show-more-count="state.showMoreCount"
       :refine="state.refine"
       :createURL="state.createURL"
       :toggle-show-more="state.toggleShowMore"
@@ -39,9 +40,13 @@
         :disabled="!state.canToggleShowMore"
         @click.prevent="state.toggleShowMore"
       >
-        <slot name="showMoreLabel" :is-showing-more="state.isShowingMore">{{
-          state.isShowingMore ? 'Show less' : 'Show more'
-        }}</slot>
+        <slot
+          name="showMoreLabel"
+          :is-showing-more="state.isShowingMore"
+          :show-more-count="showMoreCount"
+        >
+          {{ state.isShowingMore ? 'Show less' : 'Show more' }}
+        </slot>
       </button>
     </slot>
   </div>
