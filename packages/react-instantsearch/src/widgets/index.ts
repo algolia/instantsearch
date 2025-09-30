@@ -1,4 +1,5 @@
 export * from './Breadcrumb';
+export * from './Chat';
 export * from './ClearRefinements';
 export * from './CurrentRefinements';
 export * from './FrequentlyBoughtTogether';
@@ -7,6 +8,7 @@ export * from './Highlight';
 export * from './Hits';
 export * from './HitsPerPage';
 export * from './InfiniteHits';
+export * from './LookingSimilar';
 export * from './Menu';
 export * from './Pagination';
 export * from './PoweredBy';
@@ -19,4 +21,3 @@ export * from './SortBy';
 export * from './Stats';
 export * from './ToggleRefinement';
 export * from './TrendingItems';
-export * from './LookingSimilar';

@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx createElement */
 import { render } from '@testing-library/preact';
@@ -18,7 +18,6 @@ describe('ChatMessage', () => {
       <ChatMessage
         indexUiState={{}}
         setIndexUiState={jest.fn()}
-        content={<span>Content</span>}
         message={{ role: 'user', id: '1', parts: [] }}
       />
     );
@@ -49,7 +48,6 @@ describe('ChatMessage', () => {
       <ChatMessage
         indexUiState={{}}
         setIndexUiState={jest.fn()}
-        content={<span>Content</span>}
         message={{
           role: 'user',
           id: '1',
@@ -93,7 +91,6 @@ describe('ChatMessage', () => {
         <ChatMessage
           indexUiState={{}}
           setIndexUiState={jest.fn()}
-          content={<span>Content</span>}
           message={{
             role: 'user',
             id: '1',
@@ -103,7 +100,6 @@ describe('ChatMessage', () => {
         <ChatMessage
           indexUiState={{}}
           setIndexUiState={jest.fn()}
-          content={<span>Content</span>}
           message={{
             role: 'assistant',
             id: '2',
@@ -113,7 +109,6 @@ describe('ChatMessage', () => {
         <ChatMessage
           indexUiState={{}}
           setIndexUiState={jest.fn()}
-          content={<span>Content</span>}
           message={{
             role: 'system',
             id: '3',
@@ -201,7 +196,6 @@ describe('ChatMessage', () => {
       <ChatMessage
         indexUiState={{}}
         setIndexUiState={jest.fn()}
-        content={<span>Content</span>}
         message={{
           role: 'assistant',
           id: '1',
@@ -221,6 +215,8 @@ describe('ChatMessage', () => {
             component: ({ message }) => (
               <div className="wrapper">{JSON.stringify(message.output)}</div>
             ),
+            addToolResult: jest.fn(),
+            onToolCall: jest.fn(),
           },
         ]}
       />

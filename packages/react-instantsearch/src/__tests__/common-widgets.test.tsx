@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/widgets';
@@ -392,6 +392,9 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
+  createChatWidgetTests() {
+    throw new Error('Chat is not tested through the Common Test Suite yet');
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -435,6 +438,12 @@ const testOptions: TestOptionsMap<TestSuites> = {
     },
   },
   createDynamicWidgetsWidgetTests: { act },
+  createChatWidgetTests: {
+    act,
+    skippedTests: {
+      'Chat widget common tests': true,
+    },
+  },
 };
 
 /**

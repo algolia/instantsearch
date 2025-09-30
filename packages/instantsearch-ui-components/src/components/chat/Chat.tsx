@@ -7,21 +7,26 @@ import { createChatMessagesComponent } from './ChatMessages';
 import { createChatPromptComponent } from './ChatPrompt';
 import { createChatToggleButtonComponent } from './ChatToggleButton';
 
-import type { Renderer } from '../../types';
+import type { MutableRef, Renderer, ComponentProps } from '../../types';
 import type { ChatHeaderProps } from './ChatHeader';
 import type { ChatMessagesProps } from './ChatMessages';
 import type { ChatPromptProps } from './ChatPrompt';
 import type { ChatToggleButtonProps } from './ChatToggleButton';
 
 export type ChatClassNames = {
+  root?: string | string[];
   container?: string | string[];
 };
 
-export type ChatProps = {
+export type ChatProps = Omit<ComponentProps<'div'>, 'onError' | 'title'> & {
   /*
    * Whether the chat is open or closed.
    */
   open: boolean;
+  /*
+   * Whether the chat is maximized or not.
+   */
+  maximized?: boolean;
   /*
    * Props for the ChatHeader component.
    */
@@ -42,6 +47,10 @@ export type ChatProps = {
    * Optional class names for elements
    */
   classNames?: Partial<ChatClassNames>;
+  /**
+   * Optional title for the chat
+   */
+  title?: string;
 };
 
 export function createChatComponent({ createElement, Fragment }: Renderer) {
@@ -53,27 +62,50 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
   const ChatMessages = createChatMessagesComponent({ createElement, Fragment });
   const ChatPrompt = createChatPromptComponent({ createElement, Fragment });
 
+  const promptRef: MutableRef<HTMLTextAreaElement | null> = { current: null };
+
   return function Chat({
     open,
+    maximized = false,
     headerProps,
     toggleButtonProps,
     messagesProps,
-    promptProps,
+    promptProps = {},
     classNames = {},
+    className,
+    ...props
   }: ChatProps) {
     return (
-      <>
-        {!open ? (
-          <ChatToggleButton {...toggleButtonProps} />
-        ) : (
-          <div className={cx('ais-Chat-container', classNames.container)}>
-            <ChatHeader {...headerProps} />
-            <ChatMessages {...messagesProps} />
-
-            <ChatPrompt {...promptProps} />
-          </div>
+      <div
+        {...props}
+        className={cx(
+          'ais-Chat',
+          maximized && 'ais-Chat--maximized',
+          classNames.root,
+          className
         )}
-      </>
+      >
+        <div
+          className={cx(
+            'ais-Chat-container',
+            open && 'ais-Chat-container--open',
+            maximized && 'ais-Chat-container--maximized',
+            classNames.container
+          )}
+        >
+          <ChatHeader {...headerProps} maximized={maximized} />
+          <ChatMessages {...messagesProps} />
+          <ChatPrompt {...promptProps} ref={promptRef} />
+        </div>
+
+        <ChatToggleButton
+          {...toggleButtonProps}
+          onClick={() => {
+            toggleButtonProps.onClick?.();
+            promptRef.current?.focus?.();
+          }}
+        />
+      </div>
     );
   };
 }

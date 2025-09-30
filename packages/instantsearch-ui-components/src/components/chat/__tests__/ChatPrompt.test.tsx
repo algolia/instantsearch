@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx createElement */
 import { render } from '@testing-library/preact';
@@ -26,34 +26,50 @@ describe('ChatPrompt', () => {
           >
             <textarea
               aria-label="Type your message..."
-              class="ais-ChatPrompt-textarea"
+              autofocus="true"
+              class="ais-ChatPrompt-textarea ais-Scrollbar"
+              data-max-rows="5"
               placeholder="Type your message..."
-              rows="2"
-              style="max-height: 12em; resize: none; overflow: auto;"
+              style="height: auto; overflow-y: hidden;"
             />
             <div
               class="ais-ChatPrompt-actions"
             >
               <button
+                aria-label="Message is empty"
                 class="ais-ChatPrompt-submit"
                 data-status="ready"
                 disabled=""
-                title="Message is empty"
+                type="submit"
               >
                 <svg
                   fill="none"
                   height="16"
-                  viewBox="0 0 16 16"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
                   width="16"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    clipRule="evenodd"
-                    d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"
-                    fill="currentColor"
-                    fillRule="evenodd"
+                    d="m5 12 7-7 7 7"
+                  />
+                  <path
+                    d="M12 19V5"
                   />
                 </svg>
               </button>
+            </div>
+          </div>
+          <div
+            class="ais-ChatPrompt-footer"
+          >
+            <div
+              class="ais-ChatPrompt-disclaimer"
+            >
+              AI can make mistakes. Verify responses.
             </div>
           </div>
         </form>
@@ -96,31 +112,38 @@ describe('ChatPrompt', () => {
           >
             <textarea
               aria-label="Type your message..."
-              class="ais-ChatPrompt-textarea textarea"
+              autofocus="true"
+              class="ais-ChatPrompt-textarea ais-Scrollbar textarea"
+              data-max-rows="5"
               placeholder="Type your message..."
-              rows="2"
-              style="max-height: 12em; resize: none; overflow: auto;"
+              style="height: auto; overflow-y: hidden;"
             />
             <div
               class="ais-ChatPrompt-actions actions"
             >
               <button
+                aria-label="Message is empty"
                 class="ais-ChatPrompt-submit submit"
                 data-status="ready"
                 disabled=""
-                title="Message is empty"
+                type="submit"
               >
                 <svg
                   fill="none"
                   height="16"
-                  viewBox="0 0 16 16"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
                   width="16"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    clipRule="evenodd"
-                    d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"
-                    fill="currentColor"
-                    fillRule="evenodd"
+                    d="m5 12 7-7 7 7"
+                  />
+                  <path
+                    d="M12 19V5"
                   />
                 </svg>
               </button>

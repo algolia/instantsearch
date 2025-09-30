@@ -1,9 +1,12 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 import { runTestSuites } from '@instantsearch/tests/common';
 import * as testSuites from '@instantsearch/tests/shared';
-import { connectMenu, connectPagination } from 'instantsearch.js/es/connectors';
+import {
+  connectMenu,
+  connectPagination,
+} from 'instantsearch.js/es/connectors/index.umd';
 
 import { nextTick, mountApp } from '../../test/utils';
 import {

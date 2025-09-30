@@ -2,7 +2,9 @@
 
 import { cx } from '../../lib';
 
-import type { ComponentProps, Renderer } from '../../types';
+import { ArrowUpIconComponent, StopIconComponent } from './icons';
+
+import type { ComponentProps, MutableRef, Renderer } from '../../types';
 import type { ChatStatus } from './types';
 
 export type ChatPromptTranslations = {
@@ -27,9 +29,9 @@ export type ChatPromptTranslations = {
    */
   sendMessageTooltip: string;
   /**
-   * The tooltip when the chat prompt is disabled
+   * The disclaimer text shown in the footer
    */
-  disabledTooltip: string;
+  disclaimer: string;
 };
 
 export type ChatPromptClassNames = {
@@ -64,7 +66,7 @@ export type ChatPromptClassNames = {
 };
 
 export type ChatPromptProps = Omit<
-  ComponentProps<'form'>,
+  ComponentProps<'textarea'>,
   'onInput' | 'onSubmit'
 > & {
   /**
@@ -96,6 +98,10 @@ export type ChatPromptProps = Omit<
    */
   maxRows?: number;
   /**
+   * Whether to auto-focus the textarea when mounted
+   */
+  autoFocus?: boolean;
+  /**
    * Optional class names
    */
   classNames?: Partial<ChatPromptClassNames>;
@@ -104,45 +110,74 @@ export type ChatPromptProps = Omit<
    */
   translations?: Partial<ChatPromptTranslations>;
   /**
-   * Callback when the textarea value changes
-   */
-  onInput?: (value: string) => void;
-  /**
-   * Callback when the form is submitted
-   */
-  onSubmit?: (value: string) => void;
-  /**
    * Callback when the stop button is clicked
    */
   onStop?: () => void;
+  /**
+   * Callback when the form is submitted
+   */
+  onSubmit?: ComponentProps<'textarea'>['onSubmit'];
+  /**
+   * Callback when the textarea value changes
+   */
+  onInput?: ComponentProps<'textarea'>['onInput'];
+  /**
+   * Ref callback to get access to the focus function
+   */
+  ref?: MutableRef<HTMLTextAreaElement | null>;
 };
 
-function createDefaultSubmitIconComponent({
-  createElement,
-}: Pick<Renderer, 'createElement'>) {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        fill="currentColor"
-        d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"
-      />
-    </svg>
-  );
-}
-
-function createDefaultStopIconComponent({
-  createElement,
-}: Pick<Renderer, 'createElement'>) {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <rect x="4" y="4" width="8" height="8" rx="1" fill="currentColor" />
-    </svg>
-  );
-}
-
 export function createChatPromptComponent({ createElement }: Renderer) {
+  let textAreaElement: HTMLTextAreaElement | null = null;
+  let lineHeight = 0;
+  let padding = 0;
+
+  const adjustHeight = () => {
+    if (!textAreaElement) return;
+
+    textAreaElement.style.height = 'auto';
+    const fullHeight = textAreaElement.scrollHeight;
+
+    if (textAreaElement.getAttribute('data-max-rows')) {
+      const maxRows = parseInt(
+        textAreaElement.getAttribute('data-max-rows') || '0',
+        10
+      );
+      if (maxRows > 0) {
+        const maxHeight = maxRows * lineHeight + padding;
+        textAreaElement.style.overflowY =
+          fullHeight > maxHeight ? 'auto' : 'hidden';
+        textAreaElement.style.height = `${Math.min(fullHeight, maxHeight)}px`;
+        return;
+      }
+    }
+
+    textAreaElement.style.overflowY = 'hidden';
+    textAreaElement.style.height = `${fullHeight}px`;
+  };
+
+  const setTextAreaRef = (
+    element: HTMLTextAreaElement | null,
+    ref?: MutableRef<HTMLTextAreaElement | null>
+  ) => {
+    textAreaElement = element;
+
+    if (ref) {
+      ref.current = element;
+    }
+
+    if (element) {
+      const styles = getComputedStyle(element);
+      lineHeight = parseFloat(styles.lineHeight);
+
+      const pt = parseFloat(styles.paddingTop);
+      const pb = parseFloat(styles.paddingBottom);
+      padding = pt + pb;
+
+      adjustHeight();
+    }
+  };
+
   return function ChatPrompt(userProps: ChatPromptProps) {
     const {
       classNames = {},
@@ -152,11 +187,14 @@ export function createChatPromptComponent({ createElement }: Renderer) {
       placeholder,
       status = 'ready',
       disabled = false,
-      maxRows = 8,
+      maxRows = 5,
+      autoFocus = true,
       translations: userTranslations,
       onInput,
       onSubmit,
+      onKeyDown,
       onStop,
+      ref,
       ...props
     } = userProps;
 
@@ -166,7 +204,7 @@ export function createChatPromptComponent({ createElement }: Renderer) {
       emptyMessageTooltip: 'Message is empty',
       stopResponseTooltip: 'Stop response',
       sendMessageTooltip: 'Send message',
-      disabledTooltip: 'Chat prompt is disabled',
+      disclaimer: 'AI can make mistakes. Verify responses.',
       ...userTranslations,
     };
 
@@ -174,7 +212,11 @@ export function createChatPromptComponent({ createElement }: Renderer) {
       root: cx('ais-ChatPrompt', classNames.root),
       header: cx('ais-ChatPrompt-header', classNames.header),
       body: cx('ais-ChatPrompt-body', classNames.body),
-      textarea: cx('ais-ChatPrompt-textarea', classNames.textarea),
+      textarea: cx(
+        'ais-ChatPrompt-textarea ais-Scrollbar',
+        disabled && 'ais-ChatPrompt-textarea--disabled',
+        classNames.textarea
+      ),
       actions: cx(
         'ais-ChatPrompt-actions',
         classNames.actions,
@@ -189,48 +231,26 @@ export function createChatPromptComponent({ createElement }: Renderer) {
     const canStop = status === 'submitted' || status === 'streaming';
     const buttonDisabled = (!hasValue && !canStop) || disabled;
 
-    const handleSubmit = (event: any) => {
-      event.preventDefault();
-
-      if (!hasValue || canStop || disabled) {
-        return;
-      }
-
-      onSubmit?.(value || '');
-    };
-
-    const handleTextareaInput = (event: any) => {
-      const target = event.target as HTMLTextAreaElement;
-      const newValue = target.value;
-
-      onInput?.(newValue);
-    };
-
-    const handleKeyDown = (event: any) => {
-      if (event.key === 'Enter' && !event.shiftKey) {
-        handleSubmit(event);
-      }
-      if (event.key === 'Escape') {
-        (event.target as HTMLTextAreaElement).blur();
-      }
-    };
-
-    const handleButtonClick = (event: any) => {
-      if (canStop) {
-        event.preventDefault();
-        onStop?.();
-      }
-    };
-
-    const SubmitIcon = canStop
-      ? createDefaultStopIconComponent
-      : createDefaultSubmitIconComponent;
+    const submitIcon = canStop ? (
+      <StopIconComponent createElement={createElement} />
+    ) : (
+      <ArrowUpIconComponent createElement={createElement} />
+    );
 
     return (
       <form
-        {...props}
         className={cx(cssClasses.root, props.className)}
-        onSubmit={handleSubmit}
+        onSubmit={(event) => {
+          event.preventDefault();
+          if (canStop) {
+            onStop?.();
+            return;
+          }
+          if (!hasValue) {
+            return;
+          }
+          onSubmit?.(event as any);
+        }}
       >
         {HeaderComponent && (
           <div className={cx(cssClasses.header)}>
@@ -238,46 +258,74 @@ export function createChatPromptComponent({ createElement }: Renderer) {
           </div>
         )}
 
-        <div className={cx(cssClasses.body)}>
+        <div
+          className={cx(cssClasses.body)}
+          onClick={(e) => {
+            if (e.target === textAreaElement) return;
+            textAreaElement?.focus();
+          }}
+        >
           <textarea
+            {...props}
+            ref={(element) => setTextAreaRef(element, ref)}
+            data-max-rows={maxRows}
             className={cx(cssClasses.textarea)}
             value={value}
             placeholder={placeholder || translations.textareaPlaceholder}
             aria-label={translations.textareaLabel}
             disabled={disabled}
-            rows={2}
-            style={{
-              maxHeight: `${maxRows * 1.5}em`,
-              resize: 'none',
-              overflow: 'auto',
+            autoFocus={autoFocus}
+            onInput={(event) => {
+              adjustHeight();
+              onInput?.(event);
             }}
-            onInput={handleTextareaInput}
-            onKeyDown={handleKeyDown}
+            onKeyDown={(event) => {
+              onKeyDown?.(event);
+              if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                if (canStop) {
+                  onStop?.();
+                  return;
+                }
+                if (!hasValue) {
+                  return;
+                }
+                onSubmit?.(event);
+              }
+              if (event.key === 'Escape') {
+                if (event.currentTarget && event.currentTarget.blur) {
+                  event.currentTarget.blur();
+                }
+              }
+            }}
           />
 
           <div className={cx(cssClasses.actions)}>
             <button
+              type="submit"
               className={cx(cssClasses.submit)}
               disabled={buttonDisabled}
-              title={(() => {
-                if (disabled) return translations.disabledTooltip;
+              aria-label={(() => {
                 if (buttonDisabled) return translations.emptyMessageTooltip;
                 if (canStop) return translations.stopResponseTooltip;
                 return translations.sendMessageTooltip;
               })()}
-              onClick={handleButtonClick}
               data-status={status}
             >
-              <SubmitIcon createElement={createElement} />
+              {submitIcon}
             </button>
           </div>
         </div>
 
-        {FooterComponent && (
-          <div className={cx(cssClasses.footer)}>
+        <div className={cx(cssClasses.footer)}>
+          {FooterComponent ? (
             <FooterComponent />
-          </div>
-        )}
+          ) : (
+            <div className="ais-ChatPrompt-disclaimer">
+              {translations.disclaimer}
+            </div>
+          )}
+        </div>
       </form>
     );
   };

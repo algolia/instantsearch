@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 import { runTestSuites } from '@instantsearch/tests/common';
 import * as testSuites from '@instantsearch/tests/widgets';
@@ -581,6 +581,9 @@ const testSetups = {
       document.body.appendChild(document.createElement('div'))
     );
   },
+  createChatWidgetTests() {
+    throw new Error('Chat is not supported in Vue InstantSearch');
+  },
 };
 
 const testOptions = {
@@ -623,6 +626,9 @@ const testOptions = {
   },
   createPoweredByWidgetTests: undefined,
   createDynamicWidgetsWidgetTests: undefined,
+  createChatWidgetTests: {
+    skippedTests: { 'Chat widget common tests': true },
+  },
 };
 
 describe('Common widget tests (Vue InstantSearch)', () => {

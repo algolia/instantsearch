@@ -1,7 +1,3 @@
-/**
- * @jest-environment node
- */
-
 import { getAllInstantSearchWidgets } from './__utils__/all-widgets';
 
 describe('widgets', () => {
@@ -101,6 +97,11 @@ describe('widgets', () => {
           "name": "InfiniteHits",
         },
         {
+          "$$type": "ais.lookingSimilar",
+          "$$widgetType": "ais.lookingSimilar",
+          "name": "LookingSimilar",
+        },
+        {
           "$$type": "ais.menu",
           "$$widgetType": "ais.menu",
           "name": "Menu",
@@ -149,11 +150,6 @@ describe('widgets', () => {
           "$$type": "ais.trendingItems",
           "$$widgetType": "ais.trendingItems",
           "name": "TrendingItems",
-        },
-        {
-          "$$type": "ais.lookingSimilar",
-          "$$widgetType": "ais.lookingSimilar",
-          "name": "LookingSimilar",
         },
       ]
     `);

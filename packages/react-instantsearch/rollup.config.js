@@ -45,8 +45,8 @@ const plugins = [
 ];
 
 const createConfiguration = ({ name, minify = false } = {}) => ({
-  input: 'src/index.ts',
-  external: ['react'],
+  input: 'src/index.umd.ts',
+  external: ['react', 'ai'],
   output: {
     file: `dist/umd/ReactInstantSearch${name}${minify ? '.min' : ''}.js`,
     name: `ReactInstantSearch${name}`,

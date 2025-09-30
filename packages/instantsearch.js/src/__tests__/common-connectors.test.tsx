@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/connectors';
@@ -19,6 +19,7 @@ import {
   connectFrequentlyBoughtTogether,
   connectTrendingItems,
   connectLookingSimilar,
+  connectChat,
 } from '../connectors';
 import instantsearch from '../index.es';
 import { refinementList } from '../widgets';
@@ -530,6 +531,51 @@ const testSetups: TestSetupsMap<TestSuites> = {
 
     search.start();
   },
+  createChatConnectorTests({ instantSearchOptions, widgetParams }) {
+    const customChat = connectChat<{
+      container: HTMLElement;
+    }>((renderOptions) => {
+      const { input, setInput, open, setOpen } = renderOptions;
+      renderOptions.widgetParams.container.innerHTML = `
+        <div data-testid="Chat-root" style="display: ${
+          open ? 'block' : 'none'
+        }">
+          <input data-testid="Chat-input" type="text" value="${input}" />
+          <button data-testid="Chat-updateInput">update input</button>
+        </div>
+        <button data-testid="Chat-toggleButton">
+          toggle chat
+        </button>
+      `;
+
+      renderOptions.widgetParams.container
+        .querySelector('[data-testid="Chat-toggleButton"]')!
+        .addEventListener('click', () => {
+          setOpen(!open);
+        });
+
+      renderOptions.widgetParams.container
+        .querySelector('[data-testid="Chat-updateInput"]')!
+        .addEventListener('click', () => {
+          setInput('hello world');
+        });
+    });
+
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        customChat({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
 };
 
 function addWidgetToggleUi(search: InstantSearch, widget: Widget) {
@@ -561,6 +607,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createFrequentlyBoughtTogetherConnectorTests: undefined,
   createTrendingItemsConnectorTests: undefined,
   createLookingSimilarConnectorTests: undefined,
+  createChatConnectorTests: undefined,
 };
 
 describe('Common connector tests (InstantSearch.js)', () => {

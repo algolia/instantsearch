@@ -1,0 +1,124 @@
+@use '../../shared/_common';
+@use '../../shared/_variables';
+
+.ais-ChatPrompt {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: calc(var(--ais-spacing) * 0.5);
+  width: 100%;
+  position: relative;
+  padding: 0 var(--ais-spacing) var(--ais-spacing) var(--ais-spacing);
+
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    right: 0;
+    height: var(--ais-spacing);
+    background: linear-gradient(
+      to top,
+      rgba(var(--ais-background-color-rgb), var(--ais-background-color-alpha)),
+      transparent
+    );
+    pointer-events: none;
+  }
+}
+
+.ais-ChatPrompt-header {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--ais-spacing) * 0.375);
+}
+
+.ais-ChatPrompt-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(var(--ais-spacing) * 0.375);
+
+  .ais-ChatPrompt-disclaimer {
+    font-size: calc(var(--ais-spacing) * 0.75);
+    color: rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha));
+  }
+}
+
+.ais-ChatPrompt-body {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+  background-color: rgba(
+    var(--ais-background-color-rgb),
+    var(--ais-background-color-alpha)
+  );
+  border-radius: var(--ais-border-radius-sm);
+  border: 1px solid
+    rgba(var(--ais-border-color-rgb), var(--ais-border-color-alpha));
+  outline: 1px solid transparent;
+  z-index: 1;
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: border-color var(--ais-transition-duration)
+        var(--ais-transition-timing-function),
+      outline-color var(--ais-transition-duration)
+        var(--ais-transition-timing-function);
+  }
+}
+
+.ais-ChatPrompt-body:focus-within {
+  outline: 1px solid
+    rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+  border-color: rgba(
+    var(--ais-primary-color-rgb),
+    var(--ais-primary-color-alpha)
+  );
+}
+
+.ais-ChatPrompt-textarea {
+  appearance: none;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  padding: calc(var(--ais-spacing) * 0.75);
+  padding-bottom: 0;
+  caret-color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+}
+
+.ais-ChatPrompt-textarea::placeholder {
+  color: rgba(var(--ais-text-color-rgb), 0.7);
+}
+
+.ais-ChatPrompt-textarea:disabled,
+.ais-ChatPrompt-actions--disabled {
+  background-color: rgba(var(--ais-muted-color-rgb), 0.1);
+}
+
+.ais-ChatPrompt-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding: calc(var(--ais-spacing) * 0.75);
+  padding-top: calc(var(--ais-spacing) * 0.5);
+  cursor: text;
+}
+
+.ais-ChatPrompt-submit {
+  @extend %ais-button-primary;
+
+  width: calc(var(--ais-spacing) * 1.5);
+  height: calc(var(--ais-spacing) * 1.5);
+}
+
+@media (max-width: variables.$ais-chat-breakpoint) {
+  .ais-ChatPrompt .ais-ChatPrompt-textarea {
+    font-size: var(--ais-spacing);
+  }
+}

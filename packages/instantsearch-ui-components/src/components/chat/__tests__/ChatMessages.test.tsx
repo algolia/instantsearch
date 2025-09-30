@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx createElement */
 import { render } from '@testing-library/preact';
@@ -25,13 +25,12 @@ describe('ChatMessages', () => {
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
-          aria-label="Chat messages"
           aria-live="polite"
           class="ais-ChatMessages"
           role="log"
         >
           <div
-            class="ais-ChatMessages-scroll"
+            class="ais-ChatMessages-scroll ais-Scrollbar"
           >
             <div
               class="ais-ChatMessages-content"
@@ -40,20 +39,22 @@ describe('ChatMessages', () => {
           <button
             aria-label="Scroll to bottom"
             class="ais-ChatMessages-scrollToBottom"
-            title="Scroll to bottom"
+            tabindex="0"
             type="button"
           >
             <svg
               fill="none"
               height="16"
-              viewBox="0 0 16 16"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
               width="16"
+              xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                clipRule="evenodd"
-                d="M3.646 5.646a.5.5 0 0 1 .708 0L8 9.293l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z"
-                fill="currentColor"
-                fillRule="evenodd"
+                d="m6 9 6 6 6-6"
               />
             </svg>
           </button>
@@ -96,44 +97,40 @@ describe('ChatMessages', () => {
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
-          aria-label="Chat messages"
           aria-live="polite"
           class="ais-ChatMessages"
           role="log"
         >
           <div
-            class="ais-ChatMessages-scroll"
+            class="ais-ChatMessages-scroll ais-Scrollbar"
           >
             <div
               class="ais-ChatMessages-content"
             >
-              <div
-                class="ais-ChatMessages-message ais-ChatMessages-message--user"
-                data-role="user"
-              >
-                <span>
-                  Messages
-                </span>
-              </div>
+              <span>
+                Messages
+              </span>
             </div>
           </div>
           <button
             aria-label="Scroll to bottom"
             class="ais-ChatMessages-scrollToBottom"
-            title="Scroll to bottom"
+            tabindex="0"
             type="button"
           >
             <svg
               fill="none"
               height="16"
-              viewBox="0 0 16 16"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
               width="16"
+              xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                clipRule="evenodd"
-                d="M3.646 5.646a.5.5 0 0 1 .708 0L8 9.293l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z"
-                fill="currentColor"
-                fillRule="evenodd"
+                d="m6 9 6 6 6-6"
               />
             </svg>
           </button>
@@ -160,13 +157,12 @@ describe('ChatMessages', () => {
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
-          aria-label="Chat messages"
           aria-live="polite"
           class="ais-ChatMessages root"
           role="log"
         >
           <div
-            class="ais-ChatMessages-scroll scroll"
+            class="ais-ChatMessages-scroll ais-Scrollbar scroll"
           >
             <div
               class="ais-ChatMessages-content content"
@@ -175,20 +171,22 @@ describe('ChatMessages', () => {
           <button
             aria-label="Scroll to bottom"
             class="ais-ChatMessages-scrollToBottom scrollToBottom"
-            title="Scroll to bottom"
+            tabindex="0"
             type="button"
           >
             <svg
               fill="none"
               height="16"
-              viewBox="0 0 16 16"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
               width="16"
+              xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                clipRule="evenodd"
-                d="M3.646 5.646a.5.5 0 0 1 .708 0L8 9.293l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z"
-                fill="currentColor"
-                fillRule="evenodd"
+                d="m6 9 6 6 6-6"
               />
             </svg>
           </button>
