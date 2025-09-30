@@ -1,3 +1,4 @@
+export * from './autocomplete';
 export * from './Carousel';
 export * from './chat/Chat';
 export * from './chat/ChatHeader';
@@ -13,11 +14,3 @@ export * from './Hits';
 export * from './LookingSimilar';
 export * from './RelatedProducts';
 export * from './TrendingItems';
-export * from './chat/Chat';
-export * from './chat/ChatPrompt';
-export * from './chat/ChatMessages';
-export * from './chat/ChatMessage';
-export * from './chat/ChatToggleButton';
-export * from './chat/ChatHeader';
-export * from './chat/types';
-export * from './autocomplete';
