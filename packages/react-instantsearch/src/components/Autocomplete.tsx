@@ -6,7 +6,7 @@ import {
 import React, { createElement, useState, Fragment } from 'react';
 import { Index, useHits } from 'react-instantsearch-core';
 
-import { SearchBox } from '../widgets';
+import { SearchBox } from '../widgets/SearchBox';
 
 import type { Pragma } from 'instantsearch-ui-components';
 import type { BaseHit, Hit } from 'instantsearch.js';
