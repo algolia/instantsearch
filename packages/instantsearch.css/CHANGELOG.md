@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.6.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.5.1...instantsearch.css@8.6.0) (2025-09-30)
+
+
+### Features
+
+* **instantsearch-ui-components:** implement chat carousel design ([#6719](https://github.com/algolia/instantsearch/issues/6719)) ([e29f0d5](https://github.com/algolia/instantsearch/commit/e29f0d56a63bee5db596e6b9918ccafa4a8112b8))
+* **react-instantsearch-ui:** implement chat components design ([#6704](https://github.com/algolia/instantsearch/issues/6704)) ([dbea460](https://github.com/algolia/instantsearch/commit/dbea4600184666c913f952fcdf7a4971e89ac266))
+* **ui-components:** introduce chat components ([#6678](https://github.com/algolia/instantsearch/issues/6678)) ([4967237](https://github.com/algolia/instantsearch/commit/4967237ebcc73095dd02f686b1fbb161b48b6d3e))
+
+
+
+
+
 ## [8.5.1](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.5.0...instantsearch.css@8.5.1) (2024-09-10)
 
 
