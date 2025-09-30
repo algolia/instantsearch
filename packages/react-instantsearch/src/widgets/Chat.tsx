@@ -21,6 +21,7 @@ import type {
   AddToolResultWithOutput,
   UserClientSideTool,
 } from 'instantsearch-ui-components/src/components/chat/types';
+import type { IndexUiState } from 'instantsearch.js';
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
 import type { UseChatOptions } from 'react-instantsearch-core';
 
@@ -30,9 +31,10 @@ const ChatUiComponent = createChatComponent({
 });
 
 export function createDefaultTools<TObject extends RecordWithObjectID>(
-  itemComponent?: ItemComponent<TObject>
+  itemComponent?: ItemComponent<TObject>,
+  getSearchPageURL?: (nextUiState: IndexUiState) => string
 ): UserClientSideTool[] {
-  return [createSearchIndexTool(itemComponent)];
+  return [createSearchIndexTool(itemComponent, getSearchPageURL)];
 }
 
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
@@ -73,6 +75,7 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
   itemComponent?: ItemComponent<TObject>;
   tools?: UserClientSideTool[];
   defaultOpen?: boolean;
+  getSearchPageURL?: (nextUiState: IndexUiState) => string;
 } & UseChatOptions<TUiMessage> & {
     toggleButtonProps?: UserToggleButtonProps;
     headerProps?: UserHeaderProps;
@@ -93,6 +96,7 @@ export function Chat<
   promptProps,
   classNames,
   title,
+  getSearchPageURL,
   ...props
 }: ChatProps<TObject, TUiMessage>) {
   const { indexUiState, setIndexUiState } = useInstantSearch();
@@ -109,7 +113,7 @@ export function Chat<
     });
 
   const tools = React.useMemo(() => {
-    const defaults = createDefaultTools(itemComponent);
+    const defaults = createDefaultTools(itemComponent, getSearchPageURL);
 
     if (!userTools) {
       return defaults;
@@ -126,7 +130,7 @@ export function Chat<
     );
 
     return [...merged, ...extraUserTools];
-  }, [itemComponent, userTools]);
+  }, [getSearchPageURL, itemComponent, userTools]);
 
   const {
     messages,
