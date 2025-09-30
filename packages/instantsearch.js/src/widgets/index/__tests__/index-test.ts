@@ -2891,7 +2891,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       const fbt = createFrequentlyBoughtTogether({ shouldRender: () => true });
       const searchBox = virtualSearchBox({});
       jest.spyOn(searchBox, 'render');
-      instance.addWidgets([fbt, searchBox]);
+      const child = index({ indexName: 'childIndexName' });
+      jest.spyOn(child, 'render');
+      instance.addWidgets([fbt, searchBox, child]);
 
       instance.init(
         createIndexInitOptions({
@@ -2906,6 +2908,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
       expect(fbt.render).toHaveBeenCalledTimes(1);
       expect(searchBox.render).toHaveBeenCalledTimes(0);
+      expect(child.render).toHaveBeenCalledTimes(1);
     });
 
     // https://github.com/algolia/instantsearch/pull/2623
