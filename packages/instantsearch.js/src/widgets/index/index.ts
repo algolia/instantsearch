@@ -903,7 +903,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         derivedHelper?.lastRecommendResults ||
         (isolated && !indexName)
           ? localWidgets
-          : localWidgets.filter(isIndexWidget);
+          : localWidgets.filter((widget) => widget.shouldRender);
 
       widgetsToRender = widgetsToRender.filter((widget) => {
         if (!widget.shouldRender) {
@@ -1010,6 +1010,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         uiState,
         initialSearchParameters: searchParameters,
       });
+    },
+
+    shouldRender() {
+      return true;
     },
 
     refreshUiState() {

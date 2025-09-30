@@ -264,12 +264,16 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         };
       },
 
-      get chatInstance() {
-        return _chatInstance;
-      },
-
       dispose() {
         unmountFn();
+      },
+
+      shouldRender() {
+        return true;
+      },
+
+      get chatInstance() {
+        return _chatInstance;
       },
     };
   };
