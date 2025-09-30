@@ -903,7 +903,9 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         derivedHelper?.lastRecommendResults ||
         (isolated && !indexName)
           ? localWidgets
-          : localWidgets.filter(isIndexWidget);
+          : localWidgets.filter(
+              (widget) => widget.shouldRender || isIndexWidget(widget)
+            );
 
       widgetsToRender = widgetsToRender.filter((widget) => {
         if (!widget.shouldRender) {

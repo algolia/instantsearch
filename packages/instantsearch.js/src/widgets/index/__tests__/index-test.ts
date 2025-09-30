@@ -2884,6 +2884,30 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       expect(fbt.render).toHaveBeenCalledTimes(0);
     });
 
+    it('calls render on widgets with shouldRender, even if there are no results', () => {
+      const instance = index({ indexName: 'indexName' });
+      const instantSearchInstance = createInstantSearch();
+
+      const fbt = createFrequentlyBoughtTogether({ shouldRender: () => true });
+      const searchBox = virtualSearchBox({});
+      jest.spyOn(searchBox, 'render');
+      instance.addWidgets([fbt, searchBox]);
+
+      instance.init(
+        createIndexInitOptions({
+          instantSearchInstance,
+          parent: null,
+        })
+      );
+
+      instance.render({
+        instantSearchInstance,
+      });
+
+      expect(fbt.render).toHaveBeenCalledTimes(1);
+      expect(searchBox.render).toHaveBeenCalledTimes(0);
+    });
+
     // https://github.com/algolia/instantsearch/pull/2623
     it('does not call `render` without `lastResults`', () => {
       const instance = index({ indexName: 'indexName' });
