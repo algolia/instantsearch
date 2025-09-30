@@ -14,6 +14,7 @@ import type {
   ChatToolMessage,
   UserClientSideTool,
 } from 'instantsearch-ui-components';
+import type { IndexUiState } from 'instantsearch.js';
 
 export const SearchIndexToolType: ChatToolMessage['type'] =
   'tool-algolia_search_index';
@@ -21,7 +22,8 @@ export const SearchIndexToolType: ChatToolMessage['type'] =
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
 
 export function createSearchIndexTool<TObject extends RecordWithObjectID>(
-  itemComponent?: ItemComponent<TObject>
+  itemComponent?: ItemComponent<TObject>,
+  getSearchPageURL?: (nextUiState: IndexUiState) => string
 ): UserClientSideTool {
   return {
     type: SearchIndexToolType,
@@ -69,12 +71,32 @@ export function createSearchIndexTool<TObject extends RecordWithObjectID>(
                   <button
                     type="button"
                     onClick={() => {
-                      if (input?.query) {
+                      if (!input?.query) {
+                        return;
+                      }
+
+                      if (!getSearchPageURL) {
                         setIndexUiState({
                           ...indexUiState,
                           query: input.query,
                         });
+                        return;
                       }
+
+                      const url = getSearchPageURL({
+                        query: input.query,
+                      });
+
+                      if (new URL(url).pathname === window.location.pathname) {
+                        // same page, just update the state
+                        setIndexUiState({
+                          ...indexUiState,
+                          query: input.query,
+                        });
+                        return;
+                      }
+
+                      window.location.href = url;
                     }}
                     className="ais-ChatToolSearchIndexCarouselHeaderViewAll"
                   >
