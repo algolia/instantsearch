@@ -54,13 +54,13 @@ exports.config = {
    */
   sauceConnectOpts: {
     /*
-     * Retry to establish a tunnel 2 times maximum on fail
+     * Retry to establish a tunnel 3 times maximum on fail
      * This is useful to prevent premature test failure if we have difficulties to open the tunnel
      * (can happen if there are already multiple tunnels opened on SauceLabs)
      * https://github.com/bermi/sauce-connect-launcher#advanced-usage
      */
-    connectRetries: 2,
-    connectRetryTimeout: 10000,
+    connectRetries: 3,
+    connectRetryTimeout: 15000,
   },
   /*
    * Sauce Labs Open Source offer has a maximum of 5 concurrent session
