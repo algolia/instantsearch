@@ -30,10 +30,11 @@ export type ClientSideToolComponent = (
 ) => JSX.Element;
 
 export type ClientSideTool = {
-  type: ChatToolType;
-  component: ClientSideToolComponent;
+  layoutComponent: ClientSideToolComponent;
   addToolResult: AddToolResult;
   onToolCall?: (params: { addToolResult: AddToolResultWithOutput }) => void;
 };
+export type ClientSideTools = Record<string, ClientSideTool>;
 
 export type UserClientSideTool = Omit<ClientSideTool, 'addToolResult'>;
+export type UserClientSideTools = Record<string, UserClientSideTool>;

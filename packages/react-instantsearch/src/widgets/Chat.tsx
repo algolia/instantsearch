@@ -1,6 +1,4 @@
 import { createChatComponent } from 'instantsearch-ui-components';
-import { defaultTools } from 'instantsearch.js/es/lib/chat';
-import { find } from 'instantsearch.js/es/lib/utils';
 import React, { createElement, Fragment } from 'react';
 import { useInstantSearch, useChat } from 'react-instantsearch-core';
 
@@ -16,11 +14,11 @@ import type {
   RecommendComponentProps,
   RecordWithObjectID,
   MutableRef,
-} from 'instantsearch-ui-components';
-import type {
-  AddToolResultWithOutput,
   UserClientSideTool,
-} from 'instantsearch-ui-components/src/components/chat/types';
+  UserClientSideTools,
+  AddToolResultWithOutput,
+  ClientSideTools,
+} from 'instantsearch-ui-components';
 import type { IndexUiState } from 'instantsearch.js';
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
 import type { UseChatOptions } from 'react-instantsearch-core';
@@ -33,8 +31,8 @@ const ChatUiComponent = createChatComponent({
 export function createDefaultTools<TObject extends RecordWithObjectID>(
   itemComponent?: ItemComponent<TObject>,
   getSearchPageURL?: (nextUiState: IndexUiState) => string
-): UserClientSideTool[] {
-  return [createSearchIndexTool(itemComponent, getSearchPageURL)];
+): UserClientSideTools {
+  return { ...createSearchIndexTool(itemComponent, getSearchPageURL) };
 }
 
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
@@ -67,13 +65,14 @@ type UserPromptProps = Omit<
 >;
 
 export type Tool = UserClientSideTool;
+export type Tools = UserClientSideTools;
 
 export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
   ChatUiProps,
   keyof UiProps
 > & {
   itemComponent?: ItemComponent<TObject>;
-  tools?: UserClientSideTool[];
+  tools?: UserClientSideTools;
   defaultOpen?: boolean;
   getSearchPageURL?: (nextUiState: IndexUiState) => string;
 } & UseChatOptions<TUiMessage> & {
@@ -119,17 +118,7 @@ export function Chat<
       return defaults;
     }
 
-    const userToolsMap = new Map(userTools.map((tool) => [tool.type, tool]));
-
-    const merged = defaults.map(
-      (defaultTool) => userToolsMap.get(defaultTool.type) ?? defaultTool
-    );
-
-    const extraUserTools = userTools.filter(
-      (tool) => !defaultTools.includes(tool.type)
-    );
-
-    return [...merged, ...extraUserTools];
+    return { ...defaults, ...userTools };
   }, [getSearchPageURL, itemComponent, userTools]);
 
   const {
@@ -144,7 +133,7 @@ export function Chat<
   } = useChat({
     ...props,
     onToolCall: ({ toolCall }) => {
-      const tool = find(tools, (t) => t.type === `tool-${toolCall.toolName}`);
+      const tool = tools[toolCall.toolName];
 
       if (tool && tool.onToolCall) {
         const scopedAddToolResult: AddToolResultWithOutput = ({ output }) => {
@@ -161,14 +150,16 @@ export function Chat<
     },
   });
 
-  const toolsForUi = React.useMemo(
-    () =>
-      tools?.map((t) => ({
-        ...t,
+  const toolsForUi: ClientSideTools = React.useMemo(() => {
+    const result: ClientSideTools = {};
+    Object.entries(tools).forEach(([key, tool]) => {
+      result[key] = {
+        ...tool,
         addToolResult,
-      })),
-    [tools, addToolResult]
-  );
+      };
+    });
+    return result;
+  }, [tools, addToolResult]);
 
   const handleClear = React.useCallback(() => {
     if (!messages || messages.length === 0) return;
