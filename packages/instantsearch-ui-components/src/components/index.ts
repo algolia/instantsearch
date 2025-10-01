@@ -1,3 +1,4 @@
+export * from './autocomplete';
 export * from './Carousel';
 export * from './chat/Chat';
 export * from './chat/ChatHeader';
