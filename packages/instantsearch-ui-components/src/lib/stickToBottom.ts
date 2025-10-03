@@ -125,16 +125,16 @@ const RETAIN_ANIMATION_DURATION_MS = 350;
 
 let mouseDown = false;
 
-if (typeof globalThis.document !== 'undefined') {
-  globalThis.document.addEventListener('mousedown', () => {
+if (typeof document !== 'undefined') {
+  document.addEventListener('mousedown', () => {
     mouseDown = true;
   });
 
-  globalThis.document.addEventListener('mouseup', () => {
+  document.addEventListener('mouseup', () => {
     mouseDown = false;
   });
 
-  globalThis.document.addEventListener('click', () => {
+  document.addEventListener('click', () => {
     mouseDown = false;
   });
 }
