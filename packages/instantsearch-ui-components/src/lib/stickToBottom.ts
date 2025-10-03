@@ -282,9 +282,14 @@ export const createStickToBottom = (
     let startTarget = state.calculatedTargetScrollTop;
 
     if (scrollOptions.duration instanceof Promise) {
-      scrollOptions.duration.finally(() => {
-        durationElapsed = Date.now();
-      });
+      scrollOptions.duration.then(
+        () => {
+          durationElapsed = Date.now();
+        },
+        () => {
+          durationElapsed = Date.now();
+        }
+      );
     } else {
       durationElapsed = waitElapsed + (scrollOptions.duration ?? 0);
     }
