@@ -198,6 +198,7 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
       const [isClearing, setIsClearing] = state.use(false);
       const [maximized, setMaximized] = state.use(false);
       const [isScrollAtBottom, setIsScrollAtBottom] = state.use(true);
+      const [promptRef] = state.use({ current: null });
 
       const onClear = () => setIsClearing(true);
       const onClearTransitionEnd = () => {
@@ -226,6 +227,7 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
             tools: toolsForUi,
           }}
           promptProps={{
+            promptRef,
             status,
             value: input,
             onInput: (event) => {
