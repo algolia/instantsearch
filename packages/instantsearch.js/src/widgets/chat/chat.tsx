@@ -141,7 +141,6 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
   containerNode,
   templates,
   tools,
-  translations,
 }: {
   containerNode: HTMLElement;
   cssClasses: ChatCSSClasses;
@@ -150,7 +149,6 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
   };
   templates: ChatTemplates<THit>;
   tools: UserClientSideToolWithTemplate[];
-  translations: ChatTranslations;
 }): Renderer<ChatRenderState, Partial<ChatWidgetParams>> => {
   const state = createLocalState();
   return (props, isFirstRendering) => {
@@ -168,12 +166,6 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
       status,
       addToolResult,
     } = props;
-
-    const {
-      prompt: promptTranslations = {},
-      header: headerTranslations = {},
-      messages: messagesTranslations = {},
-    } = translations;
 
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
@@ -223,7 +215,6 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
             onToggleMaximize: () => setMaximized(!maximized),
             onClear,
             canClear: messages.length > 0 && isClearing !== true,
-            translations: headerTranslations,
           }}
           messagesProps={{
             messages,
@@ -234,7 +225,6 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
             setIsScrollAtBottom,
             setIndexUiState,
             tools: toolsForUi,
-            translations: messagesTranslations,
           }}
           promptProps={{
             status,
@@ -246,7 +236,6 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
               sendMessage({ text: input });
               setInput('');
             },
-            translations: promptTranslations,
           }}
           toggleButtonProps={{ open, onClick: () => setOpen(!open) }}
         />,
@@ -278,12 +267,6 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
     item: TemplateWithBindEvent<Hit<THit>>;
   }>;
 
-export type ChatTranslations = Partial<{
-  prompt: ChatUiProps['promptProps']['translations'];
-  header: ChatUiProps['headerProps']['translations'];
-  messages: ChatUiProps['messagesProps']['translations'];
-}>;
-
 type ChatWidgetParams<THit extends NonNullable<object> = BaseHit> = {
   /**
    * CSS Selector or HTMLElement to insert the widget.
@@ -304,11 +287,6 @@ type ChatWidgetParams<THit extends NonNullable<object> = BaseHit> = {
    * CSS classes to add.
    */
   cssClasses?: ChatCSSClasses;
-
-  /**
-   * Translations for the widget.
-   */
-  translations?: ChatTranslations;
 };
 
 export type ChatWidget = WidgetFactory<
@@ -326,7 +304,6 @@ export default (function chat<THit extends NonNullable<object> = BaseHit>(
     cssClasses = {},
     resume = false,
     tools: userTools,
-    translations = {},
     ...options
   } = widgetParams || {};
 
@@ -344,7 +321,6 @@ export default (function chat<THit extends NonNullable<object> = BaseHit>(
     renderState: {},
     templates,
     tools,
-    translations,
   });
 
   const makeWidget = connectChat(specializedRenderer, () =>
