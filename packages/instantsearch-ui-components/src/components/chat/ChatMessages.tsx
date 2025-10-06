@@ -1,6 +1,7 @@
 /** @jsx createElement */
 
 import { cx } from '../../lib';
+import { createStickToBottom } from '../../lib/stickToBottom';
 
 import { createChatMessageComponent } from './ChatMessage';
 import { createChatMessageErrorComponent } from './ChatMessageError';
@@ -11,7 +12,7 @@ import {
   ReloadIconComponent,
 } from './icons';
 
-import type { ComponentProps, MutableRef, Renderer } from '../../types';
+import type { ComponentProps, Renderer } from '../../types';
 import type { ChatMessageProps, ChatMessageActionProps } from './ChatMessage';
 import type { ChatMessageErrorProps } from './ChatMessageError';
 import type { ChatMessageLoaderProps } from './ChatMessageLoader';
@@ -119,21 +120,13 @@ export type ChatMessagesProps<
    */
   assistantMessageProps?: Partial<Omit<ChatMessageProps, 'ref' | 'key'>>;
   /**
-   * Optional scroll ref
-   */
-  scrollRef?: MutableRef<HTMLDivElement>;
-  /**
-   * Optional content ref
-   */
-  contentRef?: MutableRef<HTMLDivElement>;
-  /**
-   * Whether the scroll is at the bottom
+   * Whether the scroll is at the bottom (controlled state)
    */
   isScrollAtBottom?: boolean;
   /**
-   * Callback for scroll to bottom
+   * Callback when scroll position changes (controlled state)
    */
-  onScrollToBottom?: () => void;
+  setIsScrollAtBottom?: (isScrollAtBottom: boolean) => void;
   /**
    * Whether the messages are clearing (for animation)
    */
@@ -234,6 +227,16 @@ export function createChatMessagesComponent({
     createElement,
   });
 
+  let setIsScrollAtBottomCallback: ((isAtBottom: boolean) => void) | null =
+    null;
+
+  const stickToBottom = createStickToBottom({
+    initial: 'instant',
+    onIsAtBottomChange: (isAtBottom) => {
+      setIsScrollAtBottomCallback?.(isAtBottom);
+    },
+  });
+
   return function ChatMessages<
     TMessage extends ChatMessageBase = ChatMessageBase
   >(userProps: ChatMessagesProps<TMessage>) {
@@ -252,14 +255,14 @@ export function createChatMessagesComponent({
       translations: userTranslations,
       userMessageProps,
       assistantMessageProps,
-      scrollRef,
-      contentRef,
-      isScrollAtBottom,
-      onScrollToBottom,
       isClearing = false,
       onClearTransitionEnd,
+      isScrollAtBottom,
+      setIsScrollAtBottom,
       ...props
     } = userProps;
+
+    setIsScrollAtBottomCallback = setIsScrollAtBottom || null;
 
     const translations: ChatMessagesTranslations = {
       scrollToBottomLabel: 'Scroll to bottom',
@@ -293,13 +296,16 @@ export function createChatMessagesComponent({
         role="log"
         aria-live="polite"
       >
-        <div className={cx(cssClasses.scroll)} ref={scrollRef}>
+        <div
+          className={cx(cssClasses.scroll)}
+          ref={(el) => stickToBottom.setScrollElement(el)}
+        >
           <div
             className={cx(
               cssClasses.content,
               isClearing && 'ais-ChatMessages-content--clearing'
             )}
-            ref={contentRef}
+            ref={(el) => stickToBottom.setContentElement(el)}
             onTransitionEnd={(e) => {
               if (
                 e.target === e.currentTarget &&
@@ -341,7 +347,7 @@ export function createChatMessagesComponent({
             (hideScrollToBottom || isScrollAtBottom) &&
               cssClasses.scrollToBottomHidden
           )}
-          onClick={onScrollToBottom}
+          onClick={() => stickToBottom.scrollToBottom()}
           aria-label={translations.scrollToBottomLabel}
           tabIndex={isScrollAtBottom ? -1 : 0}
         >

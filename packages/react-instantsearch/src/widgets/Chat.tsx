@@ -2,8 +2,6 @@ import { createChatComponent } from 'instantsearch-ui-components';
 import React, { createElement, Fragment } from 'react';
 import { useInstantSearch, useChat } from 'react-instantsearch-core';
 
-import { useStickToBottom } from '../ui/lib/useStickToBottom';
-
 import { createSearchIndexTool } from './chat/tools/SearchIndexTool';
 
 export { SearchIndexToolType } from './chat/tools/SearchIndexTool';
@@ -13,10 +11,9 @@ import type {
   ChatProps as ChatUiProps,
   RecommendComponentProps,
   RecordWithObjectID,
-  MutableRef,
+  AddToolResultWithOutput,
   UserClientSideTool,
   UserClientSideTools,
-  AddToolResultWithOutput,
   ClientSideTools,
 } from 'instantsearch-ui-components';
 import type { IndexUiState } from 'instantsearch.js';
@@ -104,12 +101,7 @@ export function Chat<
   const [maximized, setMaximized] = React.useState(false);
   const [input, setInput] = React.useState('');
   const [isClearing, setIsClearing] = React.useState(false);
-
-  const { scrollRef, contentRef, isAtBottom, scrollToBottom } =
-    useStickToBottom({
-      initial: 'instant',
-      resize: 'smooth',
-    });
+  const [isScrollAtBottom, setIsScrollAtBottom] = React.useState(true);
 
   const tools = React.useMemo(() => {
     const defaults = createDefaultTools(itemComponent, getSearchPageURL);
@@ -199,10 +191,8 @@ export function Chat<
         setIndexUiState,
         isClearing,
         onClearTransitionEnd: handleClearTransitionEnd,
-        scrollRef: scrollRef as unknown as MutableRef<HTMLDivElement>,
-        contentRef: contentRef as unknown as MutableRef<HTMLDivElement>,
-        isScrollAtBottom: isAtBottom,
-        onScrollToBottom: scrollToBottom,
+        isScrollAtBottom,
+        setIsScrollAtBottom,
         ...messagesProps,
       }}
       promptProps={{
