@@ -16,6 +16,10 @@ import type { ChatToggleButtonProps } from './ChatToggleButton';
 export type ChatClassNames = {
   root?: string | string[];
   container?: string | string[];
+  header?: ChatHeaderProps['classNames'];
+  messages?: ChatMessagesProps['classNames'];
+  prompt?: ChatPromptProps['classNames'];
+  toggleButton?: ChatToggleButtonProps['classNames'];
 };
 
 export type ChatProps = Omit<ComponentProps<'div'>, 'onError' | 'title'> & {
@@ -93,13 +97,22 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
             classNames.container
           )}
         >
-          <ChatHeader {...headerProps} maximized={maximized} />
-          <ChatMessages {...messagesProps} />
-          <ChatPrompt {...promptProps} ref={promptRef} />
+          <ChatHeader
+            {...headerProps}
+            classNames={classNames.header}
+            maximized={maximized}
+          />
+          <ChatMessages {...messagesProps} classNames={classNames.messages} />
+          <ChatPrompt
+            {...promptProps}
+            classNames={classNames.prompt}
+            ref={promptRef}
+          />
         </div>
 
         <ChatToggleButton
           {...toggleButtonProps}
+          classNames={classNames.toggleButton}
           onClick={() => {
             toggleButtonProps.onClick?.();
             promptRef.current?.focus?.();
