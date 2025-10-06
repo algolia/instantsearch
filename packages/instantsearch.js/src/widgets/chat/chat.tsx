@@ -194,10 +194,9 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
     const promptHeaderComponent = () => {
       return (
         <TemplateComponent
-          templates={templates}
-          templateKey="promptHeader"
+          templates={templates.prompt}
+          templateKey="header"
           rootTagName="fragment"
-          data={{}}
         />
       );
     };
@@ -205,10 +204,9 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
     const promptFooterComponent = () => {
       return (
         <TemplateComponent
-          templates={templates}
+          templates={templates.prompt}
           templateKey="promptFooter"
           rootTagName="fragment"
-          data={{}}
         />
       );
     };
@@ -289,8 +287,20 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
      * Template to use for each result. This template will receive an object containing a single record.
      */
     item: TemplateWithBindEvent<Hit<THit>>;
-    promptHeader: Template;
-    promptFooter: Template;
+
+    /**
+     * Templates to use for the prompt.
+     */
+    prompt: {
+      /**
+       * Template to use for the prompt header.
+       */
+      header: Template;
+      /**
+       * Template to use for the prompt footer.
+       */
+      footer: Template;
+    };
   }>;
 
 type ChatWidgetParams<THit extends NonNullable<object> = BaseHit> = {
