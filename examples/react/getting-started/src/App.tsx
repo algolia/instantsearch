@@ -11,6 +11,7 @@ import {
   SearchBox,
   TrendingItems,
   Carousel,
+  Chat,
 } from 'react-instantsearch';
 
 import { Panel } from './Panel';
@@ -69,6 +70,8 @@ export function App() {
               </div>
             </div>
           </div>
+
+          <Chat agentId="xxxx" itemComponent={ItemComponent} />
         </InstantSearch>
       </div>
     </div>

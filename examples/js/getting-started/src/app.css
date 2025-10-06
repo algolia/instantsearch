@@ -1,3 +1,7 @@
+:root {
+  --ais-primary-color-rgb: 252, 180, 58;
+}
+
 .header {
   display: flex;
   align-items: center;
