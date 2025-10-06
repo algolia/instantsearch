@@ -205,7 +205,7 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
       return (
         <TemplateComponent
           templates={templates.prompt}
-          templateKey="promptFooter"
+          templateKey="footer"
           rootTagName="fragment"
         />
       );
