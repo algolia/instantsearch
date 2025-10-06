@@ -218,6 +218,7 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
 
       const [isClearing, setIsClearing] = state.use(false);
       const [maximized, setMaximized] = state.use(false);
+      const [isScrollAtBottom, setIsScrollAtBottom] = state.use(true);
 
       const onClear = () => setIsClearing(true);
       const onClearTransitionEnd = () => {
@@ -240,9 +241,8 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
             indexUiState,
             isClearing,
             onClearTransitionEnd,
-            // temporary until we have a good solution in js
-            // or move logic in ui-component
-            hideScrollToBottom: true,
+            isScrollAtBottom,
+            setIsScrollAtBottom,
             setIndexUiState,
             tools: toolsForUi,
           }}
