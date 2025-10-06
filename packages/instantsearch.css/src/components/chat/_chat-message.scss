@@ -74,12 +74,6 @@
   justify-content: flex-end;
 }
 
-.ais-ChatMessage-action {
-  @extend %ais-button-ghost;
-
-  padding: calc(var(--ais-spacing) * 0.25);
-}
-
 .ais-ChatMessage--auto-hide-actions .ais-ChatMessage-actions {
   opacity: 0;
 

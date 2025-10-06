@@ -112,13 +112,6 @@
   cursor: text;
 }
 
-.ais-ChatPrompt-submit {
-  @extend %ais-button-primary;
-
-  width: calc(var(--ais-spacing) * 1.5);
-  height: calc(var(--ais-spacing) * 1.5);
-}
-
 @media (max-width: variables.$ais-chat-breakpoint) {
   .ais-ChatPrompt .ais-ChatPrompt-textarea {
     font-size: var(--ais-spacing);

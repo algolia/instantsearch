@@ -2,6 +2,7 @@
 import { compiler } from 'markdown-to-jsx';
 
 import { cx, startsWith } from '../../lib';
+import { createButtonComponent } from '../Button';
 
 import { MenuIconComponent } from './icons';
 
@@ -140,6 +141,8 @@ export type ChatMessageProps = ComponentProps<'article'> & {
 };
 
 export function createChatMessageComponent({ createElement }: Renderer) {
+  const Button = createButtonComponent({ createElement });
+
   return function ChatMessage(userProps: ChatMessageProps) {
     const {
       classNames = {},
@@ -261,9 +264,11 @@ export function createChatMessageComponent({ createElement }: Renderer) {
                   <ActionsComponent actions={actions} message={message} />
                 ) : (
                   actions.map((action, index) => (
-                    <button
+                    <Button
                       key={index}
-                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      iconOnly
                       className="ais-ChatMessage-action"
                       disabled={action.disabled}
                       aria-label={action.title}
@@ -274,7 +279,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
                       ) : (
                         <MenuIconComponent createElement={createElement} />
                       )}
-                    </button>
+                    </Button>
                   ))
                 )}
               </div>

@@ -36,8 +36,6 @@
 }
 
 .ais-ChatMessages-scrollToBottom {
-  @extend %ais-button-outline;
-
   position: absolute;
   bottom: var(--ais-spacing);
   left: 50%;

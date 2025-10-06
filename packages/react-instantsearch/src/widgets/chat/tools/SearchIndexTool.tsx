@@ -2,6 +2,7 @@ import {
   ChevronLeftIconComponent,
   ChevronRightIconComponent,
   ArrowRightIconComponent,
+  createButtonComponent,
 } from 'instantsearch-ui-components';
 import React, { createElement } from 'react';
 
@@ -23,6 +24,10 @@ export function createSearchIndexTool<TObject extends RecordWithObjectID>(
   itemComponent?: ItemComponent<TObject>,
   getSearchPageURL?: (nextUiState: IndexUiState) => string
 ): UserClientSideTools {
+  const Button = createButtonComponent({
+    createElement: createElement as Pragma,
+  });
+
   return {
     [SearchIndexToolType]: {
       layoutComponent: ({ message, indexUiState, setIndexUiState }) => {
@@ -67,8 +72,9 @@ export function createSearchIndexTool<TObject extends RecordWithObjectID>(
                         {output?.nbHits > 1 ? 's' : ''}
                       </div>
                     )}
-                    <button
-                      type="button"
+                    <Button
+                      variant="ghost"
+                      size="sm"
                       onClick={() => {
                         if (!input?.query) {
                           return;
@@ -105,12 +111,15 @@ export function createSearchIndexTool<TObject extends RecordWithObjectID>(
                       <ArrowRightIconComponent
                         createElement={createElement as Pragma}
                       />
-                    </button>
+                    </Button>
                   </div>
 
                   {(input?.number_of_results ?? 0) > 2 && (
                     <div className="ais-ChatToolSearchIndexCarouselHeaderScrollButtons">
-                      <button
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        iconOnly
                         onClick={scrollLeft}
                         disabled={!canScrollLeft}
                         className="ais-ChatToolSearchIndexCarouselHeaderScrollButton"
@@ -118,8 +127,11 @@ export function createSearchIndexTool<TObject extends RecordWithObjectID>(
                         <ChevronLeftIconComponent
                           createElement={createElement as Pragma}
                         />
-                      </button>
-                      <button
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        iconOnly
                         onClick={scrollRight}
                         disabled={!canScrollRight}
                         className="ais-ChatToolSearchIndexCarouselHeaderScrollButton"
@@ -127,7 +139,7 @@ export function createSearchIndexTool<TObject extends RecordWithObjectID>(
                         <ChevronRightIconComponent
                           createElement={createElement as Pragma}
                         />
-                      </button>
+                      </Button>
                     </div>
                   )}
                 </div>

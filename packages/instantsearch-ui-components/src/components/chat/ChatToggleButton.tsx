@@ -1,5 +1,6 @@
 /** @jsx createElement */
 import { cx } from '../../lib/cx';
+import { createButtonComponent } from '../Button';
 
 import { SparklesIconComponent, ChevronUpIconComponent } from './icons';
 
@@ -32,11 +33,14 @@ export type ChatToggleButtonProps = ComponentProps<'button'> & {
 };
 
 export function createChatToggleButtonComponent({ createElement }: Renderer) {
+  const Button = createButtonComponent({ createElement });
+
   return function ChatToggleButton({
     open,
     onClick,
     toggleIconComponent: ToggleIconComponent,
     classNames = {},
+    className,
     ...props
   }: ChatToggleButtonProps) {
     const defaultIcon = open ? (
@@ -54,15 +58,17 @@ export function createChatToggleButtonComponent({ createElement }: Renderer) {
     );
 
     return (
-      <button
+      <Button
+        variant="primary"
+        size="md"
+        iconOnly
         className={cx(
           'ais-ChatToggleButton',
           open && 'ais-ChatToggleButton--open',
           classNames.root,
-          props.className
+          className
         )}
         onClick={onClick}
-        type="button"
         {...props}
       >
         {ToggleIconComponent ? (
@@ -70,7 +76,7 @@ export function createChatToggleButtonComponent({ createElement }: Renderer) {
         ) : (
           defaultIcon
         )}
-      </button>
+      </Button>
     );
   };
 }

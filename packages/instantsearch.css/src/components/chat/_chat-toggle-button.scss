@@ -2,8 +2,6 @@
 @use '../../shared/_common';
 
 .ais-ChatToggleButton {
-  @extend %ais-button-primary;
-
   width: calc(var(--ais-spacing) * 3);
   height: calc(var(--ais-spacing) * 3);
   border-radius: var(--ais-border-radius-full);

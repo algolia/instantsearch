@@ -36,7 +36,7 @@
   font-weight: 600;
 }
 
-.ais-ChatHeader-titleIcon {
+.ais-ChatHeader-title-icon {
   display: inline-flex;
   align-items: center;
   color: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
@@ -46,19 +46,6 @@
   display: flex;
   align-items: center;
   gap: calc(var(--ais-spacing) / 2);
-}
-
-.ais-ChatHeader-clear {
-  @extend %ais-button-ghost;
-
-  padding: calc(var(--ais-spacing) * 0.25) calc(var(--ais-spacing) * 0.5);
-}
-
-.ais-ChatHeader-maximize,
-.ais-ChatHeader-close {
-  @extend %ais-button-ghost;
-
-  padding: calc(var(--ais-spacing) * 0.25);
 }
 
 @media (max-width: variables.$ais-chat-breakpoint) {

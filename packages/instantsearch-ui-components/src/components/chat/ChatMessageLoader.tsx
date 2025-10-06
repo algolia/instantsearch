@@ -37,7 +37,7 @@ export function createChatMessageLoaderComponent({
       >
         <div className="ais-ChatMessage-container">
           <div className="ais-ChatMessage-leading">
-            <div className="ais-ChatMessage-loaderSpinner">
+            <div className="ais-ChatMessage-loader-spinner">
               <LoadingSpinnerIconComponent createElement={createElement} />
             </div>
           </div>
@@ -45,13 +45,13 @@ export function createChatMessageLoaderComponent({
           <div className="ais-ChatMessage-content">
             <div className="ais-ChatMessage-message">
               {translations.loaderText && (
-                <div className="ais-ChatMessage-loaderText">
+                <div className="ais-ChatMessage-loader-text">
                   {translations.loaderText}
                 </div>
               )}
-              <div className="ais-ChatMessage-loaderSkeletonWrapper">
-                <div className="ais-ChatMessage-loaderSkeletonItem"></div>
-                <div className="ais-ChatMessage-loaderSkeletonItem"></div>
+              <div className="ais-ChatMessage-loader-skeleton-wrapper">
+                <div className="ais-ChatMessage-loader-skeleton-item"></div>
+                <div className="ais-ChatMessage-loader-skeleton-item"></div>
               </div>
             </div>
           </div>
