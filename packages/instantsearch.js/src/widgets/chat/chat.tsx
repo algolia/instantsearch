@@ -32,6 +32,9 @@ import type {
   AddToolResultWithOutput,
   ChatClassNames,
   ChatHeaderTranslations,
+  ChatMessageErrorProps,
+  ChatMessageLoaderProps,
+  ChatMessagesTranslations,
   ChatPromptTranslations,
   ClientSideToolComponent,
   ClientSideToolComponentProps,
@@ -197,46 +200,6 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
       },
     }));
 
-    const promptTemplateProps = prepareTemplateProps({
-      defaultTemplates: {} as unknown as NonNullable<
-        Required<ChatTemplates<THit>['prompt']>
-      >,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates: templates.prompt,
-    }) as PreparedTemplateProps<ChatTemplates<THit>>;
-    const promptHeaderComponent = templates.prompt?.header
-      ? () => {
-          return (
-            <TemplateComponent
-              {...promptTemplateProps}
-              templateKey="header"
-              rootTagName="fragment"
-            />
-          );
-        }
-      : undefined;
-    const promptFooterComponent = templates.prompt?.footer
-      ? () => {
-          return (
-            <TemplateComponent
-              {...promptTemplateProps}
-              templateKey="footer"
-              rootTagName="fragment"
-            />
-          );
-        }
-      : undefined;
-
-    const promptTranslations: Partial<ChatPromptTranslations> =
-      getDefinedProperties({
-        textareaLabel: templates.prompt?.textareaLabelText,
-        textareaPlaceholder: templates.prompt?.textareaPlaceholderText,
-        emptyMessageTooltip: templates.prompt?.emptyMessageTooltipText,
-        stopResponseTooltip: templates.prompt?.stopResponseTooltipText,
-        sendMessageTooltip: templates.prompt?.sendMessageTooltipText,
-        disclaimer: templates.prompt?.disclaimerText,
-      });
-
     const headerTemplateProps = prepareTemplateProps({
       defaultTemplates: {} as unknown as NonNullable<
         Required<ChatTemplates<THit>['header']>
@@ -289,7 +252,6 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
           );
         }
       : undefined;
-
     const headerTranslations: Partial<ChatHeaderTranslations> =
       getDefinedProperties({
         title: templates.header?.titleText,
@@ -297,6 +259,84 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
         maximizeLabel: templates.header?.maximizeLabelText,
         closeLabel: templates.header?.closeLabelText,
         clearLabel: templates.header?.clearLabelText,
+      });
+
+    const messagesTemplateProps = prepareTemplateProps({
+      defaultTemplates: {} as unknown as NonNullable<
+        Required<ChatTemplates<THit>['messages']>
+      >,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates: templates.messages,
+    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    const messagesLoaderComponent = templates.messages?.loader
+      ? (loaderProps: ChatMessageLoaderProps) => {
+          return (
+            <TemplateComponent
+              {...messagesTemplateProps}
+              templateKey="loader"
+              rootTagName="div"
+              data={loaderProps}
+            />
+          );
+        }
+      : undefined;
+    const messagesErrorComponent = templates.messages?.error
+      ? (errorProps: ChatMessageErrorProps) => {
+          return (
+            <TemplateComponent
+              {...messagesTemplateProps}
+              templateKey="error"
+              rootTagName="div"
+              data={errorProps}
+            />
+          );
+        }
+      : undefined;
+    const messagesTranslations: Partial<ChatMessagesTranslations> =
+      getDefinedProperties({
+        scrollToBottomLabel: templates.messages?.scrollToBottomLabelText,
+        loaderText: templates.messages?.loaderText,
+        copyToClipboardLabel: templates.messages?.copyToClipboardLabelText,
+        regenerateLabel: templates.messages?.regenerateLabelText,
+      });
+
+    const promptTemplateProps = prepareTemplateProps({
+      defaultTemplates: {} as unknown as NonNullable<
+        Required<ChatTemplates<THit>['prompt']>
+      >,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates: templates.prompt,
+    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    const promptHeaderComponent = templates.prompt?.header
+      ? () => {
+          return (
+            <TemplateComponent
+              {...promptTemplateProps}
+              templateKey="header"
+              rootTagName="fragment"
+            />
+          );
+        }
+      : undefined;
+    const promptFooterComponent = templates.prompt?.footer
+      ? () => {
+          return (
+            <TemplateComponent
+              {...promptTemplateProps}
+              templateKey="footer"
+              rootTagName="fragment"
+            />
+          );
+        }
+      : undefined;
+    const promptTranslations: Partial<ChatPromptTranslations> =
+      getDefinedProperties({
+        textareaLabel: templates.prompt?.textareaLabelText,
+        textareaPlaceholder: templates.prompt?.textareaPlaceholderText,
+        emptyMessageTooltip: templates.prompt?.emptyMessageTooltipText,
+        stopResponseTooltip: templates.prompt?.stopResponseTooltipText,
+        sendMessageTooltip: templates.prompt?.sendMessageTooltipText,
+        disclaimer: templates.prompt?.disclaimerText,
       });
 
     state.subscribe(rerender);
@@ -338,6 +378,9 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
             setIsScrollAtBottom,
             setIndexUiState,
             tools: toolsForUi,
+            loaderComponent: messagesLoaderComponent,
+            errorComponent: messagesErrorComponent,
+            translations: messagesTranslations,
           }}
           promptProps={{
             status,
@@ -422,6 +465,36 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        * Text for the clear button
        */
       clearLabelText: string;
+    }>;
+
+    /**
+     * Templates to use for the messages.
+     */
+    messages: Partial<{
+      /**
+       * Template to use when loading messages
+       */
+      loader: Template<ChatMessageLoaderProps>;
+      /**
+       * Template to use when there is an error loading messages
+       */
+      error: Template<ChatMessageErrorProps>;
+      /**
+       * Label for the scroll to bottom button
+       */
+      scrollToBottomLabelText?: string;
+      /**
+       * Text to display in the loader
+       */
+      loaderText?: string;
+      /**
+       * Label for the copy to clipboard action
+       */
+      copyToClipboardLabelText?: string;
+      /**
+       * Label for the regenerate action
+       */
+      regenerateLabelText?: string;
     }>;
 
     /**

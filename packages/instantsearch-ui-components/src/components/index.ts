@@ -4,6 +4,8 @@ export * from './chat/Chat';
 export * from './chat/ChatHeader';
 export * from './chat/ChatMessage';
 export * from './chat/ChatMessages';
+export * from './chat/ChatMessageLoader';
+export * from './chat/ChatMessageError';
 export * from './chat/ChatPrompt';
 export * from './chat/ChatToggleButton';
 export * from './chat/icons';

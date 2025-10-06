@@ -68,16 +68,22 @@ export type Tool = UserClientSideTool;
 export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
   ChatUiProps,
   keyof UiProps
-> & {
-  itemComponent?: ItemComponent<TObject>;
-  tools?: UserClientSideTool[];
-  defaultOpen?: boolean;
-  getSearchPageURL?: (nextUiState: IndexUiState) => string;
-} & UseChatOptions<TUiMessage> & {
+> &
+  UseChatOptions<TUiMessage> & {
+    itemComponent?: ItemComponent<TObject>;
+    tools?: UserClientSideTool[];
+    defaultOpen?: boolean;
+    getSearchPageURL?: (nextUiState: IndexUiState) => string;
     toggleButtonProps?: UserToggleButtonProps;
     headerProps?: UserHeaderProps;
     messagesProps?: UserMessagesProps;
     promptProps?: UserPromptProps;
+    headerTitleIconComponent?: ChatUiProps['headerProps']['titleIconComponent'];
+    headerCloseIconComponent?: ChatUiProps['headerProps']['closeIconComponent'];
+    headerMinimizeIconComponent?: ChatUiProps['headerProps']['minimizeIconComponent'];
+    headerMaximizeIconComponent?: ChatUiProps['headerProps']['maximizeIconComponent'];
+    messagesLoaderComponent?: ChatUiProps['messagesProps']['loaderComponent'];
+    messagesErrorComponent?: ChatUiProps['messagesProps']['errorComponent'];
     promptHeaderComponent?: ChatUiProps['promptProps']['headerComponent'];
     promptFooterComponent?: ChatUiProps['promptProps']['footerComponent'];
   };
@@ -87,12 +93,18 @@ export function Chat<
   TUiMessage extends UIMessage
 >({
   tools: userTools,
-  itemComponent,
   defaultOpen = false,
   toggleButtonProps,
   headerProps,
   messagesProps,
   promptProps,
+  itemComponent,
+  headerTitleIconComponent,
+  headerCloseIconComponent,
+  headerMinimizeIconComponent,
+  headerMaximizeIconComponent,
+  messagesLoaderComponent,
+  messagesErrorComponent,
   promptHeaderComponent,
   promptFooterComponent,
   classNames,
@@ -193,6 +205,10 @@ export function Chat<
         onToggleMaximize: () => setMaximized(!maximized),
         onClear: handleClear,
         canClear: messages && messages.length > 0 && !isClearing,
+        titleIconComponent: headerTitleIconComponent,
+        closeIconComponent: headerCloseIconComponent,
+        minimizeIconComponent: headerMinimizeIconComponent,
+        maximizeIconComponent: headerMaximizeIconComponent,
         ...headerProps,
       }}
       messagesProps={{
@@ -206,6 +222,8 @@ export function Chat<
         onClearTransitionEnd: handleClearTransitionEnd,
         isScrollAtBottom,
         setIsScrollAtBottom,
+        loaderComponent: messagesLoaderComponent,
+        errorComponent: messagesErrorComponent,
         ...messagesProps,
       }}
       promptProps={{
