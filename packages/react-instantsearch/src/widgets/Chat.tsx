@@ -78,11 +78,11 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     headerProps?: UserHeaderProps;
     messagesProps?: UserMessagesProps;
     promptProps?: UserPromptProps;
-    translations: {
+    translations?: Partial<{
       prompt: ChatUiProps['promptProps']['translations'];
       header: ChatUiProps['headerProps']['translations'];
       messages: ChatUiProps['messagesProps']['translations'];
-    };
+    }>;
   };
 
 export function Chat<
@@ -97,7 +97,7 @@ export function Chat<
   messagesProps,
   promptProps,
   classNames,
-  translations,
+  translations = {},
   title,
   getSearchPageURL,
   ...props
