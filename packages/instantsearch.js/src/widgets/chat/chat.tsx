@@ -32,6 +32,7 @@ import type {
   AddToolResultWithOutput,
   ChatClassNames,
   ChatHeaderTranslations,
+  ChatMessageActionProps,
   ChatMessageErrorProps,
   ChatMessageLoaderProps,
   ChatMessagesTranslations,
@@ -339,6 +340,19 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
         disclaimer: templates.prompt?.disclaimerText,
       });
 
+    const actionsComponent = templates.actions
+      ? (actionsProps: { actions: ChatMessageActionProps[] }) => {
+          return (
+            <TemplateComponent
+              {...renderState.templateProps}
+              templateKey="actions"
+              rootTagName="div"
+              data={actionsProps}
+            />
+          );
+        }
+      : undefined;
+
     state.subscribe(rerender);
 
     function rerender() {
@@ -380,6 +394,7 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
             tools: toolsForUi,
             loaderComponent: messagesLoaderComponent,
             errorComponent: messagesErrorComponent,
+            actionsComponent,
             translations: messagesTranslations,
           }}
           promptProps={{
@@ -533,6 +548,13 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        * The disclaimer text shown in the footer
        */
       disclaimerText: string;
+    }>;
+
+    /**
+     * Template to use for the message actions.
+     */
+    actions: Template<{
+      actions: ChatMessageActionProps[];
     }>;
   }>;
 

@@ -86,6 +86,7 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     messagesErrorComponent?: ChatUiProps['messagesProps']['errorComponent'];
     promptHeaderComponent?: ChatUiProps['promptProps']['headerComponent'];
     promptFooterComponent?: ChatUiProps['promptProps']['footerComponent'];
+    actionsComponent?: ChatUiProps['messagesProps']['actionsComponent'];
   };
 
 export function Chat<
@@ -107,6 +108,7 @@ export function Chat<
   messagesErrorComponent,
   promptHeaderComponent,
   promptFooterComponent,
+  actionsComponent,
   classNames,
   title,
   getSearchPageURL,
@@ -224,6 +226,7 @@ export function Chat<
         setIsScrollAtBottom,
         loaderComponent: messagesLoaderComponent,
         errorComponent: messagesErrorComponent,
+        actionsComponent,
         ...messagesProps,
       }}
       promptProps={{
