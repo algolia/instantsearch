@@ -342,7 +342,7 @@ export default (function chat<THit extends NonNullable<object> = BaseHit>(
             })
           );
         };
-        tool.onToolCall({ addToolResult: scopedAddToolResult });
+        tool.onToolCall({ ...toolCall, addToolResult: scopedAddToolResult });
       }
     },
   });

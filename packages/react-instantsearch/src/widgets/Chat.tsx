@@ -137,7 +137,7 @@ export function Chat<
             })
           );
         };
-        tool.onToolCall({ addToolResult: scopedAddToolResult });
+        tool.onToolCall({ ...toolCall, addToolResult: scopedAddToolResult });
       }
     },
   });
