@@ -22,7 +22,7 @@ import './App.css';
 
 const searchClient = algoliasearch(
   'latency',
-  '6be0576ff61c053d5f9a3225e2a90f76'
+  '312a11382a63bdfc06e3183492fc469f'
 );
 
 export function App() {
@@ -71,7 +71,10 @@ export function App() {
             </div>
           </div>
 
-          <Chat agentId="xxxx" itemComponent={ItemComponent} />
+          <Chat
+            agentId="8f80fec3-f86a-1c8-86bb-426cb067cbbd"
+            itemComponent={ItemComponent}
+          />
         </InstantSearch>
       </div>
     </div>
