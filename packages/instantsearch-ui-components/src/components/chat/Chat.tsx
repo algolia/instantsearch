@@ -51,6 +51,14 @@ export type ChatProps = Omit<ComponentProps<'div'>, 'onError' | 'title'> & {
    * Optional title for the chat
    */
   title?: string;
+  /**
+   * Optional header component for the chat
+   */
+  headerComponent?: (props: ChatHeaderProps) => JSX.Element;
+  /**
+   * Optional prompt component for the chat
+   */
+  promptComponent?: (props: ChatPromptProps) => JSX.Element;
 };
 
 export function createChatComponent({ createElement, Fragment }: Renderer) {
@@ -71,6 +79,8 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
     toggleButtonProps,
     messagesProps,
     promptProps = {},
+    headerComponent: HeaderComponent,
+    promptComponent: PromptComponent,
     classNames = {},
     className,
     ...props
@@ -93,9 +103,17 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
             classNames.container
           )}
         >
-          <ChatHeader {...headerProps} maximized={maximized} />
+          {HeaderComponent ? (
+            <HeaderComponent {...headerProps} maximized={maximized} />
+          ) : (
+            <ChatHeader {...headerProps} maximized={maximized} />
+          )}
           <ChatMessages {...messagesProps} />
-          <ChatPrompt {...promptProps} ref={promptRef} />
+          {PromptComponent ? (
+            <PromptComponent {...promptProps} ref={promptRef} />
+          ) : (
+            <ChatPrompt {...promptProps} ref={promptRef} />
+          )}
         </div>
 
         <ChatToggleButton

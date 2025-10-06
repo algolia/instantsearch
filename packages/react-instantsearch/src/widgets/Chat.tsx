@@ -38,7 +38,13 @@ type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
 
 type UiProps = Pick<
   ChatUiProps,
-  'open' | 'headerProps' | 'toggleButtonProps' | 'messagesProps' | 'promptProps'
+  | 'open'
+  | 'headerProps'
+  | 'toggleButtonProps'
+  | 'messagesProps'
+  | 'promptProps'
+  | 'headerComponent'
+  | 'promptComponent'
 >;
 
 type UserToggleButtonProps = Omit<
@@ -78,12 +84,14 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     headerProps?: UserHeaderProps;
     messagesProps?: UserMessagesProps;
     promptProps?: UserPromptProps;
+    headerLayoutComponent?: ChatUiProps['headerComponent'];
     headerTitleIconComponent?: ChatUiProps['headerProps']['titleIconComponent'];
     headerCloseIconComponent?: ChatUiProps['headerProps']['closeIconComponent'];
     headerMinimizeIconComponent?: ChatUiProps['headerProps']['minimizeIconComponent'];
     headerMaximizeIconComponent?: ChatUiProps['headerProps']['maximizeIconComponent'];
     messagesLoaderComponent?: ChatUiProps['messagesProps']['loaderComponent'];
     messagesErrorComponent?: ChatUiProps['messagesProps']['errorComponent'];
+    promptLayoutComponent?: ChatUiProps['promptComponent'];
     promptHeaderComponent?: ChatUiProps['promptProps']['headerComponent'];
     promptFooterComponent?: ChatUiProps['promptProps']['footerComponent'];
     actionsComponent?: ChatUiProps['messagesProps']['actionsComponent'];
@@ -100,12 +108,14 @@ export function Chat<
   messagesProps,
   promptProps,
   itemComponent,
+  headerLayoutComponent,
   headerTitleIconComponent,
   headerCloseIconComponent,
   headerMinimizeIconComponent,
   headerMaximizeIconComponent,
   messagesLoaderComponent,
   messagesErrorComponent,
+  promptLayoutComponent,
   promptHeaderComponent,
   promptFooterComponent,
   actionsComponent,
@@ -196,6 +206,8 @@ export function Chat<
       title={title}
       open={open}
       maximized={maximized}
+      headerComponent={headerLayoutComponent}
+      promptComponent={promptLayoutComponent}
       toggleButtonProps={{
         open,
         onClick: () => setOpen(!open),

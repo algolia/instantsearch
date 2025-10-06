@@ -31,11 +31,13 @@ import type {
 import type {
   AddToolResultWithOutput,
   ChatClassNames,
+  ChatHeaderProps,
   ChatHeaderTranslations,
   ChatMessageActionProps,
   ChatMessageErrorProps,
   ChatMessageLoaderProps,
   ChatMessagesTranslations,
+  ChatPromptProps,
   ChatPromptTranslations,
   ClientSideToolComponent,
   ClientSideToolComponentProps,
@@ -208,6 +210,18 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
       templatesConfig: instantSearchInstance.templatesConfig,
       templates: templates.header,
     }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    const headerLayoutComponent = templates.header?.layout
+      ? (headerProps: ChatHeaderProps) => {
+          return (
+            <TemplateComponent
+              {...headerTemplateProps}
+              templateKey="layout"
+              rootTagName="div"
+              data={headerProps}
+            />
+          );
+        }
+      : undefined;
     const headerCloseIconComponent = templates.header?.closeIcon
       ? () => {
           return (
@@ -308,6 +322,18 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
       templatesConfig: instantSearchInstance.templatesConfig,
       templates: templates.prompt,
     }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    const promptLayoutComponent = templates.prompt?.layout
+      ? (promptProps: ChatPromptProps) => {
+          return (
+            <TemplateComponent
+              {...promptTemplateProps}
+              templateKey="layout"
+              rootTagName="div"
+              data={promptProps}
+            />
+          );
+        }
+      : undefined;
     const promptHeaderComponent = templates.prompt?.header
       ? () => {
           return (
@@ -372,6 +398,8 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
           classNames={cssClasses}
           open={open}
           maximized={maximized}
+          headerComponent={headerLayoutComponent}
+          promptComponent={promptLayoutComponent}
           headerProps={{
             onClose: () => setOpen(false),
             onToggleMaximize: () => setMaximized(!maximized),
@@ -445,6 +473,10 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
      */
     header: Partial<{
       /**
+       * Template to use for the chat header.
+       */
+      layout: Template<ChatHeaderProps>;
+      /**
        * Optional close icon
        */
       closeIcon: Template;
@@ -516,6 +548,10 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
      * Templates to use for the prompt.
      */
     prompt: Partial<{
+      /**
+       * Template to use for the chat prompt.
+       */
+      layout: Template<ChatPromptProps>;
       /**
        * Template to use for the prompt header.
        */
