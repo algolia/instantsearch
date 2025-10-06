@@ -35,7 +35,6 @@ import type {
   ClientSideToolComponent,
   ClientSideToolComponentProps,
   UserClientSideTool,
-  ChatProps as ChatUiProps,
 } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'chat' });
