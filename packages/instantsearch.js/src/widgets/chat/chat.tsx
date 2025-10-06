@@ -31,6 +31,7 @@ import type {
 import type {
   AddToolResultWithOutput,
   ChatClassNames,
+  ChatHeaderTranslations,
   ChatPromptTranslations,
   ClientSideToolComponent,
   ClientSideToolComponentProps,
@@ -236,6 +237,68 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
         disclaimer: templates.prompt?.disclaimerText,
       });
 
+    renderState.templateProps = prepareTemplateProps({
+      defaultTemplates: {} as unknown as NonNullable<
+        Required<ChatTemplates<THit>['header']>
+      >,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates: templates.header,
+    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    const headerCloseIconComponent = templates.header?.closeIcon
+      ? () => {
+          return (
+            <TemplateComponent
+              {...renderState.templateProps}
+              templateKey="closeIcon"
+              rootTagName="span"
+            />
+          );
+        }
+      : undefined;
+    const headerMinimizeIconComponent = templates.header?.minimizeIcon
+      ? () => {
+          return (
+            <TemplateComponent
+              {...renderState.templateProps}
+              templateKey="minimizeIcon"
+              rootTagName="span"
+            />
+          );
+        }
+      : undefined;
+    const headerMaximizeIconComponent = templates.header?.maximizeIcon
+      ? ({ maximized }: { maximized: boolean }) => {
+          return (
+            <TemplateComponent
+              {...renderState.templateProps}
+              templateKey="maximizeIcon"
+              rootTagName="span"
+              data={{ maximized }}
+            />
+          );
+        }
+      : undefined;
+    const headerTitleIconComponent = templates.header?.titleIcon
+      ? () => {
+          return (
+            <TemplateComponent
+              {...renderState.templateProps}
+              templateKey="titleIcon"
+              rootTagName="span"
+            />
+          );
+        }
+      : undefined;
+
+    const headerTranslations: Partial<ChatHeaderTranslations> =
+      getDefinedProperties({
+        title: templates.header?.titleText,
+        minimizeLabel: templates.header?.minimizeLabelText,
+        maximizeLabel: templates.header?.maximizeLabelText,
+        closeLabel: templates.header?.closeLabelText,
+        clearLabel: templates.header?.clearLabelText,
+      });
+
     state.subscribe(rerender);
 
     function rerender() {
@@ -260,6 +323,11 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
             onToggleMaximize: () => setMaximized(!maximized),
             onClear,
             canClear: messages.length > 0 && isClearing !== true,
+            closeIconComponent: headerCloseIconComponent,
+            minimizeIconComponent: headerMinimizeIconComponent,
+            maximizeIconComponent: headerMaximizeIconComponent,
+            titleIconComponent: headerTitleIconComponent,
+            translations: headerTranslations,
           }}
           messagesProps={{
             messages,
@@ -315,9 +383,51 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
     item: TemplateWithBindEvent<Hit<THit>>;
 
     /**
+     * Templates to use for the header.
+     */
+    header: Partial<{
+      /**
+       * Optional close icon
+       */
+      closeIcon: Template;
+      /**
+       * Optional minimize icon
+       */
+      minimizeIcon?: Template;
+      /**
+       * Optional maximize icon
+       */
+      maximizeIcon?: Template<{ maximized: boolean }>;
+      /**
+       * Optional title icon (defaults to sparkles)
+       */
+      titleIcon?: Template;
+      /**
+       * The title to display in the header
+       */
+      titleText: string;
+      /**
+       * Accessible label for the minimize button
+       */
+      minimizeLabelText: string;
+      /**
+       * Accessible label for the maximize button
+       */
+      maximizeLabelText: string;
+      /**
+       * Accessible label for the close button
+       */
+      closeLabelText: string;
+      /**
+       * Text for the clear button
+       */
+      clearLabelText: string;
+    }>;
+
+    /**
      * Templates to use for the prompt.
      */
-    prompt: {
+    prompt: Partial<{
       /**
        * Template to use for the prompt header.
        */
@@ -350,7 +460,7 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        * The disclaimer text shown in the footer
        */
       disclaimerText: string;
-    };
+    }>;
   }>;
 
 type ChatWidgetParams<THit extends NonNullable<object> = BaseHit> = {
