@@ -28,6 +28,7 @@ import type {
   Hit,
   TemplateWithBindEvent,
   BaseHit,
+  Template,
 } from '../../types';
 import type {
   AddToolResultWithOutput,
@@ -144,7 +145,7 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
   containerNode: HTMLElement;
   cssClasses: ChatCSSClasses;
   renderState: {
-    templateProps?: PreparedTemplateProps<Required<ChatTemplates<THit>>>;
+    templateProps?: PreparedTemplateProps<ChatTemplates<THit>>;
   };
   templates: ChatTemplates<THit>;
   tools: UserClientSideToolWithTemplate[];
@@ -170,7 +171,7 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
         templatesConfig: instantSearchInstance.templatesConfig,
-        templates,
+        templates: templates as any,
       });
       return;
     }
@@ -189,6 +190,28 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
         );
       },
     }));
+
+    const promptHeaderComponent = () => {
+      return (
+        <TemplateComponent
+          templates={templates}
+          templateKey="promptHeader"
+          rootTagName="fragment"
+          data={{}}
+        />
+      );
+    };
+
+    const promptFooterComponent = () => {
+      return (
+        <TemplateComponent
+          templates={templates}
+          templateKey="promptFooter"
+          rootTagName="fragment"
+          data={{}}
+        />
+      );
+    };
 
     state.subscribe(rerender);
 
@@ -235,6 +258,8 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
               sendMessage({ text: input });
               setInput('');
             },
+            headerComponent: promptHeaderComponent,
+            footerComponent: promptFooterComponent,
           }}
           toggleButtonProps={{ open, onClick: () => setOpen(!open) }}
         />,
@@ -264,6 +289,8 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
      * Template to use for each result. This template will receive an object containing a single record.
      */
     item: TemplateWithBindEvent<Hit<THit>>;
+    promptHeader: Template;
+    promptFooter: Template;
   }>;
 
 type ChatWidgetParams<THit extends NonNullable<object> = BaseHit> = {

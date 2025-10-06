@@ -63,7 +63,7 @@ type UserMessagesProps = Omit<
 
 type UserPromptProps = Omit<
   ChatUiProps['promptProps'],
-  'value' | 'onInput' | 'onSubmit'
+  'value' | 'onInput' | 'onSubmit' | 'headerComponent' | 'footerComponent'
 >;
 
 export type Tool = UserClientSideTool;
@@ -81,6 +81,8 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     headerProps?: UserHeaderProps;
     messagesProps?: UserMessagesProps;
     promptProps?: UserPromptProps;
+    promptHeaderComponent?: ChatUiProps['promptProps']['headerComponent'];
+    promptFooterComponent?: ChatUiProps['promptProps']['footerComponent'];
   };
 
 export function Chat<
@@ -94,6 +96,8 @@ export function Chat<
   headerProps,
   messagesProps,
   promptProps,
+  promptHeaderComponent,
+  promptFooterComponent,
   classNames,
   title,
   getSearchPageURL,
@@ -229,6 +233,8 @@ export function Chat<
         onStop: () => {
           stop();
         },
+        headerComponent: promptHeaderComponent,
+        footerComponent: promptFooterComponent,
         ...promptProps,
       }}
       classNames={classNames}
