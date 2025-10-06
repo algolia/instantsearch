@@ -164,6 +164,8 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
       setOpen,
       status,
       addToolResult,
+      regenerate,
+      stop,
     } = props;
 
     if (isFirstRendering) {
@@ -209,13 +211,17 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
           classNames={cssClasses}
           open={open}
           maximized={maximized}
+          toggleButtonProps={{ open, onClick: () => setOpen(!open) }}
           headerProps={{
             onClose: () => setOpen(false),
+            maximized,
             onToggleMaximize: () => setMaximized(!maximized),
             onClear,
-            canClear: messages.length > 0 && isClearing !== true,
+            canClear: Boolean(messages?.length) && !isClearing,
           }}
           messagesProps={{
+            status,
+            onReload: (messageId) => regenerate({ messageId }),
             messages,
             indexUiState,
             isClearing,
@@ -235,8 +241,10 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
               sendMessage({ text: input });
               setInput('');
             },
+            onStop: () => {
+              stop();
+            },
           }}
-          toggleButtonProps={{ open, onClick: () => setOpen(!open) }}
         />,
         containerNode
       );
