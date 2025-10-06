@@ -14,8 +14,6 @@ import {
 } from '../../lib/utils';
 import { carousel } from '../../templates';
 
-import defaultTemplates from './defaultTemplates';
-
 import type {
   ChatRenderState,
   ChatConnectorParams,
@@ -33,6 +31,7 @@ import type {
 import type {
   AddToolResultWithOutput,
   ChatClassNames,
+  ChatPromptTranslations,
   ClientSideToolComponent,
   ClientSideToolComponentProps,
   UserClientSideTool,
@@ -41,6 +40,12 @@ import type {
 const withUsage = createDocumentationMessageGenerator({ name: 'chat' });
 
 const Chat = createChatComponent({ createElement: h, Fragment });
+
+function getDefinedProperties<T extends object>(obj: T): Partial<T> {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([, value]) => value !== undefined)
+  ) as Partial<T>;
+}
 
 function createDefaultTools<THit extends NonNullable<object> = BaseHit>(
   templates: ChatTemplates<THit>
@@ -169,9 +174,9 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
 
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
-        defaultTemplates,
+        defaultTemplates: {} as unknown as ChatTemplates<THit>,
         templatesConfig: instantSearchInstance.templatesConfig,
-        templates: templates as any,
+        templates,
       });
       return;
     }
@@ -191,25 +196,45 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
       },
     }));
 
-    const promptHeaderComponent = () => {
-      return (
-        <TemplateComponent
-          templates={templates.prompt}
-          templateKey="header"
-          rootTagName="fragment"
-        />
-      );
-    };
+    renderState.templateProps = prepareTemplateProps({
+      defaultTemplates: {} as unknown as NonNullable<
+        Required<ChatTemplates<THit>['prompt']>
+      >,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates: templates.prompt,
+    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    const promptHeaderComponent = templates.prompt?.header
+      ? () => {
+          return (
+            <TemplateComponent
+              {...renderState.templateProps}
+              templateKey="header"
+              rootTagName="fragment"
+            />
+          );
+        }
+      : undefined;
+    const promptFooterComponent = templates.prompt?.footer
+      ? () => {
+          return (
+            <TemplateComponent
+              {...renderState.templateProps}
+              templateKey="footer"
+              rootTagName="fragment"
+            />
+          );
+        }
+      : undefined;
 
-    const promptFooterComponent = () => {
-      return (
-        <TemplateComponent
-          templates={templates.prompt}
-          templateKey="footer"
-          rootTagName="fragment"
-        />
-      );
-    };
+    const promptTranslations: Partial<ChatPromptTranslations> =
+      getDefinedProperties({
+        textareaLabel: templates.prompt?.textareaLabelText,
+        textareaPlaceholder: templates.prompt?.textareaPlaceholderText,
+        emptyMessageTooltip: templates.prompt?.emptyMessageTooltipText,
+        stopResponseTooltip: templates.prompt?.stopResponseTooltipText,
+        sendMessageTooltip: templates.prompt?.sendMessageTooltipText,
+        disclaimer: templates.prompt?.disclaimerText,
+      });
 
     state.subscribe(rerender);
 
@@ -258,6 +283,7 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
             },
             headerComponent: promptHeaderComponent,
             footerComponent: promptFooterComponent,
+            translations: promptTranslations,
           }}
           toggleButtonProps={{ open, onClick: () => setOpen(!open) }}
         />,
@@ -300,6 +326,30 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        * Template to use for the prompt footer.
        */
       footer: Template;
+      /**
+       * The label for the textarea
+       */
+      textareaLabelText: string;
+      /**
+       * The placeholder text for the textarea
+       */
+      textareaPlaceholderText: string;
+      /**
+       * The tooltip for the submit button when message is empty
+       */
+      emptyMessageTooltipText: string;
+      /**
+       * The tooltip for the stop button
+       */
+      stopResponseTooltipText: string;
+      /**
+       * The tooltip for the send button
+       */
+      sendMessageTooltipText: string;
+      /**
+       * The disclaimer text shown in the footer
+       */
+      disclaimerText: string;
     };
   }>;
 
