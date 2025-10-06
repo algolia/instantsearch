@@ -197,7 +197,7 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
       },
     }));
 
-    renderState.templateProps = prepareTemplateProps({
+    const promptTemplateProps = prepareTemplateProps({
       defaultTemplates: {} as unknown as NonNullable<
         Required<ChatTemplates<THit>['prompt']>
       >,
@@ -208,7 +208,7 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
       ? () => {
           return (
             <TemplateComponent
-              {...renderState.templateProps}
+              {...promptTemplateProps}
               templateKey="header"
               rootTagName="fragment"
             />
@@ -219,7 +219,7 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
       ? () => {
           return (
             <TemplateComponent
-              {...renderState.templateProps}
+              {...promptTemplateProps}
               templateKey="footer"
               rootTagName="fragment"
             />
@@ -237,7 +237,7 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
         disclaimer: templates.prompt?.disclaimerText,
       });
 
-    renderState.templateProps = prepareTemplateProps({
+    const headerTemplateProps = prepareTemplateProps({
       defaultTemplates: {} as unknown as NonNullable<
         Required<ChatTemplates<THit>['header']>
       >,
@@ -248,7 +248,7 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
       ? () => {
           return (
             <TemplateComponent
-              {...renderState.templateProps}
+              {...headerTemplateProps}
               templateKey="closeIcon"
               rootTagName="span"
             />
@@ -259,7 +259,7 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
       ? () => {
           return (
             <TemplateComponent
-              {...renderState.templateProps}
+              {...headerTemplateProps}
               templateKey="minimizeIcon"
               rootTagName="span"
             />
@@ -270,7 +270,7 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
       ? ({ maximized }: { maximized: boolean }) => {
           return (
             <TemplateComponent
-              {...renderState.templateProps}
+              {...headerTemplateProps}
               templateKey="maximizeIcon"
               rootTagName="span"
               data={{ maximized }}
@@ -282,7 +282,7 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
       ? () => {
           return (
             <TemplateComponent
-              {...renderState.templateProps}
+              {...headerTemplateProps}
               templateKey="titleIcon"
               rootTagName="span"
             />
