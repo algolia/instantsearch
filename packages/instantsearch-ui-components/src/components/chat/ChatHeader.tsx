@@ -18,7 +18,7 @@ export type ChatHeaderTranslations = {
   /**
    * Accessible label for the minimize button
    */
-  minimizedLabel: string;
+  minimizeLabel: string;
   /**
    * Accessible label for the maximize button
    */
@@ -124,7 +124,7 @@ export function createChatHeaderComponent({ createElement }: Renderer) {
   }: ChatHeaderProps) {
     const translations: Required<ChatHeaderTranslations> = {
       title: 'Chat',
-      minimizedLabel: 'Minimize chat',
+      minimizeLabel: 'Minimize chat',
       maximizeLabel: 'Maximize chat',
       closeLabel: 'Close chat',
       clearLabel: 'Clear',
@@ -174,7 +174,7 @@ export function createChatHeaderComponent({ createElement }: Renderer) {
             onClick={onToggleMaximize}
             aria-label={
               maximized
-                ? translations.minimizedLabel
+                ? translations.minimizeLabel
                 : translations.maximizeLabel
             }
             type="button"
