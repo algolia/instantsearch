@@ -1,3 +1,4 @@
+export * from './autocomplete';
 export * from './breadcrumb';
 export * from './clear-refinements';
 export * from './current-refinements';

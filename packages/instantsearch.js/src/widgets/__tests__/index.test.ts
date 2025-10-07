@@ -158,6 +158,19 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
           objectIDs: ['objectID'],
         });
       }
+      case 'EXPERIMENTAL_autocomplete': {
+        const EXPERIMENTAL_autocomplete =
+          widget as Widgets['EXPERIMENTAL_autocomplete'];
+
+        // We don't test the result of the autocomplete widget, as it is a composed
+        // widget. We only test if it instantiates correctly here.
+        const instance = EXPERIMENTAL_autocomplete({ indices: [] });
+
+        return {
+          ...(instance[0] as any),
+          $$type: 'ais.autocomplete',
+        };
+      }
       default: {
         const defaultWidget = widget as UnknownWidgetFactory;
         return defaultWidget({ container, attribute: 'attr' });

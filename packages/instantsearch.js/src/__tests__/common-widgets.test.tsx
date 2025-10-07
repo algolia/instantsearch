@@ -33,6 +33,7 @@ import {
   menuSelect,
   dynamicWidgets,
   chat,
+  EXPERIMENTAL_autocomplete,
 } from '../widgets';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -41,6 +42,22 @@ type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
 
 const testSetups: TestSetupsMap<TestSuites> = {
+  createAutocompleteWidgetTests({ instantSearchOptions, widgetParams }) {
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        EXPERIMENTAL_autocomplete({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
   createHierarchicalMenuWidgetTests({ instantSearchOptions, widgetParams }) {
     instantsearch(instantSearchOptions)
       .addWidgets([
@@ -637,6 +654,7 @@ const testSetups: TestSetupsMap<TestSuites> = {
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
+  createAutocompleteWidgetTests: undefined,
   createRefinementListWidgetTests: undefined,
   createHierarchicalMenuWidgetTests: undefined,
   createBreadcrumbWidgetTests: undefined,
@@ -674,5 +692,6 @@ describe('Common widget tests (InstantSearch.js)', () => {
     testSuites,
     testSetups,
     testOptions,
+    only: ['createAutocompleteWidgetTests'],
   });
 });

@@ -523,6 +523,9 @@ const testSetups = {
   createLookingSimilarWidgetTests() {
     throw new Error('LookingSimilar is not supported in Vue InstantSearch');
   },
+  createAutocompleteWidgetTests() {
+    throw new Error('Autocomplete is not supported in Vue InstantSearch');
+  },
   createPoweredByWidgetTests({ instantSearchOptions, widgetParams }) {
     mountApp(
       {
@@ -593,6 +596,9 @@ const testOptions = {
     },
   },
   createHierarchicalMenuWidgetTests: undefined,
+  createAutocompleteWidgetTests: {
+    skippedTests: { 'Autocomplete widget common tests': true },
+  },
   createBreadcrumbWidgetTests: undefined,
   createMenuWidgetTests: undefined,
   createPaginationWidgetTests: undefined,

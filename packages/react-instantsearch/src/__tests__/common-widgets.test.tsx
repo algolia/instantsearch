@@ -31,6 +31,7 @@ import {
   LookingSimilar,
   PoweredBy,
   DynamicWidgets,
+  EXPERIMENTAL_Autocomplete,
 } from '..';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -41,6 +42,19 @@ type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
 
 const testSetups: TestSetupsMap<TestSuites> = {
+  createAutocompleteWidgetTests({ instantSearchOptions, widgetParams }) {
+    const { indices: jsIndices, ...rest } = widgetParams;
+    const indices = jsIndices?.map((index) => ({
+      ...index,
+      itemComponent: (props: Hit) => <div>{props.objectID}</div>,
+    }));
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <EXPERIMENTAL_Autocomplete indices={indices} {...rest} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+  },
   createRefinementListWidgetTests({ instantSearchOptions, widgetParams }) {
     render(
       <InstantSearch {...instantSearchOptions}>
@@ -398,6 +412,7 @@ const testSetups: TestSetupsMap<TestSuites> = {
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
+  createAutocompleteWidgetTests: { act },
   createRefinementListWidgetTests: { act },
   createHierarchicalMenuWidgetTests: { act },
   createBreadcrumbWidgetTests: { act },

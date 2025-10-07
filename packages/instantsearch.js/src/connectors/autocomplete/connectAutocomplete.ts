@@ -24,13 +24,27 @@ export type AutocompleteConnectorParams = {
    * @default `true`
    */
   escapeHTML?: boolean;
+  /**
+   * Enable usage of future Autocomplete behavior.
+   */
+  future?: {
+    /**
+     * When set to true, the query is not set to an empty string when there is no query.
+     * When resetting the query is still set to an empty string.
+     *
+     * @default `false`
+     */
+    undefinedEmptyQuery?: boolean;
+  };
 };
 
 export type AutocompleteRenderState = {
   /**
    * The current value of the query.
+   * If `future.undefinedEmptyQuery` is set to `true`, this value is `undefined` when there is no query.
+   * Otherwise it is an empty string when there is no query.
    */
-  currentRefinement: string;
+  currentRefinement: string | undefined;
 
   /**
    * The indices this widget has access to.
@@ -95,6 +109,7 @@ const connectAutocomplete: AutocompleteConnector = function connectAutocomplete(
     const {
       // @MAJOR: this can default to false
       escapeHTML = true,
+      future: { undefinedEmptyQuery = false } = {},
     } = widgetParams || {};
 
     warning(
@@ -205,7 +220,9 @@ search.addWidgets([
         });
 
         return {
-          currentRefinement: state.query || '',
+          currentRefinement: undefinedEmptyQuery
+            ? state.query
+            : state.query || '',
           indices,
           refine: connectorState.refine,
           widgetParams,
@@ -213,9 +230,11 @@ search.addWidgets([
       },
 
       getWidgetUiState(uiState, { searchParameters }) {
-        const query = searchParameters.query || '';
+        const query = undefinedEmptyQuery
+          ? searchParameters.query
+          : searchParameters.query || '';
 
-        if (query === '' || (uiState && uiState.query === query)) {
+        if (!query || query === '' || (uiState && uiState.query === query)) {
           return uiState;
         }
 
@@ -227,7 +246,7 @@ search.addWidgets([
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
         const parameters = {
-          query: uiState.query || '',
+          query: undefinedEmptyQuery ? uiState.query : uiState.query || '',
         };
 
         if (!escapeHTML) {

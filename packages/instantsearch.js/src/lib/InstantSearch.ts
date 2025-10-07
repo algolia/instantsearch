@@ -492,7 +492,9 @@ See documentation: ${createDocumentationLink({
    * Widgets can be added either before or after InstantSearch has started.
    * @param widgets The array of widgets to add to InstantSearch.
    */
-  public addWidgets(widgets: Array<Widget | IndexWidget | Widget[]>) {
+  public addWidgets(
+    widgets: Array<Widget | IndexWidget | Array<IndexWidget | Widget>>
+  ) {
     if (!Array.isArray(widgets)) {
       throw new Error(
         withUsage(
