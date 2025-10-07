@@ -122,9 +122,9 @@ export type ChatPromptProps = Omit<
    */
   onInput?: ComponentProps<'textarea'>['onInput'];
   /**
-   * Ref callback to get access to the focus function
+   * Ref to the prompt textarea element for focus management
    */
-  ref?: MutableRef<HTMLTextAreaElement | null>;
+  promptRef?: MutableRef<HTMLTextAreaElement | null>;
 };
 
 export function createChatPromptComponent({ createElement }: Renderer) {
@@ -158,12 +158,12 @@ export function createChatPromptComponent({ createElement }: Renderer) {
 
   const setTextAreaRef = (
     element: HTMLTextAreaElement | null,
-    ref?: MutableRef<HTMLTextAreaElement | null>
+    promptRef?: MutableRef<HTMLTextAreaElement | null>
   ) => {
     textAreaElement = element;
 
-    if (ref) {
-      ref.current = element;
+    if (promptRef) {
+      promptRef.current = element;
     }
 
     if (element) {
@@ -194,7 +194,7 @@ export function createChatPromptComponent({ createElement }: Renderer) {
       onSubmit,
       onKeyDown,
       onStop,
-      ref,
+      promptRef,
       ...props
     } = userProps;
 
@@ -267,7 +267,7 @@ export function createChatPromptComponent({ createElement }: Renderer) {
         >
           <textarea
             {...props}
-            ref={(element) => setTextAreaRef(element, ref)}
+            ref={(element) => setTextAreaRef(element, promptRef)}
             data-max-rows={maxRows}
             className={cx(cssClasses.textarea)}
             value={value}

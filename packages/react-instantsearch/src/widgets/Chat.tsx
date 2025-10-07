@@ -104,6 +104,8 @@ export function Chat<
   const [isClearing, setIsClearing] = React.useState(false);
   const [isScrollAtBottom, setIsScrollAtBottom] = React.useState(true);
 
+  const promptRef = React.useRef<HTMLTextAreaElement>(null);
+
   const tools = React.useMemo(() => {
     const defaults = createDefaultTools(itemComponent, getSearchPageURL);
 
@@ -205,6 +207,7 @@ export function Chat<
         ...messagesProps,
       }}
       promptProps={{
+        promptRef,
         status,
         value: input,
         // Explicit event type is required to prevent TypeScript error
