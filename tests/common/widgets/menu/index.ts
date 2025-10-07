@@ -10,6 +10,7 @@ import type { MenuWidget } from 'instantsearch.js/es/widgets/menu/menu';
 type WidgetParams = Parameters<MenuWidget>[0];
 export type MenuWidgetSetup = TestSetup<{
   widgetParams: Omit<WidgetParams, 'container'>;
+  vueSlots?: Record<string, unknown>;
 }>;
 
 export function createMenuWidgetTests(

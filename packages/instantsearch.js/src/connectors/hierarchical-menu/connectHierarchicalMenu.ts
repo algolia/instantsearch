@@ -115,6 +115,10 @@ export type HierarchicalMenuRenderState = {
    */
   isShowingMore: boolean;
   /**
+   * Total number of facet values that can be displayed for 'show more'.
+   */
+  showMoreCount: number;
+  /**
    * Toggles the number of values displayed between `limit` and `showMoreLimit`.
    */
   toggleShowMore: () => void;
@@ -223,6 +227,7 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
       let _refine: HierarchicalMenuRenderState['refine'] | undefined;
 
       let isShowingMore = false;
+      let showMoreCount = 0;
 
       function createToggleShowMore(
         renderOptions: RenderOptions,
@@ -351,6 +356,7 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
           }
 
           if (results) {
+            const currentLimit = getLimit();
             const facetValues = results.getFacetValues(hierarchicalFacetName, {
               sortBy,
               facetOrdering: sortBy === DEFAULT_SORT,
@@ -367,9 +373,17 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
             // Because this is used for making the search of facets unable or not, it is important
             // to be conservative here.
             const hasExhaustiveItems =
-              (state.maxValuesPerFacet || 0) > getLimit()
-                ? facetItems.length <= getLimit()
-                : facetItems.length < getLimit();
+              (state.maxValuesPerFacet || 0) > currentLimit
+                ? facetItems.length <= currentLimit
+                : facetItems.length < currentLimit;
+
+            if (showMore) {
+              const showMoreTotalCount = Math.min(
+                showMoreLimit,
+                facetItems.length
+              );
+              showMoreCount = showMoreTotalCount - currentLimit;
+            }
 
             canToggleShowMore =
               showMore && (isShowingMore || !hasExhaustiveItems);
@@ -387,6 +401,7 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
             sendEvent,
             widgetParams,
             isShowingMore,
+            showMoreCount,
             toggleShowMore: cachedToggleShowMore,
             canToggleShowMore,
           };

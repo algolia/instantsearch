@@ -48,9 +48,9 @@ type HierarchicalMenuTemplates = Partial<{
     cssClasses: HierarchicalMenuCSSClasses;
   }>;
   /**
-   * Template used for the show more text, provided with `isShowingMore` data property.
+   * Template used for the show more text, provided with `isShowingMore`, `showMoreCount` data properties.
    */
-  showMoreText: Template<{ isShowingMore: boolean }>;
+  showMoreText: Template<{ isShowingMore: boolean; showMoreCount: number }>;
 }>;
 
 export type HierarchicalMenuCSSClasses = Partial<{
@@ -208,6 +208,7 @@ const renderer =
       refine,
       instantSearchInstance,
       isShowingMore,
+      showMoreCount,
       toggleShowMore,
       canToggleShowMore,
     }: HierarchicalMenuRenderState &
@@ -233,6 +234,7 @@ const renderer =
         showMore={showMore}
         toggleShowMore={toggleShowMore}
         isShowingMore={isShowingMore}
+        showMoreCount={showMoreCount}
         canToggleShowMore={canToggleShowMore}
       />,
       containerNode

@@ -10,6 +10,7 @@ import type { RefinementListWidget } from 'instantsearch.js/es/widgets/refinemen
 type WidgetParams = Parameters<RefinementListWidget>[0];
 export type RefinementListWidgetSetup = TestSetup<{
   widgetParams: Omit<WidgetParams, 'container'>;
+  vueSlots?: Record<string, unknown>;
 }>;
 
 export function createRefinementListWidgetTests(
