@@ -94,6 +94,11 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     promptHeaderComponent?: ChatUiProps['promptProps']['headerComponent'];
     promptFooterComponent?: ChatUiProps['promptProps']['footerComponent'];
     actionsComponent?: ChatUiProps['messagesProps']['actionsComponent'];
+    translations?: Partial<{
+      prompt: ChatUiProps['promptProps']['translations'];
+      header: ChatUiProps['headerProps']['translations'];
+      messages: ChatUiProps['messagesProps']['translations'];
+    }>;
   };
 
 export function Chat<
@@ -119,10 +124,17 @@ export function Chat<
   promptFooterComponent,
   actionsComponent,
   classNames,
+  translations = {},
   title,
   getSearchPageURL,
   ...props
 }: ChatProps<TObject, TUiMessage>) {
+  const {
+    prompt: promptTranslations,
+    header: headerTranslations,
+    messages: messagesTranslations,
+  } = translations;
+
   const { indexUiState, setIndexUiState } = useInstantSearch();
 
   const [open, setOpen] = React.useState(defaultOpen);
@@ -216,6 +228,7 @@ export function Chat<
         closeIconComponent: headerCloseIconComponent,
         minimizeIconComponent: headerMinimizeIconComponent,
         maximizeIconComponent: headerMaximizeIconComponent,
+        translations: headerTranslations,
         ...headerProps,
       }}
       messagesProps={{
@@ -232,12 +245,14 @@ export function Chat<
         loaderComponent: messagesLoaderComponent,
         errorComponent: messagesErrorComponent,
         actionsComponent,
+        translations: messagesTranslations,
         ...messagesProps,
       }}
       promptProps={{
         promptRef,
         status,
         value: input,
+        translations: promptTranslations,
         // Explicit event type is required to prevent TypeScript error
         // where parameter would implicitly have 'any' type without type annotation
         onInput: (event: React.ChangeEvent<HTMLTextAreaElement>) => {
