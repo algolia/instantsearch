@@ -8,44 +8,46 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { InstantSearchTestWrapper } from '@instantsearch/testutils';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import React from 'react';
+import { useSearchBox } from 'react-instantsearch-core';
 
 import { EXPERIMENTAL_Autocomplete } from '../Autocomplete';
 
+import type { SearchResponses } from 'algoliasearch';
+
 describe('Autocomplete', () => {
-  function createMockedSearchClient() {
+  function createMockedSearchClient(response: SearchResponses) {
     return createSearchClient({
       // @ts-expect-error - doesn't properly handle multi index, expects all responses to be of the same type
-      search: jest.fn(() =>
-        Promise.resolve(
-          createMultiSearchResponse(
-            createSingleSearchResponse({
-              hits: [{ objectID: '1', name: 'Item 1' }],
-            }),
-            // @ts-expect-error - ignore second response type
-            createSingleSearchResponse({
-              hits: [{ objectID: '2', query: 'hello' }],
-            })
-          )
-        )
-      ),
+      search: jest.fn(() => Promise.resolve(response)),
     });
   }
 
   test('should render a searchbox and indices with hits', async () => {
-    const searchClient = createMockedSearchClient();
+    const searchClient = createMockedSearchClient(
+      createMultiSearchResponse(
+        createSingleSearchResponse({
+          hits: [{ objectID: '1', name: 'Item 1' }],
+        }),
+        // @ts-expect-error - ignore second response type
+        createSingleSearchResponse({
+          hits: [{ objectID: '2', query: 'hello' }],
+        })
+      )
+    );
     const { container } = render(
       <InstantSearchTestWrapper searchClient={searchClient}>
         <EXPERIMENTAL_Autocomplete
           indices={[
             {
               indexName: 'indexName',
-              itemComponent: (props: { name: string }) => props.name,
+              itemComponent: (props) => props.item.name,
             },
             {
               indexName: 'indexName2',
-              itemComponent: (props: { query: string }) => props.query,
+              itemComponent: (props) => props.item.query,
             },
           ]}
         />
@@ -192,5 +194,87 @@ describe('Autocomplete', () => {
         </div>
       </div>
     `);
+  });
+
+  test('should render suggestions', async () => {
+    const searchClient = createMockedSearchClient(
+      createMultiSearchResponse(
+        createSingleSearchResponse({
+          hits: [
+            { objectID: '1', query: 'hello' },
+            { objectID: '2', query: 'hi' },
+          ],
+        })
+      )
+    );
+    const VirtualSearchBox = () => {
+      useSearchBox();
+      return null;
+    };
+    const { container } = render(
+      <InstantSearchTestWrapper searchClient={searchClient}>
+        <VirtualSearchBox />
+        <EXPERIMENTAL_Autocomplete
+          showSuggestions={{ indexName: 'query_suggestions' }}
+        />
+      </InstantSearchTestWrapper>
+    );
+
+    await screen.findByText('hello');
+
+    expect(container.querySelector('.ais-AutocompletePanel'))
+      .toMatchInlineSnapshot(`
+      <div
+        class="ais-AutocompletePanel"
+        hidden=""
+      >
+        <div
+          class="ais-AutocompletePanelLayout"
+        >
+          <div
+            class="ais-AutocompleteIndex ais-AutocompleteSuggestions"
+          >
+            <ol
+              class="ais-AutocompleteIndexList ais-AutocompleteSuggestionsList"
+            >
+              <li
+                class="ais-AutocompleteIndexItem ais-AutocompleteSuggestionsItem"
+              >
+                <div
+                  class="ais-AutocompleteSuggestion"
+                >
+                  hello
+                </div>
+              </li>
+              <li
+                class="ais-AutocompleteIndexItem ais-AutocompleteSuggestionsItem"
+              >
+                <div
+                  class="ais-AutocompleteSuggestion"
+                >
+                  hi
+                </div>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    `);
+
+    userEvent.click(screen.getByRole('searchbox'));
+    userEvent.click(screen.getByText(/hello/i));
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(3);
+    });
+
+    expect(searchClient.search).toHaveBeenLastCalledWith([
+      {
+        indexName: 'indexName',
+        params: expect.objectContaining({
+          query: 'hello',
+        }),
+      },
+    ]);
   });
 });

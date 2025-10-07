@@ -11,6 +11,7 @@ import {
   SearchBox,
   TrendingItems,
   Carousel,
+  EXPERIMENTAL_Autocomplete,
 } from 'react-instantsearch';
 
 import { Panel } from './Panel';
@@ -45,6 +46,13 @@ export function App() {
           indexName="instant_search"
           insights={true}
         >
+          <EXPERIMENTAL_Autocomplete
+            indices={[]}
+            showSuggestions={{
+              indexName: 'instant_search_demo_query_suggestions',
+            }}
+          />
+
           <Configure hitsPerPage={8} />
           <div className="search-panel">
             <div className="search-panel__filters">
