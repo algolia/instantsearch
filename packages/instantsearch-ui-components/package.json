@@ -51,6 +51,6 @@
     "ai": "^5.0.18",
     "zod": "^3.25.76 || ^4",
     "zod-to-json-schema": "3.24.6",
-    "markdown-to-jsx": "^7.1.13"
+    "markdown-to-jsx": "^7.7.15"
   }
 }
