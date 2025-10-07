@@ -1,4 +1,4 @@
-import type { AbstractChat, UIMessage } from 'ai';
+import type { AbstractChat, ChatInit, UIMessage } from 'ai';
 
 export type ChatStatus = 'ready' | 'submitted' | 'streaming' | 'error';
 export type ChatRole = 'data' | 'user' | 'assistant' | 'system';
@@ -30,10 +30,17 @@ export type ClientSideToolComponent = (
 ) => JSX.Element;
 
 export type ClientSideTool = {
-  type: ChatToolType;
-  component: ClientSideToolComponent;
+  layoutComponent: ClientSideToolComponent;
   addToolResult: AddToolResult;
-  onToolCall?: (params: { addToolResult: AddToolResultWithOutput }) => void;
+  onToolCall?: (
+    params: Parameters<
+      NonNullable<ChatInit<UIMessage>['onToolCall']>
+    >[0]['toolCall'] & {
+      addToolResult: AddToolResultWithOutput;
+    }
+  ) => void;
 };
+export type ClientSideTools = Record<string, ClientSideTool>;
 
 export type UserClientSideTool = Omit<ClientSideTool, 'addToolResult'>;
+export type UserClientSideTools = Record<string, UserClientSideTool>;
