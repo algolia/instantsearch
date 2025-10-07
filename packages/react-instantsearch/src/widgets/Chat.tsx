@@ -77,6 +77,11 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     headerProps?: UserHeaderProps;
     messagesProps?: UserMessagesProps;
     promptProps?: UserPromptProps;
+    translations?: Partial<{
+      prompt: ChatUiProps['promptProps']['translations'];
+      header: ChatUiProps['headerProps']['translations'];
+      messages: ChatUiProps['messagesProps']['translations'];
+    }>;
   };
 
 export function Chat<
@@ -91,10 +96,17 @@ export function Chat<
   messagesProps,
   promptProps,
   classNames,
+  translations = {},
   title,
   getSearchPageURL,
   ...props
 }: ChatProps<TObject, TUiMessage>) {
+  const {
+    prompt: promptTranslations,
+    header: headerTranslations,
+    messages: messagesTranslations,
+  } = translations;
+
   const { indexUiState, setIndexUiState } = useInstantSearch();
 
   const [open, setOpen] = React.useState(defaultOpen);
@@ -182,6 +194,7 @@ export function Chat<
         onToggleMaximize: () => setMaximized(!maximized),
         onClear: handleClear,
         canClear: Boolean(messages?.length) && !isClearing,
+        translations: headerTranslations,
         ...headerProps,
       }}
       messagesProps={{
@@ -195,12 +208,14 @@ export function Chat<
         onClearTransitionEnd: handleClearTransitionEnd,
         isScrollAtBottom,
         setIsScrollAtBottom,
+        translations: messagesTranslations,
         ...messagesProps,
       }}
       promptProps={{
         promptRef,
         status,
         value: input,
+        translations: promptTranslations,
         // Explicit event type is required to prevent TypeScript error
         // where parameter would implicitly have 'any' type without type annotation
         onInput: (event: React.ChangeEvent<HTMLTextAreaElement>) => {
