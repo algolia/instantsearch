@@ -16,7 +16,7 @@ import type { ComponentProps, Renderer } from '../../types';
 import type { ChatMessageProps, ChatMessageActionProps } from './ChatMessage';
 import type { ChatMessageErrorProps } from './ChatMessageError';
 import type { ChatMessageLoaderProps } from './ChatMessageLoader';
-import type { ChatMessageBase, ChatStatus, ClientSideTool } from './types';
+import type { ChatMessageBase, ChatStatus, ClientSideTools } from './types';
 
 export type ChatMessagesTranslations = {
   /**
@@ -94,7 +94,7 @@ export type ChatMessagesProps<
   /**
    * Tools available for the assistant
    */
-  tools?: ClientSideTool[];
+  tools?: ClientSideTools;
   /**
    * Current chat status
    */
@@ -177,7 +177,7 @@ function createDefaultMessageComponent<
     assistantMessageProps?: Partial<ChatMessageProps>;
     indexUiState: object;
     setIndexUiState: (state: object) => void;
-    tools?: ClientSideTool[];
+    tools?: ClientSideTools;
     onReload?: (messageId?: string) => void;
     translations: ChatMessagesTranslations;
     actionsComponent?: ChatMessageProps['actionsComponent'];

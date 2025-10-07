@@ -209,16 +209,15 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        tools={[
-          {
-            type: 'tool-test_tool',
-            component: ({ message }) => (
+        tools={{
+          test_tool: {
+            layoutComponent: ({ message }) => (
               <div className="wrapper">{JSON.stringify(message.output)}</div>
             ),
             addToolResult: jest.fn(),
             onToolCall: jest.fn(),
           },
-        ]}
+        }}
       />
     );
     expect(container).toMatchInlineSnapshot(`

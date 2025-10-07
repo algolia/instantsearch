@@ -61,7 +61,7 @@ export function createOptionsTests(
             role: 'assistant',
             parts: [
               {
-                type: SearchIndexToolType,
+                type: `tool-${SearchIndexToolType}`,
                 toolCallId: '1',
                 input: { text: 'test' },
                 state: 'output-available',
@@ -127,15 +127,14 @@ export function createOptionsTests(
         widgetParams: {
           agentId: 'agentId',
           chat: chat as any,
-          tools: [
-            {
-              type: 'tool-hello',
+          tools: {
+            hello: {
               template: {
                 component: (_, { html }) =>
                   html`<div id="tool-content">The message said hello!</div>`,
               },
             },
-          ],
+          },
         },
       });
 
@@ -164,7 +163,7 @@ export function createOptionsTests(
             role: 'assistant',
             parts: [
               {
-                type: SearchIndexToolType,
+                type: `tool-${SearchIndexToolType}`,
                 toolCallId: '1',
                 input: { text: 'hello' },
                 state: 'output-available',
@@ -184,15 +183,14 @@ export function createOptionsTests(
         widgetParams: {
           agentId: 'agentId',
           chat: chat as any,
-          tools: [
-            {
-              type: SearchIndexToolType,
+          tools: {
+            [SearchIndexToolType]: {
               template: {
                 component: (_, { html }) =>
                   html`<div id="tool-content">The message said hello!</div>`,
               },
             },
-          ],
+          },
         },
       });
 
