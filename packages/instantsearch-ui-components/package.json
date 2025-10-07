@@ -1,6 +1,6 @@
 {
   "name": "instantsearch-ui-components",
-  "version": "0.11.2",
+  "version": "0.12.0",
   "description": "Common UI components for InstantSearch.",
   "types": "dist/es/index.d.ts",
   "main": "dist/cjs/index.js",
@@ -49,8 +49,8 @@
   "dependencies": {
     "@babel/runtime": "^7.27.6",
     "ai": "^5.0.18",
+    "markdown-to-jsx": "^7.1.13",
     "zod": "^3.25.76 || ^4",
-    "zod-to-json-schema": "3.24.6",
-    "markdown-to-jsx": "^7.1.13"
+    "zod-to-json-schema": "3.24.6"
   }
 }

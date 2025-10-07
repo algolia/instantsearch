@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.22.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.21.3...vue-instantsearch@4.22.0) (2025-10-07)
+
+
+### Features
+
+* **instantsearch.js:** introduce chat widget ([#6705](https://github.com/algolia/instantsearch/issues/6705)) ([d7b360b](https://github.com/algolia/instantsearch/commit/d7b360b0a2d18e3eae42bf89ffae87f10142d0c1))
+
+
+
+
+
 ## [4.21.3](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.21.2...vue-instantsearch@4.21.3) (2025-09-09)
 
 **Note:** Version bump only for package vue-instantsearch
