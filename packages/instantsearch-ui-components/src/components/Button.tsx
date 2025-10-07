@@ -38,7 +38,7 @@ export type ButtonProps = ComponentProps<'button'> & {
   /**
    * Click event handler
    */
-  onClick?: (event: MouseEvent) => void;
+  onClick?: (event: any) => void;
 };
 
 export function createButtonComponent({
