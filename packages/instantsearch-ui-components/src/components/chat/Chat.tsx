@@ -7,7 +7,7 @@ import { createChatMessagesComponent } from './ChatMessages';
 import { createChatPromptComponent } from './ChatPrompt';
 import { createChatToggleButtonComponent } from './ChatToggleButton';
 
-import type { MutableRef, Renderer, ComponentProps } from '../../types';
+import type { Renderer, ComponentProps } from '../../types';
 import type { ChatHeaderProps } from './ChatHeader';
 import type { ChatMessagesProps } from './ChatMessages';
 import type { ChatPromptProps } from './ChatPrompt';
@@ -66,8 +66,6 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
   const ChatMessages = createChatMessagesComponent({ createElement, Fragment });
   const ChatPrompt = createChatPromptComponent({ createElement, Fragment });
 
-  const promptRef: MutableRef<HTMLTextAreaElement | null> = { current: null };
-
   return function Chat({
     open,
     maximized = false,
@@ -103,11 +101,7 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
             maximized={maximized}
           />
           <ChatMessages {...messagesProps} classNames={classNames.messages} />
-          <ChatPrompt
-            {...promptProps}
-            classNames={classNames.prompt}
-            ref={promptRef}
-          />
+          <ChatPrompt {...promptProps} classNames={classNames.prompt} />
         </div>
 
         <ChatToggleButton
@@ -115,7 +109,9 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
           classNames={classNames.toggleButton}
           onClick={() => {
             toggleButtonProps.onClick?.();
-            promptRef.current?.focus?.();
+            if (!open) {
+              promptProps.promptRef?.current?.focus();
+            }
           }}
         />
       </div>

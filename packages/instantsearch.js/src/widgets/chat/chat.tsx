@@ -5,12 +5,11 @@ import { Fragment, h, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
 import connectChat from '../../connectors/chat/connectChat';
-import { defaultTools, SearchIndexToolType } from '../../lib/chat';
+import { SearchIndexToolType } from '../../lib/chat';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
-  find,
 } from '../../lib/utils';
 import { carousel } from '../../templates';
 
@@ -34,6 +33,7 @@ import type {
   ChatClassNames,
   ClientSideToolComponent,
   ClientSideToolComponentProps,
+  ClientSideTools,
   UserClientSideTool,
 } from 'instantsearch-ui-components';
 
@@ -43,7 +43,7 @@ const Chat = createChatComponent({ createElement: h, Fragment });
 
 function createDefaultTools<THit extends NonNullable<object> = BaseHit>(
   templates: ChatTemplates<THit>
-): UserClientSideToolWithTemplate[] {
+): UserClientSideToolsWithTemplate {
   const Carousel = carousel();
 
   const Component: ClientSideToolComponent = ({
@@ -99,21 +99,20 @@ function createDefaultTools<THit extends NonNullable<object> = BaseHit>(
     );
   };
 
-  return [
-    {
-      type: SearchIndexToolType,
+  return {
+    [SearchIndexToolType]: {
       template: {
         component: (props) => {
           return <Component {...props} />;
         },
       },
     },
-  ];
+  };
 }
 
 function combineTools<THit extends NonNullable<object> = BaseHit>(
   templates: ChatTemplates<THit>,
-  userTools?: UserClientSideToolWithTemplate[]
+  userTools?: UserClientSideToolsWithTemplate
 ) {
   const defaults = createDefaultTools(templates);
 
@@ -121,17 +120,7 @@ function combineTools<THit extends NonNullable<object> = BaseHit>(
     return defaults;
   }
 
-  const userToolsMap = new Map(userTools.map((tool) => [tool.type, tool]));
-
-  const merged = defaults.map(
-    (defaultTool) => userToolsMap.get(defaultTool.type) ?? defaultTool
-  );
-
-  const extraUserTools = userTools.filter(
-    (tool) => !defaultTools.includes(tool.type)
-  );
-
-  return [...merged, ...extraUserTools];
+  return { ...defaults, ...userTools };
 }
 
 const createRenderer = <THit extends NonNullable<object> = BaseHit>({
@@ -147,7 +136,7 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
     templateProps?: PreparedTemplateProps<Required<ChatTemplates<THit>>>;
   };
   templates: ChatTemplates<THit>;
-  tools: UserClientSideToolWithTemplate[];
+  tools: UserClientSideToolsWithTemplate;
 }): Renderer<ChatRenderState, Partial<ChatWidgetParams>> => {
   const state = createLocalState();
   return (props, isFirstRendering) => {
@@ -164,6 +153,8 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
       setOpen,
       status,
       addToolResult,
+      regenerate,
+      stop,
     } = props;
 
     if (isFirstRendering) {
@@ -175,20 +166,23 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
       return;
     }
 
-    const toolsForUi = tools?.map((t) => ({
-      ...t,
-      addToolResult,
-      component: (componentProps: ClientSideToolComponentProps) => {
-        return (
-          <TemplateComponent
-            templates={t.template}
-            rootTagName="fragment"
-            templateKey="component"
-            data={componentProps}
-          />
-        );
-      },
-    }));
+    const toolsForUi: ClientSideTools = {};
+    Object.entries(tools).forEach(([key, tool]) => {
+      toolsForUi[key] = {
+        ...tool,
+        addToolResult,
+        layoutComponent: (componentProps: ClientSideToolComponentProps) => {
+          return (
+            <TemplateComponent
+              templates={tool.template}
+              rootTagName="fragment"
+              templateKey="component"
+              data={componentProps}
+            />
+          );
+        },
+      };
+    });
 
     state.subscribe(rerender);
 
@@ -198,6 +192,7 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
       const [isClearing, setIsClearing] = state.use(false);
       const [maximized, setMaximized] = state.use(false);
       const [isScrollAtBottom, setIsScrollAtBottom] = state.use(true);
+      const [promptRef] = state.use({ current: null });
 
       const onClear = () => setIsClearing(true);
       const onClearTransitionEnd = () => {
@@ -209,13 +204,17 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
           classNames={cssClasses}
           open={open}
           maximized={maximized}
+          toggleButtonProps={{ open, onClick: () => setOpen(!open) }}
           headerProps={{
             onClose: () => setOpen(false),
+            maximized,
             onToggleMaximize: () => setMaximized(!maximized),
             onClear,
-            canClear: messages.length > 0 && isClearing !== true,
+            canClear: Boolean(messages?.length) && !isClearing,
           }}
           messagesProps={{
+            status,
+            onReload: (messageId) => regenerate({ messageId }),
             messages,
             indexUiState,
             isClearing,
@@ -226,6 +225,7 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
             tools: toolsForUi,
           }}
           promptProps={{
+            promptRef,
             status,
             value: input,
             onInput: (event) => {
@@ -235,8 +235,10 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
               sendMessage({ text: input });
               setInput('');
             },
+            onStop: () => {
+              stop();
+            },
           }}
-          toggleButtonProps={{ open, onClick: () => setOpen(!open) }}
         />,
         containerNode
       );
@@ -250,11 +252,19 @@ export type UserClientSideToolTemplate = Partial<{
   component: TemplateWithBindEvent<ClientSideToolComponentProps>;
 }>;
 
-type UserClientSideToolWithTemplate = Omit<UserClientSideTool, 'component'> & {
+type UserClientSideToolWithTemplate = Omit<
+  UserClientSideTool,
+  'layoutComponent'
+> & {
   template: UserClientSideToolTemplate;
 };
+type UserClientSideToolsWithTemplate = Record<
+  string,
+  UserClientSideToolWithTemplate
+>;
 
 export type Tool = UserClientSideToolWithTemplate;
+export type Tools = UserClientSideToolsWithTemplate;
 
 export type ChatCSSClasses = Partial<ChatClassNames>;
 
@@ -275,7 +285,7 @@ type ChatWidgetParams<THit extends NonNullable<object> = BaseHit> = {
   /**
    * Client-side tools to add to the chat
    */
-  tools?: UserClientSideToolWithTemplate[];
+  tools?: UserClientSideToolsWithTemplate;
 
   /**
    * Templates to use for the widget.
@@ -330,7 +340,7 @@ export default (function chat<THit extends NonNullable<object> = BaseHit>(
     resume,
     ...options,
     onToolCall: ({ toolCall }) => {
-      const tool = find(tools, (t) => t.type === `tool-${toolCall.toolName}`);
+      const tool = tools[toolCall.toolName];
 
       if (tool && tool.onToolCall) {
         const scopedAddToolResult: AddToolResultWithOutput = ({ output }) => {
@@ -342,7 +352,7 @@ export default (function chat<THit extends NonNullable<object> = BaseHit>(
             })
           );
         };
-        tool.onToolCall({ addToolResult: scopedAddToolResult });
+        tool.onToolCall({ ...toolCall, addToolResult: scopedAddToolResult });
       }
     },
   });

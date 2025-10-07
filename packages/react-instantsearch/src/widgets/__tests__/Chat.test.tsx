@@ -101,17 +101,16 @@ describe('Chat', () => {
     const { container } = render(
       <InstantSearchTestWrapper>
         <Chat
-          tools={[
-            {
-              type: 'tool-hello',
-              component: () => (
+          tools={{
+            hello: {
+              layoutComponent: () => (
                 <div>
                   <div role="alert">The message said hello!</div>
                 </div>
               ),
               onToolCall,
             },
-          ]}
+          }}
         />
       </InstantSearchTestWrapper>
     );
@@ -129,7 +128,7 @@ describe('Chat', () => {
         {
           id: '0',
           role: 'assistant',
-          parts: [{ type: SearchIndexToolType }],
+          parts: [{ type: `tool-${SearchIndexToolType}` }],
         },
       ],
       sendMessage: jest.fn(),
@@ -138,17 +137,16 @@ describe('Chat', () => {
     const { container } = render(
       <InstantSearchTestWrapper>
         <Chat
-          tools={[
-            {
-              type: SearchIndexToolType,
-              component: () => (
+          tools={{
+            [SearchIndexToolType]: {
+              layoutComponent: () => (
                 <div>
                   <div role="alert">Custom search index tool</div>
                 </div>
               ),
               onToolCall,
             },
-          ]}
+          }}
         />
       </InstantSearchTestWrapper>
     );

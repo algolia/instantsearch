@@ -1,7 +1,7 @@
 /** @jsx createElement */
 import { compiler } from 'markdown-to-jsx';
 
-import { cx, find, startsWith } from '../../lib';
+import { cx, startsWith } from '../../lib';
 
 import { MenuIconComponent } from './icons';
 
@@ -10,7 +10,7 @@ import type {
   AddToolResultWithOutput,
   ChatMessageBase,
   ChatToolMessage,
-  ClientSideTool,
+  ClientSideTools,
 } from './types';
 
 export type ChatMessageSide = 'left' | 'right';
@@ -123,7 +123,7 @@ export type ChatMessageProps = ComponentProps<'article'> & {
   /**
    * Array of tools available for the assistant (for tool messages)
    */
-  tools?: ClientSideTool[];
+  tools?: ClientSideTools;
   /**
    * Optional handler to refine the search query (for tool actions)
    */
@@ -151,7 +151,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       leadingComponent: LeadingComponent,
       actionsComponent: ActionsComponent,
       footerComponent: FooterComponent,
-      tools = [],
+      tools = {},
       indexUiState,
       setIndexUiState,
       translations: userTranslations,
@@ -198,9 +198,10 @@ export function createChatMessageComponent({ createElement }: Renderer) {
         return <span key={`${message.id}-${index}`}>{markdown}</span>;
       }
       if (startsWith(part.type, 'tool-')) {
-        const tool = find(tools, (t) => t.type === part.type);
+        const toolName = part.type.replace('tool-', '');
+        const tool = tools[toolName];
         if (tool) {
-          const ToolComponent = tool.component;
+          const ToolLayoutComponent = tool.layoutComponent;
           const toolMessage = part as ChatToolMessage;
 
           const boundAddToolResult: AddToolResultWithOutput = (params) =>
@@ -215,7 +216,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
               key={`${message.id}-${index}`}
               className="ais-ChatMessage-tool"
             >
-              <ToolComponent
+              <ToolLayoutComponent
                 message={toolMessage}
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
