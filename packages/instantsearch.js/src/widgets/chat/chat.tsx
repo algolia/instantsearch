@@ -34,6 +34,7 @@ import type {
   ChatHeaderProps,
   ChatHeaderTranslations,
   ChatMessageActionProps,
+  ChatMessageBase,
   ChatMessageErrorProps,
   ChatMessageLoaderProps,
   ChatMessagesTranslations,
@@ -591,6 +592,7 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
      */
     actions: Template<{
       actions: ChatMessageActionProps[];
+      message: ChatMessageBase;
     }>;
   }>;
 

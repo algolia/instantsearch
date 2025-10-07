@@ -107,6 +107,7 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    */
   actionsComponent?: (props: {
     actions: ChatMessageActionProps[];
+    message: ChatMessageBase;
   }) => JSX.Element | null;
   /**
    * Footer content
@@ -256,7 +257,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
                 aria-label={translations.actionsLabel}
               >
                 {ActionsComponent ? (
-                  <ActionsComponent actions={actions} />
+                  <ActionsComponent actions={actions} message={message} />
                 ) : (
                   actions.map((action, index) => (
                     <button
