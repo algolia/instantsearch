@@ -16,7 +16,7 @@ import 'instantsearch.css/themes/satellite.css';
 
 const searchClient = algoliasearch(
   'latency',
-  '312a11382a63bdfc06e3183492fc469f'
+  '6be0576ff61c053d5f9a3225e2a90f76'
 );
 
 const search = instantsearch({
@@ -79,7 +79,7 @@ search.addWidgets([
   }),
   chat({
     container: '#chat',
-    agentId: '8f80fec3-f86a-1c8-86bb-426cb067cbbd',
+    agentId: '1eed8cbe-c096-4b8e-bfe7-873b9bc040ef',
     templates: {
       item: productItemTemplate,
     },
