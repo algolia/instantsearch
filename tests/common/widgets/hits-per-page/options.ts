@@ -41,6 +41,7 @@ export function createOptionsTests(
           class="ais-HitsPerPage"
         >
           <select
+            aria-label="Items per page"
             class="ais-HitsPerPage-select"
           >
             <option
@@ -94,6 +95,7 @@ export function createOptionsTests(
           class="ais-HitsPerPage"
         >
           <select
+            aria-label="Items per page"
             class="ais-HitsPerPage-select"
           >
             <option
