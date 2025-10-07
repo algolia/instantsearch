@@ -188,7 +188,7 @@ export function Chat<
         maximized,
         onToggleMaximize: () => setMaximized(!maximized),
         onClear: handleClear,
-        canClear: messages && messages.length > 0 && !isClearing,
+        canClear: Boolean(messages?.length) && !isClearing,
         ...headerProps,
       }}
       messagesProps={{
