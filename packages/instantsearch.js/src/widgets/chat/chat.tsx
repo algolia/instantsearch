@@ -116,7 +116,7 @@ function createDefaultTools<THit extends NonNullable<object> = BaseHit>(
   return {
     [SearchIndexToolType]: {
       template: {
-        component: (props) => {
+        layout: (props) => {
           return <Component {...props} />;
         },
       },
@@ -451,7 +451,7 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
 };
 
 export type UserClientSideToolTemplate = Partial<{
-  component: TemplateWithBindEvent<ClientSideToolComponentProps>;
+  layout: TemplateWithBindEvent<ClientSideToolComponentProps>;
 }>;
 
 type UserClientSideToolWithTemplate = Omit<

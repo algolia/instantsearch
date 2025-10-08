@@ -130,7 +130,7 @@ export function createOptionsTests(
           tools: {
             hello: {
               template: {
-                component: (_, { html }) =>
+                layout: (_, { html }) =>
                   html`<div id="tool-content">The message said hello!</div>`,
               },
             },
@@ -186,7 +186,7 @@ export function createOptionsTests(
           tools: {
             [SearchIndexToolType]: {
               template: {
-                component: (_, { html }) =>
+                layout: (_, { html }) =>
                   html`<div id="tool-content">The message said hello!</div>`,
               },
             },
