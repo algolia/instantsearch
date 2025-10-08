@@ -44,14 +44,16 @@ export type ButtonProps = ComponentProps<'button'> & {
 export function createButtonComponent({
   createElement,
 }: Pick<Renderer, 'createElement'>) {
-  return function Button({
-    variant = 'primary',
-    size = 'md',
-    iconOnly = false,
-    className,
-    children,
-    ...props
-  }: ButtonProps) {
+  return function Button(userProps: ButtonProps) {
+    const {
+      variant = 'primary',
+      size = 'md',
+      iconOnly = false,
+      className,
+      children,
+      ...props
+    } = userProps;
+
     return (
       <button
         type="button"
