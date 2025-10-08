@@ -43,7 +43,7 @@ describe('Chat', () => {
                 class="ais-ChatHeader-title"
               >
                 <span
-                  class="ais-ChatHeader-titleIcon"
+                  class="ais-ChatHeader-title-icon"
                 >
                   <svg
                     fill="none"
@@ -73,7 +73,7 @@ describe('Chat', () => {
               >
                 <button
                   aria-label="Maximize chat"
-                  class="ais-ChatHeader-maximize"
+                  class="ais-Button ais-Button--ghost ais-Button--sm ais-Button--icon-only ais-ChatHeader-maximize"
                   type="button"
                 >
                   <svg
@@ -103,7 +103,7 @@ describe('Chat', () => {
                 </button>
                 <button
                   aria-label="Close chat"
-                  class="ais-ChatHeader-close"
+                  class="ais-Button ais-Button--ghost ais-Button--sm ais-Button--icon-only ais-ChatHeader-close"
                   title="Close chat"
                   type="button"
                 >
@@ -142,7 +142,7 @@ describe('Chat', () => {
               </div>
               <button
                 aria-label="Scroll to bottom"
-                class="ais-ChatMessages-scrollToBottom"
+                class="ais-Button ais-Button--outline ais-Button--sm ais-Button--icon-only ais-ChatMessages-scrollToBottom"
                 tabindex="0"
                 type="button"
               >
@@ -182,7 +182,7 @@ describe('Chat', () => {
                 >
                   <button
                     aria-label="Message is empty"
-                    class="ais-ChatPrompt-submit"
+                    class="ais-Button ais-Button--primary ais-Button--sm ais-Button--icon-only ais-ChatPrompt-submit"
                     data-status="ready"
                     disabled=""
                     type="submit"
@@ -220,7 +220,7 @@ describe('Chat', () => {
             </form>
           </div>
           <button
-            class="ais-ChatToggleButton ais-ChatToggleButton--open"
+            class="ais-Button ais-Button--primary ais-Button--md ais-Button--icon-only ais-ChatToggleButton ais-ChatToggleButton--open"
             type="button"
           >
             <svg

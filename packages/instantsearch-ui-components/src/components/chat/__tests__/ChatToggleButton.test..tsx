@@ -19,7 +19,7 @@ describe('ChatToggleButton', () => {
     expect(container).toMatchInlineSnapshot(`
       <div>
         <button
-          class="ais-ChatToggleButton ais-ChatToggleButton--open"
+          class="ais-Button ais-Button--primary ais-Button--md ais-Button--icon-only ais-ChatToggleButton ais-ChatToggleButton--open"
           type="button"
         >
           <svg
@@ -49,7 +49,7 @@ describe('ChatToggleButton', () => {
     expect(container).toMatchInlineSnapshot(`
       <div>
         <button
-          class="ais-ChatToggleButton"
+          class="ais-Button ais-Button--primary ais-Button--md ais-Button--icon-only ais-ChatToggleButton"
           type="button"
         >
           <svg
@@ -94,14 +94,14 @@ describe('ChatToggleButton', () => {
       />
     );
     expect(container.querySelector('button')!.className).toBe(
-      'ais-ChatToggleButton ais-ChatToggleButton--open custom-root'
+      'ais-Button ais-Button--primary ais-Button--md ais-Button--icon-only ais-ChatToggleButton ais-ChatToggleButton--open custom-root'
     );
 
     const { container: classNameContainer } = render(
       <ChatToggleButton open onClick={jest.fn()} className="custom-root" />
     );
     expect(classNameContainer.querySelector('button')!.className).toBe(
-      'custom-root'
+      'ais-Button ais-Button--primary ais-Button--md ais-Button--icon-only ais-ChatToggleButton ais-ChatToggleButton--open custom-root'
     );
   });
 
@@ -120,7 +120,7 @@ describe('ChatToggleButton', () => {
     expect(container).toMatchInlineSnapshot(`
       <div>
         <button
-          class="ais-ChatToggleButton"
+          class="ais-Button ais-Button--primary ais-Button--md ais-Button--icon-only ais-ChatToggleButton"
           type="button"
         >
           <span>
