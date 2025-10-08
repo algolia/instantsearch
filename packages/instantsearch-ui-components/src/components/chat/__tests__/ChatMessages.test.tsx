@@ -19,6 +19,9 @@ describe('ChatMessages', () => {
         messages={[]}
         indexUiState={{}}
         setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
       />
     );
 
@@ -79,6 +82,9 @@ describe('ChatMessages', () => {
         indexUiState={{}}
         setIndexUiState={jest.fn()}
         messageComponent={Messages}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
       />
     );
 
@@ -151,6 +157,9 @@ describe('ChatMessages', () => {
         }}
         indexUiState={{}}
         setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
       />
     );
 

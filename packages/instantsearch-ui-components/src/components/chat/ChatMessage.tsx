@@ -123,13 +123,13 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    */
   setIndexUiState: (state: object) => void;
   /**
+   * Close the chat
+   */
+  onClose: () => void;
+  /**
    * Array of tools available for the assistant (for tool messages)
    */
-  tools?: ClientSideTools;
-  /**
-   * Optional handler to refine the search query (for tool actions)
-   */
-  handleRefine?: (value: string) => void;
+  tools: ClientSideTools;
   /**
    * Optional class names
    */
@@ -151,13 +151,13 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       variant = 'subtle',
       actions = [],
       autoHideActions = false,
-      handleRefine,
       leadingComponent: LeadingComponent,
       actionsComponent: ActionsComponent,
       footerComponent: FooterComponent,
       tools = {},
       indexUiState,
       setIndexUiState,
+      onClose,
       translations: userTranslations,
       ...props
     } = userProps;
@@ -225,6 +225,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
                 addToolResult={boundAddToolResult}
+                onClose={onClose}
               />
             </div>
           );

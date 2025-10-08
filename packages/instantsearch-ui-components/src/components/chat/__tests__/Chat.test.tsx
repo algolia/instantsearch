@@ -22,6 +22,9 @@ describe('Chat', () => {
           messages: [],
           indexUiState: {},
           setIndexUiState: jest.fn(),
+          tools: {},
+          onReload: jest.fn(),
+          onClose: jest.fn(),
         }}
         promptProps={{}}
         toggleButtonProps={{ open: true, onClick: jest.fn() }}
