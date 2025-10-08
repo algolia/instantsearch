@@ -185,13 +185,15 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
       toolsForUi[key] = {
         ...tool,
         addToolResult,
-        layoutComponent: (componentProps: ClientSideToolComponentProps) => {
+        layoutComponent: (
+          layoutComponentProps: ClientSideToolComponentProps
+        ) => {
           return (
             <TemplateComponent
               templates={tool.template}
               rootTagName="fragment"
-              templateKey="component"
-              data={componentProps}
+              templateKey="layout"
+              data={layoutComponentProps}
             />
           );
         },
