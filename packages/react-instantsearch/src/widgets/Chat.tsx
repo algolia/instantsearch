@@ -36,7 +36,13 @@ type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
 
 type UiProps = Pick<
   ChatUiProps,
-  'open' | 'headerProps' | 'toggleButtonProps' | 'messagesProps' | 'promptProps'
+  | 'open'
+  | 'headerProps'
+  | 'toggleButtonProps'
+  | 'messagesProps'
+  | 'promptProps'
+  | 'headerComponent'
+  | 'promptComponent'
 >;
 
 type UserToggleButtonProps = Omit<
@@ -58,7 +64,7 @@ type UserMessagesProps = Omit<
 
 type UserPromptProps = Omit<
   ChatUiProps['promptProps'],
-  'value' | 'onInput' | 'onSubmit'
+  'value' | 'onInput' | 'onSubmit' | 'headerComponent' | 'footerComponent'
 >;
 
 export type Tool = UserClientSideTool;
@@ -67,16 +73,27 @@ export type Tools = UserClientSideTools;
 export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
   ChatUiProps,
   keyof UiProps
-> & {
-  itemComponent?: ItemComponent<TObject>;
-  tools?: UserClientSideTools;
-  defaultOpen?: boolean;
-  getSearchPageURL?: (nextUiState: IndexUiState) => string;
-} & UseChatOptions<TUiMessage> & {
+> &
+  UseChatOptions<TUiMessage> & {
+    itemComponent?: ItemComponent<TObject>;
+    tools?: UserClientSideTools;
+    defaultOpen?: boolean;
+    getSearchPageURL?: (nextUiState: IndexUiState) => string;
     toggleButtonProps?: UserToggleButtonProps;
     headerProps?: UserHeaderProps;
     messagesProps?: UserMessagesProps;
     promptProps?: UserPromptProps;
+    headerLayoutComponent?: ChatUiProps['headerComponent'];
+    headerTitleIconComponent?: ChatUiProps['headerProps']['titleIconComponent'];
+    headerCloseIconComponent?: ChatUiProps['headerProps']['closeIconComponent'];
+    headerMinimizeIconComponent?: ChatUiProps['headerProps']['minimizeIconComponent'];
+    headerMaximizeIconComponent?: ChatUiProps['headerProps']['maximizeIconComponent'];
+    messagesLoaderComponent?: ChatUiProps['messagesProps']['loaderComponent'];
+    messagesErrorComponent?: ChatUiProps['messagesProps']['errorComponent'];
+    promptLayoutComponent?: ChatUiProps['promptComponent'];
+    promptHeaderComponent?: ChatUiProps['promptProps']['headerComponent'];
+    promptFooterComponent?: ChatUiProps['promptProps']['footerComponent'];
+    actionsComponent?: ChatUiProps['messagesProps']['actionsComponent'];
     translations?: Partial<{
       prompt: ChatUiProps['promptProps']['translations'];
       header: ChatUiProps['headerProps']['translations'];
@@ -89,12 +106,23 @@ export function Chat<
   TUiMessage extends UIMessage
 >({
   tools: userTools,
-  itemComponent,
   defaultOpen = false,
   toggleButtonProps,
   headerProps,
   messagesProps,
   promptProps,
+  itemComponent,
+  headerLayoutComponent,
+  headerTitleIconComponent,
+  headerCloseIconComponent,
+  headerMinimizeIconComponent,
+  headerMaximizeIconComponent,
+  messagesLoaderComponent,
+  messagesErrorComponent,
+  promptLayoutComponent,
+  promptHeaderComponent,
+  promptFooterComponent,
+  actionsComponent,
   classNames,
   translations = {},
   title,
@@ -183,6 +211,8 @@ export function Chat<
       title={title}
       open={open}
       maximized={maximized}
+      headerComponent={headerLayoutComponent}
+      promptComponent={promptLayoutComponent}
       toggleButtonProps={{
         open,
         onClick: () => setOpen(!open),
@@ -194,6 +224,10 @@ export function Chat<
         onToggleMaximize: () => setMaximized(!maximized),
         onClear: handleClear,
         canClear: Boolean(messages?.length) && !isClearing,
+        titleIconComponent: headerTitleIconComponent,
+        closeIconComponent: headerCloseIconComponent,
+        minimizeIconComponent: headerMinimizeIconComponent,
+        maximizeIconComponent: headerMaximizeIconComponent,
         translations: headerTranslations,
         ...headerProps,
       }}
@@ -208,6 +242,9 @@ export function Chat<
         onClearTransitionEnd: handleClearTransitionEnd,
         isScrollAtBottom,
         setIsScrollAtBottom,
+        loaderComponent: messagesLoaderComponent,
+        errorComponent: messagesErrorComponent,
+        actionsComponent,
         translations: messagesTranslations,
         ...messagesProps,
       }}
@@ -228,6 +265,8 @@ export function Chat<
         onStop: () => {
           stop();
         },
+        headerComponent: promptHeaderComponent,
+        footerComponent: promptFooterComponent,
         ...promptProps,
       }}
       classNames={classNames}

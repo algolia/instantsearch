@@ -13,8 +13,6 @@ import {
 } from '../../lib/utils';
 import { carousel } from '../../templates';
 
-import defaultTemplates from './defaultTemplates';
-
 import type {
   ChatRenderState,
   ChatConnectorParams,
@@ -27,10 +25,20 @@ import type {
   Hit,
   TemplateWithBindEvent,
   BaseHit,
+  Template,
 } from '../../types';
 import type {
   AddToolResultWithOutput,
   ChatClassNames,
+  ChatHeaderProps,
+  ChatHeaderTranslations,
+  ChatMessageActionProps,
+  ChatMessageBase,
+  ChatMessageErrorProps,
+  ChatMessageLoaderProps,
+  ChatMessagesTranslations,
+  ChatPromptProps,
+  ChatPromptTranslations,
   ClientSideToolComponent,
   ClientSideToolComponentProps,
   ClientSideTools,
@@ -40,6 +48,12 @@ import type {
 const withUsage = createDocumentationMessageGenerator({ name: 'chat' });
 
 const Chat = createChatComponent({ createElement: h, Fragment });
+
+function getDefinedProperties<T extends object>(obj: T): Partial<T> {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([, value]) => value !== undefined)
+  ) as Partial<T>;
+}
 
 function createDefaultTools<THit extends NonNullable<object> = BaseHit>(
   templates: ChatTemplates<THit>
@@ -102,7 +116,7 @@ function createDefaultTools<THit extends NonNullable<object> = BaseHit>(
   return {
     [SearchIndexToolType]: {
       template: {
-        component: (props) => {
+        layout: (props) => {
           return <Component {...props} />;
         },
       },
@@ -133,7 +147,7 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
   containerNode: HTMLElement;
   cssClasses: ChatCSSClasses;
   renderState: {
-    templateProps?: PreparedTemplateProps<Required<ChatTemplates<THit>>>;
+    templateProps?: PreparedTemplateProps<ChatTemplates<THit>>;
   };
   templates: ChatTemplates<THit>;
   tools: UserClientSideToolsWithTemplate;
@@ -159,7 +173,7 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
 
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
-        defaultTemplates,
+        defaultTemplates: {} as unknown as ChatTemplates<THit>,
         templatesConfig: instantSearchInstance.templatesConfig,
         templates,
       });
@@ -171,18 +185,196 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
       toolsForUi[key] = {
         ...tool,
         addToolResult,
-        layoutComponent: (componentProps: ClientSideToolComponentProps) => {
+        layoutComponent: (
+          layoutComponentProps: ClientSideToolComponentProps
+        ) => {
           return (
             <TemplateComponent
               templates={tool.template}
               rootTagName="fragment"
-              templateKey="component"
-              data={componentProps}
+              templateKey="layout"
+              data={layoutComponentProps}
             />
           );
         },
       };
     });
+
+    const headerTemplateProps = prepareTemplateProps({
+      defaultTemplates: {} as unknown as NonNullable<
+        Required<ChatTemplates<THit>['header']>
+      >,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates: templates.header,
+    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    const headerLayoutComponent = templates.header?.layout
+      ? (headerProps: ChatHeaderProps) => {
+          return (
+            <TemplateComponent
+              {...headerTemplateProps}
+              templateKey="layout"
+              rootTagName="div"
+              data={headerProps}
+            />
+          );
+        }
+      : undefined;
+    const headerCloseIconComponent = templates.header?.closeIcon
+      ? () => {
+          return (
+            <TemplateComponent
+              {...headerTemplateProps}
+              templateKey="closeIcon"
+              rootTagName="span"
+            />
+          );
+        }
+      : undefined;
+    const headerMinimizeIconComponent = templates.header?.minimizeIcon
+      ? () => {
+          return (
+            <TemplateComponent
+              {...headerTemplateProps}
+              templateKey="minimizeIcon"
+              rootTagName="span"
+            />
+          );
+        }
+      : undefined;
+    const headerMaximizeIconComponent = templates.header?.maximizeIcon
+      ? ({ maximized }: { maximized: boolean }) => {
+          return (
+            <TemplateComponent
+              {...headerTemplateProps}
+              templateKey="maximizeIcon"
+              rootTagName="span"
+              data={{ maximized }}
+            />
+          );
+        }
+      : undefined;
+    const headerTitleIconComponent = templates.header?.titleIcon
+      ? () => {
+          return (
+            <TemplateComponent
+              {...headerTemplateProps}
+              templateKey="titleIcon"
+              rootTagName="span"
+            />
+          );
+        }
+      : undefined;
+    const headerTranslations: Partial<ChatHeaderTranslations> =
+      getDefinedProperties({
+        title: templates.header?.titleText,
+        minimizeLabel: templates.header?.minimizeLabelText,
+        maximizeLabel: templates.header?.maximizeLabelText,
+        closeLabel: templates.header?.closeLabelText,
+        clearLabel: templates.header?.clearLabelText,
+      });
+
+    const messagesTemplateProps = prepareTemplateProps({
+      defaultTemplates: {} as unknown as NonNullable<
+        Required<ChatTemplates<THit>['messages']>
+      >,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates: templates.messages,
+    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    const messagesLoaderComponent = templates.messages?.loader
+      ? (loaderProps: ChatMessageLoaderProps) => {
+          return (
+            <TemplateComponent
+              {...messagesTemplateProps}
+              templateKey="loader"
+              rootTagName="div"
+              data={loaderProps}
+            />
+          );
+        }
+      : undefined;
+    const messagesErrorComponent = templates.messages?.error
+      ? (errorProps: ChatMessageErrorProps) => {
+          return (
+            <TemplateComponent
+              {...messagesTemplateProps}
+              templateKey="error"
+              rootTagName="div"
+              data={errorProps}
+            />
+          );
+        }
+      : undefined;
+    const messagesTranslations: Partial<ChatMessagesTranslations> =
+      getDefinedProperties({
+        scrollToBottomLabel: templates.messages?.scrollToBottomLabelText,
+        loaderText: templates.messages?.loaderText,
+        copyToClipboardLabel: templates.messages?.copyToClipboardLabelText,
+        regenerateLabel: templates.messages?.regenerateLabelText,
+      });
+
+    const promptTemplateProps = prepareTemplateProps({
+      defaultTemplates: {} as unknown as NonNullable<
+        Required<ChatTemplates<THit>['prompt']>
+      >,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates: templates.prompt,
+    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    const promptLayoutComponent = templates.prompt?.layout
+      ? (promptProps: ChatPromptProps) => {
+          return (
+            <TemplateComponent
+              {...promptTemplateProps}
+              templateKey="layout"
+              rootTagName="div"
+              data={promptProps}
+            />
+          );
+        }
+      : undefined;
+    const promptHeaderComponent = templates.prompt?.header
+      ? () => {
+          return (
+            <TemplateComponent
+              {...promptTemplateProps}
+              templateKey="header"
+              rootTagName="fragment"
+            />
+          );
+        }
+      : undefined;
+    const promptFooterComponent = templates.prompt?.footer
+      ? () => {
+          return (
+            <TemplateComponent
+              {...promptTemplateProps}
+              templateKey="footer"
+              rootTagName="fragment"
+            />
+          );
+        }
+      : undefined;
+    const promptTranslations: Partial<ChatPromptTranslations> =
+      getDefinedProperties({
+        textareaLabel: templates.prompt?.textareaLabelText,
+        textareaPlaceholder: templates.prompt?.textareaPlaceholderText,
+        emptyMessageTooltip: templates.prompt?.emptyMessageTooltipText,
+        stopResponseTooltip: templates.prompt?.stopResponseTooltipText,
+        sendMessageTooltip: templates.prompt?.sendMessageTooltipText,
+        disclaimer: templates.prompt?.disclaimerText,
+      });
+
+    const actionsComponent = templates.actions
+      ? (actionsProps: { actions: ChatMessageActionProps[] }) => {
+          return (
+            <TemplateComponent
+              {...renderState.templateProps}
+              templateKey="actions"
+              rootTagName="div"
+              data={actionsProps}
+            />
+          );
+        }
+      : undefined;
 
     state.subscribe(rerender);
 
@@ -192,7 +384,6 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
       const [isClearing, setIsClearing] = state.use(false);
       const [maximized, setMaximized] = state.use(false);
       const [isScrollAtBottom, setIsScrollAtBottom] = state.use(true);
-      const [promptRef] = state.use({ current: null });
 
       const onClear = () => setIsClearing(true);
       const onClearTransitionEnd = () => {
@@ -205,12 +396,19 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
           open={open}
           maximized={maximized}
           toggleButtonProps={{ open, onClick: () => setOpen(!open) }}
+          headerComponent={headerLayoutComponent}
+          promptComponent={promptLayoutComponent}
           headerProps={{
             onClose: () => setOpen(false),
             maximized,
             onToggleMaximize: () => setMaximized(!maximized),
             onClear,
             canClear: Boolean(messages?.length) && !isClearing,
+            closeIconComponent: headerCloseIconComponent,
+            minimizeIconComponent: headerMinimizeIconComponent,
+            maximizeIconComponent: headerMaximizeIconComponent,
+            titleIconComponent: headerTitleIconComponent,
+            translations: headerTranslations,
           }}
           messagesProps={{
             status,
@@ -223,9 +421,12 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
             setIsScrollAtBottom,
             setIndexUiState,
             tools: toolsForUi,
+            loaderComponent: messagesLoaderComponent,
+            errorComponent: messagesErrorComponent,
+            actionsComponent,
+            translations: messagesTranslations,
           }}
           promptProps={{
-            promptRef,
             status,
             value: input,
             onInput: (event) => {
@@ -238,6 +439,9 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
             onStop: () => {
               stop();
             },
+            headerComponent: promptHeaderComponent,
+            footerComponent: promptFooterComponent,
+            translations: promptTranslations,
           }}
         />,
         containerNode
@@ -249,7 +453,7 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
 };
 
 export type UserClientSideToolTemplate = Partial<{
-  component: TemplateWithBindEvent<ClientSideToolComponentProps>;
+  layout: TemplateWithBindEvent<ClientSideToolComponentProps>;
 }>;
 
 type UserClientSideToolWithTemplate = Omit<
@@ -274,6 +478,132 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
      * Template to use for each result. This template will receive an object containing a single record.
      */
     item: TemplateWithBindEvent<Hit<THit>>;
+
+    /**
+     * Templates to use for the header.
+     */
+    header: Partial<{
+      /**
+       * Template to use for the chat header.
+       */
+      layout: Template<ChatHeaderProps>;
+      /**
+       * Optional close icon
+       */
+      closeIcon: Template;
+      /**
+       * Optional minimize icon
+       */
+      minimizeIcon?: Template;
+      /**
+       * Optional maximize icon
+       */
+      maximizeIcon?: Template<{ maximized: boolean }>;
+      /**
+       * Optional title icon (defaults to sparkles)
+       */
+      titleIcon?: Template;
+      /**
+       * The title to display in the header
+       */
+      titleText: string;
+      /**
+       * Accessible label for the minimize button
+       */
+      minimizeLabelText: string;
+      /**
+       * Accessible label for the maximize button
+       */
+      maximizeLabelText: string;
+      /**
+       * Accessible label for the close button
+       */
+      closeLabelText: string;
+      /**
+       * Text for the clear button
+       */
+      clearLabelText: string;
+    }>;
+
+    /**
+     * Templates to use for the messages.
+     */
+    messages: Partial<{
+      /**
+       * Template to use when loading messages
+       */
+      loader: Template<ChatMessageLoaderProps>;
+      /**
+       * Template to use when there is an error loading messages
+       */
+      error: Template<ChatMessageErrorProps>;
+      /**
+       * Label for the scroll to bottom button
+       */
+      scrollToBottomLabelText?: string;
+      /**
+       * Text to display in the loader
+       */
+      loaderText?: string;
+      /**
+       * Label for the copy to clipboard action
+       */
+      copyToClipboardLabelText?: string;
+      /**
+       * Label for the regenerate action
+       */
+      regenerateLabelText?: string;
+    }>;
+
+    /**
+     * Templates to use for the prompt.
+     */
+    prompt: Partial<{
+      /**
+       * Template to use for the chat prompt.
+       */
+      layout: Template<ChatPromptProps>;
+      /**
+       * Template to use for the prompt header.
+       */
+      header: Template;
+      /**
+       * Template to use for the prompt footer.
+       */
+      footer: Template;
+      /**
+       * The label for the textarea
+       */
+      textareaLabelText: string;
+      /**
+       * The placeholder text for the textarea
+       */
+      textareaPlaceholderText: string;
+      /**
+       * The tooltip for the submit button when message is empty
+       */
+      emptyMessageTooltipText: string;
+      /**
+       * The tooltip for the stop button
+       */
+      stopResponseTooltipText: string;
+      /**
+       * The tooltip for the send button
+       */
+      sendMessageTooltipText: string;
+      /**
+       * The disclaimer text shown in the footer
+       */
+      disclaimerText: string;
+    }>;
+
+    /**
+     * Template to use for the message actions.
+     */
+    actions: Template<{
+      actions: ChatMessageActionProps[];
+      message: ChatMessageBase;
+    }>;
   }>;
 
 type ChatWidgetParams<THit extends NonNullable<object> = BaseHit> = {

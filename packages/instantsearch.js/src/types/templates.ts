@@ -50,7 +50,11 @@ export type TemplateWithBindEvent<TTemplateData = void> =
     ) => VNode | VNode[] | string);
 
 export type Templates = {
-  [key: string]: Template<any> | TemplateWithBindEvent<any> | undefined;
+  [key: string]:
+    | Template<any>
+    | TemplateWithBindEvent<any>
+    | Templates
+    | undefined;
 };
 
 export type HoganHelpers<TKeys extends string = string> = Record<

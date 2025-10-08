@@ -80,6 +80,10 @@ export type ChatMessagesProps<
    */
   errorComponent?: (props: ChatMessageErrorProps) => JSX.Element;
   /**
+   * Custom actions component
+   */
+  actionsComponent?: ChatMessageProps['actionsComponent'];
+  /**
    * The index UI state
    */
   indexUiState: object;
@@ -165,6 +169,7 @@ function createDefaultMessageComponent<
     setIndexUiState,
     onReload,
     translations,
+    actionsComponent,
   }: {
     key: string;
     message: TMessage;
@@ -175,6 +180,7 @@ function createDefaultMessageComponent<
     tools?: ClientSideTools;
     onReload?: (messageId?: string) => void;
     translations: ChatMessagesTranslations;
+    actionsComponent?: ChatMessageProps['actionsComponent'];
   }) {
     const defaultAssistantActions: ChatMessageActionProps[] = [
       ...(hasTextContent(message)
@@ -207,6 +213,7 @@ function createDefaultMessageComponent<
         indexUiState={indexUiState}
         setIndexUiState={setIndexUiState}
         actions={defaultActions}
+        actionsComponent={actionsComponent}
         data-role={message.role}
         {...messageProps}
       />
@@ -246,6 +253,7 @@ export function createChatMessagesComponent({
       messageComponent: MessageComponent,
       loaderComponent: LoaderComponent,
       errorComponent: ErrorComponent,
+      actionsComponent: ActionsComponent,
       tools,
       indexUiState,
       setIndexUiState,
@@ -326,6 +334,7 @@ export function createChatMessagesComponent({
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
                 onReload={onReload}
+                actionsComponent={ActionsComponent}
                 translations={translations}
               />
             ))}
