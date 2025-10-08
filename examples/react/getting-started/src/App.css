@@ -1,3 +1,7 @@
+:root {
+  --ais-primary-color-rgb: 142, 67, 231;
+}
+
 body,
 h1 {
   margin: 0;
