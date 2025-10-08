@@ -79,7 +79,7 @@ search.addWidgets([
   }),
   chat({
     container: '#chat',
-    agentId: '1eed8cbe-c096-4b8e-bfe7-873b9bc040ef',
+    agentId: '7c2f6816-bfdb-46e9-a51f-9cb8e5fc9628',
     templates: {
       item: productItemTemplate,
     },
