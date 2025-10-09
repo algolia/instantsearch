@@ -8,9 +8,9 @@ import { createChatPromptComponent } from './ChatPrompt';
 import { createChatToggleButtonComponent } from './ChatToggleButton';
 
 import type { Renderer, ComponentProps } from '../../types';
-import type { ChatHeaderProps } from './ChatHeader';
+import type { ChatHeaderProps, ChatHeaderOwnProps } from './ChatHeader';
 import type { ChatMessagesProps } from './ChatMessages';
-import type { ChatPromptProps } from './ChatPrompt';
+import type { ChatPromptProps, ChatPromptOwnProps } from './ChatPrompt';
 import type { ChatToggleButtonProps } from './ChatToggleButton';
 
 export type ChatClassNames = {
@@ -58,11 +58,11 @@ export type ChatProps = Omit<ComponentProps<'div'>, 'onError' | 'title'> & {
   /**
    * Optional header component for the chat
    */
-  headerComponent?: (props: ChatHeaderProps) => JSX.Element;
+  headerComponent?: (props: ChatHeaderOwnProps) => JSX.Element;
   /**
    * Optional prompt component for the chat
    */
-  promptComponent?: (props: ChatPromptProps) => JSX.Element;
+  promptComponent?: (props: ChatPromptOwnProps) => JSX.Element;
 };
 
 export function createChatComponent({ createElement, Fragment }: Renderer) {
