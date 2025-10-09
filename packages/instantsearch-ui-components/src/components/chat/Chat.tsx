@@ -63,6 +63,10 @@ export type ChatProps = Omit<ComponentProps<'div'>, 'onError' | 'title'> & {
    * Optional prompt component for the chat
    */
   promptComponent?: (props: ChatPromptProps) => JSX.Element;
+  /**
+   * Optional toggle button component for the chat
+   */
+  toggleButtonComponent?: (props: ChatToggleButtonProps) => JSX.Element;
 };
 
 export function createChatComponent({ createElement, Fragment }: Renderer) {
@@ -83,6 +87,7 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
     promptProps = {},
     headerComponent: HeaderComponent,
     promptComponent: PromptComponent,
+    toggleButtonComponent: ToggleButtonComponent,
     classNames = {},
     className,
     ...props
@@ -105,37 +110,28 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
             classNames.container
           )}
         >
-          {HeaderComponent ? (
-            <HeaderComponent
-              {...headerProps}
-              classNames={classNames.header}
-              maximized={maximized}
-            />
-          ) : (
-            <ChatHeader
-              {...headerProps}
-              classNames={classNames.header}
-              maximized={maximized}
-            />
-          )}
+          {createElement(HeaderComponent || ChatHeader, {
+            ...headerProps,
+            classNames: classNames.header,
+            maximized,
+          })}
           <ChatMessages {...messagesProps} classNames={classNames.messages} />
-          {PromptComponent ? (
-            <PromptComponent {...promptProps} classNames={classNames.prompt} />
-          ) : (
-            <ChatPrompt {...promptProps} classNames={classNames.prompt} />
-          )}
+          {createElement(PromptComponent || ChatPrompt, {
+            ...promptProps,
+            classNames: classNames.prompt,
+          })}
         </div>
 
-        <ChatToggleButton
-          {...toggleButtonProps}
-          classNames={classNames.toggleButton}
-          onClick={() => {
+        {createElement(ToggleButtonComponent || ChatToggleButton, {
+          ...toggleButtonProps,
+          classNames: classNames.toggleButton,
+          onClick: () => {
             toggleButtonProps.onClick?.();
             if (!open) {
               promptProps.promptRef?.current?.focus();
             }
-          }}
-        />
+          },
+        })}
       </div>
     );
   };
