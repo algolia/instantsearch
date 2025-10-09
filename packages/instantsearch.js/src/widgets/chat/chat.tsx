@@ -36,7 +36,6 @@ import type {
   IndexWidget,
 } from '../../types';
 import type {
-  AddToolResultWithOutput,
   ChatClassNames,
   ChatHeaderProps,
   ChatHeaderTranslations,
@@ -806,29 +805,12 @@ export default (function chat<
     render(null, containerNode)
   );
 
-  const { chatInstance, ...rest } = makeWidget({
-    resume,
-    ...options,
-    onToolCall: ({ toolCall }) => {
-      const tool = tools[toolCall.toolName];
-
-      if (tool && tool.onToolCall) {
-        const scopedAddToolResult: AddToolResultWithOutput = ({ output }) => {
-          return Promise.resolve(
-            chatInstance.addToolResult({
-              output,
-              tool: toolCall.toolName,
-              toolCallId: toolCall.toolCallId,
-            })
-          );
-        };
-        tool.onToolCall({ ...toolCall, addToolResult: scopedAddToolResult });
-      }
-    },
-  });
-
   return {
-    ...rest,
+    ...makeWidget({
+      resume,
+      tools,
+      ...options,
+    }),
     $$widgetType: 'ais.chat',
   };
 } satisfies ChatWidget);
