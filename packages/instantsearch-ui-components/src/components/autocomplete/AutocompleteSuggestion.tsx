@@ -25,12 +25,12 @@ export function createAutocompleteSuggestionComponent({
   return function AutocompleteSuggestion({
     item,
     onSelect,
-    classNames,
+    classNames = {},
   }: AutocompleteSuggestionProps) {
     return (
       <div
         onClick={onSelect}
-        className={cx('ais-AutocompleteSuggestion', classNames?.root)}
+        className={cx('ais-AutocompleteSuggestion', classNames.root)}
       >
         {item.query}
       </div>

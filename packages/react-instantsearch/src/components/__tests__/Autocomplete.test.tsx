@@ -222,6 +222,15 @@ describe('Autocomplete', () => {
 
     await screen.findByText('hello');
 
+    expect(searchClient.search).toHaveBeenCalledWith([
+      {
+        indexName: 'query_suggestions',
+        params: expect.objectContaining({
+          query: '',
+        }),
+      },
+    ]);
+
     expect(container.querySelector('.ais-AutocompletePanel'))
       .toMatchInlineSnapshot(`
       <div
