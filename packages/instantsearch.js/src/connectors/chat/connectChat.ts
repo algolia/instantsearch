@@ -158,6 +158,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           ? options
           : {
               ...options,
+              id: options.agentId,
               transport,
             };
 
