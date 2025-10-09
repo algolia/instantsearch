@@ -15,10 +15,10 @@ import { useSearchBox } from 'react-instantsearch-core';
 
 import { EXPERIMENTAL_Autocomplete } from '../Autocomplete';
 
-import type { SearchResponses } from 'algoliasearch';
-
 describe('Autocomplete', () => {
-  function createMockedSearchClient(response: SearchResponses) {
+  function createMockedSearchClient(
+    response: ReturnType<typeof createMultiSearchResponse>
+  ) {
     return createSearchClient({
       // @ts-expect-error - doesn't properly handle multi index, expects all responses to be of the same type
       search: jest.fn(() => Promise.resolve(response)),
