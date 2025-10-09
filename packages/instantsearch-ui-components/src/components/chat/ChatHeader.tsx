@@ -61,7 +61,7 @@ export type ChatHeaderClassNames = {
   clear?: string | string[];
 };
 
-export type ChatHeaderProps = ComponentProps<'div'> & {
+export type ChatHeaderOwnProps = {
   /**
    * Whether the chat is maximized
    */
@@ -107,6 +107,8 @@ export type ChatHeaderProps = ComponentProps<'div'> & {
    */
   translations?: Partial<ChatHeaderTranslations>;
 };
+
+export type ChatHeaderProps = ComponentProps<'div'> & ChatHeaderOwnProps;
 
 export function createChatHeaderComponent({ createElement }: Renderer) {
   const Button = createButtonComponent({ createElement });
