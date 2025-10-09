@@ -20,25 +20,10 @@
     font-weight: 600;
   }
 
-  .ais-ChatToolSearchIndexCarouselHeaderViewAll {
-    @extend %ais-button-ghost;
-
-    display: flex;
-    align-items: center;
-    gap: calc(var(--ais-spacing) * 0.25);
-    padding: calc(var(--ais-spacing) * 0.25) calc(var(--ais-spacing) * 0.5);
-  }
-
   .ais-ChatToolSearchIndexCarouselHeaderScrollButtons {
     display: flex;
     align-items: center;
     gap: calc(var(--ais-spacing) * 0.25);
-  }
-
-  .ais-ChatToolSearchIndexCarouselHeaderScrollButton {
-    @extend %ais-button-outline;
-
-    padding: calc(var(--ais-spacing) * 0.25);
   }
 
   .ais-Carousel {
@@ -188,12 +173,9 @@
   }
 
   .ais-Carousel-hit-favorite {
-    @extend %ais-button-outline;
-
     position: absolute;
     top: calc(var(--ais-spacing) * 0.5);
     right: calc(var(--ais-spacing) * 0.5);
-    padding: calc(var(--ais-spacing) * 0.25);
     z-index: 1;
   }
 

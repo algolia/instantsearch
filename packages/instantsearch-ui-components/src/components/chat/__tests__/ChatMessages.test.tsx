@@ -38,7 +38,7 @@ describe('ChatMessages', () => {
           </div>
           <button
             aria-label="Scroll to bottom"
-            class="ais-ChatMessages-scrollToBottom"
+            class="ais-Button ais-Button--outline ais-Button--sm ais-Button--icon-only ais-ChatMessages-scrollToBottom"
             tabindex="0"
             type="button"
           >
@@ -114,7 +114,7 @@ describe('ChatMessages', () => {
           </div>
           <button
             aria-label="Scroll to bottom"
-            class="ais-ChatMessages-scrollToBottom"
+            class="ais-Button ais-Button--outline ais-Button--sm ais-Button--icon-only ais-ChatMessages-scrollToBottom"
             tabindex="0"
             type="button"
           >
@@ -170,7 +170,7 @@ describe('ChatMessages', () => {
           </div>
           <button
             aria-label="Scroll to bottom"
-            class="ais-ChatMessages-scrollToBottom scrollToBottom"
+            class="ais-Button ais-Button--outline ais-Button--sm ais-Button--icon-only ais-ChatMessages-scrollToBottom scrollToBottom"
             tabindex="0"
             type="button"
           >

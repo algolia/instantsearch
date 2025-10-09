@@ -2,6 +2,7 @@
 
 import { cx } from '../../lib';
 import { createStickToBottom } from '../../lib/stickToBottom';
+import { createButtonComponent } from '../Button';
 
 import { createChatMessageComponent } from './ChatMessage';
 import { createChatMessageErrorComponent } from './ChatMessageError';
@@ -225,6 +226,7 @@ export function createChatMessagesComponent({
   createElement,
   Fragment,
 }: Renderer) {
+  const Button = createButtonComponent({ createElement });
   const DefaultMessageComponent =
     createDefaultMessageComponent<ChatMessageBase>({ createElement, Fragment });
   const DefaultLoaderComponent = createChatMessageLoaderComponent({
@@ -349,8 +351,10 @@ export function createChatMessagesComponent({
           </div>
         </div>
 
-        <button
-          type="button"
+        <Button
+          variant="outline"
+          size="sm"
+          iconOnly
           className={cx(
             cssClasses.scrollToBottom,
             (hideScrollToBottom || isScrollAtBottom) &&
@@ -361,7 +365,7 @@ export function createChatMessagesComponent({
           tabIndex={isScrollAtBottom ? -1 : 0}
         >
           <ChevronDownIconComponent createElement={createElement} />
-        </button>
+        </Button>
       </div>
     );
   };

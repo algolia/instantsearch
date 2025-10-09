@@ -1,5 +1,7 @@
 /** @jsx createElement */
 
+import { createButtonComponent } from '../Button';
+
 import { ReloadIconComponent } from './icons';
 
 import type { ComponentProps, Renderer } from '../../types';
@@ -33,6 +35,8 @@ export type ChatMessageErrorProps = ComponentProps<'article'> & {
 export function createChatMessageErrorComponent({
   createElement,
 }: Pick<Renderer, 'createElement'>) {
+  const Button = createButtonComponent({ createElement });
+
   return function ChatMessageError({
     onReload,
     actions,
@@ -60,24 +64,25 @@ export function createChatMessageErrorComponent({
               <div className="ais-ChatMessage-actions">
                 {actions ? (
                   actions.map((action, index) => (
-                    <button
+                    <Button
                       key={index}
-                      type="button"
+                      variant="ghost"
                       className="ais-ChatMessage-action"
                       {...action}
                     >
                       {action.children}
-                    </button>
+                    </Button>
                   ))
                 ) : (
-                  <button
-                    type="button"
-                    className="ais-ChatMessage-action ais-ChatMessage-errorAction"
+                  <Button
+                    variant="primary"
+                    size="md"
+                    className="ais-ChatMessage-errorAction"
                     onClick={() => onReload?.()}
                   >
                     <ReloadIconComponent createElement={createElement} />
                     {translations.retryText}
-                  </button>
+                  </Button>
                 )}
               </div>
             )}

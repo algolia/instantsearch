@@ -1,6 +1,7 @@
 /** @jsx createElement */
 
 import { cx } from '../../lib';
+import { createButtonComponent } from '../Button';
 
 import { ArrowUpIconComponent, StopIconComponent } from './icons';
 
@@ -128,6 +129,8 @@ export type ChatPromptProps = Omit<
 };
 
 export function createChatPromptComponent({ createElement }: Renderer) {
+  const Button = createButtonComponent({ createElement });
+
   let textAreaElement: HTMLTextAreaElement | null = null;
   let lineHeight = 0;
   let padding = 0;
@@ -301,8 +304,11 @@ export function createChatPromptComponent({ createElement }: Renderer) {
           />
 
           <div className={cx(cssClasses.actions)}>
-            <button
+            <Button
               type="submit"
+              variant="primary"
+              size="sm"
+              iconOnly
               className={cx(cssClasses.submit)}
               disabled={buttonDisabled}
               aria-label={(() => {
@@ -313,7 +319,7 @@ export function createChatPromptComponent({ createElement }: Renderer) {
               data-status={status}
             >
               {submitIcon}
-            </button>
+            </Button>
           </div>
         </div>
 
