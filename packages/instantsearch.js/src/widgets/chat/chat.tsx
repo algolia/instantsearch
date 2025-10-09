@@ -39,6 +39,7 @@ import type {
   ChatMessagesTranslations,
   ChatPromptProps,
   ChatPromptTranslations,
+  ChatToggleButtonProps,
   ClientSideToolComponent,
   ClientSideToolComponentProps,
   ClientSideTools,
@@ -376,6 +377,38 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
         }
       : undefined;
 
+    const toggleButtonTemplateProps = prepareTemplateProps({
+      defaultTemplates: {} as unknown as NonNullable<
+        Required<ChatTemplates<THit>['toggleButton']>
+      >,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates: templates.toggleButton,
+    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    const toggleButtonLayoutComponent = templates.toggleButton?.layout
+      ? (toggleButtonProps: ChatToggleButtonProps) => {
+          return (
+            <TemplateComponent
+              {...toggleButtonTemplateProps}
+              templateKey="layout"
+              rootTagName="button"
+              data={toggleButtonProps}
+            />
+          );
+        }
+      : undefined;
+    const toggleButtonIconComponent = templates.toggleButton?.icon
+      ? ({ isOpen }: { isOpen: boolean }) => {
+          return (
+            <TemplateComponent
+              {...toggleButtonTemplateProps}
+              templateKey="icon"
+              rootTagName="span"
+              data={{ isOpen }}
+            />
+          );
+        }
+      : undefined;
+
     state.subscribe(rerender);
 
     function rerender() {
@@ -395,7 +428,12 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
           classNames={cssClasses}
           open={open}
           maximized={maximized}
-          toggleButtonProps={{ open, onClick: () => setOpen(!open) }}
+          toggleButtonComponent={toggleButtonLayoutComponent}
+          toggleButtonProps={{
+            open,
+            onClick: () => setOpen(!open),
+            toggleIconComponent: toggleButtonIconComponent,
+          }}
           headerComponent={headerLayoutComponent}
           promptComponent={promptLayoutComponent}
           headerProps={{
@@ -595,6 +633,20 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        * The disclaimer text shown in the footer
        */
       disclaimerText: string;
+    }>;
+
+    /**
+     * Templates to use for the toggle button.
+     */
+    toggleButton: Partial<{
+      /**
+       * Template to use for the toggle button layout.
+       */
+      layout: Template<ChatToggleButtonProps>;
+      /**
+       * Template to use for the toggle button icon.
+       */
+      icon: Template<{ isOpen: boolean }>;
     }>;
 
     /**

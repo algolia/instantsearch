@@ -83,6 +83,7 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     headerProps?: UserHeaderProps;
     messagesProps?: UserMessagesProps;
     promptProps?: UserPromptProps;
+    toggleButtonComponent?: ChatUiProps['toggleButtonComponent'];
     headerLayoutComponent?: ChatUiProps['headerComponent'];
     headerTitleIconComponent?: ChatUiProps['headerProps']['titleIconComponent'];
     headerCloseIconComponent?: ChatUiProps['headerProps']['closeIconComponent'];
@@ -112,6 +113,7 @@ export function Chat<
   messagesProps,
   promptProps,
   itemComponent,
+  toggleButtonComponent,
   headerLayoutComponent,
   headerTitleIconComponent,
   headerCloseIconComponent,
@@ -213,6 +215,7 @@ export function Chat<
       maximized={maximized}
       headerComponent={headerLayoutComponent}
       promptComponent={promptLayoutComponent}
+      toggleButtonComponent={toggleButtonComponent}
       toggleButtonProps={{
         open,
         onClick: () => setOpen(!open),
