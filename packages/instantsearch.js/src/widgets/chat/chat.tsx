@@ -1,7 +1,13 @@
 /** @jsx h */
 
-import { createChatComponent } from 'instantsearch-ui-components';
+import {
+  ArrowRightIconComponent,
+  ChevronLeftIconComponent,
+  ChevronRightIconComponent,
+  createChatComponent,
+} from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
+import { useMemo } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
 import connectChat from '../../connectors/chat/connectChat';
@@ -26,6 +32,8 @@ import type {
   TemplateWithBindEvent,
   BaseHit,
   Template,
+  IndexUiState,
+  IndexWidget,
 } from '../../types';
 import type {
   AddToolResultWithOutput,
@@ -39,15 +47,18 @@ import type {
   ChatMessagesTranslations,
   ChatPromptProps,
   ChatPromptTranslations,
-  ClientSideToolComponent,
   ClientSideToolComponentProps,
   ClientSideTools,
+  RecordWithObjectID,
   UserClientSideTool,
 } from 'instantsearch-ui-components';
+import type { ComponentProps } from 'preact';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'chat' });
 
 const Chat = createChatComponent({ createElement: h, Fragment });
+
+export { SearchIndexToolType };
 
 function getDefinedProperties<T extends object>(obj: T): Partial<T> {
   return Object.fromEntries(
@@ -55,89 +66,195 @@ function getDefinedProperties<T extends object>(obj: T): Partial<T> {
   ) as Partial<T>;
 }
 
-function createDefaultTools<THit extends NonNullable<object> = BaseHit>(
-  templates: ChatTemplates<THit>
+function createSearchIndexTool<
+  THit extends RecordWithObjectID = RecordWithObjectID
+>(
+  templates: ChatTemplates<THit>,
+  getSearchPageURL?: (nextUiState: IndexUiState) => string
 ): UserClientSideToolsWithTemplate {
-  const Carousel = carousel();
-
-  const Component: ClientSideToolComponent = ({
+  function SearchLayoutComponent({
     message,
     indexUiState,
     setIndexUiState,
-  }) => {
-    const items =
-      (
-        message.output as {
-          hits?: Array<Hit<THit>>;
+    onClose,
+  }: ClientSideToolComponentProps) {
+    const input = message?.input as
+      | {
+          query: string;
+          number_of_results?: number;
         }
-      )?.hits || [];
+      | undefined;
 
-    const input = message.input as { query: string };
+    const output = message?.output as
+      | {
+          hits?: Array<RecordWithObjectID<THit>>;
+          nbHits?: number;
+        }
+      | undefined;
+
+    const items = output?.hits || [];
+
+    const MemoedHeaderComponent = useMemo(() => {
+      return (
+        props: Omit<
+          ComponentProps<typeof HeaderComponent>,
+          | 'nbHits'
+          | 'query'
+          | 'hitsPerPage'
+          | 'setIndexUiState'
+          | 'indexUiState'
+          | 'getSearchPageURL'
+          | 'onClose'
+        >
+      ) => (
+        <HeaderComponent
+          nbHits={output?.nbHits}
+          query={input?.query}
+          hitsPerPage={input?.number_of_results}
+          setIndexUiState={setIndexUiState}
+          indexUiState={indexUiState}
+          getSearchPageURL={getSearchPageURL}
+          onClose={onClose}
+          {...props}
+        />
+      );
+    }, [
+      input?.number_of_results,
+      input?.query,
+      output?.nbHits,
+      setIndexUiState,
+      indexUiState,
+      onClose,
+    ]);
+
+    return carousel({
+      showNavigation: false,
+      templates: {
+        header: MemoedHeaderComponent,
+      },
+    })({
+      items,
+      templates: {
+        item: ({ item }) => (
+          <TemplateComponent
+            templates={templates}
+            templateKey="item"
+            data={item}
+            rootTagName="fragment"
+          />
+        ),
+      },
+      sendEvent: () => {},
+    });
+  }
+
+  function HeaderComponent({
+    canScrollLeft,
+    canScrollRight,
+    scrollLeft,
+    scrollRight,
+    nbHits,
+    query,
+    hitsPerPage,
+    setIndexUiState,
+    indexUiState,
+    onClose,
+    // eslint-disable-next-line no-shadow
+    getSearchPageURL,
+  }: {
+    canScrollLeft: boolean;
+    canScrollRight: boolean;
+    scrollLeft: () => void;
+    scrollRight: () => void;
+    nbHits?: number;
+    query?: string;
+    hitsPerPage?: number;
+    setIndexUiState: IndexWidget['setIndexUiState'];
+    indexUiState: IndexUiState;
+    onClose: () => void;
+    getSearchPageURL?: (nextUiState: IndexUiState) => string;
+  }) {
+    if ((hitsPerPage ?? 0) < 1) {
+      return null;
+    }
 
     return (
-      <div>
-        <Carousel
-          items={items}
-          templates={{
-            item: templates.item
-              ? ({ item, sendEvent }) => (
-                  <TemplateComponent
-                    templates={templates}
-                    templateKey="item"
-                    rootTagName="fragment"
-                    data={item}
-                    sendEvent={sendEvent}
-                  />
-                )
-              : undefined,
-          }}
-          sendEvent={() => {}}
-        />
-
-        {input?.query && (
+      <div className="ais-ChatToolSearchIndexCarouselHeader">
+        <div className="ais-ChatToolSearchIndexCarouselHeaderResults">
+          {nbHits && (
+            <div className="ais-ChatToolSearchIndexCarouselHeaderCount">
+              {hitsPerPage ?? 0} of {nbHits} result
+              {nbHits > 1 ? 's' : ''}
+            </div>
+          )}
           <button
-            className="ais-ChatToolSearchIndexRefineButton"
+            type="button"
             onClick={() => {
-              if (input?.query) {
-                setIndexUiState({
-                  ...indexUiState,
-                  query: input.query,
-                });
+              if (!query) return;
+
+              const nextUiState = { ...indexUiState, query };
+
+              // If no main search page URL or we are on the search page, just update the state
+              if (
+                !getSearchPageURL ||
+                (getSearchPageURL &&
+                  new URL(getSearchPageURL(nextUiState)).pathname ===
+                    window.location.pathname)
+              ) {
+                setIndexUiState(nextUiState);
+                onClose();
+                return;
               }
+
+              // Navigate to different page
+              window.location.href = getSearchPageURL(nextUiState);
             }}
+            className="ais-ChatToolSearchIndexCarouselHeaderViewAll"
           >
-            Refine on this query
+            View all
+            <ArrowRightIconComponent createElement={h} />
           </button>
+        </div>
+
+        {(hitsPerPage ?? 0) > 2 && (
+          <div className="ais-ChatToolSearchIndexCarouselHeaderScrollButtons">
+            <button
+              onClick={scrollLeft}
+              disabled={!canScrollLeft}
+              className="ais-ChatToolSearchIndexCarouselHeaderScrollButton"
+            >
+              <ChevronLeftIconComponent createElement={h} />
+            </button>
+            <button
+              onClick={scrollRight}
+              disabled={!canScrollRight}
+              className="ais-ChatToolSearchIndexCarouselHeaderScrollButton"
+            >
+              <ChevronRightIconComponent createElement={h} />
+            </button>
+          </div>
         )}
       </div>
     );
-  };
+  }
 
   return {
     [SearchIndexToolType]: {
-      template: {
-        layout: (props) => {
-          return <Component {...props} />;
-        },
-      },
+      templates: { layout: SearchLayoutComponent },
     },
   };
 }
 
-function combineTools<THit extends NonNullable<object> = BaseHit>(
+function createDefaultTools<
+  THit extends RecordWithObjectID = RecordWithObjectID
+>(
   templates: ChatTemplates<THit>,
-  userTools?: UserClientSideToolsWithTemplate
-) {
-  const defaults = createDefaultTools(templates);
-
-  if (!userTools) {
-    return defaults;
-  }
-
-  return { ...defaults, ...userTools };
+  getSearchPageURL?: (nextUiState: IndexUiState) => string
+): UserClientSideToolsWithTemplate {
+  return { ...createSearchIndexTool(templates, getSearchPageURL) };
 }
 
-const createRenderer = <THit extends NonNullable<object> = BaseHit>({
+const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   renderState,
   cssClasses,
   containerNode,
@@ -190,7 +307,7 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
         ) => {
           return (
             <TemplateComponent
-              templates={tool.template}
+              templates={tool.templates}
               rootTagName="fragment"
               templateKey="layout"
               data={layoutComponentProps}
@@ -413,6 +530,7 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
           messagesProps={{
             status,
             onReload: (messageId) => regenerate({ messageId }),
+            onClose: () => setOpen(false),
             messages,
             indexUiState,
             isClearing,
@@ -452,7 +570,7 @@ const createRenderer = <THit extends NonNullable<object> = BaseHit>({
   };
 };
 
-export type UserClientSideToolTemplate = Partial<{
+export type UserClientSideToolTemplates = Partial<{
   layout: TemplateWithBindEvent<ClientSideToolComponentProps>;
 }>;
 
@@ -460,7 +578,7 @@ type UserClientSideToolWithTemplate = Omit<
   UserClientSideTool,
   'layoutComponent'
 > & {
-  template: UserClientSideToolTemplate;
+  templates: UserClientSideToolTemplates;
 };
 type UserClientSideToolsWithTemplate = Record<
   string,
@@ -606,11 +724,19 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
     }>;
   }>;
 
-type ChatWidgetParams<THit extends NonNullable<object> = BaseHit> = {
+type ChatWidgetParams<THit extends RecordWithObjectID = RecordWithObjectID> = {
   /**
    * CSS Selector or HTMLElement to insert the widget.
    */
   container: string | HTMLElement;
+
+  /**
+   * Return the URL of the main search page with the `nextUiState`.
+   * This is used to navigate to the main search page when the user clicks on "View all" in the search tool.
+   *
+   * @example (nextUiState) => `/search?${qs.stringify(nextUiState)}`
+   */
+  getSearchPageURL?: (nextUiState: IndexUiState) => string;
 
   /**
    * Client-side tools to add to the chat
@@ -634,15 +760,22 @@ export type ChatWidget = WidgetFactory<
   ChatWidgetParams
 >;
 
-export default (function chat<THit extends NonNullable<object> = BaseHit>(
-  widgetParams: ChatWidgetParams<THit> & ChatConnectorParams
-) {
+const defaultTemplates: ChatTemplates = {
+  item(item) {
+    return JSON.stringify(item, null, 2);
+  },
+};
+
+export default (function chat<
+  THit extends RecordWithObjectID = RecordWithObjectID
+>(widgetParams: ChatWidgetParams<THit> & ChatConnectorParams) {
   const {
     container,
-    templates = {},
+    templates: userTemplates = {},
     cssClasses = {},
     resume = false,
     tools: userTools,
+    getSearchPageURL,
     ...options
   } = widgetParams || {};
 
@@ -652,7 +785,14 @@ export default (function chat<THit extends NonNullable<object> = BaseHit>(
 
   const containerNode = getContainerNode(container);
 
-  const tools = combineTools(templates, userTools);
+  const templates: ChatTemplates<THit> = {
+    ...defaultTemplates,
+    ...userTemplates,
+  };
+
+  const defaultTools = createDefaultTools(templates, getSearchPageURL);
+
+  const tools = { ...defaultTools, ...userTools };
 
   const specializedRenderer = createRenderer({
     containerNode,

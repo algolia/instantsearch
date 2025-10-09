@@ -33,7 +33,7 @@ function CarouselWithRefs<TObject extends Record<string, unknown>>(
   >
 ) {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
 
   const carouselRefs: Pick<
     CarouselUiProps<TObject>,
@@ -59,14 +59,26 @@ function CarouselWithRefs<TObject extends Record<string, unknown>>(
   return <Carousel {...carouselRefs} {...props} />;
 }
 
-type Template = (params: { html: typeof html }) => VNode | VNode[] | null;
+type Template<TData = Record<string, unknown>> = (
+  params: { html: typeof html } & TData
+) => VNode | VNode[] | null;
 
 type CreateCarouselTemplateProps<TObject extends Record<string, unknown>> = {
   templates?: Partial<{
     previous: Exclude<Template, string>;
     next: Exclude<Template, string>;
+    header: Exclude<
+      Template<{
+        canScrollLeft: boolean;
+        canScrollRight: boolean;
+        scrollLeft: () => void;
+        scrollRight: () => void;
+      }>,
+      string
+    >;
   }>;
   cssClasses?: Partial<CarouselUiProps<TObject>['classNames']>;
+  showNavigation?: boolean;
 };
 
 type CarouselTemplateProps<TObject extends Record<string, unknown>> = Pick<
@@ -84,6 +96,7 @@ type CarouselTemplateProps<TObject extends Record<string, unknown>> = Pick<
 export function carousel<TObject extends Record<string, unknown>>({
   cssClasses,
   templates = {},
+  showNavigation = true,
 }: CreateCarouselTemplateProps<TObject> = {}) {
   return function CarouselTemplate({
     items,
@@ -91,13 +104,18 @@ export function carousel<TObject extends Record<string, unknown>>({
     cssClasses: widgetCssClasses = {},
     sendEvent = () => {},
   }: CarouselTemplateProps<TObject>) {
-    const { previous, next } = templates;
+    const { previous, next, header } = templates;
 
     return (
       <CarouselWithRefs
         items={items}
         sendEvent={sendEvent}
         itemComponent={widgetTemplates.item}
+        headerComponent={
+          (header
+            ? (props) => header({ html, ...props })
+            : undefined) as CarouselUiProps<TObject>['headerComponent']
+        }
         previousIconComponent={
           (previous
             ? () => previous({ html })
@@ -115,6 +133,7 @@ export function carousel<TObject extends Record<string, unknown>>({
             item: cx(cssClasses?.item, widgetCssClasses?.item),
           },
         }}
+        showNavigation={showNavigation}
       />
     );
   };

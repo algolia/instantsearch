@@ -95,7 +95,7 @@ export type ChatMessagesProps<
   /**
    * Tools available for the assistant
    */
-  tools?: ClientSideTools;
+  tools: ClientSideTools;
   /**
    * Current chat status
    */
@@ -107,7 +107,11 @@ export type ChatMessagesProps<
   /**
    * Callback for reload action
    */
-  onReload?: (messageId?: string) => void;
+  onReload: (messageId?: string) => void;
+  /**
+   * Function to close the chat
+   */
+  onClose: () => void;
   /**
    * Optional class names
    */
@@ -169,6 +173,7 @@ function createDefaultMessageComponent<
     indexUiState,
     setIndexUiState,
     onReload,
+    onClose,
     translations,
     actionsComponent,
   }: {
@@ -178,8 +183,9 @@ function createDefaultMessageComponent<
     assistantMessageProps?: Partial<ChatMessageProps>;
     indexUiState: object;
     setIndexUiState: (state: object) => void;
-    tools?: ClientSideTools;
-    onReload?: (messageId?: string) => void;
+    tools: ClientSideTools;
+    onReload: (messageId?: string) => void;
+    onClose: () => void;
     translations: ChatMessagesTranslations;
     actionsComponent?: ChatMessageProps['actionsComponent'];
   }) {
@@ -196,7 +202,7 @@ function createDefaultMessageComponent<
       {
         title: translations.regenerateLabel,
         icon: () => <ReloadIconComponent createElement={createElement} />,
-        onClick: (m) => onReload?.(m.id),
+        onClick: (m) => onReload(m.id),
       },
     ];
 
@@ -213,6 +219,7 @@ function createDefaultMessageComponent<
         tools={tools}
         indexUiState={indexUiState}
         setIndexUiState={setIndexUiState}
+        onClose={onClose}
         actions={defaultActions}
         actionsComponent={actionsComponent}
         data-role={message.role}
@@ -262,6 +269,7 @@ export function createChatMessagesComponent({
       status = 'ready',
       hideScrollToBottom = false,
       onReload,
+      onClose,
       translations: userTranslations,
       userMessageProps,
       assistantMessageProps,
@@ -337,6 +345,7 @@ export function createChatMessagesComponent({
                 setIndexUiState={setIndexUiState}
                 onReload={onReload}
                 actionsComponent={ActionsComponent}
+                onClose={onClose}
                 translations={translations}
               />
             ))}

@@ -4,7 +4,7 @@ import { useInstantSearch, useChat } from 'react-instantsearch-core';
 
 import { createSearchIndexTool } from './chat/tools/SearchIndexTool';
 
-export { SearchIndexToolType } from './chat/tools/SearchIndexTool';
+export { SearchIndexToolType } from 'instantsearch.js/es/lib/chat';
 
 import type {
   Pragma,
@@ -148,10 +148,6 @@ export function Chat<
   const tools = React.useMemo(() => {
     const defaults = createDefaultTools(itemComponent, getSearchPageURL);
 
-    if (!userTools) {
-      return defaults;
-    }
-
     return { ...defaults, ...userTools };
   }, [getSearchPageURL, itemComponent, userTools]);
 
@@ -166,7 +162,7 @@ export function Chat<
     clearError,
   } = useChat({
     ...props,
-    onToolCall: ({ toolCall }) => {
+    onToolCall({ toolCall }) {
       const tool = tools[toolCall.toolName];
 
       if (tool && tool.onToolCall) {
@@ -234,6 +230,7 @@ export function Chat<
       messagesProps={{
         status,
         onReload: (messageId) => regenerate({ messageId }),
+        onClose: () => setOpen(false),
         messages,
         tools: toolsForUi,
         indexUiState,

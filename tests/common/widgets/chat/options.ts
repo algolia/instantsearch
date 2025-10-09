@@ -129,7 +129,7 @@ export function createOptionsTests(
           chat: chat as any,
           tools: {
             hello: {
-              template: {
+              templates: {
                 layout: (_, { html }) =>
                   html`<div id="tool-content">The message said hello!</div>`,
               },
@@ -185,7 +185,7 @@ export function createOptionsTests(
           chat: chat as any,
           tools: {
             [SearchIndexToolType]: {
-              template: {
+              templates: {
                 layout: (_, { html }) =>
                   html`<div id="tool-content">The message said hello!</div>`,
               },
