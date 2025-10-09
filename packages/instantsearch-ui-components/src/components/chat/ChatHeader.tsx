@@ -147,7 +147,7 @@ export function createChatHeaderComponent({ createElement }: Renderer) {
       >
         <span className={cx('ais-ChatHeader-title', classNames.title)}>
           <span
-            className={cx('ais-ChatHeader-title-icon', classNames.titleIcon)}
+            className={cx('ais-ChatHeader-titleIcon', classNames.titleIcon)}
           >
             {TitleIconComponent ? (
               <TitleIconComponent />

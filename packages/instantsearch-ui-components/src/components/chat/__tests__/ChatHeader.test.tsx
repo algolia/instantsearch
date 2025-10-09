@@ -28,7 +28,7 @@ describe('ChatHeader', () => {
             class="ais-ChatHeader-title"
           >
             <span
-              class="ais-ChatHeader-title-icon"
+              class="ais-ChatHeader-titleIcon"
             >
               <svg
                 fill="none"

@@ -77,7 +77,7 @@ export function createChatMessageErrorComponent({
                   <Button
                     variant="primary"
                     size="md"
-                    className="ais-ChatMessage-error-action"
+                    className="ais-ChatMessage-errorAction"
                     onClick={() => onReload?.()}
                   >
                     <ReloadIconComponent createElement={createElement} />
