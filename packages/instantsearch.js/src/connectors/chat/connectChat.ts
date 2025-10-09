@@ -24,6 +24,10 @@ import type {
   IndexUiState,
   IndexWidget,
 } from '../../types';
+import type {
+  AddToolResultWithOutput,
+  UserClientSideTool,
+} from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'chat',
@@ -84,6 +88,10 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
    * Whether to resume an ongoing chat generation stream.
    */
   resume?: boolean;
+  /**
+   * Configuration for client-side tools.
+   */
+  tools?: Record<string, Omit<UserClientSideTool, 'layoutComponent'>>;
 };
 
 export type ChatWidgetDescription<TUiMessage extends UIMessage = UIMessage> = {
@@ -106,7 +114,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
   return <TUiMessage extends UIMessage = UIMessage>(
     widgetParams: TWidgetParams & ChatConnectorParams<TUiMessage>
   ) => {
-    const { resume = false, ...options } = widgetParams || {};
+    const { resume = false, tools = {}, ...options } = widgetParams || {};
 
     let _chatInstance: Chat<TUiMessage>;
     let input = '';
@@ -153,17 +161,35 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         );
       }
 
-      const optionsWithTransport =
-        'chat' in options
-          ? options
-          : {
-              ...options,
-              transport,
-            };
+      if ('chat' in options) {
+        return options.chat;
+      }
 
-      return 'chat' in optionsWithTransport
-        ? optionsWithTransport.chat
-        : new Chat(optionsWithTransport);
+      return new Chat({
+        ...options,
+        transport,
+        onToolCall({ toolCall }) {
+          const tool = tools[toolCall.toolName];
+
+          if (!tool?.onToolCall) {
+            return Promise.resolve();
+          }
+
+          const addToolResult: AddToolResultWithOutput = ({ output }) =>
+            Promise.resolve(
+              _chatInstance.addToolResult({
+                output,
+                tool: toolCall.toolName,
+                toolCallId: toolCall.toolCallId,
+              })
+            );
+
+          return tool.onToolCall({
+            ...toolCall,
+            addToolResult,
+          });
+        },
+      });
     };
 
     return {
