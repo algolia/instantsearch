@@ -4,6 +4,10 @@
 import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/widgets';
 import { act, render } from '@testing-library/react';
+import {
+  convertTemplates,
+  convertToolTemplates,
+} from 'instantsearch.js/src/widgets/chat/chat';
 import React from 'react';
 
 import {
@@ -31,6 +35,7 @@ import {
   LookingSimilar,
   PoweredBy,
   DynamicWidgets,
+  Chat,
 } from '..';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -392,8 +397,18 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
-  createChatWidgetTests() {
-    throw new Error('Chat is not tested through the Common Test Suite yet');
+  createChatWidgetTests({ instantSearchOptions, widgetParams }) {
+    const components = convertTemplates(widgetParams.templates, {});
+    const tools = convertToolTemplates(widgetParams.tools || {});
+
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <div id="ais-Chat">
+          <Chat {...widgetParams} {...components} tools={tools} />
+        </div>
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
   },
 };
 
@@ -440,9 +455,6 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createDynamicWidgetsWidgetTests: { act },
   createChatWidgetTests: {
     act,
-    skippedTests: {
-      'Chat widget common tests': true,
-    },
   },
 };
 
