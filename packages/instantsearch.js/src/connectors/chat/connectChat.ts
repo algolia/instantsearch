@@ -114,7 +114,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
   return <TUiMessage extends UIMessage = UIMessage>(
     widgetParams: TWidgetParams & ChatConnectorParams<TUiMessage>
   ) => {
-    const { resume = false, ...options } = widgetParams || {};
+    const { resume = false, tools = {}, ...options } = widgetParams || {};
 
     let _chatInstance: Chat<TUiMessage>;
     let input = '';
@@ -165,10 +165,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         return options.chat;
       }
 
-      const { tools = {}, ...chatInitOptions } = options;
-
       return new Chat({
-        ...chatInitOptions,
+        ...options,
         transport,
         onToolCall({ toolCall }) {
           const tool = tools[toolCall.toolName];
