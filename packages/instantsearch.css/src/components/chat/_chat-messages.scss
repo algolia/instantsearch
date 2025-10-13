@@ -11,6 +11,7 @@
 .ais-ChatMessages-scroll {
   overflow-y: auto;
   overflow-x: hidden;
+  overscroll-behavior: none;
   width: 100%;
   height: 100%;
   padding: var(--ais-spacing);
