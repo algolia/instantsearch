@@ -4,10 +4,6 @@
 import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/widgets';
 import { act, render } from '@testing-library/react';
-import {
-  convertTemplates,
-  convertToolTemplates,
-} from 'instantsearch.js/src/widgets/chat/chat';
 import React from 'react';
 
 import {
@@ -397,14 +393,14 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
-  createChatWidgetTests({ instantSearchOptions, widgetParams }) {
-    const components = convertTemplates(widgetParams.templates, {});
-    const tools = convertToolTemplates(widgetParams.tools || {});
-
+  createChatWidgetTests({
+    instantSearchOptions,
+    reactWidgetParams: widgetParams,
+  }) {
     render(
       <InstantSearch {...instantSearchOptions}>
-        <div id="ais-Chat">
-          <Chat {...widgetParams} {...components} tools={tools} />
+        <div className="ais-Chat">
+          <Chat {...widgetParams} />
         </div>
         <GlobalErrorSwallower />
       </InstantSearch>

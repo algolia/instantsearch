@@ -618,7 +618,10 @@ const testSetups: TestSetupsMap<TestSuites> = {
       ])
       .start();
   },
-  createChatWidgetTests({ instantSearchOptions, widgetParams }) {
+  createChatWidgetTests({
+    instantSearchOptions,
+    jsWidgetParams: widgetParams,
+  }) {
     instantsearch(instantSearchOptions)
       .addWidgets([
         chat({
