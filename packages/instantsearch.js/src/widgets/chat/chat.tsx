@@ -11,7 +11,7 @@ import { useMemo } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
 import connectChat from '../../connectors/chat/connectChat';
-import { SearchIndexToolType } from '../../lib/chat';
+import { SearchIndexToolType, RecommendToolType } from '../../lib/chat';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
@@ -57,7 +57,7 @@ const withUsage = createDocumentationMessageGenerator({ name: 'chat' });
 
 const Chat = createChatComponent({ createElement: h, Fragment });
 
-export { SearchIndexToolType };
+export { SearchIndexToolType, RecommendToolType };
 
 function getDefinedProperties<T extends object>(obj: T): Partial<T> {
   return Object.fromEntries(
@@ -65,12 +65,13 @@ function getDefinedProperties<T extends object>(obj: T): Partial<T> {
   ) as Partial<T>;
 }
 
-function createSearchIndexTool<
+function createCarouselTool<
   THit extends RecordWithObjectID = RecordWithObjectID
 >(
+  showViewAll: boolean,
   templates: ChatTemplates<THit>,
   getSearchPageURL?: (nextUiState: IndexUiState) => string
-): UserClientSideToolsWithTemplate {
+): UserClientSideToolWithTemplate {
   function SearchLayoutComponent({
     message,
     indexUiState,
@@ -186,33 +187,35 @@ function createSearchIndexTool<
               {nbHits > 1 ? 's' : ''}
             </div>
           )}
-          <button
-            type="button"
-            onClick={() => {
-              if (!query) return;
+          {showViewAll && (
+            <button
+              type="button"
+              onClick={() => {
+                if (!query) return;
 
-              const nextUiState = { ...indexUiState, query };
+                const nextUiState = { ...indexUiState, query };
 
-              // If no main search page URL or we are on the search page, just update the state
-              if (
-                !getSearchPageURL ||
-                (getSearchPageURL &&
-                  new URL(getSearchPageURL(nextUiState)).pathname ===
-                    window.location.pathname)
-              ) {
-                setIndexUiState(nextUiState);
-                onClose();
-                return;
-              }
+                // If no main search page URL or we are on the search page, just update the state
+                if (
+                  !getSearchPageURL ||
+                  (getSearchPageURL &&
+                    new URL(getSearchPageURL(nextUiState)).pathname ===
+                      window.location.pathname)
+                ) {
+                  setIndexUiState(nextUiState);
+                  onClose();
+                  return;
+                }
 
-              // Navigate to different page
-              window.location.href = getSearchPageURL(nextUiState);
-            }}
-            className="ais-ChatToolSearchIndexCarouselHeaderViewAll"
-          >
-            View all
-            <ArrowRightIconComponent createElement={h} />
-          </button>
+                // Navigate to different page
+                window.location.href = getSearchPageURL(nextUiState);
+              }}
+              className="ais-ChatToolSearchIndexCarouselHeaderViewAll"
+            >
+              View all
+              <ArrowRightIconComponent createElement={h} />
+            </button>
+          )}
         </div>
 
         {(hitsPerPage ?? 0) > 2 && (
@@ -238,9 +241,7 @@ function createSearchIndexTool<
   }
 
   return {
-    [SearchIndexToolType]: {
-      templates: { layout: SearchLayoutComponent },
-    },
+    templates: { layout: SearchLayoutComponent },
   };
 }
 
@@ -250,7 +251,14 @@ function createDefaultTools<
   templates: ChatTemplates<THit>,
   getSearchPageURL?: (nextUiState: IndexUiState) => string
 ): UserClientSideToolsWithTemplate {
-  return { ...createSearchIndexTool(templates, getSearchPageURL) };
+  return {
+    [SearchIndexToolType]: createCarouselTool(
+      true,
+      templates,
+      getSearchPageURL
+    ),
+    [RecommendToolType]: createCarouselTool(false, templates, getSearchPageURL),
+  };
 }
 
 const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
