@@ -47,7 +47,6 @@ import type {
   ChatMessagesTranslations,
   ChatPromptProps,
   ChatPromptTranslations,
-  ClientSideTool,
   ClientSideToolComponentProps,
   ClientSideTools,
   RecordWithObjectID,
@@ -299,32 +298,200 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
     }
 
     const toolsForUi: ClientSideTools = {};
-    Object.entries(convertToolTemplates(tools)).forEach(([key, tool]) => {
+    Object.entries(tools).forEach(([key, tool]) => {
       toolsForUi[key] = {
         ...tool,
         addToolResult,
+        layoutComponent: (
+          layoutComponentProps: ClientSideToolComponentProps
+        ) => {
+          return (
+            <TemplateComponent
+              templates={tool.templates}
+              rootTagName="fragment"
+              templateKey="layout"
+              data={layoutComponentProps}
+            />
+          );
+        },
       };
     });
 
-    const {
-      headerLayoutComponent,
-      headerCloseIconComponent,
-      headerMinimizeIconComponent,
-      headerMaximizeIconComponent,
-      headerTitleIconComponent,
-      headerTranslations,
-      messagesLoaderComponent,
-      messagesErrorComponent,
-      messagesTranslations,
-      promptLayoutComponent,
-      promptHeaderComponent,
-      promptFooterComponent,
-      promptTranslations,
-      actionsComponent,
-    } = convertTemplates<THit>(
-      templates,
-      instantSearchInstance.templatesConfig
-    );
+    const headerTemplateProps = prepareTemplateProps({
+      defaultTemplates: {} as unknown as NonNullable<
+        Required<ChatTemplates<THit>['header']>
+      >,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates: templates.header,
+    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    const headerLayoutComponent = templates.header?.layout
+      ? (headerProps: ChatHeaderProps) => {
+          return (
+            <TemplateComponent
+              {...headerTemplateProps}
+              templateKey="layout"
+              rootTagName="div"
+              data={headerProps}
+            />
+          );
+        }
+      : undefined;
+    const headerCloseIconComponent = templates.header?.closeIcon
+      ? () => {
+          return (
+            <TemplateComponent
+              {...headerTemplateProps}
+              templateKey="closeIcon"
+              rootTagName="span"
+            />
+          );
+        }
+      : undefined;
+    const headerMinimizeIconComponent = templates.header?.minimizeIcon
+      ? () => {
+          return (
+            <TemplateComponent
+              {...headerTemplateProps}
+              templateKey="minimizeIcon"
+              rootTagName="span"
+            />
+          );
+        }
+      : undefined;
+    const headerMaximizeIconComponent = templates.header?.maximizeIcon
+      ? ({ maximized }: { maximized: boolean }) => {
+          return (
+            <TemplateComponent
+              {...headerTemplateProps}
+              templateKey="maximizeIcon"
+              rootTagName="span"
+              data={{ maximized }}
+            />
+          );
+        }
+      : undefined;
+    const headerTitleIconComponent = templates.header?.titleIcon
+      ? () => {
+          return (
+            <TemplateComponent
+              {...headerTemplateProps}
+              templateKey="titleIcon"
+              rootTagName="span"
+            />
+          );
+        }
+      : undefined;
+    const headerTranslations: Partial<ChatHeaderTranslations> =
+      getDefinedProperties({
+        title: templates.header?.titleText,
+        minimizeLabel: templates.header?.minimizeLabelText,
+        maximizeLabel: templates.header?.maximizeLabelText,
+        closeLabel: templates.header?.closeLabelText,
+        clearLabel: templates.header?.clearLabelText,
+      });
+
+    const messagesTemplateProps = prepareTemplateProps({
+      defaultTemplates: {} as unknown as NonNullable<
+        Required<ChatTemplates<THit>['messages']>
+      >,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates: templates.messages,
+    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    const messagesLoaderComponent = templates.messages?.loader
+      ? (loaderProps: ChatMessageLoaderProps) => {
+          return (
+            <TemplateComponent
+              {...messagesTemplateProps}
+              templateKey="loader"
+              rootTagName="div"
+              data={loaderProps}
+            />
+          );
+        }
+      : undefined;
+    const messagesErrorComponent = templates.messages?.error
+      ? (errorProps: ChatMessageErrorProps) => {
+          return (
+            <TemplateComponent
+              {...messagesTemplateProps}
+              templateKey="error"
+              rootTagName="div"
+              data={errorProps}
+            />
+          );
+        }
+      : undefined;
+    const messagesTranslations: Partial<ChatMessagesTranslations> =
+      getDefinedProperties({
+        scrollToBottomLabel: templates.messages?.scrollToBottomLabelText,
+        loaderText: templates.messages?.loaderText,
+        copyToClipboardLabel: templates.messages?.copyToClipboardLabelText,
+        regenerateLabel: templates.messages?.regenerateLabelText,
+      });
+
+    const promptTemplateProps = prepareTemplateProps({
+      defaultTemplates: {} as unknown as NonNullable<
+        Required<ChatTemplates<THit>['prompt']>
+      >,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates: templates.prompt,
+    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    const promptLayoutComponent = templates.prompt?.layout
+      ? (promptProps: ChatPromptProps) => {
+          return (
+            <TemplateComponent
+              {...promptTemplateProps}
+              templateKey="layout"
+              rootTagName="div"
+              data={promptProps}
+            />
+          );
+        }
+      : undefined;
+    const promptHeaderComponent = templates.prompt?.header
+      ? () => {
+          return (
+            <TemplateComponent
+              {...promptTemplateProps}
+              templateKey="header"
+              rootTagName="fragment"
+            />
+          );
+        }
+      : undefined;
+    const promptFooterComponent = templates.prompt?.footer
+      ? () => {
+          return (
+            <TemplateComponent
+              {...promptTemplateProps}
+              templateKey="footer"
+              rootTagName="fragment"
+            />
+          );
+        }
+      : undefined;
+    const promptTranslations: Partial<ChatPromptTranslations> =
+      getDefinedProperties({
+        textareaLabel: templates.prompt?.textareaLabelText,
+        textareaPlaceholder: templates.prompt?.textareaPlaceholderText,
+        emptyMessageTooltip: templates.prompt?.emptyMessageTooltipText,
+        stopResponseTooltip: templates.prompt?.stopResponseTooltipText,
+        sendMessageTooltip: templates.prompt?.sendMessageTooltipText,
+        disclaimer: templates.prompt?.disclaimerText,
+      });
+
+    const actionsComponent = templates.actions
+      ? (actionsProps: { actions: ChatMessageActionProps[] }) => {
+          return (
+            <TemplateComponent
+              {...renderState.templateProps}
+              templateKey="actions"
+              rootTagName="div"
+              data={actionsProps}
+            />
+          );
+        }
+      : undefined;
 
     state.subscribe(rerender);
 
@@ -598,232 +765,6 @@ const defaultTemplates: ChatTemplates = {
     return JSON.stringify(item, null, 2);
   },
 };
-
-export function convertToolTemplates(tools: Tools) {
-  const toolsForUi: Record<string, Omit<ClientSideTool, 'addToolResult'>> = {};
-  Object.entries(tools).forEach(([key, tool]) => {
-    toolsForUi[key] = {
-      ...tool,
-      layoutComponent: (layoutComponentProps: ClientSideToolComponentProps) => {
-        return (
-          <TemplateComponent
-            templates={tool.templates}
-            rootTagName="fragment"
-            templateKey="layout"
-            data={layoutComponentProps}
-          />
-        );
-      },
-    };
-  });
-
-  return toolsForUi;
-}
-
-export function convertTemplates<
-  THit extends RecordWithObjectID = RecordWithObjectID
->(
-  templates: ChatTemplates<THit> = {},
-  templatesConfig: Record<string, unknown>
-) {
-  const headerTemplateProps = prepareTemplateProps({
-    defaultTemplates: {} as unknown as NonNullable<
-      Required<ChatTemplates<THit>['header']>
-    >,
-    templatesConfig,
-    templates: templates.header,
-  }) as PreparedTemplateProps<ChatTemplates<THit>>;
-  const headerLayoutComponent = templates.header?.layout
-    ? (headerProps: ChatHeaderProps) => {
-        return (
-          <TemplateComponent
-            {...headerTemplateProps}
-            templateKey="layout"
-            rootTagName="div"
-            data={headerProps}
-          />
-        );
-      }
-    : undefined;
-  const headerCloseIconComponent = templates.header?.closeIcon
-    ? () => {
-        return (
-          <TemplateComponent
-            {...headerTemplateProps}
-            templateKey="closeIcon"
-            rootTagName="span"
-          />
-        );
-      }
-    : undefined;
-  const headerMinimizeIconComponent = templates.header?.minimizeIcon
-    ? () => {
-        return (
-          <TemplateComponent
-            {...headerTemplateProps}
-            templateKey="minimizeIcon"
-            rootTagName="span"
-          />
-        );
-      }
-    : undefined;
-  const headerMaximizeIconComponent = templates.header?.maximizeIcon
-    ? ({ maximized }: { maximized: boolean }) => {
-        return (
-          <TemplateComponent
-            {...headerTemplateProps}
-            templateKey="maximizeIcon"
-            rootTagName="span"
-            data={{ maximized }}
-          />
-        );
-      }
-    : undefined;
-  const headerTitleIconComponent = templates.header?.titleIcon
-    ? () => {
-        return (
-          <TemplateComponent
-            {...headerTemplateProps}
-            templateKey="titleIcon"
-            rootTagName="span"
-          />
-        );
-      }
-    : undefined;
-  const headerTranslations: Partial<ChatHeaderTranslations> =
-    getDefinedProperties({
-      title: templates.header?.titleText,
-      minimizeLabel: templates.header?.minimizeLabelText,
-      maximizeLabel: templates.header?.maximizeLabelText,
-      closeLabel: templates.header?.closeLabelText,
-      clearLabel: templates.header?.clearLabelText,
-    });
-
-  const messagesTemplateProps = prepareTemplateProps({
-    defaultTemplates: {} as unknown as NonNullable<
-      Required<ChatTemplates<THit>['messages']>
-    >,
-    templatesConfig,
-    templates: templates.messages,
-  }) as PreparedTemplateProps<ChatTemplates<THit>>;
-  const messagesLoaderComponent = templates.messages?.loader
-    ? (loaderProps: ChatMessageLoaderProps) => {
-        return (
-          <TemplateComponent
-            {...messagesTemplateProps}
-            templateKey="loader"
-            rootTagName="div"
-            data={loaderProps}
-          />
-        );
-      }
-    : undefined;
-  const messagesErrorComponent = templates.messages?.error
-    ? (errorProps: ChatMessageErrorProps) => {
-        return (
-          <TemplateComponent
-            {...messagesTemplateProps}
-            templateKey="error"
-            rootTagName="div"
-            data={errorProps}
-          />
-        );
-      }
-    : undefined;
-  const messagesTranslations: Partial<ChatMessagesTranslations> =
-    getDefinedProperties({
-      scrollToBottomLabel: templates.messages?.scrollToBottomLabelText,
-      loaderText: templates.messages?.loaderText,
-      copyToClipboardLabel: templates.messages?.copyToClipboardLabelText,
-      regenerateLabel: templates.messages?.regenerateLabelText,
-    });
-
-  const promptTemplateProps = prepareTemplateProps({
-    defaultTemplates: {} as unknown as NonNullable<
-      Required<ChatTemplates<THit>['prompt']>
-    >,
-    templatesConfig,
-    templates: templates.prompt,
-  }) as PreparedTemplateProps<ChatTemplates<THit>>;
-  const promptLayoutComponent = templates.prompt?.layout
-    ? (promptProps: ChatPromptProps) => {
-        return (
-          <TemplateComponent
-            {...promptTemplateProps}
-            templateKey="layout"
-            rootTagName="div"
-            data={promptProps}
-          />
-        );
-      }
-    : undefined;
-  const promptHeaderComponent = templates.prompt?.header
-    ? () => {
-        return (
-          <TemplateComponent
-            {...promptTemplateProps}
-            templateKey="header"
-            rootTagName="fragment"
-          />
-        );
-      }
-    : undefined;
-  const promptFooterComponent = templates.prompt?.footer
-    ? () => {
-        return (
-          <TemplateComponent
-            {...promptTemplateProps}
-            templateKey="footer"
-            rootTagName="fragment"
-          />
-        );
-      }
-    : undefined;
-  const promptTranslations: Partial<ChatPromptTranslations> =
-    getDefinedProperties({
-      textareaLabel: templates.prompt?.textareaLabelText,
-      textareaPlaceholder: templates.prompt?.textareaPlaceholderText,
-      emptyMessageTooltip: templates.prompt?.emptyMessageTooltipText,
-      stopResponseTooltip: templates.prompt?.stopResponseTooltipText,
-      sendMessageTooltip: templates.prompt?.sendMessageTooltipText,
-      disclaimer: templates.prompt?.disclaimerText,
-    });
-
-  const actionsTemplateProps = prepareTemplateProps({
-    defaultTemplates: {} as unknown as ChatTemplates<THit>,
-    templatesConfig,
-    templates,
-  });
-  const actionsComponent = templates.actions
-    ? (actionsProps: { actions: ChatMessageActionProps[] }) => {
-        return (
-          <TemplateComponent
-            {...actionsTemplateProps}
-            templateKey="actions"
-            rootTagName="div"
-            data={actionsProps}
-          />
-        );
-      }
-    : undefined;
-
-  return {
-    headerLayoutComponent,
-    headerCloseIconComponent,
-    headerMinimizeIconComponent,
-    headerMaximizeIconComponent,
-    headerTitleIconComponent,
-    headerTranslations,
-    messagesLoaderComponent,
-    messagesErrorComponent,
-    messagesTranslations,
-    promptLayoutComponent,
-    promptHeaderComponent,
-    promptFooterComponent,
-    promptTranslations,
-    actionsComponent,
-  };
-}
 
 export default (function chat<
   THit extends RecordWithObjectID = RecordWithObjectID
