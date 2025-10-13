@@ -618,15 +618,12 @@ const testSetups: TestSetupsMap<TestSuites> = {
       ])
       .start();
   },
-  createChatWidgetTests({
-    instantSearchOptions,
-    jsWidgetParams: widgetParams,
-  }) {
+  createChatWidgetTests({ instantSearchOptions, widgetParams }) {
     instantsearch(instantSearchOptions)
       .addWidgets([
         chat({
           container: document.body.appendChild(document.createElement('div')),
-          ...widgetParams,
+          ...(widgetParams as suites.JSChatWidgetParams),
         }),
       ])
       .on('error', () => {
@@ -674,6 +671,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
 
 describe('Common widget tests (InstantSearch.js)', () => {
   runTestSuites({
+    flavor: 'javascript',
     testSuites,
     testSetups,
     testOptions,

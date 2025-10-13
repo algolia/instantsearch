@@ -4,12 +4,12 @@ import userEvent from '@testing-library/user-event';
 import { Chat, SearchIndexToolType } from 'instantsearch.js/es/lib/chat';
 import React from 'react';
 
-import type { ChatWidgetSetup } from '.';
+import type { ChatWidgetParams, ChatWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 
 export function createOptionsTests(
   setup: ChatWidgetSetup,
-  { act }: Required<TestOptions>
+  { act, flavor }: Required<TestOptions>
 ) {
   describe('options', () => {
     test('renders with default props', async () => {
@@ -27,8 +27,7 @@ export function createOptionsTests(
           indexName: 'indexName',
           searchClient,
         },
-        jsWidgetParams: commonWidgetParams,
-        reactWidgetParams: commonWidgetParams,
+        widgetParams: commonWidgetParams,
       });
 
       await act(async () => {
@@ -85,8 +84,7 @@ export function createOptionsTests(
           indexName: 'indexName',
           searchClient,
         },
-        jsWidgetParams: commonWidgetParams,
-        reactWidgetParams: commonWidgetParams,
+        widgetParams: commonWidgetParams,
       });
 
       await act(async () => {
@@ -128,30 +126,35 @@ export function createOptionsTests(
         agentId: 'agentId',
         chat: chat as any,
       };
+      const toolsParams: ChatWidgetParams =
+        flavor === 'javascript'
+          ? {
+              tools: {
+                hello: {
+                  templates: {
+                    layout:
+                      '<div id="tool-content">The message said hello!</div>',
+                  },
+                },
+              },
+            }
+          : {
+              tools: {
+                hello: {
+                  layoutComponent: () => (
+                    <div id="tool-content">The message said hello!</div>
+                  ),
+                },
+              },
+            };
       await setup({
         instantSearchOptions: {
           indexName: 'indexName',
           searchClient,
         },
-        reactWidgetParams: {
+        widgetParams: {
           ...commonWidgetParams,
-          tools: {
-            hello: {
-              layoutComponent: () => (
-                <div id="tool-content">The message said hello!</div>
-              ),
-            },
-          },
-        },
-        jsWidgetParams: {
-          ...commonWidgetParams,
-          tools: {
-            hello: {
-              templates: {
-                layout: '<div id="tool-content">The message said hello!</div>',
-              },
-            },
-          },
+          ...toolsParams,
         },
       });
 
@@ -196,30 +199,35 @@ export function createOptionsTests(
         agentId: 'agentId',
         chat: chat as any,
       };
+      const toolsParams: ChatWidgetParams =
+        flavor === 'javascript'
+          ? {
+              tools: {
+                [SearchIndexToolType]: {
+                  templates: {
+                    layout:
+                      '<div id="tool-content">The message said hello!</div>',
+                  },
+                },
+              },
+            }
+          : {
+              tools: {
+                [SearchIndexToolType]: {
+                  layoutComponent: () => (
+                    <div id="tool-content">The message said hello!</div>
+                  ),
+                },
+              },
+            };
       await setup({
         instantSearchOptions: {
           indexName: 'indexName',
           searchClient,
         },
-        jsWidgetParams: {
+        widgetParams: {
           ...commonWidgetParams,
-          tools: {
-            [SearchIndexToolType]: {
-              templates: {
-                layout: '<div id="tool-content">The message said hello!</div>',
-              },
-            },
-          },
-        },
-        reactWidgetParams: {
-          ...commonWidgetParams,
-          tools: {
-            [SearchIndexToolType]: {
-              layoutComponent: () => (
-                <div id="tool-content">The message said hello!</div>
-              ),
-            },
-          },
+          ...toolsParams,
         },
       });
 

@@ -393,14 +393,11 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
-  createChatWidgetTests({
-    instantSearchOptions,
-    reactWidgetParams: widgetParams,
-  }) {
+  createChatWidgetTests({ instantSearchOptions, widgetParams }) {
     render(
       <InstantSearch {...instantSearchOptions}>
         <div className="ais-Chat">
-          <Chat {...widgetParams} />
+          <Chat {...(widgetParams as suites.ReactChatWidgetParams)} />
         </div>
         <GlobalErrorSwallower />
       </InstantSearch>
@@ -466,6 +463,7 @@ function GlobalErrorSwallower() {
 
 describe('Common widget tests (React InstantSearch)', () => {
   runTestSuites({
+    flavor: 'react',
     testSuites,
     testSetups,
     testOptions,
