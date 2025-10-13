@@ -13,7 +13,7 @@ export type ChatToggleButtonClassNames = {
   root?: string | string[];
 };
 
-export type ChatToggleButtonProps = ComponentProps<'button'> & {
+export type ChatToggleButtonOwnProps = {
   /**
    * Whether the chat is open
    */
@@ -31,6 +31,9 @@ export type ChatToggleButtonProps = ComponentProps<'button'> & {
    */
   classNames?: Partial<ChatToggleButtonClassNames>;
 };
+
+export type ChatToggleButtonProps = ComponentProps<'button'> &
+  ChatToggleButtonOwnProps;
 
 export function createChatToggleButtonComponent({ createElement }: Renderer) {
   const Button = createButtonComponent({ createElement });
