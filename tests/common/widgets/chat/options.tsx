@@ -5,11 +5,11 @@ import { Chat, SearchIndexToolType } from 'instantsearch.js/es/lib/chat';
 import React from 'react';
 
 import type { ChatWidgetParams, ChatWidgetSetup } from '.';
-import type { TestOptions } from '../../common';
+import type { TestOptionsWithFlavor } from '../../common';
 
 export function createOptionsTests(
   setup: ChatWidgetSetup,
-  { act, flavor }: Required<TestOptions>
+  { act, flavor }: Required<TestOptionsWithFlavor>
 ) {
   describe('options', () => {
     test('renders with default props', async () => {

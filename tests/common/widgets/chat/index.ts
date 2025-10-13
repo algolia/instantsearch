@@ -2,7 +2,7 @@ import { fakeAct, skippableDescribe } from '../../common';
 
 import { createOptionsTests } from './options';
 
-import type { TestOptions, TestSetup } from '../../common';
+import type { TestOptionsWithFlavor, TestSetup } from '../../common';
 import type { ChatConnectorParams } from 'instantsearch.js/es/connectors/chat/connectChat';
 import type { ChatWidget } from 'instantsearch.js/es/widgets/chat/chat';
 import type { ChatProps } from 'react-instantsearch';
@@ -22,7 +22,11 @@ export type ChatWidgetSetup = TestSetup<{
 
 export function createChatWidgetTests(
   setup: ChatWidgetSetup,
-  { act = fakeAct, skippedTests = {}, flavor = 'javascript' }: TestOptions = {}
+  {
+    act = fakeAct,
+    skippedTests = {},
+    flavor = 'javascript',
+  }: TestOptionsWithFlavor = {}
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
