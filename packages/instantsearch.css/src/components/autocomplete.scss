@@ -361,4 +361,86 @@
       var(--ais-autocomplete-selected-color-alpha)
     );
   }
+
+  @at-root .ais-AutocompleteItemWrapper {
+    align-items: center;
+    color: inherit;
+    display: grid;
+    gap: calc(var(--ais-autocomplete-spacing-half) / 2);
+    grid-auto-flow: column;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  @at-root .ais-AutocompleteItemContent {
+    align-items: center;
+    cursor: pointer;
+    display: grid;
+    gap: var(--ais-autocomplete-spacing-half);
+    grid-auto-flow: column;
+    line-height: 1.25em;
+    overflow: hidden;
+    &:empty {
+      display: none;
+    }
+    mark {
+      background: none;
+      color: rgba(var(--ais-autocomplete-text-color-rgb), var(--ais-autocomplete-text-color-alpha));
+      font-style: normal;
+      font-weight: var(--ais-autocomplete-font-weight-bold);
+    }
+  }
+
+  @at-root .ais-AutocompleteItemIcon {
+    align-items: center;
+    border-radius: 3px;
+    color: rgba(var(--ais-autocomplete-icon-color-rgb), var(--ais-autocomplete-icon-color-alpha));
+    display: flex;
+    flex-shrink: 0;
+    font-size: 0.7em;
+    height: calc(var(--ais-autocomplete-icon-size) + var(--ais-autocomplete-spacing-half));
+    justify-content: center;
+    overflow: hidden;
+    stroke-width: var(--ais-autocomplete-icon-stroke-width);
+    text-align: center;
+    width: calc(var(--ais-autocomplete-icon-size) + var(--ais-autocomplete-spacing-half));
+    svg {
+      height: var(--ais-autocomplete-icon-size);
+      width: var(--ais-autocomplete-icon-size);
+    }
+  }
+  @at-root .ais-AutocompleteItemActions {
+    display: grid;
+    grid-auto-flow: column;
+    height: 100%;
+    justify-self: end;
+    margin: 0 calc(var(--ais-autocomplete-spacing) / -3);
+    padding: 0 2px 0 0;
+  }
+  @at-root .ais-AutocompleteItemActionButton {
+    align-items: center;
+    background: none;
+    border: 0;
+    color: rgba(var(--ais-autocomplete-muted-color-rgb), var(--ais-autocomplete-muted-color-alpha));
+    cursor: pointer;
+    display: flex;
+    flex-shrink: 0;
+    padding: 0;
+    &:hover,
+    &:focus {
+      svg {
+        color: rgba(var(--ais-autocomplete-text-color-rgb), var(--ais-autocomplete-text-color-alpha));
+        @media (hover: none) and (pointer: coarse) {
+          color: inherit;
+        }
+      }
+    }
+    svg {
+      color: rgba(var(--ais-autocomplete-muted-color-rgb), var(--ais-autocomplete-muted-color-alpha));
+      margin: 0;
+      margin: calc(var(--ais-autocomplete-spacing) / 3);
+      stroke-width: var(--ais-autocomplete-icon-stroke-width);
+      width: var(--ais-autocomplete-action-icon-size);
+    }
+  }
 }

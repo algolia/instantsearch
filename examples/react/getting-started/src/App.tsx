@@ -56,6 +56,7 @@ export function App() {
 
             <div className="search-panel__results">
               <SearchBox placeholder="" className="searchbox" />
+
               <Hits hitComponent={HitComponent} />
 
               <div className="pagination">
