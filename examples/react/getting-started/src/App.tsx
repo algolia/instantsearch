@@ -105,14 +105,18 @@ function HitComponent({ hit }: { hit: HitType }) {
 
 function ItemComponent({ item }: { item: Hit }) {
   return (
-    <div>
-      <article>
-        <div>
-          <img src={item.image} />
-          <h2>{item.name}</h2>
-        </div>
-        <a href={`/products.html?pid=${item.objectID}`}>See product</a>
-      </article>
-    </div>
+    <article className="ais-Carousel-hit">
+      <div className="ais-Carousel-hit-image">
+        <img src={item.image} />
+      </div>
+      <h2 className="ais-Carousel-hit-title">
+        <a
+          href={`/products.html?pid=${item.objectID}`}
+          className="ais-Carousel-hit-link"
+        >
+          {item.name}
+        </a>
+      </h2>
+    </article>
   );
 }

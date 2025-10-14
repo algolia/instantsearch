@@ -67,7 +67,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
         <HeaderComponent
           nbHits={output?.nbHits}
           query={input?.query}
-          hitsPerPage={input?.number_of_results}
+          hitsPerPage={items.length}
           setIndexUiState={setIndexUiState}
           indexUiState={indexUiState}
           getSearchPageURL={getSearchPageURL}
@@ -76,7 +76,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
         />
       );
     }, [
-      input?.number_of_results,
+      items.length,
       input?.query,
       output?.nbHits,
       setIndexUiState,

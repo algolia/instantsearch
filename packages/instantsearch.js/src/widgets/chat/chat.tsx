@@ -4,6 +4,7 @@ import {
   ArrowRightIconComponent,
   ChevronLeftIconComponent,
   ChevronRightIconComponent,
+  createButtonComponent,
   createChatComponent,
 } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
@@ -72,6 +73,10 @@ function createCarouselTool<
   templates: ChatTemplates<THit>,
   getSearchPageURL?: (nextUiState: IndexUiState) => string
 ): UserClientSideToolWithTemplate {
+  const Button = createButtonComponent({
+    createElement: h,
+  });
+
   function SearchLayoutComponent({
     message,
     indexUiState,
@@ -110,7 +115,7 @@ function createCarouselTool<
         <HeaderComponent
           nbHits={output?.nbHits}
           query={input?.query}
-          hitsPerPage={input?.number_of_results}
+          hitsPerPage={items.length}
           setIndexUiState={setIndexUiState}
           indexUiState={indexUiState}
           getSearchPageURL={getSearchPageURL}
@@ -119,7 +124,7 @@ function createCarouselTool<
         />
       );
     }, [
-      input?.number_of_results,
+      items.length,
       input?.query,
       output?.nbHits,
       setIndexUiState,
@@ -188,8 +193,9 @@ function createCarouselTool<
             </div>
           )}
           {showViewAll && (
-            <button
-              type="button"
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={() => {
                 if (!query) return;
 
@@ -214,26 +220,32 @@ function createCarouselTool<
             >
               View all
               <ArrowRightIconComponent createElement={h} />
-            </button>
+            </Button>
           )}
         </div>
 
         {(hitsPerPage ?? 0) > 2 && (
           <div className="ais-ChatToolSearchIndexCarouselHeaderScrollButtons">
-            <button
+            <Button
+              variant="outline"
+              size="sm"
+              iconOnly
               onClick={scrollLeft}
               disabled={!canScrollLeft}
               className="ais-ChatToolSearchIndexCarouselHeaderScrollButton"
             >
               <ChevronLeftIconComponent createElement={h} />
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              iconOnly
               onClick={scrollRight}
               disabled={!canScrollRight}
               className="ais-ChatToolSearchIndexCarouselHeaderScrollButton"
             >
               <ChevronRightIconComponent createElement={h} />
-            </button>
+            </Button>
           </div>
         )}
       </div>

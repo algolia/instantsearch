@@ -161,6 +161,7 @@
   .ais-Carousel-hit-image {
     position: relative;
     display: flex;
+    justify-content: center;
     border-radius: var(--ais-border-radius-md);
     overflow: hidden;
 

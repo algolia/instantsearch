@@ -24,7 +24,11 @@ const NON_WIDGETS = [
 type RegularWidgets = Omit<typeof widgets, typeof NON_WIDGETS[number]>;
 
 // Non-components that should be excluded from SingleWidget type
-const NON_COMPONENTS = ['createDefaultTools', 'SearchIndexToolType', 'RecommendToolType'] as const;
+const NON_COMPONENTS = [
+  'createDefaultTools',
+  'SearchIndexToolType',
+  'RecommendToolType',
+] as const;
 type ComponentWidgets = Omit<typeof widgets, typeof NON_COMPONENTS[number]>;
 
 export type SingleWidget = {
