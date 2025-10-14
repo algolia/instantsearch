@@ -1,6 +1,6 @@
 {
   "name": "example-instantsearch-ecommerce",
-  "version": "1.81.0",
+  "version": "1.82.0",
   "private": true,
   "scripts": {
     "start": "BABEL_ENV=parcel parcel index.html --port 3000",
@@ -11,9 +11,9 @@
   "dependencies": {
     "algoliasearch": "5.1.1",
     "algoliasearch-helper": "3.26.0",
-    "instantsearch-ui-components": "0.11.2",
-    "instantsearch.css": "8.5.1",
-    "instantsearch.js": "4.80.0"
+    "instantsearch-ui-components": "0.12.0",
+    "instantsearch.css": "8.6.0",
+    "instantsearch.js": "4.81.0"
   },
   "devDependencies": {
     "@babel/core": "7.15.5",

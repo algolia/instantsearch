@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.81.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.80.0...instantsearch.js@4.81.0) (2025-10-14)
+
+
+### Bug Fixes
+
+* **chat:** add missing props to the IS.js chat widget ([#6726](https://github.com/algolia/instantsearch/issues/6726)) ([ed6a24b](https://github.com/algolia/instantsearch/commit/ed6a24b67c927370bf27f385899c1176dfc2e5dc))
+* **chat:** update tools api in chat widgets ([#6728](https://github.com/algolia/instantsearch/issues/6728)) ([8c9f388](https://github.com/algolia/instantsearch/commit/8c9f3883207e5f55efff095dc1f2da4a30a6c568))
+* **deps:** resolve ai dependencies on all levels ([#6731](https://github.com/algolia/instantsearch/issues/6731)) ([5cec774](https://github.com/algolia/instantsearch/commit/5cec774ae11293b91e6d2e4bae51eca81e3bc2c3))
+* **instantsearch-ui-components:** fix auto focus on open ([#6725](https://github.com/algolia/instantsearch/issues/6725)) ([2daeede](https://github.com/algolia/instantsearch/commit/2daeedeef2eac49061c927b45b84171e3736e8c6))
+
+
+### Features
+
+* **chat:** add support for client side tools ([#6708](https://github.com/algolia/instantsearch/issues/6708)) ([268f1f8](https://github.com/algolia/instantsearch/commit/268f1f8ec8ad87d34b104884242a7378fa07a4c1))
+* **chat:** add top level components and templates ([#6730](https://github.com/algolia/instantsearch/issues/6730)) ([703471b](https://github.com/algolia/instantsearch/commit/703471b06cef4abd2f3b7edcb5b2c2eae2a1c0a3))
+* **chat:** move stickToBottom lib to ui components ([#6724](https://github.com/algolia/instantsearch/issues/6724)) ([e1b654f](https://github.com/algolia/instantsearch/commit/e1b654f5d2e274c059980fc6c9e37d6777ad7e4a))
+* **chat:** render when no indexName is passed ([#6722](https://github.com/algolia/instantsearch/issues/6722)) ([c2e81f7](https://github.com/algolia/instantsearch/commit/c2e81f77ca4b4c7dfb22e5923771c04de64f428c))
+* **chat:** save messages in session storage ([#6710](https://github.com/algolia/instantsearch/issues/6710)) ([bbe5c88](https://github.com/algolia/instantsearch/commit/bbe5c8840045e5742302f30648c08c7eb3b9d039))
+* **instantsearch-ui-components:** implement chat carousel design ([#6719](https://github.com/algolia/instantsearch/issues/6719)) ([e29f0d5](https://github.com/algolia/instantsearch/commit/e29f0d56a63bee5db596e6b9918ccafa4a8112b8))
+* **instantsearch.js:** introduce chat widget ([#6705](https://github.com/algolia/instantsearch/issues/6705)) ([d7b360b](https://github.com/algolia/instantsearch/commit/d7b360b0a2d18e3eae42bf89ffae87f10142d0c1))
+* **react-instantsearch:** introduce chat widget ([#6698](https://github.com/algolia/instantsearch/issues/6698)) ([9e79c1f](https://github.com/algolia/instantsearch/commit/9e79c1f2bca03e37de18c882a7f7dd929894bc06))
+
+
+
+
+
 # [4.80.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.79.2...instantsearch.js@4.80.0) (2025-09-09)
 
 
