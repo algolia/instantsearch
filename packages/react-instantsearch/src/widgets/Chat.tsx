@@ -99,6 +99,7 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     messagesProps?: UserMessagesProps;
     promptProps?: UserPromptProps;
     toggleButtonComponent?: ChatUiProps['toggleButtonComponent'];
+    toggleButtonIconComponent?: ChatUiProps['toggleButtonProps']['toggleIconComponent'];
     headerLayoutComponent?: ChatUiProps['headerComponent'];
     headerTitleIconComponent?: ChatUiProps['headerProps']['titleIconComponent'];
     headerCloseIconComponent?: ChatUiProps['headerProps']['closeIconComponent'];
@@ -129,6 +130,7 @@ export function Chat<
   promptProps,
   itemComponent,
   toggleButtonComponent,
+  toggleButtonIconComponent,
   headerLayoutComponent,
   headerTitleIconComponent,
   headerCloseIconComponent,
@@ -230,6 +232,7 @@ export function Chat<
       toggleButtonProps={{
         open,
         onClick: () => setOpen(!open),
+        toggleIconComponent: toggleButtonIconComponent,
         ...toggleButtonProps,
       }}
       headerProps={{
