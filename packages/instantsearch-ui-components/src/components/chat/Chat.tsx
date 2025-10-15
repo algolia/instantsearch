@@ -122,16 +122,18 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
           })}
         </div>
 
-        {createElement(ToggleButtonComponent || ChatToggleButton, {
-          ...toggleButtonProps,
-          classNames: classNames.toggleButton,
-          onClick: () => {
-            toggleButtonProps.onClick?.();
-            if (!open) {
-              promptProps.promptRef?.current?.focus();
-            }
-          },
-        })}
+        <div className="ais-Chat-toggleButtonWrapper">
+          {createElement(ToggleButtonComponent || ChatToggleButton, {
+            ...toggleButtonProps,
+            classNames: classNames.toggleButton,
+            onClick: () => {
+              toggleButtonProps.onClick?.();
+              if (!open) {
+                promptProps.promptRef?.current?.focus();
+              }
+            },
+          })}
+        </div>
       </div>
     );
   };
