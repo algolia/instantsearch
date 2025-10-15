@@ -2,7 +2,11 @@ import { fakeAct, skippableDescribe } from '../../common';
 
 import { createOptionsTests } from './options';
 
-import type { TestOptionsWithFlavor, TestSetup } from '../../common';
+import type {
+  SupportedFlavor,
+  TestOptionsWithFlavor,
+  TestSetup,
+} from '../../common';
 import type { ChatConnectorParams } from 'instantsearch.js/es/connectors/chat/connectChat';
 import type { ChatWidget } from 'instantsearch.js/es/widgets/chat/chat';
 import type { ChatProps } from 'react-instantsearch';
@@ -14,25 +18,30 @@ export type JSChatWidgetParams = Omit<JSBaseWidgetParams, 'container'> &
   ChatConnectorParams;
 export type ReactChatWidgetParams = ChatProps<unknown>;
 
-export type ChatWidgetParams = JSChatWidgetParams | ReactChatWidgetParams;
+export type ChatWidgetParamsByFlavor<T extends SupportedFlavor> =
+  T extends 'javascript' ? JSChatWidgetParams : ReactChatWidgetParams;
 
-export type ChatWidgetSetup = TestSetup<{
-  widgetParams: ChatWidgetParams;
+export type ChatWidgetSetup<T extends SupportedFlavor> = TestSetup<{
+  widgetParams: ChatWidgetParamsByFlavor<T>;
 }>;
 
-export function createChatWidgetTests(
-  setup: ChatWidgetSetup,
+export function createChatWidgetTests<T extends SupportedFlavor>(
+  setup: ChatWidgetSetup<T>,
   {
     act = fakeAct,
     skippedTests = {},
-    flavor = 'javascript',
-  }: TestOptionsWithFlavor = {}
+    flavor = 'javascript' as T,
+  }: TestOptionsWithFlavor<T> = {}
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
   skippableDescribe('Chat widget common tests', skippedTests, () => {
-    createOptionsTests(setup, { act, skippedTests, flavor });
+    createOptionsTests<T>(setup, {
+      act,
+      skippedTests,
+      flavor,
+    });
   });
 }

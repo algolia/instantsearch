@@ -623,7 +623,7 @@ const testSetups: TestSetupsMap<TestSuites> = {
       .addWidgets([
         chat({
           container: document.body.appendChild(document.createElement('div')),
-          ...(widgetParams as suites.JSChatWidgetParams),
+          ...widgetParams,
         }),
       ])
       .on('error', () => {

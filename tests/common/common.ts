@@ -34,16 +34,23 @@ export function skippableTest(
   return (skippedTests[name] ? test.skip : test)(name, fn);
 }
 
-export type SupportedFlavor = 'javascript' | 'react' | 'vue';
+export type SupportedFlavor = 'javascript' | 'react';
 
 export type TestOptions = {
   act?: Act;
   skippedTests?: SkippedTests;
 };
 
-export type TestOptionsWithFlavor = TestOptions & {
-  flavor?: SupportedFlavor;
-};
+export type TestOptionsWithFlavor<T extends SupportedFlavor = SupportedFlavor> =
+  TestOptions & {
+    flavor?: T;
+  };
+
+// export type Flavorized<
+//   T extends SupportedFlavor,
+//   TJS,
+//   TReact
+// > = T extends 'javascript' ? TJS : TReact;
 
 export type SetupOptions<TSetup extends TestSetup<any, any>> =
   Parameters<TSetup>[0];

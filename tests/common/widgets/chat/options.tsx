@@ -4,12 +4,12 @@ import userEvent from '@testing-library/user-event';
 import { Chat, SearchIndexToolType } from 'instantsearch.js/es/lib/chat';
 import React from 'react';
 
-import type { ChatWidgetParams, ChatWidgetSetup } from '.';
-import type { TestOptionsWithFlavor } from '../../common';
+import type { ChatWidgetParamsByFlavor, ChatWidgetSetup } from '.';
+import type { SupportedFlavor, TestOptionsWithFlavor } from '../../common';
 
-export function createOptionsTests(
-  setup: ChatWidgetSetup,
-  { act, flavor }: Required<TestOptionsWithFlavor>
+export function createOptionsTests<T extends SupportedFlavor>(
+  setup: ChatWidgetSetup<T>,
+  { act, flavor }: Required<TestOptionsWithFlavor<T>>
 ) {
   describe('options', () => {
     test('renders with default props', async () => {
@@ -126,7 +126,7 @@ export function createOptionsTests(
         agentId: 'agentId',
         chat: chat as any,
       };
-      const toolsParams: ChatWidgetParams =
+      const toolsParams: ChatWidgetParamsByFlavor<T> =
         flavor === 'javascript'
           ? {
               tools: {
@@ -199,7 +199,7 @@ export function createOptionsTests(
         agentId: 'agentId',
         chat: chat as any,
       };
-      const toolsParams: ChatWidgetParams =
+      const toolsParams: ChatWidgetParamsByFlavor<T> =
         flavor === 'javascript'
           ? {
               tools: {
