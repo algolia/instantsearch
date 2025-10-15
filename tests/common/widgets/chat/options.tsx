@@ -8,9 +8,9 @@ import React from 'react';
 import type { ChatWidgetSetup } from '.';
 import type { Act, TestOptions } from '../../common';
 
-const createDefaultWidgetParams = () => ({
+const createDefaultWidgetParams = (chat?: Chat<any>) => ({
   agentId: 'agentId',
-  chat: new Chat({}),
+  chat: chat || new Chat({}),
 });
 
 async function openChat(act: Act) {
@@ -60,18 +60,14 @@ export function createOptionsTests(
       const chat = new Chat({});
       const sendMessageSpy = jest.spyOn(chat, 'sendMessage');
 
-      const commonWidgetParams = {
-        agentId: 'agentId',
-        chat,
-      };
       await setup({
         instantSearchOptions: {
           indexName: 'indexName',
           searchClient,
         },
         widgetParams: {
-          javascript: commonWidgetParams,
-          react: commonWidgetParams,
+          javascript: createDefaultWidgetParams(chat),
+          react: createDefaultWidgetParams(chat),
           vue: {},
         },
       });
@@ -211,18 +207,14 @@ export function createOptionsTests(
           id: 'chat-id',
         });
 
-        const commonWidgetParams = {
-          agentId: 'agentId',
-          chat: chat as any,
-        };
         await setup({
           instantSearchOptions: {
             indexName: 'indexName',
             searchClient,
           },
           widgetParams: {
-            javascript: commonWidgetParams,
-            react: commonWidgetParams,
+            javascript: createDefaultWidgetParams(chat),
+            react: createDefaultWidgetParams(chat),
             vue: {},
           },
         });
@@ -254,11 +246,6 @@ export function createOptionsTests(
           id: 'chat-id',
         });
 
-        const commonWidgetParams = {
-          agentId: 'agentId',
-          chat: chat as any,
-        };
-
         await setup({
           instantSearchOptions: {
             indexName: 'indexName',
@@ -266,7 +253,7 @@ export function createOptionsTests(
           },
           widgetParams: {
             javascript: {
-              ...commonWidgetParams,
+              ...createDefaultWidgetParams(chat),
               tools: {
                 hello: {
                   templates: {
@@ -277,7 +264,7 @@ export function createOptionsTests(
               },
             },
             react: {
-              ...commonWidgetParams,
+              ...createDefaultWidgetParams(chat),
               tools: {
                 hello: {
                   layoutComponent: () => (
@@ -319,11 +306,6 @@ export function createOptionsTests(
           id: 'chat-id',
         });
 
-        const commonWidgetParams = {
-          agentId: 'agentId',
-          chat: chat as any,
-        };
-
         await setup({
           instantSearchOptions: {
             indexName: 'indexName',
@@ -331,7 +313,7 @@ export function createOptionsTests(
           },
           widgetParams: {
             javascript: {
-              ...commonWidgetParams,
+              ...createDefaultWidgetParams(chat),
               tools: {
                 [SearchIndexToolType]: {
                   templates: {
@@ -342,7 +324,7 @@ export function createOptionsTests(
               },
             },
             react: {
-              ...commonWidgetParams,
+              ...createDefaultWidgetParams(chat),
               tools: {
                 [SearchIndexToolType]: {
                   layoutComponent: () => (

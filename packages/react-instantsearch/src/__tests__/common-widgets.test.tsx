@@ -38,9 +38,7 @@ import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
 import type { Hit } from 'instantsearch.js';
 import type { SendEventForHits } from 'instantsearch.js/es/lib/utils';
 
-type TestSuites = typeof suites & {
-  createChatWidgetTests: typeof suites.createChatWidgetTests<'react'>;
-};
+type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
 
 const testSetups: TestSetupsMap<TestSuites, 'react'> = {

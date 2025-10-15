@@ -37,9 +37,7 @@ import {
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
 
-type TestSuites = typeof suites & {
-  createChatWidgetTests: typeof suites.createChatWidgetTests<'javascript'>;
-};
+type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
 
 const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
