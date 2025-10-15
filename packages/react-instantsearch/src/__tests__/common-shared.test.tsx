@@ -63,6 +63,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
 
 describe('Common shared tests (React InstantSearch)', () => {
   runTestSuites({
+    flavor: 'react',
     testSuites,
     testSetups,
     testOptions,

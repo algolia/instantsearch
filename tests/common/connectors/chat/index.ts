@@ -11,13 +11,13 @@ export type ChatConnectorSetup = TestSetup<{
 
 export function createChatConnectorTests(
   setup: ChatConnectorSetup,
-  { act = fakeAct, skippedTests = {} }: TestOptions = {}
+  { act = fakeAct, skippedTests = {}, flavor = 'javascript' }: TestOptions = {}
 ) {
   beforeAll(() => {
     document.body.innerHTML = '';
   });
 
   describe('Chat connector common tests', () => {
-    createOptionsTests(setup, { act, skippedTests });
+    createOptionsTests(setup, { act, skippedTests, flavor });
   });
 }

@@ -464,6 +464,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
 
 describe('Common connector tests (React InstantSearch)', () => {
   runTestSuites({
+    flavor: 'react',
     testSuites,
     testSetups,
     testOptions,

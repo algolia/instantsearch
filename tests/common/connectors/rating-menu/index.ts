@@ -12,13 +12,13 @@ export type RatingMenuConnectorSetup = TestSetup<{
 
 export function createRatingMenuConnectorTests(
   setup: RatingMenuConnectorSetup,
-  { act = fakeAct, skippedTests = {} }: TestOptions = {}
+  { act = fakeAct, skippedTests = {}, flavor = 'javascript' }: TestOptions = {}
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
   describe('RatingMenu connector common tests', () => {
-    createRoutingTests(setup, { act, skippedTests });
+    createRoutingTests(setup, { act, skippedTests, flavor });
   });
 }

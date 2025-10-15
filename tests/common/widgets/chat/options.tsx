@@ -1,15 +1,16 @@
+/** @jsx React.createElement */
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import userEvent from '@testing-library/user-event';
 import { Chat, SearchIndexToolType } from 'instantsearch.js/es/lib/chat';
 import React from 'react';
 
-import type { ChatWidgetParamsByFlavor, ChatWidgetSetup } from '.';
-import type { SupportedFlavor, TestOptionsWithFlavor } from '../../common';
+import type { ChatWidgetParams, ChatWidgetSetup } from '.';
+import type { SupportedFlavor, TestOptions } from '../../common';
 
 export function createOptionsTests<T extends SupportedFlavor>(
   setup: ChatWidgetSetup<T>,
-  { act, flavor }: Required<TestOptionsWithFlavor<T>>
+  { act, flavor }: Required<TestOptions<T>>
 ) {
   describe('options', () => {
     test('renders with default props', async () => {
@@ -126,27 +127,28 @@ export function createOptionsTests<T extends SupportedFlavor>(
         agentId: 'agentId',
         chat: chat as any,
       };
-      const toolsParams: ChatWidgetParamsByFlavor<T> =
-        flavor === 'javascript'
-          ? {
-              tools: {
-                hello: {
-                  templates: {
-                    layout:
-                      '<div id="tool-content">The message said hello!</div>',
-                  },
-                },
+      const toolsParams = {
+        javascript: {
+          tools: {
+            hello: {
+              templates: {
+                layout: '<div id="tool-content">The message said hello!</div>',
               },
-            }
-          : {
-              tools: {
-                hello: {
-                  layoutComponent: () => (
-                    <div id="tool-content">The message said hello!</div>
-                  ),
-                },
-              },
-            };
+            },
+          },
+        },
+        react: {
+          tools: {
+            hello: {
+              layoutComponent: () => (
+                <div id="tool-content">The message said hello!</div>
+              ),
+            },
+          },
+        },
+        vue: {},
+      }[flavor];
+
       await setup({
         instantSearchOptions: {
           indexName: 'indexName',
@@ -199,27 +201,28 @@ export function createOptionsTests<T extends SupportedFlavor>(
         agentId: 'agentId',
         chat: chat as any,
       };
-      const toolsParams: ChatWidgetParamsByFlavor<T> =
-        flavor === 'javascript'
-          ? {
-              tools: {
-                [SearchIndexToolType]: {
-                  templates: {
-                    layout:
-                      '<div id="tool-content">The message said hello!</div>',
-                  },
-                },
+      const toolsParams: ChatWidgetParams<T> = {
+        javascript: {
+          tools: {
+            [SearchIndexToolType]: {
+              templates: {
+                layout: '<div id="tool-content">The message said hello!</div>',
               },
-            }
-          : {
-              tools: {
-                [SearchIndexToolType]: {
-                  layoutComponent: () => (
-                    <div id="tool-content">The message said hello!</div>
-                  ),
-                },
-              },
-            };
+            },
+          },
+        },
+        react: {
+          tools: {
+            [SearchIndexToolType]: {
+              layoutComponent: () => (
+                <div id="tool-content">The message said hello!</div>
+              ),
+            },
+          },
+        },
+        vue: {},
+      }[flavor];
+
       await setup({
         instantSearchOptions: {
           indexName: 'indexName',

@@ -21,15 +21,15 @@ export type SharedSetup = TestSetup<{
 
 export function createSharedTests(
   setup: SharedSetup,
-  { act = fakeAct, skippedTests = {} }: TestOptions = {}
+  { act = fakeAct, skippedTests = {}, flavor = 'javascript' }: TestOptions = {}
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
   describe('Shared common tests', () => {
-    createRoutingTests(setup, { act, skippedTests });
-    createInsightsTests(setup, { act, skippedTests });
-    createInteractionTests(setup, { act, skippedTests });
+    createRoutingTests(setup, { act, skippedTests, flavor });
+    createInsightsTests(setup, { act, skippedTests, flavor });
+    createInteractionTests(setup, { act, skippedTests, flavor });
   });
 }

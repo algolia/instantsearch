@@ -12,13 +12,13 @@ export type CurrentRefinementsConnectorSetup = TestSetup<{
 
 export function createCurrentRefinementsConnectorTests(
   setup: CurrentRefinementsConnectorSetup,
-  { act = fakeAct, skippedTests = {} }: TestOptions = {}
+  { act = fakeAct, skippedTests = {}, flavor = 'javascript' }: TestOptions = {}
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
   describe('CurrentRefinements connector common tests', () => {
-    createRoutingTests(setup, { act, skippedTests });
+    createRoutingTests(setup, { act, skippedTests, flavor });
   });
 }

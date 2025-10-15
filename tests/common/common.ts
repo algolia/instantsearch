@@ -34,23 +34,13 @@ export function skippableTest(
   return (skippedTests[name] ? test.skip : test)(name, fn);
 }
 
-export type SupportedFlavor = 'javascript' | 'react';
+export type SupportedFlavor = 'javascript' | 'react' | 'vue';
 
-export type TestOptions = {
+export type TestOptions<T extends SupportedFlavor = 'javascript'> = {
   act?: Act;
   skippedTests?: SkippedTests;
+  flavor?: T;
 };
-
-export type TestOptionsWithFlavor<T extends SupportedFlavor = SupportedFlavor> =
-  TestOptions & {
-    flavor?: T;
-  };
-
-// export type Flavorized<
-//   T extends SupportedFlavor,
-//   TJS,
-//   TReact
-// > = T extends 'javascript' ? TJS : TReact;
 
 export type SetupOptions<TSetup extends TestSetup<any, any>> =
   Parameters<TSetup>[0];
@@ -88,7 +78,7 @@ export function runTestSuites<
   testOptions,
   only,
 }: {
-  flavor?: SupportedFlavor;
+  flavor: SupportedFlavor;
   testSuites: TTestSuites;
   testSetups: TestSetupsMap<TTestSuites>;
   testOptions: TestOptionsMap<TTestSuites>;
@@ -104,6 +94,6 @@ export function runTestSuites<
     .filter((name) => !only || only.includes(name))
     .forEach(<T extends keyof TTestSuites>(key: T) => {
       const suite: TestSuite<TTestSuites, T> = testSuites[key];
-      suite(testSetups[key], { flavor, ...testOptions[key] });
+      suite(testSetups[key], { ...testOptions[key], flavor });
     });
 }
