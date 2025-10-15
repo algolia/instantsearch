@@ -7,7 +7,7 @@ import {
   createSearchClient,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import { InstantSearchTestWrapper } from '@instantsearch/testutils';
+import { InstantSearchTestWrapper, wait } from '@instantsearch/testutils';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
@@ -309,5 +309,85 @@ describe('Autocomplete', () => {
         }),
       },
     ]);
+  });
+
+  test('should support keyboard navigation', async () => {
+    const searchClient = createMockedSearchClient(
+      createMultiSearchResponse(
+        createSingleSearchResponse({
+          hits: [
+            { objectID: '1', name: 'Item 1' },
+            { objectID: '2', name: 'Item 2' },
+          ],
+        }),
+        // @ts-expect-error - ignore second response type
+        createSingleSearchResponse({
+          hits: [
+            { objectID: '1', query: 'hello' },
+            { objectID: '2', query: 'world' },
+          ],
+        })
+      )
+    );
+    const mockOnSelect = jest.fn();
+    const { container } = render(
+      <InstantSearchTestWrapper searchClient={searchClient}>
+        <EXPERIMENTAL_Autocomplete
+          indices={[
+            {
+              indexName: 'indexName',
+              itemComponent: (props) => props.item.name,
+            },
+            {
+              indexName: 'indexName2',
+              itemComponent: (props) => props.item.query,
+              onSelect: mockOnSelect,
+            },
+          ]}
+        />
+      </InstantSearchTestWrapper>
+    );
+
+    await screen.findByText('hello');
+
+    expect(container.querySelectorAll('[aria-selected="true"]')).toHaveLength(
+      0
+    );
+    expect(screen.getByRole('combobox')).not.toHaveAttribute(
+      'aria-activedescendant'
+    );
+
+    // Highlight the first item
+    userEvent.click(screen.getByRole('combobox'));
+    userEvent.keyboard('{ArrowDown}');
+    await wait(0);
+
+    let selectedItem = screen.getByRole('row', { selected: true });
+    expect(selectedItem).toHaveTextContent('Item 1');
+    expect(screen.getByRole('combobox')).toHaveAttribute(
+      'aria-activedescendant',
+      selectedItem.id
+    );
+
+    // Loop to the second-to-last item, from the second index
+    userEvent.keyboard('{ArrowUp}{ArrowUp}');
+    await wait(0);
+
+    selectedItem = screen.getByRole('row', { selected: true });
+    expect(selectedItem).toHaveTextContent('hello');
+    expect(screen.getByRole('combobox')).toHaveAttribute(
+      'aria-activedescendant',
+      selectedItem.id
+    );
+
+    // Handle Enter
+    userEvent.keyboard('{Enter}');
+    await wait(0);
+
+    expect(mockOnSelect).toHaveBeenCalledWith(
+      expect.objectContaining({
+        item: expect.objectContaining({ objectID: '1', query: 'hello' }),
+      })
+    );
   });
 });

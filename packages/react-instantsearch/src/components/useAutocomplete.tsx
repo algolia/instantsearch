@@ -1,7 +1,7 @@
 import { useId, useLayoutEffect, useRef, useState } from 'react';
 import { useInstantSearch } from 'react-instantsearch-core';
 
-import type { ComponentProps, Ref } from 'react';
+import type { ComponentProps } from 'react';
 
 type AutocompleteGetInputProps = () => Pick<
   ComponentProps<'input'>,
@@ -31,15 +31,10 @@ type AutocompleteGetItemProps = (
 
 type AutocompleteGetPanelProps = () => Pick<
   ComponentProps<'div'>,
-  'id' | 'role' | 'aria-labelledby'
-> & {
-  ref: Ref<HTMLElement>;
-  isOpen: boolean;
-};
+  'id' | 'hidden' | 'ref' | 'role' | 'aria-labelledby'
+>;
 
-type AutocompleteGetRootProps = () => {
-  ref: Ref<HTMLDivElement>;
-};
+type AutocompleteGetRootProps = () => Pick<ComponentProps<'div'>, 'ref'>;
 
 type AutocompleteUpdateStoreParams = {
   indexName: string;
@@ -134,7 +129,6 @@ export const useAutocomplete = () => {
         setIsOpen(false);
         return;
       }
-
       switch (event.key) {
         case 'ArrowLeft':
         case 'ArrowUp':
@@ -200,7 +194,7 @@ export const useAutocomplete = () => {
 
   const getPanelProps: AutocompleteGetPanelProps = () => ({
     ref: panelRef,
-    isOpen,
+    hidden: !isOpen,
     id: getElementId('panel'),
     role: 'grid',
     'aria-labelledby': getElementId('input'),
