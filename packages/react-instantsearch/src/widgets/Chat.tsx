@@ -1,10 +1,14 @@
 import { createChatComponent } from 'instantsearch-ui-components';
+import {
+  SearchIndexToolType,
+  RecommendToolType,
+} from 'instantsearch.js/es/lib/chat';
 import React, { createElement, Fragment } from 'react';
 import { useInstantSearch, useChat } from 'react-instantsearch-core';
 
-import { createSearchIndexTool } from './chat/tools/SearchIndexTool';
+import { createCarouselTool } from './chat/tools/SearchIndexTool';
 
-export { SearchIndexToolType } from 'instantsearch.js/es/lib/chat';
+export { SearchIndexToolType, RecommendToolType };
 
 import type {
   Pragma,
@@ -29,7 +33,18 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
   itemComponent?: ItemComponent<TObject>,
   getSearchPageURL?: (nextUiState: IndexUiState) => string
 ): UserClientSideTools {
-  return { ...createSearchIndexTool(itemComponent, getSearchPageURL) };
+  return {
+    [SearchIndexToolType]: createCarouselTool(
+      true,
+      itemComponent,
+      getSearchPageURL
+    ),
+    [RecommendToolType]: createCarouselTool(
+      false,
+      itemComponent,
+      getSearchPageURL
+    ),
+  };
 }
 
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];

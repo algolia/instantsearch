@@ -9,6 +9,7 @@ https://www.algolia.com/doc/guides/building-search-ui/installation/react/#instal
   );
 };
 export const SearchIndexToolType = undefined;
+export const RecommendToolType = undefined;
 export const createDefaultTools = () => {};
 
 export * from './ClearRefinements';
