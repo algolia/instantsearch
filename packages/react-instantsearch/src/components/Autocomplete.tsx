@@ -5,10 +5,17 @@ import {
   createAutocompleteSuggestionComponent,
   cx,
 } from 'instantsearch-ui-components';
-import React, { createElement, useState, Fragment } from 'react';
-import { Index, useHits, useInstantSearch } from 'react-instantsearch-core';
+import React, { createElement, Fragment } from 'react';
+import {
+  Index,
+  useHits,
+  useInstantSearch,
+  useSearchBox,
+} from 'react-instantsearch-core';
 
 import { SearchBox } from '../widgets/SearchBox';
+
+import { useAutocomplete } from './useAutocomplete';
 
 import type {
   AutocompleteIndexClassNames,
@@ -60,19 +67,30 @@ export type AutocompleteProps = {
   showSuggestions?: {
     itemComponent?: ItemComponentProps<Hit<{ query: string }>>;
     indexName?: string;
-    classNames?: Partial<AutocompleteIndexClassNames>;
+    classNames?: IndexConfig['classNames'];
   };
 };
+
+function VirtualSearchBox() {
+  useSearchBox();
+  return null;
+}
 
 export function EXPERIMENTAL_Autocomplete({
   indices: userIndices = [],
   showSuggestions,
 }: AutocompleteProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const {
+    getIndexProps,
+    getInputProps,
+    getItemProps,
+    getPanelProps,
+    getRootProps,
+    updateStore,
+  } = useAutocomplete();
   const { setIndexUiState } = useInstantSearch();
 
   const indices = [...userIndices];
-
   if (showSuggestions?.indexName) {
     indices.unshift({
       indexName: showSuggestions.indexName,
@@ -99,49 +117,69 @@ export function EXPERIMENTAL_Autocomplete({
   }
 
   return (
-    <Index EXPERIMENTAL_isolated>
-      <Autocomplete isOpen={isOpen}>
-        <SearchBox onFocus={() => setIsOpen(true)} />
-        <AutocompletePanel isOpen={isOpen}>
-          {indices.map((index) => (
-            <Index key={index.indexName} indexName={index.indexName}>
-              <AutocompleteIndexComponent
-                {...index}
-                setQuery={(query) => {
-                  setIndexUiState((state) => ({ ...state, query }));
-                }}
-              />
-            </Index>
-          ))}
-        </AutocompletePanel>
-      </Autocomplete>
-    </Index>
+    <Fragment>
+      <VirtualSearchBox />
+      <Index EXPERIMENTAL_isolated {...getIndexProps()}>
+        <Autocomplete {...getRootProps()}>
+          <SearchBox inputProps={getInputProps()} />
+          <AutocompletePanel {...getPanelProps()}>
+            {indices.map((index) => (
+              <Index key={index.indexName} indexName={index.indexName}>
+                <AutocompleteIndexComponent
+                  {...index}
+                  setQuery={(query) => {
+                    setIndexUiState((state) => ({ ...state, query }));
+                  }}
+                  getItemProps={getItemProps}
+                  updateStore={updateStore}
+                />
+              </Index>
+            ))}
+          </AutocompletePanel>
+        </Autocomplete>
+      </Index>
+    </Fragment>
   );
 }
 
 function AutocompleteIndexComponent({
+  indexName,
   itemComponent: ItemComponent,
-  onSelect,
+  onSelect: userOnSelect,
+  getItemProps,
   getQuery,
   getURL,
   setQuery,
+  updateStore,
   classNames,
-}: IndexConfig & { setQuery: (query: string) => void }) {
+}: IndexConfig &
+  Pick<ReturnType<typeof useAutocomplete>, 'getItemProps' | 'updateStore'> & {
+    setQuery: (query: string) => void;
+  }) {
   const { items } = useHits();
+  const onSelect: Parameters<typeof AutocompleteIndex>['0']['onSelect'] = (
+    item
+  ) => {
+    userOnSelect?.({
+      item,
+      getQuery: () => getQuery?.(item) || '',
+      getURL: () => getURL?.(item) || '',
+      setQuery,
+    });
+  };
+
+  updateStore({ indexName, items, onSelect, getQuery, getURL });
 
   return (
     <AutocompleteIndex
       // @ts-expect-error - there seems to be problems with React.ComponentType and this, but it's actually correct
       ItemComponent={ItemComponent}
-      items={items}
-      onSelect={(item) => {
-        onSelect?.({
-          item,
-          getQuery: () => getQuery?.(item) || '',
-          getURL: () => getURL?.(item) || '',
-          setQuery,
-        });
-      }}
+      items={items.map((item) => ({
+        ...item,
+        __indexName: indexName,
+      }))}
+      getItemProps={getItemProps}
+      onSelect={onSelect}
       classNames={classNames}
     />
   );
