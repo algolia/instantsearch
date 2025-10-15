@@ -167,6 +167,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
       return new Chat({
         ...options,
+        id: options.agentId,
         transport,
         onToolCall({ toolCall }) {
           const tool = tools[toolCall.toolName];
