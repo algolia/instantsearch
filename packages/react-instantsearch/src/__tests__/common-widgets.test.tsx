@@ -41,7 +41,7 @@ import type { SendEventForHits } from 'instantsearch.js/es/lib/utils';
 type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
 
-const testSetups: TestSetupsMap<TestSuites> = {
+const testSetups: TestSetupsMap<TestSuites, 'react'> = {
   createRefinementListWidgetTests({ instantSearchOptions, widgetParams }) {
     render(
       <InstantSearch {...instantSearchOptions}>

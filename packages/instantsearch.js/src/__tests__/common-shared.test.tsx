@@ -19,7 +19,7 @@ import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
 type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
 
-const testSetups: TestSetupsMap<TestSuites> = {
+const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
   createSharedTests({ instantSearchOptions, widgetParams }) {
     const menuURL = connectMenu<{ container: HTMLElement }>((renderOptions) => {
       renderOptions.widgetParams.container.innerHTML = `

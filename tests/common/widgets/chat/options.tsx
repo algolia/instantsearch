@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { Chat, SearchIndexToolType } from 'instantsearch.js/es/lib/chat';
 import React from 'react';
 
-import type { ChatWidgetParams, ChatWidgetSetup } from '.';
+import type { ChatWidgetSetup } from '.';
 import type { SupportedFlavor, TestOptions } from '../../common';
 
 export function createOptionsTests<T extends SupportedFlavor>(
@@ -28,7 +28,11 @@ export function createOptionsTests<T extends SupportedFlavor>(
           indexName: 'indexName',
           searchClient,
         },
-        widgetParams: commonWidgetParams,
+        widgetParams: {
+          javascript: commonWidgetParams,
+          react: commonWidgetParams,
+          vue: {},
+        }[flavor],
       });
 
       await act(async () => {
@@ -80,12 +84,17 @@ export function createOptionsTests<T extends SupportedFlavor>(
         agentId: 'agentId',
         chat: chat as any,
       };
+
       await setup({
         instantSearchOptions: {
           indexName: 'indexName',
           searchClient,
         },
-        widgetParams: commonWidgetParams,
+        widgetParams: {
+          javascript: commonWidgetParams,
+          react: commonWidgetParams,
+          vue: {},
+        }[flavor],
       });
 
       await act(async () => {
@@ -127,27 +136,6 @@ export function createOptionsTests<T extends SupportedFlavor>(
         agentId: 'agentId',
         chat: chat as any,
       };
-      const toolsParams = {
-        javascript: {
-          tools: {
-            hello: {
-              templates: {
-                layout: '<div id="tool-content">The message said hello!</div>',
-              },
-            },
-          },
-        },
-        react: {
-          tools: {
-            hello: {
-              layoutComponent: () => (
-                <div id="tool-content">The message said hello!</div>
-              ),
-            },
-          },
-        },
-        vue: {},
-      }[flavor];
 
       await setup({
         instantSearchOptions: {
@@ -155,9 +143,29 @@ export function createOptionsTests<T extends SupportedFlavor>(
           searchClient,
         },
         widgetParams: {
-          ...commonWidgetParams,
-          ...toolsParams,
-        },
+          javascript: {
+            ...commonWidgetParams,
+            tools: {
+              hello: {
+                templates: {
+                  layout:
+                    '<div id="tool-content">The message said hello!</div>',
+                },
+              },
+            },
+          },
+          react: {
+            ...commonWidgetParams,
+            tools: {
+              hello: {
+                layoutComponent: () => (
+                  <div id="tool-content">The message said hello!</div>
+                ),
+              },
+            },
+          },
+          vue: {},
+        }[flavor],
       });
 
       await act(async () => {
@@ -196,32 +204,10 @@ export function createOptionsTests<T extends SupportedFlavor>(
         ],
         id: 'chat-id',
       });
-
       const commonWidgetParams = {
         agentId: 'agentId',
         chat: chat as any,
       };
-      const toolsParams: ChatWidgetParams<T> = {
-        javascript: {
-          tools: {
-            [SearchIndexToolType]: {
-              templates: {
-                layout: '<div id="tool-content">The message said hello!</div>',
-              },
-            },
-          },
-        },
-        react: {
-          tools: {
-            [SearchIndexToolType]: {
-              layoutComponent: () => (
-                <div id="tool-content">The message said hello!</div>
-              ),
-            },
-          },
-        },
-        vue: {},
-      }[flavor];
 
       await setup({
         instantSearchOptions: {
@@ -229,9 +215,29 @@ export function createOptionsTests<T extends SupportedFlavor>(
           searchClient,
         },
         widgetParams: {
-          ...commonWidgetParams,
-          ...toolsParams,
-        },
+          javascript: {
+            ...commonWidgetParams,
+            tools: {
+              [SearchIndexToolType]: {
+                templates: {
+                  layout:
+                    '<div id="tool-content">The message said hello!</div>',
+                },
+              },
+            },
+          },
+          react: {
+            ...commonWidgetParams,
+            tools: {
+              [SearchIndexToolType]: {
+                layoutComponent: () => (
+                  <div id="tool-content">The message said hello!</div>
+                ),
+              },
+            },
+          },
+          vue: {},
+        }[flavor],
       });
 
       await act(async () => {

@@ -50,7 +50,7 @@ import type {
 type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
 
-const testSetups: TestSetupsMap<TestSuites> = {
+const testSetups: TestSetupsMap<TestSuites, 'react'> = {
   createRefinementListConnectorTests({ instantSearchOptions, widgetParams }) {
     function CustomRefinementList(props: UseRefinementListProps) {
       const { createURL, refine } = useRefinementList(props);

@@ -14,15 +14,25 @@ export type JSChatWidgetParams = Omit<JSBaseWidgetParams, 'container'> &
   ChatConnectorParams;
 export type ReactChatWidgetParams = ChatProps<unknown>;
 
-export type ChatWidgetParams<T extends SupportedFlavor = 'javascript'> = {
+type ChatWidgetParams<T extends SupportedFlavor = 'javascript'> = {
   javascript: JSChatWidgetParams;
   react: ReactChatWidgetParams;
-  vue: any;
+  vue: Record<string, never>;
 }[T];
 
 export type ChatWidgetSetup<T extends SupportedFlavor> = TestSetup<{
   widgetParams: ChatWidgetParams<T>;
 }>;
+
+declare module '../../common' {
+  interface FlavoredWidgetParams {
+    createChatWidgetTests: {
+      javascript: JSChatWidgetParams;
+      react: ReactChatWidgetParams;
+      vue: Record<string, never>;
+    };
+  }
+}
 
 export function createChatWidgetTests<T extends SupportedFlavor>(
   setup: ChatWidgetSetup<T>,
