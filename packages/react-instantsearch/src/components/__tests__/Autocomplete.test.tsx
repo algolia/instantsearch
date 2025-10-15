@@ -64,13 +64,19 @@ describe('Autocomplete', () => {
         role="search"
       >
         <input
+          aria-autocomplete="list"
+          aria-controls="autocomplete:r0:panel"
+          aria-expanded="false"
+          aria-haspopup="grid"
           aria-label="Search"
           autocapitalize="off"
           autocomplete="off"
           autocorrect="off"
           class="ais-SearchBox-input"
+          id="autocomplete:r0:input"
           maxlength="512"
           placeholder=""
+          role="combobox"
           spellcheck="false"
           type="search"
           value=""
@@ -159,8 +165,11 @@ describe('Autocomplete', () => {
     expect(container.querySelector('.ais-AutocompletePanel'))
       .toMatchInlineSnapshot(`
       <div
+        aria-labelledby="autocomplete:r0:input"
         class="ais-AutocompletePanel"
         hidden=""
+        id="autocomplete:r0:panel"
+        role="grid"
       >
         <div
           class="ais-AutocompletePanelLayout"
@@ -172,7 +181,10 @@ describe('Autocomplete', () => {
               class="ais-AutocompleteIndexList"
             >
               <li
+                aria-selected="false"
                 class="ais-AutocompleteIndexItem"
+                id="autocomplete:r0:item:indexName:0"
+                role="row"
               >
                 Item 1
               </li>
@@ -185,7 +197,10 @@ describe('Autocomplete', () => {
               class="ais-AutocompleteIndexList"
             >
               <li
+                aria-selected="false"
                 class="ais-AutocompleteIndexItem"
+                id="autocomplete:r0:item:indexName2:0"
+                role="row"
               >
                 hello
               </li>
@@ -234,8 +249,11 @@ describe('Autocomplete', () => {
     expect(container.querySelector('.ais-AutocompletePanel'))
       .toMatchInlineSnapshot(`
       <div
+        aria-labelledby="autocomplete:r1:input"
         class="ais-AutocompletePanel"
         hidden=""
+        id="autocomplete:r1:panel"
+        role="grid"
       >
         <div
           class="ais-AutocompletePanelLayout"
@@ -247,7 +265,10 @@ describe('Autocomplete', () => {
               class="ais-AutocompleteIndexList ais-AutocompleteSuggestionsList"
             >
               <li
+                aria-selected="false"
                 class="ais-AutocompleteIndexItem ais-AutocompleteSuggestionsItem"
+                id="autocomplete:r1:item:query_suggestions:0"
+                role="row"
               >
                 <div
                   class="ais-AutocompleteSuggestion"
@@ -256,7 +277,10 @@ describe('Autocomplete', () => {
                 </div>
               </li>
               <li
+                aria-selected="false"
                 class="ais-AutocompleteIndexItem ais-AutocompleteSuggestionsItem"
+                id="autocomplete:r1:item:query_suggestions:1"
+                role="row"
               >
                 <div
                   class="ais-AutocompleteSuggestion"
@@ -270,7 +294,7 @@ describe('Autocomplete', () => {
       </div>
     `);
 
-    userEvent.click(screen.getByRole('searchbox'));
+    userEvent.click(screen.getByRole('combobox'));
     userEvent.click(screen.getByText(/hello/i));
 
     await waitFor(() => {
