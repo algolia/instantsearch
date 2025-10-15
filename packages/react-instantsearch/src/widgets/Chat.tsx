@@ -100,14 +100,14 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     promptProps?: UserPromptProps;
     toggleButtonComponent?: ChatUiProps['toggleButtonComponent'];
     toggleButtonIconComponent?: ChatUiProps['toggleButtonProps']['toggleIconComponent'];
-    headerLayoutComponent?: ChatUiProps['headerComponent'];
+    headerComponent?: ChatUiProps['headerComponent'];
     headerTitleIconComponent?: ChatUiProps['headerProps']['titleIconComponent'];
     headerCloseIconComponent?: ChatUiProps['headerProps']['closeIconComponent'];
     headerMinimizeIconComponent?: ChatUiProps['headerProps']['minimizeIconComponent'];
     headerMaximizeIconComponent?: ChatUiProps['headerProps']['maximizeIconComponent'];
     messagesLoaderComponent?: ChatUiProps['messagesProps']['loaderComponent'];
     messagesErrorComponent?: ChatUiProps['messagesProps']['errorComponent'];
-    promptLayoutComponent?: ChatUiProps['promptComponent'];
+    promptComponent?: ChatUiProps['promptComponent'];
     promptHeaderComponent?: ChatUiProps['promptProps']['headerComponent'];
     promptFooterComponent?: ChatUiProps['promptProps']['footerComponent'];
     actionsComponent?: ChatUiProps['messagesProps']['actionsComponent'];
@@ -131,14 +131,14 @@ export function Chat<
   itemComponent,
   toggleButtonComponent,
   toggleButtonIconComponent,
-  headerLayoutComponent,
+  headerComponent,
   headerTitleIconComponent,
   headerCloseIconComponent,
   headerMinimizeIconComponent,
   headerMaximizeIconComponent,
   messagesLoaderComponent,
   messagesErrorComponent,
-  promptLayoutComponent,
+  promptComponent,
   promptHeaderComponent,
   promptFooterComponent,
   actionsComponent,
@@ -226,8 +226,8 @@ export function Chat<
       title={title}
       open={open}
       maximized={maximized}
-      headerComponent={headerLayoutComponent}
-      promptComponent={promptLayoutComponent}
+      headerComponent={headerComponent}
+      promptComponent={promptComponent}
       toggleButtonComponent={toggleButtonComponent}
       toggleButtonProps={{
         open,
