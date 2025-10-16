@@ -125,17 +125,19 @@ const RETAIN_ANIMATION_DURATION_MS = 350;
 
 let mouseDown = false;
 
-document?.addEventListener('mousedown', () => {
-  mouseDown = true;
-});
+if (typeof document !== 'undefined') {
+  document.addEventListener('mousedown', () => {
+    mouseDown = true;
+  });
 
-document?.addEventListener('mouseup', () => {
-  mouseDown = false;
-});
+  document.addEventListener('mouseup', () => {
+    mouseDown = false;
+  });
 
-document?.addEventListener('click', () => {
-  mouseDown = false;
-});
+  document.addEventListener('click', () => {
+    mouseDown = false;
+  });
+}
 
 export const createStickToBottom = (
   options: StickToBottomOptions = {}
