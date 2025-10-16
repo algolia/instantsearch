@@ -8,7 +8,8 @@ export type AutocompleteIndexProps<
   T = { objectID: string } & Record<string, unknown>
 > = {
   items: T[];
-  ItemComponent: (item: T) => JSX.Element;
+  onSelect: (item: T) => void;
+  ItemComponent: (props: { item: T; onSelect: () => void }) => JSX.Element;
   classNames?: Partial<AutocompleteIndexClassNames>;
 };
 
@@ -29,7 +30,7 @@ export type AutocompleteIndexClassNames = {
 
 export function createAutocompleteIndexComponent({ createElement }: Renderer) {
   return function AutocompleteIndex(userProps: AutocompleteIndexProps) {
-    const { items, ItemComponent, classNames = {} } = userProps;
+    const { items, ItemComponent, onSelect, classNames = {} } = userProps;
 
     return (
       <div className={cx('ais-AutocompleteIndex', classNames.root)}>
@@ -39,7 +40,7 @@ export function createAutocompleteIndexComponent({ createElement }: Renderer) {
               key={item.objectID}
               className={cx('ais-AutocompleteIndexItem', classNames.item)}
             >
-              <ItemComponent {...item} />
+              <ItemComponent item={item} onSelect={() => onSelect(item)} />
             </li>
           ))}
         </ol>

@@ -4,7 +4,6 @@ import {
   ArrowRightIconComponent,
   createButtonComponent,
 } from 'instantsearch-ui-components';
-import { SearchIndexToolType } from 'instantsearch.js/es/lib/chat';
 import React, { createElement } from 'react';
 
 import { Carousel } from '../../../components';
@@ -14,17 +13,18 @@ import type {
   Pragma,
   RecommendComponentProps,
   RecordWithObjectID,
-  UserClientSideTools,
+  UserClientSideTool,
 } from 'instantsearch-ui-components';
 import type { IndexUiState, IndexWidget } from 'instantsearch.js';
 import type { ComponentProps } from 'react';
 
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
 
-export function createSearchIndexTool<TObject extends RecordWithObjectID>(
+function createCarouselTool<TObject extends RecordWithObjectID>(
+  showViewAll: boolean,
   itemComponent?: ItemComponent<TObject>,
   getSearchPageURL?: (nextUiState: IndexUiState) => string
-): UserClientSideTools {
+): UserClientSideTool {
   const Button = createButtonComponent({
     createElement: createElement as Pragma,
   });
@@ -67,7 +67,7 @@ export function createSearchIndexTool<TObject extends RecordWithObjectID>(
         <HeaderComponent
           nbHits={output?.nbHits}
           query={input?.query}
-          hitsPerPage={input?.number_of_results}
+          hitsPerPage={items.length}
           setIndexUiState={setIndexUiState}
           indexUiState={indexUiState}
           getSearchPageURL={getSearchPageURL}
@@ -76,7 +76,7 @@ export function createSearchIndexTool<TObject extends RecordWithObjectID>(
         />
       );
     }, [
-      input?.number_of_results,
+      items.length,
       input?.query,
       output?.nbHits,
       setIndexUiState,
@@ -134,34 +134,38 @@ export function createSearchIndexTool<TObject extends RecordWithObjectID>(
               {nbHits > 1 ? 's' : ''}
             </div>
           )}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              if (!query) return;
+          {showViewAll && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                if (!query) return;
 
-              const nextUiState = { ...indexUiState, query };
+                const nextUiState = { ...indexUiState, query };
 
-              // If no main search page URL or we are on the search page, just update the state
-              if (
-                !getSearchPageURL ||
-                (getSearchPageURL &&
-                  new URL(getSearchPageURL(nextUiState)).pathname ===
-                    window.location.pathname)
-              ) {
-                setIndexUiState(nextUiState);
-                onClose();
-                return;
-              }
+                // If no main search page URL or we are on the search page, just update the state
+                if (
+                  !getSearchPageURL ||
+                  (getSearchPageURL &&
+                    new URL(getSearchPageURL(nextUiState)).pathname ===
+                      window.location.pathname)
+                ) {
+                  setIndexUiState(nextUiState);
+                  onClose();
+                  return;
+                }
 
-              // Navigate to different page
-              window.location.href = getSearchPageURL(nextUiState);
-            }}
-            className="ais-ChatToolSearchIndexCarouselHeaderViewAll"
-          >
-            View all
-            <ArrowRightIconComponent createElement={createElement as Pragma} />
-          </Button>
+                // Navigate to different page
+                window.location.href = getSearchPageURL(nextUiState);
+              }}
+              className="ais-ChatToolSearchIndexCarouselHeaderViewAll"
+            >
+              View all
+              <ArrowRightIconComponent
+                createElement={createElement as Pragma}
+              />
+            </Button>
+          )}
         </div>
 
         {(hitsPerPage ?? 0) > 2 && (
@@ -197,8 +201,8 @@ export function createSearchIndexTool<TObject extends RecordWithObjectID>(
   }
 
   return {
-    [SearchIndexToolType]: {
-      layoutComponent: SearchLayoutComponent,
-    },
+    layoutComponent: SearchLayoutComponent,
   };
 }
+
+export { createCarouselTool };
