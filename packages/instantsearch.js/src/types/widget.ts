@@ -195,6 +195,14 @@ type RecommendWidget<
   >;
 };
 
+type Parent = {
+  /**
+   * This get dynamically added by the `index` widget. If the widget has gone through
+   * addWidget, it will have a parent.
+   */
+  parent?: IndexWidget;
+};
+
 type RequiredWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
   /**
    * Identifier for connectors and widgets.
@@ -331,7 +339,8 @@ export type Widget<
     $$type: string;
   }
 > = Expand<
-  RequiredWidgetLifeCycle<TWidgetDescription> &
+  Parent &
+    RequiredWidgetLifeCycle<TWidgetDescription> &
     WidgetType<TWidgetDescription> &
     UiStateLifeCycle<TWidgetDescription> &
     RenderStateLifeCycle<TWidgetDescription>

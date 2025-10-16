@@ -482,6 +482,64 @@ search.addWidgets([
       });
     });
 
+    test('returns undefined for currentRefinement when future.undefinedEmptyQuery is true and no query', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createAutocomplete = connectAutocomplete(renderFn, unmountFn);
+      const autocomplete = createAutocomplete({
+        future: { undefinedEmptyQuery: true },
+      });
+
+      const renderState1 = autocomplete.getRenderState({}, createInitOptions());
+
+      expect(renderState1.autocomplete).toEqual({
+        currentRefinement: undefined,
+        indices: [],
+        refine: expect.any(Function),
+        widgetParams: { future: { undefinedEmptyQuery: true } },
+      });
+
+      autocomplete.init!(createInitOptions());
+
+      const renderState2 = autocomplete.getRenderState(
+        {},
+        createRenderOptions()
+      );
+
+      expect(renderState2.autocomplete).toEqual({
+        currentRefinement: undefined,
+        indices: expect.any(Array),
+        refine: expect.any(Function),
+        widgetParams: { future: { undefinedEmptyQuery: true } },
+      });
+    });
+
+    test('returns the query for currentRefinement when future.undefinedEmptyQuery is true and query is set', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createAutocomplete = connectAutocomplete(renderFn, unmountFn);
+      const autocomplete = createAutocomplete({
+        future: { undefinedEmptyQuery: true },
+      });
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        query: 'query',
+      });
+
+      autocomplete.init!(createInitOptions());
+
+      const renderState = autocomplete.getRenderState(
+        {},
+        createRenderOptions({ helper })
+      );
+
+      expect(renderState.autocomplete).toEqual({
+        currentRefinement: 'query',
+        indices: expect.any(Array),
+        refine: expect.any(Function),
+        widgetParams: { future: { undefinedEmptyQuery: true } },
+      });
+    });
+
     test('returns the render state with a query', () => {
       const renderFn = jest.fn();
       const unmountFn = jest.fn();
@@ -538,6 +596,72 @@ search.addWidgets([
         widgetParams: {},
       });
     });
+    test('returns undefined for currentRefinement when future.undefinedEmptyQuery is true and no query', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createAutocomplete = connectAutocomplete(renderFn, unmountFn);
+      const autocomplete = createAutocomplete({
+        future: { undefinedEmptyQuery: true },
+      });
+
+      const renderState1 = autocomplete.getWidgetRenderState(
+        createInitOptions()
+      );
+
+      expect(renderState1).toEqual({
+        currentRefinement: undefined,
+        indices: [],
+        refine: expect.any(Function),
+        widgetParams: { future: { undefinedEmptyQuery: true } },
+      });
+
+      autocomplete.init!(createInitOptions());
+
+      const renderState2 = autocomplete.getWidgetRenderState(
+        createRenderOptions()
+      );
+
+      expect(renderState2).toEqual({
+        currentRefinement: undefined,
+        indices: expect.any(Array),
+        refine: expect.any(Function),
+        widgetParams: { future: { undefinedEmptyQuery: true } },
+      });
+    });
+
+    test('returns the query for currentRefinement when future.undefinedEmptyQuery is true and query is set', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createAutocomplete = connectAutocomplete(renderFn, unmountFn);
+      const autocomplete = createAutocomplete({
+        future: { undefinedEmptyQuery: true },
+      });
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        query: 'query',
+      });
+
+      autocomplete.init!(createInitOptions());
+
+      const renderState = autocomplete.getWidgetRenderState(
+        createRenderOptions({ helper })
+      );
+
+      const hits = Object.assign([], { __escaped: true });
+
+      expect(renderState).toEqual({
+        currentRefinement: 'query',
+        indices: [
+          expect.objectContaining({
+            results: expect.objectContaining({
+              hits,
+            }),
+            sendEvent: expect.any(Function),
+          }),
+        ],
+        refine: expect.any(Function),
+        widgetParams: { future: { undefinedEmptyQuery: true } },
+      });
+    });
 
     test('returns the widget render state with a query', () => {
       const renderFn = jest.fn();
@@ -576,6 +700,51 @@ search.addWidgets([
     test('should give back the object unmodified if the default value is selected', () => {
       const [widget, helper] = getInitializedWidget();
       const uiStateBefore = {};
+      const uiStateAfter = widget.getWidgetUiState(uiStateBefore, {
+        searchParameters: helper.state,
+        helper,
+      });
+      expect(uiStateAfter).toBe(uiStateBefore);
+    });
+    test('should give back the object unmodified if the default value is selected and future.undefinedEmptyQuery is true', () => {
+      const [widget, helper] = getInitializedWidget({
+        future: { undefinedEmptyQuery: true },
+      });
+      const uiStateBefore = {};
+      const uiStateAfter = widget.getWidgetUiState(uiStateBefore, {
+        searchParameters: helper.state,
+        helper,
+      });
+      expect(uiStateAfter).toBe(uiStateBefore);
+    });
+
+    test('should add an entry equal to the refinement when future.undefinedEmptyQuery is true', () => {
+      const [widget, helper, refine] = getInitializedWidget({
+        future: { undefinedEmptyQuery: true },
+      });
+      refine('some query');
+      const uiStateBefore = {};
+      const uiStateAfter = widget.getWidgetUiState(uiStateBefore, {
+        searchParameters: helper.state,
+        helper,
+      });
+      expect(uiStateAfter).toEqual({
+        query: 'some query',
+      });
+    });
+
+    test('should give back the same instance if the value is already in the uiState and future.undefinedEmptyQuery is true', () => {
+      const [widget, helper, refine] = getInitializedWidget({
+        future: { undefinedEmptyQuery: true },
+      });
+      refine('query');
+      const uiStateBefore = widget.getWidgetUiState(
+        {},
+        {
+          searchParameters: helper.state,
+          helper,
+        }
+      );
       const uiStateAfter = widget.getWidgetUiState(uiStateBefore, {
         searchParameters: helper.state,
         helper,
@@ -634,6 +803,55 @@ search.addWidgets([
         new SearchParameters({
           index: '',
           query: 'Apple',
+          ...TAG_PLACEHOLDER,
+        })
+      );
+    });
+    test('returns the `SearchParameters` with the value from `uiState` and future.undefinedEmptyQuery is true', () => {
+      const [widget, helper] = getInitializedWidget({
+        future: { undefinedEmptyQuery: true },
+      });
+
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          index: '',
+        })
+      );
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {
+          query: 'Apple',
+        },
+      });
+
+      expect(actual).toEqual(
+        new SearchParameters({
+          index: '',
+          query: 'Apple',
+          ...TAG_PLACEHOLDER,
+        })
+      );
+    });
+
+    test('returns the `SearchParameters` with the default value and future.undefinedEmptyQuery is true', () => {
+      const [widget, helper] = getInitializedWidget({
+        future: { undefinedEmptyQuery: true },
+      });
+
+      expect(helper.state).toEqual(
+        new SearchParameters({
+          index: '',
+        })
+      );
+
+      const actual = widget.getWidgetSearchParameters(helper.state, {
+        uiState: {},
+      });
+
+      expect(actual).toEqual(
+        new SearchParameters({
+          index: '',
+          query: undefined,
           ...TAG_PLACEHOLDER,
         })
       );

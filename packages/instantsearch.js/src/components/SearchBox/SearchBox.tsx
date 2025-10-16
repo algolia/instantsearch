@@ -31,8 +31,9 @@ type SearchBoxProps = {
   isSearchStalled?: boolean;
   disabled?: boolean;
   ariaLabel?: string;
-  onChange?: (event: Event) => void;
-  onSubmit?: (event: Event) => void;
+  onChange?: (event: InputEvent) => void;
+  onSubmit?: (event: SubmitEvent) => void;
+  onFocus?: (event: FocusEvent) => void;
   onReset?: (event: Event) => void;
 };
 
@@ -50,6 +51,7 @@ const defaultProps = {
   onChange: noop,
   onSubmit: noop,
   onReset: noop,
+  onFocus: noop,
   refine: noop,
 };
 
@@ -151,7 +153,8 @@ class SearchBox extends Component<
     this.setState({ focused: false });
   };
 
-  private onFocus = () => {
+  private onFocus = (event: FocusEvent) => {
+    this.props.onFocus(event);
     this.setState({ focused: true });
   };
 

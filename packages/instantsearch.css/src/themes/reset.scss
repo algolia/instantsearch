@@ -130,6 +130,19 @@
   }
 }
 
+.ais-Autocomplete {
+  width: 15em;
+  position: relative;
+}
+
+.ais-Autocomplete-panel {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: white;
+}
+
 // Reset RangeSlider
 
 .ais-RangeSlider {

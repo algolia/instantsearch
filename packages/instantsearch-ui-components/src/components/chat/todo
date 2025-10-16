@@ -1,0 +1,8 @@
+- include carousel in chat styles
+- border box in chat styles
+- transformItems for messages
+- add a graceful default tool (no rendering, "no tool" output)
+- default prompt from URL (auto opens)
+- remove ComponentProps from layout template types
+- match the agentid before getting the saved text
+- toggle button: add translation and icon changeable
