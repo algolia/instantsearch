@@ -111,7 +111,6 @@ export function useChat<TUiMessage extends UIMessage = UIMessage>({
     }
     return {
       ...options,
-      id: options.agentId,
       transport,
     };
   }, [options, transport]);
