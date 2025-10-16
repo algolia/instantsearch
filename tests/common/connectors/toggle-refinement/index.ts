@@ -12,13 +12,13 @@ export type ToggleRefinementConnectorSetup = TestSetup<{
 
 export function createToggleRefinementConnectorTests(
   setup: ToggleRefinementConnectorSetup,
-  { act = fakeAct, skippedTests = {} }: TestOptions = {}
+  { act = fakeAct, skippedTests = {}, flavor = 'javascript' }: TestOptions = {}
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
   describe('ToggleRefinement connector common tests', () => {
-    createRoutingTests(setup, { act, skippedTests });
+    createRoutingTests(setup, { act, skippedTests, flavor });
   });
 }
