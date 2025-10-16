@@ -8,9 +8,11 @@ export type AutocompleteIndexProps<
   T = { objectID: string } & Record<string, unknown>
 > = {
   items: T[];
-  onSelect: (item: T) => void;
   ItemComponent: (props: { item: T; onSelect: () => void }) => JSX.Element;
-  getItemProps: (item: T, index: number) => ComponentProps<'li'>;
+  getItemProps: (
+    item: T,
+    index: number
+  ) => Omit<ComponentProps<'li'>, 'onSelect'> & { onSelect: () => void };
   classNames?: Partial<AutocompleteIndexClassNames>;
 };
 
@@ -31,19 +33,16 @@ export type AutocompleteIndexClassNames = {
 
 export function createAutocompleteIndexComponent({ createElement }: Renderer) {
   return function AutocompleteIndex(userProps: AutocompleteIndexProps) {
-    const {
-      items,
-      ItemComponent,
-      getItemProps,
-      onSelect,
-      classNames = {},
-    } = userProps;
+    const { items, ItemComponent, getItemProps, classNames = {} } = userProps;
 
     return (
       <div className={cx('ais-AutocompleteIndex', classNames.root)}>
         <ol className={cx('ais-AutocompleteIndexList', classNames.list)}>
           {items.map((item, index) => {
-            const { className, ...itemProps } = getItemProps(item, index);
+            const { className, onSelect, ...itemProps } = getItemProps(
+              item,
+              index
+            );
             return (
               <li
                 key={item.objectID}
@@ -54,7 +53,7 @@ export function createAutocompleteIndexComponent({ createElement }: Renderer) {
                   className
                 )}
               >
-                <ItemComponent item={item} onSelect={() => onSelect(item)} />
+                <ItemComponent item={item} onSelect={onSelect} />
               </li>
             );
           })}

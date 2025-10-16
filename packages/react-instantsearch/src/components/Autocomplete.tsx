@@ -6,12 +6,7 @@ import {
   cx,
 } from 'instantsearch-ui-components';
 import React, { createElement, Fragment } from 'react';
-import {
-  Index,
-  useHits,
-  useInstantSearch,
-  useSearchBox,
-} from 'react-instantsearch-core';
+import { Index, useHits, useSearchBox } from 'react-instantsearch-core';
 
 import { SearchBox } from '../widgets/SearchBox';
 
@@ -80,16 +75,6 @@ export function EXPERIMENTAL_Autocomplete({
   indices: userIndices = [],
   showSuggestions,
 }: AutocompleteProps) {
-  const {
-    getIndexProps,
-    getInputProps,
-    getItemProps,
-    getPanelProps,
-    getRootProps,
-    updateStore,
-  } = useAutocomplete();
-  const { setIndexUiState } = useInstantSearch();
-
   const indices = [...userIndices];
   if (showSuggestions?.indexName) {
     indices.unshift({
@@ -116,6 +101,14 @@ export function EXPERIMENTAL_Autocomplete({
     });
   }
 
+  const {
+    getIndexProps,
+    getInputProps,
+    getItemProps,
+    getPanelProps,
+    getRootProps,
+  } = useAutocomplete({ indices });
+
   return (
     <Fragment>
       <VirtualSearchBox />
@@ -127,11 +120,7 @@ export function EXPERIMENTAL_Autocomplete({
               <Index key={index.indexName} indexName={index.indexName}>
                 <AutocompleteIndexComponent
                   {...index}
-                  setQuery={(query) => {
-                    setIndexUiState((state) => ({ ...state, query }));
-                  }}
                   getItemProps={getItemProps}
-                  updateStore={updateStore}
                 />
               </Index>
             ))}
@@ -145,30 +134,10 @@ export function EXPERIMENTAL_Autocomplete({
 function AutocompleteIndexComponent({
   indexName,
   itemComponent: ItemComponent,
-  onSelect: userOnSelect,
   getItemProps,
-  getQuery,
-  getURL,
-  setQuery,
-  updateStore,
   classNames,
-}: IndexConfig &
-  Pick<ReturnType<typeof useAutocomplete>, 'getItemProps' | 'updateStore'> & {
-    setQuery: (query: string) => void;
-  }) {
+}: IndexConfig & Pick<ReturnType<typeof useAutocomplete>, 'getItemProps'>) {
   const { items } = useHits();
-  const onSelect: Parameters<typeof AutocompleteIndex>['0']['onSelect'] = (
-    item
-  ) => {
-    userOnSelect?.({
-      item,
-      getQuery: () => getQuery?.(item) || '',
-      getURL: () => getURL?.(item) || '',
-      setQuery,
-    });
-  };
-
-  updateStore({ indexName, items, onSelect, getQuery, getURL });
 
   return (
     <AutocompleteIndex
@@ -179,7 +148,6 @@ function AutocompleteIndexComponent({
         __indexName: indexName,
       }))}
       getItemProps={getItemProps}
-      onSelect={onSelect}
       classNames={classNames}
     />
   );

@@ -1,6 +1,8 @@
+import { connectAutocomplete } from 'instantsearch.js/es/connectors';
 import { useId, useLayoutEffect, useRef, useState } from 'react';
-import { useInstantSearch } from 'react-instantsearch-core';
+import { useConnector, useInstantSearch } from 'react-instantsearch-core';
 
+import type { BaseHit, Hit } from 'instantsearch.js';
 import type { ComponentProps } from 'react';
 
 type AutocompleteGetInputProps = () => Pick<
@@ -25,9 +27,11 @@ type AutocompleteGetItemProps = (
   } & Record<string, unknown>,
   index: number
 ) => Pick<
-  ComponentProps<'div'>,
+  ComponentProps<'li'>,
   'id' | 'role' | 'aria-selected' | 'onMouseEnter' | 'onMouseLeave'
->;
+> & {
+  onSelect: () => void;
+};
 
 type AutocompleteGetPanelProps = () => Pick<
   ComponentProps<'div'>,
@@ -36,15 +40,45 @@ type AutocompleteGetPanelProps = () => Pick<
 
 type AutocompleteGetRootProps = () => Pick<ComponentProps<'div'>, 'ref'>;
 
-type AutocompleteUpdateStoreParams = {
-  indexName: string;
-  items: Array<{ objectID: string } & Record<string, unknown>>;
-  onSelect: (item: { objectID: string } & Record<string, unknown>) => void;
-  getQuery?: (item: { objectID: string } & Record<string, unknown>) => string;
-  getURL?: (item: { objectID: string } & Record<string, unknown>) => string;
+type AutocompleteStore<TItem extends Hit<BaseHit> = Hit<BaseHit> | any> =
+  Record<
+    string,
+    {
+      item: TItem;
+      getQuery: () => string;
+      getURL: () => string;
+      onSelect?: (params: {
+        item: TItem;
+        getQuery: () => string;
+        getURL: () => string;
+        setQuery: (query: string) => void;
+      }) => void;
+    }
+  >;
+
+type UseAutocompleteParams<TItem extends Hit<BaseHit> = Hit<BaseHit> | any> = {
+  indices: Array<{
+    indexName: string;
+    getQuery?: (item: TItem) => string;
+    getURL?: (item: TItem) => string;
+    onSelect?: (params: {
+      item: TItem;
+      getQuery: () => string;
+      getURL: () => string;
+      setQuery: (query: string) => void;
+    }) => void;
+  }>;
 };
 
-export const useAutocomplete = () => {
+export const useAutocomplete = <
+  TItem extends Hit<BaseHit> = Hit<BaseHit> | any
+>({
+  indices,
+}: UseAutocompleteParams<TItem>) => {
+  const { indices: connectorIndices, refine } = useConnector(
+    connectAutocomplete,
+    {}
+  );
   const { setUiState } = useInstantSearch();
 
   const getElementId = createGetElementId(useId());
@@ -55,14 +89,29 @@ export const useAutocomplete = () => {
     undefined
   );
 
-  const store = new Map<
-    string,
-    {
-      item: AutocompleteUpdateStoreParams['items'][0];
-      getQuery: () => string;
-      getURL: () => string;
-    } & Omit<AutocompleteUpdateStoreParams, 'items' | 'getQuery' | 'getURL'>
-  >();
+  const store = indices.reduce<AutocompleteStore<TItem>>((storeAcc, index) => {
+    const items =
+      connectorIndices
+        .find(({ indexName }) => index.indexName === indexName)
+        ?.hits.reduce(
+          (itemsAcc, item, i) => ({
+            ...itemsAcc,
+            [getElementId('item', index.indexName, i)]: {
+              item,
+              indexName: index.indexName,
+              getQuery: () => index.getQuery?.(item as TItem) || '',
+              getURL: () => index.getURL?.(item as TItem) || '',
+              onSelect: index.onSelect,
+            },
+          }),
+          {}
+        ) || {};
+
+    return {
+      ...storeAcc,
+      ...items,
+    };
+  }, {});
 
   useLayoutEffect(() => {
     const onBodyClick = (event: MouseEvent) => {
@@ -114,6 +163,26 @@ export const useAutocomplete = () => {
     }
   };
 
+  const submit = () => {
+    setIsOpen(false);
+    if (activeDescendent && store[activeDescendent]) {
+      const { item, onSelect, getQuery, getURL } = store[activeDescendent];
+      onSelect?.({
+        item,
+        getQuery,
+        getURL,
+        setQuery(query) {
+          refine(query);
+        },
+      });
+      setUiState((uiState) => ({
+        ...uiState,
+        [getElementId('index')]: { query: getQuery() },
+      }));
+      setActiveDescendent(undefined);
+    }
+  };
+
   const getInputProps: AutocompleteGetInputProps = () => ({
     id: getElementId('input'),
     role: 'combobox',
@@ -138,16 +207,7 @@ export const useAutocomplete = () => {
           event.preventDefault();
           break;
         case 'Enter': {
-          setIsOpen(false);
-          if (activeDescendent && store.has(activeDescendent)) {
-            const { item, onSelect, getQuery } = store.get(activeDescendent)!;
-            onSelect(item);
-            setUiState((uiState) => ({
-              ...uiState,
-              [getElementId('index')]: { query: getQuery() },
-            }));
-            setActiveDescendent(undefined);
-          }
+          submit();
           break;
         }
         case 'Tab':
@@ -189,6 +249,7 @@ export const useAutocomplete = () => {
       'aria-selected': id === activeDescendent,
       onMouseEnter: () => setActiveDescendent(id),
       onMouseLeave: () => setActiveDescendent(undefined),
+      onSelect: () => submit(),
     };
   };
 
@@ -204,33 +265,12 @@ export const useAutocomplete = () => {
     ref: rootRef,
   });
 
-  const updateStore = ({
-    indexName,
-    items,
-    getQuery,
-    getURL,
-    onSelect,
-  }: AutocompleteUpdateStoreParams) => {
-    items.forEach((item, index) => {
-      store.set(getElementId('item', indexName, index), {
-        item,
-        indexName,
-        getQuery: () => getQuery?.(item) || '',
-        getURL: () => getURL?.(item) || '',
-        onSelect,
-      });
-    });
-  };
-
   return {
-    isOpen,
-    setIsOpen,
     getIndexProps,
     getInputProps,
     getItemProps,
     getPanelProps,
     getRootProps,
-    updateStore,
   };
 };
 
