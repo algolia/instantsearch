@@ -1,6 +1,8 @@
 import { fakeAct, skippableDescribe } from '../../common';
 
 import { createOptionsTests } from './options';
+import { createTemplatesTests } from './templates';
+import { createTranslationsTests } from './translations';
 
 import type { TestOptions, TestSetup } from '../../common';
 import type { ChatConnectorParams } from 'instantsearch.js/es/connectors/chat/connectChat';
@@ -39,11 +41,9 @@ export function createChatWidgetTests(
   });
 
   skippableDescribe('Chat widget common tests', skippedTests, () => {
-    createOptionsTests(setup, {
-      act,
-      skippedTests,
-      flavor,
-    });
+    createOptionsTests(setup, { act, skippedTests, flavor });
+    createTemplatesTests(setup, { act, skippedTests, flavor });
+    createTranslationsTests(setup, { act, skippedTests, flavor });
   });
 }
 createChatWidgetTests.flavored = true;
