@@ -26,15 +26,19 @@ const search = instantsearch({
 });
 
 const productItemTemplate = (item, { html }) => html`
-  <div>
-    <article>
-      <div>
-        <img src="${item.image}" />
-        <h2>${item.name}</h2>
-      </div>
-      <a href="/products.html?pid=${item.objectID}">See product</a>
-    </article>
-  </div>
+  <article class="ais-Carousel-hit">
+    <div class="ais-Carousel-hit-image">
+      <img src="${item.image}" />
+    </div>
+    <h2 class="ais-Carousel-hit-title">
+      <a
+        href="/products.html?pid=${item.objectID}"
+        class="ais-Carousel-hit-link"
+      >
+        ${item.name}
+      </a>
+    </h2>
+  </article>
 `;
 
 search.addWidgets([

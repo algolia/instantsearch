@@ -4,6 +4,7 @@ import {
   ArrowRightIconComponent,
   ChevronLeftIconComponent,
   ChevronRightIconComponent,
+  createButtonComponent,
   createChatComponent,
 } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
@@ -11,7 +12,7 @@ import { useMemo } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
 import connectChat from '../../connectors/chat/connectChat';
-import { SearchIndexToolType } from '../../lib/chat';
+import { SearchIndexToolType, RecommendToolType } from '../../lib/chat';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
@@ -36,7 +37,6 @@ import type {
   IndexWidget,
 } from '../../types';
 import type {
-  AddToolResultWithOutput,
   ChatClassNames,
   ChatHeaderProps,
   ChatHeaderTranslations,
@@ -47,6 +47,7 @@ import type {
   ChatMessagesTranslations,
   ChatPromptProps,
   ChatPromptTranslations,
+  ChatToggleButtonProps,
   ClientSideToolComponentProps,
   ClientSideTools,
   RecordWithObjectID,
@@ -58,7 +59,7 @@ const withUsage = createDocumentationMessageGenerator({ name: 'chat' });
 
 const Chat = createChatComponent({ createElement: h, Fragment });
 
-export { SearchIndexToolType };
+export { SearchIndexToolType, RecommendToolType };
 
 function getDefinedProperties<T extends object>(obj: T): Partial<T> {
   return Object.fromEntries(
@@ -66,12 +67,17 @@ function getDefinedProperties<T extends object>(obj: T): Partial<T> {
   ) as Partial<T>;
 }
 
-function createSearchIndexTool<
+function createCarouselTool<
   THit extends RecordWithObjectID = RecordWithObjectID
 >(
+  showViewAll: boolean,
   templates: ChatTemplates<THit>,
   getSearchPageURL?: (nextUiState: IndexUiState) => string
-): UserClientSideToolsWithTemplate {
+): UserClientSideToolWithTemplate {
+  const Button = createButtonComponent({
+    createElement: h,
+  });
+
   function SearchLayoutComponent({
     message,
     indexUiState,
@@ -110,7 +116,7 @@ function createSearchIndexTool<
         <HeaderComponent
           nbHits={output?.nbHits}
           query={input?.query}
-          hitsPerPage={input?.number_of_results}
+          hitsPerPage={items.length}
           setIndexUiState={setIndexUiState}
           indexUiState={indexUiState}
           getSearchPageURL={getSearchPageURL}
@@ -119,7 +125,7 @@ function createSearchIndexTool<
         />
       );
     }, [
-      input?.number_of_results,
+      items.length,
       input?.query,
       output?.nbHits,
       setIndexUiState,
@@ -187,51 +193,60 @@ function createSearchIndexTool<
               {nbHits > 1 ? 's' : ''}
             </div>
           )}
-          <button
-            type="button"
-            onClick={() => {
-              if (!query) return;
+          {showViewAll && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                if (!query) return;
 
-              const nextUiState = { ...indexUiState, query };
+                const nextUiState = { ...indexUiState, query };
 
-              // If no main search page URL or we are on the search page, just update the state
-              if (
-                !getSearchPageURL ||
-                (getSearchPageURL &&
-                  new URL(getSearchPageURL(nextUiState)).pathname ===
-                    window.location.pathname)
-              ) {
-                setIndexUiState(nextUiState);
-                onClose();
-                return;
-              }
+                // If no main search page URL or we are on the search page, just update the state
+                if (
+                  !getSearchPageURL ||
+                  (getSearchPageURL &&
+                    new URL(getSearchPageURL(nextUiState)).pathname ===
+                      window.location.pathname)
+                ) {
+                  setIndexUiState(nextUiState);
+                  onClose();
+                  return;
+                }
 
-              // Navigate to different page
-              window.location.href = getSearchPageURL(nextUiState);
-            }}
-            className="ais-ChatToolSearchIndexCarouselHeaderViewAll"
-          >
-            View all
-            <ArrowRightIconComponent createElement={h} />
-          </button>
+                // Navigate to different page
+                window.location.href = getSearchPageURL(nextUiState);
+              }}
+              className="ais-ChatToolSearchIndexCarouselHeaderViewAll"
+            >
+              View all
+              <ArrowRightIconComponent createElement={h} />
+            </Button>
+          )}
         </div>
 
         {(hitsPerPage ?? 0) > 2 && (
           <div className="ais-ChatToolSearchIndexCarouselHeaderScrollButtons">
-            <button
+            <Button
+              variant="outline"
+              size="sm"
+              iconOnly
               onClick={scrollLeft}
               disabled={!canScrollLeft}
               className="ais-ChatToolSearchIndexCarouselHeaderScrollButton"
             >
               <ChevronLeftIconComponent createElement={h} />
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              iconOnly
               onClick={scrollRight}
               disabled={!canScrollRight}
               className="ais-ChatToolSearchIndexCarouselHeaderScrollButton"
             >
               <ChevronRightIconComponent createElement={h} />
-            </button>
+            </Button>
           </div>
         )}
       </div>
@@ -239,9 +254,7 @@ function createSearchIndexTool<
   }
 
   return {
-    [SearchIndexToolType]: {
-      templates: { layout: SearchLayoutComponent },
-    },
+    templates: { layout: SearchLayoutComponent },
   };
 }
 
@@ -251,7 +264,14 @@ function createDefaultTools<
   templates: ChatTemplates<THit>,
   getSearchPageURL?: (nextUiState: IndexUiState) => string
 ): UserClientSideToolsWithTemplate {
-  return { ...createSearchIndexTool(templates, getSearchPageURL) };
+  return {
+    [SearchIndexToolType]: createCarouselTool(
+      true,
+      templates,
+      getSearchPageURL
+    ),
+    [RecommendToolType]: createCarouselTool(false, templates, getSearchPageURL),
+  };
 }
 
 const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
@@ -270,6 +290,8 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   tools: UserClientSideToolsWithTemplate;
 }): Renderer<ChatRenderState, Partial<ChatWidgetParams>> => {
   const state = createLocalState();
+  const promptRef = { current: null as HTMLTextAreaElement | null };
+
   return (props, isFirstRendering) => {
     const {
       indexUiState,
@@ -493,6 +515,38 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         }
       : undefined;
 
+    const toggleButtonTemplateProps = prepareTemplateProps({
+      defaultTemplates: {} as unknown as NonNullable<
+        Required<ChatTemplates<THit>['toggleButton']>
+      >,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates: templates.toggleButton,
+    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    const toggleButtonLayoutComponent = templates.toggleButton?.layout
+      ? (toggleButtonProps: ChatToggleButtonProps) => {
+          return (
+            <TemplateComponent
+              {...toggleButtonTemplateProps}
+              templateKey="layout"
+              rootTagName="button"
+              data={toggleButtonProps}
+            />
+          );
+        }
+      : undefined;
+    const toggleButtonIconComponent = templates.toggleButton?.icon
+      ? ({ isOpen }: { isOpen: boolean }) => {
+          return (
+            <TemplateComponent
+              {...toggleButtonTemplateProps}
+              templateKey="icon"
+              rootTagName="span"
+              data={{ isOpen }}
+            />
+          );
+        }
+      : undefined;
+
     state.subscribe(rerender);
 
     function rerender() {
@@ -512,7 +566,12 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           classNames={cssClasses}
           open={open}
           maximized={maximized}
-          toggleButtonProps={{ open, onClick: () => setOpen(!open) }}
+          toggleButtonComponent={toggleButtonLayoutComponent}
+          toggleButtonProps={{
+            open,
+            onClick: () => setOpen(!open),
+            toggleIconComponent: toggleButtonIconComponent,
+          }}
           headerComponent={headerLayoutComponent}
           promptComponent={promptLayoutComponent}
           headerProps={{
@@ -545,6 +604,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
             translations: messagesTranslations,
           }}
           promptProps={{
+            promptRef,
             status,
             value: input,
             onInput: (event) => {
@@ -716,6 +776,20 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
     }>;
 
     /**
+     * Templates to use for the toggle button.
+     */
+    toggleButton: Partial<{
+      /**
+       * Template to use for the toggle button layout.
+       */
+      layout: Template<ChatToggleButtonProps>;
+      /**
+       * Template to use for the toggle button icon.
+       */
+      icon: Template<{ isOpen: boolean }>;
+    }>;
+
+    /**
      * Template to use for the message actions.
      */
     actions: Template<{
@@ -806,29 +880,12 @@ export default (function chat<
     render(null, containerNode)
   );
 
-  const { chatInstance, ...rest } = makeWidget({
-    resume,
-    ...options,
-    onToolCall: ({ toolCall }) => {
-      const tool = tools[toolCall.toolName];
-
-      if (tool && tool.onToolCall) {
-        const scopedAddToolResult: AddToolResultWithOutput = ({ output }) => {
-          return Promise.resolve(
-            chatInstance.addToolResult({
-              output,
-              tool: toolCall.toolName,
-              toolCallId: toolCall.toolCallId,
-            })
-          );
-        };
-        tool.onToolCall({ ...toolCall, addToolResult: scopedAddToolResult });
-      }
-    },
-  });
-
   return {
-    ...rest,
+    ...makeWidget({
+      resume,
+      tools,
+      ...options,
+    }),
     $$widgetType: 'ais.chat',
   };
 } satisfies ChatWidget);

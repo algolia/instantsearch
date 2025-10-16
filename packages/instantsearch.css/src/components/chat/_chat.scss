@@ -59,6 +59,10 @@
   }
 }
 
+.ais-Chat-toggleButtonWrapper {
+  pointer-events: auto;
+}
+
 @media (max-width: variables.$ais-chat-breakpoint) {
   .ais-Chat {
     inset: 0;

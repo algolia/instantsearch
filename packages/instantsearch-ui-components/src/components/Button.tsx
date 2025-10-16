@@ -6,7 +6,7 @@ import type { ComponentChildren, ComponentProps, Renderer } from '../types';
 export type ButtonVariant = 'primary' | 'ghost' | 'outline';
 export type ButtonSize = 'sm' | 'md';
 
-export type ButtonProps = ComponentProps<'button'> & {
+export type ButtonProps = Omit<ComponentProps<'button'>, 'children'> & {
   /**
    * The button variant
    * @default 'primary'

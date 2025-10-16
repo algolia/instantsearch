@@ -139,18 +139,6 @@ if (typeof document !== 'undefined') {
   });
 }
 
-export interface StickToBottomInstance {
-  setScrollElement: (element: HTMLElement | null) => void;
-  setContentElement: (element: HTMLElement | null) => void;
-  scrollToBottom: ScrollToBottom;
-  stopScroll: StopScroll;
-  isAtBottom: boolean;
-  isNearBottom: boolean;
-  escapedFromLock: boolean;
-  state: StickToBottomState;
-  destroy: () => void;
-}
-
 export const createStickToBottom = (
   options: StickToBottomOptions = {}
 ): StickToBottomInstance => {
@@ -159,6 +147,30 @@ export const createStickToBottom = (
   let escapedFromLock = false;
   let isAtBottom = options.initial !== false;
   let isNearBottom = false;
+
+  const notifyIsAtBottomChange = (newIsAtBottom: boolean) => {
+    if (options.onIsAtBottomChange) {
+      options.onIsAtBottomChange(newIsAtBottom);
+    }
+  };
+
+  const isSelecting = () => {
+    if (!mouseDown) {
+      return false;
+    }
+
+    const selection = window.getSelection();
+    if (!selection || !selection.rangeCount) {
+      return false;
+    }
+
+    const range = selection.getRangeAt(0);
+    return (
+      (scrollElement &&
+        range.commonAncestorContainer.contains(scrollElement)) ||
+      (scrollElement && scrollElement.contains(range.commonAncestorContainer))
+    );
+  };
 
   let lastCalculation:
     | { targetScrollTop: number; calculatedScrollTop: number }
@@ -232,37 +244,15 @@ export const createStickToBottom = (
     },
   };
 
-  const isSelecting = (): boolean => {
-    if (!mouseDown) {
-      return false;
-    }
-
-    const selection = window.getSelection();
-    if (!selection || !selection.rangeCount) {
-      return false;
-    }
-
-    const range = selection.getRangeAt(0);
-    return (
-      range.commonAncestorContainer.contains(scrollElement) ||
-      scrollElement?.contains(range.commonAncestorContainer) ||
-      false
-    );
+  const setIsAtBottom = (value: boolean) => {
+    isAtBottom = value;
+    state.isAtBottom = value;
+    notifyIsAtBottomChange(value || isNearBottom);
   };
 
-  const setIsAtBottom = (newIsAtBottom: boolean): void => {
-    state.isAtBottom = newIsAtBottom;
-    isAtBottom = newIsAtBottom;
-    options.onIsAtBottomChange?.(newIsAtBottom);
-  };
-
-  const setEscapedFromLock = (escaped: boolean): void => {
-    state.escapedFromLock = escaped;
-    escapedFromLock = escaped;
-  };
-
-  const setIsNearBottom = (newIsNearBottom: boolean): void => {
-    isNearBottom = newIsNearBottom;
+  const setEscapedFromLock = (value: boolean) => {
+    escapedFromLock = value;
+    state.escapedFromLock = value;
   };
 
   const scrollToBottom: ScrollToBottom = (scrollOptions = {}) => {
@@ -295,7 +285,9 @@ export const createStickToBottom = (
     }
 
     const next = (): Promise<boolean> => {
-      const promise = new Promise(requestAnimationFrame).then(() => {
+      const promise = new Promise<void>((resolve) =>
+        requestAnimationFrame(() => resolve())
+      ).then(() => {
         if (!state.isAtBottom) {
           state.animation = undefined;
 
@@ -306,7 +298,11 @@ export const createStickToBottom = (
         const tick = performance.now();
         const tickDelta =
           (tick - (state.lastTick ?? tick)) / SIXTY_FPS_INTERVAL_MS;
-        state.animation ||= { behavior, promise, ignoreEscapes };
+        state.animation = state.animation || {
+          behavior,
+          promise,
+          ignoreEscapes,
+        };
 
         if (state.animation.behavior === behavior) {
           state.lastTick = tick;
@@ -391,12 +387,12 @@ export const createStickToBottom = (
     return next();
   };
 
-  const stopScroll = (): void => {
+  const stopScroll = () => {
     setEscapedFromLock(true);
     setIsAtBottom(false);
   };
 
-  const handleScroll = ({ target }: Event): void => {
+  const handleScroll = ({ target }: Event) => {
     if (target !== scrollElement) {
       return;
     }
@@ -416,7 +412,11 @@ export const createStickToBottom = (
       lastScrollTop = ignoreScrollToTop;
     }
 
-    setIsNearBottom(state.isNearBottom);
+    const newIsNearBottom = state.isNearBottom;
+    if (newIsNearBottom !== isNearBottom) {
+      isNearBottom = newIsNearBottom;
+      notifyIsAtBottomChange(isAtBottom || isNearBottom);
+    }
 
     /**
      * Scroll events may come before a ResizeObserver event,
@@ -456,13 +456,13 @@ export const createStickToBottom = (
         setEscapedFromLock(false);
       }
 
-      if (!state.escapedFromLock && state.isNearBottom) {
+      if (!state.escapedFromLock && state.scrollDifference <= 2) {
         setIsAtBottom(true);
       }
     }, 1);
   };
 
-  const handleWheel = ({ target, deltaY }: WheelEvent): void => {
+  const handleWheel = ({ target, deltaY }: WheelEvent) => {
     let element = target as HTMLElement;
 
     while (!['scroll', 'auto'].includes(getComputedStyle(element).overflow)) {
@@ -481,6 +481,7 @@ export const createStickToBottom = (
     if (
       element === scrollElement &&
       deltaY < 0 &&
+      scrollElement &&
       scrollElement.scrollHeight > scrollElement.clientHeight &&
       !state.animation?.ignoreEscapes
     ) {
@@ -489,23 +490,32 @@ export const createStickToBottom = (
     }
   };
 
-  const setScrollElement = (element: HTMLElement | null): void => {
-    scrollElement?.removeEventListener('scroll', handleScroll);
-    scrollElement?.removeEventListener('wheel', handleWheel);
-    scrollElement = element;
-    scrollElement?.addEventListener('scroll', handleScroll, { passive: true });
-    scrollElement?.addEventListener('wheel', handleWheel, { passive: true });
-  };
-
-  const setContentElement = (element: HTMLElement | null): void => {
-    state.resizeObserver?.disconnect();
-
-    if (!element) {
-      contentElement = null;
-      return;
+  const setScrollElement = (element: HTMLElement | null) => {
+    // Clean up previous element
+    if (scrollElement) {
+      scrollElement.removeEventListener('scroll', handleScroll);
+      scrollElement.removeEventListener('wheel', handleWheel);
     }
 
+    // Set new element
+    scrollElement = element;
+
+    // Attach listeners to new element
+    if (element) {
+      element.addEventListener('scroll', handleScroll, { passive: true });
+      element.addEventListener('wheel', handleWheel, { passive: true });
+    }
+  };
+
+  const setContentElement = (element: HTMLElement | null) => {
+    // Disconnect previous observer
+    state.resizeObserver?.disconnect();
+
     contentElement = element;
+
+    if (!element) {
+      return;
+    }
 
     let previousHeight: number | undefined;
 
@@ -523,7 +533,11 @@ export const createStickToBottom = (
         state.scrollTop = state.targetScrollTop;
       }
 
-      setIsNearBottom(state.isNearBottom);
+      const newIsNearBottom = state.isNearBottom;
+      if (newIsNearBottom !== isNearBottom) {
+        isNearBottom = newIsNearBottom;
+        notifyIsAtBottomChange(isAtBottom || isNearBottom);
+      }
 
       if (difference >= 0) {
         /**
@@ -570,13 +584,12 @@ export const createStickToBottom = (
       });
     });
 
-    state.resizeObserver?.observe(element);
+    state.resizeObserver.observe(element);
   };
 
-  const destroy = (): void => {
-    scrollElement?.removeEventListener('scroll', handleScroll);
-    scrollElement?.removeEventListener('wheel', handleWheel);
-    state.resizeObserver?.disconnect();
+  const destroy = () => {
+    setScrollElement(null);
+    setContentElement(null);
   };
 
   return {
@@ -598,25 +611,41 @@ export const createStickToBottom = (
   };
 };
 
-const animationCache = new Map<string, Readonly<Required<SpringAnimation>>>();
+export interface StickToBottomInstance {
+  setScrollElement: (element: HTMLElement | null) => void;
+  setContentElement: (element: HTMLElement | null) => void;
+  scrollToBottom: ScrollToBottom;
+  stopScroll: StopScroll;
+  isAtBottom: boolean;
+  isNearBottom: boolean;
+  escapedFromLock: boolean;
+  state: StickToBottomState;
+  destroy: () => void;
+}
 
+const animationCache = new Map<string, Readonly<Required<SpringAnimation>>>();
 function mergeAnimations(
   ...animations: Array<Animation | boolean | undefined>
 ) {
   const result = { ...DEFAULT_SPRING_ANIMATION };
   let instant = false;
 
-  for (let i = 0; i < animations.length; i++) {
-    const animation = animations[i];
+  animations.forEach((animation) => {
     if (animation === 'instant') {
       instant = true;
-    } else if (typeof animation === 'object' && animation !== null) {
-      instant = false;
-      result.damping = animation.damping ?? result.damping;
-      result.stiffness = animation.stiffness ?? result.stiffness;
-      result.mass = animation.mass ?? result.mass;
+      return;
     }
-  }
+
+    if (typeof animation !== 'object') {
+      return;
+    }
+
+    instant = false;
+
+    result.damping = animation.damping ?? result.damping;
+    result.stiffness = animation.stiffness ?? result.stiffness;
+    result.mass = animation.mass ?? result.mass;
+  });
 
   const key = JSON.stringify(result);
 

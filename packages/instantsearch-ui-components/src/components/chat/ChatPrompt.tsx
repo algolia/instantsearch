@@ -66,10 +66,7 @@ export type ChatPromptClassNames = {
   footer: string | string[];
 };
 
-export type ChatPromptProps = Omit<
-  ComponentProps<'textarea'>,
-  'onInput' | 'onSubmit'
-> & {
+export type ChatPromptOwnProps = {
   /**
    * Content to render above the textarea
    */
@@ -127,6 +124,12 @@ export type ChatPromptProps = Omit<
    */
   promptRef?: MutableRef<HTMLTextAreaElement | null>;
 };
+
+export type ChatPromptProps = Omit<
+  ComponentProps<'textarea'>,
+  'onInput' | 'onSubmit'
+> &
+  ChatPromptOwnProps;
 
 export function createChatPromptComponent({ createElement }: Renderer) {
   const Button = createButtonComponent({ createElement });

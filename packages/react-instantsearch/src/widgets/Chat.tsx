@@ -1,10 +1,14 @@
 import { createChatComponent } from 'instantsearch-ui-components';
+import {
+  SearchIndexToolType,
+  RecommendToolType,
+} from 'instantsearch.js/es/lib/chat';
 import React, { createElement, Fragment } from 'react';
 import { useInstantSearch, useChat } from 'react-instantsearch-core';
 
-import { createSearchIndexTool } from './chat/tools/SearchIndexTool';
+import { createCarouselTool } from './chat/tools/SearchIndexTool';
 
-export { SearchIndexToolType } from 'instantsearch.js/es/lib/chat';
+export { SearchIndexToolType, RecommendToolType };
 
 import type {
   Pragma,
@@ -29,7 +33,18 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
   itemComponent?: ItemComponent<TObject>,
   getSearchPageURL?: (nextUiState: IndexUiState) => string
 ): UserClientSideTools {
-  return { ...createSearchIndexTool(itemComponent, getSearchPageURL) };
+  return {
+    [SearchIndexToolType]: createCarouselTool(
+      true,
+      itemComponent,
+      getSearchPageURL
+    ),
+    [RecommendToolType]: createCarouselTool(
+      false,
+      itemComponent,
+      getSearchPageURL
+    ),
+  };
 }
 
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
@@ -83,14 +98,16 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     headerProps?: UserHeaderProps;
     messagesProps?: UserMessagesProps;
     promptProps?: UserPromptProps;
-    headerLayoutComponent?: ChatUiProps['headerComponent'];
+    toggleButtonComponent?: ChatUiProps['toggleButtonComponent'];
+    toggleButtonIconComponent?: ChatUiProps['toggleButtonProps']['toggleIconComponent'];
+    headerComponent?: ChatUiProps['headerComponent'];
     headerTitleIconComponent?: ChatUiProps['headerProps']['titleIconComponent'];
     headerCloseIconComponent?: ChatUiProps['headerProps']['closeIconComponent'];
     headerMinimizeIconComponent?: ChatUiProps['headerProps']['minimizeIconComponent'];
     headerMaximizeIconComponent?: ChatUiProps['headerProps']['maximizeIconComponent'];
     messagesLoaderComponent?: ChatUiProps['messagesProps']['loaderComponent'];
     messagesErrorComponent?: ChatUiProps['messagesProps']['errorComponent'];
-    promptLayoutComponent?: ChatUiProps['promptComponent'];
+    promptComponent?: ChatUiProps['promptComponent'];
     promptHeaderComponent?: ChatUiProps['promptProps']['headerComponent'];
     promptFooterComponent?: ChatUiProps['promptProps']['footerComponent'];
     actionsComponent?: ChatUiProps['messagesProps']['actionsComponent'];
@@ -112,14 +129,16 @@ export function Chat<
   messagesProps,
   promptProps,
   itemComponent,
-  headerLayoutComponent,
+  toggleButtonComponent,
+  toggleButtonIconComponent,
+  headerComponent,
   headerTitleIconComponent,
   headerCloseIconComponent,
   headerMinimizeIconComponent,
   headerMaximizeIconComponent,
   messagesLoaderComponent,
   messagesErrorComponent,
-  promptLayoutComponent,
+  promptComponent,
   promptHeaderComponent,
   promptFooterComponent,
   actionsComponent,
@@ -207,11 +226,13 @@ export function Chat<
       title={title}
       open={open}
       maximized={maximized}
-      headerComponent={headerLayoutComponent}
-      promptComponent={promptLayoutComponent}
+      headerComponent={headerComponent}
+      promptComponent={promptComponent}
+      toggleButtonComponent={toggleButtonComponent}
       toggleButtonProps={{
         open,
         onClick: () => setOpen(!open),
+        toggleIconComponent: toggleButtonIconComponent,
         ...toggleButtonProps,
       }}
       headerProps={{

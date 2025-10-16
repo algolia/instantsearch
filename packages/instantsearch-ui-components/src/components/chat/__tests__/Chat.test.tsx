@@ -222,26 +222,30 @@ describe('Chat', () => {
               </div>
             </form>
           </div>
-          <button
-            class="ais-Button ais-Button--primary ais-Button--md ais-Button--icon-only ais-ChatToggleButton ais-ChatToggleButton--open"
-            type="button"
+          <div
+            class="ais-Chat-toggleButtonWrapper"
           >
-            <svg
-              fill="none"
-              height="28"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              width="28"
-              xmlns="http://www.w3.org/2000/svg"
+            <button
+              class="ais-Button ais-Button--primary ais-Button--md ais-Button--icon-only ais-ChatToggleButton ais-ChatToggleButton--open"
+              type="button"
             >
-              <path
-                d="m18 15-6-6-6 6"
-              />
-            </svg>
-          </button>
+              <svg
+                fill="none"
+                height="28"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                width="28"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m18 15-6-6-6 6"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     `);
