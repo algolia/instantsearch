@@ -12,6 +12,7 @@ import { SearchBox } from '../widgets/SearchBox';
 
 import { useAutocomplete } from './useAutocomplete';
 
+import type { IndexConfig as UseAutocompleteIndexConfig } from './useAutocomplete';
 import type {
   AutocompleteIndexClassNames,
   Pragma,
@@ -38,32 +39,26 @@ const AutocompleteSuggestion = createAutocompleteSuggestionComponent({
   Fragment,
 });
 
-type ItemComponentProps<TItem> = React.ComponentType<{
-  item: TItem;
+type ItemComponentProps<TItem extends BaseHit> = React.ComponentType<{
+  item: Hit<TItem>;
   onSelect: () => void;
 }>;
 
-type IndexConfig<TItem extends Hit<BaseHit> = Hit<BaseHit> | any> = {
-  indexName: string;
-  getQuery?: (item: TItem) => string;
-  getURL?: (item: TItem) => string;
-  itemComponent: ItemComponentProps<TItem>;
-  onSelect?: (params: {
-    item: TItem;
-    getQuery: () => string;
-    getURL: () => string;
-    setQuery: (query: string) => void;
-  }) => void;
+type IndexConfig<TItem extends BaseHit> = UseAutocompleteIndexConfig<TItem> & {
+  itemComponent:
+    | ItemComponentProps<TItem>
+    | ItemComponentProps<{ query: string }>;
   classNames?: Partial<AutocompleteIndexClassNames>;
 };
 
-export type AutocompleteProps = {
-  indices?: IndexConfig[];
-  showSuggestions?: {
-    itemComponent?: ItemComponentProps<Hit<{ query: string }>>;
-    indexName?: string;
-    classNames?: IndexConfig['classNames'];
-  };
+export type AutocompleteProps<TItem extends BaseHit> = {
+  indices?: Array<IndexConfig<TItem>>;
+  showSuggestions?: Partial<
+    Pick<
+      IndexConfig<{ query: string }>,
+      'indexName' | 'itemComponent' | 'classNames'
+    >
+  >;
 };
 
 function VirtualSearchBox() {
@@ -71,10 +66,10 @@ function VirtualSearchBox() {
   return null;
 }
 
-export function EXPERIMENTAL_Autocomplete({
+export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
   indices: userIndices = [],
   showSuggestions,
-}: AutocompleteProps) {
+}: AutocompleteProps<TItem>) {
   const indices = [...userIndices];
   if (showSuggestions?.indexName) {
     indices.unshift({
@@ -118,7 +113,7 @@ export function EXPERIMENTAL_Autocomplete({
           <AutocompletePanel {...getPanelProps()}>
             {indices.map((index) => (
               <Index key={index.indexName} indexName={index.indexName}>
-                <AutocompleteIndexComponent
+                <AutocompleteIndexComponent<TItem>
                   {...index}
                   getItemProps={getItemProps}
                 />
@@ -131,13 +126,14 @@ export function EXPERIMENTAL_Autocomplete({
   );
 }
 
-function AutocompleteIndexComponent({
+function AutocompleteIndexComponent<TItem extends BaseHit>({
   indexName,
   itemComponent: ItemComponent,
   getItemProps,
   classNames,
-}: IndexConfig & Pick<ReturnType<typeof useAutocomplete>, 'getItemProps'>) {
-  const { items } = useHits();
+}: IndexConfig<TItem> &
+  Pick<ReturnType<typeof useAutocomplete>, 'getItemProps'>) {
+  const { items } = useHits<TItem>();
 
   return (
     <AutocompleteIndex

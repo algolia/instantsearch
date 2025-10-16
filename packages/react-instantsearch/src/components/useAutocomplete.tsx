@@ -5,7 +5,23 @@ import { useConnector, useInstantSearch } from 'react-instantsearch-core';
 import type { BaseHit, Hit } from 'instantsearch.js';
 import type { ComponentProps } from 'react';
 
-type AutocompleteGetInputProps = () => Pick<
+export type IndexConfig<TItem extends BaseHit> = {
+  indexName: string;
+  getQuery?: (item: Hit<TItem>) => string;
+  getURL?: (item: Hit<TItem>) => string;
+  onSelect?: (params: {
+    item: Hit<TItem>;
+    getQuery: () => string;
+    getURL: () => string;
+    setQuery: (query: string) => void;
+  }) => void;
+};
+
+type GetIndexProps = () => {
+  indexId: string;
+};
+
+type GetInputProps = () => Pick<
   ComponentProps<'input'>,
   | 'id'
   | 'role'
@@ -20,11 +36,8 @@ type AutocompleteGetInputProps = () => Pick<
   | 'onKeyUp'
 >;
 
-type AutocompleteGetItemProps = (
-  item: {
-    objectID: string;
-    __indexName?: string;
-  } & Record<string, unknown>,
+type GetItemProps = (
+  item: { __indexName: string } & Record<string, unknown>,
   index: number
 ) => Pick<
   ComponentProps<'li'>,
@@ -33,48 +46,38 @@ type AutocompleteGetItemProps = (
   onSelect: () => void;
 };
 
-type AutocompleteGetPanelProps = () => Pick<
+type GetPanelProps = () => Pick<
   ComponentProps<'div'>,
   'id' | 'hidden' | 'ref' | 'role' | 'aria-labelledby'
 >;
 
-type AutocompleteGetRootProps = () => Pick<ComponentProps<'div'>, 'ref'>;
+type GetRootProps = () => Pick<ComponentProps<'div'>, 'ref'>;
 
-type AutocompleteStore<TItem extends Hit<BaseHit> = Hit<BaseHit> | any> =
-  Record<
-    string,
-    {
-      item: TItem;
-      getQuery: () => string;
-      getURL: () => string;
-      onSelect?: (params: {
-        item: TItem;
-        getQuery: () => string;
-        getURL: () => string;
-        setQuery: (query: string) => void;
-      }) => void;
-    }
-  >;
-
-type UseAutocompleteParams<TItem extends Hit<BaseHit> = Hit<BaseHit> | any> = {
-  indices: Array<{
-    indexName: string;
-    getQuery?: (item: TItem) => string;
-    getURL?: (item: TItem) => string;
-    onSelect?: (params: {
-      item: TItem;
-      getQuery: () => string;
-      getURL: () => string;
-      setQuery: (query: string) => void;
-    }) => void;
-  }>;
+type UseAutocomplete<TItem extends BaseHit> = (params: {
+  indices: Array<IndexConfig<TItem>>;
+}) => {
+  getIndexProps: GetIndexProps;
+  getInputProps: GetInputProps;
+  getItemProps: GetItemProps;
+  getPanelProps: GetPanelProps;
+  getRootProps: GetRootProps;
 };
 
-export const useAutocomplete = <
-  TItem extends Hit<BaseHit> = Hit<BaseHit> | any
->({
+type UseAutocompleteItems<TItem extends BaseHit> = Record<
+  string,
+  {
+    item: Hit<TItem>;
+    getQuery: () => string;
+    getURL: () => string;
+    onSelect?: IndexConfig<TItem>['onSelect'];
+  }
+>;
+
+export function useAutocomplete<TItem extends BaseHit = BaseHit>({
   indices,
-}: UseAutocompleteParams<TItem>) => {
+}: Parameters<UseAutocomplete<TItem>>['0']): ReturnType<
+  UseAutocomplete<TItem>
+> {
   const { indices: connectorIndices, refine } = useConnector(
     connectAutocomplete,
     {}
@@ -89,29 +92,32 @@ export const useAutocomplete = <
     undefined
   );
 
-  const store = indices.reduce<AutocompleteStore<TItem>>((storeAcc, index) => {
-    const items =
-      connectorIndices
-        .find(({ indexName }) => index.indexName === indexName)
-        ?.hits.reduce(
-          (itemsAcc, item, i) => ({
-            ...itemsAcc,
-            [getElementId('item', index.indexName, i)]: {
-              item,
-              indexName: index.indexName,
-              getQuery: () => index.getQuery?.(item as TItem) || '',
-              getURL: () => index.getURL?.(item as TItem) || '',
-              onSelect: index.onSelect,
-            },
-          }),
-          {}
-        ) || {};
+  const items = indices.reduce<UseAutocompleteItems<TItem>>(
+    (itemsAcc, index) => {
+      const indexItems =
+        connectorIndices
+          .find(({ indexName }) => index.indexName === indexName)
+          ?.hits.reduce(
+            (indexItemsAcc, item, i) => ({
+              ...indexItemsAcc,
+              [getElementId('item', index.indexName, i)]: {
+                item,
+                indexName: index.indexName,
+                getQuery: () => index.getQuery?.(item as Hit<TItem>) || '',
+                getURL: () => index.getURL?.(item as Hit<TItem>) || '',
+                onSelect: index.onSelect,
+              },
+            }),
+            {}
+          ) || {};
 
-    return {
-      ...storeAcc,
-      ...items,
-    };
-  }, {});
+      return {
+        ...itemsAcc,
+        ...indexItems,
+      };
+    },
+    {}
+  );
 
   useLayoutEffect(() => {
     const onBodyClick = (event: MouseEvent) => {
@@ -165,8 +171,8 @@ export const useAutocomplete = <
 
   const submit = () => {
     setIsOpen(false);
-    if (activeDescendent && store[activeDescendent]) {
-      const { item, onSelect, getQuery, getURL } = store[activeDescendent];
+    if (activeDescendent && items[activeDescendent]) {
+      const { item, onSelect, getQuery, getURL } = items[activeDescendent];
       onSelect?.({
         item,
         getQuery,
@@ -183,96 +189,82 @@ export const useAutocomplete = <
     }
   };
 
-  const getInputProps: AutocompleteGetInputProps = () => ({
-    id: getElementId('input'),
-    role: 'combobox',
-    'aria-autocomplete': 'list',
-    'aria-expanded': isOpen,
-    'aria-haspopup': 'grid',
-    'aria-controls': getElementId('panel'),
-    'aria-activedescendant': activeDescendent,
-    onFocus: () => setIsOpen(true),
-    onKeyDown: (event) => {
-      if (event.key === 'Escape') {
-        setActiveDescendent(undefined);
-        setIsOpen(false);
-        return;
-      }
-      switch (event.key) {
-        case 'ArrowLeft':
-        case 'ArrowUp':
-        case 'ArrowRight':
-        case 'ArrowDown':
-          setActiveDescendent(getNextActiveDescendent(event.key));
-          event.preventDefault();
-          break;
-        case 'Enter': {
-          submit();
-          break;
-        }
-        case 'Tab':
-          setIsOpen(false);
-          break;
-        default:
-          return;
-      }
-    },
-    onKeyUp: (event) => {
-      switch (event.key) {
-        case 'ArrowLeft':
-        case 'ArrowUp':
-        case 'ArrowRight':
-        case 'ArrowDown':
-        case 'Escape':
-        case 'Return':
-          event.preventDefault();
-          return;
-        default:
-          setActiveDescendent(undefined);
-          break;
-      }
-    },
-  });
-
-  const getIndexProps = () => {
-    return {
-      indexId: getElementId('index'),
-    };
-  };
-
-  const getItemProps: AutocompleteGetItemProps = (item, index) => {
-    const id = getElementId('item', item.__indexName || '', index);
-
-    return {
-      id,
-      role: 'row',
-      'aria-selected': id === activeDescendent,
-      onMouseEnter: () => setActiveDescendent(id),
-      onMouseLeave: () => setActiveDescendent(undefined),
-      onSelect: () => submit(),
-    };
-  };
-
-  const getPanelProps: AutocompleteGetPanelProps = () => ({
-    ref: panelRef,
-    hidden: !isOpen,
-    id: getElementId('panel'),
-    role: 'grid',
-    'aria-labelledby': getElementId('input'),
-  });
-
-  const getRootProps: AutocompleteGetRootProps = () => ({
-    ref: rootRef,
-  });
-
   return {
-    getIndexProps,
-    getInputProps,
-    getItemProps,
-    getPanelProps,
-    getRootProps,
+    getIndexProps: () => ({ indexId: getElementId('index') }),
+    getInputProps: () => ({
+      id: getElementId('input'),
+      role: 'combobox',
+      'aria-autocomplete': 'list',
+      'aria-expanded': isOpen,
+      'aria-haspopup': 'grid',
+      'aria-controls': getElementId('panel'),
+      'aria-activedescendant': activeDescendent,
+      onFocus: () => setIsOpen(true),
+      onKeyDown: (event) => {
+        if (event.key === 'Escape') {
+          setActiveDescendent(undefined);
+          setIsOpen(false);
+          return;
+        }
+        switch (event.key) {
+          case 'ArrowLeft':
+          case 'ArrowUp':
+          case 'ArrowRight':
+          case 'ArrowDown':
+            setActiveDescendent(getNextActiveDescendent(event.key));
+            event.preventDefault();
+            break;
+          case 'Enter': {
+            submit();
+            break;
+          }
+          case 'Tab':
+            setIsOpen(false);
+            break;
+          default:
+            return;
+        }
+      },
+      onKeyUp: (event) => {
+        switch (event.key) {
+          case 'ArrowLeft':
+          case 'ArrowUp':
+          case 'ArrowRight':
+          case 'ArrowDown':
+          case 'Escape':
+          case 'Return':
+            event.preventDefault();
+            return;
+          default:
+            setActiveDescendent(undefined);
+            break;
+        }
+      },
+    }),
+    getItemProps: (item, index) => {
+      const id = getElementId('item', item.__indexName, index);
+
+      return {
+        id,
+        role: 'row',
+        'aria-selected': id === activeDescendent,
+        onMouseEnter: () => setActiveDescendent(id),
+        onMouseLeave: () => setActiveDescendent(undefined),
+        onSelect: () => submit(),
+      };
+    },
+    getPanelProps: () => ({
+      ref: panelRef,
+      hidden: !isOpen,
+      id: getElementId('panel'),
+      role: 'grid',
+      'aria-labelledby': getElementId('input'),
+    }),
+    getRootProps: () => ({
+      ref: rootRef,
+    }),
   };
-};
+}
 
 function createGetElementId(autocompleteId: string) {
   return function getElementId(...suffixes: Array<string | number>) {
