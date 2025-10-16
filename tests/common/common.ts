@@ -36,10 +36,10 @@ export function skippableTest(
 
 export type SupportedFlavor = 'javascript' | 'react' | 'vue';
 
-export type TestOptions<T extends SupportedFlavor = 'javascript'> = {
+export type TestOptions = {
   act?: Act;
   skippedTests?: SkippedTests;
-  flavor?: T;
+  flavor?: SupportedFlavor;
 };
 
 // Registry for widgets that have flavor-specific setup types
@@ -52,10 +52,9 @@ export interface FlavoredWidgetParams {
 export type SetupOptions<TSetup extends TestSetup<any, any>> =
   Parameters<TSetup>[0];
 
-export type AnyTestSuite = (
-  setup: TestSetup<Record<string, unknown>, any>,
-  options: TestOptions
-) => any;
+type AnyTestSetup = TestSetup<Record<string, unknown>, any>;
+
+export type AnyTestSuite = (setup: AnyTestSetup, options: TestOptions) => any;
 
 // Helper to resolve setup type - checks if widget has flavor-specific setup
 type ResolveSetupType<
@@ -63,13 +62,13 @@ type ResolveSetupType<
   TFlavor extends SupportedFlavor,
   TFunctionName extends string = string
 > = TFunctionName extends keyof FlavoredWidgetParams
-  ? FlavoredWidgetParams[TFunctionName] extends Record<SupportedFlavor, any>
+  ? keyof FlavoredWidgetParams[TFunctionName] extends SupportedFlavor
     ? (
         setup: {
           instantSearchOptions: InstantSearchOptions;
           widgetParams: FlavoredWidgetParams[TFunctionName][TFlavor];
         },
-        options?: TestOptions<TFlavor>
+        options?: TestOptions
       ) => void
     : Parameters<TFunc>[0]
   : Parameters<TFunc>[0];
@@ -126,6 +125,33 @@ export function runTestSuites<
   (Object.keys(testSuites) as Array<keyof TTestSuites>)
     .filter((name) => !only || only.includes(name))
     .forEach(<T extends keyof TTestSuites>(key: T) => {
-      testSuites[key](testSetups[key], { ...testOptions[key], flavor });
+      if ('flavored' in testSuites[key]) {
+        const flavoredSetup = (
+          args: TestSetupOptions & {
+            widgetParams: T extends keyof FlavoredWidgetParams
+              ? FlavoredWidgetParams[T]
+              : never;
+          }
+        ) => {
+          const originalSetup = testSetups[key];
+          const flavorSpecificParams = (
+            args.widgetParams as Record<string, unknown>
+          )[flavor];
+          return (originalSetup as AnyTestSetup)({
+            instantSearchOptions: args.instantSearchOptions,
+            widgetParams: flavorSpecificParams,
+          });
+        };
+
+        testSuites[key](flavoredSetup as AnyTestSetup, {
+          ...testOptions[key],
+          flavor,
+        });
+      } else {
+        testSuites[key](testSetups[key] as AnyTestSetup, {
+          ...testOptions[key],
+          flavor,
+        });
+      }
     });
 }

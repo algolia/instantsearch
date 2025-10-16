@@ -6,11 +6,11 @@ import { Chat, SearchIndexToolType } from 'instantsearch.js/es/lib/chat';
 import React from 'react';
 
 import type { ChatWidgetSetup } from '.';
-import type { SupportedFlavor, TestOptions } from '../../common';
+import type { TestOptions } from '../../common';
 
-export function createOptionsTests<T extends SupportedFlavor>(
-  setup: ChatWidgetSetup<T>,
-  { act, flavor }: Required<TestOptions<T>>
+export function createOptionsTests(
+  setup: ChatWidgetSetup,
+  { act }: Required<TestOptions>
 ) {
   describe('options', () => {
     test('renders with default props', async () => {
@@ -32,7 +32,7 @@ export function createOptionsTests<T extends SupportedFlavor>(
           javascript: commonWidgetParams,
           react: commonWidgetParams,
           vue: {},
-        }[flavor],
+        },
       });
 
       await act(async () => {
@@ -94,7 +94,7 @@ export function createOptionsTests<T extends SupportedFlavor>(
           javascript: commonWidgetParams,
           react: commonWidgetParams,
           vue: {},
-        }[flavor],
+        },
       });
 
       await act(async () => {
@@ -165,7 +165,7 @@ export function createOptionsTests<T extends SupportedFlavor>(
             },
           },
           vue: {},
-        }[flavor],
+        },
       });
 
       await act(async () => {
@@ -237,7 +237,7 @@ export function createOptionsTests<T extends SupportedFlavor>(
             },
           },
           vue: {},
-        }[flavor],
+        },
       });
 
       await act(async () => {

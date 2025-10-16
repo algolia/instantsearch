@@ -2,7 +2,7 @@ import { fakeAct, skippableDescribe } from '../../common';
 
 import { createOptionsTests } from './options';
 
-import type { SupportedFlavor, TestOptions, TestSetup } from '../../common';
+import type { TestOptions, TestSetup } from '../../common';
 import type { ChatConnectorParams } from 'instantsearch.js/es/connectors/chat/connectChat';
 import type { ChatWidget } from 'instantsearch.js/es/widgets/chat/chat';
 import type { ChatProps } from 'react-instantsearch';
@@ -14,33 +14,25 @@ export type JSChatWidgetParams = Omit<JSBaseWidgetParams, 'container'> &
   ChatConnectorParams;
 export type ReactChatWidgetParams = ChatProps<unknown>;
 
-type ChatWidgetParams<T extends SupportedFlavor = 'javascript'> = {
+type ChatWidgetParams = {
   javascript: JSChatWidgetParams;
   react: ReactChatWidgetParams;
   vue: Record<string, never>;
-}[T];
-
-export type ChatWidgetSetup<T extends SupportedFlavor> = TestSetup<{
-  widgetParams: ChatWidgetParams<T>;
-}>;
+};
 
 declare module '../../common' {
   interface FlavoredWidgetParams {
-    createChatWidgetTests: {
-      javascript: JSChatWidgetParams;
-      react: ReactChatWidgetParams;
-      vue: Record<string, never>;
-    };
+    createChatWidgetTests: ChatWidgetParams;
   }
 }
 
-export function createChatWidgetTests<T extends SupportedFlavor>(
-  setup: ChatWidgetSetup<T>,
-  {
-    act = fakeAct,
-    skippedTests = {},
-    flavor = 'javascript' as T,
-  }: TestOptions<T> = {}
+export type ChatWidgetSetup = TestSetup<{
+  widgetParams: ChatWidgetParams;
+}>;
+
+export function createChatWidgetTests(
+  setup: ChatWidgetSetup,
+  { act = fakeAct, skippedTests = {}, flavor = 'javascript' }: TestOptions = {}
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
@@ -54,3 +46,4 @@ export function createChatWidgetTests<T extends SupportedFlavor>(
     });
   });
 }
+createChatWidgetTests.flavored = true;

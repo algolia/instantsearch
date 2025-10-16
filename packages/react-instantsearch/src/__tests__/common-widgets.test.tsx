@@ -396,9 +396,7 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
   createChatWidgetTests({ instantSearchOptions, widgetParams }) {
     render(
       <InstantSearch {...instantSearchOptions}>
-        <div className="ais-Chat">
-          <Chat {...widgetParams} />
-        </div>
+        <Chat {...widgetParams} />
         <GlobalErrorSwallower />
       </InstantSearch>
     );
