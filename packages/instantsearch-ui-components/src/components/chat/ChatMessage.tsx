@@ -231,14 +231,8 @@ export function createChatMessageComponent({ createElement }: Renderer) {
             </div>
           );
         }
-
-        return null;
       }
-      return (
-        <pre key={`${message.id}-${index}`} className="ais-ChatMessage-code">
-          {JSON.stringify(part)}
-        </pre>
-      );
+      return null;
     }
 
     return (
