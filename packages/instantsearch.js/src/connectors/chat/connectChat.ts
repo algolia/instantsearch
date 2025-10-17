@@ -1,4 +1,7 @@
-import { DefaultChatTransport } from 'ai';
+import {
+  DefaultChatTransport,
+  lastAssistantMessageIsCompleteWithToolCalls,
+} from 'ai';
 
 import { Chat } from '../../lib/chat';
 import {
@@ -171,6 +174,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       return new Chat({
         ...options,
         transport,
+        sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
         onToolCall({ toolCall }) {
           const tool = tools[toolCall.toolName];
 

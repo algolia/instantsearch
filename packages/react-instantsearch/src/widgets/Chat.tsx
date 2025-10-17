@@ -1,14 +1,11 @@
+import { lastAssistantMessageIsCompleteWithToolCalls } from 'ai';
 import { createChatComponent } from 'instantsearch-ui-components';
 import {
   SearchIndexToolType,
   RecommendToolType,
 } from 'instantsearch.js/es/lib/chat';
 import React, { createElement, Fragment } from 'react';
-import {
-  useInstantSearch,
-  useChat,
-  lastAssistantMessageIsCompleteWithToolCalls,
-} from 'react-instantsearch-core';
+import { useInstantSearch, useChat } from 'react-instantsearch-core';
 
 import { createCarouselTool } from './chat/tools/SearchIndexTool';
 
