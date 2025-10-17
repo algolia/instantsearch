@@ -204,6 +204,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       if (startsWith(part.type, 'tool-')) {
         const toolName = part.type.replace('tool-', '');
         const tool = tools[toolName];
+
         if (tool) {
           const ToolLayoutComponent = tool.layoutComponent;
           const toolMessage = part as ChatToolMessage;
@@ -231,11 +232,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
           );
         }
       }
-      return (
-        <pre key={`${message.id}-${index}`} className="ais-ChatMessage-code">
-          {JSON.stringify(part)}
-        </pre>
-      );
+      return null;
     }
 
     return (
