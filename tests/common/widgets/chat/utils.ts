@@ -4,7 +4,7 @@ import { Chat } from 'instantsearch.js/es/lib/chat';
 
 import type { Act } from '../../common';
 
-export const createDefaultWidgetParams = (chat?: Chat) => ({
+export const createDefaultWidgetParams = (chat?: Chat<any>) => ({
   agentId: 'agentId',
   chat: chat ?? new Chat({}),
 });

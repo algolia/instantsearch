@@ -32,7 +32,7 @@ export function createTemplatesTests(
             },
             react: {
               ...createDefaultWidgetParams(),
-              headerLayoutComponent: () => (
+              headerComponent: () => (
                 <div className="custom-header">Custom header</div>
               ),
             },
@@ -128,7 +128,7 @@ export function createTemplatesTests(
             },
             react: {
               ...createDefaultWidgetParams(),
-              promptLayoutComponent: () => (
+              promptComponent: () => (
                 <div className="custom-prompt">Custom prompt</div>
               ),
             },
