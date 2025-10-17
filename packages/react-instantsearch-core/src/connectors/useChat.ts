@@ -1,4 +1,7 @@
-import { DefaultChatTransport } from 'ai';
+import {
+  DefaultChatTransport,
+  lastAssistantMessageIsCompleteWithToolCalls,
+} from 'ai';
 import { Chat } from 'instantsearch.js/es/lib/chat';
 import {
   useCallback,
@@ -193,3 +196,5 @@ export function useChat<TUiMessage extends UIMessage = UIMessage>({
     addToolResult: chatRef.current.addToolResult,
   };
 }
+
+export { lastAssistantMessageIsCompleteWithToolCalls };

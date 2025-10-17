@@ -305,10 +305,15 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       setMessages,
       setOpen,
       status,
+      error,
       addToolResult,
       regenerate,
       stop,
     } = props;
+
+    if (__DEV__ && error) {
+      throw error;
+    }
 
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({

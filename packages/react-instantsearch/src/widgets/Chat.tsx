@@ -4,7 +4,11 @@ import {
   RecommendToolType,
 } from 'instantsearch.js/es/lib/chat';
 import React, { createElement, Fragment } from 'react';
-import { useInstantSearch, useChat } from 'react-instantsearch-core';
+import {
+  useInstantSearch,
+  useChat,
+  lastAssistantMessageIsCompleteWithToolCalls,
+} from 'react-instantsearch-core';
 
 import { createCarouselTool } from './chat/tools/SearchIndexTool';
 
@@ -179,8 +183,10 @@ export function Chat<
     stop,
     setMessages,
     clearError,
+    error,
   } = useChat({
     ...props,
+    sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
     onToolCall({ toolCall }) {
       const tool = tools[toolCall.toolName];
 
@@ -195,6 +201,18 @@ export function Chat<
           );
         };
         tool.onToolCall({ ...toolCall, addToolResult: scopedAddToolResult });
+      } else {
+        if (__DEV__) {
+          throw new Error(
+            `No tool implementation found for "${toolCall.toolName}". Please provide a tool implementation in the \`tools\` prop.`
+          );
+        }
+
+        addToolResult({
+          output: `No tool implemented for "${toolCall.toolName}".`,
+          tool: toolCall.toolName,
+          toolCallId: toolCall.toolCallId,
+        });
       }
     },
   });
@@ -220,6 +238,10 @@ export function Chat<
     clearError();
     setIsClearing(false);
   }, [setMessages, clearError]);
+
+  if (__DEV__ && error) {
+    throw error;
+  }
 
   return (
     <ChatUiComponent
