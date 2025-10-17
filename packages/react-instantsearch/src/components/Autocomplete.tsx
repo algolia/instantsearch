@@ -45,9 +45,7 @@ type ItemComponentProps<TItem extends BaseHit> = React.ComponentType<{
 }>;
 
 type IndexConfig<TItem extends BaseHit> = UseAutocompleteIndexConfig<TItem> & {
-  itemComponent:
-    | ItemComponentProps<TItem>
-    | ItemComponentProps<{ query: string }>;
+  itemComponent: ItemComponentProps<TItem>;
   classNames?: Partial<AutocompleteIndexClassNames>;
 };
 
@@ -74,7 +72,9 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
   if (showSuggestions?.indexName) {
     indices.unshift({
       indexName: showSuggestions.indexName,
-      itemComponent: showSuggestions.itemComponent || AutocompleteSuggestion,
+      // Temporarily force casting until the coming refactoring
+      itemComponent: (showSuggestions.itemComponent ||
+        AutocompleteSuggestion) as unknown as ItemComponentProps<TItem>,
       classNames: {
         root: cx(
           'ais-AutocompleteSuggestions',
