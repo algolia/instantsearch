@@ -43,7 +43,9 @@ export function createOptionsTests(
       const searchClient = createSearchClient();
 
       const chat = new Chat({});
-      const sendMessageSpy = jest.spyOn(chat, 'sendMessage');
+      const sendMessageSpy = jest
+        .spyOn(chat, 'sendMessage')
+        .mockResolvedValue(undefined);
 
       await setup({
         instantSearchOptions: {
