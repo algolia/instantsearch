@@ -247,7 +247,8 @@ export function createChatMessagesComponent({
     null;
 
   const stickToBottom = createStickToBottom({
-    initial: 'instant',
+    initial: 'smooth',
+    resize: 'smooth',
     onIsAtBottomChange: (isAtBottom) => {
       setIsScrollAtBottomCallback?.(isAtBottom);
     },

@@ -30,7 +30,7 @@ import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
 type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
 
-const testSetups: TestSetupsMap<TestSuites> = {
+const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
   createHierarchicalMenuConnectorTests({ instantSearchOptions, widgetParams }) {
     const customHierarchicalMenu = connectHierarchicalMenu<{
       container: HTMLElement;
@@ -612,6 +612,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
 
 describe('Common connector tests (InstantSearch.js)', () => {
   runTestSuites({
+    flavor: 'javascript',
     testSuites,
     testSetups,
     testOptions,

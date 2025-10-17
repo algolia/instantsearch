@@ -7,6 +7,7 @@ import {
   createSendEventForHits,
   getAppIdAndApiKey,
   noop,
+  warning,
 } from '../../lib/utils';
 
 import type {
@@ -114,6 +115,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
   return <TUiMessage extends UIMessage = UIMessage>(
     widgetParams: TWidgetParams & ChatConnectorParams<TUiMessage>
   ) => {
+    warning(false, 'Chat is not yet stable and will change in the future.');
+
     const { resume = false, tools = {}, ...options } = widgetParams || {};
 
     let _chatInstance: Chat<TUiMessage>;
@@ -167,7 +170,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
       return new Chat({
         ...options,
-        id: options.agentId,
         transport,
         onToolCall({ toolCall }) {
           const tool = tools[toolCall.toolName];

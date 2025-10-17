@@ -95,6 +95,7 @@ const testOptions = {
 
 describe('Common shared tests (Vue InstantSearch)', () => {
   runTestSuites({
+    flavor: 'vue',
     testSuites,
     testSetups,
     testOptions,

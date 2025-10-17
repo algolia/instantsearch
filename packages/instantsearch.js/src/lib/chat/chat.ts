@@ -11,12 +11,12 @@ export type { UIMessage };
 export { AbstractChat };
 export { ChatInit };
 
-export const CACHE_KEY = 'instantsearch-chat-initial-messages-';
+export const CACHE_KEY = 'instantsearch-chat-initial-messages';
 
-function getDefaultInitialMessages<TUIMessage extends UIMessage>(
-  id?: string
-): TUIMessage[] {
-  const initialMessages = sessionStorage.getItem(CACHE_KEY + id);
+function getDefaultInitialMessages<
+  TUIMessage extends UIMessage
+>(): TUIMessage[] {
+  const initialMessages = sessionStorage.getItem(CACHE_KEY);
   return initialMessages ? JSON.parse(initialMessages) : [];
 }
 
@@ -32,14 +32,13 @@ export class ChatState<TUiMessage extends UIMessage>
   _errorCallbacks = new Set<() => void>();
 
   constructor(
-    id: string | undefined = undefined,
-    initialMessages: TUiMessage[] = getDefaultInitialMessages<TUiMessage>(id)
+    initialMessages: TUiMessage[] = getDefaultInitialMessages<TUiMessage>()
   ) {
     this._messages = initialMessages;
     const saveMessagesInLocalStorage = () => {
       if (this.status === 'ready') {
         try {
-          sessionStorage.setItem(CACHE_KEY + id, JSON.stringify(this.messages));
+          sessionStorage.setItem(CACHE_KEY, JSON.stringify(this.messages));
         } catch (e) {
           // Do nothing if sessionStorage is not available or full
         }
@@ -140,8 +139,8 @@ export class Chat<
 > extends AbstractChat<TUiMessage> {
   _state: ChatState<TUiMessage>;
 
-  constructor({ messages, id, ...init }: ChatInit<TUiMessage>) {
-    const state = new ChatState(id, messages);
+  constructor({ messages, ...init }: ChatInit<TUiMessage>) {
+    const state = new ChatState(messages);
     super({ ...init, state });
     this._state = state;
   }
