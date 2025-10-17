@@ -29,10 +29,12 @@ describe('Autocomplete', () => {
     const searchClient = createMockedSearchClient(
       createMultiSearchResponse(
         createSingleSearchResponse({
+          index: 'indexName',
           hits: [{ objectID: '1', name: 'Item 1' }],
         }),
         // @ts-expect-error - ignore second response type
         createSingleSearchResponse({
+          index: 'indexName2',
           hits: [{ objectID: '2', query: 'hello' }],
         })
       )
@@ -215,6 +217,7 @@ describe('Autocomplete', () => {
     const searchClient = createMockedSearchClient(
       createMultiSearchResponse(
         createSingleSearchResponse({
+          index: 'query_suggestions',
           hits: [
             { objectID: '1', query: 'hello' },
             { objectID: '2', query: 'hi' },
@@ -315,6 +318,7 @@ describe('Autocomplete', () => {
     const searchClient = createMockedSearchClient(
       createMultiSearchResponse(
         createSingleSearchResponse({
+          index: 'indexName',
           hits: [
             { objectID: '1', name: 'Item 1' },
             { objectID: '2', name: 'Item 2' },
@@ -322,6 +326,7 @@ describe('Autocomplete', () => {
         }),
         // @ts-expect-error - ignore second response type
         createSingleSearchResponse({
+          index: 'indexName2',
           hits: [
             { objectID: '1', query: 'hello' },
             { objectID: '2', query: 'world' },
