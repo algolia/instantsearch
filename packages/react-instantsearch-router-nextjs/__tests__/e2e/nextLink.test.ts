@@ -1,4 +1,4 @@
-import { waitForUrl } from './utils';
+import { waitForUrl, waitForInputValue } from './utils';
 
 describe('clicking on a Next.js link within the same page updates InstantSearch', () => {
   it('works when not on a i18n route', async () => {
@@ -9,13 +9,8 @@ describe('clicking on a Next.js link within the same page updates InstantSearch'
 
     await waitForUrl('http://localhost:3000/?instant_search%5Bquery%5D=apple');
 
-    const searchInput = await $('.ais-SearchBox-input');
-
-    expect(
-      await browser.waitUntil(async () => {
-        return (await searchInput.getValue()) === 'apple';
-      })
-    ).toBe(true);
+    // Wait for the input value to be updated, which ensures the page has fully loaded
+    await waitForInputValue('.ais-SearchBox-input', 'apple');
   });
 
   it('works when on a i18n route', async () => {
@@ -28,11 +23,7 @@ describe('clicking on a Next.js link within the same page updates InstantSearch'
       'http://localhost:3000/fr?instant_search%5Bquery%5D=apple'
     );
 
-    const searchInput = await $('.ais-SearchBox-input');
-    expect(
-      await browser.waitUntil(async () => {
-        return (await searchInput.getValue()) === 'apple';
-      })
-    ).toBe(true);
+    // Wait for the input value to be updated, which ensures the page has fully loaded
+    await waitForInputValue('.ais-SearchBox-input', 'apple');
   });
 });
