@@ -3,12 +3,21 @@ import {
   createAutocompleteIndexComponent,
   createAutocompletePanelComponent,
   createAutocompleteSuggestionComponent,
+  createAutocompleteRecentSearchComponent,
   cx,
 } from 'instantsearch-ui-components';
-import React, { createElement, useState, Fragment } from 'react';
+import React, {
+  createElement,
+  useState,
+  Fragment,
+  useSyncExternalStore,
+  useRef,
+} from 'react';
 import { Index, useHits, useInstantSearch } from 'react-instantsearch-core';
 
 import { SearchBox } from '../widgets/SearchBox';
+
+import { createStorage } from './createStorage';
 
 import type {
   AutocompleteIndexClassNames,
@@ -36,9 +45,15 @@ const AutocompleteSuggestion = createAutocompleteSuggestionComponent({
   Fragment,
 });
 
+const AutocompleteRecentSearch = createAutocompleteRecentSearchComponent({
+  createElement: createElement as Pragma,
+  Fragment,
+});
+
 type ItemComponentProps<TItem> = React.ComponentType<{
   item: TItem;
   onSelect: () => void;
+  classNames: Partial<AutocompleteIndexClassNames>;
 }>;
 
 type IndexConfig<TItem extends Hit<BaseHit> = Hit<BaseHit> | any> = {
@@ -62,14 +77,32 @@ export type AutocompleteProps = {
     indexName?: string;
     classNames?: Partial<AutocompleteIndexClassNames>;
   };
+  showRecent?:
+    | boolean
+    | {
+        itemComponent: ItemComponentProps<{ query: string }> & {
+          onRemoveRecentSearch: () => void;
+        };
+      };
 };
 
 export function EXPERIMENTAL_Autocomplete({
   indices: userIndices = [],
   showSuggestions,
+  showRecent,
 }: AutocompleteProps) {
+  const storageRef = useRef(createStorage({ limit: 5 }));
+  const storage = useSyncExternalStore(
+    (onStorageChange) => {
+      storageRef.current.registerUpdateListener(onStorageChange);
+      return () => {
+        storageRef.current.unregisterUpdateListener();
+      };
+    },
+    () => storageRef.current
+  );
+  const { indexUiState, setIndexUiState } = useInstantSearch();
   const [isOpen, setIsOpen] = useState(false);
-  const { setIndexUiState } = useInstantSearch();
 
   const indices = [...userIndices];
 
@@ -98,42 +131,77 @@ export function EXPERIMENTAL_Autocomplete({
     });
   }
 
+  const setQuery = (query: string) => {
+    storage.onAdd(query);
+    setIndexUiState((state) => ({ ...state, query }));
+  };
+
+  const query = indexUiState.query || '';
+
+  const AutocompleteRecentSearchComponent =
+    (typeof showRecent === 'object' && showRecent.itemComponent) ||
+    AutocompleteRecentSearch;
+
   return (
-    <Index EXPERIMENTAL_isolated>
-      <Autocomplete isOpen={isOpen}>
+    <Autocomplete isOpen={isOpen}>
+      <Index EXPERIMENTAL_isolated>
         <SearchBox onFocus={() => setIsOpen(true)} />
         <AutocompletePanel isOpen={isOpen}>
+          {showRecent && (
+            <AutocompleteIndexComponent
+              setQuery={setQuery}
+              itemComponent={({ item, onSelect, classNames }) => (
+                <AutocompleteRecentSearchComponent
+                  item={item}
+                  onSelect={onSelect}
+                  classNames={classNames}
+                  onRemoveRecentSearch={() => storage.onRemove(item.query)}
+                />
+              )}
+              classNames={{
+                root: 'ais-AutocompleteRecentSearches',
+                list: 'ais-AutocompleteRecentSearchesList',
+                item: 'ais-AutocompleteRecentSearchesItem',
+              }}
+              items={storage
+                .getAll(query)
+                .map((value) => ({ objectID: value, query: value }))}
+            />
+          )}
           {indices.map((index) => (
             <Index key={index.indexName} indexName={index.indexName}>
-              <AutocompleteIndexComponent
-                {...index}
-                setQuery={(query) => {
-                  setIndexUiState((state) => ({ ...state, query }));
-                }}
-              />
+              <AutocompleteIndexComponent {...index} setQuery={setQuery} />
             </Index>
           ))}
         </AutocompletePanel>
-      </Autocomplete>
-    </Index>
+      </Index>
+    </Autocomplete>
   );
 }
 
-function AutocompleteIndexComponent({
+export function AutocompleteIndexComponent<
+  T extends { objectID: string } & Record<string, unknown> = {
+    objectID: string;
+  } & Record<string, unknown>
+>({
   itemComponent: ItemComponent,
   onSelect,
   getQuery,
   getURL,
   setQuery,
   classNames,
-}: IndexConfig & { setQuery: (query: string) => void }) {
-  const { items } = useHits();
+  items,
+}: Omit<IndexConfig, 'indexName'> & {
+  setQuery: (query: string) => void;
+  items?: T[];
+}) {
+  const { items: hits } = useHits();
 
   return (
     <AutocompleteIndex
       // @ts-expect-error - there seems to be problems with React.ComponentType and this, but it's actually correct
       ItemComponent={ItemComponent}
-      items={items}
+      items={items || hits}
       onSelect={(item) => {
         onSelect?.({
           item,

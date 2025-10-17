@@ -8,10 +8,10 @@ import {
   InstantSearch,
   Pagination,
   RefinementList,
-  SearchBox,
   TrendingItems,
   Carousel,
   Chat,
+  EXPERIMENTAL_Autocomplete,
 } from 'react-instantsearch';
 
 import { Panel } from './Panel';
@@ -55,7 +55,13 @@ export function App() {
             </div>
 
             <div className="search-panel__results">
-              <SearchBox placeholder="" className="searchbox" />
+              <EXPERIMENTAL_Autocomplete
+                showRecent
+                showSuggestions={{
+                  indexName: 'instant_search_demo_query_suggestions',
+                }}
+              />
+
               <Hits hitComponent={HitComponent} />
 
               <div className="pagination">
