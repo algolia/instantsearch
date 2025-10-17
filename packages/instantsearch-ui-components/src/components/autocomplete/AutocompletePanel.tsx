@@ -2,10 +2,9 @@
 
 import { cx } from '../../lib/cx';
 
-import type { ComponentChildren, Renderer } from '../../types';
+import type { ComponentChildren, ComponentProps, Renderer } from '../../types';
 
-export type AutocompletePanelProps = {
-  isOpen: boolean;
+export type AutocompletePanelProps = ComponentProps<'div'> & {
   children?: ComponentChildren;
   classNames?: Partial<AutocompletePanelClassNames>;
 };
@@ -23,12 +22,16 @@ export type AutocompletePanelClassNames = {
 
 export function createAutocompletePanelComponent({ createElement }: Renderer) {
   return function AutocompletePanel(userProps: AutocompletePanelProps) {
-    const { children, isOpen, classNames = {} } = userProps;
+    const { children, classNames = {}, ...props } = userProps;
 
     return (
       <div
-        className={cx('ais-AutocompletePanel', classNames.root)}
-        hidden={!isOpen}
+        {...props}
+        className={cx(
+          'ais-AutocompletePanel',
+          classNames.root,
+          props.className
+        )}
       >
         <div className={cx('ais-AutocompletePanelLayout', classNames.layout)}>
           {children}
