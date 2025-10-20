@@ -11,7 +11,6 @@ import { InstantSearchTestWrapper, wait } from '@instantsearch/testutils';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
-import { useSearchBox } from 'react-instantsearch-core';
 
 import { EXPERIMENTAL_Autocomplete } from '../Autocomplete';
 
@@ -225,13 +224,8 @@ describe('Autocomplete', () => {
         })
       )
     );
-    const VirtualSearchBox = () => {
-      useSearchBox();
-      return null;
-    };
     const { container } = render(
       <InstantSearchTestWrapper searchClient={searchClient}>
-        <VirtualSearchBox />
         <EXPERIMENTAL_Autocomplete
           showSuggestions={{ indexName: 'query_suggestions' }}
         />
@@ -301,6 +295,7 @@ describe('Autocomplete', () => {
     userEvent.click(screen.getByText(/hello/i));
 
     await waitFor(() => {
+      // FIXME: issue with number of search calls?
       expect(searchClient.search).toHaveBeenCalledTimes(3);
     });
 
