@@ -1,7 +1,6 @@
 /** @jsx createElement */
 
 import { cx } from '../../lib';
-import { createStickToBottom } from '../../lib/stickToBottom';
 import { createButtonComponent } from '../Button';
 
 import { createChatMessageComponent } from './ChatMessage';
@@ -13,7 +12,7 @@ import {
   ReloadIconComponent,
 } from './icons';
 
-import type { ComponentProps, Renderer } from '../../types';
+import type { ComponentProps, MutableRef, Renderer } from '../../types';
 import type { ChatMessageProps, ChatMessageActionProps } from './ChatMessage';
 import type { ChatMessageErrorProps } from './ChatMessageError';
 import type { ChatMessageLoaderProps } from './ChatMessageLoader';
@@ -133,10 +132,6 @@ export type ChatMessagesProps<
    */
   isScrollAtBottom?: boolean;
   /**
-   * Callback when scroll position changes (controlled state)
-   */
-  setIsScrollAtBottom?: (isScrollAtBottom: boolean) => void;
-  /**
    * Whether the messages are clearing (for animation)
    */
   isClearing?: boolean;
@@ -144,6 +139,18 @@ export type ChatMessagesProps<
    * Callback for when clearing transition ends
    */
   onClearTransitionEnd?: () => void;
+  /**
+   * Ref callback for the scroll container element
+   */
+  scrollRef?: MutableRef<HTMLDivElement | null>;
+  /**
+   * Ref callback for the content element
+   */
+  contentRef?: MutableRef<HTMLDivElement | null>;
+  /**
+   * Callback to scroll to bottom
+   */
+  onScrollToBottom?: () => void;
 };
 
 const getTextContent = (message: ChatMessageBase) => {
@@ -243,17 +250,6 @@ export function createChatMessagesComponent({
     createElement,
   });
 
-  let setIsScrollAtBottomCallback: ((isAtBottom: boolean) => void) | null =
-    null;
-
-  const stickToBottom = createStickToBottom({
-    initial: 'smooth',
-    resize: 'smooth',
-    onIsAtBottomChange: (isAtBottom) => {
-      setIsScrollAtBottomCallback?.(isAtBottom);
-    },
-  });
-
   return function ChatMessages<
     TMessage extends ChatMessageBase = ChatMessageBase
   >(userProps: ChatMessagesProps<TMessage>) {
@@ -277,11 +273,11 @@ export function createChatMessagesComponent({
       isClearing = false,
       onClearTransitionEnd,
       isScrollAtBottom,
-      setIsScrollAtBottom,
+      scrollRef,
+      contentRef,
+      onScrollToBottom,
       ...props
     } = userProps;
-
-    setIsScrollAtBottomCallback = setIsScrollAtBottom || null;
 
     const translations: ChatMessagesTranslations = {
       scrollToBottomLabel: 'Scroll to bottom',
@@ -315,16 +311,13 @@ export function createChatMessagesComponent({
         role="log"
         aria-live="polite"
       >
-        <div
-          className={cx(cssClasses.scroll)}
-          ref={(el) => stickToBottom.setScrollElement(el)}
-        >
+        <div className={cx(cssClasses.scroll)} ref={scrollRef}>
           <div
             className={cx(
               cssClasses.content,
               isClearing && 'ais-ChatMessages-content--clearing'
             )}
-            ref={(el) => stickToBottom.setContentElement(el)}
+            ref={contentRef}
             onTransitionEnd={(e) => {
               if (
                 e.target === e.currentTarget &&
@@ -370,7 +363,7 @@ export function createChatMessagesComponent({
             (hideScrollToBottom || isScrollAtBottom) &&
               cssClasses.scrollToBottomHidden
           )}
-          onClick={() => stickToBottom.scrollToBottom()}
+          onClick={onScrollToBottom}
           aria-label={translations.scrollToBottomLabel}
           tabIndex={isScrollAtBottom ? -1 : 0}
         >
