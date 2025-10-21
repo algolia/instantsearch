@@ -48,6 +48,10 @@
   gap: calc(var(--ais-spacing) / 2);
 }
 
+.ais-ChatHeader-clear {
+  font-size: calc(var(--ais-spacing) * 0.875);
+}
+
 @media (max-width: variables.$ais-chat-breakpoint) {
   .ais-ChatHeader-maximize {
     display: none;
