@@ -44,8 +44,8 @@
 .ais-ChatMessage-message {
   position: relative;
   text-wrap: pretty;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
+  font-size: calc(var(--ais-spacing) * 0.875);
+  line-height: calc(var(--ais-spacing) * 1.25);
 
   img {
     max-width: 100%;
