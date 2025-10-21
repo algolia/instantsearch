@@ -5,11 +5,14 @@ import {
   createAutocompleteSuggestionComponent,
   cx,
 } from 'instantsearch-ui-components';
-import React, { createElement, useState, Fragment } from 'react';
-import { Index, useHits, useInstantSearch } from 'react-instantsearch-core';
+import React, { createElement, Fragment } from 'react';
+import { Index, useHits, useSearchBox } from 'react-instantsearch-core';
 
 import { SearchBox } from '../widgets/SearchBox';
 
+import { useAutocomplete } from './useAutocomplete';
+
+import type { IndexConfig as UseAutocompleteIndexConfig } from './useAutocomplete';
 import type {
   AutocompleteIndexClassNames,
   Pragma,
@@ -36,47 +39,42 @@ const AutocompleteSuggestion = createAutocompleteSuggestionComponent({
   Fragment,
 });
 
-type ItemComponentProps<TItem> = React.ComponentType<{
-  item: TItem;
+type ItemComponentProps<TItem extends BaseHit> = React.ComponentType<{
+  item: Hit<TItem>;
   onSelect: () => void;
 }>;
 
-type IndexConfig<TItem extends Hit<BaseHit> = Hit<BaseHit> | any> = {
-  indexName: string;
-  getQuery?: (item: TItem) => string;
-  getURL?: (item: TItem) => string;
+type IndexConfig<TItem extends BaseHit> = UseAutocompleteIndexConfig<TItem> & {
   itemComponent: ItemComponentProps<TItem>;
-  onSelect?: (params: {
-    item: TItem;
-    getQuery: () => string;
-    getURL: () => string;
-    setQuery: (query: string) => void;
-  }) => void;
   classNames?: Partial<AutocompleteIndexClassNames>;
 };
 
-export type AutocompleteProps = {
-  indices?: IndexConfig[];
-  showSuggestions?: {
-    itemComponent?: ItemComponentProps<Hit<{ query: string }>>;
-    indexName?: string;
-    classNames?: Partial<AutocompleteIndexClassNames>;
-  };
+export type AutocompleteProps<TItem extends BaseHit> = {
+  indices?: Array<IndexConfig<TItem>>;
+  showSuggestions?: Partial<
+    Pick<
+      IndexConfig<{ query: string }>,
+      'indexName' | 'itemComponent' | 'classNames'
+    >
+  >;
 };
 
-export function EXPERIMENTAL_Autocomplete({
+function VirtualSearchBox() {
+  useSearchBox();
+  return null;
+}
+
+export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
   indices: userIndices = [],
   showSuggestions,
-}: AutocompleteProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const { setIndexUiState } = useInstantSearch();
-
+}: AutocompleteProps<TItem>) {
   const indices = [...userIndices];
-
   if (showSuggestions?.indexName) {
     indices.unshift({
       indexName: showSuggestions.indexName,
-      itemComponent: showSuggestions.itemComponent || AutocompleteSuggestion,
+      // Temporarily force casting until the coming refactoring
+      itemComponent: (showSuggestions.itemComponent ||
+        AutocompleteSuggestion) as unknown as ItemComponentProps<TItem>,
       classNames: {
         root: cx(
           'ais-AutocompleteSuggestions',
@@ -98,50 +96,54 @@ export function EXPERIMENTAL_Autocomplete({
     });
   }
 
+  const {
+    getIndexProps,
+    getInputProps,
+    getItemProps,
+    getPanelProps,
+    getRootProps,
+  } = useAutocomplete({ indices });
+
   return (
-    <Index EXPERIMENTAL_isolated>
-      <Autocomplete isOpen={isOpen}>
-        <SearchBox onFocus={() => setIsOpen(true)} />
-        <AutocompletePanel isOpen={isOpen}>
-          {indices.map((index) => (
-            <Index key={index.indexName} indexName={index.indexName}>
-              <AutocompleteIndexComponent
-                {...index}
-                setQuery={(query) => {
-                  setIndexUiState((state) => ({ ...state, query }));
-                }}
-              />
-            </Index>
-          ))}
-        </AutocompletePanel>
-      </Autocomplete>
-    </Index>
+    <Fragment>
+      <VirtualSearchBox />
+      <Index EXPERIMENTAL_isolated {...getIndexProps()}>
+        <Autocomplete {...getRootProps()}>
+          <SearchBox inputProps={getInputProps()} />
+          <AutocompletePanel {...getPanelProps()}>
+            {indices.map((index) => (
+              <Index key={index.indexName} indexName={index.indexName}>
+                <AutocompleteIndexComponent<TItem>
+                  {...index}
+                  getItemProps={getItemProps}
+                />
+              </Index>
+            ))}
+          </AutocompletePanel>
+        </Autocomplete>
+      </Index>
+    </Fragment>
   );
 }
 
-function AutocompleteIndexComponent({
+function AutocompleteIndexComponent<TItem extends BaseHit>({
+  indexName,
   itemComponent: ItemComponent,
-  onSelect,
-  getQuery,
-  getURL,
-  setQuery,
+  getItemProps,
   classNames,
-}: IndexConfig & { setQuery: (query: string) => void }) {
-  const { items } = useHits();
+}: IndexConfig<TItem> &
+  Pick<ReturnType<typeof useAutocomplete>, 'getItemProps'>) {
+  const { items } = useHits<TItem>();
 
   return (
     <AutocompleteIndex
       // @ts-expect-error - there seems to be problems with React.ComponentType and this, but it's actually correct
       ItemComponent={ItemComponent}
-      items={items}
-      onSelect={(item) => {
-        onSelect?.({
-          item,
-          getQuery: () => getQuery?.(item) || '',
-          getURL: () => getURL?.(item) || '',
-          setQuery,
-        });
-      }}
+      items={items.map((item) => ({
+        ...item,
+        __indexName: indexName,
+      }))}
+      getItemProps={getItemProps}
       classNames={classNames}
     />
   );

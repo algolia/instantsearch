@@ -633,6 +633,7 @@ const testOptions = {
 
 describe('Common widget tests (Vue InstantSearch)', () => {
   runTestSuites({
+    flavor: 'vue',
     testSuites,
     testSetups,
     testOptions,

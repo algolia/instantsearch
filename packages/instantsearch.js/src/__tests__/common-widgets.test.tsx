@@ -40,7 +40,7 @@ import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
 type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
 
-const testSetups: TestSetupsMap<TestSuites> = {
+const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
   createHierarchicalMenuWidgetTests({ instantSearchOptions, widgetParams }) {
     instantsearch(instantSearchOptions)
       .addWidgets([
@@ -671,6 +671,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
 
 describe('Common widget tests (InstantSearch.js)', () => {
   runTestSuites({
+    flavor: 'javascript',
     testSuites,
     testSetups,
     testOptions,

@@ -140,8 +140,12 @@ export class Chat<
 > extends AbstractChat<TUiMessage> {
   _state: ChatState<TUiMessage>;
 
-  constructor({ messages, id, ...init }: ChatInit<TUiMessage>) {
-    const state = new ChatState(id, messages);
+  constructor({
+    messages,
+    agentId,
+    ...init
+  }: ChatInit<TUiMessage> & { agentId?: string }) {
+    const state = new ChatState(agentId, messages);
     super({ ...init, state });
     this._state = state;
   }

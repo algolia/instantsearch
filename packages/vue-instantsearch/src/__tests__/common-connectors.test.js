@@ -447,6 +447,7 @@ const testOptions = {
 
 describe('Common connector tests (Vue InstantSearch)', () => {
   runTestSuites({
+    flavor: 'vue',
     testSuites,
     testSetups,
     testOptions,

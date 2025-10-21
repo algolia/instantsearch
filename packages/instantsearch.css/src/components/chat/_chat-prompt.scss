@@ -87,10 +87,9 @@
   padding-bottom: 0;
   caret-color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
   font-family: inherit;
-  font-size: inherit;
   line-height: inherit;
   color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
-  font-size: 0.875rem;
+  font-size: calc(var(--ais-spacing) * 0.875);
   line-height: 1.25rem;
 }
 

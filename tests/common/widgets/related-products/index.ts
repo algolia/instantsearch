@@ -13,14 +13,14 @@ export type RelatedProductsWidgetSetup = TestSetup<{
 
 export function createRelatedProductsWidgetTests(
   setup: RelatedProductsWidgetSetup,
-  { act = fakeAct, skippedTests = {} }: TestOptions = {}
+  { act = fakeAct, skippedTests = {}, flavor = 'javascript' }: TestOptions = {}
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
   skippableDescribe('RelatedProducts widget common tests', skippedTests, () => {
-    createOptionsTests(setup, { act, skippedTests });
-    createLinksTests(setup, { act, skippedTests });
+    createOptionsTests(setup, { act, skippedTests, flavor });
+    createLinksTests(setup, { act, skippedTests, flavor });
   });
 }

@@ -290,6 +290,8 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   tools: UserClientSideToolsWithTemplate;
 }): Renderer<ChatRenderState, Partial<ChatWidgetParams>> => {
   const state = createLocalState();
+  const promptRef = { current: null as HTMLTextAreaElement | null };
+
   return (props, isFirstRendering) => {
     const {
       indexUiState,
@@ -303,10 +305,15 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       setMessages,
       setOpen,
       status,
+      error,
       addToolResult,
       regenerate,
       stop,
     } = props;
+
+    if (__DEV__ && error) {
+      throw error;
+    }
 
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
@@ -602,6 +609,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
             translations: messagesTranslations,
           }}
           promptProps={{
+            promptRef,
             status,
             value: input,
             onInput: (event) => {

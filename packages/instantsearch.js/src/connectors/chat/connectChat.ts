@@ -1,4 +1,7 @@
-import { DefaultChatTransport } from 'ai';
+import {
+  DefaultChatTransport,
+  lastAssistantMessageIsCompleteWithToolCalls,
+} from 'ai';
 
 import { Chat } from '../../lib/chat';
 import {
@@ -7,6 +10,7 @@ import {
   createSendEventForHits,
   getAppIdAndApiKey,
   noop,
+  warning,
 } from '../../lib/utils';
 
 import type {
@@ -114,6 +118,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
   return <TUiMessage extends UIMessage = UIMessage>(
     widgetParams: TWidgetParams & ChatConnectorParams<TUiMessage>
   ) => {
+    warning(false, 'Chat is not yet stable and will change in the future.');
+
     const { resume = false, tools = {}, ...options } = widgetParams || {};
 
     let _chatInstance: Chat<TUiMessage>;
@@ -167,28 +173,44 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
       return new Chat({
         ...options,
-        id: options.agentId,
         transport,
+        sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
         onToolCall({ toolCall }) {
           const tool = tools[toolCall.toolName];
 
-          if (!tool?.onToolCall) {
-            return Promise.resolve();
+          if (tool && tool.onToolCall) {
+            const addToolResult: AddToolResultWithOutput = ({ output }) =>
+              Promise.resolve(
+                _chatInstance.addToolResult({
+                  output,
+                  tool: toolCall.toolName,
+                  toolCallId: toolCall.toolCallId,
+                })
+              );
+
+            return tool.onToolCall({
+              ...toolCall,
+              addToolResult,
+            });
           }
 
-          const addToolResult: AddToolResultWithOutput = ({ output }) =>
-            Promise.resolve(
+          if (!tool) {
+            if (__DEV__) {
+              throw new Error(
+                `No tool implementation found for "${toolCall.toolName}". Please provide a tool implementation in the \`tools\` prop.`
+              );
+            }
+
+            return Promise.resolve(
               _chatInstance.addToolResult({
-                output,
+                output: `No tool implemented for "${toolCall.toolName}".`,
                 tool: toolCall.toolName,
                 toolCallId: toolCall.toolCallId,
               })
             );
+          }
 
-          return tool.onToolCall({
-            ...toolCall,
-            addToolResult,
-          });
+          return Promise.resolve();
         },
       });
     };
