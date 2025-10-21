@@ -187,18 +187,7 @@ export function Chat<
     onToolCall({ toolCall }) {
       const tool = tools[toolCall.toolName];
 
-      if (tool && tool.onToolCall) {
-        const scopedAddToolResult: AddToolResultWithOutput = ({ output }) => {
-          return Promise.resolve(
-            addToolResult({
-              output,
-              tool: toolCall.toolName,
-              toolCallId: toolCall.toolCallId,
-            })
-          );
-        };
-        tool.onToolCall({ ...toolCall, addToolResult: scopedAddToolResult });
-      } else {
+      if (!tool) {
         if (__DEV__) {
           throw new Error(
             `No tool implementation found for "${toolCall.toolName}". Please provide a tool implementation in the \`tools\` prop.`
@@ -210,6 +199,18 @@ export function Chat<
           tool: toolCall.toolName,
           toolCallId: toolCall.toolCallId,
         });
+        return;
+      }
+
+      if (tool.onToolCall) {
+        const scopedAddToolResult: AddToolResultWithOutput = ({ output }) =>
+          addToolResult({
+            output,
+            tool: toolCall.toolName,
+            toolCallId: toolCall.toolCallId,
+          });
+
+        tool.onToolCall({ ...toolCall, addToolResult: scopedAddToolResult });
       }
     },
   });
