@@ -68,7 +68,7 @@ export function createAutocompletePropGetters({
     onRefine,
   }: Parameters<UsePropGetters<TItem>>[0]): ReturnType<UsePropGetters<TItem>> {
     const getElementId = createGetElementId(useId());
-    const rootRef = useRef<HTMLInputElement>(null);
+    const rootRef = useRef<HTMLDivElement>(null);
     const [isOpen, setIsOpen] = useState(false);
     const [activeDescendant, setActiveDescendant] = useState<
       string | undefined
@@ -81,7 +81,7 @@ export function createAutocompletePropGetters({
 
     useEffect(() => {
       const onBodyClick = (event: MouseEvent) => {
-        if (rootRef.current?.contains(event.target as HTMLElement)) {
+        if (unwrapRef(rootRef)?.contains(event.target as HTMLElement)) {
           return;
         }
 
@@ -237,4 +237,13 @@ function createGetElementId(autocompleteId: string) {
     const prefix = 'autocomplete';
     return `${prefix}${autocompleteId}${suffixes.join(':')}`;
   };
+}
+
+/**
+ * Returns the framework-agnostic value of a ref.
+ */
+function unwrapRef<TType>(ref: { current: TType | null }): TType | null {
+  return ref.current && typeof ref.current === 'object' && 'base' in ref.current
+    ? (ref.current.base as TType) // Preact
+    : ref.current; // React
 }
