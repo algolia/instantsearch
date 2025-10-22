@@ -178,22 +178,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         onToolCall({ toolCall }) {
           const tool = tools[toolCall.toolName];
 
-          if (tool && tool.onToolCall) {
-            const addToolResult: AddToolResultWithOutput = ({ output }) =>
-              Promise.resolve(
-                _chatInstance.addToolResult({
-                  output,
-                  tool: toolCall.toolName,
-                  toolCallId: toolCall.toolCallId,
-                })
-              );
-
-            return tool.onToolCall({
-              ...toolCall,
-              addToolResult,
-            });
-          }
-
           if (!tool) {
             if (__DEV__) {
               throw new Error(
@@ -201,13 +185,25 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
               );
             }
 
-            return Promise.resolve(
+            return _chatInstance.addToolResult({
+              output: `No tool implemented for "${toolCall.toolName}".`,
+              tool: toolCall.toolName,
+              toolCallId: toolCall.toolCallId,
+            });
+          }
+
+          if (tool.onToolCall) {
+            const addToolResult: AddToolResultWithOutput = ({ output }) =>
               _chatInstance.addToolResult({
-                output: `No tool implemented for "${toolCall.toolName}".`,
+                output,
                 tool: toolCall.toolName,
                 toolCallId: toolCall.toolCallId,
-              })
-            );
+              });
+
+            return tool.onToolCall({
+              ...toolCall,
+              addToolResult,
+            });
           }
 
           return Promise.resolve();
