@@ -153,12 +153,13 @@ type CreateStickToBottomParams = {
     callback: T,
     deps: readonly unknown[]
   ) => T;
-  useEffect: (effect: () => void | (() => void), deps?: readonly unknown[]) => void;
+  useEffect: (
+    effect: () => void | (() => void),
+    deps?: readonly unknown[]
+  ) => void;
   useMemo: <TType>(factory: () => TType, deps: readonly unknown[]) => TType;
   useRef: <TType>(initialValue: TType) => { current: TType };
-  useState: <TType>(
-    initialState: TType
-  ) => [TType, (newState: TType) => void];
+  useState: <TType>(initialState: TType) => [TType, (newState: TType) => void];
 };
 
 export function createStickToBottom({
@@ -400,7 +401,8 @@ export function createStickToBottom({
                   optionsRef.current.resize
                 ),
                 ignoreEscapes,
-                duration: Math.max(0, durationElapsed - Date.now()) || undefined,
+                duration:
+                  Math.max(0, durationElapsed - Date.now()) || undefined,
               });
             }
 
@@ -510,7 +512,9 @@ export function createStickToBottom({
       ({ target, deltaY }: WheelEvent) => {
         let element = target as HTMLElement;
 
-        while (!['scroll', 'auto'].includes(getComputedStyle(element).overflow)) {
+        while (
+          !['scroll', 'auto'].includes(getComputedStyle(element).overflow)
+        ) {
           if (!element.parentElement) {
             return;
           }
@@ -594,7 +598,9 @@ export function createStickToBottom({
             wait: true,
             preserveScrollPosition: true,
             duration:
-              animation === 'instant' ? undefined : RETAIN_ANIMATION_DURATION_MS,
+              animation === 'instant'
+                ? undefined
+                : RETAIN_ANIMATION_DURATION_MS,
           });
         } else if (state.isNearBottom) {
           /**
