@@ -135,6 +135,12 @@
         background-color: rgba(var(--ais-muted-color-rgb), 0.2);
       }
     }
+
+    &:has(:focus-visible) {
+      outline: 2px solid
+        rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+      outline-offset: 2px;
+    }
   }
 
   .ais-Carousel-hit-title {
@@ -145,16 +151,14 @@
   }
 
   .ais-Carousel-hit-link {
-    @extend %ais-focus-outline;
-
-    &:focus-visible {
-      outline-offset: -1px;
-    }
-
     &::before {
       content: '';
       position: absolute;
       inset: 0;
+    }
+
+    &:focus-visible {
+      outline: none;
     }
   }
 
