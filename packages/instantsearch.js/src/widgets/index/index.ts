@@ -126,7 +126,9 @@ export type IndexWidget<TUiState extends UiState = UiState> = Omit<
     nextState: SearchParameters | ((state: IndexUiState) => IndexUiState)
   ) => string;
 
-  addWidgets: (widgets: Array<Widget | IndexWidget | Widget[]>) => IndexWidget;
+  addWidgets: (
+    widgets: Array<Widget | IndexWidget | Array<IndexWidget | Widget>>
+  ) => IndexWidget;
   removeWidgets: (
     widgets: Array<Widget | IndexWidget | Widget[]>
   ) => IndexWidget;
@@ -454,6 +456,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       }
 
       flatWidgets.forEach((widget) => {
+        widget.parent = this;
         if (isIndexWidget(widget)) {
           return;
         }
@@ -551,6 +554,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       );
 
       localWidgets.forEach((widget) => {
+        widget.parent = undefined;
         if (isIndexWidget(widget)) {
           return;
         }

@@ -19,10 +19,7 @@ type GetInputProps = () => Partial<ComponentProps<'input'>>;
 type GetItemProps = (
   item: { __indexName: string } & Record<string, unknown>,
   index: number
-) => Pick<
-  ComponentProps<'li'>,
-  'id' | 'role' | 'aria-selected' | 'onMouseEnter' | 'onMouseLeave'
-> & {
+) => Pick<ComponentProps<'li'>, 'id' | 'role' | 'aria-selected'> & {
   onSelect: () => void;
 };
 
@@ -190,8 +187,6 @@ export function createAutocompletePropGetters({
           id,
           role: 'row',
           'aria-selected': id === activeDescendant,
-          onMouseEnter: () => setActiveDescendant(id),
-          onMouseLeave: () => setActiveDescendant(undefined),
           onSelect: () => submit(),
         };
       },

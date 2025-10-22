@@ -10,6 +10,7 @@ import type {
   SearchBoxCSSClasses,
   SearchBoxTemplates,
 } from '../../widgets/search-box/search-box';
+import type { ComponentProps } from 'preact';
 
 export type SearchBoxComponentCSSClasses =
   ComponentCSSClasses<SearchBoxCSSClasses>;
@@ -34,6 +35,7 @@ type SearchBoxProps = {
   onChange?: (event: Event) => void;
   onSubmit?: (event: Event) => void;
   onReset?: (event: Event) => void;
+  inputProps?: Partial<ComponentProps<'input'>>;
 };
 
 const defaultProps = {
@@ -51,6 +53,7 @@ const defaultProps = {
   onSubmit: noop,
   onReset: noop,
   refine: noop,
+  inputProps: {},
 };
 
 type SearchBoxPropsWithDefaultProps = SearchBoxProps &
@@ -86,6 +89,9 @@ class SearchBox extends Component<
   }
 
   private onInput = (event: Event) => {
+    // @ts-expect-error the context incompatibility of `this` doesn't matter
+    this.props.inputProps.onInput?.(event);
+
     const { searchAsYouType, refine, onChange } = this.props;
     const query = (event.target as HTMLInputElement).value;
 
@@ -147,11 +153,17 @@ class SearchBox extends Component<
     onReset(event);
   };
 
-  private onBlur = () => {
+  private onBlur = (event: FocusEvent) => {
+    // @ts-expect-error the context incompatibility of `this` doesn't matter
+    this.props.inputProps.onBlur?.(event);
+
     this.setState({ focused: false });
   };
 
-  private onFocus = () => {
+  private onFocus: (event: FocusEvent) => void = (event) => {
+    // @ts-expect-error the context incompatibility of `this` doesn't matter
+    this.props.inputProps.onFocus?.(event);
+
     this.setState({ focused: true });
   };
 
@@ -166,6 +178,7 @@ class SearchBox extends Component<
       templates,
       isSearchStalled,
       ariaLabel,
+      inputProps,
     } = this.props;
 
     return (
@@ -179,6 +192,7 @@ class SearchBox extends Component<
           onReset={this.onReset}
         >
           <input
+            {...inputProps}
             ref={this.input}
             value={this.state.query}
             disabled={this.props.disabled}
