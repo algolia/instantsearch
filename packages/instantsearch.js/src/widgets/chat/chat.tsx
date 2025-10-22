@@ -189,7 +189,7 @@ function createCarouselTool<
         <div className="ais-ChatToolSearchIndexCarouselHeaderResults">
           {nbHits && (
             <div className="ais-ChatToolSearchIndexCarouselHeaderCount">
-              {hitsPerPage ?? 0} of {nbHits} result
+              {hitsPerPage ?? 0} of {nbHits.toLocaleString()} result
               {nbHits > 1 ? 's' : ''}
             </div>
           )}
