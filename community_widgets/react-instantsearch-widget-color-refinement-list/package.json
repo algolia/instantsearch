@@ -1,0 +1,100 @@
+{
+  "name": "@algolia/react-instantsearch-widget-color-refinement-list",
+  "version": "2.0.0",
+  "description": "React InstantSearch widget that filters the dataset based on color facet values",
+  "keywords": [
+    "instantsearch-widget",
+    "instantsearch",
+    "react-instantsearch",
+    "react-instantsearch-widget-color-refinement-list",
+    "widget",
+    "connector",
+    "algolia"
+  ],
+  "license": "MIT",
+  "author": "Algolia <support@algolia.com>",
+  "repository": "algolia/react-instantsearch-widget-color-refinement-list",
+  "homepage": "https://github.com/algolia/react-instantsearch-widget-color-refinement-list#readme",
+  "bugs": {
+    "url": "https://github.com/algolia/react-instantsearch-widget-color-refinement-list/issues",
+    "email": "support@algolia.com"
+  },
+  "type": "module",
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.cjs.js"
+    }
+  },
+  "jsdelivr": "./dist/index.umd.js",
+  "unpkg": "./dist/index.umd.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "start": "vite example",
+    "prebuild": "rm -rf dist",
+    "build": "vite build && npm run build:types && npm run build:styles",
+    "build:types": "tsc -p tsconfig.declaration.json",
+    "build:styles": "sass --style=compressed --no-source-map src/style.scss:dist/style.css",
+    "lint": "eslint --ext .js,.ts,.tsx .",
+    "lint:fix": "npm run lint --fix",
+    "test": "jest",
+    "test:watch": "npm test -- --watch",
+    "test:types": "tsc",
+    "prerelease": "npm run build",
+    "release": "standard-version"
+  },
+  "peerDependencies": {
+    "classnames": "^2.3.1",
+    "react": ">= 16.8.0 < 20",
+    "react-instantsearch": "^7.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.18.6",
+    "@babel/eslint-parser": "^7.18.2",
+    "@babel/preset-env": "^7.18.6",
+    "@babel/preset-react": "^7.18.6",
+    "@babel/preset-typescript": "^7.18.6",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^13.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@tweakpane/core": "^1.1.0",
+    "@types/jest": "^28.1.4",
+    "@types/node": "^18.0.3",
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "^18.0.6",
+    "@typescript-eslint/eslint-plugin": "^5.30.5",
+    "@typescript-eslint/parser": "^5.30.5",
+    "@vitejs/plugin-react-refresh": "^1.3.6",
+    "algoliasearch": "^4.13.1",
+    "babel-jest": "^28.1.2",
+    "classnames": "^2.3.1",
+    "eslint": "^8.19.0",
+    "eslint-config-algolia": "^20.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-eslint-comments": "3.2.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jest": "^26.5.3",
+    "eslint-plugin-jsdoc": "^39.3.3",
+    "eslint-plugin-jsx-a11y": "^6.6.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.30.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "jest": "^28.1.2",
+    "jest-environment-jsdom": "^30.2.0",
+    "prettier": "^2.7.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-instantsearch": "^7.0.0",
+    "react-instantsearch-core": "^7.0.0",
+    "sass": "^1.53.0",
+    "standard-version": "^9.5.0",
+    "tweakpane": "^3.1.0",
+    "typescript": "^4.7.4",
+    "vite": "^2.9.13"
+  }
+}

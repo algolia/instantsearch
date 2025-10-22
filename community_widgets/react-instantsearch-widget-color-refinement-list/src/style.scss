@@ -1,0 +1,128 @@
+/* ========================= ColorRefinementList Widget */
+/* ---------- CSS variables */
+.ais-ColorRefinementList {
+  // Transition
+  --transition-duration: 0.2s;
+  // Grid
+  --items-column-width: 3rem;
+  --items-gap: 1rem;
+  // Refined icon
+  --refined-icon-size: 1.1rem;
+  // Color
+  --color-size: 1.75rem;
+}
+
+/* ---------- List layout */
+.ais-ColorRefinementList-layoutList .ais-ColorRefinementList-items {
+  grid-template-columns: 1fr;
+}
+
+.ais-ColorRefinementList-layoutList .ais-ColorRefinementList-item {
+  flex-basis: 100%;
+  flex-direction: row;
+  max-width: 100%;
+}
+
+.ais-ColorRefinementList-layoutList .ais-ColorRefinementList-color {
+  margin-right: 0.8rem;
+}
+
+.ais-ColorRefinementList-layoutList .ais-ColorRefinementList-label {
+  margin-top: 0;
+}
+
+.ais-ColorRefinementList-layoutList .ais-ColorRefinementList-count {
+  display: block;
+  margin-left: auto;
+}
+
+/* ---------- Items */
+.ais-ColorRefinementList-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--items-column-width), 1fr));
+  gap: var(--items-gap);
+}
+
+.ais-ColorRefinementList-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.8rem;
+  color: black;
+
+  /* Reset button styles */
+  background: transparent;
+  border: 0px;
+  padding: 0px;
+  cursor: pointer;
+}
+
+/* ---------- Color */
+.ais-ColorRefinementList-color {
+  width: var(--color-size);
+  height: var(--color-size);
+  border-radius: 9999px;
+  transition: var(--transition-duration) transform ease-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: contain;
+}
+
+/* Hover/active states */
+.ais-ColorRefinementList-item {
+  &:hover .ais-ColorRefinementList-color {
+    transform: scale(1.1);
+  }
+
+  &:active .ais-ColorRefinementList-color {
+    transform: scale(0.9);
+  }
+}
+
+/* Specific case: Add border to color circle to distinguish it from the background */
+.ais-ColorRefinementList-color.color--ffffff {
+  border: 1px solid #d1d1d1;
+}
+
+/* Shape modifiers */
+.ais-ColorRefinementList-shapeSquare .ais-ColorRefinementList-color {
+  border-radius: 0;
+}
+
+/* ---------- Label */
+.ais-ColorRefinementList-label {
+  margin-top: 0.3rem;
+  transition: 0.3s color ease-out;
+  padding: 0 0.3rem;
+}
+
+.ais-ColorRefinementList-item:hover .ais-ColorRefinementList-label {
+  color: #848484;
+}
+
+/* ---------- Count */
+.ais-ColorRefinementList-count {
+  display: none;
+}
+
+/* ---------- RefinedIcon */
+.ais-ColorRefinementList-refinedIcon {
+  position: relative;
+  width: var(--refined-icon-size);
+  height: var(--refined-icon-size);
+  color: var(--contrast-color);
+  transform: scale(0);
+  visibility: hidden;
+  opacity: 0;
+  transition: transform var(--transition-duration) ease-out 0s, opacity var(--transition-duration) linear 0s, visibility 0s linear var(--transition-duration);
+}
+
+.ais-ColorRefinementList-item.ais-ColorRefinementList-itemRefined {
+  .ais-ColorRefinementList-refinedIcon {
+    transform: scale(1);
+    visibility: visible;
+    opacity: 1;
+    transition: transform var(--transition-duration) ease-out 0s, opacity var(--transition-duration) linear 0s, visibility 0s linear 0s;
+  }
+}
