@@ -90,7 +90,10 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
   showSuggestions,
   ...props
 }: AutocompleteProps<TItem>) {
-  const { refine } = useSearchBox();
+  const { refine } = useSearchBox(
+    {},
+    { $$type: 'ais.autocomplete', $$widgetType: 'ais.autocomplete' }
+  );
   const indicesConfig = [...indices];
   if (showSuggestions?.indexName) {
     indicesConfig.unshift({
