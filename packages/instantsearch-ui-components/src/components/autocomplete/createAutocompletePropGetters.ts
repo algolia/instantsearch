@@ -112,13 +112,13 @@ export function createAutocompletePropGetters({
       }
     };
 
-    const submit = () => {
+    const submit = (actualActiveDescendant = activeDescendant) => {
       setIsOpen(false);
-      if (activeDescendant && items.has(activeDescendant)) {
+      if (actualActiveDescendant && items.has(actualActiveDescendant)) {
         const {
           item,
           config: { onSelect, getQuery, getURL },
-        } = items.get(activeDescendant)!;
+        } = items.get(actualActiveDescendant)!;
         onSelect?.({
           item,
           getQuery: () => getQuery?.(item) ?? '',
@@ -187,7 +187,7 @@ export function createAutocompletePropGetters({
           id,
           role: 'row',
           'aria-selected': id === activeDescendant,
-          onSelect: () => submit(),
+          onSelect: () => submit(id),
         };
       },
       getPanelProps: () => ({

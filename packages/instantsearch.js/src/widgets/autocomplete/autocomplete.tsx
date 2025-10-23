@@ -90,6 +90,8 @@ type RendererParams<TItem extends BaseHit> = {
     indexTemplateProps: Array<
       PreparedTemplateProps<NonNullable<IndexConfig<TItem>['templates']>>
     >;
+    isolatedIndex: IndexWidget;
+    targetIndex: IndexWidget;
   };
   templates: AutocompleteTemplates<TItem>;
 };
@@ -100,11 +102,22 @@ const createRenderer = <TItem extends BaseHit>(
   AutocompleteRenderState,
   Partial<AutocompleteWidgetParams<TItem>>
 > => {
-  const { containerNode, ...rendererParams } = params;
+  const { instanceId, containerNode, ...rendererParams } = params;
   return (connectorParams, isFirstRendering) => {
     if (isFirstRendering) {
+      let isolatedIndex = connectorParams.instantSearchInstance.mainIndex;
+      let targetIndex = connectorParams.instantSearchInstance.mainIndex;
+      walkIndex(targetIndex, (childIndex) => {
+        if (childIndex.getIndexId() === `ais-autocomplete-${instanceId}`) {
+          isolatedIndex = childIndex;
+          targetIndex = childIndex.parent!;
+        }
+      });
+
       rendererParams.renderState = {
         indexTemplateProps: [],
+        isolatedIndex,
+        targetIndex,
       };
       return;
     }
@@ -118,13 +131,12 @@ const createRenderer = <TItem extends BaseHit>(
 
 type AutocompleteWrapperProps<TItem extends BaseHit> = Pick<
   RendererParams<TItem>,
-  'instanceId' | 'indicesConfig' | 'cssClasses' | 'templates' | 'renderState'
+  'indicesConfig' | 'cssClasses' | 'templates' | 'renderState'
 > &
   Pick<AutocompleteRenderState, 'indices' | 'refine'> &
   RendererOptions<Partial<AutocompleteWidgetParams<TItem>>>;
 
 function AutocompleteWrapper<TItem extends BaseHit>({
-  instanceId,
   indicesConfig,
   indices,
   refine,
@@ -132,13 +144,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   renderState,
   instantSearchInstance,
 }: AutocompleteWrapperProps<TItem>) {
-  let targetIndex = instantSearchInstance.mainIndex;
-  walkIndex(instantSearchInstance.mainIndex, (idx) => {
-    if (idx.getIndexId() === `ais-autocomplete-${instanceId}`) {
-      targetIndex = idx.parent as IndexWidget;
-    }
-  });
-
+  const { isolatedIndex, targetIndex } = renderState;
   const { getInputProps, getItemProps, getPanelProps, getRootProps } =
     usePropGetters({
       indices,
@@ -150,7 +156,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
             ...uiState[targetIndex.getIndexId()],
             query,
           },
-          [`ais-autocomplete-${instanceId}`]: { query },
+          [isolatedIndex.getIndexId()]: { query },
         }));
       },
     });
