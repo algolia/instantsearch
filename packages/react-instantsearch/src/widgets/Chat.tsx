@@ -7,6 +7,8 @@ import {
 import React, { createElement, Fragment } from 'react';
 import { useInstantSearch, useChat } from 'react-instantsearch-core';
 
+import { useStickToBottom } from '../lib/useStickToBottom';
+
 import { createCarouselTool } from './chat/tools/SearchIndexTool';
 
 export { SearchIndexToolType, RecommendToolType };
@@ -161,9 +163,14 @@ export function Chat<
   const [maximized, setMaximized] = React.useState(false);
   const [input, setInput] = React.useState('');
   const [isClearing, setIsClearing] = React.useState(false);
-  const [isScrollAtBottom, setIsScrollAtBottom] = React.useState(true);
 
   const promptRef = React.useRef<HTMLTextAreaElement>(null);
+
+  const { scrollRef, contentRef, scrollToBottom, isAtBottom } =
+    useStickToBottom({
+      initial: 'smooth',
+      resize: 'smooth',
+    });
 
   const tools = React.useMemo(() => {
     const defaults = createDefaultTools(itemComponent, getSearchPageURL);
@@ -278,8 +285,10 @@ export function Chat<
         setIndexUiState,
         isClearing,
         onClearTransitionEnd: handleClearTransitionEnd,
-        isScrollAtBottom,
-        setIsScrollAtBottom,
+        isScrollAtBottom: isAtBottom,
+        scrollRef,
+        contentRef,
+        onScrollToBottom: scrollToBottom,
         loaderComponent: messagesLoaderComponent,
         errorComponent: messagesErrorComponent,
         actionsComponent,
