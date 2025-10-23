@@ -23,8 +23,10 @@ import type {
   AutocompleteIndexClassNames,
   AutocompleteIndexConfig,
   Pragma,
+  AutocompleteClassNames,
 } from 'instantsearch-ui-components';
 import type { BaseHit, Hit } from 'instantsearch.js';
+import type { ComponentProps } from 'react';
 
 const Autocomplete = createAutocompleteComponent({
   createElement: createElement as Pragma,
@@ -64,7 +66,7 @@ type IndexConfig<TItem extends BaseHit> = AutocompleteIndexConfig<TItem> & {
   classNames?: Partial<AutocompleteIndexClassNames>;
 };
 
-export type AutocompleteProps<TItem extends BaseHit> = {
+export type AutocompleteProps<TItem extends BaseHit> = ComponentProps<'div'> & {
   indices?: Array<IndexConfig<TItem>>;
   showSuggestions?: Partial<
     Pick<
@@ -72,9 +74,13 @@ export type AutocompleteProps<TItem extends BaseHit> = {
       'indexName' | 'itemComponent' | 'classNames'
     >
   >;
+  classNames?: Partial<AutocompleteClassNames>;
 };
 
-type InnerAutocompleteProps<TItem extends BaseHit> = {
+type InnerAutocompleteProps<TItem extends BaseHit> = Omit<
+  AutocompleteProps<TItem>,
+  'indices' | 'showSuggestions'
+> & {
   indicesConfig: Array<IndexConfig<TItem>>;
   refineSearchBox: ReturnType<typeof useSearchBox>['refine'];
 };
@@ -82,6 +88,7 @@ type InnerAutocompleteProps<TItem extends BaseHit> = {
 export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
   indices = [],
   showSuggestions,
+  ...props
 }: AutocompleteProps<TItem>) {
   const { refine } = useSearchBox();
   const indicesConfig = [...indices];
@@ -119,6 +126,7 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
           <Index key={index.indexName} indexName={index.indexName} />
         ))}
         <InnerAutocomplete
+          {...props}
           indicesConfig={indicesConfig}
           refineSearchBox={refine}
         />
@@ -130,6 +138,7 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
 function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   indicesConfig,
   refineSearchBox,
+  ...props
 }: InnerAutocompleteProps<TItem>) {
   const { indices, refine: refineAutocomplete } = useAutocomplete();
   const { getInputProps, getItemProps, getPanelProps, getRootProps } =
@@ -143,7 +152,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     });
 
   return (
-    <Autocomplete {...getRootProps()}>
+    <Autocomplete {...props} {...getRootProps()}>
       <SearchBox inputProps={getInputProps()} />
       <AutocompletePanel {...getPanelProps()}>
         {indices.map(({ indexId, hits }, index) => (

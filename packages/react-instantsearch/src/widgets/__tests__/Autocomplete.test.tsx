@@ -234,7 +234,8 @@ describe('Autocomplete', () => {
 
     await screen.findByText('hello');
 
-    expect(searchClient.search).toHaveBeenCalledWith([
+    expect(searchClient.search).toHaveBeenCalledTimes(4);
+    expect(searchClient.search).toHaveBeenNthCalledWith(3, [
       {
         indexName: 'query_suggestions',
         params: expect.objectContaining({
@@ -242,6 +243,7 @@ describe('Autocomplete', () => {
         }),
       },
     ]);
+    (searchClient.search as jest.Mock).mockClear();
 
     expect(container.querySelector('.ais-AutocompletePanel'))
       .toMatchInlineSnapshot(`
@@ -295,8 +297,7 @@ describe('Autocomplete', () => {
     userEvent.click(screen.getByText(/hello/i));
 
     await waitFor(() => {
-      // FIXME: issue with number of search calls?
-      expect(searchClient.search).toHaveBeenCalledTimes(3);
+      expect(searchClient.search).toHaveBeenCalledTimes(2);
     });
 
     expect(searchClient.search).toHaveBeenLastCalledWith([

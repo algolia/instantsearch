@@ -11,7 +11,9 @@ import {
 import { Fragment, h, render } from 'preact';
 import { useEffect, useId, useMemo, useRef, useState } from 'preact/hooks';
 
-import SearchBox from '../../components/SearchBox/SearchBox';
+import SearchBox, {
+  type SearchBoxComponentCSSClasses,
+} from '../../components/SearchBox/SearchBox';
 import TemplateComponent from '../../components/Template/Template';
 import {
   connectAutocomplete,
@@ -28,7 +30,6 @@ import configure from '../configure/configure';
 import index from '../index/index';
 import searchBoxTemplates from '../search-box/defaultTemplates';
 
-import type { SearchBoxComponentCSSClasses } from '../../components/SearchBox/SearchBox';
 import type {
   AutocompleteConnectorParams,
   AutocompleteRenderState,
@@ -47,6 +48,7 @@ import type {
   AutocompleteClassNames,
   AutocompleteIndexClassNames,
   AutocompleteIndexConfig,
+  AutocompleteIndexProps,
 } from 'instantsearch-ui-components';
 
 let autocompleteInstanceId = 0;
@@ -90,8 +92,8 @@ type RendererParams<TItem extends BaseHit> = {
     indexTemplateProps: Array<
       PreparedTemplateProps<NonNullable<IndexConfig<TItem>['templates']>>
     >;
-    isolatedIndex: IndexWidget;
-    targetIndex: IndexWidget;
+    isolatedIndex: IndexWidget | undefined;
+    targetIndex: IndexWidget | undefined;
   };
   templates: AutocompleteTemplates<TItem>;
 };
@@ -152,26 +154,38 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       onRefine(query) {
         instantSearchInstance.setUiState((uiState) => ({
           ...uiState,
-          [targetIndex.getIndexId()]: {
-            ...uiState[targetIndex.getIndexId()],
+          [targetIndex!.getIndexId()]: {
+            ...uiState[targetIndex!.getIndexId()],
             query,
           },
-          [isolatedIndex.getIndexId()]: { query },
+          [isolatedIndex!.getIndexId()]: { query },
         }));
       },
     });
 
   const query =
-    instantSearchInstance.getUiState()[targetIndex.getIndexId()].query;
+    instantSearchInstance.getUiState()[targetIndex!.getIndexId()].query;
+
+  const searchBoxSuit = component('SearchBox');
+  const searchBoxCssClasses = {
+    root: cx(searchBoxSuit()),
+    form: cx(searchBoxSuit({ descendantName: 'form' })),
+    input: cx(searchBoxSuit({ descendantName: 'input' })),
+    submit: cx(searchBoxSuit({ descendantName: 'submit' })),
+    submitIcon: cx(searchBoxSuit({ descendantName: 'submitIcon' })),
+    reset: cx(searchBoxSuit({ descendantName: 'reset' })),
+    resetIcon: cx(searchBoxSuit({ descendantName: 'resetIcon' })),
+    loadingIndicator: cx(searchBoxSuit({ descendantName: 'loadingIndicator' })),
+    loadingIcon: cx(searchBoxSuit({ descendantName: 'loadingIcon' })),
+  } satisfies SearchBoxComponentCSSClasses;
 
   return (
-    <Autocomplete {...getRootProps()}>
+    <Autocomplete {...getRootProps()} classNames={cssClasses}>
       <SearchBox
         query={query}
         refine={refine}
         inputProps={getInputProps()}
-        // FIXME: Types
-        cssClasses={cssClasses.searchBox}
+        cssClasses={searchBoxCssClasses}
         templates={searchBoxTemplates}
       />
       <AutocompletePanel {...getPanelProps()}>
@@ -185,8 +199,10 @@ function AutocompleteWrapper<TItem extends BaseHit>({
               templates: indicesConfig[i].templates,
             });
           }
-          // FIXME: Types
-          const itemComponent = ({ item, onSelect }) => {
+          const itemComponent = ({
+            item,
+            onSelect,
+          }: Parameters<AutocompleteIndexProps['ItemComponent']>[0]) => {
             return (
               <TemplateComponent
                 {...renderState.indexTemplateProps[i]}
@@ -212,12 +228,11 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   );
 }
 
-export type AutocompleteCSSClasses = Partial<AutocompleteClassNames> &
-  Partial<{
-    searchBox: Partial<SearchBoxComponentCSSClasses>;
-  }>;
+export type AutocompleteCSSClasses = Partial<AutocompleteClassNames>;
 
-export type AutocompleteTemplates<TItem extends BaseHit> = Partial<{}>;
+export type AutocompleteTemplates<TItem extends BaseHit> = Partial<
+  Record<string, TItem>
+>;
 
 type IndexConfig<TItem extends BaseHit> = AutocompleteIndexConfig<TItem> & {
   templates?: Partial<{
@@ -286,44 +301,8 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
 
   const containerNode = getContainerNode(container);
 
-  const searchBoxSuit = component('SearchBox');
   const cssClasses = {
     root: cx(suit(), userCssClasses.root),
-    searchBox: {
-      root: cx(searchBoxSuit(), userCssClasses.searchBox?.root),
-      form: cx(
-        searchBoxSuit({ descendantName: 'form' }),
-        userCssClasses.searchBox?.form
-      ),
-      input: cx(
-        searchBoxSuit({ descendantName: 'input' }),
-        userCssClasses.searchBox?.input
-      ),
-      submit: cx(
-        searchBoxSuit({ descendantName: 'submit' }),
-        userCssClasses.searchBox?.submit
-      ),
-      submitIcon: cx(
-        searchBoxSuit({ descendantName: 'submitIcon' }),
-        userCssClasses.searchBox?.submitIcon
-      ),
-      reset: cx(
-        searchBoxSuit({ descendantName: 'reset' }),
-        userCssClasses.searchBox?.reset
-      ),
-      resetIcon: cx(
-        searchBoxSuit({ descendantName: 'resetIcon' }),
-        userCssClasses.searchBox?.resetIcon
-      ),
-      loadingIndicator: cx(
-        searchBoxSuit({ descendantName: 'loadingIndicator' }),
-        userCssClasses.searchBox?.loadingIndicator
-      ),
-      loadingIcon: cx(
-        searchBoxSuit({ descendantName: 'loadingIcon' }),
-        userCssClasses.searchBox?.loadingIcon
-      ),
-    },
   } satisfies AutocompleteCSSClasses;
 
   const indicesConfig = [...indices];
@@ -360,7 +339,11 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     containerNode,
     indicesConfig,
     cssClasses,
-    renderState: { indexTemplateProps: [] },
+    renderState: {
+      indexTemplateProps: [],
+      isolatedIndex: undefined,
+      targetIndex: undefined,
+    },
     templates,
   });
 
