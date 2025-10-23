@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.5.15...algolia-experiences@1.6.0) (2025-10-23)
+
+
+### Features
+
+* **instantsearch.js:** introduce chat widget ([#6705](https://github.com/algolia/instantsearch/issues/6705)) ([d7b360b](https://github.com/algolia/instantsearch/commit/d7b360b0a2d18e3eae42bf89ffae87f10142d0c1))
+
+
+
+
+
 ## [1.5.15](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.5.14...algolia-experiences@1.5.15) (2025-09-09)
 
 **Note:** Version bump only for package algolia-experiences
