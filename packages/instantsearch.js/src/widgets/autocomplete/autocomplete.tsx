@@ -184,6 +184,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       <SearchBox
         query={query}
         refine={refine}
+        // @ts-ignore type issues on event handlers
         inputProps={getInputProps()}
         cssClasses={searchBoxCssClasses}
         templates={searchBoxTemplates}

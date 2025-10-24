@@ -4,7 +4,7 @@ import { cx } from '../../lib/cx';
 
 import type { ComponentChildren, ComponentProps, Renderer } from '../../types';
 
-export type AutocompletePanelProps = ComponentProps<'div'> & {
+export type AutocompletePanelProps = Omit<ComponentProps<'div'>, 'children'> & {
   children?: ComponentChildren;
   classNames?: Partial<AutocompletePanelClassNames>;
 };
