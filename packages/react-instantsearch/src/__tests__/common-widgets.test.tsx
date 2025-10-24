@@ -32,6 +32,7 @@ import {
   PoweredBy,
   DynamicWidgets,
   Chat,
+  EXPERIMENTAL_Autocomplete,
 } from '..';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -401,6 +402,14 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
       </InstantSearch>
     );
   },
+  createAutocompleteWidgetTests({ instantSearchOptions, widgetParams }) {
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <EXPERIMENTAL_Autocomplete {...widgetParams} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -447,6 +456,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createChatWidgetTests: {
     act,
   },
+  createAutocompleteWidgetTests: { act },
 };
 
 /**
