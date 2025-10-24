@@ -584,6 +584,9 @@ const testSetups = {
   createChatWidgetTests() {
     throw new Error('Chat is not supported in Vue InstantSearch');
   },
+  createAutocompleteWidgetTests() {
+    throw new Error('Autocomplete is not supported in Vue InstantSearch');
+  },
 };
 
 const testOptions = {
@@ -628,6 +631,9 @@ const testOptions = {
   createDynamicWidgetsWidgetTests: undefined,
   createChatWidgetTests: {
     skippedTests: { 'Chat widget common tests': true },
+  },
+  createAutocompleteWidgetTests: {
+    skippedTests: { 'Autocomplete widget common tests': true },
   },
 };
 
