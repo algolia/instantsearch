@@ -127,7 +127,7 @@
 }
 
 .ais-Carousel-list {
-  margin: -0.5rem !important;
+  margin: -0.5rem;
   grid-auto-columns: calc(22% - 0.5rem) !important;
 }
 

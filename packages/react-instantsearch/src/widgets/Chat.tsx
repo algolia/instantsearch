@@ -7,6 +7,8 @@ import {
 import React, { createElement, Fragment } from 'react';
 import { useInstantSearch, useChat } from 'react-instantsearch-core';
 
+import { useStickToBottom } from '../lib/useStickToBottom';
+
 import { createCarouselTool } from './chat/tools/SearchIndexTool';
 
 export { SearchIndexToolType, RecommendToolType };
@@ -161,9 +163,14 @@ export function Chat<
   const [maximized, setMaximized] = React.useState(false);
   const [input, setInput] = React.useState('');
   const [isClearing, setIsClearing] = React.useState(false);
-  const [isScrollAtBottom, setIsScrollAtBottom] = React.useState(true);
 
   const promptRef = React.useRef<HTMLTextAreaElement>(null);
+
+  const { scrollRef, contentRef, scrollToBottom, isAtBottom } =
+    useStickToBottom({
+      initial: 'smooth',
+      resize: 'smooth',
+    });
 
   const tools = React.useMemo(() => {
     const defaults = createDefaultTools(itemComponent, getSearchPageURL);
@@ -187,18 +194,7 @@ export function Chat<
     onToolCall({ toolCall }) {
       const tool = tools[toolCall.toolName];
 
-      if (tool && tool.onToolCall) {
-        const scopedAddToolResult: AddToolResultWithOutput = ({ output }) => {
-          return Promise.resolve(
-            addToolResult({
-              output,
-              tool: toolCall.toolName,
-              toolCallId: toolCall.toolCallId,
-            })
-          );
-        };
-        tool.onToolCall({ ...toolCall, addToolResult: scopedAddToolResult });
-      } else {
+      if (!tool) {
         if (__DEV__) {
           throw new Error(
             `No tool implementation found for "${toolCall.toolName}". Please provide a tool implementation in the \`tools\` prop.`
@@ -210,6 +206,18 @@ export function Chat<
           tool: toolCall.toolName,
           toolCallId: toolCall.toolCallId,
         });
+        return;
+      }
+
+      if (tool.onToolCall) {
+        const scopedAddToolResult: AddToolResultWithOutput = ({ output }) =>
+          addToolResult({
+            output,
+            tool: toolCall.toolName,
+            toolCallId: toolCall.toolCallId,
+          });
+
+        tool.onToolCall({ ...toolCall, addToolResult: scopedAddToolResult });
       }
     },
   });
@@ -277,8 +285,10 @@ export function Chat<
         setIndexUiState,
         isClearing,
         onClearTransitionEnd: handleClearTransitionEnd,
-        isScrollAtBottom,
-        setIsScrollAtBottom,
+        isScrollAtBottom: isAtBottom,
+        scrollRef,
+        contentRef,
+        onScrollToBottom: scrollToBottom,
         loaderComponent: messagesLoaderComponent,
         errorComponent: messagesErrorComponent,
         actionsComponent,

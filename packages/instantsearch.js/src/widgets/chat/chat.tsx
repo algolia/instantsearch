@@ -14,6 +14,7 @@ import TemplateComponent from '../../components/Template/Template';
 import connectChat from '../../connectors/chat/connectChat';
 import { SearchIndexToolType, RecommendToolType } from '../../lib/chat';
 import { prepareTemplateProps } from '../../lib/templating';
+import { useStickToBottom } from '../../lib/useStickToBottom';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
@@ -47,6 +48,7 @@ import type {
   ChatMessagesTranslations,
   ChatPromptProps,
   ChatPromptTranslations,
+  ChatStatus,
   ChatToggleButtonProps,
   ClientSideToolComponentProps,
   ClientSideTools,
@@ -189,7 +191,7 @@ function createCarouselTool<
         <div className="ais-ChatToolSearchIndexCarouselHeaderResults">
           {nbHits && (
             <div className="ais-ChatToolSearchIndexCarouselHeaderCount">
-              {hitsPerPage ?? 0} of {nbHits} result
+              {hitsPerPage ?? 0} of {nbHits.toLocaleString()} result
               {nbHits > 1 ? 's' : ''}
             </div>
           )}
@@ -272,6 +274,159 @@ function createDefaultTools<
     ),
     [RecommendToolType]: createCarouselTool(false, templates, getSearchPageURL),
   };
+}
+
+type ChatWrapperProps = {
+  cssClasses: ChatCSSClasses;
+  chatOpen: boolean;
+  setChatOpen: (open: boolean) => void;
+  chatMessages: ChatMessageBase[];
+  setChatMessages: (messages: ChatMessageBase[]) => void;
+  indexUiState: IndexUiState;
+  setIndexUiState: IndexWidget['setIndexUiState'];
+  chatStatus: ChatStatus;
+  chatInput: ChatRenderState['input'];
+  setChatInput: ChatRenderState['setInput'];
+  sendMessage: ChatRenderState['sendMessage'];
+  regenerate: ChatRenderState['regenerate'];
+  stop: ChatRenderState['stop'];
+  toolsForUi: ClientSideTools;
+  toggleButtonProps: {
+    layoutComponent: ComponentProps<typeof Chat>['toggleButtonComponent'];
+    iconComponent: ComponentProps<
+      typeof Chat
+    >['toggleButtonProps']['toggleIconComponent'];
+  };
+  headerProps: {
+    layoutComponent: ComponentProps<typeof Chat>['headerComponent'];
+    closeIconComponent: ChatHeaderProps['closeIconComponent'];
+    minimizeIconComponent: ChatHeaderProps['minimizeIconComponent'];
+    maximizeIconComponent: ChatHeaderProps['maximizeIconComponent'];
+    titleIconComponent: ChatHeaderProps['titleIconComponent'];
+    translations: Partial<ChatHeaderTranslations>;
+  };
+  messagesProps: {
+    loaderComponent:
+      | ((props: ChatMessageLoaderProps) => JSX.Element)
+      | undefined;
+    errorComponent: ((props: ChatMessageErrorProps) => JSX.Element) | undefined;
+    actionsComponent:
+      | ((props: { actions: ChatMessageActionProps[] }) => JSX.Element)
+      | undefined;
+    translations: Partial<ChatMessagesTranslations>;
+  };
+  promptProps: {
+    layoutComponent: ComponentProps<typeof Chat>['promptComponent'];
+    headerComponent: ChatPromptProps['headerComponent'];
+    footerComponent: ChatPromptProps['footerComponent'];
+    translations: Partial<ChatPromptTranslations>;
+    promptRef: { current: HTMLTextAreaElement | null };
+  };
+  state: ReturnType<typeof createLocalState>;
+};
+
+function ChatWrapper({
+  cssClasses,
+  chatOpen,
+  setChatOpen,
+  chatMessages,
+  setChatMessages,
+  indexUiState,
+  setIndexUiState,
+  chatStatus,
+  chatInput,
+  setChatInput,
+  sendMessage,
+  regenerate,
+  stop,
+  toolsForUi,
+  toggleButtonProps,
+  headerProps,
+  messagesProps,
+  promptProps,
+  state,
+}: ChatWrapperProps) {
+  const { scrollRef, contentRef, scrollToBottom, isAtBottom } =
+    useStickToBottom({
+      initial: 'smooth',
+      resize: 'smooth',
+    });
+
+  state.init();
+
+  const [isClearing, setIsClearing] = state.use(false);
+  const [maximized, setMaximized] = state.use(false);
+
+  const onClear = () => setIsClearing(true);
+  const onClearTransitionEnd = () => {
+    setChatMessages([]);
+    setIsClearing(false);
+  };
+
+  return (
+    <Chat
+      classNames={cssClasses}
+      open={chatOpen}
+      maximized={maximized}
+      toggleButtonComponent={toggleButtonProps.layoutComponent}
+      toggleButtonProps={{
+        open: chatOpen,
+        onClick: () => setChatOpen(!chatOpen),
+        toggleIconComponent: toggleButtonProps.iconComponent,
+      }}
+      headerComponent={headerProps.layoutComponent}
+      promptComponent={promptProps.layoutComponent}
+      headerProps={{
+        onClose: () => setChatOpen(false),
+        maximized,
+        onToggleMaximize: () => setMaximized(!maximized),
+        onClear,
+        canClear: Boolean(chatMessages?.length) && !isClearing,
+        closeIconComponent: headerProps.closeIconComponent,
+        minimizeIconComponent: headerProps.minimizeIconComponent,
+        maximizeIconComponent: headerProps.maximizeIconComponent,
+        titleIconComponent: headerProps.titleIconComponent,
+        translations: headerProps.translations,
+      }}
+      messagesProps={{
+        status: chatStatus,
+        onReload: (messageId) => regenerate({ messageId }),
+        onClose: () => setChatOpen(false),
+        messages: chatMessages,
+        indexUiState,
+        isClearing,
+        onClearTransitionEnd,
+        isScrollAtBottom: isAtBottom,
+        scrollRef,
+        contentRef,
+        onScrollToBottom: scrollToBottom,
+        setIndexUiState,
+        tools: toolsForUi,
+        loaderComponent: messagesProps.loaderComponent,
+        errorComponent: messagesProps.errorComponent,
+        actionsComponent: messagesProps.actionsComponent,
+        translations: messagesProps.translations,
+      }}
+      promptProps={{
+        promptRef: promptProps.promptRef,
+        status: chatStatus,
+        value: chatInput,
+        onInput: (event) => {
+          setChatInput(event.currentTarget.value);
+        },
+        onSubmit: () => {
+          sendMessage({ text: chatInput });
+          setChatInput('');
+        },
+        onStop: () => {
+          stop();
+        },
+        headerComponent: promptProps.headerComponent,
+        footerComponent: promptProps.footerComponent,
+        translations: promptProps.translations,
+      }}
+    />
+  );
 }
 
 const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
@@ -555,36 +710,28 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
     state.subscribe(rerender);
 
     function rerender() {
-      state.init();
-
-      const [isClearing, setIsClearing] = state.use(false);
-      const [maximized, setMaximized] = state.use(false);
-      const [isScrollAtBottom, setIsScrollAtBottom] = state.use(true);
-
-      const onClear = () => setIsClearing(true);
-      const onClearTransitionEnd = () => {
-        setMessages([]);
-        setIsClearing(false);
-      };
       render(
-        <Chat
-          classNames={cssClasses}
-          open={open}
-          maximized={maximized}
-          toggleButtonComponent={toggleButtonLayoutComponent}
+        <ChatWrapper
+          cssClasses={cssClasses}
+          chatOpen={open}
+          setChatOpen={setOpen}
+          chatMessages={messages}
+          setChatMessages={setMessages}
+          indexUiState={indexUiState}
+          setIndexUiState={setIndexUiState}
+          chatStatus={status}
+          chatInput={input}
+          setChatInput={setInput}
+          sendMessage={sendMessage}
+          regenerate={regenerate}
+          stop={stop}
+          toolsForUi={toolsForUi}
           toggleButtonProps={{
-            open,
-            onClick: () => setOpen(!open),
-            toggleIconComponent: toggleButtonIconComponent,
+            layoutComponent: toggleButtonLayoutComponent,
+            iconComponent: toggleButtonIconComponent,
           }}
-          headerComponent={headerLayoutComponent}
-          promptComponent={promptLayoutComponent}
           headerProps={{
-            onClose: () => setOpen(false),
-            maximized,
-            onToggleMaximize: () => setMaximized(!maximized),
-            onClear,
-            canClear: Boolean(messages?.length) && !isClearing,
+            layoutComponent: headerLayoutComponent,
             closeIconComponent: headerCloseIconComponent,
             minimizeIconComponent: headerMinimizeIconComponent,
             maximizeIconComponent: headerMaximizeIconComponent,
@@ -592,40 +739,19 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
             translations: headerTranslations,
           }}
           messagesProps={{
-            status,
-            onReload: (messageId) => regenerate({ messageId }),
-            onClose: () => setOpen(false),
-            messages,
-            indexUiState,
-            isClearing,
-            onClearTransitionEnd,
-            isScrollAtBottom,
-            setIsScrollAtBottom,
-            setIndexUiState,
-            tools: toolsForUi,
             loaderComponent: messagesLoaderComponent,
             errorComponent: messagesErrorComponent,
             actionsComponent,
             translations: messagesTranslations,
           }}
           promptProps={{
-            promptRef,
-            status,
-            value: input,
-            onInput: (event) => {
-              setInput(event.currentTarget.value);
-            },
-            onSubmit: () => {
-              sendMessage({ text: input });
-              setInput('');
-            },
-            onStop: () => {
-              stop();
-            },
+            layoutComponent: promptLayoutComponent,
             headerComponent: promptHeaderComponent,
             footerComponent: promptFooterComponent,
             translations: promptTranslations,
+            promptRef,
           }}
+          state={state}
         />,
         containerNode
       );
