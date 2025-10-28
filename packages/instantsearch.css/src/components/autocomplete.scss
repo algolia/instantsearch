@@ -1,0 +1,329 @@
+@use '../themes/reset';
+@use '../shared/_variables';
+@use '../shared/_common';
+
+:root {
+  // Base colors
+  --ais-autocomplete-text-color-rgb: 38, 38, 39;
+  --ais-autocomplete-text-color-alpha: 1;
+  --ais-autocomplete-primary-color-rgb: 62, 52, 211;
+  --ais-autocomplete-primary-color-alpha: 0.2;
+  --ais-autocomplete-muted-color-rgb: 128, 126, 163;
+  --ais-autocomplete-muted-color-alpha: 0.6;
+
+  // Input
+  --ais-autocomplete-search-input-height: 44px;
+  --ais-autocomplete-input-icon-size: 20px;
+
+  // Size and spacing
+  --ais-autocomplete-base-unit: 16;
+  --ais-autocomplete-spacing-factor: 1;
+  --ais-autocomplete-spacing: calc(var(--ais-autocomplete-base-unit) * var(--ais-autocomplete-spacing-factor) * 1px);
+  --ais-autocomplete-spacing-half: calc(var(--ais-autocomplete-spacing) / 2);
+  --ais-autocomplete-panel-max-height: 650px;
+
+  // Z-index
+  --ais-autocomplete-base-z-index: 9998;
+
+  // Font
+  --ais-autocomplete-font-size: calc(var(--ais-autocomplete-base-unit) * 1px);
+  --ais-autocomplete-font-family: inherit;
+  --ais-autocomplete-font-weight-medium: 500;
+  --ais-autocomplete-font-weight-semibold: 600;
+  --ais-autocomplete-font-weight-bold: 700;
+
+  // Icons
+  --ais-autocomplete-icon-size: 20px;
+  --ais-autocomplete-icon-stroke-width: 1.6;
+  --ais-autocomplete-icon-color-rgb: 119, 119, 163;
+  --ais-autocomplete-icon-color-alpha: 1;
+  --ais-autocomplete-action-icon-size: 20px;
+
+  // Border colors
+  --ais-autocomplete-panel-border-color-rgb: 128, 126, 163;
+  --ais-autocomplete-panel-border-color-alpha: 0.3;
+  --ais-autocomplete-input-border-color-rgb: 128, 126, 163;
+  --ais-autocomplete-input-border-color-alpha: 0.8;
+
+  // Background colors
+  --ais-autocomplete-background-color-rgb: 255, 255, 255;
+  --ais-autocomplete-background-color-alpha: 1;
+  --ais-autocomplete-input-background-color-rgb: 255, 255, 255;
+  --ais-autocomplete-input-background-color-alpha: 1;
+  --ais-autocomplete-selected-color-rgb: 179, 173, 214;
+  --ais-autocomplete-selected-color-alpha: 0.205;
+  --ais-autocomplete-description-highlight-background-color-rgb: 245, 223, 77;
+  --ais-autocomplete-description-highlight-background-color-alpha: 0.5;
+
+  // Detached mode
+  --ais-autocomplete-detached-media-query: (max-width: 680px);
+  --ais-autocomplete-detached-modal-media-query: (min-width: 680px);
+  --ais-autocomplete-detached-modal-max-width: 680px;
+  --ais-autocomplete-detached-modal-max-height: 500px;
+  --ais-autocomplete-overlay-color-rgb: 115, 114, 129;
+  --ais-autocomplete-overlay-color-alpha: 0.4;
+
+  // Shadows
+  --ais-autocomplete-panel-shadow: 0 0 0 1px rgba(35, 38, 59, 0.1),
+    0 6px 16px -4px rgba(35, 38, 59, 0.15);
+
+  // Scrollbar
+  --ais-autocomplete-scrollbar-width: 13px;
+  --ais-autocomplete-scrollbar-track-background-color-rgb: 234, 234, 234;
+  --ais-autocomplete-scrollbar-track-background-color-alpha: 1;
+  --ais-autocomplete-scrollbar-thumb-background-color-rgb: var(--ais-background-color-rgb);
+  --ais-autocomplete-scrollbar-thumb-background-color-alpha: 1;
+
+  // Touch screens
+  @media (hover: none) and (pointer: coarse) {
+    --ais-autocomplete-spacing-factor: 1.2;
+    --ais-autocomplete-action-icon-size: 22px;
+  }
+}
+
+// Reset for `@extend`
+%reset {
+  box-sizing: border-box;
+}
+
+// Init for `@extend`
+%init {
+  color: rgba(var(--ais-autocomplete-text-color-rgb), var(--ais-autocomplete-text-color-alpha));
+  font-family: var(--ais-autocomplete-font-family);
+  font-size: var(--ais-autocomplete-font-size);
+  font-weight: normal;
+  line-height: 1em;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+// ----------------
+// 3. Autocomplete
+// ----------------
+.ais-Autocomplete,
+.ais-DetachedFormContainer {
+  @extend %init;
+  * {
+    @extend %reset;
+  }
+  // Search box
+  @at-root .ais-AutocompleteForm {
+    align-items: center;
+    background-color: rgba(
+      var(--ais-autocomplete-input-background-color-rgb),
+      var(--ais-autocomplete-input-background-color-alpha)
+    );
+    border: 1px solid
+      rgba(var(--ais-autocomplete-input-border-color-rgb), var(--ais-autocomplete-input-border-color-alpha));
+    border-radius: 3px;
+    display: flex;
+    line-height: 1em;
+    margin: 0;
+    position: relative;
+    width: 100%;
+    &:focus-within {
+      border-color: rgba(var(--ais-autocomplete-primary-color-rgb), 1);
+      box-shadow: rgba(
+            var(--ais-autocomplete-primary-color-rgb),
+            var(--ais-autocomplete-primary-color-alpha)
+          )
+          0 0 0 2px,
+        inset rgba(var(--ais-autocomplete-primary-color-rgb), var(--ais-autocomplete-primary-color-alpha)) 0
+          0 0 2px;
+      outline: currentColor none medium;
+    }
+    @at-root .ais-AutocompleteInputWrapperPrefix {
+      align-items: center;
+      display: flex;
+      flex-shrink: 0;
+      height: var(--ais-autocomplete-search-input-height);
+      order: 1;
+      // Container for search and loading icons
+      @at-root .ais-AutocompleteLabel,
+        .ais-AutocompleteLoadingIndicator {
+        cursor: initial;
+        flex-shrink: 0;
+        height: 100%;
+        padding: 0;
+        text-align: left;
+        svg {
+          color: rgba(var(--ais-autocomplete-primary-color-rgb), 1);
+          height: auto;
+          max-height: var(--ais-autocomplete-input-icon-size);
+          stroke-width: var(--ais-autocomplete-icon-stroke-width);
+          width: var(--ais-autocomplete-input-icon-size);
+        }
+      }
+      @at-root .ais-AutocompleteSubmitButton,
+        .ais-AutocompleteLoadingIndicator {
+        height: 100%;
+        padding-left: calc(var(--ais-autocomplete-spacing) * 0.75 - 1px);
+        padding-right: var(--ais-autocomplete-spacing-half);
+        width: calc(var(--ais-autocomplete-spacing) * 1.75 + var(--ais-autocomplete-icon-size) - 1px);
+        @media (hover: none) and (pointer: coarse) {
+          padding-left: calc(var(--ais-autocomplete-spacing-half) / 2 - 1px);
+          width: calc(var(--ais-autocomplete-icon-size) + (var(--ais-autocomplete-spacing) * 1.25) - 1px);
+        }
+      }
+      @at-root .ais-AutocompleteSubmitButton {
+        appearance: none;
+        background: none;
+        border: 0;
+        margin: 0;
+      }
+      @at-root .ais-AutocompleteLoadingIndicator {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        &[hidden] {
+          display: none;
+        }
+      }
+    }
+    @at-root .ais-AutocompleteInputWrapper {
+      order: 3;
+      position: relative;
+      width: 100%;
+      // Search box input (with placeholder and query)
+      @at-root .ais-AutocompleteInput {
+        appearance: none;
+        background: none;
+        border: 0;
+        color: rgba(var(--ais-autocomplete-text-color-rgb), var(--ais-autocomplete-text-color-alpha));
+        font: inherit;
+        height: var(--ais-autocomplete-search-input-height);
+        padding: 0;
+        width: 100%;
+        &::placeholder {
+          color: rgba(var(--ais-autocomplete-muted-color-rgb), var(--ais-autocomplete-muted-color-alpha));
+          opacity: 1;
+        }
+        // Focus is set and styled on the parent, it isn't necessary here
+        &:focus {
+          border-color: none;
+          box-shadow: none;
+          outline: none;
+        }
+        // Remove native appearance
+        &::-webkit-search-decoration,
+        &::-webkit-search-cancel-button,
+        &::-webkit-search-results-button,
+        &::-webkit-search-results-decoration {
+          appearance: none;
+        }
+      }
+    }
+    @at-root .ais-AutocompleteInputWrapperSuffix {
+      align-items: center;
+      display: flex;
+      height: var(--ais-autocomplete-search-input-height);
+      order: 4;
+      // Accelerator to clear the query
+      @at-root .ais-AutocompleteClearButton {
+        align-items: center;
+        background: none;
+        border: 0;
+        color: rgba(var(--ais-autocomplete-muted-color-rgb), var(--ais-autocomplete-muted-color-alpha));
+        cursor: pointer;
+        display: flex;
+        height: 100%;
+        margin: 0;
+        padding: 0 calc(var(--ais-autocomplete-spacing) * (5 / 6) - 0.5px);
+        @media (hover: none) and (pointer: coarse) {
+          padding: 0 calc(var(--ais-autocomplete-spacing) * (2 / 3) - 0.5px);
+        }
+        &:hover,
+        &:focus {
+          color: rgba(var(--ais-autocomplete-text-color-rgb), var(--ais-autocomplete-text-color-alpha));
+        }
+        &[hidden] {
+          display: none;
+        }
+        svg {
+          stroke-width: var(--ais-autocomplete-icon-stroke-width);
+          width: var(--ais-autocomplete-icon-size);
+        }
+      }
+    }
+  }
+}
+
+.ais-AutocompletePanel {
+  @extend %init;
+
+  background-color: rgba(
+    var(--ais-autocomplete-background-color-rgb),
+    var(--ais-autocomplete-background-color-alpha)
+  );
+  border-radius: calc(var(--ais-autocomplete-spacing) / 4);
+  box-shadow: var(--ais-autocomplete-panel-shadow);
+  margin: 8px 0 0;
+  padding: var(--ais-autocomplete-spacing-half);
+  overflow: hidden;
+  transition: opacity 200ms ease-in, filter 200ms ease-in;
+  @media screen and (prefers-reduced-motion) {
+    transition: none;
+  }
+  * {
+    @extend %reset;
+  }
+  button {
+    appearance: none;
+    background: none;
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  @at-root .ais-AutocompletePanelLayout {
+    height: 100%;
+    margin: 0;
+    max-height: var(--ais-autocomplete-panel-max-height);
+    overflow-y: auto;
+    padding: 0;
+    position: relative;
+    text-align: left;
+  }
+}
+
+/// Source
+.ais-AutocompleteIndex {
+  margin: 0;
+  padding: 0;
+  position: relative;
+  width: 100%;
+  &:empty {
+    // Hide empty section
+    display: none;
+  }
+  @at-root .ais-AutocompleteIndexNoResults {
+    font-size: 1em;
+    margin: 0;
+    padding: var(--ais-autocomplete-spacing);
+  }
+  // List of results inside the source
+  @at-root .ais-AutocompleteIndexList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+  }
+}
+
+// Items
+.ais-AutocompleteIndexItem {
+  align-items: center;
+  border-radius: 3px;
+  cursor: pointer;
+  display: grid;
+  min-height: calc(var(--ais-autocomplete-spacing) * 2.5);
+  padding: calc(var(--ais-autocomplete-spacing-half) / 2);
+  // When the result is active
+  &[aria-selected='true'] {
+    background-color: rgba(
+      var(--ais-autocomplete-selected-color-rgb),
+      var(--ais-autocomplete-selected-color-alpha)
+    );
+  }
+}
