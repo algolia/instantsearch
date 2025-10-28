@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.82.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.81.0...instantsearch.js@4.82.0) (2025-10-28)
+
+
+### Features
+
+* **instantsearch.js:** introduce autocomplete widget ([#6759](https://github.com/algolia/instantsearch/issues/6759)) ([59f8fbf](https://github.com/algolia/instantsearch/commit/59f8fbf1a70262ab0927f5fdcde5c3ecbd10e3ba))
+
+
+
+
+
 # [4.81.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.80.0...instantsearch.js@4.81.0) (2025-10-23)
 
 
