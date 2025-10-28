@@ -5,6 +5,7 @@ export * from './components/Index';
 export * from './components/InstantSearch';
 export * from './components/InstantSearchServerContext';
 export * from './components/InstantSearchSSRProvider';
+export * from './connectors/useAutocomplete';
 export * from './connectors/useBreadcrumb';
 
 export const useChat = () => {

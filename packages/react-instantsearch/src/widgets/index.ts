@@ -1,3 +1,4 @@
+export * from './Autocomplete';
 export * from './Breadcrumb';
 export * from './Chat';
 export * from './ClearRefinements';

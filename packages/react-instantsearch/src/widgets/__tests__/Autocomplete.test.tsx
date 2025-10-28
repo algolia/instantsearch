@@ -11,7 +11,6 @@ import { InstantSearchTestWrapper, wait } from '@instantsearch/testutils';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
-import { useSearchBox } from 'react-instantsearch-core';
 
 import { EXPERIMENTAL_Autocomplete } from '../Autocomplete';
 
@@ -225,13 +224,8 @@ describe('Autocomplete', () => {
         })
       )
     );
-    const VirtualSearchBox = () => {
-      useSearchBox();
-      return null;
-    };
     const { container } = render(
       <InstantSearchTestWrapper searchClient={searchClient}>
-        <VirtualSearchBox />
         <EXPERIMENTAL_Autocomplete
           showSuggestions={{ indexName: 'query_suggestions' }}
         />
@@ -240,7 +234,8 @@ describe('Autocomplete', () => {
 
     await screen.findByText('hello');
 
-    expect(searchClient.search).toHaveBeenCalledWith([
+    expect(searchClient.search).toHaveBeenCalledTimes(4);
+    expect(searchClient.search).toHaveBeenNthCalledWith(3, [
       {
         indexName: 'query_suggestions',
         params: expect.objectContaining({
@@ -248,6 +243,7 @@ describe('Autocomplete', () => {
         }),
       },
     ]);
+    (searchClient.search as jest.Mock).mockClear();
 
     expect(container.querySelector('.ais-AutocompletePanel'))
       .toMatchInlineSnapshot(`
@@ -301,7 +297,7 @@ describe('Autocomplete', () => {
     userEvent.click(screen.getByText(/hello/i));
 
     await waitFor(() => {
-      expect(searchClient.search).toHaveBeenCalledTimes(3);
+      expect(searchClient.search).toHaveBeenCalledTimes(2);
     });
 
     expect(searchClient.search).toHaveBeenLastCalledWith([
