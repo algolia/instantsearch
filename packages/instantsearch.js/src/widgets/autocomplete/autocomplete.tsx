@@ -293,7 +293,7 @@ type AutocompleteWidgetParams<TItem extends BaseHit> = {
   showSuggestions?: Partial<
     Pick<
       IndexConfig<{ query: string }>,
-      'indexName' | 'templates' | 'cssClasses'
+      'indexName' | 'getURL' | 'templates' | 'cssClasses'
     >
   >;
 
@@ -364,6 +364,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
         ),
       },
       getQuery: (item) => item.query,
+      getURL: showSuggestions.getURL as unknown as IndexConfig<TItem>['getURL'],
     });
   }
 

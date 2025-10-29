@@ -76,7 +76,7 @@ export type AutocompleteProps<TItem extends BaseHit> = ComponentProps<'div'> & {
   showSuggestions?: Partial<
     Pick<
       IndexConfig<{ query: string }>,
-      'indexName' | 'itemComponent' | 'classNames'
+      'indexName' | 'getURL' | 'itemComponent' | 'classNames'
     >
   >;
   getSearchPageURL?: (nextUiState: IndexUiState) => string;
@@ -126,6 +126,7 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
         ),
       },
       getQuery: (item) => item.query,
+      getURL: showSuggestions.getURL as unknown as IndexConfig<TItem>['getURL'],
     });
   }
 
