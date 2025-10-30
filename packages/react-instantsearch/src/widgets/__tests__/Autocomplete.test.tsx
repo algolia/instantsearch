@@ -70,8 +70,8 @@ describe('Autocomplete', () => {
           <label
             aria-label="Submit"
             class="ais-AutocompleteLabel"
-            for="autocomplete-input"
-            id="autocomplete-label"
+            for="autocomplete:r0:input"
+            id="autocomplete:r0:input-label"
           >
             <button
               class="ais-AutocompleteSubmitButton"
@@ -130,7 +130,7 @@ describe('Autocomplete', () => {
             aria-controls="autocomplete:r0:panel"
             aria-expanded="false"
             aria-haspopup="grid"
-            aria-labelledby="autocomplete-label"
+            aria-labelledby="autocomplete:r0:input-label"
             autocapitalize="off"
             autocomplete="off"
             autocorrect="off"
