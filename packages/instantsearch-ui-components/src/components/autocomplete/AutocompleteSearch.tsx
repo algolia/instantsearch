@@ -1,10 +1,11 @@
 /** @jsx createElement */
-import type { Renderer } from '../..';
+import type { ComponentProps, Renderer } from '../..';
 
 export type AutocompleteSearchProps = {
-  inputProps: Partial<React.DOMAttributes<HTMLInputElement>>;
+  inputProps: Partial<ComponentProps<'input'>>;
   onClear: () => void;
   query: string;
+  isSearchStalled: boolean;
 };
 
 export function createAutocompleteSearchComponent({ createElement }: Renderer) {
@@ -12,6 +13,7 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
     inputProps,
     onClear,
     query,
+    isSearchStalled,
   }: AutocompleteSearchProps) {
     return (
       <form
@@ -25,8 +27,8 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
           <label
             className="ais-AutocompleteLabel"
             aria-label="Submit"
-            htmlFor="autocomplete-input"
-            id="autocomplete-label"
+            htmlFor={inputProps.id}
+            id={`${inputProps.id}-label`}
           >
             <button
               className="ais-AutocompleteSubmitButton"
@@ -44,7 +46,10 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
               </svg>
             </button>
           </label>
-          <div className="ais-AutocompleteLoadingIndicator" hidden>
+          <div
+            className="ais-AutocompleteLoadingIndicator"
+            hidden={!isSearchStalled}
+          >
             <svg
               className="ais-AutocompleteLoadingIcon"
               viewBox="0 0 100 100"
@@ -76,8 +81,7 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
           <input
             className="ais-AutocompleteInput"
             aria-autocomplete="both"
-            aria-labelledby="autocomplete-label"
-            id="autocomplete-input"
+            aria-labelledby={`${inputProps.id}-label`}
             autoComplete="off"
             autoCorrect="off"
             autoCapitalize="off"
@@ -95,7 +99,7 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
             className="ais-AutocompleteClearButton"
             type="reset"
             title="Clear"
-            hidden={!query}
+            hidden={query.length === 0 || isSearchStalled}
             onClick={onClear}
           >
             <svg

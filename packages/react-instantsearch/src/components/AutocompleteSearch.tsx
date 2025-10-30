@@ -18,16 +18,18 @@ export function AutocompleteSearch({
   inputProps,
   clearQuery,
 }: AutocompleteSearchProps) {
-  const { query, refine } = useSearchBox();
+  const { query, refine, isSearchStalled } = useSearchBox();
 
   return (
     <AutocompleteSearchComponent
       inputProps={{
         ...inputProps,
-        onChange: (event) => refine(event.currentTarget.value),
+        onChange: (event: React.ChangeEvent<HTMLInputElement>) =>
+          refine(event.currentTarget.value),
       }}
       onClear={clearQuery}
       query={query}
+      isSearchStalled={isSearchStalled}
     />
   );
 }
