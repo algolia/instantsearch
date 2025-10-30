@@ -4,9 +4,10 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
+import userEvent from '@testing-library/user-event';
 
 import type { AutocompleteWidgetSetup } from '.';
-import type { TestOptions } from '../../common';
+import type { SupportedFlavor, TestOptions } from '../../common';
 
 function createMockedSearchClient(
   response: ReturnType<typeof createMultiSearchResponse>
@@ -19,7 +20,7 @@ function createMockedSearchClient(
 
 export function createOptionsTests(
   setup: AutocompleteWidgetSetup,
-  { act }: Required<TestOptions>
+  { act, flavor }: Required<TestOptions>
 ) {
   describe('options', () => {
     test('renders with default options', async () => {
@@ -48,13 +49,13 @@ export function createOptionsTests(
               {
                 indexName: 'indexName',
                 templates: {
-                  item: (props) => props.item.query,
+                  item: (props) => props.item.name,
                 },
               },
               {
                 indexName: 'indexName2',
                 templates: {
-                  item: (props) => props.item.name,
+                  item: (props) => props.item.query,
                 },
               },
             ],
@@ -92,6 +93,15 @@ export function createOptionsTests(
       expect(document.querySelectorAll('.ais-AutocompleteIndex')).toHaveLength(
         2
       );
+
+      await act(async () => {
+        // JS currently doesn't refine on focus
+        const input = document.querySelector('.ais-SearchBox-input')!;
+        userEvent.click(input);
+        userEvent.type(input, 'a');
+        userEvent.clear(input);
+        await wait(0);
+      });
 
       const indicesItems = document.querySelectorAll(
         '.ais-AutocompleteIndexItem'
@@ -136,17 +146,37 @@ export function createOptionsTests(
 
       await act(async () => {
         await wait(0);
+
+        // JS currently doesn't refine on focus
+        if (flavor === 'javascript') {
+          const input = document.querySelector('.ais-SearchBox-input')!;
+          userEvent.click(input);
+          userEvent.type(input, 'a');
+          userEvent.clear(input);
+        }
+
+        await wait(0);
       });
 
-      expect(searchClient.search).toHaveBeenCalledTimes(4);
-      expect(searchClient.search).toHaveBeenNthCalledWith(3, [
-        {
-          indexName: 'query_suggestions',
-          params: expect.objectContaining({
-            query: '',
-          }),
-        },
-      ]);
+      const callTimes: Record<string, Record<SupportedFlavor, number>> = {
+        initial: { javascript: 2, react: 4, vue: 0 },
+        refined: { javascript: 1, react: 2, vue: 0 },
+      };
+
+      expect(searchClient.search).toHaveBeenCalledTimes(
+        callTimes.initial[flavor]
+      );
+      expect(searchClient.search).toHaveBeenNthCalledWith(
+        callTimes.initial[flavor] - 1,
+        [
+          {
+            indexName: 'query_suggestions',
+            params: expect.objectContaining({
+              query: '',
+            }),
+          },
+        ]
+      );
       (searchClient.search as jest.Mock).mockClear();
 
       expect(
@@ -169,7 +199,9 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      expect(searchClient.search).toHaveBeenCalledTimes(2);
+      expect(searchClient.search).toHaveBeenCalledTimes(
+        callTimes.refined[flavor]
+      );
       expect(searchClient.search).toHaveBeenLastCalledWith([
         {
           indexName: 'query_suggestions',
@@ -213,13 +245,13 @@ export function createOptionsTests(
               {
                 indexName: 'indexName',
                 templates: {
-                  item: (props) => props.item.query,
+                  item: (props) => props.item.name,
                 },
               },
               {
                 indexName: 'indexName2',
                 templates: {
-                  item: (props) => props.item.name,
+                  item: (props) => props.item.query,
                 },
                 onSelect: mockOnSelect,
               },
@@ -244,6 +276,11 @@ export function createOptionsTests(
 
       await act(async () => {
         await wait(0);
+        // JS currently doesn't refine on focus
+        const input = document.querySelector('.ais-SearchBox-input')!;
+        userEvent.click(input);
+        userEvent.type(input, 'a');
+        userEvent.clear(input);
       });
 
       expect(document.querySelectorAll('[aria-selected="true"]')).toHaveLength(
