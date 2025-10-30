@@ -81,11 +81,6 @@
   }
 }
 
-// Reset for `@extend`
-%reset {
-  box-sizing: border-box;
-}
-
 // Init for `@extend`
 %init {
   color: rgba(var(--ais-autocomplete-text-color-rgb), var(--ais-autocomplete-text-color-alpha));
@@ -104,9 +99,6 @@
 .ais-Autocomplete,
 .ais-DetachedFormContainer {
   @extend %init;
-  * {
-    @extend %reset;
-  }
   // Search box
   @at-root .ais-AutocompleteForm {
     align-items: center;
