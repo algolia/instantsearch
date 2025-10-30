@@ -253,12 +253,9 @@
   margin: 8px 0 0;
   padding: var(--ais-autocomplete-spacing-half);
   overflow: hidden;
-  transition: opacity 200ms ease-in, filter 200ms ease-in;
+  transition: opacity var(--ais-transition-duration) var(--ais-transition-timing-function), filter var(--ais-transition-duration) var(--ais-transition-timing-function);
   @media screen and (prefers-reduced-motion) {
     transition: none;
-  }
-  * {
-    @extend %reset;
   }
   button {
     appearance: none;
