@@ -8,9 +8,9 @@ export type AutocompleteIndexConfig<TItem extends BaseHit> = {
   getURL?: (item: TItem) => string;
   onSelect?: (params: {
     item: TItem;
-    getQuery: () => string;
-    getURL: () => string;
+    query: string;
     setQuery: (query: string) => void;
+    url?: string;
   }) => void;
 };
 
@@ -48,6 +48,7 @@ type UsePropGetters<TItem extends BaseHit> = (params: {
   }>;
   indicesConfig: Array<AutocompleteIndexConfig<TItem>>;
   onRefine: (query: string) => void;
+  onSelect: NonNullable<AutocompleteIndexConfig<TItem>['onSelect']>;
 }) => {
   getInputProps: GetInputProps;
   getItemProps: GetItemProps;
@@ -66,6 +67,7 @@ export function createAutocompletePropGetters({
     indices,
     indicesConfig,
     onRefine,
+    onSelect: globalOnSelect,
   }: Parameters<UsePropGetters<TItem>>[0]): ReturnType<UsePropGetters<TItem>> {
     const getElementId = createGetElementId(useId());
     const rootRef = useRef<HTMLDivElement>(null);
@@ -117,12 +119,13 @@ export function createAutocompletePropGetters({
       if (actualActiveDescendant && items.has(actualActiveDescendant)) {
         const {
           item,
-          config: { onSelect, getQuery, getURL },
+          config: { onSelect: indexOnSelect, getQuery, getURL },
         } = items.get(actualActiveDescendant)!;
-        onSelect?.({
+        const actualOnSelect = indexOnSelect ?? globalOnSelect;
+        actualOnSelect({
           item,
-          getQuery: () => getQuery?.(item) ?? '',
-          getURL: () => getURL?.(item) ?? '',
+          query: getQuery?.(item) ?? '',
+          url: getURL?.(item),
           setQuery: (query) => onRefine(query),
         });
         setActiveDescendant(undefined);
