@@ -311,7 +311,9 @@
   display: grid;
   min-height: calc(var(--ais-autocomplete-spacing) * 2.5);
   padding: calc(var(--ais-autocomplete-spacing-half) / 2);
-  // When the result is active
+
+  // When the result is active, either by hover or keyboard navigation
+  &:hover,
   &[aria-selected='true'] {
     background-color: rgba(
       var(--ais-autocomplete-selected-color-rgb),
