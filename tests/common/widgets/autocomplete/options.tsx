@@ -4,6 +4,7 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
+import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 
 import type { AutocompleteWidgetSetup } from '.';
@@ -81,12 +82,7 @@ export function createOptionsTests(
       });
 
       expect(document.querySelector('.ais-Autocomplete')).toBeInTheDocument();
-      expect(
-        document.querySelector('.ais-SearchBox-input')
-      ).toBeInTheDocument();
-      expect(
-        document.querySelector('.ais-SearchBox-loadingIndicator')
-      ).toHaveAttribute('hidden');
+      expect(screen.getByRole('search')).toBeInTheDocument();
       expect(
         document.querySelector('.ais-AutocompletePanel')
       ).toBeInTheDocument();
@@ -96,7 +92,12 @@ export function createOptionsTests(
 
       await act(async () => {
         // JS currently doesn't refine on focus
-        const input = document.querySelector('.ais-SearchBox-input')!;
+        const input =
+          flavor === 'javascript'
+            ? document.querySelector('.ais-SearchBox-input')!
+            : screen.getByRole('combobox', {
+                name: /submit/i,
+              });
         userEvent.click(input);
         userEvent.type(input, 'a');
         userEvent.clear(input);
@@ -149,7 +150,12 @@ export function createOptionsTests(
 
         // JS currently doesn't refine on focus
         if (flavor === 'javascript') {
-          const input = document.querySelector('.ais-SearchBox-input')!;
+          const input =
+            flavor === 'javascript'
+              ? document.querySelector('.ais-SearchBox-input')!
+              : screen.getByRole('combobox', {
+                  name: /submit/i,
+                });
           userEvent.click(input);
           userEvent.type(input, 'a');
           userEvent.clear(input);
@@ -277,7 +283,12 @@ export function createOptionsTests(
       await act(async () => {
         await wait(0);
         // JS currently doesn't refine on focus
-        const input = document.querySelector('.ais-SearchBox-input')!;
+        const input =
+          flavor === 'javascript'
+            ? document.querySelector('.ais-SearchBox-input')!
+            : screen.getByRole('combobox', {
+                name: /submit/i,
+              });
         userEvent.click(input);
         userEvent.type(input, 'a');
         userEvent.clear(input);
@@ -287,9 +298,12 @@ export function createOptionsTests(
         0
       );
 
-      const input = document.querySelector(
-        '.ais-SearchBox-input'
-      ) as HTMLInputElement;
+      const input: HTMLInputElement =
+        flavor === 'javascript'
+          ? document.querySelector('.ais-SearchBox-input')!
+          : screen.getByRole('combobox', {
+              name: /submit/i,
+            });
 
       await act(async () => {
         input.click();

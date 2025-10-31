@@ -17,7 +17,7 @@ import React, {
 } from 'react';
 import { Index, useAutocomplete, useSearchBox } from 'react-instantsearch-core';
 
-import { SearchBox } from '../widgets/SearchBox';
+import { AutocompleteSearch } from '../components/AutocompleteSearch';
 
 import type {
   AutocompleteIndexClassNames,
@@ -156,7 +156,13 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
 
   return (
     <Autocomplete {...props} {...getRootProps()}>
-      <SearchBox inputProps={getInputProps()} />
+      <AutocompleteSearch
+        inputProps={getInputProps()}
+        clearQuery={() => {
+          refineSearchBox('');
+          refineAutocomplete('');
+        }}
+      />
       <AutocompletePanel {...getPanelProps()}>
         {indices.map(({ indexId, hits }, index) => (
           <AutocompleteIndex
