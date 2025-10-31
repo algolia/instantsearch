@@ -108,6 +108,10 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
           'ais-AutocompleteSuggestionsList',
           showSuggestions?.classNames?.list
         ),
+        header: cx(
+          'ais-AutocompleteSuggestionsHeader',
+          showSuggestions?.classNames?.header
+        ),
         item: cx(
           'ais-AutocompleteSuggestionsItem',
           showSuggestions?.classNames?.item

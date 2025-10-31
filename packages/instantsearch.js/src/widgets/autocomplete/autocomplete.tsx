@@ -329,7 +329,6 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
 
   const indicesConfig = [...indices];
   if (showSuggestions?.indexName) {
-    const suggestionsSuit = component('AutocompleteSuggestions');
     indicesConfig.unshift({
       indexName: showSuggestions.indexName,
       templates: {
@@ -338,13 +337,20 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
         ...showSuggestions.templates,
       },
       cssClasses: {
-        root: cx(suggestionsSuit(), showSuggestions.cssClasses?.root),
+        root: cx(
+          'ais-AutocompleteSuggestions',
+          showSuggestions.cssClasses?.root
+        ),
         list: cx(
-          suggestionsSuit({ descendantName: 'list' }),
+          'ais-AutocompleteSuggestionsList',
           showSuggestions.cssClasses?.list
         ),
+        header: cx(
+          'ais-AutocompleteSuggestionsHeader',
+          showSuggestions.cssClasses?.header
+        ),
         item: cx(
-          suggestionsSuit({ descendantName: 'item' }),
+          'ais-AutocompleteSuggestionsItem',
           showSuggestions.cssClasses?.item
         ),
       },
