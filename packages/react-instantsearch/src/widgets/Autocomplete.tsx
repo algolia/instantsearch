@@ -15,7 +15,12 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Index, useAutocomplete, useSearchBox } from 'react-instantsearch-core';
+import {
+  Configure,
+  Index,
+  useAutocomplete,
+  useSearchBox,
+} from 'react-instantsearch-core';
 
 import { SearchBox } from '../widgets/SearchBox';
 
@@ -125,6 +130,7 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
   return (
     <Fragment>
       <Index EXPERIMENTAL_isolated>
+        <Configure hitsPerPage={5} />
         {indicesConfig.map((index) => (
           <Index key={index.indexName} indexName={index.indexName} />
         ))}
