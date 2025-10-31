@@ -91,6 +91,7 @@
   margin: 0;
   padding: 0;
   text-align: left;
+  position: relative;
 }
 
 // ----------------
@@ -252,6 +253,8 @@
   box-shadow: var(--ais-autocomplete-panel-shadow);
   margin: 8px 0 0;
   padding: var(--ais-autocomplete-spacing-half);
+  position: absolute;
+  width: 100%;
   overflow: hidden;
   transition: opacity var(--ais-transition-duration) var(--ais-transition-timing-function), filter var(--ais-transition-duration) var(--ais-transition-timing-function);
   @media screen and (prefers-reduced-motion) {
