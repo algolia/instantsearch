@@ -1,4 +1,4 @@
-import { waitForUrl } from './utils';
+import { waitForUrl, waitForInputValue, waitForElementText } from './utils';
 
 describe('refining InstantSearch causes only one onStateChange', () => {
   describe('Next.js Link', () => {
@@ -12,13 +12,11 @@ describe('refining InstantSearch causes only one onStateChange', () => {
         'http://localhost:3000/test?instant_search%5Bquery%5D=apple'
       );
 
-      const searchInput = await $('.ais-SearchBox-input');
-      await browser.waitUntil(async () => {
-        return (await searchInput.getValue()) === 'apple';
-      });
-
-      const output = await $('output#onStateChange');
-      expect(await output.getText()).toBe('1');
+      // Wait for both URL and input value to be consistent
+      await waitForInputValue('.ais-SearchBox-input', 'apple');
+      
+      // Wait for the onStateChange counter to be updated
+      await waitForElementText('output#onStateChange', '1');
     });
 
     it('works when on a i18n route', async () => {
@@ -31,13 +29,11 @@ describe('refining InstantSearch causes only one onStateChange', () => {
         'http://localhost:3000/fr/test?instant_search%5Bquery%5D=apple'
       );
 
-      const searchInput = await $('.ais-SearchBox-input');
-      await browser.waitUntil(async () => {
-        return (await searchInput.getValue()) === 'apple';
-      });
-
-      const output = await $('output#onStateChange');
-      expect(await output.getText()).toBe('1');
+      // Wait for both URL and input value to be consistent
+      await waitForInputValue('.ais-SearchBox-input', 'apple');
+      
+      // Wait for the onStateChange counter to be updated
+      await waitForElementText('output#onStateChange', '1');
     });
   });
 
@@ -52,8 +48,8 @@ describe('refining InstantSearch causes only one onStateChange', () => {
         'http://localhost:3000/test?instant_search%5BrefinementList%5D%5Bbrand%5D%5B0%5D=Apple'
       );
 
-      const output = await $('output#onStateChange');
-      expect(await output.getText()).toBe('1');
+      // Wait for the onStateChange counter to be updated
+      await waitForElementText('output#onStateChange', '1');
     });
 
     it('works when on a i18n route', async () => {
@@ -66,8 +62,8 @@ describe('refining InstantSearch causes only one onStateChange', () => {
         'http://localhost:3000/fr/test?instant_search%5BrefinementList%5D%5Bbrand%5D%5B0%5D=Apple'
       );
 
-      const output = await $('output#onStateChange');
-      expect(await output.getValue()).toBe('1');
+      // Wait for the onStateChange counter to be updated
+      await waitForElementText('output#onStateChange', '1');
     });
   });
 });

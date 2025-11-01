@@ -1,4 +1,4 @@
-import { waitForUrl } from './utils';
+import { waitForUrl, waitForElementText } from './utils';
 
 describe('browser back/forward buttons', () => {
   it('works on a single page with InstantSearch', async () => {
@@ -74,11 +74,8 @@ describe('browser back/forward buttons', () => {
     await audioLink.click();
     await waitForUrl('http://localhost:3000/Audio');
 
-    // wait a bit for results
-    await browser.pause(1000);
-
-    firstHit = await (await $('.ais-Hits-item')).getText();
-    expect(firstHit).toContain('Apple - EarPods');
+    // Wait for results to load by checking for specific content
+    await waitForElementText('.ais-Hits-item', 'Apple - EarPods');
 
     await browser.back();
     await waitForUrl('http://localhost:3000/Appliances');
@@ -97,11 +94,17 @@ describe('browser back/forward buttons', () => {
     await audioLink.click();
     await waitForUrl('http://localhost:3000/');
 
-    // wait a bit for results
-    await browser.pause(1000);
-
-    firstHit = await (await $('.ais-Hits-item')).getText();
-    expect(firstHit).toContain('Amazon');
+    // Wait for results to load by checking for specific content
+    await browser.waitUntil(
+      async () => {
+        const hitText = await (await $('.ais-Hits-item')).getText();
+        return hitText.includes('Amazon');
+      },
+      {
+        timeout: 15000,
+        timeoutMsg: 'Expected first hit to contain "Amazon"',
+      }
+    );
 
     await browser.back();
     await waitForUrl('http://localhost:3000/Appliances');
