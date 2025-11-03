@@ -394,6 +394,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
       indexId: `ais-autocomplete-${instanceId}`,
       EXPERIMENTAL_isolated: true,
     }).addWidgets([
+      configure({ hitsPerPage: 5 }),
       ...indicesConfig.map(({ indexName }) =>
         index({ indexName, indexId: indexName }).addWidgets([configure({})])
       ),
