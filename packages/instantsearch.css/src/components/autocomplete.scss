@@ -303,6 +303,47 @@
   }
 }
 
+// Header
+.ais-AutocompleteIndexHeader {
+  margin: var(--ais-autocomplete-spacing-half) 0.5em var(--ais-autocomplete-spacing-half) 0;
+  padding: 0;
+  position: relative;
+
+
+  &:empty {
+    display: none;
+  }
+}
+
+.ais-AutocompleteIndexHeaderTitle {
+  background: rgba(
+    var(--ais-autocomplete-background-color-rgb),
+    var(--ais-autocomplete-background-color-alpha)
+  );
+  color: rgba(var(--ais-autocomplete-primary-color-rgb), 1);
+  display: inline-block;
+  font-size: 0.8em;
+  font-weight: var(--ais-autocomplete-font-weight-semibold);
+  margin: 0;
+  padding: 0 var(--ais-autocomplete-spacing-half) 0 0;
+  position: relative;
+  z-index: var(--ais-autocomplete-base-z-index);
+}
+
+.ais-AutocompleteIndexHeaderLine {
+  border-bottom: solid 1px rgba(var(--ais-autocomplete-primary-color-rgb), 1);
+  display: block;
+  height: 2px;
+  left: 0;
+  margin: 0;
+  opacity: 0.3;
+  padding: 0;
+  position: absolute;
+  right: 0;
+  top: var(--ais-autocomplete-spacing-half);
+  z-index: calc(var(--ais-autocomplete-base-z-index) - 1);
+}
+
 // Items
 .ais-AutocompleteIndexItem {
   align-items: center;
