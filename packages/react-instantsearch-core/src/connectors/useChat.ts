@@ -5,12 +5,18 @@ import {
   useEffect,
   useMemo,
   useRef,
+  useState,
   useSyncExternalStore,
 } from 'react';
 
 import { useAppIdAndApiKey } from '../lib/useAppIdAndApiKey';
 import { warn } from '../lib/warn';
 
+import type {
+  UserClientSideTools,
+  ClientSideTools,
+  AddToolResultWithOutput,
+} from 'instantsearch-ui-components';
 import type {
   AbstractChat,
   ChatInit as ChatInitAi,
@@ -22,7 +28,6 @@ export type UseChatHelpers<TUiMessage extends UIMessage> = {
    * The id of the chat.
    */
   readonly id: string;
-
   /**
    * Update the `messages` state locally. This is useful when you want to
    * edit the messages on the client, and then trigger the `reload` method
@@ -31,7 +36,41 @@ export type UseChatHelpers<TUiMessage extends UIMessage> = {
   setMessages: (
     messages: TUiMessage[] | ((m: TUiMessage[]) => TUiMessage[])
   ) => void;
-
+  /**
+   * The current input value.
+   */
+  input: string;
+  /**
+   * Update the input value.
+   */
+  setInput: (input: string) => void;
+  /**
+   * Whether the chat is currently open.
+   */
+  open: boolean;
+  /**
+   * Update the open state.
+   */
+  setOpen: (open: boolean) => void;
+  /**
+   * Whether the chat is in the process of clearing messages.
+   */
+  isClearing: boolean;
+  /**
+   * Clear all messages.
+   */
+  clearMessages: () => void;
+  /**
+   * Callback to be called when the clear transition ends.
+   */
+  onClearTransitionEnd: () => void;
+  /**
+   * Tools with addToolResult injected, ready to be used by the UI.
+   */
+  toolsForUi: ClientSideTools;
+  /**
+   * The current error.
+   */
   error: Error | undefined;
 } & Pick<
   AbstractChat<TUiMessage>,
@@ -66,10 +105,25 @@ export type UseChatOptions<TUiMessage extends UIMessage> = (
    * Whether to resume an ongoing chat generation stream.
    */
   resume?: boolean;
+  /**
+   * Initial value for the input field.
+   */
+  initialInput?: string;
+  /**
+   * Whether the chat should be open by default.
+   */
+  defaultOpen?: boolean;
+  /**
+   * Custom tools to be used in the chat.
+   */
+  tools?: UserClientSideTools;
 };
 
 export function useChat<TUiMessage extends UIMessage = UIMessage>({
   resume = false,
+  initialInput = '',
+  defaultOpen = false,
+  tools = {},
   ...options
 }: UseChatOptions<TUiMessage> = {}): UseChatHelpers<TUiMessage> {
   warn(false, 'Chat is not yet stable and will change in the future.');
@@ -79,6 +133,10 @@ export function useChat<TUiMessage extends UIMessage = UIMessage>({
   );
 
   const [appId, apiKey] = useAppIdAndApiKey();
+
+  const [input, setInput] = useState(initialInput);
+  const [open, setOpen] = useState(defaultOpen);
+  const [isClearing, setIsClearing] = useState(false);
 
   const transport = useMemo(() => {
     if ('transport' in options && options.transport) {
@@ -115,11 +173,50 @@ export function useChat<TUiMessage extends UIMessage = UIMessage>({
     };
   }, [options, transport]);
 
-  const chatRef = useRef<Chat<TUiMessage>>(
-    'chat' in optionsWithTransport
-      ? optionsWithTransport.chat
-      : new Chat(optionsWithTransport)
-  );
+  const createChatInstance = useCallback(() => {
+    if ('chat' in optionsWithTransport) {
+      return optionsWithTransport.chat;
+    }
+
+    const chatInstanceRef = { current: null as Chat<TUiMessage> | null };
+
+    const onToolCall = ({ toolCall }: { toolCall: any }) => {
+      const tool = tools[toolCall.toolName];
+      const chatInstance = chatInstanceRef.current!;
+
+      if (!tool) {
+        if (__DEV__) {
+          throw new Error(
+            `No tool implementation found for "${toolCall.toolName}". Please provide a tool implementation in the \`tools\` prop.`
+          );
+        }
+
+        chatInstance.addToolResult({
+          output: `No tool implemented for "${toolCall.toolName}".`,
+          tool: toolCall.toolName,
+          toolCallId: toolCall.toolCallId,
+        });
+        return;
+      }
+
+      if (tool.onToolCall) {
+        const scopedAddToolResult: AddToolResultWithOutput = ({ output }) =>
+          chatInstance.addToolResult({
+            output,
+            tool: toolCall.toolName,
+            toolCallId: toolCall.toolCallId,
+          });
+
+        tool.onToolCall({ ...toolCall, addToolResult: scopedAddToolResult });
+      }
+    };
+
+    const chatInstance = new Chat({ ...optionsWithTransport, onToolCall });
+    chatInstanceRef.current = chatInstance;
+    return chatInstance;
+  }, [optionsWithTransport, tools]);
+
+  const chatRef = useRef<Chat<TUiMessage>>(createChatInstance());
 
   const shouldRecreateChat =
     ('chat' in optionsWithTransport &&
@@ -128,10 +225,7 @@ export function useChat<TUiMessage extends UIMessage = UIMessage>({
       chatRef.current.id !== optionsWithTransport.id);
 
   if (shouldRecreateChat) {
-    chatRef.current =
-      'chat' in optionsWithTransport
-        ? optionsWithTransport.chat
-        : new Chat(optionsWithTransport);
+    chatRef.current = createChatInstance();
   }
 
   const optionsId =
@@ -173,6 +267,28 @@ export function useChat<TUiMessage extends UIMessage = UIMessage>({
     [chatRef]
   );
 
+  const clearMessages = useCallback(() => {
+    if (!messages || messages.length === 0) return;
+    setIsClearing(true);
+  }, [messages]);
+
+  const onClearTransitionEnd = useCallback(() => {
+    setMessages([]);
+    chatRef.current.clearError();
+    setIsClearing(false);
+  }, [setMessages, chatRef]);
+
+  const toolsForUi: ClientSideTools = useMemo(() => {
+    const result: ClientSideTools = {};
+    Object.entries(tools).forEach(([key, tool]) => {
+      result[key] = {
+        ...tool,
+        addToolResult: chatRef.current.addToolResult,
+      };
+    });
+    return result;
+  }, [tools]);
+
   useEffect(() => {
     if (resume) {
       chatRef.current.resumeStream();
@@ -183,6 +299,14 @@ export function useChat<TUiMessage extends UIMessage = UIMessage>({
     id: chatRef.current.id,
     messages,
     setMessages,
+    input,
+    setInput,
+    open,
+    setOpen,
+    isClearing,
+    clearMessages,
+    onClearTransitionEnd,
+    toolsForUi,
     sendMessage: chatRef.current.sendMessage,
     regenerate: chatRef.current.regenerate,
     clearError: chatRef.current.clearError,
