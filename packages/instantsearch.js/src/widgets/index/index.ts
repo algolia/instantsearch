@@ -714,6 +714,9 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       ) => {
         const state = helper!.state.setQueryParameters(userState);
 
+        // lastResults are always null at this point, we need to get them from
+        // the derived helper.
+        mainHelper.lastResults = derivedHelper!.lastResults;
         return mainHelper.searchForFacetValues(
           facetName,
           facetValue,

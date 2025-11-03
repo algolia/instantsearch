@@ -948,8 +948,8 @@ SearchResults.prototype.getFacetValues = function (attribute, opts) {
 
   return recSort(
     function (data, facetName) {
+      var facetOrdering = getFacetOrdering(results, facetName);
       if (options.facetOrdering) {
-        var facetOrdering = getFacetOrdering(results, facetName);
         if (facetOrdering) {
           return sortViaFacetOrdering(data, facetOrdering);
         }
@@ -957,7 +957,24 @@ SearchResults.prototype.getFacetValues = function (attribute, opts) {
 
       if (Array.isArray(options.sortBy)) {
         var order = formatSort(options.sortBy, SearchResults.DEFAULT_SORT);
-        return orderBy(data, order[0], order[1]);
+        var items = orderBy(data, order[0], order[1]);
+
+        var hide =
+          facetOrdering && facetOrdering.hide ? facetOrdering.hide : [];
+        if (hide.length > 0) {
+          var hidden = [];
+          items.forEach(function (item) {
+            // hierarchical facets get sorted using their raw name
+            var name = item.path || item.name;
+            if (hide.indexOf(name) === -1) {
+              hidden.push(item);
+            }
+          });
+
+          return hidden;
+        }
+
+        return items;
       } else if (typeof options.sortBy === 'function') {
         return vanillaSortFn(options.sortBy, data);
       }
