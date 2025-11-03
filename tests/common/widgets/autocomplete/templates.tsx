@@ -4,6 +4,7 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
+import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
@@ -12,7 +13,7 @@ import type { TestOptions } from '../../common';
 
 export function createTemplatesTests(
   setup: AutocompleteWidgetSetup,
-  { act }: Required<TestOptions>
+  { act, flavor }: Required<TestOptions>
 ) {
   describe('templates', () => {
     test('renders indices headers', async () => {
@@ -88,8 +89,14 @@ export function createTemplatesTests(
 
       await act(async () => {
         await wait(0);
+
         // JS currently doesn't refine on focus
-        const input = document.querySelector('.ais-SearchBox-input')!;
+        const input =
+          flavor === 'javascript'
+            ? document.querySelector('.ais-SearchBox-input')!
+            : screen.getByRole('combobox', {
+                name: /submit/i,
+              });
         userEvent.click(input);
         userEvent.type(input, 'a');
         userEvent.clear(input);
