@@ -5,7 +5,7 @@
   "scripts": {
     "start": "BABEL_ENV=parcel parcel index.html products.html --port 3000",
     "build": "BABEL_ENV=parcel parcel build index.html products.html",
-    "lint": "eslint .",
+    "lint": "eslint --ext .ts .",
     "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
