@@ -39,48 +39,48 @@ const withUsage = createDocumentationMessageGenerator({
 
 export type IndexWidgetParams =
   | {
-      /**
-       * The index or composition id to target.
-       */
-      indexName: string;
-      /**
-       * Id to use for the index if there are multiple indices with the same name.
-       * This will be used to create the URL and the render state.
-       */
-      indexId?: string;
-      /**
-       * If `true`, the index will not be merged with the main helper's state.
-       * This means that the index will not be part of the main search request.
-       *
-       * @default false
-       */
-      EXPERIMENTAL_isolated?: false;
-    }
+    /**
+     * The index or composition id to target.
+     */
+    indexName: string;
+    /**
+     * Id to use for the index if there are multiple indices with the same name.
+     * This will be used to create the URL and the render state.
+     */
+    indexId?: string;
+    /**
+     * If `true`, the index will not be merged with the main helper's state.
+     * This means that the index will not be part of the main search request.
+     *
+     * @default false
+     */
+    EXPERIMENTAL_isolated?: false;
+  }
   | {
-      /**
-       * If `true`, the index will not be merged with the main helper's state.
-       * This means that the index will not be part of the main search request.
-       *
-       * This option is EXPERIMENTAL, and implementation details may change in the future.
-       * Things that could change are:
-       * - which widgets get rendered when a change happens
-       * - whether the index searches automatically
-       * - whether the index is included in the URL / UiState
-       * - whether the index is included in server-side rendering
-       *
-       * @default false
-       */
-      EXPERIMENTAL_isolated: true;
-      /**
-       * The index or composition id to target.
-       */
-      indexName?: string;
-      /**
-       * Id to use for the index if there are multiple indices with the same name.
-       * This will be used to create the URL and the render state.
-       */
-      indexId?: string;
-    };
+    /**
+     * If `true`, the index will not be merged with the main helper's state.
+     * This means that the index will not be part of the main search request.
+     *
+     * This option is EXPERIMENTAL, and implementation details may change in the future.
+     * Things that could change are:
+     * - which widgets get rendered when a change happens
+     * - whether the index searches automatically
+     * - whether the index is included in the URL / UiState
+     * - whether the index is included in server-side rendering
+     *
+     * @default false
+     */
+    EXPERIMENTAL_isolated: true;
+    /**
+     * The index or composition id to target.
+     */
+    indexName?: string;
+    /**
+     * Id to use for the index if there are multiple indices with the same name.
+     * This will be used to create the URL and the render state.
+     */
+    indexId?: string;
+  };
 
 export type IndexInitOptions = {
   instantSearchInstance: InstantSearch;
@@ -599,20 +599,20 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         const newState = localInstantSearchInstance.future
           .preserveSharedStateOnUnmount
           ? getLocalWidgetsSearchParameters(localWidgets, {
-              uiState: localUiState,
-              initialSearchParameters: new algoliasearchHelper.SearchParameters(
-                {
-                  index: this.getIndexName(),
-                }
-              ),
-            })
+            uiState: localUiState,
+            initialSearchParameters: new algoliasearchHelper.SearchParameters(
+              {
+                index: this.getIndexName(),
+              }
+            ),
+          })
           : getLocalWidgetsSearchParameters(localWidgets, {
-              uiState: getLocalWidgetsUiState(localWidgets, {
-                searchParameters: cleanedSearchState,
-                helper: helper!,
-              }),
-              initialSearchParameters: cleanedSearchState,
-            });
+            uiState: getLocalWidgetsUiState(localWidgets, {
+              searchParameters: cleanedSearchState,
+              helper: helper!,
+            }),
+            initialSearchParameters: cleanedSearchState,
+          });
 
         localUiState = getLocalWidgetsUiState(localWidgets, {
           searchParameters: newState,
@@ -714,6 +714,9 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       ) => {
         const state = helper!.state.setQueryParameters(userState);
 
+        // lastResults are always null at this point, we need to get them from
+        // the derived helper.
+        mainHelper.lastResults = derivedHelper!.lastResults;
         return mainHelper.searchForFacetValues(
           facetName,
           facetValue,
@@ -904,8 +907,8 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       // as there are no results to display for the isolated index itself.
       let widgetsToRender =
         this.getResults() ||
-        derivedHelper?.lastRecommendResults ||
-        (isolated && !indexName)
+          derivedHelper?.lastRecommendResults ||
+          (isolated && !indexName)
           ? localWidgets
           : localWidgets.filter((widget) => widget.shouldRender);
 
