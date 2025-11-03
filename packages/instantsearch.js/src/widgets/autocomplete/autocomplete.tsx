@@ -230,6 +230,22 @@ function AutocompleteWrapper<TItem extends BaseHit>({
               templates: indicesConfig[i].templates,
             });
           }
+          const headerComponent = indicesConfig[i].templates?.header
+            ? ({
+                items,
+              }: Parameters<
+                NonNullable<AutocompleteIndexProps['HeaderComponent']>
+              >[0]) => {
+                return (
+                  <TemplateComponent
+                    {...renderState.indexTemplateProps[i]}
+                    templateKey="header"
+                    rootTagName="fragment"
+                    data={{ items }}
+                  />
+                );
+              }
+            : undefined;
           const itemComponent = ({
             item,
             onSelect,
@@ -247,6 +263,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
           return (
             <AutocompleteIndex
               key={indexId}
+              HeaderComponent={headerComponent}
               ItemComponent={itemComponent}
               items={hits.map((item) => ({ ...item, __indexName: indexId }))}
               getItemProps={getItemProps}
@@ -267,6 +284,10 @@ export type AutocompleteTemplates<TItem extends BaseHit> = Partial<
 
 type IndexConfig<TItem extends BaseHit> = AutocompleteIndexConfig<TItem> & {
   templates?: Partial<{
+    /**
+     * Template to use for the header, before the list of items.
+     */
+    header: Template<{ items: TItem[] }>;
     /**
      * Template to use for each result. This template will receive an object containing a single record.
      */
@@ -344,22 +365,28 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
 
   const indicesConfig = [...indices];
   if (showSuggestions?.indexName) {
-    const suggestionsSuit = component('AutocompleteSuggestions');
     indicesConfig.unshift({
       indexName: showSuggestions.indexName,
       templates: {
-        // Temporarily force casting until the coming refactoring
-        item: (showSuggestions.templates?.item ||
-          AutocompleteSuggestion) as unknown as Template<{ item: TItem }>,
+        // @ts-expect-error
+        item: AutocompleteSuggestion,
+        ...showSuggestions.templates,
       },
       cssClasses: {
-        root: cx(suggestionsSuit(), showSuggestions.cssClasses?.root),
+        root: cx(
+          'ais-AutocompleteSuggestions',
+          showSuggestions.cssClasses?.root
+        ),
         list: cx(
-          suggestionsSuit({ descendantName: 'list' }),
+          'ais-AutocompleteSuggestionsList',
           showSuggestions.cssClasses?.list
         ),
+        header: cx(
+          'ais-AutocompleteSuggestionsHeader',
+          showSuggestions.cssClasses?.header
+        ),
         item: cx(
-          suggestionsSuit({ descendantName: 'item' }),
+          'ais-AutocompleteSuggestionsItem',
           showSuggestions.cssClasses?.item
         ),
       },
