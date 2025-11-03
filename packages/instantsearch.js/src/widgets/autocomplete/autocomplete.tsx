@@ -38,6 +38,7 @@ import type {
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   BaseHit,
+  IndexUiState,
   IndexWidget,
   Renderer,
   RendererOptions,
@@ -87,7 +88,6 @@ type RendererParams<TItem extends BaseHit> = {
   instanceId: number;
   containerNode: HTMLElement;
   indicesConfig: Array<IndexConfig<TItem>>;
-  cssClasses: AutocompleteCSSClasses;
   renderState: {
     indexTemplateProps: Array<
       PreparedTemplateProps<NonNullable<IndexConfig<TItem>['templates']>>
@@ -95,8 +95,8 @@ type RendererParams<TItem extends BaseHit> = {
     isolatedIndex: IndexWidget | undefined;
     targetIndex: IndexWidget | undefined;
   };
-  templates: AutocompleteTemplates<TItem>;
-};
+} & Pick<AutocompleteWidgetParams<TItem>, 'getSearchPageURL' | 'onSelect'> &
+  Required<Pick<AutocompleteWidgetParams<TItem>, 'cssClasses' | 'templates'>>;
 
 const createRenderer = <TItem extends BaseHit>(
   params: RendererParams<TItem>
@@ -133,7 +133,12 @@ const createRenderer = <TItem extends BaseHit>(
 
 type AutocompleteWrapperProps<TItem extends BaseHit> = Pick<
   RendererParams<TItem>,
-  'indicesConfig' | 'cssClasses' | 'templates' | 'renderState'
+  | 'indicesConfig'
+  | 'getSearchPageURL'
+  | 'onSelect'
+  | 'cssClasses'
+  | 'templates'
+  | 'renderState'
 > &
   Pick<AutocompleteRenderState, 'indices' | 'refine'> &
   RendererOptions<Partial<AutocompleteWidgetParams<TItem>>>;
@@ -141,12 +146,20 @@ type AutocompleteWrapperProps<TItem extends BaseHit> = Pick<
 function AutocompleteWrapper<TItem extends BaseHit>({
   indicesConfig,
   indices,
+  getSearchPageURL,
+  onSelect: userOnSelect,
   refine,
   cssClasses,
   renderState,
   instantSearchInstance,
 }: AutocompleteWrapperProps<TItem>) {
   const { isolatedIndex, targetIndex } = renderState;
+  const isSearchPage =
+    targetIndex
+      ?.getWidgets()
+      .some(({ $$type }) =>
+        ['ais.hits', 'ais.infiniteHits'].includes($$type)
+      ) ?? false;
   const { getInputProps, getItemProps, getPanelProps, getRootProps } =
     usePropGetters({
       indices,
@@ -161,6 +174,23 @@ function AutocompleteWrapper<TItem extends BaseHit>({
           [isolatedIndex!.getIndexId()]: { query },
         }));
       },
+      onSelect:
+        userOnSelect ??
+        (({ query, setQuery, url }) => {
+          if (url) {
+            window.location.href = url;
+            return;
+          }
+
+          if (!isSearchPage && typeof getSearchPageURL !== 'undefined') {
+            const indexUiState =
+              instantSearchInstance.getUiState()[targetIndex!.getIndexId()];
+            window.location.href = getSearchPageURL({ ...indexUiState, query });
+            return;
+          }
+
+          setQuery(query);
+        }),
     });
 
   const query =
@@ -284,9 +314,13 @@ type AutocompleteWidgetParams<TItem extends BaseHit> = {
   showSuggestions?: Partial<
     Pick<
       IndexConfig<{ query: string }>,
-      'indexName' | 'templates' | 'cssClasses'
+      'indexName' | 'getURL' | 'templates' | 'cssClasses'
     >
   >;
+
+  getSearchPageURL?: (nextUiState: IndexUiState) => string;
+
+  onSelect?: AutocompleteIndexConfig<TItem>['onSelect'];
 
   /**
    * Templates to use for the widget.
@@ -313,6 +347,8 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     escapeHTML,
     indices = [],
     showSuggestions,
+    getSearchPageURL,
+    onSelect,
     templates = {},
     cssClasses: userCssClasses = {},
   } = widgetParams || {};
@@ -355,9 +391,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
         ),
       },
       getQuery: (item) => item.query,
-      onSelect({ getQuery, setQuery }) {
-        setQuery(getQuery());
-      },
+      getURL: showSuggestions.getURL as unknown as IndexConfig<TItem>['getURL'],
     });
   }
 
@@ -366,6 +400,8 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     instanceId,
     containerNode,
     indicesConfig,
+    getSearchPageURL,
+    onSelect,
     cssClasses,
     renderState: {
       indexTemplateProps: [],
@@ -385,6 +421,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
       indexId: `ais-autocomplete-${instanceId}`,
       EXPERIMENTAL_isolated: true,
     }).addWidgets([
+      configure({ hitsPerPage: 5 }),
       ...indicesConfig.map(({ indexName }) =>
         index({ indexName, indexId: indexName }).addWidgets([configure({})])
       ),
