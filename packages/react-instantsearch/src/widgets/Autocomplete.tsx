@@ -30,8 +30,9 @@ import type {
   AutocompleteIndexConfig,
   Pragma,
   AutocompleteClassNames,
+  AutocompleteIndexProps,
 } from 'instantsearch-ui-components';
-import type { BaseHit, Hit, IndexUiState } from 'instantsearch.js';
+import type { BaseHit, IndexUiState } from 'instantsearch.js';
 import type { ComponentProps } from 'react';
 
 const Autocomplete = createAutocompleteComponent({
@@ -62,13 +63,9 @@ const usePropGetters = createAutocompletePropGetters({
   useState,
 });
 
-type ItemComponentProps<TItem extends BaseHit> = React.ComponentType<{
-  item: Hit<TItem>;
-  onSelect: () => void;
-}>;
-
 type IndexConfig<TItem extends BaseHit> = AutocompleteIndexConfig<TItem> & {
-  itemComponent: ItemComponentProps<TItem>;
+  headerComponent?: AutocompleteIndexProps<TItem>['HeaderComponent'];
+  itemComponent: AutocompleteIndexProps<TItem>['ItemComponent'];
   classNames?: Partial<AutocompleteIndexClassNames>;
 };
 
@@ -77,7 +74,11 @@ export type AutocompleteProps<TItem extends BaseHit> = ComponentProps<'div'> & {
   showSuggestions?: Partial<
     Pick<
       IndexConfig<{ query: string }>,
-      'indexName' | 'getURL' | 'itemComponent' | 'classNames'
+      | 'indexName'
+      | 'getURL'
+      | 'headerComponent'
+      | 'itemComponent'
+      | 'classNames'
     >
   >;
   getSearchPageURL?: (nextUiState: IndexUiState) => string;
@@ -109,9 +110,10 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
   if (showSuggestions?.indexName) {
     indicesConfig.unshift({
       indexName: showSuggestions.indexName,
-      // Temporarily force casting until the coming refactoring
+      headerComponent:
+        showSuggestions.headerComponent as unknown as AutocompleteIndexProps<TItem>['HeaderComponent'],
       itemComponent: (showSuggestions.itemComponent ||
-        AutocompleteSuggestion) as unknown as ItemComponentProps<TItem>,
+        AutocompleteSuggestion) as unknown as AutocompleteIndexProps<TItem>['ItemComponent'],
       classNames: {
         root: cx(
           'ais-AutocompleteSuggestions',
@@ -120,6 +122,10 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
         list: cx(
           'ais-AutocompleteSuggestionsList',
           showSuggestions?.classNames?.list
+        ),
+        header: cx(
+          'ais-AutocompleteSuggestionsHeader',
+          showSuggestions?.classNames?.header
         ),
         item: cx(
           'ais-AutocompleteSuggestionsItem',
@@ -205,6 +211,8 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
         {indices.map(({ indexId, hits }, index) => (
           <AutocompleteIndex
             key={indexId}
+            // @ts-expect-error - there seems to be problems with React.ComponentType and this, but it's actually correct
+            HeaderComponent={indicesConfig[index].headerComponent}
             // @ts-expect-error - there seems to be problems with React.ComponentType and this, but it's actually correct
             ItemComponent={indicesConfig[index].itemComponent}
             items={hits.map((item) => ({

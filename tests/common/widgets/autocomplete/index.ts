@@ -1,6 +1,7 @@
 import { fakeAct, skippableDescribe } from '../../common';
 
 import { createOptionsTests } from './options';
+import { createTemplatesTests } from './templates';
 
 import type { TestOptions, TestSetup } from '../../common';
 import type { AutocompleteConnectorParams } from 'instantsearch.js/es/connectors/autocomplete/connectAutocomplete';
@@ -38,6 +39,7 @@ export function createAutocompleteWidgetTests(
 
   skippableDescribe('Autocomplete widget common tests', skippedTests, () => {
     createOptionsTests(setup, { act, skippedTests, flavor });
+    createTemplatesTests(setup, { act, skippedTests, flavor });
   });
 }
 createAutocompleteWidgetTests.flavored = true;
