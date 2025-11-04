@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.18.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.17.0...react-instantsearch@7.18.0) (2025-11-04)
+
+
+### Bug Fixes
+
+* **autocomplete:** default to 5 hits per index ([#6783](https://github.com/algolia/instantsearch/issues/6783)) ([60c5bc5](https://github.com/algolia/instantsearch/commit/60c5bc5812245d9758bac24dcf54b034ac19c3c9))
+
+
+### Features
+
+* **autocomplete:** implement styling ([#6776](https://github.com/algolia/instantsearch/issues/6776)) ([46aa79a](https://github.com/algolia/instantsearch/commit/46aa79aa20700d9c52754f09f9d45e9250237117))
+* **autocomplete:** support global onSelect and redirect to search page ([#6777](https://github.com/algolia/instantsearch/issues/6777)) ([44ffb9a](https://github.com/algolia/instantsearch/commit/44ffb9a43d75f7f3bdd83383d0ad500cb0924024))
+* **autocomplete:** support header template for autocomplete index ([#6782](https://github.com/algolia/instantsearch/issues/6782)) ([a27123f](https://github.com/algolia/instantsearch/commit/a27123f46de052620989af72a182e48dd94c4b3e))
+* **instantsearch.js:** introduce autocomplete widget ([#6759](https://github.com/algolia/instantsearch/issues/6759)) ([59f8fbf](https://github.com/algolia/instantsearch/commit/59f8fbf1a70262ab0927f5fdcde5c3ecbd10e3ba))
+
+
+
+
+
 # [7.17.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.16.3...react-instantsearch@7.17.0) (2025-10-23)
 
 
