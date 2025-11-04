@@ -5,15 +5,13 @@ import {
   createAutocompleteIndexComponent,
   createAutocompletePanelComponent,
   createAutocompletePropGetters,
+  createAutocompleteSearchComponent,
   createAutocompleteSuggestionComponent,
   cx,
 } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 import { useEffect, useId, useMemo, useRef, useState } from 'preact/hooks';
 
-import SearchBox, {
-  type SearchBoxComponentCSSClasses,
-} from '../../components/SearchBox/SearchBox';
 import TemplateComponent from '../../components/Template/Template';
 import {
   connectAutocomplete,
@@ -28,7 +26,6 @@ import {
 } from '../../lib/utils';
 import configure from '../configure/configure';
 import index from '../index/index';
-import searchBoxTemplates from '../search-box/defaultTemplates';
 
 import type {
   AutocompleteConnectorParams,
@@ -51,6 +48,7 @@ import type {
   AutocompleteIndexConfig,
   AutocompleteIndexProps,
 } from 'instantsearch-ui-components';
+import type { JSX as JSXPreact } from 'preact';
 
 let autocompleteInstanceId = 0;
 const withUsage = createDocumentationMessageGenerator({ name: 'autocomplete' });
@@ -72,6 +70,11 @@ const AutocompleteIndex = createAutocompleteIndexComponent({
 });
 
 const AutocompleteSuggestion = createAutocompleteSuggestionComponent({
+  createElement: h,
+  Fragment,
+});
+
+const AutocompleteSearchBox = createAutocompleteSearchComponent({
   createElement: h,
   Fragment,
 });
@@ -160,20 +163,22 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       .some(({ $$type }) =>
         ['ais.hits', 'ais.infiniteHits'].includes($$type)
       ) ?? false;
+
+  const onRefine = (query: string) => {
+    instantSearchInstance.setUiState((uiState) => ({
+      ...uiState,
+      [targetIndex!.getIndexId()]: {
+        ...uiState[targetIndex!.getIndexId()],
+        query,
+      },
+      [isolatedIndex!.getIndexId()]: { query },
+    }));
+  };
   const { getInputProps, getItemProps, getPanelProps, getRootProps } =
     usePropGetters({
       indices,
       indicesConfig,
-      onRefine(query) {
-        instantSearchInstance.setUiState((uiState) => ({
-          ...uiState,
-          [targetIndex!.getIndexId()]: {
-            ...uiState[targetIndex!.getIndexId()],
-            query,
-          },
-          [isolatedIndex!.getIndexId()]: { query },
-        }));
-      },
+      onRefine,
       onSelect:
         userOnSelect ??
         (({ query, setQuery, url }) => {
@@ -193,31 +198,19 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         }),
     });
 
-  const query =
-    instantSearchInstance.getUiState()[targetIndex!.getIndexId()].query;
-
-  const searchBoxSuit = component('SearchBox');
-  const searchBoxCssClasses = {
-    root: cx(searchBoxSuit()),
-    form: cx(searchBoxSuit({ descendantName: 'form' })),
-    input: cx(searchBoxSuit({ descendantName: 'input' })),
-    submit: cx(searchBoxSuit({ descendantName: 'submit' })),
-    submitIcon: cx(searchBoxSuit({ descendantName: 'submitIcon' })),
-    reset: cx(searchBoxSuit({ descendantName: 'reset' })),
-    resetIcon: cx(searchBoxSuit({ descendantName: 'resetIcon' })),
-    loadingIndicator: cx(searchBoxSuit({ descendantName: 'loadingIndicator' })),
-    loadingIcon: cx(searchBoxSuit({ descendantName: 'loadingIcon' })),
-  } satisfies SearchBoxComponentCSSClasses;
+  const query = isolatedIndex?.getHelper()?.state.query;
 
   return (
     <Autocomplete {...getRootProps()} classNames={cssClasses}>
-      <SearchBox
-        query={query}
-        refine={refine}
-        // @ts-ignore type issues on event handlers
-        inputProps={getInputProps()}
-        cssClasses={searchBoxCssClasses}
-        templates={searchBoxTemplates}
+      <AutocompleteSearchBox
+        query={query || ''}
+        inputProps={{
+          ...getInputProps(),
+          onInput: (evt: JSXPreact.TargetedEvent<HTMLInputElement>) =>
+            refine(evt.currentTarget.value),
+        }}
+        onClear={() => onRefine('')}
+        isSearchStalled={instantSearchInstance.status === 'stalled'}
       />
       <AutocompletePanel {...getPanelProps()}>
         {indices.map(({ indexId, hits }, i) => {
