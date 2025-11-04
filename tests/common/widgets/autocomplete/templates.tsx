@@ -13,7 +13,7 @@ import type { TestOptions } from '../../common';
 
 export function createTemplatesTests(
   setup: AutocompleteWidgetSetup,
-  { act, flavor }: Required<TestOptions>
+  { act }: Required<TestOptions>
 ) {
   describe('templates', () => {
     test('renders indices headers', async () => {
