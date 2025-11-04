@@ -5,9 +5,11 @@ export function QueryId() {
   const { results } = useInstantSearch();
   const { waitForResultsRef } = useContext(InstantSearchRSCContext);
 
-  if (waitForResultsRef?.current) {
-    use(waitForResultsRef.current);
-    use(waitForResultsRef.current);
+  // eslint-disable-next-line react-hooks/refs
+  const promise = waitForResultsRef?.current;
+  if (promise) {
+    use(promise);
+    use(promise);
   }
 
   return <div id="query-id">{results.queryID}</div>;
