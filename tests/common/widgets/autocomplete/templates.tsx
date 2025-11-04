@@ -13,7 +13,7 @@ import type { TestOptions } from '../../common';
 
 export function createTemplatesTests(
   setup: AutocompleteWidgetSetup,
-  { act, flavor }: Required<TestOptions>
+  { act }: Required<TestOptions>
 ) {
   describe('templates', () => {
     test('renders indices headers', async () => {
@@ -91,12 +91,9 @@ export function createTemplatesTests(
         await wait(0);
 
         // JS currently doesn't refine on focus
-        const input =
-          flavor === 'javascript'
-            ? document.querySelector('.ais-SearchBox-input')!
-            : screen.getByRole('combobox', {
-                name: /submit/i,
-              });
+        const input = screen.getByRole('combobox', {
+          name: /submit/i,
+        });
         userEvent.click(input);
         userEvent.type(input, 'a');
         userEvent.clear(input);
