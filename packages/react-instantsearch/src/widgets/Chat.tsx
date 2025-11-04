@@ -187,7 +187,7 @@ export function Chat<
     isClearing,
     clearMessages,
     onClearTransitionEnd,
-    toolsForUi,
+    tools: hookTools,
   } = useChat({
     ...props,
     defaultOpen,
@@ -231,7 +231,7 @@ export function Chat<
         onReload: (messageId) => regenerate({ messageId }),
         onClose: () => setOpen(false),
         messages,
-        tools: toolsForUi,
+        tools: hookTools,
         indexUiState,
         setIndexUiState,
         isClearing,

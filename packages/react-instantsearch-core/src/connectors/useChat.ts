@@ -67,7 +67,7 @@ export type UseChatHelpers<TUiMessage extends UIMessage> = {
   /**
    * Tools with addToolResult injected, ready to be used by the UI.
    */
-  toolsForUi: ClientSideTools;
+  tools: ClientSideTools;
   /**
    * The current error.
    */
@@ -278,7 +278,7 @@ export function useChat<TUiMessage extends UIMessage = UIMessage>({
     setIsClearing(false);
   }, [setMessages, chatRef]);
 
-  const toolsForUi: ClientSideTools = useMemo(() => {
+  const toolsWithAddToolResult: ClientSideTools = useMemo(() => {
     const result: ClientSideTools = {};
     Object.entries(tools).forEach(([key, tool]) => {
       result[key] = {
@@ -306,7 +306,7 @@ export function useChat<TUiMessage extends UIMessage = UIMessage>({
     isClearing,
     clearMessages,
     onClearTransitionEnd,
-    toolsForUi,
+    tools: toolsWithAddToolResult,
     sendMessage: chatRef.current.sendMessage,
     regenerate: chatRef.current.regenerate,
     clearError: chatRef.current.clearError,
