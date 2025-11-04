@@ -382,24 +382,16 @@ export function createOptionsTests(
       await act(async () => {
         await wait(0);
         // JS currently doesn't refine on focus
-        const input =
-          flavor === 'javascript'
-            ? document.querySelector('.ais-SearchBox-input')!
-            : screen.getByRole('combobox', {
-                name: /submit/i,
-              });
+        const input = screen.getByRole('combobox', {
+          name: /submit/i,
+        });
         userEvent.click(input);
         userEvent.type(input, 'a');
         userEvent.clear(input);
         await wait(0);
       });
 
-      const input: HTMLInputElement =
-        flavor === 'javascript'
-          ? document.querySelector('.ais-SearchBox-input')!
-          : screen.getByRole('combobox', {
-              name: /submit/i,
-            });
+      const input = screen.getByRole('combobox', { name: /submit/i });
 
       const mockScrollIntoView = jest.fn();
       const originalGetElementById = document.getElementById.bind(document);
