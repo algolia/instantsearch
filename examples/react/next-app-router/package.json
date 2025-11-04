@@ -6,14 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
     "algoliasearch": "5.1.1",
     "algoliasearch-helper": "3.26.0",
     "instantsearch-ui-components": "0.12.0",
     "instantsearch.css": "8.6.0",
-    "next": "15.1.4",
+    "next": "16.0.1",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-instantsearch": "7.17.0",
@@ -23,8 +23,8 @@
   "devDependencies": {
     "@types/node": "17.0.40",
     "@types/react": "19.0.3",
-    "eslint": "8.4.0",
-    "eslint-config-next": "12.0.7",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "16.0.1",
     "typescript": "5.5.2"
   }
 }

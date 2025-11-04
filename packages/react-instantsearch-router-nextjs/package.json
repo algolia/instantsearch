@@ -66,6 +66,6 @@
     "ts-node": "8.4.1"
   },
   "peerDependencies": {
-    "next": ">= 9 && < 16"
+    "next": ">= 9 && < 17"
   }
 }
