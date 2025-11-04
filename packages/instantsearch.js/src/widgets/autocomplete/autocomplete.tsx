@@ -206,6 +206,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         query={query || ''}
         inputProps={{
           ...getInputProps(),
+          // @ts-ignore - This clashes with some ambient React JSX declarations.
           onInput: (evt: JSXPreact.TargetedEvent<HTMLInputElement>) =>
             refine(evt.currentTarget.value),
         }}
