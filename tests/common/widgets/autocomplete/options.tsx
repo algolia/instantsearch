@@ -297,12 +297,7 @@ export function createOptionsTests(
         input.click();
         await wait(0);
 
-        const downArrowEvent = new KeyboardEvent('keydown', {
-          key: 'ArrowDown',
-          bubbles: true,
-        });
-        input.dispatchEvent(downArrowEvent);
-
+        userEvent.keyboard('{ArrowDown}');
         await wait(0);
       });
 
@@ -317,18 +312,9 @@ export function createOptionsTests(
       );
 
       await act(async () => {
-        const upArrowEvent1 = new KeyboardEvent('keydown', {
-          key: 'ArrowUp',
-          bubbles: true,
-        });
-        input.dispatchEvent(upArrowEvent1);
+        userEvent.keyboard('{ArrowUp}');
         await wait(0);
-
-        const upArrowEvent2 = new KeyboardEvent('keydown', {
-          key: 'ArrowUp',
-          bubbles: true,
-        });
-        input.dispatchEvent(upArrowEvent2);
+        userEvent.keyboard('{ArrowUp}');
         await wait(0);
       });
 
@@ -343,12 +329,7 @@ export function createOptionsTests(
       );
 
       await act(async () => {
-        const enterEvent = new KeyboardEvent('keydown', {
-          key: 'Enter',
-          bubbles: true,
-        });
-        input.dispatchEvent(enterEvent);
-
+        userEvent.keyboard('{Enter}');
         await wait(0);
       });
 
@@ -357,6 +338,84 @@ export function createOptionsTests(
           item: expect.objectContaining({ objectID: '1', query: 'hello' }),
         })
       );
+    });
+
+    test('scrolls active descendant into view', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'indexName',
+            hits: Array.from({ length: 100 }, (_, i) => ({
+              objectID: String(i + 1),
+              name: `Item ${i + 1}`,
+            })),
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            indices: [
+              {
+                indexName: 'indexName',
+                templates: { item: (props) => props.item.name },
+              },
+            ],
+          },
+          react: {
+            indices: [
+              {
+                indexName: 'indexName',
+                itemComponent: (props) => props.item.name,
+              },
+            ],
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+        // JS currently doesn't refine on focus
+        const input = screen.getByRole('combobox', {
+          name: /submit/i,
+        });
+        userEvent.click(input);
+        userEvent.type(input, 'a');
+        userEvent.clear(input);
+        await wait(0);
+      });
+
+      const input = screen.getByRole('combobox', { name: /submit/i });
+
+      const mockScrollIntoView = jest.fn();
+      const originalGetElementById = document.getElementById.bind(document);
+      jest
+        .spyOn(document, 'getElementById')
+        // @ts-ignore
+        .mockImplementation(() => ({ scrollIntoView: mockScrollIntoView }));
+
+      await act(async () => {
+        input.click();
+        await wait(0);
+
+        userEvent.keyboard('{ArrowUp}');
+        await wait(0);
+      });
+
+      const selectedItem = document.querySelector(
+        '.ais-AutocompleteIndexItem[aria-selected="true"]'
+      )!;
+      expect(selectedItem).not.toBeNull();
+      expect(selectedItem.textContent).toBe('Item 100');
+      expect(mockScrollIntoView).toHaveBeenNthCalledWith(1, false);
+
+      document.getElementById = originalGetElementById;
     });
   });
 }

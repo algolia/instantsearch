@@ -152,10 +152,16 @@ export function createAutocompletePropGetters({
             case 'ArrowLeft':
             case 'ArrowUp':
             case 'ArrowRight':
-            case 'ArrowDown':
-              setActiveDescendant(getNextActiveDescendent(event.key));
+            case 'ArrowDown': {
+              const nextActiveDescendent = getNextActiveDescendent(event.key)!;
+              setActiveDescendant(nextActiveDescendent);
+              document
+                .getElementById(nextActiveDescendent)
+                ?.scrollIntoView(false);
+
               event.preventDefault();
               break;
+            }
             case 'Enter': {
               submit();
               break;
