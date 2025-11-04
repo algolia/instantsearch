@@ -1,5 +1,6 @@
 import { fakeAct } from '../../common';
 
+import { createEdgeCasesTests } from './edge-cases';
 import { createLinksTests } from './links';
 import { createOptimisticUiTests } from './optimistic-ui';
 import { createOptionsTests } from './options';
@@ -24,5 +25,6 @@ export function createHierarchicalMenuWidgetTests(
     createOptimisticUiTests(setup, { act, skippedTests, flavor });
     createOptionsTests(setup, { act, skippedTests, flavor });
     createLinksTests(setup, { act, skippedTests, flavor });
+    createEdgeCasesTests(setup, { act, skippedTests, flavor });
   });
 }
