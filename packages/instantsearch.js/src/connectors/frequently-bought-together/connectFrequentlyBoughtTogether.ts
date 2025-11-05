@@ -56,6 +56,14 @@ export type FrequentlyBoughtTogetherConnectorParams<
   threshold?: number;
 
   /**
+   * List of search parameters to send.
+   */
+  fallbackParameters?: Omit<
+    PlainSearchParameters,
+    'page' | 'hitsPerPage' | 'offset' | 'length'
+  >;
+
+  /**
    * The maximum number of recommendations to return.
    */
   limit?: number;
@@ -121,6 +129,7 @@ export default (function connectFrequentlyBoughtTogether<
       objectIDs,
       limit,
       threshold,
+      fallbackParameters,
       queryParameters,
     } = widgetParams || {};
 
@@ -211,8 +220,15 @@ export default (function connectFrequentlyBoughtTogether<
           (acc, objectID) =>
             acc.addFrequentlyBoughtTogether({
               objectID,
-              threshold,
               maxRecommendations: limit,
+              threshold,
+              // @ts-expect-error until @algolia/recommend types are updated
+              fallbackParameters: fallbackParameters
+                ? {
+                    ...fallbackParameters,
+                    ...(escapeHTML ? TAG_PLACEHOLDER : {}),
+                  }
+                : undefined,
               queryParameters: {
                 ...queryParameters,
                 ...(escapeHTML ? TAG_PLACEHOLDER : {}),
