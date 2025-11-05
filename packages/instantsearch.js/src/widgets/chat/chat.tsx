@@ -45,6 +45,7 @@ import type {
   ChatMessageBase,
   ChatMessageErrorProps,
   ChatMessageLoaderProps,
+  ChatMessageProps,
   ChatMessagesTranslations,
   ChatPromptProps,
   ChatPromptTranslations,
@@ -315,6 +316,14 @@ type ChatWrapperProps = {
     actionsComponent:
       | ((props: { actions: ChatMessageActionProps[] }) => JSX.Element)
       | undefined;
+    assistantMessageProps: {
+      leadingComponent: ChatMessageProps['leadingComponent'];
+      footerComponent: ChatMessageProps['footerComponent'];
+    };
+    userMessageProps: {
+      leadingComponent: ChatMessageProps['leadingComponent'];
+      footerComponent: ChatMessageProps['footerComponent'];
+    };
     translations: Partial<ChatMessagesTranslations>;
   };
   promptProps: {
@@ -402,6 +411,17 @@ function ChatWrapper({
         loaderComponent: messagesProps.loaderComponent,
         errorComponent: messagesProps.errorComponent,
         actionsComponent: messagesProps.actionsComponent,
+        assistantMessageProps: {
+          ...messagesProps.assistantMessageProps,
+          leadingComponent:
+            messagesProps.assistantMessageProps.leadingComponent,
+          footerComponent: messagesProps.assistantMessageProps.footerComponent,
+        },
+        userMessageProps: {
+          ...messagesProps.userMessageProps,
+          leadingComponent: messagesProps.userMessageProps.leadingComponent,
+          footerComponent: messagesProps.userMessageProps.footerComponent,
+        },
         translations: messagesProps.translations,
       }}
       promptProps={{
@@ -444,6 +464,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   const state = createLocalState();
   const promptRef = { current: null as HTMLTextAreaElement | null };
 
+  // eslint-disable-next-line complexity
   return (props, isFirstRendering) => {
     const {
       indexUiState,
@@ -613,6 +634,66 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         regenerateLabel: templates.messages?.regenerateLabelText,
       });
 
+    const assistantMessageTemplateProps = prepareTemplateProps({
+      defaultTemplates: {} as unknown as NonNullable<
+        Required<ChatTemplates<THit>['assistantMessage']>
+      >,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates: templates.assistantMessage,
+    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    const assistantMessageLeadingComponent = templates.assistantMessage?.leading
+      ? () => {
+          return (
+            <TemplateComponent
+              {...assistantMessageTemplateProps}
+              templateKey="leading"
+              rootTagName="fragment"
+            />
+          );
+        }
+      : undefined;
+    const assistantMessageFooterComponent = templates.assistantMessage?.footer
+      ? () => {
+          return (
+            <TemplateComponent
+              {...assistantMessageTemplateProps}
+              templateKey="footer"
+              rootTagName="fragment"
+            />
+          );
+        }
+      : undefined;
+
+    const userMessageTemplateProps = prepareTemplateProps({
+      defaultTemplates: {} as unknown as NonNullable<
+        Required<ChatTemplates<THit>['userMessage']>
+      >,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates: templates.userMessage,
+    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    const userMessageLeadingComponent = templates.userMessage?.leading
+      ? () => {
+          return (
+            <TemplateComponent
+              {...userMessageTemplateProps}
+              templateKey="leading"
+              rootTagName="fragment"
+            />
+          );
+        }
+      : undefined;
+    const userMessageFooterComponent = templates.userMessage?.footer
+      ? () => {
+          return (
+            <TemplateComponent
+              {...userMessageTemplateProps}
+              templateKey="footer"
+              rootTagName="fragment"
+            />
+          );
+        }
+      : undefined;
+
     const promptTemplateProps = prepareTemplateProps({
       defaultTemplates: {} as unknown as NonNullable<
         Required<ChatTemplates<THit>['prompt']>
@@ -746,6 +827,14 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
             loaderComponent: messagesLoaderComponent,
             errorComponent: messagesErrorComponent,
             actionsComponent,
+            assistantMessageProps: {
+              leadingComponent: assistantMessageLeadingComponent,
+              footerComponent: assistantMessageFooterComponent,
+            },
+            userMessageProps: {
+              leadingComponent: userMessageLeadingComponent,
+              footerComponent: userMessageFooterComponent,
+            },
             translations: messagesTranslations,
           }}
           promptProps={{
@@ -866,6 +955,34 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        * Label for the regenerate action
        */
       regenerateLabelText?: string;
+    }>;
+
+    /**
+     * Templates to use for the assistant message.
+     */
+    assistantMessage: Partial<{
+      /**
+       * Template to use for the assistant message leading content.
+       */
+      leading: Template;
+      /**
+       * Template to use for the assistant message footer content.
+       */
+      footer: Template;
+    }>;
+
+    /**
+     * Templates to use for the user message.
+     */
+    userMessage: Partial<{
+      /**
+       * Template to use for the user message leading content.
+       */
+      leading: Template;
+      /**
+       * Template to use for the user message footer content.
+       */
+      footer: Template;
     }>;
 
     /**
