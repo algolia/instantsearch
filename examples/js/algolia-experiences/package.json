@@ -1,6 +1,6 @@
 {
   "name": "example-algolia-experiences",
-  "version": "1.24.0",
+  "version": "1.25.0",
   "private": true,
   "scripts": {
     "start": "BABEL_ENV=parcel parcel *.html",
@@ -9,8 +9,11 @@
   },
   "browserslist": "firefox 68, chrome 78, IE 11",
   "dependencies": {
-    "algolia-experiences": "1.5.15",
-    "instantsearch.css": "8.5.1"
+    "algolia-experiences": "1.6.0",
+    "algoliasearch-helper": "3.26.0",
+    "instantsearch-ui-components": "0.12.0",
+    "instantsearch.css": "8.6.0",
+    "instantsearch.js": "4.81.0"
   },
   "devDependencies": {
     "@babel/core": "7.15.5",

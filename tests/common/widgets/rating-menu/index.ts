@@ -14,15 +14,15 @@ export type RatingMenuWidgetSetup = TestSetup<{
 
 export function createRatingMenuWidgetTests(
   setup: RatingMenuWidgetSetup,
-  { act = fakeAct, skippedTests = {} }: TestOptions = {}
+  { act = fakeAct, skippedTests = {}, flavor = 'javascript' }: TestOptions = {}
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
   skippableDescribe('RatingMenu widget common tests', skippedTests, () => {
-    createBehaviourTests(setup, { act, skippedTests });
-    createOptionsTests(setup, { act, skippedTests });
-    createLinksTests(setup, { act, skippedTests });
+    createBehaviourTests(setup, { act, skippedTests, flavor });
+    createOptionsTests(setup, { act, skippedTests, flavor });
+    createLinksTests(setup, { act, skippedTests, flavor });
   });
 }

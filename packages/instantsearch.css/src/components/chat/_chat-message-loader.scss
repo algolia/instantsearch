@@ -10,7 +10,7 @@
     gap: calc(var(--ais-spacing) * 0.5);
   }
 
-  .ais-ChatMessage-loaderSpinner {
+  .ais-ChatMessageLoader-spinner {
     width: calc(var(--ais-spacing) * 1.5);
     height: calc(var(--ais-spacing) * 1.5);
     color: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
@@ -20,7 +20,7 @@
     }
   }
 
-  .ais-ChatMessage-loaderText {
+  .ais-ChatMessageLoader-text {
     text-fill-color: transparent;
     -webkit-text-fill-color: transparent;
     background: rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha))
@@ -47,13 +47,13 @@
     }
   }
 
-  .ais-ChatMessage-loaderSkeletonWrapper {
+  .ais-ChatMessageLoader-skeletonWrapper {
     display: flex;
     flex-direction: column;
     gap: calc(var(--ais-spacing) * 0.25);
   }
 
-  .ais-ChatMessage-loaderSkeletonItem {
+  .ais-ChatMessageLoader-skeletonItem {
     height: var(--ais-spacing);
     background-color: rgba(var(--ais-muted-color-rgb), 0.2);
     border-radius: var(--ais-border-radius-sm);

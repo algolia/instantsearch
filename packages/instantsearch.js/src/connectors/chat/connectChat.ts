@@ -1,4 +1,7 @@
-import { DefaultChatTransport } from 'ai';
+import {
+  DefaultChatTransport,
+  lastAssistantMessageIsCompleteWithToolCalls,
+} from 'ai';
 
 import { Chat } from '../../lib/chat';
 import {
@@ -7,6 +10,7 @@ import {
   createSendEventForHits,
   getAppIdAndApiKey,
   noop,
+  warning,
 } from '../../lib/utils';
 
 import type {
@@ -24,6 +28,10 @@ import type {
   IndexUiState,
   IndexWidget,
 } from '../../types';
+import type {
+  AddToolResultWithOutput,
+  UserClientSideTool,
+} from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'chat',
@@ -49,6 +57,22 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
   setMessages: (
     messages: TUiMessage[] | ((m: TUiMessage[]) => TUiMessage[])
   ) => void;
+  /**
+   * Whether the chat is in the process of clearing messages.
+   */
+  isClearing: boolean;
+  /**
+   * Clear all messages.
+   */
+  clearMessages: () => void;
+  /**
+   * Callback to be called when the clear transition ends.
+   */
+  onClearTransitionEnd: () => void;
+  /**
+   * Tools configuration passed to the connector.
+   */
+  tools: Record<string, Omit<UserClientSideTool, 'layoutComponent'>>;
 } & Pick<
   AbstractChat<TUiMessage>,
   | 'addToolResult'
@@ -84,6 +108,10 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
    * Whether to resume an ongoing chat generation stream.
    */
   resume?: boolean;
+  /**
+   * Configuration for client-side tools.
+   */
+  tools?: Record<string, Omit<UserClientSideTool, 'layoutComponent'>>;
 };
 
 export type ChatWidgetDescription<TUiMessage extends UIMessage = UIMessage> = {
@@ -106,14 +134,18 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
   return <TUiMessage extends UIMessage = UIMessage>(
     widgetParams: TWidgetParams & ChatConnectorParams<TUiMessage>
   ) => {
-    const { resume = false, ...options } = widgetParams || {};
+    warning(false, 'Chat is not yet stable and will change in the future.');
+
+    const { resume = false, tools = {}, ...options } = widgetParams || {};
 
     let _chatInstance: Chat<TUiMessage>;
     let input = '';
     let open = false;
+    let isClearing = false;
     let sendEvent: SendEventForHits;
     let setInput: ChatRenderState<TUiMessage>['setInput'];
     let setOpen: ChatRenderState<TUiMessage>['setOpen'];
+    let setIsClearing: (value: boolean) => void;
 
     const setMessages = (
       messagesParam: TUiMessage[] | ((m: TUiMessage[]) => TUiMessage[])
@@ -122,6 +154,19 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         messagesParam = messagesParam(_chatInstance.messages);
       }
       _chatInstance.messages = messagesParam;
+    };
+
+    const clearMessages = () => {
+      if (!_chatInstance.messages || _chatInstance.messages.length === 0) {
+        return;
+      }
+      setIsClearing(true);
+    };
+
+    const onClearTransitionEnd = () => {
+      setMessages([]);
+      _chatInstance.clearError();
+      setIsClearing(false);
     };
 
     const makeChatInstance = (instantSearchInstance: InstantSearch) => {
@@ -153,17 +198,48 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         );
       }
 
-      const optionsWithTransport =
-        'chat' in options
-          ? options
-          : {
-              ...options,
-              transport,
-            };
+      if ('chat' in options) {
+        return options.chat;
+      }
 
-      return 'chat' in optionsWithTransport
-        ? optionsWithTransport.chat
-        : new Chat(optionsWithTransport);
+      return new Chat({
+        ...options,
+        transport,
+        sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
+        onToolCall({ toolCall }) {
+          const tool = tools[toolCall.toolName];
+
+          if (!tool) {
+            if (__DEV__) {
+              throw new Error(
+                `No tool implementation found for "${toolCall.toolName}". Please provide a tool implementation in the \`tools\` prop.`
+              );
+            }
+
+            return _chatInstance.addToolResult({
+              output: `No tool implemented for "${toolCall.toolName}".`,
+              tool: toolCall.toolName,
+              toolCallId: toolCall.toolCallId,
+            });
+          }
+
+          if (tool.onToolCall) {
+            const addToolResult: AddToolResultWithOutput = ({ output }) =>
+              _chatInstance.addToolResult({
+                output,
+                tool: toolCall.toolName,
+                toolCallId: toolCall.toolCallId,
+              });
+
+            return tool.onToolCall({
+              ...toolCall,
+              addToolResult,
+            });
+          }
+
+          return Promise.resolve();
+        },
+      });
     };
 
     return {
@@ -191,6 +267,11 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
         setInput = (i) => {
           input = i;
+          render();
+        };
+
+        setIsClearing = (value) => {
+          isClearing = value;
           render();
         };
 
@@ -248,6 +329,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           setInput,
           setOpen,
           setMessages,
+          isClearing,
+          clearMessages,
+          onClearTransitionEnd,
+          tools,
           widgetParams,
 
           // Chat instance render state
@@ -266,6 +351,14 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
       dispose() {
         unmountFn();
+      },
+
+      shouldRender() {
+        return true;
+      },
+
+      get chatInstance() {
+        return _chatInstance;
       },
     };
   };

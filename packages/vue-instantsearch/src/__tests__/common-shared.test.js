@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 import { runTestSuites } from '@instantsearch/tests/common';
 import * as testSuites from '@instantsearch/tests/shared';
@@ -95,6 +95,7 @@ const testOptions = {
 
 describe('Common shared tests (Vue InstantSearch)', () => {
   runTestSuites({
+    flavor: 'vue',
     testSuites,
     testSetups,
     testOptions,

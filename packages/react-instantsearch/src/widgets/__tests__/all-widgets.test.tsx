@@ -1,18 +1,21 @@
-/**
- * @jest-environment node
- */
-
 import { getAllInstantSearchWidgets } from './__utils__/all-widgets';
 
 describe('widgets', () => {
   const widgets = getAllInstantSearchWidgets();
+
+  const customExpectedLength: Partial<
+    Record<typeof widgets[0]['name'], number>
+  > = {
+    // searchbox + isolated index
+    EXPERIMENTAL_Autocomplete: 2,
+  };
 
   test('renders one widget', () => {
     widgets.forEach(({ name, renderedWidgets }) => {
       expect({ name, renderedWidgets }).toEqual({
         name,
         renderedWidgets: expect.objectContaining({
-          length: 1,
+          length: customExpectedLength[name] ?? 1,
         }),
       });
     });
@@ -29,7 +32,7 @@ describe('widgets', () => {
 
     test('starts with "ais."', () => {
       widgets.forEach(({ name, widget }) =>
-        expect([name, widget.$$type.substr(0, 4)]).toEqual([name, 'ais.'])
+        expect([name, widget.$$type.substring(0, 4)]).toEqual([name, 'ais.'])
       );
     });
   });
@@ -43,7 +46,7 @@ describe('widgets', () => {
 
     test('starts with "ais."', () => {
       widgets.forEach(({ name, widget }) =>
-        expect([name, widget.$$widgetType!.substr(0, 4)]).toEqual([
+        expect([name, widget.$$widgetType!.substring(0, 4)]).toEqual([
           name,
           'ais.',
         ])
@@ -60,6 +63,11 @@ describe('widgets', () => {
       }))
     ).toMatchInlineSnapshot(`
       [
+        {
+          "$$type": "ais.autocomplete",
+          "$$widgetType": "ais.autocomplete",
+          "name": "EXPERIMENTAL_Autocomplete",
+        },
         {
           "$$type": "ais.breadcrumb",
           "$$widgetType": "ais.breadcrumb",

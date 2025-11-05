@@ -19,11 +19,16 @@ const NON_WIDGETS = [
   'Chat',
   'createDefaultTools',
   'SearchIndexToolType',
+  'RecommendToolType',
 ] as const;
 type RegularWidgets = Omit<typeof widgets, typeof NON_WIDGETS[number]>;
 
 // Non-components that should be excluded from SingleWidget type
-const NON_COMPONENTS = ['createDefaultTools', 'SearchIndexToolType'] as const;
+const NON_COMPONENTS = [
+  'createDefaultTools',
+  'SearchIndexToolType',
+  'RecommendToolType',
+] as const;
 type ComponentWidgets = Omit<typeof widgets, typeof NON_COMPONENTS[number]>;
 
 export type SingleWidget = {
@@ -108,6 +113,10 @@ function Widget<TWidget extends SingleWidget>({
     case 'RelatedProducts':
     case 'LookingSimilar': {
       return <widget.Component objectIDs={['1']} {...props} />;
+    }
+    case 'EXPERIMENTAL_Autocomplete': {
+      // @ts-expect-error - incorrectly expects onSelect from ComponentProps<'div'>
+      return <widget.Component {...props} />;
     }
     default: {
       return <widget.Component {...props} />;

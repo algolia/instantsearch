@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx createElement */
 import { render } from '@testing-library/preact';
@@ -58,7 +58,7 @@ describe('ChatHeader', () => {
           >
             <button
               aria-label="Maximize chat"
-              class="ais-ChatHeader-maximize"
+              class="ais-Button ais-Button--ghost ais-Button--sm ais-Button--icon-only ais-ChatHeader-maximize"
               type="button"
             >
               <svg
@@ -88,7 +88,7 @@ describe('ChatHeader', () => {
             </button>
             <button
               aria-label="Close chat"
-              class="ais-ChatHeader-close"
+              class="ais-Button ais-Button--ghost ais-Button--sm ais-Button--icon-only ais-ChatHeader-close"
               title="Close chat"
               type="button"
             >
@@ -141,7 +141,7 @@ describe('ChatHeader', () => {
       'ais-ChatHeader custom-root'
     );
     expect(container.querySelector('.ais-ChatHeader-close')!.className).toBe(
-      'ais-ChatHeader-close custom-close'
+      'ais-Button ais-Button--ghost ais-Button--sm ais-Button--icon-only ais-ChatHeader-close custom-close'
     );
     expect(container.querySelector('.ais-ChatHeader-title')!.className).toBe(
       'ais-ChatHeader-title custom-title'

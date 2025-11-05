@@ -44,12 +44,17 @@
 .ais-ChatMessage-message {
   position: relative;
   text-wrap: pretty;
-  overflow-x: auto;
+  font-size: calc(var(--ais-spacing) * 0.875);
+  line-height: calc(var(--ais-spacing) * 1.25);
 
   img {
     max-width: 100%;
     height: auto;
   }
+}
+
+.ais-ChatMessage-code {
+  overflow-x: auto;
 }
 
 .ais-ChatMessage--neutral .ais-ChatMessage-message {
@@ -67,12 +72,6 @@
 
 .ais-ChatMessage--right .ais-ChatMessage-actions {
   justify-content: flex-end;
-}
-
-.ais-ChatMessage-action {
-  @extend %ais-button-ghost;
-
-  padding: calc(var(--ais-spacing) * 0.25);
 }
 
 .ais-ChatMessage--auto-hide-actions .ais-ChatMessage-actions {

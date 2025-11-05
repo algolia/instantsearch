@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx createElement */
 import { render } from '@testing-library/preact';
@@ -19,6 +19,8 @@ describe('ChatMessage', () => {
         indexUiState={{}}
         setIndexUiState={jest.fn()}
         message={{ role: 'user', id: '1', parts: [] }}
+        tools={{}}
+        onClose={jest.fn()}
       />
     );
     expect(container).toMatchInlineSnapshot(`
@@ -61,6 +63,8 @@ describe('ChatMessage', () => {
           message: 'message',
           actions: 'actions',
         }}
+        tools={{}}
+        onClose={jest.fn()}
       />
     );
     expect(container).toMatchInlineSnapshot(`
@@ -96,6 +100,8 @@ describe('ChatMessage', () => {
             id: '1',
             parts: [{ type: 'text', text: 'User content' }],
           }}
+          tools={{}}
+          onClose={jest.fn()}
         />
         <ChatMessage
           indexUiState={{}}
@@ -105,6 +111,8 @@ describe('ChatMessage', () => {
             id: '2',
             parts: [{ type: 'text', text: 'Assistant content' }],
           }}
+          tools={{}}
+          onClose={jest.fn()}
         />
         <ChatMessage
           indexUiState={{}}
@@ -114,6 +122,8 @@ describe('ChatMessage', () => {
             id: '3',
             parts: [{ type: 'text', text: 'System content' }],
           }}
+          tools={{}}
+          onClose={jest.fn()}
         />
       </div>
     );
@@ -209,15 +219,16 @@ describe('ChatMessage', () => {
             },
           ],
         }}
-        tools={[
-          {
-            type: 'tool-test_tool',
-            component: ({ message }) => (
+        tools={{
+          test_tool: {
+            layoutComponent: ({ message }) => (
               <div className="wrapper">{JSON.stringify(message.output)}</div>
             ),
+            addToolResult: jest.fn(),
             onToolCall: jest.fn(),
           },
-        ]}
+        }}
+        onClose={jest.fn()}
       />
     );
     expect(container).toMatchInlineSnapshot(`

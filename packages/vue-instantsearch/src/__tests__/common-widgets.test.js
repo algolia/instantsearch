@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 import { runTestSuites } from '@instantsearch/tests/common';
 import * as testSuites from '@instantsearch/tests/widgets';
@@ -584,6 +584,9 @@ const testSetups = {
   createChatWidgetTests() {
     throw new Error('Chat is not supported in Vue InstantSearch');
   },
+  createAutocompleteWidgetTests() {
+    throw new Error('Autocomplete is not supported in Vue InstantSearch');
+  },
 };
 
 const testOptions = {
@@ -629,10 +632,14 @@ const testOptions = {
   createChatWidgetTests: {
     skippedTests: { 'Chat widget common tests': true },
   },
+  createAutocompleteWidgetTests: {
+    skippedTests: { 'Autocomplete widget common tests': true },
+  },
 };
 
 describe('Common widget tests (Vue InstantSearch)', () => {
   runTestSuites({
+    flavor: 'vue',
     testSuites,
     testSetups,
     testOptions,

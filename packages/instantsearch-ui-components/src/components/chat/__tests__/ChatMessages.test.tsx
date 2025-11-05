@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx createElement */
 import { render } from '@testing-library/preact';
@@ -19,6 +19,9 @@ describe('ChatMessages', () => {
         messages={[]}
         indexUiState={{}}
         setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
       />
     );
 
@@ -38,7 +41,7 @@ describe('ChatMessages', () => {
           </div>
           <button
             aria-label="Scroll to bottom"
-            class="ais-ChatMessages-scrollToBottom"
+            class="ais-Button ais-Button--outline ais-Button--sm ais-Button--icon-only ais-ChatMessages-scrollToBottom"
             tabindex="0"
             type="button"
           >
@@ -79,6 +82,9 @@ describe('ChatMessages', () => {
         indexUiState={{}}
         setIndexUiState={jest.fn()}
         messageComponent={Messages}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
       />
     );
 
@@ -114,7 +120,7 @@ describe('ChatMessages', () => {
           </div>
           <button
             aria-label="Scroll to bottom"
-            class="ais-ChatMessages-scrollToBottom"
+            class="ais-Button ais-Button--outline ais-Button--sm ais-Button--icon-only ais-ChatMessages-scrollToBottom"
             tabindex="0"
             type="button"
           >
@@ -151,6 +157,9 @@ describe('ChatMessages', () => {
         }}
         indexUiState={{}}
         setIndexUiState={jest.fn()}
+        tools={{}}
+        onReload={jest.fn()}
+        onClose={jest.fn()}
       />
     );
 
@@ -170,7 +179,7 @@ describe('ChatMessages', () => {
           </div>
           <button
             aria-label="Scroll to bottom"
-            class="ais-ChatMessages-scrollToBottom scrollToBottom"
+            class="ais-Button ais-Button--outline ais-Button--sm ais-Button--icon-only ais-ChatMessages-scrollToBottom scrollToBottom"
             tabindex="0"
             type="button"
           >

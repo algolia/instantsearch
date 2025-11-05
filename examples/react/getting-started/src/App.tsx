@@ -11,6 +11,7 @@ import {
   SearchBox,
   TrendingItems,
   Carousel,
+  Chat,
 } from 'react-instantsearch';
 
 import { Panel } from './Panel';
@@ -69,6 +70,11 @@ export function App() {
               </div>
             </div>
           </div>
+
+          <Chat
+            agentId="7c2f6816-bfdb-46e9-a51f-9cb8e5fc9628"
+            itemComponent={ItemComponent}
+          />
         </InstantSearch>
       </div>
     </div>
@@ -99,14 +105,18 @@ function HitComponent({ hit }: { hit: HitType }) {
 
 function ItemComponent({ item }: { item: Hit }) {
   return (
-    <div>
-      <article>
-        <div>
-          <img src={item.image} />
-          <h2>{item.name}</h2>
-        </div>
-        <a href={`/products.html?pid=${item.objectID}`}>See product</a>
-      </article>
-    </div>
+    <article className="ais-Carousel-hit">
+      <div className="ais-Carousel-hit-image">
+        <img src={item.image} />
+      </div>
+      <h2 className="ais-Carousel-hit-title">
+        <a
+          href={`/products.html?pid=${item.objectID}`}
+          className="ais-Carousel-hit-link"
+        >
+          {item.name}
+        </a>
+      </h2>
+    </article>
   );
 }

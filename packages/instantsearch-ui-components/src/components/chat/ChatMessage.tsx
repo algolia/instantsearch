@@ -1,16 +1,17 @@
 /** @jsx createElement */
 import { compiler } from 'markdown-to-jsx';
 
-import { cx, find, startsWith } from '../../lib';
+import { cx, startsWith } from '../../lib';
+import { createButtonComponent } from '../Button';
 
 import { MenuIconComponent } from './icons';
 
 import type { ComponentProps, Renderer } from '../../types';
 import type {
-  AddToolResult,
-  ChatInit,
+  AddToolResultWithOutput,
   ChatMessageBase,
   ChatToolMessage,
+  ClientSideTools,
 } from './types';
 
 export type ChatMessageSide = 'left' | 'right';
@@ -77,21 +78,6 @@ export type ChatMessageActionProps = {
   onClick?: (message: ChatMessageBase) => void;
 };
 
-export type Tools = Array<{
-  type: string;
-  component: (props: {
-    message: ChatToolMessage;
-    indexUiState: object;
-    setIndexUiState: (state: object) => void;
-  }) => JSX.Element;
-  onToolCall: (params: {
-    toolCall: Parameters<
-      NonNullable<ChatInit<ChatMessageBase>['onToolCall']>
-    >[0]['toolCall'];
-    addToolResult: AddToolResult;
-  }) => void;
-}>;
-
 export type ChatMessageProps = ComponentProps<'article'> & {
   /**
    * The message object associated with this chat message
@@ -122,6 +108,7 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    */
   actionsComponent?: (props: {
     actions: ChatMessageActionProps[];
+    message: ChatMessageBase;
   }) => JSX.Element | null;
   /**
    * Footer content
@@ -136,13 +123,13 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    */
   setIndexUiState: (state: object) => void;
   /**
+   * Close the chat
+   */
+  onClose: () => void;
+  /**
    * Array of tools available for the assistant (for tool messages)
    */
-  tools?: Tools;
-  /**
-   * Optional handler to refine the search query (for tool actions)
-   */
-  handleRefine?: (value: string) => void;
+  tools: ClientSideTools;
   /**
    * Optional class names
    */
@@ -154,6 +141,8 @@ export type ChatMessageProps = ComponentProps<'article'> & {
 };
 
 export function createChatMessageComponent({ createElement }: Renderer) {
+  const Button = createButtonComponent({ createElement });
+
   return function ChatMessage(userProps: ChatMessageProps) {
     const {
       classNames = {},
@@ -162,13 +151,13 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       variant = 'subtle',
       actions = [],
       autoHideActions = false,
-      handleRefine,
       leadingComponent: LeadingComponent,
       actionsComponent: ActionsComponent,
       footerComponent: FooterComponent,
-      tools = [],
+      tools = {},
       indexUiState,
       setIndexUiState,
+      onClose,
       translations: userTranslations,
       ...props
     } = userProps;
@@ -213,28 +202,37 @@ export function createChatMessageComponent({ createElement }: Renderer) {
         return <span key={`${message.id}-${index}`}>{markdown}</span>;
       }
       if (startsWith(part.type, 'tool-')) {
-        const tool = find(tools, (t) => t.type === part.type);
+        const toolName = part.type.replace('tool-', '');
+        const tool = tools[toolName];
+
         if (tool) {
-          const ToolComponent = tool.component;
+          const ToolLayoutComponent = tool.layoutComponent;
+          const toolMessage = part as ChatToolMessage;
+
+          const boundAddToolResult: AddToolResultWithOutput = (params) =>
+            tool.addToolResult?.({
+              output: params.output,
+              tool: part.type,
+              toolCallId: toolMessage.toolCallId,
+            });
+
           return (
             <div
               key={`${message.id}-${index}`}
               className="ais-ChatMessage-tool"
             >
-              <ToolComponent
-                message={part as ChatToolMessage}
+              <ToolLayoutComponent
+                message={toolMessage}
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
+                addToolResult={boundAddToolResult}
+                onClose={onClose}
               />
             </div>
           );
         }
       }
-      return (
-        <pre key={`${message.id}-${index}`} className="ais-ChatMessage-code">
-          {JSON.stringify(part)}
-        </pre>
-      );
+      return null;
     }
 
     return (
@@ -261,12 +259,14 @@ export function createChatMessageComponent({ createElement }: Renderer) {
                 aria-label={translations.actionsLabel}
               >
                 {ActionsComponent ? (
-                  <ActionsComponent actions={actions} />
+                  <ActionsComponent actions={actions} message={message} />
                 ) : (
                   actions.map((action, index) => (
-                    <button
+                    <Button
                       key={index}
-                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      iconOnly
                       className="ais-ChatMessage-action"
                       disabled={action.disabled}
                       aria-label={action.title}
@@ -277,7 +277,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
                       ) : (
                         <MenuIconComponent createElement={createElement} />
                       )}
-                    </button>
+                    </Button>
                   ))
                 )}
               </div>

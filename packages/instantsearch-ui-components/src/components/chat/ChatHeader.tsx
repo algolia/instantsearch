@@ -1,5 +1,6 @@
 /** @jsx createElement */
 import { cx } from '../../lib';
+import { createButtonComponent } from '../Button';
 
 import {
   SparklesIconComponent,
@@ -18,7 +19,7 @@ export type ChatHeaderTranslations = {
   /**
    * Accessible label for the minimize button
    */
-  minimizedLabel: string;
+  minimizeLabel: string;
   /**
    * Accessible label for the maximize button
    */
@@ -60,7 +61,7 @@ export type ChatHeaderClassNames = {
   clear?: string | string[];
 };
 
-export type ChatHeaderProps = ComponentProps<'div'> & {
+export type ChatHeaderOwnProps = {
   /**
    * Whether the chat is maximized
    */
@@ -107,7 +108,11 @@ export type ChatHeaderProps = ComponentProps<'div'> & {
   translations?: Partial<ChatHeaderTranslations>;
 };
 
+export type ChatHeaderProps = ComponentProps<'div'> & ChatHeaderOwnProps;
+
 export function createChatHeaderComponent({ createElement }: Renderer) {
+  const Button = createButtonComponent({ createElement });
+
   return function ChatHeader({
     maximized = false,
     onToggleMaximize,
@@ -124,7 +129,7 @@ export function createChatHeaderComponent({ createElement }: Renderer) {
   }: ChatHeaderProps) {
     const translations: Required<ChatHeaderTranslations> = {
       title: 'Chat',
-      minimizedLabel: 'Minimize chat',
+      minimizeLabel: 'Minimize chat',
       maximizeLabel: 'Maximize chat',
       closeLabel: 'Close chat',
       clearLabel: 'Clear',
@@ -160,44 +165,49 @@ export function createChatHeaderComponent({ createElement }: Renderer) {
         </span>
         <div className={cx('ais-ChatHeader-actions')}>
           {onClear && (
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               className={cx('ais-ChatHeader-clear', classNames.clear)}
               onClick={onClear}
               disabled={!canClear}
-              type="button"
             >
               {translations.clearLabel}
-            </button>
+            </Button>
           )}
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
+            iconOnly
             className={cx('ais-ChatHeader-maximize', classNames.maximize)}
             onClick={onToggleMaximize}
             aria-label={
               maximized
-                ? translations.minimizedLabel
+                ? translations.minimizeLabel
                 : translations.maximizeLabel
             }
-            type="button"
           >
             {MaximizeIconComponent ? (
               <MaximizeIconComponent maximized={maximized} />
             ) : (
               defaultMaximizeIcon
             )}
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            iconOnly
             className={cx('ais-ChatHeader-close', classNames.close)}
             onClick={onClose}
             aria-label={translations.closeLabel}
             title={translations.closeLabel}
-            type="button"
           >
             {CloseIconComponent ? (
               <CloseIconComponent />
             ) : (
               <CloseIconComponentDefault createElement={createElement} />
             )}
-          </button>
+          </Button>
         </div>
       </div>
     );

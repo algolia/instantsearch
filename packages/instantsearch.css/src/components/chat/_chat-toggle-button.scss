@@ -2,14 +2,11 @@
 @use '../../shared/_common';
 
 .ais-ChatToggleButton {
-  @extend %ais-button-primary;
-
   width: calc(var(--ais-spacing) * 3);
   height: calc(var(--ais-spacing) * 3);
   border-radius: var(--ais-border-radius-full);
   box-shadow: var(--ais-shadow-sm);
   flex-shrink: 0;
-  pointer-events: auto;
 
   @media (prefers-reduced-motion: no-preference) {
     transition: transform var(--ais-transition-duration)

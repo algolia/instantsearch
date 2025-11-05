@@ -7,18 +7,25 @@ import { createChatMessagesComponent } from './ChatMessages';
 import { createChatPromptComponent } from './ChatPrompt';
 import { createChatToggleButtonComponent } from './ChatToggleButton';
 
-import type { MutableRef, Renderer, ComponentProps } from '../../types';
-import type { ChatHeaderProps } from './ChatHeader';
+import type { Renderer, ComponentProps } from '../../types';
+import type { ChatHeaderProps, ChatHeaderOwnProps } from './ChatHeader';
 import type { ChatMessagesProps } from './ChatMessages';
-import type { ChatPromptProps } from './ChatPrompt';
-import type { ChatToggleButtonProps } from './ChatToggleButton';
+import type { ChatPromptProps, ChatPromptOwnProps } from './ChatPrompt';
+import type {
+  ChatToggleButtonOwnProps,
+  ChatToggleButtonProps,
+} from './ChatToggleButton';
 
 export type ChatClassNames = {
   root?: string | string[];
   container?: string | string[];
+  header?: ChatHeaderProps['classNames'];
+  messages?: ChatMessagesProps['classNames'];
+  prompt?: ChatPromptProps['classNames'];
+  toggleButton?: ChatToggleButtonProps['classNames'];
 };
 
-export type ChatProps = Omit<ComponentProps<'div'>, 'onError'> & {
+export type ChatProps = Omit<ComponentProps<'div'>, 'onError' | 'title'> & {
   /*
    * Whether the chat is open or closed.
    */
@@ -47,6 +54,22 @@ export type ChatProps = Omit<ComponentProps<'div'>, 'onError'> & {
    * Optional class names for elements
    */
   classNames?: Partial<ChatClassNames>;
+  /**
+   * Optional title for the chat
+   */
+  title?: string;
+  /**
+   * Optional header component for the chat
+   */
+  headerComponent?: (props: ChatHeaderOwnProps) => JSX.Element;
+  /**
+   * Optional prompt component for the chat
+   */
+  promptComponent?: (props: ChatPromptOwnProps) => JSX.Element;
+  /**
+   * Optional toggle button component for the chat
+   */
+  toggleButtonComponent?: (props: ChatToggleButtonOwnProps) => JSX.Element;
 };
 
 export function createChatComponent({ createElement, Fragment }: Renderer) {
@@ -58,8 +81,6 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
   const ChatMessages = createChatMessagesComponent({ createElement, Fragment });
   const ChatPrompt = createChatPromptComponent({ createElement, Fragment });
 
-  const promptRef: MutableRef<HTMLTextAreaElement | null> = { current: null };
-
   return function Chat({
     open,
     maximized = false,
@@ -67,6 +88,9 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
     toggleButtonProps,
     messagesProps,
     promptProps = {},
+    headerComponent: HeaderComponent,
+    promptComponent: PromptComponent,
+    toggleButtonComponent: ToggleButtonComponent,
     classNames = {},
     className,
     ...props
@@ -89,18 +113,30 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
             classNames.container
           )}
         >
-          <ChatHeader {...headerProps} maximized={maximized} />
-          <ChatMessages {...messagesProps} />
-          <ChatPrompt {...promptProps} ref={promptRef} />
+          {createElement(HeaderComponent || ChatHeader, {
+            ...headerProps,
+            classNames: classNames.header,
+            maximized,
+          })}
+          <ChatMessages {...messagesProps} classNames={classNames.messages} />
+          {createElement(PromptComponent || ChatPrompt, {
+            ...promptProps,
+            classNames: classNames.prompt,
+          })}
         </div>
 
-        <ChatToggleButton
-          {...toggleButtonProps}
-          onClick={() => {
-            toggleButtonProps.onClick?.();
-            promptRef.current?.focus?.();
-          }}
-        />
+        <div className="ais-Chat-toggleButtonWrapper">
+          {createElement(ToggleButtonComponent || ChatToggleButton, {
+            ...toggleButtonProps,
+            classNames: classNames.toggleButton,
+            onClick: () => {
+              toggleButtonProps.onClick?.();
+              if (!open) {
+                promptProps.promptRef?.current?.focus();
+              }
+            },
+          })}
+        </div>
       </div>
     );
   };

@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx createElement */
 import { render } from '@testing-library/preact';
@@ -37,7 +37,7 @@ describe('ChatPrompt', () => {
             >
               <button
                 aria-label="Message is empty"
-                class="ais-ChatPrompt-submit"
+                class="ais-Button ais-Button--primary ais-Button--sm ais-Button--icon-only ais-ChatPrompt-submit"
                 data-status="ready"
                 disabled=""
                 type="submit"
@@ -123,7 +123,7 @@ describe('ChatPrompt', () => {
             >
               <button
                 aria-label="Message is empty"
-                class="ais-ChatPrompt-submit submit"
+                class="ais-Button ais-Button--primary ais-Button--sm ais-Button--icon-only ais-ChatPrompt-submit submit"
                 data-status="ready"
                 disabled=""
                 type="submit"

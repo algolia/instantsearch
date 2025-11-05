@@ -1,6 +1,7 @@
 /** @jsx createElement */
 
 import { cx } from '../../lib';
+import { createButtonComponent } from '../Button';
 
 import { createChatMessageComponent } from './ChatMessage';
 import { createChatMessageErrorComponent } from './ChatMessageError';
@@ -12,24 +13,28 @@ import {
 } from './icons';
 
 import type { ComponentProps, MutableRef, Renderer } from '../../types';
-import type {
-  ChatMessageProps,
-  Tools,
-  ChatMessageActionProps,
-} from './ChatMessage';
+import type { ChatMessageProps, ChatMessageActionProps } from './ChatMessage';
 import type { ChatMessageErrorProps } from './ChatMessageError';
 import type { ChatMessageLoaderProps } from './ChatMessageLoader';
-import type { ChatMessageBase, ChatStatus } from './types';
+import type { ChatMessageBase, ChatStatus, ClientSideTools } from './types';
 
 export type ChatMessagesTranslations = {
   /**
-   * Text for the scroll to bottom button
+   * Label for the scroll to bottom button
    */
-  scrollToBottomText: string;
+  scrollToBottomLabel: string;
   /**
    * Text to display in the loader
    */
   loaderText?: string;
+  /**
+   * Label for the copy to clipboard action
+   */
+  copyToClipboardLabel?: string;
+  /**
+   * Label for the regenerate action
+   */
+  regenerateLabel?: string;
 };
 
 export type ChatMessagesClassNames = {
@@ -75,6 +80,10 @@ export type ChatMessagesProps<
    */
   errorComponent?: (props: ChatMessageErrorProps) => JSX.Element;
   /**
+   * Custom actions component
+   */
+  actionsComponent?: ChatMessageProps['actionsComponent'];
+  /**
    * The index UI state
    */
   indexUiState: object;
@@ -85,7 +94,7 @@ export type ChatMessagesProps<
   /**
    * Tools available for the assistant
    */
-  tools?: Tools;
+  tools: ClientSideTools;
   /**
    * Current chat status
    */
@@ -97,7 +106,11 @@ export type ChatMessagesProps<
   /**
    * Callback for reload action
    */
-  onReload?: (messageId?: string) => void;
+  onReload: (messageId?: string) => void;
+  /**
+   * Function to close the chat
+   */
+  onClose: () => void;
   /**
    * Optional class names
    */
@@ -115,21 +128,9 @@ export type ChatMessagesProps<
    */
   assistantMessageProps?: Partial<Omit<ChatMessageProps, 'ref' | 'key'>>;
   /**
-   * Optional scroll ref
-   */
-  scrollRef?: MutableRef<HTMLDivElement>;
-  /**
-   * Optional content ref
-   */
-  contentRef?: MutableRef<HTMLDivElement>;
-  /**
-   * Whether the scroll is at the bottom
+   * Whether the scroll is at the bottom (controlled state)
    */
   isScrollAtBottom?: boolean;
-  /**
-   * Callback for scroll to bottom
-   */
-  onScrollToBottom?: () => void;
   /**
    * Whether the messages are clearing (for animation)
    */
@@ -138,19 +139,32 @@ export type ChatMessagesProps<
    * Callback for when clearing transition ends
    */
   onClearTransitionEnd?: () => void;
+  /**
+   * Ref callback for the scroll container element
+   */
+  scrollRef?: MutableRef<HTMLDivElement | null>;
+  /**
+   * Ref callback for the content element
+   */
+  contentRef?: MutableRef<HTMLDivElement | null>;
+  /**
+   * Callback to scroll to bottom
+   */
+  onScrollToBottom?: () => void;
+};
+
+const getTextContent = (message: ChatMessageBase) => {
+  return message.parts
+    .map((part) => ('text' in part ? part.text : ''))
+    .join('');
+};
+
+const hasTextContent = (message: ChatMessageBase) => {
+  return getTextContent(message).trim() !== '';
 };
 
 const copyToClipboard = (message: ChatMessageBase) => {
-  navigator.clipboard.writeText(
-    message.parts
-      .map((part) => {
-        if ('text' in part) {
-          return part.text;
-        }
-        return '';
-      })
-      .join('')
-  );
+  navigator.clipboard.writeText(getTextContent(message));
 };
 
 function createDefaultMessageComponent<
@@ -166,6 +180,9 @@ function createDefaultMessageComponent<
     indexUiState,
     setIndexUiState,
     onReload,
+    onClose,
+    translations,
+    actionsComponent,
   }: {
     key: string;
     message: TMessage;
@@ -173,19 +190,26 @@ function createDefaultMessageComponent<
     assistantMessageProps?: Partial<ChatMessageProps>;
     indexUiState: object;
     setIndexUiState: (state: object) => void;
-    tools?: Tools;
-    onReload?: (messageId?: string) => void;
+    tools: ClientSideTools;
+    onReload: (messageId?: string) => void;
+    onClose: () => void;
+    translations: ChatMessagesTranslations;
+    actionsComponent?: ChatMessageProps['actionsComponent'];
   }) {
     const defaultAssistantActions: ChatMessageActionProps[] = [
+      ...(hasTextContent(message)
+        ? [
+            {
+              title: translations.copyToClipboardLabel,
+              icon: () => <CopyIconComponent createElement={createElement} />,
+              onClick: copyToClipboard,
+            },
+          ]
+        : []),
       {
-        title: 'Copy to clipboard',
-        icon: () => <CopyIconComponent createElement={createElement} />,
-        onClick: copyToClipboard,
-      },
-      {
-        title: 'Regenerate',
+        title: translations.regenerateLabel,
         icon: () => <ReloadIconComponent createElement={createElement} />,
-        onClick: (m) => onReload?.(m.id),
+        onClick: (m) => onReload(m.id),
       },
     ];
 
@@ -202,7 +226,9 @@ function createDefaultMessageComponent<
         tools={tools}
         indexUiState={indexUiState}
         setIndexUiState={setIndexUiState}
+        onClose={onClose}
         actions={defaultActions}
+        actionsComponent={actionsComponent}
         data-role={message.role}
         {...messageProps}
       />
@@ -214,6 +240,7 @@ export function createChatMessagesComponent({
   createElement,
   Fragment,
 }: Renderer) {
+  const Button = createButtonComponent({ createElement });
   const DefaultMessageComponent =
     createDefaultMessageComponent<ChatMessageBase>({ createElement, Fragment });
   const DefaultLoaderComponent = createChatMessageLoaderComponent({
@@ -232,27 +259,30 @@ export function createChatMessagesComponent({
       messageComponent: MessageComponent,
       loaderComponent: LoaderComponent,
       errorComponent: ErrorComponent,
+      actionsComponent: ActionsComponent,
       tools,
       indexUiState,
       setIndexUiState,
       status = 'ready',
       hideScrollToBottom = false,
       onReload,
+      onClose,
       translations: userTranslations,
       userMessageProps,
       assistantMessageProps,
-      scrollRef,
-      contentRef,
-      isScrollAtBottom,
-      onScrollToBottom,
       isClearing = false,
       onClearTransitionEnd,
+      isScrollAtBottom,
+      scrollRef,
+      contentRef,
+      onScrollToBottom,
       ...props
     } = userProps;
 
-    const translations: Required<ChatMessagesTranslations> = {
-      scrollToBottomText: 'Scroll to bottom',
-      loaderText: 'Thinking...',
+    const translations: ChatMessagesTranslations = {
+      scrollToBottomLabel: 'Scroll to bottom',
+      copyToClipboardLabel: 'Copy to clipboard',
+      regenerateLabel: 'Regenerate',
       ...userTranslations,
     };
 
@@ -308,6 +338,9 @@ export function createChatMessagesComponent({
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
                 onReload={onReload}
+                actionsComponent={ActionsComponent}
+                onClose={onClose}
+                translations={translations}
               />
             ))}
 
@@ -321,19 +354,21 @@ export function createChatMessagesComponent({
           </div>
         </div>
 
-        <button
-          type="button"
+        <Button
+          variant="outline"
+          size="sm"
+          iconOnly
           className={cx(
             cssClasses.scrollToBottom,
             (hideScrollToBottom || isScrollAtBottom) &&
               cssClasses.scrollToBottomHidden
           )}
           onClick={onScrollToBottom}
-          aria-label={translations.scrollToBottomText}
+          aria-label={translations.scrollToBottomLabel}
           tabIndex={isScrollAtBottom ? -1 : 0}
         >
           <ChevronDownIconComponent createElement={createElement} />
-        </button>
+        </Button>
       </div>
     );
   };

@@ -6,7 +6,7 @@ $ais-chat-breakpoint: 680px;
   /* Text colors */
   --ais-text-color-rgb: 38, 38, 38;
   --ais-text-color-alpha: 1;
-  --ais-primary-color-rgb: 226, 164, 0;
+  --ais-primary-color-rgb: 30, 89, 255;
   --ais-primary-color-alpha: 1;
   --ais-muted-color-rgb: 82, 82, 82;
   --ais-muted-color-alpha: 1;
@@ -53,6 +53,9 @@ $ais-chat-breakpoint: 680px;
   --ais-chat-maximized-width: 70%;
   --ais-chat-maximized-height: 100%;
   --ais-chat-margin: 1.5rem;
+
+  /* Chat carousel component */
+  --ais-chat-carousel-item-width: calc(var(--ais-spacing) * 10);
 }
 
 /* Dark Mode */
@@ -72,12 +75,12 @@ $ais-chat-breakpoint: 680px;
   --ais-shadow-color-rgb: 0, 0, 0;
 }
 
-:root[data-theme="dark"] {
+:root[data-theme='dark'] {
   @include dark-theme;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
+  :root:not([data-theme='light']) {
     @include dark-theme;
   }
 }

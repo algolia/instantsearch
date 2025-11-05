@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx createElement */
 import { render } from '@testing-library/preact';
@@ -22,6 +22,9 @@ describe('Chat', () => {
           messages: [],
           indexUiState: {},
           setIndexUiState: jest.fn(),
+          tools: {},
+          onReload: jest.fn(),
+          onClose: jest.fn(),
         }}
         promptProps={{}}
         toggleButtonProps={{ open: true, onClick: jest.fn() }}
@@ -73,7 +76,7 @@ describe('Chat', () => {
               >
                 <button
                   aria-label="Maximize chat"
-                  class="ais-ChatHeader-maximize"
+                  class="ais-Button ais-Button--ghost ais-Button--sm ais-Button--icon-only ais-ChatHeader-maximize"
                   type="button"
                 >
                   <svg
@@ -103,7 +106,7 @@ describe('Chat', () => {
                 </button>
                 <button
                   aria-label="Close chat"
-                  class="ais-ChatHeader-close"
+                  class="ais-Button ais-Button--ghost ais-Button--sm ais-Button--icon-only ais-ChatHeader-close"
                   title="Close chat"
                   type="button"
                 >
@@ -142,7 +145,7 @@ describe('Chat', () => {
               </div>
               <button
                 aria-label="Scroll to bottom"
-                class="ais-ChatMessages-scrollToBottom"
+                class="ais-Button ais-Button--outline ais-Button--sm ais-Button--icon-only ais-ChatMessages-scrollToBottom"
                 tabindex="0"
                 type="button"
               >
@@ -182,7 +185,7 @@ describe('Chat', () => {
                 >
                   <button
                     aria-label="Message is empty"
-                    class="ais-ChatPrompt-submit"
+                    class="ais-Button ais-Button--primary ais-Button--sm ais-Button--icon-only ais-ChatPrompt-submit"
                     data-status="ready"
                     disabled=""
                     type="submit"
@@ -219,26 +222,30 @@ describe('Chat', () => {
               </div>
             </form>
           </div>
-          <button
-            class="ais-ChatToggleButton ais-ChatToggleButton--open"
-            type="button"
+          <div
+            class="ais-Chat-toggleButtonWrapper"
           >
-            <svg
-              fill="none"
-              height="28"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              width="28"
-              xmlns="http://www.w3.org/2000/svg"
+            <button
+              class="ais-Button ais-Button--primary ais-Button--md ais-Button--icon-only ais-ChatToggleButton ais-ChatToggleButton--open"
+              type="button"
             >
-              <path
-                d="m18 15-6-6-6 6"
-              />
-            </svg>
-          </button>
+              <svg
+                fill="none"
+                height="28"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                width="28"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m18 15-6-6-6 6"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     `);

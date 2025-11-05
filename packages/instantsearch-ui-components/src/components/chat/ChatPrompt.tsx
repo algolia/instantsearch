@@ -1,6 +1,7 @@
 /** @jsx createElement */
 
 import { cx } from '../../lib';
+import { createButtonComponent } from '../Button';
 
 import { ArrowUpIconComponent, StopIconComponent } from './icons';
 
@@ -28,10 +29,6 @@ export type ChatPromptTranslations = {
    * The tooltip for the send button
    */
   sendMessageTooltip: string;
-  /**
-   * The tooltip when the chat prompt is disabled
-   */
-  disabledTooltip: string;
   /**
    * The disclaimer text shown in the footer
    */
@@ -69,10 +66,7 @@ export type ChatPromptClassNames = {
   footer: string | string[];
 };
 
-export type ChatPromptProps = Omit<
-  ComponentProps<'textarea'>,
-  'onInput' | 'onSubmit'
-> & {
+export type ChatPromptOwnProps = {
   /**
    * Content to render above the textarea
    */
@@ -126,12 +120,20 @@ export type ChatPromptProps = Omit<
    */
   onInput?: ComponentProps<'textarea'>['onInput'];
   /**
-   * Ref callback to get access to the focus function
+   * Ref to the prompt textarea element for focus management
    */
-  ref?: MutableRef<HTMLTextAreaElement | null>;
+  promptRef?: MutableRef<HTMLTextAreaElement | null>;
 };
 
+export type ChatPromptProps = Omit<
+  ComponentProps<'textarea'>,
+  'onInput' | 'onSubmit'
+> &
+  ChatPromptOwnProps;
+
 export function createChatPromptComponent({ createElement }: Renderer) {
+  const Button = createButtonComponent({ createElement });
+
   let textAreaElement: HTMLTextAreaElement | null = null;
   let lineHeight = 0;
   let padding = 0;
@@ -162,12 +164,12 @@ export function createChatPromptComponent({ createElement }: Renderer) {
 
   const setTextAreaRef = (
     element: HTMLTextAreaElement | null,
-    ref?: MutableRef<HTMLTextAreaElement | null>
+    promptRef?: MutableRef<HTMLTextAreaElement | null>
   ) => {
     textAreaElement = element;
 
-    if (ref) {
-      ref.current = element;
+    if (promptRef) {
+      promptRef.current = element;
     }
 
     if (element) {
@@ -198,7 +200,7 @@ export function createChatPromptComponent({ createElement }: Renderer) {
       onSubmit,
       onKeyDown,
       onStop,
-      ref,
+      promptRef,
       ...props
     } = userProps;
 
@@ -208,7 +210,6 @@ export function createChatPromptComponent({ createElement }: Renderer) {
       emptyMessageTooltip: 'Message is empty',
       stopResponseTooltip: 'Stop response',
       sendMessageTooltip: 'Send message',
-      disabledTooltip: 'Chat prompt is disabled',
       disclaimer: 'AI can make mistakes. Verify responses.',
       ...userTranslations,
     };
@@ -272,7 +273,7 @@ export function createChatPromptComponent({ createElement }: Renderer) {
         >
           <textarea
             {...props}
-            ref={(element) => setTextAreaRef(element, ref)}
+            ref={(element) => setTextAreaRef(element, promptRef)}
             data-max-rows={maxRows}
             className={cx(cssClasses.textarea)}
             value={value}
@@ -306,12 +307,14 @@ export function createChatPromptComponent({ createElement }: Renderer) {
           />
 
           <div className={cx(cssClasses.actions)}>
-            <button
+            <Button
               type="submit"
+              variant="primary"
+              size="sm"
+              iconOnly
               className={cx(cssClasses.submit)}
               disabled={buttonDisabled}
               aria-label={(() => {
-                if (disabled) return translations.disabledTooltip;
                 if (buttonDisabled) return translations.emptyMessageTooltip;
                 if (canStop) return translations.stopResponseTooltip;
                 return translations.sendMessageTooltip;
@@ -319,7 +322,7 @@ export function createChatPromptComponent({ createElement }: Renderer) {
               data-status={status}
             >
               {submitIcon}
-            </button>
+            </Button>
           </div>
         </div>
 
