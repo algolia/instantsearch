@@ -962,16 +962,16 @@ SearchResults.prototype.getFacetValues = function (attribute, opts) {
         var hide =
           facetOrdering && facetOrdering.hide ? facetOrdering.hide : [];
         if (hide.length > 0) {
-          var hidden = [];
+          var visible = [];
           items.forEach(function (item) {
             // hierarchical facets get sorted using their raw name
             var name = item.path || item.name;
             if (hide.indexOf(name) === -1) {
-              hidden.push(item);
+              visible.push(item);
             }
           });
 
-          return hidden;
+          return visible;
         }
 
         return items;
