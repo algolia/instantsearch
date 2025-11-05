@@ -1,4 +1,3 @@
-import { lastAssistantMessageIsCompleteWithToolCalls } from 'ai';
 import { createChatComponent } from 'instantsearch-ui-components';
 import {
   SearchIndexToolType,
@@ -23,7 +22,7 @@ import type {
 } from 'instantsearch-ui-components';
 import type { IndexUiState } from 'instantsearch.js';
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
-import type { UseChatOptions } from 'react-instantsearch-core';
+import type { UseChatProps } from 'react-instantsearch-core';
 
 const ChatUiComponent = createChatComponent({
   createElement: createElement as Pragma,
@@ -90,10 +89,9 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
   ChatUiProps,
   keyof UiProps
 > &
-  UseChatOptions<TUiMessage> & {
+  UseChatProps<TUiMessage> & {
     itemComponent?: ItemComponent<TObject>;
     tools?: UserClientSideTools;
-    defaultOpen?: boolean;
     getSearchPageURL?: (nextUiState: IndexUiState) => string;
     toggleButtonProps?: UserToggleButtonProps;
     headerProps?: UserHeaderProps;
@@ -124,7 +122,6 @@ export function Chat<
   TUiMessage extends UIMessage
 >({
   tools: userTools,
-  defaultOpen = false,
   toggleButtonProps,
   headerProps,
   messagesProps,
@@ -187,13 +184,22 @@ export function Chat<
     isClearing,
     clearMessages,
     onClearTransitionEnd,
-    tools: hookTools,
+    addToolResult,
   } = useChat({
     ...props,
-    defaultOpen,
     tools,
-    sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
   });
+
+  const toolsForUi = React.useMemo(() => {
+    const result: Record<string, any> = {};
+    Object.keys(tools).forEach((key) => {
+      result[key] = {
+        ...tools[key],
+        addToolResult,
+      };
+    });
+    return result;
+  }, [tools, addToolResult]);
 
   if (__DEV__ && error) {
     throw error;
@@ -231,7 +237,7 @@ export function Chat<
         onReload: (messageId) => regenerate({ messageId }),
         onClose: () => setOpen(false),
         messages,
-        tools: hookTools,
+        tools: toolsForUi,
         indexUiState,
         setIndexUiState,
         isClearing,
