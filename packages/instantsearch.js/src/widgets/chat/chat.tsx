@@ -281,7 +281,6 @@ type ChatWrapperProps = {
   chatOpen: boolean;
   setChatOpen: (open: boolean) => void;
   chatMessages: ChatMessageBase[];
-  setChatMessages: (messages: ChatMessageBase[]) => void;
   indexUiState: IndexUiState;
   setIndexUiState: IndexWidget['setIndexUiState'];
   chatStatus: ChatStatus;
@@ -290,6 +289,9 @@ type ChatWrapperProps = {
   sendMessage: ChatRenderState['sendMessage'];
   regenerate: ChatRenderState['regenerate'];
   stop: ChatRenderState['stop'];
+  isClearing: boolean;
+  clearMessages: () => void;
+  onClearTransitionEnd: () => void;
   toolsForUi: ClientSideTools;
   toggleButtonProps: {
     layoutComponent: ComponentProps<typeof Chat>['toggleButtonComponent'];
@@ -330,7 +332,6 @@ function ChatWrapper({
   chatOpen,
   setChatOpen,
   chatMessages,
-  setChatMessages,
   indexUiState,
   setIndexUiState,
   chatStatus,
@@ -339,6 +340,9 @@ function ChatWrapper({
   sendMessage,
   regenerate,
   stop,
+  isClearing,
+  clearMessages,
+  onClearTransitionEnd,
   toolsForUi,
   toggleButtonProps,
   headerProps,
@@ -354,14 +358,7 @@ function ChatWrapper({
 
   state.init();
 
-  const [isClearing, setIsClearing] = state.use(false);
   const [maximized, setMaximized] = state.use(false);
-
-  const onClear = () => setIsClearing(true);
-  const onClearTransitionEnd = () => {
-    setChatMessages([]);
-    setIsClearing(false);
-  };
 
   return (
     <Chat
@@ -380,7 +377,7 @@ function ChatWrapper({
         onClose: () => setChatOpen(false),
         maximized,
         onToggleMaximize: () => setMaximized(!maximized),
-        onClear,
+        onClear: clearMessages,
         canClear: Boolean(chatMessages?.length) && !isClearing,
         closeIconComponent: headerProps.closeIconComponent,
         minimizeIconComponent: headerProps.minimizeIconComponent,
@@ -457,13 +454,16 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       sendMessage,
       setIndexUiState,
       setInput,
-      setMessages,
       setOpen,
       status,
       error,
       addToolResult,
       regenerate,
       stop,
+      isClearing,
+      clearMessages,
+      onClearTransitionEnd,
+      tools: toolsFromConnector,
     } = props;
 
     if (__DEV__ && error) {
@@ -480,16 +480,18 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
     }
 
     const toolsForUi: ClientSideTools = {};
-    Object.entries(tools).forEach(([key, tool]) => {
+    Object.entries(toolsFromConnector).forEach(([key, connectorTool]) => {
+      const widgetTool = tools[key];
+
       toolsForUi[key] = {
-        ...tool,
+        ...connectorTool,
         addToolResult,
         layoutComponent: (
           layoutComponentProps: ClientSideToolComponentProps
         ) => {
           return (
             <TemplateComponent
-              templates={tool.templates}
+              templates={widgetTool.templates}
               rootTagName="fragment"
               templateKey="layout"
               data={layoutComponentProps}
@@ -716,7 +718,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           chatOpen={open}
           setChatOpen={setOpen}
           chatMessages={messages}
-          setChatMessages={setMessages}
           indexUiState={indexUiState}
           setIndexUiState={setIndexUiState}
           chatStatus={status}
@@ -725,6 +726,9 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           sendMessage={sendMessage}
           regenerate={regenerate}
           stop={stop}
+          isClearing={isClearing}
+          clearMessages={clearMessages}
+          onClearTransitionEnd={onClearTransitionEnd}
           toolsForUi={toolsForUi}
           toggleButtonProps={{
             layoutComponent: toggleButtonLayoutComponent,

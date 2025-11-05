@@ -18,10 +18,8 @@ import type {
   ChatProps as ChatUiProps,
   RecommendComponentProps,
   RecordWithObjectID,
-  AddToolResultWithOutput,
   UserClientSideTool,
   UserClientSideTools,
-  ClientSideTools,
 } from 'instantsearch-ui-components';
 import type { IndexUiState } from 'instantsearch.js';
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
@@ -159,10 +157,7 @@ export function Chat<
 
   const { indexUiState, setIndexUiState } = useInstantSearch();
 
-  const [open, setOpen] = React.useState(defaultOpen);
   const [maximized, setMaximized] = React.useState(false);
-  const [input, setInput] = React.useState('');
-  const [isClearing, setIsClearing] = React.useState(false);
 
   const promptRef = React.useRef<HTMLTextAreaElement>(null);
 
@@ -181,68 +176,24 @@ export function Chat<
   const {
     messages,
     sendMessage,
-    addToolResult,
     status,
     regenerate,
     stop,
-    setMessages,
-    clearError,
     error,
+    input,
+    setInput,
+    open,
+    setOpen,
+    isClearing,
+    clearMessages,
+    onClearTransitionEnd,
+    tools: hookTools,
   } = useChat({
     ...props,
+    defaultOpen,
+    tools,
     sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
-    onToolCall({ toolCall }) {
-      const tool = tools[toolCall.toolName];
-
-      if (!tool) {
-        if (__DEV__) {
-          throw new Error(
-            `No tool implementation found for "${toolCall.toolName}". Please provide a tool implementation in the \`tools\` prop.`
-          );
-        }
-
-        addToolResult({
-          output: `No tool implemented for "${toolCall.toolName}".`,
-          tool: toolCall.toolName,
-          toolCallId: toolCall.toolCallId,
-        });
-        return;
-      }
-
-      if (tool.onToolCall) {
-        const scopedAddToolResult: AddToolResultWithOutput = ({ output }) =>
-          addToolResult({
-            output,
-            tool: toolCall.toolName,
-            toolCallId: toolCall.toolCallId,
-          });
-
-        tool.onToolCall({ ...toolCall, addToolResult: scopedAddToolResult });
-      }
-    },
   });
-
-  const toolsForUi: ClientSideTools = React.useMemo(() => {
-    const result: ClientSideTools = {};
-    Object.entries(tools).forEach(([key, tool]) => {
-      result[key] = {
-        ...tool,
-        addToolResult,
-      };
-    });
-    return result;
-  }, [tools, addToolResult]);
-
-  const handleClear = React.useCallback(() => {
-    if (!messages || messages.length === 0) return;
-    setIsClearing(true);
-  }, [messages]);
-
-  const handleClearTransitionEnd = React.useCallback(() => {
-    setMessages([]);
-    clearError();
-    setIsClearing(false);
-  }, [setMessages, clearError]);
 
   if (__DEV__ && error) {
     throw error;
@@ -266,7 +217,7 @@ export function Chat<
         onClose: () => setOpen(false),
         maximized,
         onToggleMaximize: () => setMaximized(!maximized),
-        onClear: handleClear,
+        onClear: clearMessages,
         canClear: Boolean(messages?.length) && !isClearing,
         titleIconComponent: headerTitleIconComponent,
         closeIconComponent: headerCloseIconComponent,
@@ -280,11 +231,11 @@ export function Chat<
         onReload: (messageId) => regenerate({ messageId }),
         onClose: () => setOpen(false),
         messages,
-        tools: toolsForUi,
+        tools: hookTools,
         indexUiState,
         setIndexUiState,
         isClearing,
-        onClearTransitionEnd: handleClearTransitionEnd,
+        onClearTransitionEnd,
         isScrollAtBottom: isAtBottom,
         scrollRef,
         contentRef,

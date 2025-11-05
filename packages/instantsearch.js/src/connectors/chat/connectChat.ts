@@ -57,6 +57,22 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
   setMessages: (
     messages: TUiMessage[] | ((m: TUiMessage[]) => TUiMessage[])
   ) => void;
+  /**
+   * Whether the chat is in the process of clearing messages.
+   */
+  isClearing: boolean;
+  /**
+   * Clear all messages.
+   */
+  clearMessages: () => void;
+  /**
+   * Callback to be called when the clear transition ends.
+   */
+  onClearTransitionEnd: () => void;
+  /**
+   * Tools configuration passed to the connector.
+   */
+  tools: Record<string, Omit<UserClientSideTool, 'layoutComponent'>>;
 } & Pick<
   AbstractChat<TUiMessage>,
   | 'addToolResult'
@@ -125,9 +141,11 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     let _chatInstance: Chat<TUiMessage>;
     let input = '';
     let open = false;
+    let isClearing = false;
     let sendEvent: SendEventForHits;
     let setInput: ChatRenderState<TUiMessage>['setInput'];
     let setOpen: ChatRenderState<TUiMessage>['setOpen'];
+    let setIsClearing: (value: boolean) => void;
 
     const setMessages = (
       messagesParam: TUiMessage[] | ((m: TUiMessage[]) => TUiMessage[])
@@ -136,6 +154,19 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         messagesParam = messagesParam(_chatInstance.messages);
       }
       _chatInstance.messages = messagesParam;
+    };
+
+    const clearMessages = () => {
+      if (!_chatInstance.messages || _chatInstance.messages.length === 0) {
+        return;
+      }
+      setIsClearing(true);
+    };
+
+    const onClearTransitionEnd = () => {
+      setMessages([]);
+      _chatInstance.clearError();
+      setIsClearing(false);
     };
 
     const makeChatInstance = (instantSearchInstance: InstantSearch) => {
@@ -239,6 +270,11 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           render();
         };
 
+        setIsClearing = (value) => {
+          isClearing = value;
+          render();
+        };
+
         _chatInstance['~registerErrorCallback'](render);
         _chatInstance['~registerMessagesCallback'](render);
         _chatInstance['~registerStatusCallback'](render);
@@ -293,6 +329,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           setInput,
           setOpen,
           setMessages,
+          isClearing,
+          clearMessages,
+          onClearTransitionEnd,
+          tools,
           widgetParams,
 
           // Chat instance render state
