@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.13.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.12.0...instantsearch-ui-components@0.13.0) (2025-11-06)
+
+
+### Bug Fixes
+
+* **autocomplete:** scroll active item into view ([#6790](https://github.com/algolia/instantsearch/issues/6790)) ([510c2bb](https://github.com/algolia/instantsearch/commit/510c2bbc51a451046eecd8410a7519e75c8afe01))
+
+
+### Features
+
+* **autocomplete:** implement styling ([#6776](https://github.com/algolia/instantsearch/issues/6776)) ([46aa79a](https://github.com/algolia/instantsearch/commit/46aa79aa20700d9c52754f09f9d45e9250237117))
+* **autocomplete:** support global onSelect and redirect to search page ([#6777](https://github.com/algolia/instantsearch/issues/6777)) ([44ffb9a](https://github.com/algolia/instantsearch/commit/44ffb9a43d75f7f3bdd83383d0ad500cb0924024))
+* **autocomplete:** support header template for autocomplete index ([#6782](https://github.com/algolia/instantsearch/issues/6782)) ([a27123f](https://github.com/algolia/instantsearch/commit/a27123f46de052620989af72a182e48dd94c4b3e))
+* **instantsearch.js:** introduce autocomplete widget ([#6759](https://github.com/algolia/instantsearch/issues/6759)) ([59f8fbf](https://github.com/algolia/instantsearch/commit/59f8fbf1a70262ab0927f5fdcde5c3ecbd10e3ba))
+
+
+
+
+
 # [0.12.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.11.2...instantsearch-ui-components@0.12.0) (2025-10-23)
 
 
