@@ -631,6 +631,50 @@ export function createOptionsTests(
       expect(document.activeElement).toEqual(updatedTargetItem);
     });
 
+    test('does not display facets that should be hidden based on the renderingContent', async () => {
+      const searchClient = createMockedSearchClient(undefined, undefined, {
+        facetOrdering: {
+          values: {
+            brand: {
+              hide: ['Apple'],
+            },
+          },
+        },
+      });
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          attribute: 'brand',
+          searchable: true,
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(
+        Array.from(
+          document.querySelectorAll('.ais-RefinementList-labelText')
+        ).map((item) => item.textContent)
+      ).toEqual([
+        'Insignia™',
+        'Samsung',
+        'Metra',
+        'HP',
+        'GE',
+        'Sony',
+        'Incipio',
+        'KitchenAid',
+        'Whirlpool',
+        'LG',
+      ]);
+    });
+
     describe('sorting', () => {
       test('sorts the items by ascending name', async () => {
         const searchClient = createMockedSearchClient();
@@ -1810,6 +1854,7 @@ function createMockedSearchClient(
               facets: {
                 brand: values,
               },
+              renderingContent,
             })
           )
         )
