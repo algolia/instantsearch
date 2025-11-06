@@ -81,6 +81,8 @@ type UserMessagesProps = Omit<
   | 'messageComponent'
   | 'leadingComponent'
   | 'footerComponent'
+  | 'translations'
+  | 'classNames'
 >;
 
 type UserPromptProps = Omit<
@@ -125,6 +127,7 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     translations?: Partial<{
       prompt: ChatUiProps['promptProps']['translations'];
       header: ChatUiProps['headerProps']['translations'];
+      message: ChatUiProps['messagesProps']['messageTranslations'];
       messages: ChatUiProps['messagesProps']['translations'];
     }>;
   };
@@ -167,6 +170,7 @@ export function Chat<
   const {
     prompt: promptTranslations,
     header: headerTranslations,
+    message: messageTranslations,
     messages: messagesTranslations,
   } = translations;
 
@@ -270,6 +274,7 @@ export function Chat<
           ...messagesProps?.userMessageProps,
         },
         translations: messagesTranslations,
+        messageTranslations,
         ...messagesProps,
       }}
       promptProps={{

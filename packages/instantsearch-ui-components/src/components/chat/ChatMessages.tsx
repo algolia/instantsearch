@@ -17,6 +17,7 @@ import type {
   ChatMessageProps,
   ChatMessageActionProps,
   ChatMessageClassNames,
+  ChatMessageTranslations,
 } from './ChatMessage';
 import type { ChatMessageErrorProps } from './ChatMessageError';
 import type { ChatMessageLoaderProps } from './ChatMessageLoader';
@@ -128,6 +129,10 @@ export type ChatMessagesProps<
    */
   translations?: Partial<ChatMessagesTranslations>;
   /**
+   * Optional message translations
+   */
+  messageTranslations?: Partial<ChatMessageTranslations>;
+  /**
    * Optional user message props
    */
   userMessageProps?: Partial<Omit<ChatMessageProps, 'ref' | 'key'>>;
@@ -191,6 +196,7 @@ function createDefaultMessageComponent<
     onClose,
     actionsComponent,
     classNames,
+    messageTranslations,
     translations,
   }: {
     key: string;
@@ -202,9 +208,10 @@ function createDefaultMessageComponent<
     tools: ClientSideTools;
     onReload: (messageId?: string) => void;
     onClose: () => void;
-    classNames?: Partial<ChatMessageClassNames>;
-    translations: ChatMessagesTranslations;
     actionsComponent?: ChatMessageProps['actionsComponent'];
+    translations: ChatMessagesTranslations;
+    classNames?: Partial<ChatMessageClassNames>;
+    messageTranslations?: Partial<ChatMessageTranslations>;
   }) {
     const defaultAssistantActions: ChatMessageActionProps[] = [
       ...(hasTextContent(message)
@@ -241,6 +248,7 @@ function createDefaultMessageComponent<
         actionsComponent={actionsComponent}
         data-role={message.role}
         classNames={classNames}
+        translations={messageTranslations}
         {...messageProps}
       />
     );
@@ -267,6 +275,7 @@ export function createChatMessagesComponent({
     const {
       classNames = {},
       messageClassNames = {},
+      messageTranslations,
       messages = [],
       messageComponent: MessageComponent,
       loaderComponent: LoaderComponent,
@@ -352,8 +361,9 @@ export function createChatMessagesComponent({
                 onReload={onReload}
                 actionsComponent={ActionsComponent}
                 onClose={onClose}
-                classNames={messageClassNames}
                 translations={translations}
+                classNames={messageClassNames}
+                messageTranslations={messageTranslations}
               />
             ))}
 
