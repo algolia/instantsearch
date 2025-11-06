@@ -411,17 +411,8 @@ function ChatWrapper({
         loaderComponent: messagesProps.loaderComponent,
         errorComponent: messagesProps.errorComponent,
         actionsComponent: messagesProps.actionsComponent,
-        assistantMessageProps: {
-          ...messagesProps.assistantMessageProps,
-          leadingComponent:
-            messagesProps.assistantMessageProps.leadingComponent,
-          footerComponent: messagesProps.assistantMessageProps.footerComponent,
-        },
-        userMessageProps: {
-          ...messagesProps.userMessageProps,
-          leadingComponent: messagesProps.userMessageProps.leadingComponent,
-          footerComponent: messagesProps.userMessageProps.footerComponent,
-        },
+        assistantMessageProps: messagesProps.assistantMessageProps,
+        userMessageProps: messagesProps.userMessageProps,
         translations: messagesProps.translations,
       }}
       promptProps={{
