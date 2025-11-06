@@ -949,6 +949,20 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
     }>;
 
     /**
+     * Templates to use for each message.
+     */
+    message: Partial<{
+      /**
+       * Label for the message actions
+       */
+      actionsLabelText?: string;
+      /**
+       * Label for the message container
+       */
+      messageLabelText?: string;
+    }>;
+
+    /**
      * Templates to use for the assistant message.
      */
     assistantMessage: Partial<{
