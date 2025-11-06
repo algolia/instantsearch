@@ -125,7 +125,7 @@ const createRenderer = <TItem extends BaseHit>(
         targetIndex,
       };
 
-      connectorParams.refine(targetIndex?.getHelper()?.state.query ?? '');
+      connectorParams.refine(targetIndex.getHelper()?.state.query ?? '');
       return;
     }
 
