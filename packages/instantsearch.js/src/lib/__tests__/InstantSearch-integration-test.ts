@@ -229,6 +229,7 @@ describe('network requests', () => {
       ).toMatchInlineSnapshot(`
         [
           {
+            "fallbackParameters": undefined,
             "indexName": "indexName",
             "maxRecommendations": undefined,
             "model": "bought-together",
@@ -276,6 +277,7 @@ describe('network requests', () => {
       ).toMatchInlineSnapshot(`
         [
           {
+            "fallbackParameters": undefined,
             "indexName": "indexName",
             "maxRecommendations": undefined,
             "model": "bought-together",
@@ -375,6 +377,7 @@ describe('network requests', () => {
       ).toMatchInlineSnapshot(`
         [
           {
+            "fallbackParameters": undefined,
             "indexName": "indexName",
             "maxRecommendations": undefined,
             "model": "bought-together",
@@ -425,6 +428,7 @@ describe('network requests', () => {
       ).toMatchInlineSnapshot(`
         [
           {
+            "fallbackParameters": undefined,
             "indexName": "indexName",
             "maxRecommendations": undefined,
             "model": "bought-together",
@@ -524,6 +528,7 @@ describe('network requests', () => {
       ).toMatchInlineSnapshot(`
         [
           {
+            "fallbackParameters": undefined,
             "indexName": "indexName",
             "maxRecommendations": undefined,
             "model": "bought-together",
@@ -574,6 +579,7 @@ describe('network requests', () => {
       ).toMatchInlineSnapshot(`
         [
           {
+            "fallbackParameters": undefined,
             "indexName": "indexName",
             "maxRecommendations": undefined,
             "model": "bought-together",
@@ -623,6 +629,7 @@ describe('network requests', () => {
       ).toMatchInlineSnapshot(`
         [
           {
+            "fallbackParameters": undefined,
             "indexName": "indexName",
             "maxRecommendations": undefined,
             "model": "bought-together",

@@ -166,6 +166,9 @@ export function createOptionsTests(
           queryParameters: {
             query: 'regular query',
           },
+          fallbackParameters: {
+            query: 'fallback query',
+          },
           threshold: 80,
           limit: 3,
           escapeHTML: false,
@@ -181,6 +184,9 @@ export function createOptionsTests(
           objectID: 'objectID',
           queryParameters: {
             query: 'regular query',
+          },
+          fallbackParameters: {
+            query: 'fallback query',
           },
           threshold: 80,
           maxRecommendations: 3,
