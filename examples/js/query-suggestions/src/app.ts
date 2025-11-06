@@ -29,6 +29,10 @@ search.addWidgets([
       {
         indexName: 'instant_search',
         templates: {
+          header: (_, { html }) => html`
+            <span class="ais-AutocompleteIndexHeaderTitle">Products</span>
+            <span class="ais-AutocompleteIndexHeaderLine" />
+          `,
           item: ({ item, onSelect }, { html }) => html`
             <div onClick=${onSelect}>${item.name}</div>
           `,
@@ -38,6 +42,12 @@ search.addWidgets([
     ],
     showSuggestions: {
       indexName: 'instant_search_demo_query_suggestions',
+      templates: {
+        header: (_, { html }) => html`
+          <span class="ais-AutocompleteIndexHeaderTitle">Suggestions</span>
+          <span class="ais-AutocompleteIndexHeaderLine" />
+        `,
+      },
     },
   }),
   hits({
