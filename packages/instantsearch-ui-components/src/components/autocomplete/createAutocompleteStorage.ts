@@ -35,6 +35,15 @@ export function createAutocompleteStorage({
       };
     }, [storage]);
 
+    if (!showRecent) {
+      return {
+        storage: { onAdd: () => {}, onRemove: () => {} },
+        storageHits: [],
+        indicesForPropGetters: indices,
+        indicesConfigForPropGetters: indicesConfig,
+      };
+    }
+
     const storageHits = snapshot.getAll(query).map((value) => ({
       objectID: value,
       query: value,
@@ -43,18 +52,16 @@ export function createAutocompleteStorage({
 
     const indicesForPropGetters = [...indices];
     const indicesConfigForPropGetters = [...indicesConfig];
-    if (showRecent) {
-      indicesForPropGetters.unshift({
-        indexName: 'recent-searches',
-        indexId: 'recent-searches',
-        hits: storageHits,
-      });
-      indicesConfigForPropGetters.unshift({
-        indexName: 'recent-searches',
-        // @ts-expect-error - we know it has query as it's generated from storageHits
-        getQuery: (item) => item.query,
-      });
-    }
+    indicesForPropGetters.unshift({
+      indexName: 'recent-searches',
+      indexId: 'recent-searches',
+      hits: storageHits,
+    });
+    indicesConfigForPropGetters.unshift({
+      indexName: 'recent-searches',
+      // @ts-expect-error - we know it has query as it's generated from storageHits
+      getQuery: (item) => item.query,
+    });
 
     return {
       storage,
