@@ -216,6 +216,10 @@ export function createChatMessageComponent({ createElement }: Renderer) {
               toolCallId: toolMessage.toolCallId,
             });
 
+          if (!ToolLayoutComponent) {
+            return null;
+          }
+
           return (
             <div
               key={`${message.id}-${index}`}

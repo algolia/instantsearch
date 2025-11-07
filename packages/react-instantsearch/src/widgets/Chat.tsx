@@ -170,6 +170,11 @@ export function Chat<
     return { ...defaults, ...userTools };
   }, [getSearchPageURL, itemComponent, userTools]);
 
+  const chatState = useChat<TUiMessage>({
+    ...props,
+    tools,
+  });
+
   const {
     messages,
     sendMessage,
@@ -184,22 +189,8 @@ export function Chat<
     isClearing,
     clearMessages,
     onClearTransitionEnd,
-    addToolResult,
-  } = useChat({
-    ...props,
-    tools,
-  });
-
-  const toolsForUi = React.useMemo(() => {
-    const result: Record<string, any> = {};
-    Object.keys(tools).forEach((key) => {
-      result[key] = {
-        ...tools[key],
-        addToolResult,
-      };
-    });
-    return result;
-  }, [tools, addToolResult]);
+    tools: toolsFromConnector,
+  } = chatState;
 
   if (__DEV__ && error) {
     throw error;
@@ -237,7 +228,7 @@ export function Chat<
         onReload: (messageId) => regenerate({ messageId }),
         onClose: () => setOpen(false),
         messages,
-        tools: toolsForUi,
+        tools: toolsFromConnector,
         indexUiState,
         setIndexUiState,
         isClearing,

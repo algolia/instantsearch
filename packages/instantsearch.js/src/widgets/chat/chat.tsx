@@ -457,7 +457,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       setOpen,
       status,
       error,
-      addToolResult,
       regenerate,
       stop,
       isClearing,
@@ -485,19 +484,20 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
 
       toolsForUi[key] = {
         ...connectorTool,
-        addToolResult,
-        layoutComponent: (
-          layoutComponentProps: ClientSideToolComponentProps
-        ) => {
-          return (
-            <TemplateComponent
-              templates={widgetTool.templates}
-              rootTagName="fragment"
-              templateKey="layout"
-              data={layoutComponentProps}
-            />
-          );
-        },
+        ...(widgetTool?.templates?.layout && {
+          layoutComponent: (
+            layoutComponentProps: ClientSideToolComponentProps
+          ) => {
+            return (
+              <TemplateComponent
+                templates={widgetTool.templates}
+                rootTagName="fragment"
+                templateKey="layout"
+                data={layoutComponentProps}
+              />
+            );
+          },
+        }),
       };
     });
 
