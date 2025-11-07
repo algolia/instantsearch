@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.82.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.81.0...instantsearch.js@4.82.0) (2025-11-06)
+
+
+### Bug Fixes
+
+* **autocomplete:** default to 5 hits per index ([#6783](https://github.com/algolia/instantsearch/issues/6783)) ([60c5bc5](https://github.com/algolia/instantsearch/commit/60c5bc5812245d9758bac24dcf54b034ac19c3c9))
+* **hierarchicalMenu:** correct canShowMore when children can show more ([#6786](https://github.com/algolia/instantsearch/issues/6786)) ([05193af](https://github.com/algolia/instantsearch/commit/05193af2cbce4f6034b2cd257e320733b2802678)), closes [#6781](https://github.com/algolia/instantsearch/issues/6781)
+* **recommend:** omit fallbackParameters from query when not passed as params ([#6716](https://github.com/algolia/instantsearch/issues/6716)) ([a9efc4f](https://github.com/algolia/instantsearch/commit/a9efc4fe0e292de395121fdf2aa138aceafe981e))
+
+
+### Features
+
+* add fallbackParameters support to Recommend FBT [RECO-2443] ([#6794](https://github.com/algolia/instantsearch/issues/6794)) ([343711b](https://github.com/algolia/instantsearch/commit/343711b712be5bbfbb214853691f3457571d22cb))
+* **autocomplete:** support global onSelect and redirect to search page ([#6777](https://github.com/algolia/instantsearch/issues/6777)) ([44ffb9a](https://github.com/algolia/instantsearch/commit/44ffb9a43d75f7f3bdd83383d0ad500cb0924024))
+* **autocomplete:** support header template for autocomplete index ([#6782](https://github.com/algolia/instantsearch/issues/6782)) ([a27123f](https://github.com/algolia/instantsearch/commit/a27123f46de052620989af72a182e48dd94c4b3e))
+* **autocomplete:** use shared SearchBox for IS.js ([#6787](https://github.com/algolia/instantsearch/issues/6787)) ([891fd50](https://github.com/algolia/instantsearch/commit/891fd50b418f25b6ee2ffb1e810309a52b9c8ef0))
+* **instantsearch.js:** introduce autocomplete widget ([#6759](https://github.com/algolia/instantsearch/issues/6759)) ([59f8fbf](https://github.com/algolia/instantsearch/commit/59f8fbf1a70262ab0927f5fdcde5c3ecbd10e3ba))
+
+
+
+
+
 # [4.81.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.80.0...instantsearch.js@4.81.0) (2025-10-23)
 
 

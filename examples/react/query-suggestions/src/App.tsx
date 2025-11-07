@@ -56,6 +56,14 @@ export function App() {
                 indices={[
                   {
                     indexName: 'instant_search',
+                    headerComponent: () => (
+                      <>
+                        <span className="ais-AutocompleteIndexHeaderTitle">
+                          Products
+                        </span>
+                        <span className="ais-AutocompleteIndexHeaderLine" />
+                      </>
+                    ),
                     itemComponent: ({ item, onSelect }) => (
                       <div onClick={onSelect}>{item.name}</div>
                     ),
@@ -64,6 +72,14 @@ export function App() {
                 ]}
                 showSuggestions={{
                   indexName: 'instant_search_demo_query_suggestions',
+                  headerComponent: () => (
+                    <>
+                      <span className="ais-AutocompleteIndexHeaderTitle">
+                        Suggestions
+                      </span>
+                      <span className="ais-AutocompleteIndexHeaderLine" />
+                    </>
+                  ),
                 }}
               />
               <Hits hitComponent={HitComponent} />

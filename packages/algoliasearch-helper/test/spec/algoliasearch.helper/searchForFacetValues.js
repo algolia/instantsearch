@@ -521,14 +521,14 @@ test('hides a facet value that is hidden according to `renderingContent`', funct
           exhaustiveFacetsCount: true,
           facetHits: [
             {
-              count: 318,
-              highlighted: 'something',
-              value: 'something',
-            },
-            {
               count: 1,
               highlighted: 'hidden',
               value: 'hidden',
+            },
+            {
+              count: 318,
+              highlighted: 'something',
+              value: 'something',
             },
           ],
           processingTimeMS: 3,
@@ -600,14 +600,14 @@ test('does not hide if last results are for another index', function () {
           exhaustiveFacetsCount: true,
           facetHits: [
             {
-              count: 318,
-              highlighted: 'something',
-              value: 'something',
-            },
-            {
               count: 1,
               highlighted: 'hidden',
               value: 'hidden',
+            },
+            {
+              count: 318,
+              highlighted: 'something',
+              value: 'something',
             },
           ],
           processingTimeMS: 3,
@@ -641,18 +641,18 @@ test('does not hide if last results are for another index', function () {
         processingTimeMS: 3,
         facetHits: [
           {
-            count: 318,
-            highlighted: 'something',
-            isRefined: false,
-            escapedValue: 'something',
-            value: 'something',
-          },
-          {
             count: 1,
             highlighted: 'hidden',
             isRefined: false,
             escapedValue: 'hidden',
             value: 'hidden',
+          },
+          {
+            count: 318,
+            highlighted: 'something',
+            isRefined: false,
+            escapedValue: 'something',
+            value: 'something',
           },
         ],
       });

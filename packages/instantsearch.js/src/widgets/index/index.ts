@@ -26,7 +26,6 @@ import type {
 import type {
   AlgoliaSearchHelper as Helper,
   DerivedHelper,
-  PlainSearchParameters,
   SearchParameters,
   SearchResults,
   AlgoliaSearchHelper,
@@ -703,23 +702,6 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
       helper.searchWithoutTriggeringOnStateChange = () => {
         return mainHelper.search();
-      };
-
-      // We use the same pattern for the `searchForFacetValues`.
-      helper.searchForFacetValues = (
-        facetName,
-        facetValue,
-        maxFacetHits,
-        userState: PlainSearchParameters
-      ) => {
-        const state = helper!.state.setQueryParameters(userState);
-
-        return mainHelper.searchForFacetValues(
-          facetName,
-          facetValue,
-          maxFacetHits,
-          state
-        );
       };
 
       const isolatedHelper = indexName

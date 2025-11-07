@@ -170,3 +170,7 @@ em {
     rgba(255, 255, 255, 1) 100%
   );
 }
+
+.ais-Autocomplete {
+  margin-bottom: 1rem;
+}
