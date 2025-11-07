@@ -31,6 +31,8 @@ import type {
 import type {
   AddToolResultWithOutput,
   UserClientSideTool,
+  ClientSideTools,
+  ClientSideTool,
 } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -70,9 +72,9 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
    */
   onClearTransitionEnd: () => void;
   /**
-   * Tools configuration passed to the connector.
+   * Tools configuration with addToolResult bound, ready to be used by the UI.
    */
-  tools: Record<string, Omit<UserClientSideTool, 'layoutComponent'>>;
+  tools: ClientSideTools;
 } & Pick<
   AbstractChat<TUiMessage>,
   | 'addToolResult'
@@ -320,6 +322,15 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           });
         }
 
+        const toolsWithAddToolResult: ClientSideTools = {};
+        Object.entries(tools).forEach(([key, tool]) => {
+          const toolWithAddToolResult: ClientSideTool = {
+            ...tool,
+            addToolResult: _chatInstance.addToolResult,
+          };
+          toolsWithAddToolResult[key] = toolWithAddToolResult;
+        });
+
         return {
           indexUiState: instantSearchInstance.getUiState()[parent.getIndexId()],
           input,
@@ -332,7 +343,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           isClearing,
           clearMessages,
           onClearTransitionEnd,
-          tools,
+          tools: toolsWithAddToolResult,
           widgetParams,
 
           // Chat instance render state

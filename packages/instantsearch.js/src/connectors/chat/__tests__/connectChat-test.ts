@@ -278,7 +278,10 @@ describe('connectChat', () => {
 
       const renderState = getRenderState();
       expect(renderState.tools).toEqual({
-        testTool: mockTool,
+        testTool: {
+          ...mockTool,
+          addToolResult: expect.any(Function),
+        },
       });
     });
   });
