@@ -19,6 +19,7 @@ import type {
   RecordWithObjectID,
   UserClientSideTool,
   UserClientSideTools,
+  ChatMessageProps,
 } from 'instantsearch-ui-components';
 import type { IndexUiState } from 'instantsearch.js';
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
@@ -75,6 +76,11 @@ type UserMessagesProps = Omit<
   | 'setIndexUiState'
   | 'scrollRef'
   | 'contentRef'
+  | 'messageComponent'
+  | 'leadingComponent'
+  | 'footerComponent'
+  | 'translations'
+  | 'classNames'
 >;
 
 type UserPromptProps = Omit<
@@ -110,9 +116,14 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     promptHeaderComponent?: ChatUiProps['promptProps']['headerComponent'];
     promptFooterComponent?: ChatUiProps['promptProps']['footerComponent'];
     actionsComponent?: ChatUiProps['messagesProps']['actionsComponent'];
+    assistantMessageLeadingComponent?: ChatMessageProps['leadingComponent'];
+    assistantMessageFooterComponent?: ChatMessageProps['footerComponent'];
+    userMessageLeadingComponent?: ChatMessageProps['leadingComponent'];
+    userMessageFooterComponent?: ChatMessageProps['footerComponent'];
     translations?: Partial<{
       prompt: ChatUiProps['promptProps']['translations'];
       header: ChatUiProps['headerProps']['translations'];
+      message: ChatUiProps['messagesProps']['messageTranslations'];
       messages: ChatUiProps['messagesProps']['translations'];
     }>;
   };
@@ -139,6 +150,10 @@ export function Chat<
   promptComponent,
   promptHeaderComponent,
   promptFooterComponent,
+  assistantMessageLeadingComponent,
+  assistantMessageFooterComponent,
+  userMessageLeadingComponent,
+  userMessageFooterComponent,
   actionsComponent,
   classNames,
   translations = {},
@@ -149,6 +164,7 @@ export function Chat<
   const {
     prompt: promptTranslations,
     header: headerTranslations,
+    message: messageTranslations,
     messages: messagesTranslations,
   } = translations;
 
@@ -240,7 +256,18 @@ export function Chat<
         loaderComponent: messagesLoaderComponent,
         errorComponent: messagesErrorComponent,
         actionsComponent,
+        assistantMessageProps: {
+          leadingComponent: assistantMessageLeadingComponent,
+          footerComponent: assistantMessageFooterComponent,
+          ...messagesProps?.assistantMessageProps,
+        },
+        userMessageProps: {
+          leadingComponent: userMessageLeadingComponent,
+          footerComponent: userMessageFooterComponent,
+          ...messagesProps?.userMessageProps,
+        },
         translations: messagesTranslations,
+        messageTranslations,
         ...messagesProps,
       }}
       promptProps={{

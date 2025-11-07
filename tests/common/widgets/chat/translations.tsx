@@ -330,6 +330,82 @@ export function createTranslationsTests(
           'Custom regenerate action'
         );
       });
+
+      test('renders with custom message translations', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({
+          messages: [
+            {
+              id: '0',
+              role: 'user',
+              parts: [
+                {
+                  type: 'text',
+                  text: 'hello',
+                },
+              ],
+            },
+            {
+              id: '1',
+              role: 'assistant',
+              parts: [
+                {
+                  type: 'text',
+                  text: 'hello',
+                },
+              ],
+            },
+          ],
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              templates: {
+                message: {
+                  messageLabelText: 'Custom message',
+                  actionsLabelText: 'Custom actions',
+                },
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              translations: {
+                message: {
+                  messageLabel: 'Custom message',
+                  actionsLabel: 'Custom actions',
+                },
+              },
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        expect(
+          document
+            .querySelectorAll('.ais-ChatMessage')[0]
+            ?.getAttribute('aria-label')
+        ).toBe('Custom message');
+        expect(
+          document
+            .querySelectorAll('.ais-ChatMessage')[1]
+            ?.getAttribute('aria-label')
+        ).toBe('Custom message');
+
+        expect(
+          document
+            .querySelector('.ais-ChatMessage-actions')
+            ?.getAttribute('aria-label')
+        ).toBe('Custom actions');
+      });
     });
   });
 }

@@ -169,6 +169,101 @@ export function createOptionsTests(
           'CONTAINER'
         );
       });
+
+      test('adds custom CSS classes for message component', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({
+          messages: [
+            {
+              id: '1',
+              role: 'user',
+              parts: [
+                {
+                  type: 'text',
+                  text: 'Hello, world!',
+                },
+              ],
+            },
+            {
+              id: '2',
+              role: 'assistant',
+              parts: [
+                {
+                  type: 'text',
+                  text: 'Hi there!',
+                },
+              ],
+            },
+          ],
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              cssClasses: {
+                message: {
+                  root: 'MESSAGE-ROOT',
+                  container: 'MESSAGE-CONTAINER',
+                  content: 'MESSAGE-CONTENT',
+                  message: 'MESSAGE-MESSAGE',
+                  actions: 'MESSAGE-ACTIONS',
+                },
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              classNames: {
+                message: {
+                  root: 'MESSAGE-ROOT',
+                  container: 'MESSAGE-CONTAINER',
+                  content: 'MESSAGE-CONTENT',
+                  message: 'MESSAGE-MESSAGE',
+                  actions: 'MESSAGE-ACTIONS',
+                },
+              },
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        expect(document.querySelectorAll('.ais-ChatMessage')[0]).toHaveClass(
+          'MESSAGE-ROOT'
+        );
+        expect(
+          document.querySelectorAll('.ais-ChatMessage-container')[0]
+        ).toHaveClass('MESSAGE-CONTAINER');
+        expect(
+          document.querySelectorAll('.ais-ChatMessage-content')[0]
+        ).toHaveClass('MESSAGE-CONTENT');
+        expect(
+          document.querySelectorAll('.ais-ChatMessage-message')[0]
+        ).toHaveClass('MESSAGE-MESSAGE');
+
+        expect(document.querySelectorAll('.ais-ChatMessage')[1]).toHaveClass(
+          'MESSAGE-ROOT'
+        );
+        expect(
+          document.querySelectorAll('.ais-ChatMessage-container')[1]
+        ).toHaveClass('MESSAGE-CONTAINER');
+        expect(
+          document.querySelectorAll('.ais-ChatMessage-content')[1]
+        ).toHaveClass('MESSAGE-CONTENT');
+        expect(
+          document.querySelectorAll('.ais-ChatMessage-message')[1]
+        ).toHaveClass('MESSAGE-MESSAGE');
+
+        expect(document.querySelector('.ais-ChatMessage-actions')).toHaveClass(
+          'MESSAGE-ACTIONS'
+        );
+      });
     });
 
     describe('tools', () => {

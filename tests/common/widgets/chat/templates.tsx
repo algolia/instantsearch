@@ -263,6 +263,101 @@ export function createTemplatesTests(
           'Custom error'
         );
       });
+
+      test('renders with custom assistant and user message parts', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({
+          messages: [
+            {
+              id: '0',
+              role: 'user',
+              parts: [
+                {
+                  type: 'text',
+                  text: 'hello',
+                },
+              ],
+            },
+            {
+              id: '1',
+              role: 'assistant',
+              parts: [
+                {
+                  type: 'text',
+                  text: 'hi there!',
+                },
+              ],
+            },
+          ],
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              cssClasses: {
+                message: {
+                  leading: 'MESSAGE-LEADING',
+                  footer: 'MESSAGE-FOOTER',
+                },
+              },
+              templates: {
+                assistantMessage: {
+                  leading: '<span>Assistant Leading</span>',
+                  footer: '<span>Assistant Footer</span>',
+                },
+                userMessage: {
+                  leading: '<span>User Leading</span>',
+                  footer: '<span>User Footer</span>',
+                },
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              classNames: {
+                message: {
+                  leading: 'MESSAGE-LEADING',
+                  footer: 'MESSAGE-FOOTER',
+                },
+              },
+              assistantMessageLeadingComponent: () => (
+                <div>Assistant Leading</div>
+              ),
+              assistantMessageFooterComponent: () => (
+                <div>Assistant Footer</div>
+              ),
+              userMessageLeadingComponent: () => <div>User Leading</div>,
+              userMessageFooterComponent: () => <div>User Footer</div>,
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        const leadingElements = document.querySelectorAll(
+          '.ais-ChatMessage-leading'
+        );
+        const footerElements = document.querySelectorAll(
+          '.ais-ChatMessage-footer'
+        );
+        expect(leadingElements).toHaveLength(2);
+        expect(footerElements).toHaveLength(2);
+        expect(leadingElements[0].textContent).toBe('User Leading');
+        expect(leadingElements[1].textContent).toBe('Assistant Leading');
+        expect(footerElements[0].textContent).toBe('User Footer');
+        expect(footerElements[1].textContent).toBe('Assistant Footer');
+
+        expect(leadingElements[0]).toHaveClass('MESSAGE-LEADING');
+        expect(leadingElements[1]).toHaveClass('MESSAGE-LEADING');
+        expect(footerElements[0]).toHaveClass('MESSAGE-FOOTER');
+        expect(footerElements[1]).toHaveClass('MESSAGE-FOOTER');
+      });
     });
 
     test('renders with custom actions', async () => {

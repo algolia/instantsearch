@@ -13,7 +13,12 @@ import {
 } from './icons';
 
 import type { ComponentProps, MutableRef, Renderer } from '../../types';
-import type { ChatMessageProps, ChatMessageActionProps } from './ChatMessage';
+import type {
+  ChatMessageProps,
+  ChatMessageActionProps,
+  ChatMessageClassNames,
+  ChatMessageTranslations,
+} from './ChatMessage';
 import type { ChatMessageErrorProps } from './ChatMessageError';
 import type { ChatMessageLoaderProps } from './ChatMessageLoader';
 import type { ChatMessageBase, ChatStatus, ClientSideTools } from './types';
@@ -116,9 +121,17 @@ export type ChatMessagesProps<
    */
   classNames?: Partial<ChatMessagesClassNames>;
   /**
+   * Optional message class names
+   */
+  messageClassNames?: Partial<ChatMessageClassNames>;
+  /**
    * Optional translations
    */
   translations?: Partial<ChatMessagesTranslations>;
+  /**
+   * Optional message translations
+   */
+  messageTranslations?: Partial<ChatMessageTranslations>;
   /**
    * Optional user message props
    */
@@ -181,8 +194,10 @@ function createDefaultMessageComponent<
     setIndexUiState,
     onReload,
     onClose,
-    translations,
     actionsComponent,
+    classNames,
+    messageTranslations,
+    translations,
   }: {
     key: string;
     message: TMessage;
@@ -193,8 +208,10 @@ function createDefaultMessageComponent<
     tools: ClientSideTools;
     onReload: (messageId?: string) => void;
     onClose: () => void;
-    translations: ChatMessagesTranslations;
     actionsComponent?: ChatMessageProps['actionsComponent'];
+    translations: ChatMessagesTranslations;
+    classNames?: Partial<ChatMessageClassNames>;
+    messageTranslations?: Partial<ChatMessageTranslations>;
   }) {
     const defaultAssistantActions: ChatMessageActionProps[] = [
       ...(hasTextContent(message)
@@ -230,6 +247,8 @@ function createDefaultMessageComponent<
         actions={defaultActions}
         actionsComponent={actionsComponent}
         data-role={message.role}
+        classNames={classNames}
+        translations={messageTranslations}
         {...messageProps}
       />
     );
@@ -255,6 +274,8 @@ export function createChatMessagesComponent({
   >(userProps: ChatMessagesProps<TMessage>) {
     const {
       classNames = {},
+      messageClassNames = {},
+      messageTranslations,
       messages = [],
       messageComponent: MessageComponent,
       loaderComponent: LoaderComponent,
@@ -341,6 +362,8 @@ export function createChatMessagesComponent({
                 actionsComponent={ActionsComponent}
                 onClose={onClose}
                 translations={translations}
+                classNames={messageClassNames}
+                messageTranslations={messageTranslations}
               />
             ))}
 
