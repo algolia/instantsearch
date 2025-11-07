@@ -1854,7 +1854,6 @@ function createMockedSearchClient(
               facets: {
                 brand: values,
               },
-              renderingContent,
             })
           )
         )
