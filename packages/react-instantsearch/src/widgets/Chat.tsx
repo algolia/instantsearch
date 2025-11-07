@@ -21,7 +21,6 @@ import type {
   UserClientSideTool,
   UserClientSideTools,
   ChatMessageProps,
-  ChatMessagesProps,
 } from 'instantsearch-ui-components';
 import type { IndexUiState } from 'instantsearch.js';
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
@@ -119,7 +118,6 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     promptHeaderComponent?: ChatUiProps['promptProps']['headerComponent'];
     promptFooterComponent?: ChatUiProps['promptProps']['footerComponent'];
     actionsComponent?: ChatUiProps['messagesProps']['actionsComponent'];
-    messageComponent?: ChatMessagesProps['messageComponent'];
     assistantMessageLeadingComponent?: ChatMessageProps['leadingComponent'];
     assistantMessageFooterComponent?: ChatMessageProps['footerComponent'];
     userMessageLeadingComponent?: ChatMessageProps['leadingComponent'];
@@ -155,7 +153,6 @@ export function Chat<
   promptComponent,
   promptHeaderComponent,
   promptFooterComponent,
-  messageComponent,
   assistantMessageLeadingComponent,
   assistantMessageFooterComponent,
   userMessageLeadingComponent,
@@ -262,7 +259,6 @@ export function Chat<
         loaderComponent: messagesLoaderComponent,
         errorComponent: messagesErrorComponent,
         actionsComponent,
-        messageComponent,
         assistantMessageProps: {
           leadingComponent: assistantMessageLeadingComponent,
           footerComponent: assistantMessageFooterComponent,
