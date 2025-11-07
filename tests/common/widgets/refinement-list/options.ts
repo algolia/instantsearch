@@ -1878,10 +1878,11 @@ function textRepresentation() {
   return Array.from(document.querySelectorAll('.ais-RefinementList-item'))
     .map(
       (item) =>
-        `${item.querySelector('.ais-RefinementList-labelText')!.textContent} ${item.querySelector<HTMLInputElement>('.ais-RefinementList-checkbox')!
-          .checked
-          ? '☒'
-          : '☐'
+        `${item.querySelector('.ais-RefinementList-labelText')!.textContent} ${
+          item.querySelector<HTMLInputElement>('.ais-RefinementList-checkbox')!
+            .checked
+            ? '☒'
+            : '☐'
         }`
     )
     .join('\n');
