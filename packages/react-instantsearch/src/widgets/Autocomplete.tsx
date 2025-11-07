@@ -97,6 +97,14 @@ export type AutocompleteProps<TItem extends BaseHit> = ComponentProps<'div'> & {
   showRecent?:
     | boolean
     | {
+        /**
+         * Storage key to use in the local storage.
+         */
+        storageKey?: string;
+
+        /**
+         * Component to use for each recent search item.
+         */
         itemComponent: AutocompleteIndexProps<{
           query: string;
         }>['ItemComponent'] & {

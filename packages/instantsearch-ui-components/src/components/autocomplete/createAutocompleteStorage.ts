@@ -9,7 +9,7 @@ type CreateAutocompleteStorageParams = {
 };
 
 type UseStorageParams<TItem extends Record<string, unknown>> = {
-  showRecent?: boolean | object;
+  showRecent?: boolean | { storageKey?: string };
   query?: string;
 } & Pick<Parameters<UsePropGetters<TItem>>[0], 'indices' | 'indicesConfig'>;
 
@@ -24,7 +24,14 @@ export function createAutocompleteStorage({
     indices,
     indicesConfig,
   }: UseStorageParams<TItem>) {
-    const storage = useMemo(() => createStorage({ limit: 5 }), []);
+    const storageKey =
+      showRecent && typeof showRecent === 'object'
+        ? showRecent.storageKey
+        : undefined;
+    const storage = useMemo(
+      () => createStorage({ limit: 5, storageKey }),
+      [storageKey]
+    );
     const [snapshot, setSnapshot] = useState(storage.getSnapshot());
     useEffect(() => {
       storage.registerUpdateListener(() => {
@@ -86,7 +93,7 @@ function isLocalStorageSupported() {
   }
 }
 
-function getLocalStorage() {
+function getLocalStorage(key: string = LOCAL_STORAGE_KEY) {
   if (!isLocalStorageSupported()) {
     return {
       setItems() {},
@@ -99,21 +106,27 @@ function getLocalStorage() {
   return {
     setItems(items: string[]) {
       try {
-        window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(items));
+        window.localStorage.setItem(key, JSON.stringify(items));
       } catch {
         // do nothing, this likely means the storage is full
       }
     },
     getItems(): string[] {
-      const items = window.localStorage.getItem(LOCAL_STORAGE_KEY);
+      const items = window.localStorage.getItem(key);
 
       return items ? (JSON.parse(items) as string[]) : [];
     },
   };
 }
 
-export function createStorage({ limit = 5 }: { limit: number }) {
-  const storage = getLocalStorage();
+export function createStorage({
+  limit = 5,
+  storageKey,
+}: {
+  limit: number;
+  storageKey?: string;
+}) {
+  const storage = getLocalStorage(storageKey);
   let updateListener: (() => void) | null = null;
 
   return {

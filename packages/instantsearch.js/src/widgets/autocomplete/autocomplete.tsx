@@ -392,6 +392,10 @@ type AutocompleteWidgetParams<TItem extends BaseHit> = {
   showRecent?:
     | boolean
     | {
+        /**
+         * Storage key to use in the local storage.
+         */
+        storageKey?: string;
         templates?: Partial<{
           /**
            * Template to use for each result. This template will receive an object containing a single record.
