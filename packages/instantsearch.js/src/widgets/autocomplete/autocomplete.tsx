@@ -124,6 +124,8 @@ const createRenderer = <TItem extends BaseHit>(
         isolatedIndex,
         targetIndex,
       };
+
+      connectorParams.refine(targetIndex.getHelper()?.state.query ?? '');
       return;
     }
 
@@ -415,9 +417,10 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
       indexId: `ais-autocomplete-${instanceId}`,
       EXPERIMENTAL_isolated: true,
     }).addWidgets([
-      configure({ hitsPerPage: 5 }),
       ...indicesConfig.map(({ indexName }) =>
-        index({ indexName, indexId: indexName }).addWidgets([configure({})])
+        index({ indexName, indexId: indexName }).addWidgets([
+          configure({ hitsPerPage: 5 }),
+        ])
       ),
       {
         ...makeWidget({ escapeHTML }),

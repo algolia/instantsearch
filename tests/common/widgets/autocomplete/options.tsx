@@ -91,13 +91,6 @@ export function createOptionsTests(
       );
 
       await act(async () => {
-        // JS currently doesn't refine on focus
-        const input = screen.getByRole('combobox', {
-          name: /submit/i,
-        });
-        userEvent.click(input);
-        userEvent.type(input, 'a');
-        userEvent.clear(input);
         await wait(0);
       });
 
@@ -144,22 +137,10 @@ export function createOptionsTests(
 
       await act(async () => {
         await wait(0);
-
-        // JS currently doesn't refine on focus
-        if (flavor === 'javascript') {
-          const input = screen.getByRole('combobox', {
-            name: /submit/i,
-          });
-          userEvent.click(input);
-          userEvent.type(input, 'a');
-          userEvent.clear(input);
-        }
-
-        await wait(0);
       });
 
       const callTimes: Record<string, Record<SupportedFlavor, number>> = {
-        initial: { javascript: 3, react: 4, vue: 0 },
+        initial: { javascript: 2, react: 4, vue: 0 },
         refined: { javascript: 1, react: 2, vue: 0 },
       };
 
@@ -167,7 +148,7 @@ export function createOptionsTests(
         callTimes.initial[flavor]
       );
       expect(searchClient.search).toHaveBeenNthCalledWith(
-        callTimes.initial[flavor] - (flavor === 'javascript' ? 2 : 1),
+        callTimes.initial[flavor] - 1,
         [
           {
             indexName: 'query_suggestions',
@@ -276,25 +257,16 @@ export function createOptionsTests(
 
       await act(async () => {
         await wait(0);
-        // JS currently doesn't refine on focus
-        const input = screen.getByRole('combobox', {
-          name: /submit/i,
-        });
-        userEvent.click(input);
-        userEvent.type(input, 'a');
-        userEvent.clear(input);
       });
 
       expect(document.querySelectorAll('[aria-selected="true"]')).toHaveLength(
         0
       );
 
-      const input: HTMLInputElement = screen.getByRole('combobox', {
-        name: /submit/i,
-      });
+      const input = screen.getByRole('combobox', { name: /submit/i });
 
       await act(async () => {
-        input.click();
+        userEvent.click(input);
         await wait(0);
 
         userEvent.keyboard('{ArrowDown}');
@@ -381,14 +353,6 @@ export function createOptionsTests(
 
       await act(async () => {
         await wait(0);
-        // JS currently doesn't refine on focus
-        const input = screen.getByRole('combobox', {
-          name: /submit/i,
-        });
-        userEvent.click(input);
-        userEvent.type(input, 'a');
-        userEvent.clear(input);
-        await wait(0);
       });
 
       const input = screen.getByRole('combobox', { name: /submit/i });
@@ -401,7 +365,7 @@ export function createOptionsTests(
         .mockImplementation(() => ({ scrollIntoView: mockScrollIntoView }));
 
       await act(async () => {
-        input.click();
+        userEvent.click(input);
         await wait(0);
 
         userEvent.keyboard('{ArrowUp}');

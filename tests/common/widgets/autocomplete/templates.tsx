@@ -4,8 +4,6 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
-import { screen } from '@testing-library/dom';
-import userEvent from '@testing-library/user-event';
 import React from 'react';
 
 import type { AutocompleteWidgetSetup } from '.';
@@ -88,16 +86,6 @@ export function createTemplatesTests(
       });
 
       await act(async () => {
-        await wait(0);
-
-        // JS currently doesn't refine on focus
-        const input = screen.getByRole('combobox', {
-          name: /submit/i,
-        });
-        userEvent.click(input);
-        userEvent.type(input, 'a');
-        userEvent.clear(input);
-
         await wait(0);
       });
 
