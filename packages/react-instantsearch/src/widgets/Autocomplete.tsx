@@ -4,6 +4,8 @@ import {
   createAutocompletePanelComponent,
   createAutocompletePropGetters,
   createAutocompleteSuggestionComponent,
+  createAutocompleteRecentSearchComponent,
+  createAutocompleteStorage,
   cx,
 } from 'instantsearch-ui-components';
 import React, {
@@ -55,11 +57,22 @@ const AutocompleteSuggestion = createAutocompleteSuggestionComponent({
   Fragment,
 });
 
+const AutocompleteRecentSearch = createAutocompleteRecentSearchComponent({
+  createElement: createElement as Pragma,
+  Fragment,
+});
+
 const usePropGetters = createAutocompletePropGetters({
   useEffect,
   useId,
   useMemo,
   useRef,
+  useState,
+});
+
+const useStorage = createAutocompleteStorage({
+  useEffect,
+  useMemo,
   useState,
 });
 
@@ -81,6 +94,23 @@ export type AutocompleteProps<TItem extends BaseHit> = ComponentProps<'div'> & {
       | 'classNames'
     >
   >;
+  showRecent?:
+    | boolean
+    | {
+        /**
+         * Storage key to use in the local storage.
+         */
+        storageKey?: string;
+
+        /**
+         * Component to use for each recent search item.
+         */
+        itemComponent: AutocompleteIndexProps<{
+          query: string;
+        }>['ItemComponent'] & {
+          onRemoveRecentSearch: () => void;
+        };
+      };
   getSearchPageURL?: (nextUiState: IndexUiState) => string;
   onSelect?: AutocompleteIndexConfig<TItem>['onSelect'];
   classNames?: Partial<AutocompleteClassNames>;
@@ -94,11 +124,13 @@ type InnerAutocompleteProps<TItem extends BaseHit> = Omit<
   refineSearchBox: ReturnType<typeof useSearchBox>['refine'];
   indexUiState: IndexUiState;
   isSearchPage: boolean;
+  showRecent: AutocompleteProps<TItem>['showRecent'];
 };
 
 export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
   indices = [],
   showSuggestions,
+  showRecent,
   ...props
 }: AutocompleteProps<TItem>) {
   const { indexUiState, indexRenderState } = useInstantSearch();
@@ -157,6 +189,7 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
           refineSearchBox={refine}
           indexUiState={indexUiState}
           isSearchPage={isSearchPage}
+          showRecent={showRecent}
         />
       </Index>
     </Fragment>
@@ -170,16 +203,35 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   onSelect: userOnSelect,
   indexUiState,
   isSearchPage,
+  showRecent,
   ...props
 }: InnerAutocompleteProps<TItem>) {
-  const { indices, refine: refineAutocomplete } = useAutocomplete();
+  const {
+    indices,
+    refine: refineAutocomplete,
+    currentRefinement,
+  } = useAutocomplete();
+
+  const {
+    storage,
+    storageHits,
+    indicesForPropGetters,
+    indicesConfigForPropGetters,
+  } = useStorage<TItem>({
+    showRecent,
+    query: currentRefinement,
+    indices,
+    indicesConfig,
+  });
+
   const { getInputProps, getItemProps, getPanelProps, getRootProps } =
     usePropGetters<TItem>({
-      indices,
-      indicesConfig,
+      indices: indicesForPropGetters,
+      indicesConfig: indicesConfigForPropGetters,
       onRefine: (query) => {
         refineAutocomplete(query);
         refineSearchBox(query);
+        storage.onAdd(query);
       },
       onSelect:
         userOnSelect ??
@@ -198,6 +250,10 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
         }),
     });
 
+  const AutocompleteRecentSearchComponent =
+    (typeof showRecent === 'object' && showRecent.itemComponent) ||
+    AutocompleteRecentSearch;
+
   return (
     <Autocomplete {...props} {...getRootProps()}>
       <AutocompleteSearch
@@ -208,6 +264,27 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
         }}
       />
       <AutocompletePanel {...getPanelProps()}>
+        {showRecent && (
+          <AutocompleteIndex
+            // @ts-ignore - there seems to be problems with React.ComponentType and this, but it's actually correct
+            ItemComponent={({ item, onSelect }) => (
+              <AutocompleteRecentSearchComponent
+                item={item as unknown as { query: string }}
+                onSelect={onSelect}
+                onRemoveRecentSearch={() =>
+                  storage.onRemove((item as unknown as { query: string }).query)
+                }
+              />
+            )}
+            classNames={{
+              root: 'ais-AutocompleteRecentSearches',
+              list: 'ais-AutocompleteRecentSearchesList',
+              item: 'ais-AutocompleteRecentSearchesItem',
+            }}
+            items={storageHits}
+            getItemProps={getItemProps}
+          />
+        )}
         {indices.map(({ indexId, hits }, index) => (
           <AutocompleteIndex
             key={indexId}

@@ -2,6 +2,8 @@
 
 import { cx } from '../../lib';
 
+import { AutocompleteSubmitIcon } from './icons';
+
 import type { Renderer } from '../../types';
 
 export type AutocompleteSuggestionProps<
@@ -17,6 +19,14 @@ export type AutocompleteSuggestionClassNames = {
    * Class names to apply to the root element
    **/
   root: string | string[];
+  /** Class names to apply to the content element **/
+  content: string | string[];
+  /** Class names to apply to the actions element **/
+  actions: string | string[];
+  /** Class names to apply to the icon element **/
+  icon: string | string[];
+  /** Class names to apply to the body element **/
+  body: string | string[];
 };
 
 export function createAutocompleteSuggestionComponent({
@@ -30,9 +40,38 @@ export function createAutocompleteSuggestionComponent({
     return (
       <div
         onClick={onSelect}
-        className={cx('ais-AutocompleteSuggestion', classNames.root)}
+        className={cx(
+          'ais-AutocompleteItemWrapper',
+          'ais-AutocompleteSuggestionWrapper',
+          classNames.root
+        )}
       >
-        {item.query}
+        <div
+          className={cx(
+            'ais-AutocompleteItemContent',
+            'ais-AutocompleteSuggestionItemContent',
+            classNames.content
+          )}
+        >
+          <div
+            className={cx(
+              'ais-AutocompleteItemIcon',
+              'ais-AutocompleteSuggestionItemIcon',
+              classNames.content
+            )}
+          >
+            <AutocompleteSubmitIcon createElement={createElement} />
+          </div>
+          <div
+            className={cx(
+              'ais-AutocompleteItemContentBody',
+              'ais-AutocompleteSuggestionItemContentBody',
+              classNames.content
+            )}
+          >
+            {item.query}
+          </div>
+        </div>
       </div>
     );
   };

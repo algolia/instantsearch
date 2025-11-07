@@ -160,23 +160,17 @@ export function createOptionsTests(
       );
       (searchClient.search as jest.Mock).mockClear();
 
+      expect(screen.getAllByRole('row', { hidden: true }).length).toBe(2);
       expect(
-        document.querySelectorAll('.ais-AutocompleteSuggestion')
-      ).toHaveLength(2);
+        screen.getByRole('row', { name: 'hello', hidden: true })
+      ).toBeInTheDocument();
       expect(
-        document.querySelectorAll('.ais-AutocompleteSuggestion')[0]
-      ).toHaveTextContent('hello');
-      expect(
-        document.querySelectorAll('.ais-AutocompleteSuggestion')[1]
-      ).toHaveTextContent('hi');
+        screen.getByRole('row', { name: 'hi', hidden: true })
+      ).toBeInTheDocument();
 
       // click the hello combo box suggestion
       await act(async () => {
-        (
-          document.querySelectorAll(
-            '.ais-AutocompleteSuggestion'
-          )[0] as HTMLElement
-        ).click();
+        screen.getByText('hello').click();
         await wait(0);
       });
 
@@ -191,6 +185,85 @@ export function createOptionsTests(
           }),
         },
       ]);
+    });
+
+    test('renders recent searches', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'query_suggestions',
+            hits: [
+              { objectID: '1', query: 'hello' },
+              { objectID: '2', query: 'hi' },
+            ],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'query_suggestions',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            showSuggestions: {
+              indexName: 'query_suggestions',
+            },
+            showRecent: true,
+          },
+          react: {
+            showSuggestions: {
+              indexName: 'query_suggestions',
+            },
+            showRecent: true,
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+
+        // JS currently doesn't refine on focus
+        if (flavor === 'javascript') {
+          const input = screen.getByRole('combobox', {
+            name: /submit/i,
+          });
+          userEvent.click(input);
+          userEvent.type(input, 'a');
+          userEvent.clear(input);
+        }
+
+        await wait(0);
+      });
+
+      // click the hello combo box suggestion
+      await act(async () => {
+        screen.getAllByText('hello')[0].click();
+        await wait(0);
+      });
+
+      const recentSearches = document.querySelectorAll(
+        '.ais-AutocompleteRecentSearchesItem'
+      );
+      expect(recentSearches).toHaveLength(1);
+      expect(recentSearches[0]).toHaveTextContent('hello');
+
+      await act(async () => {
+        screen
+          .getByRole('button', {
+            name: /remove hello from recent searches/i,
+            hidden: true,
+          })
+          .click();
+        await wait(0);
+      });
+
+      const newRecentSearches = document.querySelectorAll(
+        '.ais-AutocompleteRecentSearchesItem'
+      );
+      expect(newRecentSearches).toHaveLength(0);
     });
 
     test('supports keyboard navigation', async () => {

@@ -40,7 +40,7 @@ type CreateAutocompletePropGettersParams = {
   ) => [TType, (newState: TType) => unknown];
 };
 
-type UsePropGetters<TItem extends BaseHit> = (params: {
+export type UsePropGetters<TItem extends BaseHit> = (params: {
   indices: Array<{
     indexName: string;
     indexId: string;

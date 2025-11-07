@@ -5,7 +5,9 @@ import {
   createAutocompleteIndexComponent,
   createAutocompletePanelComponent,
   createAutocompletePropGetters,
+  createAutocompleteRecentSearchComponent,
   createAutocompleteSearchComponent,
+  createAutocompleteStorage,
   createAutocompleteSuggestionComponent,
   cx,
 } from 'instantsearch-ui-components';
@@ -79,12 +81,23 @@ const AutocompleteSearchBox = createAutocompleteSearchComponent({
   Fragment,
 });
 
+const AutocompleteRecentSearch = createAutocompleteRecentSearchComponent({
+  createElement: h,
+  Fragment,
+});
+
 const usePropGetters = createAutocompletePropGetters({
   useEffect,
   useId,
   useMemo,
   useRef,
   useState,
+});
+
+const useStorage = createAutocompleteStorage({
+  useEffect,
+  useState,
+  useMemo,
 });
 
 type RendererParams<TItem extends BaseHit> = {
@@ -98,7 +111,10 @@ type RendererParams<TItem extends BaseHit> = {
     isolatedIndex: IndexWidget | undefined;
     targetIndex: IndexWidget | undefined;
   };
-} & Pick<AutocompleteWidgetParams<TItem>, 'getSearchPageURL' | 'onSelect'> &
+} & Pick<
+  AutocompleteWidgetParams<TItem>,
+  'getSearchPageURL' | 'onSelect' | 'showRecent'
+> &
   Required<Pick<AutocompleteWidgetParams<TItem>, 'cssClasses' | 'templates'>>;
 
 const createRenderer = <TItem extends BaseHit>(
@@ -144,6 +160,7 @@ type AutocompleteWrapperProps<TItem extends BaseHit> = Pick<
   | 'cssClasses'
   | 'templates'
   | 'renderState'
+  | 'showRecent'
 > &
   Pick<AutocompleteRenderState, 'indices' | 'refine'> &
   RendererOptions<Partial<AutocompleteWidgetParams<TItem>>>;
@@ -157,8 +174,24 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   cssClasses,
   renderState,
   instantSearchInstance,
+  showRecent,
 }: AutocompleteWrapperProps<TItem>) {
   const { isolatedIndex, targetIndex } = renderState;
+
+  const searchboxQuery = isolatedIndex?.getHelper()?.state.query;
+
+  const {
+    storage,
+    storageHits,
+    indicesConfigForPropGetters,
+    indicesForPropGetters,
+  } = useStorage<TItem>({
+    query: searchboxQuery,
+    showRecent,
+    indices,
+    indicesConfig,
+  });
+
   const isSearchPage =
     targetIndex
       ?.getWidgets()
@@ -175,11 +208,13 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       },
       [isolatedIndex!.getIndexId()]: { query },
     }));
+    query.length > 0 && storage.onAdd(query);
   };
+
   const { getInputProps, getItemProps, getPanelProps, getRootProps } =
     usePropGetters({
-      indices,
-      indicesConfig,
+      indices: indicesForPropGetters,
+      indicesConfig: indicesConfigForPropGetters,
       onRefine,
       onSelect:
         userOnSelect ??
@@ -200,12 +235,33 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         }),
     });
 
-  const query = isolatedIndex?.getHelper()?.state.query;
+  let AutocompleteRecentSearchComponent = AutocompleteRecentSearch;
+  if (typeof showRecent === 'object' && showRecent.templates?.item) {
+    const props = prepareTemplateProps({
+      defaultTemplates: {} as unknown as NonNullable<
+        typeof showRecent.templates
+      >,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates: showRecent.templates,
+    });
+    AutocompleteRecentSearchComponent = ({
+      item,
+      onSelect,
+      onRemoveRecentSearch,
+    }) => (
+      <TemplateComponent
+        {...props}
+        templateKey="item"
+        rootTagName="fragment"
+        data={{ item, onSelect, onRemoveRecentSearch }}
+      />
+    );
+  }
 
   return (
     <Autocomplete {...getRootProps()} classNames={cssClasses}>
       <AutocompleteSearchBox
-        query={query || ''}
+        query={searchboxQuery || ''}
         inputProps={{
           ...getInputProps(),
           // @ts-ignore - This clashes with some ambient React JSX declarations.
@@ -216,6 +272,27 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         isSearchStalled={instantSearchInstance.status === 'stalled'}
       />
       <AutocompletePanel {...getPanelProps()}>
+        {showRecent && (
+          <AutocompleteIndex
+            // @ts-ignore - there seems to be problems with React.ComponentType and this, but it's actually correct
+            ItemComponent={({ item, onSelect }) => (
+              <AutocompleteRecentSearchComponent
+                item={item as unknown as { query: string }}
+                onSelect={onSelect}
+                onRemoveRecentSearch={() =>
+                  storage.onRemove((item as unknown as { query: string }).query)
+                }
+              />
+            )}
+            classNames={{
+              root: 'ais-AutocompleteRecentSearches',
+              list: 'ais-AutocompleteRecentSearchesList',
+              item: 'ais-AutocompleteRecentSearchesItem',
+            }}
+            items={storageHits}
+            getItemProps={getItemProps}
+          />
+        )}
         {indices.map(({ indexId, hits }, i) => {
           if (!renderState.indexTemplateProps[i]) {
             renderState.indexTemplateProps[i] = prepareTemplateProps({
@@ -314,6 +391,25 @@ type AutocompleteWidgetParams<TItem extends BaseHit> = {
     >
   >;
 
+  showRecent?:
+    | boolean
+    | {
+        /**
+         * Storage key to use in the local storage.
+         */
+        storageKey?: string;
+        templates?: Partial<{
+          /**
+           * Template to use for each result. This template will receive an object containing a single record.
+           */
+          item: Template<{
+            item: { query: string };
+            onSelect: () => void;
+            onRemoveRecentSearch: () => void;
+          }>;
+        }>;
+      };
+
   getSearchPageURL?: (nextUiState: IndexUiState) => string;
 
   onSelect?: AutocompleteIndexConfig<TItem>['onSelect'];
@@ -343,6 +439,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     escapeHTML,
     indices = [],
     showSuggestions,
+    showRecent,
     getSearchPageURL,
     onSelect,
     templates = {},
@@ -399,6 +496,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     getSearchPageURL,
     onSelect,
     cssClasses,
+    showRecent,
     renderState: {
       indexTemplateProps: [],
       isolatedIndex: undefined,
