@@ -300,6 +300,12 @@ export function createTemplatesTests(
           widgetParams: {
             javascript: {
               ...createDefaultWidgetParams(chat),
+              cssClasses: {
+                message: {
+                  leading: 'MESSAGE-LEADING',
+                  footer: 'MESSAGE-FOOTER',
+                },
+              },
               templates: {
                 assistantMessage: {
                   leading: '<span>Assistant Leading</span>',
@@ -313,6 +319,12 @@ export function createTemplatesTests(
             },
             react: {
               ...createDefaultWidgetParams(chat),
+              classNames: {
+                message: {
+                  leading: 'MESSAGE-LEADING',
+                  footer: 'MESSAGE-FOOTER',
+                },
+              },
               assistantMessageLeadingComponent: () => (
                 <div>Assistant Leading</div>
               ),
@@ -340,6 +352,11 @@ export function createTemplatesTests(
         expect(leadingElements[1].textContent).toBe('Assistant Leading');
         expect(footerElements[0].textContent).toBe('User Footer');
         expect(footerElements[1].textContent).toBe('Assistant Footer');
+
+        expect(leadingElements[0]).toHaveClass('MESSAGE-LEADING');
+        expect(leadingElements[1]).toHaveClass('MESSAGE-LEADING');
+        expect(footerElements[0]).toHaveClass('MESSAGE-FOOTER');
+        expect(footerElements[1]).toHaveClass('MESSAGE-FOOTER');
       });
     });
 
