@@ -325,6 +325,7 @@ type ChatWrapperProps = {
       footerComponent: ChatMessageProps['footerComponent'];
     };
     translations: Partial<ChatMessagesTranslations>;
+    messageTranslations: Partial<ChatMessageProps['translations']>;
   };
   promptProps: {
     layoutComponent: ComponentProps<typeof Chat>['promptComponent'];
@@ -414,6 +415,7 @@ function ChatWrapper({
         assistantMessageProps: messagesProps.assistantMessageProps,
         userMessageProps: messagesProps.userMessageProps,
         translations: messagesProps.translations,
+        messageTranslations: messagesProps.messageTranslations,
       }}
       promptProps={{
         promptRef: promptProps.promptRef,
@@ -655,6 +657,11 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         }
       : undefined;
 
+    const messageTranslations = getDefinedProperties({
+      actionsLabel: templates.message?.actionsLabelText,
+      messageLabel: templates.message?.messageLabelText,
+    });
+
     const userMessageTemplateProps = prepareTemplateProps({
       defaultTemplates: {} as unknown as NonNullable<
         Required<ChatTemplates<THit>['userMessage']>
@@ -827,6 +834,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
               footerComponent: userMessageFooterComponent,
             },
             translations: messagesTranslations,
+            messageTranslations,
           }}
           promptProps={{
             layoutComponent: promptLayoutComponent,
