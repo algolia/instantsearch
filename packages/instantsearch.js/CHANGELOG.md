@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.83.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.82.0...instantsearch.js@4.83.0) (2025-11-10)
+
+
+### Bug Fixes
+
+* **autocomplete:** trigger initial refine in js implementation ([#6800](https://github.com/algolia/instantsearch/issues/6800)) ([b5eeb79](https://github.com/algolia/instantsearch/commit/b5eeb79c867aef229eab4a0a8b546a63defb66f4))
+* **refinementList:** hide facets based on `renderingContent` when searched ([#6792](https://github.com/algolia/instantsearch/issues/6792)) ([ee0d2e4](https://github.com/algolia/instantsearch/commit/ee0d2e4bcb2106425dfd1d0a6fecca0c647f3805))
+
+
+### Features
+
+* **autocomplete:** implement recent searches ([#6747](https://github.com/algolia/instantsearch/issues/6747)) ([630a9e6](https://github.com/algolia/instantsearch/commit/630a9e6ad407941a7bdad64448f2cced52ec0ef8))
+* **chat:** add assistant and user message components/templates in widget ([#6797](https://github.com/algolia/instantsearch/issues/6797)) ([a86b6f3](https://github.com/algolia/instantsearch/commit/a86b6f3c0e43a3ed1ae99e5c21259d890e005025))
+
+
+
+
+
 # [4.82.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.81.0...instantsearch.js@4.82.0) (2025-11-06)
 
 

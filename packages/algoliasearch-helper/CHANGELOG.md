@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.26.1](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.26.0...algoliasearch-helper@3.26.1) (2025-11-10)
+
+
+### Bug Fixes
+
+* **refinementList:** hide facets based on `renderingContent` when searched ([#6792](https://github.com/algolia/instantsearch/issues/6792)) ([ee0d2e4](https://github.com/algolia/instantsearch/commit/ee0d2e4bcb2106425dfd1d0a6fecca0c647f3805))
+* **refinementList:** hide facets when when `sortBy` is provided ([#6785](https://github.com/algolia/instantsearch/issues/6785)) ([cb92a6b](https://github.com/algolia/instantsearch/commit/cb92a6b33b192587fa257b8685af2dc42e248cbf))
+
+
+
+
+
 # [3.26.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.25.0...algoliasearch-helper@3.26.0) (2025-06-16)
 
 

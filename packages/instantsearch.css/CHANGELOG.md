@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.8.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.7.0...instantsearch.css@8.8.0) (2025-11-10)
+
+
+### Features
+
+* **autocomplete:** implement recent searches ([#6747](https://github.com/algolia/instantsearch/issues/6747)) ([630a9e6](https://github.com/algolia/instantsearch/commit/630a9e6ad407941a7bdad64448f2cced52ec0ef8))
+
+
+
+
+
 # [8.7.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.6.0...instantsearch.css@8.7.0) (2025-11-06)
 
 
