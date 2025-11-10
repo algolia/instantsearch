@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.27.6",
-    "ai": "^5.0.18",
+    "ai": "6.0.0-beta.95",
     "markdown-to-jsx": "^7.7.15",
     "zod": "^3.25.76 || ^4",
     "zod-to-json-schema": "3.24.6"

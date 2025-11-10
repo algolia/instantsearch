@@ -29,7 +29,7 @@ import type {
   IndexWidget,
 } from '../../types';
 import type {
-  AddToolResultWithOutput,
+  AddToolOutputWithOutput,
   UserClientSideTool,
   ClientSideTools,
   ClientSideTool,
@@ -72,12 +72,12 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
    */
   onClearTransitionEnd: () => void;
   /**
-   * Tools configuration with addToolResult bound, ready to be used by the UI.
+   * Tools configuration with addToolOutput bound, ready to be used by the UI.
    */
   tools: ClientSideTools;
 } & Pick<
   AbstractChat<TUiMessage>,
-  | 'addToolResult'
+  | 'addToolOutput'
   | 'clearError'
   | 'error'
   | 'id'
@@ -187,7 +187,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           );
         }
         transport = new DefaultChatTransport({
-          api: `https://${appId}.algolia.net/agent-studio/1/agents/${agentId}/completions?compatibilityMode=ai-sdk-5`,
+          api: `https://${appId}.algolia.net/agent-studio/1/agents/${agentId}/completions?compatibilityMode=ai-sdk-6`,
           headers: {
             'x-algolia-application-id': appId,
             'x-algolia-api-Key': apiKey,
@@ -218,7 +218,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
               );
             }
 
-            return _chatInstance.addToolResult({
+            return _chatInstance.addToolOutput({
               output: `No tool implemented for "${toolCall.toolName}".`,
               tool: toolCall.toolName,
               toolCallId: toolCall.toolCallId,
@@ -226,8 +226,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           }
 
           if (tool.onToolCall) {
-            const addToolResult: AddToolResultWithOutput = ({ output }) =>
-              _chatInstance.addToolResult({
+            const addToolOutput: AddToolOutputWithOutput = ({ output }) =>
+              _chatInstance.addToolOutput({
                 output,
                 tool: toolCall.toolName,
                 toolCallId: toolCall.toolCallId,
@@ -235,7 +235,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
             return tool.onToolCall({
               ...toolCall,
-              addToolResult,
+              addToolOutput,
             });
           }
 
@@ -322,13 +322,13 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           });
         }
 
-        const toolsWithAddToolResult: ClientSideTools = {};
+        const toolsWithAddToolOutput: ClientSideTools = {};
         Object.entries(tools).forEach(([key, tool]) => {
-          const toolWithAddToolResult: ClientSideTool = {
+          const toolWithAddToolOutput: ClientSideTool = {
             ...tool,
-            addToolResult: _chatInstance.addToolResult,
+            addToolOutput: _chatInstance.addToolOutput,
           };
-          toolsWithAddToolResult[key] = toolWithAddToolResult;
+          toolsWithAddToolOutput[key] = toolWithAddToolOutput;
         });
 
         return {
@@ -343,11 +343,11 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           isClearing,
           clearMessages,
           onClearTransitionEnd,
-          tools: toolsWithAddToolResult,
+          tools: toolsWithAddToolOutput,
           widgetParams,
 
           // Chat instance render state
-          addToolResult: _chatInstance.addToolResult,
+          addToolOutput: _chatInstance.addToolOutput,
           clearError: _chatInstance.clearError,
           error: _chatInstance.error,
           id: _chatInstance.id,

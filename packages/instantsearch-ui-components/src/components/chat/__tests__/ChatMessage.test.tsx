@@ -224,7 +224,7 @@ describe('ChatMessage', () => {
             layoutComponent: ({ message }) => (
               <div className="wrapper">{JSON.stringify(message.output)}</div>
             ),
-            addToolResult: jest.fn(),
+            addToolOutput: jest.fn(),
             onToolCall: jest.fn(),
           },
         }}

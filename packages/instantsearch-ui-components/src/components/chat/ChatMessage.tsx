@@ -8,7 +8,7 @@ import { MenuIconComponent } from './icons';
 
 import type { ComponentProps, Renderer } from '../../types';
 import type {
-  AddToolResultWithOutput,
+  AddToolOutputWithOutput,
   ChatMessageBase,
   ChatToolMessage,
   ClientSideTools,
@@ -209,8 +209,8 @@ export function createChatMessageComponent({ createElement }: Renderer) {
           const ToolLayoutComponent = tool.layoutComponent;
           const toolMessage = part as ChatToolMessage;
 
-          const boundAddToolResult: AddToolResultWithOutput = (params) =>
-            tool.addToolResult?.({
+          const boundAddToolOutput: AddToolOutputWithOutput = (params) =>
+            tool.addToolOutput?.({
               output: params.output,
               tool: part.type,
               toolCallId: toolMessage.toolCallId,
@@ -229,7 +229,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
                 message={toolMessage}
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
-                addToolResult={boundAddToolResult}
+                addToolOutput={boundAddToolOutput}
                 onClose={onClose}
               />
             </div>
