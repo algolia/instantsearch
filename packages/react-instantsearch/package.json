@@ -50,7 +50,7 @@
     "@babel/runtime": "^7.27.6",
     "instantsearch-ui-components": "0.14.0",
     "instantsearch.js": "4.83.0",
-    "react-instantsearch-core": "7.18.1"
+    "react-instantsearch-core": "7.19.0"
   },
   "peerDependencies": {
     "algoliasearch": ">= 3.1 < 6",

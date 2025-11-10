@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "instantsearch.js": "4.83.0",
-    "react-instantsearch-core": "7.18.1"
+    "react-instantsearch-core": "7.19.0"
   },
   "devDependencies": {
     "@types/jasmine": "3.3.16",
