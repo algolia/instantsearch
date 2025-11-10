@@ -103,7 +103,7 @@ describe('connectChat', () => {
           setIndexUiState: expect.any(Function),
           indexUiState: {},
           tools: {},
-          addToolResult: expect.any(Function),
+          addToolOutput: expect.any(Function),
           clearError: expect.any(Function),
           error: undefined,
           id: expect.any(String),
@@ -280,7 +280,7 @@ describe('connectChat', () => {
       expect(renderState.tools).toEqual({
         testTool: {
           ...mockTool,
-          addToolResult: expect.any(Function),
+          addToolOutput: expect.any(Function),
         },
       });
     });

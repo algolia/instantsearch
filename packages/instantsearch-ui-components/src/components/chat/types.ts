@@ -12,18 +12,18 @@ export type ChatToolMessage = Extract<
 export type ChatToolType = ChatToolMessage['type'];
 
 export type { ChatInit } from 'ai';
-export type AddToolResult = AbstractChat<UIMessage>['addToolResult'];
+export type AddToolOutput = AbstractChat<UIMessage>['addToolOutput'];
 
-export type AddToolResultWithOutput = (
-  params: Pick<Parameters<AddToolResult>[0], 'output'>
-) => ReturnType<AddToolResult>;
+export type AddToolOutputWithOutput = (
+  params: Pick<Parameters<AddToolOutput>[0], 'output'>
+) => ReturnType<AddToolOutput>;
 
 export type ClientSideToolComponentProps = {
   message: ChatToolMessage;
   indexUiState: object;
   setIndexUiState: (state: object) => void;
   onClose: () => void;
-  addToolResult: AddToolResultWithOutput;
+  addToolOutput: AddToolOutputWithOutput;
 };
 
 export type ClientSideToolComponent = (
@@ -32,16 +32,16 @@ export type ClientSideToolComponent = (
 
 export type ClientSideTool = {
   layoutComponent?: ClientSideToolComponent;
-  addToolResult: AddToolResult;
+  addToolOutput: AddToolOutput;
   onToolCall?: (
     params: Parameters<
       NonNullable<ChatInit<UIMessage>['onToolCall']>
     >[0]['toolCall'] & {
-      addToolResult: AddToolResultWithOutput;
+      addToolOutput: AddToolOutputWithOutput;
     }
   ) => void;
 };
 export type ClientSideTools = Record<string, ClientSideTool>;
 
-export type UserClientSideTool = Omit<ClientSideTool, 'addToolResult'>;
+export type UserClientSideTool = Omit<ClientSideTool, 'addToolOutput'>;
 export type UserClientSideTools = Record<string, UserClientSideTool>;
