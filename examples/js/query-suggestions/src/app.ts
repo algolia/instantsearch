@@ -19,6 +19,7 @@ const searchClient = algoliasearch(
 const search = instantsearch({
   indexName: 'instant_search',
   searchClient,
+  routing: true,
   insights: true,
 });
 

@@ -41,6 +41,7 @@ export function App() {
         <InstantSearch
           searchClient={searchClient}
           indexName="instant_search"
+          routing={true}
           insights={true}
         >
           <Configure hitsPerPage={8} />
