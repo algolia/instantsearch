@@ -266,6 +266,70 @@ export function createOptionsTests(
       expect(newRecentSearches).toHaveLength(0);
     });
 
+    test('forwards search params to search client', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'indexName',
+            hits: [],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            indices: [
+              {
+                indexName: 'indexName',
+                templates: {
+                  item: (props) => props.item.name,
+                },
+              },
+            ],
+            searchParameters: {
+              hitsPerPage: 10,
+              userToken: 'user-123',
+              enableRules: false,
+            },
+          },
+          react: {
+            indices: [
+              {
+                indexName: 'indexName',
+                itemComponent: (props) => props.item.name,
+              },
+            ],
+            searchParameters: {
+              hitsPerPage: 10,
+              userToken: 'user-123',
+              enableRules: false,
+            },
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(searchClient.search).toHaveBeenCalledWith([
+        {
+          indexName: 'indexName',
+          params: expect.objectContaining({
+            hitsPerPage: 10,
+            userToken: 'user-123',
+            enableRules: false,
+          }),
+        },
+      ]);
+    });
+
     test('supports keyboard navigation', async () => {
       const searchClient = createMockedSearchClient(
         createMultiSearchResponse(
