@@ -97,7 +97,7 @@ export function createAutocompletePropGetters({
       };
     }, [rootRef]);
 
-    const getNextActiveDescendent = (key: string): string | undefined => {
+    const getNextActiveDescendant = (key: string): string | undefined => {
       switch (key) {
         case 'ArrowLeft':
         case 'ArrowUp': {
@@ -114,13 +114,24 @@ export function createAutocompletePropGetters({
       }
     };
 
-    const submit = (actualActiveDescendant = activeDescendant) => {
+    const submit = (
+      override: {
+        query?: string;
+        activeDescendant?: string;
+      } = {}
+    ) => {
       setIsOpen(false);
-      if (actualActiveDescendant && items.has(actualActiveDescendant)) {
+      const actualDescendant = override.activeDescendant ?? activeDescendant;
+
+      if (!actualDescendant && override.query) {
+        onRefine(override.query);
+      }
+
+      if (actualDescendant && items.has(actualDescendant)) {
         const {
           item,
           config: { onSelect: indexOnSelect, getQuery, getURL },
-        } = items.get(actualActiveDescendant)!;
+        } = items.get(actualDescendant)!;
         const actualOnSelect = indexOnSelect ?? globalOnSelect;
         actualOnSelect({
           item,
@@ -153,17 +164,17 @@ export function createAutocompletePropGetters({
             case 'ArrowUp':
             case 'ArrowRight':
             case 'ArrowDown': {
-              const nextActiveDescendent = getNextActiveDescendent(event.key)!;
-              setActiveDescendant(nextActiveDescendent);
+              const nextActiveDescendant = getNextActiveDescendant(event.key)!;
+              setActiveDescendant(nextActiveDescendant);
               document
-                .getElementById(nextActiveDescendent)
+                .getElementById(nextActiveDescendant)
                 ?.scrollIntoView(false);
 
               event.preventDefault();
               break;
             }
             case 'Enter': {
-              submit();
+              submit({ query: (event.target as HTMLInputElement).value });
               break;
             }
             case 'Tab':
@@ -196,7 +207,7 @@ export function createAutocompletePropGetters({
           id,
           role: 'row',
           'aria-selected': id === activeDescendant,
-          onSelect: () => submit(id),
+          onSelect: () => submit({ activeDescendant: id }),
         };
       },
       getPanelProps: () => ({

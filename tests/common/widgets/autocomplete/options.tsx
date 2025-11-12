@@ -385,6 +385,72 @@ export function createOptionsTests(
       );
     });
 
+    test('refines with input value when no item is selected', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'indexName',
+            hits: [
+              { objectID: '1', name: 'Item 1' },
+              { objectID: '2', name: 'Item 2' },
+            ],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            indices: [
+              {
+                indexName: 'indexName',
+                templates: {
+                  item: (props) => props.item.name,
+                },
+              },
+            ],
+          },
+          react: {
+            indices: [
+              {
+                indexName: 'indexName',
+                itemComponent: (props) => props.item.name,
+              },
+            ],
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const input = screen.getByRole('combobox', { name: /submit/i });
+
+      await act(async () => {
+        userEvent.click(input);
+        userEvent.type(input, 'Item 3');
+        await wait(0);
+      });
+
+      expect(document.querySelectorAll('[aria-selected="true"]')).toHaveLength(
+        0
+      );
+      expect(searchClient.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'indexName',
+          params: expect.objectContaining({
+            query: 'Item 3',
+          }),
+        },
+      ]);
+    });
+
     test('scrolls active descendant into view', async () => {
       const searchClient = createMockedSearchClient(
         createMultiSearchResponse(
