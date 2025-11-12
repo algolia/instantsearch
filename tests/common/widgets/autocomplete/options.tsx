@@ -266,11 +266,15 @@ export function createOptionsTests(
       expect(newRecentSearches).toHaveLength(0);
     });
 
-    test('forwards search params to search client', async () => {
+    test('forwards search params to each index', async () => {
       const searchClient = createMockedSearchClient(
         createMultiSearchResponse(
           createSingleSearchResponse({
             index: 'indexName',
+            hits: [],
+          }),
+          createSingleSearchResponse({
+            index: 'indexName2',
             hits: [],
           })
         )
@@ -289,10 +293,102 @@ export function createOptionsTests(
                 templates: {
                   item: (props) => props.item.name,
                 },
+                searchParameters: {
+                  hitsPerPage: 10,
+                },
+              },
+              {
+                indexName: 'indexName2',
+                templates: {
+                  item: (props) => props.item.query,
+                },
+                searchParameters: {
+                  hitsPerPage: 20,
+                },
+              },
+            ],
+          },
+          react: {
+            indices: [
+              {
+                indexName: 'indexName',
+                itemComponent: (props) => props.item.name,
+                searchParameters: {
+                  hitsPerPage: 10,
+                },
+              },
+              {
+                indexName: 'indexName2',
+                itemComponent: (props) => props.item.query,
+                searchParameters: {
+                  hitsPerPage: 20,
+                },
+              },
+            ],
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(searchClient.search).toHaveBeenCalledWith([
+        {
+          indexName: 'indexName',
+          params: expect.objectContaining({
+            hitsPerPage: 10,
+          }),
+        },
+        {
+          indexName: 'indexName2',
+          params: expect.objectContaining({
+            hitsPerPage: 20,
+          }),
+        },
+      ]);
+    });
+
+    test('forwards base search params to all indices', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'indexName',
+            hits: [],
+          }),
+          createSingleSearchResponse({
+            index: 'indexName2',
+            hits: [],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            indices: [
+              {
+                indexName: 'indexName',
+                templates: {
+                  item: (props) => props.item.name,
+                },
+                searchParameters: {
+                  hitsPerPage: 10,
+                },
+              },
+              {
+                indexName: 'indexName2',
+                templates: {
+                  item: (props) => props.item.query,
+                },
               },
             ],
             searchParameters: {
-              hitsPerPage: 10,
               userToken: 'user-123',
               enableRules: false,
             },
@@ -302,10 +398,16 @@ export function createOptionsTests(
               {
                 indexName: 'indexName',
                 itemComponent: (props) => props.item.name,
+                searchParameters: {
+                  hitsPerPage: 10,
+                },
+              },
+              {
+                indexName: 'indexName2',
+                itemComponent: (props) => props.item.query,
               },
             ],
             searchParameters: {
-              hitsPerPage: 10,
               userToken: 'user-123',
               enableRules: false,
             },
@@ -322,7 +424,14 @@ export function createOptionsTests(
         {
           indexName: 'indexName',
           params: expect.objectContaining({
+            userToken: 'user-123',
+            enableRules: false,
             hitsPerPage: 10,
+          }),
+        },
+        {
+          indexName: 'indexName2',
+          params: expect.objectContaining({
             userToken: 'user-123',
             enableRules: false,
           }),

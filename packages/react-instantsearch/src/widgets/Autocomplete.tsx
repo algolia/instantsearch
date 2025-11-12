@@ -82,6 +82,7 @@ type AutocompleteSearchParameters = Omit<PlainSearchParameters, 'index'>;
 type IndexConfig<TItem extends BaseHit> = AutocompleteIndexConfig<TItem> & {
   headerComponent?: AutocompleteIndexProps<TItem>['HeaderComponent'];
   itemComponent: AutocompleteIndexProps<TItem>['ItemComponent'];
+  searchParameters?: AutocompleteSearchParameters;
   classNames?: Partial<AutocompleteIndexClassNames>;
 };
 
@@ -190,7 +191,9 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
       <Index EXPERIMENTAL_isolated>
         <Configure {...searchParameters} />
         {indicesConfig.map((index) => (
-          <Index key={index.indexName} indexName={index.indexName} />
+          <Index key={index.indexName} indexName={index.indexName}>
+            <Configure {...index.searchParameters} />
+          </Index>
         ))}
         <InnerAutocomplete
           {...props}

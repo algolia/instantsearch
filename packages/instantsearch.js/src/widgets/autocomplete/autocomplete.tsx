@@ -370,6 +370,11 @@ type IndexConfig<TItem extends BaseHit> = AutocompleteIndexConfig<TItem> & {
     item: Template<{ item: TItem; onSelect: () => void }>;
   }>;
 
+  /**
+   * Search parameters to apply to this index.
+   */
+  searchParameters?: AutocompleteSearchParameters;
+
   cssClasses?: Partial<AutocompleteIndexClassNames>;
 };
 
@@ -529,10 +534,12 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
       indexId: `ais-autocomplete-${instanceId}`,
       EXPERIMENTAL_isolated: true,
     }).addWidgets([
-      ...indicesConfig.map(({ indexName }) =>
-        index({ indexName, indexId: indexName }).addWidgets([
-          configure(searchParameters),
-        ])
+      configure(searchParameters),
+      ...indicesConfig.map(
+        ({ indexName, searchParameters: indexSearchParameters }) =>
+          index({ indexName, indexId: indexName }).addWidgets([
+            configure(indexSearchParameters || {}),
+          ])
       ),
       {
         ...makeWidget({ escapeHTML }),
