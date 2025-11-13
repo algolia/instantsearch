@@ -4,13 +4,14 @@ import { cx } from '../../lib';
 
 import { AutocompleteSubmitIcon } from './icons';
 
-import type { Renderer } from '../../types';
+import type { ComponentChildren, Renderer } from '../../types';
 
 export type AutocompleteSuggestionProps<
   T = { query: string } & Record<string, unknown>
 > = {
   item: T;
   onSelect: () => void;
+  children: ComponentChildren;
   classNames?: Partial<AutocompleteSuggestionClassNames>;
 };
 
@@ -33,7 +34,7 @@ export function createAutocompleteSuggestionComponent({
   createElement,
 }: Renderer) {
   return function AutocompleteSuggestion({
-    item,
+    children,
     onSelect,
     classNames = {},
   }: AutocompleteSuggestionProps) {
@@ -69,7 +70,7 @@ export function createAutocompleteSuggestionComponent({
               classNames.content
             )}
           >
-            {item.query}
+            {children}
           </div>
         </div>
       </div>

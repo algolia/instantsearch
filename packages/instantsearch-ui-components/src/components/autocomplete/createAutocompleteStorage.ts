@@ -55,6 +55,10 @@ export function createAutocompleteStorage({
       objectID: value,
       query: value,
       __indexName: 'recent-searches',
+      _highlightResult: getHighlightedAttribute({
+        item: { query: value },
+        query: query || '',
+      }),
     }));
 
     const indicesForPropGetters = [...indices];
@@ -91,6 +95,29 @@ function isLocalStorageSupported() {
   } catch (error) {
     return false;
   }
+}
+
+function getHighlightedAttribute({
+  item,
+  query,
+}: {
+  item: { query: string };
+  query: string;
+}) {
+  if (!query.trim().length) {
+    return { query: { matchLevel: 'none' } };
+  }
+
+  return {
+    query: {
+      value: item.query.replace(
+        new RegExp(query.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&'), 'gi'),
+        (match) => {
+          return `<mark>${match}</mark>`;
+        }
+      ),
+    },
+  };
 }
 
 function getLocalStorage(key: string = LOCAL_STORAGE_KEY) {
