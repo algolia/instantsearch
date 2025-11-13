@@ -140,7 +140,7 @@ export function createOptionsTests(
       });
 
       const callTimes: Record<string, Record<SupportedFlavor, number>> = {
-        initial: { javascript: 2, react: 4, vue: 0 },
+        initial: { javascript: 2, react: 2, vue: 0 },
         refined: { javascript: 1, react: 2, vue: 0 },
       };
 
@@ -378,7 +378,7 @@ export function createOptionsTests(
                   item: (props) => props.item.name,
                 },
                 searchParameters: {
-                  hitsPerPage: 10,
+                  hitsPerPage: 20,
                 },
               },
               {
@@ -391,6 +391,7 @@ export function createOptionsTests(
             searchParameters: {
               userToken: 'user-123',
               enableRules: false,
+              hitsPerPage: 10,
             },
           },
           react: {
@@ -399,7 +400,7 @@ export function createOptionsTests(
                 indexName: 'indexName',
                 itemComponent: (props) => props.item.name,
                 searchParameters: {
-                  hitsPerPage: 10,
+                  hitsPerPage: 20,
                 },
               },
               {
@@ -410,6 +411,7 @@ export function createOptionsTests(
             searchParameters: {
               userToken: 'user-123',
               enableRules: false,
+              hitsPerPage: 10,
             },
           },
           vue: {},
@@ -426,7 +428,7 @@ export function createOptionsTests(
           params: expect.objectContaining({
             userToken: 'user-123',
             enableRules: false,
-            hitsPerPage: 10,
+            hitsPerPage: 20,
           }),
         },
         {
@@ -434,6 +436,7 @@ export function createOptionsTests(
           params: expect.objectContaining({
             userToken: 'user-123',
             enableRules: false,
+            hitsPerPage: 10,
           }),
         },
       ]);
