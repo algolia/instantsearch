@@ -70,6 +70,7 @@ export function createAutocompletePropGetters({
     onSelect: globalOnSelect,
   }: Parameters<UsePropGetters<TItem>>[0]): ReturnType<UsePropGetters<TItem>> {
     const getElementId = createGetElementId(useId());
+    const inputRef = useRef<HTMLInputElement>(null);
     const rootRef = useRef<HTMLDivElement>(null);
     const [isOpen, setIsOpen] = useState(false);
     const [activeDescendant, setActiveDescendant] = useState<
@@ -121,6 +122,8 @@ export function createAutocompletePropGetters({
       } = {}
     ) => {
       setIsOpen(false);
+      inputRef.current?.blur();
+
       const actualDescendant = override.activeDescendant ?? activeDescendant;
 
       if (!actualDescendant && override.query) {
@@ -146,6 +149,7 @@ export function createAutocompletePropGetters({
     return {
       getInputProps: () => ({
         id: getElementId('input'),
+        ref: inputRef,
         role: 'combobox',
         'aria-autocomplete': 'list',
         'aria-expanded': isOpen,
@@ -154,16 +158,22 @@ export function createAutocompletePropGetters({
         'aria-activedescendant': activeDescendant,
         onFocus: () => setIsOpen(true),
         onKeyDown: (event) => {
-          if (event.key === 'Escape') {
-            setActiveDescendant(undefined);
-            setIsOpen(false);
-            return;
-          }
           switch (event.key) {
+            case 'Escape': {
+              if (isOpen) {
+                setIsOpen(false);
+                event.preventDefault();
+              } else {
+                setActiveDescendant(undefined);
+              }
+              break;
+            }
             case 'ArrowLeft':
             case 'ArrowUp':
             case 'ArrowRight':
             case 'ArrowDown': {
+              setIsOpen(true);
+
               const nextActiveDescendant = getNextActiveDescendant(event.key)!;
               setActiveDescendant(nextActiveDescendant);
               document
@@ -181,6 +191,7 @@ export function createAutocompletePropGetters({
               setIsOpen(false);
               break;
             default:
+              setIsOpen(true);
               return;
           }
         },
