@@ -19,6 +19,7 @@ import {
   connectAutocomplete,
   connectSearchBox,
 } from '../../connectors/index.umd';
+import { ReverseHighlight } from '../../helpers/components';
 import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
@@ -37,6 +38,7 @@ import type {
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   BaseHit,
+  Hit,
   IndexUiState,
   IndexWidget,
   Renderer,
@@ -236,7 +238,21 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         }),
     });
 
-  let AutocompleteRecentSearchComponent = AutocompleteRecentSearch;
+  let AutocompleteRecentSearchComponent = ({
+    item,
+    onSelect,
+    onRemoveRecentSearch,
+  }: Parameters<typeof AutocompleteRecentSearch>[0]) => (
+    <AutocompleteRecentSearch
+      item={item}
+      onSelect={onSelect}
+      onRemoveRecentSearch={onRemoveRecentSearch}
+    >
+      <ConditionalReverseHighlight
+        item={item as unknown as Hit<{ query: string }>}
+      />
+    </AutocompleteRecentSearch>
+  );
   if (typeof showRecent === 'object' && showRecent.templates?.item) {
     const props = prepareTemplateProps({
       defaultTemplates: {} as unknown as NonNullable<
@@ -481,7 +497,19 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
       indexName: showSuggestions.indexName,
       templates: {
         // @ts-expect-error
-        item: AutocompleteSuggestion,
+        item: ({
+          item,
+          onSelect: onSelectItem,
+        }: {
+          item: { query: string };
+          onSelect: () => void;
+        }) => (
+          <AutocompleteSuggestion item={item} onSelect={onSelectItem}>
+            <ConditionalReverseHighlight
+              item={item as unknown as Hit<{ query: string }>}
+            />
+          </AutocompleteSuggestion>
+        ),
         ...showSuggestions.templates,
       },
       cssClasses: {
@@ -547,4 +575,20 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
       },
     ]),
   ];
+}
+
+function ConditionalReverseHighlight<TItem extends { query: string }>({
+  item,
+}: {
+  item: Hit<TItem>;
+}) {
+  if (
+    !item._highlightResult?.query ||
+    // @ts-expect-error - we should not have matchLevel as arrays here
+    item._highlightResult.query.matchLevel === 'none'
+  ) {
+    return item.query;
+  }
+
+  return <ReverseHighlight attribute="query" hit={item} />;
 }
