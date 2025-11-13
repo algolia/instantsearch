@@ -8,9 +8,7 @@ import {
 import type { ComponentProps, Renderer } from '../..';
 
 export type AutocompleteSearchProps = {
-  inputProps: Partial<ComponentProps<'input'>> & {
-    ref: { current: HTMLInputElement | null };
-  };
+  inputProps: Partial<ComponentProps<'input'>>;
   onClear: () => void;
   query: string;
   isSearchStalled: boolean;
@@ -23,6 +21,7 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
     query,
     isSearchStalled,
   }: AutocompleteSearchProps) {
+    const inputRef = inputProps.ref as { current: HTMLInputElement | null };
     return (
       <form
         className="ais-AutocompleteForm"
@@ -30,7 +29,7 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
         noValidate
         role="search"
         onSubmit={(e) => e.preventDefault()}
-        onReset={() => inputProps.ref?.current?.focus()}
+        onReset={() => inputRef.current?.focus()}
       >
         <div className="ais-AutocompleteInputWrapperPrefix">
           <label
