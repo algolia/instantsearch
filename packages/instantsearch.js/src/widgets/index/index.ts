@@ -9,6 +9,7 @@ import {
   isIndexWidget,
   createInitArgs,
   createRenderArgs,
+  defer,
 } from '../../lib/utils';
 import { addWidgetId } from '../../lib/utils/addWidgetId';
 
@@ -167,6 +168,11 @@ export type IndexWidget<TUiState extends UiState = UiState> = Omit<
    * @private
    */
   _isolated: boolean;
+  /**
+   * Schedules a search for this index only.
+   * @private
+   */
+  scheduleLocalSearch: () => void;
 };
 
 /**
@@ -425,6 +431,12 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       });
     },
 
+    scheduleLocalSearch: defer(() => {
+      if (isolated) {
+        helper?.search();
+      }
+    }),
+
     getWidgets() {
       return localWidgets;
     },
@@ -522,7 +534,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         });
 
         if (isolated) {
-          helper?.search();
+          this.scheduleLocalSearch();
         } else {
           localInstantSearchInstance.scheduleSearch();
         }
@@ -623,7 +635,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
         if (localWidgets.length) {
           if (isolated) {
-            helper?.search();
+            this.scheduleLocalSearch();
           } else {
             localInstantSearchInstance.scheduleSearch();
           }
