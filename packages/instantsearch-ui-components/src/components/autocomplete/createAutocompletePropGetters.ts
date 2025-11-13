@@ -121,8 +121,11 @@ export function createAutocompletePropGetters({
         activeDescendant?: string;
       } = {}
     ) => {
-      setIsOpen(false);
-      inputRef.current?.blur();
+      if (isOpen) {
+        setIsOpen(false);
+      } else {
+        inputRef.current?.blur();
+      }
 
       const actualDescendant = override.activeDescendant ?? activeDescendant;
 

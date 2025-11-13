@@ -451,6 +451,83 @@ export function createOptionsTests(
       ]);
     });
 
+    test('closes the panel then blurs the input when pressing enter', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'indexName',
+            hits: [
+              { objectID: '1', name: 'Item 1' },
+              { objectID: '2', name: 'Item 2' },
+            ],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            indices: [
+              {
+                indexName: 'indexName',
+                templates: {
+                  item: (props) => props.item.name,
+                },
+              },
+            ],
+          },
+          react: {
+            indices: [
+              {
+                indexName: 'indexName',
+                itemComponent: (props) => props.item.name,
+              },
+            ],
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const input = screen.getByRole('combobox', { name: /submit/i });
+
+      await act(async () => {
+        userEvent.click(input);
+        userEvent.keyboard('{ArrowDown}');
+        await wait(0);
+      });
+
+      expect(
+        document.querySelector('[aria-selected="true"]')
+      ).toHaveTextContent('Item 1');
+      expect(input).toHaveAttribute('aria-expanded', 'true');
+      expect(input).toHaveFocus();
+
+      // Closes panel on first Enter
+      await act(async () => {
+        userEvent.keyboard('{Enter}');
+        await wait(0);
+      });
+
+      expect(input).toHaveAttribute('aria-expanded', 'false');
+      expect(input).toHaveFocus();
+
+      // Blurs input on second Enter
+      await act(async () => {
+        userEvent.keyboard('{Enter}');
+        await wait(0);
+      });
+
+      expect(input).not.toHaveFocus();
+    });
+
     test('closes the panel then clears the input when pressing escape', async () => {
       const searchClient = createMockedSearchClient(
         createMultiSearchResponse(
