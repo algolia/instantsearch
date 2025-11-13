@@ -4,12 +4,13 @@ import { cx } from '../../lib';
 
 import { AutocompleteClockIcon, AutocompleteTrashIcon } from './icons';
 
-import type { Renderer } from '../../types';
+import type { ComponentChildren, Renderer } from '../../types';
 
 export type AutocompleteRecentSearchProps<
   T = { query: string } & Record<string, unknown>
 > = {
   item: T;
+  children?: ComponentChildren;
   onSelect: () => void;
   onRemoveRecentSearch: () => void;
   classNames?: Partial<AutocompleteRecentSearchClassNames>;
@@ -47,6 +48,7 @@ export function createAutocompleteRecentSearchComponent({
 }: Renderer) {
   return function AutocompleteRecentSearch({
     item,
+    children,
     onSelect,
     onRemoveRecentSearch,
     classNames = {},
@@ -82,7 +84,7 @@ export function createAutocompleteRecentSearchComponent({
               classNames.content
             )}
           >
-            {item.query}
+            {children}
           </div>
         </div>
         <div

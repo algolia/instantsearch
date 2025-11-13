@@ -14,6 +14,7 @@ import type { ComponentProps } from 'react';
 // We only track widgets that use connectors.
 const NON_WIDGETS = [
   'Highlight',
+  'ReverseHighlight',
   'Snippet',
   'PoweredBy',
   'Chat',
@@ -88,7 +89,8 @@ function Widget<TWidget extends SingleWidget>({
       );
     }
     case 'Snippet':
-    case 'Highlight': {
+    case 'Highlight':
+    case 'ReverseHighlight': {
       return (
         <widget.Component
           hit={{ objectID: '', __position: 0 }}
