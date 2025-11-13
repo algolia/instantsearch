@@ -1,0 +1,12 @@
+diff --git a/node_modules/@vercel/oidc/package.json b/node_modules/@vercel/oidc/package.json
+index 1234567..abcdefg 100644
+--- a/node_modules/@vercel/oidc/package.json
++++ b/node_modules/@vercel/oidc/package.json
+@@ -8,6 +8,7 @@
+     "**/*.d.ts",
+     "**/*.md"
+   ],
++  "main": "./dist/index-browser.js",
+   "types": "./dist/index.d.ts",
+   "exports": {
+     ".": {
