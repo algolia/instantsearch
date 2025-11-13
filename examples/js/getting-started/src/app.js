@@ -1,4 +1,5 @@
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
+import { createInstantSearchTweakpane } from 'instantsearch-ui-components';
 import instantsearch from 'instantsearch.js';
 import { carousel } from 'instantsearch.js/es/templates';
 import {
@@ -91,3 +92,6 @@ search.addWidgets([
 ]);
 
 search.start();
+
+// Initialize the Tweakpane for CSS variable configuration
+createInstantSearchTweakpane();

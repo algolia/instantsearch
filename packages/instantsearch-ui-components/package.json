@@ -52,5 +52,16 @@
     "markdown-to-jsx": "^7.7.15",
     "zod": "^3.25.76 || ^4",
     "zod-to-json-schema": "3.24.6"
+  },
+  "devDependencies": {
+    "@tweakpane/core": "^2.0.5"
+  },
+  "peerDependencies": {
+    "tweakpane": "^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "tweakpane": {
+      "optional": true
+    }
   }
 }
