@@ -140,7 +140,7 @@ export function createOptionsTests(
       });
 
       const callTimes: Record<string, Record<SupportedFlavor, number>> = {
-        initial: { javascript: 2, react: 4, vue: 0 },
+        initial: { javascript: 2, react: 2, vue: 0 },
         refined: { javascript: 1, react: 2, vue: 0 },
       };
 
@@ -264,6 +264,182 @@ export function createOptionsTests(
         '.ais-AutocompleteRecentSearchesItem'
       );
       expect(newRecentSearches).toHaveLength(0);
+    });
+
+    test('forwards search params to each index', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'indexName',
+            hits: [],
+          }),
+          createSingleSearchResponse({
+            index: 'indexName2',
+            hits: [],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            indices: [
+              {
+                indexName: 'indexName',
+                templates: {
+                  item: (props) => props.item.name,
+                },
+                searchParameters: {
+                  hitsPerPage: 10,
+                },
+              },
+              {
+                indexName: 'indexName2',
+                templates: {
+                  item: (props) => props.item.query,
+                },
+                searchParameters: {
+                  hitsPerPage: 20,
+                },
+              },
+            ],
+          },
+          react: {
+            indices: [
+              {
+                indexName: 'indexName',
+                itemComponent: (props) => props.item.name,
+                searchParameters: {
+                  hitsPerPage: 10,
+                },
+              },
+              {
+                indexName: 'indexName2',
+                itemComponent: (props) => props.item.query,
+                searchParameters: {
+                  hitsPerPage: 20,
+                },
+              },
+            ],
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(searchClient.search).toHaveBeenCalledWith([
+        {
+          indexName: 'indexName',
+          params: expect.objectContaining({
+            hitsPerPage: 10,
+          }),
+        },
+        {
+          indexName: 'indexName2',
+          params: expect.objectContaining({
+            hitsPerPage: 20,
+          }),
+        },
+      ]);
+    });
+
+    test('forwards base search params to all indices', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'indexName',
+            hits: [],
+          }),
+          createSingleSearchResponse({
+            index: 'indexName2',
+            hits: [],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            indices: [
+              {
+                indexName: 'indexName',
+                templates: {
+                  item: (props) => props.item.name,
+                },
+                searchParameters: {
+                  hitsPerPage: 20,
+                },
+              },
+              {
+                indexName: 'indexName2',
+                templates: {
+                  item: (props) => props.item.query,
+                },
+              },
+            ],
+            searchParameters: {
+              userToken: 'user-123',
+              enableRules: false,
+              hitsPerPage: 10,
+            },
+          },
+          react: {
+            indices: [
+              {
+                indexName: 'indexName',
+                itemComponent: (props) => props.item.name,
+                searchParameters: {
+                  hitsPerPage: 20,
+                },
+              },
+              {
+                indexName: 'indexName2',
+                itemComponent: (props) => props.item.query,
+              },
+            ],
+            searchParameters: {
+              userToken: 'user-123',
+              enableRules: false,
+              hitsPerPage: 10,
+            },
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(searchClient.search).toHaveBeenCalledWith([
+        {
+          indexName: 'indexName',
+          params: expect.objectContaining({
+            userToken: 'user-123',
+            enableRules: false,
+            hitsPerPage: 20,
+          }),
+        },
+        {
+          indexName: 'indexName2',
+          params: expect.objectContaining({
+            userToken: 'user-123',
+            enableRules: false,
+            hitsPerPage: 10,
+          }),
+        },
+      ]);
     });
 
     test('supports keyboard navigation', async () => {
