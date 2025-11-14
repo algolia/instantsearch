@@ -93,5 +93,4 @@ search.addWidgets([
 
 search.start();
 
-// Initialize the Tweakpane for CSS variable configuration
 createInstantSearchTweakpane();

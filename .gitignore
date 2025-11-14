@@ -17,6 +17,7 @@ build/
 /website/stories/*
 /website/specs/*
 /storybook/dist/*
+/packages/instantsearch-ui-components/src/lib/variables-config.json
 !.gitkeep
 
 # Unneeded changelogs
