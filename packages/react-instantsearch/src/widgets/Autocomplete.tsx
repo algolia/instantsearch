@@ -27,6 +27,7 @@ import {
 
 import { AutocompleteSearch } from '../components/AutocompleteSearch';
 
+import type { PlainSearchParameters } from 'algoliasearch-helper';
 import type {
   AutocompleteIndexClassNames,
   AutocompleteIndexConfig,
@@ -76,9 +77,12 @@ const useStorage = createAutocompleteStorage({
   useState,
 });
 
+type AutocompleteSearchParameters = Omit<PlainSearchParameters, 'index'>;
+
 type IndexConfig<TItem extends BaseHit> = AutocompleteIndexConfig<TItem> & {
   headerComponent?: AutocompleteIndexProps<TItem>['HeaderComponent'];
   itemComponent: AutocompleteIndexProps<TItem>['ItemComponent'];
+  searchParameters?: AutocompleteSearchParameters;
   classNames?: Partial<AutocompleteIndexClassNames>;
 };
 
@@ -113,6 +117,7 @@ export type AutocompleteProps<TItem extends BaseHit> = ComponentProps<'div'> & {
       };
   getSearchPageURL?: (nextUiState: IndexUiState) => string;
   onSelect?: AutocompleteIndexConfig<TItem>['onSelect'];
+  searchParameters?: AutocompleteSearchParameters;
   classNames?: Partial<AutocompleteClassNames>;
 };
 
@@ -131,6 +136,7 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
   indices = [],
   showSuggestions,
   showRecent,
+  searchParameters: userSearchParameters,
   ...props
 }: AutocompleteProps<TItem>) {
   const { indexUiState, indexRenderState } = useInstantSearch();
@@ -138,6 +144,10 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
     {},
     { $$type: 'ais.autocomplete', $$widgetType: 'ais.autocomplete' }
   );
+  const searchParameters = {
+    hitsPerPage: 5,
+    ...userSearchParameters,
+  };
   const indicesConfig = [...indices];
   if (showSuggestions?.indexName) {
     indicesConfig.unshift({
@@ -179,9 +189,11 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
   return (
     <Fragment>
       <Index EXPERIMENTAL_isolated>
-        <Configure hitsPerPage={5} />
+        <Configure {...searchParameters} />
         {indicesConfig.map((index) => (
-          <Index key={index.indexName} indexName={index.indexName} />
+          <Index key={index.indexName} indexName={index.indexName}>
+            <Configure {...index.searchParameters} />
+          </Index>
         ))}
         <InnerAutocomplete
           {...props}

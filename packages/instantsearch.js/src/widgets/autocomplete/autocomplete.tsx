@@ -44,6 +44,7 @@ import type {
   Template,
   WidgetFactory,
 } from '../../types';
+import type { PlainSearchParameters } from 'algoliasearch-helper';
 import type {
   AutocompleteClassNames,
   AutocompleteIndexClassNames,
@@ -351,6 +352,8 @@ function AutocompleteWrapper<TItem extends BaseHit>({
 
 export type AutocompleteCSSClasses = Partial<AutocompleteClassNames>;
 
+export type AutocompleteSearchParameters = Omit<PlainSearchParameters, 'index'>;
+
 export type AutocompleteTemplates<TItem extends BaseHit> = Partial<
   Record<string, TItem>
 >;
@@ -366,6 +369,11 @@ type IndexConfig<TItem extends BaseHit> = AutocompleteIndexConfig<TItem> & {
      */
     item: Template<{ item: TItem; onSelect: () => void }>;
   }>;
+
+  /**
+   * Search parameters to apply to this index.
+   */
+  searchParameters?: AutocompleteSearchParameters;
 
   cssClasses?: Partial<AutocompleteIndexClassNames>;
 };
@@ -410,6 +418,11 @@ type AutocompleteWidgetParams<TItem extends BaseHit> = {
         }>;
       };
 
+  /**
+   * Search parameters to apply to the autocomplete indices.
+   */
+  searchParameters?: AutocompleteSearchParameters;
+
   getSearchPageURL?: (nextUiState: IndexUiState) => string;
 
   onSelect?: AutocompleteIndexConfig<TItem>['onSelect'];
@@ -440,6 +453,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     indices = [],
     showSuggestions,
     showRecent,
+    searchParameters: userSearchParameters,
     getSearchPageURL,
     onSelect,
     templates = {},
@@ -451,6 +465,11 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
   }
 
   const containerNode = getContainerNode(container);
+
+  const searchParameters = {
+    hitsPerPage: 5,
+    ...userSearchParameters,
+  };
 
   const cssClasses = {
     root: cx(suit(), userCssClasses.root),
@@ -515,10 +534,12 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
       indexId: `ais-autocomplete-${instanceId}`,
       EXPERIMENTAL_isolated: true,
     }).addWidgets([
-      ...indicesConfig.map(({ indexName }) =>
-        index({ indexName, indexId: indexName }).addWidgets([
-          configure({ hitsPerPage: 5 }),
-        ])
+      configure(searchParameters),
+      ...indicesConfig.map(
+        ({ indexName, searchParameters: indexSearchParameters }) =>
+          index({ indexName, indexId: indexName }).addWidgets([
+            configure(indexSearchParameters || {}),
+          ])
       ),
       {
         ...makeWidget({ escapeHTML }),
