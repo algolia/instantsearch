@@ -21,6 +21,7 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
     query,
     isSearchStalled,
   }: AutocompleteSearchProps) {
+    const inputRef = inputProps.ref as { current: HTMLInputElement | null };
     return (
       <form
         className="ais-AutocompleteForm"
@@ -28,6 +29,7 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
         noValidate
         role="search"
         onSubmit={(e) => e.preventDefault()}
+        onReset={() => inputRef.current?.focus()}
       >
         <div className="ais-AutocompleteInputWrapperPrefix">
           <label

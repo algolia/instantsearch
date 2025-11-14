@@ -70,6 +70,7 @@ export function createAutocompletePropGetters({
     onSelect: globalOnSelect,
   }: Parameters<UsePropGetters<TItem>>[0]): ReturnType<UsePropGetters<TItem>> {
     const getElementId = createGetElementId(useId());
+    const inputRef = useRef<HTMLInputElement>(null);
     const rootRef = useRef<HTMLDivElement>(null);
     const [isOpen, setIsOpen] = useState(false);
     const [activeDescendant, setActiveDescendant] = useState<
@@ -97,7 +98,7 @@ export function createAutocompletePropGetters({
       };
     }, [rootRef]);
 
-    const getNextActiveDescendent = (key: string): string | undefined => {
+    const getNextActiveDescendant = (key: string): string | undefined => {
       switch (key) {
         case 'ArrowLeft':
         case 'ArrowUp': {
@@ -114,13 +115,29 @@ export function createAutocompletePropGetters({
       }
     };
 
-    const submit = (actualActiveDescendant = activeDescendant) => {
-      setIsOpen(false);
-      if (actualActiveDescendant && items.has(actualActiveDescendant)) {
+    const submit = (
+      override: {
+        query?: string;
+        activeDescendant?: string;
+      } = {}
+    ) => {
+      if (isOpen) {
+        setIsOpen(false);
+      } else {
+        inputRef.current?.blur();
+      }
+
+      const actualDescendant = override.activeDescendant ?? activeDescendant;
+
+      if (!actualDescendant && override.query) {
+        onRefine(override.query);
+      }
+
+      if (actualDescendant && items.has(actualDescendant)) {
         const {
           item,
           config: { onSelect: indexOnSelect, getQuery, getURL },
-        } = items.get(actualActiveDescendant)!;
+        } = items.get(actualDescendant)!;
         const actualOnSelect = indexOnSelect ?? globalOnSelect;
         actualOnSelect({
           item,
@@ -135,6 +152,7 @@ export function createAutocompletePropGetters({
     return {
       getInputProps: () => ({
         id: getElementId('input'),
+        ref: inputRef,
         role: 'combobox',
         'aria-autocomplete': 'list',
         'aria-expanded': isOpen,
@@ -143,33 +161,40 @@ export function createAutocompletePropGetters({
         'aria-activedescendant': activeDescendant,
         onFocus: () => setIsOpen(true),
         onKeyDown: (event) => {
-          if (event.key === 'Escape') {
-            setActiveDescendant(undefined);
-            setIsOpen(false);
-            return;
-          }
           switch (event.key) {
+            case 'Escape': {
+              if (isOpen) {
+                setIsOpen(false);
+                event.preventDefault();
+              } else {
+                setActiveDescendant(undefined);
+              }
+              break;
+            }
             case 'ArrowLeft':
             case 'ArrowUp':
             case 'ArrowRight':
             case 'ArrowDown': {
-              const nextActiveDescendent = getNextActiveDescendent(event.key)!;
-              setActiveDescendant(nextActiveDescendent);
+              setIsOpen(true);
+
+              const nextActiveDescendant = getNextActiveDescendant(event.key)!;
+              setActiveDescendant(nextActiveDescendant);
               document
-                .getElementById(nextActiveDescendent)
+                .getElementById(nextActiveDescendant)
                 ?.scrollIntoView(false);
 
               event.preventDefault();
               break;
             }
             case 'Enter': {
-              submit();
+              submit({ query: (event.target as HTMLInputElement).value });
               break;
             }
             case 'Tab':
               setIsOpen(false);
               break;
             default:
+              setIsOpen(true);
               return;
           }
         },
@@ -196,7 +221,7 @@ export function createAutocompletePropGetters({
           id,
           role: 'row',
           'aria-selected': id === activeDescendant,
-          onSelect: () => submit(id),
+          onSelect: () => submit({ activeDescendant: id }),
         };
       },
       getPanelProps: () => ({
