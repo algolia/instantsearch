@@ -1,7 +1,6 @@
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import { createInstantSearchTweakpane } from 'instantsearch-ui-components';
 import { Hit } from 'instantsearch.js';
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   Configure,
   Highlight,
@@ -17,6 +16,7 @@ import {
 
 import { Panel } from './Panel';
 
+import 'instantsearch.css/devtools/inject';
 import 'instantsearch.css/themes/satellite.css';
 
 import './App.css';
@@ -27,11 +27,6 @@ const searchClient = algoliasearch(
 );
 
 export function App() {
-  useEffect(() => {
-    const cleanup = createInstantSearchTweakpane();
-    return cleanup;
-  }, []);
-
   return (
     <div>
       <header className="header">

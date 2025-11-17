@@ -16,6 +16,25 @@
   "license": "MIT",
   "author": "Algolia <support@algolia.com>",
   "type": "module",
+  "files": [
+    "themes",
+    "components",
+    "devtools"
+  ],
+  "exports": {
+    "./devtools": {
+      "types": "./devtools/index.d.ts",
+      "import": "./devtools/index.js",
+      "default": "./devtools/index.js"
+    },
+    "./devtools/inject": {
+      "import": "./devtools/inject.js",
+      "default": "./devtools/inject.js"
+    }
+  },
+  "sideEffects": [
+    "devtools/inject.js"
+  ],
   "scripts": {
     "build": "rm -rf themes components && yarn styles:build && yarn styles:minify && yarn styles:autoprefixer && yarn generate-variables-config",
     "styles:autoprefixer": "postcss themes/ components/ --use autoprefixer --replace --no-map",
@@ -25,6 +44,14 @@
     "prepare": "yarn build",
     "lint": "stylelint \"**/*.scss\"",
     "generate-variables-config": "node scripts/generate-variables-config.cjs"
+  },
+  "peerDependencies": {
+    "tweakpane": "^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "tweakpane": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "autoprefixer": "10.4.13",

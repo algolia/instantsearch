@@ -1,0 +1,14 @@
+export type Theme = 'auto' | 'light' | 'dark';
+
+export interface DevtoolsOptions {
+  container?: HTMLElement;
+  style?: Partial<CSSStyleDeclaration>;
+}
+
+/**
+ * Creates an InstantSearch devtools panel to configure CSS variables in real-time.
+ * @returns A cleanup function to dispose the panel
+ */
+export function createInstantSearchDevtools(
+  options?: DevtoolsOptions
+): () => void;

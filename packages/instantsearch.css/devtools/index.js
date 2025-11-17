@@ -1,47 +1,42 @@
-// @ts-expect-error - importing JSON file
 import variablesConfig from './variables-config.json';
 
-import type { Pane } from 'tweakpane';
+/**
+ * @typedef {'auto' | 'light' | 'dark'} Theme
+ */
 
-type Theme = 'auto' | 'light' | 'dark';
+/**
+ * @typedef {Object} DevtoolsOptions
+ * @property {HTMLElement} [container] - The container element to append the devtools panel to.
+ *   If not provided, a new div will be created and appended to document.body.
+ * @property {Partial<CSSStyleDeclaration>} [style] - Custom styles to apply to the container element.
+ *   Use this to customize positioning and other visual properties.
+ *   Default: { position: 'fixed', bottom: '1.5rem', left: '1.5rem', zIndex: '1000' }
+ */
 
-export interface TweakpaneOptions {
-  /**
-   * The container element to append the pane to.
-   * If not provided, a new div will be created and appended to document.body.
-   */
-  container?: HTMLElement;
-  /**
-   * Custom styles to apply to the container element.
-   * Use this to customize positioning and other visual properties.
-   * Default: { position: 'fixed', top: '1.5rem', left: '1.5rem', zIndex: '1000' }
-   */
-  style?: Partial<CSSStyleDeclaration>;
-}
+/**
+ * @typedef {Object} VariableConfig
+ * @property {string} name
+ * @property {string} type
+ * @property {boolean} themeVariable
+ * @property {string} category
+ * @property {Object} control
+ * @property {string} control.label
+ * @property {string} [control.colorName]
+ * @property {number} [control.min]
+ * @property {number} [control.max]
+ * @property {number} [control.step]
+ * @property {string} [control.unit]
+ * @property {boolean} [control.convertFromRem]
+ */
 
-interface VariableConfig {
-  name: string;
-  type: string;
-  themeVariable: boolean;
-  category: string;
-  control: {
-    label: string;
-    colorName?: string;
-    min?: number;
-    max?: number;
-    step?: number;
-    unit?: string;
-    convertFromRem?: boolean;
-  };
-}
-
-interface CSSValues {
-  theme: Theme;
-  [key: string]: string | number;
-}
+/**
+ * @typedef {Object} CSSValues
+ * @property {Theme} theme
+ * @property {string | number} [key]
+ */
 
 // Utility functions
-function getCSSVariableValue(property: string, fallback: string = '') {
+function getCSSVariableValue(property, fallback = '') {
   return (
     getComputedStyle(document.documentElement)
       .getPropertyValue(property)
@@ -49,7 +44,7 @@ function getCSSVariableValue(property: string, fallback: string = '') {
   );
 }
 
-function rgbToHex(rgb: string) {
+function rgbToHex(rgb) {
   const values = rgb.split(',').map((v) => parseInt(v.trim(), 10));
   if (values.length !== 3) return '#000000';
 
@@ -62,7 +57,7 @@ function rgbToHex(rgb: string) {
     .join('')}`;
 }
 
-function hexToRgb(hex: string): { r: number; g: number; b: number } {
+function hexToRgb(hex) {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? {
@@ -73,17 +68,26 @@ function hexToRgb(hex: string): { r: number; g: number; b: number } {
     : { r: 0, g: 0, b: 0 };
 }
 
-function parseNumericValue(cssValue: string) {
+function parseNumericValue(cssValue) {
   const match = cssValue.match(/^(\d*\.?\d+)/);
   return match ? parseFloat(match[1]) : 0;
 }
 
-function getCurrentTheme(): Theme {
+/**
+ * Get the current theme setting
+ * @returns {Theme} The current theme
+ */
+function getCurrentTheme() {
   const theme = document.documentElement.getAttribute('data-theme');
-  return (theme as Theme) || 'auto';
+  return theme || 'auto';
 }
 
-function applyTheme(theme: Theme) {
+/**
+ * Apply a theme to the document
+ * @param {Theme} theme - The theme to apply
+ * @returns {void}
+ */
+function applyTheme(theme) {
   if (theme === 'auto') {
     document.documentElement.removeAttribute('data-theme');
   } else {
@@ -91,16 +95,11 @@ function applyTheme(theme: Theme) {
   }
 }
 
-function updateCSSVariable(property: string, value: string | number) {
+function updateCSSVariable(property, value) {
   document.documentElement.style.setProperty(property, String(value));
 }
 
-function updateColorVariable(
-  colorHex: string,
-  rgbProperty: string,
-  alphaProperty?: string,
-  alpha?: number
-) {
+function updateColorVariable(colorHex, rgbProperty, alphaProperty, alpha) {
   const { r, g, b } = hexToRgb(colorHex);
   updateCSSVariable(rgbProperty, `${r}, ${g}, ${b}`);
   if (alphaProperty && alpha !== undefined) {
@@ -110,18 +109,20 @@ function updateColorVariable(
 
 /**
  * Get default values from CSS variables based on config
+ * @param {Object} config - The variables configuration object
+ * @returns {CSSValues} Object containing theme and CSS variable values
  */
-function getDefaultValues(config: typeof variablesConfig): CSSValues {
-  const values: CSSValues = {
+function getDefaultValues(config) {
+  const values = {
     theme: getCurrentTheme(),
   };
 
-  config.variables.forEach((variable: VariableConfig) => {
+  config.variables.forEach((variable) => {
     const cssValue = getCSSVariableValue(variable.name);
 
     if (variable.type === 'color-rgb') {
       // Convert RGB to hex color
-      values[variable.control.colorName!] = rgbToHex(cssValue);
+      values[variable.control.colorName] = rgbToHex(cssValue);
     } else if (variable.type === 'color-alpha') {
       // Store alpha as number
       const alphaKey = variable.control.label.replace(/ /g, '');
@@ -142,26 +143,25 @@ function getDefaultValues(config: typeof variablesConfig): CSSValues {
 
 /**
  * Group variables by category
+ * @param {VariableConfig[]} variables - Array of variable configurations
+ * @returns {Object} Object mapping category names to arrays of variables
  */
-function groupByCategory(
-  variables: VariableConfig[]
-): Record<string, VariableConfig[]> {
+function groupByCategory(variables) {
   return variables.reduce((acc, variable) => {
     if (!acc[variable.category]) {
       acc[variable.category] = [];
     }
     acc[variable.category].push(variable);
     return acc;
-  }, {} as Record<string, VariableConfig[]>);
+  }, {});
 }
 
 /**
  * Pair color-rgb variables with their corresponding alpha variables
+ * @param {VariableConfig[]} variables - Array of variable configurations
+ * @returns {Array} Array of color pairs with rgb and optional alpha
  */
-function getColorPairs(variables: VariableConfig[]): Array<{
-  rgb: VariableConfig;
-  alpha?: VariableConfig;
-}> {
+function getColorPairs(variables) {
   const rgbVars = variables.filter((v) => v.type === 'color-rgb');
   const alphaVars = variables.filter((v) => v.type === 'color-alpha');
 
@@ -174,25 +174,27 @@ function getColorPairs(variables: VariableConfig[]): Array<{
 
 /**
  * Get non-color variables
+ * @param {VariableConfig[]} variables - Array of variable configurations
+ * @returns {VariableConfig[]} Array of non-color variables
  */
-function getNonColorVariables(variables: VariableConfig[]): VariableConfig[] {
+function getNonColorVariables(variables) {
   return variables.filter(
     (v) => v.type !== 'color-rgb' && v.type !== 'color-alpha'
   );
 }
 
 /**
- * Export current CSS variables
+ * Export current CSS variables as CSS text
+ * @param {CSSValues} values - Current CSS variable values
+ * @param {Object} config - The variables configuration object
+ * @returns {string} CSS text with variable definitions
  */
-function exportCSSVariables(
-  values: CSSValues,
-  config: typeof variablesConfig
-): string {
+function exportCSSVariables(values, config) {
   let output = `// CSS Variables\n:root {\n`;
 
-  config.variables.forEach((variable: VariableConfig) => {
+  config.variables.forEach((variable) => {
     if (variable.type === 'color-rgb') {
-      const hex = values[variable.control.colorName!] as string;
+      const hex = values[variable.control.colorName];
       const { r, g, b } = hexToRgb(hex);
       output += `  ${variable.name}: ${r}, ${g}, ${b};\n`;
     } else if (variable.type === 'color-alpha') {
@@ -200,7 +202,7 @@ function exportCSSVariables(
       output += `  ${variable.name}: ${values[alphaKey]};\n`;
     } else if (variable.type === 'spacing' && variable.control.convertFromRem) {
       const key = variable.control.label.replace(/ /g, '');
-      output += `  ${variable.name}: ${(values[key] as number) / 16}rem;\n`;
+      output += `  ${variable.name}: ${values[key] / 16}rem;\n`;
     } else {
       const key = variable.control.label.replace(/ /g, '');
       output += `  ${variable.name}: ${values[key]}${
@@ -214,36 +216,17 @@ function exportCSSVariables(
 }
 
 /**
- * Creates a Tweakpane panel to configure InstantSearch CSS variables in real-time.
- *
- * @param options - Configuration options for the pane
- * @returns A cleanup function that disposes the pane and removes the container
- *
- * @example
- * ```typescript
- * import { createInstantSearchTweakpane } from 'instantsearch-ui-components';
- *
- * // Create with default positioning
- * const cleanup = createInstantSearchTweakpane();
- *
- * // Create with custom positioning
- * const cleanup = createInstantSearchTweakpane({
- *   style: { top: '20px', right: '20px', zIndex: '10000' }
- * });
- *
- * // Later, when you want to remove the pane:
- * cleanup();
- * ```
+ * Creates an InstantSearch devtools panel to configure CSS variables in real-time.
+ * @param {DevtoolsOptions} [options] - Configuration options for the devtools panel
+ * @returns {Function} A cleanup function that disposes the panel and removes the container
  */
-export function createInstantSearchTweakpane(
-  options: TweakpaneOptions = {}
-): () => void {
-  let PaneConstructor: typeof Pane;
+export function createInstantSearchDevtools(options = {}) {
+  let PaneConstructor;
   try {
     PaneConstructor = require('tweakpane').Pane;
   } catch (error) {
     throw new Error(
-      'Tweakpane is not installed. Please install it with: npm install tweakpane'
+      'InstantSearch devtools requires Tweakpane. Install it with: npm install tweakpane'
     );
   }
 
@@ -257,7 +240,7 @@ export function createInstantSearchTweakpane(
     shouldRemoveContainer = true;
 
     // Apply default styles
-    const defaultStyle: Partial<CSSStyleDeclaration> = {
+    const defaultStyle = {
       position: 'fixed',
       bottom: '1.5rem',
       left: '1.5rem',
@@ -275,7 +258,7 @@ export function createInstantSearchTweakpane(
   // Create the pane
   const pane = new PaneConstructor({
     container,
-    title: 'InstantSearch CSS Variables',
+    title: 'InstantSearch Devtools',
     expanded: false,
   });
 
@@ -294,7 +277,7 @@ export function createInstantSearchTweakpane(
       },
       label: 'Theme',
     })
-    .on('change', (ev: any) => {
+    .on('change', (ev) => {
       applyTheme(ev.value);
 
       // Update the pane values to reflect the new theme without triggering events
@@ -303,10 +286,10 @@ export function createInstantSearchTweakpane(
       const newValues = getDefaultValues(variablesConfig);
 
       // Update all color values that change with theme
-      variablesConfig.variables.forEach((variable: VariableConfig) => {
+      variablesConfig.variables.forEach((variable) => {
         if (variable.themeVariable && variable.type === 'color-rgb') {
-          values[variable.control.colorName!] =
-            newValues[variable.control.colorName!];
+          values[variable.control.colorName] =
+            newValues[variable.control.colorName];
         }
       });
 
@@ -328,13 +311,13 @@ export function createInstantSearchTweakpane(
       const { rgb, alpha } = pair;
 
       folder
-        .addBinding(values, rgb.control.colorName!, {
+        .addBinding(values, rgb.control.colorName, {
           label: rgb.control.label,
         })
-        .on('change', (ev: any) => {
+        .on('change', (ev) => {
           if (isUpdatingTheme) return;
           const alphaValue = alpha
-            ? (values[alpha.control.label.replace(/ /g, '')] as number)
+            ? values[alpha.control.label.replace(/ /g, '')]
             : undefined;
           updateColorVariable(ev.value, rgb.name, alpha?.name, alphaValue);
         });
@@ -349,7 +332,7 @@ export function createInstantSearchTweakpane(
             step: alpha.control.step,
             label: alpha.control.label,
           })
-          .on('change', (ev: any) => updateCSSVariable(alpha.name, ev.value));
+          .on('change', (ev) => updateCSSVariable(alpha.name, ev.value));
       }
     });
 
@@ -365,8 +348,8 @@ export function createInstantSearchTweakpane(
           step: variable.control.step,
           label: variable.control.label,
         })
-        .on('change', (ev: any) => {
-          let cssValue: string;
+        .on('change', (ev) => {
+          let cssValue;
 
           if (variable.type === 'spacing' && variable.control.convertFromRem) {
             // Convert px to rem

@@ -1,5 +1,5 @@
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import { createInstantSearchTweakpane } from 'instantsearch-ui-components';
+import 'instantsearch.css/devtools/inject';
 import instantsearch from 'instantsearch.js';
 import { carousel } from 'instantsearch.js/es/templates';
 import {
@@ -92,5 +92,3 @@ search.addWidgets([
 ]);
 
 search.start();
-
-createInstantSearchTweakpane();

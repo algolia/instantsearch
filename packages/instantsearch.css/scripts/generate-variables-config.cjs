@@ -7,7 +7,7 @@ const path = require('path');
 const SCSS_FILE = path.resolve(__dirname, '../src/shared/_variables.scss');
 const OUTPUT_FILE = path.resolve(
   __dirname,
-  '../../instantsearch-ui-components/src/lib/variables-config.json'
+  '../devtools/variables-config.json'
 );
 
 function parseSCSSVariables() {
