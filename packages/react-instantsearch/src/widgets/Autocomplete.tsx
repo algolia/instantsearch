@@ -27,6 +27,8 @@ import {
 
 import { AutocompleteSearch } from '../components/AutocompleteSearch';
 
+import { ReverseHighlight } from './ReverseHighlight';
+
 import type { PlainSearchParameters } from 'algoliasearch-helper';
 import type {
   AutocompleteIndexClassNames,
@@ -35,7 +37,7 @@ import type {
   AutocompleteClassNames,
   AutocompleteIndexProps,
 } from 'instantsearch-ui-components';
-import type { BaseHit, IndexUiState } from 'instantsearch.js';
+import type { BaseHit, Hit, IndexUiState } from 'instantsearch.js';
 import type { ComponentProps } from 'react';
 
 const Autocomplete = createAutocompleteComponent({
@@ -155,7 +157,13 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
       headerComponent:
         showSuggestions.headerComponent as unknown as AutocompleteIndexProps<TItem>['HeaderComponent'],
       itemComponent: (showSuggestions.itemComponent ||
-        AutocompleteSuggestion) as unknown as AutocompleteIndexProps<TItem>['ItemComponent'],
+        (({ item, onSelect }: Parameters<typeof AutocompleteSuggestion>[0]) => (
+          <AutocompleteSuggestion item={item} onSelect={onSelect}>
+            <ConditionalReverseHighlight
+              item={item as unknown as Hit<{ query: string }>}
+            />
+          </AutocompleteSuggestion>
+        ))) as unknown as AutocompleteIndexProps<TItem>['ItemComponent'],
       classNames: {
         root: cx(
           'ais-AutocompleteSuggestions',
@@ -286,7 +294,11 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
                 onRemoveRecentSearch={() =>
                   storage.onRemove((item as unknown as { query: string }).query)
                 }
-              />
+              >
+                <ConditionalReverseHighlight
+                  item={item as unknown as Hit<{ query: string }>}
+                />
+              </AutocompleteRecentSearchComponent>
             )}
             classNames={{
               root: 'ais-AutocompleteRecentSearches',
@@ -315,4 +327,20 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
       </AutocompletePanel>
     </Autocomplete>
   );
+}
+
+function ConditionalReverseHighlight<TItem extends { query: string }>({
+  item,
+}: {
+  item: Hit<TItem>;
+}) {
+  if (
+    !item._highlightResult?.query ||
+    // @ts-expect-error - we should not have matchLevel as arrays here
+    item._highlightResult.query.matchLevel === 'none'
+  ) {
+    return item.query;
+  }
+
+  return <ReverseHighlight attribute="query" hit={item} />;
 }

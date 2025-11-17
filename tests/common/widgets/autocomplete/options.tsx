@@ -929,5 +929,75 @@ export function createOptionsTests(
 
       document.getElementById = originalGetElementById;
     });
+
+    test('has reversed highlighting by default', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'query_suggestions',
+            hits: [
+              {
+                objectID: '1',
+                query: 'hello',
+                _highlightResult: {
+                  query: {
+                    value: '<mark>hell</mark>o',
+                    matchLevel: 'partial',
+                    matchedWords: ['hell'],
+                  },
+                },
+              },
+              {
+                objectID: '2',
+                query: 'hi',
+                _highlightResult: {
+                  query: {
+                    value: 'hi',
+                    matchLevel: 'none',
+                    matchedWords: [],
+                  },
+                },
+              },
+            ],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'query_suggestions',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            showSuggestions: {
+              indexName: 'query_suggestions',
+            },
+          },
+          react: {
+            showSuggestions: {
+              indexName: 'query_suggestions',
+            },
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(
+        document.querySelector('.ais-ReverseHighlight-nonHighlighted')
+      ).toHaveTextContent('hell');
+      expect(
+        document.querySelector('.ais-ReverseHighlight-highlighted')
+      ).toHaveTextContent('o');
+
+      // this should not render any highlighted or nonHighlighted spans
+      const hiItem = screen.getByText('hi');
+      expect(hiItem).not.toHaveClass('ais-ReverseHighlight-highlighted');
+      expect(hiItem).not.toHaveClass('ais-ReverseHighlight-nonHighlighted');
+    });
   });
 }

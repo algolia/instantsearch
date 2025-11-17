@@ -28,6 +28,7 @@ export * from './PoweredBy';
 export * from './RangeInput';
 export * from './RefinementList';
 export * from './RelatedProducts';
+export * from './ReverseHighlight';
 export * from './SearchBox';
 export * from './Snippet';
 export * from './SortBy';
