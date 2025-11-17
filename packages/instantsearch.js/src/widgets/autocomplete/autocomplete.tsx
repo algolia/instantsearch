@@ -113,10 +113,13 @@ type RendererParams<TItem extends BaseHit> = {
     >;
     isolatedIndex: IndexWidget | undefined;
     targetIndex: IndexWidget | undefined;
+    templateProps:
+      | PreparedTemplateProps<NonNullable<AutocompleteTemplates<TItem>>>
+      | undefined;
   };
 } & Pick<
   AutocompleteWidgetParams<TItem>,
-  'getSearchPageURL' | 'onSelect' | 'showRecent'
+  'getSearchPageURL' | 'onSelect' | 'showRecent' | 'showSuggestions'
 > &
   Required<Pick<AutocompleteWidgetParams<TItem>, 'cssClasses' | 'templates'>>;
 
@@ -142,6 +145,14 @@ const createRenderer = <TItem extends BaseHit>(
         indexTemplateProps: [],
         isolatedIndex,
         targetIndex,
+        templateProps: prepareTemplateProps({
+          defaultTemplates: {} as unknown as NonNullable<
+            typeof rendererParams.templates
+          >,
+          templatesConfig:
+            connectorParams.instantSearchInstance.templatesConfig,
+          templates: rendererParams.templates,
+        }),
       };
 
       connectorParams.refine(targetIndex.getHelper()?.state.query ?? '');
@@ -164,6 +175,7 @@ type AutocompleteWrapperProps<TItem extends BaseHit> = Pick<
   | 'templates'
   | 'renderState'
   | 'showRecent'
+  | 'showSuggestions'
 > &
   Pick<AutocompleteRenderState, 'indices' | 'refine'> &
   RendererOptions<Partial<AutocompleteWidgetParams<TItem>>>;
@@ -178,6 +190,8 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   renderState,
   instantSearchInstance,
   showRecent,
+  showSuggestions,
+  templates,
 }: AutocompleteWrapperProps<TItem>) {
   const { isolatedIndex, targetIndex } = renderState;
 
@@ -276,6 +290,100 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     );
   }
 
+  const elements: PanelElements = {};
+  if (showRecent) {
+    elements.recent = (
+      <AutocompleteIndex
+        // @ts-ignore - there seems to be problems with React.ComponentType and this, but it's actually correct
+        ItemComponent={({ item, onSelect }) => (
+          <AutocompleteRecentSearchComponent
+            item={item as unknown as { query: string }}
+            onSelect={onSelect}
+            onRemoveRecentSearch={() =>
+              storage.onRemove((item as unknown as { query: string }).query)
+            }
+          />
+        )}
+        classNames={{
+          root: 'ais-AutocompleteRecentSearches',
+          list: 'ais-AutocompleteRecentSearchesList',
+          item: 'ais-AutocompleteRecentSearchesItem',
+        }}
+        items={storageHits}
+        getItemProps={getItemProps}
+      />
+    );
+  }
+
+  indices.forEach(({ indexId, indexName, hits }, i) => {
+    if (!renderState.indexTemplateProps[i]) {
+      renderState.indexTemplateProps[i] = prepareTemplateProps({
+        defaultTemplates: {} as unknown as NonNullable<
+          IndexConfig<TItem>['templates']
+        >,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates: indicesConfig[i].templates,
+      });
+    }
+    const headerComponent = indicesConfig[i].templates?.header
+      ? ({
+          items,
+        }: Parameters<
+          NonNullable<AutocompleteIndexProps['HeaderComponent']>
+        >[0]) => {
+          return (
+            <TemplateComponent
+              {...renderState.indexTemplateProps[i]}
+              templateKey="header"
+              rootTagName="fragment"
+              data={{ items }}
+            />
+          );
+        }
+      : undefined;
+    const itemComponent = ({
+      item,
+      onSelect,
+    }: Parameters<AutocompleteIndexProps['ItemComponent']>[0]) => {
+      return (
+        <TemplateComponent
+          {...renderState.indexTemplateProps[i]}
+          templateKey="item"
+          rootTagName="fragment"
+          data={{ item, onSelect }}
+        />
+      );
+    };
+
+    const elementId =
+      indexName === showSuggestions?.indexName ? 'suggestions' : indexName;
+
+    elements[elementId] = (
+      <AutocompleteIndex
+        key={indexId}
+        HeaderComponent={headerComponent}
+        ItemComponent={itemComponent}
+        items={hits.map((item) => ({
+          ...item,
+          __indexName: indexId,
+        }))}
+        getItemProps={getItemProps}
+        classNames={indicesConfig[i].cssClasses}
+      />
+    );
+  });
+
+  const UserElementsComponent = templates.panel
+    ? () => (
+        <TemplateComponent
+          {...renderState.templateProps}
+          templateKey="panel"
+          rootTagName="fragment"
+          data={{ elements, indices }}
+        />
+      )
+    : undefined;
+
   return (
     <Autocomplete {...getRootProps()} classNames={cssClasses}>
       <AutocompleteSearchBox
@@ -290,78 +398,11 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         isSearchStalled={instantSearchInstance.status === 'stalled'}
       />
       <AutocompletePanel {...getPanelProps()}>
-        {showRecent && (
-          <AutocompleteIndex
-            // @ts-ignore - there seems to be problems with React.ComponentType and this, but it's actually correct
-            ItemComponent={({ item, onSelect }) => (
-              <AutocompleteRecentSearchComponent
-                item={item as unknown as { query: string }}
-                onSelect={onSelect}
-                onRemoveRecentSearch={() =>
-                  storage.onRemove((item as unknown as { query: string }).query)
-                }
-              />
-            )}
-            classNames={{
-              root: 'ais-AutocompleteRecentSearches',
-              list: 'ais-AutocompleteRecentSearchesList',
-              item: 'ais-AutocompleteRecentSearchesItem',
-            }}
-            items={storageHits}
-            getItemProps={getItemProps}
-          />
+        {UserElementsComponent ? (
+          <UserElementsComponent />
+        ) : (
+          Object.keys(elements).map((elementId) => elements[elementId])
         )}
-        {indices.map(({ indexId, hits }, i) => {
-          if (!renderState.indexTemplateProps[i]) {
-            renderState.indexTemplateProps[i] = prepareTemplateProps({
-              defaultTemplates: {} as unknown as NonNullable<
-                IndexConfig<TItem>['templates']
-              >,
-              templatesConfig: instantSearchInstance.templatesConfig,
-              templates: indicesConfig[i].templates,
-            });
-          }
-          const headerComponent = indicesConfig[i].templates?.header
-            ? ({
-                items,
-              }: Parameters<
-                NonNullable<AutocompleteIndexProps['HeaderComponent']>
-              >[0]) => {
-                return (
-                  <TemplateComponent
-                    {...renderState.indexTemplateProps[i]}
-                    templateKey="header"
-                    rootTagName="fragment"
-                    data={{ items }}
-                  />
-                );
-              }
-            : undefined;
-          const itemComponent = ({
-            item,
-            onSelect,
-          }: Parameters<AutocompleteIndexProps['ItemComponent']>[0]) => {
-            return (
-              <TemplateComponent
-                {...renderState.indexTemplateProps[i]}
-                templateKey="item"
-                rootTagName="fragment"
-                data={{ item, onSelect }}
-              />
-            );
-          };
-
-          return (
-            <AutocompleteIndex
-              key={indexId}
-              HeaderComponent={headerComponent}
-              ItemComponent={itemComponent}
-              items={hits.map((item) => ({ ...item, __indexName: indexId }))}
-              getItemProps={getItemProps}
-              classNames={indicesConfig[i].cssClasses}
-            />
-          );
-        })}
       </AutocompletePanel>
     </Autocomplete>
   );
@@ -371,9 +412,15 @@ export type AutocompleteCSSClasses = Partial<AutocompleteClassNames>;
 
 export type AutocompleteSearchParameters = Omit<PlainSearchParameters, 'index'>;
 
-export type AutocompleteTemplates<TItem extends BaseHit> = Partial<
-  Record<string, TItem>
->;
+export type AutocompleteTemplates<TItem extends BaseHit> = {
+  /**
+   * Template to use for the panel.
+   */
+  panel?: Template<{
+    elements: PanelElements;
+    indices: Array<IndexConfig<TItem>>;
+  }>;
+};
 
 type IndexConfig<TItem extends BaseHit> = AutocompleteIndexConfig<TItem> & {
   templates?: Partial<{
@@ -394,6 +441,11 @@ type IndexConfig<TItem extends BaseHit> = AutocompleteIndexConfig<TItem> & {
 
   cssClasses?: Partial<AutocompleteIndexClassNames>;
 };
+
+type PanelElements = Partial<
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  Record<'recent' | 'suggestions' | (string & {}), preact.JSX.Element>
+>;
 
 type AutocompleteWidgetParams<TItem extends BaseHit> = {
   /**
@@ -546,10 +598,12 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     onSelect,
     cssClasses,
     showRecent,
+    showSuggestions,
     renderState: {
       indexTemplateProps: [],
       isolatedIndex: undefined,
       targetIndex: undefined,
+      templateProps: undefined,
     },
     templates,
   });
