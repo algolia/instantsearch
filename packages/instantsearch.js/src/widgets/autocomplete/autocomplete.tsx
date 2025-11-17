@@ -248,6 +248,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       onSelect={onSelect}
       onRemoveRecentSearch={onRemoveRecentSearch}
     >
+      {/* @ts-expect-error - it should accept string as return value */}
       <ConditionalReverseHighlight
         item={item as unknown as Hit<{ query: string }>}
       />
@@ -505,6 +506,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
           onSelect: () => void;
         }) => (
           <AutocompleteSuggestion item={item} onSelect={onSelectItem}>
+            {/* @ts-expect-error - it should accept string as return value */}
             <ConditionalReverseHighlight
               item={item as unknown as Hit<{ query: string }>}
             />
