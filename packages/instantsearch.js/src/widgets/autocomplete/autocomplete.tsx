@@ -373,17 +373,6 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     );
   });
 
-  const UserElementsComponent = templates.panel
-    ? () => (
-        <TemplateComponent
-          {...renderState.templateProps}
-          templateKey="panel"
-          rootTagName="fragment"
-          data={{ elements, indices }}
-        />
-      )
-    : undefined;
-
   return (
     <Autocomplete {...getRootProps()} classNames={cssClasses}>
       <AutocompleteSearchBox
@@ -398,8 +387,13 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         isSearchStalled={instantSearchInstance.status === 'stalled'}
       />
       <AutocompletePanel {...getPanelProps()}>
-        {UserElementsComponent ? (
-          <UserElementsComponent />
+        {templates.panel ? (
+          <TemplateComponent
+            {...renderState.templateProps}
+            templateKey="panel"
+            rootTagName="fragment"
+            data={{ elements, indices }}
+          />
         ) : (
           Object.keys(elements).map((elementId) => elements[elementId])
         )}
