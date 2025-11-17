@@ -114,7 +114,7 @@ type RendererParams<TItem extends BaseHit> = {
     isolatedIndex: IndexWidget | undefined;
     targetIndex: IndexWidget | undefined;
     templateProps:
-      | PreparedTemplateProps<NonNullable<AutocompleteTemplates<TItem>>>
+      | PreparedTemplateProps<NonNullable<AutocompleteTemplates>>
       | undefined;
   };
 } & Pick<
@@ -406,13 +406,13 @@ export type AutocompleteCSSClasses = Partial<AutocompleteClassNames>;
 
 export type AutocompleteSearchParameters = Omit<PlainSearchParameters, 'index'>;
 
-export type AutocompleteTemplates<TItem extends BaseHit> = {
+export type AutocompleteTemplates = {
   /**
    * Template to use for the panel.
    */
   panel?: Template<{
     elements: PanelElements;
-    indices: Array<IndexConfig<TItem>>;
+    indices: AutocompleteRenderState['indices'];
   }>;
 };
 
@@ -493,7 +493,7 @@ type AutocompleteWidgetParams<TItem extends BaseHit> = {
   /**
    * Templates to use for the widget.
    */
-  templates?: AutocompleteTemplates<TItem>;
+  templates?: AutocompleteTemplates;
 
   /**
    * CSS classes to add.
