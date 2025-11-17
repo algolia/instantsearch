@@ -111,7 +111,6 @@ function getHighlightedAttribute({
   return {
     query: {
       value: item.query.replace(
-        // codacy-disable-next-line security/detect-non-literal-regexp
         new RegExp(query.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&'), 'gi'),
         (match) => {
           return `<mark>${match}</mark>`;
