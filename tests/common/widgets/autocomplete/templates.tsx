@@ -180,6 +180,7 @@ export function createTemplatesTests(
             ],
             showSuggestions: {
               indexName: 'indexName2',
+              // @ts-expect-error itemComponent can return a string
               itemComponent: (props) => props.item.query,
             },
             showRecent: true,
