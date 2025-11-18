@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.15.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.14.0...instantsearch-ui-components@0.15.0) (2025-11-18)
+
+
+### Bug Fixes
+
+* **autocomplete:** enhance focus and keyboard behavior ([#6805](https://github.com/algolia/instantsearch/issues/6805)) ([75f41c2](https://github.com/algolia/instantsearch/commit/75f41c269eead4964660bd8bfd904f72fc81e24c))
+
+
+### Features
+
+* **autocomplete:** implement reverse highlighting ([#6806](https://github.com/algolia/instantsearch/issues/6806)) ([05fdd2c](https://github.com/algolia/instantsearch/commit/05fdd2c5214d4809a71b069839caf12b3d5fb341))
+
+
+
+
+
 # [0.14.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.13.0...instantsearch-ui-components@0.14.0) (2025-11-10)
 
 

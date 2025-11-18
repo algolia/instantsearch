@@ -1,6 +1,6 @@
 {
   "name": "example-instantsearch-media",
-  "version": "1.85.0",
+  "version": "1.86.0",
   "private": true,
   "scripts": {
     "start": "BABEL_ENV=parcel parcel index.html --port 3000",
@@ -12,9 +12,9 @@
     "algoliasearch-helper": "3.26.1",
     "date-fns": "2.25.0",
     "htm": "^3.0.0",
-    "instantsearch-ui-components": "0.14.0",
+    "instantsearch-ui-components": "0.15.0",
     "instantsearch.css": "8.8.0",
-    "instantsearch.js": "4.83.0"
+    "instantsearch.js": "4.84.0"
   },
   "devDependencies": {
     "@babel/core": "7.15.5",
