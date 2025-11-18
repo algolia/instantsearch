@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /* eslint-disable no-console */
 
 const fs = require('fs');
@@ -257,8 +256,4 @@ function main() {
   });
 }
 
-if (require.main === module) {
-  main();
-}
-
-module.exports = { parseSCSSVariables, createVariableConfig };
+main();
