@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.84.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.83.0...instantsearch.js@4.84.0) (2025-11-18)
+
+
+### Features
+
+* **autocomplete:** forward search params to the query API request ([#6804](https://github.com/algolia/instantsearch/issues/6804)) ([e711429](https://github.com/algolia/instantsearch/commit/e711429ea1768a7d2a518815861abb4863fb2eaa))
+* **autocomplete:** implement reverse highlighting ([#6806](https://github.com/algolia/instantsearch/issues/6806)) ([05fdd2c](https://github.com/algolia/instantsearch/commit/05fdd2c5214d4809a71b069839caf12b3d5fb341))
+
+
+
+
+
 # [4.83.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.82.0...instantsearch.js@4.83.0) (2025-11-10)
 
 
