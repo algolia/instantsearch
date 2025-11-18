@@ -88,6 +88,11 @@ type IndexConfig<TItem extends BaseHit> = AutocompleteIndexConfig<TItem> & {
   classNames?: Partial<AutocompleteIndexClassNames>;
 };
 
+type PanelElements = Partial<
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  Record<'recent' | 'suggestions' | (string & {}), React.JSX.Element>
+>;
+
 export type AutocompleteProps<TItem extends BaseHit> = ComponentProps<'div'> & {
   indices?: Array<IndexConfig<TItem>>;
   showSuggestions?: Partial<
@@ -119,19 +124,22 @@ export type AutocompleteProps<TItem extends BaseHit> = ComponentProps<'div'> & {
       };
   getSearchPageURL?: (nextUiState: IndexUiState) => string;
   onSelect?: AutocompleteIndexConfig<TItem>['onSelect'];
+  panelComponent?: (props: {
+    elements: PanelElements;
+    indices: ReturnType<typeof useAutocomplete>['indices'];
+  }) => React.JSX.Element;
   searchParameters?: AutocompleteSearchParameters;
   classNames?: Partial<AutocompleteClassNames>;
 };
 
 type InnerAutocompleteProps<TItem extends BaseHit> = Omit<
   AutocompleteProps<TItem>,
-  'indices' | 'showSuggestions'
+  'indices'
 > & {
   indicesConfig: Array<IndexConfig<TItem>>;
   refineSearchBox: ReturnType<typeof useSearchBox>['refine'];
   indexUiState: IndexUiState;
   isSearchPage: boolean;
-  showRecent: AutocompleteProps<TItem>['showRecent'];
 };
 
 export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
@@ -210,6 +218,7 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
           indexUiState={indexUiState}
           isSearchPage={isSearchPage}
           showRecent={showRecent}
+          showSuggestions={showSuggestions}
         />
       </Index>
     </Fragment>
@@ -223,7 +232,9 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   onSelect: userOnSelect,
   indexUiState,
   isSearchPage,
+  panelComponent: PanelComponent,
   showRecent,
+  showSuggestions,
   ...props
 }: InnerAutocompleteProps<TItem>) {
   const {
@@ -274,6 +285,55 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     (typeof showRecent === 'object' && showRecent.itemComponent) ||
     AutocompleteRecentSearch;
 
+  const elements: PanelElements = {};
+  if (showRecent) {
+    elements.recent = (
+      <AutocompleteIndex
+        // @ts-ignore - there seems to be problems with React.ComponentType and this, but it's actually correct
+        ItemComponent={({ item, onSelect }) => (
+          <AutocompleteRecentSearchComponent
+            item={item as unknown as { query: string }}
+            onSelect={onSelect}
+            onRemoveRecentSearch={() =>
+              storage.onRemove((item as unknown as { query: string }).query)
+            }
+          >
+            <ConditionalReverseHighlight
+              item={item as unknown as Hit<{ query: string }>}
+            />
+          </AutocompleteRecentSearchComponent>
+        )}
+        classNames={{
+          root: 'ais-AutocompleteRecentSearches',
+          list: 'ais-AutocompleteRecentSearchesList',
+          item: 'ais-AutocompleteRecentSearchesItem',
+        }}
+        items={storageHits}
+        getItemProps={getItemProps}
+      />
+    );
+  }
+
+  indices.forEach(({ indexId, indexName, hits }, i) => {
+    const elementId =
+      indexName === showSuggestions?.indexName ? 'suggestions' : indexName;
+    elements[elementId] = (
+      <AutocompleteIndex
+        key={indexId}
+        // @ts-expect-error - there seems to be problems with React.ComponentType and this, but it's actually correct
+        HeaderComponent={indicesConfig[i].headerComponent}
+        // @ts-expect-error - there seems to be problems with React.ComponentType and this, but it's actually correct
+        ItemComponent={indicesConfig[i].itemComponent}
+        items={hits.map((item) => ({
+          ...item,
+          __indexName: indexId,
+        }))}
+        getItemProps={getItemProps}
+        classNames={indicesConfig[i].classNames}
+      />
+    );
+  });
+
   return (
     <Autocomplete {...props} {...getRootProps()}>
       <AutocompleteSearch
@@ -284,46 +344,11 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
         }}
       />
       <AutocompletePanel {...getPanelProps()}>
-        {showRecent && (
-          <AutocompleteIndex
-            // @ts-ignore - there seems to be problems with React.ComponentType and this, but it's actually correct
-            ItemComponent={({ item, onSelect }) => (
-              <AutocompleteRecentSearchComponent
-                item={item as unknown as { query: string }}
-                onSelect={onSelect}
-                onRemoveRecentSearch={() =>
-                  storage.onRemove((item as unknown as { query: string }).query)
-                }
-              >
-                <ConditionalReverseHighlight
-                  item={item as unknown as Hit<{ query: string }>}
-                />
-              </AutocompleteRecentSearchComponent>
-            )}
-            classNames={{
-              root: 'ais-AutocompleteRecentSearches',
-              list: 'ais-AutocompleteRecentSearchesList',
-              item: 'ais-AutocompleteRecentSearchesItem',
-            }}
-            items={storageHits}
-            getItemProps={getItemProps}
-          />
+        {PanelComponent ? (
+          <PanelComponent elements={elements} indices={indices} />
+        ) : (
+          Object.keys(elements).map((elementId) => elements[elementId])
         )}
-        {indices.map(({ indexId, hits }, index) => (
-          <AutocompleteIndex
-            key={indexId}
-            // @ts-expect-error - there seems to be problems with React.ComponentType and this, but it's actually correct
-            HeaderComponent={indicesConfig[index].headerComponent}
-            // @ts-expect-error - there seems to be problems with React.ComponentType and this, but it's actually correct
-            ItemComponent={indicesConfig[index].itemComponent}
-            items={hits.map((item) => ({
-              ...item,
-              __indexName: indexId,
-            }))}
-            getItemProps={getItemProps}
-            classNames={indicesConfig[index].classNames}
-          />
-        ))}
       </AutocompletePanel>
     </Autocomplete>
   );
