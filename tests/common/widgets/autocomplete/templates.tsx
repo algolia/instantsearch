@@ -118,7 +118,7 @@ export function createTemplatesTests(
       ]);
     });
 
-    test.only('renders custom panel', async () => {
+    test('renders custom panel', async () => {
       const searchClient = createMockedSearchClient(
         createMultiSearchResponse(
           createSingleSearchResponse({
