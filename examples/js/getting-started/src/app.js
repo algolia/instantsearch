@@ -1,5 +1,4 @@
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import 'instantsearch.css/devtools/inject';
 import instantsearch from 'instantsearch.js';
 import { carousel } from 'instantsearch.js/es/templates';
 import {
@@ -13,6 +12,7 @@ import {
   chat,
 } from 'instantsearch.js/es/widgets';
 
+import 'instantsearch.css/devtools/inject';
 import 'instantsearch.css/themes/satellite.css';
 
 const searchClient = algoliasearch(
