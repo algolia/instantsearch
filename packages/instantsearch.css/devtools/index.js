@@ -1,4 +1,307 @@
-import variablesConfig from './variables-config.json';
+// @ts-check
+
+const variablesConfig = {
+  variables: [
+    {
+      name: '--ais-text-color-rgb',
+      type: 'color-rgb',
+      themeVariable: true,
+      category: 'Text Colors',
+      control: {
+        label: 'Text Color Rgb',
+        colorName: 'textColor',
+      },
+    },
+    {
+      name: '--ais-text-color-alpha',
+      type: 'color-alpha',
+      themeVariable: false,
+      category: 'Text Colors',
+      control: {
+        label: 'Text Color Alpha',
+        min: 0,
+        max: 1,
+        step: 0.01,
+      },
+    },
+    {
+      name: '--ais-primary-color-rgb',
+      type: 'color-rgb',
+      themeVariable: false,
+      category: 'Text Colors',
+      control: {
+        label: 'Primary Color Rgb',
+        colorName: 'primaryColor',
+      },
+    },
+    {
+      name: '--ais-primary-color-alpha',
+      type: 'color-alpha',
+      themeVariable: false,
+      category: 'Text Colors',
+      control: {
+        label: 'Primary Color Alpha',
+        min: 0,
+        max: 1,
+        step: 0.01,
+      },
+    },
+    {
+      name: '--ais-muted-color-rgb',
+      type: 'color-rgb',
+      themeVariable: true,
+      category: 'Text Colors',
+      control: {
+        label: 'Muted Color Rgb',
+        colorName: 'mutedColor',
+      },
+    },
+    {
+      name: '--ais-muted-color-alpha',
+      type: 'color-alpha',
+      themeVariable: false,
+      category: 'Text Colors',
+      control: {
+        label: 'Muted Color Alpha',
+        min: 0,
+        max: 1,
+        step: 0.01,
+      },
+    },
+    {
+      name: '--ais-button-text-color-rgb',
+      type: 'color-rgb',
+      themeVariable: true,
+      category: 'Text Colors',
+      control: {
+        label: 'Button Text Color Rgb',
+        colorName: 'buttonTextColor',
+      },
+    },
+    {
+      name: '--ais-button-text-color-alpha',
+      type: 'color-alpha',
+      themeVariable: false,
+      category: 'Text Colors',
+      control: {
+        label: 'Button Text Color Alpha',
+        min: 0,
+        max: 1,
+        step: 0.01,
+      },
+    },
+    {
+      name: '--ais-border-color-rgb',
+      type: 'color-rgb',
+      themeVariable: true,
+      category: 'Border & Background',
+      control: {
+        label: 'Border Color Rgb',
+        colorName: 'borderColor',
+      },
+    },
+    {
+      name: '--ais-border-color-alpha',
+      type: 'color-alpha',
+      themeVariable: false,
+      category: 'Border & Background',
+      control: {
+        label: 'Border Color Alpha',
+        min: 0,
+        max: 1,
+        step: 0.01,
+      },
+    },
+    {
+      name: '--ais-background-color-rgb',
+      type: 'color-rgb',
+      themeVariable: true,
+      category: 'Border & Background',
+      control: {
+        label: 'Background Color Rgb',
+        colorName: 'backgroundColor',
+      },
+    },
+    {
+      name: '--ais-background-color-alpha',
+      type: 'color-alpha',
+      themeVariable: false,
+      category: 'Border & Background',
+      control: {
+        label: 'Background Color Alpha',
+        min: 0,
+        max: 1,
+        step: 0.01,
+      },
+    },
+    {
+      name: '--ais-shadow-color-rgb',
+      type: 'color-rgb',
+      themeVariable: true,
+      category: 'Border & Background',
+      control: {
+        label: 'Shadow Color Rgb',
+        colorName: 'shadowColor',
+      },
+    },
+    {
+      name: '--ais-spacing',
+      type: 'spacing',
+      themeVariable: false,
+      category: 'Spacing & Layout',
+      control: {
+        label: 'Spacing',
+        min: 4,
+        max: 32,
+        step: 1,
+        unit: 'px',
+        convertFromRem: true,
+      },
+    },
+    {
+      name: '--ais-border-radius-sm',
+      type: 'border-radius',
+      themeVariable: false,
+      category: 'Border Radius',
+      control: {
+        label: 'Border Radius Sm',
+        min: 0,
+        max: 20,
+        step: 1,
+        unit: 'px',
+      },
+    },
+    {
+      name: '--ais-border-radius-md',
+      type: 'border-radius',
+      themeVariable: false,
+      category: 'Border Radius',
+      control: {
+        label: 'Border Radius Md',
+        min: 0,
+        max: 30,
+        step: 1,
+        unit: 'px',
+      },
+    },
+    {
+      name: '--ais-border-radius-lg',
+      type: 'border-radius',
+      themeVariable: false,
+      category: 'Border Radius',
+      control: {
+        label: 'Border Radius Lg',
+        min: 0,
+        max: 50,
+        step: 1,
+        unit: 'px',
+      },
+    },
+    {
+      name: '--ais-border-radius-full',
+      type: 'border-radius',
+      themeVariable: false,
+      category: 'Border Radius',
+      control: {
+        label: 'Border Radius Full',
+        min: 0,
+        max: 9999,
+        step: 10,
+        unit: 'px',
+      },
+    },
+    {
+      name: '--ais-transition-duration',
+      type: 'duration',
+      themeVariable: false,
+      category: 'Transitions',
+      control: {
+        label: 'Transition Duration',
+        min: 0.1,
+        max: 2,
+        step: 0.1,
+        unit: 's',
+      },
+    },
+    {
+      name: '--ais-z-index-chat',
+      type: 'z-index',
+      themeVariable: false,
+      category: 'Z-index',
+      control: {
+        label: 'Z Index Chat',
+        min: 1,
+        max: 10000,
+        step: 1,
+      },
+    },
+    {
+      name: '--ais-chat-width',
+      type: 'dimension-rem',
+      themeVariable: false,
+      category: 'Chat Component',
+      control: {
+        label: 'Chat Width',
+        min: 10,
+        max: 50,
+        step: 0.5,
+        unit: 'rem',
+      },
+    },
+    {
+      name: '--ais-chat-height',
+      type: 'dimension-percent',
+      themeVariable: false,
+      category: 'Chat Component',
+      control: {
+        label: 'Chat Height',
+        min: 30,
+        max: 100,
+        step: 5,
+        unit: '%',
+      },
+    },
+    {
+      name: '--ais-chat-maximized-width',
+      type: 'dimension-percent',
+      themeVariable: false,
+      category: 'Chat Component',
+      control: {
+        label: 'Chat Maximized Width',
+        min: 50,
+        max: 100,
+        step: 5,
+        unit: '%',
+      },
+    },
+    {
+      name: '--ais-chat-maximized-height',
+      type: 'dimension-percent',
+      themeVariable: false,
+      category: 'Chat Component',
+      control: {
+        label: 'Chat Maximized Height',
+        min: 80,
+        max: 100,
+        step: 5,
+        unit: '%',
+      },
+    },
+    {
+      name: '--ais-chat-margin',
+      type: 'dimension-rem',
+      themeVariable: false,
+      category: 'Chat Component',
+      control: {
+        label: 'Chat Margin',
+        min: 0,
+        max: 5,
+        step: 0.1,
+        unit: 'rem',
+      },
+    },
+  ],
+};
 
 /**
  * @typedef {'auto' | 'light' | 'dark'} Theme
@@ -79,7 +382,7 @@ function parseNumericValue(cssValue) {
  */
 function getCurrentTheme() {
   const theme = document.documentElement.getAttribute('data-theme');
-  return theme || 'auto';
+  return /** @type {Theme} */ (theme || 'auto');
 }
 
 /**
@@ -287,7 +590,11 @@ export function createInstantSearchDevtools(options = {}) {
 
       // Update all color values that change with theme
       variablesConfig.variables.forEach((variable) => {
-        if (variable.themeVariable && variable.type === 'color-rgb') {
+        if (
+          variable.themeVariable &&
+          variable.type === 'color-rgb' &&
+          variable.control.colorName
+        ) {
           values[variable.control.colorName] =
             newValues[variable.control.colorName];
         }
@@ -342,7 +649,7 @@ export function createInstantSearchDevtools(options = {}) {
       const key = variable.control.label.replace(/ /g, '');
 
       folder
-        .addBinding(values, key, {
+        .addBinding(values, /** @type {keyof CSSValues} */ (key), {
           min: variable.control.min,
           max: variable.control.max,
           step: variable.control.step,
@@ -353,7 +660,7 @@ export function createInstantSearchDevtools(options = {}) {
 
           if (variable.type === 'spacing' && variable.control.convertFromRem) {
             // Convert px to rem
-            cssValue = `${ev.value / 16}rem`;
+            cssValue = `${Number(ev.value) / 16}rem`;
           } else {
             // Use value with unit
             cssValue = `${ev.value}${variable.control.unit || ''}`;

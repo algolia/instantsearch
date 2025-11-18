@@ -12,7 +12,6 @@ import {
   chat,
 } from 'instantsearch.js/es/widgets';
 
-import 'instantsearch.css/devtools/inject';
 import 'instantsearch.css/themes/satellite.css';
 
 const searchClient = algoliasearch(

@@ -16,7 +16,6 @@ import {
 
 import { Panel } from './Panel';
 
-import 'instantsearch.css/devtools/inject';
 import 'instantsearch.css/themes/satellite.css';
 
 import './App.css';

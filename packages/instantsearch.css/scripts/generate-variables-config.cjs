@@ -4,10 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const SCSS_FILE = path.resolve(__dirname, '../src/shared/_variables.scss');
-const OUTPUT_FILE = path.resolve(
-  __dirname,
-  '../devtools/variables-config.json'
-);
+const INDEX_FILE = path.resolve(__dirname, '../devtools/index.js');
 
 function parseSCSSVariables() {
   const content = fs.readFileSync(SCSS_FILE, 'utf-8');
@@ -236,13 +233,30 @@ function main() {
 
   const config = {
     variables,
-    generatedAt: new Date().toISOString(),
-    source: 'src/shared/_variables.scss',
   };
 
-  fs.writeFileSync(OUTPUT_FILE, JSON.stringify(config, null, 2), 'utf-8');
+  const configString = `const variablesConfig = ${JSON.stringify(
+    config,
+    null,
+    2
+  )};`;
 
-  console.log('Generated config file:', OUTPUT_FILE);
+  let indexContent = fs.readFileSync(INDEX_FILE, 'utf-8');
+  indexContent = indexContent.replace(
+    /const variablesConfig = \{[\s\S]*?\};/,
+    configString
+  );
+
+  fs.writeFileSync(INDEX_FILE, indexContent, 'utf-8');
+
+  const { execSync } = require('child_process');
+  try {
+    execSync(`npx prettier --write ${INDEX_FILE}`, { stdio: 'inherit' });
+  } catch (error) {
+    console.warn('Warning: Failed to run prettier');
+  }
+
+  console.log('Updated config in:', INDEX_FILE);
   console.log('\nVariables by category:');
 
   const byCategory = variables.reduce((acc, v) => {

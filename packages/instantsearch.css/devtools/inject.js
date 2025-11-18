@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * Auto-inject devtools for InstantSearch CSS variables.
  */

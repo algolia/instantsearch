@@ -45,15 +45,11 @@
     "lint": "stylelint \"**/*.scss\"",
     "generate-variables-config": "node scripts/generate-variables-config.cjs"
   },
-  "peerDependencies": {
+  "dependencies": {
     "tweakpane": "4.0.5"
   },
-  "peerDependenciesMeta": {
-    "tweakpane": {
-      "optional": true
-    }
-  },
   "devDependencies": {
+    "@tweakpane/core": "2.0.5",
     "autoprefixer": "10.4.13",
     "postcss": "8.4.20",
     "postcss-cli": "10.1.0",
