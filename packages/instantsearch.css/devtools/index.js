@@ -493,7 +493,7 @@ function getNonColorVariables(variables) {
  * @returns {string} CSS text with variable definitions
  */
 function exportCSSVariables(values, config) {
-  let output = `// CSS Variables\n:root {\n`;
+  let output = `/* CSS Variables */\n:root {\n`;
 
   config.variables.forEach((variable) => {
     if (variable.type === 'color-rgb') {
