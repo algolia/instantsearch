@@ -8,6 +8,7 @@ import {
   checkRendering,
   createDocumentationMessageGenerator,
   createSendEventForHits,
+  getAlgoliaAgent,
   getAppIdAndApiKey,
   noop,
   warning,
@@ -191,6 +192,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           headers: {
             'x-algolia-application-id': appId,
             'x-algolia-api-Key': apiKey,
+            'x-algolia-agent': getAlgoliaAgent(instantSearchInstance.client),
           },
         });
       }

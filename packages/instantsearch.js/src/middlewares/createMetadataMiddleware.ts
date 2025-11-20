@@ -1,4 +1,8 @@
-import { createInitArgs, safelyRunOnBrowser } from '../lib/utils';
+import {
+  createInitArgs,
+  getAlgoliaAgent,
+  safelyRunOnBrowser,
+} from '../lib/utils';
 
 import type {
   InstantSearch,
@@ -103,11 +107,7 @@ export function createMetadataMiddleware({
       subscribe() {
         // using setTimeout here to delay extraction until widgets have been added in a tick (e.g. Vue)
         setTimeout(() => {
-          const client = instantSearchInstance.client as any;
-          payload.ua =
-            client.transporter && client.transporter.userAgent
-              ? client.transporter.userAgent.value
-              : client._ua;
+          payload.ua = getAlgoliaAgent(instantSearchInstance.client);
 
           extractWidgetPayload(
             instantSearchInstance.mainIndex.getWidgets(),
