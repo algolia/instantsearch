@@ -6351,6 +6351,11 @@
   resolved "https://registry.yarnpkg.com/@tsconfig/node16/-/node16-1.0.4.tgz#0b92dcc0cc1c81f6f306a381f28e31b1a56536e9"
   integrity sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==
 
+"@tweakpane/core@2.0.5":
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/@tweakpane/core/-/core-2.0.5.tgz#bae776cd530b31f5e5424641411d4b20c3baed8e"
+  integrity sha512-punBgD5rKCF5vcNo6BsSOXiDR/NSs9VM7SG65QSLJIxfRaGgj54ree9zQW6bO3pNFf3AogiGgaNODUVQRk9YqQ==
+
 "@tybys/wasm-util@^0.10.0":
   version "0.10.1"
   resolved "https://registry.yarnpkg.com/@tybys/wasm-util/-/wasm-util-0.10.1.tgz#ecddd3205cf1e2d5274649ff0eedd2991ed7f414"
@@ -31749,6 +31754,11 @@ turndown@~7.0.0:
   integrity sha512-G1FfxfR0mUNMeGjszLYl3kxtopC4O9DRRiMlMDDVHvU1jaBkGFg4qxIyjIk2aiKLHyDyZvZyu4qBO2guuYBy3Q==
   dependencies:
     domino "^2.1.6"
+
+tweakpane@4.0.5:
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/tweakpane/-/tweakpane-4.0.5.tgz#696572c4294c48a11cc0a3c487ea89ad1491e09a"
+  integrity sha512-rxEXdSI+ArlG1RyO6FghC4ZUX8JkEfz8F3v1JuteXSV0pEtHJzyo07fcDG+NsJfN5L39kSbCYbB9cBGHyuI/tQ==
 
 tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"

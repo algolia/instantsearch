@@ -16,16 +16,40 @@
   "license": "MIT",
   "author": "Algolia <support@algolia.com>",
   "type": "module",
+  "files": [
+    "themes",
+    "components",
+    "devtools"
+  ],
+  "exports": {
+    "./devtools": {
+      "types": "./devtools/index.d.ts",
+      "import": "./devtools/index.js",
+      "default": "./devtools/index.js"
+    },
+    "./devtools/inject": {
+      "import": "./devtools/inject.js",
+      "default": "./devtools/inject.js"
+    }
+  },
+  "sideEffects": [
+    "devtools/inject.js"
+  ],
   "scripts": {
-    "build": "rm -rf themes components && yarn styles:build && yarn styles:minify && yarn styles:autoprefixer",
+    "build": "rm -rf themes components && yarn styles:build && yarn styles:minify && yarn styles:autoprefixer && yarn generate-variables-config",
     "styles:autoprefixer": "postcss themes/ components/ --use autoprefixer --replace --no-map",
     "styles:minify": "sass src/themes/algolia.scss:themes/algolia-min.css src/themes/satellite.scss:themes/satellite-min.css src/themes/reset.scss:themes/reset-min.css src/components/chat.scss:components/chat-min.css --no-source-map --style compressed",
     "styles:build": "sass src/themes:themes src/components:components --no-source-map",
     "watch": "sass src/themes:themes src/components:components --no-source-map --watch",
     "prepare": "yarn build",
-    "lint": "stylelint \"**/*.scss\""
+    "lint": "stylelint \"**/*.scss\"",
+    "generate-variables-config": "node scripts/generate-variables-config.cjs"
+  },
+  "dependencies": {
+    "tweakpane": "4.0.5"
   },
   "devDependencies": {
+    "@tweakpane/core": "2.0.5",
     "autoprefixer": "10.4.13",
     "postcss": "8.4.20",
     "postcss-cli": "10.1.0",
