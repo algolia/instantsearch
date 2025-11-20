@@ -15,9 +15,9 @@
   margin: 0;
   background-color: transparent;
   border-radius: var(--ais-border-radius-sm);
-  font-family: inherit;
-  font-size: inherit;
-  line-height: inherit;
+  font-family: var(--ais-font-family);
+  font-size: var(--ais-font-size);
+  line-height: 1em;
 
   &:disabled {
     cursor: not-allowed;

@@ -78,7 +78,8 @@
   opacity: 0;
 
   @media (prefers-reduced-motion: no-preference) {
-    transition: opacity 150ms ease-in-out;
+    transition: opacity var(--ais-transition-duration)
+      var(--ais-transition-timing-function);
   }
 }
 

@@ -17,7 +17,7 @@
 
   .ais-ChatToolSearchIndexCarouselHeaderCount {
     color: rgba(var(--ais-text-color-rgb), 0.8);
-    font-weight: 600;
+    font-weight: var(--ais-font-weight-semibold);
   }
 
   .ais-ChatToolSearchIndexCarouselHeaderScrollButtons {
@@ -198,7 +198,7 @@
   }
 
   .ais-Carousel-hit-price {
-    font-weight: 600;
+    font-weight: var(--ais-font-weight-semibold);
     margin-top: auto;
   }
 
