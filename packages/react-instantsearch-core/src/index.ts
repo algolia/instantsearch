@@ -8,6 +8,7 @@ export * from './components/InstantSearchSSRProvider';
 export * from './connectors/useAutocomplete';
 export * from './connectors/useBreadcrumb';
 export * from './connectors/useChat';
+export * from './connectors/usePromptSuggestions';
 export * from './connectors/useClearRefinements';
 export * from './connectors/useConfigure';
 export * from './connectors/useCurrentRefinements';

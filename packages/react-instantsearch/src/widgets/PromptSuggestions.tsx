@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useChat, useHits } from 'react-instantsearch-core';
+import React from 'react';
+import { useHits, usePromptSuggestions } from 'react-instantsearch-core';
 
 type PromptSuggestionsUiProps = {
   agentId: string;
@@ -7,59 +7,20 @@ type PromptSuggestionsUiProps = {
 
 export function PromptSuggestions({ agentId }: PromptSuggestionsUiProps) {
   const { items } = useHits();
-  const [suggestions, setSuggestions] = useState<Array<{ title: string }>>([]);
 
-  const { messages, status, sendMessage } = useChat({ agentId });
-
-  useEffect(() => {
-    if (items.length > 0) {
-      sendMessage({
-        text: JSON.stringify(items[0]),
-      });
-    }
-  }, [items, sendMessage]);
-
-  useEffect(() => {
-    if (status === 'ready') {
-      // get last assistant message
-      const lastMessage = messages.find(
-        (message) => message.role === 'assistant'
-      );
-
-      try {
-        if (lastMessage) {
-          const payload = lastMessage.parts.find(
-            (part) => part.type === 'text'
-          );
-          const parsed = JSON.parse(payload?.text || '');
-          if (Array.isArray(parsed.suggestions)) {
-            setSuggestions(parsed.suggestions);
-          }
-        }
-      } catch (e) {
-        console.error('Failed to parse suggestions from assistant message', e);
-      }
-    }
-  }, [messages, status]);
+  const { suggestions, status } = usePromptSuggestions({
+    agentId,
+    item: items[0],
+  });
 
   return (
     <div>
       <span>Item: {JSON.stringify(items[0])}</span>
-      <span>Messages: {JSON.stringify(messages)}</span>
+      <span>Status: {status}</span>
 
-      <button
-        onClick={() => {
-          if (items.length > 0) {
-            sendMessage({
-              text: JSON.stringify(items[0]),
-            });
-          }
-        }}
-      >
-        Send Message
-      </button>
+      {status === 'streaming' && <span>Loading suggestions...</span>}
 
-      {suggestions.length > 0 && (
+      {status === 'ready' && suggestions.length > 0 && (
         <div>
           <h3>Suggestions:</h3>
           <ul>
