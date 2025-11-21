@@ -127,6 +127,10 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    */
   onClose: () => void;
   /**
+   * Function to send a message
+   */
+  sendMessage: (message: string) => void;
+  /**
    * Array of tools available for the assistant (for tool messages)
    */
   tools: ClientSideTools;
@@ -158,6 +162,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       indexUiState,
       setIndexUiState,
       onClose,
+      sendMessage,
       translations: userTranslations,
       ...props
     } = userProps;
@@ -216,7 +221,18 @@ export function createChatMessageComponent({ createElement }: Renderer) {
               toolCallId: toolMessage.toolCallId,
             });
 
-          if (!ToolLayoutComponent) {
+          if (toolMessage.state === 'input-available' && tool.renderLast) {
+            boundAddToolResult({ output: { message: '' } });
+          }
+
+          if (
+            !ToolLayoutComponent ||
+            (tool.renderLast &&
+              (!message.parts.find((p) => p.type === 'text') ||
+                message.parts.some(
+                  (p) => p.type === 'text' && p.state === 'streaming'
+                )))
+          ) {
             return null;
           }
 
@@ -230,6 +246,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
                 addToolResult={boundAddToolResult}
+                sendMessage={sendMessage}
                 onClose={onClose}
               />
             </div>
@@ -238,6 +255,17 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       }
       return null;
     }
+
+    const toolToRenderLast = message.parts.find((part) => {
+      if (!startsWith(part.type, 'tool-')) {
+        return false;
+      }
+
+      const toolName = part.type.replace('tool-', '');
+      const tool = tools[toolName];
+
+      return tool?.renderLast;
+    });
 
     return (
       <article
@@ -254,7 +282,11 @@ export function createChatMessageComponent({ createElement }: Renderer) {
 
           <div className={cx(cssClasses.content)}>
             <div className={cx(cssClasses.message)}>
-              {message.parts.map(renderMessagePart)}
+              {message.parts
+                .filter((part) => part !== toolToRenderLast)
+                .map(renderMessagePart)}
+              {toolToRenderLast &&
+                renderMessagePart(toolToRenderLast, message.parts.length - 1)}
             </div>
 
             {hasActions && (

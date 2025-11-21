@@ -2,12 +2,14 @@ import { createChatComponent } from 'instantsearch-ui-components';
 import {
   SearchIndexToolType,
   RecommendToolType,
+  PromptSuggestionsToolType,
 } from 'instantsearch.js/es/lib/chat';
 import React, { createElement, Fragment } from 'react';
 import { useInstantSearch, useChat } from 'react-instantsearch-core';
 
 import { useStickToBottom } from '../lib/useStickToBottom';
 
+import { createPromptSuggestionsTool } from './chat/tools/PromptSuggestionsTool';
 import { createCarouselTool } from './chat/tools/SearchIndexTool';
 
 export { SearchIndexToolType, RecommendToolType };
@@ -45,6 +47,7 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
       itemComponent,
       getSearchPageURL
     ),
+    [PromptSuggestionsToolType]: createPromptSuggestionsTool(),
   };
 }
 
@@ -268,6 +271,9 @@ export function Chat<
         },
         translations: messagesTranslations,
         messageTranslations,
+        sendMessage: (newMessage: string) => {
+          sendMessage({ text: newMessage });
+        },
         ...messagesProps,
       }}
       promptProps={{
