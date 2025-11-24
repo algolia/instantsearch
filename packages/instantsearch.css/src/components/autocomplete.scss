@@ -188,8 +188,8 @@
   );
   border-radius: var(--ais-border-radius-sm);
   box-shadow: var(--ais-shadow-lg);
+  border: 1px solid rgba(var(--ais-border-color-rgb), 0.2);
   margin: 8px 0 0;
-  padding: calc(var(--ais-spacing) / 2);
   position: absolute;
   width: 100%;
   z-index: var(--ais-z-index-autocomplete);
@@ -225,7 +225,7 @@
     margin: 0;
     max-height: var(--ais-autocomplete-panel-max-height);
     overflow-y: auto;
-    padding: 0;
+    padding: calc(var(--ais-spacing) / 2);
     position: relative;
     text-align: left;
   }

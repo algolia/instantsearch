@@ -43,14 +43,12 @@ $ais-chat-breakpoint: 680px;
   --ais-border-radius-lg: 16px;
   --ais-border-radius-full: 9999px;
 
-  /* Font weights */
-  --ais-font-weight-medium: 500;
-  --ais-font-weight-semibold: 600;
-  --ais-font-weight-bold: 700;
-
   /* Typography */
   --ais-font-size: calc(var(--ais-base-unit) * 1px);
   --ais-font-family: inherit;
+  --ais-font-weight-medium: 500;
+  --ais-font-weight-semibold: 600;
+  --ais-font-weight-bold: 700;
 
   /* Icons */
   --ais-icon-size: 20px;
