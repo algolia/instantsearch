@@ -100,7 +100,8 @@ $ais-chat-breakpoint: 680px;
   --ais-shadow-color-rgb: 0, 0, 0;
 }
 
-:root[data-theme='dark'] {
+:root[data-theme='dark'],
+.dark {
   @include dark-theme;
 }
 
