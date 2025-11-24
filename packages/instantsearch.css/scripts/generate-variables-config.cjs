@@ -21,6 +21,7 @@ function parseSCSSVariables() {
 
   // Parse variables from :root
   const variables = [];
+  const seenVariables = new Set();
   const varRegex = /--([a-z-]+):\s*([^;]+);/g;
   let match;
 
@@ -28,18 +29,20 @@ function parseSCSSVariables() {
     const name = `--${match[1]}`;
     const value = match[2].trim();
 
+    // Skip if we've already seen this variable (handles duplicates in media queries)
     // Skip computed variables (containing calc, rgba, var)
     const isComputedVariable =
       value.includes('calc(') ||
       value.includes('rgba(') ||
       value.includes('var(');
 
-    if (!isComputedVariable) {
+    if (!seenVariables.has(name) && !isComputedVariable) {
       const isThemeVariable = darkThemeContent.includes(name);
       const config = createVariableConfig(name, value, isThemeVariable);
 
       if (config) {
         variables.push(config);
+        seenVariables.add(name);
       }
     }
   }
@@ -74,6 +77,10 @@ function detectVariableType(name, value) {
   if (name.startsWith('--ais-z-index-')) return 'z-index';
   if (value.endsWith('rem')) return 'dimension-rem';
   if (value.endsWith('%')) return 'dimension-percent';
+  if (value.endsWith('px')) return 'dimension-px';
+
+  // Check if it's a unitless number
+  if (/^\d+(\.\d+)?$/.test(value.trim())) return 'unitless';
 
   return null;
 }
@@ -98,7 +105,11 @@ function detectCategory(name) {
   ) {
     return 'Border & Background';
   }
-  if (name.includes('spacing')) {
+  if (
+    name.includes('spacing') ||
+    name.includes('base-unit') ||
+    name.includes('factor')
+  ) {
     return 'Spacing & Layout';
   }
   if (name.includes('transition')) {
@@ -112,6 +123,54 @@ function detectCategory(name) {
   }
 
   return 'Other';
+}
+
+function getDimensionConfig(name, unit) {
+  const configs = {
+    rem: {
+      width: { min: 10, max: 50, step: 0.5 },
+      margin: { min: 0, max: 5, step: 0.1 },
+    },
+    '%': {
+      'maximized-width': { min: 50, max: 100, step: 5 },
+      'maximized-height': { min: 80, max: 100, step: 5 },
+      height: { min: 30, max: 100, step: 5 },
+    },
+    px: {
+      width: { min: 100, max: 800, step: 10 },
+      height: { min: 20, max: 500, step: 10 },
+      size: { min: 10, max: 100, step: 1 },
+      default: { min: 0, max: 100, step: 1 },
+    },
+    unitless: {
+      'base-unit': { min: 8, max: 32, step: 1 },
+      factor: { min: 0.5, max: 3, step: 0.1 },
+      default: { min: 0, max: 100, step: 1 },
+    },
+  };
+
+  const unitConfigs = configs[unit] || {};
+  const matchedEntry = Object.entries(unitConfigs).find(([key]) =>
+    name.includes(key)
+  );
+
+  if (matchedEntry) {
+    const config = { ...matchedEntry[1] };
+    if (unit) {
+      config.unit = unit;
+    }
+    return config;
+  }
+
+  if (unitConfigs.default) {
+    const config = { ...unitConfigs.default };
+    if (unit) {
+      config.unit = unit;
+    }
+    return config;
+  }
+
+  return unit ? { unit } : {};
 }
 
 function createControlConfig(name, type) {
@@ -176,33 +235,19 @@ function createControlConfig(name, type) {
       break;
 
     case 'dimension-rem':
-      if (name.includes('width')) {
-        control.min = 10;
-        control.max = 50;
-        control.step = 0.5;
-      } else if (name.includes('margin')) {
-        control.min = 0;
-        control.max = 5;
-        control.step = 0.1;
-      }
-      control.unit = 'rem';
+      Object.assign(control, getDimensionConfig(name, 'rem'));
       break;
 
     case 'dimension-percent':
-      if (name.includes('maximized-width')) {
-        control.min = 50;
-        control.max = 100;
-        control.step = 5;
-      } else if (name.includes('maximized-height')) {
-        control.min = 80;
-        control.max = 100;
-        control.step = 5;
-      } else if (name.includes('height')) {
-        control.min = 30;
-        control.max = 100;
-        control.step = 5;
-      }
-      control.unit = '%';
+      Object.assign(control, getDimensionConfig(name, '%'));
+      break;
+
+    case 'dimension-px':
+      Object.assign(control, getDimensionConfig(name, 'px'));
+      break;
+
+    case 'unitless':
+      Object.assign(control, getDimensionConfig(name, 'unitless'));
       break;
 
     default:
