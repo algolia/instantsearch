@@ -66,11 +66,19 @@
     },
     {
       "path": "./packages/instantsearch.css/components/chat.css",
-      "maxSize": "4.75 kB"
+      "maxSize": "5 kB"
     },
     {
       "path": "./packages/instantsearch.css/components/chat-min.css",
-      "maxSize": "4.5 kB"
+      "maxSize": "4.75 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/components/autocomplete.css",
+      "maxSize": "3.75 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/components/autocomplete-min.css",
+      "maxSize": "3.50 kB"
     }
   ]
 }

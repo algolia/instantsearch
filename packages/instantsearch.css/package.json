@@ -40,7 +40,7 @@
   "scripts": {
     "build": "rm -rf themes components && yarn styles:build && yarn styles:minify && yarn styles:autoprefixer && yarn generate-variables-config",
     "styles:autoprefixer": "postcss themes/ components/ --use autoprefixer --replace --no-map",
-    "styles:minify": "sass src/themes/algolia.scss:themes/algolia-min.css src/themes/satellite.scss:themes/satellite-min.css src/themes/reset.scss:themes/reset-min.css src/components/chat.scss:components/chat-min.css --no-source-map --style compressed",
+    "styles:minify": "sass src/themes/algolia.scss:themes/algolia-min.css src/themes/satellite.scss:themes/satellite-min.css src/themes/reset.scss:themes/reset-min.css src/components/chat.scss:components/chat-min.css src/components/autocomplete.scss:components/autocomplete-min.css --no-source-map --style compressed",
     "styles:build": "sass src/themes:themes src/components:components --no-source-map",
     "watch": "sass src/themes:themes src/components:components --no-source-map --watch",
     "prepare": "yarn build",
