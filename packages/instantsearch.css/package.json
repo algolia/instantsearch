@@ -30,7 +30,9 @@
     "./devtools/inject": {
       "import": "./devtools/inject.js",
       "default": "./devtools/inject.js"
-    }
+    },
+    "./components/*.css": "./components/*.css",
+    "./themes/*.css": "./themes/*.css"
   },
   "sideEffects": [
     "devtools/inject.js"
