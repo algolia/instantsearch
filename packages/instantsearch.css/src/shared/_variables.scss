@@ -104,8 +104,9 @@ $ais-chat-breakpoint: 680px;
   @include dark-theme;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    @include dark-theme;
-  }
-}
+// Disabled until all widgets support dark mode
+// @media (prefers-color-scheme: dark) {
+//   :root:not([data-theme='light']) {
+//     @include dark-theme;
+//   }
+// }
