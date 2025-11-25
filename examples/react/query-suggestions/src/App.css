@@ -2,16 +2,6 @@
   --ais-primary-color-rgb: 130, 50, 220;
 }
 
-:root[data-theme='dark'] {
-  --ais-primary-color-rgb: 175, 125, 240;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --ais-primary-color-rgb: 175, 125, 240;
-  }
-}
-
 body,
 h1 {
   margin: 0;

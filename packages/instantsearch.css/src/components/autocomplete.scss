@@ -314,7 +314,7 @@
     &:hover {
       background-color: color-mix(
         in srgb,
-        rgb(var(--ais-primary-color-rgb)) 20%,
+        rgb(var(--ais-primary-color-rgb)) 8%,
         rgb(var(--ais-background-color-rgb))
       );
     }
@@ -323,7 +323,7 @@
   &[aria-selected='true'] {
     background-color: color-mix(
       in srgb,
-      rgb(var(--ais-primary-color-rgb)) 20%,
+      rgb(var(--ais-primary-color-rgb)) 8%,
       rgb(var(--ais-background-color-rgb))
     );
   }

@@ -2,16 +2,6 @@
   --ais-primary-color-rgb: 200, 130, 10;
 }
 
-:root[data-theme='dark'] {
-  --ais-primary-color-rgb: 175, 125, 240;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --ais-primary-color-rgb: 255, 195, 85;
-  }
-}
-
 .header {
   display: flex;
   align-items: center;
