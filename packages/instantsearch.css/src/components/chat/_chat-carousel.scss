@@ -20,10 +20,20 @@
     font-weight: var(--ais-font-weight-semibold);
   }
 
+  .ais-ChatToolSearchIndexCarouselHeaderViewAll {
+    svg {
+      width: calc(var(--ais-icon-size) * 0.8);
+    }
+  }
+
   .ais-ChatToolSearchIndexCarouselHeaderScrollButtons {
     display: flex;
     align-items: center;
     gap: calc(var(--ais-spacing) * 0.25);
+
+    svg {
+      width: calc(var(--ais-icon-size) * 0.8);
+    }
   }
 
   .ais-Carousel {

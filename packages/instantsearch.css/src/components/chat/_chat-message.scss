@@ -68,6 +68,10 @@
   align-items: center;
   gap: calc(var(--ais-spacing) * 0.25);
   position: relative;
+
+  svg {
+    width: calc(var(--ais-icon-size) * 0.8);
+  }
 }
 
 .ais-ChatMessage--right .ais-ChatMessage-actions {

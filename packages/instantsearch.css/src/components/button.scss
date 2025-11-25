@@ -19,6 +19,12 @@
   font-size: var(--ais-font-size);
   line-height: 1em;
 
+  svg {
+    stroke-width: var(--ais-icon-stroke-width);
+    width: var(--ais-icon-size);
+    height: auto;
+  }
+
   &:disabled {
     cursor: not-allowed;
   }
