@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.85.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.84.0...instantsearch.js@4.85.0) (2025-11-25)
+
+
+### Features
+
+* **chat:** annotate with algoliaAgent ([#6812](https://github.com/algolia/instantsearch/issues/6812)) ([6d811bd](https://github.com/algolia/instantsearch/commit/6d811bd7a0e069cfba4f470638c6044fe3cb2c53))
+
+
+
+
+
 # [4.84.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.83.0...instantsearch.js@4.84.0) (2025-11-18)
 
 

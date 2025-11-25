@@ -1,6 +1,6 @@
 {
   "name": "example-instantsearch-default-theme",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "scripts": {
     "start": "BABEL_ENV=parcel parcel index.html --port 3000",
@@ -10,8 +10,8 @@
     "algoliasearch": "5.1.1",
     "algoliasearch-helper": "3.26.1",
     "instantsearch-ui-components": "0.15.0",
-    "instantsearch.css": "8.8.0",
-    "instantsearch.js": "4.84.0"
+    "instantsearch.css": "8.9.0",
+    "instantsearch.js": "4.85.0"
   },
   "devDependencies": {
     "@babel/core": "7.15.5",
