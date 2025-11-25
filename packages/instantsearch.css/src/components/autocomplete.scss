@@ -5,7 +5,7 @@
 // Init for `@extend`
 %init {
   color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
-  font-family: var(--ais-font-family);
+  font-family: inherit;
   font-size: var(--ais-font-size);
   font-weight: normal;
   line-height: 1em;
