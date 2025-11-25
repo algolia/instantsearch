@@ -2,7 +2,7 @@
 
 import { cx } from '../../lib';
 
-import { AutocompleteSubmitIcon } from './icons';
+import { SubmitIcon } from './icons';
 
 import type { ComponentChildren, Renderer } from '../../types';
 
@@ -61,7 +61,7 @@ export function createAutocompleteSuggestionComponent({
               classNames.content
             )}
           >
-            <AutocompleteSubmitIcon createElement={createElement} />
+            <SubmitIcon createElement={createElement} />
           </div>
           <div
             className={cx(

@@ -6,11 +6,7 @@ import { createButtonComponent } from '../Button';
 import { createChatMessageComponent } from './ChatMessage';
 import { createChatMessageErrorComponent } from './ChatMessageError';
 import { createChatMessageLoaderComponent } from './ChatMessageLoader';
-import {
-  ChevronDownIconComponent,
-  CopyIconComponent,
-  ReloadIconComponent,
-} from './icons';
+import { ChevronDownIcon, CopyIcon, ReloadIcon } from './icons';
 
 import type { ComponentProps, MutableRef, Renderer } from '../../types';
 import type {
@@ -218,14 +214,14 @@ function createDefaultMessageComponent<
         ? [
             {
               title: translations.copyToClipboardLabel,
-              icon: () => <CopyIconComponent createElement={createElement} />,
+              icon: () => <CopyIcon createElement={createElement} />,
               onClick: copyToClipboard,
             },
           ]
         : []),
       {
         title: translations.regenerateLabel,
-        icon: () => <ReloadIconComponent createElement={createElement} />,
+        icon: () => <ReloadIcon createElement={createElement} />,
         onClick: (m) => onReload(m.id),
       },
     ];
@@ -390,7 +386,7 @@ export function createChatMessagesComponent({
           aria-label={translations.scrollToBottomLabel}
           tabIndex={isScrollAtBottom ? -1 : 0}
         >
-          <ChevronDownIconComponent createElement={createElement} />
+          <ChevronDownIcon createElement={createElement} />
         </Button>
       </div>
     );

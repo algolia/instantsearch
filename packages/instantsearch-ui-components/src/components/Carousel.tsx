@@ -103,7 +103,7 @@ function PreviousIconDefaultComponent({
   createElement,
 }: Pick<Renderer, 'createElement'>) {
   return (
-    <svg width="8" height="16" viewBox="0 0 8 16" fill="none">
+    <svg viewBox="0 0 8 16" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -118,7 +118,7 @@ function NextIconDefaultComponent({
   createElement,
 }: Pick<Renderer, 'createElement'>) {
   return (
-    <svg width="8" height="16" viewBox="0 0 8 16" fill="none">
+    <svg viewBox="0 0 8 16" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -147,9 +147,8 @@ export function createCarouselComponent({ createElement, Fragment }: Renderer) {
         createElement,
         Fragment,
       }),
-      previousIconComponent:
-        PreviousIconComponent = PreviousIconDefaultComponent,
-      nextIconComponent: NextIconComponent = NextIconDefaultComponent,
+      previousIconComponent: PreviousIcon = PreviousIconDefaultComponent,
+      nextIconComponent: NextIcon = NextIconDefaultComponent,
       headerComponent: HeaderComponent,
       showNavigation = true,
       items,
@@ -243,7 +242,7 @@ export function createCarouselComponent({ createElement, Fragment }: Renderer) {
               scrollLeft();
             }}
           >
-            <PreviousIconComponent createElement={createElement} />
+            <PreviousIcon createElement={createElement} />
           </button>
         )}
 
@@ -296,7 +295,7 @@ export function createCarouselComponent({ createElement, Fragment }: Renderer) {
               scrollRight();
             }}
           >
-            <NextIconComponent createElement={createElement} />
+            <NextIcon createElement={createElement} />
           </button>
         )}
       </div>

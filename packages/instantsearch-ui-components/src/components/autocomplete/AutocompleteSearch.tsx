@@ -1,9 +1,5 @@
 /** @jsx createElement */
-import {
-  AutocompleteClearIcon,
-  AutocompleteLoadingIcon,
-  AutocompleteSubmitIcon,
-} from './icons';
+import { ClearIcon, LoadingIcon, SubmitIcon } from './icons';
 
 import type { ComponentProps, Renderer } from '../..';
 
@@ -43,14 +39,14 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
               type="submit"
               title="Submit"
             >
-              <AutocompleteSubmitIcon createElement={createElement} />
+              <SubmitIcon createElement={createElement} />
             </button>
           </label>
           <div
             className="ais-AutocompleteLoadingIndicator"
             hidden={!isSearchStalled}
           >
-            <AutocompleteLoadingIcon createElement={createElement} />
+            <LoadingIcon createElement={createElement} />
           </div>
         </div>
         <div className="ais-AutocompleteInputWrapper">
@@ -78,7 +74,7 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
             hidden={query.length === 0 || isSearchStalled}
             onClick={onClear}
           >
-            <AutocompleteClearIcon createElement={createElement} />
+            <ClearIcon createElement={createElement} />
           </button>
         </div>
       </form>

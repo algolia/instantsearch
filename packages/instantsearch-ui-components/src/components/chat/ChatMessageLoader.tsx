@@ -1,6 +1,6 @@
 /** @jsx createElement */
 
-import { LoadingSpinnerIconComponent } from './icons';
+import { LoadingSpinnerIcon } from './icons';
 
 import type { ComponentProps, Renderer } from '../../types';
 
@@ -38,7 +38,7 @@ export function createChatMessageLoaderComponent({
         <div className="ais-ChatMessage-container">
           <div className="ais-ChatMessage-leading">
             <div className="ais-ChatMessageLoader-spinner">
-              <LoadingSpinnerIconComponent createElement={createElement} />
+              <LoadingSpinnerIcon createElement={createElement} />
             </div>
           </div>
 

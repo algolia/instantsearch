@@ -2,7 +2,7 @@
 
 import { cx } from '../../lib';
 
-import { AutocompleteClockIcon, AutocompleteTrashIcon } from './icons';
+import { ClockIcon, TrashIcon } from './icons';
 
 import type { ComponentChildren, Renderer } from '../../types';
 
@@ -75,7 +75,7 @@ export function createAutocompleteRecentSearchComponent({
               classNames.content
             )}
           >
-            <AutocompleteClockIcon createElement={createElement} />
+            <ClockIcon createElement={createElement} />
           </div>
           <div
             className={cx(
@@ -106,7 +106,7 @@ export function createAutocompleteRecentSearchComponent({
               onRemoveRecentSearch();
             }}
           >
-            <AutocompleteTrashIcon createElement={createElement} />
+            <TrashIcon createElement={createElement} />
           </button>
         </div>
       </div>

@@ -3,7 +3,7 @@
 import { cx } from '../../lib';
 import { createButtonComponent } from '../Button';
 
-import { ArrowUpIconComponent, StopIconComponent } from './icons';
+import { ArrowUpIcon, StopIcon } from './icons';
 
 import type { ComponentProps, MutableRef, Renderer } from '../../types';
 import type { ChatStatus } from './types';
@@ -238,9 +238,9 @@ export function createChatPromptComponent({ createElement }: Renderer) {
     const buttonDisabled = (!hasValue && !canStop) || disabled;
 
     const submitIcon = canStop ? (
-      <StopIconComponent createElement={createElement} />
+      <StopIcon createElement={createElement} />
     ) : (
-      <ArrowUpIconComponent createElement={createElement} />
+      <ArrowUpIcon createElement={createElement} />
     );
 
     return (

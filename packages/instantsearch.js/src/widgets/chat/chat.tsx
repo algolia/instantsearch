@@ -1,9 +1,9 @@
 /** @jsx h */
 
 import {
-  ArrowRightIconComponent,
-  ChevronLeftIconComponent,
-  ChevronRightIconComponent,
+  ArrowRightIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
   createButtonComponent,
   createChatComponent,
 } from 'instantsearch-ui-components';
@@ -223,7 +223,7 @@ function createCarouselTool<
               className="ais-ChatToolSearchIndexCarouselHeaderViewAll"
             >
               View all
-              <ArrowRightIconComponent createElement={h} />
+              <ArrowRightIcon createElement={h} />
             </Button>
           )}
         </div>
@@ -238,7 +238,7 @@ function createCarouselTool<
               disabled={!canScrollLeft}
               className="ais-ChatToolSearchIndexCarouselHeaderScrollButton"
             >
-              <ChevronLeftIconComponent createElement={h} />
+              <ChevronLeftIcon createElement={h} />
             </Button>
             <Button
               variant="outline"
@@ -248,7 +248,7 @@ function createCarouselTool<
               disabled={!canScrollRight}
               className="ais-ChatToolSearchIndexCarouselHeaderScrollButton"
             >
-              <ChevronRightIconComponent createElement={h} />
+              <ChevronRightIcon createElement={h} />
             </Button>
           </div>
         )}
