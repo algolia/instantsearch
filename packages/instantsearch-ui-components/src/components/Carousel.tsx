@@ -103,7 +103,7 @@ function PreviousIconDefaultComponent({
   createElement,
 }: Pick<Renderer, 'createElement'>) {
   return (
-    <svg viewBox="0 0 8 16" fill="none">
+    <svg width="8" height="16" viewBox="0 0 8 16" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -118,7 +118,7 @@ function NextIconDefaultComponent({
   createElement,
 }: Pick<Renderer, 'createElement'>) {
   return (
-    <svg viewBox="0 0 8 16" fill="none">
+    <svg width="8" height="16" viewBox="0 0 8 16" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
