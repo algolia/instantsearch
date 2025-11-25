@@ -6,7 +6,7 @@ export interface DevtoolsOptions {
 }
 
 /**
- * Creates an InstantSearch devtools panel to configure CSS variables in real-time.
+ * Creates an InstantSearch.css DevTools panel to configure CSS variables in real-time.
  * @returns A promise that resolves to a cleanup function to dispose the panel
  */
 export function createInstantSearchDevtools(

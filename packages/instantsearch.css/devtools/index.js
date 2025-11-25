@@ -634,7 +634,7 @@ function exportCSSVariables(values, config) {
 }
 
 /**
- * Creates an InstantSearch devtools panel to configure CSS variables in real-time.
+ * Creates an InstantSearch.css DevTools panel to configure CSS variables in real-time.
  * @param {DevtoolsOptions} [options] - Configuration options for the devtools panel
  * @returns {Promise<Function>} A promise that resolves to a cleanup function that disposes the panel and removes the container
  */
@@ -671,7 +671,7 @@ export function createInstantSearchDevtools(options = {}) {
       // Create the pane
       const pane = new PaneConstructor({
         container,
-        title: 'InstantSearch Devtools',
+        title: 'InstantSearch.css DevTools',
         expanded: false,
       });
 
@@ -817,9 +817,9 @@ export function createInstantSearchDevtools(options = {}) {
         }
       };
     })
-    .catch(() => {
+    .catch((error) => {
       throw new Error(
-        'InstantSearch devtools requires Tweakpane. Install it with: npm install tweakpane'
+        `Failed to load Tweakpane for InstantSearch.css DevTools: ${error.message}`
       );
     });
 }

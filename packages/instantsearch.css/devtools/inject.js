@@ -16,6 +16,6 @@ if (
   window[GLOBAL_KEY] = true;
   createInstantSearchDevtools().catch((err) => {
     // eslint-disable-next-line no-console
-    console.error('Failed to initialize InstantSearch devtools:', err);
+    console.error('Failed to initialize InstantSearch.css DevTools:', err);
   });
 }
