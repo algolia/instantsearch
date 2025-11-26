@@ -623,9 +623,9 @@ function exportCSSVariables(values, config) {
       output += `  ${variable.name}: ${values[key] / 16}rem;\n`;
     } else {
       const key = variable.control.label.replace(/ /g, '');
-      output += `  ${variable.name}: ${values[key]}${
-        variable.control.unit || ''
-      };\n`;
+      const unit =
+        variable.control.unit === 'unitless' ? '' : variable.control.unit || '';
+      output += `  ${variable.name}: ${values[key]}${unit};\n`;
     }
   });
 
@@ -779,11 +779,8 @@ export function createInstantSearchDevtools(options = {}) {
               ) {
                 // Convert px to rem
                 cssValue = `${Number(ev.value) / 16}rem`;
-              } else if (variable.type === 'unitless') {
-                // Unitless values don't need a unit
-                cssValue = `${ev.value}`;
               } else {
-                // Use value with unit
+                // Append unit if it exists, otherwise just the value
                 cssValue = `${ev.value}${variable.control.unit || ''}`;
               }
 
