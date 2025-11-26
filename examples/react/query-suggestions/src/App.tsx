@@ -54,6 +54,7 @@ export function App() {
 
             <div className="search-panel__results">
               <EXPERIMENTAL_Autocomplete
+                placeholder="Search for products"
                 indices={[
                   {
                     indexName: 'instant_search',
