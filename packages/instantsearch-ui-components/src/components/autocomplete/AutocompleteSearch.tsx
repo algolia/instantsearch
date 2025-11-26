@@ -63,7 +63,6 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
             autoCapitalize="off"
             enterKeyHint="search"
             spellCheck="false"
-            placeholder=""
             maxLength={512}
             type="search"
             value={query}
