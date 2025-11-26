@@ -312,20 +312,12 @@
   // When the result is active, either by hover or keyboard navigation
   @media (hover: hover) {
     &:hover {
-      background-color: color-mix(
-        in srgb,
-        rgb(var(--ais-primary-color-rgb)) 10%,
-        rgb(var(--ais-background-color-rgb))
-      );
+      background-color: rgba(var(--ais-primary-color-rgb), 0.1);
     }
   }
 
   &[aria-selected='true'] {
-    background-color: color-mix(
-      in srgb,
-      rgb(var(--ais-primary-color-rgb)) 10%,
-      rgb(var(--ais-background-color-rgb))
-    );
+    background-color: rgba(var(--ais-primary-color-rgb), 0.1);
   }
 
   @at-root .ais-AutocompleteItemWrapper {
