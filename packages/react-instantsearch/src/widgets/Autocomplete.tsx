@@ -114,13 +114,22 @@ export type AutocompleteProps<TItem extends BaseHit> = ComponentProps<'div'> & {
         storageKey?: string;
 
         /**
+         * Component to use for the header, before the list of items.
+         */
+        headerComponent?: AutocompleteIndexProps<{
+          query: string;
+        }>['HeaderComponent'];
+
+        /**
          * Component to use for each recent search item.
          */
-        itemComponent: AutocompleteIndexProps<{
+        itemComponent?: AutocompleteIndexProps<{
           query: string;
         }>['ItemComponent'] & {
           onRemoveRecentSearch: () => void;
         };
+
+        classNames?: Partial<AutocompleteIndexClassNames>;
       };
   getSearchPageURL?: (nextUiState: IndexUiState) => string;
   onSelect?: AutocompleteIndexConfig<TItem>['onSelect'];
@@ -140,6 +149,13 @@ type InnerAutocompleteProps<TItem extends BaseHit> = Omit<
   refineSearchBox: ReturnType<typeof useSearchBox>['refine'];
   indexUiState: IndexUiState;
   isSearchPage: boolean;
+  recentSearchConfig?: {
+    headerComponent?: AutocompleteIndexProps<{
+      query: string;
+    }>['HeaderComponent'];
+    itemComponent: typeof AutocompleteRecentSearch;
+    classNames: Partial<AutocompleteIndexClassNames>;
+  };
 };
 
 export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
@@ -195,6 +211,45 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
     });
   }
 
+  const recentSearchConfig = showRecent
+    ? {
+        headerComponent:
+          typeof showRecent === 'object'
+            ? showRecent.headerComponent
+            : undefined,
+        itemComponent:
+          typeof showRecent === 'object' && showRecent.itemComponent
+            ? showRecent.itemComponent
+            : AutocompleteRecentSearch,
+        classNames: {
+          root: cx(
+            'ais-AutocompleteRecentSearches',
+            typeof showRecent === 'object'
+              ? showRecent.classNames?.root
+              : undefined
+          ),
+          list: cx(
+            'ais-AutocompleteRecentSearchesList',
+            typeof showRecent === 'object'
+              ? showRecent.classNames?.list
+              : undefined
+          ),
+          header: cx(
+            'ais-AutocompleteRecentSearchesHeader',
+            typeof showRecent === 'object'
+              ? showRecent.classNames?.header
+              : undefined
+          ),
+          item: cx(
+            'ais-AutocompleteRecentSearchesItem',
+            typeof showRecent === 'object'
+              ? showRecent.classNames?.item
+              : undefined
+          ),
+        },
+      }
+    : undefined;
+
   const isSearchPage = useMemo(
     () =>
       typeof indexRenderState.hits !== 'undefined' ||
@@ -218,6 +273,7 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
           indexUiState={indexUiState}
           isSearchPage={isSearchPage}
           showRecent={showRecent}
+          recentSearchConfig={recentSearchConfig}
           showSuggestions={showSuggestions}
         />
       </Index>
@@ -234,6 +290,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   isSearchPage,
   panelComponent: PanelComponent,
   showRecent,
+  recentSearchConfig,
   showSuggestions,
   ...props
 }: InnerAutocompleteProps<TItem>) {
@@ -281,17 +338,17 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
         }),
     });
 
-  const AutocompleteRecentSearchComponent =
-    (typeof showRecent === 'object' && showRecent.itemComponent) ||
-    AutocompleteRecentSearch;
-
   const elements: PanelElements = {};
-  if (showRecent) {
+  if (showRecent && recentSearchConfig) {
+    const RecentSearchItemComponent = recentSearchConfig.itemComponent;
     elements.recent = (
       <AutocompleteIndex
+        HeaderComponent={
+          recentSearchConfig.headerComponent as AutocompleteIndexProps['HeaderComponent']
+        }
         // @ts-ignore - there seems to be problems with React.ComponentType and this, but it's actually correct
         ItemComponent={({ item, onSelect }) => (
-          <AutocompleteRecentSearchComponent
+          <RecentSearchItemComponent
             item={item as unknown as { query: string }}
             onSelect={onSelect}
             onRemoveRecentSearch={() =>
@@ -301,13 +358,9 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
             <ConditionalReverseHighlight
               item={item as unknown as Hit<{ query: string }>}
             />
-          </AutocompleteRecentSearchComponent>
+          </RecentSearchItemComponent>
         )}
-        classNames={{
-          root: 'ais-AutocompleteRecentSearches',
-          list: 'ais-AutocompleteRecentSearchesList',
-          item: 'ais-AutocompleteRecentSearchesItem',
-        }}
+        classNames={recentSearchConfig.classNames}
         items={storageHits}
         getItemProps={getItemProps}
       />
