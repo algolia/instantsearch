@@ -74,6 +74,16 @@ export function App() {
                     getURL: (item) => `/products.html?pid=${item.objectID}`,
                   },
                 ]}
+                showRecent={{
+                  headerComponent: () => (
+                    <>
+                      <span className="ais-AutocompleteIndexHeaderTitle">
+                        Recent Searches
+                      </span>
+                      <span className="ais-AutocompleteIndexHeaderLine" />
+                    </>
+                  ),
+                }}
                 showSuggestions={{
                   indexName: 'instant_search_demo_query_suggestions',
                   headerComponent: () => (
