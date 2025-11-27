@@ -33,19 +33,28 @@
   display: flex;
   align-items: center;
   gap: calc(var(--ais-spacing) / 2);
-  font-weight: 600;
+  font-weight: var(--ais-font-weight-semibold);
 }
 
 .ais-ChatHeader-titleIcon {
   display: inline-flex;
   align-items: center;
   color: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+
+  svg {
+    width: var(--ais-icon-size);
+    height: auto;
+  }
 }
 
 .ais-ChatHeader-actions {
   display: flex;
   align-items: center;
   gap: calc(var(--ais-spacing) / 2);
+
+  svg {
+    width: calc(var(--ais-icon-size) * 0.8);
+  }
 }
 
 .ais-ChatHeader-clear {

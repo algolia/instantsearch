@@ -25,14 +25,17 @@ $ais-chat-breakpoint: 680px;
   --ais-shadow-color-rgb: 23, 23, 23;
 
   /* Size and spacing */
-  --ais-spacing: 1rem;
+  --ais-base-unit: 16;
+  --ais-spacing-factor: 1;
+  --ais-spacing: calc(var(--ais-base-unit) * var(--ais-spacing-factor) * 1px);
 
   /* Shadows */
-  --ais-shadow-xs: 0px 1px 2px 0px rgba(var(--ais-shadow-color-rgb), 0.15);
   --ais-shadow-sm: 0px 0px 0px 1px rgba(var(--ais-shadow-color-rgb), 0.05),
     0px 1px 3px 0px rgba(var(--ais-shadow-color-rgb), 0.25);
   --ais-shadow-md: 0px 0px 0px 1px rgba(var(--ais-shadow-color-rgb), 0.05),
     0px 4px 8px -2px rgba(var(--ais-shadow-color-rgb), 0.25);
+  --ais-shadow-lg: 0 0 0 1px rgba(var(--ais-shadow-color-rgb), 0.05),
+    0 6px 16px -4px rgba(var(--ais-shadow-color-rgb), 0.15);
 
   /* Border radius */
   --ais-border-radius-sm: 4px;
@@ -40,12 +43,23 @@ $ais-chat-breakpoint: 680px;
   --ais-border-radius-lg: 16px;
   --ais-border-radius-full: 9999px;
 
+  /* Typography */
+  --ais-font-size: calc(var(--ais-base-unit) * 1px);
+  --ais-font-weight-medium: 500;
+  --ais-font-weight-semibold: 600;
+  --ais-font-weight-bold: 700;
+
+  /* Icons */
+  --ais-icon-size: 20px;
+  --ais-icon-stroke-width: 1.6;
+
   /* Transitions */
   --ais-transition-duration: 0.3s;
   --ais-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* Z-index layers */
   --ais-z-index-chat: 9999;
+  --ais-z-index-autocomplete: 10000;
 
   /* Chat component */
   --ais-chat-width: 22.5rem;
@@ -56,12 +70,22 @@ $ais-chat-breakpoint: 680px;
 
   /* Chat carousel component */
   --ais-chat-carousel-item-width: calc(var(--ais-spacing) * 10);
+
+  /* Autocomplete component */
+  --ais-autocomplete-search-input-height: 44px;
+  --ais-autocomplete-panel-max-height: 650px;
+
+  /* Touch screens */
+  @media (hover: none) and (pointer: coarse) {
+    --ais-spacing-factor: 1.2;
+  }
 }
 
 /* Dark Mode */
 @mixin dark-theme {
   /* Text colors */
   --ais-text-color-rgb: 255, 255, 255;
+  --ais-primary-color-rgb: 110, 160, 255;
   --ais-muted-color-rgb: 190, 190, 190;
   --ais-button-text-color-rgb: 255, 255, 255;
 
@@ -75,12 +99,14 @@ $ais-chat-breakpoint: 680px;
   --ais-shadow-color-rgb: 0, 0, 0;
 }
 
-:root[data-theme='dark'] {
+:root[data-theme='dark'],
+.dark {
   @include dark-theme;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    @include dark-theme;
-  }
-}
+// Disabled until all widgets support dark mode
+// @media (prefers-color-scheme: dark) {
+//   :root:not([data-theme='light']) {
+//     @include dark-theme;
+//   }
+// }

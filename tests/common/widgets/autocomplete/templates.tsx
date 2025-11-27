@@ -209,7 +209,7 @@ export function createTemplatesTests(
         `
         <div
           aria-labelledby="autocompleteP484input"
-          class="ais-AutocompletePanel"
+          class="ais-AutocompletePanel ais-AutocompletePanel--open"
           id="autocompleteP484panel"
           role="grid"
         >

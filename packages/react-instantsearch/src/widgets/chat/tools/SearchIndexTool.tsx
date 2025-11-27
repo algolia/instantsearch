@@ -1,7 +1,7 @@
 import {
-  ChevronLeftIconComponent,
-  ChevronRightIconComponent,
-  ArrowRightIconComponent,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ArrowRightIcon,
   createButtonComponent,
 } from 'instantsearch-ui-components';
 import React, { createElement } from 'react';
@@ -161,9 +161,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
               className="ais-ChatToolSearchIndexCarouselHeaderViewAll"
             >
               View all
-              <ArrowRightIconComponent
-                createElement={createElement as Pragma}
-              />
+              <ArrowRightIcon createElement={createElement as Pragma} />
             </Button>
           )}
         </div>
@@ -178,9 +176,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
               disabled={!canScrollLeft}
               className="ais-ChatToolSearchIndexCarouselHeaderScrollButton"
             >
-              <ChevronLeftIconComponent
-                createElement={createElement as Pragma}
-              />
+              <ChevronLeftIcon createElement={createElement as Pragma} />
             </Button>
             <Button
               variant="outline"
@@ -190,9 +186,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
               disabled={!canScrollRight}
               className="ais-ChatToolSearchIndexCarouselHeaderScrollButton"
             >
-              <ChevronRightIconComponent
-                createElement={createElement as Pragma}
-              />
+              <ChevronRightIcon createElement={createElement as Pragma} />
             </Button>
           </div>
         )}

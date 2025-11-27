@@ -9,6 +9,7 @@ import {
   Pagination,
   RefinementList,
   EXPERIMENTAL_Autocomplete,
+  Chat,
 } from 'react-instantsearch';
 
 import { Panel } from './Panel';
@@ -54,6 +55,7 @@ export function App() {
 
             <div className="search-panel__results">
               <EXPERIMENTAL_Autocomplete
+                showRecent
                 placeholder="Search for products"
                 indices={[
                   {
@@ -91,6 +93,11 @@ export function App() {
               </div>
             </div>
           </div>
+
+          <Chat
+            agentId="7c2f6816-bfdb-46e9-a51f-9cb8e5fc9628"
+            itemComponent={ItemComponent}
+          />
         </InstantSearch>
       </div>
     </div>
@@ -115,6 +122,24 @@ function HitComponent({ hit }: { hit: HitType }) {
         <Highlight attribute="description" hit={hit} />
       </p>
       <a href={`/products.html?pid=${hit.objectID}`}>See product</a>
+    </article>
+  );
+}
+
+function ItemComponent({ item }: { item: Hit }) {
+  return (
+    <article className="ais-Carousel-hit">
+      <div className="ais-Carousel-hit-image">
+        <img src={item.image} />
+      </div>
+      <h2 className="ais-Carousel-hit-title">
+        <a
+          href={`/products.html?pid=${item.objectID}`}
+          className="ais-Carousel-hit-link"
+        >
+          {item.name}
+        </a>
+      </h2>
     </article>
   );
 }

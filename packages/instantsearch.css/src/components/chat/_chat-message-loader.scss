@@ -37,7 +37,7 @@
     background-size: 50% 200%;
     display: inline-block;
     background-position: -100% 0;
-    font-weight: 500;
+    font-weight: var(--ais-font-weight-medium);
 
     @media (prefers-reduced-motion: no-preference) {
       animation-delay: 0.5s;

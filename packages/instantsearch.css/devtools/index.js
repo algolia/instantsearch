@@ -27,7 +27,7 @@ const variablesConfig = {
     {
       name: '--ais-primary-color-rgb',
       type: 'color-rgb',
-      themeVariable: false,
+      themeVariable: true,
       category: 'Text Colors',
       control: {
         label: 'Primary Color Rgb',
@@ -145,17 +145,29 @@ const variablesConfig = {
       },
     },
     {
-      name: '--ais-spacing',
-      type: 'spacing',
+      name: '--ais-base-unit',
+      type: 'unitless',
       themeVariable: false,
       category: 'Spacing & Layout',
       control: {
-        label: 'Spacing',
-        min: 4,
+        label: 'Base Unit',
+        min: 8,
         max: 32,
         step: 1,
-        unit: 'px',
-        convertFromRem: true,
+        unit: 'unitless',
+      },
+    },
+    {
+      name: '--ais-spacing-factor',
+      type: 'unitless',
+      themeVariable: false,
+      category: 'Spacing & Layout',
+      control: {
+        label: 'Spacing Factor',
+        min: 0.5,
+        max: 3,
+        step: 0.1,
+        unit: 'unitless',
       },
     },
     {
@@ -211,6 +223,71 @@ const variablesConfig = {
       },
     },
     {
+      name: '--ais-font-weight-medium',
+      type: 'unitless',
+      themeVariable: false,
+      category: 'Other',
+      control: {
+        label: 'Font Weight Medium',
+        min: 0,
+        max: 100,
+        step: 1,
+        unit: 'unitless',
+      },
+    },
+    {
+      name: '--ais-font-weight-semibold',
+      type: 'unitless',
+      themeVariable: false,
+      category: 'Other',
+      control: {
+        label: 'Font Weight Semibold',
+        min: 0,
+        max: 100,
+        step: 1,
+        unit: 'unitless',
+      },
+    },
+    {
+      name: '--ais-font-weight-bold',
+      type: 'unitless',
+      themeVariable: false,
+      category: 'Other',
+      control: {
+        label: 'Font Weight Bold',
+        min: 0,
+        max: 100,
+        step: 1,
+        unit: 'unitless',
+      },
+    },
+    {
+      name: '--ais-icon-size',
+      type: 'dimension-px',
+      themeVariable: false,
+      category: 'Other',
+      control: {
+        label: 'Icon Size',
+        min: 10,
+        max: 100,
+        step: 1,
+        unit: 'px',
+      },
+    },
+    {
+      name: '--ais-icon-stroke-width',
+      type: 'unitless',
+      themeVariable: false,
+      category: 'Other',
+      control: {
+        label: 'Icon Stroke Width',
+        min: 0,
+        max: 100,
+        step: 1,
+        unit: 'unitless',
+      },
+    },
+    {
       name: '--ais-transition-duration',
       type: 'duration',
       themeVariable: false,
@@ -230,6 +307,18 @@ const variablesConfig = {
       category: 'Z-index',
       control: {
         label: 'Z Index Chat',
+        min: 1,
+        max: 10000,
+        step: 1,
+      },
+    },
+    {
+      name: '--ais-z-index-autocomplete',
+      type: 'z-index',
+      themeVariable: false,
+      category: 'Z-index',
+      control: {
+        label: 'Z Index Autocomplete',
         min: 1,
         max: 10000,
         step: 1,
@@ -298,6 +387,32 @@ const variablesConfig = {
         max: 5,
         step: 0.1,
         unit: 'rem',
+      },
+    },
+    {
+      name: '--ais-autocomplete-search-input-height',
+      type: 'dimension-px',
+      themeVariable: false,
+      category: 'Other',
+      control: {
+        label: 'Autocomplete Search Input Height',
+        min: 20,
+        max: 500,
+        step: 10,
+        unit: 'px',
+      },
+    },
+    {
+      name: '--ais-autocomplete-panel-max-height',
+      type: 'dimension-px',
+      themeVariable: false,
+      category: 'Other',
+      control: {
+        label: 'Autocomplete Panel Max Height',
+        min: 20,
+        max: 500,
+        step: 10,
+        unit: 'px',
       },
     },
   ],
@@ -508,9 +623,9 @@ function exportCSSVariables(values, config) {
       output += `  ${variable.name}: ${values[key] / 16}rem;\n`;
     } else {
       const key = variable.control.label.replace(/ /g, '');
-      output += `  ${variable.name}: ${values[key]}${
-        variable.control.unit || ''
-      };\n`;
+      const unit =
+        variable.control.unit === 'unitless' ? '' : variable.control.unit || '';
+      output += `  ${variable.name}: ${values[key]}${unit};\n`;
     }
   });
 
@@ -519,180 +634,193 @@ function exportCSSVariables(values, config) {
 }
 
 /**
- * Creates an InstantSearch devtools panel to configure CSS variables in real-time.
+ * Creates an InstantSearch.css DevTools panel to configure CSS variables in real-time.
  * @param {DevtoolsOptions} [options] - Configuration options for the devtools panel
- * @returns {Function} A cleanup function that disposes the panel and removes the container
+ * @returns {Promise<Function>} A promise that resolves to a cleanup function that disposes the panel and removes the container
  */
 export function createInstantSearchDevtools(options = {}) {
-  let PaneConstructor;
-  try {
-    PaneConstructor = require('tweakpane').Pane;
-  } catch (error) {
-    throw new Error(
-      'InstantSearch devtools requires Tweakpane. Install it with: npm install tweakpane'
-    );
-  }
+  return import('tweakpane')
+    .then((tweakpane) => {
+      const PaneConstructor = tweakpane.Pane;
 
-  // Create or use provided container
-  let container = options.container;
-  let shouldRemoveContainer = false;
+      // Create or use provided container
+      let container = options.container;
+      let shouldRemoveContainer = false;
 
-  if (!container) {
-    container = document.createElement('div');
-    document.body.appendChild(container);
-    shouldRemoveContainer = true;
+      if (!container) {
+        container = document.createElement('div');
+        document.body.appendChild(container);
+        shouldRemoveContainer = true;
 
-    // Apply default styles
-    const defaultStyle = {
-      position: 'fixed',
-      bottom: '1.5rem',
-      left: '1.5rem',
-      zIndex: '1000',
-      overflow: 'auto',
-      maxHeight: 'calc(100% - 3rem)',
-    };
+        // Apply default styles
+        const defaultStyle = {
+          position: 'fixed',
+          bottom: '1.5rem',
+          left: '1.5rem',
+          zIndex: '1000',
+          overflow: 'auto',
+          maxHeight: 'calc(100% - 3rem)',
+        };
 
-    Object.assign(container.style, defaultStyle, options.style || {});
-  } else if (options.style) {
-    // Apply custom styles to provided container
-    Object.assign(container.style, options.style);
-  }
-
-  // Create the pane
-  const pane = new PaneConstructor({
-    container,
-    title: 'InstantSearch Devtools',
-    expanded: false,
-  });
-
-  const values = getDefaultValues(variablesConfig);
-
-  // Flag to prevent triggering events during theme updates
-  let isUpdatingTheme = false;
-
-  // Theme Control
-  pane
-    .addBinding(values, 'theme', {
-      options: {
-        Auto: 'auto',
-        Light: 'light',
-        Dark: 'dark',
-      },
-      label: 'Theme',
-    })
-    .on('change', (ev) => {
-      applyTheme(ev.value);
-
-      // Update the pane values to reflect the new theme without triggering events
-      isUpdatingTheme = true;
-
-      const newValues = getDefaultValues(variablesConfig);
-
-      // Update all color values that change with theme
-      variablesConfig.variables.forEach((variable) => {
-        if (
-          variable.themeVariable &&
-          variable.type === 'color-rgb' &&
-          variable.control.colorName
-        ) {
-          values[variable.control.colorName] =
-            newValues[variable.control.colorName];
-        }
-      });
-
-      // Refresh pane to show updated values
-      pane.refresh();
-
-      isUpdatingTheme = false;
-    });
-
-  // Group variables by category
-  const categories = groupByCategory(variablesConfig.variables);
-
-  Object.entries(categories).forEach(([categoryName, variables]) => {
-    const folder = pane.addFolder({ title: categoryName });
-
-    // Handle color variables (RGB + Alpha pairs)
-    const colorPairs = getColorPairs(variables);
-    colorPairs.forEach((pair) => {
-      const { rgb, alpha } = pair;
-
-      folder
-        .addBinding(values, rgb.control.colorName, {
-          label: rgb.control.label,
-        })
-        .on('change', (ev) => {
-          if (isUpdatingTheme) return;
-          const alphaValue = alpha
-            ? values[alpha.control.label.replace(/ /g, '')]
-            : undefined;
-          updateColorVariable(ev.value, rgb.name, alpha?.name, alphaValue);
-        });
-
-      // Add alpha slider if exists
-      if (alpha) {
-        const alphaKey = alpha.control.label.replace(/ /g, '');
-        folder
-          .addBinding(values, alphaKey, {
-            min: alpha.control.min,
-            max: alpha.control.max,
-            step: alpha.control.step,
-            label: alpha.control.label,
-          })
-          .on('change', (ev) => updateCSSVariable(alpha.name, ev.value));
+        Object.assign(container.style, defaultStyle, options.style || {});
+      } else if (options.style) {
+        // Apply custom styles to provided container
+        Object.assign(container.style, options.style);
       }
-    });
 
-    // Handle non-color variables
-    const otherVariables = getNonColorVariables(variables);
-    otherVariables.forEach((variable) => {
-      const key = variable.control.label.replace(/ /g, '');
+      // Create the pane
+      const pane = new PaneConstructor({
+        container,
+        title: 'InstantSearch.css DevTools',
+        expanded: false,
+      });
 
-      folder
-        .addBinding(values, /** @type {keyof CSSValues} */ (key), {
-          min: variable.control.min,
-          max: variable.control.max,
-          step: variable.control.step,
-          label: variable.control.label,
+      const values = getDefaultValues(variablesConfig);
+
+      // Flag to prevent triggering events during theme updates
+      let isUpdatingTheme = false;
+
+      // Theme Control
+      pane
+        .addBinding(values, 'theme', {
+          options: {
+            Auto: 'auto',
+            Light: 'light',
+            Dark: 'dark',
+          },
+          label: 'Theme',
         })
         .on('change', (ev) => {
-          let cssValue;
+          applyTheme(ev.value);
 
-          if (variable.type === 'spacing' && variable.control.convertFromRem) {
-            // Convert px to rem
-            cssValue = `${Number(ev.value) / 16}rem`;
-          } else {
-            // Use value with unit
-            cssValue = `${ev.value}${variable.control.unit || ''}`;
-          }
+          // Update the pane values to reflect the new theme without triggering events
+          isUpdatingTheme = true;
 
-          updateCSSVariable(variable.name, cssValue);
+          const newValues = getDefaultValues(variablesConfig);
+
+          // Update all color values that change with theme
+          variablesConfig.variables.forEach((variable) => {
+            if (
+              variable.themeVariable &&
+              variable.type === 'color-rgb' &&
+              variable.control.colorName
+            ) {
+              values[variable.control.colorName] =
+                newValues[variable.control.colorName];
+            }
+          });
+
+          // Refresh pane to show updated values
+          pane.refresh();
+
+          isUpdatingTheme = false;
         });
-    });
-  });
 
-  const exportFolder = pane.addFolder({ title: 'Export' });
+      // Group variables by category
+      const categories = groupByCategory(variablesConfig.variables);
 
-  exportFolder.addButton({ title: 'Copy to clipboard' }).on('click', () => {
-    const cssVariables = exportCSSVariables(values, variablesConfig);
-    navigator.clipboard
-      .writeText(cssVariables)
-      .then(() => {
-        // eslint-disable-next-line no-console
-        console.log('CSS variables copied to clipboard!');
-      })
-      .catch((err) => {
-        // eslint-disable-next-line no-console
-        console.error('Failed to copy CSS variables:', err);
-        // eslint-disable-next-line no-console
-        console.log('CSS Variables:\n', cssVariables);
+      Object.entries(categories).forEach(([categoryName, variables]) => {
+        const folder = pane.addFolder({ title: categoryName });
+
+        // Handle color variables (RGB + Alpha pairs)
+        const colorPairs = getColorPairs(variables);
+        colorPairs.forEach((pair) => {
+          const { rgb, alpha } = pair;
+
+          folder
+            .addBinding(values, rgb.control.colorName, {
+              label: rgb.control.label,
+            })
+            .on('change', (ev) => {
+              if (isUpdatingTheme) return;
+              const alphaValue = alpha
+                ? values[alpha.control.label.replace(/ /g, '')]
+                : undefined;
+              updateColorVariable(ev.value, rgb.name, alpha?.name, alphaValue);
+            });
+
+          // Add alpha slider if exists
+          if (alpha) {
+            const alphaKey = alpha.control.label.replace(/ /g, '');
+            folder
+              .addBinding(values, alphaKey, {
+                min: alpha.control.min,
+                max: alpha.control.max,
+                step: alpha.control.step,
+                label: alpha.control.label,
+              })
+              .on('change', (ev) => updateCSSVariable(alpha.name, ev.value));
+          }
+        });
+
+        // Handle non-color variables
+        const otherVariables = getNonColorVariables(variables);
+        otherVariables.forEach((variable) => {
+          const key = variable.control.label.replace(/ /g, '');
+          const shouldShowUnit =
+            variable.control.unit && variable.control.unit !== 'unitless';
+          const label = shouldShowUnit
+            ? `${variable.control.label} (${variable.control.unit})`
+            : variable.control.label;
+
+          folder
+            .addBinding(values, /** @type {keyof CSSValues} */ (key), {
+              min: variable.control.min,
+              max: variable.control.max,
+              step: variable.control.step,
+              label,
+            })
+            .on('change', (ev) => {
+              let cssValue;
+
+              if (
+                variable.type === 'spacing' &&
+                variable.control.convertFromRem
+              ) {
+                // Convert px to rem
+                cssValue = `${Number(ev.value) / 16}rem`;
+              } else {
+                // Append unit if it exists and is not 'unitless', otherwise just the value
+                const unit =
+                  variable.control.unit && variable.control.unit !== 'unitless'
+                    ? variable.control.unit
+                    : '';
+                cssValue = `${ev.value}${unit}`;
+              }
+
+              updateCSSVariable(variable.name, cssValue);
+            });
+        });
       });
-  });
 
-  return () => {
-    pane.dispose();
-    if (shouldRemoveContainer && container?.parentNode) {
-      container.parentNode.removeChild(container);
-    }
-  };
+      const exportFolder = pane.addFolder({ title: 'Export' });
+
+      exportFolder.addButton({ title: 'Copy to clipboard' }).on('click', () => {
+        const cssVariables = exportCSSVariables(values, variablesConfig);
+        navigator.clipboard
+          .writeText(cssVariables)
+          .then(() => {
+            // eslint-disable-next-line no-console
+            console.log('CSS variables copied to clipboard!');
+          })
+          .catch((err) => {
+            // eslint-disable-next-line no-console
+            console.error('Failed to copy CSS variables:', err);
+            // eslint-disable-next-line no-console
+            console.log('CSS Variables:\n', cssVariables);
+          });
+      });
+
+      return () => {
+        pane.dispose();
+        if (shouldRemoveContainer && container?.parentNode) {
+          container.parentNode.removeChild(container);
+        }
+      };
+    })
+    .catch((error) => {
+      throw new Error(
+        `Failed to load Tweakpane for InstantSearch.css DevTools: ${error.message}`
+      );
+    });
 }

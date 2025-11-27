@@ -1,24 +1,11 @@
 /** @jsx createElement */
 import type { Renderer } from '../../types';
 
-type IconProps = Pick<Renderer, 'createElement'> & {
-  width?: number;
-  height?: number;
-};
+type IconProps = Pick<Renderer, 'createElement'>;
 
-export function SparklesIconComponent({
-  createElement,
-  width = 20,
-  height = 20,
-}: IconProps) {
+export function SparklesIcon({ createElement }: IconProps) {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width={width}
-      height={height}
-      fill="none"
-      viewBox="0 0 20 20"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
       <path
         fill="currentColor"
         fillRule="evenodd"
@@ -35,20 +22,13 @@ export function SparklesIconComponent({
   );
 }
 
-export function ArrowUpIconComponent({
-  createElement,
-  width = 16,
-  height = 16,
-}: IconProps) {
+export function ArrowUpIcon({ createElement }: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={width}
-      height={height}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     >
@@ -58,20 +38,13 @@ export function ArrowUpIconComponent({
   );
 }
 
-export function ArrowRightIconComponent({
-  createElement,
-  width = 16,
-  height = 16,
-}: IconProps) {
+export function ArrowRightIcon({ createElement }: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={width}
-      height={height}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     >
@@ -81,20 +54,13 @@ export function ArrowRightIconComponent({
   );
 }
 
-export function ChevronUpIconComponent({
-  createElement,
-  width = 16,
-  height = 16,
-}: IconProps) {
+export function ChevronUpIcon({ createElement }: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={width}
-      height={height}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     >
@@ -103,20 +69,13 @@ export function ChevronUpIconComponent({
   );
 }
 
-export function ChevronDownIconComponent({
-  createElement,
-  width = 16,
-  height = 16,
-}: IconProps) {
+export function ChevronDownIcon({ createElement }: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={width}
-      height={height}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     >
@@ -125,20 +84,13 @@ export function ChevronDownIconComponent({
   );
 }
 
-export function CloseIconComponent({
-  createElement,
-  width = 16,
-  height = 16,
-}: IconProps) {
+export function CloseIcon({ createElement }: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={width}
-      height={height}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     >
@@ -148,19 +100,12 @@ export function CloseIconComponent({
   );
 }
 
-export function MaximizeIconComponent({
-  createElement,
-  width = 16,
-  height = 16,
-}: IconProps) {
+export function MaximizeIcon({ createElement }: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={width}
-      height={height}
       viewBox="0 0 24 24"
       fill="none"
-      strokeWidth="2"
       stroke="currentColor"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -173,19 +118,12 @@ export function MaximizeIconComponent({
   );
 }
 
-export function MinimizeIconComponent({
-  createElement,
-  width = 16,
-  height = 16,
-}: IconProps) {
+export function MinimizeIcon({ createElement }: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={width}
-      height={height}
       viewBox="0 0 24 24"
       fill="none"
-      strokeWidth="2"
       stroke="currentColor"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -198,20 +136,13 @@ export function MinimizeIconComponent({
   );
 }
 
-export function StopIconComponent({
-  createElement,
-  width = 16,
-  height = 16,
-}: IconProps) {
+export function StopIcon({ createElement }: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={width}
-      height={height}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     >
@@ -221,20 +152,13 @@ export function StopIconComponent({
   );
 }
 
-export function ReloadIconComponent({
-  createElement,
-  width = 16,
-  height = 16,
-}: IconProps) {
+export function ReloadIcon({ createElement }: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={width}
-      height={height}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     >
@@ -246,20 +170,13 @@ export function ReloadIconComponent({
   );
 }
 
-export function CopyIconComponent({
-  createElement,
-  width = 16,
-  height = 16,
-}: IconProps) {
+export function CopyIcon({ createElement }: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={width}
-      height={height}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     >
@@ -269,20 +186,13 @@ export function CopyIconComponent({
   );
 }
 
-export function MenuIconComponent({
-  createElement,
-  width = 16,
-  height = 16,
-}: IconProps) {
+export function MenuIcon({ createElement }: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={width}
-      height={height}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     >
@@ -293,47 +203,27 @@ export function MenuIconComponent({
   );
 }
 
-export function LoadingSpinnerIconComponent({
-  createElement,
-  width = 24,
-  height = 24,
-}: IconProps) {
+export function LoadingSpinnerIcon({ createElement }: IconProps) {
   return (
     <svg
       viewBox="12 12 24 24"
-      width={width}
-      height={height}
       role="status"
       aria-busy="true"
       aria-live="polite"
     >
       <title>Loading spinner</title>
-      <circle
-        cx="24"
-        cy="24"
-        r="11"
-        fill="none"
-        strokeWidth="2"
-        stroke="currentColor"
-      />
+      <circle cx="24" cy="24" r="11" fill="none" stroke="currentColor" />
     </svg>
   );
 }
 
-export function ChevronLeftIconComponent({
-  createElement,
-  width = 16,
-  height = 16,
-}: IconProps) {
+export function ChevronLeftIcon({ createElement }: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={width}
-      height={height}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     >
@@ -342,20 +232,13 @@ export function ChevronLeftIconComponent({
   );
 }
 
-export function ChevronRightIconComponent({
-  createElement,
-  width = 16,
-  height = 16,
-}: IconProps) {
+export function ChevronRightIcon({ createElement }: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={width}
-      height={height}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     >

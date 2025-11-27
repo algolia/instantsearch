@@ -22,13 +22,14 @@ export type AutocompletePanelClassNames = {
 
 export function createAutocompletePanelComponent({ createElement }: Renderer) {
   return function AutocompletePanel(userProps: AutocompletePanelProps) {
-    const { children, classNames = {}, ...props } = userProps;
+    const { children, classNames = {}, hidden, ...props } = userProps;
 
     return (
       <div
         {...props}
         className={cx(
           'ais-AutocompletePanel',
+          !hidden && 'ais-AutocompletePanel--open',
           classNames.root,
           props.className
         )}

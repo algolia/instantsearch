@@ -2,7 +2,7 @@
 
 import { createButtonComponent } from '../Button';
 
-import { ReloadIconComponent } from './icons';
+import { ReloadIcon } from './icons';
 
 import type { ComponentProps, Renderer } from '../../types';
 
@@ -80,7 +80,7 @@ export function createChatMessageErrorComponent({
                     className="ais-ChatMessage-errorAction"
                     onClick={() => onReload?.()}
                   >
-                    <ReloadIconComponent createElement={createElement} />
+                    <ReloadIcon createElement={createElement} />
                     {translations.retryText}
                   </Button>
                 )}

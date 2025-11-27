@@ -4,7 +4,7 @@ import { compiler } from 'markdown-to-jsx';
 import { cx, startsWith } from '../../lib';
 import { createButtonComponent } from '../Button';
 
-import { MenuIconComponent } from './icons';
+import { MenuIcon } from './icons';
 
 import type { ComponentProps, Renderer } from '../../types';
 import type {
@@ -279,7 +279,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
                       {action.icon ? (
                         <action.icon />
                       ) : (
-                        <MenuIconComponent createElement={createElement} />
+                        <MenuIcon createElement={createElement} />
                       )}
                     </Button>
                   ))
