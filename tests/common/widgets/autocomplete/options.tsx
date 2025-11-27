@@ -8,7 +8,7 @@ import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 
 import type { AutocompleteWidgetSetup } from '.';
-import type { SupportedFlavor, TestOptions } from '../../common';
+import type { TestOptions } from '../../common';
 
 function createMockedSearchClient(
   response: ReturnType<typeof createMultiSearchResponse>
@@ -139,25 +139,15 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      const callTimes: Record<string, Record<SupportedFlavor, number>> = {
-        initial: { javascript: 2, react: 2, vue: 0 },
-        refined: { javascript: 1, react: 2, vue: 0 },
-      };
-
-      expect(searchClient.search).toHaveBeenCalledTimes(
-        callTimes.initial[flavor]
-      );
-      expect(searchClient.search).toHaveBeenNthCalledWith(
-        callTimes.initial[flavor] - 1,
-        [
-          {
-            indexName: 'query_suggestions',
-            params: expect.objectContaining({
-              query: '',
-            }),
-          },
-        ]
-      );
+      expect(searchClient.search).toHaveBeenCalledTimes(2);
+      expect(searchClient.search).toHaveBeenNthCalledWith(1, [
+        {
+          indexName: 'query_suggestions',
+          params: expect.objectContaining({
+            query: '',
+          }),
+        },
+      ]);
       (searchClient.search as jest.Mock).mockClear();
 
       expect(screen.getAllByRole('row', { hidden: true }).length).toBe(2);
@@ -174,9 +164,7 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      expect(searchClient.search).toHaveBeenCalledTimes(
-        callTimes.refined[flavor]
-      );
+      expect(searchClient.search).toHaveBeenCalledTimes(2);
       expect(searchClient.search).toHaveBeenLastCalledWith([
         {
           indexName: 'query_suggestions',
@@ -786,6 +774,81 @@ export function createOptionsTests(
       );
       expect(input).toHaveAttribute('aria-expanded', 'false');
       expect(input).toHaveFocus();
+    });
+
+    test('clearing the query also clears internal autocomplete query', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'indexName',
+            hits: [
+              { objectID: '1', name: 'Item 1' },
+              { objectID: '2', name: 'Item 2' },
+            ],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            indices: [
+              {
+                indexName: 'indexName',
+                templates: {
+                  item: (props) => props.item.name,
+                },
+              },
+            ],
+          },
+          react: {
+            indices: [
+              {
+                indexName: 'indexName',
+                itemComponent: (props) => props.item.name,
+              },
+            ],
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const input = screen.getByRole('combobox', { name: /submit/i });
+
+      await act(async () => {
+        userEvent.click(input);
+        userEvent.type(input, 'Item 3');
+        userEvent.keyboard('{Enter}');
+        await wait(0);
+        userEvent.keyboard('{Enter}');
+        await wait(0);
+      });
+
+      expect(input).not.toHaveFocus();
+      expect(input).toHaveAttribute('aria-expanded', 'false');
+      expect(screen.getByRole('button', { name: /clear/i })).toBeVisible();
+
+      await act(async () => {
+        userEvent.click(screen.getByRole('button', { name: /clear/i }));
+        await wait(0);
+      });
+
+      expect(searchClient.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'indexName',
+          params: expect.objectContaining({
+            query: '',
+          }),
+        },
+      ]);
     });
 
     test('refocuses the input after clearing the query', async () => {
