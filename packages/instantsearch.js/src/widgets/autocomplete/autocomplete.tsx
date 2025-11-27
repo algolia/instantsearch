@@ -190,7 +190,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   indices,
   getSearchPageURL,
   onSelect: userOnSelect,
-  refine,
+  refine: refineAutocomplete,
   cssClasses,
   renderState,
   instantSearchInstance,
@@ -223,6 +223,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       ) ?? false;
 
   const onRefine = (query: string) => {
+    refineAutocomplete(query);
     instantSearchInstance.setUiState((uiState) => ({
       ...uiState,
       [targetIndex!.getIndexId()]: {
@@ -388,9 +389,11 @@ function AutocompleteWrapper<TItem extends BaseHit>({
           ...getInputProps(),
           // @ts-ignore - This clashes with some ambient React JSX declarations.
           onInput: (evt: JSXPreact.TargetedEvent<HTMLInputElement>) =>
-            refine(evt.currentTarget.value),
+            refineAutocomplete(evt.currentTarget.value),
         }}
-        onClear={() => onRefine('')}
+        onClear={() => {
+          onRefine('');
+        }}
         isSearchStalled={instantSearchInstance.status === 'stalled'}
       />
       <AutocompletePanel {...getPanelProps()}>
