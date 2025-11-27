@@ -23,5 +23,10 @@
   },
   "@parcel/resolver-default": {
     "packageExports": true
+  },
+  "targets": {
+    "default": {
+      "scopeHoist": false
+    }
   }
 }
