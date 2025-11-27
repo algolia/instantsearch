@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "BABEL_ENV=parcel parcel index.html --port 3000",
-    "build": "BABEL_ENV=parcel parcel build index.html --public-url ."
+    "build": "BABEL_ENV=parcel parcel build index.html --public-url .",
+    "website:examples": "BABEL_ENV=parcel parcel build index.html --public-url . --dist-dir=../../../website/examples/js/default-theme"
   },
   "dependencies": {
     "algoliasearch": "5.1.1",
