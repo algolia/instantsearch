@@ -61,7 +61,7 @@ export function createAutocompleteIndexComponent({ createElement }: Renderer) {
             );
             return (
               <li
-                key={item.objectID}
+                key={`${itemProps.id}:${item.objectID}`}
                 {...itemProps}
                 className={cx(
                   'ais-AutocompleteIndexItem',

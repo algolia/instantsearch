@@ -32,6 +32,11 @@ export function createAutocompletePanelComponent({ createElement }: Renderer) {
           classNames.root,
           props.className
         )}
+        onMouseDown={(event: React.MouseEvent<HTMLDivElement>) => {
+          // Prevents the autocomplete panel from blurring the input when
+          // clicking inside the panel.
+          event.preventDefault();
+        }}
       >
         <div className={cx('ais-AutocompletePanelLayout', classNames.layout)}>
           {children}
