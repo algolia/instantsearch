@@ -134,7 +134,6 @@ describe('Autocomplete', () => {
             enterkeyhint="search"
             id="autocomplete:r0:input"
             maxlength="512"
-            placeholder=""
             role="combobox"
             spellcheck="false"
             type="search"

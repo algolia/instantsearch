@@ -130,6 +130,7 @@ export type AutocompleteProps<TItem extends BaseHit> = ComponentProps<'div'> & {
   }) => React.JSX.Element;
   searchParameters?: AutocompleteSearchParameters;
   classNames?: Partial<AutocompleteClassNames>;
+  placeholder?: string;
 };
 
 type InnerAutocompleteProps<TItem extends BaseHit> = Omit<
@@ -235,6 +236,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   panelComponent: PanelComponent,
   showRecent,
   showSuggestions,
+  placeholder,
   ...props
 }: InnerAutocompleteProps<TItem>) {
   const {
@@ -279,6 +281,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
 
           setQuery(query);
         }),
+      placeholder,
     });
 
   const AutocompleteRecentSearchComponent =

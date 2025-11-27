@@ -119,7 +119,11 @@ type RendererParams<TItem extends BaseHit> = {
   };
 } & Pick<
   AutocompleteWidgetParams<TItem>,
-  'getSearchPageURL' | 'onSelect' | 'showRecent' | 'showSuggestions'
+  | 'getSearchPageURL'
+  | 'onSelect'
+  | 'showRecent'
+  | 'showSuggestions'
+  | 'placeholder'
 > &
   Required<Pick<AutocompleteWidgetParams<TItem>, 'cssClasses' | 'templates'>>;
 
@@ -176,6 +180,7 @@ type AutocompleteWrapperProps<TItem extends BaseHit> = Pick<
   | 'renderState'
   | 'showRecent'
   | 'showSuggestions'
+  | 'placeholder'
 > &
   Pick<AutocompleteRenderState, 'indices' | 'refine'> &
   RendererOptions<Partial<AutocompleteWidgetParams<TItem>>>;
@@ -192,6 +197,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   showRecent,
   showSuggestions,
   templates,
+  placeholder,
 }: AutocompleteWrapperProps<TItem>) {
   const { isolatedIndex, targetIndex } = renderState;
 
@@ -250,6 +256,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
 
           setQuery(query);
         }),
+      placeholder,
     });
 
   let AutocompleteRecentSearchComponent = ({
@@ -499,6 +506,11 @@ type AutocompleteWidgetParams<TItem extends BaseHit> = {
    * CSS classes to add.
    */
   cssClasses?: AutocompleteCSSClasses;
+
+  /**
+   * Placeholder text for the search input.
+   */
+  placeholder?: string;
 };
 
 export type AutocompleteWidget<TItem extends BaseHit = BaseHit> = WidgetFactory<
@@ -521,6 +533,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     onSelect,
     templates = {},
     cssClasses: userCssClasses = {},
+    placeholder,
   } = widgetParams || {};
 
   if (!container) {
@@ -593,6 +606,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     cssClasses,
     showRecent,
     showSuggestions,
+    placeholder,
     renderState: {
       indexTemplateProps: [],
       isolatedIndex: undefined,

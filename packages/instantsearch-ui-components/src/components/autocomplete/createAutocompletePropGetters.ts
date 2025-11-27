@@ -49,6 +49,7 @@ export type UsePropGetters<TItem extends BaseHit> = (params: {
   indicesConfig: Array<AutocompleteIndexConfig<TItem>>;
   onRefine: (query: string) => void;
   onSelect: NonNullable<AutocompleteIndexConfig<TItem>['onSelect']>;
+  placeholder?: string;
 }) => {
   getInputProps: GetInputProps;
   getItemProps: GetItemProps;
@@ -68,6 +69,7 @@ export function createAutocompletePropGetters({
     indicesConfig,
     onRefine,
     onSelect: globalOnSelect,
+    placeholder,
   }: Parameters<UsePropGetters<TItem>>[0]): ReturnType<UsePropGetters<TItem>> {
     const getElementId = createGetElementId(useId());
     const inputRef = useRef<HTMLInputElement>(null);
@@ -159,6 +161,7 @@ export function createAutocompletePropGetters({
         'aria-haspopup': 'grid',
         'aria-controls': getElementId('panel'),
         'aria-activedescendant': activeDescendant,
+        placeholder,
         onFocus: () => setIsOpen(true),
         onKeyDown: (event) => {
           switch (event.key) {
