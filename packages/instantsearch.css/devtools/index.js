@@ -780,8 +780,12 @@ export function createInstantSearchDevtools(options = {}) {
                 // Convert px to rem
                 cssValue = `${Number(ev.value) / 16}rem`;
               } else {
-                // Append unit if it exists, otherwise just the value
-                cssValue = `${ev.value}${variable.control.unit || ''}`;
+                // Append unit if it exists and is not 'unitless', otherwise just the value
+                const unit =
+                  variable.control.unit && variable.control.unit !== 'unitless'
+                    ? variable.control.unit
+                    : '';
+                cssValue = `${ev.value}${unit}`;
               }
 
               updateCSSVariable(variable.name, cssValue);
