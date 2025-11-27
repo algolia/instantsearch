@@ -999,5 +999,66 @@ export function createOptionsTests(
       expect(hiItem).not.toHaveClass('ais-ReverseHighlight-highlighted');
       expect(hiItem).not.toHaveClass('ais-ReverseHighlight-nonHighlighted');
     });
+
+    test('keeps input focused when clicking inside the panel', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'indexName',
+            hits: [{ objectID: '1', name: 'Item 1' }],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            indices: [
+              {
+                indexName: 'indexName',
+                templates: {
+                  item: (props) => props.item.name,
+                },
+              },
+            ],
+          },
+          react: {
+            indices: [
+              {
+                indexName: 'indexName',
+                itemComponent: (props) => props.item.name,
+              },
+            ],
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const input = screen.getByRole('combobox', { name: /submit/i });
+
+      await act(async () => {
+        userEvent.click(input);
+        await wait(0);
+      });
+
+      expect(input).toHaveFocus();
+
+      const panel = document.querySelector('.ais-AutocompletePanel')!;
+
+      await act(async () => {
+        userEvent.click(panel);
+        await wait(0);
+      });
+
+      expect(input).toHaveFocus();
+    });
   });
 }
