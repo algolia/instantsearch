@@ -22,5 +22,10 @@
     "@parcel/transformer-webmanifest": "2.10.0",
     "parcel": "2.10.0",
     "typescript": "5.5.2"
+  },
+  "targets": {
+    "default": {
+      "scopeHoist": false
+    }
   }
 }

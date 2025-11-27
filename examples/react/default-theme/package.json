@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "build": "BABEL_ENV=parcel parcel build index.html",
-    "start": "BABEL_ENV=parcel parcel index.html"
+    "start": "BABEL_ENV=parcel parcel index.html",
+    "website:examples": "BABEL_ENV=parcel parcel build index.html --public-url . --dist-dir=../../../website/examples/react/default-theme"
   },
   "dependencies": {
     "algoliasearch": "5.1.1",
@@ -27,5 +28,10 @@
   },
   "@parcel/resolver-default": {
     "packageExports": true
+  },
+  "targets": {
+    "website": {
+      "scopeHoist": false
+    }
   }
 }
