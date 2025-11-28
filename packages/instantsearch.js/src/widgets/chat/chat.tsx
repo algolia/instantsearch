@@ -64,10 +64,40 @@ const Chat = createChatComponent({ createElement: h, Fragment });
 
 export { SearchIndexToolType, RecommendToolType };
 
+type SearchToolInput = {
+  query: string;
+  number_of_results?: number;
+  facet_filters?: string[][];
+};
+
 function getDefinedProperties<T extends object>(obj: T): Partial<T> {
   return Object.fromEntries(
     Object.entries(obj).filter(([, value]) => value !== undefined)
   ) as Partial<T>;
+}
+
+function generateIndexUiState(input: SearchToolInput) {
+  const indexUiState: IndexUiState = {};
+
+  if (input.query) {
+    indexUiState.query = input.query;
+  }
+
+  if (input.facet_filters) {
+    indexUiState.refinementList = {};
+
+    input.facet_filters.forEach((facetFilter) => {
+      facetFilter.forEach((filter) => {
+        const [facet, value] = filter.split(':');
+        if (!indexUiState.refinementList![facet]) {
+          indexUiState.refinementList![facet] = [];
+        }
+        indexUiState.refinementList![facet].push(value);
+      });
+    });
+  }
+
+  return indexUiState;
 }
 
 function createCarouselTool<
@@ -87,12 +117,7 @@ function createCarouselTool<
     setIndexUiState,
     onClose,
   }: ClientSideToolComponentProps) {
-    const input = message?.input as
-      | {
-          query: string;
-          number_of_results?: number;
-        }
-      | undefined;
+    const input = message?.input as SearchToolInput | undefined;
 
     const output = message?.output as
       | {
@@ -118,7 +143,7 @@ function createCarouselTool<
       ) => (
         <HeaderComponent
           nbHits={output?.nbHits}
-          query={input?.query}
+          input={input}
           hitsPerPage={items.length}
           setIndexUiState={setIndexUiState}
           indexUiState={indexUiState}
@@ -129,7 +154,7 @@ function createCarouselTool<
       );
     }, [
       items.length,
-      input?.query,
+      input,
       output?.nbHits,
       setIndexUiState,
       indexUiState,
@@ -163,7 +188,7 @@ function createCarouselTool<
     scrollLeft,
     scrollRight,
     nbHits,
-    query,
+    input,
     hitsPerPage,
     setIndexUiState,
     indexUiState,
@@ -176,7 +201,7 @@ function createCarouselTool<
     scrollLeft: () => void;
     scrollRight: () => void;
     nbHits?: number;
-    query?: string;
+    input?: SearchToolInput;
     hitsPerPage?: number;
     setIndexUiState: IndexWidget['setIndexUiState'];
     indexUiState: IndexUiState;
@@ -201,9 +226,12 @@ function createCarouselTool<
               variant="ghost"
               size="sm"
               onClick={() => {
-                if (!query) return;
+                if (!input?.query) return;
 
-                const nextUiState = { ...indexUiState, query };
+                const nextUiState = {
+                  ...indexUiState,
+                  ...generateIndexUiState(input),
+                };
 
                 // If no main search page URL or we are on the search page, just update the state
                 if (
