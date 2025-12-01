@@ -292,14 +292,6 @@ export function createTemplatesTests(
                       id="autocompleteP484item:indexName2:0"
                       role="row"
                     >
-                      hello
-                    </li>
-                    <li
-                      aria-selected="false"
-                      class="ais-AutocompleteIndexItem ais-AutocompleteSuggestionsItem"
-                      id="autocompleteP484item:indexName2:1"
-                      role="row"
-                    >
                       world
                     </li>
                   </ol>

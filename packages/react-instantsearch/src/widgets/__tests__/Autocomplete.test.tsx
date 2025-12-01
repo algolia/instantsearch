@@ -168,6 +168,7 @@ describe('Autocomplete', () => {
       <div
         aria-labelledby="autocomplete:r0:input"
         class="ais-AutocompletePanel"
+        hidden=""
         id="autocomplete:r0:panel"
         role="grid"
       >
@@ -249,6 +250,7 @@ describe('Autocomplete', () => {
       <div
         aria-labelledby="autocomplete:r1:input"
         class="ais-AutocompletePanel"
+        hidden=""
         id="autocomplete:r1:panel"
         role="grid"
       >

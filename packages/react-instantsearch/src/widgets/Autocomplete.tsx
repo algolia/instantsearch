@@ -322,7 +322,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     const elementId =
       indexName === showSuggestions?.indexName ? 'suggestions' : indexName;
     const filteredHits =
-      elementId === 'suggestions'
+      elementId === 'suggestions' && showRecent
         ? hits.filter(
             (suggestionHit) =>
               !storageHits.find(

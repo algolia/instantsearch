@@ -368,7 +368,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       indexName === showSuggestions?.indexName ? 'suggestions' : indexName;
 
     const filteredHits =
-      elementId === 'suggestions'
+      elementId === 'suggestions' && showRecent
         ? hits.filter(
             (suggestionHit) =>
               !find(
