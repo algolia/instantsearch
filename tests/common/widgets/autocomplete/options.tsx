@@ -228,7 +228,7 @@ export function createOptionsTests(
 
       // click the hello combo box suggestion
       await act(async () => {
-        screen.getAllByText('hello')[0].click();
+        screen.getByText('hello').click();
         await wait(0);
       });
 
@@ -237,6 +237,9 @@ export function createOptionsTests(
       );
       expect(recentSearches).toHaveLength(1);
       expect(recentSearches[0]).toHaveTextContent('hello');
+
+      // It should not be duplicated in suggestions
+      expect(screen.getAllByText('hello').length).toBe(1);
 
       await act(async () => {
         screen

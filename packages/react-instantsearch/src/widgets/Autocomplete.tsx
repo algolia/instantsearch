@@ -313,6 +313,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
         }}
         items={storageHits}
         getItemProps={getItemProps}
+        key="recentSearches"
       />
     );
   }
@@ -320,6 +321,15 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   indices.forEach(({ indexId, indexName, hits }, i) => {
     const elementId =
       indexName === showSuggestions?.indexName ? 'suggestions' : indexName;
+    const filteredHits =
+      elementId === 'suggestions'
+        ? hits.filter(
+            (suggestionHit) =>
+              !storageHits.find(
+                (storageHit) => storageHit.query === suggestionHit.query
+              )
+          )
+        : hits;
     elements[elementId] = (
       <AutocompleteIndex
         key={indexId}
@@ -327,7 +337,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
         HeaderComponent={indicesConfig[i].headerComponent}
         // @ts-expect-error - there seems to be problems with React.ComponentType and this, but it's actually correct
         ItemComponent={indicesConfig[i].itemComponent}
-        items={hits.map((item) => ({
+        items={filteredHits.map((item) => ({
           ...item,
           __indexName: indexId,
         }))}

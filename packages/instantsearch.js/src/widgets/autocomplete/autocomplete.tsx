@@ -24,6 +24,7 @@ import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
   createDocumentationMessageGenerator,
+  find,
   getContainerNode,
   walkIndex,
 } from '../../lib/utils';
@@ -366,12 +367,23 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     const elementId =
       indexName === showSuggestions?.indexName ? 'suggestions' : indexName;
 
+    const filteredHits =
+      elementId === 'suggestions'
+        ? hits.filter(
+            (suggestionHit) =>
+              !find(
+                storageHits,
+                (storageHit) => storageHit.query === suggestionHit.query
+              )
+          )
+        : hits;
+
     elements[elementId] = (
       <AutocompleteIndex
         key={indexId}
         HeaderComponent={headerComponent}
         ItemComponent={itemComponent}
-        items={hits.map((item) => ({
+        items={filteredHits.map((item) => ({
           ...item,
           __indexName: indexId,
         }))}
