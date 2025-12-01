@@ -10,45 +10,16 @@ import { h } from 'preact';
 import { useMemo } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
+import { generateIndexUiState } from '../../lib/utils/getStateFromSearchToolInput';
 import { carousel } from '../../templates';
 
-import type { IndexUiState, IndexWidget } from '../../types';
+import type { IndexUiState, IndexWidget, SearchToolInput } from '../../types';
 import type { ChatTemplates, UserClientSideToolWithTemplate } from './chat';
 import type {
   ClientSideToolComponentProps,
   ComponentProps,
   RecordWithObjectID,
 } from 'instantsearch-ui-components';
-
-type SearchToolInput = {
-  query: string;
-  number_of_results?: number;
-  facet_filters?: string[][];
-};
-
-function generateIndexUiState(input: SearchToolInput) {
-  const indexUiState: IndexUiState = {};
-
-  if (input.query) {
-    indexUiState.query = input.query;
-  }
-
-  if (input.facet_filters) {
-    indexUiState.refinementList = {};
-
-    input.facet_filters.forEach((facetFilter) => {
-      facetFilter.forEach((filter) => {
-        const [facet, value] = filter.split(':');
-        if (!indexUiState.refinementList![facet]) {
-          indexUiState.refinementList![facet] = [];
-        }
-        indexUiState.refinementList![facet].push(value);
-      });
-    });
-  }
-
-  return indexUiState;
-}
 
 export function createCarouselTool<
   THit extends RecordWithObjectID = RecordWithObjectID
@@ -182,7 +153,7 @@ export function createCarouselTool<
 
                 const nextUiState = {
                   ...indexUiState,
-                  ...generateIndexUiState(input),
+                  ...generateIndexUiState(input, indexUiState),
                 };
 
                 // If no main search page URL or we are on the search page, just update the state

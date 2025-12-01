@@ -4,6 +4,7 @@ import {
   ArrowRightIcon,
   createButtonComponent,
 } from 'instantsearch-ui-components';
+import { generateIndexUiState } from 'instantsearch.js/es/lib/utils';
 import React, { createElement } from 'react';
 
 import { Carousel } from '../../../components';
@@ -25,30 +26,6 @@ type SearchToolInput = {
   number_of_results?: number;
   facet_filters?: string[][];
 };
-
-function generateIndexUiState(input: SearchToolInput) {
-  const indexUiState: IndexUiState = {};
-
-  if (input.query) {
-    indexUiState.query = input.query;
-  }
-
-  if (input.facet_filters) {
-    indexUiState.refinementList = {};
-
-    input.facet_filters.forEach((facetFilter) => {
-      facetFilter.forEach((filter) => {
-        const [facet, value] = filter.split(':');
-        if (!indexUiState.refinementList![facet]) {
-          indexUiState.refinementList![facet] = [];
-        }
-        indexUiState.refinementList![facet].push(value);
-      });
-    });
-  }
-
-  return indexUiState;
-}
 
 function createCarouselTool<TObject extends RecordWithObjectID>(
   showViewAll: boolean,
@@ -168,7 +145,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
 
                 const nextUiState = {
                   ...indexUiState,
-                  ...generateIndexUiState(input),
+                  ...generateIndexUiState(input, indexUiState),
                 };
 
                 // If no main search page URL or we are on the search page, just update the state
