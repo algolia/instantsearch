@@ -1,12 +1,5 @@
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ArrowRightIcon,
-  createButtonComponent,
-} from 'instantsearch-ui-components';
-import React, { createElement } from 'react';
-
-import { Carousel } from '../../../components';
+import { createSearchIndexTool } from 'instantsearch-ui-components';
+import React, { createElement, Fragment } from 'react';
 
 import type {
   ClientSideToolComponentProps,
@@ -15,212 +8,33 @@ import type {
   RecordWithObjectID,
   UserClientSideTool,
 } from 'instantsearch-ui-components';
-import type { IndexUiState, IndexWidget } from 'instantsearch.js';
-import type { ComponentProps } from 'react';
+import type { IndexUiState } from 'instantsearch.js';
 
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
-
-type SearchToolInput = {
-  query: string;
-  number_of_results?: number;
-  facet_filters?: string[][];
-};
-
-function generateIndexUiState(input: SearchToolInput) {
-  const indexUiState: IndexUiState = {};
-
-  if (input.query) {
-    indexUiState.query = input.query;
-  }
-
-  if (input.facet_filters) {
-    indexUiState.refinementList = {};
-
-    input.facet_filters.forEach((facetFilter) => {
-      facetFilter.forEach((filter) => {
-        const [facet, value] = filter.split(':');
-        if (!indexUiState.refinementList![facet]) {
-          indexUiState.refinementList![facet] = [];
-        }
-        indexUiState.refinementList![facet].push(value);
-      });
-    });
-  }
-
-  return indexUiState;
-}
 
 function createCarouselTool<TObject extends RecordWithObjectID>(
   showViewAll: boolean,
   itemComponent?: ItemComponent<TObject>,
   getSearchPageURL?: (nextUiState: IndexUiState) => string
 ): UserClientSideTool {
-  const Button = createButtonComponent({
+  const SearchLayoutUIComponent = createSearchIndexTool<TObject>({
     createElement: createElement as Pragma,
+    Fragment,
   });
 
-  function SearchLayoutComponent({
-    message,
-    indexUiState,
-    setIndexUiState,
-    onClose,
-  }: ClientSideToolComponentProps) {
-    const input = message?.input as SearchToolInput | undefined;
-
-    const output = message?.output as
-      | {
-          hits?: Array<RecordWithObjectID<TObject>>;
-          nbHits?: number;
-        }
-      | undefined;
-
-    const items = output?.hits || [];
-
-    const MemoedHeaderComponent = React.useMemo(() => {
-      return (
-        props: Omit<
-          ComponentProps<typeof HeaderComponent>,
-          | 'nbHits'
-          | 'query'
-          | 'hitsPerPage'
-          | 'setIndexUiState'
-          | 'indexUiState'
-          | 'getSearchPageURL'
-          | 'onClose'
-        >
-      ) => (
-        <HeaderComponent
-          nbHits={output?.nbHits}
-          input={input}
-          hitsPerPage={items.length}
-          setIndexUiState={setIndexUiState}
-          indexUiState={indexUiState}
-          getSearchPageURL={getSearchPageURL}
-          onClose={onClose}
-          {...props}
-        />
-      );
-    }, [
-      items.length,
-      input,
-      output?.nbHits,
-      setIndexUiState,
-      onClose,
-      indexUiState,
-    ]);
-
+  const SearchLayoutComponent = (toolProps: ClientSideToolComponentProps) => {
     return (
-      <Carousel
-        items={items}
+      <SearchLayoutUIComponent
+        useMemo={React.useMemo}
+        useRef={React.useRef}
+        useState={React.useState}
+        getSearchPageURL={getSearchPageURL}
+        headerProps={{ showViewAll }}
         itemComponent={itemComponent}
-        sendEvent={() => {}}
-        showNavigation={false}
-        headerComponent={MemoedHeaderComponent}
+        toolProps={toolProps}
       />
     );
-  }
-
-  function HeaderComponent({
-    canScrollLeft,
-    canScrollRight,
-    scrollLeft,
-    scrollRight,
-    nbHits,
-    input,
-    hitsPerPage,
-    setIndexUiState,
-    indexUiState,
-    // eslint-disable-next-line no-shadow
-    getSearchPageURL,
-    onClose,
-  }: {
-    canScrollLeft: boolean;
-    canScrollRight: boolean;
-    scrollLeft: () => void;
-    scrollRight: () => void;
-    nbHits?: number;
-    input?: SearchToolInput;
-    hitsPerPage?: number;
-    setIndexUiState: IndexWidget['setIndexUiState'];
-    indexUiState: IndexUiState;
-    getSearchPageURL?: (nextUiState: IndexUiState) => string;
-    onClose: () => void;
-  }) {
-    if ((hitsPerPage ?? 0) < 1) {
-      return null;
-    }
-
-    return (
-      <div className="ais-ChatToolSearchIndexCarouselHeader">
-        <div className="ais-ChatToolSearchIndexCarouselHeaderResults">
-          {nbHits && (
-            <div className="ais-ChatToolSearchIndexCarouselHeaderCount">
-              {hitsPerPage ?? 0} of {nbHits.toLocaleString()} result
-              {nbHits > 1 ? 's' : ''}
-            </div>
-          )}
-          {showViewAll && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                if (!input?.query) return;
-
-                const nextUiState = {
-                  ...indexUiState,
-                  ...generateIndexUiState(input),
-                };
-
-                // If no main search page URL or we are on the search page, just update the state
-                if (
-                  !getSearchPageURL ||
-                  (getSearchPageURL &&
-                    new URL(getSearchPageURL(nextUiState)).pathname ===
-                      window.location.pathname)
-                ) {
-                  setIndexUiState(nextUiState);
-                  onClose();
-                  return;
-                }
-
-                // Navigate to different page
-                window.location.href = getSearchPageURL(nextUiState);
-              }}
-              className="ais-ChatToolSearchIndexCarouselHeaderViewAll"
-            >
-              View all
-              <ArrowRightIcon createElement={createElement as Pragma} />
-            </Button>
-          )}
-        </div>
-
-        {(hitsPerPage ?? 0) > 2 && (
-          <div className="ais-ChatToolSearchIndexCarouselHeaderScrollButtons">
-            <Button
-              variant="outline"
-              size="sm"
-              iconOnly
-              onClick={scrollLeft}
-              disabled={!canScrollLeft}
-              className="ais-ChatToolSearchIndexCarouselHeaderScrollButton"
-            >
-              <ChevronLeftIcon createElement={createElement as Pragma} />
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              iconOnly
-              onClick={scrollRight}
-              disabled={!canScrollRight}
-              className="ais-ChatToolSearchIndexCarouselHeaderScrollButton"
-            >
-              <ChevronRightIcon createElement={createElement as Pragma} />
-            </Button>
-          </div>
-        )}
-      </div>
-    );
-  }
+  };
 
   return {
     layoutComponent: SearchLayoutComponent,

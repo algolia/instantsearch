@@ -3,7 +3,7 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import userEvent from '@testing-library/user-event';
 import { Chat, SearchIndexToolType } from 'instantsearch.js/es/lib/chat';
-import { createCarouselTool as jsCreateCarouselTool } from 'instantsearch.js/src/widgets/chat/searchIndexTool';
+import { createCarouselTool as jsCreateCarouselTool } from 'instantsearch.js/src/widgets/chat/search-index-tool';
 import React from 'react';
 import { createCarouselTool as reactCreateCarouselTool } from 'react-instantsearch/src/widgets/chat/tools/SearchIndexTool';
 

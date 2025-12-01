@@ -13,7 +13,7 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
-import { createCarouselTool } from './searchIndexTool';
+import { createCarouselTool } from './search-index-tool';
 
 import type {
   ChatRenderState,

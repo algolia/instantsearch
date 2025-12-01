@@ -11,6 +11,7 @@ export * from './chat/ChatPrompt';
 export * from './chat/ChatToggleButton';
 export * from './chat/icons';
 export * from './chat/types';
+export * from './chat/tools/SearchIndexTool';
 export * from './FrequentlyBoughtTogether';
 export * from './Highlight';
 export * from './Hits';
