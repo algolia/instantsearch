@@ -3,7 +3,7 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import userEvent from '@testing-library/user-event';
 import { Chat, SearchIndexToolType } from 'instantsearch.js/es/lib/chat';
-import { createCarouselTool as jsCreateCarouselTool } from 'instantsearch.js/src/widgets/chat/searchIndexTool';
+import { createCarouselTool as jsCreateCarouselTool } from 'instantsearch.js/src/widgets/chat/search-index-tool';
 import React from 'react';
 import { createCarouselTool as reactCreateCarouselTool } from 'react-instantsearch/src/widgets/chat/tools/SearchIndexTool';
 
@@ -428,97 +428,317 @@ export function createOptionsTests(
         );
       });
 
-      test('search index tool updates the index UI state based on input', async () => {
-        const searchClient = createSearchClient();
+      describe('search tool index UI state', () => {
+        test('updates the index UI if refinementList is present', async () => {
+          const searchClient = createSearchClient();
 
-        const chat = new Chat({
-          messages: [
-            {
-              id: '1',
-              role: 'assistant',
-              parts: [
-                {
-                  type: `tool-${SearchIndexToolType}`,
-                  toolCallId: '1',
-                  input: {
-                    query: 'iphone',
-                    number_of_results: 1,
-                    facet_filters: [['brand:Apple', 'category:Smartphones']],
+          const chat = new Chat({
+            messages: [
+              {
+                id: '1',
+                role: 'assistant',
+                parts: [
+                  {
+                    type: `tool-${SearchIndexToolType}`,
+                    toolCallId: '1',
+                    input: {
+                      query: 'iphone',
+                      number_of_results: 1,
+                      facet_filters: [['brand:Apple', 'category:Smartphones']],
+                    },
+                    state: 'output-available',
+                    output: { hits: [{ objectID: '123' }] },
                   },
-                  state: 'output-available',
-                  output: { hits: [{ objectID: '123' }] },
-                },
-              ],
+                ],
+              },
+            ],
+            id: 'chat-id',
+          });
+
+          const mockSetIndexUiState = jest.fn();
+
+          const currentUiState = {
+            refinementList: {
+              brand: [],
+              category: [],
             },
-          ],
-          id: 'chat-id',
-        });
+            menu: {
+              brand: [],
+              category: [],
+            },
+          };
 
-        const mockSetIndexUiState = jest.fn();
+          const JsTool = jsCreateCarouselTool(true, {
+            item: '<div>Item</div>',
+          });
+          const ReactTool = reactCreateCarouselTool(true);
 
-        const JsTool = jsCreateCarouselTool(true, { item: '<div>Item</div>' });
-        const ReactTool = reactCreateCarouselTool(true);
-
-        await setup({
-          instantSearchOptions: {
-            indexName: 'indexName',
-            searchClient,
-          },
-          widgetParams: {
-            javascript: {
-              ...createDefaultWidgetParams(chat),
-              tools: {
-                [SearchIndexToolType]: {
-                  templates: {
-                    layout: (props) =>
-                      JsTool.templates.layout
-                        ? // @ts-expect-error
-                          JsTool.templates.layout({
-                            ...props,
-                            setIndexUiState: mockSetIndexUiState,
-                          })
-                        : null,
+          await setup({
+            instantSearchOptions: {
+              indexName: 'indexName',
+              searchClient,
+            },
+            widgetParams: {
+              javascript: {
+                ...createDefaultWidgetParams(chat),
+                tools: {
+                  [SearchIndexToolType]: {
+                    templates: {
+                      layout: (props) =>
+                        JsTool.templates.layout
+                          ? // @ts-expect-error
+                            JsTool.templates.layout({
+                              ...props,
+                              indexUiState: currentUiState,
+                              setIndexUiState: mockSetIndexUiState,
+                            })
+                          : null,
+                    },
                   },
                 },
               },
-            },
-            react: {
-              ...createDefaultWidgetParams(chat),
-              tools: {
-                [SearchIndexToolType]: {
-                  // @ts-expect-error
-                  layoutComponent: (props) =>
-                    ReactTool.layoutComponent ? (
-                      <ReactTool.layoutComponent
-                        {...props}
-                        setIndexUiState={mockSetIndexUiState}
-                      />
-                    ) : null,
+              react: {
+                ...createDefaultWidgetParams(chat),
+                tools: {
+                  [SearchIndexToolType]: {
+                    // @ts-expect-error
+                    layoutComponent: (props) =>
+                      ReactTool.layoutComponent ? (
+                        <ReactTool.layoutComponent
+                          {...props}
+                          indexUiState={currentUiState}
+                          setIndexUiState={mockSetIndexUiState}
+                        />
+                      ) : null,
+                  },
                 },
               },
+              vue: {},
             },
-            vue: {},
-          },
+          });
+
+          await openChat(act);
+
+          userEvent.click(
+            document.querySelector(
+              '.ais-ChatToolSearchIndexCarouselHeaderViewAll'
+            )!
+          );
+
+          await act(async () => {
+            await wait(0);
+          });
+
+          expect(mockSetIndexUiState).toHaveBeenCalledWith({
+            query: 'iphone',
+            refinementList: {
+              brand: ['Apple'],
+              category: ['Smartphones'],
+            },
+            menu: {
+              brand: [],
+              category: [],
+            },
+          });
         });
 
-        await openChat(act);
+        test('updates the index UI if menu is present', async () => {
+          const searchClient = createSearchClient();
 
-        userEvent.click(
-          document.querySelector(
-            '.ais-ChatToolSearchIndexCarouselHeaderViewAll'
-          )!
-        );
+          const chat = new Chat({
+            messages: [
+              {
+                id: '1',
+                role: 'assistant',
+                parts: [
+                  {
+                    type: `tool-${SearchIndexToolType}`,
+                    toolCallId: '1',
+                    input: {
+                      query: 'iphone',
+                      number_of_results: 1,
+                      facet_filters: [['brand:Apple', 'category:Smartphones']],
+                    },
+                    state: 'output-available',
+                    output: { hits: [{ objectID: '123' }] },
+                  },
+                ],
+              },
+            ],
+            id: 'chat-id',
+          });
 
-        await act(async () => {
-          await wait(0);
+          const mockSetIndexUiState = jest.fn();
+
+          const currentUiState = {
+            menu: {
+              brand: [],
+              category: [],
+            },
+          };
+
+          const JsTool = jsCreateCarouselTool(true, {
+            item: '<div>Item</div>',
+          });
+          const ReactTool = reactCreateCarouselTool(true);
+
+          await setup({
+            instantSearchOptions: {
+              indexName: 'indexName',
+              searchClient,
+            },
+            widgetParams: {
+              javascript: {
+                ...createDefaultWidgetParams(chat),
+                tools: {
+                  [SearchIndexToolType]: {
+                    templates: {
+                      layout: (props) =>
+                        JsTool.templates.layout
+                          ? // @ts-expect-error
+                            JsTool.templates.layout({
+                              ...props,
+                              indexUiState: currentUiState,
+                              setIndexUiState: mockSetIndexUiState,
+                            })
+                          : null,
+                    },
+                  },
+                },
+              },
+              react: {
+                ...createDefaultWidgetParams(chat),
+                tools: {
+                  [SearchIndexToolType]: {
+                    // @ts-expect-error
+                    layoutComponent: (props) =>
+                      ReactTool.layoutComponent ? (
+                        <ReactTool.layoutComponent
+                          {...props}
+                          indexUiState={currentUiState}
+                          setIndexUiState={mockSetIndexUiState}
+                        />
+                      ) : null,
+                  },
+                },
+              },
+              vue: {},
+            },
+          });
+
+          await openChat(act);
+
+          userEvent.click(
+            document.querySelector(
+              '.ais-ChatToolSearchIndexCarouselHeaderViewAll'
+            )!
+          );
+
+          await act(async () => {
+            await wait(0);
+          });
+
+          expect(mockSetIndexUiState).toHaveBeenCalledWith({
+            query: 'iphone',
+            menu: {
+              brand: ['Apple'],
+              category: ['Smartphones'],
+            },
+          });
         });
 
-        expect(mockSetIndexUiState).toHaveBeenCalledWith({
-          query: 'iphone',
-          refinementList: {
-            brand: ['Apple'],
-            category: ['Smartphones'],
-          },
+        test('does not update the index UI if no refinements are possible', async () => {
+          const searchClient = createSearchClient();
+
+          const chat = new Chat({
+            messages: [
+              {
+                id: '1',
+                role: 'assistant',
+                parts: [
+                  {
+                    type: `tool-${SearchIndexToolType}`,
+                    toolCallId: '1',
+                    input: {
+                      query: 'iphone',
+                      number_of_results: 1,
+                      facet_filters: [['brand:Apple', 'category:Smartphones']],
+                    },
+                    state: 'output-available',
+                    output: { hits: [{ objectID: '123' }] },
+                  },
+                ],
+              },
+            ],
+            id: 'chat-id',
+          });
+
+          const mockSetIndexUiState = jest.fn();
+
+          const currentUiState = {};
+
+          const JsTool = jsCreateCarouselTool(true, {
+            item: '<div>Item</div>',
+          });
+          const ReactTool = reactCreateCarouselTool(true);
+
+          await setup({
+            instantSearchOptions: {
+              indexName: 'indexName',
+              searchClient,
+            },
+            widgetParams: {
+              javascript: {
+                ...createDefaultWidgetParams(chat),
+                tools: {
+                  [SearchIndexToolType]: {
+                    templates: {
+                      layout: (props) =>
+                        JsTool.templates.layout
+                          ? // @ts-expect-error
+                            JsTool.templates.layout({
+                              ...props,
+                              indexUiState: currentUiState,
+                              setIndexUiState: mockSetIndexUiState,
+                            })
+                          : null,
+                    },
+                  },
+                },
+              },
+              react: {
+                ...createDefaultWidgetParams(chat),
+                tools: {
+                  [SearchIndexToolType]: {
+                    // @ts-expect-error
+                    layoutComponent: (props) =>
+                      ReactTool.layoutComponent ? (
+                        <ReactTool.layoutComponent
+                          {...props}
+                          indexUiState={currentUiState}
+                          setIndexUiState={mockSetIndexUiState}
+                        />
+                      ) : null,
+                  },
+                },
+              },
+              vue: {},
+            },
+          });
+
+          await openChat(act);
+
+          userEvent.click(
+            document.querySelector(
+              '.ais-ChatToolSearchIndexCarouselHeaderViewAll'
+            )!
+          );
+
+          await act(async () => {
+            await wait(0);
+          });
+
+          expect(mockSetIndexUiState).toHaveBeenCalledWith({ query: 'iphone' });
         });
       });
     });
