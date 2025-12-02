@@ -6,6 +6,8 @@ import {
   ChevronRightIcon,
   createButtonComponent,
   createChatComponent,
+  createChatMessageLoaderComponent,
+  createSuggestedFiltersComponent,
 } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 import { useMemo } from 'preact/hooks';
@@ -81,11 +83,21 @@ function createCarouselTool<
     createElement: h,
   });
 
+  const SuggestedFilters = createSuggestedFiltersComponent({
+    createElement: h,
+  });
+
+  const ChatMessageLoader = createChatMessageLoaderComponent({
+    createElement: h,
+  });
+
   function SearchLayoutComponent({
     message,
     indexUiState,
+    toolState,
     setIndexUiState,
     onClose,
+    sendMessage,
   }: ClientSideToolComponentProps) {
     const input = message?.input as
       | {
@@ -98,10 +110,34 @@ function createCarouselTool<
       | {
           hits?: Array<RecordWithObjectID<THit>>;
           nbHits?: number;
+          suggestedFilters?: Array<{
+            label: string;
+            attribute: string;
+            value: string;
+            count: number;
+          }>;
         }
       | undefined;
 
     const items = output?.hits || [];
+    const suggestedFilters = output?.suggestedFilters || [];
+
+    const handleFilterClick = (
+      attribute: string,
+      value: string,
+      isRefined: boolean
+    ) => {
+      const action = isRefined ? 'Remove' : 'Apply';
+      sendMessage({
+        text: `${action} the ${attribute} filter: ${value}`,
+      });
+    };
+
+    if (toolState === 'input-streaming') {
+      return (
+        <ChatMessageLoader translations={{ loaderText: 'Searching...' }} />
+      );
+    }
 
     const MemoedHeaderComponent = useMemo(() => {
       return (
@@ -136,7 +172,7 @@ function createCarouselTool<
       onClose,
     ]);
 
-    return carousel({
+    const carouselElement = carousel({
       showNavigation: false,
       templates: {
         header: MemoedHeaderComponent,
@@ -155,6 +191,19 @@ function createCarouselTool<
       },
       sendEvent: () => {},
     });
+
+    return (
+      <Fragment>
+        {carouselElement}
+        {suggestedFilters.length > 0 && (
+          <SuggestedFilters
+            filters={suggestedFilters}
+            onFilterClick={handleFilterClick}
+            indexUiState={indexUiState}
+          />
+        )}
+      </Fragment>
+    );
   }
 
   function HeaderComponent({
@@ -399,6 +448,7 @@ function ChatWrapper({
         status: chatStatus,
         onReload: (messageId) => regenerate({ messageId }),
         onClose: () => setChatOpen(false),
+        sendMessage,
         messages: chatMessages,
         indexUiState,
         isClearing,

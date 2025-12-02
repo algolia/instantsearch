@@ -20,10 +20,11 @@ import 'instantsearch.css/themes/satellite.css';
 
 import './App.css';
 
-const searchClient = algoliasearch(
-  'latency',
-  '6be0576ff61c053d5f9a3225e2a90f76'
-);
+const appId = 'latency';
+const apiKey = '6be0576ff61c053d5f9a3225e2a90f76';
+const agentId = '50426804-635d-48ed-90aa-0eebc8e2f878';
+
+const searchClient = algoliasearch(appId, apiKey);
 
 export function App() {
   return (
@@ -52,6 +53,12 @@ export function App() {
               <Panel header="brand">
                 <RefinementList attribute="brand" />
               </Panel>
+              <Panel header="category">
+                <RefinementList attribute="categories" />
+              </Panel>
+              <Panel header="price range">
+                <RefinementList attribute="price_range" />
+              </Panel>
             </div>
 
             <div className="search-panel__results">
@@ -72,8 +79,14 @@ export function App() {
           </div>
 
           <Chat
-            agentId="7c2f6816-bfdb-46e9-a51f-9cb8e5fc9628"
             itemComponent={ItemComponent}
+            transport={{
+              api: `http://localhost:8000/1/agents/${agentId}/completions?compatibilityMode=ai-sdk-5`,
+              headers: {
+                'x-algolia-application-id': appId,
+                'x-algolia-api-Key': apiKey,
+              },
+            }}
           />
         </InstantSearch>
       </div>
