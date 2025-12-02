@@ -208,6 +208,7 @@ export function createTemplatesTests(
         normalizeSnapshot('P484'),
         `
         <div
+          aria-hidden="false"
           aria-labelledby="autocompleteP484input"
           class="ais-AutocompletePanel ais-AutocompletePanel--open"
           id="autocompleteP484panel"

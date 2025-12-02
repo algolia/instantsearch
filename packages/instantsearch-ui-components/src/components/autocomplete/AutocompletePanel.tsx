@@ -27,7 +27,7 @@ export function createAutocompletePanelComponent({ createElement }: Renderer) {
     return (
       <div
         {...props}
-        hidden={hidden}
+        aria-hidden={hidden}
         className={cx(
           'ais-AutocompletePanel',
           !hidden && 'ais-AutocompletePanel--open',
