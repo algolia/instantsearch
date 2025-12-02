@@ -32,7 +32,7 @@ const renderComponent = async ({
   ref = { current: null },
   nonce,
   insertedHTML,
-  client = ccreateSearchClient({
+  client = createSearchClient({
     getRecommendations: jest.fn().mockResolvedValue({
       results: [createSingleSearchResponse()],
     }),
