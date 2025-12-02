@@ -96,7 +96,7 @@ test('it errors when search errors', async () => {
     search: jest.fn().mockRejectedValue(new Error('composition failed')),
   });
 
-  renderComponent({
+  await renderComponent({
     ref,
     children: (
       <>

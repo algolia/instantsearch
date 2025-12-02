@@ -73,8 +73,8 @@ const renderComponent = async ({
   return client;
 };
 
-test('it calls resetWidgetId', () => {
-  renderComponent();
+test('it calls resetWidgetId', async () => {
+  await renderComponent();
 
   expect(utils.resetWidgetId).toHaveBeenCalledTimes(1);
 });
@@ -158,7 +158,7 @@ test('it errors if search fails', async () => {
     search: jest.fn().mockRejectedValue(new Error('search failed')),
   });
 
-  renderComponent({
+  await renderComponent({
     ref,
     children: (
       <>
@@ -188,7 +188,7 @@ test('it errors if recommend fails', async () => {
       .mockRejectedValue(new Error('recommend failed')),
   });
 
-  renderComponent({
+  await renderComponent({
     ref,
     children: (
       <>
@@ -219,7 +219,7 @@ test('it errors if both search and recommend fail', async () => {
       .mockRejectedValue(new Error('recommend failed')),
   });
 
-  renderComponent({
+  await renderComponent({
     ref,
     children: (
       <>
@@ -252,7 +252,7 @@ test('it does not error if only search fails, but recommendations passes', async
     }),
   });
 
-  renderComponent({
+  await renderComponent({
     ref,
     children: (
       <>
@@ -286,7 +286,7 @@ test('it does not error if only recommendations fails, but search passes', async
       .mockRejectedValue(new Error('recommend failed')),
   });
 
-  renderComponent({
+  await renderComponent({
     ref,
     children: (
       <>
