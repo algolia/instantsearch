@@ -21,6 +21,7 @@ describe('ChatMessage', () => {
         message={{ role: 'user', id: '1', parts: [] }}
         tools={{}}
         onClose={jest.fn()}
+        sendMessage={jest.fn()}
       />
     );
     expect(container).toMatchInlineSnapshot(`
@@ -65,6 +66,7 @@ describe('ChatMessage', () => {
         }}
         tools={{}}
         onClose={jest.fn()}
+        sendMessage={jest.fn()}
       />
     );
     expect(container).toMatchInlineSnapshot(`
@@ -102,6 +104,7 @@ describe('ChatMessage', () => {
           }}
           tools={{}}
           onClose={jest.fn()}
+          sendMessage={jest.fn()}
         />
         <ChatMessage
           indexUiState={{}}
@@ -113,6 +116,7 @@ describe('ChatMessage', () => {
           }}
           tools={{}}
           onClose={jest.fn()}
+          sendMessage={jest.fn()}
         />
         <ChatMessage
           indexUiState={{}}
@@ -124,6 +128,7 @@ describe('ChatMessage', () => {
           }}
           tools={{}}
           onClose={jest.fn()}
+          sendMessage={jest.fn()}
         />
       </div>
     );
@@ -229,6 +234,7 @@ describe('ChatMessage', () => {
           },
         }}
         onClose={jest.fn()}
+        sendMessage={jest.fn()}
       />
     );
     expect(container).toMatchInlineSnapshot(`
