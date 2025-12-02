@@ -23,3 +23,5 @@ export * from './trending-items';
 export * from './looking-similar';
 export * from './powered-by';
 export * from './menu-select';
+export * from './chat';
+export * from './autocomplete';

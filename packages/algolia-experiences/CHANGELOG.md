@@ -3,6 +3,89 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.3](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.6.2...algolia-experiences@1.6.3) (2025-11-18)
+
+**Note:** Version bump only for package algolia-experiences
+
+
+
+
+
+## [1.6.2](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.6.1...algolia-experiences@1.6.2) (2025-11-10)
+
+**Note:** Version bump only for package algolia-experiences
+
+
+
+
+
+## [1.6.1](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.6.0...algolia-experiences@1.6.1) (2025-11-06)
+
+**Note:** Version bump only for package algolia-experiences
+
+
+
+
+
+# [1.6.0](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.5.15...algolia-experiences@1.6.0) (2025-10-23)
+
+
+### Features
+
+* **instantsearch.js:** introduce chat widget ([#6705](https://github.com/algolia/instantsearch/issues/6705)) ([d7b360b](https://github.com/algolia/instantsearch/commit/d7b360b0a2d18e3eae42bf89ffae87f10142d0c1))
+
+
+
+
+
+## [1.5.15](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.5.14...algolia-experiences@1.5.15) (2025-09-09)
+
+**Note:** Version bump only for package algolia-experiences
+
+
+
+
+
+## [1.5.14](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.5.13...algolia-experiences@1.5.14) (2025-07-22)
+
+**Note:** Version bump only for package algolia-experiences
+
+
+
+
+
+## [1.5.13](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.5.12...algolia-experiences@1.5.13) (2025-07-08)
+
+**Note:** Version bump only for package algolia-experiences
+
+
+
+
+
+## [1.5.12](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.5.11...algolia-experiences@1.5.12) (2025-06-16)
+
+**Note:** Version bump only for package algolia-experiences
+
+
+
+
+
+## [1.5.11](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.5.10...algolia-experiences@1.5.11) (2025-05-06)
+
+**Note:** Version bump only for package algolia-experiences
+
+
+
+
+
+## [1.5.10](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.5.9...algolia-experiences@1.5.10) (2025-04-29)
+
+**Note:** Version bump only for package algolia-experiences
+
+
+
+
+
 ## [1.5.9](https://github.com/algolia/instantsearch/compare/algolia-experiences@1.5.8...algolia-experiences@1.5.9) (2025-03-18)
 
 **Note:** Version bump only for package algolia-experiences

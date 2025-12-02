@@ -26,7 +26,7 @@ type InitializePromiseProps = {
 
 export function InitializePromise({ nonce }: InitializePromiseProps) {
   const search = useInstantSearchContext();
-  const waitForResultsRef = useRSCContext();
+  const { waitForResultsRef } = useRSCContext();
   const insertHTML =
     useContext(ServerInsertedHTMLContext) ||
     (() => {
@@ -54,6 +54,7 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
         });
 
         if (shouldRefetch) {
+          search._resetScheduleSearch?.();
           waitForResultsRef.current = wrapPromiseWithState(
             waitForResults(search).then(injectInitialResults)
           );

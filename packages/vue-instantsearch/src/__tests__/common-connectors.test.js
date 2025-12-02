@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 import { runTestSuites } from '@instantsearch/tests/common';
 import * as testSuites from '@instantsearch/tests/connectors';
@@ -14,7 +14,7 @@ import {
   connectRatingMenu,
   connectRefinementList,
   connectToggleRefinement,
-} from 'instantsearch.js/es/connectors';
+} from 'instantsearch.js/es/connectors/index.umd';
 
 import { nextTick, mountApp } from '../../test/utils';
 import {
@@ -343,6 +343,7 @@ const testSetups = {
   createFrequentlyBoughtTogetherConnectorTests: () => {},
   createTrendingItemsConnectorTests: () => {},
   createLookingSimilarConnectorTests: () => {},
+  createChatConnectorTests: () => {},
 };
 
 function createCustomWidget({
@@ -441,10 +442,12 @@ const testOptions = {
       state: true,
     },
   },
+  createChatConnectorTests: { skippedTests: { options: true } },
 };
 
 describe('Common connector tests (Vue InstantSearch)', () => {
   runTestSuites({
+    flavor: 'vue',
     testSuites,
     testSetups,
     testOptions,

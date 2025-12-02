@@ -1,9 +1,9 @@
 {
   "name": "@instantsearch/tests",
   "private": true,
-  "version": "1.72.0",
+  "version": "1.82.0",
   "description": "Common tests for all InstantSearch flavors.",
   "dependencies": {
-    "instantsearch.js": "4.78.1"
+    "instantsearch.js": "4.84.0"
   }
 }

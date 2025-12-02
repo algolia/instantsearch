@@ -1,0 +1,147 @@
+@use '../shared/_variables';
+@use '../shared/_common';
+
+// Base button styles
+.ais-Button {
+  @extend %ais-focus-outline;
+
+  appearance: none;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--ais-spacing) * 0.25);
+  margin: 0;
+  background-color: transparent;
+  border-radius: var(--ais-border-radius-sm);
+  font-family: inherit;
+  font-size: var(--ais-font-size);
+  line-height: 1em;
+
+  svg {
+    stroke-width: var(--ais-icon-stroke-width);
+    width: var(--ais-icon-size);
+    height: auto;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: background-color var(--ais-transition-duration)
+        var(--ais-transition-timing-function),
+      color var(--ais-transition-duration) var(--ais-transition-timing-function);
+  }
+}
+
+// Button sizes
+.ais-Button--sm {
+  padding: calc(var(--ais-spacing) * 0.25) calc(var(--ais-spacing) * 0.5);
+}
+
+.ais-Button--md {
+  padding: calc(var(--ais-spacing) * 0.5) calc(var(--ais-spacing) * 1);
+}
+
+// Icon-only buttons (square padding)
+.ais-Button--icon-only.ais-Button--sm {
+  padding: calc(var(--ais-spacing) * 0.25);
+}
+
+.ais-Button--icon-only.ais-Button--md {
+  padding: calc(var(--ais-spacing) * 0.5);
+}
+
+// Primary button (with primary color background)
+.ais-Button--primary {
+  background-color: rgba(
+    var(--ais-primary-color-rgb),
+    var(--ais-primary-color-alpha)
+  );
+  color: rgba(
+    var(--ais-button-text-color-rgb),
+    var(--ais-button-text-color-alpha)
+  );
+
+  &:disabled {
+    background-color: rgba(
+      var(--ais-primary-color-rgb),
+      calc(var(--ais-primary-color-alpha) * 0.5)
+    );
+  }
+
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      background-color: color-mix(
+        in srgb,
+        rgb(var(--ais-primary-color-rgb)),
+        rgb(var(--ais-background-color-rgb)) 20%
+      );
+    }
+  }
+
+  &:active:not(:disabled) {
+    background-color: rgba(
+      var(--ais-primary-color-rgb),
+      var(--ais-primary-color-alpha)
+    );
+  }
+}
+
+// Ghost button (transparent background)
+.ais-Button--ghost {
+  color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+
+  &:disabled {
+    color: rgba(var(--ais-muted-color-rgb), 0.5);
+  }
+
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      background-color: rgba(var(--ais-muted-color-rgb), 0.1);
+    }
+  }
+
+  &:active:not(:disabled) {
+    background-color: rgba(var(--ais-muted-color-rgb), 0.2);
+  }
+}
+
+// Outline button (with border and background)
+.ais-Button--outline {
+  color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+  background-color: rgba(
+    var(--ais-background-color-rgb),
+    var(--ais-background-color-alpha)
+  );
+  border: 1px solid
+    color-mix(
+      in srgb,
+      rgb(var(--ais-muted-color-rgb)) 30%,
+      rgb(var(--ais-background-color-rgb))
+    );
+
+  &:disabled {
+    color: rgba(var(--ais-text-color-rgb), 0.4);
+  }
+
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      background-color: color-mix(
+        in srgb,
+        rgb(var(--ais-muted-color-rgb)) 10%,
+        rgb(var(--ais-background-color-rgb))
+      );
+    }
+  }
+
+  &:active:not(:disabled) {
+    background-color: color-mix(
+      in srgb,
+      rgb(var(--ais-muted-color-rgb)) 20%,
+      rgb(var(--ais-background-color-rgb))
+    );
+  }
+}

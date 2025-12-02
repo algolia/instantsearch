@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/connectors';
@@ -50,7 +50,7 @@ import type {
 type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
 
-const testSetups: TestSetupsMap<TestSuites> = {
+const testSetups: TestSetupsMap<TestSuites, 'react'> = {
   createRefinementListConnectorTests({ instantSearchOptions, widgetParams }) {
     function CustomRefinementList(props: UseRefinementListProps) {
       const { createURL, refine } = useRefinementList(props);
@@ -435,6 +435,7 @@ const testSetups: TestSetupsMap<TestSuites> = {
 
     render(<App />);
   },
+  createChatConnectorTests: () => {},
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -458,10 +459,12 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createFrequentlyBoughtTogetherConnectorTests: { act },
   createTrendingItemsConnectorTests: { act },
   createLookingSimilarConnectorTests: { act, skippedTests: { options: true } },
+  createChatConnectorTests: { act, skippedTests: { options: true } },
 };
 
 describe('Common connector tests (React InstantSearch)', () => {
   runTestSuites({
+    flavor: 'react',
     testSuites,
     testSetups,
     testOptions,

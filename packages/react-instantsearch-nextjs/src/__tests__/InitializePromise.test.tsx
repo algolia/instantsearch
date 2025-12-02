@@ -1,12 +1,12 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
 import {
   createSearchClient,
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
-import { act, render } from '@testing-library/react';
+import { render, act } from '@testing-library/react';
 import * as utils from 'instantsearch.js/es/lib/utils';
 import { ServerInsertedHTMLContext } from 'next/navigation';
 import React from 'react';
@@ -27,12 +27,12 @@ jest.mock('instantsearch.js/es/lib/utils', () => ({
   resetWidgetId: jest.fn(),
 }));
 
-const renderComponent = ({
+const renderComponent = async ({
   children,
   ref = { current: null },
   nonce,
   insertedHTML,
-  client = createSearchClient({
+  client = ccreateSearchClient({
     getRecommendations: jest.fn().mockResolvedValue({
       results: [createSingleSearchResponse()],
     }),
@@ -44,21 +44,31 @@ const renderComponent = ({
   insertedHTML?: jest.Mock;
   client?: ReturnType<typeof createSearchClient>;
 } = {}) => {
-  render(
-    <InstantSearchRSCContext.Provider value={ref}>
-      <InstantSearchSSRProvider>
-        <InstantSearch searchClient={client} indexName="indexName">
-          <ServerInsertedHTMLContext.Provider
-            value={(cb) => insertedHTML?.(cb())}
-          >
-            <InitializePromise nonce={nonce} />
-            {children}
-            <TriggerSearch />
-          </ServerInsertedHTMLContext.Provider>
-        </InstantSearch>
-      </InstantSearchSSRProvider>
-    </InstantSearchRSCContext.Provider>
+  await act(() =>
+    render(
+      <InstantSearchRSCContext.Provider
+        value={{
+          waitForResultsRef: ref,
+          countRef: { current: 0 },
+          ignoreMultipleHooksWarning: false,
+        }}
+      >
+        <InstantSearchSSRProvider>
+          <InstantSearch searchClient={client} indexName="indexName">
+            <ServerInsertedHTMLContext.Provider
+              value={(cb) => insertedHTML?.(cb())}
+            >
+              <InitializePromise nonce={nonce} />
+              {children}
+              <TriggerSearch />
+            </ServerInsertedHTMLContext.Provider>
+          </InstantSearch>
+        </InstantSearchSSRProvider>
+      </InstantSearchRSCContext.Provider>
+    )
   );
+
+  await ref.current;
 
   return client;
 };
@@ -70,17 +80,11 @@ test('it calls resetWidgetId', () => {
 });
 
 test('it applies provided nonce on the injected script tag', async () => {
-  const ref: { current: PromiseWithState<void> | null } = { current: null };
   const insertedHTML = jest.fn();
-  renderComponent({
-    ref,
+  await renderComponent({
     children: <SearchBox />,
     nonce: 'csp-nonce',
     insertedHTML,
-  });
-
-  await act(async () => {
-    await ref.current;
   });
 
   expect(insertedHTML).toHaveBeenLastCalledWith(
@@ -95,7 +99,7 @@ test('it applies provided nonce on the injected script tag', async () => {
 test('it waits for both search and recommend results', async () => {
   const ref: { current: PromiseWithState<void> | null } = { current: null };
 
-  const client = renderComponent({
+  const client = await renderComponent({
     ref,
     children: (
       <>
@@ -103,10 +107,6 @@ test('it waits for both search and recommend results', async () => {
         <TrendingItems />
       </>
     ),
-  });
-
-  await act(async () => {
-    await ref.current;
   });
 
   expect(ref.current!.status).toBe('fulfilled');
@@ -117,17 +117,13 @@ test('it waits for both search and recommend results', async () => {
 test('it waits for search only if there are only search widgets', async () => {
   const ref: { current: PromiseWithState<void> | null } = { current: null };
 
-  const client = renderComponent({
+  const client = await renderComponent({
     ref,
     children: (
       <>
         <SearchBox />
       </>
     ),
-  });
-
-  await act(async () => {
-    await ref.current;
   });
 
   expect(ref.current!.status).toBe('fulfilled');
@@ -141,17 +137,13 @@ test('it waits for search only if there are only search widgets', async () => {
 test('it waits for recommend only if there are only recommend widgets', async () => {
   const ref: { current: PromiseWithState<void> | null } = { current: null };
 
-  const client = renderComponent({
+  const client = await renderComponent({
     ref,
     children: (
       <>
         <TrendingItems />
       </>
     ),
-  });
-
-  await act(async () => {
-    await ref.current;
   });
 
   expect(ref.current!.status).toBe('fulfilled');

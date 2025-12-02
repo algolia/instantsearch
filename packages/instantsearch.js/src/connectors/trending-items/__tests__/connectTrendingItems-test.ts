@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
@@ -134,7 +134,6 @@ describe('connectTrendingItems', () => {
           maxRecommendations: 10,
           threshold: 95,
           queryParameters: { userToken: 'token' },
-          fallbackParameters: {},
         })
       );
     });
@@ -165,7 +164,46 @@ describe('connectTrendingItems', () => {
           maxRecommendations: 10,
           threshold: 95,
           queryParameters: { userToken: 'token' },
-          fallbackParameters: {},
+        })
+      );
+    });
+
+    it('adds escapeHTML tags', () => {
+      const render = () => {};
+      const makeWidget = connectTrendingItems(render);
+      const widget = makeWidget({
+        facetName: 'key',
+        facetValue: 'value',
+        limit: 10,
+        threshold: 95,
+        queryParameters: { userToken: 'token' },
+        escapeHTML: true,
+        fallbackParameters: { query: 'query' },
+      });
+
+      // @ts-expect-error
+      const actual = widget.getWidgetParameters(new RecommendParameters(), {
+        uiState: {},
+      });
+
+      expect(actual).toEqual(
+        new RecommendParameters().addTrendingItems({
+          // @ts-expect-error
+          $$id: widget.$$id,
+          facetName: 'key',
+          facetValue: 'value',
+          maxRecommendations: 10,
+          threshold: 95,
+          queryParameters: {
+            userToken: 'token',
+            highlightPostTag: '__/ais-highlight__',
+            highlightPreTag: '__ais-highlight__',
+          },
+          fallbackParameters: {
+            highlightPostTag: '__/ais-highlight__',
+            highlightPreTag: '__ais-highlight__',
+            query: 'query',
+          },
         })
       );
     });

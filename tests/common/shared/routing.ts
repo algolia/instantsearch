@@ -28,6 +28,7 @@ export function createRoutingTests(
         const delay = 100;
         const margin = 10;
         const attribute = 'one';
+        const hierarchicalAttribute = 'hierarchicalCategories.lvl0';
 
         const router = history({
           writeDelay: 0,
@@ -65,6 +66,7 @@ export function createRoutingTests(
             },
             hits: {},
             pagination: {},
+            hierarchicalMenu: { attributes: [hierarchicalAttribute] },
           },
         };
 

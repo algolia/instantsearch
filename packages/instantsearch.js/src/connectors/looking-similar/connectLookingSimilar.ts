@@ -215,10 +215,12 @@ export default (function connectLookingSimilar<
               objectID,
               maxRecommendations: limit,
               threshold,
-              fallbackParameters: {
-                ...fallbackParameters,
-                ...(escapeHTML ? TAG_PLACEHOLDER : {}),
-              },
+              fallbackParameters: fallbackParameters
+                ? {
+                    ...fallbackParameters,
+                    ...(escapeHTML ? TAG_PLACEHOLDER : {}),
+                  }
+                : undefined,
               queryParameters: {
                 ...queryParameters,
                 ...(escapeHTML ? TAG_PLACEHOLDER : {}),

@@ -229,6 +229,8 @@ class InstantSearch<
   public _searchStalledTimer: any;
   public _initialUiState: TUiState;
   public _initialResults: InitialResults | null;
+  public _manuallyResetScheduleSearch: boolean = false;
+  public _resetScheduleSearch?: () => void;
   public _createURL: CreateURL<TUiState>;
   public _searchFunction?: InstantSearchOptions['searchFunction'];
   public _mainHelperSearch?: AlgoliaSearchHelper['search'];
@@ -490,7 +492,9 @@ See documentation: ${createDocumentationLink({
    * Widgets can be added either before or after InstantSearch has started.
    * @param widgets The array of widgets to add to InstantSearch.
    */
-  public addWidgets(widgets: Array<Widget | IndexWidget>) {
+  public addWidgets(
+    widgets: Array<Widget | IndexWidget | Array<IndexWidget | Widget>>
+  ) {
     if (!Array.isArray(widgets)) {
       throw new Error(
         withUsage(
@@ -500,20 +504,9 @@ See documentation: ${createDocumentationLink({
     }
 
     if (
-      widgets.some(
-        (widget) =>
-          typeof widget.init !== 'function' &&
-          typeof widget.render !== 'function'
-      )
+      this.compositionID &&
+      widgets.some((w) => !Array.isArray(w) && isIndexWidget(w) && !w._isolated)
     ) {
-      throw new Error(
-        withUsage(
-          'The widget definition expects a `render` and/or an `init` method.'
-        )
-      );
-    }
-
-    if (this.compositionID && widgets.some(isIndexWidget)) {
       throw new Error(
         withUsage(
           'The `index` widget cannot be used with a composition-based InstantSearch implementation.'
@@ -548,18 +541,12 @@ See documentation: ${createDocumentationLink({
    *
    * The widgets must implement a `dispose()` method to clear their states.
    */
-  public removeWidgets(widgets: Array<Widget | IndexWidget>) {
+  public removeWidgets(widgets: Array<Widget | IndexWidget | Widget[]>) {
     if (!Array.isArray(widgets)) {
       throw new Error(
         withUsage(
           'The `removeWidgets` method expects an array of widgets. Please use `removeWidget`.'
         )
-      );
-    }
-
-    if (widgets.some((widget) => typeof widget.dispose !== 'function')) {
-      throw new Error(
-        withUsage('The widget definition expects a `dispose` method.')
       );
     }
 
@@ -700,14 +687,25 @@ See documentation: ${createDocumentationLink({
       // because we already have the results to render. This skips the initial
       // network request on the browser on `start`.
       this.scheduleSearch = defer(noop);
-      // We also skip the initial network request when widgets are dynamically
-      // added in the first tick (that's the case in all the framework-based flavors).
-      // When we add a widget to `index`, it calls `scheduleSearch`. We can rely
-      // on our `defer` util to restore the original `scheduleSearch` value once
-      // widgets are added to hook back to the regular lifecycle.
-      defer(() => {
-        this.scheduleSearch = originalScheduleSearch;
-      })();
+      if (this._manuallyResetScheduleSearch) {
+        // If `_manuallyResetScheduleSearch` is passed, it means that we don't
+        // want to rely on a single `defer` to reset the `scheduleSearch`.
+        // Instead, the consumer will call `_resetScheduleSearch` to restore
+        // the original `scheduleSearch` function.
+        // This happens in the React flavour after rendering.
+        this._resetScheduleSearch = () => {
+          this.scheduleSearch = originalScheduleSearch;
+        };
+      } else {
+        // We also skip the initial network request when widgets are dynamically
+        // added in the first tick (that's the case in all the framework-based flavors).
+        // When we add a widget to `index`, it calls `scheduleSearch`. We can rely
+        // on our `defer` util to restore the original `scheduleSearch` value once
+        // widgets are added to hook back to the regular lifecycle.
+        defer(() => {
+          this.scheduleSearch = originalScheduleSearch;
+        })();
+      }
     }
     // We only schedule a search when widgets have been added before `start()`
     // because there are listeners that can use these results.

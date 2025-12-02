@@ -25,6 +25,8 @@ export function createInsightsTests(
         const delay = 100;
         const margin = 10;
         const attribute = 'one';
+        const hierarchicalAttribute = 'hierarchicalCategories.lvl0';
+
         window.aa = Object.assign(jest.fn(), { version: '2.17.2' });
 
         const options = {
@@ -62,6 +64,7 @@ export function createInsightsTests(
             },
             hits: {},
             pagination: {},
+            hierarchicalMenu: { attributes: [hierarchicalAttribute] },
           },
         };
 
@@ -109,6 +112,8 @@ export function createInsightsTests(
         const delay = 100;
         const margin = 10;
         const attribute = 'one';
+        const hierarchicalAttribute = 'hierarchicalCategories.lvl0';
+
         window.aa = Object.assign(jest.fn(), { version: '2.17.2' });
 
         const options = {
@@ -145,6 +150,7 @@ export function createInsightsTests(
             },
             hits: {},
             pagination: {},
+            hierarchicalMenu: { attributes: [hierarchicalAttribute] },
           },
         };
 

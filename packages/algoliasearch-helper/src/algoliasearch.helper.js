@@ -437,6 +437,16 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function (
     query: query,
   });
 
+  var hide =
+    (this.lastResults &&
+      this.lastResults.index === state.index &&
+      this.lastResults.renderingContent &&
+      this.lastResults.renderingContent.facetOrdering &&
+      this.lastResults.renderingContent.facetOrdering.values &&
+      this.lastResults.renderingContent.facetOrdering.values[facet] &&
+      this.lastResults.renderingContent.facetOrdering.values[facet].hide) ||
+    [];
+
   return searchForFacetValuesPromise.then(
     function addIsRefined(content) {
       self._currentNbQueries--;
@@ -444,12 +454,19 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function (
 
       content = Array.isArray(content) ? content[0] : content;
 
-      content.facetHits.forEach(function (f) {
+      content.facetHits = content.facetHits.reduce(function (acc, f) {
+        if (hide.indexOf(f.value) > -1) {
+          return acc;
+        }
+
         f.escapedValue = escapeFacetValue(f.value);
         f.isRefined = isDisjunctive
           ? state.isDisjunctiveFacetRefined(facet, f.escapedValue)
           : state.isFacetRefined(facet, f.escapedValue);
-      });
+
+        acc.push(f);
+        return acc;
+      }, []);
 
       return content;
     },
@@ -1922,6 +1939,7 @@ AlgoliaSearchHelper.prototype._dispatchRecommendResponse = function (
     }
     cache[id] = Object.assign({}, firstResult, {
       hits: sortAndMergeRecommendations(
+        ids,
         indices.map(function (idx) {
           return content.results[idx].hits;
         })

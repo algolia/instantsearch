@@ -24,6 +24,7 @@ export const EXPERIMENTAL_dynamicWidgets = deprecate(
 export { dynamicWidgets };
 
 export { default as analytics } from './analytics/analytics';
+export { EXPERIMENTAL_autocomplete } from './autocomplete/autocomplete';
 export { default as breadcrumb } from './breadcrumb/breadcrumb';
 export { default as clearRefinements } from './clear-refinements/clear-refinements';
 export { default as configure } from './configure/configure';
@@ -58,3 +59,4 @@ export { default as trendingItems } from './trending-items/trending-items';
 export { default as voiceSearch } from './voice-search/voice-search';
 export { default as frequentlyBoughtTogether } from './frequently-bought-together/frequently-bought-together';
 export { default as lookingSimilar } from './looking-similar/looking-similar';
+export { default as chat } from './chat/chat';

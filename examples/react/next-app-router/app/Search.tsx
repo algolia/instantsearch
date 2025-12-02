@@ -1,38 +1,28 @@
 'use client';
 
-import { Hit as AlgoliaHit } from 'instantsearch.js';
+import Link from 'next/link';
 import React from 'react';
 import {
   Hits,
-  Highlight,
   SearchBox,
   RefinementList,
   DynamicWidgets,
 } from 'react-instantsearch';
 import { InstantSearchNext } from 'react-instantsearch-nextjs';
 
+import { Hit } from '../components/Hit';
 import { Panel } from '../components/Panel';
+import { QueryId } from '../components/QueryId';
 import { client } from '../lib/client';
-
-type HitProps = {
-  hit: AlgoliaHit<{
-    name: string;
-    price: number;
-  }>;
-};
-
-function Hit({ hit }: HitProps) {
-  return (
-    <>
-      <Highlight hit={hit} attribute="name" className="Hit-label" />
-      <span className="Hit-price">${hit.price}</span>
-    </>
-  );
-}
 
 export default function Search() {
   return (
-    <InstantSearchNext searchClient={client} indexName="instant_search" routing>
+    <InstantSearchNext
+      searchClient={client}
+      indexName="instant_search"
+      routing
+      insights={false}
+    >
       <div className="Container">
         <div>
           <DynamicWidgets fallbackComponent={FallbackComponent} />
@@ -42,6 +32,10 @@ export default function Search() {
           <Hits hitComponent={Hit} />
         </div>
       </div>
+      <QueryId />
+      <Link href="/layout" id="link">
+        Other page
+      </Link>
     </InstantSearchNext>
   );
 }

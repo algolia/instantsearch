@@ -62,6 +62,7 @@ export type BuiltinTypes =
   | 'ais.autocomplete'
   | 'ais.breadcrumb'
   | 'ais.clearRefinements'
+  | 'ais.chat'
   | 'ais.configure'
   | 'ais.configureRelatedItems'
   | 'ais.currentRefinements'
@@ -100,6 +101,7 @@ export type BuiltinWidgetTypes =
   | 'ais.answers'
   | 'ais.autocomplete'
   | 'ais.breadcrumb'
+  | 'ais.chat'
   | 'ais.clearRefinements'
   | 'ais.configure'
   | 'ais.configureRelatedItems'
@@ -191,6 +193,14 @@ type RecommendWidget<
       TWidgetDescription['widgetParams']
     >
   >;
+};
+
+type Parent = {
+  /**
+   * This gets dynamically added by the `index` widget.
+   * If the widget has gone through `addWidget`, it will have a parent.
+   */
+  parent?: IndexWidget;
 };
 
 type RequiredWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
@@ -329,7 +339,8 @@ export type Widget<
     $$type: string;
   }
 > = Expand<
-  RequiredWidgetLifeCycle<TWidgetDescription> &
+  Parent &
+    RequiredWidgetLifeCycle<TWidgetDescription> &
     WidgetType<TWidgetDescription> &
     UiStateLifeCycle<TWidgetDescription> &
     RenderStateLifeCycle<TWidgetDescription>

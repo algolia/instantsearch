@@ -1,0 +1,32 @@
+{
+  "name": "example-instantsearch-default-theme",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "BABEL_ENV=parcel parcel index.html --port 3000",
+    "build": "BABEL_ENV=parcel parcel build index.html --public-url .",
+    "website:examples": "BABEL_ENV=parcel parcel build index.html --public-url . --dist-dir=../../../website/examples/js/default-theme"
+  },
+  "dependencies": {
+    "algoliasearch": "5.1.1",
+    "algoliasearch-helper": "3.26.1",
+    "instantsearch-ui-components": "0.15.0",
+    "instantsearch.css": "8.8.0",
+    "instantsearch.js": "4.84.0"
+  },
+  "devDependencies": {
+    "@babel/core": "7.15.5",
+    "@parcel/core": "2.10.0",
+    "@parcel/packager-raw-url": "2.10.0",
+    "@parcel/transformer-webmanifest": "2.10.0",
+    "parcel": "2.10.0"
+  },
+  "@parcel/resolver-default": {
+    "packageExports": true
+  },
+  "targets": {
+    "default": {
+      "scopeHoist": false
+    }
+  }
+}

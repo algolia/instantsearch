@@ -44,14 +44,13 @@ export function InfiniteHits<THit extends BaseHit = BaseHit>({
   showPrevious: shouldShowPrevious = true,
   cache,
   escapeHTML,
-  showPrevious: userShowPrevious,
   transformItems,
   translations,
   bannerComponent: BannerComponent,
   ...props
 }: InfiniteHitsProps<THit>) {
   const {
-    hits,
+    items,
     banner,
     sendEvent,
     showPrevious,
@@ -59,7 +58,7 @@ export function InfiniteHits<THit extends BaseHit = BaseHit>({
     isFirstPage,
     isLastPage,
   } = useInfiniteHits<THit>(
-    { cache, escapeHTML, showPrevious: userShowPrevious, transformItems },
+    { cache, escapeHTML, showPrevious: shouldShowPrevious, transformItems },
     { $$widgetType: 'ais.infiniteHits' }
   );
 
@@ -68,7 +67,7 @@ export function InfiniteHits<THit extends BaseHit = BaseHit>({
   ) as InfiniteHitsUiComponentProps<THit>['bannerComponent'];
 
   const uiProps: UiProps<THit> = {
-    hits,
+    hits: items,
     banner,
     bannerComponent,
     sendEvent,

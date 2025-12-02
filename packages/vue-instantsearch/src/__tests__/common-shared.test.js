@@ -1,12 +1,17 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 import { runTestSuites } from '@instantsearch/tests/common';
 import * as testSuites from '@instantsearch/tests/shared';
-import { connectMenu, connectPagination } from 'instantsearch.js/es/connectors';
+import {
+  connectMenu,
+  connectPagination,
+} from 'instantsearch.js/es/connectors/index.umd';
 
 import { nextTick, mountApp } from '../../test/utils';
 import {
+  AisBreadcrumb,
+  AisHierarchicalMenu,
   AisHits,
   AisInstantSearch,
   AisMenu,
@@ -35,7 +40,11 @@ const testSetups = {
         render: renderCompat((h) =>
           h(AisInstantSearch, { props: instantSearchOptions }, [
             h(CustomMenu, { props: widgetParams.menu }),
+            h(AisHierarchicalMenu, { props: widgetParams.hierarchicalMenu }),
             h(AisMenu, { props: widgetParams.menu }),
+            h(AisBreadcrumb, {
+              props: { attributes: widgetParams.hierarchicalMenu.attributes },
+            }),
             h(AisHits, { props: widgetParams.hits }),
             h(CustomPagination, { props: widgetParams.pagination }),
             h(AisPagination, { props: widgetParams.pagination }),
@@ -86,6 +95,7 @@ const testOptions = {
 
 describe('Common shared tests (Vue InstantSearch)', () => {
   runTestSuites({
+    flavor: 'vue',
     testSuites,
     testSetups,
     testOptions,

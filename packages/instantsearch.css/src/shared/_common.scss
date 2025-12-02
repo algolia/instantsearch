@@ -1,0 +1,36 @@
+// Scrollbar
+.ais-Scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(
+      in srgb,
+      rgb(var(--ais-muted-color-rgb)) 40%,
+      rgb(var(--ais-background-color-rgb))
+    )
+    transparent;
+}
+
+.ais-Scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ais-Scrollbar::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.ais-Scrollbar::-webkit-scrollbar-thumb {
+  background-color: color-mix(
+    in srgb,
+    rgb(var(--ais-muted-color-rgb)) 40%,
+    rgb(var(--ais-background-color-rgb))
+  );
+  border-radius: var(--ais-border-radius-sm);
+}
+
+// Focus outline
+%ais-focus-outline {
+  &:focus-visible {
+    outline: 2px solid
+      rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+    outline-offset: 2px;
+  }
+}

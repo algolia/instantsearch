@@ -9,6 +9,7 @@ import {
   refinementList,
   searchBox,
   trendingItems,
+  chat,
 } from 'instantsearch.js/es/widgets';
 
 import 'instantsearch.css/themes/satellite.css';
@@ -23,6 +24,22 @@ const search = instantsearch({
   searchClient,
   insights: true,
 });
+
+const productItemTemplate = (item, { html }) => html`
+  <article class="ais-Carousel-hit">
+    <div class="ais-Carousel-hit-image">
+      <img src="${item.image}" />
+    </div>
+    <h2 class="ais-Carousel-hit-title">
+      <a
+        href="/products.html?pid=${item.objectID}"
+        class="ais-Carousel-hit-link"
+      >
+        ${item.name}
+      </a>
+    </h2>
+  </article>
+`;
 
 search.addWidgets([
   searchBox({
@@ -60,18 +77,15 @@ search.addWidgets([
     container: '#trending',
     limit: 6,
     templates: {
-      item: (item, { html }) => html`
-        <div>
-          <article>
-            <div>
-              <img src="${item.image}" />
-              <h2>${item.name}</h2>
-            </div>
-            <a href="/products.html?pid=${item.objectID}">See product</a>
-          </article>
-        </div>
-      `,
+      item: productItemTemplate,
       layout: carousel(),
+    },
+  }),
+  chat({
+    container: '#chat',
+    agentId: '7c2f6816-bfdb-46e9-a51f-9cb8e5fc9628',
+    templates: {
+      item: productItemTemplate,
     },
   }),
 ]);

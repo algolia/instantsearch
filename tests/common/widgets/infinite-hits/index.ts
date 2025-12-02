@@ -15,16 +15,16 @@ export type InfiniteHitsWidgetSetup = TestSetup<{
 
 export function createInfiniteHitsWidgetTests(
   setup: InfiniteHitsWidgetSetup,
-  { act = fakeAct, skippedTests = {} }: TestOptions = {}
+  { act = fakeAct, skippedTests = {}, flavor = 'javascript' }: TestOptions = {}
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
   describe('InfiniteHits widget common tests', () => {
-    createOptimisticUiTests(setup, { act, skippedTests });
-    createInsightsTests(setup, { act, skippedTests });
-    createOptionsTests(setup, { act, skippedTests });
-    createLinksTests(setup, { act, skippedTests });
+    createOptimisticUiTests(setup, { act, skippedTests, flavor });
+    createInsightsTests(setup, { act, skippedTests, flavor });
+    createOptionsTests(setup, { act, skippedTests, flavor });
+    createLinksTests(setup, { act, skippedTests, flavor });
   });
 }

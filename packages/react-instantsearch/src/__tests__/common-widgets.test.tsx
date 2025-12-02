@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/widgets';
@@ -31,6 +31,8 @@ import {
   LookingSimilar,
   PoweredBy,
   DynamicWidgets,
+  Chat,
+  EXPERIMENTAL_Autocomplete,
 } from '..';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -40,7 +42,7 @@ import type { SendEventForHits } from 'instantsearch.js/es/lib/utils';
 type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
 
-const testSetups: TestSetupsMap<TestSuites> = {
+const testSetups: TestSetupsMap<TestSuites, 'react'> = {
   createRefinementListWidgetTests({ instantSearchOptions, widgetParams }) {
     render(
       <InstantSearch {...instantSearchOptions}>
@@ -392,6 +394,22 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
+  createChatWidgetTests({ instantSearchOptions, widgetParams }) {
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <Chat {...widgetParams} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+  },
+  createAutocompleteWidgetTests({ instantSearchOptions, widgetParams }) {
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <EXPERIMENTAL_Autocomplete {...widgetParams} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -435,6 +453,10 @@ const testOptions: TestOptionsMap<TestSuites> = {
     },
   },
   createDynamicWidgetsWidgetTests: { act },
+  createChatWidgetTests: {
+    act,
+  },
+  createAutocompleteWidgetTests: { act },
 };
 
 /**
@@ -449,6 +471,7 @@ function GlobalErrorSwallower() {
 
 describe('Common widget tests (React InstantSearch)', () => {
   runTestSuites({
+    flavor: 'react',
     testSuites,
     testSetups,
     testOptions,

@@ -12,14 +12,14 @@ export type RelatedProductsConnectorSetup = TestSetup<{
 
 export function createRelatedProductsConnectorTests(
   setup: RelatedProductsConnectorSetup,
-  { act = fakeAct, skippedTests = {} }: TestOptions = {}
+  { act = fakeAct, skippedTests = {}, flavor = 'javascript' }: TestOptions = {}
 ) {
   beforeAll(() => {
     document.body.innerHTML = '';
   });
 
   describe('RelatedProducts connector common tests', () => {
-    createOptionsTests(setup, { act, skippedTests });
-    createStateTests(setup, { act, skippedTests });
+    createOptionsTests(setup, { act, skippedTests, flavor });
+    createStateTests(setup, { act, skippedTests, flavor });
   });
 }

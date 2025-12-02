@@ -29,7 +29,10 @@ export type RefinementListProps = Omit<
   keyof UiProps
 > &
   UseRefinementListProps &
-  Pick<RefinementListWidgetParams, 'searchable' | 'searchablePlaceholder'> & {
+  Pick<
+    RefinementListWidgetParams,
+    'searchable' | 'searchablePlaceholder' | 'searchableSelectOnSubmit'
+  > & {
     translations?: Partial<
       UiProps['translations'] &
         SearchBoxTranslations & {
@@ -44,6 +47,7 @@ export type RefinementListProps = Omit<
 export function RefinementList({
   searchable,
   searchablePlaceholder,
+  searchableSelectOnSubmit = true,
   attribute,
   operator,
   limit,
@@ -109,6 +113,9 @@ export function RefinementList({
   }
 
   function onSubmit() {
+    if (searchableSelectOnSubmit === false) {
+      return;
+    }
     if (items.length > 0) {
       refine(items[0].value);
       setQuery('');

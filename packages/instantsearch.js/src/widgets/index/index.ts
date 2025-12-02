@@ -9,6 +9,7 @@ import {
   isIndexWidget,
   createInitArgs,
   createRenderArgs,
+  defer,
 } from '../../lib/utils';
 import { addWidgetId } from '../../lib/utils/addWidgetId';
 
@@ -18,15 +19,14 @@ import type {
   IndexUiState,
   Widget,
   ScopedResult,
-  SearchClient,
   IndexRenderState,
   RenderOptions,
   RecommendResponse,
+  SearchClient,
 } from '../../types';
 import type {
   AlgoliaSearchHelper as Helper,
   DerivedHelper,
-  PlainSearchParameters,
   SearchParameters,
   SearchResults,
   AlgoliaSearchHelper,
@@ -37,10 +37,50 @@ const withUsage = createDocumentationMessageGenerator({
   name: 'index-widget',
 });
 
-export type IndexWidgetParams = {
-  indexName: string;
-  indexId?: string;
-};
+export type IndexWidgetParams =
+  | {
+      /**
+       * The index or composition id to target.
+       */
+      indexName: string;
+      /**
+       * Id to use for the index if there are multiple indices with the same name.
+       * This will be used to create the URL and the render state.
+       */
+      indexId?: string;
+      /**
+       * If `true`, the index will not be merged with the main helper's state.
+       * This means that the index will not be part of the main search request.
+       *
+       * @default false
+       */
+      EXPERIMENTAL_isolated?: false;
+    }
+  | {
+      /**
+       * If `true`, the index will not be merged with the main helper's state.
+       * This means that the index will not be part of the main search request.
+       *
+       * This option is EXPERIMENTAL, and implementation details may change in the future.
+       * Things that could change are:
+       * - which widgets get rendered when a change happens
+       * - whether the index searches automatically
+       * - whether the index is included in the URL / UiState
+       * - whether the index is included in server-side rendering
+       *
+       * @default false
+       */
+      EXPERIMENTAL_isolated: true;
+      /**
+       * The index or composition id to target.
+       */
+      indexName?: string;
+      /**
+       * Id to use for the index if there are multiple indices with the same name.
+       * This will be used to create the URL and the render state.
+       */
+      indexId?: string;
+    };
 
 export type IndexInitOptions = {
   instantSearchInstance: InstantSearch;
@@ -86,8 +126,12 @@ export type IndexWidget<TUiState extends UiState = UiState> = Omit<
     nextState: SearchParameters | ((state: IndexUiState) => IndexUiState)
   ) => string;
 
-  addWidgets: (widgets: Array<Widget | IndexWidget>) => IndexWidget;
-  removeWidgets: (widgets: Array<Widget | IndexWidget>) => IndexWidget;
+  addWidgets: (
+    widgets: Array<Widget | IndexWidget | Array<IndexWidget | Widget>>
+  ) => IndexWidget;
+  removeWidgets: (
+    widgets: Array<Widget | IndexWidget | Widget[]>
+  ) => IndexWidget;
 
   init: (options: IndexInitOptions) => void;
   render: (options: IndexRenderOptions) => void;
@@ -118,6 +162,17 @@ export type IndexWidget<TUiState extends UiState = UiState> = Omit<
       | TUiState[string]
       | ((previousIndexUiState: TUiState[string]) => TUiState[string])
   ) => void;
+  /**
+   * This index is isolated, meaning it will not be merged with the main
+   * helper's state.
+   * @private
+   */
+  _isolated: boolean;
+  /**
+   * Schedules a search for this index only.
+   * @private
+   */
+  scheduleLocalSearch: () => void;
 };
 
 /**
@@ -260,11 +315,21 @@ function resolveScopedResultsFromWidgets(
 }
 
 const index = (widgetParams: IndexWidgetParams): IndexWidget => {
-  if (widgetParams === undefined || widgetParams.indexName === undefined) {
+  if (
+    widgetParams === undefined ||
+    (widgetParams.indexName === undefined &&
+      !widgetParams.EXPERIMENTAL_isolated)
+  ) {
     throw new Error(withUsage('The `indexName` option is required.'));
   }
 
-  const { indexName, indexId = indexName } = widgetParams;
+  // When isolated=true, we use an empty string as the default indexName.
+  // This is intentional: isolated indices do not require a real index name.
+  const {
+    indexName = '',
+    indexId = indexName,
+    EXPERIMENTAL_isolated: isolated = false,
+  } = widgetParams;
 
   let localWidgets: Array<Widget | IndexWidget> = [];
   let localUiState: IndexUiState = {};
@@ -279,6 +344,8 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
   return {
     $$type: 'ais.index',
     $$widgetType: 'ais.index',
+
+    _isolated: isolated,
 
     getIndexName() {
       return indexName;
@@ -345,7 +412,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
     },
 
     getParent() {
-      return localParent;
+      return isolated ? null : localParent;
     },
 
     createURL(
@@ -364,6 +431,12 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       });
     },
 
+    scheduleLocalSearch: defer(() => {
+      if (isolated) {
+        helper?.search();
+      }
+    }),
+
     getWidgets() {
       return localWidgets;
     },
@@ -374,9 +447,13 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           withUsage('The `addWidgets` method expects an array of widgets.')
         );
       }
+      const flatWidgets = widgets.reduce<Array<Widget | IndexWidget>>(
+        (acc, w) => acc.concat(Array.isArray(w) ? w : [w]),
+        []
+      );
 
       if (
-        widgets.some(
+        flatWidgets.some(
           (widget) =>
             typeof widget.init !== 'function' &&
             typeof widget.render !== 'function'
@@ -389,7 +466,8 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         );
       }
 
-      widgets.forEach((widget) => {
+      flatWidgets.forEach((widget) => {
+        widget.parent = this;
         if (isIndexWidget(widget)) {
           return;
         }
@@ -407,8 +485,8 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         addWidgetId(widget);
       });
 
-      localWidgets = localWidgets.concat(widgets);
-      if (localInstantSearchInstance && Boolean(widgets.length)) {
+      localWidgets = localWidgets.concat(flatWidgets);
+      if (localInstantSearchInstance && Boolean(flatWidgets.length)) {
         privateHelperSetState(helper!, {
           state: getLocalWidgetsSearchParameters(localWidgets, {
             uiState: localUiState,
@@ -424,7 +502,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         // We compute the render state before calling `init` in a separate loop
         // to construct the whole render state object that is then passed to
         // `init`.
-        widgets.forEach((widget) => {
+        flatWidgets.forEach((widget) => {
           if (widget.getRenderState) {
             const renderState = widget.getRenderState(
               localInstantSearchInstance!.renderState[this.getIndexId()] || {},
@@ -443,7 +521,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           }
         });
 
-        widgets.forEach((widget) => {
+        flatWidgets.forEach((widget) => {
           if (widget.init) {
             widget.init(
               createInitArgs(
@@ -455,7 +533,11 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           }
         });
 
-        localInstantSearchInstance.scheduleSearch();
+        if (isolated) {
+          this.scheduleLocalSearch();
+        } else {
+          localInstantSearchInstance.scheduleSearch();
+        }
       }
 
       return this;
@@ -467,18 +549,23 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
           withUsage('The `removeWidgets` method expects an array of widgets.')
         );
       }
+      const flatWidgets = widgets.reduce<Array<Widget | IndexWidget>>(
+        (acc, w) => acc.concat(Array.isArray(w) ? w : [w]),
+        []
+      );
 
-      if (widgets.some((widget) => typeof widget.dispose !== 'function')) {
+      if (flatWidgets.some((widget) => typeof widget.dispose !== 'function')) {
         throw new Error(
           withUsage('The widget definition expects a `dispose` method.')
         );
       }
 
       localWidgets = localWidgets.filter(
-        (widget) => widgets.indexOf(widget) === -1
+        (widget) => flatWidgets.indexOf(widget) === -1
       );
 
       localWidgets.forEach((widget) => {
+        widget.parent = undefined;
         if (isIndexWidget(widget)) {
           return;
         }
@@ -494,30 +581,31 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         }
       });
 
-      if (localInstantSearchInstance && Boolean(widgets.length)) {
-        const { cleanedSearchState, cleanedRecommendState } = widgets.reduce(
-          (states, widget) => {
-            // the `dispose` method exists at this point we already assert it
-            const next = widget.dispose!({
-              helper: helper!,
-              state: states.cleanedSearchState,
-              recommendState: states.cleanedRecommendState,
-              parent: this,
-            });
+      if (localInstantSearchInstance && Boolean(flatWidgets.length)) {
+        const { cleanedSearchState, cleanedRecommendState } =
+          flatWidgets.reduce(
+            (states, widget) => {
+              // the `dispose` method exists at this point we already assert it
+              const next = widget.dispose!({
+                helper: helper!,
+                state: states.cleanedSearchState,
+                recommendState: states.cleanedRecommendState,
+                parent: this,
+              });
 
-            if (next instanceof algoliasearchHelper.RecommendParameters) {
-              states.cleanedRecommendState = next;
-            } else if (next) {
-              states.cleanedSearchState = next;
+              if (next instanceof algoliasearchHelper.RecommendParameters) {
+                states.cleanedRecommendState = next;
+              } else if (next) {
+                states.cleanedSearchState = next;
+              }
+
+              return states;
+            },
+            {
+              cleanedSearchState: helper!.state,
+              cleanedRecommendState: helper!.recommendState,
             }
-
-            return states;
-          },
-          {
-            cleanedSearchState: helper!.state,
-            cleanedRecommendState: helper!.recommendState,
-          }
-        );
+          );
 
         const newState = localInstantSearchInstance.future
           .preserveSharedStateOnUnmount
@@ -546,7 +634,11 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         helper!.recommendState = cleanedRecommendState;
 
         if (localWidgets.length) {
-          localInstantSearchInstance.scheduleSearch();
+          if (isolated) {
+            this.scheduleLocalSearch();
+          } else {
+            localInstantSearchInstance.scheduleSearch();
+          }
         }
       }
 
@@ -587,7 +679,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       // `searchClient`. Only the "main" Helper created at the `InstantSearch`
       // level is aware of the client.
       helper = algoliasearchHelper(
-        {} as SearchClient,
+        mainHelper.getClient(),
         parameters.index,
         parameters
       );
@@ -597,6 +689,14 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       // which is responsible for managing the queries (it's the only one that is
       // aware of the `searchClient`).
       helper.search = () => {
+        if (isolated) {
+          instantSearchInstance.status = 'loading';
+          this.render({ instantSearchInstance });
+          return instantSearchInstance.compositionID
+            ? helper!.searchWithComposition()
+            : helper!.searchOnlyWithDerivedHelpers();
+        }
+
         if (instantSearchInstance.onStateChange) {
           instantSearchInstance.onStateChange({
             uiState: instantSearchInstance.mainIndex.getWidgetUiState({}),
@@ -616,24 +716,14 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         return mainHelper.search();
       };
 
-      // We use the same pattern for the `searchForFacetValues`.
-      helper.searchForFacetValues = (
-        facetName,
-        facetValue,
-        maxFacetHits,
-        userState: PlainSearchParameters
-      ) => {
-        const state = helper!.state.setQueryParameters(userState);
+      const isolatedHelper = indexName
+        ? helper
+        : algoliasearchHelper({} as SearchClient, '__empty_index__', {});
+      const derivingHelper = isolated
+        ? isolatedHelper
+        : nearestIsolatedHelper(parent, mainHelper);
 
-        return mainHelper.searchForFacetValues(
-          facetName,
-          facetValue,
-          maxFacetHits,
-          state
-        );
-      };
-
-      derivedHelper = mainHelper.derive(
+      derivedHelper = derivingHelper.derive(
         () =>
           mergeSearchParameters(
             mainHelper.state,
@@ -804,10 +894,14 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
       // We only render index widgets if there are no results.
       // This makes sure `render` is never called with `results` being `null`.
+      // If it's an isolated index without an index name, we render all widgets,
+      // as there are no results to display for the isolated index itself.
       let widgetsToRender =
-        this.getResults() || derivedHelper?.lastRecommendResults
+        this.getResults() ||
+        derivedHelper?.lastRecommendResults ||
+        (isolated && !indexName)
           ? localWidgets
-          : localWidgets.filter(isIndexWidget);
+          : localWidgets.filter((widget) => widget.shouldRender);
 
       widgetsToRender = widgetsToRender.filter((widget) => {
         if (!widget.shouldRender) {
@@ -886,6 +980,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
     getWidgetUiState<TUiState extends UiState = UiState>(uiState: TUiState) {
       return localWidgets
         .filter(isIndexWidget)
+        .filter((w) => !w._isolated)
         .reduce<TUiState>(
           (previousUiState, innerIndex) =>
             innerIndex.getWidgetUiState(previousUiState),
@@ -913,6 +1008,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         uiState,
         initialSearchParameters: searchParameters,
       });
+    },
+
+    shouldRender() {
+      return true;
     },
 
     refreshUiState() {
@@ -966,4 +1065,20 @@ function storeRenderState({
       ...renderState,
     },
   };
+}
+
+/**
+ * Walk up the parent chain to find the closest isolated index, or fall back to mainHelper
+ */
+function nearestIsolatedHelper(
+  current: IndexWidget | null,
+  mainHelper: Helper
+): Helper {
+  while (current) {
+    if (current._isolated) {
+      return current.getHelper()!;
+    }
+    current = current.getParent();
+  }
+  return mainHelper;
 }

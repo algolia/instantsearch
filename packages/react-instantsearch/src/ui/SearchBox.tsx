@@ -69,6 +69,10 @@ export type SearchBoxProps = Omit<
     ) => void;
     formRef?: React.RefObject<HTMLFormElement | null>;
     inputRef: React.RefObject<HTMLInputElement | null>;
+    inputProps?: Omit<
+      React.ComponentProps<'input'>,
+      'placeholder' | 'value' | 'onChange' | 'onCompositionEnd' | 'autoFocus'
+    >;
     isSearchStalled: boolean;
     value: string;
     resetIconComponent?: React.JSXElementConstructor<IconProps>;
@@ -139,6 +143,7 @@ function DefaultLoadingIcon({ classNames }: IconProps) {
 export function SearchBox({
   formRef,
   inputRef,
+  inputProps,
   isSearchStalled,
   onChange,
   onReset,
@@ -192,8 +197,13 @@ export function SearchBox({
         role="search"
       >
         <input
+          {...inputProps}
           ref={inputRef}
-          className={cx('ais-SearchBox-input', classNames.input)}
+          className={cx(
+            'ais-SearchBox-input',
+            classNames.input,
+            inputProps?.className
+          )}
           aria-label="Search"
           autoComplete="off"
           autoCorrect="off"

@@ -1,6 +1,7 @@
 import type { AnswersWidgetDescription } from '../connectors/answers/connectAnswers';
 import type { AutocompleteWidgetDescription } from '../connectors/autocomplete/connectAutocomplete';
 import type { BreadcrumbWidgetDescription } from '../connectors/breadcrumb/connectBreadcrumb';
+import type { ChatWidgetDescription } from '../connectors/chat/connectChat';
 import type { ClearRefinementsWidgetDescription } from '../connectors/clear-refinements/connectClearRefinements';
 import type { ConfigureWidgetDescription } from '../connectors/configure/connectConfigure';
 import type { CurrentRefinementsWidgetDescription } from '../connectors/current-refinements/connectCurrentRefinements';
@@ -29,6 +30,7 @@ import type { PlacesWidgetDescription } from '../widgets/places/places';
 type ConnectorRenderStates = AnswersWidgetDescription['indexRenderState'] &
   AutocompleteWidgetDescription['indexRenderState'] &
   BreadcrumbWidgetDescription['indexRenderState'] &
+  ChatWidgetDescription['indexRenderState'] &
   ClearRefinementsWidgetDescription['indexRenderState'] &
   ConfigureWidgetDescription['indexRenderState'] &
   CurrentRefinementsWidgetDescription['indexRenderState'] &
