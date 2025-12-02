@@ -25,6 +25,7 @@ describe('Chat', () => {
           tools: {},
           onReload: jest.fn(),
           onClose: jest.fn(),
+          sendMessage: jest.fn(),
         }}
         promptProps={{}}
         toggleButtonProps={{ open: true, onClick: jest.fn() }}
