@@ -27,8 +27,8 @@ export function createSuggestedFiltersComponent({
     createElement,
   });
 
-  return function SuggestedFilters(props: SuggestedFiltersProps) {
-    const { filters, onFilterClick, indexUiState, className } = props;
+  return function SuggestedFilters(userProps: SuggestedFiltersProps) {
+    const { filters, onFilterClick, indexUiState, className } = userProps;
 
     if (filters.length === 0) {
       return null;
