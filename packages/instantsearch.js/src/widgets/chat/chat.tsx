@@ -133,12 +133,6 @@ function createCarouselTool<
       });
     };
 
-    if (toolState === 'input-streaming') {
-      return (
-        <ChatMessageLoader translations={{ loaderText: 'Searching...' }} />
-      );
-    }
-
     const MemoedHeaderComponent = useMemo(() => {
       return (
         props: Omit<
@@ -171,6 +165,12 @@ function createCarouselTool<
       indexUiState,
       onClose,
     ]);
+
+    if (toolState === 'input-streaming') {
+      return (
+        <ChatMessageLoader translations={{ loaderText: 'Searching...' }} />
+      );
+    }
 
     const carouselElement = carousel({
       showNavigation: false,
