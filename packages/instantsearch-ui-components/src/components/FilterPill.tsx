@@ -16,8 +16,8 @@ export type FilterPillProps = {
 export function createFilterPillComponent({
   createElement,
 }: Pick<Renderer, 'createElement'>) {
-  return function FilterPill(props: FilterPillProps) {
-    const { label, value, count, isRefined, onClick, className } = props;
+  return function FilterPill(userProps: FilterPillProps) {
+    const { label, value, count, isRefined, onClick, className } = userProps;
 
     return (
       <button
