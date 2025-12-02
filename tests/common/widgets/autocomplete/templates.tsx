@@ -208,6 +208,7 @@ export function createTemplatesTests(
         normalizeSnapshot('P484'),
         `
         <div
+          aria-hidden="false"
           aria-labelledby="autocompleteP484input"
           class="ais-AutocompletePanel ais-AutocompletePanel--open"
           id="autocompleteP484panel"
@@ -290,14 +291,6 @@ export function createTemplatesTests(
                       aria-selected="false"
                       class="ais-AutocompleteIndexItem ais-AutocompleteSuggestionsItem"
                       id="autocompleteP484item:indexName2:0"
-                      role="row"
-                    >
-                      hello
-                    </li>
-                    <li
-                      aria-selected="false"
-                      class="ais-AutocompleteIndexItem ais-AutocompleteSuggestionsItem"
-                      id="autocompleteP484item:indexName2:1"
                       role="row"
                     >
                       world

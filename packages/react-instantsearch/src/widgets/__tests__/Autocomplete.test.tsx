@@ -166,6 +166,7 @@ describe('Autocomplete', () => {
     expect(container.querySelector('.ais-AutocompletePanel'))
       .toMatchInlineSnapshot(`
       <div
+        aria-hidden="true"
         aria-labelledby="autocomplete:r0:input"
         class="ais-AutocompletePanel"
         id="autocomplete:r0:panel"
@@ -247,6 +248,7 @@ describe('Autocomplete', () => {
     expect(container.querySelector('.ais-AutocompletePanel'))
       .toMatchInlineSnapshot(`
       <div
+        aria-hidden="true"
         aria-labelledby="autocomplete:r1:input"
         class="ais-AutocompletePanel"
         id="autocomplete:r1:panel"
