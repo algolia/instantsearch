@@ -3,6 +3,8 @@ import {
   ChevronRightIcon,
   ArrowRightIcon,
   createButtonComponent,
+  createSuggestedFiltersComponent,
+  createChatMessageLoaderComponent,
 } from 'instantsearch-ui-components';
 import React, { createElement } from 'react';
 
@@ -29,11 +31,21 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
     createElement: createElement as Pragma,
   });
 
+  const SuggestedFilters = createSuggestedFiltersComponent({
+    createElement: createElement as Pragma,
+  });
+
+  const ChatMessageLoader = createChatMessageLoaderComponent({
+    createElement: createElement as Pragma,
+  });
+
   function SearchLayoutComponent({
     message,
     indexUiState,
+    toolState,
     setIndexUiState,
     onClose,
+    sendMessage,
   }: ClientSideToolComponentProps) {
     const input = message?.input as
       | {
@@ -46,10 +58,27 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
       | {
           hits?: Array<RecordWithObjectID<TObject>>;
           nbHits?: number;
+          suggestedFilters?: Array<{
+            label: string;
+            attribute: string;
+            value: string;
+            count: number;
+          }>;
         }
       | undefined;
 
     const items = output?.hits || [];
+    const suggestedFilters = output?.suggestedFilters || [];
+
+    const handleFilterClick = React.useCallback(
+      (attribute: string, value: string, isRefined: boolean) => {
+        const action = isRefined ? 'Remove' : 'Apply';
+        sendMessage({
+          text: `${action} the ${attribute} filter: ${value}`,
+        });
+      },
+      [sendMessage]
+    );
 
     const MemoedHeaderComponent = React.useMemo(() => {
       return (
@@ -84,14 +113,29 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
       indexUiState,
     ]);
 
+    if (toolState === 'input-streaming') {
+      return (
+        <ChatMessageLoader translations={{ loaderText: 'Searching...' }} />
+      );
+    }
+
     return (
-      <Carousel
-        items={items}
-        itemComponent={itemComponent}
-        sendEvent={() => {}}
-        showNavigation={false}
-        headerComponent={MemoedHeaderComponent}
-      />
+      <>
+        <Carousel
+          items={items}
+          itemComponent={itemComponent}
+          sendEvent={() => {}}
+          showNavigation={false}
+          headerComponent={MemoedHeaderComponent}
+        />
+        {suggestedFilters.length > 0 && (
+          <SuggestedFilters
+            filters={suggestedFilters}
+            onFilterClick={handleFilterClick}
+            indexUiState={indexUiState}
+          />
+        )}
+      </>
     );
   }
 

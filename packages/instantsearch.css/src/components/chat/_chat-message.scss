@@ -41,6 +41,10 @@
   min-width: 0;
 }
 
+.ais-ChatMessage:has(.ais-ChatMessageLoader) .ais-ChatMessage-content {
+  width: 100%;
+}
+
 .ais-ChatMessage-message {
   position: relative;
   text-wrap: pretty;

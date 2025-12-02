@@ -1,0 +1,108 @@
+@use '../../shared/_variables';
+@use '../../shared/_common';
+
+.ais-ChatMessage-message {
+  // Suggested filters container
+  .ais-ChatToolSuggestedFilters {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--ais-spacing) * 0.25);
+    margin: calc(var(--ais-spacing) * 1.5) 0 var(--ais-spacing) 0;
+  }
+
+  .ais-SuggestedFilters-header {
+    font-size: calc(var(--ais-font-size) * 0.75);
+    font-weight: var(--ais-font-weight-semibold);
+    color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+    margin-bottom: calc(var(--ais-spacing) * 0.25);
+  }
+
+  // Horizontal scrolling container
+  .ais-SuggestedFilters {
+    @extend .ais-Scrollbar;
+
+    display: flex;
+    flex-wrap: nowrap;
+    gap: calc(var(--ais-spacing) * 0.5);
+    margin-left: calc(-1 * var(--ais-spacing));
+    margin-right: calc(-1 * var(--ais-spacing));
+    padding-left: calc(var(--ais-spacing) * 0.5);
+    padding-right: calc(var(--ais-spacing) * 0.5);
+    padding-bottom: calc(var(--ais-spacing) * 0.5);
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  // Individual filter pill
+  .ais-FilterPill {
+    @extend %ais-focus-outline;
+
+    appearance: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--ais-spacing) * 0.25);
+    margin: 0;
+    padding: calc(var(--ais-spacing) * 0.25) calc(var(--ais-spacing) * 0.75);
+    flex-shrink: 0;
+    background-color: rgba(
+      var(--ais-background-color-rgb),
+      var(--ais-background-color-alpha)
+    );
+    border: 1px solid
+      color-mix(
+        in srgb,
+        rgb(var(--ais-muted-color-rgb)) 30%,
+        rgb(var(--ais-background-color-rgb))
+      );
+    border-radius: calc(var(--ais-border-radius-md) * 2);
+    font-family: inherit;
+    font-size: calc(var(--ais-font-size) * 0.875);
+    line-height: 1.5;
+    color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition: all var(--ais-transition-duration)
+        var(--ais-transition-timing-function);
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        border-color: rgba(var(--ais-primary-color-rgb), 0.5);
+        background-color: rgba(var(--ais-primary-color-rgb), 0.05);
+      }
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  // Filter pill sub-elements
+  .ais-FilterPill-label {
+    font-weight: var(--ais-font-weight-semibold);
+    text-transform: capitalize;
+  }
+
+  .ais-FilterPill-value {
+    font-weight: normal;
+  }
+
+  .ais-FilterPill-count {
+    opacity: 0.6;
+    font-size: calc(var(--ais-font-size) * 0.75);
+  }
+
+  // Refined state modifier
+  .ais-FilterPill--refined {
+    background-color: rgba(var(--ais-primary-color-rgb), 0.1);
+    border-color: rgba(var(--ais-primary-color-rgb), 1);
+    color: rgb(var(--ais-primary-color-rgb));
+
+    @media (hover: hover) {
+      &:hover {
+        background-color: rgba(var(--ais-primary-color-rgb), 0.15);
+      }
+    }
+  }
+}

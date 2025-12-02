@@ -243,6 +243,7 @@ export function Chat<
         status,
         onReload: (messageId) => regenerate({ messageId }),
         onClose: () => setOpen(false),
+        sendMessage,
         messages,
         tools: toolsFromConnector,
         indexUiState,
