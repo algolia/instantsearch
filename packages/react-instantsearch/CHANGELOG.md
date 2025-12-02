@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.20.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.20.0...react-instantsearch@7.20.1) (2025-12-02)
+
+
+### Bug Fixes
+
+* **autocomplete:** add `placeholder` input prop ([#6817](https://github.com/algolia/instantsearch/issues/6817)) ([9ed31df](https://github.com/algolia/instantsearch/commit/9ed31dffd1b931bf69cf6cba3e98d3aa820ad55c))
+
+
+
+
+
 # [7.20.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.19.0...react-instantsearch@7.20.0) (2025-11-18)
 
 
