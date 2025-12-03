@@ -9,6 +9,7 @@ export * from './chat/ChatMessageLoader';
 export * from './chat/ChatMessageError';
 export * from './chat/ChatPrompt';
 export * from './chat/ChatToggleButton';
+export * from './chat/PromptSuggestions';
 export * from './chat/icons';
 export * from './chat/types';
 export * from './FrequentlyBoughtTogether';
