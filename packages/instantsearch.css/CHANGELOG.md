@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.9.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.8.0...instantsearch.css@8.9.0) (2025-12-02)
+
+
+### Features
+
+* **css:** add devtools for CSS variable config ([#6809](https://github.com/algolia/instantsearch/issues/6809)) ([b5d7f91](https://github.com/algolia/instantsearch/commit/b5d7f9121c3cd9306f1143631dfd99077dbd27a0))
+
+
+
+
+
 # [8.8.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.7.0...instantsearch.css@8.8.0) (2025-11-10)
 
 

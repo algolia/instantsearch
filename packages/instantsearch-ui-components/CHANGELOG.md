@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.15.1](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.15.0...instantsearch-ui-components@0.15.1) (2025-12-02)
+
+
+### Bug Fixes
+
+* **autocomplete:** add `placeholder` input prop ([#6817](https://github.com/algolia/instantsearch/issues/6817)) ([9ed31df](https://github.com/algolia/instantsearch/commit/9ed31dffd1b931bf69cf6cba3e98d3aa820ad55c))
+* **autocomplete:** keep input focused when clicking inside panel + more specific React keys ([#6820](https://github.com/algolia/instantsearch/issues/6820)) ([85d0bfb](https://github.com/algolia/instantsearch/commit/85d0bfb57089463cbbe11977f4907b8880eade66))
+
+
+
+
+
 # [0.15.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.14.0...instantsearch-ui-components@0.15.0) (2025-11-18)
 
 
