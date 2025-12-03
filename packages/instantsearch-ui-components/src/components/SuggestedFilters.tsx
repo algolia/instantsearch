@@ -13,11 +13,26 @@ export type SuggestedFilter = {
   count: number;
 };
 
+export type SuggestedFiltersClassNames = {
+  /**
+   * Class names to apply to the root element
+   */
+  root?: string | string[];
+  /**
+   * Class names to apply to the header element
+   */
+  header?: string | string[];
+  /**
+   * Class names to apply to the filters list element
+   */
+  list?: string | string[];
+};
+
 export type SuggestedFiltersProps = {
   filters: SuggestedFilter[];
   onFilterClick: (attribute: string, value: string, isRefined: boolean) => void;
   indexUiState: object;
-  className?: string;
+  classNames?: Partial<SuggestedFiltersClassNames>;
 };
 
 export function createSuggestedFiltersComponent({
@@ -28,7 +43,7 @@ export function createSuggestedFiltersComponent({
   });
 
   return function SuggestedFilters(userProps: SuggestedFiltersProps) {
-    const { filters, onFilterClick, indexUiState, className } = userProps;
+    const { filters, onFilterClick, indexUiState, classNames = {} } = userProps;
 
     if (filters.length === 0) {
       return null;
@@ -44,9 +59,11 @@ export function createSuggestedFiltersComponent({
     };
 
     return (
-      <div className={cx('ais-ChatToolSuggestedFilters', className)}>
-        <div className="ais-SuggestedFilters-header">Suggested Filters</div>
-        <div className="ais-SuggestedFilters">
+      <div className={cx('ais-ChatToolSuggestedFilters', classNames.root)}>
+        <div className={cx('ais-SuggestedFilters-header', classNames.header)}>
+          Suggested Filters
+        </div>
+        <div className={cx('ais-SuggestedFilters', classNames.list)}>
           {filters.map((filter) => {
             const refined = isRefined(filter.attribute, filter.value);
             return (
