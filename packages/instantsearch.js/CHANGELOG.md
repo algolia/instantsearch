@@ -10,7 +10,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 * **autocomplete:** add `placeholder` input prop ([#6817](https://github.com/algolia/instantsearch/issues/6817)) ([9ed31df](https://github.com/algolia/instantsearch/commit/9ed31dffd1b931bf69cf6cba3e98d3aa820ad55c))
 * **autocomplete:** clear panel query in instantsearch.js ([#6821](https://github.com/algolia/instantsearch/issues/6821)) ([c99bf31](https://github.com/algolia/instantsearch/commit/c99bf3115c13f43207ec560085c8d6c0ff201281))
-
+* **autocomplete:** deduplicate recent searches/suggestions ([#6824](https://github.com/algolia/instantsearch/issues/6824)) ([b643508](https://github.com/algolia/instantsearch/commit/b6435083988903df178b99d075c3e0c479fa14a2))
 
 ### Features
 
