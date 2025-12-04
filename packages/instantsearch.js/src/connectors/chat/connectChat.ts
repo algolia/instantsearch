@@ -28,6 +28,7 @@ import type {
   InstantSearch,
   IndexUiState,
   IndexWidget,
+  WidgetRenderState,
 } from '../../types';
 import type {
   AddToolResultWithOutput,
@@ -76,6 +77,10 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
    * Tools configuration with addToolResult bound, ready to be used by the UI.
    */
   tools: ClientSideTools;
+  /**
+   * Suggestions received from the AI model.
+   */
+  suggestions?: string[];
 } & Pick<
   AbstractChat<TUiMessage>,
   | 'addToolResult'
@@ -120,7 +125,12 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
 export type ChatWidgetDescription<TUiMessage extends UIMessage = UIMessage> = {
   $$type: 'ais.chat';
   renderState: ChatRenderState<TUiMessage>;
-  indexRenderState: Record<string, unknown>;
+  indexRenderState: {
+    chat: WidgetRenderState<
+      ChatRenderState<TUiMessage>,
+      ChatConnectorParams<TUiMessage>
+    >;
+  };
 };
 
 export type ChatConnector<TUiMessage extends UIMessage = UIMessage> = Connector<
@@ -149,6 +159,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     let setInput: ChatRenderState<TUiMessage>['setInput'];
     let setOpen: ChatRenderState<TUiMessage>['setOpen'];
     let setIsClearing: (value: boolean) => void;
+    let suggestions: string[] | undefined;
 
     const setMessages = (
       messagesParam: TUiMessage[] | ((m: TUiMessage[]) => TUiMessage[])
@@ -210,6 +221,11 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         ...options,
         transport,
         sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
+        onData: ({ data }) => {
+          if (data && typeof data === 'object' && 'suggestions' in data) {
+            suggestions = (data as any).suggestions as string[] | undefined;
+          }
+        },
         onToolCall({ toolCall }) {
           const tool = tools[toolCall.toolName];
 
@@ -306,8 +322,11 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         );
       },
 
-      getRenderState(renderState) {
-        return renderState;
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          chat: this.getWidgetRenderState(renderOptions),
+        };
       },
 
       getWidgetRenderState(renderState) {
@@ -342,6 +361,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           setInput,
           setOpen,
           setMessages,
+          suggestions,
           isClearing,
           clearMessages,
           onClearTransitionEnd,
