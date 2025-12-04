@@ -110,8 +110,8 @@ export function useWidget<TWidget extends Widget | IndexWidget, TProps>({
   if (waitForResultsRef?.current?.status === 'fulfilled') {
     countRef.current += 1;
     warn(
-      countRef.current > parentIndex.getWidgets().length &&
-        !ignoreMultipleHooksWarning,
+      ignoreMultipleHooksWarning ||
+        countRef.current <= parentIndex.getWidgets().length,
       `We detected you may have a component with multiple InstantSearch hooks.
 
 With Next.js, you need to set \`skipSuspense\` to \`true\` for all but the last hook in the component, otherwise, only the first hook will be rendered on the server.
