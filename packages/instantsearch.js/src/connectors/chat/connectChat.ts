@@ -28,6 +28,7 @@ import type {
   InstantSearch,
   IndexUiState,
   IndexWidget,
+  WidgetRenderState,
 } from '../../types';
 import type {
   AddToolResultWithOutput,
@@ -124,7 +125,12 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
 export type ChatWidgetDescription<TUiMessage extends UIMessage = UIMessage> = {
   $$type: 'ais.chat';
   renderState: ChatRenderState<TUiMessage>;
-  indexRenderState: Record<string, unknown>;
+  indexRenderState: {
+    chat: WidgetRenderState<
+      ChatRenderState<TUiMessage>,
+      ChatConnectorParams<TUiMessage>
+    >;
+  };
 };
 
 export type ChatConnector<TUiMessage extends UIMessage = UIMessage> = Connector<
@@ -316,8 +322,11 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         );
       },
 
-      getRenderState(renderState) {
-        return renderState;
+      getRenderState(renderState, renderOptions) {
+        return {
+          ...renderState,
+          chat: this.getWidgetRenderState(renderOptions),
+        };
       },
 
       getWidgetRenderState(renderState) {

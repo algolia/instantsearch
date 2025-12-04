@@ -76,6 +76,10 @@ export class ChatState<TUiMessage extends UIMessage>
     this._callMessagesCallbacks();
   }
 
+  get data(): unknown {
+    return this.data;
+  }
+
   pushMessage = (message: TUiMessage) => {
     this._messages = this._messages.concat(message);
     this._callMessagesCallbacks();
@@ -148,6 +152,10 @@ export class Chat<
     const state = new ChatState(agentId, messages);
     super({ ...init, state });
     this._state = state;
+  }
+
+  get data() {
+    return this._state.data;
   }
 
   '~registerMessagesCallback' = (onChange: () => void): (() => void) =>
