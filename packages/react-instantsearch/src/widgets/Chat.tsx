@@ -206,6 +206,7 @@ export function Chat<
     clearMessages,
     onClearTransitionEnd,
     tools: toolsFromConnector,
+    suggestions,
   } = chatState;
 
   if (__DEV__ && error) {
@@ -290,6 +291,13 @@ export function Chat<
         headerComponent: promptHeaderComponent,
         footerComponent: promptFooterComponent,
         ...promptProps,
+      }}
+      suggestionsProps={{
+        suggestions,
+        onSuggestionClick: (suggestion) => {
+          setInput(suggestion);
+          promptRef.current?.focus();
+        },
       }}
       classNames={classNames}
     />
