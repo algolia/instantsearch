@@ -115,6 +115,78 @@ export function createTemplatesTests(
       ]);
     });
 
+    test('renders recent searches header', async () => {
+      jest
+        .spyOn(Storage.prototype, 'getItem')
+        .mockReturnValue(JSON.stringify(['hello', 'world']));
+
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'indexName',
+            hits: [
+              { objectID: '1', name: 'Item 1' },
+              { objectID: '2', name: 'Item 2' },
+            ],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            indices: [
+              {
+                indexName: 'indexName',
+                templates: {
+                  item: (props) => props.item.name,
+                },
+              },
+            ],
+            showRecent: {
+              templates: {
+                header: (props) => `<span>${props.items.length} recent</span>`,
+              },
+              cssClasses: { header: 'RECENT-HEADER' },
+            },
+          },
+          react: {
+            indices: [
+              {
+                indexName: 'indexName',
+                itemComponent: (props) => props.item.name,
+              },
+            ],
+            showRecent: {
+              headerComponent: (props) => (
+                <span>{props.items.length} recent</span>
+              ),
+              classNames: { header: 'RECENT-HEADER' },
+            },
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        userEvent.click(screen.queryByRole('combobox')!);
+        await wait(0);
+      });
+
+      const headers = [
+        ...document.querySelectorAll('.ais-AutocompleteIndexHeader'),
+      ];
+      expect(headers).toHaveLength(1);
+      expect(headers[0].className).toBe(
+        'ais-AutocompleteIndexHeader ais-AutocompleteRecentSearchesHeader RECENT-HEADER'
+      );
+      expect(headers[0].textContent).toBe('2 recent');
+    });
+
     test('renders custom panel', async () => {
       jest
         .spyOn(Storage.prototype, 'getItem')
