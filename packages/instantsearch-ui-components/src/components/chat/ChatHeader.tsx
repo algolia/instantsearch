@@ -113,20 +113,21 @@ export type ChatHeaderProps = ComponentProps<'div'> & ChatHeaderOwnProps;
 export function createChatHeaderComponent({ createElement }: Renderer) {
   const Button = createButtonComponent({ createElement });
 
-  return function ChatHeader({
-    maximized = false,
-    onToggleMaximize,
-    onClose,
-    onClear,
-    canClear = false,
-    closeIconComponent: CloseIcon,
-    minimizeIconComponent: MinimizeIcon,
-    maximizeIconComponent: MaximizeIcon,
-    titleIconComponent: TitleIcon,
-    classNames = {},
-    translations: userTranslations,
-    ...props
-  }: ChatHeaderProps) {
+  return function ChatHeader(userProps: ChatHeaderProps) {
+    const {
+      maximized = false,
+      onToggleMaximize,
+      onClose,
+      onClear,
+      canClear = false,
+      closeIconComponent: CloseIcon,
+      minimizeIconComponent: MinimizeIcon,
+      maximizeIconComponent: MaximizeIcon,
+      titleIconComponent: TitleIcon,
+      classNames = {},
+      translations: userTranslations,
+      ...props
+    } = userProps;
     const translations: Required<ChatHeaderTranslations> = {
       title: 'Chat',
       minimizeLabel: 'Minimize chat',

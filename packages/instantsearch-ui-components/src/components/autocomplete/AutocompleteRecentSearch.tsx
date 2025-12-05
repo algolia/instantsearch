@@ -46,13 +46,16 @@ export type AutocompleteRecentSearchClassNames = {
 export function createAutocompleteRecentSearchComponent({
   createElement,
 }: Renderer) {
-  return function AutocompleteRecentSearch({
-    item,
-    children,
-    onSelect,
-    onRemoveRecentSearch,
-    classNames = {},
-  }: AutocompleteRecentSearchProps) {
+  return function AutocompleteRecentSearch(
+    userProps: AutocompleteRecentSearchProps
+  ) {
+    const {
+      item,
+      children,
+      onSelect,
+      onRemoveRecentSearch,
+      classNames = {},
+    } = userProps;
     return (
       <div
         onClick={onSelect}

@@ -21,10 +21,8 @@ export type ChatMessageLoaderProps = ComponentProps<'article'> & {
 export function createChatMessageLoaderComponent({
   createElement,
 }: Pick<Renderer, 'createElement'>) {
-  return function ChatMessageLoader({
-    translations: userTranslations,
-    ...props
-  }: ChatMessageLoaderProps) {
+  return function ChatMessageLoader(userProps: ChatMessageLoaderProps) {
+    const { translations: userTranslations, ...props } = userProps;
     const translations: Required<ChatMessageLoaderTranslations> = {
       loaderText: 'Thinking...',
       ...userTranslations,

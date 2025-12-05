@@ -82,20 +82,21 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
   const ChatMessages = createChatMessagesComponent({ createElement, Fragment });
   const ChatPrompt = createChatPromptComponent({ createElement, Fragment });
 
-  return function Chat({
-    open,
-    maximized = false,
-    headerProps,
-    toggleButtonProps,
-    messagesProps,
-    promptProps = {},
-    headerComponent: HeaderComponent,
-    promptComponent: PromptComponent,
-    toggleButtonComponent: ToggleButtonComponent,
-    classNames = {},
-    className,
-    ...props
-  }: ChatProps) {
+  return function Chat(userProps: ChatProps) {
+    const {
+      open,
+      maximized = false,
+      headerProps,
+      toggleButtonProps,
+      messagesProps,
+      promptProps = {},
+      headerComponent: HeaderComponent,
+      promptComponent: PromptComponent,
+      toggleButtonComponent: ToggleButtonComponent,
+      classNames = {},
+      className,
+      ...props
+    } = userProps;
     return (
       <div
         {...props}

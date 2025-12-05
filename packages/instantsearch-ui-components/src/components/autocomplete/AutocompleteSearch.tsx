@@ -11,12 +11,8 @@ export type AutocompleteSearchProps = {
 };
 
 export function createAutocompleteSearchComponent({ createElement }: Renderer) {
-  return function AutocompleteSearch({
-    inputProps,
-    onClear,
-    query,
-    isSearchStalled,
-  }: AutocompleteSearchProps) {
+  return function AutocompleteSearch(userProps: AutocompleteSearchProps) {
+    const { inputProps, onClear, query, isSearchStalled } = userProps;
     const inputRef = inputProps.ref as { current: HTMLInputElement | null };
     return (
       <form
