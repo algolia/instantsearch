@@ -38,14 +38,15 @@ export type ChatToggleButtonProps = ComponentProps<'button'> &
 export function createChatToggleButtonComponent({ createElement }: Renderer) {
   const Button = createButtonComponent({ createElement });
 
-  return function ChatToggleButton({
-    open,
-    onClick,
-    toggleIconComponent: ToggleIcon,
-    classNames = {},
-    className,
-    ...props
-  }: ChatToggleButtonProps) {
+  return function ChatToggleButton(userProps: ChatToggleButtonProps) {
+    const {
+      open,
+      onClick,
+      toggleIconComponent: ToggleIcon,
+      classNames = {},
+      className,
+      ...props
+    } = userProps;
     const defaultIcon = open ? (
       <ChevronUpIcon createElement={createElement} />
     ) : (

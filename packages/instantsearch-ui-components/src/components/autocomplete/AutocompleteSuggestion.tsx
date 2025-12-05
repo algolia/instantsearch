@@ -33,11 +33,10 @@ export type AutocompleteSuggestionClassNames = {
 export function createAutocompleteSuggestionComponent({
   createElement,
 }: Renderer) {
-  return function AutocompleteSuggestion({
-    children,
-    onSelect,
-    classNames = {},
-  }: AutocompleteSuggestionProps) {
+  return function AutocompleteSuggestion(
+    userProps: AutocompleteSuggestionProps
+  ) {
+    const { children, onSelect, classNames = {} } = userProps;
     return (
       <div
         onClick={onSelect}
