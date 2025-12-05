@@ -268,6 +268,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             },
             false
           );
+          instantSearchInstance.scheduleRender(false);
         };
 
         setOpen = (o) => {
