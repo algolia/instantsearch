@@ -114,11 +114,11 @@ export type ChatPromptOwnProps = {
   /**
    * Callback when the form is submitted
    */
-  onSubmit?: ComponentProps<'textarea'>['onSubmit'];
+  onSubmit?: (event: Event) => void;
   /**
    * Callback when the textarea value changes
    */
-  onInput?: ComponentProps<'textarea'>['onInput'];
+  onInput?: (event: Event) => void;
   /**
    * Ref to the prompt textarea element for focus management
    */

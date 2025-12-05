@@ -13,37 +13,29 @@ function delint(sourceFile: ts.SourceFile) {
     character: number;
     message: string;
   }> = [];
+  const fileName = sourceFile.fileName.replace('.d.ts', '');
 
-  let exportsValidFunctionName = false;
   delintNode(sourceFile);
 
   function delintNode(node: ts.Node) {
     switch (node.kind) {
       case ts.SyntaxKind.FunctionDeclaration: {
         const functionDeclaration = node as ts.FunctionDeclaration;
-        const fileNameSegment = sourceFile.fileName.replace('.d.ts', '');
-        let hasError = false;
-        const report = (message: string) => {
-          hasError = true;
-          const { line, character } = sourceFile.getLineAndCharacterOfPosition(
-            node.getStart()
-          );
-          errors.push({
-            file: sourceFile.fileName,
-            line: line + 1,
-            character: character + 1,
-            message,
-          });
-        };
 
-        if (fileNameSegment === 'icons') {
-          validateIcons(functionDeclaration, fileNameSegment, report);
+        if (fileName === 'icons') {
+          validateIcons(functionDeclaration, fileName, report(node));
         } else {
-          validateComponents(functionDeclaration, fileNameSegment, report);
+          validateComponents(functionDeclaration, fileName, report(node));
         }
-        if (!hasError) {
-          exportsValidFunctionName = true;
-        }
+        break;
+      }
+      case ts.SyntaxKind.TypeAliasDeclaration:
+      case ts.SyntaxKind.InterfaceDeclaration: {
+        const typeDeclaration = node as
+          | ts.TypeAliasDeclaration
+          | ts.InterfaceDeclaration;
+
+        validateTypes(typeDeclaration, fileName, report(node));
 
         break;
       }
@@ -55,7 +47,21 @@ function delint(sourceFile: ts.SourceFile) {
     ts.forEachChild(node, delintNode);
   }
 
-  return !exportsValidFunctionName ? errors : [];
+  function report(node: ts.Node) {
+    return (message: string) => {
+      const { line, character } = sourceFile.getLineAndCharacterOfPosition(
+        node.getStart()
+      );
+      errors.push({
+        file: sourceFile.fileName,
+        line: line + 1,
+        character: character + 1,
+        message,
+      });
+    };
+  }
+
+  return errors;
 }
 
 function validateIcons(
@@ -117,6 +123,12 @@ function validateComponents(
   }
 
   const actualName = functionDeclaration.name?.getText();
+
+  if (actualName?.startsWith('generate')) {
+    // Allowed for generateSomething helper functions
+    return;
+  }
+
   if (actualName !== componentName) {
     report(
       `Exported component should be named '${componentName}', but was '${actualName}' instead.`
@@ -149,6 +161,61 @@ function validateComponents(
   }
 }
 
+function validateTypes(
+  node: ts.TypeAliasDeclaration | ts.InterfaceDeclaration,
+  _filename: string,
+  report: (message: string) => void
+) {
+  // Only validate exported prop types
+  if (!node.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword)) {
+    return;
+  }
+
+  const name = node.name?.getText();
+  if (!name || !name.endsWith('Props')) {
+    // only enforce for exported types that look like props
+    return;
+  }
+
+  let found = false;
+
+  function visit(n: ts.Node) {
+    if (n.kind === ts.SyntaxKind.IndexedAccessType) {
+      const iat = n as ts.IndexedAccessTypeNode;
+      const objectType = iat.objectType;
+      if (objectType.kind === ts.SyntaxKind.TypeReference) {
+        const tr = objectType as ts.TypeReferenceNode;
+        const typeName = tr.typeName.getText();
+        if (typeName === 'ComponentProps') {
+          found = true;
+          return;
+        }
+      }
+    }
+
+    ts.forEachChild(n, visit);
+  }
+
+  if (node.kind === ts.SyntaxKind.TypeAliasDeclaration) {
+    if (node.type) {
+      visit(node.type);
+    }
+  } else {
+    node.members.forEach((member) => {
+      if ((member as ts.PropertySignature).type) {
+        visit((member as ts.PropertySignature).type!);
+      }
+    });
+  }
+
+  if (found) {
+    report(`Exported prop type '${name}' must not reference ComponentProps.`);
+  }
+}
+
+const componentsDir = path.join(__dirname, '../dist/es/components');
+const files: Array<{ file: string; subdir: string }> = [];
+
 function walkDir(dir: string, relativePath: string = '') {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
 
@@ -172,8 +239,6 @@ function walkDir(dir: string, relativePath: string = '') {
   }
 }
 
-const componentsDir = path.join(__dirname, '../dist/es/components');
-const files: Array<{ file: string; subdir: string }> = [];
 walkDir(componentsDir);
 
 describe('Exposes correct types', () => {
