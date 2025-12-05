@@ -1,6 +1,6 @@
 import { createPromptSuggestionsComponent } from 'instantsearch-ui-components';
-import React, { createElement, useEffect } from 'react';
-import { useHits, useChat } from 'react-instantsearch-core';
+import React, { createElement } from 'react';
+import { usePromptSuggestions } from 'react-instantsearch-core/src/connectors/usePromptSuggestions';
 
 import type {
   Pragma,
@@ -25,28 +25,16 @@ export function PromptSuggestions({
   classNames,
   translations,
 }: PromptSuggestionsUiProps) {
-  const { items } = useHits();
-
-  const { suggestions, messages, sendMessage, status } = useChat({
-    agentId,
-  });
-
-  useEffect(() => {
-    if (items.length > 0 && messages.length === 0) {
-      const objectToSend = items[0];
-      sendMessage({
-        text: JSON.stringify(objectToSend),
-      });
-    }
-  }, [items, messages.length, sendMessage]);
+  const { suggestions, status, suggestionsClickCallback } =
+    usePromptSuggestions({
+      agentId,
+    });
 
   return (
     <PromptSuggestionsUiComponent
       status={status}
       suggestions={suggestions}
-      onSuggestionClick={(suggestion) => {
-        sendMessage({ text: suggestion });
-      }}
+      onSuggestionClick={suggestionsClickCallback}
       loadingComponent={loadingComponent}
       classNames={classNames}
       translations={translations}
