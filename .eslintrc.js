@@ -18,6 +18,10 @@ const config = {
       version: 'detect',
     },
     'import/resolver': {
+      typescript: {
+        alwaysTryTypes: true,
+        project: './tsconfig.json',
+      },
       node: {
         // The migration is an incremental process so we import TypeScript modules
         // from JavaScript files.
@@ -35,6 +39,8 @@ const config = {
     'import/no-extraneous-dependencies': 'off',
     '@typescript-eslint/explicit-member-accessibility': ['off'],
     'import/extensions': 'off',
+    // Allow markdown-to-jsx subpath exports (exports field not fully supported by old resolver version)
+    'import/no-unresolved': ['error', { ignore: ['^markdown-to-jsx/'] }],
     'eslint-comments/disable-enable-pair': 'off',
     'react/jsx-no-bind': 'off',
     // We can't display an error message with the ESLint version we're using

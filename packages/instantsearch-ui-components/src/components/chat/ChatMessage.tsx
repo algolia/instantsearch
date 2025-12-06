@@ -1,5 +1,5 @@
 /** @jsx createElement */
-import { compiler } from 'markdown-to-jsx';
+import { compiler } from 'markdown-to-jsx/react';
 
 import { cx, startsWith } from '../../lib';
 import { createButtonComponent } from '../Button';
