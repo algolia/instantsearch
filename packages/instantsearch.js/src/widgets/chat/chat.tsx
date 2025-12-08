@@ -422,7 +422,7 @@ function ChatWrapper({
         status: chatStatus,
         value: chatInput,
         onInput: (event) => {
-          setChatInput((event.currentTarget as HTMLInputElement).value);
+          setChatInput(event.currentTarget.value);
         },
         onSubmit: () => {
           sendMessage({ text: chatInput });

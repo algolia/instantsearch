@@ -114,11 +114,11 @@ export type ChatPromptOwnProps = {
   /**
    * Callback when the form is submitted
    */
-  onSubmit?: (event: SubmitEvent) => void;
+  onSubmit?: ComponentProps<'textarea'>['onSubmit'];
   /**
    * Callback when the textarea value changes
    */
-  onInput?: (event: InputEvent) => void;
+  onInput?: ComponentProps<'textarea'>['onInput'];
   /**
    * Ref to the prompt textarea element for focus management
    */
@@ -283,7 +283,7 @@ export function createChatPromptComponent({ createElement }: Renderer) {
             autoFocus={autoFocus}
             onInput={(event) => {
               adjustHeight();
-              onInput?.(event as unknown as InputEvent);
+              onInput?.(event);
             }}
             onKeyDown={(event) => {
               onKeyDown?.(event);
@@ -296,7 +296,7 @@ export function createChatPromptComponent({ createElement }: Renderer) {
                 if (!hasValue) {
                   return;
                 }
-                onSubmit?.(event as unknown as SubmitEvent);
+                onSubmit?.(event);
               }
               if (event.key === 'Escape') {
                 if (event.currentTarget && event.currentTarget.blur) {

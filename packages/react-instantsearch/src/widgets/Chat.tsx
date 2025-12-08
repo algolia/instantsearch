@@ -276,7 +276,7 @@ export function Chat<
         value: input,
         translations: promptTranslations,
         onInput: (event) => {
-          setInput((event.currentTarget as HTMLInputElement).value);
+          setInput(event.currentTarget.value);
         },
         onSubmit: () => {
           sendMessage({ text: input });

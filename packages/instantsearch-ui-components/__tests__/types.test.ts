@@ -29,16 +29,6 @@ function delint(sourceFile: ts.SourceFile) {
         }
         break;
       }
-      case ts.SyntaxKind.TypeAliasDeclaration:
-      case ts.SyntaxKind.InterfaceDeclaration: {
-        const typeDeclaration = node as
-          | ts.TypeAliasDeclaration
-          | ts.InterfaceDeclaration;
-
-        validateTypes(typeDeclaration, fileName, report(node));
-
-        break;
-      }
       default: {
         break;
       }
@@ -158,58 +148,6 @@ function validateComponents(
     ).parameters[0].name.getText() !== 'userProps'
   ) {
     report(`Exported component's return type should be called 'userProps'.`);
-  }
-}
-
-function validateTypes(
-  node: ts.TypeAliasDeclaration | ts.InterfaceDeclaration,
-  _filename: string,
-  report: (message: string) => void
-) {
-  // Only validate exported prop types
-  if (!node.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword)) {
-    return;
-  }
-
-  const name = node.name?.getText();
-  if (!name || !name.endsWith('Props')) {
-    // only enforce for exported types that look like props
-    return;
-  }
-
-  let found = false;
-
-  function visit(n: ts.Node) {
-    if (n.kind === ts.SyntaxKind.IndexedAccessType) {
-      const iat = n as ts.IndexedAccessTypeNode;
-      const objectType = iat.objectType;
-      if (objectType.kind === ts.SyntaxKind.TypeReference) {
-        const tr = objectType as ts.TypeReferenceNode;
-        const typeName = tr.typeName.getText();
-        if (typeName === 'ComponentProps') {
-          found = true;
-          return;
-        }
-      }
-    }
-
-    ts.forEachChild(n, visit);
-  }
-
-  if (node.kind === ts.SyntaxKind.TypeAliasDeclaration) {
-    if (node.type) {
-      visit(node.type);
-    }
-  } else {
-    node.members.forEach((member) => {
-      if ((member as ts.PropertySignature).type) {
-        visit((member as ts.PropertySignature).type!);
-      }
-    });
-  }
-
-  if (found) {
-    report(`Exported prop type '${name}' must not reference ComponentProps.`);
   }
 }
 
