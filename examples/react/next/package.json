@@ -11,7 +11,7 @@
   "dependencies": {
     "algoliasearch": "5.1.1",
     "instantsearch.css": "8.9.0",
-    "next": "16.0.1",
+    "next": "16.0.7",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-instantsearch": "7.20.1",
@@ -21,7 +21,7 @@
     "@types/node": "17.0.40",
     "@types/react": "19.0.3",
     "eslint": "^9.0.0",
-    "eslint-config-next": "16.0.1",
+    "eslint-config-next": "16.0.7",
     "typescript": "5.5.2"
   }
 }
