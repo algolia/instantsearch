@@ -12,7 +12,7 @@ declare global {
 // For safety when there's no @types/react or preact, we don't directly use
 // JSX.IntrinsicElements
 type IntrinsicElements = keyof JSX.IntrinsicElements extends never
-  ? Record<string, any>
+  ? Record<string, unknown>
   : JSX.IntrinsicElements;
 
 export type Pragma = (

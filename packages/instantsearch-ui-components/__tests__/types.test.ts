@@ -15,27 +15,13 @@ function delint(sourceFile: ts.SourceFile) {
   }> = [];
   const fileName = sourceFile.fileName.replace('.d.ts', '');
 
-  delintNode(sourceFile);
-
-  function delintNode(node: ts.Node) {
-    switch (node.kind) {
-      case ts.SyntaxKind.FunctionDeclaration: {
-        const functionDeclaration = node as ts.FunctionDeclaration;
-
-        if (fileName === 'icons') {
-          validateIcons(functionDeclaration, fileName, report(node));
-        } else {
-          validateComponents(functionDeclaration, fileName, report(node));
-        }
-        break;
-      }
-      default: {
-        break;
-      }
-    }
-
-    ts.forEachChild(node, delintNode);
+  if (fileName === 'icons') {
+    validateIcons(sourceFile, report);
+  } else {
+    validateComponents(sourceFile, fileName, report);
   }
+
+  validateComponentPropsUsage(sourceFile, report);
 
   function report(node: ts.Node) {
     return (message: string) => {
@@ -54,101 +40,181 @@ function delint(sourceFile: ts.SourceFile) {
   return errors;
 }
 
-function validateIcons(
-  functionDeclaration: ts.FunctionDeclaration,
-  _filename: string,
-  report: (message: string) => void
+function validateComponentPropsUsage(
+  sourceFile: ts.SourceFile,
+  report: (node: ts.Node) => (message: string) => void
 ) {
-  if (
-    !(
-      functionDeclaration.modifiers?.some(
-        (modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword
-      ) &&
-      functionDeclaration.modifiers?.some(
-        (modifier) => modifier.kind === ts.SyntaxKind.DeclareKeyword
+  function containsComponentProps(node: ts.Node): boolean {
+    let found = false;
+    function visit(n: ts.Node) {
+      if (found) return;
+      if (ts.isTypeReferenceNode(n)) {
+        const tn = n.typeName;
+        if (ts.isIdentifier(tn) && tn.text === 'ComponentProps') {
+          found = true;
+          return;
+        }
+      }
+      ts.forEachChild(n, visit);
+    }
+    visit(node);
+    return found;
+  }
+
+  function checkNode(node: ts.Node) {
+    // Partial<ComponentProps<...>> or Pick<ComponentProps<...>, ...> are disallowed
+    if (ts.isTypeReferenceNode(node)) {
+      const tn = node.typeName;
+      if (
+        ts.isIdentifier(tn) &&
+        ['Omit', 'Array'].includes(tn.text) === false
+      ) {
+        const args = node.typeArguments || [];
+        for (const arg of args) {
+          if (containsComponentProps(arg)) {
+            report(node)(`${tn.text} should not be used with ComponentProps.`);
+          }
+        }
+      }
+    }
+
+    // Indexed access: ComponentProps<'div'>['classNames']
+    if (ts.isIndexedAccessTypeNode(node)) {
+      const objectType = node.objectType;
+      if (containsComponentProps(objectType)) {
+        report(node)(`Indexed access on ComponentProps is disallowed.`);
+      }
+    }
+
+    ts.forEachChild(node, checkNode);
+  }
+
+  checkNode(sourceFile);
+}
+
+function validateIcons(
+  sourceFile: ts.SourceFile,
+  report: (node: ts.Node) => (message: string) => void
+) {
+  function checkFunction(functionDeclaration: ts.FunctionDeclaration) {
+    if (
+      !(
+        functionDeclaration.modifiers?.some(
+          (modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword
+        ) &&
+        functionDeclaration.modifiers?.some(
+          (modifier) => modifier.kind === ts.SyntaxKind.DeclareKeyword
+        )
       )
-    )
-  ) {
-    return;
+    ) {
+      return;
+    }
+
+    const actualName = functionDeclaration.name?.getText();
+
+    if (!actualName || !/^[A-Z].*Icon$/.test(actualName)) {
+      report(functionDeclaration)(
+        `Icon function should start with a capital letter and end with 'Icon', but was '${actualName}' instead.`
+      );
+    }
+
+    const parameters = functionDeclaration.parameters;
+    if (parameters.length !== 1) {
+      report(functionDeclaration)(
+        `Icon function should accept exactly one parameter.`
+      );
+    }
+
+    const returnType = functionDeclaration.type;
+    if (returnType && returnType.getText() !== 'JSX.Element') {
+      report(functionDeclaration)(
+        `Icon function should return JSX.Element. (got '${returnType.getText()}')`
+      );
+    }
   }
 
-  const actualName = functionDeclaration.name?.getText();
-
-  if (!actualName || !/^[A-Z].*Icon$/.test(actualName)) {
-    report(
-      `Icon function should start with a capital letter and end with 'Icon', but was '${actualName}' instead.`
-    );
+  function visit(node: ts.Node) {
+    if (ts.isFunctionDeclaration(node)) {
+      checkFunction(node as ts.FunctionDeclaration);
+    }
+    ts.forEachChild(node, visit);
   }
 
-  const parameters = functionDeclaration.parameters;
-  if (parameters.length !== 1) {
-    report(`Icon function should accept exactly one parameter.`);
-  }
-
-  const returnType = functionDeclaration.type;
-  if (returnType && returnType.getText() !== 'JSX.Element') {
-    report(
-      `Icon function should return JSX.Element. (got '${returnType.getText()}')`
-    );
-  }
+  visit(sourceFile);
 }
 
 function validateComponents(
-  functionDeclaration: ts.FunctionDeclaration,
+  sourceFile: ts.SourceFile,
   filename: string,
-  report: (message: string) => void
+  report: (node: ts.Node) => (message: string) => void
 ) {
   const componentName = `create${filename}Component`;
-  if (
-    !(
-      functionDeclaration.modifiers?.some(
-        (modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword
-      ) &&
-      functionDeclaration.modifiers?.some(
-        (modifier) => modifier.kind === ts.SyntaxKind.DeclareKeyword
+
+  function checkFunction(functionDeclaration: ts.FunctionDeclaration) {
+    if (
+      !(
+        functionDeclaration.modifiers?.some(
+          (modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword
+        ) &&
+        functionDeclaration.modifiers?.some(
+          (modifier) => modifier.kind === ts.SyntaxKind.DeclareKeyword
+        )
       )
-    )
-  ) {
-    return;
+    ) {
+      return;
+    }
+
+    const actualName = functionDeclaration.name?.getText();
+
+    if (actualName?.startsWith('generate')) {
+      // Allowed for generateSomething helper functions
+      return;
+    }
+
+    if (actualName !== componentName) {
+      report(functionDeclaration)(
+        `Exported component should be named '${componentName}', but was '${actualName}' instead.`
+      );
+    }
+
+    const returnType = functionDeclaration.type as ts.FunctionTypeNode;
+
+    if (returnType.kind !== ts.SyntaxKind.FunctionType) {
+      report(functionDeclaration)(
+        `Exported component's return type should be a function.`
+      );
+    }
+
+    if (
+      returnType.kind === ts.SyntaxKind.FunctionType &&
+      returnType.parameters.length > 1
+    ) {
+      report(functionDeclaration)(
+        `Exported component's return type should have zero or one parameter`
+      );
+    }
+
+    if (
+      functionDeclaration.type?.kind === ts.SyntaxKind.FunctionType &&
+      (functionDeclaration.type as ts.FunctionTypeNode).parameters[0] &&
+      (
+        functionDeclaration.type as ts.FunctionTypeNode
+      ).parameters[0].name.getText() !== 'userProps'
+    ) {
+      report(functionDeclaration)(
+        `Exported component's return type should be called 'userProps'.`
+      );
+    }
   }
 
-  const actualName = functionDeclaration.name?.getText();
-
-  if (actualName?.startsWith('generate')) {
-    // Allowed for generateSomething helper functions
-    return;
+  function visit(node: ts.Node) {
+    if (ts.isFunctionDeclaration(node)) {
+      checkFunction(node as ts.FunctionDeclaration);
+    }
+    ts.forEachChild(node, visit);
   }
 
-  if (actualName !== componentName) {
-    report(
-      `Exported component should be named '${componentName}', but was '${actualName}' instead.`
-    );
-  }
-
-  const returnType = functionDeclaration.type as ts.FunctionTypeNode;
-
-  if (returnType.kind !== ts.SyntaxKind.FunctionType) {
-    report(`Exported component's return type should be a function.`);
-  }
-
-  if (
-    returnType.kind === ts.SyntaxKind.FunctionType &&
-    returnType.parameters.length > 1
-  ) {
-    report(
-      `Exported component's return type should have zero or one parameter`
-    );
-  }
-
-  if (
-    functionDeclaration.type?.kind === ts.SyntaxKind.FunctionType &&
-    (functionDeclaration.type as ts.FunctionTypeNode).parameters[0] &&
-    (
-      functionDeclaration.type as ts.FunctionTypeNode
-    ).parameters[0].name.getText() !== 'userProps'
-  ) {
-    report(`Exported component's return type should be called 'userProps'.`);
-  }
+  visit(sourceFile);
 }
 
 const componentsDir = path.join(__dirname, '../dist/es/components');
