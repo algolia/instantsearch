@@ -275,8 +275,8 @@ export function Chat<
         status,
         value: input,
         translations: promptTranslations,
-        onInput: (event: React.FormEvent<HTMLTextAreaElement>) => {
-          setInput(event.currentTarget.value);
+        onInput: (event) => {
+          setInput((event.currentTarget as HTMLInputElement).value);
         },
         onSubmit: () => {
           sendMessage({ text: input });
