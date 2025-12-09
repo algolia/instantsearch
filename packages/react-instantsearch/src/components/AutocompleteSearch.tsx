@@ -1,5 +1,5 @@
 import { createAutocompleteSearchComponent } from 'instantsearch-ui-components';
-import React, { createElement, Fragment } from 'react';
+import React, { ComponentProps, createElement, Fragment } from 'react';
 import { useSearchBox } from 'react-instantsearch-core';
 
 import type { Pragma } from 'instantsearch-ui-components';
@@ -10,7 +10,7 @@ const AutocompleteSearchComponent = createAutocompleteSearchComponent({
 });
 
 export type AutocompleteSearchProps = {
-  inputProps: Partial<React.DOMAttributes<HTMLInputElement>>;
+  inputProps: ComponentProps<'input'>;
   clearQuery: () => void;
 };
 
