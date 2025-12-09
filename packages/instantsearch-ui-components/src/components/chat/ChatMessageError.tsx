@@ -37,12 +37,13 @@ export function createChatMessageErrorComponent({
 }: Pick<Renderer, 'createElement'>) {
   const Button = createButtonComponent({ createElement });
 
-  return function ChatMessageError({
-    onReload,
-    actions,
-    translations: userTranslations,
-    ...props
-  }: ChatMessageErrorProps) {
+  return function ChatMessageError(userProps: ChatMessageErrorProps) {
+    const {
+      onReload,
+      actions,
+      translations: userTranslations,
+      ...props
+    } = userProps;
     const translations: Required<ChatMessageErrorTranslations> = {
       errorMessage:
         'Sorry, we are not able to generate a response at the moment. Please retry or contact support.',
