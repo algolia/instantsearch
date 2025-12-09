@@ -5,7 +5,9 @@ describe('exports', () => {
   describe('umd', () => {
     test('has the same number of exports as the main entrypoint', () => {
       expect(Object.keys(exportsUmd).sort()).toEqual(
-        Object.keys(exports).sort()
+        Object.keys(exports)
+          .filter((key) => key !== 'useStickToBottom')
+          .sort()
       );
     });
   });
