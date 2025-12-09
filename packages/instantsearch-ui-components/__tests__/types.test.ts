@@ -96,20 +96,7 @@ function validateIcons(
   sourceFile: ts.SourceFile,
   report: (node: ts.Node) => (message: string) => void
 ) {
-  function checkFunction(functionDeclaration: ts.FunctionDeclaration) {
-    if (
-      !(
-        functionDeclaration.modifiers?.some(
-          (modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword
-        ) &&
-        functionDeclaration.modifiers?.some(
-          (modifier) => modifier.kind === ts.SyntaxKind.DeclareKeyword
-        )
-      )
-    ) {
-      return;
-    }
-
+  function checkExportedFunction(functionDeclaration: ts.FunctionDeclaration) {
     const actualName = functionDeclaration.name?.getText();
 
     if (!actualName || !/^[A-Z].*Icon$/.test(actualName)) {
@@ -134,8 +121,16 @@ function validateIcons(
   }
 
   function visit(node: ts.Node) {
-    if (ts.isFunctionDeclaration(node)) {
-      checkFunction(node as ts.FunctionDeclaration);
+    if (
+      ts.isFunctionDeclaration(node) &&
+      node.modifiers?.some(
+        (modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword
+      ) &&
+      node.modifiers?.some(
+        (modifier) => modifier.kind === ts.SyntaxKind.DeclareKeyword
+      )
+    ) {
+      checkExportedFunction(node);
     }
     ts.forEachChild(node, visit);
   }
@@ -150,20 +145,7 @@ function validateComponents(
 ) {
   const componentName = `create${filename}Component`;
 
-  function checkFunction(functionDeclaration: ts.FunctionDeclaration) {
-    if (
-      !(
-        functionDeclaration.modifiers?.some(
-          (modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword
-        ) &&
-        functionDeclaration.modifiers?.some(
-          (modifier) => modifier.kind === ts.SyntaxKind.DeclareKeyword
-        )
-      )
-    ) {
-      return;
-    }
-
+  function checkExportedFunction(functionDeclaration: ts.FunctionDeclaration) {
     const actualName = functionDeclaration.name?.getText();
 
     if (actualName?.startsWith('generate')) {
@@ -208,8 +190,16 @@ function validateComponents(
   }
 
   function visit(node: ts.Node) {
-    if (ts.isFunctionDeclaration(node)) {
-      checkFunction(node as ts.FunctionDeclaration);
+    if (
+      ts.isFunctionDeclaration(node) &&
+      node.modifiers?.some(
+        (modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword
+      ) &&
+      node.modifiers?.some(
+        (modifier) => modifier.kind === ts.SyntaxKind.DeclareKeyword
+      )
+    ) {
+      checkExportedFunction(node);
     }
     ts.forEachChild(node, visit);
   }

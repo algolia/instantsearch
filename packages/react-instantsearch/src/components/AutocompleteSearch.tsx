@@ -23,7 +23,7 @@ export function AutocompleteSearch({
   return (
     <AutocompleteSearchComponent
       inputProps={{
-        ...inputProps!,
+        ...(inputProps as NonNullable<AutocompleteSearchProps['inputProps']>),
         onChange: (event: React.ChangeEvent<HTMLInputElement>) =>
           refine(event.currentTarget.value),
       }}
