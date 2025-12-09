@@ -29,6 +29,7 @@ import type {
   IndexUiState,
   IndexWidget,
   WidgetRenderState,
+  IndexRenderState,
 } from '../../types';
 import type {
   AddToolResultWithOutput,
@@ -312,7 +313,11 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         );
       },
 
-      getRenderState(renderState, renderOptions) {
+      getRenderState(
+        renderState,
+        renderOptions
+        // Type is explicitly redefined, to avoid having the TWidgetParams type in the definition
+      ): IndexRenderState & ChatWidgetDescription['indexRenderState'] {
         return {
           ...renderState,
           chat: this.getWidgetRenderState(renderOptions),
