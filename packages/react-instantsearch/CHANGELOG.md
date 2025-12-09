@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.20.2](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.20.1...react-instantsearch@7.20.2) (2025-12-09)
+
+
+### Bug Fixes
+
+* **ui-components:** portable types ([#6829](https://github.com/algolia/instantsearch/issues/6829)) ([4f54f16](https://github.com/algolia/instantsearch/commit/4f54f1683077f0b0b81e46818f76b84658a0bf88))
+
+
+
+
+
 ## [7.20.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.20.0...react-instantsearch@7.20.1) (2025-12-02)
 
 
