@@ -116,6 +116,11 @@ type RendererParams<TItem extends BaseHit> = {
     templateProps:
       | PreparedTemplateProps<NonNullable<AutocompleteTemplates>>
       | undefined;
+    RecentSearchComponent: typeof AutocompleteRecentSearch;
+    recentSearchHeaderComponent:
+      | typeof AutocompleteIndex['prototype']['props']['HeaderComponent']
+      | undefined;
+    recentSearchCssClasses: Partial<AutocompleteIndexClassNames>;
   };
 } & Pick<
   AutocompleteWidgetParams<TItem>,
@@ -145,6 +150,96 @@ const createRenderer = <TItem extends BaseHit>(
         }
       });
 
+      let RecentSearchComponent = ({
+        item,
+        onSelect,
+        onRemoveRecentSearch,
+      }: Parameters<typeof AutocompleteRecentSearch>[0]) => (
+        <AutocompleteRecentSearch
+          item={item}
+          onSelect={onSelect}
+          onRemoveRecentSearch={onRemoveRecentSearch}
+        >
+          {/* @ts-expect-error - it should accept string as return value */}
+          <ConditionalReverseHighlight
+            item={item as unknown as Hit<{ query: string }>}
+          />
+        </AutocompleteRecentSearch>
+      );
+      let recentSearchHeaderComponent: typeof AutocompleteIndex['prototype']['props']['HeaderComponent'] =
+        undefined;
+
+      if (
+        typeof rendererParams.showRecent === 'object' &&
+        rendererParams.showRecent.templates
+      ) {
+        const recentTemplateProps = prepareTemplateProps({
+          defaultTemplates: {} as unknown as NonNullable<
+            typeof rendererParams.showRecent.templates
+          >,
+          templatesConfig:
+            connectorParams.instantSearchInstance.templatesConfig,
+          templates: rendererParams.showRecent.templates,
+        });
+
+        if (rendererParams.showRecent.templates.item) {
+          RecentSearchComponent = ({
+            item,
+            onSelect,
+            onRemoveRecentSearch,
+          }) => (
+            <TemplateComponent
+              {...recentTemplateProps}
+              templateKey="item"
+              rootTagName="fragment"
+              data={{ item, onSelect, onRemoveRecentSearch }}
+            />
+          );
+        }
+
+        if (rendererParams.showRecent.templates.header) {
+          recentSearchHeaderComponent = ({
+            items,
+          }: {
+            items: Array<{ query: string }>;
+          }) => (
+            <TemplateComponent
+              {...recentTemplateProps}
+              templateKey="header"
+              rootTagName="fragment"
+              data={{ items }}
+            />
+          );
+        }
+      }
+
+      const recentSearchCssClasses = {
+        root: cx(
+          'ais-AutocompleteRecentSearches',
+          typeof rendererParams.showRecent === 'object'
+            ? rendererParams.showRecent.cssClasses?.root
+            : undefined
+        ),
+        list: cx(
+          'ais-AutocompleteRecentSearchesList',
+          typeof rendererParams.showRecent === 'object'
+            ? rendererParams.showRecent.cssClasses?.list
+            : undefined
+        ),
+        header: cx(
+          'ais-AutocompleteRecentSearchesHeader',
+          typeof rendererParams.showRecent === 'object'
+            ? rendererParams.showRecent.cssClasses?.header
+            : undefined
+        ),
+        item: cx(
+          'ais-AutocompleteRecentSearchesItem',
+          typeof rendererParams.showRecent === 'object'
+            ? rendererParams.showRecent.cssClasses?.item
+            : undefined
+        ),
+      };
+
       rendererParams.renderState = {
         indexTemplateProps: [],
         isolatedIndex,
@@ -157,6 +252,9 @@ const createRenderer = <TItem extends BaseHit>(
             connectorParams.instantSearchInstance.templatesConfig,
           templates: rendererParams.templates,
         }),
+        RecentSearchComponent,
+        recentSearchHeaderComponent,
+        recentSearchCssClasses,
       };
 
       connectorParams.refine(targetIndex.getHelper()?.state.query ?? '');
@@ -260,51 +358,14 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       placeholder,
     });
 
-  let AutocompleteRecentSearchComponent = ({
-    item,
-    onSelect,
-    onRemoveRecentSearch,
-  }: Parameters<typeof AutocompleteRecentSearch>[0]) => (
-    <AutocompleteRecentSearch
-      item={item}
-      onSelect={onSelect}
-      onRemoveRecentSearch={onRemoveRecentSearch}
-    >
-      {/* @ts-expect-error - it should accept string as return value */}
-      <ConditionalReverseHighlight
-        item={item as unknown as Hit<{ query: string }>}
-      />
-    </AutocompleteRecentSearch>
-  );
-  if (typeof showRecent === 'object' && showRecent.templates?.item) {
-    const props = prepareTemplateProps({
-      defaultTemplates: {} as unknown as NonNullable<
-        typeof showRecent.templates
-      >,
-      templatesConfig: instantSearchInstance.templatesConfig,
-      templates: showRecent.templates,
-    });
-    AutocompleteRecentSearchComponent = ({
-      item,
-      onSelect,
-      onRemoveRecentSearch,
-    }) => (
-      <TemplateComponent
-        {...props}
-        templateKey="item"
-        rootTagName="fragment"
-        data={{ item, onSelect, onRemoveRecentSearch }}
-      />
-    );
-  }
-
   const elements: PanelElements = {};
   if (showRecent) {
     elements.recent = (
       <AutocompleteIndex
+        HeaderComponent={renderState.recentSearchHeaderComponent}
         // @ts-ignore - there seems to be problems with React.ComponentType and this, but it's actually correct
         ItemComponent={({ item, onSelect }) => (
-          <AutocompleteRecentSearchComponent
+          <renderState.RecentSearchComponent
             item={item as unknown as { query: string }}
             onSelect={onSelect}
             onRemoveRecentSearch={() =>
@@ -312,11 +373,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
             }
           />
         )}
-        classNames={{
-          root: 'ais-AutocompleteRecentSearches',
-          list: 'ais-AutocompleteRecentSearchesList',
-          item: 'ais-AutocompleteRecentSearchesItem',
-        }}
+        classNames={renderState.recentSearchCssClasses}
         items={storageHits}
         getItemProps={getItemProps}
       />
@@ -491,6 +548,10 @@ type AutocompleteWidgetParams<TItem extends BaseHit> = {
         storageKey?: string;
         templates?: Partial<{
           /**
+           * Template to use for the header, before the list of items.
+           */
+          header: Template<{ items: Array<{ query: string }> }>;
+          /**
            * Template to use for each result. This template will receive an object containing a single record.
            */
           item: Template<{
@@ -499,6 +560,7 @@ type AutocompleteWidgetParams<TItem extends BaseHit> = {
             onRemoveRecentSearch: () => void;
           }>;
         }>;
+        cssClasses?: Partial<AutocompleteIndexClassNames>;
       };
 
   /**
@@ -625,6 +687,14 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
       isolatedIndex: undefined,
       targetIndex: undefined,
       templateProps: undefined,
+      RecentSearchComponent: AutocompleteRecentSearch,
+      recentSearchHeaderComponent: undefined,
+      recentSearchCssClasses: {
+        root: 'ais-AutocompleteRecentSearches',
+        list: 'ais-AutocompleteRecentSearchesList',
+        header: 'ais-AutocompleteRecentSearchesHeader',
+        item: 'ais-AutocompleteRecentSearchesItem',
+      },
     },
     templates,
   });

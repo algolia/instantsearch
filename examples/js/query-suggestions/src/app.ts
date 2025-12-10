@@ -41,6 +41,14 @@ search.addWidgets([
         getURL: (item) => `/products.html?pid=${item.objectID}`,
       },
     ],
+    showRecent: {
+      templates: {
+        header: (_, { html }) => html`
+          <span class="ais-AutocompleteIndexHeaderTitle">Recent Searches</span>
+          <span class="ais-AutocompleteIndexHeaderLine" />
+        `,
+      },
+    },
     showSuggestions: {
       indexName: 'instant_search_demo_query_suggestions',
       templates: {
