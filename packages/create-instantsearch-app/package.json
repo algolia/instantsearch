@@ -49,7 +49,7 @@
     "validate-npm-package-name": "3.0.0"
   },
   "devDependencies": {
-    "@instantsearch/testutils": "1.73.0",
+    "@instantsearch/testutils": "1.74.0",
     "jest-image-snapshot": "2.12.0",
     "walk-sync": "2.0.2"
   }

@@ -62,7 +62,7 @@
     "@wdio/spec-reporter": "5.16.5",
     "instantsearch.js": "4.85.2",
     "next": "16.0.7",
-    "react-instantsearch-core": "7.20.3",
+    "react-instantsearch-core": "7.21.0",
     "start-server-and-test": "1.15.3",
     "ts-node": "8.4.1"
   },
