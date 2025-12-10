@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.85.2](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.85.1...instantsearch.js@4.85.2) (2025-12-10)
+
+
+### Bug Fixes
+
+* **types:** ensure TWidgetParams reference is kept ([#6835](https://github.com/algolia/instantsearch/issues/6835)) ([8578265](https://github.com/algolia/instantsearch/commit/857826524f28cfb2834a26fee0448d6cb7c9551c)), closes [/github.com/algolia/instantsearch/commit/0cde49ee54dd844343e10ba6060b0225492fe0ec#diff-eaddc72b53ce12906d949a84f825b02ed1457775c7bacbf9b478652d0cb2975](https://github.com//github.com/algolia/instantsearch/commit/0cde49ee54dd844343e10ba6060b0225492fe0ec/issues/diff-eaddc72b53ce12906d949a84f825b02ed1457775c7bacbf9b478652d0cb2975)
+
+
+
+
+
 ## [4.85.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.85.0...instantsearch.js@4.85.1) (2025-12-09)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.21.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.20.2...react-instantsearch@7.21.0) (2025-12-10)
+
+
+### Features
+
+* **react-instantsearch:** export `useStickToBottom` hook ([#6834](https://github.com/algolia/instantsearch/issues/6834)) ([b657e72](https://github.com/algolia/instantsearch/commit/b657e72a142af229f1135206f8458bbaeaf1cacd))
+
+
+
+
+
 ## [7.20.2](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.20.1...react-instantsearch@7.20.2) (2025-12-09)
 
 
