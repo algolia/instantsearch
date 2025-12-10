@@ -1,6 +1,6 @@
 import { createPromptSuggestionsComponent } from 'instantsearch-ui-components';
 import React, { createElement } from 'react';
-import { usePromptSuggestions } from 'react-instantsearch-core/src/connectors/usePromptSuggestions';
+import { usePromptSuggestions } from 'react-instantsearch-core';
 
 import type {
   Pragma,
@@ -12,7 +12,7 @@ const PromptSuggestionsUiComponent = createPromptSuggestionsComponent({
   createElement: createElement as Pragma,
 });
 
-type PromptSuggestionsUiProps = {
+export type PromptSuggestionsProps = {
   agentId: string;
   loadingComponent?: () => JSX.Element;
   classNames?: Partial<PromptSuggestionsClassNames>;
@@ -24,7 +24,7 @@ export function PromptSuggestions({
   loadingComponent,
   classNames,
   translations,
-}: PromptSuggestionsUiProps) {
+}: PromptSuggestionsProps) {
   const { suggestions, status, suggestionsClickCallback } =
     usePromptSuggestions({
       agentId,
