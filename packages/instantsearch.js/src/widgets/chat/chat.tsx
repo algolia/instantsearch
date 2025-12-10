@@ -335,6 +335,7 @@ type ChatWrapperProps = {
     promptRef: { current: HTMLTextAreaElement | null };
   };
   state: ReturnType<typeof createLocalState>;
+  suggestions?: string[];
 };
 
 function ChatWrapper({
@@ -359,6 +360,7 @@ function ChatWrapper({
   messagesProps,
   promptProps,
   state,
+  suggestions,
 }: ChatWrapperProps) {
   const { scrollRef, contentRef, scrollToBottom, isAtBottom } =
     useStickToBottom({
@@ -435,6 +437,13 @@ function ChatWrapper({
         footerComponent: promptProps.footerComponent,
         translations: promptProps.translations,
       }}
+      suggestionsProps={{
+        suggestions,
+        onSuggestionClick: (suggestion) => {
+          setChatInput(suggestion);
+          promptProps.promptRef.current?.focus();
+        },
+      }}
     />
   );
 }
@@ -477,6 +486,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       clearMessages,
       onClearTransitionEnd,
       tools: toolsFromConnector,
+      suggestions,
     } = props;
 
     if (__DEV__ && error) {
@@ -844,6 +854,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
             promptRef,
           }}
           state={state}
+          suggestions={suggestions}
         />,
         containerNode
       );
