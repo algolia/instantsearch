@@ -1,4 +1,4 @@
-import type { ComponentProps } from '../../types';
+import type { ComponentProps, MutableRef } from '../../types';
 
 type BaseHit = Record<string, unknown>;
 
@@ -14,21 +14,29 @@ export type AutocompleteIndexConfig<TItem extends BaseHit> = {
   }) => void;
 };
 
-type GetInputProps = () => Partial<ComponentProps<'input'>>;
+type GetInputProps = () => ComponentProps<'input'>;
+
+type ValidAriaRole = 'combobox' | 'row' | 'grid';
 
 type GetItemProps = (
   item: { __indexName: string } & Record<string, unknown>,
   index: number
-) => Pick<ComponentProps<'li'>, 'id' | 'role' | 'aria-selected'> & {
+) => {
+  id?: string;
+  role?: ValidAriaRole;
+  'aria-selected'?: boolean;
+} & {
   onSelect: () => void;
 };
 
-type GetPanelProps = () => Pick<
-  ComponentProps<'div'>,
-  'id' | 'hidden' | 'role' | 'aria-labelledby'
->;
+type GetPanelProps = () => {
+  id?: string;
+  hidden?: boolean;
+  role?: ValidAriaRole;
+  'aria-labelledby'?: string;
+};
 
-type GetRootProps = () => Pick<ComponentProps<'div'>, 'ref'>;
+type GetRootProps = () => { ref?: MutableRef<HTMLDivElement | null> };
 
 type CreateAutocompletePropGettersParams = {
   useEffect: (effect: () => void, inputs?: readonly unknown[]) => void;

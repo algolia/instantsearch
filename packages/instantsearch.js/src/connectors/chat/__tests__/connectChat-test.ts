@@ -121,6 +121,70 @@ describe('connectChat', () => {
     });
   });
 
+  describe('getRenderState', () => {
+    it('merges state', () => {
+      const { widget, helper } = getInitializedWidget();
+
+      const instantSearchInstance: Pick<
+        InstantSearch,
+        'client' | 'getUiState'
+      > = {
+        client: createSearchClient(),
+        getUiState: () => ({ indexName: {} }),
+      };
+      const parent: Pick<IndexWidget, 'getIndexId' | 'setIndexUiState'> = {
+        getIndexId: () => 'indexName',
+        setIndexUiState: () => {},
+      };
+
+      expect(
+        widget.getRenderState(
+          {
+            // @ts-expect-error
+            searchBox: {},
+            // @ts-expect-error
+            chat: {},
+          },
+          createInitOptions({
+            helper,
+            state: helper.state,
+            instantSearchInstance: instantSearchInstance as InstantSearch,
+            parent: parent as IndexWidget,
+          })
+        )
+      ).toEqual({
+        searchBox: {},
+        chat: expect.objectContaining({
+          input: '',
+          open: false,
+          isClearing: false,
+          setInput: expect.any(Function),
+          setOpen: expect.any(Function),
+          setMessages: expect.any(Function),
+          clearMessages: expect.any(Function),
+          onClearTransitionEnd: expect.any(Function),
+          sendEvent: expect.any(Function),
+          setIndexUiState: expect.any(Function),
+          indexUiState: {},
+          tools: {},
+          addToolResult: expect.any(Function),
+          clearError: expect.any(Function),
+          error: undefined,
+          id: expect.any(String),
+          messages: expect.any(Array),
+          regenerate: expect.any(Function),
+          resumeStream: expect.any(Function),
+          sendMessage: expect.any(Function),
+          status: expect.any(String),
+          stop: expect.any(Function),
+          widgetParams: expect.objectContaining({
+            agentId: 'agentId',
+          }),
+        }),
+      });
+    });
+  });
+
   it('renders during init and render', () => {
     const { widget, helper, renderFn } = getInitializedWidget();
 

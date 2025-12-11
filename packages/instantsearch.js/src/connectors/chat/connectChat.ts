@@ -29,6 +29,7 @@ import type {
   IndexUiState,
   IndexWidget,
   WidgetRenderState,
+  IndexRenderState,
 } from '../../types';
 import type {
   AddToolResultWithOutput,
@@ -322,23 +323,27 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         );
       },
 
-      getRenderState(renderState, renderOptions) {
+      getRenderState(
+        renderState,
+        renderOptions
+        // Type is explicitly redefined, to avoid having the TWidgetParams type in the definition
+      ): IndexRenderState & ChatWidgetDescription['indexRenderState'] {
         return {
           ...renderState,
           chat: this.getWidgetRenderState(renderOptions),
         };
       },
 
-      getWidgetRenderState(renderState) {
-        const { instantSearchInstance, parent } = renderState;
+      getWidgetRenderState(renderOptions) {
+        const { instantSearchInstance, parent } = renderOptions;
         if (!_chatInstance) {
-          this.init!({ ...renderState, uiState: {}, results: undefined });
+          this.init!({ ...renderOptions, uiState: {}, results: undefined });
         }
 
         if (!sendEvent) {
           sendEvent = createSendEventForHits({
-            instantSearchInstance: renderState.instantSearchInstance,
-            helper: renderState.helper,
+            instantSearchInstance: renderOptions.instantSearchInstance,
+            helper: renderOptions.helper,
             widgetType: this.$$type,
           });
         }

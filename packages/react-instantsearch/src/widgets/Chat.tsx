@@ -275,10 +275,8 @@ export function Chat<
         status,
         value: input,
         translations: promptTranslations,
-        // Explicit event type is required to prevent TypeScript error
-        // where parameter would implicitly have 'any' type without type annotation
-        onInput: (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-          setInput(event.currentTarget.value);
+        onInput: (event) => {
+          setInput((event.currentTarget as HTMLInputElement).value);
         },
         onSubmit: () => {
           sendMessage({ text: input });

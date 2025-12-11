@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.15.2](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.15.1...instantsearch-ui-components@0.15.2) (2025-12-09)
+
+
+### Bug Fixes
+
+* **ui-components:** portable types ([#6829](https://github.com/algolia/instantsearch/issues/6829)) ([4f54f16](https://github.com/algolia/instantsearch/commit/4f54f1683077f0b0b81e46818f76b84658a0bf88))
+
+
+
+
+
 ## [0.15.1](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.15.0...instantsearch-ui-components@0.15.1) (2025-12-02)
 
 
