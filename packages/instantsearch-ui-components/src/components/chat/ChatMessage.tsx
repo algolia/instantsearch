@@ -13,6 +13,7 @@ import type {
   ChatToolMessage,
   ClientSideTools,
 } from './types';
+import type { DynamicToolUIPart } from 'ai';
 
 export type ChatMessageSide = 'left' | 'right';
 export type ChatMessageVariant = 'neutral' | 'subtle';
@@ -127,6 +128,10 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    */
   onClose: () => void;
   /**
+   * Send a message to the chat
+   */
+  sendMessage: (params: { text: string }) => void;
+  /**
    * Array of tools available for the assistant (for tool messages)
    */
   tools: ClientSideTools;
@@ -158,6 +163,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       indexUiState,
       setIndexUiState,
       onClose,
+      sendMessage,
       translations: userTranslations,
       ...props
     } = userProps;
@@ -231,6 +237,8 @@ export function createChatMessageComponent({ createElement }: Renderer) {
                 setIndexUiState={setIndexUiState}
                 addToolResult={boundAddToolResult}
                 onClose={onClose}
+                sendMessage={sendMessage}
+                toolState={(part as DynamicToolUIPart).state}
               />
             </div>
           );

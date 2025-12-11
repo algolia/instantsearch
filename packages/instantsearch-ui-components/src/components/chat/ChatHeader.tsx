@@ -48,6 +48,10 @@ export type ChatHeaderClassNames = {
    */
   titleIcon?: string | string[];
   /**
+   * Class names to apply to the actions container element
+   */
+  actions?: string | string[];
+  /**
    * Class names to apply to the maximize button element
    */
   maximize?: string | string[];
@@ -160,7 +164,7 @@ export function createChatHeaderComponent({ createElement }: Renderer) {
           </span>
           {translations.title}
         </span>
-        <div className={cx('ais-ChatHeader-actions')}>
+        <div className={cx('ais-ChatHeader-actions', classNames.actions)}>
           {onClear && (
             <Button
               variant="ghost"

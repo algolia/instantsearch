@@ -1,4 +1,4 @@
-import type { AbstractChat, ChatInit, UIMessage } from 'ai';
+import type { AbstractChat, ChatInit, DynamicToolUIPart, UIMessage } from 'ai';
 
 export type ChatStatus = 'ready' | 'submitted' | 'streaming' | 'error';
 export type ChatRole = 'data' | 'user' | 'assistant' | 'system';
@@ -21,9 +21,11 @@ export type AddToolResultWithOutput = (
 export type ClientSideToolComponentProps = {
   message: ChatToolMessage;
   indexUiState: object;
+  toolState: DynamicToolUIPart['state'];
   setIndexUiState: (state: object) => void;
   onClose: () => void;
   addToolResult: AddToolResultWithOutput;
+  sendMessage: (params: { text: string }) => void;
 };
 
 export type ClientSideToolComponent = (
