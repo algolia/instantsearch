@@ -42,6 +42,17 @@ export class ChatState<TUiMessage extends UIMessage>
         : [];
     const saveMessagesInLocalStorage = () => {
       if (this.status === 'ready' && enableCaching) {
+        // We remove data-* parts before saving as it causes validation errors on the API side
+        this.messages.forEach((message) => {
+          if (message.role === 'assistant') {
+            const newParts = message.parts.filter(
+              (part) => !part.type.includes('data-')
+            );
+
+            message.parts = newParts;
+          }
+        });
+
         try {
           sessionStorage.setItem(CACHE_KEY + id, JSON.stringify(this.messages));
         } catch (e) {
