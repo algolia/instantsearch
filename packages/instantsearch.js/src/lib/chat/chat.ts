@@ -33,11 +33,15 @@ export class ChatState<TUiMessage extends UIMessage>
 
   constructor(
     id: string | undefined = undefined,
-    initialMessages: TUiMessage[] = getDefaultInitialMessages<TUiMessage>(id)
+    initialMessages: TUiMessage[] = [],
+    enableCaching: boolean = true
   ) {
-    this._messages = initialMessages;
+    this._messages =
+      enableCaching && initialMessages.length === 0
+        ? getDefaultInitialMessages<TUiMessage>(id)
+        : [];
     const saveMessagesInLocalStorage = () => {
-      if (this.status === 'ready') {
+      if (this.status === 'ready' && enableCaching) {
         try {
           sessionStorage.setItem(CACHE_KEY + id, JSON.stringify(this.messages));
         } catch (e) {
@@ -147,9 +151,10 @@ export class Chat<
   constructor({
     messages,
     agentId,
+    enableCaching = true,
     ...init
-  }: ChatInit<TUiMessage> & { agentId?: string }) {
-    const state = new ChatState(agentId, messages);
+  }: ChatInit<TUiMessage> & { agentId?: string; enableCaching?: boolean }) {
+    const state = new ChatState(agentId, messages, enableCaching);
     super({ ...init, state });
     this._state = state;
   }

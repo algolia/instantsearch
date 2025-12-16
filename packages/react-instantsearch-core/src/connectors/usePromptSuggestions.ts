@@ -36,7 +36,7 @@ export function usePromptSuggestions<TUiMessage extends UIMessage = UIMessage>(
     ChatWidgetDescription<TUiMessage>
   >(
     connectChat as unknown as ChatConnector<TUiMessage>,
-    props,
+    { ...props, enableCaching: false },
     additionalWidgetProperties
   );
 
