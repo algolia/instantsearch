@@ -33,11 +33,26 @@ export class ChatState<TUiMessage extends UIMessage>
 
   constructor(
     id: string | undefined = undefined,
-    initialMessages: TUiMessage[] = getDefaultInitialMessages<TUiMessage>(id)
+    initialMessages: TUiMessage[] = [],
+    enableCaching: boolean = true
   ) {
-    this._messages = initialMessages;
+    this._messages =
+      enableCaching && initialMessages.length === 0
+        ? getDefaultInitialMessages<TUiMessage>(id)
+        : [];
     const saveMessagesInLocalStorage = () => {
-      if (this.status === 'ready') {
+      if (this.status === 'ready' && enableCaching) {
+        // We remove data-* parts before saving as it causes validation errors on the API side
+        this.messages.forEach((message) => {
+          if (message.role === 'assistant') {
+            const newParts = message.parts.filter(
+              (part) => !part.type.includes('data-')
+            );
+
+            message.parts = newParts;
+          }
+        });
+
         try {
           sessionStorage.setItem(CACHE_KEY + id, JSON.stringify(this.messages));
         } catch (e) {
@@ -74,6 +89,10 @@ export class ChatState<TUiMessage extends UIMessage>
   set messages(newMessages: TUiMessage[]) {
     this._messages = [...newMessages];
     this._callMessagesCallbacks();
+  }
+
+  get data(): unknown {
+    return this.data;
   }
 
   pushMessage = (message: TUiMessage) => {
@@ -143,11 +162,16 @@ export class Chat<
   constructor({
     messages,
     agentId,
+    enableCaching = true,
     ...init
-  }: ChatInit<TUiMessage> & { agentId?: string }) {
-    const state = new ChatState(agentId, messages);
+  }: ChatInit<TUiMessage> & { agentId?: string; enableCaching?: boolean }) {
+    const state = new ChatState(agentId, messages, enableCaching);
     super({ ...init, state });
     this._state = state;
+  }
+
+  get data() {
+    return this._state.data;
   }
 
   '~registerMessagesCallback' = (onChange: () => void): (() => void) =>
