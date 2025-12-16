@@ -140,11 +140,14 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
             {...messagesProps}
             classNames={classNames.messages}
             messageClassNames={classNames.message}
+            suggestionsElement={createElement(
+              SuggestionsComponent || ChatPromptSuggestions,
+              {
+                ...suggestionsProps,
+                classNames: classNames.suggestions,
+              }
+            )}
           />
-          {createElement(SuggestionsComponent || ChatPromptSuggestions, {
-            ...suggestionsProps,
-            classNames: classNames.suggestions,
-          })}
           {createElement(PromptComponent || ChatPrompt, {
             ...promptProps,
             classNames: classNames.prompt,

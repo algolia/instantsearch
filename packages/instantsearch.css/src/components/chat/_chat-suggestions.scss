@@ -1,0 +1,13 @@
+@use '../../shared/_common';
+@use '../../shared/_variables';
+
+.ais-ChatPromptSuggestions {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--ais-spacing) * 0.5);
+}
+
+.ais-ChatPromptSuggestions-suggestion {
+  width: fit-content;
+  border-radius: var(--ais-border-radius-lg);
+}

@@ -3,6 +3,7 @@
 import { cx } from '../../lib';
 
 import type { Renderer } from '../../types';
+import { createButtonComponent } from '../Button';
 
 export type ChatPromptSuggestionsClassNames = {
   root?: string | string[];
@@ -27,6 +28,8 @@ export type ChatPromptSuggestionsOwnProps = {
 export function createChatPromptSuggestionsComponent({
   createElement,
 }: Renderer) {
+  const Button = createButtonComponent({ createElement });
+
   return function ChatPromptSuggestions({
     suggestions = [],
     onSuggestionClick,
@@ -39,8 +42,10 @@ export function createChatPromptSuggestionsComponent({
     return (
       <div className={cx('ais-ChatPromptSuggestions', classNames.root)}>
         {suggestions.map((suggestion, index) => (
-          <button
+          <Button
             key={index}
+            size="sm"
+            variant="ghost"
             className={cx(
               'ais-ChatPromptSuggestions-suggestion',
               classNames.suggestion
@@ -48,7 +53,7 @@ export function createChatPromptSuggestionsComponent({
             onClick={() => onSuggestionClick(suggestion)}
           >
             {suggestion}
-          </button>
+          </Button>
         ))}
       </div>
     );
