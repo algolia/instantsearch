@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-e-commerce",
-  "version": "74.0.0",
+  "version": "75.0.0",
   "private": true,
   "scripts": {
     "build": "BABEL_ENV=parcel parcel build index.html",
@@ -17,8 +17,8 @@
     "react": "19.0.0",
     "react-compound-slider": "3.4.0",
     "react-dom": "19.0.0",
-    "react-instantsearch": "7.21.0",
-    "react-instantsearch-core": "7.21.0"
+    "react-instantsearch": "7.21.1",
+    "react-instantsearch-core": "7.21.1"
   },
   "devDependencies": {
     "@parcel/core": "2.10.0",

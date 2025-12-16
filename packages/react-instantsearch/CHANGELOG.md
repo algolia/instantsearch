@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.21.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.21.0...react-instantsearch@7.21.1) (2025-12-16)
+
+
+### Bug Fixes
+
+* **types:** expose types field in exports ([#6838](https://github.com/algolia/instantsearch/issues/6838)) ([87f3aaf](https://github.com/algolia/instantsearch/commit/87f3aaf85b5fc7ca16f254dca5d485dd5abb1f80)), closes [#6836](https://github.com/algolia/instantsearch/issues/6836)
+
+
+
+
+
 # [7.21.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.20.2...react-instantsearch@7.21.0) (2025-12-10)
 
 
