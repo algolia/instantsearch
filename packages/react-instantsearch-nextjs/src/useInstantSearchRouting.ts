@@ -2,8 +2,6 @@ import historyRouter from 'instantsearch.js/es/lib/routers/history';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useRef, useEffect } from 'react';
 
-import { useNextHeaders } from './useNextHeaders';
-
 import type { InstantSearchNextProps } from './InstantSearchNext';
 import type { UiState } from 'instantsearch.js';
 import type { BrowserHistoryArgs } from 'instantsearch.js/es/lib/routers/history';
@@ -12,10 +10,15 @@ import type { InstantSearchProps } from 'react-instantsearch-core';
 export function useInstantSearchRouting<
   TUiState extends UiState = UiState,
   TRouteState = TUiState
->(
-  passedRouting: InstantSearchNextProps<TUiState, TRouteState>['routing'],
-  isMounting: React.RefObject<boolean>
-) {
+>({
+  routing,
+  isMounting,
+  headers,
+}: {
+  routing: InstantSearchNextProps<TUiState, TRouteState>['routing'];
+  isMounting: React.RefObject<boolean>;
+  headers?: Headers;
+}) {
   const isServer = typeof window === 'undefined';
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -37,9 +40,7 @@ export function useInstantSearchRouting<
     };
   });
 
-  const headers = useNextHeaders();
-
-  if (passedRouting && !routingRef.current) {
+  if (routing && !routingRef.current) {
     let browserHistoryOptions: Partial<BrowserHistoryArgs<TRouteState>> = {};
 
     browserHistoryOptions.getLocation = () => {
@@ -73,12 +74,12 @@ export function useInstantSearchRouting<
     };
 
     routingRef.current = {};
-    if (typeof passedRouting === 'object') {
+    if (typeof routing === 'object') {
       browserHistoryOptions = {
         ...browserHistoryOptions,
-        ...passedRouting.router,
+        ...routing.router,
       };
-      routingRef.current.stateMapping = passedRouting.stateMapping;
+      routingRef.current.stateMapping = routing.stateMapping;
     }
     routingRef.current.router = historyRouter(browserHistoryOptions);
   }
