@@ -30,11 +30,11 @@ export function createChatPromptSuggestionsComponent({
 }: Renderer) {
   const Button = createButtonComponent({ createElement });
 
-  return function ChatPromptSuggestions({
-    suggestions = [],
-    onSuggestionClick,
-    classNames = {},
-  }: ChatPromptSuggestionsOwnProps) {
+  return function ChatPromptSuggestions(
+    userProps: ChatPromptSuggestionsOwnProps
+  ) {
+    const { suggestions = [], onSuggestionClick, classNames = {} } = userProps;
+
     if (!suggestions || suggestions.length === 0) {
       return null;
     }
