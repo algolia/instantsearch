@@ -8,6 +8,10 @@
 }
 
 .ais-ChatPromptSuggestions-suggestion {
+  font-size: revert;
   width: fit-content;
   border-radius: var(--ais-border-radius-lg);
+  padding-left: calc(var(--ais-spacing) * 0.75);
+  padding-right: calc(var(--ais-spacing) * 0.75);
 }
+

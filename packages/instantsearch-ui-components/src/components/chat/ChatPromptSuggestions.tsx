@@ -1,9 +1,9 @@
 /** @jsx createElement */
 /** @jsxFrag Fragment */
 import { cx } from '../../lib';
+import { createButtonComponent } from '../Button';
 
 import type { Renderer } from '../../types';
-import { createButtonComponent } from '../Button';
 
 export type ChatPromptSuggestionsClassNames = {
   root?: string | string[];
@@ -45,7 +45,7 @@ export function createChatPromptSuggestionsComponent({
           <Button
             key={index}
             size="sm"
-            variant="ghost"
+            variant="outline"
             className={cx(
               'ais-ChatPromptSuggestions-suggestion',
               classNames.suggestion
