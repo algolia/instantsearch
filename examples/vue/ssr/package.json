@@ -1,6 +1,6 @@
 {
   "name": "example-vue-instantsearch-ssr",
-  "version": "0.86.0",
+  "version": "0.88.0",
   "private": true,
   "scripts": {
     "build": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service ssr:build",
@@ -10,12 +10,12 @@
   "dependencies": {
     "algoliasearch": "5.1.1",
     "algoliasearch-helper": "3.26.1",
-    "instantsearch-ui-components": "0.15.1",
+    "instantsearch-ui-components": "0.15.2",
     "instantsearch.css": "8.9.0",
-    "instantsearch.js": "4.85.0",
+    "instantsearch.js": "4.85.2",
     "qs": "6.9.7",
     "vue": "2.7.14",
-    "vue-instantsearch": "4.22.4",
+    "vue-instantsearch": "4.22.6",
     "vue-router": "^3.0.2",
     "vue-server-renderer": "2.7.14"
   },

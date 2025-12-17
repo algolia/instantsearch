@@ -54,7 +54,6 @@ import type {
   AutocompleteIndexConfig,
   AutocompleteIndexProps,
 } from 'instantsearch-ui-components';
-import type { JSX as JSXPreact } from 'preact';
 
 let autocompleteInstanceId = 0;
 const withUsage = createDocumentationMessageGenerator({ name: 'autocomplete' });
@@ -399,9 +398,8 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         query={searchboxQuery || ''}
         inputProps={{
           ...getInputProps(),
-          // @ts-ignore - This clashes with some ambient React JSX declarations.
-          onInput: (evt: JSXPreact.TargetedEvent<HTMLInputElement>) =>
-            refineAutocomplete(evt.currentTarget.value),
+          onInput: (event) =>
+            refineAutocomplete((event.currentTarget as HTMLInputElement).value),
         }}
         onClear={() => {
           onRefine('');

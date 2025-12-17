@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.85.2](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.85.1...instantsearch.js@4.85.2) (2025-12-10)
+
+
+### Bug Fixes
+
+* **types:** ensure TWidgetParams reference is kept ([#6835](https://github.com/algolia/instantsearch/issues/6835)) ([8578265](https://github.com/algolia/instantsearch/commit/857826524f28cfb2834a26fee0448d6cb7c9551c)), closes [/github.com/algolia/instantsearch/commit/0cde49ee54dd844343e10ba6060b0225492fe0ec#diff-eaddc72b53ce12906d949a84f825b02ed1457775c7bacbf9b478652d0cb2975](https://github.com//github.com/algolia/instantsearch/commit/0cde49ee54dd844343e10ba6060b0225492fe0ec/issues/diff-eaddc72b53ce12906d949a84f825b02ed1457775c7bacbf9b478652d0cb2975)
+
+
+
+
+
+## [4.85.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.85.0...instantsearch.js@4.85.1) (2025-12-09)
+
+
+### Bug Fixes
+
+* **chat:** add chat widget render state ([#6830](https://github.com/algolia/instantsearch/issues/6830)) ([78670ab](https://github.com/algolia/instantsearch/commit/78670abe1bec4082eb2ebb6710b46ebfe569adb4))
+* **ui-components:** portable types ([#6829](https://github.com/algolia/instantsearch/issues/6829)) ([4f54f16](https://github.com/algolia/instantsearch/commit/4f54f1683077f0b0b81e46818f76b84658a0bf88))
+
+
+
+
+
 # [4.85.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.84.0...instantsearch.js@4.85.0) (2025-12-02)
 
 

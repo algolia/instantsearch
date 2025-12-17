@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.21.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.20.2...react-instantsearch-core@7.21.0) (2025-12-10)
+
+**Note:** Version bump only for package react-instantsearch-core
+
+
+
+
+
+## [7.20.2](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.20.1...react-instantsearch-core@7.20.2) (2025-12-09)
+
+
+### Bug Fixes
+
+* **nextjs:** correct warning for multiple hooks ([#6825](https://github.com/algolia/instantsearch/issues/6825)) ([2525be5](https://github.com/algolia/instantsearch/commit/2525be511512eadede87b1c7b9f7bd6e43433a4d))
+
+
+
+
+
 ## [7.20.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.20.0...react-instantsearch-core@7.20.1) (2025-12-02)
 
 **Note:** Version bump only for package react-instantsearch-core
