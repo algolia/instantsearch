@@ -860,11 +860,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
               { value: 'index1', strategy: 'strategy1', label: 'Test' } as any,
             ],
           });
-        }).toThrowErrorMatchingInlineSnapshot(`
-"Item at index 0 cannot have both "value" and "strategy" properties.
-
-See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/#connector"
-`);
+        }).toThrow(
+          'Item at index 0 cannot have both "value" and "strategy" properties.'
+        );
       });
 
       it('throws when item has neither value nor strategy', () => {
@@ -872,11 +870,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
           connectSortBy(() => {})({
             items: [{ label: 'Test' } as any],
           });
-        }).toThrowErrorMatchingInlineSnapshot(`
-"Item at index 0 must have either a "value" or "strategy" property.
-
-See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/#connector"
-`);
+        }).toThrow(
+          'Item at index 0 must have either a "value" or "strategy" property.'
+        );
       });
 
       it('throws when strategy name conflicts with index value', () => {
@@ -887,11 +883,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
               { strategy: 'products', label: 'Products Strategy' },
             ],
           });
-        }).toThrowErrorMatchingInlineSnapshot(`
-"Strategy "products" conflicts with an existing index value. Index values and strategy names must be unique.
-
-See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/#connector"
-`);
+        }).toThrow(
+          'Strategy "products" conflicts with an existing index value. Index values and strategy names must be unique.'
+        );
       });
 
       it('throws when strategies are used without composition mode', () => {
@@ -917,11 +911,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
               instantSearchInstance,
             })
           );
-        }).toThrowErrorMatchingInlineSnapshot(`
-"Sorting strategies can only be used in composition mode. Please provide a "compositionID" to your InstantSearch instance.
-
-See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/#connector"
-`);
+        }).toThrow(
+          'Sorting strategies can only be used in composition mode. Please provide a "compositionID" to your InstantSearch instance.'
+        );
       });
 
       it('does not throw when strategies are used with composition mode', () => {
@@ -1136,8 +1128,11 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
 
         // Refine with index
         refine('products');
+        expect(helper.setQueryParameter).toHaveBeenCalledWith(
+          'sortBy',
+          undefined
+        );
         expect(helper.setIndex).toHaveBeenCalledWith('products');
-        expect(helper.setQueryParameter).not.toHaveBeenCalled();
 
         helper.setIndex = jest.fn(() => helper);
         helper.setQueryParameter = jest.fn(() => helper);
@@ -1270,11 +1265,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       it('does not set sortBy in uiState when it matches initialValue', () => {
         const makeWidget = connectSortBy(() => {});
         const instantSearchInstance = createInstantSearch({
-          indexName: 'defaultIndex',
+          indexName: 'my-composition',
         });
         instantSearchInstance.compositionID = 'my-composition';
 
-        const items = [{ strategy: 'price_asc', label: 'Price: Low to High' }];
+        const items = [
+          { value: 'my-composition', label: 'Default' },
+          { strategy: 'price_asc', label: 'Price: Low to High' },
+        ];
         const widget = makeWidget({ items });
 
         const helper = algoliasearchHelper(
@@ -1407,7 +1405,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         const unmount = jest.fn();
         const makeWidget = connectSortBy(() => {}, unmount);
         const instantSearchInstance = createInstantSearch({
-          indexName: 'defaultIndex',
+          indexName: 'my-composition',
         });
         instantSearchInstance.compositionID = 'my-composition';
 
