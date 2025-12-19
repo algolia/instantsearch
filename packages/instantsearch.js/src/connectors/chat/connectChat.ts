@@ -160,7 +160,38 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     let setInput: ChatRenderState<TUiMessage>['setInput'];
     let setOpen: ChatRenderState<TUiMessage>['setOpen'];
     let setIsClearing: (value: boolean) => void;
-    let suggestions: string[] | undefined;
+
+    const agentId = 'agentId' in options ? options.agentId : undefined;
+
+    // Extract suggestions from the last assistant message's data-suggestions part
+    const getSuggestionsFromMessages = (messages: TUiMessage[]) => {
+      // Find the last assistant message (iterate from end)
+      const lastAssistantMessage = [...messages]
+        .reverse()
+        .find((message) => message.role === 'assistant' && message.parts);
+
+      if (!lastAssistantMessage?.parts) {
+        return undefined;
+      }
+
+      // Find the data-suggestions part
+      const suggestionsPart = lastAssistantMessage.parts.find(
+        (
+          part
+        ): part is {
+          type: `data-${string}`;
+          data: { suggestions: string[] };
+        } =>
+          'type' in part &&
+          part.type === 'data-suggestions' &&
+          'data' in part &&
+          Array.isArray(
+            (part as { data?: { suggestions?: unknown } }).data?.suggestions
+          )
+      );
+
+      return suggestionsPart?.data.suggestions;
+    };
 
     const setMessages = (
       messagesParam: TUiMessage[] | ((m: TUiMessage[]) => TUiMessage[])
@@ -187,11 +218,46 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     const makeChatInstance = (instantSearchInstance: InstantSearch) => {
       let transport;
       const [appId, apiKey] = getAppIdAndApiKey(instantSearchInstance.client);
+
+      // Filter out custom data parts (like data-suggestions) that the backend doesn't accept
+      const filterDataParts = (messages: UIMessage[]): UIMessage[] =>
+        messages.map((message) => ({
+          ...message,
+          parts: message.parts?.filter(
+            (part) => !('type' in part && part.type.startsWith('data-'))
+          ),
+        }));
+
       if ('transport' in options && options.transport) {
-        transport = new DefaultChatTransport(options.transport);
+        const originalPrepare = options.transport.prepareSendMessagesRequest;
+        transport = new DefaultChatTransport({
+          ...options.transport,
+          prepareSendMessagesRequest: (params) => {
+            // Call the original prepareSendMessagesRequest if it exists,
+            // otherwise construct the default body
+            const preparedOrPromise = originalPrepare
+              ? originalPrepare(params)
+              : { body: { ...params } };
+            // Then filter out data-* parts
+            const applyFilter = (prepared: { body: object }) => ({
+              ...prepared,
+              body: {
+                ...prepared.body,
+                messages: filterDataParts(
+                  (prepared.body as { messages: UIMessage[] }).messages
+                ),
+              },
+            });
+
+            // Handle both sync and async cases
+            if (preparedOrPromise && 'then' in preparedOrPromise) {
+              return preparedOrPromise.then(applyFilter);
+            }
+            return applyFilter(preparedOrPromise);
+          },
+        });
       }
       if ('agentId' in options && options.agentId) {
-        const { agentId } = options;
         if (!appId || !apiKey) {
           throw new Error(
             withUsage(
@@ -206,6 +272,12 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             'x-algolia-api-Key': apiKey,
             'x-algolia-agent': getAlgoliaAgent(instantSearchInstance.client),
           },
+          prepareSendMessagesRequest: ({ messages, ...rest }) => ({
+            body: {
+              ...rest,
+              messages: filterDataParts(messages),
+            },
+          }),
         });
       }
       if (!transport) {
@@ -222,11 +294,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         ...options,
         transport,
         sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
-        onData: ({ data }) => {
-          if (data && typeof data === 'object' && 'suggestions' in data) {
-            suggestions = (data as any).suggestions as string[] | undefined;
-          }
-        },
         onToolCall({ toolCall }) {
           const tool = tools[toolCall.toolName];
 
@@ -366,7 +433,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           setInput,
           setOpen,
           setMessages,
-          suggestions,
+          suggestions: getSuggestionsFromMessages(_chatInstance.messages),
           isClearing,
           clearMessages,
           onClearTransitionEnd,
