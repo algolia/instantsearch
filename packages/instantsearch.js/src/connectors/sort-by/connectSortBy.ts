@@ -128,11 +128,11 @@ function getItemValue(item: SortByItem): string {
 }
 
 function isValidStrategy(
-  itemsMap: Map<string, SortByItem>,
+  itemsLookup: Record<string, SortByItem>,
   value: string | undefined
 ): boolean {
   if (!value) return false;
-  const item = itemsMap.get(value);
+  const item = itemsLookup[value];
   return item !== undefined && isStrategyItem(item);
 }
 
@@ -150,8 +150,8 @@ const connectSortBy: SortByConnector = function connectSortBy(
     // Cached flag: whether we're in composition mode (checked once, never changes)
     // This is cached because instantSearchInstance is not available in all lifecycle methods
     isUsingComposition?: boolean;
-    // Map for O(1) lookup: value/strategy -> item
-    itemsMap?: Map<string, SortByItem>;
+    // Object for O(1) lookup: value/strategy -> item
+    itemsLookup?: Record<string, SortByItem>;
   };
 
   return (widgetParams) => {
@@ -168,7 +168,7 @@ const connectSortBy: SortByConnector = function connectSortBy(
       );
     }
 
-    const itemsMap = new Map<string, SortByItem>();
+    const itemsLookup: Record<string, SortByItem> = {};
 
     items.forEach((item, index) => {
       const hasValue = 'value' in item && item.value !== undefined;
@@ -193,10 +193,10 @@ const connectSortBy: SortByConnector = function connectSortBy(
 
       const itemValue = getItemValue(item);
 
-      itemsMap.set(itemValue, item);
+      itemsLookup[itemValue] = item;
     });
 
-    connectorState.itemsMap = itemsMap;
+    connectorState.itemsLookup = itemsLookup;
 
     return {
       $$type: 'ais.sortBy',
@@ -295,8 +295,8 @@ const connectSortBy: SortByConnector = function connectSortBy(
           );
 
           connectorState.refine = (value: string) => {
-            // O(1) lookup using the items map
-            const item = connectorState.itemsMap!.get(value);
+            // O(1) lookup using the items lookup table
+            const item = connectorState.itemsLookup![value];
 
             if (item && isStrategyItem(item)) {
               // Strategy-based: set sortBy parameter for composition API
@@ -327,7 +327,7 @@ const connectSortBy: SortByConnector = function connectSortBy(
         // Otherwise use the index (for index-based items or when no valid strategy is active)
         const currentRefinement =
           connectorState.isUsingComposition &&
-          isValidStrategy(connectorState.itemsMap!, state.sortBy)
+          isValidStrategy(connectorState.itemsLookup!, state.sortBy)
             ? state.sortBy!
             : state.index;
 
@@ -348,7 +348,7 @@ const connectSortBy: SortByConnector = function connectSortBy(
         // Otherwise use index-based behavior (traditional mode)
         const currentValue =
           connectorState.isUsingComposition &&
-          isValidStrategy(connectorState.itemsMap!, searchParameters.sortBy)
+          isValidStrategy(connectorState.itemsLookup!, searchParameters.sortBy)
             ? searchParameters.sortBy!
             : searchParameters.index;
 
@@ -367,8 +367,8 @@ const connectSortBy: SortByConnector = function connectSortBy(
           connectorState.initialValue ||
           searchParameters.index;
 
-        if (isValidStrategy(connectorState.itemsMap!, sortByValue)) {
-          const item = connectorState.itemsMap!.get(sortByValue)!;
+        if (isValidStrategy(connectorState.itemsLookup!, sortByValue)) {
+          const item = connectorState.itemsLookup![sortByValue];
           // Strategy-based: set the sortBy parameter for composition API
           // The index remains as the compositionID
           return searchParameters.setQueryParameter('sortBy', item.strategy);
