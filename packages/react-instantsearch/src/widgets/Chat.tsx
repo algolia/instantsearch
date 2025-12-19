@@ -299,8 +299,7 @@ export function Chat<
       suggestionsProps={{
         suggestions,
         onSuggestionClick: (suggestion) => {
-          setInput(suggestion);
-          promptRef.current?.focus();
+          sendMessage({ text: suggestion });
         },
       }}
       classNames={classNames}
