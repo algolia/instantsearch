@@ -35,7 +35,7 @@ export function createChatPromptSuggestionsComponent({
   ) {
     const { suggestions = [], onSuggestionClick, classNames = {} } = userProps;
 
-    if (!suggestions || suggestions.length === 0) {
+    if (suggestions.length === 0) {
       return null;
     }
 
@@ -45,7 +45,7 @@ export function createChatPromptSuggestionsComponent({
           <Button
             key={index}
             size="sm"
-            variant="outline"
+            variant="primary"
             className={cx(
               'ais-ChatPromptSuggestions-suggestion',
               classNames.suggestion

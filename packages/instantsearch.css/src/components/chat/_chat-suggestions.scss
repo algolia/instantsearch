@@ -9,9 +9,30 @@
 
 .ais-ChatPromptSuggestions-suggestion {
   font-size: revert;
+  line-height: var(--ais-spacing);
   width: fit-content;
   border-radius: var(--ais-border-radius-lg);
-  padding-left: calc(var(--ais-spacing) * 0.75);
-  padding-right: calc(var(--ais-spacing) * 0.75);
+  padding: calc(var(--ais-spacing) * 0.5) calc(var(--ais-spacing) * 1);
+  background-color: rgba(var(--ais-muted-color-rgb), 0.1);
+  color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+  animation: ais-fadeIn 1500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  text-align: left;
+
+  // Staggered delays for each suggestion
+  @for $i from 1 through 5 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{($i - 1) * 100}ms;
+    }
+  }
+
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      background-color: rgba(var(--ais-muted-color-rgb), 0.2);
+    }
+  }
+
+  &:active:not(:disabled) {
+    background-color: rgba(var(--ais-muted-color-rgb), 0.3);
+  }
 }
 
