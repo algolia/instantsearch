@@ -875,19 +875,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
         );
       });
 
-      it('throws when strategy name conflicts with index value', () => {
-        expect(() => {
-          connectSortBy(() => {})({
-            items: [
-              { value: 'products', label: 'Products' },
-              { strategy: 'products', label: 'Products Strategy' },
-            ],
-          });
-        }).toThrow(
-          'Strategy "products" conflicts with an existing index value. Index values and strategy names must be unique.'
-        );
-      });
-
       it('throws when strategies are used without composition mode', () => {
         const rendering = jest.fn();
         const makeWidget = connectSortBy(rendering);

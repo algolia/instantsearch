@@ -193,20 +193,6 @@ const connectSortBy: SortByConnector = function connectSortBy(
 
       const itemValue = getItemValue(item);
 
-      // Check for cross-type collision (strategy name matching an index value)
-      if (itemsMap.has(itemValue)) {
-        const existing = itemsMap.get(itemValue)!;
-        // Only throw if it's a cross-type collision
-        if (isStrategyItem(item) !== isStrategyItem(existing)) {
-          throw new Error(
-            withUsage(
-              `Strategy "${item.strategy}" conflicts with an existing index value. Index values and strategy names must be unique.`
-            )
-          );
-        }
-        // Same-type duplicates: silent overwrite (existing behavior)
-      }
-
       itemsMap.set(itemValue, item);
     });
 
