@@ -265,19 +265,27 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             )
           );
         }
+        const baseApi = `https://${appId}.algolia.net/agent-studio/1/agents/${agentId}/completions?compatibilityMode=ai-sdk-5`;
         transport = new DefaultChatTransport({
-          api: `https://${appId}.algolia.net/agent-studio/1/agents/${agentId}/completions?compatibilityMode=ai-sdk-5`,
+          api: baseApi,
           headers: {
             'x-algolia-application-id': appId,
             'x-algolia-api-Key': apiKey,
             'x-algolia-agent': getAlgoliaAgent(instantSearchInstance.client),
           },
-          prepareSendMessagesRequest: ({ messages, ...rest }) => ({
-            body: {
-              ...rest,
-              messages: filterDataParts(messages),
-            },
-          }),
+          prepareSendMessagesRequest: ({ messages, trigger, ...rest }) => {
+            return {
+              // Bypass cache when regenerating to ensure fresh responses
+              api:
+                trigger === 'regenerate-message'
+                  ? `${baseApi}&cache=false`
+                  : baseApi,
+              body: {
+                ...rest,
+                messages: filterDataParts(messages),
+              },
+            };
+          },
         });
       }
       if (!transport) {
