@@ -29,6 +29,10 @@ describe('ChatState', () => {
   beforeEach(() => {
     // Clear sessionStorage before each test
     sessionStorage.removeItem(CACHE_KEY);
+    sessionStorage.removeItem(CACHE_KEY + '-agentID1');
+    sessionStorage.removeItem(CACHE_KEY + '-agentID2');
+    sessionStorage.removeItem(CACHE_KEY + '-agentID3');
+    sessionStorage.removeItem(CACHE_KEY + '-agentID4');
   });
 
   afterAll(() => {
@@ -42,13 +46,13 @@ describe('ChatState', () => {
     const message = { role: 'user', content: 'Hello' };
     chatState.status = 'submitted';
     chatState.messages = [message];
-    expect(sessionStorage.getItem(CACHE_KEY + agentId)).toBe(null);
+    expect(sessionStorage.getItem(CACHE_KEY + '-' + agentId)).toBe(null);
 
     chatState.status = 'streaming';
-    expect(sessionStorage.getItem(CACHE_KEY + agentId)).toBe(null);
+    expect(sessionStorage.getItem(CACHE_KEY + '-' + agentId)).toBe(null);
 
     chatState.status = 'ready';
-    expect(sessionStorage.getItem(CACHE_KEY + agentId)).toBe(
+    expect(sessionStorage.getItem(CACHE_KEY + '-' + agentId)).toBe(
       JSON.stringify([message])
     );
   });
@@ -60,7 +64,7 @@ describe('ChatState', () => {
       { role: 'bot', content: 'Hi there!' },
     ];
     sessionStorage.setItem(
-      CACHE_KEY + agentId,
+      CACHE_KEY + '-' + agentId,
       JSON.stringify(initialMessages)
     );
 
@@ -74,12 +78,12 @@ describe('ChatState', () => {
     const message = { role: 'user', content: 'Hello' };
     chatState.status = 'submitted';
     chatState.messages = [message];
-    expect(sessionStorage.getItem(CACHE_KEY + agentId)).toBe(null);
+    expect(sessionStorage.getItem(CACHE_KEY + '-' + agentId)).toBe(null);
 
     chatState.status = 'streaming';
-    expect(sessionStorage.getItem(CACHE_KEY + agentId)).toBe(null);
+    expect(sessionStorage.getItem(CACHE_KEY + '-' + agentId)).toBe(null);
     chatState.status = 'error';
-    expect(sessionStorage.getItem(CACHE_KEY + agentId)).toBe(null);
+    expect(sessionStorage.getItem(CACHE_KEY + '-' + agentId)).toBe(null);
   });
 
   it('should handle sessionStorage being unavailable', () => {
@@ -94,9 +98,9 @@ describe('ChatState', () => {
     const message = { role: 'user', content: 'Hello' };
     chatState.status = 'submitted';
     chatState.messages = [message];
-    expect(sessionStorage.getItem(CACHE_KEY + agentId)).toBe(null);
+    expect(sessionStorage.getItem(CACHE_KEY + '-' + agentId)).toBe(null);
     chatState.status = 'ready';
-    expect(sessionStorage.getItem(CACHE_KEY + agentId)).toBe(null);
+    expect(sessionStorage.getItem(CACHE_KEY + '-' + agentId)).toBe(null);
 
     sessionStorage.setItem = originalSetItem;
   });
