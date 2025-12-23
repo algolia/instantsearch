@@ -55,7 +55,6 @@ export function App() {
 
             <div className="search-panel__results">
               <EXPERIMENTAL_Autocomplete
-                showRecent
                 placeholder="Search for products"
                 indices={[
                   {

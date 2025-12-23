@@ -120,17 +120,17 @@ type RendererParams<TItem extends BaseHit> = {
     recentSearchHeaderComponent:
       | typeof AutocompleteIndex['prototype']['props']['HeaderComponent']
       | undefined;
-    recentSearchCssClasses: Partial<AutocompleteIndexClassNames>;
   };
 } & Pick<
   AutocompleteWidgetParams<TItem>,
-  | 'getSearchPageURL'
-  | 'onSelect'
-  | 'showRecent'
-  | 'showSuggestions'
-  | 'placeholder'
-> &
-  Required<Pick<AutocompleteWidgetParams<TItem>, 'cssClasses' | 'templates'>>;
+  'getSearchPageURL' | 'onSelect' | 'showSuggestions' | 'placeholder'
+> & {
+    showRecent:
+      | Exclude<AutocompleteWidgetParams<TItem>['showRecent'], boolean>
+      | undefined;
+  } & Required<
+    Pick<AutocompleteWidgetParams<TItem>, 'cssClasses' | 'templates'>
+  >;
 
 const createRenderer = <TItem extends BaseHit>(
   params: RendererParams<TItem>
@@ -141,6 +141,7 @@ const createRenderer = <TItem extends BaseHit>(
   const { instanceId, containerNode, ...rendererParams } = params;
   return (connectorParams, isFirstRendering) => {
     if (isFirstRendering) {
+      const showRecentObj = rendererParams.showRecent;
       let isolatedIndex = connectorParams.instantSearchInstance.mainIndex;
       let targetIndex = connectorParams.instantSearchInstance.mainIndex;
       walkIndex(targetIndex, (childIndex) => {
@@ -169,20 +170,17 @@ const createRenderer = <TItem extends BaseHit>(
       let recentSearchHeaderComponent: typeof AutocompleteIndex['prototype']['props']['HeaderComponent'] =
         undefined;
 
-      if (
-        typeof rendererParams.showRecent === 'object' &&
-        rendererParams.showRecent.templates
-      ) {
+      if (showRecentObj && showRecentObj.templates) {
         const recentTemplateProps = prepareTemplateProps({
           defaultTemplates: {} as unknown as NonNullable<
-            typeof rendererParams.showRecent.templates
+            typeof showRecentObj.templates
           >,
           templatesConfig:
             connectorParams.instantSearchInstance.templatesConfig,
-          templates: rendererParams.showRecent.templates,
+          templates: showRecentObj.templates,
         });
 
-        if (rendererParams.showRecent.templates.item) {
+        if (showRecentObj.templates.item) {
           RecentSearchComponent = ({
             item,
             onSelect,
@@ -197,7 +195,7 @@ const createRenderer = <TItem extends BaseHit>(
           );
         }
 
-        if (rendererParams.showRecent.templates.header) {
+        if (showRecentObj.templates.header) {
           recentSearchHeaderComponent = ({
             items,
           }: {
@@ -212,34 +210,6 @@ const createRenderer = <TItem extends BaseHit>(
           );
         }
       }
-
-      const recentSearchCssClasses = {
-        root: cx(
-          'ais-AutocompleteRecentSearches',
-          typeof rendererParams.showRecent === 'object'
-            ? rendererParams.showRecent.cssClasses?.root
-            : undefined
-        ),
-        list: cx(
-          'ais-AutocompleteRecentSearchesList',
-          typeof rendererParams.showRecent === 'object'
-            ? rendererParams.showRecent.cssClasses?.list
-            : undefined
-        ),
-        header: cx(
-          'ais-AutocompleteRecentSearchesHeader',
-          typeof rendererParams.showRecent === 'object'
-            ? rendererParams.showRecent.cssClasses?.header
-            : undefined
-        ),
-        item: cx(
-          'ais-AutocompleteRecentSearchesItem',
-          typeof rendererParams.showRecent === 'object'
-            ? rendererParams.showRecent.cssClasses?.item
-            : undefined
-        ),
-      };
-
       rendererParams.renderState = {
         indexTemplateProps: [],
         isolatedIndex,
@@ -254,7 +224,6 @@ const createRenderer = <TItem extends BaseHit>(
         }),
         RecentSearchComponent,
         recentSearchHeaderComponent,
-        recentSearchCssClasses,
       };
 
       connectorParams.refine(targetIndex.getHelper()?.state.query ?? '');
@@ -312,6 +281,23 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     indices,
     indicesConfig,
   });
+  const showRecentObj = showRecent;
+
+  const recentSearchCssClasses = {
+    root: cx('ais-AutocompleteRecentSearches', showRecentObj?.cssClasses?.root),
+    list: cx(
+      'ais-AutocompleteRecentSearchesList',
+      showRecentObj?.cssClasses?.list
+    ),
+    header: cx(
+      'ais-AutocompleteRecentSearchesHeader',
+      showRecentObj?.cssClasses?.header
+    ),
+    item: cx(
+      'ais-AutocompleteRecentSearchesItem',
+      showRecentObj?.cssClasses?.item
+    ),
+  };
 
   const isSearchPage =
     targetIndex
@@ -373,7 +359,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
             }
           />
         )}
-        classNames={renderState.recentSearchCssClasses}
+        classNames={recentSearchCssClasses}
         items={storageHits}
         getItemProps={getItemProps}
       />
@@ -672,6 +658,10 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
   }
 
   const instanceId = ++autocompleteInstanceId;
+  const shouldShowRecent = showRecent || undefined;
+  const showRecentOptions =
+    typeof shouldShowRecent === 'boolean' ? {} : shouldShowRecent;
+
   const specializedRenderer = createRenderer({
     instanceId,
     containerNode,
@@ -679,7 +669,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     getSearchPageURL,
     onSelect,
     cssClasses,
-    showRecent,
+    showRecent: showRecentOptions,
     showSuggestions,
     placeholder,
     renderState: {
@@ -689,12 +679,6 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
       templateProps: undefined,
       RecentSearchComponent: AutocompleteRecentSearch,
       recentSearchHeaderComponent: undefined,
-      recentSearchCssClasses: {
-        root: 'ais-AutocompleteRecentSearches',
-        list: 'ais-AutocompleteRecentSearchesList',
-        header: 'ais-AutocompleteRecentSearchesHeader',
-        item: 'ais-AutocompleteRecentSearchesItem',
-      },
     },
     templates,
   });
