@@ -334,6 +334,11 @@ type ChatWrapperProps = {
     translations: Partial<ChatPromptTranslations>;
     promptRef: { current: HTMLTextAreaElement | null };
   };
+  suggestionsProps: {
+    suggestions?: string[];
+    onSuggestionClick: (suggestion: string) => void;
+    suggestionsComponent: ComponentProps<typeof Chat>['suggestionsComponent'];
+  };
   state: ReturnType<typeof createLocalState>;
 };
 
@@ -358,6 +363,7 @@ function ChatWrapper({
   headerProps,
   messagesProps,
   promptProps,
+  suggestionsProps,
   state,
 }: ChatWrapperProps) {
   const { scrollRef, contentRef, scrollToBottom, isAtBottom } =
@@ -383,6 +389,7 @@ function ChatWrapper({
       }}
       headerComponent={headerProps.layoutComponent}
       promptComponent={promptProps.layoutComponent}
+      suggestionsComponent={suggestionsProps.suggestionsComponent}
       headerProps={{
         onClose: () => setChatOpen(false),
         maximized,
@@ -435,6 +442,10 @@ function ChatWrapper({
         footerComponent: promptProps.footerComponent,
         translations: promptProps.translations,
       }}
+      suggestionsProps={{
+        onSuggestionClick: suggestionsProps.onSuggestionClick,
+        suggestions: suggestionsProps.suggestions,
+      }}
     />
   );
 }
@@ -477,6 +488,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       clearMessages,
       onClearTransitionEnd,
       tools: toolsFromConnector,
+      suggestions,
     } = props;
 
     if (__DEV__ && error) {
@@ -788,6 +800,22 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         }
       : undefined;
 
+    const suggestionsComponent = templates.suggestions
+      ? (suggestionsProps: {
+          suggestions?: string[];
+          onSuggestionClick: (suggestion: string) => void;
+        }) => {
+          return (
+            <TemplateComponent
+              {...renderState.templateProps}
+              templateKey="suggestions"
+              rootTagName="fragment"
+              data={suggestionsProps}
+            />
+          );
+        }
+      : undefined;
+
     state.subscribe(rerender);
 
     function rerender() {
@@ -844,6 +872,13 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
             promptRef,
           }}
           state={state}
+          suggestionsProps={{
+            suggestions,
+            onSuggestionClick: (message: string) => {
+              sendMessage({ text: message });
+            },
+            suggestionsComponent,
+          }}
         />,
         containerNode
       );
@@ -1060,6 +1095,14 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
     actions: Template<{
       actions: ChatMessageActionProps[];
       message: ChatMessageBase;
+    }>;
+
+    /**
+     * Template to use for prompt suggestions.
+     */
+    suggestions: Template<{
+      suggestions: string[];
+      onSuggestionClick: (suggestion: string) => void;
     }>;
   }>;
 

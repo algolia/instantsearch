@@ -8,7 +8,7 @@ import { createChatMessageErrorComponent } from './ChatMessageError';
 import { createChatMessageLoaderComponent } from './ChatMessageLoader';
 import { ChevronDownIcon, CopyIcon, ReloadIcon } from './icons';
 
-import type { ComponentProps, MutableRef, Renderer } from '../../types';
+import type { ComponentProps, MutableRef, Renderer, VNode } from '../../types';
 import type {
   ChatMessageProps,
   ChatMessageActionProps,
@@ -160,6 +160,10 @@ export type ChatMessagesProps<
    * Callback to scroll to bottom
    */
   onScrollToBottom?: () => void;
+  /**
+   * Suggestions element to display below a message
+   */
+  suggestionsElement?: VNode;
 };
 
 const getTextContent = (message: ChatMessageBase) => {
@@ -194,6 +198,7 @@ function createDefaultMessageComponent<
     classNames,
     messageTranslations,
     translations,
+    suggestionsElement,
   }: {
     key: string;
     message: TMessage;
@@ -208,6 +213,7 @@ function createDefaultMessageComponent<
     translations: ChatMessagesTranslations;
     classNames?: Partial<ChatMessageClassNames>;
     messageTranslations?: Partial<ChatMessageTranslations>;
+    suggestionsElement?: VNode;
   }) {
     const defaultAssistantActions: ChatMessageActionProps[] = [
       ...(hasTextContent(message)
@@ -245,6 +251,7 @@ function createDefaultMessageComponent<
         data-role={message.role}
         classNames={classNames}
         translations={messageTranslations}
+        suggestionsElement={suggestionsElement}
         {...messageProps}
       />
     );
@@ -293,6 +300,7 @@ export function createChatMessagesComponent({
       scrollRef,
       contentRef,
       onScrollToBottom,
+      suggestionsElement,
       ...props
     } = userProps;
 
@@ -345,7 +353,7 @@ export function createChatMessagesComponent({
               }
             }}
           >
-            {messages.map((message) => (
+            {messages.map((message, index) => (
               <DefaultMessage
                 key={message.id}
                 message={message}
@@ -360,6 +368,13 @@ export function createChatMessagesComponent({
                 translations={translations}
                 classNames={messageClassNames}
                 messageTranslations={messageTranslations}
+                suggestionsElement={
+                  status === 'ready' &&
+                  message.role === 'assistant' &&
+                  index === messages.length - 1
+                    ? suggestionsElement
+                    : undefined
+                }
               />
             ))}
 

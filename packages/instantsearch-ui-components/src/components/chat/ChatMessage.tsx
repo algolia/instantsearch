@@ -6,7 +6,7 @@ import { createButtonComponent } from '../Button';
 
 import { MenuIcon } from './icons';
 
-import type { ComponentProps, Renderer } from '../../types';
+import type { ComponentProps, Renderer, VNode } from '../../types';
 import type {
   AddToolResultWithOutput,
   ChatMessageBase,
@@ -131,6 +131,10 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    */
   tools: ClientSideTools;
   /**
+   * Optional suggestions element
+   */
+  suggestionsElement?: VNode;
+  /**
    * Optional class names
    */
   classNames?: Partial<ChatMessageClassNames>;
@@ -159,6 +163,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       setIndexUiState,
       onClose,
       translations: userTranslations,
+      suggestionsElement,
       ...props
     } = userProps;
 
@@ -256,6 +261,8 @@ export function createChatMessageComponent({ createElement }: Renderer) {
             <div className={cx(cssClasses.message)}>
               {message.parts.map(renderMessagePart)}
             </div>
+
+            {suggestionsElement}
 
             {hasActions && (
               <div
