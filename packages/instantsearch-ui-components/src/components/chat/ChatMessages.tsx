@@ -112,6 +112,7 @@ export type ChatMessagesProps<
    * Function to close the chat
    */
   onClose: () => void;
+  sendMessage: (message: string) => void;
   /**
    * Optional class names
    */
@@ -190,6 +191,7 @@ function createDefaultMessageComponent<
     setIndexUiState,
     onReload,
     onClose,
+    sendMessage,
     actionsComponent,
     classNames,
     messageTranslations,
@@ -205,6 +207,7 @@ function createDefaultMessageComponent<
     onReload: (messageId?: string) => void;
     onClose: () => void;
     actionsComponent?: ChatMessageProps['actionsComponent'];
+    sendMessage: (newMessage: string) => void;
     translations: ChatMessagesTranslations;
     classNames?: Partial<ChatMessageClassNames>;
     messageTranslations?: Partial<ChatMessageTranslations>;
@@ -240,6 +243,7 @@ function createDefaultMessageComponent<
         indexUiState={indexUiState}
         setIndexUiState={setIndexUiState}
         onClose={onClose}
+        sendMessage={sendMessage}
         actions={defaultActions}
         actionsComponent={actionsComponent}
         data-role={message.role}
@@ -284,6 +288,7 @@ export function createChatMessagesComponent({
       hideScrollToBottom = false,
       onReload,
       onClose,
+      sendMessage,
       translations: userTranslations,
       userMessageProps,
       assistantMessageProps,
@@ -357,6 +362,7 @@ export function createChatMessagesComponent({
                 onReload={onReload}
                 actionsComponent={ActionsComponent}
                 onClose={onClose}
+                sendMessage={sendMessage}
                 translations={translations}
                 classNames={messageClassNames}
                 messageTranslations={messageTranslations}
