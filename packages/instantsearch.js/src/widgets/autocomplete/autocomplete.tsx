@@ -154,11 +154,13 @@ const createRenderer = <TItem extends BaseHit>(
       let RecentSearchComponent = ({
         item,
         onSelect,
+        onApply,
         onRemoveRecentSearch,
       }: Parameters<typeof AutocompleteRecentSearch>[0]) => (
         <AutocompleteRecentSearch
           item={item}
           onSelect={onSelect}
+          onApply={onApply}
           onRemoveRecentSearch={onRemoveRecentSearch}
         >
           {/* @ts-expect-error - it should accept string as return value */}
@@ -353,10 +355,11 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       <AutocompleteIndex
         HeaderComponent={renderState.recentSearchHeaderComponent}
         // @ts-ignore - there seems to be problems with React.ComponentType and this, but it's actually correct
-        ItemComponent={({ item, onSelect }) => (
+        ItemComponent={({ item, onSelect, onApply }) => (
           <renderState.RecentSearchComponent
             item={item as unknown as { query: string }}
             onSelect={onSelect}
+            onApply={onApply}
             onRemoveRecentSearch={() =>
               storage.onRemove((item as unknown as { query: string }).query)
             }
