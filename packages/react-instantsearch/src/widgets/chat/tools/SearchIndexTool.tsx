@@ -76,10 +76,9 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
       : rawSuggestedFilters;
 
     const handleFilterClick = React.useCallback(
-      (attribute: string, value: string, isRefined: boolean) => {
-        const action = isRefined ? 'Remove' : 'Apply';
+      (attribute: string, value: string) => {
         sendMessage({
-          text: `${action} the ${attribute} filter: ${value}`,
+          text: `Apply the ${attribute} filter: ${value}`,
         });
       },
       [sendMessage]
@@ -137,7 +136,6 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
           <SuggestedFilters
             filters={suggestedFilters}
             onFilterClick={handleFilterClick}
-            indexUiState={indexUiState}
           />
         )}
       </>

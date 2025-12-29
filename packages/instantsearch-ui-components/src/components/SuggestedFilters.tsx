@@ -30,8 +30,7 @@ export type SuggestedFiltersClassNames = {
 
 export type SuggestedFiltersProps = {
   filters: SuggestedFilter[];
-  onFilterClick: (attribute: string, value: string, isRefined: boolean) => void;
-  indexUiState: object;
+  onFilterClick: (attribute: string, value: string) => void;
   classNames?: Partial<SuggestedFiltersClassNames>;
 };
 
@@ -43,20 +42,11 @@ export function createSuggestedFiltersComponent({
   });
 
   return function SuggestedFilters(userProps: SuggestedFiltersProps) {
-    const { filters, onFilterClick, indexUiState, classNames = {} } = userProps;
+    const { filters, onFilterClick, classNames = {} } = userProps;
 
     if (filters.length === 0) {
       return null;
     }
-
-    // Check if a filter is currently refined
-    const isRefined = (attribute: string, value: string): boolean => {
-      const refinementList = (indexUiState as any).refinementList;
-      if (!refinementList || !refinementList[attribute]) {
-        return false;
-      }
-      return refinementList[attribute].includes(value);
-    };
 
     return (
       <div className={cx('ais-ChatToolSuggestedFilters', classNames.root)}>
@@ -64,21 +54,15 @@ export function createSuggestedFiltersComponent({
           Suggested Filters
         </div>
         <div className={cx('ais-SuggestedFilters', classNames.list)}>
-          {filters.map((filter) => {
-            const refined = isRefined(filter.attribute, filter.value);
-            return (
-              <FilterPill
-                key={`${filter.attribute}-${filter.value}`}
-                label={filter.label}
-                value={filter.value}
-                count={filter.count}
-                isRefined={refined}
-                onClick={() =>
-                  onFilterClick(filter.attribute, filter.value, refined)
-                }
-              />
-            );
-          })}
+          {filters.map((filter) => (
+            <FilterPill
+              key={`${filter.attribute}-${filter.value}`}
+              label={filter.label}
+              value={filter.value}
+              count={filter.count}
+              onClick={() => onFilterClick(filter.attribute, filter.value)}
+            />
+          ))}
         </div>
       </div>
     );

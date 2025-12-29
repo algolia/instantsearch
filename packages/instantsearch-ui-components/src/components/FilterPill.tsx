@@ -26,7 +26,6 @@ export type FilterPillProps = {
   label: string;
   value: string;
   count: number;
-  isRefined: boolean;
   onClick: () => void;
   classNames?: Partial<FilterPillClassNames>;
   key?: string;
@@ -36,22 +35,11 @@ export function createFilterPillComponent({
   createElement,
 }: Pick<Renderer, 'createElement'>) {
   return function FilterPill(userProps: FilterPillProps) {
-    const {
-      label,
-      value,
-      count,
-      isRefined,
-      onClick,
-      classNames = {},
-    } = userProps;
+    const { label, value, count, onClick, classNames = {} } = userProps;
 
     return (
       <button
-        className={cx(
-          'ais-FilterPill',
-          isRefined && 'ais-FilterPill--refined',
-          classNames.root
-        )}
+        className={cx('ais-FilterPill', classNames.root)}
         onClick={onClick}
         type="button"
       >

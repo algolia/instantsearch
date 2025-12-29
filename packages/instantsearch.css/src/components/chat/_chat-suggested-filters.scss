@@ -93,16 +93,4 @@
     font-size: calc(var(--ais-font-size) * 0.75);
   }
 
-  // Refined state modifier
-  .ais-FilterPill--refined {
-    background-color: rgba(var(--ais-primary-color-rgb), 0.1);
-    border-color: rgba(var(--ais-primary-color-rgb), 1);
-    color: rgb(var(--ais-primary-color-rgb));
-
-    @media (hover: hover) {
-      &:hover {
-        background-color: rgba(var(--ais-primary-color-rgb), 0.15);
-      }
-    }
-  }
 }
