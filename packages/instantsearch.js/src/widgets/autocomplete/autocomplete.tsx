@@ -341,6 +341,9 @@ function AutocompleteWrapper<TItem extends BaseHit>({
 
           setQuery(query);
         }),
+      onApply: (query: string) => {
+        refineAutocomplete(query);
+      },
       placeholder,
     });
 
@@ -395,13 +398,14 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     const itemComponent = ({
       item,
       onSelect,
+      onApply,
     }: Parameters<AutocompleteIndexProps['ItemComponent']>[0]) => {
       return (
         <TemplateComponent
           {...renderState.indexTemplateProps[i]}
           templateKey="item"
           rootTagName="fragment"
-          data={{ item, onSelect }}
+          data={{ item, onSelect, onApply }}
         />
       );
     };
@@ -621,11 +625,17 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
         item: ({
           item,
           onSelect: onSelectItem,
+          onApply,
         }: {
           item: { query: string };
           onSelect: () => void;
+          onApply: () => void;
         }) => (
-          <AutocompleteSuggestion item={item} onSelect={onSelectItem}>
+          <AutocompleteSuggestion
+            item={item}
+            onSelect={onSelectItem}
+            onApply={onApply}
+          >
             {/* @ts-expect-error - it should accept string as return value */}
             <ConditionalReverseHighlight
               item={item as unknown as Hit<{ query: string }>}

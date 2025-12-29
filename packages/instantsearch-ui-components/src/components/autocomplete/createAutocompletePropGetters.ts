@@ -27,6 +27,7 @@ type GetItemProps = (
   'aria-selected'?: boolean;
 } & {
   onSelect: () => void;
+  onApply: () => void;
 };
 
 type GetPanelProps = () => {
@@ -57,6 +58,7 @@ export type UsePropGetters<TItem extends BaseHit> = (params: {
   indicesConfig: Array<AutocompleteIndexConfig<TItem>>;
   onRefine: (query: string) => void;
   onSelect: NonNullable<AutocompleteIndexConfig<TItem>['onSelect']>;
+  onApply: (query: string) => void;
   placeholder?: string;
 }) => {
   getInputProps: GetInputProps;
@@ -77,6 +79,7 @@ export function createAutocompletePropGetters({
     indicesConfig,
     onRefine,
     onSelect: globalOnSelect,
+    onApply,
     placeholder,
   }: Parameters<UsePropGetters<TItem>>[0]): ReturnType<UsePropGetters<TItem>> {
     const getElementId = createGetElementId(useId());
@@ -233,6 +236,13 @@ export function createAutocompletePropGetters({
           role: 'row',
           'aria-selected': id === activeDescendant,
           onSelect: () => submit({ activeDescendant: id }),
+          onApply: () => {
+            const {
+              item: currentItem,
+              config: { getQuery },
+            } = items.get(id)!;
+            onApply(getQuery?.(currentItem) ?? '');
+          },
         };
       },
       getPanelProps: () => ({

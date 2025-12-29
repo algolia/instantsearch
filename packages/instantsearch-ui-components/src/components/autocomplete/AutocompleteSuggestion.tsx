@@ -2,7 +2,7 @@
 
 import { cx } from '../../lib';
 
-import { SubmitIcon } from './icons';
+import { SubmitIcon, ApplyIcon } from './icons';
 
 import type { ComponentChildren, Renderer } from '../../types';
 
@@ -11,6 +11,7 @@ export type AutocompleteSuggestionProps<
 > = {
   item: T;
   onSelect: () => void;
+  onApply: () => void;
   children: ComponentChildren;
   classNames?: Partial<AutocompleteSuggestionClassNames>;
 };
@@ -28,6 +29,8 @@ export type AutocompleteSuggestionClassNames = {
   icon: string | string[];
   /** Class names to apply to the body element **/
   body: string | string[];
+  /** Class names to apply to the apply button element **/
+  applyButton: string | string[];
 };
 
 export function createAutocompleteSuggestionComponent({
@@ -36,7 +39,7 @@ export function createAutocompleteSuggestionComponent({
   return function AutocompleteSuggestion(
     userProps: AutocompleteSuggestionProps
   ) {
-    const { children, onSelect, classNames = {} } = userProps;
+    const { item, children, onSelect, onApply, classNames = {} } = userProps;
     return (
       <div
         onClick={onSelect}
@@ -71,6 +74,29 @@ export function createAutocompleteSuggestionComponent({
           >
             {children}
           </div>
+        </div>
+        <div
+          className={cx(
+            'ais-AutocompleteItemActions',
+            'ais-AutocompleteSuggestionItemActions',
+            classNames.actions
+          )}
+        >
+          <button
+            className={cx(
+              'ais-AutocompleteItemActionButton',
+              'ais-AutocompleteSuggestionItemApplyButton',
+              classNames.applyButton
+            )}
+            type="button"
+            title={`Apply ${item.query} as search`}
+            onClick={(evt) => {
+              evt.stopPropagation();
+              onApply();
+            }}
+          >
+            <ApplyIcon createElement={createElement} />
+          </button>
         </div>
       </div>
     );
