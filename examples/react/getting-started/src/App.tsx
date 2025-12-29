@@ -20,9 +20,9 @@ import 'instantsearch.css/themes/satellite.css';
 
 import './App.css';
 
-const appId = 'latency';
-const apiKey = '6be0576ff61c053d5f9a3225e2a90f76';
-const agentId = '50426804-635d-48ed-90aa-0eebc8e2f878';
+const appId = 'F4T6CUV2AH';
+const apiKey = 'f33fd36eb0c251c553e3cd7684a6ba33';
+const agentId = '6711d1bb-32fb-46ee-9708-ffc7fd6425b5';
 
 const searchClient = algoliasearch(appId, apiKey);
 
@@ -86,6 +86,20 @@ export function App() {
                 'x-algolia-application-id': appId,
                 'x-algolia-api-Key': apiKey,
               },
+            }}
+            transformItems={{
+              suggestedFilters: (items) =>
+                items.map((item) => {
+                  const attributeLabels: Record<string, string> = {
+                    'hierarchicalCategories.lvl3': 'Category',
+                    'vakgebied.lvl1': 'Field',
+                    categories: 'Categories',
+                  };
+                  return {
+                    ...item,
+                    label: attributeLabels[item.attribute] || item.attribute,
+                  };
+                }),
             }}
           />
         </InstantSearch>

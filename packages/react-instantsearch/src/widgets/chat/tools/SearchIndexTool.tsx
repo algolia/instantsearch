@@ -10,6 +10,7 @@ import React, { createElement } from 'react';
 
 import { Carousel } from '../../../components';
 
+import type { ChatTransformItems } from '../../Chat';
 import type {
   ClientSideToolComponentProps,
   Pragma,
@@ -25,7 +26,8 @@ type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
 function createCarouselTool<TObject extends RecordWithObjectID>(
   showViewAll: boolean,
   itemComponent?: ItemComponent<TObject>,
-  getSearchPageURL?: (nextUiState: IndexUiState) => string
+  getSearchPageURL?: (nextUiState: IndexUiState) => string,
+  transformItems?: ChatTransformItems
 ): UserClientSideTool {
   const Button = createButtonComponent({
     createElement: createElement as Pragma,
@@ -68,7 +70,10 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
       | undefined;
 
     const items = output?.hits || [];
-    const suggestedFilters = output?.suggestedFilters || [];
+    const rawSuggestedFilters = output?.suggestedFilters || [];
+    const suggestedFilters = transformItems?.suggestedFilters
+      ? transformItems.suggestedFilters(rawSuggestedFilters)
+      : rawSuggestedFilters;
 
     const handleFilterClick = React.useCallback(
       (attribute: string, value: string, isRefined: boolean) => {
