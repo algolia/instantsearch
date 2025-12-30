@@ -154,11 +154,13 @@ const createRenderer = <TItem extends BaseHit>(
       let RecentSearchComponent = ({
         item,
         onSelect,
+        onApply,
         onRemoveRecentSearch,
       }: Parameters<typeof AutocompleteRecentSearch>[0]) => (
         <AutocompleteRecentSearch
           item={item}
           onSelect={onSelect}
+          onApply={onApply}
           onRemoveRecentSearch={onRemoveRecentSearch}
         >
           {/* @ts-expect-error - it should accept string as return value */}
@@ -341,6 +343,9 @@ function AutocompleteWrapper<TItem extends BaseHit>({
 
           setQuery(query);
         }),
+      onApply: (query: string) => {
+        refineAutocomplete(query);
+      },
       placeholder,
     });
 
@@ -350,10 +355,11 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       <AutocompleteIndex
         HeaderComponent={renderState.recentSearchHeaderComponent}
         // @ts-ignore - there seems to be problems with React.ComponentType and this, but it's actually correct
-        ItemComponent={({ item, onSelect }) => (
+        ItemComponent={({ item, onSelect, onApply }) => (
           <renderState.RecentSearchComponent
             item={item as unknown as { query: string }}
             onSelect={onSelect}
+            onApply={onApply}
             onRemoveRecentSearch={() =>
               storage.onRemove((item as unknown as { query: string }).query)
             }
@@ -395,13 +401,14 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     const itemComponent = ({
       item,
       onSelect,
+      onApply,
     }: Parameters<AutocompleteIndexProps['ItemComponent']>[0]) => {
       return (
         <TemplateComponent
           {...renderState.indexTemplateProps[i]}
           templateKey="item"
           rootTagName="fragment"
-          data={{ item, onSelect }}
+          data={{ item, onSelect, onApply }}
         />
       );
     };
@@ -621,11 +628,17 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
         item: ({
           item,
           onSelect: onSelectItem,
+          onApply,
         }: {
           item: { query: string };
           onSelect: () => void;
+          onApply: () => void;
         }) => (
-          <AutocompleteSuggestion item={item} onSelect={onSelectItem}>
+          <AutocompleteSuggestion
+            item={item}
+            onSelect={onSelectItem}
+            onApply={onApply}
+          >
             {/* @ts-expect-error - it should accept string as return value */}
             <ConditionalReverseHighlight
               item={item as unknown as Hit<{ query: string }>}

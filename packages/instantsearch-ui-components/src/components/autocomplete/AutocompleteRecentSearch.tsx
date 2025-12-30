@@ -2,7 +2,7 @@
 
 import { cx } from '../../lib';
 
-import { ClockIcon, TrashIcon } from './icons';
+import { ApplyIcon, ClockIcon, TrashIcon } from './icons';
 
 import type { ComponentChildren, Renderer } from '../../types';
 
@@ -13,6 +13,7 @@ export type AutocompleteRecentSearchProps<
   children?: ComponentChildren;
   onSelect: () => void;
   onRemoveRecentSearch: () => void;
+  onApply: () => void;
   classNames?: Partial<AutocompleteRecentSearchClassNames>;
 };
 
@@ -41,6 +42,10 @@ export type AutocompleteRecentSearchClassNames = {
    * Class names to apply to the delete button element
    **/
   deleteButton: string | string[];
+  /**
+   * Class names to apply to the apply button element
+   **/
+  applyButton: string | string[];
 };
 
 export function createAutocompleteRecentSearchComponent({
@@ -54,6 +59,7 @@ export function createAutocompleteRecentSearchComponent({
       children,
       onSelect,
       onRemoveRecentSearch,
+      onApply,
       classNames = {},
     } = userProps;
     return (
@@ -110,6 +116,20 @@ export function createAutocompleteRecentSearchComponent({
             }}
           >
             <TrashIcon createElement={createElement} />
+          </button>
+          <button
+            className={cx(
+              'ais-AutocompleteItemActionButton',
+              'ais-AutocompleteRecentSearchItemApplyButton',
+              classNames.applyButton
+            )}
+            title={`Apply ${item.query} as search`}
+            onClick={(evt) => {
+              evt.stopPropagation();
+              onApply();
+            }}
+          >
+            <ApplyIcon createElement={createElement} />
           </button>
         </div>
       </div>

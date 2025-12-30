@@ -182,8 +182,16 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
       headerComponent:
         showSuggestions.headerComponent as unknown as AutocompleteIndexProps<TItem>['HeaderComponent'],
       itemComponent: (showSuggestions.itemComponent ||
-        (({ item, onSelect }: Parameters<typeof AutocompleteSuggestion>[0]) => (
-          <AutocompleteSuggestion item={item} onSelect={onSelect}>
+        (({
+          item,
+          onSelect,
+          onApply,
+        }: Parameters<typeof AutocompleteSuggestion>[0]) => (
+          <AutocompleteSuggestion
+            item={item}
+            onSelect={onSelect}
+            onApply={onApply}
+          >
             <ConditionalReverseHighlight
               item={item as unknown as Hit<{ query: string }>}
             />
@@ -323,6 +331,9 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
         refineSearchBox(query);
         storage.onAdd(query);
       },
+      onApply: (query) => {
+        refineAutocomplete(query);
+      },
       onSelect:
         userOnSelect ??
         (({ query, setQuery, url }) => {
@@ -350,13 +361,14 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
           recentSearchConfig.headerComponent as AutocompleteIndexProps['HeaderComponent']
         }
         // @ts-ignore - there seems to be problems with React.ComponentType and this, but it's actually correct
-        ItemComponent={({ item, onSelect }) => (
+        ItemComponent={({ item, onSelect, onApply }) => (
           <RecentSearchItemComponent
             item={item as unknown as { query: string }}
             onSelect={onSelect}
             onRemoveRecentSearch={() =>
               storage.onRemove((item as unknown as { query: string }).query)
             }
+            onApply={onApply}
           >
             <ConditionalReverseHighlight
               item={item as unknown as Hit<{ query: string }>}
