@@ -20,6 +20,8 @@ import {
   warning,
   setIndexHelperState,
   isIndexWidget,
+  walkIndex,
+  getAppIdAndApiKey,
 } from './utils';
 import version from './version';
 
@@ -42,6 +44,7 @@ import type {
   CompositionClient,
 } from '../types';
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
+import { chat } from '../widgets';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'instantsearch',
@@ -612,6 +615,60 @@ See documentation: ${createDocumentationLink({
       return mainHelper;
     };
 
+    const managedWidgets = [];
+
+    walkIndex(this.mainIndex, (index) => {
+      const widgets = index.getWidgets();
+
+      widgets.forEach((widget) => {
+        if (widget.$$widgetParams?.experienceId) {
+          managedWidgets.push(widget);
+        }
+      });
+    });
+
+    const [appId, apiKey] = getAppIdAndApiKey(this.client);
+
+    const requests = managedWidgets.map((widget) => {
+      return buildExperienceRequest({
+        appId,
+        apiKey,
+        endpoint: `experiences/${widget.$$widgetParams.experienceId}`,
+      });
+    });
+
+    Promise.all(requests).then((r) => {
+      const chatParams = managedWidgets[0].$$widgetParams;
+      const { cssVars, ...fetchedParams } =
+        r[0].blocks[1].children[0].children[0].parameters;
+
+      const cssVarsEntries = Object.entries(cssVars);
+
+      if (cssVarsEntries.length > 0) {
+        injectStyleElement(`
+              :root {
+                ${cssVarsEntries
+                  .map(([key, value]) => {
+                    const { r, g, b } = hexToRgb(value);
+
+                    return `${key}: ${r}, ${g}, ${b}`;
+                  })
+                  .join(';')}
+              }
+            `);
+      }
+
+      managedWidgets[0].parent
+        .removeWidgets([managedWidgets[0]])
+        .addWidgets([chat({ ...chatParams, ...fetchedParams })]);
+
+      // walkIndex(this.mainIndex, (index) => {
+      //   console.log(index.getWidgets());
+      // });
+    });
+
+    //return;
+
     if (this._searchFunction) {
       // this client isn't used to actually search, but required for the helper
       // to not throw errors
@@ -900,3 +957,46 @@ See documentation: ${createDocumentationLink({
 }
 
 export default InstantSearch;
+
+function buildExperienceRequest({
+  appId,
+  apiKey,
+  endpoint,
+  method = 'GET',
+  data,
+}) {
+  return fetch(`https://experiences-beta.algolia.com/1/${endpoint}`, {
+    method,
+    headers: {
+      'X-Algolia-Application-ID': appId,
+      'X-Algolia-API-Key': apiKey,
+    },
+    body: data ? JSON.stringify(data) : undefined,
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(res.statusText);
+      }
+
+      return res;
+    })
+    .then((res) => res.json());
+}
+
+export function hexToRgb(hex: string) {
+  const cleanHex = hex.replace(/^#/, '');
+
+  const r = parseInt(cleanHex.substring(0, 2), 16);
+  const g = parseInt(cleanHex.substring(2, 4), 16);
+  const b = parseInt(cleanHex.substring(4, 6), 16);
+
+  return { r, g, b };
+}
+
+export function injectStyleElement(textContent: string) {
+  const style = document.createElement('style');
+
+  style.textContent = textContent;
+
+  document.head.appendChild(style);
+}
