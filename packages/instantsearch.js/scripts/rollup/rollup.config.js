@@ -26,12 +26,15 @@ const plugins = [
         replacement: path.join(__dirname, './emptyModule.js'),
       },
       {
-        find: /^eventsource-parser.*/,
+        find: /^react.*/,
         replacement: path.join(__dirname, './emptyModule.js'),
       },
       {
-        find: /^react.*/,
-        replacement: path.join(__dirname, './emptyModule.js'),
+        find: 'eventsource-parser/stream',
+        replacement: path.join(
+          __dirname,
+          '../../../../node_modules/eventsource-parser/dist/stream.js'
+        ),
       },
     ],
   }),
