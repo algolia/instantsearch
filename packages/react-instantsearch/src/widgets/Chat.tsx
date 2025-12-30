@@ -1,4 +1,3 @@
-import { lastAssistantMessageIsCompleteWithToolCalls } from 'ai';
 import { createChatComponent } from 'instantsearch-ui-components';
 import {
   SearchIndexToolType,
@@ -18,14 +17,13 @@ import type {
   ChatProps as ChatUiProps,
   RecommendComponentProps,
   RecordWithObjectID,
-  AddToolResultWithOutput,
   UserClientSideTool,
   UserClientSideTools,
-  ClientSideTools,
+  ChatMessageProps,
 } from 'instantsearch-ui-components';
 import type { IndexUiState } from 'instantsearch.js';
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
-import type { UseChatOptions } from 'react-instantsearch-core';
+import type { UseChatProps } from 'react-instantsearch-core';
 
 const ChatUiComponent = createChatComponent({
   createElement: createElement as Pragma,
@@ -78,6 +76,11 @@ type UserMessagesProps = Omit<
   | 'setIndexUiState'
   | 'scrollRef'
   | 'contentRef'
+  | 'messageComponent'
+  | 'leadingComponent'
+  | 'footerComponent'
+  | 'translations'
+  | 'classNames'
 >;
 
 type UserPromptProps = Omit<
@@ -92,10 +95,9 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
   ChatUiProps,
   keyof UiProps
 > &
-  UseChatOptions<TUiMessage> & {
+  UseChatProps<TUiMessage> & {
     itemComponent?: ItemComponent<TObject>;
     tools?: UserClientSideTools;
-    defaultOpen?: boolean;
     getSearchPageURL?: (nextUiState: IndexUiState) => string;
     toggleButtonProps?: UserToggleButtonProps;
     headerProps?: UserHeaderProps;
@@ -114,9 +116,14 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     promptHeaderComponent?: ChatUiProps['promptProps']['headerComponent'];
     promptFooterComponent?: ChatUiProps['promptProps']['footerComponent'];
     actionsComponent?: ChatUiProps['messagesProps']['actionsComponent'];
+    assistantMessageLeadingComponent?: ChatMessageProps['leadingComponent'];
+    assistantMessageFooterComponent?: ChatMessageProps['footerComponent'];
+    userMessageLeadingComponent?: ChatMessageProps['leadingComponent'];
+    userMessageFooterComponent?: ChatMessageProps['footerComponent'];
     translations?: Partial<{
       prompt: ChatUiProps['promptProps']['translations'];
       header: ChatUiProps['headerProps']['translations'];
+      message: ChatUiProps['messagesProps']['messageTranslations'];
       messages: ChatUiProps['messagesProps']['translations'];
     }>;
   };
@@ -126,7 +133,6 @@ export function Chat<
   TUiMessage extends UIMessage
 >({
   tools: userTools,
-  defaultOpen = false,
   toggleButtonProps,
   headerProps,
   messagesProps,
@@ -144,6 +150,10 @@ export function Chat<
   promptComponent,
   promptHeaderComponent,
   promptFooterComponent,
+  assistantMessageLeadingComponent,
+  assistantMessageFooterComponent,
+  userMessageLeadingComponent,
+  userMessageFooterComponent,
   actionsComponent,
   classNames,
   translations = {},
@@ -154,15 +164,13 @@ export function Chat<
   const {
     prompt: promptTranslations,
     header: headerTranslations,
+    message: messageTranslations,
     messages: messagesTranslations,
   } = translations;
 
   const { indexUiState, setIndexUiState } = useInstantSearch();
 
-  const [open, setOpen] = React.useState(defaultOpen);
   const [maximized, setMaximized] = React.useState(false);
-  const [input, setInput] = React.useState('');
-  const [isClearing, setIsClearing] = React.useState(false);
 
   const promptRef = React.useRef<HTMLTextAreaElement>(null);
 
@@ -178,71 +186,27 @@ export function Chat<
     return { ...defaults, ...userTools };
   }, [getSearchPageURL, itemComponent, userTools]);
 
+  const chatState = useChat<TUiMessage>({
+    ...props,
+    tools,
+  });
+
   const {
     messages,
     sendMessage,
-    addToolResult,
     status,
     regenerate,
     stop,
-    setMessages,
-    clearError,
     error,
-  } = useChat({
-    ...props,
-    sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
-    onToolCall({ toolCall }) {
-      const tool = tools[toolCall.toolName];
-
-      if (!tool) {
-        if (__DEV__) {
-          throw new Error(
-            `No tool implementation found for "${toolCall.toolName}". Please provide a tool implementation in the \`tools\` prop.`
-          );
-        }
-
-        addToolResult({
-          output: `No tool implemented for "${toolCall.toolName}".`,
-          tool: toolCall.toolName,
-          toolCallId: toolCall.toolCallId,
-        });
-        return;
-      }
-
-      if (tool.onToolCall) {
-        const scopedAddToolResult: AddToolResultWithOutput = ({ output }) =>
-          addToolResult({
-            output,
-            tool: toolCall.toolName,
-            toolCallId: toolCall.toolCallId,
-          });
-
-        tool.onToolCall({ ...toolCall, addToolResult: scopedAddToolResult });
-      }
-    },
-  });
-
-  const toolsForUi: ClientSideTools = React.useMemo(() => {
-    const result: ClientSideTools = {};
-    Object.entries(tools).forEach(([key, tool]) => {
-      result[key] = {
-        ...tool,
-        addToolResult,
-      };
-    });
-    return result;
-  }, [tools, addToolResult]);
-
-  const handleClear = React.useCallback(() => {
-    if (!messages || messages.length === 0) return;
-    setIsClearing(true);
-  }, [messages]);
-
-  const handleClearTransitionEnd = React.useCallback(() => {
-    setMessages([]);
-    clearError();
-    setIsClearing(false);
-  }, [setMessages, clearError]);
+    input,
+    setInput,
+    open,
+    setOpen,
+    isClearing,
+    clearMessages,
+    onClearTransitionEnd,
+    tools: toolsFromConnector,
+  } = chatState;
 
   if (__DEV__ && error) {
     throw error;
@@ -266,7 +230,7 @@ export function Chat<
         onClose: () => setOpen(false),
         maximized,
         onToggleMaximize: () => setMaximized(!maximized),
-        onClear: handleClear,
+        onClear: clearMessages,
         canClear: Boolean(messages?.length) && !isClearing,
         titleIconComponent: headerTitleIconComponent,
         closeIconComponent: headerCloseIconComponent,
@@ -280,11 +244,11 @@ export function Chat<
         onReload: (messageId) => regenerate({ messageId }),
         onClose: () => setOpen(false),
         messages,
-        tools: toolsForUi,
+        tools: toolsFromConnector,
         indexUiState,
         setIndexUiState,
         isClearing,
-        onClearTransitionEnd: handleClearTransitionEnd,
+        onClearTransitionEnd,
         isScrollAtBottom: isAtBottom,
         scrollRef,
         contentRef,
@@ -292,7 +256,18 @@ export function Chat<
         loaderComponent: messagesLoaderComponent,
         errorComponent: messagesErrorComponent,
         actionsComponent,
+        assistantMessageProps: {
+          leadingComponent: assistantMessageLeadingComponent,
+          footerComponent: assistantMessageFooterComponent,
+          ...messagesProps?.assistantMessageProps,
+        },
+        userMessageProps: {
+          leadingComponent: userMessageLeadingComponent,
+          footerComponent: userMessageFooterComponent,
+          ...messagesProps?.userMessageProps,
+        },
         translations: messagesTranslations,
+        messageTranslations,
         ...messagesProps,
       }}
       promptProps={{
@@ -300,10 +275,8 @@ export function Chat<
         status,
         value: input,
         translations: promptTranslations,
-        // Explicit event type is required to prevent TypeScript error
-        // where parameter would implicitly have 'any' type without type annotation
-        onInput: (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-          setInput(event.currentTarget.value);
+        onInput: (event) => {
+          setInput((event.currentTarget as HTMLInputElement).value);
         },
         onSubmit: () => {
           sendMessage({ text: input });

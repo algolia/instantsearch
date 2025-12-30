@@ -31,7 +31,7 @@ export type ClientSideToolComponent = (
 ) => JSX.Element;
 
 export type ClientSideTool = {
-  layoutComponent: ClientSideToolComponent;
+  layoutComponent?: ClientSideToolComponent;
   addToolResult: AddToolResult;
   onToolCall?: (
     params: Parameters<

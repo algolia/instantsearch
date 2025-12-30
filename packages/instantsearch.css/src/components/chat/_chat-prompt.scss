@@ -109,6 +109,10 @@
   padding: calc(var(--ais-spacing) * 0.75);
   padding-top: calc(var(--ais-spacing) * 0.5);
   cursor: text;
+
+  svg {
+    width: calc(var(--ais-icon-size) * 0.8);
+  }
 }
 
 @media (max-width: variables.$ais-chat-breakpoint) {

@@ -3,7 +3,7 @@
 import { cx } from '../../lib';
 import { createButtonComponent } from '../Button';
 
-import { ArrowUpIconComponent, StopIconComponent } from './icons';
+import { ArrowUpIcon, StopIcon } from './icons';
 
 import type { ComponentProps, MutableRef, Renderer } from '../../types';
 import type { ChatStatus } from './types';
@@ -114,11 +114,11 @@ export type ChatPromptOwnProps = {
   /**
    * Callback when the form is submitted
    */
-  onSubmit?: ComponentProps<'textarea'>['onSubmit'];
+  onSubmit?: (event: SubmitEvent) => void;
   /**
    * Callback when the textarea value changes
    */
-  onInput?: ComponentProps<'textarea'>['onInput'];
+  onInput?: (event: InputEvent) => void;
   /**
    * Ref to the prompt textarea element for focus management
    */
@@ -238,9 +238,9 @@ export function createChatPromptComponent({ createElement }: Renderer) {
     const buttonDisabled = (!hasValue && !canStop) || disabled;
 
     const submitIcon = canStop ? (
-      <StopIconComponent createElement={createElement} />
+      <StopIcon createElement={createElement} />
     ) : (
-      <ArrowUpIconComponent createElement={createElement} />
+      <ArrowUpIcon createElement={createElement} />
     );
 
     return (
@@ -283,7 +283,7 @@ export function createChatPromptComponent({ createElement }: Renderer) {
             autoFocus={autoFocus}
             onInput={(event) => {
               adjustHeight();
-              onInput?.(event);
+              onInput?.(event as unknown as InputEvent);
             }}
             onKeyDown={(event) => {
               onKeyDown?.(event);
@@ -296,7 +296,7 @@ export function createChatPromptComponent({ createElement }: Renderer) {
                 if (!hasValue) {
                   return;
                 }
-                onSubmit?.(event);
+                onSubmit?.(event as unknown as SubmitEvent);
               }
               if (event.key === 'Escape') {
                 if (event.currentTarget && event.currentTarget.blur) {

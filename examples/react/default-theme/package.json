@@ -1,21 +1,22 @@
 {
   "name": "example-react-instantsearch-default-theme",
-  "version": "68.0.0",
+  "version": "75.0.0",
   "private": true,
   "scripts": {
     "build": "BABEL_ENV=parcel parcel build index.html",
-    "start": "BABEL_ENV=parcel parcel index.html"
+    "start": "BABEL_ENV=parcel parcel index.html",
+    "website:examples": "BABEL_ENV=parcel parcel build index.html --public-url . --dist-dir=../../../website/examples/react/default-theme"
   },
   "dependencies": {
     "algoliasearch": "5.1.1",
-    "algoliasearch-helper": "3.26.0",
-    "instantsearch-ui-components": "0.12.0",
-    "instantsearch.css": "8.6.0",
-    "instantsearch.js": "4.81.0",
+    "algoliasearch-helper": "3.27.0",
+    "instantsearch-ui-components": "0.16.0",
+    "instantsearch.css": "8.9.0",
+    "instantsearch.js": "4.86.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "react-instantsearch": "7.17.0",
-    "react-instantsearch-core": "7.17.0"
+    "react-instantsearch": "7.22.0",
+    "react-instantsearch-core": "7.22.0"
   },
   "devDependencies": {
     "@parcel/core": "2.10.0",
@@ -27,5 +28,10 @@
   },
   "@parcel/resolver-default": {
     "packageExports": true
+  },
+  "targets": {
+    "website": {
+      "scopeHoist": false
+    }
   }
 }

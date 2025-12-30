@@ -22,16 +22,23 @@ export type AutocompletePanelClassNames = {
 
 export function createAutocompletePanelComponent({ createElement }: Renderer) {
   return function AutocompletePanel(userProps: AutocompletePanelProps) {
-    const { children, classNames = {}, ...props } = userProps;
+    const { children, classNames = {}, hidden, ...props } = userProps;
 
     return (
       <div
         {...props}
+        aria-hidden={hidden}
         className={cx(
           'ais-AutocompletePanel',
+          !hidden && 'ais-AutocompletePanel--open',
           classNames.root,
           props.className
         )}
+        onMouseDown={(event: React.MouseEvent<HTMLDivElement>) => {
+          // Prevents the autocomplete panel from blurring the input when
+          // clicking inside the panel.
+          event.preventDefault();
+        }}
       >
         <div className={cx('ais-AutocompletePanelLayout', classNames.layout)}>
           {children}

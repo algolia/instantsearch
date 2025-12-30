@@ -1236,43 +1236,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       expect(search).toHaveBeenCalledTimes(1);
     });
 
-    it('forwards the `searchForFacetValues` call to the main instance', () => {
-      const instance = index({ indexName: 'indexName' });
-      const mainHelper = algoliasearchHelper({} as any, '', {});
-      const instantSearchInstance = createInstantSearch({
-        mainHelper,
-      });
-
-      const searchForFacetValues = jest
-        .spyOn(mainHelper, 'searchForFacetValues')
-        .mockImplementation();
-
-      instance.init(
-        createIndexInitOptions({
-          instantSearchInstance,
-          parent: null,
-        })
-      );
-
-      // Simulate a call to searchForFacetValues from a widget
-      instance.getHelper()!.searchForFacetValues('brand', 'Apple', 10, {
-        highlightPreTag: '<mark>',
-        highlightPostTag: '</mark>',
-      });
-
-      expect(searchForFacetValues).toHaveBeenCalledTimes(1);
-      expect(searchForFacetValues).toHaveBeenCalledWith(
-        'brand',
-        'Apple',
-        10,
-        expect.objectContaining({
-          index: 'indexName',
-          highlightPreTag: '<mark>',
-          highlightPostTag: '</mark>',
-        })
-      );
-    });
-
     it('uses the internal state for the queries', () => {
       const instance = index({ indexName: 'indexName' });
       const searchClient = createSearchClient();

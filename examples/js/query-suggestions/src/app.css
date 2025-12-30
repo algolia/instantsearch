@@ -1,5 +1,5 @@
 :root {
-  --ais-primary-color-rgb: 252, 180, 58;
+  --ais-primary-color-rgb: 200, 130, 10;
 }
 
 .header {
@@ -158,4 +158,8 @@
     rgba(255, 255, 255, 0) 0%,
     rgba(255, 255, 255, 1) 100%
   );
+}
+
+.ais-Autocomplete {
+  margin-bottom: 1rem;
 }

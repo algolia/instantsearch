@@ -21,6 +21,7 @@ export type ChatClassNames = {
   container?: string | string[];
   header?: ChatHeaderProps['classNames'];
   messages?: ChatMessagesProps['classNames'];
+  message?: ChatMessagesProps['messageClassNames'];
   prompt?: ChatPromptProps['classNames'];
   toggleButton?: ChatToggleButtonProps['classNames'];
 };
@@ -81,20 +82,21 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
   const ChatMessages = createChatMessagesComponent({ createElement, Fragment });
   const ChatPrompt = createChatPromptComponent({ createElement, Fragment });
 
-  return function Chat({
-    open,
-    maximized = false,
-    headerProps,
-    toggleButtonProps,
-    messagesProps,
-    promptProps = {},
-    headerComponent: HeaderComponent,
-    promptComponent: PromptComponent,
-    toggleButtonComponent: ToggleButtonComponent,
-    classNames = {},
-    className,
-    ...props
-  }: ChatProps) {
+  return function Chat(userProps: ChatProps) {
+    const {
+      open,
+      maximized = false,
+      headerProps,
+      toggleButtonProps,
+      messagesProps,
+      promptProps = {},
+      headerComponent: HeaderComponent,
+      promptComponent: PromptComponent,
+      toggleButtonComponent: ToggleButtonComponent,
+      classNames = {},
+      className,
+      ...props
+    } = userProps;
     return (
       <div
         {...props}
@@ -118,7 +120,11 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
             classNames: classNames.header,
             maximized,
           })}
-          <ChatMessages {...messagesProps} classNames={classNames.messages} />
+          <ChatMessages
+            {...messagesProps}
+            classNames={classNames.messages}
+            messageClassNames={classNames.message}
+          />
           {createElement(PromptComponent || ChatPrompt, {
             ...promptProps,
             classNames: classNames.prompt,

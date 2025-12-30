@@ -1,4 +1,4 @@
-import type { ComponentProps } from '../../types';
+import type { ComponentProps, MutableRef } from '../../types';
 
 type BaseHit = Record<string, unknown>;
 
@@ -14,21 +14,30 @@ export type AutocompleteIndexConfig<TItem extends BaseHit> = {
   }) => void;
 };
 
-type GetInputProps = () => Partial<ComponentProps<'input'>>;
+type GetInputProps = () => ComponentProps<'input'>;
+
+type ValidAriaRole = 'combobox' | 'row' | 'grid';
 
 type GetItemProps = (
   item: { __indexName: string } & Record<string, unknown>,
   index: number
-) => Pick<ComponentProps<'li'>, 'id' | 'role' | 'aria-selected'> & {
+) => {
+  id?: string;
+  role?: ValidAriaRole;
+  'aria-selected'?: boolean;
+} & {
   onSelect: () => void;
+  onApply: () => void;
 };
 
-type GetPanelProps = () => Pick<
-  ComponentProps<'div'>,
-  'id' | 'hidden' | 'role' | 'aria-labelledby'
->;
+type GetPanelProps = () => {
+  id?: string;
+  hidden?: boolean;
+  role?: ValidAriaRole;
+  'aria-labelledby'?: string;
+};
 
-type GetRootProps = () => Pick<ComponentProps<'div'>, 'ref'>;
+type GetRootProps = () => { ref?: MutableRef<HTMLDivElement | null> };
 
 type CreateAutocompletePropGettersParams = {
   useEffect: (effect: () => void, inputs?: readonly unknown[]) => void;
@@ -40,7 +49,7 @@ type CreateAutocompletePropGettersParams = {
   ) => [TType, (newState: TType) => unknown];
 };
 
-type UsePropGetters<TItem extends BaseHit> = (params: {
+export type UsePropGetters<TItem extends BaseHit> = (params: {
   indices: Array<{
     indexName: string;
     indexId: string;
@@ -49,6 +58,8 @@ type UsePropGetters<TItem extends BaseHit> = (params: {
   indicesConfig: Array<AutocompleteIndexConfig<TItem>>;
   onRefine: (query: string) => void;
   onSelect: NonNullable<AutocompleteIndexConfig<TItem>['onSelect']>;
+  onApply: (query: string) => void;
+  placeholder?: string;
 }) => {
   getInputProps: GetInputProps;
   getItemProps: GetItemProps;
@@ -68,8 +79,11 @@ export function createAutocompletePropGetters({
     indicesConfig,
     onRefine,
     onSelect: globalOnSelect,
+    onApply,
+    placeholder,
   }: Parameters<UsePropGetters<TItem>>[0]): ReturnType<UsePropGetters<TItem>> {
     const getElementId = createGetElementId(useId());
+    const inputRef = useRef<HTMLInputElement>(null);
     const rootRef = useRef<HTMLDivElement>(null);
     const [isOpen, setIsOpen] = useState(false);
     const [activeDescendant, setActiveDescendant] = useState<
@@ -97,7 +111,7 @@ export function createAutocompletePropGetters({
       };
     }, [rootRef]);
 
-    const getNextActiveDescendent = (key: string): string | undefined => {
+    const getNextActiveDescendant = (key: string): string | undefined => {
       switch (key) {
         case 'ArrowLeft':
         case 'ArrowUp': {
@@ -114,13 +128,29 @@ export function createAutocompletePropGetters({
       }
     };
 
-    const submit = (actualActiveDescendant = activeDescendant) => {
-      setIsOpen(false);
-      if (actualActiveDescendant && items.has(actualActiveDescendant)) {
+    const submit = (
+      override: {
+        query?: string;
+        activeDescendant?: string;
+      } = {}
+    ) => {
+      if (isOpen) {
+        setIsOpen(false);
+      } else {
+        inputRef.current?.blur();
+      }
+
+      const actualDescendant = override.activeDescendant ?? activeDescendant;
+
+      if (!actualDescendant && override.query) {
+        onRefine(override.query);
+      }
+
+      if (actualDescendant && items.has(actualDescendant)) {
         const {
           item,
           config: { onSelect: indexOnSelect, getQuery, getURL },
-        } = items.get(actualActiveDescendant)!;
+        } = items.get(actualDescendant)!;
         const actualOnSelect = indexOnSelect ?? globalOnSelect;
         actualOnSelect({
           item,
@@ -135,35 +165,50 @@ export function createAutocompletePropGetters({
     return {
       getInputProps: () => ({
         id: getElementId('input'),
+        ref: inputRef,
         role: 'combobox',
         'aria-autocomplete': 'list',
         'aria-expanded': isOpen,
         'aria-haspopup': 'grid',
         'aria-controls': getElementId('panel'),
         'aria-activedescendant': activeDescendant,
+        placeholder,
         onFocus: () => setIsOpen(true),
         onKeyDown: (event) => {
-          if (event.key === 'Escape') {
-            setActiveDescendant(undefined);
-            setIsOpen(false);
-            return;
-          }
           switch (event.key) {
+            case 'Escape': {
+              if (isOpen) {
+                setIsOpen(false);
+                event.preventDefault();
+              } else {
+                setActiveDescendant(undefined);
+              }
+              break;
+            }
             case 'ArrowLeft':
             case 'ArrowUp':
             case 'ArrowRight':
-            case 'ArrowDown':
-              setActiveDescendant(getNextActiveDescendent(event.key));
+            case 'ArrowDown': {
+              setIsOpen(true);
+
+              const nextActiveDescendant = getNextActiveDescendant(event.key)!;
+              setActiveDescendant(nextActiveDescendant);
+              document
+                .getElementById(nextActiveDescendant)
+                ?.scrollIntoView(false);
+
               event.preventDefault();
               break;
+            }
             case 'Enter': {
-              submit();
+              submit({ query: (event.target as HTMLInputElement).value });
               break;
             }
             case 'Tab':
               setIsOpen(false);
               break;
             default:
+              setIsOpen(true);
               return;
           }
         },
@@ -190,7 +235,14 @@ export function createAutocompletePropGetters({
           id,
           role: 'row',
           'aria-selected': id === activeDescendant,
-          onSelect: () => submit(id),
+          onSelect: () => submit({ activeDescendant: id }),
+          onApply: () => {
+            const {
+              item: currentItem,
+              config: { getQuery },
+            } = items.get(id)!;
+            onApply(getQuery?.(currentItem) ?? '');
+          },
         };
       },
       getPanelProps: () => ({

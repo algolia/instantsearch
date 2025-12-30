@@ -251,6 +251,12 @@ const config = {
             message:
               '`with` is disallowed in strict mode because it makes code impossible to predict and optimize.',
           },
+          {
+            selector:
+              ":matches(TSSatisfiesExpression, TSAsExpression) ObjectExpression Property[method=true][key.name='getRenderState'] > FunctionExpression:not([returnType]) :matches(MemberExpression[object.name='renderState'], SpreadElement > Identifier[name='renderState'])",
+            message:
+              'Connectors using `satisfies` that use `renderState` must explicitly annotate the return type of `getRenderState`.',
+          },
         ],
       },
     },

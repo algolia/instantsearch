@@ -1,6 +1,6 @@
 /** @jsx createElement */
 
-import { LoadingSpinnerIconComponent } from './icons';
+import { LoadingSpinnerIcon } from './icons';
 
 import type { ComponentProps, Renderer } from '../../types';
 
@@ -21,10 +21,8 @@ export type ChatMessageLoaderProps = ComponentProps<'article'> & {
 export function createChatMessageLoaderComponent({
   createElement,
 }: Pick<Renderer, 'createElement'>) {
-  return function ChatMessageLoader({
-    translations: userTranslations,
-    ...props
-  }: ChatMessageLoaderProps) {
+  return function ChatMessageLoader(userProps: ChatMessageLoaderProps) {
+    const { translations: userTranslations, ...props } = userProps;
     const translations: Required<ChatMessageLoaderTranslations> = {
       loaderText: 'Thinking...',
       ...userTranslations,
@@ -38,7 +36,7 @@ export function createChatMessageLoaderComponent({
         <div className="ais-ChatMessage-container">
           <div className="ais-ChatMessage-leading">
             <div className="ais-ChatMessageLoader-spinner">
-              <LoadingSpinnerIconComponent createElement={createElement} />
+              <LoadingSpinnerIcon createElement={createElement} />
             </div>
           </div>
 

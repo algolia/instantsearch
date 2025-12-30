@@ -1,26 +1,19 @@
 /** @jsx createElement */
-import {
-  AutocompleteClearIcon,
-  AutocompleteLoadingIcon,
-  AutocompleteSubmitIcon,
-} from './icons';
+import { ClearIcon, LoadingIcon, SubmitIcon } from './icons';
 
 import type { ComponentProps, Renderer } from '../..';
 
 export type AutocompleteSearchProps = {
-  inputProps: Partial<ComponentProps<'input'>>;
+  inputProps: ComponentProps<'input'>;
   onClear: () => void;
   query: string;
   isSearchStalled: boolean;
 };
 
 export function createAutocompleteSearchComponent({ createElement }: Renderer) {
-  return function AutocompleteSearch({
-    inputProps,
-    onClear,
-    query,
-    isSearchStalled,
-  }: AutocompleteSearchProps) {
+  return function AutocompleteSearch(userProps: AutocompleteSearchProps) {
+    const { inputProps, onClear, query, isSearchStalled } = userProps;
+    const inputRef = inputProps.ref as { current: HTMLInputElement | null };
     return (
       <form
         className="ais-AutocompleteForm"
@@ -28,6 +21,7 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
         noValidate
         role="search"
         onSubmit={(e) => e.preventDefault()}
+        onReset={() => inputRef.current?.focus()}
       >
         <div className="ais-AutocompleteInputWrapperPrefix">
           <label
@@ -41,14 +35,14 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
               type="submit"
               title="Submit"
             >
-              <AutocompleteSubmitIcon createElement={createElement} />
+              <SubmitIcon createElement={createElement} />
             </button>
           </label>
           <div
             className="ais-AutocompleteLoadingIndicator"
             hidden={!isSearchStalled}
           >
-            <AutocompleteLoadingIcon createElement={createElement} />
+            <LoadingIcon createElement={createElement} />
           </div>
         </div>
         <div className="ais-AutocompleteInputWrapper">
@@ -61,7 +55,6 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
             autoCapitalize="off"
             enterKeyHint="search"
             spellCheck="false"
-            placeholder=""
             maxLength={512}
             type="search"
             value={query}
@@ -76,7 +69,7 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
             hidden={query.length === 0 || isSearchStalled}
             onClick={onClear}
           >
-            <AutocompleteClearIcon createElement={createElement} />
+            <ClearIcon createElement={createElement} />
           </button>
         </div>
       </form>

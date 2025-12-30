@@ -8,6 +8,7 @@ import {
   checkRendering,
   createDocumentationMessageGenerator,
   createSendEventForHits,
+  getAlgoliaAgent,
   getAppIdAndApiKey,
   noop,
   warning,
@@ -27,10 +28,14 @@ import type {
   InstantSearch,
   IndexUiState,
   IndexWidget,
+  WidgetRenderState,
+  IndexRenderState,
 } from '../../types';
 import type {
   AddToolResultWithOutput,
   UserClientSideTool,
+  ClientSideTools,
+  ClientSideTool,
 } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -57,6 +62,22 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
   setMessages: (
     messages: TUiMessage[] | ((m: TUiMessage[]) => TUiMessage[])
   ) => void;
+  /**
+   * Whether the chat is in the process of clearing messages.
+   */
+  isClearing: boolean;
+  /**
+   * Clear all messages.
+   */
+  clearMessages: () => void;
+  /**
+   * Callback to be called when the clear transition ends.
+   */
+  onClearTransitionEnd: () => void;
+  /**
+   * Tools configuration with addToolResult bound, ready to be used by the UI.
+   */
+  tools: ClientSideTools;
 } & Pick<
   AbstractChat<TUiMessage>,
   | 'addToolResult'
@@ -101,7 +122,12 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
 export type ChatWidgetDescription<TUiMessage extends UIMessage = UIMessage> = {
   $$type: 'ais.chat';
   renderState: ChatRenderState<TUiMessage>;
-  indexRenderState: Record<string, unknown>;
+  indexRenderState: {
+    chat: WidgetRenderState<
+      ChatRenderState<TUiMessage>,
+      ChatConnectorParams<TUiMessage>
+    >;
+  };
 };
 
 export type ChatConnector<TUiMessage extends UIMessage = UIMessage> = Connector<
@@ -125,9 +151,11 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     let _chatInstance: Chat<TUiMessage>;
     let input = '';
     let open = false;
+    let isClearing = false;
     let sendEvent: SendEventForHits;
     let setInput: ChatRenderState<TUiMessage>['setInput'];
     let setOpen: ChatRenderState<TUiMessage>['setOpen'];
+    let setIsClearing: (value: boolean) => void;
 
     const setMessages = (
       messagesParam: TUiMessage[] | ((m: TUiMessage[]) => TUiMessage[])
@@ -136,6 +164,19 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         messagesParam = messagesParam(_chatInstance.messages);
       }
       _chatInstance.messages = messagesParam;
+    };
+
+    const clearMessages = () => {
+      if (!_chatInstance.messages || _chatInstance.messages.length === 0) {
+        return;
+      }
+      setIsClearing(true);
+    };
+
+    const onClearTransitionEnd = () => {
+      setMessages([]);
+      _chatInstance.clearError();
+      setIsClearing(false);
     };
 
     const makeChatInstance = (instantSearchInstance: InstantSearch) => {
@@ -158,6 +199,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           headers: {
             'x-algolia-application-id': appId,
             'x-algolia-api-Key': apiKey,
+            'x-algolia-agent': getAlgoliaAgent(instantSearchInstance.client),
           },
         });
       }
@@ -239,6 +281,11 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           render();
         };
 
+        setIsClearing = (value) => {
+          isClearing = value;
+          render();
+        };
+
         _chatInstance['~registerErrorCallback'](render);
         _chatInstance['~registerMessagesCallback'](render);
         _chatInstance['~registerStatusCallback'](render);
@@ -266,23 +313,39 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         );
       },
 
-      getRenderState(renderState) {
-        return renderState;
+      getRenderState(
+        renderState,
+        renderOptions
+        // Type is explicitly redefined, to avoid having the TWidgetParams type in the definition
+      ): IndexRenderState & ChatWidgetDescription['indexRenderState'] {
+        return {
+          ...renderState,
+          chat: this.getWidgetRenderState(renderOptions),
+        };
       },
 
-      getWidgetRenderState(renderState) {
-        const { instantSearchInstance, parent } = renderState;
+      getWidgetRenderState(renderOptions) {
+        const { instantSearchInstance, parent } = renderOptions;
         if (!_chatInstance) {
-          this.init!({ ...renderState, uiState: {}, results: undefined });
+          this.init!({ ...renderOptions, uiState: {}, results: undefined });
         }
 
         if (!sendEvent) {
           sendEvent = createSendEventForHits({
-            instantSearchInstance: renderState.instantSearchInstance,
-            helper: renderState.helper,
+            instantSearchInstance: renderOptions.instantSearchInstance,
+            helper: renderOptions.helper,
             widgetType: this.$$type,
           });
         }
+
+        const toolsWithAddToolResult: ClientSideTools = {};
+        Object.entries(tools).forEach(([key, tool]) => {
+          const toolWithAddToolResult: ClientSideTool = {
+            ...tool,
+            addToolResult: _chatInstance.addToolResult,
+          };
+          toolsWithAddToolResult[key] = toolWithAddToolResult;
+        });
 
         return {
           indexUiState: instantSearchInstance.getUiState()[parent.getIndexId()],
@@ -293,6 +356,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           setInput,
           setOpen,
           setMessages,
+          isClearing,
+          clearMessages,
+          onClearTransitionEnd,
+          tools: toolsWithAddToolResult,
           widgetParams,
 
           // Chat instance render state

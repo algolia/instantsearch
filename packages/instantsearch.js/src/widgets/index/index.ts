@@ -9,6 +9,7 @@ import {
   isIndexWidget,
   createInitArgs,
   createRenderArgs,
+  defer,
 } from '../../lib/utils';
 import { addWidgetId } from '../../lib/utils/addWidgetId';
 
@@ -26,7 +27,6 @@ import type {
 import type {
   AlgoliaSearchHelper as Helper,
   DerivedHelper,
-  PlainSearchParameters,
   SearchParameters,
   SearchResults,
   AlgoliaSearchHelper,
@@ -168,6 +168,11 @@ export type IndexWidget<TUiState extends UiState = UiState> = Omit<
    * @private
    */
   _isolated: boolean;
+  /**
+   * Schedules a search for this index only.
+   * @private
+   */
+  scheduleLocalSearch: () => void;
 };
 
 /**
@@ -426,6 +431,12 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
       });
     },
 
+    scheduleLocalSearch: defer(() => {
+      if (isolated) {
+        helper?.search();
+      }
+    }),
+
     getWidgets() {
       return localWidgets;
     },
@@ -523,7 +534,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         });
 
         if (isolated) {
-          helper?.search();
+          this.scheduleLocalSearch();
         } else {
           localInstantSearchInstance.scheduleSearch();
         }
@@ -624,7 +635,7 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
         if (localWidgets.length) {
           if (isolated) {
-            helper?.search();
+            this.scheduleLocalSearch();
           } else {
             localInstantSearchInstance.scheduleSearch();
           }
@@ -703,23 +714,6 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
 
       helper.searchWithoutTriggeringOnStateChange = () => {
         return mainHelper.search();
-      };
-
-      // We use the same pattern for the `searchForFacetValues`.
-      helper.searchForFacetValues = (
-        facetName,
-        facetValue,
-        maxFacetHits,
-        userState: PlainSearchParameters
-      ) => {
-        const state = helper!.state.setQueryParameters(userState);
-
-        return mainHelper.searchForFacetValues(
-          facetName,
-          facetValue,
-          maxFacetHits,
-          state
-        );
       };
 
       const isolatedHelper = indexName

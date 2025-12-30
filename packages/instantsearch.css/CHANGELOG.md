@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.9.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.8.0...instantsearch.css@8.9.0) (2025-12-02)
+
+
+### Features
+
+* **css:** add devtools for CSS variable config ([#6809](https://github.com/algolia/instantsearch/issues/6809)) ([b5d7f91](https://github.com/algolia/instantsearch/commit/b5d7f9121c3cd9306f1143631dfd99077dbd27a0))
+
+
+
+
+
+# [8.8.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.7.0...instantsearch.css@8.8.0) (2025-11-10)
+
+
+### Features
+
+* **autocomplete:** implement recent searches ([#6747](https://github.com/algolia/instantsearch/issues/6747)) ([630a9e6](https://github.com/algolia/instantsearch/commit/630a9e6ad407941a7bdad64448f2cced52ec0ef8))
+
+
+
+
+
+# [8.7.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.6.0...instantsearch.css@8.7.0) (2025-11-06)
+
+
+### Features
+
+* **autocomplete:** implement styling ([#6776](https://github.com/algolia/instantsearch/issues/6776)) ([46aa79a](https://github.com/algolia/instantsearch/commit/46aa79aa20700d9c52754f09f9d45e9250237117))
+* **autocomplete:** support header template for autocomplete index ([#6782](https://github.com/algolia/instantsearch/issues/6782)) ([a27123f](https://github.com/algolia/instantsearch/commit/a27123f46de052620989af72a182e48dd94c4b3e))
+
+
+
+
+
 # [8.6.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.5.1...instantsearch.css@8.6.0) (2025-10-23)
 
 

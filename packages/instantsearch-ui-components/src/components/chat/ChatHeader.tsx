@@ -3,10 +3,10 @@ import { cx } from '../../lib';
 import { createButtonComponent } from '../Button';
 
 import {
-  SparklesIconComponent,
-  MaximizeIconComponent as MaximizeIconComponentDefault,
-  MinimizeIconComponent as MinimizeIconComponentDefault,
-  CloseIconComponent as CloseIconComponentDefault,
+  SparklesIcon,
+  MaximizeIcon as MaximizeIconDefault,
+  MinimizeIcon as MinimizeIconDefault,
+  CloseIcon as CloseIconDefault,
 } from './icons';
 
 import type { Renderer, ComponentProps } from '../../types';
@@ -113,20 +113,21 @@ export type ChatHeaderProps = ComponentProps<'div'> & ChatHeaderOwnProps;
 export function createChatHeaderComponent({ createElement }: Renderer) {
   const Button = createButtonComponent({ createElement });
 
-  return function ChatHeader({
-    maximized = false,
-    onToggleMaximize,
-    onClose,
-    onClear,
-    canClear = false,
-    closeIconComponent: CloseIconComponent,
-    minimizeIconComponent: MinimizeIconComponent,
-    maximizeIconComponent: MaximizeIconComponent,
-    titleIconComponent: TitleIconComponent,
-    classNames = {},
-    translations: userTranslations,
-    ...props
-  }: ChatHeaderProps) {
+  return function ChatHeader(userProps: ChatHeaderProps) {
+    const {
+      maximized = false,
+      onToggleMaximize,
+      onClose,
+      onClear,
+      canClear = false,
+      closeIconComponent: CloseIcon,
+      minimizeIconComponent: MinimizeIcon,
+      maximizeIconComponent: MaximizeIcon,
+      titleIconComponent: TitleIcon,
+      classNames = {},
+      translations: userTranslations,
+      ...props
+    } = userProps;
     const translations: Required<ChatHeaderTranslations> = {
       title: 'Chat',
       minimizeLabel: 'Minimize chat',
@@ -137,9 +138,9 @@ export function createChatHeaderComponent({ createElement }: Renderer) {
     };
 
     const defaultMaximizeIcon = maximized ? (
-      <MinimizeIconComponentDefault createElement={createElement} />
+      <MinimizeIconDefault createElement={createElement} />
     ) : (
-      <MaximizeIconComponentDefault createElement={createElement} />
+      <MaximizeIconDefault createElement={createElement} />
     );
 
     return (
@@ -151,14 +152,10 @@ export function createChatHeaderComponent({ createElement }: Renderer) {
           <span
             className={cx('ais-ChatHeader-titleIcon', classNames.titleIcon)}
           >
-            {TitleIconComponent ? (
-              <TitleIconComponent />
+            {TitleIcon ? (
+              <TitleIcon />
             ) : (
-              <SparklesIconComponent
-                createElement={createElement}
-                width={20}
-                height={20}
-              />
+              <SparklesIcon createElement={createElement} />
             )}
           </span>
           {translations.title}
@@ -187,8 +184,8 @@ export function createChatHeaderComponent({ createElement }: Renderer) {
                 : translations.maximizeLabel
             }
           >
-            {MaximizeIconComponent ? (
-              <MaximizeIconComponent maximized={maximized} />
+            {MaximizeIcon ? (
+              <MaximizeIcon maximized={maximized} />
             ) : (
               defaultMaximizeIcon
             )}
@@ -202,10 +199,10 @@ export function createChatHeaderComponent({ createElement }: Renderer) {
             aria-label={translations.closeLabel}
             title={translations.closeLabel}
           >
-            {CloseIconComponent ? (
-              <CloseIconComponent />
+            {CloseIcon ? (
+              <CloseIcon />
             ) : (
-              <CloseIconComponentDefault createElement={createElement} />
+              <CloseIconDefault createElement={createElement} />
             )}
           </Button>
         </div>

@@ -1,9 +1,9 @@
 /** @jsx h */
 
 import {
-  ArrowRightIconComponent,
-  ChevronLeftIconComponent,
-  ChevronRightIconComponent,
+  ArrowRightIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
   createButtonComponent,
   createChatComponent,
 } from 'instantsearch-ui-components';
@@ -45,6 +45,7 @@ import type {
   ChatMessageBase,
   ChatMessageErrorProps,
   ChatMessageLoaderProps,
+  ChatMessageProps,
   ChatMessagesTranslations,
   ChatPromptProps,
   ChatPromptTranslations,
@@ -222,7 +223,7 @@ function createCarouselTool<
               className="ais-ChatToolSearchIndexCarouselHeaderViewAll"
             >
               View all
-              <ArrowRightIconComponent createElement={h} />
+              <ArrowRightIcon createElement={h} />
             </Button>
           )}
         </div>
@@ -237,7 +238,7 @@ function createCarouselTool<
               disabled={!canScrollLeft}
               className="ais-ChatToolSearchIndexCarouselHeaderScrollButton"
             >
-              <ChevronLeftIconComponent createElement={h} />
+              <ChevronLeftIcon createElement={h} />
             </Button>
             <Button
               variant="outline"
@@ -247,7 +248,7 @@ function createCarouselTool<
               disabled={!canScrollRight}
               className="ais-ChatToolSearchIndexCarouselHeaderScrollButton"
             >
-              <ChevronRightIconComponent createElement={h} />
+              <ChevronRightIcon createElement={h} />
             </Button>
           </div>
         )}
@@ -281,7 +282,6 @@ type ChatWrapperProps = {
   chatOpen: boolean;
   setChatOpen: (open: boolean) => void;
   chatMessages: ChatMessageBase[];
-  setChatMessages: (messages: ChatMessageBase[]) => void;
   indexUiState: IndexUiState;
   setIndexUiState: IndexWidget['setIndexUiState'];
   chatStatus: ChatStatus;
@@ -290,6 +290,9 @@ type ChatWrapperProps = {
   sendMessage: ChatRenderState['sendMessage'];
   regenerate: ChatRenderState['regenerate'];
   stop: ChatRenderState['stop'];
+  isClearing: boolean;
+  clearMessages: () => void;
+  onClearTransitionEnd: () => void;
   toolsForUi: ClientSideTools;
   toggleButtonProps: {
     layoutComponent: ComponentProps<typeof Chat>['toggleButtonComponent'];
@@ -313,7 +316,16 @@ type ChatWrapperProps = {
     actionsComponent:
       | ((props: { actions: ChatMessageActionProps[] }) => JSX.Element)
       | undefined;
+    assistantMessageProps: {
+      leadingComponent: ChatMessageProps['leadingComponent'];
+      footerComponent: ChatMessageProps['footerComponent'];
+    };
+    userMessageProps: {
+      leadingComponent: ChatMessageProps['leadingComponent'];
+      footerComponent: ChatMessageProps['footerComponent'];
+    };
     translations: Partial<ChatMessagesTranslations>;
+    messageTranslations: Partial<ChatMessageProps['translations']>;
   };
   promptProps: {
     layoutComponent: ComponentProps<typeof Chat>['promptComponent'];
@@ -330,7 +342,6 @@ function ChatWrapper({
   chatOpen,
   setChatOpen,
   chatMessages,
-  setChatMessages,
   indexUiState,
   setIndexUiState,
   chatStatus,
@@ -339,6 +350,9 @@ function ChatWrapper({
   sendMessage,
   regenerate,
   stop,
+  isClearing,
+  clearMessages,
+  onClearTransitionEnd,
   toolsForUi,
   toggleButtonProps,
   headerProps,
@@ -354,14 +368,7 @@ function ChatWrapper({
 
   state.init();
 
-  const [isClearing, setIsClearing] = state.use(false);
   const [maximized, setMaximized] = state.use(false);
-
-  const onClear = () => setIsClearing(true);
-  const onClearTransitionEnd = () => {
-    setChatMessages([]);
-    setIsClearing(false);
-  };
 
   return (
     <Chat
@@ -380,7 +387,7 @@ function ChatWrapper({
         onClose: () => setChatOpen(false),
         maximized,
         onToggleMaximize: () => setMaximized(!maximized),
-        onClear,
+        onClear: clearMessages,
         canClear: Boolean(chatMessages?.length) && !isClearing,
         closeIconComponent: headerProps.closeIconComponent,
         minimizeIconComponent: headerProps.minimizeIconComponent,
@@ -405,14 +412,17 @@ function ChatWrapper({
         loaderComponent: messagesProps.loaderComponent,
         errorComponent: messagesProps.errorComponent,
         actionsComponent: messagesProps.actionsComponent,
+        assistantMessageProps: messagesProps.assistantMessageProps,
+        userMessageProps: messagesProps.userMessageProps,
         translations: messagesProps.translations,
+        messageTranslations: messagesProps.messageTranslations,
       }}
       promptProps={{
         promptRef: promptProps.promptRef,
         status: chatStatus,
         value: chatInput,
         onInput: (event) => {
-          setChatInput(event.currentTarget.value);
+          setChatInput((event.currentTarget as HTMLInputElement).value);
         },
         onSubmit: () => {
           sendMessage({ text: chatInput });
@@ -447,6 +457,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   const state = createLocalState();
   const promptRef = { current: null as HTMLTextAreaElement | null };
 
+  // eslint-disable-next-line complexity
   return (props, isFirstRendering) => {
     const {
       indexUiState,
@@ -457,13 +468,15 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       sendMessage,
       setIndexUiState,
       setInput,
-      setMessages,
       setOpen,
       status,
       error,
-      addToolResult,
       regenerate,
       stop,
+      isClearing,
+      clearMessages,
+      onClearTransitionEnd,
+      tools: toolsFromConnector,
     } = props;
 
     if (__DEV__ && error) {
@@ -480,22 +493,25 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
     }
 
     const toolsForUi: ClientSideTools = {};
-    Object.entries(tools).forEach(([key, tool]) => {
+    Object.entries(toolsFromConnector).forEach(([key, connectorTool]) => {
+      const widgetTool = tools[key];
+
       toolsForUi[key] = {
-        ...tool,
-        addToolResult,
-        layoutComponent: (
-          layoutComponentProps: ClientSideToolComponentProps
-        ) => {
-          return (
-            <TemplateComponent
-              templates={tool.templates}
-              rootTagName="fragment"
-              templateKey="layout"
-              data={layoutComponentProps}
-            />
-          );
-        },
+        ...connectorTool,
+        ...(widgetTool?.templates?.layout && {
+          layoutComponent: (
+            layoutComponentProps: ClientSideToolComponentProps
+          ) => {
+            return (
+              <TemplateComponent
+                templates={widgetTool.templates}
+                rootTagName="fragment"
+                templateKey="layout"
+                data={layoutComponentProps}
+              />
+            );
+          },
+        }),
       };
     });
 
@@ -611,6 +627,71 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         regenerateLabel: templates.messages?.regenerateLabelText,
       });
 
+    const assistantMessageTemplateProps = prepareTemplateProps({
+      defaultTemplates: {} as unknown as NonNullable<
+        Required<ChatTemplates<THit>['assistantMessage']>
+      >,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates: templates.assistantMessage,
+    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    const assistantMessageLeadingComponent = templates.assistantMessage?.leading
+      ? () => {
+          return (
+            <TemplateComponent
+              {...assistantMessageTemplateProps}
+              templateKey="leading"
+              rootTagName="fragment"
+            />
+          );
+        }
+      : undefined;
+    const assistantMessageFooterComponent = templates.assistantMessage?.footer
+      ? () => {
+          return (
+            <TemplateComponent
+              {...assistantMessageTemplateProps}
+              templateKey="footer"
+              rootTagName="fragment"
+            />
+          );
+        }
+      : undefined;
+
+    const messageTranslations = getDefinedProperties({
+      actionsLabel: templates.message?.actionsLabelText,
+      messageLabel: templates.message?.messageLabelText,
+    });
+
+    const userMessageTemplateProps = prepareTemplateProps({
+      defaultTemplates: {} as unknown as NonNullable<
+        Required<ChatTemplates<THit>['userMessage']>
+      >,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates: templates.userMessage,
+    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    const userMessageLeadingComponent = templates.userMessage?.leading
+      ? () => {
+          return (
+            <TemplateComponent
+              {...userMessageTemplateProps}
+              templateKey="leading"
+              rootTagName="fragment"
+            />
+          );
+        }
+      : undefined;
+    const userMessageFooterComponent = templates.userMessage?.footer
+      ? () => {
+          return (
+            <TemplateComponent
+              {...userMessageTemplateProps}
+              templateKey="footer"
+              rootTagName="fragment"
+            />
+          );
+        }
+      : undefined;
+
     const promptTemplateProps = prepareTemplateProps({
       defaultTemplates: {} as unknown as NonNullable<
         Required<ChatTemplates<THit>['prompt']>
@@ -716,7 +797,6 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           chatOpen={open}
           setChatOpen={setOpen}
           chatMessages={messages}
-          setChatMessages={setMessages}
           indexUiState={indexUiState}
           setIndexUiState={setIndexUiState}
           chatStatus={status}
@@ -725,6 +805,9 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
           sendMessage={sendMessage}
           regenerate={regenerate}
           stop={stop}
+          isClearing={isClearing}
+          clearMessages={clearMessages}
+          onClearTransitionEnd={onClearTransitionEnd}
           toolsForUi={toolsForUi}
           toggleButtonProps={{
             layoutComponent: toggleButtonLayoutComponent,
@@ -742,7 +825,16 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
             loaderComponent: messagesLoaderComponent,
             errorComponent: messagesErrorComponent,
             actionsComponent,
+            assistantMessageProps: {
+              leadingComponent: assistantMessageLeadingComponent,
+              footerComponent: assistantMessageFooterComponent,
+            },
+            userMessageProps: {
+              leadingComponent: userMessageLeadingComponent,
+              footerComponent: userMessageFooterComponent,
+            },
             translations: messagesTranslations,
+            messageTranslations,
           }}
           promptProps={{
             layoutComponent: promptLayoutComponent,
@@ -862,6 +954,48 @@ export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
        * Label for the regenerate action
        */
       regenerateLabelText?: string;
+    }>;
+
+    /**
+     * Templates to use for each message.
+     */
+    message: Partial<{
+      /**
+       * Label for the message actions
+       */
+      actionsLabelText?: string;
+      /**
+       * Label for the message container
+       */
+      messageLabelText?: string;
+    }>;
+
+    /**
+     * Templates to use for the assistant message.
+     */
+    assistantMessage: Partial<{
+      /**
+       * Template to use for the assistant message leading content.
+       */
+      leading: Template;
+      /**
+       * Template to use for the assistant message footer content.
+       */
+      footer: Template;
+    }>;
+
+    /**
+     * Templates to use for the user message.
+     */
+    userMessage: Partial<{
+      /**
+       * Template to use for the user message leading content.
+       */
+      leading: Template;
+      /**
+       * Template to use for the user message footer content.
+       */
+      footer: Template;
     }>;
 
     /**

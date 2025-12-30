@@ -2,90 +2,11 @@
 @use '../shared/_variables';
 @use '../shared/_common';
 
-:root {
-  // Base colors
-  --ais-autocomplete-text-color-rgb: 38, 38, 39;
-  --ais-autocomplete-text-color-alpha: 1;
-  --ais-autocomplete-primary-color-rgb: 62, 52, 211;
-  --ais-autocomplete-primary-color-alpha: 0.2;
-  --ais-autocomplete-muted-color-rgb: 128, 126, 163;
-  --ais-autocomplete-muted-color-alpha: 0.6;
-
-  // Input
-  --ais-autocomplete-search-input-height: 44px;
-  --ais-autocomplete-input-icon-size: 20px;
-
-  // Size and spacing
-  --ais-autocomplete-base-unit: 16;
-  --ais-autocomplete-spacing-factor: 1;
-  --ais-autocomplete-spacing: calc(var(--ais-autocomplete-base-unit) * var(--ais-autocomplete-spacing-factor) * 1px);
-  --ais-autocomplete-spacing-half: calc(var(--ais-autocomplete-spacing) / 2);
-  --ais-autocomplete-panel-max-height: 650px;
-
-  // Z-index
-  --ais-autocomplete-base-z-index: 9998;
-
-  // Font
-  --ais-autocomplete-font-size: calc(var(--ais-autocomplete-base-unit) * 1px);
-  --ais-autocomplete-font-family: inherit;
-  --ais-autocomplete-font-weight-medium: 500;
-  --ais-autocomplete-font-weight-semibold: 600;
-  --ais-autocomplete-font-weight-bold: 700;
-
-  // Icons
-  --ais-autocomplete-icon-size: 20px;
-  --ais-autocomplete-icon-stroke-width: 1.6;
-  --ais-autocomplete-icon-color-rgb: 119, 119, 163;
-  --ais-autocomplete-icon-color-alpha: 1;
-  --ais-autocomplete-action-icon-size: 20px;
-
-  // Border colors
-  --ais-autocomplete-panel-border-color-rgb: 128, 126, 163;
-  --ais-autocomplete-panel-border-color-alpha: 0.3;
-  --ais-autocomplete-input-border-color-rgb: 128, 126, 163;
-  --ais-autocomplete-input-border-color-alpha: 0.8;
-
-  // Background colors
-  --ais-autocomplete-background-color-rgb: 255, 255, 255;
-  --ais-autocomplete-background-color-alpha: 1;
-  --ais-autocomplete-input-background-color-rgb: 255, 255, 255;
-  --ais-autocomplete-input-background-color-alpha: 1;
-  --ais-autocomplete-selected-color-rgb: 179, 173, 214;
-  --ais-autocomplete-selected-color-alpha: 0.205;
-  --ais-autocomplete-description-highlight-background-color-rgb: 245, 223, 77;
-  --ais-autocomplete-description-highlight-background-color-alpha: 0.5;
-
-  // Detached mode
-  --ais-autocomplete-detached-media-query: (max-width: 680px);
-  --ais-autocomplete-detached-modal-media-query: (min-width: 680px);
-  --ais-autocomplete-detached-modal-max-width: 680px;
-  --ais-autocomplete-detached-modal-max-height: 500px;
-  --ais-autocomplete-overlay-color-rgb: 115, 114, 129;
-  --ais-autocomplete-overlay-color-alpha: 0.4;
-
-  // Shadows
-  --ais-autocomplete-panel-shadow: 0 0 0 1px rgba(35, 38, 59, 0.1),
-    0 6px 16px -4px rgba(35, 38, 59, 0.15);
-
-  // Scrollbar
-  --ais-autocomplete-scrollbar-width: 13px;
-  --ais-autocomplete-scrollbar-track-background-color-rgb: 234, 234, 234;
-  --ais-autocomplete-scrollbar-track-background-color-alpha: 1;
-  --ais-autocomplete-scrollbar-thumb-background-color-rgb: var(--ais-background-color-rgb);
-  --ais-autocomplete-scrollbar-thumb-background-color-alpha: 1;
-
-  // Touch screens
-  @media (hover: none) and (pointer: coarse) {
-    --ais-autocomplete-spacing-factor: 1.2;
-    --ais-autocomplete-action-icon-size: 22px;
-  }
-}
-
 // Init for `@extend`
 %init {
-  color: rgba(var(--ais-autocomplete-text-color-rgb), var(--ais-autocomplete-text-color-alpha));
-  font-family: var(--ais-autocomplete-font-family);
-  font-size: var(--ais-autocomplete-font-size);
+  color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+  font-family: inherit;
+  font-size: var(--ais-font-size);
   font-weight: normal;
   line-height: 1em;
   margin: 0;
@@ -104,26 +25,30 @@
   @at-root .ais-AutocompleteForm {
     align-items: center;
     background-color: rgba(
-      var(--ais-autocomplete-input-background-color-rgb),
-      var(--ais-autocomplete-input-background-color-alpha)
+      var(--ais-background-color-rgb),
+      var(--ais-background-color-alpha)
     );
-    border: 1px solid
-      rgba(var(--ais-autocomplete-input-border-color-rgb), var(--ais-autocomplete-input-border-color-alpha));
-    border-radius: 3px;
+    border: 1px solid rgba(var(--ais-border-color-rgb), 0.8);
+    border-radius: var(--ais-border-radius-sm);
     display: flex;
     line-height: 1em;
     margin: 0;
     position: relative;
     width: 100%;
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition: border-color var(--ais-transition-duration)
+          var(--ais-transition-timing-function),
+        box-shadow var(--ais-transition-duration)
+          var(--ais-transition-timing-function),
+        outline-color var(--ais-transition-duration)
+          var(--ais-transition-timing-function);
+    }
+
     &:focus-within {
-      border-color: rgba(var(--ais-autocomplete-primary-color-rgb), 1);
-      box-shadow: rgba(
-            var(--ais-autocomplete-primary-color-rgb),
-            var(--ais-autocomplete-primary-color-alpha)
-          )
-          0 0 0 2px,
-        inset rgba(var(--ais-autocomplete-primary-color-rgb), var(--ais-autocomplete-primary-color-alpha)) 0
-          0 0 2px;
+      border-color: rgba(var(--ais-primary-color-rgb), 1);
+      box-shadow: rgba(var(--ais-primary-color-rgb), 0.2) 0 0 0 2px,
+        inset rgba(var(--ais-primary-color-rgb), 0.2) 0 0 0 2px;
       outline: currentColor none medium;
     }
     @at-root .ais-AutocompleteInputWrapperPrefix {
@@ -141,22 +66,22 @@
         padding: 0;
         text-align: left;
         svg {
-          color: rgba(var(--ais-autocomplete-primary-color-rgb), 1);
+          color: rgba(var(--ais-primary-color-rgb), 1);
           height: auto;
-          max-height: var(--ais-autocomplete-input-icon-size);
-          stroke-width: var(--ais-autocomplete-icon-stroke-width);
-          width: var(--ais-autocomplete-input-icon-size);
+          max-height: var(--ais-icon-size);
+          stroke-width: var(--ais-icon-stroke-width);
+          width: var(--ais-icon-size);
         }
       }
       @at-root .ais-AutocompleteSubmitButton,
         .ais-AutocompleteLoadingIndicator {
         height: 100%;
-        padding-left: calc(var(--ais-autocomplete-spacing) * 0.75 - 1px);
-        padding-right: var(--ais-autocomplete-spacing-half);
-        width: calc(var(--ais-autocomplete-spacing) * 1.75 + var(--ais-autocomplete-icon-size) - 1px);
+        padding-left: calc(var(--ais-spacing) * 0.75 - 1px);
+        padding-right: calc(var(--ais-spacing) / 2);
+        width: calc(var(--ais-spacing) * 1.75 + var(--ais-icon-size) - 1px);
         @media (hover: none) and (pointer: coarse) {
-          padding-left: calc(var(--ais-autocomplete-spacing-half) / 2 - 1px);
-          width: calc(var(--ais-autocomplete-icon-size) + (var(--ais-autocomplete-spacing) * 1.25) - 1px);
+          padding-left: calc(calc(var(--ais-spacing) / 2) / 2 - 1px);
+          width: calc(var(--ais-icon-size) + (var(--ais-spacing) * 1.25) - 1px);
         }
       }
       @at-root .ais-AutocompleteSubmitButton {
@@ -183,13 +108,13 @@
         appearance: none;
         background: none;
         border: 0;
-        color: rgba(var(--ais-autocomplete-text-color-rgb), var(--ais-autocomplete-text-color-alpha));
+        color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
         font: inherit;
         height: var(--ais-autocomplete-search-input-height);
         padding: 0;
         width: 100%;
         &::placeholder {
-          color: rgba(var(--ais-autocomplete-muted-color-rgb), var(--ais-autocomplete-muted-color-alpha));
+          color: rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha));
           opacity: 1;
         }
         // Focus is set and styled on the parent, it isn't necessary here
@@ -217,25 +142,37 @@
         align-items: center;
         background: none;
         border: 0;
-        color: rgba(var(--ais-autocomplete-muted-color-rgb), var(--ais-autocomplete-muted-color-alpha));
+        color: rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha));
         cursor: pointer;
         display: flex;
         height: 100%;
         margin: 0;
-        padding: 0 calc(var(--ais-autocomplete-spacing) * (5 / 6) - 0.5px);
-        @media (hover: none) and (pointer: coarse) {
-          padding: 0 calc(var(--ais-autocomplete-spacing) * (2 / 3) - 0.5px);
+        padding: 0 calc(var(--ais-spacing) * (5 / 6) - 0.5px);
+
+        @media (prefers-reduced-motion: no-preference) {
+          transition: color var(--ais-transition-duration)
+            var(--ais-transition-timing-function);
         }
-        &:hover,
+
+        @media (hover: none) and (pointer: coarse) {
+          padding: 0 calc(var(--ais-spacing) * (2 / 3) - 0.5px);
+        }
+
+        @media (hover: hover) {
+          &:hover {
+            color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+          }
+        }
+
         &:focus {
-          color: rgba(var(--ais-autocomplete-text-color-rgb), var(--ais-autocomplete-text-color-alpha));
+          color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
         }
         &[hidden] {
           display: none;
         }
         svg {
-          stroke-width: var(--ais-autocomplete-icon-stroke-width);
-          width: var(--ais-autocomplete-icon-size);
+          stroke-width: var(--ais-icon-stroke-width);
+          width: var(--ais-icon-size);
         }
       }
     }
@@ -246,19 +183,33 @@
   @extend %init;
 
   background-color: rgba(
-    var(--ais-autocomplete-background-color-rgb),
-    var(--ais-autocomplete-background-color-alpha)
+    var(--ais-background-color-rgb),
+    var(--ais-background-color-alpha)
   );
-  border-radius: calc(var(--ais-autocomplete-spacing) / 4);
-  box-shadow: var(--ais-autocomplete-panel-shadow);
+  border-radius: var(--ais-border-radius-sm);
+  box-shadow: var(--ais-shadow-lg);
+  border: 1px solid rgba(var(--ais-border-color-rgb), 0.2);
   margin: 8px 0 0;
-  padding: var(--ais-autocomplete-spacing-half);
   position: absolute;
   width: 100%;
+  z-index: var(--ais-z-index-autocomplete);
   overflow: hidden;
-  transition: opacity var(--ais-transition-duration) var(--ais-transition-timing-function), filter var(--ais-transition-duration) var(--ais-transition-timing-function);
-  @media screen and (prefers-reduced-motion) {
-    transition: none;
+  opacity: 0;
+  pointer-events: none;
+  transform-origin: top center;
+  transform: scale(0.95) translateY(calc(var(--ais-spacing) * -1));
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: opacity var(--ais-transition-duration)
+        var(--ais-transition-timing-function),
+      transform var(--ais-transition-duration)
+        var(--ais-transition-timing-function);
+  }
+
+  &--open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1) translateY(0);
   }
   button {
     appearance: none;
@@ -269,17 +220,18 @@
   }
 
   @at-root .ais-AutocompletePanelLayout {
+    @extend .ais-Scrollbar;
     height: 100%;
     margin: 0;
     max-height: var(--ais-autocomplete-panel-max-height);
     overflow-y: auto;
-    padding: 0;
+    padding: calc(var(--ais-spacing) / 2);
     position: relative;
     text-align: left;
   }
 }
 
-/// Source
+// Source
 .ais-AutocompleteIndex {
   margin: 0;
   padding: 0;
@@ -292,7 +244,7 @@
   @at-root .ais-AutocompleteIndexNoResults {
     font-size: 1em;
     margin: 0;
-    padding: var(--ais-autocomplete-spacing);
+    padding: var(--ais-spacing);
   }
   // List of results inside the source
   @at-root .ais-AutocompleteIndexList {
@@ -305,10 +257,9 @@
 
 // Header
 .ais-AutocompleteIndexHeader {
-  margin: var(--ais-autocomplete-spacing-half) 0.5em var(--ais-autocomplete-spacing-half) 0;
+  margin: calc(var(--ais-spacing) / 2) 0.5em calc(var(--ais-spacing) / 2) 0;
   padding: 0;
   position: relative;
-
 
   &:empty {
     display: none;
@@ -317,21 +268,21 @@
 
 .ais-AutocompleteIndexHeaderTitle {
   background: rgba(
-    var(--ais-autocomplete-background-color-rgb),
-    var(--ais-autocomplete-background-color-alpha)
+    var(--ais-background-color-rgb),
+    var(--ais-background-color-alpha)
   );
-  color: rgba(var(--ais-autocomplete-primary-color-rgb), 1);
+  color: rgba(var(--ais-primary-color-rgb), 1);
   display: inline-block;
   font-size: 0.8em;
-  font-weight: var(--ais-autocomplete-font-weight-semibold);
+  font-weight: var(--ais-font-weight-semibold);
   margin: 0;
-  padding: 0 var(--ais-autocomplete-spacing-half) 0 0;
+  padding: 0 calc(var(--ais-spacing) / 2) 0 0;
   position: relative;
-  z-index: var(--ais-autocomplete-base-z-index);
+  z-index: 2;
 }
 
 .ais-AutocompleteIndexHeaderLine {
-  border-bottom: solid 1px rgba(var(--ais-autocomplete-primary-color-rgb), 1);
+  border-bottom: solid 1px rgba(var(--ais-primary-color-rgb), 1);
   display: block;
   height: 2px;
   left: 0;
@@ -340,25 +291,118 @@
   padding: 0;
   position: absolute;
   right: 0;
-  top: var(--ais-autocomplete-spacing-half);
-  z-index: calc(var(--ais-autocomplete-base-z-index) - 1);
+  top: calc(var(--ais-spacing) / 2);
+  z-index: 1;
 }
 
 // Items
 .ais-AutocompleteIndexItem {
   align-items: center;
-  border-radius: 3px;
+  border-radius: var(--ais-border-radius-sm);
   cursor: pointer;
   display: grid;
-  min-height: calc(var(--ais-autocomplete-spacing) * 2.5);
-  padding: calc(var(--ais-autocomplete-spacing-half) / 2);
+  min-height: calc(var(--ais-spacing) * 2.5);
+  padding: calc(calc(var(--ais-spacing) / 2) / 2);
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: background-color var(--ais-transition-duration)
+      var(--ais-transition-timing-function);
+  }
 
   // When the result is active, either by hover or keyboard navigation
-  &:hover,
+  @media (hover: hover) {
+    &:hover {
+      background-color: rgba(var(--ais-primary-color-rgb), 0.1);
+    }
+  }
+
   &[aria-selected='true'] {
-    background-color: rgba(
-      var(--ais-autocomplete-selected-color-rgb),
-      var(--ais-autocomplete-selected-color-alpha)
-    );
+    background-color: rgba(var(--ais-primary-color-rgb), 0.1);
+  }
+
+  @at-root .ais-AutocompleteItemWrapper {
+    align-items: center;
+    color: inherit;
+    display: grid;
+    gap: calc(calc(var(--ais-spacing) / 2) / 2);
+    grid-auto-flow: column;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  @at-root .ais-AutocompleteItemContent {
+    align-items: center;
+    cursor: pointer;
+    display: grid;
+    gap: calc(var(--ais-spacing) / 2);
+    grid-auto-flow: column;
+    line-height: 1.25em;
+    overflow: hidden;
+    &:empty {
+      display: none;
+    }
+    mark {
+      background: none;
+      color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+      font-style: normal;
+      font-weight: var(--ais-font-weight-bold);
+    }
+  }
+
+  @at-root .ais-AutocompleteItemIcon {
+    align-items: center;
+    border-radius: var(--ais-border-radius-sm);
+    color: rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha));
+    display: flex;
+    flex-shrink: 0;
+    font-size: 0.7em;
+    height: calc(var(--ais-icon-size) + calc(var(--ais-spacing) / 2));
+    justify-content: center;
+    overflow: hidden;
+    stroke-width: var(--ais-icon-stroke-width);
+    text-align: center;
+    width: calc(var(--ais-icon-size) + calc(var(--ais-spacing) / 2));
+    svg {
+      height: var(--ais-icon-size);
+      width: var(--ais-icon-size);
+    }
+  }
+  @at-root .ais-AutocompleteItemActions {
+    display: grid;
+    grid-auto-flow: column;
+    height: 100%;
+    justify-self: end;
+  }
+  @at-root .ais-AutocompleteItemActionButton {
+    align-items: center;
+    background: none;
+    border: 0;
+    color: rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha));
+    cursor: pointer;
+    display: flex;
+    flex-shrink: 0;
+    padding: 0;
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition: color var(--ais-transition-duration)
+        var(--ais-transition-timing-function);
+    }
+
+    &:hover,
+    &:focus {
+      svg {
+        color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+        @media (hover: none) and (pointer: coarse) {
+          color: inherit;
+        }
+      }
+    }
+    svg {
+      color: rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha));
+      margin: 0;
+      margin: calc(var(--ais-spacing) / 3);
+      stroke-width: var(--ais-icon-stroke-width);
+      width: var(--ais-icon-size);
+    }
   }
 }

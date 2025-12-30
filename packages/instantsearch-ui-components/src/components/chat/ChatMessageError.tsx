@@ -2,7 +2,7 @@
 
 import { createButtonComponent } from '../Button';
 
-import { ReloadIconComponent } from './icons';
+import { ReloadIcon } from './icons';
 
 import type { ComponentProps, Renderer } from '../../types';
 
@@ -37,12 +37,13 @@ export function createChatMessageErrorComponent({
 }: Pick<Renderer, 'createElement'>) {
   const Button = createButtonComponent({ createElement });
 
-  return function ChatMessageError({
-    onReload,
-    actions,
-    translations: userTranslations,
-    ...props
-  }: ChatMessageErrorProps) {
+  return function ChatMessageError(userProps: ChatMessageErrorProps) {
+    const {
+      onReload,
+      actions,
+      translations: userTranslations,
+      ...props
+    } = userProps;
     const translations: Required<ChatMessageErrorTranslations> = {
       errorMessage:
         'Sorry, we are not able to generate a response at the moment. Please retry or contact support.',
@@ -80,7 +81,7 @@ export function createChatMessageErrorComponent({
                     className="ais-ChatMessage-errorAction"
                     onClick={() => onReload?.()}
                   >
-                    <ReloadIconComponent createElement={createElement} />
+                    <ReloadIcon createElement={createElement} />
                     {translations.retryText}
                   </Button>
                 )}

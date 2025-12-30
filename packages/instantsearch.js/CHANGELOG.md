@@ -3,6 +3,112 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.86.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.85.2...instantsearch.js@4.86.0) (2025-12-30)
+
+
+### Features
+
+* **autocomplete:** add header to showRecents ([#6816](https://github.com/algolia/instantsearch/issues/6816)) ([7f5e54d](https://github.com/algolia/instantsearch/commit/7f5e54da487874e59ae390bc9082c936d7c47dce))
+* **autocomplete:** implement apply suggestion button ([#6844](https://github.com/algolia/instantsearch/issues/6844)) ([730e6f0](https://github.com/algolia/instantsearch/commit/730e6f0dd2271d8e044c5b65d891243c21d0af27))
+* **sortBy:** support composition sorting strategies ([#6841](https://github.com/algolia/instantsearch/issues/6841)) ([f7d7a66](https://github.com/algolia/instantsearch/commit/f7d7a66359bbd2479ae120f7de6823f15695d78d))
+
+
+
+
+
+## [4.85.2](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.85.1...instantsearch.js@4.85.2) (2025-12-10)
+
+
+### Bug Fixes
+
+* **types:** ensure TWidgetParams reference is kept ([#6835](https://github.com/algolia/instantsearch/issues/6835)) ([8578265](https://github.com/algolia/instantsearch/commit/857826524f28cfb2834a26fee0448d6cb7c9551c)), closes [/github.com/algolia/instantsearch/commit/0cde49ee54dd844343e10ba6060b0225492fe0ec#diff-eaddc72b53ce12906d949a84f825b02ed1457775c7bacbf9b478652d0cb2975](https://github.com//github.com/algolia/instantsearch/commit/0cde49ee54dd844343e10ba6060b0225492fe0ec/issues/diff-eaddc72b53ce12906d949a84f825b02ed1457775c7bacbf9b478652d0cb2975)
+
+
+
+
+
+## [4.85.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.85.0...instantsearch.js@4.85.1) (2025-12-09)
+
+
+### Bug Fixes
+
+* **chat:** add chat widget render state ([#6830](https://github.com/algolia/instantsearch/issues/6830)) ([78670ab](https://github.com/algolia/instantsearch/commit/78670abe1bec4082eb2ebb6710b46ebfe569adb4))
+* **ui-components:** portable types ([#6829](https://github.com/algolia/instantsearch/issues/6829)) ([4f54f16](https://github.com/algolia/instantsearch/commit/4f54f1683077f0b0b81e46818f76b84658a0bf88))
+
+
+
+
+
+# [4.85.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.84.0...instantsearch.js@4.85.0) (2025-12-02)
+
+
+### Bug Fixes
+
+* **autocomplete:** add `placeholder` input prop ([#6817](https://github.com/algolia/instantsearch/issues/6817)) ([9ed31df](https://github.com/algolia/instantsearch/commit/9ed31dffd1b931bf69cf6cba3e98d3aa820ad55c))
+* **autocomplete:** clear panel query in instantsearch.js ([#6821](https://github.com/algolia/instantsearch/issues/6821)) ([c99bf31](https://github.com/algolia/instantsearch/commit/c99bf3115c13f43207ec560085c8d6c0ff201281))
+* **autocomplete:** deduplicate recent searches/suggestions ([#6824](https://github.com/algolia/instantsearch/issues/6824)) ([b643508](https://github.com/algolia/instantsearch/commit/b6435083988903df178b99d075c3e0c479fa14a2))
+
+### Features
+
+* **chat:** annotate with algoliaAgent ([#6812](https://github.com/algolia/instantsearch/issues/6812)) ([6d811bd](https://github.com/algolia/instantsearch/commit/6d811bd7a0e069cfba4f470638c6044fe3cb2c53))
+
+
+
+
+
+# [4.84.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.83.0...instantsearch.js@4.84.0) (2025-11-18)
+
+
+### Features
+
+* **autocomplete:** forward search params to the query API request ([#6804](https://github.com/algolia/instantsearch/issues/6804)) ([e711429](https://github.com/algolia/instantsearch/commit/e711429ea1768a7d2a518815861abb4863fb2eaa))
+* **autocomplete:** implement reverse highlighting ([#6806](https://github.com/algolia/instantsearch/issues/6806)) ([05fdd2c](https://github.com/algolia/instantsearch/commit/05fdd2c5214d4809a71b069839caf12b3d5fb341))
+* **autocomplete:** support panel customization ([#6807](https://github.com/algolia/instantsearch/issues/6807)) ([6c7fbd8](https://github.com/algolia/instantsearch/commit/6c7fbd80052775161bf89398530a9510eea150a5))
+
+
+
+
+
+# [4.83.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.82.0...instantsearch.js@4.83.0) (2025-11-10)
+
+
+### Bug Fixes
+
+* **autocomplete:** trigger initial refine in js implementation ([#6800](https://github.com/algolia/instantsearch/issues/6800)) ([b5eeb79](https://github.com/algolia/instantsearch/commit/b5eeb79c867aef229eab4a0a8b546a63defb66f4))
+* **refinementList:** hide facets based on `renderingContent` when searched ([#6792](https://github.com/algolia/instantsearch/issues/6792)) ([ee0d2e4](https://github.com/algolia/instantsearch/commit/ee0d2e4bcb2106425dfd1d0a6fecca0c647f3805))
+
+
+### Features
+
+* **autocomplete:** implement recent searches ([#6747](https://github.com/algolia/instantsearch/issues/6747)) ([630a9e6](https://github.com/algolia/instantsearch/commit/630a9e6ad407941a7bdad64448f2cced52ec0ef8))
+* **chat:** add assistant and user message components/templates in widget ([#6797](https://github.com/algolia/instantsearch/issues/6797)) ([a86b6f3](https://github.com/algolia/instantsearch/commit/a86b6f3c0e43a3ed1ae99e5c21259d890e005025))
+
+
+
+
+
+# [4.82.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.81.0...instantsearch.js@4.82.0) (2025-11-06)
+
+
+### Bug Fixes
+
+* **autocomplete:** default to 5 hits per index ([#6783](https://github.com/algolia/instantsearch/issues/6783)) ([60c5bc5](https://github.com/algolia/instantsearch/commit/60c5bc5812245d9758bac24dcf54b034ac19c3c9))
+* **hierarchicalMenu:** correct canShowMore when children can show more ([#6786](https://github.com/algolia/instantsearch/issues/6786)) ([05193af](https://github.com/algolia/instantsearch/commit/05193af2cbce4f6034b2cd257e320733b2802678)), closes [#6781](https://github.com/algolia/instantsearch/issues/6781)
+* **recommend:** omit fallbackParameters from query when not passed as params ([#6716](https://github.com/algolia/instantsearch/issues/6716)) ([a9efc4f](https://github.com/algolia/instantsearch/commit/a9efc4fe0e292de395121fdf2aa138aceafe981e))
+
+
+### Features
+
+* add fallbackParameters support to Recommend FBT [RECO-2443] ([#6794](https://github.com/algolia/instantsearch/issues/6794)) ([343711b](https://github.com/algolia/instantsearch/commit/343711b712be5bbfbb214853691f3457571d22cb))
+* **autocomplete:** support global onSelect and redirect to search page ([#6777](https://github.com/algolia/instantsearch/issues/6777)) ([44ffb9a](https://github.com/algolia/instantsearch/commit/44ffb9a43d75f7f3bdd83383d0ad500cb0924024))
+* **autocomplete:** support header template for autocomplete index ([#6782](https://github.com/algolia/instantsearch/issues/6782)) ([a27123f](https://github.com/algolia/instantsearch/commit/a27123f46de052620989af72a182e48dd94c4b3e))
+* **autocomplete:** use shared SearchBox for IS.js ([#6787](https://github.com/algolia/instantsearch/issues/6787)) ([891fd50](https://github.com/algolia/instantsearch/commit/891fd50b418f25b6ee2ffb1e810309a52b9c8ef0))
+* **instantsearch.js:** introduce autocomplete widget ([#6759](https://github.com/algolia/instantsearch/issues/6759)) ([59f8fbf](https://github.com/algolia/instantsearch/commit/59f8fbf1a70262ab0927f5fdcde5c3ecbd10e3ba))
+
+
+
+
+
 # [4.81.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.80.0...instantsearch.js@4.81.0) (2025-10-23)
 
 

@@ -8,7 +8,7 @@ import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 
 import type { AutocompleteWidgetSetup } from '.';
-import type { SupportedFlavor, TestOptions } from '../../common';
+import type { TestOptions } from '../../common';
 
 function createMockedSearchClient(
   response: ReturnType<typeof createMultiSearchResponse>
@@ -91,16 +91,6 @@ export function createOptionsTests(
       );
 
       await act(async () => {
-        // JS currently doesn't refine on focus
-        const input =
-          flavor === 'javascript'
-            ? document.querySelector('.ais-SearchBox-input')!
-            : screen.getByRole('combobox', {
-                name: /submit/i,
-              });
-        userEvent.click(input);
-        userEvent.type(input, 'a');
-        userEvent.clear(input);
         await wait(0);
       });
 
@@ -147,15 +137,87 @@ export function createOptionsTests(
 
       await act(async () => {
         await wait(0);
+      });
+
+      expect(searchClient.search).toHaveBeenCalledTimes(2);
+      expect(searchClient.search).toHaveBeenNthCalledWith(1, [
+        {
+          indexName: 'query_suggestions',
+          params: expect.objectContaining({
+            query: '',
+          }),
+        },
+      ]);
+      (searchClient.search as jest.Mock).mockClear();
+
+      expect(screen.getAllByRole('row', { hidden: true }).length).toBe(2);
+      expect(
+        screen.getByRole('row', { name: 'hello', hidden: true })
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('row', { name: 'hi', hidden: true })
+      ).toBeInTheDocument();
+
+      // click the hello combo box suggestion
+      await act(async () => {
+        screen.getByText('hello').click();
+        await wait(0);
+      });
+
+      expect(searchClient.search).toHaveBeenCalledTimes(2);
+      expect(searchClient.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'query_suggestions',
+          params: expect.objectContaining({
+            query: 'hello',
+          }),
+        },
+      ]);
+    });
+
+    test('renders recent searches', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'query_suggestions',
+            hits: [
+              { objectID: '1', query: 'hello' },
+              { objectID: '2', query: 'hi' },
+            ],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'query_suggestions',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            showSuggestions: {
+              indexName: 'query_suggestions',
+            },
+            showRecent: true,
+          },
+          react: {
+            showSuggestions: {
+              indexName: 'query_suggestions',
+            },
+            showRecent: true,
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
 
         // JS currently doesn't refine on focus
         if (flavor === 'javascript') {
-          const input =
-            flavor === 'javascript'
-              ? document.querySelector('.ais-SearchBox-input')!
-              : screen.getByRole('combobox', {
-                  name: /submit/i,
-                });
+          const input = screen.getByRole('combobox', {
+            name: /submit/i,
+          });
           userEvent.click(input);
           userEvent.type(input, 'a');
           userEvent.clear(input);
@@ -164,55 +226,208 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      const callTimes: Record<string, Record<SupportedFlavor, number>> = {
-        initial: { javascript: 2, react: 4, vue: 0 },
-        refined: { javascript: 1, react: 2, vue: 0 },
-      };
-
-      expect(searchClient.search).toHaveBeenCalledTimes(
-        callTimes.initial[flavor]
-      );
-      expect(searchClient.search).toHaveBeenNthCalledWith(
-        callTimes.initial[flavor] - 1,
-        [
-          {
-            indexName: 'query_suggestions',
-            params: expect.objectContaining({
-              query: '',
-            }),
-          },
-        ]
-      );
-      (searchClient.search as jest.Mock).mockClear();
-
-      expect(
-        document.querySelectorAll('.ais-AutocompleteSuggestion')
-      ).toHaveLength(2);
-      expect(
-        document.querySelectorAll('.ais-AutocompleteSuggestion')[0]
-      ).toHaveTextContent('hello');
-      expect(
-        document.querySelectorAll('.ais-AutocompleteSuggestion')[1]
-      ).toHaveTextContent('hi');
-
       // click the hello combo box suggestion
       await act(async () => {
-        (
-          document.querySelectorAll(
-            '.ais-AutocompleteSuggestion'
-          )[0] as HTMLElement
-        ).click();
+        screen.getByText('hello').click();
         await wait(0);
       });
 
-      expect(searchClient.search).toHaveBeenCalledTimes(
-        callTimes.refined[flavor]
+      const recentSearches = document.querySelectorAll(
+        '.ais-AutocompleteRecentSearchesItem'
       );
-      expect(searchClient.search).toHaveBeenLastCalledWith([
+      expect(recentSearches).toHaveLength(1);
+      expect(recentSearches[0]).toHaveTextContent('hello');
+
+      // It should not be duplicated in suggestions
+      expect(screen.getAllByText('hello').length).toBe(1);
+
+      await act(async () => {
+        screen
+          .getByRole('button', {
+            name: /remove hello from recent searches/i,
+            hidden: true,
+          })
+          .click();
+        await wait(0);
+      });
+
+      const newRecentSearches = document.querySelectorAll(
+        '.ais-AutocompleteRecentSearchesItem'
+      );
+      expect(newRecentSearches).toHaveLength(0);
+    });
+
+    test('forwards search params to each index', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'indexName',
+            hits: [],
+          }),
+          createSingleSearchResponse({
+            index: 'indexName2',
+            hits: [],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            indices: [
+              {
+                indexName: 'indexName',
+                templates: {
+                  item: (props) => props.item.name,
+                },
+                searchParameters: {
+                  hitsPerPage: 10,
+                },
+              },
+              {
+                indexName: 'indexName2',
+                templates: {
+                  item: (props) => props.item.query,
+                },
+                searchParameters: {
+                  hitsPerPage: 20,
+                },
+              },
+            ],
+          },
+          react: {
+            indices: [
+              {
+                indexName: 'indexName',
+                itemComponent: (props) => props.item.name,
+                searchParameters: {
+                  hitsPerPage: 10,
+                },
+              },
+              {
+                indexName: 'indexName2',
+                itemComponent: (props) => props.item.query,
+                searchParameters: {
+                  hitsPerPage: 20,
+                },
+              },
+            ],
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(searchClient.search).toHaveBeenCalledWith([
         {
-          indexName: 'query_suggestions',
+          indexName: 'indexName',
           params: expect.objectContaining({
-            query: 'hello',
+            hitsPerPage: 10,
+          }),
+        },
+        {
+          indexName: 'indexName2',
+          params: expect.objectContaining({
+            hitsPerPage: 20,
+          }),
+        },
+      ]);
+    });
+
+    test('forwards base search params to all indices', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'indexName',
+            hits: [],
+          }),
+          createSingleSearchResponse({
+            index: 'indexName2',
+            hits: [],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            indices: [
+              {
+                indexName: 'indexName',
+                templates: {
+                  item: (props) => props.item.name,
+                },
+                searchParameters: {
+                  hitsPerPage: 20,
+                },
+              },
+              {
+                indexName: 'indexName2',
+                templates: {
+                  item: (props) => props.item.query,
+                },
+              },
+            ],
+            searchParameters: {
+              userToken: 'user-123',
+              enableRules: false,
+              hitsPerPage: 10,
+            },
+          },
+          react: {
+            indices: [
+              {
+                indexName: 'indexName',
+                itemComponent: (props) => props.item.name,
+                searchParameters: {
+                  hitsPerPage: 20,
+                },
+              },
+              {
+                indexName: 'indexName2',
+                itemComponent: (props) => props.item.query,
+              },
+            ],
+            searchParameters: {
+              userToken: 'user-123',
+              enableRules: false,
+              hitsPerPage: 10,
+            },
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(searchClient.search).toHaveBeenCalledWith([
+        {
+          indexName: 'indexName',
+          params: expect.objectContaining({
+            userToken: 'user-123',
+            enableRules: false,
+            hitsPerPage: 20,
+          }),
+        },
+        {
+          indexName: 'indexName2',
+          params: expect.objectContaining({
+            userToken: 'user-123',
+            enableRules: false,
+            hitsPerPage: 10,
           }),
         },
       ]);
@@ -282,39 +497,19 @@ export function createOptionsTests(
 
       await act(async () => {
         await wait(0);
-        // JS currently doesn't refine on focus
-        const input =
-          flavor === 'javascript'
-            ? document.querySelector('.ais-SearchBox-input')!
-            : screen.getByRole('combobox', {
-                name: /submit/i,
-              });
-        userEvent.click(input);
-        userEvent.type(input, 'a');
-        userEvent.clear(input);
       });
 
       expect(document.querySelectorAll('[aria-selected="true"]')).toHaveLength(
         0
       );
 
-      const input: HTMLInputElement =
-        flavor === 'javascript'
-          ? document.querySelector('.ais-SearchBox-input')!
-          : screen.getByRole('combobox', {
-              name: /submit/i,
-            });
+      const input = screen.getByRole('combobox', { name: /submit/i });
 
       await act(async () => {
-        input.click();
+        userEvent.click(input);
         await wait(0);
 
-        const downArrowEvent = new KeyboardEvent('keydown', {
-          key: 'ArrowDown',
-          bubbles: true,
-        });
-        input.dispatchEvent(downArrowEvent);
-
+        userEvent.keyboard('{ArrowDown}');
         await wait(0);
       });
 
@@ -329,18 +524,9 @@ export function createOptionsTests(
       );
 
       await act(async () => {
-        const upArrowEvent1 = new KeyboardEvent('keydown', {
-          key: 'ArrowUp',
-          bubbles: true,
-        });
-        input.dispatchEvent(upArrowEvent1);
+        userEvent.keyboard('{ArrowUp}');
         await wait(0);
-
-        const upArrowEvent2 = new KeyboardEvent('keydown', {
-          key: 'ArrowUp',
-          bubbles: true,
-        });
-        input.dispatchEvent(upArrowEvent2);
+        userEvent.keyboard('{ArrowUp}');
         await wait(0);
       });
 
@@ -355,12 +541,7 @@ export function createOptionsTests(
       );
 
       await act(async () => {
-        const enterEvent = new KeyboardEvent('keydown', {
-          key: 'Enter',
-          bubbles: true,
-        });
-        input.dispatchEvent(enterEvent);
-
+        userEvent.keyboard('{Enter}');
         await wait(0);
       });
 
@@ -368,6 +549,648 @@ export function createOptionsTests(
         expect.objectContaining({
           item: expect.objectContaining({ objectID: '1', query: 'hello' }),
         })
+      );
+    });
+
+    test('refines with input value when no item is selected', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'indexName',
+            hits: [
+              { objectID: '1', name: 'Item 1' },
+              { objectID: '2', name: 'Item 2' },
+            ],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            indices: [
+              {
+                indexName: 'indexName',
+                templates: {
+                  item: (props) => props.item.name,
+                },
+              },
+            ],
+          },
+          react: {
+            indices: [
+              {
+                indexName: 'indexName',
+                itemComponent: (props) => props.item.name,
+              },
+            ],
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const input = screen.getByRole('combobox', { name: /submit/i });
+
+      await act(async () => {
+        userEvent.click(input);
+        userEvent.type(input, 'Item 3');
+        await wait(0);
+      });
+
+      expect(document.querySelectorAll('[aria-selected="true"]')).toHaveLength(
+        0
+      );
+      expect(searchClient.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'indexName',
+          params: expect.objectContaining({
+            query: 'Item 3',
+          }),
+        },
+      ]);
+    });
+
+    test('closes the panel then blurs the input when pressing enter', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'indexName',
+            hits: [
+              { objectID: '1', name: 'Item 1' },
+              { objectID: '2', name: 'Item 2' },
+            ],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            indices: [
+              {
+                indexName: 'indexName',
+                templates: {
+                  item: (props) => props.item.name,
+                },
+              },
+            ],
+          },
+          react: {
+            indices: [
+              {
+                indexName: 'indexName',
+                itemComponent: (props) => props.item.name,
+              },
+            ],
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const input = screen.getByRole('combobox', { name: /submit/i });
+
+      await act(async () => {
+        userEvent.click(input);
+        userEvent.keyboard('{ArrowDown}');
+        await wait(0);
+      });
+
+      expect(
+        document.querySelector('[aria-selected="true"]')
+      ).toHaveTextContent('Item 1');
+      expect(input).toHaveAttribute('aria-expanded', 'true');
+      expect(input).toHaveFocus();
+
+      // Closes panel on first Enter
+      await act(async () => {
+        userEvent.keyboard('{Enter}');
+        await wait(0);
+      });
+
+      expect(input).toHaveAttribute('aria-expanded', 'false');
+      expect(input).toHaveFocus();
+
+      // Blurs input on second Enter
+      await act(async () => {
+        userEvent.keyboard('{Enter}');
+        await wait(0);
+      });
+
+      expect(input).not.toHaveFocus();
+    });
+
+    test('closes the panel then clears the input when pressing escape', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'indexName',
+            hits: [
+              { objectID: '1', name: 'Item 1' },
+              { objectID: '2', name: 'Item 2' },
+            ],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            indices: [
+              {
+                indexName: 'indexName',
+                templates: {
+                  item: (props) => props.item.name,
+                },
+              },
+            ],
+          },
+          react: {
+            indices: [
+              {
+                indexName: 'indexName',
+                itemComponent: (props) => props.item.name,
+              },
+            ],
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const input = screen.getByRole('combobox', { name: /submit/i });
+
+      await act(async () => {
+        userEvent.click(input);
+        userEvent.keyboard('{ArrowDown}');
+        await wait(0);
+      });
+
+      expect(
+        document.querySelector('[aria-selected="true"]')
+      ).toHaveTextContent('Item 1');
+      expect(input).toHaveAttribute('aria-expanded', 'true');
+      expect(input).toHaveFocus();
+
+      // Closes panel on first Escape
+      await act(async () => {
+        userEvent.keyboard('{Escape}');
+        await wait(0);
+      });
+
+      expect(
+        document.querySelector('[aria-selected="true"]')
+      ).toHaveTextContent('Item 1');
+      expect(input).toHaveAttribute('aria-expanded', 'false');
+      expect(input).toHaveFocus();
+
+      // Clears selection on second Escape
+      await act(async () => {
+        userEvent.keyboard('{Escape}');
+        await wait(0);
+      });
+
+      expect(document.querySelectorAll('[aria-selected="true"]')).toHaveLength(
+        0
+      );
+      expect(input).toHaveAttribute('aria-expanded', 'false');
+      expect(input).toHaveFocus();
+    });
+
+    test('clearing the query also clears internal autocomplete query', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'indexName',
+            hits: [
+              { objectID: '1', name: 'Item 1' },
+              { objectID: '2', name: 'Item 2' },
+            ],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            indices: [
+              {
+                indexName: 'indexName',
+                templates: {
+                  item: (props) => props.item.name,
+                },
+              },
+            ],
+          },
+          react: {
+            indices: [
+              {
+                indexName: 'indexName',
+                itemComponent: (props) => props.item.name,
+              },
+            ],
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const input = screen.getByRole('combobox', { name: /submit/i });
+
+      await act(async () => {
+        userEvent.click(input);
+        userEvent.type(input, 'Item 3');
+        userEvent.keyboard('{Enter}');
+        await wait(0);
+        userEvent.keyboard('{Enter}');
+        await wait(0);
+      });
+
+      expect(input).not.toHaveFocus();
+      expect(input).toHaveAttribute('aria-expanded', 'false');
+      expect(screen.getByRole('button', { name: /clear/i })).toBeVisible();
+
+      await act(async () => {
+        userEvent.click(screen.getByRole('button', { name: /clear/i }));
+        await wait(0);
+      });
+
+      expect(searchClient.search).toHaveBeenLastCalledWith([
+        {
+          indexName: 'indexName',
+          params: expect.objectContaining({
+            query: '',
+          }),
+        },
+      ]);
+    });
+
+    test('refocuses the input after clearing the query', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'indexName',
+            hits: [
+              { objectID: '1', name: 'Item 1' },
+              { objectID: '2', name: 'Item 2' },
+            ],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            indices: [
+              {
+                indexName: 'indexName',
+                templates: {
+                  item: (props) => props.item.name,
+                },
+              },
+            ],
+          },
+          react: {
+            indices: [
+              {
+                indexName: 'indexName',
+                itemComponent: (props) => props.item.name,
+              },
+            ],
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const input = screen.getByRole('combobox', { name: /submit/i });
+
+      await act(async () => {
+        userEvent.click(input);
+        userEvent.type(input, 'Item 3');
+        userEvent.keyboard('{Enter}');
+        await wait(0);
+        userEvent.keyboard('{Enter}');
+        await wait(0);
+      });
+
+      expect(input).not.toHaveFocus();
+      expect(input).toHaveAttribute('aria-expanded', 'false');
+      expect(screen.getByRole('button', { name: /clear/i })).toBeVisible();
+
+      await act(async () => {
+        userEvent.click(screen.getByRole('button', { name: /clear/i }));
+        await wait(0);
+      });
+
+      expect(input).toHaveFocus();
+      expect(input).toHaveAttribute('aria-expanded', 'true');
+      expect(
+        screen.queryByRole('button', { name: /clear/i })
+      ).not.toBeInTheDocument();
+    });
+
+    test('scrolls active descendant into view', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'indexName',
+            hits: Array.from({ length: 100 }, (_, i) => ({
+              objectID: String(i + 1),
+              name: `Item ${i + 1}`,
+            })),
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            indices: [
+              {
+                indexName: 'indexName',
+                templates: { item: (props) => props.item.name },
+              },
+            ],
+          },
+          react: {
+            indices: [
+              {
+                indexName: 'indexName',
+                itemComponent: (props) => props.item.name,
+              },
+            ],
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const input = screen.getByRole('combobox', { name: /submit/i });
+
+      const mockScrollIntoView = jest.fn();
+      const originalGetElementById = document.getElementById.bind(document);
+      jest
+        .spyOn(document, 'getElementById')
+        // @ts-ignore
+        .mockImplementation(() => ({ scrollIntoView: mockScrollIntoView }));
+
+      await act(async () => {
+        userEvent.click(input);
+        await wait(0);
+
+        userEvent.keyboard('{ArrowUp}');
+        await wait(0);
+      });
+
+      const selectedItem = document.querySelector(
+        '.ais-AutocompleteIndexItem[aria-selected="true"]'
+      )!;
+      expect(selectedItem).not.toBeNull();
+      expect(selectedItem.textContent).toBe('Item 100');
+      expect(mockScrollIntoView).toHaveBeenNthCalledWith(1, false);
+
+      document.getElementById = originalGetElementById;
+    });
+
+    test('has reversed highlighting by default', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'query_suggestions',
+            hits: [
+              {
+                objectID: '1',
+                query: 'hello',
+                _highlightResult: {
+                  query: {
+                    value: '<mark>hell</mark>o',
+                    matchLevel: 'partial',
+                    matchedWords: ['hell'],
+                  },
+                },
+              },
+              {
+                objectID: '2',
+                query: 'hi',
+                _highlightResult: {
+                  query: {
+                    value: 'hi',
+                    matchLevel: 'none',
+                    matchedWords: [],
+                  },
+                },
+              },
+            ],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'query_suggestions',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            showSuggestions: {
+              indexName: 'query_suggestions',
+            },
+          },
+          react: {
+            showSuggestions: {
+              indexName: 'query_suggestions',
+            },
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(
+        document.querySelector('.ais-ReverseHighlight-nonHighlighted')
+      ).toHaveTextContent('hell');
+      expect(
+        document.querySelector('.ais-ReverseHighlight-highlighted')
+      ).toHaveTextContent('o');
+
+      // this should not render any highlighted or nonHighlighted spans
+      const hiItem = screen.getByText('hi');
+      expect(hiItem).not.toHaveClass('ais-ReverseHighlight-highlighted');
+      expect(hiItem).not.toHaveClass('ais-ReverseHighlight-nonHighlighted');
+    });
+
+    test('keeps input focused when clicking inside the panel', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'indexName',
+            hits: [{ objectID: '1', name: 'Item 1' }],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            indices: [
+              {
+                indexName: 'indexName',
+                templates: {
+                  item: (props) => props.item.name,
+                },
+              },
+            ],
+          },
+          react: {
+            indices: [
+              {
+                indexName: 'indexName',
+                itemComponent: (props) => props.item.name,
+              },
+            ],
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const input = screen.getByRole('combobox', { name: /submit/i });
+
+      await act(async () => {
+        userEvent.click(input);
+        await wait(0);
+      });
+
+      expect(input).toHaveFocus();
+
+      const panel = document.querySelector('.ais-AutocompletePanel')!;
+
+      await act(async () => {
+        userEvent.click(panel);
+        await wait(0);
+      });
+
+      expect(input).toHaveFocus();
+    });
+
+    test('applies query suggestions when clicking on the fill action button', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'query_suggestions',
+            hits: [
+              { objectID: '1', query: 'hello' },
+              { objectID: '2', query: 'hi' },
+            ],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'query_suggestions',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            showSuggestions: {
+              indexName: 'query_suggestions',
+            },
+          },
+          react: {
+            showSuggestions: {
+              indexName: 'query_suggestions',
+            },
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const applyButton = screen.getByRole('button', {
+        name: /apply hello as search/i,
+        hidden: true,
+      });
+      expect(applyButton).toBeInTheDocument();
+
+      await act(async () => {
+        userEvent.click(applyButton);
+        await wait(0);
+      });
+
+      expect(
+        screen.getByRole('combobox', {
+          name: /submit/i,
+        })
+      ).toHaveValue('hello');
+
+      // 2 initial calls for the root index + suggestions index, then 1 for the suggestions index only
+      expect(searchClient.search).toHaveBeenCalledTimes(3);
+      expect(searchClient.search).toHaveBeenLastCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            params: expect.objectContaining({
+              query: 'hello',
+            }),
+          }),
+        ])
       );
     });
   });

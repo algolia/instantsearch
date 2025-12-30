@@ -8,6 +8,10 @@
   box-shadow: var(--ais-shadow-sm);
   flex-shrink: 0;
 
+  svg {
+    width: calc(var(--ais-icon-size) * 1.4);
+  }
+
   @media (prefers-reduced-motion: no-preference) {
     transition: transform var(--ais-transition-duration)
         var(--ais-transition-timing-function),

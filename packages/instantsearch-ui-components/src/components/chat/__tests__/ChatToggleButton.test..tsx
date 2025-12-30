@@ -24,13 +24,10 @@ describe('ChatToggleButton', () => {
         >
           <svg
             fill="none"
-            height="28"
             stroke="currentColor"
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeWidth="2"
             viewBox="0 0 24 24"
-            width="28"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
@@ -54,9 +51,7 @@ describe('ChatToggleButton', () => {
         >
           <svg
             fill="none"
-            height="28"
             viewBox="0 0 20 20"
-            width="28"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path

@@ -6,14 +6,15 @@ import { createButtonComponent } from '../Button';
 import { createChatMessageComponent } from './ChatMessage';
 import { createChatMessageErrorComponent } from './ChatMessageError';
 import { createChatMessageLoaderComponent } from './ChatMessageLoader';
-import {
-  ChevronDownIconComponent,
-  CopyIconComponent,
-  ReloadIconComponent,
-} from './icons';
+import { ChevronDownIcon, CopyIcon, ReloadIcon } from './icons';
 
 import type { ComponentProps, MutableRef, Renderer } from '../../types';
-import type { ChatMessageProps, ChatMessageActionProps } from './ChatMessage';
+import type {
+  ChatMessageProps,
+  ChatMessageActionProps,
+  ChatMessageClassNames,
+  ChatMessageTranslations,
+} from './ChatMessage';
 import type { ChatMessageErrorProps } from './ChatMessageError';
 import type { ChatMessageLoaderProps } from './ChatMessageLoader';
 import type { ChatMessageBase, ChatStatus, ClientSideTools } from './types';
@@ -116,9 +117,17 @@ export type ChatMessagesProps<
    */
   classNames?: Partial<ChatMessagesClassNames>;
   /**
+   * Optional message class names
+   */
+  messageClassNames?: Partial<ChatMessageClassNames>;
+  /**
    * Optional translations
    */
   translations?: Partial<ChatMessagesTranslations>;
+  /**
+   * Optional message translations
+   */
+  messageTranslations?: Partial<ChatMessageTranslations>;
   /**
    * Optional user message props
    */
@@ -181,8 +190,10 @@ function createDefaultMessageComponent<
     setIndexUiState,
     onReload,
     onClose,
-    translations,
     actionsComponent,
+    classNames,
+    messageTranslations,
+    translations,
   }: {
     key: string;
     message: TMessage;
@@ -193,22 +204,24 @@ function createDefaultMessageComponent<
     tools: ClientSideTools;
     onReload: (messageId?: string) => void;
     onClose: () => void;
-    translations: ChatMessagesTranslations;
     actionsComponent?: ChatMessageProps['actionsComponent'];
+    translations: ChatMessagesTranslations;
+    classNames?: Partial<ChatMessageClassNames>;
+    messageTranslations?: Partial<ChatMessageTranslations>;
   }) {
     const defaultAssistantActions: ChatMessageActionProps[] = [
       ...(hasTextContent(message)
         ? [
             {
               title: translations.copyToClipboardLabel,
-              icon: () => <CopyIconComponent createElement={createElement} />,
+              icon: () => <CopyIcon createElement={createElement} />,
               onClick: copyToClipboard,
             },
           ]
         : []),
       {
         title: translations.regenerateLabel,
-        icon: () => <ReloadIconComponent createElement={createElement} />,
+        icon: () => <ReloadIcon createElement={createElement} />,
         onClick: (m) => onReload(m.id),
       },
     ];
@@ -230,6 +243,8 @@ function createDefaultMessageComponent<
         actions={defaultActions}
         actionsComponent={actionsComponent}
         data-role={message.role}
+        classNames={classNames}
+        translations={messageTranslations}
         {...messageProps}
       />
     );
@@ -255,6 +270,8 @@ export function createChatMessagesComponent({
   >(userProps: ChatMessagesProps<TMessage>) {
     const {
       classNames = {},
+      messageClassNames = {},
+      messageTranslations,
       messages = [],
       messageComponent: MessageComponent,
       loaderComponent: LoaderComponent,
@@ -341,6 +358,8 @@ export function createChatMessagesComponent({
                 actionsComponent={ActionsComponent}
                 onClose={onClose}
                 translations={translations}
+                classNames={messageClassNames}
+                messageTranslations={messageTranslations}
               />
             ))}
 
@@ -367,7 +386,7 @@ export function createChatMessagesComponent({
           aria-label={translations.scrollToBottomLabel}
           tabIndex={isScrollAtBottom ? -1 : 0}
         >
-          <ChevronDownIconComponent createElement={createElement} />
+          <ChevronDownIcon createElement={createElement} />
         </Button>
       </div>
     );

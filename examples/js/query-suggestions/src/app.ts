@@ -19,6 +19,7 @@ const searchClient = algoliasearch(
 const search = instantsearch({
   indexName: 'instant_search',
   searchClient,
+  routing: true,
   insights: true,
 });
 
@@ -29,6 +30,10 @@ search.addWidgets([
       {
         indexName: 'instant_search',
         templates: {
+          header: (_, { html }) => html`
+            <span class="ais-AutocompleteIndexHeaderTitle">Products</span>
+            <span class="ais-AutocompleteIndexHeaderLine" />
+          `,
           item: ({ item, onSelect }, { html }) => html`
             <div onClick=${onSelect}>${item.name}</div>
           `,
@@ -36,8 +41,22 @@ search.addWidgets([
         getURL: (item) => `/products.html?pid=${item.objectID}`,
       },
     ],
+    showRecent: {
+      templates: {
+        header: (_, { html }) => html`
+          <span class="ais-AutocompleteIndexHeaderTitle">Recent Searches</span>
+          <span class="ais-AutocompleteIndexHeaderLine" />
+        `,
+      },
+    },
     showSuggestions: {
       indexName: 'instant_search_demo_query_suggestions',
+      templates: {
+        header: (_, { html }) => html`
+          <span class="ais-AutocompleteIndexHeaderTitle">Suggestions</span>
+          <span class="ais-AutocompleteIndexHeaderLine" />
+        `,
+      },
     },
   }),
   hits({

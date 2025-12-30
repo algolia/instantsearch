@@ -631,6 +631,50 @@ export function createOptionsTests(
       expect(document.activeElement).toEqual(updatedTargetItem);
     });
 
+    test('does not display facets that should be hidden based on the renderingContent', async () => {
+      const searchClient = createMockedSearchClient(undefined, undefined, {
+        facetOrdering: {
+          values: {
+            brand: {
+              hide: ['Apple'],
+            },
+          },
+        },
+      });
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          attribute: 'brand',
+          searchable: true,
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      expect(
+        Array.from(
+          document.querySelectorAll('.ais-RefinementList-labelText')
+        ).map((item) => item.textContent)
+      ).toEqual([
+        'Insignia™',
+        'Samsung',
+        'Metra',
+        'HP',
+        'GE',
+        'Sony',
+        'Incipio',
+        'KitchenAid',
+        'Whirlpool',
+        'LG',
+      ]);
+    });
+
     describe('sorting', () => {
       test('sorts the items by ascending name', async () => {
         const searchClient = createMockedSearchClient();
@@ -1121,6 +1165,60 @@ export function createOptionsTests(
           </div>
         `
         );
+      });
+
+      test('does not display hidden items when searching', async () => {
+        const searchClient = createMockedSearchClient(undefined, undefined, {
+          facetOrdering: {
+            values: {
+              brand: {
+                hide: ['Apple'],
+              },
+            },
+          },
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            attribute: 'brand',
+            searchable: true,
+            searchablePlaceholder: 'Search brands',
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        const searchInput = document.querySelector(
+          '.ais-SearchBox-input'
+        ) as HTMLInputElement;
+        userEvent.type(searchInput, 'app');
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(
+          Array.from(
+            document.querySelectorAll('.ais-RefinementList-labelText')
+          ).map((item) => item.textContent)
+        ).toEqual([
+          'Apple',
+          'Alpine',
+          'APC',
+          'Amped Wireless',
+          "Applebee's",
+          'Amplicom',
+          'Apollo Enclosures',
+          'Apple®',
+          'Applica',
+          'Apricorn',
+        ]);
       });
 
       skippableTest(
@@ -1743,7 +1841,8 @@ function createMockedSearchClient(
     Dell: 174,
     'Hamilton Beach': 173,
     Platinum: 155,
-  }
+  },
+  renderingContent: Record<string, any> = {}
 ) {
   return createSearchClient({
     search: jest.fn((requests) => {
@@ -1751,6 +1850,7 @@ function createMockedSearchClient(
         createMultiSearchResponse(
           ...requests.map(() =>
             createSingleSearchResponse({
+              renderingContent,
               facets: {
                 brand: values,
               },
