@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.16.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.15.2...instantsearch-ui-components@0.16.0) (2025-12-30)
+
+
+### Features
+
+* **autocomplete:** implement apply suggestion button ([#6844](https://github.com/algolia/instantsearch/issues/6844)) ([730e6f0](https://github.com/algolia/instantsearch/commit/730e6f0dd2271d8e044c5b65d891243c21d0af27))
+
+
+
+
+
 ## [0.15.2](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.15.1...instantsearch-ui-components@0.15.2) (2025-12-09)
 
 

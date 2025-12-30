@@ -1,6 +1,6 @@
 {
   "name": "instantsearch.js",
-  "version": "4.85.2",
+  "version": "4.86.0",
   "description": "InstantSearch.js is a JavaScript library for building performant and instant search experiences with Algolia.",
   "homepage": "https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/",
   "types": "es/index.d.ts",
@@ -32,10 +32,10 @@
     "@types/hogan.js": "^3.0.0",
     "@types/qs": "^6.5.3",
     "ai": "^5.0.18",
-    "algoliasearch-helper": "3.26.1",
+    "algoliasearch-helper": "3.27.0",
     "hogan.js": "^3.0.2",
     "htm": "^3.0.0",
-    "instantsearch-ui-components": "0.15.2",
+    "instantsearch-ui-components": "0.16.0",
     "preact": "^10.10.0",
     "qs": "^6.5.1 < 6.10",
     "react": ">= 0.14.0",
@@ -60,9 +60,9 @@
     "watch:es": "yarn --silent build:es:base --watch"
   },
   "devDependencies": {
-    "@instantsearch/mocks": "1.85.0",
-    "@instantsearch/tests": "1.85.0",
-    "@instantsearch/testutils": "1.74.0",
+    "@instantsearch/mocks": "1.86.0",
+    "@instantsearch/tests": "1.86.0",
+    "@instantsearch/testutils": "1.75.0",
     "@storybook/html": "5.3.9",
     "@types/scriptjs": "0.0.2",
     "algoliasearch": "5.1.1",

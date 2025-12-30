@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.22.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.21.0...react-instantsearch@7.22.0) (2025-12-30)
+
+
+### Bug Fixes
+
+* **types:** expose types field in exports ([#6838](https://github.com/algolia/instantsearch/issues/6838)) ([87f3aaf](https://github.com/algolia/instantsearch/commit/87f3aaf85b5fc7ca16f254dca5d485dd5abb1f80)), closes [#6836](https://github.com/algolia/instantsearch/issues/6836)
+
+
+### Features
+
+* **autocomplete:** add header to showRecents ([#6816](https://github.com/algolia/instantsearch/issues/6816)) ([7f5e54d](https://github.com/algolia/instantsearch/commit/7f5e54da487874e59ae390bc9082c936d7c47dce))
+* **autocomplete:** implement apply suggestion button ([#6844](https://github.com/algolia/instantsearch/issues/6844)) ([730e6f0](https://github.com/algolia/instantsearch/commit/730e6f0dd2271d8e044c5b65d891243c21d0af27))
+
+
+
+
+
 # [7.21.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.20.2...react-instantsearch@7.21.0) (2025-12-10)
 
 

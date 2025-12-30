@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.27.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.26.1...algoliasearch-helper@3.27.0) (2025-12-30)
+
+
+### Features
+
+* **sortBy:** support composition sorting strategies ([#6841](https://github.com/algolia/instantsearch/issues/6841)) ([f7d7a66](https://github.com/algolia/instantsearch/commit/f7d7a66359bbd2479ae120f7de6823f15695d78d))
+
+
+
+
+
 ## [3.26.1](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.26.0...algoliasearch-helper@3.26.1) (2025-11-10)
 
 
