@@ -43,11 +43,9 @@ export function createFilterPillComponent({
         onClick={onClick}
         type="button"
       >
-        {Boolean(label) && (
-          <span className={cx('ais-FilterPill-label', classNames.label)}>
-            {label}:
-          </span>
-        )}
+        <span className={cx('ais-FilterPill-label', classNames.label)}>
+          {label}:
+        </span>
         <span className={cx('ais-FilterPill-value', classNames.value)}>
           {value}
         </span>

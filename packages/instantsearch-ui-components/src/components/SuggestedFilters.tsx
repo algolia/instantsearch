@@ -7,7 +7,7 @@ import { createFilterPillComponent } from './FilterPill';
 import type { Renderer } from '../types';
 
 export type SuggestedFilter = {
-  label: string;
+  label?: string;
   attribute: string;
   value: string;
   count: number;
@@ -57,7 +57,7 @@ export function createSuggestedFiltersComponent({
           {filters.map((filter) => (
             <FilterPill
               key={`${filter.attribute}-${filter.value}`}
-              label={filter.label}
+              label={filter.label || filter.attribute}
               value={filter.value}
               count={filter.count}
               onClick={() => onFilterClick(filter.attribute, filter.value)}

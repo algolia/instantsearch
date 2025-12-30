@@ -16,6 +16,7 @@ import type {
   Pragma,
   RecommendComponentProps,
   RecordWithObjectID,
+  SuggestedFilter,
   UserClientSideTool,
 } from 'instantsearch-ui-components';
 import type { IndexUiState, IndexWidget } from 'instantsearch.js';
@@ -60,12 +61,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
       | {
           hits?: Array<RecordWithObjectID<TObject>>;
           nbHits?: number;
-          suggestedFilters?: Array<{
-            label: string;
-            attribute: string;
-            value: string;
-            count: number;
-          }>;
+          suggestedFilters?: SuggestedFilter[];
         }
       | undefined;
 
