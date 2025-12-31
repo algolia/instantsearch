@@ -1,6 +1,6 @@
 {
   "name": "example-instantsearch-getting-started",
-  "version": "1.47.0",
+  "version": "1.48.0",
   "private": true,
   "scripts": {
     "start": "BABEL_ENV=parcel parcel index.html products.html --port 3000",
@@ -13,14 +13,14 @@
     "algoliasearch-helper": "3.27.0",
     "instantsearch-ui-components": "0.16.0",
     "instantsearch.css": "8.9.0",
-    "instantsearch.js": "4.86.0"
+    "instantsearch.js": "4.86.1"
   },
   "devDependencies": {
     "@babel/core": "7.15.5",
-    "@parcel/core": "2.16.3",
-    "@parcel/packager-raw-url": "2.16.3",
-    "@parcel/transformer-webmanifest": "2.16.3",
-    "parcel": "2.16.3"
+    "@parcel/core": "2.10.0",
+    "@parcel/packager-raw-url": "2.10.0",
+    "@parcel/transformer-webmanifest": "2.10.0",
+    "parcel": "2.10.0"
   },
   "@parcel/resolver-default": {
     "packageExports": true
