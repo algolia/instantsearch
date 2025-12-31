@@ -4,13 +4,14 @@ import {
   liteClient as namedConstructor,
   default as defaultConstructor,
 } from 'algoliasearch/lite';
-import type instantsearch from '../../src';
+import instantsearch from '../../src/index.es';
 import defaultPlayground from '../playgrounds/default';
 import {
   InstantSearch,
   InstantSearchOptions,
   SearchClient,
 } from '../../src/types';
+import configure from '../../src/widgets/configure/configure';
 
 const algoliasearch = (namedConstructor || defaultConstructor) as unknown as (
   appId: string,
@@ -81,7 +82,7 @@ export const withHits =
     });
 
     search.addWidgets([
-      instantsearch.widgets.configure({
+      configure({
         hitsPerPage: 4,
         attributesToSnippet: ['description:15'],
         snippetEllipsisText: '[…]',
