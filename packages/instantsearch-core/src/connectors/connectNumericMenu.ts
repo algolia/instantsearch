@@ -43,10 +43,13 @@ export type NumericMenuRenderStateItem = {
   label: string;
 
   /**
-   * URL encoded of the bounds object with the form `{start, end}`.
-   * This value can be used verbatim in the webpage and can be read by `refine`
-   * directly. If you want to inspect the value, you can do:
-   * `JSON.parse(decodeURI(value))` to get the object.
+   * The value of the option. It is a concatenation of the start and end values
+   * in the form of `start:end`. For example, if the start is 10 and the end is
+   * 20, the value will be `10:20`. If the start is 10 and the end is undefined,
+   * the value will be `10:`. If the start and end are both the same, the value
+   * will be `start:start`. For example, if the start is 10 and the end is 10,
+   * the value will be `10:10`. If the start and end are both undefined, the
+   * value will be `:`.
    */
   value: string;
 
@@ -169,7 +172,7 @@ export const connectNumericMenu: NumericMenuConnector =
       const prepareItems = (state: SearchParameters) =>
         items.map(({ start, end, label }) => ({
           label,
-          value: encodeURI(JSON.stringify({ start, end })),
+          value: `${start || ''}:${end || ''}`,
           isRefined: isRefined(state, attribute, { start, end }),
         }));
 
@@ -208,27 +211,17 @@ export const connectNumericMenu: NumericMenuConnector =
         getWidgetUiState(uiState, { searchParameters }) {
           const values = searchParameters.getNumericRefinements(attribute);
 
-          const equal = values['='] && values['='][0];
-
-          if (equal || equal === 0) {
-            return {
-              ...uiState,
-              numericMenu: {
-                ...uiState.numericMenu,
-                [attribute]: `${values['=']}`,
-              },
-            };
-          }
-
-          const min = (values['>='] && values['>='][0]) || '';
-          const max = (values['<='] && values['<='][0]) || '';
+          const min = ((values['>='] && values['>='][0]) ||
+            undefined) as number;
+          const max = ((values['<='] && values['<='][0]) ||
+            undefined) as number;
 
           return removeEmptyRefinementsFromUiState(
             {
               ...uiState,
               numericMenu: {
                 ...uiState.numericMenu,
-                [attribute]: `${min}:${max}`,
+                [attribute]: valueToString({ start: min, end: max }),
               },
             },
             attribute
@@ -236,7 +229,7 @@ export const connectNumericMenu: NumericMenuConnector =
         },
 
         getWidgetSearchParameters(searchParameters, { uiState }) {
-          const value = uiState.numericMenu && uiState.numericMenu[attribute];
+          let value = uiState.numericMenu && uiState.numericMenu[attribute];
 
           const withoutRefinements = searchParameters.setQueryParameters({
             numericRefinements: {
@@ -249,24 +242,20 @@ export const connectNumericMenu: NumericMenuConnector =
             return withoutRefinements;
           }
 
-          const isExact = value.indexOf(':') === -1;
-
-          if (isExact) {
-            return withoutRefinements.addNumericRefinement(
-              attribute,
-              '=',
-              Number(value)
-            );
+          // Backwards compatibility: previous to v5 the value was just a number
+          // if start and end were the same.
+          if (value.indexOf(':') === -1) {
+            value = `${value}:${value}`;
           }
 
-          const [min, max] = value.split(':').map(parseFloat);
+          const { start, end } = stringToValue(value);
 
-          const withMinRefinement = Number.isFinite(min)
-            ? withoutRefinements.addNumericRefinement(attribute, '>=', min)
+          const withMinRefinement = Number.isFinite(start)
+            ? withoutRefinements.addNumericRefinement(attribute, '>=', start!)
             : withoutRefinements;
 
-          const withMaxRefinement = Number.isFinite(max)
-            ? withMinRefinement.addNumericRefinement(attribute, '<=', max)
+          const withMaxRefinement = Number.isFinite(end)
+            ? withMinRefinement.addNumericRefinement(attribute, '<=', end!)
             : withMinRefinement;
 
           return withMaxRefinement;
@@ -344,6 +333,17 @@ export const connectNumericMenu: NumericMenuConnector =
     };
   };
 
+function stringToValue(value: string): NumericMenuValue {
+  const [start, end] = value
+    .split(':')
+    .map((v) => (v ? parseFloat(v) : undefined));
+  return { start, end };
+}
+
+function valueToString(value: NumericMenuValue): string {
+  return `${value.start || ''}:${value.end || ''}`;
+}
+
 function isRefined(
   state: SearchParameters,
   attribute: string,
@@ -352,14 +352,10 @@ function isRefined(
   const currentRefinements = state.getNumericRefinements(attribute);
 
   if (option.start !== undefined && option.end !== undefined) {
-    if (option.start === option.end) {
-      return hasNumericRefinement(currentRefinements, '=', option.start);
-    } else {
-      return (
-        hasNumericRefinement(currentRefinements, '>=', option.start) &&
-        hasNumericRefinement(currentRefinements, '<=', option.end)
-      );
-    }
+    return (
+      hasNumericRefinement(currentRefinements, '>=', option.start) &&
+      hasNumericRefinement(currentRefinements, '<=', option.end)
+    );
   }
 
   if (option.start !== undefined) {
@@ -384,73 +380,19 @@ function getRefinedState(
   attribute: string,
   facetValue: string
 ) {
-  let resolvedState = state;
-  const refinedOption: NumericMenuValue = JSON.parse(decodeURI(facetValue));
-  const currentRefinements = resolvedState.getNumericRefinements(attribute);
+  let resolvedState = state.removeNumericRefinement(attribute).setPage(0);
 
-  if (refinedOption.start === undefined && refinedOption.end === undefined) {
-    return resolvedState.removeNumericRefinement(attribute);
+  const { start, end } = stringToValue(facetValue);
+  if (start !== undefined && end !== undefined && start > end) {
+    throw new Error('option.start should be > to option.end');
   }
 
-  if (!isRefined(resolvedState, attribute, refinedOption)) {
-    resolvedState = resolvedState.removeNumericRefinement(attribute);
+  if (start !== undefined) {
+    resolvedState = resolvedState.addNumericRefinement(attribute, '>=', start);
   }
 
-  if (refinedOption.start !== undefined && refinedOption.end !== undefined) {
-    if (refinedOption.start > refinedOption.end) {
-      throw new Error('option.start should be > to option.end');
-    }
-
-    if (refinedOption.start === refinedOption.end) {
-      if (hasNumericRefinement(currentRefinements, '=', refinedOption.start)) {
-        resolvedState = resolvedState.removeNumericRefinement(
-          attribute,
-          '=',
-          refinedOption.start
-        );
-      } else {
-        resolvedState = resolvedState.addNumericRefinement(
-          attribute,
-          '=',
-          refinedOption.start
-        );
-      }
-      return resolvedState;
-    }
-  }
-
-  if (refinedOption.start !== undefined) {
-    if (hasNumericRefinement(currentRefinements, '>=', refinedOption.start)) {
-      resolvedState = resolvedState.removeNumericRefinement(
-        attribute,
-        '>=',
-        refinedOption.start
-      );
-    }
-    resolvedState = resolvedState.addNumericRefinement(
-      attribute,
-      '>=',
-      refinedOption.start
-    );
-  }
-
-  if (refinedOption.end !== undefined) {
-    if (hasNumericRefinement(currentRefinements, '<=', refinedOption.end)) {
-      resolvedState = resolvedState.removeNumericRefinement(
-        attribute,
-        '<=',
-        refinedOption.end
-      );
-    }
-    resolvedState = resolvedState.addNumericRefinement(
-      attribute,
-      '<=',
-      refinedOption.end
-    );
-  }
-
-  if (typeof resolvedState.page === 'number') {
-    resolvedState.page = 0;
+  if (end !== undefined) {
+    resolvedState = resolvedState.addNumericRefinement(attribute, '<=', end);
   }
 
   return resolvedState;
