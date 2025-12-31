@@ -377,3 +377,9 @@ export type SortBy<TItem> =
  * Creates the URL for the given value.
  */
 export type CreateURL<TValue> = (value: TValue) => string;
+
+export type SearchToolInput = {
+  query: string;
+  number_of_results?: number;
+  facet_filters?: string[][];
+};

@@ -1,39 +1,35 @@
+/** @jsx h */
+
 import {
+  ArrowRightIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  ArrowRightIcon,
   createButtonComponent,
 } from 'instantsearch-ui-components';
-import { generateIndexUiState } from 'instantsearch.js/es/lib/utils';
-import React, { createElement } from 'react';
+import { h } from 'preact';
+import { useMemo } from 'preact/hooks';
 
-import { Carousel } from '../../../components';
+import TemplateComponent from '../../components/Template/Template';
+import { generateIndexUiState } from '../../lib/utils/getStateFromSearchToolInput';
+import { carousel } from '../../templates';
 
+import type { IndexUiState, IndexWidget, SearchToolInput } from '../../types';
+import type { ChatTemplates, UserClientSideToolWithTemplate } from './chat';
 import type {
   ClientSideToolComponentProps,
-  Pragma,
-  RecommendComponentProps,
+  ComponentProps,
   RecordWithObjectID,
-  UserClientSideTool,
 } from 'instantsearch-ui-components';
-import type { IndexUiState, IndexWidget } from 'instantsearch.js';
-import type { ComponentProps } from 'react';
 
-type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
-
-type SearchToolInput = {
-  query: string;
-  number_of_results?: number;
-  facet_filters?: string[][];
-};
-
-function createCarouselTool<TObject extends RecordWithObjectID>(
+export function createCarouselTool<
+  THit extends RecordWithObjectID = RecordWithObjectID
+>(
   showViewAll: boolean,
-  itemComponent?: ItemComponent<TObject>,
+  templates: ChatTemplates<THit>,
   getSearchPageURL?: (nextUiState: IndexUiState) => string
-): UserClientSideTool {
+): UserClientSideToolWithTemplate {
   const Button = createButtonComponent({
-    createElement: createElement as Pragma,
+    createElement: h,
   });
 
   function SearchLayoutComponent({
@@ -46,16 +42,17 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
 
     const output = message?.output as
       | {
-          hits?: Array<RecordWithObjectID<TObject>>;
+          hits?: Array<RecordWithObjectID<THit>>;
           nbHits?: number;
         }
       | undefined;
 
     const items = output?.hits || [];
 
-    const MemoedHeaderComponent = React.useMemo(() => {
+    const MemoedHeaderComponent = useMemo(() => {
       return (
         props: Omit<
+          // @ts-expect-error
           ComponentProps<typeof HeaderComponent>,
           | 'nbHits'
           | 'query'
@@ -66,6 +63,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
           | 'onClose'
         >
       ) => (
+        // @ts-expect-error
         <HeaderComponent
           nbHits={output?.nbHits}
           input={input}
@@ -82,19 +80,29 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
       input,
       output?.nbHits,
       setIndexUiState,
-      onClose,
       indexUiState,
+      onClose,
     ]);
 
-    return (
-      <Carousel
-        items={items}
-        itemComponent={itemComponent}
-        sendEvent={() => {}}
-        showNavigation={false}
-        headerComponent={MemoedHeaderComponent}
-      />
-    );
+    return carousel({
+      showNavigation: false,
+      templates: {
+        header: MemoedHeaderComponent,
+      },
+    })({
+      items,
+      templates: {
+        item: ({ item }) => (
+          <TemplateComponent
+            templates={templates}
+            templateKey="item"
+            data={item}
+            rootTagName="fragment"
+          />
+        ),
+      },
+      sendEvent: () => {},
+    });
   }
 
   function HeaderComponent({
@@ -107,9 +115,9 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
     hitsPerPage,
     setIndexUiState,
     indexUiState,
+    onClose,
     // eslint-disable-next-line no-shadow
     getSearchPageURL,
-    onClose,
   }: {
     canScrollLeft: boolean;
     canScrollRight: boolean;
@@ -120,8 +128,8 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
     hitsPerPage?: number;
     setIndexUiState: IndexWidget['setIndexUiState'];
     indexUiState: IndexUiState;
-    getSearchPageURL?: (nextUiState: IndexUiState) => string;
     onClose: () => void;
+    getSearchPageURL?: (nextUiState: IndexUiState) => string;
   }) {
     if ((hitsPerPage ?? 0) < 1) {
       return null;
@@ -166,7 +174,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
               className="ais-ChatToolSearchIndexCarouselHeaderViewAll"
             >
               View all
-              <ArrowRightIcon createElement={createElement as Pragma} />
+              <ArrowRightIcon createElement={h} />
             </Button>
           )}
         </div>
@@ -181,7 +189,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
               disabled={!canScrollLeft}
               className="ais-ChatToolSearchIndexCarouselHeaderScrollButton"
             >
-              <ChevronLeftIcon createElement={createElement as Pragma} />
+              <ChevronLeftIcon createElement={h} />
             </Button>
             <Button
               variant="outline"
@@ -191,7 +199,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
               disabled={!canScrollRight}
               className="ais-ChatToolSearchIndexCarouselHeaderScrollButton"
             >
-              <ChevronRightIcon createElement={createElement as Pragma} />
+              <ChevronRightIcon createElement={h} />
             </Button>
           </div>
         )}
@@ -200,8 +208,6 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
   }
 
   return {
-    layoutComponent: SearchLayoutComponent,
+    templates: { layout: SearchLayoutComponent },
   };
 }
-
-export { createCarouselTool };
