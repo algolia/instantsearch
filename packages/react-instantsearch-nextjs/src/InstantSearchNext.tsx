@@ -47,6 +47,7 @@ export type InstantSearchNextProps<
   routing?: InstantSearchNextRouting<TUiState, TRouteState> | boolean;
   instance?: InstantSearchNextInstance;
   ignoreMultipleHooksWarning?: boolean;
+  headers?: Headers;
 };
 
 export function InstantSearchNext<
@@ -57,6 +58,7 @@ export function InstantSearchNext<
   routing: passedRouting,
   instance,
   ignoreMultipleHooksWarning = false,
+  headers: passedHeaders,
   ...instantSearchProps
 }: InstantSearchNextProps<TUiState, TRouteState>) {
   const isMounting = useRef(true);
@@ -66,7 +68,9 @@ export function InstantSearchNext<
     isMounting.current = false;
   }, []);
 
-  const headers = useNextHeaders();
+  // We're not using hooks that are subject to these rules
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const headers = passedHeaders ? new Headers(passedHeaders) : useNextHeaders();
 
   const nonce = safelyRunOnBrowser(() => undefined, {
     fallback: () => headers?.get('x-nonce') || undefined,
@@ -74,7 +78,11 @@ export function InstantSearchNext<
 
   useDynamicRouteWarning({ isServer, isMounting, instance });
 
-  const routing = useInstantSearchRouting(passedRouting, isMounting);
+  const routing = useInstantSearchRouting({
+    routing: passedRouting,
+    isMounting,
+    headers,
+  });
 
   warn(
     false,
