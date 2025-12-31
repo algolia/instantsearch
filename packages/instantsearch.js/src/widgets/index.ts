@@ -61,3 +61,4 @@ export { default as frequentlyBoughtTogether } from './frequently-bought-togethe
 export { default as lookingSimilar } from './looking-similar/looking-similar';
 export { default as chat } from './chat/chat';
 export { default as filterSuggestions } from './filter-suggestions/filter-suggestions';
+export { default as promptSuggestions } from './prompt-suggestions/prompt-suggestions';

@@ -69,3 +69,4 @@ https://www.algolia.com/doc/guides/building-search-ui/installation/js/#with-a-pa
   );
 };
 export { default as filterSuggestions } from './filter-suggestions/filter-suggestions';
+export { default as promptSuggestions } from './prompt-suggestions/prompt-suggestions';

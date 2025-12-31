@@ -39,3 +39,12 @@ export * from './SortBy';
 export * from './Stats';
 export * from './ToggleRefinement';
 export * from './TrendingItems';
+
+export const PromptSuggestions = () => {
+  throw new Error(
+    `"<PromptSuggestions>" is not available from the UMD build.
+
+Please use React InstantSearch with a packaging system:
+https://www.algolia.com/doc/guides/building-search-ui/installation/react/#install-react-instantsearch-as-an-npm-package`
+  );
+};
