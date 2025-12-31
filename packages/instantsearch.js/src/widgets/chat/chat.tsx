@@ -122,14 +122,9 @@ function createCarouselTool<
     const items = output?.hits || [];
     const suggestedFilters = output?.suggestedFilters || [];
 
-    const handleFilterClick = (
-      attribute: string,
-      value: string,
-      isRefined: boolean
-    ) => {
-      const action = isRefined ? 'Remove' : 'Apply';
+    const handleFilterClick = (attribute: string, value: string) => {
       sendMessage({
-        text: `${action} the ${attribute} filter: ${value}`,
+        text: `Apply the ${attribute} filter: ${value}`,
       });
     };
 
@@ -199,7 +194,6 @@ function createCarouselTool<
           <SuggestedFilters
             filters={suggestedFilters}
             onFilterClick={handleFilterClick}
-            indexUiState={indexUiState}
           />
         )}
       </Fragment>
