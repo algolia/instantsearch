@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-e-commerce",
-  "version": "75.0.0",
+  "version": "76.0.0",
   "private": true,
   "scripts": {
     "build": "BABEL_ENV=parcel parcel build index.html",
@@ -13,12 +13,12 @@
     "algoliasearch-helper": "3.27.0",
     "instantsearch-ui-components": "0.16.0",
     "instantsearch.css": "8.9.0",
-    "instantsearch.js": "4.86.0",
+    "instantsearch.js": "4.86.1",
     "react": "19.0.0",
     "react-compound-slider": "3.4.0",
     "react-dom": "19.0.0",
-    "react-instantsearch": "7.22.0",
-    "react-instantsearch-core": "7.22.0"
+    "react-instantsearch": "7.22.1",
+    "react-instantsearch-core": "7.22.1"
   },
   "devDependencies": {
     "@parcel/core": "2.16.3",

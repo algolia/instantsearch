@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-server-side-rendering",
-  "version": "6.105.0",
+  "version": "6.106.0",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -29,7 +29,7 @@
     "instantsearch-ui-components": "0.16.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "react-instantsearch": "7.22.0",
-    "react-instantsearch-core": "7.22.0"
+    "react-instantsearch": "7.22.1",
+    "react-instantsearch-core": "7.22.1"
   }
 }
