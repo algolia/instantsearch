@@ -18,6 +18,7 @@ const NON_WIDGETS = [
   'Snippet',
   'PoweredBy',
   'Chat',
+  'PromptSuggestions',
   'createDefaultTools',
   'SearchIndexToolType',
   'RecommendToolType',
@@ -29,6 +30,7 @@ const NON_COMPONENTS = [
   'createDefaultTools',
   'SearchIndexToolType',
   'RecommendToolType',
+  'PromptSuggestions',
 ] as const;
 type ComponentWidgets = Omit<typeof widgets, typeof NON_COMPONENTS[number]>;
 
@@ -117,7 +119,6 @@ function Widget<TWidget extends SingleWidget>({
       return <widget.Component objectIDs={['1']} {...props} />;
     }
     case 'EXPERIMENTAL_Autocomplete': {
-      // @ts-expect-error - incorrectly expects onSelect from ComponentProps<'div'>
       return <widget.Component {...props} />;
     }
     default: {
