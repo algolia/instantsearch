@@ -1,0 +1,86 @@
+@use '../themes/reset';
+@use '../shared/_variables';
+@use '../shared/_common';
+@use 'button';
+@use 'chat/chat-suggestions';
+
+.ais-PromptSuggestions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ais-spacing);
+  background-color: rgba(var(--ais-background-color-rgb), var(--ais-background-color-alpha));
+  border-radius: var(--ais-border-radius-lg);
+  padding: calc(var(--ais-spacing) * 1.5);
+  border: 1px solid rgba(var(--ais-muted-color-rgb), 0.2);
+}
+
+.ais-PromptSuggestions-header {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--ais-spacing) * 0.5);
+  font-size: var(--ais-font-size-sm);
+  font-weight: 500;
+  color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+}
+
+.ais-PromptSuggestions-headerIcon {
+  display: flex;
+  align-items: center;
+  color: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+
+  svg {
+    width: var(--ais-icon-size);
+    height: var(--ais-icon-size);
+  }
+}
+
+.ais-PromptSuggestions-headerTitle {
+  flex: 1;
+}
+
+// Override suggestions layout to row with wrap
+.ais-PromptSuggestions .ais-ChatPromptSuggestions {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+// Skeleton loading state
+.ais-PromptSuggestions-skeleton {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--ais-spacing) * 0.5);
+}
+
+.ais-PromptSuggestions-skeletonItem {
+  height: calc(var(--ais-spacing) * 2);
+  background-color: rgba(var(--ais-muted-color-rgb), 0.15);
+  border-radius: var(--ais-border-radius-lg);
+
+  // Varying widths to mimic real suggestions
+  &:nth-child(1) {
+    width: 180px;
+  }
+
+  &:nth-child(2) {
+    width: 220px;
+  }
+
+  &:nth-child(3) {
+    width: 160px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: ais-prompt-suggestions-skeleton 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes ais-prompt-suggestions-skeleton {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+

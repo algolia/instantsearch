@@ -187,6 +187,11 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       footer: cx('ais-ChatMessage-footer', classNames.footer),
     };
 
+    // Strip hidden context from message text (used by PromptSuggestions)
+    function stripHiddenContext(text: string): string {
+      return text.replace(/<!--ais-context:.*?-->/g, '');
+    }
+
     function renderMessagePart(
       part: ChatMessageBase['parts'][number],
       index: number
@@ -195,7 +200,8 @@ export function createChatMessageComponent({ createElement }: Renderer) {
         return null;
       }
       if (part.type === 'text') {
-        const markdown = compiler(part.text, {
+        const displayText = stripHiddenContext(part.text);
+        const markdown = compiler(displayText, {
           createElement: createElement as any,
           disableParsingRawHTML: true,
         });
