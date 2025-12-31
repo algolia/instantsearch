@@ -183,6 +183,47 @@ describe('connectChat', () => {
         }),
       });
     });
+
+    it('uses custom `type` as key in getRenderState', () => {
+      const render = jest.fn();
+      const makeWidget = connectChat(render);
+      const widget = makeWidget({ type: 'customChat', agentId: 'agentId' });
+
+      const helper = algoliasearchHelper(createSearchClient(), '');
+
+      const instantSearchInstance: Pick<
+        InstantSearch,
+        'client' | 'getUiState'
+      > = {
+        client: createSearchClient(),
+        getUiState: () => ({ indexName: {} }),
+      };
+      const parent: Pick<IndexWidget, 'getIndexId' | 'setIndexUiState'> = {
+        getIndexId: () => 'indexName',
+        setIndexUiState: () => {},
+      };
+
+      const result = widget.getRenderState(
+        {
+          // @ts-expect-error
+          searchBox: {},
+        },
+        createInitOptions({
+          helper,
+          state: helper.state,
+          instantSearchInstance: instantSearchInstance as InstantSearch,
+          parent: parent as IndexWidget,
+        })
+      );
+
+      expect(result).toHaveProperty('customChat');
+      // @ts-expect-error access dynamic key
+      expect(result.customChat).toEqual(
+        expect.objectContaining({
+          widgetParams: expect.objectContaining({ type: 'customChat' }),
+        })
+      );
+    });
   });
 
   it('renders during init and render', () => {

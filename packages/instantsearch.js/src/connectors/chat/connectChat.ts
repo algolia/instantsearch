@@ -117,12 +117,18 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
    * Configuration for client-side tools.
    */
   tools?: Record<string, Omit<UserClientSideTool, 'layoutComponent'>>;
+  /**
+   * Identifier of this type of chat widget. This is used for the key in renderState.
+   * @default 'chat'
+   */
+  type?: string;
 };
 
 export type ChatWidgetDescription<TUiMessage extends UIMessage = UIMessage> = {
   $$type: 'ais.chat';
   renderState: ChatRenderState<TUiMessage>;
   indexRenderState: {
+    // In IndexRenderState, the key is always 'chat', but in the widgetParams you can customize it with the `type` parameter
     chat: WidgetRenderState<
       ChatRenderState<TUiMessage>,
       ChatConnectorParams<TUiMessage>
@@ -146,7 +152,12 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
   ) => {
     warning(false, 'Chat is not yet stable and will change in the future.');
 
-    const { resume = false, tools = {}, ...options } = widgetParams || {};
+    const {
+      resume = false,
+      tools = {},
+      type = 'chat',
+      ...options
+    } = widgetParams || {};
 
     let _chatInstance: Chat<TUiMessage>;
     let input = '';
@@ -320,7 +331,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       ): IndexRenderState & ChatWidgetDescription['indexRenderState'] {
         return {
           ...renderState,
-          chat: this.getWidgetRenderState(renderOptions),
+          // Type is casted to 'chat' here, because in the IndexRenderState the key is always 'chat'
+          [type as 'chat']: this.getWidgetRenderState(renderOptions),
         };
       },
 
