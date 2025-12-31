@@ -30,6 +30,6 @@
   "devDependencies": {
     "@codeshift/cli": "^0.15.6",
     "@types/jscodeshift": "^0.11.6",
-    "parcel": "2.10.0"
+    "parcel": "2.16.3"
   }
 }
