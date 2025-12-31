@@ -15,8 +15,8 @@ import {
 import 'instantsearch.css/themes/satellite.css';
 
 const searchClient = algoliasearch(
-  'latency',
-  '6be0576ff61c053d5f9a3225e2a90f76'
+  'F4T6CUV2AH',
+  '4ce25fa46f7de67117fc1b787742e0f3'
 );
 
 const search = instantsearch({
@@ -47,46 +47,11 @@ search.addWidgets([
   }),
   hits({
     container: '#hits',
-    templates: {
-      item: (hit, { html, components }) => html`
-        <article>
-          <h1>
-            <a href="/products.html?pid=${hit.objectID}"
-              >${components.Highlight({ hit, attribute: 'name' })}</a
-            >
-          </h1>
-          <p>${components.Highlight({ hit, attribute: 'description' })}</p>
-          <a href="/products.html?pid=${hit.objectID}">See product</a>
-        </article>
-      `,
-    },
-  }),
-  configure({
-    hitsPerPage: 8,
-  }),
-  panel({
-    templates: { header: 'brand' },
-  })(refinementList)({
-    container: '#brand-list',
-    attribute: 'brand',
-  }),
-  pagination({
-    container: '#pagination',
-  }),
-  trendingItems({
-    container: '#trending',
-    limit: 6,
-    templates: {
-      item: productItemTemplate,
-      layout: carousel(),
-    },
   }),
   chat({
     container: '#chat',
-    agentId: '7c2f6816-bfdb-46e9-a51f-9cb8e5fc9628',
-    templates: {
-      item: productItemTemplate,
-    },
+    agentId: 'toto',
+    experienceId: '87d8f696-dc75-4421-a44a-255693f6b310',
   }),
 ]);
 

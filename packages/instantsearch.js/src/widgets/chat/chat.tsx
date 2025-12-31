@@ -1152,6 +1152,7 @@ export default (function chat<
       ...options,
     }),
     $$widgetType: 'ais.chat',
+    $$widgetParams: widgetParams,
   };
 } satisfies ChatWidget);
 
