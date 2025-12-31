@@ -18,10 +18,10 @@
   },
   "devDependencies": {
     "@babel/core": "7.15.5",
-    "@parcel/core": "2.10.0",
-    "@parcel/packager-raw-url": "2.10.0",
-    "@parcel/transformer-webmanifest": "2.10.0",
-    "parcel": "2.10.0",
+    "@parcel/core": "2.16.3",
+    "@parcel/packager-raw-url": "2.16.3",
+    "@parcel/transformer-webmanifest": "2.16.3",
+    "parcel": "2.16.3",
     "typescript": "5.5.2"
   },
   "@parcel/resolver-default": {

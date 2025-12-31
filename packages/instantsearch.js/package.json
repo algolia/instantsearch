@@ -37,7 +37,7 @@
     "htm": "^3.0.0",
     "instantsearch-ui-components": "0.16.0",
     "preact": "^10.10.0",
-    "qs": "^6.5.1 < 6.10",
+    "qs": "^6.5.1",
     "react": ">= 0.14.0",
     "search-insights": "^2.17.2",
     "zod": "^3.25.76 || ^4",
