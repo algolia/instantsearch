@@ -22,6 +22,7 @@ describe('ChatMessages', () => {
         tools={{}}
         onReload={jest.fn()}
         onClose={jest.fn()}
+        sendMessage={jest.fn()}
       />
     );
 
@@ -82,6 +83,7 @@ describe('ChatMessages', () => {
         tools={{}}
         onReload={jest.fn()}
         onClose={jest.fn()}
+        sendMessage={jest.fn()}
       />
     );
 
@@ -154,6 +156,7 @@ describe('ChatMessages', () => {
         tools={{}}
         onReload={jest.fn()}
         onClose={jest.fn()}
+        sendMessage={jest.fn()}
       />
     );
 

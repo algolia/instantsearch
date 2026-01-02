@@ -3,16 +3,20 @@ import {
   ChevronRightIcon,
   ArrowRightIcon,
   createButtonComponent,
+  createSuggestedFiltersComponent,
+  createChatMessageLoaderComponent,
 } from 'instantsearch-ui-components';
 import React, { createElement } from 'react';
 
 import { Carousel } from '../../../components';
 
+import type { ChatTransformItems } from '../../Chat';
 import type {
   ClientSideToolComponentProps,
   Pragma,
   RecommendComponentProps,
   RecordWithObjectID,
+  SuggestedFilter,
   UserClientSideTool,
 } from 'instantsearch-ui-components';
 import type { IndexUiState, IndexWidget } from 'instantsearch.js';
@@ -23,17 +27,28 @@ type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
 function createCarouselTool<TObject extends RecordWithObjectID>(
   showViewAll: boolean,
   itemComponent?: ItemComponent<TObject>,
-  getSearchPageURL?: (nextUiState: IndexUiState) => string
+  getSearchPageURL?: (nextUiState: IndexUiState) => string,
+  transformItems?: ChatTransformItems
 ): UserClientSideTool {
   const Button = createButtonComponent({
+    createElement: createElement as Pragma,
+  });
+
+  const SuggestedFilters = createSuggestedFiltersComponent({
+    createElement: createElement as Pragma,
+  });
+
+  const ChatMessageLoader = createChatMessageLoaderComponent({
     createElement: createElement as Pragma,
   });
 
   function SearchLayoutComponent({
     message,
     indexUiState,
+    toolState,
     setIndexUiState,
     onClose,
+    sendMessage,
   }: ClientSideToolComponentProps) {
     const input = message?.input as
       | {
@@ -46,10 +61,24 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
       | {
           hits?: Array<RecordWithObjectID<TObject>>;
           nbHits?: number;
+          suggestedFilters?: SuggestedFilter[];
         }
       | undefined;
 
     const items = output?.hits || [];
+    const rawSuggestedFilters = output?.suggestedFilters || [];
+    const suggestedFilters = transformItems?.suggestedFilters
+      ? transformItems.suggestedFilters(rawSuggestedFilters)
+      : rawSuggestedFilters;
+
+    const handleFilterClick = React.useCallback(
+      (attribute: string, value: string) => {
+        sendMessage({
+          text: `Apply the ${attribute} filter: ${value}`,
+        });
+      },
+      [sendMessage]
+    );
 
     const MemoedHeaderComponent = React.useMemo(() => {
       return (
@@ -84,14 +113,28 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
       indexUiState,
     ]);
 
+    if (toolState === 'input-streaming') {
+      return (
+        <ChatMessageLoader translations={{ loaderText: 'Searching...' }} />
+      );
+    }
+
     return (
-      <Carousel
-        items={items}
-        itemComponent={itemComponent}
-        sendEvent={() => {}}
-        showNavigation={false}
-        headerComponent={MemoedHeaderComponent}
-      />
+      <>
+        <Carousel
+          items={items}
+          itemComponent={itemComponent}
+          sendEvent={() => {}}
+          showNavigation={false}
+          headerComponent={MemoedHeaderComponent}
+        />
+        {suggestedFilters.length > 0 && (
+          <SuggestedFilters
+            filters={suggestedFilters}
+            onFilterClick={handleFilterClick}
+          />
+        )}
+      </>
     );
   }
 

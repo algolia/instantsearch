@@ -20,10 +20,11 @@ import 'instantsearch.css/themes/satellite.css';
 
 import './App.css';
 
-const searchClient = algoliasearch(
-  'latency',
-  '6be0576ff61c053d5f9a3225e2a90f76'
-);
+const appId = 'F4T6CUV2AH';
+const apiKey = 'f33fd36eb0c251c553e3cd7684a6ba33';
+const agentId = '6711d1bb-32fb-46ee-9708-ffc7fd6425b5';
+
+const searchClient = algoliasearch(appId, apiKey);
 
 export function App() {
   return (
@@ -52,6 +53,12 @@ export function App() {
               <Panel header="brand">
                 <RefinementList attribute="brand" />
               </Panel>
+              <Panel header="category">
+                <RefinementList attribute="categories" />
+              </Panel>
+              <Panel header="price range">
+                <RefinementList attribute="price_range" />
+              </Panel>
             </div>
 
             <div className="search-panel__results">
@@ -72,8 +79,28 @@ export function App() {
           </div>
 
           <Chat
-            agentId="7c2f6816-bfdb-46e9-a51f-9cb8e5fc9628"
             itemComponent={ItemComponent}
+            transport={{
+              api: `http://localhost:8000/1/agents/${agentId}/completions?compatibilityMode=ai-sdk-5`,
+              headers: {
+                'x-algolia-application-id': appId,
+                'x-algolia-api-Key': apiKey,
+              },
+            }}
+            transformItems={{
+              suggestedFilters: (items) =>
+                items.map((item) => {
+                  const attributeLabels: Record<string, string> = {
+                    'hierarchicalCategories.lvl3': 'Category',
+                    'vakgebied.lvl1': 'Field',
+                    categories: 'Categories',
+                  };
+                  return {
+                    ...item,
+                    label: attributeLabels[item.attribute] || item.attribute,
+                  };
+                }),
+            }}
           />
         </InstantSearch>
       </div>

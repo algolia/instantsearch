@@ -17,6 +17,7 @@ import type {
   ChatProps as ChatUiProps,
   RecommendComponentProps,
   RecordWithObjectID,
+  SuggestedFilter,
   UserClientSideTool,
   UserClientSideTools,
   ChatMessageProps,
@@ -30,20 +31,29 @@ const ChatUiComponent = createChatComponent({
   Fragment,
 });
 
+export type ChatTransformItems = {
+  suggestedFilters?: (items: SuggestedFilter[]) => SuggestedFilter[];
+};
+
+export type { SuggestedFilter };
+
 export function createDefaultTools<TObject extends RecordWithObjectID>(
   itemComponent?: ItemComponent<TObject>,
-  getSearchPageURL?: (nextUiState: IndexUiState) => string
+  getSearchPageURL?: (nextUiState: IndexUiState) => string,
+  transformItems?: ChatTransformItems
 ): UserClientSideTools {
   return {
     [SearchIndexToolType]: createCarouselTool(
       true,
       itemComponent,
-      getSearchPageURL
+      getSearchPageURL,
+      transformItems
     ),
     [RecommendToolType]: createCarouselTool(
       false,
       itemComponent,
-      getSearchPageURL
+      getSearchPageURL,
+      transformItems
     ),
   };
 }
@@ -99,6 +109,7 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     itemComponent?: ItemComponent<TObject>;
     tools?: UserClientSideTools;
     getSearchPageURL?: (nextUiState: IndexUiState) => string;
+    transformItems?: ChatTransformItems;
     toggleButtonProps?: UserToggleButtonProps;
     headerProps?: UserHeaderProps;
     messagesProps?: UserMessagesProps;
@@ -159,6 +170,7 @@ export function Chat<
   translations = {},
   title,
   getSearchPageURL,
+  transformItems,
   ...props
 }: ChatProps<TObject, TUiMessage>) {
   const {
@@ -181,10 +193,14 @@ export function Chat<
     });
 
   const tools = React.useMemo(() => {
-    const defaults = createDefaultTools(itemComponent, getSearchPageURL);
+    const defaults = createDefaultTools(
+      itemComponent,
+      getSearchPageURL,
+      transformItems
+    );
 
     return { ...defaults, ...userTools };
-  }, [getSearchPageURL, itemComponent, userTools]);
+  }, [getSearchPageURL, itemComponent, transformItems, userTools]);
 
   const chatState = useChat<TUiMessage>({
     ...props,
@@ -243,6 +259,7 @@ export function Chat<
         status,
         onReload: (messageId) => regenerate({ messageId }),
         onClose: () => setOpen(false),
+        sendMessage,
         messages,
         tools: toolsFromConnector,
         indexUiState,
