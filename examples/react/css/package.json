@@ -1,0 +1,30 @@
+{
+  "name": "example-react-instantsearch-css",
+  "version": "8.65.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "algoliasearch": "5.1.1",
+    "algoliasearch-helper": "3.26.1",
+    "instantsearch-ui-components": "0.15.2",
+    "instantsearch.css": "8.9.0",
+    "next": "16.0.7",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "react-instantsearch": "7.21.0",
+    "react-instantsearch-core": "7.21.0",
+    "react-instantsearch-nextjs": "1.0.9"
+  },
+  "devDependencies": {
+    "@types/node": "17.0.40",
+    "@types/react": "19.0.3",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "16.0.7",
+    "typescript": "5.5.2"
+  }
+}
