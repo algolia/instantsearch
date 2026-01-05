@@ -78,6 +78,10 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
    * Tools configuration with addToolResult bound, ready to be used by the UI.
    */
   tools: ClientSideTools;
+  /**
+   * Suggestions received from the AI model.
+   */
+  suggestions?: string[];
 } & Pick<
   AbstractChat<TUiMessage>,
   | 'addToolResult'
@@ -114,6 +118,10 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
    */
   resume?: boolean;
   /**
+   * Whether to enable caching of chat messages.
+   */
+  enableCaching?: boolean;
+  /**
    * Configuration for client-side tools.
    */
   tools?: Record<string, Omit<UserClientSideTool, 'layoutComponent'>>;
@@ -146,7 +154,12 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
   ) => {
     warning(false, 'Chat is not yet stable and will change in the future.');
 
-    const { resume = false, tools = {}, ...options } = widgetParams || {};
+    const {
+      resume = false,
+      enableCaching = true,
+      tools = {},
+      ...options
+    } = widgetParams || {};
 
     let _chatInstance: Chat<TUiMessage>;
     let input = '';
@@ -156,6 +169,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     let setInput: ChatRenderState<TUiMessage>['setInput'];
     let setOpen: ChatRenderState<TUiMessage>['setOpen'];
     let setIsClearing: (value: boolean) => void;
+    let suggestions: string[] | undefined;
 
     const setMessages = (
       messagesParam: TUiMessage[] | ((m: TUiMessage[]) => TUiMessage[])
@@ -216,7 +230,13 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       return new Chat({
         ...options,
         transport,
+        enableCaching,
         sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
+        onData: ({ data }) => {
+          if (data && typeof data === 'object' && 'suggestions' in data) {
+            suggestions = (data as any).suggestions as string[] | undefined;
+          }
+        },
         onToolCall({ toolCall }) {
           const tool = tools[toolCall.toolName];
 
@@ -356,6 +376,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           setInput,
           setOpen,
           setMessages,
+          suggestions,
           isClearing,
           clearMessages,
           onClearTransitionEnd,
