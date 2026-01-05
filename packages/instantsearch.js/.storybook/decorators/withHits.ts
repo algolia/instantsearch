@@ -11,18 +11,22 @@ import {
   InstantSearchOptions,
   SearchClient,
 } from '../../src/types';
-import configure from '../../src/widgets/configure/configure';
+import * as widgets from '../../src/widgets/index.umd';
+import * as connectors from '../../src/connectors/index.umd';
+import { createInsightsMiddleware } from '../../src/middlewares';
+import { reverseSnippet } from '../../src/helpers';
 
 const algoliasearch = (namedConstructor || defaultConstructor) as unknown as (
   appId: string,
   apiKey: string
 ) => SearchClient;
 
-type InstantSearchUMDModule = typeof instantsearch;
-
 export type Playground = (options: {
   search: InstantSearch;
-  instantsearch: InstantSearchUMDModule;
+  instantsearch: {
+    widgets: typeof widgets;
+    middlewares: { createInsightsMiddleware: typeof createInsightsMiddleware };
+  };
   leftPanel: HTMLDivElement;
   rightPanel: HTMLDivElement;
 }) => void;
@@ -47,7 +51,11 @@ export const withHits =
       search,
     }: {
       container: HTMLElement;
-      instantsearch: InstantSearchUMDModule;
+      instantsearch: {
+        widgets: typeof widgets;
+        connectors: typeof connectors;
+        reverseSnippet: typeof reverseSnippet;
+      };
       search: InstantSearch;
     }) => void,
     searchOptions?: SearchOptions
@@ -82,7 +90,7 @@ export const withHits =
     });
 
     search.addWidgets([
-      configure({
+      widgets.configure({
         hitsPerPage: 4,
         attributesToSnippet: ['description:15'],
         snippetEllipsisText: '[…]',
@@ -111,14 +119,18 @@ export const withHits =
 
     playground({
       search,
-      instantsearch,
+      instantsearch: { widgets, middlewares: { createInsightsMiddleware } },
       leftPanel: leftPanelPlaygroundElement,
       rightPanel: rightPanelPlaygroundElement,
     });
 
     storyFn({
       container: previewElement,
-      instantsearch,
+      instantsearch: {
+        widgets,
+        connectors,
+        reverseSnippet,
+      },
       search,
     });
 
