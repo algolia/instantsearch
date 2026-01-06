@@ -23,6 +23,7 @@ const search = instantsearch({
   indexName: 'instant_search',
   searchClient,
   insights: true,
+  future: { managedUi: { env: 'beta' } },
 });
 
 const productItemTemplate = (item, { html }) => html`
@@ -50,8 +51,7 @@ search.addWidgets([
   }),
   chat({
     container: '#chat',
-    agentId: 'toto',
-    experienceId: '87d8f696-dc75-4421-a44a-255693f6b310',
+    configId: '87d8f696-dc75-4421-a44a-255693f6b310',
   }),
 ]);
 

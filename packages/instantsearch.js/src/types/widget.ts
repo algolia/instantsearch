@@ -145,6 +145,7 @@ export type WidgetParams = {
 export type WidgetDescription = {
   $$type: string;
   $$widgetType?: string;
+  $$widgetParams?: UnknownWidgetParams;
   renderState?: Record<string, unknown>;
   indexRenderState?: Record<string, unknown>;
   indexUiState?: Record<string, unknown>;
