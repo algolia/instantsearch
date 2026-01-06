@@ -57,8 +57,10 @@ type UiProps = Pick<
   | 'toggleButtonProps'
   | 'messagesProps'
   | 'promptProps'
+  | 'suggestionsProps'
   | 'headerComponent'
   | 'promptComponent'
+  | 'suggestionsComponent'
 >;
 
 type UserToggleButtonProps = Omit<
@@ -79,6 +81,7 @@ type UserMessagesProps = Omit<
   | 'messageComponent'
   | 'leadingComponent'
   | 'footerComponent'
+  | 'suggestionsComponent'
   | 'translations'
   | 'classNames'
 >;
@@ -120,6 +123,7 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
     assistantMessageFooterComponent?: ChatMessageProps['footerComponent'];
     userMessageLeadingComponent?: ChatMessageProps['leadingComponent'];
     userMessageFooterComponent?: ChatMessageProps['footerComponent'];
+    suggestionsComponent?: ChatUiProps['suggestionsComponent'];
     translations?: Partial<{
       prompt: ChatUiProps['promptProps']['translations'];
       header: ChatUiProps['headerProps']['translations'];
@@ -155,6 +159,7 @@ export function Chat<
   userMessageLeadingComponent,
   userMessageFooterComponent,
   actionsComponent,
+  suggestionsComponent,
   classNames,
   translations = {},
   title,
@@ -206,6 +211,7 @@ export function Chat<
     clearMessages,
     onClearTransitionEnd,
     tools: toolsFromConnector,
+    suggestions,
   } = chatState;
 
   if (__DEV__ && error) {
@@ -220,6 +226,7 @@ export function Chat<
       headerComponent={headerComponent}
       promptComponent={promptComponent}
       toggleButtonComponent={toggleButtonComponent}
+      suggestionsComponent={suggestionsComponent}
       toggleButtonProps={{
         open,
         onClick: () => setOpen(!open),
@@ -288,6 +295,12 @@ export function Chat<
         headerComponent: promptHeaderComponent,
         footerComponent: promptFooterComponent,
         ...promptProps,
+      }}
+      suggestionsProps={{
+        suggestions,
+        onSuggestionClick: (suggestion) => {
+          sendMessage({ text: suggestion });
+        },
       }}
       classNames={classNames}
     />

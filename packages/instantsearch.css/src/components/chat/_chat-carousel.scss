@@ -38,6 +38,7 @@
 
   .ais-Carousel {
     position: relative;
+    margin-bottom: var(--ais-spacing);
 
     a {
       color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));

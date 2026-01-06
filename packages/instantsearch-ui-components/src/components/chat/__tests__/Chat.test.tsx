@@ -28,6 +28,7 @@ describe('Chat', () => {
         }}
         promptProps={{}}
         toggleButtonProps={{ open: true, onClick: jest.fn() }}
+        suggestionsProps={{ onSuggestionClick: jest.fn() }}
       />
     );
 
