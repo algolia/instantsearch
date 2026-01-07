@@ -69,4 +69,4 @@ https://www.algolia.com/doc/guides/building-search-ui/installation/js/#with-a-pa
   );
 };
 
-export { default as experience } from './experience/experience';
+export { default as experience } from './experience/experience.umd';

@@ -1,7 +1,7 @@
 import { getAppIdAndApiKey, walkIndex, warning } from '../lib/utils';
-import chat from '../widgets/chat/chat';
 
-import type { InternalMiddleware, Widget } from '../types';
+import type { InternalMiddleware } from '../types';
+import type { ExperienceWidget } from '../widgets/experience/types';
 
 export type ExperienceProps = {
   env?: 'prod' | 'beta';
@@ -10,11 +10,6 @@ export type ExperienceProps = {
 const API_BASE = {
   beta: 'https://experiences-beta.algolia.com/1',
   prod: 'https://experiences.algolia.com/1',
-};
-
-// FIXME: Proper typing
-const SUPPORTED_WIDGETS: Record<string, (...args: any[]) => Widget> = {
-  'ais.chat': chat,
 };
 
 export function createExperienceMiddleware(
@@ -28,7 +23,7 @@ export function createExperienceMiddleware(
       $$internal: true,
       onStateChange: () => {},
       subscribe() {
-        const experienceWidgets: Widget[] = [];
+        const experienceWidgets: ExperienceWidget[] = [];
 
         // TODO: Recursion
         walkIndex(instantSearchInstance.mainIndex, (index) => {
@@ -36,7 +31,7 @@ export function createExperienceMiddleware(
 
           widgets.forEach((widget) => {
             if (widget.$$type === 'ais.experience') {
-              experienceWidgets.push(widget);
+              experienceWidgets.push(widget as ExperienceWidget);
             }
           });
         });
@@ -50,7 +45,6 @@ export function createExperienceMiddleware(
           return;
         }
 
-        // TODO: Provide final typed block structure
         Promise.all(
           experienceWidgets.map((widget) =>
             buildExperienceRequest({
@@ -63,32 +57,37 @@ export function createExperienceMiddleware(
         ).then((configs) => {
           configs.forEach((config, index) => {
             const widget = experienceWidgets[index];
-            const { configId, ...widgetParams } = widget.$$widgetParams;
-            const { cssVars, ...fetchedParams } =
-              config.blocks[1].children[0].children[0].parameters;
+            // TODO: Handle multiple config blocks for a single experience id
+            const { type, parameters } =
+              config.blocks[1].children[0].children[0];
+            const { cssVars, ...fetchedParams } = parameters;
 
-            // const cssVarsEntries = Object.entries<string>(cssVars);
-            // if (cssVarsEntries.length > 0) {
-            //   injectStyleElement(`
-            //       :root {
-            //         ${cssVarsEntries
-            //           .map(([key, value]) => {
-            //             const { r, g, b } = hexToRgb(value);
+            const cssVarsKeys = Object.keys(cssVars);
+            if (cssVarsKeys.length > 0) {
+              injectStyleElement(`
+                  :root {
+                    ${cssVarsKeys
+                      .map((key) => {
+                        const { r, g, b } = hexToRgb(cssVars[key]);
 
-            //             return `${key}: ${r}, ${g}, ${b}`;
-            //           })
-            //           .join(';')}
-            //       }
-            //     `);
-            // }
+                        return `${key}: ${r}, ${g}, ${b}`;
+                      })
+                      .join(';')}
+                  }
+                `);
+            }
 
             const widgetParent = widget.parent!;
-            widgetParent.removeWidgets([widget]).addWidgets([
-              SUPPORTED_WIDGETS[widget.$$type]({
-                ...widgetParams,
-                ...fetchedParams,
-              }),
-            ]);
+            const newWidget = widget.$$supportedWidgets[type];
+            widgetParent.removeWidgets([widget]);
+            if (newWidget) {
+              widgetParent.addWidgets([
+                newWidget({
+                  ...fetchedParams,
+                  container: '#chat', // TODO: Get from API
+                }),
+              ]);
+            }
           });
         });
       },

@@ -10,6 +10,7 @@ import {
   searchBox,
   trendingItems,
   chat,
+  experience,
 } from 'instantsearch.js/es/widgets';
 
 import 'instantsearch.css/themes/satellite.css';
@@ -23,7 +24,7 @@ const search = instantsearch({
   indexName: 'instant_search',
   searchClient,
   insights: true,
-  future: { managedUi: { env: 'beta' } },
+  future: { enableExperience: { env: 'beta' } },
 });
 
 const productItemTemplate = (item, { html }) => html`
@@ -49,9 +50,12 @@ search.addWidgets([
   hits({
     container: '#hits',
   }),
-  chat({
-    container: '#chat',
-    configId: '87d8f696-dc75-4421-a44a-255693f6b310',
+  // chat({
+  //   container: '#chat',
+  //   configId: '87d8f696-dc75-4421-a44a-255693f6b310',
+  // }),
+  experience({
+    id: '87d8f696-dc75-4421-a44a-255693f6b310',
   }),
 ]);
 

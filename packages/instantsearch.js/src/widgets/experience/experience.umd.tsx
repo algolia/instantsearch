@@ -1,5 +1,4 @@
 import { createDocumentationMessageGenerator } from '../../lib/utils';
-import chat from '../chat/chat';
 
 import { ExperienceWidget } from './types';
 
@@ -19,7 +18,14 @@ export default (function experience(widgetParams: ExperienceWidgetParams) {
     $$widgetType: 'ais.experience',
     $$widgetParams: widgetParams,
     $$supportedWidgets: {
-      'ais.chat': chat,
+      'ais.chat': () => {
+        throw new Error(
+          `"chat" is not available from the UMD build.
+
+Please use InstantSearch.js with a packaging system:
+https://www.algolia.com/doc/guides/building-search-ui/installation/js/#with-a-packaging-system`
+        );
+      },
     },
     render: () => {},
     dispose: () => {},
