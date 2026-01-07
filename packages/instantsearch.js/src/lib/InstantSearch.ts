@@ -1,8 +1,8 @@
 import EventEmitter from '@algolia/events';
 import algoliasearchHelper from 'algoliasearch-helper';
 
+import { createExperienceMiddleware } from '../middlewares/createExperienceMiddleware';
 import { createInsightsMiddleware } from '../middlewares/createInsightsMiddleware';
-import { createManagedUiMiddleware } from '../middlewares/createManagedUiMiddleware';
 import {
   createMetadataMiddleware,
   isMetadataEnabled,
@@ -24,11 +24,11 @@ import {
 } from './utils';
 import version from './version';
 
+import type { ExperienceProps } from '../middlewares/createExperienceMiddleware';
 import type {
   InsightsEvent,
   InsightsProps,
 } from '../middlewares/createInsightsMiddleware';
-import type { ManagedUiProps } from '../middlewares/createManagedUiMiddleware';
 import type { RouterProps } from '../middlewares/createRouterMiddleware';
 import type {
   InsightsClient as AlgoliaInsightsClient,
@@ -194,7 +194,7 @@ export type InstantSearchOptions<
     // @MAJOR: Remove legacy behaviour here and in algoliasearch-helper
     persistHierarchicalRootCount?: boolean;
 
-    managedUi?: boolean | ManagedUiProps;
+    enableExperience?: boolean | ExperienceProps;
   };
 };
 
@@ -205,7 +205,7 @@ export const INSTANTSEARCH_FUTURE_DEFAULTS: Required<
 > = {
   preserveSharedStateOnUnmount: false,
   persistHierarchicalRootCount: false,
-  managedUi: false,
+  enableExperience: false,
 };
 
 /**
@@ -738,11 +738,11 @@ See documentation: ${createDocumentationLink({
 
     // This is the automatic Managed Ui middleware,
     // added when `future.managedUi` is set.
-    if (this.future.managedUi) {
+    if (this.future.enableExperience) {
       this.use(
-        createManagedUiMiddleware(
-          typeof this.future.managedUi !== 'boolean'
-            ? this.future.managedUi
+        createExperienceMiddleware(
+          typeof this.future.enableExperience !== 'boolean'
+            ? this.future.enableExperience
             : {}
         )
       );

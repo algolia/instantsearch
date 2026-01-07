@@ -1091,8 +1091,6 @@ type ChatWidgetParams<THit extends RecordWithObjectID = RecordWithObjectID> = {
    * CSS classes to add.
    */
   cssClasses?: ChatCSSClasses;
-
-  configId?: string;
 };
 
 export type ChatWidget = WidgetFactory<
@@ -1112,7 +1110,6 @@ export default (function chat<
 >(widgetParams: ChatWidgetParams<THit> & ChatConnectorParams) {
   const {
     container,
-    configId,
     templates: userTemplates = {},
     cssClasses = {},
     resume = false,
@@ -1123,17 +1120,6 @@ export default (function chat<
 
   if (!container) {
     throw new Error(withUsage('The `container` option is required.'));
-  }
-
-  if (configId) {
-    // FIXME: does not satisfy ChatWidget
-    return {
-      $$type: 'ais.chat',
-      $$widgetType: 'ais.chat',
-      $$widgetParams: widgetParams,
-      render: () => {},
-      dispose: () => {},
-    };
   }
 
   const containerNode = getContainerNode(container);
@@ -1166,7 +1152,6 @@ export default (function chat<
       ...options,
     }),
     $$widgetType: 'ais.chat',
-    $$widgetParams: widgetParams,
   };
 } satisfies ChatWidget);
 

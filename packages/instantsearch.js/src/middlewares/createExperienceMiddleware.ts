@@ -3,7 +3,7 @@ import chat from '../widgets/chat/chat';
 
 import type { InternalMiddleware, Widget } from '../types';
 
-export type ManagedUiProps = {
+export type ExperienceProps = {
   env?: 'prod' | 'beta';
 };
 
@@ -17,25 +17,26 @@ const SUPPORTED_WIDGETS: Record<string, (...args: any[]) => Widget> = {
   'ais.chat': chat,
 };
 
-export function createManagedUiMiddleware(
-  props: ManagedUiProps = {}
+export function createExperienceMiddleware(
+  props: ExperienceProps = {}
 ): InternalMiddleware {
   const { env = 'prod' } = props;
 
   return ({ instantSearchInstance }) => {
     return {
-      $$type: 'ais.managedUi',
+      $$type: 'ais.experience',
       $$internal: true,
       onStateChange: () => {},
       subscribe() {
-        const managedWidgets: Widget[] = [];
+        const experienceWidgets: Widget[] = [];
 
+        // TODO: Recursion
         walkIndex(instantSearchInstance.mainIndex, (index) => {
           const widgets = index.getWidgets();
 
           widgets.forEach((widget) => {
-            if (widget.$$widgetParams?.configId) {
-              managedWidgets.push(widget);
+            if (widget.$$type === 'ais.experience') {
+              experienceWidgets.push(widget);
             }
           });
         });
@@ -51,35 +52,35 @@ export function createManagedUiMiddleware(
 
         // TODO: Provide final typed block structure
         Promise.all(
-          managedWidgets.map((widget) =>
+          experienceWidgets.map((widget) =>
             buildExperienceRequest({
               appId,
               apiKey,
               env,
-              configId: widget.$$widgetParams.configId,
+              experienceId: widget.$$widgetParams.id,
             })
           )
         ).then((configs) => {
           configs.forEach((config, index) => {
-            const widget = managedWidgets[index];
+            const widget = experienceWidgets[index];
             const { configId, ...widgetParams } = widget.$$widgetParams;
             const { cssVars, ...fetchedParams } =
               config.blocks[1].children[0].children[0].parameters;
 
-            const cssVarsEntries = Object.entries<string>(cssVars);
-            if (cssVarsEntries.length > 0) {
-              injectStyleElement(`
-                  :root {
-                    ${cssVarsEntries
-                      .map(([key, value]) => {
-                        const { r, g, b } = hexToRgb(value);
+            // const cssVarsEntries = Object.entries<string>(cssVars);
+            // if (cssVarsEntries.length > 0) {
+            //   injectStyleElement(`
+            //       :root {
+            //         ${cssVarsEntries
+            //           .map(([key, value]) => {
+            //             const { r, g, b } = hexToRgb(value);
 
-                        return `${key}: ${r}, ${g}, ${b}`;
-                      })
-                      .join(';')}
-                  }
-                `);
-            }
+            //             return `${key}: ${r}, ${g}, ${b}`;
+            //           })
+            //           .join(';')}
+            //       }
+            //     `);
+            // }
 
             const widgetParent = widget.parent!;
             widgetParent.removeWidgets([widget]).addWidgets([
@@ -100,17 +101,17 @@ export function createManagedUiMiddleware(
 type BuildExperienceRequestParams = {
   appId: string;
   apiKey: string;
-  env: NonNullable<ManagedUiProps['env']>;
-  configId: string;
+  env: NonNullable<ExperienceProps['env']>;
+  experienceId: string;
 };
 
 function buildExperienceRequest({
   appId,
   apiKey,
   env,
-  configId,
+  experienceId,
 }: BuildExperienceRequestParams) {
-  return fetch(`${API_BASE[env]}/experiences/${configId}`, {
+  return fetch(`${API_BASE[env]}/experiences/${experienceId}`, {
     method: 'GET',
     headers: {
       'X-Algolia-Application-ID': appId,
