@@ -24,6 +24,12 @@ export type AutocompleteConnectorParams = {
    * @default `true`
    */
   escapeHTML?: boolean;
+  /**
+   * Transforms the items of all indices at once.
+   */
+  transformItems?: (
+    indices: Pick<AutocompleteRenderState, 'indices'>['indices']
+  ) => Pick<AutocompleteRenderState, 'indices'>['indices'];
 };
 
 export type AutocompleteRenderState = {
@@ -95,6 +101,9 @@ const connectAutocomplete: AutocompleteConnector = function connectAutocomplete(
     const {
       // @MAJOR: this can default to false
       escapeHTML = true,
+      transformItems = ((indices) => indices) as NonNullable<
+        AutocompleteConnectorParams['transformItems']
+      >,
     } = widgetParams || {};
 
     warning(
@@ -204,9 +213,11 @@ search.addWidgets([
           };
         });
 
+        const finalIndices = transformItems(indices);
+
         return {
           currentRefinement: state.query || '',
-          indices,
+          indices: finalIndices,
           refine: connectorState.refine,
           widgetParams,
         };

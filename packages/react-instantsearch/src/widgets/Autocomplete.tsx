@@ -29,13 +29,17 @@ import { AutocompleteSearch } from '../components/AutocompleteSearch';
 
 import { ReverseHighlight } from './ReverseHighlight';
 
-import type { PlainSearchParameters } from 'algoliasearch-helper';
+import type {
+  PlainSearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
 import type {
   AutocompleteIndexClassNames,
   AutocompleteIndexConfig,
   Pragma,
   AutocompleteClassNames,
   AutocompleteIndexProps,
+  SendEventForHits,
 } from 'instantsearch-ui-components';
 import type { BaseHit, Hit, IndexUiState } from 'instantsearch.js';
 import type { ComponentProps } from 'react';
@@ -133,6 +137,21 @@ export type AutocompleteProps<TItem extends BaseHit> = ComponentProps<'div'> & {
       };
   getSearchPageURL?: (nextUiState: IndexUiState) => string;
   onSelect?: AutocompleteIndexConfig<TItem>['onSelect'];
+  transformItems?: (
+    indices: Array<{
+      indexName: string;
+      indexId: string;
+      hits: Hit[];
+      results: SearchResults;
+      sendEvent: SendEventForHits;
+    }>
+  ) => Array<{
+    indexName: string;
+    indexId: string;
+    hits: Hit[];
+    results: SearchResults;
+    sendEvent: SendEventForHits;
+  }>;
   panelComponent?: (props: {
     elements: PanelElements;
     indices: ReturnType<typeof useAutocomplete>['indices'];
@@ -301,6 +320,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   showRecent,
   recentSearchConfig,
   showSuggestions,
+  transformItems,
   placeholder,
   ...props
 }: InnerAutocompleteProps<TItem>) {
@@ -308,7 +328,9 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     indices,
     refine: refineAutocomplete,
     currentRefinement,
-  } = useAutocomplete();
+  } = useAutocomplete({
+    transformItems,
+  });
 
   const {
     storage,
@@ -383,7 +405,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     );
   }
 
-  indices.forEach(({ indexId, indexName, hits }, i) => {
+  indices.forEach(({ indexId, indexName, hits }) => {
     const elementId =
       indexName === showSuggestions?.indexName ? 'suggestions' : indexName;
     const filteredHits =
@@ -395,19 +417,27 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
               )
           )
         : hits;
+    const currentIndexConfig = indicesConfig.find(
+      (config) => config.indexName === indexName
+    );
+
+    if (!currentIndexConfig) {
+      return;
+    }
+
     elements[elementId] = (
       <AutocompleteIndex
         key={indexId}
         // @ts-expect-error - there seems to be problems with React.ComponentType and this, but it's actually correct
-        HeaderComponent={indicesConfig[i].headerComponent}
+        HeaderComponent={currentIndexConfig.headerComponent}
         // @ts-expect-error - there seems to be problems with React.ComponentType and this, but it's actually correct
-        ItemComponent={indicesConfig[i].itemComponent}
+        ItemComponent={currentIndexConfig.itemComponent}
         items={filteredHits.map((item) => ({
           ...item,
           __indexName: indexId,
         }))}
         getItemProps={getItemProps}
-        classNames={indicesConfig[i].classNames}
+        classNames={currentIndexConfig.classNames}
       />
     );
   });

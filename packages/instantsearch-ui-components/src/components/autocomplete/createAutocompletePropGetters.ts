@@ -271,15 +271,22 @@ function buildItems<TItem extends BaseHit>({
     { item: TItem; config: AutocompleteIndexConfig<TItem> }
   >();
 
-  for (let i = 0; i < indicesConfig.length; i++) {
-    const config = indicesConfig[i];
+  for (let i = 0; i < indices.length; i++) {
+    const currentIndexConfig = indicesConfig.find(
+      (config) => config.indexName === indices[i].indexName
+    );
+
     const hits = indices[i]?.hits || [];
 
     for (let position = 0; position < hits.length; position++) {
-      const itemId = getElementId('item', config.indexName, position);
+      const itemId = getElementId(
+        'item',
+        currentIndexConfig?.indexName || indices[i].indexName,
+        position
+      );
       items.set(itemId, {
         item: hits[position] as TItem,
-        config,
+        config: currentIndexConfig!,
       });
       itemsIds.push(itemId);
     }
