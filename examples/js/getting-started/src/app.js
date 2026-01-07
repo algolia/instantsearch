@@ -26,7 +26,7 @@ const search = instantsearch({
 
 search.addWidgets([
   experience({
-    id: '87d8f696-dc75-4421-a44a-255693f6b310',
+    id: 'agent-ui-c37cac85-5291-47e7-aea3-5a8e704afa7b',
   }),
   searchBox({
     container: '#searchbox',

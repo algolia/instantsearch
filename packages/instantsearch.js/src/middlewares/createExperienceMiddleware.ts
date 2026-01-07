@@ -58,19 +58,16 @@ export function createExperienceMiddleware(
           configs.forEach((config, index) => {
             const widget = experienceWidgets[index];
             // TODO: Handle multiple config blocks for a single experience id
-            const { type, parameters } =
-              config.blocks[1].children[0].children[0];
-            const { cssVars, ...fetchedParams } = parameters;
+            const { type, parameters } = config.blocks[0];
+            const { cssVariables, ...fetchedParams } = parameters;
 
-            const cssVarsKeys = Object.keys(cssVars);
-            if (cssVarsKeys.length > 0) {
+            const cssVariablesKeys = Object.keys(cssVariables);
+            if (cssVariablesKeys.length > 0) {
               injectStyleElement(`
                   :root {
-                    ${cssVarsKeys
+                    ${cssVariablesKeys
                       .map((key) => {
-                        const { r, g, b } = hexToRgb(cssVars[key]);
-
-                        return `${key}: ${r}, ${g}, ${b}`;
+                        return `--ais-${key}: ${cssVariables[key]};`;
                       })
                       .join(';')}
                   }
@@ -81,12 +78,7 @@ export function createExperienceMiddleware(
             const newWidget = widget.$$supportedWidgets[type];
             widgetParent.removeWidgets([widget]);
             if (newWidget) {
-              widgetParent.addWidgets([
-                newWidget({
-                  ...fetchedParams,
-                  container: '#chat', // TODO: Get from API
-                }),
-              ]);
+              widgetParent.addWidgets([newWidget(fetchedParams)]);
             }
           });
         });
@@ -125,16 +117,6 @@ function buildExperienceRequest({
       return res;
     })
     .then((res) => res.json());
-}
-
-export function hexToRgb(hex: string) {
-  const cleanHex = hex.replace(/^#/, '');
-
-  const r = parseInt(cleanHex.substring(0, 2), 16);
-  const g = parseInt(cleanHex.substring(2, 4), 16);
-  const b = parseInt(cleanHex.substring(4, 6), 16);
-
-  return { r, g, b };
 }
 
 export function injectStyleElement(textContent: string) {
