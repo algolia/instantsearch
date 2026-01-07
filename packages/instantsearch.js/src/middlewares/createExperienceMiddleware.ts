@@ -7,6 +7,20 @@ export type ExperienceProps = {
   env?: 'prod' | 'beta';
 };
 
+type ExperienceApiResponse = {
+  blocks: Array<{
+    type: string;
+    parameters: {
+      container: string;
+      cssVariables: Record<string, string>;
+    } & Record<
+      // eslint-disable-next-line @typescript-eslint/ban-types
+      'container' | 'cssVariables' | (string & {}),
+      unknown
+    >;
+  }>;
+};
+
 const API_BASE = {
   beta: 'https://experiences-beta.algolia.com/1',
   prod: 'https://experiences.algolia.com/1',
@@ -24,8 +38,6 @@ export function createExperienceMiddleware(
       onStateChange: () => {},
       subscribe() {
         const experienceWidgets: ExperienceWidget[] = [];
-
-        // TODO: Recursion
         walkIndex(instantSearchInstance.mainIndex, (index) => {
           const widgets = index.getWidgets();
 
@@ -57,13 +69,17 @@ export function createExperienceMiddleware(
         ).then((configs) => {
           configs.forEach((config, index) => {
             const widget = experienceWidgets[index];
-            // TODO: Handle multiple config blocks for a single experience id
-            const { type, parameters } = config.blocks[0];
-            const { cssVariables, ...fetchedParams } = parameters;
+            const parent = widget.parent!;
 
-            const cssVariablesKeys = Object.keys(cssVariables);
-            if (cssVariablesKeys.length > 0) {
-              injectStyleElement(`
+            parent.removeWidgets([widget]);
+
+            config.blocks.forEach((block) => {
+              const { type, parameters } = block;
+              const { cssVariables, ...fetchedParams } = parameters;
+
+              const cssVariablesKeys = Object.keys(cssVariables);
+              if (cssVariablesKeys.length > 0) {
+                injectStyleElement(`
                   :root {
                     ${cssVariablesKeys
                       .map((key) => {
@@ -72,14 +88,16 @@ export function createExperienceMiddleware(
                       .join(';')}
                   }
                 `);
-            }
+              }
 
-            const widgetParent = widget.parent!;
-            const newWidget = widget.$$supportedWidgets[type];
-            widgetParent.removeWidgets([widget]);
-            if (newWidget) {
-              widgetParent.addWidgets([newWidget(fetchedParams)]);
-            }
+              const newWidget = widget.$$supportedWidgets[type];
+              if (
+                newWidget &&
+                document.querySelector(fetchedParams.container) !== null
+              ) {
+                parent.addWidgets([newWidget(fetchedParams)]);
+              }
+            });
           });
         });
       },
@@ -116,7 +134,7 @@ function buildExperienceRequest({
 
       return res;
     })
-    .then((res) => res.json());
+    .then((res) => res.json() as Promise<ExperienceApiResponse>);
 }
 
 export function injectStyleElement(textContent: string) {
