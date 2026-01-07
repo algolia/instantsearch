@@ -377,7 +377,8 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   }
 
   indices.forEach(({ indexId, indexName, hits }, i) => {
-    const currentIndexConfig = indicesConfig.find(
+    const currentIndexConfig = find(
+      indicesConfig,
       (config) => config.indexName === indexName
     );
 

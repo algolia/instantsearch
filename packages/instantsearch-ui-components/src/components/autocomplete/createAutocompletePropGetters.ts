@@ -1,3 +1,5 @@
+import { find } from '../../lib';
+
 import type { ComponentProps, MutableRef } from '../../types';
 
 type BaseHit = Record<string, unknown>;
@@ -272,7 +274,8 @@ function buildItems<TItem extends BaseHit>({
   >();
 
   for (let i = 0; i < indices.length; i++) {
-    const currentIndexConfig = indicesConfig.find(
+    const currentIndexConfig = find(
+      indicesConfig,
       (config) => config.indexName === indices[i].indexName
     );
 
