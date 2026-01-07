@@ -1,7 +1,14 @@
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import instantsearch from 'instantsearch.js';
-// import { carousel } from 'instantsearch.js/es/templates';
-import { hits, searchBox, experience } from 'instantsearch.js/es/widgets';
+import {
+  hits,
+  searchBox,
+  experience,
+  configure,
+  panel,
+  refinementList,
+  pagination,
+} from 'instantsearch.js/es/widgets';
 
 import 'instantsearch.css/themes/satellite.css';
 
@@ -17,31 +24,40 @@ const search = instantsearch({
   future: { enableExperience: { env: 'beta' } },
 });
 
-// const productItemTemplate = (item, { html }) => html`
-//   <article class="ais-Carousel-hit">
-//     <div class="ais-Carousel-hit-image">
-//       <img src="${item.image}" />
-//     </div>
-//     <h2 class="ais-Carousel-hit-title">
-//       <a
-//         href="/products.html?pid=${item.objectID}"
-//         class="ais-Carousel-hit-link"
-//       >
-//         ${item.name}
-//       </a>
-//     </h2>
-//   </article>
-// `;
-
 search.addWidgets([
+  experience({
+    id: '87d8f696-dc75-4421-a44a-255693f6b310',
+  }),
   searchBox({
     container: '#searchbox',
   }),
   hits({
     container: '#hits',
+    templates: {
+      item: (hit, { html, components }) => html`
+        <article>
+          <h1>
+            <a href="/products.html?pid=${hit.objectID}"
+              >${components.Highlight({ hit, attribute: 'name' })}</a
+            >
+          </h1>
+          <p>${components.Highlight({ hit, attribute: 'description' })}</p>
+          <a href="/products.html?pid=${hit.objectID}">See product</a>
+        </article>
+      `,
+    },
   }),
-  experience({
-    id: '87d8f696-dc75-4421-a44a-255693f6b310',
+  configure({
+    hitsPerPage: 8,
+  }),
+  panel({
+    templates: { header: 'brand' },
+  })(refinementList)({
+    container: '#brand-list',
+    attribute: 'brand',
+  }),
+  pagination({
+    container: '#pagination',
   }),
 ]);
 
