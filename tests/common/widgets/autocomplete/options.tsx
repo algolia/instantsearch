@@ -1193,5 +1193,247 @@ export function createOptionsTests(
         ])
       );
     });
+
+    describe('transformItems', () => {
+      test('applies to a single index correctly', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'indexName',
+              hits: [
+                { objectID: '1', name: 'Item 1' },
+                { objectID: '2', name: 'Item 2' },
+              ],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              indices: [
+                {
+                  indexName: 'indexName',
+                  templates: {
+                    item: (props) => props.item.name,
+                  },
+                },
+              ],
+              transformItems: (indices) =>
+                indices.map((index) => ({
+                  ...index,
+                  hits: index.hits.map((item) => ({
+                    ...item,
+                    name: item.name.toUpperCase(),
+                  })),
+                })),
+            },
+            react: {
+              indices: [
+                {
+                  indexName: 'indexName',
+                  itemComponent: (props) => props.item.name,
+                },
+              ],
+              transformItems: (indices) =>
+                indices.map((index) => ({
+                  ...index,
+                  hits: index.hits.map((item) => ({
+                    ...item,
+                    name: item.name.toUpperCase(),
+                  })),
+                })),
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        const indicesItems = document.querySelectorAll(
+          '.ais-AutocompleteIndexItem'
+        );
+        expect(indicesItems).toHaveLength(2);
+        expect(indicesItems[0]).toHaveTextContent('ITEM 1');
+        expect(indicesItems[1]).toHaveTextContent('ITEM 2');
+      });
+
+      test('applies to query suggestions and a single index correctly', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'query_suggestions',
+              hits: [
+                { objectID: '1', query: 'hello' },
+                { objectID: '2', query: 'hi' },
+              ],
+            }),
+            // @ts-expect-error - ignore second response type
+            createSingleSearchResponse({
+              index: 'indexName',
+              hits: [
+                { objectID: '1', name: 'Item 1' },
+                { objectID: '2', name: 'Item 2' },
+              ],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              showSuggestions: {
+                indexName: 'query_suggestions',
+              },
+              indices: [
+                {
+                  indexName: 'indexName',
+                  templates: {
+                    item: (props) => props.item.name,
+                  },
+                },
+              ],
+              // reverse the order of appearance of suggestions and indices
+              transformItems: (indices) => {
+                const querySuggestions = indices.find(
+                  (index) => index.indexName === 'query_suggestions'
+                );
+                const otherIndices = indices.filter(
+                  (index) => index.indexName !== 'query_suggestions'
+                );
+
+                return [
+                  ...otherIndices,
+                  ...(querySuggestions ? [querySuggestions] : []),
+                ];
+              },
+            },
+            react: {
+              showSuggestions: {
+                indexName: 'query_suggestions',
+              },
+              indices: [
+                {
+                  indexName: 'indexName',
+                  itemComponent: (props) => props.item.name,
+                },
+              ],
+              transformItems: (indices) => {
+                const querySuggestions = indices.find(
+                  (index) => index.indexName === 'query_suggestions'
+                );
+                const otherIndices = indices.filter(
+                  (index) => index.indexName !== 'query_suggestions'
+                );
+
+                return [
+                  ...otherIndices,
+                  ...(querySuggestions ? [querySuggestions] : []),
+                ];
+              },
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        const indicesItems = document.querySelectorAll(
+          '.ais-AutocompleteIndexItem'
+        );
+        expect(indicesItems).toHaveLength(4);
+        expect(indicesItems[0]).toHaveTextContent('Item 1');
+        expect(indicesItems[1]).toHaveTextContent('Item 2');
+        expect(indicesItems[2]).toHaveTextContent('hello');
+        expect(indicesItems[3]).toHaveTextContent('hi');
+      });
+
+      test('reorders indices with correct keyboard navigation', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'indexName1',
+              hits: [{ objectID: '1', name: 'Item 1' }],
+            }),
+            createSingleSearchResponse({
+              index: 'indexName2',
+              hits: [{ objectID: '1', name: 'Item 2' }],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName1',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              indices: [
+                {
+                  indexName: 'indexName1',
+                  templates: {
+                    item: (props) => props.item.name,
+                  },
+                },
+                {
+                  indexName: 'indexName2',
+                  templates: {
+                    item: (props) => props.item.name,
+                  },
+                },
+              ],
+              transformItems: (indices) => indices.slice().reverse(),
+            },
+            react: {
+              indices: [
+                {
+                  indexName: 'indexName1',
+                  itemComponent: (props) => props.item.name,
+                },
+                {
+                  indexName: 'indexName2',
+                  itemComponent: (props) => props.item.name,
+                },
+              ],
+              transformItems: (indices) => indices.slice().reverse(),
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        const input = screen.getByRole('combobox', { name: /submit/i });
+
+        await act(async () => {
+          userEvent.click(input);
+          await wait(0);
+
+          userEvent.keyboard('{ArrowDown}');
+          await wait(0);
+        });
+
+        const selectedItem = document.querySelector(
+          '.ais-AutocompleteIndexItem[aria-selected="true"]'
+        );
+        expect(selectedItem).not.toBeNull();
+        expect(selectedItem!.textContent).toBe('Item 2');
+      });
+    });
   });
 }
