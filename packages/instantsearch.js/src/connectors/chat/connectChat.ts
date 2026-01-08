@@ -345,6 +345,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
           return Promise.resolve();
         },
+        skipCache: type !== 'chat',
       });
     };
 

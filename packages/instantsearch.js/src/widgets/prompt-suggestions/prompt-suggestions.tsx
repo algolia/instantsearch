@@ -1,28 +1,23 @@
 /** @jsx h */
 
 import { createPromptSuggestionsComponent } from 'instantsearch-ui-components';
-import { h, render } from 'preact';
+import { h, render, Fragment } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectChat from '../../connectors/chat/connectChat';
+import connectPromptSuggestions from '../../connectors/prompt-suggestions/connectPromptSuggestions';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
   createDocumentationMessageGenerator,
-  warning,
 } from '../../lib/utils';
 
+import type { ChatTransport } from '../../connectors/chat/connectChat';
 import type {
-  ChatTransport,
-  ChatRenderState,
-} from '../../connectors/chat/connectChat';
+  PromptSuggestionsConnectorParams,
+  PromptSuggestionsWidgetDescription,
+} from '../../connectors/prompt-suggestions/connectPromptSuggestions';
 import type { PreparedTemplateProps } from '../../lib/templating';
-import type {
-  Template,
-  InstantSearch,
-  IndexWidget,
-  InitOptions,
-} from '../../types';
+import type { Template, WidgetFactory } from '../../types';
 import type { PromptSuggestionsClassNames } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -31,6 +26,7 @@ const withUsage = createDocumentationMessageGenerator({
 
 const PromptSuggestions = createPromptSuggestionsComponent({
   createElement: h,
+  Fragment,
 });
 
 export type PromptSuggestionsCSSClasses = Partial<PromptSuggestionsClassNames>;
@@ -65,6 +61,14 @@ export type PromptSuggestionsWidgetParams = ChatTransport & {
   cssClasses?: PromptSuggestionsCSSClasses;
 };
 
+export type PromptSuggestionsWidget = WidgetFactory<
+  PromptSuggestionsWidgetDescription & {
+    $$widgetType: 'ais.promptSuggestions';
+  },
+  PromptSuggestionsConnectorParams,
+  PromptSuggestionsWidgetParams
+>;
+
 const defaultTemplates: Required<PromptSuggestionsTemplates> = {
   title: 'Ask a question about this product:',
   titleIcon: '',
@@ -75,7 +79,9 @@ const defaultTemplates: Required<PromptSuggestionsTemplates> = {
  * based on page context (e.g., product data on a PDP). Clicking a suggestion opens the
  * chat and sends the suggestion as a message.
  */
-function promptSuggestions(widgetParams: PromptSuggestionsWidgetParams) {
+export default (function promptSuggestions(
+  widgetParams: PromptSuggestionsWidgetParams
+) {
   const {
     container,
     agentId,
@@ -83,6 +89,7 @@ function promptSuggestions(widgetParams: PromptSuggestionsWidgetParams) {
     context,
     cssClasses: userCssClasses = {},
     templates = {},
+    ...rest
   } = widgetParams || {};
 
   if (!container) {
@@ -111,15 +118,8 @@ function promptSuggestions(widgetParams: PromptSuggestionsWidgetParams) {
     templateProps?: PreparedTemplateProps<PromptSuggestionsTemplates>;
   } = {};
 
-  let hasSentContext = false;
-  let instantSearchInstance: InstantSearch;
-  let parentIndex: IndexWidget;
-
-  // Create an internal chat widget for fetching suggestions
-  const suggestionsChat = connectChat(
+  const widget = connectPromptSuggestions(
     (props, isFirstRendering) => {
-      const { suggestions, status, sendMessage } = props;
-
       if (isFirstRendering) {
         renderState.templateProps = prepareTemplateProps({
           defaultTemplates,
@@ -128,47 +128,6 @@ function promptSuggestions(widgetParams: PromptSuggestionsWidgetParams) {
         });
         return;
       }
-
-      // Send context on first ready state to get suggestions
-      if (status === 'ready' && !hasSentContext) {
-        hasSentContext = true;
-        sendMessage({ text: JSON.stringify(context) });
-        return;
-      }
-
-      // Map chat status to our simpler status
-      let uiStatus: 'idle' | 'loading' | 'ready';
-      if (status === 'submitted' || status === 'streaming') {
-        uiStatus = 'loading';
-      } else if (status === 'ready' && suggestions && suggestions.length > 0) {
-        uiStatus = 'ready';
-      } else {
-        uiStatus = 'idle';
-      }
-
-      // When a suggestion is clicked, send to the MAIN chat
-      const handleSuggestionClick = (suggestion: string) => {
-        const indexId = parentIndex.getIndexId();
-        const mainChat = instantSearchInstance.renderState[indexId]?.chat as
-          | ChatRenderState
-          | undefined;
-
-        if (!mainChat) {
-          warning(
-            false,
-            'PromptSuggestions: Chat widget not found. Make sure you have a Chat widget in your InstantSearch instance.'
-          );
-          return;
-        }
-
-        // Open the chat if not already open
-        if (!mainChat.open) {
-          mainChat.setOpen(true);
-        }
-
-        // Send the suggestion as a message
-        mainChat.sendMessage({ text: suggestion });
-      };
 
       const titleIconComponent = templates.titleIcon
         ? () => (
@@ -185,9 +144,9 @@ function promptSuggestions(widgetParams: PromptSuggestionsWidgetParams) {
 
       render(
         <PromptSuggestions
-          suggestions={suggestions || []}
-          status={uiStatus}
-          onSuggestionClick={handleSuggestionClick}
+          suggestions={props.suggestions}
+          status={props.status}
+          onSuggestionClick={props.sendSuggestion}
           classNames={cssClasses}
           translations={{ title: titleText }}
           titleIconComponent={titleIconComponent}
@@ -196,19 +155,10 @@ function promptSuggestions(widgetParams: PromptSuggestionsWidgetParams) {
       );
     },
     () => render(null, containerNode)
-  )({ agentId, transport });
+  )({ agentId, transport, context, ...rest });
 
   return {
-    ...suggestionsChat,
-    $$type: 'ais.promptSuggestions',
+    ...widget,
     $$widgetType: 'ais.promptSuggestions',
-
-    init(initOptions: InitOptions) {
-      instantSearchInstance = initOptions.instantSearchInstance;
-      parentIndex = initOptions.parent;
-      suggestionsChat.init(initOptions);
-    },
   };
-}
-
-export default promptSuggestions;
+} satisfies PromptSuggestionsWidget);
