@@ -96,14 +96,6 @@ export default (function promptSuggestions(
     throw new Error(withUsage('The `container` option is required.'));
   }
 
-  if (!agentId && !transport) {
-    throw new Error(withUsage('Either `agentId` or `transport` is required.'));
-  }
-
-  if (!context) {
-    throw new Error(withUsage('The `context` option is required.'));
-  }
-
   const containerNode = getContainerNode(container);
 
   const cssClasses: PromptSuggestionsCSSClasses = {

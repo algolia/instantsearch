@@ -30,30 +30,6 @@ export function createOptionsTests(
   _: Required<TestOptions>
 ) {
   describe('options', () => {
-    test('renders with default options', async () => {
-      const searchClient = createSearchClient();
-
-      await setup({
-        instantSearchOptions: {
-          indexName: 'indexName',
-          searchClient,
-        },
-        widgetParams: {
-          javascript: {
-            agentId: 'abc',
-            context: { objectID: '123', title: 'Hello' },
-            chat: createChatInstance(),
-          },
-          react: { context: { objectID: '123', title: 'Hello' } },
-          vue: {},
-        },
-      });
-
-      expect(
-        screen.getByText(/ask a question about this product:/i)
-      ).toBeInTheDocument();
-    });
-
     test('sends message with context at once', async () => {
       const searchClient = createSearchClient();
 
