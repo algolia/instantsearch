@@ -23,12 +23,12 @@ export type PromptSuggestionsTransport = {
 
 export type PromptSuggestionsConnectorParams<
   TUiMessage extends UIMessage = UIMessage
-> = ({ chat: Chat<TUiMessage> } | PromptSuggestionsTransport) & {
-  /**
-   * Context object to send to the agent (e.g., product data for a PDP).
-   */
-  context: Record<string, unknown>;
-};
+> = { chat?: Chat<TUiMessage> } & PromptSuggestionsTransport & {
+    /**
+     * Context object to send to the agent (e.g., product data for a PDP).
+     */
+    context: Record<string, unknown>;
+  };
 
 export type PromptSuggestionsRenderState = {
   /**
