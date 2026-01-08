@@ -33,25 +33,33 @@ export class ChatState<TUiMessage extends UIMessage>
   _statusCallbacks = new Set<() => void>();
   _errorCallbacks = new Set<() => void>();
 
-  constructor(
-    id: string | undefined = undefined,
-    initialMessages: TUiMessage[] = getDefaultInitialMessages<TUiMessage>(id)
-  ) {
+  constructor({
+    id,
+    initialMessages = getDefaultInitialMessages<TUiMessage>(id),
+    skipCache = false,
+  }: {
+    id?: string;
+    initialMessages?: TUiMessage[];
+    skipCache?: boolean;
+  }) {
     this._messages = initialMessages;
-    const saveMessagesInLocalStorage = () => {
-      if (this.status === 'ready') {
-        try {
-          sessionStorage.setItem(
-            CACHE_KEY + (id ? `-${id}` : ''),
-            JSON.stringify(this.messages)
-          );
-        } catch (e) {
-          // Do nothing if sessionStorage is not available or full
+
+    if (!skipCache) {
+      const saveMessagesInLocalStorage = () => {
+        if (this.status === 'ready') {
+          try {
+            sessionStorage.setItem(
+              CACHE_KEY + (id ? `-${id}` : ''),
+              JSON.stringify(this.messages)
+            );
+          } catch (e) {
+            // Do nothing if sessionStorage is not available or full
+          }
         }
-      }
-    };
-    this['~registerMessagesCallback'](saveMessagesInLocalStorage);
-    this['~registerStatusCallback'](saveMessagesInLocalStorage);
+      };
+      this['~registerMessagesCallback'](saveMessagesInLocalStorage);
+      this['~registerStatusCallback'](saveMessagesInLocalStorage);
+    }
   }
 
   get status(): ChatStatus {
@@ -148,9 +156,14 @@ export class Chat<
   constructor({
     messages,
     agentId,
+    skipCache = false,
     ...init
-  }: ChatInit<TUiMessage> & { agentId?: string }) {
-    const state = new ChatState(agentId, messages);
+  }: ChatInit<TUiMessage> & { agentId?: string; skipCache?: boolean }) {
+    const state = new ChatState({
+      id: agentId,
+      initialMessages: messages,
+      skipCache,
+    });
     super({ ...init, state });
     this._state = state;
   }

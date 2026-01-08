@@ -34,6 +34,7 @@ import {
   dynamicWidgets,
   chat,
   EXPERIMENTAL_autocomplete,
+  promptSuggestions,
 } from '../widgets';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -651,6 +652,28 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       })
       .start();
   },
+  createPromptSuggestionsWidgetTests({ instantSearchOptions, widgetParams }) {
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        promptSuggestions({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+        chat({
+          container: document.body.appendChild(document.createElement('div')),
+          agentId: widgetParams.agentId,
+          // @ts-ignore For some reason there are problems with types going from this library to the test ones back here
+          chat: widgetParams.chat,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -685,6 +708,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createDynamicWidgetsWidgetTests: undefined,
   createChatWidgetTests: undefined,
   createAutocompleteWidgetTests: undefined,
+  createPromptSuggestionsWidgetTests: undefined,
 };
 
 describe('Common widget tests (InstantSearch.js)', () => {

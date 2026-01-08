@@ -1,5 +1,5 @@
 import { createPromptSuggestionsComponent } from 'instantsearch-ui-components';
-import React, { createElement } from 'react';
+import React, { createElement, Fragment } from 'react';
 import { usePromptSuggestions } from 'react-instantsearch-core';
 
 import type {
@@ -12,6 +12,7 @@ import type { UsePromptSuggestionsProps } from 'react-instantsearch-core';
 
 const PromptSuggestionsUiComponent = createPromptSuggestionsComponent({
   createElement: createElement as Pragma,
+  Fragment,
 });
 
 export type PromptSuggestionsProps = Omit<
@@ -35,27 +36,17 @@ export function PromptSuggestions({
   context,
   ...props
 }: PromptSuggestionsProps) {
-  const { suggestions, status, sendSuggestion } = usePromptSuggestions(
-    { agentId, transport, context },
-    { $$widgetType: 'ais.promptSuggestions' }
-  );
-
-  // Map connector status to UI status
-  const getUiStatus = (): 'loading' | 'ready' | 'idle' => {
-    if (status === 'loading') {
-      return 'loading';
-    }
-    if (status === 'ready' && suggestions.length > 0) {
-      return 'ready';
-    }
-    return 'idle';
-  };
+  const { suggestions, status, sendSuggestion } = usePromptSuggestions({
+    agentId,
+    transport,
+    context,
+  });
 
   return (
     <PromptSuggestionsUiComponent
       {...props}
       suggestions={suggestions}
-      status={getUiStatus()}
+      status={status}
       onSuggestionClick={sendSuggestion}
     />
   );

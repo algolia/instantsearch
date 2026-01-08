@@ -55,9 +55,11 @@ export type PromptSuggestionsProps = {
 
 export function createPromptSuggestionsComponent({
   createElement,
-}: Pick<Renderer, 'createElement'>) {
+  Fragment,
+}: Renderer) {
   const ChatPromptSuggestions = createChatPromptSuggestionsComponent({
     createElement,
+    Fragment,
   });
 
   return function PromptSuggestions(userProps: PromptSuggestionsProps) {

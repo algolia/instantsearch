@@ -587,6 +587,9 @@ const testSetups = {
   createAutocompleteWidgetTests() {
     throw new Error('Autocomplete is not supported in Vue InstantSearch');
   },
+  createPromptSuggestionsWidgetTests() {
+    throw new Error('PromptSuggestions is not supported in Vue InstantSearch');
+  },
 };
 
 const testOptions = {
@@ -634,6 +637,9 @@ const testOptions = {
   },
   createAutocompleteWidgetTests: {
     skippedTests: { 'Autocomplete widget common tests': true },
+  },
+  createPromptSuggestionsWidgetTests: {
+    skippedTests: { 'PromptSuggestions widget common tests': true },
   },
 };
 
