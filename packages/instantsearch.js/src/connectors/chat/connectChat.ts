@@ -304,7 +304,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         );
       }
 
-      if ('chat' in options) {
+      if ('chat' in options && options.chat !== undefined) {
         return options.chat;
       }
 
