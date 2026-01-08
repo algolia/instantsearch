@@ -119,6 +119,7 @@ function Widget<TWidget extends SingleWidget>({
       return <widget.Component objectIDs={['1']} {...props} />;
     }
     case 'EXPERIMENTAL_Autocomplete': {
+      // @ts-expect-error - incorrectly expects onSelect from ComponentProps<'div'>
       return <widget.Component {...props} />;
     }
     default: {
