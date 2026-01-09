@@ -1,24 +1,13 @@
 import { getAppIdAndApiKey, walkIndex, warning } from '../lib/utils';
 
 import type { InternalMiddleware } from '../types';
-import type { ExperienceWidget } from '../widgets/experience/types';
+import type {
+  ExperienceApiResponse,
+  ExperienceWidget,
+} from '../widgets/experience/types';
 
 export type ExperienceProps = {
   env?: 'prod' | 'beta';
-};
-
-type ExperienceApiResponse = {
-  blocks: Array<{
-    type: string;
-    parameters: {
-      container: string;
-      cssVariables: Record<string, string>;
-    } & Record<
-      // eslint-disable-next-line @typescript-eslint/ban-types
-      'container' | 'cssVariables' | (string & {}),
-      unknown
-    >;
-  }>;
 };
 
 const API_BASE = {
@@ -75,27 +64,29 @@ export function createExperienceMiddleware(
 
             config.blocks.forEach((block) => {
               const { type, parameters } = block;
-              const { cssVariables, ...fetchedParams } = parameters;
 
-              const cssVariablesKeys = Object.keys(cssVariables);
+              const cssVariablesKeys = Object.keys(parameters.cssVariables);
               if (cssVariablesKeys.length > 0) {
                 injectStyleElement(`
                   :root {
                     ${cssVariablesKeys
                       .map((key) => {
-                        return `--ais-${key}: ${cssVariables[key]};`;
+                        return `--ais-${key}: ${parameters.cssVariables[key]};`;
                       })
                       .join(';')}
                   }
                 `);
               }
 
-              const newWidget = widget.$$supportedWidgets[type];
+              const newWidget = widget.$$supportedWidgets[type].widget;
+              const transformedParams = widget.$$supportedWidgets[
+                type
+              ].transformParams(parameters, { env, instantSearchInstance });
               if (
                 newWidget &&
-                document.querySelector(fetchedParams.container) !== null
+                document.querySelector(parameters.container) !== null
               ) {
-                parent.addWidgets([newWidget(fetchedParams)]);
+                parent.addWidgets([newWidget(transformedParams)]);
               }
             });
           });

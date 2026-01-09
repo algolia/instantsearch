@@ -18,7 +18,7 @@ const searchClient = algoliasearch(
 );
 
 const search = instantsearch({
-  indexName: 'instant_search',
+  indexName: 'spencer_and_williams',
   searchClient,
   insights: true,
   future: { enableExperience: { env: 'beta' } },
@@ -26,7 +26,7 @@ const search = instantsearch({
 
 search.addWidgets([
   experience({
-    id: 'agent-ui-c37cac85-5291-47e7-aea3-5a8e704afa7b',
+    id: 'agent-ui-7354b616-d29e-4f47-b339-205f3c8f0222',
   }),
   searchBox({
     container: '#searchbox',
