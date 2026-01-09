@@ -17,6 +17,13 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
+export type TransformItemsIndicesConfig = {
+  indexName: string;
+  indexId: string;
+  hits: Hit[];
+  results: SearchResults;
+};
+
 export type AutocompleteConnectorParams = {
   /**
    * Escapes HTML entities from hits string values.
@@ -25,11 +32,11 @@ export type AutocompleteConnectorParams = {
    */
   escapeHTML?: boolean;
   /**
-   * Transforms the items of all indices at once.
+   * Transforms the items of all indices.
    */
   transformItems?: (
-    indices: Pick<AutocompleteRenderState, 'indices'>['indices']
-  ) => Pick<AutocompleteRenderState, 'indices'>['indices'];
+    indices: TransformItemsIndicesConfig[]
+  ) => TransformItemsIndicesConfig[];
 };
 
 export type AutocompleteRenderState = {
@@ -213,11 +220,17 @@ search.addWidgets([
           };
         });
 
-        const finalIndices = transformItems(indices);
+        const transformedIndicesWithSendEvent = transformItems(indices).map(
+          (item, idx) => ({
+            ...item,
+            // keep sendEvent function intact after transformItems
+            sendEvent: indices[idx].sendEvent,
+          })
+        );
 
         return {
           currentRefinement: state.query || '',
-          indices: finalIndices,
+          indices: transformedIndicesWithSendEvent,
           refine: connectorState.refine,
           widgetParams,
         };

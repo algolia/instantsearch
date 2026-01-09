@@ -35,6 +35,7 @@ import type {
   AutocompleteConnectorParams,
   AutocompleteRenderState,
   AutocompleteWidgetDescription,
+  TransformItemsIndicesConfig,
 } from '../../connectors/autocomplete/connectAutocomplete';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
@@ -47,16 +48,12 @@ import type {
   Template,
   WidgetFactory,
 } from '../../types';
-import type {
-  PlainSearchParameters,
-  SearchResults,
-} from 'algoliasearch-helper';
+import type { PlainSearchParameters } from 'algoliasearch-helper';
 import type {
   AutocompleteClassNames,
   AutocompleteIndexClassNames,
   AutocompleteIndexConfig,
   AutocompleteIndexProps,
-  SendEventForHits,
 } from 'instantsearch-ui-components';
 
 let autocompleteInstanceId = 0;
@@ -571,20 +568,8 @@ type AutocompleteWidgetParams<TItem extends BaseHit> = {
       };
 
   transformItems?: (
-    indices: Array<{
-      indexName: string;
-      indexId: string;
-      hits: Hit[];
-      results: SearchResults;
-      sendEvent: SendEventForHits;
-    }>
-  ) => Array<{
-    indexName: string;
-    indexId: string;
-    hits: Hit[];
-    results: SearchResults;
-    sendEvent: SendEventForHits;
-  }>;
+    indices: TransformItemsIndicesConfig[]
+  ) => TransformItemsIndicesConfig[];
 
   /**
    * Search parameters to apply to the autocomplete indices.

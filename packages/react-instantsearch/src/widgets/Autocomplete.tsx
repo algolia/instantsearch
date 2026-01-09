@@ -29,19 +29,16 @@ import { AutocompleteSearch } from '../components/AutocompleteSearch';
 
 import { ReverseHighlight } from './ReverseHighlight';
 
-import type {
-  PlainSearchParameters,
-  SearchResults,
-} from 'algoliasearch-helper';
+import type { PlainSearchParameters } from 'algoliasearch-helper';
 import type {
   AutocompleteIndexClassNames,
   AutocompleteIndexConfig,
   Pragma,
   AutocompleteClassNames,
   AutocompleteIndexProps,
-  SendEventForHits,
 } from 'instantsearch-ui-components';
 import type { BaseHit, Hit, IndexUiState } from 'instantsearch.js';
+import type { TransformItemsIndicesConfig } from 'instantsearch.js/es/connectors/autocomplete/connectAutocomplete';
 import type { ComponentProps } from 'react';
 
 const Autocomplete = createAutocompleteComponent({
@@ -138,20 +135,8 @@ export type AutocompleteProps<TItem extends BaseHit> = ComponentProps<'div'> & {
   getSearchPageURL?: (nextUiState: IndexUiState) => string;
   onSelect?: AutocompleteIndexConfig<TItem>['onSelect'];
   transformItems?: (
-    indices: Array<{
-      indexName: string;
-      indexId: string;
-      hits: Hit[];
-      results: SearchResults;
-      sendEvent: SendEventForHits;
-    }>
-  ) => Array<{
-    indexName: string;
-    indexId: string;
-    hits: Hit[];
-    results: SearchResults;
-    sendEvent: SendEventForHits;
-  }>;
+    indices: TransformItemsIndicesConfig[]
+  ) => TransformItemsIndicesConfig[];
   panelComponent?: (props: {
     elements: PanelElements;
     indices: ReturnType<typeof useAutocomplete>['indices'];
