@@ -1434,6 +1434,110 @@ export function createOptionsTests(
         expect(selectedItem).not.toBeNull();
         expect(selectedItem!.textContent).toBe('Item 2');
       });
+
+      test('reorders and deletes hits with correct keyboard navigation', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'indexName1',
+              hits: [
+                { objectID: '1', name: 'Item 1' },
+                { objectID: '2', name: 'Item 2' },
+              ],
+            }),
+            createSingleSearchResponse({
+              index: 'indexName2',
+              hits: [
+                { objectID: '1', name: 'Item 3' },
+                { objectID: '2', name: 'Item 4' },
+              ],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName1',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              indices: [
+                {
+                  indexName: 'indexName1',
+                  templates: {
+                    item: (props) => props.item.name,
+                  },
+                },
+                {
+                  indexName: 'indexName2',
+                  templates: {
+                    item: (props) => props.item.name,
+                  },
+                },
+              ],
+              transformItems: (indices) => {
+                const reversed = indices.slice().reverse();
+                return reversed.map((index) => ({
+                  ...index,
+                  hits: index.hits.filter((_, idx) => idx % 2 === 0),
+                }));
+              },
+            },
+            react: {
+              indices: [
+                {
+                  indexName: 'indexName1',
+                  itemComponent: (props) => props.item.name,
+                },
+                {
+                  indexName: 'indexName2',
+                  itemComponent: (props) => props.item.name,
+                },
+              ],
+              transformItems: (indices) => {
+                const reversed = indices.slice().reverse();
+                return reversed.map((index) => ({
+                  ...index,
+                  hits: index.hits.filter((_, idx) => idx % 2 === 0),
+                }));
+              },
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        const input = screen.getByRole('combobox', { name: /submit/i });
+
+        await act(async () => {
+          userEvent.click(input);
+          await wait(0);
+
+          userEvent.keyboard('{ArrowDown}');
+          await wait(0);
+        });
+
+        let selectedItem = document.querySelector(
+          '.ais-AutocompleteIndexItem[aria-selected="true"]'
+        );
+        expect(selectedItem).not.toBeNull();
+        expect(selectedItem!.textContent).toBe('Item 3');
+
+        await act(async () => {
+          userEvent.keyboard('{ArrowDown}');
+          await wait(0);
+        });
+
+        selectedItem = document.querySelector(
+          '.ais-AutocompleteIndexItem[aria-selected="true"]'
+        );
+        expect(selectedItem).not.toBeNull();
+        expect(selectedItem!.textContent).toBe('Item 1');
+      });
     });
   });
 }
