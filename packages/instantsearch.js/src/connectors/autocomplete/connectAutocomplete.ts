@@ -220,17 +220,13 @@ search.addWidgets([
           };
         });
 
-        const transformedIndicesWithSendEvent = transformItems(indices).map(
-          (item, idx) => ({
+        return {
+          currentRefinement: state.query || '',
+          indices: transformItems(indices).map((item, idx) => ({
             ...item,
             // keep sendEvent function intact after transformItems
             sendEvent: indices[idx].sendEvent,
-          })
-        );
-
-        return {
-          currentRefinement: state.query || '',
-          indices: transformedIndicesWithSendEvent,
+          })),
           refine: connectorState.refine,
           widgetParams,
         };
