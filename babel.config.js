@@ -81,6 +81,10 @@ module.exports = (api) => {
             // we require polyfills for this already
             'Array.prototype.includes',
 
+            // Used only in Chat, which expects modern browsers
+            'Object.fromEntries',
+            'Object.entries',
+
             // false positive (babel doesn't know types)
             // this is actually only called on arrays
             'String.prototype.includes',
