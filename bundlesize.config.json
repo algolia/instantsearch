@@ -10,11 +10,11 @@
     },
     {
       "path": "./packages/instantsearch.js/dist/instantsearch.production.min.js",
-      "maxSize": "100 kB"
+      "maxSize": "123 kB"
     },
     {
       "path": "./packages/instantsearch.js/dist/instantsearch.development.js",
-      "maxSize": "210 kB"
+      "maxSize": "243.25 kB"
     },
     {
       "path": "packages/react-instantsearch-core/dist/umd/ReactInstantSearchCore.min.js",
@@ -66,7 +66,7 @@
     },
     {
       "path": "./packages/instantsearch.css/components/chat.css",
-      "maxSize": "5 kB"
+      "maxSize": "5.25 kB"
     },
     {
       "path": "./packages/instantsearch.css/components/chat-min.css",

@@ -34,3 +34,13 @@
     outline-offset: 2px;
   }
 }
+
+// Fade-in animation
+@keyframes ais-fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
