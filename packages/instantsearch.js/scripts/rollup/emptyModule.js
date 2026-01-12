@@ -1,3 +1,10 @@
+// IE11 TransformStream stub for AI
+if (typeof TransformStream === 'undefined') {
+  window.TransformStream = function TransformStream() {
+    throw new Error('TransformStream not supported in IE11');
+  };
+}
+
 // Placeholder export for 'zod' module
 export const ZodFirstPartyTypeKind = {};
 export const toJSONSchema = {};
