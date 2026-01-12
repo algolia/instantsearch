@@ -196,6 +196,7 @@ search.addWidgets([
           };
         }
 
+        const sendEventMap: Record<string, SendEventForHits> = {};
         const indices = scopedResults.map((scopedResult) => {
           // We need to escape the hits because highlighting
           // exposes HTML tags to the end-user.
@@ -205,7 +206,7 @@ search.addWidgets([
               : scopedResult.results.hits;
           }
 
-          const sendEvent = createSendEventForHits({
+          sendEventMap[scopedResult.indexId] = createSendEventForHits({
             instantSearchInstance,
             helper: scopedResult.helper,
             widgetType: this.$$type,
@@ -216,16 +217,14 @@ search.addWidgets([
             indexName: scopedResult.results?.index || '',
             hits: scopedResult.results?.hits || [],
             results: scopedResult.results || ({} as unknown as SearchResults),
-            sendEvent,
           };
         });
 
         return {
           currentRefinement: state.query || '',
-          indices: transformItems(indices).map((item, idx) => ({
-            ...item,
-            // keep sendEvent function intact after transformItems
-            sendEvent: indices[idx].sendEvent,
+          indices: transformItems(indices).map((transformedIndex) => ({
+            ...transformedIndex,
+            sendEvent: sendEventMap[transformedIndex.indexId],
           })),
           refine: connectorState.refine,
           widgetParams,
