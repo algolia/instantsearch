@@ -282,6 +282,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     showRecent,
     indices,
     indicesConfig,
+    suggestionsIndexName: showSuggestions?.indexName,
   });
   const showRecentObj = showRecent;
 
