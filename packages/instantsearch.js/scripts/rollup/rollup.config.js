@@ -23,7 +23,7 @@ const plugins = [
     entries: [
       {
         find: /^zod.*/,
-        replacement: path.join(__dirname, './emptyModule.js'),
+        replacement: path.join(__dirname, './fakeZod.js'),
       },
       {
         find: /^react.*/,
@@ -62,7 +62,7 @@ const createConfiguration = ({ mode, filename }) => ({
     file: `dist/${filename}`,
     name: 'instantsearch',
     format: 'umd',
-    banner: `${license}\n(function(){if(typeof TransformStream==='undefined'&&typeof window === 'object'){window.TransformStream=function(){};g.TransformStream.prototype={readable:null,writable:null};}})();`,
+    banner: license,
     sourcemap: true,
   },
   onwarn(warning, warn) {

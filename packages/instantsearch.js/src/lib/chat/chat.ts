@@ -1,15 +1,17 @@
-import { AbstractChat } from 'ai';
+import { loadAI } from './loadAI';
 
 import type {
   UIMessage,
-  ChatState as BaseChatState,
+  BaseChatState,
   ChatStatus,
-  ChatInit,
-} from 'ai';
+  ChatInitAi,
+  AIModule,
+} from './loadAI';
 
 export type { UIMessage };
-export { AbstractChat };
-export { ChatInit };
+export type ChatInit<TUiMessage extends UIMessage> = ChatInitAi<TUiMessage> & {
+  agentId?: string;
+};
 
 export const CACHE_KEY = 'instantsearch-chat-initial-messages';
 
@@ -140,19 +142,72 @@ export class ChatState<TUiMessage extends UIMessage>
   };
 }
 
-export class Chat<
-  TUiMessage extends UIMessage
-> extends AbstractChat<TUiMessage> {
+export class Chat<TUiMessage extends UIMessage> {
   _state: ChatState<TUiMessage>;
+  _abstractChat: InstanceType<AIModule['AbstractChat']>;
 
-  constructor({
-    messages,
-    agentId,
-    ...init
-  }: ChatInit<TUiMessage> & { agentId?: string }) {
+  constructor({ messages, agentId, ...init }: ChatInit<TUiMessage>) {
     const state = new ChatState(agentId, messages);
-    super({ ...init, state });
     this._state = state;
+
+    try {
+      // Load AI library and create AbstractChat instance
+      const ai = loadAI();
+      // @ts-expect-error AbstractChat is marked abstract in TypeScript but is instantiable at runtime in JavaScript
+      this._abstractChat = new ai.AbstractChat({ ...init, state });
+    } catch (error) {
+      // Propagate error to state so UI can show it
+      state.error = error as Error;
+      state.status = 'error';
+      throw error;
+    }
+  }
+
+  get addToolResult() {
+    return this._abstractChat.addToolResult.bind(this._abstractChat);
+  }
+
+  get clearError() {
+    return () => {
+      this._state.error = undefined;
+      this._abstractChat.clearError();
+    };
+  }
+
+  get error(): Error | undefined {
+    return this._abstractChat.error;
+  }
+
+  get id(): string | undefined {
+    return this._abstractChat.id;
+  }
+
+  get messages(): TUiMessage[] {
+    return this._state.messages;
+  }
+
+  set messages(value: TUiMessage[]) {
+    this._state.messages = value;
+  }
+
+  get regenerate() {
+    return this._abstractChat.regenerate.bind(this._abstractChat);
+  }
+
+  get resumeStream() {
+    return this._abstractChat.resumeStream.bind(this._abstractChat);
+  }
+
+  get sendMessage() {
+    return this._abstractChat.sendMessage.bind(this._abstractChat);
+  }
+
+  get status(): ChatStatus {
+    return this._state.status;
+  }
+
+  get stop() {
+    return this._abstractChat.stop.bind(this._abstractChat);
   }
 
   '~registerMessagesCallback' = (onChange: () => void): (() => void) =>
