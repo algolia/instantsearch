@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.23.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.22.1...react-instantsearch@7.23.0) (2026-01-13)
+
+
+### Features
+
+* **chat:** support prompt suggestions ([#6831](https://github.com/algolia/instantsearch/issues/6831)) ([aca8934](https://github.com/algolia/instantsearch/commit/aca8934163c047ca56db0dad679737f331efac29))
+
+
+
+
+
 ## [7.22.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.22.0...react-instantsearch@7.22.1) (2025-12-31)
 
 **Note:** Version bump only for package react-instantsearch

@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.87.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.86.1...instantsearch.js@4.87.0) (2026-01-13)
+
+
+### Features
+
+* **chat:** add support for custom type in render state ([#6847](https://github.com/algolia/instantsearch/issues/6847)) ([b5a262d](https://github.com/algolia/instantsearch/commit/b5a262d1ca3782689742e59332a02b190c701683))
+* **chat:** include in UMD build ([#6793](https://github.com/algolia/instantsearch/issues/6793)) ([0ab30cd](https://github.com/algolia/instantsearch/commit/0ab30cd31e73b8bf83bc2fa5ac9b97e5a4f470af))
+* **chat:** support prompt suggestions ([#6831](https://github.com/algolia/instantsearch/issues/6831)) ([aca8934](https://github.com/algolia/instantsearch/commit/aca8934163c047ca56db0dad679737f331efac29))
+
+
+
+
+
 ## [4.86.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.86.0...instantsearch.js@4.86.1) (2025-12-31)
 
 
