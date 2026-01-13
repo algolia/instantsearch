@@ -7,6 +7,8 @@ import { createInstantSearchNextInstance, InstantSearchNext } from 'react-instan
 
 import { agentId, searchClient } from '../lib/client';
 
+import 'instantsearch.css/devtools/inject';
+
 // Chat uses sessionStorage, so it must be client-side only
 const Chat = dynamic(
   () => import('react-instantsearch').then((mod) => mod.Chat),

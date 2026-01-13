@@ -6,7 +6,7 @@
 
 a[class^='ais-']:focus-visible,
 button[class^='ais-']:focus-visible,
-input[class^='ais-']:not(.ais-AutocompleteInput):focus-visible,
+input[class^='ais-']:not(.ais-AutocompleteInput):not(.ais-SearchBox-input):focus-visible,
 select[class^='ais-']:focus-visible {
   outline: 2px solid
     rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));

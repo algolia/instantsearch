@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 
 import 'instantsearch.css/components/autocomplete.css';
-import 'instantsearch.css/components/prompt-suggestions.css';
+// import 'instantsearch.css/components/prompt-suggestions.css';
+import 'instantsearch.css/components/refinement-suggestions.css';
 import 'instantsearch.css/components/chat.css';
 import '../styles/algolia.css';
 

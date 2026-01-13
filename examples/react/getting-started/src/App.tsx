@@ -9,6 +9,7 @@ import {
   Pagination,
   RefinementList,
   SearchBox,
+  RefinementSuggestions,
   TrendingItems,
   Carousel,
   Chat,
@@ -21,8 +22,8 @@ import 'instantsearch.css/themes/satellite.css';
 import './App.css';
 
 const searchClient = algoliasearch(
-  'latency',
-  '6be0576ff61c053d5f9a3225e2a90f76'
+  'F4T6CUV2AH',
+  'f33fd36eb0c251c553e3cd7684a6ba33'
 );
 
 export function App() {
@@ -46,7 +47,7 @@ export function App() {
           indexName="instant_search"
           insights={true}
         >
-          <Configure hitsPerPage={8} />
+          <Configure hitsPerPage={8} facets={['brand', 'categories']} />
           <div className="search-panel">
             <div className="search-panel__filters">
               <Panel header="brand">
@@ -56,6 +57,14 @@ export function App() {
 
             <div className="search-panel__results">
               <SearchBox placeholder="" className="searchbox" />
+
+              {/* Suggested refinements below search box */}
+              <RefinementSuggestions
+                agentId="b9f41bec-4acc-4996-a382-43877604c023"
+                attributes={['brand', 'categories']}
+                maxSuggestions={3}
+              />
+
               <Hits hitComponent={HitComponent} />
 
               <div className="pagination">
