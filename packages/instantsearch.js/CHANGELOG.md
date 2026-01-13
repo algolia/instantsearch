@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.86.1](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.86.0...instantsearch.js@4.86.1) (2025-12-31)
+
+
+### Bug Fixes
+
+* **dependencies:** remove qs limitation ([#6850](https://github.com/algolia/instantsearch/issues/6850)) ([ca86687](https://github.com/algolia/instantsearch/commit/ca866878fb532f8f0667126b1c052b1fb1a7ff55)), closes [#6849](https://github.com/algolia/instantsearch/issues/6849)
+
+
+
+
+
+# [4.86.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.85.2...instantsearch.js@4.86.0) (2025-12-30)
+
+
+### Features
+
+* **autocomplete:** add header to showRecents ([#6816](https://github.com/algolia/instantsearch/issues/6816)) ([7f5e54d](https://github.com/algolia/instantsearch/commit/7f5e54da487874e59ae390bc9082c936d7c47dce))
+* **autocomplete:** implement apply suggestion button ([#6844](https://github.com/algolia/instantsearch/issues/6844)) ([730e6f0](https://github.com/algolia/instantsearch/commit/730e6f0dd2271d8e044c5b65d891243c21d0af27))
+* **sortBy:** support composition sorting strategies ([#6841](https://github.com/algolia/instantsearch/issues/6841)) ([f7d7a66](https://github.com/algolia/instantsearch/commit/f7d7a66359bbd2479ae120f7de6823f15695d78d))
+
+
+
+
+
 ## [4.85.2](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.85.1...instantsearch.js@4.85.2) (2025-12-10)
 
 

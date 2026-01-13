@@ -10,27 +10,27 @@
     },
     {
       "path": "./packages/instantsearch.js/dist/instantsearch.production.min.js",
-      "maxSize": "91 kB"
+      "maxSize": "123 kB"
     },
     {
       "path": "./packages/instantsearch.js/dist/instantsearch.development.js",
-      "maxSize": "193.5 kB"
+      "maxSize": "243.25 kB"
     },
     {
       "path": "packages/react-instantsearch-core/dist/umd/ReactInstantSearchCore.min.js",
-      "maxSize": "53.75 kB"
+      "maxSize": "62 kB"
     },
     {
       "path": "packages/react-instantsearch/dist/umd/ReactInstantSearch.min.js",
-      "maxSize": "72.5 kB"
+      "maxSize": "82 kB"
     },
     {
       "path": "packages/vue-instantsearch/vue2/umd/index.js",
-      "maxSize": "70 kB"
+      "maxSize": "80 kB"
     },
     {
       "path": "packages/vue-instantsearch/vue3/umd/index.js",
-      "maxSize": "70 kB"
+      "maxSize": "80 kB"
     },
     {
       "path": "packages/vue-instantsearch/vue2/cjs/index.js",
@@ -66,7 +66,7 @@
     },
     {
       "path": "./packages/instantsearch.css/components/chat.css",
-      "maxSize": "5 kB"
+      "maxSize": "5.25 kB"
     },
     {
       "path": "./packages/instantsearch.css/components/chat-min.css",

@@ -850,4 +850,577 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/sort-by/js/
       });
     });
   });
+
+  describe('Sorting Strategies (Composition Mode)', () => {
+    describe('Validation', () => {
+      it('throws when item has both value and strategy', () => {
+        expect(() => {
+          connectSortBy(() => {})({
+            items: [
+              { value: 'index1', strategy: 'strategy1', label: 'Test' } as any,
+            ],
+          });
+        }).toThrow(
+          'Item at index 0 cannot have both "value" and "strategy" properties.'
+        );
+      });
+
+      it('throws when item has neither value nor strategy', () => {
+        expect(() => {
+          connectSortBy(() => {})({
+            items: [{ label: 'Test' } as any],
+          });
+        }).toThrow(
+          'Item at index 0 must have either a "value" or "strategy" property.'
+        );
+      });
+
+      it('throws when strategies are used without composition mode', () => {
+        const rendering = jest.fn();
+        const makeWidget = connectSortBy(rendering);
+        const instantSearchInstance = createInstantSearch({
+          indexName: 'defaultIndex',
+        });
+
+        const items = [{ strategy: 'price_asc', label: 'Price Ascending' }];
+        const widget = makeWidget({ items });
+
+        const helper = algoliasearchHelper(
+          createSearchClient(),
+          'defaultIndex'
+        );
+
+        expect(() => {
+          widget.init!(
+            createInitOptions({
+              helper,
+              state: helper.state,
+              instantSearchInstance,
+            })
+          );
+        }).toThrow(
+          'Sorting strategies can only be used in composition mode. Please provide a "compositionID" to your InstantSearch instance.'
+        );
+      });
+
+      it('does not throw when strategies are used with composition mode', () => {
+        const rendering = jest.fn();
+        const makeWidget = connectSortBy(rendering);
+        const instantSearchInstance = createInstantSearch({
+          indexName: 'defaultIndex',
+        });
+        instantSearchInstance.compositionID = 'my-composition';
+
+        const items = [{ strategy: 'price_asc', label: 'Price Ascending' }];
+        const widget = makeWidget({ items });
+
+        const helper = algoliasearchHelper(
+          createSearchClient(),
+          'my-composition'
+        );
+
+        expect(() => {
+          widget.init!(
+            createInitOptions({
+              helper,
+              state: helper.state,
+              instantSearchInstance,
+            })
+          );
+        }).not.toThrow();
+      });
+    });
+
+    describe('Normalization', () => {
+      it('normalizes strategy items to have value property in options', () => {
+        const rendering = jest.fn();
+        const makeWidget = connectSortBy(rendering);
+        const instantSearchInstance = createInstantSearch({
+          indexName: 'defaultIndex',
+        });
+        instantSearchInstance.compositionID = 'my-composition';
+
+        const items = [
+          { strategy: 'relevance', label: 'Most Relevant' },
+          { strategy: 'price_asc', label: 'Price: Low to High' },
+        ];
+        const widget = makeWidget({ items });
+
+        const helper = algoliasearchHelper(
+          createSearchClient(),
+          'my-composition'
+        );
+        helper.search = jest.fn();
+
+        widget.init!(
+          createInitOptions({
+            helper,
+            state: helper.state,
+            instantSearchInstance,
+          })
+        );
+
+        expect(rendering).toHaveBeenLastCalledWith(
+          expect.objectContaining({
+            options: [
+              { value: 'relevance', label: 'Most Relevant' },
+              { value: 'price_asc', label: 'Price: Low to High' },
+            ],
+          }),
+          true
+        );
+      });
+
+      it('normalizes mixed index and strategy items', () => {
+        const rendering = jest.fn();
+        const makeWidget = connectSortBy(rendering);
+        const instantSearchInstance = createInstantSearch({
+          indexName: 'defaultIndex',
+        });
+        instantSearchInstance.compositionID = 'my-composition';
+
+        const items = [
+          { value: 'products', label: 'Default' },
+          { strategy: 'price_asc', label: 'Price: Low to High' },
+        ];
+        const widget = makeWidget({ items });
+
+        const helper = algoliasearchHelper(
+          createSearchClient(),
+          'my-composition'
+        );
+        helper.search = jest.fn();
+
+        widget.init!(
+          createInitOptions({
+            helper,
+            state: helper.state,
+            instantSearchInstance,
+          })
+        );
+
+        expect(rendering).toHaveBeenLastCalledWith(
+          expect.objectContaining({
+            options: [
+              { value: 'products', label: 'Default' },
+              { value: 'price_asc', label: 'Price: Low to High' },
+            ],
+          }),
+          true
+        );
+      });
+    });
+
+    describe('Refine functionality', () => {
+      it('calls setQueryParameter with sortBy for strategy items', () => {
+        const rendering = jest.fn();
+        const makeWidget = connectSortBy(rendering);
+        const instantSearchInstance = createInstantSearch({
+          indexName: 'defaultIndex',
+        });
+        instantSearchInstance.compositionID = 'my-composition';
+
+        const items = [{ strategy: 'price_asc', label: 'Price: Low to High' }];
+        const widget = makeWidget({ items });
+
+        const helper = algoliasearchHelper(
+          createSearchClient(),
+          'my-composition'
+        );
+        helper.search = jest.fn();
+        helper.setQueryParameter = jest.fn(() => helper);
+
+        widget.init!(
+          createInitOptions({
+            helper,
+            state: helper.state,
+            instantSearchInstance,
+          })
+        );
+
+        const { refine } = rendering.mock.calls[0][0];
+        refine('price_asc');
+
+        expect(helper.setQueryParameter).toHaveBeenCalledWith(
+          'sortBy',
+          'price_asc'
+        );
+        expect(helper.search).toHaveBeenCalled();
+      });
+
+      it('calls setIndex for index items', () => {
+        const rendering = jest.fn();
+        const makeWidget = connectSortBy(rendering);
+        const instantSearchInstance = createInstantSearch({
+          indexName: 'defaultIndex',
+        });
+        instantSearchInstance.compositionID = 'my-composition';
+
+        const items = [{ value: 'products_asc', label: 'Products ASC' }];
+        const widget = makeWidget({ items });
+
+        const helper = algoliasearchHelper(
+          createSearchClient(),
+          'my-composition'
+        );
+        helper.search = jest.fn();
+        helper.setIndex = jest.fn(() => helper);
+
+        widget.init!(
+          createInitOptions({
+            helper,
+            state: helper.state,
+            instantSearchInstance,
+          })
+        );
+
+        const { refine } = rendering.mock.calls[0][0];
+        refine('products_asc');
+
+        expect(helper.setIndex).toHaveBeenCalledWith('products_asc');
+        expect(helper.search).toHaveBeenCalled();
+      });
+
+      it('handles mixed items correctly in refine', () => {
+        const rendering = jest.fn();
+        const makeWidget = connectSortBy(rendering);
+        const instantSearchInstance = createInstantSearch({
+          indexName: 'defaultIndex',
+        });
+        instantSearchInstance.compositionID = 'my-composition';
+
+        const items = [
+          { value: 'products', label: 'Default' },
+          { strategy: 'price_asc', label: 'Price: Low to High' },
+        ];
+        const widget = makeWidget({ items });
+
+        const helper = algoliasearchHelper(
+          createSearchClient(),
+          'my-composition'
+        );
+        helper.search = jest.fn();
+        helper.setIndex = jest.fn(() => helper);
+        helper.setQueryParameter = jest.fn(() => helper);
+
+        widget.init!(
+          createInitOptions({
+            helper,
+            state: helper.state,
+            instantSearchInstance,
+          })
+        );
+
+        const { refine } = rendering.mock.calls[0][0];
+
+        // Refine with index
+        refine('products');
+        expect(helper.setQueryParameter).toHaveBeenCalledWith(
+          'sortBy',
+          undefined
+        );
+        expect(helper.setIndex).toHaveBeenCalledWith('products');
+
+        helper.setIndex = jest.fn(() => helper);
+        helper.setQueryParameter = jest.fn(() => helper);
+
+        // Refine with strategy
+        refine('price_asc');
+        expect(helper.setQueryParameter).toHaveBeenCalledWith(
+          'sortBy',
+          'price_asc'
+        );
+        expect(helper.setIndex).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('Current refinement', () => {
+      it('reads currentRefinement from state.sortBy in composition mode', () => {
+        const rendering = jest.fn();
+        const makeWidget = connectSortBy(rendering);
+        const instantSearchInstance = createInstantSearch({
+          indexName: 'defaultIndex',
+        });
+        instantSearchInstance.compositionID = 'my-composition';
+
+        const items = [{ strategy: 'price_asc', label: 'Price: Low to High' }];
+        const widget = makeWidget({ items });
+
+        const helper = algoliasearchHelper(
+          createSearchClient(),
+          'my-composition'
+        );
+        const state = helper.state.setQueryParameter(
+          'sortBy' as any,
+          'price_asc'
+        );
+
+        widget.render!(
+          createRenderOptions({
+            results: new SearchResults(state, [createSingleSearchResponse()]),
+            state,
+            helper,
+            instantSearchInstance,
+          })
+        );
+
+        expect(rendering).toHaveBeenLastCalledWith(
+          expect.objectContaining({
+            currentRefinement: 'price_asc',
+          }),
+          false
+        );
+      });
+
+      it('reads currentRefinement from state.index when sortBy not set', () => {
+        const rendering = jest.fn();
+        const makeWidget = connectSortBy(rendering);
+        const instantSearchInstance = createInstantSearch({
+          indexName: 'defaultIndex',
+        });
+        instantSearchInstance.compositionID = 'my-composition';
+
+        const items = [{ value: 'products', label: 'Products' }];
+        const widget = makeWidget({ items });
+
+        const helper = algoliasearchHelper(
+          createSearchClient(),
+          'my-composition'
+        );
+
+        widget.render!(
+          createRenderOptions({
+            results: new SearchResults(helper.state, [
+              createSingleSearchResponse(),
+            ]),
+            state: helper.state,
+            helper,
+            instantSearchInstance,
+          })
+        );
+
+        expect(rendering).toHaveBeenLastCalledWith(
+          expect.objectContaining({
+            currentRefinement: 'my-composition',
+          }),
+          false
+        );
+      });
+    });
+
+    describe('UI State', () => {
+      it('sets sortBy in uiState from state.sortBy in composition mode', () => {
+        const makeWidget = connectSortBy(() => {});
+        const instantSearchInstance = createInstantSearch({
+          indexName: 'defaultIndex',
+        });
+        instantSearchInstance.compositionID = 'my-composition';
+
+        const items = [{ strategy: 'price_asc', label: 'Price: Low to High' }];
+        const widget = makeWidget({ items });
+
+        const helper = algoliasearchHelper(
+          createSearchClient(),
+          'my-composition'
+        );
+
+        widget.init!(
+          createInitOptions({
+            helper,
+            state: helper.state,
+            instantSearchInstance,
+          })
+        );
+
+        const state = helper.state.setQueryParameter(
+          'sortBy' as any,
+          'price_asc'
+        );
+        const uiState = widget.getWidgetUiState(
+          {},
+          {
+            searchParameters: state,
+            helper,
+          }
+        );
+
+        expect(uiState).toEqual({
+          sortBy: 'price_asc',
+        });
+      });
+
+      it('does not set sortBy in uiState when it matches initialValue', () => {
+        const makeWidget = connectSortBy(() => {});
+        const instantSearchInstance = createInstantSearch({
+          indexName: 'my-composition',
+        });
+        instantSearchInstance.compositionID = 'my-composition';
+
+        const items = [
+          { value: 'my-composition', label: 'Default' },
+          { strategy: 'price_asc', label: 'Price: Low to High' },
+        ];
+        const widget = makeWidget({ items });
+
+        const helper = algoliasearchHelper(
+          createSearchClient(),
+          'my-composition'
+        );
+
+        widget.init!(
+          createInitOptions({
+            helper,
+            state: helper.state,
+            instantSearchInstance,
+          })
+        );
+
+        const uiState = widget.getWidgetUiState(
+          {},
+          {
+            searchParameters: helper.state,
+            helper,
+          }
+        );
+
+        expect(uiState).toEqual({});
+      });
+    });
+
+    describe('Search Parameters', () => {
+      it('sets sortBy parameter for strategy items', () => {
+        const makeWidget = connectSortBy(() => {});
+        const instantSearchInstance = createInstantSearch({
+          indexName: 'defaultIndex',
+        });
+        instantSearchInstance.compositionID = 'my-composition';
+
+        const items = [{ strategy: 'price_asc', label: 'Price: Low to High' }];
+        const widget = makeWidget({ items });
+
+        const helper = algoliasearchHelper(
+          createSearchClient(),
+          'my-composition'
+        );
+
+        widget.init!(
+          createInitOptions({
+            helper,
+            state: helper.state,
+            instantSearchInstance,
+          })
+        );
+
+        const newState = widget.getWidgetSearchParameters(helper.state, {
+          uiState: { sortBy: 'price_asc' },
+        }) as any;
+
+        expect(newState.sortBy).toBe('price_asc');
+      });
+
+      it('sets index parameter for index items', () => {
+        const makeWidget = connectSortBy(() => {});
+        const instantSearchInstance = createInstantSearch({
+          indexName: 'defaultIndex',
+        });
+        instantSearchInstance.compositionID = 'my-composition';
+
+        const items = [{ value: 'products_asc', label: 'Products ASC' }];
+        const widget = makeWidget({ items });
+
+        const helper = algoliasearchHelper(
+          createSearchClient(),
+          'my-composition'
+        );
+
+        widget.init!(
+          createInitOptions({
+            helper,
+            state: helper.state,
+            instantSearchInstance,
+          })
+        );
+
+        const newState = widget.getWidgetSearchParameters(helper.state, {
+          uiState: { sortBy: 'products_asc' },
+        }) as any;
+
+        expect(newState.index).toBe('products_asc');
+        expect(newState.sortBy).toBeUndefined();
+      });
+    });
+
+    describe('Dispose', () => {
+      it('clears sortBy parameter on dispose in composition mode', () => {
+        const unmount = jest.fn();
+        const makeWidget = connectSortBy(() => {}, unmount);
+        const instantSearchInstance = createInstantSearch({
+          indexName: 'defaultIndex',
+        });
+        instantSearchInstance.compositionID = 'my-composition';
+
+        const items = [{ strategy: 'price_asc', label: 'Price: Low to High' }];
+        const widget = makeWidget({ items });
+
+        const helper = algoliasearchHelper(
+          createSearchClient(),
+          'my-composition'
+        );
+
+        widget.init!(
+          createInitOptions({
+            helper,
+            state: helper.state,
+            instantSearchInstance,
+          })
+        );
+
+        const stateWithSortBy = helper.state.setQueryParameter(
+          'sortBy' as any,
+          'price_asc'
+        );
+
+        const newState = widget.dispose!(
+          createDisposeOptions({ helper, state: stateWithSortBy })
+        ) as any;
+
+        expect(newState.sortBy).toBeUndefined();
+        expect(unmount).toHaveBeenCalled();
+      });
+
+      it('restores initial index on dispose', () => {
+        const unmount = jest.fn();
+        const makeWidget = connectSortBy(() => {}, unmount);
+        const instantSearchInstance = createInstantSearch({
+          indexName: 'my-composition',
+        });
+        instantSearchInstance.compositionID = 'my-composition';
+
+        const items = [{ value: 'products_desc', label: 'Products DESC' }];
+        const widget = makeWidget({ items });
+
+        const helper = algoliasearchHelper(
+          createSearchClient(),
+          'my-composition'
+        );
+
+        widget.init!(
+          createInitOptions({
+            helper,
+            state: helper.state,
+            instantSearchInstance,
+          })
+        );
+
+        const stateWithDifferentIndex = helper.state.setIndex('products_desc');
+
+        const newState = widget.dispose!(
+          createDisposeOptions({ helper, state: stateWithDifferentIndex })
+        ) as any;
+
+        expect(newState.index).toBe('my-composition');
+        expect(unmount).toHaveBeenCalled();
+      });
+    });
+  });
 });

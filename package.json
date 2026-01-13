@@ -136,6 +136,7 @@
     "rollup-plugin-node-resolve": "5.2.0",
     "rollup-plugin-replace": "2.2.0",
     "rollup-plugin-uglify": "6.0.4",
+    "rollup-plugin-alias": "2.2.0",
     "shelljs": "0.8.5",
     "shipjs": "0.26.0",
     "ts-jest": "27",
@@ -146,7 +147,8 @@
     "brotli-size": "4.0.0",
     "webpack": "4.47.0",
     "babel-loader": "8.2.2",
-    "zod": "3.25.76"
+    "zod": "3.25.76",
+    "qs": "6.9.7"
   },
   "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }

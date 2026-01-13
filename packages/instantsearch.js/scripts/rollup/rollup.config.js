@@ -1,3 +1,6 @@
+import path from 'path';
+
+import alias from 'rollup-plugin-alias';
 import babel from 'rollup-plugin-babel';
 import commonjs from 'rollup-plugin-commonjs';
 import filesize from 'rollup-plugin-filesize';
@@ -16,6 +19,25 @@ const link = 'https://github.com/algolia/instantsearch';
 const license = `/*! InstantSearch.js ${version} | ${algolia} | ${link} */`;
 
 const plugins = [
+  alias({
+    entries: [
+      {
+        find: /^zod.*/,
+        replacement: path.join(__dirname, './emptyModule.js'),
+      },
+      {
+        find: /^react.*/,
+        replacement: path.join(__dirname, './emptyModule.js'),
+      },
+      {
+        find: 'eventsource-parser/stream',
+        replacement: path.join(
+          __dirname,
+          '../../../../node_modules/eventsource-parser/dist/stream.js'
+        ),
+      },
+    ],
+  }),
   resolve({
     browser: true,
     preferBuiltins: false,
@@ -40,7 +62,7 @@ const createConfiguration = ({ mode, filename }) => ({
     file: `dist/${filename}`,
     name: 'instantsearch',
     format: 'umd',
-    banner: license,
+    banner: `${license}\n(function(){if(typeof TransformStream==='undefined'){var g=typeof window!=='undefined'?window:this;g.TransformStream=function(){};g.TransformStream.prototype={readable:null,writable:null};}})();`,
     sourcemap: true,
   },
   onwarn(warning, warn) {

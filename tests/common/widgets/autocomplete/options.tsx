@@ -1126,5 +1126,72 @@ export function createOptionsTests(
 
       expect(input).toHaveFocus();
     });
+
+    test('applies query suggestions when clicking on the fill action button', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'query_suggestions',
+            hits: [
+              { objectID: '1', query: 'hello' },
+              { objectID: '2', query: 'hi' },
+            ],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'query_suggestions',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            showSuggestions: {
+              indexName: 'query_suggestions',
+            },
+          },
+          react: {
+            showSuggestions: {
+              indexName: 'query_suggestions',
+            },
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const applyButton = screen.getByRole('button', {
+        name: /apply hello as search/i,
+        hidden: true,
+      });
+      expect(applyButton).toBeInTheDocument();
+
+      await act(async () => {
+        userEvent.click(applyButton);
+        await wait(0);
+      });
+
+      expect(
+        screen.getByRole('combobox', {
+          name: /submit/i,
+        })
+      ).toHaveValue('hello');
+
+      // 2 initial calls for the root index + suggestions index, then 1 for the suggestions index only
+      expect(searchClient.search).toHaveBeenCalledTimes(3);
+      expect(searchClient.search).toHaveBeenLastCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            params: expect.objectContaining({
+              query: 'hello',
+            }),
+          }),
+        ])
+      );
+    });
   });
 }
