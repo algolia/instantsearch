@@ -62,9 +62,7 @@ const createConfiguration = ({ mode, filename }) => ({
     file: `dist/${filename}`,
     name: 'instantsearch',
     format: 'umd',
-    banner: license,
-    // fake polyfill for TransformStream in older browsers, to prevent IE11 breaking entirely, even without using ai library.
-    intro: `if (typeof TransformStream === 'undefined' && typeof window === 'object') { window.TransformStream = function TransformStream() { throw new Error('TransformStream is undefined'); }; }`,
+    banner: `${license}\n(function(){if(typeof TransformStream==='undefined'){var g=typeof window!=='undefined'?window:this;g.TransformStream=function(){};g.TransformStream.prototype={readable:null,writable:null};}})();`,
     sourcemap: true,
   },
   onwarn(warning, warn) {
