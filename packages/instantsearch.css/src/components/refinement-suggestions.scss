@@ -1,0 +1,107 @@
+@use '../shared/_variables';
+@use '../shared/_common';
+
+.ais-RefinementSuggestions {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--ais-spacing) * 0.5);
+}
+
+.ais-RefinementSuggestions-header {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--ais-spacing) * 0.5);
+}
+
+.ais-RefinementSuggestions-headerIcon {
+  display: flex;
+  align-items: center;
+  color: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+
+  svg {
+    width: var(--ais-icon-size);
+    height: var(--ais-icon-size);
+  }
+}
+
+.ais-RefinementSuggestions-headerTitle {
+  font-size: var(--ais-font-size-sm);
+  font-weight: 500;
+  color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+}
+
+.ais-RefinementSuggestions-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--ais-spacing) * 0.5);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ais-RefinementSuggestions-item {
+  display: inline-flex;
+  white-space: nowrap;
+}
+
+// Refined state
+.ais-RefinementSuggestions-item--refined {
+  .ais-RefinementSuggestions-nbHits {
+    color: rgba(
+      var(--ais-button-text-color-rgb),
+      var(--ais-button-text-color-alpha)
+    );
+    background-color: rgba(
+      var(--ais-button-text-color-rgb),
+      0.2
+    );
+  }
+}
+
+.ais-RefinementSuggestions-nbHits {
+  font-size: calc(var(--ais-font-size) * 0.8);
+  color: rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha));
+  background-color: rgba(var(--ais-muted-color-rgb), 0.1);
+  padding: calc(var(--ais-spacing) * 0.125) calc(var(--ais-spacing) * 0.375);
+  border-radius: var(--ais-border-radius-sm);
+}
+
+// Skeleton loading state
+.ais-RefinementSuggestions-skeleton {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--ais-spacing) * 0.5);
+}
+
+.ais-RefinementSuggestions-skeletonItem {
+  height: calc(var(--ais-spacing) * 1.875);
+  background-color: rgba(var(--ais-muted-color-rgb), 0.15);
+  border-radius: var(--ais-border-radius-sm);
+
+  // Varying widths to mimic real suggestions (totaling ~100%)
+  &:nth-child(1) {
+    width: 25%;
+  }
+
+  &:nth-child(2) {
+    width: 35%;
+  }
+
+  &:nth-child(3) {
+    width: 20%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: ais-refinement-suggestions-skeleton 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes ais-refinement-suggestions-skeleton {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
