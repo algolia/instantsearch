@@ -225,7 +225,7 @@ export function createAutocompletePropGetters({
               event.preventDefault();
               return;
             default:
-              setActiveDescendant(undefined);
+              setActiveDescendant(itemsIds[0] || undefined);
               break;
           }
         },

@@ -1,6 +1,7 @@
 import EventEmitter from '@algolia/events';
 import algoliasearchHelper from 'algoliasearch-helper';
 
+import { createExperienceMiddleware } from '../middlewares/createExperienceMiddleware';
 import { createInsightsMiddleware } from '../middlewares/createInsightsMiddleware';
 import {
   createMetadataMiddleware,
@@ -23,6 +24,7 @@ import {
 } from './utils';
 import version from './version';
 
+import type { ExperienceProps } from '../middlewares/createExperienceMiddleware';
 import type {
   InsightsEvent,
   InsightsProps,
@@ -191,6 +193,8 @@ export type InstantSearchOptions<
      */
     // @MAJOR: Remove legacy behaviour here and in algoliasearch-helper
     persistHierarchicalRootCount?: boolean;
+
+    enableExperience?: boolean | ExperienceProps;
   };
 };
 
@@ -201,6 +205,7 @@ export const INSTANTSEARCH_FUTURE_DEFAULTS: Required<
 > = {
   preserveSharedStateOnUnmount: false,
   persistHierarchicalRootCount: false,
+  enableExperience: false,
 };
 
 /**
@@ -730,6 +735,18 @@ See documentation: ${createDocumentationLink({
     this.middleware.forEach(({ instance }) => {
       instance.started();
     });
+
+    // This is the automatic Managed Ui middleware,
+    // added when `future.managedUi` is set.
+    if (this.future.enableExperience) {
+      this.use(
+        createExperienceMiddleware(
+          typeof this.future.enableExperience !== 'boolean'
+            ? this.future.enableExperience
+            : {}
+        )
+      );
+    }
 
     // This is the automatic Insights middleware,
     // added when `insights` is unset and the initial results possess `queryID`.

@@ -1,5 +1,6 @@
 import path from 'path';
 
+import alias from 'rollup-plugin-alias';
 import babel from 'rollup-plugin-babel';
 import commonjs from 'rollup-plugin-commonjs';
 import resolve from 'rollup-plugin-node-resolve';
@@ -17,6 +18,38 @@ const link = 'https://github.com/algolia/instantsearch';
 const license = `/*! algolia-experiences ${version} | ${algolia} | ${link} */`;
 
 const plugins = [
+  alias({
+    entries: [
+      {
+        find: /^zod.*/,
+        replacement: path.join(
+          __dirname,
+          '../instantsearch.js/scripts/rollup/emptyModule.js'
+        ),
+      },
+      {
+        find: /^react.*/,
+        replacement: path.join(
+          __dirname,
+          '../instantsearch.js/scripts/rollup/emptyModule.js'
+        ),
+      },
+      {
+        find: /^instantsearch\.css\/.*\.css$/,
+        replacement: path.join(
+          __dirname,
+          '../instantsearch.js/scripts/rollup/emptyModule.js'
+        ),
+      },
+      {
+        find: 'eventsource-parser/stream',
+        replacement: path.join(
+          __dirname,
+          '../../node_modules/eventsource-parser/dist/stream.js'
+        ),
+      },
+    ],
+  }),
   {
     /**
      * This plugin is a workaround for the fact that the `algoliasearch/lite`

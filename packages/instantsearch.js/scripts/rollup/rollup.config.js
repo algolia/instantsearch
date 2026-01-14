@@ -30,6 +30,10 @@ const plugins = [
         replacement: path.join(__dirname, './emptyModule.js'),
       },
       {
+        find: /^instantsearch\.css\/.*\.css$/,
+        replacement: path.join(__dirname, './emptyModule.js'),
+      },
+      {
         find: 'eventsource-parser/stream',
         replacement: path.join(
           __dirname,
