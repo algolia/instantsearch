@@ -1,4 +1,5 @@
-import type { InstantSearch, Widget } from '../../types';
+import type { IndexWidget, InstantSearch, Widget } from '../../types';
+import type { AutocompleteWidget } from '../autocomplete/autocomplete';
 import type { ChatWidget } from '../chat/chat';
 import type { TemplateChild } from './render';
 
@@ -24,7 +25,7 @@ type SupportedWidget<
   TWidgetParameters = unknown,
   TApiParameters = ExperienceApiResponse['blocks'][0]['parameters']
 > = {
-  widget: (...args: any[]) => Widget;
+  widget: (...args: any[]) => Widget | Array<IndexWidget | Widget>;
   transformParams: (
     params: TApiParameters,
     options: {
@@ -37,6 +38,7 @@ type SupportedWidget<
 export type ExperienceWidget = Widget & {
   $$widgetParams: ExperienceWidgetParams;
   $$supportedWidgets: {
+    'ais.autocomplete': SupportedWidget<Parameters<AutocompleteWidget>[0]>;
     'ais.chat': SupportedWidget<
       Parameters<ChatWidget>[0],
       ExperienceApiResponse['blocks'][0]['parameters'] & {
