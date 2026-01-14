@@ -4,6 +4,10 @@
 
 import { createAutocompleteStorage } from '../createAutocompleteStorage';
 
+import type { AutocompleteIndexConfig } from '../createAutocompletePropGetters';
+
+type BaseHit = Record<string, unknown>;
+
 describe('createAutocompleteStorage', () => {
   let effectCallback: (() => void) | null = null;
   const mockUseEffect = jest.fn((callback: () => void) => {
@@ -28,7 +32,7 @@ describe('createAutocompleteStorage', () => {
     localStorage.clear();
   });
 
-  it('filters out suggestions that match recent searches when suggestionsIndexName is provided', () => {
+  test('filters out suggestions that match recent searches when suggestionsIndexName is provided', () => {
     const useStorage = createAutocompleteStorage({
       useEffect: mockUseEffect,
       useMemo: mockUseMemo,
@@ -83,14 +87,14 @@ describe('createAutocompleteStorage', () => {
       },
     ];
 
-    const indicesConfig = [
+    const indicesConfig: Array<AutocompleteIndexConfig<BaseHit>> = [
       {
         indexName: 'products',
-        getQuery: (item: any) => item.name,
+        getQuery: (item) => (item.name as string) || '',
       },
       {
         indexName: 'suggestions',
-        getQuery: (item: any) => item.query,
+        getQuery: (item) => (item.query as string) || '',
       },
     ];
 
@@ -134,7 +138,7 @@ describe('createAutocompleteStorage', () => {
     });
   });
 
-  it('does not filter suggestions when suggestionsIndexName is not provided', () => {
+  test('does not filter suggestions when suggestionsIndexName is not provided', () => {
     const useStorage = createAutocompleteStorage({
       useEffect: mockUseEffect,
       useMemo: mockUseMemo,
@@ -168,10 +172,10 @@ describe('createAutocompleteStorage', () => {
       },
     ];
 
-    const indicesConfig = [
+    const indicesConfig: Array<AutocompleteIndexConfig<BaseHit>> = [
       {
         indexName: 'suggestions',
-        getQuery: (item: any) => item.query,
+        getQuery: (item) => (item.query as string) || '',
       },
     ];
 
@@ -191,7 +195,7 @@ describe('createAutocompleteStorage', () => {
     expect(suggestionsIndex?.hits).toHaveLength(3);
   });
 
-  it('does not filter suggestions when showRecent is false', () => {
+  test('does not filter suggestions when showRecent is false', () => {
     const useStorage = createAutocompleteStorage({
       useEffect: mockUseEffect,
       useMemo: mockUseMemo,
@@ -215,10 +219,10 @@ describe('createAutocompleteStorage', () => {
       },
     ];
 
-    const indicesConfig = [
+    const indicesConfig: Array<AutocompleteIndexConfig<BaseHit>> = [
       {
         indexName: 'suggestions',
-        getQuery: (item: any) => item.query,
+        getQuery: (item) => (item.query as string) || '',
       },
     ];
 
@@ -235,7 +239,7 @@ describe('createAutocompleteStorage', () => {
     expect(result.storageHits).toEqual([]);
   });
 
-  it('filters suggestions correctly when recent searches contain partial matches', () => {
+  test('filters suggestions correctly when recent searches contain partial matches', () => {
     const useStorage = createAutocompleteStorage({
       useEffect: mockUseEffect,
       useMemo: mockUseMemo,
@@ -269,10 +273,10 @@ describe('createAutocompleteStorage', () => {
       },
     ];
 
-    const indicesConfig = [
+    const indicesConfig: Array<AutocompleteIndexConfig<BaseHit>> = [
       {
         indexName: 'suggestions',
-        getQuery: (item: any) => item.query,
+        getQuery: (item) => (item.query as string) || '',
       },
     ];
 
