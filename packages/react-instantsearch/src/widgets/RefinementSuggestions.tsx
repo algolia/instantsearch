@@ -15,14 +15,33 @@ const RefinementSuggestionsUiComponent = createRefinementSuggestionsComponent({
 
 type UiProps = Pick<
   RefinementSuggestionsUiComponentProps,
-  'suggestions' | 'isLoading' | 'onRefine' | 'skeletonCount'
+  | 'suggestions'
+  | 'isLoading'
+  | 'onRefine'
+  | 'skeletonCount'
+  | 'itemComponent'
+  | 'headerComponent'
+  | 'emptyComponent'
 >;
 
 export type RefinementSuggestionsProps = Omit<
   RefinementSuggestionsUiComponentProps,
   keyof UiProps
 > &
-  UseRefinementSuggestionsProps;
+  UseRefinementSuggestionsProps & {
+    /**
+     * Component to render each suggestion item.
+     */
+    itemComponent?: RefinementSuggestionsUiComponentProps['itemComponent'];
+    /**
+     * Component to render the header.
+     */
+    headerComponent?: RefinementSuggestionsUiComponentProps['headerComponent'];
+    /**
+     * Component to render when there are no suggestions.
+     */
+    emptyComponent?: RefinementSuggestionsUiComponentProps['emptyComponent'];
+  };
 
 export function RefinementSuggestions({
   agentId,
@@ -31,6 +50,9 @@ export function RefinementSuggestions({
   debounceMs,
   hitsToSample,
   transformItems,
+  itemComponent,
+  headerComponent,
+  emptyComponent,
   ...props
 }: RefinementSuggestionsProps) {
   const { suggestions, isLoading, refine } = useRefinementSuggestions(
@@ -50,6 +72,9 @@ export function RefinementSuggestions({
     isLoading,
     onRefine: refine,
     skeletonCount: maxSuggestions,
+    itemComponent,
+    headerComponent,
+    emptyComponent,
   };
 
   return <RefinementSuggestionsUiComponent {...props} {...uiProps} />;
