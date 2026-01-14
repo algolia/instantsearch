@@ -2,7 +2,7 @@ import { find } from '../../lib';
 
 import type { UsePropGetters } from './createAutocompletePropGetters';
 
-type CreateAutocompleteStorageParams = {
+export type CreateAutocompleteStorageParams = {
   useEffect: (effect: () => void, inputs?: readonly unknown[]) => void;
   useMemo: <TType>(factory: () => TType, inputs: readonly unknown[]) => TType;
   useState: <TType>(

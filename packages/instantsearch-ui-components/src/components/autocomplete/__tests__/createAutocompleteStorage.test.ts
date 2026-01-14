@@ -5,39 +5,41 @@
 import { createAutocompleteStorage } from '../createAutocompleteStorage';
 
 import type { AutocompleteIndexConfig } from '../createAutocompletePropGetters';
+import type { CreateAutocompleteStorageParams } from '../createAutocompleteStorage';
 
 type BaseHit = Record<string, unknown>;
 
 describe('createAutocompleteStorage', () => {
-  let effectCallback: (() => void) | null = null;
-  const mockUseEffect = jest.fn((callback: () => void) => {
-    effectCallback = callback;
-    callback();
-  });
-  const mockUseMemo = jest.fn(<T>(factory: () => T) => factory());
-  const mockUseState = jest.fn(<T>(initialState: T) => {
-    let state = initialState;
-    const setState = (newState: T) => {
-      state = newState;
-    };
-    return [state, setState];
-  });
+  type MockedHooks = {
+    [key in keyof CreateAutocompleteStorageParams]: jest.MockedFunction<
+      CreateAutocompleteStorageParams[key]
+    >;
+  };
+  const mockedHooks: MockedHooks = {
+    useEffect: jest.fn((callback: () => void) => {
+      callback();
+    }),
+    useMemo: jest.fn((factory, _) => factory()) as MockedHooks['useMemo'],
+    useState: jest.fn(<T>(initialState: T) => {
+      let state = initialState;
+      const setState = (newState: T) => {
+        state = newState;
+      };
+      return [state, setState];
+    }) as MockedHooks['useState'],
+  };
+  const hooks = mockedHooks as CreateAutocompleteStorageParams;
 
   beforeEach(() => {
-    mockUseEffect.mockClear();
-    mockUseMemo.mockClear();
-    mockUseState.mockClear();
-    effectCallback = null;
+    mockedHooks.useEffect.mockClear();
+    mockedHooks.useMemo.mockClear();
+    mockedHooks.useState.mockClear();
     // Clear localStorage
     localStorage.clear();
   });
 
   test('filters out suggestions that match recent searches when suggestionsIndexName is provided', () => {
-    const useStorage = createAutocompleteStorage({
-      useEffect: mockUseEffect,
-      useMemo: mockUseMemo,
-      useState: mockUseState,
-    });
+    const useStorage = createAutocompleteStorage(hooks);
 
     // Setup: Add some items to localStorage to simulate recent searches
     localStorage.setItem(
@@ -139,11 +141,7 @@ describe('createAutocompleteStorage', () => {
   });
 
   test('does not filter suggestions when suggestionsIndexName is not provided', () => {
-    const useStorage = createAutocompleteStorage({
-      useEffect: mockUseEffect,
-      useMemo: mockUseMemo,
-      useState: mockUseState,
-    });
+    const useStorage = createAutocompleteStorage(hooks);
 
     // Setup: Add some items to localStorage to simulate recent searches
     localStorage.setItem(
@@ -196,11 +194,7 @@ describe('createAutocompleteStorage', () => {
   });
 
   test('does not filter suggestions when showRecent is false', () => {
-    const useStorage = createAutocompleteStorage({
-      useEffect: mockUseEffect,
-      useMemo: mockUseMemo,
-      useState: mockUseState,
-    });
+    const useStorage = createAutocompleteStorage(hooks);
 
     const indices = [
       {
@@ -240,11 +234,7 @@ describe('createAutocompleteStorage', () => {
   });
 
   test('filters suggestions correctly when recent searches contain partial matches', () => {
-    const useStorage = createAutocompleteStorage({
-      useEffect: mockUseEffect,
-      useMemo: mockUseMemo,
-      useState: mockUseState,
-    });
+    const useStorage = createAutocompleteStorage(hooks);
 
     // Setup: Add items to localStorage
     localStorage.setItem(
