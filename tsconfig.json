@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "ESNEXT",
+    "lib": ["ES2015", "DOM"],
     "module": "es2020",
     "moduleResolution": "node",
     "noEmit": true,
@@ -18,7 +19,6 @@
   "exclude": [
     "**/es",
     "**/dist",
-    "**/__tests__",
     "tests/e2e",
     "examples/react/next/next-env.d.ts",
     // @TODO: we need to re-enable type checking in the React Native example
