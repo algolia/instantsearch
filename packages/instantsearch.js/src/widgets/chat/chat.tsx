@@ -261,7 +261,7 @@ function createCarouselTool<
   };
 }
 
-function createDefaultTools<
+export function createDefaultTools<
   THit extends RecordWithObjectID = RecordWithObjectID
 >(
   templates: ChatTemplates<THit>,

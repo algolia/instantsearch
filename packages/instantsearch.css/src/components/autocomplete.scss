@@ -231,6 +231,89 @@
   }
 }
 
+// Dialog
+.ais-AutocompleteDialog {
+  &--active {
+    overflow: hidden !important;
+  }
+
+  .ais-AutocompleteDialog-Button {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    appearance: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: var(--ais-autocomplete-search-input-height);
+    font: inherit;
+    color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+    background-color: rgba(var(--ais-background-color-rgb), var(--ais-background-color-alpha));
+    border: 1px solid rgba(var(--ais-border-color-rgb), .8);
+    border-radius: var(--ais-border-radius-sm);
+    line-height: 1em;
+  }
+
+  .ais-AutocompleteDialog-Button-Icon {
+    display: flex;
+    align-items: center;
+    padding-left: calc(var(--ais-spacing) * .75 - 1px);
+    padding-right: calc(var(--ais-spacing) / 2);
+    height: 100%;
+    width: calc(var(--ais-spacing) * 1.75 + var(--ais-icon-size) - 1px);
+
+    svg {
+      fill: rgba(var(--ais-primary-color-rgb), 1);
+      height: auto;
+      max-height: var(--ais-icon-size);
+      stroke-width: var(--ais-icon-stroke-width);
+      width: var(--ais-icon-size);
+    }
+
+    span {
+      color: rgba(var(--ais-text-color-rgb), .8);
+    }
+  }
+
+  .ais-AutocompleteDialog-Container {
+    position: fixed;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 400;
+  }
+
+  .ais-AutocompleteDialog-Content {
+    margin: 100px auto auto;
+    max-width: 800px;
+  }
+}
+
+// Agent
+.ais-Autocomplete-AgentPrompt {
+  border-radius: 4px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 8px;
+  height: 56px;
+
+  svg {
+    width: calc(var(--ais-icon-size) * 1.4);
+    margin-right: 8px;
+    color: rgb(var(--ais-primary-color-rgb), .8);
+  }
+
+  span {
+    position: relative;
+    color: rgb(var(--ais-primary-color-rgb), .8);
+    border-bottom: 1px solid rgb(var(--ais-primary-color-rgb), .8);
+  }
+}
+
 // Source
 .ais-AutocompleteIndex {
   margin: 0;
