@@ -29,6 +29,30 @@ export type Suggestion = {
   isRefined: boolean;
 };
 
+export type RefinementSuggestionsItemComponentProps = {
+  suggestion: Suggestion;
+  classNames: Partial<
+    Pick<
+      RefinementSuggestionsClassNames,
+      'item' | 'itemRefined' | 'button' | 'label' | 'count'
+    >
+  >;
+  onRefine: () => void;
+};
+
+export type RefinementSuggestionsHeaderComponentProps = {
+  classNames: Partial<
+    Pick<
+      RefinementSuggestionsClassNames,
+      'header' | 'headerIcon' | 'headerTitle'
+    >
+  >;
+};
+
+export type RefinementSuggestionsEmptyComponentProps = {
+  classNames: Partial<Pick<RefinementSuggestionsClassNames, 'emptyRoot'>>;
+};
+
 export type RefinementSuggestionsProps = ComponentProps<'div'> & {
   suggestions: Suggestion[];
   isLoading: boolean;
@@ -39,6 +63,24 @@ export type RefinementSuggestionsProps = ComponentProps<'div'> & {
    * @default 3
    */
   skeletonCount?: number;
+  /**
+   * Component to render each suggestion item.
+   */
+  itemComponent?: (
+    props: RefinementSuggestionsItemComponentProps
+  ) => JSX.Element;
+  /**
+   * Component to render the header.
+   */
+  headerComponent?: (
+    props: RefinementSuggestionsHeaderComponentProps
+  ) => JSX.Element;
+  /**
+   * Component to render when there are no suggestions.
+   */
+  emptyComponent?: (
+    props: RefinementSuggestionsEmptyComponentProps
+  ) => JSX.Element | null;
 };
 
 export type RefinementSuggestionsClassNames = {
@@ -97,6 +139,59 @@ export function createRefinementSuggestionsComponent({
 }: Renderer) {
   const Button = createButtonComponent({ createElement });
 
+  function DefaultHeader({
+    classNames,
+  }: RefinementSuggestionsHeaderComponentProps) {
+    return (
+      <div
+        className={cx('ais-RefinementSuggestions-header', classNames.header)}
+      >
+        <span
+          className={cx(
+            'ais-RefinementSuggestions-headerIcon',
+            classNames.headerIcon
+          )}
+        >
+          <SparklesIcon createElement={createElement} />
+        </span>
+        <span
+          className={cx(
+            'ais-RefinementSuggestions-headerTitle',
+            classNames.headerTitle
+          )}
+        >
+          Refinement suggestions
+        </span>
+      </div>
+    );
+  }
+
+  function DefaultItem({
+    suggestion,
+    classNames,
+    onRefine,
+  }: RefinementSuggestionsItemComponentProps) {
+    return (
+      <Button
+        variant={suggestion.isRefined ? 'primary' : 'outline'}
+        size="sm"
+        className={cx(classNames.button)}
+        onClick={onRefine}
+      >
+        <span
+          className={cx('ais-RefinementSuggestions-label', classNames.label)}
+        >
+          {suggestion.label}: {suggestion.value}
+        </span>
+        <span
+          className={cx('ais-RefinementSuggestions-nbHits', classNames.count)}
+        >
+          {suggestion.count}
+        </span>
+      </Button>
+    );
+  }
+
   return function RefinementSuggestions(
     userProps: RefinementSuggestionsProps
   ): JSX.Element | null {
@@ -106,14 +201,49 @@ export function createRefinementSuggestionsComponent({
       isLoading,
       onRefine,
       skeletonCount = 3,
+      itemComponent: ItemComponent = DefaultItem,
+      headerComponent: HeaderComponent = DefaultHeader,
+      emptyComponent: EmptyComponent,
       ...props
     } = userProps;
 
     const isEmpty = suggestions.length === 0;
 
     if (isEmpty && !isLoading) {
+      if (EmptyComponent) {
+        return (
+          <div
+            {...props}
+            className={cx(
+              'ais-RefinementSuggestions',
+              classNames.root,
+              'ais-RefinementSuggestions--empty',
+              classNames.emptyRoot,
+              props.className
+            )}
+          >
+            <EmptyComponent classNames={{ emptyRoot: classNames.emptyRoot }} />
+          </div>
+        );
+      }
       return null;
     }
+
+    const headerClassNames: RefinementSuggestionsHeaderComponentProps['classNames'] =
+      {
+        header: classNames.header,
+        headerIcon: classNames.headerIcon,
+        headerTitle: classNames.headerTitle,
+      };
+
+    const itemClassNames: RefinementSuggestionsItemComponentProps['classNames'] =
+      {
+        item: classNames.item,
+        itemRefined: classNames.itemRefined,
+        button: classNames.button,
+        label: classNames.label,
+        count: classNames.count,
+      };
 
     return (
       <div
@@ -126,26 +256,7 @@ export function createRefinementSuggestionsComponent({
           props.className
         )}
       >
-        <div
-          className={cx('ais-RefinementSuggestions-header', classNames.header)}
-        >
-          <span
-            className={cx(
-              'ais-RefinementSuggestions-headerIcon',
-              classNames.headerIcon
-            )}
-          >
-            <SparklesIcon createElement={createElement} />
-          </span>
-          <span
-            className={cx(
-              'ais-RefinementSuggestions-headerTitle',
-              classNames.headerTitle
-            )}
-          >
-            Refinement suggestions
-          </span>
-        </div>
+        <HeaderComponent classNames={headerClassNames} />
         {isLoading ? (
           <div className="ais-RefinementSuggestions-skeleton">
             {[...new Array(skeletonCount)].map((_, i) => (
@@ -167,31 +278,13 @@ export function createRefinementSuggestionsComponent({
                     )
                 )}
               >
-                <Button
-                  variant={suggestion.isRefined ? 'primary' : 'outline'}
-                  size="sm"
-                  className={cx(classNames.button)}
-                  onClick={() =>
+                <ItemComponent
+                  suggestion={suggestion}
+                  classNames={itemClassNames}
+                  onRefine={() =>
                     onRefine(suggestion.attribute, suggestion.value)
                   }
-                >
-                  <span
-                    className={cx(
-                      'ais-RefinementSuggestions-label',
-                      classNames.label
-                    )}
-                  >
-                    {suggestion.label}: {suggestion.value}
-                  </span>
-                  <span
-                    className={cx(
-                      'ais-RefinementSuggestions-nbHits',
-                      classNames.count
-                    )}
-                  >
-                    {suggestion.count}
-                  </span>
-                </Button>
+                />
               </li>
             ))}
           </ul>
