@@ -1,3 +1,5 @@
+import { find } from '../../lib';
+
 import type { UsePropGetters } from './createAutocompletePropGetters';
 
 type CreateAutocompleteStorageParams = {
@@ -11,6 +13,7 @@ type CreateAutocompleteStorageParams = {
 type UseStorageParams<TItem extends Record<string, unknown>> = {
   showRecent?: boolean | { storageKey?: string };
   query?: string;
+  suggestionsIndexName?: string;
 } & Pick<Parameters<UsePropGetters<TItem>>[0], 'indices' | 'indicesConfig'>;
 
 export function createAutocompleteStorage({
@@ -23,6 +26,7 @@ export function createAutocompleteStorage({
     query,
     indices,
     indicesConfig,
+    suggestionsIndexName,
   }: UseStorageParams<TItem>) {
     const storageKey =
       showRecent && typeof showRecent === 'object'
@@ -61,7 +65,22 @@ export function createAutocompleteStorage({
       }),
     }));
 
-    const indicesForPropGetters = [...indices];
+    const indicesForPropGetters = [
+      ...indices.map((index) =>
+        index.indexName === suggestionsIndexName
+          ? {
+              ...index,
+              hits: index.hits.filter(
+                (hit) =>
+                  !find(
+                    storageHits,
+                    (storageHit) => storageHit.query === hit.query
+                  )
+              ),
+            }
+          : index
+      ),
+    ];
     const indicesConfigForPropGetters = [...indicesConfig];
     indicesForPropGetters.unshift({
       indexName: 'recent-searches',
