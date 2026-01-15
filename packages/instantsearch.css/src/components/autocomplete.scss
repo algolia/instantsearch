@@ -430,6 +430,39 @@
       font-style: normal;
       font-weight: var(--ais-font-weight-bold);
     }
+
+    @at-root .ais-AutocompleteItemContentBody {
+      display: grid;
+      gap: calc(var(--ais-spacing) / 2);
+    }
+    @at-root .ais-AutocompleteItemContentTitle {
+      display: inline-block;
+      margin: 0 0.5em 0 0;
+      max-width: 100%;
+      overflow: hidden;
+      padding: 0;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    @at-root .ais-AutocompleteItemContentDescription {
+      color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+      font-size: 0.85em;
+      max-width: 100%;
+      overflow-x: hidden;
+      text-overflow: ellipsis;
+      &:empty {
+        display: none;
+      }
+      mark {
+        // background: rgba(
+        //   var(--ais-description-highlight-background-color-rgb),
+        //   var(--ais-description-highlight-background-color-alpha)
+        // );
+        color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+        font-style: normal;
+        font-weight: var(--ais-font-weight-medium);
+      }
+    }
   }
 
   @at-root .ais-AutocompleteItemIcon {
@@ -445,9 +478,31 @@
     stroke-width: var(--ais-icon-stroke-width);
     text-align: center;
     width: calc(var(--ais-icon-size) + calc(var(--ais-spacing) / 2));
+    img {
+      height: auto;
+      max-height: calc(var(--ais-icon-size) + calc(var(--ais-spacing) / 2) - 8px);
+      max-width: calc(var(--ais-icon-size) + calc(var(--ais-spacing) / 2) - 8px);
+      width: auto;
+    }
     svg {
       height: var(--ais-icon-size);
       width: var(--ais-icon-size);
+    }
+    @at-root .ais-AutocompleteItemIcon--alignTop {
+      align-self: flex-start;
+    }
+    @at-root .ais-AutocompleteItemIcon--noBorder {
+      background: none;
+      box-shadow: none;
+    }
+    @at-root .ais-AutocompleteItemIcon--picture {
+      height: 96px;
+      width: 96px;
+      img {
+        max-height: 100%;
+        max-width: 100%;
+        padding: calc(var(--ais-spacing) / 2);
+      }
     }
   }
   @at-root .ais-AutocompleteItemActions {
