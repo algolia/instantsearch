@@ -18,6 +18,7 @@ const NON_WIDGETS = [
   'Snippet',
   'PoweredBy',
   'Chat',
+  'PromptSuggestions',
   'createDefaultTools',
   'SearchIndexToolType',
   'RecommendToolType',
@@ -29,6 +30,7 @@ const NON_COMPONENTS = [
   'createDefaultTools',
   'SearchIndexToolType',
   'RecommendToolType',
+  'PromptSuggestions',
 ] as const;
 type ComponentWidgets = Omit<typeof widgets, typeof NON_COMPONENTS[number]>;
 

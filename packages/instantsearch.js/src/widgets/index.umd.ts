@@ -68,3 +68,12 @@ Please use InstantSearch.js with a packaging system:
 https://www.algolia.com/doc/guides/building-search-ui/installation/js/#with-a-packaging-system`
   );
 };
+
+export const promptSuggestions = () => {
+  throw new Error(
+    `"promptSuggestions" is not available from the UMD build.
+
+Please use InstantSearch.js with a packaging system:
+https://www.algolia.com/doc/guides/building-search-ui/installation/js/#with-a-packaging-system`
+  );
+};
