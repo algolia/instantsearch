@@ -4,29 +4,24 @@ import {
   liteClient as namedConstructor,
   default as defaultConstructor,
 } from 'algoliasearch/lite';
-import instantsearch from '../../src/index.es';
+import instantsearch from '../../src';
 import defaultPlayground from '../playgrounds/default';
 import {
   InstantSearch,
   InstantSearchOptions,
   SearchClient,
 } from '../../src/types';
-import * as widgets from '../../src/widgets/index.umd';
-import * as connectors from '../../src/connectors/index.umd';
-import { createInsightsMiddleware } from '../../src/middlewares';
-import { reverseSnippet } from '../../src/helpers';
 
 const algoliasearch = (namedConstructor || defaultConstructor) as unknown as (
   appId: string,
   apiKey: string
 ) => SearchClient;
 
+type InstantSearchUMDModule = typeof instantsearch;
+
 export type Playground = (options: {
   search: InstantSearch;
-  instantsearch: {
-    widgets: typeof widgets;
-    middlewares: { createInsightsMiddleware: typeof createInsightsMiddleware };
-  };
+  instantsearch: InstantSearchUMDModule;
   leftPanel: HTMLDivElement;
   rightPanel: HTMLDivElement;
 }) => void;
@@ -51,11 +46,7 @@ export const withHits =
       search,
     }: {
       container: HTMLElement;
-      instantsearch: {
-        widgets: typeof widgets;
-        connectors: typeof connectors;
-        reverseSnippet: typeof reverseSnippet;
-      };
+      instantsearch: InstantSearchUMDModule;
       search: InstantSearch;
     }) => void,
     searchOptions?: SearchOptions
@@ -90,7 +81,7 @@ export const withHits =
     });
 
     search.addWidgets([
-      widgets.configure({
+      instantsearch.widgets.configure({
         hitsPerPage: 4,
         attributesToSnippet: ['description:15'],
         snippetEllipsisText: '[…]',
@@ -119,18 +110,14 @@ export const withHits =
 
     playground({
       search,
-      instantsearch: { widgets, middlewares: { createInsightsMiddleware } },
+      instantsearch,
       leftPanel: leftPanelPlaygroundElement,
       rightPanel: rightPanelPlaygroundElement,
     });
 
     storyFn({
       container: previewElement,
-      instantsearch: {
-        widgets,
-        connectors,
-        reverseSnippet,
-      },
+      instantsearch,
       search,
     });
 

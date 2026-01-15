@@ -14,6 +14,7 @@ describe('UMD bundle', () => {
       name: 'instantsearch.js',
       bundle: 'dist/instantsearch.production.min.js',
       globalName: 'instantsearch',
+      unavailable: ['connectors.connectChat', 'widgets.chat'],
     },
     {
       name: 'react-instantsearch-core',
@@ -122,8 +123,6 @@ async function createEnvironment(
     runScripts: 'dangerously',
     resources: 'usable',
   });
-
-  window.TransformStream = TransformStream;
 
   const error = jest.fn();
   window.addEventListener('error', error);
