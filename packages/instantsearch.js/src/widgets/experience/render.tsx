@@ -75,6 +75,26 @@ function renderText(text: TemplateText[number], hit: any, components: any) {
     });
   }
 
+  // Custom 'tags' type for rendering arrays as tag elements
+  if ((text as unknown as { type: 'tags'; path: string[] }).type === 'tags') {
+    const value = getPropertyByPath(hit, (text as { path: string[] }).path);
+
+    if (Array.isArray(value)) {
+      return (
+        <div>
+          {value.map((item, i) => (
+            <span key={i} className="ais-AutocompleteItemContentTag">
+              {String(item)}
+            </span>
+          ))}
+        </div>
+      );
+    }
+
+    // If not an array, render as plain text
+    return String(value ?? '');
+  }
+
   return null;
 }
 

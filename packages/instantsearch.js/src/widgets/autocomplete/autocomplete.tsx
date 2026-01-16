@@ -354,7 +354,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       return html`<div>${JSON.stringify(item)}</div>`;
     },
   });
-  const disableTools = indices.some(({ indexName }) => indexName === 'faq');
+  const disableTools = true; // Temporarily disabling tools
 
   const sendMessage = (message: string) => {
     if (agent && !renderState.chatInstance) {
@@ -363,6 +363,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         agent,
         disableTools ? undefined : agentTools
       );
+      renderState.chatInstance.messages = []; // Temporarily clearing history on load
       renderState.chatInstance['~registerMessagesCallback'](() => {
         setAgentMessages(renderState.chatInstance!.messages);
       });

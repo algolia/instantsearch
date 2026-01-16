@@ -2,7 +2,6 @@ import {
   createAutocompleteComponent,
   createAutocompleteIndexComponent,
   createAutocompletePanelComponent,
-  createAutocompletePropGetters,
   createAutocompleteSuggestionComponent,
   createAutocompleteRecentSearchComponent,
   createAutocompleteStorage,
@@ -32,6 +31,7 @@ import {
 import { AutocompleteSearch } from '../components/AutocompleteSearch';
 
 import { createDefaultTools } from './Chat';
+import { createAutocompletePropGetters } from './createAutocompletePropGetters';
 import { ReverseHighlight } from './ReverseHighlight';
 
 import type { PlainSearchParameters } from 'algoliasearch-helper';
@@ -349,19 +349,25 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
 
   // @ts-ignore
   const agentTools = createDefaultTools(({ item }) => <div>{item.name}</div>);
+  const disableTools = true; // Temporarily disabling tools
   const chatInstance = useMemo(() => {
     if (!agent) {
       return undefined;
     }
 
-    const instance = makeChatInstance(instantSearchInstance, agent, agentTools);
+    const instance = makeChatInstance(
+      instantSearchInstance,
+      agent,
+      disableTools ? undefined : agentTools
+    );
+    instance.messages = []; // Temporarily clearing history on load
     instance['~registerMessagesCallback'](() =>
       setAgentMessages(instance.messages)
     );
     instance['~registerStatusCallback'](() => setAgentStatus(instance.status));
 
     return instance;
-  }, [agent, instantSearchInstance, agentTools]);
+  }, [agent, instantSearchInstance, agentTools, disableTools]);
 
   useEffect(() => {
     document.body.classList.toggle('ais-AutocompleteDialog--active', showUi);
@@ -574,7 +580,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
                 status={agentStatus}
                 hideScrollToBottom={true}
                 // @ts-ignore
-                tools={agentTools}
+                tools={disableTools ? undefined : agentTools}
                 translations={{ loaderText: 'Thinking…' }}
               />
             </div>
