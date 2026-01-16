@@ -23,19 +23,12 @@ export type Suggestion = {
    * Number of records matching this filter.
    */
   count: number;
-  /**
-   * Whether this refinement is currently applied.
-   */
-  isRefined: boolean;
 };
 
 export type RefinementSuggestionsItemComponentProps = {
   suggestion: Suggestion;
   classNames: Partial<
-    Pick<
-      RefinementSuggestionsClassNames,
-      'item' | 'itemRefined' | 'button' | 'label' | 'count'
-    >
+    Pick<RefinementSuggestionsClassNames, 'item' | 'button' | 'label' | 'count'>
   >;
   onRefine: () => void;
 };
@@ -71,10 +64,11 @@ export type RefinementSuggestionsProps = ComponentProps<'div'> & {
   ) => JSX.Element;
   /**
    * Component to render the header.
+   * Pass `false` to hide the header.
    */
-  headerComponent?: (
-    props: RefinementSuggestionsHeaderComponentProps
-  ) => JSX.Element;
+  headerComponent?:
+    | ((props: RefinementSuggestionsHeaderComponentProps) => JSX.Element | null)
+    | false;
   /**
    * Component to render when there are no suggestions.
    */
@@ -117,10 +111,6 @@ export type RefinementSuggestionsClassNames = {
    */
   item: string | string[];
   /**
-   * Class names to apply to the item element when refined
-   */
-  itemRefined: string | string[];
-  /**
    * Class names to apply to the button element
    */
   button: string | string[];
@@ -132,6 +122,14 @@ export type RefinementSuggestionsClassNames = {
    * Class names to apply to the count element
    */
   count: string | string[];
+  /**
+   * Class names to apply to the skeleton container element
+   */
+  skeleton: string | string[];
+  /**
+   * Class names to apply to each skeleton item element
+   */
+  skeletonItem: string | string[];
 };
 
 export function createRefinementSuggestionsComponent({
@@ -173,7 +171,7 @@ export function createRefinementSuggestionsComponent({
   }: RefinementSuggestionsItemComponentProps) {
     return (
       <Button
-        variant={suggestion.isRefined ? 'primary' : 'outline'}
+        variant="outline"
         size="sm"
         className={cx(classNames.button)}
         onClick={onRefine}
@@ -239,7 +237,6 @@ export function createRefinementSuggestionsComponent({
     const itemClassNames: RefinementSuggestionsItemComponentProps['classNames'] =
       {
         item: classNames.item,
-        itemRefined: classNames.itemRefined,
         button: classNames.button,
         label: classNames.label,
         count: classNames.count,
@@ -256,11 +253,22 @@ export function createRefinementSuggestionsComponent({
           props.className
         )}
       >
-        <HeaderComponent classNames={headerClassNames} />
+        {HeaderComponent && <HeaderComponent classNames={headerClassNames} />}
         {isLoading ? (
-          <div className="ais-RefinementSuggestions-skeleton">
+          <div
+            className={cx(
+              'ais-RefinementSuggestions-skeleton',
+              classNames.skeleton
+            )}
+          >
             {[...new Array(skeletonCount)].map((_, i) => (
-              <div key={i} className="ais-RefinementSuggestions-skeletonItem" />
+              <div
+                key={i}
+                className={cx(
+                  'ais-RefinementSuggestions-skeletonItem',
+                  classNames.skeletonItem
+                )}
+              />
             ))}
           </div>
         ) : (
@@ -270,12 +278,7 @@ export function createRefinementSuggestionsComponent({
                 key={`${suggestion.attribute}-${suggestion.value}`}
                 className={cx(
                   'ais-RefinementSuggestions-item',
-                  classNames.item,
-                  suggestion.isRefined &&
-                    cx(
-                      'ais-RefinementSuggestions-item--refined',
-                      classNames.itemRefined
-                    )
+                  classNames.item
                 )}
               >
                 <ItemComponent
