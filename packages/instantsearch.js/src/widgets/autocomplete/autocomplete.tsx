@@ -351,22 +351,28 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   const [agentStatus, setAgentStatus] = useState<ChatStatus>('ready');
   const agentTools = createDefaultTools({
     item: (item, { html }) => {
-      return html`<div>${item.name}</div>`;
+      return html`<div>${JSON.stringify(item)}</div>`;
     },
   });
-  if (agent && !renderState.chatInstance) {
-    renderState.chatInstance = makeChatInstance(
-      instantSearchInstance,
-      agent,
-      agentTools
-    );
-    renderState.chatInstance['~registerMessagesCallback'](() => {
-      setAgentMessages(renderState.chatInstance!.messages);
-    });
-    renderState.chatInstance['~registerStatusCallback'](() => {
-      setAgentStatus(renderState.chatInstance!.status);
-    });
-  }
+  const disableTools = indices.some(({ indexName }) => indexName === 'faq');
+
+  const sendMessage = (message: string) => {
+    if (agent && !renderState.chatInstance) {
+      renderState.chatInstance = makeChatInstance(
+        instantSearchInstance,
+        agent,
+        disableTools ? undefined : agentTools
+      );
+      renderState.chatInstance['~registerMessagesCallback'](() => {
+        setAgentMessages(renderState.chatInstance!.messages);
+      });
+      renderState.chatInstance['~registerStatusCallback'](() => {
+        setAgentStatus(renderState.chatInstance!.status);
+      });
+    }
+
+    renderState.chatInstance!.sendMessage({ text: message });
+  };
 
   useEffect(() => {
     document.body.classList.toggle('ais-AutocompleteDialog--active', showUi);
@@ -408,7 +414,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         indexName: 'ais-autocomplete-agent',
         getQuery: (item) => item.query,
         onSelect: ({ query }) => {
-          renderState.chatInstance!.sendMessage({ text: query });
+          sendMessage(query);
           inputRef.current!.select();
           setShowConversation(true);
         },
@@ -423,7 +429,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       indicesConfig: indicesConfigWithAgent(indicesConfigForPropGetters),
       onRefine: (query) => {
         if (agent && showConversation) {
-          renderState.chatInstance!.sendMessage({ text: query });
+          sendMessage(query);
           inputRef.current!.select();
           return;
         }
@@ -645,7 +651,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
                 messages={agentMessages}
                 status={agentStatus}
                 hideScrollToBottom={true}
-                tools={agentToolsWithLayoutComponent}
+                tools={disableTools ? undefined : agentToolsWithLayoutComponent}
                 translations={{ loaderText: 'Thinking…' }}
               />
             </div>

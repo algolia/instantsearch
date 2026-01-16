@@ -366,7 +366,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   useEffect(() => {
     document.body.classList.toggle('ais-AutocompleteDialog--active', showUi);
     if (showUi) {
-      inputRef.current?.focus();
+      setTimeout(() => inputRef.current?.focus(), 0);
     }
 
     return () => {

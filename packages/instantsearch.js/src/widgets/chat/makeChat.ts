@@ -7,11 +7,7 @@ import { Chat } from '../../lib/chat/chat';
 import { getAlgoliaAgent, getAppIdAndApiKey } from '../../lib/utils';
 
 import type { ChatTransport } from '../../connectors/chat/connectChat';
-import type {
-  // type AbstractChat,
-  // type ChatInit as ChatInitAi,
-  UIMessage,
-} from '../../lib/chat/chat';
+import type { UIMessage } from '../../lib/chat/chat';
 import type { InstantSearch } from '../../types';
 import type {
   AddToolResultWithOutput,
@@ -21,7 +17,7 @@ import type {
 export function makeChatInstance(
   instantSearchInstance: InstantSearch,
   options: ChatTransport,
-  tools: Record<string, Omit<UserClientSideTool, 'layoutComponent'>> = {}
+  tools?: Record<string, Omit<UserClientSideTool, 'layoutComponent'>>
 ): Chat<UIMessage> {
   let transport;
   const [appId, apiKey] = getAppIdAndApiKey(instantSearchInstance.client);
@@ -101,15 +97,15 @@ export function makeChatInstance(
     );
   }
 
-  // if ('chat' in options) {
-  //   return options.chat;
-  // }
-
   const _chatInstance: Chat<UIMessage> = new Chat({
     ...options,
     transport,
     sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
     onToolCall({ toolCall }) {
+      if (!tools) {
+        return Promise.resolve();
+      }
+
       const tool = tools[toolCall.toolName];
 
       if (!tool) {

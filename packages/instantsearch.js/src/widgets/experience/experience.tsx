@@ -33,13 +33,25 @@ export default (function experience(widgetParams: ExperienceWidgetParams) {
       'ais.autocomplete': {
         widget: EXPERIMENTAL_autocomplete<any>,
         transformParams(params, { env, instantSearchInstance }) {
-          const { agentId, ...rest } = params;
+          const { agentId, indices, ...rest } = params;
           return {
             agent: createAgentConfig(
               instantSearchInstance,
               env,
               agentId as string
             ),
+            indices: (
+              indices as Array<{
+                indexName: string;
+                itemTemplate: TemplateChild[];
+              }>
+            ).map((index) => ({
+              indexName: index.indexName,
+              templates: {
+                item: ({ item }, itemParams) =>
+                  renderTemplate(index.itemTemplate)(item, itemParams),
+              },
+            })),
             ...rest,
           };
         },

@@ -1,19 +1,20 @@
 import type { IndexWidget, InstantSearch, Widget } from '../../types';
 import type { AutocompleteWidget } from '../autocomplete/autocomplete';
 import type { ChatWidget } from '../chat/chat';
-import type { TemplateChild } from './render';
+
+type ExperienceApiBlockParameters = {
+  container: string;
+  cssVariables: Record<string, string>;
+} & Record<
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  'container' | 'cssVariables' | (string & {}),
+  unknown
+>;
 
 export type ExperienceApiResponse = {
   blocks: Array<{
     type: string;
-    parameters: {
-      container: string;
-      cssVariables: Record<string, string>;
-    } & Record<
-      // eslint-disable-next-line @typescript-eslint/ban-types
-      'container' | 'cssVariables' | (string & {}),
-      unknown
-    >;
+    parameters: ExperienceApiBlockParameters;
   }>;
 };
 
@@ -23,7 +24,7 @@ export type ExperienceWidgetParams = {
 
 type SupportedWidget<
   TWidgetParameters = unknown,
-  TApiParameters = ExperienceApiResponse['blocks'][0]['parameters']
+  TApiParameters = ExperienceApiBlockParameters
 > = {
   widget: (...args: any[]) => Widget | Array<IndexWidget | Widget>;
   transformParams: (
@@ -39,12 +40,7 @@ export type ExperienceWidget = Widget & {
   $$widgetParams: ExperienceWidgetParams;
   $$supportedWidgets: {
     'ais.autocomplete': SupportedWidget<Parameters<AutocompleteWidget>[0]>;
-    'ais.chat': SupportedWidget<
-      Parameters<ChatWidget>[0],
-      ExperienceApiResponse['blocks'][0]['parameters'] & {
-        itemTemplate?: TemplateChild[];
-      }
-    >;
+    'ais.chat': SupportedWidget<Parameters<ChatWidget>[0]>;
     // eslint-disable-next-line @typescript-eslint/ban-types
   } & Record<'ais.chat' | (string & {}), SupportedWidget>;
 };

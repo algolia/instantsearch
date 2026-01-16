@@ -3,7 +3,7 @@ import { h, Fragment } from 'preact';
 
 import { getPropertyByPath } from '../../lib/utils';
 
-import type { AlgoliaHit, TemplateParams } from '../../types';
+import type { BaseHit, TemplateParams } from '../../types';
 import type { ComponentChildren } from 'preact';
 
 type StaticString = { type: 'string'; value: string };
@@ -62,12 +62,10 @@ function renderText(text: TemplateText[number], hit: any, components: any) {
   }
 
   if (text.type === 'highlight') {
-    return getPropertyByPath(hit, text.path);
-    // FIXME: Not working right now
-    // return components.Highlight({
-    //   hit,
-    //   attribute: text.path,
-    // });
+    return components.Highlight({
+      hit,
+      attribute: text.path,
+    });
   }
 
   if (text.type === 'snippet') {
@@ -94,7 +92,7 @@ function renderAttribute(text: TemplateAttribute[number], hit: any) {
 
 export function renderTemplate(
   template: TemplateChild[]
-): (hit: AlgoliaHit, params: TemplateParams) => any {
+): (hit: BaseHit, params: TemplateParams) => any {
   function renderChild(child: TemplateChild, hit: any, components: any) {
     const Tag = tagNames.get(child.type) as keyof JSX.IntrinsicElements;
     if (!Tag) {

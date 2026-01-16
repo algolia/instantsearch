@@ -273,6 +273,7 @@ export function createDefaultTools<
       templates,
       getSearchPageURL
     ),
+    search_index: createCarouselTool(true, templates, getSearchPageURL),
     [RecommendToolType]: createCarouselTool(false, templates, getSearchPageURL),
   };
 }
