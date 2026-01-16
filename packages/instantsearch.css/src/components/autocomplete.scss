@@ -463,6 +463,16 @@
         font-weight: var(--ais-font-weight-medium);
       }
     }
+
+    @at-root .ais-AutocompleteItemContentTag {
+      background-color: rgba(
+        var(--ais-muted-color-rgb),
+        .15
+      );
+      border-radius: 3px;
+      margin: 0 0.4em 0 0;
+      padding: 0.08em 0.3em;
+    }
   }
 
   @at-root .ais-AutocompleteItemIcon {
