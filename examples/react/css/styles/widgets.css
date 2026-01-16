@@ -2,8 +2,7 @@
 .ais-SearchBox-form {
   display: flex;
   align-items: center;
-  border: 1px solid
-    rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha));
+  border: 1px solid rgba(var(--ais-border-color-rgb), 0.8);
   border-radius: var(--ais-border-radius-sm);
   line-height: 1em;
   margin: 0;
@@ -402,7 +401,7 @@
   border: 1px solid
     rgba(var(--ais-border-color-rgb), var(--ais-border-color-alpha));
   border-radius: var(--ais-border-radius-sm);
-  padding: calc((var(--ais-spacing) / 3)) calc((var(--ais-spacing) / 2));
+  padding: calc((var(--ais-spacing) / 2)) calc((var(--ais-spacing) / 2));
   color: rgb(var(--ais-text-color-rgb));
 }
 

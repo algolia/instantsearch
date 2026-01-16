@@ -18,15 +18,17 @@ import {
   Breadcrumb,
   Snippet,
   SortBy,
+  RefinementSuggestions,
+  SearchBox,
 } from 'react-instantsearch';
 
 import { Panel } from '../components/Panel';
 
-const EXPERIMENTAL_Autocomplete = dynamic(
-  () =>
-    import('react-instantsearch').then((mod) => mod.EXPERIMENTAL_Autocomplete),
-  { ssr: false }
-);
+// const EXPERIMENTAL_Autocomplete = dynamic(
+//   () =>
+//     import('react-instantsearch').then((mod) => mod.EXPERIMENTAL_Autocomplete),
+//   { ssr: false }
+// );
 
 const PoweredBy = dynamic(
   () => import('react-instantsearch').then((mod) => mod.PoweredBy),
@@ -70,7 +72,7 @@ export default function Search() {
               'hierarchicalCategories.lvl2',
             ]}
           />
-          <EXPERIMENTAL_Autocomplete
+          {/* <EXPERIMENTAL_Autocomplete
             showRecent
             placeholder="Search for products"
             indices={[
@@ -121,6 +123,17 @@ export default function Search() {
                 </>
               ),
             }}
+          /> */}
+          <SearchBox placeholder="Search for products" />
+          <RefinementSuggestions
+            agentId="b26eb967-e2f4-4335-8456-54633d221d8b"
+            attributes={[
+              'brand',
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ]}
+            maxSuggestions={3}
           />
           <div className="results-toolbar">
             <PoweredBy />

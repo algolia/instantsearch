@@ -7,7 +7,7 @@ import { createElement } from 'react';
 import {
   Configure,
   Hits,
-  PromptSuggestions,
+  // PromptSuggestions,
   useInstantSearch,
 } from 'react-instantsearch';
 
@@ -77,7 +77,7 @@ function HitComponent({ hit }: { hit: Hit }) {
         {hit.free_shipping && (
           <span className="product-detail-shipping">Free Shipping</span>
         )}
-        <PromptSuggestions agentId={agentId} context={hit} />
+        {/* <PromptSuggestions agentId={agentId} context={hit} /> */}
         <Button className="product-detail-button">Add to Cart</Button>
       </div>
     </article>
