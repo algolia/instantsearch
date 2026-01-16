@@ -100,7 +100,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
       ) => (
         <HeaderComponent
           nbHits={output?.nbHits}
-          query={input?.query}
+          input={input}
           hitsPerPage={items.length}
           setIndexUiState={setIndexUiState}
           indexUiState={indexUiState}
@@ -111,7 +111,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
       );
     }, [
       items.length,
-      input?.query,
+      input,
       output?.nbHits,
       setIndexUiState,
       onClose,
@@ -233,14 +233,31 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
                   disjunctiveFacetsRefinements
                 );
 
+                const searchParameters =
+                  new AlgoliaSearchHelper.SearchParameters({
+                    // query: input.query,
+                    facets: facetFilters.length ? facetFilters : undefined,
+                    facetsRefinements:
+                      Object.keys(facetRefinements).length > 0
+                        ? facetRefinements
+                        : undefined,
+                    disjunctiveFacets: disjunctiveFacets.length
+                      ? disjunctiveFacets
+                      : undefined,
+                    disjunctiveFacetsRefinements:
+                      Object.keys(disjunctiveFacetsRefinements).length > 0
+                        ? disjunctiveFacetsRefinements
+                        : undefined,
+                  });
+
+                console.log('searchParameters', searchParameters);
+
                 const newState = getLocalWidgetsUiState(
                   search.mainIndex.getWidgets(),
                   {
                     searchParameters: new AlgoliaSearchHelper.SearchParameters({
                       // query: input.query,
-                      facetFilters: facetFilters.length
-                        ? input.facet_filters
-                        : undefined,
+                      facets: facetFilters.length ? facetFilters : undefined,
                       facetsRefinements:
                         Object.keys(facetRefinements).length > 0
                           ? facetRefinements

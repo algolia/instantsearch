@@ -48,11 +48,11 @@ export function App() {
         >
           <div className="search-panel">
             <div className="search-panel__filters">
-              <Panel header="brand">
-                <RefinementList attribute="brand" />
-              </Panel>
               <Panel header="categories">
                 <RefinementList attribute="categories" operator="and" />
+              </Panel>
+              <Panel header="brand">
+                <RefinementList attribute="brand" />
               </Panel>
             </div>
 
