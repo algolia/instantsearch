@@ -49,7 +49,7 @@
   "dependencies": {
     "@babel/runtime": "^7.27.6",
     "ai": "^5.0.18",
-    "markdown-to-jsx": "^7.7.15",
+    "markdown-to-jsx": "^9.1.2",
     "zod": "^3.25.76 || ^4",
     "zod-to-json-schema": "3.24.6"
   }
