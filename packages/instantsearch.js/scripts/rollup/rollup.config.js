@@ -23,7 +23,7 @@ const plugins = [
     entries: [
       {
         find: /^zod.*/,
-        replacement: path.join(__dirname, './emptyModule.js'),
+        replacement: path.join(__dirname, './fakeZod.js'),
       },
       {
         find: /^react.*/,

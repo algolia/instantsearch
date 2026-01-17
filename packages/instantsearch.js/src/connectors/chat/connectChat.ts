@@ -1,9 +1,4 @@
-import {
-  DefaultChatTransport,
-  lastAssistantMessageIsCompleteWithToolCalls,
-} from 'ai';
-
-import { Chat } from '../../lib/chat';
+import { Chat, loadAI } from '../../lib/chat';
 import {
   checkRendering,
   createDocumentationMessageGenerator,
@@ -14,11 +9,7 @@ import {
   warning,
 } from '../../lib/utils';
 
-import type {
-  AbstractChat,
-  ChatInit as ChatInitAi,
-  UIMessage,
-} from '../../lib/chat';
+import type { ChatInit as ChatInitWithoutAI, UIMessage } from '../../lib/chat';
 import type { SendEventForHits } from '../../lib/utils';
 import type {
   Connector,
@@ -82,28 +73,29 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
    * Suggestions received from the AI model.
    */
   suggestions?: string[];
-} & Pick<
-  AbstractChat<TUiMessage>,
-  | 'addToolResult'
-  | 'clearError'
-  | 'error'
-  | 'id'
-  | 'messages'
-  | 'regenerate'
-  | 'resumeStream'
-  | 'sendMessage'
-  | 'status'
-  | 'stop'
->;
+  /**
+   * Methods from the chat instance
+   */
+  addToolResult: Chat<TUiMessage>['addToolResult'];
+  clearError: Chat<TUiMessage>['clearError'];
+  error: Chat<TUiMessage>['error'];
+  id: Chat<TUiMessage>['id'];
+  messages: Chat<TUiMessage>['messages'];
+  regenerate: Chat<TUiMessage>['regenerate'];
+  resumeStream: Chat<TUiMessage>['resumeStream'];
+  sendMessage: Chat<TUiMessage>['sendMessage'];
+  status: Chat<TUiMessage>['status'];
+  stop: Chat<TUiMessage>['stop'];
+};
 
 export type ChatInitWithoutTransport<TUiMessage extends UIMessage> = Omit<
-  ChatInitAi<TUiMessage>,
+  ChatInitWithoutAI<TUiMessage>,
   'transport'
 >;
 
 export type ChatTransport = {
   agentId?: string;
-  transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
+  transport?: any; // Will be typed properly after AI module is loaded
 };
 
 export type ChatInit<TUiMessage extends UIMessage> =
@@ -163,7 +155,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       ...options
     } = widgetParams || {};
 
-    let _chatInstance: Chat<TUiMessage>;
+    let _chatInstance: Chat<TUiMessage> | null = null;
     let input = '';
     let open = false;
     let isClearing = false;
@@ -207,6 +199,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     const setMessages = (
       messagesParam: TUiMessage[] | ((m: TUiMessage[]) => TUiMessage[])
     ) => {
+      if (!_chatInstance) return;
       if (typeof messagesParam === 'function') {
         messagesParam = messagesParam(_chatInstance.messages);
       }
@@ -214,7 +207,11 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     };
 
     const clearMessages = () => {
-      if (!_chatInstance.messages || _chatInstance.messages.length === 0) {
+      if (
+        !_chatInstance ||
+        !_chatInstance.messages ||
+        _chatInstance.messages.length === 0
+      ) {
         return;
       }
       setIsClearing(true);
@@ -222,12 +219,17 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
     const onClearTransitionEnd = () => {
       setMessages([]);
-      _chatInstance.clearError();
+      if (_chatInstance) {
+        _chatInstance.clearError();
+      }
       setIsClearing(false);
     };
 
     const makeChatInstance = (instantSearchInstance: InstantSearch) => {
-      let transport;
+      if ('chat' in options) {
+        return options.chat;
+      }
+
       const [appId, apiKey] = getAppIdAndApiKey(instantSearchInstance.client);
 
       // Filter out custom data parts (like data-suggestions) that the backend doesn't accept
@@ -239,11 +241,15 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           ),
         }));
 
+      // Load AI module
+      const ai = loadAI();
+      let transport;
+
       if ('transport' in options && options.transport) {
         const originalPrepare = options.transport.prepareSendMessagesRequest;
-        transport = new DefaultChatTransport({
+        transport = new ai.DefaultChatTransport({
           ...options.transport,
-          prepareSendMessagesRequest: (params) => {
+          prepareSendMessagesRequest: (params: any) => {
             // Call the original prepareSendMessagesRequest if it exists,
             // otherwise construct the default body
             const preparedOrPromise = originalPrepare
@@ -277,14 +283,14 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           );
         }
         const baseApi = `https://${appId}.algolia.net/agent-studio/1/agents/${agentId}/completions?compatibilityMode=ai-sdk-5`;
-        transport = new DefaultChatTransport({
+        transport = new ai.DefaultChatTransport({
           api: baseApi,
           headers: {
             'x-algolia-application-id': appId,
             'x-algolia-api-Key': apiKey,
             'x-algolia-agent': getAlgoliaAgent(instantSearchInstance.client),
           },
-          prepareSendMessagesRequest: ({ messages, trigger, ...rest }) => {
+          prepareSendMessagesRequest: ({ messages, trigger, ...rest }: any) => {
             return {
               // Bypass cache when regenerating to ensure fresh responses
               api:
@@ -305,15 +311,11 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         );
       }
 
-      if ('chat' in options) {
-        return options.chat;
-      }
-
-      return new Chat({
+      const chat = new Chat({
         ...options,
         transport,
-        sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
-        onToolCall({ toolCall }) {
+        sendAutomaticallyWhen: ai.lastAssistantMessageIsCompleteWithToolCalls,
+        onToolCall({ toolCall }: any) {
           const tool = tools[toolCall.toolName];
 
           if (!tool) {
@@ -323,7 +325,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
               );
             }
 
-            return _chatInstance.addToolResult({
+            return _chatInstance!.addToolResult({
               output: `No tool implemented for "${toolCall.toolName}".`,
               tool: toolCall.toolName,
               toolCallId: toolCall.toolCallId,
@@ -332,7 +334,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
           if (tool.onToolCall) {
             const addToolResult: AddToolResultWithOutput = ({ output }) =>
-              _chatInstance.addToolResult({
+              _chatInstance!.addToolResult({
                 output,
                 tool: toolCall.toolName,
                 toolCallId: toolCall.toolCallId,
@@ -347,6 +349,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           return Promise.resolve();
         },
       });
+
+      return chat;
     };
 
     return {
@@ -439,7 +443,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         Object.entries(tools).forEach(([key, tool]) => {
           const toolWithAddToolResult: ClientSideTool = {
             ...tool,
-            addToolResult: _chatInstance.addToolResult,
+            addToolResult: _chatInstance!.addToolResult,
           };
           toolsWithAddToolResult[key] = toolWithAddToolResult;
         });
@@ -453,7 +457,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           setInput,
           setOpen,
           setMessages,
-          suggestions: getSuggestionsFromMessages(_chatInstance.messages),
+          suggestions: getSuggestionsFromMessages(_chatInstance!.messages),
           isClearing,
           clearMessages,
           onClearTransitionEnd,
@@ -461,16 +465,16 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           widgetParams,
 
           // Chat instance render state
-          addToolResult: _chatInstance.addToolResult,
-          clearError: _chatInstance.clearError,
-          error: _chatInstance.error,
-          id: _chatInstance.id,
-          messages: _chatInstance.messages,
-          regenerate: _chatInstance.regenerate,
-          resumeStream: _chatInstance.resumeStream,
-          sendMessage: _chatInstance.sendMessage,
-          status: _chatInstance.status,
-          stop: _chatInstance.stop,
+          addToolResult: _chatInstance!.addToolResult,
+          clearError: _chatInstance!.clearError,
+          error: _chatInstance!.error,
+          id: _chatInstance!.id || '',
+          messages: _chatInstance!.messages,
+          regenerate: _chatInstance!.regenerate,
+          resumeStream: _chatInstance!.resumeStream,
+          sendMessage: _chatInstance!.sendMessage,
+          status: _chatInstance!.status,
+          stop: _chatInstance!.stop,
         };
       },
 
