@@ -78,6 +78,10 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
    * Tools configuration with addToolResult bound, ready to be used by the UI.
    */
   tools: ClientSideTools;
+  /**
+   * Suggestions received from the AI model.
+   */
+  suggestions?: string[];
 } & Pick<
   AbstractChat<TUiMessage>,
   | 'addToolResult'
@@ -117,12 +121,18 @@ export type ChatConnectorParams<TUiMessage extends UIMessage = UIMessage> = (
    * Configuration for client-side tools.
    */
   tools?: Record<string, Omit<UserClientSideTool, 'layoutComponent'>>;
+  /**
+   * Identifier of this type of chat widget. This is used for the key in renderState.
+   * @default 'chat'
+   */
+  type?: string;
 };
 
 export type ChatWidgetDescription<TUiMessage extends UIMessage = UIMessage> = {
   $$type: 'ais.chat';
   renderState: ChatRenderState<TUiMessage>;
   indexRenderState: {
+    // In IndexRenderState, the key is always 'chat', but in the widgetParams you can customize it with the `type` parameter
     chat: WidgetRenderState<
       ChatRenderState<TUiMessage>,
       ChatConnectorParams<TUiMessage>
@@ -146,7 +156,12 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
   ) => {
     warning(false, 'Chat is not yet stable and will change in the future.');
 
-    const { resume = false, tools = {}, ...options } = widgetParams || {};
+    const {
+      resume = false,
+      tools = {},
+      type = 'chat',
+      ...options
+    } = widgetParams || {};
 
     let _chatInstance: Chat<TUiMessage>;
     let input = '';
@@ -156,6 +171,38 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     let setInput: ChatRenderState<TUiMessage>['setInput'];
     let setOpen: ChatRenderState<TUiMessage>['setOpen'];
     let setIsClearing: (value: boolean) => void;
+
+    const agentId = 'agentId' in options ? options.agentId : undefined;
+
+    // Extract suggestions from the last assistant message's data-suggestions part
+    const getSuggestionsFromMessages = (messages: TUiMessage[]) => {
+      // Find the last assistant message (iterate from end)
+      const lastAssistantMessage = [...messages]
+        .reverse()
+        .find((message) => message.role === 'assistant' && message.parts);
+
+      if (!lastAssistantMessage?.parts) {
+        return undefined;
+      }
+
+      // Find the data-suggestions part
+      const suggestionsPart = lastAssistantMessage.parts.find(
+        (
+          part
+        ): part is {
+          type: `data-${string}`;
+          data: { suggestions: string[] };
+        } =>
+          'type' in part &&
+          part.type === 'data-suggestions' &&
+          'data' in part &&
+          Array.isArray(
+            (part as { data?: { suggestions?: unknown } }).data?.suggestions
+          )
+      );
+
+      return suggestionsPart?.data.suggestions;
+    };
 
     const setMessages = (
       messagesParam: TUiMessage[] | ((m: TUiMessage[]) => TUiMessage[])
@@ -182,11 +229,46 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     const makeChatInstance = (instantSearchInstance: InstantSearch) => {
       let transport;
       const [appId, apiKey] = getAppIdAndApiKey(instantSearchInstance.client);
+
+      // Filter out custom data parts (like data-suggestions) that the backend doesn't accept
+      const filterDataParts = (messages: UIMessage[]): UIMessage[] =>
+        messages.map((message) => ({
+          ...message,
+          parts: message.parts?.filter(
+            (part) => !('type' in part && part.type.startsWith('data-'))
+          ),
+        }));
+
       if ('transport' in options && options.transport) {
-        transport = new DefaultChatTransport(options.transport);
+        const originalPrepare = options.transport.prepareSendMessagesRequest;
+        transport = new DefaultChatTransport({
+          ...options.transport,
+          prepareSendMessagesRequest: (params) => {
+            // Call the original prepareSendMessagesRequest if it exists,
+            // otherwise construct the default body
+            const preparedOrPromise = originalPrepare
+              ? originalPrepare(params)
+              : { body: { ...params } };
+            // Then filter out data-* parts
+            const applyFilter = (prepared: { body: object }) => ({
+              ...prepared,
+              body: {
+                ...prepared.body,
+                messages: filterDataParts(
+                  (prepared.body as { messages: UIMessage[] }).messages
+                ),
+              },
+            });
+
+            // Handle both sync and async cases
+            if (preparedOrPromise && 'then' in preparedOrPromise) {
+              return preparedOrPromise.then(applyFilter);
+            }
+            return applyFilter(preparedOrPromise);
+          },
+        });
       }
       if ('agentId' in options && options.agentId) {
-        const { agentId } = options;
         if (!appId || !apiKey) {
           throw new Error(
             withUsage(
@@ -194,12 +276,26 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             )
           );
         }
+        const baseApi = `https://${appId}.algolia.net/agent-studio/1/agents/${agentId}/completions?compatibilityMode=ai-sdk-5`;
         transport = new DefaultChatTransport({
-          api: `https://${appId}.algolia.net/agent-studio/1/agents/${agentId}/completions?compatibilityMode=ai-sdk-5`,
+          api: baseApi,
           headers: {
             'x-algolia-application-id': appId,
             'x-algolia-api-Key': apiKey,
             'x-algolia-agent': getAlgoliaAgent(instantSearchInstance.client),
+          },
+          prepareSendMessagesRequest: ({ messages, trigger, ...rest }) => {
+            return {
+              // Bypass cache when regenerating to ensure fresh responses
+              api:
+                trigger === 'regenerate-message'
+                  ? `${baseApi}&cache=false`
+                  : baseApi,
+              body: {
+                ...rest,
+                messages: filterDataParts(messages),
+              },
+            };
           },
         });
       }
@@ -320,7 +416,8 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       ): IndexRenderState & ChatWidgetDescription['indexRenderState'] {
         return {
           ...renderState,
-          chat: this.getWidgetRenderState(renderOptions),
+          // Type is casted to 'chat' here, because in the IndexRenderState the key is always 'chat'
+          [type as 'chat']: this.getWidgetRenderState(renderOptions),
         };
       },
 
@@ -356,6 +453,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           setInput,
           setOpen,
           setMessages,
+          suggestions: getSuggestionsFromMessages(_chatInstance.messages),
           isClearing,
           clearMessages,
           onClearTransitionEnd,

@@ -35,6 +35,7 @@ import type {
   AutocompleteConnectorParams,
   AutocompleteRenderState,
   AutocompleteWidgetDescription,
+  TransformItemsIndicesConfig,
 } from '../../connectors/autocomplete/connectAutocomplete';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
@@ -282,6 +283,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     showRecent,
     indices,
     indicesConfig,
+    suggestionsIndexName: showSuggestions?.indexName,
   });
   const showRecentObj = showRecent;
 
@@ -373,16 +375,26 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   }
 
   indices.forEach(({ indexId, indexName, hits }, i) => {
+    const currentIndexConfig = find(
+      indicesConfig,
+      (config) => config.indexName === indexName
+    );
+
+    if (!currentIndexConfig) {
+      return;
+    }
+
     if (!renderState.indexTemplateProps[i]) {
       renderState.indexTemplateProps[i] = prepareTemplateProps({
         defaultTemplates: {} as unknown as NonNullable<
           IndexConfig<TItem>['templates']
         >,
         templatesConfig: instantSearchInstance.templatesConfig,
-        templates: indicesConfig[i].templates,
+        templates: currentIndexConfig.templates,
       });
     }
-    const headerComponent = indicesConfig[i].templates?.header
+
+    const headerComponent = currentIndexConfig.templates?.header
       ? ({
           items,
         }: Parameters<
@@ -437,7 +449,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
           __indexName: indexId,
         }))}
         getItemProps={getItemProps}
-        classNames={indicesConfig[i].cssClasses}
+        classNames={currentIndexConfig.cssClasses}
       />
     );
   });
@@ -556,6 +568,10 @@ type AutocompleteWidgetParams<TItem extends BaseHit> = {
         cssClasses?: Partial<AutocompleteIndexClassNames>;
       };
 
+  transformItems?: (
+    indices: TransformItemsIndicesConfig[]
+  ) => TransformItemsIndicesConfig[];
+
   /**
    * Search parameters to apply to the autocomplete indices.
    */
@@ -600,6 +616,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     getSearchPageURL,
     onSelect,
     templates = {},
+    transformItems,
     cssClasses: userCssClasses = {},
     placeholder,
   } = widgetParams || {};
@@ -714,7 +731,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
           ])
       ),
       {
-        ...makeWidget({ escapeHTML }),
+        ...makeWidget({ escapeHTML, transformItems }),
         $$widgetType: 'ais.autocomplete',
       },
     ]),
