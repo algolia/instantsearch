@@ -20,8 +20,10 @@ import {
   connectTrendingItems,
   connectLookingSimilar,
   connectChat,
+  connectRefinementSuggestions,
 } from '../connectors';
 import instantsearch from '../index.es';
+import { noop } from '../lib/utils';
 import { refinementList } from '../widgets';
 
 import type { InstantSearch, Widget } from '../index.es';
@@ -576,6 +578,64 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       })
       .start();
   },
+  createRefinementSuggestionsConnectorTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
+    const customRefinementSuggestions = connectRefinementSuggestions<{
+      container: HTMLElement;
+    }>((renderOptions) => {
+      const { suggestions, refine, isLoading } = renderOptions;
+      renderOptions.widgetParams.container.innerHTML = `
+        <div data-testid="RefinementSuggestions-root">
+          ${
+            isLoading
+              ? '<div data-testid="RefinementSuggestions-loading">Loading...</div>'
+              : ''
+          }
+          <ul data-testid="RefinementSuggestions-list">
+            ${suggestions
+              .map(
+                (suggestion) =>
+                  `<li data-testid="RefinementSuggestions-item">
+                    <button data-testid="RefinementSuggestions-refine" data-attribute="${suggestion.attribute}" data-value="${suggestion.value}">
+                      ${suggestion.label} (${suggestion.count})
+                    </button>
+                  </li>`
+              )
+              .join('')}
+          </ul>
+        </div>
+      `;
+
+      renderOptions.widgetParams.container
+        .querySelectorAll('[data-testid="RefinementSuggestions-refine"]')
+        .forEach((button) => {
+          button.addEventListener('click', () => {
+            const attribute = (button as HTMLElement).dataset.attribute!;
+            const value = (button as HTMLElement).dataset.value!;
+            refine(attribute, value);
+          });
+        });
+    });
+
+    const search = instantsearch(instantSearchOptions)
+      .addWidgets([
+        customRefinementSuggestions({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+        connectRefinementList(noop)({ attribute: 'brand' }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      });
+
+    search.start();
+  },
 };
 
 function addWidgetToggleUi(search: InstantSearch, widget: Widget) {
@@ -608,6 +668,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createTrendingItemsConnectorTests: undefined,
   createLookingSimilarConnectorTests: undefined,
   createChatConnectorTests: undefined,
+  createRefinementSuggestionsConnectorTests: undefined,
 };
 
 describe('Common connector tests (InstantSearch.js)', () => {

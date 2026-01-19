@@ -24,6 +24,7 @@ import {
   useFrequentlyBoughtTogether,
   useTrendingItems,
   useLookingSimilar,
+  useRefinementSuggestions,
 } from '..';
 
 import type {
@@ -40,6 +41,7 @@ import type {
   UseFrequentlyBoughtTogetherProps,
   UseTrendingItemsProps,
   UseLookingSimilarProps,
+  UseRefinementSuggestionsProps,
 } from '..';
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
 import type {
@@ -436,6 +438,42 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
     render(<App />);
   },
   createChatConnectorTests: () => {},
+  createRefinementSuggestionsConnectorTests: ({
+    instantSearchOptions,
+    widgetParams,
+  }) => {
+    function CustomRefinementSuggestions(props: UseRefinementSuggestionsProps) {
+      const { suggestions, refine, isLoading } =
+        useRefinementSuggestions(props);
+      useRefinementList({ attribute: 'brand' });
+
+      return (
+        <div data-testid="RefinementSuggestions-root">
+          {isLoading && (
+            <div data-testid="RefinementSuggestions-loading">Loading...</div>
+          )}
+          <ul data-testid="RefinementSuggestions-list">
+            {suggestions.map((suggestion) => (
+              <li key={`${suggestion.attribute}-${suggestion.value}`}>
+                <button
+                  data-testid="RefinementSuggestions-refine"
+                  onClick={() => refine(suggestion.attribute, suggestion.value)}
+                >
+                  {suggestion.label} ({suggestion.count})
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    }
+
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <CustomRefinementSuggestions {...widgetParams} />
+      </InstantSearch>
+    );
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -460,6 +498,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createTrendingItemsConnectorTests: { act },
   createLookingSimilarConnectorTests: { act, skippedTests: { options: true } },
   createChatConnectorTests: { act, skippedTests: { options: true } },
+  createRefinementSuggestionsConnectorTests: { act },
 };
 
 describe('Common connector tests (React InstantSearch)', () => {

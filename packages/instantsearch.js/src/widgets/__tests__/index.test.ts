@@ -174,6 +174,15 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
 
         return autocomplete;
       }
+      case 'refinementSuggestions': {
+        const refinementSuggestions =
+          widget as Widgets['refinementSuggestions'];
+        return refinementSuggestions({
+          container,
+          agentId: 'test-agent-id',
+          attributes: ['attr'],
+        });
+      }
       default: {
         const defaultWidget = widget as UnknownWidgetFactory;
         return defaultWidget({ container, attribute: 'attr' });

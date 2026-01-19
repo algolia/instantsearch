@@ -8,7 +8,8 @@ import type {
   RefinementSuggestionsWidgetDescription,
 } from 'instantsearch.js/es/connectors/refinement-suggestions/connectRefinementSuggestions';
 
-export type UseRefinementSuggestionsProps = RefinementSuggestionsConnectorParams;
+export type UseRefinementSuggestionsProps =
+  RefinementSuggestionsConnectorParams;
 
 export function useRefinementSuggestions(
   props: UseRefinementSuggestionsProps,
@@ -19,4 +20,3 @@ export function useRefinementSuggestions(
     RefinementSuggestionsWidgetDescription
   >(connectRefinementSuggestions, props, additionalWidgetProperties);
 }
-

@@ -3,7 +3,6 @@ import {
   createDocumentationMessageGenerator,
   getAlgoliaAgent,
   getAppIdAndApiKey,
-  isFacetRefined,
   noop,
 } from '../../lib/utils';
 
@@ -38,10 +37,6 @@ export type Suggestion = {
    * Number of records matching this filter.
    */
   count: number;
-  /**
-   * Whether this refinement is currently applied.
-   */
-  isRefined: boolean;
 };
 
 export type RefinementSuggestionsRenderState = {
@@ -127,13 +122,12 @@ const connectRefinementSuggestions: RefinementSuggestionsConnector =
 
       let endpoint: string;
       let headers: Record<string, string>;
-      let rawSuggestions: Array<Omit<Suggestion, 'isRefined'>> = [];
+      let suggestions: Suggestion[] = [];
       let isLoading = false;
       let debounceTimer: ReturnType<typeof setTimeout> | undefined;
       let lastStateSignature: string | null = null; // null means never fetched
       let refine: RefinementSuggestionsRenderState['refine'];
       let searchHelper: InitOptions['helper'] | null = null;
-      // Store latest render options to use when debounce fires
       let latestRenderOptions: RenderOptions | null = null;
 
       // Create a signature of the current search state (query + refinements)
@@ -147,45 +141,15 @@ const connectRefinementSuggestions: RefinementSuggestionsConnector =
         return `${query}|${refinements}`;
       };
 
-      // Check if a suggestion is refined, handling hierarchical facets properly
-      const checkIsRefined = (attribute: string, value: string): boolean => {
-        if (!searchHelper) return false;
-
-        // Check if the attribute belongs to a hierarchical facet
-        const hierarchicalFacet = searchHelper.state.hierarchicalFacets.find(
-          (facet) => facet.attributes.includes(attribute)
-        );
-
-        if (hierarchicalFacet) {
-          // For hierarchical facets, check using the facet name
-          return searchHelper.state.isHierarchicalFacetRefined(
-            hierarchicalFacet.name,
-            value
-          );
-        }
-
-        // For regular facets, use isFacetRefined
-        return isFacetRefined(searchHelper, attribute, value);
-      };
-
       const getWidgetRenderState = (
         renderOptions: InitOptions | RenderOptions
       ) => {
-        // Compute isRefined on the fly based on current helper state
-        const suggestionsWithRefined: Suggestion[] = rawSuggestions.map(
-          (suggestion) => ({
-            ...suggestion,
-            isRefined: checkIsRefined(suggestion.attribute, suggestion.value),
-          })
-        );
-
-        // Apply transformItems
         const results =
           'results' in renderOptions ? renderOptions.results : undefined;
-        const suggestions = transformItems(suggestionsWithRefined, { results });
+        const transformedSuggestions = transformItems(suggestions, { results });
 
         return {
-          suggestions,
+          suggestions: transformedSuggestions,
           isLoading,
           refine,
           widgetParams,
@@ -197,7 +161,7 @@ const connectRefinementSuggestions: RefinementSuggestionsConnector =
         renderOptions: RenderOptions
       ) => {
         if (!results?.hits?.length) {
-          rawSuggestions = [];
+          suggestions = [];
           isLoading = false;
           renderFn(
             {
@@ -291,35 +255,38 @@ const connectRefinementSuggestions: RefinementSuggestionsConnector =
           headers: { ...headers, 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
         })
-          .then((response) => response.text())
-          .then((text) => {
-            // Collect all text deltas from the SSE stream
-            const fullText = text
-              .split('\n')
-              .filter(
-                (line) => line.startsWith('data: ') && !line.includes('[DONE]')
-              )
-              .reduce((acc, line) => {
-                try {
-                  const eventData = JSON.parse(line.slice(6));
-                  if (eventData.type === 'text-delta' && eventData.delta) {
-                    return acc + eventData.delta;
-                  }
-                } catch {
-                  // Skip non-JSON lines
-                }
-                return acc;
-              }, '');
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            const parsedSuggestions = JSON.parse(data.parts[1].text);
 
-            // Parse the collected text as JSON array
-            const parsed = JSON.parse(fullText);
-            rawSuggestions = (Array.isArray(parsed) ? parsed : []).slice(
-              0,
-              maxSuggestions
-            );
+            const validSuggestions = (
+              Array.isArray(parsedSuggestions) ? parsedSuggestions : []
+            )
+              .filter((suggestion) => {
+                if (
+                  !suggestion?.attribute ||
+                  !suggestion?.value ||
+                  !suggestion?.label
+                ) {
+                  return false;
+                }
+                // If attributes filter is specified, only allow suggestions for those attributes
+                if (attributes && !attributes.includes(suggestion.attribute)) {
+                  return false;
+                }
+                return true;
+              })
+              .slice(0, maxSuggestions);
+
+            suggestions = validSuggestions;
           })
           .catch(() => {
-            rawSuggestions = [];
+            suggestions = [];
           })
           .finally(() => {
             isLoading = false;
@@ -352,10 +319,7 @@ const connectRefinementSuggestions: RefinementSuggestionsConnector =
             );
           }
 
-          // Production endpoint:
-          // endpoint = `https://${appId}.algolia.net/agent-studio/1/agents/${agentId}/completions?compatibilityMode=ai-sdk-5`;
-          // Local test endpoint:
-          endpoint = `http://127.0.0.1:8000/1/agents/${agentId}/completions?compatibilityMode=ai-sdk-5`;
+          endpoint = `https://${appId}.algolia.net/agent-studio/1/agents/${agentId}/completions?compatibilityMode=ai-sdk-5&stream=false`;
           headers = {
             'x-algolia-application-id': appId,
             'x-algolia-api-key': apiKey,

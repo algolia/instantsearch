@@ -13,3 +13,4 @@ export * from './frequently-bought-together';
 export * from './trending-items';
 export * from './looking-similar';
 export * from './chat';
+export * from './refinement-suggestions';

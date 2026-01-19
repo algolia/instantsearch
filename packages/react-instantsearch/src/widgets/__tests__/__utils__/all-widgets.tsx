@@ -120,6 +120,9 @@ function Widget<TWidget extends SingleWidget>({
       // @ts-expect-error - incorrectly expects onSelect from ComponentProps<'div'>
       return <widget.Component {...props} />;
     }
+    case 'RefinementSuggestions': {
+      return <widget.Component agentId="test-agent-id" {...props} />;
+    }
     default: {
       return <widget.Component {...props} />;
     }

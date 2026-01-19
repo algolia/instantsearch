@@ -23,10 +23,6 @@ export type Suggestion = {
    * Number of records matching this filter.
    */
   count: number;
-  /**
-   * Whether this refinement is currently applied.
-   */
-  isRefined: boolean;
 };
 
 export type RefinementSuggestionsItemComponentProps = {
@@ -173,7 +169,7 @@ export function createRefinementSuggestionsComponent({
   }: RefinementSuggestionsItemComponentProps) {
     return (
       <Button
-        variant={suggestion.isRefined ? 'primary' : 'outline'}
+        variant="outline"
         size="sm"
         className={cx(classNames.button)}
         onClick={onRefine}
@@ -210,23 +206,22 @@ export function createRefinementSuggestionsComponent({
     const isEmpty = suggestions.length === 0;
 
     if (isEmpty && !isLoading) {
-      if (EmptyComponent) {
-        return (
-          <div
-            {...props}
-            className={cx(
-              'ais-RefinementSuggestions',
-              classNames.root,
-              'ais-RefinementSuggestions--empty',
-              classNames.emptyRoot,
-              props.className
-            )}
-          >
+      return (
+        <div
+          {...props}
+          className={cx(
+            'ais-RefinementSuggestions',
+            classNames.root,
+            'ais-RefinementSuggestions--empty',
+            classNames.emptyRoot,
+            props.className
+          )}
+        >
+          {EmptyComponent && (
             <EmptyComponent classNames={{ emptyRoot: classNames.emptyRoot }} />
-          </div>
-        );
-      }
-      return null;
+          )}
+        </div>
+      );
     }
 
     const headerClassNames: RefinementSuggestionsHeaderComponentProps['classNames'] =
@@ -270,12 +265,7 @@ export function createRefinementSuggestionsComponent({
                 key={`${suggestion.attribute}-${suggestion.value}`}
                 className={cx(
                   'ais-RefinementSuggestions-item',
-                  classNames.item,
-                  suggestion.isRefined &&
-                    cx(
-                      'ais-RefinementSuggestions-item--refined',
-                      classNames.itemRefined
-                    )
+                  classNames.item
                 )}
               >
                 <ItemComponent

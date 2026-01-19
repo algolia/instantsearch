@@ -34,6 +34,7 @@ import {
   dynamicWidgets,
   chat,
   EXPERIMENTAL_autocomplete,
+  refinementSuggestions,
 } from '../widgets';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -651,6 +652,25 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       })
       .start();
   },
+  createRefinementSuggestionsWidgetTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        refinementSuggestions({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -685,6 +705,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createDynamicWidgetsWidgetTests: undefined,
   createChatWidgetTests: undefined,
   createAutocompleteWidgetTests: undefined,
+  createRefinementSuggestionsWidgetTests: undefined,
 };
 
 describe('Common widget tests (InstantSearch.js)', () => {

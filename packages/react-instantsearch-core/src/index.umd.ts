@@ -16,6 +16,14 @@ Please use React InstantSearch with a packaging system:
 https://www.algolia.com/doc/guides/building-search-ui/installation/react/#install-react-instantsearch-as-an-npm-package`
   );
 };
+export const useRefinementSuggestions = () => {
+  throw new Error(
+    `"useRefinementSuggestions()" is not available from the UMD build.
+
+Please use React InstantSearch with a packaging system:
+https://www.algolia.com/doc/guides/building-search-ui/installation/react/#install-react-instantsearch-as-an-npm-package`
+  );
+};
 
 export * from './connectors/useClearRefinements';
 export * from './connectors/useConfigure';
