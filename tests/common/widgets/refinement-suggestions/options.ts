@@ -3,6 +3,7 @@ import { wait } from '@instantsearch/testutils';
 
 import type { RefinementSuggestionsWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
+import type { SearchResponse } from 'instantsearch.js';
 
 export function createOptionsTests(
   setup: RefinementSuggestionsWidgetSetup,
@@ -126,7 +127,7 @@ export function createOptionsTests(
                 query: '',
                 params: '',
               },
-            ],
+            ] as unknown as Array<SearchResponse<any>>,
           })
         ),
       });
