@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.10.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.9.0...instantsearch.css@8.10.0) (2026-01-20)
+
+
+### Features
+
+* **chat:** support prompt suggestions ([#6831](https://github.com/algolia/instantsearch/issues/6831)) ([aca8934](https://github.com/algolia/instantsearch/commit/aca8934163c047ca56db0dad679737f331efac29))
+
+
+
+
+
 # [8.9.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.8.0...instantsearch.css@8.9.0) (2025-12-02)
 
 
