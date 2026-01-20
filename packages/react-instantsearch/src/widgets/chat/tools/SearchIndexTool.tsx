@@ -172,91 +172,62 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
             </div>
           )}
           {showViewAll && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                if (!input?.query) return;
+            <>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  if (!input?.query) return;
 
-                input.facet_filters = [
-                  ['brand:Samsung'],
-                  ['categories:Cell Phones', 'categories:Unlocked Cell Phones'],
-                ];
+                  input.facet_filters = [
+                    ['brand:Samsung'],
+                    [
+                      'categories:Cell Phones',
+                      'categories:Unlocked Cell Phones',
+                    ],
+                  ];
 
-                const attributeMap = input.facet_filters.reduce(
-                  (acc, filters) => {
-                    filters.forEach((filter) => {
-                      const [facet, value] = filter.split(':');
-                      if (!acc[facet]) {
-                        acc[facet] = [];
-                      }
-                      acc[facet].push(value);
-                    });
-                    return acc;
-                  },
-                  {} as Record<string, string[]>
-                );
-
-                const facetFilters: string[] = [];
-                const facetRefinements: Record<string, string[]> = {};
-                const disjunctiveFacets: string[] = [];
-                const disjunctiveFacetsRefinements: Record<string, string[]> =
-                  {};
-
-                // go over the refinementlist widgets
-                if (indexRenderState.refinementList) {
-                  Object.keys(indexRenderState.refinementList).forEach(
-                    (attribute) => {
-                      // check widget params of widget if it has the AND operator
-                      if (
-                        indexRenderState.refinementList?.[attribute]
-                          .widgetParams.operator === 'and'
-                      ) {
-                        facetFilters.push(attribute);
-                        facetRefinements[attribute] = attributeMap[attribute];
-                      } else {
-                        disjunctiveFacets.push(attribute);
-                        disjunctiveFacetsRefinements[attribute] =
-                          attributeMap[attribute];
-                      }
-                    }
+                  const attributeMap = input.facet_filters.reduce(
+                    (acc, filters) => {
+                      filters.forEach((filter) => {
+                        const [facet, value] = filter.split(':');
+                        if (!acc[facet]) {
+                          acc[facet] = [];
+                        }
+                        acc[facet].push(value);
+                      });
+                      return acc;
+                    },
+                    {} as Record<string, string[]>
                   );
-                }
 
-                console.log('facetFilters', facetFilters);
-                console.log(
-                  'facetRefinements',
-                  facetRefinements,
-                  'disjunctiveFacets',
-                  disjunctiveFacets,
-                  'disjunctiveFacetsRefinements',
-                  disjunctiveFacetsRefinements
-                );
+                  const facetFilters: string[] = [];
+                  const facetRefinements: Record<string, string[]> = {};
+                  const disjunctiveFacets: string[] = [];
+                  const disjunctiveFacetsRefinements: Record<string, string[]> =
+                    {};
 
-                const searchParameters =
-                  new AlgoliaSearchHelper.SearchParameters({
-                    // query: input.query,
-                    facets: facetFilters.length ? facetFilters : undefined,
-                    facetsRefinements:
-                      Object.keys(facetRefinements).length > 0
-                        ? facetRefinements
-                        : undefined,
-                    disjunctiveFacets: disjunctiveFacets.length
-                      ? disjunctiveFacets
-                      : undefined,
-                    disjunctiveFacetsRefinements:
-                      Object.keys(disjunctiveFacetsRefinements).length > 0
-                        ? disjunctiveFacetsRefinements
-                        : undefined,
-                  });
+                  if (indexRenderState.refinementList) {
+                    Object.keys(indexRenderState.refinementList).forEach(
+                      (attribute) => {
+                        if (
+                          indexRenderState.refinementList?.[attribute]
+                            .widgetParams.operator === 'and'
+                        ) {
+                          facetFilters.push(attribute);
+                          facetRefinements[attribute] = attributeMap[attribute];
+                        } else {
+                          disjunctiveFacets.push(attribute);
+                          disjunctiveFacetsRefinements[attribute] =
+                            attributeMap[attribute];
+                        }
+                      }
+                    );
+                  }
 
-                console.log('searchParameters', searchParameters);
-
-                const newState = getLocalWidgetsUiState(
-                  search.mainIndex.getWidgets(),
-                  {
-                    searchParameters: new AlgoliaSearchHelper.SearchParameters({
-                      // query: input.query,
+                  const searchParameters =
+                    new AlgoliaSearchHelper.SearchParameters({
+                      query: input.query,
                       facets: facetFilters.length ? facetFilters : undefined,
                       facetsRefinements:
                         Object.keys(facetRefinements).length > 0
@@ -269,60 +240,45 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
                         Object.keys(disjunctiveFacetsRefinements).length > 0
                           ? disjunctiveFacetsRefinements
                           : undefined,
-                      // disjunctiveFacets: input.facet_filters
-                      //   ? input.facet_filters.reduce((acc, filters) => {
-                      //       filters.forEach((filter) => {
-                      //         const [facet] = filter.split(':');
-                      //         if (!acc.includes(facet)) {
-                      //           acc.push(facet);
-                      //         }
-                      //       });
-                      //       return acc;
-                      //     }, [] as string[])
-                      //   : [],
-                      // disjunctiveFacetsRefinements: input.facet_filters
-                      //   ? input.facet_filters.reduce((acc, filters) => {
-                      //       filters.forEach((filter) => {
-                      //         const [facet, value] = filter.split(':');
-                      //         if (!acc[facet]) {
-                      //           acc[facet] = [];
-                      //         }
-                      //         acc[facet].push(value);
-                      //       });
-                      //       return acc;
-                      //     }, {} as Record<string, string[]>)
-                      //   : {},
-                    }),
+                    });
+
+                  const newState = getLocalWidgetsUiState(
+                    search.mainIndex.getWidgets(),
+                    {
+                      searchParameters,
+                    }
+                  );
+
+                  const nextUiState = {
+                    ...indexUiState,
+                    ...newState,
+                  };
+
+                  if (!indexRenderState.currentRefinements?.aiMode) {
+                    indexRenderState.currentRefinements?.setAiMode(true);
                   }
-                );
 
-                console.log('newState', newState);
+                  // If no main search page URL or we are on the search page, just update the state
+                  if (
+                    !getSearchPageURL ||
+                    (getSearchPageURL &&
+                      new URL(getSearchPageURL(nextUiState)).pathname ===
+                        window.location.pathname)
+                  ) {
+                    setIndexUiState(nextUiState);
+                    onClose();
+                    return;
+                  }
 
-                const nextUiState = {
-                  ...indexUiState,
-                  ...newState,
-                };
-
-                // If no main search page URL or we are on the search page, just update the state
-                if (
-                  !getSearchPageURL ||
-                  (getSearchPageURL &&
-                    new URL(getSearchPageURL(nextUiState)).pathname ===
-                      window.location.pathname)
-                ) {
-                  setIndexUiState(nextUiState);
-                  onClose();
-                  return;
-                }
-
-                // Navigate to different page
-                window.location.href = getSearchPageURL(nextUiState);
-              }}
-              className="ais-ChatToolSearchIndexCarouselHeaderViewAll"
-            >
-              View all
-              <ArrowRightIcon createElement={createElement as Pragma} />
-            </Button>
+                  // Navigate to different page
+                  window.location.href = getSearchPageURL(nextUiState);
+                }}
+                className="ais-ChatToolSearchIndexCarouselHeaderViewAll"
+              >
+                View all
+                <ArrowRightIcon createElement={createElement as Pragma} />
+              </Button>
+            </>
           )}
         </div>
 
