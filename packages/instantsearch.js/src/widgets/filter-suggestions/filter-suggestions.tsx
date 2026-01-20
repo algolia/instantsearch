@@ -206,6 +206,7 @@ export default (function filterSuggestions(
     debounceMs,
     hitsToSample,
     transformItems,
+    transport,
   } = widgetParams || {};
 
   if (!container) {
@@ -234,6 +235,7 @@ export default (function filterSuggestions(
       debounceMs,
       hitsToSample,
       transformItems,
+      transport,
     }),
     $$widgetType: 'ais.filterSuggestions',
   };

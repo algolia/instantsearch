@@ -53,6 +53,7 @@ export function FilterSuggestions({
   itemComponent,
   headerComponent,
   emptyComponent,
+  transport,
   ...props
 }: FilterSuggestionsProps) {
   const { suggestions, isLoading, refine } = useFilterSuggestions(
@@ -63,6 +64,7 @@ export function FilterSuggestions({
       debounceMs,
       hitsToSample,
       transformItems,
+      transport,
     },
     { $$widgetType: 'ais.filterSuggestions' }
   );

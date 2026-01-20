@@ -39,9 +39,27 @@ export type Suggestion = {
   count: number;
 };
 
+export type FilterSuggestionsTransport = {
+  /**
+   * The custom API endpoint URL.
+   */
+  api: string;
+  /**
+   * Custom headers to send with the request.
+   */
+  headers?: Record<string, string>;
+  /**
+   * Function to prepare the request body before sending.
+   * Receives the default body and returns the modified request options.
+   */
+  prepareSendMessagesRequest?: (body: Record<string, unknown>) => {
+    body: Record<string, unknown>;
+  };
+};
+
 export type FilterSuggestionsRenderState = {
   /**
-   * The list of suggested refinements.
+   * The list of suggested filters.
    */
   suggestions: Suggestion[];
   /**
@@ -49,7 +67,7 @@ export type FilterSuggestionsRenderState = {
    */
   isLoading: boolean;
   /**
-   * Applies a refinement for the given attribute and value.
+   * Applies a filter for the given attribute and value.
    */
   refine: (attribute: string, value: string) => void;
 };
@@ -57,8 +75,9 @@ export type FilterSuggestionsRenderState = {
 export type FilterSuggestionsConnectorParams = {
   /**
    * The ID of the agent configured in the Algolia dashboard.
+   * Required unless a custom `transport` is provided.
    */
-  agentId: string;
+  agentId?: string;
   /**
    * Limit to specific facet attributes.
    */
@@ -82,6 +101,11 @@ export type FilterSuggestionsConnectorParams = {
    * Function to transform the items passed to the templates.
    */
   transformItems?: TransformItems<Suggestion>;
+  /**
+   * Custom transport configuration for the API requests.
+   * When provided, allows using a custom endpoint, headers, and request body.
+   */
+  transport?: FilterSuggestionsTransport;
 };
 
 export type FilterSuggestionsWidgetDescription = {
@@ -114,10 +138,15 @@ const connectFilterSuggestions: FilterSuggestionsConnector =
         transformItems = ((items) => items) as NonNullable<
           FilterSuggestionsConnectorParams['transformItems']
         >,
+        transport,
       } = widgetParams;
 
-      if (!agentId) {
-        throw new Error(withUsage('The `agentId` option is required.'));
+      if (!agentId && !transport) {
+        throw new Error(
+          withUsage(
+            'The `agentId` option is required unless a custom `transport` is provided.'
+          )
+        );
       }
 
       let endpoint: string;
@@ -234,7 +263,7 @@ const connectFilterSuggestions: FilterSuggestionsConnector =
           maxSuggestions,
         });
 
-        const payload = {
+        const payload: Record<string, unknown> = {
           messages: [
             {
               id: `sr-${Date.now()}`,
@@ -250,10 +279,15 @@ const connectFilterSuggestions: FilterSuggestionsConnector =
           ],
         };
 
+        // Apply custom body transformation if provided
+        const finalPayload = transport?.prepareSendMessagesRequest
+          ? transport.prepareSendMessagesRequest(payload).body
+          : payload;
+
         fetch(endpoint, {
           method: 'POST',
           headers: { ...headers, 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
+          body: JSON.stringify(finalPayload),
         })
           .then((response) => {
             if (!response.ok) {
@@ -307,24 +341,31 @@ const connectFilterSuggestions: FilterSuggestionsConnector =
           const { instantSearchInstance, helper } = initOptions;
           searchHelper = helper;
 
-          const [appId, apiKey] = getAppIdAndApiKey(
-            instantSearchInstance.client
-          );
-
-          if (!appId || !apiKey) {
-            throw new Error(
-              withUsage(
-                'Could not extract Algolia credentials from the search client.'
-              )
+          if (transport) {
+            // Use custom transport configuration
+            endpoint = transport.api;
+            headers = transport.headers || {};
+          } else {
+            // Use default Algolia agent endpoint
+            const [appId, apiKey] = getAppIdAndApiKey(
+              instantSearchInstance.client
             );
-          }
 
-          endpoint = `https://${appId}.algolia.net/agent-studio/1/agents/${agentId}/completions?compatibilityMode=ai-sdk-5&stream=false`;
-          headers = {
-            'x-algolia-application-id': appId,
-            'x-algolia-api-key': apiKey,
-            'x-algolia-agent': getAlgoliaAgent(instantSearchInstance.client),
-          };
+            if (!appId || !apiKey) {
+              throw new Error(
+                withUsage(
+                  'Could not extract Algolia credentials from the search client.'
+                )
+              );
+            }
+
+            endpoint = `https://${appId}.algolia.net/agent-studio/1/agents/${agentId}/completions?compatibilityMode=ai-sdk-5&stream=false`;
+            headers = {
+              'x-algolia-application-id': appId,
+              'x-algolia-api-key': apiKey,
+              'x-algolia-agent': getAlgoliaAgent(instantSearchInstance.client),
+            };
+          }
 
           refine = (attribute: string, value: string) => {
             // Check if the attribute belongs to a hierarchical facet
