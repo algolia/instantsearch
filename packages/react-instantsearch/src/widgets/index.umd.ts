@@ -9,14 +9,7 @@ Please use React InstantSearch with a packaging system:
 https://www.algolia.com/doc/guides/building-search-ui/installation/react/#install-react-instantsearch-as-an-npm-package`
   );
 };
-export const FilterSuggestions = () => {
-  throw new Error(
-    `"<FilterSuggestions>" is not available from the UMD build.
-
-Please use React InstantSearch with a packaging system:
-https://www.algolia.com/doc/guides/building-search-ui/installation/react/#install-react-instantsearch-as-an-npm-package`
-  );
-};
+export * from './FilterSuggestions';
 export const SearchIndexToolType = undefined;
 export const RecommendToolType = undefined;
 export const createDefaultTools = () => {};

@@ -63,11 +63,4 @@ Please use InstantSearch.js with a packaging system:
 https://www.algolia.com/doc/guides/building-search-ui/installation/js/#with-a-packaging-system`
   );
 };
-export const connectFilterSuggestions = () => {
-  throw new Error(
-    `"connectFilterSuggestions" is not available from the UMD build.
-
-Please use InstantSearch.js with a packaging system:
-https://www.algolia.com/doc/guides/building-search-ui/installation/js/#with-a-packaging-system`
-  );
-};
+export { default as connectFilterSuggestions } from './filter-suggestions/connectFilterSuggestions';
