@@ -34,7 +34,7 @@ export type RefinementSuggestionsProps = Omit<
      */
     itemComponent?: RefinementSuggestionsUiComponentProps['itemComponent'];
     /**
-     * Component to render the header.
+     * Component to render the header. Set to `false` to disable the header.
      */
     headerComponent?: RefinementSuggestionsUiComponentProps['headerComponent'];
     /**

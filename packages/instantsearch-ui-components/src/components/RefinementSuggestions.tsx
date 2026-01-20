@@ -66,11 +66,11 @@ export type RefinementSuggestionsProps = ComponentProps<'div'> & {
     props: RefinementSuggestionsItemComponentProps
   ) => JSX.Element;
   /**
-   * Component to render the header.
+   * Component to render the header. Set to `false` to disable the header.
    */
-  headerComponent?: (
-    props: RefinementSuggestionsHeaderComponentProps
-  ) => JSX.Element;
+  headerComponent?:
+    | ((props: RefinementSuggestionsHeaderComponentProps) => JSX.Element)
+    | false;
   /**
    * Component to render when there are no suggestions.
    */
@@ -198,10 +198,13 @@ export function createRefinementSuggestionsComponent({
       onRefine,
       skeletonCount = 3,
       itemComponent: ItemComponent = DefaultItem,
-      headerComponent: HeaderComponent = DefaultHeader,
+      headerComponent,
       emptyComponent: EmptyComponent,
       ...props
     } = userProps;
+
+    const HeaderComponent =
+      headerComponent === false ? null : headerComponent ?? DefaultHeader;
 
     const isEmpty = suggestions.length === 0;
 
@@ -251,7 +254,7 @@ export function createRefinementSuggestionsComponent({
           props.className
         )}
       >
-        <HeaderComponent classNames={headerClassNames} />
+        {HeaderComponent && <HeaderComponent classNames={headerClassNames} />}
         {isLoading ? (
           <div className="ais-RefinementSuggestions-skeleton">
             {[...new Array(skeletonCount)].map((_, i) => (

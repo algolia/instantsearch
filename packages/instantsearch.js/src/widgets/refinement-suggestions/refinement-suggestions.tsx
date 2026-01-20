@@ -23,6 +23,7 @@ import type {
   RefinementSuggestionsEmptyComponentProps,
   RefinementSuggestionsHeaderComponentProps,
   RefinementSuggestionsItemComponentProps,
+  RefinementSuggestionsProps as RefinementSuggestionsUiProps,
 } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -50,9 +51,9 @@ export type RefinementSuggestionsCSSClasses =
 
 export type RefinementSuggestionsTemplates = Partial<{
   /**
-   * Template to use for the header.
+   * Template to use for the header. Set to `false` to disable the header.
    */
-  header: Template<RefinementSuggestionsHeaderComponentProps>;
+  header: Template<RefinementSuggestionsHeaderComponentProps> | false;
   /**
    * Template to use for each suggestion item.
    */
@@ -60,6 +61,12 @@ export type RefinementSuggestionsTemplates = Partial<{
   /**
    * Template to use when there are no suggestions.
    */
+  empty: Template<RefinementSuggestionsEmptyComponentProps>;
+}>;
+
+type RefinementSuggestionsTemplatesWithoutHeader = Partial<{
+  header: Template<RefinementSuggestionsHeaderComponentProps>;
+  item: Template<RefinementSuggestionsItemComponentProps>;
   empty: Template<RefinementSuggestionsEmptyComponentProps>;
 }>;
 
@@ -74,7 +81,7 @@ const createRenderer =
     containerNode: HTMLElement;
     cssClasses: RefinementSuggestionsCSSClasses;
     renderState: {
-      templateProps?: PreparedTemplateProps<RefinementSuggestionsTemplates>;
+      templateProps?: PreparedTemplateProps<RefinementSuggestionsTemplatesWithoutHeader>;
     };
     templates: RefinementSuggestionsTemplates;
     maxSuggestions?: number;
@@ -85,27 +92,40 @@ const createRenderer =
   (props, isFirstRendering) => {
     const { suggestions, isLoading, refine, instantSearchInstance } = props;
 
+    const headerTemplate =
+      templates.header === false ? undefined : templates.header;
+
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
-        defaultTemplates: {} as unknown as RefinementSuggestionsTemplates,
+        defaultTemplates:
+          {} as unknown as RefinementSuggestionsTemplatesWithoutHeader,
         templatesConfig: instantSearchInstance.templatesConfig,
-        templates,
+        templates: {
+          header: headerTemplate,
+          item: templates.item,
+          empty: templates.empty,
+        },
       });
       return;
     }
 
-    const headerComponent = templates.header
-      ? (headerProps: RefinementSuggestionsHeaderComponentProps) => {
-          return (
-            <TemplateComponent
-              {...renderState.templateProps}
-              templateKey="header"
-              rootTagName="div"
-              data={headerProps}
-            />
-          );
-        }
-      : undefined;
+    let headerComponent: RefinementSuggestionsUiProps['headerComponent'];
+    if (templates.header === false) {
+      headerComponent = false;
+    } else if (headerTemplate) {
+      headerComponent = (
+        headerProps: RefinementSuggestionsHeaderComponentProps
+      ) => {
+        return (
+          <TemplateComponent
+            {...renderState.templateProps}
+            templateKey="header"
+            rootTagName="div"
+            data={headerProps}
+          />
+        );
+      };
+    }
 
     const itemComponent = templates.item
       ? (itemProps: RefinementSuggestionsItemComponentProps) => {
