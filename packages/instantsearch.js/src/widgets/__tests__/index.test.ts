@@ -175,8 +175,7 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
         return autocomplete;
       }
       case 'filterSuggestions': {
-        const filterSuggestions =
-          widget as Widgets['filterSuggestions'];
+        const filterSuggestions = widget as Widgets['filterSuggestions'];
         return filterSuggestions({
           container,
           agentId: 'test-agent-id',

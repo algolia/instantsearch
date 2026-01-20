@@ -411,10 +411,7 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
       </InstantSearch>
     );
   },
-  createFilterSuggestionsWidgetTests({
-    instantSearchOptions,
-    widgetParams,
-  }) {
+  createFilterSuggestionsWidgetTests({ instantSearchOptions, widgetParams }) {
     render(
       <InstantSearch {...instantSearchOptions}>
         <FilterSuggestions {...widgetParams} />

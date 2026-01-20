@@ -443,8 +443,7 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
     widgetParams,
   }) => {
     function CustomFilterSuggestions(props: UseFilterSuggestionsProps) {
-      const { suggestions, refine, isLoading } =
-        useFilterSuggestions(props);
+      const { suggestions, refine, isLoading } = useFilterSuggestions(props);
       useRefinementList({ attribute: 'brand' });
 
       return (

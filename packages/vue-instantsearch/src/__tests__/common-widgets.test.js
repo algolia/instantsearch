@@ -588,9 +588,7 @@ const testSetups = {
     throw new Error('Autocomplete is not supported in Vue InstantSearch');
   },
   createFilterSuggestionsWidgetTests() {
-    throw new Error(
-      'FilterSuggestions is not supported in Vue InstantSearch'
-    );
+    throw new Error('FilterSuggestions is not supported in Vue InstantSearch');
   },
 };
 

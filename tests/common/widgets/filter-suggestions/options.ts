@@ -106,9 +106,7 @@ export function createOptionsTests(
         document.querySelector('.ais-FilterSuggestions-list')
       ).toBeInTheDocument();
 
-      const items = document.querySelectorAll(
-        '.ais-FilterSuggestions-item'
-      );
+      const items = document.querySelectorAll('.ais-FilterSuggestions-item');
       expect(items.length).toBe(2);
     });
 
@@ -231,9 +229,7 @@ export function createOptionsTests(
         await wait(10);
       });
 
-      const items = document.querySelectorAll(
-        '.ais-FilterSuggestions-item'
-      );
+      const items = document.querySelectorAll('.ais-FilterSuggestions-item');
       // Should only show brand suggestion (color filtered out)
       expect(items.length).toBe(1);
     });
