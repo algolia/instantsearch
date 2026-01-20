@@ -142,6 +142,9 @@ export type CurrentRefinementsRenderState = {
    * Generates a URL for the next state.
    */
   createURL: CreateURL<CurrentRefinementsConnectorParamsRefinement>;
+
+  aiMode: boolean;
+  setAiMode: (value: boolean) => void;
 };
 
 const withUsage = createDocumentationMessageGenerator({
@@ -170,6 +173,12 @@ const connectCurrentRefinements: CurrentRefinementsConnector =
     checkRendering(renderFn, withUsage());
 
     return (widgetParams) => {
+      let isAiMode = false;
+
+      const setAiMode = (value: boolean) => {
+        isAiMode = value;
+      };
+
       if (
         (widgetParams || {}).includedAttributes &&
         (widgetParams || {}).excludedAttributes
@@ -262,12 +271,18 @@ const connectCurrentRefinements: CurrentRefinementsConnector =
 
           const items = getItems();
 
+          if (items.length === 0) {
+            setAiMode(false);
+          }
+
           return {
             items,
             canRefine: items.length > 0,
             refine: (refinement) => clearRefinement(helper, refinement),
             createURL: (refinement) =>
               createURL(clearRefinementFromState(helper.state, refinement)),
+            aiMode: isAiMode,
+            setAiMode,
             widgetParams,
           };
         },
