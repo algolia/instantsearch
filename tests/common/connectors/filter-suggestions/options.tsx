@@ -13,7 +13,7 @@ export function createOptionsTests(
   { act, skippedTests }: Required<TestOptions>
 ) {
   skippableDescribe('options', skippedTests, () => {
-    test('requires agentId', () => {
+    test('requires agentId or transport', () => {
       const searchClient = createSearchClient({});
 
       expect(() =>
@@ -26,7 +26,9 @@ export function createOptionsTests(
             agentId: '',
           } as any,
         })
-      ).toThrow('The `agentId` option is required.');
+      ).toThrow(
+        'The `agentId` option is required unless a custom `transport` is provided.'
+      );
     });
 
     test('initializes with valid agentId', async () => {

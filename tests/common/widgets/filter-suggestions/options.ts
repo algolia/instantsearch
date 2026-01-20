@@ -23,7 +23,9 @@ export function createOptionsTests(
             agentId: '',
           } as any,
         })
-      ).toThrow('The `agentId` option is required.');
+      ).toThrow(
+        'The `agentId` option is required unless a custom `transport` is provided.'
+      );
     });
 
     test('renders with default props', async () => {
