@@ -105,6 +105,14 @@ export type RefinementSuggestionsClassNames = {
    */
   headerTitle: string | string[];
   /**
+   * Class names to apply to the skeleton container element
+   */
+  skeleton: string | string[];
+  /**
+   * Class names to apply to each skeleton item element
+   */
+  skeletonItem: string | string[];
+  /**
    * Class names to apply to the list element
    */
   list: string | string[];
@@ -256,9 +264,20 @@ export function createRefinementSuggestionsComponent({
       >
         {HeaderComponent && <HeaderComponent classNames={headerClassNames} />}
         {isLoading ? (
-          <div className="ais-RefinementSuggestions-skeleton">
+          <div
+            className={cx(
+              'ais-RefinementSuggestions-skeleton',
+              classNames.skeleton
+            )}
+          >
             {[...new Array(skeletonCount)].map((_, i) => (
-              <div key={i} className="ais-RefinementSuggestions-skeletonItem" />
+              <div
+                key={i}
+                className={cx(
+                  'ais-RefinementSuggestions-skeletonItem',
+                  classNames.skeletonItem
+                )}
+              />
             ))}
           </div>
         ) : (
