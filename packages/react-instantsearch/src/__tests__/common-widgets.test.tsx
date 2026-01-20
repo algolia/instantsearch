@@ -33,7 +33,7 @@ import {
   DynamicWidgets,
   Chat,
   EXPERIMENTAL_Autocomplete,
-  RefinementSuggestions,
+  FilterSuggestions,
 } from '..';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -411,13 +411,13 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
       </InstantSearch>
     );
   },
-  createRefinementSuggestionsWidgetTests({
+  createFilterSuggestionsWidgetTests({
     instantSearchOptions,
     widgetParams,
   }) {
     render(
       <InstantSearch {...instantSearchOptions}>
-        <RefinementSuggestions {...widgetParams} />
+        <FilterSuggestions {...widgetParams} />
         <GlobalErrorSwallower />
       </InstantSearch>
     );
@@ -469,7 +469,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
     act,
   },
   createAutocompleteWidgetTests: { act },
-  createRefinementSuggestionsWidgetTests: { act },
+  createFilterSuggestionsWidgetTests: { act },
 };
 
 /**

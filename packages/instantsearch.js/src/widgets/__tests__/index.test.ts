@@ -174,10 +174,10 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
 
         return autocomplete;
       }
-      case 'refinementSuggestions': {
-        const refinementSuggestions =
-          widget as Widgets['refinementSuggestions'];
-        return refinementSuggestions({
+      case 'filterSuggestions': {
+        const filterSuggestions =
+          widget as Widgets['filterSuggestions'];
+        return filterSuggestions({
           container,
           agentId: 'test-agent-id',
           attributes: ['attr'],

@@ -34,7 +34,7 @@ import {
   dynamicWidgets,
   chat,
   EXPERIMENTAL_autocomplete,
-  refinementSuggestions,
+  filterSuggestions,
 } from '../widgets';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -652,13 +652,13 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       })
       .start();
   },
-  createRefinementSuggestionsWidgetTests({
+  createFilterSuggestionsWidgetTests({
     instantSearchOptions,
     widgetParams,
   }) {
     instantsearch(instantSearchOptions)
       .addWidgets([
-        refinementSuggestions({
+        filterSuggestions({
           container: document.body.appendChild(document.createElement('div')),
           ...widgetParams,
         }),
@@ -705,7 +705,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createDynamicWidgetsWidgetTests: undefined,
   createChatWidgetTests: undefined,
   createAutocompleteWidgetTests: undefined,
-  createRefinementSuggestionsWidgetTests: undefined,
+  createFilterSuggestionsWidgetTests: undefined,
 };
 
 describe('Common widget tests (InstantSearch.js)', () => {

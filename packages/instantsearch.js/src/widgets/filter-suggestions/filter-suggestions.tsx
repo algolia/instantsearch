@@ -1,10 +1,10 @@
 /** @jsx h */
 
-import { createRefinementSuggestionsComponent } from 'instantsearch-ui-components';
+import { createFilterSuggestionsComponent } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
 import TemplateComponent from '../../components/Template/Template';
-import connectRefinementSuggestions from '../../connectors/refinement-suggestions/connectRefinementSuggestions';
+import connectFilterSuggestions from '../../connectors/filter-suggestions/connectFilterSuggestions';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
   getContainerNode,
@@ -12,31 +12,31 @@ import {
 } from '../../lib/utils';
 
 import type {
-  RefinementSuggestionsRenderState,
-  RefinementSuggestionsConnectorParams,
-  RefinementSuggestionsWidgetDescription,
-} from '../../connectors/refinement-suggestions/connectRefinementSuggestions';
+  FilterSuggestionsRenderState,
+  FilterSuggestionsConnectorParams,
+  FilterSuggestionsWidgetDescription,
+} from '../../connectors/filter-suggestions/connectFilterSuggestions';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type { WidgetFactory, Renderer, Template } from '../../types';
 import type {
-  RefinementSuggestionsClassNames,
-  RefinementSuggestionsEmptyComponentProps,
-  RefinementSuggestionsHeaderComponentProps,
-  RefinementSuggestionsItemComponentProps,
-  RefinementSuggestionsProps as RefinementSuggestionsUiProps,
+  FilterSuggestionsClassNames,
+  FilterSuggestionsEmptyComponentProps,
+  FilterSuggestionsHeaderComponentProps,
+  FilterSuggestionsItemComponentProps,
+  FilterSuggestionsProps as FilterSuggestionsUiProps,
 } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({
-  name: 'refinement-suggestions',
+  name: 'filter-suggestions',
 });
 
-const RefinementSuggestions = createRefinementSuggestionsComponent({
+const FilterSuggestions = createFilterSuggestionsComponent({
   createElement: h,
   Fragment: 'fragment',
 });
 
 type UiProps = Pick<
-  Parameters<typeof RefinementSuggestions>[0],
+  Parameters<typeof FilterSuggestions>[0],
   | 'suggestions'
   | 'isLoading'
   | 'onRefine'
@@ -46,28 +46,27 @@ type UiProps = Pick<
   | 'emptyComponent'
 >;
 
-export type RefinementSuggestionsCSSClasses =
-  Partial<RefinementSuggestionsClassNames>;
+export type FilterSuggestionsCSSClasses = Partial<FilterSuggestionsClassNames>;
 
-export type RefinementSuggestionsTemplates = Partial<{
+export type FilterSuggestionsTemplates = Partial<{
   /**
    * Template to use for the header. Set to `false` to disable the header.
    */
-  header: Template<RefinementSuggestionsHeaderComponentProps> | false;
+  header: Template<FilterSuggestionsHeaderComponentProps> | false;
   /**
    * Template to use for each suggestion item.
    */
-  item: Template<RefinementSuggestionsItemComponentProps>;
+  item: Template<FilterSuggestionsItemComponentProps>;
   /**
    * Template to use when there are no suggestions.
    */
-  empty: Template<RefinementSuggestionsEmptyComponentProps>;
+  empty: Template<FilterSuggestionsEmptyComponentProps>;
 }>;
 
-type RefinementSuggestionsTemplatesWithoutHeader = Partial<{
-  header: Template<RefinementSuggestionsHeaderComponentProps>;
-  item: Template<RefinementSuggestionsItemComponentProps>;
-  empty: Template<RefinementSuggestionsEmptyComponentProps>;
+type FilterSuggestionsTemplatesWithoutHeader = Partial<{
+  header: Template<FilterSuggestionsHeaderComponentProps>;
+  item: Template<FilterSuggestionsItemComponentProps>;
+  empty: Template<FilterSuggestionsEmptyComponentProps>;
 }>;
 
 const createRenderer =
@@ -79,15 +78,15 @@ const createRenderer =
     maxSuggestions,
   }: {
     containerNode: HTMLElement;
-    cssClasses: RefinementSuggestionsCSSClasses;
+    cssClasses: FilterSuggestionsCSSClasses;
     renderState: {
-      templateProps?: PreparedTemplateProps<RefinementSuggestionsTemplatesWithoutHeader>;
+      templateProps?: PreparedTemplateProps<FilterSuggestionsTemplatesWithoutHeader>;
     };
-    templates: RefinementSuggestionsTemplates;
+    templates: FilterSuggestionsTemplates;
     maxSuggestions?: number;
   }): Renderer<
-    RefinementSuggestionsRenderState,
-    Partial<RefinementSuggestionsWidgetParams>
+    FilterSuggestionsRenderState,
+    Partial<FilterSuggestionsWidgetParams>
   > =>
   (props, isFirstRendering) => {
     const { suggestions, isLoading, refine, instantSearchInstance } = props;
@@ -98,7 +97,7 @@ const createRenderer =
     if (isFirstRendering) {
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates:
-          {} as unknown as RefinementSuggestionsTemplatesWithoutHeader,
+          {} as unknown as FilterSuggestionsTemplatesWithoutHeader,
         templatesConfig: instantSearchInstance.templatesConfig,
         templates: {
           header: headerTemplate,
@@ -109,12 +108,12 @@ const createRenderer =
       return;
     }
 
-    let headerComponent: RefinementSuggestionsUiProps['headerComponent'];
+    let headerComponent: FilterSuggestionsUiProps['headerComponent'];
     if (templates.header === false) {
       headerComponent = false;
     } else if (headerTemplate) {
       headerComponent = (
-        headerProps: RefinementSuggestionsHeaderComponentProps
+        headerProps: FilterSuggestionsHeaderComponentProps
       ) => {
         return (
           <TemplateComponent
@@ -128,7 +127,7 @@ const createRenderer =
     }
 
     const itemComponent = templates.item
-      ? (itemProps: RefinementSuggestionsItemComponentProps) => {
+      ? (itemProps: FilterSuggestionsItemComponentProps) => {
           return (
             <TemplateComponent
               {...renderState.templateProps}
@@ -141,7 +140,7 @@ const createRenderer =
       : undefined;
 
     const emptyComponent = templates.empty
-      ? (emptyProps: RefinementSuggestionsEmptyComponentProps) => {
+      ? (emptyProps: FilterSuggestionsEmptyComponentProps) => {
           return (
             <TemplateComponent
               {...renderState.templateProps}
@@ -164,12 +163,12 @@ const createRenderer =
     };
 
     render(
-      <RefinementSuggestions classNames={cssClasses} {...uiProps} />,
+      <FilterSuggestions classNames={cssClasses} {...uiProps} />,
       containerNode
     );
   };
 
-type RefinementSuggestionsWidgetParams = {
+type FilterSuggestionsWidgetParams = {
   /**
    * CSS Selector or HTMLElement to insert the widget.
    */
@@ -178,25 +177,24 @@ type RefinementSuggestionsWidgetParams = {
   /**
    * Templates to use for the widget.
    */
-  templates?: RefinementSuggestionsTemplates;
+  templates?: FilterSuggestionsTemplates;
 
   /**
    * CSS classes to add.
    */
-  cssClasses?: RefinementSuggestionsCSSClasses;
+  cssClasses?: FilterSuggestionsCSSClasses;
 };
 
-export type RefinementSuggestionsWidget = WidgetFactory<
-  RefinementSuggestionsWidgetDescription & {
-    $$widgetType: 'ais.refinementSuggestions';
+export type FilterSuggestionsWidget = WidgetFactory<
+  FilterSuggestionsWidgetDescription & {
+    $$widgetType: 'ais.filterSuggestions';
   },
-  RefinementSuggestionsConnectorParams,
-  RefinementSuggestionsWidgetParams
+  FilterSuggestionsConnectorParams,
+  FilterSuggestionsWidgetParams
 >;
 
-export default (function refinementSuggestions(
-  widgetParams: RefinementSuggestionsWidgetParams &
-    RefinementSuggestionsConnectorParams
+export default (function filterSuggestions(
+  widgetParams: FilterSuggestionsWidgetParams & FilterSuggestionsConnectorParams
 ) {
   const {
     container,
@@ -224,7 +222,7 @@ export default (function refinementSuggestions(
     maxSuggestions,
   });
 
-  const makeWidget = connectRefinementSuggestions(specializedRenderer, () =>
+  const makeWidget = connectFilterSuggestions(specializedRenderer, () =>
     render(null, containerNode)
   );
 
@@ -237,6 +235,6 @@ export default (function refinementSuggestions(
       hitsToSample,
       transformItems,
     }),
-    $$widgetType: 'ais.refinementSuggestions',
+    $$widgetType: 'ais.filterSuggestions',
   };
-} satisfies RefinementSuggestionsWidget);
+} satisfies FilterSuggestionsWidget);

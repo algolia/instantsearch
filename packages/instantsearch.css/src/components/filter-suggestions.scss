@@ -1,19 +1,19 @@
 @use '../shared/_variables';
 @use '../shared/_common';
 
-.ais-RefinementSuggestions {
+.ais-FilterSuggestions {
   display: flex;
   flex-direction: column;
   gap: calc(var(--ais-spacing) * 0.5);
 }
 
-.ais-RefinementSuggestions-header {
+.ais-FilterSuggestions-header {
   display: flex;
   align-items: center;
   gap: calc(var(--ais-spacing) * 0.5);
 }
 
-.ais-RefinementSuggestions-headerIcon {
+.ais-FilterSuggestions-headerIcon {
   display: flex;
   align-items: center;
   color: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
@@ -24,13 +24,13 @@
   }
 }
 
-.ais-RefinementSuggestions-headerTitle {
+.ais-FilterSuggestions-headerTitle {
   font-size: var(--ais-font-size-sm);
   font-weight: 500;
   color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
 }
 
-.ais-RefinementSuggestions-list {
+.ais-FilterSuggestions-list {
   display: flex;
   flex-wrap: wrap;
   gap: calc(var(--ais-spacing) * 0.5);
@@ -39,14 +39,14 @@
   padding: 0;
 }
 
-.ais-RefinementSuggestions-item {
+.ais-FilterSuggestions-item {
   display: inline-flex;
   white-space: nowrap;
 }
 
 // Refined state
-.ais-RefinementSuggestions-item--refined {
-  .ais-RefinementSuggestions-nbHits {
+.ais-FilterSuggestions-item--refined {
+  .ais-FilterSuggestions-nbHits {
     color: rgba(
       var(--ais-button-text-color-rgb),
       var(--ais-button-text-color-alpha)
@@ -58,7 +58,7 @@
   }
 }
 
-.ais-RefinementSuggestions-nbHits {
+.ais-FilterSuggestions-nbHits {
   font-size: calc(var(--ais-font-size) * 0.8);
   color: rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha));
   background-color: rgba(var(--ais-muted-color-rgb), 0.1);
@@ -67,13 +67,13 @@
 }
 
 // Skeleton loading state
-.ais-RefinementSuggestions-skeleton {
+.ais-FilterSuggestions-skeleton {
   display: flex;
   flex-wrap: wrap;
   gap: calc(var(--ais-spacing) * 0.5);
 }
 
-.ais-RefinementSuggestions-skeletonItem {
+.ais-FilterSuggestions-skeletonItem {
   height: calc(var(--ais-spacing) * 1.875);
   background-color: rgba(var(--ais-muted-color-rgb), 0.15);
   border-radius: var(--ais-border-radius-sm);
@@ -92,11 +92,11 @@
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    animation: ais-refinement-suggestions-skeleton 1.5s ease-in-out infinite;
+    animation: ais-filter-suggestions-skeleton 1.5s ease-in-out infinite;
   }
 }
 
-@keyframes ais-refinement-suggestions-skeleton {
+@keyframes ais-filter-suggestions-skeleton {
   0%,
   100% {
     opacity: 1;

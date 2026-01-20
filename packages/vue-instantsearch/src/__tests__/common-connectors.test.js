@@ -344,7 +344,7 @@ const testSetups = {
   createTrendingItemsConnectorTests: () => {},
   createLookingSimilarConnectorTests: () => {},
   createChatConnectorTests: () => {},
-  createRefinementSuggestionsConnectorTests: () => {},
+  createFilterSuggestionsConnectorTests: () => {},
 };
 
 function createCustomWidget({
@@ -444,7 +444,7 @@ const testOptions = {
     },
   },
   createChatConnectorTests: { skippedTests: { options: true } },
-  createRefinementSuggestionsConnectorTests: {
+  createFilterSuggestionsConnectorTests: {
     skippedTests: {
       options: true,
     },

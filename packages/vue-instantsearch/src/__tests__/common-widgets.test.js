@@ -587,9 +587,9 @@ const testSetups = {
   createAutocompleteWidgetTests() {
     throw new Error('Autocomplete is not supported in Vue InstantSearch');
   },
-  createRefinementSuggestionsWidgetTests() {
+  createFilterSuggestionsWidgetTests() {
     throw new Error(
-      'RefinementSuggestions is not supported in Vue InstantSearch'
+      'FilterSuggestions is not supported in Vue InstantSearch'
     );
   },
 };
@@ -640,8 +640,8 @@ const testOptions = {
   createAutocompleteWidgetTests: {
     skippedTests: { 'Autocomplete widget common tests': true },
   },
-  createRefinementSuggestionsWidgetTests: {
-    skippedTests: { 'RefinementSuggestions widget common tests': true },
+  createFilterSuggestionsWidgetTests: {
+    skippedTests: { 'FilterSuggestions widget common tests': true },
   },
 };
 

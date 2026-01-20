@@ -25,35 +25,32 @@ export type Suggestion = {
   count: number;
 };
 
-export type RefinementSuggestionsItemComponentProps = {
+export type FilterSuggestionsItemComponentProps = {
   suggestion: Suggestion;
   classNames: Partial<
     Pick<
-      RefinementSuggestionsClassNames,
+      FilterSuggestionsClassNames,
       'item' | 'itemRefined' | 'button' | 'label' | 'count'
     >
   >;
   onRefine: () => void;
 };
 
-export type RefinementSuggestionsHeaderComponentProps = {
+export type FilterSuggestionsHeaderComponentProps = {
   classNames: Partial<
-    Pick<
-      RefinementSuggestionsClassNames,
-      'header' | 'headerIcon' | 'headerTitle'
-    >
+    Pick<FilterSuggestionsClassNames, 'header' | 'headerIcon' | 'headerTitle'>
   >;
 };
 
-export type RefinementSuggestionsEmptyComponentProps = {
-  classNames: Partial<Pick<RefinementSuggestionsClassNames, 'emptyRoot'>>;
+export type FilterSuggestionsEmptyComponentProps = {
+  classNames: Partial<Pick<FilterSuggestionsClassNames, 'emptyRoot'>>;
 };
 
-export type RefinementSuggestionsProps = ComponentProps<'div'> & {
+export type FilterSuggestionsProps = ComponentProps<'div'> & {
   suggestions: Suggestion[];
   isLoading: boolean;
   onRefine: (attribute: string, value: string) => void;
-  classNames?: Partial<RefinementSuggestionsClassNames>;
+  classNames?: Partial<FilterSuggestionsClassNames>;
   /**
    * Number of skeleton items to show when loading.
    * @default 3
@@ -62,24 +59,22 @@ export type RefinementSuggestionsProps = ComponentProps<'div'> & {
   /**
    * Component to render each suggestion item.
    */
-  itemComponent?: (
-    props: RefinementSuggestionsItemComponentProps
-  ) => JSX.Element;
+  itemComponent?: (props: FilterSuggestionsItemComponentProps) => JSX.Element;
   /**
    * Component to render the header. Set to `false` to disable the header.
    */
   headerComponent?:
-    | ((props: RefinementSuggestionsHeaderComponentProps) => JSX.Element)
+    | ((props: FilterSuggestionsHeaderComponentProps) => JSX.Element)
     | false;
   /**
    * Component to render when there are no suggestions.
    */
   emptyComponent?: (
-    props: RefinementSuggestionsEmptyComponentProps
+    props: FilterSuggestionsEmptyComponentProps
   ) => JSX.Element | null;
 };
 
-export type RefinementSuggestionsClassNames = {
+export type FilterSuggestionsClassNames = {
   /**
    * Class names to apply to the root element
    */
@@ -138,21 +133,17 @@ export type RefinementSuggestionsClassNames = {
   count: string | string[];
 };
 
-export function createRefinementSuggestionsComponent({
-  createElement,
-}: Renderer) {
+export function createFilterSuggestionsComponent({ createElement }: Renderer) {
   const Button = createButtonComponent({ createElement });
 
   function DefaultHeader({
     classNames,
-  }: RefinementSuggestionsHeaderComponentProps) {
+  }: FilterSuggestionsHeaderComponentProps) {
     return (
-      <div
-        className={cx('ais-RefinementSuggestions-header', classNames.header)}
-      >
+      <div className={cx('ais-FilterSuggestions-header', classNames.header)}>
         <span
           className={cx(
-            'ais-RefinementSuggestions-headerIcon',
+            'ais-FilterSuggestions-headerIcon',
             classNames.headerIcon
           )}
         >
@@ -160,11 +151,11 @@ export function createRefinementSuggestionsComponent({
         </span>
         <span
           className={cx(
-            'ais-RefinementSuggestions-headerTitle',
+            'ais-FilterSuggestions-headerTitle',
             classNames.headerTitle
           )}
         >
-          Refinement suggestions
+          Filter suggestions
         </span>
       </div>
     );
@@ -174,7 +165,7 @@ export function createRefinementSuggestionsComponent({
     suggestion,
     classNames,
     onRefine,
-  }: RefinementSuggestionsItemComponentProps) {
+  }: FilterSuggestionsItemComponentProps) {
     return (
       <Button
         variant="outline"
@@ -182,22 +173,18 @@ export function createRefinementSuggestionsComponent({
         className={cx(classNames.button)}
         onClick={onRefine}
       >
-        <span
-          className={cx('ais-RefinementSuggestions-label', classNames.label)}
-        >
+        <span className={cx('ais-FilterSuggestions-label', classNames.label)}>
           {suggestion.label}: {suggestion.value}
         </span>
-        <span
-          className={cx('ais-RefinementSuggestions-nbHits', classNames.count)}
-        >
+        <span className={cx('ais-FilterSuggestions-nbHits', classNames.count)}>
           {suggestion.count}
         </span>
       </Button>
     );
   }
 
-  return function RefinementSuggestions(
-    userProps: RefinementSuggestionsProps
+  return function FilterSuggestions(
+    userProps: FilterSuggestionsProps
   ): JSX.Element | null {
     const {
       classNames = {},
@@ -221,9 +208,9 @@ export function createRefinementSuggestionsComponent({
         <div
           {...props}
           className={cx(
-            'ais-RefinementSuggestions',
+            'ais-FilterSuggestions',
             classNames.root,
-            'ais-RefinementSuggestions--empty',
+            'ais-FilterSuggestions--empty',
             classNames.emptyRoot,
             props.className
           )}
@@ -235,30 +222,29 @@ export function createRefinementSuggestionsComponent({
       );
     }
 
-    const headerClassNames: RefinementSuggestionsHeaderComponentProps['classNames'] =
+    const headerClassNames: FilterSuggestionsHeaderComponentProps['classNames'] =
       {
         header: classNames.header,
         headerIcon: classNames.headerIcon,
         headerTitle: classNames.headerTitle,
       };
 
-    const itemClassNames: RefinementSuggestionsItemComponentProps['classNames'] =
-      {
-        item: classNames.item,
-        itemRefined: classNames.itemRefined,
-        button: classNames.button,
-        label: classNames.label,
-        count: classNames.count,
-      };
+    const itemClassNames: FilterSuggestionsItemComponentProps['classNames'] = {
+      item: classNames.item,
+      itemRefined: classNames.itemRefined,
+      button: classNames.button,
+      label: classNames.label,
+      count: classNames.count,
+    };
 
     return (
       <div
         {...props}
         className={cx(
-          'ais-RefinementSuggestions',
+          'ais-FilterSuggestions',
           classNames.root,
           isLoading &&
-            cx('ais-RefinementSuggestions--loading', classNames.loadingRoot),
+            cx('ais-FilterSuggestions--loading', classNames.loadingRoot),
           props.className
         )}
       >
@@ -266,7 +252,7 @@ export function createRefinementSuggestionsComponent({
         {isLoading ? (
           <div
             className={cx(
-              'ais-RefinementSuggestions-skeleton',
+              'ais-FilterSuggestions-skeleton',
               classNames.skeleton
             )}
           >
@@ -274,21 +260,18 @@ export function createRefinementSuggestionsComponent({
               <div
                 key={i}
                 className={cx(
-                  'ais-RefinementSuggestions-skeletonItem',
+                  'ais-FilterSuggestions-skeletonItem',
                   classNames.skeletonItem
                 )}
               />
             ))}
           </div>
         ) : (
-          <ul className={cx('ais-RefinementSuggestions-list', classNames.list)}>
+          <ul className={cx('ais-FilterSuggestions-list', classNames.list)}>
             {suggestions.map((suggestion) => (
               <li
                 key={`${suggestion.attribute}-${suggestion.value}`}
-                className={cx(
-                  'ais-RefinementSuggestions-item',
-                  classNames.item
-                )}
+                className={cx('ais-FilterSuggestions-item', classNames.item)}
               >
                 <ItemComponent
                   suggestion={suggestion}

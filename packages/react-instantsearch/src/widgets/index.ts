@@ -23,4 +23,4 @@ export * from './SortBy';
 export * from './Stats';
 export * from './ToggleRefinement';
 export * from './TrendingItems';
-export * from './RefinementSuggestions';
+export * from './FilterSuggestions';

@@ -1,12 +1,12 @@
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 
-import type { RefinementSuggestionsWidgetSetup } from '.';
+import type { FilterSuggestionsWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 import type { SearchResponse } from 'instantsearch.js';
 
 export function createOptionsTests(
-  setup: RefinementSuggestionsWidgetSetup,
+  setup: FilterSuggestionsWidgetSetup,
   { act }: Required<TestOptions>
 ) {
   describe('options', () => {
@@ -97,17 +97,17 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-RefinementSuggestions')
+        document.querySelector('.ais-FilterSuggestions')
       ).toBeInTheDocument();
       expect(
-        document.querySelector('.ais-RefinementSuggestions-header')
+        document.querySelector('.ais-FilterSuggestions-header')
       ).toBeInTheDocument();
       expect(
-        document.querySelector('.ais-RefinementSuggestions-list')
+        document.querySelector('.ais-FilterSuggestions-list')
       ).toBeInTheDocument();
 
       const items = document.querySelectorAll(
-        '.ais-RefinementSuggestions-item'
+        '.ais-FilterSuggestions-item'
       );
       expect(items.length).toBe(2);
     });
@@ -149,7 +149,7 @@ export function createOptionsTests(
       });
 
       // Should render but be empty since no hits means no suggestions
-      const widget = document.querySelector('.ais-RefinementSuggestions');
+      const widget = document.querySelector('.ais-FilterSuggestions');
       expect(widget).toBeEmptyDOMElement();
     });
 
@@ -232,7 +232,7 @@ export function createOptionsTests(
       });
 
       const items = document.querySelectorAll(
-        '.ais-RefinementSuggestions-item'
+        '.ais-FilterSuggestions-item'
       );
       // Should only show brand suggestion (color filtered out)
       expect(items.length).toBe(1);

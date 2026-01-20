@@ -16,7 +16,7 @@ import type {
 import type { SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
-  name: 'refinement-suggestions',
+  name: 'filter-suggestions',
   connector: true,
 });
 
@@ -39,7 +39,7 @@ export type Suggestion = {
   count: number;
 };
 
-export type RefinementSuggestionsRenderState = {
+export type FilterSuggestionsRenderState = {
   /**
    * The list of suggested refinements.
    */
@@ -54,7 +54,7 @@ export type RefinementSuggestionsRenderState = {
   refine: (attribute: string, value: string) => void;
 };
 
-export type RefinementSuggestionsConnectorParams = {
+export type FilterSuggestionsConnectorParams = {
   /**
    * The ID of the agent configured in the Algolia dashboard.
    */
@@ -84,24 +84,24 @@ export type RefinementSuggestionsConnectorParams = {
   transformItems?: TransformItems<Suggestion>;
 };
 
-export type RefinementSuggestionsWidgetDescription = {
-  $$type: 'ais.refinementSuggestions';
-  renderState: RefinementSuggestionsRenderState;
+export type FilterSuggestionsWidgetDescription = {
+  $$type: 'ais.filterSuggestions';
+  renderState: FilterSuggestionsRenderState;
   indexRenderState: {
-    refinementSuggestions: WidgetRenderState<
-      RefinementSuggestionsRenderState,
-      RefinementSuggestionsConnectorParams
+    filterSuggestions: WidgetRenderState<
+      FilterSuggestionsRenderState,
+      FilterSuggestionsConnectorParams
     >;
   };
 };
 
-export type RefinementSuggestionsConnector = Connector<
-  RefinementSuggestionsWidgetDescription,
-  RefinementSuggestionsConnectorParams
+export type FilterSuggestionsConnector = Connector<
+  FilterSuggestionsWidgetDescription,
+  FilterSuggestionsConnectorParams
 >;
 
-const connectRefinementSuggestions: RefinementSuggestionsConnector =
-  function connectRefinementSuggestions(renderFn, unmountFn = noop) {
+const connectFilterSuggestions: FilterSuggestionsConnector =
+  function connectFilterSuggestions(renderFn, unmountFn = noop) {
     checkRendering(renderFn, withUsage());
 
     return (widgetParams) => {
@@ -112,7 +112,7 @@ const connectRefinementSuggestions: RefinementSuggestionsConnector =
         debounceMs = 300,
         hitsToSample = 5,
         transformItems = ((items) => items) as NonNullable<
-          RefinementSuggestionsConnectorParams['transformItems']
+          FilterSuggestionsConnectorParams['transformItems']
         >,
       } = widgetParams;
 
@@ -126,7 +126,7 @@ const connectRefinementSuggestions: RefinementSuggestionsConnector =
       let isLoading = false;
       let debounceTimer: ReturnType<typeof setTimeout> | undefined;
       let lastStateSignature: string | null = null; // null means never fetched
-      let refine: RefinementSuggestionsRenderState['refine'];
+      let refine: FilterSuggestionsRenderState['refine'];
       let searchHelper: InitOptions['helper'] | null = null;
       let latestRenderOptions: RenderOptions | null = null;
 
@@ -301,7 +301,7 @@ const connectRefinementSuggestions: RefinementSuggestionsConnector =
       };
 
       return {
-        $$type: 'ais.refinementSuggestions',
+        $$type: 'ais.filterSuggestions',
 
         init(initOptions) {
           const { instantSearchInstance, helper } = initOptions;
@@ -401,7 +401,7 @@ const connectRefinementSuggestions: RefinementSuggestionsConnector =
         getRenderState(renderState, renderOptions) {
           return {
             ...renderState,
-            refinementSuggestions: this.getWidgetRenderState(renderOptions),
+            filterSuggestions: this.getWidgetRenderState(renderOptions),
           };
         },
 
@@ -412,4 +412,4 @@ const connectRefinementSuggestions: RefinementSuggestionsConnector =
     };
   };
 
-export default connectRefinementSuggestions;
+export default connectFilterSuggestions;

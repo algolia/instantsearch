@@ -24,7 +24,7 @@ import {
   useFrequentlyBoughtTogether,
   useTrendingItems,
   useLookingSimilar,
-  useRefinementSuggestions,
+  useFilterSuggestions,
 } from '..';
 
 import type {
@@ -41,7 +41,7 @@ import type {
   UseFrequentlyBoughtTogetherProps,
   UseTrendingItemsProps,
   UseLookingSimilarProps,
-  UseRefinementSuggestionsProps,
+  UseFilterSuggestionsProps,
 } from '..';
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
 import type {
@@ -438,25 +438,25 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
     render(<App />);
   },
   createChatConnectorTests: () => {},
-  createRefinementSuggestionsConnectorTests: ({
+  createFilterSuggestionsConnectorTests: ({
     instantSearchOptions,
     widgetParams,
   }) => {
-    function CustomRefinementSuggestions(props: UseRefinementSuggestionsProps) {
+    function CustomFilterSuggestions(props: UseFilterSuggestionsProps) {
       const { suggestions, refine, isLoading } =
-        useRefinementSuggestions(props);
+        useFilterSuggestions(props);
       useRefinementList({ attribute: 'brand' });
 
       return (
-        <div data-testid="RefinementSuggestions-root">
+        <div data-testid="FilterSuggestions-root">
           {isLoading && (
-            <div data-testid="RefinementSuggestions-loading">Loading...</div>
+            <div data-testid="FilterSuggestions-loading">Loading...</div>
           )}
-          <ul data-testid="RefinementSuggestions-list">
+          <ul data-testid="FilterSuggestions-list">
             {suggestions.map((suggestion) => (
               <li key={`${suggestion.attribute}-${suggestion.value}`}>
                 <button
-                  data-testid="RefinementSuggestions-refine"
+                  data-testid="FilterSuggestions-refine"
                   onClick={() => refine(suggestion.attribute, suggestion.value)}
                 >
                   {suggestion.label} ({suggestion.count})
@@ -470,7 +470,7 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
 
     render(
       <InstantSearch {...instantSearchOptions}>
-        <CustomRefinementSuggestions {...widgetParams} />
+        <CustomFilterSuggestions {...widgetParams} />
       </InstantSearch>
     );
   },
@@ -498,7 +498,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createTrendingItemsConnectorTests: { act },
   createLookingSimilarConnectorTests: { act, skippedTests: { options: true } },
   createChatConnectorTests: { act, skippedTests: { options: true } },
-  createRefinementSuggestionsConnectorTests: { act },
+  createFilterSuggestionsConnectorTests: { act },
 };
 
 describe('Common connector tests (React InstantSearch)', () => {

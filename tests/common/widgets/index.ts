@@ -25,4 +25,4 @@ export * from './powered-by';
 export * from './menu-select';
 export * from './chat';
 export * from './autocomplete';
-export * from './refinement-suggestions';
+export * from './filter-suggestions';

@@ -5,11 +5,11 @@ import userEvent from '@testing-library/user-event';
 
 import { skippableDescribe } from '../../common';
 
-import type { RefinementSuggestionsConnectorSetup } from '.';
+import type { FilterSuggestionsConnectorSetup } from '.';
 import type { TestOptions } from '../../common';
 
 export function createOptionsTests(
-  setup: RefinementSuggestionsConnectorSetup,
+  setup: FilterSuggestionsConnectorSetup,
   { act, skippedTests }: Required<TestOptions>
 ) {
   skippableDescribe('options', skippedTests, () => {

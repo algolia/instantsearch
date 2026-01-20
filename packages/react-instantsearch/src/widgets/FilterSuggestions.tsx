@@ -1,20 +1,20 @@
-import { createRefinementSuggestionsComponent } from 'instantsearch-ui-components';
+import { createFilterSuggestionsComponent } from 'instantsearch-ui-components';
 import React, { createElement, Fragment } from 'react';
-import { useRefinementSuggestions } from 'react-instantsearch-core';
+import { useFilterSuggestions } from 'react-instantsearch-core';
 
 import type {
   Pragma,
-  RefinementSuggestionsProps as RefinementSuggestionsUiComponentProps,
+  FilterSuggestionsProps as FilterSuggestionsUiComponentProps,
 } from 'instantsearch-ui-components';
-import type { UseRefinementSuggestionsProps } from 'react-instantsearch-core';
+import type { UseFilterSuggestionsProps } from 'react-instantsearch-core';
 
-const RefinementSuggestionsUiComponent = createRefinementSuggestionsComponent({
+const FilterSuggestionsUiComponent = createFilterSuggestionsComponent({
   createElement: createElement as Pragma,
   Fragment,
 });
 
 type UiProps = Pick<
-  RefinementSuggestionsUiComponentProps,
+  FilterSuggestionsUiComponentProps,
   | 'suggestions'
   | 'isLoading'
   | 'onRefine'
@@ -24,26 +24,26 @@ type UiProps = Pick<
   | 'emptyComponent'
 >;
 
-export type RefinementSuggestionsProps = Omit<
-  RefinementSuggestionsUiComponentProps,
+export type FilterSuggestionsProps = Omit<
+  FilterSuggestionsUiComponentProps,
   keyof UiProps
 > &
-  UseRefinementSuggestionsProps & {
+  UseFilterSuggestionsProps & {
     /**
      * Component to render each suggestion item.
      */
-    itemComponent?: RefinementSuggestionsUiComponentProps['itemComponent'];
+    itemComponent?: FilterSuggestionsUiComponentProps['itemComponent'];
     /**
      * Component to render the header. Set to `false` to disable the header.
      */
-    headerComponent?: RefinementSuggestionsUiComponentProps['headerComponent'];
+    headerComponent?: FilterSuggestionsUiComponentProps['headerComponent'];
     /**
      * Component to render when there are no suggestions.
      */
-    emptyComponent?: RefinementSuggestionsUiComponentProps['emptyComponent'];
+    emptyComponent?: FilterSuggestionsUiComponentProps['emptyComponent'];
   };
 
-export function RefinementSuggestions({
+export function FilterSuggestions({
   agentId,
   attributes,
   maxSuggestions,
@@ -54,8 +54,8 @@ export function RefinementSuggestions({
   headerComponent,
   emptyComponent,
   ...props
-}: RefinementSuggestionsProps) {
-  const { suggestions, isLoading, refine } = useRefinementSuggestions(
+}: FilterSuggestionsProps) {
+  const { suggestions, isLoading, refine } = useFilterSuggestions(
     {
       agentId,
       attributes,
@@ -64,7 +64,7 @@ export function RefinementSuggestions({
       hitsToSample,
       transformItems,
     },
-    { $$widgetType: 'ais.refinementSuggestions' }
+    { $$widgetType: 'ais.filterSuggestions' }
   );
 
   const uiProps: UiProps = {
@@ -77,5 +77,5 @@ export function RefinementSuggestions({
     emptyComponent,
   };
 
-  return <RefinementSuggestionsUiComponent {...props} {...uiProps} />;
+  return <FilterSuggestionsUiComponent {...props} {...uiProps} />;
 }

@@ -20,7 +20,7 @@ import {
   connectTrendingItems,
   connectLookingSimilar,
   connectChat,
-  connectRefinementSuggestions,
+  connectFilterSuggestions,
 } from '../connectors';
 import instantsearch from '../index.es';
 import { noop } from '../lib/utils';
@@ -578,27 +578,27 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       })
       .start();
   },
-  createRefinementSuggestionsConnectorTests({
+  createFilterSuggestionsConnectorTests({
     instantSearchOptions,
     widgetParams,
   }) {
-    const customRefinementSuggestions = connectRefinementSuggestions<{
+    const customFilterSuggestions = connectFilterSuggestions<{
       container: HTMLElement;
     }>((renderOptions) => {
       const { suggestions, refine, isLoading } = renderOptions;
       renderOptions.widgetParams.container.innerHTML = `
-        <div data-testid="RefinementSuggestions-root">
+        <div data-testid="FilterSuggestions-root">
           ${
             isLoading
-              ? '<div data-testid="RefinementSuggestions-loading">Loading...</div>'
+              ? '<div data-testid="FilterSuggestions-loading">Loading...</div>'
               : ''
           }
-          <ul data-testid="RefinementSuggestions-list">
+          <ul data-testid="FilterSuggestions-list">
             ${suggestions
               .map(
                 (suggestion) =>
-                  `<li data-testid="RefinementSuggestions-item">
-                    <button data-testid="RefinementSuggestions-refine" data-attribute="${suggestion.attribute}" data-value="${suggestion.value}">
+                  `<li data-testid="FilterSuggestions-item">
+                    <button data-testid="FilterSuggestions-refine" data-attribute="${suggestion.attribute}" data-value="${suggestion.value}">
                       ${suggestion.label} (${suggestion.count})
                     </button>
                   </li>`
@@ -609,7 +609,7 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       `;
 
       renderOptions.widgetParams.container
-        .querySelectorAll('[data-testid="RefinementSuggestions-refine"]')
+        .querySelectorAll('[data-testid="FilterSuggestions-refine"]')
         .forEach((button) => {
           button.addEventListener('click', () => {
             const attribute = (button as HTMLElement).dataset.attribute!;
@@ -621,7 +621,7 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
 
     const search = instantsearch(instantSearchOptions)
       .addWidgets([
-        customRefinementSuggestions({
+        customFilterSuggestions({
           container: document.body.appendChild(document.createElement('div')),
           ...widgetParams,
         }),
@@ -668,7 +668,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createTrendingItemsConnectorTests: undefined,
   createLookingSimilarConnectorTests: undefined,
   createChatConnectorTests: undefined,
-  createRefinementSuggestionsConnectorTests: undefined,
+  createFilterSuggestionsConnectorTests: undefined,
 };
 
 describe('Common connector tests (InstantSearch.js)', () => {

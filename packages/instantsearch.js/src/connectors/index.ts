@@ -55,4 +55,4 @@ export { default as connectRelevantSort } from './relevant-sort/connectRelevantS
 export { default as connectFrequentlyBoughtTogether } from './frequently-bought-together/connectFrequentlyBoughtTogether';
 export { default as connectLookingSimilar } from './looking-similar/connectLookingSimilar';
 export { default as connectChat } from './chat/connectChat';
-export { default as connectRefinementSuggestions } from './refinement-suggestions/connectRefinementSuggestions';
+export { default as connectFilterSuggestions } from './filter-suggestions/connectFilterSuggestions';

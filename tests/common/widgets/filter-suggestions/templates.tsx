@@ -2,11 +2,11 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import React from 'react';
 
-import type { RefinementSuggestionsWidgetSetup } from '.';
+import type { FilterSuggestionsWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 
 export function createTemplatesTests(
-  setup: RefinementSuggestionsWidgetSetup,
+  setup: FilterSuggestionsWidgetSetup,
   { act }: Required<TestOptions>
 ) {
   describe('templates', () => {
@@ -85,11 +85,11 @@ export function createTemplatesTests(
 
       // The widget should render - custom template is applied via TemplateComponent
       expect(
-        document.querySelector('.ais-RefinementSuggestions')
+        document.querySelector('.ais-FilterSuggestions')
       ).toBeInTheDocument();
       // Check that the widget has content (header should exist)
       const header = document.querySelector(
-        '.ais-RefinementSuggestions'
+        '.ais-FilterSuggestions'
       )?.firstChild;
       expect(header).not.toBeNull();
     });
@@ -170,9 +170,9 @@ export function createTemplatesTests(
 
       // The widget should render with items
       expect(
-        document.querySelector('.ais-RefinementSuggestions')
+        document.querySelector('.ais-FilterSuggestions')
       ).toBeInTheDocument();
-      const list = document.querySelector('.ais-RefinementSuggestions-list');
+      const list = document.querySelector('.ais-FilterSuggestions-list');
       expect(list).toBeInTheDocument();
       // At least one item should be rendered
       const items = list?.querySelectorAll('li');
@@ -227,7 +227,7 @@ export function createTemplatesTests(
       });
 
       expect(
-        document.querySelector('.ais-RefinementSuggestions')
+        document.querySelector('.ais-FilterSuggestions')
       ).toBeInTheDocument();
       const empty = document.querySelector('.custom-empty');
       expect(empty).toBeInTheDocument();

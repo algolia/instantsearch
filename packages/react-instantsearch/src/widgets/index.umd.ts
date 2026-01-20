@@ -9,9 +9,9 @@ Please use React InstantSearch with a packaging system:
 https://www.algolia.com/doc/guides/building-search-ui/installation/react/#install-react-instantsearch-as-an-npm-package`
   );
 };
-export const RefinementSuggestions = () => {
+export const FilterSuggestions = () => {
   throw new Error(
-    `"<RefinementSuggestions>" is not available from the UMD build.
+    `"<FilterSuggestions>" is not available from the UMD build.
 
 Please use React InstantSearch with a packaging system:
 https://www.algolia.com/doc/guides/building-search-ui/installation/react/#install-react-instantsearch-as-an-npm-package`

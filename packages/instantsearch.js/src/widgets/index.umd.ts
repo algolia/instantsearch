@@ -68,9 +68,9 @@ Please use InstantSearch.js with a packaging system:
 https://www.algolia.com/doc/guides/building-search-ui/installation/js/#with-a-packaging-system`
   );
 };
-export const refinementSuggestions = () => {
+export const filterSuggestions = () => {
   throw new Error(
-    `"refinementSuggestions" is not available from the UMD build.
+    `"filterSuggestions" is not available from the UMD build.
 
 Please use InstantSearch.js with a packaging system:
 https://www.algolia.com/doc/guides/building-search-ui/installation/js/#with-a-packaging-system`
