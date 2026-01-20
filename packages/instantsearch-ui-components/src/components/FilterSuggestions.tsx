@@ -33,7 +33,7 @@ export type FilterSuggestionsItemComponentProps = {
       'item' | 'itemRefined' | 'button' | 'label' | 'count'
     >
   >;
-  onRefine: () => void;
+  refine: () => void;
 };
 
 export type FilterSuggestionsHeaderComponentProps = {
@@ -49,7 +49,7 @@ export type FilterSuggestionsEmptyComponentProps = {
 export type FilterSuggestionsProps = ComponentProps<'div'> & {
   suggestions: Suggestion[];
   isLoading: boolean;
-  onRefine: (attribute: string, value: string) => void;
+  refine: (attribute: string, value: string) => void;
   classNames?: Partial<FilterSuggestionsClassNames>;
   /**
    * Number of skeleton items to show when loading.
@@ -164,19 +164,19 @@ export function createFilterSuggestionsComponent({ createElement }: Renderer) {
   function DefaultItem({
     suggestion,
     classNames,
-    onRefine,
+    refine,
   }: FilterSuggestionsItemComponentProps) {
     return (
       <Button
         variant="outline"
         size="sm"
         className={cx(classNames.button)}
-        onClick={onRefine}
+        onClick={refine}
       >
         <span className={cx('ais-FilterSuggestions-label', classNames.label)}>
           {suggestion.label}: {suggestion.value}
         </span>
-        <span className={cx('ais-FilterSuggestions-nbHits', classNames.count)}>
+        <span className={cx('ais-FilterSuggestions-count', classNames.count)}>
           {suggestion.count}
         </span>
       </Button>
@@ -190,7 +190,7 @@ export function createFilterSuggestionsComponent({ createElement }: Renderer) {
       classNames = {},
       suggestions,
       isLoading,
-      onRefine,
+      refine,
       skeletonCount = 3,
       itemComponent: ItemComponent = DefaultItem,
       headerComponent,
@@ -276,9 +276,7 @@ export function createFilterSuggestionsComponent({ createElement }: Renderer) {
                 <ItemComponent
                   suggestion={suggestion}
                   classNames={itemClassNames}
-                  onRefine={() =>
-                    onRefine(suggestion.attribute, suggestion.value)
-                  }
+                  refine={() => refine(suggestion.attribute, suggestion.value)}
                 />
               </li>
             ))}

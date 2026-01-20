@@ -17,7 +17,7 @@ type UiProps = Pick<
   FilterSuggestionsUiComponentProps,
   | 'suggestions'
   | 'isLoading'
-  | 'onRefine'
+  | 'refine'
   | 'skeletonCount'
   | 'itemComponent'
   | 'headerComponent'
@@ -72,7 +72,7 @@ export function FilterSuggestions({
   const uiProps: UiProps = {
     suggestions,
     isLoading,
-    onRefine: refine,
+    refine,
     skeletonCount: maxSuggestions,
     itemComponent,
     headerComponent,

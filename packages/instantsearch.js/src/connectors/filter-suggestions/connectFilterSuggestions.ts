@@ -3,6 +3,7 @@ import {
   createDocumentationMessageGenerator,
   getAlgoliaAgent,
   getAppIdAndApiKey,
+  getRefinements,
   noop,
 } from '../../lib/utils';
 
@@ -226,34 +227,12 @@ const connectFilterSuggestions: FilterSuggestionsConnector =
           : rawFacets;
 
         // Collect current refinements to exclude from suggestions
-        const currentRefinements: Array<{ attribute: string; value: string }> =
-          [];
-        if (searchHelper) {
-          // Regular facets
-          Object.entries(searchHelper.state.facetsRefinements || {}).forEach(
-            ([attr, values]) => {
-              values.forEach((val) =>
-                currentRefinements.push({ attribute: attr, value: val })
-              );
-            }
-          );
-          // Disjunctive facets
-          Object.entries(
-            searchHelper.state.disjunctiveFacetsRefinements || {}
-          ).forEach(([attr, values]) => {
-            values.forEach((val) =>
-              currentRefinements.push({ attribute: attr, value: val })
-            );
-          });
-          // Hierarchical facets
-          Object.entries(
-            searchHelper.state.hierarchicalFacetsRefinements || {}
-          ).forEach(([attr, values]) => {
-            values.forEach((val) =>
-              currentRefinements.push({ attribute: attr, value: val })
-            );
-          });
-        }
+        const currentRefinements = searchHelper
+          ? getRefinements(results, searchHelper.state).map((refinement) => ({
+              attribute: refinement.attribute,
+              value: refinement.name,
+            }))
+          : [];
 
         const messageText = JSON.stringify({
           query: results.query,
@@ -370,16 +349,12 @@ const connectFilterSuggestions: FilterSuggestionsConnector =
           refine = (attribute: string, value: string) => {
             // Check if the attribute belongs to a hierarchical facet
             // by finding a hierarchical facet that includes this attribute
-            const hierarchicalFacet = helper.state.hierarchicalFacets.find(
-              (facet) => facet.attributes.includes(attribute)
-            );
+            const attr =
+              helper.state.hierarchicalFacets.find((facet) =>
+                facet.attributes.includes(attribute)
+              )?.name || attribute;
 
-            if (hierarchicalFacet) {
-              // Use the hierarchical facet name for toggling
-              helper.toggleFacetRefinement(hierarchicalFacet.name, value);
-            } else {
-              helper.toggleFacetRefinement(attribute, value);
-            }
+            helper.toggleFacetRefinement(attr, value);
             helper.search();
           };
 

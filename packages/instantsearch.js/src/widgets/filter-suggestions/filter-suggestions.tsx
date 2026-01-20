@@ -39,7 +39,7 @@ type UiProps = Pick<
   Parameters<typeof FilterSuggestions>[0],
   | 'suggestions'
   | 'isLoading'
-  | 'onRefine'
+  | 'refine'
   | 'skeletonCount'
   | 'itemComponent'
   | 'headerComponent'
@@ -155,7 +155,7 @@ const createRenderer =
     const uiProps: UiProps = {
       suggestions,
       isLoading,
-      onRefine: refine,
+      refine,
       skeletonCount: maxSuggestions,
       itemComponent,
       headerComponent,

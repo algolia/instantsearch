@@ -46,7 +46,7 @@
 
 // Refined state
 .ais-FilterSuggestions-item--refined {
-  .ais-FilterSuggestions-nbHits {
+  .ais-FilterSuggestions-count {
     color: rgba(
       var(--ais-button-text-color-rgb),
       var(--ais-button-text-color-alpha)
@@ -58,7 +58,7 @@
   }
 }
 
-.ais-FilterSuggestions-nbHits {
+.ais-FilterSuggestions-count {
   font-size: calc(var(--ais-font-size) * 0.8);
   color: rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha));
   background-color: rgba(var(--ais-muted-color-rgb), 0.1);
