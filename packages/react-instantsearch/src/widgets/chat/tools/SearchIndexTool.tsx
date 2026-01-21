@@ -1,4 +1,3 @@
-import AlgoliaSearchHelper from 'algoliasearch-helper';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -7,10 +6,7 @@ import {
 } from 'instantsearch-ui-components';
 import { isIndexWidget } from 'instantsearch.js/es/lib/utils';
 import React, { createElement } from 'react';
-import {
-  useInstantSearch,
-  useInstantSearchContext,
-} from 'react-instantsearch-core';
+import { useInstantSearchContext } from 'react-instantsearch-core';
 
 import { Carousel } from '../../../components';
 
@@ -156,7 +152,6 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
     onClose: () => void;
   }) {
     const search = useInstantSearchContext();
-    const { indexRenderState } = useInstantSearch();
 
     if ((hitsPerPage ?? 0) < 1) {
       return null;
@@ -187,91 +182,52 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
                     ],
                   ];
 
-                  const attributeMap = input.facet_filters.reduce(
-                    (acc, filters) => {
-                      filters.forEach((filter) => {
-                        const [facet, value] = filter.split(':');
-                        if (!acc[facet]) {
-                          acc[facet] = [];
-                        }
-                        acc[facet].push(value);
-                      });
-                      return acc;
-                    },
-                    {} as Record<string, string[]>
-                  );
+                  const attributes = input.facet_filters
+                    .flat()
+                    .map((filter) => {
+                      const [attribute, value] = filter.split(':');
 
-                  const facetFilters: string[] = [];
-                  const facetRefinements: Record<string, string[]> = {};
-                  const disjunctiveFacets: string[] = [];
-                  const disjunctiveFacetsRefinements: Record<string, string[]> =
-                    {};
-
-                  if (indexRenderState.refinementList) {
-                    Object.keys(indexRenderState.refinementList).forEach(
-                      (attribute) => {
-                        if (
-                          indexRenderState.refinementList?.[attribute]
-                            .widgetParams.operator === 'and'
-                        ) {
-                          facetFilters.push(attribute);
-                          facetRefinements[attribute] = attributeMap[attribute];
-                        } else {
-                          disjunctiveFacets.push(attribute);
-                          disjunctiveFacetsRefinements[attribute] =
-                            attributeMap[attribute];
-                        }
-                      }
-                    );
-                  }
-
-                  const searchParameters =
-                    new AlgoliaSearchHelper.SearchParameters({
-                      query: input.query,
-                      facets: facetFilters.length ? facetFilters : undefined,
-                      facetsRefinements:
-                        Object.keys(facetRefinements).length > 0
-                          ? facetRefinements
-                          : undefined,
-                      disjunctiveFacets: disjunctiveFacets.length
-                        ? disjunctiveFacets
-                        : undefined,
-                      disjunctiveFacetsRefinements:
-                        Object.keys(disjunctiveFacetsRefinements).length > 0
-                          ? disjunctiveFacetsRefinements
-                          : undefined,
+                      return { attribute, value };
                     });
 
-                  const newState = getLocalWidgetsUiState(
-                    search.mainIndex.getWidgets(),
-                    {
-                      searchParameters,
+                  const helper = search.mainIndex.getHelper();
+                  if (!helper) return;
+
+                  if (input.query) {
+                    helper.setQuery(input.query);
+                  }
+
+                  attributes.forEach(({ attribute }) => {
+                    helper.clearRefinements(attribute);
+                  });
+
+                  attributes.forEach(({ attribute, value }) => {
+                    const hierarchicalFacet =
+                      helper.state.hierarchicalFacets.find(
+                        (facet) => facet.name === attribute
+                      );
+
+                    if (hierarchicalFacet) {
+                      helper.toggleFacetRefinement(
+                        hierarchicalFacet.name,
+                        value
+                      );
+                    } else {
+                      helper.toggleFacetRefinement(attribute, value);
                     }
-                  );
+                  });
 
-                  const nextUiState = {
-                    ...indexUiState,
-                    ...newState,
-                  };
+                  helper.search();
 
-                  if (!indexRenderState.currentRefinements?.aiMode) {
-                    indexRenderState.currentRefinements?.setAiMode(true);
-                  }
-
-                  // If no main search page URL or we are on the search page, just update the state
                   if (
-                    !getSearchPageURL ||
-                    (getSearchPageURL &&
-                      new URL(getSearchPageURL(nextUiState)).pathname ===
-                        window.location.pathname)
+                    getSearchPageURL &&
+                    new URL(getSearchPageURL(helper.state)).pathname !==
+                      window.location.pathname
                   ) {
-                    setIndexUiState(nextUiState);
+                    window.location.href = getSearchPageURL(helper.state);
+                  } else {
                     onClose();
-                    return;
                   }
-
-                  // Navigate to different page
-                  window.location.href = getSearchPageURL(nextUiState);
                 }}
                 className="ais-ChatToolSearchIndexCarouselHeaderViewAll"
               >
