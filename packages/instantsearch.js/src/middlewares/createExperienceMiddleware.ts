@@ -79,15 +79,16 @@ export function createExperienceMiddleware(
               }
 
               const newWidget = widget.$$supportedWidgets[type].widget;
-              const transformedParams = widget.$$supportedWidgets[
-                type
-              ].transformParams(parameters, { env, instantSearchInstance });
-              if (
-                newWidget &&
-                document.querySelector(parameters.container) !== null
-              ) {
-                parent.addWidgets([newWidget(transformedParams)]);
-              }
+              widget.$$supportedWidgets[type]
+                .transformParams(parameters, { env, instantSearchInstance })
+                .then((transformedParams) => {
+                  if (
+                    newWidget &&
+                    document.querySelector(parameters.container) !== null
+                  ) {
+                    parent.addWidgets([newWidget(transformedParams)]);
+                  }
+                });
             });
           });
         });
@@ -105,7 +106,7 @@ type BuildExperienceRequestParams = {
   experienceId: string;
 };
 
-function buildExperienceRequest({
+export function buildExperienceRequest({
   appId,
   apiKey,
   env,

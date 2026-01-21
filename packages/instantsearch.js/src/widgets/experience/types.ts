@@ -33,7 +33,7 @@ type SupportedWidget<
       env: 'beta' | 'prod';
       instantSearchInstance: InstantSearch;
     }
-  ) => TWidgetParameters;
+  ) => Promise<TWidgetParameters>;
 };
 
 export type ExperienceWidget = Widget & {

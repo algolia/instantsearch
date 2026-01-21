@@ -1,9 +1,11 @@
 /** @jsx h */
 import { h, Fragment } from 'preact';
+import { useState } from 'preact/hooks';
 
 import { getPropertyByPath } from '../../lib/utils';
 
 import type { BaseHit, TemplateParams } from '../../types';
+import type { ExperienceApiResponse } from './types';
 import type { ComponentChildren } from 'preact';
 
 type StaticString = { type: 'string'; value: string };
@@ -16,13 +18,13 @@ type RegularParameters = {
 };
 export type TemplateChild =
   | {
-      type: 'paragraph' | 'span' | 'h2';
+      type: 'p' | 'paragraph' | 'span' | 'h2';
       parameters: {
         text: TemplateText;
       } & RegularParameters;
     }
   | {
-      type: 'div';
+      type: 'div' | 'svg' | 'path' | 'circle' | 'line' | 'polyline';
       parameters: RegularParameters;
       children: TemplateChild[];
     }
@@ -44,11 +46,17 @@ export type TemplateChild =
 const tagNames = new Map<string, string>(
   Object.entries({
     paragraph: 'p',
+    p: 'p',
     span: 'span',
     h2: 'h2',
     div: 'div',
     link: 'a',
     image: 'img',
+    svg: 'svg',
+    path: 'path',
+    circle: 'circle',
+    line: 'line',
+    polyline: 'polyline',
   })
 );
 
@@ -112,7 +120,7 @@ function renderAttribute(text: TemplateAttribute[number], hit: any) {
 
 export function renderTemplate(
   template: TemplateChild[]
-): (hit: BaseHit, params: TemplateParams) => any {
+): (hit: BaseHit, params?: TemplateParams) => any {
   function renderChild(child: TemplateChild, hit: any, components: any) {
     const Tag = tagNames.get(child.type) as keyof JSX.IntrinsicElements;
     if (!Tag) {
@@ -145,6 +153,76 @@ export function renderTemplate(
     return <Tag {...attributes}>{children}</Tag>;
   }
 
-  return (hit, { components }) =>
-    template.map((child) => renderChild(child, hit, components));
+  return (hit, params) =>
+    template.map((child) => renderChild(child, hit, params?.components));
+}
+
+type RenderToolParams = {
+  name: string;
+  experience: ExperienceApiResponse;
+};
+
+export function renderTool({ name, experience }: RenderToolParams) {
+  const { template, webhook } = experience.blocks[0].parameters as unknown as {
+    template: TemplateChild[];
+    webhook?: string;
+  };
+
+  return {
+    [name]: {
+      templates: {
+        layout: ({ message }) => (
+          <RemoteToolRenderer
+            template={template}
+            input={message.input}
+            webhook={webhook}
+          />
+        ),
+      },
+    },
+  };
+}
+
+type RemoteToolRendererProps = {
+  template: TemplateChild[];
+  input: Record<string, unknown>;
+  webhook?: string;
+};
+
+function RemoteToolRenderer({
+  template,
+  input,
+  webhook,
+}: RemoteToolRendererProps) {
+  const [query, setQuery] = useState<{
+    status: 'idle' | 'pending' | 'error' | 'success';
+    data: typeof input | null;
+  }>({ status: 'idle', data: null });
+
+  if (!webhook) {
+    setQuery({ status: 'success', data: input });
+  }
+  if (webhook && query.status === 'idle') {
+    setQuery({ status: 'pending', data: null });
+    fetch(webhook, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(input),
+    })
+      .then((res) => res.json())
+      .then((fetchedData) => {
+        setQuery({ status: 'success', data: fetchedData });
+      })
+      .catch((error) => {
+        setQuery({ status: 'error', data: error });
+      });
+  }
+
+  if (query.status === 'success') {
+    return renderTemplate(template)(query.data as BaseHit);
+  }
+
+  return <div className="ais-Card ais-Card--loading">Loading…</div>;
 }

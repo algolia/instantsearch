@@ -2,10 +2,11 @@ import {
   createDocumentationMessageGenerator,
   getAppIdAndApiKey,
 } from '../../lib/utils';
+import { buildExperienceRequest } from '../../middlewares/createExperienceMiddleware';
 import { EXPERIMENTAL_autocomplete } from '../autocomplete/autocomplete';
 import chat from '../chat/chat';
 
-import { renderTemplate } from './render';
+import { renderTemplate, renderTool } from './render';
 import { ExperienceWidget } from './types';
 
 import type { ChatTransport } from '../../connectors/chat/connectChat';
@@ -41,7 +42,7 @@ export default (function experience(widgetParams: ExperienceWidgetParams) {
               }>;
               querySuggestionIndexName?: string;
             };
-          return {
+          return Promise.resolve({
             agent: createAgentConfig(
               instantSearchInstance,
               env,
@@ -58,14 +59,41 @@ export default (function experience(widgetParams: ExperienceWidgetParams) {
               ? { indexName: querySuggestionIndexName }
               : undefined,
             ...rest,
-          };
+          });
         },
       },
       'ais.chat': {
         widget: chat,
-        transformParams(params, { env, instantSearchInstance }) {
-          const { itemTemplate, agentId, ...rest } = params;
-          return {
+        // eslint-disable-next-line no-restricted-syntax
+        async transformParams(params, { env, instantSearchInstance }) {
+          const {
+            itemTemplate,
+            agentId,
+            toolRenderings = {},
+            ...rest
+          } = params as typeof params & {
+            toolRenderings: { [key: string]: string };
+          };
+
+          const [appId, apiKey] = getAppIdAndApiKey(
+            instantSearchInstance.client
+          ) as [string, string];
+          const tools = (
+            await Promise.all(
+              Object.entries(toolRenderings).map(([toolName, experienceId]) => {
+                return buildExperienceRequest({
+                  appId,
+                  apiKey,
+                  env,
+                  experienceId,
+                }).then((toolExperience) =>
+                  renderTool({ name: toolName, experience: toolExperience })
+                );
+              })
+            )
+          ).reduce((acc, tool) => ({ ...acc, ...tool }), {});
+
+          return Promise.resolve({
             ...createAgentConfig(instantSearchInstance, env, agentId as string),
             ...rest,
             templates: {
@@ -74,7 +102,8 @@ export default (function experience(widgetParams: ExperienceWidgetParams) {
                 ? { item: renderTemplate(itemTemplate as TemplateChild[]) }
                 : {}),
             },
-          };
+            tools,
+          });
         },
       },
     },
