@@ -19,7 +19,7 @@ jobs:
        github.event.state == 'success' &&
        github.event.branches[0].name == 'master' &&
        github.event.context == 'ci/circleci: signal release ready') ||
-      github.event_name == 'workflow_dispatch'
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/master')
     name: Release if needed
     runs-on: ubuntu-latest
     steps:
