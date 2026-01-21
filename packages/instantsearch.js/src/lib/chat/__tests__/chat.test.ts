@@ -42,7 +42,7 @@ describe('ChatState', () => {
 
   it('should save messages to sessionStorage when status changes to ready', () => {
     const agentId = 'agentID1';
-    const chatState = new ChatState<any>({ id: agentId });
+    const chatState = new ChatState<any>(agentId);
     const message = { role: 'user', content: 'Hello' };
     chatState.status = 'submitted';
     chatState.messages = [message];
@@ -68,13 +68,13 @@ describe('ChatState', () => {
       JSON.stringify(initialMessages)
     );
 
-    const chatState = new ChatState({ id: agentId });
+    const chatState = new ChatState(agentId);
     expect(chatState.messages).toEqual(initialMessages);
   });
 
   it('should not save messages to sessionStorage when status is not ready', () => {
     const agentId = 'agentID3';
-    const chatState = new ChatState<any>({ id: agentId });
+    const chatState = new ChatState<any>(agentId);
     const message = { role: 'user', content: 'Hello' };
     chatState.status = 'submitted';
     chatState.messages = [message];
@@ -94,7 +94,7 @@ describe('ChatState', () => {
       throw new Error('sessionStorage is full');
     };
 
-    const chatState = new ChatState<any>({ id: agentId });
+    const chatState = new ChatState<any>(agentId);
     const message = { role: 'user', content: 'Hello' };
     chatState.status = 'submitted';
     chatState.messages = [message];

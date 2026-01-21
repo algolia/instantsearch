@@ -304,7 +304,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         );
       }
 
-      if ('chat' in options && options.chat !== undefined) {
+      if ('chat' in options) {
         return options.chat;
       }
 
@@ -345,7 +345,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
           return Promise.resolve();
         },
-        skipCache: type !== 'chat',
       });
     };
 
