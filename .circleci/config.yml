@@ -180,6 +180,7 @@ jobs:
       - persist_to_workspace:
           root: *workspace_root
           paths:
+            - node_modules
             - packages/algolia-experiences/dist
             - packages/algoliasearch-helper/dist
             - packages/instantsearch.js/es
@@ -197,7 +198,6 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - *attach_workspace
       - *install_yarn_version
       - run:
           name: Test package versions
@@ -209,11 +209,7 @@ jobs:
     environment:
       NODE_OPTIONS: '--max-old-space-size=4096'
     steps:
-      - checkout
       - *attach_workspace
-      - *install_yarn_version
-      - *restore_yarn_cache
-      - *run_yarn_install
       - run:
           name: Lint & Code styles
           command: yarn run lint
@@ -224,11 +220,7 @@ jobs:
   legacy algoliasearch v3:
     <<: *defaults
     steps:
-      - checkout
       - *attach_workspace
-      - *install_yarn_version
-      - *restore_yarn_cache
-      - *run_yarn_install
       - run:
           name: Update dependencies
           command: |
@@ -244,11 +236,7 @@ jobs:
     <<: *defaults
     resource_class: large
     steps:
-      - checkout
       - *attach_workspace
-      - *install_yarn_version
-      - *restore_yarn_cache
-      - *run_yarn_install
       - run:
           name: Update dependencies
           command: |
@@ -265,11 +253,7 @@ jobs:
   vue v3:
     <<: *defaults
     steps:
-      - checkout
       - *attach_workspace
-      - *install_yarn_version
-      - *restore_yarn_cache
-      - *run_yarn_install
       - run:
           name: Update dependencies
           command: |
@@ -287,11 +271,7 @@ jobs:
     <<: *defaults
     resource_class: large
     steps:
-      - checkout
       - *attach_workspace
-      - *install_yarn_version
-      - *restore_yarn_cache
-      - *run_yarn_install
       - run:
           name: Unit tests
           command: yarn run test:ci
@@ -302,11 +282,7 @@ jobs:
     <<: *defaults
     resource_class: large
     steps:
-      - checkout
       - *attach_workspace
-      - *install_yarn_version
-      - *restore_yarn_cache
-      - *run_yarn_install
       - run:
           name: Build examples
           command: yarn run website:examples --concurrency=1
@@ -318,11 +294,7 @@ jobs:
   helper docs:
     <<: *defaults
     steps:
-      - checkout
       - *attach_workspace
-      - *install_yarn_version
-      - *restore_yarn_cache
-      - *run_yarn_install
       - run:
           name: Build helper documentation
           command: yarn workspace algoliasearch-helper run doc
@@ -340,11 +312,7 @@ jobs:
       E2E_BROWSER: << parameters.browser >>
     resource_class: large
     steps:
-      - checkout
       - *attach_workspace
-      - *install_yarn_version
-      - *restore_yarn_cache
-      - *run_yarn_install
       - run:
           name: End-to-end tests
           command: yarn run test:e2e:saucelabs
@@ -406,11 +374,7 @@ jobs:
     <<: *defaults
     resource_class: large
     steps:
-      - checkout
       - *attach_workspace
-      - *install_yarn_version
-      - *restore_yarn_cache
-      - *run_yarn_install
       - run:
           name: End-to-end tests
           command: yarn workspace react-instantsearch-router-nextjs run test:e2e:saucelabs
@@ -421,11 +385,7 @@ jobs:
     <<: *defaults
     resource_class: large
     steps:
-      - checkout
       - *attach_workspace
-      - *install_yarn_version
-      - *restore_yarn_cache
-      - *run_yarn_install
       - run:
           name: End-to-end tests
           command: yarn workspace react-instantsearch-nextjs run test:e2e:saucelabs
