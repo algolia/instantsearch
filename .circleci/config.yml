@@ -117,11 +117,11 @@ workflows:
             - legacy algoliasearch v3
             - legacy algoliasearch v4
             - helper docs
-            - e2e tests playwright
-          filters:
-            branches:
-              only:
-                - master
+            - e2e tests
+          # filters:
+          #   branches:
+          #     only:
+          #       - master
   scheduled e2e:
     # This workflow is triggered by a schedule pipeline.
     # See: https://app.circleci.com/settings/project/github/algolia/instantsearch/triggers
