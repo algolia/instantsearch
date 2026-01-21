@@ -18,26 +18,31 @@ references:
     restore_cache:
       name: Restore Yarn cache
       keys:
-        - yarn-packages-{{ checksum "yarn.lock" }}
+        - yarn-packages-v2-{{ checksum "yarn.lock" }}
+        - yarn-packages-v2-
   save_yarn_cache: &save_yarn_cache
     save_cache:
       name: Save Yarn cache
-      key: yarn-packages-{{ checksum "yarn.lock" }}
+      key: yarn-packages-v2-{{ checksum "yarn.lock" }}
       paths:
         - ~/.cache/yarn
+        - node_modules
+        - packages/*/node_modules
   run_yarn_install: &run_yarn_install
     run:
       name: Install dependencies
-      command: yarn install --frozen-lockfile --prefer-offline
+      command: yarn install --frozen-lockfile --prefer-offline --network-concurrency 8 --silent --mutex network
   restore_yarn_cache_v3: &restore_yarn_cache_v3
     restore_cache:
       name: Restore Yarn cache (v3)
       keys:
-        - yarn-packages-v3-{{ checksum "yarn.lock" }}-{{ checksum "scripts/legacy/downgrade-algoliasearch-dependency.js" }}
+        - yarn-packages-v3-v2-{{ checksum "yarn.lock" }}-{{ checksum "scripts/legacy/downgrade-algoliasearch-dependency.js" }}
+        - yarn-packages-v3-v2-{{ checksum "yarn.lock" }}-
+        - yarn-packages-v3-v2-
   save_yarn_cache_v3: &save_yarn_cache_v3
     save_cache:
       name: Save Yarn cache (v3)
-      key: yarn-packages-v3-{{ checksum "yarn.lock" }}-{{ checksum "scripts/legacy/downgrade-algoliasearch-dependency.js" }}
+      key: yarn-packages-v3-v2-{{ checksum "yarn.lock" }}-{{ checksum "scripts/legacy/downgrade-algoliasearch-dependency.js" }}
       paths:
         - ~/.cache/yarn
         - node_modules
@@ -46,11 +51,13 @@ references:
     restore_cache:
       name: Restore Yarn cache (v4)
       keys:
-        - yarn-packages-v4-{{ checksum "yarn.lock" }}-{{ checksum "scripts/legacy/downgrade-algoliasearch-v4.js" }}
+        - yarn-packages-v4-v2-{{ checksum "yarn.lock" }}-{{ checksum "scripts/legacy/downgrade-algoliasearch-v4.js" }}
+        - yarn-packages-v4-v2-{{ checksum "yarn.lock" }}-
+        - yarn-packages-v4-v2-
   save_yarn_cache_v4: &save_yarn_cache_v4
     save_cache:
       name: Save Yarn cache (v4)
-      key: yarn-packages-v4-{{ checksum "yarn.lock" }}-{{ checksum "scripts/legacy/downgrade-algoliasearch-v4.js" }}
+      key: yarn-packages-v4-v2-{{ checksum "yarn.lock" }}-{{ checksum "scripts/legacy/downgrade-algoliasearch-v4.js" }}
       paths:
         - ~/.cache/yarn
         - node_modules
@@ -60,6 +67,7 @@ defaults: &defaults
   working_directory: ~/instantsearch
   docker:
     - image: cimg/node:20.10.0
+  resource_class: medium+
 
 workflows:
   version: 2
@@ -206,6 +214,7 @@ jobs:
       - persist_to_workspace:
           root: *workspace_root
           paths:
+            - .
             - packages/*/dist
             - packages/instantsearch.js/es
             - packages/instantsearch.js/cjs
@@ -214,6 +223,7 @@ jobs:
 
   test metadata:
     <<: *defaults
+    resource_class: small
     steps:
       - checkout
       - *install_yarn_version
@@ -227,7 +237,6 @@ jobs:
     environment:
       NODE_OPTIONS: '--max-old-space-size=4096'
     steps:
-      - checkout
       - *attach_workspace
       - *install_yarn_version
       - *restore_yarn_cache
@@ -246,6 +255,7 @@ jobs:
       - *attach_workspace
       - *install_yarn_version
       - *restore_yarn_cache_v3
+      - *run_yarn_install
       - run:
           name: Update dependencies
           command: |
@@ -266,6 +276,7 @@ jobs:
       - *attach_workspace
       - *install_yarn_version
       - *restore_yarn_cache_v4
+      - *run_yarn_install
       - run:
           name: Update dependencies
           command: |
@@ -282,6 +293,7 @@ jobs:
 
   vue v3:
     <<: *defaults
+    resource_class: medium+
     steps:
       - checkout
       - *attach_workspace
@@ -305,14 +317,13 @@ jobs:
     <<: *defaults
     resource_class: large
     steps:
-      - checkout
       - *attach_workspace
       - *install_yarn_version
       - *restore_yarn_cache
       - *run_yarn_install
       - run:
           name: Unit tests
-          command: yarn run test:ci
+          command: yarn run test:ci --maxWorkers=50%
       - store_test_results:
           path: junit/jest/
 
@@ -320,7 +331,6 @@ jobs:
     <<: *defaults
     resource_class: large
     steps:
-      - checkout
       - *attach_workspace
       - *install_yarn_version
       - *restore_yarn_cache
@@ -335,8 +345,8 @@ jobs:
 
   helper docs:
     <<: *defaults
+    resource_class: medium
     steps:
-      - checkout
       - *attach_workspace
       - *install_yarn_version
       - *restore_yarn_cache
@@ -358,7 +368,6 @@ jobs:
       E2E_BROWSER: << parameters.browser >>
     resource_class: large
     steps:
-      - checkout
       - *attach_workspace
       - *install_yarn_version
       - *restore_yarn_cache
@@ -424,7 +433,6 @@ jobs:
     <<: *defaults
     resource_class: large
     steps:
-      - checkout
       - *attach_workspace
       - *install_yarn_version
       - *restore_yarn_cache
@@ -439,7 +447,6 @@ jobs:
     <<: *defaults
     resource_class: large
     steps:
-      - checkout
       - *attach_workspace
       - *install_yarn_version
       - *restore_yarn_cache
