@@ -29,6 +29,32 @@ references:
     run:
       name: Install dependencies
       command: yarn install --frozen-lockfile
+  restore_yarn_cache_v3: &restore_yarn_cache_v3
+    restore_cache:
+      name: Restore Yarn cache (v3)
+      keys:
+        - yarn-packages-v3-{{ checksum "yarn.lock" }}-{{ checksum "scripts/legacy/downgrade-algoliasearch-dependency.js" }}
+  save_yarn_cache_v3: &save_yarn_cache_v3
+    save_cache:
+      name: Save Yarn cache (v3)
+      key: yarn-packages-v3-{{ checksum "yarn.lock" }}-{{ checksum "scripts/legacy/downgrade-algoliasearch-dependency.js" }}
+      paths:
+        - ~/.cache/yarn
+        - node_modules
+        - packages/*/node_modules
+  restore_yarn_cache_v4: &restore_yarn_cache_v4
+    restore_cache:
+      name: Restore Yarn cache (v4)
+      keys:
+        - yarn-packages-v4-{{ checksum "yarn.lock" }}-{{ checksum "scripts/legacy/downgrade-algoliasearch-v4.js" }}
+  save_yarn_cache_v4: &save_yarn_cache_v4
+    save_cache:
+      name: Save Yarn cache (v4)
+      key: yarn-packages-v4-{{ checksum "yarn.lock" }}-{{ checksum "scripts/legacy/downgrade-algoliasearch-v4.js" }}
+      paths:
+        - ~/.cache/yarn
+        - node_modules
+        - packages/*/node_modules
 
 defaults: &defaults
   working_directory: ~/instantsearch
@@ -217,10 +243,13 @@ jobs:
     steps:
       - checkout
       - *attach_workspace
+      - *install_yarn_version
+      - *restore_yarn_cache_v3
       - run:
           name: Update dependencies
           command: |
             ./scripts/legacy/downgrade-algoliasearch-dependency.js
+      - *save_yarn_cache_v3
       - run:
           name: Unit & Integration tests
           command: yarn run test:v3
@@ -234,10 +263,13 @@ jobs:
     steps:
       - checkout
       - *attach_workspace
+      - *install_yarn_version
+      - *restore_yarn_cache_v4
       - run:
           name: Update dependencies
           command: |
             ./scripts/legacy/downgrade-algoliasearch-v4.js
+      - *save_yarn_cache_v4
       - run:
           name: Unit & Integration tests
           command: yarn run test:ci:v4
