@@ -150,16 +150,11 @@ jobs:
   signal release ready:
     <<: *defaults
     steps:
+      - checkout
       - *attach_workspace
       - run:
           name: Create tarball of build artifacts
-          command: |
-            tar -czf build-artifacts.tar.gz \
-              packages/*/dist \
-              packages/instantsearch.js/es \
-              packages/instantsearch.js/cjs \
-              packages/vue-instantsearch/vue2 \
-              packages/vue-instantsearch/vue3
+          command: tar -czf build-artifacts.tar.gz packages/
       - store_artifacts:
           path: build-artifacts.tar.gz
       - run:
