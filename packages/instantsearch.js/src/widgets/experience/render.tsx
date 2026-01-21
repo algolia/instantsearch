@@ -1,8 +1,8 @@
 /** @jsx h */
 import { h, Fragment } from 'preact';
-import { useState } from 'preact/hooks';
 
 import { getPropertyByPath } from '../../lib/utils';
+import { Tool } from '../chat/chat';
 
 import type { BaseHit, TemplateParams } from '../../types';
 import type { ExperienceApiResponse } from './types';
@@ -171,58 +171,41 @@ export function renderTool({ name, experience }: RenderToolParams) {
   return {
     [name]: {
       templates: {
-        layout: ({ message }) => (
-          <RemoteToolRenderer
-            template={template}
-            input={message.input}
-            webhook={webhook}
-          />
-        ),
+        layout: ({ message }) => {
+          return message.output ? (
+            <div className="ais-Chat-ToolCard">
+              {renderTemplate(template)(message.output as BaseHit)}
+            </div>
+          ) : (
+            <div className="ais-Chat-ToolCard ais-Chat-ToolCard--loading">
+              Loading…
+            </div>
+          );
+        },
+      },
+      onToolCall: ({ addToolResult, input }) => {
+        if (!webhook) {
+          addToolResult({ output: { success: true, data: input } });
+          return;
+        }
+
+        fetch(webhook, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(input),
+        })
+          .then((res) => res.json())
+          .then((data) =>
+            addToolResult({
+              output: {
+                success: true,
+                ...data,
+              },
+            })
+          );
       },
     },
-  };
-}
-
-type RemoteToolRendererProps = {
-  template: TemplateChild[];
-  input: Record<string, unknown>;
-  webhook?: string;
-};
-
-function RemoteToolRenderer({
-  template,
-  input,
-  webhook,
-}: RemoteToolRendererProps) {
-  const [query, setQuery] = useState<{
-    status: 'idle' | 'pending' | 'error' | 'success';
-    data: typeof input | null;
-  }>({ status: 'idle', data: null });
-
-  if (!webhook) {
-    setQuery({ status: 'success', data: input });
-  }
-  if (webhook && query.status === 'idle') {
-    setQuery({ status: 'pending', data: null });
-    fetch(webhook, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(input),
-    })
-      .then((res) => res.json())
-      .then((fetchedData) => {
-        setQuery({ status: 'success', data: fetchedData });
-      })
-      .catch((error) => {
-        setQuery({ status: 'error', data: error });
-      });
-  }
-
-  if (query.status === 'success') {
-    return renderTemplate(template)(query.data as BaseHit);
-  }
-
-  return <div className="ais-Card ais-Card--loading">Loading…</div>;
+  } satisfies { [key: string]: Tool };
 }
