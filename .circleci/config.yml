@@ -103,8 +103,7 @@ workflows:
             branches:
               only:
                 - master
-      - release if needed:
-          context: fx-libraries
+      - signal release ready:
           requires:
             - build
             - lint
@@ -118,16 +117,6 @@ workflows:
             branches:
               only:
                 - master
-  scheduled release:
-    # This workflow is triggered by a schedule pipeline.
-    # See: https://app.circleci.com/settings/project/github/algolia/instantsearch/triggers
-    when:
-      and:
-        - equal: [scheduled_pipeline, << pipeline.trigger_source >>]
-        - equal: [scheduled_release, << pipeline.schedule.name >>]
-    jobs:
-      - prepare release:
-          context: fx-libraries
   scheduled e2e:
     # This workflow is triggered by a schedule pipeline.
     # See: https://app.circleci.com/settings/project/github/algolia/instantsearch/triggers
@@ -158,6 +147,25 @@ workflows:
             - build
 
 jobs:
+  signal release ready:
+    <<: *defaults
+    steps:
+      - *attach_workspace
+      - run:
+          name: Create tarball of build artifacts
+          command: |
+            tar -czf build-artifacts.tar.gz \
+              packages/*/dist \
+              packages/instantsearch.js/es \
+              packages/instantsearch.js/cjs \
+              packages/vue-instantsearch/vue2 \
+              packages/vue-instantsearch/vue3
+      - store_artifacts:
+          path: build-artifacts.tar.gz
+      - run:
+          name: Signal that release dependencies are met
+          command: echo "All release dependencies have passed"
+
   build:
     <<: *defaults
     steps:
@@ -192,6 +200,9 @@ jobs:
             - packages/vue-instantsearch/vue2
             - packages/vue-instantsearch/vue3
             - packages/instantsearch-ui-components/dist
+      - store_artifacts:
+          path: packages
+          destination: packages
 
   test metadata:
     <<: *defaults
@@ -431,32 +442,3 @@ jobs:
           command: yarn workspace react-instantsearch-nextjs run test:e2e:saucelabs
       - store_test_results:
           path: packages/react-instantsearch-nextjs/junit/wdio/
-
-  release if needed:
-    <<: *defaults
-    steps:
-      - checkout
-      - *attach_workspace
-      - *install_yarn_version
-      - *restore_yarn_cache
-      - *run_yarn_install
-      - run:
-          name: Trigger a release if the latest commit is a release commit
-          command: |
-            git config --global user.email "instantsearch-bot@algolia.com"
-            git config --global user.name "InstantSearch[bot]"
-            yarn shipjs trigger
-
-  prepare release:
-    <<: *defaults
-    steps:
-      - checkout
-      - *install_yarn_version
-      - *restore_yarn_cache
-      - *run_yarn_install
-      - run:
-          name: Prepare a pull request for next release
-          command: |
-            git config --global user.email "instantsearch-bot@algolia.com"
-            git config --global user.name "InstantSearch[bot]"
-            yarn run shipjs prepare --yes --no-browse
