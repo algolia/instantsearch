@@ -11,9 +11,9 @@ import {
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
 
-import type { ChatTransport } from '../../connectors/chat/connectChat';
 import type {
   PromptSuggestionsConnectorParams,
+  PromptSuggestionsTransport,
   PromptSuggestionsWidgetDescription,
 } from '../../connectors/prompt-suggestions/connectPromptSuggestions';
 import type { PreparedTemplateProps } from '../../lib/templating';
@@ -42,7 +42,17 @@ export type PromptSuggestionsTemplates = Partial<{
   titleIcon: Template;
 }>;
 
-export type PromptSuggestionsWidgetParams = ChatTransport & {
+export type PromptSuggestionsWidgetParams = {
+  /**
+   * The ID of the agent configured in the Algolia dashboard.
+   * Required unless a custom `transport` is provided.
+   */
+  agentId?: PromptSuggestionsConnectorParams['agentId'];
+  /**
+   * Custom transport configuration for the API requests.
+   * When provided, allows using a custom endpoint, headers, and request body.
+   */
+  transport?: PromptSuggestionsTransport;
   /**
    * CSS Selector or HTMLElement to insert the widget.
    */
@@ -50,7 +60,7 @@ export type PromptSuggestionsWidgetParams = ChatTransport & {
   /**
    * Context object to send to the agent (e.g., product data for a PDP).
    */
-  context: Record<string, unknown>;
+  context: PromptSuggestionsConnectorParams['context'];
   /**
    * Templates to use for the widget.
    */

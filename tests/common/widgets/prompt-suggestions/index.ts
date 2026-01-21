@@ -4,6 +4,7 @@ import { createOptionsTests } from './options';
 
 import type { TestOptions, TestSetup } from '../../common';
 import type { PromptSuggestionsConnectorParams } from 'instantsearch.js/es/connectors/prompt-suggestions/connectPromptSuggestions';
+import type { Chat, UIMessage } from 'instantsearch.js/es/lib/chat';
 import type { PromptSuggestionsWidget } from 'instantsearch.js/es/widgets/prompt-suggestions/prompt-suggestions';
 import type { PromptSuggestionsProps } from 'react-instantsearch';
 
@@ -12,8 +13,17 @@ export type JSPromptSuggestionsWidgetParams = Omit<
   JSBaseWidgetParams,
   'container'
 > &
-  PromptSuggestionsConnectorParams;
-export type ReactPromptSuggestionsWidgetParams = PromptSuggestionsProps;
+  PromptSuggestionsConnectorParams &
+  PromptSuggestionsTestParams;
+export type ReactPromptSuggestionsWidgetParams = PromptSuggestionsProps &
+  PromptSuggestionsTestParams;
+
+type PromptSuggestionsTestParams = {
+  /**
+   * Chat instance used by tests to wire a Chat widget.
+   */
+  chat?: Chat<UIMessage>;
+};
 
 type PromptSuggestionsWidgetParams = {
   javascript: JSPromptSuggestionsWidgetParams;

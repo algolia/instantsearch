@@ -34,14 +34,12 @@ export function PromptSuggestions({
   agentId,
   transport,
   context,
-  chat,
   ...props
 }: PromptSuggestionsProps) {
   const { suggestions, status, sendSuggestion } = usePromptSuggestions({
     agentId,
     transport,
     context,
-    chat,
   });
 
   return (

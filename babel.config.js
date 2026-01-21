@@ -96,6 +96,7 @@ module.exports = (api) => {
 
             // Used by newer widgets, we don't care about IE11 support
             'Promise.prototype.finally',
+            'Array.prototype.find',
 
             // false positive (spread)
             'Object.getOwnPropertyDescriptors',
