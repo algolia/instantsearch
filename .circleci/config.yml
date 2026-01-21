@@ -209,6 +209,7 @@ jobs:
     environment:
       NODE_OPTIONS: '--max-old-space-size=4096'
     steps:
+      - checkout
       - *attach_workspace
       - run:
           name: Lint & Code styles
@@ -220,6 +221,7 @@ jobs:
   legacy algoliasearch v3:
     <<: *defaults
     steps:
+      - checkout
       - *attach_workspace
       - run:
           name: Update dependencies
@@ -236,6 +238,7 @@ jobs:
     <<: *defaults
     resource_class: large
     steps:
+      - checkout
       - *attach_workspace
       - run:
           name: Update dependencies
@@ -253,6 +256,7 @@ jobs:
   vue v3:
     <<: *defaults
     steps:
+      - checkout
       - *attach_workspace
       - run:
           name: Update dependencies
@@ -271,6 +275,7 @@ jobs:
     <<: *defaults
     resource_class: large
     steps:
+      - checkout
       - *attach_workspace
       - run:
           name: Unit tests
@@ -282,6 +287,7 @@ jobs:
     <<: *defaults
     resource_class: large
     steps:
+      - checkout
       - *attach_workspace
       - run:
           name: Build examples
@@ -294,6 +300,7 @@ jobs:
   helper docs:
     <<: *defaults
     steps:
+      - checkout
       - *attach_workspace
       - run:
           name: Build helper documentation
@@ -312,6 +319,7 @@ jobs:
       E2E_BROWSER: << parameters.browser >>
     resource_class: large
     steps:
+      - checkout
       - *attach_workspace
       - run:
           name: End-to-end tests
@@ -374,6 +382,7 @@ jobs:
     <<: *defaults
     resource_class: large
     steps:
+      - checkout
       - *attach_workspace
       - run:
           name: End-to-end tests
@@ -385,6 +394,7 @@ jobs:
     <<: *defaults
     resource_class: large
     steps:
+      - checkout
       - *attach_workspace
       - run:
           name: End-to-end tests
