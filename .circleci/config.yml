@@ -323,7 +323,7 @@ jobs:
       - *run_yarn_install
       - run:
           name: Unit tests
-          command: yarn run test:ci --maxWorkers=50%
+          command: yarn run test:ci
       - store_test_results:
           path: junit/jest/
 
