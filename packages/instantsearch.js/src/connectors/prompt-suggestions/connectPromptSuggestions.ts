@@ -1,13 +1,21 @@
-import type { Chat } from '../../lib/chat';
+import {
+  checkRendering,
+  createDocumentationMessageGenerator,
+  getAlgoliaAgent,
+  getAppIdAndApiKey,
+  noop,
+} from '../../lib/utils';
+
 import type {
   Connector,
+  InitOptions,
+  RenderOptions,
   Renderer,
   Unmounter,
   UnknownWidgetParams,
   WidgetRenderState,
   IndexRenderState,
 } from '../../types';
-import type { DefaultChatTransport, UIMessage } from '../../lib/ai-lite';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'prompt-suggestions',
@@ -17,18 +25,39 @@ const withUsage = createDocumentationMessageGenerator({
 export type PromptSuggestionsStatus = 'idle' | 'loading' | 'ready' | 'error';
 
 export type PromptSuggestionsTransport = {
-  agentId?: string;
-  transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
+  /**
+   * The custom API endpoint URL.
+   */
+  api: string;
+  /**
+   * Custom headers to send with the request.
+   */
+  headers?: Record<string, string>;
+  /**
+   * Function to prepare the request body before sending.
+   * Receives the default body and returns the modified request options.
+   */
+  prepareSendMessagesRequest?: (body: Record<string, unknown>) => {
+    body: Record<string, unknown>;
+  };
 };
 
-export type PromptSuggestionsConnectorParams<
-  TUiMessage extends UIMessage = UIMessage
-> = { chat?: Chat<TUiMessage> } & PromptSuggestionsTransport & {
-    /**
-     * Context object to send to the agent (e.g., product data for a PDP).
-     */
-    context: Record<string, unknown>;
-  };
+export type PromptSuggestionsConnectorParams = {
+  /**
+   * The ID of the agent configured in the Algolia dashboard.
+   * Required unless a custom `transport` is provided.
+   */
+  agentId?: string;
+  /**
+   * Context object to send to the agent (e.g., product data for a PDP).
+   */
+  context: Record<string, unknown>;
+  /**
+   * Custom transport configuration for the API requests.
+   * When provided, allows using a custom endpoint, headers, and request body.
+   */
+  transport?: PromptSuggestionsTransport;
+};
 
 export type PromptSuggestionsRenderState = {
   /**
@@ -77,45 +106,157 @@ export default (function connectPromptSuggestions<
   checkRendering(renderFn, withUsage());
 
   return (widgetParams: TWidgetParams & PromptSuggestionsConnectorParams) => {
-    const chatWidget = connectChat(
-      noop,
-      unmountFn
-    )({
-      ...widgetParams,
-      type: 'promptSuggestions',
-    });
+    const { agentId, context, transport } = widgetParams;
 
-    return {
-      ...chatWidget,
-      $$type: 'ais.promptSuggestions',
+    if (!agentId && !transport) {
+      throw new Error(
+        withUsage(
+          'The `agentId` option is required unless a custom `transport` is provided.'
+        )
+      );
+    }
 
-      init(initOptions) {
-        chatWidget.init(initOptions);
+    let endpoint: string;
+    let headers: Record<string, string>;
+    let status: PromptSuggestionsStatus = 'idle';
+    let suggestions: string[] | undefined;
+    let error: Error | undefined;
 
-        const render = () => {
+    const getWidgetRenderState = (
+      renderOptions: InitOptions | RenderOptions
+    ) => {
+      return {
+        suggestions,
+        status,
+        error,
+        sendSuggestion: (suggestion: string) => {
+          const indexId = renderOptions.parent.getIndexId();
+          const mainChat = renderOptions.instantSearchInstance.renderState[
+            indexId
+          ]?.chat as WidgetRenderState<any, any> | undefined;
+
+          if (!mainChat) {
+            throw new Error(
+              'PromptSuggestions: Chat widget not found. Make sure you have a Chat widget in your InstantSearch instance.'
+            );
+          }
+
+          if (!mainChat.open) {
+            mainChat.setOpen(true);
+          }
+
+          mainChat.sendMessage({ text: suggestion });
+        },
+        widgetParams,
+      };
+    };
+
+    const fetchSuggestions = (initOptions: InitOptions) => {
+      const { instantSearchInstance } = initOptions;
+
+      status = 'loading';
+      renderFn(
+        {
+          ...getWidgetRenderState(initOptions),
+          instantSearchInstance,
+        },
+        false
+      );
+
+      const payload: Record<string, unknown> = {
+        messages: [
+          {
+            role: 'user',
+            content: JSON.stringify(context),
+          },
+        ],
+      };
+
+      const finalPayload = transport?.prepareSendMessagesRequest
+        ? transport.prepareSendMessagesRequest(payload).body
+        : payload;
+
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { ...headers, 'Content-Type': 'application/json' },
+        body: JSON.stringify(finalPayload),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          const assistantMessage = data.messages?.find(
+            (msg: { role: string }) => msg.role === 'assistant'
+          );
+
+          if (assistantMessage?.parts) {
+            const suggestionsPart = assistantMessage.parts.find(
+              (part: { type: string }) => part.type === 'data-suggestions'
+            );
+            if (suggestionsPart?.data?.suggestions) {
+              suggestions = suggestionsPart.data.suggestions;
+            }
+          }
+
+          status = 'ready';
+        })
+        .catch((e) => {
+          status = 'error';
+          error = e;
+        })
+        .finally(() => {
           renderFn(
             {
-              ...this.getWidgetRenderState(initOptions),
-              instantSearchInstance: initOptions.instantSearchInstance,
+              ...getWidgetRenderState(initOptions),
+              instantSearchInstance,
             },
             false
           );
-        };
+        });
+    };
 
-        chatWidget.chatInstance['~registerMessagesCallback'](render);
-        chatWidget.chatInstance['~registerStatusCallback'](render);
-        chatWidget.chatInstance['~registerErrorCallback'](render);
+    return {
+      $$type: 'ais.promptSuggestions' as const,
 
-        const renderState = chatWidget.getWidgetRenderState(initOptions);
-        renderState.sendMessage({ text: JSON.stringify(widgetParams.context) });
+      init(initOptions) {
+        const { instantSearchInstance } = initOptions;
+
+        if (transport) {
+          endpoint = transport.api;
+          headers = transport.headers || {};
+        } else {
+          const [appId, apiKey] = getAppIdAndApiKey(
+            instantSearchInstance.client
+          );
+
+          if (!appId || !apiKey) {
+            throw new Error(
+              withUsage(
+                'Could not extract Algolia credentials from the search client.'
+              )
+            );
+          }
+
+          endpoint = `https://${appId}.algolia.net/agent-studio/1/agents/${agentId}/completions?compatibilityMode=ai-sdk-5&stream=false`;
+          headers = {
+            'x-algolia-application-id': appId,
+            'x-algolia-api-key': apiKey,
+            'x-algolia-agent': getAlgoliaAgent(instantSearchInstance.client),
+          };
+        }
 
         renderFn(
           {
-            ...this.getWidgetRenderState(initOptions),
-            instantSearchInstance: initOptions.instantSearchInstance,
+            ...getWidgetRenderState(initOptions),
+            instantSearchInstance,
           },
           true
         );
+
+        fetchSuggestions(initOptions);
       },
 
       render(renderOptions) {
@@ -123,7 +264,7 @@ export default (function connectPromptSuggestions<
 
         renderFn(
           {
-            ...this.getWidgetRenderState(renderOptions),
+            ...getWidgetRenderState(renderOptions),
             instantSearchInstance,
           },
           false
@@ -142,47 +283,11 @@ export default (function connectPromptSuggestions<
       },
 
       getWidgetRenderState(renderOptions) {
-        const chatRenderState = chatWidget.getWidgetRenderState(renderOptions);
+        return getWidgetRenderState(renderOptions);
+      },
 
-        const { suggestions, status } = chatRenderState;
-
-        let uiStatus: PromptSuggestionsStatus = 'idle';
-        if (status === 'error') {
-          uiStatus = 'error';
-        } else if (status === 'submitted' || status === 'streaming') {
-          uiStatus = 'loading';
-        } else if (
-          status === 'ready' &&
-          suggestions &&
-          suggestions.length > 0
-        ) {
-          uiStatus = 'ready';
-        }
-
-        return {
-          suggestions,
-          status: uiStatus,
-          error: chatRenderState.error,
-          sendSuggestion: (suggestion: string) => {
-            const indexId = renderOptions.parent.getIndexId();
-            const mainChat = renderOptions.instantSearchInstance.renderState[
-              indexId
-            ]?.chat as WidgetRenderState<any, any> | undefined;
-
-            if (!mainChat) {
-              throw new Error(
-                'PromptSuggestions: Chat widget not found. Make sure you have a Chat widget in your InstantSearch instance.'
-              );
-            }
-
-            if (!mainChat.open) {
-              mainChat.setOpen(true);
-            }
-
-            mainChat.sendMessage({ text: suggestion });
-          },
-          widgetParams,
-        };
+      dispose() {
+        unmountFn();
       },
     };
   };

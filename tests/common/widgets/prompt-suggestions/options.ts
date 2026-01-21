@@ -8,6 +8,27 @@ import type { PromptSuggestionsWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 import type { UIMessage } from 'instantsearch.js/es/lib/chat';
 
+const createMockFetch = (suggestions: string[] = []) => {
+  return jest.fn().mockResolvedValue({
+    ok: true,
+    json: () =>
+      Promise.resolve({
+        messages: [
+          {
+            role: 'assistant',
+            parts: [
+              { type: 'text', text: 'Hello' },
+              {
+                type: 'data-suggestions',
+                data: { suggestions },
+              },
+            ],
+          },
+        ],
+      }),
+  });
+};
+
 const createChatInstance = (messages: any = []) => {
   return new Chat({
     // @ts-ignore - we need to mock it partially
@@ -30,13 +51,22 @@ export function createOptionsTests(
   _: Required<TestOptions>
 ) {
   describe('options', () => {
-    test('sends message with context at once', async () => {
+    let originalFetch: typeof global.fetch;
+
+    beforeEach(() => {
+      originalFetch = global.fetch;
+    });
+
+    afterEach(() => {
+      global.fetch = originalFetch;
+    });
+
+    test('fetches suggestions with context on init', async () => {
       const searchClient = createSearchClient();
+      const mockFetch = createMockFetch(['Suggestion 1', 'Suggestion 2']);
+      global.fetch = mockFetch;
 
       const chat = createChatInstance();
-      const sendMessageSpy = jest
-        .spyOn(chat, 'sendMessage')
-        .mockResolvedValue(undefined);
 
       await setup({
         instantSearchOptions: {
@@ -58,27 +88,30 @@ export function createOptionsTests(
         },
       });
 
-      expect(sendMessageSpy).toHaveBeenCalledWith({
-        text: JSON.stringify({ objectID: '123', title: 'Hello' }),
-      });
+      expect(mockFetch).toHaveBeenCalledWith(
+        expect.stringContaining(
+          '/agent-studio/1/agents/abc/completions?compatibilityMode=ai-sdk-5&stream=false'
+        ),
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({
+            messages: [
+              {
+                role: 'user',
+                content: JSON.stringify({ objectID: '123', title: 'Hello' }),
+              },
+            ],
+          }),
+        })
+      );
     });
 
     test('renders buttons with suggestions and sends message when clicked', async () => {
       const searchClient = createSearchClient();
+      const mockFetch = createMockFetch(['Suggestion 1', 'Suggestion 2']);
+      global.fetch = mockFetch;
 
-      const chat = createChatInstance([
-        {
-          id: '1',
-          parts: [
-            { type: 'text', text: 'Hello' },
-            {
-              type: 'data-suggestions',
-              data: { suggestions: ['Suggestion 1', 'Suggestion 2'] },
-            },
-          ],
-          role: 'assistant',
-        },
-      ]);
+      const chat = createChatInstance();
       const sendMessageSpy = jest.spyOn(chat, 'sendMessage');
 
       await setup({
@@ -90,10 +123,8 @@ export function createOptionsTests(
           javascript: {
             agentId: 'abc',
             context: { objectID: '123', title: 'Hello' },
-            // @ts-ignore - it doesn't accept messages in the constructor
             chat,
           },
-          // @ts-ignore - it doesn't accept messages in the constructor
           react: {
             agentId: 'abc',
             context: { objectID: '123', title: 'Hello' },
@@ -125,20 +156,10 @@ export function createOptionsTests(
     describe('cssClasses', () => {
       test('adds custom CSS classes', async () => {
         const searchClient = createSearchClient();
+        const mockFetch = createMockFetch(['Suggestion 1', 'Suggestion 2']);
+        global.fetch = mockFetch;
 
-        const chat = createChatInstance([
-          {
-            id: '1',
-            parts: [
-              { type: 'text', text: 'Hello' },
-              {
-                type: 'data-suggestions',
-                data: { suggestions: ['Suggestion 1', 'Suggestion 2'] },
-              },
-            ],
-            role: 'assistant',
-          },
-        ]);
+        const chat = createChatInstance();
 
         await setup({
           instantSearchOptions: {

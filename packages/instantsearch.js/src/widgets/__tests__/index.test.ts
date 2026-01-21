@@ -182,6 +182,14 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
           attributes: ['attr'],
         });
       }
+      case 'promptSuggestions': {
+        const promptSuggestions = widget as Widgets['promptSuggestions'];
+        return promptSuggestions({
+          container,
+          agentId: 'test-agent-id',
+          context: {},
+        });
+      }
       default: {
         const defaultWidget = widget as UnknownWidgetFactory;
         return defaultWidget({ container, attribute: 'attr' });
