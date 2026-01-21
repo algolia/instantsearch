@@ -28,7 +28,7 @@ references:
   run_yarn_install: &run_yarn_install
     run:
       name: Install dependencies
-      command: yarn install --frozen-lockfile
+      command: yarn install --frozen-lockfile --prefer-offline
   restore_yarn_cache_v3: &restore_yarn_cache_v3
     restore_cache:
       name: Restore Yarn cache (v3)
@@ -206,8 +206,6 @@ jobs:
       - persist_to_workspace:
           root: *workspace_root
           paths:
-            - node_modules
-            - packages/*/node_modules
             - packages/*/dist
             - packages/instantsearch.js/es
             - packages/instantsearch.js/cjs
@@ -231,6 +229,9 @@ jobs:
     steps:
       - checkout
       - *attach_workspace
+      - *install_yarn_version
+      - *restore_yarn_cache
+      - *run_yarn_install
       - run:
           name: Lint & Code styles
           command: yarn run lint
@@ -284,6 +285,9 @@ jobs:
     steps:
       - checkout
       - *attach_workspace
+      - *install_yarn_version
+      - *restore_yarn_cache
+      - *run_yarn_install
       - run:
           name: Update dependencies
           command: |
@@ -303,6 +307,9 @@ jobs:
     steps:
       - checkout
       - *attach_workspace
+      - *install_yarn_version
+      - *restore_yarn_cache
+      - *run_yarn_install
       - run:
           name: Unit tests
           command: yarn run test:ci
@@ -315,6 +322,9 @@ jobs:
     steps:
       - checkout
       - *attach_workspace
+      - *install_yarn_version
+      - *restore_yarn_cache
+      - *run_yarn_install
       - run:
           name: Build examples
           command: yarn run website:examples --concurrency=1
@@ -328,6 +338,9 @@ jobs:
     steps:
       - checkout
       - *attach_workspace
+      - *install_yarn_version
+      - *restore_yarn_cache
+      - *run_yarn_install
       - run:
           name: Build helper documentation
           command: yarn workspace algoliasearch-helper run doc
@@ -347,6 +360,9 @@ jobs:
     steps:
       - checkout
       - *attach_workspace
+      - *install_yarn_version
+      - *restore_yarn_cache
+      - *run_yarn_install
       - run:
           name: End-to-end tests
           command: yarn run test:e2e:saucelabs
@@ -410,6 +426,9 @@ jobs:
     steps:
       - checkout
       - *attach_workspace
+      - *install_yarn_version
+      - *restore_yarn_cache
+      - *run_yarn_install
       - run:
           name: End-to-end tests
           command: yarn workspace react-instantsearch-router-nextjs run test:e2e:saucelabs
@@ -422,6 +441,9 @@ jobs:
     steps:
       - checkout
       - *attach_workspace
+      - *install_yarn_version
+      - *restore_yarn_cache
+      - *run_yarn_install
       - run:
           name: End-to-end tests
           command: yarn workspace react-instantsearch-nextjs run test:e2e:saucelabs
