@@ -35,6 +35,7 @@ export { default as connectInfiniteHitsWithInsights } from './infinite-hits/conn
 export { default as connectMenu } from './menu/connectMenu';
 export { default as connectNumericMenu } from './numeric-menu/connectNumericMenu';
 export { default as connectPagination } from './pagination/connectPagination';
+export { default as connectPromptSuggestions } from './prompt-suggestions/connectPromptSuggestions';
 export { default as connectRange } from './range/connectRange';
 export { default as connectRefinementList } from './refinement-list/connectRefinementList';
 export { default as connectRelatedProducts } from './related-products/connectRelatedProducts';
@@ -64,11 +65,4 @@ https://www.algolia.com/doc/guides/building-search-ui/installation/js/#with-a-pa
   );
 };
 export { default as connectFilterSuggestions } from './filter-suggestions/connectFilterSuggestions';
-export const connectPromptSuggestions = () => {
-  throw new Error(
-    `"connectPromptSuggestions" is not available from the UMD build.
-
-Please use InstantSearch.js with a packaging system:
-https://www.algolia.com/doc/guides/building-search-ui/installation/js/#with-a-packaging-system`
-  );
-};
+export { default as connectPromptSuggestions } from './prompt-suggestions/connectPromptSuggestions';
