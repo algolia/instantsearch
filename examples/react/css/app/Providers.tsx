@@ -4,8 +4,8 @@ import { Hit } from 'instantsearch.js';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { createInstantSearchNextInstance, InstantSearchNext } from 'react-instantsearch-nextjs';
-
-import { agentId, searchClient } from '../lib/client';
+import { agentId, searchClient, appId, apiKey } from '../lib/client';
+import { getAlgoliaAgent } from 'instantsearch.js/es/lib/utils';
 
 // Chat uses sessionStorage, so it must be client-side only
 const Chat = dynamic(
@@ -49,8 +49,15 @@ export function Providers({ children }: { children: React.ReactNode }) {
     >
       {children}
       <Chat
-        agentId={agentId}
+        // agentId={agentId}
         itemComponent={ChatItem}
+        transport={{
+          api: `http://127.0.0.1:8000/1/agents/${agentId}/completions?compatibilityMode=ai-sdk-5&cache=false`,
+          headers: {
+            'x-algolia-application-id': appId,
+            'x-algolia-api-Key': apiKey,
+          },
+        }}
       />
     </InstantSearchNext>
   );
