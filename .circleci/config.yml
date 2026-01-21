@@ -181,18 +181,12 @@ jobs:
           root: *workspace_root
           paths:
             - node_modules
-            - packages/algolia-experiences/dist
-            - packages/algoliasearch-helper/dist
+            - packages/*/node_modules
+            - packages/*/dist
             - packages/instantsearch.js/es
             - packages/instantsearch.js/cjs
-            - packages/instantsearch.js/dist
-            - packages/react-instantsearch/dist
-            - packages/react-instantsearch-core/dist
-            - packages/react-instantsearch-router-nextjs/dist
-            - packages/react-instantsearch-nextjs/dist
             - packages/vue-instantsearch/vue2
             - packages/vue-instantsearch/vue3
-            - packages/instantsearch-ui-components/dist
 
   test metadata:
     <<: *defaults
