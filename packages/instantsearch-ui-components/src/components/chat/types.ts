@@ -24,6 +24,7 @@ export type ClientSideToolComponentProps = {
   setIndexUiState: (state: object) => void;
   onClose: () => void;
   addToolResult: AddToolResultWithOutput;
+  sendMessage: (message: string) => void;
 };
 
 export type ClientSideToolComponent = (
@@ -40,6 +41,7 @@ export type ClientSideTool = {
       addToolResult: AddToolResultWithOutput;
     }
   ) => void;
+  renderLast?: boolean;
 };
 export type ClientSideTools = Record<string, ClientSideTool>;
 

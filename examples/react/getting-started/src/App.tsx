@@ -72,7 +72,7 @@ export function App() {
           </div>
 
           <Chat
-            agentId="7c2f6816-bfdb-46e9-a51f-9cb8e5fc9628"
+            agentId="92a0b174-344c-4b0c-bde8-90b5d221f2b3"
             itemComponent={ItemComponent}
           />
         </InstantSearch>
