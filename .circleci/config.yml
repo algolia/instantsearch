@@ -66,7 +66,7 @@ references:
 defaults: &defaults
   working_directory: ~/instantsearch
   docker:
-    - image: cimg/node:20.19.0
+    - image: cimg/node:20.10.0
   resource_class: medium+
 
 workflows:
