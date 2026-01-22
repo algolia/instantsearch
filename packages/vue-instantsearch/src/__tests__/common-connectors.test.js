@@ -344,6 +344,7 @@ const testSetups = {
   createTrendingItemsConnectorTests: () => {},
   createLookingSimilarConnectorTests: () => {},
   createChatConnectorTests: () => {},
+  createFilterSuggestionsConnectorTests: () => {},
 };
 
 function createCustomWidget({
@@ -443,6 +444,11 @@ const testOptions = {
     },
   },
   createChatConnectorTests: { skippedTests: { options: true } },
+  createFilterSuggestionsConnectorTests: {
+    skippedTests: {
+      options: true,
+    },
+  },
 };
 
 describe('Common connector tests (Vue InstantSearch)', () => {

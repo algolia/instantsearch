@@ -42,7 +42,7 @@
     },
     {
       "path": "./packages/instantsearch.css/themes/algolia.css",
-      "maxSize": "9 kB"
+      "maxSize": "9.25 kB"
     },
     {
       "path": "./packages/instantsearch.css/themes/algolia-min.css",
@@ -58,7 +58,7 @@
     },
     {
       "path": "./packages/instantsearch.css/themes/satellite.css",
-      "maxSize": "10 kB"
+      "maxSize": "10.25 kB"
     },
     {
       "path": "./packages/instantsearch.css/themes/satellite-min.css",

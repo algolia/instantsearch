@@ -163,6 +163,11 @@ describe('widgets', () => {
           "$$widgetType": "ais.trendingItems",
           "name": "TrendingItems",
         },
+        {
+          "$$type": "ais.filterSuggestions",
+          "$$widgetType": "ais.filterSuggestions",
+          "name": "FilterSuggestions",
+        },
       ]
     `);
   });
