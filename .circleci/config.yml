@@ -31,7 +31,7 @@ references:
   run_yarn_install: &run_yarn_install
     run:
       name: Install dependencies
-      command: yarn install --frozen-lockfile --prefer-offline --network-concurrency 8 --silent --mutex network
+      command: yarn install --frozen-lockfile --prefer-offline --network-concurrency 8
   restore_yarn_cache_v3: &restore_yarn_cache_v3
     restore_cache:
       name: Restore Yarn cache (v3)
@@ -214,7 +214,6 @@ jobs:
       - persist_to_workspace:
           root: *workspace_root
           paths:
-            - .
             - packages/*/dist
             - packages/instantsearch.js/es
             - packages/instantsearch.js/cjs
@@ -237,6 +236,7 @@ jobs:
     environment:
       NODE_OPTIONS: '--max-old-space-size=4096'
     steps:
+      - checkout
       - *attach_workspace
       - *install_yarn_version
       - *restore_yarn_cache
@@ -317,6 +317,7 @@ jobs:
     <<: *defaults
     resource_class: large
     steps:
+      - checkout
       - *attach_workspace
       - *install_yarn_version
       - *restore_yarn_cache
@@ -331,6 +332,7 @@ jobs:
     <<: *defaults
     resource_class: large
     steps:
+      - checkout
       - *attach_workspace
       - *install_yarn_version
       - *restore_yarn_cache
@@ -347,6 +349,7 @@ jobs:
     <<: *defaults
     resource_class: medium
     steps:
+      - checkout
       - *attach_workspace
       - *install_yarn_version
       - *restore_yarn_cache
@@ -368,6 +371,7 @@ jobs:
       E2E_BROWSER: << parameters.browser >>
     resource_class: large
     steps:
+      - checkout
       - *attach_workspace
       - *install_yarn_version
       - *restore_yarn_cache
@@ -433,6 +437,7 @@ jobs:
     <<: *defaults
     resource_class: large
     steps:
+      - checkout
       - *attach_workspace
       - *install_yarn_version
       - *restore_yarn_cache
@@ -447,6 +452,7 @@ jobs:
     <<: *defaults
     resource_class: large
     steps:
+      - checkout
       - *attach_workspace
       - *install_yarn_version
       - *restore_yarn_cache
