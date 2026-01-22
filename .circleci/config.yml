@@ -89,10 +89,18 @@ workflows:
       - legacy algoliasearch v3:
           requires:
             - build
+          filters:
+            branches:
+              only:
+                - /^chore\/release-\d+$/
       - legacy algoliasearch v4:
           context: fx-libraries
           requires:
             - build
+          filters:
+            branches:
+              only:
+                - /^chore\/release-\d+$/
       - vue v3:
           requires:
             - build
