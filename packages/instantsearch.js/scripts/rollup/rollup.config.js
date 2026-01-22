@@ -66,7 +66,7 @@ const createConfiguration = ({ mode, filename }) => ({
     file: `dist/${filename}`,
     name: 'instantsearch',
     format: 'umd',
-    banner: `${license}\n(function(){if(typeof TransformStream==='undefined'){var g=typeof window!=='undefined'?window:this;g.TransformStream=function(){};g.TransformStream.prototype={readable:null,writable:null};}})();`,
+    banner: license,
     sourcemap: true,
   },
   onwarn(warning, warn) {

@@ -174,6 +174,14 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
 
         return autocomplete;
       }
+      case 'filterSuggestions': {
+        const filterSuggestions = widget as Widgets['filterSuggestions'];
+        return filterSuggestions({
+          container,
+          agentId: 'test-agent-id',
+          attributes: ['attr'],
+        });
+      }
       default: {
         const defaultWidget = widget as UnknownWidgetFactory;
         return defaultWidget({ container, attribute: 'attr' });
