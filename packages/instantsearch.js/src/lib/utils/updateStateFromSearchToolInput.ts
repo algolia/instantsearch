@@ -21,6 +21,17 @@ export function updateStateFromSearchToolInput(
       return { attribute, value };
     });
 
+    if (
+      attributes.some(
+        ({ attribute }) =>
+          !helper.state.isConjunctiveFacet(attribute) &&
+          !helper.state.isHierarchicalFacet(attribute) &&
+          !helper.state.isDisjunctiveFacet(attribute)
+      )
+    ) {
+      return false;
+    }
+
     attributes.forEach(({ attribute }) => {
       helper.clearRefinements(attribute);
     });
