@@ -145,7 +145,11 @@ export default (function connectPromptSuggestions<
             mainChat.setOpen(true);
           }
 
-          mainChat.sendMessage({ text: suggestion });
+          const messageWithContext = context
+            ? `<!--ais-context:${JSON.stringify(context)}-->${suggestion}`
+            : suggestion;
+
+          mainChat.sendMessage({ text: messageWithContext });
         },
         widgetParams,
       };
@@ -167,7 +171,12 @@ export default (function connectPromptSuggestions<
         messages: [
           {
             role: 'user',
-            content: JSON.stringify(context),
+            parts: [
+              {
+                type: 'text',
+                text: JSON.stringify(context),
+              },
+            ],
           },
         ],
       };
@@ -188,18 +197,12 @@ export default (function connectPromptSuggestions<
           return response.json();
         })
         .then((data) => {
-          const assistantMessage = data.messages?.find(
-            (msg: { role: string }) => msg.role === 'assistant'
-          );
-
-          if (assistantMessage?.parts) {
-            const suggestionsPart = assistantMessage.parts.find(
-              (part: { type: string }) => part.type === 'data-suggestions'
-            );
-            if (suggestionsPart?.data?.suggestions) {
-              suggestions = suggestionsPart.data.suggestions;
-            }
+          if (data.role !== 'assistant') {
+            return;
           }
+          suggestions = data.parts?.find(
+            (part: { type: string }) => part.type === 'data-suggestions'
+          )?.data?.suggestions;
 
           status = 'ready';
         })
