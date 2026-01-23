@@ -173,7 +173,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     let setInput: ChatRenderState<TUiMessage>['setInput'];
     let setOpen: ChatRenderState<TUiMessage>['setOpen'];
     let setIsClearing: (value: boolean) => void;
-    let applyFilters: (toolInput: SearchToolInput) => boolean;
 
     const agentId = 'agentId' in options ? options.agentId : undefined;
 
@@ -360,13 +359,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
         _chatInstance = makeChatInstance(instantSearchInstance);
 
-        applyFilters = (inputParam: SearchToolInput) => {
-          const helper = instantSearchInstance.mainIndex.getHelper();
-          if (!helper || !inputParam) return false;
-
-          return updateStateFromSearchToolInput(inputParam, helper);
-        };
-
         const render = () => {
           renderFn(
             {
@@ -432,7 +424,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       },
 
       getWidgetRenderState(renderOptions) {
-        const { instantSearchInstance, parent } = renderOptions;
+        const { instantSearchInstance, parent, helper } = renderOptions;
         if (!_chatInstance) {
           this.init!({ ...renderOptions, uiState: {}, results: undefined });
         }
@@ -443,6 +435,12 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
             helper: renderOptions.helper,
             widgetType: this.$$type,
           });
+        }
+
+        function applyFilters(inputParam: SearchToolInput): boolean {
+          if (!helper || !inputParam) return false;
+
+          return updateStateFromSearchToolInput(inputParam, helper);
         }
 
         const toolsWithAddToolResult: ClientSideTools = {};

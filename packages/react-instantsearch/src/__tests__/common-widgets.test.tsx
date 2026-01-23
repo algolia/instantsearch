@@ -395,9 +395,23 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
     );
   },
   createChatWidgetTests({ instantSearchOptions, widgetParams }) {
+    const { renderRefinements, ...chatWidgetParams } = widgetParams;
     render(
       <InstantSearch {...instantSearchOptions}>
-        <Chat {...widgetParams} />
+        {renderRefinements && (
+          <>
+            <RefinementList attribute="brand" />
+            <RefinementList attribute="category" />
+            <HierarchicalMenu
+              attributes={[
+                'hierarchicalCategories.lvl0',
+                'hierarchicalCategories.lvl1',
+                'hierarchicalCategories.lvl2',
+              ]}
+            />
+          </>
+        )}
+        <Chat {...chatWidgetParams} />
         <GlobalErrorSwallower />
       </InstantSearch>
     );

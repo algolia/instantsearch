@@ -1,3 +1,5 @@
+import { flat } from './flat';
+
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 
 type SearchToolInput = {
@@ -15,7 +17,7 @@ export function updateStateFromSearchToolInput(
   }
 
   if (input.facet_filters) {
-    const attributes = input.facet_filters.flat().map((filter) => {
+    const attributes = flat(input.facet_filters).map((filter) => {
       const [attribute, value] = filter.split(':');
 
       return { attribute, value };

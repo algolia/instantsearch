@@ -13,8 +13,10 @@ type JSBaseWidgetParams = Parameters<ChatWidget>[0];
 // Explicitly adding ChatConnectorParams back. For some reason
 // ChatConnectorParams are not inferred when Omit is used with WidgetParams.
 export type JSChatWidgetParams = Omit<JSBaseWidgetParams, 'container'> &
-  ChatConnectorParams;
-export type ReactChatWidgetParams = ChatProps<unknown>;
+  ChatConnectorParams & { renderRefinements?: boolean };
+export type ReactChatWidgetParams = ChatProps<unknown> & {
+  renderRefinements?: boolean;
+};
 
 type ChatWidgetParams = {
   javascript: JSChatWidgetParams;

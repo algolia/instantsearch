@@ -425,6 +425,154 @@ export function createOptionsTests(
           'The message said hello!'
         );
       });
+
+      test('applies filters from the algolia search tool view all button', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({
+          messages: [
+            {
+              id: '1',
+              role: 'assistant',
+              parts: [
+                {
+                  type: `tool-${SearchIndexToolType}`,
+                  toolCallId: '1',
+                  input: {
+                    query: 'test',
+                    facet_filters: [['brand:Apple'], ['category:Laptops']],
+                  },
+                  state: 'output-available',
+                  output: {
+                    hits: [
+                      {
+                        objectID: '123',
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          ],
+          id: 'chat-id',
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+            initialUiState: {
+              indexName: {
+                refinementList: {
+                  brand: ['Samsung', 'Apple'],
+                  category: ['Laptops'],
+                },
+              },
+            },
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(chat),
+              renderRefinements: true,
+            },
+            react: {
+              ...createDefaultWidgetParams(chat),
+              renderRefinements: true,
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        userEvent.click(
+          document.querySelector(
+            '.ais-ChatToolSearchIndexCarouselHeaderViewAll'
+          )!
+        );
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(searchClient.search).toHaveBeenCalledTimes(2);
+        expect(searchClient.search).toHaveBeenLastCalledWith(
+          expect.arrayContaining([
+            expect.objectContaining({
+              params: expect.objectContaining({
+                query: 'test',
+                facetFilters: [['brand:Apple'], ['category:Laptops']],
+              }),
+            }),
+          ])
+        );
+      });
+
+      test('does not apply filters when attribute is not in state', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({
+          messages: [
+            {
+              id: '1',
+              role: 'assistant',
+              parts: [
+                {
+                  type: `tool-${SearchIndexToolType}`,
+                  toolCallId: '1',
+                  input: {
+                    query: 'test',
+                    facet_filters: [['brand:Apple'], ['category:Laptops']],
+                  },
+                  state: 'output-available',
+                  output: {
+                    hits: [
+                      {
+                        objectID: '123',
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          ],
+          id: 'chat-id',
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+            initialUiState: {
+              indexName: {
+                refinementList: {
+                  brand: ['Samsung', 'Apple'],
+                  // category is missing
+                },
+              },
+            },
+          },
+          widgetParams: {
+            javascript: createDefaultWidgetParams(chat),
+            react: createDefaultWidgetParams(chat),
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        userEvent.click(
+          document.querySelector(
+            '.ais-ChatToolSearchIndexCarouselHeaderViewAll'
+          )!
+        );
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(searchClient.search).toHaveBeenCalledTimes(1);
+      });
     });
   });
 }
