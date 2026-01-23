@@ -15,7 +15,6 @@ export type CurrentRefinementsProps = React.ComponentProps<'div'> & {
       Record<string, unknown>
   >;
   hasRefinements?: boolean;
-  aiMode?: boolean;
 };
 
 export type CurrentRefinementsClassNames = {
@@ -61,7 +60,6 @@ export function CurrentRefinements({
   classNames = {},
   items = [],
   hasRefinements = false,
-  aiMode,
   ...props
 }: CurrentRefinementsProps) {
   return (
@@ -78,7 +76,6 @@ export function CurrentRefinements({
         props.className
       )}
     >
-      {aiMode && <p>AI Refinements Applied</p>}
       <ul
         className={cx(
           'ais-CurrentRefinements-list',
