@@ -620,11 +620,40 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       .start();
   },
   createChatWidgetTests({ instantSearchOptions, widgetParams }) {
+    const { renderRefinements, ...chatWidgetParams } = widgetParams;
+
+    const refinementsWidgets = [];
+    if (renderRefinements) {
+      refinementsWidgets.push(
+        ...[
+          searchBox({
+            container: document.body.appendChild(document.createElement('div')),
+          }),
+          refinementList({
+            container: document.body.appendChild(document.createElement('div')),
+            attribute: 'brand',
+          }),
+          refinementList({
+            container: document.body.appendChild(document.createElement('div')),
+            attribute: 'category',
+          }),
+          hierarchicalMenu({
+            container: document.body.appendChild(document.createElement('div')),
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+            ],
+          }),
+        ]
+      );
+    }
+
     instantsearch(instantSearchOptions)
       .addWidgets([
+        ...refinementsWidgets,
         chat({
           container: document.body.appendChild(document.createElement('div')),
-          ...widgetParams,
+          ...chatWidgetParams,
         }),
       ])
       .on('error', () => {
