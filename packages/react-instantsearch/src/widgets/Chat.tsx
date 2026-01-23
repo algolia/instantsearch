@@ -2,6 +2,9 @@ import { createChatComponent } from 'instantsearch-ui-components';
 import {
   SearchIndexToolType,
   RecommendToolType,
+  MemorizeToolType,
+  MemorySearchToolType,
+  PonderToolType,
 } from 'instantsearch.js/es/lib/chat';
 import React, { createElement, Fragment } from 'react';
 import { useInstantSearch, useChat } from 'react-instantsearch-core';
@@ -10,7 +13,13 @@ import { useStickToBottom } from '../lib/useStickToBottom';
 
 import { createCarouselTool } from './chat/tools/SearchIndexTool';
 
-export { SearchIndexToolType, RecommendToolType };
+export {
+  SearchIndexToolType,
+  RecommendToolType,
+  MemorizeToolType,
+  MemorySearchToolType,
+  PonderToolType,
+};
 
 import type {
   Pragma,
@@ -45,6 +54,9 @@ export function createDefaultTools<TObject extends RecordWithObjectID>(
       itemComponent,
       getSearchPageURL
     ),
+    [MemorizeToolType]: {},
+    [MemorySearchToolType]: {},
+    [PonderToolType]: {},
   };
 }
 

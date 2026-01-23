@@ -12,7 +12,13 @@ import { useMemo } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
 import connectChat from '../../connectors/chat/connectChat';
-import { SearchIndexToolType, RecommendToolType } from '../../lib/chat';
+import {
+  SearchIndexToolType,
+  RecommendToolType,
+  MemorizeToolType,
+  MemorySearchToolType,
+  PonderToolType,
+} from '../../lib/chat';
 import { prepareTemplateProps } from '../../lib/templating';
 import { useStickToBottom } from '../../lib/useStickToBottom';
 import {
@@ -274,6 +280,9 @@ function createDefaultTools<
       getSearchPageURL
     ),
     [RecommendToolType]: createCarouselTool(false, templates, getSearchPageURL),
+    [MemorizeToolType]: { templates: {} },
+    [MemorySearchToolType]: { templates: {} },
+    [PonderToolType]: { templates: {} },
   };
 }
 
