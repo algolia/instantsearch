@@ -244,6 +244,25 @@ export function createOptionsTests(
       await act(async () => {
         screen
           .getByRole('button', {
+            name: /apply hi as search/i,
+            hidden: true,
+          })
+          .click();
+        await wait(0);
+      });
+
+      expect(screen.getByRole('combobox', { name: /submit/i })).toHaveValue(
+        'hi'
+      );
+
+      await act(async () => {
+        userEvent.clear(screen.getByRole('combobox', { name: /submit/i }));
+        await wait(0);
+      });
+
+      await act(async () => {
+        screen
+          .getByRole('button', {
             name: /remove hello from recent searches/i,
             hidden: true,
           })

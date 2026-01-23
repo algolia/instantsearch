@@ -64,6 +64,7 @@
     var(--ais-button-text-color-rgb),
     var(--ais-button-text-color-alpha)
   );
+  border: 1px solid transparent;
 
   &:disabled {
     background-color: rgba(

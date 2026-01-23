@@ -9,8 +9,12 @@ Please use React InstantSearch with a packaging system:
 https://www.algolia.com/doc/guides/building-search-ui/installation/react/#install-react-instantsearch-as-an-npm-package`
   );
 };
+export * from './FilterSuggestions';
 export const SearchIndexToolType = undefined;
 export const RecommendToolType = undefined;
+export const MemorizeToolType = undefined;
+export const MemorySearchToolType = undefined;
+export const PonderToolType = undefined;
 export const createDefaultTools = () => {};
 
 export * from './ClearRefinements';

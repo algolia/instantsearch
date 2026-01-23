@@ -327,6 +327,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     query: currentRefinement,
     indices,
     indicesConfig,
+    suggestionsIndexName: showSuggestions?.indexName,
   });
 
   const { getInputProps, getItemProps, getPanelProps, getRootProps } =
