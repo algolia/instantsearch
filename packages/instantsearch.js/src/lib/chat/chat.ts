@@ -1,11 +1,11 @@
-import { AbstractChat } from 'ai';
+import { AbstractChat } from '../ai-lite';
 
 import type {
   UIMessage,
   ChatState as BaseChatState,
   ChatStatus,
   ChatInit,
-} from 'ai';
+} from '../ai-lite';
 
 export type { UIMessage };
 export { AbstractChat };
