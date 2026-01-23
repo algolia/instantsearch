@@ -37,6 +37,7 @@ import type {
   UserClientSideTool,
   ClientSideTools,
   ClientSideTool,
+  SearchToolInput,
 } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -172,7 +173,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     let setInput: ChatRenderState<TUiMessage>['setInput'];
     let setOpen: ChatRenderState<TUiMessage>['setOpen'];
     let setIsClearing: (value: boolean) => void;
-    let helperTest: (toolInput: {}) => void;
+    let applyFilters: (toolInput: SearchToolInput) => boolean;
 
     const agentId = 'agentId' in options ? options.agentId : undefined;
 
@@ -359,11 +360,11 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
         _chatInstance = makeChatInstance(instantSearchInstance);
 
-        helperTest = (toolInput: {}) => {
-          updateStateFromSearchToolInput(
-            toolInput as any,
-            instantSearchInstance.mainIndex.getHelper()!
-          );
+        applyFilters = (inputParam: SearchToolInput) => {
+          const helper = instantSearchInstance.mainIndex.getHelper();
+          if (!helper || !inputParam) return false;
+
+          return updateStateFromSearchToolInput(inputParam, helper);
         };
 
         const render = () => {
@@ -449,6 +450,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           const toolWithAddToolResult: ClientSideTool = {
             ...tool,
             addToolResult: _chatInstance.addToolResult,
+            applyFilters,
           };
           toolsWithAddToolResult[key] = toolWithAddToolResult;
         });
@@ -489,10 +491,6 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
       shouldRender() {
         return true;
-      },
-
-      helperTest(toolInput: {}) {
-        return helperTest(toolInput);
       },
 
       get chatInstance() {

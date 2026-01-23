@@ -18,12 +18,19 @@ export type AddToolResultWithOutput = (
   params: Pick<Parameters<AddToolResult>[0], 'output'>
 ) => ReturnType<AddToolResult>;
 
+export type SearchToolInput = {
+  query: string;
+  number_of_results?: number;
+  facet_filters?: string[][];
+};
+
 export type ClientSideToolComponentProps = {
   message: ChatToolMessage;
   indexUiState: object;
   setIndexUiState: (state: object) => void;
   onClose: () => void;
   addToolResult: AddToolResultWithOutput;
+  applyFilters: (params: SearchToolInput) => boolean;
 };
 
 export type ClientSideToolComponent = (
@@ -40,8 +47,12 @@ export type ClientSideTool = {
       addToolResult: AddToolResultWithOutput;
     }
   ) => void;
+  applyFilters: (params: SearchToolInput) => boolean;
 };
 export type ClientSideTools = Record<string, ClientSideTool>;
 
-export type UserClientSideTool = Omit<ClientSideTool, 'addToolResult'>;
+export type UserClientSideTool = Omit<
+  ClientSideTool,
+  'addToolResult' | 'applyFilters'
+>;
 export type UserClientSideTools = Record<string, UserClientSideTool>;

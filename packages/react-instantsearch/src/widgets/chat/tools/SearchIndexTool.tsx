@@ -5,7 +5,6 @@ import {
   createButtonComponent,
 } from 'instantsearch-ui-components';
 import React, { createElement } from 'react';
-import { useInstantSearchContext } from 'react-instantsearch-core';
 
 import { Carousel } from '../../../components';
 
@@ -18,7 +17,6 @@ import type {
 } from 'instantsearch-ui-components';
 import type { IndexUiState, IndexWidget } from 'instantsearch.js';
 import type { ComponentProps } from 'react';
-import { updateStateFromSearchToolInput } from 'instantsearch.js/es/lib/utils';
 
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
 
@@ -41,6 +39,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
     message,
     indexUiState,
     setIndexUiState,
+    applyFilters,
     onClose,
   }: ClientSideToolComponentProps) {
     const input = message?.input as
@@ -66,6 +65,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
           | 'nbHits'
           | 'query'
           | 'hitsPerPage'
+          | 'applyFilters'
           | 'setIndexUiState'
           | 'indexUiState'
           | 'getSearchPageURL'
@@ -80,6 +80,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
           indexUiState={indexUiState}
           getSearchPageURL={getSearchPageURL}
           onClose={onClose}
+          applyFilters={applyFilters}
           {...props}
         />
       );
@@ -87,6 +88,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
       items.length,
       input,
       output?.nbHits,
+      applyFilters,
       setIndexUiState,
       onClose,
       indexUiState,
@@ -111,6 +113,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
     nbHits,
     input,
     hitsPerPage,
+    applyFilters,
     onClose,
   }: {
     canScrollLeft: boolean;
@@ -122,11 +125,10 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
     hitsPerPage?: number;
     setIndexUiState: IndexWidget['setIndexUiState'];
     indexUiState: IndexUiState;
+    applyFilters: (toolInput: SearchToolInput) => boolean;
     getSearchPageURL?: (nextUiState: IndexUiState) => string;
     onClose: () => void;
   }) {
-    const search = useInstantSearchContext();
-
     if ((hitsPerPage ?? 0) < 1) {
       return null;
     }
@@ -146,10 +148,9 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
                 variant="ghost"
                 size="sm"
                 onClick={() => {
-                  const helper = search.mainIndex.getHelper();
-                  if (!helper || !input) return;
+                  if (!input || !applyFilters) return;
 
-                  const success = updateStateFromSearchToolInput(input, helper);
+                  const success = applyFilters(input);
                   if (success) {
                     onClose();
                   }
