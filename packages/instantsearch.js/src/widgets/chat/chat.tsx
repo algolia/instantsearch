@@ -70,12 +70,19 @@ function getDefinedProperties<T extends object>(obj: T): Partial<T> {
   ) as Partial<T>;
 }
 
+type SearchToolInput = {
+  query: string;
+  number_of_results?: number;
+  facet_filters?: string[][];
+};
+
 function createCarouselTool<
   THit extends RecordWithObjectID = RecordWithObjectID
 >(
   showViewAll: boolean,
   templates: ChatTemplates<THit>,
-  getSearchPageURL?: (nextUiState: IndexUiState) => string
+  getSearchPageURL?: (nextUiState: IndexUiState) => string,
+  helperTest?: (input: {}) => void
 ): UserClientSideToolWithTemplate {
   const Button = createButtonComponent({
     createElement: h,
@@ -118,7 +125,7 @@ function createCarouselTool<
       ) => (
         <HeaderComponent
           nbHits={output?.nbHits}
-          query={input?.query}
+          input={input}
           hitsPerPage={items.length}
           setIndexUiState={setIndexUiState}
           indexUiState={indexUiState}
@@ -129,7 +136,7 @@ function createCarouselTool<
       );
     }, [
       items.length,
-      input?.query,
+      input,
       output?.nbHits,
       setIndexUiState,
       indexUiState,
@@ -163,20 +170,16 @@ function createCarouselTool<
     scrollLeft,
     scrollRight,
     nbHits,
-    query,
+    input,
     hitsPerPage,
-    setIndexUiState,
-    indexUiState,
     onClose,
-    // eslint-disable-next-line no-shadow
-    getSearchPageURL,
   }: {
     canScrollLeft: boolean;
     canScrollRight: boolean;
     scrollLeft: () => void;
     scrollRight: () => void;
     nbHits?: number;
-    query?: string;
+    input?: SearchToolInput;
     hitsPerPage?: number;
     setIndexUiState: IndexWidget['setIndexUiState'];
     indexUiState: IndexUiState;
@@ -201,24 +204,7 @@ function createCarouselTool<
               variant="ghost"
               size="sm"
               onClick={() => {
-                if (!query) return;
-
-                const nextUiState = { ...indexUiState, query };
-
-                // If no main search page URL or we are on the search page, just update the state
-                if (
-                  !getSearchPageURL ||
-                  (getSearchPageURL &&
-                    new URL(getSearchPageURL(nextUiState)).pathname ===
-                      window.location.pathname)
-                ) {
-                  setIndexUiState(nextUiState);
-                  onClose();
-                  return;
-                }
-
-                // Navigate to different page
-                window.location.href = getSearchPageURL(nextUiState);
+                helperTest?.(input || {});
               }}
               className="ais-ChatToolSearchIndexCarouselHeaderViewAll"
             >
@@ -265,7 +251,8 @@ function createDefaultTools<
   THit extends RecordWithObjectID = RecordWithObjectID
 >(
   templates: ChatTemplates<THit>,
-  getSearchPageURL?: (nextUiState: IndexUiState) => string
+  getSearchPageURL?: (nextUiState: IndexUiState) => string,
+  helperTest: (input: {}) => void
 ): UserClientSideToolsWithTemplate {
   return {
     [SearchIndexToolType]: createCarouselTool(
@@ -1172,7 +1159,9 @@ export default (function chat<
     ...userTemplates,
   };
 
-  const defaultTools = createDefaultTools(templates, getSearchPageURL);
+  const defaultTools = createDefaultTools(templates, getSearchPageURL, () => {
+    // no default action
+  });
 
   const tools = { ...defaultTools, ...userTools };
 
@@ -1188,12 +1177,20 @@ export default (function chat<
     render(null, containerNode)
   );
 
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { helperTest, ...rest } = makeWidget({
+    resume,
+    tools: {
+      ...createDefaultTools(templates, getSearchPageURL, () => {
+        helperTest?.({});
+      }),
+      ...userTools,
+    },
+    ...options,
+  });
+
   return {
-    ...makeWidget({
-      resume,
-      tools,
-      ...options,
-    }),
+    ...rest,
     $$widgetType: 'ais.chat',
   };
 } satisfies ChatWidget);

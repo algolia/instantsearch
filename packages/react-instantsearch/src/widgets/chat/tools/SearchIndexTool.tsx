@@ -4,7 +4,6 @@ import {
   ArrowRightIcon,
   createButtonComponent,
 } from 'instantsearch-ui-components';
-import { isIndexWidget } from 'instantsearch.js/es/lib/utils';
 import React, { createElement } from 'react';
 import { useInstantSearchContext } from 'react-instantsearch-core';
 
@@ -19,6 +18,7 @@ import type {
 } from 'instantsearch-ui-components';
 import type { IndexUiState, IndexWidget } from 'instantsearch.js';
 import type { ComponentProps } from 'react';
+import { updateStateFromSearchToolInput } from 'instantsearch.js/es/lib/utils';
 
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
 
@@ -27,28 +27,6 @@ type SearchToolInput = {
   number_of_results?: number;
   facet_filters?: string[][];
 };
-
-function getLocalWidgetsUiState(
-  widgets: Array<Widget | IndexWidget>,
-  widgetStateOptions: WidgetUiStateOptions,
-  initialUiState: IndexUiState = {}
-) {
-  return widgets.reduce((uiState, widget) => {
-    if (isIndexWidget(widget)) {
-      return uiState;
-    }
-
-    if (!widget.getWidgetUiState && !widget.getWidgetState) {
-      return uiState;
-    }
-
-    if (widget.getWidgetUiState) {
-      return widget.getWidgetUiState(uiState, widgetStateOptions);
-    }
-
-    return widget.getWidgetState!(uiState, widgetStateOptions);
-  }, initialUiState);
-}
 
 function createCarouselTool<TObject extends RecordWithObjectID>(
   showViewAll: boolean,
@@ -133,10 +111,6 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
     nbHits,
     input,
     hitsPerPage,
-    setIndexUiState,
-    indexUiState,
-    // eslint-disable-next-line no-shadow
-    getSearchPageURL,
     onClose,
   }: {
     canScrollLeft: boolean;
@@ -172,60 +146,11 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
                 variant="ghost"
                 size="sm"
                 onClick={() => {
-                  if (!input?.query) return;
-
-                  input.facet_filters = [
-                    ['brand:Samsung'],
-                    [
-                      'categories:Cell Phones',
-                      'categories:Unlocked Cell Phones',
-                    ],
-                  ];
-
-                  const attributes = input.facet_filters
-                    .flat()
-                    .map((filter) => {
-                      const [attribute, value] = filter.split(':');
-
-                      return { attribute, value };
-                    });
-
                   const helper = search.mainIndex.getHelper();
-                  if (!helper) return;
+                  if (!helper || !input) return;
 
-                  if (input.query) {
-                    helper.setQuery(input.query);
-                  }
-
-                  attributes.forEach(({ attribute }) => {
-                    helper.clearRefinements(attribute);
-                  });
-
-                  attributes.forEach(({ attribute, value }) => {
-                    const hierarchicalFacet =
-                      helper.state.hierarchicalFacets.find(
-                        (facet) => facet.name === attribute
-                      );
-
-                    if (hierarchicalFacet) {
-                      helper.toggleFacetRefinement(
-                        hierarchicalFacet.name,
-                        value
-                      );
-                    } else {
-                      helper.toggleFacetRefinement(attribute, value);
-                    }
-                  });
-
-                  helper.search();
-
-                  if (
-                    getSearchPageURL &&
-                    new URL(getSearchPageURL(helper.state)).pathname !==
-                      window.location.pathname
-                  ) {
-                    window.location.href = getSearchPageURL(helper.state);
-                  } else {
+                  const success = updateStateFromSearchToolInput(input, helper);
+                  if (success) {
                     onClose();
                   }
                 }}

@@ -11,6 +11,7 @@ import {
   getAlgoliaAgent,
   getAppIdAndApiKey,
   noop,
+  updateStateFromSearchToolInput,
   warning,
 } from '../../lib/utils';
 
@@ -171,6 +172,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     let setInput: ChatRenderState<TUiMessage>['setInput'];
     let setOpen: ChatRenderState<TUiMessage>['setOpen'];
     let setIsClearing: (value: boolean) => void;
+    let helperTest: (toolInput: {}) => void;
 
     const agentId = 'agentId' in options ? options.agentId : undefined;
 
@@ -357,6 +359,13 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
         _chatInstance = makeChatInstance(instantSearchInstance);
 
+        helperTest = (toolInput: {}) => {
+          updateStateFromSearchToolInput(
+            toolInput as any,
+            instantSearchInstance.mainIndex.getHelper()!
+          );
+        };
+
         const render = () => {
           renderFn(
             {
@@ -480,6 +489,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
 
       shouldRender() {
         return true;
+      },
+
+      helperTest(toolInput: {}) {
+        return helperTest(toolInput);
       },
 
       get chatInstance() {
