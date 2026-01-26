@@ -1,6 +1,4 @@
-import { find } from '../../lib';
-
-import type { ComponentProps, MutableRef } from '../../types';
+import type { ComponentProps, MutableRef } from 'instantsearch-ui-components';
 
 type BaseHit = Record<string, unknown>;
 
@@ -176,6 +174,7 @@ export function createAutocompletePropGetters({
         'aria-activedescendant': activeDescendant,
         placeholder,
         onFocus: () => setIsOpen(true),
+        // @ts-ignore
         onKeyDown: (event) => {
           switch (event.key) {
             case 'Escape': {
@@ -214,7 +213,8 @@ export function createAutocompletePropGetters({
               return;
           }
         },
-        onKeyUp: (event) => {
+        // @ts-ignore
+        onKeyUp: (event: KeyboardEvent) => {
           switch (event.key) {
             case 'ArrowLeft':
             case 'ArrowUp':
@@ -273,23 +273,15 @@ function buildItems<TItem extends BaseHit>({
     { item: TItem; config: AutocompleteIndexConfig<TItem> }
   >();
 
-  for (let i = 0; i < indices.length; i++) {
-    const currentIndexConfig = find(
-      indicesConfig,
-      (config) => config.indexName === indices[i].indexName
-    );
-
+  for (let i = 0; i < indicesConfig.length; i++) {
+    const config = indicesConfig[i];
     const hits = indices[i]?.hits || [];
 
     for (let position = 0; position < hits.length; position++) {
-      const itemId = getElementId(
-        'item',
-        currentIndexConfig?.indexName || indices[i].indexName,
-        position
-      );
+      const itemId = getElementId('item', config.indexName, position);
       items.set(itemId, {
         item: hits[position] as TItem,
-        config: currentIndexConfig!,
+        config,
       });
       itemsIds.push(itemId);
     }

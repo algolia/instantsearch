@@ -267,7 +267,7 @@ function createCarouselTool<
   };
 }
 
-function createDefaultTools<
+export function createDefaultTools<
   THit extends RecordWithObjectID = RecordWithObjectID
 >(
   templates: ChatTemplates<THit>,
@@ -279,6 +279,7 @@ function createDefaultTools<
       templates,
       getSearchPageURL
     ),
+    search_index: createCarouselTool(true, templates, getSearchPageURL),
     [RecommendToolType]: createCarouselTool(false, templates, getSearchPageURL),
     [MemorizeToolType]: { templates: {} },
     [MemorySearchToolType]: { templates: {} },

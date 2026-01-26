@@ -68,4 +68,6 @@ Please use InstantSearch.js with a packaging system:
 https://www.algolia.com/doc/guides/building-search-ui/installation/js/#with-a-packaging-system`
   );
 };
+
+export { default as experience } from './experience/experience.umd';
 export { default as filterSuggestions } from './filter-suggestions/filter-suggestions';

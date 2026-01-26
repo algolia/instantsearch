@@ -9,7 +9,9 @@ import {
   createAutocompleteSearchComponent,
   createAutocompleteStorage,
   createAutocompleteSuggestionComponent,
+  createChatMessagesComponent,
   cx,
+  SparklesIcon,
 } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 import { useEffect, useId, useMemo, useRef, useState } from 'preact/hooks';
@@ -28,6 +30,8 @@ import {
   getContainerNode,
   walkIndex,
 } from '../../lib/utils';
+import { createDefaultTools } from '../chat/chat';
+import { makeChatInstance } from '../chat/makeChat';
 import configure from '../configure/configure';
 import index from '../index/index';
 
@@ -37,6 +41,8 @@ import type {
   AutocompleteWidgetDescription,
   TransformItemsIndicesConfig,
 } from '../../connectors/autocomplete/connectAutocomplete';
+import type { ChatTransport } from '../../connectors/chat/connectChat';
+import type { Chat, UIMessage } from '../../lib/chat';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   BaseHit,
@@ -54,6 +60,7 @@ import type {
   AutocompleteIndexClassNames,
   AutocompleteIndexConfig,
   AutocompleteIndexProps,
+  ChatStatus,
 } from 'instantsearch-ui-components';
 
 let autocompleteInstanceId = 0;
@@ -90,6 +97,11 @@ const AutocompleteRecentSearch = createAutocompleteRecentSearchComponent({
   Fragment,
 });
 
+const ChatMessages = createChatMessagesComponent({
+  createElement: h,
+  Fragment,
+});
+
 const usePropGetters = createAutocompletePropGetters({
   useEffect,
   useId,
@@ -121,10 +133,16 @@ type RendererParams<TItem extends BaseHit> = {
     recentSearchHeaderComponent:
       | typeof AutocompleteIndex['prototype']['props']['HeaderComponent']
       | undefined;
+    chatInstance: Chat<UIMessage> | undefined;
   };
 } & Pick<
   AutocompleteWidgetParams<TItem>,
-  'getSearchPageURL' | 'onSelect' | 'showSuggestions' | 'placeholder'
+  | 'getSearchPageURL'
+  | 'onSelect'
+  | 'agent'
+  | 'display'
+  | 'showSuggestions'
+  | 'placeholder'
 > & {
     showRecent:
       | Exclude<AutocompleteWidgetParams<TItem>['showRecent'], boolean>
@@ -248,6 +266,8 @@ type AutocompleteWrapperProps<TItem extends BaseHit> = Pick<
   | 'cssClasses'
   | 'templates'
   | 'renderState'
+  | 'agent'
+  | 'display'
   | 'showRecent'
   | 'showSuggestions'
   | 'placeholder'
@@ -264,6 +284,8 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   cssClasses,
   renderState,
   instantSearchInstance,
+  agent,
+  display,
   showRecent,
   showSuggestions,
   templates,
@@ -323,11 +345,100 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     query.length > 0 && storage.onAdd(query);
   };
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const [showUi, setShowUi] = useState(false);
+  const [showConversation, setShowConversation] = useState(false);
+  const [agentMessages, setAgentMessages] = useState<any[]>([]);
+  const [agentStatus, setAgentStatus] = useState<ChatStatus>('ready');
+  const agentTools = createDefaultTools({
+    item: (item, { html }) => {
+      return html`<div>${JSON.stringify(item)}</div>`;
+    },
+  });
+  const disableTools = true; // Temporarily disabling tools
+
+  const sendMessage = (message: string) => {
+    if (agent && !renderState.chatInstance) {
+      renderState.chatInstance = makeChatInstance(
+        instantSearchInstance,
+        agent,
+        disableTools ? undefined : agentTools
+      );
+      renderState.chatInstance.messages = []; // Temporarily clearing history on load
+      renderState.chatInstance['~registerMessagesCallback'](() => {
+        setAgentMessages(renderState.chatInstance!.messages);
+      });
+      renderState.chatInstance['~registerStatusCallback'](() => {
+        setAgentStatus(renderState.chatInstance!.status);
+      });
+    }
+
+    renderState.chatInstance!.sendMessage({ text: message });
+  };
+
+  useEffect(() => {
+    document.body.classList.toggle('ais-AutocompleteDialog--active', showUi);
+    if (showUi) {
+      inputRef.current?.focus();
+    }
+
+    return () => {
+      document.body.classList.remove('ais-AutocompleteDialog--active');
+    };
+  }, [showUi]);
+
+  const indicesWithAgent = (
+    _indices: Parameters<typeof usePropGetters>[0]['indices']
+  ) => {
+    if (!agent) {
+      return _indices;
+    }
+
+    return [
+      {
+        indexName: 'ais-autocomplete-agent',
+        indexId: 'ais-autocomplete-agent',
+        hits: searchboxQuery ? [{ query: searchboxQuery }] : [],
+      },
+      ..._indices,
+    ];
+  };
+
+  const indicesConfigWithAgent = (
+    _indicesConfig: Array<AutocompleteIndexConfig<TItem>>
+  ) => {
+    if (!agent) {
+      return _indicesConfig;
+    }
+
+    return [
+      {
+        indexName: 'ais-autocomplete-agent',
+        getQuery: (item) => item.query,
+        onSelect: ({ query }) => {
+          sendMessage(query);
+          inputRef.current!.select();
+          setShowConversation(true);
+        },
+      },
+      ..._indicesConfig,
+    ];
+  };
+
   const { getInputProps, getItemProps, getPanelProps, getRootProps } =
     usePropGetters({
-      indices: indicesForPropGetters,
-      indicesConfig: indicesConfigForPropGetters,
-      onRefine,
+      indices: indicesWithAgent(indicesForPropGetters),
+      indicesConfig: indicesConfigWithAgent(indicesConfigForPropGetters),
+      onRefine: (query) => {
+        if (agent && showConversation) {
+          sendMessage(query);
+          inputRef.current!.select();
+          return;
+        }
+
+        onRefine(query);
+      },
       onSelect:
         userOnSelect ??
         (({ query, setQuery, url }) => {
@@ -348,10 +459,41 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       onApply: (query: string) => {
         refineAutocomplete(query);
       },
-      placeholder,
+      placeholder: showConversation ? 'Ask another question…' : placeholder,
     });
 
   const elements: PanelElements = {};
+  if (agent) {
+    elements.agent = (
+      <AutocompleteIndex
+        // @ts-ignore - there seems to be problems with React.ComponentType and this, but it's actually correct
+        ItemComponent={({ item, onSelect }) => {
+          return (
+            <div className="ais-Autocomplete-AgentPrompt" onClick={onSelect}>
+              <div>
+                <SparklesIcon createElement={h} />
+              </div>
+              {item.query && (
+                <div>
+                  Ask Agent: <span>{`"${item.query}"`}</span>
+                </div>
+              )}
+              {!item.query && <div>Type something to ask a question…</div>}
+            </div>
+          );
+        }}
+        items={[
+          {
+            objectID: 'ais-autocomplete-agent',
+            __indexName: 'ais-autocomplete-agent',
+            query: searchboxQuery,
+          },
+        ]}
+        getItemProps={getItemProps}
+      />
+    );
+  }
+
   if (showRecent) {
     elements.recent = (
       <AutocompleteIndex
@@ -454,33 +596,133 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     );
   });
 
+  const agentToolsWithLayoutComponent = Object.entries(agentTools).reduce(
+    (acc, [key, tool]) => {
+      return {
+        ...acc,
+        [key]: {
+          ...tool,
+          layoutComponent: (layoutComponentProps: any) => (
+            <TemplateComponent
+              templates={tool.templates}
+              rootTagName="fragment"
+              templateKey="layout"
+              data={layoutComponentProps}
+            />
+          ),
+        },
+      };
+    },
+    {}
+  );
+
   return (
-    <Autocomplete {...getRootProps()} classNames={cssClasses}>
-      <AutocompleteSearchBox
-        query={searchboxQuery || ''}
-        inputProps={{
-          ...getInputProps(),
-          onInput: (event) =>
-            refineAutocomplete((event.currentTarget as HTMLInputElement).value),
-        }}
-        onClear={() => {
-          onRefine('');
-        }}
-        isSearchStalled={instantSearchInstance.status === 'stalled'}
-      />
-      <AutocompletePanel {...getPanelProps()}>
-        {templates.panel ? (
-          <TemplateComponent
-            {...renderState.templateProps}
-            templateKey="panel"
-            rootTagName="fragment"
-            data={{ elements, indices }}
-          />
+    <AutocompleteDialogWrapper
+      display={display}
+      showUi={showUi}
+      setShowUi={setShowUi}
+      setShowConversation={setShowConversation}
+      placeholder={placeholder}
+    >
+      <Autocomplete {...getRootProps()} classNames={cssClasses}>
+        <AutocompleteSearchBox
+          query={searchboxQuery || ''}
+          inputProps={{
+            ...getInputProps(),
+            ref: inputRef,
+            onInput: (event) =>
+              refineAutocomplete(
+                (event.currentTarget as HTMLInputElement).value
+              ),
+          }}
+          onClear={() => {
+            onRefine('');
+          }}
+          isSearchStalled={instantSearchInstance.status === 'stalled'}
+        />
+        {!showConversation ? (
+          <AutocompletePanel
+            {...(display === 'dialog'
+              ? { ...getPanelProps(), hidden: false }
+              : getPanelProps())}
+          >
+            {templates.panel ? (
+              <TemplateComponent
+                {...renderState.templateProps}
+                templateKey="panel"
+                rootTagName="fragment"
+                data={{ elements, indices }}
+              />
+            ) : (
+              Object.keys(elements).map((elementId) => elements[elementId])
+            )}
+          </AutocompletePanel>
         ) : (
-          Object.keys(elements).map((elementId) => elements[elementId])
+          <div className="ais-AutocompletePanel ais-AutocompletePanel--open">
+            <div className="ais-AutocompletePanelLayout">
+              <ChatMessages
+                messages={agentMessages}
+                status={agentStatus}
+                hideScrollToBottom={true}
+                tools={disableTools ? undefined : agentToolsWithLayoutComponent}
+                translations={{ loaderText: 'Thinking…' }}
+              />
+            </div>
+          </div>
         )}
-      </AutocompletePanel>
-    </Autocomplete>
+      </Autocomplete>
+    </AutocompleteDialogWrapper>
+  );
+}
+
+type AutocompleteDialogWrapperProps = {
+  display?: 'inline' | 'dialog';
+  showUi: boolean;
+  setShowUi: (showUi: boolean) => void;
+  setShowConversation: (showConversation: boolean) => void;
+  placeholder?: string;
+  children: any;
+};
+
+function AutocompleteDialogWrapper({
+  display,
+  showUi,
+  setShowUi,
+  setShowConversation,
+  placeholder,
+  children,
+}: AutocompleteDialogWrapperProps) {
+  if (display !== 'dialog') {
+    return children;
+  }
+
+  return (
+    <div className="ais-AutocompleteDialog">
+      <button
+        className="ais-AutocompleteDialog-Button"
+        onClick={() => setShowUi(true)}
+      >
+        <div className="ais-AutocompleteDialog-Button-Icon">
+          <svg width="10" height="10" viewBox="0 0 40 40" aria-hidden="true">
+            <path d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z" />
+          </svg>
+        </div>
+        <span>{placeholder}</span>
+      </button>
+      {showUi && (
+        <div
+          className="ais-AutocompleteDialog-Container"
+          onClick={(event) => {
+            if (event.target === event.currentTarget) {
+              setShowUi(false);
+              setShowConversation(false);
+            }
+          }}
+        >
+          <div className="ais-AutocompleteDialog-Content">{children}</div>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -520,7 +762,7 @@ type IndexConfig<TItem extends BaseHit> = AutocompleteIndexConfig<TItem> & {
 
 type PanelElements = Partial<
   // eslint-disable-next-line @typescript-eslint/ban-types
-  Record<'recent' | 'suggestions' | (string & {}), preact.JSX.Element>
+  Record<'agent' | 'recent' | 'suggestions' | (string & {}), preact.JSX.Element>
 >;
 
 type AutocompleteWidgetParams<TItem extends BaseHit> = {
@@ -528,6 +770,10 @@ type AutocompleteWidgetParams<TItem extends BaseHit> = {
    * CSS Selector or HTMLElement to insert the widget.
    */
   container: string | HTMLElement;
+
+  agent?: ChatTransport;
+
+  display?: 'inline' | 'dialog';
 
   /**
    * Indices to use in the Autocomplete.
@@ -611,6 +857,8 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     escapeHTML,
     indices = [],
     showSuggestions,
+    agent,
+    display = 'inline',
     showRecent,
     searchParameters: userSearchParameters,
     getSearchPageURL,
@@ -699,6 +947,8 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     getSearchPageURL,
     onSelect,
     cssClasses,
+    agent,
+    display,
     showRecent: showRecentOptions,
     showSuggestions,
     placeholder,
@@ -709,6 +959,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
       templateProps: undefined,
       RecentSearchComponent: AutocompleteRecentSearch,
       recentSearchHeaderComponent: undefined,
+      chatInstance: undefined,
     },
     templates,
   });
