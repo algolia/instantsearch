@@ -37,7 +37,6 @@ import type {
   UserClientSideTool,
   ClientSideTools,
   ClientSideTool,
-  SearchToolInput,
 } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -106,6 +105,11 @@ export type ChatInitWithoutTransport<TUiMessage extends UIMessage> = Omit<
 export type ChatTransport = {
   agentId?: string;
   transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
+};
+
+export type ApplyFiltersParams = {
+  query?: string;
+  facetFilters?: string[][];
 };
 
 export type ChatInit<TUiMessage extends UIMessage> =
@@ -437,10 +441,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           });
         }
 
-        function applyFilters(inputParam: SearchToolInput): boolean {
-          if (!helper || !inputParam) return false;
+        function applyFilters(params: ApplyFiltersParams): boolean {
+          if (!helper) return false;
 
-          return updateStateFromSearchToolInput(inputParam, helper);
+          return updateStateFromSearchToolInput(params, helper);
         }
 
         const toolsWithAddToolResult: ClientSideTools = {};

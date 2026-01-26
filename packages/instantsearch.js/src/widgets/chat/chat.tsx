@@ -186,7 +186,7 @@ function createCarouselTool<
     input?: SearchToolInput;
     hitsPerPage?: number;
     setIndexUiState: IndexWidget['setIndexUiState'];
-    applyFilters?: (params: SearchToolInput) => boolean;
+    applyFilters?: ClientSideToolComponentProps['applyFilters'];
     indexUiState: IndexUiState;
     onClose: () => void;
     getSearchPageURL?: (nextUiState: IndexUiState) => string;
@@ -211,7 +211,10 @@ function createCarouselTool<
               onClick={() => {
                 if (!input || !applyFilters) return;
 
-                const success = applyFilters(input);
+                const success = applyFilters({
+                  query: input.query,
+                  facetFilters: input.facet_filters,
+                });
                 if (success) {
                   onClose();
                 }

@@ -125,7 +125,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
     hitsPerPage?: number;
     setIndexUiState: IndexWidget['setIndexUiState'];
     indexUiState: IndexUiState;
-    applyFilters: (toolInput: SearchToolInput) => boolean;
+    applyFilters: ClientSideToolComponentProps['applyFilters'];
     getSearchPageURL?: (nextUiState: IndexUiState) => string;
     onClose: () => void;
   }) {
@@ -150,7 +150,10 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
                 onClick={() => {
                   if (!input || !applyFilters) return;
 
-                  const success = applyFilters(input);
+                  const success = applyFilters({
+                    query: input.query,
+                    facetFilters: input.facet_filters,
+                  });
                   if (success) {
                     onClose();
                   }

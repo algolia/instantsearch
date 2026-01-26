@@ -1,23 +1,18 @@
 import { flat } from './flat';
 
 import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
-
-type SearchToolInput = {
-  query: string;
-  number_of_results?: number;
-  facet_filters?: string[][];
-};
+import type { ApplyFiltersParams } from 'instantsearch-ui-components';
 
 export function updateStateFromSearchToolInput(
-  input: SearchToolInput,
+  params: ApplyFiltersParams,
   helper: AlgoliaSearchHelper
 ) {
-  if (input.query) {
-    helper.setQuery(input.query);
+  if (params.query) {
+    helper.setQuery(params.query);
   }
 
-  if (input.facet_filters) {
-    const attributes = flat(input.facet_filters).map((filter) => {
+  if (params.facetFilters) {
+    const attributes = flat(params.facetFilters).map((filter) => {
       const [attribute, value] = filter.split(':');
 
       return { attribute, value };

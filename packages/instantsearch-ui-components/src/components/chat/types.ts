@@ -24,13 +24,18 @@ export type SearchToolInput = {
   facet_filters?: string[][];
 };
 
+export type ApplyFiltersParams = {
+  query?: string;
+  facetFilters?: string[][];
+};
+
 export type ClientSideToolComponentProps = {
   message: ChatToolMessage;
   indexUiState: object;
   setIndexUiState: (state: object) => void;
   onClose: () => void;
   addToolResult: AddToolResultWithOutput;
-  applyFilters: (params: SearchToolInput) => boolean;
+  applyFilters: (params: ApplyFiltersParams) => boolean;
 };
 
 export type ClientSideToolComponent = (
@@ -47,7 +52,7 @@ export type ClientSideTool = {
       addToolResult: AddToolResultWithOutput;
     }
   ) => void;
-  applyFilters: (params: SearchToolInput) => boolean;
+  applyFilters: (params: ApplyFiltersParams) => boolean;
 };
 export type ClientSideTools = Record<string, ClientSideTool>;
 
