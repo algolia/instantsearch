@@ -1,14 +1,7 @@
 /** @jsx h */
 
-import {
-  ArrowRightIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  createButtonComponent,
-  createChatComponent,
-} from 'instantsearch-ui-components';
+import { createChatComponent } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
-import { useMemo } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
 import connectChat from '../../connectors/chat/connectChat';
@@ -25,7 +18,8 @@ import {
   getContainerNode,
   createDocumentationMessageGenerator,
 } from '../../lib/utils';
-import { carousel } from '../../templates';
+
+import { createCarouselTool } from './search-index-tool';
 
 import type {
   ChatRenderState,
@@ -60,7 +54,6 @@ import type {
   ClientSideToolComponentProps,
   ClientSideTools,
   RecordWithObjectID,
-  SearchToolInput,
   UserClientSideTool,
 } from 'instantsearch-ui-components';
 import type { ComponentProps } from 'preact';
@@ -75,189 +68,6 @@ function getDefinedProperties<T extends object>(obj: T): Partial<T> {
   return Object.fromEntries(
     Object.entries(obj).filter(([, value]) => value !== undefined)
   ) as Partial<T>;
-}
-
-function createCarouselTool<
-  THit extends RecordWithObjectID = RecordWithObjectID
->(
-  showViewAll: boolean,
-  templates: ChatTemplates<THit>,
-  getSearchPageURL?: (nextUiState: IndexUiState) => string
-): UserClientSideToolWithTemplate {
-  const Button = createButtonComponent({
-    createElement: h,
-  });
-
-  function SearchLayoutComponent({
-    message,
-    indexUiState,
-    setIndexUiState,
-    applyFilters,
-    onClose,
-  }: ClientSideToolComponentProps) {
-    const input = message?.input as
-      | {
-          query: string;
-          number_of_results?: number;
-        }
-      | undefined;
-
-    const output = message?.output as
-      | {
-          hits?: Array<RecordWithObjectID<THit>>;
-          nbHits?: number;
-        }
-      | undefined;
-
-    const items = output?.hits || [];
-
-    const MemoedHeaderComponent = useMemo(() => {
-      return (
-        props: Omit<
-          ComponentProps<typeof HeaderComponent>,
-          | 'nbHits'
-          | 'query'
-          | 'hitsPerPage'
-          | 'setIndexUiState'
-          | 'indexUiState'
-          | 'getSearchPageURL'
-          | 'onClose'
-        >
-      ) => (
-        <HeaderComponent
-          nbHits={output?.nbHits}
-          input={input}
-          hitsPerPage={items.length}
-          setIndexUiState={setIndexUiState}
-          indexUiState={indexUiState}
-          getSearchPageURL={getSearchPageURL}
-          applyFilters={applyFilters}
-          onClose={onClose}
-          {...props}
-        />
-      );
-    }, [
-      items.length,
-      input,
-      output?.nbHits,
-      applyFilters,
-      setIndexUiState,
-      indexUiState,
-      onClose,
-    ]);
-
-    return carousel({
-      showNavigation: false,
-      templates: {
-        header: MemoedHeaderComponent,
-      },
-    })({
-      items,
-      templates: {
-        item: ({ item }) => (
-          <TemplateComponent
-            templates={templates}
-            templateKey="item"
-            data={item}
-            rootTagName="fragment"
-          />
-        ),
-      },
-      sendEvent: () => {},
-    });
-  }
-
-  function HeaderComponent({
-    canScrollLeft,
-    canScrollRight,
-    scrollLeft,
-    scrollRight,
-    nbHits,
-    input,
-    hitsPerPage,
-    applyFilters,
-    onClose,
-  }: {
-    canScrollLeft: boolean;
-    canScrollRight: boolean;
-    scrollLeft: () => void;
-    scrollRight: () => void;
-    nbHits?: number;
-    input?: SearchToolInput;
-    hitsPerPage?: number;
-    setIndexUiState: IndexWidget['setIndexUiState'];
-    applyFilters?: ClientSideToolComponentProps['applyFilters'];
-    indexUiState: IndexUiState;
-    onClose: () => void;
-    getSearchPageURL?: (nextUiState: IndexUiState) => string;
-  }) {
-    if ((hitsPerPage ?? 0) < 1) {
-      return null;
-    }
-
-    return (
-      <div className="ais-ChatToolSearchIndexCarouselHeader">
-        <div className="ais-ChatToolSearchIndexCarouselHeaderResults">
-          {nbHits && (
-            <div className="ais-ChatToolSearchIndexCarouselHeaderCount">
-              {hitsPerPage ?? 0} of {nbHits.toLocaleString()} result
-              {nbHits > 1 ? 's' : ''}
-            </div>
-          )}
-          {showViewAll && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                if (!input || !applyFilters) return;
-
-                const success = applyFilters({
-                  query: input.query,
-                  facetFilters: input.facet_filters,
-                });
-                if (success) {
-                  onClose();
-                }
-              }}
-              className="ais-ChatToolSearchIndexCarouselHeaderViewAll"
-            >
-              View all
-              <ArrowRightIcon createElement={h} />
-            </Button>
-          )}
-        </div>
-
-        {(hitsPerPage ?? 0) > 2 && (
-          <div className="ais-ChatToolSearchIndexCarouselHeaderScrollButtons">
-            <Button
-              variant="outline"
-              size="sm"
-              iconOnly
-              onClick={scrollLeft}
-              disabled={!canScrollLeft}
-              className="ais-ChatToolSearchIndexCarouselHeaderScrollButton"
-            >
-              <ChevronLeftIcon createElement={h} />
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              iconOnly
-              onClick={scrollRight}
-              disabled={!canScrollRight}
-              className="ais-ChatToolSearchIndexCarouselHeaderScrollButton"
-            >
-              <ChevronRightIcon createElement={h} />
-            </Button>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  return {
-    templates: { layout: SearchLayoutComponent },
-  };
 }
 
 function createDefaultTools<
