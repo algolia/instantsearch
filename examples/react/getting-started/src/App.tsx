@@ -2,6 +2,7 @@ import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import { Hit } from 'instantsearch.js';
 import React from 'react';
 import {
+  Configure,
   Highlight,
   Hits,
   InstantSearch,
@@ -44,20 +45,17 @@ export function App() {
           searchClient={searchClient}
           indexName="instant_search"
           insights={true}
-          routing
         >
+          <Configure hitsPerPage={8} />
           <div className="search-panel">
             <div className="search-panel__filters">
-              <Panel header="categories">
-                <RefinementList attribute="categories" operator="and" />
-              </Panel>
               <Panel header="brand">
                 <RefinementList attribute="brand" />
               </Panel>
             </div>
 
             <div className="search-panel__results">
-              <SearchBox className="searchbox" />
+              <SearchBox placeholder="" className="searchbox" />
               <Hits hitComponent={HitComponent} />
 
               <div className="pagination">
