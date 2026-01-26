@@ -25,6 +25,8 @@ type InitializePromiseProps = {
   nonce?: string;
 };
 
+const SSR_TIMEOUT_MS = 30000;
+
 export function InitializePromise({ nonce }: InitializePromiseProps) {
   const search = useInstantSearchContext();
   const { waitForResultsRef } = useRSCContext();
@@ -34,16 +36,31 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
       throw new Error('Missing ServerInsertedHTMLContext');
     });
 
-  // Extract search parameters from the search client to use them
-  // later during hydration.
   let requestParamsList: SearchOptions[];
+  let ssrSearchFailed = false;
+
+  const handleResponse = (response: any) => {
+    if (!response || !('results' in response)) {
+      ssrSearchFailed = true;
+      return { results: [] };
+    }
+    return response;
+  };
+
+  const handleError = () => {
+    ssrSearchFailed = true;
+    return { results: [] };
+  };
 
   if (search.compositionID) {
     search.mainHelper!.setClient({
       ...search.mainHelper!.getClient(),
       search(query) {
         requestParamsList = [query.requestBody.params];
-        return (search.client as CompositionClient).search(query);
+        return (search.client as CompositionClient)
+          .search(query)
+          .then(handleResponse)
+          .catch(handleError);
       },
     } as CompositionClient);
   } else {
@@ -51,7 +68,10 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
       ...search.mainHelper!.getClient(),
       search(queries) {
         requestParamsList = queries.map(({ params }) => params);
-        return (search.client as SearchClient).search(queries);
+        return (search.client as SearchClient)
+          .search(queries)
+          .then(handleResponse)
+          .catch(handleError);
       },
     } as SearchClient);
   }
@@ -59,27 +79,62 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
   resetWidgetId();
 
   const waitForResults = () =>
-    new Promise<void>((resolve) => {
+    new Promise<void>((resolve, reject) => {
       let searchReceived = false;
       let recommendReceived = false;
-      search.mainHelper!.derivedHelpers[0].once('result', () => {
+      let isSettled = false;
+
+      const helper = search.mainHelper!;
+      const derivedHelper = helper.derivedHelpers[0];
+
+      const timeout = setTimeout(() => {
+        if (!isSettled) {
+          isSettled = true;
+          reject(new Error('InstantSearch SSR timeout'));
+        }
+      }, SSR_TIMEOUT_MS);
+
+      const settle = (error?: unknown) => {
+        if (isSettled) return;
+        isSettled = true;
+        clearTimeout(timeout);
+
+        if (error) {
+          reject(error);
+        } else {
+          resolve();
+        }
+      };
+
+      derivedHelper.once('result', () => {
         searchReceived = true;
         if (!search._hasRecommendWidget || recommendReceived) {
-          resolve();
+          settle();
         }
       });
-      search.mainHelper!.derivedHelpers[0].once('recommend:result', () => {
+
+      derivedHelper.once('recommend:result', () => {
         recommendReceived = true;
         if (!search._hasSearchWidget || searchReceived) {
-          resolve();
+          settle();
         }
       });
+
+      helper.on('error', settle);
+      search.on('error', settle);
+      helper.derivedHelpers.forEach((dh) => dh.on('error', settle));
     });
 
   const injectInitialResults = () => {
-    const options = { inserted: false };
-    const results = getInitialResults(search.mainIndex, requestParamsList);
-    insertHTML(createInsertHTML({ options, results, nonce }));
+    if (ssrSearchFailed) return;
+
+    try {
+      const options = { inserted: false };
+      const results = getInitialResults(search.mainIndex, requestParamsList);
+      insertHTML(createInsertHTML({ options, results, nonce }));
+    } catch {
+      // Silently fail - SSR results are optional
+    }
   };
 
   if (waitForResultsRef?.current === null) {
@@ -96,7 +151,11 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
           if (shouldRefetch) {
             search._resetScheduleSearch?.();
             waitForResultsRef.current = wrapPromiseWithState(
-              waitForResults().then(injectInitialResults)
+              waitForResults()
+                .then(injectInitialResults)
+                .catch(() => {
+                  // Silently fail on refetch errors
+                })
             );
           }
 
@@ -107,6 +166,9 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
             return;
           }
           injectInitialResults();
+        })
+        .catch(() => {
+          // Silently fail - allows app to continue without SSR results
         })
     );
   }
