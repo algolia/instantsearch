@@ -151,6 +151,158 @@ test('it waits for recommend only if there are only recommend widgets', async ()
   expect(client.getRecommendations).toHaveBeenCalledTimes(1);
 });
 
+test('it resolves when search client throws an error', async () => {
+  const ref: { current: PromiseWithState<void> | null } = { current: null };
+  const insertedHTML = jest.fn();
+
+  const client = createSearchClient({
+    search: jest.fn().mockRejectedValue(new Error('Network error')),
+  });
+
+  await act(() =>
+    render(
+      <InstantSearchRSCContext.Provider
+        value={{
+          waitForResultsRef: ref,
+          countRef: { current: 0 },
+          ignoreMultipleHooksWarning: false,
+        }}
+      >
+        <InstantSearchSSRProvider>
+          <InstantSearch searchClient={client} indexName="indexName">
+            <ServerInsertedHTMLContext.Provider
+              value={(cb) => insertedHTML?.(cb())}
+            >
+              <InitializePromise />
+              <SearchBox />
+              <TriggerSearch />
+            </ServerInsertedHTMLContext.Provider>
+          </InstantSearch>
+        </InstantSearchSSRProvider>
+      </InstantSearchRSCContext.Provider>
+    )
+  );
+
+  await ref.current;
+
+  expect(ref.current!.status).toBe('fulfilled');
+  expect(insertedHTML).not.toHaveBeenCalled();
+});
+
+test('it resolves when search client returns invalid response', async () => {
+  const ref: { current: PromiseWithState<void> | null } = { current: null };
+  const insertedHTML = jest.fn();
+
+  const client = createSearchClient({
+    search: jest.fn().mockResolvedValue(null),
+  });
+
+  await act(() =>
+    render(
+      <InstantSearchRSCContext.Provider
+        value={{
+          waitForResultsRef: ref,
+          countRef: { current: 0 },
+          ignoreMultipleHooksWarning: false,
+        }}
+      >
+        <InstantSearchSSRProvider>
+          <InstantSearch searchClient={client} indexName="indexName">
+            <ServerInsertedHTMLContext.Provider
+              value={(cb) => insertedHTML?.(cb())}
+            >
+              <InitializePromise />
+              <SearchBox />
+              <TriggerSearch />
+            </ServerInsertedHTMLContext.Provider>
+          </InstantSearch>
+        </InstantSearchSSRProvider>
+      </InstantSearchRSCContext.Provider>
+    )
+  );
+
+  await ref.current;
+
+  expect(ref.current!.status).toBe('fulfilled');
+  expect(insertedHTML).not.toHaveBeenCalled();
+});
+
+test('it resolves when search client returns response without results property', async () => {
+  const ref: { current: PromiseWithState<void> | null } = { current: null };
+  const insertedHTML = jest.fn();
+
+  const client = createSearchClient({
+    search: jest.fn().mockResolvedValue({ invalid: 'response' }),
+  });
+
+  await act(() =>
+    render(
+      <InstantSearchRSCContext.Provider
+        value={{
+          waitForResultsRef: ref,
+          countRef: { current: 0 },
+          ignoreMultipleHooksWarning: false,
+        }}
+      >
+        <InstantSearchSSRProvider>
+          <InstantSearch searchClient={client} indexName="indexName">
+            <ServerInsertedHTMLContext.Provider
+              value={(cb) => insertedHTML?.(cb())}
+            >
+              <InitializePromise />
+              <SearchBox />
+              <TriggerSearch />
+            </ServerInsertedHTMLContext.Provider>
+          </InstantSearch>
+        </InstantSearchSSRProvider>
+      </InstantSearchRSCContext.Provider>
+    )
+  );
+
+  await ref.current;
+
+  expect(ref.current!.status).toBe('fulfilled');
+  expect(insertedHTML).not.toHaveBeenCalled();
+});
+
+test('it does not inject results when recommend client throws an error', async () => {
+  const ref: { current: PromiseWithState<void> | null } = { current: null };
+  const insertedHTML = jest.fn();
+
+  const client = createSearchClient({
+    getRecommendations: jest.fn().mockRejectedValue(new Error('Network error')),
+  });
+
+  await act(() =>
+    render(
+      <InstantSearchRSCContext.Provider
+        value={{
+          waitForResultsRef: ref,
+          countRef: { current: 0 },
+          ignoreMultipleHooksWarning: false,
+        }}
+      >
+        <InstantSearchSSRProvider>
+          <InstantSearch searchClient={client} indexName="indexName">
+            <ServerInsertedHTMLContext.Provider
+              value={(cb) => insertedHTML?.(cb())}
+            >
+              <InitializePromise />
+              <TrendingItems />
+              <TriggerSearch />
+            </ServerInsertedHTMLContext.Provider>
+          </InstantSearch>
+        </InstantSearchSSRProvider>
+      </InstantSearchRSCContext.Provider>
+    )
+  );
+
+  await ref.current;
+
+  expect(ref.current!.status).toBe('fulfilled');
+  expect(insertedHTML).not.toHaveBeenCalled();
+});
+
 afterAll(() => {
   jest.resetAllMocks();
 });

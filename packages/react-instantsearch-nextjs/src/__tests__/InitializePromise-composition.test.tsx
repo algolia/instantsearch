@@ -89,6 +89,86 @@ test('it waits for composition-based search', async () => {
   );
 });
 
+test('it resolves when composition search client throws an error', async () => {
+  const ref: { current: PromiseWithState<void> | null } = { current: null };
+  const insertedHTML = jest.fn();
+
+  const client = createCompositionClient({
+    search: jest.fn().mockRejectedValue(new Error('Network error')),
+  });
+
+  await act(() =>
+    render(
+      <InstantSearchRSCContext.Provider
+        value={{
+          waitForResultsRef: ref,
+          countRef: { current: 0 },
+          ignoreMultipleHooksWarning: false,
+        }}
+      >
+        <InstantSearchSSRProvider>
+          <InstantSearch searchClient={client} compositionID={compositionID}>
+            <ServerInsertedHTMLContext.Provider
+              value={(cb) => insertedHTML?.(cb())}
+            >
+              <InitializePromise />
+              <SearchBox />
+              <TriggerSearch />
+            </ServerInsertedHTMLContext.Provider>
+          </InstantSearch>
+        </InstantSearchSSRProvider>
+      </InstantSearchRSCContext.Provider>
+    )
+  );
+
+  await act(async () => {
+    await ref.current;
+  });
+
+  expect(ref.current!.status).toBe('fulfilled');
+  expect(insertedHTML).not.toHaveBeenCalled();
+});
+
+test('it resolves when composition search client returns invalid response', async () => {
+  const ref: { current: PromiseWithState<void> | null } = { current: null };
+  const insertedHTML = jest.fn();
+
+  const client = createCompositionClient({
+    search: jest.fn().mockResolvedValue(null),
+  });
+
+  await act(() =>
+    render(
+      <InstantSearchRSCContext.Provider
+        value={{
+          waitForResultsRef: ref,
+          countRef: { current: 0 },
+          ignoreMultipleHooksWarning: false,
+        }}
+      >
+        <InstantSearchSSRProvider>
+          <InstantSearch searchClient={client} compositionID={compositionID}>
+            <ServerInsertedHTMLContext.Provider
+              value={(cb) => insertedHTML?.(cb())}
+            >
+              <InitializePromise />
+              <SearchBox />
+              <TriggerSearch />
+            </ServerInsertedHTMLContext.Provider>
+          </InstantSearch>
+        </InstantSearchSSRProvider>
+      </InstantSearchRSCContext.Provider>
+    )
+  );
+
+  await act(async () => {
+    await ref.current;
+  });
+
+  expect(ref.current!.status).toBe('fulfilled');
+  expect(insertedHTML).not.toHaveBeenCalled();
+});
+
 afterAll(() => {
   jest.resetAllMocks();
 });
