@@ -5,6 +5,9 @@ import type { FilterSuggestionsWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 import type { SearchResponse } from 'instantsearch.js';
 
+// Minimum loading duration in the connector to avoid skeleton flash
+const MIN_LOADING_DURATION_MS = 300;
+
 export function createOptionsTests(
   setup: FilterSuggestionsWidgetSetup,
   { act }: Required<TestOptions>
@@ -94,8 +97,9 @@ export function createOptionsTests(
         },
       });
 
+      // Wait for minimum loading duration to complete
       await act(async () => {
-        await wait(10);
+        await wait(MIN_LOADING_DURATION_MS + 50);
       });
 
       expect(
@@ -227,8 +231,9 @@ export function createOptionsTests(
         },
       });
 
+      // Wait for minimum loading duration to complete
       await act(async () => {
-        await wait(10);
+        await wait(MIN_LOADING_DURATION_MS + 50);
       });
 
       const items = document.querySelectorAll('.ais-FilterSuggestions-item');
@@ -307,8 +312,9 @@ export function createOptionsTests(
         },
       });
 
+      // Wait for minimum loading duration to complete
       await act(async () => {
-        await wait(10);
+        await wait(MIN_LOADING_DURATION_MS + 50);
       });
 
       expect(transformItems).toHaveBeenCalled();
