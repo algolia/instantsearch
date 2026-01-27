@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.23.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.22.1...react-instantsearch@7.23.0) (2026-01-27)
+
+
+### Bug Fixes
+
+* **autocomplete:** item ids are shifted when there are deduped items ([#6862](https://github.com/algolia/instantsearch/issues/6862)) ([2b24d3b](https://github.com/algolia/instantsearch/commit/2b24d3b864549fca2a9d75f704e33095846ccbaa))
+
+
+### Features
+
+* add `FilterSuggestions` widget ([#6861](https://github.com/algolia/instantsearch/issues/6861)) ([3ff224f](https://github.com/algolia/instantsearch/commit/3ff224f0c0823c47ace52306ad810a98231a8f83))
+* **autocomplete:** add `transformItems` prop ([#6853](https://github.com/algolia/instantsearch/issues/6853)) ([664892a](https://github.com/algolia/instantsearch/commit/664892a51c290433530ccf6314305b3e9228e8c3))
+* **chat:** add default memory tools ([#6873](https://github.com/algolia/instantsearch/issues/6873)) ([36127f4](https://github.com/algolia/instantsearch/commit/36127f4105276ccda7d07bae3982627179316ba8))
+* **chat:** support prompt suggestions ([#6831](https://github.com/algolia/instantsearch/issues/6831)) ([aca8934](https://github.com/algolia/instantsearch/commit/aca8934163c047ca56db0dad679737f331efac29))
+
+
+
+
+
 ## [7.22.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.22.0...react-instantsearch@7.22.1) (2025-12-31)
 
 **Note:** Version bump only for package react-instantsearch
