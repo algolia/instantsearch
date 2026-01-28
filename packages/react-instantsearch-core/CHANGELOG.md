@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.23.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.22.1...react-instantsearch-core@7.23.0) (2026-01-27)
+
+
+### Features
+
+* add `FilterSuggestions` widget ([#6861](https://github.com/algolia/instantsearch/issues/6861)) ([3ff224f](https://github.com/algolia/instantsearch/commit/3ff224f0c0823c47ace52306ad810a98231a8f83))
+
+
+
+
+
 ## [7.22.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-core@7.22.0...react-instantsearch-core@7.22.1) (2025-12-31)
 
 **Note:** Version bump only for package react-instantsearch-core
