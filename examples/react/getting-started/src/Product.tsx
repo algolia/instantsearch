@@ -7,6 +7,7 @@ import {
   InstantSearch,
   RelatedProducts,
   Carousel,
+  Chat,
 } from 'react-instantsearch';
 
 import './App.css';
@@ -52,6 +53,10 @@ export function Product({ pid }: { pid: string }) {
             objectIDs={[pid]}
             limit={6}
             layoutComponent={Carousel}
+          />
+          <Chat
+            agentId="eedef238-5468-470d-bc37-f99fa741bd25"
+            itemComponent={ItemComponent}
           />
         </InstantSearch>
       </div>

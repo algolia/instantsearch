@@ -18,28 +18,27 @@ export function updateStateFromSearchToolInput(
       return { attribute, value };
     });
 
-    if (
-      attributes.some(
-        ({ attribute }) =>
-          !helper.state.isConjunctiveFacet(attribute) &&
-          !helper.state.isHierarchicalFacet(attribute) &&
-          !helper.state.isDisjunctiveFacet(attribute)
-      )
-    ) {
-      return false;
-    }
-
     attributes.forEach(({ attribute }) => {
       helper.clearRefinements(attribute);
     });
 
     attributes.forEach(({ attribute, value }) => {
-      const attr =
-        helper.state.hierarchicalFacets.find(
-          (facet) => facet.name === attribute
-        )?.name || attribute;
+      if (
+        !helper.state.isConjunctiveFacet(attribute) &&
+        !helper.state.isHierarchicalFacet(attribute) &&
+        !helper.state.isDisjunctiveFacet(attribute)
+      ) {
+        const s = helper.state.addDisjunctiveFacet(attribute);
+        s.addDisjunctiveFacetRefinement(attribute, value);
+        helper.setState(s);
+      } else {
+        const attr =
+          helper.state.hierarchicalFacets.find(
+            (facet) => facet.name === attribute
+          )?.name || attribute;
 
-      helper.toggleFacetRefinement(attr, value);
+        helper.toggleFacetRefinement(attr, value);
+      }
     });
   }
 

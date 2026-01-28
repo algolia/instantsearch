@@ -12,6 +12,7 @@ import {
   TrendingItems,
   Carousel,
   Chat,
+  CurrentRefinements,
 } from 'react-instantsearch';
 
 import { Panel } from './Panel';
@@ -52,9 +53,13 @@ export function App() {
               <Panel header="brand">
                 <RefinementList attribute="brand" />
               </Panel>
+              <Panel header="categories">
+                <RefinementList attribute="categories" />
+              </Panel>
             </div>
 
             <div className="search-panel__results">
+              <CurrentRefinements />
               <SearchBox placeholder="" className="searchbox" />
               <Hits hitComponent={HitComponent} />
 
@@ -72,7 +77,7 @@ export function App() {
           </div>
 
           <Chat
-            agentId="7c2f6816-bfdb-46e9-a51f-9cb8e5fc9628"
+            agentId="eedef238-5468-470d-bc37-f99fa741bd25"
             itemComponent={ItemComponent}
           />
         </InstantSearch>
