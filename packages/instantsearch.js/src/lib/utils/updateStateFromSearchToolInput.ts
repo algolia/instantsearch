@@ -34,15 +34,12 @@ export function updateStateFromSearchToolInput(
     });
 
     attributes.forEach(({ attribute, value }) => {
-      const hierarchicalFacet = helper.state.hierarchicalFacets.find(
-        (facet) => facet.name === attribute
-      );
+      const attr =
+        helper.state.hierarchicalFacets.find(
+          (facet) => facet.name === attribute
+        )?.name || attribute;
 
-      if (hierarchicalFacet) {
-        helper.toggleFacetRefinement(hierarchicalFacet.name, value);
-      } else {
-        helper.toggleFacetRefinement(attribute, value);
-      }
+      helper.toggleFacetRefinement(attr, value);
     });
   }
 
