@@ -28,10 +28,7 @@ export type Suggestion = {
 export type FilterSuggestionsItemComponentProps = {
   suggestion: Suggestion;
   classNames: Partial<
-    Pick<
-      FilterSuggestionsClassNames,
-      'item' | 'itemRefined' | 'button' | 'label' | 'count'
-    >
+    Pick<FilterSuggestionsClassNames, 'item' | 'button' | 'label' | 'count'>
   >;
   refine: () => void;
 };
@@ -115,10 +112,6 @@ export type FilterSuggestionsClassNames = {
    * Class names to apply to each item element
    */
   item: string | string[];
-  /**
-   * Class names to apply to the item element when refined
-   */
-  itemRefined: string | string[];
   /**
    * Class names to apply to the button element
    */
@@ -231,7 +224,6 @@ export function createFilterSuggestionsComponent({ createElement }: Renderer) {
 
     const itemClassNames: FilterSuggestionsItemComponentProps['classNames'] = {
       item: classNames.item,
-      itemRefined: classNames.itemRefined,
       button: classNames.button,
       label: classNames.label,
       count: classNames.count,
