@@ -55,7 +55,7 @@ export function createAutocompleteIndexComponent({ createElement }: Renderer) {
 
     return (
       <div className={cx('ais-AutocompleteIndex', classNames.root)}>
-        {HeaderComponent && (
+        {HeaderComponent && items.length > 0 && (
           <div className={cx('ais-AutocompleteIndexHeader', classNames.header)}>
             <HeaderComponent items={items} />
           </div>
