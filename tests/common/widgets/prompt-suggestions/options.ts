@@ -13,16 +13,12 @@ const createMockFetch = (suggestions: string[] = []) => {
     ok: true,
     json: () =>
       Promise.resolve({
-        messages: [
+        role: 'assistant',
+        parts: [
+          { type: 'text', text: 'Hello' },
           {
-            role: 'assistant',
-            parts: [
-              { type: 'text', text: 'Hello' },
-              {
-                type: 'data-suggestions',
-                data: { suggestions },
-              },
-            ],
+            type: 'data-suggestions',
+            data: { suggestions },
           },
         ],
       }),
@@ -98,7 +94,12 @@ export function createOptionsTests(
             messages: [
               {
                 role: 'user',
-                content: JSON.stringify({ objectID: '123', title: 'Hello' }),
+                parts: [
+                  {
+                    type: 'text',
+                    text: JSON.stringify({ objectID: '123', title: 'Hello' }),
+                  },
+                ],
               },
             ],
           }),
@@ -148,7 +149,7 @@ export function createOptionsTests(
 
       await waitFor(() => {
         expect(sendMessageSpy).toHaveBeenCalledWith({
-          text: 'Suggestion 1',
+          text: '<!--ais-context:{"objectID":"123","title":"Hello"}-->Suggestion 1',
         });
       });
     });
