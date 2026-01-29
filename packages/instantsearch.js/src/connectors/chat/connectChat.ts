@@ -174,8 +174,8 @@ function updateStateFromSearchToolInput(
         !helper.state.isDisjunctiveFacet(attribute)
       ) {
         const s = helper.state.addDisjunctiveFacet(attribute);
-        s.addDisjunctiveFacetRefinement(attribute, value);
         helper.setState(s);
+        helper.toggleFacetRefinement(attribute, value);
       } else {
         const attr =
           helper.state.hierarchicalFacets.find(
