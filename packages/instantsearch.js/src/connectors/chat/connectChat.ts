@@ -11,9 +11,9 @@ import {
   getAlgoliaAgent,
   getAppIdAndApiKey,
   noop,
-  updateStateFromSearchToolInput,
   warning,
 } from '../../lib/utils';
+import { flat } from '../../lib/utils/flat';
 
 import type {
   AbstractChat,
@@ -32,6 +32,7 @@ import type {
   WidgetRenderState,
   IndexRenderState,
 } from '../../types';
+import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
 import type {
   AddToolResultWithOutput,
   UserClientSideTool,
@@ -150,6 +151,48 @@ export type ChatConnector<TUiMessage extends UIMessage = UIMessage> = Connector<
   ChatWidgetDescription<TUiMessage>,
   ChatConnectorParams<TUiMessage>
 >;
+
+function updateStateFromSearchToolInput(
+  params: ApplyFiltersParams,
+  helper: AlgoliaSearchHelper
+) {
+  if (params.facetFilters) {
+    const attributes = flat(params.facetFilters).map((filter) => {
+      const [attribute, value] = filter.split(':');
+
+      return { attribute, value };
+    });
+
+    attributes.forEach(({ attribute }) => {
+      helper.clearRefinements(attribute);
+    });
+
+    attributes.forEach(({ attribute, value }) => {
+      if (
+        !helper.state.isConjunctiveFacet(attribute) &&
+        !helper.state.isHierarchicalFacet(attribute) &&
+        !helper.state.isDisjunctiveFacet(attribute)
+      ) {
+        const s = helper.state.addDisjunctiveFacet(attribute);
+        s.addDisjunctiveFacetRefinement(attribute, value);
+        helper.setState(s);
+      } else {
+        const attr =
+          helper.state.hierarchicalFacets.find(
+            (facet) => facet.name === attribute
+          )?.name || attribute;
+
+        helper.toggleFacetRefinement(attr, value);
+      }
+    });
+  }
+
+  if (params.query) {
+    helper.setQuery(params.query);
+  }
+
+  helper.search();
+}
 
 export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
   renderFn: Renderer<ChatRenderState, TWidgetParams & ChatConnectorParams>,
