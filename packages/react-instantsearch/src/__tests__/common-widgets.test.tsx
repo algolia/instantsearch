@@ -401,6 +401,7 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
       <InstantSearch {...instantSearchOptions}>
         {renderRefinements && (
           <>
+            <SearchBox />
             <RefinementList attribute="brand" />
             <RefinementList attribute="category" />
             <HierarchicalMenu
