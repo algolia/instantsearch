@@ -174,3 +174,221 @@ em {
 .ais-Autocomplete {
   margin-bottom: 1rem;
 }
+
+/* Container styles */
+
+.container-wrapper {
+  position: relative;
+}
+
+.container-filters {
+  flex: 1;
+}
+
+.container-filters .container-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.container-filters .container-header h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.container-filters .container-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.container-results {
+  flex: 3;
+}
+
+.container-filters-footer {
+  display: none;
+}
+
+.filters-button {
+  display: none;
+}
+
+/* Desktop styles */
+
+@media (min-width: 900px) {
+  [data-layout='mobile'] {
+    display: none;
+  }
+}
+
+/* Mobile styles */
+
+@media (max-width: 899px) {
+  [data-layout='desktop'] {
+    display: none;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .header-title::after {
+    display: none;
+  }
+
+  .search-panel {
+    flex-direction: column;
+  }
+
+  .search-panel__filters {
+    display: none;
+  }
+
+  /* Filters overlay */
+
+  .container-filters {
+    background: #fff;
+    border-radius: 16px 16px 0 0;
+    left: 0;
+    max-width: initial;
+    padding: 0 0 5rem 0;
+    position: fixed;
+    top: 0;
+    transform: translateY(100%);
+    transition: transform 300ms cubic-bezier(0.465, 0.183, 0.153, 0.946),
+      visibility 0s 300ms;
+    visibility: hidden;
+    width: 100%;
+    will-change: transform;
+    z-index: 1000;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  .container-filters .container-header,
+  .container-filters .container-body {
+    padding: 1.5rem;
+  }
+
+  .container-filters .container-header {
+    border-bottom: 1px solid #ebecf3;
+    position: sticky;
+    top: 0;
+    background: #fff;
+    z-index: 1;
+  }
+
+  .filtering .container-filters {
+    transform: translateY(4rem);
+    transition: transform 300ms cubic-bezier(0.465, 0.183, 0.153, 0.946);
+    visibility: visible;
+  }
+
+  /* Filters footer */
+
+  .filtering .container-filters-footer {
+    background-color: #fff;
+    border-top: 1px solid #ebecf3;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1001;
+    box-sizing: border-box;
+  }
+
+  .container-filters-footer-button-wrapper {
+    flex: 1;
+  }
+
+  .container-filters-footer .ais-ClearRefinements-button,
+  .container-filters-footer .button {
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid #d6d6e7;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 600;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 1rem;
+    text-align: center;
+    width: 100%;
+  }
+
+  .container-filters-footer .button-primary {
+    background-color: rgb(130, 50, 220);
+    border-color: rgb(130, 50, 220);
+    color: #fff;
+  }
+
+  /* Filters button */
+
+  .filters-button {
+    align-items: center;
+    background-color: rgb(130, 50, 220);
+    border: none;
+    border-radius: 8px;
+    bottom: 1.5rem;
+    box-shadow: 0 4px 16px rgba(130, 50, 220, 0.4);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 600;
+    justify-content: center;
+    left: 50%;
+    min-height: 44px;
+    min-width: 120px;
+    padding: 0 1.25rem;
+    position: fixed;
+    transform: translateX(-50%);
+    z-index: 100;
+  }
+
+  .filters-button svg {
+    height: 14px;
+    margin-right: 8px;
+    width: 16px;
+  }
+
+  .filtering .filters-button {
+    display: none;
+  }
+
+  /* Overlay backdrop */
+
+  .container-filters-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+  }
+
+  .filtering .container-filters-overlay {
+    display: block;
+  }
+
+  /* Hide chat button when filters are open */
+
+  .filtering .ais-Chat {
+    display: none;
+  }
+}
