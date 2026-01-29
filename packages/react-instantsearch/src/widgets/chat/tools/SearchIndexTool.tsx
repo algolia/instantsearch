@@ -78,7 +78,6 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
           hitsPerPage={items.length}
           setIndexUiState={setIndexUiState}
           indexUiState={indexUiState}
-          getSearchPageURL={getSearchPageURL}
           onClose={onClose}
           applyFilters={applyFilters}
           {...props}
@@ -113,6 +112,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
     nbHits,
     input,
     hitsPerPage,
+    indexUiState,
     applyFilters,
     onClose,
   }: {
@@ -126,7 +126,6 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
     setIndexUiState: IndexWidget['setIndexUiState'];
     indexUiState: IndexUiState;
     applyFilters: ClientSideToolComponentProps['applyFilters'];
-    getSearchPageURL?: (nextUiState: IndexUiState) => string;
     onClose: () => void;
   }) {
     if ((hitsPerPage ?? 0) < 1) {
@@ -143,27 +142,33 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
             </div>
           )}
           {showViewAll && (
-            <>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => {
-                  if (!input || !applyFilters) return;
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                if (!input || !applyFilters) return;
+                const success = applyFilters({
+                  query: input.query,
+                  facetFilters: input.facet_filters,
+                });
 
-                  const success = applyFilters({
-                    query: input.query,
-                    facetFilters: input.facet_filters,
-                  });
-                  if (success) {
-                    onClose();
-                  }
-                }}
-                className="ais-ChatToolSearchIndexCarouselHeaderViewAll"
-              >
-                View all
-                <ArrowRightIcon createElement={createElement as Pragma} />
-              </Button>
-            </>
+                if (success) {
+                  onClose();
+                }
+
+                if (
+                  getSearchPageURL &&
+                  new URL(getSearchPageURL(indexUiState)).pathname ===
+                    window.location.pathname
+                ) {
+                  window.location.href = getSearchPageURL(indexUiState);
+                }
+              }}
+              className="ais-ChatToolSearchIndexCarouselHeaderViewAll"
+            >
+              View all
+              <ArrowRightIcon createElement={createElement as Pragma} />
+            </Button>
           )}
         </div>
 
