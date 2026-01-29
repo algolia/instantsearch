@@ -7,10 +7,6 @@ export function updateStateFromSearchToolInput(
   params: ApplyFiltersParams,
   helper: AlgoliaSearchHelper
 ) {
-  if (params.query) {
-    helper.setQuery(params.query);
-  }
-
   if (params.facetFilters) {
     const attributes = flat(params.facetFilters).map((filter) => {
       const [attribute, value] = filter.split(':');
@@ -42,7 +38,9 @@ export function updateStateFromSearchToolInput(
     });
   }
 
-  helper.search();
+  if (params.query) {
+    helper.setQuery(params.query);
+  }
 
-  return true;
+  helper.search();
 }

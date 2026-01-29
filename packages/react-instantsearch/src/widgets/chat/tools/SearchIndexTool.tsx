@@ -147,22 +147,20 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
               size="sm"
               onClick={() => {
                 if (!input || !applyFilters) return;
-                const success = applyFilters({
+                applyFilters({
                   query: input.query,
                   facetFilters: input.facet_filters,
                 });
 
-                if (success) {
-                  onClose();
-                }
-
                 if (
                   getSearchPageURL &&
-                  new URL(getSearchPageURL(indexUiState)).pathname ===
+                  new URL(getSearchPageURL(indexUiState)).pathname !==
                     window.location.pathname
                 ) {
                   window.location.href = getSearchPageURL(indexUiState);
                 }
+
+                onClose();
               }}
               className="ais-ChatToolSearchIndexCarouselHeaderViewAll"
             >

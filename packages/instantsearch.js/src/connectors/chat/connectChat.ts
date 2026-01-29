@@ -441,7 +441,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           });
         }
 
-        function applyFilters(params: ApplyFiltersParams): boolean {
+        function applyFilters(params: ApplyFiltersParams) {
           return updateStateFromSearchToolInput(params, helper);
         }
 

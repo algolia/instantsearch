@@ -35,7 +35,7 @@ export type ClientSideToolComponentProps = {
   setIndexUiState: (state: object) => void;
   onClose: () => void;
   addToolResult: AddToolResultWithOutput;
-  applyFilters: (params: ApplyFiltersParams) => boolean;
+  applyFilters: (params: ApplyFiltersParams) => void;
 };
 
 export type ClientSideToolComponent = (
@@ -52,7 +52,7 @@ export type ClientSideTool = {
       addToolResult: AddToolResultWithOutput;
     }
   ) => void;
-  applyFilters: (params: ApplyFiltersParams) => boolean;
+  applyFilters: (params: ApplyFiltersParams) => void;
 };
 export type ClientSideTools = Record<string, ClientSideTool>;
 
