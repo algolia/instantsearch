@@ -91,7 +91,6 @@ function createCarouselTool<
   function SearchLayoutComponent({
     message,
     indexUiState,
-    setIndexUiState,
     applyFilters,
     onClose,
   }: ClientSideToolComponentProps) {
@@ -128,9 +127,7 @@ function createCarouselTool<
           nbHits={output?.nbHits}
           input={input}
           hitsPerPage={items.length}
-          setIndexUiState={setIndexUiState}
           indexUiState={indexUiState}
-          getSearchPageURL={getSearchPageURL}
           applyFilters={applyFilters}
           onClose={onClose}
           {...props}
@@ -141,7 +138,6 @@ function createCarouselTool<
       input,
       output?.nbHits,
       applyFilters,
-      setIndexUiState,
       indexUiState,
       onClose,
     ]);
@@ -175,6 +171,7 @@ function createCarouselTool<
     nbHits,
     input,
     hitsPerPage,
+    indexUiState,
     applyFilters,
     onClose,
   }: {
@@ -185,11 +182,9 @@ function createCarouselTool<
     nbHits?: number;
     input?: SearchToolInput;
     hitsPerPage?: number;
-    setIndexUiState: IndexWidget['setIndexUiState'];
-    applyFilters?: ClientSideToolComponentProps['applyFilters'];
     indexUiState: IndexUiState;
+    applyFilters?: ClientSideToolComponentProps['applyFilters'];
     onClose: () => void;
-    getSearchPageURL?: (nextUiState: IndexUiState) => string;
   }) {
     if ((hitsPerPage ?? 0) < 1) {
       return null;
@@ -210,14 +205,20 @@ function createCarouselTool<
               size="sm"
               onClick={() => {
                 if (!input || !applyFilters) return;
-
-                const success = applyFilters({
+                applyFilters({
                   query: input.query,
                   facetFilters: input.facet_filters,
                 });
-                if (success) {
-                  onClose();
+
+                if (
+                  getSearchPageURL &&
+                  new URL(getSearchPageURL(indexUiState)).pathname !==
+                    window.location.pathname
+                ) {
+                  window.location.href = getSearchPageURL(indexUiState);
                 }
+
+                onClose();
               }}
               className="ais-ChatToolSearchIndexCarouselHeaderViewAll"
             >

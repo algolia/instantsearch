@@ -15,7 +15,7 @@ import type {
   RecordWithObjectID,
   UserClientSideTool,
 } from 'instantsearch-ui-components';
-import type { IndexUiState, IndexWidget } from 'instantsearch.js';
+import type { IndexUiState } from 'instantsearch.js';
 import type { ComponentProps } from 'react';
 
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
@@ -38,7 +38,6 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
   function SearchLayoutComponent({
     message,
     indexUiState,
-    setIndexUiState,
     applyFilters,
     onClose,
   }: ClientSideToolComponentProps) {
@@ -76,7 +75,6 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
           nbHits={output?.nbHits}
           input={input}
           hitsPerPage={items.length}
-          setIndexUiState={setIndexUiState}
           indexUiState={indexUiState}
           onClose={onClose}
           applyFilters={applyFilters}
@@ -88,7 +86,6 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
       input,
       output?.nbHits,
       applyFilters,
-      setIndexUiState,
       onClose,
       indexUiState,
     ]);
@@ -123,7 +120,6 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
     nbHits?: number;
     input?: SearchToolInput;
     hitsPerPage?: number;
-    setIndexUiState: IndexWidget['setIndexUiState'];
     indexUiState: IndexUiState;
     applyFilters: ClientSideToolComponentProps['applyFilters'];
     onClose: () => void;
