@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ESNEXT",
     "module": "es2020",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "noEmit": true,
     "strict": true,
     "jsx": "react",

@@ -21705,10 +21705,10 @@ markdown-to-jsx@^6.9.1, markdown-to-jsx@^6.9.3:
     prop-types "^15.6.2"
     unquote "^1.1.0"
 
-markdown-to-jsx@^7.7.15:
-  version "7.7.15"
-  resolved "https://registry.yarnpkg.com/markdown-to-jsx/-/markdown-to-jsx-7.7.15.tgz#7dad08e2b2cf35460a1c157f5d3e7bc875bcb511"
-  integrity sha512-U5dw5oRajrPTE2oJQWAbLK8RgbCDJ264AjW3fGABq+/rZjQ0E/WGVCLKAHvpKHQFUwoWoK8ZZWVPNLR/biYMhg==
+markdown-to-jsx@^9.1.2:
+  version "9.1.2"
+  resolved "https://registry.yarnpkg.com/markdown-to-jsx/-/markdown-to-jsx-9.1.2.tgz#8a0ee7103ece66037d74c9316762f2527fa5870c"
+  integrity sha512-bHBappSlwhloYlee+elyhy8A1yPjzUqTlphFUkG9khIdlJuUSUnPk2s2MkaUN5bfDqhOZEa3gSSjMvb4HahgfA==
 
 marked@^0.7.0:
   version "0.7.0"
