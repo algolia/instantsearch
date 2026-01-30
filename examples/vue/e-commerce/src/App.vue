@@ -535,9 +535,13 @@ export default {
   methods: {
     formatNumber,
     toValue(value, range) {
+      const minVal = typeof value.min === 'number' ? value.min : range.min;
+      const maxVal = typeof value.max === 'number' ? value.max : range.max;
+      
+      // Clamp values to the range limits to prevent overflow
       return [
-        typeof value.min === 'number' ? value.min : range.min,
-        typeof value.max === 'number' ? value.max : range.max,
+        Math.max(range.min, Math.min(range.max, minVal)),
+        Math.max(range.min, Math.min(range.max, maxVal)),
       ];
     },
     openFilters() {
