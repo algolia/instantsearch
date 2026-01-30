@@ -1,3 +1,5 @@
+import { TextDecoder, TextEncoder } from 'util';
+
 import JSDOMEnv from 'jest-environment-jsdom';
 
 import type { Config } from '@jest/types';
@@ -13,6 +15,9 @@ export default class Fixed extends JSDOMEnv {
     super(config, context);
 
     this.global.TransformStream = TransformStream;
+    this.global.TextEncoder = TextEncoder;
+    this.global.TextDecoder = TextDecoder as typeof global.TextDecoder;
+    this.global.ReadableStream = ReadableStream;
   }
 
   async setup() {

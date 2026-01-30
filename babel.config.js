@@ -87,6 +87,8 @@ module.exports = (api) => {
             'Array.prototype.find',
             'String.prototype.startsWith',
             'Promise.prototype.finally',
+            'Array.prototype.entries',
+            'Array.prototype.findIndex',
 
             // false positive (babel doesn't know types)
             // this is actually only called on arrays

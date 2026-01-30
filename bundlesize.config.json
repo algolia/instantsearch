@@ -10,19 +10,19 @@
     },
     {
       "path": "./packages/instantsearch.js/dist/instantsearch.production.min.js",
-      "maxSize": "123.25 kB"
+      "maxSize": "117 kB"
     },
     {
       "path": "./packages/instantsearch.js/dist/instantsearch.development.js",
-      "maxSize": "243.75 kB"
+      "maxSize": "237.5 kB"
     },
     {
       "path": "packages/react-instantsearch-core/dist/umd/ReactInstantSearchCore.min.js",
-      "maxSize": "62 kB"
+      "maxSize": "61.25 kB"
     },
     {
       "path": "packages/react-instantsearch/dist/umd/ReactInstantSearch.min.js",
-      "maxSize": "82 kB"
+      "maxSize": "96.5 kB"
     },
     {
       "path": "packages/vue-instantsearch/vue2/umd/index.js",

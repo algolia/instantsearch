@@ -1,8 +1,7 @@
 import {
   DefaultChatTransport,
   lastAssistantMessageIsCompleteWithToolCalls,
-} from 'ai';
-
+} from '../../lib/ai-lite';
 import { Chat } from '../../lib/chat';
 import {
   checkRendering,
