@@ -14,7 +14,6 @@ describe('UMD bundle', () => {
       name: 'instantsearch.js',
       bundle: 'dist/instantsearch.production.min.js',
       globalName: 'instantsearch',
-      unavailable: ['connectors.connectChat', 'widgets.chat'],
     },
     {
       name: 'react-instantsearch-core',
