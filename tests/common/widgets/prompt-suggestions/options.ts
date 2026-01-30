@@ -30,11 +30,9 @@ const createChatInstance = (messages: any = []) => {
     // @ts-ignore - we need to mock it partially
     transport: {
       sendMessages: jest.fn().mockResolvedValue({
-        pipeThrough: () => ({
-          getReader: () => ({
-            releaseLock: () => {},
-            read: jest.fn().mockResolvedValue({ done: true }),
-          }),
+        getReader: () => ({
+          releaseLock: () => {},
+          read: jest.fn().mockResolvedValue({ done: true }),
         }),
       }),
     },

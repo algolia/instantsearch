@@ -26,6 +26,7 @@ export { connectDynamicWidgets };
 
 export { default as connectClearRefinements } from './clear-refinements/connectClearRefinements';
 export { default as connectCurrentRefinements } from './current-refinements/connectCurrentRefinements';
+export { default as connectFilterSuggestions } from './filter-suggestions/connectFilterSuggestions';
 export { default as connectHierarchicalMenu } from './hierarchical-menu/connectHierarchicalMenu';
 export { default as connectHits } from './hits/connectHits';
 export { default as connectHitsWithInsights } from './hits/connectHitsWithInsights';
@@ -64,5 +65,3 @@ Please use InstantSearch.js with a packaging system:
 https://www.algolia.com/doc/guides/building-search-ui/installation/js/#with-a-packaging-system`
   );
 };
-export { default as connectFilterSuggestions } from './filter-suggestions/connectFilterSuggestions';
-export { default as connectPromptSuggestions } from './prompt-suggestions/connectPromptSuggestions';

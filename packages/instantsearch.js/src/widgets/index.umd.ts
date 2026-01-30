@@ -29,6 +29,7 @@ export { default as breadcrumb } from './breadcrumb/breadcrumb';
 export { default as clearRefinements } from './clear-refinements/clear-refinements';
 export { default as configure } from './configure/configure';
 export { default as currentRefinements } from './current-refinements/current-refinements';
+export { default as filterSuggestions } from './filter-suggestions/filter-suggestions';
 export { default as geoSearch } from './geo-search/geo-search';
 export { default as hierarchicalMenu } from './hierarchical-menu/hierarchical-menu';
 export { default as hits } from './hits/hits';
@@ -69,5 +70,3 @@ Please use InstantSearch.js with a packaging system:
 https://www.algolia.com/doc/guides/building-search-ui/installation/js/#with-a-packaging-system`
   );
 };
-export { default as filterSuggestions } from './filter-suggestions/filter-suggestions';
-export { default as promptSuggestions } from './prompt-suggestions/prompt-suggestions';

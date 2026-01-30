@@ -4,7 +4,7 @@ import { cx } from '../lib';
 import { createChatPromptSuggestionsComponent } from './chat/ChatPromptSuggestions';
 import { SparklesIcon } from './chat/icons';
 
-import type { Renderer } from '../types';
+import type { ComponentProps, Renderer } from '../types';
 import type { ChatPromptSuggestionsClassNames } from './chat/ChatPromptSuggestions';
 
 export type PromptSuggestionsClassNames = {
@@ -26,7 +26,7 @@ export type PromptSuggestionsTranslations = {
 
 export type PromptSuggestionsStatus = 'idle' | 'loading' | 'ready' | 'error';
 
-export type PromptSuggestionsProps = {
+export type PromptSuggestionsProps = ComponentProps<'div'> & {
   /**
    * List of prompt suggestions.
    */
@@ -70,6 +70,7 @@ export function createPromptSuggestionsComponent({
       translations = {},
       classNames = {},
       titleIconComponent: TitleIconComponent,
+      ...props
     } = userProps;
 
     const { title = 'Ask a question about this product:' } = translations;
@@ -82,7 +83,7 @@ export function createPromptSuggestionsComponent({
     const isLoading = status === 'loading';
 
     return (
-      <div className={cx('ais-PromptSuggestions', classNames.root)}>
+      <div className={cx('ais-PromptSuggestions', classNames.root)} {...props}>
         {title && (
           <div
             className={cx('ais-PromptSuggestions-header', classNames.header)}

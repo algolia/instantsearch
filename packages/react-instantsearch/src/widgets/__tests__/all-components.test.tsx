@@ -10,6 +10,19 @@ import { getAllWidgets } from './__utils__/all-widgets';
 describe('rendering', () => {
   const widgets = getAllWidgets();
 
+  let originalFetch: typeof global.fetch;
+
+  beforeAll(() => {
+    originalFetch = global.fetch;
+    global.fetch = jest
+      .fn()
+      .mockResolvedValue({ ok: true, json: () => Promise.resolve({}) });
+  });
+
+  afterAll(() => {
+    global.fetch = originalFetch;
+  });
+
   describe('className', () => {
     test.each(widgets)('sets root class name $name', ({ Component }) => {
       const { container } = render(

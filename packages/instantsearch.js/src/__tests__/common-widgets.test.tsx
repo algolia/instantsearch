@@ -660,10 +660,10 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
           container: document.body.appendChild(document.createElement('div')),
           ...widgetParams,
         }),
+        // @ts-ignore needed to have Chat working inside PromptSuggestions tests
         chat({
           container: document.body.appendChild(document.createElement('div')),
           agentId: widgetParams.agentId,
-          // @ts-ignore For some reason there are problems with types going from this library to the test ones back here
           chat: widgetParams.chat,
         }),
       ])
