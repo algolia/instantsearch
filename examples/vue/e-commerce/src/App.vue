@@ -537,7 +537,7 @@ export default {
     toValue(value, range) {
       const minVal = typeof value.min === 'number' ? value.min : range.min;
       const maxVal = typeof value.max === 'number' ? value.max : range.max;
-      
+
       // Clamp values to the range limits to prevent overflow
       return [
         Math.max(range.min, Math.min(range.max, minVal)),

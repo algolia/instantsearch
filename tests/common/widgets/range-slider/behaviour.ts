@@ -66,17 +66,17 @@ export function createBehaviourTests(
 
       // Check that the slider handles are clamped to the range
       const handles = document.querySelectorAll('.rheostat-handle');
-      
+
       expect(handles).toHaveLength(2);
-      
+
       // The max handle should not overflow beyond the slider bounds
       const maxHandle = handles[1] as HTMLElement;
       const slider = document.querySelector('.rheostat');
-      
+
       if (slider) {
         const sliderRect = slider.getBoundingClientRect();
         const handleRect = maxHandle.getBoundingClientRect();
-        
+
         // The handle should be within or at the edge of the slider
         expect(handleRect.right).toBeLessThanOrEqual(sliderRect.right + 1);
       }
