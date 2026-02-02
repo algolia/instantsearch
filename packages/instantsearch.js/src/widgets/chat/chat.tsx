@@ -43,6 +43,7 @@ import type {
   IndexUiState,
   IndexWidget,
 } from '../../types';
+import type { SearchParameters } from 'algoliasearch-helper';
 import type {
   ChatClassNames,
   ChatHeaderProps,
@@ -82,7 +83,7 @@ function createCarouselTool<
 >(
   showViewAll: boolean,
   templates: ChatTemplates<THit>,
-  getSearchPageURL?: (nextUiState: IndexUiState) => string
+  getSearchPageURL?: (params: SearchParameters) => string
 ): UserClientSideToolWithTemplate {
   const Button = createButtonComponent({
     createElement: h,
@@ -90,7 +91,6 @@ function createCarouselTool<
 
   function SearchLayoutComponent({
     message,
-    indexUiState,
     applyFilters,
     onClose,
   }: ClientSideToolComponentProps) {
@@ -127,20 +127,12 @@ function createCarouselTool<
           nbHits={output?.nbHits}
           input={input}
           hitsPerPage={items.length}
-          indexUiState={indexUiState}
           applyFilters={applyFilters}
           onClose={onClose}
           {...props}
         />
       );
-    }, [
-      items.length,
-      input,
-      output?.nbHits,
-      applyFilters,
-      indexUiState,
-      onClose,
-    ]);
+    }, [items.length, input, output?.nbHits, applyFilters, onClose]);
 
     return carousel({
       showNavigation: false,
@@ -171,7 +163,6 @@ function createCarouselTool<
     nbHits,
     input,
     hitsPerPage,
-    indexUiState,
     applyFilters,
     onClose,
   }: {
@@ -182,7 +173,6 @@ function createCarouselTool<
     nbHits?: number;
     input?: SearchToolInput;
     hitsPerPage?: number;
-    indexUiState: IndexUiState;
     applyFilters?: ClientSideToolComponentProps['applyFilters'];
     onClose: () => void;
   }) {
@@ -205,17 +195,17 @@ function createCarouselTool<
               size="sm"
               onClick={() => {
                 if (!input || !applyFilters) return;
-                applyFilters({
+                const params = applyFilters({
                   query: input.query,
                   facetFilters: input.facet_filters,
                 });
 
                 if (
                   getSearchPageURL &&
-                  new URL(getSearchPageURL(indexUiState)).pathname !==
+                  new URL(getSearchPageURL(params)).pathname !==
                     window.location.pathname
                 ) {
-                  window.location.href = getSearchPageURL(indexUiState);
+                  window.location.href = getSearchPageURL(params);
                 }
 
                 onClose();

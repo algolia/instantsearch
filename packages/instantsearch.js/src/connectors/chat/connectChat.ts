@@ -191,6 +191,8 @@ function updateStateFromSearchToolInput(
   }
 
   helper.search();
+
+  return helper.state;
 }
 
 export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(

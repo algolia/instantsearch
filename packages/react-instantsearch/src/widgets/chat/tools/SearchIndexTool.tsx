@@ -8,6 +8,7 @@ import React, { createElement } from 'react';
 
 import { Carousel } from '../../../components';
 
+import type { SearchParameters } from 'algoliasearch-helper';
 import type {
   ClientSideToolComponentProps,
   Pragma,
@@ -15,7 +16,6 @@ import type {
   RecordWithObjectID,
   UserClientSideTool,
 } from 'instantsearch-ui-components';
-import type { IndexUiState } from 'instantsearch.js';
 import type { ComponentProps } from 'react';
 
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
@@ -29,7 +29,7 @@ type SearchToolInput = {
 function createCarouselTool<TObject extends RecordWithObjectID>(
   showViewAll: boolean,
   itemComponent?: ItemComponent<TObject>,
-  getSearchPageURL?: (nextUiState: IndexUiState) => string
+  getSearchPageURL?: (params: SearchParameters) => string
 ): UserClientSideTool {
   const Button = createButtonComponent({
     createElement: createElement as Pragma,
@@ -37,7 +37,6 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
 
   function SearchLayoutComponent({
     message,
-    indexUiState,
     applyFilters,
     onClose,
   }: ClientSideToolComponentProps) {
@@ -75,20 +74,12 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
           nbHits={output?.nbHits}
           input={input}
           hitsPerPage={items.length}
-          indexUiState={indexUiState}
           onClose={onClose}
           applyFilters={applyFilters}
           {...props}
         />
       );
-    }, [
-      items.length,
-      input,
-      output?.nbHits,
-      applyFilters,
-      onClose,
-      indexUiState,
-    ]);
+    }, [items.length, input, output?.nbHits, applyFilters, onClose]);
 
     return (
       <Carousel
@@ -109,7 +100,6 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
     nbHits,
     input,
     hitsPerPage,
-    indexUiState,
     applyFilters,
     onClose,
   }: {
@@ -120,7 +110,6 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
     nbHits?: number;
     input?: SearchToolInput;
     hitsPerPage?: number;
-    indexUiState: IndexUiState;
     applyFilters: ClientSideToolComponentProps['applyFilters'];
     onClose: () => void;
   }) {
@@ -143,17 +132,17 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
               size="sm"
               onClick={() => {
                 if (!input || !applyFilters) return;
-                applyFilters({
+                const params = applyFilters({
                   query: input.query,
                   facetFilters: input.facet_filters,
                 });
 
                 if (
                   getSearchPageURL &&
-                  new URL(getSearchPageURL(indexUiState)).pathname !==
+                  new URL(getSearchPageURL(params)).pathname !==
                     window.location.pathname
                 ) {
-                  window.location.href = getSearchPageURL(indexUiState);
+                  window.location.href = getSearchPageURL(params);
                 }
 
                 onClose();
