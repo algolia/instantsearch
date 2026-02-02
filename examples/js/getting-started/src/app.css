@@ -63,6 +63,10 @@
   text-align: center;
 }
 
+.ais-Hits {
+  margin-top: 1rem;
+}
+
 #related-products,
 .ais-Hits--single {
   margin-top: 1rem;

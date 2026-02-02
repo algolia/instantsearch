@@ -5,6 +5,9 @@ import React from 'react';
 import type { FilterSuggestionsWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
 
+// Minimum loading duration in the connector to avoid skeleton flash
+const MIN_LOADING_DURATION_MS = 300;
+
 export function createTemplatesTests(
   setup: FilterSuggestionsWidgetSetup,
   { act }: Required<TestOptions>
@@ -65,12 +68,14 @@ export function createTemplatesTests(
         widgetParams: {
           javascript: {
             agentId: 'test-agent-id',
+            debounceMs: 0,
             templates: {
               header: () => '<div class="custom-header">Custom Header</div>',
             },
           },
           react: {
             agentId: 'test-agent-id',
+            debounceMs: 0,
             headerComponent: () => (
               <div className="custom-header">Custom Header</div>
             ),
@@ -79,8 +84,9 @@ export function createTemplatesTests(
         },
       });
 
+      // Wait for minimum loading duration to complete
       await act(async () => {
-        await wait(500);
+        await wait(MIN_LOADING_DURATION_MS + 50);
       });
 
       // The widget should render - custom template is applied via TemplateComponent
@@ -149,6 +155,7 @@ export function createTemplatesTests(
         widgetParams: {
           javascript: {
             agentId: 'test-agent-id',
+            debounceMs: 0,
             templates: {
               item: ({ suggestion }) =>
                 `<div class="custom-item">${suggestion.label}</div>`,
@@ -156,6 +163,7 @@ export function createTemplatesTests(
           },
           react: {
             agentId: 'test-agent-id',
+            debounceMs: 0,
             itemComponent: ({ suggestion }) => (
               <div className="custom-item">{suggestion.label}</div>
             ),
@@ -164,8 +172,9 @@ export function createTemplatesTests(
         },
       });
 
+      // Wait for minimum loading duration to complete
       await act(async () => {
-        await wait(500);
+        await wait(MIN_LOADING_DURATION_MS + 50);
       });
 
       // The widget should render with items

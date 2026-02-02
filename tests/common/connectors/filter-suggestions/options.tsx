@@ -8,6 +8,9 @@ import { skippableDescribe } from '../../common';
 import type { FilterSuggestionsConnectorSetup } from '.';
 import type { TestOptions } from '../../common';
 
+// Minimum loading duration in the connector to avoid skeleton flash
+const MIN_LOADING_DURATION_MS = 300;
+
 export function createOptionsTests(
   setup: FilterSuggestionsConnectorSetup,
   { act, skippedTests }: Required<TestOptions>
@@ -200,8 +203,9 @@ export function createOptionsTests(
         },
       });
 
+      // Wait for minimum loading duration to complete
       await act(async () => {
-        await wait(10);
+        await wait(MIN_LOADING_DURATION_MS + 50);
       });
 
       expect(transformItems).toHaveBeenCalledWith(
@@ -286,8 +290,9 @@ export function createOptionsTests(
         },
       });
 
+      // Wait for minimum loading duration to complete
       await act(async () => {
-        await wait(10);
+        await wait(MIN_LOADING_DURATION_MS + 50);
       });
 
       await act(async () => {
@@ -310,6 +315,56 @@ export function createOptionsTests(
           }),
         ])
       );
+    });
+
+    test('shows loading state for minimum duration to prevent flash', async () => {
+      const searchClient = createSearchClientWithHits();
+
+      mockFetch({
+        parts: [
+          { type: 'text', text: '' },
+          {
+            type: 'text',
+            text: JSON.stringify([
+              { attribute: 'brand', value: 'Apple', label: 'Apple', count: 10 },
+            ]),
+          },
+        ],
+      });
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          agentId: 'test-agent-id',
+          debounceMs: 0,
+        },
+      });
+
+      // Wait for fetch to complete but before minimum duration
+      await act(async () => {
+        await wait(50);
+      });
+
+      // Loading should still be visible even though API responded instantly
+      expect(
+        screen.getByTestId('FilterSuggestions-loading')
+      ).toBeInTheDocument();
+
+      // Wait for minimum loading duration to complete
+      await act(async () => {
+        await wait(MIN_LOADING_DURATION_MS);
+      });
+
+      // Loading should now be hidden and suggestions visible
+      expect(
+        screen.queryByTestId('FilterSuggestions-loading')
+      ).not.toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: /apple \(10\)/i })
+      ).toBeInTheDocument();
     });
   });
 }

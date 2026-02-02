@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.23.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.22.8...vue-instantsearch@4.23.0) (2026-01-27)
+
+
+### Features
+
+* add `FilterSuggestions` widget ([#6861](https://github.com/algolia/instantsearch/issues/6861)) ([3ff224f](https://github.com/algolia/instantsearch/commit/3ff224f0c0823c47ace52306ad810a98231a8f83))
+
+
+
+
+
 ## [4.22.8](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.22.7...vue-instantsearch@4.22.8) (2025-12-31)
 
 **Note:** Version bump only for package vue-instantsearch
