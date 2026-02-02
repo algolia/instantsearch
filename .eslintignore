@@ -38,3 +38,6 @@ packages/instantsearch-codemods/__testfixtures__
 **/playwright-report/**
 **/test-results/**
 tests/e2e/playwright/**
+
+## Rollup configs use import attributes syntax not yet supported by ESLint parser
+**/rollup.config.mjs

@@ -40,15 +40,15 @@
   ],
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "yarn build:cjs && yarn build:es && yarn build:types",
-    "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/cjs --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet && ../../scripts/prepare-cjs.sh",
-    "build:es:base": "BABEL_ENV=es babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --ignore '**/__tests__/**/*','**/__mocks__/**/*'",
-    "build:es": "yarn build:es:base --quiet",
+    "build": "BABEL_ENV=es,rollup BUILD_FORMAT=esm rollup -c rollup.config.mjs && BABEL_ENV=rollup BUILD_FORMAT=cjs rollup -c rollup.config.mjs && yarn build:types",
     "build:types": "tsc -p ./tsconfig.declaration.json --outDir ./dist/es",
     "test:e2e": "playwright test",
     "test:e2e:saucelabs": "playwright test",
     "test:exports": "node ./__tests__/module/is-es-module.mjs && node ./__tests__/module/is-cjs-module.cjs",
-    "watch:es": "yarn --silent build:es:base --watch"
+    "watch:es": "rollup -c rollup.config.mjs --watch"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.27.6"
   },
   "devDependencies": {
     "@playwright/test": "1.49.1",

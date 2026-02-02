@@ -47,7 +47,7 @@
   },
   "scripts": {
     "build": "yarn run build:cjs && yarn run build:es && yarn run build:umd && yarn run build:types",
-    "build:umd": "rm -rf dist && BABEL_ENV=umd rollup --config ./scripts/rollup/rollup.config.js",
+    "build:umd": "rm -rf dist && BABEL_ENV=rollup rollup --config rollup.config.mjs",
     "build:cjs": "rm -rf cjs && BABEL_ENV=cjs babel --root-mode upward src --extensions '.js,.ts,.tsx' --out-dir cjs/ --ignore 'src/index.es.ts','**/__tests__','**/__mocks__' --quiet",
     "build:es:base": "BABEL_ENV=es babel --root-mode upward src --extensions '.js,.ts,.tsx' --out-dir es/ --ignore 'src/index.es.ts','**/__tests__','**/__mocks__'",
     "build:es": "rm -rf es && yarn build:es:base --quiet && BABEL_ENV=es babel --root-mode upward src/index.es.ts --out-file es/index.js --quiet && echo '{\"type\":\"module\",\"sideEffects\":false}' > es/package.json",

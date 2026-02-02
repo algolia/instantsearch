@@ -1,0 +1,62 @@
+import {
+  createESMConfig,
+  createCJSConfig,
+  createUMDConfig,
+  createBanner,
+} from '../../scripts/build/rollup.base.mjs';
+import pkg from './package.json' with { type: 'json' };
+
+const input = 'src/index.ts';
+const isESM = process.env.BUILD_FORMAT === 'esm';
+const isCJS = process.env.BUILD_FORMAT === 'cjs';
+const isUMD = process.env.BUILD_FORMAT === 'umd';
+
+const banner = createBanner({
+  name: 'React InstantSearch',
+  version: pkg.version,
+});
+
+// When BUILD_FORMAT is set, only build that format
+// Otherwise, build all (for watch mode)
+const configs = [];
+
+if (isESM || (!isESM && !isCJS && !isUMD)) {
+  configs.push(
+    createESMConfig({
+      input,
+      pkg,
+      outputDir: 'dist/es',
+    })
+  );
+}
+
+if (isCJS || (!isESM && !isCJS && !isUMD)) {
+  configs.push(
+    createCJSConfig({
+      input,
+      pkg,
+      outputDir: 'dist/cjs',
+      replaceImports: {
+        'instantsearch.js/es': 'instantsearch.js/cjs',
+      },
+    })
+  );
+}
+
+if (isUMD || (!isESM && !isCJS && !isUMD)) {
+  configs.push(
+    ...createUMDConfig({
+      input,
+      pkg,
+      name: 'ReactInstantSearch',
+      banner,
+      outputDir: 'dist/umd',
+      fileName: 'ReactInstantSearch',
+      globals: {
+        react: 'React',
+      },
+    })
+  );
+}
+
+export default configs;

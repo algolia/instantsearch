@@ -7,7 +7,7 @@ describe('UMD bundle', () => {
   describe.each([
     {
       name: 'algoliasearch-helper',
-      bundle: 'dist/algoliasearch.helper.min.js',
+      bundle: 'dist/algoliasearch.helper.production.min.js',
       globalName: 'algoliasearchHelper',
     },
     {
@@ -17,7 +17,7 @@ describe('UMD bundle', () => {
     },
     {
       name: 'react-instantsearch-core',
-      bundle: 'dist/umd/ReactInstantSearchCore.js',
+      bundle: 'dist/umd/ReactInstantSearchCore.production.min.js',
       globalName: 'ReactInstantSearchCore',
       dependencies: [
         'https://cdn.jsdelivr.net/npm/react@17/umd/react.production.min.js',
@@ -25,7 +25,7 @@ describe('UMD bundle', () => {
     },
     {
       name: 'react-instantsearch',
-      bundle: 'dist/umd/ReactInstantSearch.js',
+      bundle: 'dist/umd/ReactInstantSearch.production.min.js',
       globalName: 'ReactInstantSearch',
       dependencies: [
         'https://cdn.jsdelivr.net/npm/react@17/umd/react.production.min.js',
