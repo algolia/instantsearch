@@ -135,6 +135,28 @@ const variablesConfig = {
       },
     },
     {
+      name: '--ais-overlay-color-rgb',
+      type: 'color-rgb',
+      themeVariable: false,
+      category: 'Other',
+      control: {
+        label: 'Overlay Color Rgb',
+        colorName: 'overlayColor',
+      },
+    },
+    {
+      name: '--ais-overlay-color-alpha',
+      type: 'color-alpha',
+      themeVariable: false,
+      category: 'Other',
+      control: {
+        label: 'Overlay Color Alpha',
+        min: 0,
+        max: 1,
+        step: 0.01,
+      },
+    },
+    {
       name: '--ais-shadow-color-rgb',
       type: 'color-rgb',
       themeVariable: true,
@@ -409,6 +431,32 @@ const variablesConfig = {
       category: 'Other',
       control: {
         label: 'Autocomplete Panel Max Height',
+        min: 20,
+        max: 500,
+        step: 10,
+        unit: 'px',
+      },
+    },
+    {
+      name: '--ais-autocomplete-detached-modal-max-width',
+      type: 'dimension-px',
+      themeVariable: false,
+      category: 'Other',
+      control: {
+        label: 'Autocomplete Detached Modal Max Width',
+        min: 100,
+        max: 800,
+        step: 10,
+        unit: 'px',
+      },
+    },
+    {
+      name: '--ais-autocomplete-detached-modal-max-height',
+      type: 'dimension-px',
+      themeVariable: false,
+      category: 'Other',
+      control: {
+        label: 'Autocomplete Detached Modal Max Height',
         min: 20,
         max: 500,
         step: 10,

@@ -61,12 +61,36 @@ export type UsePropGetters<TItem extends BaseHit> = (params: {
   onRefine: (query: string) => void;
   onSelect: NonNullable<AutocompleteIndexConfig<TItem>['onSelect']>;
   onApply: (query: string) => void;
+  /**
+   * Called when the form is submitted (Enter pressed).
+   * Useful for detached mode to close the modal.
+   */
+  onSubmit?: () => void;
   placeholder?: string;
+  /**
+   * Whether the autocomplete is in detached mode (mobile).
+   * In detached mode:
+   * - Panel stays open (doesn't close on body click)
+   * - Tab key doesn't close panel
+   */
+  isDetached?: boolean;
 }) => {
   getInputProps: GetInputProps;
   getItemProps: GetItemProps;
   getPanelProps: GetPanelProps;
   getRootProps: GetRootProps;
+  /**
+   * Whether the panel is open.
+   */
+  isOpen: boolean;
+  /**
+   * Function to set the panel open state. Useful for detached mode.
+   */
+  setIsOpen: (isOpen: boolean) => void;
+  /**
+   * Function to focus the input. Useful for detached mode to show the keyboard.
+   */
+  focusInput: () => void;
 };
 
 export function createAutocompletePropGetters({
@@ -82,7 +106,9 @@ export function createAutocompletePropGetters({
     onRefine,
     onSelect: globalOnSelect,
     onApply,
+    onSubmit,
     placeholder,
+    isDetached = false,
   }: Parameters<UsePropGetters<TItem>>[0]): ReturnType<UsePropGetters<TItem>> {
     const getElementId = createGetElementId(useId());
     const inputRef = useRef<HTMLInputElement>(null);
@@ -98,6 +124,12 @@ export function createAutocompletePropGetters({
     );
 
     useEffect(() => {
+      // In detached mode, we don't close the panel on body click
+      // because the overlay handles closing
+      if (isDetached) {
+        return () => {};
+      }
+
       const onBodyClick = (event: MouseEvent) => {
         if (unwrapRef(rootRef)?.contains(event.target as HTMLElement)) {
           return;
@@ -111,7 +143,7 @@ export function createAutocompletePropGetters({
       return () => {
         document.body.removeEventListener('click', onBodyClick);
       };
-    }, [rootRef]);
+    }, [rootRef, isDetached]);
 
     const getNextActiveDescendant = (key: string): string | undefined => {
       switch (key) {
@@ -162,6 +194,8 @@ export function createAutocompletePropGetters({
         });
         setActiveDescendant(undefined);
       }
+
+      onSubmit?.();
     };
 
     return {
@@ -207,7 +241,10 @@ export function createAutocompletePropGetters({
               break;
             }
             case 'Tab':
-              setIsOpen(false);
+              // In detached mode, Tab doesn't close the panel
+              if (!isDetached) {
+                setIsOpen(false);
+              }
               break;
             default:
               setIsOpen(true);
@@ -256,6 +293,11 @@ export function createAutocompletePropGetters({
       getRootProps: () => ({
         ref: rootRef,
       }),
+      isOpen,
+      setIsOpen,
+      focusInput: () => {
+        inputRef.current?.focus();
+      },
     };
   };
 }

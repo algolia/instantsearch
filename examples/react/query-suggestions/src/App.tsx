@@ -68,6 +68,7 @@ export function App() {
 
                 <div className="search-panel__results">
                   <EXPERIMENTAL_Autocomplete
+                    detachedMediaQuery="(max-width: 1024px)"
                     placeholder="Search for products"
                     indices={[
                       {

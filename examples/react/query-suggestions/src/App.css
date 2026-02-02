@@ -175,6 +175,10 @@ em {
   margin-bottom: 1rem;
 }
 
+.ais-Pagination-list {
+  flex-wrap: wrap;
+}
+
 /* Container styles */
 
 .container-wrapper {
@@ -341,7 +345,7 @@ em {
     background-color: rgb(130, 50, 220);
     border: none;
     border-radius: 8px;
-    bottom: 1.5rem;
+    bottom: 2rem;
     box-shadow: 0 4px 16px rgba(130, 50, 220, 0.4);
     color: #fff;
     cursor: pointer;
