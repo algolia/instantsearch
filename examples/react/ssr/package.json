@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack && nodemon dist/server.js",
     "watch": "webpack --watch",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider webpack --mode=production"
+    "build:local": "NODE_OPTIONS=--openssl-legacy-provider webpack --mode=production"
   },
   "devDependencies": {
     "@babel/core": "7.15.5",

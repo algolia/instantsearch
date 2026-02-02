@@ -3,8 +3,10 @@
   "version": "1.46.0",
   "private": true,
   "scripts": {
-    "start": "BABEL_ENV=parcel parcel index.html products.html --port 3000",
-    "build": "BABEL_ENV=parcel parcel build index.html products.html",
+    "dev": "vite",
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "lint": "eslint --ext .ts .",
     "lint:fix": "npm run lint -- --fix"
   },
@@ -16,13 +18,7 @@
     "instantsearch.js": "4.88.0"
   },
   "devDependencies": {
-    "@babel/core": "7.15.5",
-    "@parcel/core": "2.10.0",
-    "@parcel/packager-raw-url": "2.10.0",
-    "@parcel/transformer-webmanifest": "2.10.0",
-    "parcel": "2.10.0"
-  },
-  "@parcel/resolver-default": {
-    "packageExports": true
+    "vite": "5.0.7",
+    "vite-plugin-commonjs": "0.10.0"
   }
 }

@@ -3,8 +3,10 @@
   "version": "6.106.0",
   "private": true,
   "scripts": {
-    "build": "BABEL_ENV=parcel parcel build index.html products.html",
-    "start": "BABEL_ENV=parcel parcel index.html products.html --port 3000"
+    "dev": "vite",
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
     "algoliasearch": "5.1.1",
@@ -18,14 +20,10 @@
     "react-instantsearch-core": "7.24.0"
   },
   "devDependencies": {
-    "@parcel/core": "2.10.0",
-    "@parcel/packager-raw-url": "2.10.0",
-    "@parcel/transformer-webmanifest": "2.10.0",
     "@types/react": "19.0.3",
-    "parcel": "2.10.0",
-    "typescript": "5.5.2"
-  },
-  "@parcel/resolver-default": {
-    "packageExports": true
+    "@vitejs/plugin-react": "4.2.1",
+    "typescript": "5.5.2",
+    "vite": "5.0.7",
+    "vite-plugin-commonjs": "0.10.0"
   }
 }
