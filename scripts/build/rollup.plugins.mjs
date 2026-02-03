@@ -76,10 +76,15 @@ export function createReplacePlugin({ mode, additional = {} }) {
  * @param {string} [options.banner] - License banner to preserve
  * @returns Configured terser plugin
  */
-export function createTerserPlugin({ banner, maxWorkers = 1 } = {}) {
+export function createTerserPlugin({
+  banner,
+  maxWorkers = 1,
+  ...options
+} = {}) {
   return terser({
     output: banner ? { preamble: banner } : undefined,
     maxWorkers,
+    ...options,
   });
 }
 

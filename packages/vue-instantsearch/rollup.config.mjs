@@ -4,20 +4,18 @@ import path from 'path';
 const require = createRequire(import.meta.url);
 
 import { babel } from '@rollup/plugin-babel';
-import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
-import { nodeResolve } from '@rollup/plugin-node-resolve';
-import replace from '@rollup/plugin-replace';
-import terser from '@rollup/plugin-terser';
+import {
+  createCommonjsPlugin,
+  createPackageJsonPlugin,
+  createReplacePlugin,
+  createResolvePlugin,
+  createTerserPlugin,
+} from '../../scripts/build/rollup.plugins.mjs';
 import vue2PluginModule from 'rollup-plugin-vue2';
 import vue3Plugin from 'rollup-plugin-vue3';
 
 const vue2Plugin = vue2PluginModule.default || vue2PluginModule;
-
-const processEnv = (mode) => ({
-  preventAssignment: true,
-  'process.env.NODE_ENV': JSON.stringify(mode),
-});
 
 const createFile = (fileName, content) => ({
   name: 'inject-package-json',
@@ -75,9 +73,9 @@ function outputs(vueVersion) {
 
   const basePlugins = [
     vuePlugin({ compileTemplate: true, css: false }),
-    commonjs(),
+    createCommonjsPlugin(),
     json(),
-    replace(processEnv('production')),
+    createReplacePlugin({ mode: 'production' }),
     aliasVueCompat(vueVersion),
   ];
 
@@ -92,15 +90,14 @@ function outputs(vueVersion) {
     },
     plugins: [
       ...basePlugins,
-      replace({
-        preventAssignment: true,
-        'instantsearch.js/es': 'instantsearch.js/cjs',
+      createReplacePlugin({
+        mode: 'production',
+        additional: {
+          'instantsearch.js/es': 'instantsearch.js/cjs',
+        },
       }),
-      terser({ sourceMap: true }),
-      createFile(
-        'package.json',
-        JSON.stringify({ type: 'commonjs', sideEffects: true })
-      ),
+      createTerserPlugin({ sourceMap: true }),
+      createPackageJsonPlugin({ type: 'commonjs', sideEffects: true }),
     ],
   };
 
@@ -129,17 +126,14 @@ function outputs(vueVersion) {
           ],
         ],
       }),
-      terser({ sourceMap: true }),
+      createTerserPlugin({ sourceMap: true }),
       createFile(
         'index.js',
         `import InstantSearch from './src/instantsearch.js';
 export default InstantSearch;
 export * from './src/instantsearch.js';`
       ),
-      createFile(
-        'package.json',
-        JSON.stringify({ type: 'module', sideEffects: true })
-      ),
+      createPackageJsonPlugin({ type: 'module', sideEffects: true }),
     ],
   };
 
@@ -164,11 +158,8 @@ export * from './src/instantsearch.js';`
     },
     plugins: [
       ...basePlugins,
-      nodeResolve({
-        browser: true,
-        preferBuiltins: false,
-      }),
-      terser({ sourceMap: true }),
+      createResolvePlugin(),
+      createTerserPlugin({ sourceMap: true }),
     ],
   };
 
