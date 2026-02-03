@@ -1,6 +1,8 @@
-const { config: baseConfig } = require('./wdio.conf.cjs');
+require('dotenv').config();
 
-exports.config = {
+const baseConfig = require('./wdio.base.conf');
+
+module.exports = {
   ...baseConfig,
   /*
    * List of reporters to use
@@ -13,6 +15,9 @@ exports.config = {
       'junit',
       {
         outputDir: `${process.cwd()}/junit/wdio`,
+        /**
+         * @param {{ cid: string; capabilities: { browserName: string; browserVersion: string; }; }} opts
+         */
         outputFileFormat({
           cid,
           capabilities: { browserName, browserVersion },
@@ -24,17 +29,11 @@ exports.config = {
     ],
   ],
   /*
-   * Level of logging verbosity
-   * Can be: trace, debug, info, warn, error, silent
-   * https://webdriver.io/docs/options.html#loglevel
-   */
-  logLevel: 'warn',
-  /*
    * Add Sauce Labs integration to WebdriverIO
    * https://webdriver.io/docs/sauce-service.html
    * https://github.com/webdriverio/webdriverio/tree/master/packages/wdio-sauce-service
    */
-  services: ['sauce'],
+  services: [...(baseConfig.services || []), 'sauce'],
   /*
    * Sauce Labs credentials
    * Can be set in environement variables or in a `.env` file in
@@ -61,6 +60,7 @@ exports.config = {
      */
     connectRetries: 2,
     connectRetryTimeout: 10000,
+    tunnelIdentifier: 'instantsearch-e2e-ie11',
   },
   /*
    * Sauce Labs Open Source offer has a maximum of 5 concurrent session
@@ -68,19 +68,32 @@ exports.config = {
   maxInstances: 5,
 
   /*
-   * Platforms where we want to run our tests
+   * Retry spec files 2 times maximum on fail
+   * This is usefull is case of a flacky test
+   * https://webdriver.io/docs/options.html#specfileretries
+   */
+  specFileRetries: 2,
+
+  /*
+   * IE11 only capability
    * https://wiki.saucelabs.com/display/DOCS/Platform+Configurator#/
    */
   capabilities: [
     {
-      browserName: 'chrome',
-      browserVersion: '125.0',
+      browserName: 'internet explorer',
+      browserVersion: '11',
+      platformName: 'Windows 10',
       /*
        * Sauce Labs specific options
        * https://wiki.saucelabs.com/display/DOCS/Test+Configuration+Options
        */
       'sauce:options': {
         screenResolution: '1680x1050',
+      },
+      'se:ieOptions': {
+        // Required for drag and drop to work
+        // https://stackoverflow.com/questions/14299392/selenium-webdriver-draganddrop-for-ie9
+        requireWindowFocus: true,
       },
     },
   ],

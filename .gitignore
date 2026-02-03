@@ -42,6 +42,8 @@ integration/screenshots/
 junit
 /coverage
 junit.xml
+playwright-report/
+test-results/
 
 # User-specific files
 *.iml
