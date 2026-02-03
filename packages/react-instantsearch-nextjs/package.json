@@ -1,6 +1,6 @@
 {
   "name": "react-instantsearch-nextjs",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "React InstantSearch SSR utilities for Next.js",
   "types": "dist/es/index.d.ts",
   "main": "dist/cjs/index.js",
@@ -60,9 +60,9 @@
     "@wdio/sauce-service": "5.16.5",
     "@wdio/selenium-standalone-service": "5.16.5",
     "@wdio/spec-reporter": "5.16.5",
-    "instantsearch.js": "4.87.0",
+    "instantsearch.js": "4.87.1",
     "next": "16.0.7",
-    "react-instantsearch-core": "7.23.0",
+    "react-instantsearch-core": "7.23.1",
     "start-server-and-test": "1.15.3",
     "ts-node": "8.4.1"
   },

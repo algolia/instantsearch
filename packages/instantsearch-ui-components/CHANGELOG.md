@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.17.1](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.17.0...instantsearch-ui-components@0.17.1) (2026-02-03)
+
+
+### Bug Fixes
+
+* **autocomplete:** hide header when there are no items to display ([#6883](https://github.com/algolia/instantsearch/issues/6883)) ([81e677a](https://github.com/algolia/instantsearch/commit/81e677ac9e891d685005b0c0f4752b9b05737c9e))
+* **ui-components:** export `ChatPromptSuggestions` component from index ([#6885](https://github.com/algolia/instantsearch/issues/6885)) ([0b75380](https://github.com/algolia/instantsearch/commit/0b7538069e9207c0f4629ffd78236e7dca79dd24))
+
+
+
+
+
 # [0.17.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.16.0...instantsearch-ui-components@0.17.0) (2026-01-27)
 
 
