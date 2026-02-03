@@ -14,8 +14,7 @@
   "sideEffects": false,
   "scripts": {
     "type-check": "tsc",
-    "test:playwright": "playwright test -c playwright/playwright.config.ts",
-    "test:wdio:ie11": "wdio run wdio.ie11.conf.js"
+    "test:playwright": "playwright test -c playwright/playwright.config.ts"
   },
   "dependencies": {
     "@playwright/test": "1.49.1",
