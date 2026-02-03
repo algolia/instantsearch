@@ -28,6 +28,8 @@ examples/react/react-native
 examples/react/next
 examples/react/next-routing
 examples/react/next-app-router
+## Excluded from global typescript config
+**/next-env.d.ts
 specs/src/env.d.ts
 ## templates that don't get installed
 packages/create-instantsearch-app/src/templates

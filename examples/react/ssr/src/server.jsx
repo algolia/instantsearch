@@ -37,7 +37,7 @@ app.get('/', async (req, res) => {
     <div id="root">${html}</div>
   </body>
 
-  <script src="/assets/bundle.js"></script>
+  <script type="module" src="/assets/bundle.js"></script>
 </html>`
   );
 });
