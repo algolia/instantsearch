@@ -1,4 +1,5 @@
 {
   "extends": "../../tsconfig.declaration",
+  "include": ["src/**/*"],
   "exclude": ["**/__tests__/**/*", "**/dist/**/*"]
 }
