@@ -33,17 +33,26 @@ const createFile = (fileName, content) => ({
 const aliasVueCompat = (vueVersion) => ({
   name: 'alias-vue-compat',
   resolveId(source, importer) {
-    // Only handle relative imports that end with 'vue-compat' or 'vue-compat/Highlighter'
-    // Don't handle .vue files or already resolved absolute paths
+    // Only intercept imports that:
+    // 1. Contain 'vue-compat' in the path
+    // 2. End with 'vue-compat' or 'vue-compat/Highlighter' (directory imports)
+    // 3. Don't end with .vue (actual Vue component files)
     if (
       source.includes('vue-compat') &&
       !source.endsWith('.vue') &&
-      !path.isAbsolute(source) &&
       (source.endsWith('vue-compat') ||
-        source.endsWith('vue-compat/Highlighter'))
+        source.endsWith('vue-compat/Highlighter') ||
+        source.endsWith('vue-compat/index.js') ||
+        source.endsWith('vue-compat/Highlighter/index.js'))
     ) {
-      const compatFolder = path.resolve(path.dirname(importer), source);
-      const matchingVueCompatFile = `index-${vueVersion}.js`;
+      const matchingVueCompatFile = `./index-${vueVersion}.js`;
+
+      const compatFolder = path.resolve(
+        path.dirname(importer),
+        // source is either './vue-compat', './vue-compat/index.js', etc.
+        source.replace(/\/index\.js$/, '/')
+      );
+
       return path.resolve(compatFolder, matchingVueCompatFile);
     }
     return null;
