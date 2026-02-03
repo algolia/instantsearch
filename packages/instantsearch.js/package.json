@@ -46,17 +46,16 @@
     "algoliasearch": ">= 3.1 < 6"
   },
   "scripts": {
-    "build": "yarn run build:cjs && yarn run build:es && yarn run build:umd && yarn run build:types",
-    "build:umd": "rm -rf dist && BABEL_ENV=rollup rollup --config rollup.config.mjs",
-    "build:cjs": "rm -rf cjs && BABEL_ENV=cjs babel --root-mode upward src --extensions '.js,.ts,.tsx' --out-dir cjs/ --ignore 'src/index.es.ts','**/__tests__','**/__mocks__' --quiet",
-    "build:es:base": "BABEL_ENV=es babel --root-mode upward src --extensions '.js,.ts,.tsx' --out-dir es/ --ignore 'src/index.es.ts','**/__tests__','**/__mocks__'",
-    "build:es": "rm -rf es && yarn build:es:base --quiet && BABEL_ENV=es babel --root-mode upward src/index.es.ts --out-file es/index.js --quiet && echo '{\"type\":\"module\",\"sideEffects\":false}' > es/package.json",
+    "build": "BABEL_ENV=es,rollup BUILD_FORMAT=esm rollup -c rollup.config.mjs && BABEL_ENV=rollup BUILD_FORMAT=cjs rollup -c rollup.config.mjs && BABEL_ENV=rollup BUILD_FORMAT=umd rollup -c rollup.config.mjs && yarn build:types",
+    "build:umd": "BABEL_ENV=rollup BUILD_FORMAT=umd rollup --config rollup.config.mjs",
+    "build:cjs": "BABEL_ENV=rollup BUILD_FORMAT=cjs rollup --config rollup.config.mjs",
+    "build:es": "BABEL_ENV=es,rollup BUILD_FORMAT=esm rollup --config rollup.config.mjs",
     "build:types": "scripts/typescript/extract.js",
     "storybook": "NODE_OPTIONS=--openssl-legacy-provider start-storybook --quiet --port 6006 --ci --static-dir .storybook/static",
     "storybook:build": "NODE_OPTIONS=--openssl-legacy-provider build-storybook --quiet --output-dir ../../website/stories/js --static-dir .storybook/static",
     "test:exports": "node test/module/is-es-module.mjs && node test/module/is-cjs-module.cjs",
     "version": "./scripts/version/update-version.js",
-    "watch:es": "yarn --silent build:es:base --watch"
+    "watch:es": "BABEL_ENV=es,rollup BUILD_FORMAT=esm rollup --config rollup.config.mjs --watch"
   },
   "devDependencies": {
     "@instantsearch/mocks": "1.91.0",
