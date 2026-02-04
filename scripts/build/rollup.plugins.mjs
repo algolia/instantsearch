@@ -91,7 +91,14 @@ export function createStripJsxPragmaPlugin() {
  * @returns Configured commonjs plugin
  */
 export function createCommonjsPlugin(options = {}) {
-  return commonjs(options);
+  const { include, extensions, ...restOptions } = options;
+
+  return commonjs({
+    include: include || [/node_modules/, /packages\/algoliasearch-helper\//],
+    extensions: extensions || ['.js', '.cjs'],
+    transformMixedEsModules: true,
+    ...restOptions,
+  });
 }
 
 /**

@@ -74,11 +74,12 @@ function outputs(vueVersion) {
   const vuePlugin = vueVersion === 'vue3' ? vue3Plugin : vue2Plugin;
 
   const basePlugins = [
+    aliasVueCompat(vueVersion),
     vuePlugin({ compileTemplate: true, css: false }),
+    createCommonjsPlugin(),
     createSwcPlugin({
       include: /\.[jt]sx?$|\.vue$/,
     }),
-    createCommonjsPlugin(),
     createResolvePlugin({
       extensions: [
         '.mjs',
@@ -92,7 +93,6 @@ function outputs(vueVersion) {
     json(),
     createReplacePlugin({ mode: 'production' }),
     createStripJsxPragmaPlugin(),
-    aliasVueCompat(vueVersion),
   ];
 
   const cjs = {

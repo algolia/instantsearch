@@ -64,8 +64,8 @@ export function createESMConfig({
     onwarn: onWarn,
     plugins: [
       createResolvePlugin(),
-      createSwcPlugin(),
       createCommonjsPlugin(),
+      createSwcPlugin(),
       createReplacePlugin({ mode: 'production' }),
       createStripJsxPragmaPlugin(),
       extensionResolver({
@@ -120,8 +120,8 @@ export function createCJSConfig({
     onwarn: onWarn,
     plugins: [
       createResolvePlugin(),
-      createSwcPlugin(),
       createCommonjsPlugin(),
+      createSwcPlugin(),
       createReplacePlugin({ mode: 'production', additional: replaceImports }),
       createStripJsxPragmaPlugin(),
       createPackageJsonPlugin({ type: 'commonjs', sideEffects: false }),
@@ -166,8 +166,8 @@ export function createUMDConfig({
 
   const basePlugins = [
     createResolvePlugin(),
-    createSwcPlugin(),
     createCommonjsPlugin(),
+    createSwcPlugin(),
   ];
 
   // Development build (unminified)
