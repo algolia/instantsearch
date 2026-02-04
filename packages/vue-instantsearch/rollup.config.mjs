@@ -74,9 +74,18 @@ function outputs(vueVersion) {
     vuePlugin({ compileTemplate: true, css: false }),
     createSwcPlugin({
       include: /\.[jt]sx?$|\.vue$/,
-      jsc: { externalHelpers: false },
     }),
     createCommonjsPlugin(),
+    createResolvePlugin({
+      extensions: [
+        '.mjs',
+        '.js',
+        '.ts',
+        '.jsx',
+        '.tsx',
+        '.vue',
+      ],
+    }),
     json(),
     createReplacePlugin({ mode: 'production' }),
     createStripJsxPragmaPlugin(),

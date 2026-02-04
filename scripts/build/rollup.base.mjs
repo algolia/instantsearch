@@ -73,6 +73,7 @@ export function createESMConfig({
           'instantsearch.js',
           'react-dom',
           'use-sync-external-store',
+          '@swc/helpers',
           'next',
         ],
       }),
@@ -165,8 +166,7 @@ export function createUMDConfig({
 
   const basePlugins = [
     createResolvePlugin(),
-    // For UMD, inline helpers instead of using external @swc/helpers
-    createSwcPlugin({ jsc: { externalHelpers: false } }),
+    createSwcPlugin(),
     createCommonjsPlugin(),
   ];
 
@@ -202,7 +202,11 @@ export function createUMDConfig({
     plugins: [
       ...basePlugins,
       createReplacePlugin({ mode: 'production' }),
-      createTerserPlugin({ banner }),
+      createTerserPlugin({
+        banner,
+        compress: { passes: 3, toplevel: true },
+        mangle: { toplevel: true, reserved: [name] },
+      }),
       ...plugins,
     ],
   };

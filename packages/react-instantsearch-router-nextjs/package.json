@@ -46,6 +46,7 @@
     "watch:es": "yarn --silent build:es:base --watch"
   },
   "dependencies": {
+    "@swc/helpers": "0.5.18",
     "instantsearch.js": "4.88.0",
     "react-instantsearch-core": "7.24.0"
   },

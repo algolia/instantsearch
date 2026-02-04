@@ -26,6 +26,7 @@
     "scripts/transforms"
   ],
   "dependencies": {
+    "@swc/helpers": "0.5.18",
     "@algolia/events": "^4.0.1",
     "@types/dom-speech-recognition": "^0.0.1",
     "@types/google.maps": "^3.55.12",

@@ -36,6 +36,7 @@
     "watch:es": "yarn --silent build --watch"
   },
   "dependencies": {
+    "@swc/helpers": "0.5.18",
     "instantsearch-ui-components": "0.18.0",
     "instantsearch.js": "4.88.0",
     "mitt": "^2.1.0"
