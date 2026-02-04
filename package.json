@@ -55,7 +55,6 @@
     "@rollup/plugin-node-resolve": "16.0.0",
     "@rollup/plugin-replace": "6.0.2",
     "@rollup/plugin-terser": "0.4.4",
-    "@rollup/rollup-darwin-arm64": "4.57.1",
     "@storybook/addon-actions": "5.3.9",
     "@storybook/addon-knobs": "5.3.9",
     "@storybook/addon-options": "5.3.9",
