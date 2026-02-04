@@ -67,6 +67,7 @@ const external = (id) =>
     'instantsearch-ui-components',
     'vue',
     'mitt',
+    '@swc/helpers',
   ].some((dep) => id === dep || id.startsWith(`${dep}/`));
 
 function outputs(vueVersion) {
