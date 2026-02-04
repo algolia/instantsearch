@@ -63,6 +63,7 @@
     "@vue/test-utils2": "npm:@vue/test-utils@2.0.0-rc.11",
     "algoliasearch": "5.1.1",
     "algoliasearch-helper": "3.27.1",
+    "babel-preset-vue": "2.0.2",
     "instantsearch.css": "8.11.0",
     "rollup-plugin-vue2": "npm:rollup-plugin-vue@4.3.2",
     "rollup-plugin-vue3": "npm:rollup-plugin-vue@6.0.0",
