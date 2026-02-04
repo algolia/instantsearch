@@ -54,7 +54,7 @@ export function createSwcPlugin(options = {}) {
           pragmaFrag: 'React.Fragment',
         },
       },
-      externalHelpers: true,
+      externalHelpers: false,
       ...jscOverrides,
     },
     env: {
