@@ -1,4 +1,5 @@
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 import json from '@rollup/plugin-json';
 import {
@@ -15,6 +16,7 @@ import vue2PluginModule from 'rollup-plugin-vue2';
 import vue3Plugin from 'rollup-plugin-vue3';
 
 const vue2Plugin = vue2PluginModule.default || vue2PluginModule;
+const packageRoot = path.dirname(fileURLToPath(import.meta.url));
 
 const createFile = (fileName, content) => ({
   name: 'inject-package-json',
@@ -122,6 +124,7 @@ function outputs(vueVersion) {
       dir: `${vueVersion}/es`,
       format: 'es',
       preserveModules: true,
+      preserveModulesRoot: packageRoot,
     },
     plugins: [
       ...basePlugins,
