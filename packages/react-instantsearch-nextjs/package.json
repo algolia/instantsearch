@@ -47,9 +47,7 @@
     "test:exports": "node ./__tests__/module/is-es-module.mjs && node ./__tests__/module/is-cjs-module.cjs",
     "watch:es": "rollup -c rollup.config.mjs --watch"
   },
-  "dependencies": {
-    "@babel/runtime": "^7.27.6"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@playwright/test": "1.49.1",
     "instantsearch.js": "4.88.0",

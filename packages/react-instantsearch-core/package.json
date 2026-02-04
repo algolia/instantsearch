@@ -45,7 +45,6 @@
     "watch:es": "BABEL_ENV=es,rollup BUILD_FORMAT=esm rollup -c rollup.config.mjs --watch"
   },
   "dependencies": {
-    "@babel/runtime": "^7.27.6",
     "algoliasearch-helper": "3.27.1",
     "instantsearch.js": "4.88.0",
     "use-sync-external-store": "^1.0.0",

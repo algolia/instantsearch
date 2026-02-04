@@ -19,11 +19,12 @@
  */
 
 import {
-  createBabelPlugin,
+  createSwcPlugin,
   createCommonjsPlugin,
   createPackageJsonPlugin,
   createReplacePlugin,
   createResolvePlugin,
+  createStripJsxPragmaPlugin,
   createTerserPlugin,
   onWarn,
 } from './rollup.plugins.mjs';
@@ -62,9 +63,10 @@ export function createESMConfig({
     onwarn: onWarn,
     plugins: [
       createResolvePlugin(),
-      createBabelPlugin(),
+      createSwcPlugin(),
       createCommonjsPlugin(),
       createReplacePlugin({ mode: 'production' }),
+      createStripJsxPragmaPlugin(),
       createPackageJsonPlugin({ type: 'module', sideEffects: false }),
       ...plugins,
     ],
@@ -108,9 +110,10 @@ export function createCJSConfig({
     onwarn: onWarn,
     plugins: [
       createResolvePlugin(),
-      createBabelPlugin(),
+      createSwcPlugin(),
       createCommonjsPlugin(),
       createReplacePlugin({ mode: 'production', additional: replaceImports }),
+      createStripJsxPragmaPlugin(),
       createPackageJsonPlugin({ type: 'commonjs', sideEffects: false }),
       ...plugins,
     ],
@@ -153,7 +156,8 @@ export function createUMDConfig({
 
   const basePlugins = [
     createResolvePlugin(),
-    createBabelPlugin({ babelHelpers: 'bundled' }),
+    // For UMD, inline helpers instead of using external @swc/helpers
+    createSwcPlugin({ jsc: { externalHelpers: false } }),
     createCommonjsPlugin(),
   ];
 
@@ -225,11 +229,12 @@ function getExternalDeps(pkg) {
  */
 export { createBanner } from './banner.mjs';
 export {
-  createBabelPlugin,
+  createSwcPlugin,
   createCommonjsPlugin,
   createPackageJsonPlugin,
   createReplacePlugin,
   createResolvePlugin,
+  createStripJsxPragmaPlugin,
   createTerserPlugin,
   onWarn,
 } from './rollup.plugins.mjs';

@@ -47,6 +47,8 @@ if (isESM || (!isESM && !isCJS)) {
       pkg,
       outputDir: 'dist/es',
       external,
+      // Preserve module structure so Next.js can tree-shake Server/Client Components
+      preserveModules: true,
     })
   );
 }
@@ -58,6 +60,8 @@ if (isCJS || (!isESM && !isCJS)) {
       pkg,
       outputDir: 'dist/cjs',
       external,
+      // Preserve module structure so bundlers can tree-shake Server/Client Components
+      preserveModules: true,
       // Replace instantsearch.js/es imports with instantsearch.js/cjs for CJS build
       replaceImports: {
         'instantsearch.js/es': 'instantsearch.js/cjs',

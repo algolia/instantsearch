@@ -44,7 +44,6 @@
     "watch:es": "BABEL_ENV=es,rollup BUILD_FORMAT=esm rollup -c rollup.config.mjs --watch"
   },
   "dependencies": {
-    "@babel/runtime": "^7.27.6",
     "instantsearch-ui-components": "0.18.0",
     "instantsearch.js": "4.88.0",
     "react-instantsearch-core": "7.24.0"

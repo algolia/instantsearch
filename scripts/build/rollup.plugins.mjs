@@ -2,11 +2,11 @@
  * Shared Rollup plugin configurations for InstantSearch packages.
  */
 
-import { babel } from '@rollup/plugin-babel';
 import commonjs from '@rollup/plugin-commonjs';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import terser from '@rollup/plugin-terser';
+import swc from 'rollup-plugin-swc3';
 
 /**
  * Default extensions to resolve
@@ -28,21 +28,61 @@ export function createResolvePlugin(options = {}) {
 }
 
 /**
- * Creates the Babel plugin with common settings.
+ * Creates the SWC plugin with common settings.
  * @param {Object} [options] - Additional options to merge
- * @returns Configured babel plugin
+ * @param {Object} [options.jsc] - SWC jsc options to merge
+ * @param {Object} [options.env] - SWC env options to merge
+ * @returns Configured swc plugin
  */
-export function createBabelPlugin(options = {}) {
-  return babel({
-    babelHelpers: 'runtime',
-    // Skip preflight check because files that don't need transforms
-    // return 'inline' mode which causes a false error
-    skipPreflightCheck: true,
-    exclude: /node_modules|algoliasearch-helper/,
-    extensions: ['.js', '.ts', '.tsx'],
-    rootMode: 'upward',
-    ...options,
+export function createSwcPlugin(options = {}) {
+  const { jsc: jscOverrides = {}, env: envOverrides = {}, ...restOptions } = options;
+  
+  return swc({
+    include: /\.[jt]sx?$/,
+    exclude: /node_modules/,
+    tsconfig: false,
+    sourceMaps: true,
+    jsc: {
+      parser: {
+        syntax: 'typescript',
+        tsx: true,
+      },
+      transform: {
+        react: {
+          runtime: 'classic',
+          pragma: 'React.createElement',
+          pragmaFrag: 'React.Fragment',
+        },
+      },
+      externalHelpers: true,
+      ...jscOverrides,
+    },
+    env: {
+      targets: 'ie >= 11',
+      // Don't inject polyfills - let consumers handle that
+      ...envOverrides,
+    },
+    ...restOptions,
   });
+}
+
+/**
+ * Creates a plugin that strips JSX pragma comments from output.
+ * This prevents conflicts with bundlers using automatic JSX runtime.
+ * @returns Rollup plugin
+ */
+export function createStripJsxPragmaPlugin() {
+  return {
+    name: 'strip-jsx-pragma',
+    renderChunk(code) {
+      // Remove /** @jsx ... */ and /** @jsxFrag ... */ comments
+      const transformed = code.replace(/\/\*\*?\s*@jsx\w*\s+[^*]*\*\//g, '');
+      if (transformed !== code) {
+        return { code: transformed, map: null };
+      }
+      return null;
+    },
+  };
 }
 
 /**

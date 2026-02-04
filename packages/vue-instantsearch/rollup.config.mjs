@@ -1,17 +1,16 @@
-import { createRequire } from 'module';
 import path from 'path';
 
-const require = createRequire(import.meta.url);
-
-import { babel } from '@rollup/plugin-babel';
 import json from '@rollup/plugin-json';
 import {
   createCommonjsPlugin,
   createPackageJsonPlugin,
   createReplacePlugin,
   createResolvePlugin,
+  createStripJsxPragmaPlugin,
+  createSwcPlugin,
   createTerserPlugin,
 } from '../../scripts/build/rollup.plugins.mjs';
+import { extensionResolver } from '../../scripts/build/rollup-plugin-extension-resolver.mjs';
 import vue2PluginModule from 'rollup-plugin-vue2';
 import vue3Plugin from 'rollup-plugin-vue3';
 
@@ -73,9 +72,14 @@ function outputs(vueVersion) {
 
   const basePlugins = [
     vuePlugin({ compileTemplate: true, css: false }),
+    createSwcPlugin({
+      include: /\.[jt]sx?$|\.vue$/,
+      jsc: { externalHelpers: false },
+    }),
     createCommonjsPlugin(),
     json(),
     createReplacePlugin({ mode: 'production' }),
+    createStripJsxPragmaPlugin(),
     aliasVueCompat(vueVersion),
   ];
 
@@ -112,19 +116,8 @@ function outputs(vueVersion) {
     },
     plugins: [
       ...basePlugins,
-      babel({
-        babelHelpers: 'bundled',
-        exclude: /node_modules|algoliasearch-helper/,
-        extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', '.vue'],
-        babelrc: false,
-        plugins: [
-          [
-            require.resolve('../../scripts/babel/extension-resolver'),
-            {
-              modulesToResolve: ['instantsearch.js'],
-            },
-          ],
-        ],
+      extensionResolver({
+        modulesToResolve: ['instantsearch.js'],
       }),
       createTerserPlugin({ sourceMap: true }),
       createFile(
