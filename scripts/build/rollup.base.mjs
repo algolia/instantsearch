@@ -28,6 +28,7 @@ import {
   createTerserPlugin,
   onWarn,
 } from './rollup.plugins.mjs';
+import { extensionResolver } from './rollup-plugin-extension-resolver.mjs';
 
 /**
  * Creates an ESM (ES Modules) configuration.
@@ -67,6 +68,14 @@ export function createESMConfig({
       createCommonjsPlugin(),
       createReplacePlugin({ mode: 'production' }),
       createStripJsxPragmaPlugin(),
+      extensionResolver({
+        modulesToResolve: [
+          'instantsearch.js',
+          'react-dom',
+          'use-sync-external-store',
+          'next',
+        ],
+      }),
       createPackageJsonPlugin({ type: 'module', sideEffects: false }),
       ...plugins,
     ],

@@ -7,8 +7,11 @@
  * This plugin resolves imports like `./foo` to `./foo.js` in the output.
  */
 
-import { existsSync, statSync } from 'fs';
-import { dirname, join, resolve, sep, posix } from 'path';
+import { createRequire } from 'module';
+import { existsSync } from 'fs';
+import { dirname, join, resolve, sep } from 'path';
+
+const require = createRequire(import.meta.url);
 
 /**
  * @typedef {Object} ExtensionResolverOptions
@@ -40,7 +43,7 @@ export function extensionResolver({
       
       // Match import/export statements with string specifiers
       // Handles: import x from './foo', export { x } from './foo', export * from './foo'
-      const importExportRegex = /(import\s+.*?\s+from\s+['"]|export\s+.*?\s+from\s+['"]|export\s+\*\s+from\s+['"])([^'"]+)(['"])/g;
+      const importExportRegex = /(import\s+.*?\s+from\s+['"]|export\s+.*?\s+from\s+['"]|export\s+\*\s+from\s+['"]|import\s+['"])([^'"]+)(['"])/g;
       
       let hasChanges = false;
       const transformedCode = code.replace(importExportRegex, (match, prefix, sourcePath, suffix) => {
@@ -80,7 +83,7 @@ function resolveSourcePath(sourcePath, baseDir, { modulesToResolve, srcExtension
   
   // Check if it's an external module we should resolve
   if (modulesToResolve.some((mod) => sourcePath.startsWith(`${mod}/`))) {
-    return resolveExternalModulePath(sourcePath);
+    return resolveExternalModulePath(sourcePath, dstExtension);
   }
   
   return sourcePath;
@@ -120,7 +123,7 @@ function resolveRelativePath(baseDir, sourcePath, srcExtensions, dstExtension) {
  * Resolves an external module path (e.g., 'instantsearch.js/es/widgets').
  * Uses require.resolve to find the actual file path.
  */
-function resolveExternalModulePath(sourcePath) {
+function resolveExternalModulePath(sourcePath, dstExtension) {
   try {
     // Get the package name (handles scoped packages)
     const packageNameRegex = sourcePath.startsWith('@')
@@ -147,6 +150,10 @@ function resolveExternalModulePath(sourcePath) {
     // Normalize to forward slashes
     return normalizeToForwardSlashes(packageName + resolvedPath);
   } catch {
+    // Fallback: append extension if missing
+    if (!hasExtension(sourcePath)) {
+      return `${sourcePath}${dstExtension}`;
+    }
     return sourcePath;
   }
 }
@@ -163,7 +170,11 @@ function isRelativePath(path) {
  */
 function hasExtension(path) {
   const lastSegment = path.split('/').pop();
-  return lastSegment.includes('.') && !lastSegment.startsWith('.');
+  return (
+    lastSegment.includes('.') &&
+    !lastSegment.startsWith('.') &&
+    !lastSegment.endsWith('/')
+  );
 }
 
 /**
