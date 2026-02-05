@@ -80,7 +80,7 @@ jobs:
              - instantsearch/packages/instantsearch.js/CHANGELOG.md
              - instantsearch/packages/react-instantsearch/CHANGELOG.md
              - instantsearch/packages/react-instantsearch-core/CHANGELOG.md
-             - instantsearch/packages/vue-instantsearch/CHANGELOG.md
+             - instantsearch/packages/vue-instantsearch/CHANGELOG.md (low priority - only update Vue docs if this changelog shows explicit feature additions)
 
           2. Find and read ONE existing doc as a format reference:
              - Use Glob to find InstantSearch widget docs: docs-new/**/instantsearch/**/*.mdx
@@ -119,6 +119,9 @@ jobs:
           - Match the existing documentation format and style exactly
           - Only modify documentation files in docs-new/
           - Don't add placeholder content - only document what actually exists
+          - CROSS-FLAVOR CONSISTENCY: When updating a widget/hook that exists in multiple flavors (JS, React, Vue),
+            check if the same prop/feature exists in the other flavors and update ALL relevant docs.
+            Many features are shared via instantsearch-ui-components. Read the source for each flavor to verify.
 
           ## Source Code Reference
 
