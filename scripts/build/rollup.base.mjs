@@ -25,6 +25,7 @@ import {
   createReplacePlugin,
   createResolvePlugin,
   createStripJsxPragmaPlugin,
+  createWrapWarningsWithDevCheckPlugin,
   createTerserPlugin,
   onWarn,
 } from './rollup.plugins.mjs';
@@ -66,6 +67,7 @@ export function createESMConfig({
       createResolvePlugin(),
       createCommonjsPlugin(),
       createSwcPlugin(),
+      createWrapWarningsWithDevCheckPlugin(),
       createReplacePlugin({ mode: 'production' }),
       createStripJsxPragmaPlugin(),
       extensionResolver({
@@ -122,6 +124,7 @@ export function createCJSConfig({
       createResolvePlugin(),
       createCommonjsPlugin(),
       createSwcPlugin(),
+      createWrapWarningsWithDevCheckPlugin(),
       createReplacePlugin({ mode: 'production', additional: replaceImports }),
       createStripJsxPragmaPlugin(),
       createPackageJsonPlugin({ type: 'commonjs', sideEffects: false }),
@@ -176,6 +179,7 @@ export function createUMDConfig({
     createResolvePlugin(),
     createCommonjsPlugin(),
     createSwcPlugin(),
+    createWrapWarningsWithDevCheckPlugin(),
   ];
 
   // Development build (unminified)

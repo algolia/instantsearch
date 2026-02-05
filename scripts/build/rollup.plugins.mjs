@@ -7,6 +7,7 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import terser from '@rollup/plugin-terser';
 import swc from 'rollup-plugin-swc3';
+import MagicString from 'magic-string';
 
 /**
  * Default extensions to resolve
@@ -81,6 +82,74 @@ export function createStripJsxPragmaPlugin() {
         return { code: transformed, map: null };
       }
       return null;
+    },
+  };
+}
+
+/**
+ * Creates a plugin that wraps warn/warning calls in __DEV__ checks.
+ * This allows production builds to strip warnings.
+ * @returns Rollup plugin
+ */
+export function createWrapWarningsWithDevCheckPlugin() {
+  const WARNING_IDENTIFIERS = new Set(['warn', 'warning']);
+  const DEV_IDENTIFIER = '__DEV__';
+
+  function walk(node, callback) {
+    if (!node || typeof node !== 'object') return;
+    callback(node);
+    for (const key of Object.keys(node)) {
+      const child = node[key];
+      if (Array.isArray(child)) {
+        child.forEach((c) => walk(c, callback));
+      } else if (child && typeof child.type === 'string') {
+        walk(child, callback);
+      }
+    }
+  }
+
+  return {
+    name: 'wrap-warning-with-dev-check',
+    transform(code, id) {
+      if (!id || id.includes('node_modules')) {
+        return null;
+      }
+
+      if (!/\bwarn\s*\(|\bwarning\s*\(/.test(code)) {
+        return null;
+      }
+
+      let ast;
+      try {
+        ast = this.parse(code);
+      } catch {
+        return null;
+      }
+
+      const magicString = new MagicString(code);
+      let hasChanges = false;
+
+      walk(ast, (node) => {
+        if (
+          node.type === 'ExpressionStatement' &&
+          node.expression.type === 'CallExpression' &&
+          node.expression.callee.type === 'Identifier' &&
+          WARNING_IDENTIFIERS.has(node.expression.callee.name)
+        ) {
+          magicString.appendLeft(node.start, `if (${DEV_IDENTIFIER}) { `);
+          magicString.appendRight(node.end, ` }`);
+          hasChanges = true;
+        }
+      });
+
+      if (!hasChanges) {
+        return null;
+      }
+
+      return {
+        code: magicString.toString(),
+        map: magicString.generateMap({ hires: true }),
+      };
     },
   };
 }
