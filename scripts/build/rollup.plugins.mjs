@@ -223,6 +223,75 @@ export function createPackageJsonPlugin(content) {
 }
 
 /**
+ * Creates a pair of plugins that work around an SWC bug where the JSX pragma
+ * name collides with a local variable of the same name.
+ *
+ * When a file has `/** @jsx createElement * /` and also destructures
+ * `{ createElement }` from a parameter, SWC renames the local variable
+ * (e.g., to `createElement1`) but still generates JSX calls using the bare
+ * pragma name `createElement`, which is then undefined at runtime.
+ *
+ * The workaround:
+ * 1. `prePlugin` strips `@jsx`/`@jsxFrag` pragmas from source BEFORE SWC,
+ *    so SWC uses its default `React.createElement` pragma (no collision).
+ * 2. `postPlugin` replaces `React.createElement(` back to the original pragma
+ *    name (e.g., `createElement(`) AFTER SWC, restoring the intended behavior.
+ *
+ * Usage:
+ *   const { prePlugin, postPlugin } = createJsxPragmaFixPlugins();
+ *   // prePlugin must be positioned BEFORE the SWC plugin
+ *   // postPlugin must be positioned AFTER the SWC plugin
+ *
+ * @returns {{ prePlugin: import('rollup').Plugin, postPlugin: import('rollup').Plugin }}
+ */
+export function createJsxPragmaFixPlugins() {
+  const pragmaInfo = new Map();
+
+  const prePlugin = {
+    name: 'jsx-pragma-fix-pre',
+    transform(code, id) {
+      if (!/\.[jt]sx$/.test(id)) return null;
+
+      const jsxMatch = code.match(/\/\*\*?\s*@jsx\s+(\w+)\s*\*\//);
+      if (!jsxMatch) return null;
+
+      const pragma = jsxMatch[1];
+      const jsxFragMatch = code.match(/\/\*\*?\s*@jsxFrag\s+(\w+)\s*\*\//);
+      const pragmaFrag = jsxFragMatch ? jsxFragMatch[1] : 'Fragment';
+
+      pragmaInfo.set(id, { pragma, pragmaFrag });
+
+      // Strip @jsx and @jsxFrag pragma comments so SWC uses its default
+      // React.createElement / React.Fragment (avoiding the naming collision)
+      const stripped = code.replace(/\/\*\*?\s*@jsx\w*\s+[^*]*\*\//g, '');
+      if (stripped !== code) {
+        return { code: stripped, map: null };
+      }
+      return null;
+    },
+  };
+
+  const postPlugin = {
+    name: 'jsx-pragma-fix-post',
+    transform(code, id) {
+      const info = pragmaInfo.get(id);
+      if (!info) return null;
+
+      let result = code;
+      result = result.replace(/React\.createElement\s*\(/g, `${info.pragma}(`);
+      result = result.replace(/React\.Fragment/g, info.pragmaFrag);
+
+      if (result !== code) {
+        return { code: result, map: null };
+      }
+      return null;
+    },
+  };
+
+  return { prePlugin, postPlugin };
+}
+
+/**
  * Standard warning handler that throws on circular dependencies.
  * @param {Object} warning - Rollup warning object
  * @param {Function} warn - Default warn function

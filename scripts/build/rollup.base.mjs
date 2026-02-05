@@ -49,6 +49,8 @@ export function createESMConfig({
   external,
   plugins = [],
   preserveModules = false,
+  swc = {},
+  preSwcPlugins = [],
 }) {
   const externalDeps = external || getExternalDeps(pkg);
 
@@ -66,7 +68,8 @@ export function createESMConfig({
     plugins: [
       createResolvePlugin(),
       createCommonjsPlugin(),
-      createSwcPlugin(),
+      ...preSwcPlugins,
+      createSwcPlugin(swc),
       createWrapWarningsWithDevCheckPlugin(),
       createReplacePlugin({ mode: 'production' }),
       createStripJsxPragmaPlugin(),
@@ -105,6 +108,8 @@ export function createCJSConfig({
   plugins = [],
   replaceImports = {},
   preserveModules = false,
+  swc = {},
+  preSwcPlugins = [],
 }) {
   const externalDeps = external || getExternalDeps(pkg);
 
@@ -123,7 +128,8 @@ export function createCJSConfig({
     plugins: [
       createResolvePlugin(),
       createCommonjsPlugin(),
-      createSwcPlugin(),
+      ...preSwcPlugins,
+      createSwcPlugin(swc),
       createWrapWarningsWithDevCheckPlugin(),
       createReplacePlugin({ mode: 'production', additional: replaceImports }),
       createStripJsxPragmaPlugin(),
@@ -160,6 +166,8 @@ export function createUMDConfig({
   globals = {},
   external = [],
   plugins = [],
+  swc = {},
+  preSwcPlugins = [],
 }) {
   const baseName = fileName || name.toLowerCase().replace(/\s+/g, '');
   const devFileName = legacyFileNames
@@ -178,7 +186,8 @@ export function createUMDConfig({
   const basePlugins = [
     createResolvePlugin(),
     createCommonjsPlugin(),
-    createSwcPlugin(),
+    ...preSwcPlugins,
+    createSwcPlugin(swc),
     createWrapWarningsWithDevCheckPlugin(),
   ];
 
@@ -260,6 +269,7 @@ export { createBanner } from './banner.mjs';
 export {
   createSwcPlugin,
   createCommonjsPlugin,
+  createJsxPragmaFixPlugins,
   createPackageJsonPlugin,
   createReplacePlugin,
   createResolvePlugin,
