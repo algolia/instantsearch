@@ -3,6 +3,260 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.23.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.23.0...react-instantsearch@7.23.1) (2026-02-03)
+
+**Note:** Version bump only for package react-instantsearch
+
+
+
+
+
+# [7.23.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.22.1...react-instantsearch@7.23.0) (2026-01-27)
+
+
+### Bug Fixes
+
+* **autocomplete:** item ids are shifted when there are deduped items ([#6862](https://github.com/algolia/instantsearch/issues/6862)) ([2b24d3b](https://github.com/algolia/instantsearch/commit/2b24d3b864549fca2a9d75f704e33095846ccbaa))
+
+
+### Features
+
+* add `FilterSuggestions` widget ([#6861](https://github.com/algolia/instantsearch/issues/6861)) ([3ff224f](https://github.com/algolia/instantsearch/commit/3ff224f0c0823c47ace52306ad810a98231a8f83))
+* **autocomplete:** add `transformItems` prop ([#6853](https://github.com/algolia/instantsearch/issues/6853)) ([664892a](https://github.com/algolia/instantsearch/commit/664892a51c290433530ccf6314305b3e9228e8c3))
+* **chat:** add default memory tools ([#6873](https://github.com/algolia/instantsearch/issues/6873)) ([36127f4](https://github.com/algolia/instantsearch/commit/36127f4105276ccda7d07bae3982627179316ba8))
+* **chat:** support prompt suggestions ([#6831](https://github.com/algolia/instantsearch/issues/6831)) ([aca8934](https://github.com/algolia/instantsearch/commit/aca8934163c047ca56db0dad679737f331efac29))
+
+
+
+
+
+## [7.22.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.22.0...react-instantsearch@7.22.1) (2025-12-31)
+
+**Note:** Version bump only for package react-instantsearch
+
+
+
+
+
+# [7.22.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.21.0...react-instantsearch@7.22.0) (2025-12-30)
+
+
+### Bug Fixes
+
+* **types:** expose types field in exports ([#6838](https://github.com/algolia/instantsearch/issues/6838)) ([87f3aaf](https://github.com/algolia/instantsearch/commit/87f3aaf85b5fc7ca16f254dca5d485dd5abb1f80)), closes [#6836](https://github.com/algolia/instantsearch/issues/6836)
+
+
+### Features
+
+* **autocomplete:** add header to showRecents ([#6816](https://github.com/algolia/instantsearch/issues/6816)) ([7f5e54d](https://github.com/algolia/instantsearch/commit/7f5e54da487874e59ae390bc9082c936d7c47dce))
+* **autocomplete:** implement apply suggestion button ([#6844](https://github.com/algolia/instantsearch/issues/6844)) ([730e6f0](https://github.com/algolia/instantsearch/commit/730e6f0dd2271d8e044c5b65d891243c21d0af27))
+
+
+
+
+
+# [7.21.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.20.2...react-instantsearch@7.21.0) (2025-12-10)
+
+
+### Features
+
+* **react-instantsearch:** export `useStickToBottom` hook ([#6834](https://github.com/algolia/instantsearch/issues/6834)) ([b657e72](https://github.com/algolia/instantsearch/commit/b657e72a142af229f1135206f8458bbaeaf1cacd))
+
+
+
+
+
+## [7.20.2](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.20.1...react-instantsearch@7.20.2) (2025-12-09)
+
+
+### Bug Fixes
+
+* **ui-components:** portable types ([#6829](https://github.com/algolia/instantsearch/issues/6829)) ([4f54f16](https://github.com/algolia/instantsearch/commit/4f54f1683077f0b0b81e46818f76b84658a0bf88))
+
+
+
+
+
+## [7.20.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.20.0...react-instantsearch@7.20.1) (2025-12-02)
+
+
+### Bug Fixes
+
+* **autocomplete:** add `placeholder` input prop ([#6817](https://github.com/algolia/instantsearch/issues/6817)) ([9ed31df](https://github.com/algolia/instantsearch/commit/9ed31dffd1b931bf69cf6cba3e98d3aa820ad55c))
+* **autocomplete:** deduplicate recent searches/suggestions ([#6824](https://github.com/algolia/instantsearch/issues/6824)) ([b643508](https://github.com/algolia/instantsearch/commit/b6435083988903df178b99d075c3e0c479fa14a2))
+
+
+
+
+# [7.20.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.19.0...react-instantsearch@7.20.0) (2025-11-18)
+
+
+### Features
+
+* **autocomplete:** forward search params to the query API request ([#6804](https://github.com/algolia/instantsearch/issues/6804)) ([e711429](https://github.com/algolia/instantsearch/commit/e711429ea1768a7d2a518815861abb4863fb2eaa))
+* **autocomplete:** implement reverse highlighting ([#6806](https://github.com/algolia/instantsearch/issues/6806)) ([05fdd2c](https://github.com/algolia/instantsearch/commit/05fdd2c5214d4809a71b069839caf12b3d5fb341))
+* **autocomplete:** support panel customization ([#6807](https://github.com/algolia/instantsearch/issues/6807)) ([6c7fbd8](https://github.com/algolia/instantsearch/commit/6c7fbd80052775161bf89398530a9510eea150a5))
+
+
+
+
+
+# [7.19.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.18.0...react-instantsearch@7.19.0) (2025-11-10)
+
+
+### Features
+
+* **autocomplete:** implement recent searches ([#6747](https://github.com/algolia/instantsearch/issues/6747)) ([630a9e6](https://github.com/algolia/instantsearch/commit/630a9e6ad407941a7bdad64448f2cced52ec0ef8))
+* **chat:** add assistant and user message components/templates in widget ([#6797](https://github.com/algolia/instantsearch/issues/6797)) ([a86b6f3](https://github.com/algolia/instantsearch/commit/a86b6f3c0e43a3ed1ae99e5c21259d890e005025))
+
+
+
+
+
+# [7.18.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.17.0...react-instantsearch@7.18.0) (2025-11-06)
+
+
+### Bug Fixes
+
+* **autocomplete:** default to 5 hits per index ([#6783](https://github.com/algolia/instantsearch/issues/6783)) ([60c5bc5](https://github.com/algolia/instantsearch/commit/60c5bc5812245d9758bac24dcf54b034ac19c3c9))
+
+
+### Features
+
+* add fallbackParameters support to Recommend FBT [RECO-2443] ([#6794](https://github.com/algolia/instantsearch/issues/6794)) ([343711b](https://github.com/algolia/instantsearch/commit/343711b712be5bbfbb214853691f3457571d22cb))
+* **autocomplete:** implement styling ([#6776](https://github.com/algolia/instantsearch/issues/6776)) ([46aa79a](https://github.com/algolia/instantsearch/commit/46aa79aa20700d9c52754f09f9d45e9250237117))
+* **autocomplete:** support global onSelect and redirect to search page ([#6777](https://github.com/algolia/instantsearch/issues/6777)) ([44ffb9a](https://github.com/algolia/instantsearch/commit/44ffb9a43d75f7f3bdd83383d0ad500cb0924024))
+* **autocomplete:** support header template for autocomplete index ([#6782](https://github.com/algolia/instantsearch/issues/6782)) ([a27123f](https://github.com/algolia/instantsearch/commit/a27123f46de052620989af72a182e48dd94c4b3e))
+* **instantsearch.js:** introduce autocomplete widget ([#6759](https://github.com/algolia/instantsearch/issues/6759)) ([59f8fbf](https://github.com/algolia/instantsearch/commit/59f8fbf1a70262ab0927f5fdcde5c3ecbd10e3ba))
+
+
+
+
+
+# [7.17.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.16.3...react-instantsearch@7.17.0) (2025-10-23)
+
+
+### Bug Fixes
+
+* **chat:** add missing props to the IS.js chat widget ([#6726](https://github.com/algolia/instantsearch/issues/6726)) ([ed6a24b](https://github.com/algolia/instantsearch/commit/ed6a24b67c927370bf27f385899c1176dfc2e5dc))
+* **chat:** format hits count with locale-specific separators ([#6766](https://github.com/algolia/instantsearch/issues/6766)) ([4129f37](https://github.com/algolia/instantsearch/commit/4129f37ac5a771b517d1794bb25d8b86ae7a05fd))
+* **chat:** move stick-to-bottom logic to widget-level hooks ([#6762](https://github.com/algolia/instantsearch/issues/6762)) ([676e2d8](https://github.com/algolia/instantsearch/commit/676e2d8d57cc35a87aaa1ac648eb1a4406187749))
+* **chat:** update tools api in chat widgets ([#6728](https://github.com/algolia/instantsearch/issues/6728)) ([8c9f388](https://github.com/algolia/instantsearch/commit/8c9f3883207e5f55efff095dc1f2da4a30a6c568))
+* **chat:** wrong tool call handling logic for RIS ([#6764](https://github.com/algolia/instantsearch/issues/6764)) ([3c144ed](https://github.com/algolia/instantsearch/commit/3c144ed30ba79b34a8094f26eb1dc43eda21bf80))
+* **instantsearch-ui-components:** fix auto focus on open ([#6725](https://github.com/algolia/instantsearch/issues/6725)) ([2daeede](https://github.com/algolia/instantsearch/commit/2daeedeef2eac49061c927b45b84171e3736e8c6))
+* **react-instantsearch:** fix scroll refs handling ([#6713](https://github.com/algolia/instantsearch/issues/6713)) ([1a0d437](https://github.com/algolia/instantsearch/commit/1a0d437e0edc97232d41ec805702f9d526442644))
+* **umd:** remove chat components from react umd bundle ([#6714](https://github.com/algolia/instantsearch/issues/6714)) ([3d324d0](https://github.com/algolia/instantsearch/commit/3d324d0488afcf0c47ec21654d0fe7c097a8bcec))
+
+
+### Features
+
+* **autocomplete:** draft React component ([#6702](https://github.com/algolia/instantsearch/issues/6702)) ([0ec964b](https://github.com/algolia/instantsearch/commit/0ec964b402ce717eb6895089ea209cc76e0e7599))
+* **autocomplete:** generate component props for keyboard navigation and accessibility ([#6749](https://github.com/algolia/instantsearch/issues/6749)) ([14d7a4e](https://github.com/algolia/instantsearch/commit/14d7a4e1e3f5e0a90026158cf0b8d718436d656e))
+* **autocomplete:** implement basic shared DOM ([#6709](https://github.com/algolia/instantsearch/issues/6709)) ([47e95af](https://github.com/algolia/instantsearch/commit/47e95af233650197d7f5303f794a1dc04b1e7caa))
+* **autocomplete:** implement suggestions for React ([#6735](https://github.com/algolia/instantsearch/issues/6735)) ([df2a0f6](https://github.com/algolia/instantsearch/commit/df2a0f670ef6d1bf592b7896fec366b388a33bfd))
+* **autocomplete:** indices prop for React component ([#6703](https://github.com/algolia/instantsearch/issues/6703)) ([166db09](https://github.com/algolia/instantsearch/commit/166db0903cd98b186ce361b10834fc2090dc9cab))
+* **chat:** add custom toggle button support ([#6740](https://github.com/algolia/instantsearch/issues/6740)) ([ee9c31b](https://github.com/algolia/instantsearch/commit/ee9c31ba1fff7401cdc4f450cc42d070589c93fc))
+* **chat:** add fallbacks for unhandled tools ([#6757](https://github.com/algolia/instantsearch/issues/6757)) ([4210d55](https://github.com/algolia/instantsearch/commit/4210d55bcb1e73dc49affcd0df1c5fd2d2163221))
+* **chat:** add recommend tool ([#6746](https://github.com/algolia/instantsearch/issues/6746)) ([4108174](https://github.com/algolia/instantsearch/commit/4108174047e9a5ff81156751e2fe7b4719fa4213))
+* **chat:** add support for client side tools ([#6708](https://github.com/algolia/instantsearch/issues/6708)) ([268f1f8](https://github.com/algolia/instantsearch/commit/268f1f8ec8ad87d34b104884242a7378fa07a4c1))
+* **chat:** add top level components and templates ([#6730](https://github.com/algolia/instantsearch/issues/6730)) ([703471b](https://github.com/algolia/instantsearch/commit/703471b06cef4abd2f3b7edcb5b2c2eae2a1c0a3))
+* **chat:** add top level translations and classnames ([#6729](https://github.com/algolia/instantsearch/issues/6729)) ([cc586f5](https://github.com/algolia/instantsearch/commit/cc586f55f30c7c238f445887a41644fac08b9d36))
+* **chat:** handle show all for other pages than search ([#6723](https://github.com/algolia/instantsearch/issues/6723)) ([05330b4](https://github.com/algolia/instantsearch/commit/05330b42902daf3ce3d3a75c13b686271731c1ed))
+* **chat:** move stickToBottom lib to ui components ([#6724](https://github.com/algolia/instantsearch/issues/6724)) ([e1b654f](https://github.com/algolia/instantsearch/commit/e1b654f5d2e274c059980fc6c9e37d6777ad7e4a))
+* **instantsearch-ui-components:** add `Button` component and refactor chat components ([#6734](https://github.com/algolia/instantsearch/issues/6734)) ([3b65ede](https://github.com/algolia/instantsearch/commit/3b65ede9c706b674e01bdd066e99761ae538d9b8))
+* **instantsearch-ui-components:** implement chat carousel design ([#6719](https://github.com/algolia/instantsearch/issues/6719)) ([e29f0d5](https://github.com/algolia/instantsearch/commit/e29f0d56a63bee5db596e6b9918ccafa4a8112b8))
+* **instantsearch.js:** introduce chat widget ([#6705](https://github.com/algolia/instantsearch/issues/6705)) ([d7b360b](https://github.com/algolia/instantsearch/commit/d7b360b0a2d18e3eae42bf89ffae87f10142d0c1))
+* **react-instantsearch-ui:** implement chat components design ([#6704](https://github.com/algolia/instantsearch/issues/6704)) ([dbea460](https://github.com/algolia/instantsearch/commit/dbea4600184666c913f952fcdf7a4971e89ac266))
+* **react-instantsearch:** introduce chat widget ([#6698](https://github.com/algolia/instantsearch/issues/6698)) ([9e79c1f](https://github.com/algolia/instantsearch/commit/9e79c1f2bca03e37de18c882a7f7dd929894bc06))
+
+
+
+
+
+## [7.16.3](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.16.2...react-instantsearch@7.16.3) (2025-09-09)
+
+**Note:** Version bump only for package react-instantsearch
+
+
+
+
+
+## [7.16.2](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.16.1...react-instantsearch@7.16.2) (2025-07-22)
+
+**Note:** Version bump only for package react-instantsearch
+
+
+
+
+
+## [7.16.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.16.0...react-instantsearch@7.16.1) (2025-07-08)
+
+
+### Bug Fixes
+
+* **babel:** update babel/runtime ([#6666](https://github.com/algolia/instantsearch/issues/6666)) ([33807d7](https://github.com/algolia/instantsearch/commit/33807d728f949555a66d2a930a1b29701354264c)), closes [#6664](https://github.com/algolia/instantsearch/issues/6664) [#6665](https://github.com/algolia/instantsearch/issues/6665)
+
+
+
+
+
+# [7.16.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.15.8...react-instantsearch@7.16.0) (2025-06-16)
+
+
+### Bug Fixes
+
+* **breadcrumb:** use hierarchical facets only ([#6645](https://github.com/algolia/instantsearch/issues/6645)) ([c9e50d9](https://github.com/algolia/instantsearch/commit/c9e50d9230426c13fd68cf08b0004fc7e19147ce))
+* **infiniteHits:** always return valid showPrevious and showMore functions ([#6644](https://github.com/algolia/instantsearch/issues/6644)) ([03670aa](https://github.com/algolia/instantsearch/commit/03670aa503f4428708e5fd2d76bd2c960063cf53))
+
+
+### Features
+
+* **refinementList:** add option to disable selecting on searchbox submit ([#6649](https://github.com/algolia/instantsearch/issues/6649)) ([8b9fae6](https://github.com/algolia/instantsearch/commit/8b9fae67738fec4aaf2a2dad93910be9d89ac69b))
+
+
+
+
+
+## [7.15.8](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.15.7...react-instantsearch@7.15.8) (2025-05-27)
+
+**Note:** Version bump only for package react-instantsearch
+
+
+
+
+
+## [7.15.7](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.15.6...react-instantsearch@7.15.7) (2025-05-06)
+
+**Note:** Version bump only for package react-instantsearch
+
+
+
+
+
+## [7.15.6](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.15.5...react-instantsearch@7.15.6) (2025-04-29)
+
+**Note:** Version bump only for package react-instantsearch
+
+
+
+
+
+## [7.15.5](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.15.4...react-instantsearch@7.15.5) (2025-03-18)
+
+**Note:** Version bump only for package react-instantsearch
+
+
+
+
+
+## [7.15.4](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.15.3...react-instantsearch@7.15.4) (2025-03-04)
+
+**Note:** Version bump only for package react-instantsearch
+
+
+
+
+
 ## [7.15.3](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.15.2...react-instantsearch@7.15.3) (2025-01-28)
 
 **Note:** Version bump only for package react-instantsearch

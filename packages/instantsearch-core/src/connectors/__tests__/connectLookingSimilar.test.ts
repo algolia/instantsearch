@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
@@ -141,7 +141,6 @@ describe('connectLookingSimilar', () => {
             maxRecommendations: 10,
             threshold: 95,
             queryParameters: { userToken: 'token' },
-            fallbackParameters: {},
           })
           .addLookingSimilar({
             // @ts-expect-error
@@ -150,7 +149,62 @@ describe('connectLookingSimilar', () => {
             maxRecommendations: 10,
             threshold: 95,
             queryParameters: { userToken: 'token' },
-            fallbackParameters: {},
+          })
+      );
+    });
+
+    it('adds escapeHTML tags', () => {
+      const render = () => {};
+      const makeWidget = connectLookingSimilar(render);
+      const widget = makeWidget({
+        objectIDs: ['1', '2'],
+        limit: 10,
+        threshold: 95,
+        queryParameters: { userToken: 'token' },
+        fallbackParameters: { query: 'query' },
+        escapeHTML: true,
+      });
+
+      // @ts-expect-error
+      const actual = widget.getWidgetParameters(new RecommendParameters(), {
+        uiState: {},
+      });
+
+      expect(actual).toEqual(
+        new RecommendParameters()
+          .addLookingSimilar({
+            // @ts-expect-error
+            $$id: widget.$$id,
+            objectID: '1',
+            maxRecommendations: 10,
+            threshold: 95,
+            queryParameters: {
+              userToken: 'token',
+              highlightPostTag: '__/ais-highlight__',
+              highlightPreTag: '__ais-highlight__',
+            },
+            fallbackParameters: {
+              query: 'query',
+              highlightPostTag: '__/ais-highlight__',
+              highlightPreTag: '__ais-highlight__',
+            },
+          })
+          .addLookingSimilar({
+            // @ts-expect-error
+            $$id: widget.$$id,
+            objectID: '2',
+            maxRecommendations: 10,
+            threshold: 95,
+            queryParameters: {
+              userToken: 'token',
+              highlightPostTag: '__/ais-highlight__',
+              highlightPreTag: '__ais-highlight__',
+            },
+            fallbackParameters: {
+              query: 'query',
+              highlightPostTag: '__/ais-highlight__',
+              highlightPreTag: '__ais-highlight__',
+            },
           })
       );
     });

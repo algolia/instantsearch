@@ -477,6 +477,12 @@ declare namespace algoliasearchHelper {
      * less relevant results.
      */
     relevancyStrictness?: number;
+
+    /**
+     * The sorting strategy to use in composition mode.
+     * Only available when using the Composition API.
+     */
+    sortBy?: string;
   }
 
   export class SearchParameters implements PlainSearchParameters {
@@ -1085,6 +1091,12 @@ declare namespace algoliasearchHelper {
      * less relevant results.
      */
     relevancyStrictness?: number;
+
+    /**
+     * The sorting strategy to use in composition mode.
+     * Only available when using the Composition API.
+     */
+    sortBy?: string;
 
     /* end implementation of algoliasearch.QueryParameters */
 

@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 import { runTestSuites } from '@instantsearch/tests/common';
 import * as testSuites from '@instantsearch/tests/widgets';
@@ -579,10 +579,23 @@ const testSetups = {
       document.body.appendChild(document.createElement('div'))
     );
   },
+  createChatWidgetTests() {
+    throw new Error('Chat is not supported in Vue InstantSearch');
+  },
+  createAutocompleteWidgetTests() {
+    throw new Error('Autocomplete is not supported in Vue InstantSearch');
+  },
+  createFilterSuggestionsWidgetTests() {
+    throw new Error('FilterSuggestions is not supported in Vue InstantSearch');
+  },
 };
 
 const testOptions = {
-  createRefinementListWidgetTests: undefined,
+  createRefinementListWidgetTests: {
+    skippedTests: {
+      'selects first item on submitting the search (with searchableSelectOnSubmit: true)': true,
+    },
+  },
   createHierarchicalMenuWidgetTests: undefined,
   createBreadcrumbWidgetTests: undefined,
   createMenuWidgetTests: undefined,
@@ -617,10 +630,20 @@ const testOptions = {
   },
   createPoweredByWidgetTests: undefined,
   createDynamicWidgetsWidgetTests: undefined,
+  createChatWidgetTests: {
+    skippedTests: { 'Chat widget common tests': true },
+  },
+  createAutocompleteWidgetTests: {
+    skippedTests: { 'Autocomplete widget common tests': true },
+  },
+  createFilterSuggestionsWidgetTests: {
+    skippedTests: { 'FilterSuggestions widget common tests': true },
+  },
 };
 
 describe('Common widget tests (Vue InstantSearch)', () => {
   runTestSuites({
+    flavor: 'vue',
     testSuites,
     testSetups,
     testOptions,

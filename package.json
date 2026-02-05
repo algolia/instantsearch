@@ -117,7 +117,6 @@
     "jest": "27.4.7",
     "jest-diff": "27.4.6",
     "jest-environment-jsdom": "27.1.0",
-    "jest-environment-jsdom-global": "2.0.4",
     "jest-junit": "12.2.0",
     "jest-vue-preprocessor": "1.7.1",
     "jest-watch-typeahead": "1.0.0",
@@ -146,12 +145,15 @@
   "resolutions": {
     "brotli-size": "4.0.0",
     "webpack": "4.47.0",
-    "babel-loader": "8.2.2"
+    "babel-loader": "8.2.2",
+    "zod": "3.25.76",
+    "qs": "6.9.7"
   },
   "browserslist": [
     "chrome >= 60",
     "firefox >= 55",
     "safari >= 12.2",
     "not op_mini all"
-  ]
+  ],
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }

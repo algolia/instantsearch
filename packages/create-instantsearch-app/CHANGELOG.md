@@ -3,6 +3,121 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.5.37](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.36...create-instantsearch-app@7.5.37) (2026-02-03)
+
+**Note:** Version bump only for package create-instantsearch-app
+
+
+
+
+
+## [7.5.36](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.35...create-instantsearch-app@7.5.36) (2026-01-27)
+
+**Note:** Version bump only for package create-instantsearch-app
+
+
+
+
+
+## [7.5.35](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.34...create-instantsearch-app@7.5.35) (2025-12-30)
+
+**Note:** Version bump only for package create-instantsearch-app
+
+
+
+
+
+## [7.5.34](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.33...create-instantsearch-app@7.5.34) (2025-12-09)
+
+**Note:** Version bump only for package create-instantsearch-app
+
+
+
+
+
+## [7.5.33](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.32...create-instantsearch-app@7.5.33) (2025-12-02)
+
+**Note:** Version bump only for package create-instantsearch-app
+
+
+
+
+
+## [7.5.32](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.31...create-instantsearch-app@7.5.32) (2025-11-18)
+
+**Note:** Version bump only for package create-instantsearch-app
+
+
+
+
+
+## [7.5.31](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.30...create-instantsearch-app@7.5.31) (2025-11-10)
+
+**Note:** Version bump only for package create-instantsearch-app
+
+
+
+
+
+## [7.5.30](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.29...create-instantsearch-app@7.5.30) (2025-11-06)
+
+**Note:** Version bump only for package create-instantsearch-app
+
+
+
+
+
+## [7.5.29](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.28...create-instantsearch-app@7.5.29) (2025-10-23)
+
+**Note:** Version bump only for package create-instantsearch-app
+
+
+
+
+
+## [7.5.28](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.27...create-instantsearch-app@7.5.28) (2025-07-08)
+
+**Note:** Version bump only for package create-instantsearch-app
+
+
+
+
+
+## [7.5.27](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.26...create-instantsearch-app@7.5.27) (2025-06-16)
+
+**Note:** Version bump only for package create-instantsearch-app
+
+
+
+
+
+## [7.5.26](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.25...create-instantsearch-app@7.5.26) (2025-04-29)
+
+**Note:** Version bump only for package create-instantsearch-app
+
+
+
+
+
+## [7.5.25](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.24...create-instantsearch-app@7.5.25) (2025-03-18)
+
+**Note:** Version bump only for package create-instantsearch-app
+
+
+
+
+
+## [7.5.24](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.23...create-instantsearch-app@7.5.24) (2025-03-04)
+
+
+### Bug Fixes
+
+* **create-instantsearch-app:** fix corejs version in vue-is template  ([#6567](https://github.com/algolia/instantsearch/issues/6567)) ([018ee43](https://github.com/algolia/instantsearch/commit/018ee43a0b18b0210cc06bab5b6a451e80a6deab))
+
+
+
+
+
 ## [7.5.23](https://github.com/algolia/instantsearch/compare/create-instantsearch-app@7.5.22...create-instantsearch-app@7.5.23) (2025-01-28)
 
 **Note:** Version bump only for package create-instantsearch-app

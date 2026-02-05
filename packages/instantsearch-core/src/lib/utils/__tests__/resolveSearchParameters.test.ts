@@ -1,5 +1,4 @@
-import { createIndexInitOptions } from 'instantsearch-core/test/createWidget';
-
+import { createIndexInitOptions } from '../../../../test/createWidget';
 import { resolveSearchParameters } from '..';
 import { index } from '../../../widgets';
 

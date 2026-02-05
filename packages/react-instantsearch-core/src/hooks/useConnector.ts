@@ -17,7 +17,9 @@ import type {
   WidgetDescription,
 } from 'instantsearch-core';
 
-export type AdditionalWidgetProperties = Partial<Widget<WidgetDescription>>;
+export type AdditionalWidgetProperties = Partial<Widget<WidgetDescription>> & {
+  skipSuspense?: boolean;
+};
 
 export function useConnector<
   TProps extends Record<string, unknown>,
@@ -25,7 +27,10 @@ export function useConnector<
 >(
   connector: Connector<TDescription, TProps>,
   props: TProps = {} as TProps,
-  additionalWidgetProperties: AdditionalWidgetProperties = {}
+  {
+    skipSuspense = false,
+    ...additionalWidgetProperties
+  }: AdditionalWidgetProperties = {}
 ): TDescription['renderState'] {
   const serverContext = useInstantSearchServerContext();
   const ssrContext = useInstantSearchSSRContext();
@@ -145,6 +150,7 @@ export function useConnector<
     parentIndex,
     props: stableProps,
     shouldSsr: Boolean(serverContext),
+    skipSuspense,
   });
 
   return state;

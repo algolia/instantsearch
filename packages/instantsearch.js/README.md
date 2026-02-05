@@ -131,7 +131,7 @@ The documentation is available on the [Algolia website](https://www.algolia.com/
 
 | E-commerce | Media | Travel |
 | --- | --- | --- |
-| <a href="https://instantsearchjs.netlify.com/examples/e-commerce/"><img src="https://www.algolia.com/doc/assets/images/build-search-ui/demos/e-commerce-2c7ed6b6.png" width="250" alt="E-commerce demo preview"></a> | <a href="https://instantsearchjs.netlify.com/examples/media/"><img src="https://www.algolia.com/doc/assets/images/build-search-ui/demos/media-articles-abc153ab.png" width="250" alt="Media demo preview"></a> | <a href="https://instantsearchjs.netlify.com/examples/tourism/"><img src="https://instantsearchjs.netlify.com/examples/tourism/capture.png" width="250" alt="Tourism demo preview"></a> |
+| <a href="https://instantsearchjs.netlify.app/examples/e-commerce/"><img src="https://www.algolia.com/doc/assets/images/build-search-ui/demos/e-commerce-2c7ed6b6.png" width="250" alt="E-commerce demo preview"></a> | <a href="https://instantsearchjs.netlify.app/examples/media/"><img src="https://www.algolia.com/doc/assets/images/build-search-ui/demos/media-articles-abc153ab.png" width="250" alt="Media demo preview"></a> | <a href="https://instantsearchjs.netlify.app/examples/tourism/"><img src="https://instantsearchjs.netlify.app/examples/tourism/capture.png" width="250" alt="Tourism demo preview"></a> |
 
 See more demos [on the website](https://www.algolia.com/doc/guides/building-search-ui/resources/demos/js/).
 

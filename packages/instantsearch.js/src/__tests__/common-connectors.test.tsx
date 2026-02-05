@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/connectors';
@@ -19,8 +19,11 @@ import {
   connectFrequentlyBoughtTogether,
   connectTrendingItems,
   connectLookingSimilar,
+  connectChat,
+  connectFilterSuggestions,
 } from '../connectors';
 import instantsearch from '../index.es';
+import { noop } from '../lib/utils';
 import { refinementList } from '../widgets';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -29,7 +32,7 @@ import type { InstantSearch, Widget } from 'instantsearch-core';
 type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
 
-const testSetups: TestSetupsMap<TestSuites> = {
+const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
   createHierarchicalMenuConnectorTests({ instantSearchOptions, widgetParams }) {
     const customHierarchicalMenu = connectHierarchicalMenu<{
       container: HTMLElement;
@@ -530,6 +533,109 @@ const testSetups: TestSetupsMap<TestSuites> = {
 
     search.start();
   },
+  createChatConnectorTests({ instantSearchOptions, widgetParams }) {
+    const customChat = connectChat<{
+      container: HTMLElement;
+    }>((renderOptions) => {
+      const { input, setInput, open, setOpen } = renderOptions;
+      renderOptions.widgetParams.container.innerHTML = `
+        <div data-testid="Chat-root" style="display: ${
+          open ? 'block' : 'none'
+        }">
+          <input data-testid="Chat-input" type="text" value="${input}" />
+          <button data-testid="Chat-updateInput">update input</button>
+        </div>
+        <button data-testid="Chat-toggleButton">
+          toggle chat
+        </button>
+      `;
+
+      renderOptions.widgetParams.container
+        .querySelector('[data-testid="Chat-toggleButton"]')!
+        .addEventListener('click', () => {
+          setOpen(!open);
+        });
+
+      renderOptions.widgetParams.container
+        .querySelector('[data-testid="Chat-updateInput"]')!
+        .addEventListener('click', () => {
+          setInput('hello world');
+        });
+    });
+
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        customChat({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
+  createFilterSuggestionsConnectorTests({
+    instantSearchOptions,
+    widgetParams,
+  }) {
+    const customFilterSuggestions = connectFilterSuggestions<{
+      container: HTMLElement;
+    }>((renderOptions) => {
+      const { suggestions, refine, isLoading } = renderOptions;
+      renderOptions.widgetParams.container.innerHTML = `
+        <div data-testid="FilterSuggestions-root">
+          ${
+            isLoading
+              ? '<div data-testid="FilterSuggestions-loading">Loading...</div>'
+              : ''
+          }
+          <ul data-testid="FilterSuggestions-list">
+            ${suggestions
+              .map(
+                (suggestion) =>
+                  `<li data-testid="FilterSuggestions-item">
+                    <button data-testid="FilterSuggestions-refine" data-attribute="${suggestion.attribute}" data-value="${suggestion.value}">
+                      ${suggestion.label} (${suggestion.count})
+                    </button>
+                  </li>`
+              )
+              .join('')}
+          </ul>
+        </div>
+      `;
+
+      renderOptions.widgetParams.container
+        .querySelectorAll('[data-testid="FilterSuggestions-refine"]')
+        .forEach((button) => {
+          button.addEventListener('click', () => {
+            const attribute = (button as HTMLElement).dataset.attribute!;
+            const value = (button as HTMLElement).dataset.value!;
+            refine(attribute, value);
+          });
+        });
+    });
+
+    const search = instantsearch(instantSearchOptions)
+      .addWidgets([
+        customFilterSuggestions({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+        connectRefinementList(noop)({ attribute: 'brand' }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      });
+
+    search.start();
+  },
 };
 
 function addWidgetToggleUi(search: InstantSearch, widget: Widget) {
@@ -561,10 +667,13 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createFrequentlyBoughtTogetherConnectorTests: undefined,
   createTrendingItemsConnectorTests: undefined,
   createLookingSimilarConnectorTests: undefined,
+  createChatConnectorTests: undefined,
+  createFilterSuggestionsConnectorTests: undefined,
 };
 
 describe('Common connector tests (InstantSearch.js)', () => {
   runTestSuites({
+    flavor: 'javascript',
     testSuites,
     testSetups,
     testOptions,

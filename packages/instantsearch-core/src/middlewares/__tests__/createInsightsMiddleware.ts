@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom-global
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
 import {
@@ -41,15 +41,20 @@ declare global {
 }
 
 describe('insights', () => {
-  const searchClientWithCredentials = createSearchClient({
-    // @ts-expect-error only available in search client v4
-    transporter: {
-      headers: {
-        'x-algolia-application-id': 'myAppId',
-        'x-algolia-api-key': 'myApiKey',
+  let searchClientWithCredentials: SearchClient;
+
+  beforeEach(() => {
+    searchClientWithCredentials = createSearchClient({
+      // @ts-expect-error only available in search client v4
+      transporter: {
+        headers: {
+          'x-algolia-application-id': 'myAppId',
+          'x-algolia-api-key': 'myApiKey',
+        },
       },
-    },
+    });
   });
+
   const createTestEnvironment = ({
     searchClient = searchClientWithCredentials,
     started = true,
@@ -1214,6 +1219,76 @@ describe('insights', () => {
           headers: {
             'X-Algolia-Application-Id': 'myAppId',
             'X-Algolia-API-Key': 'myApiKey',
+          },
+        }
+      );
+    });
+
+    it('uses latest appId and apiKey from client', () => {
+      const { insightsClient, instantSearchInstance, analytics } =
+        createTestEnvironment();
+
+      instantSearchInstance.use(
+        createInsightsMiddleware({
+          insightsClient,
+        })
+      );
+      insightsClient('setUserToken', 'token');
+
+      instantSearchInstance.sendEventToInsights({
+        insightsMethod: 'viewedObjectIDs',
+        widgetType: 'ais.customWidget',
+        eventType: 'view',
+        payload: {
+          index: 'my-index',
+          eventName: 'My Hits Viewed',
+          objectIDs: ['obj1'],
+        },
+      });
+
+      expect(analytics.viewedObjectIDs).toHaveBeenCalledTimes(1);
+      expect(analytics.viewedObjectIDs).toHaveBeenCalledWith(
+        {
+          index: 'my-index',
+          eventName: 'My Hits Viewed',
+          objectIDs: ['obj1'],
+          algoliaSource: ['instantsearch'],
+        },
+        {
+          headers: {
+            'X-Algolia-Application-Id': 'myAppId',
+            'X-Algolia-API-Key': 'myApiKey',
+          },
+        }
+      );
+
+      // @ts-expect-error - only works for v4+
+      instantSearchInstance.client.transporter.headers['x-algolia-api-key'] =
+        'myApiKey2';
+
+      instantSearchInstance.sendEventToInsights({
+        insightsMethod: 'viewedObjectIDs',
+        widgetType: 'ais.customWidget',
+        eventType: 'view',
+        payload: {
+          index: 'my-index',
+          eventName: 'My Hits Viewed',
+          objectIDs: ['obj2'],
+        },
+      });
+
+      expect(analytics.viewedObjectIDs).toHaveBeenCalledTimes(2);
+      expect(analytics.viewedObjectIDs).toHaveBeenCalledWith(
+        {
+          index: 'my-index',
+          eventName: 'My Hits Viewed',
+          objectIDs: ['obj2'],
+          algoliaSource: ['instantsearch'],
+        },
+        {
+          headers: {
+            'X-Algolia-Application-Id': 'myAppId',
+            'X-Algolia-API-Key': 'myApiKey2',
           },
         }
       );

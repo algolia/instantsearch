@@ -1,0 +1,44 @@
+.Tabs-header {
+  display: flex;
+}
+
+.Tabs-title {
+  padding: 0 1rem;
+  flex: 1;
+  font-family: inherit;
+  font-size: 0.875rem;
+  color: #23263b;
+  background: linear-gradient(-180deg, #fff, #fcfcfd);
+  border: 1px solid #d6d6e7;
+  box-shadow: 0 1px 0 0 rgb(35 38 59 / 5%);
+  text-align: center;
+  line-height: 2rem;
+  cursor: pointer;
+}
+
+.Tabs-title:first-child {
+  border-radius: 3px 0 0 3px;
+}
+
+.Tabs-title:last-child {
+  border-radius: 0 3px 3px 0;
+}
+
+.Tabs-title:hover {
+  background: linear-gradient(-180deg, #fff, #f5f5fa);
+}
+
+.Tabs-title + .Tabs-title {
+  margin-left: -1px;
+}
+
+.Tabs-title--active {
+  font-weight: bold;
+  box-shadow: inset 0 1px 4px 0 rgb(119 122 175 / 40%),
+    inset 0 1px 1px 0 rgb(119 122 175 / 40%), 0 1px 0 0 rgb(35 38 59 / 5%);
+  z-index: 1;
+}
+
+.Tabs-list {
+  margin-top: 1rem;
+}

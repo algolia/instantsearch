@@ -1,18 +1,19 @@
 {
   "name": "example-react-instantsearch-server-side-rendering",
-  "version": "6.88.0",
+  "version": "6.108.0",
   "private": true,
   "license": "MIT",
   "scripts": {
     "start": "webpack && nodemon dist/server.js",
     "watch": "webpack --watch",
-    "build": "webpack --mode=production"
+    "build": "NODE_OPTIONS=--openssl-legacy-provider webpack --mode=production"
   },
   "devDependencies": {
     "@babel/core": "7.25.9",
     "@babel/polyfill": "7.12.1",
     "@babel/preset-env": "7.25.9",
     "@babel/preset-react": "7.25.9",
+    "@babel/plugin-transform-optional-chaining": "7.25.9",
     "babel-core": "6.26.3",
     "babel-jest": "24.9.0",
     "babel-loader": "9.2.1",
@@ -23,9 +24,12 @@
   },
   "dependencies": {
     "algoliasearch": "5.1.1",
+    "algoliasearch-helper": "3.27.0",
     "express": "4.17.1",
+    "instantsearch-ui-components": "0.17.1",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "react-instantsearch": "7.15.3"
+    "react-instantsearch": "7.23.1",
+    "react-instantsearch-core": "7.23.1"
   }
 }

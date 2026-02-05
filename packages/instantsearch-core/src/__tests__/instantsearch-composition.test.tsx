@@ -1,3 +1,7 @@
+/**
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ */
+
 import {
   createCompositionClient,
   createSearchClient,
@@ -195,7 +199,11 @@ describe('Composition implementation', () => {
       expect(searchClient.search).toHaveBeenNthCalledWith(1, {
         compositionID: 'my-composition',
         requestBody: {
-          params: { query: '', facets: ['brand', 'disjunctive(categories)'] },
+          params: {
+            query: '',
+            facets: ['brand', 'categories', 'disjunctive(author)'],
+            facetFilters: [['author:Terry Pratchett']],
+          },
         },
       });
     });

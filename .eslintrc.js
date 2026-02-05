@@ -172,11 +172,23 @@ const config = {
       },
     },
     {
-      files: ['**/__tests__/**.ts', '**/__tests__/**.tsx'],
+      files: ['**/__tests__/**.ts', '**/__tests__/**.tsx', 'tests/**/*.ts'],
       rules: {
         'jest/no-done-callback': 'warn',
         '@typescript-eslint/unbound-method': 'off',
         'jest/unbound-method': 'error',
+        'jest/no-standalone-expect': [
+          'off',
+          { additionalTestBlockFunctions: ['skippableTest'] },
+        ],
+        'no-restricted-syntax': [
+          'error',
+          {
+            selector:
+              'CallExpression[callee.name="runTestSuites"][arguments.0] Property[key.name="only"]',
+            message: 'Do not commit a restricted test',
+          },
+        ],
       },
     },
     {
@@ -229,6 +241,12 @@ const config = {
             selector: 'WithStatement',
             message:
               '`with` is disallowed in strict mode because it makes code impossible to predict and optimize.',
+          },
+          {
+            selector:
+              ":matches(TSSatisfiesExpression, TSAsExpression) ObjectExpression Property[method=true][key.name='getRenderState'] > FunctionExpression:not([returnType]) :matches(MemberExpression[object.name='renderState'], SpreadElement > Identifier[name='renderState'])",
+            message:
+              'Connectors using `satisfies` that use `renderState` must explicitly annotate the return type of `getRenderState`.',
           },
         ],
       },

@@ -98,6 +98,15 @@ workflows:
               only:
                 - master
                 - next
+      - e2e tests app router nextjs:
+          context: fx-libraries
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
+                - next
       - release if needed:
           context: fx-libraries
           requires:
@@ -144,6 +153,10 @@ workflows:
             parameters:
               browser: [chrome, firefox]
       - e2e tests router nextjs:
+          context: fx-libraries
+          requires:
+            - build
+      - e2e tests app router nextjs:
           context: fx-libraries
           requires:
             - build
@@ -408,6 +421,21 @@ jobs:
           command: yarn workspace react-instantsearch-router-nextjs run test:e2e:saucelabs
       - store_test_results:
           path: packages/react-instantsearch-router-nextjs/junit/wdio/
+
+  e2e tests app router nextjs:
+    <<: *defaults
+    resource_class: large
+    steps:
+      - checkout
+      - *attach_workspace
+      - *install_yarn_version
+      - *restore_yarn_cache
+      - *run_yarn_install
+      - run:
+          name: End-to-end tests
+          command: yarn workspace react-instantsearch-nextjs run test:e2e:saucelabs
+      - store_test_results:
+          path: packages/react-instantsearch-nextjs/junit/wdio/
 
   release if needed:
     <<: *defaults

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.5](https://github.com/algolia/instantsearch/compare/instantsearch-codemods@0.1.4...instantsearch-codemods@0.1.5) (2025-12-31)
+
+
+### Bug Fixes
+
+* **dependencies:** remove qs limitation ([#6850](https://github.com/algolia/instantsearch/issues/6850)) ([ca86687](https://github.com/algolia/instantsearch/commit/ca866878fb532f8f0667126b1c052b1fb1a7ff55)), closes [#6849](https://github.com/algolia/instantsearch/issues/6849)
+
+
+
+
+
 ## [0.1.4](https://github.com/algolia/instantsearch/compare/instantsearch-codemods@0.1.3...instantsearch-codemods@0.1.4) (2023-10-24)
 
 **Note:** Version bump only for package instantsearch-codemods

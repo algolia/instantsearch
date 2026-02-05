@@ -246,3 +246,8 @@ export type {
   VoiceListeningState,
   CreateVoiceSearchHelper,
 } from 'instantsearch-core';
+
+export { default as connectHitsWithInsights } from './hits/connectHitsWithInsights';
+export { default as connectInfiniteHitsWithInsights } from './infinite-hits/connectInfiniteHitsWithInsights';
+export { default as connectChat } from './chat/connectChat';
+export { default as connectFilterSuggestions } from './filter-suggestions/connectFilterSuggestions';

@@ -199,6 +199,11 @@ export type RefinementListWidgetParams = {
    */
   searchableEscapeFacetValues?: boolean;
   /**
+   * When activated, submitting the search box will select the first item in the list.
+   * @default true
+   */
+  searchableSelectOnSubmit?: boolean;
+  /**
    * Templates to use for the widget.
    */
   templates?: RefinementListTemplates;
@@ -219,6 +224,7 @@ const renderer =
     searchable,
     searchablePlaceholder,
     searchableIsAlwaysActive,
+    searchableSelectOnSubmit,
   }: {
     containerNode: HTMLElement;
     cssClasses: RefinementListComponentCSSClasses;
@@ -232,6 +238,7 @@ const renderer =
     searchable?: boolean;
     searchablePlaceholder?: string;
     searchableIsAlwaysActive?: boolean;
+    searchableSelectOnSubmit?: boolean;
   }): Renderer<RefinementListRenderState, RefinementListConnectorParams> =>
   (
     {
@@ -276,6 +283,7 @@ const renderer =
         isShowingMore={isShowingMore}
         hasExhaustiveItems={hasExhaustiveItems}
         canToggleShowMore={canToggleShowMore}
+        searchableSelectOnSubmit={searchableSelectOnSubmit}
       />,
       containerNode
     );
@@ -321,6 +329,7 @@ const refinementList: RefinementListWidget = function refinementList(
     searchablePlaceholder = 'Search...',
     searchableEscapeFacetValues = true,
     searchableIsAlwaysActive = true,
+    searchableSelectOnSubmit = true,
     cssClasses: userCssClasses = {},
     templates = {},
     transformItems,
@@ -417,6 +426,7 @@ const refinementList: RefinementListWidget = function refinementList(
     searchable,
     searchablePlaceholder,
     searchableIsAlwaysActive,
+    searchableSelectOnSubmit,
     showMore,
   });
 

@@ -1,8 +1,9 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /* global google */
 import * as widgets from '..';
+import * as widgetsUmd from '../index.umd';
 
 import type { IndexWidget } from '..';
 import type { UnknownWidgetFactory, Widget } from '../../types';
@@ -33,6 +34,7 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
     return [name, initiateWidget(name, widget)];
   });
 
+  // eslint-disable-next-line complexity
   function initiateWidget<TName extends WidgetNames>(
     name: TName,
     widget: Widgets[TName]
@@ -128,6 +130,29 @@ function initiateAllWidgets(): Array<[WidgetNames, Widget | IndexWidget]> {
           objectIDs: ['objectID'],
         });
       }
+      case 'EXPERIMENTAL_autocomplete': {
+        const EXPERIMENTAL_autocomplete =
+          widget as Widgets['EXPERIMENTAL_autocomplete'];
+
+        const instance = EXPERIMENTAL_autocomplete({ container, indices: [] });
+        const autocomplete = (instance[1] as IndexWidget)
+          .getWidgets()
+          .find((w) => w.$$type === 'ais.autocomplete');
+
+        if (!autocomplete) {
+          throw new Error('autocomplete widget not found');
+        }
+
+        return autocomplete;
+      }
+      case 'filterSuggestions': {
+        const filterSuggestions = widget as Widgets['filterSuggestions'];
+        return filterSuggestions({
+          container,
+          agentId: 'test-agent-id',
+          attributes: ['attr'],
+        });
+      }
       default: {
         const defaultWidget = widget as UnknownWidgetFactory;
         return defaultWidget({ container, attribute: 'attr' });
@@ -150,7 +175,7 @@ describe('widgets', () => {
       const widgetInstances = initiateAllWidgets();
 
       widgetInstances.forEach(([name, widget]) =>
-        expect([name, widget.$$type.substr(0, 4)]).toEqual([name, 'ais.'])
+        expect([name, widget.$$type.substring(0, 4)]).toEqual([name, 'ais.'])
       );
     });
   });
@@ -168,7 +193,7 @@ describe('widgets', () => {
       const widgetInstances = initiateAllWidgets();
 
       widgetInstances.forEach(([name, widget]) =>
-        expect([name, widget.$$widgetType?.substr(0, 4)]).toEqual([
+        expect([name, widget.$$widgetType!.substring(0, 4)]).toEqual([
           name,
           'ais.',
         ])
@@ -187,6 +212,12 @@ describe('widgets', () => {
           `ais.${name.replace('EXPERIMENTAL_', '')}`
         );
       });
+    });
+  });
+
+  describe('umd', () => {
+    test('has the same number of exports as the main entrypoint', () => {
+      expect(Object.keys(widgetsUmd)).toEqual(Object.keys(widgets));
     });
   });
 });

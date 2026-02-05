@@ -44,7 +44,6 @@ export function InfiniteHits<THit extends BaseHit = BaseHit>({
   showPrevious: shouldShowPrevious = true,
   cache,
   escapeHTML,
-  showPrevious: userShowPrevious,
   transformItems,
   translations,
   bannerComponent: BannerComponent,
@@ -59,7 +58,7 @@ export function InfiniteHits<THit extends BaseHit = BaseHit>({
     isFirstPage,
     isLastPage,
   } = useInfiniteHits<THit>(
-    { cache, escapeHTML, showPrevious: userShowPrevious, transformItems },
+    { cache, escapeHTML, showPrevious: shouldShowPrevious, transformItems },
     { $$widgetType: 'ais.infiniteHits' }
   );
 

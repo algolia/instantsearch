@@ -3,6 +3,75 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.10.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.9.0...instantsearch.css@8.10.0) (2026-01-27)
+
+
+### Features
+
+* add `FilterSuggestions` widget ([#6861](https://github.com/algolia/instantsearch/issues/6861)) ([3ff224f](https://github.com/algolia/instantsearch/commit/3ff224f0c0823c47ace52306ad810a98231a8f83))
+* **chat:** support prompt suggestions ([#6831](https://github.com/algolia/instantsearch/issues/6831)) ([aca8934](https://github.com/algolia/instantsearch/commit/aca8934163c047ca56db0dad679737f331efac29))
+
+
+
+
+
+# [8.9.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.8.0...instantsearch.css@8.9.0) (2025-12-02)
+
+
+### Features
+
+* **css:** add devtools for CSS variable config ([#6809](https://github.com/algolia/instantsearch/issues/6809)) ([b5d7f91](https://github.com/algolia/instantsearch/commit/b5d7f9121c3cd9306f1143631dfd99077dbd27a0))
+
+
+
+
+
+# [8.8.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.7.0...instantsearch.css@8.8.0) (2025-11-10)
+
+
+### Features
+
+* **autocomplete:** implement recent searches ([#6747](https://github.com/algolia/instantsearch/issues/6747)) ([630a9e6](https://github.com/algolia/instantsearch/commit/630a9e6ad407941a7bdad64448f2cced52ec0ef8))
+
+
+
+
+
+# [8.7.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.6.0...instantsearch.css@8.7.0) (2025-11-06)
+
+
+### Features
+
+* **autocomplete:** implement styling ([#6776](https://github.com/algolia/instantsearch/issues/6776)) ([46aa79a](https://github.com/algolia/instantsearch/commit/46aa79aa20700d9c52754f09f9d45e9250237117))
+* **autocomplete:** support header template for autocomplete index ([#6782](https://github.com/algolia/instantsearch/issues/6782)) ([a27123f](https://github.com/algolia/instantsearch/commit/a27123f46de052620989af72a182e48dd94c4b3e))
+
+
+
+
+
+# [8.6.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.5.1...instantsearch.css@8.6.0) (2025-10-23)
+
+
+### Bug Fixes
+
+* **chat:** improve carousel focus outline and styling ([#6765](https://github.com/algolia/instantsearch/issues/6765)) ([f3e0396](https://github.com/algolia/instantsearch/commit/f3e0396e4d092c0632b357a8d7594bcd9e37f068))
+* **chat:** prevent overscroll ([#6744](https://github.com/algolia/instantsearch/issues/6744)) ([0b57bee](https://github.com/algolia/instantsearch/commit/0b57beef56471b5c150ae2938b56fd32265a9cba))
+* **chat:** use css var for font-size ([#6763](https://github.com/algolia/instantsearch/issues/6763)) ([93772c1](https://github.com/algolia/instantsearch/commit/93772c16f9b66079805f0e613441c8a31de8d956))
+
+
+### Features
+
+* **chat:** add custom toggle button support ([#6740](https://github.com/algolia/instantsearch/issues/6740)) ([ee9c31b](https://github.com/algolia/instantsearch/commit/ee9c31ba1fff7401cdc4f450cc42d070589c93fc))
+* **chat:** add recommend tool ([#6746](https://github.com/algolia/instantsearch/issues/6746)) ([4108174](https://github.com/algolia/instantsearch/commit/4108174047e9a5ff81156751e2fe7b4719fa4213))
+* **instantsearch-ui-components:** add `Button` component and refactor chat components ([#6734](https://github.com/algolia/instantsearch/issues/6734)) ([3b65ede](https://github.com/algolia/instantsearch/commit/3b65ede9c706b674e01bdd066e99761ae538d9b8))
+* **instantsearch-ui-components:** implement chat carousel design ([#6719](https://github.com/algolia/instantsearch/issues/6719)) ([e29f0d5](https://github.com/algolia/instantsearch/commit/e29f0d56a63bee5db596e6b9918ccafa4a8112b8))
+* **react-instantsearch-ui:** implement chat components design ([#6704](https://github.com/algolia/instantsearch/issues/6704)) ([dbea460](https://github.com/algolia/instantsearch/commit/dbea4600184666c913f952fcdf7a4971e89ac266))
+* **ui-components:** introduce chat components ([#6678](https://github.com/algolia/instantsearch/issues/6678)) ([4967237](https://github.com/algolia/instantsearch/commit/4967237ebcc73095dd02f686b1fbb161b48b6d3e))
+
+
+
+
+
 ## [8.5.1](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.5.0...instantsearch.css@8.5.1) (2024-09-10)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "example-instantsearch-tourism",
-  "version": "1.31.0",
+  "version": "1.50.0",
   "private": true,
   "scripts": {
     "start": "BABEL_ENV=parcel parcel index.html --port 3000",
@@ -9,8 +9,10 @@
   },
   "dependencies": {
     "algoliasearch": "5.1.1",
-    "instantsearch.css": "8.5.1",
-    "instantsearch.js": "4.77.3"
+    "algoliasearch-helper": "3.27.0",
+    "instantsearch-ui-components": "0.17.1",
+    "instantsearch.css": "8.10.0",
+    "instantsearch.js": "4.87.1"
   },
   "devDependencies": {
     "@babel/core": "7.25.9",
@@ -21,5 +23,10 @@
   },
   "@parcel/resolver-default": {
     "packageExports": true
+  },
+  "targets": {
+    "default": {
+      "scopeHoist": false
+    }
   }
 }

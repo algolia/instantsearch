@@ -6,7 +6,10 @@ import { SearchBox as SearchBoxUiComponent } from '../ui/SearchBox';
 
 import type { RefinementListProps as RefinementListUiComponentProps } from '../ui/RefinementList';
 import type { SearchBoxProps, SearchBoxTranslations } from '../ui/SearchBox';
-import type { RefinementListItem } from 'instantsearch-core';
+import type {
+  RefinementListItem,
+  RefinementListWidgetParams,
+} from 'instantsearch-core';
 import type { UseRefinementListProps } from 'react-instantsearch-core';
 
 type UiProps = Pick<
@@ -27,18 +30,11 @@ export type RefinementListProps = Omit<
   RefinementListUiComponentProps,
   keyof UiProps
 > &
-  UseRefinementListProps & {
-    /**
-     * Add a search input to let the user search for more facet values. In order
-     * to make this feature work, you need to make the attribute searchable
-     * [using the API](https://www.algolia.com/doc/guides/searching/faceting/?language=js#declaring-a-searchable-attribute-for-faceting)
-     * or [the dashboard](https://www.algolia.com/explorer/display/)
-     */
-    searchable?: boolean;
-    /**
-     * Value of the search field placeholder.
-     */
-    searchablePlaceholder?: string;
+  UseRefinementListProps &
+  Pick<
+    RefinementListWidgetParams,
+    'searchable' | 'searchablePlaceholder' | 'searchableSelectOnSubmit'
+  > & {
     translations?: Partial<
       UiProps['translations'] &
         SearchBoxTranslations & {
@@ -53,6 +49,7 @@ export type RefinementListProps = Omit<
 export function RefinementList({
   searchable,
   searchablePlaceholder,
+  searchableSelectOnSubmit = true,
   attribute,
   operator,
   limit,
@@ -118,6 +115,9 @@ export function RefinementList({
   }
 
   function onSubmit() {
+    if (searchableSelectOnSubmit === false) {
+      return;
+    }
     if (items.length > 0) {
       refine(items[0].value);
       setQuery('');

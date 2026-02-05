@@ -1,3 +1,7 @@
+:root {
+  --ais-primary-color-rgb: 200, 130, 10;
+}
+
 .header {
   display: flex;
   align-items: center;
@@ -57,6 +61,10 @@
 #pagination {
   margin: 2rem auto;
   text-align: center;
+}
+
+.ais-Hits {
+  margin-top: 1rem;
 }
 
 #related-products,
@@ -123,7 +131,7 @@
 }
 
 .ais-Carousel-list {
-  margin: -0.5rem !important;
+  margin: -0.5rem;
   grid-auto-columns: calc(22% - 0.5rem) !important;
 }
 

@@ -38,5 +38,6 @@ export type Templates = {
     | Template<any>
     | TemplateWithSendEvent<any>
     | string
+    | Templates
     | undefined;
 };

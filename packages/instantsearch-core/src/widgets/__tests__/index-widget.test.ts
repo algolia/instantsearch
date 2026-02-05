@@ -1,8 +1,9 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
 import {
+  createCompositionClient,
   createSearchClient,
   createSingleRecommendResponse,
   createSingleSearchResponse,
@@ -137,6 +138,12 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 `);
   });
 
+  it('does not throw without `indexName` option when `isolated` is true', () => {
+    expect(() => {
+      index({ EXPERIMENTAL_isolated: true });
+    }).not.toThrow();
+  });
+
   it('is a widget', () => {
     const widget = index({ indexName: 'indexName' });
 
@@ -159,6 +166,21 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       instance.addWidgets([virtualSearchBox({}), virtualPagination({})]);
 
       expect(instance.getWidgets()).toHaveLength(2);
+    });
+
+    it('accepts nested widgets', () => {
+      const instance = index({ indexName: 'indexName' });
+      const searchBox = virtualSearchBox({});
+      const pagination = virtualPagination({});
+      const refinementList = virtualRefinementList({ attribute: 'brand' });
+
+      instance.addWidgets([searchBox, [pagination, refinementList]]);
+      expect(instance.getWidgets()).toHaveLength(3);
+      expect(instance.getWidgets()).toEqual([
+        searchBox,
+        pagination,
+        refinementList,
+      ]);
     });
 
     it('returns the instance to be able to chain the calls', () => {
@@ -463,6 +485,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
 
       instance.removeWidgets([searchBox, pagination]);
 
+      expect(instance.getWidgets()).toHaveLength(0);
+    });
+
+    it('accepts nested widgets', () => {
+      const instance = index({ indexName: 'indexName' });
+      const searchBox = virtualSearchBox({});
+      const pagination = virtualPagination({});
+      const refinementList = virtualRefinementList({ attribute: 'brand' });
+
+      instance.addWidgets([searchBox, pagination, refinementList]);
+
+      expect(instance.getWidgets()).toHaveLength(3);
+
+      instance.removeWidgets([searchBox, [pagination, refinementList]]);
       expect(instance.getWidgets()).toHaveLength(0);
     });
 
@@ -1098,7 +1134,6 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         })
       );
     });
-
     it('uses the internal state for the queries', () => {
       const instance = index({ indexName: 'indexName' });
       const searchClient = createSearchClient();
@@ -2698,6 +2733,33 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       expect(fbt.render).toHaveBeenCalledTimes(0);
     });
 
+    it('calls render on widgets with shouldRender, even if there are no results', () => {
+      const instance = index({ indexName: 'indexName' });
+      const instantSearchInstance = createInstantSearch();
+
+      const fbt = createFrequentlyBoughtTogether({ shouldRender: () => true });
+      const searchBox = virtualSearchBox({});
+      jest.spyOn(searchBox, 'render');
+      const child = index({ indexName: 'childIndexName' });
+      jest.spyOn(child, 'render');
+      instance.addWidgets([fbt, searchBox, child]);
+
+      instance.init(
+        createIndexInitOptions({
+          instantSearchInstance,
+          parent: null,
+        })
+      );
+
+      instance.render({
+        instantSearchInstance,
+      });
+
+      expect(fbt.render).toHaveBeenCalledTimes(1);
+      expect(searchBox.render).toHaveBeenCalledTimes(0);
+      expect(child.render).toHaveBeenCalledTimes(1);
+    });
+
     // https://github.com/algolia/instantsearch/pull/2623
     it('does not call `render` without `lastResults`', () => {
       const instance = index({ indexName: 'indexName' });
@@ -3484,6 +3546,153 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
         expect.objectContaining({ objectID: '2' }),
         expect.objectContaining({ objectID: '3' }),
       ]);
+    });
+  });
+
+  describe('isolated', () => {
+    it('sets _isolated to true when isolated option is true', () => {
+      const instance = index({ EXPERIMENTAL_isolated: true });
+      expect(instance._isolated).toBe(true);
+      expect(instance.getParent()).toBeNull();
+    });
+
+    it('sets _isolated to false when isolated option is false or omitted', () => {
+      const instance = index({ indexName: 'indexName' });
+      expect(instance._isolated).toBe(false);
+    });
+
+    it('returns correct parent for non-isolated indices', () => {
+      const parent = index({ indexName: 'parentIndex' });
+      const child = index({ indexName: 'childIndex' });
+      parent.addWidgets([child]);
+      child.init(createIndexInitOptions({ parent }));
+      expect(child.getParent()).toBe(parent);
+    });
+
+    it('returns null parent for isolated indices', () => {
+      const parent = index({ indexName: 'parentIndex' });
+      const child = index({ EXPERIMENTAL_isolated: true });
+      parent.addWidgets([child]);
+      child.init(createIndexInitOptions({ parent }));
+      expect(child.getParent()).toBeNull();
+    });
+
+    it('does not search by default when isolated', async () => {
+      const search = instantsearch({
+        searchClient: createSearchClient(),
+      }).addWidgets([
+        index({ EXPERIMENTAL_isolated: true }).addWidgets([
+          virtualSearchBox({}),
+        ]),
+      ]);
+      search.start();
+
+      await wait(0);
+      expect(search.client.search).toHaveBeenCalledTimes(0);
+    });
+
+    it('searches by default when not isolated', async () => {
+      const search = instantsearch({
+        searchClient: createSearchClient(),
+      }).addWidgets([
+        index({ EXPERIMENTAL_isolated: false, indexName: 'a' }).addWidgets([
+          virtualSearchBox({}),
+        ]),
+      ]);
+      search.start();
+
+      await wait(0);
+      expect(search.client.search).toHaveBeenCalledTimes(1);
+      expect(castToJestMock(search.client.search).mock.calls[0][0])
+        .toMatchInlineSnapshot(`
+        [
+          {
+            "indexName": "a",
+            "params": {
+              "query": "",
+            },
+          },
+        ]
+      `);
+    });
+
+    it('searches on refine while isolated', async () => {
+      const search = instantsearch({
+        searchClient: createSearchClient(),
+      }).addWidgets([
+        index({ EXPERIMENTAL_isolated: true, indexName: 'a' }).addWidgets([
+          virtualSearchBox({}),
+        ]),
+      ]);
+      search.start();
+
+      await wait(0);
+      expect(search.client.search).toHaveBeenCalledTimes(0);
+
+      search.renderState.a.searchBox?.refine('please search now');
+
+      expect(search.client.search).toHaveBeenCalledTimes(1);
+      expect(castToJestMock(search.client.search).mock.calls[0][0])
+        .toMatchInlineSnapshot(`
+        [
+          {
+            "indexName": "a",
+            "params": {
+              "query": "please search now",
+            },
+          },
+        ]
+      `);
+    });
+
+    it('searches on refine of a child while isolated', async () => {
+      const search = instantsearch({
+        searchClient: createSearchClient(),
+      }).addWidgets([
+        index({ EXPERIMENTAL_isolated: true }).addWidgets([
+          index({ indexName: 'a' }),
+          virtualSearchBox({}),
+        ]),
+      ]);
+      search.start();
+
+      await wait(0);
+      expect(search.client.search).toHaveBeenCalledTimes(0);
+
+      search.renderState[''].searchBox?.refine('please search now');
+
+      expect(search.client.search).toHaveBeenCalledTimes(1);
+    });
+
+    it('triggers composition when root has a compositionId', async () => {
+      const search = instantsearch({
+        searchClient: createCompositionClient(),
+        compositionID: 'composition-id',
+      }).addWidgets([
+        index({ EXPERIMENTAL_isolated: true, indexName: 'a' }).addWidgets([
+          virtualSearchBox({}),
+        ]),
+      ]);
+      search.start();
+
+      await wait(0);
+      // Now called for the root, as a compositionId is set
+      expect(search.client.search).toHaveBeenCalledTimes(1);
+
+      search.renderState.a.searchBox?.refine('please search now');
+
+      expect(search.client.search).toHaveBeenCalledTimes(2);
+      expect(castToJestMock(search.client.search).mock.calls[1][0])
+        .toMatchInlineSnapshot(`
+        {
+          "compositionID": "a",
+          "requestBody": {
+            "params": {
+              "query": "please search now",
+            },
+          },
+        }
+      `);
     });
   });
 

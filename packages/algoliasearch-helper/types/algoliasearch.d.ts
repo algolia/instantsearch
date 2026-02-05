@@ -319,6 +319,17 @@ export interface CompositionClient {
   }) => Promise<{
     results: Array<AlgoliaSearch.SearchResponse<T>>;
   }>;
+  searchForFacetValues?: (options: {
+    compositionID: string;
+    facetName: string;
+    searchForFacetValuesRequest: {
+      params: {
+        query: string;
+        maxFacetHits: number;
+        searchQuery: SearchOptions;
+      };
+    };
+  }) => Promise<{ results: AlgoliaSearch.SearchForFacetValuesResponse[] }>;
   initIndex?: never;
   addAlgoliaAgent?: DefaultSearchClient['addAlgoliaAgent'];
 }

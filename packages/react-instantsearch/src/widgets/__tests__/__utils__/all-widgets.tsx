@@ -11,17 +11,39 @@ import * as widgets from '../..';
 import type { InstantSearch as InstantSearchClass } from 'instantsearch-core';
 import type { ComponentProps } from 'react';
 
-type AllWidgets = typeof widgets;
 // We only track widgets that use connectors.
-const NON_WIDGETS = ['Highlight', 'Snippet', 'PoweredBy'] as const;
+const NON_WIDGETS = [
+  'Highlight',
+  'ReverseHighlight',
+  'Snippet',
+  'PoweredBy',
+  'Chat',
+  'createDefaultTools',
+  'SearchIndexToolType',
+  'RecommendToolType',
+  'MemorizeToolType',
+  'MemorySearchToolType',
+  'PonderToolType',
+] as const;
 type RegularWidgets = Omit<typeof widgets, typeof NON_WIDGETS[number]>;
 
+// Non-components that should be excluded from SingleWidget type
+const NON_COMPONENTS = [
+  'createDefaultTools',
+  'SearchIndexToolType',
+  'RecommendToolType',
+  'MemorizeToolType',
+  'MemorySearchToolType',
+  'PonderToolType',
+] as const;
+type ComponentWidgets = Omit<typeof widgets, typeof NON_COMPONENTS[number]>;
+
 export type SingleWidget = {
-  [name in keyof AllWidgets]: {
+  [name in keyof ComponentWidgets]: {
     name: name;
-    Component: AllWidgets[name];
+    Component: ComponentWidgets[name];
   };
-}[keyof AllWidgets];
+}[keyof ComponentWidgets];
 
 /**
  * Get the props for a widget, excluding the ref prop as it's not valid for
@@ -73,7 +95,8 @@ function Widget<TWidget extends SingleWidget>({
       );
     }
     case 'Snippet':
-    case 'Highlight': {
+    case 'Highlight':
+    case 'ReverseHighlight': {
       return (
         <widget.Component
           hit={{ objectID: '', __position: 0 }}
@@ -81,6 +104,9 @@ function Widget<TWidget extends SingleWidget>({
           {...props}
         />
       );
+    }
+    case 'Chat': {
+      return <widget.Component agentId="agentId" {...props} />;
     }
     case 'ToggleRefinement':
     case 'RangeInput':
@@ -95,6 +121,13 @@ function Widget<TWidget extends SingleWidget>({
     case 'RelatedProducts':
     case 'LookingSimilar': {
       return <widget.Component objectIDs={['1']} {...props} />;
+    }
+    case 'EXPERIMENTAL_Autocomplete': {
+      // @ts-expect-error - incorrectly expects onSelect from ComponentProps<'div'>
+      return <widget.Component {...props} />;
+    }
+    case 'FilterSuggestions': {
+      return <widget.Component agentId="test-agent-id" {...props} />;
     }
     default: {
       return <widget.Component {...props} />;
@@ -152,20 +185,23 @@ export function getAllInstantSearchWidgets() {
 /**
  * Retrieve all widget components, wrapped inside InstantSearch, ready to render
  */
-export function getAllWidgets() {
-  return Object.entries(widgets).map(([name, Component]) => {
-    const widget = { name, Component } as SingleWidget;
 
-    return {
-      name,
-      Component: (props: Omit<ComponentProps<typeof Widget>, 'widget'>) => (
-        <InstantSearch
-          searchClient={createSearchClient({})}
-          indexName="indexName"
-        >
-          <Widget {...props} widget={widget} />
-        </InstantSearch>
-      ),
-    };
-  });
+export function getAllWidgets() {
+  return Object.entries(widgets)
+    .filter(([name]) => !(NON_COMPONENTS as readonly string[]).includes(name))
+    .map(([name, Component]) => {
+      const widget = { name, Component } as SingleWidget;
+
+      return {
+        name,
+        Component: (props: Omit<ComponentProps<typeof Widget>, 'widget'>) => (
+          <InstantSearch
+            searchClient={createSearchClient({})}
+            indexName="indexName"
+          >
+            <Widget {...props} widget={widget} />
+          </InstantSearch>
+        ),
+      };
+    });
 }

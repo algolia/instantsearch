@@ -39,7 +39,7 @@ To render the component in the browser and allow users to interact with it, incl
 
 ```diff
 +'use client';
-import algoliasearch from 'algoliasearch/lite';
+import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import {
   InstantSearch,
   SearchBox,
@@ -62,7 +62,7 @@ Import the `<InstantSearchNext>` component from the `react-instantsearch-nextjs`
 
 ```diff
 'use client';
-import algoliasearch from 'algoliasearch/lite';
+import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import {
 - InstantSearch,
   SearchBox,

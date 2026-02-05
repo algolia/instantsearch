@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
 import { getInsightsAnonymousUserToken, ANONYMOUS_TOKEN_COOKIE_KEY } from '..';

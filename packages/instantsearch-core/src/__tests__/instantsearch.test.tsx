@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx h */
 
@@ -85,10 +85,10 @@ describe('Usage', () => {
       // eslint-disable-next-line no-new
       new InstantSearch({ indexName: 'indexName', searchClient: undefined });
     }).toThrowErrorMatchingInlineSnapshot(`
-"The \`searchClient\` option is required.
+      "The \`searchClient\` option is required.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
-`);
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
+    `);
   });
 
   it('throws if searchClient does not implement a search method', () => {
@@ -97,10 +97,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       // eslint-disable-next-line no-new
       new InstantSearch({ indexName: 'indexName', searchClient: {} });
     }).toThrowErrorMatchingInlineSnapshot(`
-"The \`searchClient\` must implement a \`search\` method.
+      "The \`searchClient\` must implement a \`search\` method.
 
-See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend-search/in-depth/backend-instantsearch/js/"
-`);
+      See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend-search/in-depth/backend-instantsearch/js/"
+    `);
   });
 
   describe('root index warning', () => {
@@ -160,6 +160,25 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     });
   });
 
+  it('throws if insightsClient is not a function', () => {
+    const warn = jest.spyOn(global.console, 'warn');
+    warn.mockImplementation(() => {});
+
+    expect(() => {
+      // eslint-disable-next-line no-new
+      new InstantSearch({
+        indexName: 'indexName',
+        searchClient: createSearchClient(),
+        // @ts-expect-error
+        insightsClient: 'insights',
+      });
+    }).toThrowErrorMatchingInlineSnapshot(`
+      "The \`insightsClient\` option should be a function.
+
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
+    `);
+  });
+
   it('throws if addWidgets is called with a single widget', () => {
     expect(() => {
       const search = new InstantSearch({
@@ -169,10 +188,10 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
       // @ts-expect-error
       search.addWidgets({});
     }).toThrowErrorMatchingInlineSnapshot(`
-"The \`addWidgets\` method expects an array of widgets. Please use \`addWidget\`.
+      "The \`addWidgets\` method expects an array of widgets. Please use \`addWidget\`.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
-`);
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
+    `);
   });
 
   it('throws if a widget without render or init method is added', () => {
@@ -185,10 +204,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       });
       search.addWidgets(widgets);
     }).toThrowErrorMatchingInlineSnapshot(`
-"The widget definition expects a \`render\` and/or an \`init\` method.
+      "The widget definition expects a \`render\` and/or an \`init\` method.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
-`);
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widget/js/"
+    `);
   });
 
   it('does not throw with a widget having a init method', () => {
@@ -224,10 +243,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       // @ts-expect-error
       search.removeWidgets({});
     }).toThrowErrorMatchingInlineSnapshot(`
-"The \`removeWidgets\` method expects an array of widgets. Please use \`removeWidget\`.
+      "The \`removeWidgets\` method expects an array of widgets. Please use \`removeWidget\`.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
-`);
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
+    `);
   });
 
   it('throws if a widget without dispose method is removed', () => {
@@ -242,10 +261,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
       });
       search.removeWidgets(widgets);
     }).toThrowErrorMatchingInlineSnapshot(`
-"The widget definition expects a \`dispose\` method.
+      "The widget definition expects a \`dispose\` method.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
-`);
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widget/js/"
+    `);
   });
 
   it('throws if createURL is called before start', () => {
@@ -255,10 +274,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     });
 
     expect(() => search.createURL()).toThrowErrorMatchingInlineSnapshot(`
-"The \`start\` method needs to be called before \`createURL\`.
+      "The \`start\` method needs to be called before \`createURL\`.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
-`);
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
+    `);
   });
 
   it('throws if refresh is called before start', () => {
@@ -268,10 +287,10 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsear
     });
 
     expect(() => search.refresh()).toThrowErrorMatchingInlineSnapshot(`
-"The \`start\` method needs to be called before \`refresh\`.
+      "The \`start\` method needs to be called before \`refresh\`.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
-`);
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
+    `);
   });
 
   it('does not warn dev with use', () => {
@@ -997,10 +1016,10 @@ describe('start', () => {
     expect(() => {
       instance.start();
     }).toThrowErrorMatchingInlineSnapshot(`
-"The \`start\` method has already been called once.
+      "The \`start\` method has already been called once.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
-`);
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
+    `);
   });
 
   it('keeps a helper already set on the instance (Vue SSR)', () => {
@@ -1954,10 +1973,10 @@ describe('setUiState', () => {
     expect(() => {
       search.setUiState({});
     }).toThrowErrorMatchingInlineSnapshot(`
-"The \`start\` method needs to be called before \`setUiState\`.
+      "The \`start\` method needs to be called before \`setUiState\`.
 
-See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
-`);
+      See documentation: https://www.algolia.com/doc/api-reference/widgets/instantsearch/js/"
+    `);
   });
 
   test('triggers a search', async () => {

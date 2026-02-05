@@ -1,4 +1,9 @@
-@import 'reset.scss';
+@use 'reset';
+@use '../shared/_variables';
+@use '../shared/_common';
+@use '../components/chat';
+@use '../components/autocomplete';
+@use '../components/filter-suggestions';
 
 ////////////////
 // Shared
@@ -79,14 +84,6 @@ $break-medium: 767px;
 ////////////////
 // Shared
 ////////////////
-
-/**
- * Reset
- */
-
-[class^='ais-'] {
-  box-sizing: border-box;
-}
 
 /**
  * Disabled

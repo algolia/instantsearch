@@ -9,6 +9,9 @@ import {
   refinementList,
   searchBox,
   trendingItems,
+  chat,
+  filterSuggestions,
+  currentRefinements,
 } from 'instantsearch.js/es/widgets';
 
 import 'instantsearch.css/themes/satellite.css';
@@ -24,9 +27,39 @@ const search = instantsearch({
   insights: true,
 });
 
+const productItemTemplate = (item, { html }) => html`
+  <article class="ais-Carousel-hit">
+    <div class="ais-Carousel-hit-image">
+      <img src="${item.image}" />
+    </div>
+    <h2 class="ais-Carousel-hit-title">
+      <a
+        href="/products.html?pid=${item.objectID}"
+        class="ais-Carousel-hit-link"
+      >
+        ${item.name}
+      </a>
+    </h2>
+  </article>
+`;
+
 search.addWidgets([
   searchBox({
     container: '#searchbox',
+  }),
+  panel({
+    templates: { header: 'Current Refinements' },
+    hidden: ({ items }) => items.length === 0,
+  })(currentRefinements)({
+    container: '#current-refinements',
+  }),
+  panel({ templates: { header: 'Filter Suggestions' } })(filterSuggestions)({
+    container: '#filter-suggestions',
+    agentId: '3123062d-d611-4d4f-8ab2-4fa39302dc64',
+    attributes: ['brand', 'categories'],
+    templates: {
+      header: false,
+    },
   }),
   hits({
     container: '#hits',
@@ -52,6 +85,14 @@ search.addWidgets([
   })(refinementList)({
     container: '#brand-list',
     attribute: 'brand',
+    showMore: true,
+  }),
+  panel({
+    templates: { header: 'categories' },
+  })(refinementList)({
+    container: '#categories-list',
+    attribute: 'categories',
+    showMore: true,
   }),
   pagination({
     container: '#pagination',
@@ -60,18 +101,15 @@ search.addWidgets([
     container: '#trending',
     limit: 6,
     templates: {
-      item: (item, { html }) => html`
-        <div>
-          <article>
-            <div>
-              <img src="${item.image}" />
-              <h2>${item.name}</h2>
-            </div>
-            <a href="/products.html?pid=${item.objectID}">See product</a>
-          </article>
-        </div>
-      `,
+      item: productItemTemplate,
       layout: carousel(),
+    },
+  }),
+  chat({
+    container: '#chat',
+    agentId: 'eedef238-5468-470d-bc37-f99fa741bd25',
+    templates: {
+      item: productItemTemplate,
     },
   }),
 ]);

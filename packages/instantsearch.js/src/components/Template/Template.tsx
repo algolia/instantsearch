@@ -9,7 +9,6 @@ import type { PreparedTemplateProps } from '../../lib/templating';
 import type { Templates } from '../../types';
 import type { SendEventForHits } from 'instantsearch-core';
 import type { JSX } from 'preact';
-
 const defaultProps = {
   data: {},
   rootTagName: 'div',

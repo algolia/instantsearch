@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 /** @jsx createElement */
 import { render } from '@testing-library/preact';
@@ -19,17 +19,35 @@ const Carousel = createCarouselComponent({
 function CarouselWithRefs(
   props: Omit<
     CarouselProps<RecordWithObjectID>,
-    'listRef' | 'nextButtonRef' | 'previousButtonRef' | 'carouselIdRef'
+    | 'listRef'
+    | 'nextButtonRef'
+    | 'previousButtonRef'
+    | 'carouselIdRef'
+    | 'canScrollLeft'
+    | 'canScrollRight'
+    | 'setCanScrollLeft'
+    | 'setCanScrollRight'
   >
 ) {
   const carouselRefs: Pick<
     CarouselProps<RecordWithObjectID>,
-    'listRef' | 'nextButtonRef' | 'previousButtonRef' | 'carouselIdRef'
+    | 'listRef'
+    | 'nextButtonRef'
+    | 'previousButtonRef'
+    | 'carouselIdRef'
+    | 'canScrollLeft'
+    | 'canScrollRight'
+    | 'setCanScrollLeft'
+    | 'setCanScrollRight'
   > = {
     listRef: useRef(null),
     nextButtonRef: useRef(null),
     previousButtonRef: useRef(null),
     carouselIdRef: useRef(generateCarouselId()),
+    canScrollLeft: false,
+    canScrollRight: false,
+    setCanScrollLeft: () => {},
+    setCanScrollRight: () => {},
   };
 
   return <Carousel {...carouselRefs} {...props} />;

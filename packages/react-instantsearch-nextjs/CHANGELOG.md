@@ -3,6 +3,171 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.13](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.0.12...react-instantsearch-nextjs@1.0.13) (2026-02-03)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [1.0.12](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.0.11...react-instantsearch-nextjs@1.0.12) (2026-01-27)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [1.0.11](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.0.10...react-instantsearch-nextjs@1.0.11) (2025-12-31)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [1.0.10](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.0.9...react-instantsearch-nextjs@1.0.10) (2025-12-30)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [1.0.9](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.0.8...react-instantsearch-nextjs@1.0.9) (2025-12-10)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [1.0.8](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.0.7...react-instantsearch-nextjs@1.0.8) (2025-12-09)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [1.0.7](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.0.6...react-instantsearch-nextjs@1.0.7) (2025-12-02)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [1.0.6](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.0.5...react-instantsearch-nextjs@1.0.6) (2025-11-18)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [1.0.5](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.0.4...react-instantsearch-nextjs@1.0.5) (2025-11-10)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [1.0.4](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.0.3...react-instantsearch-nextjs@1.0.4) (2025-11-06)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [1.0.3](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.0.2...react-instantsearch-nextjs@1.0.3) (2025-10-23)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [1.0.2](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.0.1...react-instantsearch-nextjs@1.0.2) (2025-09-09)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [1.0.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.0.0...react-instantsearch-nextjs@1.0.1) (2025-07-22)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [1.0.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.5.0...react-instantsearch-nextjs@1.0.0) (2025-07-08)
+
+### Features
+
+* **next:** release stable version, with new `instance` option and ways to compose hooks ([#6647](https://github.com/algolia/instantsearch/issues/6647)) ([4769e20](https://github.com/algolia/instantsearch/commit/4769e20c1581ba7b4436b0da0dc9dd03cba3ef38))
+
+
+# [0.5.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.4.9...react-instantsearch-nextjs@0.5.0) (2025-06-16)
+
+
+### Features
+
+* **server:** reset scheduleSearch only after all components mount ([#6650](https://github.com/algolia/instantsearch/issues/6650)) ([7aca759](https://github.com/algolia/instantsearch/commit/7aca7595d5a5bb026b0bd2e456f144c1eec61664))
+
+
+
+
+
+## [0.4.9](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.4.8...react-instantsearch-nextjs@0.4.9) (2025-05-27)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [0.4.8](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.4.7...react-instantsearch-nextjs@0.4.8) (2025-05-06)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [0.4.7](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.4.6...react-instantsearch-nextjs@0.4.7) (2025-04-29)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [0.4.6](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.4.5...react-instantsearch-nextjs@0.4.6) (2025-03-18)
+
+**Note:** Version bump only for package react-instantsearch-nextjs
+
+
+
+
+
+## [0.4.5](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.4.4...react-instantsearch-nextjs@0.4.5) (2025-03-04)
+
+
+### Bug Fixes
+
+* **next:** insert empty initial results for page with no widgets ([#6595](https://github.com/algolia/instantsearch/issues/6595)) ([8e1012f](https://github.com/algolia/instantsearch/commit/8e1012f26562e656867d08f140adccf2fddff4b1))
+
+
+
+
+
 ## [0.4.4](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@0.4.3...react-instantsearch-nextjs@0.4.4) (2025-01-28)
 
 **Note:** Version bump only for package react-instantsearch-nextjs

@@ -56,6 +56,7 @@ export type BuiltinTypes =
   | 'ais.autocomplete'
   | 'ais.breadcrumb'
   | 'ais.clearRefinements'
+  | 'ais.chat'
   | 'ais.configure'
   | 'ais.currentRefinements'
   | 'ais.dynamicWidgets'
@@ -90,6 +91,7 @@ export type BuiltinTypes =
 export type BuiltinWidgetTypes =
   | 'ais.autocomplete'
   | 'ais.breadcrumb'
+  | 'ais.chat'
   | 'ais.clearRefinements'
   | 'ais.configure'
   | 'ais.currentRefinements'
@@ -180,6 +182,14 @@ type RecommendWidget<
       TWidgetDescription['widgetParams']
     >
   >;
+};
+
+type Parent = {
+  /**
+   * This gets dynamically added by the `index` widget.
+   * If the widget has gone through `addWidget`, it will have a parent.
+   */
+  parent?: IndexWidget;
 };
 
 type RequiredWidgetLifeCycle<TWidgetDescription extends WidgetDescription> = {
@@ -307,7 +317,8 @@ export type Widget<
     $$type: string;
   }
 > = Expand<
-  RequiredWidgetLifeCycle<TWidgetDescription> &
+  Parent &
+    RequiredWidgetLifeCycle<TWidgetDescription> &
     WidgetType<TWidgetDescription> &
     UiStateLifeCycle<TWidgetDescription> &
     RenderStateLifeCycle<TWidgetDescription>
@@ -319,8 +330,12 @@ export type IndexWidget<TUiState extends UiState = UiState> = Omit<
   'getWidgetUiState'
 > & {
   // public API
-  addWidgets: (widgets: Array<Widget | IndexWidget>) => IndexWidget;
-  removeWidgets: (widgets: Array<Widget | IndexWidget>) => IndexWidget;
+  addWidgets: (
+    widgets: Array<Widget | IndexWidget | Array<IndexWidget | Widget>>
+  ) => IndexWidget;
+  removeWidgets: (
+    widgets: Array<Widget | IndexWidget | Widget[]>
+  ) => IndexWidget;
 
   // "private" API
   getIndexName: () => string;
@@ -352,6 +367,17 @@ export type IndexWidget<TUiState extends UiState = UiState> = Omit<
       | TUiState[string]
       | ((previousIndexUiState: TUiState[string]) => TUiState[string])
   ) => void;
+  /**
+   * This index is isolated, meaning it will not be merged with the main
+   * helper's state.
+   * @private
+   */
+  _isolated: boolean;
+  /**
+   * Schedules a search for this index only.
+   * @private
+   */
+  scheduleLocalSearch: () => void;
 
   // widget lifecycle
   init: (options: IndexInitOptions) => void;

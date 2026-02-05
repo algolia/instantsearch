@@ -310,10 +310,13 @@ export function createInsightsMiddleware<
 
         if (isModernInsightsClient(insightsClient)) {
           insightsClientWithLocalCredentials = (method, payload) => {
+            const [latestAppId, latestApiKey] = getAppIdAndApiKey(
+              instantSearchInstance.client
+            );
             const extraParams = {
               headers: {
-                'X-Algolia-Application-Id': appId,
-                'X-Algolia-API-Key': apiKey,
+                'X-Algolia-Application-Id': latestAppId,
+                'X-Algolia-API-Key': latestApiKey,
               },
             };
 

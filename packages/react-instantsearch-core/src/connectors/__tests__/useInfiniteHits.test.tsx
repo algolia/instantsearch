@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
 import { createInstantSearchTestWrapper } from '@instantsearch/testutils';
@@ -16,14 +16,14 @@ describe('useInfiniteHits', () => {
 
     // Initial render state from manual `getWidgetRenderState`
     expect(result.current).toEqual({
+      sendEvent: expect.any(Function),
       items: [],
       results: expect.objectContaining({ nbHits: 0 }),
-      sendEvent: undefined,
       currentPageHits: [],
       isFirstPage: true,
       isLastPage: true,
-      showMore: undefined,
-      showPrevious: undefined,
+      showMore: expect.any(Function),
+      showPrevious: expect.any(Function),
     });
 
     await waitFor(() => {

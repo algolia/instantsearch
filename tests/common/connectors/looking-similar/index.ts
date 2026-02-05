@@ -12,14 +12,14 @@ export type LookingSimilarConnectorSetup = TestSetup<{
 
 export function createLookingSimilarConnectorTests(
   setup: LookingSimilarConnectorSetup,
-  { act = fakeAct, skippedTests = {} }: TestOptions = {}
+  { act = fakeAct, skippedTests = {}, flavor = 'javascript' }: TestOptions = {}
 ) {
   beforeAll(() => {
     document.body.innerHTML = '';
   });
 
   describe('LookingSimilar connector common tests', () => {
-    createOptionsTests(setup, { act, skippedTests });
-    createStateTests(setup, { act, skippedTests });
+    createOptionsTests(setup, { act, skippedTests, flavor });
+    createStateTests(setup, { act, skippedTests, flavor });
   });
 }

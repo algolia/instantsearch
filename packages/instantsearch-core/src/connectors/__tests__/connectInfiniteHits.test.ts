@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
 import {
@@ -302,6 +302,46 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
     const { showMore, showPrevious } = widget.getWidgetRenderState(
       createRenderOptions({
         state: helper.state,
+        helper,
+      })
+    );
+    showMore();
+    expect(helper.state.page).toBe(5);
+
+    showPrevious();
+    expect(
+      helper.overrideStateWithoutTriggeringChangeEvent
+    ).toHaveBeenCalledWith(expect.objectContaining({ page: 3 }));
+  });
+
+  it('goes to previous page correctly when state is mismatched', () => {
+    const renderFn = jest.fn();
+    const makeWidget = connectInfiniteHits(renderFn);
+    const widget = makeWidget({});
+
+    const helper = algoliasearchHelper(createSearchClient(), '', {
+      page: 4,
+    });
+    helper.overrideStateWithoutTriggeringChangeEvent = jest.fn(() => helper);
+    helper.searchWithoutTriggeringOnStateChange = jest.fn();
+
+    // we add a query to the parent helper to simulate multi-index where
+    // the parent has a query and the infinite hits index does not
+    const parentHelper = algoliasearchHelper(createSearchClient(), '', {
+      page: 4,
+      query: 'test',
+    });
+
+    widget.init(
+      createInitOptions({
+        state: parentHelper.state,
+        helper,
+      })
+    );
+
+    const { showMore, showPrevious } = widget.getWidgetRenderState(
+      createRenderOptions({
+        state: parentHelper.state,
         helper,
       })
     );
@@ -1424,6 +1464,51 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/infinite-hi
         results,
         showMore: renderState1.showMore,
         showPrevious: renderState1.showPrevious,
+        widgetParams: {},
+      });
+    });
+
+    it('returns the widget render state with artificial results', () => {
+      const renderFn = jest.fn();
+      const unmountFn = jest.fn();
+      const createInfiniteHits = connectInfiniteHits(renderFn, unmountFn);
+      const infiniteHitsWidget = createInfiniteHits({});
+      const helper = algoliasearchHelper(createSearchClient(), 'indexName', {
+        index: 'indexName',
+      });
+
+      const results = new SearchResults(
+        helper.state,
+        [
+          createSingleSearchResponse({
+            hits: [],
+            queryID: 'theQueryID',
+          }),
+        ],
+        { __isArtificial: true }
+      );
+
+      const renderOptions = createRenderOptions({
+        helper,
+        state: helper.state,
+        results,
+      });
+
+      const renderState =
+        infiniteHitsWidget.getWidgetRenderState(renderOptions);
+
+      expect(renderState).toEqual({
+        hits: [],
+        items: [],
+        currentPageHits: [],
+        sendEvent: expect.any(Function),
+        bindEvent: expect.any(Function),
+        isFirstPage: true,
+        isLastPage: true,
+        banner: undefined,
+        results,
+        showMore: expect.any(Function),
+        showPrevious: expect.any(Function),
         widgetParams: {},
       });
     });

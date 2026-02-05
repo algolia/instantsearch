@@ -12,14 +12,14 @@ export type TrendingItemsConnectorSetup = TestSetup<{
 
 export function createTrendingItemsConnectorTests(
   setup: TrendingItemsConnectorSetup,
-  { act = fakeAct, skippedTests = {} }: TestOptions = {}
+  { act = fakeAct, skippedTests = {}, flavor = 'javascript' }: TestOptions = {}
 ) {
   beforeAll(() => {
     document.body.innerHTML = '';
   });
 
   describe('TrendingItems connector common tests', () => {
-    createOptionsTests(setup, { act, skippedTests });
-    createStateTests(setup, { act, skippedTests });
+    createOptionsTests(setup, { act, skippedTests, flavor });
+    createStateTests(setup, { act, skippedTests, flavor });
   });
 }

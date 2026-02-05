@@ -28,6 +28,7 @@ type ComponentChild =
   | object
   | string
   | number
+  | bigint
   | boolean
   | null
   | undefined;
