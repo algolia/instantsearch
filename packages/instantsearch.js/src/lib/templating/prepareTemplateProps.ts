@@ -1,7 +1,8 @@
-import type { Templates } from '../../types';
+import type { Templates, TemplatesConfig } from '../../types';
 
 export type PreparedTemplateProps<TTemplates extends Templates> = {
   templates: TTemplates;
+  templatesConfig?: TemplatesConfig;
 };
 
 /**
@@ -10,9 +11,11 @@ export type PreparedTemplateProps<TTemplates extends Templates> = {
 export function prepareTemplateProps<TTemplates extends Templates>({
   defaultTemplates,
   templates,
+  templatesConfig,
 }: {
   defaultTemplates: TTemplates;
   templates?: Partial<TTemplates>;
+  templatesConfig?: TemplatesConfig;
 }): PreparedTemplateProps<TTemplates> {
   const filteredTemplates: Templates = {};
   for (const [key, value] of Object.entries(templates || {})) {
@@ -21,5 +24,8 @@ export function prepareTemplateProps<TTemplates extends Templates>({
     }
   }
 
-  return { templates: { ...defaultTemplates, ...filteredTemplates } };
+  return {
+    templates: { ...defaultTemplates, ...filteredTemplates },
+    templatesConfig,
+  };
 }

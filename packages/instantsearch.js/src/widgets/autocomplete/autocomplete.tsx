@@ -1,5 +1,6 @@
 /** @jsx h */
 
+import { index } from 'instantsearch-core';
 import {
   createAutocompleteComponent,
   createAutocompleteIndexComponent,
@@ -24,12 +25,10 @@ import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
   createDocumentationMessageGenerator,
-  find,
   getContainerNode,
   walkIndex,
 } from '../../lib/utils';
 import configure from '../configure/configure';
-import index from '../index/index';
 
 import type {
   AutocompleteConnectorParams,
@@ -119,7 +118,7 @@ type RendererParams<TItem extends BaseHit> = {
       | undefined;
     RecentSearchComponent: typeof AutocompleteRecentSearch;
     recentSearchHeaderComponent:
-      | typeof AutocompleteIndex['prototype']['props']['HeaderComponent']
+      | (typeof AutocompleteIndex)['prototype']['props']['HeaderComponent']
       | undefined;
   };
 } & Pick<
@@ -164,13 +163,12 @@ const createRenderer = <TItem extends BaseHit>(
           onApply={onApply}
           onRemoveRecentSearch={onRemoveRecentSearch}
         >
-          {/* @ts-expect-error - it should accept string as return value */}
           <ConditionalReverseHighlight
             item={item as unknown as Hit<{ query: string }>}
           />
         </AutocompleteRecentSearch>
       );
-      let recentSearchHeaderComponent: typeof AutocompleteIndex['prototype']['props']['HeaderComponent'] =
+      let recentSearchHeaderComponent: (typeof AutocompleteIndex)['prototype']['props']['HeaderComponent'] =
         undefined;
 
       if (showRecentObj && showRecentObj.templates) {
@@ -375,8 +373,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   }
 
   indices.forEach(({ indexId, indexName, hits }, i) => {
-    const currentIndexConfig = find(
-      indicesConfig,
+    const currentIndexConfig = indicesConfig.find(
       (config) => config.indexName === indexName
     );
 
@@ -432,8 +429,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       elementId === 'suggestions' && showRecent
         ? hits.filter(
             (suggestionHit) =>
-              !find(
-                storageHits,
+              !storageHits.find(
                 (storageHit) => storageHit.query === suggestionHit.query
               )
           )
@@ -656,7 +652,6 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
             onSelect={onSelectItem}
             onApply={onApply}
           >
-            {/* @ts-expect-error - it should accept string as return value */}
             <ConditionalReverseHighlight
               item={item as unknown as Hit<{ query: string }>}
             />

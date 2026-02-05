@@ -1,4 +1,4 @@
-import connectChat from 'instantsearch.js/es/connectors/chat/connectChat';
+import { connectChat } from 'instantsearch-core';
 
 import { useConnector } from '../hooks/useConnector';
 
@@ -7,8 +7,8 @@ import type {
   ChatConnector,
   ChatConnectorParams,
   ChatWidgetDescription,
-} from 'instantsearch.js/es/connectors/chat/connectChat';
-import type { UIMessage } from 'instantsearch.js/es/lib/chat';
+  UIMessage,
+} from 'instantsearch-core';
 
 export type UseChatProps<TUiMessage extends UIMessage = UIMessage> =
   ChatConnectorParams<TUiMessage>;

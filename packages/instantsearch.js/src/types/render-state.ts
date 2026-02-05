@@ -1,36 +1,32 @@
-import type { AnswersWidgetDescription } from '../connectors/answers/connectAnswers';
-import type { AutocompleteWidgetDescription } from '../connectors/autocomplete/connectAutocomplete';
-import type { BreadcrumbWidgetDescription } from '../connectors/breadcrumb/connectBreadcrumb';
-import type { ChatWidgetDescription } from '../connectors/chat/connectChat';
-import type { ClearRefinementsWidgetDescription } from '../connectors/clear-refinements/connectClearRefinements';
-import type { ConfigureWidgetDescription } from '../connectors/configure/connectConfigure';
-import type { CurrentRefinementsWidgetDescription } from '../connectors/current-refinements/connectCurrentRefinements';
-import type { GeoSearchWidgetDescription } from '../connectors/geo-search/connectGeoSearch';
-import type { HierarchicalMenuWidgetDescription } from '../connectors/hierarchical-menu/connectHierarchicalMenu';
-import type { HitsPerPageWidgetDescription } from '../connectors/hits-per-page/connectHitsPerPage';
-import type { HitsWidgetDescription } from '../connectors/hits/connectHits';
-import type { InfiniteHitsWidgetDescription } from '../connectors/infinite-hits/connectInfiniteHits';
-import type { MenuWidgetDescription } from '../connectors/menu/connectMenu';
-import type { NumericMenuWidgetDescription } from '../connectors/numeric-menu/connectNumericMenu';
-import type { PaginationWidgetDescription } from '../connectors/pagination/connectPagination';
-import type { PoweredByWidgetDescription } from '../connectors/powered-by/connectPoweredBy';
-import type { QueryRulesWidgetDescription } from '../connectors/query-rules/connectQueryRules';
-import type { RangeWidgetDescription } from '../connectors/range/connectRange';
-import type { RatingMenuWidgetDescription } from '../connectors/rating-menu/connectRatingMenu';
-import type { RefinementListWidgetDescription } from '../connectors/refinement-list/connectRefinementList';
-import type { RelevantSortWidgetDescription } from '../connectors/relevant-sort/connectRelevantSort';
-import type { SearchBoxWidgetDescription } from '../connectors/search-box/connectSearchBox';
-import type { SortByWidgetDescription } from '../connectors/sort-by/connectSortBy';
-import type { StatsWidgetDescription } from '../connectors/stats/connectStats';
-import type { ToggleRefinementWidgetDescription } from '../connectors/toggle-refinement/connectToggleRefinement';
-import type { VoiceSearchWidgetDescription } from '../connectors/voice-search/connectVoiceSearch';
-import type { AnalyticsWidgetDescription } from '../widgets/analytics/analytics';
-import type { PlacesWidgetDescription } from '../widgets/places/places';
+import type {
+  AutocompleteWidgetDescription,
+  BreadcrumbWidgetDescription,
+  ClearRefinementsWidgetDescription,
+  ConfigureWidgetDescription,
+  CurrentRefinementsWidgetDescription,
+  GeoSearchWidgetDescription,
+  HierarchicalMenuWidgetDescription,
+  HitsPerPageWidgetDescription,
+  HitsWidgetDescription,
+  InfiniteHitsWidgetDescription,
+  MenuWidgetDescription,
+  NumericMenuWidgetDescription,
+  PaginationWidgetDescription,
+  PoweredByWidgetDescription,
+  QueryRulesWidgetDescription,
+  RangeWidgetDescription,
+  RatingMenuWidgetDescription,
+  RefinementListWidgetDescription,
+  RelevantSortWidgetDescription,
+  SearchBoxWidgetDescription,
+  SortByWidgetDescription,
+  StatsWidgetDescription,
+  ToggleRefinementWidgetDescription,
+  VoiceSearchWidgetDescription,
+} from 'instantsearch-core';
 
-type ConnectorRenderStates = AnswersWidgetDescription['indexRenderState'] &
-  AutocompleteWidgetDescription['indexRenderState'] &
+type ConnectorRenderStates = AutocompleteWidgetDescription['indexRenderState'] &
   BreadcrumbWidgetDescription['indexRenderState'] &
-  ChatWidgetDescription['indexRenderState'] &
   ClearRefinementsWidgetDescription['indexRenderState'] &
   ConfigureWidgetDescription['indexRenderState'] &
   CurrentRefinementsWidgetDescription['indexRenderState'] &
@@ -54,12 +50,7 @@ type ConnectorRenderStates = AnswersWidgetDescription['indexRenderState'] &
   ToggleRefinementWidgetDescription['indexRenderState'] &
   VoiceSearchWidgetDescription['indexRenderState'];
 
-type WidgetRenderStates = AnalyticsWidgetDescription['indexRenderState'] &
-  PlacesWidgetDescription['indexRenderState'];
-
-export type IndexRenderState = Partial<
-  ConnectorRenderStates & WidgetRenderStates
->;
+export type IndexRenderState = Partial<ConnectorRenderStates>;
 
 export type RenderState = {
   [indexId: string]: IndexRenderState;

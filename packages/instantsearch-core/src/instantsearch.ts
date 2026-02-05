@@ -63,6 +63,7 @@ export class InstantSearch<
   client: InstantSearchOptions['searchClient'];
   indexName: string;
   compositionID?: string;
+  templatesConfig: InstantSearchOptions['templatesConfig'];
   onStateChange: InstantSearchOptions<TUiState>['onStateChange'] | null = null;
   future: NonNullable<InstantSearchOptions<TUiState>['future']>;
   helper: AlgoliaSearchHelper | null;
@@ -108,6 +109,7 @@ export class InstantSearch<
       stalledSearchDelay = 200,
       searchClient = null,
       onStateChange = null,
+      templatesConfig = undefined,
       future = {
         ...INSTANTSEARCH_FUTURE_DEFAULTS,
         ...(options.future || {}),
@@ -151,6 +153,7 @@ See ${createDocumentationLink({
     this.future = future;
     this.indexName = indexName;
     this.compositionID = compositionID;
+    this.templatesConfig = templatesConfig;
     this.helper = null;
     this.mainIndex = index({
       // we use an index widget to render compositions
@@ -322,8 +325,8 @@ See ${createDocumentationLink({
 
       warning(
         Boolean(this.indexName) ||
-          Boolean(this.compositionID) ||
-          this.mainIndex.getWidgets().some(isIndexWidget),
+        Boolean(this.compositionID) ||
+        this.mainIndex.getWidgets().some(isIndexWidget),
         'No indexName provided, nor an explicit index widget in the widgets tree. This is required to be able to display results.'
       );
 

@@ -1,41 +1,44 @@
 import {
   DefaultChatTransport,
   lastAssistantMessageIsCompleteWithToolCalls,
-} from '../../lib/ai-lite';
-import { Chat } from '../../lib/chat';
+} from '../lib/ai-lite';
+import { Chat } from '../lib/chat';
+import {
+  createDocumentationMessageGenerator,
+  noop,
+  warning,
+} from '../lib/public';
 import {
   checkRendering,
-  createDocumentationMessageGenerator,
   createSendEventForHits,
   getAlgoliaAgent,
   getAppIdAndApiKey,
-  noop,
-  warning,
-} from '../../lib/utils';
+} from '../lib/utils';
 
 import type {
   AbstractChat,
   ChatInit as ChatInitAi,
   UIMessage,
-} from '../../lib/chat';
+} from '../lib/chat';
+import type { InstantSearch } from '../instantsearch';
 import type {
   Connector,
   Renderer,
   Unmounter,
   UnknownWidgetParams,
-  InstantSearch,
   IndexUiState,
   IndexWidget,
   WidgetRenderState,
   IndexRenderState,
   SendEventForHits,
-} from '../../types';
-import type {
   AddToolResultWithOutput,
   UserClientSideTool,
   ClientSideTools,
   ClientSideTool,
-} from 'instantsearch-ui-components';
+} from '../types';
+
+// Re-export UIMessage for external use
+export type { UIMessage } from '../lib/chat';
 
 const withUsage = createDocumentationMessageGenerator({
   name: 'chat',
@@ -144,7 +147,7 @@ export type ChatConnector<TUiMessage extends UIMessage = UIMessage> = Connector<
   ChatConnectorParams<TUiMessage>
 >;
 
-export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
+export const connectChat = (function connectChat<TWidgetParams extends UnknownWidgetParams>(
   renderFn: Renderer<ChatRenderState, TWidgetParams & ChatConnectorParams>,
   unmountFn: Unmounter = noop
 ) {

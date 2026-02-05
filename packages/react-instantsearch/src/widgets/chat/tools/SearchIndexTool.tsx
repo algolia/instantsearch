@@ -8,6 +8,7 @@ import React, { createElement } from 'react';
 
 import { Carousel } from '../../../components';
 
+import type { IndexUiState, IndexWidget } from 'instantsearch-core';
 import type {
   ClientSideToolComponentProps,
   Pragma,
@@ -15,7 +16,6 @@ import type {
   RecordWithObjectID,
   UserClientSideTool,
 } from 'instantsearch-ui-components';
-import type { IndexUiState, IndexWidget } from 'instantsearch.js';
 import type { ComponentProps } from 'react';
 
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];

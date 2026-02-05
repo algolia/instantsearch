@@ -89,6 +89,11 @@ export type SortByRenderState = {
    */
   refine: (value: string) => void;
   /**
+   * `true` if the last search contains no result.
+   * @deprecated Use `canRefine` instead.
+   */
+  hasNoResults: boolean;
+  /**
    * `true` if we can refine.
    */
   canRefine: boolean;
@@ -242,8 +247,13 @@ export const connectSortBy: SortByConnector = function connectSortBy(
         );
       },
 
-      dispose({ state }) {
+      dispose({ parent }) {
         unmountFn();
+
+        let state = parent.getHelper()?.state;
+        if (!state) {
+          return
+        }
 
         // Clear sortBy parameter if it was set
         if (connectorState.isUsingComposition && state.sortBy) {
@@ -320,7 +330,7 @@ export const connectSortBy: SortByConnector = function connectSortBy(
         // Otherwise use the index (for index-based items or when no valid strategy is active)
         const currentRefinement =
           connectorState.isUsingComposition &&
-          isValidStrategy(connectorState.itemsLookup!, state.sortBy)
+            isValidStrategy(connectorState.itemsLookup!, state.sortBy)
             ? state.sortBy!
             : state.index;
 
@@ -341,7 +351,7 @@ export const connectSortBy: SortByConnector = function connectSortBy(
         // Otherwise use index-based behavior (traditional mode)
         const currentValue =
           connectorState.isUsingComposition &&
-          isValidStrategy(connectorState.itemsLookup!, searchParameters.sortBy)
+            isValidStrategy(connectorState.itemsLookup!, searchParameters.sortBy)
             ? searchParameters.sortBy!
             : searchParameters.index;
 

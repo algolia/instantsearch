@@ -1,4 +1,5 @@
 export type * from './algoliasearch';
+export type * from './chat';
 export type * from './connector';
 export type * from './insights';
 export type * from './instantsearch';

@@ -97,7 +97,6 @@ export function InitializePromise({ nonce }: InitializePromiseProps) {
           });
 
           if (shouldRefetch) {
-            search._resetScheduleSearch?.();
             waitForResultsRef.current = wrapPromiseWithState(
               waitForResults().then(injectInitialResults)
             );

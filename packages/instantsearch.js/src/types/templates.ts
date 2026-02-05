@@ -33,6 +33,12 @@ export type TemplateWithSendEvent<TTemplateData = void> = (
   params: TemplateWithSendEventParams
 ) => VNode | VNode[] | string;
 
+/**
+ * @deprecated Use TemplateWithSendEvent instead.
+ */
+export type TemplateWithBindEvent<TTemplateData = void> =
+  TemplateWithSendEvent<TTemplateData>;
+
 export type Templates = {
   [key: string]:
     | Template<any>

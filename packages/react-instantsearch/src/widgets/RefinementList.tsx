@@ -6,10 +6,7 @@ import { SearchBox as SearchBoxUiComponent } from '../ui/SearchBox';
 
 import type { RefinementListProps as RefinementListUiComponentProps } from '../ui/RefinementList';
 import type { SearchBoxProps, SearchBoxTranslations } from '../ui/SearchBox';
-import type {
-  RefinementListItem,
-  RefinementListWidgetParams,
-} from 'instantsearch-core';
+import type { RefinementListItem } from 'instantsearch-core';
 import type { UseRefinementListProps } from 'react-instantsearch-core';
 
 type UiProps = Pick<
@@ -30,11 +27,11 @@ export type RefinementListProps = Omit<
   RefinementListUiComponentProps,
   keyof UiProps
 > &
-  UseRefinementListProps &
-  Pick<
-    RefinementListWidgetParams,
-    'searchable' | 'searchablePlaceholder' | 'searchableSelectOnSubmit'
-  > & {
+  UseRefinementListProps & {
+    searchable?: boolean;
+    searchablePlaceholder?: string;
+    searchableSelectOnSubmit?: boolean;
+  } & {
     translations?: Partial<
       UiProps['translations'] &
         SearchBoxTranslations & {

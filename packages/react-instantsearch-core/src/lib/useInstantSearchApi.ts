@@ -62,12 +62,12 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
   const forceUpdate = useForceUpdate();
   const serverContext = useInstantSearchServerContext<TUiState, TRouteState>();
   const serverState = useInstantSearchSSRContext<TUiState, TRouteState>();
-  const { waitForResultsRef } = useRSCContext();
+  const waitingForResultsRef = useRSCContext();
   const initialResults = serverState?.initialResults;
   const prevPropsRef = useRef(props);
 
   const shouldRenderAtOnce =
-    serverContext || initialResults || waitForResultsRef;
+    serverContext || initialResults || waitingForResultsRef;
 
   let searchRef = useRef<InternalInstantSearch<TUiState, TRouteState> | null>(
     null
@@ -75,7 +75,7 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
   // As we need to render on mount with SSR, using the local ref above in `StrictMode` will
   // create and start two instances of InstantSearch. To avoid this, we instead discard it and use
   // an upward ref from `InstantSearchSSRContext` as it has already been mounted a second time at this point.
-  if (serverState?.ssrSearchRef) {
+  if (serverState) {
     searchRef = serverState.ssrSearchRef;
   }
 
@@ -109,10 +109,6 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
       // an additional network request. (This is equivalent to monkey-patching
       // `scheduleSearch` to a noop.)
       search._initialResults = initialResults || {};
-      // We don't rely on the `defer` to reset the schedule search, but will call
-      // `search._resetScheduleSearch()` manually in the effect after children
-      // mount in `InstantSearch`.
-      search._manuallyResetScheduleSearch = true;
     }
 
     addAlgoliaAgents(props.searchClient, [
@@ -135,7 +131,7 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
     }
 
     warnNextRouter(props.routing);
-    warnNextAppDir(Boolean(waitForResultsRef));
+    warnNextAppDir(Boolean(waitingForResultsRef));
 
     searchRef.current = search;
   }
@@ -217,13 +213,10 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
       }
 
       return () => {
-        if (serverState?.ssrSearchRef) {
-          return;
-        }
-
         function cleanup() {
           search.dispose();
         }
+
         clearTimeout(search._schedule.timer);
         // We clean up only when the component that uses this subscription unmounts,
         // but not when it updates, because it would dispose the instance, which
@@ -232,12 +225,13 @@ export function useInstantSearchApi<TUiState extends UiState, TRouteState>(
         // in the next effect.
         // (There might be better ways to do this.)
         cleanupTimerRef.current = setTimeout(cleanup);
+
         // We need to prevent the `useWidget` cleanup function so that widgets
         // are not removed before the instance is disposed, triggering
         // an unwanted search request.
         search._preventWidgetCleanup = true;
       };
-    }, [forceUpdate, serverState]),
+    }, [forceUpdate]),
     () => searchRef.current!,
     () => searchRef.current!
   );
@@ -295,8 +289,8 @@ function warnNextAppDir(isRscContextDefined: boolean) {
     Boolean((window as any).next?.appDir) === false,
     `
 We've detected you are using Next.js with the App Router.
-We released a package called "react-instantsearch-nextjs" that makes SSR work with the App Router.
-Please check its usage instructions: https://www.algolia.com/doc/guides/building-search-ui/going-further/server-side-rendering/react/#with-nextjs-app-router
+We released an **experimental** package called "react-instantsearch-nextjs" that makes SSR work with the App Router.
+Please check its usage instructions: https://www.algolia.com/doc/guides/building-search-ui/going-further/server-side-rendering/react/#with-nextjs
 
 This warning will not be outputted in production builds.`
   );

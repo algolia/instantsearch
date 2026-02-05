@@ -1,22 +1,28 @@
 export * from './getContainerNode';
 export * from './isDomElement';
+export * from './getAlgoliaAgent';
 export {
   addWidgetId,
   resetWidgetId,
   capitalize,
   defer,
+  checkRendering,
   createDocumentationLink,
   createDocumentationMessageGenerator,
+  createSendEventForHits,
   TAG_PLACEHOLDER,
   TAG_REPLACEMENT,
   escapeHits,
   escapeFacets,
   escape,
+  escapeFacetValue,
   unescape,
+  getAppIdAndApiKey,
   getHighlightedParts,
   getHighlightFromSiblings,
   getObjectType,
   getPropertyByPath,
+  getRefinements,
   getWidgetAttribute,
   isEqual,
   isFacetRefined,

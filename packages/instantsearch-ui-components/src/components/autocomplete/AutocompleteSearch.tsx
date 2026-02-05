@@ -53,7 +53,6 @@ export function createAutocompleteSearchComponent({ createElement }: Renderer) {
             autoComplete="off"
             autoCorrect="off"
             autoCapitalize="off"
-            enterKeyHint="search"
             spellCheck="false"
             maxLength={512}
             type="search"

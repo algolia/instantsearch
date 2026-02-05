@@ -8,8 +8,12 @@ import {
   warning,
 } from '../../lib/utils';
 
-import type { SendEventForHits } from '../../lib/utils';
-import type { Hit, Connector, WidgetRenderState } from '../../types';
+import type {
+  Hit,
+  Connector,
+  WidgetRenderState,
+  SendEventForHits,
+} from '../../types';
 import type { SearchResults } from 'algoliasearch-helper';
 
 const withUsage = createDocumentationMessageGenerator({
@@ -259,8 +263,13 @@ search.addWidgets([
         });
       },
 
-      dispose({ state }) {
+      dispose({ parent }) {
         unmountFn();
+
+        const state = parent.getHelper()?.state;
+        if (!state) {
+          return undefined;
+        }
 
         const stateWithoutQuery = state.setQueryParameter('query', undefined);
 

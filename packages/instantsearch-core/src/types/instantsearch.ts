@@ -3,6 +3,8 @@ import type { InsightsProps } from './insights';
 import type { RouterProps } from './router';
 import type { UiState } from './ui-state';
 
+export type TemplatesConfig = Record<string, unknown>;
+
 export type InstantSearchOptions<
   TUiState extends UiState = UiState,
   TRouteState = TUiState
@@ -50,6 +52,10 @@ export type InstantSearchOptions<
    * to `Number.prototype.toLocaleString()`
    */
   numberLocale?: string;
+  /**
+   * Options for template rendering helpers.
+   */
+  templatesConfig?: TemplatesConfig;
   /**
    * Function called when the state changes.
    *

@@ -37,7 +37,11 @@ function ItemWrapper({
   }
 
   return (
-    <div className={cx(cssClasses.link)} aria-label={`${value} & up`} disabled>
+    <div
+      className={cx(cssClasses.link)}
+      aria-label={`${value} & up`}
+      aria-disabled="true"
+    >
       {children}
     </div>
   );

@@ -9,6 +9,7 @@ export * from './createSendEventForFacet';
 export * from './createSendEventForHits';
 export * from './escapeFacetValue';
 export * from './geo-search';
+export * from './getAlgoliaAgent';
 export * from './getAppIdAndApiKey';
 export * from './getInsightsAnonymousToken';
 export * from './getRefinements';

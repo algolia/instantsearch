@@ -20,6 +20,13 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
+export type TransformItemsIndicesConfig = {
+  indexName: string;
+  indexId: string;
+  hits: Hit[];
+  results: SearchResults;
+};
+
 export type AutocompleteConnectorParams = {
   /**
    * Escapes HTML entities from hits string values.

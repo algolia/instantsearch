@@ -1,11 +1,11 @@
-import { createChatComponent } from 'instantsearch-ui-components';
 import {
   SearchIndexToolType,
   RecommendToolType,
   MemorizeToolType,
   MemorySearchToolType,
   PonderToolType,
-} from 'instantsearch.js/es/lib/chat';
+} from 'instantsearch-core';
+import { createChatComponent } from 'instantsearch-ui-components';
 import React, { createElement, Fragment } from 'react';
 import { useInstantSearch, useChat } from 'react-instantsearch-core';
 
@@ -21,6 +21,7 @@ export {
   PonderToolType,
 };
 
+import type { IndexUiState, UIMessage } from 'instantsearch-core';
 import type {
   Pragma,
   ChatProps as ChatUiProps,
@@ -30,8 +31,6 @@ import type {
   UserClientSideTools,
   ChatMessageProps,
 } from 'instantsearch-ui-components';
-import type { IndexUiState } from 'instantsearch.js';
-import type { UIMessage } from 'instantsearch.js/es/lib/chat';
 import type { UseChatProps } from 'react-instantsearch-core';
 
 const ChatUiComponent = createChatComponent({
@@ -263,7 +262,7 @@ export function Chat<
         onReload: (messageId) => regenerate({ messageId }),
         onClose: () => setOpen(false),
         messages,
-        tools: toolsFromConnector,
+        tools: toolsFromConnector as any,
         indexUiState,
         setIndexUiState,
         isClearing,

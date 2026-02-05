@@ -21,12 +21,11 @@ browserify index.js \
 
 echo "..Minify"
 
-uglifyjs dist/algoliasearch.helper.js \
-  --mangle \
-  --compress=warnings=false \
-  --in-source-map "dist/algoliasearch.helper.js.map" \
-  --source-map "dist/algoliasearch.helper.min.js.map" \
-  --output dist/algoliasearch.helper.min.js
+node scripts/minify.js \
+  dist/algoliasearch.helper.js \
+  dist/algoliasearch.helper.js.map \
+  dist/algoliasearch.helper.min.js \
+  dist/algoliasearch.helper.min.js.map
 
 echo '..Gzipped file size'
 

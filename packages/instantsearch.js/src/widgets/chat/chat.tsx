@@ -1152,7 +1152,7 @@ export type ChatWidget = WidgetFactory<
 >;
 
 const defaultTemplates: ChatTemplates = {
-  item(item) {
+  item(item: Hit<BaseHit>) {
     return JSON.stringify(item, null, 2);
   },
 };

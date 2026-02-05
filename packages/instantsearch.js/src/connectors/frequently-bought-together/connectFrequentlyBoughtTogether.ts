@@ -1,15 +1,17 @@
 import {
+  addAbsolutePosition,
+  addQueryID,
+} from 'instantsearch-core/src/lib/utils';
+
+import {
   createDocumentationMessageGenerator,
   checkRendering,
   noop,
   escapeHits,
   TAG_PLACEHOLDER,
   createSendEventForHits,
-  addAbsolutePosition,
-  addQueryID,
 } from '../../lib/utils';
 
-import type { SendEventForHits } from '../../lib/utils';
 import type {
   Connector,
   TransformItems,
@@ -20,6 +22,7 @@ import type {
   RecommendResponse,
   Hit,
   AlgoliaHit,
+  SendEventForHits,
 } from '../../types';
 import type { PlainSearchParameters } from 'algoliasearch-helper';
 
@@ -210,9 +213,8 @@ export default (function connectFrequentlyBoughtTogether<
         };
       },
 
-      dispose({ recommendState }) {
+      dispose() {
         unmountFn();
-        return recommendState.removeParams(this.$$id!);
       },
 
       getWidgetParameters(state) {

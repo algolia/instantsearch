@@ -252,31 +252,31 @@ export const connectInfiniteHits = function connectInfiniteHits<
     const getShowPrevious =
       (
         helper: Helper,
-        getCachedHits: () => InfiniteHitsCachedHits<THit>
+        getCachedHits: () => InfiniteHitsCachedItems<THit>
       ): (() => void) =>
-      () => {
-        const cachedHits = getCachedHits();
-        // Using the helper's `overrideStateWithoutTriggeringChangeEvent` method
-        // avoid updating the browser URL when the user displays the previous page.
-        helper
-          .overrideStateWithoutTriggeringChangeEvent({
-            ...helper.state,
-            page: getFirstReceivedPage(helper.state, cachedHits) - 1,
-          })
-          .searchWithoutTriggeringOnStateChange();
-      };
+        () => {
+          const cachedHits = getCachedHits();
+          // Using the helper's `overrideStateWithoutTriggeringChangeEvent` method
+          // avoid updating the browser URL when the user displays the previous page.
+          helper
+            .overrideStateWithoutTriggeringChangeEvent({
+              ...helper.state,
+              page: getFirstReceivedPage(helper.state, cachedHits) - 1,
+            })
+            .searchWithoutTriggeringOnStateChange();
+        };
 
     const getShowMore =
       (
         helper: Helper,
-        getCachedHits: () => InfiniteHitsCachedHits<THit>
+        getCachedHits: () => InfiniteHitsCachedItems<THit>
       ): (() => void) =>
-      () => {
-        const cachedHits = getCachedHits();
-        helper
-          .setPage(getLastReceivedPage(helper.state, cachedHits) + 1)
-          .search();
-      };
+        () => {
+          const cachedHits = getCachedHits();
+          helper
+            .setPage(getLastReceivedPage(helper.state, cachedHits) + 1)
+            .search();
+        };
 
     type InfiniteHitsWidget = Widget<
       InfiniteHitsWidgetDescription<THit> & {
@@ -343,7 +343,7 @@ export const connectInfiniteHits = function connectInfiniteHits<
          */
         const state = parent.getPreviousState() || existingState;
 
-        const cachedItems = cache.read({ state: normalizeState(state) }) || {};
+        const cachedItems = getCacheHits();
 
         const banner = results?.renderingContent?.widgets?.banners?.[0];
 

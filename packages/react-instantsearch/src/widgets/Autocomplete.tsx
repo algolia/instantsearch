@@ -31,14 +31,18 @@ import { ReverseHighlight } from './ReverseHighlight';
 
 import type { PlainSearchParameters } from 'algoliasearch-helper';
 import type {
+  BaseHit,
+  Hit,
+  IndexUiState,
+  TransformItemsIndicesConfig,
+} from 'instantsearch-core';
+import type {
   AutocompleteIndexClassNames,
   AutocompleteIndexConfig,
   Pragma,
   AutocompleteClassNames,
   AutocompleteIndexProps,
 } from 'instantsearch-ui-components';
-import type { BaseHit, Hit, IndexUiState } from 'instantsearch.js';
-import type { TransformItemsIndicesConfig } from 'instantsearch.js/es/connectors/autocomplete/connectAutocomplete';
 import type { ComponentProps } from 'react';
 
 const Autocomplete = createAutocompleteComponent({
@@ -313,9 +317,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     indices,
     refine: refineAutocomplete,
     currentRefinement,
-  } = useAutocomplete({
-    transformItems,
-  });
+  } = useAutocomplete({});
 
   const {
     storage,
@@ -429,6 +431,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   });
 
   return (
+    // @ts-expect-error
     <Autocomplete {...props} {...getRootProps()}>
       <AutocompleteSearch
         inputProps={getInputProps()}

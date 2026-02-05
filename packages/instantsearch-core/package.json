@@ -47,7 +47,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.25.9",
-    "algoliasearch-helper": "3.24.1",
+    "algoliasearch-helper": "3.27.0",
     "@algolia/events": "^4.0.1",
     "@types/qs": "^6.5.3",
     "qs": "^6.5.1 < 6.10",

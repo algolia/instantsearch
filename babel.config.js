@@ -12,6 +12,15 @@ module.exports = (api) => {
 
   const disableHoisting = env.includes('disableHoisting');
 
+  const hasPolyfillEsShims = (() => {
+    try {
+      require.resolve('babel-plugin-polyfill-es-shims');
+      return true;
+    } catch (error) {
+      return false;
+    }
+  })();
+
   const modules = isTest || isCJS ? 'commonjs' : false;
   const targets = {};
 
@@ -59,6 +68,52 @@ module.exports = (api) => {
           // `next` imports as peer dependencies fail if paths are incomplete
           'next',
         ],
+      },
+    ],
+    // this plugin is used to test if we need polyfills, not to actually insert them
+    // only UMD, since cjs & esm have false positives due to imports
+    isUMD &&
+      hasPolyfillEsShims && [
+      'polyfill-es-shims',
+      {
+        method: 'usage-global',
+        targets: {
+          ie: 11,
+        },
+        shouldInjectPolyfill(name, defaultShouldInject) {
+          const exclude = [
+            // false positives (we access these from objects only)
+            'Array.prototype.item',
+            'String.prototype.item',
+            'Array.prototype.values',
+            'Function.prototype.name',
+
+            // we require polyfills for this already
+            'Array.prototype.includes',
+
+            // Used only in newer widgets, which expect modern browsers
+            'Object.fromEntries',
+            'Object.entries',
+            'Array.prototype.find',
+            'String.prototype.startsWith',
+            'Promise.prototype.finally',
+            'Array.prototype.entries',
+            'Array.prototype.findIndex',
+
+            // false positive (babel doesn't know types)
+            // this is actually only called on arrays
+            'String.prototype.includes',
+
+            // false positive (spread)
+            'Object.getOwnPropertyDescriptors',
+          ];
+          if (defaultShouldInject && !exclude.includes(name)) {
+            throw new Error(
+              `Usage of a builtin which isn't allowed to be polyfilled: ${name}`
+            );
+          }
+          return false;
+        },
       },
     ],
   ]);

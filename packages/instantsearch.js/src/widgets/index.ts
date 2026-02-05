@@ -23,6 +23,7 @@ export { default as rangeInput } from './range-input/range-input';
 export { default as rangeSlider } from './range-slider/range-slider';
 export { default as ratingMenu } from './rating-menu/rating-menu';
 export { default as refinementList } from './refinement-list/refinement-list';
+export type { RefinementListWidgetParams } from './refinement-list/refinement-list';
 export { default as relevantSort } from './relevant-sort/relevant-sort';
 export { default as searchBox } from './search-box/search-box';
 export { default as sortBy } from './sort-by/sort-by';
