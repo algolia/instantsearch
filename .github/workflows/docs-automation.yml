@@ -1,0 +1,278 @@
+name: Documentation Automation
+
+on:
+  # Trigger on release tags (e.g., instantsearch.js@4.87.0)
+  push:
+    tags:
+      - '*@*'
+
+  # Manual trigger for testing
+  workflow_dispatch:
+    inputs:
+      package:
+        description: 'Package name (e.g., instantsearch.js)'
+        required: false
+        default: 'instantsearch.js'
+      run_claude:
+        description: 'Run Claude Code (false = only generate prompt)'
+        required: false
+        default: 'false'
+        type: boolean
+      create_pr:
+        description: 'Create PR in docs-new (requires run_claude=true)'
+        required: false
+        default: 'false'
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  detect-changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    outputs:
+      package: ${{ steps.parse-tag.outputs.package }}
+      version: ${{ steps.parse-tag.outputs.version }}
+      has_docs_changes: ${{ steps.classify.outputs.has_docs_changes }}
+      priority: ${{ steps.classify.outputs.priority }}
+      prompt: ${{ steps.generate-prompt.outputs.prompt }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Parse tag or input
+        id: parse-tag
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            PACKAGE="${{ inputs.package }}"
+            # Get latest version from CHANGELOG
+            VERSION=$(head -20 packages/$PACKAGE/CHANGELOG.md | grep -oP '\d+\.\d+\.\d+' | head -1)
+          else
+            TAG="${GITHUB_REF#refs/tags/}"
+            PACKAGE="${TAG%@*}"
+            VERSION="${TAG##*@}"
+          fi
+          echo "package=$PACKAGE" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Package: $PACKAGE, Version: $VERSION"
+
+      - name: Install dependencies
+        run: |
+          cd scripts/docs-automation
+          yarn install
+
+      - name: Classify changes
+        id: classify
+        run: |
+          cd scripts/docs-automation
+          OUTPUT=$(npx tsx src/index.ts parse-changelog --package ${{ steps.parse-tag.outputs.package }})
+          echo "$OUTPUT"
+
+          # Check if there are documentation needs
+          if echo "$OUTPUT" | grep -q "Documentation priority: high\|Documentation priority: medium"; then
+            echo "has_docs_changes=true" >> $GITHUB_OUTPUT
+            PRIORITY=$(echo "$OUTPUT" | grep "Documentation priority:" | cut -d: -f2 | tr -d ' ')
+            echo "priority=$PRIORITY" >> $GITHUB_OUTPUT
+          else
+            echo "has_docs_changes=false" >> $GITHUB_OUTPUT
+            echo "priority=none" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Generate Claude prompt
+        id: generate-prompt
+        if: steps.classify.outputs.has_docs_changes == 'true'
+        run: |
+          cd scripts/docs-automation
+
+          # Generate the prompt and save to file
+          npx tsx src/index.ts generate-prompt \
+            --package ${{ steps.parse-tag.outputs.package }} \
+            --version ${{ steps.parse-tag.outputs.version }} \
+            --output ./prompt.txt
+
+          # Store prompt in output (base64 encoded to handle multiline)
+          PROMPT=$(cat ./prompt.txt | base64 -w 0)
+          echo "prompt=$PROMPT" >> $GITHUB_OUTPUT
+
+      - name: Upload prompt artifact
+        if: steps.classify.outputs.has_docs_changes == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: claude-prompt
+          path: scripts/docs-automation/prompt.txt
+          retention-days: 7
+
+  update-docs:
+    name: Update Documentation
+    needs: detect-changes
+    if: needs.detect-changes.outputs.has_docs_changes == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout instantsearch (for source reference)
+        uses: actions/checkout@v4
+        with:
+          path: instantsearch
+
+      - name: Download prompt
+        uses: actions/download-artifact@v4
+        with:
+          name: claude-prompt
+          path: ./
+
+      - name: Clone docs-new repository
+        run: |
+          git clone https://x-access-token:${{ secrets.DOCS_REPO_PAT }}@github.com/algolia/docs-new.git docs-new
+          cd docs-new
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Install Claude Code CLI
+        run: |
+          npm install -g @anthropic-ai/claude-code
+
+      - name: Show prompt (dry run)
+        if: github.event_name == 'workflow_dispatch' && inputs.run_claude == 'false'
+        run: |
+          echo "## Generated Prompt"
+          echo ""
+          cat prompt.txt
+          echo ""
+          echo "---"
+          echo "To run Claude, trigger the workflow with run_claude=true"
+
+      - name: Run Claude Code
+        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.run_claude == 'true')
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        working-directory: docs-new
+        run: |
+          # Read the prompt and add reference to instantsearch source
+          PROMPT=$(cat ../prompt.txt)
+          PROMPT="$PROMPT
+
+          ## Source Code Reference
+
+          The instantsearch source code is available at ../instantsearch for reference.
+          You can read files from there to understand the API, types, and implementation details.
+          For example: ../instantsearch/packages/instantsearch.js/src/widgets/
+          "
+
+          # Run Claude Code in headless mode
+          claude -p "$PROMPT" \
+            --model claude-sonnet-4-5-20250514 \
+            --allowedTools "Read,Edit,Write,Bash(git diff *),Bash(git status *),Glob,Grep" \
+            --output-format text
+
+      - name: Show changes (no PR)
+        if: github.event_name == 'workflow_dispatch' && inputs.run_claude == 'true' && inputs.create_pr == 'false'
+        working-directory: docs-new
+        run: |
+          echo "## Changes made by Claude"
+          echo ""
+          git status
+          echo ""
+          git diff || true
+          echo ""
+          echo "---"
+          echo "To create a PR, trigger the workflow with create_pr=true"
+
+      - name: Create branch and commit
+        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.create_pr == 'true')
+        working-directory: docs-new
+        env:
+          PACKAGE: ${{ needs.detect-changes.outputs.package }}
+          VERSION: ${{ needs.detect-changes.outputs.version }}
+        run: |
+          BRANCH="docs/${PACKAGE}-${VERSION}"
+
+          # Check if there are changes
+          if git diff --quiet && git diff --staged --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          # Create branch and commit
+          git checkout -b "$BRANCH"
+          git add -A
+          git commit -m "docs: update documentation for ${PACKAGE}@${VERSION}
+
+          Auto-generated by InstantSearch docs automation.
+
+          Co-Authored-By: Claude <noreply@anthropic.com>"
+
+          # Push branch
+          git push origin "$BRANCH"
+
+          echo "branch=$BRANCH" >> $GITHUB_ENV
+
+      - name: Create Pull Request
+        if: env.branch != '' && (github.event_name == 'push' || inputs.create_pr == 'true')
+        env:
+          GITHUB_TOKEN: ${{ secrets.DOCS_REPO_PAT }}
+          PACKAGE: ${{ needs.detect-changes.outputs.package }}
+          VERSION: ${{ needs.detect-changes.outputs.version }}
+          PRIORITY: ${{ needs.detect-changes.outputs.priority }}
+        working-directory: docs-new
+        run: |
+          gh pr create \
+            --repo algolia/docs-new \
+            --title "docs: update documentation for ${PACKAGE}@${VERSION}" \
+            --body "## Summary
+
+          Auto-generated documentation update for ${PACKAGE}@${VERSION}.
+
+          **Priority:** ${PRIORITY}
+
+          ## Source
+          - [Changelog](https://github.com/algolia/instantsearch/blob/master/packages/${PACKAGE}/CHANGELOG.md)
+          - [Release workflow](https://github.com/algolia/instantsearch/actions/runs/${{ github.run_id }})
+
+          ## Review Checklist
+          - [ ] Content is accurate and complete
+          - [ ] Code examples work correctly
+          - [ ] Links are valid
+          - [ ] Formatting follows documentation style guide
+
+          ---
+          *Generated by [InstantSearch Docs Automation](https://github.com/algolia/instantsearch)*" \
+            --draft \
+            --label "documentation" \
+            --label "auto-generated"
+
+      - name: Summary
+        run: |
+          echo "## Documentation Update" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Package:** ${{ needs.detect-changes.outputs.package }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Version:** ${{ needs.detect-changes.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Priority:** ${{ needs.detect-changes.outputs.priority }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "### Manual Run Settings" >> $GITHUB_STEP_SUMMARY
+            echo "- **Run Claude:** ${{ inputs.run_claude }}" >> $GITHUB_STEP_SUMMARY
+            echo "- **Create PR:** ${{ inputs.create_pr }}" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [[ -n "${{ env.branch }}" ]]; then
+            echo "### Result" >> $GITHUB_STEP_SUMMARY
+            echo "- **Branch:** ${{ env.branch }}" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "✅ A draft PR has been created in algolia/docs-new." >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.run_claude }}" == "false" ]]; then
+            echo "ℹ️ **Dry run mode.** Only the prompt was generated. Check the logs to see it." >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.create_pr }}" == "false" ]]; then
+            echo "ℹ️ **Preview mode.** Claude ran but no PR was created. Check the logs to see changes." >> $GITHUB_STEP_SUMMARY
+          fi
