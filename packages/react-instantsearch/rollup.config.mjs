@@ -52,6 +52,7 @@ if (isUMD || (!isESM && !isCJS && !isUMD)) {
       banner,
       outputDir: 'dist/umd',
       fileName: 'ReactInstantSearch',
+      legacyFileNames: true,
       globals: {
         react: 'React',
       },

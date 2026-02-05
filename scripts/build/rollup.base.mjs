@@ -140,6 +140,7 @@ export function createCJSConfig({
  * @param {string} options.banner - License banner
  * @param {string} [options.outputDir='dist/umd'] - Output directory
  * @param {string} [options.fileName] - Base filename (defaults to lowercase name)
+ * @param {boolean} [options.legacyFileNames=false] - Use .js/.min.js names (no dev/prod suffix)
  * @param {Object} [options.globals={}] - External globals mapping (e.g., { react: 'React' })
  * @param {string[]} [options.external=[]] - External dependencies for UMD
  * @param {Object[]} [options.plugins] - Additional plugins to append
@@ -152,11 +153,18 @@ export function createUMDConfig({
   banner,
   outputDir = 'dist/umd',
   fileName,
+  legacyFileNames = false,
   globals = {},
   external = [],
   plugins = [],
 }) {
   const baseName = fileName || name.toLowerCase().replace(/\s+/g, '');
+  const devFileName = legacyFileNames
+    ? `${baseName}.js`
+    : `${baseName}.development.js`;
+  const prodFileName = legacyFileNames
+    ? `${baseName}.min.js`
+    : `${baseName}.production.min.js`;
 
   const baseConfig = {
     input,
@@ -174,7 +182,7 @@ export function createUMDConfig({
   const devConfig = {
     ...baseConfig,
     output: {
-      file: `${outputDir}/${baseName}.development.js`,
+      file: `${outputDir}/${devFileName}`,
       format: 'umd',
       name,
       globals,
@@ -192,7 +200,7 @@ export function createUMDConfig({
   const prodConfig = {
     ...baseConfig,
     output: {
-      file: `${outputDir}/${baseName}.production.min.js`,
+      file: `${outputDir}/${prodFileName}`,
       format: 'umd',
       name,
       globals,
@@ -204,7 +212,11 @@ export function createUMDConfig({
       createReplacePlugin({ mode: 'production' }),
       createTerserPlugin({
         banner,
-        compress: { passes: 3, toplevel: true },
+        compress: {
+          passes: 4,
+          toplevel: true,
+          pure_getters: true,
+        },
         mangle: { toplevel: true, reserved: [name] },
       }),
       ...plugins,

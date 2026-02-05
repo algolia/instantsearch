@@ -20,6 +20,7 @@ export default createUMDConfig({
   banner,
   outputDir: 'dist',
   fileName: 'algoliasearch.helper',
+  legacyFileNames: true,
   globals: {},
   external: [],
 });

@@ -1,11 +1,11 @@
 {
   "files": [
     {
-      "path": "packages/algoliasearch-helper/dist/algoliasearch.helper.development.js",
+      "path": "packages/algoliasearch-helper/dist/algoliasearch.helper.js",
       "maxSize": "43.5 kB"
     },
     {
-      "path": "packages/algoliasearch-helper/dist/algoliasearch.helper.production.min.js",
+      "path": "packages/algoliasearch-helper/dist/algoliasearch.helper.min.js",
       "maxSize": "14 kB"
     },
     {
@@ -17,11 +17,11 @@
       "maxSize": "247 kB"
     },
     {
-      "path": "packages/react-instantsearch-core/dist/umd/ReactInstantSearchCore.production.min.js",
+      "path": "packages/react-instantsearch-core/dist/umd/ReactInstantSearchCore.min.js",
       "maxSize": "64 kB"
     },
     {
-      "path": "packages/react-instantsearch/dist/umd/ReactInstantSearch.production.min.js",
+      "path": "packages/react-instantsearch/dist/umd/ReactInstantSearch.min.js",
       "maxSize": "99 kB"
     },
     {
