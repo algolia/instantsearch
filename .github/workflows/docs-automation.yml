@@ -170,7 +170,6 @@ jobs:
 
           # Run Claude Code in headless mode
           claude -p "$PROMPT" \
-            --model claude-sonnet-4-5-20250514 \
             --allowedTools "Read,Edit,Write,Bash(git diff *),Bash(git status *),Glob,Grep" \
             --output-format text
 
