@@ -1,27 +1,21 @@
 name: Documentation Automation
 
 on:
-  # Trigger on release tags (e.g., instantsearch.js@4.87.0)
+  # Trigger on push to master (for release commits)
   push:
-    tags:
-      - '*@*'
+    branches:
+      - master
 
   # Manual trigger for testing
   workflow_dispatch:
     inputs:
-      package:
-        description: 'Package name (e.g., instantsearch.js)'
-        required: false
-        default: 'instantsearch.js'
       run_claude:
-        description: 'Run Claude Code (false = only generate prompt)'
-        required: false
-        default: 'false'
+        description: 'Run Claude Code'
+        default: false
         type: boolean
       create_pr:
-        description: 'Create PR in docs-new (requires run_claude=true)'
-        required: false
-        default: 'false'
+        description: 'Create PR'
+        default: false
         type: boolean
 
 permissions:
@@ -31,12 +25,11 @@ jobs:
   detect-changes:
     name: Detect Changes
     runs-on: ubuntu-latest
+    # Only run on release commits or manual triggers
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.head_commit.message, 'chore: release')
     outputs:
-      package: ${{ steps.parse-tag.outputs.package }}
-      version: ${{ steps.parse-tag.outputs.version }}
-      has_docs_changes: ${{ steps.classify.outputs.has_docs_changes }}
-      priority: ${{ steps.classify.outputs.priority }}
-      prompt: ${{ steps.generate-prompt.outputs.prompt }}
+      has_docs_changes: ${{ steps.generate-prompt.outputs.has_docs_changes }}
+      packages_json: ${{ steps.generate-prompt.outputs.packages_json }}
 
     steps:
       - name: Checkout
@@ -50,66 +43,40 @@ jobs:
           node-version: '20'
           cache: 'yarn'
 
-      - name: Parse tag or input
-        id: parse-tag
-        run: |
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            PACKAGE="${{ inputs.package }}"
-            # Get latest version from CHANGELOG
-            VERSION=$(head -20 packages/$PACKAGE/CHANGELOG.md | grep -oP '\d+\.\d+\.\d+' | head -1)
-          else
-            TAG="${GITHUB_REF#refs/tags/}"
-            PACKAGE="${TAG%@*}"
-            VERSION="${TAG##*@}"
-          fi
-          echo "package=$PACKAGE" >> $GITHUB_OUTPUT
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Package: $PACKAGE, Version: $VERSION"
-
       - name: Install dependencies
         run: |
           cd scripts/docs-automation
           yarn install
 
-      - name: Classify changes
-        id: classify
-        run: |
-          cd scripts/docs-automation
-          OUTPUT=$(npx tsx src/index.ts parse-changelog --package ${{ steps.parse-tag.outputs.package }})
-          echo "$OUTPUT"
-
-          # Check if there are documentation needs
-          if echo "$OUTPUT" | grep -q "Documentation priority: high\|Documentation priority: medium"; then
-            echo "has_docs_changes=true" >> $GITHUB_OUTPUT
-            PRIORITY=$(echo "$OUTPUT" | grep "Documentation priority:" | cut -d: -f2 | tr -d ' ')
-            echo "priority=$PRIORITY" >> $GITHUB_OUTPUT
-          else
-            echo "has_docs_changes=false" >> $GITHUB_OUTPUT
-            echo "priority=none" >> $GITHUB_OUTPUT
-          fi
-
       - name: Generate Claude prompt
         id: generate-prompt
-        if: steps.classify.outputs.has_docs_changes == 'true'
         run: |
           cd scripts/docs-automation
 
-          # Generate the prompt and save to file
-          npx tsx src/index.ts generate-prompt \
-            --package ${{ steps.parse-tag.outputs.package }} \
-            --version ${{ steps.parse-tag.outputs.version }} \
-            --output ./prompt.txt
+          # Auto-detect all released packages and generate combined prompt
+          npx tsx src/index.ts generate-prompt --output ./prompt.txt --verbose
 
-          # Store prompt in output (base64 encoded to handle multiline)
-          PROMPT=$(cat ./prompt.txt | base64 -w 0)
-          echo "prompt=$PROMPT" >> $GITHUB_OUTPUT
+          # Check if prompt was generated (packages with doc needs found)
+          if [[ -f ./prompt.txt ]]; then
+            echo "has_docs_changes=true" >> $GITHUB_OUTPUT
+
+            # Read packages info JSON and encode for output
+            if [[ -f ./prompt-packages.json ]]; then
+              PACKAGES_JSON=$(cat ./prompt-packages.json | base64 -w 0)
+              echo "packages_json=$PACKAGES_JSON" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "has_docs_changes=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Upload prompt artifact
-        if: steps.classify.outputs.has_docs_changes == 'true'
+        if: steps.generate-prompt.outputs.has_docs_changes == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: claude-prompt
-          path: scripts/docs-automation/prompt.txt
+          path: |
+            scripts/docs-automation/prompt.txt
+            scripts/docs-automation/prompt-packages.json
           retention-days: 7
 
   update-docs:
@@ -149,6 +116,10 @@ jobs:
           cat prompt.txt
           echo ""
           echo "---"
+          echo "## Packages Info"
+          cat prompt-packages.json || echo "No packages info"
+          echo ""
+          echo "---"
           echo "To run Claude, trigger the workflow with run_claude=true"
 
       - name: Run Claude Code
@@ -173,6 +144,23 @@ jobs:
             --allowedTools "Read,Edit,Write,Bash(git diff *),Bash(git status *),Glob,Grep" \
             --output-format text
 
+      - name: Install docs-new dependencies
+        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.run_claude == true)
+        working-directory: docs-new
+        run: npm ci
+
+      - name: Run style guide check
+        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.run_claude == true)
+        working-directory: docs-new
+        continue-on-error: true
+        run: npm run check:styleguide || echo "Style guide check not available or failed"
+
+      - name: Run link check
+        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.run_claude == true)
+        working-directory: docs-new
+        continue-on-error: true
+        run: npm run check:links || echo "Link check not available or failed"
+
       - name: Show changes (no PR)
         if: github.event_name == 'workflow_dispatch' && inputs.run_claude == true && inputs.create_pr == false
         working-directory: docs-new
@@ -189,11 +177,9 @@ jobs:
       - name: Create branch and commit
         if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.create_pr == true)
         working-directory: docs-new
-        env:
-          PACKAGE: ${{ needs.detect-changes.outputs.package }}
-          VERSION: ${{ needs.detect-changes.outputs.version }}
         run: |
-          BRANCH="docs/${PACKAGE}-${VERSION}"
+          DATE=$(date +%Y%m%d)
+          BRANCH="docs/release-${DATE}"
 
           # Check if there are changes
           if git diff --quiet && git diff --staged --quiet; then
@@ -204,7 +190,7 @@ jobs:
           # Create branch and commit
           git checkout -b "$BRANCH"
           git add -A
-          git commit -m "docs: update documentation for ${PACKAGE}@${VERSION}
+          git commit -m "docs: update documentation for release
 
           Auto-generated by InstantSearch docs automation.
 
@@ -219,22 +205,26 @@ jobs:
         if: env.branch != '' && (github.event_name == 'push' || inputs.create_pr == true)
         env:
           GITHUB_TOKEN: ${{ secrets.DOCS_REPO_PAT }}
-          PACKAGE: ${{ needs.detect-changes.outputs.package }}
-          VERSION: ${{ needs.detect-changes.outputs.version }}
-          PRIORITY: ${{ needs.detect-changes.outputs.priority }}
         working-directory: docs-new
         run: |
+          # Parse packages info for PR body
+          PACKAGES_LIST=""
+          if [[ -f ../prompt-packages.json ]]; then
+            PACKAGES_LIST=$(cat ../prompt-packages.json | jq -r '.[] | "- \(.name)@\(.version) (\(.priority) priority)"' 2>/dev/null || echo "")
+          fi
+
           gh pr create \
             --repo algolia/docs-new \
-            --title "docs: update documentation for ${PACKAGE}@${VERSION}" \
+            --title "docs: update documentation for release" \
             --body "## Summary
 
-          Auto-generated documentation update for ${PACKAGE}@${VERSION}.
+          Auto-generated documentation update for InstantSearch release.
 
-          **Priority:** ${PRIORITY}
+          ## Packages Included
+
+          ${PACKAGES_LIST:-No package info available}
 
           ## Source
-          - [Changelog](https://github.com/algolia/instantsearch/blob/master/packages/${PACKAGE}/CHANGELOG.md)
           - [Release workflow](https://github.com/algolia/instantsearch/actions/runs/${{ github.run_id }})
 
           ## Review Checklist
@@ -253,10 +243,12 @@ jobs:
         run: |
           echo "## Documentation Update" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- **Package:** ${{ needs.detect-changes.outputs.package }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Version:** ${{ needs.detect-changes.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Priority:** ${{ needs.detect-changes.outputs.priority }}" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [[ -f prompt-packages.json ]]; then
+            echo "### Packages Detected" >> $GITHUB_STEP_SUMMARY
+            cat prompt-packages.json | jq -r '.[] | "- **\(.name)** v\(.version) (\(.priority) priority)"' >> $GITHUB_STEP_SUMMARY 2>/dev/null || echo "- Unable to parse packages" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
 
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             echo "### Manual Run Settings" >> $GITHUB_STEP_SUMMARY
@@ -269,9 +261,9 @@ jobs:
             echo "### Result" >> $GITHUB_STEP_SUMMARY
             echo "- **Branch:** ${{ env.branch }}" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "✅ A draft PR has been created in algolia/docs-new." >> $GITHUB_STEP_SUMMARY
+            echo "A draft PR has been created in algolia/docs-new." >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.run_claude }}" == "false" ]]; then
-            echo "ℹ️ **Dry run mode.** Only the prompt was generated. Check the logs to see it." >> $GITHUB_STEP_SUMMARY
+            echo "**Dry run mode.** Only the prompt was generated. Check the logs to see it." >> $GITHUB_STEP_SUMMARY
           elif [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.create_pr }}" == "false" ]]; then
-            echo "ℹ️ **Preview mode.** Claude ran but no PR was created. Check the logs to see changes." >> $GITHUB_STEP_SUMMARY
+            echo "**Preview mode.** Claude ran but no PR was created. Check the logs to see changes." >> $GITHUB_STEP_SUMMARY
           fi
