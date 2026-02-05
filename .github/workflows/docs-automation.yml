@@ -1,0 +1,262 @@
+name: Documentation Automation
+
+on:
+  # Trigger on push to master (for release commits)
+  push:
+    branches:
+      - master
+
+  # Manual trigger for testing
+  workflow_dispatch:
+    inputs:
+      run_claude:
+        description: 'Run Claude Code'
+        default: false
+        type: boolean
+      create_pr:
+        description: 'Create PR'
+        default: false
+        type: boolean
+      max_turns:
+        description: 'Max Claude turns (increase if hitting limit)'
+        default: 50
+        type: number
+
+permissions:
+  contents: read
+
+jobs:
+  update-docs:
+    name: Update Documentation
+    runs-on: ubuntu-latest
+    # Only run on release commits (chore: release) or manual triggers
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (startsWith(github.event.head_commit.message, 'chore:') && contains(github.event.head_commit.message, 'release'))
+
+    steps:
+      - name: Checkout instantsearch
+        uses: actions/checkout@v4
+        with:
+          path: instantsearch
+
+      - name: Clone docs-new repository
+        run: |
+          git clone https://x-access-token:${{ secrets.DOCS_REPO_PAT }}@github.com/algolia/docs-new.git docs-new
+          cd docs-new
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Install docs-new dependencies
+        working-directory: docs-new
+        run: npm ci
+
+      - name: Run Claude Code
+        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.run_claude == true)
+        timeout-minutes: 15
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          claude -p "You are updating documentation for InstantSearch.
+
+          IMPORTANT: This is a non-interactive automated workflow. Do not ask for user input or clarification.
+          If you cannot access a file, skip it and work with what you have.
+          If there are no documentable changes, report that finding and exit successfully.
+
+          BE EFFICIENT: You have limited turns. Read multiple files in parallel when possible. Don't over-explore.
+
+          ## Repository Layout
+
+          You are running from the root directory where:
+          - instantsearch/ contains the InstantSearch source code and changelogs
+          - docs-new/ contains the documentation repository to update
+
+          ## Task
+
+          1. Read the changelogs to understand what changed in the latest release:
+             - instantsearch/packages/instantsearch.js/CHANGELOG.md
+             - instantsearch/packages/react-instantsearch/CHANGELOG.md
+             - instantsearch/packages/react-instantsearch-core/CHANGELOG.md
+             - instantsearch/packages/vue-instantsearch/CHANGELOG.md
+
+          2. Find and read ONE existing doc as a format reference:
+             - Use Glob to find InstantSearch widget docs: docs-new/**/instantsearch/**/*.mdx
+             - Read just ONE example file to understand the format (don't read many)
+
+          3. Update documentation for any new features, modified components, or breaking changes.
+
+          4. After making changes, run link check to catch broken links:
+             - cd docs-new && npm run check:links
+             Fix any broken links you introduced, but don't spend time on pre-existing issues.
+
+          5. REQUIRED: Write a summary file at CHANGES_SUMMARY.md with this exact format:
+             ---
+             First line: A short title describing the main change (e.g., 'Add useFrequentlyBoughtTogether hook documentation')
+
+             Blank line, then a markdown list of what was changed:
+             - Added docs for X widget/hook
+             - Updated Y component with new Z prop
+             - Fixed broken links in W page
+             ---
+             If no changes were made, write 'No documentation changes needed' as the title.
+
+          ## Flavor Mapping
+
+          Each package has its own documentation flavor:
+          - instantsearch.js → .js.mdx files
+          - react-instantsearch → .react.mdx files
+          - vue-instantsearch → .vue.mdx files
+
+          ## Guidelines
+
+          - Focus on the LATEST release section in each changelog
+          - For new widgets/hooks, create new .{flavor}.mdx files following existing patterns
+          - For modified components, update existing docs with new props/options
+          - For breaking changes, update migration guides if applicable
+          - Match the existing documentation format and style exactly
+          - Only modify documentation files in docs-new/
+          - Don't add placeholder content - only document what actually exists
+
+          ## Source Code Reference
+
+          The InstantSearch source is at instantsearch/ for reference.
+          Read source files to understand APIs, types, and implementation.
+          Example: instantsearch/packages/instantsearch.js/src/widgets/" \
+            --allowedTools "Read,Edit,Write,Glob,Grep,Bash(cd docs-new && npm run check:links),Bash(git diff *),Bash(git status *)" \
+            --max-turns ${{ inputs.max_turns || 50 }} \
+            --verbose \
+            --output-format stream-json
+
+      - name: Show what Claude would do (dry run)
+        if: github.event_name == 'workflow_dispatch' && inputs.run_claude == false
+        run: |
+          echo "## Dry Run Mode"
+          echo ""
+          echo "Would run Claude with prompt to:"
+          echo "1. Read changelogs from instantsearch packages"
+          echo "2. Explore docs-new structure"
+          echo "3. Update documentation for new features/changes"
+          echo "4. Run link check to catch broken links"
+          echo ""
+          echo "Trigger with run_claude=true to actually run Claude."
+
+      - name: Show changes (no PR)
+        if: github.event_name == 'workflow_dispatch' && inputs.run_claude == true && inputs.create_pr == false
+        working-directory: docs-new
+        run: |
+          echo "## Changes made by Claude"
+          echo ""
+          if [[ -f ../CHANGES_SUMMARY.md ]]; then
+            echo "### Summary"
+            cat ../CHANGES_SUMMARY.md
+            echo ""
+          fi
+          echo "### Git Status"
+          git status
+          echo ""
+          echo "### Diff"
+          git diff || true
+          echo ""
+          echo "---"
+          echo "To create a PR, trigger the workflow with create_pr=true"
+
+      - name: Create branch and commit
+        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.create_pr == true)
+        working-directory: docs-new
+        run: |
+          DATE=$(date +%Y%m%d)
+          BRANCH="docs/release-${DATE}"
+
+          # Check if there are changes
+          if git diff --quiet && git diff --staged --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          # Read the summary file Claude created
+          if [[ -f ../CHANGES_SUMMARY.md ]]; then
+            TITLE=$(head -n 1 ../CHANGES_SUMMARY.md)
+            BODY=$(tail -n +3 ../CHANGES_SUMMARY.md)
+          else
+            TITLE="Update documentation for release"
+            BODY="Auto-generated documentation update."
+          fi
+
+          # Create branch and commit
+          git checkout -b "$BRANCH"
+          git add -A
+          git commit -m "docs: ${TITLE}
+
+          ${BODY}
+
+          Co-Authored-By: Claude <noreply@anthropic.com>"
+
+          # Push branch
+          git push origin "$BRANCH"
+
+          # Save for PR step
+          echo "branch=$BRANCH" >> $GITHUB_ENV
+          echo "pr_title=${TITLE}" >> $GITHUB_ENV
+
+          # Save body to file for multi-line support
+          echo "$BODY" > /tmp/pr_body.md
+
+      - name: Create Pull Request
+        if: env.branch != '' && (github.event_name == 'push' || inputs.create_pr == true)
+        env:
+          GITHUB_TOKEN: ${{ secrets.DOCS_REPO_PAT }}
+        working-directory: docs-new
+        run: |
+          # Read the body from the file
+          if [[ -f /tmp/pr_body.md ]]; then
+            CHANGES=$(cat /tmp/pr_body.md)
+          else
+            CHANGES="Auto-generated documentation update."
+          fi
+
+          gh pr create \
+            --repo algolia/docs-new \
+            --title "docs: ${{ env.pr_title }}" \
+            --body "## Summary
+
+          ${CHANGES}
+
+          ## Source
+          - [Release workflow](https://github.com/algolia/instantsearch/actions/runs/${{ github.run_id }})
+
+          ## Review Checklist
+          - [ ] Content is accurate and complete
+          - [ ] Code examples work correctly
+          - [ ] Links are valid
+          - [ ] Formatting follows documentation style guide
+
+          ---
+          *Generated by [InstantSearch Docs Automation](https://github.com/algolia/instantsearch)*" \
+            --draft \
+            --reviewer algolia/frontend-experiences-web
+
+      - name: Summary
+        run: |
+          echo "## Documentation Update" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "### Manual Run Settings" >> $GITHUB_STEP_SUMMARY
+            echo "- **Run Claude:** ${{ inputs.run_claude }}" >> $GITHUB_STEP_SUMMARY
+            echo "- **Create PR:** ${{ inputs.create_pr }}" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [[ -n "${{ env.branch }}" ]]; then
+            echo "### Result" >> $GITHUB_STEP_SUMMARY
+            echo "- **Branch:** ${{ env.branch }}" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "A draft PR has been created in algolia/docs-new." >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.run_claude }}" == "false" ]]; then
+            echo "**Dry run mode.** Check the logs to see what would happen." >> $GITHUB_STEP_SUMMARY
+          elif [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.create_pr }}" == "false" ]]; then
+            echo "**Preview mode.** Claude ran but no PR was created. Check the logs to see changes." >> $GITHUB_STEP_SUMMARY
+          fi
