@@ -142,7 +142,7 @@ jobs:
           npm install -g @anthropic-ai/claude-code
 
       - name: Show prompt (dry run)
-        if: github.event_name == 'workflow_dispatch' && inputs.run_claude == 'false'
+        if: github.event_name == 'workflow_dispatch' && inputs.run_claude == false
         run: |
           echo "## Generated Prompt"
           echo ""
@@ -152,7 +152,7 @@ jobs:
           echo "To run Claude, trigger the workflow with run_claude=true"
 
       - name: Run Claude Code
-        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.run_claude == 'true')
+        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.run_claude == true)
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         working-directory: docs-new
@@ -175,7 +175,7 @@ jobs:
             --output-format text
 
       - name: Show changes (no PR)
-        if: github.event_name == 'workflow_dispatch' && inputs.run_claude == 'true' && inputs.create_pr == 'false'
+        if: github.event_name == 'workflow_dispatch' && inputs.run_claude == true && inputs.create_pr == false
         working-directory: docs-new
         run: |
           echo "## Changes made by Claude"
@@ -188,7 +188,7 @@ jobs:
           echo "To create a PR, trigger the workflow with create_pr=true"
 
       - name: Create branch and commit
-        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.create_pr == 'true')
+        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.create_pr == true)
         working-directory: docs-new
         env:
           PACKAGE: ${{ needs.detect-changes.outputs.package }}
@@ -217,7 +217,7 @@ jobs:
           echo "branch=$BRANCH" >> $GITHUB_ENV
 
       - name: Create Pull Request
-        if: env.branch != '' && (github.event_name == 'push' || inputs.create_pr == 'true')
+        if: env.branch != '' && (github.event_name == 'push' || inputs.create_pr == true)
         env:
           GITHUB_TOKEN: ${{ secrets.DOCS_REPO_PAT }}
           PACKAGE: ${{ needs.detect-changes.outputs.package }}
