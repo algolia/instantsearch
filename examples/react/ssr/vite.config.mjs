@@ -2,8 +2,8 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import commonjs from 'vite-plugin-commonjs';
 
-export default defineConfig(({ ssrBuild }) => {
-  const isSSR = Boolean(ssrBuild);
+export default defineConfig(({ isSsrBuild }) => {
+  const isSSR = Boolean(isSsrBuild);
 
   return {
     plugins: [commonjs(), react()],
