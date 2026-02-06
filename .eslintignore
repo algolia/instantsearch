@@ -20,6 +20,8 @@ coverage
 .next
 
 # Non-lintable source files
+## Symlinked packages in examples (already linted from their real location)
+examples/js/e-commerce-umd/public/packages
 ## Polyfills for examples, retrieved from polyfill.io
 examples/**/polyfills.js
 ## React-Native TypeScript wasn't supporting the mix of react 18 and 17
