@@ -148,7 +148,8 @@
     "webpack": "4.47.0",
     "babel-loader": "8.2.2",
     "zod": "3.25.76",
-    "qs": "6.9.7"
+    "qs": "6.9.7",
+    "cheerio": "1.0.0-rc.10"
   },
   "browserslist": [
     "chrome >= 60",

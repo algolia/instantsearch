@@ -1,5 +1,6 @@
 /** @jsx h */
 
+import { createDocumentationMessageGenerator } from 'instantsearch-core';
 import { cx } from 'instantsearch-ui-components';
 import { h, render } from 'preact';
 
@@ -7,25 +8,18 @@ import RefinementList from '../../components/RefinementList/RefinementList';
 import { connectNumericMenu } from '../../connectors';
 import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
-import {
-  getContainerNode,
-  createDocumentationMessageGenerator,
-} from '../../lib/utils';
+import { getContainerNode } from '../../lib/utils';
 
 import defaultTemplates from './defaultTemplates';
 
+import type { PreparedTemplateProps } from '../../lib/templating';
+import type { ComponentCSSClasses, Template, WidgetFactory } from '../../types';
 import type {
   NumericMenuConnectorParams,
   NumericMenuRenderState,
   NumericMenuWidgetDescription,
-} from '../../connectors';
-import type { PreparedTemplateProps } from '../../lib/templating';
-import type {
-  ComponentCSSClasses,
   Renderer,
-  Template,
-  WidgetFactory,
-} from '../../types';
+} from 'instantsearch-core';
 
 const withUsage = createDocumentationMessageGenerator({ name: 'numeric-menu' });
 const suit = component('NumericMenu');
@@ -51,6 +45,7 @@ const renderer =
       renderState.templateProps = prepareTemplateProps({
         defaultTemplates,
         templates,
+        templatesConfig: {},
       });
       return;
     }
