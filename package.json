@@ -143,7 +143,8 @@
     "babel-loader": "8.2.2",
     "zod": "3.25.76",
     "qs": "6.9.7",
-    "baseline-browser-mapping": "2.9.19"
+    "baseline-browser-mapping": "2.9.19",
+    "express": "4.22.1"
   },
   "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }
