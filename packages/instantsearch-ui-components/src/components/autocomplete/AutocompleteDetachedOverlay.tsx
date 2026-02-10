@@ -2,8 +2,8 @@
 
 import { cx } from '../../lib/cx';
 
-import type { AutocompleteClassNames } from './Autocomplete';
 import type { ComponentChildren, Renderer } from '../../types';
+import type { AutocompleteClassNames } from './Autocomplete';
 
 export type AutocompleteDetachedOverlayProps = {
   children?: ComponentChildren;
@@ -15,9 +15,9 @@ export function createAutocompleteDetachedOverlayComponent({
   createElement,
 }: Renderer) {
   return function AutocompleteDetachedOverlay(
-    props: AutocompleteDetachedOverlayProps
+    userProps: AutocompleteDetachedOverlayProps
   ) {
-    const { children, classNames = {}, onClose } = props;
+    const { children, classNames = {}, onClose } = userProps;
 
     return (
       <div

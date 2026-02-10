@@ -4,52 +4,76 @@
 
 import { createAutocompletePropGetters } from '../createAutocompletePropGetters';
 
+import type { UsePropGetters } from '../createAutocompletePropGetters';
+import type { KeyboardEvent as ReactKeyboardEvent } from 'react';
+
 describe('createAutocompletePropGetters', () => {
+  type CreateAutocompletePropGettersParams = Parameters<
+    typeof createAutocompletePropGetters
+  >[0];
+  type DefaultParams = Parameters<UsePropGetters<Record<string, unknown>>>[0];
+
   // Mock React hooks
-  const mockUseEffect = jest.fn((effect) => {
-    // Execute the effect immediately for testing
-    const cleanup = effect();
-    return cleanup;
+  const mockUseEffect: CreateAutocompletePropGettersParams['useEffect'] = (
+    effect
+  ) => {
+    effect();
+  };
+
+  const mockUseId: CreateAutocompletePropGettersParams['useId'] = () =>
+    'test-id';
+
+  const mockUseMemo: CreateAutocompletePropGettersParams['useMemo'] = (
+    factory
+  ) => factory();
+
+  const mockUseRef: CreateAutocompletePropGettersParams['useRef'] = (
+    initialValue
+  ) => ({
+    current: initialValue,
   });
 
-  const mockUseId = jest.fn(() => 'test-id');
+  const mockUseState: CreateAutocompletePropGettersParams['useState'] = (
+    initialState
+  ) => [initialState, jest.fn()];
 
-  const mockUseMemo = jest.fn(<T>(factory: () => T) => factory());
+  const createUsePropGetters = (
+    overrides: Partial<CreateAutocompletePropGettersParams> = {}
+  ) =>
+    createAutocompletePropGetters({
+      useEffect: mockUseEffect,
+      useId: mockUseId,
+      useMemo: mockUseMemo,
+      useRef: mockUseRef,
+      useState: mockUseState,
+      ...overrides,
+    });
 
-  const mockUseRef = jest.fn(<T>(initialValue: T) => ({
-    current: initialValue,
-  }));
+  const createKeyDownEvent = (
+    key: string,
+    value = ''
+  ): ReactKeyboardEvent<HTMLInputElement> => {
+    const target = document.createElement('input');
+    target.value = value;
 
-  let mockStateValue = false;
-  const mockUseState = jest.fn(<T>(initialState: T | (() => T)) => {
-    const value =
-      typeof initialState === 'function'
-        ? (initialState as () => T)()
-        : initialState;
-    return [
-      value,
-      jest.fn((newValue) => {
-        mockStateValue = newValue as boolean;
-      }),
-    ];
-  }) as typeof import('react').useState;
+    const event: Partial<ReactKeyboardEvent<HTMLInputElement>> & {
+      target: EventTarget & HTMLInputElement;
+    } = {
+      key,
+      preventDefault: jest.fn(),
+      target,
+    };
+
+    return event as ReactKeyboardEvent<HTMLInputElement>;
+  };
 
   beforeEach(() => {
     jest.clearAllMocks();
-    mockStateValue = false;
     // Reset body click listeners
     document.body.innerHTML = '';
   });
 
-  const usePropGetters = createAutocompletePropGetters({
-    useEffect: mockUseEffect as unknown as typeof import('react').useEffect,
-    useId: mockUseId,
-    useMemo: mockUseMemo as unknown as typeof import('react').useMemo,
-    useRef: mockUseRef as unknown as typeof import('react').useRef,
-    useState: mockUseState,
-  });
-
-  const defaultParams = {
+  const defaultParams: DefaultParams = {
     indices: [],
     indicesConfig: [],
     onRefine: jest.fn(),
@@ -60,17 +84,17 @@ describe('createAutocompletePropGetters', () => {
 
   describe('isDetached parameter', () => {
     test('should return isOpen, setIsOpen, and focusInput in the result', () => {
+      const usePropGetters = createUsePropGetters();
       const result = usePropGetters(defaultParams);
 
-      expect(result).toHaveProperty('isOpen');
-      expect(result).toHaveProperty('setIsOpen');
-      expect(result).toHaveProperty('focusInput');
+      expect(result.isOpen).toBe(false);
       expect(typeof result.setIsOpen).toBe('function');
       expect(typeof result.focusInput).toBe('function');
     });
 
     test('should not add body click listener when isDetached is true', () => {
       const addEventListenerSpy = jest.spyOn(document.body, 'addEventListener');
+      const usePropGetters = createUsePropGetters();
 
       usePropGetters({
         ...defaultParams,
@@ -78,26 +102,32 @@ describe('createAutocompletePropGetters', () => {
       });
 
       // The effect should return early without adding event listener
-      expect(addEventListenerSpy).not.toHaveBeenCalledWith(
-        'click',
-        expect.any(Function)
-      );
+      expect(
+        addEventListenerSpy.mock.calls.some(
+          ([eventName]) => eventName === 'click'
+        )
+      ).toBe(false);
+      expect(addEventListenerSpy).not.toHaveBeenCalled();
 
       addEventListenerSpy.mockRestore();
     });
 
     test('should add body click listener when isDetached is false', () => {
       const addEventListenerSpy = jest.spyOn(document.body, 'addEventListener');
+      const usePropGetters = createUsePropGetters();
 
       usePropGetters({
         ...defaultParams,
         isDetached: false,
       });
 
-      expect(addEventListenerSpy).toHaveBeenCalledWith(
-        'click',
-        expect.any(Function)
-      );
+      expect(
+        addEventListenerSpy.mock.calls.some(
+          ([eventName, listener]) =>
+            eventName === 'click' && typeof listener === 'function'
+        )
+      ).toBe(true);
+      expect(addEventListenerSpy).toHaveBeenCalled();
 
       addEventListenerSpy.mockRestore();
     });
@@ -106,18 +136,12 @@ describe('createAutocompletePropGetters', () => {
       const setIsOpenMock = jest.fn();
 
       // Override useState to capture setIsOpen
-      const customUseState = jest.fn((initialState) => {
-        const value =
-          typeof initialState === 'function' ? initialState() : initialState;
-        return [value, setIsOpenMock];
-      });
+      const customUseState: CreateAutocompletePropGettersParams['useState'] = (
+        initialState
+      ) => [initialState, setIsOpenMock];
 
-      const customUsePropGetters = createAutocompletePropGetters({
-        useEffect: mockUseEffect as unknown as typeof import('react').useEffect,
-        useId: mockUseId,
-        useMemo: mockUseMemo as unknown as typeof import('react').useMemo,
-        useRef: mockUseRef as unknown as typeof import('react').useRef,
-        useState: customUseState as unknown as typeof import('react').useState,
+      const customUsePropGetters = createUsePropGetters({
+        useState: customUseState,
       });
 
       const result = customUsePropGetters({
@@ -128,14 +152,7 @@ describe('createAutocompletePropGetters', () => {
       const inputProps = result.getInputProps();
 
       // Simulate Tab key press
-      const mockEvent = {
-        key: 'Tab',
-        preventDefault: jest.fn(),
-      } as unknown as KeyboardEvent;
-
-      inputProps.onKeyDown?.(
-        mockEvent as unknown as React.KeyboardEvent<HTMLInputElement>
-      );
+      inputProps.onKeyDown?.(createKeyDownEvent('Tab'));
 
       // In detached mode, Tab should NOT call setIsOpen(false)
       expect(setIsOpenMock).not.toHaveBeenCalledWith(false);
@@ -145,18 +162,12 @@ describe('createAutocompletePropGetters', () => {
       const setIsOpenMock = jest.fn();
 
       // Override useState to capture setIsOpen
-      const customUseState = jest.fn((initialState) => {
-        const value =
-          typeof initialState === 'function' ? initialState() : initialState;
-        return [value, setIsOpenMock];
-      });
+      const customUseState: CreateAutocompletePropGettersParams['useState'] = (
+        initialState
+      ) => [initialState, setIsOpenMock];
 
-      const customUsePropGetters = createAutocompletePropGetters({
-        useEffect: mockUseEffect as unknown as typeof import('react').useEffect,
-        useId: mockUseId,
-        useMemo: mockUseMemo as unknown as typeof import('react').useMemo,
-        useRef: mockUseRef as unknown as typeof import('react').useRef,
-        useState: customUseState as unknown as typeof import('react').useState,
+      const customUsePropGetters = createUsePropGetters({
+        useState: customUseState,
       });
 
       const result = customUsePropGetters({
@@ -167,17 +178,31 @@ describe('createAutocompletePropGetters', () => {
       const inputProps = result.getInputProps();
 
       // Simulate Tab key press
-      const mockEvent = {
-        key: 'Tab',
-        preventDefault: jest.fn(),
-      } as unknown as KeyboardEvent;
-
-      inputProps.onKeyDown?.(
-        mockEvent as unknown as React.KeyboardEvent<HTMLInputElement>
-      );
+      inputProps.onKeyDown?.(createKeyDownEvent('Tab'));
 
       // In non-detached mode, Tab SHOULD call setIsOpen(false)
       expect(setIsOpenMock).toHaveBeenCalledWith(false);
+    });
+
+    test('getInputProps should call onSubmit on Enter', () => {
+      const onSubmit = jest.fn();
+      const onRefine = jest.fn();
+
+      const customUsePropGetters = createUsePropGetters({
+        useState: mockUseState,
+      });
+
+      const result = customUsePropGetters({
+        ...defaultParams,
+        onRefine,
+        onSubmit,
+      });
+
+      const inputProps = result.getInputProps();
+      inputProps.onKeyDown?.(createKeyDownEvent('Enter', 'hello'));
+
+      expect(onRefine).toHaveBeenCalledWith('hello');
+      expect(onSubmit).toHaveBeenCalledTimes(1);
     });
   });
 });

@@ -26,7 +26,7 @@ export function createAutocompleteDetachedSearchButtonComponent({
   createElement,
 }: Renderer) {
   return function AutocompleteDetachedSearchButton(
-    props: AutocompleteDetachedSearchButtonProps
+    userProps: AutocompleteDetachedSearchButtonProps
   ) {
     const {
       query,
@@ -35,7 +35,7 @@ export function createAutocompleteDetachedSearchButtonComponent({
       onClick,
       onClear,
       translations,
-    } = props;
+    } = userProps;
 
     return (
       <div

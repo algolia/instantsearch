@@ -1,5 +1,6 @@
 export * from './Autocomplete';
 export * from './AutocompleteDetachedContainer';
+export * from './AutocompleteDetachedFormContainer';
 export * from './AutocompleteDetachedOverlay';
 export * from './AutocompleteDetachedSearchButton';
 export * from './AutocompleteIndex';

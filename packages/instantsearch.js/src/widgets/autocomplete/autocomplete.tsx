@@ -174,6 +174,14 @@ function resolveMediaQuery(
   return getCssMediaQueryValue(cssVarName) || fallback;
 }
 
+function getMediaQueryList(mediaQuery: string) {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+    return null;
+  }
+
+  return window.matchMedia(mediaQuery);
+}
+
 type RendererParams<TItem extends BaseHit> = {
   instanceId: number;
   containerNode: HTMLElement;
@@ -375,21 +383,27 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     [detachedMediaQuery]
   );
   const [isDetached, setIsDetached] = useState(
-    typeof window !== 'undefined' && resolvedDetachedMediaQuery
-      ? window.matchMedia(resolvedDetachedMediaQuery).matches
+    resolvedDetachedMediaQuery
+      ? Boolean(getMediaQueryList(resolvedDetachedMediaQuery)?.matches)
       : false
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalDetached, setIsModalDetached] = useState(false);
+  const previousIsDetachedRef = useRef(isDetached);
 
   // Media query listener for detached mode
   useEffect(() => {
-    if (typeof window === 'undefined' || !resolvedDetachedMediaQuery) {
+    if (!resolvedDetachedMediaQuery) {
       setIsDetached(false);
       return () => {};
     }
 
-    const mql = window.matchMedia(resolvedDetachedMediaQuery);
+    const mql = getMediaQueryList(resolvedDetachedMediaQuery);
+    if (!mql) {
+      setIsDetached(false);
+      return () => {};
+    }
+
     const handler = (event: MediaQueryListEvent) => {
       const wasDetached = isDetached;
       setIsDetached(event.matches);
@@ -404,7 +418,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   }, [resolvedDetachedMediaQuery, isDetached]);
 
   useEffect(() => {
-    if (!isDetached || typeof window === 'undefined') {
+    if (!isDetached) {
       setIsModalDetached(false);
       return () => {};
     }
@@ -420,7 +434,12 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       return () => {};
     }
 
-    const mql = window.matchMedia(modalMediaQuery);
+    const mql = getMediaQueryList(modalMediaQuery);
+    if (!mql) {
+      setIsModalDetached(false);
+      return () => {};
+    }
+
     const handler = (event: MediaQueryListEvent) => {
       setIsModalDetached(event.matches);
     };
@@ -553,9 +572,14 @@ function AutocompleteWrapper<TItem extends BaseHit>({
 
   // Keep the modal open if the panel was open before switching to detached
   useEffect(() => {
-    if (isDetached && isOpen) {
+    const wasDetached = previousIsDetachedRef.current;
+    const switchedToDetached = !wasDetached && isDetached;
+
+    if (switchedToDetached && isOpen) {
       setIsModalOpen(true);
     }
+
+    previousIsDetachedRef.current = isDetached;
   }, [isDetached, isOpen, setIsModalOpen]);
 
   const elements: PanelElements = {};
