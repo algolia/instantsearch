@@ -38,11 +38,6 @@ export function createAutocompleteDetachedFormContainerComponent({
             'ais-AutocompleteDetachedCancelButton',
             classNames.detachedCancelButton
           )}
-          onTouchStart={(event) => {
-            // Prevent onTouchStart from closing the panel
-            // since it should be initiated by onClick only
-            event.stopPropagation();
-          }}
           onClick={onCancel}
         >
           {translations.detachedCancelButtonText}
