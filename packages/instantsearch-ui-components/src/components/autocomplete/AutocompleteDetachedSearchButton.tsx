@@ -44,7 +44,7 @@ export function createAutocompleteDetachedSearchButtonComponent({
           classNames.detachedSearchButton
         )}
         onClick={onClick}
-        onKeyDown={(event: any) => {
+        onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
             onClick();

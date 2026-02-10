@@ -165,7 +165,10 @@ function resolveMediaQuery(
 }
 
 function getMediaQueryList(mediaQuery: string) {
-  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+  if (
+    typeof window === 'undefined' ||
+    typeof window.matchMedia !== 'function'
+  ) {
     return null;
   }
 
@@ -186,7 +189,9 @@ function useDetachedMode(mediaQuery?: string) {
     [mediaQuery]
   );
   const [isDetached, setIsDetached] = useState(() =>
-    resolvedMediaQuery ? Boolean(getMediaQueryList(resolvedMediaQuery)?.matches) : false
+    resolvedMediaQuery
+      ? Boolean(getMediaQueryList(resolvedMediaQuery)?.matches)
+      : false
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalDetached, setIsModalDetached] = useState(false);

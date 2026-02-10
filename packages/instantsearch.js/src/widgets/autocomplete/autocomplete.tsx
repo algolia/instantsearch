@@ -175,7 +175,10 @@ function resolveMediaQuery(
 }
 
 function getMediaQueryList(mediaQuery: string) {
-  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+  if (
+    typeof window === 'undefined' ||
+    typeof window.matchMedia !== 'function'
+  ) {
     return null;
   }
 
