@@ -5,11 +5,14 @@ import {
 import { Chat } from '../../lib/chat';
 import {
   checkRendering,
+  clearRefinements,
   createDocumentationMessageGenerator,
   createSendEventForHits,
   getAlgoliaAgent,
   getAppIdAndApiKey,
+  getRefinements,
   noop,
+  uniq,
   warning,
 } from '../../lib/utils';
 import { flat } from '../../lib/utils/flat';
@@ -31,7 +34,7 @@ import type {
   WidgetRenderState,
   IndexRenderState,
 } from '../../types';
-import type { AlgoliaSearchHelper } from 'algoliasearch-helper';
+import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
 import type {
   AddToolResultWithOutput,
   UserClientSideTool,
@@ -151,6 +154,20 @@ export type ChatConnector<TUiMessage extends UIMessage = UIMessage> = Connector<
   ChatConnectorParams<TUiMessage>
 >;
 
+function getAttributesToClear({
+  results,
+  helper,
+}: {
+  results: SearchResults;
+  helper: AlgoliaSearchHelper;
+}) {
+  return uniq(
+    getRefinements(results, helper.state, true).map(
+      (refinement) => refinement.attribute
+    )
+  );
+}
+
 function updateStateFromSearchToolInput(
   params: ApplyFiltersParams,
   helper: AlgoliaSearchHelper
@@ -162,9 +179,17 @@ function updateStateFromSearchToolInput(
       return { attribute, value };
     });
 
-    attributes.forEach(({ attribute }) => {
-      helper.clearRefinements(attribute);
+    const attributesToClear = getAttributesToClear({
+      results: helper.lastResults!,
+      helper,
     });
+
+    helper.setState(
+      clearRefinements({
+        helper,
+        attributesToClear,
+      })
+    );
 
     attributes.forEach(({ attribute, value }) => {
       if (
