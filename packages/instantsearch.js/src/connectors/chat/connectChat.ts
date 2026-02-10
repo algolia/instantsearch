@@ -172,24 +172,25 @@ function updateStateFromSearchToolInput(
   params: ApplyFiltersParams,
   helper: AlgoliaSearchHelper
 ) {
+  // clear all filters first
+  const attributesToClear = getAttributesToClear({
+    results: helper.lastResults!,
+    helper,
+  });
+
+  helper.setState(
+    clearRefinements({
+      helper,
+      attributesToClear,
+    })
+  );
+
   if (params.facetFilters) {
     const attributes = flat(params.facetFilters).map((filter) => {
       const [attribute, value] = filter.split(':');
 
       return { attribute, value };
     });
-
-    const attributesToClear = getAttributesToClear({
-      results: helper.lastResults!,
-      helper,
-    });
-
-    helper.setState(
-      clearRefinements({
-        helper,
-        attributesToClear,
-      })
-    );
 
     attributes.forEach(({ attribute, value }) => {
       if (
