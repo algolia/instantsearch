@@ -34,6 +34,7 @@ import {
   dynamicWidgets,
   chat,
   EXPERIMENTAL_autocomplete,
+  promptSuggestions,
   filterSuggestions,
 } from '../widgets';
 
@@ -652,6 +653,28 @@ const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
       })
       .start();
   },
+  createPromptSuggestionsWidgetTests({ instantSearchOptions, widgetParams }) {
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        promptSuggestions({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+        // @ts-ignore needed to have Chat working inside PromptSuggestions tests
+        chat({
+          container: document.body.appendChild(document.createElement('div')),
+          agentId: widgetParams.agentId,
+          chat: widgetParams.chat,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
   createFilterSuggestionsWidgetTests({ instantSearchOptions, widgetParams }) {
     instantsearch(instantSearchOptions)
       .addWidgets([
@@ -702,6 +725,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createDynamicWidgetsWidgetTests: undefined,
   createChatWidgetTests: undefined,
   createAutocompleteWidgetTests: undefined,
+  createPromptSuggestionsWidgetTests: undefined,
   createFilterSuggestionsWidgetTests: undefined,
 };
 

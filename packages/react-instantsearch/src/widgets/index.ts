@@ -24,3 +24,4 @@ export * from './Stats';
 export * from './ToggleRefinement';
 export * from './TrendingItems';
 export * from './FilterSuggestions';
+export * from './PromptSuggestions';

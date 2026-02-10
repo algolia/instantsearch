@@ -18,6 +18,7 @@ const NON_WIDGETS = [
   'Snippet',
   'PoweredBy',
   'Chat',
+  'PromptSuggestions',
   'createDefaultTools',
   'SearchIndexToolType',
   'RecommendToolType',
@@ -128,6 +129,11 @@ function Widget<TWidget extends SingleWidget>({
     }
     case 'FilterSuggestions': {
       return <widget.Component agentId="test-agent-id" {...props} />;
+    }
+    case 'PromptSuggestions': {
+      return (
+        <widget.Component agentId="test-agent-id" context={{}} {...props} />
+      );
     }
     default: {
       return <widget.Component {...props} />;

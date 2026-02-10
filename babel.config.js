@@ -94,6 +94,10 @@ module.exports = (api) => {
             // this is actually only called on arrays
             'String.prototype.includes',
 
+            // Used by newer widgets, we don't care about IE11 support
+            'Promise.prototype.finally',
+            'Array.prototype.find',
+
             // false positive (spread)
             'Object.getOwnPropertyDescriptors',
           ];

@@ -19,3 +19,4 @@ export * from './LookingSimilar';
 export * from './RelatedProducts';
 export * from './TrendingItems';
 export * from './FilterSuggestions';
+export * from './PromptSuggestions';

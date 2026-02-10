@@ -34,6 +34,7 @@ import {
   Chat,
   EXPERIMENTAL_Autocomplete,
   FilterSuggestions,
+  PromptSuggestions,
 } from '..';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -419,6 +420,16 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
       </InstantSearch>
     );
   },
+  createPromptSuggestionsWidgetTests({ instantSearchOptions, widgetParams }) {
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <PromptSuggestions {...widgetParams} />
+        {/* @ts-ignore - types are messed up passing from one to the other */}
+        <Chat agentId={widgetParams.agentId} chat={widgetParams.chat} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -467,6 +478,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   },
   createAutocompleteWidgetTests: { act },
   createFilterSuggestionsWidgetTests: { act },
+  createPromptSuggestionsWidgetTests: { act },
 };
 
 /**

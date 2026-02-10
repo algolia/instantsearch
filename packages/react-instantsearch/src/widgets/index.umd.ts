@@ -29,6 +29,7 @@ export * from './LookingSimilar';
 export * from './Menu';
 export * from './Pagination';
 export * from './PoweredBy';
+export * from './PromptSuggestions';
 export * from './RangeInput';
 export * from './RefinementList';
 export * from './RelatedProducts';
