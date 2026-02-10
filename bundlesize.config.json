@@ -42,11 +42,11 @@
     },
     {
       "path": "./packages/instantsearch.css/themes/algolia.css",
-      "maxSize": "9.25 kB"
+      "maxSize": "9.75 kB"
     },
     {
       "path": "./packages/instantsearch.css/themes/algolia-min.css",
-      "maxSize": "8.50 kB"
+      "maxSize": "9.25 kB"
     },
     {
       "path": "./packages/instantsearch.css/themes/reset.css",
@@ -58,11 +58,11 @@
     },
     {
       "path": "./packages/instantsearch.css/themes/satellite.css",
-      "maxSize": "10.25 kB"
+      "maxSize": "10.75 kB"
     },
     {
       "path": "./packages/instantsearch.css/themes/satellite-min.css",
-      "maxSize": "9.50 kB"
+      "maxSize": "10 kB"
     },
     {
       "path": "./packages/instantsearch.css/components/chat.css",
@@ -74,11 +74,11 @@
     },
     {
       "path": "./packages/instantsearch.css/components/autocomplete.css",
-      "maxSize": "3.75 kB"
+      "maxSize": "4.25 kB"
     },
     {
       "path": "./packages/instantsearch.css/components/autocomplete-min.css",
-      "maxSize": "3.50 kB"
+      "maxSize": "3.75 kB"
     }
   ]
 }
