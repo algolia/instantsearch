@@ -8,6 +8,7 @@ import React, { createElement } from 'react';
 
 import { Carousel } from '../../../components';
 
+import type { SearchParameters } from 'algoliasearch-helper';
 import type {
   ClientSideToolComponentProps,
   Pragma,
@@ -15,15 +16,20 @@ import type {
   RecordWithObjectID,
   UserClientSideTool,
 } from 'instantsearch-ui-components';
-import type { IndexUiState, IndexWidget } from 'instantsearch.js';
 import type { ComponentProps } from 'react';
 
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
 
+type SearchToolInput = {
+  query: string;
+  number_of_results?: number;
+  facet_filters?: string[][];
+};
+
 function createCarouselTool<TObject extends RecordWithObjectID>(
   showViewAll: boolean,
   itemComponent?: ItemComponent<TObject>,
-  getSearchPageURL?: (nextUiState: IndexUiState) => string
+  getSearchPageURL?: (params: SearchParameters) => string
 ): UserClientSideTool {
   const Button = createButtonComponent({
     createElement: createElement as Pragma,
@@ -31,8 +37,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
 
   function SearchLayoutComponent({
     message,
-    indexUiState,
-    setIndexUiState,
+    applyFilters,
     onClose,
   }: ClientSideToolComponentProps) {
     const input = message?.input as
@@ -58,6 +63,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
           | 'nbHits'
           | 'query'
           | 'hitsPerPage'
+          | 'applyFilters'
           | 'setIndexUiState'
           | 'indexUiState'
           | 'getSearchPageURL'
@@ -66,23 +72,14 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
       ) => (
         <HeaderComponent
           nbHits={output?.nbHits}
-          query={input?.query}
+          input={input}
           hitsPerPage={items.length}
-          setIndexUiState={setIndexUiState}
-          indexUiState={indexUiState}
-          getSearchPageURL={getSearchPageURL}
           onClose={onClose}
+          applyFilters={applyFilters}
           {...props}
         />
       );
-    }, [
-      items.length,
-      input?.query,
-      output?.nbHits,
-      setIndexUiState,
-      onClose,
-      indexUiState,
-    ]);
+    }, [items.length, input, output?.nbHits, applyFilters, onClose]);
 
     return (
       <Carousel
@@ -101,12 +98,9 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
     scrollLeft,
     scrollRight,
     nbHits,
-    query,
+    input,
     hitsPerPage,
-    setIndexUiState,
-    indexUiState,
-    // eslint-disable-next-line no-shadow
-    getSearchPageURL,
+    applyFilters,
     onClose,
   }: {
     canScrollLeft: boolean;
@@ -114,11 +108,9 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
     scrollLeft: () => void;
     scrollRight: () => void;
     nbHits?: number;
-    query?: string;
+    input?: SearchToolInput;
     hitsPerPage?: number;
-    setIndexUiState: IndexWidget['setIndexUiState'];
-    indexUiState: IndexUiState;
-    getSearchPageURL?: (nextUiState: IndexUiState) => string;
+    applyFilters: ClientSideToolComponentProps['applyFilters'];
     onClose: () => void;
   }) {
     if ((hitsPerPage ?? 0) < 1) {
@@ -139,24 +131,21 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
               variant="ghost"
               size="sm"
               onClick={() => {
-                if (!query) return;
+                if (!input || !applyFilters) return;
+                const params = applyFilters({
+                  query: input.query,
+                  facetFilters: input.facet_filters,
+                });
 
-                const nextUiState = { ...indexUiState, query };
-
-                // If no main search page URL or we are on the search page, just update the state
                 if (
-                  !getSearchPageURL ||
-                  (getSearchPageURL &&
-                    new URL(getSearchPageURL(nextUiState)).pathname ===
-                      window.location.pathname)
+                  getSearchPageURL &&
+                  new URL(getSearchPageURL(params)).pathname !==
+                    window.location.pathname
                 ) {
-                  setIndexUiState(nextUiState);
-                  onClose();
-                  return;
+                  window.location.href = getSearchPageURL(params);
                 }
 
-                // Navigate to different page
-                window.location.href = getSearchPageURL(nextUiState);
+                onClose();
               }}
               className="ais-ChatToolSearchIndexCarouselHeaderViewAll"
             >
