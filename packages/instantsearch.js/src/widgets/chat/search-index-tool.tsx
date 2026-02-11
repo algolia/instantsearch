@@ -6,11 +6,11 @@ import { useMemo, useRef, useState } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
 
-import type { IndexUiState } from '../../types';
 import type {
   ChatTemplates,
   Tool as UserClientSideToolWithTemplate,
 } from './chat';
+import type { SearchParameters } from 'algoliasearch-helper';
 import type {
   ClientSideToolComponentProps,
   RecordWithObjectID,
@@ -21,7 +21,7 @@ export function createCarouselTool<
 >(
   showViewAll: boolean,
   templates: ChatTemplates<THit>,
-  getSearchPageURL?: (nextUiState: IndexUiState) => string
+  getSearchPageURL?: (params: SearchParameters) => string
 ): UserClientSideToolWithTemplate {
   const SearchLayoutUIComponent = createSearchIndexTool<THit>({
     createElement: h,

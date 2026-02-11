@@ -37,7 +37,6 @@ import type {
   IndexUiState,
   IndexWidget,
 } from '../../types';
-import type { SearchParameters } from 'algoliasearch-helper';
 import type {
   ChatClassNames,
   ChatHeaderProps,
@@ -55,7 +54,6 @@ import type {
   ClientSideToolComponentProps,
   ClientSideTools,
   RecordWithObjectID,
-  SearchToolInput,
   UserClientSideTool,
 } from 'instantsearch-ui-components';
 import type { ComponentProps } from 'preact';

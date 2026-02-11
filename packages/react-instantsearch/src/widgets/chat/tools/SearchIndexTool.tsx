@@ -12,12 +12,6 @@ import type {
 
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
 
-type SearchToolInput = {
-  query: string;
-  number_of_results?: number;
-  facet_filters?: string[][];
-};
-
 function createCarouselTool<TObject extends RecordWithObjectID>(
   showViewAll: boolean,
   itemComponent?: ItemComponent<TObject>,

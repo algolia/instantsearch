@@ -10,7 +10,7 @@ import type {
   HeaderComponentProps as CarouselHeaderComponentProps,
 } from '../../Carousel';
 import type { ClientSideToolComponentProps } from '../types';
-import type { IndexUiState } from 'instantsearch.js';
+import type { SearchParameters } from 'algoliasearch-helper';
 
 type SearchToolInput = {
   query: string;
@@ -28,7 +28,7 @@ type HeaderProps = {
   input?: SearchToolInput;
   hitsPerPage?: number;
   applyFilters: ClientSideToolComponentProps['applyFilters'];
-  getSearchPageURL?: (nextUiState: IndexUiState) => string;
+  getSearchPageURL?: (params: SearchParameters) => string;
   onClose: () => void;
 };
 
@@ -38,7 +38,7 @@ export type SearchIndexToolProps<THit extends RecordWithObjectID> = {
   useState: <TType>(
     initialState: TType
   ) => [TType, (newState: TType) => unknown];
-  getSearchPageURL?: (nextUiState: IndexUiState) => string;
+  getSearchPageURL?: (params: SearchParameters) => string;
   toolProps: ClientSideToolComponentProps;
   itemComponent?: CarouselProps<THit>['itemComponent'];
   headerComponent?: (props: HeaderProps) => JSX.Element;
