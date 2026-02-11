@@ -222,7 +222,7 @@ em {
 
 /* Desktop styles */
 
-@media (min-width: 900px) {
+@media (min-width: 681px) {
   [data-layout='mobile'] {
     display: none;
   }
@@ -230,7 +230,7 @@ em {
 
 /* Mobile styles */
 
-@media (max-width: 899px) {
+@media (max-width: 680px) {
   [data-layout='desktop'] {
     display: none;
   }
