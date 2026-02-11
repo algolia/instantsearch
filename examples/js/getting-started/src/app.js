@@ -10,6 +10,8 @@ import {
   searchBox,
   trendingItems,
   chat,
+  filterSuggestions,
+  currentRefinements,
 } from 'instantsearch.js/es/widgets';
 
 import 'instantsearch.css/themes/satellite.css';
@@ -45,6 +47,20 @@ search.addWidgets([
   searchBox({
     container: '#searchbox',
   }),
+  panel({
+    templates: { header: 'Current Refinements' },
+    hidden: ({ items }) => items.length === 0,
+  })(currentRefinements)({
+    container: '#current-refinements',
+  }),
+  panel({ templates: { header: 'Filter Suggestions' } })(filterSuggestions)({
+    container: '#filter-suggestions',
+    agentId: '3123062d-d611-4d4f-8ab2-4fa39302dc64',
+    attributes: ['brand', 'categories'],
+    templates: {
+      header: false,
+    },
+  }),
   hits({
     container: '#hits',
     templates: {
@@ -69,6 +85,14 @@ search.addWidgets([
   })(refinementList)({
     container: '#brand-list',
     attribute: 'brand',
+    showMore: true,
+  }),
+  panel({
+    templates: { header: 'categories' },
+  })(refinementList)({
+    container: '#categories-list',
+    attribute: 'categories',
+    showMore: true,
   }),
   pagination({
     container: '#pagination',
@@ -83,7 +107,7 @@ search.addWidgets([
   }),
   chat({
     container: '#chat',
-    agentId: '7c2f6816-bfdb-46e9-a51f-9cb8e5fc9628',
+    agentId: 'eedef238-5468-470d-bc37-f99fa741bd25',
     templates: {
       item: productItemTemplate,
     },

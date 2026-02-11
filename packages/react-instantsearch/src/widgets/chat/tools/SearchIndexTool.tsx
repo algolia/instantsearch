@@ -1,6 +1,7 @@
 import { createSearchIndexTool } from 'instantsearch-ui-components';
 import React, { createElement, Fragment } from 'react';
 
+import type { SearchParameters } from 'algoliasearch-helper';
 import type {
   ClientSideToolComponentProps,
   Pragma,
@@ -8,14 +9,19 @@ import type {
   RecordWithObjectID,
   UserClientSideTool,
 } from 'instantsearch-ui-components';
-import type { IndexUiState } from 'instantsearch.js';
 
 type ItemComponent<TObject> = RecommendComponentProps<TObject>['itemComponent'];
+
+type SearchToolInput = {
+  query: string;
+  number_of_results?: number;
+  facet_filters?: string[][];
+};
 
 function createCarouselTool<TObject extends RecordWithObjectID>(
   showViewAll: boolean,
   itemComponent?: ItemComponent<TObject>,
-  getSearchPageURL?: (nextUiState: IndexUiState) => string
+  getSearchPageURL?: (params: SearchParameters) => string
 ): UserClientSideTool {
   const SearchLayoutUIComponent = createSearchIndexTool<TObject>({
     createElement: createElement as Pragma,

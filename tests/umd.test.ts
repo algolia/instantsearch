@@ -14,7 +14,6 @@ describe('UMD bundle', () => {
       name: 'instantsearch.js',
       bundle: 'dist/instantsearch.production.min.js',
       globalName: 'instantsearch',
-      unavailable: ['connectors.connectChat', 'widgets.chat'],
     },
     {
       name: 'react-instantsearch-core',
@@ -23,7 +22,6 @@ describe('UMD bundle', () => {
       dependencies: [
         'https://cdn.jsdelivr.net/npm/react@17/umd/react.production.min.js',
       ],
-      unavailable: ['useChat'],
     },
     {
       name: 'react-instantsearch',
@@ -32,7 +30,6 @@ describe('UMD bundle', () => {
       dependencies: [
         'https://cdn.jsdelivr.net/npm/react@17/umd/react.production.min.js',
       ],
-      unavailable: ['useChat', 'Chat'],
     },
     {
       name: 'vue-instantsearch',
@@ -48,7 +45,7 @@ describe('UMD bundle', () => {
         'https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js',
       ],
     },
-  ])('$bundle', ({ name, bundle, globalName, dependencies, unavailable }) => {
+  ])('$bundle', ({ name, bundle, globalName, dependencies }) => {
     test('loads successfully', async () => {
       const { window, error } = await createEnvironment(
         `packages/${name}/${bundle}`,
@@ -58,26 +55,6 @@ describe('UMD bundle', () => {
       expect(error).not.toHaveBeenCalled();
       expect(window[globalName]).toBeDefined();
     });
-
-    if (unavailable) {
-      test.each(unavailable)(
-        'throws when calling %s',
-        async (componentPath) => {
-          const { window } = await createEnvironment(
-            `packages/${name}/${bundle}`,
-            dependencies
-          );
-
-          const component = componentPath
-            .split('.')
-            .reduce((acc, path) => acc[path], window[globalName]);
-
-          expect(() => component()).toThrow(
-            /is not available from the UMD build/
-          );
-        }
-      );
-    }
   });
 });
 

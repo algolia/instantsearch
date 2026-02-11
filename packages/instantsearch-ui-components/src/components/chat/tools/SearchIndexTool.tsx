@@ -10,7 +10,7 @@ import type {
   HeaderComponentProps as CarouselHeaderComponentProps,
 } from '../../Carousel';
 import type { ClientSideToolComponentProps } from '../types';
-import type { IndexUiState, IndexWidget } from 'instantsearch.js';
+import type { IndexUiState } from 'instantsearch.js';
 
 type SearchToolInput = {
   query: string;
@@ -27,8 +27,6 @@ type HeaderProps = {
   nbHits?: number;
   input?: SearchToolInput;
   hitsPerPage?: number;
-  setIndexUiState: IndexWidget['setIndexUiState'];
-  indexUiState: IndexUiState;
   applyFilters: ClientSideToolComponentProps['applyFilters'];
   getSearchPageURL?: (nextUiState: IndexUiState) => string;
   onClose: () => void;
@@ -60,6 +58,7 @@ function createHeaderComponent({ createElement }: Renderer) {
     input,
     hitsPerPage,
     applyFilters,
+    getSearchPageURL,
     onClose,
   }: HeaderProps) {
     if ((hitsPerPage ?? 0) < 1) {
@@ -82,13 +81,20 @@ function createHeaderComponent({ createElement }: Renderer) {
               onClick={() => {
                 if (!input || !applyFilters) return;
 
-                const success = applyFilters({
+                const params = applyFilters({
                   query: input.query,
                   facetFilters: input.facet_filters,
                 });
-                if (success) {
-                  onClose();
+
+                if (
+                  getSearchPageURL &&
+                  new URL(getSearchPageURL(params)).pathname !==
+                    window.location.pathname
+                ) {
+                  window.location.href = getSearchPageURL(params);
                 }
+
+                onClose();
               }}
               className="ais-ChatToolSearchIndexCarouselHeaderViewAll"
             >
@@ -141,13 +147,7 @@ export function createSearchIndexTool<TObject extends RecordWithObjectID>({
     itemComponent: ItemComponent,
     headerComponent: HeaderComponent,
     getSearchPageURL,
-    toolProps: {
-      message,
-      indexUiState,
-      setIndexUiState,
-      applyFilters,
-      onClose,
-    },
+    toolProps: { message, applyFilters, onClose },
     headerProps: { showViewAll },
   }: SearchIndexToolProps<TObject>) {
     const input = message?.input as
@@ -199,8 +199,6 @@ export function createSearchIndexTool<TObject extends RecordWithObjectID>({
             input={input}
             hitsPerPage={items.length}
             applyFilters={applyFilters}
-            setIndexUiState={setIndexUiState}
-            indexUiState={indexUiState}
             getSearchPageURL={getSearchPageURL}
             onClose={onClose}
             {...props}
@@ -215,8 +213,6 @@ export function createSearchIndexTool<TObject extends RecordWithObjectID>({
           input={input}
           hitsPerPage={items.length}
           applyFilters={applyFilters}
-          setIndexUiState={setIndexUiState}
-          indexUiState={indexUiState}
           getSearchPageURL={getSearchPageURL}
           onClose={onClose}
           {...props}
@@ -229,8 +225,6 @@ export function createSearchIndexTool<TObject extends RecordWithObjectID>({
       input,
       items.length,
       applyFilters,
-      setIndexUiState,
-      indexUiState,
       getSearchPageURL,
       onClose,
     ]);

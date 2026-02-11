@@ -186,6 +186,9 @@ const connectFilterSuggestions: FilterSuggestionsConnector =
         };
       };
 
+      // Minimum duration to show skeleton to avoid flash when results are cached
+      const MIN_SKELETON_DURATION_MS = 300;
+
       const fetchSuggestions = (
         results: SearchResults,
         renderOptions: RenderOptions
@@ -203,6 +206,7 @@ const connectFilterSuggestions: FilterSuggestionsConnector =
           return;
         }
 
+        const loadingStartTime = Date.now();
         isLoading = true;
         renderFn(
           {
@@ -302,14 +306,28 @@ const connectFilterSuggestions: FilterSuggestionsConnector =
             suggestions = [];
           })
           .finally(() => {
-            isLoading = false;
-            renderFn(
-              {
-                ...getWidgetRenderState(renderOptions),
-                instantSearchInstance: renderOptions.instantSearchInstance,
-              },
-              false
+            const elapsed = Date.now() - loadingStartTime;
+            const remainingDelay = Math.max(
+              0,
+              MIN_SKELETON_DURATION_MS - elapsed
             );
+
+            const finishLoading = () => {
+              isLoading = false;
+              renderFn(
+                {
+                  ...getWidgetRenderState(renderOptions),
+                  instantSearchInstance: renderOptions.instantSearchInstance,
+                },
+                false
+              );
+            };
+
+            if (remainingDelay > 0) {
+              setTimeout(finishLoading, remainingDelay);
+            } else {
+              finishLoading();
+            }
           });
       };
 

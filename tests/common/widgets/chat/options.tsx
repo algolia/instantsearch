@@ -508,72 +508,6 @@ export function createOptionsTests(
         );
       });
 
-      test('does not apply filters when attribute is not in state', async () => {
-        const searchClient = createSearchClient();
-
-        const chat = new Chat({
-          messages: [
-            {
-              id: '1',
-              role: 'assistant',
-              parts: [
-                {
-                  type: `tool-${SearchIndexToolType}`,
-                  toolCallId: '1',
-                  input: {
-                    query: 'test',
-                    facet_filters: [['brand:Apple'], ['category:Laptops']],
-                  },
-                  state: 'output-available',
-                  output: {
-                    hits: [
-                      {
-                        objectID: '123',
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          ],
-          id: 'chat-id',
-        });
-
-        await setup({
-          instantSearchOptions: {
-            indexName: 'indexName',
-            searchClient,
-            initialUiState: {
-              indexName: {
-                refinementList: {
-                  brand: ['Samsung', 'Apple'],
-                  // category is missing
-                },
-              },
-            },
-          },
-          widgetParams: {
-            javascript: createDefaultWidgetParams(chat),
-            react: createDefaultWidgetParams(chat),
-            vue: {},
-          },
-        });
-
-        await openChat(act);
-
-        userEvent.click(
-          document.querySelector(
-            '.ais-ChatToolSearchIndexCarouselHeaderViewAll'
-          )!
-        );
-
-        await act(async () => {
-          await wait(0);
-        });
-
-        expect(searchClient.search).toHaveBeenCalledTimes(1);
-      });
-
       test('applies filters for custom tools', async () => {
         const searchClient = createSearchClient();
 
@@ -683,6 +617,165 @@ export function createOptionsTests(
               params: expect.objectContaining({
                 query: 'test',
                 facetFilters: [['brand:Apple'], ['category:Laptops']],
+              }),
+            }),
+          ])
+        );
+      });
+
+      test('handles missing filters and attributes when applying filters', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({
+          messages: [
+            {
+              id: '1',
+              role: 'assistant',
+              parts: [
+                {
+                  type: `tool-${SearchIndexToolType}`,
+                  toolCallId: '1',
+                  input: {
+                    query: 'test',
+                    facet_filters: [['brand:Apple']],
+                  },
+                  state: 'output-available',
+                  output: {
+                    hits: [
+                      {
+                        objectID: '123',
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          ],
+          id: 'chat-id',
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+            initialUiState: {
+              indexName: {
+                refinementList: {
+                  category: ['Laptops'],
+                },
+              },
+            },
+          },
+          widgetParams: {
+            javascript: createDefaultWidgetParams(chat),
+            react: createDefaultWidgetParams(chat),
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        userEvent.click(
+          document.querySelector(
+            '.ais-ChatToolSearchIndexCarouselHeaderViewAll'
+          )!
+        );
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(searchClient.search).toHaveBeenCalledTimes(2);
+        expect(searchClient.search).toHaveBeenLastCalledWith(
+          expect.arrayContaining([
+            expect.objectContaining({
+              params: expect.objectContaining({
+                query: 'test',
+                facetFilters: [['brand:Apple']],
+              }),
+            }),
+          ])
+        );
+      });
+
+      test('handles hierarchical facets when applying filters', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({
+          messages: [
+            {
+              id: '1',
+              role: 'assistant',
+              parts: [
+                {
+                  type: `tool-${SearchIndexToolType}`,
+                  toolCallId: '1',
+                  input: {
+                    query: 'test',
+                    facet_filters: [
+                      [
+                        'hierarchicalCategories.lvl1:Computers & Tablets > Laptops',
+                      ],
+                    ],
+                  },
+                  state: 'output-available',
+                  output: {
+                    hits: [
+                      {
+                        objectID: '123',
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          ],
+          id: 'chat-id',
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+            initialUiState: {
+              indexName: {
+                hierarchicalMenu: {
+                  category: [
+                    'hierarchicalCategories.lvl0',
+                    'hierarchicalCategories.lvl1',
+                  ],
+                },
+              },
+            },
+          },
+          widgetParams: {
+            javascript: createDefaultWidgetParams(chat),
+            react: createDefaultWidgetParams(chat),
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        userEvent.click(
+          document.querySelector(
+            '.ais-ChatToolSearchIndexCarouselHeaderViewAll'
+          )!
+        );
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(searchClient.search).toHaveBeenCalledTimes(2);
+        expect(searchClient.search).toHaveBeenLastCalledWith(
+          expect.arrayContaining([
+            expect.objectContaining({
+              params: expect.objectContaining({
+                query: 'test',
+                facetFilters: [
+                  ['hierarchicalCategories.lvl1:Computers & Tablets > Laptops'],
+                ],
               }),
             }),
           ])

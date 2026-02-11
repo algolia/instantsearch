@@ -6,6 +6,7 @@ import {
 import { wait } from '@instantsearch/testutils';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
+import React from 'react';
 
 import type { AutocompleteWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
@@ -274,6 +275,70 @@ export function createOptionsTests(
         '.ais-AutocompleteRecentSearchesItem'
       );
       expect(newRecentSearches).toHaveLength(0);
+    });
+
+    test('does not render recent searches header when there are no recent searches', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'query_suggestions',
+            hits: [
+              { objectID: '1', query: 'hello' },
+              { objectID: '2', query: 'hi' },
+            ],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'query_suggestions',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            showSuggestions: {
+              indexName: 'query_suggestions',
+            },
+            showRecent: {
+              templates: {
+                header: () => 'Recent Searches',
+              },
+            },
+          },
+          react: {
+            showSuggestions: {
+              indexName: 'query_suggestions',
+            },
+            showRecent: {
+              headerComponent: () => (
+                <React.Fragment>Recent Searches</React.Fragment>
+              ),
+            },
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      // No recent searches yet, so the header should not be rendered
+      expect(
+        document.querySelector('.ais-AutocompleteRecentSearchesHeader')
+      ).not.toBeInTheDocument();
+
+      // Click on a suggestion to add it to recent searches
+      await act(async () => {
+        screen.getByText('hello').click();
+        await wait(0);
+      });
+
+      // Now the header should be visible
+      expect(
+        document.querySelector('.ais-AutocompleteRecentSearchesHeader')
+      ).toHaveTextContent('Recent Searches');
     });
 
     test('forwards search params to each index', async () => {

@@ -233,7 +233,7 @@ search.addWidgets([
   }),
   chat({
     container: '#chat',
-    agentId: '7c2f6816-bfdb-46e9-a51f-9cb8e5fc9628',
+    agentId: 'eedef238-5468-470d-bc37-f99fa741bd25',
     templates: {
       item: itemTemplate,
     },
