@@ -226,6 +226,19 @@ export function Chat<
     suggestions,
   } = chatState;
 
+  const wasOpenRef = React.useRef(false);
+  React.useEffect(() => {
+    const shouldFocusPrompt = !wasOpenRef.current && open;
+
+    if (shouldFocusPrompt) {
+      window.requestAnimationFrame(() => {
+        promptRef.current?.focus();
+      });
+    }
+
+    wasOpenRef.current = open;
+  }, [open]);
+
   if (__DEV__ && error) {
     throw error;
   }

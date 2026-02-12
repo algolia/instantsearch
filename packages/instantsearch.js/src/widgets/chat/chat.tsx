@@ -476,6 +476,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
 }): Renderer<ChatRenderState, Partial<ChatWidgetParams>> => {
   const state = createLocalState();
   const promptRef = { current: null as HTMLTextAreaElement | null };
+  let wasOpen = false;
 
   // eslint-disable-next-line complexity
   return (props, isFirstRendering) => {
@@ -893,7 +894,17 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
       );
     }
 
+    const shouldFocusPrompt = !wasOpen && open;
+
     rerender();
+
+    if (shouldFocusPrompt) {
+      window.requestAnimationFrame(() => {
+        promptRef.current?.focus();
+      });
+    }
+
+    wasOpen = open;
   };
 };
 

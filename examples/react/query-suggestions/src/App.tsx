@@ -94,6 +94,18 @@ export function App() {
                     </>
                   ),
                 }}
+                showPromptSuggestions={{
+                  indexName: 'instant_search_prompt_suggestions_poc',
+                  maxSuggestions: 2,
+                  headerComponent: () => (
+                    <>
+                      <span className="ais-AutocompleteIndexHeaderTitle">
+                        Ask AI
+                      </span>
+                      <span className="ais-AutocompleteIndexHeaderLine" />
+                    </>
+                  ),
+                }}
               />
               <Hits hitComponent={HitComponent} />
 

@@ -4,6 +4,7 @@ import {
   createAutocompleteComponent,
   createAutocompleteIndexComponent,
   createAutocompletePanelComponent,
+  createAutocompletePromptSuggestionComponent,
   createAutocompletePropGetters,
   createAutocompleteRecentSearchComponent,
   createAutocompleteSearchComponent,
@@ -19,13 +20,14 @@ import {
   connectAutocomplete,
   connectSearchBox,
 } from '../../connectors/index.umd';
-import { ReverseHighlight } from '../../helpers/components';
+import { Highlight, ReverseHighlight } from '../../helpers/components';
 import { component } from '../../lib/suit';
 import { prepareTemplateProps } from '../../lib/templating';
 import {
   createDocumentationMessageGenerator,
   find,
   getContainerNode,
+  warn,
   walkIndex,
 } from '../../lib/utils';
 import configure from '../configure/configure';
@@ -37,6 +39,7 @@ import type {
   AutocompleteWidgetDescription,
   TransformItemsIndicesConfig,
 } from '../../connectors/autocomplete/connectAutocomplete';
+import type { ChatRenderState } from '../../connectors/chat/connectChat';
 import type { PreparedTemplateProps } from '../../lib/templating';
 import type {
   BaseHit,
@@ -80,6 +83,12 @@ const AutocompleteSuggestion = createAutocompleteSuggestionComponent({
   Fragment,
 });
 
+const AutocompletePromptSuggestion =
+  createAutocompletePromptSuggestionComponent({
+    createElement: h,
+    Fragment,
+  });
+
 const AutocompleteSearchBox = createAutocompleteSearchComponent({
   createElement: h,
   Fragment,
@@ -121,10 +130,15 @@ type RendererParams<TItem extends BaseHit> = {
     recentSearchHeaderComponent:
       | typeof AutocompleteIndex['prototype']['props']['HeaderComponent']
       | undefined;
+    hasWarnedMissingPromptSuggestionsChat: boolean;
   };
 } & Pick<
   AutocompleteWidgetParams<TItem>,
-  'getSearchPageURL' | 'onSelect' | 'showSuggestions' | 'placeholder'
+  | 'getSearchPageURL'
+  | 'onSelect'
+  | 'showSuggestions'
+  | 'showPromptSuggestions'
+  | 'placeholder'
 > & {
     showRecent:
       | Exclude<AutocompleteWidgetParams<TItem>['showRecent'], boolean>
@@ -227,6 +241,7 @@ const createRenderer = <TItem extends BaseHit>(
         }),
         RecentSearchComponent,
         recentSearchHeaderComponent,
+        hasWarnedMissingPromptSuggestionsChat: false,
       };
 
       connectorParams.refine(targetIndex.getHelper()?.state.query ?? '');
@@ -250,6 +265,7 @@ type AutocompleteWrapperProps<TItem extends BaseHit> = Pick<
   | 'renderState'
   | 'showRecent'
   | 'showSuggestions'
+  | 'showPromptSuggestions'
   | 'placeholder'
 > &
   Pick<AutocompleteRenderState, 'indices' | 'refine'> &
@@ -266,6 +282,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   instantSearchInstance,
   showRecent,
   showSuggestions,
+  showPromptSuggestions,
   templates,
   placeholder,
 }: AutocompleteWrapperProps<TItem>) {
@@ -285,6 +302,57 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     indicesConfig,
     suggestionsIndexName: showSuggestions?.indexName,
   });
+  const promptSuggestionsIndexName = showPromptSuggestions?.indexName;
+  const promptSuggestionsLimit = showPromptSuggestions?.maxSuggestions ?? 3;
+  const promptSuggestionsQuery = searchboxQuery || '';
+  const indicesForPanel = indices.map((autocompleteIndex) => {
+    const dedupedHits =
+      autocompleteIndex.indexName === showSuggestions?.indexName && showRecent
+        ? autocompleteIndex.hits.filter(
+            (suggestionHit) =>
+              !find(
+                storageHits,
+                (storageHit) => storageHit.query === suggestionHit.query
+              )
+          )
+        : autocompleteIndex.hits;
+
+    if (autocompleteIndex.indexName !== promptSuggestionsIndexName) {
+      return {
+        ...autocompleteIndex,
+        hits: dedupedHits,
+      };
+    }
+
+    return {
+      ...autocompleteIndex,
+      hits: getPromptSuggestionHits({
+        hits: dedupedHits as Array<
+          { objectID: string } & Record<string, unknown>
+        >,
+        query: promptSuggestionsQuery,
+        limit: promptSuggestionsLimit,
+      }),
+    };
+  });
+  const indicesForPropGettersWithPromptSuggestions = indicesForPropGetters.map(
+    (autocompleteIndex) => {
+      if (autocompleteIndex.indexName !== promptSuggestionsIndexName) {
+        return autocompleteIndex;
+      }
+
+      return {
+        ...autocompleteIndex,
+        hits: getPromptSuggestionHits({
+          hits: autocompleteIndex.hits as Array<
+            { objectID: string } & Record<string, unknown>
+          >,
+          query: promptSuggestionsQuery,
+          limit: promptSuggestionsLimit,
+        }),
+      };
+    }
+  );
   const showRecentObj = showRecent;
 
   const recentSearchCssClasses = {
@@ -325,12 +393,36 @@ function AutocompleteWrapper<TItem extends BaseHit>({
 
   const { getInputProps, getItemProps, getPanelProps, getRootProps } =
     usePropGetters({
-      indices: indicesForPropGetters,
+      indices: indicesForPropGettersWithPromptSuggestions,
       indicesConfig: indicesConfigForPropGetters,
       onRefine,
       onSelect:
         userOnSelect ??
-        (({ query, setQuery, url }) => {
+        (({ item, query, setQuery, url }) => {
+          if (isPromptSuggestion(item)) {
+            const chatRenderState = instantSearchInstance.renderState[
+              targetIndex!.getIndexId()
+            ]?.chat as Partial<ChatRenderState> | undefined;
+
+            if (chatRenderState) {
+              chatRenderState.setOpen?.(true);
+              chatRenderState.focusInput?.();
+              chatRenderState.sendMessage?.({ text: query });
+              return;
+            }
+
+            if (
+              __DEV__ &&
+              showPromptSuggestions?.indexName &&
+              !renderState.hasWarnedMissingPromptSuggestionsChat
+            ) {
+              renderState.hasWarnedMissingPromptSuggestionsChat = true;
+              warn(
+                'showPromptSuggestions requires a Chat widget in the same index to open chat and send messages. Add `chat()` to enable this behavior.'
+              );
+            }
+          }
+
           if (url) {
             window.location.href = url;
             return;
@@ -374,7 +466,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     );
   }
 
-  indices.forEach(({ indexId, indexName, hits }, i) => {
+  indicesForPanel.forEach(({ indexId, indexName, hits }, i) => {
     const currentIndexConfig = find(
       indicesConfig,
       (config) => config.indexName === indexName
@@ -425,26 +517,19 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       );
     };
 
-    const elementId =
-      indexName === showSuggestions?.indexName ? 'suggestions' : indexName;
-
-    const filteredHits =
-      elementId === 'suggestions' && showRecent
-        ? hits.filter(
-            (suggestionHit) =>
-              !find(
-                storageHits,
-                (storageHit) => storageHit.query === suggestionHit.query
-              )
-          )
-        : hits;
+    let elementId = indexName;
+    if (indexName === showSuggestions?.indexName) {
+      elementId = 'suggestions';
+    } else if (indexName === showPromptSuggestions?.indexName) {
+      elementId = 'promptSuggestions';
+    }
 
     elements[elementId] = (
       <AutocompleteIndex
         key={indexId}
         HeaderComponent={headerComponent}
         ItemComponent={itemComponent}
-        items={filteredHits.map((item) => ({
+        items={hits.map((item) => ({
           ...item,
           __indexName: indexId,
         }))}
@@ -474,7 +559,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
             {...renderState.templateProps}
             templateKey="panel"
             rootTagName="fragment"
-            data={{ elements, indices }}
+            data={{ elements, indices: indicesForPanel }}
           />
         ) : (
           Object.keys(elements).map((elementId) => elements[elementId])
@@ -543,6 +628,14 @@ type AutocompleteWidgetParams<TItem extends BaseHit> = {
       'indexName' | 'getURL' | 'templates' | 'cssClasses'
     >
   >;
+  showPromptSuggestions?: Partial<
+    Pick<
+      IndexConfig<{ query: string; label?: string }>,
+      'indexName' | 'getURL' | 'templates' | 'cssClasses'
+    >
+  > & {
+    maxSuggestions?: number;
+  };
 
   showRecent?:
     | boolean
@@ -611,6 +704,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     escapeHTML,
     indices = [],
     showSuggestions,
+    showPromptSuggestions,
     showRecent,
     searchParameters: userSearchParameters,
     getSearchPageURL,
@@ -686,6 +780,58 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
       getURL: showSuggestions.getURL as unknown as IndexConfig<TItem>['getURL'],
     });
   }
+  if (showPromptSuggestions?.indexName) {
+    indicesConfig.push({
+      indexName: showPromptSuggestions.indexName,
+      templates: {
+        // @ts-expect-error
+        item: ({
+          item,
+          onSelect: onSelectItem,
+        }: {
+          item: {
+            query: string;
+            label?: string;
+            __isPromptSuggestionFallback?: boolean;
+          };
+          onSelect: () => void;
+        }) => (
+          <AutocompletePromptSuggestion item={item} onSelect={onSelectItem}>
+            {isPromptSuggestionFallback(item)
+              ? item.label || item.query
+              : renderConditionalHighlight({
+                  item: item as unknown as Hit<{ query: string }>,
+                })}
+          </AutocompletePromptSuggestion>
+        ),
+        ...showPromptSuggestions.templates,
+      },
+      cssClasses: {
+        root: cx(
+          'ais-AutocompletePromptSuggestions',
+          showPromptSuggestions.cssClasses?.root
+        ),
+        list: cx(
+          'ais-AutocompletePromptSuggestionsList',
+          showPromptSuggestions.cssClasses?.list
+        ),
+        header: cx(
+          'ais-AutocompletePromptSuggestionsHeader',
+          showPromptSuggestions.cssClasses?.header
+        ),
+        item: cx(
+          'ais-AutocompletePromptSuggestionsItem',
+          showPromptSuggestions.cssClasses?.item
+        ),
+      },
+      searchParameters: {
+        hitsPerPage: showPromptSuggestions.maxSuggestions ?? 3,
+      },
+      getQuery: (item) => item.query,
+      getURL:
+        showPromptSuggestions.getURL as unknown as IndexConfig<TItem>['getURL'],
+    });
+  }
 
   const instanceId = ++autocompleteInstanceId;
   const shouldShowRecent = showRecent || undefined;
@@ -701,6 +847,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     cssClasses,
     showRecent: showRecentOptions,
     showSuggestions,
+    showPromptSuggestions,
     placeholder,
     renderState: {
       indexTemplateProps: [],
@@ -709,6 +856,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
       templateProps: undefined,
       RecentSearchComponent: AutocompleteRecentSearch,
       recentSearchHeaderComponent: undefined,
+      hasWarnedMissingPromptSuggestionsChat: false,
     },
     templates,
   });
@@ -752,4 +900,73 @@ function ConditionalReverseHighlight<TItem extends { query: string }>({
   }
 
   return <ReverseHighlight attribute="query" hit={item} />;
+}
+
+function renderConditionalHighlight<TItem extends { query: string }>({
+  item,
+}: {
+  item: Hit<TItem>;
+}) {
+  if (
+    !item._highlightResult?.query ||
+    // @ts-expect-error - we should not have matchLevel as arrays here
+    item._highlightResult.query.matchLevel === 'none'
+  ) {
+    return item.query;
+  }
+
+  return <Highlight attribute="query" hit={item} />;
+}
+
+function getPromptSuggestionHits({
+  hits,
+  query,
+  limit,
+}: {
+  hits: Array<{ objectID: string } & Record<string, unknown>>;
+  query: string;
+  limit: number;
+}): Array<{ objectID: string } & Record<string, unknown>> {
+  const promptHits = hits.slice(0, limit).map((hit) => ({
+    ...hit,
+    __isPromptSuggestion: true,
+  }));
+
+  if (promptHits.length > 0 || query.trim().length === 0) {
+    return promptHits;
+  }
+
+  return [
+    {
+      objectID: `ask-about:${encodeURIComponent(query)}`,
+      query,
+      label: `Ask about "${query}"`,
+      __isPromptSuggestion: true,
+      __isPromptSuggestionFallback: true,
+    },
+  ];
+}
+
+function isPromptSuggestion(item: unknown): item is {
+  query: string;
+  __isPromptSuggestion: true;
+} {
+  return Boolean(
+    item &&
+      typeof item === 'object' &&
+      (item as { __isPromptSuggestion?: boolean }).__isPromptSuggestion
+  );
+}
+
+function isPromptSuggestionFallback(item: unknown): item is {
+  query: string;
+  label?: string;
+  __isPromptSuggestionFallback: true;
+} {
+  return Boolean(
+    item &&
+      typeof item === 'object' &&
+      (item as { __isPromptSuggestionFallback?: boolean })
+        .__isPromptSuggestionFallback
+  );
 }

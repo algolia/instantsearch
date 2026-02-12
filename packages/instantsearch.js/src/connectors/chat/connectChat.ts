@@ -54,6 +54,10 @@ export type ChatRenderState<TUiMessage extends UIMessage = UIMessage> = {
   setInput: (input: string) => void;
   setOpen: (open: boolean) => void;
   /**
+   * Opens the chat (if needed) and focuses the prompt input.
+   */
+  focusInput: () => void;
+  /**
    * Updates the `messages` state locally. This is useful when you want to
    * edit the messages on the client, and then trigger the `reload` method
    * manually to regenerate the AI response.
@@ -169,6 +173,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
     let sendEvent: SendEventForHits;
     let setInput: ChatRenderState<TUiMessage>['setInput'];
     let setOpen: ChatRenderState<TUiMessage>['setOpen'];
+    let focusInput: ChatRenderState<TUiMessage>['focusInput'];
     let setIsClearing: (value: boolean) => void;
 
     const agentId = 'agentId' in options ? options.agentId : undefined;
@@ -371,6 +376,10 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           render();
         };
 
+        focusInput = () => {
+          setOpen(true);
+        };
+
         setInput = (i) => {
           input = i;
           render();
@@ -451,6 +460,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           setIndexUiState: parent.setIndexUiState.bind(parent),
           setInput,
           setOpen,
+          focusInput,
           setMessages,
           suggestions: getSuggestionsFromMessages(_chatInstance.messages),
           isClearing,
