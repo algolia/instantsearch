@@ -136,7 +136,7 @@ type RendererParams<TItem extends BaseHit> = {
   AutocompleteWidgetParams<TItem>,
   | 'getSearchPageURL'
   | 'onSelect'
-  | 'showSuggestions'
+  | 'showQuerySuggestions'
   | 'showPromptSuggestions'
   | 'placeholder'
 > & {
@@ -264,7 +264,7 @@ type AutocompleteWrapperProps<TItem extends BaseHit> = Pick<
   | 'templates'
   | 'renderState'
   | 'showRecent'
-  | 'showSuggestions'
+  | 'showQuerySuggestions'
   | 'showPromptSuggestions'
   | 'placeholder'
 > &
@@ -281,7 +281,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   renderState,
   instantSearchInstance,
   showRecent,
-  showSuggestions,
+  showQuerySuggestions,
   showPromptSuggestions,
   templates,
   placeholder,
@@ -300,14 +300,16 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     showRecent,
     indices,
     indicesConfig,
-    suggestionsIndexName: showSuggestions?.indexName,
+    suggestionsIndexName: showQuerySuggestions?.indexName,
   });
   const promptSuggestionsIndexName = showPromptSuggestions?.indexName;
-  const promptSuggestionsLimit = showPromptSuggestions?.maxSuggestions ?? 3;
+  const promptSuggestionsLimit =
+    showPromptSuggestions?.searchParameters?.hitsPerPage ?? 3;
   const promptSuggestionsQuery = searchboxQuery || '';
   const indicesForPanel = indices.map((autocompleteIndex) => {
     const dedupedHits =
-      autocompleteIndex.indexName === showSuggestions?.indexName && showRecent
+      autocompleteIndex.indexName === showQuerySuggestions?.indexName &&
+      showRecent
         ? autocompleteIndex.hits.filter(
             (suggestionHit) =>
               !find(
@@ -518,7 +520,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     };
 
     let elementId = indexName;
-    if (indexName === showSuggestions?.indexName) {
+    if (indexName === showQuerySuggestions?.indexName) {
       elementId = 'suggestions';
     } else if (indexName === showPromptSuggestions?.indexName) {
       elementId = 'promptSuggestions';
@@ -622,20 +624,26 @@ type AutocompleteWidgetParams<TItem extends BaseHit> = {
   /**
    * Index to use for retrieving and showing query suggestions.
    */
-  showSuggestions?: Partial<
+  showQuerySuggestions?: Partial<
     Pick<
       IndexConfig<{ query: string }>,
-      'indexName' | 'getURL' | 'templates' | 'cssClasses'
+      | 'indexName'
+      | 'getURL'
+      | 'templates'
+      | 'cssClasses'
+      | 'searchParameters'
     >
   >;
   showPromptSuggestions?: Partial<
     Pick<
       IndexConfig<{ query: string; label?: string }>,
-      'indexName' | 'getURL' | 'templates' | 'cssClasses'
+      | 'indexName'
+      | 'getURL'
+      | 'templates'
+      | 'cssClasses'
+      | 'searchParameters'
     >
-  > & {
-    maxSuggestions?: number;
-  };
+  >;
 
   showRecent?:
     | boolean
@@ -703,7 +711,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     container,
     escapeHTML,
     indices = [],
-    showSuggestions,
+    showQuerySuggestions,
     showPromptSuggestions,
     showRecent,
     searchParameters: userSearchParameters,
@@ -731,9 +739,9 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
   } satisfies AutocompleteCSSClasses;
 
   const indicesConfig = [...indices];
-  if (showSuggestions?.indexName) {
+  if (showQuerySuggestions?.indexName) {
     indicesConfig.unshift({
-      indexName: showSuggestions.indexName,
+      indexName: showQuerySuggestions.indexName,
       templates: {
         // @ts-expect-error
         item: ({
@@ -756,28 +764,33 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
             />
           </AutocompleteSuggestion>
         ),
-        ...showSuggestions.templates,
+        ...showQuerySuggestions.templates,
       },
       cssClasses: {
         root: cx(
           'ais-AutocompleteSuggestions',
-          showSuggestions.cssClasses?.root
+          showQuerySuggestions.cssClasses?.root
         ),
         list: cx(
           'ais-AutocompleteSuggestionsList',
-          showSuggestions.cssClasses?.list
+          showQuerySuggestions.cssClasses?.list
         ),
         header: cx(
           'ais-AutocompleteSuggestionsHeader',
-          showSuggestions.cssClasses?.header
+          showQuerySuggestions.cssClasses?.header
         ),
         item: cx(
           'ais-AutocompleteSuggestionsItem',
-          showSuggestions.cssClasses?.item
+          showQuerySuggestions.cssClasses?.item
         ),
       },
+      searchParameters: {
+        hitsPerPage: 3,
+        ...showQuerySuggestions.searchParameters,
+      },
       getQuery: (item) => item.query,
-      getURL: showSuggestions.getURL as unknown as IndexConfig<TItem>['getURL'],
+      getURL:
+        showQuerySuggestions.getURL as unknown as IndexConfig<TItem>['getURL'],
     });
   }
   if (showPromptSuggestions?.indexName) {
@@ -825,7 +838,8 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
         ),
       },
       searchParameters: {
-        hitsPerPage: showPromptSuggestions.maxSuggestions ?? 3,
+        hitsPerPage: 3,
+        ...showPromptSuggestions.searchParameters,
       },
       getQuery: (item) => item.query,
       getURL:
@@ -846,7 +860,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     onSelect,
     cssClasses,
     showRecent: showRecentOptions,
-    showSuggestions,
+    showQuerySuggestions,
     showPromptSuggestions,
     placeholder,
     renderState: {

@@ -50,8 +50,11 @@ search.addWidgets([
         `,
       },
     },
-    showSuggestions: {
+    showQuerySuggestions: {
       indexName: 'instant_search_demo_query_suggestions',
+      searchParameters: {
+        hitsPerPage: 2,
+      },
       templates: {
         header: (_, { html }) => html`
           <span class="ais-AutocompleteIndexHeaderTitle">Suggestions</span>
@@ -61,7 +64,9 @@ search.addWidgets([
     },
     showPromptSuggestions: {
       indexName: 'instant_search_prompt_suggestions',
-      maxSuggestions: 2,
+      searchParameters: {
+        hitsPerPage: 2,
+      },
       templates: {
         header: (_, { html }) => html`
           <span class="ais-AutocompleteIndexHeaderTitle">Ask AI</span>

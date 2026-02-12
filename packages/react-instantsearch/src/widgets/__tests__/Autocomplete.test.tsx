@@ -227,7 +227,7 @@ describe('Autocomplete', () => {
     const { container } = render(
       <InstantSearchTestWrapper searchClient={searchClient}>
         <EXPERIMENTAL_Autocomplete
-          showSuggestions={{ indexName: 'query_suggestions' }}
+          showQuerySuggestions={{ indexName: 'query_suggestions' }}
         />
       </InstantSearchTestWrapper>
     );
