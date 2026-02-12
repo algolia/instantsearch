@@ -1,3 +1,5 @@
+import type { SearchParameters } from 'algoliasearch-helper';
+
 export type ChatStatus = 'ready' | 'submitted' | 'streaming' | 'error';
 export type ChatRole = 'data' | 'user' | 'assistant' | 'system';
 
@@ -444,12 +446,24 @@ export type AddToolResultWithOutput = (
   params: Pick<Parameters<AddToolResult>[0], 'output'>
 ) => ReturnType<AddToolResult>;
 
+export type SearchToolInput = {
+  query: string;
+  number_of_results?: number;
+  facet_filters?: string[][];
+};
+
+export type ApplyFiltersParams = {
+  query?: string;
+  facetFilters?: string[][];
+};
+
 export type ClientSideToolComponentProps = {
   message: ChatToolMessage;
   indexUiState: object;
   setIndexUiState: (state: object) => void;
   onClose: () => void;
   addToolResult: AddToolResultWithOutput;
+  applyFilters: (params: ApplyFiltersParams) => SearchParameters;
 };
 
 export type ClientSideToolComponent = (
@@ -466,8 +480,12 @@ export type ClientSideTool = {
       addToolResult: AddToolResultWithOutput;
     }
   ) => void;
+  applyFilters: (params: ApplyFiltersParams) => SearchParameters;
 };
 export type ClientSideTools = Record<string, ClientSideTool>;
 
-export type UserClientSideTool = Omit<ClientSideTool, 'addToolResult'>;
+export type UserClientSideTool = Omit<
+  ClientSideTool,
+  'addToolResult' | 'applyFilters'
+>;
 export type UserClientSideTools = Record<string, UserClientSideTool>;

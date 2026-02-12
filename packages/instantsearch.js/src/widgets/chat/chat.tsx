@@ -43,6 +43,7 @@ import type {
   IndexUiState,
   IndexWidget,
 } from '../../types';
+import type { SearchParameters } from 'algoliasearch-helper';
 import type {
   ChatClassNames,
   ChatHeaderProps,
@@ -60,6 +61,7 @@ import type {
   ClientSideToolComponentProps,
   ClientSideTools,
   RecordWithObjectID,
+  SearchToolInput,
   UserClientSideTool,
 } from 'instantsearch-ui-components';
 import type { ComponentProps } from 'preact';
@@ -81,7 +83,7 @@ function createCarouselTool<
 >(
   showViewAll: boolean,
   templates: ChatTemplates<THit>,
-  getSearchPageURL?: (nextUiState: IndexUiState) => string
+  getSearchPageURL?: (params: SearchParameters) => string
 ): UserClientSideToolWithTemplate {
   const Button = createButtonComponent({
     createElement: h,
@@ -89,8 +91,7 @@ function createCarouselTool<
 
   function SearchLayoutComponent({
     message,
-    indexUiState,
-    setIndexUiState,
+    applyFilters,
     onClose,
   }: ClientSideToolComponentProps) {
     const input = message?.input as
@@ -124,23 +125,14 @@ function createCarouselTool<
       ) => (
         <HeaderComponent
           nbHits={output?.nbHits}
-          query={input?.query}
+          input={input}
           hitsPerPage={items.length}
-          setIndexUiState={setIndexUiState}
-          indexUiState={indexUiState}
-          getSearchPageURL={getSearchPageURL}
+          applyFilters={applyFilters}
           onClose={onClose}
           {...props}
         />
       );
-    }, [
-      items.length,
-      input?.query,
-      output?.nbHits,
-      setIndexUiState,
-      indexUiState,
-      onClose,
-    ]);
+    }, [items.length, input, output?.nbHits, applyFilters, onClose]);
 
     return carousel({
       showNavigation: false,
@@ -169,25 +161,20 @@ function createCarouselTool<
     scrollLeft,
     scrollRight,
     nbHits,
-    query,
+    input,
     hitsPerPage,
-    setIndexUiState,
-    indexUiState,
+    applyFilters,
     onClose,
-    // eslint-disable-next-line no-shadow
-    getSearchPageURL,
   }: {
     canScrollLeft: boolean;
     canScrollRight: boolean;
     scrollLeft: () => void;
     scrollRight: () => void;
     nbHits?: number;
-    query?: string;
+    input?: SearchToolInput;
     hitsPerPage?: number;
-    setIndexUiState: IndexWidget['setIndexUiState'];
-    indexUiState: IndexUiState;
+    applyFilters?: ClientSideToolComponentProps['applyFilters'];
     onClose: () => void;
-    getSearchPageURL?: (nextUiState: IndexUiState) => string;
   }) {
     if ((hitsPerPage ?? 0) < 1) {
       return null;
@@ -207,24 +194,21 @@ function createCarouselTool<
               variant="ghost"
               size="sm"
               onClick={() => {
-                if (!query) return;
+                if (!input || !applyFilters) return;
+                const params = applyFilters({
+                  query: input.query,
+                  facetFilters: input.facet_filters,
+                });
 
-                const nextUiState = { ...indexUiState, query };
-
-                // If no main search page URL or we are on the search page, just update the state
                 if (
-                  !getSearchPageURL ||
-                  (getSearchPageURL &&
-                    new URL(getSearchPageURL(nextUiState)).pathname ===
-                      window.location.pathname)
+                  getSearchPageURL &&
+                  new URL(getSearchPageURL(params)).pathname !==
+                    window.location.pathname
                 ) {
-                  setIndexUiState(nextUiState);
-                  onClose();
-                  return;
+                  window.location.href = getSearchPageURL(params);
                 }
 
-                // Navigate to different page
-                window.location.href = getSearchPageURL(nextUiState);
+                onClose();
               }}
               className="ais-ChatToolSearchIndexCarouselHeaderViewAll"
             >

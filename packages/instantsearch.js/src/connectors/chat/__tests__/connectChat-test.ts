@@ -386,6 +386,7 @@ describe('connectChat', () => {
         testTool: {
           ...mockTool,
           addToolResult: expect.any(Function),
+          applyFilters: expect.any(Function),
         },
       });
     });
