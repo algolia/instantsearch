@@ -97,7 +97,7 @@ export function App() {
                         </>
                       ),
                     }}
-                    showSuggestions={{
+                    showQuerySuggestions={{
                       indexName: 'instant_search_demo_query_suggestions',
                       headerComponent: () => (
                         <>
@@ -110,7 +110,9 @@ export function App() {
                     }}
                     showPromptSuggestions={{
                       indexName: 'instant_search_prompt_suggestions_poc',
-                      maxSuggestions: 2,
+                      searchParameters: {
+                        hitsPerPage: 2,
+                      },
                       headerComponent: () => (
                         <>
                           <span className="ais-AutocompleteIndexHeaderTitle">

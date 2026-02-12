@@ -283,7 +283,7 @@ function useDetachedMode(mediaQuery?: string) {
 
 export type AutocompleteProps<TItem extends BaseHit> = ComponentProps<'div'> & {
   indices?: Array<IndexConfig<TItem>>;
-  showSuggestions?: Partial<
+  showQuerySuggestions?: Partial<
     Pick<
       IndexConfig<{ query: string }>,
       | 'indexName'
@@ -291,6 +291,7 @@ export type AutocompleteProps<TItem extends BaseHit> = ComponentProps<'div'> & {
       | 'headerComponent'
       | 'itemComponent'
       | 'classNames'
+      | 'searchParameters'
     >
   >;
   showPromptSuggestions?: Partial<
@@ -301,10 +302,9 @@ export type AutocompleteProps<TItem extends BaseHit> = ComponentProps<'div'> & {
       | 'headerComponent'
       | 'itemComponent'
       | 'classNames'
+      | 'searchParameters'
     >
-  > & {
-    maxSuggestions?: number;
-  };
+  >;
   showRecent?:
     | boolean
     | {
@@ -379,7 +379,7 @@ type InnerAutocompleteProps<TItem extends BaseHit> = Omit<
 
 export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
   indices = [],
-  showSuggestions,
+  showQuerySuggestions,
   showPromptSuggestions,
   showRecent,
   searchParameters: userSearchParameters,
@@ -402,12 +402,12 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
     ...userSearchParameters,
   };
   const indicesConfig = [...indices];
-  if (showSuggestions?.indexName) {
+  if (showQuerySuggestions?.indexName) {
     indicesConfig.unshift({
-      indexName: showSuggestions.indexName,
+      indexName: showQuerySuggestions.indexName,
       headerComponent:
-        showSuggestions.headerComponent as unknown as AutocompleteIndexProps<TItem>['HeaderComponent'],
-      itemComponent: (showSuggestions.itemComponent ||
+        showQuerySuggestions.headerComponent as unknown as AutocompleteIndexProps<TItem>['HeaderComponent'],
+      itemComponent: (showQuerySuggestions.itemComponent ||
         (({
           item,
           onSelect,
@@ -426,23 +426,28 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
       classNames: {
         root: cx(
           'ais-AutocompleteSuggestions',
-          showSuggestions?.classNames?.root
+          showQuerySuggestions?.classNames?.root
         ),
         list: cx(
           'ais-AutocompleteSuggestionsList',
-          showSuggestions?.classNames?.list
+          showQuerySuggestions?.classNames?.list
         ),
         header: cx(
           'ais-AutocompleteSuggestionsHeader',
-          showSuggestions?.classNames?.header
+          showQuerySuggestions?.classNames?.header
         ),
         item: cx(
           'ais-AutocompleteSuggestionsItem',
-          showSuggestions?.classNames?.item
+          showQuerySuggestions?.classNames?.item
         ),
       },
+      searchParameters: {
+        hitsPerPage: 3,
+        ...showQuerySuggestions.searchParameters,
+      },
       getQuery: (item) => item.query,
-      getURL: showSuggestions.getURL as unknown as IndexConfig<TItem>['getURL'],
+      getURL:
+        showQuerySuggestions.getURL as unknown as IndexConfig<TItem>['getURL'],
     });
   }
   if (showPromptSuggestions?.indexName) {
@@ -491,7 +496,8 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
         ),
       },
       searchParameters: {
-        hitsPerPage: showPromptSuggestions.maxSuggestions ?? 3,
+        hitsPerPage: 3,
+        ...showPromptSuggestions.searchParameters,
       },
       getQuery: (item) => item.query,
       getURL:
@@ -563,7 +569,7 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
           isSearchPage={isSearchPage}
           showRecent={showRecent}
           recentSearchConfig={recentSearchConfig}
-          showSuggestions={showSuggestions}
+          showQuerySuggestions={showQuerySuggestions}
           detachedMediaQuery={detachedMediaQuery}
           translations={translations}
           showPromptSuggestions={showPromptSuggestions}
@@ -587,7 +593,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   panelComponent: PanelComponent,
   showRecent,
   recentSearchConfig,
-  showSuggestions,
+  showQuerySuggestions,
   showPromptSuggestions,
   chatRenderState,
   transformItems,
@@ -619,16 +625,17 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     query: currentRefinement,
     indices,
     indicesConfig,
-    suggestionsIndexName: showSuggestions?.indexName,
+    suggestionsIndexName: showQuerySuggestions?.indexName,
   });
   const promptSuggestionsIndexName = showPromptSuggestions?.indexName;
-  const promptSuggestionsLimit = showPromptSuggestions?.maxSuggestions ?? 3;
+  const promptSuggestionsLimit =
+    showPromptSuggestions?.searchParameters?.hitsPerPage ?? 3;
   const promptSuggestionsQuery = currentRefinement || '';
   const indicesForPanel = useMemo(
     () =>
       indices.map((index) => {
         const dedupedHits =
-          index.indexName === showSuggestions?.indexName && showRecent
+          index.indexName === showQuerySuggestions?.indexName && showRecent
             ? index.hits.filter(
                 (suggestionHit) =>
                   !storageHits.find(
@@ -661,7 +668,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
       promptSuggestionsLimit,
       promptSuggestionsQuery,
       showRecent,
-      showSuggestions?.indexName,
+      showQuerySuggestions?.indexName,
       storageHits,
     ]
   );
@@ -814,7 +821,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
 
   indicesForPanel.forEach(({ indexId, indexName, hits }) => {
     let elementId = indexName;
-    if (indexName === showSuggestions?.indexName) {
+    if (indexName === showQuerySuggestions?.indexName) {
       elementId = 'suggestions';
     } else if (indexName === showPromptSuggestions?.indexName) {
       elementId = 'promptSuggestions';

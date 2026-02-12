@@ -123,12 +123,12 @@ export function createOptionsTests(
         },
         widgetParams: {
           javascript: {
-            showSuggestions: {
+            showQuerySuggestions: {
               indexName: 'query_suggestions',
             },
           },
           react: {
-            showSuggestions: {
+            showQuerySuggestions: {
               indexName: 'query_suggestions',
             },
           },
@@ -196,13 +196,13 @@ export function createOptionsTests(
         },
         widgetParams: {
           javascript: {
-            showSuggestions: {
+            showQuerySuggestions: {
               indexName: 'query_suggestions',
             },
             showRecent: true,
           },
           react: {
-            showSuggestions: {
+            showQuerySuggestions: {
               indexName: 'query_suggestions',
             },
             showRecent: true,
@@ -297,7 +297,7 @@ export function createOptionsTests(
         },
         widgetParams: {
           javascript: {
-            showSuggestions: {
+            showQuerySuggestions: {
               indexName: 'query_suggestions',
             },
             showRecent: {
@@ -307,7 +307,7 @@ export function createOptionsTests(
             },
           },
           react: {
-            showSuggestions: {
+            showQuerySuggestions: {
               indexName: 'query_suggestions',
             },
             showRecent: {
@@ -1120,12 +1120,12 @@ export function createOptionsTests(
         },
         widgetParams: {
           javascript: {
-            showSuggestions: {
+            showQuerySuggestions: {
               indexName: 'query_suggestions',
             },
           },
           react: {
-            showSuggestions: {
+            showQuerySuggestions: {
               indexName: 'query_suggestions',
             },
           },
@@ -1231,12 +1231,12 @@ export function createOptionsTests(
         },
         widgetParams: {
           javascript: {
-            showSuggestions: {
+            showQuerySuggestions: {
               indexName: 'query_suggestions',
             },
           },
           react: {
-            showSuggestions: {
+            showQuerySuggestions: {
               indexName: 'query_suggestions',
             },
           },
@@ -1806,7 +1806,7 @@ export function createOptionsTests(
           },
           widgetParams: {
             javascript: {
-              showSuggestions: {
+              showQuerySuggestions: {
                 indexName: 'query_suggestions',
               },
               indices: [
@@ -1833,7 +1833,7 @@ export function createOptionsTests(
               },
             },
             react: {
-              showSuggestions: {
+              showQuerySuggestions: {
                 indexName: 'query_suggestions',
               },
               indices: [
