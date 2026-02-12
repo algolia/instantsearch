@@ -1,10 +1,10 @@
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import instantsearch from 'instantsearch.js';
 import {
-  chat,
   clearRefinements,
   configure,
   EXPERIMENTAL_autocomplete,
+  chat,
   hits,
   pagination,
   panel,
@@ -74,6 +74,15 @@ search.addWidgets([
       templates: {
         header: (_, { html }) => html`
           <span class="ais-AutocompleteIndexHeaderTitle">Suggestions</span>
+          <span class="ais-AutocompleteIndexHeaderLine" />
+        `,
+      },
+    },
+    showPromptSuggestions: {
+      indexName: 'instant_search_prompt_suggestions',
+      templates: {
+        header: (_, { html }) => html`
+          <span class="ais-AutocompleteIndexHeaderTitle">Ask AI</span>
           <span class="ais-AutocompleteIndexHeaderLine" />
         `,
       },
