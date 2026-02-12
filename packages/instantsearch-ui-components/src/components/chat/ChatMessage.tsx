@@ -235,6 +235,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
                 indexUiState={indexUiState}
                 setIndexUiState={setIndexUiState}
                 addToolResult={boundAddToolResult}
+                applyFilters={tool.applyFilters}
                 onClose={onClose}
               />
             </div>

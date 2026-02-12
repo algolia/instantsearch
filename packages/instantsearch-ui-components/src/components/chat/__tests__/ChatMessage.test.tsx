@@ -226,6 +226,7 @@ describe('ChatMessage', () => {
             ),
             addToolResult: jest.fn(),
             onToolCall: jest.fn(),
+            applyFilters: jest.fn(),
           },
         }}
         onClose={jest.fn()}
