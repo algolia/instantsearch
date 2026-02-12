@@ -99,7 +99,7 @@ function outputs(vueVersion) {
     input: 'src/instantsearch.js',
     external,
     output: {
-      sourcemap: true,
+      sourcemap: false,
       file: `${vueVersion}/cjs/index.js`,
       format: 'cjs',
       exports: 'named',
@@ -112,7 +112,7 @@ function outputs(vueVersion) {
           'instantsearch.js/es': 'instantsearch.js/cjs',
         },
       }),
-      createTerserPlugin({ sourceMap: true }),
+      createTerserPlugin({ sourceMap: false }),
       createPackageJsonPlugin({ type: 'commonjs', sideEffects: true }),
     ],
   };
@@ -121,7 +121,7 @@ function outputs(vueVersion) {
     input: 'src/instantsearch.js',
     external,
     output: {
-      sourcemap: true,
+      sourcemap: false,
       dir: `${vueVersion}/es`,
       format: 'es',
       preserveModules: true,
@@ -132,7 +132,7 @@ function outputs(vueVersion) {
       extensionResolver({
         modulesToResolve: ['instantsearch.js'],
       }),
-      createTerserPlugin({ sourceMap: true }),
+      createTerserPlugin({ sourceMap: false }),
       createFile(
         'index.js',
         `import InstantSearch from './src/instantsearch.js';
@@ -147,7 +147,7 @@ export * from './src/instantsearch.js';`
     input: 'src/instantsearch.umd.js',
     external: ['vue'],
     output: {
-      sourcemap: true,
+      sourcemap: false,
       file: `${vueVersion}/umd/index.js`,
       format: 'umd',
       name: 'VueInstantSearch',
@@ -165,7 +165,7 @@ export * from './src/instantsearch.js';`
     plugins: [
       ...basePlugins,
       createResolvePlugin(),
-      createTerserPlugin({ sourceMap: true }),
+      createTerserPlugin({ sourceMap: false }),
     ],
   };
 

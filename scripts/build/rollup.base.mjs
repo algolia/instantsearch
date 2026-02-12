@@ -60,7 +60,7 @@ export function createESMConfig({
     output: {
       dir: outputDir,
       format: 'es',
-      sourcemap: true,
+      sourcemap: false,
       preserveModules,
       ...(preserveModules ? { preserveModulesRoot: 'src' } : {}),
     },
@@ -119,7 +119,7 @@ export function createCJSConfig({
     output: {
       dir: outputDir,
       format: 'cjs',
-      sourcemap: true,
+      sourcemap: false,
       exports: 'named',
       preserveModules,
       ...(preserveModules ? { preserveModulesRoot: 'src' } : {}),
@@ -200,7 +200,7 @@ export function createUMDConfig({
       name,
       globals,
       banner,
-      sourcemap: true,
+      sourcemap: false,
     },
     plugins: [
       ...basePlugins,
@@ -218,7 +218,7 @@ export function createUMDConfig({
       name,
       globals,
       banner,
-      sourcemap: true,
+      sourcemap: false,
     },
     plugins: [
       ...basePlugins,
