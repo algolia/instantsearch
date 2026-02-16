@@ -1,4 +1,4 @@
-import { createSearchIndexTool } from 'instantsearch-ui-components';
+import { createSearchIndexToolComponent } from 'instantsearch-ui-components';
 import React, { createElement, Fragment } from 'react';
 
 import type { SearchParameters } from 'algoliasearch-helper';
@@ -17,7 +17,7 @@ function createCarouselTool<TObject extends RecordWithObjectID>(
   itemComponent?: ItemComponent<TObject>,
   getSearchPageURL?: (params: SearchParameters) => string
 ): UserClientSideTool {
-  const SearchLayoutUIComponent = createSearchIndexTool<TObject>({
+  const SearchLayoutUIComponent = createSearchIndexToolComponent<TObject>({
     createElement: createElement as Pragma,
     Fragment,
   });

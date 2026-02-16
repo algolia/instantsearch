@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { createSearchIndexTool } from 'instantsearch-ui-components';
+import { createSearchIndexToolComponent } from 'instantsearch-ui-components';
 import { Fragment, h } from 'preact';
 import { useMemo, useRef, useState } from 'preact/hooks';
 
@@ -23,7 +23,7 @@ export function createCarouselTool<
   templates: ChatTemplates<THit>,
   getSearchPageURL?: (params: SearchParameters) => string
 ): UserClientSideToolWithTemplate {
-  const SearchLayoutUIComponent = createSearchIndexTool<THit>({
+  const SearchLayoutUIComponent = createSearchIndexToolComponent<THit>({
     createElement: h,
     Fragment,
   });
