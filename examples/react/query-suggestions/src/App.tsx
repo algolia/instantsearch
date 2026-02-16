@@ -83,12 +83,29 @@ export function App() {
                     </>
                   ),
                 }}
-                showSuggestions={{
+                showQuerySuggestions={{
                   indexName: 'instant_search_demo_query_suggestions',
+                  searchParameters: {
+                    hitsPerPage: 2,
+                  },
                   headerComponent: () => (
                     <>
                       <span className="ais-AutocompleteIndexHeaderTitle">
                         Suggestions
+                      </span>
+                      <span className="ais-AutocompleteIndexHeaderLine" />
+                    </>
+                  ),
+                }}
+                showPromptSuggestions={{
+                  indexName: 'instant_search_prompt_suggestions_poc',
+                  searchParameters: {
+                    hitsPerPage: 2,
+                  },
+                  headerComponent: () => (
+                    <>
+                      <span className="ais-AutocompleteIndexHeaderTitle">
+                        Ask AI
                       </span>
                       <span className="ais-AutocompleteIndexHeaderLine" />
                     </>

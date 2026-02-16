@@ -3,6 +3,7 @@ import instantsearch from 'instantsearch.js';
 import {
   configure,
   EXPERIMENTAL_autocomplete,
+  chat,
   hits,
   pagination,
   panel,
@@ -49,11 +50,26 @@ search.addWidgets([
         `,
       },
     },
-    showSuggestions: {
+    showQuerySuggestions: {
       indexName: 'instant_search_demo_query_suggestions',
+      searchParameters: {
+        hitsPerPage: 2,
+      },
       templates: {
         header: (_, { html }) => html`
           <span class="ais-AutocompleteIndexHeaderTitle">Suggestions</span>
+          <span class="ais-AutocompleteIndexHeaderLine" />
+        `,
+      },
+    },
+    showPromptSuggestions: {
+      indexName: 'instant_search_prompt_suggestions',
+      searchParameters: {
+        hitsPerPage: 2,
+      },
+      templates: {
+        header: (_, { html }) => html`
+          <span class="ais-AutocompleteIndexHeaderTitle">Ask AI</span>
           <span class="ais-AutocompleteIndexHeaderLine" />
         `,
       },
@@ -86,6 +102,10 @@ search.addWidgets([
   }),
   pagination({
     container: '#pagination',
+  }),
+  chat({
+    container: '#chat',
+    agentId: 'eedef238-5468-470d-bc37-f99fa741bd25',
   }),
 ]);
 

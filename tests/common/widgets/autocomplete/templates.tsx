@@ -66,7 +66,7 @@ export function createTemplatesTests(
                 cssClasses: { header: 'HEADER' },
               },
             ],
-            showSuggestions: {
+            showQuerySuggestions: {
               indexName: 'indexName2',
               templates: {
                 header: (props) => `<span>${props.items.length} results</span>`,
@@ -85,7 +85,7 @@ export function createTemplatesTests(
                 classNames: { header: 'HEADER' },
               },
             ],
-            showSuggestions: {
+            showQuerySuggestions: {
               indexName: 'indexName2',
               headerComponent: (props) => (
                 <span>{props.items.length} results</span>
@@ -226,7 +226,7 @@ export function createTemplatesTests(
                 templates: { item: (props) => props.item.name },
               },
             ],
-            showSuggestions: {
+            showQuerySuggestions: {
               indexName: 'indexName2',
               templates: { item: (props) => props.item.query },
             },
@@ -250,7 +250,7 @@ export function createTemplatesTests(
                 itemComponent: (props) => props.item.name,
               },
             ],
-            showSuggestions: {
+            showQuerySuggestions: {
               indexName: 'indexName2',
               // @ts-expect-error itemComponent can return a string
               itemComponent: (props) => props.item.query,

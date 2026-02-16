@@ -406,3 +406,12 @@
     }
   }
 }
+
+.ais-AutocompletePromptSuggestionItemIcon {
+  color: rgba(var(--ais-primary-color-rgb), 1);
+}
+
+.ais-AutocompletePromptSuggestionItemIcon svg {
+  width: var(--ais-icon-size);
+  height: var(--ais-icon-size);
+}
