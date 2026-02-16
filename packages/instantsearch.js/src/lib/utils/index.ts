@@ -50,4 +50,3 @@ export * from './safelyRunOnBrowser';
 export * from './serializer';
 export * from './toArray';
 export * from './uniq';
-export * from './updateStateFromSearchToolInput';
