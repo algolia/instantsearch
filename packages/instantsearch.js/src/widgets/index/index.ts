@@ -723,7 +723,10 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         maxFacetHits,
         userState
       ) => {
-        const state = helper!.state.setQueryParameters(userState!);
+        const state = mergeSearchParameters(
+          mainHelper.state,
+          ...resolveSearchParameters(this)
+        ).setQueryParameters(userState!);
 
         return mainHelper.searchForFacetValues(
           facetName,

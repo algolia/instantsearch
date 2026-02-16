@@ -1442,52 +1442,108 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/index-widge
       );
     });
 
-    it('uses the internal state for the SFFV queries', () => {
-      const instance = index({ indexName: 'indexName' });
+    it('uses the internal state for the SFFV queries', async () => {
       const searchClient = createSearchClient();
-      const mainHelper = algoliasearchHelper(searchClient, '', {});
-      const instantSearchInstance = createInstantSearch({
-        mainHelper,
-      });
-
-      instance.addWidgets([
-        createSearchBox({
-          getWidgetSearchParameters(state) {
-            return state.setQueryParameter('query', 'Apple');
-          },
-        }),
-        createPagination({
-          getWidgetSearchParameters(state) {
-            return state.setQueryParameter('page', 5);
-          },
-        }),
+      const search = instantsearch({
+        indexName: 'root',
+        searchClient,
+      }).addWidgets([
+        // index has widgets that set search parameters
+        index({ indexName: 'index' }).addWidgets([
+          virtualSearchBox({}),
+          virtualPagination({}),
+          virtualRefinementList({
+            attribute: 'brand',
+            limit: 10,
+          }),
+        ]),
       ]);
 
-      instance.init(
-        createIndexInitOptions({
-          instantSearchInstance,
-          parent: null,
-        })
-      );
+      search.start();
 
-      // Simulate a call to search from a widget
-      instance.getHelper()!.searchForFacetValues('brand', 'Apple', 10, {
-        highlightPreTag: '<mark>',
-        highlightPostTag: '</mark>',
-      });
+      // Set parameters in the index
+      search.renderState.index.searchBox!.refine('Apple iPhone');
+      search.renderState.index.pagination!.refine(3);
+
+      await wait(0);
+
+      const searchForItems =
+        search.renderState.index.refinementList!.brand.searchForItems;
+
+      // Search for facet values
+      searchForItems('Samsung');
+      await wait(0);
 
       expect(searchClient.searchForFacetValues).toHaveBeenCalledTimes(1);
       expect(searchClient.searchForFacetValues).toHaveBeenCalledWith(
         expect.arrayContaining([
           {
-            indexName: 'indexName',
+            indexName: 'index',
             params: expect.objectContaining({
               facetName: 'brand',
-              facetQuery: 'Apple',
+              facetQuery: 'Samsung',
               maxFacetHits: 10,
-              highlightPreTag: '<mark>',
-              highlightPostTag: '</mark>',
-              page: 5,
+              // Notably: index parameters are included
+              query: 'Apple iPhone',
+              page: 3,
+              highlightPreTag: '__ais-highlight__',
+              highlightPostTag: '__/ais-highlight__',
+            }),
+          },
+        ])
+      );
+    });
+
+    it('uses the parent state for the SFFV queries', async () => {
+      const searchClient = createSearchClient();
+      const search = instantsearch({
+        indexName: 'root',
+        searchClient,
+      }).addWidgets([
+        // Parent index has widgets that set search parameters
+        index({ indexName: 'parentIndexName' }).addWidgets([
+          virtualSearchBox({}),
+          virtualPagination({}),
+          // Child index only has a refinementList widget
+          index({ indexName: 'childIndexName' }).addWidgets([
+            virtualRefinementList({
+              attribute: 'brand',
+              limit: 10,
+            }),
+          ]),
+        ]),
+      ]);
+
+      search.start();
+
+      // Set parameters in the parent index
+      search.renderState.parentIndexName.searchBox!.refine('Apple iPhone');
+      search.renderState.parentIndexName.pagination!.refine(3);
+
+      await wait(0);
+
+      const searchForItems =
+        search.renderState.childIndexName.refinementList!.brand.searchForItems;
+
+      // Search for facet values
+      searchForItems('Samsung');
+
+      await wait(0);
+
+      expect(searchClient.searchForFacetValues).toHaveBeenCalledTimes(1);
+      expect(searchClient.searchForFacetValues).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          {
+            indexName: 'childIndexName',
+            params: expect.objectContaining({
+              facetName: 'brand',
+              facetQuery: 'Samsung',
+              maxFacetHits: 10,
+              // Notably: parent index parameters are included
+              query: 'Apple iPhone',
+              page: 3,
+              highlightPreTag: '__ais-highlight__',
+              highlightPostTag: '__/ais-highlight__',
             }),
           },
         ])
