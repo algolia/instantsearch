@@ -133,23 +133,24 @@ function createHeaderComponent({ createElement }: Renderer) {
   };
 }
 
-export function createSearchIndexTool<TObject extends RecordWithObjectID>({
-  createElement,
-  Fragment,
-}: Renderer) {
+export function createSearchIndexToolComponent<
+  TObject extends RecordWithObjectID
+>({ createElement, Fragment }: Renderer) {
   const DefaultHeader = createHeaderComponent({ createElement, Fragment });
   const Carousel = createCarouselComponent({ createElement, Fragment });
 
-  return function SearchIndexTool({
-    useMemo,
-    useRef,
-    useState,
-    itemComponent: ItemComponent,
-    headerComponent: HeaderComponent,
-    getSearchPageURL,
-    toolProps: { message, applyFilters, onClose },
-    headerProps: { showViewAll },
-  }: SearchIndexToolProps<TObject>) {
+  return function SearchIndexTool(userProps: SearchIndexToolProps<TObject>) {
+    const {
+      useMemo,
+      useRef,
+      useState,
+      itemComponent: ItemComponent,
+      headerComponent: HeaderComponent,
+      getSearchPageURL,
+      toolProps: { message, applyFilters, onClose },
+      headerProps: { showViewAll },
+    } = userProps;
+
     const input = message?.input as
       | {
           query: string;
