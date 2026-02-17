@@ -20,3 +20,5 @@ pnpm-debug.log*
 
 /public
 /themes
+
+CHANGELOG.md
