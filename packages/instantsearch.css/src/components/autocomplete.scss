@@ -406,3 +406,222 @@
     }
   }
 }
+
+// ----------------
+// Detached Mode (Mobile)
+// ----------------
+
+// Remove scroll on body when detached modal is open
+body.ais-Autocomplete--detached {
+  height: 100vh;
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
+// Detached overlay backdrop
+.ais-AutocompleteDetachedOverlay {
+  background-color: rgba(
+    var(--ais-overlay-color-rgb),
+    var(--ais-overlay-color-alpha)
+  );
+  height: 100vh;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: calc(var(--ais-z-index-autocomplete) - 1);
+}
+
+// Detached container (full-screen by default)
+.ais-AutocompleteDetachedContainer {
+  @extend %init;
+  background: rgba(
+    var(--ais-background-color-rgb),
+    var(--ais-background-color-alpha)
+  );
+  bottom: 0;
+  box-shadow: var(--ais-shadow-lg);
+  display: flex;
+  flex-direction: column;
+  left: 0;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: var(--ais-z-index-autocomplete);
+  height: 100vh;
+
+  // Panel styling inside detached container
+  .ais-AutocompletePanel {
+    background-color: rgba(
+      var(--ais-background-color-rgb),
+      var(--ais-background-color-alpha)
+    );
+    border-radius: 0;
+    box-shadow: none;
+    border: 0;
+    flex-grow: 1;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+  }
+
+  .ais-AutocompletePanelLayout {
+    bottom: 0;
+    box-shadow: none;
+    left: 0;
+    margin: 0;
+    max-height: none;
+    overflow-y: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 100%;
+  }
+}
+
+.ais-AutocompleteDetachedContainer--modal {
+  border-radius: var(--ais-border-radius-md);
+  bottom: inherit;
+  height: auto;
+  margin: 0 auto;
+  max-width: var(--ais-autocomplete-detached-modal-max-width);
+  position: absolute;
+  top: 3%;
+
+  .ais-AutocompletePanelLayout {
+    max-height: var(--ais-autocomplete-detached-modal-max-height);
+    padding-bottom: calc(var(--ais-spacing) / 2);
+    position: static;
+
+    &:empty {
+      display: none;
+    }
+  }
+}
+
+// Form container inside detached mode (with cancel button)
+.ais-AutocompleteDetachedFormContainer {
+  @extend %init;
+  border-bottom: solid 1px rgba(var(--ais-border-color-rgb), 0.3);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 0;
+  padding: calc(var(--ais-spacing) / 2);
+
+  .ais-AutocompleteForm {
+    flex: 1;
+  }
+}
+
+// Cancel button in detached mode (extends .ais-Button--ghost)
+.ais-AutocompleteDetachedCancelButton {
+  margin: 0 0 0 calc(var(--ais-spacing) / 2);
+  padding: 0 calc(var(--ais-spacing) / 2);
+}
+
+// Search button (shown when detached mode is active but modal is closed)
+.ais-AutocompleteDetachedSearchButton {
+  align-items: center;
+  background-color: rgba(
+    var(--ais-background-color-rgb),
+    var(--ais-background-color-alpha)
+  );
+  border: 1px solid rgba(var(--ais-border-color-rgb), 0.8);
+  border-radius: var(--ais-border-radius-sm);
+  color: rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha));
+  cursor: pointer;
+  display: flex;
+  font: inherit;
+  font-size: var(--ais-font-size);
+  height: var(--ais-autocomplete-search-input-height);
+  margin: 0;
+  position: relative;
+  text-align: left;
+  width: 100%;
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: border-color var(--ais-transition-duration)
+        var(--ais-transition-timing-function),
+      box-shadow var(--ais-transition-duration)
+        var(--ais-transition-timing-function);
+  }
+}
+
+.ais-AutocompleteDetachedSearchButtonIcon {
+  align-items: center;
+  color: rgba(var(--ais-primary-color-rgb), 1);
+  cursor: initial;
+  display: flex;
+  flex-shrink: 0;
+  height: 100%;
+  justify-content: center;
+  padding-left: calc(var(--ais-spacing) * 0.75);
+  padding-right: calc(var(--ais-spacing) / 2);
+
+  svg {
+    height: var(--ais-icon-size);
+    width: var(--ais-icon-size);
+    stroke-width: var(--ais-icon-stroke-width);
+  }
+}
+
+.ais-AutocompleteDetachedSearchButtonQuery {
+  color: rgba(var(--ais-text-color-rgb), 1);
+  line-height: 1.25em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ais-AutocompleteDetachedSearchButtonPlaceholder {
+  &[hidden] {
+    display: none;
+  }
+}
+
+.ais-AutocompleteDetachedSearchButtonClear {
+  align-items: center;
+  background: none;
+  border: 0;
+  color: rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha));
+  cursor: pointer;
+  display: flex;
+  flex-shrink: 0;
+  height: 100%;
+  justify-content: center;
+  margin: 0;
+  margin-left: auto;
+  padding: 0 calc(var(--ais-spacing) * 0.5);
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: color var(--ais-transition-duration)
+      var(--ais-transition-timing-function);
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+    }
+  }
+
+  &:focus {
+    color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+    outline: none;
+  }
+
+  svg {
+    height: var(--ais-icon-size);
+    stroke-width: var(--ais-icon-stroke-width);
+    width: var(--ais-icon-size);
+  }
+}
