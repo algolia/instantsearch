@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.88.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.87.2...instantsearch.js@4.88.0) (2026-02-17)
+
+
+### Bug Fixes
+
+* **searchable:** include parent index state ([#6901](https://github.com/algolia/instantsearch/issues/6901)) ([41be769](https://github.com/algolia/instantsearch/commit/41be7694f7ea7408f901ff45bd19b55f1c2a6dd4))
+
+
+### Features
+
+* **chat:** handle setting refinements from the search index tool 'view all' button ([#6866](https://github.com/algolia/instantsearch/issues/6866)) ([e68506f](https://github.com/algolia/instantsearch/commit/e68506f45b0123cc2dac5dd0ed2b1ee336b8c646))
+
+
+
+
+
 ## [4.87.2](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.87.1...instantsearch.js@4.87.2) (2026-02-10)
 
 
