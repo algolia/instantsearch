@@ -18,6 +18,7 @@ export default class Fixed extends JSDOMEnv {
     this.global.TextEncoder = TextEncoder;
     this.global.TextDecoder = TextDecoder as typeof global.TextDecoder;
     this.global.ReadableStream = ReadableStream;
+    this.global.Response = Response;
   }
 
   async setup() {

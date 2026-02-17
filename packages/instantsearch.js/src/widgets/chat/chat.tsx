@@ -107,7 +107,6 @@ function createCarouselTool<
           nbHits?: number;
         }
       | undefined;
-
     const items = output?.hits || [];
 
     const MemoedHeaderComponent = useMemo(() => {
@@ -499,7 +498,12 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
 
     const toolsForUi: ClientSideTools = {};
     Object.entries(toolsFromConnector).forEach(([key, connectorTool]) => {
-      const widgetTool = tools[key];
+      let widgetTool = tools[key];
+
+      // Compatibility shim with Algolia MCP Server search tool
+      if (!widgetTool && key.startsWith(`${SearchIndexToolType}_`)) {
+        widgetTool = tools[SearchIndexToolType];
+      }
 
       toolsForUi[key] = {
         ...connectorTool,
