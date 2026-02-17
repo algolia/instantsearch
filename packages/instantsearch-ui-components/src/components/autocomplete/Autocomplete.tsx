@@ -14,6 +14,42 @@ export type AutocompleteClassNames = {
    * Class names to apply to the root element
    */
   root: string | string[];
+  /**
+   * Class names to apply to the detached overlay backdrop
+   */
+  detachedOverlay: string | string[];
+  /**
+   * Class names to apply to the detached container
+   */
+  detachedContainer: string | string[];
+  /**
+   * Class names to apply to the detached form container
+   */
+  detachedFormContainer: string | string[];
+  /**
+   * Class names to apply to the detached search button
+   */
+  detachedSearchButton: string | string[];
+  /**
+   * Class names to apply to the detached search button icon
+   */
+  detachedSearchButtonIcon: string | string[];
+  /**
+   * Class names to apply to the detached search button placeholder
+   */
+  detachedSearchButtonPlaceholder: string | string[];
+  /**
+   * Class names to apply to the detached search button query
+   */
+  detachedSearchButtonQuery: string | string[];
+  /**
+   * Class names to apply to the detached search button clear button
+   */
+  detachedSearchButtonClear: string | string[];
+  /**
+   * Class names to apply to the detached cancel button
+   */
+  detachedCancelButton: string | string[];
 };
 
 export function createAutocompleteComponent({ createElement }: Renderer) {
