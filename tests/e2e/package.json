@@ -7,14 +7,17 @@
     "algolia",
     "instantsearch",
     "test",
+    "playwright",
     "webdriverio"
   ],
   "author": "Algolia <support@algolia.com>",
   "sideEffects": false,
   "scripts": {
-    "type-check": "tsc"
+    "type-check": "tsc",
+    "test:playwright": "playwright test -c playwright/playwright.config.ts"
   },
   "dependencies": {
+    "@playwright/test": "1.49.1",
     "@types/jasmine": "3.3.16",
     "@wdio/cli": "5.16.9",
     "@wdio/jasmine-framework": "5.16.5",
@@ -25,6 +28,7 @@
     "@wdio/spec-reporter": "5.16.5",
     "@wdio/static-server-service": "5.16.5",
     "dotenv": "8.2.0",
+    "serve": "14.2.4",
     "ts-node": "8.4.1",
     "webdriverio": "5.16.9"
   }
