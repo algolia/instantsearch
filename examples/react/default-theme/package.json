@@ -16,7 +16,7 @@
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-instantsearch": "7.24.0",
-    "react-instantsearch-core": "7.23.3"
+    "react-instantsearch-core": "7.24.0"
   },
   "devDependencies": {
     "@parcel/core": "2.10.0",
