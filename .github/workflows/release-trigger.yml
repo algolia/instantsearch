@@ -1,0 +1,74 @@
+name: Trigger a release
+
+on:
+  status:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: release-trigger-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: |
+      (github.event_name == 'status' &&
+       github.event.state == 'success' &&
+       github.event.branches[0].name == 'master' &&
+       github.event.context == 'ci/circleci: signal release ready') ||
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/master')
+    name: Release if needed
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Download CircleCI build artifacts
+        env:
+          CIRCLECI_TOKEN: ${{ secrets.CIRCLECI_TOKEN }}
+        run: |
+          COMMIT_SHA="${{ github.sha }}"
+
+          # Find pipeline for this commit
+          PIPELINE=$(curl -s "https://circleci.com/api/v2/project/gh/algolia/instantsearch/pipeline?branch=master" \
+            -H "Circle-Token: $CIRCLECI_TOKEN" | \
+            jq -r --arg sha "$COMMIT_SHA" '.items[] | select(.vcs.revision == $sha) | .id' | head -1)
+
+          [ -z "$PIPELINE" ] && echo "Pipeline not found" && exit 1
+
+          # Find workflow and job
+          WORKFLOW=$(curl -s "https://circleci.com/api/v2/pipeline/$PIPELINE/workflow" -H "Circle-Token: $CIRCLECI_TOKEN" | \
+            jq -r '.items[] | select(.name == "ci") | .id' | head -1)
+
+          [ -z "$WORKFLOW" ] && echo "Workflow not found" && exit 1
+
+          JOB_NUM=$(curl -s "https://circleci.com/api/v2/workflow/$WORKFLOW/job" -H "Circle-Token: $CIRCLECI_TOKEN" | \
+            jq -r '.items[] | select(.name == "signal release ready") | .job_number')
+
+          [ -z "$JOB_NUM" ] && echo "Job not found" && exit 1
+
+          # Download artifact
+          ARTIFACT=$(curl -s "https://circleci.com/api/v2/project/gh/algolia/instantsearch/$JOB_NUM/artifacts" \
+            -H "Circle-Token: $CIRCLECI_TOKEN" | \
+            jq -r '.items[] | select(.path | endswith("build-artifacts.tar.gz")) | .url')
+
+          [ -z "$ARTIFACT" ] && echo "Artifact not found" && exit 1
+
+          curl -L "$ARTIFACT" -o build-artifacts.tar.gz -H "Circle-Token: $CIRCLECI_TOKEN"
+          tar -xzf build-artifacts.tar.gz
+
+      - name: Configure git user
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Trigger release if latest commit is a release commit
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx shipjs@0.26.0 trigger
