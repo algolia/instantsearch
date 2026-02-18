@@ -1,73 +1,73 @@
-import { waitForUrl } from './utils';
+import { test, expect } from '@playwright/test';
 
-describe('refining InstantSearch causes only one onStateChange', () => {
-  describe('Next.js Link', () => {
-    it('works when not on a i18n route', async () => {
-      await browser.url('/test');
+test.describe('refining InstantSearch causes only one onStateChange', () => {
+  test.describe('Next.js Link', () => {
+    test('works when not on a i18n route', async ({ page }) => {
+      await page.goto('/test');
 
-      const navigationLink = await $('a=Prefilled query');
+      const navigationLink = page.locator('a', { hasText: 'Prefilled query' });
       await navigationLink.click();
 
-      await waitForUrl(
+      await page.waitForURL(
         'http://localhost:3000/test?instant_search%5Bquery%5D=apple'
       );
 
-      const searchInput = await $('.ais-SearchBox-input');
-      await browser.waitUntil(async () => {
-        return (await searchInput.getValue()) === 'apple';
-      });
+      const searchInput = page.locator('.ais-SearchBox-input');
+      await expect(searchInput).toHaveValue('apple');
 
-      const output = await $('output#onStateChange');
-      expect(await output.getText()).toBe('1');
+      const output = page.locator('output#onStateChange');
+      await expect(output).toHaveText('1');
     });
 
-    it('works when on a i18n route', async () => {
-      await browser.url('/fr/test');
+    test('works when on a i18n route', async ({ page }) => {
+      await page.goto('/fr/test');
 
-      const navigationLink = await $('a=Prefilled query');
+      const navigationLink = page.locator('a', { hasText: 'Prefilled query' });
       await navigationLink.click();
 
-      await waitForUrl(
+      await page.waitForURL(
         'http://localhost:3000/fr/test?instant_search%5Bquery%5D=apple'
       );
 
-      const searchInput = await $('.ais-SearchBox-input');
-      await browser.waitUntil(async () => {
-        return (await searchInput.getValue()) === 'apple';
-      });
+      const searchInput = page.locator('.ais-SearchBox-input');
+      await expect(searchInput).toHaveValue('apple');
 
-      const output = await $('output#onStateChange');
-      expect(await output.getText()).toBe('1');
+      const output = page.locator('output#onStateChange');
+      await expect(output).toHaveText('1');
     });
   });
 
-  describe('InstantSearch', () => {
-    it('works when not on a i18n route', async () => {
-      await browser.url('/test');
+  test.describe('InstantSearch', () => {
+    test('works when not on a i18n route', async ({ page }) => {
+      await page.goto('/test');
 
-      const refinementLink = await $('.ais-RefinementList-labelText=Apple');
+      const refinementLink = page.locator('.ais-RefinementList-labelText', {
+        hasText: 'Apple',
+      });
       await refinementLink.click();
 
-      await waitForUrl(
+      await page.waitForURL(
         'http://localhost:3000/test?instant_search%5BrefinementList%5D%5Bbrand%5D%5B0%5D=Apple'
       );
 
-      const output = await $('output#onStateChange');
-      expect(await output.getText()).toBe('1');
+      const output = page.locator('output#onStateChange');
+      await expect(output).toHaveText('1');
     });
 
-    it('works when on a i18n route', async () => {
-      await browser.url('/fr/test');
+    test('works when on a i18n route', async ({ page }) => {
+      await page.goto('/fr/test');
 
-      const refinementLink = await $('.ais-RefinementList-labelText=Apple');
+      const refinementLink = page.locator('.ais-RefinementList-labelText', {
+        hasText: 'Apple',
+      });
       await refinementLink.click();
 
-      await waitForUrl(
+      await page.waitForURL(
         'http://localhost:3000/fr/test?instant_search%5BrefinementList%5D%5Bbrand%5D%5B0%5D=Apple'
       );
 
-      const output = await $('output#onStateChange');
-      expect(await output.getValue()).toBe('1');
+      const output = page.locator('output#onStateChange');
+      await expect(output).toHaveText('1');
     });
   });
 });

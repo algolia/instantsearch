@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-next-routing-example",
-  "version": "6.129.0",
+  "version": "6.130.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -11,14 +11,14 @@
   "dependencies": {
     "algoliasearch": "5.1.1",
     "algoliasearch-helper": "3.27.1",
-    "instantsearch-ui-components": "0.17.1",
-    "instantsearch.css": "8.10.0",
+    "instantsearch-ui-components": "0.18.0",
+    "instantsearch.css": "8.11.0",
     "next": "16.0.7",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "react-instantsearch": "7.23.2",
-    "react-instantsearch-core": "7.23.2",
-    "react-instantsearch-router-nextjs": "7.23.2"
+    "react-instantsearch": "7.24.0",
+    "react-instantsearch-core": "7.24.0",
+    "react-instantsearch-router-nextjs": "7.24.0"
   },
   "devDependencies": {
     "@types/node": "17.0.40",

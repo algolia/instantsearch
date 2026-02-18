@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.11.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.10.0...instantsearch.css@8.11.0) (2026-02-17)
+
+
+### Features
+
+* **autocomplete:** add responsive detached mode ([#6898](https://github.com/algolia/instantsearch/issues/6898)) ([ac15ace](https://github.com/algolia/instantsearch/commit/ac15acebec121c547b3517e7ac9ad81cea6ae264))
+
+
+
+
+
 # [8.10.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.9.0...instantsearch.css@8.10.0) (2026-01-27)
 
 

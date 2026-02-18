@@ -17,7 +17,7 @@ import type { TestOptions } from '../../common';
 function normalizeSnapshot(expectedId: string) {
   return function _normalizeSnapshot(html: string) {
     // `useId()` in Preact and React have different patterns.
-    return commonNormalizeSnapshot(html).replace(/(P\d{3}|:r.:)/g, expectedId);
+    return commonNormalizeSnapshot(html).replace(/(P\d+|:r.:)/g, expectedId);
   };
 }
 

@@ -1,15 +1,21 @@
-describe('multiple hooks in a single component', () => {
-  it('only renders first hook if skipSuspense not set to true', async () => {
-    await browser.url('/multiple-hooks');
+import { test, expect } from '@playwright/test';
 
-    const withoutSkipSuspense = await $('#without-skip-suspense');
-    expect((await withoutSkipSuspense.$$('li')).length).toBe(1);
+test.describe('multiple hooks in a single component', () => {
+  test('only renders first hook if skipSuspense not set to true', async ({
+    page,
+  }) => {
+    await page.goto('/multiple-hooks');
+
+    const withoutSkipSuspense = page.locator('#without-skip-suspense');
+    await expect(withoutSkipSuspense.locator('li')).toHaveCount(1);
   });
 
-  it('only renders hooks properly if skipSuspense set to true', async () => {
-    await browser.url('/multiple-hooks');
+  test('only renders hooks properly if skipSuspense set to true', async ({
+    page,
+  }) => {
+    await page.goto('/multiple-hooks');
 
-    const withoutSkipSuspense = await $('#with-skip-suspense');
-    expect((await withoutSkipSuspense.$$('li')).length).toBe(2);
+    const withSkipSuspense = page.locator('#with-skip-suspense');
+    await expect(withSkipSuspense.locator('li')).toHaveCount(2);
   });
 });

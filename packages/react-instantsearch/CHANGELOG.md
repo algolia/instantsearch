@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.24.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.23.2...react-instantsearch@7.24.0) (2026-02-17)
+
+
+### Features
+
+* **autocomplete:** add responsive detached mode ([#6898](https://github.com/algolia/instantsearch/issues/6898)) ([ac15ace](https://github.com/algolia/instantsearch/commit/ac15acebec121c547b3517e7ac9ad81cea6ae264))
+* **chat:** handle setting refinements from the search index tool 'view all' button ([#6866](https://github.com/algolia/instantsearch/issues/6866)) ([e68506f](https://github.com/algolia/instantsearch/commit/e68506f45b0123cc2dac5dd0ed2b1ee336b8c646))
+
+
+
+
+
 ## [7.23.2](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.23.1...react-instantsearch@7.23.2) (2026-02-10)
 
 

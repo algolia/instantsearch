@@ -1,112 +1,112 @@
-import { waitForUrl } from './utils';
+import { test, expect } from '@playwright/test';
 
-describe('browser back/forward buttons', () => {
-  it('works on a single page with InstantSearch', async () => {
-    await browser.url('/');
+// slowMo is required for browser back/forward navigation tests in headless mode
+// The Next.js App Router dynamic routes need extra time to process popstate events
+test.use({ launchOptions: { slowMo: 500 } });
 
-    const appleRefinementListItem = await $(
+test.describe('browser back/forward buttons', () => {
+  test('works on a single page with InstantSearch', async ({ page }) => {
+    await page.goto('/');
+
+    const appleRefinementListItem = page.locator(
       '.ais-RefinementList-checkbox[value="Apple"]'
     );
     await appleRefinementListItem.click();
 
     const urlWithRefinement =
       'http://localhost:3000/?instant_search%5BrefinementList%5D%5Bbrand%5D%5B0%5D=Apple';
-    await waitForUrl(urlWithRefinement);
+    await expect(page).toHaveURL(urlWithRefinement);
 
     // Ensure push was done by Next.js router
-    const historyState = (await browser.execute(
-      'return window.history.state'
-    )) as History['state'];
+    const historyState = await page.evaluate(() => window.history.state);
     expect(historyState.__NA).toBe(true);
 
-    const queryId = await (await $('#query-id')).getText();
-
-    const link = await $('#link');
+    const link = page.locator('#link');
     await link.click();
 
-    await waitForUrl('http://localhost:3000/layout');
+    await expect(page).toHaveURL('http://localhost:3000/layout');
 
-    await browser.back();
+    await page.goBack();
 
-    await waitForUrl(urlWithRefinement);
+    await expect(page).toHaveURL(urlWithRefinement);
 
-    const checkbox = await $('.ais-RefinementList-checkbox[value="Apple"]');
-    expect(await checkbox.getAttribute('checked')).toBe('true');
-    const queryIdAfterBack = await (await $('#query-id')).getText();
-    expect(queryIdAfterBack).toBe(queryId);
+    const checkbox = page.locator(
+      '.ais-RefinementList-checkbox[value="Apple"]'
+    );
+    await expect(checkbox).toBeChecked();
   });
 
-  it('works on a page wrapped with a layout containing InstantSearch', async () => {
-    await browser.url('/layout');
+  test('works on a page wrapped with a layout containing InstantSearch', async ({
+    page,
+  }) => {
+    await page.goto('/layout');
 
-    const link = await $$('a=Go to search page');
+    const links = page.locator('a', { hasText: 'Go to search page' });
 
     // Ensure hydration works and does not double on a page without widgets
-    expect(link.length).toBe(1);
-    await link[0].click();
+    await expect(links).toHaveCount(1);
+    await links.first().click();
 
-    await waitForUrl('http://localhost:3000/layout/search');
+    await expect(page).toHaveURL('http://localhost:3000/layout/search');
 
-    const queryId = await (await $('#query-id')).getText();
+    const queryId = await page.locator('#query-id').textContent();
 
-    await browser.back();
+    await page.goBack();
 
-    await waitForUrl('http://localhost:3000/layout');
+    await expect(page).toHaveURL('http://localhost:3000/layout');
 
-    await browser.forward();
+    await page.goForward();
 
-    await waitForUrl('http://localhost:3000/layout/search');
+    await expect(page).toHaveURL('http://localhost:3000/layout/search');
 
-    const queryIdAfterForward = await (await $('#query-id')).getText();
+    const queryIdAfterForward = await page.locator('#query-id').textContent();
 
-    const hits = await $$('.ais-Hits-item');
-    expect(hits.length).toBeGreaterThan(0);
+    const hits = page.locator('.ais-Hits-item');
+    await expect(hits).not.toHaveCount(0);
     expect(queryIdAfterForward).toBe(queryId);
   });
 
-  it('works on a dynamic route with links', async () => {
-    await browser.url('/Appliances');
+  test('works on a dynamic route with links', async ({ page }) => {
+    await page.goto('/Appliances');
 
-    let firstHit = await (await $('.ais-Hits-item')).getText();
-    expect(firstHit).toContain('Nest - Learning Thermostat');
+    let firstHit = page.locator('.ais-Hits-item').first();
+    await expect(firstHit).toContainText('Nest - Learning Thermostat');
 
-    const audioLink = await $('a=Audio');
+    const audioLink = page.locator('a', { hasText: 'Audio' });
     await audioLink.click();
-    await waitForUrl('http://localhost:3000/Audio');
+    await expect(page).toHaveURL('http://localhost:3000/Audio');
 
-    // wait a bit for results
-    await browser.pause(1000);
+    // wait for results to load
+    await expect(page.locator('.ais-Hits-item').first()).toContainText(
+      'Apple - EarPods'
+    );
 
-    firstHit = await (await $('.ais-Hits-item')).getText();
-    expect(firstHit).toContain('Apple - EarPods');
+    await page.goBack();
+    await expect(page).toHaveURL('http://localhost:3000/Appliances');
 
-    await browser.back();
-    await waitForUrl('http://localhost:3000/Appliances');
-
-    firstHit = await (await $('.ais-Hits-item')).getText();
-    expect(firstHit).toContain('Nest - Learning Thermostat');
+    firstHit = page.locator('.ais-Hits-item').first();
+    await expect(firstHit).toContainText('Nest - Learning Thermostat');
   });
 
-  it('works on different pages with InstantSearch', async () => {
-    await browser.url('/Appliances');
+  test('works on different pages with InstantSearch', async ({ page }) => {
+    await page.goto('/Appliances');
 
-    let firstHit = await (await $('.ais-Hits-item')).getText();
-    expect(firstHit).toContain('Nest - Learning Thermostat');
+    let firstHit = page.locator('.ais-Hits-item').first();
+    await expect(firstHit).toContainText('Nest - Learning Thermostat');
 
-    const audioLink = await $('a=Home');
-    await audioLink.click();
-    await waitForUrl('http://localhost:3000/');
+    const homeLink = page.locator('a', { hasText: 'Home' });
+    await homeLink.click();
+    await expect(page).toHaveURL('http://localhost:3000/');
 
-    // wait a bit for results
-    await browser.pause(1000);
+    // wait for results to load
+    await expect(page.locator('.ais-Hits-item').first()).toContainText(
+      'Amazon'
+    );
 
-    firstHit = await (await $('.ais-Hits-item')).getText();
-    expect(firstHit).toContain('Amazon');
+    await page.goBack();
+    await expect(page).toHaveURL('http://localhost:3000/Appliances');
 
-    await browser.back();
-    await waitForUrl('http://localhost:3000/Appliances');
-
-    firstHit = await (await $('.ais-Hits-item')).getText();
-    expect(firstHit).toContain('Nest - Learning Thermostat');
+    firstHit = page.locator('.ais-Hits-item').first();
+    await expect(firstHit).toContainText('Nest - Learning Thermostat');
   });
 });

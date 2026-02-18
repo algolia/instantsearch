@@ -1,0 +1,20 @@
+{
+  "rewrites": [
+    {
+      "source": "/examples/js/e-commerce/search/**",
+      "destination": "/examples/js/e-commerce/index.html"
+    },
+    {
+      "source": "/examples/js-umd/e-commerce/search/**",
+      "destination": "/examples/js-umd/e-commerce/index.html"
+    },
+    {
+      "source": "/examples/react/e-commerce/search/**",
+      "destination": "/examples/react/e-commerce/index.html"
+    },
+    {
+      "source": "/examples/vue/e-commerce/search/**",
+      "destination": "/examples/vue/e-commerce/index.html"
+    }
+  ]
+}

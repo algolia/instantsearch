@@ -1,6 +1,5 @@
 import { createAutocompleteSearchComponent } from 'instantsearch-ui-components';
 import React, { createElement, Fragment } from 'react';
-import { useSearchBox } from 'react-instantsearch-core';
 
 import type { ComponentProps, Pragma } from 'instantsearch-ui-components';
 
@@ -12,20 +11,29 @@ const AutocompleteSearchComponent = createAutocompleteSearchComponent({
 export type AutocompleteSearchProps = {
   inputProps: ComponentProps<'input'>;
   clearQuery: () => void;
+  onQueryChange?: (query: string) => void;
+  query: string;
+  refine: (query: string) => void;
+  isSearchStalled: boolean;
 };
 
 export function AutocompleteSearch({
   inputProps,
   clearQuery,
+  onQueryChange,
+  query,
+  refine,
+  isSearchStalled,
 }: AutocompleteSearchProps) {
-  const { query, refine, isSearchStalled } = useSearchBox();
-
   return (
     <AutocompleteSearchComponent
       inputProps={{
         ...(inputProps as NonNullable<AutocompleteSearchProps['inputProps']>),
-        onChange: (event: React.ChangeEvent<HTMLInputElement>) =>
-          refine(event.currentTarget.value),
+        onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
+          const value = event.currentTarget.value;
+          refine(value);
+          onQueryChange?.(value);
+        },
       }}
       onClear={clearQuery}
       query={query}
