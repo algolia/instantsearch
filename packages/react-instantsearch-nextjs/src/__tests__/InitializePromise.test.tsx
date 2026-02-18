@@ -32,18 +32,18 @@ const renderComponent = async ({
   ref = { current: null },
   nonce,
   insertedHTML,
+  client = createSearchClient({
+    getRecommendations: jest.fn().mockResolvedValue({
+      results: [createSingleSearchResponse()],
+    }),
+  }),
 }: {
   children?: React.ReactNode;
   ref?: { current: PromiseWithState<void> | null };
   nonce?: string;
   insertedHTML?: jest.Mock;
+  client?: ReturnType<typeof createSearchClient>;
 } = {}) => {
-  const client = createSearchClient({
-    getRecommendations: jest.fn().mockResolvedValue({
-      results: [createSingleSearchResponse()],
-    }),
-  });
-
   await act(() =>
     render(
       <InstantSearchRSCContext.Provider
@@ -73,8 +73,8 @@ const renderComponent = async ({
   return client;
 };
 
-test('it calls resetWidgetId', () => {
-  renderComponent();
+test('it calls resetWidgetId', async () => {
+  await renderComponent();
 
   expect(utils.resetWidgetId).toHaveBeenCalledTimes(1);
 });
@@ -149,6 +149,163 @@ test('it waits for recommend only if there are only recommend widgets', async ()
   expect(ref.current!.status).toBe('fulfilled');
   expect(client.search).not.toHaveBeenCalled();
   expect(client.getRecommendations).toHaveBeenCalledTimes(1);
+});
+
+test('it errors if search fails', async () => {
+  const ref: { current: PromiseWithState<void> | null } = { current: null };
+
+  const client = createSearchClient({
+    search: jest.fn().mockRejectedValue(new Error('search failed')),
+  });
+
+  await renderComponent({
+    ref,
+    children: (
+      <>
+        <SearchBox />
+      </>
+    ),
+    client,
+  });
+
+  await act(async () => {
+    try {
+      await ref.current;
+    } catch {
+      // prevent jest from failing the test
+    }
+  });
+
+  await expect(ref.current).rejects.toEqual(new Error('search failed'));
+});
+
+test('it errors if recommend fails', async () => {
+  const ref: { current: PromiseWithState<void> | null } = { current: null };
+
+  const client = createSearchClient({
+    getRecommendations: jest
+      .fn()
+      .mockRejectedValue(new Error('recommend failed')),
+  });
+
+  await renderComponent({
+    ref,
+    children: (
+      <>
+        <TrendingItems />
+      </>
+    ),
+    client,
+  });
+
+  await act(async () => {
+    try {
+      await ref.current;
+    } catch {
+      // prevent jest from failing the test
+    }
+  });
+
+  await expect(ref.current).rejects.toEqual(new Error('recommend failed'));
+});
+
+test('it errors if both search and recommend fail', async () => {
+  const ref: { current: PromiseWithState<void> | null } = { current: null };
+
+  const client = createSearchClient({
+    search: jest.fn().mockRejectedValue(new Error('search failed')),
+    getRecommendations: jest
+      .fn()
+      .mockRejectedValue(new Error('recommend failed')),
+  });
+
+  await renderComponent({
+    ref,
+    children: (
+      <>
+        <TrendingItems />
+        <SearchBox />
+      </>
+    ),
+    client,
+  });
+
+  await act(async () => {
+    try {
+      await ref.current;
+    } catch {
+      // prevent jest from failing the test
+    }
+  });
+
+  // There's only one rejection, search comes first
+  await expect(ref.current).rejects.toEqual(new Error('search failed'));
+});
+
+test('it does not error if only search fails, but recommendations passes', async () => {
+  const ref: { current: PromiseWithState<void> | null } = { current: null };
+
+  const client = createSearchClient({
+    search: jest.fn().mockRejectedValue(new Error('search failed')),
+    getRecommendations: jest.fn().mockResolvedValue({
+      results: [createSingleSearchResponse()],
+    }),
+  });
+
+  await renderComponent({
+    ref,
+    children: (
+      <>
+        <TrendingItems />
+        <SearchBox />
+      </>
+    ),
+    client,
+  });
+
+  await act(async () => {
+    try {
+      await ref.current;
+    } catch {
+      // prevent jest from failing the test
+    }
+  });
+
+  expect(ref.current!.status).toBe('fulfilled');
+});
+
+test('it does not error if only recommendations fails, but search passes', async () => {
+  const ref: { current: PromiseWithState<void> | null } = { current: null };
+
+  const client = createSearchClient({
+    search: jest.fn().mockResolvedValue({
+      results: [createSingleSearchResponse()],
+    }),
+    getRecommendations: jest
+      .fn()
+      .mockRejectedValue(new Error('recommend failed')),
+  });
+
+  await renderComponent({
+    ref,
+    children: (
+      <>
+        <TrendingItems />
+        <SearchBox />
+      </>
+    ),
+    client,
+  });
+
+  await act(async () => {
+    try {
+      await ref.current;
+    } catch {
+      // prevent jest from failing the test
+    }
+  });
+
+  expect(ref.current!.status).toBe('fulfilled');
 });
 
 afterAll(() => {
