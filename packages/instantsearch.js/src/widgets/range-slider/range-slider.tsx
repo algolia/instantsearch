@@ -53,8 +53,8 @@ const renderer =
     // Should probably be done on the connector side, but we need to stay
     // backward compatible so we still need to pass [-Infinity, Infinity]
     const values: RangeBoundaries = [
-      minFinite! > maxRange! ? maxRange : minFinite,
-      maxFinite! < minRange! ? minRange : maxFinite,
+      Math.max(minRange!, Math.min(maxRange!, minFinite!)),
+      Math.max(minRange!, Math.min(maxRange!, maxFinite!)),
     ];
 
     render(
