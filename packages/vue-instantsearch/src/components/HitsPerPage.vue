@@ -9,6 +9,7 @@
     >
       <select
         :class="suit('select')"
+        aria-label="Items per page"
         @change="state.refine(Number($event.currentTarget.value))"
       >
         <option
