@@ -23,6 +23,7 @@ import type {
   Unmounter,
   UnknownWidgetParams,
   IndexRenderState,
+  InitOptions,
 } from '../../types';
 import type {
   Banner,
@@ -291,8 +292,8 @@ export default (function connectInfiniteHits<
 
     return {
       $$type: 'ais.infiniteHits',
-
-      init(initOptions) {
+      // Type is explicitly redefined, to avoid having the TWidgetParams type in the definition
+      init(initOptions: InitOptions<InfiniteHitsWidgetDescription<THit>>) {
         renderFn(
           {
             ...this.getWidgetRenderState(initOptions),
