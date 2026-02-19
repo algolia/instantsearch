@@ -191,6 +191,11 @@ export type InstantSearchOptions<
      */
     // @MAJOR: Remove legacy behaviour here and in algoliasearch-helper
     persistHierarchicalRootCount?: boolean;
+    /**
+     * Experimental option to disable `renderState`
+     * @defualt false
+     */
+    dontStoreRenderState?: boolean;
   };
 };
 
@@ -201,6 +206,7 @@ export const INSTANTSEARCH_FUTURE_DEFAULTS: Required<
 > = {
   preserveSharedStateOnUnmount: false,
   persistHierarchicalRootCount: false,
+  dontStoreRenderState: false,
 };
 
 /**
