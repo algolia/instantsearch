@@ -111,49 +111,6 @@ export function createOptionsTests(
                 />
               </svg>
             </button>
-            <span
-              class="ais-SearchBox-loadingIndicator"
-              hidden=""
-            >
-              <svg
-                aria-hidden="true"
-                aria-label="Results are loading"
-                class="ais-SearchBox-loadingIcon"
-                height="16"
-                stroke="#444"
-                viewBox="0 0 38 38"
-                width="16"
-              >
-                <g
-                  fill="none"
-                  fill-rule="evenodd"
-                >
-                  <g
-                    stroke-width="2"
-                    transform="translate(1 1)"
-                  >
-                    <circle
-                      cx="18"
-                      cy="18"
-                      r="18"
-                      stroke-opacity=".5"
-                    />
-                    <path
-                      d="M36 18c0-9.94-8.06-18-18-18"
-                    >
-                      <animatetransform
-                        attributeName="transform"
-                        dur="1s"
-                        from="0 18 18"
-                        repeatCount="indefinite"
-                        to="360 18 18"
-                        type="rotate"
-                      />
-                    </path>
-                  </g>
-                </g>
-              </svg>
-            </span>
           </form>
         </div>
       `
@@ -238,9 +195,7 @@ export function createOptionsTests(
         await wait(0);
       });
 
-      expect(
-        document.querySelector('.ais-SearchBox-loadingIndicator')
-      ).not.toBeVisible();
+      expect(document.querySelector('.ais-SearchBox-loadingIcon')).toBeNull();
 
       await act(async () => {
         userEvent.type(screen.getByRole('searchbox'), 'a');
@@ -249,16 +204,14 @@ export function createOptionsTests(
       });
 
       expect(
-        document.querySelector('.ais-SearchBox-loadingIndicator')
+        document.querySelector('.ais-SearchBox-loadingIcon')
       ).toBeVisible();
 
       await act(async () => {
         await wait(100);
       });
 
-      expect(
-        document.querySelector('.ais-SearchBox-loadingIndicator')
-      ).not.toBeVisible();
+      expect(document.querySelector('.ais-SearchBox-loadingIcon')).toBeNull();
     });
 
     test('forwards `placeholder` prop', async () => {

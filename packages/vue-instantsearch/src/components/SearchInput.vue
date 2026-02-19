@@ -72,8 +72,7 @@
     </button>
 
     <span
-      v-if="showLoadingIndicator"
-      :hidden="!shouldShowLoadingIndicator"
+      v-if="showLoadingIndicator && shouldShowLoadingIndicator"
       :class="suit('loadingIndicator')"
     >
       <slot name="loading-indicator">

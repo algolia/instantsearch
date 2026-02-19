@@ -123,12 +123,6 @@ exports[`RefinementList rendering with facets from search 1`] = `
           >
             reset
           </button>
-          <span
-            class="loadingIndicator"
-            hidden=""
-          >
-            loadingIndicator
-          </span>
         </form>
       </div>
     </div>
@@ -201,12 +195,6 @@ exports[`RefinementList rendering without facets from search 1`] = `
           >
             reset
           </button>
-          <span
-            class="loadingIndicator"
-            hidden=""
-          >
-            loadingIndicator
-          </span>
         </form>
       </div>
     </div>
