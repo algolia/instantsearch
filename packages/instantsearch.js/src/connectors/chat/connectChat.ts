@@ -1,18 +1,21 @@
 import {
   DefaultChatTransport,
   lastAssistantMessageIsCompleteWithToolCalls,
-} from 'ai';
-
-import { Chat } from '../../lib/chat';
+} from '../../lib/ai-lite';
+import { Chat, SearchIndexToolType } from '../../lib/chat';
 import {
   checkRendering,
+  clearRefinements,
   createDocumentationMessageGenerator,
   createSendEventForHits,
   getAlgoliaAgent,
   getAppIdAndApiKey,
+  getRefinements,
   noop,
+  uniq,
   warning,
 } from '../../lib/utils';
+import { flat } from '../../lib/utils/flat';
 
 import type {
   AbstractChat,
@@ -31,6 +34,7 @@ import type {
   WidgetRenderState,
   IndexRenderState,
 } from '../../types';
+import type { AlgoliaSearchHelper, SearchResults } from 'algoliasearch-helper';
 import type {
   AddToolResultWithOutput,
   UserClientSideTool,
@@ -106,6 +110,11 @@ export type ChatTransport = {
   transport?: ConstructorParameters<typeof DefaultChatTransport>[0];
 };
 
+export type ApplyFiltersParams = {
+  query?: string;
+  facetFilters?: string[][];
+};
+
 export type ChatInit<TUiMessage extends UIMessage> =
   ChatInitWithoutTransport<TUiMessage> & ChatTransport;
 
@@ -144,6 +153,73 @@ export type ChatConnector<TUiMessage extends UIMessage = UIMessage> = Connector<
   ChatWidgetDescription<TUiMessage>,
   ChatConnectorParams<TUiMessage>
 >;
+
+function getAttributesToClear({
+  results,
+  helper,
+}: {
+  results: SearchResults;
+  helper: AlgoliaSearchHelper;
+}) {
+  return uniq(
+    getRefinements(results, helper.state, true).map(
+      (refinement) => refinement.attribute
+    )
+  );
+}
+
+function updateStateFromSearchToolInput(
+  params: ApplyFiltersParams,
+  helper: AlgoliaSearchHelper
+) {
+  // clear all filters first
+  const attributesToClear = getAttributesToClear({
+    results: helper.lastResults!,
+    helper,
+  });
+
+  helper.setState(
+    clearRefinements({
+      helper,
+      attributesToClear,
+    })
+  );
+
+  if (params.facetFilters) {
+    const attributes = flat(params.facetFilters).map((filter) => {
+      const [attribute, value] = filter.split(':');
+
+      return { attribute, value };
+    });
+
+    attributes.forEach(({ attribute, value }) => {
+      if (
+        !helper.state.isConjunctiveFacet(attribute) &&
+        !helper.state.isHierarchicalFacet(attribute) &&
+        !helper.state.isDisjunctiveFacet(attribute)
+      ) {
+        const s = helper.state.addDisjunctiveFacet(attribute);
+        helper.setState(s);
+        helper.toggleFacetRefinement(attribute, value);
+      } else {
+        const attr =
+          helper.state.hierarchicalFacets.find(
+            (facet) => facet.name === attribute
+          )?.name || attribute;
+
+        helper.toggleFacetRefinement(attr, value);
+      }
+    });
+  }
+
+  if (params.query) {
+    helper.setQuery(params.query);
+  }
+
+  helper.search();
+
+  return helper.state;
+}
 
 export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
   renderFn: Renderer<ChatRenderState, TWidgetParams & ChatConnectorParams>,
@@ -314,7 +390,15 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         transport,
         sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
         onToolCall({ toolCall }) {
-          const tool = tools[toolCall.toolName];
+          let tool = tools[toolCall.toolName];
+
+          // Compatibility shim with Algolia MCP Server search tool
+          if (
+            !tool &&
+            toolCall.toolName.startsWith(`${SearchIndexToolType}_`)
+          ) {
+            tool = tools[SearchIndexToolType];
+          }
 
           if (!tool) {
             if (__DEV__) {
@@ -422,7 +506,7 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
       },
 
       getWidgetRenderState(renderOptions) {
-        const { instantSearchInstance, parent } = renderOptions;
+        const { instantSearchInstance, parent, helper } = renderOptions;
         if (!_chatInstance) {
           this.init!({ ...renderOptions, uiState: {}, results: undefined });
         }
@@ -435,11 +519,16 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
           });
         }
 
+        function applyFilters(params: ApplyFiltersParams) {
+          return updateStateFromSearchToolInput(params, helper);
+        }
+
         const toolsWithAddToolResult: ClientSideTools = {};
         Object.entries(tools).forEach(([key, tool]) => {
           const toolWithAddToolResult: ClientSideTool = {
             ...tool,
             addToolResult: _chatInstance.addToolResult,
+            applyFilters,
           };
           toolsWithAddToolResult[key] = toolWithAddToolResult;
         });

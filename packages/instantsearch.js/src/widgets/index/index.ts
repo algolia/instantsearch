@@ -716,6 +716,26 @@ const index = (widgetParams: IndexWidgetParams): IndexWidget => {
         return mainHelper.search();
       };
 
+      // We use the same pattern for the `searchForFacetValues`.
+      helper.searchForFacetValues = (
+        facetName,
+        facetValue,
+        maxFacetHits,
+        userState
+      ) => {
+        const state = mergeSearchParameters(
+          mainHelper.state,
+          ...resolveSearchParameters(this)
+        ).setQueryParameters(userState!);
+
+        return mainHelper.searchForFacetValues(
+          facetName,
+          facetValue,
+          maxFacetHits,
+          state
+        );
+      };
+
       const isolatedHelper = indexName
         ? helper
         : algoliasearchHelper({} as SearchClient, '__empty_index__', {});

@@ -4,7 +4,11 @@
     "**/es",
     "**/dist",
     "tests/e2e",
-    "examples/react/next/next-env.d.ts",
+    // Next.js examples have their own tsconfig and are type-checked during
+    // their build. They import from local packages that need to be built first.
+    "examples/react/next",
+    "examples/react/next-routing",
+    "examples/react/next-app-router",
     "examples/react/react-native",
     "packages/create-instantsearch-app/src/templates/**/*",
     "packages/algolia-experiences"

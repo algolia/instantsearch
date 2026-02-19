@@ -1,65 +1,65 @@
-import { waitForUrl } from './utils';
+import { test, expect } from '@playwright/test';
 
-describe('browser back/forward buttons works on routes pushed by InstantSearch', () => {
-  it('works when not on a i18n route', async () => {
-    await browser.url('/');
+test.describe('browser back/forward buttons works on routes pushed by InstantSearch', () => {
+  test('works when not on a i18n route', async ({ page }) => {
+    await page.goto('/');
 
-    const appleRefinementListItem = await $(
+    const appleRefinementListItem = page.locator(
       '.ais-RefinementList-checkbox[value="Apple"]'
     );
     await appleRefinementListItem.click();
 
     const urlWithRefinement =
       'http://localhost:3000/?instant_search%5BrefinementList%5D%5Bbrand%5D%5B0%5D=Apple';
-    await waitForUrl(urlWithRefinement);
+    await page.waitForURL(urlWithRefinement);
 
     // Ensure push was done by Next.js router
-    const historyState = (await browser.execute(
-      'return window.history.state'
-    )) as History['state'];
+    const historyState = await page.evaluate(() => window.history.state);
     expect(historyState.__N).toBe(true);
 
-    const link = await $('.ais-Hits-item');
+    const link = page.locator('.ais-Hits-item a').first();
     await link.click();
 
-    await waitForUrl('http://localhost:3000/other-page');
+    await expect(page).toHaveURL('http://localhost:3000/other-page');
 
-    await browser.back();
+    await page.goBack();
 
-    await waitForUrl(urlWithRefinement);
+    await expect(page).toHaveURL(urlWithRefinement);
 
-    const checkbox = await $('.ais-RefinementList-checkbox[value="Apple"]');
-    expect(await checkbox.getAttribute('checked')).toBe('true');
+    const checkbox = page.locator(
+      '.ais-RefinementList-checkbox[value="Apple"]'
+    );
+    await expect(checkbox).toBeChecked();
   });
 
-  it('works when on a i18n route', async () => {
-    await browser.url('/fr');
+  test('works when on a i18n route', async ({ page }) => {
+    await page.goto('/fr');
 
-    const appleRefinementListItem = await $(
+    const appleRefinementListItem = page.locator(
       '.ais-RefinementList-checkbox[value="Apple"]'
     );
     await appleRefinementListItem.click();
 
     const urlWithRefinement =
       'http://localhost:3000/fr?instant_search%5BrefinementList%5D%5Bbrand%5D%5B0%5D=Apple';
-    await waitForUrl(urlWithRefinement);
+    await page.waitForURL(urlWithRefinement);
 
     // Ensure push was done by Next.js router
-    const historyState = (await browser.execute(
-      'return window.history.state'
-    )) as History['state'];
+    const historyState = await page.evaluate(() => window.history.state);
     expect(historyState.__N).toBe(true);
 
-    const link = await $('.ais-Hits-item');
+    const link = page.locator('.ais-Hits-item a').first();
     await link.click();
 
-    await waitForUrl('http://localhost:3000/fr/other-page');
+    await expect(page).toHaveURL('http://localhost:3000/fr/other-page');
 
-    await browser.back();
+    await page.goBack();
 
-    await waitForUrl(urlWithRefinement);
+    await expect(page).toHaveURL(urlWithRefinement);
 
-    const checkbox = await $('.ais-RefinementList-checkbox[value="Apple"]');
-    expect(await checkbox.getAttribute('checked')).toBe('true');
+    const checkbox = page.locator(
+      '.ais-RefinementList-checkbox[value="Apple"]'
+    );
+    await expect(checkbox).toBeChecked();
   });
 });

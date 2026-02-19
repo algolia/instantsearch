@@ -76,13 +76,18 @@ workflows:
             branches:
               only:
                 - master
-      - e2e tests:
+      - e2e tests playwright:
           context: fx-libraries
           requires:
             - examples
-          matrix:
-            parameters:
-              browser: [chrome, firefox, internet explorer]
+          filters:
+            branches:
+              only:
+                - master
+      - e2e tests ie11:
+          context: fx-libraries
+          requires:
+            - examples
           filters:
             branches:
               only:
@@ -113,7 +118,7 @@ workflows:
             - legacy algoliasearch v3
             - legacy algoliasearch v4
             - helper docs
-            - e2e tests
+            - e2e tests playwright
           filters:
             branches:
               only:
@@ -141,13 +146,14 @@ workflows:
       - examples:
           requires:
             - build
-      - e2e tests:
+      - e2e tests playwright:
           context: fx-libraries
           requires:
             - examples
-          matrix:
-            parameters:
-              browser: [chrome, firefox, internet explorer]
+      - e2e tests ie11:
+          context: fx-libraries
+          requires:
+            - examples
       - e2e tests router nextjs:
           context: fx-libraries
           requires:
@@ -331,13 +337,8 @@ jobs:
           paths:
             - website/algoliasearch-helper-js
 
-  e2e tests:
+  e2e tests playwright:
     <<: *defaults
-    parameters:
-      browser:
-        type: string
-    environment:
-      E2E_BROWSER: << parameters.browser >>
     resource_class: large
     steps:
       - checkout
@@ -346,14 +347,18 @@ jobs:
       - *restore_yarn_cache
       - *run_yarn_install
       - run:
-          name: End-to-end tests
-          command: yarn run test:e2e:saucelabs
+          name: Install Playwright browsers
+          command: npx playwright install --with-deps chromium firefox
+      - run:
+          name: End-to-end tests (Playwright)
+          command: yarn run test:e2e:playwright
       - store_test_results:
-          path: junit/wdio/
+          path: tests/e2e/junit/playwright/
+      - store_artifacts:
+          path: tests/e2e/playwright/playwright-report/
       - slack/notify:
           channel: $SLACK_E2E_NOTIF_CHANNEL
           event: fail
-          # See: https://app.slack.com/block-kit-builder/
           custom: |
             {
               "blocks": [
@@ -374,7 +379,64 @@ jobs:
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*Browser*: << parameters.browser >>"
+                      "text": "*Framework*: Playwright"
+                    }
+                  ]
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "CircleCI"
+                      },
+                      "url": "$CIRCLE_BUILD_URL"
+                    }
+                  ]
+                }
+              ]
+            }
+
+  e2e tests ie11:
+    <<: *defaults
+    resource_class: large
+    steps:
+      - checkout
+      - *attach_workspace
+      - *install_yarn_version
+      - *restore_yarn_cache
+      - *run_yarn_install
+      - run:
+          name: End-to-end tests (IE11)
+          command: yarn run test:e2e:ie11
+      - store_test_results:
+          path: tests/e2e/junit/wdio/
+      - slack/notify:
+          channel: $SLACK_E2E_NOTIF_CHANNEL
+          event: fail
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": ":warning: End-to-end tests failed",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Project*: $CIRCLE_PROJECT_REPONAME"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Browser*: Internet Explorer 11"
                     }
                   ]
                 },
@@ -412,10 +474,15 @@ jobs:
       - *restore_yarn_cache
       - *run_yarn_install
       - run:
-          name: End-to-end tests
-          command: yarn workspace react-instantsearch-router-nextjs run test:e2e:saucelabs
+          name: Install Playwright browsers
+          command: npx playwright install --with-deps chromium firefox
+      - run:
+          name: End-to-end tests (Playwright)
+          command: yarn workspace react-instantsearch-router-nextjs run test:e2e
       - store_test_results:
-          path: packages/react-instantsearch-router-nextjs/junit/wdio/
+          path: packages/react-instantsearch-router-nextjs/junit/playwright/
+      - store_artifacts:
+          path: packages/react-instantsearch-router-nextjs/playwright-report/
 
   e2e tests app router nextjs:
     <<: *defaults
@@ -427,10 +494,15 @@ jobs:
       - *restore_yarn_cache
       - *run_yarn_install
       - run:
-          name: End-to-end tests
-          command: yarn workspace react-instantsearch-nextjs run test:e2e:saucelabs
+          name: Install Playwright browsers
+          command: npx playwright install --with-deps chromium firefox
+      - run:
+          name: End-to-end tests (Playwright)
+          command: yarn workspace react-instantsearch-nextjs run test:e2e
       - store_test_results:
-          path: packages/react-instantsearch-nextjs/junit/wdio/
+          path: packages/react-instantsearch-nextjs/junit/playwright/
+      - store_artifacts:
+          path: packages/react-instantsearch-nextjs/playwright-report/
 
   release if needed:
     <<: *defaults

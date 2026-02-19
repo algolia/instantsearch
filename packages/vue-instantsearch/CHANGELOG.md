@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.23.3](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.23.2...vue-instantsearch@4.23.3) (2026-02-17)
+
+**Note:** Version bump only for package vue-instantsearch
+
+
+
+
+
+## [4.23.2](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.23.1...vue-instantsearch@4.23.2) (2026-02-10)
+
+
+### Bug Fixes
+
+* **composition:** forwards parameters in sffv ([#6889](https://github.com/algolia/instantsearch/issues/6889)) ([f908559](https://github.com/algolia/instantsearch/commit/f9085591ebb71d8f56f580c94d6afb7ccbeb5475)), closes [/github.com/algolia/instantsearch/pull/6792/changes#diff-6af3d106c335b51f0e85d49f808b248a9704cb12dab1472606b6e9a383d981b1](https://github.com//github.com/algolia/instantsearch/pull/6792/changes/issues/diff-6af3d106c335b51f0e85d49f808b248a9704cb12dab1472606b6e9a383d981b1) [/github.com/algolia/instantsearch/blob/59f8fbf1a70262ab0927f5fdcde5c3ecbd10e3ba/packages/instantsearch.js/src/lib/InstantSearch.ts#L580-L583](https://github.com//github.com/algolia/instantsearch/blob/59f8fbf1a70262ab0927f5fdcde5c3ecbd10e3ba/packages/instantsearch.js/src/lib/InstantSearch.ts/issues/L580-L583)
+
+
+
+
+
+## [4.23.1](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.23.0...vue-instantsearch@4.23.1) (2026-02-03)
+
+**Note:** Version bump only for package vue-instantsearch
+
+
+
+
+
+# [4.23.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.22.8...vue-instantsearch@4.23.0) (2026-01-27)
+
+
+### Features
+
+* add `FilterSuggestions` widget ([#6861](https://github.com/algolia/instantsearch/issues/6861)) ([3ff224f](https://github.com/algolia/instantsearch/commit/3ff224f0c0823c47ace52306ad810a98231a8f83))
+
+
+
+
+
 ## [4.22.8](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.22.7...vue-instantsearch@4.22.8) (2025-12-31)
 
 **Note:** Version bump only for package vue-instantsearch

@@ -12,9 +12,9 @@
     "allowSyntheticDefaultImports": true,
     "types": ["node", "webdriverio", "jasmine"],
     "allowJs": true,
-    "checkJs": true,
+    "checkJs": true
   },
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "playwright"],
   "include": [
     "./*.ts",
     "./*.js",

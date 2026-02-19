@@ -2,6 +2,10 @@
 
 import {
   createAutocompleteComponent,
+  createAutocompleteDetachedContainerComponent,
+  createAutocompleteDetachedOverlayComponent,
+  createAutocompleteDetachedFormContainerComponent,
+  createAutocompleteDetachedSearchButtonComponent,
   createAutocompleteIndexComponent,
   createAutocompletePanelComponent,
   createAutocompletePropGetters,
@@ -90,6 +94,29 @@ const AutocompleteRecentSearch = createAutocompleteRecentSearchComponent({
   Fragment,
 });
 
+const AutocompleteDetachedContainer =
+  createAutocompleteDetachedContainerComponent({
+    createElement: h,
+    Fragment,
+  });
+
+const AutocompleteDetachedOverlay = createAutocompleteDetachedOverlayComponent({
+  createElement: h,
+  Fragment,
+});
+
+const AutocompleteDetachedFormContainer =
+  createAutocompleteDetachedFormContainerComponent({
+    createElement: h,
+    Fragment,
+  });
+
+const AutocompleteDetachedSearchButton =
+  createAutocompleteDetachedSearchButtonComponent({
+    createElement: h,
+    Fragment,
+  });
+
 const usePropGetters = createAutocompletePropGetters({
   useEffect,
   useId,
@@ -103,6 +130,60 @@ const useStorage = createAutocompleteStorage({
   useState,
   useMemo,
 });
+
+type AutocompleteTranslations = {
+  detachedCancelButtonText: string;
+  detachedSearchButtonTitle: string;
+  detachedClearButtonTitle: string;
+};
+
+const DEFAULT_DETACHED_MEDIA_QUERY = '(max-width: 680px)';
+const DEFAULT_DETACHED_MODAL_MEDIA_QUERY = '(min-width: 680px)';
+const DETACHED_MEDIA_QUERY_CSS_VAR = '--ais-autocomplete-detached-media-query';
+const DETACHED_MODAL_MEDIA_QUERY_CSS_VAR =
+  '--ais-autocomplete-detached-modal-media-query';
+const DEFAULT_TRANSLATIONS: AutocompleteTranslations = {
+  detachedCancelButtonText: 'Cancel',
+  detachedSearchButtonTitle: 'Search',
+  detachedClearButtonTitle: 'Clear',
+};
+
+function getCssMediaQueryValue(name: string) {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return '';
+  }
+
+  return getComputedStyle(document.documentElement)
+    .getPropertyValue(name)
+    .trim();
+}
+
+function resolveMediaQuery(
+  value: string | undefined,
+  cssVarName: string,
+  fallback: string
+) {
+  if (value === '') {
+    return '';
+  }
+
+  if (value) {
+    return value;
+  }
+
+  return getCssMediaQueryValue(cssVarName) || fallback;
+}
+
+function getMediaQueryList(mediaQuery: string) {
+  if (
+    typeof window === 'undefined' ||
+    typeof window.matchMedia !== 'function'
+  ) {
+    return null;
+  }
+
+  return window.matchMedia(mediaQuery);
+}
 
 type RendererParams<TItem extends BaseHit> = {
   instanceId: number;
@@ -122,6 +203,8 @@ type RendererParams<TItem extends BaseHit> = {
       | typeof AutocompleteIndex['prototype']['props']['HeaderComponent']
       | undefined;
   };
+  detachedMediaQuery: string | undefined;
+  translations: AutocompleteTranslations;
 } & Pick<
   AutocompleteWidgetParams<TItem>,
   'getSearchPageURL' | 'onSelect' | 'showSuggestions' | 'placeholder'
@@ -251,6 +334,8 @@ type AutocompleteWrapperProps<TItem extends BaseHit> = Pick<
   | 'showRecent'
   | 'showSuggestions'
   | 'placeholder'
+  | 'detachedMediaQuery'
+  | 'translations'
 > &
   Pick<AutocompleteRenderState, 'indices' | 'refine'> &
   RendererOptions<Partial<AutocompleteWidgetParams<TItem>>>;
@@ -268,10 +353,123 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   showSuggestions,
   templates,
   placeholder,
+  detachedMediaQuery,
+  translations,
 }: AutocompleteWrapperProps<TItem>) {
   const { isolatedIndex, targetIndex } = renderState;
 
   const searchboxQuery = isolatedIndex?.getHelper()?.state.query;
+  const targetIndexQuery = targetIndex?.getHelper()?.state.query;
+
+  // Local query state for immediate updates (especially for detached search button)
+  const [localQuery, setLocalQuery] = useState(
+    searchboxQuery || targetIndexQuery || ''
+  );
+
+  // Sync local query with searchbox query when it changes externally
+  useEffect(() => {
+    // If the isolated index has a query, use it (user typing).
+    // If not, fall back to the target index query (URL/main state).
+    const query = searchboxQuery || targetIndexQuery;
+    if (query !== undefined) {
+      setLocalQuery(query);
+    }
+  }, [searchboxQuery, targetIndexQuery]);
+
+  const resolvedDetachedMediaQuery = useMemo(
+    () =>
+      resolveMediaQuery(
+        detachedMediaQuery,
+        DETACHED_MEDIA_QUERY_CSS_VAR,
+        DEFAULT_DETACHED_MEDIA_QUERY
+      ),
+    [detachedMediaQuery]
+  );
+  const [isDetached, setIsDetached] = useState(
+    resolvedDetachedMediaQuery
+      ? Boolean(getMediaQueryList(resolvedDetachedMediaQuery)?.matches)
+      : false
+  );
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalDetached, setIsModalDetached] = useState(false);
+  const previousIsDetachedRef = useRef(isDetached);
+
+  // Media query listener for detached mode
+  useEffect(() => {
+    if (!resolvedDetachedMediaQuery) {
+      setIsDetached(false);
+      return () => {};
+    }
+
+    const mql = getMediaQueryList(resolvedDetachedMediaQuery);
+    if (!mql) {
+      setIsDetached(false);
+      return () => {};
+    }
+
+    const handler = (event: MediaQueryListEvent) => {
+      const wasDetached = isDetached;
+      setIsDetached(event.matches);
+      // Close modal if switching from detached to non-detached
+      if (wasDetached && !event.matches) {
+        setIsModalOpen(false);
+      }
+    };
+
+    mql.addEventListener('change', handler);
+    return () => mql.removeEventListener('change', handler);
+  }, [resolvedDetachedMediaQuery, isDetached]);
+
+  useEffect(() => {
+    if (!isDetached) {
+      setIsModalDetached(false);
+      return () => {};
+    }
+
+    const modalMediaQuery = resolveMediaQuery(
+      undefined,
+      DETACHED_MODAL_MEDIA_QUERY_CSS_VAR,
+      DEFAULT_DETACHED_MODAL_MEDIA_QUERY
+    );
+
+    if (!modalMediaQuery) {
+      setIsModalDetached(false);
+      return () => {};
+    }
+
+    const mql = getMediaQueryList(modalMediaQuery);
+    if (!mql) {
+      setIsModalDetached(false);
+      return () => {};
+    }
+
+    const handler = (event: MediaQueryListEvent) => {
+      setIsModalDetached(event.matches);
+    };
+
+    setIsModalDetached(mql.matches);
+    mql.addEventListener('change', handler);
+    return () => mql.removeEventListener('change', handler);
+  }, [isDetached]);
+
+  // Body class management for scroll prevention
+  useEffect(() => {
+    if (typeof document === 'undefined') return () => {};
+
+    if (isModalOpen) {
+      const scrollY = window.scrollY;
+      document.body.style.top = `-${scrollY}px`;
+      document.body.classList.add('ais-Autocomplete--detached');
+
+      return () => {
+        document.body.classList.remove('ais-Autocomplete--detached');
+        document.body.style.top = '';
+        window.scrollTo(0, scrollY);
+      };
+    }
+
+    return () => {};
+  }, [isModalOpen]);
 
   const {
     storage,
@@ -311,6 +509,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       ) ?? false;
 
   const onRefine = (query: string) => {
+    setLocalQuery(query);
     refineAutocomplete(query);
     instantSearchInstance.setUiState((uiState) => ({
       ...uiState,
@@ -323,33 +522,68 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     query.length > 0 && storage.onAdd(query);
   };
 
-  const { getInputProps, getItemProps, getPanelProps, getRootProps } =
-    usePropGetters({
-      indices: indicesForPropGetters,
-      indicesConfig: indicesConfigForPropGetters,
-      onRefine,
-      onSelect:
-        userOnSelect ??
-        (({ query, setQuery, url }) => {
-          if (url) {
-            window.location.href = url;
-            return;
-          }
+  const {
+    getInputProps,
+    getItemProps,
+    getPanelProps,
+    getRootProps,
+    isOpen,
+    setIsOpen,
+    focusInput,
+  } = usePropGetters({
+    indices: indicesForPropGetters,
+    indicesConfig: indicesConfigForPropGetters,
+    onRefine,
+    onSelect:
+      userOnSelect ??
+      (({ query, setQuery, url }) => {
+        if (url) {
+          window.location.href = url;
+          return;
+        }
 
-          if (!isSearchPage && typeof getSearchPageURL !== 'undefined') {
-            const indexUiState =
-              instantSearchInstance.getUiState()[targetIndex!.getIndexId()];
-            window.location.href = getSearchPageURL({ ...indexUiState, query });
-            return;
-          }
+        if (!isSearchPage && typeof getSearchPageURL !== 'undefined') {
+          const indexUiState =
+            instantSearchInstance.getUiState()[targetIndex!.getIndexId()];
+          window.location.href = getSearchPageURL({ ...indexUiState, query });
+          return;
+        }
 
-          setQuery(query);
-        }),
-      onApply: (query: string) => {
-        refineAutocomplete(query);
-      },
-      placeholder,
-    });
+        setQuery(query);
+      }),
+    onApply: (query: string) => {
+      refineAutocomplete(query);
+    },
+    onSubmit: () => {
+      // Close the detached modal when form is submitted
+      if (isDetached) {
+        setIsModalOpen(false);
+      }
+    },
+    placeholder,
+    isDetached,
+  });
+
+  // Open panel and focus input when modal opens
+  useEffect(() => {
+    if (isDetached && isModalOpen) {
+      setIsOpen(true);
+      // Focus input to show the keyboard on mobile
+      focusInput();
+    }
+  }, [isDetached, isModalOpen, setIsOpen, focusInput]);
+
+  // Keep the modal open if the panel was open before switching to detached
+  useEffect(() => {
+    const wasDetached = previousIsDetachedRef.current;
+    const switchedToDetached = !wasDetached && isDetached;
+
+    if (switchedToDetached && isOpen) {
+      setIsModalOpen(true);
+    }
+
+    previousIsDetachedRef.current = isDetached;
+  }, [isDetached, isOpen, setIsModalOpen]);
 
   const elements: PanelElements = {};
   if (showRecent) {
@@ -454,32 +688,98 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     );
   });
 
+  const searchBoxContent = (
+    <AutocompleteSearchBox
+      query={localQuery}
+      inputProps={{
+        ...getInputProps(),
+        onInput: (event) => {
+          const query = (event.currentTarget as HTMLInputElement).value;
+          setLocalQuery(query);
+          refineAutocomplete(query);
+        },
+      }}
+      onClear={() => {
+        onRefine('');
+      }}
+      isSearchStalled={instantSearchInstance.status === 'stalled'}
+    />
+  );
+
+  const panelContent = (
+    <AutocompletePanel {...getPanelProps()}>
+      {templates.panel ? (
+        <TemplateComponent
+          {...renderState.templateProps}
+          templateKey="panel"
+          rootTagName="fragment"
+          data={{ elements, indices }}
+        />
+      ) : (
+        Object.keys(elements).map((elementId) => elements[elementId])
+      )}
+    </AutocompletePanel>
+  );
+  const detachedContainerCssClasses = isModalDetached
+    ? {
+        ...cssClasses,
+        detachedContainer: cx(
+          'ais-AutocompleteDetachedContainer--modal',
+          cssClasses.detachedContainer
+        ),
+      }
+    : cssClasses;
+
+  if (isDetached) {
+    return (
+      <Autocomplete {...getRootProps()} classNames={cssClasses}>
+        <AutocompleteDetachedSearchButton
+          query={localQuery}
+          placeholder={placeholder}
+          classNames={cssClasses}
+          onClick={() => {
+            setIsModalOpen(true);
+            setIsOpen(true);
+          }}
+          onClear={() => {
+            onRefine('');
+          }}
+          translations={translations}
+        />
+        {isModalOpen && (
+          <AutocompleteDetachedOverlay
+            classNames={cssClasses}
+            onClose={() => {
+              setIsModalOpen(false);
+              setIsOpen(false);
+            }}
+          >
+            <AutocompleteDetachedContainer
+              classNames={detachedContainerCssClasses}
+            >
+              <AutocompleteDetachedFormContainer
+                classNames={cssClasses}
+                onCancel={() => {
+                  setIsModalOpen(false);
+                  setIsOpen(false);
+                }}
+                translations={translations}
+              >
+                {searchBoxContent}
+              </AutocompleteDetachedFormContainer>
+              {panelContent}
+            </AutocompleteDetachedContainer>
+          </AutocompleteDetachedOverlay>
+        )}
+      </Autocomplete>
+    );
+  }
+
+  // Normal (non-detached) rendering
   return (
     <Autocomplete {...getRootProps()} classNames={cssClasses}>
-      <AutocompleteSearchBox
-        query={searchboxQuery || ''}
-        inputProps={{
-          ...getInputProps(),
-          onInput: (event) =>
-            refineAutocomplete((event.currentTarget as HTMLInputElement).value),
-        }}
-        onClear={() => {
-          onRefine('');
-        }}
-        isSearchStalled={instantSearchInstance.status === 'stalled'}
-      />
-      <AutocompletePanel {...getPanelProps()}>
-        {templates.panel ? (
-          <TemplateComponent
-            {...renderState.templateProps}
-            templateKey="panel"
-            rootTagName="fragment"
-            data={{ elements, indices }}
-          />
-        ) : (
-          Object.keys(elements).map((elementId) => elements[elementId])
-        )}
-      </AutocompletePanel>
+      {searchBoxContent}
+      {panelContent}
     </Autocomplete>
   );
 }
@@ -595,6 +895,20 @@ type AutocompleteWidgetParams<TItem extends BaseHit> = {
    * Placeholder text for the search input.
    */
   placeholder?: string;
+
+  /**
+   * Media query to enable detached (mobile) mode.
+   * When the media query matches, the autocomplete switches to a full-screen overlay.
+   * Set to empty string to disable detached mode.
+   * When omitted, defaults to `--ais-autocomplete-detached-media-query`.
+   * @default "(max-width: 680px)"
+   */
+  detachedMediaQuery?: string;
+
+  /**
+   * Translations for the Autocomplete widget.
+   */
+  translations?: Partial<AutocompleteTranslations>;
 };
 
 export type AutocompleteWidget<TItem extends BaseHit = BaseHit> = WidgetFactory<
@@ -619,6 +933,8 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     transformItems,
     cssClasses: userCssClasses = {},
     placeholder,
+    detachedMediaQuery,
+    translations: userTranslations = {},
   } = widgetParams || {};
 
   if (!container) {
@@ -692,6 +1008,11 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
   const showRecentOptions =
     typeof shouldShowRecent === 'boolean' ? {} : shouldShowRecent;
 
+  const translations: AutocompleteTranslations = {
+    ...DEFAULT_TRANSLATIONS,
+    ...userTranslations,
+  };
+
   const specializedRenderer = createRenderer({
     instanceId,
     containerNode,
@@ -702,6 +1023,8 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
     showRecent: showRecentOptions,
     showSuggestions,
     placeholder,
+    detachedMediaQuery,
+    translations,
     renderState: {
       indexTemplateProps: [],
       isolatedIndex: undefined,

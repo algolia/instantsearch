@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "es2016",
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "noEmit": true,
     "strict": true,
     "noUnusedLocals": true,
@@ -10,9 +10,9 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
-    "types": ["node", "webdriverio", "jasmine"],
-    "allowJs": true,
-    "checkJs": true
+    "esModuleInterop": true
   },
-  "exclude": ["node_modules"]
+  "include": [
+    "./**/*.ts"
+  ]
 }

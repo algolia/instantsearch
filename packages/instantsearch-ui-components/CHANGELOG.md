@@ -3,6 +3,48 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.18.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.17.1...instantsearch-ui-components@0.18.0) (2026-02-17)
+
+
+### Features
+
+* **autocomplete:** add responsive detached mode ([#6898](https://github.com/algolia/instantsearch/issues/6898)) ([ac15ace](https://github.com/algolia/instantsearch/commit/ac15acebec121c547b3517e7ac9ad81cea6ae264))
+* **chat:** handle setting refinements from the search index tool 'view all' button ([#6866](https://github.com/algolia/instantsearch/issues/6866)) ([e68506f](https://github.com/algolia/instantsearch/commit/e68506f45b0123cc2dac5dd0ed2b1ee336b8c646))
+
+
+
+
+
+## [0.17.1](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.17.0...instantsearch-ui-components@0.17.1) (2026-02-03)
+
+
+### Bug Fixes
+
+* **autocomplete:** hide header when there are no items to display ([#6883](https://github.com/algolia/instantsearch/issues/6883)) ([81e677a](https://github.com/algolia/instantsearch/commit/81e677ac9e891d685005b0c0f4752b9b05737c9e))
+* **ui-components:** export `ChatPromptSuggestions` component from index ([#6885](https://github.com/algolia/instantsearch/issues/6885)) ([0b75380](https://github.com/algolia/instantsearch/commit/0b7538069e9207c0f4629ffd78236e7dca79dd24))
+
+
+
+
+
+# [0.17.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.16.0...instantsearch-ui-components@0.17.0) (2026-01-27)
+
+
+### Bug Fixes
+
+* **autocomplete:** item ids are shifted when there are deduped items ([#6862](https://github.com/algolia/instantsearch/issues/6862)) ([2b24d3b](https://github.com/algolia/instantsearch/commit/2b24d3b864549fca2a9d75f704e33095846ccbaa))
+
+
+### Features
+
+* add `FilterSuggestions` widget ([#6861](https://github.com/algolia/instantsearch/issues/6861)) ([3ff224f](https://github.com/algolia/instantsearch/commit/3ff224f0c0823c47ace52306ad810a98231a8f83))
+* **autocomplete:** add `transformItems` prop ([#6853](https://github.com/algolia/instantsearch/issues/6853)) ([664892a](https://github.com/algolia/instantsearch/commit/664892a51c290433530ccf6314305b3e9228e8c3))
+* **chat:** support prompt suggestions ([#6831](https://github.com/algolia/instantsearch/issues/6831)) ([aca8934](https://github.com/algolia/instantsearch/commit/aca8934163c047ca56db0dad679737f331efac29))
+
+
+
+
+
 # [0.16.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.15.2...instantsearch-ui-components@0.16.0) (2025-12-30)
 
 

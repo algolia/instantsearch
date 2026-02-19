@@ -4,8 +4,9 @@ import {
   createSingleSearchResponse,
 } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
-import { screen } from '@testing-library/dom';
+import { screen, waitFor } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
+import React from 'react';
 
 import type { AutocompleteWidgetSetup } from '.';
 import type { TestOptions } from '../../common';
@@ -274,6 +275,70 @@ export function createOptionsTests(
         '.ais-AutocompleteRecentSearchesItem'
       );
       expect(newRecentSearches).toHaveLength(0);
+    });
+
+    test('does not render recent searches header when there are no recent searches', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'query_suggestions',
+            hits: [
+              { objectID: '1', query: 'hello' },
+              { objectID: '2', query: 'hi' },
+            ],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'query_suggestions',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            showSuggestions: {
+              indexName: 'query_suggestions',
+            },
+            showRecent: {
+              templates: {
+                header: () => 'Recent Searches',
+              },
+            },
+          },
+          react: {
+            showSuggestions: {
+              indexName: 'query_suggestions',
+            },
+            showRecent: {
+              headerComponent: () => (
+                <React.Fragment>Recent Searches</React.Fragment>
+              ),
+            },
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      // No recent searches yet, so the header should not be rendered
+      expect(
+        document.querySelector('.ais-AutocompleteRecentSearchesHeader')
+      ).not.toBeInTheDocument();
+
+      // Click on a suggestion to add it to recent searches
+      await act(async () => {
+        screen.getByText('hello').click();
+        await wait(0);
+      });
+
+      // Now the header should be visible
+      expect(
+        document.querySelector('.ais-AutocompleteRecentSearchesHeader')
+      ).toHaveTextContent('Recent Searches');
     });
 
     test('forwards search params to each index', async () => {
@@ -619,8 +684,8 @@ export function createOptionsTests(
       const input = screen.getByRole('combobox', { name: /submit/i });
 
       await act(async () => {
-        userEvent.click(input);
-        userEvent.type(input, 'Item 3');
+        await userEvent.click(input);
+        await userEvent.paste(input, 'Item 3');
         await wait(0);
       });
 
@@ -1211,6 +1276,436 @@ export function createOptionsTests(
           }),
         ])
       );
+    });
+
+    describe('detached mode', () => {
+      const detachedMediaQuery = '(max-width: 680px)';
+      const detachedModalMediaQuery = '(min-width: 680px)';
+
+      function mockMatchMedia(matches: boolean) {
+        Object.defineProperty(window, 'matchMedia', {
+          writable: true,
+          value: jest.fn().mockImplementation((query: string) => ({
+            matches,
+            media: query,
+            onchange: null,
+            addListener: jest.fn(),
+            removeListener: jest.fn(),
+            addEventListener: jest.fn(),
+            removeEventListener: jest.fn(),
+            dispatchEvent: jest.fn(),
+          })),
+        });
+      }
+
+      function createDynamicMatchMedia(
+        initialMatches: Record<string, boolean>
+      ): {
+        matchMedia: typeof window.matchMedia;
+        setMatches: (query: string, matches: boolean) => void;
+      } {
+        const listeners = new Map<string, Set<EventListener>>();
+        const mqlMap = new Map<string, MediaQueryList>();
+
+        const getMql = (query: string) => {
+          if (!mqlMap.has(query)) {
+            const listenerSet = new Set<EventListener>();
+            listeners.set(query, listenerSet);
+
+            const mql: MediaQueryList = {
+              matches: Boolean(initialMatches[query]),
+              media: query,
+              onchange: null,
+              addListener: jest.fn(),
+              removeListener: jest.fn(),
+              addEventListener: jest.fn(
+                (eventName: string, cb: EventListener) => {
+                  if (eventName === 'change') {
+                    listenerSet.add(cb);
+                  }
+                }
+              ),
+              removeEventListener: jest.fn(
+                (eventName: string, cb: EventListener) => {
+                  if (eventName === 'change') {
+                    listenerSet.delete(cb);
+                  }
+                }
+              ),
+              dispatchEvent: jest.fn(),
+            };
+
+            mqlMap.set(query, mql);
+          }
+
+          return mqlMap.get(query)!;
+        };
+
+        return {
+          matchMedia: jest.fn().mockImplementation(getMql),
+          setMatches: (query: string, matches: boolean) => {
+            const mql = getMql(query);
+            Object.defineProperty(mql, 'matches', {
+              configurable: true,
+              value: matches,
+            });
+
+            const event = new Event('change');
+            Object.defineProperty(event, 'matches', {
+              configurable: true,
+              value: matches,
+            });
+            Object.defineProperty(event, 'media', {
+              configurable: true,
+              value: query,
+            });
+
+            listeners.get(query)?.forEach((listener) => listener(event));
+          },
+        };
+      }
+
+      afterEach(() => {
+        mockMatchMedia(false);
+        document.body.classList.remove('ais-Autocomplete--detached');
+      });
+
+      test('renders detached search button and toggles overlay', async () => {
+        mockMatchMedia(true);
+
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'indexName',
+              hits: [{ objectID: '1', name: 'Item 1' }],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              detachedMediaQuery,
+              indices: [
+                {
+                  indexName: 'indexName',
+                  templates: { item: (props) => props.item.name },
+                },
+              ],
+            },
+            react: {
+              detachedMediaQuery,
+              indices: [
+                {
+                  indexName: 'indexName',
+                  itemComponent: (props) => props.item.name,
+                },
+              ],
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-AutocompleteDetachedSearchButton')
+        ).toBeInTheDocument();
+        expect(document.querySelector('.ais-AutocompleteForm')).toBeNull();
+
+        await act(async () => {
+          userEvent.click(
+            document.querySelector('.ais-AutocompleteDetachedSearchButton')!
+          );
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-AutocompleteDetachedOverlay')
+        ).toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-AutocompleteDetachedContainer')
+        ).toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-AutocompleteForm')
+        ).toBeInTheDocument();
+
+        await act(async () => {
+          userEvent.click(
+            document.querySelector('.ais-AutocompleteDetachedOverlay')!
+          );
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-AutocompleteDetachedOverlay')
+        ).toBeNull();
+        expect(
+          document.querySelector('.ais-AutocompleteDetachedContainer')
+        ).toBeNull();
+      });
+
+      test('renders regular mode when detached media query does not match', async () => {
+        mockMatchMedia(false);
+
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'indexName',
+              hits: [{ objectID: '1', name: 'Item 1' }],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              detachedMediaQuery,
+              indices: [
+                {
+                  indexName: 'indexName',
+                  templates: { item: (props) => props.item.name },
+                },
+              ],
+            },
+            react: {
+              detachedMediaQuery,
+              indices: [
+                {
+                  indexName: 'indexName',
+                  itemComponent: (props) => props.item.name,
+                },
+              ],
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-AutocompleteForm')
+        ).toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-AutocompleteDetachedSearchButton')
+        ).toBeNull();
+      });
+
+      test('supports custom detached mode translations', async () => {
+        mockMatchMedia(true);
+
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'indexName',
+              hits: [{ objectID: '1', name: 'Item 1' }],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              detachedMediaQuery,
+              translations: {
+                detachedCancelButtonText: 'Annuler',
+                detachedSearchButtonTitle: 'Rechercher',
+              },
+              indices: [
+                {
+                  indexName: 'indexName',
+                  templates: { item: (props) => props.item.name },
+                },
+              ],
+            },
+            react: {
+              detachedMediaQuery,
+              translations: {
+                detachedCancelButtonText: 'Annuler',
+                detachedSearchButtonTitle: 'Rechercher',
+              },
+              indices: [
+                {
+                  indexName: 'indexName',
+                  itemComponent: (props) => props.item.name,
+                },
+              ],
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-AutocompleteDetachedSearchButton')
+        ).toHaveAttribute('title', 'Rechercher');
+
+        await act(async () => {
+          userEvent.click(
+            document.querySelector('.ais-AutocompleteDetachedSearchButton')!
+          );
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-AutocompleteDetachedCancelButton')
+        ).toHaveTextContent('Annuler');
+      });
+
+      test('disables detached mode when detachedMediaQuery is empty', async () => {
+        mockMatchMedia(true);
+
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'indexName',
+              hits: [{ objectID: '1', name: 'Item 1' }],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              detachedMediaQuery: '',
+              indices: [
+                {
+                  indexName: 'indexName',
+                  templates: { item: (props) => props.item.name },
+                },
+              ],
+            },
+            react: {
+              detachedMediaQuery: '',
+              indices: [
+                {
+                  indexName: 'indexName',
+                  itemComponent: (props) => props.item.name,
+                },
+              ],
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-AutocompleteForm')
+        ).toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-AutocompleteDetachedSearchButton')
+        ).toBeNull();
+      });
+
+      test('keeps detached modal open when switching from non-detached mode', async () => {
+        const { matchMedia, setMatches } = createDynamicMatchMedia({
+          [detachedMediaQuery]: false,
+          [detachedModalMediaQuery]: true,
+        });
+
+        Object.defineProperty(window, 'matchMedia', {
+          writable: true,
+          value: matchMedia,
+        });
+
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'indexName',
+              hits: [{ objectID: '1', name: 'Item 1' }],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              detachedMediaQuery,
+              indices: [
+                {
+                  indexName: 'indexName',
+                  templates: { item: (props) => props.item.name },
+                },
+              ],
+            },
+            react: {
+              detachedMediaQuery,
+              indices: [
+                {
+                  indexName: 'indexName',
+                  itemComponent: (props) => props.item.name,
+                },
+              ],
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        const input = screen.getByRole('combobox', { name: /submit/i });
+
+        await act(async () => {
+          userEvent.click(input);
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-AutocompletePanel--open')
+        ).toBeInTheDocument();
+
+        await act(async () => {
+          setMatches(detachedMediaQuery, true);
+          await wait(0);
+          await wait(0);
+        });
+
+        await waitFor(() => {
+          expect(
+            document.querySelector('.ais-AutocompleteDetachedOverlay')
+          ).toBeInTheDocument();
+        });
+        await waitFor(() => {
+          expect(
+            document.querySelector('.ais-AutocompleteDetachedContainer')
+          ).toBeInTheDocument();
+          expect(
+            document.querySelector('.ais-AutocompleteDetachedContainer')
+          ).toHaveClass('ais-AutocompleteDetachedContainer--modal');
+        });
+      });
     });
 
     describe('transformItems', () => {

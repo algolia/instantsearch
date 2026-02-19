@@ -12,6 +12,9 @@ https://www.algolia.com/doc/guides/building-search-ui/installation/react/#instal
 export * from './FilterSuggestions';
 export const SearchIndexToolType = undefined;
 export const RecommendToolType = undefined;
+export const MemorizeToolType = undefined;
+export const MemorySearchToolType = undefined;
+export const PonderToolType = undefined;
 export const createDefaultTools = () => {};
 
 export * from './ClearRefinements';
