@@ -927,21 +927,13 @@ type AutocompleteWidgetParams<TItem extends BaseHit> = {
   showQuerySuggestions?: Partial<
     Pick<
       IndexConfig<{ query: string }>,
-      | 'indexName'
-      | 'getURL'
-      | 'templates'
-      | 'cssClasses'
-      | 'searchParameters'
+      'indexName' | 'getURL' | 'templates' | 'cssClasses' | 'searchParameters'
     >
   >;
   showPromptSuggestions?: Partial<
     Pick<
       IndexConfig<{ query: string; label?: string }>,
-      | 'indexName'
-      | 'getURL'
-      | 'templates'
-      | 'cssClasses'
-      | 'searchParameters'
+      'indexName' | 'getURL' | 'templates' | 'cssClasses' | 'searchParameters'
     >
   >;
 
@@ -1119,7 +1111,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
           onSelect: onSelectItem,
         }: {
           item: {
-            query: string;
+            prompt: string;
             label?: string;
             __isPromptSuggestionFallback?: boolean;
           };
@@ -1127,9 +1119,10 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
         }) => (
           <AutocompletePromptSuggestion item={item} onSelect={onSelectItem}>
             {isPromptSuggestionFallback(item)
-              ? item.label || item.query
+              ? item.label || item.prompt
               : renderConditionalHighlight({
-                  item: item as unknown as Hit<{ query: string }>,
+                  item: item as unknown as Hit<{ prompt: string }>,
+                  attribute: 'prompt',
                 })}
           </AutocompletePromptSuggestion>
         ),
@@ -1239,20 +1232,19 @@ function ConditionalReverseHighlight<TItem extends { query: string }>({
   return <ReverseHighlight attribute="query" hit={item} />;
 }
 
-function renderConditionalHighlight<TItem extends { query: string }>({
-  item,
-}: {
-  item: Hit<TItem>;
-}) {
+function renderConditionalHighlight<
+  TItem extends BaseHit,
+  TAttribute extends keyof TItem & string = keyof TItem & string
+>({ item, attribute }: { item: Hit<TItem>; attribute: TAttribute }) {
   if (
-    !item._highlightResult?.query ||
+    !item._highlightResult?.[attribute] ||
     // @ts-expect-error - we should not have matchLevel as arrays here
-    item._highlightResult.query.matchLevel === 'none'
+    item._highlightResult[attribute].matchLevel === 'none'
   ) {
-    return item.query;
+    return item[attribute];
   }
 
-  return <Highlight attribute="query" hit={item} />;
+  return <Highlight attribute={attribute} hit={item} />;
 }
 
 function getPromptSuggestionHits({

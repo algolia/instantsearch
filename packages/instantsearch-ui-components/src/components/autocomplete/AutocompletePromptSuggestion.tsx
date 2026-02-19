@@ -6,7 +6,7 @@ import { SparklesIcon } from '../chat/icons';
 import type { ComponentChildren, Renderer } from '../../types';
 
 export type AutocompletePromptSuggestionProps<
-  T = { query: string; label?: string } & Record<string, unknown>
+  T = { prompt: string; label?: string } & Record<string, unknown>
 > = {
   item: T;
   onSelect: () => void;
