@@ -3,6 +3,7 @@
  */
 
 import { createSearchClient } from '@instantsearch/mocks';
+import { waitFor } from '@testing-library/dom';
 import algoliasearchHelper from 'algoliasearch-helper';
 
 import {
@@ -388,6 +389,58 @@ describe('connectChat', () => {
           addToolResult: expect.any(Function),
           applyFilters: expect.any(Function),
         },
+      });
+    });
+  });
+
+  describe('default chat instance', () => {
+    it('adds a compatibility layer for Algolia MCP Server search tool', async () => {
+      const onSearchToolCall = jest.fn();
+
+      const { widget } = getInitializedWidget({
+        agentId: undefined,
+        transport: {
+          fetch: () =>
+            Promise.resolve(
+              new Response(
+                `data: {"type": "start", "messageId": "test-id"}
+
+data: {"type": "start-step"}
+
+data: {"type": "tool-input-available", "toolCallId": "call_1", "toolName": "algolia_search_index_movies", "input": {"query": "Toy Story", "attributesToRetrieve": ["year"], "hitsPerPage": 1}}
+
+data: {"type":"tool-output-available","toolCallId":"call_1","output":{"results":[{"hits":[]}]}}
+
+data: {"type": "finish-step"}
+
+data: {"type": "finish"}
+
+data: [DONE]`,
+                {
+                  headers: { 'Content-Type': 'text/event-stream' },
+                }
+              )
+            ),
+        },
+        tools: { algolia_search_index: { onToolCall: onSearchToolCall } },
+      });
+
+      const { chatInstance } = widget;
+
+      // Simulate sending a message that triggers the tool call
+      await chatInstance.sendMessage({
+        id: 'message-id',
+        role: 'user',
+        parts: [{ type: 'text', text: 'Trigger tool call' }],
+      });
+
+      await waitFor(() => {
+        expect(onSearchToolCall).toHaveBeenCalledWith(
+          expect.objectContaining({
+            toolCallId: 'call_1',
+            toolName: 'algolia_search_index_movies',
+          })
+        );
       });
     });
   });

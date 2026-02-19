@@ -144,6 +144,9 @@ export type ChatMessageProps = ComponentProps<'article'> & {
   translations?: Partial<ChatMessageTranslations>;
 };
 
+// Keep in sync with packages/instantsearch.js/src/lib/chat/index.ts
+const SearchIndexToolType = 'algolia_search_index';
+
 export function createChatMessageComponent({ createElement }: Renderer) {
   const Button = createButtonComponent({ createElement });
 
@@ -208,7 +211,12 @@ export function createChatMessageComponent({ createElement }: Renderer) {
       }
       if (startsWith(part.type, 'tool-')) {
         const toolName = part.type.replace('tool-', '');
-        const tool = tools[toolName];
+        let tool = tools[toolName];
+
+        // Compatibility shim with Algolia MCP Server search tool
+        if (!tool && startsWith(toolName, `${SearchIndexToolType}_`)) {
+          tool = tools[SearchIndexToolType];
+        }
 
         if (tool) {
           const ToolLayoutComponent = tool.layoutComponent;

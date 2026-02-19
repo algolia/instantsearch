@@ -2,7 +2,7 @@ import {
   DefaultChatTransport,
   lastAssistantMessageIsCompleteWithToolCalls,
 } from '../../lib/ai-lite';
-import { Chat } from '../../lib/chat';
+import { Chat, SearchIndexToolType } from '../../lib/chat';
 import {
   checkRendering,
   clearRefinements,
@@ -390,7 +390,15 @@ export default (function connectChat<TWidgetParams extends UnknownWidgetParams>(
         transport,
         sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
         onToolCall({ toolCall }) {
-          const tool = tools[toolCall.toolName];
+          let tool = tools[toolCall.toolName];
+
+          // Compatibility shim with Algolia MCP Server search tool
+          if (
+            !tool &&
+            toolCall.toolName.startsWith(`${SearchIndexToolType}_`)
+          ) {
+            tool = tools[SearchIndexToolType];
+          }
 
           if (!tool) {
             if (__DEV__) {
