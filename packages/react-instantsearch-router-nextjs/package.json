@@ -38,10 +38,7 @@
   ],
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "yarn build:cjs && yarn build:es && yarn build:types",
-    "build:cjs": "BABEL_ENV=cjs babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/cjs --ignore '**/__tests__/**/*','**/__mocks__/**/*' --quiet && ../../scripts/prepare-cjs.sh",
-    "build:es:base": "BABEL_ENV=es babel src --root-mode upward --extensions '.js,.ts,.tsx' --out-dir dist/es --ignore '**/__tests__/**/*','**/__mocks__/**/*'",
-    "build:es": "yarn build:es:base --quiet",
+    "build": "BABEL_ENV=es,rollup BUILD_FORMAT=esm rollup -c rollup.config.mjs && BABEL_ENV=rollup BUILD_FORMAT=cjs rollup -c rollup.config.mjs && yarn build:types",
     "build:types": "tsc -p ./tsconfig.declaration.json --outDir ./dist/es",
     "test:exports": "node ./__tests__/module/is-es-module.mjs && node ./__tests__/module/is-cjs-module.cjs",
     "test:e2e": "playwright test",
@@ -49,6 +46,7 @@
     "watch:es": "yarn --silent build:es:base --watch"
   },
   "dependencies": {
+    "@swc/helpers": "0.5.18",
     "instantsearch.js": "4.88.0",
     "react-instantsearch-core": "7.24.0"
   },

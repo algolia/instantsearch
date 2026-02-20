@@ -4,23 +4,13 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "start": "webpack && nodemon dist/server.js",
-    "watch": "webpack --watch",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider webpack --mode=production"
+    "build": "vite build && vite build --ssr src/server.jsx",
+    "start": "yarn build && node dist/server.js"
   },
   "devDependencies": {
-    "@babel/core": "7.15.5",
-    "@babel/plugin-transform-optional-chaining": "7.25.9",
-    "@babel/polyfill": "7.4.4",
-    "@babel/preset-env": "7.4.5",
-    "@babel/preset-react": "7.0.0",
-    "babel-core": "6.26.3",
-    "babel-jest": "24.9.0",
-    "babel-loader": "8.2.2",
-    "nodemon": "1.19.3",
-    "webpack": "4.47.0",
-    "webpack-cli": "3.3.7",
-    "webpack-node-externals": "1.7.2"
+    "@vitejs/plugin-react": "4.2.1",
+    "vite": "5.0.7",
+    "vite-plugin-commonjs": "0.10.0"
   },
   "dependencies": {
     "algoliasearch": "5.1.1",

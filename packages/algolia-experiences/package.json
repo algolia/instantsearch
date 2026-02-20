@@ -16,6 +16,6 @@
     "@instantsearch/testutils": "1.80.0"
   },
   "scripts": {
-    "build": "rollup -c rollup.config.js"
+    "build": "rm -rf dist && BABEL_ENV=rollup rollup -c rollup.config.mjs"
   }
 }

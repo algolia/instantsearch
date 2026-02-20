@@ -20,6 +20,8 @@ coverage
 .next
 
 # Non-lintable source files
+## Symlinked packages in examples (already linted from their real location)
+examples/js/e-commerce-umd/public/packages
 ## Polyfills for examples, retrieved from polyfill.io
 examples/**/polyfills.js
 ## React-Native TypeScript wasn't supporting the mix of react 18 and 17
@@ -28,6 +30,8 @@ examples/react/react-native
 examples/react/next
 examples/react/next-routing
 examples/react/next-app-router
+## Excluded from global typescript config
+**/next-env.d.ts
 specs/src/env.d.ts
 ## templates that don't get installed
 packages/create-instantsearch-app/src/templates
@@ -38,3 +42,6 @@ packages/instantsearch-codemods/__testfixtures__
 **/playwright-report/**
 **/test-results/**
 tests/e2e/playwright/**
+
+## Rollup configs use import attributes syntax not yet supported by ESLint parser
+**/rollup.config.mjs

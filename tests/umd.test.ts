@@ -17,7 +17,7 @@ describe('UMD bundle', () => {
     },
     {
       name: 'react-instantsearch-core',
-      bundle: 'dist/umd/ReactInstantSearchCore.js',
+      bundle: 'dist/umd/ReactInstantSearchCore.min.js',
       globalName: 'ReactInstantSearchCore',
       dependencies: [
         'https://cdn.jsdelivr.net/npm/react@17/umd/react.production.min.js',
@@ -25,7 +25,7 @@ describe('UMD bundle', () => {
     },
     {
       name: 'react-instantsearch',
-      bundle: 'dist/umd/ReactInstantSearch.js',
+      bundle: 'dist/umd/ReactInstantSearch.min.js',
       globalName: 'ReactInstantSearch',
       dependencies: [
         'https://cdn.jsdelivr.net/npm/react@17/umd/react.production.min.js',

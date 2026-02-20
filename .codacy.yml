@@ -1,0 +1,8 @@
+---
+# Exclude build configuration files from security checks.
+# These files are build-time scripts that use Rollup's internal module resolution,
+# not web-facing code that processes untrusted user input.
+engines:
+  semgrep:
+    exclude_paths:
+      - "**/rollup.config.mjs"

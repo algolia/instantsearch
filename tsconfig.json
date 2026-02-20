@@ -27,6 +27,7 @@
     // @TODO: we need to re-enable type checking in the React Native example
     // when the RN types work with React 18.
     "examples/react/react-native",
+    "examples/js/e-commerce-umd/public/packages",
     "packages/create-instantsearch-app/src/templates/**/*"
   ]
 }

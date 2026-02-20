@@ -21,7 +21,7 @@
   ],
   "scripts": {
     "dev": "codeshift",
-    "build": "parcel build"
+    "build": "BABEL_ENV=rollup rollup -c rollup.config.mjs"
   },
   "dependencies": {
     "@codeshift/utils": "^0.2.5",
@@ -29,7 +29,6 @@
   },
   "devDependencies": {
     "@codeshift/cli": "^0.15.6",
-    "@types/jscodeshift": "^0.11.6",
-    "parcel": "2.10.0"
+    "@types/jscodeshift": "^0.11.6"
   }
 }
