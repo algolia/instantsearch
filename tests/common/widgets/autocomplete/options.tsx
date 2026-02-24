@@ -607,6 +607,22 @@ export function createOptionsTests(
         selectedItem!.id
       );
 
+      // ArrowRight should not navigate items
+      await act(async () => {
+        userEvent.keyboard('{ArrowRight}');
+        await wait(0);
+      });
+
+      expect(selectedItem!.textContent).toBe('Item 1');
+
+      // ArrowLeft should not navigate items
+      await act(async () => {
+        userEvent.keyboard('{ArrowLeft}');
+        await wait(0);
+      });
+
+      expect(selectedItem!.textContent).toBe('Item 1');
+
       await act(async () => {
         userEvent.keyboard('{ArrowUp}');
         await wait(0);
