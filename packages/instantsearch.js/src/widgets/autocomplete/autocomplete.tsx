@@ -601,7 +601,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     setIsOpen,
     focusInput,
   } = usePropGetters({
-    indices: indicesForPropGetters,
+    indices: indicesForPropGettersWithPromptSuggestions,
     indicesConfig: indicesConfigForPropGetters,
     onRefine,
     onSelect:
