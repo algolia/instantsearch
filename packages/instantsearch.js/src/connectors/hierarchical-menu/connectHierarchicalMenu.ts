@@ -259,6 +259,33 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
           );
       }
 
+      function _hasMoreItems(
+        facetValues: SearchResults.HierarchicalFacet[],
+        maxValuesPerFacet: number
+      ): boolean {
+        const currentLimit = getLimit();
+
+        return (
+          // Check if we have exhaustive items at this level
+          // If the limit is the max number of facet retrieved it is impossible to know
+          // if the facets are exhaustive. The only moment we are sure it is exhaustive
+          // is when it is strictly under the number requested unless we know that another
+          // widget has requested more values (maxValuesPerFacet > getLimit()).
+          !(maxValuesPerFacet > currentLimit
+            ? facetValues.length <= currentLimit
+            : facetValues.length < currentLimit) ||
+          // Check if any of the children are not exhaustive.
+          facetValues
+            .slice(0, limit)
+            .some(
+              (item) =>
+                Array.isArray(item.data) &&
+                item.data.length > 0 &&
+                _hasMoreItems(item.data, maxValuesPerFacet)
+            )
+        );
+      }
+
       return {
         $$type: 'ais.hierarchicalMenu',
 
@@ -360,19 +387,15 @@ const connectHierarchicalMenu: HierarchicalMenuConnector =
                 ? facetValues.data
                 : [];
 
-            // If the limit is the max number of facet retrieved it is impossible to know
-            // if the facets are exhaustive. The only moment we are sure it is exhaustive
-            // is when it is strictly under the number requested unless we know that another
-            // widget has requested more values (maxValuesPerFacet > getLimit()).
-            // Because this is used for making the search of facets unable or not, it is important
-            // to be conservative here.
-            const hasExhaustiveItems =
-              (state.maxValuesPerFacet || 0) > getLimit()
-                ? facetItems.length <= getLimit()
-                : facetItems.length < getLimit();
+            // Check if there are more items to show at any level
+            // This checks both the exhaustiveness of items retrieved from the API
+            // and whether there are hidden items at any visible child level
+            const hasMoreItems = _hasMoreItems(
+              facetItems,
+              state.maxValuesPerFacet || 0
+            );
 
-            canToggleShowMore =
-              showMore && (isShowingMore || !hasExhaustiveItems);
+            canToggleShowMore = showMore && (isShowingMore || hasMoreItems);
 
             items = transformItems(_prepareFacetValues(facetItems), {
               results,

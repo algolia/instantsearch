@@ -1,3 +1,7 @@
+/**
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ */
+
 import {
   createCompositionClient,
   createSearchClient,

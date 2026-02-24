@@ -14,15 +14,15 @@ export type BreadcrumbWidgetSetup = TestSetup<{
 
 export function createBreadcrumbWidgetTests(
   setup: BreadcrumbWidgetSetup,
-  { act = fakeAct, skippedTests = {} }: TestOptions = {}
+  { act = fakeAct, skippedTests = {}, flavor = 'javascript' }: TestOptions = {}
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
   describe('Breadcrumb widget common tests', () => {
-    createOptimisticUiTests(setup, { act, skippedTests });
-    createOptionsTests(setup, { act, skippedTests });
-    createLinksTests(setup, { act, skippedTests });
+    createOptimisticUiTests(setup, { act, skippedTests, flavor });
+    createOptionsTests(setup, { act, skippedTests, flavor });
+    createLinksTests(setup, { act, skippedTests, flavor });
   });
 }

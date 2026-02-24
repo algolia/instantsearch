@@ -12,14 +12,14 @@ export type FrequentlyBoughtTogetherConnectorSetup = TestSetup<{
 
 export function createFrequentlyBoughtTogetherConnectorTests(
   setup: FrequentlyBoughtTogetherConnectorSetup,
-  { act = fakeAct, skippedTests = {} }: TestOptions = {}
+  { act = fakeAct, skippedTests = {}, flavor = 'javascript' }: TestOptions = {}
 ) {
   beforeAll(() => {
     document.body.innerHTML = '';
   });
 
   describe('FrequentlyBoughtTogether connector common tests', () => {
-    createOptionsTests(setup, { act, skippedTests });
-    createStateTests(setup, { act, skippedTests });
+    createOptionsTests(setup, { act, skippedTests, flavor });
+    createStateTests(setup, { act, skippedTests, flavor });
   });
 }

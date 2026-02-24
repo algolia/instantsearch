@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { connectAutocomplete } from 'instantsearch.js/es/connectors';
+import { connectAutocomplete } from 'instantsearch.js/es/connectors/index.umd';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';

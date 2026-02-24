@@ -12,13 +12,13 @@ export type ToggleRefinementWidgetSetup = TestSetup<{
 
 export function createToggleRefinementWidgetTests(
   setup: ToggleRefinementWidgetSetup,
-  { act = fakeAct, skippedTests = {} }: TestOptions = {}
+  { act = fakeAct, skippedTests = {}, flavor = 'javascript' }: TestOptions = {}
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
   describe('ToggleRefinement widget common tests', () => {
-    createOptionsTests(setup, { act, skippedTests });
+    createOptionsTests(setup, { act, skippedTests, flavor });
   });
 }

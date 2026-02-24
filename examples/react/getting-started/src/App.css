@@ -1,3 +1,7 @@
+:root {
+  --ais-primary-color-rgb: 130, 50, 220;
+}
+
 body,
 h1 {
   margin: 0;
@@ -134,7 +138,7 @@ em {
 }
 
 .ais-Carousel-list {
-  margin: -0.5rem !important;
+  margin: -0.5rem;
   grid-auto-columns: calc(22% - 0.5rem) !important;
 }
 

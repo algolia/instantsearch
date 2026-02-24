@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.27.1](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.27.0...algoliasearch-helper@3.27.1) (2026-02-10)
+
+
+### Bug Fixes
+
+* **composition:** forwards parameters in sffv ([#6889](https://github.com/algolia/instantsearch/issues/6889)) ([f908559](https://github.com/algolia/instantsearch/commit/f9085591ebb71d8f56f580c94d6afb7ccbeb5475)), closes [/github.com/algolia/instantsearch/pull/6792/changes#diff-6af3d106c335b51f0e85d49f808b248a9704cb12dab1472606b6e9a383d981b1](https://github.com//github.com/algolia/instantsearch/pull/6792/changes/issues/diff-6af3d106c335b51f0e85d49f808b248a9704cb12dab1472606b6e9a383d981b1) [/github.com/algolia/instantsearch/blob/59f8fbf1a70262ab0927f5fdcde5c3ecbd10e3ba/packages/instantsearch.js/src/lib/InstantSearch.ts#L580-L583](https://github.com//github.com/algolia/instantsearch/blob/59f8fbf1a70262ab0927f5fdcde5c3ecbd10e3ba/packages/instantsearch.js/src/lib/InstantSearch.ts/issues/L580-L583)
+
+
+
+
+
+# [3.27.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.26.1...algoliasearch-helper@3.27.0) (2025-12-30)
+
+
+### Features
+
+* **sortBy:** support composition sorting strategies ([#6841](https://github.com/algolia/instantsearch/issues/6841)) ([f7d7a66](https://github.com/algolia/instantsearch/commit/f7d7a66359bbd2479ae120f7de6823f15695d78d))
+
+
+
+
+
+## [3.26.1](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.26.0...algoliasearch-helper@3.26.1) (2025-11-10)
+
+
+### Bug Fixes
+
+* **refinementList:** hide facets based on `renderingContent` when searched ([#6792](https://github.com/algolia/instantsearch/issues/6792)) ([ee0d2e4](https://github.com/algolia/instantsearch/commit/ee0d2e4bcb2106425dfd1d0a6fecca0c647f3805))
+* **refinementList:** hide facets when when `sortBy` is provided ([#6785](https://github.com/algolia/instantsearch/issues/6785)) ([cb92a6b](https://github.com/algolia/instantsearch/commit/cb92a6b33b192587fa257b8685af2dc42e248cbf))
+
+
+
+
+
 # [3.26.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.25.0...algoliasearch-helper@3.26.0) (2025-06-16)
 
 

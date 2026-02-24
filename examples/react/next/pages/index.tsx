@@ -36,7 +36,11 @@ type HitProps = {
 function Hit({ hit }: HitProps) {
   return (
     <>
-      <Highlight hit={hit} attribute="name" className="Hit-label" />
+      <Highlight
+        hit={hit}
+        attribute="name"
+        classNames={{ root: 'Hit-label' }}
+      />
       <span className="Hit-price">${hit.price}</span>
     </>
   );

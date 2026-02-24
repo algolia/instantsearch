@@ -39,16 +39,16 @@
         :disabled="!state.canToggleShowMore"
         @click.prevent="state.toggleShowMore"
       >
-        <slot name="showMoreLabel" :is-showing-more="state.isShowingMore">{{
-          state.isShowingMore ? 'Show less' : 'Show more'
-        }}</slot>
+        <slot name="showMoreLabel" :is-showing-more="state.isShowingMore">
+          {{ state.isShowingMore ? 'Show less' : 'Show more' }}
+        </slot>
       </button>
     </slot>
   </div>
 </template>
 
 <script>
-import { connectMenu } from 'instantsearch.js/es/connectors';
+import { connectMenu } from 'instantsearch.js/es/connectors/index.umd';
 
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';

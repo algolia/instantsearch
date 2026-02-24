@@ -10,11 +10,11 @@
     },
     {
       "path": "./packages/instantsearch.js/dist/instantsearch.production.min.js",
-      "maxSize": "85.25 kB"
+      "maxSize": "119 kB"
     },
     {
       "path": "./packages/instantsearch.js/dist/instantsearch.development.js",
-      "maxSize": "185 kB"
+      "maxSize": "241 kB"
     },
     {
       "path": "packages/react-instantsearch-core/dist/umd/ReactInstantSearchCore.min.js",
@@ -25,12 +25,16 @@
       "maxSize": "66.75 kB"
     },
     {
+      "path": "packages/react-instantsearch/dist/umd/ReactInstantSearch.min.js",
+      "maxSize": "98.25 kB"
+    },
+    {
       "path": "packages/vue-instantsearch/vue2/umd/index.js",
-      "maxSize": "70 kB"
+      "maxSize": "80 kB"
     },
     {
       "path": "packages/vue-instantsearch/vue3/umd/index.js",
-      "maxSize": "70 kB"
+      "maxSize": "80 kB"
     },
     {
       "path": "packages/vue-instantsearch/vue2/cjs/index.js",
@@ -42,11 +46,11 @@
     },
     {
       "path": "./packages/instantsearch.css/themes/algolia.css",
-      "maxSize": "4 kB"
+      "maxSize": "9.75 kB"
     },
     {
       "path": "./packages/instantsearch.css/themes/algolia-min.css",
-      "maxSize": "3.75 kB"
+      "maxSize": "9.25 kB"
     },
     {
       "path": "./packages/instantsearch.css/themes/reset.css",
@@ -58,11 +62,27 @@
     },
     {
       "path": "./packages/instantsearch.css/themes/satellite.css",
-      "maxSize": "5.25 kB"
+      "maxSize": "10.75 kB"
     },
     {
       "path": "./packages/instantsearch.css/themes/satellite-min.css",
-      "maxSize": "4.75 kB"
+      "maxSize": "10 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/components/chat.css",
+      "maxSize": "5.25 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/components/chat-min.css",
+      "maxSize": "5 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/components/autocomplete.css",
+      "maxSize": "4.25 kB"
+    },
+    {
+      "path": "./packages/instantsearch.css/components/autocomplete-min.css",
+      "maxSize": "3.75 kB"
     }
   ]
 }

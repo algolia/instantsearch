@@ -28,7 +28,9 @@
     "test:size": "bundlesize",
     "test:exports": "lerna run test:exports",
     "test:versions": "./tests/versions/index.js",
-    "test:e2e": "yarn test:e2e:local",
+    "test:e2e": "yarn test:e2e:playwright",
+    "test:e2e:playwright": "yarn workspace @instantsearch/e2e-tests test:playwright",
+    "test:e2e:ie11": "E2E_BROWSER='internet explorer' wdio scripts/wdio/saucelabs.conf.js",
     "test:e2e:local": "wdio scripts/wdio/local.conf.js",
     "test:e2e:saucelabs": "wdio scripts/wdio/saucelabs.conf.js",
     "test:v3": "lerna run test:v3",
@@ -115,7 +117,6 @@
     "jest": "27.4.7",
     "jest-diff": "27.4.6",
     "jest-environment-jsdom": "27.1.0",
-    "jest-environment-jsdom-global": "2.0.4",
     "jest-junit": "12.2.0",
     "jest-vue-preprocessor": "1.7.1",
     "jest-watch-typeahead": "1.0.0",
@@ -146,6 +147,9 @@
     "places.js/algoliasearch": "5.1.1",
     "brotli-size": "4.0.0",
     "webpack": "4.47.0",
-    "babel-loader": "8.2.2"
-  }
+    "babel-loader": "8.2.2",
+    "zod": "3.25.76",
+    "qs": "6.9.7"
+  },
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }

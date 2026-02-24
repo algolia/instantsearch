@@ -14,15 +14,15 @@ export type RangeInputWidgetSetup = TestSetup<{
 
 export function createRangeInputWidgetTests(
   setup: RangeInputWidgetSetup,
-  { act = fakeAct, skippedTests = {} }: TestOptions = {}
+  { act = fakeAct, skippedTests = {}, flavor = 'javascript' }: TestOptions = {}
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
   describe('RangeInput widget common tests', () => {
-    createBehaviourTests(setup, { act, skippedTests });
-    createOptionsTests(setup, { act, skippedTests });
-    createLinksTests(setup, { act, skippedTests });
+    createBehaviourTests(setup, { act, skippedTests, flavor });
+    createOptionsTests(setup, { act, skippedTests, flavor });
+    createLinksTests(setup, { act, skippedTests, flavor });
   });
 }

@@ -1,3 +1,9 @@
+// Base styles for all widgets
+
+[class^='ais-'] {
+  box-sizing: border-box;
+}
+
 // Reset all lists
 
 .ais-Breadcrumb-list,

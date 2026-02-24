@@ -1,5 +1,6 @@
 import { fakeAct } from '../../common';
 
+import { createEdgeCasesTests } from './edge-cases';
 import { createLinksTests } from './links';
 import { createOptimisticUiTests } from './optimistic-ui';
 import { createOptionsTests } from './options';
@@ -14,15 +15,16 @@ export type HierarchicalMenuWidgetSetup = TestSetup<{
 
 export function createHierarchicalMenuWidgetTests(
   setup: HierarchicalMenuWidgetSetup,
-  { act = fakeAct, skippedTests = {} }: TestOptions = {}
+  { act = fakeAct, skippedTests = {}, flavor = 'javascript' }: TestOptions = {}
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
   describe('HierarchicalMenu widget common tests', () => {
-    createOptimisticUiTests(setup, { act, skippedTests });
-    createOptionsTests(setup, { act, skippedTests });
-    createLinksTests(setup, { act, skippedTests });
+    createOptimisticUiTests(setup, { act, skippedTests, flavor });
+    createOptionsTests(setup, { act, skippedTests, flavor });
+    createLinksTests(setup, { act, skippedTests, flavor });
+    createEdgeCasesTests(setup, { act, skippedTests, flavor });
   });
 }

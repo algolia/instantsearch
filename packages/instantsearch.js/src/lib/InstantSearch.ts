@@ -492,7 +492,9 @@ See documentation: ${createDocumentationLink({
    * Widgets can be added either before or after InstantSearch has started.
    * @param widgets The array of widgets to add to InstantSearch.
    */
-  public addWidgets(widgets: Array<Widget | IndexWidget>) {
+  public addWidgets(
+    widgets: Array<Widget | IndexWidget | Array<IndexWidget | Widget>>
+  ) {
     if (!Array.isArray(widgets)) {
       throw new Error(
         withUsage(
@@ -502,20 +504,9 @@ See documentation: ${createDocumentationLink({
     }
 
     if (
-      widgets.some(
-        (widget) =>
-          typeof widget.init !== 'function' &&
-          typeof widget.render !== 'function'
-      )
+      this.compositionID &&
+      widgets.some((w) => !Array.isArray(w) && isIndexWidget(w) && !w._isolated)
     ) {
-      throw new Error(
-        withUsage(
-          'The widget definition expects a `render` and/or an `init` method.'
-        )
-      );
-    }
-
-    if (this.compositionID && widgets.some(isIndexWidget)) {
       throw new Error(
         withUsage(
           'The `index` widget cannot be used with a composition-based InstantSearch implementation.'
@@ -550,18 +541,12 @@ See documentation: ${createDocumentationLink({
    *
    * The widgets must implement a `dispose()` method to clear their states.
    */
-  public removeWidgets(widgets: Array<Widget | IndexWidget>) {
+  public removeWidgets(widgets: Array<Widget | IndexWidget | Widget[]>) {
     if (!Array.isArray(widgets)) {
       throw new Error(
         withUsage(
           'The `removeWidgets` method expects an array of widgets. Please use `removeWidget`.'
         )
-      );
-    }
-
-    if (widgets.some((widget) => typeof widget.dispose !== 'function')) {
-      throw new Error(
-        withUsage('The widget definition expects a `dispose` method.')
       );
     }
 

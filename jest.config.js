@@ -10,7 +10,7 @@ const algoliaSearchMajor =
 const config = {
   rootDir: process.cwd(),
   testRunner: 'jest-circus',
-  testEnvironment: 'node',
+  testEnvironment: '@instantsearch/testutils/jest-environment-node.ts',
   setupFilesAfterEnv: ['./tests/utils/setupTests.ts'],
   testPathIgnorePatterns: [
     '<rootDir>/node_modules/',
@@ -38,7 +38,7 @@ const config = {
     'jest-watch-typeahead/testname',
   ],
   transformIgnorePatterns: [
-    'node_modules/(?!(search-insights|algoliasearch)/)',
+    'node_modules/(?!(search-insights|algoliasearch|zod)/)',
   ],
   transform: {
     '^.+\\.(j|t)sx?$': 'babel-jest',
@@ -47,6 +47,8 @@ const config = {
   moduleFileExtensions: ['tsx', 'ts', 'js', 'vue'],
   moduleNameMapper: {
     '^react-instantsearch$': '<rootDir>/packages/react-instantsearch/src/',
+    '^react-instantsearch-core/dist/es(.*)$':
+      '<rootDir>/packages/react-instantsearch-core/src$1',
     '^react-instantsearch-(.*[^v6])$':
       '<rootDir>/packages/react-instantsearch-$1/src/',
     '^instantsearch.js$': '<rootDir>/packages/instantsearch.js/src/',

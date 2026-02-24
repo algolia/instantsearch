@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/html';
 
 import { withHits, withLifecycle } from '../.storybook/decorators';
-import { connectHierarchicalMenu } from '../src/connectors';
+import connectHierarchicalMenu from '../src/connectors/hierarchical-menu/connectHierarchicalMenu';
 import { noop } from '../src/lib/utils';
 
 const virtualHierarchicalMenu = (args = {}) =>

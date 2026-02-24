@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
 import { render } from '@testing-library/react';
@@ -13,7 +13,7 @@ describe('rendering', () => {
   describe('className', () => {
     test.each(widgets)('sets root class name $name', ({ Component }) => {
       const { container } = render(
-        <Component className="BASECLASS" classNames={{ root: 'ROOTCLASS' }} />
+        <Component classNames={{ root: 'BASECLASS ROOTCLASS' }} />
       );
 
       expect(
@@ -25,7 +25,7 @@ describe('rendering', () => {
   describe('root element props', () => {
     test.each(widgets)('set root html attribute $name', ({ Component }) => {
       const { container } = render(
-        <Component className="BASECLASS" title="test title" />
+        <Component classNames={{ root: 'BASECLASS' }} title="test title" />
       );
 
       expect(container.querySelector<HTMLDivElement>('.BASECLASS')!.title).toBe(

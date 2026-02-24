@@ -18,6 +18,7 @@ export * from './escapeFacetValue';
 export * from './find';
 export * from './findIndex';
 export * from './geo-search';
+export * from './getAlgoliaAgent';
 export * from './getAppIdAndApiKey';
 export * from './getContainerNode';
 export * from './getHighlightedParts';

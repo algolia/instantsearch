@@ -1,38 +1,31 @@
-import { waitForUrl } from './utils';
+import { test, expect } from '@playwright/test';
 
-describe('clicking on a Next.js link within the same page updates InstantSearch', () => {
-  it('works when not on a i18n route', async () => {
-    await browser.url('/');
+test.describe('clicking on a Next.js link within the same page updates InstantSearch', () => {
+  test('works when not on a i18n route', async ({ page }) => {
+    await page.goto('/');
 
-    const navigationLink = await $('a=Prefilled query');
+    const navigationLink = page.locator('a', { hasText: 'Prefilled query' });
     await navigationLink.click();
 
-    await waitForUrl('http://localhost:3000/?instant_search%5Bquery%5D=apple');
+    await page.waitForURL(
+      'http://localhost:3000/?instant_search%5Bquery%5D=apple'
+    );
 
-    const searchInput = await $('.ais-SearchBox-input');
-
-    expect(
-      await browser.waitUntil(async () => {
-        return (await searchInput.getValue()) === 'apple';
-      })
-    ).toBe(true);
+    const searchInput = page.locator('.ais-SearchBox-input');
+    await expect(searchInput).toHaveValue('apple');
   });
 
-  it('works when on a i18n route', async () => {
-    await browser.url('/fr');
+  test('works when on a i18n route', async ({ page }) => {
+    await page.goto('/fr');
 
-    const navigationLink = await $('a=Prefilled query');
+    const navigationLink = page.locator('a', { hasText: 'Prefilled query' });
     await navigationLink.click();
 
-    await waitForUrl(
+    await page.waitForURL(
       'http://localhost:3000/fr?instant_search%5Bquery%5D=apple'
     );
 
-    const searchInput = await $('.ais-SearchBox-input');
-    expect(
-      await browser.waitUntil(async () => {
-        return (await searchInput.getValue()) === 'apple';
-      })
-    ).toBe(true);
+    const searchInput = page.locator('.ais-SearchBox-input');
+    await expect(searchInput).toHaveValue('apple');
   });
 });

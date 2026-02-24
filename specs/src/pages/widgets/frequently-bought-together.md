@@ -52,15 +52,17 @@ options:
     description: Number of recommendations to retrieve
   - name: queryParameters
     description: List of search parameters to send
+  - name: fallbackParameters
+    description: List of search parameters to send as additional filters to use as fallback when there aren't enough recommendations.
   - name: threshold
     description: Threshold for the recommendations confidence score (between 0 and 100)
   - name: transformItems
     description: Function which receives the items, which will be called before displaying them. Should return a new array with the same shape as the original array. Useful for mapping over the items to transform, remove or reorder them
 translations:
   - name: title
-    default: "Frequently bought together"
+    default: 'Frequently bought together'
     description: The text for the header element
   - name: sliderLabel
-    default: "Frequently bought together products"
+    default: 'Frequently bought together products'
     description: The label for the horizontal slider
 ---

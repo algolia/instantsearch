@@ -13,13 +13,13 @@ export type InstantSearchWidgetSetup = TestSetup<
 
 export function createInstantSearchWidgetTests(
   setup: InstantSearchWidgetSetup,
-  { act = fakeAct, skippedTests = {} }: TestOptions = {}
+  { act = fakeAct, skippedTests = {}, flavor = 'javascript' }: TestOptions = {}
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
   describe('InstantSearch widget common tests', () => {
-    createAlgoliaAgentTests(setup, { act, skippedTests });
+    createAlgoliaAgentTests(setup, { act, skippedTests, flavor });
   });
 }

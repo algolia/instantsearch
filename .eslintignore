@@ -24,10 +24,17 @@ coverage
 examples/**/polyfills.js
 ## React-Native TypeScript wasn't supporting the mix of react 18 and 17
 examples/react/react-native
-## Excluded from global typescript config
-examples/react/next/next-env.d.ts
+## Next.js examples have their own tsconfig and are type-checked during their build
+examples/react/next
+examples/react/next-routing
+examples/react/next-app-router
 specs/src/env.d.ts
 ## templates that don't get installed
 packages/create-instantsearch-app/src/templates
 ## test fixtures for codemods
 packages/instantsearch-codemods/__testfixtures__
+
+# Playwright artifacts and test files (Playwright has its own tsconfig)
+**/playwright-report/**
+**/test-results/**
+tests/e2e/playwright/**

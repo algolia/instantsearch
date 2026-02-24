@@ -834,3 +834,41 @@ test('getFacetValues(facetName) prefers the "main" facet result (hierarchical) (
 
   expect(facetValues).toEqual(expected);
 });
+
+test('getFacetValues(disjunctive) does not return values that should be hidden', function () {
+  var data = require('./getFacetValues/disjunctive.json');
+  var hidden = {
+    renderingContent: {
+      facetOrdering: {
+        values: {
+          brand: {
+            hide: ['Samsung'],
+          },
+        },
+      },
+    },
+  };
+  var results = data.content.results.slice();
+  results[0] = Object.assign(hidden, results[0]);
+
+  var searchParams = new SearchParameters(data.state);
+  var result = new SearchResults(searchParams, results);
+
+  var facetValuesDefault = result.getFacetValues('brand');
+  var facetValuesWithSorting = result.getFacetValues('brand', {
+    sortBy: ['count:desc'],
+  });
+
+  var expected = [
+    {
+      count: 551,
+      isRefined: false,
+      name: 'Insignia™',
+      escapedValue: 'Insignia™',
+    },
+    { count: 386, isRefined: true, name: 'Apple', escapedValue: 'Apple' },
+  ];
+
+  expect(facetValuesDefault).toEqual(expected);
+  expect(facetValuesWithSorting).toEqual(expected);
+});

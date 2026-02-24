@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/shared';
@@ -23,7 +23,7 @@ import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
 type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
 
-const testSetups: TestSetupsMap<TestSuites> = {
+const testSetups: TestSetupsMap<TestSuites, 'react'> = {
   createSharedTests({ instantSearchOptions, widgetParams }) {
     function MenuURL(props: UseMenuProps) {
       const { createURL } = useMenu(props);
@@ -63,6 +63,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
 
 describe('Common shared tests (React InstantSearch)', () => {
   runTestSuites({
+    flavor: 'react',
     testSuites,
     testSetups,
     testOptions,

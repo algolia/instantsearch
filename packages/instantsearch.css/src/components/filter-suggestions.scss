@@ -1,0 +1,107 @@
+@use '../shared/_variables';
+@use '../shared/_common';
+
+.ais-FilterSuggestions {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--ais-spacing) * 0.5);
+}
+
+.ais-FilterSuggestions-header {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--ais-spacing) * 0.5);
+}
+
+.ais-FilterSuggestions-headerIcon {
+  display: flex;
+  align-items: center;
+  color: rgba(var(--ais-primary-color-rgb), var(--ais-primary-color-alpha));
+
+  svg {
+    width: var(--ais-icon-size);
+    height: var(--ais-icon-size);
+  }
+}
+
+.ais-FilterSuggestions-headerTitle {
+  font-size: var(--ais-font-size-sm);
+  font-weight: 500;
+  color: rgba(var(--ais-text-color-rgb), var(--ais-text-color-alpha));
+}
+
+.ais-FilterSuggestions-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--ais-spacing) * 0.5);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ais-FilterSuggestions-item {
+  display: inline-flex;
+  white-space: nowrap;
+}
+
+// Refined state
+.ais-FilterSuggestions-item--refined {
+  .ais-FilterSuggestions-count {
+    color: rgba(
+      var(--ais-button-text-color-rgb),
+      var(--ais-button-text-color-alpha)
+    );
+    background-color: rgba(
+      var(--ais-button-text-color-rgb),
+      0.2
+    );
+  }
+}
+
+.ais-FilterSuggestions-count {
+  font-size: calc(var(--ais-font-size) * 0.8);
+  color: rgba(var(--ais-muted-color-rgb), var(--ais-muted-color-alpha));
+  background-color: rgba(var(--ais-muted-color-rgb), 0.1);
+  padding: calc(var(--ais-spacing) * 0.125) calc(var(--ais-spacing) * 0.375);
+  border-radius: var(--ais-border-radius-sm);
+}
+
+// Skeleton loading state
+.ais-FilterSuggestions-skeleton {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--ais-spacing) * 0.5);
+}
+
+.ais-FilterSuggestions-skeletonItem {
+  height: calc(var(--ais-spacing) * 1.875);
+  background-color: rgba(var(--ais-muted-color-rgb), 0.15);
+  border-radius: var(--ais-border-radius-sm);
+
+  // Varying widths to mimic real suggestions (totaling ~100%)
+  &:nth-child(1) {
+    width: 25%;
+  }
+
+  &:nth-child(2) {
+    width: 35%;
+  }
+
+  &:nth-child(3) {
+    width: 20%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: ais-filter-suggestions-skeleton 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes ais-filter-suggestions-skeleton {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}

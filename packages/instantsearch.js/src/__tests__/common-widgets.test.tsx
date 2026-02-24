@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 
 import { runTestSuites } from '@instantsearch/tests';
@@ -33,6 +33,9 @@ import {
   menuSelect,
   dynamicWidgets,
   trendingFacets,
+  chat,
+  EXPERIMENTAL_autocomplete,
+  filterSuggestions,
 } from '../widgets';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -40,7 +43,7 @@ import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
 type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
 
-const testSetups: TestSetupsMap<TestSuites> = {
+const testSetups: TestSetupsMap<TestSuites, 'javascript'> = {
   createHierarchicalMenuWidgetTests({ instantSearchOptions, widgetParams }) {
     instantsearch(instantSearchOptions)
       .addWidgets([
@@ -634,6 +637,83 @@ const testSetups: TestSetupsMap<TestSuites> = {
       ])
       .start();
   },
+  createChatWidgetTests({ instantSearchOptions, widgetParams }) {
+    const { renderRefinements, ...chatWidgetParams } = widgetParams;
+
+    const refinementsWidgets = [];
+    if (renderRefinements) {
+      refinementsWidgets.push(
+        ...[
+          searchBox({
+            container: document.body.appendChild(document.createElement('div')),
+          }),
+          refinementList({
+            container: document.body.appendChild(document.createElement('div')),
+            attribute: 'brand',
+          }),
+          refinementList({
+            container: document.body.appendChild(document.createElement('div')),
+            attribute: 'category',
+          }),
+          hierarchicalMenu({
+            container: document.body.appendChild(document.createElement('div')),
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+            ],
+          }),
+        ]
+      );
+    }
+
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        ...refinementsWidgets,
+        chat({
+          container: document.body.appendChild(document.createElement('div')),
+          ...chatWidgetParams,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
+  createAutocompleteWidgetTests({ instantSearchOptions, widgetParams }) {
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        EXPERIMENTAL_autocomplete({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
+  createFilterSuggestionsWidgetTests({ instantSearchOptions, widgetParams }) {
+    instantsearch(instantSearchOptions)
+      .addWidgets([
+        filterSuggestions({
+          container: document.body.appendChild(document.createElement('div')),
+          ...widgetParams,
+        }),
+      ])
+      .on('error', () => {
+        /*
+         * prevent rethrowing InstantSearch errors, so tests can be asserted.
+         * IRL this isn't needed, as the error doesn't stop execution.
+         */
+      })
+      .start();
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -667,10 +747,14 @@ const testOptions: TestOptionsMap<TestSuites> = {
   createPoweredByWidgetTests: undefined,
   createMenuSelectWidgetTests: undefined,
   createDynamicWidgetsWidgetTests: undefined,
+  createChatWidgetTests: undefined,
+  createAutocompleteWidgetTests: undefined,
+  createFilterSuggestionsWidgetTests: undefined,
 };
 
 describe('Common widget tests (InstantSearch.js)', () => {
   runTestSuites({
+    flavor: 'javascript',
     testSuites,
     testSetups,
     testOptions,

@@ -1,3 +1,7 @@
+/**
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
+ */
+
 import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils/wait';
 

@@ -33,7 +33,7 @@ class RawHtml extends Component<{ content: string }> {
     });
     // if there is one TextNode first and one TextNode last, the
     // last one's nodeValue will be assigned to the first.
-    if (this.nodes[0].nodeValue) {
+    if (this.nodes[0] && this.nodes[0].nodeValue) {
       this.nodes[0].nodeValue = '';
     }
   }

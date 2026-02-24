@@ -9,7 +9,7 @@ import { createInsertHTML } from './createInsertHTML';
 
 export function TriggerSearch({ nonce }: { nonce?: string }) {
   const instantsearch = useInstantSearchContext();
-  const waitForResultsRef = useRSCContext();
+  const { waitForResultsRef } = useRSCContext();
   const insertHTML =
     useContext(ServerInsertedHTMLContext) ||
     (() => {

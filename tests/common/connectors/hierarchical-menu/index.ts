@@ -12,13 +12,13 @@ export type HierarchicalMenuConnectorSetup = TestSetup<{
 
 export function createHierarchicalMenuConnectorTests(
   setup: HierarchicalMenuConnectorSetup,
-  { act = fakeAct, skippedTests = {} }: TestOptions = {}
+  { act = fakeAct, skippedTests = {}, flavor = 'javascript' }: TestOptions = {}
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
   describe('HierarchicalMenu connector common tests', () => {
-    createRoutingTests(setup, { act, skippedTests });
+    createRoutingTests(setup, { act, skippedTests, flavor });
   });
 }

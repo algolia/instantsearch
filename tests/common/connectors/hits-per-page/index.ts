@@ -12,13 +12,13 @@ export type HitsPerPageConnectorSetup = TestSetup<{
 
 export function createHitsPerPageConnectorTests(
   setup: HitsPerPageConnectorSetup,
-  { act = fakeAct, skippedTests = {} }: TestOptions = {}
+  { act = fakeAct, skippedTests = {}, flavor = 'javascript' }: TestOptions = {}
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
   describe('HitsPerPage connector common tests', () => {
-    createRoutingTests(setup, { act, skippedTests });
+    createRoutingTests(setup, { act, skippedTests, flavor });
   });
 }

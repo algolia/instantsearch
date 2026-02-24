@@ -21,6 +21,7 @@ import {
   SearchBox,
   SortBy,
   ToggleRefinement,
+  Chat,
 } from 'react-instantsearch';
 
 import {
@@ -31,6 +32,7 @@ import {
 } from './components';
 import { Tab, Tabs } from './components/layout';
 
+import 'instantsearch.css/devtools/inject';
 import 'instantsearch.css/themes/satellite.css';
 
 import './App.css';
@@ -53,6 +55,24 @@ function Hit({ hit }: HitProps) {
       <Highlight hit={hit} attribute="name" className="Hit-label" />
       <span className="Hit-price">${hit.price}</span>
     </>
+  );
+}
+
+function ItemComponent({ item }: { item: AlgoliaHit }) {
+  return (
+    <article className="ais-Carousel-hit">
+      <div className="ais-Carousel-hit-image">
+        <img src={item.image} />
+      </div>
+      <h2 className="ais-Carousel-hit-title">
+        <a
+          href={`/products.html?pid=${item.objectID}`}
+          className="ais-Carousel-hit-link"
+        >
+          {item.name}
+        </a>
+      </h2>
+    </article>
   );
 }
 
@@ -177,6 +197,11 @@ export function App() {
           </Tabs>
         </div>
       </div>
+
+      <Chat
+        agentId="eedef238-5468-470d-bc37-f99fa741bd25"
+        itemComponent={ItemComponent}
+      />
     </InstantSearch>
   );
 }

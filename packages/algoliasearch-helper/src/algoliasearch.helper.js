@@ -454,16 +454,19 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function (
 
       content = Array.isArray(content) ? content[0] : content;
 
-      content.facetHits.forEach(function (f, i) {
+      content.facetHits = content.facetHits.reduce(function (acc, f) {
         if (hide.indexOf(f.value) > -1) {
-          content.facetHits.splice(i, 1);
-          return;
+          return acc;
         }
+
         f.escapedValue = escapeFacetValue(f.value);
         f.isRefined = isDisjunctive
           ? state.isDisjunctiveFacetRefined(facet, f.escapedValue)
           : state.isFacetRefined(facet, f.escapedValue);
-      });
+
+        acc.push(f);
+        return acc;
+      }, []);
 
       return content;
     },

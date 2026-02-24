@@ -81,6 +81,15 @@ module.exports = (api) => {
             // we require polyfills for this already
             'Array.prototype.includes',
 
+            // Used only in newer widgets, which expect modern browsers
+            'Object.fromEntries',
+            'Object.entries',
+            'Array.prototype.find',
+            'String.prototype.startsWith',
+            'Promise.prototype.finally',
+            'Array.prototype.entries',
+            'Array.prototype.findIndex',
+
             // false positive (babel doesn't know types)
             // this is actually only called on arrays
             'String.prototype.includes',

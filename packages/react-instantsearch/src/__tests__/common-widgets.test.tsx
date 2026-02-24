@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment @instantsearch/testutils/jest-environment-jsdom.ts
  */
 import { runTestSuites } from '@instantsearch/tests';
 import * as suites from '@instantsearch/tests/widgets';
@@ -32,6 +32,9 @@ import {
   LookingSimilar,
   PoweredBy,
   DynamicWidgets,
+  Chat,
+  EXPERIMENTAL_Autocomplete,
+  FilterSuggestions,
 } from '..';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
@@ -43,7 +46,7 @@ import type { ComponentProps } from 'react';
 type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
 
-const testSetups: TestSetupsMap<TestSuites> = {
+const testSetups: TestSetupsMap<TestSuites, 'react'> = {
   createRefinementListWidgetTests({ instantSearchOptions, widgetParams }) {
     render(
       <InstantSearch {...instantSearchOptions}>
@@ -411,6 +414,45 @@ const testSetups: TestSetupsMap<TestSuites> = {
       </InstantSearch>
     );
   },
+  createChatWidgetTests({ instantSearchOptions, widgetParams }) {
+    const { renderRefinements, ...chatWidgetParams } = widgetParams;
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        {renderRefinements && (
+          <>
+            <SearchBox />
+            <RefinementList attribute="brand" />
+            <RefinementList attribute="category" />
+            <HierarchicalMenu
+              attributes={[
+                'hierarchicalCategories.lvl0',
+                'hierarchicalCategories.lvl1',
+                'hierarchicalCategories.lvl2',
+              ]}
+            />
+          </>
+        )}
+        <Chat {...chatWidgetParams} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+  },
+  createAutocompleteWidgetTests({ instantSearchOptions, widgetParams }) {
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <EXPERIMENTAL_Autocomplete {...widgetParams} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+  },
+  createFilterSuggestionsWidgetTests({ instantSearchOptions, widgetParams }) {
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <FilterSuggestions {...widgetParams} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+  },
 };
 
 const testOptions: TestOptionsMap<TestSuites> = {
@@ -455,6 +497,11 @@ const testOptions: TestOptionsMap<TestSuites> = {
     },
   },
   createDynamicWidgetsWidgetTests: { act },
+  createChatWidgetTests: {
+    act,
+  },
+  createAutocompleteWidgetTests: { act },
+  createFilterSuggestionsWidgetTests: { act },
 };
 
 /**
@@ -469,6 +516,7 @@ function GlobalErrorSwallower() {
 
 describe('Common widget tests (React InstantSearch)', () => {
   runTestSuites({
+    flavor: 'react',
     testSuites,
     testSetups,
     testOptions,

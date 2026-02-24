@@ -47,7 +47,29 @@ export type SortByIndexDefinition = {
    * The label of the index to display.
    */
   label: string;
+  /**
+   * Ensures mutual exclusivity with strategy.
+   */
+  strategy?: never;
 };
+
+export type SortByStrategyDefinition = {
+  /**
+   * The name of the sorting strategy to use.
+   * Only available in composition mode.
+   */
+  strategy: string;
+  /**
+   * The label of the strategy to display.
+   */
+  label: string;
+  /**
+   * Ensures mutual exclusivity with value.
+   */
+  value?: never;
+};
+
+export type SortByDefinition = SortByIndexDefinition | SortByStrategyDefinition;
 
 export type SortByWidgetParams = {
   /**
@@ -55,9 +77,9 @@ export type SortByWidgetParams = {
    */
   container: string | HTMLElement;
   /**
-   * Array of objects defining the different indices to choose from.
+   * Array of objects defining the different indices or strategies to choose from.
    */
-  items: SortByIndexDefinition[];
+  items: SortByDefinition[];
   /**
    * CSS classes to be added.
    */

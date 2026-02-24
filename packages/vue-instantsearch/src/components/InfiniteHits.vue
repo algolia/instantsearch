@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import { connectInfiniteHitsWithInsights } from 'instantsearch.js/es/connectors';
+import { connectInfiniteHitsWithInsights } from 'instantsearch.js/es/connectors/index.umd';
 
 import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';

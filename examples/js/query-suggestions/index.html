@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="theme-color" content="#000000" />
+
+    <link rel="shortcut icon" href="./favicon.png" />
+
+    <link rel="stylesheet" href="./src/index.css" />
+    <link rel="stylesheet" href="./src/app.css" />
+
+    <title>InstantSearch.js — Query suggestions</title>
+  </head>
+
+  <body>
+    <header class="header">
+      <h1 class="header-title">
+        <a href="/">Query suggestions</a>
+      </h1>
+      <p class="header-subtitle">
+        using
+        <a href="https://github.com/algolia/instantsearch">
+          InstantSearch.js
+        </a>
+      </p>
+    </header>
+
+    <div class="container">
+      <main>
+        <div class="container-wrapper">
+          <div class="search-panel">
+            <div class="search-panel__filters" data-layout="desktop">
+              <div id="brand-list"></div>
+            </div>
+
+            <div class="search-panel__results">
+              <div id="autocomplete"></div>
+              <div id="hits"></div>
+              <div id="pagination"></div>
+              <div id="trending"></div>
+            </div>
+          </div>
+
+          <div
+            class="container-filters-overlay"
+            data-layout="mobile"
+            data-action="close-overlay"
+          ></div>
+
+          <section class="container-filters" data-layout="mobile">
+            <div class="container-header">
+              <h2>Filters</h2>
+              <div data-widget="results-number-mobile"></div>
+            </div>
+
+            <div class="container-body">
+              <div id="brand-list-mobile"></div>
+            </div>
+          </section>
+
+          <footer class="container-filters-footer" data-layout="mobile">
+            <div
+              class="container-filters-footer-button-wrapper"
+              data-widget="clear-filters-mobile"
+              data-action="close-overlay"
+            ></div>
+            <div
+              class="container-filters-footer-button-wrapper"
+              data-widget="save-filters-mobile"
+              data-action="close-overlay"
+            ></div>
+          </footer>
+        </div>
+      </main>
+      <div id="chat"></div>
+    </div>
+
+    <button class="filters-button" data-action="open-overlay">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 14">
+        <path
+          d="M15 1H1l5.6 6.3v4.37L9.4 13V7.3z"
+          stroke="#fff"
+          stroke-width="1.29"
+          fill="none"
+          fill-rule="evenodd"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      Filters
+    </button>
+
+    <script type="module" src="./src/app.ts"></script>
+  </body>
+</html>

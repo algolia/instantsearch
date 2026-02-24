@@ -17,6 +17,13 @@ const withUsage = createDocumentationMessageGenerator({
   connector: true,
 });
 
+export type TransformItemsIndicesConfig = {
+  indexName: string;
+  indexId: string;
+  hits: Hit[];
+  results: SearchResults;
+};
+
 export type AutocompleteConnectorParams = {
   /**
    * Escapes HTML entities from hits string values.
@@ -24,6 +31,12 @@ export type AutocompleteConnectorParams = {
    * @default `true`
    */
   escapeHTML?: boolean;
+  /**
+   * Transforms the items of all indices.
+   */
+  transformItems?: (
+    indices: TransformItemsIndicesConfig[]
+  ) => TransformItemsIndicesConfig[];
 };
 
 export type AutocompleteRenderState = {
@@ -95,6 +108,9 @@ const connectAutocomplete: AutocompleteConnector = function connectAutocomplete(
     const {
       // @MAJOR: this can default to false
       escapeHTML = true,
+      transformItems = ((indices) => indices) as NonNullable<
+        AutocompleteConnectorParams['transformItems']
+      >,
     } = widgetParams || {};
 
     warning(
@@ -180,6 +196,7 @@ search.addWidgets([
           };
         }
 
+        const sendEventMap: Record<string, SendEventForHits> = {};
         const indices = scopedResults.map((scopedResult) => {
           // We need to escape the hits because highlighting
           // exposes HTML tags to the end-user.
@@ -189,7 +206,7 @@ search.addWidgets([
               : scopedResult.results.hits;
           }
 
-          const sendEvent = createSendEventForHits({
+          sendEventMap[scopedResult.indexId] = createSendEventForHits({
             instantSearchInstance,
             helper: scopedResult.helper,
             widgetType: this.$$type,
@@ -200,13 +217,15 @@ search.addWidgets([
             indexName: scopedResult.results?.index || '',
             hits: scopedResult.results?.hits || [],
             results: scopedResult.results || ({} as unknown as SearchResults),
-            sendEvent,
           };
         });
 
         return {
           currentRefinement: state.query || '',
-          indices,
+          indices: transformItems(indices).map((transformedIndex) => ({
+            ...transformedIndex,
+            sendEvent: sendEventMap[transformedIndex.indexId],
+          })),
           refine: connectorState.refine,
           widgetParams,
         };

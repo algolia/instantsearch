@@ -12,13 +12,13 @@ export type RefinementListConnectorSetup = TestSetup<{
 
 export function createRefinementListConnectorTests(
   setup: RefinementListConnectorSetup,
-  { act = fakeAct, skippedTests = {} }: TestOptions = {}
+  { act = fakeAct, skippedTests = {}, flavor = 'javascript' }: TestOptions = {}
 ) {
   beforeEach(() => {
     document.body.innerHTML = '';
   });
 
   describe('RefinementList connector common tests', () => {
-    createRoutingTests(setup, { act, skippedTests });
+    createRoutingTests(setup, { act, skippedTests, flavor });
   });
 }

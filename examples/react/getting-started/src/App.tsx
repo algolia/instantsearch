@@ -11,6 +11,9 @@ import {
   SearchBox,
   TrendingItems,
   Carousel,
+  Chat,
+  FilterSuggestions,
+  CurrentRefinements,
 } from 'react-instantsearch';
 
 import { Panel } from './Panel';
@@ -51,10 +54,28 @@ export function App() {
               <Panel header="brand">
                 <RefinementList attribute="brand" />
               </Panel>
+              <Panel header="categories">
+                <RefinementList attribute="categories" />
+              </Panel>
             </div>
 
             <div className="search-panel__results">
               <SearchBox placeholder="" className="searchbox" />
+              <Panel
+                header="Current Refinements"
+                hidden={(state) =>
+                  state.currentRefinements?.items?.length === 0
+                }
+              >
+                <CurrentRefinements />
+              </Panel>
+              <Panel header="Filter Suggestions">
+                <FilterSuggestions
+                  agentId="3123062d-d611-4d4f-8ab2-4fa39302dc64"
+                  attributes={['brand', 'categories']}
+                  headerComponent={false}
+                />
+              </Panel>
               <Hits hitComponent={HitComponent} />
 
               <div className="pagination">
@@ -69,6 +90,11 @@ export function App() {
               </div>
             </div>
           </div>
+
+          <Chat
+            agentId="eedef238-5468-470d-bc37-f99fa741bd25"
+            itemComponent={ItemComponent}
+          />
         </InstantSearch>
       </div>
     </div>
@@ -99,14 +125,18 @@ function HitComponent({ hit }: { hit: HitType }) {
 
 function ItemComponent({ item }: { item: Hit }) {
   return (
-    <div>
-      <article>
-        <div>
-          <img src={item.image} />
-          <h2>{item.name}</h2>
-        </div>
-        <a href={`/products.html?pid=${item.objectID}`}>See product</a>
-      </article>
-    </div>
+    <article className="ais-Carousel-hit">
+      <div className="ais-Carousel-hit-image">
+        <img src={item.image} />
+      </div>
+      <h2 className="ais-Carousel-hit-title">
+        <a
+          href={`/products.html?pid=${item.objectID}`}
+          className="ais-Carousel-hit-link"
+        >
+          {item.name}
+        </a>
+      </h2>
+    </article>
   );
 }
