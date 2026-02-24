@@ -461,7 +461,7 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
           onSelect,
         }: {
           item: {
-            query: string;
+            prompt: string;
             label?: string;
             __isPromptSuggestionFallback?: boolean;
           };
@@ -469,10 +469,11 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
         }) => (
           <AutocompletePromptSuggestion item={item} onSelect={onSelect}>
             {isPromptSuggestionFallback(item) ? (
-              item.label || item.query
+              item.label || item.prompt
             ) : (
               <ConditionalHighlight
-                item={item as unknown as Hit<{ query: string }>}
+                item={item as unknown as Hit<{ prompt: string }>}
+                attribute="prompt"
               />
             )}
           </AutocompletePromptSuggestion>
@@ -499,7 +500,7 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
         hitsPerPage: 3,
         ...showPromptSuggestions.searchParameters,
       },
-      getQuery: (item) => item.query,
+      getQuery: (item) => item.prompt,
       getURL:
         showPromptSuggestions.getURL as unknown as IndexConfig<TItem>['getURL'],
     });
@@ -729,7 +730,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
           if (chatRenderStateWithFocus) {
             chatRenderStateWithFocus.setOpen?.(true);
             chatRenderStateWithFocus.focusInput?.();
-            chatRenderStateWithFocus.sendMessage?.({ text: query });
+            chatRenderStateWithFocus.sendMessage?.({ text: item.prompt });
             return;
           }
 
@@ -962,20 +963,25 @@ function ConditionalReverseHighlight<TItem extends { query: string }>({
   return <ReverseHighlight attribute="query" hit={item} />;
 }
 
-function ConditionalHighlight<TItem extends { query: string }>({
+function ConditionalHighlight<
+  TItem extends BaseHit,
+  TAttribute extends keyof TItem & string = keyof TItem & string
+>({
   item,
+  attribute = 'query' as TAttribute,
 }: {
   item: Hit<TItem>;
+  attribute?: TAttribute;
 }) {
   if (
-    !item._highlightResult?.query ||
+    !item._highlightResult?.[attribute] ||
     // @ts-expect-error - we should not have matchLevel as arrays here
-    item._highlightResult.query.matchLevel === 'none'
+    item._highlightResult[attribute].matchLevel === 'none'
   ) {
-    return <>{item.query}</>;
+    return <>{item[attribute]}</>;
   }
 
-  return <Highlight attribute="query" hit={item} />;
+  return <Highlight attribute={attribute} hit={item} />;
 }
 
 function getPromptSuggestionHits({
@@ -999,7 +1005,7 @@ function getPromptSuggestionHits({
   return [
     {
       objectID: `ask-about:${encodeURIComponent(query)}`,
-      query,
+      prompt: query,
       label: `Ask about "${query}"`,
       __isPromptSuggestion: true,
       __isPromptSuggestionFallback: true,
@@ -1008,7 +1014,7 @@ function getPromptSuggestionHits({
 }
 
 function isPromptSuggestion(item: unknown): item is {
-  query: string;
+  prompt: string;
   __isPromptSuggestion: true;
 } {
   return Boolean(
@@ -1019,7 +1025,7 @@ function isPromptSuggestion(item: unknown): item is {
 }
 
 function isPromptSuggestionFallback(item: unknown): item is {
-  query: string;
+  prompt: string;
   label?: string;
   __isPromptSuggestionFallback: true;
 } {

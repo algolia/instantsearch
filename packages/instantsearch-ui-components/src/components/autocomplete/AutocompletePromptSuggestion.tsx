@@ -40,7 +40,7 @@ export function createAutocompletePromptSuggestionComponent({
     userProps: AutocompletePromptSuggestionProps
   ) {
     const { item, onSelect, children, classNames = {} } = userProps;
-    const label = item.label || item.query;
+    const label = item.label || item.prompt;
 
     return (
       <div

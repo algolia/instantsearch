@@ -606,7 +606,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     onRefine,
     onSelect:
       userOnSelect ??
-      (({ query, setQuery, url }) => {
+      (({ query, item, setQuery, url }) => {
         if (isPromptSuggestion(item)) {
           const chatRenderState = instantSearchInstance.renderState[
             targetIndex!.getIndexId()
@@ -615,7 +615,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
           if (chatRenderState) {
             chatRenderState.setOpen?.(true);
             chatRenderState.focusInput?.();
-            chatRenderState.sendMessage?.({ text: query });
+            chatRenderState.sendMessage?.({ text: item.prompt });
             return;
           }
 
@@ -1150,7 +1150,7 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
         hitsPerPage: 3,
         ...showPromptSuggestions.searchParameters,
       },
-      getQuery: (item) => item.query,
+      getQuery: (item) => item.prompt,
       getURL:
         showPromptSuggestions.getURL as unknown as IndexConfig<TItem>['getURL'],
     });
@@ -1268,7 +1268,7 @@ function getPromptSuggestionHits({
   return [
     {
       objectID: `ask-about:${encodeURIComponent(query)}`,
-      query,
+      prompt: query,
       label: `Ask about "${query}"`,
       __isPromptSuggestion: true,
       __isPromptSuggestionFallback: true,
@@ -1277,7 +1277,7 @@ function getPromptSuggestionHits({
 }
 
 function isPromptSuggestion(item: unknown): item is {
-  query: string;
+  prompt: string;
   __isPromptSuggestion: true;
 } {
   return Boolean(
@@ -1288,7 +1288,7 @@ function isPromptSuggestion(item: unknown): item is {
 }
 
 function isPromptSuggestionFallback(item: unknown): item is {
-  query: string;
+  prompt: string;
   label?: string;
   __isPromptSuggestionFallback: true;
 } {
