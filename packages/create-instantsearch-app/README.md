@@ -183,8 +183,8 @@ Create InstantSearch App is [MIT licensed](LICENSE).
 
 [version-svg]: https://img.shields.io/npm/v/create-instantsearch-app.svg?style=flat-square
 [package-url]: https://npmjs.org/package/create-instantsearch-app
-[ci-svg]: https://img.shields.io/circleci/project/github/algolia/create-instantsearch-app.svg?style=flat-square
-[ci-url]: https://circleci.com/gh/algolia/instantsearch
+[ci-svg]: https://img.shields.io/github/actions/workflow/status/algolia/instantsearch/ci.yml?branch=master&style=flat-square
+[ci-url]: https://github.com/algolia/instantsearch/actions/workflows/ci.yml
 [license-image]: https://img.shields.io/badge/license-MIT-green.svg?style=flat-square
 [license-url]: LICENSE
 

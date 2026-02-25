@@ -97,8 +97,8 @@ InstantSearch.css is [MIT licensed][license-url].
 
 [version-svg]: https://img.shields.io/npm/v/instantsearch.css.svg?style=flat-square
 [package-url]: https://npmjs.org/package/instantsearch.css
-[ci-svg]: https://img.shields.io/circleci/project/github/algolia/instantsearch.svg?style=flat-square
-[ci-url]: https://circleci.com/gh/algolia/instantsearch
+[ci-svg]: https://img.shields.io/github/actions/workflow/status/algolia/instantsearch/ci.yml?branch=master&style=flat-square
+[ci-url]: https://github.com/algolia/instantsearch/actions/workflows/ci.yml
 [license-image]: http://img.shields.io/badge/license-MIT-green.svg?style=flat-square
 [website-svg]: https://img.shields.io/badge/website-instantsearchjs.netlify.app/specs-yellow?style=flat-square
 [website-url]: https://instantsearchjs.netlify.app/specs/

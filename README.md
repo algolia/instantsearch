@@ -70,8 +70,8 @@ InstantSearch is [MIT licensed][license-url].
 
 <!-- Badges -->
 
-[ci-svg]: https://img.shields.io/circleci/project/github/algolia/instantsearch.svg?style=flat-square
-[ci-url]: https://circleci.com/gh/algolia/instantsearch
+[ci-svg]: https://img.shields.io/github/actions/workflow/status/algolia/instantsearch/ci.yml?branch=master&style=flat-square
+[ci-url]: https://github.com/algolia/instantsearch/actions/workflows/ci.yml
 [license-image]: http://img.shields.io/badge/license-MIT-green.svg?style=flat-square
 [license-url]: LICENSE
 
