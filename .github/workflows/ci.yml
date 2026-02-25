@@ -118,15 +118,17 @@ jobs:
       - uses: actions/checkout@v4
 
       - uses: ./.github/actions/setup
+        with:
+          cache-suffix: 'v3'
+
+      - name: Update dependencies
+        run: ./scripts/legacy/downgrade-algoliasearch-dependency.js
 
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
           path: packages
-
-      - name: Update dependencies
-        run: ./scripts/legacy/downgrade-algoliasearch-dependency.js
 
       - name: Unit & Integration tests
         run: yarn run test:v3
@@ -142,15 +144,17 @@ jobs:
       - uses: actions/checkout@v4
 
       - uses: ./.github/actions/setup
+        with:
+          cache-suffix: 'v4'
+
+      - name: Update dependencies
+        run: ./scripts/legacy/downgrade-algoliasearch-v4.js
 
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
           path: packages
-
-      - name: Update dependencies
-        run: ./scripts/legacy/downgrade-algoliasearch-v4.js
 
       - name: Unit & Integration tests
         run: yarn run test:ci:v4
@@ -177,15 +181,17 @@ jobs:
       - uses: actions/checkout@v4
 
       - uses: ./.github/actions/setup
+        with:
+          cache-suffix: 'vue3'
+
+      - name: Update dependencies
+        run: yarn run prepare-vue3
 
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
           path: packages
-
-      - name: Update dependencies
-        run: yarn run prepare-vue3
 
       - name: Vue Unit tests
         run: yarn run jest packages/vue-instantsearch --ci --maxWorkers=4

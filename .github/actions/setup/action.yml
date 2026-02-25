@@ -6,6 +6,10 @@ inputs:
     description: 'Whether to install dependencies (set to false if only downloading artifacts)'
     required: false
     default: 'true'
+  cache-suffix:
+    description: 'Optional suffix for cache key (e.g., "vue3", "v4") for jobs that modify dependencies'
+    required: false
+    default: ''
 
 runs:
   using: 'composite'
@@ -23,8 +27,9 @@ runs:
           */*/node_modules
           scripts/legacy/algoliasearch@5-dependency-container/node_modules
           scripts/legacy/algoliasearch-v4-dependency-container/node_modules
-        key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+        key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}${{ inputs.cache-suffix && format('-{0}', inputs.cache-suffix) || '' }}
         restore-keys: |
+          node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}${{ inputs.cache-suffix && format('-{0}', inputs.cache-suffix) || '' }}
           node-modules-${{ runner.os }}-
 
     - name: Install dependencies
