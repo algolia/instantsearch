@@ -6,7 +6,7 @@
   "types": "index.d.ts",
   "homepage": "https://community.algolia.com/algoliasearch-helper-js/",
   "scripts": {
-    "build": "./scripts/build.sh",
+    "build": "rm -rf dist && BABEL_ENV=rollup rollup --config rollup.config.mjs",
     "lint": "eslint .",
     "doc": "node documentation-src/metalsmith.js",
     "test": "../../scripts/retry.sh 3 'scripts/test.sh'",
@@ -36,8 +36,6 @@
   ],
   "devDependencies": {
     "@metalsmith/sass": "1.4.0",
-    "browserify": "14.5.0",
-    "exorcist": "1.0.1",
     "handlebars": "4.1.0",
     "jest-watch-typeahead": "0.3.0",
     "jsdoc-to-markdown": "8.0.0",
@@ -46,9 +44,7 @@
     "metalsmith-layouts": "1.8.1",
     "metalsmith-markdown": "1.3.0",
     "metalsmith-metallic": "1.0.0",
-    "pretty-bytes-cli": "2.0.0",
-    "pug": "2.0.3",
-    "uglify-js": "2.8.29"
+    "pug": "2.0.3"
   },
   "dependencies": {
     "@algolia/events": "^4.0.1"

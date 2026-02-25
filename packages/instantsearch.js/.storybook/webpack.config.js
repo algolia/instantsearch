@@ -12,6 +12,7 @@ module.exports = ({ config, mode }) => {
         loader: 'babel-loader',
         options: {
           rootMode: 'upward',
+          envName: 'storybook',
         },
       },
     ],

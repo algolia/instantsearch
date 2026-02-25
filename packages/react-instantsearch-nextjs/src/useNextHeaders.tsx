@@ -1,29 +1,38 @@
-import { headers } from 'next/headers';
 import { use } from 'react';
 
-function isPromise(obj: any) {
+type NextHeaders = {
+  get: (name: string) => string | null;
+  has: (name: string) => boolean;
+  entries: () => IterableIterator<[string, string]>;
+  keys: () => IterableIterator<string>;
+  values: () => IterableIterator<string>;
+  forEach: (
+    callbackfn: (value: string, key: string, parent: NextHeaders) => void
+  ) => void;
+};
+
+type Headers = NextHeaders | undefined;
+type HeadersResult = NextHeaders | Promise<NextHeaders>;
+
+function isPromise(obj: unknown): obj is Promise<unknown> {
   return (
-    obj &&
+    obj !== null &&
     (typeof obj === 'object' || typeof obj === 'function') &&
-    typeof obj.then === 'function'
+    typeof (obj as Promise<unknown>).then === 'function'
   );
 }
 
-type Headers = Awaited<ReturnType<typeof headers>> | undefined;
-
-export const useNextHeaders = () => {
+export const useNextHeaders = (): Headers => {
   const isServer = typeof window === 'undefined';
 
-  let h: Headers;
-
   if (isServer) {
-    const nextHeaders = headers();
-    if (isPromise(headers())) {
-      h = use(nextHeaders);
-    } else {
-      h = nextHeaders as unknown as Headers; // assert that headers come from the synchronous nextjs function
-    }
+    // Dynamic require to avoid bundling next/headers in client components
+    const nextHeadersModule = require('next/headers') as {
+      headers: () => HeadersResult;
+    };
+    const nextHeaders = nextHeadersModule.headers();
+    return isPromise(nextHeaders) ? use(nextHeaders) : nextHeaders;
   }
 
-  return h;
+  return undefined;
 };
