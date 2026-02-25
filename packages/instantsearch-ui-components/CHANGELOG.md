@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.19.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.18.0...instantsearch-ui-components@0.19.0) (2026-02-24)
+
+
+### Bug Fixes
+
+* **autocomplete:** left and right arrow keys do not navigate items ([#6907](https://github.com/algolia/instantsearch/issues/6907)) ([d47dc84](https://github.com/algolia/instantsearch/commit/d47dc8497cbd3043d7bf7a6178d3c0133d1ae559))
+
+
+### Features
+
+* **chat:** add compatibility with algolia mcp search tool [DASH-2294] ([#6904](https://github.com/algolia/instantsearch/issues/6904)) ([adf1037](https://github.com/algolia/instantsearch/commit/adf1037eb4f7088e2972212917ed2ac32b23072a))
+
+
+
+
+
 # [0.18.0](https://github.com/algolia/instantsearch/compare/instantsearch-ui-components@0.17.1...instantsearch-ui-components@0.18.0) (2026-02-17)
 
 

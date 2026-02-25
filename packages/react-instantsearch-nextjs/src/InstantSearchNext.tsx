@@ -11,7 +11,6 @@ import { TriggerSearch } from './TriggerSearch';
 import { useDynamicRouteWarning } from './useDynamicRouteWarning';
 import { useInstantSearchRouting } from './useInstantSearchRouting';
 import { useNextHeaders } from './useNextHeaders';
-import { warn } from './warn';
 
 import type { InitialResults, StateMapping, UiState } from 'instantsearch.js';
 import type { BrowserHistoryArgs } from 'instantsearch.js/es/lib/routers/history';
@@ -75,12 +74,6 @@ export function InstantSearchNext<
   useDynamicRouteWarning({ isServer, isMounting, instance });
 
   const routing = useInstantSearchRouting(passedRouting, isMounting);
-
-  warn(
-    false,
-    `InstantSearchNext relies on experimental APIs and may break in the future.
-This message will only be displayed in development mode.`
-  );
 
   return (
     <ServerOrHydrationProvider

@@ -1,6 +1,6 @@
 {
   "name": "example-instantsearch-getting-started",
-  "version": "1.52.0",
+  "version": "1.53.0",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -13,9 +13,9 @@
   "dependencies": {
     "algoliasearch": "5.1.1",
     "algoliasearch-helper": "3.27.1",
-    "instantsearch-ui-components": "0.18.0",
+    "instantsearch-ui-components": "0.19.0",
     "instantsearch.css": "8.11.0",
-    "instantsearch.js": "4.88.0"
+    "instantsearch.js": "4.89.0"
   },
   "devDependencies": {
     "vite": "5.0.7",

@@ -147,12 +147,10 @@ export function createAutocompletePropGetters({
 
     const getNextActiveDescendant = (key: string): string | undefined => {
       switch (key) {
-        case 'ArrowLeft':
         case 'ArrowUp': {
           const prevIndex = itemsIds.indexOf(activeDescendant || '') - 1;
           return itemsIds[prevIndex] || itemsIds[itemsIds.length - 1];
         }
-        case 'ArrowRight':
         case 'ArrowDown': {
           const nextIndex = itemsIds.indexOf(activeDescendant || '') + 1;
           return itemsIds[nextIndex] || itemsIds[0];
@@ -221,9 +219,7 @@ export function createAutocompletePropGetters({
               }
               break;
             }
-            case 'ArrowLeft':
             case 'ArrowUp':
-            case 'ArrowRight':
             case 'ArrowDown': {
               setIsOpen(true);
 
