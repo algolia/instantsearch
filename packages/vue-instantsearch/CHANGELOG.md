@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.24.0](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.23.4...vue-instantsearch@4.24.0) (2026-02-25)
+
+
+### Features
+
+* **build:** unify build system across monorepo ([#6886](https://github.com/algolia/instantsearch/issues/6886)) ([e8b2ef7](https://github.com/algolia/instantsearch/commit/e8b2ef7dc1b7d98f1ee5518fad7607b5f31bbd96))
+
+
+
+
+
 ## [4.23.4](https://github.com/algolia/instantsearch/compare/vue-instantsearch@4.23.3...vue-instantsearch@4.23.4) (2026-02-24)
 
 **Note:** Version bump only for package vue-instantsearch

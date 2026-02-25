@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.28.0](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.27.1...algoliasearch-helper@3.28.0) (2026-02-25)
+
+
+### Features
+
+* **build:** unify build system across monorepo ([#6886](https://github.com/algolia/instantsearch/issues/6886)) ([e8b2ef7](https://github.com/algolia/instantsearch/commit/e8b2ef7dc1b7d98f1ee5518fad7607b5f31bbd96))
+
+
+
+
+
 ## [3.27.1](https://github.com/algolia/instantsearch/compare/algoliasearch-helper@3.27.0...algoliasearch-helper@3.27.1) (2026-02-10)
 
 

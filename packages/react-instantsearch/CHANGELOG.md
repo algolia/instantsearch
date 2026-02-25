@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.26.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.25.0...react-instantsearch@7.26.0) (2026-02-25)
+
+
+### Features
+
+* **build:** unify build system across monorepo ([#6886](https://github.com/algolia/instantsearch/issues/6886)) ([e8b2ef7](https://github.com/algolia/instantsearch/commit/e8b2ef7dc1b7d98f1ee5518fad7607b5f31bbd96))
+
+
+
+
+
 # [7.25.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.24.0...react-instantsearch@7.25.0) (2026-02-24)
 
 
