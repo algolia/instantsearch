@@ -11,9 +11,15 @@ type Options = {
    * @default false
    */
   minimal?: boolean;
+  /**
+   * The fixture to use for the recommendations.
+   *
+   * @default defaultFixture
+   */
+  fixture?: any[];
 };
 
-const fixture = [
+const defaultFixture = [
   {
     _highlightResult: {
       name: {
@@ -39,7 +45,7 @@ const fixture = [
 ];
 
 export function createRecommendSearchClient(options: Options = {}) {
-  const { minimal = false } = options;
+  const { minimal = false, fixture = defaultFixture } = options;
   return createSearchClient({
     getRecommendations: jest.fn((requests) =>
       Promise.resolve(

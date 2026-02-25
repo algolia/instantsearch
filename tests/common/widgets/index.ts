@@ -19,6 +19,7 @@ export * from './stats';
 export * from './numeric-menu';
 export * from './related-products';
 export * from './frequently-bought-together';
+export * from './trending-facets';
 export * from './trending-items';
 export * from './looking-similar';
 export * from './powered-by';

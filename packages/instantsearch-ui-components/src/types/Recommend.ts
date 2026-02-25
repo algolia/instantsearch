@@ -100,3 +100,22 @@ export type RecommendItemComponentProps<TObject> = {
 
 // @TODO: use instantsearch status instead
 export type RecommendStatus = 'idle' | 'loading' | 'stalled' | 'error';
+
+// for convenience, redefined here from instantsearch
+export type TrendingFacetHit = {
+  objectID: string;
+  /**
+   * Recommendation score.
+   */
+  _score: number;
+
+  /**
+   * Facet attribute. To be used in combination with `facetValue`. If specified, only recommendations matching the facet filter will be returned.
+   */
+  attribute: string;
+
+  /**
+   * Facet value. To be used in combination with `facetName`. If specified, only recommendations matching the facet filter will be returned.
+   */
+  value: string;
+};

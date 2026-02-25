@@ -27,6 +27,7 @@ import {
   Stats,
   RelatedProducts,
   FrequentlyBoughtTogether,
+  TrendingFacets,
   TrendingItems,
   LookingSimilar,
   PoweredBy,
@@ -37,8 +38,10 @@ import {
 } from '..';
 
 import type { TestOptionsMap, TestSetupsMap } from '@instantsearch/tests';
+import type { TrendingFacetHit } from 'instantsearch-ui-components';
 import type { Hit } from 'instantsearch.js';
 import type { SendEventForHits } from 'instantsearch.js/es/lib/utils';
+import type { ComponentProps } from 'react';
 
 type TestSuites = typeof suites;
 const testSuites: TestSuites = suites;
@@ -341,6 +344,22 @@ const testSetups: TestSetupsMap<TestSuites, 'react'> = {
       </InstantSearch>
     );
   },
+  createTrendingFacetsWidgetTests({ instantSearchOptions, widgetParams }) {
+    const { templates, ...params } = widgetParams;
+    const itemComponent: ComponentProps<
+      typeof TrendingFacets
+    >['itemComponent'] = ({ item }: { item: Hit<TrendingFacetHit> }) =>
+      typeof widgetParams.templates.item === 'function'
+        ? (widgetParams.templates.item(item, {} as any) as JSX.Element)
+        : ('Error: itemComponent should be a function' as unknown as JSX.Element);
+
+    render(
+      <InstantSearch {...instantSearchOptions}>
+        <TrendingFacets itemComponent={itemComponent} {...params} />
+        <GlobalErrorSwallower />
+      </InstantSearch>
+    );
+  },
   createTrendingItemsWidgetTests({ instantSearchOptions, widgetParams }) {
     const { facetName, facetValue, ...params } = widgetParams;
     const facetParams =
@@ -467,6 +486,7 @@ const testOptions: TestOptionsMap<TestSuites> = {
   },
   createRelatedProductsWidgetTests: { act },
   createFrequentlyBoughtTogetherWidgetTests: { act },
+  createTrendingFacetsWidgetTests: { act },
   createTrendingItemsWidgetTests: { act },
   createLookingSimilarWidgetTests: { act },
   createPoweredByWidgetTests: { act },

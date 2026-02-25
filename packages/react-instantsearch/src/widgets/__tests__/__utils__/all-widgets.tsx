@@ -122,6 +122,15 @@ function Widget<TWidget extends SingleWidget>({
     case 'LookingSimilar': {
       return <widget.Component objectIDs={['1']} {...props} />;
     }
+    case 'TrendingFacets': {
+      return (
+        <widget.Component
+          attribute="foobar"
+          itemComponent={({ item }) => <div>{item.objectID}</div>}
+          {...props}
+        />
+      );
+    }
     case 'EXPERIMENTAL_Autocomplete': {
       // @ts-expect-error - incorrectly expects onSelect from ComponentProps<'div'>
       return <widget.Component {...props} />;
