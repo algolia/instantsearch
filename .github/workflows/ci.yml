@@ -22,11 +22,6 @@ jobs:
           node-version-file: '.nvmrc'
           cache: 'yarn'
 
-      - name: Install specific Yarn version
-        run: |
-          curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
-          echo "$HOME/.yarn/bin" >> $GITHUB_PATH
-
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
@@ -69,11 +64,6 @@ jobs:
           node-version-file: '.nvmrc'
           cache: 'yarn'
 
-      - name: Install specific Yarn version
-        run: |
-          curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
-          echo "$HOME/.yarn/bin" >> $GITHUB_PATH
-
       - name: Test package versions
         run: yarn run test:versions
 
@@ -88,11 +78,6 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
-
-      - name: Install specific Yarn version
-        run: |
-          curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
-          echo "$HOME/.yarn/bin" >> $GITHUB_PATH
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -122,11 +107,6 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
-
-      - name: Install specific Yarn version
-        run: |
-          curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
-          echo "$HOME/.yarn/bin" >> $GITHUB_PATH
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -163,11 +143,6 @@ jobs:
           node-version-file: '.nvmrc'
           cache: 'yarn'
 
-      - name: Install specific Yarn version
-        run: |
-          curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
-          echo "$HOME/.yarn/bin" >> $GITHUB_PATH
-
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
@@ -197,11 +172,6 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
-
-      - name: Install specific Yarn version
-        run: |
-          curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
-          echo "$HOME/.yarn/bin" >> $GITHUB_PATH
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -244,11 +214,6 @@ jobs:
           node-version-file: '.nvmrc'
           cache: 'yarn'
 
-      - name: Install specific Yarn version
-        run: |
-          curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
-          echo "$HOME/.yarn/bin" >> $GITHUB_PATH
-
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
@@ -287,11 +252,6 @@ jobs:
           node-version-file: '.nvmrc'
           cache: 'yarn'
 
-      - name: Install specific Yarn version
-        run: |
-          curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
-          echo "$HOME/.yarn/bin" >> $GITHUB_PATH
-
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
@@ -323,11 +283,6 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
-
-      - name: Install specific Yarn version
-        run: |
-          curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
-          echo "$HOME/.yarn/bin" >> $GITHUB_PATH
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -363,11 +318,6 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
-
-      - name: Install specific Yarn version
-        run: |
-          curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
-          echo "$HOME/.yarn/bin" >> $GITHUB_PATH
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -414,11 +364,6 @@ jobs:
           node-version-file: '.nvmrc'
           cache: 'yarn'
 
-      - name: Install specific Yarn version
-        run: |
-          curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
-          echo "$HOME/.yarn/bin" >> $GITHUB_PATH
-
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
@@ -455,11 +400,6 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
-
-      - name: Install specific Yarn version
-        run: |
-          curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
-          echo "$HOME/.yarn/bin" >> $GITHUB_PATH
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
