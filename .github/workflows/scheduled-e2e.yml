@@ -3,8 +3,8 @@ name: Scheduled E2E Tests
 on:
   schedule:
     # Runs on a schedule (configure your desired schedule)
-    - cron: '0 2 * * *'  # Daily at 2 AM UTC
-  workflow_dispatch:  # Allow manual trigger
+    - cron: '0 2 * * *' # Daily at 2 AM UTC
+  workflow_dispatch: # Allow manual trigger
 
 concurrency:
   group: scheduled-e2e
