@@ -11,7 +11,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **chat:** add compatibility with algolia mcp search tool [DASH-2294] ([#6904](https://github.com/algolia/instantsearch/issues/6904)) ([adf1037](https://github.com/algolia/instantsearch/commit/adf1037eb4f7088e2972212917ed2ac32b23072a))
 
 
+### Bug Fixes
 
+* **autocomplete:** left and right arrow keys do not navigate items ([#6907](https://github.com/algolia/instantsearch/issues/6907)) ([d47dc84](https://github.com/algolia/instantsearch/commit/d47dc8497cbd3043d7bf7a6178d3c0133d1ae559))
 
 
 # [7.24.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.23.2...react-instantsearch@7.24.0) (2026-02-17)

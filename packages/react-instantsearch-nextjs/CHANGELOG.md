@@ -5,7 +5,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [1.0.16](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.0.15...react-instantsearch-nextjs@1.0.16) (2026-02-24)
 
-**Note:** Version bump only for package react-instantsearch-nextjs
+
+### Bug Fixes
+
+* **next:** remove experimental warning ([#6909](https://github.com/algolia/instantsearch/issues/6909)) ([d624f06](https://github.com/algolia/instantsearch/commit/d624f064259d892ca4902cb0cd44f7cd393ca1e6))
 
 
 
