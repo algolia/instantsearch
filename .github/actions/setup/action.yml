@@ -13,7 +13,6 @@ runs:
     - uses: actions/setup-node@v4
       with:
         node-version-file: '.nvmrc'
-      shell: bash
 
     - name: Cache node_modules
       id: cache-node-modules
@@ -27,7 +26,6 @@ runs:
         key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
           node-modules-${{ runner.os }}-
-      shell: bash
 
     - name: Install dependencies
       if: inputs.install-dependencies == 'true' && steps.cache-node-modules.outputs.cache-hit != 'true'
