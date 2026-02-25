@@ -36,3 +36,8 @@ runs:
       if: inputs.install-dependencies == 'true' && steps.cache-node-modules.outputs.cache-hit != 'true'
       run: yarn install --frozen-lockfile
       shell: bash
+
+    - name: Run prepare scripts (when using cache)
+      if: inputs.install-dependencies == 'true' && steps.cache-node-modules.outputs.cache-hit == 'true'
+      run: yarn run prepare
+      shell: bash
