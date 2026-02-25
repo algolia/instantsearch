@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.0.16...react-instantsearch-nextjs@1.1.0) (2026-02-25)
+
+
+### Features
+
+* **build:** unify build system across monorepo ([#6886](https://github.com/algolia/instantsearch/issues/6886)) ([e8b2ef7](https://github.com/algolia/instantsearch/commit/e8b2ef7dc1b7d98f1ee5518fad7607b5f31bbd96))
+
+
+
+
+
 ## [1.0.16](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.0.15...react-instantsearch-nextjs@1.0.16) (2026-02-24)
 
 
