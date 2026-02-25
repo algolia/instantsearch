@@ -32,7 +32,7 @@ import type {
 } from 'instantsearch-ui-components';
 
 const withUsage = createDocumentationMessageGenerator({
-  name: 'trending-items',
+  name: 'trending-facets',
 });
 
 const TrendingFacets = createTrendingFacetsComponent({

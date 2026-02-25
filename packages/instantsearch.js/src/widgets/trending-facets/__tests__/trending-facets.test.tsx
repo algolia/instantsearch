@@ -34,7 +34,7 @@ describe('trendingFacets', () => {
       }).toThrowErrorMatchingInlineSnapshot(`
         "The \`container\` option is required.
 
-        See documentation: https://www.algolia.com/doc/api-reference/widgets/trending-items/js/"
+        See documentation: https://www.algolia.com/doc/api-reference/widgets/trending-facets/js/"
       `);
     });
 
