@@ -20,9 +20,22 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
+
+      - name: Cache node_modules
+        id: cache-node-modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+            scripts/legacy/algoliasearch@5-dependency-container/node_modules
+            scripts/legacy/algoliasearch-v4-dependency-container/node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            node-modules-${{ runner.os }}-
 
       - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
 
       - name: Build library
@@ -57,9 +70,22 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
+
+      - name: Cache node_modules
+        id: cache-node-modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+            scripts/legacy/algoliasearch@5-dependency-container/node_modules
+            scripts/legacy/algoliasearch-v4-dependency-container/node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            node-modules-${{ runner.os }}-
 
       - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
 
       - name: Download build artifacts
@@ -92,9 +118,22 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
+
+      - name: Cache node_modules
+        id: cache-node-modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+            scripts/legacy/algoliasearch@5-dependency-container/node_modules
+            scripts/legacy/algoliasearch-v4-dependency-container/node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            node-modules-${{ runner.os }}-
 
       - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
 
       - name: Download build artifacts
@@ -191,9 +230,22 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
+
+      - name: Cache node_modules
+        id: cache-node-modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+            scripts/legacy/algoliasearch@5-dependency-container/node_modules
+            scripts/legacy/algoliasearch-v4-dependency-container/node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            node-modules-${{ runner.os }}-
 
       - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
 
       - name: Download build artifacts
@@ -227,9 +279,22 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
+
+      - name: Cache node_modules
+        id: cache-node-modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+            scripts/legacy/algoliasearch@5-dependency-container/node_modules
+            scripts/legacy/algoliasearch-v4-dependency-container/node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            node-modules-${{ runner.os }}-
 
       - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
 
       - name: Download build artifacts
