@@ -325,6 +325,12 @@ export function createChatMessagesComponent({
       ),
     };
 
+    const lastMessage = messages[messages.length - 1];
+    const lastPart = lastMessage?.parts[lastMessage.parts.length - 1];
+    const showLoader =
+      status === 'submitted' ||
+      (status === 'streaming' && lastPart?.type === 'step-start');
+
     const DefaultMessage = MessageComponent || DefaultMessageComponent;
     const DefaultLoader = LoaderComponent || DefaultLoaderComponent;
     const DefaultError = ErrorComponent || DefaultErrorComponent;
@@ -378,7 +384,7 @@ export function createChatMessagesComponent({
               />
             ))}
 
-            {status === 'submitted' && (
+            {showLoader && (
               <DefaultLoader
                 translations={{ loaderText: translations.loaderText }}
               />

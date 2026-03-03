@@ -177,7 +177,10 @@ export function createChatMessageComponent({ createElement }: Renderer) {
     };
 
     const hasLeading = Boolean(LeadingComponent);
-    const hasActions = Boolean(actions.length > 0 || ActionsComponent);
+
+    const showActions =
+      Boolean(actions.length > 0 || ActionsComponent) &&
+      message.parts.some((part) => part.type === 'text');
 
     const cssClasses: ChatMessageClassNames = {
       root: cx(
@@ -273,7 +276,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
 
             {suggestionsElement}
 
-            {hasActions && (
+            {showActions && (
               <div
                 className={cx(cssClasses.actions)}
                 aria-label={translations.actionsLabel}
