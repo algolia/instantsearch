@@ -1,6 +1,6 @@
 {
   "name": "example-react-instantsearch-getting-started",
-  "version": "6.114.0",
+  "version": "6.115.0",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -16,8 +16,8 @@
     "instantsearch.js": "4.90.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "react-instantsearch": "7.26.0",
-    "react-instantsearch-core": "7.26.0"
+    "react-instantsearch": "7.26.1",
+    "react-instantsearch-core": "7.26.1"
   },
   "devDependencies": {
     "@types/react": "19.0.3",
