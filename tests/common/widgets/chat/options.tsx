@@ -134,6 +134,46 @@ export function createOptionsTests(
       );
     });
 
+    test('shows loader during streaming when last message has no text content', async () => {
+      const searchClient = createSearchClient();
+      const chat = new Chat({});
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: createDefaultWidgetParams(chat),
+          react: createDefaultWidgetParams(chat),
+          vue: {},
+        },
+      });
+
+      await openChat(act);
+
+      await act(async () => {
+        chat._state.messages = [
+          {
+            id: '1',
+            role: 'user',
+            parts: [{ type: 'text', text: 'Hello' }],
+          },
+          {
+            id: '2',
+            role: 'assistant',
+            parts: [{ type: 'step-start' }],
+          },
+        ] as any;
+        chat._state.status = 'streaming';
+        await wait(0);
+      });
+
+      expect(
+        document.querySelector('.ais-ChatMessageLoader')
+      ).toBeInTheDocument();
+    });
+
     describe('cssClasses', () => {
       test('adds custom CSS classes', async () => {
         const searchClient = createSearchClient();
@@ -696,6 +736,134 @@ export function createOptionsTests(
             }),
           ])
         );
+      });
+
+      test('shows actions for assistant message when tool has output', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({
+          messages: [
+            {
+              id: '1',
+              role: 'assistant',
+              parts: [
+                {
+                  type: `tool-${SearchIndexToolType}`,
+                  toolCallId: '1',
+                  state: 'output-available',
+                  input: { text: 'test' },
+                  output: { hits: [] },
+                },
+              ],
+            },
+          ],
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: createDefaultWidgetParams(chat),
+            react: createDefaultWidgetParams(chat),
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        expect(
+          document.querySelector('.ais-ChatMessage-actions')
+        ).toBeInTheDocument();
+      });
+
+      test('does not show actions for assistant message when tool has no output', async () => {
+        const searchClient = createSearchClient();
+
+        const chat = new Chat({
+          messages: [
+            {
+              id: '1',
+              role: 'assistant',
+              parts: [
+                {
+                  type: `tool-${SearchIndexToolType}`,
+                  toolCallId: '1',
+                  state: 'input-streaming',
+                  input: undefined,
+                },
+              ],
+            },
+          ],
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: createDefaultWidgetParams(chat),
+            react: createDefaultWidgetParams(chat),
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        expect(
+          document.querySelector('.ais-ChatMessage-actions')
+        ).not.toBeInTheDocument();
+      });
+
+      test('shows loader during streaming when last part is a tool call', async () => {
+        const searchClient = createSearchClient();
+        const chat = new Chat({});
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: createDefaultWidgetParams(chat),
+            react: createDefaultWidgetParams(chat),
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        await act(async () => {
+          chat._state.messages = [
+            {
+              id: '1',
+              role: 'user',
+              parts: [{ type: 'text', text: 'Hello' }],
+            },
+            {
+              id: '2',
+              role: 'assistant',
+              parts: [
+                { type: 'text', text: 'Let me search for that.' },
+                {
+                  type: 'tool-hello',
+                  toolCallId: '1',
+                  state: 'output-available',
+                  input: {},
+                  output: 'result',
+                },
+              ],
+            },
+          ] as any;
+          chat._state.status = 'streaming';
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-ChatMessageLoader')
+        ).toBeInTheDocument();
       });
 
       test('handles hierarchical facets when applying filters', async () => {
