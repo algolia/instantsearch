@@ -2,11 +2,6 @@
 import { compiler } from 'markdown-to-jsx';
 
 import { cx, startsWith } from '../../lib';
-import {
-  hasTextContent,
-  hasToolParts,
-  toolHasOutput,
-} from '../../lib/utils/chat';
 import { createButtonComponent } from '../Button';
 
 import { MenuIcon } from './icons';
@@ -15,6 +10,7 @@ import type { ComponentProps, Renderer, VNode } from '../../types';
 import type {
   AddToolResultWithOutput,
   ChatMessageBase,
+  ChatStatus,
   ChatToolMessage,
   ClientSideTools,
 } from './types';
@@ -89,6 +85,10 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    */
   message: ChatMessageBase;
   /**
+   * The status of the message (e.g. whether it's still streaming)
+   */
+  status: ChatStatus;
+  /**
    * The side of the message
    */
   side?: ChatMessageSide;
@@ -159,6 +159,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
     const {
       classNames = {},
       message,
+      status,
       side = 'left',
       variant = 'subtle',
       actions = [],
@@ -184,9 +185,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
     const hasLeading = Boolean(LeadingComponent);
 
     const showActions =
-      Boolean(actions.length > 0 || ActionsComponent) &&
-      (hasTextContent(message) ||
-        (hasToolParts(message) && toolHasOutput(message)));
+      Boolean(actions.length > 0 || ActionsComponent) && status === 'ready';
 
     const cssClasses: ChatMessageClassNames = {
       root: cx(

@@ -20,6 +20,12 @@ export const hasToolParts = (message: ChatMessageBase) => {
   return getToolParts(message).length > 0;
 };
 
+export const isPartText = (
+  part: ChatMessageBase['parts'][number]
+): part is Extract<ChatMessageBase['parts'][number], { type: 'text' }> => {
+  return part.type === 'text';
+};
+
 export const isPartTool = (
   part: ChatMessageBase['parts'][number]
 ): part is ChatToolMessage => {

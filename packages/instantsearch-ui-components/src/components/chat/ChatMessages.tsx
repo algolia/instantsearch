@@ -4,7 +4,8 @@ import { cx } from '../../lib';
 import {
   getTextContent,
   hasTextContent,
-  hasToolParts,
+  isPartText,
+  isPartTool,
 } from '../../lib/utils/chat';
 import { createButtonComponent } from '../Button';
 
@@ -182,6 +183,7 @@ function createDefaultMessageComponent<
 
   return function DefaultMessage({
     message,
+    status,
     userMessageProps,
     assistantMessageProps,
     tools,
@@ -197,6 +199,7 @@ function createDefaultMessageComponent<
   }: {
     key: string;
     message: TMessage;
+    status: ChatStatus;
     userMessageProps?: Partial<ChatMessageProps>;
     assistantMessageProps?: Partial<ChatMessageProps>;
     indexUiState: object;
@@ -237,6 +240,7 @@ function createDefaultMessageComponent<
         side={message.role === 'user' ? 'right' : 'left'}
         variant={message.role === 'user' ? 'neutral' : 'subtle'}
         message={message}
+        status={status}
         tools={tools}
         indexUiState={indexUiState}
         setIndexUiState={setIndexUiState}
@@ -321,10 +325,17 @@ export function createChatMessagesComponent({
     };
 
     const lastMessage = messages[messages.length - 1];
+    const lastPart = lastMessage?.parts?.[lastMessage.parts.length - 1];
     const showLoader =
       status === 'submitted' ||
+      (status === 'streaming' && !lastPart) ||
+      // show the loader if the last part is a tool that doesn't have output available yet
       (status === 'streaming' &&
-        (!hasTextContent(lastMessage) || hasToolParts(lastMessage)));
+        lastPart &&
+        isPartTool(lastPart) &&
+        lastPart.state !== 'output-available') ||
+      // show the loader if the last part is text and we're still streaming (i.e. more text is coming)
+      (status === 'streaming' && lastPart && !isPartText(lastPart));
 
     const DefaultMessage = MessageComponent || DefaultMessageComponent;
     const DefaultLoader = LoaderComponent || DefaultLoaderComponent;
@@ -358,6 +369,7 @@ export function createChatMessagesComponent({
               <DefaultMessage
                 key={message.id}
                 message={message}
+                status={status}
                 userMessageProps={userMessageProps}
                 assistantMessageProps={assistantMessageProps}
                 tools={tools}
