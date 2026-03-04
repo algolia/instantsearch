@@ -129,7 +129,13 @@ export function createCJSConfig({
       createResolvePlugin(),
       createCommonjsPlugin(),
       ...preSwcPlugins,
-      createSwcPlugin(swc),
+      createSwcPlugin({
+        module: {
+          type: 'commonjs',
+          noInterop: false,
+        },
+        ...swc,
+      }),
       createWrapWarningsWithDevCheckPlugin(),
       createReplacePlugin({ mode: 'production', additional: replaceImports }),
       createStripJsxPragmaPlugin(),
