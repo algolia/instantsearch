@@ -2,7 +2,11 @@
 import { compiler } from 'markdown-to-jsx';
 
 import { cx, startsWith } from '../../lib';
-import { hasTextContent, hasToolParts } from '../../lib/utils/chat';
+import {
+  hasTextContent,
+  hasToolParts,
+  toolHasOutput,
+} from '../../lib/utils/chat';
 import { createButtonComponent } from '../Button';
 
 import { MenuIcon } from './icons';
@@ -181,7 +185,8 @@ export function createChatMessageComponent({ createElement }: Renderer) {
 
     const showActions =
       Boolean(actions.length > 0 || ActionsComponent) &&
-      (hasTextContent(message) || hasToolParts(message));
+      (hasTextContent(message) ||
+        (hasToolParts(message) && toolHasOutput(message)));
 
     const cssClasses: ChatMessageClassNames = {
       root: cx(
