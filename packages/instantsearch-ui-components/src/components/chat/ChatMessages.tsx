@@ -1,6 +1,11 @@
 /** @jsx createElement */
 
 import { cx } from '../../lib';
+import {
+  getTextContent,
+  hasTextContent,
+  hasToolParts,
+} from '../../lib/utils/chat';
 import { createButtonComponent } from '../Button';
 
 import { createChatMessageComponent } from './ChatMessage';
@@ -166,16 +171,6 @@ export type ChatMessagesProps<
   suggestionsElement?: VNode;
 };
 
-const getTextContent = (message: ChatMessageBase) => {
-  return message.parts
-    .map((part) => ('text' in part ? part.text : ''))
-    .join('');
-};
-
-const hasTextContent = (message: ChatMessageBase) => {
-  return getTextContent(message).trim() !== '';
-};
-
 const copyToClipboard = (message: ChatMessageBase) => {
   navigator.clipboard.writeText(getTextContent(message));
 };
@@ -326,10 +321,10 @@ export function createChatMessagesComponent({
     };
 
     const lastMessage = messages[messages.length - 1];
-    const lastPart = lastMessage?.parts[lastMessage.parts.length - 1];
     const showLoader =
       status === 'submitted' ||
-      (status === 'streaming' && lastPart?.type === 'step-start');
+      (status === 'streaming' &&
+        (!hasTextContent(lastMessage) || hasToolParts(lastMessage)));
 
     const DefaultMessage = MessageComponent || DefaultMessageComponent;
     const DefaultLoader = LoaderComponent || DefaultLoaderComponent;
