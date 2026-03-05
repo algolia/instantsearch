@@ -3,12 +3,14 @@
  *
  * Usage in package rollup.config.mjs:
  *
- * import { createESMConfig, createCJSConfig, createUMDConfig } from '../../scripts/build/rollup.base.mjs';
+ * import { createESMConfig, createCJSConfig, createUMDConfig, collectSourceEntries } from '../../scripts/build/rollup.base.mjs';
  * import pkg from './package.json' with { type: 'json' };
  *
+ * const input = collectSourceEntries();
+ *
  * export default [
- *   createESMConfig({ input: 'src/index.ts', pkg }),
- *   createCJSConfig({ input: 'src/index.ts', pkg }),
+ *   createESMConfig({ input, pkg }),
+ *   createCJSConfig({ input, pkg }),
  *   createUMDConfig({
  *     input: 'src/index.ts',
  *     pkg,
@@ -17,6 +19,9 @@
  *   }),
  * ];
  */
+
+import { readdirSync } from 'node:fs';
+import { extname, join } from 'node:path';
 
 import {
   createSwcPlugin,
@@ -243,6 +248,62 @@ export function createUMDConfig({
   };
 
   return [devConfig, prodConfig];
+}
+
+const DEFAULT_SOURCE_EXTENSIONS = new Set(['.js', '.jsx', '.ts', '.tsx']);
+const DEFAULT_IGNORED_DIRS = new Set(['__tests__', '__mocks__']);
+
+/**
+ * Collects all source files from a directory recursively.
+ * @param {Object} [options] - Configuration options
+ * @param {string} [options.sourceRoot='src'] - Root directory to scan
+ * @param {Set<string>} [options.extensions] - File extensions to include
+ * @param {Set<string>} [options.ignoredDirs] - Directory names to skip
+ * @param {string[]} [options.exclude] - File paths (relative to sourceRoot) to exclude
+ * @returns {string[]} Array of file paths
+ */
+export function collectSourceEntries({
+  sourceRoot = 'src',
+  extensions = DEFAULT_SOURCE_EXTENSIONS,
+  ignoredDirs = DEFAULT_IGNORED_DIRS,
+  exclude = [],
+} = {}) {
+  const excludeSet = new Set(exclude);
+  const entries = [];
+
+  function walk(dir) {
+    const dirEntries = readdirSync(dir, { withFileTypes: true });
+
+    for (const entry of dirEntries) {
+      const filePath = join(dir, entry.name);
+
+      if (entry.isDirectory()) {
+        if (!ignoredDirs.has(entry.name)) {
+          walk(filePath);
+        }
+        continue;
+      }
+
+      if (!entry.isFile()) {
+        continue;
+      }
+
+      if (!extensions.has(extname(entry.name))) {
+        continue;
+      }
+
+      // Check if this file should be excluded
+      const relativePath = filePath.slice(sourceRoot.length + 1);
+      if (excludeSet.has(relativePath)) {
+        continue;
+      }
+
+      entries.push(filePath);
+    }
+  }
+
+  walk(sourceRoot);
+  return entries;
 }
 
 /**
