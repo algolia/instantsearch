@@ -1,11 +1,12 @@
 import {
   createESMConfig,
   createCJSConfig,
+  collectSourceEntries,
 } from '../../scripts/build/rollup.base.mjs';
 
 import pkg from './package.json' with { type: 'json' };
 
-const input = 'src/index.ts';
+const input = collectSourceEntries();
 const isESM = process.env.BUILD_FORMAT === 'esm';
 const isCJS = process.env.BUILD_FORMAT === 'cjs';
 
@@ -29,6 +30,7 @@ if (isCJS || (!isESM && !isCJS)) {
       input,
       pkg,
       outputDir: 'dist/cjs',
+      preserveModules: true,
       // Replace instantsearch.js/es imports with instantsearch.js/cjs for CJS build
       replaceImports: {
         'instantsearch.js/es': 'instantsearch.js/cjs',

@@ -1,33 +1,5 @@
-import { createESMConfig, createCJSConfig, createJsxPragmaFixPlugins } from '../../scripts/build/rollup.base.mjs';
-import { readdirSync } from 'node:fs';
-import { extname, join } from 'node:path';
+import { createESMConfig, createCJSConfig, createJsxPragmaFixPlugins, collectSourceEntries } from '../../scripts/build/rollup.base.mjs';
 import pkg from './package.json' with { type: 'json' };
-
-const SOURCE_ROOT = 'src';
-const SOURCE_EXTENSIONS = new Set(['.js', '.jsx', '.ts', '.tsx']);
-const IGNORED_DIRS = new Set(['__tests__', '__mocks__']);
-
-function collectSourceEntries(dir = SOURCE_ROOT) {
-  const entries = [];
-  const dirEntries = readdirSync(dir, { withFileTypes: true });
-
-  for (const entry of dirEntries) {
-    const filePath = join(dir, entry.name);
-
-    if (entry.isDirectory()) {
-      if (!IGNORED_DIRS.has(entry.name)) {
-        entries.push(...collectSourceEntries(filePath));
-      }
-      continue;
-    }
-
-    if (entry.isFile() && SOURCE_EXTENSIONS.has(extname(entry.name))) {
-      entries.push(filePath);
-    }
-  }
-
-  return entries;
-}
 
 const input = collectSourceEntries();
 
