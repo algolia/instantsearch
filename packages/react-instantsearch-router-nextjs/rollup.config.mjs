@@ -29,6 +29,7 @@ if (isCJS || (!isESM && !isCJS)) {
       input,
       pkg,
       outputDir: 'dist/cjs',
+      preserveModules: true,
       // Replace instantsearch.js/es imports with instantsearch.js/cjs for CJS build
       replaceImports: {
         'instantsearch.js/es': 'instantsearch.js/cjs',
