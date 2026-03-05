@@ -97,7 +97,7 @@ export function createESMConfig({
  * @param {string[]} [options.external] - External dependencies (auto-detected from pkg if not provided)
  * @param {Object[]} [options.plugins] - Additional plugins to append
  * @param {Object} [options.replaceImports] - Import path replacements (e.g., { 'pkg/es': 'pkg/cjs' })
- * @param {boolean} [options.preserveModules=false] - Whether to preserve module structure
+ * @param {boolean} [options.preserveModules=true] - Whether to preserve module structure
  * @returns Rollup configuration object
  */
 export function createCJSConfig({
@@ -107,7 +107,7 @@ export function createCJSConfig({
   external,
   plugins = [],
   replaceImports = {},
-  preserveModules = false,
+  preserveModules = true,
   swc = {},
   preSwcPlugins = [],
 }) {
