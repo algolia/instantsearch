@@ -5,7 +5,6 @@ import {
   getTextContent,
   hasTextContent,
   isPartText,
-  isPartTool,
 } from '../../lib/utils/chat';
 import { createButtonComponent } from '../Button';
 
@@ -326,16 +325,15 @@ export function createChatMessagesComponent({
 
     const lastMessage = messages[messages.length - 1];
     const lastPart = lastMessage?.parts?.[lastMessage.parts.length - 1];
+    const isWaitingForResponse = status === 'submitted';
+    const isStreamingWithNoContent = status === 'streaming' && !lastPart;
+    const isStreamingNonTextContent =
+      status === 'streaming' && lastPart && !isPartText(lastPart);
+
     const showLoader =
-      status === 'submitted' ||
-      (status === 'streaming' && !lastPart) ||
-      // show the loader if the last part is a tool that doesn't have output available yet
-      (status === 'streaming' &&
-        lastPart &&
-        isPartTool(lastPart) &&
-        lastPart.state !== 'output-available') ||
-      // show the loader if the last part is text and we're still streaming (i.e. more text is coming)
-      (status === 'streaming' && lastPart && !isPartText(lastPart));
+      isWaitingForResponse ||
+      isStreamingWithNoContent ||
+      isStreamingNonTextContent;
 
     const DefaultMessage = MessageComponent || DefaultMessageComponent;
     const DefaultLoader = LoaderComponent || DefaultLoaderComponent;
