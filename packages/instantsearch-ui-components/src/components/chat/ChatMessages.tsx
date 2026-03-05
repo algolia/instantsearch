@@ -1,6 +1,11 @@
 /** @jsx createElement */
 
 import { cx } from '../../lib';
+import {
+  getTextContent,
+  hasTextContent,
+  isPartText,
+} from '../../lib/utils/chat';
 import { createButtonComponent } from '../Button';
 
 import { createChatMessageComponent } from './ChatMessage';
@@ -166,16 +171,6 @@ export type ChatMessagesProps<
   suggestionsElement?: VNode;
 };
 
-const getTextContent = (message: ChatMessageBase) => {
-  return message.parts
-    .map((part) => ('text' in part ? part.text : ''))
-    .join('');
-};
-
-const hasTextContent = (message: ChatMessageBase) => {
-  return getTextContent(message).trim() !== '';
-};
-
 const copyToClipboard = (message: ChatMessageBase) => {
   navigator.clipboard.writeText(getTextContent(message));
 };
@@ -187,6 +182,7 @@ function createDefaultMessageComponent<
 
   return function DefaultMessage({
     message,
+    status,
     userMessageProps,
     assistantMessageProps,
     tools,
@@ -202,6 +198,7 @@ function createDefaultMessageComponent<
   }: {
     key: string;
     message: TMessage;
+    status: ChatStatus;
     userMessageProps?: Partial<ChatMessageProps>;
     assistantMessageProps?: Partial<ChatMessageProps>;
     indexUiState: object;
@@ -242,6 +239,7 @@ function createDefaultMessageComponent<
         side={message.role === 'user' ? 'right' : 'left'}
         variant={message.role === 'user' ? 'neutral' : 'subtle'}
         message={message}
+        status={status}
         tools={tools}
         indexUiState={indexUiState}
         setIndexUiState={setIndexUiState}
@@ -325,6 +323,18 @@ export function createChatMessagesComponent({
       ),
     };
 
+    const lastMessage = messages[messages.length - 1];
+    const lastPart = lastMessage?.parts?.[lastMessage.parts.length - 1];
+    const isWaitingForResponse = status === 'submitted';
+    const isStreamingWithNoContent = status === 'streaming' && !lastPart;
+    const isStreamingNonTextContent =
+      status === 'streaming' && lastPart && !isPartText(lastPart);
+
+    const showLoader =
+      isWaitingForResponse ||
+      isStreamingWithNoContent ||
+      isStreamingNonTextContent;
+
     const DefaultMessage = MessageComponent || DefaultMessageComponent;
     const DefaultLoader = LoaderComponent || DefaultLoaderComponent;
     const DefaultError = ErrorComponent || DefaultErrorComponent;
@@ -357,6 +367,7 @@ export function createChatMessagesComponent({
               <DefaultMessage
                 key={message.id}
                 message={message}
+                status={status}
                 userMessageProps={userMessageProps}
                 assistantMessageProps={assistantMessageProps}
                 tools={tools}
@@ -378,7 +389,7 @@ export function createChatMessagesComponent({
               />
             ))}
 
-            {status === 'submitted' && (
+            {showLoader && (
               <DefaultLoader
                 translations={{ loaderText: translations.loaderText }}
               />

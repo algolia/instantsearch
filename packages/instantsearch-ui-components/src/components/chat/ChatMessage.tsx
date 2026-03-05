@@ -10,6 +10,7 @@ import type { ComponentProps, Renderer, VNode } from '../../types';
 import type {
   AddToolResultWithOutput,
   ChatMessageBase,
+  ChatStatus,
   ChatToolMessage,
   ClientSideTools,
 } from './types';
@@ -84,6 +85,10 @@ export type ChatMessageProps = ComponentProps<'article'> & {
    */
   message: ChatMessageBase;
   /**
+   * The status of the message (e.g. whether it's still streaming)
+   */
+  status: ChatStatus;
+  /**
    * The side of the message
    */
   side?: ChatMessageSide;
@@ -154,6 +159,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
     const {
       classNames = {},
       message,
+      status,
       side = 'left',
       variant = 'subtle',
       actions = [],
@@ -177,7 +183,9 @@ export function createChatMessageComponent({ createElement }: Renderer) {
     };
 
     const hasLeading = Boolean(LeadingComponent);
-    const hasActions = Boolean(actions.length > 0 || ActionsComponent);
+
+    const showActions =
+      Boolean(actions.length > 0 || ActionsComponent) && status === 'ready';
 
     const cssClasses: ChatMessageClassNames = {
       root: cx(
@@ -273,7 +281,7 @@ export function createChatMessageComponent({ createElement }: Renderer) {
 
             {suggestionsElement}
 
-            {hasActions && (
+            {showActions && (
               <div
                 className={cx(cssClasses.actions)}
                 aria-label={translations.actionsLabel}
