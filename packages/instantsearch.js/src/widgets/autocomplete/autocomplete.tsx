@@ -17,7 +17,6 @@ import {
   cx,
   getPromptSuggestionHits,
   isPromptSuggestion,
-  isPromptSuggestionFallback,
 } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 import { useEffect, useId, useMemo, useRef, useState } from 'preact/hooks';
@@ -506,7 +505,6 @@ function AutocompleteWrapper<TItem extends BaseHit>({
   const promptSuggestionsIndexName = showPromptSuggestions?.indexName;
   const promptSuggestionsLimit =
     showPromptSuggestions?.searchParameters?.hitsPerPage ?? 3;
-  const promptSuggestionsQuery = searchboxQuery || '';
   const indicesForPanel = indices.map((autocompleteIndex) => {
     const dedupedHits =
       autocompleteIndex.indexName === showQuerySuggestions?.indexName &&
@@ -533,7 +531,6 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         hits: dedupedHits as Array<
           { objectID: string } & Record<string, unknown>
         >,
-        query: promptSuggestionsQuery,
         limit: promptSuggestionsLimit,
       }),
     };
@@ -550,7 +547,6 @@ function AutocompleteWrapper<TItem extends BaseHit>({
           hits: autocompleteIndex.hits as Array<
             { objectID: string } & Record<string, unknown>
           >,
-          query: promptSuggestionsQuery,
           limit: promptSuggestionsLimit,
         }),
       };
@@ -1116,17 +1112,14 @@ export function EXPERIMENTAL_autocomplete<TItem extends BaseHit = BaseHit>(
           item: {
             prompt: string;
             label?: string;
-            __isPromptSuggestionFallback?: boolean;
           };
           onSelect: () => void;
         }) => (
           <AutocompletePromptSuggestion item={item} onSelect={onSelectItem}>
-            {isPromptSuggestionFallback(item)
-              ? item.label || item.prompt
-              : renderConditionalHighlight({
-                  item: item as unknown as Hit<{ prompt: string }>,
-                  attribute: 'prompt',
-                })}
+            {renderConditionalHighlight({
+              item: item as unknown as Hit<{ prompt: string }>,
+              attribute: 'prompt',
+            })}
           </AutocompletePromptSuggestion>
         ),
         ...showPromptSuggestions.templates,

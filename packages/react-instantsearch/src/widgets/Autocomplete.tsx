@@ -14,7 +14,6 @@ import {
   cx,
   getPromptSuggestionHits,
   isPromptSuggestion,
-  isPromptSuggestionFallback,
 } from 'instantsearch-ui-components';
 import { warn } from 'instantsearch.js/es/lib/utils';
 import React, {
@@ -466,19 +465,14 @@ export function EXPERIMENTAL_Autocomplete<TItem extends BaseHit = BaseHit>({
           item: {
             prompt: string;
             label?: string;
-            __isPromptSuggestionFallback?: boolean;
           };
           onSelect: () => void;
         }) => (
           <AutocompletePromptSuggestion item={item} onSelect={onSelect}>
-            {isPromptSuggestionFallback(item) ? (
-              item.label || item.prompt
-            ) : (
-              <ConditionalHighlight
-                item={item as unknown as Hit<{ prompt: string }>}
-                attribute="prompt"
-              />
-            )}
+            <ConditionalHighlight
+              item={item as unknown as Hit<{ prompt: string }>}
+              attribute="prompt"
+            />
           </AutocompletePromptSuggestion>
         ))) as unknown as AutocompleteIndexProps<TItem>['ItemComponent'],
       classNames: {
@@ -634,7 +628,6 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   const promptSuggestionsIndexName = showPromptSuggestions?.indexName;
   const promptSuggestionsLimit =
     showPromptSuggestions?.searchParameters?.hitsPerPage ?? 3;
-  const promptSuggestionsQuery = currentRefinement || '';
   const indicesForPanel = useMemo(
     () =>
       indices.map((index) => {
@@ -661,7 +654,6 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
             hits: dedupedHits as Array<
               { objectID: string } & Record<string, unknown>
             >,
-            query: promptSuggestionsQuery,
             limit: promptSuggestionsLimit,
           }),
         };
@@ -670,7 +662,6 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
       indices,
       promptSuggestionsIndexName,
       promptSuggestionsLimit,
-      promptSuggestionsQuery,
       showRecent,
       showQuerySuggestions?.indexName,
       storageHits,
@@ -689,17 +680,11 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
             hits: index.hits as Array<
               { objectID: string } & Record<string, unknown>
             >,
-            query: promptSuggestionsQuery,
             limit: promptSuggestionsLimit,
           }),
         };
       }),
-    [
-      indicesForPropGetters,
-      promptSuggestionsIndexName,
-      promptSuggestionsLimit,
-      promptSuggestionsQuery,
-    ]
+    [indicesForPropGetters, promptSuggestionsIndexName, promptSuggestionsLimit]
   );
   const hasWarnedMissingPromptSuggestionsChatRef = useRef(false);
 
