@@ -6,7 +6,14 @@ import {
   MemorySearchToolType,
   PonderToolType,
 } from 'instantsearch.js/es/lib/chat';
-import React, { createElement, Fragment } from 'react';
+import React, {
+  createElement,
+  Fragment,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useInstantSearch, useChat } from 'react-instantsearch-core';
 
 import { useStickToBottom } from '../lib/useStickToBottom';
@@ -187,9 +194,9 @@ export function Chat<
 
   const { indexUiState, setIndexUiState } = useInstantSearch();
 
-  const [maximized, setMaximized] = React.useState(false);
+  const [maximized, setMaximized] = useState(false);
 
-  const promptRef = React.useRef<HTMLTextAreaElement>(null);
+  const promptRef = useRef<HTMLTextAreaElement>(null);
 
   const { scrollRef, contentRef, scrollToBottom, isAtBottom } =
     useStickToBottom({
@@ -197,7 +204,7 @@ export function Chat<
       resize: 'smooth',
     });
 
-  const tools = React.useMemo(() => {
+  const tools = useMemo(() => {
     const defaults = createDefaultTools(itemComponent, getSearchPageURL);
 
     return { ...defaults, ...userTools };
@@ -225,6 +232,19 @@ export function Chat<
     tools: toolsFromConnector,
     suggestions,
   } = chatState;
+
+  const wasOpenRef = useRef(false);
+  useEffect(() => {
+    const shouldFocusPrompt = !wasOpenRef.current && open;
+
+    if (shouldFocusPrompt) {
+      window.requestAnimationFrame(() => {
+        promptRef.current?.focus();
+      });
+    }
+
+    wasOpenRef.current = open;
+  }, [open]);
 
   if (__DEV__ && error) {
     throw error;
