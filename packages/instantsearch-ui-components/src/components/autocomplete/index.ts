@@ -11,3 +11,4 @@ export * from './AutocompleteSearch';
 export * from './AutocompleteSuggestion';
 export * from './createAutocompletePropGetters';
 export * from './createAutocompleteStorage';
+export * from './promptSuggestionUtils';

@@ -2053,5 +2053,390 @@ export function createOptionsTests(
         expect(selectedItem!.textContent).toBe('Item 1');
       });
     });
+
+    describe('prompt suggestions', () => {
+      test('renders prompt suggestions', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'prompt_suggestions',
+              hits: [
+                { objectID: '1', prompt: 'What is the best product?' },
+                { objectID: '2', prompt: 'How do I get started?' },
+              ],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              showPromptSuggestions: {
+                indexName: 'prompt_suggestions',
+              },
+            },
+            react: {
+              showPromptSuggestions: {
+                indexName: 'prompt_suggestions',
+              },
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-AutocompletePromptSuggestions')
+        ).toBeInTheDocument();
+
+        const promptItems = document.querySelectorAll(
+          '.ais-AutocompletePromptSuggestionsItem'
+        );
+        expect(promptItems).toHaveLength(2);
+        expect(promptItems[0]).toHaveTextContent('What is the best product?');
+        expect(promptItems[1]).toHaveTextContent('How do I get started?');
+      });
+
+      test('renders prompt suggestions with custom search parameters', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'prompt_suggestions',
+              hits: [{ objectID: '1', prompt: 'What is the best product?' }],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              showPromptSuggestions: {
+                indexName: 'prompt_suggestions',
+                searchParameters: {
+                  hitsPerPage: 5,
+                },
+              },
+            },
+            react: {
+              showPromptSuggestions: {
+                indexName: 'prompt_suggestions',
+                searchParameters: {
+                  hitsPerPage: 5,
+                },
+              },
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(searchClient.search).toHaveBeenCalledWith(
+          expect.arrayContaining([
+            expect.objectContaining({
+              indexName: 'prompt_suggestions',
+              params: expect.objectContaining({
+                hitsPerPage: 5,
+              }),
+            }),
+          ])
+        );
+      });
+
+      test('shows fallback "Ask about" when no prompt suggestions match the query', async () => {
+        const searchClient = createSearchClient({
+          // @ts-expect-error - doesn't properly handle multi index, expects all responses to be of the same type
+          search: jest.fn((requests) =>
+            Promise.resolve(
+              createMultiSearchResponse(
+                ...requests.map(
+                  (req: { indexName: string; params?: { query?: string } }) =>
+                    createSingleSearchResponse({
+                      index: req.indexName,
+                      hits:
+                        // eslint-disable-next-line no-nested-ternary
+                        req.indexName === 'prompt_suggestions' &&
+                        req.params?.query
+                          ? []
+                          : req.indexName === 'prompt_suggestions'
+                          ? [
+                              {
+                                objectID: '1',
+                                prompt: 'What is the best product?',
+                              },
+                            ]
+                          : [],
+                    })
+                )
+              )
+            )
+          ),
+        });
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              showPromptSuggestions: {
+                indexName: 'prompt_suggestions',
+              },
+            },
+            react: {
+              showPromptSuggestions: {
+                indexName: 'prompt_suggestions',
+              },
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        // Initially shows prompt suggestions from the index
+        expect(
+          document.querySelectorAll('.ais-AutocompletePromptSuggestionsItem')
+        ).toHaveLength(1);
+        expect(
+          document.querySelector('.ais-AutocompletePromptSuggestionsItem')
+        ).toHaveTextContent('What is the best product?');
+
+        // Type a query that returns no results from the prompt suggestions index
+        const input = screen.getByRole('combobox', { name: /submit/i });
+        await act(async () => {
+          userEvent.click(input);
+          await userEvent.paste(input, 'something unique');
+          await wait(0);
+        });
+
+        // Should show fallback "Ask about" suggestion
+        const fallbackItems = document.querySelectorAll(
+          '.ais-AutocompletePromptSuggestionsItem'
+        );
+        expect(fallbackItems).toHaveLength(1);
+        expect(fallbackItems[0]).toHaveTextContent(
+          'Ask about "something unique"'
+        );
+      });
+
+      test('renders prompt suggestions alongside query suggestions', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'query_suggestions',
+              hits: [
+                { objectID: '1', query: 'laptop' },
+                { objectID: '2', query: 'phone' },
+              ],
+            }),
+            // @ts-expect-error - ignore second response type
+            createSingleSearchResponse({
+              index: 'prompt_suggestions',
+              hits: [
+                { objectID: '1', prompt: 'What is the best laptop?' },
+                { objectID: '2', prompt: 'Compare phones' },
+              ],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              showQuerySuggestions: {
+                indexName: 'query_suggestions',
+              },
+              showPromptSuggestions: {
+                indexName: 'prompt_suggestions',
+              },
+            },
+            react: {
+              showQuerySuggestions: {
+                indexName: 'query_suggestions',
+              },
+              showPromptSuggestions: {
+                indexName: 'prompt_suggestions',
+              },
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        // Query suggestions should be rendered
+        const querySuggestionItems = document.querySelectorAll(
+          '.ais-AutocompleteSuggestionsItem'
+        );
+        expect(querySuggestionItems).toHaveLength(2);
+
+        // Prompt suggestions should be rendered
+        const promptSuggestionItems = document.querySelectorAll(
+          '.ais-AutocompletePromptSuggestionsItem'
+        );
+        expect(promptSuggestionItems).toHaveLength(2);
+      });
+
+      test('renders prompt suggestions with custom CSS classes', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'prompt_suggestions',
+              hits: [{ objectID: '1', prompt: 'What is the best product?' }],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              showPromptSuggestions: {
+                indexName: 'prompt_suggestions',
+                cssClasses: {
+                  root: 'custom-root',
+                  list: 'custom-list',
+                  item: 'custom-item',
+                },
+              },
+            },
+            react: {
+              showPromptSuggestions: {
+                indexName: 'prompt_suggestions',
+                classNames: {
+                  root: 'custom-root',
+                  list: 'custom-list',
+                  item: 'custom-item',
+                },
+              },
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector(
+            '.ais-AutocompletePromptSuggestions.custom-root'
+          )
+        ).toBeInTheDocument();
+        expect(
+          document.querySelector(
+            '.ais-AutocompletePromptSuggestionsList.custom-list'
+          )
+        ).toBeInTheDocument();
+        expect(
+          document.querySelector(
+            '.ais-AutocompletePromptSuggestionsItem.custom-item'
+          )
+        ).toBeInTheDocument();
+      });
+
+      test('exposes prompt suggestions in custom panel', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'query_suggestions',
+              hits: [{ objectID: '1', query: 'laptop' }],
+            }),
+            // @ts-expect-error - ignore second response type
+            createSingleSearchResponse({
+              index: 'prompt_suggestions',
+              hits: [{ objectID: '1', prompt: 'What is the best laptop?' }],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              showQuerySuggestions: {
+                indexName: 'query_suggestions',
+              },
+              showPromptSuggestions: {
+                indexName: 'prompt_suggestions',
+              },
+              templates: {
+                panel: ({ elements }, { html }) => html`
+                  <div>
+                    <div class="left">${elements.suggestions}</div>
+                    <div class="right">${elements.promptSuggestions}</div>
+                  </div>
+                `,
+              },
+            },
+            react: {
+              showQuerySuggestions: {
+                indexName: 'query_suggestions',
+              },
+              showPromptSuggestions: {
+                indexName: 'prompt_suggestions',
+              },
+              panelComponent: ({ elements }) => (
+                <div>
+                  <div className="left">{elements.suggestions}</div>
+                  <div className="right">{elements.promptSuggestions}</div>
+                </div>
+              ),
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        // Verify that prompt suggestions are in the "right" section
+        const rightSection = document.querySelector('.right');
+        expect(rightSection).toBeInTheDocument();
+        expect(
+          rightSection!.querySelector('.ais-AutocompletePromptSuggestions')
+        ).toBeInTheDocument();
+        expect(
+          rightSection!.querySelector('.ais-AutocompletePromptSuggestionsItem')
+        ).toHaveTextContent('What is the best laptop?');
+
+        // Verify that query suggestions are in the "left" section
+        const leftSection = document.querySelector('.left');
+        expect(leftSection).toBeInTheDocument();
+        expect(
+          leftSection!.querySelector('.ais-AutocompleteSuggestions')
+        ).toBeInTheDocument();
+      });
+    });
   });
 }

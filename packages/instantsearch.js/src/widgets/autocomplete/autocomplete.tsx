@@ -15,6 +15,9 @@ import {
   createAutocompleteStorage,
   createAutocompleteSuggestionComponent,
   cx,
+  getPromptSuggestionHits,
+  isPromptSuggestion,
+  isPromptSuggestionFallback,
 } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
 import { useEffect, useId, useMemo, useRef, useState } from 'preact/hooks';
@@ -1245,57 +1248,4 @@ function renderConditionalHighlight<
   }
 
   return <Highlight attribute={attribute} hit={item} />;
-}
-
-function getPromptSuggestionHits({
-  hits,
-  query,
-  limit,
-}: {
-  hits: Array<{ objectID: string } & Record<string, unknown>>;
-  query: string;
-  limit: number;
-}): Array<{ objectID: string } & Record<string, unknown>> {
-  const promptHits = hits.slice(0, limit).map((hit) => ({
-    ...hit,
-    __isPromptSuggestion: true,
-  }));
-
-  if (promptHits.length > 0 || query.trim().length === 0) {
-    return promptHits;
-  }
-
-  return [
-    {
-      objectID: `ask-about:${encodeURIComponent(query)}`,
-      prompt: query,
-      label: `Ask about "${query}"`,
-      __isPromptSuggestion: true,
-      __isPromptSuggestionFallback: true,
-    },
-  ];
-}
-
-function isPromptSuggestion(item: unknown): item is {
-  prompt: string;
-  __isPromptSuggestion: true;
-} {
-  return Boolean(
-    item &&
-      typeof item === 'object' &&
-      (item as { __isPromptSuggestion?: boolean }).__isPromptSuggestion
-  );
-}
-
-function isPromptSuggestionFallback(item: unknown): item is {
-  prompt: string;
-  label?: string;
-  __isPromptSuggestionFallback: true;
-} {
-  return Boolean(
-    item &&
-      typeof item === 'object' &&
-      (item as { __isPromptSuggestionFallback?: boolean })
-        .__isPromptSuggestionFallback
-  );
 }
