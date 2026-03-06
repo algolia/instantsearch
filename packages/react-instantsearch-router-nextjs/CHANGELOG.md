@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+
+## [7.26.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-router-nextjs@7.26.0...react-instantsearch-router-nextjs@7.26.1) (2026-02-24)
+
+**Note:** Version bump only for package react-instantsearch-router-nextjs
+
+
+# [7.26.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-router-nextjs@7.25.0...react-instantsearch-router-nextjs@7.26.0) (2026-02-25)
+
+
+### Features
+
+* **build:** unify build system across monorepo ([#6886](https://github.com/algolia/instantsearch/issues/6886)) ([e8b2ef7](https://github.com/algolia/instantsearch/commit/e8b2ef7dc1b7d98f1ee5518fad7607b5f31bbd96))
+
+
+
+
+
+## [7.25.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-router-nextjs@7.24.0...react-instantsearch-router-nextjs@7.25.0) (2026-02-24)
+
+**Note:** Version bump only for package react-instantsearch-router-nextjs
+
+
+
+
+
 ## [7.23.3](https://github.com/algolia/instantsearch/compare/react-instantsearch-router-nextjs@7.23.2...react-instantsearch-router-nextjs@7.23.3) (2026-02-17)
 
 **Note:** Version bump only for package react-instantsearch-router-nextjs

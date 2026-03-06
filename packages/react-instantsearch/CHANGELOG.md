@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.26.1](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.26.0...react-instantsearch@7.26.1) (2026-03-03)
+
+
+### Bug Fixes
+
+* **react:** shim useId ([#6872](https://github.com/algolia/instantsearch/issues/6872)) ([90d1324](https://github.com/algolia/instantsearch/commit/90d13246e655fe145e395b4d1aee59ff59636a43)), closes [#6871](https://github.com/algolia/instantsearch/issues/6871)
+
+
+
+
+
+# [7.26.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.25.0...react-instantsearch@7.26.0) (2026-02-25)
+
+
+### Features
+
+* **build:** unify build system across monorepo ([#6886](https://github.com/algolia/instantsearch/issues/6886)) ([e8b2ef7](https://github.com/algolia/instantsearch/commit/e8b2ef7dc1b7d98f1ee5518fad7607b5f31bbd96))
+
+
+
+
+
+# [7.25.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.24.0...react-instantsearch@7.25.0) (2026-02-24)
+
+
+### Features
+
+* **chat:** add compatibility with algolia mcp search tool [DASH-2294] ([#6904](https://github.com/algolia/instantsearch/issues/6904)) ([adf1037](https://github.com/algolia/instantsearch/commit/adf1037eb4f7088e2972212917ed2ac32b23072a))
+
+
+### Bug Fixes
+
+* **autocomplete:** left and right arrow keys do not navigate items ([#6907](https://github.com/algolia/instantsearch/issues/6907)) ([d47dc84](https://github.com/algolia/instantsearch/commit/d47dc8497cbd3043d7bf7a6178d3c0133d1ae559))
+
+
 # [7.24.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.23.2...react-instantsearch@7.24.0) (2026-02-17)
 
 

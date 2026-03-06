@@ -9,6 +9,8 @@ node_modules/
 /packages/vue-instantsearch/vue3
 dist/
 build/
+!scripts/build/
+!scripts/build/**
 
 # Generated files
 /docs

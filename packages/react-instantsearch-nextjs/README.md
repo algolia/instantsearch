@@ -17,9 +17,6 @@
 
 This package provides server-side rendering for [React InstantSearch](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/) that is compatible with [Next.js 13 App Router](https://nextjs.org/docs/app).
 
-> [!WARNING]
-> **This package is experimental.**
-
 ## Installation
 
 ```sh
@@ -30,8 +27,7 @@ npm install react-instantsearch-nextjs
 
 ## Usage
 
-> [!NOTE]
-> You can check this documentation on [Algolia's Documentation website](https://www.algolia.com/doc/guides/building-search-ui/going-further/server-side-rendering/react/#app-router-experimental).
+> [!NOTE] You can check this documentation on [Algolia's Documentation website](https://www.algolia.com/doc/guides/building-search-ui/going-further/server-side-rendering/react/#app-router-experimental).
 
 Your search component must be in its own file, and it shouldn't be named `page.js` or `page.tsx`.
 
@@ -58,7 +54,6 @@ export function Search() {
 ```
 
 Import the `<InstantSearchNext>` component from the `react-instantsearch-nextjs` package, and replace the [`<InstantSearch>`](https://www.algolia.com/doc/api-reference/widgets/instantsearch/react/) component with it, without changing the props.
-
 
 ```diff
 'use client';

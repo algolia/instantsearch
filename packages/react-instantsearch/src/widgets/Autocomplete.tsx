@@ -21,7 +21,6 @@ import React, {
   createElement,
   Fragment,
   useEffect,
-  useId,
   useMemo,
   useRef,
   useState,
@@ -106,9 +105,10 @@ const AutocompleteDetachedSearchButton =
     Fragment,
   });
 
+let id = 0;
 const usePropGetters = createAutocompletePropGetters({
   useEffect,
-  useId,
+  useId: React.useId || (() => React.useState(() => (id++).toString())),
   useMemo,
   useRef,
   useState,
