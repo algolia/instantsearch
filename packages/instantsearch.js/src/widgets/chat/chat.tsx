@@ -8,7 +8,7 @@ import {
   createChatComponent,
 } from 'instantsearch-ui-components';
 import { Fragment, h, render } from 'preact';
-import { useMemo } from 'preact/hooks';
+import { useEffect, useMemo } from 'preact/hooks';
 
 import TemplateComponent from '../../components/Template/Template';
 import connectChat from '../../connectors/chat/connectChat';
@@ -54,6 +54,7 @@ import type {
   ChatMessageLoaderProps,
   ChatMessageProps,
   ChatMessagesTranslations,
+  ChatMode,
   ChatPromptProps,
   ChatPromptTranslations,
   ChatStatus,
@@ -270,6 +271,7 @@ function createDefaultTools<
 }
 
 type ChatWrapperProps = {
+  mode: ChatMode;
   cssClasses: ChatCSSClasses;
   chatOpen: boolean;
   setChatOpen: (open: boolean) => void;
@@ -335,6 +337,7 @@ type ChatWrapperProps = {
 };
 
 function ChatWrapper({
+  mode,
   cssClasses,
   chatOpen,
   setChatOpen,
@@ -368,8 +371,26 @@ function ChatWrapper({
 
   const [maximized, setMaximized] = state.use(false);
 
+  // In side-panel mode, push page content by applying margin to <body>
+  useEffect(() => {
+    if (mode !== 'side-panel') return;
+
+    if (chatOpen) {
+      const el = document.querySelector('.ais-Chat--side-panel');
+      const width = el ? el.getBoundingClientRect().width : 0;
+      document.body.style.marginRight = `${width}px`;
+    } else {
+      document.body.style.marginRight = '';
+    }
+
+    return () => {
+      document.body.style.marginRight = '';
+    };
+  }, [mode, chatOpen]);
+
   return (
     <Chat
+      mode={mode}
       classNames={cssClasses}
       open={chatOpen}
       maximized={maximized}
@@ -448,6 +469,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   containerNode,
   templates,
   tools,
+  mode,
 }: {
   containerNode: HTMLElement;
   cssClasses: ChatCSSClasses;
@@ -456,6 +478,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
   };
   templates: ChatTemplates<THit>;
   tools: UserClientSideToolsWithTemplate;
+  mode: ChatMode;
 }): Renderer<ChatRenderState, Partial<ChatWidgetParams>> => {
   const state = createLocalState();
   const promptRef = { current: null as HTMLTextAreaElement | null };
@@ -819,6 +842,7 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
     function rerender() {
       render(
         <ChatWrapper
+          mode={mode}
           cssClasses={cssClasses}
           chatOpen={open}
           setChatOpen={setOpen}
@@ -1121,6 +1145,14 @@ type ChatWidgetParams<THit extends RecordWithObjectID = RecordWithObjectID> = {
   container: string | HTMLElement;
 
   /**
+   * The display mode of the chat widget.
+   * - 'overlay' (default): Fixed bottom-right overlay
+   * - 'side-panel': Fixed right-edge full-height panel
+   * - 'inline': Flows within the page layout
+   */
+  mode?: ChatMode;
+
+  /**
    * Return the URL of the main search page with the `nextUiState`.
    * This is used to navigate to the main search page when the user clicks on "View all" in the search tool.
    *
@@ -1161,6 +1193,7 @@ export default (function chat<
 >(widgetParams: ChatWidgetParams<THit> & ChatConnectorParams) {
   const {
     container,
+    mode = 'overlay',
     templates: userTemplates = {},
     cssClasses = {},
     resume = false,
@@ -1190,6 +1223,7 @@ export default (function chat<
     renderState: {},
     templates,
     tools,
+    mode,
   });
 
   const makeWidget = connectChat(specializedRenderer, () =>

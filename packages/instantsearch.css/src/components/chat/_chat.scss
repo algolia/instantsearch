@@ -21,6 +21,54 @@
     height: var(--ais-chat-maximized-height);
   }
 
+  // Side panel mode: full-height panel anchored to the right edge
+  &--side-panel {
+    right: 0;
+    bottom: 0;
+    top: 0;
+    width: var(--ais-chat-side-panel-width, 24rem);
+    height: 100%;
+    max-height: 100%;
+    max-width: 100%;
+    gap: 0;
+
+    .ais-Chat-container {
+      border-radius: 0;
+      transform-origin: right center;
+      transform: translateX(100%);
+
+      &--open {
+        transform: translateX(0);
+      }
+    }
+
+    .ais-Chat-toggleButtonWrapper {
+      position: absolute;
+      left: 0;
+      bottom: var(--ais-chat-margin);
+      transform: translateX(calc(-100% - var(--ais-chat-margin)));
+    }
+  }
+
+  // Inline mode: flows with the document
+  &--inline {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    height: var(--ais-chat-inline-height, 32rem);
+    max-width: none;
+    max-height: none;
+    pointer-events: auto;
+    gap: 0;
+
+    .ais-Chat-container {
+      pointer-events: auto;
+      opacity: 1;
+      transform: none;
+    }
+  }
+
   @media (prefers-reduced-motion: no-preference) {
     transition: width var(--ais-transition-duration)
         var(--ais-transition-timing-function),
@@ -63,6 +111,14 @@
   pointer-events: auto;
 }
 
+// Smooth body margin transition for side-panel mode
+body {
+  @media (prefers-reduced-motion: no-preference) {
+    transition: margin-right var(--ais-transition-duration, 200ms)
+      var(--ais-transition-timing-function, ease);
+  }
+}
+
 @media (max-width: variables.$ais-chat-breakpoint) {
   .ais-Chat {
     inset: 0;
@@ -77,5 +133,10 @@
   .ais-Chat-container {
     border-radius: 0;
     transition: none;
+  }
+
+  // On mobile, side-panel falls back to full-screen like overlay
+  .ais-Chat--side-panel {
+    width: 100%;
   }
 }

@@ -31,6 +31,7 @@ export {
 import type {
   Pragma,
   ChatProps as ChatUiProps,
+  ChatMode,
   RecommendComponentProps,
   RecordWithObjectID,
   UserClientSideTool,
@@ -118,6 +119,13 @@ export type ChatProps<TObject, TUiMessage extends UIMessage = UIMessage> = Omit<
   keyof UiProps
 > &
   UseChatProps<TUiMessage> & {
+    /**
+     * The display mode of the chat widget.
+     * - 'overlay' (default): Fixed bottom-right overlay
+     * - 'side-panel': Fixed right-edge full-height panel
+     * - 'inline': Flows within the page layout
+     */
+    mode?: ChatMode;
     itemComponent?: ItemComponent<TObject>;
     tools?: UserClientSideTools;
     getSearchPageURL?: (nextUiState: IndexUiState) => string;
@@ -155,6 +163,7 @@ export function Chat<
   TObject extends RecordWithObjectID,
   TUiMessage extends UIMessage
 >({
+  mode,
   tools: userTools,
   toggleButtonProps,
   headerProps,
@@ -233,6 +242,23 @@ export function Chat<
     suggestions,
   } = chatState;
 
+  // In side-panel mode, push page content by applying margin to <body>
+  useEffect(() => {
+    if (mode !== 'side-panel') return;
+
+    if (open) {
+      const el = document.querySelector('.ais-Chat--side-panel');
+      const width = el ? el.getBoundingClientRect().width : 0;
+      document.body.style.marginRight = `${width}px`;
+    } else {
+      document.body.style.marginRight = '';
+    }
+
+    return () => {
+      document.body.style.marginRight = '';
+    };
+  }, [mode, open]);
+
   const wasOpenRef = useRef(false);
   useEffect(() => {
     const shouldFocusPrompt = !wasOpenRef.current && open;
@@ -252,6 +278,7 @@ export function Chat<
 
   return (
     <ChatUiComponent
+      mode={mode}
       title={title}
       open={open}
       maximized={maximized}

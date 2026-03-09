@@ -29,7 +29,16 @@ export type ChatClassNames = {
   suggestions?: ChatPromptSuggestionsOwnProps['classNames'];
 };
 
+export type ChatMode = 'overlay' | 'side-panel' | 'inline';
+
 export type ChatProps = Omit<ComponentProps<'div'>, 'onError' | 'title'> & {
+  /*
+   * The display mode of the chat widget.
+   * - 'overlay' (default): Fixed bottom-right overlay
+   * - 'side-panel': Fixed right-edge full-height panel
+   * - 'inline': Flows within the page layout
+   */
+  mode?: ChatMode;
   /*
    * Whether the chat is open or closed.
    */
@@ -99,6 +108,7 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
 
   return function Chat(userProps: ChatProps) {
     const {
+      mode = 'overlay',
       open,
       maximized = false,
       headerProps,
@@ -114,11 +124,17 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
       className,
       ...props
     } = userProps;
+
+    // In inline mode, the chat is always open and has no toggle button
+    const effectiveOpen = mode === 'inline' ? true : open;
+    const showToggleButton = mode !== 'inline';
+
     return (
       <div
         {...props}
         className={cx(
           'ais-Chat',
+          mode !== 'overlay' && `ais-Chat--${mode}`,
           maximized && 'ais-Chat--maximized',
           classNames.root,
           className
@@ -127,7 +143,7 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
         <div
           className={cx(
             'ais-Chat-container',
-            open && 'ais-Chat-container--open',
+            effectiveOpen && 'ais-Chat-container--open',
             maximized && 'ais-Chat-container--maximized',
             classNames.container
           )}
@@ -155,18 +171,20 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
           })}
         </div>
 
-        <div className="ais-Chat-toggleButtonWrapper">
-          {createElement(ToggleButtonComponent || ChatToggleButton, {
-            ...toggleButtonProps,
-            classNames: classNames.toggleButton,
-            onClick: () => {
-              toggleButtonProps.onClick?.();
-              if (!open) {
-                promptProps.promptRef?.current?.focus();
-              }
-            },
-          })}
-        </div>
+        {showToggleButton && (
+          <div className="ais-Chat-toggleButtonWrapper">
+            {createElement(ToggleButtonComponent || ChatToggleButton, {
+              ...toggleButtonProps,
+              classNames: classNames.toggleButton,
+              onClick: () => {
+                toggleButtonProps.onClick?.();
+                if (!open) {
+                  promptProps.promptRef?.current?.focus();
+                }
+              },
+            })}
+          </div>
+        )}
       </div>
     );
   };
