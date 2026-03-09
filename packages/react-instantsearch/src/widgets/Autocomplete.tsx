@@ -124,6 +124,7 @@ type AutocompleteSearchParameters = Omit<PlainSearchParameters, 'index'>;
 type IndexConfig<TItem extends BaseHit> = AutocompleteIndexConfig<TItem> & {
   headerComponent?: AutocompleteIndexProps<TItem>['HeaderComponent'];
   itemComponent: AutocompleteIndexProps<TItem>['ItemComponent'];
+  noResultsComponent?: AutocompleteIndexProps<TItem>['NoResultsComponent'];
   searchParameters?: AutocompleteSearchParameters;
   classNames?: Partial<AutocompleteIndexClassNames>;
 };
@@ -830,6 +831,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
         HeaderComponent={currentIndexConfig.headerComponent}
         // @ts-expect-error - there seems to be problems with React.ComponentType and this, but it's actually correct
         ItemComponent={currentIndexConfig.itemComponent}
+        NoResultsComponent={currentIndexConfig.noResultsComponent}
         items={hits.map((item) => ({
           ...item,
           __indexName: indexId,
@@ -839,6 +841,16 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
       />
     );
   });
+
+  const allIndicesEmpty = indicesForPanel.every(
+    ({ hits }) => hits.length === 0
+  );
+  const recentEmpty = !storageHits || storageHits.length === 0;
+  const hasNoResultsTemplate = indicesConfig.some(
+    (c) => c.noResultsComponent !== undefined
+  );
+  const shouldHideEmptyPanel =
+    allIndicesEmpty && recentEmpty && !hasNoResultsTemplate;
 
   const searchBoxContent = (
     <AutocompleteSearch
@@ -857,7 +869,10 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   );
 
   const panelContent = (
-    <AutocompletePanel {...getPanelProps()}>
+    <AutocompletePanel
+      {...getPanelProps()}
+      {...(shouldHideEmptyPanel ? { hidden: true } : {})}
+    >
       {PanelComponent ? (
         <PanelComponent
           elements={elements}

@@ -2374,5 +2374,224 @@ export function createOptionsTests(
         ).toBeInTheDocument();
       });
     });
+
+    describe('noResults', () => {
+      test('renders noResults template when index returns empty hits', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'indexName',
+              hits: [],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              indices: [
+                {
+                  indexName: 'indexName',
+                  templates: {
+                    item: (props) => props.item.name,
+                    noResults: () => 'No results found',
+                  },
+                },
+              ],
+            },
+            react: {
+              indices: [
+                {
+                  indexName: 'indexName',
+                  itemComponent: (props) => props.item.name,
+                  noResultsComponent: () => <>No results found</>,
+                },
+              ],
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-AutocompleteIndexNoResults')
+        ).toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-AutocompleteIndexNoResults')
+        ).toHaveTextContent('No results found');
+        expect(
+          document.querySelectorAll('.ais-AutocompleteIndexItem')
+        ).toHaveLength(0);
+      });
+
+      test('does not render noResults when index has hits', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'indexName',
+              hits: [{ objectID: '1', name: 'Item 1' }],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              indices: [
+                {
+                  indexName: 'indexName',
+                  templates: {
+                    item: (props) => props.item.name,
+                    noResults: () => 'No results found',
+                  },
+                },
+              ],
+            },
+            react: {
+              indices: [
+                {
+                  indexName: 'indexName',
+                  itemComponent: (props) => props.item.name,
+                  noResultsComponent: () => <>No results found</>,
+                },
+              ],
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        expect(
+          document.querySelector('.ais-AutocompleteIndexNoResults')
+        ).not.toBeInTheDocument();
+        expect(
+          document.querySelectorAll('.ais-AutocompleteIndexItem')
+        ).toHaveLength(1);
+      });
+
+      test('hides panel when all indices are empty and no noResults template exists', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'indexName',
+              hits: [],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              indices: [
+                {
+                  indexName: 'indexName',
+                  templates: {
+                    item: (props) => props.item.name,
+                  },
+                },
+              ],
+            },
+            react: {
+              indices: [
+                {
+                  indexName: 'indexName',
+                  itemComponent: (props) => props.item.name,
+                },
+              ],
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        // Focus the input to open the panel
+        const input = screen.getByRole('combobox', { name: /submit/i });
+        await act(async () => {
+          userEvent.click(input);
+          await wait(0);
+        });
+
+        const panel = document.querySelector('.ais-AutocompletePanel');
+        expect(panel).toBeInTheDocument();
+        expect(panel).toHaveAttribute('aria-hidden', 'true');
+      });
+
+      test('keeps panel visible when all indices are empty but noResults template exists', async () => {
+        const searchClient = createMockedSearchClient(
+          createMultiSearchResponse(
+            createSingleSearchResponse({
+              index: 'indexName',
+              hits: [],
+            })
+          )
+        );
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              indices: [
+                {
+                  indexName: 'indexName',
+                  templates: {
+                    item: (props) => props.item.name,
+                    noResults: () => 'No results found',
+                  },
+                },
+              ],
+            },
+            react: {
+              indices: [
+                {
+                  indexName: 'indexName',
+                  itemComponent: (props) => props.item.name,
+                  noResultsComponent: () => <>No results found</>,
+                },
+              ],
+            },
+            vue: {},
+          },
+        });
+
+        await act(async () => {
+          await wait(0);
+        });
+
+        // Focus the input to open the panel
+        const input = screen.getByRole('combobox', { name: /submit/i });
+        await act(async () => {
+          userEvent.click(input);
+          await wait(0);
+        });
+
+        const panel = document.querySelector('.ais-AutocompletePanel');
+        expect(panel).toBeInTheDocument();
+        expect(panel).not.toHaveAttribute('aria-hidden', 'true');
+      });
+    });
   });
 }

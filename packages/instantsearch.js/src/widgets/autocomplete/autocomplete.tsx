@@ -752,6 +752,17 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       );
     };
 
+    const noResultsComponent = currentIndexConfig.templates?.noResults
+      ? () => (
+          <TemplateComponent
+            {...renderState.indexTemplateProps[i]}
+            templateKey="noResults"
+            rootTagName="fragment"
+            data={{}}
+          />
+        )
+      : undefined;
+
     let elementId = indexName;
     if (indexName === showQuerySuggestions?.indexName) {
       elementId = 'suggestions';
@@ -764,6 +775,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         key={indexId}
         HeaderComponent={headerComponent}
         ItemComponent={itemComponent}
+        NoResultsComponent={noResultsComponent}
         items={hits.map((item) => ({
           ...item,
           __indexName: indexId,
@@ -792,8 +804,21 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     />
   );
 
+  const allIndicesEmpty = indicesForPanel.every(
+    ({ hits }) => hits.length === 0
+  );
+  const recentEmpty = !storageHits || storageHits.length === 0;
+  const hasNoResultsTemplate = indicesConfig.some(
+    (c) => c.templates?.noResults !== undefined
+  );
+  const shouldHideEmptyPanel =
+    allIndicesEmpty && recentEmpty && !hasNoResultsTemplate;
+
   const panelContent = (
-    <AutocompletePanel {...getPanelProps()}>
+    <AutocompletePanel
+      {...getPanelProps()}
+      {...(shouldHideEmptyPanel ? { hidden: true } : {})}
+    >
       {templates.panel ? (
         <TemplateComponent
           {...renderState.templateProps}
@@ -894,6 +919,10 @@ type IndexConfig<TItem extends BaseHit> = AutocompleteIndexConfig<TItem> & {
      * Template to use for each result. This template will receive an object containing a single record.
      */
     item: Template<{ item: TItem; onSelect: () => void }>;
+    /**
+     * Template to use when no results are found.
+     */
+    noResults: Template<Record<string, never>>;
   }>;
 
   /**
