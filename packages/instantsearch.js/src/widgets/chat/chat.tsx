@@ -373,14 +373,14 @@ function ChatWrapper({
 
   // In side-panel mode, push page content by applying margin to <body>
   useEffect(() => {
-    if (mode !== 'side-panel') return;
-
-    if (chatOpen) {
-      const el = document.querySelector('.ais-Chat--side-panel');
-      const width = el ? el.getBoundingClientRect().width : 0;
-      document.body.style.marginRight = `${width}px`;
-    } else {
-      document.body.style.marginRight = '';
+    if (mode === 'side-panel') {
+      if (chatOpen) {
+        const el = document.querySelector('.ais-Chat--side-panel');
+        const width = el ? el.getBoundingClientRect().width : 0;
+        document.body.style.marginRight = `${width}px`;
+      } else {
+        document.body.style.marginRight = '';
+      }
     }
 
     return () => {

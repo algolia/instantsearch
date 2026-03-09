@@ -169,6 +169,10 @@ export type ChatMessagesProps<
    * Suggestions element to display below a message
    */
   suggestionsElement?: VNode;
+  /**
+   * When set, only the last N messages are rendered.
+   */
+  visibleMessageCount?: number;
 };
 
 const copyToClipboard = (message: ChatMessageBase) => {
@@ -299,6 +303,7 @@ export function createChatMessagesComponent({
       contentRef,
       onScrollToBottom,
       suggestionsElement,
+      visibleMessageCount,
       ...props
     } = userProps;
 
@@ -339,6 +344,10 @@ export function createChatMessagesComponent({
     const DefaultLoader = LoaderComponent || DefaultLoaderComponent;
     const DefaultError = ErrorComponent || DefaultErrorComponent;
 
+    const visibleMessages = visibleMessageCount
+      ? messages.slice(-visibleMessageCount)
+      : messages;
+
     return (
       <div
         {...props}
@@ -363,7 +372,7 @@ export function createChatMessagesComponent({
               }
             }}
           >
-            {messages.map((message, index) => (
+            {visibleMessages.map((message, index) => (
               <DefaultMessage
                 key={message.id}
                 message={message}
@@ -382,7 +391,7 @@ export function createChatMessagesComponent({
                 suggestionsElement={
                   status === 'ready' &&
                   message.role === 'assistant' &&
-                  index === messages.length - 1
+                  index === visibleMessages.length - 1
                     ? suggestionsElement
                     : undefined
                 }

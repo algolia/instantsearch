@@ -50,13 +50,13 @@
     }
   }
 
-  // Inline mode: flows with the document
+  // Inline mode: flows with the document, single-message view
   &--inline {
     position: relative;
     right: auto;
     bottom: auto;
     width: 100%;
-    height: var(--ais-chat-inline-height, 32rem);
+    height: auto;
     max-width: none;
     max-height: none;
     pointer-events: auto;
@@ -66,6 +66,29 @@
       pointer-events: auto;
       opacity: 1;
       transform: none;
+      box-shadow: none;
+      border-radius: 0;
+    }
+
+    .ais-ChatHeader {
+      display: none;
+    }
+
+    .ais-ChatMessages-scroll {
+      overflow: hidden;
+      padding: calc(var(--ais-spacing) / 2) 0;
+    }
+
+    .ais-ChatMessages-content {
+      gap: var(--ais-spacing);
+    }
+
+    .ais-ChatMessages-scrollToBottom {
+      display: none;
+    }
+
+    .ais-ChatPrompt-footer {
+      display: none;
     }
   }
 

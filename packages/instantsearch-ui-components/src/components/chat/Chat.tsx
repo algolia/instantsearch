@@ -157,6 +157,7 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
             {...messagesProps}
             classNames={classNames.messages}
             messageClassNames={classNames.message}
+            {...(mode === 'inline' && { visibleMessageCount: 2 })}
             suggestionsElement={createElement(
               SuggestionsComponent || ChatPromptSuggestions,
               {
