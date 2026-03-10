@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.91.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.90.0...instantsearch.js@4.91.0) (2026-03-10)
+
+
+### Bug Fixes
+
+* **build:** correct cjs interop ([#6915](https://github.com/algolia/instantsearch/issues/6915)) ([366e8a7](https://github.com/algolia/instantsearch/commit/366e8a7f586e470c8485c1b86b722ff73a92dc43)), closes [#6914](https://github.com/algolia/instantsearch/issues/6914) [#8668](https://github.com/algolia/instantsearch/issues/8668)
+
+
+### Features
+
+* **autocomplete:** add prompt suggestions ([#6900](https://github.com/algolia/instantsearch/issues/6900)) ([02c3cfe](https://github.com/algolia/instantsearch/commit/02c3cfe6e30b3577066250c2dcac69a695b9c7ad))
+
+
+
+
+
 # [4.90.0](https://github.com/algolia/instantsearch/compare/instantsearch.js@4.89.0...instantsearch.js@4.90.0) (2026-02-25)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.12.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.11.0...instantsearch.css@8.12.0) (2026-03-10)
+
+
+### Features
+
+* **autocomplete:** add prompt suggestions ([#6900](https://github.com/algolia/instantsearch/issues/6900)) ([02c3cfe](https://github.com/algolia/instantsearch/commit/02c3cfe6e30b3577066250c2dcac69a695b9c7ad))
+
+
+
+
+
 # [8.11.0](https://github.com/algolia/instantsearch/compare/instantsearch.css@8.10.0...instantsearch.css@8.11.0) (2026-02-17)
 
 
