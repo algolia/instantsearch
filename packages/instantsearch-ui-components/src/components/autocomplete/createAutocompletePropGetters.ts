@@ -74,6 +74,11 @@ export type UsePropGetters<TItem extends BaseHit> = (params: {
    * - Tab key doesn't close panel
    */
   isDetached?: boolean;
+  /**
+   * Whether the panel should be hidden even when open
+   * (e.g., when all sources are empty and there's no custom content to show).
+   */
+  shouldHidePanel?: boolean;
 }) => {
   getInputProps: GetInputProps;
   getItemProps: GetItemProps;
@@ -109,6 +114,7 @@ export function createAutocompletePropGetters({
     onSubmit,
     placeholder,
     isDetached = false,
+    shouldHidePanel = false,
   }: Parameters<UsePropGetters<TItem>>[0]): ReturnType<UsePropGetters<TItem>> {
     const getElementId = createGetElementId(useId());
     const inputRef = useRef<HTMLInputElement>(null);
@@ -281,7 +287,7 @@ export function createAutocompletePropGetters({
         };
       },
       getPanelProps: () => ({
-        hidden: !isOpen,
+        hidden: !isOpen || shouldHidePanel,
         id: getElementId('panel'),
         role: 'grid',
         'aria-labelledby': getElementId('input'),

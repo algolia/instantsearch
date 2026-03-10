@@ -591,6 +591,16 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     query.length > 0 && storage.onAdd(query);
   };
 
+  const allIndicesEmpty = indicesForPanel.every(
+    ({ hits }) => hits.length === 0
+  );
+  const recentEmpty = !storageHits || storageHits.length === 0;
+  const hasNoResultsTemplate = indicesConfig.some(
+    (c) => c.templates?.noResults !== undefined
+  );
+  const shouldHideEmptyPanel =
+    allIndicesEmpty && recentEmpty && !hasNoResultsTemplate && !templates.panel;
+
   const {
     getInputProps,
     getItemProps,
@@ -655,6 +665,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     },
     placeholder,
     isDetached,
+    shouldHidePanel: shouldHideEmptyPanel,
   });
 
   // Open panel and focus input when modal opens
@@ -804,21 +815,8 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     />
   );
 
-  const allIndicesEmpty = indicesForPanel.every(
-    ({ hits }) => hits.length === 0
-  );
-  const recentEmpty = !storageHits || storageHits.length === 0;
-  const hasNoResultsTemplate = indicesConfig.some(
-    (c) => c.templates?.noResults !== undefined
-  );
-  const shouldHideEmptyPanel =
-    allIndicesEmpty && recentEmpty && !hasNoResultsTemplate;
-
   const panelContent = (
-    <AutocompletePanel
-      {...getPanelProps()}
-      {...(shouldHideEmptyPanel ? { hidden: true } : {})}
-    >
+    <AutocompletePanel {...getPanelProps()}>
       {templates.panel ? (
         <TemplateComponent
           {...renderState.templateProps}

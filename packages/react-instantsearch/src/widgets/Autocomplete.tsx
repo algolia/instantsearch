@@ -689,6 +689,16 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   );
   const hasWarnedMissingPromptSuggestionsChatRef = useRef(false);
 
+  const allIndicesEmpty = indicesForPanel.every(
+    ({ hits }) => hits.length === 0
+  );
+  const recentEmpty = !storageHits || storageHits.length === 0;
+  const hasNoResultsTemplate = indicesConfig.some(
+    (c) => c.noResultsComponent !== undefined
+  );
+  const shouldHideEmptyPanel =
+    allIndicesEmpty && recentEmpty && !hasNoResultsTemplate && !PanelComponent;
+
   const {
     getInputProps,
     getItemProps,
@@ -755,6 +765,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     },
     placeholder,
     isDetached,
+    shouldHidePanel: shouldHideEmptyPanel,
   });
 
   // Open panel and focus input when modal opens
@@ -842,16 +853,6 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     );
   });
 
-  const allIndicesEmpty = indicesForPanel.every(
-    ({ hits }) => hits.length === 0
-  );
-  const recentEmpty = !storageHits || storageHits.length === 0;
-  const hasNoResultsTemplate = indicesConfig.some(
-    (c) => c.noResultsComponent !== undefined
-  );
-  const shouldHideEmptyPanel =
-    allIndicesEmpty && recentEmpty && !hasNoResultsTemplate;
-
   const searchBoxContent = (
     <AutocompleteSearch
       inputProps={getInputProps()}
@@ -869,10 +870,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   );
 
   const panelContent = (
-    <AutocompletePanel
-      {...getPanelProps()}
-      {...(shouldHideEmptyPanel ? { hidden: true } : {})}
-    >
+    <AutocompletePanel {...getPanelProps()}>
       {PanelComponent ? (
         <PanelComponent
           elements={elements}
