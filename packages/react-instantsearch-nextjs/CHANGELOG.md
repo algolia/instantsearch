@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.1](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.1.0...react-instantsearch-nextjs@1.1.1) (2026-03-10)
+
+
+### Bug Fixes
+
+* **build:** correct cjs interop ([#6915](https://github.com/algolia/instantsearch/issues/6915)) ([366e8a7](https://github.com/algolia/instantsearch/commit/366e8a7f586e470c8485c1b86b722ff73a92dc43)), closes [#6914](https://github.com/algolia/instantsearch/issues/6914) [#8668](https://github.com/algolia/instantsearch/issues/8668)
+
+
+
+
+
 # [1.1.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-nextjs@1.0.16...react-instantsearch-nextjs@1.1.0) (2026-02-25)
 
 
