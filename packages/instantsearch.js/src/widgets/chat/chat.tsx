@@ -375,9 +375,11 @@ function ChatWrapper({
   useEffect(() => {
     if (mode === 'side-panel') {
       if (chatOpen) {
-        const el = document.querySelector('.ais-Chat--side-panel');
-        const width = el ? el.getBoundingClientRect().width : 0;
-        document.body.style.marginRight = `${width}px`;
+        const width =
+          getComputedStyle(document.documentElement)
+            .getPropertyValue('--ais-chat-side-panel-width')
+            .trim() || '24rem';
+        document.body.style.marginRight = width;
       } else {
         document.body.style.marginRight = '';
       }

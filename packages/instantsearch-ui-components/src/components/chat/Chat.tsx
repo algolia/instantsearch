@@ -135,6 +135,7 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
         className={cx(
           'ais-Chat',
           mode !== 'overlay' && `ais-Chat--${mode}`,
+          effectiveOpen && 'ais-Chat--open',
           maximized && 'ais-Chat--maximized',
           classNames.root,
           className
