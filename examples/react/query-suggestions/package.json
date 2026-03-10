@@ -17,7 +17,7 @@
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-instantsearch": "7.27.0",
-    "react-instantsearch-core": "7.26.2"
+    "react-instantsearch-core": "7.27.0"
   },
   "devDependencies": {
     "@types/react": "19.0.3",
