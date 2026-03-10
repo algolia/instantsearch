@@ -70,47 +70,26 @@
       pointer-events: auto;
       opacity: 1;
       transform: none;
-      box-shadow: none;
-      border-radius: 0;
+      max-height: var(--ais-chat-inline-max-height, 32rem);
     }
 
-    .ais-ChatHeader {
-      display: none;
-    }
-
-    .ais-ChatMessages-scroll {
-      overflow: hidden;
-      padding: calc(var(--ais-spacing) / 2) 0;
-    }
-
-    .ais-ChatMessages-content {
-      gap: var(--ais-spacing);
-    }
-
-    .ais-ChatMessages-scrollToBottom {
-      display: none;
-    }
-
-    .ais-ChatPrompt-footer {
+    .ais-ChatHeader-maximize,
+    .ais-ChatHeader-close {
       display: none;
     }
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    transition: width var(--ais-transition-duration)
-        var(--ais-transition-timing-function),
-      height var(--ais-transition-duration)
-        var(--ais-transition-timing-function);
+    transition: width var(--ais-transition-duration) var(--ais-transition-timing-function),
+      height var(--ais-transition-duration) var(--ais-transition-timing-function);
   }
 }
 
 .ais-Chat-container {
   display: flex;
   flex-direction: column;
-  background-color: rgba(
-    var(--ais-background-color-rgb),
-    var(--ais-background-color-alpha)
-  );
+  background-color: rgba(var(--ais-background-color-rgb),
+      var(--ais-background-color-alpha));
   border-radius: var(--ais-border-radius-lg);
   box-shadow: var(--ais-shadow-md);
   width: 100%;
@@ -121,10 +100,8 @@
   transform: scale(0.95) translateY(var(--ais-spacing));
 
   @media (prefers-reduced-motion: no-preference) {
-    transition: opacity var(--ais-transition-duration)
-        var(--ais-transition-timing-function),
-      transform var(--ais-transition-duration)
-        var(--ais-transition-timing-function);
+    transition: opacity var(--ais-transition-duration) var(--ais-transition-timing-function),
+      transform var(--ais-transition-duration) var(--ais-transition-timing-function);
   }
 
   &--open {
@@ -141,8 +118,7 @@
 // Smooth body margin transition for side-panel mode
 body {
   @media (prefers-reduced-motion: no-preference) {
-    transition: margin-right var(--ais-transition-duration, 200ms)
-      var(--ais-transition-timing-function, ease);
+    transition: margin-right var(--ais-transition-duration, 200ms) var(--ais-transition-timing-function, ease);
   }
 }
 
