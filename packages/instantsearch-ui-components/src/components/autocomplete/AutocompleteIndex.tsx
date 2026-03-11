@@ -14,6 +14,7 @@ export type AutocompleteIndexProps<
     onSelect: () => void;
     onApply: () => void;
   }) => JSX.Element;
+  NoResultsComponent?: () => JSX.Element;
   getItemProps: (
     item: T,
     index: number
@@ -41,6 +42,10 @@ export type AutocompleteIndexClassNames = {
    * Class names to apply to each item element
    */
   item: string | string[];
+  /**
+   * Class names to apply to the no results element
+   */
+  noResults: string | string[];
 };
 
 export function createAutocompleteIndexComponent({ createElement }: Renderer) {
@@ -49,11 +54,12 @@ export function createAutocompleteIndexComponent({ createElement }: Renderer) {
       items,
       HeaderComponent,
       ItemComponent,
+      NoResultsComponent,
       getItemProps,
       classNames = {},
     } = userProps;
 
-    if (items.length === 0) {
+    if (items.length === 0 && !NoResultsComponent) {
       return null;
     }
 
@@ -64,31 +70,40 @@ export function createAutocompleteIndexComponent({ createElement }: Renderer) {
             <HeaderComponent items={items} />
           </div>
         )}
-        <ol className={cx('ais-AutocompleteIndexList', classNames.list)}>
-          {items.map((item, index) => {
-            const { className, onSelect, onApply, ...itemProps } = getItemProps(
-              item,
-              index
-            );
-            return (
-              <li
-                key={`${itemProps.id}:${item.objectID}`}
-                {...itemProps}
-                className={cx(
-                  'ais-AutocompleteIndexItem',
-                  classNames.item,
-                  className
-                )}
-              >
-                <ItemComponent
-                  item={item}
-                  onSelect={onSelect}
-                  onApply={onApply}
-                />
-              </li>
-            );
-          })}
-        </ol>
+        {items.length === 0 && NoResultsComponent ? (
+          <div
+            className={cx(
+              'ais-AutocompleteIndexNoResults',
+              classNames.noResults
+            )}
+          >
+            <NoResultsComponent />
+          </div>
+        ) : (
+          <ol className={cx('ais-AutocompleteIndexList', classNames.list)}>
+            {items.map((item, index) => {
+              const { className, onSelect, onApply, ...itemProps } =
+                getItemProps(item, index);
+              return (
+                <li
+                  key={`${itemProps.id}:${item.objectID}`}
+                  {...itemProps}
+                  className={cx(
+                    'ais-AutocompleteIndexItem',
+                    classNames.item,
+                    className
+                  )}
+                >
+                  <ItemComponent
+                    item={item}
+                    onSelect={onSelect}
+                    onApply={onApply}
+                  />
+                </li>
+              );
+            })}
+          </ol>
+        )}
       </div>
     );
   };

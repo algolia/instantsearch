@@ -591,6 +591,16 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     query.length > 0 && storage.onAdd(query);
   };
 
+  const allIndicesEmpty = indicesForPanel.every(
+    ({ hits }) => hits.length === 0
+  );
+  const recentEmpty = !storageHits || storageHits.length === 0;
+  const hasNoResultsTemplate = indicesConfig.some(
+    (c) => c.templates?.noResults !== undefined
+  );
+  const shouldHideEmptyPanel =
+    allIndicesEmpty && recentEmpty && !hasNoResultsTemplate && !templates.panel;
+
   const {
     getInputProps,
     getItemProps,
@@ -655,6 +665,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     },
     placeholder,
     isDetached,
+    shouldHidePanel: shouldHideEmptyPanel,
   });
 
   // Open panel and focus input when modal opens
@@ -752,6 +763,17 @@ function AutocompleteWrapper<TItem extends BaseHit>({
       );
     };
 
+    const noResultsComponent = currentIndexConfig.templates?.noResults
+      ? () => (
+          <TemplateComponent
+            {...renderState.indexTemplateProps[i]}
+            templateKey="noResults"
+            rootTagName="fragment"
+            data={{}}
+          />
+        )
+      : undefined;
+
     let elementId = indexName;
     if (indexName === showQuerySuggestions?.indexName) {
       elementId = 'suggestions';
@@ -764,6 +786,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         key={indexId}
         HeaderComponent={headerComponent}
         ItemComponent={itemComponent}
+        NoResultsComponent={noResultsComponent}
         items={hits.map((item) => ({
           ...item,
           __indexName: indexId,
@@ -894,6 +917,10 @@ type IndexConfig<TItem extends BaseHit> = AutocompleteIndexConfig<TItem> & {
      * Template to use for each result. This template will receive an object containing a single record.
      */
     item: Template<{ item: TItem; onSelect: () => void }>;
+    /**
+     * Template to use when no results are found.
+     */
+    noResults: Template<Record<string, never>>;
   }>;
 
   /**

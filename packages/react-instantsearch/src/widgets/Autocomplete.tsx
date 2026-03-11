@@ -124,6 +124,7 @@ type AutocompleteSearchParameters = Omit<PlainSearchParameters, 'index'>;
 type IndexConfig<TItem extends BaseHit> = AutocompleteIndexConfig<TItem> & {
   headerComponent?: AutocompleteIndexProps<TItem>['HeaderComponent'];
   itemComponent: AutocompleteIndexProps<TItem>['ItemComponent'];
+  noResultsComponent?: AutocompleteIndexProps<TItem>['NoResultsComponent'];
   searchParameters?: AutocompleteSearchParameters;
   classNames?: Partial<AutocompleteIndexClassNames>;
 };
@@ -688,6 +689,16 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   );
   const hasWarnedMissingPromptSuggestionsChatRef = useRef(false);
 
+  const allIndicesEmpty = indicesForPanel.every(
+    ({ hits }) => hits.length === 0
+  );
+  const recentEmpty = !storageHits || storageHits.length === 0;
+  const hasNoResultsTemplate = indicesConfig.some(
+    (c) => c.noResultsComponent !== undefined
+  );
+  const shouldHideEmptyPanel =
+    allIndicesEmpty && recentEmpty && !hasNoResultsTemplate && !PanelComponent;
+
   const {
     getInputProps,
     getItemProps,
@@ -754,6 +765,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     },
     placeholder,
     isDetached,
+    shouldHidePanel: shouldHideEmptyPanel,
   });
 
   // Open panel and focus input when modal opens
@@ -830,6 +842,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
         HeaderComponent={currentIndexConfig.headerComponent}
         // @ts-expect-error - there seems to be problems with React.ComponentType and this, but it's actually correct
         ItemComponent={currentIndexConfig.itemComponent}
+        NoResultsComponent={currentIndexConfig.noResultsComponent}
         items={hits.map((item) => ({
           ...item,
           __indexName: indexId,
