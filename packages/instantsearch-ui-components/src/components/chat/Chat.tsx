@@ -1,9 +1,9 @@
 /** @jsx createElement */
 /** @jsxFrag Fragment */
-import { cx } from '../../lib';
 
 import { createChatHeaderComponent } from './ChatHeader';
 import { createChatMessagesComponent } from './ChatMessages';
+import { createChatOverlayLayoutComponent } from './ChatOverlayLayout';
 import { createChatPromptComponent } from './ChatPrompt';
 import { createChatPromptSuggestionsComponent } from './ChatPromptSuggestions';
 import { createChatToggleButtonComponent } from './ChatToggleButton';
@@ -11,6 +11,7 @@ import { createChatToggleButtonComponent } from './ChatToggleButton';
 import type { Renderer, ComponentProps } from '../../types';
 import type { ChatHeaderProps, ChatHeaderOwnProps } from './ChatHeader';
 import type { ChatMessagesProps } from './ChatMessages';
+import type { ChatLayoutOwnProps } from './ChatOverlayLayout';
 import type { ChatPromptProps, ChatPromptOwnProps } from './ChatPrompt';
 import type { ChatPromptSuggestionsOwnProps } from './ChatPromptSuggestions';
 import type {
@@ -82,6 +83,10 @@ export type ChatProps = Omit<ComponentProps<'div'>, 'onError' | 'title'> & {
    * Optional suggestions component for the chat
    */
   suggestionsComponent?: (props: ChatPromptSuggestionsOwnProps) => JSX.Element;
+  /**
+   * Optional layout component for the chat.
+   */
+  layoutComponent?: (props: ChatLayoutOwnProps) => JSX.Element;
 };
 
 export function createChatComponent({ createElement, Fragment }: Renderer) {
@@ -93,6 +98,10 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
   const ChatMessages = createChatMessagesComponent({ createElement, Fragment });
   const ChatPrompt = createChatPromptComponent({ createElement, Fragment });
   const ChatPromptSuggestions = createChatPromptSuggestionsComponent({
+    createElement,
+    Fragment,
+  });
+  const OverlayLayout = createChatOverlayLayoutComponent({
     createElement,
     Fragment,
   });
@@ -110,64 +119,65 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
       promptComponent: PromptComponent,
       toggleButtonComponent: ToggleButtonComponent,
       suggestionsComponent: SuggestionsComponent,
+      layoutComponent: LayoutComponent,
       classNames = {},
-      className,
+      className: _className,
       ...props
     } = userProps;
-    return (
-      <div
-        {...props}
-        className={cx(
-          'ais-Chat',
-          maximized && 'ais-Chat--maximized',
-          classNames.root,
-          className
-        )}
-      >
-        <div
-          className={cx(
-            'ais-Chat-container',
-            open && 'ais-Chat-container--open',
-            maximized && 'ais-Chat-container--maximized',
-            classNames.container
-          )}
-        >
-          {createElement(HeaderComponent || ChatHeader, {
-            ...headerProps,
-            classNames: classNames.header,
-            maximized,
-          })}
-          <ChatMessages
-            {...messagesProps}
-            classNames={classNames.messages}
-            messageClassNames={classNames.message}
-            suggestionsElement={createElement(
-              SuggestionsComponent || ChatPromptSuggestions,
-              {
-                ...suggestionsProps,
-                classNames: classNames.suggestions,
-              }
-            )}
-          />
-          {createElement(PromptComponent || ChatPrompt, {
-            ...promptProps,
-            classNames: classNames.prompt,
-          })}
-        </div>
 
-        <div className="ais-Chat-toggleButtonWrapper">
-          {createElement(ToggleButtonComponent || ChatToggleButton, {
-            ...toggleButtonProps,
-            classNames: classNames.toggleButton,
-            onClick: () => {
-              toggleButtonProps.onClick?.();
-              if (!open) {
-                promptProps.promptRef?.current?.focus();
-              }
-            },
-          })}
-        </div>
-      </div>
+    const headerElement = createElement(HeaderComponent || ChatHeader, {
+      ...headerProps,
+      classNames: classNames.header,
+      maximized,
+    });
+
+    const messagesElement = (
+      <ChatMessages
+        {...messagesProps}
+        classNames={classNames.messages}
+        messageClassNames={classNames.message}
+        suggestionsElement={createElement(
+          SuggestionsComponent || ChatPromptSuggestions,
+          {
+            ...suggestionsProps,
+            classNames: classNames.suggestions,
+          }
+        )}
+      />
+    );
+
+    const promptElement = createElement(PromptComponent || ChatPrompt, {
+      ...promptProps,
+      classNames: classNames.prompt,
+    });
+
+    const toggleButtonElement = createElement(
+      ToggleButtonComponent || ChatToggleButton,
+      {
+        ...toggleButtonProps,
+        classNames: classNames.toggleButton,
+        onClick: () => {
+          toggleButtonProps.onClick?.();
+          if (!open) {
+            promptProps.promptRef?.current?.focus();
+          }
+        },
+      }
+    );
+
+    const ResolvedLayout = LayoutComponent || OverlayLayout;
+
+    return (
+      <ResolvedLayout
+        {...props}
+        open={open}
+        maximized={maximized}
+        headerElement={headerElement}
+        messagesElement={messagesElement}
+        promptElement={promptElement}
+        toggleButtonElement={toggleButtonElement}
+        classNames={{ root: classNames.root, container: classNames.container }}
+      />
     );
   };
 }

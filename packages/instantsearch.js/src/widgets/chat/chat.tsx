@@ -48,6 +48,7 @@ import type {
   ChatClassNames,
   ChatHeaderProps,
   ChatHeaderTranslations,
+  ChatLayoutOwnProps,
   ChatMessageActionProps,
   ChatMessageBase,
   ChatMessageErrorProps,
@@ -270,6 +271,7 @@ function createDefaultTools<
 }
 
 type ChatWrapperProps = {
+  layoutComponent?: (props: ChatLayoutOwnProps) => JSX.Element;
   cssClasses: ChatCSSClasses;
   chatOpen: boolean;
   setChatOpen: (open: boolean) => void;
@@ -335,6 +337,7 @@ type ChatWrapperProps = {
 };
 
 function ChatWrapper({
+  layoutComponent,
   cssClasses,
   chatOpen,
   setChatOpen,
@@ -370,6 +373,7 @@ function ChatWrapper({
 
   return (
     <Chat
+      layoutComponent={layoutComponent}
       classNames={cssClasses}
       open={chatOpen}
       maximized={maximized}
@@ -814,11 +818,32 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
         }
       : undefined;
 
+    const layoutTemplateProps = prepareTemplateProps({
+      defaultTemplates: {} as unknown as NonNullable<
+        Required<Pick<ChatTemplates<THit>, 'layout'>>
+      >,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates: { layout: templates.layout },
+    }) as PreparedTemplateProps<ChatTemplates<THit>>;
+    const layoutComponent = templates.layout
+      ? (layoutProps: ChatLayoutOwnProps) => {
+          return (
+            <TemplateComponent
+              {...layoutTemplateProps}
+              templateKey="layout"
+              rootTagName="div"
+              data={layoutProps}
+            />
+          );
+        }
+      : undefined;
+
     state.subscribe(rerender);
 
     function rerender() {
       render(
         <ChatWrapper
+          layoutComponent={layoutComponent}
           cssClasses={cssClasses}
           chatOpen={open}
           setChatOpen={setOpen}
@@ -918,6 +943,13 @@ export type ChatCSSClasses = Partial<ChatClassNames>;
 
 export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
   Partial<{
+    /**
+     * Custom layout template for the chat widget.
+     * Use `chatInlineLayout()` or `chatOverlayLayout()` from `instantsearch.js/es/templates`,
+     * or provide a custom component receiving `ChatLayoutOwnProps`.
+     */
+    layout: Template<ChatLayoutOwnProps>;
+
     /**
      * Template to use for each result. This template will receive an object containing a single record.
      */
