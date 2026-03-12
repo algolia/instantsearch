@@ -7,13 +7,13 @@ import type { ChatLayoutOwnProps } from './types';
 export function createChatInlineLayoutComponent({ createElement }: Renderer) {
   return function ChatInlineLayout(userProps: ChatLayoutOwnProps) {
     const {
-      headerElement,
-      messagesElement,
-      promptElement,
+      headerComponent,
+      messagesComponent,
+      promptComponent,
       classNames = {},
       open: _open,
       maximized: _maximized,
-      toggleButtonElement: _toggleButtonElement,
+      toggleButtonComponent: _toggleButtonElement,
       // Chat state props (destructured to avoid spreading on div)
       messages: _messages,
       status: _status,
@@ -37,9 +37,9 @@ export function createChatInlineLayoutComponent({ createElement }: Renderer) {
             classNames.container
           )}
         >
-          {headerElement}
-          {messagesElement}
-          {promptElement}
+          {headerComponent}
+          {messagesComponent}
+          {promptComponent}
         </div>
       </div>
     );

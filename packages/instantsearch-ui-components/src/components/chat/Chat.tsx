@@ -125,13 +125,13 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
       ...props
     } = userProps;
 
-    const headerElement = createElement(HeaderComponent || ChatHeader, {
+    const headerComponent = createElement(HeaderComponent || ChatHeader, {
       ...headerProps,
       classNames: classNames.header,
       maximized,
     });
 
-    const messagesElement = (
+    const messagesComponent = (
       <ChatMessages
         {...messagesProps}
         classNames={classNames.messages}
@@ -146,12 +146,12 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
       />
     );
 
-    const promptElement = createElement(PromptComponent || ChatPrompt, {
+    const promptComponent = createElement(PromptComponent || ChatPrompt, {
       ...promptProps,
       classNames: classNames.prompt,
     });
 
-    const toggleButtonElement = createElement(
+    const toggleButtonComponent = createElement(
       ToggleButtonComponent || ChatToggleButton,
       {
         ...toggleButtonProps,
@@ -172,10 +172,10 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
         {...props}
         open={open}
         maximized={maximized}
-        headerElement={headerElement}
-        messagesElement={messagesElement}
-        promptElement={promptElement}
-        toggleButtonElement={toggleButtonElement}
+        headerComponent={headerComponent}
+        messagesComponent={messagesComponent}
+        promptComponent={promptComponent}
+        toggleButtonComponent={toggleButtonComponent}
         classNames={{ root: classNames.root, container: classNames.container }}
         messages={messagesProps.messages}
         status={messagesProps.status}
