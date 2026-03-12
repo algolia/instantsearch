@@ -463,10 +463,10 @@ export type ChatLayoutOwnProps<
 > = {
   open: boolean;
   maximized: boolean;
-  headerElement: JSX.Element;
-  messagesElement: JSX.Element;
-  promptElement: JSX.Element;
-  toggleButtonElement: JSX.Element;
+  headerComponent: JSX.Element;
+  messagesComponent: JSX.Element;
+  promptComponent: JSX.Element;
+  toggleButtonComponent: JSX.Element;
   classNames?: { root?: string | string[]; container?: string | string[] };
   isClearing?: boolean;
   clearMessages?: () => void;
