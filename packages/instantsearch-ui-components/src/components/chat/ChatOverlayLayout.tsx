@@ -14,6 +14,14 @@ export function createChatOverlayLayoutComponent({ createElement }: Renderer) {
       promptElement,
       toggleButtonElement,
       classNames = {},
+      // Chat state props (destructured to avoid spreading on div)
+      messages: _messages,
+      status: _status,
+      isClearing: _isClearing,
+      clearMessages: _clearMessages,
+      onClearTransitionEnd: _onClearTransitionEnd,
+      suggestions: _suggestions,
+      tools: _tools,
       ...rest
     } = userProps;
 

@@ -458,7 +458,9 @@ export type ApplyFiltersParams = {
   facetFilters?: string[][];
 };
 
-export type ChatLayoutOwnProps = {
+export type ChatLayoutOwnProps<
+  TMessage extends ChatMessageBase = ChatMessageBase
+> = {
   open: boolean;
   maximized: boolean;
   headerElement: JSX.Element;
@@ -466,7 +468,14 @@ export type ChatLayoutOwnProps = {
   promptElement: JSX.Element;
   toggleButtonElement: JSX.Element;
   classNames?: { root?: string | string[]; container?: string | string[] };
-} & Omit<ComponentProps<'div'>, 'className'>;
+  isClearing?: boolean;
+  clearMessages?: () => void;
+  onClearTransitionEnd?: () => void;
+  suggestions?: string[];
+  tools: ClientSideTools;
+} & Pick<ChatState<TMessage>, 'messages'> &
+  Partial<Pick<ChatState<TMessage>, 'status'>> &
+  Omit<ComponentProps<'div'>, 'className'>;
 
 export type ClientSideToolComponentProps = {
   message: ChatToolMessage;

@@ -20,6 +20,12 @@ describe('ChatInlineLayout', () => {
     messagesElement: <div className="messages">Messages</div>,
     promptElement: <div className="prompt">Prompt</div>,
     toggleButtonElement: <button className="toggle">Toggle</button>,
+    messages: [],
+    status: 'ready' as const,
+    isClearing: false,
+    clearMessages: jest.fn(),
+    onClearTransitionEnd: jest.fn(),
+    tools: {},
   };
 
   test('renders with default props', () => {

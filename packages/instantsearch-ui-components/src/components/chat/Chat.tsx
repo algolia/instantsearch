@@ -177,6 +177,13 @@ export function createChatComponent({ createElement, Fragment }: Renderer) {
         promptElement={promptElement}
         toggleButtonElement={toggleButtonElement}
         classNames={{ root: classNames.root, container: classNames.container }}
+        messages={messagesProps.messages}
+        status={messagesProps.status}
+        tools={messagesProps.tools}
+        isClearing={messagesProps.isClearing}
+        clearMessages={headerProps.onClear}
+        onClearTransitionEnd={messagesProps.onClearTransitionEnd}
+        suggestions={suggestionsProps.suggestions}
       />
     );
   };
