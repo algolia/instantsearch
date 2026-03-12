@@ -43,7 +43,7 @@
     "test:exports": "node ./__tests__/module/is-es-module.mjs && node ./__tests__/module/is-cjs-module.cjs",
     "test:e2e": "playwright test",
     "test:e2e:saucelabs": "playwright test",
-    "watch:es": "yarn --silent build:es:base --watch"
+    "watch:es": "BABEL_ENV=es,rollup BUILD_FORMAT=esm rollup -c rollup.config.mjs --watch"
   },
   "dependencies": {
     "@swc/helpers": "0.5.18",

@@ -347,6 +347,10 @@ export type AutocompleteProps<TItem extends BaseHit> = ComponentProps<'div'> & {
   classNames?: Partial<AutocompleteClassNames>;
   placeholder?: string;
   /**
+   * Whether the input should be focused and the panel open initially.
+   */
+  autoFocus?: boolean;
+  /**
    * Media query to enable detached (mobile) mode.
    * When the media query matches, the autocomplete switches to a full-screen overlay.
    * Set to empty string to disable detached mode.
@@ -597,6 +601,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
   chatRenderState,
   transformItems,
   placeholder,
+  autoFocus,
   detachedMediaQuery = DEFAULT_DETACHED_MEDIA_QUERY,
   translations,
   classNames,
@@ -766,6 +771,7 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
     placeholder,
     isDetached,
     shouldHidePanel: shouldHideEmptyPanel,
+    autoFocus,
   });
 
   // Open panel and focus input when modal opens

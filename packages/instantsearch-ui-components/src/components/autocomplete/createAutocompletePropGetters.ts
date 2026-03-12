@@ -79,6 +79,10 @@ export type UsePropGetters<TItem extends BaseHit> = (params: {
    * (e.g., when all sources are empty and there's no custom content to show).
    */
   shouldHidePanel?: boolean;
+  /**
+   * Whether the input should be focused and the panel open initially.
+   */
+  autoFocus?: boolean;
 }) => {
   getInputProps: GetInputProps;
   getItemProps: GetItemProps;
@@ -115,11 +119,12 @@ export function createAutocompletePropGetters({
     placeholder,
     isDetached = false,
     shouldHidePanel = false,
+    autoFocus = false,
   }: Parameters<UsePropGetters<TItem>>[0]): ReturnType<UsePropGetters<TItem>> {
     const getElementId = createGetElementId(useId());
     const inputRef = useRef<HTMLInputElement>(null);
     const rootRef = useRef<HTMLDivElement>(null);
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(autoFocus);
     const [activeDescendant, setActiveDescendant] = useState<
       string | undefined
     >(undefined);
@@ -207,6 +212,7 @@ export function createAutocompletePropGetters({
         id: getElementId('input'),
         ref: inputRef,
         role: 'combobox',
+        autoFocus,
         'aria-autocomplete': 'list',
         'aria-expanded': isOpen,
         'aria-haspopup': 'grid',
