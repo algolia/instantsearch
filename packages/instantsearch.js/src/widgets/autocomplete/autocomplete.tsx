@@ -842,10 +842,11 @@ function AutocompleteWrapper<TItem extends BaseHit>({
         ),
       }
     : cssClasses;
+  const { ref: rootRef, ...rootProps } = getRootProps();
 
   if (isDetached) {
     return (
-      <Autocomplete {...getRootProps()} classNames={cssClasses}>
+      <Autocomplete {...rootProps} rootRef={rootRef} classNames={cssClasses}>
         <AutocompleteDetachedSearchButton
           query={localQuery}
           placeholder={placeholder}
@@ -890,7 +891,7 @@ function AutocompleteWrapper<TItem extends BaseHit>({
 
   // Normal (non-detached) rendering
   return (
-    <Autocomplete {...getRootProps()} classNames={cssClasses}>
+    <Autocomplete {...rootProps} rootRef={rootRef} classNames={cssClasses}>
       {searchBoxContent}
       {panelContent}
     </Autocomplete>
