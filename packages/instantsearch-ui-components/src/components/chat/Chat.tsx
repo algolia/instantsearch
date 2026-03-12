@@ -11,13 +11,13 @@ import { createChatToggleButtonComponent } from './ChatToggleButton';
 import type { Renderer, ComponentProps } from '../../types';
 import type { ChatHeaderProps, ChatHeaderOwnProps } from './ChatHeader';
 import type { ChatMessagesProps } from './ChatMessages';
-import type { ChatLayoutOwnProps } from './ChatOverlayLayout';
 import type { ChatPromptProps, ChatPromptOwnProps } from './ChatPrompt';
 import type { ChatPromptSuggestionsOwnProps } from './ChatPromptSuggestions';
 import type {
   ChatToggleButtonOwnProps,
   ChatToggleButtonProps,
 } from './ChatToggleButton';
+import type { ChatLayoutOwnProps } from './types';
 
 export type ChatClassNames = {
   root?: string | string[];
