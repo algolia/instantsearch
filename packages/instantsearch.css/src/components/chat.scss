@@ -3,6 +3,8 @@
 @use '../shared/_common';
 @use 'button';
 @use 'chat/chat';
+@use 'chat/chat-overlay-layout';
+@use 'chat/chat-inline-layout';
 @use 'chat/chat-toggle-button';
 @use 'chat/chat-header';
 @use 'chat/chat-messages';
