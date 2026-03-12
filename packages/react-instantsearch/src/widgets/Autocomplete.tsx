@@ -898,10 +898,16 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
         ),
       }
     : classNames;
+  const { ref: rootRef, ...rootProps } = getRootProps();
 
   if (isDetached) {
     return (
-      <Autocomplete {...props} {...getRootProps()} classNames={classNames}>
+      <Autocomplete
+        {...props}
+        {...rootProps}
+        rootRef={rootRef}
+        classNames={classNames}
+      >
         <AutocompleteDetachedSearchButton
           query={currentRefinement || indexUiState.query || ''}
           placeholder={placeholder}
@@ -947,7 +953,12 @@ function InnerAutocomplete<TItem extends BaseHit = BaseHit>({
 
   // Normal (non-detached) rendering
   return (
-    <Autocomplete {...props} {...getRootProps()} classNames={classNames}>
+    <Autocomplete
+      {...props}
+      {...rootProps}
+      rootRef={rootRef}
+      classNames={classNames}
+    >
       {searchBoxContent}
       {panelContent}
     </Autocomplete>
