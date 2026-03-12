@@ -1227,6 +1227,66 @@ export function createOptionsTests(
       expect(input).toHaveFocus();
     });
 
+    test('focuses the input and opens the panel when autofocus is set', async () => {
+      const searchClient = createMockedSearchClient(
+        createMultiSearchResponse(
+          createSingleSearchResponse({
+            index: 'indexName',
+            hits: [{ objectID: '1', name: 'Item 1' }],
+          })
+        )
+      );
+
+      await setup({
+        instantSearchOptions: {
+          indexName: 'indexName',
+          searchClient,
+        },
+        widgetParams: {
+          javascript: {
+            autofocus: true,
+            indices: [
+              {
+                indexName: 'indexName',
+                templates: {
+                  item: (props) => props.item.name,
+                },
+              },
+            ],
+          },
+          react: {
+            autoFocus: true,
+            indices: [
+              {
+                indexName: 'indexName',
+                itemComponent: (props) => props.item.name,
+              },
+            ],
+          },
+          vue: {},
+        },
+      });
+
+      await act(async () => {
+        await wait(0);
+      });
+
+      const input = screen.getByRole('combobox', { name: /submit/i });
+
+      try {
+        // For IS.js, jsdom does not implement autofocus so we test the attribute
+        expect(input).toHaveAttribute('autofocus');
+      } catch {
+        // For React, it doesn't set the `autofocus` attribute but polyfills it
+        // eslint-disable-next-line jest/no-conditional-expect
+        expect(input).toHaveFocus();
+      }
+
+      // Panel should be open initially
+      const panel = document.querySelector('.ais-AutocompletePanel');
+      expect(panel).not.toHaveAttribute('hidden');
+    });
+
     test('applies query suggestions when clicking on the fill action button', async () => {
       const searchClient = createMockedSearchClient(
         createMultiSearchResponse(
