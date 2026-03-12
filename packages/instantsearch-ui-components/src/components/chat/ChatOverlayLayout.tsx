@@ -1,7 +1,7 @@
 /** @jsx createElement */
 import { cx } from '../../lib';
 
-import type { Renderer } from '../../types';
+import type { ComponentProps, Renderer } from '../../types';
 
 export type ChatLayoutOwnProps = {
   open: boolean;
@@ -11,20 +11,24 @@ export type ChatLayoutOwnProps = {
   promptElement: JSX.Element;
   toggleButtonElement: JSX.Element;
   classNames?: { root?: string | string[]; container?: string | string[] };
-};
+} & Omit<ComponentProps<'div'>, 'className'>;
 
 export function createChatOverlayLayoutComponent({ createElement }: Renderer) {
-  return function ChatOverlayLayout({
-    open,
-    maximized,
-    headerElement,
-    messagesElement,
-    promptElement,
-    toggleButtonElement,
-    classNames = {},
-  }: ChatLayoutOwnProps) {
+  return function ChatOverlayLayout(userProps: ChatLayoutOwnProps) {
+    const {
+      open,
+      maximized,
+      headerElement,
+      messagesElement,
+      promptElement,
+      toggleButtonElement,
+      classNames = {},
+      ...rest
+    } = userProps;
+
     return (
       <div
+        {...rest}
         className={cx(
           'ais-Chat',
           'ais-ChatOverlayLayout',

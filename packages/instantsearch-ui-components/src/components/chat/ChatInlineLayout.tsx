@@ -5,14 +5,23 @@ import type { Renderer } from '../../types';
 import type { ChatLayoutOwnProps } from './ChatOverlayLayout';
 
 export function createChatInlineLayoutComponent({ createElement }: Renderer) {
-  return function ChatInlineLayout({
-    headerElement,
-    messagesElement,
-    promptElement,
-    classNames = {},
-  }: ChatLayoutOwnProps) {
+  return function ChatInlineLayout(userProps: ChatLayoutOwnProps) {
+    const {
+      headerElement,
+      messagesElement,
+      promptElement,
+      classNames = {},
+      open: _open,
+      maximized: _maximized,
+      toggleButtonElement: _toggleButtonElement,
+      ...rest
+    } = userProps;
+
     return (
-      <div className={cx('ais-Chat', 'ais-ChatInlineLayout', classNames.root)}>
+      <div
+        {...rest}
+        className={cx('ais-Chat', 'ais-ChatInlineLayout', classNames.root)}
+      >
         <div
           className={cx(
             'ais-Chat-container',

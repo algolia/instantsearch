@@ -35,7 +35,7 @@ describe('Chat', () => {
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
-          class="ais-Chat"
+          class="ais-Chat ais-ChatOverlayLayout"
         >
           <div
             class="ais-Chat-container ais-Chat-container--open"
