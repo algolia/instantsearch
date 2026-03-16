@@ -1148,10 +1148,10 @@ export function createOptionsTests(
             javascript: {
               ...createDefaultWidgetParams(),
               templates: {
-                layout: (props: any, { html }: any) =>
+                layout: (props, { html }: any) =>
                   html`<div class="custom-layout">
                     <span class="custom-layout-title">My Custom Chat</span>
-                    ${props.toggleButtonElement}
+                    ${props.templates.header()}
                   </div>`,
               },
             },
@@ -1160,7 +1160,7 @@ export function createOptionsTests(
               layoutComponent: (props) => (
                 <div className="custom-layout">
                   <span className="custom-layout-title">My Custom Chat</span>
-                  {props.toggleButtonElement}
+                  {props.toggleButtonComponent}
                 </div>
               ),
             },

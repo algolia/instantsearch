@@ -827,12 +827,27 @@ const createRenderer = <THit extends RecordWithObjectID = RecordWithObjectID>({
     }) as PreparedTemplateProps<ChatTemplates<THit>>;
     const layoutComponent = templates.layout
       ? (layoutProps: ChatLayoutOwnProps) => {
+          const {
+            headerComponent,
+            messagesComponent,
+            promptComponent,
+            toggleButtonComponent,
+            ...restLayoutProps
+          } = layoutProps;
           return (
             <TemplateComponent
               {...layoutTemplateProps}
               templateKey="layout"
-              rootTagName="div"
-              data={layoutProps}
+              rootTagName="fragment"
+              data={{
+                ...restLayoutProps,
+                templates: {
+                  header: () => headerComponent,
+                  messages: () => messagesComponent,
+                  prompt: () => promptComponent,
+                  toggleButton: () => toggleButtonComponent,
+                },
+              }}
             />
           );
         }
@@ -941,14 +956,27 @@ export type Tools = UserClientSideToolsWithTemplate;
 
 export type ChatCSSClasses = Partial<ChatClassNames>;
 
+export type ChatLayoutTemplateData = Omit<
+  ChatLayoutOwnProps,
+  | 'headerComponent'
+  | 'messagesComponent'
+  | 'promptComponent'
+  | 'toggleButtonComponent'
+> & {
+  templates: {
+    header: () => JSX.Element;
+    messages: () => JSX.Element;
+    prompt: () => JSX.Element;
+    toggleButton: () => JSX.Element;
+  };
+};
+
 export type ChatTemplates<THit extends NonNullable<object> = BaseHit> =
   Partial<{
     /**
      * Custom layout template for the chat widget.
-     * Use `chatInlineLayout()` or `chatOverlayLayout()` from `instantsearch.js/es/templates`,
-     * or provide a custom component receiving `ChatLayoutOwnProps`.
      */
-    layout: Template<ChatLayoutOwnProps>;
+    layout: Template<ChatLayoutTemplateData>;
 
     /**
      * Template to use for each result. This template will receive an object containing a single record.
