@@ -8,7 +8,9 @@ const {
   buildVersionFileContent,
 } = require('./shared');
 
-const PACKAGES_DIR = path.join(__dirname, '../../packages');
+const ROOT_DIR = path.join(__dirname, '../..');
+const PACKAGES_DIR = path.join(ROOT_DIR, 'packages');
+const EXAMPLES_DIR = path.join(ROOT_DIR, 'examples');
 
 function compareSemver(a, b) {
   const pa = a.split('.').map(Number);
@@ -68,6 +70,57 @@ function insertChangelogEntry(name, oldVersion, newVersion) {
   return true;
 }
 
+function findPackageJsonFiles(dir) {
+  const results = [];
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (entry.name === 'node_modules' || entry.name === '.next') {
+      // eslint-disable-next-line no-continue
+      continue;
+    }
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      results.push(...findPackageJsonFiles(fullPath));
+    } else if (entry.name === 'package.json') {
+      results.push(fullPath);
+    }
+  }
+  return results;
+}
+
+function updateDependencyReferences(packageName, newVersion) {
+  const depKeys = ['dependencies', 'devDependencies', 'peerDependencies'];
+  const packageJsonFiles = [
+    ...findPackageJsonFiles(PACKAGES_DIR),
+    ...findPackageJsonFiles(EXAMPLES_DIR),
+  ];
+
+  packageJsonFiles.forEach((filePath) => {
+    const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    let changed = false;
+
+    depKeys.forEach((key) => {
+      if (
+        data[key] &&
+        data[key][packageName] &&
+        data[key][packageName] !== newVersion
+      ) {
+        console.log(
+          `  Updating ${packageName} dependency in ${path.relative(
+            ROOT_DIR,
+            filePath
+          )}: ${data[key][packageName]} -> ${newVersion}`
+        );
+        data[key][packageName] = newVersion;
+        changed = true;
+      }
+    });
+
+    if (changed) {
+      writePackageJson(filePath, data);
+    }
+  });
+}
+
 function fixMismatches() {
   // Fix group version mismatches
   for (const [group, packages] of Object.entries(PACKAGE_GROUPS)) {
@@ -94,6 +147,8 @@ function fixMismatches() {
         if (insertChangelogEntry(pkg.name, pkg.version, highestVersion)) {
           console.log(`  Updated CHANGELOG.md`);
         }
+
+        updateDependencyReferences(pkg.name, highestVersion);
       });
   }
 
