@@ -47,7 +47,7 @@
     "@swc/helpers": "0.5.18",
     "instantsearch-ui-components": "0.22.0",
     "instantsearch.js": "4.92.0",
-    "react-instantsearch-core": "7.27.1"
+    "react-instantsearch-core": "7.28.0"
   },
   "peerDependencies": {
     "algoliasearch": ">= 3.1 < 6",

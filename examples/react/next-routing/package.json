@@ -17,7 +17,7 @@
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-instantsearch": "7.28.0",
-    "react-instantsearch-core": "7.27.1",
+    "react-instantsearch-core": "7.28.0",
     "react-instantsearch-router-nextjs": "7.28.0"
   },
   "devDependencies": {
