@@ -30,17 +30,16 @@ function getToday() {
   return `${yyyy}-${mm}-${dd}`;
 }
 
-function readPackageJson(name) {
-  const filePath = path.join(PACKAGES_DIR, name, 'package.json');
-  return { filePath, data: JSON.parse(fs.readFileSync(filePath, 'utf8')) };
+function readJson(filePath) {
+  return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }
 
-function writePackageJson(filePath, data) {
+function writeJson(filePath, data) {
   fs.writeFileSync(filePath, `${JSON.stringify(data, null, 2)}\n`);
 }
 
-function insertChangelogEntry(name, oldVersion, newVersion) {
-  const changelogPath = path.join(PACKAGES_DIR, name, 'CHANGELOG.md');
+function insertChangelogEntry(packagesDir, name, oldVersion, newVersion) {
+  const changelogPath = path.join(packagesDir, name, 'CHANGELOG.md');
   if (!fs.existsSync(changelogPath)) {
     return false;
   }
@@ -71,6 +70,9 @@ function insertChangelogEntry(name, oldVersion, newVersion) {
 }
 
 function findPackageJsonFiles(dir) {
+  if (!fs.existsSync(dir)) {
+    return [];
+  }
   const results = [];
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     if (entry.name === 'node_modules' || entry.name === '.next') {
@@ -87,15 +89,21 @@ function findPackageJsonFiles(dir) {
   return results;
 }
 
-function updateDependencyReferences(packageName, newVersion) {
+function updateDependencyReferences(
+  rootDir,
+  packagesDir,
+  examplesDir,
+  packageName,
+  newVersion
+) {
   const depKeys = ['dependencies', 'devDependencies', 'peerDependencies'];
   const packageJsonFiles = [
-    ...findPackageJsonFiles(PACKAGES_DIR),
-    ...findPackageJsonFiles(EXAMPLES_DIR),
+    ...findPackageJsonFiles(packagesDir),
+    ...findPackageJsonFiles(examplesDir),
   ];
 
   packageJsonFiles.forEach((filePath) => {
-    const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    const data = readJson(filePath);
     let changed = false;
 
     depKeys.forEach((key) => {
@@ -106,7 +114,7 @@ function updateDependencyReferences(packageName, newVersion) {
       ) {
         console.log(
           `  Updating ${packageName} dependency in ${path.relative(
-            ROOT_DIR,
+            rootDir,
             filePath
           )}: ${data[key][packageName]} -> ${newVersion}`
         );
@@ -116,16 +124,21 @@ function updateDependencyReferences(packageName, newVersion) {
     });
 
     if (changed) {
-      writePackageJson(filePath, data);
+      writeJson(filePath, data);
     }
   });
 }
 
-function fixMismatches() {
+function fixMismatchesIn(
+  packageGroups,
+  versionFiles,
+  { rootDir, packagesDir, examplesDir }
+) {
   // Fix group version mismatches
-  for (const [group, packages] of Object.entries(PACKAGE_GROUPS)) {
+  for (const [group, packages] of Object.entries(packageGroups)) {
     const packageVersions = packages.map((name) => {
-      const { filePath, data } = readPackageJson(name);
+      const filePath = path.join(packagesDir, name, 'package.json');
+      const data = readJson(filePath);
       return { name, filePath, data, version: data.version };
     });
 
@@ -142,21 +155,34 @@ function fixMismatches() {
         );
 
         pkg.data.version = highestVersion;
-        writePackageJson(pkg.filePath, pkg.data);
+        writeJson(pkg.filePath, pkg.data);
 
-        if (insertChangelogEntry(pkg.name, pkg.version, highestVersion)) {
+        if (
+          insertChangelogEntry(
+            packagesDir,
+            pkg.name,
+            pkg.version,
+            highestVersion
+          )
+        ) {
           console.log(`  Updated CHANGELOG.md`);
         }
 
-        updateDependencyReferences(pkg.name, highestVersion);
+        updateDependencyReferences(
+          rootDir,
+          packagesDir,
+          examplesDir,
+          pkg.name,
+          highestVersion
+        );
       });
   }
 
   // Fix version file mismatches
-  for (const { name, versionFile, format } of VERSION_FILES) {
-    const { data } = readPackageJson(name);
-    const version = data.version;
-    const filePath = path.join(PACKAGES_DIR, name, versionFile);
+  for (const { name, versionFile, format } of versionFiles) {
+    const filePath = path.join(packagesDir, name, versionFile);
+    const pkgPath = path.join(packagesDir, name, 'package.json');
+    const { version } = readJson(pkgPath);
 
     const expected = buildVersionFileContent(version, format);
     const actual = fs.readFileSync(filePath, 'utf8');
@@ -168,4 +194,12 @@ function fixMismatches() {
   }
 }
 
-module.exports = { fixMismatches };
+function fixMismatches() {
+  fixMismatchesIn(PACKAGE_GROUPS, VERSION_FILES, {
+    rootDir: ROOT_DIR,
+    packagesDir: PACKAGES_DIR,
+    examplesDir: EXAMPLES_DIR,
+  });
+}
+
+module.exports = { fixMismatches, fixMismatchesIn };
