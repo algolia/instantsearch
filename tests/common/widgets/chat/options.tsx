@@ -3,9 +3,12 @@ import { createSearchClient } from '@instantsearch/mocks';
 import { wait } from '@instantsearch/testutils';
 import userEvent from '@testing-library/user-event';
 import { Chat, SearchIndexToolType } from 'instantsearch.js/es/lib/chat';
-import { chatInlineLayout } from 'instantsearch.js/es/templates';
+import {
+  chatInlineLayout,
+  chatSidePanelLayout,
+} from 'instantsearch.js/es/templates';
 import React from 'react';
-import { ChatInlineLayout } from 'react-instantsearch';
+import { ChatInlineLayout, ChatSidePanelLayout } from 'react-instantsearch';
 
 import { createDefaultWidgetParams, openChat } from './utils';
 
@@ -1220,6 +1223,48 @@ export function createOptionsTests(
         ).not.toBeInTheDocument();
         expect(
           document.querySelector('.ais-Chat-toggleButtonWrapper')
+        ).not.toBeInTheDocument();
+      });
+
+      test('renders with sidepanel layout component', async () => {
+        const searchClient = createSearchClient();
+
+        await setup({
+          instantSearchOptions: {
+            indexName: 'indexName',
+            searchClient,
+          },
+          widgetParams: {
+            javascript: {
+              ...createDefaultWidgetParams(),
+              templates: {
+                layout: chatSidePanelLayout(),
+              },
+            },
+            react: {
+              ...createDefaultWidgetParams(),
+              layoutComponent: ChatSidePanelLayout,
+            },
+            vue: {},
+          },
+        });
+
+        await openChat(act);
+
+        expect(
+          document.querySelector('.ais-ChatSidePanelLayout')
+        ).toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-Chat-container--open')
+        ).toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-Chat-toggleButtonWrapper')
+        ).toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-ChatOverlayLayout')
+        ).not.toBeInTheDocument();
+        expect(
+          document.querySelector('.ais-ChatInlineLayout')
         ).not.toBeInTheDocument();
       });
     });
