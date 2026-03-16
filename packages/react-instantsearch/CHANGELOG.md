@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.28.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.27.0...react-instantsearch@7.28.0) (2026-03-16)
+
+
+### Bug Fixes
+
+* **autocomplete:** forward the root ref ([#6922](https://github.com/algolia/instantsearch/issues/6922)) ([a7f62d8](https://github.com/algolia/instantsearch/commit/a7f62d81a7d68dc2b8bd5645425df0f9ec3dab8c))
+
+
+### Features
+
+* **autocomplete:** `noResults` template ([#6917](https://github.com/algolia/instantsearch/issues/6917)) ([a59db2f](https://github.com/algolia/instantsearch/commit/a59db2f45a430b0ca5324e6cf4bb1809cc5a4598))
+* **autocomplete:** support autofocus ([#6921](https://github.com/algolia/instantsearch/issues/6921)) ([1d2156a](https://github.com/algolia/instantsearch/commit/1d2156aac5f5d236dabdbfa11821d0fee7a5f41d))
+
+
+
+
+
 # [7.27.0](https://github.com/algolia/instantsearch/compare/react-instantsearch@7.26.1...react-instantsearch@7.27.0) (2026-03-10)
 
 
