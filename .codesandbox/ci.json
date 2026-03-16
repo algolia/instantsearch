@@ -17,5 +17,5 @@
     "packages/instantsearch.css",
     "packages/instantsearch-ui-components"
   ],
-  "node": "20"
+  "node": "20.19.0"
 }

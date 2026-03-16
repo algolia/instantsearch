@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const { spawnSync } = require('child_process');
+const { existsSync } = require('fs');
 const path = require('path');
 
 const repoRoot = path.resolve(__dirname, '..', '..');
@@ -10,6 +11,16 @@ const oxlintBin = path.join(
   '.bin',
   process.platform === 'win32' ? 'oxlint.cmd' : 'oxlint'
 );
+
+if (!existsSync(oxlintBin)) {
+  process.stderr.write(
+    [
+      'Oxlint is not installed for this environment.',
+      'Use Node >= 20.19.0 or >= 22.12.0 and reinstall dependencies to run lint.',
+    ].join('\n') + '\n'
+  );
+  process.exit(1);
+}
 
 const supportedExtensions = new Set([
   '.cjs',

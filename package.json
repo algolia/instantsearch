@@ -109,8 +109,6 @@
     "jest-watch-typeahead": "1.0.0",
     "jsdom-global": "3.0.2",
     "lerna": "6.0.3",
-    "oxlint": "1.55.0",
-    "oxlint-tsgolint": "0.17.0",
     "patch-package": "6.2.2",
     "places.js": "1.17.1",
     "prettier": "^2.4.1",
@@ -125,6 +123,10 @@
     "shipjs": "0.26.0",
     "ts-jest": "27",
     "typescript": "5.5.2"
+  },
+  "optionalDependencies": {
+    "oxlint": "1.55.0",
+    "oxlint-tsgolint": "0.17.0"
   },
   "resolutions": {
     "places.js/algoliasearch": "5.1.1",
