@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.28.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-router-nextjs@7.27.0...react-instantsearch-router-nextjs@7.28.0) (2026-03-16)
+
+
+### Features
+
+* **autocomplete:** support autofocus ([#6921](https://github.com/algolia/instantsearch/issues/6921)) ([1d2156a](https://github.com/algolia/instantsearch/commit/1d2156aac5f5d236dabdbfa11821d0fee7a5f41d))
+
+
+
+
+
 ## [7.27.0](https://github.com/algolia/instantsearch/compare/react-instantsearch-router-nextjs@7.26.1...react-instantsearch-router-nextjs@7.27.0) (2026-03-10)
 
 
