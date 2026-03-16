@@ -465,11 +465,11 @@ function saveTokenAsCookie(token: string, cookieDuration?: number) {
 function isModernInsightsClient(client: InsightsClientWithGlobals): boolean {
   const [major, minor] = (client.version || '').split('.').map(Number);
 
-  /* eslint-disable @typescript-eslint/naming-convention */
+  /* eslint-disable instantsearch/naming-convention */
   const v3 = major >= 3;
   const v2_6 = major === 2 && minor >= 6;
   const v1_10 = major === 1 && minor >= 10;
-  /* eslint-enable @typescript-eslint/naming-convention */
+  /* eslint-enable instantsearch/naming-convention */
 
   return v3 || v2_6 || v1_10;
 }

@@ -1,0 +1,15 @@
+{
+  "extends": [
+    "../../.oxlintrc.json"
+  ],
+  "rules": {
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_|^createElement$",
+        "caughtErrors": "none",
+        "ignoreRestSiblings": true
+      }
+    ]
+  }
+}

@@ -172,7 +172,7 @@ export type ChatMessagesProps<
 };
 
 const copyToClipboard = (message: ChatMessageBase) => {
-  navigator.clipboard.writeText(getTextContent(message));
+  void navigator.clipboard.writeText(getTextContent(message));
 };
 
 function createDefaultMessageComponent<

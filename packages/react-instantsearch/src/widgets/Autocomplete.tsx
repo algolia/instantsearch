@@ -119,7 +119,9 @@ const useStorage = createAutocompleteStorage({
   useState,
 });
 
-type AutocompleteSearchParameters = Omit<PlainSearchParameters, 'index'>;
+type AutocompleteSearchParameters = Omit<PlainSearchParameters, 'index'> & {
+  hitsPerPage?: number;
+};
 
 type IndexConfig<TItem extends BaseHit> = AutocompleteIndexConfig<TItem> & {
   headerComponent?: AutocompleteIndexProps<TItem>['HeaderComponent'];

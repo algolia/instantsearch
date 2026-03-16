@@ -7,7 +7,7 @@
     "start": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint --ext .ts .",
+    "lint": "oxlint .",
     "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {

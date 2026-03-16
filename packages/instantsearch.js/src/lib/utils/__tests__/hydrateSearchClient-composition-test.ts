@@ -55,7 +55,7 @@ describe('hydrateSearchClient (composition)', () => {
 
       hydrateSearchClient(client, initialResults);
 
-      client.search({
+      void client.search({
         compositionID: 'my-composition',
         requestBody: { params: { query: 'test' } },
       });
@@ -80,7 +80,7 @@ describe('hydrateSearchClient (composition)', () => {
 
         expect(search).not.toHaveBeenCalled();
 
-        client.search({
+        void client.search({
           compositionID: 'my-composition',
           requestBody: { params: { query: 'test' } },
         });

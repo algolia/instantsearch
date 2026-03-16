@@ -6,8 +6,8 @@ describe('debounce', () => {
   it('debounces the function', async () => {
     const originalFunction = jest.fn();
     const debouncedFunction = debounce(originalFunction, 100);
-    debouncedFunction('a');
-    debouncedFunction('b');
+    void debouncedFunction('a');
+    void debouncedFunction('b');
 
     await wait(100);
 
@@ -19,10 +19,10 @@ describe('debounce', () => {
     const originalFunction = jest.fn();
     const debouncedFunction = debounce(originalFunction, 100);
 
-    debouncedFunction('a');
+    void debouncedFunction('a');
 
     setTimeout(() => {
-      debouncedFunction('b');
+      void debouncedFunction('b');
     }, 100);
 
     await wait(250);
@@ -35,7 +35,7 @@ describe('debounce', () => {
     const originalFunction = jest.fn((x) => Promise.resolve(x));
     const debouncedFunction = debounce(originalFunction, 100);
 
-    debouncedFunction('a');
+    void debouncedFunction('a');
 
     const promise = debouncedFunction('b');
     await expect(promise).resolves.toEqual('b');
