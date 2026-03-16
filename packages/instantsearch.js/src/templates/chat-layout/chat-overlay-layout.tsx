@@ -3,7 +3,7 @@
 import { createChatOverlayLayoutComponent } from 'instantsearch-ui-components';
 import { Fragment, h } from 'preact';
 
-import type { ChatLayoutOwnProps } from 'instantsearch-ui-components';
+import type { ChatLayoutTemplateData } from '../../widgets/chat/chat';
 
 const ChatOverlayLayout = createChatOverlayLayoutComponent({
   createElement: h,
@@ -11,7 +11,16 @@ const ChatOverlayLayout = createChatOverlayLayoutComponent({
 });
 
 export function chatOverlayLayout() {
-  return function ChatOverlayLayoutTemplate(props: ChatLayoutOwnProps) {
-    return <ChatOverlayLayout {...props} />;
+  return function ChatOverlayLayoutTemplate(props: ChatLayoutTemplateData) {
+    const { templates, ...rest } = props;
+    return (
+      <ChatOverlayLayout
+        {...rest}
+        headerComponent={templates.header()}
+        messagesComponent={templates.messages()}
+        promptComponent={templates.prompt()}
+        toggleButtonComponent={templates.toggleButton()}
+      />
+    );
   };
 }
