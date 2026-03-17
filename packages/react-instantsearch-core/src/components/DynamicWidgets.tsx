@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 
 import { useDynamicWidgets } from '../connectors/useDynamicWidgets';
+import { useInstantSearch } from '../hooks/useInstantSearch';
 import { invariant } from '../lib/invariant';
 import { warn } from '../lib/warn';
 
@@ -22,12 +23,26 @@ export type DynamicWidgetsProps = Omit<
 > &
   AtLeastOne<{
     children: ReactNode;
-    fallbackComponent: ComponentType<{ attribute: string }>;
-  }>;
+    fallbackComponent: ComponentType<{
+      attribute: string;
+      canRefine: boolean;
+      facetValues: Record<string, number>;
+    }>;
+  }> & {
+    /**
+     * Rendering mode for dynamic widgets.
+     * - `"default"`: Traditional per-facet widget rendering (default for backward compatibility).
+     * - `"batched"`: Optimized for high-facet scenarios; renders all facets through a single batched component.
+     *
+     * @default "default"
+     */
+    mode?: 'default' | 'batched';
+  };
 
 export function DynamicWidgets({
   children,
   fallbackComponent: Fallback = DefaultFallbackComponent,
+  mode = 'default',
   ...props
 }: DynamicWidgetsProps) {
   const FallbackComponent = React.useRef(Fallback);
@@ -40,6 +55,9 @@ export function DynamicWidgets({
   const { attributesToRender } = useDynamicWidgets(props, {
     $$widgetType: 'ais.dynamicWidgets',
   });
+  const { results } = useInstantSearch();
+  const rawFacets = results?._rawResults?.[0]?.facets || {};
+  const facets = Object.keys(rawFacets).length > 0 ? rawFacets : results?.facets;
   const widgets: Map<string, ReactNode> = new Map();
 
   React.Children.forEach(children, (child) => {
@@ -53,12 +71,34 @@ export function DynamicWidgets({
     widgets.set(attribute, child);
   });
 
+  // In batched mode, skip per-widget mounting and render all facets as presentational components
+  if (mode === 'batched') {
+    return (
+      <>
+        {attributesToRender.map((attribute) => (
+          <Fragment key={attribute}>
+            <FallbackComponent.current
+              attribute={attribute}
+              canRefine={Object.keys(facets?.[attribute] || {}).length > 0}
+              facetValues={facets?.[attribute] || {}}
+            />
+          </Fragment>
+        ))}
+      </>
+    );
+  }
+
+  // Default mode: traditional per-widget rendering with facet metadata available
   return (
     <>
       {attributesToRender.map((attribute) => (
         <Fragment key={attribute}>
           {widgets.get(attribute) || (
-            <FallbackComponent.current attribute={attribute} />
+            <FallbackComponent.current
+              attribute={attribute}
+              canRefine={Object.keys(facets?.[attribute] || {}).length > 0}
+              facetValues={facets?.[attribute] || {}}
+            />
           )}
         </Fragment>
       ))}
