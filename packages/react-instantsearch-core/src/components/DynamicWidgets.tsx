@@ -56,8 +56,11 @@ export function DynamicWidgets({
     $$widgetType: 'ais.dynamicWidgets',
   });
   const { results } = useInstantSearch();
-  const rawFacets = results?._rawResults?.[0]?.facets || {};
-  const facets = Object.keys(rawFacets).length > 0 ? rawFacets : results?.facets;
+  const rawFacets = results?._rawResults?.[0]?.facets;
+  const resultsFacets = results?.facets;
+  const facets: Record<string, Record<string, number>> =
+    (rawFacets && !Array.isArray(rawFacets) ? rawFacets : undefined) ||
+    (resultsFacets && !Array.isArray(resultsFacets) ? resultsFacets : {});
   const widgets: Map<string, ReactNode> = new Map();
 
   React.Children.forEach(children, (child) => {
@@ -79,8 +82,11 @@ export function DynamicWidgets({
           <Fragment key={attribute}>
             <FallbackComponent.current
               attribute={attribute}
-              canRefine={Object.keys(facets?.[attribute] || {}).length > 0}
-              facetValues={facets?.[attribute] || {}}
+              canRefine={
+                Object.keys(facets[getNormalizedFacetAttribute(attribute)] || {})
+                  .length > 0
+              }
+              facetValues={facets[getNormalizedFacetAttribute(attribute)] || {}}
             />
           </Fragment>
         ))}
@@ -96,14 +102,24 @@ export function DynamicWidgets({
           {widgets.get(attribute) || (
             <FallbackComponent.current
               attribute={attribute}
-              canRefine={Object.keys(facets?.[attribute] || {}).length > 0}
-              facetValues={facets?.[attribute] || {}}
+              canRefine={
+                Object.keys(facets[getNormalizedFacetAttribute(attribute)] || {})
+                  .length > 0
+              }
+              facetValues={facets[getNormalizedFacetAttribute(attribute)] || {}}
             />
           )}
         </Fragment>
       ))}
     </>
   );
+}
+
+function getNormalizedFacetAttribute(attribute: string): string {
+  return attribute
+    .replace(/^searchable\(/, '')
+    .replace(/^filterOnly\(/, '')
+    .replace(/\)$/, '');
 }
 
 function isReactElement(
