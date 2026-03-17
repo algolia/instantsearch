@@ -68,20 +68,55 @@ export function DynamicWidgets({
     () => getRefinedAttributes(indexUiState),
     [indexUiState]
   );
-  const [renderBudget, setRenderBudget] = React.useState(
-    Math.min(INITIAL_WIDGET_BUDGET, attributesToRender.length)
+  const [mountedAttributes, setMountedAttributes] = React.useState(
+    () => new Set<string>()
   );
-
-  React.useEffect(() => {
-    setRenderBudget(Math.min(INITIAL_WIDGET_BUDGET, attributesToRender.length));
-  }, [attributesToRender.length]);
 
   React.useEffect(() => {
     if (mode !== 'default') {
       return;
     }
 
-    if (renderBudget >= attributesToRender.length) {
+    setMountedAttributes((previous) => {
+      const availableAttributes = new Set(attributesToRender);
+      const next = new Set<string>();
+      let changed = false;
+
+      previous.forEach((attribute) => {
+        if (availableAttributes.has(attribute)) {
+          next.add(attribute);
+        } else {
+          changed = true;
+        }
+      });
+
+      attributesToRender.forEach((attribute) => {
+        if (refinedAttributes.has(getNormalizedFacetAttribute(attribute))) {
+          if (!next.has(attribute)) {
+            next.add(attribute);
+            changed = true;
+          }
+        }
+      });
+
+      if (!changed && next.size === previous.size) {
+        return previous;
+      }
+
+      return next;
+    });
+  }, [mode, attributesToRender, refinedAttributes]);
+
+  React.useEffect(() => {
+    if (mode !== 'default') {
+      return;
+    }
+
+    const unmountedAttributes = attributesToRender.filter(
+      (attribute) => !mountedAttributes.has(attribute)
+    );
+
+    if (unmountedAttributes.length === 0) {
       return;
     }
 
@@ -99,9 +134,29 @@ export function DynamicWidgets({
     let idleId: number | null = null;
 
     const increaseBudget = () => {
-      setRenderBudget((previous) =>
-        Math.min(previous + WIDGET_BUDGET_CHUNK, attributesToRender.length)
-      );
+      setMountedAttributes((previous) => {
+        const next = new Set(previous);
+        let added = 0;
+
+        for (let index = 0; index < attributesToRender.length; index++) {
+          const attribute = attributesToRender[index];
+
+          if (!next.has(attribute)) {
+            next.add(attribute);
+            added += 1;
+          }
+
+          if (added >= WIDGET_BUDGET_CHUNK) {
+            break;
+          }
+        }
+
+        if (added === 0) {
+          return previous;
+        }
+
+        return next;
+      });
     };
 
     if (typeof requestIdle === 'function') {
@@ -123,16 +178,17 @@ export function DynamicWidgets({
         clearTimeout(timeoutId);
       }
     };
-  }, [mode, renderBudget, attributesToRender.length]);
+  }, [mode, mountedAttributes, attributesToRender]);
 
   const attributesToRenderWithBudget = React.useMemo(
     () =>
       attributesToRender.filter(
         (attribute, index) =>
-          index < renderBudget ||
+          index < INITIAL_WIDGET_BUDGET ||
+          mountedAttributes.has(attribute) ||
           refinedAttributes.has(getNormalizedFacetAttribute(attribute))
       ),
-    [attributesToRender, renderBudget, refinedAttributes]
+    [attributesToRender, mountedAttributes, refinedAttributes]
   );
   const widgets: Map<string, ReactNode> = new Map();
 
