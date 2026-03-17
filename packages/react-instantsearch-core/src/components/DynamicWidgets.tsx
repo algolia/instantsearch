@@ -46,7 +46,7 @@ export function DynamicWidgets({
   ...props
 }: DynamicWidgetsProps) {
   const INITIAL_WIDGET_BUDGET = 25;
-  const WIDGET_BUDGET_CHUNK = 25;
+  const WIDGET_BUDGET_CHUNK = 12;
 
   const FallbackComponent = React.useRef(Fallback);
 
@@ -133,7 +133,9 @@ export function DynamicWidgets({
         : undefined;
     let idleId: number | null = null;
 
-    const increaseBudget = () => {
+    const increaseBudget = (
+      idleDeadline?: { timeRemaining: () => number; didTimeout: boolean }
+    ) => {
       setMountedAttributes((previous) => {
         const next = new Set(previous);
         let added = 0;
@@ -142,6 +144,15 @@ export function DynamicWidgets({
           const attribute = attributesToRender[index];
 
           if (!next.has(attribute)) {
+            if (
+              idleDeadline &&
+              !idleDeadline.didTimeout &&
+              added > 0 &&
+              idleDeadline.timeRemaining() < 2
+            ) {
+              break;
+            }
+
             next.add(attribute);
             added += 1;
           }
@@ -160,8 +171,11 @@ export function DynamicWidgets({
     };
 
     if (typeof requestIdle === 'function') {
-      idleId = requestIdle(() => {
-        increaseBudget();
+      idleId = requestIdle((deadline: {
+        timeRemaining: () => number;
+        didTimeout: boolean;
+      }) => {
+        increaseBudget(deadline);
       }, { timeout: 100 });
     } else {
       timeoutId = setTimeout(() => {
