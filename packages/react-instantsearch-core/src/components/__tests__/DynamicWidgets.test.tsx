@@ -360,6 +360,68 @@ describe('DynamicWidgets', () => {
     `);
   });
 
+  test('passes facet metadata to fallbackComponent', async () => {
+    const search = jest.fn((requests) =>
+      Promise.resolve({
+        results: requests.map(() => ({
+          facets: {
+            categories: { Phones: 12 },
+          },
+          renderingContent: {
+            facetOrdering: {
+              facets: {
+                order: ['categories', 'brand'],
+              },
+            },
+          },
+        })),
+      })
+    );
+
+    const searchClient = createSearchClient({
+      search,
+    });
+
+    const fallbackComponent = jest.fn(
+      ({
+        attribute,
+        canRefine,
+      }: {
+        attribute: string;
+        canRefine: boolean;
+        facetValues: Record<string, number>;
+      }) => `${attribute}:${canRefine}` as unknown as JSX.Element
+    );
+
+    const { container } = render(
+      <InstantSearch indexName="indexName" searchClient={searchClient}>
+        <DynamicWidgets fallbackComponent={fallbackComponent}>
+          <RefinementList attribute="brand" />
+        </DynamicWidgets>
+      </InstantSearch>
+    );
+
+    await waitFor(() => {
+      expect(searchClient.search).toHaveBeenCalledTimes(1);
+    });
+
+    expect(container).toMatchInlineSnapshot(`
+      <div>
+        categories:true
+        RefinementList(brand)
+      </div>
+    `);
+
+    expect(fallbackComponent).toHaveBeenCalledWith(
+      expect.objectContaining({
+        attribute: 'categories',
+        canRefine: true,
+        facetValues: { Phones: 12 },
+      }),
+      undefined
+    );
+  });
+
   test('renders attributes without widget with fallbackComponent (function form)', async () => {
     const searchClient = createSearchClient({});
 

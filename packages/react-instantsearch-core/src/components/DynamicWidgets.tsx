@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 
 import { useDynamicWidgets } from '../connectors/useDynamicWidgets';
+import { useInstantSearch } from '../hooks/useInstantSearch';
 import { invariant } from '../lib/invariant';
 import { warn } from '../lib/warn';
 
@@ -22,7 +23,11 @@ export type DynamicWidgetsProps = Omit<
 > &
   AtLeastOne<{
     children: ReactNode;
-    fallbackComponent: ComponentType<{ attribute: string }>;
+    fallbackComponent: ComponentType<{
+      attribute: string;
+      canRefine: boolean;
+      facetValues: Record<string, number>;
+    }>;
   }>;
 
 export function DynamicWidgets({
@@ -40,6 +45,9 @@ export function DynamicWidgets({
   const { attributesToRender } = useDynamicWidgets(props, {
     $$widgetType: 'ais.dynamicWidgets',
   });
+  const { results } = useInstantSearch();
+  const rawFacets = results?._rawResults?.[0]?.facets || {};
+  const facets = Object.keys(rawFacets).length > 0 ? rawFacets : results?.facets;
   const widgets: Map<string, ReactNode> = new Map();
 
   React.Children.forEach(children, (child) => {
@@ -58,7 +66,11 @@ export function DynamicWidgets({
       {attributesToRender.map((attribute) => (
         <Fragment key={attribute}>
           {widgets.get(attribute) || (
-            <FallbackComponent.current attribute={attribute} />
+            <FallbackComponent.current
+              attribute={attribute}
+              canRefine={Object.keys(facets?.[attribute] || {}).length > 0}
+              facetValues={facets?.[attribute] || {}}
+            />
           )}
         </Fragment>
       ))}
