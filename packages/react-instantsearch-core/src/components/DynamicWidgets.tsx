@@ -45,6 +45,9 @@ export function DynamicWidgets({
   mode = 'default',
   ...props
 }: DynamicWidgetsProps) {
+  const INITIAL_WIDGET_BUDGET = 50;
+  const WIDGET_BUDGET_CHUNK = 50;
+
   const FallbackComponent = React.useRef(Fallback);
 
   warn(
@@ -55,12 +58,53 @@ export function DynamicWidgets({
   const { attributesToRender } = useDynamicWidgets(props, {
     $$widgetType: 'ais.dynamicWidgets',
   });
-  const { results } = useInstantSearch();
+  const { results, indexUiState } = useInstantSearch();
   const rawFacets = results?._rawResults?.[0]?.facets;
   const resultsFacets = results?.facets;
   const facets: Record<string, Record<string, number>> =
     (rawFacets && !Array.isArray(rawFacets) ? rawFacets : undefined) ||
     (resultsFacets && !Array.isArray(resultsFacets) ? resultsFacets : {});
+  const refinedAttributes = React.useMemo(
+    () => getRefinedAttributes(indexUiState),
+    [indexUiState]
+  );
+  const [renderBudget, setRenderBudget] = React.useState(
+    Math.min(INITIAL_WIDGET_BUDGET, attributesToRender.length)
+  );
+
+  React.useEffect(() => {
+    setRenderBudget(Math.min(INITIAL_WIDGET_BUDGET, attributesToRender.length));
+  }, [attributesToRender.length]);
+
+  React.useEffect(() => {
+    if (mode !== 'default') {
+      return;
+    }
+
+    if (renderBudget >= attributesToRender.length) {
+      return;
+    }
+
+    const timeoutId = setTimeout(() => {
+      setRenderBudget((previous) =>
+        Math.min(previous + WIDGET_BUDGET_CHUNK, attributesToRender.length)
+      );
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [mode, renderBudget, attributesToRender.length]);
+
+  const attributesToRenderWithBudget = React.useMemo(
+    () =>
+      attributesToRender.filter(
+        (attribute, index) =>
+          index < renderBudget ||
+          refinedAttributes.has(getNormalizedFacetAttribute(attribute))
+      ),
+    [attributesToRender, renderBudget, refinedAttributes]
+  );
   const widgets: Map<string, ReactNode> = new Map();
 
   React.Children.forEach(children, (child) => {
@@ -97,7 +141,7 @@ export function DynamicWidgets({
   // Default mode: traditional per-widget rendering with facet metadata available
   return (
     <>
-      {attributesToRender.map((attribute) => (
+      {attributesToRenderWithBudget.map((attribute) => (
         <Fragment key={attribute}>
           {widgets.get(attribute) || (
             <FallbackComponent.current
@@ -120,6 +164,46 @@ function getNormalizedFacetAttribute(attribute: string): string {
     .replace(/^searchable\(/, '')
     .replace(/^filterOnly\(/, '')
     .replace(/\)$/, '');
+}
+
+function getRefinedAttributes(indexUiState: Record<string, unknown>) {
+  const refinedAttributes = new Set<string>();
+
+  const refinementList = (indexUiState.refinementList || {}) as Record<
+    string,
+    string[]
+  >;
+  Object.keys(refinementList).forEach((attribute) => {
+    if ((refinementList[attribute] || []).length > 0) {
+      refinedAttributes.add(attribute);
+    }
+  });
+
+  const menu = (indexUiState.menu || {}) as Record<string, string>;
+  Object.keys(menu).forEach((attribute) => {
+    if (menu[attribute]) {
+      refinedAttributes.add(attribute);
+    }
+  });
+
+  const hierarchicalMenu = (indexUiState.hierarchicalMenu || {}) as Record<
+    string,
+    string[]
+  >;
+  Object.keys(hierarchicalMenu).forEach((attribute) => {
+    if ((hierarchicalMenu[attribute] || []).length > 0) {
+      refinedAttributes.add(attribute);
+    }
+  });
+
+  const toggle = (indexUiState.toggle || {}) as Record<string, boolean>;
+  Object.keys(toggle).forEach((attribute) => {
+    if (toggle[attribute]) {
+      refinedAttributes.add(attribute);
+    }
+  });
+
+  return refinedAttributes;
 }
 
 function isReactElement(
