@@ -45,8 +45,8 @@ export function DynamicWidgets({
   mode = 'default',
   ...props
 }: DynamicWidgetsProps) {
-  const INITIAL_WIDGET_BUDGET = 50;
-  const WIDGET_BUDGET_CHUNK = 50;
+  const INITIAL_WIDGET_BUDGET = 25;
+  const WIDGET_BUDGET_CHUNK = 25;
 
   const FallbackComponent = React.useRef(Fallback);
 
@@ -85,14 +85,43 @@ export function DynamicWidgets({
       return;
     }
 
-    const timeoutId = setTimeout(() => {
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+    const requestIdle =
+      typeof window !== 'undefined'
+        ? (window as unknown as { requestIdleCallback?: Function })
+            .requestIdleCallback
+        : undefined;
+    const cancelIdle =
+      typeof window !== 'undefined'
+        ? (window as unknown as { cancelIdleCallback?: Function })
+            .cancelIdleCallback
+        : undefined;
+    let idleId: number | null = null;
+
+    const increaseBudget = () => {
       setRenderBudget((previous) =>
         Math.min(previous + WIDGET_BUDGET_CHUNK, attributesToRender.length)
       );
-    }, 0);
+    };
+
+    if (typeof requestIdle === 'function') {
+      idleId = requestIdle(() => {
+        increaseBudget();
+      }, { timeout: 100 });
+    } else {
+      timeoutId = setTimeout(() => {
+        increaseBudget();
+      }, 16);
+    }
 
     return () => {
-      clearTimeout(timeoutId);
+      if (idleId !== null && typeof cancelIdle === 'function') {
+        cancelIdle(idleId);
+      }
+
+      if (timeoutId !== null) {
+        clearTimeout(timeoutId);
+      }
     };
   }, [mode, renderBudget, attributesToRender.length]);
 
