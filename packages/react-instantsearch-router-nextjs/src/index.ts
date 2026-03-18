@@ -160,7 +160,7 @@ export function createInstantSearchRouterNext<TRouteState = UiState>(
       const url = stripLocaleFromUrl(newUrl, singletonRouter.locale);
 
       // No need to provide the second argument, Next.js will know what to do
-      void singletonRouter.push(url, undefined, {
+      singletonRouter.push(url, undefined, {
         shallow: true,
       });
       lastPushFromThis = true;
