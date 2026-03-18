@@ -72,7 +72,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
-          path: packages
+          path: .
 
       - name: Lint & Code styles
         run: yarn run lint
@@ -95,7 +95,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
-          path: packages
+          path: .
 
       - name: Unit tests
         run: yarn run test:ci
@@ -129,7 +129,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
-          path: packages
+          path: .
 
       - name: Unit & Integration tests
         run: yarn run test:v3
@@ -155,7 +155,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
-          path: packages
+          path: .
 
       - name: Unit & Integration tests
         run: yarn run test:ci:v4
@@ -192,7 +192,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
-          path: packages
+          path: .
 
       - name: Vue Unit tests
         run: yarn run jest packages/vue-instantsearch --ci --maxWorkers=4
@@ -221,7 +221,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
-          path: packages
+          path: .
 
       - name: Build examples
         run: yarn run website:examples --concurrency=1
@@ -247,7 +247,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
-          path: packages
+          path: .
 
       - name: Build helper documentation
         run: yarn workspace algoliasearch-helper run doc
@@ -276,7 +276,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
-          path: packages
+          path: .
 
       - name: Download examples
         uses: actions/download-artifact@v4
@@ -315,7 +315,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
-          path: packages
+          path: .
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
@@ -349,7 +349,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
-          path: packages
+          path: .
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
@@ -393,7 +393,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
-          path: packages
+          path: .
 
       - name: Create tarball of build artifacts
         run: tar -czf build-artifacts.tar.gz packages/

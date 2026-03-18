@@ -54,7 +54,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
-          path: packages
+          path: .
 
       - name: Build examples
         run: yarn run website:examples --concurrency=1
@@ -83,7 +83,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
-          path: packages
+          path: .
 
       - name: Download examples
         uses: actions/download-artifact@v4
@@ -176,7 +176,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
-          path: packages
+          path: .
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
@@ -209,7 +209,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
-          path: packages
+          path: .
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
