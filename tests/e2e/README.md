@@ -84,6 +84,8 @@ test_e2e:
   # ...
   steps:
     # ...
-    - store_test_results:
-      path: junit/wdio
+    - uses: actions/upload-artifact@v4
+      with:
+        name: test-results-e2e
+        path: junit/wdio/
 ```

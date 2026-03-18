@@ -178,6 +178,9 @@ jobs:
           name: build-artifacts
           path: packages
 
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
       - name: End-to-end tests
         run: yarn workspace react-instantsearch-router-nextjs run test:e2e:saucelabs
         env:
@@ -207,6 +210,9 @@ jobs:
         with:
           name: build-artifacts
           path: packages
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
 
       - name: End-to-end tests
         run: yarn workspace react-instantsearch-nextjs run test:e2e:saucelabs
