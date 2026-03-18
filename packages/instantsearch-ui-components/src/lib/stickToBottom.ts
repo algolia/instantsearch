@@ -593,7 +593,7 @@ export function createStickToBottom({
               : optionsRef.current.initial
           );
 
-          void scrollToBottom({
+          scrollToBottom({
             animation,
             wait: true,
             preserveScrollPosition: true,
