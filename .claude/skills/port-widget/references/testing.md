@@ -46,6 +46,44 @@ Add flavor-specific tests only for behavior that the shared suites do not cover,
   - `examples/vue/e-commerce/src/`
 - Recommendation, chat, and query-suggestion features already appear in getting-started or query-suggestions examples for JS and React.
 
+## Vue-specific test timing
+
+### State delivery is async for some connectors
+
+Most connectors (e.g. `connectRefinementList`) deliver state synchronously during `mountApp` because the mock search client responds immediately. Newer connectors like `connectChat` deliver state asynchronously. The Vue test setup must account for this:
+
+```javascript
+mountApp({ render: ... }, container);
+await nextTick();                                      // Vue tick
+await new Promise((resolve) => setTimeout(resolve, 0)); // macrotask for async state
+await nextTick();                                      // Vue tick to re-render
+```
+
+### Provide a custom `act` for Vue
+
+Vue batches DOM updates asynchronously, unlike React which re-renders synchronously within event handlers. Tests that `await act(async () => { await wait(0); })` work because `act` wraps the wait. Provide a custom `act` in `testOptions` that flushes Vue's update queue:
+
+```javascript
+createXxxWidgetTests: {
+  act: async (cb) => {
+    await cb();
+    await nextTick();
+  },
+},
+```
+
+Tests that click then immediately assert DOM changes (without `act`) will still fail in Vue. These are known limitations of the shared test suite's React-centric timing assumptions. Document them in the `testOptions` but avoid skipping the entire test suite.
+
+### Flavored test params
+
+For `flavored` test suites (like Chat), `runTestSuites` extracts the flavor-specific params via `widgetParams[flavor]`. The Vue setup function receives only the Vue portion. Ensure the Vue params include all required connector params (e.g. `agentId`, `chat`) — empty `{}` will cause connector errors.
+
+When Vue params need component functions (tools with `layoutComponent`, custom `headerComponent`), use `import { h as vueH } from 'vue'` in the `.tsx` test file and return VNodes: `() => vueH('div', { class: 'foo' }, 'text')`.
+
+### skippedTests granularity
+
+`skippableDescribe` only skips entire describe blocks by name. Individual test names in `skippedTests` have no effect unless the test file uses `skippableTest`. The shared chat/options/templates/translations test files use plain `test()`, so individual test skipping is not available for Chat widget tests.
+
 ## Useful commands
 
 ```bash

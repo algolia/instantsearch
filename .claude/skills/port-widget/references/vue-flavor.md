@@ -22,12 +22,13 @@
 
 ## Implementation rules
 
-- Import connectors from `instantsearch.js/es/connectors/index.umd` to match the existing Vue package pattern.
+- Import connectors from `instantsearch.js/es/connectors/index.umd` to match the existing Vue package pattern. **Exception**: connectors intentionally excluded from UMD (e.g. `connectChat`) must be imported directly: `import connectChat from 'instantsearch.js/es/connectors/chat/connectChat'`. The UMD stub throws at runtime.
 - Use `createWidgetMixin({ connector: ... }, { $$widgetType: 'ais.<camelName>' })`.
-- Use `createSuitMixin({ name: '<Pascal>' })` for BEM classes.
+- Use `createSuitMixin({ name: '<Pascal>' })` for BEM classes. When the widget delegates all rendering to a shared `createXxxComponent` factory, the suit mixin's `suit()` method goes unused but the `classNames` prop it provides is still convenient. Pass `this.classNames` directly to the shared component's `classNames` prop (semantic keys like `{ root, container }`, not BEM keys).
 - Expose connector params through a computed `widgetParams()` object.
 - When reusing shared UI factories, wrap the render function with `renderCompat(...)` and map `this.classNames` into the `classNames` prop expected by the shared component.
 - Prefer `getScopedSlot` or `getDefaultSlot` helpers over direct slot access when matching render-function components.
+- In render-function callbacks that reference connector state (e.g. `onSubmit`, `onInput`), read from `this.state.xxx` instead of destructured locals. Vue batches re-renders, so destructured values become stale between synchronous user interactions (type then click).
 
 ## Registration checklist
 
