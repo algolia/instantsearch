@@ -22,10 +22,17 @@ description: Port or introduce an InstantSearch widget or connector-driven featu
 - Shared widget tests: `tests/common/widgets/<widget>/`
 - Shared connector tests: `tests/common/connectors/<widget>/`
 
+## Variant widgets
+
+Some widgets reuse another widget's connector with different defaults or UI. For example, `menuSelect` uses `connectMenu`/`useMenu` (not a dedicated `connectMenuSelect`). The audit will show `no` for connector and hook rows — this is expected. The `$$widgetType` still differs (`ais.menuSelect` vs `ais.menu`). When porting a variant widget, skip connector/hook creation and reuse the existing hook directly in the widget file.
+
+Known variants: `menuSelect` → `connectMenu`/`useMenu`.
+
 ## Workflow
 
 1. Decide the scope.
    - Existing connector, missing wrapper: keep the connector API unchanged and port only the wrapper plus wrapper tests.
+   - Variant widget (shared connector, different UI): skip connector/hook creation; reuse the existing hook and set a distinct `$$widgetType`.
    - Missing connector or changed render state: start in `instantsearch.js`, then update every flavor and both common test suites.
    - Vue port for a newer recommendation, chat, or filter-suggestions feature: inspect `Hits.js`, `Highlighter.js`, `DynamicWidgets.js`, and `util/vue-compat.js` before designing the wrapper.
 2. Match a real precedent.
@@ -35,17 +42,19 @@ description: Port or introduce an InstantSearch widget or connector-driven featu
    - Connector exports belong in `packages/instantsearch.js/src/connectors/index.ts` and `index.umd.ts`.
    - JS widget exports belong in `packages/instantsearch.js/src/widgets/index.ts` and `index.umd.ts`.
    - React hook exports belong in `packages/react-instantsearch-core/src/index.ts`.
-   - React widget exports belong in `packages/react-instantsearch/src/widgets/index.ts`; `packages/react-instantsearch/src/index.ts` already re-exports widgets.
+   - React widget exports belong in both `packages/react-instantsearch/src/widgets/index.ts` and `index.umd.ts`; `packages/react-instantsearch/src/index.ts` already re-exports widgets.
    - Vue exports belong in `packages/vue-instantsearch/src/widgets.js`; `src/instantsearch.js` and the plugin re-export and register from there automatically.
 4. Choose the right sharing model.
    - JS and React: prefer `instantsearch-ui-components` when the markup can be shared.
-   - React: create `src/ui/<Pascal>.tsx` only when the widget needs React-only concerns like refs, DOM event plumbing, or composition-heavy JSX.
+   - React: create `src/ui/<Pascal>.tsx` whenever the widget has no shared factory in `instantsearch-ui-components`. This includes simple widgets like `MenuSelect` (a plain `<select>`) — `src/ui/` is for all React-rendered markup, not only complex cases.
    - Vue: use `.vue` SFCs for slot-heavy markup and `.js` render functions with `renderCompat` when reusing `instantsearch-ui-components`.
 5. Wire tests before finishing.
    - Update `tests/common/widgets/<widget>/` whenever the wrapper behavior changes.
    - Update `tests/common/connectors/<widget>/` whenever connector params or render state change.
    - Register the suite in each flavor's `common-widgets.test.*` and `common-connectors.test.*`.
-   - Remove any placeholder "not supported in Vue InstantSearch" branches when you finish a Vue port.
+   - Replace any `throw new Error('X is not supported in ...')` placeholder with real setup code in the target flavor's `common-widgets.test.*`.
+   - Remove the corresponding `skippedTests` entry in `testOptions` for that widget.
+   - For React: always add the widget to the switch in `packages/react-instantsearch/src/widgets/__tests__/__utils__/all-widgets.tsx` with the required minimum props.
 6. Check examples only when the widget is user-facing.
    - Search existing examples first. Recommendation, chat, and query-suggestion widgets already live in getting-started or query-suggestions examples, not only the e-commerce apps.
    - Add to `examples/*/e-commerce` only when the widget fits the shared storefront UX or existing Playwright coverage.

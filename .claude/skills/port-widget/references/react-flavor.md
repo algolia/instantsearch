@@ -19,9 +19,9 @@ File: `packages/react-instantsearch-core/src/connectors/use<Pascal>.ts`
 Choose the closest precedent before writing code:
 
 - Shared UI component wrapper: `Hits.tsx`, `RelatedProducts.tsx`, `TrendingItems.tsx`, `FilterSuggestions.tsx`
-- React-only presentational UI in `src/ui`: `SearchBox.tsx`, `RangeInput.tsx`, `RefinementList.tsx`, `Menu.tsx`
+- React-only presentational UI in `src/ui`: `SearchBox.tsx`, `RangeInput.tsx`, `RefinementList.tsx`, `Menu.tsx`, `MenuSelect.tsx`, `SortBy.tsx`
 
-### If the UI is shared
+### If the UI is shared via `instantsearch-ui-components`
 
 - Instantiate the factory with `createElement as Pragma` and `Fragment`.
 - Keep connector params separate from UI-only props.
@@ -29,14 +29,24 @@ Choose the closest precedent before writing code:
 - Use `useInstantSearch()` only when the UI needs search status or other top-level state.
 - Only add `useMemo` or `useCallback` when an adjacent widget uses them to stabilize component props passed into a shared UI factory.
 
-### If the UI is React-only
+### If no shared factory exists (React-only UI)
 
-- Put pure presentational code in `packages/react-instantsearch/src/ui/<Pascal>.tsx`.
+- Create `packages/react-instantsearch/src/ui/<Pascal>.tsx` for the presentational component. This applies to all widgets without a shared factory — even simple ones like `MenuSelect` (a plain `<select>`).
 - Keep the widget file focused on mapping hook state and event handlers into the UI component.
+
+### Variant widgets (shared connector)
+
+Some widgets reuse another widget's hook instead of having a dedicated one. For example, `MenuSelect` uses `useMenu` (not `useMenuSelect`). In this case:
+- Import the existing hook directly in the widget file.
+- Pick only the relevant connector params (e.g., exclude `showMore`/`showMoreLimit` for `MenuSelect`).
+- Set a distinct `$$widgetType` (e.g., `'ais.menuSelect'`).
 
 ## Registration checklist
 
-- Export the hook from `packages/react-instantsearch-core/src/index.ts`.
-- Export the widget from `packages/react-instantsearch/src/widgets/index.ts`.
+- Export the hook from `packages/react-instantsearch-core/src/index.ts` (skip for variant widgets that reuse an existing hook).
+- Export the widget from both `packages/react-instantsearch/src/widgets/index.ts` and `index.umd.ts`.
 - If the widget is public, `packages/react-instantsearch/src/index.ts` already re-exports it through `./widgets`.
-- Check `packages/react-instantsearch/src/widgets/__tests__/__utils__/all-widgets.tsx` when the new widget needs special minimum props for snapshot or registry coverage.
+- Add the widget to the switch in `packages/react-instantsearch/src/widgets/__tests__/__utils__/all-widgets.tsx` with required minimum props (e.g., `attribute="brand"`).
+- In `packages/react-instantsearch/src/__tests__/common-widgets.test.tsx`:
+  - Replace the `throw new Error('X is not supported in React InstantSearch')` with real setup code.
+  - Remove the `skippedTests` entry for the widget in `testOptions`.

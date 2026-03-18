@@ -5,10 +5,11 @@
 ### Wrapper or public widget change
 
 - Update `tests/common/widgets/<widget>/`.
-- Register or unskip the suite in:
+- Register or unskip the suite in each flavor's `common-widgets.test.*`:
   - `packages/instantsearch.js/src/__tests__/common-widgets.test.tsx`
   - `packages/react-instantsearch/src/__tests__/common-widgets.test.tsx`
   - `packages/vue-instantsearch/src/__tests__/common-widgets.test.js`
+- For previously unsupported widgets: replace the `throw new Error('X is not supported in ...')` placeholder with real setup code, and remove the `skippedTests` entry in `testOptions`.
 
 ### Connector or hook API change
 
@@ -48,14 +49,24 @@ Add flavor-specific tests only for behavior that the shared suites do not cover,
 ## Useful commands
 
 ```bash
-yarn test packages/instantsearch.js/src/__tests__/common-widgets.test.tsx
-yarn test packages/instantsearch.js/src/__tests__/common-connectors.test.tsx
-yarn test packages/react-instantsearch/src/__tests__/common-widgets.test.tsx
-yarn test packages/react-instantsearch/src/__tests__/common-connectors.test.tsx
-yarn test packages/vue-instantsearch/src/__tests__/common-widgets.test.js
-yarn test packages/vue-instantsearch/src/__tests__/common-connectors.test.js
-yarn test packages/react-instantsearch/src/widgets/__tests__/<Pascal>.test.tsx
-yarn test packages/instantsearch.js/src/widgets/<widget>
+# Common widget/connector tests
+npx jest packages/instantsearch.js/src/__tests__/common-widgets.test.tsx --no-coverage
+npx jest packages/instantsearch.js/src/__tests__/common-connectors.test.tsx --no-coverage
+npx jest packages/react-instantsearch/src/__tests__/common-widgets.test.tsx --no-coverage
+npx jest packages/react-instantsearch/src/__tests__/common-connectors.test.tsx --no-coverage
+npx jest packages/vue-instantsearch/src/__tests__/common-widgets.test.js --no-coverage
+
+# Run only tests matching a specific widget name
+npx jest packages/react-instantsearch/src/__tests__/common-widgets.test.tsx --testNamePattern="MenuSelect" --no-coverage
+
+# Flavor-specific tests
+npx jest packages/react-instantsearch/src/widgets/__tests__ --no-coverage
+npx jest packages/instantsearch.js/src/widgets/<widget> --no-coverage
+
+# Update snapshots after adding new exports
+npx jest packages/react-instantsearch/src/widgets/__tests__ --no-coverage -u
+
+# E2E
 yarn website:examples
 E2E_FLAVOR=react E2E_BROWSER=chromium yarn test:e2e
 ```
