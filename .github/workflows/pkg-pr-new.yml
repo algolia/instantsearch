@@ -1,0 +1,43 @@
+name: Preview Packages
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build packages
+        run: yarn build:ci
+
+      - name: Publish preview packages
+        run: >
+          npx pkg-pr-new publish
+          --compact
+          --template './examples/js/getting-started'
+          --template './examples/react/getting-started'
+          --template './examples/react/next-app-router'
+          --template './examples/react/next-routing'
+          --template './examples/vue/getting-started'
+          './packages/algoliasearch-helper'
+          './packages/instantsearch.js'
+          './packages/react-instantsearch'
+          './packages/react-instantsearch-core'
+          './packages/react-instantsearch-nextjs'
+          './packages/react-instantsearch-router-nextjs'
+          './packages/vue-instantsearch'
+          './packages/instantsearch.css'
+          './packages/instantsearch-ui-components'
