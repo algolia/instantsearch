@@ -1,3 +1,4 @@
+import { headers } from 'next/headers';
 import { use } from 'react';
 
 type NextHeaders = {
@@ -26,11 +27,7 @@ export const useNextHeaders = (): Headers => {
   const isServer = typeof window === 'undefined';
 
   if (isServer) {
-    // Dynamic require to avoid bundling next/headers in client components
-    const nextHeadersModule = require('next/headers') as {
-      headers: () => HeadersResult;
-    };
-    const nextHeaders = nextHeadersModule.headers();
+    const nextHeaders = headers() as HeadersResult;
     return isPromise(nextHeaders) ? use(nextHeaders) : nextHeaders;
   }
 
