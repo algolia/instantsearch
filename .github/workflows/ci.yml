@@ -1,0 +1,458 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup
+
+      - name: Build library
+        run: yarn run build:ci
+
+      - name: Test packages size
+        run: yarn run test:size
+
+      - name: Test Exports
+        run: yarn run test:exports
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            packages/algolia-experiences/dist
+            packages/algoliasearch-helper/dist
+            packages/instantsearch.js/es
+            packages/instantsearch.js/cjs
+            packages/instantsearch.js/dist
+            packages/react-instantsearch/dist
+            packages/react-instantsearch-core/dist
+            packages/react-instantsearch-router-nextjs/dist
+            packages/react-instantsearch-nextjs/dist
+            packages/vue-instantsearch/vue2
+            packages/vue-instantsearch/vue3
+            packages/instantsearch-ui-components/dist
+          retention-days: 1
+
+  test-metadata:
+    name: Test Metadata
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup
+
+      - name: Test package versions
+        run: yarn run test:versions
+
+  lint:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: packages
+
+      - name: Lint & Code styles
+        run: yarn run lint
+
+      - name: Type Checking
+        run: yarn run type-check
+        env:
+          NODE_OPTIONS: '--max-old-space-size=4096'
+
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: packages
+
+      - name: Unit tests
+        run: yarn run test:ci
+        env:
+          ALGOLIA_APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID }}
+          ALGOLIA_SEARCH_KEY: ${{ secrets.ALGOLIA_SEARCH_KEY }}
+          ALGOLIA_INSIGHTS_INDEX: ${{ secrets.ALGOLIA_INSIGHTS_INDEX }}
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-unit
+          path: junit/jest/
+
+  legacy-algoliasearch-v3:
+    name: Legacy Algoliasearch v3
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup
+        with:
+          cache-suffix: 'v3'
+
+      - name: Update dependencies
+        run: ./scripts/legacy/downgrade-algoliasearch-dependency.js
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: packages
+
+      - name: Unit & Integration tests
+        run: yarn run test:v3
+
+      - name: Type Checking
+        run: yarn run type-check:v3
+
+  legacy-algoliasearch-v4:
+    name: Legacy Algoliasearch v4
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup
+        with:
+          cache-suffix: 'v4'
+
+      - name: Update dependencies
+        run: ./scripts/legacy/downgrade-algoliasearch-v4.js
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: packages
+
+      - name: Unit & Integration tests
+        run: yarn run test:ci:v4
+        env:
+          ALGOLIA_APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID }}
+          ALGOLIA_SEARCH_KEY: ${{ secrets.ALGOLIA_SEARCH_KEY }}
+          ALGOLIA_INSIGHTS_INDEX: ${{ secrets.ALGOLIA_INSIGHTS_INDEX }}
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-v4
+          path: junit/jest/
+
+      - name: Type Checking
+        run: yarn run type-check:v4
+
+  vue-v3:
+    name: Vue v3
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup
+        with:
+          cache-suffix: 'vue3'
+
+      - name: Update dependencies
+        run: yarn run prepare-vue3
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: packages
+
+      - name: Vue Unit tests
+        run: yarn run jest packages/vue-instantsearch --ci --maxWorkers=4
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-vue
+          path: junit/jest/
+
+      - name: Vue 3 Test Exports
+        run: yarn workspace vue-instantsearch run test:exports:vue3
+
+  examples:
+    name: Build Examples
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/master' || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: packages
+
+      - name: Build examples
+        run: yarn run website:examples --concurrency=1
+
+      - name: Upload examples
+        uses: actions/upload-artifact@v4
+        with:
+          name: examples
+          path: website/examples
+          retention-days: 1
+
+  helper-docs:
+    name: Helper Documentation
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/master' || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: packages
+
+      - name: Build helper documentation
+        run: yarn workspace algoliasearch-helper run doc
+
+      - name: Upload helper docs
+        uses: actions/upload-artifact@v4
+        with:
+          name: helper-docs
+          path: website/algoliasearch-helper-js
+          retention-days: 1
+
+  e2e-secrets:
+    name: E2E Secrets Availability
+    runs-on: ubuntu-latest
+    outputs:
+      has-sauce: ${{ steps.check.outputs.has-sauce }}
+    steps:
+      - id: check
+        name: Check SauceLabs credentials
+        env:
+          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+        run: |
+          if [ -n "$SAUCE_USERNAME" ] && [ -n "$SAUCE_ACCESS_KEY" ]; then
+            echo "has-sauce=true" >> $GITHUB_OUTPUT
+          else
+            echo "has-sauce=false" >> $GITHUB_OUTPUT
+          fi
+
+  e2e-tests:
+    name: E2E Tests (${{ matrix.browser }})
+    runs-on: ubuntu-latest
+    needs: [examples]
+    if: github.ref == 'refs/heads/master' || github.event_name == 'workflow_dispatch'
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chrome, firefox, 'internet explorer']
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: packages
+
+      - name: Download examples
+        uses: actions/download-artifact@v4
+        with:
+          name: examples
+          path: website/examples
+
+      - name: End-to-end tests
+        run: yarn run test:e2e:saucelabs
+        env:
+          E2E_BROWSER: ${{ matrix.browser }}
+          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+          ALGOLIA_APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID }}
+          ALGOLIA_SEARCH_KEY: ${{ secrets.ALGOLIA_SEARCH_KEY }}
+          ALGOLIA_INSIGHTS_INDEX: ${{ secrets.ALGOLIA_INSIGHTS_INDEX }}
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-e2e-${{ matrix.browser }}
+          path: junit/wdio/
+
+  e2e-tests-playwright:
+    name: E2E Tests (Playwright)
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: packages
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium firefox
+
+      - name: End-to-end tests (Playwright)
+        run: yarn run test:e2e:playwright
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-e2e-playwright
+          path: tests/e2e/junit/playwright/
+
+  e2e-tests-router-nextjs:
+    name: E2E Tests (Next.js Router)
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/master' || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: packages
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: End-to-end tests
+        run: yarn workspace react-instantsearch-router-nextjs run test:e2e:saucelabs
+        env:
+          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+          ALGOLIA_APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID }}
+          ALGOLIA_SEARCH_KEY: ${{ secrets.ALGOLIA_SEARCH_KEY }}
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-e2e-router-nextjs
+          path: packages/react-instantsearch-router-nextjs/junit/wdio/
+
+  e2e-tests-app-router-nextjs:
+    name: E2E Tests (Next.js App Router)
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/master' || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: packages
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: End-to-end tests
+        run: yarn workspace react-instantsearch-nextjs run test:e2e:saucelabs
+        env:
+          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+          ALGOLIA_APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID }}
+          ALGOLIA_SEARCH_KEY: ${{ secrets.ALGOLIA_SEARCH_KEY }}
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-e2e-app-router-nextjs
+          path: packages/react-instantsearch-nextjs/junit/wdio/
+
+  signal-release-ready:
+    name: Signal Release Ready
+    runs-on: ubuntu-latest
+    needs:
+      - build
+      - test-metadata
+      - lint
+      - unit-tests
+      - legacy-algoliasearch-v3
+      - legacy-algoliasearch-v4
+      - vue-v3
+      - examples
+      - helper-docs
+      - e2e-tests
+      - e2e-tests-playwright
+      - e2e-tests-router-nextjs
+      - e2e-tests-app-router-nextjs
+    if: github.ref == 'refs/heads/master' || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: packages
+
+      - name: Create tarball of build artifacts
+        run: tar -czf build-artifacts.tar.gz packages/
+
+      - name: Upload build tarball
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts-tarball
+          path: build-artifacts.tar.gz
+          retention-days: 7
+
+      - name: Signal that release dependencies are met
+        run: echo "All release dependencies have passed"

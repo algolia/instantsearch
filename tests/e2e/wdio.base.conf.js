@@ -1,6 +1,7 @@
 const path = require('path');
 
 const { ALL_FLAVORS } = require('./flavors');
+const staticServerPort = Number(process.env.E2E_SERVER_PORT || 5000);
 
 module.exports = {
   /*
@@ -19,14 +20,14 @@ module.exports = {
       path: `./website/examples/${flavor}/e-commerce`,
     })),
   ],
-  staticServerPort: 5000,
+  staticServerPort,
   /*
    * Set the static server, started above, as the base URL
    * Will be prepended to the `url` parameter of `browser.url()` calls
    * https://webdriver.io/docs/configurationfile.html
    * https://webdriver.io/docs/api/browser/url.html
    */
-  baseUrl: 'http://localhost:5000',
+  baseUrl: `http://localhost:${staticServerPort}`,
 
   /*
    * Specify Test Files

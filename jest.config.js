@@ -69,7 +69,7 @@ const config = {
   snapshotFormat: {
     printBasicPrototype: false,
   },
-  // reporter for circleci
+  // reporter for CI
   reporters: [
     'default',
     [

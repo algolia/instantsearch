@@ -1,0 +1,60 @@
+name: Trigger a release
+
+on:
+  workflow_run:
+    workflows: ['CI']
+    types:
+      - completed
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: read
+  id-token: write
+
+concurrency:
+  group: release-trigger-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: |
+      (github.event_name == 'workflow_run' &&
+       github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.head_branch == 'master') ||
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/master')
+    name: Release if needed
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: master
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Download build artifacts from CI workflow
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          workflow: ci.yml
+          branch: master
+          name: build-artifacts-tarball
+          path: .
+          if_no_artifact_found: fail
+
+      - name: Extract build artifacts
+        run: tar -xzf build-artifacts.tar.gz
+
+      - name: Configure git user
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Trigger release if latest commit is a release commit
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx shipjs@0.26.0 trigger

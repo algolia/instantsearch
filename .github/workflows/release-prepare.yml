@@ -1,0 +1,37 @@
+name: Prepare a release
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Runs every Tuesday at 8:00 AM UTC
+    - cron: '0 8 * * 2'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: release-prepare
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    name: Prepare release PR
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Configure git user
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Prepare release pull request
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx shipjs@0.26.0 prepare --yes --no-browse

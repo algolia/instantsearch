@@ -406,13 +406,12 @@ JavaScript and TypeScript files are validated using a combination of [Prettier](
 
 ### Main version
 
-To release a stable version, go on `master` (`git checkout master`) and use:
+To release a stable version:
 
-```sh
-yarn run release
-```
-
-It will create a pull request for the next release. When it's reviewed, approved and merged, then CircleCI will automatically publish it to npm.
+1. Go to [GitHub Actions](https://github.com/algolia/instantsearch/actions/workflows/release-prepare.yml)
+2. Click "Run workflow" and select the `master` branch
+3. This will create a pull request for the next release
+4. When it's reviewed, approved and merged, GitHub Actions will automatically publish it to npm after CI tests pass
 
 ### Maintenance versions
 
@@ -433,4 +432,4 @@ git checkout next
 yarn run release
 ```
 
-The script will ask you a question about the next version. If it's wrong, you can say "No" and specify the version (e.g. "7.0.0-beta.0"). Then, it will open a pull request for that release. When the pull request is merged, CircleCI will publish it to npm with a `--tag beta` argument.
+The script will ask you a question about the next version. If it's wrong, you can say "No" and specify the version (e.g. "7.0.0-beta.0"). Then, it will open a pull request for that release. When the pull request is merged, GitHub Actions will publish it to npm with a `--tag beta` argument.

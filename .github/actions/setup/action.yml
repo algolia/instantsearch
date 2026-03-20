@@ -1,0 +1,43 @@
+name: 'Setup Node.js and Dependencies'
+description: 'Sets up Node.js and caches/installs dependencies'
+
+inputs:
+  install-dependencies:
+    description: 'Whether to install dependencies (set to false if only downloading artifacts)'
+    required: false
+    default: 'true'
+  cache-suffix:
+    description: 'Optional suffix for cache key (e.g., "vue3", "v4") for jobs that modify dependencies'
+    required: false
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version-file: '.nvmrc'
+
+    - name: Cache node_modules
+      id: cache-node-modules
+      uses: actions/cache@v4
+      with:
+        path: |
+          node_modules
+          */*/node_modules
+          scripts/legacy/algoliasearch@5-dependency-container/node_modules
+          scripts/legacy/algoliasearch-v4-dependency-container/node_modules
+        key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}${{ inputs.cache-suffix && format('-{0}', inputs.cache-suffix) || '' }}
+        restore-keys: |
+          node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}${{ inputs.cache-suffix && format('-{0}', inputs.cache-suffix) || '' }}
+          node-modules-${{ runner.os }}-
+
+    - name: Install dependencies
+      if: inputs.install-dependencies == 'true' && steps.cache-node-modules.outputs.cache-hit != 'true'
+      run: yarn install --frozen-lockfile
+      shell: bash
+
+    - name: Run prepare scripts (when using cache)
+      if: inputs.install-dependencies == 'true' && steps.cache-node-modules.outputs.cache-hit == 'true'
+      run: yarn run prepare
+      shell: bash

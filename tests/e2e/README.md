@@ -75,15 +75,17 @@ exports.config = {
 };
 ```
 
-## Sending reports to CircleCI
+## Sending reports to GitHub Actions
 
-CircleCI can [read JUnit XML test metadata files](https://circleci.com/docs/2.0/collect-test-data/) to provide insights on the stability of the test suite. To enable this feature, you can add the following key to your e2e job in **.circleci/config.yml**:
+GitHub Actions can [upload test results as artifacts](https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts) to provide insights on the stability of the test suite. Test results are automatically uploaded in the CI workflow using the `actions/upload-artifact` action:
 
 ```yaml
 test_e2e:
   # ...
   steps:
     # ...
-    - store_test_results:
-      path: junit/wdio
+    - uses: actions/upload-artifact@v4
+      with:
+        name: test-results-e2e
+        path: junit/wdio/
 ```

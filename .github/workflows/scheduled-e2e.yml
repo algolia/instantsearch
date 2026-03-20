@@ -1,0 +1,230 @@
+name: Scheduled E2E Tests
+
+on:
+  schedule:
+    # Runs on a schedule (configure your desired schedule)
+    - cron: '0 2 * * *' # Daily at 2 AM UTC
+  workflow_dispatch: # Allow manual trigger
+
+concurrency:
+  group: scheduled-e2e
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup
+
+      - name: Build library
+        run: yarn run build:ci
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            packages/algolia-experiences/dist
+            packages/algoliasearch-helper/dist
+            packages/instantsearch.js/es
+            packages/instantsearch.js/cjs
+            packages/instantsearch.js/dist
+            packages/react-instantsearch/dist
+            packages/react-instantsearch-core/dist
+            packages/react-instantsearch-router-nextjs/dist
+            packages/react-instantsearch-nextjs/dist
+            packages/vue-instantsearch/vue2
+            packages/vue-instantsearch/vue3
+            packages/instantsearch-ui-components/dist
+          retention-days: 1
+
+  examples:
+    name: Build Examples
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: packages
+
+      - name: Build examples
+        run: yarn run website:examples --concurrency=1
+
+      - name: Upload examples
+        uses: actions/upload-artifact@v4
+        with:
+          name: examples
+          path: website/examples
+          retention-days: 1
+
+  e2e-tests:
+    name: E2E Tests (${{ matrix.browser }})
+    runs-on: ubuntu-latest
+    needs: examples
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chrome, firefox, 'internet explorer']
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: packages
+
+      - name: Download examples
+        uses: actions/download-artifact@v4
+        with:
+          name: examples
+          path: website/examples
+
+      - name: End-to-end tests
+        run: yarn run test:e2e:saucelabs
+        env:
+          E2E_BROWSER: ${{ matrix.browser }}
+          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+          ALGOLIA_APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID }}
+          ALGOLIA_SEARCH_KEY: ${{ secrets.ALGOLIA_SEARCH_KEY }}
+          ALGOLIA_INSIGHTS_INDEX: ${{ secrets.ALGOLIA_INSIGHTS_INDEX }}
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-e2e-${{ matrix.browser }}
+          path: junit/wdio/
+
+      - name: Notify on failure
+        if: failure()
+        uses: slackapi/slack-github-action@v1
+        with:
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": ":warning: End-to-end tests failed",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Project*: ${{ github.repository }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Browser*: ${{ matrix.browser }}"
+                    }
+                  ]
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "GitHub Actions"
+                      },
+                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                    },
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "SauceLabs"
+                      },
+                      "url": "https://app.saucelabs.com/dashboard/tests/vdc"
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
+  e2e-tests-router-nextjs:
+    name: E2E Tests (Next.js Router)
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: packages
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: End-to-end tests
+        run: yarn workspace react-instantsearch-router-nextjs run test:e2e:saucelabs
+        env:
+          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+          ALGOLIA_APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID }}
+          ALGOLIA_SEARCH_KEY: ${{ secrets.ALGOLIA_SEARCH_KEY }}
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-e2e-router-nextjs
+          path: packages/react-instantsearch-router-nextjs/junit/wdio/
+
+  e2e-tests-app-router-nextjs:
+    name: E2E Tests (Next.js App Router)
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: packages
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: End-to-end tests
+        run: yarn workspace react-instantsearch-nextjs run test:e2e:saucelabs
+        env:
+          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+          ALGOLIA_APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID }}
+          ALGOLIA_SEARCH_KEY: ${{ secrets.ALGOLIA_SEARCH_KEY }}
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-e2e-app-router-nextjs
+          path: packages/react-instantsearch-nextjs/junit/wdio/
