@@ -312,9 +312,12 @@ This warning will not be outputted in production builds.`
  * which is either `nodejs` or `edge`.
  */
 function getNextVersion() {
+  const nextRuntime = (globalThis as { process?: { env?: { NEXT_RUNTIME?: string } } })
+    .process?.env?.NEXT_RUNTIME;
+
   return (
     (typeof window !== 'undefined' &&
       ((window as any).next?.version as string | undefined)) ||
-    (typeof process !== 'undefined' ? process.env?.NEXT_RUNTIME : undefined)
+    nextRuntime
   );
 }
