@@ -148,10 +148,7 @@ function resolveExternalModulePath(sourcePath, dstExtension) {
     // Normalize to forward slashes
     return normalizeToForwardSlashes(packageName + resolvedPath);
   } catch {
-    // Fallback: append extension if missing
-    if (!hasExtension(sourcePath)) {
-      return `${sourcePath}${dstExtension}`;
-    }
+    // Can't resolve — leave the import unchanged rather than guessing
     return sourcePath;
   }
 }
