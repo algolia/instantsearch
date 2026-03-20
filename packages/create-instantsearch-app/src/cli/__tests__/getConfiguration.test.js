@@ -1,4 +1,5 @@
 import loadJsonFile from 'load-json-file';
+
 import getConfiguration from '../getConfiguration';
 
 vi.mock('load-json-file');

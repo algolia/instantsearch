@@ -486,7 +486,9 @@ See https://www.algolia.com/doc/api-reference/widgets/configure/js/`);
                     ? { _automaticInsights: true }
                     : undefined),
                   index: request.indexName,
-                  query: (request as any).query || request.params.query,
+                  query:
+                    ('query' in request ? request.query : undefined) ||
+                    request.params.query,
                   ...(request.indexName === 'indexNameWithAutomaticInsights'
                     ? { queryID: 'queryID' }
                     : undefined),

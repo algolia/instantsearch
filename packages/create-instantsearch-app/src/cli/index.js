@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { createRequire } from 'module';
 import os from 'os';
 import path from 'path';
 import process from 'process';
@@ -8,9 +9,9 @@ import program from 'commander';
 import inquirer from 'inquirer';
 import semver from 'semver';
 
-import { createRequire } from 'module';
 const _require = createRequire(import.meta.url);
 const { version } = _require('../../package.json');
+
 import createInstantSearchApp from '../api/index.js';
 import {
   checkAppPath,

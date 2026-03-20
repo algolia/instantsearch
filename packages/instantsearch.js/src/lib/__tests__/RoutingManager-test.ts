@@ -154,7 +154,7 @@ describe('RoutingManager', () => {
         const widget = createWidget({
           render: vi.fn(),
           getWidgetSearchParameters: vi.fn((searchParameters, { uiState }) =>
-            searchParameters.setQuery(uiState.query!)
+            searchParameters.setQuery(uiState.query)
           ),
         });
 
