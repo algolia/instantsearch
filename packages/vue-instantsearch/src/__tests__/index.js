@@ -91,7 +91,7 @@ function getAllComponents() {
                 indexName: 'instant_search',
                 searchClient: {
                   search() {
-                    return Promise.resolve({ results: [] });
+                    return new Promise(() => {});
                   },
                 },
               },

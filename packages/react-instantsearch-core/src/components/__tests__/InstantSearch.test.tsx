@@ -954,7 +954,9 @@ describe('InstantSearch', () => {
                 // @ts-expect-error: _isNextRouter is not part of the public API
                 _isNextRouter: true,
                 read: vi.fn(),
+                write: vi.fn(),
                 onUpdate: vi.fn(),
+                dispose: vi.fn(),
               },
             }}
           >

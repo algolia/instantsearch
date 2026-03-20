@@ -484,14 +484,17 @@ describe('useInstantSearch', () => {
     });
 
     test('turns to loading and error when searching', async () => {
-      // Suppress the expected unhandled rejection from the search client error
-      const onUnhandledRejection = () => {};
-      process.on('unhandledRejection', onUnhandledRejection);
-
       const searchClient = createAlgoliaSearchClient({});
-      searchClient.search.mockImplementation(async () => {
-        await wait(100);
-        throw new Error('API_ERROR');
+      // Track rejections so they don't leak as unhandled
+      const rejections: Promise<unknown>[] = [];
+      searchClient.search.mockImplementation(() => {
+        const p = wait(100).then(() => {
+          throw new Error('API_ERROR');
+        });
+        // Prevent unhandled rejection by attaching a no-op catch.
+        // InstantSearch still receives the rejection via its own .then() chain.
+        rejections.push(p.catch(() => {}));
+        return p;
       });
 
       const App = () => (
@@ -519,7 +522,7 @@ describe('useInstantSearch', () => {
         expect(getByTestId('error')).toHaveTextContent('API_ERROR');
       });
 
-      process.off('unhandledRejection', onUnhandledRejection);
+      await Promise.all(rejections);
     });
 
     function Status(props: UseInstantSearchProps) {
