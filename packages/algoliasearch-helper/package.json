@@ -7,7 +7,7 @@
   "homepage": "https://community.algolia.com/algoliasearch-helper-js/",
   "scripts": {
     "build": "rm -rf dist && BABEL_ENV=rollup rollup --config rollup.config.mjs",
-    "lint": "eslint .",
+    "lint": "oxlint .",
     "doc": "node documentation-src/metalsmith.js",
     "test": "../../scripts/retry.sh 3 'scripts/test.sh'",
     "test:v4": "../../scripts/retry.sh 3 'scripts/test.sh'",

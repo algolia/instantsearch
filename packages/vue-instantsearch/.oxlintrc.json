@@ -1,0 +1,16 @@
+{
+  "extends": [
+    "../../.oxlintrc.json"
+  ],
+  "rules": {
+    "import/extensions": "off",
+    "import/named": "off",
+    "import/namespace": "off",
+    "instantsearch/naming-convention": "off",
+    "no-restricted-imports": "off",
+    "no-use-before-define": "off",
+    "no-warning-comments": "warn",
+    "react-hooks/exhaustive-deps": "off",
+    "react-hooks/rules-of-hooks": "off"
+  }
+}

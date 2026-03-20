@@ -1,21 +1,21 @@
 {
   "name": "example-instantsearch-query-suggestions",
-  "version": "1.49.0",
+  "version": "1.50.0",
   "private": true,
   "scripts": {
     "dev": "vite",
     "start": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint --ext .ts .",
+    "lint": "oxlint .",
     "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
     "algoliasearch": "5.1.1",
     "algoliasearch-helper": "3.28.0",
-    "instantsearch-ui-components": "0.21.0",
+    "instantsearch-ui-components": "0.22.0",
     "instantsearch.css": "8.12.0",
-    "instantsearch.js": "4.91.0"
+    "instantsearch.js": "4.92.0"
   },
   "devDependencies": {
     "vite": "5.0.7",

@@ -801,13 +801,19 @@ function AutocompleteWrapper<TItem extends BaseHit>({
     );
   });
 
+  const rawInputProps = getInputProps();
+  const inputProps =
+    typeof rawInputProps === 'object' && rawInputProps !== null
+      ? rawInputProps
+      : {};
+
   const searchBoxContent = (
     <AutocompleteSearchBox
       query={localQuery}
       inputProps={{
-        ...getInputProps(),
+        ...inputProps,
         onInput: (event) => {
-          const query = (event.currentTarget as HTMLInputElement).value;
+          const query = event.currentTarget.value;
           setLocalQuery(query);
           refineAutocomplete(query);
         },

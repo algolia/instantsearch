@@ -1,9 +1,11 @@
 ---
-import { GITHUB_EDIT_URL } from '../config';
 import WidgetContent from '../components/WidgetContent.astro';
 import WidgetsList from '../components/WidgetsList.astro';
-import type { WidgetFrontmatter } from '../types';
+import { GITHUB_EDIT_URL } from '../config';
+
 import MainLayout from './MainLayout.astro';
+
+import type { WidgetFrontmatter } from '../types';
 
 type Props = {
   frontmatter: WidgetFrontmatter;
